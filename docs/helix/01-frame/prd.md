@@ -213,7 +213,7 @@ The direct read and traversal requirements below are convenience operations and 
 
 - **FR-36** — The storage layout, the journal, the catalog revision steps and the mutation protocol are specified as contracts that do not depend on a programming language.
 - **FR-37** — A conformance corpus, held as data, gives the expected results, state, journal and report for each case; expected SQL is informative only.
-- **FR-38** — An implementation passes a corpus version on a named PostgreSQL version, and an interchange check shows two implementations can read what the other wrote.
+- **FR-38** — The first-release Python implementation verifies its required behavioral corpus on a named PostgreSQL version against independent expected results and native state/journal/transaction observations. TypeScript maintenance and bidirectional interchange are deferred correctness work; an eventual interchange claim must show each real implementation reads the other's writes in both directions against independent expectations.
 - **FR-39** — The layout declares a version, and an implementation refuses a database of a different major version.
 - **FR-40** — The layout DDL and its check pass on every supported PostgreSQL version.
 - **FR-50** — An implementation reads UMF so that it accepts and rejects the same documents, with the same diagnostics, as the reference validator, shown by corpus cases that give each document's expected diagnostics.
@@ -267,13 +267,15 @@ Resource acceptance (RES-01–04): exercise each published maximum and one-over 
 | FR-25 | Late commit | An older transaction still open when a newer one commits | The consumer's read withholds the newer rows until the older transaction ends, then returns both in order |
 | FR-29 | Listing | List a type with 3 objects and one with 200,000, at 10 and at 1,000 types | Same page cost; the marker says whether more remain |
 | FR-33 | Enforcement report | The corpus model | Every assertion has a status; a rule that only the engine enforces is not reported as database enforcement |
-| FR-38, FR-40 | Corpus on two versions | The seed corpus on PostgreSQL 16 and 17 | Every case passes; the DDL check passes on both |
+| FR-38, FR-40 | Python corpus on advertised profile | Required Python behavioral corpus and DDL on the named supported profile (currently PostgreSQL18.6) | Required cases and DDL checks pass for that profile; other versions and interchange remain unclaimed |
 
 ## Technical Context
 
-This section records current decisions; it does not make them.
+This section retains initial spike context; it is not the current release checklist.
+The current Python runtime and installation profile are documented in
+[the Python package](../../../packages/python/README.md).
 
-- **Language/Runtime**: TypeScript on Bun for the first implementation, with a portable core free of I/O (ADR-001). Other languages may implement the contracts (ADR-003, proposed).
+- **Language/Runtime**: Python is the first-release public interface under accepted ADR-003 (2026-10-09). Weft supplies the Rust compiler and UMF supplies its owner TypeScript APIs. Truss TypeScript implementation maintenance/interchange is deferred.
 - **Key Libraries**: UMF's TypeScript library, version 0.7.0 at the time of the spikes (ADR-001 D4).
 - **Data/Storage**: PostgreSQL. The adopted layout is one object table with a key table and no per-type DDL (ADR-002). Tested on PostgreSQL 16.2 and 17.9; 18 and managed PostgreSQL services are unverified. The minimum supported version of 16 is proposed.
 - **APIs**: none yet. The contracts (`02-design/contracts/`) define the tables and protocols; the query and mutation engines are later.
@@ -305,7 +307,7 @@ This section records current decisions; it does not make them.
 | Risk | Probability | Impact | Mitigation |
 |------|-------------|--------|------------|
 | Provisional layout points change after a second implementation depends on them | Medium | High | Layout versions; the corpus carries the version; re-pin by a recorded decision |
-| The corpus is too thin to catch divergence | Medium | High | Seed from SPIKE-002; require the interchange check; add a case with every contract change |
+| The corpus is too thin to catch divergence | Medium | High | Retain independently expected Python behavioral cases for advertised semantics; defer interchange until a second implementation exists; add a relevant case for a behavior change |
 | Catalog acceptance starves under constant write load | Medium | Medium | Bounded lock admission and explicit pre-effect refusal; no automatic retry loop |
 | Layout is slower than a hand-designed schema at the target scale | Medium | High | Measure the 2× bar at production size; reversal conditions in ADR-002 |
 | Measurements are not representative: one loaded machine, two embedded engines, no managed service | High | Medium | Re-run the harness on a quiet machine, on PostgreSQL 18 and on a managed service before fixing the targets |
@@ -322,8 +324,8 @@ This section records current decisions; it does not make them.
 
 ## Success Criteria
 
-- Every P0 requirement has a passing acceptance scenario on PostgreSQL 16 and 17.
-- The conformance corpus exists and one implementation passes it; a second implementation passes it and the interchange check.
+- Every first-release Python P0 requirement has a passing acceptance scenario on the advertised PostgreSQL profile (currently18.6); other engine/version support is not implied.
+- The required Python behavioral corpus exists and the Python implementation passes it on its named supported profile. A second implementation and full interchange qualification are later deliverables, not first-release gates.
 - The enforcement report is verified for every assertion in the corpus, with no assertion unclassified.
-- The proposed latency targets are agreed, measured on a quiet machine and met.
+- Performance campaigns and proposed latency targets are deferred until a concrete adopter workload requires them; any advertised performance claim must have measurements on its named profile.
 - At least one consumer outside the maintainers runs it.

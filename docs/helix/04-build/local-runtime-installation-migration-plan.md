@@ -1,5 +1,17 @@
 # Local runtime, installation and migration execution plan
 
+## First-release scope — owner direction, 2026-10-13
+
+Python is the first-release public interface. Truss TypeScript implementation
+maintenance and full bidirectional TypeScript/Python interchange are deferred
+correctness/portability work, not first-release blocking gates. The accepted
+ADR-003 amendment governs earlier contrary sequencing in this artifact.
+Required Python behavioral cases, independently authored expectations, and
+native state/journal/transaction evidence retain their meaning. Deferral does
+not qualify interchange: an eventual claim still needs both real directions
+and their original independent expectations. UMF TypeScript dependencies and
+Weft's Rust compiler remain required where the Python API consumes them.
+
 ## Non-superuser administrative profile — runtime 0.25
 
 Fresh installation, status, module-access configuration and feed enrollment
@@ -384,7 +396,7 @@ The default runtime and managed release tuples require separate delivery evidenc
 | P1 / weeks1–3 | Package a complete fresh-install bundle and Python explicit install/verify entrypoints. Install on a disposable pgserver runtime, verify original inventory, initialize and publish readiness atomically; inject late failure and prove no ready installation. Include the mandatory native guard/finalizer bodies and security composition. Server startup remains DDL-free. |
 | P2 / weeks4–6 | Ship a Python preview supporting catalog acceptance/install, atomic apply with preconditions and same-plan dry-run, atomic/per-item provenance import, direct key/edge reads and the complete consumer R8 read-shape implementation path, together with its versioned executable preview corpus/runner. Exercise one installed consumer model through actual accepted IDs/report, persisted values/keys/edges, journal and exact read results. Include R4 per-person isolation, R5 authenticated-versus-asserted origin and document qualification in the same installed path. Test denial/revocation, failure/rollback and large integers/decimals/absence/null. Unsupported shapes explicitly refuse. Required R8 shapes include indexed equality, relationship predicates, capped alias expansion, business-key paging and one-property grouped counts with exact Weft/native plans and finite bounds. This is a preview integration milestone; unsupported required shapes prevent R8/consumer-ready acceptance. Complete corpus/stable-layout/managed-target release remains separate. |
 | P3 / weeks6–8 | Add complete feed transaction delivery/acknowledgement and durable request receipts with retry/idempotency and reached-position semantics. Exercise commit, lost response, explicit caller retry, no-op groups, restart and isolation on the same installation. Expand the published preview corpus/runner with these installed cases; clearly identify remaining full-corpus cases. |
-| P4 / weeks8–12 | Qualify the complete release corpus and Python/TypeScript interchange; freeze the admitted layout/support tuple, package explicit populated migration/reconciliation and prove preservation plus fresh-process recovery. Qualify Aurora/Lakebase independently before advertising them. Publish stable artifacts only after these exits; candidate0.16 and a preview cannot be relabeled stable. |
+| P4 / weeks8–12 | Qualify the required Python behavioral corpus; defer Python/TypeScript interchange; freeze the admitted layout/support tuple, package explicit populated migration/reconciliation and prove preservation plus fresh-process recovery. Qualify Aurora/Lakebase independently before advertising them. Publish stable artifacts only after these exits; candidate0.16 and a preview cannot be relabeled stable. |
 
 P1 and P2 are one integration workstream, not independent packages waiting for a
 general design-completion vote. Implement R4/R5 against the existing security
@@ -631,7 +643,7 @@ pause independent Python and installation work.
    retry receipts, epochs/feed positions and unresolved attempt custody. Implement
    M2–M5 from the existing migration handoff; administrative recovery does not
    repeat uncertain recipes. Startup reports incompatibility rather than migrating.
-5. Qualify clean Python distribution and TypeScript/Python interchange, then each
+5. Qualify clean Python distribution for first release; defer TypeScript/Python interchange. Qualify each
    advertised managed target. Retain independent expected data and complete effects;
    a local server smoke or development wheel is not a complete Truss runtime.
 
@@ -656,7 +668,7 @@ pause independent Python and installation work.
 - Populated explicit migration passes independently expected preservation, late
   rollback, lost acknowledgement and fresh-process reconcile cases. Clean installed
   packages contain every registered recipe/profile/verification input.
-- Complete required Python corpus and bidirectional committed interchange run on
+- The required Python behavioral corpus passes on
   the exact local profile; known unsupported behavior never becomes a skipped pass.
 
 ## Traversal clarification
@@ -953,8 +965,9 @@ The [exact-host-view wheel receipt](evidence/design-audit/python-exact-host-view
 pins the expanded distribution, unchanged original candidates, shared vectors and
 committed owner numeric source review. All nine installed-wheel tests pass from
 outside the checkout: five exact host-view checks plus four native local lifecycle
-checks. Dependencies are reused; native exact-value round trips and complete
-committed TypeScript/Python engine interchange remain separate obligations.
+checks. Dependencies are reused. Native exact-value round trips remain required
+for advertised Python behavior; complete committed TypeScript/Python engine
+interchange alone is deferred.
 
 ## Populated local immutable guards
 
@@ -1509,10 +1522,11 @@ accepted ADR-003/ADR-001, and explicitly keeps every R6/R8/R9 consumer shape on 
 implementation path. Partial direct reads cannot satisfy R8. Parsed-input/compiler,
 ready-index and native resource dependencies must be qualified or trigger a
 reforecast, not silent shape removal. Preview corpus appears with installed cases;
-full R2 interchange, R3 stable layout/Lakebase and R10 publication remain release
+full R2 interchange is deferred; R3 stable layout/Lakebase and R10 publication retain their advertised-profile release
 gates. P3 retains durable idempotent repeat/reached/feed qualification. The original
-consumer discovery input remains unchanged, and all R1–R10 are required before
-calling the result consumer-ready.
+consumer discovery input remains unchanged. Nondeferred R1–R10 requirements
+remain necessary for full consumer-readiness claims on their advertised profile;
+deferred R2 interchange is not claimed.
 
 
 ### Revised consumer input checkpoint
@@ -1625,8 +1639,9 @@ These are dependencies for one complete installer, not five independently usable
 installation APIs. Account and resource implementation remain Truss-owned;
 UMF supplies original schema interpretation/generation, Weft its separately
 admitted compiler realization, and the security owner authority semantics.
-Populated migration PKG-07 and full Python/TypeScript interchange remain required
-P4 exits; neither is silently removed to claim the P1 preview complete.
+Populated migration PKG-07 remains required for advertised upgrades. Full
+Python/TypeScript interchange is deferred from first-release P4 exits; its
+eventual claim remains unqualified rather than silently passed.
 
 
 ## Seven-body implementation packet: next native installation work
@@ -1785,7 +1800,7 @@ public0.4 lowering and the Truss result/authority/account tuple are not adopted.
 Security's completed evaluated-fact checkpoint stays distinct from its active
 native bridge iteration. Consume the minimum exact completed owner packet when
 qualified; do not transplant its17.9 fixture or moving APIs into the16.15 default.
-P3/P4 feed/reached, complete corpus/interchange, stable layout, populated migration
+P3/P4 feed/reached, required Python corpus, stable layout, populated migration (interchange deferred)
 and managed qualification remain in the original queue. None of these component
 observations changes the full45-story/167-criterion objective or marks P0/P1 done.
 

@@ -15,10 +15,22 @@ ddx:
 
 # US-028: Pass the corpus and the interchange check
 
+## First-release scope — owner direction, 2026-10-13
+
+Python is the first-release public interface. Truss TypeScript implementation
+maintenance and full bidirectional TypeScript/Python interchange are deferred
+correctness/portability work, not first-release blocking gates. The accepted
+ADR-003 amendment governs earlier contrary sequencing in this artifact.
+Required Python behavioral cases, independently authored expectations, and
+native state/journal/transaction evidence retain their meaning. Deferral does
+not qualify interchange: an eventual claim still needs both real directions
+and their original independent expectations. UMF TypeScript dependencies and
+Weft's Rust compiler remain required where the Python API consumes them.
+
 **Feature**: FEAT-007 — Conformance and Portability
 **Feature Requirements**: CNF-03
 **PRD Requirements**: FR-38
-**Priority**: P0
+**Priority**: P0 for Python behavioral qualification; interchange deferred
 **Status**: Draft
 
 ## Story
@@ -33,12 +45,16 @@ Interchange means each implementation reads what the other wrote in both directi
 
 ## Walkthrough
 
-1. Implementer runs the corpus on PostgreSQL 16.
+1. Implementer runs the required Python behavioral corpus on the named supported PostgreSQL profile (currently18.6).
 2. System reports pass or the failing cases.
-3. Implementer runs the interchange check against the TypeScript engine.
+3. In the later interchange workstream, implementer runs both directions against the TypeScript engine.
 4. System reports agreement.
 
 ## Acceptance Criteria
+
+AC1 and Python divergence detection remain required. AC2 and cross-implementation
+AC3 checks are deferred from first-release gates; their eventual pass meaning is
+unchanged. Missing second-implementation evidence is deferred, never passed.
 
 - [ ] **US-028-AC1** — Given a corpus version, when every case yields the expected results, state, journal and report, then the implementation passes on that engine version and the report names the versions.
 - [ ] **US-028-AC2** — Given implementations A and B, when A runs a case and B reads the state and journal, then they agree, and the reverse.

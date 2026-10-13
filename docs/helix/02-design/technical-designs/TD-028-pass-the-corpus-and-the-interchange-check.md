@@ -19,6 +19,18 @@ ddx:
 
 # TD-028: Corpus and bidirectional interchange
 
+## First-release scope — owner direction, 2026-10-13
+
+Python is the first-release public interface. Truss TypeScript implementation
+maintenance and full bidirectional TypeScript/Python interchange are deferred
+correctness/portability work, not first-release blocking gates. The accepted
+ADR-003 amendment governs earlier contrary sequencing in this artifact.
+Required Python behavioral cases, independently authored expectations, and
+native state/journal/transaction evidence retain their meaning. Deferral does
+not qualify interchange: an eventual claim still needs both real directions
+and their original independent expectations. UMF TypeScript dependencies and
+Weft's Rust compiler remain required where the Python API consumes them.
+
 **Story:** [[US-028]]. **Parent:** [[SD-007]]. **Feature:** FEAT-007.
 
 ## Technical Approach
@@ -34,7 +46,7 @@ Run the complete required corpus on a qualified implementation/server/profile an
 | `packages/conformance/src/runner/divergence.ts` | Structured mismatch evidence and triage status | US-028-AC3 |
 | `tests/conformance/interchange.test.ts` | Deliberate wrong adapters and fixture defects | All criteria |
 
-Harness components are new and outside runtime core. Real independent second implementation remains a future dependency under proposed ADR-003.
+Harness components are new and outside runtime core. Real independent second implementation remains a future dependency under accepted ADR-003 (2026-10-09), deferred from first release.
 
 ## API/Interface Design
 

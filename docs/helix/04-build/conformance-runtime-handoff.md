@@ -1,5 +1,17 @@
 # Conformance runtime implementation handoff
 
+## First-release scope — owner direction, 2026-10-13
+
+Python is the first-release public interface. Truss TypeScript implementation
+maintenance and full bidirectional TypeScript/Python interchange are deferred
+correctness/portability work, not first-release blocking gates. The accepted
+ADR-003 amendment governs earlier contrary sequencing in this artifact.
+Required Python behavioral cases, independently authored expectations, and
+native state/journal/transaction evidence retain their meaning. Deferral does
+not qualify interchange: an eventual claim still needs both real directions
+and their original independent expectations. UMF TypeScript dependencies and
+Weft's Rust compiler remain required where the Python API consumes them.
+
 Status: existing contracts and carrier proposals are authored; runtime services
 remain unimplemented. `packages/tooling/src` contains the layout migration planner
 and private alias-substitution and case-link candidate helpers. The conformance constructors and runner/assessor
@@ -84,7 +96,7 @@ startup registration refuse before constructing a projection.
 | C4 registered operation and observation | Dispatch exact method arguments through existing capability/executor procedures, preserve business versus execution result layers, observe all normative surfaces at original transaction boundaries | No arbitrary SQL/import/callback from case content; unknown methods/profiles and invalid scope generations refuse before dependent effects; savepoint/callback return never proves commit; absent observer leaves the case unverified |
 | C5 identity construction and comparison | Bind only original eligible typed result/setup occurrences, resolve aliases in exact registered input slots, validate the complete unchanged public wire and compare native invariants before normalization | Literal data stays exact; forward/rebound/unknown/rolled-back bindings, substituted namespace/profile and wrong endpoint/order/multiplicity fail; exact large IDs never pass through host-number conversion |
 | C6 evidence settlement and assess | Preserve every required case and actual result/state/journal/report/performance verdict, original partial progress, termination and cleanup; emit immutable receipt and invoke separately bound assessor | A recorded run is not automatically qualified; omitted/not-run/interrupted cases, unavailable observers, malformed evidence and altered original pins cannot produce qualified; later reruns receive distinct evidence identities |
-| C7 independent interchange | Run TypeScript writer/Python reader and Python writer/TypeScript reader against each direction's actual committed database state using the original writer's bindings | Readers inspect the same original state; no fixture replacement, shared writer serialization oracle or agreement-only correctness; Python ownership decision and independent packed-consumer/native evidence remain explicit gates |
+| C7 independent interchange (deferred from first release) | Run TypeScript writer/Python reader and Python writer/TypeScript reader against each direction's actual committed database state using the original writer's bindings | Readers inspect the same original state; no fixture replacement, shared writer serialization oracle or agreement-only correctness; independent packed-consumer/native evidence remains mandatory for an eventual interchange claim, not a Python release gate |
 
 Administrative and lifecycle/configuration operations belong to the same
 complete required registry where selected. The twenty-two capability return

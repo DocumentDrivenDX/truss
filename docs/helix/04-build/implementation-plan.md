@@ -7243,3 +7243,15 @@ unless they establish a specific support claim the release actually makes.
 Review remaining work against this rule before starting it. Existing protected
 security work stays scoped to its owner and must not block ordinary API release
 through claims of capabilities the Python release does not advertise.
+
+## Python-first upstream/downstream reconciliation — 2026-10-13
+
+PRD FR-38/release criteria, accepted ADR-003, US/TD/STP-028, Python integration,
+local installation/migration and conformance handoffs now explicitly prioritize
+the Python first-release interface. TypeScript maintenance and full bidirectional
+interchange are deferred without weakening their eventual claim. Python required
+behavioral corpus, independent expected values and native state/journal/transaction
+observations remain required; no omitted check is relabeled passing. Preserve
+artifact IDs/frontmatter/traceability. This amendment controls historical contrary
+release sequencing rather than deleting historical evidence or starting a second
+implementation. The practical clean-install path now succeeds separately.
