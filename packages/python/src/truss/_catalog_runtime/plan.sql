@@ -30,6 +30,7 @@ DECLARE result jsonb:=prior;types jsonb:=coalesce(prior->'type_def','[]');proper
  lineages jsonb:=coalesce(prior->'relationship_lineage','[]');endpoints jsonb:=coalesce(prior->'rel_endpoint','[]');
  changes jsonb:=coalesce(prior->'schema_change','[]');type_map jsonb:='{}';property_map jsonb:='{}';relationship_map jsonb:='{}';
  row jsonb;old jsonb;candidate jsonb;old_source jsonb;new_source jsonb;component jsonb;remapped jsonb;
+ tightening boolean;facet_map jsonb;
  assigned int;type_next int;property_next int;relationship_next int;sequence int:=0;revision int;
 BEGIN
  SELECT coalesce(max((v.value->>'type_id')::int),0) INTO type_next FROM jsonb_array_elements(types) v;
@@ -74,6 +75,15 @@ BEGIN
     candidate:=candidate||jsonb_build_object('item',old->'item');
    END IF;
    IF old->'_originalField'=row->'_originalField' THEN CONTINUE;END IF;
+   tightening:=(old->>'nullability'='absent-allowed' AND row->>'nullability'='required') IS TRUE;
+   IF tightening THEN
+    IF (old->>'cardinality'='one' AND row->>'cardinality'='one' AND old->>'scalar_type' IN ('string','integer','decimal','boolean','timestamp','binary') AND row->>'scalar_type'=old->>'scalar_type') IS DISTINCT FROM TRUE THEN
+     RAISE EXCEPTION 'required tightening requires a retained singular scalar' USING ERRCODE='0A000';END IF;
+    FOREACH facet_map IN ARRAY ARRAY[coalesce(old->'_originalField'->'facets','{}'::jsonb),coalesce(row->'_originalField'->'facets','{}'::jsonb)] LOOP
+     IF NOT ((facet_map='{}'::jsonb OR old->>'scalar_type'='integer' AND facet_map='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR old->>'scalar_type'='decimal' AND facet_map='{"precision":18,"scale":4}'::jsonb) IS TRUE) THEN
+      RAISE EXCEPTION 'required tightening needs known scalar facets' USING ERRCODE='0A000';END IF;
+    END LOOP;
+   END IF;
    -- Historical nullability-only folds keep their original admission. Actual
    -- facet changes require both maps to belong to this explicit native subset.
    IF coalesce(old->'_originalField'->'facets','{}'::jsonb) IS DISTINCT FROM coalesce(row->'_originalField'->'facets','{}'::jsonb) THEN
@@ -86,7 +96,7 @@ BEGIN
      RAISE EXCEPTION 'known native scalar facet transition required' USING ERRCODE='0A000';END IF;
    END IF;
    IF ((old->'_originalField')-ARRAY['nullability','facets']) IS DISTINCT FROM ((row->'_originalField')-ARRAY['nullability','facets'])
-    OR NOT (old->>'nullability'=row->>'nullability' OR old->>'nullability'='required' AND row->>'nullability'='absent-allowed')
+    OR NOT (old->>'nullability'=row->>'nullability' OR old->>'nullability'='required' AND row->>'nullability'='absent-allowed' OR tightening)
     OR EXISTS(SELECT 1 FROM jsonb_array_elements(keys) k WHERE k.value->>'type_id'=assigned::text AND k.value->'prop_ids' @> jsonb_build_array((old->>'prop_id')::int)) THEN
     RAISE EXCEPTION 'existing field change requires explicit evolution support' USING ERRCODE='0A000';END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');

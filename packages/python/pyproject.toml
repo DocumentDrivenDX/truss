@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "truss-toolkit"
-version = "0.0.10"
+version = "0.0.11"
 description = "Experimental Truss Python embedding components"
 requires-python = ">=3.11"
 dependencies = ["jsonschema==4.26.0", "referencing==0.37.0"]
@@ -14,7 +14,7 @@ truss-local-postgres = "truss.cli:main"
 
 [project.optional-dependencies]
 native = ["psycopg[binary]==3.3.6"]
-query = ["weft-sql==0.4.12"]
+query = ["weft-sql==0.4.13"]
 experimental-pg8000 = ["pg8000==1.31.5"]
 local = ["pgserver-pg18==18.6.1", "fasteners==0.20", "platformdirs==4.12.4", "psutil==7.2.2"]
 
