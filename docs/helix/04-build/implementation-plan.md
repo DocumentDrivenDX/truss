@@ -7052,3 +7052,23 @@ The original AddSolution action workflow passes public business-key resolution, 
 [Evidence](evidence/core08-catalog-source-20261013/receipt.json) retains a separate producer pinned to committed UMF7c0f0c98. The original security model yields136 complete current owner observations, each matching Chromium153.33 source regressions and six fresh installed-wheel tests pass;897 Python import edges pass. Source, transport, replication/output and child deadlines have explicit limits and refusal controls. Original0.7 bundles and native runtime/caller gates are unchanged.
 
 This foundation does not perform native0.8 ingress. The next functional work is to compose the original observations with exact catalog declarations/assertion occurrences/report preparation, implement a versioned native consistency/registration path with additive migration and rollback evidence, and supply the guarded assessment producer before original compiler/native mapping and protected result/effect integration. Core08CatalogSource cannot be substituted for PreparedAcceptance. All132 original cases remain required; none is promoted by this metadata component.
+
+### Original consumer idempotent action retry — 2026-10-13
+
+The original AddUseCase retry case passes native KeyAbsent/create, direct caller-key request selection, canonical-input retention, repeated native apply, identical committed token and one-object readback. [Evidence](evidence/original-consumer-action-retry-20261013.md) covers nine original read/action workflows together. The cache retains inputs only, not outcomes. Consumer dry-run/other handler mappings, full corpus/interchange and protected security activation remain open; no runtime or action-language contract was broadened.
+
+### Original consumer dry-run adoption — 2026-10-13
+
+The original AddSolution preview executes the public group, rolls back, publishes only validation, and leaves k1 available for the real write. [Evidence](evidence/original-consumer-dry-run-20261013.md) covers ten original workflows with the dry-run case in a fresh original fixture. Missing-target validation is an authorized host key-read observation, not an invented native identity or general key-exists predicate. Full adapter/corpus/interchange and protected security activation remain open.
+
+## Original consumer correction through public Python — 2026-10-13
+
+Exercise the unchanged CorrectSolution update case through public business-key lookup, UpdateObject with the found native identity/version, and the original declared ObjectExists precondition. The host commits then retries the canonical original request for its durable receipt; a fresh key read and complete-entity query verify version and creation/update actor attribution. No general action interpreter or runtime profile change is introduced. See [evidence](evidence/original-consumer-update-20261013.md) for the basic installed-runtime result; full corpus/interchange remains open.
+
+## Original grouped-count expectation discrepancy — 2026-10-13
+
+The unchanged consumer grouped-count SQL executes through the default Weft profile and returns the correct exact integer groups through public Python. Its positional oracle requires an order absent from the SQL; observed order differs, so the original case remains failing and is excluded from the passing aggregate. [Evidence](evidence/original-consumer-count-20261013.md) records the actual result and consumer correction needed (unordered comparison or authored ORDER BY). Do not rewrite SQL or sort results to qualify this original case.
+
+## Original consumer edge-first import workflow — 2026-10-13
+
+Map the original import.entities-before-relationships input through two public imports inside one host transaction: create the object, resolve actual endpoint business keys, then import the edge. Require complete one-record native reports with pending created results, retain their original form, and publish only consumer counts after known host commit. Failed preparation/execution escapes the context and rolls back the outer transaction. The unchanged complete-entity query verifies the imported relationship. [Evidence](evidence/original-consumer-import-order-20261013.md) records the exact installed tuple/basic result; no general unresolved-reference importer or combined receipt is claimed.

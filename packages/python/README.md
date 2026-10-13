@@ -503,7 +503,7 @@ Catalog registration also retains original vocabulary and extension artifacts an
 owner-reported module actions as uninterpreted metadata. It preserves the original
 validation diagnostics and partial interpretation; it does not execute actions or
 interpret placement, DDD or security annotations. Required core semantics still
-must be supported. The original consumer corpus has eight original read/action workflows
+must be supported. The original consumer corpus has twelve original read/action/import workflows
 exercised through public registration, grouped object/edge mutation, committed replay, receipt visibility and read-only queries;
 replica execution and the full consumer corpus remain unqualified.
 
@@ -516,3 +516,13 @@ composite keys retain nested tuples. Ordinary projections keep their authored
 member shape. Whole-object timestamps use exact six-fraction UTC strings from the verified object image. The original whole-entity SQL/output observations pass on the pinned tuple; position/time shape checks use the declared committed lower-bound semantics, while complete consumer-adapter and harness qualification remain open.
 
 The original consumer AddSolution example is a trusted host handler bound to the exact retained fixture document. It resolves a target by public business-key lookup, submits one create/link group with a native ObjectExists precondition and x-action origin, retains the invocation's original request for committed recovery, and reads the result through the public API. It does not interpret arbitrary UMF action declarations. Counts, initial disposition and versions come from native semantic results; the committed token is attached only after verified replay following the host's known commit.
+
+The selected AddUseCase retry workflow maps its caller key directly to the group request ID, applies the original native KeyAbsent predicate, and retains the canonical input/request for retry. Every repeated step still calls Truss; the host cache supplies no result. The original committed token and semantic result are returned with replay disposition, and readback finds one object. The original AddSolution dry-run case now uses the public caller-rollback group workflow; other consumer action cases remain outside this example handler.
+
+Dry-run previews execute the actual create/link group and roll back the caller transaction before returning validation. They return no provisional identity or receipt token and retain no invocation cache. A later real write with the same caller key is admitted normally. Missing-target previews require an exact public ObjectNotFound plus current authorized source/catalog/type/key visibility in the known fixture; other results refuse. This is a host authority observation, not a general native key-exists predicate. The dry-run case uses its own fresh basic fixture; rolled-back sequence allocations may still leave gaps.
+
+The original CorrectSolution workflow now resolves the authored business key, applies an optimistic-version UpdateObject with the declared ObjectExists precondition, and recovers the committed native receipt using its original request. Complete-entity readback proves one version increment and preserves creation attribution while recording the connecting person as updater. This is a trusted host handler for the exact retained consumer document, not a general action interpreter.
+
+The original `read.count-group-by` case is runnable with `--case`, including its record seed through public groups. Counts are exact integers, but the unchanged case currently fails its positional row oracle: the SQL has no `ORDER BY` and PostgreSQL returns the correct groups in another order. It is excluded from the passing aggregate pending a consumer-owned ordering expectation correction.
+
+The original edge-first import workflow is exercised by a trusted host mapping: import objects, resolve both authored business keys through public reads, then import relationships within the same caller transaction. The two native reports stay unchanged and pending as returned; the host publishes aggregate consumer counts only after its outer commit. This supports the selected consumer flow without inventing endpoint identities, a combined ImportReport or a commit token. General unresolved-reference batch ingestion remains outside the low-level typed-identity API.

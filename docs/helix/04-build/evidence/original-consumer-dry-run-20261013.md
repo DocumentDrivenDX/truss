@@ -1,0 +1,11 @@
+# Original consumer dry-run — 2026-10-13
+
+The unchanged action.dry-run-writes-nothing-and-keeps-the-key case passes through the exact-fixture-bound AddSolution host handler. The positive preview executes the real public create/link group with native ObjectExists and settles the caller transaction by rollback. Its validation lists actual semantic operation kinds/disposition, and exposes no provisional identity/token or cached invocation. The later real write with the same caller key k1 reports applied, proving no durable receipt/key consumption from the preview. The original intermediate query sees only the original solution.
+
+The missing-target preview uses an exact public ObjectNotFound, then verifies current authorized accepted-source bytes and visible catalog module/type/key before reporting use_case_exists. Unknown/unavailable/hidden-current-selection outcomes refuse. This is a selected trusted-fixture host authority observation, not a new general native key-exists predicate or protected row-policy claim. A typed native PreconditionFailed after a found target is mapped directly. Persisted business/receipt effects roll back; sequence allocation need not rewind.
+
+The dry-run case runs in a fresh original basic fixture because another selected case creates the same sol-2. It is not made to pass by renaming keys or changing inputs. Ten original workflows passed together through installed runtime0.34/Weft0.4.7 on DocumentDrivenDX pgserver-pg18 18.6.1/PostgreSQL18.6 and psycopg3.3.6 in one basic test (24.012seconds). Original corpus/model/SQL/expected observations remain unchanged. Full consumer-adapter/corpus coverage, protected security activation, replica execution and independent interchange remain open.
+
+Astra Ultra reviewed the plan and source scope; its required current-source/catalog authorization check was added before negative absence mapping. No runtime profile, action interpreter, metrics or new verification campaign was added.
+
+The final source review required explicit Created/create_object/create_edge validation before mapping preview effect labels. That guard-only correction is applied; the24.012second run covers the unchanged positive workflow. Unexpected native result kinds now refuse instead of being labeled Link.
