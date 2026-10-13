@@ -93,3 +93,33 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
   finally:
    with psycopg.connect(self.info.connection_uri,autocommit=True) as writer:
     writer.execute(sql.SQL('ALTER ROLE {} NOBYPASSRLS').format(sql.Identifier(self.bob)))
+
+ def test_role_catalog_cut_survives_receiver_until_executor_settlement(self):
+  """@covers US-056-AC9; selected dual catalog lock publication lifetime."""
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup();delivered=[];attempts=[]
+  def probe():
+   for statement in (sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(self.bob)),sql.SQL('GRANT {} TO {}').format(sql.Identifier(self.installation.owner_role),sql.Identifier(self.bob))):
+    with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+     with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(statement)
+     attempts.append(True)
+  def receive(packet):probe();delivered.append(packet)
+  result=source.subject.publish_role_fenced_registered_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,cut,self.registered_subjects,receive)
+  self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error));self.assertEqual(delivered,[result.value]);probe();self.assertEqual(attempts,[True]*4)
+  self.host.detach();self.admin.rollback()
+  with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+   writer.execute(sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(self.bob)))
+   self.assertEqual(writer.execute('SELECT rolbypassrls FROM pg_catalog.pg_roles WHERE rolname=%s',(self.bob,)).fetchone(),(True,))
+   writer.execute(sql.SQL('ALTER ROLE {} NOBYPASSRLS').format(sql.Identifier(self.bob)))
+
+ def test_role_catalog_writer_contention_refuses_before_subject(self):
+  """@covers US-056-AC9; opposing writer prevents initial role cut."""
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup();delivered=[]
+  with psycopg.connect(self.info.connection_uri,autocommit=True) as writer:
+   writer.execute('BEGIN');writer.execute(sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(self.bob)))
+   try:
+    with patch.object(source.subject,'encode_literal_key_tuple') as encoder,patch.object(source.subject,'run_owned_catalog_resource_read') as evaluator:
+     result=source.subject.publish_role_fenced_registered_catalog_resource_read(h,t,self.host,self.tx,mapping,selection,inspector,relations,cut,self.registered_subjects,delivered.append)
+     encoder.assert_not_called();evaluator.assert_not_called()
+    self.assertIsInstance(result,Error);self.assertEqual(delivered,[])
+    self.assertIsInstance(self.host._custody.last_attempt.error,psycopg.errors.LockNotAvailable)
+   finally:writer.execute('ROLLBACK')

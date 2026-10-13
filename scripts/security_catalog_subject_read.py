@@ -28,13 +28,14 @@ def derive_catalog_source_epoch_profile(mapping,fact_relations,barrier,*,subject
     return bind(mapping,fact_relations,barrier,subject_source=subject_source)
 
 
-def run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,*,fact_relations=None,publisher=None,source_cut=None,registered_subjects=None):
+def run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,*,fact_relations=None,publisher=None,source_cut=None,registered_subjects=None,role_catalog_cut=False):
     if (type(mapping) is not PreparedSecurityMapping or type(selection) is not _SubjectSelection
             or type(caller_host) is not PsycopgHost or type(executor_host) is not PsycopgHost):raise ValueError('Exact native caller and accepted mapping required')
     if publisher is not None and (not callable(publisher) or fact_relations is None):
         raise ValueError('Original guarded publication context required')
     if publisher is not None:publisher=_prepare_synchronous_publisher(publisher)
     mapping=replace(mapping);selection=replace(selection)
+    if type(role_catalog_cut) is not bool or (role_catalog_cut and registered_subjects is None):raise ValueError('Exact registered role cut context required')
     expected_callers=None
     if registered_subjects is not None:
         from truss._security_catalog_subject_installation import snapshot_catalog_subjects
@@ -78,6 +79,9 @@ def run_owned_native_catalog_resource_read(caller_host,caller_transaction,execut
         from truss._psycopg_epoch_cut import _run_ddl_fenced_epoch_operation
         def audience(c):
             _pin_cursor(c)
+            if role_catalog_cut:
+                from truss._security_catalog_subject_installation import acquire_registered_role_catalog_cut_with_cursor
+                acquire_registered_role_catalog_cut_with_cursor(c)
             c.execute('SELECT installation_id::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton',prepare=False,binary=False)
             if c.description is None or len(c.description)!=1 or c.description[0].type_code!=25:
                 raise ValueError('Exact source epoch installation TEXT descriptor required')
@@ -159,3 +163,11 @@ def publish_registered_ddl_epoch_guarded_native_catalog_resource_read(caller_hos
     if type(registered_subjects) is not PendingCatalogSubjects or fact_relations is None or source_cut is None or not callable(publisher):
         raise ValueError('Mandatory original registered Subject publication required')
     return run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations=fact_relations,publisher=publisher,source_cut=source_cut,registered_subjects=registered_subjects)
+
+
+def publish_role_fenced_registered_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations,source_cut,registered_subjects,publisher):
+    """Explicit privileged role catalog cut; not an admitted public backend profile."""
+    from truss._security_catalog_subject_installation import PendingCatalogSubjects
+    if type(registered_subjects) is not PendingCatalogSubjects or fact_relations is None or source_cut is None or not callable(publisher):
+        raise ValueError('Mandatory role-fenced registered publication required')
+    return run_owned_native_catalog_resource_read(caller_host,caller_transaction,executor_host,executor_transaction,mapping,selection,original_inspector,fact_relations=fact_relations,publisher=publisher,source_cut=source_cut,registered_subjects=registered_subjects,role_catalog_cut=True)

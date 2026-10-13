@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "covers": [
+    "US-056-AC9",
+    "US-056-AC2"
+  ],
+  "runs": [
+    {
+      "tests": 1,
+      "seconds": 14.284
+    },
+    {
+      "tests": 2,
+      "seconds": 28.252
+    }
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_subject_installation.py": "8254908eb3c1983ad77a8fc9d492a6b9abf152c45a327e10fb07ac78607b261b",
+    "scripts/security_catalog_subject_read.py": "4e3f8e5c3b5a282bf16bfa1a545cde6c6c87f13c98d03ae91f0f68bc91d1ee03",
+    "packages/python/tests/test_security_registered_callers_native.py": "24bfa442c052c25b4dee7d5cf16c0ab5fb7f7e5e2d14e384ef7fe7fa5923c6f4"
+  },
+  "scope": "Explicit privileged dual role catalog cut before observation, through receiver and outer settlement. Independent ALTER ROLE and GRANT refused55P03 during receiver and after delivery; ALTER ROLE succeeds after rollback. Opposing writer refuses before Subject/evaluation. Legacy3caller regression passes. No ordinary privileged issuer/callable closure, same-backend mutation, ABA, all-role/config closure or backend admission claim.132 inventory unchanged.",
+  "review": "Astra Ultra source review found no actionable defect; selected catalog and cross-transaction scope only."
+}

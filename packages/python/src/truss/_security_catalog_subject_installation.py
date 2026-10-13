@@ -135,3 +135,11 @@ def verify_registered_catalog_subjects_with_cursor(cursor,subjects,source):
  roles=_text_rows(cursor,"SELECT r.oid::pg_catalog.text,r.rolcanlogin::pg_catalog.text,r.rolsuper::pg_catalog.text,r.rolcreatedb::pg_catalog.text,r.rolcreaterole::pg_catalog.text,r.rolreplication::pg_catalog.text,r.rolbypassrls::pg_catalog.text,pg_catalog.pg_has_role(r.oid,c.relowner,'MEMBER')::pg_catalog.text FROM pg_catalog.pg_roles r CROSS JOIN pg_catalog.pg_class c WHERE c.oid OPERATOR(pg_catalog.=) 'truss.object'::pg_catalog.regclass AND r.oid OPERATOR(pg_catalog.=) ANY(%s::pg_catalog.oid[]) ORDER BY r.oid",(list(expected),),256)
  if roles!=[(str(oid),'true','false','false','false','false','false','false') for oid in expected]:raise ValueError('Original ordinary registered Subject principals required')
  if _text_rows(cursor,'SELECT role_oid::pg_catalog.text,staff_key::pg_catalog.text FROM ONLY truss.catalog_subject_map ORDER BY role_oid',limit=256)!=[(str(oid),key) for oid,key in subjects.bindings]:raise ValueError('Original registered Subject map changed')
+
+
+def acquire_registered_role_catalog_cut_with_cursor(cursor):
+ """Privileged cluster-wide cut held by caller transaction; no issuer admission."""
+ cursor.execute('LOCK TABLE pg_catalog.pg_authid,pg_catalog.pg_auth_members IN SHARE MODE NOWAIT',prepare=False)
+ locks=_text_rows(cursor,"SELECT l.relation::pg_catalog.text,l.mode::pg_catalog.text,l.granted::pg_catalog.text FROM pg_catalog.pg_locks l WHERE l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.locktype OPERATOR(pg_catalog.=) 'relation' AND l.database OPERATOR(pg_catalog.=) 0::pg_catalog.oid AND l.relation OPERATOR(pg_catalog.=) ANY(ARRAY['pg_catalog.pg_authid'::pg_catalog.regclass::pg_catalog.oid,'pg_catalog.pg_auth_members'::pg_catalog.regclass::pg_catalog.oid]) AND l.mode OPERATOR(pg_catalog.=) 'ShareLock' ORDER BY l.relation",limit=2)
+ expected=_text_rows(cursor,"SELECT oid::pg_catalog.text FROM pg_catalog.pg_class WHERE oid OPERATOR(pg_catalog.=) ANY(ARRAY['pg_catalog.pg_authid'::pg_catalog.regclass::pg_catalog.oid,'pg_catalog.pg_auth_members'::pg_catalog.regclass::pg_catalog.oid]) ORDER BY oid",limit=2)
+ if len(expected)!=2 or locks!=[(row[0],'ShareLock','true') for row in expected]:raise ValueError('Original held shared role catalog cut required')
