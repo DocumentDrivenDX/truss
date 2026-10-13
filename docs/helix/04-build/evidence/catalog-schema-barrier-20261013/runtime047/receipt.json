@@ -1,0 +1,24 @@
+{
+  "scope": "Post-merge runtime0.47 selected schema barrier regression",
+  "integrationCommit": "771edb0ddb5258836f13e50a8530790c9d7c713d",
+  "preservedOwnerMain": "0d93bd25",
+  "nativeTests": 9,
+  "seconds": 101.107,
+  "imports": 933,
+  "qualification": "Complete nine-test component suite passes with exact owned cleanup. Earlier runtime0.46 native8/native1 and Astra53 remain separately qualified. No new Record-name/member-order security qualification, full dependency lifetime or backend case promotion.",
+  "sourcePins": {
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "0eba4722a9fb1438966c60bc32a099ea37c71b1ea5262fb78dcb95450edb83d8",
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "ad763f32aafc2666edbe117ebdee082f6b1aa80a4b92e62a8cf242d246c2117b",
+    "scripts/security_catalog_subject_read.py": "bbf135606a9447644d97b10a0a6df5b8da53919d446538ef0191d3da5bc3b508",
+    "packages/postgresql/native/source-epoch-schema-ddl-barrier.sql": "0ad98a723bdfe5f0fc7c9648cf4b1845a512afba7f4069d9d0e7cc46ae07a4d6",
+    "packages/python/tests/test_security_catalog_source_cut_native.py": "274f2235dfce4f6102b2194eb28649eae6b9596a3e183115e38f8e75bd1533de"
+  },
+  "evidencePins": {
+    "published-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "2687f91ebb6866b8a45907c52b2755f9000961d375956eca12ea637f156466d1",
+    "runtime-manifest.json": "0eba4722a9fb1438966c60bc32a099ea37c71b1ea5262fb78dcb95450edb83d8",
+    "decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143"
+  }
+}

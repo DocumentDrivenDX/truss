@@ -1,0 +1,37 @@
+{
+  "scope": "Selected CREATE/ALTER/DROP SCHEMA epoch barrier participation",
+  "runtime": "truss-catalog-runtime/0.46-candidate",
+  "server": "PostgreSQL18.6",
+  "nativeSuite": {
+    "tests": 8,
+    "seconds": 127.484
+  },
+  "sameExecutor": {
+    "tests": 1,
+    "seconds": 31.815
+  },
+  "independentControls": 53,
+  "imports": 933,
+  "acceptancePrerequisites": [
+    "US-056 AC9/AC10",
+    "US-057 AC7",
+    "CONTRACT-063",
+    "STP-056"
+  ],
+  "qualification": "Foreign schema DDL is excluded through synchronous publication; same-backend schema DDL refuses55000 before effects. Disabled selected barrier refuses before codec/evaluator/sink. Original invoker source, administrator issuer seed and installed handler lifetime remain premises. No grant/comment/security-label/config/extension/role closure, automatic epoch issuance, authenticated public endpoint or backend case promotion. Prior8-test test-file snapshot precedes addition of separate1-test control; behavioral source unchanged except SQL comment scope correction.",
+  "sourcePins": {
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "ad763f32aafc2666edbe117ebdee082f6b1aa80a4b92e62a8cf242d246c2117b",
+    "scripts/security_catalog_subject_read.py": "bbf135606a9447644d97b10a0a6df5b8da53919d446538ef0191d3da5bc3b508",
+    "packages/postgresql/native/source-epoch-schema-ddl-barrier.sql": "0ad98a723bdfe5f0fc7c9648cf4b1845a512afba7f4069d9d0e7cc46ae07a4d6",
+    "packages/python/tests/test_security_catalog_source_cut_native.py": "274f2235dfce4f6102b2194eb28649eae6b9596a3e183115e38f8e75bd1533de",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "899422a4ec840f83e7631728d92ff8f4bffa8e06c853e4c0016c3956a819f601"
+  },
+  "evidencePins": {
+    "same-executor.log": "8e460a84318827ad475cef27845f51a853f2324b65196ef43e18b821f2f1e6ae",
+    "published-decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143",
+    "cleanup.json": "c04d28626b34e5bb65cb43853ab3bc27915ea99e60bbbb209b82629f343884ea",
+    "module-boundaries.log": "01248aeb63d3f8288fb8e1fc43513f50c0348f5603cbd2d1fca92e7a30a0db0a",
+    "native.log": "d34757ef29de32a342bf3c70c4bd136025181def5eb4555b6c6ecfc6cf529934",
+    "decision.json": "0db575ee57cdd29ca89e2a917cabf3857754a0b3542d32f573d5499d3b0c1143"
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "scope": "Actual Python readback and profile producer with synthetic native epoch/catalog carriers; no native event or lifecycle execution",
+  "count": 53,
+  "controls": [
+    {
+      "name": "legacy positional constructor defaults schema selection false",
+      "passed": true
+    },
+    {
+      "name": "alter=False schema=False exact ordered rows accept",
+      "passed": true
+    },
+    {
+      "name": "alter=False schema=False uses static flag literals without bind adaptation",
+      "passed": true
+    },
+    {
+      "name": "alter=False schema=False foreign descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "alter=False schema=True exact ordered rows accept",
+      "passed": true
+    },
+    {
+      "name": "alter=False schema=True uses static flag literals without bind adaptation",
+      "passed": true
+    },
+    {
+      "name": "alter=False schema=True foreign descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "alter=True schema=False exact ordered rows accept",
+      "passed": true
+    },
+    {
+      "name": "alter=True schema=False uses static flag literals without bind adaptation",
+      "passed": true
+    },
+    {
+      "name": "alter=True schema=False foreign descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "alter=True schema=True exact ordered rows accept",
+      "passed": true
+    },
+    {
+      "name": "alter=True schema=True uses static flag literals without bind adaptation",
+      "passed": true
+    },
+    {
+      "name": "alter=True schema=True foreign descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "missing schema refuses callback",
+      "passed": true
+    },
+    {
+      "name": "duplicate schema refuses callback",
+      "passed": true
+    },
+    {
+      "name": "wrong order refuses callback",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 0 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 1 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 2 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 3 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 4 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 5 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 6 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 7 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 8 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 9 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 10 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 11 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 12 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 13 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 14 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 15 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 16 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 17 exact match required",
+      "passed": true
+    },
+    {
+      "name": "schema metadata field 18 exact match required",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool NoneType None refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool int 0 refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool int 1 refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool str true refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool list [] refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_schema_ddl nonbool object <object object at 0x1086e4fb0> refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool NoneType None refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool int 0 refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool int 1 refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool str true refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool list [] refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "include_alter_routine nonbool object <object object at 0x1086e4f80> refuses before epoch host",
+      "passed": true
+    },
+    {
+      "name": "schema selection captured before epoch host mutation",
+      "passed": true
+    },
+    {
+      "name": "profile0.2 binds exact default false and optin true distinctly",
+      "passed": true
+    },
+    {
+      "name": "profile refuses schema selection None",
+      "passed": true
+    },
+    {
+      "name": "profile refuses schema selection 0",
+      "passed": true
+    },
+    {
+      "name": "profile refuses schema selection 1",
+      "passed": true
+    },
+    {
+      "name": "profile refuses schema selection 'true'",
+      "passed": true
+    }
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_psycopg_epoch_cut.py": "ad763f32aafc2666edbe117ebdee082f6b1aa80a4b92e62a8cf242d246c2117b",
+    "scripts/security_catalog_subject_read.py": "bbf135606a9447644d97b10a0a6df5b8da53919d446538ef0191d3da5bc3b508",
+    "packages/postgresql/native/source-epoch-schema-ddl-barrier.sql": "0ad98a723bdfe5f0fc7c9648cf4b1845a512afba7f4069d9d0e7cc46ae07a4d6",
+    "packages/python/tests/test_security_catalog_source_cut_native.py": "274f2235dfce4f6102b2194eb28649eae6b9596a3e183115e38f8e75bd1533de"
+  }
+}

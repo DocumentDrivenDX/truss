@@ -7592,5 +7592,15 @@ reordering is committed on main for v0.0.10/Weft0.4.12 after Astra Ultra review,
 two UMF workflows and immediate predecessor upgrade. Required-field tightening
 is next: existing non-key singular scalar optional→required after locked
 compatibility validation, public repair and reacceptance. Both UMF workflows
-pass; predecessor upgrade/release are in progress. No new formal/performance
+pass; predecessor upgrade passes and release is in progress. No new formal/performance
 campaign or independent second engine is added to these release gates.
+
+### Selected schema DDL source participation — 2026-10-13
+
+The private epoch barrier recipe can explicitly select original ALWAYS CREATE/ALTER/DROP SCHEMA participation using the existing invoker epoch/marker lock ordering. Native readback requires the exact selected trigger, tags, owner, function and descriptors before Subject use. Profile0.2 binds the schema selection; earlier selections default false. This conservatively includes unrelated schemas for those three tags. A disabled selected schema barrier refuses before key codec/evaluator/publication. Foreign CREATE SCHEMA, ALTER SCHEMA rename and DROP SCHEMA CASCADE refuse while the original source cut survives through synchronous receiver completion. Native8 passes127.484s on PostgreSQL18.6/runtime0.46; Astra53 bounded independent controls cover flag combinations, exact readback, preflight refusal and profile binding.
+
+Trace US-056 AC9/AC10, US-057 AC7, CONTRACT-063/STP-056 prerequisites. Selected schema tags are not COMMENT/SECURITY LABEL/grant or complete role/DDL/extension/config/cascade/admin/event-trigger lifetime closure. Administrative issuer seed and continuous original installed handler custody remain premises. No new source generation is issued automatically, no authenticated protected endpoint is admitted, and no backend case is promoted. Inventory26 implemented/105 not-run/1 counterexample-found remains. Evidence: `docs/helix/04-build/evidence/catalog-schema-barrier-20261013/receipt.json`.
+
+The same-executor schema control separately passes1/31.815s: all three selected commands refuse55000 with exact guard primary, no introduced schema, and original10 objects intact. Owned cleanup is exact; no backend promotion.
+
+Concurrent owner main0d93bd25/runtime0.47/package0.0.10 was preserved. The complete nine-test selected schema barrier suite passes9/101.107s with exact owned cleanup and933 imports. This is component regression only, with unchanged acceptance inventory. Evidence: `evidence/catalog-schema-barrier-20261013/runtime047/receipt.json`.

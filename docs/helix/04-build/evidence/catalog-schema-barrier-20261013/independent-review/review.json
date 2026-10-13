@@ -1,0 +1,20 @@
+{
+  "kind": "scoped-independent-review/0.1",
+  "reviewer": "Astra Ultra",
+  "status": "no_remaining_actionable_findings_in_reviewed_scope",
+  "scope": "Optional schema event-trigger readback, selected native tags, default compatibility, profile0.2 binding and same-executor/foreign-writer native controls.",
+  "independentControls": 53,
+  "controlScope": "Actual Python qualifier/profile producer; synthetic native epoch/catalog rows. All four option combinations, strict flags, descriptor-before-fetch, complete schema-hook metadata drift, captured flag and profile sensitivity. No native lifecycle independently executed.",
+  "resolvedWording": "SQL comment narrowed from all schema DDL to selected CREATE/ALTER/DROP SCHEMA tags.",
+  "nativeEvidence": {"execution": "parent-executed; reviewer inspected logs/source", "priorEightTestSuiteSeconds": 127.484, "appendedSameExecutorTestSeconds": 31.815, "fullNineTestSuiteClaimed": false, "server": "PostgreSQL18.6", "cleanup": "runtime exit succeeded; status3; socket absent", "boundaryImports": 933},
+  "findings": [],
+  "compatibility": "Default False preserves base/ALTER ROUTINE readback. Derived source packets explicitly move to0.2 and bind includeSchemaDdl; old0.1 source-cut packets are not silently admitted.",
+  "limits": ["Selected CREATE/ALTER/DROP SCHEMA tags only; no COMMENT, SECURITY LABEL, grant, admin/event-trigger, role/configuration or complete dependency lifetime closure.", "Native same-executor checks assert exact55000/primary inside later savepoints, preserve namespace/object state and retain earlier cuts. Foreign sink controls retain native LockNotAvailable scope.", "Issuer/source authentication, exclusive host and continuous cut/handler lifetime remain premises. No protected endpoint/readiness/backend acceptance case promotion."],
+  "implementationSha256": "ad763f32aafc2666edbe117ebdee082f6b1aa80a4b92e62a8cf242d246c2117b",
+  "profileProducerSha256": "bbf135606a9447644d97b10a0a6df5b8da53919d446538ef0191d3da5bc3b508",
+  "nativeTestSha256": "274f2235dfce4f6102b2194eb28649eae6b9596a3e183115e38f8e75bd1533de",
+  "nativeLogSha256": "d34757ef29de32a342bf3c70c4bd136025181def5eb4555b6c6ecfc6cf529934",
+  "sameExecutorLogSha256": "8e460a84318827ad475cef27845f51a853f2324b65196ef43e18b821f2f1e6ae",
+  "sourcePins": "source-pins.json",
+  "sourcePinsSha256": "65be6c47f2105a4e775252874dfe3ccd1694cbd944cbf93fe00d6b6cf5c774cb"
+}
