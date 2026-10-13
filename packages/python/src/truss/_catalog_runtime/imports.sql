@@ -1,6 +1,6 @@
 CREATE FUNCTION truss.runtime_import_profiles() RETURNS jsonb
 LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
- SELECT '{"importProfile":{"identity":"truss-host-scalar-import","version":"0.1","sha256":"3f8ec350d3184ef4239e3193afb48ed0b37213f36db8fe4f636d55585a2c3b9d"},"importPayloadProfile":{"identity":"truss-scalar-import-payload","version":"0.1","sha256":"bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"},"importKeyProfile":{"identity":"truss-selected-umf-scalar-key","version":"0.2","sha256":"e4b325c5906c759776e7ffbb5b9c298caa23034339d90c4e2e7a9d74eb002708"},"configurationProfile":{"identity":"truss-installed-engine-forbid","version":"0.1","sha256":"502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"}}'::jsonb;
+ SELECT '{"importProfile":{"identity":"truss-host-scalar-import","version":"0.2","sha256":"993731fae1997a344819f56b9618c689080deedaf7627a4d82948d01972eec1c"},"importPayloadProfile":{"identity":"truss-scalar-import-payload","version":"0.2","sha256":"45180a79836394b3c3c945cfe908b67e3a45ab3c81362f052b12ae45e7042281"},"importKeyProfile":{"identity":"truss-selected-umf-scalar-key","version":"0.2","sha256":"e4b325c5906c759776e7ffbb5b9c298caa23034339d90c4e2e7a9d74eb002708"},"configurationProfile":{"identity":"truss-installed-engine-forbid","version":"0.1","sha256":"502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"}}'::jsonb;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_import_profiles() FROM PUBLIC;
 
@@ -110,9 +110,11 @@ BEGIN
   OR load_id IS NULL OR octet_length(load_id) NOT BETWEEN 1 AND 4096 THEN RAISE EXCEPTION 'bounded original import record/load required' USING ERRCODE='22023';END IF;
  record:=convert_from(original_record,'UTF8')::jsonb;payload:=decode(record->'payload'->>'bytesBase64','base64');
  IF record-ARRAY['kind','identity','payload','payloadProfile']<>'{}'::jsonb OR (record->>'kind' IN ('object','edge')) IS NOT TRUE THEN RAISE EXCEPTION 'closed import record required' USING ERRCODE='22023';END IF;
- IF record->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'importPayloadProfile' OR encode(sha256(payload),'hex') IS DISTINCT FROM record->'payload'->>'sha256'
+ IF octet_length(payload) NOT BETWEEN 1 AND 1048576 OR (convert_from(payload,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique original payload required' USING ERRCODE='22023';END IF;
+ value:=convert_from(payload,'UTF8')::jsonb;
+ IF (record->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'importPayloadProfile' AND NOT ((record->'payloadProfile'='{"identity":"truss-scalar-import-payload","version":"0.1","sha256":"bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"}'::jsonb AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(value->'values') v WHERE truss.valid_scalar_cell(v.value->'value') IS NOT TRUE)) IS TRUE)) OR encode(sha256(payload),'hex') IS DISTINCT FROM record->'payload'->>'sha256'
   OR octet_length(payload) NOT BETWEEN 1 AND 1048576 OR (convert_from(payload,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'exact original profiled payload required' USING ERRCODE='22023';END IF;
- value:=convert_from(payload,'UTF8')::jsonb;input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->0;result:=attempt.results->0;
+ input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->0;result:=attempt.results->0;
  IF value-ARRAY['interfaceVersion','kind','values','source',CASE record->>'kind' WHEN 'object' THEN 'ownership' ELSE 'orderKey' END]<>'{}'::jsonb THEN RAISE EXCEPTION 'closed profiled import payload required' USING ERRCODE='22023';END IF;
  IF (record->>'kind' IN ('object','edge')) IS NOT TRUE OR value->>'interfaceVersion' IS DISTINCT FROM 'truss-import-payload/0.1.0' OR value->>'kind' IS DISTINCT FROM record->>'kind' OR result->>'outcome'<>'created'
   OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(input->'assertedOrigin'->'entries') e WHERE e.value->>'key'='x-load-id' AND e.value->'value'=jsonb_build_object('kind','string','text',load_id)) THEN

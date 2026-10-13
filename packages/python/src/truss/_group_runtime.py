@@ -3,7 +3,7 @@ from dataclasses import dataclass, fields, is_dataclass
 from hashlib import sha256
 import base64
 import json
-from .contracts import ABSENT, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, TextValue, NullValue, BooleanValue
+from .contracts import SequenceValue,ABSENT, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, TextValue, NullValue, BooleanValue
 from .execution import Ok, Error, Outcome
 from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, CreateEdge, UpdateObject, UpdateEdge, Delete, StoredObjectReference, AliasObjectReference, RootlessOwnership,
     RequestNone, RequestPresent, RequestIdentity, GroupSuccess, GroupFailed, GroupUnavailable,
@@ -90,7 +90,9 @@ def _result(raw: bytes):
     if value['outcome']=='failed':
         evidence=_artifact(raw)
         if value['code']=='precondition_failed':
-            return GroupFailed(failure=PreconditionFailed(failures=tuple(FailedPrecondition(condition_id=v['conditionId'],reason=v['reason'],rule=v['rule']) for v in value['failures'])))
+            failures=tuple(FailedPrecondition(condition_id=v['conditionId'],reason=v['reason'],rule=v['rule']) for v in value['failures'])
+            if not failures:raise ValueError('Nonempty failed preconditions required')
+            return GroupFailed(failure=PreconditionFailed(failures=(failures[0],*failures[1:])))
         if value['code']=='invalid_input':return GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
         if value['code']=='unauthorized_person':return GroupFailed(failure=UnauthorizedPerson())
         if value['code']=='request_conflict':return GroupFailed(failure=RequestConflict(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
@@ -131,8 +133,10 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     if not 1<=len(input.operations)<=128 or any(len(op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())>1024 for op in input.operations):
         return Ok(GroupUnavailable(reason='resource'))
     def scalar(value):return type(value) in (NullValue,TextValue,BooleanValue)
+    def flat(value):
+        return scalar(value) or type(value) is SequenceValue and len(value.items)<=1024 and all(scalar(v) for v in value.items) or type(value) is MapValue and len(value.entries)<=1024 and all(scalar(e.value) for e in value.entries)
     def origin_scalar(value):return type(value) is NullValue or (type(value) is TextValue and value.kind=='string')
-    if any(not scalar(v.value) for op in input.operations for v in (op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
+    if any(not (flat(v.value) if type(op) in (CreateObject,UpdateObject) else scalar(v.value)) for op in input.operations for v in (op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
         return Ok(GroupUnavailable(reason='profile'))
     if type(documents) is not tuple or not 1<=len(documents)<=512 or any(type(d) is not CatalogDocument or type(d.document_id) is not str or type(d.content) is not bytes for d in documents):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"original_documents"}'))))
@@ -203,7 +207,7 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
 
 # A real selected provider; native readiness and authority are checked per call.
 from typing import Callable, Literal, overload
-from .contracts import CapabilitySelection
+from .contracts import SequenceValue,CapabilitySelection
 from .execution import TransactionHandle
 from .groups import GroupRequestSelection, GroupApplicationResult, RequestFreeGroupApplicationResult
 

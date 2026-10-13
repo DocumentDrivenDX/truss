@@ -38,6 +38,7 @@ BEGIN
  SELECT * INTO STRICT pin FROM truss.runtime_definition('property',selected_type,property_id,revision);
  IF pin.definition_pin IS DISTINCT FROM definition_pin THEN RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
  IF NOT truss.runtime_can_read(property.definition_document_id,property.declaration_module) THEN RAISE EXCEPTION 'current historical property reader required' USING ERRCODE='42501';END IF;
+ IF property.cardinality IN ('array','map') AND truss.runtime_can_read(property.item->>'documentId',property.item->'reference'->>'module') IS NOT TRUE THEN RAISE EXCEPTION 'current historical item reader required' USING ERRCODE='42501';END IF;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_history_property(int,int,int,text) FROM PUBLIC;

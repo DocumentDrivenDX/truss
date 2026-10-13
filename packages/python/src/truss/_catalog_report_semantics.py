@@ -4,7 +4,7 @@ from hashlib import sha256
 from importlib.resources import files
 import json
 from .preparation import _require_original_preparation
-from ._catalog_support import evaluate_catalog_support, verified_retained_metadata, RETAINED_METADATA_PROFILE, CORE08_PROFILE, FACET07_PROFILE, FACET08_PROFILE
+from ._catalog_support import CONTAINER07_PROFILE,CONTAINER08_PROFILE,evaluate_catalog_support, verified_retained_metadata, RETAINED_METADATA_PROFILE, CORE08_PROFILE, FACET07_PROFILE, FACET08_PROFILE
 
 PROFILE_SHA256='be634f1d1bdf8f096333e25d15597d2b81af4ace87c9216a8abf304797df2080'
 PROFILE={'identity':'truss-catalog-report-semantic-inputs','version':'0.1.0','sha256':PROFILE_SHA256}
@@ -81,7 +81,7 @@ def compose_original_catalog_report_semantics(prepared,support):
     return {'state':'source_fields_ready','projectionProfile':dict(PROFILE),
             'projectionArtifact':{'identity':'truss.catalog-report-semantic-inputs/0.1.0',
                 'bytesBase64':base64.b64encode(policy).decode('ascii'),'sha256':PROFILE_SHA256},
-            'umf':[group['umf'] for group in groups],'umfMembership':groups,'extensions':verified_retained_metadata(prepared) if support['profile'] in (RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE) else [],
+            'umf':[group['umf'] for group in groups],'umfMembership':groups,'extensions':verified_retained_metadata(prepared) if support['profile'] in (RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE) else [],
             'assertionEntries':entries,'canonicalAssertionBytesBase64':base64.b64encode(canonical).decode('ascii'),
             'assertionInventorySha256':digest,
             'unresolvedBindings':['installedLayoutProfile','enforcementReportProfile','originalExecution','acceptanceReportProfile'],

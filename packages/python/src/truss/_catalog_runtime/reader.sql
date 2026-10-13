@@ -37,7 +37,7 @@ BEGIN
   IF NOT truss.runtime_can_read(owner.doc_id,owner.module_id) THEN CONTINUE;END IF;
   module:=jsonb_build_object('documentId',owner.doc_id,'moduleId',owner.module_id,'documentRevision',owner.doc_revision,'documentSha256',owner.content_sha256,
    'types',(SELECT coalesce(jsonb_agg(jsonb_build_object('typeId',t.type_id,'recordId',t.element,'kind',t.kind,'provisional',t.provisional) ORDER BY t.type_id),'[]') FROM truss.type_def t WHERE t.document_id=owner.doc_id AND t.module=owner.module_id AND t.retired_rev IS NULL),
-   'properties',(SELECT coalesce(jsonb_agg(jsonb_build_object('propertyId',p.prop_id,'typeId',p.type_id,'fieldId',p.element,'name',p.name,'scalarType',p.scalar_type,'nullability',p.nullability,'cardinality',p.cardinality) ORDER BY p.prop_id),'[]') FROM truss.prop_def p JOIN truss.type_def t USING(type_id) WHERE t.document_id=owner.doc_id AND t.module=owner.module_id AND t.retired_rev IS NULL AND p.retired_rev IS NULL AND truss.runtime_can_read(t.document_id,p.declaration_module)),
+   'properties',(SELECT coalesce(jsonb_agg(jsonb_build_object('propertyId',p.prop_id,'typeId',p.type_id,'fieldId',p.element,'name',p.name,'scalarType',p.scalar_type,'nullability',p.nullability,'cardinality',p.cardinality,'itemDefinition',p.item-'declaration') ORDER BY p.prop_id),'[]') FROM truss.prop_def p JOIN truss.type_def t USING(type_id) WHERE t.document_id=owner.doc_id AND t.module=owner.module_id AND t.retired_rev IS NULL AND p.retired_rev IS NULL AND truss.runtime_can_read(t.document_id,p.declaration_module) AND (p.cardinality NOT IN ('array','map') OR truss.runtime_can_read(p.item->>'documentId',p.item->'reference'->>'module'))),
    'keys',(SELECT coalesce(jsonb_agg(jsonb_build_object('typeId',k.type_id,'keyId',k.key_id,'keyNumber',k.key_num,'propertyIds',k.prop_ids,'primary',k.is_primary) ORDER BY k.type_id,k.key_num),'[]') FROM truss.key_def k JOIN truss.type_def t USING(type_id) WHERE t.document_id=owner.doc_id AND t.module=owner.module_id AND t.retired_rev IS NULL AND k.retired_rev IS NULL AND NOT EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.prop_id=ANY(k.prop_ids) AND NOT truss.runtime_can_read(t.document_id,p.declaration_module))),
    'relationships',(SELECT coalesce(jsonb_agg(jsonb_build_object('relationshipId',r.rel_type_id,'authoredId',r.rel_id,'name',r.name,'sourceMin',r.source_min,'sourceMax',r.source_max,'targetMin',r.target_min,'targetMax',r.target_max,'directed',r.directed,
       'endpoints',(SELECT jsonb_agg(jsonb_build_object('sourceType',e.source_type,'targetType',e.target_type) ORDER BY e.source_type,e.target_type) FROM truss.rel_endpoint e WHERE e.rel_type_id=r.rel_type_id)) ORDER BY r.rel_type_id),'[]') FROM truss.rel_def r
@@ -61,6 +61,10 @@ BEGIN
    SELECT t.document_id,p.declaration_module AS module_id
     FROM jsonb_array_elements(modules) m CROSS JOIN LATERAL jsonb_array_elements(m.value->'properties') f
     JOIN truss.prop_def p ON p.prop_id=(f.value->>'propertyId')::int JOIN truss.type_def t USING(type_id)
+   UNION
+   SELECT p.item->>'documentId',p.item->'reference'->>'module'
+    FROM jsonb_array_elements(modules) m CROSS JOIN LATERAL jsonb_array_elements(m.value->'properties') f
+    JOIN truss.prop_def p ON p.prop_id=(f.value->>'propertyId')::int WHERE p.cardinality IN ('array','map')
    UNION
    SELECT t.document_id,p.declaration_module
     FROM jsonb_array_elements(modules) m CROSS JOIN LATERAL jsonb_array_elements(m.value->'keys') k

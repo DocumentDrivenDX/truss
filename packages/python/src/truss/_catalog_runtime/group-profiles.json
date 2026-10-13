@@ -4,19 +4,19 @@
       "name": "mutationProfile",
       "pin": {
         "identity": "truss-rootless-scalar-graph",
-        "version": "0.2",
-        "sha256": "e2b24e52e1b374245d728db33ab34c63f6bea983e986064a4a444286d9d3c9b0"
+        "version": "0.3",
+        "sha256": "5fdc0458db29b2b1f34bef0c5ef2d522a80d4e1cf70def8757ac3da0261ea69e"
       },
-      "definition": "truss-rootless-scalar-graph/0.2;128 ordered create/update/delete object operations;rootless JSON scalar values;stored targets and prior aliases;expected_version;exact representation no-op;one version per changed operation;UMF original0.7/0.8 scalar keys: string,integer,decimal18/4,boolean,binary with retired reservations;exact native tuple correspondence;mathematical key equality preserves original value tokens;historical exact receipt replay before current-profile admission;delete refuses edges and owned dependents;exact property and metadata journals;durable exact request replay before live target checks;caller settlement;current qualified module writers;feed unavailable;128 caller-ID/reason conditions on locked prestate;all failed predicates returned;exact typed property equality;missing distinct from null;key absence is live membership absence not reservation clearance;relationship absence/counts use qualified definitions and endpoint locks;original receipt before predicate reevaluation;failed predicates roll back setup;explicit unauthorized/invalid group failures;independent directed edge create/update/delete;relationship-qualified identities;object and edge alias categories;endpoint reader and relationship writer;all old/new endpoint locks;final batch multiplicities including zero-edge new objects;final maximum-one markers;exact retained edge scalars;edge metadata history;read-only edge identity and paired order-key/id pages"
+      "definition": "truss-rootless-scalar-graph/0.3;128 ordered create/update/delete object operations;rootless JSON scalar values;stored targets and prior aliases;expected_version;exact representation no-op;one version per changed operation;UMF original0.7/0.8 scalar keys: string,integer,decimal18/4,boolean,binary with retired reservations;exact native tuple correspondence;mathematical key equality preserves original value tokens;historical exact receipt replay before current-profile admission;delete refuses edges and owned dependents;exact property and metadata journals;durable exact request replay before live target checks;caller settlement;current qualified module writers;128 caller-ID/reason conditions on locked prestate;all failed predicates returned;exact typed property equality;missing distinct from null;key absence is live membership absence not reservation clearance;relationship absence/counts use qualified definitions and endpoint locks;original receipt before predicate reevaluation;failed predicates roll back setup;explicit unauthorized/invalid group failures;independent directed edge create/update/delete;relationship-qualified identities;object and edge alias categories;endpoint reader and relationship writer;all old/new endpoint locks;final batch multiplicities including zero-edge new objects;final maximum-one markers;exact retained edge scalars;edge metadata history;read-only edge identity and paired order-key/id pages;one-level UMF array/map properties with explicit required singular scalar item Field and known facets;exact string map keys unique and C-sorted before storage/equality;sequence order/duplicates preserved;container absence/null/empty distinct;bounded exact retained scalar containers;no item rebinding,nested containers or owned records;item declaration module interpretation requires current read authority"
     },
     {
       "name": "valueProfile",
       "pin": {
         "identity": "truss-scalar-string-values",
-        "version": "0.2",
-        "sha256": "5e6a7f879e17066a8ffdeb8731da89906f0e5cb231e4b4357bd4fbea0158163f"
+        "version": "0.3",
+        "sha256": "4848867c9dede45720bbb37773a43e78db4bb2b9124891cb4d46e95c208f8f16"
       },
-      "definition": "truss-scalar-string-values/0.2;required/absent-allowed scalar string/integer/decimal/boolean/timestamp/binary;shared BooleanValue and TextValue;JSON numeric token text preserved without float or bounded numeric conversion;RFC3339 Gregorian date seconds00..59 original offsets and arbitrary fractions preserved including unknown -00:00;canonical padded base64 including empty;absence omitted;unknown exact scalar/null retained;asserted origin exact scalar string/null map;no lossy numeric conversion"
+      "definition": "truss-scalar-string-values/0.3;required/absent-allowed scalar string/integer/decimal/boolean/timestamp/binary;shared BooleanValue and TextValue;JSON numeric token text preserved without float or bounded numeric conversion;RFC3339 Gregorian date seconds00..59 original offsets and arbitrary fractions preserved including unknown -00:00;canonical padded base64 including empty;absence omitted;unknown exact scalar/null retained;asserted origin exact scalar string/null map;no lossy numeric conversion;one-level UMF array/map properties with explicit required singular scalar item Field and known facets;exact string map keys unique and C-sorted before storage/equality;sequence order/duplicates preserved;container absence/null/empty distinct;bounded exact retained scalar containers;no item rebinding,nested containers or owned records;item declaration module interpretation requires current read authority"
     },
     {
       "name": "canonicalizationProfile",
@@ -49,10 +49,10 @@
       "name": "policyProfile",
       "pin": {
         "identity": "truss-qualified-module-writer",
-        "version": "0.1",
-        "sha256": "398cee9241e057bb95c415a165b1812ac689433eaac2684c70a15084e681b88b"
+        "version": "0.2",
+        "sha256": "f0f41d6dfa0cc38f1340fd1516679ff985824f9cb79034923330b16c2fb3ec4f"
       },
-      "definition": "Direct ordinary session person;SET ROLE none;READ COMMITTED;private owner;current recursive native role memberships;qualified document/module writer;no elevated/server-capability/private-owner/raw-Truss role access;trusted administrative maintenance quiesces;v1"
+      "definition": "Direct ordinary session person;SET ROLE none;READ COMMITTED;private owner;current recursive native role memberships;qualified document/module writer;no elevated/server-capability/private-owner/raw-Truss role access;trusted administrative maintenance quiesces;v2;record-module writer plus current reader-or-writer for all property and required item definition modules before interpretation and again before handback;historical item ownership retained;original receipt recovery ordering preserved"
     },
     {
       "name": "positionProfile",
@@ -67,19 +67,19 @@
       "name": "importProfile",
       "pin": {
         "identity": "truss-host-scalar-import",
-        "version": "0.1",
-        "sha256": "3f8ec350d3184ef4239e3193afb48ed0b37213f36db8fe4f636d55585a2c3b9d"
+        "version": "0.2",
+        "sha256": "993731fae1997a344819f56b9618c689080deedaf7627a4d82948d01972eec1c"
       },
-      "definition": "Host-adopted scalar imports;objects before edges preserving submitted indices;explicit admitted primary-key/typed endpoint identity;live/reserved skips before replacement payload decode;eligible-only creates via native group provider;per-record standalone final invariants;immutable load/source provenance;pending caller settlement;finite record/input/report byte limits;no internal retry"
+      "definition": "Host-adopted scalar imports;objects before edges preserving submitted indices;explicit admitted primary-key/typed endpoint identity;live/reserved skips before replacement payload decode;eligible-only creates via native group provider;per-record standalone final invariants;immutable load/source provenance;pending caller settlement;finite record/input/report byte limits;no internal retry;object payload values may contain bounded one-level scalar arrays/maps under current value profile;edge values and provenance remain scalar;exact legacy payload profile admitted only for scalar object/edge values"
     },
     {
       "name": "importPayloadProfile",
       "pin": {
         "identity": "truss-scalar-import-payload",
-        "version": "0.1",
-        "sha256": "bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"
+        "version": "0.2",
+        "sha256": "45180a79836394b3c3c945cfe908b67e3a45ab3c81362f052b12ae45e7042281"
       },
-      "definition": "truss-import-payload/0.1.0 numeric-free duplicate-free UTF8 JSON;rootless object values or independent directed edge values/order;exact scalar cells;optional exact map source;known author/at/system string or null;identity-bearing payload fields must agree;decode only after eligible identity"
+      "definition": "truss-import-payload/0.1.0 numeric-free duplicate-free UTF8 JSON;rootless object values or independent directed edge values/order;exact scalar cells;optional exact map source;known author/at/system string or null;identity-bearing payload fields must agree;decode only after eligible identity;object payload values may contain bounded one-level scalar arrays/maps under current value profile;edge values and provenance remain scalar;exact legacy payload profile admitted only for scalar object/edge values"
     },
     {
       "name": "importKeyProfile",
@@ -116,6 +116,51 @@
         "sha256": "07e1b99b22803e55a378f8068a6b80454b7581129c66eabcb117545746a16625"
       },
       "definition": "Bundled original UMF encode-core-key-tuple2.0.0 umf-key-tuple-v1;accepted original core0.7.0 source;declared primary key and exact ordered string components;original native definition pins;no alternative tuple/equality implementation"
+    },
+    {
+      "name": "historicalMutationProfile02",
+      "pin": {
+        "identity": "truss-rootless-scalar-graph",
+        "version": "0.2",
+        "sha256": "e2b24e52e1b374245d728db33ab34c63f6bea983e986064a4a444286d9d3c9b0"
+      },
+      "definition": "truss-rootless-scalar-graph/0.2;128 ordered create/update/delete object operations;rootless JSON scalar values;stored targets and prior aliases;expected_version;exact representation no-op;one version per changed operation;UMF original0.7/0.8 scalar keys: string,integer,decimal18/4,boolean,binary with retired reservations;exact native tuple correspondence;mathematical key equality preserves original value tokens;historical exact receipt replay before current-profile admission;delete refuses edges and owned dependents;exact property and metadata journals;durable exact request replay before live target checks;caller settlement;current qualified module writers;feed unavailable;128 caller-ID/reason conditions on locked prestate;all failed predicates returned;exact typed property equality;missing distinct from null;key absence is live membership absence not reservation clearance;relationship absence/counts use qualified definitions and endpoint locks;original receipt before predicate reevaluation;failed predicates roll back setup;explicit unauthorized/invalid group failures;independent directed edge create/update/delete;relationship-qualified identities;object and edge alias categories;endpoint reader and relationship writer;all old/new endpoint locks;final batch multiplicities including zero-edge new objects;final maximum-one markers;exact retained edge scalars;edge metadata history;read-only edge identity and paired order-key/id pages"
+    },
+    {
+      "name": "historicalValueProfile02",
+      "pin": {
+        "identity": "truss-scalar-string-values",
+        "version": "0.2",
+        "sha256": "5e6a7f879e17066a8ffdeb8731da89906f0e5cb231e4b4357bd4fbea0158163f"
+      },
+      "definition": "truss-scalar-string-values/0.2;required/absent-allowed scalar string/integer/decimal/boolean/timestamp/binary;shared BooleanValue and TextValue;JSON numeric token text preserved without float or bounded numeric conversion;RFC3339 Gregorian date seconds00..59 original offsets and arbitrary fractions preserved including unknown -00:00;canonical padded base64 including empty;absence omitted;unknown exact scalar/null retained;asserted origin exact scalar string/null map;no lossy numeric conversion"
+    },
+    {
+      "name": "historicalPolicyProfile01",
+      "pin": {
+        "identity": "truss-qualified-module-writer",
+        "version": "0.1",
+        "sha256": "398cee9241e057bb95c415a165b1812ac689433eaac2684c70a15084e681b88b"
+      },
+      "definition": "Direct ordinary session person;SET ROLE none;READ COMMITTED;private owner;current recursive native role memberships;qualified document/module writer;no elevated/server-capability/private-owner/raw-Truss role access;trusted administrative maintenance quiesces;v1"
+    },
+    {
+      "name": "historicalImportProfile01",
+      "pin": {
+        "identity": "truss-host-scalar-import",
+        "version": "0.1",
+        "sha256": "3f8ec350d3184ef4239e3193afb48ed0b37213f36db8fe4f636d55585a2c3b9d"
+      },
+      "definition": "Host-adopted scalar imports;objects before edges preserving submitted indices;explicit admitted primary-key/typed endpoint identity;live/reserved skips before replacement payload decode;eligible-only creates via native group provider;per-record standalone final invariants;immutable load/source provenance;pending caller settlement;finite record/input/report byte limits;no internal retry"
+    },
+    {
+      "name": "historicalImportPayloadProfile01",
+      "pin": {
+        "identity": "truss-scalar-import-payload",
+        "version": "0.1",
+        "sha256": "bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"
+      },
+      "definition": "truss-import-payload/0.1.0 numeric-free duplicate-free UTF8 JSON;rootless object values or independent directed edge values/order;exact scalar cells;optional exact map source;known author/at/system string or null;identity-bearing payload fields must agree;decode only after eligible identity"
     }
   ]
 }

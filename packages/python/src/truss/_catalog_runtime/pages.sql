@@ -22,6 +22,7 @@ BEGIN
  SELECT * INTO selected_type FROM truss.type_def WHERE document_id=selected_document AND module=selected_module
   AND element=selected_record AND kind='record' AND NOT provisional AND retired_rev IS NULL AND since_rev<=captured_revision;
  IF NOT FOUND THEN RETURN NULL;END IF;
+ IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RETURN NULL;END IF;
  SELECT * INTO STRICT source_pin FROM truss.runtime_definition('type',selected_type.type_id);
  IF original_cursor IS NOT NULL THEN
   IF octet_length(original_cursor) NOT BETWEEN 1 AND 65536 OR (convert_from(original_cursor,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
@@ -64,6 +65,7 @@ BEGIN
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN RAISE EXCEPTION 'catalog changed during page observation' USING ERRCODE='55P03';END IF;
  result:=convert_to(jsonb_build_object('profile','truss-python-object-page/0.1','catalogRevision',captured_revision,'objects',objects,'continuation',continuation)::text,'UTF8');
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'complete page byte limit exceeded' USING ERRCODE='54000';END IF;
+ IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RAISE EXCEPTION 'current buffered page interpretation reader required' USING ERRCODE='42501';END IF;
  RETURN result;
 END;
 $$;

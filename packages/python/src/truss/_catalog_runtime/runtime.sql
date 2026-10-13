@@ -151,7 +151,7 @@ BEGIN
   'relationships',(SELECT coalesce(jsonb_agg(jsonb_build_object('documentId',r.document_id,'moduleId',r.module,'relationshipId',r.rel_id,'typeId',r.rel_type_id::text) ORDER BY r.rel_type_id),'[]'::jsonb) FROM jsonb_populate_recordset(NULL::truss.rel_def,basis->'rel_def') r WHERE r.since_rev<=request.revision));
  IF (convert_from(request.input_bytes,'UTF8')::jsonb)->'supportProfile' IN (
  '{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,
- '{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb) THEN
+ '{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb) THEN
   report:=report||jsonb_build_object('runtimeFacetEnforcement',jsonb_build_object(
    'profile',(convert_from(request.input_bytes,'UTF8')::jsonb)->'supportProfile',
    'scope','native_runtime_facade_create_update_import_read_query_scalar_validation_no_bare_table_check',
@@ -280,7 +280,7 @@ DECLARE input jsonb; documents jsonb; declarations jsonb; doc jsonb; source json
 BEGIN
  input:=convert_from(input_bytes,'UTF8')::jsonb;documents:=convert_from(documents_bytes,'UTF8')::jsonb;
  declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
- IF jsonb_typeof(input) IS DISTINCT FROM 'object' OR ((input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation()) AND (input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb) AND (input-'interfaceVersion'-'documents'-'supportProfile')=(SELECT preparation_configuration-'supportProfile' FROM truss.runtime_current_installation())) IS NOT TRUE)
+ IF jsonb_typeof(input) IS DISTINCT FROM 'object' OR ((input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation()) AND (input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb) AND (input-'interfaceVersion'-'documents'-'supportProfile')=(SELECT preparation_configuration-'supportProfile' FROM truss.runtime_current_installation())) IS NOT TRUE)
   OR input->'layoutProfile' IS DISTINCT FROM (SELECT layout_profile FROM truss.runtime_current_installation())
   OR input->'binding' IS DISTINCT FROM '{"state":"absent"}'::jsonb OR input->'transforms' IS DISTINCT FROM '[]'::jsonb
   OR jsonb_typeof(documents) IS DISTINCT FROM 'array' OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512
@@ -293,16 +293,20 @@ BEGIN
    OR selected_doc->>'documentRevision' IS DISTINCT FROM doc->>'revision'
    OR selected_doc->'artifact'->>'sha256' IS DISTINCT FROM encode(sha256(convert_to(doc->>'originalText','UTF8')),'hex')
    OR decode(selected_doc->'artifact'->>'bytesBase64','base64') IS DISTINCT FROM convert_to(doc->>'originalText','UTF8')
-   OR source->>'id' IS DISTINCT FROM doc->>'documentId' OR source->>'umf' IS DISTINCT FROM (CASE WHEN input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb) THEN '0.8.0' ELSE '0.7.0' END)
+   OR source->>'id' IS DISTINCT FROM doc->>'documentId' OR source->>'umf' IS DISTINCT FROM (CASE WHEN input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb) THEN '0.8.0' ELSE '0.7.0' END)
    OR doc->>'umfVersion' IS DISTINCT FROM source->>'umf'
-   OR (input->'supportProfile'->>'version' NOT IN ('0.6.0','0.7.0','0.8.0','0.9.0') AND (coalesce(source->'vocabularies','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb OR coalesce(source->'extensions','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb)) THEN
+   OR (input->'supportProfile'->>'version' NOT IN ('0.6.0','0.7.0','0.8.0','0.9.0','0.10.0','0.11.0') AND (coalesce(source->'vocabularies','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb OR coalesce(source->'extensions','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb)) THEN
    RAISE EXCEPTION 'original document correspondence required' USING ERRCODE='22023'; END IF;
   SELECT count(*) FILTER(WHERE e.value->>'kind'='record'),count(*) FILTER(WHERE e.value->>'kind'='field')
    INTO expected_records,expected_fields FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e;
   SELECT count(*) INTO expected_relations FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(coalesce(m.value->'relationships','[]'::jsonb)) r;
   IF jsonb_typeof(declarations->i->'records') IS DISTINCT FROM 'array' OR jsonb_typeof(declarations->i->'relationships') IS DISTINCT FROM 'array'
    OR jsonb_array_length(declarations->i->'records')<>expected_records OR jsonb_array_length(declarations->i->'relationships')<>expected_relations
-   OR (SELECT count(*) FROM jsonb_array_elements(declarations->i->'records') r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f)<>expected_fields THEN
+   OR (SELECT count(*) FROM jsonb_array_elements(declarations->i->'records') r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f)
+      +(SELECT count(*) FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
+        WHERE input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb) AND e.value->>'kind'='field'
+        AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(declarations->i->'records') r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f WHERE f.value->>'fieldModule'=m.value->>'id' AND f.value->>'fieldId'=e.value->>'id')
+        AND EXISTS(SELECT 1 FROM jsonb_array_elements(declarations->i->'records') r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f WHERE f.value->'declaration'->>'cardinality' IN ('array','map') AND f.value->'declaration'->'itemType'=jsonb_build_object('module',m.value->>'id','element',e.value->>'id')))<>expected_fields THEN
    RAISE EXCEPTION 'complete original declaration set required' USING ERRCODE='22023'; END IF;
   IF EXISTS(SELECT 1 FROM jsonb_array_elements(declarations->i->'records') r
     GROUP BY r.value->>'documentId',r.value->>'moduleId',r.value->>'elementId' HAVING count(*)<>1)
@@ -321,17 +325,22 @@ BEGIN
     SELECT e.value INTO STRICT source_field FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
      WHERE m.value->>'id'=field->>'fieldModule' AND e.value->>'id'=field->>'fieldId' AND e.value->>'kind'='field';
     IF field->'reference' IS DISTINCT FROM jsonb_build_object('module',field->>'fieldModule','element',field->>'fieldId')
-     OR field->'declaration' IS DISTINCT FROM source_field OR coalesce(source_field->>'scalarType','') NOT IN ('string','integer','decimal','boolean','timestamp','binary')
-     OR source_field->>'cardinality' IS DISTINCT FROM 'one' OR source_field->>'nullability' NOT IN ('required','absent-allowed')
-     OR EXISTS(SELECT 1 FROM jsonb_object_keys(source_field) k WHERE k NOT IN ('id','kind','name','scalarType','cardinality','nullability','extensions') AND NOT (source->>'umf'='0.8.0' AND k IN ('facets','allowedValues','default','title','description','aliases','examples')) AND NOT (k='facets' AND input->'supportProfile'='{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb))
+     OR field->'declaration' IS DISTINCT FROM source_field OR NOT (
+       (source_field->>'cardinality'='one' AND coalesce(source_field->>'scalarType','') IN ('string','integer','decimal','boolean','timestamp','binary') AND NOT source_field ? 'itemType')
+       OR (input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb) AND source_field->>'cardinality' IN ('array','map') AND NOT source_field ? 'scalarType'
+           AND jsonb_typeof(source_field->'itemType')='object' AND coalesce(source_field->'facets','{}')='{}'::jsonb)) IS TRUE OR source_field->>'nullability' NOT IN ('required','absent-allowed')
+     OR EXISTS(SELECT 1 FROM jsonb_object_keys(source_field) k WHERE k NOT IN ('id','kind','name','scalarType','cardinality','nullability','extensions') AND NOT (input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb) AND k IN ('itemType','facets')) AND NOT (source->>'umf'='0.8.0' AND k IN ('facets','allowedValues','default','title','description','aliases','examples')) AND NOT (k='facets' AND input->'supportProfile'='{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb))
      OR (input->'supportProfile' IN (
       '{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,
-      '{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb)
+      '{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb)
       AND NOT (coalesce(source_field->'facets','{}'::jsonb)='{}'::jsonb
        OR source_field->>'scalarType'='integer' AND source_field->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
        OR source_field->>'scalarType'='decimal' AND source_field->'facets'='{"precision":18,"scale":4}'::jsonb) IS TRUE)
      OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(source_record->'members') m WHERE m.value=field->'reference') THEN
      RAISE EXCEPTION 'selected original Field declaration required' USING ERRCODE='0A000'; END IF;
+    IF source_field->>'cardinality' IN ('array','map') THEN
+     PERFORM truss.catalog_item_definition(doc->>'originalText',doc->>'documentId',1,i,source_field->'itemType');
+    END IF;
    END LOOP;
   END LOOP;
   IF EXISTS(SELECT 1 FROM jsonb_array_elements(declarations->i->'records') r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f
@@ -368,7 +377,7 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.42-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.43-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;

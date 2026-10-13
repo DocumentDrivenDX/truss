@@ -69,6 +69,10 @@ BEGIN
   property_map:=property_map||jsonb_build_object(row->>'prop_id',CASE WHEN old IS NULL THEN property_next ELSE (old->>'prop_id')::int END);
   candidate:=row||jsonb_build_object('type_id',assigned,'prop_id',(property_map->> (row->>'prop_id'))::int);
   IF old IS NOT NULL THEN
+   IF old->>'cardinality' IN ('array','map') THEN
+    IF old->'item'->'reference' IS DISTINCT FROM candidate->'item'->'reference' OR old->'item'->'declaration' IS DISTINCT FROM candidate->'item'->'declaration' THEN RAISE EXCEPTION 'container item evolution requires explicit support' USING ERRCODE='0A000';END IF;
+    candidate:=candidate||jsonb_build_object('item',old->'item');
+   END IF;
    IF old->'_originalField'=row->'_originalField' THEN CONTINUE;END IF;
    -- Historical nullability-only folds keep their original admission. Actual
    -- facet changes require both maps to belong to this explicit native subset.
@@ -211,7 +215,7 @@ BEGIN
    'declaration_module',field.source->>'fieldModule','name',field.source->'declaration'->>'name',
    'scalar_type',field.source->'declaration'->>'scalarType','nullability',field.source->'declaration'->>'nullability',
    'cardinality',field.source->'declaration'->>'cardinality','facets',field.source->'declaration'->'facets',
-   'item',field.source->'declaration'->'itemType','home','json','since_rev',selected_revision,'doc_ord',docord,
+   'item',CASE WHEN field.source->'declaration'->>'cardinality' IN ('array','map') THEN truss.catalog_item_definition((documents->docord)->>'originalText',field.owner->'source'->>'documentId',selected_revision,docord,field.source->'declaration'->'itemType') ELSE field.source->'declaration'->'itemType' END,'home','json','since_rev',selected_revision,'doc_ord',docord,
    'definition_source_kind','accepted_document','definition_rev',selected_revision,'definition_doc_ord',docord,
    'definition_document_id',field.owner->'source'->>'documentId','_originalField',field.source->'declaration');
   properties:=properties||jsonb_build_array(planned_row);
