@@ -44,8 +44,17 @@ class ScramPreparationLogin:
                     raise ValueError('Original ordinary SCRAM login context required')
             return connection
         except BaseException as error:
+            cleanup_failed = False
             if connection is not None:
-                connection.close()
+                try:
+                    connection.close()
+                except BaseException:
+                    cleanup_failed = True
             if isinstance(error, Exception):
-                raise ValueError('Original SCRAM login refused') from None
+                message = 'Original SCRAM login refused'
+                if cleanup_failed:
+                    message += '; connection cleanup unconfirmed'
+                raise ValueError(message) from None
+            if cleanup_failed:
+                error.add_note('SCRAM connection cleanup unconfirmed')
             raise

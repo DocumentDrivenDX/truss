@@ -1,0 +1,7 @@
+test_original_reference_oracle (test_action_identity_codec.ActionIdentityCodecTests.test_original_reference_oracle) ... ok
+test_original_utf16_bounds_and_exact_identity (test_action_identity_codec.ActionIdentityCodecTests.test_original_utf16_bounds_and_exact_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.013s
+
+OK

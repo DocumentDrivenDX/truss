@@ -1,8 +1,9 @@
 # Shared native action Subject and role authority
 
 Candidate dependency of US-049-AC2/AC5 and CONTRACT-013, under CONTRACT-005.
-No installer, authentication service, delegation or admitted native provider is
-implemented by this document. This provider is shared by direct action admission
+Subject enrollment and stock SCRAM login components now have scoped native
+evidence below; no complete admitted action provider or delegation is claimed.
+This provider is shared by direct action admission
 and preparation; worker delegation adds separate obligations.
 
 ## Meaning and ownership
@@ -80,3 +81,20 @@ itself evidence that an external person authenticated this invocation.
 All witnesses remain required, not passed. Registry namespace codec, admitted
 authentication provider, native homes/installer/helper closure, role lifecycle,
 mapping lock ordering and actual bridge consumption are open implementation gates.
+
+## Implemented component boundary
+
+`_action_subject_installation.bootstrap_action_subjects_in_transaction` creates
+the private installation-FK-bound Subject home and exact explicit native LOGIN
+associations under a trusted quiescent direct administrator. Caller owns COMMIT;
+existing homes require migration. Native evidence verifies explicit human/service
+kinds, original readback, ordinary caller SELECT/DML refusal and no silent
+rebinding. It returns `security_ready=false`; enrollment does not authenticate an
+invocation. The native opaque identity bytes remain independent of Staff keys.
+
+[SCRAM evidence](../../04-build/evidence/security-scram-preparation-login-20261014/receipt.json)
+qualifies the separate Unix-socket credential exchange component.
+[Subject enrollment evidence](../../04-build/evidence/security-action-subject-installation-20261014/receipt.json)
+does not qualify protected current observation, role deletion/reuse, mapping cuts,
+full helper/DDL closure, action-role bindings or native permit consumption. These
+remain required before any action or preparation admission claim.
