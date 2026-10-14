@@ -148,6 +148,7 @@ def verify_registered_graph_subjects_with_cursor(cursor,subjects,*,caller_pid,so
  subjects=snapshot_graph_subjects(subjects)
  if type(caller_pid) is not int or not 1<=caller_pid<=2147483647:raise ValueError('Original graph Subject caller backend required')
  issuer=verify_graph_subject_issuer_with_cursor(cursor,subjects)
+ verify_subject_home_write_denial(cursor,subjects.bindings,include_profile=True)
  homes=_text_rows(cursor,"SELECT c.relowner::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,c.relrowsecurity::pg_catalog.text,c.relforcerowsecurity::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid)::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_locks l WHERE l.pid OPERATOR(pg_catalog.=) %s AND l.locktype OPERATOR(pg_catalog.=) 'relation' AND l.database OPERATOR(pg_catalog.=) (SELECT oid FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database()) AND l.relation OPERATOR(pg_catalog.=) c.oid AND l.mode OPERATOR(pg_catalog.=) 'ShareLock' AND l.granted)::pg_catalog.text FROM pg_catalog.pg_class c WHERE c.oid OPERATOR(pg_catalog.=) 'truss.catalog_graph_subject_profile'::pg_catalog.regclass",(caller_pid,),1)
  if homes!=[(str(subjects.owner_oid),'r','p','false','false','false','true')]:raise ValueError('Original held graph Subject profile required')
  source=snapshot_graph_security_source(source)
@@ -173,3 +174,11 @@ def derive_graph_subject_profile(source):
  source=snapshot_graph_security_source(source)
  pin,type_id,property_id,revision,request=_recipe(source)
  return json.dumps({'version':'truss.registered-graph-subject/0.1-candidate','physicalRequestSha256':sha256(source.original_request).hexdigest(),'acceptedCatalogSha256':sha256(source.accepted_catalog_assessment).hexdigest(),'graphBindingSha256':sha256(request['bindingJson'].encode()).hexdigest(),'ontologySha256':sha256(request['ontologyJson'].encode()).hexdigest(),'policySha256':sha256(request['policyJson'].encode()).hexdigest(),'physicalPin':pin,'nativeTypeId':str(type_id),'nativePropertyId':str(property_id)},sort_keys=True,separators=(',',':')).encode()
+
+
+def verify_subject_home_write_denial(cursor,bindings,*,include_profile=False):
+ if type(include_profile) is not bool:raise ValueError('Exact Subject home scope required')
+ homes=['truss.catalog_subject_map']+(['truss.catalog_graph_subject_profile'] if include_profile else [])
+ roles=[oid for oid,key in bindings]
+ rows=_text_rows(cursor,"SELECT (NOT EXISTS(SELECT 1 FROM pg_catalog.unnest(%s::pg_catalog.oid[]) actor CROSS JOIN pg_catalog.unnest(%s::pg_catalog.text[]) home WHERE EXISTS(SELECT 1 FROM pg_catalog.unnest(ARRAY['INSERT','UPDATE','DELETE','TRUNCATE','REFERENCES','TRIGGER','MAINTAIN']::pg_catalog.text[]) privilege WHERE pg_catalog.has_table_privilege(actor,home,privilege)) OR pg_catalog.has_any_column_privilege(actor,home,'INSERT') OR pg_catalog.has_any_column_privilege(actor,home,'UPDATE') OR pg_catalog.has_any_column_privilege(actor,home,'REFERENCES')))::pg_catalog.text",(roles,homes),1)
+ if rows!=[('true',)]:raise ValueError('Unmediated registered Subject writes refused')
