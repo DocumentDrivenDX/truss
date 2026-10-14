@@ -1,0 +1,15 @@
+test_private_one_tuple_full_xid_codec_and_transaction_lifetime (test_preparation_permit_binding_native.PreparationPermitBindingNativeTests.test_private_one_tuple_full_xid_codec_and_transaction_lifetime) ... 
+  test_private_one_tuple_full_xid_codec_and_transaction_lifetime (test_preparation_permit_binding_native.PreparationPermitBindingNativeTests.test_private_one_tuple_full_xid_codec_and_transaction_lifetime) (xid=18446744073709551615) ... FAIL
+
+======================================================================
+FAIL: test_private_one_tuple_full_xid_codec_and_transaction_lifetime (test_preparation_permit_binding_native.PreparationPermitBindingNativeTests.test_private_one_tuple_full_xid_codec_and_transaction_lifetime) (xid=18446744073709551615)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_preparation_permit_binding_native.py", line 60, in test_private_one_tuple_full_xid_codec_and_transaction_lifetime
+    self.assertEqual(rows[4][1],xid >> 32)
+AssertionError: 0 != 4294967295
+
+----------------------------------------------------------------------
+Ran 1 test in 5.147s
+
+FAILED (failures=1)

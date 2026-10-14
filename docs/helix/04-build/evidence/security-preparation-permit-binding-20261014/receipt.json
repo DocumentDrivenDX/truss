@@ -1,0 +1,31 @@
+{
+  "status": "owner-private-native-binding-component-passed",
+  "postgresql": "18.6",
+  "tests": 1,
+  "seconds": 6.275,
+  "nativeXidCodecVectors": 10,
+  "sourceHashes": {
+    "packages/python/src/truss/_security_bootstrap/preparation-permit-mint.sql": "3f730e626b95bec11868ec06d92ffca562132406006f9beebfedab898a9245c9",
+    "packages/python/tests/test_preparation_permit_binding_native.py": "1b218ffd5b55fe02ce267807c2c1fd939a236400c6e3e097b503f9c6fed675f4"
+  },
+  "logs": {
+    "native-r1.log": "b5564c349b29c01b1cf60f8c7ed043cb763c03063f44ed4f4708dd032458e784",
+    "native-r2.log": "37f8bc1a740030fc0583e3980498ca4256ef82b41e3efc60228dd70e0d0cf6ae"
+  },
+  "scope": [
+    "Owner-private primitive; original ordinary caller has no EXECUTE.",
+    "Native backend-specific slot enforces one complete live tuple per original coordinator transaction; duplicate tuple refuses without replacing original fields.",
+    "Concurrent original backends may share individual field addresses while preserving per-PID coherence.",
+    "Actual original data xid plus ten artificial native xid8 codec boundaries retain both32bit pieces, including2^64-1.",
+    "Native original COMMIT/ROLLBACK release tuple locks."
+  ],
+  "failureControl": "r1 maximum-xid high half was0 instead of4294967295 due to NUMERIC / rounding before truncation; repaired using pg_catalog.div. r2 is final source; r1 has no complete historical source hash.",
+  "limits": [
+    "No native authority guard, immutable anchor, authentic peer/source/current Subject/action-role or store admission.",
+    "No production installer or protected selection/seal caller; source is not granted to a coordinator.",
+    "One live tuple is not one historical anchor issue across transactions/subtransaction rollback.",
+    "Ten native vectors plus prior conditional bit-vector proof do not prove full SQL refinement for allinputs.",
+    "Artificial xid codec vectors are not authenticated live cuts.",
+    "No backend acceptance case promotion."
+  ]
+}

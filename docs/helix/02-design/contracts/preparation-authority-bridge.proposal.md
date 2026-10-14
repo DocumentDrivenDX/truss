@@ -98,3 +98,29 @@ advisory privilege/namespace/one-permit closure; shared human/action-role bindin
 same-store original current Weft selection enrollment; native direct-call,
 cross-session/replay/expiry/connection-loss and seal-COMMIT race tests. Missing
 dependencies refuse. No US-046 or shared-security backend case is promoted.
+
+## Owner-private tuple binding primitive
+
+`_security_bootstrap/preparation-permit-mint.sql` now provides a **private
+primitive**, not a guarded issuer. Its candidate ABI is
+`mint_preparation_permit_binding(int4 anchor, int4 data_pid, xid8 data_xid) → void`.
+PUBLIC execution is revoked; no ordinary/coordinator role may receive execution.
+Only a separately qualified original native authority guard may call it after
+the complete original anchor/source/Subject/action-role admission. No production
+installer or protected entrypoint consumes this primitive yet.
+
+Within the original RC/read-write coordinator transaction it mints one native
+backend-specific exclusive slot and four shared component addresses (anchor,
+data PID, low/high full xid8 pieces). Shared component modes allow different
+coordinators to share equal individual values; verification must require all
+addresses under **one original backend**, never a union. A second live tuple in
+the same coordinator transaction refuses; native completion releases the locks.
+This is not an at-most-once historical anchor-use guarantee across transactions
+or subtransaction rollback, and grants no input/peer/current-authority admission.
+
+[Native evidence](../../04-build/evidence/security-preparation-permit-binding-20261014/receipt.json)
+retains the actual maximum-xid failure of NUMERIC division followed by truncation
+and its repair using the exact integral quotient. The earlier bit-vector theorem
+did not establish PostgreSQL division semantics. Ten native boundary vectors,
+concurrent coherent backends, duplicate-tuple refusal and completion release now
+pass; there is still no all-input SQL refinement theorem or permit activation.

@@ -1,0 +1,6 @@
+test_private_one_tuple_full_xid_codec_and_transaction_lifetime (test_preparation_permit_binding_native.PreparationPermitBindingNativeTests.test_private_one_tuple_full_xid_codec_and_transaction_lifetime) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 6.275s
+
+OK
