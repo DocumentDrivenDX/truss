@@ -1,0 +1,31 @@
+{
+  "observations": [
+    {
+      "principal": "Alice",
+      "subjectKey": "Alice",
+      "ownNativeSession": true,
+      "rawReads": false
+    },
+    {
+      "principal": "Bob",
+      "subjectKey": "Bob",
+      "ownNativeSession": true,
+      "rawReads": false
+    },
+    {
+      "principal": "Outsider",
+      "subjectKey": "Outsider",
+      "ownNativeSession": true,
+      "rawReads": false
+    }
+  ],
+  "missingStaffNoEffects": true,
+  "revokedOwnerSelectRefused": true,
+  "revokedOwnerShareRefused": true,
+  "rollbackPreservesPriorWork": true,
+  "reuseRefused": true,
+  "unregisteredExecuteRefused": true,
+  "publicAclDriftRefused": true,
+  "securityReady": false,
+  "scope": "Source-validated fresh graph Subject registration and own-session metadata issuer in disposable full ontology fixture. Protected query composition/registered native compiler admission remain pending."
+}

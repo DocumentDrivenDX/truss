@@ -527,3 +527,58 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                 if directory:
                     folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
                     (folder/'ordinary-epoch-read.json').write_text(json.dumps({'observations':observations,'epoch':comparison.epoch,'advancedEpoch':advanced_epoch,'securityReady':False,'scope':'Selected actual ordinary epoch/archive/guard reads, trusted compiler/installer/routine/DDL/authentication custody; registered Subject issuer and public compiler admission pending.'},indent=2)+'\n')
+
+            if os.environ.get('TRUSS_SECURITY_ONTOLOGY_REGISTERED_SUBJECT'):
+                from truss._security_graph_subject_installation import bootstrap_graph_subjects_in_transaction,verify_graph_subject_issuer_with_cursor
+                self.admin.execute("BEGIN;CREATE TEMP TABLE graph_subject_prior(value text);INSERT INTO graph_subject_prior VALUES('kept');SAVEPOINT before_graph_subject_registration;DROP TABLE truss.catalog_subject_map")
+                registration_host=adopt_psycopg_host(self.admin,operation_timeout_ms=30000);registration_tx=registration_host.adopt_transaction().value
+                self.addCleanup(registration_host.detach)
+                role_bindings=tuple((roles[name],name) for name in ('Alice','Bob','Outsider'))
+                missing=bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=((roles['Alice'],'missing-staff'),))
+                self.assertIsInstance(missing,Error);self.assertEqual(str(registration_host._custody.last_attempt.error),'Unique original stored graph Staff identity required')
+                self.assertEqual(self.admin.execute("SELECT count(*) FROM pg_catalog.pg_class WHERE oid=pg_catalog.to_regclass('truss.catalog_subject_map')").fetchone(),(0,))
+                self.admin.execute(sql.SQL('REVOKE SELECT ON truss.object FROM {}').format(sql.Identifier(self.installation.owner_role)))
+                refused=bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=role_bindings)
+                self.assertIsInstance(refused,Error);self.assertEqual(str(registration_host._custody.last_attempt.error),'Original graph Subject owner read privileges required')
+                self.admin.execute(sql.SQL('GRANT SELECT ON truss.object TO {}').format(sql.Identifier(self.installation.owner_role)))
+                self.admin.execute(sql.SQL('REVOKE MAINTAIN,UPDATE,DELETE,TRUNCATE ON truss.object FROM {}').format(sql.Identifier(self.installation.owner_role)))
+                refused=bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=role_bindings)
+                self.assertIsInstance(refused,Error);self.assertEqual(str(registration_host._custody.last_attempt.error),'Original graph Subject owner SHARE privileges required')
+                self.admin.execute(sql.SQL('GRANT MAINTAIN,UPDATE,DELETE,TRUNCATE ON truss.object TO {}').format(sql.Identifier(self.installation.owner_role)))
+                self.admin.execute('SAVEPOINT graph_subject_installation')
+                rolled=bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=role_bindings)
+                self.assertIsInstance(rolled,Ok,str(registration_host._custody.last_attempt.error))
+                self.admin.execute('ROLLBACK TO graph_subject_installation')
+                self.assertEqual(self.admin.execute('TABLE graph_subject_prior').fetchall(),[('kept',)])
+                self.assertEqual(self.admin.execute("SELECT pg_catalog.to_regclass('truss.catalog_subject_map')::text,pg_catalog.to_regclass('truss.catalog_graph_subject_profile')::text,pg_catalog.to_regprocedure('truss.graph_subject_current()')::text").fetchone(),(None,None,None))
+                registered=bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=role_bindings)
+                self.assertIsInstance(registered,Ok,str(registration_host._custody.last_attempt.error))
+                subjects=registered.value
+                self.assertIsInstance(bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=role_bindings),Error)
+                with self.admin.cursor() as cursor:verify_graph_subject_issuer_with_cursor(cursor,subjects)
+                # Commit only this disposable fixture's explicit fresh registration.
+                registration_host.detach();self.admin.commit()
+                own_subjects=[]
+                for name in ('Alice','Bob','Outsider'):
+                    parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles[name]
+                    with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
+                        connection.execute('BEGIN')
+                        self.assertEqual(connection.execute("SELECT pg_catalog.has_table_privilege('truss.catalog_subject_map','SELECT'),pg_catalog.has_table_privilege('truss.object','SELECT')").fetchone(),(False,False))
+                        rows=connection.execute('SELECT * FROM truss.graph_subject_current()').fetchall()
+                        oid=self.admin.execute('SELECT oid::text FROM pg_catalog.pg_roles WHERE rolname=%s',(roles[name],)).fetchone()[0]
+                        db=self.admin.execute('SELECT oid::text FROM pg_catalog.pg_database WHERE datname=current_database()').fetchone()[0]
+                        self.assertEqual(rows,[(name,self.installation.installation_id,db,oid,sha256(subjects.profile_bytes).hexdigest())])
+                        self.assertEqual(connection.execute('SELECT SESSION_USER::text,CURRENT_USER::text').fetchone(),(roles[name],roles[name]))
+                        connection.rollback();own_subjects.append({'principal':name,'subjectKey':name,'ownNativeSession':True,'rawReads':False})
+                parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Unregistered']
+                with psycopg.connect(**parameters,autocommit=True) as connection:
+                    with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute('SELECT * FROM truss.graph_subject_current()')
+                self.admin.execute('GRANT EXECUTE ON FUNCTION truss.graph_subject_current() TO PUBLIC')
+                with self.admin.cursor() as cursor:
+                    with self.assertRaisesRegex(ValueError,'Exact registered graph Subject issuer ACL required'):verify_graph_subject_issuer_with_cursor(cursor,subjects)
+                self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.graph_subject_current() FROM PUBLIC')
+                directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_REGISTERED_SUBJECT_EVIDENCE')
+                if directory:
+                    folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
+                    (folder/'subject-profile.json').write_bytes(subjects.profile_bytes)
+                    (folder/'native-subject-registration.json').write_text(json.dumps({'observations':own_subjects,'missingStaffNoEffects':True,'revokedOwnerSelectRefused':True,'revokedOwnerShareRefused':True,'rollbackPreservesPriorWork':True,'reuseRefused':True,'unregisteredExecuteRefused':True,'publicAclDriftRefused':True,'securityReady':False,'scope':'Source-validated fresh graph Subject registration and own-session metadata issuer in disposable full ontology fixture. Protected query composition/registered native compiler admission remain pending.'},indent=2)+'\n')

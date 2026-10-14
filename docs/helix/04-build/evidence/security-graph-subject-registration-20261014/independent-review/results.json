@@ -1,0 +1,114 @@
+{
+  "scope": "Recipe and exact issuer comparisons on retained original inputs and deliberate local substitutions; not compiler authentication, SQL semantics, native execution or protected query composition",
+  "passed": 24,
+  "failed": 0,
+  "controls": [
+    {
+      "name": "original packaged helper digest",
+      "passed": true
+    },
+    {
+      "name": "genuine original Staff string-key recipe",
+      "passed": true
+    },
+    {
+      "name": "different ontology Subject",
+      "passed": true
+    },
+    {
+      "name": "duplicate Staff binding",
+      "passed": true
+    },
+    {
+      "name": "wrong native type",
+      "passed": true
+    },
+    {
+      "name": "wrong native property",
+      "passed": true
+    },
+    {
+      "name": "wrong logical key",
+      "passed": true
+    },
+    {
+      "name": "wrong native key",
+      "passed": true
+    },
+    {
+      "name": "wrong logical key field",
+      "passed": true
+    },
+    {
+      "name": "wrong native key field",
+      "passed": true
+    },
+    {
+      "name": "nullable key",
+      "passed": true
+    },
+    {
+      "name": "many-valued key",
+      "passed": true
+    },
+    {
+      "name": "nonstring key",
+      "passed": true
+    },
+    {
+      "name": "wrong key property order/arity",
+      "passed": true
+    },
+    {
+      "name": "provisional Staff",
+      "passed": true
+    },
+    {
+      "name": "Boolean type ID",
+      "passed": true
+    },
+    {
+      "name": "exact own-session helper metadata and registered ACL",
+      "passed": true
+    },
+    {
+      "name": "wrong definer owner",
+      "passed": true
+    },
+    {
+      "name": "security invoker substitution",
+      "passed": true
+    },
+    {
+      "name": "foreign return descriptor meaning",
+      "passed": true
+    },
+    {
+      "name": "different argument names",
+      "passed": true
+    },
+    {
+      "name": "PUBLIC execute addition refuses",
+      "passed": true
+    },
+    {
+      "name": "foreign native descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "all nine fixed helper locks covered by owner privilege recipe",
+      "passed": true
+    }
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_security_graph_subject_installation.py": "a3338d4d5ac3deb08e1f5343733e517b85351d6b060c2392a960770d985884d6",
+    "packages/python/src/truss/_security_bootstrap/graph-subject.sql": "0520931a9060692a99282b18d98b6f9becff7c00e735562a2ed7d1b69e83c0b8"
+  },
+  "inputs": "/private/tmp/truss-security-main-integration/docs/helix/04-build/evidence/security-ontology-epoch-read-20261014/merged-runtime061",
+  "inputSha256": {
+    "physical-request.json": "5596ea1dd2132ea458d7f2fa02d98264dfd080769103062c040a00ba790665be",
+    "compiler-output.json": "b7b667ea36ca4f777d5e758437f283aeda41827b3210a5c802c694caa425dd1e",
+    "accepted-catalog.json": "85b8ab52b3aa5d2a7c9f942e01c272c66d6dbc645bed651826fd28277f03c1a3",
+    "compiler-request.json": "6dd0c6b2242954d25e140087fdef26fbf2f466875fa8dc9dec05a316ddddb308"
+  }
+}
