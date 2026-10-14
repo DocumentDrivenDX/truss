@@ -1,0 +1,8 @@
+test_original_cancellation_survives_secondary_close_failure (test_scram_preparation_login.ScramCleanupTests.test_original_cancellation_survives_secondary_close_failure) ... ok
+test_secondary_close_failure_is_redacted (test_scram_preparation_login.ScramCleanupTests.test_secondary_close_failure_is_redacted) ... ok
+test_required_scram_rejects_wrong_absent_and_trust_authentication (test_scram_preparation_login_native.ScramPreparationLoginNativeTests.test_required_scram_rejects_wrong_absent_and_trust_authentication) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 3.285s
+
+OK

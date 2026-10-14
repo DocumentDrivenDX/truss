@@ -1,0 +1,17 @@
+{
+  "status": "cleanup-regressions-and-native-login-passed",
+  "tests": 3,
+  "seconds": 3.285,
+  "sourceHashes": {
+    "packages/python/src/truss/_scram_preparation_login.py": "57f8088e3976d302f9e7f221cebb0853bf788d681e195c8e29d0774f746c0c77",
+    "packages/python/tests/test_scram_preparation_login.py": "404b223b17e3e54edc44780e90d4a476805c377f9d41156c5df4efb387522633",
+    "packages/python/tests/test_scram_preparation_login_native.py": "58cd421e421716b311b73b9749b6696d4a2bd747cfdc09476c45cf0a4d3d2c23"
+  },
+  "logSha256": "09ccad66ba9886e9e3c98d19690082c4d1023b8e99044aa20fe714933780e62e",
+  "scope": "Astra engine integration finding fixed: secondary close failure cannot replace original cancellation or expose raw driver diagnostics in normal exception rendering. Native SCRAM controls replay.",
+  "limits": [
+    "Cleanup failure is explicitly unconfirmed; no termination/memory-erasure proof.",
+    "Fault injection is unit scope, not native connection-loss refinement.",
+    "No complete authentication/Subject/permit/seal qualification."
+  ]
+}
