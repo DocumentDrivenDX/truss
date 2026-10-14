@@ -1,0 +1,6 @@
+test_original_inventory_rejects_native_execution_drift (test_preparation_source_inventory_native.SourceInventoryNativeTests.test_original_inventory_rejects_native_execution_drift) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 5.814s
+
+OK
