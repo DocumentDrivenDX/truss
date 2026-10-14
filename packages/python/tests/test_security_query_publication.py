@@ -22,3 +22,9 @@ class QueryPublicationTests(unittest.TestCase):
   self.assertEqual(json.loads(published)['batchJson'],batch)
   receipt['batch']=batch;check=json.loads(inspected);check['securityReady']=0;receipt['resultCheck']=json.dumps(check)
   with self.assertRaises(ValueError):_inspected_query_publication(receipt)
+
+  for key,limit in (('request',4000000),('batch',4000000),('resultCheck',65536)):
+   with self.subTest(overflow=key):
+    oversized={'request':request,'output':output,'batch':batch,'resultCheck':inspected}
+    oversized[key]='x'*(limit+1)
+    with self.assertRaisesRegex(ValueError,'Bounded inspected query publication required'):_inspected_query_publication(oversized)

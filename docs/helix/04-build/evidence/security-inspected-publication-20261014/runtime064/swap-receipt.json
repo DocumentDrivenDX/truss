@@ -1,0 +1,10 @@
+{
+  "result": "native1/44.509s passes",
+  "runtime": "0.64",
+  "testSourceSha256": "8d9eedd5d54ed97ae40986c4ba754940b9f2a732db5b7f1a867ebc1fcf1ed431",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC2",
+    "US-056-AC10"
+  ],
+  "scope": "Actual native RB result is inspected, then callback substitutes RA in batch without a new inspection; publication refuses exact acknowledgment mismatch, no receiver and zero ShareLocks both hosts. Trusted original compiler/inspector custody remains a premise; no full132 promotion."
+}
