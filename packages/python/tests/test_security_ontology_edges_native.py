@@ -609,20 +609,26 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                         from truss._security_guarded_source import capture_guarded_source_comparison
                         guarded_source=capture_guarded_source_comparison(graph.native_dependencies,graph.guarded_response)
                     composed=[]
-                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('AliceGuarded',[]),('OutsiderGuarded',[]),('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None)) if guarded_binary else ()),('BobStreaming',None),('BobProfileDrift',None),('BobProfileRestored',['RB']),('BobPublicIssuer',None)):
+                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('AliceGuarded',[]),('OutsiderGuarded',[]),('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None)) if guarded_binary else ()),('BobOldSnapshot',None),('BobRevoked',[]),('BobReactivated',['RB']),('BobStreaming',None),('BobProfileDrift',None),('BobProfileRestored',['RB']),('BobPublicIssuer',None)):
                         if name=='BobProfileDrift':self.admin.execute("UPDATE truss.catalog_graph_subject_profile SET document_revision='tampered'")
                         if name=='BobPublicIssuer':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.graph_subject_current() TO PUBLIC')
                         with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
                             private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
-                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice' if name=='AliceGuarded' else 'Outsider' if name=='OutsiderGuarded' else 'Bob' if name in ('BobPublicIssuer','BobStreaming','BobProfileDrift','BobProfileRestored','BobGuarded','BobGuardedId','BobGuardedCorrupt') else name]
+                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice' if name=='AliceGuarded' else 'Outsider' if name=='OutsiderGuarded' else 'Bob' if name in ('BobPublicIssuer','BobOldSnapshot','BobRevoked','BobReactivated','BobStreaming','BobProfileDrift','BobProfileRestored','BobGuarded','BobGuardedId','BobGuardedCorrupt') else name]
                             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
-                                connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction().value;released=[]
+                                connection.execute('BEGIN ISOLATION LEVEL REPEATABLE READ' if name=='BobOldSnapshot' else 'BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction(isolation='repeatable_read' if name=='BobOldSnapshot' else 'read_committed').value;released=[]
+                                if name=='BobOldSnapshot':
+                                    old_snapshot=connection.execute('SELECT pg_catalog.txid_current_snapshot()::pg_catalog.text').fetchone()[0]
+                                    self.assertIsInstance(old_snapshot,str)
+                                    self.admin.execute("UPDATE truss.object SET props=pg_catalog.jsonb_set(props,ARRAY[%s,'value'],'false'::pg_catalog.jsonb) WHERE id=%s",(active_property,identities['ba']))
+                                    self.assertEqual(self.admin.execute("SELECT props->%s->>'value' FROM truss.object WHERE id=%s",(active_property,identities['ba'])).fetchone(),('false',))
                                 def receiver(raw):
                                     with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
                                         for table in ('catalog_subject_map','catalog_graph_subject_profile'):
                                             with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
                                     released.append(raw)
-                                selected_compiler=prepare_owned_graph_compiler(guarded_binary,str(Path(guarded_binary).with_name('security_guarded_result')),guarded=True,query_sql=('SELECT q.resourceId FROM Resource q' if name=='BobGuardedId' else 'SELECT q.resourceId, q.salary FROM Resource q'),source_comparison=guarded_source) if name.endswith('Guarded') or name.startswith('BobGuarded') else native_compiler
+                                is_guarded_query=name.endswith('Guarded') or name.startswith('BobGuarded') or (name=='BobRevoked' and guarded_binary is not None)
+                                selected_compiler=prepare_owned_graph_compiler(guarded_binary,str(Path(guarded_binary).with_name('security_guarded_result')),guarded=True,query_sql=('SELECT q.resourceId FROM Resource q' if name=='BobGuardedId' else 'SELECT q.resourceId, q.salary FROM Resource q'),source_comparison=guarded_source) if is_guarded_query else native_compiler
                                 corruption=[]
                                 def corrupt_guarded_check(*args,**kwargs):
                                     if args[0][0]==str(Path(guarded_binary).with_name('security_guarded_result')):
@@ -644,10 +650,13 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         caller.detach();connection.rollback();executor.detach();private.rollback()
                                         composed.append({'principal':name,'outcome':'streamingRefusedBeforeOutput','released':False,'noRetainedCuts':True})
                                         continue
-                                    result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,subjects.bindings,receiver,compiler=selected_compiler,cut_issuer=cut_issuer,source_epoch=composed_context,subject_registration=subjects,query_results=name.endswith('Guarded') or name.startswith('BobGuarded'))
+                                    result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,subjects.bindings,receiver,compiler=selected_compiler,cut_issuer=cut_issuer,source_epoch=composed_context,subject_registration=subjects,query_results=is_guarded_query)
                                 if expected is None:
                                     self.assertIsInstance(result,Error);self.assertEqual(released,[])
-                                    if name!='BobProfileDrift':self.assertEqual(str(executor._custody.last_attempt.error),'Original graph compiler result contract refused' if name=='BobGuardedCorrupt' else 'Exact registered graph Subject issuer ACL required')
+                                    if name=='BobOldSnapshot':
+                                        self.assertEqual(str(caller._custody.last_attempt.error),'Original fresh native ontology caller transaction required')
+                                        for session in (private,connection):self.assertEqual(session.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,))
+                                    elif name!='BobProfileDrift':self.assertEqual(str(executor._custody.last_attempt.error),'Original graph compiler result contract refused' if name=='BobGuardedCorrupt' else 'Exact registered graph Subject issuer ACL required')
                                     if name=='BobProfileDrift':
                                         for session in (private,connection):self.assertEqual(session.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,))
                                     if name=='BobGuardedCorrupt':
@@ -655,7 +664,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         for session in (private,connection):self.assertEqual(session.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,))
                                 else:
                                     self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual(released,[result.value])
-                                    if name in ('AliceGuarded','OutsiderGuarded','BobGuarded','BobGuardedId'):
+                                    if is_guarded_query:
                                         published=json.loads(result.value);self.assertEqual(published['version'],'truss.guarded-query-result/0.1-candidate')
                                         cells=json.loads(published['batchJson']);contract=json.loads(published['resultContractJson'])
                                         self.assertEqual(len(contract['columns']),1 if name=='BobGuardedId' else 2)
@@ -665,12 +674,13 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                     else:self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
                                 caller.detach();connection.rollback()
                             executor.detach();private.rollback()
+                        if name=='BobRevoked':self.admin.execute("UPDATE truss.object SET props=pg_catalog.jsonb_set(props,ARRAY[%s,'value'],'true'::pg_catalog.jsonb) WHERE id=%s",(active_property,identities['ba']))
                         if name=='BobProfileDrift':
                             document_revision=json.loads(graph.native_dependencies)['bindingJson']
                             document_revision=json.loads(document_revision)['physicalModule']['pin']['revision']
                             self.admin.execute('UPDATE truss.catalog_graph_subject_profile SET document_revision=%s',(document_revision,))
                         if name=='BobPublicIssuer':self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.graph_subject_current() FROM PUBLIC')
-                        composed.append({'principal':name,'outcome':('guardedResultRefused' if name=='BobGuardedCorrupt' else 'subjectProfileRefused' if name=='BobProfileDrift' else 'issuerAclRefused'),'released':False} if expected is None else {'principal':name,'resources':expected,'queryCellsPublished':name.endswith('Guarded') or name.startswith('BobGuarded'),'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
+                        composed.append({'principal':name,'outcome':('oldSnapshotRefusedAfterRevocationAck' if name=='BobOldSnapshot' else 'guardedResultRefused' if name=='BobGuardedCorrupt' else 'subjectProfileRefused' if name=='BobProfileDrift' else 'issuerAclRefused'),'released':False} if expected is None else {'principal':name,'resources':expected,'queryCellsPublished':is_guarded_query,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
                     directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_SUBJECT_COMPOSITION_EVIDENCE')
                     if directory:
                         folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)

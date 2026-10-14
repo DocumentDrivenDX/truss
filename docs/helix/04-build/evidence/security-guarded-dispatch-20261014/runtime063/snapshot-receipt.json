@@ -1,0 +1,14 @@
+{
+  "finalGuarded": "native1/40.170s passes",
+  "finalLegacy": "native1/34.680s passes",
+  "runtime": "0.63",
+  "testSourceSha256": "50be221b74a19092eba850a3b45ac026723f880f13014fc6c45c48896d9b6b0a",
+  "acceptanceCriteriaContributions": [
+    "US-057-AC3"
+  ],
+  "plannedCaseContributions": [
+    "truss.L05",
+    "truss.L06"
+  ],
+  "scope": "Actual RR snapshot before direct committed assignment revocation refuses after acknowledgment; fresh RC read denies and restoration restores RB. Administrative fixture mutation, not public writer/authority-generation qualification; no full case promotion."
+}
