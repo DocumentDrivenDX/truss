@@ -139,7 +139,7 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
    self.admin.execute('BEGIN');factory=adopt_psycopg_host(self.admin,operation_timeout_ms=30000);factory_tx=factory.adopt_transaction().value
    self.addCleanup(factory.detach)
    with self.admin.cursor() as cursor:assessment=capture_accepted_catalog(cursor,physical_request)
-   compiler_request=prepare_relationship_request(physical_request,assessment)
+   compiler_request=prepare_relationship_request(physical_request,assessment,observation_denied=bool(os.environ.get('TRUSS_SECURITY_RELATIONSHIP_OBSERVATION_DENIED')))
    output=subprocess.run([binary],input=compiler_request,capture_output=True,check=True,timeout=15).stdout
    profile=sha256(compiler_request).digest();guard=(self.installation.installation_id.encode(),profile,1)
    selected=PreparedRelationshipSecuritySource(physical_request,assessment,compiler_request,output,guard)
@@ -173,7 +173,7 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
     oid,owner=self.admin.execute('SELECT oid,relowner FROM pg_catalog.pg_class WHERE oid=%s::pg_catalog.regclass',('truss.'+name,)).fetchone()
     columns=self.admin.execute('SELECT attname,attnum,atttypid,atttypmod,attnotnull,attcollation,attgenerated,attidentity FROM pg_catalog.pg_attribute WHERE attrelid=%s AND attnum>0 AND NOT attisdropped ORDER BY attnum',(oid,)).fetchall()
     facts.append(_FactRelationComparison('truss',name,oid,owner,fence.split('AS $$',1)[1].split('$$;',1)[0],tuple(_FactColumnComparison(*c) for c in columns)))
-   inputs=dict(mapping=selected,marker=marked.value,infrastructure=infrastructure.value,fact_relations=tuple(facts),subject_source=(root/'packages/python/src/truss/_security_bootstrap/graph-subject.sql').read_bytes())
+   inputs=dict(mapping=selected,marker=marked.value,infrastructure=infrastructure.value,fact_relations=tuple(facts),subject_source=(root/('scripts/security_relationship_native_read.py' if os.environ.get('TRUSS_SECURITY_RELATIONSHIP_PUBLICATION') else 'packages/python/src/truss/_security_bootstrap/graph-subject.sql')).read_bytes())
    self.admin.execute("CREATE TEMP TABLE relationship_factory_prior(value text);INSERT INTO relationship_factory_prior VALUES('kept');SAVEPOINT before_relationship_epoch")
    issued=issue_initial_catalog_source_epoch_in_transaction(factory,factory_tx,**inputs)
    self.assertIsInstance(issued,Ok,str(factory._custody.last_attempt.error))
@@ -195,6 +195,9 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
     private_role='relationship_executor_'+__import__('uuid').uuid4().hex[:8]
     self.admin.execute(sql.SQL('CREATE ROLE {} LOGIN NOINHERIT').format(sql.Identifier(private_role)))
     self.admin.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(private_role)))
+    if os.environ.get('TRUSS_SECURITY_RELATIONSHIP_PUBLICATION'):
+     self.admin.execute(sql.SQL('GRANT SELECT ON truss.catalog_graph_subject_profile TO {}').format(sql.Identifier(private_role)))
+     self.admin.execute(sql.SQL('GRANT pg_read_all_stats TO {} WITH INHERIT TRUE').format(sql.Identifier(private_role)))
     from truss._security_catalog_assessment import SOURCE_TABLES
     for table in ('object','edge','catalog_subject_map')+SOURCE_TABLES:self.admin.execute(sql.SQL('GRANT SELECT ON {} TO {}').format(sql.Identifier('truss',table),sql.Identifier(private_role)))
     routines=self.admin.execute("SELECT p.oid::pg_catalog.regprocedure::pg_catalog.text FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' AND NOT p.prosecdef AND p.prokind='f'").fetchall()
@@ -234,5 +237,30 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
        with self.assertRaisesRegex(ValueError,'Original current graph source epoch required'):verify_held_relationship_epoch_read(cursor,stale_context)
        with self.assertRaises(ValueError):snapshot_graph_epoch_read_context(relationship_context)
       private.rollback()
+     if os.environ.get('TRUSS_SECURITY_RELATIONSHIP_PUBLICATION'):
+      from security_relationship_native_read import publish_native_relationship_read
+      publications=[]
+      for name,role in roles.items():
+       parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=role
+       private_parameters={**parameters,'user':private_role}
+       with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private,psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as ordinary:
+        private.execute('BEGIN');ordinary.execute('BEGIN')
+        executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);caller=adopt_psycopg_host(ordinary,statement_timeout_ms=10000,operation_timeout_ms=30000)
+        executor_adopted=executor.adopt_transaction();caller_adopted=caller.adopt_transaction()
+        self.assertIsInstance(executor_adopted,Ok,str(executor._custody.last_attempt.error));self.assertIsInstance(caller_adopted,Ok,str(caller._custody.last_attempt.error))
+        executor_tx=executor_adopted.value;caller_tx=caller_adopted.value;released=[]
+        def receive(raw):
+         with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+          for table in ('catalog_subject_map','catalog_graph_subject_profile','source_epoch_current','edge'):
+           with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
+         released.append(raw)
+        result=publish_native_relationship_read(caller,caller_tx,executor,executor_tx,relationship_context,subjects,receive,compiler_binary=binary)
+        self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error)+' '+str(caller._custody.last_attempt.error))
+        self.assertEqual(released,[result.value]);payload=json.loads(result.value)
+        expected=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if name=='Bob' and not os.environ.get('TRUSS_SECURITY_RELATIONSHIP_OBSERVATION_DENIED') else []
+        self.assertEqual(json.loads(payload['batchJson'])['rows'],expected)
+        publications.append({'subject':name,'expected':expected,'observed':json.loads(payload['batchJson'])['rows'],'ownNativeCallerAndPrivatePeer':True,'cutsHeldThroughReceiver':True})
+        caller.detach();ordinary.rollback();executor.detach();private.rollback()
+      if directory:(out/'protected-publications.json').write_text(json.dumps({'securityReady':False,'observations':publications},indent=2)+'\n')
      if directory:(out/'relationship-epoch-read.json').write_text(json.dumps({'securityReady':False,'privateExecutorOwnSession':True,'actualSourceFactAndEpochCuts':True,'currentArchivesGuardCensusVerified':True,'staleEpochRefused':True,'legacyContextRefused':True,'scope':'Ordinary private executor source epoch read, not protected Resource query/publication'},indent=2)+'\n')
     if directory:(out/'registered-subjects.json').write_text(json.dumps({'securityReady':False,'profile':json.loads(subjects.profile_bytes),'observations':observed,'scope':'Actual ordinary own-session metadata issuer only; protected Resource traversal/publication remains pending'},indent=2)+'\n')

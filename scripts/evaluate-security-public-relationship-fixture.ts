@@ -2,6 +2,8 @@
 import {evaluateSecurityAccess,type SecurityFact,type SecurityFactCut} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/evaluate';
 import {inspectSecurityPolicy} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/policy';
 import {checkSchemaLiteral} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/model/schema-literals';
+if(Bun.argv.length>3||(Bun.argv[2]!==undefined&&Bun.argv[2]!=='--evaluate'))throw Error('Exact oracle mode required');
+const exercising=Bun.argv[2]!== '--evaluate';
 const base='docs/helix/03-test/fixtures/security-public-relationship/';
 const resolution=await Bun.file(base+'resolution.json').json();
 const raw=await Bun.stdin.text();if(new TextEncoder().encode(raw).length>1048576)throw Error('Bounded original fixture required');
@@ -43,8 +45,8 @@ for(const variant of ['policy','policy-observation-denied']){
    return eligible.has(key)&&decision(r,'observeResourceRelations')&&input.queryRelationshipOccurrences.some((e:any)=>identities.get(e[2])===key&&identities.get(e[4])==='RB'&&eligible.has('RB'));
   }).map(r=>(r.key[0] as any).string);
   const expected=variant==='policy'&&subject==='Bob'?['RB']:[];
-  if(JSON.stringify(observed)!==JSON.stringify(expected))throw Error(JSON.stringify({variant,subject,observed,expected}));
-  results.push({variant,subject,expected,observed});
+  if(exercising&&JSON.stringify(observed)!==JSON.stringify(expected))throw Error(JSON.stringify({variant,subject,observed,expected}));
+  results.push({variant,subject,...(exercising?{expected}:{}),observed});
  }
 }
-console.log(JSON.stringify({status:'conditional-semantic-oracle-passed',results,securityReady:false,scope:'Original UMF policy read and observation actions; authored existential assembly over supplied captured edges. No native caller/cut/compiler/publication refinement.'}));
+console.log(JSON.stringify({status:exercising?'conditional-semantic-oracle-passed':'conditional-semantic-oracle-evaluated',results,securityReady:false,scope:'Original UMF policy read and observation actions; authored existential assembly over supplied captured edges. No native caller/cut/compiler/publication refinement.'}));

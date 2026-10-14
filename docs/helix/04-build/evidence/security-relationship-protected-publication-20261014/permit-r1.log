@@ -1,0 +1,15 @@
+test_actual_authored_resource_relationship_and_population (test_security_public_relationship_native.PublicRelationshipNativeTests.test_actual_authored_resource_relationship_and_population) ... ERROR
+
+======================================================================
+ERROR: test_actual_authored_resource_relationship_and_population (test_security_public_relationship_native.PublicRelationshipNativeTests.test_actual_authored_resource_relationship_and_population)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_relationship_native.py", line 249, in test_actual_authored_resource_relationship_and_population
+    executor_tx=executor.adopt_transaction().value;caller_tx=caller.adopt_transaction().value;released=[]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Error' object has no attribute 'value'
+
+----------------------------------------------------------------------
+Ran 1 test in 20.124s
+
+FAILED (errors=1)

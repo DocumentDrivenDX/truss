@@ -1,0 +1,18 @@
+{
+  "permitNativeSeconds": 28.818,
+  "deniedNativeSeconds": 29.102,
+  "testsPerRun": 1,
+  "terminalExit": 0,
+  "sourceDigests": {
+    "scripts/security_relationship_native_read.py": "1cf3d85589de8ed7898772a90fee73ec2fb170d051710cd8f43262ec31b49788",
+    "scripts/security_relationship_facts.py": "278da132e03c854919efd484cf72b2a6d716a5624dc0a21f239027f8eff6489b",
+    "scripts/security_relationship_publication.py": "bcb08c2b2c6f11688496eb507469bc3a0acff4cd30882682bbca4b2bfb2c0007",
+    "scripts/evaluate-security-public-relationship-fixture.ts": "9cf3199c2ddad0188f5b25e3fc83c569a1217db33136e45a2622aceacb97107c",
+    "packages/python/tests/test_security_public_relationship_native.py": "b44b0186186f0df0ba644355bab960c8296f79a6679b17af5b6d5d41b7998fdf"
+  },
+  "binaryDigests": {
+    "security_relationship_candidate": "d2f124d215827138d3c661a6ff497ccf98f72991ea18e8554fd723c815b77a97",
+    "security_relationship_result": "5c084132f181b6491c85ed39de85cb621fd9fcc136bf24c659f3d270fecb2bcc",
+    "security_relationship_codecs": "47d1491665bdde89fe5d0e41dfefb41c4cabb511255cc820f13e91ac53f6b0a3"
+  }
+}
