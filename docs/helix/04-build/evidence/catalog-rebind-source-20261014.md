@@ -53,3 +53,29 @@ inspection confirms twelve columns and both foreign keys, with registration's
 DEFERRABLE INITIALLY DEFERRED timing preserved. All three helper definitions
 compile. This remains storage/source evidence: registration, mutation, report,
 history and query rebinding are not enabled by this capture.
+
+## Native60 integration candidate
+
+The candidate now loads the owner-export storage and the helper suffix, applies
+registration-owned effects before report/head publication, and connects shared
+object/journal closure, creation delegation, graph validation, complete history,
+entity attribution and committed feed delivery. Reports with effects select0.3
+and expose original exact event wrappers; old report regeneration stays unchanged.
+Current report disclosure covers all original data dependencies; history/query
+checks cover only the selected object's original dependencies. The pure report
+serializer still supports metadata-only catalog verification.
+
+Astra's corrections cover same-transaction creation closure, native version guards,
+pre/post candidate and report authority, immediate UPDATE readback, scoped readers
+and psycopg's literal-percent escaping. Native tests found and corrected the
+complete-wrapper journal NULL old_value requirement and UTC journal comparison.
+Seven basic final-wheel cases pass45.785s on PG18: UMF0.7/0.8 workflows include
+create/register/read/history/query/feed/replay, invalid candidate refusal and one
+host-owned create/register transaction; populated native59 upgrade/rollback also
+passes. Candidate wheel v9 SHA25674205f73a74f65c03909dd2abd2ab101a770583b1a8bf9b44b48d4ca63a0c8a0,
+matching Weft0.4.25/backend30. Python1031-import and Weft11-package boundary checks
+pass; workspace Rust checking passes. A broad exploratory mypy invocation reports
+existing dependency-stub and implementation typing gaps and is not a successful
+package typing claim. Publication and the broader feature goal remain pending.
+
+Final authority correction rechecks every selected object's current-transaction rebind before latest-image selection, so an ordinary later update/delete cannot suppress original registration/writer/reader obligations. Astra confirms the exact diff. Final v10 wheel SHA2566fc5fa25406d1096819c29895fc7d5e98db6e64ff6deaa9720bcbf486fbda1b6 passes the same seven cases52.592s, now including create→rebind→ordinary update→commit at version3. Module boundaries remain1031 imports.

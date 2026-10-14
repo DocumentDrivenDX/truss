@@ -40,3 +40,5 @@ Truss-generated compact observation wrappers have separately identified artifact
 The unchanged commerce fixture passes one supplier/product/relationship slice, including source custody, business-key lookup, exact decimal(18,2) query, committed replay and feed delivery. This is not all-pack qualification. The implementation also admits the document's top-level title as retained metadata.
 
 `prepare_catalog(documents, source_version='0.8.0', bun_executable='bun')` is a public standalone entrypoint. It uses the same original producers and selected preparation as the assembly method and needs no database/host. It returns `PreparedAcceptance`; native acceptance and data compatibility still occur in the caller's transaction. Source0.7.0 remains separately selectable and retains its report format.
+
+Report0.3 registrations with rebinding effects retain the same original source-reference resolution. The public resolver accepts both report0.2 and report0.3 without fetching current documents. See [registration-owned rebinding](catalog-rebind-report-v0.1.md) for the separate data-disclosure contract.

@@ -200,7 +200,7 @@ BEGIN
  IF group_row.writer_xid<>pg_current_xact_id() OR group_row.actor_name<>session_user::text OR group_row.actor_oid IS DISTINCT FROM (SELECT oid FROM pg_roles WHERE rolname=session_user) THEN
   RAISE EXCEPTION 'current actual group member required' USING ERRCODE='55000'; END IF;
  expected:=group_row.expected_members->member.operation_index;
- IF EXISTS(SELECT 1 FROM truss.runtime_object_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) THEN
+ IF EXISTS(SELECT 1 FROM truss.runtime_object_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) OR EXISTS(SELECT 1 FROM truss.runtime_catalog_rebind_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) THEN
   PERFORM truss.runtime_object_validate(selected_id,selected_type);
   SELECT to_jsonb(j) INTO actual_journal FROM truss.journal j WHERE j.at=(expected->'journal'->>'at')::timestamptz AND j.seq=(expected->'journal'->>'seq')::bigint;
   IF actual_journal IS DISTINCT FROM expected->'journal' THEN RAISE EXCEPTION 'original creation journal required' USING ERRCODE='55000';END IF;
@@ -255,6 +255,7 @@ BEGIN
  IS DISTINCT FROM (SELECT coalesce(jsonb_agg(e.value ORDER BY (e.value->>'at')::timestamptz,(e.value->>'seq')::bigint),'[]'::jsonb) FROM (
      SELECT e.value->'journal' AS value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e(value) WHERE g.writer_xid=group_row.writer_xid
      UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
+     UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
      UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid) e) THEN
   RAISE EXCEPTION 'complete transaction create journal required' USING ERRCODE='55000'; END IF;
  FOR member IN SELECT * FROM truss.runtime_create_member WHERE group_id=selected_group ORDER BY operation_index LOOP

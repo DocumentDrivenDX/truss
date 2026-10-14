@@ -81,7 +81,7 @@ for(const {definition:c,source,target} of foreign){
 if(module.elements.filter((e:any)=>e.kind==='field').length!==14||module.relationships.length!==1)throw Error('Complete 12 transition columns and two referenced keys/FKs required');
 const core:any={umf:'0.8.0',id:'truss-catalog-rebind-core-0.1',vocabularies:{'truss.layout.native':{version:'0.1.0'}},modules:[module],
  extensions:{'truss.layout.native':{sourceModel:paths.native,sourceSha256:hash(nativeBytes),runtimeSource:base+'catalog-rebind.sql',runtimeSourceSha256:hash(source),parentSources,
- scope:'Unintegrated registration-owned transition. Core columns and physical FK relationships; complete native AST drives UMF SQL export. Not an installed runtime or rebinding support claim.'}}};
+ scope:'Native60 registration-owned transition candidate. Core columns and physical FK relationships; complete native AST drives UMF SQL export. Capture validation alone does not qualify callable rebinding or a published release.'}}};
 const validation=validateDocument(core),errors=validation.diagnostics.filter(d=>d.severity==='error');
 if(errors.length)throw Error(JSON.stringify(errors));
 const coreBytes=JSON.stringify(core)+'\n';
@@ -89,7 +89,7 @@ const receipt=JSON.stringify({profile:'truss-catalog-rebind-storage/0.1',umfSour
  parser:backend.identity,sourceSha256:hash(source),nativeSha256:hash(nativeBytes),coreSha256:hash(coreBytes),ddlSha256:hash(ddl),
  transitionColumns:12,referencedKeyColumns:2,foreignKeys:2,coreRelationships:1,physicalReferenceAssociations:1,reloadedExportExact:reloadedDdl===ddl,
  valid:validation.valid,complete:validation.complete,scope:core.extensions['truss.layout.native'].scope},null,2)+'\n';
-for(const [path,bytes] of [[paths.native,nativeBytes],[paths.core,coreBytes],[paths.ddl,ddl],[paths.receipt,receipt]]){
+for(const [path,bytes] of [[paths.native,nativeBytes],[paths.core,coreBytes],[paths.ddl,ddl],[base+'catalog-rebind-storage.sql',ddl],[paths.receipt,receipt]]){
  if(process.argv.includes('--check')){if(await Bun.file(path).text()!==bytes)throw Error('Stale capture: '+path);}
  else await Bun.write(path,bytes);
 }

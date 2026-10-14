@@ -499,16 +499,30 @@ REVOKE ALL ON FUNCTION truss.object_group_step(uuid,int,bytea) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_object_validate(selected_id bigint,selected_type int) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE latest truss.runtime_object_transition%ROWTYPE;actual jsonb;keys jsonb;entry jsonb;current_actor oid;
+DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;
 BEGIN
  current_actor:=truss.runtime_person(false);
- SELECT * INTO latest FROM truss.runtime_object_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id() ORDER BY transition_id DESC LIMIT 1;
+ -- Later ordinary mutations cannot suppress original registration dependencies.
+ FOR rebind IN SELECT * FROM truss.runtime_catalog_rebind_transition t WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id() LOOP
+  IF rebind.actor_oid IS DISTINCT FROM current_actor OR NOT EXISTS(SELECT 1 FROM truss.catalog_registration_request r
+   WHERE r.registration_id=rebind.registration_id AND r.revision=rebind.revision AND r.writer_xid=rebind.writer_xid
+    AND r.actor_oid=current_actor AND r.actor_name=session_user::text) THEN RAISE EXCEPTION 'current original rebind registration required' USING ERRCODE='55000';END IF;
+  PERFORM truss.runtime_module_writer((SELECT document_id FROM truss.type_def WHERE type_id=selected_type),(SELECT module FROM truss.type_def WHERE type_id=selected_type));
+  PERFORM truss.catalog_rebind_transition_reader((SELECT t FROM truss.runtime_catalog_rebind_transition t WHERE t.transition_id=rebind.transition_id));
+ END LOOP;
+ SELECT * INTO latest FROM (
+  SELECT transition_id,writer_xid,after_object,after_keys,attempt_id,NULL::uuid registration_id FROM truss.runtime_object_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()
+  UNION ALL SELECT transition_id,writer_xid,after_object,after_keys,NULL::uuid,registration_id FROM truss.runtime_catalog_rebind_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) t ORDER BY transition_id DESC LIMIT 1;
  IF NOT FOUND THEN RAISE EXCEPTION 'current registered object transition required' USING ERRCODE='55000';END IF;
- IF NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE id=latest.attempt_id AND writer_xid=latest.writer_xid AND actor_oid=current_actor) THEN RAISE EXCEPTION 'current mutation owner required' USING ERRCODE='55000';END IF;
+ IF latest.registration_id IS NOT NULL THEN
+  IF NOT EXISTS(SELECT 1 FROM truss.catalog_registration_request r WHERE r.registration_id=latest.registration_id AND r.writer_xid=latest.writer_xid AND r.actor_oid=current_actor AND r.actor_name=session_user::text) THEN RAISE EXCEPTION 'current original registration owner required' USING ERRCODE='55000';END IF;
+  PERFORM truss.runtime_module_writer((SELECT document_id FROM truss.type_def WHERE type_id=selected_type),(SELECT module FROM truss.type_def WHERE type_id=selected_type));
+  PERFORM truss.catalog_rebind_transition_reader((SELECT t FROM truss.runtime_catalog_rebind_transition t WHERE t.transition_id=latest.transition_id));
+ ELSIF NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE id=latest.attempt_id AND writer_xid=latest.writer_xid AND actor_oid=current_actor) THEN RAISE EXCEPTION 'current mutation owner required' USING ERRCODE='55000';END IF;
  SELECT to_jsonb(o) INTO actual FROM truss.object o WHERE id=selected_id AND type_id=selected_type;
  SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]'::jsonb) INTO keys FROM truss.object_key_bucket k WHERE k.object_id=selected_id AND k.type_id=selected_type;
  IF actual IS DISTINCT FROM latest.after_object OR keys IS DISTINCT FROM latest.after_keys THEN RAISE EXCEPTION 'exact final object/key state required' USING ERRCODE='55000';END IF;
- FOR entry IN SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id() LOOP
+ FOR entry IN SELECT j.value FROM (SELECT journal FROM truss.runtime_object_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id() UNION ALL SELECT journal FROM truss.runtime_catalog_rebind_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j LOOP
   SELECT to_jsonb(j) INTO actual FROM truss.journal j WHERE j.at=(entry->>'at')::timestamptz AND j.seq=(entry->>'seq')::bigint;
   IF actual IS DISTINCT FROM entry THEN RAISE EXCEPTION 'exact mutation journal required' USING ERRCODE='55000';END IF;
  END LOOP;
@@ -590,7 +604,7 @@ BEGIN
   END IF;
  ELSIF TG_TABLE_NAME='object' THEN
   IF TG_OP='DELETE' THEN PERFORM truss.runtime_object_validate(OLD.id,OLD.type_id);ELSE PERFORM truss.runtime_object_validate(NEW.id,NEW.type_id);END IF;
- ELSIF TG_TABLE_NAME='runtime_object_transition' THEN PERFORM truss.runtime_object_validate(NEW.object_id,NEW.type_id);
+ ELSIF TG_TABLE_NAME IN ('runtime_object_transition','runtime_catalog_rebind_transition') THEN PERFORM truss.runtime_object_validate(NEW.object_id,NEW.type_id);
  ELSIF TG_TABLE_NAME='edge' THEN
   IF TG_OP='DELETE' THEN PERFORM truss.runtime_edge_validate(OLD.id,OLD.rel_type_id);ELSE PERFORM truss.runtime_edge_validate(NEW.id,NEW.rel_type_id);END IF;
  ELSIF TG_TABLE_NAME='runtime_edge_transition' THEN PERFORM truss.runtime_edge_validate(NEW.edge_id,NEW.rel_type_id);
@@ -601,6 +615,7 @@ BEGIN
  SELECT coalesce(jsonb_agg(value ORDER BY (value->>'at')::timestamptz,(value->>'seq')::bigint),'[]'::jsonb) INTO expected FROM (
   SELECT e.value->'journal' value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e WHERE g.writer_xid=pg_current_xact_id()
   UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
+  UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
   UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()) e;
  IF actual IS DISTINCT FROM expected THEN RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
  RETURN NULL;
@@ -860,6 +875,7 @@ BEGIN
   SELECT DISTINCT object_id,type_id FROM (
    SELECT m.object_id,m.type_id FROM truss.runtime_create_member m JOIN truss.runtime_create_group g USING(group_id) WHERE g.writer_xid=pg_current_xact_id()
    UNION ALL SELECT object_id,type_id FROM truss.runtime_object_transition WHERE writer_xid=pg_current_xact_id()
+   UNION ALL SELECT object_id,type_id FROM truss.runtime_catalog_rebind_transition WHERE writer_xid=pg_current_xact_id()
    UNION ALL SELECT o.id,o.type_id FROM truss.object o
     JOIN truss.rel_endpoint e ON o.type_id IN(e.source_type,e.target_type)
     JOIN truss.schema_change c ON c.kind='rel' AND c.def_id=e.rel_type_id

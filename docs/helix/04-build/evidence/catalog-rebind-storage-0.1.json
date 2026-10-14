@@ -2,9 +2,9 @@
   "profile": "truss-catalog-rebind-storage/0.1",
   "umfSourceRevision": "cbb6fb8718aad59fd2061b62d12976387570db2f",
   "parser": "@libpg-query/parser@17.6.10",
-  "sourceSha256": "24111d4d8ddd9cd9fb97cca099c7e54848f82baa5f06260cd2616fd696db7762",
-  "nativeSha256": "c0413234314b4b083248070d84981e4656352a04ea54aaf3d735af0dfbd213e4",
-  "coreSha256": "2e5a85c17062ce23651b37e303f55f5adf903c628ee282cbe29730fe4772a63d",
+  "sourceSha256": "83984ff09ee1444fc3af5cba79742ac2190c92424f6d857f1d0cd51c3d9829e1",
+  "nativeSha256": "dd529eaed36e2101c4d4f62593eac4a3b4480a02ee476eedcb10a365256126fc",
+  "coreSha256": "84e041942677542db6f07100f10e3bb2461eeef97ee1e11758f0def3531fe8d0",
   "ddlSha256": "7f78b9dc2c0dc72118b9ae8e31c4b821422a2e6c7b4a1bdac865326bf915ca34",
   "transitionColumns": 12,
   "referencedKeyColumns": 2,
@@ -14,5 +14,5 @@
   "reloadedExportExact": true,
   "valid": true,
   "complete": false,
-  "scope": "Unintegrated registration-owned transition. Core columns and physical FK relationships; complete native AST drives UMF SQL export. Not an installed runtime or rebinding support claim."
+  "scope": "Native60 registration-owned transition candidate. Core columns and physical FK relationships; complete native AST drives UMF SQL export. Capture validation alone does not qualify callable rebinding or a published release."
 }
