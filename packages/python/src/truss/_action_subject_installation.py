@@ -39,7 +39,7 @@ def bootstrap_action_subjects_in_transaction(host, transaction, *, bindings):
 
     def install(cursor, observed):
         _pin_cursor(cursor)
-        prior = _text_rows(cursor, "SELECT pg_catalog.current_setting('search_path')::text", limit=1)
+        prior = _text_rows(cursor, "SELECT pg_catalog.current_setting('search_path')::pg_catalog.text", limit=1)
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog,pg_temp',true)", prepare=False)
         cursor.fetchone()
         if _text_rows(cursor, "SELECT pg_catalog.current_setting('server_version_num'),pg_catalog.current_setting('transaction_isolation'),pg_catalog.current_setting('transaction_read_only')", limit=1) != [('180006', 'read committed', 'off')]:
@@ -79,7 +79,11 @@ def bootstrap_action_subjects_in_transaction(host, transaction, *, bindings):
         cursor.execute(source.decode(), prepare=False)
         cursor.execute(sql.SQL('ALTER FUNCTION truss.acquire_action_subject_cut() OWNER TO {}').format(sql.Identifier(owner_row[0][0])), prepare=False)
         for name, principal, kind in bindings:
+            cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(name)), prepare=False)
             cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.acquire_action_subject_cut() TO {}').format(sql.Identifier(name)), prepare=False)
+        for oid, principal, kind in enrolled:
+            if _text_rows(cursor, "SELECT pg_catalog.has_schema_privilege(%s::pg_catalog.oid,'truss','USAGE')::pg_catalog.text", (oid,), 1) != [('true',)]:
+                raise ValueError('Original Subject cut namespace access required')
         grants = _text_rows(cursor, "SELECT a.grantee::text,a.grantor::text,a.privilege_type::text,a.is_grantable::text FROM pg_catalog.pg_proc p CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a WHERE p.oid='truss.acquire_action_subject_cut()'::regprocedure ORDER BY a.grantee", limit=257)
         expected = sorted([(owner, owner, 'EXECUTE', 'false'), *[(str(oid), owner, 'EXECUTE', 'false') for oid, _, _ in enrolled]], key=lambda row: int(row[0]))
         if grants != expected:

@@ -14,6 +14,10 @@ class ActionSubjectInstallationNativeTests(base.PublicCreateGroupTests):
         old_host.detach(); data.commit()
         self.admin.execute('CREATE ROLE action_service LOGIN')
         self.addCleanup(self.admin.execute, 'DROP ROLE action_service')
+        self.admin.execute('CREATE SCHEMA subject_shadow')
+        self.addCleanup(self.admin.execute, 'DROP SCHEMA subject_shadow CASCADE')
+        self.admin.execute('CREATE DOMAIN subject_shadow.text AS pg_catalog.text CHECK(false)')
+        self.admin.execute('SET search_path=subject_shadow,pg_catalog')
         self.admin.execute('BEGIN')
         host = adopt_psycopg_host(self.admin); tx = host.adopt_transaction().value
         result = bootstrap_action_subjects_in_transaction(host, tx,
@@ -22,6 +26,16 @@ class ActionSubjectInstallationNativeTests(base.PublicCreateGroupTests):
         self.assertIsInstance(result, Ok, str(host._custody.last_attempt.error))
         self.assertFalse(result.value.security_ready)
         host.detach(); self.admin.commit()
+        self.assertEqual(self.admin.execute('SHOW search_path').fetchone(), ('subject_shadow, pg_catalog',))
+        self.admin.execute('SET search_path=pg_catalog,pg_temp')
+        params = psycopg.conninfo.conninfo_to_dict(self.info.connection_uri)
+        params['user'] = 'action_service'
+        with psycopg.connect(**params,autocommit=True) as service:
+            service.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
+            service.execute('SELECT truss.acquire_action_subject_cut()')
+            service.execute('ROLLBACK')
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                service.execute('SELECT * FROM truss.action_subject_binding')
         self.assertEqual(self.admin.execute('SELECT subject_kind,principal_identity FROM truss.action_subject_binding ORDER BY subject_kind').fetchall(),
             [('human', b'original-human-identity'), ('service', b'original-service-identity')])
         for statement in ('SELECT * FROM truss.action_subject_binding',

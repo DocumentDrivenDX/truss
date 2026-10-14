@@ -1,0 +1,32 @@
+{
+  "status": "native-initial-enrollment-components-passed",
+  "postgresql": "18.6",
+  "tests": 2,
+  "seconds": 15.518,
+  "sourceHashes": {
+    "packages/python/src/truss/_action_role_installation.py": "95c41c80481d9f30e350c2397a8242ef69639762a87438f141e9c54ddbaf8422",
+    "packages/python/src/truss/_action_subject_installation.py": "d115dabc7e870299afa19fa149fa44fcbdf7aa5cd78500a3e59bee8695ae9de4",
+    "packages/python/tests/test_action_role_installation_native.py": "02e5ea20bcfc430c099224573ebcab378eb4323bac49e4d9f7ae6dc6d2720950",
+    "packages/python/tests/test_action_subject_installation_native.py": "33121f033dd4954821df0d4fd2650e6fe276b26a7547d271ff77abb2365a3958",
+    "scripts/check-module-boundaries.py": "c9bea69200c43a96703f52169e3fc98702f7d740536b64cd2497c7ba387d6e5d"
+  },
+  "logs": {
+    "native-role-r1.log": "259dbd6af95af8ad6355e1e800d29d9283503708e479686cdf2f1c9ee8aab19d",
+    "boundaries.log": "1f28cf285f9778d6e50d2dcef1713b954e06adb45da31fa31a51ef1cc0896f3c",
+    "native-astra-r2.log": "407016895d24f6f400e273f4c228b4846037f21308a79d1f73e1577857bd5742",
+    "native-astra-r1.log": "5b8fa55a970045df05fc251049ab01478b764d55f8b9b2246386aa2046e312f9"
+  },
+  "scope": [
+    "Original owner registry ticket family and exact roles mapped to explicit native NOLOGIN roles; missing/unknown/LOGIN mappings refuse.",
+    "Private native map/sequence allocator deny ordinary consumer access.",
+    "Store configuration, full family/role bytes and original revision pin retained separately.",
+    "Astra findings addressed: pg_catalog.text before namespace pin; schema USAGE granted/verified; hostile text-domain and path restoration plus fresh service cut/raw-read denial pass."
+  ],
+  "limits": [
+    "Diagnostic store config, not original admitted store issuer/namespace or source correspondence.",
+    "Initial closed producer checks full-byte uniqueness; no native arbitrary administrative-DML uniqueness guarantee or later writer API.",
+    "No current role OR, Subject lifetime/OID-reuse, authentication composition, source/helper/DDL full closure, mapping-cut composition or native permit.",
+    "Earlier logs describe earlier source; native-astra-r2 corresponds to final retained source.",
+    "No backend acceptance case promotion."
+  ]
+}

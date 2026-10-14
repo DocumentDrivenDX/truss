@@ -98,3 +98,23 @@ qualifies the separate Unix-socket credential exchange component.
 does not qualify protected current observation, role deletion/reuse, mapping cuts,
 full helper/DDL closure, action-role bindings or native permit consumption. These
 remain required before any action or preparation admission claim.
+
+`_action_role_installation.bootstrap_action_roles_in_transaction` now consumes
+the original `ActionRegistration` ticket's retained family/known role obligations,
+requires a complete explicit mapping to ordinary NOLOGIN native roles, and stores
+the original revision pin separately. Store identity bytes are retained separately
+from installation and family; their original protected store correspondence must
+still be admitted before use. The native test uses diagnostic store configuration
+bytes and does not establish an original live store issuer.
+
+The private fresh producer checks complete full-byte family/role uniqueness.
+A surrogate native key and **nonunique** digest routing avoid oversized B-tree
+keys and hash-as-identity assumptions. This is not a database-wide uniqueness
+theorem for arbitrary administrative DML: no later native mutation API is admitted.
+Qualified migrations/updates, full semantic-key enforcement and mapping writer
+closure remain open. Missing, unknown, duplicate or partial declared-role maps
+refuse; enrollment itself never evaluates current membership or grants access.
+
+[Native role/enrollment evidence](../../04-build/evidence/security-action-role-installation-20261014/receipt.json)
+also retains Astra's addressed pre-pin type-shadowing and missing schema-USAGE
+findings, with actual hostile-domain/path-restoration and fresh-service controls.
