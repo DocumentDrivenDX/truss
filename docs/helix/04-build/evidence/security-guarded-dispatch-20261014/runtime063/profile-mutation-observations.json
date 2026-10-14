@@ -1,0 +1,72 @@
+{
+  "observations": [
+    {
+      "principal": "Alice",
+      "resources": [],
+      "queryCellsPublished": false,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "Bob",
+      "resources": [
+        "RB"
+      ],
+      "queryCellsPublished": false,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "Outsider",
+      "resources": [],
+      "queryCellsPublished": false,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobGuarded",
+      "resources": [
+        "RB"
+      ],
+      "queryCellsPublished": true,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobGuardedId",
+      "resources": [
+        "RB"
+      ],
+      "queryCellsPublished": true,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobGuardedCorrupt",
+      "outcome": "guardedResultRefused",
+      "released": false
+    },
+    {
+      "principal": "BobProfileDrift",
+      "outcome": "subjectProfileRefused",
+      "released": false
+    },
+    {
+      "principal": "BobProfileRestored",
+      "resources": [
+        "RB"
+      ],
+      "queryCellsPublished": false,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobPublicIssuer",
+      "outcome": "issuerAclRefused",
+      "released": false
+    }
+  ],
+  "epoch": "35eb9709-d2cf-4e3d-8863-efdfd9c438ca",
+  "securityReady": false,
+  "scope": "Actual own-session registered Subject + peer/role/source/fact/current epoch/compiler/result guarded buffered reads; complete native admission/lifetime and all132 remain pending."
+}
