@@ -24,6 +24,8 @@ class PreparationPermitBindingNativeTests(base.PublicCreateGroupTests):
         self.admin.execute(files('truss').joinpath('_security_bootstrap','preparation-permit-mint.sql').read_text())
         self.admin.execute(sql.SQL('ALTER FUNCTION truss.mint_preparation_permit_binding(int4,int4,xid8) OWNER TO {}').format(sql.Identifier(owner)))
         self.admin.execute(sql.SQL('GRANT pg_read_all_stats TO {} WITH INHERIT TRUE').format(sql.Identifier(owner)))
+        self.admin.execute(files('truss').joinpath('_security_bootstrap','preparation-peer-xid.sql').read_text())
+        self.admin.execute(sql.SQL('ALTER FUNCTION truss.require_preparation_peer_xid(int4,xid8) OWNER TO {}').format(sql.Identifier(owner)))
         self.admin.execute(files('truss').joinpath('_security_bootstrap','preparation-permit-binding-check.sql').read_text())
         self.admin.execute(sql.SQL('ALTER FUNCTION truss.check_preparation_permit_binding(int4,int4) OWNER TO {}').format(sql.Identifier(owner)))
         # Diagnostic wrapper only: no protected rows or authority are returned.
@@ -38,6 +40,12 @@ class PreparationPermitBindingNativeTests(base.PublicCreateGroupTests):
             data.execute('SELECT truss.check_preparation_permit_binding(1,1)')
         data.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
         actual_xid = int(data.execute('SELECT pg_catalog.pg_current_xact_id()::text').fetchone()[0])
+        self.assertEqual(self.admin.execute('SELECT truss.require_preparation_peer_xid(%s,%s::xid8)::text',(data.info.backend_pid,str(actual_xid))).fetchone(),(str(actual_xid),))
+        # The forged epoch has identical native32 bits but is outside the
+        # native allocator horizon. It cannot become admission evidence.
+        self.assertEqual((actual_xid+2**32) & 0xffffffff,actual_xid & 0xffffffff)
+        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
+            self.admin.execute('SELECT truss.require_preparation_peer_xid(%s,%s::xid8)',(data.info.backend_pid,str(actual_xid+2**32)))
         snapshot = data.execute('SELECT pg_catalog.pg_current_snapshot()::text').fetchone()
         def check(anchor, coordinator):
             return data.execute('SELECT truss.binding_check_probe(%s,%s)',(anchor,coordinator.info.backend_pid)).fetchone()[0]
@@ -110,3 +118,5 @@ class PreparationPermitBindingNativeTests(base.PublicCreateGroupTests):
                 self.admin.execute('ROLLBACK')
                 self.assertEqual(fields(self.admin),[])
         data.execute('ROLLBACK')
+        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
+            self.admin.execute('SELECT truss.require_preparation_peer_xid(%s,%s::xid8)',(data.info.backend_pid,str(actual_xid)))

@@ -1,0 +1,38 @@
+{
+  "status": "owner-private-native-peer-xid-component-passed",
+  "postgresql": "18.6",
+  "finalRun": {
+    "log": "native-r3.log",
+    "tests": 1,
+    "seconds": 55.522,
+    "exitCode": 0
+  },
+  "sourceHashes": {
+    "packages/python/src/truss/_security_bootstrap/preparation-peer-xid.sql": "2006fa1bafe2ff009faa5300e8d64db97b9722f637c799b04c4e80f454a4e561",
+    "packages/python/src/truss/_security_bootstrap/preparation-permit-binding-check.sql": "d845a18bb1041c9a83734318deb9af8eb6ae491dfa643ba84d6af86ea182a696",
+    "packages/python/src/truss/_security_bootstrap/preparation-permit-mint.sql": "3f730e626b95bec11868ec06d92ffca562132406006f9beebfedab898a9245c9",
+    "packages/python/tests/test_preparation_permit_binding_native.py": "883276cc38d8635de43da405a42bc9f58ffc4d14e9d9872ec4f6c3149101df2e"
+  },
+  "logs": {
+    "native-r1.log": "db10336e73f5caa76228a93d0fe456663dd7105cf1957b6135a9838af96ac04c",
+    "native-r2.log": "bd42385ea44bbcd7cc921adb90181d556fe755028e530343e51895ec79eb2fb4",
+    "native-r3.log": "4861fdc47834de2b27005476830d07ce2071456ec856c02cf29b274a30e0b7a2"
+  },
+  "sourceReview": "https://github.com/postgres/postgres/blob/REL_18_6/src/backend/utils/adt/xid8funcs.c#L77-L135",
+  "controls": [
+    "Actual live RR peer full xid8 accepted by fresh RC private helper.",
+    "Claimed full xid plus 2^32 has identical low bits but is rejected.",
+    "Ended peer rejected.",
+    "Existing coherent tuple, COMMIT/disconnect, boundary codec and later-transaction remint controls replayed."
+  ],
+  "history": [
+    "r1 snapshot-xmax upper bound incorrectly refused a valid live assigned xid. Failed log retained; implementation discarded.",
+    "r2 corrected native status check passed; test comment changed during run. r3 is exact final source replay."
+  ],
+  "limits": [
+    "No peer backend incarnation, role, original coordinator transaction, authorization, source, store or program binding is established by this helper alone.",
+    "Native pg_xact_status xid8 range/history validation and live pg_stat_activity are PostgreSQL18.6 implementation premises, not an all-backend formal refinement proof.",
+    "Statistics owner privilege and helper ACL/source custody remain premises. No production installer, guard, selector or seal consumes this helper.",
+    "Later coordinator transaction remint counterexample remains; no acceptance case promotion."
+  ]
+}

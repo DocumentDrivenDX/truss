@@ -1,0 +1,18 @@
+test_private_one_tuple_full_xid_codec_and_transaction_lifetime (test_preparation_permit_binding_native.PreparationPermitBindingNativeTests.test_private_one_tuple_full_xid_codec_and_transaction_lifetime) ... ERROR
+
+======================================================================
+ERROR: test_private_one_tuple_full_xid_codec_and_transaction_lifetime (test_preparation_permit_binding_native.PreparationPermitBindingNativeTests.test_private_one_tuple_full_xid_codec_and_transaction_lifetime)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_preparation_permit_binding_native.py", line 43, in test_private_one_tuple_full_xid_codec_and_transaction_lifetime
+    self.assertEqual(self.admin.execute('SELECT truss.require_preparation_peer_xid(%s,%s::xid8)::text',(data.info.backend_pid,str(actual_xid))).fetchone(),(str(actual_xid),))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.ObjectNotInPrerequisiteState: original bounded current xid window required
+CONTEXT:  PL/pgSQL function truss.require_preparation_peer_xid(integer,xid8) line 22 at RAISE
+
+----------------------------------------------------------------------
+Ran 1 test in 21.048s
+
+FAILED (errors=1)

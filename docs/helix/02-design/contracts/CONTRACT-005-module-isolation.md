@@ -636,3 +636,15 @@ comparison APIs refuse a namespace that places other schemas before pg_catalog.
 The [original-caller bridge proposal](preparation-authority-bridge.proposal.md)
 records native anchor/permit/selection/finalization gates and the nine qualified
 conditional proof queries; complete preparation admission remains unavailable.
+
+
+The owner-private PG18.6 `require_preparation_peer_xid` component additionally
+requires native `pg_xact_status(xid8)` to report in-progress and compares the
+actual same-database live peer xid32. The native xid8 implementation validates
+against the allocator and retained history; snapshot xmax is not substituted
+for that allocator bound. [Retained native evidence](../../04-build/evidence/security-preparation-peer-xid-20261014/receipt.json)
+includes the discarded snapshot-bound failure, forged-epoch rejection and
+ended-peer refusal. This is a scoped reconciliation component, not original
+backend/coordinator incarnation, authority, store or program admission. Complete
+anchor/guard/selection/finalization obligations above remain open; no protected
+profile or backend acceptance case is promoted.
