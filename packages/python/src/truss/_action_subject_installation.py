@@ -5,12 +5,16 @@ credential exchange, role lifecycle/DDL custody and current action permission
 remain separate. Caller owns COMMIT. This does not repurpose ontology Staff.
 """
 from dataclasses import dataclass
+from hashlib import sha256
+from importlib.resources import files
 from psycopg import sql
 from .psycopg_host import PsycopgHost
 from .execution import Error, ExecutionFailure
 from .catalog_runtime import _pin_cursor
 from ._installation_privileges import installation_administrator_with_cursor
 from ._security_catalog_subject_installation import _text_rows
+
+_CUT_SHA256 = '5b070599774386b6c995b46e6d4154534e951acde27a5ae22604ff10cc7ded1d'
 
 
 @dataclass(frozen=True, slots=True)
@@ -69,6 +73,17 @@ def bootstrap_action_subjects_in_transaction(host, transaction, *, bindings):
         actual = _text_rows(cursor, "SELECT role_oid::text,pg_catalog.encode(principal_identity,'hex'),subject_kind::text,installation_id::text,authentication_profile::text FROM ONLY truss.action_subject_binding ORDER BY role_oid", limit=256)
         if actual != [(str(oid), principal.hex(), kind, identity, 'truss.local-scram/0.1') for oid, principal, kind in sorted(enrolled)]:
             raise ValueError('Exact original Subject enrollment readback required')
+        source = files('truss').joinpath('_security_bootstrap', 'action-subject-cut.sql').read_bytes()
+        if sha256(source).hexdigest() != _CUT_SHA256:
+            raise ValueError('Original Subject cut source required')
+        cursor.execute(source.decode(), prepare=False)
+        cursor.execute(sql.SQL('ALTER FUNCTION truss.acquire_action_subject_cut() OWNER TO {}').format(sql.Identifier(owner_row[0][0])), prepare=False)
+        for name, principal, kind in bindings:
+            cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.acquire_action_subject_cut() TO {}').format(sql.Identifier(name)), prepare=False)
+        grants = _text_rows(cursor, "SELECT a.grantee::text,a.grantor::text,a.privilege_type::text,a.is_grantable::text FROM pg_catalog.pg_proc p CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a WHERE p.oid='truss.acquire_action_subject_cut()'::regprocedure ORDER BY a.grantee", limit=257)
+        expected = sorted([(owner, owner, 'EXECUTE', 'false'), *[(str(oid), owner, 'EXECUTE', 'false') for oid, _, _ in enrolled]], key=lambda row: int(row[0]))
+        if grants != expected:
+            raise ValueError('Exact private Subject cut enrollment ACL required')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)", (prior[0][0],), prepare=False)
         if cursor.fetchone() != (prior[0][0],):
             raise ValueError('Original Subject installation context restoration required')

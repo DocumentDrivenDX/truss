@@ -1,0 +1,22 @@
+{
+  "status": "native-subject-cut-component-passed",
+  "postgresql": "18.6",
+  "tests": 1,
+  "seconds": 5.346,
+  "sourceHashes": {
+    "packages/python/src/truss/_action_subject_installation.py": "1156970ee9622f2e0dbf4431d881102cbcd37c9dd372e0adc2eabc76b2c0fea9",
+    "packages/python/src/truss/_security_bootstrap/action-subject-cut.sql": "5b070599774386b6c995b46e6d4154534e951acde27a5ae22604ff10cc7ded1d",
+    "packages/python/tests/test_action_subject_installation_native.py": "ad388f1b7f6f8b36c9d6f68192e6a989fd163d46c6c0ce9cdbd32677e657952e"
+  },
+  "logSha256": "44d8b95cb082a28f830294600150f1bca65be67b5a8b4b7cf8814c68de0a08b3",
+  "scope": [
+    "Packaged pinned-source SECDEF RR lock-only issuer owned by original NOLOGIN runtime owner and executable only by explicitly enrolled Subject roles.",
+    "Native mapping UPDATE blocks while original data SHARE cut held; original RR snapshot unchanged.",
+    "Mapping UPDATE committed after RR snapshot causes original row-lock acquisition SerializationFailure instead of stale admission."
+  ],
+  "limits": [
+    "Lock-only component, no current human/action-role authority.",
+    "Full native ABI/helper/DDL/caller-lifecycle closure and native permit composition still required.",
+    "No original materialization/seal/backend acceptance promotion."
+  ]
+}

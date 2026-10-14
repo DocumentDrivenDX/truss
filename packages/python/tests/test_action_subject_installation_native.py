@@ -37,3 +37,20 @@ class ActionSubjectInstallationNativeTests(base.PublicCreateGroupTests):
         self.assertIsInstance(duplicate, Error)
         host.detach(); self.admin.rollback()
         self.assertEqual(self.admin.execute("SELECT principal_identity FROM truss.action_subject_binding WHERE subject_kind='human'").fetchone(), (b'original-human-identity',))
+        data.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
+        original_snapshot = data.execute('SELECT pg_catalog.pg_current_snapshot()::text').fetchone()
+        data.execute('SELECT truss.acquire_action_subject_cut()')
+        self.admin.execute("SET lock_timeout='150ms'")
+        with self.assertRaises(psycopg.errors.LockNotAvailable):
+            self.admin.execute("UPDATE truss.action_subject_binding SET principal_identity=principal_identity")
+        self.assertEqual(data.execute('SELECT pg_catalog.pg_current_snapshot()::text').fetchone(), original_snapshot)
+        data.execute('ROLLBACK')
+        self.admin.execute("SET lock_timeout='0'")
+        # A later mapping change cannot be made current merely by taking a
+        # lock after the RR snapshot. The row-lock witness must refuse.
+        data.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
+        data.execute('SELECT pg_catalog.pg_current_snapshot()')
+        self.admin.execute("UPDATE truss.action_subject_binding SET principal_identity=%s WHERE subject_kind='human'", (b'new-original-human',))
+        with self.assertRaises(psycopg.errors.SerializationFailure):
+            data.execute('SELECT truss.acquire_action_subject_cut()')
+        data.execute('ROLLBACK')
