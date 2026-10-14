@@ -62,6 +62,25 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
             observed[staff]=sorted(alias.upper() for alias in ('ra','rb','ro') if any(resource==identities[alias] and project in projects for resource,project in owned))
         self.assertEqual(observed,{'alice':['RA'],'bob':['RB'],'outsider':[]})
         self.assertEqual(endpoints['ProjectClient'],{(identities['pa'],identities['c']),(identities['pb'],identities['c'])})
+        from security_ontology_edge_projection import project_full_ontology_edge_cells
+        from security_owned_read import _pin_owned_evaluator_sources,_read_owned_resource_receipt
+        import subprocess
+        types={name:self.types[('adoc',name)].type_id for name in {row[0] for row in rows}}
+        relations={name:reference.relationship_id for name,reference in refs.items()}
+        objects=tuple((str(identities[alias]),types[record],stored[alias]) for record,alias,_ in rows)
+        edge_rows=tuple(tuple(str(value) for value in row) for row in self.admin.execute('SELECT id,rel_type_id,source_id,source_type,target_id,target_type FROM truss.edge ORDER BY id').fetchall())
+        cells=project_full_ontology_edge_cells(objects,edge_rows,types,relations)
+        prepared=_pin_owned_evaluator_sources();evaluated={}
+        for subject,expected_keys in (('Alice',['RA']),('Bob',['RB']),('Outsider',[])):
+            payload=json.dumps({'cells':cells,'subjectKey':[{'string':subject}],'resultMode':'resources'})
+            evaluated_run=subprocess.run([os.environ.get('TRUSS_BUN_EXECUTABLE','bun'),str(prepared.tool),'--named-source'],cwd=Path(__file__).resolve().parents[3],input=payload,capture_output=True,text=True,timeout=10)
+            self.assertEqual(evaluated_run.returncode,0,evaluated_run.stderr)
+            decision=_read_owned_resource_receipt(evaluated_run.stdout)
+            self.assertEqual([r['key'][0]['string'] for r in decision['rows']],expected_keys)
+            for resource in decision['rows']:self.assertEqual(resource['output'][0]['disposition'],'withheld')
+            evaluated[subject]=decision
+        for damaged in (edge_rows[:-1],edge_rows+(edge_rows[0],)):
+            with self.assertRaises(ValueError):project_full_ontology_edge_cells(objects,damaged,types,relations)
         # Actual native endpoint validation through the public mutation boundary.
         context=a.group_context_in_transaction(t).value
         from truss.groups import StoredObjectReference
@@ -81,4 +100,8 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         if directory:
             folder=Path(directory)
             for document in self.documents:(folder/(document.document_id+'.json')).write_bytes(document.content)
-            (folder/'population.json').write_text(json.dumps({'aliases':identities,'storedValues':stored,'edges':actual,'oracle':observed,'expectedOracle':{'alice':['RA'],'bob':['RB'],'outsider':[]},'nativeEndpointRefusals':refusals,'scope':'Original public seed and independent graph incidence oracle; not protected visibility admission.'},indent=2,default=lambda value:{'kind':value.kind,'text':value.text})+'\n')
+            inventory={}
+            for name,table,order in (('types','type_def','type_id'),('properties','prop_def','prop_id'),('keys','key_def','type_id,key_num'),('relationships','rel_def','rel_type_id'),('endpoints','rel_endpoint','rel_type_id,source_type,target_type')):
+                inventory[name]=[row[0] for row in self.admin.execute('SELECT to_jsonb(t) FROM truss.'+table+' t ORDER BY '+order).fetchall()]
+            (folder/'native-inventory.json').write_text(json.dumps({'scope':'Excluded native assessor capture, not authenticated compiler/host admission.','inventory':inventory,'typeSelection':types,'relationshipSelection':relations},indent=2)+'\n')
+            (folder/'population.json').write_text(json.dumps({'aliases':identities,'storedValues':stored,'edges':actual,'oracle':observed,'sharedPolicyDecisions':evaluated,'expectedOracle':{'alice':['RA'],'bob':['RB'],'outsider':[]},'nativeEndpointRefusals':refusals,'scope':'Original public seed, explicit graph endpoint binding, shared semantic policy and independent incidence oracle; no authenticated protected visibility admission.'},indent=2,default=lambda value:{'kind':value.kind,'text':value.text})+'\n')
