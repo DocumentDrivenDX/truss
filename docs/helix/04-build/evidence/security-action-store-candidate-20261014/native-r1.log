@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/private/tmp/truss-main-integration-20261010/scripts/export-products-native-binding.py", line 149, in <module>
+    run(args.model,args.output,args.bun,bootstrap_source_epoch=args.bootstrap_source_epoch,install_seal_storage=args.install_seal_storage,register_action_store=args.register_action_store)
+  File "/private/tmp/truss-main-integration-20261010/scripts/export-products-native-binding.py", line 77, in run
+    replayed_store=success(register_action_store_in_transaction(assembly._host,tx,tenant='products-tenant',registration_key=b'original-products-store'))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-main-integration-20261010/packages/python/examples/adopter_workflow.py", line 25, in success
+    raise RuntimeError(f'Truss operation failed: {result!r}')
+RuntimeError: Truss operation failed: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error')
