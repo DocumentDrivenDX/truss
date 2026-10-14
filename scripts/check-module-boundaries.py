@@ -13,6 +13,8 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    'bulk_action_gateway': {'dataclasses','hashlib','inspect','threading','truss.weft','truss._bulk_set_values','truss._action_identity_codec'},
+    '_bulk_set_values': {'decimal','re'},
     '_action_identity_codec': {'json'},
     '_action_subject_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.psycopg_host','truss.execution','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation'},
     '_scram_preparation_login': {'dataclasses','psycopg'},

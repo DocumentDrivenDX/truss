@@ -1,0 +1,26 @@
+{
+  "status": "original-registry-value-and-family-components-passed",
+  "tests": 13,
+  "seconds": 21.255,
+  "sourceHashes": {
+    "packages/python/src/truss/bulk_action_gateway.py": "10f35fca05c1a37709d32e8868de5f09512e8de00773affb66ba81c3a4edaef8",
+    "packages/python/src/truss/_bulk_set_values.py": "9f3b9f38ced33cda378698081e0530c23c6b04e0d373d121f9e4d78f4148d95c",
+    "packages/python/tests/test_bulk_action_gateway.py": "8b0e411f1ccdcf72d697487fc5e77aad4a9ec252a5e8afbe6cccf9bd93f96f19",
+    "packages/python/tests/test_bulk_set_values.py": "02fed8e3b1e83b75c102db87e2296190968142d50880d4f1ba15a166200c38a2",
+    "packages/python/tests/owner_action_preparation.ts": "489eb6c2345c51979c70d3fb86f29e4d612f96d04b42066e77b1f6bfea244a0f",
+    "packages/python/tests/owner_set_values.ts": "cbb88d45c99ba7f42fe6e6c0877d62a82f9727082af56d091bc1f596458ab539"
+  },
+  "files": {
+    "owner-handoff.json": "b3cfc1ddbb506edd0fe388a64cae278a431e2d6ddde52b4a32c23f10f5224587",
+    "boundaries.log": "8bdfa6cde14012619931e02eba0f9a9c94ac5489808380626690682034f5d990",
+    "tests-r1.log": "983b2b449bd9579fd72038e1ac7a80dd674d1f00ad5ea5d7addc2cd805cfa067",
+    "tests-r2.log": "050bd5eccef322f0ff73d811332e2cd0e569b0c5777fe37952805dea0f4db5f6"
+  },
+  "scope": "Exact eight-file reviewed handoff integrated; family_policy derives pair identity, exact declared roles, original revision pin and person-required obligation from retained local registry ticket/model/owner-preparation. Existing original owner/value interoperability and identity tests pass.",
+  "limits": [
+    "Pure custody/static obligations only; trusted synchronous original owner producer remains premise.",
+    "No native registry, role membership, authentication/delegation, current source or execution rights.",
+    "No action-role home/native permit/selection/seal/backend acceptance promotion.",
+    "r1 precedes family_policy extension; r2 corresponds to retained source."
+  ]
+}

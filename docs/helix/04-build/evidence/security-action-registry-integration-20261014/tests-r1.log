@@ -1,0 +1,18 @@
+test_original_umf_preparation_and_tamper_refusal (test_bulk_action_gateway.OriginalOwnerTests.test_original_umf_preparation_and_tamper_refusal) ... ok
+test_bad_source_and_deferred_owner_refuse_before_publication (test_bulk_action_gateway.RegistrationTests.test_bad_source_and_deferred_owner_refuse_before_publication) ... ok
+test_changed_owner_output_refuses_without_publishing_handle (test_bulk_action_gateway.RegistrationTests.test_changed_owner_output_refuses_without_publishing_handle) ... ok
+test_envelope_escape_and_exact_payload_bounds_are_separate (test_bulk_action_gateway.RegistrationTests.test_envelope_escape_and_exact_payload_bounds_are_separate) ... ok
+test_foreign_and_forged_action_tickets_cannot_select_another_registry (test_bulk_action_gateway.RegistrationTests.test_foreign_and_forged_action_tickets_cannot_select_another_registry) ... ok
+test_reentrancy_and_capacity_do_not_bypass_registration (test_bulk_action_gateway.RegistrationTests.test_reentrancy_and_capacity_do_not_bypass_registration) ... ok
+test_retains_immutable_originals_and_grants_no_execution_api (test_bulk_action_gateway.RegistrationTests.test_retains_immutable_originals_and_grants_no_execution_api) ... ok
+test_agrees_with_original_umf_evaluator (test_bulk_set_values.SetValueTests.test_agrees_with_original_umf_evaluator) ... ok
+test_large_compact_exponent_and_original_expansion_boundary (test_bulk_set_values.SetValueTests.test_large_compact_exponent_and_original_expansion_boundary) ... ok
+test_original_numeric_metadata_spellings_are_exact (test_bulk_set_values.SetValueTests.test_original_numeric_metadata_spellings_are_exact) ... ok
+test_unknown_and_unsupported_domains_refuse (test_bulk_set_values.SetValueTests.test_unknown_and_unsupported_domains_refuse) ... ok
+test_original_reference_oracle (test_action_identity_codec.ActionIdentityCodecTests.test_original_reference_oracle) ... ok
+test_original_utf16_bounds_and_exact_identity (test_action_identity_codec.ActionIdentityCodecTests.test_original_utf16_bounds_and_exact_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 22.482s
+
+OK

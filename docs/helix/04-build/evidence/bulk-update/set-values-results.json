@@ -1,0 +1,27 @@
+{
+  "scope": "Candidate required set-value consumer on exact owner-prepared Fields; no native gateway execution",
+  "passed": true,
+  "valueTests": 4,
+  "registrationTests": 7,
+  "ownerLiteralCases": 62,
+  "originalMetadataSpellings": [
+    "8.0",
+    "8e0"
+  ],
+  "lossyMetadataRejected": true,
+  "sourceSha256": {
+    "packages/python/src/truss/_bulk_set_values.py": "9f3b9f38ced33cda378698081e0530c23c6b04e0d373d121f9e4d78f4148d95c",
+    "packages/python/src/truss/bulk_action_gateway.py": "9f369f88178e3506895ad118092c74405962d2d184177c34971f12394b582d9f",
+    "packages/python/tests/test_bulk_set_values.py": "02fed8e3b1e83b75c102db87e2296190968142d50880d4f1ba15a166200c38a2",
+    "packages/python/tests/owner_set_values.ts": "cbb88d45c99ba7f42fe6e6c0877d62a82f9727082af56d091bc1f596458ab539",
+    "packages/python/tests/test_bulk_action_gateway.py": "10b2a7b15e4236200992dba0a267ebeffbca6107d6e5c0057e23418a632f1177",
+    "packages/python/tests/owner_action_preparation.ts": "489eb6c2345c51979c70d3fb86f29e4d612f96d04b42066e77b1f6bfea244a0f",
+    "scripts/check-module-boundaries.py": "532196e077c6650fd89ab859c45a81a22223f9e104652841f33a6489b40d4dc7"
+  },
+  "reviewStatus": "Astra Ultra re-review: no remaining scoped code blocker; 440 independent balanced-conversion cases plus original-owner suite verified",
+  "nativeQualified": false,
+  "framedOwnerCorrectionPassed": true,
+  "balancedConversionCases": 440,
+  "largeCompactExponentRegressionPassed": true,
+  "nativeDeadlineQualified": false
+}
