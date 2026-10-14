@@ -1,0 +1,92 @@
+{
+  "observations": [
+    {
+      "principal": "Alice",
+      "resources": [],
+      "queryCellsPublished": false,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "Bob",
+      "resources": [
+        "RB"
+      ],
+      "queryCellsPublished": false,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "Outsider",
+      "resources": [],
+      "queryCellsPublished": false,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "AliceGuarded",
+      "resources": [],
+      "queryCellsPublished": true,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "OutsiderGuarded",
+      "resources": [],
+      "queryCellsPublished": true,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobGuarded",
+      "resources": [
+        "RB"
+      ],
+      "queryCellsPublished": true,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobGuardedId",
+      "resources": [
+        "RB"
+      ],
+      "queryCellsPublished": true,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobGuardedCorrupt",
+      "outcome": "guardedResultRefused",
+      "released": false
+    },
+    {
+      "principal": "BobStreaming",
+      "outcome": "streamingRefusedBeforeOutput",
+      "released": false,
+      "noRetainedCuts": true
+    },
+    {
+      "principal": "BobProfileDrift",
+      "outcome": "subjectProfileRefused",
+      "released": false
+    },
+    {
+      "principal": "BobProfileRestored",
+      "resources": [
+        "RB"
+      ],
+      "queryCellsPublished": false,
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobPublicIssuer",
+      "outcome": "issuerAclRefused",
+      "released": false
+    }
+  ],
+  "epoch": "8a4a000b-6f90-4030-a582-d85b1ee19334",
+  "securityReady": false,
+  "scope": "Actual own-session registered Subject + peer/role/source/fact/current epoch/compiler/result guarded buffered reads; complete native admission/lifetime and all132 remain pending."
+}
