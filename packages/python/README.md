@@ -20,7 +20,7 @@ server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The current release is [v0.0.21](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.21).
+The current release is [v0.0.22](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.22).
 The Python distribution version is distinct from native runtime/layout versions;
 future distributed changes receive a new package version.
 
@@ -31,10 +31,10 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.21 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.22 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.22 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.23 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.21'
+  'truss-toolkit[local,native,query]==0.0.22'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release
@@ -314,9 +314,15 @@ source cell is validated before filtering. Timestamp and binary projections, inc
 absence and explicit null. Required or absent-allowed singular binary fields support byte equality
 with canonical base64 SQL literals, another binary field, or
 `TextValue(kind="binary", text="AP8=")` parameters. Ordinary `str` parameters
-remain strings. Binary ordering/grouping and timestamp comparison/parameters
-remain unsupported. The selected compile/IR/backend interfaces are
-`0.2.5`, with the unchanged SQL dialect `0.2.0`.
+remain strings. The SDK0.0.23 candidate additionally selects the shared
+`umf-rfc3339-exact-instant/1.0.0` profile for timestamp equality. Required and
+absent-allowed timestamp fields compare exact instants across offsets with
+arbitrary fractional digits within the1MiB token limit, using literals, another
+timestamp field, or `TextValue(kind="timestamp", text="2024-01-01T00:00:00.123456789Z")`.
+Original timestamp text remains recoverable; `-00:00` retains unknown local-offset
+knowledge while identifying a known instant. Binary/timestamp ordering, grouping
+and temporal keys remain unsupported. The candidate compile/IR/backend interfaces
+are `0.2.6`, with the unchanged SQL dialect `0.2.0`; released SDK22 remains0.2.5.
 Successful native `QueryRows` and `QueryPage` results carry `as_of: QueryReadPosition`. Its opaque `value` identifies a conservative committed lower bound captured immediately before the data query; `at` is the database capture time as a timezone-aware UTC `datetime`. The following READ COMMITTED statement can include newer commits. `caller_xid_assigned` reports only whether the caller already had a transaction ID; it does not prove writes or commitment. Constructors retain an optional default for compatibility, while this provider fills the position on every successful result, including empty rows.
 
 Read-position values use their own namespace and are not receipt tokens. Do not pass them to `reached`, infer ordering from their strings or timestamps, or treat them as exact snapshots. An adapter may publish this position only with the stated lower-bound semantics. Current authority/context checks must pass before the result and position are returned.
@@ -798,7 +804,7 @@ null-parameter support is implied. Wire0.2.5 remains unchanged.
 
 Adds original decimal(18,2) facets alongside decimal(18,4) across catalog acceptance, writes/imports, reads, business keys and Weft queries/pages. Exact tokens are preserved, including redundant zeros. Maximum9999999999999999.99 is valid; excess precision or nonrepresentable scale refuses. Name-only Field evolution retains property/key identities. Native57 upgrades56 transactionally and requires matching Weft0.4.22/backend0.4.27. The unpublished20 candidate failed retained-extension checks;21 corrects that omission. Published21 passed its release workflows on both declared native platforms.
 
-## Original documents and compact reports (v0.0.22 candidate)
+## Original documents and compact reports (v0.0.22)
 
 Prepare a model without starting PostgreSQL:
 
@@ -811,4 +817,4 @@ prepared = prepare_catalog((CatalogDocument(document_id, revision, original_byte
 
 The assembly method uses the same preparation. Registration still uses the caller's transaction. UMF0.8 support0.14 preserves top-level title metadata and emits catalog report0.2 with same-report source references; exact source bytes remain in acceptedInput. Use public `resolve_catalog_report_source(report_bytes, entry["source"])` to retrieve their checked bytes, digest, identity and revision. Occurrence locations and required-field inventory remain in assertion entries; unknown extension content stays intact. See the [source-reference contract](../../docs/helix/02-design/contracts/catalog-source-reference-v0.1.md).
 
-One unchanged original commerce slice is tested through registration, supplier/product/required relationship creation, key lookup, exact decimal(18,2) queries, committed replay and feed. Other packs are separately unqualified. Matching native58/layout1.0 and Weft0.4.23/backend0.4.28 are required; native57 upgrades transactionally. Publication remains pending; the install example above stays on published21.
+One unchanged original commerce slice is tested through registration, supplier/product/required relationship creation, key lookup, exact decimal(18,2) queries, committed replay and feed. Other packs are separately unqualified. Matching native58/layout1.0 and Weft0.4.23/backend0.4.28 are required; native57 upgrades transactionally. Published22 passed its Linux and macOS release workflows; the install example above selects22 and matching Weft23.
