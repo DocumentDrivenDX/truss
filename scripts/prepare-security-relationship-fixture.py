@@ -23,6 +23,6 @@ profile['relationships']=[{'relationship':{'documentId':'domain','moduleId':'m',
 denied_policy=copy.deepcopy(policy);denied_policy['rules']=copy.deepcopy(original_rules);denied_policy['revision']='public-relationship-observation-denied-1'
 denied_profile=copy.deepcopy(profile);denied_profile['id']='public-resource-relationship-observation-denied';denied_profile['policySha256']=hashof(denied_policy)
 for name,value in [('document',doc),('modules',[module]),('ontology',ontology),('policy',policy),('query-profile-template',profile),('resolution',{'ontology':ontology,'documents':[{'revision':'public-relationship-schema-1','document':doc}]}),('policy-observation-denied',denied_policy),('query-profile-observation-denied-template',denied_profile)]:
- (out/(name+'.json')).write_text(raw(value)+'\n')
+ (out/(name+'.json')).write_bytes(raw(value).encode())
 (out/'source-manifest.json').write_text(json.dumps({'status':'authored-uninstalled-fixture','sources':{name:hashof(value) for name,value in [('document',doc),('ontology',ontology),('policy',policy),('policy-observation-denied',denied_policy)]},'originalReadRulesUnchanged':True,'nativeCorrespondence':None,'bindingDigestPlaceholder':'0'*64,'requiredNativeEdges':[['RB','RB'],['RB','RA'],['RA','RB'],['RO','RB']],'expectedBob':['RB'],'expectedRevokedAlice':[],'expectedOutsider':[],'expectedObservationDeniedBob':[]},indent=2)+'\n')
 print(json.dumps({'status':'authored-uninstalled-fixture','directory':str(out)}))

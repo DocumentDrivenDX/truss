@@ -42,6 +42,20 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
   directory=os.environ.get('TRUSS_SECURITY_PUBLIC_RELATIONSHIP_EVIDENCE')
   if directory:
    out=Path(directory);out.mkdir(parents=True,exist_ok=True)
+   for document in self.documents:(out/(document.document_id+'-accepted-source.json')).write_bytes(document.content)
+   from hashlib import sha256
+   from truss._security_catalog_assessment import capture_accepted_catalog,SOURCE_TABLES
+   from psycopg import sql
+   physical_request=json.dumps({'modules':[{'pin':{'documentId':d.document_id,'revision':d.document_revision,'umfVersion':'0.8.0','sha256':sha256(d.content).hexdigest()},'documentJson':d.content.decode()} for d in self.documents]}).encode()
+   with self.admin.transaction():
+    self.admin.execute(sql.SQL('LOCK TABLE {} IN SHARE MODE').format(sql.SQL(',').join(sql.Identifier('truss',name) for name in SOURCE_TABLES)))
+    with self.admin.cursor() as cursor:assessment=capture_accepted_catalog(cursor,physical_request)
+    (out/'accepted-assessment.json').write_bytes(assessment)
+   (out/'physical-request.json').write_bytes(physical_request)
+   catalog={}
+   for name,table,order in (('types','type_def','type_id'),('properties','prop_def','prop_id'),('keys','key_def','type_id,key_num'),('relationships','rel_def','rel_type_id'),('endpoints','rel_endpoint','rel_type_id,source_type,target_type')):
+    catalog[name]=[row[0] for row in self.admin.execute('SELECT pg_catalog.to_jsonb(t)::pg_catalog.text FROM truss.'+table+' t ORDER BY '+order).fetchall()]
+   (out/'catalog-inventory.json').write_text(json.dumps({'scope':'Excluded assessor raw native TEXT JSONB capture; no protected source admission','revision':str(self.admin.execute('SELECT rev FROM truss.schema_head WHERE id=1').fetchone()[0]),'inventoryTextRows':catalog},indent=2)+'\n')
    (out/'physical-document.json').write_text(json.dumps(physical,separators=(',',':'))+'\n')
    capture={'status':'native-installation-population-prerequisite-passed','securityReady':False,'serverVersion':self.admin.execute('SHOW server_version').fetchone()[0],'relationId':str(refs['ResourceRelatedResource'].relationship_id),'expectedEdges':expected,'observedEdges':observed,'objectIds':ids,'catalogRelations':[r[0] for r in self.admin.execute('SELECT pg_catalog.to_jsonb(r)::pg_catalog.text FROM truss.rel_def r ORDER BY rel_type_id').fetchall()],'nativeEdges':[r[0] for r in self.admin.execute('SELECT pg_catalog.to_jsonb(e)::pg_catalog.text FROM truss.edge e ORDER BY id').fetchall()]}
    (out/'native-capture.json').write_text(json.dumps(capture,indent=2)+'\n')
