@@ -1,0 +1,10 @@
+{
+  "result": "native1/54.862s passes",
+  "runtime": "0.64",
+  "testSourceSha256": "dfb10b7b873a1d6117b4759b6d91292d5d3bd70e45e3d7fa3a0776a6fa4efa82",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC6"
+  ],
+  "plannedCaseContribution": "truss.B08",
+  "scope": "Within genuine native fixture, originalSUM salary request without query-use permission refuses original query-profile admission/empty producerstdout; permittedCOUNT/filter/publication controls pass. Notallmaskqueryoperators/explicitpermissionallowance or full132promotion."
+}

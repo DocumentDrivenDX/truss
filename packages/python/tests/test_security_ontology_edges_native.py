@@ -689,6 +689,9 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         matching=execute_relational_program(cursor,matching_request,matching_output,locators[0],checker,inspector)
                                         expected_cells=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
                                         self.assertEqual(json.loads(matching['batch'])['rows'],expected_cells)
+                                        forbidden_request=_original_request(physical,before[0],'SELECT SUM(r.salary) AS total FROM Resource r')
+                                        refused=original_run([relational_binary],input=forbidden_request,capture_output=True,timeout=15)
+                                        self.assertNotEqual(refused.returncode,0);self.assertEqual(refused.stdout,b'')
                                         count_request=_original_request(physical,before[0],'SELECT COUNT(*) AS n FROM Resource r')
                                         count_output=original_run([relational_binary],input=count_request,capture_output=True,check=True,timeout=15).stdout
                                         self.assertEqual(capture_relational_source_comparison(count_request,count_output),guarded_source)
