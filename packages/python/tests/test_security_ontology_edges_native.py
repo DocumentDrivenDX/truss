@@ -609,7 +609,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                         from truss._security_guarded_source import capture_guarded_source_comparison
                         guarded_source=capture_guarded_source_comparison(graph.native_dependencies,graph.guarded_response)
                     composed=[]
-                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('AliceGuarded',[]),('OutsiderGuarded',[]),('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None),('BobGuardedReceiptSwap',None)) if guarded_binary else ()),('BobMapColumnWrite',None),('BobProfileColumnWrite',None),('BobProfilePublicWrite',None),('AliceInheritedWrite',None),('BobPrivilegedRoles',['RB']),('AliceOtherRole',None),('BobSetRole',None),('BobOldSnapshot',None),('BobRevoked',[]),('BobReactivated',['RB']),('BobStreaming',None),('BobProfileDrift',None),('BobProfileRestored',['RB']),('BobPublicIssuer',None)):
+                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('AliceGuarded',[]),('OutsiderGuarded',[]),('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None),('BobGuardedReceiptSwap',None),*((('BobGuardedCount',['RB']),) if os.environ.get('TRUSS_SECURITY_RELATIONAL_COMPILER_BINARY') else ())) if guarded_binary else ()),('BobMapColumnWrite',None),('BobProfileColumnWrite',None),('BobProfilePublicWrite',None),('AliceInheritedWrite',None),('BobPrivilegedRoles',['RB']),('AliceOtherRole',None),('BobSetRole',None),('BobOldSnapshot',None),('BobRevoked',[]),('BobReactivated',['RB']),('BobStreaming',None),('BobProfileDrift',None),('BobProfileRestored',['RB']),('BobPublicIssuer',None)):
                         if name in ('BobMapColumnWrite','BobProfileColumnWrite'):
                             writable_home,writable_column=('catalog_subject_map','staff_key') if name=='BobMapColumnWrite' else ('catalog_graph_subject_profile','profile_bytes')
                             self.admin.execute(sql.SQL('GRANT UPDATE({}) ON {} TO {}').format(sql.Identifier(writable_column),sql.Identifier('truss',writable_home),sql.Identifier(roles['Bob'])))
@@ -624,7 +624,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                         if name=='BobPublicIssuer':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.graph_subject_current() TO PUBLIC')
                         with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
                             private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
-                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice' if name in ('AliceGuarded','AliceOtherRole','AliceInheritedWrite') else 'Outsider' if name=='OutsiderGuarded' else 'Bob' if name in ('BobPublicIssuer','BobMapColumnWrite','BobProfileColumnWrite','BobProfilePublicWrite','BobPrivilegedRoles','AliceOtherRole','BobSetRole','BobOldSnapshot','BobRevoked','BobReactivated','BobStreaming','BobProfileDrift','BobProfileRestored','BobGuarded','BobGuardedId','BobGuardedCorrupt','BobGuardedReceiptSwap') else name]
+                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice' if name in ('AliceGuarded','AliceOtherRole','AliceInheritedWrite') else 'Outsider' if name=='OutsiderGuarded' else 'Bob' if name in ('BobPublicIssuer','BobMapColumnWrite','BobProfileColumnWrite','BobProfilePublicWrite','BobPrivilegedRoles','AliceOtherRole','BobSetRole','BobOldSnapshot','BobRevoked','BobReactivated','BobStreaming','BobProfileDrift','BobProfileRestored','BobGuarded','BobGuardedId','BobGuardedCorrupt','BobGuardedReceiptSwap','BobGuardedCount') else name]
                             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                                 connection.execute('BEGIN ISOLATION LEVEL REPEATABLE READ' if name=='BobOldSnapshot' else 'BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction(isolation='repeatable_read' if name=='BobOldSnapshot' else 'read_committed').value;released=[]
                                 if name=='AliceInheritedWrite':self.assertEqual(connection.execute("SELECT pg_catalog.has_any_column_privilege(CURRENT_USER,'truss.catalog_graph_subject_profile','UPDATE')").fetchone(),(True,))
@@ -656,6 +656,55 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                     released.append(raw)
                                 is_guarded_query=name.endswith('Guarded') or name.startswith('BobGuarded') or (name=='BobRevoked' and guarded_binary is not None)
                                 selected_compiler=prepare_owned_graph_compiler(guarded_binary,str(Path(guarded_binary).with_name('security_guarded_result')),guarded=True,query_sql=('SELECT q.resourceId FROM Resource q' if name=='BobGuardedId' else 'SELECT q.resourceId, q.salary FROM Resource q'),source_comparison=guarded_source) if is_guarded_query else native_compiler
+                                relational_binary=os.environ.get('TRUSS_SECURITY_RELATIONAL_COMPILER_BINARY')
+                                if relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded','BobGuardedCount'):
+                                    prior_compiler=selected_compiler
+                                    def capture_then_direct(cursor,physical,before,subject,semantic):
+                                        from security_ontology_compiled_read import _original_request
+                                        from security_relational_capture import execute_relational_program
+                                        from security_relational_codecs import prepare_owned_relational_codec_checker
+                                        from truss._security_guarded_source import capture_guarded_source_comparison
+                                        from truss._security_relational_source import capture_relational_source_comparison
+                                        relational_request=_original_request(physical,before[0],"SELECT r.resourceId FROM Resource r WHERE r.resourceId = 'never'")
+                                        produced=original_run([relational_binary],input=relational_request,capture_output=True,check=True,timeout=15).stdout
+                                        self.assertEqual(capture_relational_source_comparison(relational_request,produced),guarded_source)
+                                        inventory=json.loads(before[0])['inventory']
+                                        staff_type=next(t['type_id'] for t in inventory['types'] if t['element']=='Staff' and t['retired_rev'] is None)
+                                        staff_prop=next(p['prop_id'] for p in inventory['properties'] if p['type_id']==staff_type and p['element']=='staffId' and p['retired_rev'] is None)
+                                        locators=[int(oid) for oid,tid,raw,root in before[1] if tid==str(staff_type) and root=='false' and json.loads(raw).get(str(staff_prop))=={'kind':'string','text':subject}]
+                                        self.assertEqual(len(locators),1)
+                                        checker=prepare_owned_relational_codec_checker(Path(relational_binary).with_name('security_postgresql_codecs'))
+                                        from security_relational_inspection import prepare_owned_relational_inspector
+                                        inspector=prepare_owned_relational_inspector(Path(relational_binary).with_name('security_relational_result'))
+                                        relational_result=execute_relational_program(cursor,relational_request,produced,locators[0],checker,inspector)
+                                        self.assertEqual(json.loads(relational_result['batch'])['rows'],[])
+                                        captured=relational_result['operandBatch']
+                                        scans=json.loads(captured)['scans'];self.assertEqual(len(scans),1)
+                                        self.assertEqual(len(scans[0]['rows']),len(semantic['rows']))
+                                        self.assertEqual(len(scans[0]['rows']),1 if subject=='Bob' else 0)
+                                        self.assertEqual({r['nativeRowId'] for r in scans[0]['rows']},{str(identities['rb'])} if subject=='Bob' else set())
+                                        matching_request=_original_request(physical,before[0],"SELECT r.resourceId FROM Resource r WHERE r.resourceId = 'RB'")
+                                        matching_output=original_run([relational_binary],input=matching_request,capture_output=True,check=True,timeout=15).stdout
+                                        self.assertEqual(capture_relational_source_comparison(matching_request,matching_output),guarded_source)
+                                        matching=execute_relational_program(cursor,matching_request,matching_output,locators[0],checker,inspector)
+                                        expected_cells=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
+                                        self.assertEqual(json.loads(matching['batch'])['rows'],expected_cells)
+                                        count_request=_original_request(physical,before[0],'SELECT COUNT(*) AS n FROM Resource r')
+                                        count_output=original_run([relational_binary],input=count_request,capture_output=True,check=True,timeout=15).stdout
+                                        self.assertEqual(capture_relational_source_comparison(count_request,count_output),guarded_source)
+                                        counted=execute_relational_program(cursor,count_request,count_output,locators[0],checker,inspector)
+                                        count_cells=json.loads(counted['batch'])['rows']
+                                        self.assertEqual(count_cells,[[{'outcomeId':'computed','disposition':'computed','value':{'integerToken':str(len(semantic['rows']))}}]])
+                                        grouped_request=_original_request(physical,before[0],'SELECT r.resourceId, COUNT(*) AS n FROM Resource r GROUP BY r.resourceId')
+                                        grouped_output=original_run([relational_binary],input=grouped_request,capture_output=True,check=True,timeout=15).stdout
+                                        grouped_packet=json.loads(grouped_output)
+                                        self.assertTrue(any(c['stage']=='afterOperandValidation' for c in grouped_packet['checks']))
+                                        grouped=execute_relational_program(cursor,grouped_request,grouped_output,locators[0],checker,inspector)
+                                        expected_group=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}},{'outcomeId':'computed','disposition':'computed','value':{'integerToken':'1'}}]] if subject=='Bob' else []
+                                        self.assertEqual(json.loads(grouped['batch'])['rows'],expected_group)
+                                        if name=='BobGuardedCount':return {'request':count_request.decode(),'output':count_output.decode(),'operandBatch':counted['operandBatch'].decode(),'batch':counted['batch'].decode(),'resultCheck':counted['inspection'].decode()}
+                                        return {'request':matching_request.decode(),'output':matching_output.decode(),'operandBatch':matching['operandBatch'].decode(),'batch':matching['batch'].decode(),'resultCheck':matching['inspection'].decode()}
+                                    selected_compiler=capture_then_direct
                                 if name=='BobGuardedReceiptSwap':
                                     original_selected_compiler=selected_compiler
                                     def swapped_receipt(*args):
@@ -705,11 +754,12 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                 else:
                                     self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual(released,[result.value])
                                     if is_guarded_query:
-                                        published=json.loads(result.value);self.assertEqual(published['version'],'truss.guarded-query-result/0.1-candidate')
+                                        published=json.loads(result.value);self.assertEqual(published['version'],'truss.guarded-query-result/0.2-candidate' if relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded','BobGuardedCount') else 'truss.guarded-query-result/0.1-candidate')
                                         cells=json.loads(published['batchJson']);contract=json.loads(published['resultContractJson'])
-                                        self.assertEqual(len(contract['columns']),1 if name=='BobGuardedId' else 2)
+                                        self.assertEqual(len(contract['columns']),1 if name=='BobGuardedId' or relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded','BobGuardedCount') else 2)
                                         expected_cells=[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]
-                                        if name=='BobGuarded':expected_cells.append({'outcomeId':'withheld','disposition':'withheld'})
+                                        if name=='BobGuarded' and not relational_binary:expected_cells.append({'outcomeId':'withheld','disposition':'withheld'})
+                                        if name=='BobGuardedCount':expected_cells=[{'outcomeId':'computed','disposition':'computed','value':{'integerToken':'1'}}]
                                         self.assertEqual(cells['rows'],[expected_cells] if expected else [])
                                     else:self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
                                 caller.detach();connection.rollback()

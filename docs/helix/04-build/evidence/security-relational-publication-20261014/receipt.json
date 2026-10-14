@@ -1,0 +1,15 @@
+{
+  "result": "native1/46.207s passes",
+  "runtime": "0.64",
+  "sourceSha256": {
+    "scripts/security_relational_publication.py": "e4b3f8b8b1cc99e81b271a35c4d4a01f6c0633043816056d99dd5496e28cc61c",
+    "scripts/security_ontology_guarded_read.py": "c016dd292f5ba466068da17791b6606abcaffac32bbc4a2ac602c68499d0eacc",
+    "scripts/security_ontology_native_subject_read.py": "69fad12a8235baf144ba45f579aee1b4cfbd7b9a2958c2bf9bad1c400f68840a",
+    "packages/python/tests/test_security_ontology_edges_native.py": "a66a961a44c0bff83a5542b94cec5bd6a36eb63b6761cfe79b5be4cd676b8634"
+  },
+  "acceptanceCriteriaContributions": [
+    "US-056-AC2",
+    "US-056-AC10"
+  ],
+  "scope": "Selected separate0.2 string-filter publication with original capture/codec/check/inspection and existing native late cuts; no general operator/arithmetic/domain/lifetime or132 promotion."
+}

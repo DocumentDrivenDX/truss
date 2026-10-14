@@ -21,3 +21,10 @@ class RelationalCaptureTests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'test stops after original preflight'):
    capture_relational_operands(NoSQL(),request,output,1,stop_after_actual_preflight)
   self.assertEqual(calls,['original-preflight'])
+
+  for stage in (None,'unknown-stage'):
+   changed=json.loads(output)
+   if stage is None:changed['checks'][0].pop('stage')
+   else:changed['checks'][0]['stage']=stage
+   with self.subTest(stage=stage),self.assertRaisesRegex(ValueError,'Original relational check stages required'):
+    capture_relational_operands(NoSQL(),request,json.dumps(changed).encode(),1,checker)

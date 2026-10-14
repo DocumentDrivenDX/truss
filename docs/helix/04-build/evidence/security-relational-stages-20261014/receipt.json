@@ -1,0 +1,13 @@
+{
+  "native": "1/50.570s passes onruntime0.64",
+  "sourceSha256": {
+    "scripts/security_relational_capture.py": "9d776e18e76378fc17688a87db89f2e5b6e6e8921f0a56615cae7cdded7657a8",
+    "packages/python/tests/test_security_ontology_edges_native.py": "bbb376e796b69dde489d5357d866fd0b3c67825afe77e984a5c34328aae417dd",
+    "packages/python/tests/test_security_relational_capture.py": "2292fb82125897d91b1a03c25484a6a016cad2079e1d9dbc6e5956c406329b5b"
+  },
+  "acceptanceCriteriaContributions": [
+    "US-056-AC2",
+    "US-056-AC10"
+  ],
+  "scope": "Original before-capture/after-validation stages, native groupedCOUNT result parity and missing/unknown stage refusal; notgeneralaggregatepublication/arithmetic/full132qualification."
+}

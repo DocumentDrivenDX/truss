@@ -1,0 +1,10 @@
+{
+  "result": "native1/54.719s passes",
+  "runtime": "0.64",
+  "testSourceSha256": "5672ccbabd4018d7e141f591cb74c280067b9ea4d058a6bde93e9ba7d7c53387",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC2"
+  ],
+  "plannedCaseContribution": "truss.B03",
+  "scope": "Bob originalCOUNT computed1 batch published via protected0.2 sink under native cuts; complete collection/generalaggregate/arithmetic/all132 case qualification remains open."
+}

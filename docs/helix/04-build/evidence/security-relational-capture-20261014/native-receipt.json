@@ -1,0 +1,10 @@
+{
+  "result": "native1/45.026s passes",
+  "runtime": "0.64",
+  "testSourceSha256": "93bdb0a6d4084a7a578099eba8367c0643726b8474e6c6c3912bf88b48511b20",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC2",
+    "US-056-AC10"
+  ],
+  "scope": "Original relational filter capture under genuine existing native cuts; Bob captures exact RB identity before empty query filter, revoked/unassigned subjects capture none, original codecs before/after. Not complete0.2 query execution/population generality/admission or132 promotion."
+}
