@@ -11,16 +11,16 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.19`,
-native runtime `0.55-candidate`, layout `1.0`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.25`. The tested local
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.23`,
+native runtime `0.59-candidate`, layout `1.0`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.29`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The current release is [v0.0.22](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.22).
+The current release is [v0.0.23](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.23).
 The Python distribution version is distinct from native runtime/layout versions;
 future distributed changes receive a new package version.
 
@@ -31,15 +31,15 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.22 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.23 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.23 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.24 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.22'
+  'truss-toolkit[local,native,query]==0.0.23'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release
 publishes package checksums and source/runtime/backend pins. The Truss release
-workflow exercises the exact uploaded wheel with published Weft0.4.22 and verified
+workflow exercises the exact uploaded wheel with published Weft0.4.24 and verified
 PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
@@ -314,14 +314,14 @@ source cell is validated before filtering. Timestamp and binary projections, inc
 absence and explicit null. Required or absent-allowed singular binary fields support byte equality
 with canonical base64 SQL literals, another binary field, or
 `TextValue(kind="binary", text="AP8=")` parameters. Ordinary `str` parameters
-remain strings. The SDK0.0.23 candidate additionally selects the shared
+remain strings. SDK0.0.23 additionally selects the shared
 `umf-rfc3339-exact-instant/1.0.0` profile for timestamp equality. Required and
 absent-allowed timestamp fields compare exact instants across offsets with
 arbitrary fractional digits within the1MiB token limit, using literals, another
 timestamp field, or `TextValue(kind="timestamp", text="2024-01-01T00:00:00.123456789Z")`.
 Original timestamp text remains recoverable; `-00:00` retains unknown local-offset
 knowledge while identifying a known instant. Binary/timestamp ordering, grouping
-and temporal keys remain unsupported. The candidate compile/IR/backend interfaces
+and temporal keys remain unsupported. The selected compile/IR/backend interfaces
 are `0.2.6`, with the unchanged SQL dialect `0.2.0`; released SDK22 remains0.2.5.
 Successful native `QueryRows` and `QueryPage` results carry `as_of: QueryReadPosition`. Its opaque `value` identifies a conservative committed lower bound captured immediately before the data query; `at` is the database capture time as a timezone-aware UTC `datetime`. The following READ COMMITTED statement can include newer commits. `caller_xid_assigned` reports only whether the caller already had a transaction ID; it does not prove writes or commitment. Constructors retain an optional default for compatibility, while this provider fills the position on every successful result, including empty rows.
 
