@@ -1,0 +1,12 @@
+{
+  "status": "candidate-refusal-observed",
+  "sourceRoot": "/private/tmp/truss-main-integration-20261010",
+  "sourceQualification": false,
+  "logSha256": "d0d9a3dc10053221b767a769c9249c9576470f62f044e6d43c929b9725936851",
+  "scope": "Original products candidate exporter with genuine metadata epoch and shared action-store registration; no source edits or check bypass.",
+  "observation": "Terminal invalid_transaction refusal at registration retry. Initial call supplied products_person executor tuple; retry omitted executor_roles. Runtime diagnostic does not by itself prove this was the cause.",
+  "limits": [
+    "Concurrent provisional owner source, no held source hash or native qualification.",
+    "No successful composed store/anchor/authority/selection/seal claim."
+  ]
+}
