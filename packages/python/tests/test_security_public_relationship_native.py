@@ -51,6 +51,20 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
     self.admin.execute(sql.SQL('LOCK TABLE {} IN SHARE MODE').format(sql.SQL(',').join(sql.Identifier('truss',name) for name in SOURCE_TABLES)))
     with self.admin.cursor() as cursor:assessment=capture_accepted_catalog(cursor,physical_request)
     (out/'accepted-assessment.json').write_bytes(assessment)
+    import runpy
+    derive=runpy.run_path(str(root/'scripts/prepare-security-relationship-correspondence.py'))['derive_relationship_correspondence']
+    fixture=root/'docs/helix/03-test/fixtures/security-public-relationship'
+    selected={name:(fixture/(name+'.json')).read_bytes() for name in ('document','resolution','policy','transport')}
+    duplicate=b'{"inventory":{},"inventory":{}}'
+    with self.assertRaisesRegex(ValueError,'Duplicate correspondence source member'):derive(duplicate,physical_request,selected)
+    for suffix,policy_file in [('', 'policy'),('-observation-denied','policy-observation-denied')]:
+     sources={**selected,'policy':(fixture/(policy_file+'.json')).read_bytes()}
+     correspondence=derive(assessment,physical_request,sources)
+     mapped=json.loads(correspondence)
+     self.assertEqual(mapped['inventorySha256'],sha256(assessment).hexdigest())
+     self.assertEqual(mapped['logicalSourceDigests']['policy'],sha256(sources['policy']).hexdigest())
+     self.assertEqual(mapped['queryRelationships'][0]['nativeRelationshipId'],str(refs['ResourceRelatedResource'].relationship_id))
+     (out/('live-correspondence'+suffix+'.json')).write_bytes(correspondence)
    (out/'physical-request.json').write_bytes(physical_request)
    catalog={}
    for name,table,order in (('types','type_def','type_id'),('properties','prop_def','prop_id'),('keys','key_def','type_id,key_num'),('relationships','rel_def','rel_type_id'),('endpoints','rel_endpoint','rel_type_id,source_type,target_type')):
