@@ -18,8 +18,8 @@ from truss.groups import AuthoredValue,CreateObject,RootlessOwnership,GroupSucce
 from truss.catalog_runtime import _release,_pin_cursor
 
 
-def run(model_path,output,bun,*,bootstrap_source_epoch=False):
-    source_epoch=None
+def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storage=False):
+    source_epoch=None;seal_storage=None
     output=output.resolve()
     if output.exists() and any(output.iterdir()):raise ValueError('New empty output directory required')
     output.mkdir(parents=True,exist_ok=True)
@@ -62,6 +62,17 @@ def run(model_path,output,bun,*,bootstrap_source_epoch=False):
                             cut=source_epoch.comparison
                             if cursor.fetchmany(2)!=[(cut.installation,cut.epoch,cut.incarnation,cut.profile,cut.evidence)]:raise ValueError('Committed original metadata epoch readback required')
                         success(assembly._host._run_operation(tx,verify_epoch))
+                if install_seal_storage:
+                    from truss._preparation_seal_installation import bootstrap_preparation_seal_storage_in_transaction,verify_preparation_seal_storage_with_cursor
+                    with transaction(admin) as (assembly,tx):
+                        seal_storage=success(bootstrap_preparation_seal_storage_in_transaction(assembly._host,tx))
+                    with transaction(admin,read_only=True) as (assembly,tx):
+                        def verify_seal(cursor,observed):
+                            actual=verify_preparation_seal_storage_with_cursor(cursor,owner_oid=seal_storage.owner_oid)
+                            if actual!=(seal_storage.table_oid,seal_storage.sequence_oid):raise ValueError('Committed original seal storage readback required')
+                        success(assembly._host._run_operation(tx,verify_seal))
+                    denied=person.execute("SELECT pg_catalog.has_table_privilege(current_user,'truss.runtime_preparation_seal','SELECT'),pg_catalog.has_table_privilege(current_user,'truss.runtime_preparation_seal','INSERT'),pg_catalog.has_sequence_privilege(current_user,'truss.runtime_preparation_seal_seq','USAGE')").fetchall()
+                    if denied!=[(False,False,False)]:raise ValueError('Ordinary person seal read/write/allocation must remain unavailable')
                 with transaction(person) as (assembly,tx):
                     reference=success(assembly.get_type_reference_in_transaction(tx,document_id=document['id'],module_id='sales',record_id='products'))
                     if reference is None:raise ValueError('Actual accepted products definition required')
@@ -98,6 +109,8 @@ def run(model_path,output,bun,*,bootstrap_source_epoch=False):
     if source_epoch is not None:
         cut=source_epoch.comparison
         report['metadataSourceEpoch']={'installation':cut.installation,'epoch':cut.epoch,'incarnation':cut.incarnation,'profile':json.loads(cut.profile),'evidence':json.loads(cut.evidence),'securityReady':False,'scope':'Committed catalog metadata and original runtime source only; not authority or bulk execution.'}
+    if seal_storage is not None:
+        report['sealStorage']={'installation':seal_storage.installation_id,'sourceSha256':seal_storage.source_sha256,'tableOid':seal_storage.table_oid,'sequenceOid':seal_storage.sequence_oid,'securityReady':False,'scope':'Committed private UMF-exported storage only; no seal writer or authority. Ordinary read/write/sequence usage unavailable.'}
     (output/'receipt.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
 
@@ -105,5 +118,6 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('model',type=Path);parser.add_argument('output',type=Path)
     parser.add_argument('--bun',default='bun')
-    parser.add_argument('--bootstrap-source-epoch',action='store_true');args=parser.parse_args()
-    run(args.model,args.output,args.bun,bootstrap_source_epoch=args.bootstrap_source_epoch)
+    parser.add_argument('--bootstrap-source-epoch',action='store_true')
+    parser.add_argument('--install-seal-storage',action='store_true');args=parser.parse_args()
+    run(args.model,args.output,args.bun,bootstrap_source_epoch=args.bootstrap_source_epoch,install_seal_storage=args.install_seal_storage)
