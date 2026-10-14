@@ -1,0 +1,13 @@
+{
+  "archiveTests": 3,
+  "archiveTestSeconds": 1.543,
+  "nativeProjectionSeconds": 13.082,
+  "semanticOutcomes": 6,
+  "sourceDigests": {
+    "scripts/evaluate-security-public-relationship-fixture.ts": "67ad35ae43bbc46b10fb35431e72f19830b32d761bba67861b31842f3f9bcf40",
+    "scripts/security_ontology_edge_projection.py": "9698d8b2602db51cc066fc74a4808e5b4087206b2543b7a00c23117c47444c30",
+    "packages/python/tests/test_security_relationship_source.py": "e9baabffeb455a9682dae116f7980fe5713f957de3780d750467e38fe9c076c0"
+  },
+  "producerBinarySha256": "122996e0c71d91ba8c5e895ca325eba893e7cfd703589066e88dc7314416b70f",
+  "producerSourceStatus": "owner working snapshot /private/tmp/weft-b008-relationship-mapping, regression qualification pending"
+}

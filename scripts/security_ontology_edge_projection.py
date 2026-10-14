@@ -85,4 +85,4 @@ def project_public_relationship_edge_cells(objects,edges,types,relationships):
         for value,maximum in ((edge[0],9223372036854775807),(edge[2],9223372036854775807),(edge[4],9223372036854775807),(edge[3],2147483647),(edge[5],2147483647)):
             if type(value) is not str or not value.isascii() or not value.isdigit() or value[0:1]=='0' or not 1<=int(value)<=maximum:refuse()
         if edge[3]!=resource_type or edge[5]!=resource_type or (edge[2],edge[3]) not in nodes or (edge[4],edge[5]) not in nodes:refuse()
-    return {'policyFacts':facts,'queryRelationshipOccurrences':tuple(query)}
+    return {'policyFacts':facts,'queryRelationshipOccurrences':tuple(query),'queryResourceIdentities':tuple((row[0],row[1],row[2]['resourceId']) for row in objects if row[1]==resource_type)}

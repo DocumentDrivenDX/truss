@@ -1,0 +1,264 @@
+{
+  "policyFacts": [
+    {
+      "relation": [
+        "truss",
+        "object+typed-edge-path"
+      ],
+      "fields": [
+        [
+          [
+            "domain",
+            "m",
+            "staffId"
+          ],
+          "staffId",
+          25
+        ]
+      ],
+      "associations": [],
+      "rows": [
+        [
+          "Alice"
+        ],
+        [
+          "Bob"
+        ],
+        [
+          "Outsider"
+        ]
+      ]
+    },
+    {
+      "relation": [
+        "truss",
+        "object+typed-edge-path"
+      ],
+      "fields": [
+        [
+          [
+            "domain",
+            "m",
+            "projectId"
+          ],
+          "projectId",
+          25
+        ]
+      ],
+      "associations": [],
+      "rows": [
+        [
+          "A"
+        ],
+        [
+          "B"
+        ]
+      ]
+    },
+    {
+      "relation": [
+        "truss",
+        "object+typed-edge-path"
+      ],
+      "fields": [
+        [
+          [
+            "domain",
+            "m",
+            "resourceId"
+          ],
+          "resourceId",
+          25
+        ]
+      ],
+      "associations": [],
+      "rows": [
+        [
+          "RA"
+        ],
+        [
+          "RB"
+        ],
+        [
+          "RO"
+        ]
+      ]
+    },
+    {
+      "relation": [
+        "truss",
+        "object+typed-edge-path"
+      ],
+      "fields": [
+        [
+          [
+            "domain",
+            "m",
+            "assignmentId"
+          ],
+          "assignmentId",
+          25
+        ],
+        [
+          [
+            "domain",
+            "m",
+            "assignmentStaff"
+          ],
+          "assignmentStaff",
+          25
+        ],
+        [
+          [
+            "domain",
+            "m",
+            "assignmentProject"
+          ],
+          "assignmentProject",
+          25
+        ],
+        [
+          [
+            "domain",
+            "m",
+            "active"
+          ],
+          "active",
+          16
+        ]
+      ],
+      "associations": [
+        [
+          "domain",
+          "m",
+          "Assignment"
+        ]
+      ],
+      "rows": [
+        [
+          "AA",
+          "Alice",
+          "A",
+          "true"
+        ],
+        [
+          "AI",
+          "Alice",
+          "B",
+          "false"
+        ],
+        [
+          "BA",
+          "Bob",
+          "B",
+          "true"
+        ]
+      ]
+    },
+    {
+      "relation": [
+        "truss",
+        "object+typed-edge-path"
+      ],
+      "fields": [
+        [
+          [
+            "domain",
+            "m",
+            "ownerId"
+          ],
+          "ownerId",
+          25
+        ],
+        [
+          [
+            "domain",
+            "m",
+            "ownerResource"
+          ],
+          "ownerResource",
+          25
+        ],
+        [
+          [
+            "domain",
+            "m",
+            "ownerProject"
+          ],
+          "ownerProject",
+          25
+        ]
+      ],
+      "associations": [
+        [
+          "domain",
+          "m",
+          "Ownership"
+        ]
+      ],
+      "rows": [
+        [
+          "OA",
+          "RA",
+          "A"
+        ],
+        [
+          "OB",
+          "RB",
+          "B"
+        ]
+      ]
+    }
+  ],
+  "queryRelationshipOccurrences": [
+    [
+      "27",
+      "5",
+      "8",
+      "5",
+      "8",
+      "5"
+    ],
+    [
+      "28",
+      "5",
+      "8",
+      "5",
+      "7",
+      "5"
+    ],
+    [
+      "29",
+      "5",
+      "7",
+      "5",
+      "8",
+      "5"
+    ],
+    [
+      "30",
+      "5",
+      "9",
+      "5",
+      "8",
+      "5"
+    ]
+  ],
+  "queryResourceIdentities": [
+    [
+      "7",
+      "5",
+      "RA"
+    ],
+    [
+      "8",
+      "5",
+      "RB"
+    ],
+    [
+      "9",
+      "5",
+      "RO"
+    ]
+  ]
+}

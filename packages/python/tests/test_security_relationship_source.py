@@ -23,3 +23,26 @@ class RelationshipSourceTests(unittest.TestCase):
   historical=PreparedGraphSecuritySource(physical,output,assessment,new)
   with self.assertRaisesRegex(ValueError,'Original physical graph and compiler source correspondence required'):snapshot_graph_security_source(historical)
   with self.assertRaisesRegex(ValueError,'Distinct original relationship source archive required'):snapshot_relationship_security_source(historical)
+
+ def test_original_relationship_output_archives_and_exact_byte_drift(self):
+  binary=os.environ.get('TRUSS_SECURITY_RELATIONSHIP_COMPILER_BINARY')
+  if not binary:self.skipTest('Separate original relationship producer required')
+  from dataclasses import replace
+  from hashlib import sha256
+  from truss._security_relationship_source import relationship_source_archives
+  pin=sha256(Path(binary).read_bytes()).hexdigest()
+  root=Path(__file__).resolve().parents[3]
+  evidence=root/'docs/helix/04-build/evidence/security-public-relationship-request-20261014'
+  physical=(evidence/'physical-request.json').read_bytes();assessment=(evidence/'accepted-assessment.json').read_bytes()
+  for suffix in ('','-observation-denied'):
+   with self.subTest(variant=suffix):
+    request=(evidence/('compiler-request'+suffix+'.json')).read_bytes()
+    output=subprocess.run([binary],input=request,capture_output=True,check=True,timeout=15).stdout
+    selected=PreparedRelationshipSecuritySource(physical,assessment,request,output)
+    self.assertEqual(snapshot_relationship_security_source(selected),selected)
+    self.assertEqual(len(relationship_source_archives(selected,b'original synthetic release archive')),7)
+    with self.assertRaisesRegex(ValueError,'Distinct original relational source profile required'):capture_relational_source_comparison(request,output)
+    with self.assertRaisesRegex(ValueError,'Exact original relationship physical source correspondence required'):snapshot_relationship_security_source(replace(selected,accepted_catalog_assessment=assessment+b' '))
+    changed=json.loads(output);changed['sourceContextSha256']='0'*64
+    with self.assertRaises(ValueError):snapshot_relationship_security_source(replace(selected,original_response=json.dumps(changed).encode()))
+  self.assertEqual(sha256(Path(binary).read_bytes()).hexdigest(),pin)
