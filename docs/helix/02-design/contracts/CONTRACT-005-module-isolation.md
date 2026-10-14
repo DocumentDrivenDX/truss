@@ -613,3 +613,14 @@ current ontology/field-action evaluation, issuer/connection/cut binding,
 pre-seal finalization and exclusions through original seal COMMIT acknowledgement
 remain required **before a preparation lease or protected seal can be admitted**.
 No US-046 or original shared-security backend case is promoted by this component.
+
+
+`observe_preparation_owners_with_cursor` now derives the whole latest accepted
+native document/module union (up to256 owners) and the exact original native
+person's current reader/writer membership. Missing policy rows, duplicate
+owners, unsupported bounds and nonordinary/owner-member identities refuse.
+The native replay independently shows denied and permitted observations across
+revocation/regrant. These `security_ready=false` observations are deliberately
+not an admitted selected field/relationship/history scope: held frozen/current
+source correspondence and original logical action/field meaning must still be
+composed before issuing any lease.

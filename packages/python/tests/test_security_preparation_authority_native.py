@@ -8,6 +8,7 @@ from truss._security_preparation_authority import (
     acquire_preparation_authority_lock_with_cursor,
     capture_preparation_data_with_cursor, verify_preparation_data_with_cursor,
     verify_preparation_peer_with_cursor,
+    observe_preparation_owners_with_cursor,
 )
 
 
@@ -33,6 +34,7 @@ class PreparationAuthorityNativeTests(base.PublicCreateGroupTests):
         self.assertEqual(data.execute(membership).fetchone(), (True,))
         self.admin.execute('CREATE ROLE preparation_executor LOGIN NOINHERIT')
         self.admin.execute('GRANT pg_read_all_stats TO preparation_executor WITH INHERIT TRUE')
+        self.admin.execute('GRANT SELECT ON truss.catalog_runtime_installation,truss.schema_head,truss.schema_doc,truss.module_access TO preparation_executor')
         def drop_executor():
             self.admin.execute('DROP OWNED BY preparation_executor')
             self.admin.execute('DROP ROLE preparation_executor')
@@ -61,6 +63,9 @@ class PreparationAuthorityNativeTests(base.PublicCreateGroupTests):
             verify_preparation_peer_with_cursor(cursor, captured)
             with self.assertRaises(ValueError):
                 verify_preparation_peer_with_cursor(cursor, replace(captured, challenge='foreign'))
+            owners = observe_preparation_owners_with_cursor(cursor, issuer, captured)
+            self.assertEqual(owners.owners, (('adoc', 'm', 'group_reader', 'group_writer', 'false'),))
+            self.assertFalse(owners.security_ready)
             cursor.execute(membership.replace('p.rolname=SESSION_USER', "p.rolname='consumer'"))
             return cursor.fetchone()
         fresh = host._run_operation(tx, acquire)
@@ -93,6 +98,11 @@ class PreparationAuthorityNativeTests(base.PublicCreateGroupTests):
         self.admin.execute("SET lock_timeout='0'")
         # Released native role cut admits the waiting class of change.
         self.admin.execute('GRANT group_writer TO consumer WITH SET FALSE')
+        coordinator.execute('BEGIN')
+        with coordinator.cursor() as cursor:
+            owners = observe_preparation_owners_with_cursor(cursor, issuer, captured)
+            self.assertEqual(owners.owners, (('adoc', 'm', 'group_reader', 'group_writer', 'true'),))
+        coordinator.rollback()
         coordinator.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
         with self.assertRaises(psycopg.errors.FeatureNotSupported):
             coordinator.execute('SELECT truss.acquire_preparation_authority_lock()')

@@ -86,6 +86,64 @@ def verify_preparation_peer_with_cursor(cursor, original):
         raise ValueError('Original live preparation peer/cut custody required')
 
 
+@dataclass(frozen=True, slots=True)
+class PreparationOwnerObservation:
+    """Whole current catalog owner observation, not an admitted operation scope."""
+    installation_id: str
+    revision: str
+    caller_oid: str
+    owners: tuple[tuple[str, str, str, str, str], ...]
+    security_ready: bool = False
+
+
+def observe_preparation_owners_with_cursor(cursor, issuer, original):
+    """Current native caller/module grants; no consumer-authored owner union.
+
+    Source/head exclusion and exact frozen/current source correspondence must be
+    composed separately. This conservative component enumerates *every* module
+    in latest accepted documents, not just the modules a caller names. It does
+    not establish selected field/relationship/history or ontology action scope.
+    """
+    acquire_preparation_authority_lock_with_cursor(cursor, issuer)
+    verify_preparation_peer_with_cursor(cursor, original)
+    header = _text_rows(cursor, """SELECT i.installation_id::text,h.rev::text,
+        i.owner_oid::text FROM truss.catalog_runtime_installation i
+        CROSS JOIN truss.schema_head h WHERE i.singleton AND h.id=1""", limit=1)
+    if len(header) != 1 or header[0][0] != issuer.installation_id:
+        raise ValueError('Original current preparation installation required')
+    caller = _text_rows(cursor, """SELECT r.oid::text,r.rolname::text,
+        r.rolcanlogin::text,r.rolsuper::text,r.rolcreaterole::text,
+        r.rolcreatedb::text,r.rolreplication::text,r.rolbypassrls::text,
+        pg_catalog.pg_has_role(r.oid,%s::pg_catalog.oid,'MEMBER')::text
+        FROM pg_catalog.pg_roles r WHERE r.oid=%s::pg_catalog.oid""",
+        (header[0][2], original.identity[1]), 1)
+    if caller != [(original.identity[1], original.identity[8], 'true',
+                   'false', 'false', 'false', 'false', 'false', 'false')]:
+        raise ValueError('Original ordinary current preparation person required')
+    owners = _text_rows(cursor, """WITH RECURSIVE memberships(role_oid) AS (
+        SELECT %s::pg_catalog.oid UNION
+        SELECT m.roleid FROM pg_catalog.pg_auth_members m
+        JOIN memberships p ON m.member=p.role_oid)
+        SELECT d.doc_id::text,(m.value->>'id')::text,
+        p.reader_role::text,p.writer_role::text,
+        EXISTS(SELECT 1 FROM pg_catalog.pg_roles r JOIN memberships s
+            ON s.role_oid=r.oid WHERE r.rolname::text IN(p.reader_role,p.writer_role))::text
+        FROM truss.schema_doc d
+        CROSS JOIN LATERAL pg_catalog.jsonb_array_elements(d.document::pg_catalog.jsonb->'modules') m(value)
+        LEFT JOIN truss.module_access p ON p.document_id=d.doc_id AND p.module=m.value->>'id'
+        WHERE d.rev<=%s::pg_catalog.int4 AND d.rev=(SELECT max(latest.rev)
+            FROM truss.schema_doc latest WHERE latest.doc_id=d.doc_id AND latest.rev<=%s::pg_catalog.int4)
+        ORDER BY d.doc_id COLLATE pg_catalog."C",(m.value->>'id') COLLATE pg_catalog."C"
+        """,
+        (original.identity[1], header[0][1], header[0][1]), 256)
+    if (not owners or len({row[:2] for row in owners}) != len(owners)
+            or any(any(not value or len(value.encode()) > 4096 for value in row[:4])
+                   for row in owners)):
+        raise ValueError('Complete bounded original preparation owners required')
+    verify_preparation_peer_with_cursor(cursor, original)
+    return PreparationOwnerObservation(header[0][0], header[0][1], original.identity[1], tuple(owners))
+
+
 _SOURCE_SHA256 = '8105c84fa96b7afbfd9cedb01a6aef0fdecaaf1dec5d53b80804e0f0f2095481'
 
 def _source():
