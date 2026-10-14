@@ -597,10 +597,11 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                     new_epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,%s,%s,%s,%s)',(comparison.installation,advanced_epoch,comparison.incarnation,new_profile,comparison.evidence)).fetchone()[0]
                     composed_context=replace(context,comparison=_EpochComparison(comparison.installation,new_epoch,comparison.incarnation,new_profile,comparison.evidence))
                     composed=[]
-                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[])):
+                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),('BobPublicIssuer',None)):
+                        if name=='BobPublicIssuer':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.graph_subject_current() TO PUBLIC')
                         with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
                             private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
-                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles[name]
+                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Bob' if name=='BobPublicIssuer' else name]
                             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                                 connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction().value;released=[]
                                 def receiver(raw):
@@ -609,11 +610,16 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                             with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
                                     released.append(raw)
                                 result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,subjects.bindings,receiver,compiler=native_compiler,cut_issuer=cut_issuer,source_epoch=composed_context,subject_registration=subjects)
-                                self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual(released,[result.value])
-                                self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
+                                if expected is None:
+                                    self.assertIsInstance(result,Error);self.assertEqual(released,[])
+                                    self.assertEqual(str(executor._custody.last_attempt.error),'Exact registered graph Subject issuer ACL required')
+                                else:
+                                    self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual(released,[result.value])
+                                    self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
                                 caller.detach();connection.rollback()
                             executor.detach();private.rollback()
-                        composed.append({'principal':name,'resources':expected,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
+                        if name=='BobPublicIssuer':self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.graph_subject_current() FROM PUBLIC')
+                        composed.append({'principal':name,'outcome':'issuerAclRefused','released':False} if expected is None else {'principal':name,'resources':expected,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
                     directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_SUBJECT_COMPOSITION_EVIDENCE')
                     if directory:
                         folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
