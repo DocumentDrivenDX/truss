@@ -172,3 +172,47 @@ def acquire_issued_registered_role_catalog_cut_with_cursor(cursor,*,owner_oid,ca
  if cursor.description is None or len(cursor.description)!=1 or cursor.description[0].type_code!=2278 or cursor.fetchmany(2)!=[('',)]:raise ValueError('Exact native role cut issuer VOID result required')
  verify_held_registered_role_catalog_cut_with_cursor(cursor)
  verify_role_catalog_cut_issuer_with_cursor(cursor,owner_oid=owner_oid,caller_oid=caller_oid)
+
+
+@dataclass(frozen=True,slots=True)
+class PendingRoleCatalogCutIssuer:
+ installation_id:str
+ owner_oid:int
+ caller_oid:int
+ source_sha256:str
+ status:str='pending_commit'
+ security_ready:bool=False
+
+
+def bootstrap_role_catalog_cut_issuer_in_transaction(host,transaction,*,executor_role):
+ """Fresh trusted administrator install; caller owns commit and DDL quiescence."""
+ if type(host) is not PsycopgHost or type(executor_role) is not str or not executor_role or '\0' in executor_role or len(executor_role.encode())>63:
+  return Error(ExecutionFailure('execution_obligation','Original bounded role cut executor required'))
+ executor_role=str(executor_role)
+ source=files('truss').joinpath('_security_bootstrap','registered-role-catalog-cut.sql').read_bytes()
+ source_sha=sha256(source).hexdigest()
+ if source_sha!='91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb':return Error(ExecutionFailure('execution_obligation','Original role cut issuer source required'))
+ def install(cursor,observed):
+  _pin_cursor(cursor)
+  prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",limit=1)
+  if len(prior)!=1:raise ValueError('Original role cut installer path required')
+  cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+  if _text_rows(cursor,"SELECT pg_catalog.current_setting('server_version_num')::pg_catalog.text,pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,pg_catalog.current_setting('transaction_read_only')::pg_catalog.text",limit=1)!=[('180006','read committed','off')]:raise ValueError('Original supported role cut installation transaction required')
+  target=_text_rows(cursor,'SELECT installation_id::pg_catalog.text,owner_oid::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton FOR SHARE NOWAIT',limit=1)
+  if len(target)!=1:raise ValueError('Original role cut installation required')
+  installation_administrator_with_cursor(cursor,int(target[0][1]))
+  owner=_text_rows(cursor,"SELECT oid::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) CURRENT_USER AND rolsuper",limit=1)
+  if len(owner)!=1:raise ValueError('Original privileged role cut installer required')
+  owner_oid=int(owner[0][0])
+  caller=_text_rows(cursor,"SELECT oid::pg_catalog.text,rolcanlogin::pg_catalog.text,rolsuper::pg_catalog.text,rolcreatedb::pg_catalog.text,rolcreaterole::pg_catalog.text,rolreplication::pg_catalog.text,rolbypassrls::pg_catalog.text,pg_catalog.pg_has_role(oid,%s::pg_catalog.oid,'MEMBER')::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) %s",(owner_oid,executor_role),1)
+  if len(caller)!=1 or caller[0][1:]!=('true','false','false','false','false','false','false'):raise ValueError('Original ordinary role cut executor required')
+  caller_oid=int(caller[0][0])
+  existing=_text_rows(cursor,"SELECT p.oid::pg_catalog.text FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace WHERE n.nspname OPERATOR(pg_catalog.=) 'truss' AND p.proname OPERATOR(pg_catalog.=) 'acquire_registered_role_catalog_cut'",limit=1)
+  if existing:raise ValueError('Existing role cut issuer requires explicit migration')
+  cursor.execute(source.decode(),prepare=False)
+  cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.acquire_registered_role_catalog_cut() TO {}').format(sql.Identifier(executor_role)),prepare=False)
+  cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(executor_role)),prepare=False)
+  verify_role_catalog_cut_issuer_with_cursor(cursor,owner_oid=owner_oid,caller_oid=caller_oid)
+  cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(prior[0][0],),prepare=False)
+  return PendingRoleCatalogCutIssuer(target[0][0],owner_oid,caller_oid,source_sha)
+ return host._run_operation(transaction,install)

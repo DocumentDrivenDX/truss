@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "covers": [
+    "US-056-AC9"
+  ],
+  "runs": [
+    {
+      "tests": 1,
+      "seconds": 12.704,
+      "scope": "hostile path/original restoration, pending receipt, migration refusal, actual ordinary acquisition"
+    },
+    {
+      "tests": 1,
+      "seconds": 13.383,
+      "scope": "extra defaultACL refusal, no remaining function, preserved caller work"
+    },
+    {
+      "tests": 1,
+      "seconds": 11.801,
+      "scope": "exact extra defaultACL ValueError and rollback preservation"
+    }
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_subject_installation.py": "1cc850248bcb20d96315ba8a52b11f12d00c1f82115db1b0845d631611029625",
+    "packages/python/tests/test_security_registered_callers_native.py": "72fda62beb594552d7698774976ca3c4a3cc72c26524d1f7ca950c4948d776aa",
+    "packages/python/src/truss/_security_bootstrap/registered-role-catalog-cut.sql": "91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb"
+  },
+  "scope": "Trusted direct privileged native18.6 installer, exact original source and ordinary executor identity comparison; caller owns commit. Pending security_ready false. Source-review path finding fixed; earlier loader quoting failure retained. Full ordinary producer integration, authenticated issuer custody/lifetime and backend admission remain open;132 inventory unchanged."
+}

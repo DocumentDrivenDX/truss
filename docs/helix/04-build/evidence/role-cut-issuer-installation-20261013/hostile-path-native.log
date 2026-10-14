@@ -1,0 +1,7 @@
+test_ordinary_caller_uses_fixed_role_lock_issuer_without_catalog_write (test_security_registered_callers_native.RegisteredCallersNativeTests.test_ordinary_caller_uses_fixed_role_lock_issuer_without_catalog_write)
+@covers US-056-AC9; original fixed definer lock issuer, not complete admission. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 12.704s
+
+OK

@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/__main__.py", line 18, in <module>
+    main(module=None)
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/main.py", line 101, in __init__
+    self.parseArgs(argv)
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/main.py", line 150, in parseArgs
+    self.createTests()
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/main.py", line 161, in createTests
+    self.test = self.testLoader.loadTestsFromNames(self.testNames,
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/loader.py", line 232, in loadTestsFromNames
+    suites = [self.loadTestsFromName(name, module) for name in names]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/loader.py", line 232, in <listcomp>
+    suites = [self.loadTestsFromName(name, module) for name in names]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/loader.py", line 162, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_registered_callers_native.py", line 189
+    self.admin.execute('CREATE TEMP TABLE prior_role_issuer_work(value pg_catalog.text);INSERT INTO prior_role_issuer_work VALUES('kept')')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?

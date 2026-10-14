@@ -127,8 +127,15 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
  def test_ordinary_caller_uses_fixed_role_lock_issuer_without_catalog_write(self):
   """@covers US-056-AC9; original fixed definer lock issuer, not complete admission."""
   mapping,c,h,t,selection,inspector,relations,cut=self.source_setup()
-  self.admin.execute((source.ROOT/'packages/postgresql/native/registered-role-catalog-cut.sql').read_text())
-  self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_registered_role_catalog_cut() TO consumer')
+  from truss._security_catalog_subject_installation import bootstrap_role_catalog_cut_issuer_in_transaction
+  self.admin.execute("CREATE SCHEMA issuer_hostile;CREATE FUNCTION issuer_hostile.reject_text(pg_catalog.text) RETURNS pg_catalog.bool LANGUAGE plpgsql AS $$BEGIN RAISE EXCEPTION 'hostile issuer text executed';END$$;CREATE DOMAIN issuer_hostile.text AS pg_catalog.text CHECK(issuer_hostile.reject_text(VALUE))")
+  self.admin.execute('SET LOCAL search_path=issuer_hostile,pg_catalog')
+  installed=bootstrap_role_catalog_cut_issuer_in_transaction(self.host,self.tx,executor_role='consumer')
+  self.assertEqual(self.admin.execute("SELECT pg_catalog.current_setting('search_path')").fetchone(),('issuer_hostile, pg_catalog',))
+  self.assertIsInstance(installed,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(installed.value.security_ready)
+  self.assertEqual(installed.value.status,'pending_commit');self.assertEqual(installed.value.installation_id,self.installation.installation_id)
+  repeated=bootstrap_role_catalog_cut_issuer_in_transaction(self.host,self.tx,executor_role='consumer')
+  self.assertIsInstance(repeated,Error);self.assertEqual(str(self.host._custody.last_attempt.error),'Existing role cut issuer requires explicit migration')
   self.host.detach();self.admin.commit()
   self.assertEqual(c.execute("SELECT pg_catalog.has_table_privilege('pg_catalog.pg_authid','UPDATE'),pg_catalog.has_table_privilege('pg_catalog.pg_auth_members','UPDATE')").fetchone(),(False,False))
   from truss._security_catalog_subject_installation import acquire_issued_registered_role_catalog_cut_with_cursor
@@ -174,3 +181,18 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
   with c.cursor() as cursor:
    with self.assertRaises(ValueError):acquire_issued_registered_role_catalog_cut_with_cursor(cursor,owner_oid=owner,caller_oid=caller)
   self.assertEqual(c.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND database=0 AND granted AND mode='ShareLock' AND relation IN ('pg_catalog.pg_authid'::pg_catalog.regclass,'pg_catalog.pg_auth_members'::pg_catalog.regclass)").fetchone(),(0,))
+
+ def test_role_cut_installer_rejects_inherited_default_acl_and_preserves_work(self):
+  """@covers US-056-AC9; fresh installer rollback on extra default grant."""
+  from truss._security_catalog_subject_installation import bootstrap_role_catalog_cut_issuer_in_transaction
+  self.source_setup()
+  self.admin.execute("CREATE TEMP TABLE prior_role_issuer_work(value pg_catalog.text);INSERT INTO prior_role_issuer_work VALUES('kept')")
+  self.admin.execute(sql.SQL('ALTER DEFAULT PRIVILEGES GRANT EXECUTE ON FUNCTIONS TO {}').format(sql.Identifier(self.outsider)))
+  try:
+   result=bootstrap_role_catalog_cut_issuer_in_transaction(self.host,self.tx,executor_role='consumer')
+   self.assertIsInstance(result,Error)
+   self.assertIsInstance(self.host._custody.last_attempt.error,ValueError)
+   self.assertEqual(str(self.host._custody.last_attempt.error),'Bounded exact Subject installation rows required')
+   self.assertEqual(self.admin.execute("SELECT pg_catalog.to_regprocedure('truss.acquire_registered_role_catalog_cut()')").fetchone(),(None,))
+   self.assertEqual(self.admin.execute('SELECT value FROM prior_role_issuer_work').fetchall(),[('kept',)])
+  finally:self.admin.execute(sql.SQL('ALTER DEFAULT PRIVILEGES REVOKE EXECUTE ON FUNCTIONS FROM {}').format(sql.Identifier(self.outsider)))

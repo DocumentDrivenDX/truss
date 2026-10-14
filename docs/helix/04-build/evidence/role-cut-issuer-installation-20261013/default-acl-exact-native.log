@@ -1,0 +1,7 @@
+test_role_cut_installer_rejects_inherited_default_acl_and_preserves_work (test_security_registered_callers_native.RegisteredCallersNativeTests.test_role_cut_installer_rejects_inherited_default_acl_and_preserves_work)
+@covers US-056-AC9; fresh installer rollback on extra default grant. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 11.801s
+
+OK
