@@ -46,3 +46,10 @@ c53c79ba1a58853f49f22405780a038cc5427c0c674ef4b9cd031f768db8d095
 paired with the checksum-verified published Weft29 ARM wheel passes all seven
 planned basic workflows in59.563s. Python boundaries pass1072 imports.
 Native64 manifest and source SQL are unchanged by this Python admission fix.
+
+SDK29 workflow38521554060 completed successfully: package, macOSarm64 native,
+Linuxx86_64 native and publication. The downloaded published wheel checksum
+c35efa8a086f17f3db904550aa269ffc5bd4806c04d1fad73edd417af368f7e1 matches
+SHA256SUMS. Its pins identify source31e05241ab42b157d269ed43be5f3cb08235bccb,
+native64 manifest2faa603b5229bb0d9d843597a46452e3b1e52bb2e664e69d859138450b23ffce
+and Weft29/backend34. No new ownership support is claimed.

@@ -33,6 +33,12 @@ for(const [index,originalNode] of originalNodes.entries()){
  const replacement={...constraint,keys:['attempt_id','operation_index',...identity].map(sval=>({String:{sval}}))};
  edited=proposePostgresqlNodeEdit(edited,`/stmts/${index}/stmt/CreateStmt/tableElts/${constraintIndex}/Constraint`,JSON.stringify(replacement)).document;
 }
+// Retain endpoint root provenance after later moves/deletion; legacy rows stay SQL NULL.
+const columnModel=await importPostgresqlSql('ALTER TABLE truss.runtime_edge_transition ADD COLUMN endpoint_ownership jsonb;',backend,{id:'owned-endpoint-context-column'});
+const columnCommand=JSON.parse(renderTree(getPostgresqlNode(columnModel,'/stmts/0/stmt/AlterTableStmt/cmds/0')));
+const edgeElements=JSON.parse(renderTree(getPostgresqlNode(edited,'/stmts/1/stmt/CreateStmt/tableElts')));
+edgeElements.push({ColumnDef:columnCommand.AlterTableCmd.def.ColumnDef});
+edited=proposePostgresqlNodeEdit(edited,'/stmts/1/stmt/CreateStmt/tableElts',JSON.stringify(edgeElements)).document;
 edited.id='truss-owned-object-transition-storage-0.1';
 const nativeBytes=JSON.stringify(edited)+'\n';
 const ddl=await exportPostgresqlSql(edited,backend);
@@ -46,6 +52,9 @@ for(const [index,stmt] of statements.entries()){
  const constraint=stmt.tableElts.find((e:any)=>e.Constraint?.contype==='CONSTR_UNIQUE').Constraint;
  upgrade=proposePostgresqlNodeEdit(upgrade,`/stmts/${index}/stmt/AlterTableStmt/cmds/1/AlterTableCmd/def/Constraint`,JSON.stringify(constraint)).document;
 }
+const edgeCommands=JSON.parse(renderTree(getPostgresqlNode(upgrade,'/stmts/1/stmt/AlterTableStmt/cmds')));
+edgeCommands.push(columnCommand);
+upgrade=proposePostgresqlNodeEdit(upgrade,'/stmts/1/stmt/AlterTableStmt/cmds',JSON.stringify(edgeCommands)).document;
 const upgradeBytes=JSON.stringify(upgrade)+'\n';
 const upgradeDdl=await exportPostgresqlSql(upgrade,backend);
 if(await exportPostgresqlSql(readDocument(upgradeBytes,'json'),backend)!==upgradeDdl)throw Error('Saved upgrade model must generate identical SQL');
@@ -81,10 +90,10 @@ columnCount+=record.members.length;
 module.elements.push(record);
 }
 module.elements.push({id:'runtime_object_attempt.id',name:'id',kind:'field',cardinality:'one',nullability:'required',extensions:{'truss.layout.native':{nativeType:'uuid',interpretation:'Original referenced attempt identifier; no portable UUID key asserted'}}},{id:'runtime_object_attempt',name:'runtime_object_attempt',kind:'record',members:[ref('runtime_object_attempt.id')],references:[{role:'member',...ref('runtime_object_attempt.id')}],extensions:{'truss.layout.native':{projection:'Referenced primary-key column; full original attempt remains in operations.sql'}}});
-const core:any={umf:'0.8.0',id:'truss-owned-object-transition-core-0.1',vocabularies:{'truss.layout.native':{version:'0.1.0'}},modules:[module],extensions:{'truss.layout.native':{sourceModel:directory+'truss-owned-object-transition-storage-0.1.proposal.umf.json',scope:'Candidate multi-object and multi-edge transition uniqueness; core column/FK references and retained native keys. Not installed ownership or migration support.'}}};
+const core:any={umf:'0.8.0',id:'truss-owned-object-transition-core-0.1',vocabularies:{'truss.layout.native':{version:'0.1.0'}},modules:[module],extensions:{'truss.layout.native':{sourceModel:directory+'truss-owned-object-transition-storage-0.1.proposal.umf.json',scope:'Candidate multi-object/multi-edge transitions and retained endpoint root contexts; core column/FK references and retained native keys. Not installed ownership or migration support.'}}};
 const validation=validateDocument(core);
 if(validation.diagnostics.some(d=>d.severity==='error'))throw Error(JSON.stringify(validation.diagnostics));
-if(columnCount!==23)throw Error('Complete original ten object/thirteen edge transition columns required');
+if(columnCount!==24)throw Error('All23 original transition columns plus endpoint ownership context required');
 await Bun.write(directory+'truss-owned-object-transition-storage-0.1.proposal.umf.json',nativeBytes);
 await Bun.write(directory+'truss-owned-object-transition-core-0.1.proposal.umf.json',JSON.stringify(core)+'\n');
 await Bun.write('docs/helix/04-build/owned-object-transition.generated.sql',ddl);
