@@ -151,3 +151,49 @@ formulas model integer division, not rounded PostgreSQL NUMERIC `/`. Native
 `div`/`mod` and lock representation remain implementation premises, with separate
 finite native witnesses. No complete SQL refinement or guarded authority theorem
 is inferred from these results.
+
+## Original coordinator transaction and shared store composition
+
+The retained later-transaction remint counterexample requires the anchor to bind
+more than the coordinator PID. The next candidate uses three original physical
+connections in this order; this sequence is a design obligation, not implemented
+anchor admission:
+
+1. The engine opens the original SCRAM data connection D and keeps it idle before
+   RR. Coordinator A begins RC and assigns its native full transaction ID before
+   D starts RR. A stays in that original transaction through guarded issuance.
+2. Control C observes both original native backend incarnations. Under the
+   original shared store/source cut it verifies the committed context from
+   `_action_store.py`, rather than accepting diagnostic store bytes. It records
+   A's full transaction ID, PID, backend start and transaction start, D's actual
+   database/login/backend incarnation, exact issued store/tenant/guard identities,
+   original program/action/profile and bounded native anchor identity. C confirms
+   actual COMMIT before D begins RR. No pending registration is committed context.
+3. D begins its single RR transaction, reads that immutable original anchor and
+   acquires store/source, Subject/role mappings, then policy/native role cuts.
+   The current store context verifier is RC-only; D needs a separate original-row
+   correspondence check and must not invoke the RC verifier under RR or infer
+   current source from `binding_correspondence='matches'`.
+4. A's private native guard compares its own actual `pg_current_xact_id()` with
+   the anchor's original coordinator full xid8 before any private mint. A later
+   transaction on the same PID cannot satisfy that equality. Fresh native peer
+   reconciliation of D's claimed full xid uses the scoped private native status
+   component, plus the original anchor's database/person/backend incarnation.
+   Neither the full-xid helper nor advisory tuple alone admits the anchor.
+5. Only after complete current original action/Subject/owner/source admission may
+   A mint the coherent tuple. D's protected selector and finalizer check the same
+   immutable anchor and original coordinator incarnation/transaction, alongside
+   actual D full xid and native markers. Data-owned exclusions remain through
+   original COMMIT acknowledgement. A loss, reconnected A, re-mint in a later A
+   transaction or unavailable complete source refuses fresh use.
+
+The [native full-xid receipt](../../04-build/evidence/security-preparation-peer-xid-20261014/receipt.json)
+qualifies only its bounded PG18.6 component. It does not prove this handshake.
+Required next native controls include same-PID/new-transaction remint refusal,
+coordinator loss before/after mint, reused PID/backend start mismatch, forged
+epoch with equal xid32, anchor mutation/direct issuance denial, fenced issued
+store, incompatible guard epoch, foreign store/program and missing complete
+current authority. Original registration receipts and replay namespaces remain
+recognizable after fencing; rotating the guard epoch never creates a fresh
+replay scope. Protected anchor storage/issuer, registered selection closure,
+finalizer and the complete composed negative controls remain unimplemented.

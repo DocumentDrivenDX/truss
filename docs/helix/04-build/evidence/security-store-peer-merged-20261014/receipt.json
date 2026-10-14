@@ -1,0 +1,30 @@
+{
+  "revision": "09ae4de4738eb804dd6057b6bf3632508ca91c25",
+  "status": "merged-component-regression-passed",
+  "postgresql": "18.6",
+  "tests": 2,
+  "seconds": 82.342,
+  "exitCode": 0,
+  "classes": [
+    "test_action_store_native.ActionStoreNativeTests",
+    "test_preparation_permit_binding_native.PreparationPermitBindingNativeTests"
+  ],
+  "sourceHashes": {
+    "packages/python/src/truss/_action_store.py": "efbfd91bf3af1bbe08551024e267f88f2801d0d9721dedf8158e2a25035db9a2",
+    "packages/python/src/truss/_security_bootstrap/action-store-issuer.sql": "7181f92898912785300bb4984f41a275287e982c67ca3fde1da90fd5735d520b",
+    "packages/python/src/truss/_security_bootstrap/action-store-storage.sql": "3b699c0d800da79207f48230a7fef8f1b3252efd0d531ecd7a0a05be5bf199d8",
+    "packages/python/src/truss/_security_bootstrap/preparation-peer-xid.sql": "2006fa1bafe2ff009faa5300e8d64db97b9722f637c799b04c4e80f454a4e561",
+    "packages/python/tests/test_action_store_native.py": "ec87b58c75942ce757d579a814d90e56e3c7f1f88195dc98cac121fe088c6ea2",
+    "packages/python/tests/test_preparation_permit_binding_native.py": "883276cc38d8635de43da405a42bc9f58ffc4d14e9d9872ec4f6c3149101df2e",
+    "scripts/export-products-native-binding.py": "000a865178950808e25c932cff3bac9b3c6c689074489940881798ba31098f39"
+  },
+  "logSha256": "1775f74419eae1eb90f240f2d15ff6dfe3d97cb2c42a5682b205ff70020950e6",
+  "moduleBoundaries": {
+    "passed": true,
+    "imports": 1199
+  },
+  "limits": [
+    "Separate native component tests on the merged revision, not a composed anchor/guard/selector/seal acceptance test.",
+    "Complete protected preparation remains unimplemented; no backend acceptance promotion."
+  ]
+}
