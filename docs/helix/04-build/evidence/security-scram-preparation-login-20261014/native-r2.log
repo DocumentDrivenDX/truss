@@ -1,0 +1,7 @@
+test_required_scram_rejects_wrong_absent_and_trust_authentication (test_scram_preparation_login_native.ScramPreparationLoginNativeTests.test_required_scram_rejects_wrong_absent_and_trust_authentication) ... WARNING: password file "/dev/null" is not a plain file
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 2.734s
+
+OK

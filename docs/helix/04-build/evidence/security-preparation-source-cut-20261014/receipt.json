@@ -1,0 +1,22 @@
+{
+  "status": "native-source-cut-component-passed",
+  "tests": 2,
+  "seconds": 9.294,
+  "postgresql": "18.6",
+  "sourceHashes": {
+    "packages/python/tests/test_preparation_source_inventory_native.py": "68ed953ee8d1abfc642bd9452b2acaf2ddab2b20e69274c7bdfd139ed213bd70",
+    "packages/python/src/truss/_preparation_source_epoch.py": "fb1c0ac50974d217375656c3990425a4109e946978b829d4d4d5a2b1983c2ea5",
+    "packages/python/src/truss/_preparation_catalog_cut.py": "1cdeb9ade242bba40b7f9bbac7631bf72acb92bdd8e7829011f57bf686b8c33b",
+    "packages/python/src/truss/_security_bootstrap/preparation-catalog-cut.sql": "4d10ae19b0c6771db3bef105bb99095497a437ee3e1d5d813e6bfe36aecab677"
+  },
+  "logs": {
+    "native-r1.log": "e4cc36d827bf5503512cf97a755e0d97e4b669a91a4fca9055f1d85e12398feb",
+    "native-r2.log": "9fc5d25816e72913dec5aa8a4d5fade40c2469355b270a99d8327839cf4d454c"
+  },
+  "scope": "Genuine initial source epoch issuance and original ordinary RR metadata-cut acquisition, native competing head UPDATE lock refusal and unchanged original snapshot; source inventory drift regression also passes.",
+  "limits": [
+    "Metadata/runtime only; no original source/helper/DDL full exclusion or action authority admission.",
+    "No native permit, protected Weft selection, seal or backend acceptance-case promotion.",
+    "r1 precedes an import cleanup; r2 corresponds to retained test source."
+  ]
+}

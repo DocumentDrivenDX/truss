@@ -1,0 +1,37 @@
+{
+  "status": "native-scram-component-passed",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "libpq": "18.6",
+  "tests": 1,
+  "seconds": 3.275,
+  "sourceHashes": {
+    "packages/python/src/truss/_scram_preparation_login.py": "1b7ca2b2fbd268808063a7d38f689e4db1003049609c8b238730c2457cec53e4",
+    "packages/python/tests/test_scram_preparation_login_native.py": "58cd421e421716b311b73b9749b6696d4a2bd747cfdc09476c45cf0a4d3d2c23",
+    "scripts/check-module-boundaries.py": "1ae5d56318c577f86dcb356982664eb758c7d668feef0a4b0b7a1b8403d567a1"
+  },
+  "logs": {
+    "native-r1.log": "47907d792ebb8c3da3cce7553bfe0f9a35821d6e7852a251507243c55e788980",
+    "native-r2.log": "7e4bde5806474d503ad782916b6992aaae55bfc7729d9e5bb6af78f85eb8d770",
+    "boundaries.log": "4fd73702e92a79936a1b06667e219eaed761aa1feb7ecfb2beb31984048c3172",
+    "native-r3.log": "6b4b281573c5c55f89d45caac9fbc3798b30b20dfb0606373bef628e558a88cc"
+  },
+  "scope": [
+    "Stock libpq require_auth=scram-sha-256 refuses default trust even with supplied password.",
+    "Explicit first local consumer HBA scram rule, configuration reload observation, native SCRAM verifier-kind check.",
+    "Wrong password and actual absent credentials with isolated environment/empty private passfile refuse.",
+    "Correct ephemeral password succeeds; libpq used_password and actual ordinary current/session identity verified.",
+    "Credential is excluded from provider repr; no credential/verifier value retained."
+  ],
+  "acceptanceLinks": [
+    "US-049-AC2 authentication prerequisite only",
+    "US-049-AC4 connection-opening prerequisite only"
+  ],
+  "limits": [
+    "Unix socket host-owned original server profile only; no remote TLS/auth deployment qualification.",
+    "Does not prove human/service identity enrollment, external-account ownership, action-role authorization, immutable anchor/permit or seal.",
+    "Current actual connecting role is authenticated; changing context/later engine custody remains independently required.",
+    "Historical logs r1/r2 precede absent-credential witness/import cleanup; r3 corresponds to retained source.",
+    "No backend acceptance case promotion."
+  ]
+}

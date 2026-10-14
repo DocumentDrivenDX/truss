@@ -1,0 +1,20 @@
+{
+  "status": "merged-component-suite-passed",
+  "tests": 14,
+  "seconds": 19.09,
+  "baseCommit": "e15e336042fd64d251b65c1bf2606ff08b15ce5c",
+  "sourceHashes": {
+    "packages/python/src/truss/_engine_preparation.py": "31a8ab2e07bf19e5d8c6449f8ad4ade803907f27118f51990125188132cc9403",
+    "packages/python/src/truss/_preparation_source_epoch.py": "fb1c0ac50974d217375656c3990425a4109e946978b829d4d4d5a2b1983c2ea5",
+    "packages/python/src/truss/_security_preparation_authority.py": "bb64d37971082f87352829aa96bf9d194eaf479c891ace9deadb8aa13353eb84",
+    "packages/python/tests/test_engine_preparation.py": "9c1ead0c84ed571c3ba125553cde33de687aadb394b0c96c23b534d2cc7cc09c",
+    "packages/python/tests/test_preparation_source_inventory_native.py": "53a6c1bad7713869937d9c3633007a3f2d6cffc2bc9b420ff049b1d2f2c1d732",
+    "packages/python/tests/test_security_preparation_authority_native.py": "cfa753990ab9923e0086ac6550e388b9dbc66413918172798d2fce7566ec3cf6"
+  },
+  "logSha256": "7f887acb229c320942a306c605ad3d34cab239cb95be56e2246e633f00413e66",
+  "scope": "Merged engine unit lifecycle controls plus original native source inventory and authority/namespace/visibility component tests.",
+  "limits": [
+    "No composed original materialization/permit/protected selection/seal or action-human provider qualification.",
+    "No backend acceptance case promotion."
+  ]
+}

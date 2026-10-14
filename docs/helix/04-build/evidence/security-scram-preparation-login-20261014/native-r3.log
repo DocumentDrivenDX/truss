@@ -1,0 +1,6 @@
+test_required_scram_rejects_wrong_absent_and_trust_authentication (test_scram_preparation_login_native.ScramPreparationLoginNativeTests.test_required_scram_rejects_wrong_absent_and_trust_authentication) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 3.275s
+
+OK
