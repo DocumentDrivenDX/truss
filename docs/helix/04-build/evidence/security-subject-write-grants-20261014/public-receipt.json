@@ -1,0 +1,10 @@
+{
+  "result": "native1/42.965s passes",
+  "runtime": "0.64",
+  "testSourceSha256": "1678e090c7aead097c5c429b80a4f1cb5b75b764ad1f726e76cac63bc357c9c1",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC5",
+    "US-056-AC9"
+  ],
+  "scope": "Actual PUBLIC UPDATE(profile_bytes) grant makes effective Subject writes possible; protected execution refuses and later positive controls pass after revocation. Not complete inherited-role/DDL privilege closure or full132 promotion."
+}
