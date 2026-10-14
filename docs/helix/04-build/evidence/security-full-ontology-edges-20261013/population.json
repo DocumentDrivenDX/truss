@@ -1,0 +1,172 @@
+{
+  "aliases": {
+    "c": 1,
+    "pa": 2,
+    "pb": 3,
+    "alice": 4,
+    "bob": 5,
+    "outsider": 6,
+    "ra": 7,
+    "rb": 8,
+    "ro": 9,
+    "aa": 10,
+    "ai": 11,
+    "ba": 12,
+    "oa": 13,
+    "ob": 14
+  },
+  "storedValues": {
+    "c": {
+      "clientId": "C"
+    },
+    "pa": {
+      "projectId": "A"
+    },
+    "pb": {
+      "projectId": "B"
+    },
+    "alice": {
+      "staffId": "Alice"
+    },
+    "bob": {
+      "staffId": "Bob"
+    },
+    "outsider": {
+      "staffId": "Outsider"
+    },
+    "ra": {
+      "resourceId": "RA",
+      "salary": {
+        "kind": "integer",
+        "text": "100"
+      }
+    },
+    "rb": {
+      "resourceId": "RB",
+      "salary": {
+        "kind": "integer",
+        "text": "200"
+      }
+    },
+    "ro": {
+      "resourceId": "RO",
+      "salary": {
+        "kind": "integer",
+        "text": "300"
+      }
+    },
+    "aa": {
+      "active": true,
+      "assignmentId": "AA"
+    },
+    "ai": {
+      "active": false,
+      "assignmentId": "AI"
+    },
+    "ba": {
+      "active": true,
+      "assignmentId": "BA"
+    },
+    "oa": {
+      "ownershipId": "OA"
+    },
+    "ob": {
+      "ownershipId": "OB"
+    }
+  },
+  "edges": [
+    [
+      4,
+      2,
+      1
+    ],
+    [
+      4,
+      3,
+      1
+    ],
+    [
+      5,
+      4,
+      10
+    ],
+    [
+      5,
+      4,
+      11
+    ],
+    [
+      5,
+      5,
+      12
+    ],
+    [
+      1,
+      10,
+      2
+    ],
+    [
+      1,
+      11,
+      3
+    ],
+    [
+      1,
+      12,
+      3
+    ],
+    [
+      3,
+      13,
+      7
+    ],
+    [
+      3,
+      14,
+      8
+    ],
+    [
+      2,
+      13,
+      2
+    ],
+    [
+      2,
+      14,
+      3
+    ]
+  ],
+  "oracle": {
+    "alice": [
+      "RA"
+    ],
+    "bob": [
+      "RB"
+    ],
+    "outsider": []
+  },
+  "expectedOracle": {
+    "alice": [
+      "RA"
+    ],
+    "bob": [
+      "RB"
+    ],
+    "outsider": []
+  },
+  "nativeEndpointRefusals": {
+    "wrong-type": {
+      "code": "invalid_input",
+      "nativeState": "22023",
+      "operationIndex": "0",
+      "outcome": "failed"
+    },
+    "reversed": {
+      "code": "invalid_input",
+      "nativeState": "22023",
+      "operationIndex": "0",
+      "outcome": "failed"
+    }
+  },
+  "scope": "Original public seed and independent graph incidence oracle; not protected visibility admission."
+}

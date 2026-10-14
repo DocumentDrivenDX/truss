@@ -1,0 +1,7 @@
+# Full ontology with original typed edges
+
+The public Truss catalog and mutation APIs accept one original UMF0.8 document declaring Client, Project, Staff, Resource, Assignment and Ownership, plus five typed relationship families. The native fixture creates14 objects and12 edges without direct table seeding. ProjectA andB share ClientC; Alice has activeA/inactiveB, Bob activeB and outsider none; RA/RB have ownership and RO is ownerless. Public reads retain every supplied field, including exact integer text and stored boolean state. An independent native-incidence oracle derives AliceRA/BobRB/outsidernone. Wrong-type and reversed endpoint attempts return native22023 at operation0 and preserve complete ordered edge rows. Final native case passes16.550s; original document/population and scoped independent review are retained.
+
+Earlier authoring/carrier/assertion attempts remain preserved. The generic harness had duplicated the complete model across two documents, exceeding original bounded owner evidence; this fixture submits the complete model once, while the generic default remains unchanged. No bound or public API is weakened.
+
+This is original public population and incidence evidence. The configured seed writer/observer does not represent a protected Staff caller. Next bind this complete graph to the shared logical policy and original native/compiler context, coherent object+edge facts and guarded ordinary Subject/publication. B01/B02 and all other required cases remain unallocated until matching protected native assertions pass.
