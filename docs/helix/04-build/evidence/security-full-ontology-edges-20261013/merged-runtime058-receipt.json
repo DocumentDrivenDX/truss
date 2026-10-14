@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "runtime": "truss-catalog-runtime/0.58-candidate",
+  "mergedHead": "cf36e8f407f2387352e1a4569d1c5fd074324880",
+  "tests": 1,
+  "seconds": 24.203,
+  "sourceDigests": {
+    "packages/python/tests/test_security_ontology_edges_native.py": "9e0801a645ac78420a07f4df85e08577bac9bf691f8441d296207f35b3360fde",
+    "packages/python/tests/test_group_create_native.py": "466109480a72d5f3216689b81482c6fc545ad57cfa76985b2eaeb1f50e223e26",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "5eaac785787830c02bfed3758360e148fce3434480fbfee01c9e66ca671808a3",
+    "packages/python/src/truss/_umf_core08/manifest.json": "c83fba1ee18300455b58ed82a679eb41490b5f6ba9b794953dff0caa89cd4a74",
+    "packages/python/src/truss/catalog_runtime.py": "78ac56071029c9687251946e7a220f17dea52feacf708c0fb1393fdebfe118df"
+  },
+  "logSha256": "6a02db1520287debe49b63b39ebcc6c60dd451e50f3935f646d7d5f3c9d74365",
+  "scope": "Same full public ontology/typed-edge case replayed after preserving concurrent source-reference/runtime changes. Earlier exported population packet retains its original runtime scope. No protected visibility or backend acceptance promotion."
+}

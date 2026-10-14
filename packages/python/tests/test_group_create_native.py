@@ -15,13 +15,13 @@ import test_catalog_runtime_native as catalog_tests
 class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
     for _name in tuple(n for n in dir(catalog_tests.PublicCatalogRuntimeTests) if n.startswith('test_')):
         locals()[_name]=None
-    def ready(self,mutate_source=None):
+    def ready(self,mutate_source=None,*,document_ids=('zdoc','adoc')):
         self.install()
         connection,host,assembly,tx=self.consumer()
         from truss import CatalogDocument
         from test_catalog_relational_support import relational_document
         documents=[]
-        for identity in ('zdoc','adoc'):
+        for identity in document_ids:
             source=relational_document();source['id']=identity
             if mutate_source is not None:mutate_source(source)
             documents.append(CatalogDocument(identity,'r1',json.dumps(source,indent=2,ensure_ascii=False).encode()))

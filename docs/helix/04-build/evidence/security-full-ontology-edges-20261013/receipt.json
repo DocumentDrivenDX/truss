@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "tests": 1,
+  "seconds": 16.55,
+  "covers": [
+    "US-056-AC2"
+  ],
+  "sourceDigests": {
+    "packages/python/tests/test_security_ontology_edges_native.py": "9e0801a645ac78420a07f4df85e08577bac9bf691f8441d296207f35b3360fde",
+    "packages/python/tests/test_group_create_native.py": "466109480a72d5f3216689b81482c6fc545ad57cfa76985b2eaeb1f50e223e26"
+  },
+  "packetDigests": {
+    "adoc.json": "37ba63adcfb8c618902fd708d09b5a0837674e393bc8817373b92e78a5bcfd73",
+    "population.json": "b3f75a81a64ce6e1bef0e1780efb31dcf44efe878a7526ea4f71c50924ffbead",
+    "final-native.log": "3128095f1fa5a76b03aac7678f72004590dcbc6e920f3375b874cabe729d55a0"
+  },
+  "scope": "Original public UMF0.8 catalog preparation/acceptance, public object/edge mutation, native14 objects12 typed edges, public exact stored value readback, independently expected graph-incidence membership results and native wrong-type/reversed endpoint refusal with full edge-row preservation. Seed consumer is a configured writer/observer, not a protected security Subject. Oracle is independent incidence, not shared policy execution. No B01/B02 or full backend admission;132 inventory unchanged."
+}
