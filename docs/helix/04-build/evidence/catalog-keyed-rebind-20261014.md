@@ -25,3 +25,14 @@ UMF0.8 successful workflow through that capability passed1/16.085s against curre
 source with the matching built Weft28 wheel; lookup/query/postcommit history are
 included. This follow-up is source execution, distinct from the earlier installed
 candidate wheel whose checksum is recorded above. Module boundaries pass1072.
+
+Final published-predecessor verification passed1/10.939s using the checksum-verified
+published SDK26 wheel `cbeb21fda06b21f5452a24ac8ec21f4a7aa108597893d86df33c00baf549ee85`
+and published Weft28 ARM wheel
+`497f70e0bd9481463182b058c1cf674cd17484e303dc35146e78efb645e227a2`.
+The rebuilt installed SDK27 candidate is
+`9839511db661827d5c3e84a184f82f65f12e0b6dc114ca2b4156816b2bce8a77`.
+Original reports, real predecessor import/native version, upgrade disposition,
+new profiles, key lookup and query passed. Truss26 workflow38513465205 and Weft28
+workflow38514022606 both succeeded. Astra Ultra approves SDK27 tagging after final
+main boundary verification; its existing workflow remains the publication gate.
