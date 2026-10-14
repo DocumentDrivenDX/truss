@@ -1,0 +1,9 @@
+{
+  "result": "native1/67.996s passes",
+  "sourceSha256": {
+    "scripts/security_ontology_native_subject_read.py": "162f2bcd41ac138bd79693daf9a84dcab439ad8ac6d72b7271111138fd8e3826",
+    "scripts/security_ontology_guarded_read.py": "dbe5e864134d3b9db5a2e3310fc24e68ff60d8167f0b58f66fb8a0b4164e6d99",
+    "packages/python/tests/test_security_ontology_edges_native.py": "04c624580885ace3f18934b4147b0972605e8c03ab2553bf6fcd6cf88d66c35e"
+  },
+  "scope": "Selected diagnostic exact inspected direct-projection cell publication with held native Subject/source/epoch/facts through receiver; no public activation or original acceptance promotion."
+}

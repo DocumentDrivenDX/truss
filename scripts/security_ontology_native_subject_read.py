@@ -60,7 +60,7 @@ def _registered_subject(cursor,identity,bindings,private_reader_oid=None,verifie
     return subjects[0]
 
 
-def publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,original_request,registered_bindings,publisher,*,compiler=None,cut_issuer=None,source_epoch=None,subject_registration=None):
+def publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,original_request,registered_bindings,publisher,*,compiler=None,cut_issuer=None,source_epoch=None,subject_registration=None,query_results=False):
     """Selected original comparisons, not public query/credential admission.
 
     Caller and executor host custody are reserved through the final receiver.
@@ -75,6 +75,7 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
             or len({b[0] for b in registered_bindings})!=len(registered_bindings) or not callable(publisher)
             or (compiler is not None and not callable(compiler))):
         raise ValueError('Original bounded registered ontology read context required')
+    if type(query_results) is not bool or (query_results and (source_epoch is None or subject_registration is None)):raise ValueError('Original registered guarded query result context required')
     if cut_issuer is not None:
         if type(cut_issuer) is not tuple or len(cut_issuer)!=2 or any(type(v) is not int or not 1<=v<=4294967295 for v in cut_issuer) or cut_issuer[0]==cut_issuer[1]:raise ValueError('Original graph cut issuer comparison required')
         cut_issuer=tuple(cut_issuer)
@@ -105,6 +106,7 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
             if source_epoch.source.guarded_response is None:raise ValueError('Original archived guarded source required')
             comparison=capture_guarded_source_comparison(source_epoch.source.native_dependencies,source_epoch.source.guarded_response)
             require_same_guarded_source(comparison,receipt['request'].encode(),receipt['output'].encode())
+        elif query_results:raise ValueError('Original guarded query result required')
         elif receipt['request']!=source_epoch.source.native_dependencies.decode() or receipt['output']!=source_epoch.source.original_response.decode():raise ValueError('Original current graph compiler source correspondence required')
         return receipt
     selected_compiler=compiler if source_epoch is None else epoch_compiler
@@ -136,7 +138,7 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
                 verified_issuer=verify_registered_graph_subjects_with_cursor(private,subject_registration,caller_pid=int(observed[0][0]))
             subject=_registered_subject(private,identity,bindings,private_reader,verified_issuer)
             if subject_registration is not None and own_subject!=subject:raise ValueError('Original issuer and native mapping Subject correspondence required')
-            raw=_prepare_ontology_resource_operation(request,subject,compiler=selected_compiler,existing_locks=cut_issuer is not None)(private,private_observed)
+            raw=_prepare_ontology_resource_operation(request,subject,compiler=selected_compiler,existing_locks=cut_issuer is not None,query_results=query_results)(private,private_observed)
             if source_epoch is not None:
                 from truss._security_graph_epoch_read import verify_held_graph_epoch_read
                 verify_held_graph_epoch_read(private,source_epoch)
