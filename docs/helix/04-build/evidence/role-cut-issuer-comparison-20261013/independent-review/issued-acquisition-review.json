@@ -1,0 +1,10 @@
+{
+  "review": "Verified fixed-issuer role catalog cut acquisition",
+  "status": "No actionable findings within selected source scope.",
+  "headAtReview": "42a8cc1a0452460fc1d3f1772372f3388d22794a",
+  "assessment": "Issuer metadata/ACL checked before native CURRENT_USER matches exact expected caller; only fixed no-argument function invoked. Native VOID descriptor precedes value fetch; two current-backend shared catalog ShareLocks then verified, followed by late issuer comparison. Direct acquisition uses the same extracted lock readback.",
+  "extraction": "Independent AST comparison confirms extracted readback body unchanged from prior direct acquisition, excluding docstring and initial LOCK statement.",
+  "testAssessment": "Positive ordinary path now uses this function. Broad PUBLIC ACL is committed before attempted ordinary acquisition; exact zero shared catalog ShareLocks asserted after ValueError. Direct receiver regression submitted by parent; terminal native status not yet inspected.",
+  "limits": "Trusted expected OIDs, supported cursor/runtime and continuous selected source/DDL custody remain premises. No authenticated installer, full ordinary producer integration, effective privilege/callable closure, same-backend/administrator bypass exclusion or backend admission.",
+  "sourceDigests": {"packages/python/src/truss/_security_catalog_subject_installation.py":"7e700d267e38907d95a0b59dffd3df5b88c6c35289d47c4ec71003e82bc6ff29","packages/python/tests/test_security_registered_callers_native.py":"f7271723868663ad658140132c7589d35bb9db3faa2882cd97cee5d5250b555a","packages/python/src/truss/_security_bootstrap/registered-role-catalog-cut.sql":"91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb","packages/postgresql/native/registered-role-catalog-cut.sql":"91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb"}
+}

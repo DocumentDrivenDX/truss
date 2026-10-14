@@ -7860,6 +7860,20 @@ Owner requests timestamp behavior shared across Ashlar, Truss and other systems.
 
 SDK0.0.21/native57 with Weft0.4.22/backend0.4.27 implements pure Field name changes, including retained key fields. Current lookup/query/update uses current names; stored identity/keys and historical receipts remain retained. Prestate occupied-name reuse and retained-value collisions refuse. Both original UMF0.7/0.8 public workflows pass, plus the populated56→57 rollback/upgrade. Astra Ultra reviewed plan/source and corrections. Matching releases follow the existing workflows; original consumer document preparation/metadata remains the next integration work.
 
+### Registered native callers across Project ownership — 2026-10-13
+
+The explicit registered producer snapshots installed role/Staff bindings and
+requires source epoch plus qualified object/map cuts. Exact native map/helper
+ACL comparisons surround Subject/evaluation; actual caller OID/key must be in
+the registration. Alice(s1 activep1/inactivep2), Bob(s2 activep2) and outsider(s3)
+sessions receive r1/r2/no rows with withheld salary and no raw object/map SELECT.
+Final six native cases pass53.069s. Astra prompted qualifying new checker casts
+and strict source/status strings; the full hostile-domain case additionally
+required operation-local read path pinning/restoration. Failed setup and hostile
+path runs remain retained. [Qualified registered-caller evidence](evidence/registered-callers-20261013/README.md)
+keeps B01 population distinct from complete issuer/lifetime/backend admission.
+All132 required cases remain unchanged; US-056AC2/AC6/AC9/AC10, US-057AC7 and
+CONTRACT-063/STP-056 B01/B11/B12 prerequisites only.
 ###2026-10-13: unchanged consumer document integration
 
 Astra Ultra approved the scoped compact report route. The unchanged commerce source has203 assertion occurrences; repeated original-source base64 alone is7,455,784 bytes, beyond the native4MiB report-source bound. Compacting only Bun transport would recreate the failure during report persistence. Implement a separately versioned Truss wrapper recipe and selected report-source profile: verify captured source against the same preparation, retain exact owner pins/results/paths/diagnostic order, replace full source only at defined structural positions with digest-bound references to the same acceptedInput document archive, and keep those references in native assertion/report persistence. Do not interpret arbitrary extension members as references or substitute current catalog documents. Preserve original versus reversible-target bases and unchanged legacy preparation/report/replay bytes; changed wrapper hashes describe the new wrapper, not original owner bytes. The owner producer bundle remains unchanged. No new artifact database or general codec framework is required.
@@ -7869,3 +7883,46 @@ Original commerce top-level title admission remains a separate policy change. Va
 ###2026-10-14: unchanged commerce/public compact-report tranche
 
 SDK22/native58 and Weft23/backend28 complete the reviewed compact source route for original UMF0.8 under support0.14; titles are retained and report0.2 references exact same acceptedInput documents. Original producer bytes stay pinned. Actual commerce inventory is213 entries; earlier203 estimate omitted10 Record-member declaration duties. Public source-only prepare_catalog and same-report resolve_catalog_report_source are exported with basic no-database/native workflows. Public commerce/resolver workflows and populated57→58/legacy extension checks pass; see python-commerce-source-20261014.md. Legacy private TS occurrence/report composition explicitly refuses the new selected format. Matching releases use existing workflows and include the public contract/profile pins; no all-pack claim. Published21/Weft22 remain the current install example until22 publishes.
+### Registered principal current privilege comparison — 2026-10-13
+
+The registered producer now rechecks all installed role OIDs for ordinary LOGIN flags and helper-owner MEMBER reachability before Subject and after evaluation. A same-executor-transaction BYPASSRLS alteration of Bob refuses Alice before key encoding/evaluation. Five native cases pass66.956s; module boundaries pass1003 imports. Astra Ultra found no actionable source issue. [Retained receipt](evidence/registered-role-drift-20261013/receipt.json) ties the selected drift check to US-056AC9 and positive population to AC2; concurrent committed role visibility, continuous role exclusion, OID reuse and full backend acceptance remain open. No required-case promotion.
+
+### Committed registered role drift before final publication — 2026-10-13
+
+An independent autocommit connection changes Bob to BYPASSRLS after actual successful policy evaluation; its own flag readback confirms the committed change. The executor final registered-role comparison refuses and the publisher receives nothing. The native case passes17.045s and restores NOBYPASSRLS through an independent connection. [Evidence](evidence/registered-committed-role-drift-20261013/receipt.json) qualifies US-056AC9 detection for this schedule; continuous exclusion, the interval after final comparison, ABA and full backend admission remain open. No acceptance-case promotion.
+
+### Native role authority lock feasibility — 2026-10-13
+
+The owned PostgreSQL18.6 spike establishes that SHARE on both shared role catalogs blocks independent ALTER ROLE and membership GRANT; individual-lock omission controls allow the other writer. Rollback release permits both writes with exact readback. Ordinary callers refuse42501. [Retained source and native results](evidence/role-catalog-lock-20261013/README.md) resolve the feasibility unknown for the selected cluster-wide cut. Next integration must acquire both before role observation and hold through receiver/settlement via an isolated privileged issuer with admitted callable closure. The existing producer remains comparison-only; full authority/ABA/backend acceptance is not promoted.
+
+### Explicit role-fenced registered producer — 2026-10-13
+
+The explicit publish_role_fenced_registered_catalog_resource_read acquires both shared role catalog SHARE NOWAIT locks and exact current-backend lock readback before registered authority observation. Native receiver/settlement test passes1/14.284s; opposing writer refusal plus legacy3caller regression passes2/28.252s. Independent ALTER ROLE and GRANT block through receiver and after delivery; rollback releases the cut. [Evidence](evidence/registered-role-cut-20261013/receipt.json) records source pins and scoped Astra review. Ordinary privileged issuer/callable closure, same-backend mutation, ABA, broader role/config paths and full backend admission remain open. Existing comparison-only entry point keeps its qualified scope; no required-case promotion.
+
+### Role-fenced producer through external TLS — 2026-10-13
+
+The owned external composition now uses the explicit role-fenced registered producer. Immediately before wire publication, exact native two-lock readback and independent ALTER ROLE/GRANT55P03 controls pass. External peer receives r1 with salary withheld; wrong bearer/reuse/direct SQL refuse. PUBLIC helper grant produces generic refusal with zero encoding. Both runs remove all owned resources. [Evidence](evidence/role-fenced-external-20261013/receipt.json) qualifies single original consumer, service-private DB and privileged fixture executor; production issuer/callable closure, same-backend mutation, ABA and full backend acceptance remain open. No required-case promotion.
+
+### Fixed role-lock issuer for an ordinary caller — 2026-10-13
+
+Original native registered-role-catalog-cut.sql defines a no-input, pinned-path SECURITY DEFINER lock-only routine with PUBLIC revoked. One explicitly granted ordinary caller obtains both locks without catalog UPDATE rights; ungranted caller refuses42501 and independent ALTER ROLE/GRANT refuse55P03 until rollback. Native test passes1/11.164s. [Evidence](evidence/ordinary-role-lock-issuer-20261013/receipt.json) qualifies the trusted privileged fixture installer; production installation must pin owner/source/ACL and grant only private executor. Installer/lifetime and ordinary producer integration remain open, with no backend acceptance promotion.
+
+### Source-pinned role issuer native comparison — 2026-10-13
+
+The Python package now carries byte-identical original role-cut SQL. verify_role_catalog_cut_issuer_with_cursor checks its SHA, distinct bounded expected OIDs, exact native routine attributes/body/config, privileged owner and exact two direct EXECUTE ACL rows. Original positive and PUBLIC/INVOKER/path/volatility drift controls pass1/19.388s. [Evidence](evidence/role-cut-issuer-comparison-20261013/receipt.json) qualifies trusted expected identity custody and held DDL/source cut as premises; authenticated installer, owner lifetime and ordinary producer integration remain open. No required backend case is promoted.
+
+### Verified issued role-cut acquisition — 2026-10-13
+
+The issued acquisition verifies original native helper, exact CURRENT_USER OID, fixed no-input call, VOID descriptor/value, current-backend held locks and late original helper readback. Native ordinary caller, broad PUBLIC refusal before any catalog lock, and direct producer lifetime regression pass3/90.729s. [Evidence](evidence/verified-issued-role-cut-20261013/receipt.json) separates source-pinned Astra review from terminal native results. Original expected identity custody and held DDL/source cut remain premises; authenticated installer and full ordinary producer permissions remain open. No acceptance-case promotion.
+
+### Original native role-cut issuer installer — 2026-10-13
+
+bootstrap_role_catalog_cut_issuer_in_transaction captures original source/executor before host callbacks, requires direct native18.6 privileged installation and ordinary executor flags, refuses existing overload names, installs exact bytes and caller-only grants, verifies native definition/ACL and returns pending/non-ready installation+OID/source receipt. Astra found the reused administrator path prerequisite; safe path pin/restoration fixes it and hostile-domain replay passes1/12.704s. Extra inherited default grant refuses with no remaining function and preserved caller work1/13.383s. [Evidence](evidence/role-cut-issuer-installation-20261013/receipt.json) retains initial and loader failure attempts. Caller commit and administrative quiescence remain premises; full ordinary producer integration/issuer lifetime/backend acceptance remain open.
+
+### Read-only ordinary executor selected table cut — 2026-10-13
+
+The ordinary producer permission audit confirms direct SHARE locking requires authority beyond SELECT. Fixed original catalog-read-table-cut.sql delegates six selected native table locks with no input/DML and PUBLIC revoked. On real populated accepted graph/source homes, a dedicated ordinary executor has SELECT object/no UPDATE, direct LOCK and UPDATE refuse42501, helper yields six own ShareLocks, independent zero-effect DELETE controls refuse55P03 and succeed after rollback. Native case passes1/10.880s. [Evidence](evidence/read-only-table-cut-20261013/receipt.json) qualifies selected table exclusion only. Source/owner/ACL qualification, installation and complete ordinary producer integration remain open; no broad write grants or backend promotion.
+
+### Installed and verified read-table cut — 2026-10-13
+
+A separately owned native installation module packages/hash-checks original read-table SQL, requires direct privileged native18.6 installer and exact ordinary executor, refuses existing names, grants one executor and verifies original definition/ACL before pending/non-ready return. Ordinary acquisition verifies caller, VOID result and six current-backend permanent relation ShareLocks, then rechecks issuer. Committed PUBLIC grant refuses before any ShareLock; native final replay passes1/12.558s with real populated graph/source writer exclusion and rollback release. Astra prompted explicit relation-locktype readback; final source includes it. [Evidence](evidence/installed-read-table-cut-20261013/receipt.json) retains earlier runs and qualifies expected identity/DDL custody; complete ordinary producer and backend admission remain open.

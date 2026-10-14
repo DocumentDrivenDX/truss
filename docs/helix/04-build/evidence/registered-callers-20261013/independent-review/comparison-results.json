@@ -1,0 +1,152 @@
+{
+  "scope": "Real registered comparison/verification code with synthetic descriptor/row and helper-check seam; no native SQL execution, installer authenticity or lifetime claim.",
+  "count": 36,
+  "passed": true,
+  "controls": [
+    {
+      "name": "exact snapshot detached equivalent",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses installation_id ''",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses installation_id 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses installation_id b'x'",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses source_sha256 'x'",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses source_sha256 b'x'",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses status 'committed'",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses security_ready True",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ()",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings [(11, 's1'), (12, 's2'), (13, 's3')]",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ((True, 's1'),)",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ((0, 's1'),)",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ((4294967296, 's1'),)",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ((11, ''),)",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ((11, b's1'),)",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ((11, 'a\\x00b'),)",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ((11, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ((12, 's1'), (11, 's2'))",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ((11, 's1'), (11, 's2'))",
+      "passed": true
+    },
+    {
+      "name": "snapshot refuses bindings ((1, 's1'), (2, 's1'), (3, 's1'), (4, 's1'), (5, 's1'), (6, 's1'), (7,",
+      "passed": true
+    },
+    {
+      "name": "snapshot exact string source_sha256",
+      "passed": true
+    },
+    {
+      "name": "snapshot exact string status",
+      "passed": true
+    },
+    {
+      "name": "256 ordered unique bindings accepted",
+      "passed": true
+    },
+    {
+      "name": "native full map and exact caller set; safe native text casts",
+      "passed": true
+    },
+    {
+      "name": "native registration refuses wrong-installation",
+      "passed": true
+    },
+    {
+      "name": "native registration refuses missing",
+      "passed": true
+    },
+    {
+      "name": "native registration refuses extra",
+      "passed": true
+    },
+    {
+      "name": "native registration refuses duplicate",
+      "passed": true
+    },
+    {
+      "name": "native registration refuses rebound",
+      "passed": true
+    },
+    {
+      "name": "native registration refuses reordered",
+      "passed": true
+    },
+    {
+      "name": "native registration refuses byte-key",
+      "passed": true
+    },
+    {
+      "name": "native registration refuses installation-descriptor",
+      "passed": true
+    },
+    {
+      "name": "native registration refuses map-descriptor",
+      "passed": true
+    },
+    {
+      "name": "helper source refuses bytearray 2670",
+      "passed": true
+    },
+    {
+      "name": "helper source refuses bytes 7",
+      "passed": true
+    },
+    {
+      "name": "helper source refuses bytes 2671",
+      "passed": true
+    }
+  ],
+  "sourceSha256": "ce6ff317823486fb920dee5a2a6a3b02dd569b7b37c21d0ac1d8db3d85c96119"
+}

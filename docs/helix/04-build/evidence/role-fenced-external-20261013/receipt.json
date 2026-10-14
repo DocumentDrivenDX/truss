@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "covers": [
+    "US-056-AC2",
+    "US-056-AC9"
+  ],
+  "sourceDigests": {
+    "scripts/security_channel_composition_service.py": "3ca9b2f6980df17dde17d28d4b8e118cf7a32d7f7f815434473b7f0eab5ede7b",
+    "scripts/security_catalog_subject_read.py": "4e3f8e5c3b5a282bf16bfa1a545cde6c6c87f13c98d03ae91f0f68bc91d1ee03",
+    "packages/python/src/truss/_security_catalog_subject_installation.py": "8254908eb3c1983ad77a8fc9d492a6b9abf152c45a327e10fb07ac78607b261b"
+  },
+  "scope": "External TLS1.3 fixture uses role-fenced producer; both catalog locks and blocked ALTER ROLE/GRANT confirmed immediately before response publication. Positive original single caller and PUBLIC helper grant refusal pass with complete owned cleanup. Database remains service-private, not separate container. No privileged production issuer/callable closure, same-backend mutation, ABA, full authority or backend admission claimed;132 inventory unchanged."
+}

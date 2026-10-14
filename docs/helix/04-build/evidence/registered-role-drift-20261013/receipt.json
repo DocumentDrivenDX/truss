@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "tests": 5,
+  "seconds": 66.956,
+  "covers": [
+    "US-056-AC9",
+    "US-056-AC2"
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_subject_installation.py": "ba2476a2ab77f7118b3d60d06ab142062e11f28f5fccb14d6bdec8604807527d",
+    "packages/python/tests/test_security_registered_callers_native.py": "f32b04ee7c3c9dc9c453f08a57cf695f475671778ba908a8b9360a1bbad7d2da"
+  },
+  "nativeLogSha256": "c3308f276c4b766b7133233f54d705c0655634b78db3476567163421f51acf56",
+  "scope": "Current registered ordinary-login flags and helper-owner MEMBER reachability checked before Subject and after evaluation. BYPASSRLS drift control is visible in the same private executor transaction. No committed concurrent visibility, continuous role lock, role OID ABA, issuer authenticity or backend admission proved. All132 required cases retained.",
+  "review": "Astra Ultra source review: no actionable findings; qualified catalog query and exact bounded row equality."
+}

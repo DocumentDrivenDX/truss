@@ -1,0 +1,11 @@
+{
+  "review": "Fixed six-table lock-only definer primitive",
+  "status": "No actionable findings in inspected source/test scope.",
+  "headAtReview": "a189af0e0180105b35318a0491fd1f93e1213053",
+  "assessment": "No arguments or dynamic SQL; qualified ONLY table names, pinned pg_catalog/pg_temp path and revoked PUBLIC execution. Six existing selected homes acquire transaction-held SHARE NOWAIT locks without granting table mutation rights.",
+  "native": "Parent-owned1/10.880s passed: ordinary executor SELECT object/no UPDATE, direct LOCK42501, helper six own ShareLocks, independent zero-effect DELETE55P03 per table, actual object read and direct UPDATE42501. After caller rollback all six identical writer statements succeed. No data deletion claim.",
+  "validation": "Source/assertion/terminal log and parent digest review; no additional campaign.",
+  "limits": "Selected existing tables only; ONLY does not cover descendants. Privileged owner/source/ACL installer qualification, complete source/authority/callable closure and ordinary producer/backend admission remain unqualified. No required-case promotion.",
+  "sourceDigests": {"packages/postgresql/native/catalog-read-table-cut.sql":"9d28c88fd82ec7a08750701e28847f2d5b95b673c1c04a5dcc4aec13355f1842","packages/python/tests/test_security_registered_callers_native.py":"42fcc3dc1c467ae1c2f0899247b9c6844c444b33e70115eefd5edf02e1bd58cc"},
+  "evidenceDigests": {"native-log":"b068e55afffe2f194e701b4fe69e97db79e2929ecb88a8c5e9b3e4476bdc7261","receipt.json":"d229ac38ed11b20db80f94fbfe299fbbfff345d70002c7b83b4126455f18d4ff","README.md":"8a35dc9abef3f0d3e8fe424a9942fbe9e96873cf05ce05233ab621ed1964995c"}
+}

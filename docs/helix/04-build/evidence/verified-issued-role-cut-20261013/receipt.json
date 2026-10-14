@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "tests": 3,
+  "seconds": 90.729,
+  "covers": [
+    "US-056-AC9"
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_subject_installation.py": "7e700d267e38907d95a0b59dffd3df5b88c6c35289d47c4ec71003e82bc6ff29",
+    "packages/python/tests/test_security_registered_callers_native.py": "f7271723868663ad658140132c7589d35bb9db3faa2882cd97cee5d5250b555a"
+  },
+  "scope": "Verified fixed issuer ordinary caller acquisition, zero-lock PUBLIC grant refusal, direct producer receiver/settlement regression. Expected owner/caller custody and held source/DDL cut remain premises. No authenticated installer, full ordinary producer permissions, broad authority or backend admission;132 inventory unchanged."
+}

@@ -1,0 +1,49 @@
+{
+  "scope": "Actual retained pre-fix/final snapshot AST and verifier SQL strings. String-subclass controls are comparison/custody evidence only. Native hostile-domain execution is parent-retained evidence, not replayed here.",
+  "controls": [
+    {
+      "version": "observed-before",
+      "field": "source_sha256",
+      "accepted": true,
+      "retainedSourceHashType": "Spoof"
+    },
+    {
+      "version": "observed-before",
+      "field": "status",
+      "accepted": true,
+      "retainedSourceHashType": "str"
+    },
+    {
+      "version": "observed-before",
+      "unqualifiedTextCasts": true,
+      "queries": [
+        "SELECT installation_id::text FROM truss.catalog_runtime_installation WHERE singleton",
+        "SELECT role_oid::text,staff_key::text FROM ONLY truss.catalog_subject_map ORDER BY role_oid"
+      ]
+    },
+    {
+      "version": "final",
+      "field": "source_sha256",
+      "accepted": false,
+      "retainedSourceHashType": null
+    },
+    {
+      "version": "final",
+      "field": "status",
+      "accepted": false,
+      "retainedSourceHashType": null
+    },
+    {
+      "version": "final",
+      "unqualifiedTextCasts": false,
+      "queries": [
+        "SELECT installation_id::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton",
+        "SELECT role_oid::pg_catalog.text,staff_key::pg_catalog.text FROM ONLY truss.catalog_subject_map ORDER BY role_oid"
+      ]
+    }
+  ],
+  "sourceDigests": {
+    "observed-before": "8d6e0fc4a7411884a05a810cee0e137dd44e2305be10164c64e62e3236339e10",
+    "final": "ce6ff317823486fb920dee5a2a6a3b02dd569b7b37c21d0ac1d8db3d85c96119"
+  }
+}

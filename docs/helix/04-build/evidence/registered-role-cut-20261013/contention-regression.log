@@ -1,0 +1,9 @@
+test_role_catalog_writer_contention_refuses_before_subject (test_security_registered_callers_native.RegisteredCallersNativeTests.test_role_catalog_writer_contention_refuses_before_subject)
+@covers US-056-AC9; opposing writer prevents initial role cut. ... ok
+test_three_actual_callers_obey_own_project_membership (test_security_registered_callers_native.RegisteredCallersNativeTests.test_three_actual_callers_obey_own_project_membership)
+@covers US-056-AC2; B01 population prerequisite, not complete backend admission. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 28.252s
+
+OK

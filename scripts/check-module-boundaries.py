@@ -16,6 +16,7 @@ ALLOWED = {
     'catalog_preparation': {'hashlib','importlib.resources','json','truss.preparation','truss._catalog_source_reference','truss._catalog_support','truss._catalog_report_semantics'},
     'catalog_report_sources': {'base64','dataclasses','decimal','hashlib','json'},
     '_catalog_source_reference': set(),
+    '_security_catalog_read_cut_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation'},
     '_security_catalog_subject_helpers': {'json'},
     '_security_catalog_subject_installation': {'dataclasses','hashlib','importlib.resources','json','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_source_installation','truss._security_catalog_assessment','truss._security_catalog_subject_helpers'},
     '_security_catalog_source_binding': {'dataclasses','hashlib','json','truss._security_mapping','truss._security_source_epoch_installation','truss._psycopg_fact_cut','truss._psycopg_epoch_cut'},

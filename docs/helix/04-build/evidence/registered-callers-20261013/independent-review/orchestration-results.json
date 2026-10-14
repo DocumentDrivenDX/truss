@@ -1,0 +1,76 @@
+{
+  "scope": "Actual new orchestration with synthetic host, epoch/archives, fact lock/metadata, native context, helper, codec and evaluator seams. Verifies composition order and refusal/custody only; not native locking, semantics or source/issuer authentication.",
+  "count": 17,
+  "passed": true,
+  "controls": [
+    {
+      "name": "full registered qualification/order/captured set/both fact cuts/publication",
+      "passed": true
+    },
+    {
+      "name": "original registration replacement at file cannot rebind",
+      "passed": true
+    },
+    {
+      "name": "original registration replacement at inspector cannot rebind",
+      "passed": true
+    },
+    {
+      "name": "registered refusal stage 1 prevents sink",
+      "passed": true
+    },
+    {
+      "name": "registered refusal stage 2 prevents sink",
+      "passed": true
+    },
+    {
+      "name": "original role/key pair 21/s1",
+      "passed": true
+    },
+    {
+      "name": "original role/key pair 22/s2",
+      "passed": true
+    },
+    {
+      "name": "original role/key pair 23/s3",
+      "passed": true
+    },
+    {
+      "name": "mismatched role/key pair 21/s2",
+      "passed": true
+    },
+    {
+      "name": "mismatched role/key pair 22/s1",
+      "passed": true
+    },
+    {
+      "name": "mismatched role/key pair 99/s1",
+      "passed": true
+    },
+    {
+      "name": "missing registration refuses before inspector/host",
+      "passed": true
+    },
+    {
+      "name": "foreign registration refuses before inspector/host",
+      "passed": true
+    },
+    {
+      "name": "missing fact cuts refuses before inspector/host",
+      "passed": true
+    },
+    {
+      "name": "missing source cut refuses before inspector/host",
+      "passed": true
+    },
+    {
+      "name": "late Subject change refuses before publication",
+      "passed": true
+    },
+    {
+      "name": "legacy wrapper preserves single-caller checker selection",
+      "passed": true
+    }
+  ],
+  "sourceSha256": "ed875bb8d6e6da7d364b9f30c3870d047e1d2bd1556ecafa82200f3a54f5ef38"
+}

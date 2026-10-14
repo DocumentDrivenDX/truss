@@ -1,0 +1,10 @@
+{
+  "review": "Bounded current registered-role snapshot source review",
+  "status": "No actionable findings in the changed query and native control.",
+  "headAtReview": "322145f83a760a6be1bbfeb21be80c6fe5f1329c",
+  "queryAssessment": "Validated registered OIDs supply one bounded oid[] parameter; native pg_catalog functions/types/equality are qualified. Ordered exact eight-TEXT rows require LOGIN, all selected elevated flags false and no MEMBER reachability to original object/helper owner. Descriptor checks precede fetch; missing/extra/drifted rows refuse before map observation.",
+  "testAssessment": "Actual BYPASSRLS mutation affects another registered caller while Alice reads; exact executor primary refusal, zero encoder/evaluator calls and no delivery are asserted. Mutation is in the private executor transaction, not a committed concurrent-role visibility control.",
+  "validation": "Source review only for this increment. Parent native five-case session was running at review; no terminal success claimed here. Prior 60 independent controls remain historical and were not rerun against the new role query.",
+  "limits": "No continuous role lock, ABA exclusion, complete role membership/configuration closure, issuer authentication or backend admission. Same exact registered comparison is rechecked before Subject and after evaluation under existing selected cuts.",
+  "sourceDigests": {"packages/python/src/truss/_security_catalog_subject_installation.py":"ba2476a2ab77f7118b3d60d06ab142062e11f28f5fccb14d6bdec8604807527d","packages/python/src/truss/_security_catalog_subject_helpers.py":"5927f9f08838dfc583b5e9986a596a56f20999997dc73d1e9949ad2e8104db1d","packages/python/tests/test_security_registered_callers_native.py":"f32b04ee7c3c9dc9c453f08a57cf695f475671778ba908a8b9360a1bbad7d2da","scripts/security_catalog_subject_read.py":"ed875bb8d6e6da7d364b9f30c3870d047e1d2bd1556ecafa82200f3a54f5ef38"}
+}

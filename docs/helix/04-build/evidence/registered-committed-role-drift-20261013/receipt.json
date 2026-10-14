@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "tests": 1,
+  "seconds": 17.045,
+  "covers": [
+    "US-056-AC9"
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_subject_installation.py": "ba2476a2ab77f7118b3d60d06ab142062e11f28f5fccb14d6bdec8604807527d",
+    "packages/python/tests/test_security_registered_callers_native.py": "5e02e0ac33eb14e7c5e4107be14c5c3162eeb92f203aaafa0dad223b5b9a7802",
+    "scripts/security_catalog_subject_read.py": "ed875bb8d6e6da7d364b9f30c3870d047e1d2bd1556ecafa82200f3a54f5ef38"
+  },
+  "nativeLogSha256": "62c2cfa97fe1e9eb883aa7312cbabf766791183148785d1454d33879b945582a",
+  "schedule": [
+    "original initial qualification",
+    "actual successful policy evaluation",
+    "independent autocommit connection ALTER ROLE Bob BYPASSRLS",
+    "independent current role flag readback true",
+    "executor late comparison refuses",
+    "publisher not called",
+    "independent NOBYPASSRLS restoration"
+  ],
+  "scope": "Committed cross-connection role drift detected before final publication. This does not prove continuous role exclusion, the interval after the final comparison, ABA protection, or full backend admission. Required132 inventory unchanged."
+}

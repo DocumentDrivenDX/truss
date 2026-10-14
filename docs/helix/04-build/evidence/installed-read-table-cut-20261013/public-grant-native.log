@@ -1,0 +1,7 @@
+test_read_only_executor_uses_fixed_table_cut_without_update_grants (test_security_registered_callers_native.RegisteredCallersNativeTests.test_read_only_executor_uses_fixed_table_cut_without_update_grants)
+@covers US-056-AC9; selected real native graph/source table lock primitive. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 13.023s
+
+OK

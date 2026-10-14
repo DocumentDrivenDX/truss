@@ -17,8 +17,9 @@ class NativeCatalogSubjectTests(catalog.AcceptedCatalogReadNativeTests):
   mapping=self.populated();self.host.detach();self.admin.commit()
   self.admin.execute('BEGIN');self.host=catalog.adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
   from truss._security_catalog_subject_installation import bootstrap_catalog_subjects_in_transaction
-  registered=bootstrap_catalog_subjects_in_transaction(self.host,self.tx,mapping=mapping,bindings=(('consumer','s1'),))
+  registered=bootstrap_catalog_subjects_in_transaction(self.host,self.tx,mapping=mapping,bindings=getattr(self,'subject_bindings',(('consumer','s1'),)))
   self.assertIsInstance(registered,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(registered.value.security_ready)
+  self.registered_subjects=registered.value
   self.host.detach();self.admin.commit()
   self.admin.execute('GRANT USAGE ON SCHEMA truss TO consumer;REVOKE catalog_fact_writer FROM consumer')
   self.admin.execute('BEGIN');self.host=catalog.adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value

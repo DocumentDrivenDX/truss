@@ -90,6 +90,12 @@ def run_owned_catalog_resource_read(host,transaction,mapping,subject_key,*,fact_
             raise ValueError('Original current native authority comparison required')
     def execute(cursor,observation):
         _pin_cursor(cursor)
+        cursor.execute("SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",prepare=False)
+        paths=cursor.fetchmany(2)
+        if len(paths)!=1 or type(paths[0][0]) is not str:raise ValueError('Original catalog read caller path required')
+        original_path=paths[0][0]
+        cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+        if cursor.fetchmany(2)!=[('pg_catalog, pg_temp',)]:raise ValueError('Pinned catalog read path required')
         guard(cursor)
         cursor.execute('LOCK TABLE ONLY truss.object IN SHARE MODE NOWAIT',prepare=False)
         if capture_accepted_catalog(cursor,original_request)!=assessment:raise ValueError('Original current accepted catalog correspondence required')
@@ -102,10 +108,15 @@ def run_owned_catalog_resource_read(host,transaction,mapping,subject_key,*,fact_
         result=subprocess.run(['/opt/homebrew/bin/bun',str(prepared.tool),'--named-source'],cwd=ROOT,input=payload,capture_output=True,text=True,timeout=4)
         if result.returncode or len(result.stdout.encode())>65536:raise ValueError('Original accepted-catalog UMF evaluation refused')
         _pin_cursor(cursor)
+        cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+        if cursor.fetchmany(2)!=[('pg_catalog, pg_temp',)]:raise ValueError('Pinned late catalog read path required')
         guard(cursor)
         if capture_accepted_catalog(cursor,original_request)!=assessment:raise ValueError('Accepted catalog changed during owned evaluation')
         if any(hashlib.sha256(p.read_bytes()).digest()!=pin for p,pin in pins):raise ValueError('Original accepted-catalog evaluator sources changed')
-        return _read_owned_resource_receipt(result.stdout)
+        receipt=_read_owned_resource_receipt(result.stdout)
+        cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
+        if cursor.fetchmany(2)!=[(original_path,)]:raise ValueError('Original catalog read path restoration required')
+        return receipt
     if fact_relations is None:return host._run_operation(transaction,execute)
     from truss._psycopg_fact_cut import _FactRelationComparison,_prepare_fenced_fact_cut
     if (type(fact_relations) is not tuple or len(fact_relations)!=1

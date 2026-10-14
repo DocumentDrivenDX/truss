@@ -277,3 +277,12 @@ confirms own Subject, wrong-actor refusal and private map exclusion. Effective
 helper-owner reads are required; an owner-only ACL is insufficient. TLS source
 factory publication still passes. [Construction evidence](../../04-build/evidence/catalog-subject-installation-20261013/README.md)
 advances CH02/CH04 without complete authority/lifetime or multi-role read admission.
+
+### Registered native caller producer — 2026-10-13
+
+An explicit registered producer now checks original installed role/key comparisons
+under mandatory object/map/source cuts before Subject and after evaluation.
+Actual Alice/Bob/outsider sessions obey distinct Project memberships; external
+TLS consumes this producer for its original single caller. Exact source/status
+carriers and safe evaluator path are required. [Evidence](../../04-build/evidence/registered-callers-20261013/README.md)
+advances CH02/CH04 without complete issuer/lifetime or backend qualification.

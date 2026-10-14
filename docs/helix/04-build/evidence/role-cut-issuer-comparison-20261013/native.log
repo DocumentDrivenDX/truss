@@ -1,0 +1,7 @@
+test_role_cut_issuer_definition_and_acl_drift_refuse_before_call (test_security_registered_callers_native.RegisteredCallersNativeTests.test_role_cut_issuer_definition_and_acl_drift_refuse_before_call)
+@covers US-056-AC9; installed original issuer comparison. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 19.388s
+
+OK
