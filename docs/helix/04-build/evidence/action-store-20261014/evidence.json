@@ -1,0 +1,22 @@
+{
+  "scope": "Original shared action-store registration, commit, reopen, exact retry and public products workflow; authority false; no protected bulk admission",
+  "runtime": "pgserver-pg18 18.6.1 / PostgreSQL 18.6",
+  "sourceSha256": {
+    "packages/python/src/truss/_action_store.py": "efbfd91bf3af1bbe08551024e267f88f2801d0d9721dedf8158e2a25035db9a2",
+    "packages/python/src/truss/_security_bootstrap/action-store-storage.sql": "3b699c0d800da79207f48230a7fef8f1b3252efd0d531ecd7a0a05be5bf199d8",
+    "packages/python/src/truss/_security_bootstrap/action-store-issuer.sql": "7181f92898912785300bb4984f41a275287e982c67ca3fde1da90fd5735d520b",
+    "scripts/build-action-store.ts": "1872762a001c47c49b6c6ecae8ae12927f2a24360287a8fbb2a3e4fcf6404984",
+    "scripts/export-products-native-binding.py": "000a865178950808e25c932cff3bac9b3c6c689074489940881798ba31098f39",
+    "packages/python/tests/test_action_store_native.py": "ec87b58c75942ce757d579a814d90e56e3c7f1f88195dc98cac121fe088c6ea2"
+  },
+  "artifactsSha256": {
+    "native-runtime-manifest.json": "aada6da87a2ff1cf522f846d463ce1ae3d883bb88d435de6f9c8ca2d2263daa6",
+    "accepted-document.json": "b7f8ad91d22eeae35d9c7a966090d9120a2f436c84e29a6ba56d5979a6b712b5",
+    "original-demo-model.json": "ae5195095c14de847f97148418980683a7a2e3dcfd85a65bf3d2733fb6048795",
+    "native-query-bundle.json": "2afa3ec2b964134fcc71b79fa894ef97e74cbbb3f487c37e8e2f247d5d378d79",
+    "original-prepared-acceptance.json": "82de724c3eef3a2ed934c5bf483a85b06ea2bbdf3ea76fd958050123a162a6d1",
+    "native-binding.json": "912d607173a5460d19319945d9b5388c5d80d2f496a3039cdc7c52ae0fea9947",
+    "receipt.json": "1b2506e33561ac419311c102bc06d8502b478bba1f53a3ab4f16b7199b87a19a"
+  },
+  "astraUltraReview": "Approved scoped component; no protected action or bulk admission claim"
+}

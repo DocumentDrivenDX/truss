@@ -18,8 +18,8 @@ from truss.groups import AuthoredValue,CreateObject,RootlessOwnership,GroupSucce
 from truss.catalog_runtime import _release,_pin_cursor
 
 
-def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storage=False):
-    source_epoch=None;seal_storage=None
+def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storage=False,register_action_store=False):
+    source_epoch=None;seal_storage=None;action_store=None
     output=output.resolve()
     if output.exists() and any(output.iterdir()):raise ValueError('New empty output directory required')
     output.mkdir(parents=True,exist_ok=True)
@@ -62,6 +62,29 @@ def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storag
                             cut=source_epoch.comparison
                             if cursor.fetchmany(2)!=[(cut.installation,cut.epoch,cut.incarnation,cut.profile,cut.evidence)]:raise ValueError('Committed original metadata epoch readback required')
                         success(assembly._host._run_operation(tx,verify_epoch))
+                if register_action_store:
+                    from truss._action_store import register_action_store_in_transaction,observe_action_store_in_transaction,verify_action_store_context_with_cursor,ActionStoreObservation
+                    from truss import Error
+                    with transaction(admin) as (assembly,tx):
+                        pending_store=success(register_action_store_in_transaction(assembly._host,tx,tenant='products-tenant',registration_key=b'original-products-store',executor_roles=('products_person',)))
+                        before_commit=observe_action_store_in_transaction(assembly._host,tx,registration_key=b'original-products-store')
+                        if not isinstance(before_commit,Error):raise ValueError('Uncommitted store cannot become issued context')
+                    with transaction(person) as (assembly,tx):
+                        action_store=success(observe_action_store_in_transaction(assembly._host,tx,registration_key=b'original-products-store'))
+                        if not isinstance(action_store,ActionStoreObservation) or not action_store.binding_matches or action_store.receipt_bytes!=pending_store.receipt_bytes:raise ValueError('Original committed store readback required')
+                        success(assembly._host._run_operation(tx,lambda cursor,observed:verify_action_store_context_with_cursor(cursor,action_store)))
+                    with transaction(admin) as (assembly,tx):
+                        replayed_store=success(register_action_store_in_transaction(assembly._host,tx,tenant='products-tenant',registration_key=b'original-products-store',executor_roles=('products_person',)))
+                        if replayed_store.receipt_bytes!=pending_store.receipt_bytes:raise ValueError('Registration retry must preserve original namespace')
+                        if not isinstance(register_action_store_in_transaction(assembly._host,tx,tenant='products-tenant',registration_key=b'new-store-key',executor_roles=('products_person',)),Error):raise ValueError('Different key must not replace original logical store')
+                    with psycopg.connect(**dict(params,user='products_person'),autocommit=True,options='-c statement_timeout=10000') as reopened:
+                        with transaction(reopened) as (assembly,tx):
+                            again=success(observe_action_store_in_transaction(assembly._host,tx,registration_key=b'original-products-store'))
+                            if again!=action_store:raise ValueError('Original store identity must survive connection reopen')
+                    for query in ('SELECT * FROM truss.action_store_registration',"INSERT INTO truss.action_store_registration(singleton) VALUES(true)","SELECT truss.register_action_store_original('x'::bytea,'x'::bytea,ARRAY[]::oid[],'x','x'::bytea)"):
+                        try:person.execute(query)
+                        except psycopg.errors.InsufficientPrivilege:pass
+                        else:raise ValueError('Ordinary caller cannot forge or issue a store')
                 if install_seal_storage:
                     from truss._preparation_seal_installation import bootstrap_preparation_seal_storage_in_transaction,verify_preparation_seal_storage_with_cursor
                     with transaction(admin) as (assembly,tx):
@@ -111,6 +134,8 @@ def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storag
         report['metadataSourceEpoch']={'installation':cut.installation,'epoch':cut.epoch,'incarnation':cut.incarnation,'profile':json.loads(cut.profile),'evidence':json.loads(cut.evidence),'securityReady':False,'scope':'Committed catalog metadata and original runtime source only; not authority or bulk execution.'}
     if seal_storage is not None:
         report['sealStorage']={'installation':seal_storage.installation_id,'sourceSha256':seal_storage.source_sha256,'tableOid':seal_storage.table_oid,'sequenceOid':seal_storage.sequence_oid,'securityReady':False,'scope':'Committed private UMF-exported storage only; no seal writer or authority. Ordinary read/write/sequence usage unavailable.'}
+    if action_store is not None:
+        report['actionStore']={'receiptHex':action_store.receipt_bytes.hex(),'bindingCorrespondence':action_store.binding_correspondence,'authority':False,'scope':'Committed original shared store registration and reopen/retry; not authenticated action, permit or bulk execution.'}
     (output/'receipt.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
 
@@ -119,5 +144,6 @@ if __name__=='__main__':
     parser.add_argument('model',type=Path);parser.add_argument('output',type=Path)
     parser.add_argument('--bun',default='bun')
     parser.add_argument('--bootstrap-source-epoch',action='store_true')
-    parser.add_argument('--install-seal-storage',action='store_true');args=parser.parse_args()
-    run(args.model,args.output,args.bun,bootstrap_source_epoch=args.bootstrap_source_epoch,install_seal_storage=args.install_seal_storage)
+    parser.add_argument('--install-seal-storage',action='store_true')
+    parser.add_argument('--register-action-store',action='store_true');args=parser.parse_args()
+    run(args.model,args.output,args.bun,bootstrap_source_epoch=args.bootstrap_source_epoch,install_seal_storage=args.install_seal_storage,register_action_store=args.register_action_store)
