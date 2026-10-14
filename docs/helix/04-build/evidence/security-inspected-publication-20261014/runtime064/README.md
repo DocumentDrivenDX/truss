@@ -1,0 +1,5 @@
+# Protected direct publication replay on runtime0.64
+
+After preserving concurrent recursive-container runtime changes, the existing full selected ontology fixture passes1/42.505s. Inspected full/reduced/empty query publication, source/epoch/profile drift refusals, withheld-result corruption refusal, streaming rejection, old-snapshot revocation/fresh-read/recovery, and native role/session-authorization denial remain exercised. Boundary checks pass1072 imports. Exact source/runtime hashes, terminal log and observations are retained.
+
+This is replay of the six-Record scalar ontology and existing private buffered candidate. Recursive-field security, general field/storage/key domains, relational/aggregate operations, public profile activation, complete authority/lifecycle closure and all132 original backend acceptance cases remain required. Additional Astra review remains unavailable due reviewer usage limit.

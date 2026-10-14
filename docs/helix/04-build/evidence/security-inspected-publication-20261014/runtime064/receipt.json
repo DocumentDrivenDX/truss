@@ -1,0 +1,12 @@
+{
+  "result": "native1/42.505s passes",
+  "baseline": "edfff8759fe758674baecf547abe9d957e792aef",
+  "runtime": "0.64",
+  "sourceSha256": {
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "2faa603b5229bb0d9d843597a46452e3b1e52bb2e664e69d859138450b23ffce",
+    "scripts/security_ontology_guarded_read.py": "e53a93268da9063153bbf6cd483c03fe5edf520cc53b40c53a2d6b675808dcd0",
+    "scripts/security_ontology_native_subject_read.py": "99b41f6bfa84804a12c3abc5fa205092747d7b83f4c57d4cd2f267e42e839fa3",
+    "packages/python/tests/test_security_ontology_edges_native.py": "2bc0395b14d176ca9bfbb2fb21d7c2815bea9e49c1d21f6ce83e1cefcd8d3a25"
+  },
+  "scope": "Replay of selected scalar ontology/direct guarded publication with role/source/epoch/revocation/inspection controls on merged runtime064; no recursive-field security, wider query support or full132 acceptance qualification."
+}
