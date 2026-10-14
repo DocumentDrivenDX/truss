@@ -1,0 +1,7 @@
+test_historical_output_and_archive_cannot_authorize_relationship_source (test_security_relationship_source.RelationshipSourceTests.test_historical_output_and_archive_cannot_authorize_relationship_source) ... ok
+test_original_sources_and_protocol_separation (test_security_relational_source.RelationalSourceTests.test_original_sources_and_protocol_separation) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.947s
+
+OK
