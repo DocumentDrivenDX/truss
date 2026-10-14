@@ -1,4 +1,31 @@
 -- Pure stock-PostgreSQL exact numeric input domain, never typmod coercion.
+-- Explicit UMF CONTRACT-065 instant recipe; retain original cells/parameter text.
+CREATE FUNCTION truss.query_timestamp_instant_key(token text,profile text) RETURNS jsonb
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE calendar date;whole_seconds bigint;offset_text text;offset_minutes int:=0;fraction text;
+BEGIN
+ IF profile IS DISTINCT FROM 'umf-rfc3339-exact-instant/1.0.0' THEN
+  RAISE EXCEPTION 'selected exact instant profile required' USING ERRCODE='22023';END IF;
+ IF token IS NULL THEN RETURN NULL;END IF;
+ IF octet_length(token)>1048576 OR token !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-9]{2}([.][0-9]+)?([Zz]|[+-][0-9]{2}:[0-9]{2})$'
+  OR substring(token,1,4)::int=0 OR substring(token,12,2)::int>23 OR substring(token,15,2)::int>59 OR substring(token,18,2)::int>59 THEN
+  RAISE EXCEPTION 'selected exact instant token required' USING ERRCODE='22023';END IF;
+ calendar:=make_date(substring(token,1,4)::int,substring(token,6,2)::int,substring(token,9,2)::int);
+ IF lower(right(token,1))<>'z' THEN
+  offset_text:=right(token,6);
+  IF substring(offset_text,2,2)::int>23 OR substring(offset_text,5,2)::int>59 THEN
+   RAISE EXCEPTION 'selected exact instant offset required' USING ERRCODE='22023';END IF;
+  offset_minutes:=(substring(offset_text,2,2)::int*60+substring(offset_text,5,2)::int)
+   * CASE WHEN left(offset_text,1)='-' THEN -1 ELSE 1 END;
+ END IF;
+ whole_seconds:=(calendar-DATE '1970-01-01')::bigint*86400
+  +substring(token,12,2)::int*3600+substring(token,15,2)::int*60+substring(token,18,2)::int-offset_minutes*60;
+ fraction:=CASE WHEN substring(token,20,1)='.' THEN substring(token,21,length(token)-20-CASE WHEN lower(right(token,1))='z' THEN 1 ELSE 6 END) ELSE '' END;
+ RETURN jsonb_build_array(whole_seconds::text,rtrim(fraction,'0'));
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.query_timestamp_instant_key(text,text) FROM PUBLIC;
+
 CREATE FUNCTION truss.query_numeric_value(token text,family text) RETURNS boolean
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE mantissa text;exponent_text text;exponent_value int:=0;fraction_length int;coefficient text;scale_value int;magnitude int;
@@ -36,7 +63,7 @@ BEGIN
  IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.4'
  OR binding->>'schema' IS DISTINCT FROM 'truss' OR binding->>'installationId' IS DISTINCT FROM installation.installation_id::text
  OR binding->>'releaseId' IS DISTINCT FROM installation.release_id OR binding->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.58-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+ OR installation.release_id<>'truss-catalog-runtime/0.59-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
  OR binding->>'maximumResultRows' IS NULL OR (binding->>'maximumResultRows')::int NOT BETWEEN 1 AND 10000 OR binding->>'maximumScanRows' IS NULL OR binding->>'maximumBytes' IS NULL OR (binding->>'maximumScanRows')::int NOT BETWEEN 1 AND 10000 OR (binding->>'maximumBytes')::int NOT BETWEEN 1 AND 16777216
  OR octet_length(binding::text)>4194304 OR jsonb_typeof(binding->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'documents') NOT BETWEEN 1 AND 32
  OR jsonb_typeof(binding->'relationships') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'relationships')>1024
