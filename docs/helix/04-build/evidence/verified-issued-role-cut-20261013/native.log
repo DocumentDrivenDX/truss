@@ -1,0 +1,11 @@
+test_ordinary_caller_uses_fixed_role_lock_issuer_without_catalog_write (test_security_registered_callers_native.RegisteredCallersNativeTests.test_ordinary_caller_uses_fixed_role_lock_issuer_without_catalog_write)
+@covers US-056-AC9; original fixed definer lock issuer, not complete admission. ... ok
+test_ordinary_issued_cut_refuses_public_grant_before_acquisition (test_security_registered_callers_native.RegisteredCallersNativeTests.test_ordinary_issued_cut_refuses_public_grant_before_acquisition)
+@covers US-056-AC9; ordinary verified acquisition rejects broad issuer ACL. ... ok
+test_role_catalog_cut_survives_receiver_until_executor_settlement (test_security_registered_callers_native.RegisteredCallersNativeTests.test_role_catalog_cut_survives_receiver_until_executor_settlement)
+@covers US-056-AC9; selected dual catalog lock publication lifetime. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 90.729s
+
+OK

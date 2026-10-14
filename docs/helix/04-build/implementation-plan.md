@@ -7907,3 +7907,7 @@ Original native registered-role-catalog-cut.sql defines a no-input, pinned-path 
 ### Source-pinned role issuer native comparison — 2026-10-13
 
 The Python package now carries byte-identical original role-cut SQL. verify_role_catalog_cut_issuer_with_cursor checks its SHA, distinct bounded expected OIDs, exact native routine attributes/body/config, privileged owner and exact two direct EXECUTE ACL rows. Original positive and PUBLIC/INVOKER/path/volatility drift controls pass1/19.388s. [Evidence](evidence/role-cut-issuer-comparison-20261013/receipt.json) qualifies trusted expected identity custody and held DDL/source cut as premises; authenticated installer, owner lifetime and ordinary producer integration remain open. No required backend case is promoted.
+
+### Verified issued role-cut acquisition — 2026-10-13
+
+The issued acquisition verifies original native helper, exact CURRENT_USER OID, fixed no-input call, VOID descriptor/value, current-backend held locks and late original helper readback. Native ordinary caller, broad PUBLIC refusal before any catalog lock, and direct producer lifetime regression pass3/90.729s. [Evidence](evidence/verified-issued-role-cut-20261013/receipt.json) separates source-pinned Astra review from terminal native results. Original expected identity custody and held DDL/source cut remain premises; authenticated installer and full ordinary producer permissions remain open. No acceptance-case promotion.

@@ -140,6 +140,10 @@ def verify_registered_catalog_subjects_with_cursor(cursor,subjects,source):
 def acquire_registered_role_catalog_cut_with_cursor(cursor):
  """Privileged cluster-wide cut held by caller transaction; no issuer admission."""
  cursor.execute('LOCK TABLE pg_catalog.pg_authid,pg_catalog.pg_auth_members IN SHARE MODE NOWAIT',prepare=False)
+ verify_held_registered_role_catalog_cut_with_cursor(cursor)
+
+
+def verify_held_registered_role_catalog_cut_with_cursor(cursor):
  locks=_text_rows(cursor,"SELECT l.relation::pg_catalog.text,l.mode::pg_catalog.text,l.granted::pg_catalog.text FROM pg_catalog.pg_locks l WHERE l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.locktype OPERATOR(pg_catalog.=) 'relation' AND l.database OPERATOR(pg_catalog.=) 0::pg_catalog.oid AND l.relation OPERATOR(pg_catalog.=) ANY(ARRAY['pg_catalog.pg_authid'::pg_catalog.regclass::pg_catalog.oid,'pg_catalog.pg_auth_members'::pg_catalog.regclass::pg_catalog.oid]) AND l.mode OPERATOR(pg_catalog.=) 'ShareLock' ORDER BY l.relation",limit=2)
  expected=_text_rows(cursor,"SELECT oid::pg_catalog.text FROM pg_catalog.pg_class WHERE oid OPERATOR(pg_catalog.=) ANY(ARRAY['pg_catalog.pg_authid'::pg_catalog.regclass::pg_catalog.oid,'pg_catalog.pg_auth_members'::pg_catalog.regclass::pg_catalog.oid]) ORDER BY oid",limit=2)
  if len(expected)!=2 or locks!=[(row[0],'ShareLock','true') for row in expected]:raise ValueError('Original held shared role catalog cut required')
@@ -157,3 +161,14 @@ def verify_role_catalog_cut_issuer_with_cursor(cursor,*,owner_oid,caller_oid):
  if owner!=[('true',)]:raise ValueError('Original privileged role cut issuer owner required')
  grants=_text_rows(cursor,"SELECT a.grantee::pg_catalog.text,a.grantor::pg_catalog.text,a.privilege_type::pg_catalog.text,a.is_grantable::pg_catalog.text FROM pg_catalog.pg_proc p CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a WHERE p.oid OPERATOR(pg_catalog.=) 'truss.acquire_registered_role_catalog_cut()'::pg_catalog.regprocedure ORDER BY a.grantee,a.grantor,a.privilege_type,a.is_grantable",limit=2)
  if grants!=sorted([(str(owner_oid),str(owner_oid),'EXECUTE','false'),(str(caller_oid),str(owner_oid),'EXECUTE','false')],key=lambda r:int(r[0])):raise ValueError('Exact private role cut issuer ACL required')
+
+
+def acquire_issued_registered_role_catalog_cut_with_cursor(cursor,*,owner_oid,caller_oid):
+ """Verified fixed issuer; original owner/caller custody and held DDL cut required."""
+ verify_role_catalog_cut_issuer_with_cursor(cursor,owner_oid=owner_oid,caller_oid=caller_oid)
+ current=_text_rows(cursor,'SELECT oid::pg_catalog.text FROM pg_catalog.pg_roles WHERE rolname OPERATOR(pg_catalog.=) CURRENT_USER',limit=1)
+ if current!=[(str(caller_oid),)]:raise ValueError('Original native role cut executor required')
+ cursor.execute('SELECT truss.acquire_registered_role_catalog_cut()',prepare=False,binary=False)
+ if cursor.description is None or len(cursor.description)!=1 or cursor.description[0].type_code!=2278 or cursor.fetchmany(2)!=[('',)]:raise ValueError('Exact native role cut issuer VOID result required')
+ verify_held_registered_role_catalog_cut_with_cursor(cursor)
+ verify_role_catalog_cut_issuer_with_cursor(cursor,owner_oid=owner_oid,caller_oid=caller_oid)

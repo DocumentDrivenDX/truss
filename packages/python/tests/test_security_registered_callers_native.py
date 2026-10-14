@@ -131,7 +131,9 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
   self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_registered_role_catalog_cut() TO consumer')
   self.host.detach();self.admin.commit()
   self.assertEqual(c.execute("SELECT pg_catalog.has_table_privilege('pg_catalog.pg_authid','UPDATE'),pg_catalog.has_table_privilege('pg_catalog.pg_auth_members','UPDATE')").fetchone(),(False,False))
-  c.execute('SELECT truss.acquire_registered_role_catalog_cut()')
+  from truss._security_catalog_subject_installation import acquire_issued_registered_role_catalog_cut_with_cursor
+  owner,caller=self.admin.execute("SELECT (SELECT oid FROM pg_catalog.pg_roles WHERE rolname=CURRENT_USER),(SELECT oid FROM pg_catalog.pg_roles WHERE rolname='consumer')").fetchone()
+  with c.cursor() as cursor:acquire_issued_registered_role_catalog_cut_with_cursor(cursor,owner_oid=owner,caller_oid=caller)
   self.assertEqual(c.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND database=0 AND granted AND mode='ShareLock' AND relation IN ('pg_catalog.pg_authid'::pg_catalog.regclass,'pg_catalog.pg_auth_members'::pg_catalog.regclass)").fetchone(),(2,))
   with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
    with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(self.bob)))
@@ -160,3 +162,15 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
      with self.assertRaises(ValueError):verify_role_catalog_cut_issuer_with_cursor(cursor,owner_oid=owner,caller_oid=caller)
     finally:self.admin.execute('ROLLBACK TO SAVEPOINT issuer_drift');self.admin.execute('RELEASE SAVEPOINT issuer_drift')
    verify_role_catalog_cut_issuer_with_cursor(cursor,owner_oid=owner,caller_oid=caller)
+
+ def test_ordinary_issued_cut_refuses_public_grant_before_acquisition(self):
+  """@covers US-056-AC9; ordinary verified acquisition rejects broad issuer ACL."""
+  from truss._security_catalog_subject_installation import acquire_issued_registered_role_catalog_cut_with_cursor
+  mapping,c,h,t,selection,inspector,relations,cut=self.source_setup()
+  self.admin.execute((source.ROOT/'packages/postgresql/native/registered-role-catalog-cut.sql').read_text())
+  self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_registered_role_catalog_cut() TO consumer,PUBLIC')
+  owner,caller=self.admin.execute("SELECT (SELECT oid FROM pg_catalog.pg_roles WHERE rolname=CURRENT_USER),(SELECT oid FROM pg_catalog.pg_roles WHERE rolname='consumer')").fetchone()
+  self.host.detach();self.admin.commit()
+  with c.cursor() as cursor:
+   with self.assertRaises(ValueError):acquire_issued_registered_role_catalog_cut_with_cursor(cursor,owner_oid=owner,caller_oid=caller)
+  self.assertEqual(c.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND database=0 AND granted AND mode='ShareLock' AND relation IN ('pg_catalog.pg_authid'::pg_catalog.regclass,'pg_catalog.pg_auth_members'::pg_catalog.regclass)").fetchone(),(0,))
