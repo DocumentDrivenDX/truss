@@ -1,0 +1,49 @@
+{
+  "status": "conditional-integer-codec-passed",
+  "solver": "4.15.4",
+  "queries": [
+    {
+      "id": "exact-integer-quotient-reconstructs-full-xid",
+      "result": "unsat",
+      "expected": "unsat",
+      "model": null,
+      "sha256": "c3d9ae08cfcc6c40d9e2f3abc7d7beab51fd49a83f3b0761479e554a2aeb25d5"
+    },
+    {
+      "id": "encoded-pieces-fit-native-int32",
+      "result": "unsat",
+      "expected": "unsat",
+      "model": null,
+      "sha256": "74815bcc147b2f31f2571dfe96253064a5dc19b6fe281b916302e92ec30e0e01"
+    },
+    {
+      "id": "signed-int32-to-oid-roundtrip",
+      "result": "unsat",
+      "expected": "unsat",
+      "model": null,
+      "sha256": "199c5950a5c379f227309ce48546e6ee08342079835d8cc1112268f145eabaf8"
+    },
+    {
+      "id": "complete-native-marker-tuple-injective",
+      "result": "unsat",
+      "expected": "unsat",
+      "model": null,
+      "sha256": "0730164a5d394e608efbf7205645ee349fa7388ef4a7058e70ec9bec5d29f342"
+    },
+    {
+      "id": "discarded-high-marker-allows-foreign-xid",
+      "result": "sat",
+      "expected": "sat",
+      "model": "[original_xid = 4294967296, supplied_xid = 8589934592]",
+      "sha256": "d2e69300bb3396231ea2d7b828fb514a331ab29e038bb15837996106c067c3e6"
+    }
+  ],
+  "sourceSha256": "8e68895bf20bea82c5735f796b762d1fad03dcfa2ad0223a4497431b1ed6e3f2",
+  "scope": "All nonzero unsigned64 xids under exact integer Euclidean quotient/modulo, signed32 encoding and unsigned OID reconstruction.",
+  "limits": [
+    "Models exact integer quotient; PostgreSQL NUMERIC / rounding is deliberately not this operation.",
+    "Native div/mod implementation and lock representation are premises, not refined by these SMT formulas.",
+    "Native maximum-xid failing division control and repaired div boundary vectors are retained separately.",
+    "No anchor, peer, authority, guarded issuer, selector/seal or backend admission theorem."
+  ]
+}

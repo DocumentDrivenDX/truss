@@ -142,3 +142,12 @@ does **not** establish original anchor/attempt/coordinator incarnation, historic
 single issuance, current authority or scope. Only the original guarded issuer
 and protected consumer may compose those obligations; a true predicate or copied
 Python comparison cannot authorize selection or seal.
+
+The [integer codec proof](../../04-build/evidence/security-preparation-integer-xid-formal-20261014/receipt.json)
+adds four UNSAT safety checks and one SAT discarded-high-marker control over all
+nonzero unsigned 64-bit inputs: exact quotient/modulo reconstruction, signed
+int32 bounds, unsigned OID round-trip and complete marker injectivity. These
+formulas model integer division, not rounded PostgreSQL NUMERIC `/`. Native
+`div`/`mod` and lock representation remain implementation premises, with separate
+finite native witnesses. No complete SQL refinement or guarded authority theorem
+is inferred from these results.
