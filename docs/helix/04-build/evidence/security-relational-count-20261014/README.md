@@ -1,0 +1,5 @@
+# Native authorized-population COUNT
+
+The actual paired native fixture compiles original SELECT COUNT(*) AS n FROM Resource r on the held source capsule, derives actual Subject locator from captured typed Staff/key cells, runs original parameter/operand codecs, capture, native checks, aggregate SQL and0.2 aggregate result inspection. Its complete computed integer cell is compared independently to the shared semantic oracle eligible resource row count:1 for Bob and0 for revoked Alice/unassigned Outsider. Existing0.2 filtered publication and0.1 lifecycle/role controls still pass in the same run.
+
+Native1/48.956s on runtime0.64 passes. This contributes to US-056-AC2/truss.B03 selected aggregate execution/inspection, not aggregate publication, group/order/page/joins/SUM range/nullability/arithmetic or all132 qualification. Trusted compiler/source/installer/host/routine/DDL custody remain premises. Owner is adding explicit before/after operand-check stages; current helper runs all checks after operand validation, so group SQL is not early, but explicit staged ordering remains required in the next producer version.

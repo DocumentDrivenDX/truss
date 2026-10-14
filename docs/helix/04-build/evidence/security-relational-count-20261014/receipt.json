@@ -1,0 +1,10 @@
+{
+  "result": "native1/48.956s passes",
+  "runtime": "0.64",
+  "testSourceSha256": "6603d2ae5ed20eb8d9413951dc3833be8ce21cf5824336f501e058ae4546ee2b",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC2"
+  ],
+  "plannedCaseContribution": "truss.B03",
+  "scope": "Original0.2 COUNT(*) execution/inspection under genuine existing cuts yields independently expected eligible row count1 forBob and0 forrevoked/unassigned; noaggregatepublication/general arithmetic/full132promotion."
+}

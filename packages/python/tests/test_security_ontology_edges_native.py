@@ -689,6 +689,12 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         matching=execute_relational_program(cursor,matching_request,matching_output,locators[0],checker,inspector)
                                         expected_cells=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
                                         self.assertEqual(json.loads(matching['batch'])['rows'],expected_cells)
+                                        count_request=_original_request(physical,before[0],'SELECT COUNT(*) AS n FROM Resource r')
+                                        count_output=original_run([relational_binary],input=count_request,capture_output=True,check=True,timeout=15).stdout
+                                        self.assertEqual(capture_relational_source_comparison(count_request,count_output),guarded_source)
+                                        counted=execute_relational_program(cursor,count_request,count_output,locators[0],checker,inspector)
+                                        count_cells=json.loads(counted['batch'])['rows']
+                                        self.assertEqual(count_cells,[[{'outcomeId':'computed','disposition':'computed','value':{'integerToken':str(len(semantic['rows']))}}]])
                                         return {'request':matching_request.decode(),'output':matching_output.decode(),'operandBatch':matching['operandBatch'].decode(),'batch':matching['batch'].decode(),'resultCheck':matching['inspection'].decode()}
                                     selected_compiler=capture_then_direct
                                 if name=='BobGuardedReceiptSwap':
