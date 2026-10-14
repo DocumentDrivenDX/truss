@@ -14,6 +14,7 @@ from .catalog_runtime import _pin_cursor
 from ._installation_privileges import installation_administrator_with_cursor
 from ._security_catalog_subject_installation import _text_rows
 from ._security_catalog_assessment import capture_accepted_catalog
+from ._security_relationship_source import PreparedRelationshipSecuritySource,snapshot_relationship_security_source
 from ._security_graph_source import snapshot_graph_security_source,acquire_graph_source_catalog_cut
 from ._owner_evidence_json import decode_owner_evidence_json
 
@@ -34,6 +35,11 @@ def _source():
  raw=files('truss').joinpath('_security_bootstrap','graph-subject.sql').read_bytes()
  if sha256(raw).hexdigest()!=_DIGEST:raise ValueError('Original graph Subject issuer source required')
  return raw
+
+
+def _snapshot_subject_source(source):
+ if type(source) is PreparedRelationshipSecuritySource:return snapshot_relationship_security_source(source)
+ return snapshot_graph_security_source(source)
 
 
 def _recipe(source):
@@ -74,7 +80,7 @@ def verify_graph_subject_issuer_with_cursor(cursor,subjects):
 def bootstrap_graph_subjects_in_transaction(host,transaction,*,source,bindings):
  if type(host) is not PsycopgHost:return Error(ExecutionFailure('execution_obligation','Original graph Subject installation host required'))
  try:
-  source=snapshot_graph_security_source(source);pin,type_id,property_id,revision,request=_recipe(source);raw=_source()
+  source=_snapshot_subject_source(source);pin,type_id,property_id,revision,request=_recipe(source);raw=_source()
   if type(bindings) is not tuple or not 1<=len(bindings)<=256 or any(type(b) is not tuple or len(b)!=2 or any(type(v) is not str or not v or '\0' in v for v in b) or len(b[0].encode())>63 or len(b[1].encode())>4096 for b in bindings) or len({b[0] for b in bindings})!=len(bindings):raise ValueError('Original bounded graph Subject bindings required')
   bindings=tuple((role,key) for role,key in bindings)
  except (ValueError,TypeError,KeyError,AttributeError,UnicodeError):return Error(ExecutionFailure('execution_obligation','Original bounded graph Subject source required'))
@@ -151,7 +157,7 @@ def verify_registered_graph_subjects_with_cursor(cursor,subjects,*,caller_pid,so
  verify_subject_home_write_denial(cursor,subjects.bindings,include_profile=True)
  homes=_text_rows(cursor,"SELECT c.relowner::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,c.relrowsecurity::pg_catalog.text,c.relforcerowsecurity::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid)::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_locks l WHERE l.pid OPERATOR(pg_catalog.=) %s AND l.locktype OPERATOR(pg_catalog.=) 'relation' AND l.database OPERATOR(pg_catalog.=) (SELECT oid FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database()) AND l.relation OPERATOR(pg_catalog.=) c.oid AND l.mode OPERATOR(pg_catalog.=) 'ShareLock' AND l.granted)::pg_catalog.text FROM pg_catalog.pg_class c WHERE c.oid OPERATOR(pg_catalog.=) 'truss.catalog_graph_subject_profile'::pg_catalog.regclass",(caller_pid,),1)
  if homes!=[(str(subjects.owner_oid),'r','p','false','false','false','true')]:raise ValueError('Original held graph Subject profile required')
- source=snapshot_graph_security_source(source)
+ source=_snapshot_subject_source(source)
  pin,type_id,property_id,revision,request=_recipe(source)
  if subjects.profile_bytes!=derive_graph_subject_profile(source):raise ValueError('Original selected registered graph Subject source required')
  rows=_text_rows(cursor,"SELECT singleton::pg_catalog.text,installation_id::pg_catalog.text,native_revision::pg_catalog.text,type_id::pg_catalog.text,property_id::pg_catalog.text,document_id::pg_catalog.text,document_revision::pg_catalog.text,document_sha256::pg_catalog.text,module_id::pg_catalog.text,pg_catalog.encode(profile_bytes,'hex') FROM ONLY truss.catalog_graph_subject_profile",limit=1)
@@ -171,9 +177,9 @@ def read_own_graph_subject_with_cursor(cursor,subjects,identity):
 
 
 def derive_graph_subject_profile(source):
- source=snapshot_graph_security_source(source)
+ source=_snapshot_subject_source(source)
  pin,type_id,property_id,revision,request=_recipe(source)
- return json.dumps({'version':'truss.registered-graph-subject/0.1-candidate','physicalRequestSha256':sha256(source.original_request).hexdigest(),'acceptedCatalogSha256':sha256(source.accepted_catalog_assessment).hexdigest(),'graphBindingSha256':sha256(request['bindingJson'].encode()).hexdigest(),'ontologySha256':sha256(request['ontologyJson'].encode()).hexdigest(),'policySha256':sha256(request['policyJson'].encode()).hexdigest(),'physicalPin':pin,'nativeTypeId':str(type_id),'nativePropertyId':str(property_id)},sort_keys=True,separators=(',',':')).encode()
+ return json.dumps({'version':'truss.registered-relationship-subject/0.1-candidate' if type(source) is PreparedRelationshipSecuritySource else 'truss.registered-graph-subject/0.1-candidate','physicalRequestSha256':sha256(source.original_request).hexdigest(),'acceptedCatalogSha256':sha256(source.accepted_catalog_assessment).hexdigest(),'graphBindingSha256':sha256(request['bindingJson'].encode()).hexdigest(),'ontologySha256':sha256(request['ontologyJson'].encode()).hexdigest(),'policySha256':sha256(request['policyJson'].encode()).hexdigest(),'physicalPin':pin,'nativeTypeId':str(type_id),'nativePropertyId':str(property_id)},sort_keys=True,separators=(',',':')).encode()
 
 
 def verify_subject_home_write_denial(cursor,bindings,*,include_profile=False):

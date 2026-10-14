@@ -120,3 +120,89 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
    (out/'physical-document.json').write_text(json.dumps(physical,separators=(',',':'))+'\n')
    capture={'status':'native-installation-population-prerequisite-passed','securityReady':False,'serverVersion':self.admin.execute('SHOW server_version').fetchone()[0],'relationId':str(refs['ResourceRelatedResource'].relationship_id),'expectedEdges':expected,'observedEdges':observed,'objectIds':ids,'catalogRelations':[r[0] for r in self.admin.execute('SELECT pg_catalog.to_jsonb(r)::pg_catalog.text FROM truss.rel_def r ORDER BY rel_type_id').fetchall()],'nativeEdges':[r[0] for r in self.admin.execute('SELECT pg_catalog.to_jsonb(e)::pg_catalog.text FROM truss.edge e ORDER BY id').fetchall()]}
    (out/'native-capture.json').write_text(json.dumps(capture,indent=2)+'\n')
+  if os.environ.get('TRUSS_SECURITY_RELATIONSHIP_SOURCE_FACTORY'):
+   import subprocess
+   from hashlib import sha256
+   from dataclasses import replace
+   from psycopg import sql
+   from truss import Ok,Error,adopt_psycopg_host
+   from truss._security_catalog_assessment import capture_accepted_catalog
+   from truss._security_relationship_source import PreparedRelationshipSecuritySource
+   from truss._security_home_installation import bootstrap_security_homes_in_transaction
+   from truss._security_catalog_source_installation import bootstrap_catalog_source_marker_in_transaction,verify_catalog_source_archive_with_cursor
+   from truss._security_source_epoch_installation import bootstrap_source_epoch_infrastructure_in_transaction
+   from truss._security_catalog_source_epoch import issue_initial_catalog_source_epoch_in_transaction
+   from truss._psycopg_fact_cut import _FactRelationComparison,_FactColumnComparison
+   from security_relationship_request import prepare_relationship_request
+   binary=os.environ['TRUSS_SECURITY_RELATIONSHIP_COMPILER_BINARY']
+   physical_request=json.dumps({'modules':[{'pin':{'documentId':d.document_id,'revision':d.document_revision,'umfVersion':'0.8.0','sha256':sha256(d.content).hexdigest()},'documentJson':d.content.decode()} for d in self.documents]}).encode()
+   self.admin.execute('BEGIN');factory=adopt_psycopg_host(self.admin,operation_timeout_ms=30000);factory_tx=factory.adopt_transaction().value
+   self.addCleanup(factory.detach)
+   with self.admin.cursor() as cursor:assessment=capture_accepted_catalog(cursor,physical_request)
+   compiler_request=prepare_relationship_request(physical_request,assessment)
+   output=subprocess.run([binary],input=compiler_request,capture_output=True,check=True,timeout=15).stdout
+   profile=sha256(compiler_request).digest();guard=(self.installation.installation_id.encode(),profile,1)
+   selected=PreparedRelationshipSecuritySource(physical_request,assessment,compiler_request,output,guard)
+   homes=bootstrap_security_homes_in_transaction(factory,factory_tx,installation_identity=guard[0],authored_profile=profile,max_retained=8)
+   self.assertIsInstance(homes,Ok,str(factory._custody.last_attempt.error))
+   marked=bootstrap_catalog_source_marker_in_transaction(factory,factory_tx,selected)
+   self.assertIsInstance(marked,Ok,str(factory._custody.last_attempt.error))
+   self.assertIsInstance(bootstrap_catalog_source_marker_in_transaction(factory,factory_tx,selected),Error)
+   infrastructure=bootstrap_source_epoch_infrastructure_in_transaction(factory,factory_tx,installation_identity=guard[0])
+   self.assertIsInstance(infrastructure,Ok,str(factory._custody.last_attempt.error))
+   subjects=None
+   if os.environ.get('TRUSS_SECURITY_RELATIONSHIP_REGISTERED_SUBJECT'):
+    import uuid
+    from truss._security_graph_subject_installation import bootstrap_graph_subjects_in_transaction
+    self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.catalog_subject_map').fetchone(),(0,))
+    self.admin.execute('DROP TABLE truss.catalog_subject_map')
+    role_prefix='relationship_subject_'+uuid.uuid4().hex[:8]
+    roles={name:role_prefix+'_'+name.lower() for name in ('Alice','Bob','Outsider')}
+    for role in roles.values():self.admin.execute(sql.SQL('CREATE ROLE {} LOGIN NOINHERIT').format(sql.Identifier(role)))
+    registered=bootstrap_graph_subjects_in_transaction(factory,factory_tx,source=selected,bindings=tuple((role,name) for name,role in roles.items()))
+    self.assertIsInstance(registered,Ok,str(factory._custody.last_attempt.error));subjects=registered.value
+    self.assertIn(b'truss.registered-relationship-subject/0.1-candidate',subjects.profile_bytes)
+   else:
+    self.admin.execute(sql.SQL('ALTER TABLE truss.catalog_subject_map OWNER TO {}').format(sql.Identifier(self.installation.owner_role)))
+   fence=(root/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text();self.admin.execute(fence)
+   self.admin.execute(sql.SQL('ALTER FUNCTION truss.runtime_fence_authorization_fact_write() OWNER TO {}').format(sql.Identifier(self.installation.owner_role)))
+   facts=[]
+   for name in ('object','edge','catalog_subject_map'):
+    self.admin.execute(sql.SQL('CREATE TRIGGER fact_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON {} FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_authorization_fact_write()').format(sql.Identifier('truss',name)))
+    self.admin.execute(sql.SQL('ALTER TABLE {} ENABLE ALWAYS TRIGGER fact_write_fence').format(sql.Identifier('truss',name)))
+    oid,owner=self.admin.execute('SELECT oid,relowner FROM pg_catalog.pg_class WHERE oid=%s::pg_catalog.regclass',('truss.'+name,)).fetchone()
+    columns=self.admin.execute('SELECT attname,attnum,atttypid,atttypmod,attnotnull,attcollation,attgenerated,attidentity FROM pg_catalog.pg_attribute WHERE attrelid=%s AND attnum>0 AND NOT attisdropped ORDER BY attnum',(oid,)).fetchall()
+    facts.append(_FactRelationComparison('truss',name,oid,owner,fence.split('AS $$',1)[1].split('$$;',1)[0],tuple(_FactColumnComparison(*c) for c in columns)))
+   inputs=dict(mapping=selected,marker=marked.value,infrastructure=infrastructure.value,fact_relations=tuple(facts),subject_source=(root/'packages/python/src/truss/_security_bootstrap/graph-subject.sql').read_bytes())
+   self.admin.execute("CREATE TEMP TABLE relationship_factory_prior(value text);INSERT INTO relationship_factory_prior VALUES('kept');SAVEPOINT before_relationship_epoch")
+   issued=issue_initial_catalog_source_epoch_in_transaction(factory,factory_tx,**inputs)
+   self.assertIsInstance(issued,Ok,str(factory._custody.last_attempt.error))
+   comparison=issued.value.comparison
+   self.assertIn(b'truss-owned-relationship-source-profile/0.1-candidate',comparison.profile)
+   self.assertEqual(self.admin.execute('SELECT source_epoch,profile_bytes,evidence_bytes FROM truss.source_epoch_registry').fetchall(),[(comparison.epoch,comparison.profile,assessment)])
+   with self.admin.cursor() as cursor:verify_catalog_source_archive_with_cursor(cursor,selected,self.installation.installation_id)
+   self.assertIsInstance(issue_initial_catalog_source_epoch_in_transaction(factory,factory_tx,**inputs),Error)
+   self.admin.execute('ROLLBACK TO before_relationship_epoch')
+   self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),(0,))
+   self.assertEqual(self.admin.execute('TABLE relationship_factory_prior').fetchall(),[('kept',)])
+   stale=replace(selected,native_guard=(guard[0],profile,2))
+   self.assertIsInstance(issue_initial_catalog_source_epoch_in_transaction(factory,factory_tx,**{**inputs,'mapping':stale}),Error)
+   self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),(0,))
+   issued=issue_initial_catalog_source_epoch_in_transaction(factory,factory_tx,**inputs);self.assertIsInstance(issued,Ok,str(factory._custody.last_attempt.error))
+   if directory:
+    (out/'source-epoch-issuance.json').write_text(json.dumps({'securityReady':False,'profile':json.loads(issued.value.comparison.profile),'epoch':issued.value.comparison.epoch,'exactReadback':True,'reuseRefused':True,'rollbackKeepsPriorWork':True,'staleGuardNoEpoch':True,'freshSuccessorIssued':True,'scope':'Actual initial native source epoch registration only; ordinary Subject/read/publication admission remains separate'},indent=2)+'\n')
+   factory.detach()
+   if subjects is None:self.admin.rollback()
+   else:
+    self.admin.commit()
+    import psycopg
+    from truss._security_graph_subject_installation import read_own_graph_subject_with_cursor
+    observed=[]
+    for name,role in roles.items():
+     parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=role
+     with psycopg.connect(**parameters,autocommit=True) as ordinary:
+      identity=ordinary.execute('SELECT (SELECT oid FROM pg_catalog.pg_database WHERE datname=pg_catalog.current_database())::text,(SELECT oid FROM pg_catalog.pg_roles WHERE rolname=SESSION_USER)::text').fetchone()
+      with ordinary.cursor() as cursor:self.assertEqual(read_own_graph_subject_with_cursor(cursor,subjects,identity),name)
+      with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute('SELECT * FROM truss.catalog_subject_map')
+      observed.append({'subject':name,'ownNativeSession':True,'rawMapSelectDenied':True})
+    if directory:(out/'registered-subjects.json').write_text(json.dumps({'securityReady':False,'profile':json.loads(subjects.profile_bytes),'observations':observed,'scope':'Actual ordinary own-session metadata issuer only; protected Resource traversal/publication remains pending'},indent=2)+'\n')

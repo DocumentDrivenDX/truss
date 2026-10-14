@@ -1,0 +1,15 @@
+test_actual_authored_resource_relationship_and_population (test_security_public_relationship_native.PublicRelationshipNativeTests.test_actual_authored_resource_relationship_and_population) ... FAIL
+
+======================================================================
+FAIL: test_actual_authored_resource_relationship_and_population (test_security_public_relationship_native.PublicRelationshipNativeTests.test_actual_authored_resource_relationship_and_population)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_relationship_native.py", line 163, in test_actual_authored_resource_relationship_and_population
+    self.assertIsInstance(registered,Ok,str(factory._custody.last_attempt.error));subjects=registered.value
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Original ordinary graph Subject principal required
+
+----------------------------------------------------------------------
+Ran 1 test in 56.366s
+
+FAILED (failures=1)
