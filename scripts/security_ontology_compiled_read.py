@@ -122,8 +122,17 @@ def prepare_owned_graph_compiler(binary,result_binary,*,guarded=False,query_sql=
         for row in semantic['rows']:
             if len(row['output'])!=1 or row['output'][0]['disposition']!='withheld' or 'value' in row['output'][0]:
                 raise ValueError('Original semantic salary withholding required')
-            expected.append([{'outcomeId':'original','disposition':'original','value':{'string':row['key'][0]['string']}},
-                             {'outcomeId':'withheld','disposition':'withheld'}])
+            original_cells={'resourceId':{'outcomeId':'original','disposition':'original','value':{'string':row['key'][0]['string']}},'salary':{'outcomeId':'withheld','disposition':'withheld'}}
+            if guarded:
+                columns=query['resultContract']['columns']
+                if type(columns) is not list or not 1<=len(columns)<=100:raise ValueError('Bounded original guarded projection required')
+                projected=[]
+                for position,column in enumerate(columns,1):
+                    fields=column['sourceFields']
+                    if column['position']!=position or type(fields) is not list or len(fields)!=1 or fields[0] not in [dict(documentId='domain',module='m',element=f,revision='named-schema-1') for f in original_cells]:raise ValueError('Original supported semantic projection required')
+                    projected.append(original_cells[fields[0]['element']])
+                expected.append(projected)
+            else:expected.append([original_cells['resourceId'],original_cells['salary']])
         if sorted(json.dumps(r,sort_keys=True) for r in cells)!=sorted(json.dumps(r,sort_keys=True) for r in expected):
             raise ValueError('Original compiler projected bag differs from shared semantic oracle')
         batch=json.dumps({'version':'weft.security.cells/0.1.0','resultContractSha256':query['resultContractSha256'],'rows':cells},separators=(',',':'))

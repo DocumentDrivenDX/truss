@@ -1,0 +1,53 @@
+{
+  "observations": [
+    {
+      "principal": "Alice",
+      "resources": [],
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "Bob",
+      "resources": [
+        "RB"
+      ],
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "Outsider",
+      "resources": [],
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobGuarded",
+      "resources": [
+        "RB"
+      ],
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobGuardedId",
+      "resources": [
+        "RB"
+      ],
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobGuardedCorrupt",
+      "outcome": "guardedResultRefused",
+      "released": false
+    },
+    {
+      "principal": "BobPublicIssuer",
+      "outcome": "issuerAclRefused",
+      "released": false
+    }
+  ],
+  "epoch": "039cdf66-6491-4c4b-b951-5c0fcc24755c",
+  "securityReady": false,
+  "scope": "Actual own-session registered Subject + peer/role/source/fact/current epoch/compiler/result guarded buffered reads; complete native admission/lifetime and all132 remain pending."
+}

@@ -609,11 +609,11 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                         from truss._security_guarded_source import capture_guarded_source_comparison
                         guarded_source=capture_guarded_source_comparison(graph.native_dependencies,graph.guarded_response)
                     composed=[]
-                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('BobGuarded',['RB']),('BobGuardedCorrupt',None)) if guarded_binary else ()),('BobPublicIssuer',None)):
+                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None)) if guarded_binary else ()),('BobPublicIssuer',None)):
                         if name=='BobPublicIssuer':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.graph_subject_current() TO PUBLIC')
                         with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
                             private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
-                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Bob' if name in ('BobPublicIssuer','BobGuarded','BobGuardedCorrupt') else name]
+                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Bob' if name in ('BobPublicIssuer','BobGuarded','BobGuardedId','BobGuardedCorrupt') else name]
                             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                                 connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction().value;released=[]
                                 def receiver(raw):
@@ -621,7 +621,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         for table in ('catalog_subject_map','catalog_graph_subject_profile'):
                                             with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
                                     released.append(raw)
-                                selected_compiler=prepare_owned_graph_compiler(guarded_binary,str(Path(guarded_binary).with_name('security_guarded_result')),guarded=True,query_sql='SELECT q.resourceId, q.salary FROM Resource q',source_comparison=guarded_source) if name.startswith('BobGuarded') else native_compiler
+                                selected_compiler=prepare_owned_graph_compiler(guarded_binary,str(Path(guarded_binary).with_name('security_guarded_result')),guarded=True,query_sql=('SELECT q.resourceId FROM Resource q' if name=='BobGuardedId' else 'SELECT q.resourceId, q.salary FROM Resource q'),source_comparison=guarded_source) if name.startswith('BobGuarded') else native_compiler
                                 corruption=[]
                                 def corrupt_guarded_check(*args,**kwargs):
                                     if args[0][0]==str(Path(guarded_binary).with_name('security_guarded_result')):
