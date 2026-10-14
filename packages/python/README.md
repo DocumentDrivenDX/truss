@@ -30,11 +30,17 @@ future distributed changes receive a new package version.
 
 ## Next release candidate
 
-Alternate-key backfill over existing required scalar fields is being implemented.
-It will preserve existing key identities and pure-backfill object versions,
-produce exact tuples through UMF, and refuse duplicate candidates before changes.
-It is not callable or published yet. Newly rebound key components, existing-key
-changes and recursive rebinding remain unfinished.
+SDK26/native62 alternate-key backfill over existing required scalar fields is
+implemented and tested; its release workflow is running. It preserves existing
+key identities and pure-backfill object versions, produces exact UMF tuples,
+and refuses duplicates before changes.
+
+SDK27/native63 additionally registers a genuinely new required scalar field and
+its alternate key together using retained cells. Four basic UMF0.7/0.8 workflows
+and one populated local native62 upgrade pass, including lookup, query and
+post-commit history. Matching Weft28/backend33 is committed; publication remains
+pending. See the [report contract](../../docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md).
+Existing-key changes and recursive rebinding remain unfinished.
 
 ## Install the release
 
@@ -236,7 +242,7 @@ reported fields, not interchangeable IDs.
 
 Compatible evolution supports additional Records, optional scalar properties,
 relaxing non-key presence and widening independent relationship multiplicity or
-adding endpoints. Unchanged IDs/pins remain stable. Key backfill, retirement,
+adding endpoints. Unchanged IDs/pins remain stable. Candidate key-backfill support is described above. Retirement,
 removal, identity rebinding and structured changes are unsupported. Incompatible
 scalar/retained-name changes return typed rules and affected counts subject to
 current authority. New optional properties do not manufacture object updates.
