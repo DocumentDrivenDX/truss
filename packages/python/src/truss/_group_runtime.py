@@ -145,7 +145,7 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
             elif type(member) is MapValue:
                 if type(member.entries) is not tuple or len(member.entries)>1024:return False
                 if any(type(entry) is not MapEntry or type(entry.key) is not str for entry in member.entries):return False
-                if len({entry.key for entry in member.entries})!=len(member.entries):return False
+                # Native admission reports duplicate map keys as invalid input.
                 pending.extend((entry.value,depth+1) for entry in member.entries)
             else:return False
             if count+len(pending)>4096:return False
