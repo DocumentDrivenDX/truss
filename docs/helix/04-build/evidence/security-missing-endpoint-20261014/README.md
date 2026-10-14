@@ -1,0 +1,7 @@
+# Missing actual ontology endpoint refuses whole publication
+
+The full enabled PostgreSQL18.6/runtime0.65 native ontology test passes one test in 111.014 seconds. An excluded fixture administrator deletes the actual typed OwnershipProject edge from Bob's Ownership node to Project B, retaining the complete native row. BobMissingEndpoint uses a genuine ordinary Bob connection and existing registered source/subject epoch. The complete typed ontology projector refuses with Original complete typed ontology edge projection required. No receiver output occurs, and both caller/private sessions retain zero granted ShareLocks after refusal.
+
+The original edge is restored via its complete native JSONB row carrier. Full native row equality is asserted before BobEndpointRestored performs a fresh admitted read and receives exactly RB. This restoration demonstrates a positive successor rather than unconditional refusal. The administrator is not an admitted subject and gains no public authority from this fixture.
+
+Component linkage: US-056-AC2/AC7/AC10, US-057-AC7, original Truss B02/B15/L11. Refusal occurs at complete native-to-semantic projection before compiled execution; this does not independently prove the compiler's SQL integrity guards, every missing dependency, all current storage carriers, native issuer completeness or full backend acceptance. No case status change or public security activation. Existing role/revocation/publication/join and source controls remain in the enclosing run.
