@@ -1,0 +1,23 @@
+{
+  "status": "native-component-passed",
+  "postgresql": "18.6",
+  "tests": 3,
+  "seconds": 10.581,
+  "sourceSha256": "ab2e7c1fe0e7d4af51c8682601df9567b965ba3f4abb07703fbbe0285b19e149",
+  "evidence": {
+    "native-r1.log": "409ccae7fedf6c60e06871f3e259a80ef8f0c444eabcf9f05eb32420a5bb32c9",
+    "native-r2.log": "250101a77af146f9057a82b47a68a6fd8862dc1eefb88f9cc5545a3cdfd2005e"
+  },
+  "scope": [
+    "Ordinary caller cannot execute eight two-integer advisory mint overloads after PUBLIC revocation in an original disposable installation.",
+    "Selected NOLOGIN SECURITY DEFINER owner can mint a transaction lock; native pg_locks identifies objsubid 2.",
+    "Bigint advisory group namespace remains callable and identifies objsubid 1.",
+    "Original COMMIT releases both transaction locks."
+  ],
+  "limits": [
+    "Dedicated-database diagnostic configuration, not an installed production permit profile.",
+    "No complete alternate-helper/ACL/DDL closure, private coordinator exclusion, immutable anchor, one-permit enforcement or action-role admission proved.",
+    "No original selection/seal or backend acceptance case promotion.",
+    "Prior Astra review covers the previous source snapshot only."
+  ]
+}

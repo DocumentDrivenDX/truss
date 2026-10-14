@@ -17,6 +17,39 @@ class PreparationAuthorityNativeTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[_name] = None
 
+    def test_reserved_two_integer_permit_namespace_requires_native_issuer(self):
+        """Dedicated disposable DB privilege witness, not permit admission."""
+        data, host, assembly, tx = self.ready(document_ids=('adoc',))
+        host.detach(); data.commit()
+        self.admin.execute('CREATE ROLE preparation_mint_owner NOLOGIN')
+        self.addCleanup(self.admin.execute, 'DROP ROLE preparation_mint_owner')
+        self.addCleanup(self.admin.execute, 'DROP OWNED BY preparation_mint_owner')
+        names = ('pg_advisory_lock', 'pg_advisory_lock_shared',
+                 'pg_try_advisory_lock', 'pg_try_advisory_lock_shared',
+                 'pg_advisory_xact_lock', 'pg_advisory_xact_lock_shared',
+                 'pg_try_advisory_xact_lock', 'pg_try_advisory_xact_lock_shared')
+        for name in names:
+            self.admin.execute(f'REVOKE ALL ON FUNCTION pg_catalog.{name}(int4,int4) FROM PUBLIC')
+        self.admin.execute('GRANT EXECUTE ON FUNCTION pg_catalog.pg_advisory_xact_lock(int4,int4) TO preparation_mint_owner')
+        self.admin.execute('CREATE FUNCTION public.preparation_mint_probe() RETURNS void LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$ SELECT pg_catalog.pg_advisory_xact_lock(19001,19002) $$')
+        self.admin.execute('ALTER FUNCTION public.preparation_mint_probe() OWNER TO preparation_mint_owner')
+        self.admin.execute('REVOKE ALL ON FUNCTION public.preparation_mint_probe() FROM PUBLIC')
+        self.admin.execute('GRANT EXECUTE ON FUNCTION public.preparation_mint_probe() TO consumer')
+        for name in names:
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                data.execute(f'SELECT pg_catalog.{name}(19001,19002)')
+        data.execute('BEGIN')
+        data.execute('SELECT public.preparation_mint_probe()')
+        rows = self.admin.execute("SELECT classid::text,objid::text,objsubid,mode FROM pg_catalog.pg_locks WHERE pid=%s AND locktype='advisory'", (data.info.backend_pid,)).fetchall()
+        self.assertIn(('19001', '19002', 2, 'ExclusiveLock'), rows)
+        # Existing bigint group namespace remains callable and distinct.
+        data.execute('SELECT pg_catalog.pg_advisory_xact_lock(81608673413698::int8)')
+        spaces = self.admin.execute("SELECT DISTINCT objsubid FROM pg_catalog.pg_locks WHERE pid=%s AND locktype='advisory' ORDER BY objsubid", (data.info.backend_pid,)).fetchall()
+        self.assertEqual(spaces, [(1,), (2,)])
+        self.assertEqual(data.execute('COMMIT').statusmessage, 'COMMIT')
+        self.assertEqual(self.admin.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=%s AND locktype='advisory'", (data.info.backend_pid,)).fetchone(), (0,))
+        self.admin.execute('DROP FUNCTION public.preparation_mint_probe()')
+
     def test_data_owned_authority_exclusion_survives_coordinator_disconnect(self):
         data, old_host, assembly, old_tx = self.ready(document_ids=('adoc',))
         old_host.detach(); data.commit()
