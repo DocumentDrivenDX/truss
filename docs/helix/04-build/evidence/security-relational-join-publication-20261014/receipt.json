@@ -1,0 +1,27 @@
+{
+  "terminalExit": 0,
+  "tests": 1,
+  "seconds": 79.737,
+  "binaryBefore": {
+    "security_relational_candidate": "f955df9d182d8c4a0fd7a8a8a61a7e83224e11574cb198a0a8db29c3e91a2368",
+    "security_relational_result": "a817a6d4ce84e4b8b10678f260f1098e9fa04901971045c640f340cbfc896275",
+    "security_postgresql_codecs": "00e71fa6921b8d0c677c32cf3458bcdb6589b1c3ae73e4f096d77b77123e1d82",
+    "security_guarded_candidate": "b5334eceef00c86ded7c4a93c138a93461d58d2849d927a0b402d6fc5f05325c",
+    "security_graph_candidate": "78a28724b8ef3c6813499a671f83b8c3683048cd9ef92125b5d4ab037bf3a0b0",
+    "security_graph_result": "e34528dae8e65d31ead13c880a04b2dcd5efef9b02b0d048c014351616864a80"
+  },
+  "binaryAfter": {
+    "security_relational_candidate": "f955df9d182d8c4a0fd7a8a8a61a7e83224e11574cb198a0a8db29c3e91a2368",
+    "security_relational_result": "a817a6d4ce84e4b8b10678f260f1098e9fa04901971045c640f340cbfc896275",
+    "security_postgresql_codecs": "00e71fa6921b8d0c677c32cf3458bcdb6589b1c3ae73e4f096d77b77123e1d82",
+    "security_guarded_candidate": "b5334eceef00c86ded7c4a93c138a93461d58d2849d927a0b402d6fc5f05325c",
+    "security_graph_candidate": "78a28724b8ef3c6813499a671f83b8c3683048cd9ef92125b5d4ab037bf3a0b0",
+    "security_graph_result": "e34528dae8e65d31ead13c880a04b2dcd5efef9b02b0d048c014351616864a80"
+  },
+  "sourceDigests": {
+    "packages/python/tests/test_security_ontology_edges_native.py": "96c3ad28508d3283434e54dddfc7007fafa615e977f6c446d9d8e2baf7fc9696",
+    "scripts/security_relational_capture.py": "9d776e18e76378fc17688a87db89f2e5b6e6e8921f0a56615cae7cdded7657a8",
+    "scripts/security_relational_inspection.py": "5d665ba8b06c9abbea09de39ea0dee7cbad0c31d7461968a69f6bfdcb3ba7909",
+    "scripts/security_relational_publication.py": "e4b3f8b8b1cc99e81b271a35c4d4a01f6c0633043816056d99dd5496e28cc61c"
+  }
+}
