@@ -35,7 +35,7 @@ new required scalar field and its alternate key together using retained cells,
 preserving original effects and precise key values. See the
 [report contract](../../docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md).
 
-SDK28/native64 adds acyclic nested array/map properties with required item Fields
+SDK29/native64 adds acyclic nested array/map properties with required item Fields
 and exact scalar leaves, including writes, reads, history, imports, Weft queries
 and retained-cell rebinding. Five basic installed-wheel workflows pass. Matching
 Weft29/backend34 release publication is pending. The

@@ -33,3 +33,16 @@ a46524fcc2a5852d3387b5dae19bb0ba24d4b97b67e7fac4f2816269d7dc5eb2.
 Release pins identify source41dbbf81312d23468b9f3b4802e92c92edb3a199 and
 backend0.4.34. Truss v0.0.28 tag selects reviewed source
 f88b968bd1cf00c95e7a76c68ba16fe55b9cf153; its publication gates remain pending.
+
+Truss28 workflow38520071069 failed the two existing scalar-container checks on
+both platforms and skipped publication. Python rejected duplicate map entries as
+capability unavailable; the SDK29 correction leaves the entries intact for the
+native validator, which checks every nested map before canonicalization/effects
+and returns typed invalid input. Astra Ultra approved the fix subject to the
+same five recursive/upgrade cases plus the two failed existing scalar cases.
+
+The installed SDK29 fix wheel
+c53c79ba1a58853f49f22405780a038cc5427c0c674ef4b9cd031f768db8d095
+paired with the checksum-verified published Weft29 ARM wheel passes all seven
+planned basic workflows in59.563s. Python boundaries pass1072 imports.
+Native64 manifest and source SQL are unchanged by this Python admission fix.
