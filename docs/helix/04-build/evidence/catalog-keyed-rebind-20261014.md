@@ -18,3 +18,10 @@ predecessor-provenance/authority-placement issues were corrected before executio
 The checksum-verified published SDK26 predecessor run is still pending its
 publication. No managed-database qualification or publication claim follows from
 these local tests. Concurrent security owner changes were retained in Weft main.
+
+The selected catalog capability now mirrors the assembly's `source_version`
+keyword, preserving the0.7.0 default and explicit Bun selection. The existing
+UMF0.8 successful workflow through that capability passed1/16.085s against current
+source with the matching built Weft28 wheel; lookup/query/postcommit history are
+included. This follow-up is source execution, distinct from the earlier installed
+candidate wheel whose checksum is recorded above. Module boundaries pass1072.
