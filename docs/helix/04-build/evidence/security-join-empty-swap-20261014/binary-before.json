@@ -1,0 +1,8 @@
+{
+  "security_relational_candidate": "f955df9d182d8c4a0fd7a8a8a61a7e83224e11574cb198a0a8db29c3e91a2368",
+  "security_relational_result": "a817a6d4ce84e4b8b10678f260f1098e9fa04901971045c640f340cbfc896275",
+  "security_postgresql_codecs": "00e71fa6921b8d0c677c32cf3458bcdb6589b1c3ae73e4f096d77b77123e1d82",
+  "security_guarded_candidate": "b5334eceef00c86ded7c4a93c138a93461d58d2849d927a0b402d6fc5f05325c",
+  "security_graph_candidate": "78a28724b8ef3c6813499a671f83b8c3683048cd9ef92125b5d4ab037bf3a0b0",
+  "security_graph_result": "e34528dae8e65d31ead13c880a04b2dcd5efef9b02b0d048c014351616864a80"
+}
