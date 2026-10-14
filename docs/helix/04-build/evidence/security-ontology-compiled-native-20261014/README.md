@@ -9,3 +9,5 @@ Original security producer/checker source is committed at Weft6de199f; corrected
 This remains a trusted source/binary diagnostic composition, publishes the independently verified semantic response, and retains securityReady:false/nativeAdmission:required from the original producer. It does not activate the public compiler or qualify complete native routine/DDL/config/source/authority-generation/cache/cursor/transport closure. No original acceptance case is promoted; all132 remain required.
 
 Finalr8 uses rebuilt original producer/checker from corrected Weft main61865a6 and exact Boolean/integer slot checks. Retained native records contain those actual binary hashes. Priorr6/r7 reviews/checkpoints remain historical; final source and packet correspondence are separately reviewed.
+
+After preserving concurrent main changes, runtime0.60 adds a catalog_make_report dependency on runtime_catalog_rebind_transition. The held source cut now includes that exact table. The complete original compiler/native case passes24.171s on merged0.60 with separate log/receipt; runtime0.59 packets are unchanged.

@@ -20,7 +20,8 @@ ROOT=Path(__file__).resolve().parent.parent
 TABLES=('object','edge','schema_head','schema_rev','schema_doc',
         'catalog_registration_request','catalog_acceptance_report',
         'type_def','prop_def','key_def','rel_def','rel_endpoint',
-        'relationship_lineage','schema_change','catalog_runtime_installation','runtime_release')
+        'relationship_lineage','schema_change','catalog_runtime_installation','runtime_release',
+        'runtime_catalog_rebind_transition')
 
 
 def _capture(cursor,request):

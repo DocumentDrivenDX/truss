@@ -7964,3 +7964,5 @@ Truss24/native60 now composes new optional non-key scalar/flat-container retaine
 ## Original compiled graph query under native caller/source guard — 2026-10-14
 
 [Compiled native evidence](evidence/security-ontology-compiled-native-20261014/README.md) now runs original Weft graph SQL, endpoint/subject/truth guards and exact typed result checker inside the existing nativecaller role/map/source/fact cuts. Actual complete Resource.resourceId+withheldsalary bags match independent semantic results for Alice/Bob/Outsider. Native stale authoredsource pins and withheldcell corruption refuse before release. Final existing case passes25.527s on PostgreSQL18.6/runtime0.59, including prior lifecycle controls. Original source/checker comparisons do not issue native admission or activate public compilation; complete source/authority/cache/cursor/transport closure and all132 original cases remain required.
+
+Merged runtime0.60 replay passes24.171s after adding the original report dependency runtime_catalog_rebind_transition to the held source/fact cut. Seventeen fixed table relations are now guarded; separate receipt/log preserve prior0.59 compiled packet provenance.
