@@ -1,0 +1,11 @@
+{
+  "result": "native1/36.376s passes onruntime0.62",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_graph_source.py": "835f80343e55fab4039bb65bb50d108bef79f518f3bc9234ecee8bdb84641234",
+    "packages/python/src/truss/_security_graph_epoch_read.py": "abdcc56fd0005896e4ffcb38fa655391ce4cf690469501d8564c1f4828f73d80",
+    "packages/python/src/truss/_security_catalog_source_binding.py": "2ddf38589adac375154ef504ab1472051c96aff42418fc531a6ae056bdaead40",
+    "packages/python/tests/test_security_ontology_edges_native.py": "69d8a14113d3dea6f08a906ac465defdc172d402a5a69baa26712ff4ac11b6db"
+  },
+  "scope": "Additive exact source-only archive/capsule epoch comparison; old original per-query compiler archives remain required. No public dispatch/admission or132-case promotion.",
+  "independentReview": "Additional Astra review unavailable due reviewer usage limit."
+}

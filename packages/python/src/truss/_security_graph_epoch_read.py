@@ -113,6 +113,9 @@ def snapshot_graph_epoch_read_context(context):
      or type(source.native_guard[2]) is not int or not 1<=source.native_guard[2]<=9223372036854775807):raise ValueError('Exact bounded graph epoch read comparisons required')
  profile=decode_owner_evidence_json(comparison.profile)
  expected={'interfaceVersion':'truss-owned-graph-source-profile/0.1-candidate','requestSha256':sha256(source.original_request).hexdigest(),'acceptedCatalogSha256':sha256(source.accepted_catalog_assessment).hexdigest(),'compilerRequestSha256':sha256(source.native_dependencies).hexdigest(),'compilerOutputSha256':sha256(source.original_response).hexdigest(),'subjectHelperSha256':sha256(context.subject_source).hexdigest()}
+ if source.guarded_response is not None:
+  from ._security_guarded_source import capture_guarded_source_comparison
+  expected['sourceContextSha256']=capture_guarded_source_comparison(source.native_dependencies,source.guarded_response).source_sha256
  if any(profile.get(k)!=v for k,v in expected.items()):raise ValueError('Original graph epoch profile source correspondence required')
  return GraphEpochReadContext(source,comparison,issuer,bytes(context.subject_source))
 
@@ -127,7 +130,7 @@ def verify_held_graph_epoch_read(cursor,context):
  if rows!=[(expected.installation,expected.epoch,expected.incarnation,expected.profile.hex(),expected.evidence.hex(),sha256(expected.evidence).hexdigest())]:raise ValueError('Original current graph source epoch required')
  release=files('truss').joinpath('_catalog_runtime','manifest.json').read_bytes()
  archives=graph_source_archives(source,release)
- rows=_text_rows(cursor,"SELECT artifact_role::pg_catalog.text,artifact_identity::pg_catalog.text,pg_catalog.encode(artifact_bytes,'hex'),pg_catalog.encode(artifact_sha256,'hex'),pg_catalog.encode(artifact_identity_sha256,'hex'),installation_id::pg_catalog.text FROM ONLY truss.installation_archive ORDER BY artifact_identity COLLATE pg_catalog.\"C\"",limit=6)
+ rows=_text_rows(cursor,"SELECT artifact_role::pg_catalog.text,artifact_identity::pg_catalog.text,pg_catalog.encode(artifact_bytes,'hex'),pg_catalog.encode(artifact_sha256,'hex'),pg_catalog.encode(artifact_identity_sha256,'hex'),installation_id::pg_catalog.text FROM ONLY truss.installation_archive ORDER BY artifact_identity COLLATE pg_catalog.\"C\"",limit=len(archives))
  if rows!=sorted([(role,name,raw.hex(),sha256(raw).hexdigest(),sha256(name.encode()).hexdigest(),expected.installation) for role,name,raw in archives],key=lambda r:r[1]):raise ValueError('Original current graph source archive required')
  guard=source.native_guard
  if _text_rows(cursor,"SELECT pg_catalog.encode(installation_identity_bytes,'hex'),pg_catalog.encode(policy_profile_bytes,'hex'),generation::pg_catalog.text FROM ONLY truss.policy_generation_guard WHERE singleton OPERATOR(pg_catalog.=) 1",limit=1)!=[(guard[0].hex(),guard[1].hex(),str(guard[2]))]:raise ValueError('Original current graph authority guard required')

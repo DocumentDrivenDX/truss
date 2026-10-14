@@ -9,7 +9,7 @@ from truss._security_catalog_subject_installation import _text_rows,verify_held_
 from truss._security_catalog_assessment import verify_held_accepted_catalog_source_cut
 
 SOURCE=Path(__file__).with_name('security-ontology-read-cut.sql')
-DIGEST='5bb892306aac378528c5d15c18e6d3b3788e4201b8437f14953abca51ce8fd05'
+DIGEST='ef86642d6b38a398867962fe3fcbc12608667616b27c50eae69e6544b65c4e7d'
 
 
 def verify_ontology_read_cut_issuer(cursor,owner_oid,caller_oid):

@@ -1,0 +1,25 @@
+{
+  "status": "two test/evidence corrections required; no implementation defect identified",
+  "sourceSha256": {
+    "packages/python/tests/test_security_ontology_edges_native.py": "47a0c3ba30596df44a92359aec2d0bfd0af47363e2acd78659fbcc3fbe103401",
+    "packages/python/src/truss/_security_graph_subject_installation.py": "d16139a0ca6eeb80df6bc939c5e787ef77006847d2bfe609764da7cc4b81858f",
+    "scripts/security_ontology_native_subject_read.py": "defeef7eec70b84f7a1e8ab99ed5aec869b98ac6d622afff7fd81247b6a6bc93"
+  },
+  "findings": [
+    {
+      "priority": "P2",
+      "location": "packages/python/tests/test_security_ontology_edges_native.py:615",
+      "finding": "Exact native ACL comparison failure belongs to executor.last_attempt.error; caller intentionally wraps it as Original private native ontology execution refused.",
+      "recommendation": "Assert exact ACL reason on executor and wrapper reason on caller."
+    },
+    {
+      "priority": "P2",
+      "location": "packages/python/tests/test_security_ontology_edges_native.py:623",
+      "finding": "Negative case unconditionally emits ownSessionIssuerAndCurrentEpoch and subjectProfileAndMapCutsThroughReceiver as true, although zero receiver calls and early ACL refusal mean those success observations did not occur.",
+      "recommendation": "Emit explicit ACL refusal and zero-release fields for the negative row; retain success flags only on positive rows."
+    }
+  ],
+  "native": "Parent r3 passed 1/79.661s on unchanged implementation bytes; parent r4 failed 1/89.832s at the predicted diagnostic assertion. Preceding Error/no-release assertions passed. No reviewer native execution.",
+  "r4LogSha256": "11bec66ca6ab9b4f5058a0797525d1d692dd17e2efd730ab7fb76ffdfd7ce7cb",
+  "limits": "Test-only review; no complete role/DDL/issuer lifetime or native admission/132-case promotion."
+}

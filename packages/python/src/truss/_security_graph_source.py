@@ -6,6 +6,7 @@ Native installer/epoch machinery separately verifies actual source and custody.
 """
 from dataclasses import dataclass,field,replace
 from hashlib import sha256
+from ._security_guarded_source import capture_guarded_source_comparison
 from ._owner_evidence_json import decode_owner_evidence_json,same_owner_evidence
 
 @dataclass(frozen=True,slots=True)
@@ -15,6 +16,7 @@ class PreparedGraphSecuritySource:
  accepted_catalog_assessment:bytes
  native_dependencies:bytes # original compiler request, including graph binding
  native_guard:tuple[bytes,bytes,int]|None=None
+ guarded_response:bytes|None=None
  security_ready:bool=field(default=False,init=False)
 
 
@@ -53,17 +55,22 @@ def snapshot_graph_security_source(value):
      or decode_owner_evidence_json(document.encode())['id']!=pin['documentId']
      or binding['physicalModule']['selectedModuleIds']!=['m']):
   raise ValueError('Original authored physical graph pin required')
+ if value.guarded_response is not None:capture_guarded_source_comparison(value.native_dependencies,value.guarded_response)
  return value
 
 
 def graph_source_archives(value,release):
  value=snapshot_graph_security_source(value)
- return [('bundle','graph:original-release-manifest',release),
+ archives=[('bundle','graph:original-release-manifest',release),
          ('expected_inventory','graph:original-accepted-assessment',value.accepted_catalog_assessment),
          ('installed_inventory','graph:recaptured-accepted-assessment',value.accepted_catalog_assessment),
          ('input','graph:original-physical-request',value.original_request),
          ('input','graph:original-compiler-request',value.native_dependencies),
          ('input','graph:original-compiler-output',value.original_response)]
+ if value.guarded_response is not None:
+  capsule=capture_guarded_source_comparison(value.native_dependencies,value.guarded_response)
+  archives.append(('input','graph:original-source-context',capsule.source_bytes))
+ return archives
 
 
 def acquire_graph_source_catalog_cut(cursor):

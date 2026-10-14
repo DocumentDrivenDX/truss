@@ -1,0 +1,32 @@
+{
+  "observations": [
+    {
+      "principal": "Alice",
+      "resources": [],
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "Bob",
+      "resources": [
+        "RB"
+      ],
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "Outsider",
+      "resources": [],
+      "ownSessionIssuerAndCurrentEpoch": true,
+      "subjectProfileAndMapCutsThroughReceiver": true
+    },
+    {
+      "principal": "BobPublicIssuer",
+      "outcome": "issuerAclRefused",
+      "released": false
+    }
+  ],
+  "epoch": "76c3abc3-c905-43e8-935c-edad612179de",
+  "securityReady": false,
+  "scope": "Actual own-session registered Subject + peer/role/source/fact/current epoch/compiler/result guarded buffered reads; complete native admission/lifetime and all132 remain pending."
+}

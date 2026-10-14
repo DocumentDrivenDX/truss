@@ -13,7 +13,7 @@ from .weft import _decode
 MAX_BYTES=16777216
 SOURCE_TABLES=('schema_head','schema_rev','schema_doc','catalog_registration_request','catalog_acceptance_report',
               'type_def','prop_def','key_def','rel_def','rel_endpoint','relationship_lineage','schema_change',
-              'catalog_runtime_installation','runtime_release','runtime_catalog_rebind_transition')
+              'catalog_runtime_installation','runtime_release','runtime_catalog_rebind_transition','runtime_catalog_key_backfill')
 
 
 def verify_held_accepted_catalog_source_cut(cursor):

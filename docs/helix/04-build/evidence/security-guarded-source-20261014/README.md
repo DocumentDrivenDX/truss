@@ -1,0 +1,5 @@
+# Guarded source-only comparison foundation
+
+The new private GuardedSourceComparison copies the original guarded producer source capsule, checks its closed source fields against original request source fields, and retains exact bytes/digest independently of query SQL and query lineage. Trusted compiler/source custody is a premise: these Python comparisons are not native credentials and do not admit SQL. Existing graph archives/epoch/read paths remain unchanged.
+
+One actual compiler-backed test passes with two distinct admitted projections sharing exact source bytes but different query hashes, five mutated outer fields, three injected capsule fields with recomputed digests, and corrupt comparison digest refusals. These are correspondence controls, not native lifetime or selection proof. Next integrate the separate source archive with genuine Subject/source/epoch guarded dispatch, then qualify the required native and full132 original cases. Astra's additional review remains unavailable due reviewer usage limit.

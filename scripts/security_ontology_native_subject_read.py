@@ -96,7 +96,16 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
             import inspect
             if inspect.iscoroutine(receipt) or inspect.isgenerator(receipt):receipt.close()
             raise ValueError('Original current graph compiler source correspondence required')
-        if type(receipt.get('request')) is not str or type(receipt.get('output')) is not str or receipt['request']!=source_epoch.source.native_dependencies.decode() or receipt['output']!=source_epoch.source.original_response.decode():raise ValueError('Original current graph compiler source correspondence required')
+        if type(receipt.get('request')) is not str or type(receipt.get('output')) is not str:raise ValueError('Original current graph compiler source correspondence required')
+        from truss._owner_evidence_json import decode_owner_evidence_json
+        packet=decode_owner_evidence_json(receipt['output'].encode())
+        if packet.get('version')=='weft.truss.security.guarded-candidate/0.1-candidate':
+            from truss._security_guarded_source import capture_guarded_source_comparison,require_same_guarded_source
+            if subject_registration is None:raise ValueError('Original registered guarded Subject required')
+            if source_epoch.source.guarded_response is None:raise ValueError('Original archived guarded source required')
+            comparison=capture_guarded_source_comparison(source_epoch.source.native_dependencies,source_epoch.source.guarded_response)
+            require_same_guarded_source(comparison,receipt['request'].encode(),receipt['output'].encode())
+        elif receipt['request']!=source_epoch.source.native_dependencies.decode() or receipt['output']!=source_epoch.source.original_response.decode():raise ValueError('Original current graph compiler source correspondence required')
         return receipt
     selected_compiler=compiler if source_epoch is None else epoch_compiler
     def execute(cursor,observed):

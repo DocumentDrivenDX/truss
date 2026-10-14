@@ -51,6 +51,9 @@ def derive_catalog_source_epoch_profile(mapping,fact_relations,barrier,*,subject
         packet['interfaceVersion']='truss-owned-graph-source-profile/0.1-candidate'
         packet['compilerRequestSha256']=hashlib.sha256(mapping.native_dependencies).hexdigest()
         packet['compilerOutputSha256']=hashlib.sha256(mapping.original_response).hexdigest()
+        if mapping.guarded_response is not None:
+            from ._security_guarded_source import capture_guarded_source_comparison
+            packet['sourceContextSha256']=capture_guarded_source_comparison(mapping.native_dependencies,mapping.guarded_response).source_sha256
     raw=json.dumps(packet,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode('utf8')
     if len(raw)>65536:raise ValueError('Bounded native catalog source profile required')
     return raw

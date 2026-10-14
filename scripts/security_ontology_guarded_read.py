@@ -10,18 +10,14 @@ from hashlib import sha256
 import json, os, subprocess
 from truss.catalog_runtime import _pin_cursor
 from truss.psycopg_host import PsycopgHost
-from truss._security_catalog_assessment import capture_accepted_catalog
+from truss._security_catalog_assessment import capture_accepted_catalog, SOURCE_TABLES
 from truss._owner_evidence_json import decode_owner_evidence_json
 from security_graph_read import _text_rows
 from security_ontology_edge_projection import SPECS, PAIRS, project_full_ontology_edge_cells
 from security_owned_read import _pin_owned_evaluator_sources, _read_owned_resource_receipt
 
 ROOT=Path(__file__).resolve().parent.parent
-TABLES=('object','edge','schema_head','schema_rev','schema_doc',
-        'catalog_registration_request','catalog_acceptance_report',
-        'type_def','prop_def','key_def','rel_def','rel_endpoint',
-        'relationship_lineage','schema_change','catalog_runtime_installation','runtime_release',
-        'runtime_catalog_rebind_transition')
+TABLES=('object','edge')+SOURCE_TABLES
 
 
 def _capture(cursor,request):
