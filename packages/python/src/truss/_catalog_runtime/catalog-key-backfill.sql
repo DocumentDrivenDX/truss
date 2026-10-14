@@ -25,7 +25,7 @@ ALTER TABLE truss.runtime_catalog_key_backfill ENABLE ALWAYS TRIGGER runtime_cat
 CREATE FUNCTION truss.catalog_key_backfill_candidates(planned_basis jsonb,selected_revision int) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE definition truss.key_def%ROWTYPE;owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;
- object_row truss.object%ROWTYPE;component int;values_cells jsonb;archive truss.schema_doc%ROWTYPE;result jsonb:='[]';candidate_count int:=0;head int;
+ object_row truss.object%ROWTYPE;component int;values_cells jsonb;archive truss.schema_doc%ROWTYPE;result jsonb:='[]';candidate_count int:=0;head int;selected_cell jsonb;
 BEGIN
  PERFORM truss.catalog_actor();
  SELECT rev INTO STRICT head FROM truss.schema_head WHERE id=1 FOR UPDATE NOWAIT;
@@ -42,10 +42,12 @@ BEGIN
   IF truss.runtime_object_values_readable(owner.type_id) IS NOT TRUE THEN
    RAISE EXCEPTION 'current key backfill reader required' USING ERRCODE='42501';END IF;
   FOREACH component IN ARRAY definition.prop_ids LOOP
-   SELECT * INTO STRICT property FROM truss.prop_def WHERE prop_id=component AND type_id=owner.type_id AND retired_rev IS NULL;
+   SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p WHERE p.prop_id=component AND p.type_id=owner.type_id AND p.retired_rev IS NULL;
    IF property.nullability IS DISTINCT FROM 'required' OR property.cardinality IS DISTINCT FROM 'one'
     OR property.scalar_type NOT IN ('string','integer','decimal','boolean','binary') THEN
-    RAISE EXCEPTION 'existing required scalar key components required' USING ERRCODE='0A000';END IF;
+    RAISE EXCEPTION 'required scalar key components required' USING ERRCODE='0A000';END IF;
+   IF truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE THEN
+    RAISE EXCEPTION 'current planned key component reader required' USING ERRCODE='42501';END IF;
   END LOOP;
   SELECT * INTO STRICT archive FROM jsonb_populate_recordset(NULL::truss.schema_doc,planned_basis->'schema_doc') d
    WHERE d.rev=definition.definition_rev AND d.ord=definition.definition_doc_ord AND d.doc_id=definition.definition_document_id;
@@ -55,10 +57,17 @@ BEGIN
    candidate_count:=candidate_count+1;values_cells:='[]';
    IF candidate_count>10000 THEN RAISE EXCEPTION 'bounded key backfill inventory required' USING ERRCODE='54000';END IF;
    FOREACH component IN ARRAY definition.prop_ids LOOP
-    SELECT * INTO STRICT property FROM truss.prop_def WHERE prop_id=component AND type_id=owner.type_id;
-    IF truss.valid_scalar_property(object_row.props->component::text,property.scalar_type,false,property.facets) IS NOT TRUE THEN
+    SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p WHERE p.prop_id=component AND p.type_id=owner.type_id;
+    IF EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.prop_id=component AND p.type_id=owner.type_id) THEN
+     selected_cell:=object_row.props->component::text;
+    ELSE
+     IF property.since_rev IS DISTINCT FROM selected_revision OR object_row.props ? component::text THEN
+      RAISE EXCEPTION 'genuinely new absent key destination required' USING ERRCODE='55000';END IF;
+     selected_cell:=object_row.retained->property.name;
+    END IF;
+    IF truss.valid_scalar_property(selected_cell,property.scalar_type,false,property.facets) IS NOT TRUE THEN
      RAISE EXCEPTION 'valid complete key candidate values required' USING ERRCODE='22023';END IF;
-    values_cells:=values_cells||jsonb_build_array(object_row.props->component::text);
+    values_cells:=values_cells||jsonb_build_array(selected_cell);
    END LOOP;
    result:=result||jsonb_build_array(jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module,
     'recordId',owner.element,'keyId',definition.key_id,'keyNumber',definition.key_num::text,'typeId',owner.type_id::text,
@@ -74,6 +83,16 @@ BEGIN
   PERFORM truss.runtime_module_writer(owner.document_id,owner.module);
   IF truss.runtime_object_values_readable(owner.type_id) IS NOT TRUE THEN
    RAISE EXCEPTION 'current key backfill disclosure reader required' USING ERRCODE='42501';END IF;
+ END LOOP;
+ FOR property IN SELECT p.* FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p
+  WHERE EXISTS(SELECT 1 FROM jsonb_populate_recordset(NULL::truss.key_def,planned_basis->'key_def') k
+   WHERE k.since_rev=selected_revision AND k.type_id=p.type_id AND p.prop_id=ANY(k.prop_ids)
+    AND NOT k.is_primary
+    AND EXISTS(SELECT 1 FROM truss.type_def t WHERE t.type_id=k.type_id)
+    AND NOT EXISTS(SELECT 1 FROM truss.key_def old WHERE old.type_id=k.type_id AND old.key_id=k.key_id)) LOOP
+  SELECT * INTO STRICT owner FROM truss.type_def WHERE type_id=property.type_id;
+  IF truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE THEN
+   RAISE EXCEPTION 'current planned key component disclosure reader required' USING ERRCODE='42501';END IF;
  END LOOP;
  RETURN result;
 END;
