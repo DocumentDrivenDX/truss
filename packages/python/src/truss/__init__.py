@@ -114,3 +114,9 @@ __all__ += ["TraversalHop", "TraversalComplete", "TraversalLimited"]
 
 from .engine_import import run_import_batches
 __all__ += ["run_import_batches"]
+
+from .catalog_report_sources import CatalogSourceDocument, resolve_catalog_report_source
+__all__ += ['CatalogSourceDocument', 'resolve_catalog_report_source']
+
+from .catalog_preparation import prepare_catalog
+__all__ += ['prepare_catalog']

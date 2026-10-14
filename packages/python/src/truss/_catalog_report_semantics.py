@@ -4,10 +4,11 @@ from hashlib import sha256
 from importlib.resources import files
 import json
 from .preparation import _require_original_preparation
-from ._catalog_support import DECIMAL207_PROFILE,DECIMAL208_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,evaluate_catalog_support, verified_retained_metadata, RETAINED_METADATA_PROFILE, CORE08_PROFILE, FACET07_PROFILE, FACET08_PROFILE
+from ._catalog_support import DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,evaluate_catalog_support, verified_retained_metadata, RETAINED_METADATA_PROFILE, CORE08_PROFILE, FACET07_PROFILE, FACET08_PROFILE
 
 PROFILE_SHA256='be634f1d1bdf8f096333e25d15597d2b81af4ace87c9216a8abf304797df2080'
 PROFILE={'identity':'truss-catalog-report-semantic-inputs','version':'0.1.0','sha256':PROFILE_SHA256}
+REFERENCE_PROFILE={'identity':'truss-catalog-report-semantic-inputs','version':'0.2.0','sha256':'c2289ef0a8aeafebca555a85bb101a39ca59840ada5814430153508116b7a67d'}
 ENTRY_FIELDS=('assertion','source','ruleName','ruleNameOrigin','enforcement','reason')
 
 
@@ -60,8 +61,10 @@ def compose_original_catalog_report_semantics(prepared,support):
     inventory=support.get('closedSourceInventory',{})
     if inventory.get('state')!='inventoried':
         return {'state':'unavailable','reason':'complete_closed_source_inventory_required'}
-    policy=files('truss').joinpath('_profiles/catalog-report-semantic-inputs.json').read_bytes()
-    if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=PROFILE_SHA256:
+    compact=support['profile']==REFERENCE08_PROFILE
+    profile=REFERENCE_PROFILE if compact else PROFILE
+    policy=files('truss').joinpath('_profiles/catalog-report-semantic-inputs-references.json' if compact else '_profiles/catalog-report-semantic-inputs.json').read_bytes()
+    if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=profile['sha256']:
         raise ValueError('Original report semantic projection profile required')
     entries=[{key:entry[key] for key in ENTRY_FIELDS} for entry in inventory['entries']]
     def order(entry):
@@ -69,7 +72,7 @@ def compose_original_catalog_report_semantics(prepared,support):
         return tuple(value.encode('utf8') for value in (owner['documentId'],owner['moduleId'],assertion['sourcePointer'],entry['ruleName']))
     entries.sort(key=order)
     canonical=canonical_numeric_free(entries)
-    digest=sha256(b'truss-canonical/0.1.0\ntruss-catalog-assertion-inventory/0.1.0\n'+canonical).hexdigest()
+    digest=sha256((b'truss-canonical/0.1.0\ntruss-catalog-assertion-inventory/0.2.0\n' if compact else b'truss-canonical/0.1.0\ntruss-catalog-assertion-inventory/0.1.0\n')+canonical).hexdigest()
     groups=[]
     for document in prepared.input()['documents']:
         membership={'version':next(d.observation()['source']['umf'] for d in prepared.documents if d.document.document_id==document['documentId']),'interpretationProfile':document['umfProfile'],
@@ -78,10 +81,10 @@ def compose_original_catalog_report_semantics(prepared,support):
         if group is None:
             group={'umf':membership,'documentIds':[]};groups.append(group)
         group['documentIds'].append(document['documentId'])
-    return {'state':'source_fields_ready','projectionProfile':dict(PROFILE),
-            'projectionArtifact':{'identity':'truss.catalog-report-semantic-inputs/0.1.0',
-                'bytesBase64':base64.b64encode(policy).decode('ascii'),'sha256':PROFILE_SHA256},
-            'umf':[group['umf'] for group in groups],'umfMembership':groups,'extensions':verified_retained_metadata(prepared) if support['profile'] in (RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE) else [],
+    return {'state':'source_fields_ready','projectionProfile':dict(profile),
+            'projectionArtifact':{'identity':'truss.catalog-report-semantic-inputs/'+profile['version'],
+                'bytesBase64':base64.b64encode(policy).decode('ascii'),'sha256':profile['sha256']},
+            'umf':[group['umf'] for group in groups],'umfMembership':groups,'extensions':verified_retained_metadata(prepared) if support['profile'] in (RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE) else [],
             'assertionEntries':entries,'canonicalAssertionBytesBase64':base64.b64encode(canonical).decode('ascii'),
             'assertionInventorySha256':digest,
             'unresolvedBindings':['installedLayoutProfile','enforcementReportProfile','originalExecution','acceptanceReportProfile'],

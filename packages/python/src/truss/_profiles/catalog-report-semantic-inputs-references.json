@@ -1,0 +1,32 @@
+{
+  "identity": "truss-catalog-report-semantic-inputs",
+  "version": "0.2.0",
+  "scope": "closed_source_report_inputs_without_installed_layout_or_execution",
+  "entryFields": [
+    "assertion",
+    "source",
+    "ruleName",
+    "ruleNameOrigin",
+    "enforcement",
+    "reason"
+  ],
+  "entryOrder": [
+    "assertion.owner.documentId",
+    "assertion.owner.moduleId",
+    "assertion.sourcePointer",
+    "ruleName"
+  ],
+  "orderEncoding": "exact_utf8_lexicographic_tuple",
+  "canonicalProfile": "truss-canonical/0.1.0",
+  "digestDomain": "truss-catalog-assertion-inventory/0.2.0",
+  "digestPreimage": "ASCII canonicalProfile + LF + ASCII digestDomain + LF + canonical projected entry array",
+  "canonicalStrings": "direct_utf8_non_control_scalars_quote_backslash_escaped_controls_lowercase_u00hh_no_normalization",
+  "canonicalObjects": "exact_utf8_key_order_no_whitespace",
+  "maximumBytes": 4194304,
+  "maximumNodes": 100000,
+  "maximumDepth": 128,
+  "maximumMembers": 4096,
+  "nativeResourceAccountingQualified": false,
+  "acceptedReportQualified": false,
+  "entrySource": "identity_sha256_and_explicit_same_accepted_input_document_reference"
+}

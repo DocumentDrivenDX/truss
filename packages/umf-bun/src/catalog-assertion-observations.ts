@@ -1,3 +1,4 @@
+import {compactCatalogSources,compactCatalogObservation,catalogObservationIdentity,SOURCE_REFERENCE_FORMAT} from './catalog-source-reference';
 /** Owner observations for report preparation, never complete assertion/enforcement admission. */
 import {createHash} from 'node:crypto';
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
@@ -29,11 +30,11 @@ export function collectCatalogAssertionObservations(prepared:Prepared,owner:Owne
   // Request identities contain primitive fields; retain the original request before invoking loaded code.
   Object.freeze(identity);
   const document=prepared.documents[documentIndex];let result:unknown;
-  try{result={state:'observed',observation:run()}}catch(error){result={state:'unavailable',name:error instanceof Error?error.name:null,code:typeof (error as any)?.code==='string'?(error as any).code:null,path:typeof (error as any)?.path==='string'?(error as any).path:null,message:error instanceof Error?error.message:String(error)}}
-  const bytes=Buffer.from(JSON.stringify({profile:observationProfile,documentId:document.documentId,contentSha256:prepared.original.documents[documentIndex].sha256,basis,operation,identity,result}),'utf8');
+  try{result={state:'observed',observation:compactCatalogObservation(prepared,documentIndex,basis,run())}}catch(error){result={state:'unavailable',name:error instanceof Error?error.name:null,code:typeof (error as any)?.code==='string'?(error as any).code:null,path:typeof (error as any)?.path==='string'?(error as any).path:null,message:error instanceof Error?error.message:String(error)}}
+  const bytes=Buffer.from(JSON.stringify({...(compactCatalogSources(prepared)?{sourceFormat:SOURCE_REFERENCE_FORMAT}:{}),profile:observationProfile,documentId:document.documentId,contentSha256:prepared.original.documents[documentIndex].sha256,basis,operation,identity,result}),'utf8');
   retainedBytes+=bytes.length;if(retainedBytes>4194304)throw Error('Declaration observation component output capacity exceeded');
   observations.push(Object.freeze({documentId:document.documentId,basis,operation,identity,result,
-   evidence:Object.freeze({identity:'truss.owner-declaration-observation/'+documentIndex+'/'+(calls-1),bytesBase64:bytes.toString('base64'),sha256:createHash('sha256').update(bytes).digest('hex')})}));
+   evidence:Object.freeze({identity:catalogObservationIdentity(prepared,documentIndex,calls-1),bytesBase64:bytes.toString('base64'),sha256:createHash('sha256').update(bytes).digest('hex')})}));
  }
  for(let index=0;index<prepared.documents.length;index++){
   const document=prepared.documents[index];const source=document.interpretation.source;const target=document.interpretation.target;const propertyBasis=document.interpretation.transition?'reversible_target' as const:'original' as const;
@@ -54,6 +55,6 @@ export function collectCatalogAssertionObservations(prepared:Prepared,owner:Owne
   }
  }
  function freeze(value:unknown):void{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value)}}freeze(observations);
- const collection=Object.freeze({profile,fieldProfile,scalarProfile,membersProfile,referenceLinksProfile,observations:Object.freeze(observations),scope:'original_owner_assertion_observations_only' as const});
+ const collection=Object.freeze({...(compactCatalogSources(prepared)?{sourceFormat:SOURCE_REFERENCE_FORMAT}:{}),profile,fieldProfile,scalarProfile,membersProfile,referenceLinksProfile,observations:Object.freeze(observations),scope:'original_owner_assertion_observations_only' as const});
  originalCollections.set(collection,prepared);return collection;
 }
