@@ -62,4 +62,5 @@ const base='docs/helix/02-design/models/truss-preparation-seal-';
 await Bun.write(base+'storage-0.1.proposal.umf.json',raw);
 await Bun.write(base+'core-0.1.proposal.umf.json',JSON.stringify(core)+'\n');
 await Bun.write('docs/helix/04-build/preparation-seal.generated.sql',ddl);
+await Bun.write('packages/python/src/truss/_security_bootstrap/preparation-seal-storage.sql',ddl);
 console.log(JSON.stringify({columns:record.members.length,ownerExport:true,savedExportIdentical:true,valid:validation.valid,complete:validation.complete,installed:false}));

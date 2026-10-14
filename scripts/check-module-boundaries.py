@@ -40,6 +40,7 @@ ALLOWED = {
     '_umf_key_tuples': {'base64','truss.contracts','decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._umf_keys_release','truss._umf_keys08_release'},
     '_catalog_definition_source': {'json','decimal','truss._owner_evidence_json'},
     '_group_runtime': {'truss._receipt_position','typing','dataclasses','hashlib','base64','json','truss.contracts','truss.execution','truss.groups','truss.preparation','truss._umf_key_tuples'},
+    '_preparation_seal_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._preparation_source_epoch'},
     '_preparation_source_epoch': {'dataclasses','hashlib','importlib.resources','json','re','truss.catalog_runtime','truss.execution','truss.psycopg_host','truss._installation_privileges','truss._security_catalog_assessment','truss._security_source_epoch_installation','truss._psycopg_epoch_cut'},
     '_preparation_catalog_cut': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_assessment','truss._security_catalog_subject_installation'},
     '_engine_preparation': {'dataclasses','threading','inspect','psycopg','psycopg.rows','psycopg.types.string','truss.psycopg_host','truss._security_catalog_subject_installation','truss.engine_import','truss.execution'},

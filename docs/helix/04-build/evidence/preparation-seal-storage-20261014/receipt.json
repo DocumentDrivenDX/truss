@@ -1,0 +1,19 @@
+{
+  "scope": "Private original UMF-exported seal storage installation, COMMIT/readback, original products workflow. No seal rows, writer, native permit or protected preparation.",
+  "status": "passed",
+  "sourceHashes": {
+    "packages/python/src/truss/_preparation_seal_installation.py": "ac88709dad16ac6df0b2d9c851adc9c6a544db5eee9ec16383572f76423a7322",
+    "packages/python/src/truss/_security_bootstrap/preparation-seal-storage.sql": "235f2ce982eeda53eaee09f7608a388f96a815cde5354f4ce6db9bb3091422fe",
+    "scripts/build-preparation-seal.ts": "048dd8439f8671d6d9c5ce849ae2445f51630253e10089ea50f28c6c01bd1890",
+    "scripts/export-products-native-binding.py": "2ee82a173a7c1d2072c2dbf70a337e48afeb382a7d32bbf7ee867a06ecfe071a",
+    "packages/python/tests/test_preparation_seal_storage_native.py": "451aad0b6078a177e70b79e4d726f3ddc8e4b3d64341e36397633633d4116f66"
+  },
+  "files": {
+    "native-binding.json": "04c69cb3aa9ac8f014daa0b967f7e447b898a027e39d41e0c6d21201e4edbf08",
+    "native-query-bundle.json": "d599dc5ce57744293407b2c3dcd04f92d39daa5009f82093fa1ad723b2d1848e",
+    "native-receipt.json": "b366dd5f53d92174839d6c69cd1b37d1d38b81e4cd9d71c3873ce0d9e64c339c",
+    "native-unittest.log": "8b7a241369a61a1cf683bcf27d61c559c5f2b8c511e94673bc38830363915566"
+  },
+  "nativeTest": "1 test passed in 5.927s on disposable pgserver PG18.6; store stopped and test directory removed.",
+  "authority": false
+}

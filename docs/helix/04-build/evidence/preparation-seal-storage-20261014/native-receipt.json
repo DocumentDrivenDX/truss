@@ -1,0 +1,79 @@
+{
+  "scope": "Actual ordinary-person RC catalog/public mutation/readback and native binding export. No action, RR selection, bulk seal or security qualification.",
+  "runtime": "truss-catalog-runtime/0.65-candidate",
+  "runtimeSha256": "aada6da87a2ff1cf522f846d463ce1ae3d883bb88d435de6f9c8ca2d2263daa6",
+  "layout": {
+    "identity": "truss-layout",
+    "version": "1.0",
+    "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+  },
+  "documentSha256": "b7f8ad91d22eeae35d9c7a966090d9120a2f436c84e29a6ba56d5979a6b712b5",
+  "nativeObjectIds": [
+    "1",
+    "2"
+  ],
+  "preparationOwnerRevision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+  "files": {
+    "original-demo-model.json": "b5ec19900e4355538395200f65e3f70a4edf2e6b9dd1753deac04a6d9ef41337",
+    "accepted-document.json": "b7f8ad91d22eeae35d9c7a966090d9120a2f436c84e29a6ba56d5979a6b712b5",
+    "original-prepared-acceptance.json": "82de724c3eef3a2ed934c5bf483a85b06ea2bbdf3ea76fd958050123a162a6d1",
+    "native-query-bundle.json": "d599dc5ce57744293407b2c3dcd04f92d39daa5009f82093fa1ad723b2d1848e",
+    "native-binding.json": "04c69cb3aa9ac8f014daa0b967f7e447b898a027e39d41e0c6d21201e4edbf08",
+    "native-runtime-manifest.json": "aada6da87a2ff1cf522f846d463ce1ae3d883bb88d435de6f9c8ca2d2263daa6"
+  },
+  "metadataSourceEpoch": {
+    "installation": "bb6451b4-c6bd-4e32-bd2d-3fb24dadeca5",
+    "epoch": "142d0b45-44ed-488e-943e-8a11615c0e12",
+    "incarnation": "{\"databaseOid\":\"5\",\"interfaceVersion\":\"truss-catalog-source-target/0.1.0\",\"schemaOid\":\"16384\"}",
+    "profile": {
+      "assessmentSha256": "7ec2febc5be6cfef35754e81ab544a4271e9850a77f0b86c8b1e635fe38947d5",
+      "authority": false,
+      "businessFacts": false,
+      "interfaceVersion": "truss.preparation-catalog-metadata-source/0.1",
+      "registeredSelectionPrograms": false,
+      "releaseSha256": "aada6da87a2ff1cf522f846d463ce1ae3d883bb88d435de6f9c8ca2d2263daa6",
+      "routinesSha256": "2fdef76add9dd729ac16fe856cd659c2b77593796de2a3e6b870ad2cedd82f15",
+      "scope": "accepted_catalog_metadata_and_original_runtime_only"
+    },
+    "evidence": {
+      "archives": [
+        {
+          "identity": "preparation:original-runtime-release",
+          "role": "bundle",
+          "sha256": "aada6da87a2ff1cf522f846d463ce1ae3d883bb88d435de6f9c8ca2d2263daa6"
+        },
+        {
+          "identity": "preparation:original-catalog-documents",
+          "role": "input",
+          "sha256": "6c84be0fa942c210e344a74a476f0829fb326444c396ce09805dc7acdd8e70ba"
+        },
+        {
+          "identity": "preparation:target-incarnation",
+          "role": "input",
+          "sha256": "18731f0864e5c3d87ec4d41498325d3c0d797db6805f89f4ceb2fb4204960c7a"
+        },
+        {
+          "identity": "preparation:accepted-catalog",
+          "role": "expected_inventory",
+          "sha256": "7ec2febc5be6cfef35754e81ab544a4271e9850a77f0b86c8b1e635fe38947d5"
+        },
+        {
+          "identity": "preparation:runtime-routines",
+          "role": "installed_inventory",
+          "sha256": "2fdef76add9dd729ac16fe856cd659c2b77593796de2a3e6b870ad2cedd82f15"
+        }
+      ],
+      "interfaceVersion": "truss.preparation-catalog-metadata-source/0.1"
+    },
+    "securityReady": false,
+    "scope": "Committed catalog metadata and original runtime source only; not authority or bulk execution."
+  },
+  "sealStorage": {
+    "installation": "bb6451b4-c6bd-4e32-bd2d-3fb24dadeca5",
+    "sourceSha256": "235f2ce982eeda53eaee09f7608a388f96a815cde5354f4ce6db9bb3091422fe",
+    "tableOid": 18578,
+    "sequenceOid": 18577,
+    "securityReady": false,
+    "scope": "Committed private UMF-exported storage only; no seal writer or authority. Ordinary read/write/sequence usage unavailable."
+  }
+}
