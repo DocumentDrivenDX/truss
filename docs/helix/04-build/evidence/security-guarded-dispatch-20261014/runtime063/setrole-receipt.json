@@ -1,0 +1,10 @@
+{
+  "result": "native1/41.613s passes",
+  "runtime": "0.63",
+  "testSourceSha256": "88f68293d6b4cd24943bbd3f7afdb28343fd694ea14b79164c8257a0e6be8081",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC5"
+  ],
+  "plannedCaseContribution": "truss.B05",
+  "scope": "Actual SET LOCAL ROLE to own login role (SESSION_USER==CURRENT_USER) is refused by strict registered Subject path, no output and zero shared locks. Not owner/super/internal-role escalation completeness or full case promotion."
+}
