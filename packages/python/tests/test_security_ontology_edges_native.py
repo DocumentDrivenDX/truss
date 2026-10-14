@@ -632,7 +632,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                     return original_run(*args,**kwargs)
                                 from contextlib import nullcontext
                                 with patch.object(guarded.subprocess,'run',corrupt_guarded_check) if name=='BobGuardedCorrupt' else nullcontext():
-                                    result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,subjects.bindings,receiver,compiler=selected_compiler,cut_issuer=cut_issuer,source_epoch=composed_context,subject_registration=subjects)
+                                    result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,subjects.bindings,receiver,compiler=selected_compiler,cut_issuer=cut_issuer,source_epoch=composed_context,subject_registration=subjects,query_results=name.startswith('BobGuarded'))
                                 if expected is None:
                                     self.assertIsInstance(result,Error);self.assertEqual(released,[])
                                     self.assertEqual(str(executor._custody.last_attempt.error),'Original graph compiler result contract refused' if name=='BobGuardedCorrupt' else 'Exact registered graph Subject issuer ACL required')
@@ -641,11 +641,18 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         for session in (private,connection):self.assertEqual(session.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,))
                                 else:
                                     self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual(released,[result.value])
-                                    self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
+                                    if name in ('BobGuarded','BobGuardedId'):
+                                        published=json.loads(result.value);self.assertEqual(published['version'],'truss.guarded-query-result/0.1-candidate')
+                                        cells=json.loads(published['batchJson']);contract=json.loads(published['resultContractJson'])
+                                        self.assertEqual(len(contract['columns']),1 if name=='BobGuardedId' else 2)
+                                        expected_cells=[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]
+                                        if name=='BobGuarded':expected_cells.append({'outcomeId':'withheld','disposition':'withheld'})
+                                        self.assertEqual(cells['rows'],[expected_cells])
+                                    else:self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
                                 caller.detach();connection.rollback()
                             executor.detach();private.rollback()
                         if name=='BobPublicIssuer':self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.graph_subject_current() FROM PUBLIC')
-                        composed.append({'principal':name,'outcome':('guardedResultRefused' if name=='BobGuardedCorrupt' else 'issuerAclRefused'),'released':False} if expected is None else {'principal':name,'resources':expected,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
+                        composed.append({'principal':name,'outcome':('guardedResultRefused' if name=='BobGuardedCorrupt' else 'issuerAclRefused'),'released':False} if expected is None else {'principal':name,'resources':expected,'queryCellsPublished':name.startswith('BobGuarded'),'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
                     directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_SUBJECT_COMPOSITION_EVIDENCE')
                     if directory:
                         folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)

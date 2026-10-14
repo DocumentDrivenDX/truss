@@ -69,7 +69,7 @@ def _capture(cursor,request):
     return assessment,raw_objects,edges,cells
 
 
-def _prepare_ontology_resource_operation(original_request,subject,*,compiler=None,existing_locks=False):
+def _prepare_ontology_resource_operation(original_request,subject,*,compiler=None,existing_locks=False,query_results=False):
     """Prepare the fixed source/fact/evaluation operation, without disclosure.
 
     No caller-supplied SQL or evaluator; exact request bytes are copied before
@@ -82,6 +82,7 @@ def _prepare_ontology_resource_operation(original_request,subject,*,compiler=Non
         raise ValueError('Original bounded ontology publication context required')
     if type(existing_locks) is not bool:raise ValueError('Exact ontology existing lock mode required')
     request=bytes(original_request);prepared=_pin_owned_evaluator_sources()
+    if type(query_results) is not bool or (query_results and compiler is None):raise ValueError('Original guarded query publication mode required')
     sources=(Path(__file__),ROOT/'scripts/security_ontology_edge_projection.py')
     pins=tuple((p,sha256(p.read_bytes()).digest()) for p in sources)+tuple(prepared.pins)
     def execute(cursor,observed):
@@ -114,7 +115,13 @@ def _prepare_ontology_resource_operation(original_request,subject,*,compiler=Non
         if _capture(cursor,request)!=before:raise ValueError('Original ontology source/facts changed before publication')
         if any(sha256(p.read_bytes()).digest()!=digest for p,digest in pins):raise ValueError('Original ontology evaluator sources changed')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(previous[0][0],),prepare=False)
-        return json.dumps(decision,separators=(',',':'),ensure_ascii=False).encode()
+        if query_results:
+            packet=decode_owner_evidence_json(compiled_receipt['output'].encode())
+            if packet['version']!='weft.truss.security.guarded-candidate/0.1-candidate':raise ValueError('Original guarded query result required')
+            decision={'version':'truss.guarded-query-result/0.1-candidate','securityReady':False,'sourceContextSha256':packet['sourceContextSha256'],'queryContextSha256':packet['queryContextSha256'],'resultContractJson':packet['query']['resultContractJson'],'batchJson':compiled_receipt['batch']}
+        raw=json.dumps(decision,separators=(',',':'),ensure_ascii=False).encode()
+        if len(raw)>4000000:raise ValueError('Bounded guarded buffered result required')
+        return raw
     return execute
 
 
