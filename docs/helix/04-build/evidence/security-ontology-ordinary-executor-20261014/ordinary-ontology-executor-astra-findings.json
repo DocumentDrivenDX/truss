@@ -1,0 +1,38 @@
+{
+  "status": "Actionable source findings reported; current submitted version not clean",
+  "scope": "Read-only ordinary private executor increment; no native execution or implementation edit",
+  "findings": [
+    {
+      "priority": 1,
+      "file": "scripts/security_ontology_read_cut.py",
+      "issue": "Object/edge lock readback lacks permanent ordinary, no-RLS/FORCE, no-inheritance shape qualification; ordinary executor can observe filtered facts.",
+      "recommendation": "Verify exact three fact/map homes plus own ShareLocks before complete capture."
+    },
+    {
+      "priority": 1,
+      "file": "packages/python/src/truss/_security_catalog_assessment.py",
+      "issue": "Source verifier permits inheritance while issuer locks ONLY parents and original report queries can scan descendants.",
+      "recommendation": "Reject pg_inherits links in both directions for all15 fixed source homes."
+    },
+    {
+      "priority": 2,
+      "file": "scripts/security_ontology_guarded_read.py",
+      "issue": "Truthy non-bool existing_locks skips acquisition, and helper itself checks source locks only, not object/edge locks.",
+      "recommendation": "Require exact bool and independently verify held fact cuts for existing-lock mode."
+    },
+    {
+      "priority": 2,
+      "file": "packages/python/tests/test_security_ontology_edges_native.py",
+      "issue": "New per-case ordinary executor connection closes only after successful assertions, leaving locks held if case fails.",
+      "recommendation": "Register close immediately or use outer finally for executor handback."
+    }
+  ],
+  "sourceDigests": {
+    "scripts/security_ontology_read_cut.py": "6ce76f68685de4b0ba4f3f9d11bd62e62a3243acdf19d69797e2cd0d45800f11",
+    "scripts/security-ontology-read-cut.sql": "5bb892306aac378528c5d15c18e6d3b3788e4201b8437f14953abca51ce8fd05",
+    "scripts/security_ontology_guarded_read.py": "e83256d3d8a0917f6274240591614972c7c9d18cbbee0f08654a2708500f2f1d",
+    "packages/python/src/truss/_security_catalog_assessment.py": "4208f1b75e3badcaddb261be8402a982eb6621821366ab4f8c2d0f0a5f31167c",
+    "packages/python/tests/test_security_ontology_edges_native.py": "125587451cca455b1bfac81d7c668beb695a41744d2892b2dc51ae8e1acf979e"
+  },
+  "limits": "Source findings only, no adversarial native reproduction or full admission/DDL lifetime claim."
+}

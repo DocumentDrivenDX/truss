@@ -1,0 +1,43 @@
+{
+  "version": "truss.security.ordinary-ontology-executor-evidence/0.1-candidate",
+  "acceptanceReferences": [
+    "US-056-AC2",
+    "US-057-AC1",
+    "US-057-AC2",
+    "CONTRACT-062",
+    "CONTRACT-063",
+    "STP-056",
+    "STP-057"
+  ],
+  "runtime": "truss-catalog-runtime/0.60-candidate",
+  "native": "PostgreSQL 18.6",
+  "compilerSource": "Weft 61865a6fe7f390c1baeaf4fba265e837e18db34b",
+  "executor": {
+    "superuser": false,
+    "bypassRls": false,
+    "schemaHeadUpdate": false,
+    "selectedTables": "SELECT only",
+    "privatePeerPrivilege": "pg_read_all_stats",
+    "routineGrants": "fixture grants all Truss invoker functions; fixed lock-only definer granted only to executor"
+  },
+  "refusals": [
+    "object RLS",
+    "source parent/child inheritance",
+    "fact parent/child inheritance",
+    "PUBLIC issuer execute grant"
+  ],
+  "scope": "Selected full ontology ordinary private executor composition under trusted source, installer, mapping, routine, authentication and DDL lifetime custody; no public native admission, complete backend qualification or acceptance promotion. All132 original cases remain required.",
+  "sources": {
+    "packages/python/src/truss/_security_catalog_assessment.py": "bccc7618181db2ca7f55a98eefc846c5f5372c59064ac000244afbd35c1d36c6",
+    "packages/python/tests/test_security_ontology_edges_native.py": "9818f4cb10751704a322fd8a4d2fc2ca66e3a8781cfc767128dfaf35dece9f1a",
+    "scripts/security_ontology_guarded_read.py": "52e154bf8e6e5c1913489edda60b4a56b69e51080f31b757f502a9c82aed22a8",
+    "scripts/security_ontology_native_subject_read.py": "36801287ef43372b1dbf63a42c6948542e146ecc9590e735af1de30390a87a87",
+    "scripts/security_ontology_read_cut.py": "4fc4d711488fddca7e17c77c1344a1ce82f85e45c1450b8e6f5aa5809f55b21e",
+    "scripts/security-ontology-read-cut.sql": "5bb892306aac378528c5d15c18e6d3b3788e4201b8437f14953abca51ce8fd05"
+  },
+  "validation": {
+    "native": "1 test passed, 23.622 seconds; finalr6",
+    "moduleBoundaries": "1031 imports passed",
+    "diffCheck": "passed"
+  }
+}

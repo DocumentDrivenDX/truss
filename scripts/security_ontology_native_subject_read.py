@@ -38,13 +38,14 @@ def _caller(cursor,observed):
     return rows[0][:3]
 
 
-def _registered_subject(cursor,identity,bindings):
+def _registered_subject(cursor,identity,bindings,private_reader_oid=None):
     # The private executor already holds both shared role catalog locks and the
     # Subject map cut. Original registration comparisons are trusted custody.
     installation=_text_rows(cursor,"SELECT owner_oid::pg_catalog.text,(SELECT oid FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database())::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton",limit=1)
     if len(installation)!=1 or installation[0][1]!=identity[0]:raise ValueError('Original caller/executor database correspondence required')
     owner=installation[0][0]
-    home=_text_rows(cursor,"SELECT c.relowner::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,c.relrowsecurity::pg_catalog.text,c.relforcerowsecurity::pg_catalog.text,(EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid))::pg_catalog.text,(NOT EXISTS(SELECT 1 FROM pg_catalog.aclexplode(coalesce(c.relacl,pg_catalog.acldefault('r',c.relowner))) a WHERE a.grantee OPERATOR(pg_catalog.<>) c.relowner OR a.grantor OPERATOR(pg_catalog.<>) c.relowner))::pg_catalog.text FROM pg_catalog.pg_class c WHERE c.oid OPERATOR(pg_catalog.=) 'truss.catalog_subject_map'::pg_catalog.regclass",limit=1)
+    if private_reader_oid is not None and (type(private_reader_oid) is not int or not 1<=private_reader_oid<=4294967295):raise ValueError('Original private Subject map reader required')
+    home=_text_rows(cursor,"SELECT c.relowner::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,c.relrowsecurity::pg_catalog.text,c.relforcerowsecurity::pg_catalog.text,(EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid))::pg_catalog.text,(NOT EXISTS(SELECT 1 FROM pg_catalog.aclexplode(coalesce(c.relacl,pg_catalog.acldefault('r',c.relowner))) a WHERE a.grantor OPERATOR(pg_catalog.<>) c.relowner OR (a.grantee OPERATOR(pg_catalog.<>) c.relowner AND NOT (a.grantee OPERATOR(pg_catalog.=) %s::pg_catalog.oid AND a.privilege_type OPERATOR(pg_catalog.=) 'SELECT' AND NOT a.is_grantable))))::pg_catalog.text FROM pg_catalog.pg_class c WHERE c.oid OPERATOR(pg_catalog.=) 'truss.catalog_subject_map'::pg_catalog.regclass",(private_reader_oid or 0,),1)
     if home!=[(owner,'r','p','false','false','false','true')]:raise ValueError('Original private registered ontology Subject map required')
     mapped=_text_rows(cursor,'SELECT role_oid::pg_catalog.text,staff_key::pg_catalog.text FROM ONLY truss.catalog_subject_map ORDER BY role_oid',limit=256)
     if mapped!=[(str(oid),key) for oid,key in bindings]:raise ValueError('Original registered ontology Subject map changed')
@@ -59,7 +60,7 @@ def _registered_subject(cursor,identity,bindings):
     return subjects[0]
 
 
-def publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,original_request,registered_bindings,publisher,*,compiler=None):
+def publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,original_request,registered_bindings,publisher,*,compiler=None,cut_issuer=None):
     """Selected original comparisons, not public query/credential admission.
 
     Caller and executor host custody are reserved through the final receiver.
@@ -86,12 +87,17 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
             if private_observed[0][2:]!=('read_committed','read_write'):
                 raise ValueError('Original fresh native ontology executor transaction required')
             _pin_cursor(private)
-            acquire_registered_role_catalog_cut_with_cursor(private)
+            if cut_issuer is None:acquire_registered_role_catalog_cut_with_cursor(private)
+            else:
+                from security_ontology_read_cut import acquire_issued_ontology_read_cut
+                if type(cut_issuer) is not tuple or len(cut_issuer)!=2:raise ValueError('Original graph cut issuer comparison required')
+                acquire_issued_ontology_read_cut(private,*cut_issuer)
             _verify_native_peer(private,identity,observed[0][0],challenge)
-            private.execute('LOCK TABLE ONLY truss.catalog_subject_map,truss.catalog_runtime_installation IN SHARE MODE NOWAIT',prepare=False)
-            subject=_registered_subject(private,identity,bindings)
-            raw=_prepare_ontology_resource_operation(request,subject,compiler=compiler)(private,private_observed)
-            if _registered_subject(private,identity,bindings)!=subject:raise ValueError('Original native ontology Subject changed')
+            if cut_issuer is None:private.execute('LOCK TABLE ONLY truss.catalog_subject_map,truss.catalog_runtime_installation IN SHARE MODE NOWAIT',prepare=False)
+            private_reader=None if cut_issuer is None else cut_issuer[1]
+            subject=_registered_subject(private,identity,bindings,private_reader)
+            raw=_prepare_ontology_resource_operation(request,subject,compiler=compiler,existing_locks=cut_issuer is not None)(private,private_observed)
+            if _registered_subject(private,identity,bindings,private_reader)!=subject:raise ValueError('Original native ontology Subject changed')
             _verify_native_peer(private,identity,observed[0][0],challenge)
             return raw
         result=executor._run_operation(executor_transaction,evaluate)
