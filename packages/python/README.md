@@ -11,16 +11,16 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.26`,
-native runtime `0.62-candidate`, layout `1.0`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.32`. The tested local
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.27`,
+native runtime `0.63-candidate`, layout `1.0`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.33`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The current release is [v0.0.26](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.26).
+The current release is [v0.0.27](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.27).
 Registration-owned optional and required non-key rebinding is included in25; its
 [report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.2.md)
 retains original effects/events and requires current data-reader authority.
@@ -30,17 +30,18 @@ future distributed changes receive a new package version.
 
 ## Next release candidate
 
-SDK26/native62 alternate-key backfill over existing required scalar fields is
-implemented, tested and published. It preserves existing
-key identities and pure-backfill object versions, produces exact UMF tuples,
-and refuses duplicates before changes.
+SDK27/native63 is published with matching Weft28/backend33. It registers a
+new required scalar field and its alternate key together using retained cells,
+preserving original effects and precise key values. See the
+[report contract](../../docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md).
 
-SDK27/native63 additionally registers a genuinely new required scalar field and
-its alternate key together using retained cells. Four basic UMF0.7/0.8 workflows
-and one populated local native62 upgrade pass, including lookup, query and
-post-commit history. Matching Weft28/backend33 is committed; publication remains
-pending. See the [report contract](../../docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md).
-Existing-key changes and recursive rebinding remain unfinished.
+SDK28/native64 adds acyclic nested array/map properties with required item Fields
+and exact scalar leaves, including writes, reads, history, imports, Weft queries
+and retained-cell rebinding. Five basic installed-wheel workflows pass. Matching
+Weft29/backend34 release publication is pending. The
+[rebind addendum](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.4.md)
+defines its scope. Cyclic definitions, descendant evolution and record/composed
+ownership remain unfinished.
 
 ## Install the release
 
@@ -49,10 +50,10 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.26 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.27 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.27 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.28 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.26'
+  'truss-toolkit[local,native,query]==0.0.27'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release

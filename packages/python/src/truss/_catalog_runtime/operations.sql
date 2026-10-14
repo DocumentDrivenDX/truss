@@ -118,7 +118,7 @@ BEGIN
   IF revision IS NULL OR revision<1 THEN RAISE EXCEPTION 'positive original executed revision required' USING ERRCODE='55000';END IF;
   basis:=truss.catalog_all_expected_records(revision);
   FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(identity->>'typeId')::int AND p.retired_rev IS NULL LOOP
-   IF NOT truss.runtime_can_read(property.definition_document_id,property.declaration_module) OR (property.cardinality IN ('array','map') AND truss.runtime_can_read(property.item->>'documentId',property.item->'reference'->>'module') IS NOT TRUE) THEN RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='42501';END IF;
+   IF NOT truss.runtime_can_read(property.definition_document_id,property.declaration_module) OR (property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE) THEN RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='42501';END IF;
   END LOOP;
  ELSIF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN
   SELECT r.document_id,r.module INTO STRICT owner_document,owner_module FROM truss.rel_def r WHERE r.rel_type_id=(identity->>'typeId')::int;

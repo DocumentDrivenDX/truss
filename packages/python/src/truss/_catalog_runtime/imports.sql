@@ -1,6 +1,6 @@
 CREATE FUNCTION truss.runtime_import_profiles() RETURNS jsonb
 LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
- SELECT '{"importProfile":{"identity":"truss-scalar-import","version":"0.3","sha256":"f6bd20e9e82cbf0f6e8884ac07083dfee6dc8f67c4aa2c486b561db873dfd572"},"importPayloadProfile":{"identity":"truss-scalar-import-payload","version":"0.2","sha256":"45180a79836394b3c3c945cfe908b67e3a45ab3c81362f052b12ae45e7042281"},"importKeyProfile":{"identity":"truss-selected-umf-scalar-key","version":"0.2","sha256":"e4b325c5906c759776e7ffbb5b9c298caa23034339d90c4e2e7a9d74eb002708"},"configurationProfile":{"identity":"truss-installed-engine-forbid","version":"0.1","sha256":"502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"}}'::jsonb;
+ SELECT '{"importProfile":{"identity":"truss-scalar-import","version":"0.3","sha256":"f6bd20e9e82cbf0f6e8884ac07083dfee6dc8f67c4aa2c486b561db873dfd572"},"importPayloadProfile":{"identity":"truss-scalar-import-payload","version":"0.3","sha256":"60f3b8c801fb236b514389b8783909cb8703ab0c2466e879af0e919ec08815ae"},"importKeyProfile":{"identity":"truss-selected-umf-scalar-key","version":"0.2","sha256":"e4b325c5906c759776e7ffbb5b9c298caa23034339d90c4e2e7a9d74eb002708"},"configurationProfile":{"identity":"truss-installed-engine-forbid","version":"0.1","sha256":"502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"}}'::jsonb;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_import_profiles() FROM PUBLIC;
 
@@ -112,7 +112,13 @@ BEGIN
  IF record-ARRAY['kind','identity','payload','payloadProfile']<>'{}'::jsonb OR (record->>'kind' IN ('object','edge')) IS NOT TRUE THEN RAISE EXCEPTION 'closed import record required' USING ERRCODE='22023';END IF;
  IF octet_length(payload) NOT BETWEEN 1 AND 1048576 OR (convert_from(payload,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique original payload required' USING ERRCODE='22023';END IF;
  value:=convert_from(payload,'UTF8')::jsonb;
- IF (record->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'importPayloadProfile' AND NOT ((record->'payloadProfile'='{"identity":"truss-scalar-import-payload","version":"0.1","sha256":"bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"}'::jsonb AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(value->'values') v WHERE truss.valid_scalar_cell(v.value->'value') IS NOT TRUE)) IS TRUE)) OR encode(sha256(payload),'hex') IS DISTINCT FROM record->'payload'->>'sha256'
+ IF (record->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'importPayloadProfile'
+  AND NOT ((record->'payloadProfile'='{"identity":"truss-scalar-import-payload","version":"0.2","sha256":"45180a79836394b3c3c945cfe908b67e3a45ab3c81362f052b12ae45e7042281"}'::jsonb
+   AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(value->'values') v WHERE truss.valid_flat_cell(v.value->'value') IS NOT TRUE)
+   AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(value->'values') v
+    CROSS JOIN LATERAL jsonb_array_elements(CASE v.value->'value'->>'kind' WHEN 'sequence' THEN v.value->'value'->'items' WHEN 'map' THEN v.value->'value'->'entries' ELSE '[]'::jsonb END) child
+    WHERE truss.valid_scalar_cell(CASE v.value->'value'->>'kind' WHEN 'map' THEN child.value->'value' ELSE child.value END) IS NOT TRUE)) IS TRUE)
+  AND NOT ((record->'payloadProfile'='{"identity":"truss-scalar-import-payload","version":"0.1","sha256":"bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"}'::jsonb AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(value->'values') v WHERE truss.valid_scalar_cell(v.value->'value') IS NOT TRUE)) IS TRUE)) OR encode(sha256(payload),'hex') IS DISTINCT FROM record->'payload'->>'sha256'
   OR octet_length(payload) NOT BETWEEN 1 AND 1048576 OR (convert_from(payload,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'exact original profiled payload required' USING ERRCODE='22023';END IF;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->0;result:=attempt.results->0;
  IF value-ARRAY['interfaceVersion','kind','values','source',CASE record->>'kind' WHEN 'object' THEN 'ownership' ELSE 'orderKey' END]<>'{}'::jsonb THEN RAISE EXCEPTION 'closed profiled import payload required' USING ERRCODE='22023';END IF;
