@@ -1,0 +1,32 @@
+{
+  "version": "truss.graph-epoch-read-merged-evidence/0.1-candidate",
+  "runtime": "truss-catalog-runtime/0.61-candidate",
+  "mergedMain": "4bc1f677",
+  "validation": {
+    "native": "1 passed,28.330seconds",
+    "boundaries": "1052 imports passed",
+    "securitySources": "unchanged from reviewed88890900",
+    "sourceDependencies": "catalog_make_report still uses covered runtime_catalog_rebind_transition; rebind profile reads its journal JSON without a new native table dependency"
+  },
+  "sources": {
+    "packages/python/src/truss/_security_graph_epoch_read.py": "f623d023e63a0d4fbdfc06286bc083b8205777db90085eba11bc46250ee92553",
+    "packages/python/src/truss/_security_bootstrap/graph-epoch-read-cut.sql": "dd3ed9553c33a0a72274f24caf9f37ed5af1162832aaa25a4cc70929d3203d26",
+    "scripts/security_ontology_native_subject_read.py": "2b66393a8e23146ed04e686d8b19f472c7f71d12d290b75c9761b2259699f00f",
+    "packages/python/tests/test_security_ontology_edges_native.py": "74ba466730b07f4948a8e80fe4837306e62506ffbc05514d00a77785987eedef",
+    "scripts/check-module-boundaries.py": "4f1b784eee99a7d9621feff34b23290df2d7424023afa3be375d6f2660c3608c",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "364b2a908fd5bc53e4ccaa81ada2633e696cce441fc5df152a8698c597f5ec01",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "b45c921607f145c1ee156b525c2b52e2232b18fc4bfb2d2bcfcef5b77092dd1c",
+    "packages/python/src/truss/_catalog_runtime/catalog-rebind.sql": "66142669d27671acc9ad84b0d0ee5498b519659feff3980db4db18e42fdaa6b3"
+  },
+  "packets": {
+    "compiler-request.json": "6dd0c6b2242954d25e140087fdef26fbf2f466875fa8dc9dec05a316ddddb308",
+    "native-r7.log": "acb9035fdfac16b363f3534a111ec93cdb73b915183f338e57892284fb70f004",
+    "native-source-epoch.json": "b2d1de35ed2d06f9fc51300f74eed7cdda8c06d360f718527959bd584e1ed199",
+    "accepted-catalog.json": "85b8ab52b3aa5d2a7c9f942e01c272c66d6dbc645bed651826fd28277f03c1a3",
+    "issued-profile.json": "cfe6fed5bea8503934ffde07384bcf21bb3e5eb201c80fe8f0106adde0a595a6",
+    "ordinary-epoch-read.json": "aaee8571504d6b307c1dac08235e8c46e3fd81a90e26332e644c787c56e445f0",
+    "compiler-output.json": "b7b667ea36ca4f777d5e758437f283aeda41827b3210a5c802c694caa425dd1e",
+    "physical-request.json": "5596ea1dd2132ea458d7f2fa02d98264dfd080769103062c040a00ba790665be"
+  },
+  "scope": "Separate runtime0.61 replay of original full ontology, compiler, source factory and ordinary current epoch profile controls. Prior0.60 packets/reviews retained unchanged. No public compiler admission, complete privilege/lifecycle or original case promotion."
+}
