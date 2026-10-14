@@ -1,0 +1,42 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "queries": [
+    {
+      "id": "eligible-bag-join-law",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "c612273c1c84c73c43297a9c38f6fea4fc40936b166492c7d2c937dea9cce893"
+    },
+    {
+      "id": "hidden-left-contributes-zero",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "bf0806e1b9351824199e079303c9b746540a0809a7728103be998829ac06cf09"
+    },
+    {
+      "id": "hidden-right-contributes-zero",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "4afbfced0c65101d6d1638788851868e1a91ebd28292338b2e33f34ddd410669"
+    },
+    {
+      "id": "filtering-only-left-leaks-right",
+      "expected": "sat",
+      "observed": "sat",
+      "model": "[left_occurrences = 1,\n right_occurrences = 1,\n right_eligible = False,\n original_join_predicate = True,\n left_eligible = True]",
+      "smt2Sha256": "ad7a0b56c85440cc19f786f20e5d33b13f64fc1f981229850f0e0beeb3121719"
+    }
+  ],
+  "sourceSha256": "64cab42e1736d642230234fcadb8e982f2f6c8deb5a12d4f3d96562ee90e5c22",
+  "scope": "Arbitrary nonnegative integer bag multiplicities for a fixed pair of native identities and original join predicate. Both input populations must apply original primary eligibility before the bag join.",
+  "limitations": [
+    "Eligibility and identity correspondence are assumed, not authenticated by the algebra.",
+    "No SQL optimizer/compiler/codec/native-role or release refinement is proved.",
+    "No NULL/absence predicate semantics, outer join, cursor or aggregate theorem.",
+    "Native self-join evidence is separate; no complete B03 promotion."
+  ]
+}

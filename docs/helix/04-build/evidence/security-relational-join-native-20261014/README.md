@@ -1,0 +1,7 @@
+# Native two-scan eligible self join
+
+Original relational query: `SELECT r.resourceId AS left_id, s.resourceId AS right_id FROM Resource r JOIN Resource s ON r.resourceId = s.resourceId`. The full enabled native ontology fixture passes one test in 83.850 seconds on PostgreSQL18.6/runtime0.65. Bob receives exactly original RB/RB cells; revoked Alice and Outsider receive no pairs. Both aliases derive from original accepted graph sources with the same held subject/authority/source cut, complete operand capture and original codec/result inspection. Source-capsule correspondence remains exact.
+
+R1 used duplicate resourceId output names and was refused by original producer resolution with WFT-OUTPUT-NAME before SQL. R2 adds distinct output aliases; the join predicates and eligibility control are unchanged. Both attempts are retained. This component evidence contributes to US-056-AC2 and original Truss B03/B08. It does not prove relationship traversal, arbitrary cross-type joins, multiplicity/presence/outer joins, public join-result publication or complete B03. The enclosing protected-publication controls still exercise separate filter/count paths.
+
+The independent conditional bag algebra in security-relational-join-formal-20261014 proves eligibility on both inputs under stated premises and exhibits one-sided filtering leakage. It is not native SQL/compiler refinement. No acceptance status changes or public activation.

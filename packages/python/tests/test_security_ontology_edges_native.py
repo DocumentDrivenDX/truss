@@ -698,6 +698,12 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         ordered=execute_relational_program(cursor,ordered_request,ordered_output,locators[0],checker,inspector)
                                         ordered_expected=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
                                         self.assertEqual(json.loads(ordered['batch'])['rows'],ordered_expected)
+                                        joined_request=_original_request(physical,before[0],'SELECT r.resourceId AS left_id, s.resourceId AS right_id FROM Resource r JOIN Resource s ON r.resourceId = s.resourceId')
+                                        joined_output=original_run([relational_binary],input=joined_request,capture_output=True,check=True,timeout=15).stdout
+                                        self.assertEqual(capture_relational_source_comparison(joined_request,joined_output),guarded_source)
+                                        joined=execute_relational_program(cursor,joined_request,joined_output,locators[0],checker,inspector)
+                                        joined_expected=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}},{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
+                                        self.assertEqual(json.loads(joined['batch'])['rows'],joined_expected)
                                         count_request=_original_request(physical,before[0],'SELECT COUNT(*) AS n FROM Resource r')
                                         count_output=original_run([relational_binary],input=count_request,capture_output=True,check=True,timeout=15).stdout
                                         self.assertEqual(capture_relational_source_comparison(count_request,count_output),guarded_source)

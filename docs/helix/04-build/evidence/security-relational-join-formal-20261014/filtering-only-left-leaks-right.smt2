@@ -1,0 +1,15 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-fun right_occurrences () Int)
+(declare-fun left_occurrences () Int)
+(declare-fun left_eligible () Bool)
+(declare-fun original_join_predicate () Bool)
+(declare-fun right_eligible () Bool)
+(assert
+ (let ((?x31 (ite original_join_predicate (* (ite left_eligible left_occurrences 0) right_occurrences) 0)))
+(let (($x26 (not right_eligible)))
+(let (($x12 (>= right_occurrences 0)))
+(let (($x11 (>= left_occurrences 0)))
+(let (($x13 (and $x11 $x12)))
+(and $x13 (> left_occurrences 0) (> right_occurrences 0) left_eligible $x26 original_join_predicate (> ?x31 0))))))))
+(check-sat)
