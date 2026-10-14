@@ -24,6 +24,17 @@ The current release is [v0.0.23](https://github.com/DocumentDrivenDX/truss/relea
 The Python distribution version is distinct from native runtime/layout versions;
 future distributed changes receive a new package version.
 
+## Next release candidate
+
+Truss0.0.24/native60 with Weft0.4.25/backend0.4.30 adds registration-owned
+rebinding of retained values into new optional, non-key scalar/flat-container
+fields. Public reads, complete history, SQL and committed feeds expose the
+new version. The [report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.1.md)
+retains exact effects/events and requires current data-reader authority.
+Old reports stay unchanged. Native59 upgrades additively. Basic UMF0.7/0.8
+workflows and populated upgrade pass; publication awaits the release workflow.
+Required/key rebinding and recursive values remain unfinished.
+
 ## Install the release
 
 Use a fresh Python3.11+ environment on the declared Linuxx86_64/macOSarm64

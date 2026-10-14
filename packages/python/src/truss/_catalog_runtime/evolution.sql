@@ -41,7 +41,7 @@ BEGIN
    IF missing_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.required','affectedObjectCount',missing_count::text));END IF;
    IF family_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.scalar_type','affectedObjectCount',family_count::text));END IF;
    IF facet_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.facets','affectedObjectCount',facet_count::text));END IF;
-   IF retained_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.retained_name_collision','affectedObjectCount',retained_count::text));END IF;
+   IF retained_count>0 AND NOT (property_id IS NULL AND field->'declaration'->>'nullability'='absent-allowed') THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.retained_name_collision','affectedObjectCount',retained_count::text));END IF;
   END LOOP;
  END LOOP;
  -- Existing independent relationship bounds are checked before publication.

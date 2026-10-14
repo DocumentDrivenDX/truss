@@ -4,6 +4,8 @@ CREATE FUNCTION truss.query_object_attribution(binding jsonb,selected_type int,s
 RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY DEFINER
 SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' AS $$
 DECLARE object_row truss.object%ROWTYPE;owner truss.type_def%ROWTYPE;
+ registration truss.catalog_registration_request%ROWTYPE;rebound truss.runtime_catalog_rebind_transition%ROWTYPE;
+ writer xid8;asserted jsonb;history_profile text;
  transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  physical truss.journal%ROWTYPE;item jsonb;event jsonb;original bytea;actor text;
  created_actor text;updated_actor text;selected_version bigint;events int;used_bytes bigint:=0;
@@ -20,7 +22,7 @@ BEGIN
  SELECT * INTO STRICT object_row FROM truss.object WHERE id=selected_id AND type_id=selected_type;
  IF object_row.ver<1 OR object_row.root_id IS NOT NULL THEN RAISE EXCEPTION 'rootless current entity required' USING ERRCODE='0A000';END IF;
  FOR selected_version IN SELECT DISTINCT v FROM unnest(ARRAY[1::bigint,object_row.ver::bigint]) v LOOP
-  expected_actor:=NULL;
+  expected_actor:=NULL;registration.registration_id:=NULL;result:=NULL;
   IF selected_version=1 THEN
    SELECT g.* INTO STRICT creation FROM truss.runtime_create_group g
     CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) m
@@ -34,7 +36,16 @@ BEGIN
        AND r.value->'identity'->>'typeId'=selected_type::text);
    creation_attempt:=attempt.id;
    journals:=jsonb_build_array(member->'journal');after_image:=member->'object';expected_actor:=creation.actor_name;
+   writer:=attempt.writer_xid;asserted:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'assertedOrigin';history_profile:='truss-native-scalar-create/0.2';
   ELSE
+   SELECT * INTO rebound FROM truss.runtime_catalog_rebind_transition t WHERE t.object_id=selected_id AND t.type_id=selected_type AND (t.after_object->>'ver')::bigint=selected_version;
+   IF FOUND THEN
+    SELECT * INTO STRICT registration FROM truss.catalog_registration_request r WHERE r.registration_id=rebound.registration_id;
+    IF registration.writer_xid IS DISTINCT FROM rebound.writer_xid OR registration.actor_oid IS DISTINCT FROM rebound.actor_oid OR registration.revision IS DISTINCT FROM rebound.revision THEN RAISE EXCEPTION 'original catalog attribution source required' USING ERRCODE='55000';END IF;
+    PERFORM truss.catalog_rebind_transition_reader(rebound);
+    journals:=rebound.journal;after_image:=rebound.after_object;expected_actor:=registration.actor_name;
+    writer:=registration.writer_xid;asserted:=convert_from(registration.origin_bytes,'UTF8')::jsonb;history_profile:='truss-native-catalog-rebind/0.1';
+   ELSE
    SELECT * INTO STRICT transition FROM truss.runtime_object_transition t
     WHERE t.object_id=selected_id AND t.type_id=selected_type AND (t.after_object->>'ver')::bigint=selected_version;
    SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
@@ -47,6 +58,8 @@ BEGIN
     OR result->'identity'->>'id' IS DISTINCT FROM selected_id::text OR result->'identity'->>'typeId' IS DISTINCT FROM selected_type::text
    THEN RAISE EXCEPTION 'original changed attribution result required' USING ERRCODE='55000';END IF;
    journals:=transition.journal;after_image:=transition.after_object;
+   writer:=attempt.writer_xid;asserted:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'assertedOrigin';history_profile:='truss-native-scalar-mutation/0.1';
+   END IF;
   END IF;
   IF selected_version=object_row.ver AND after_image IS DISTINCT FROM to_jsonb(object_row)
   THEN RAISE EXCEPTION 'current entity and attribution image differ' USING ERRCODE='55000';END IF;
@@ -56,7 +69,7 @@ BEGIN
    IF events>128 OR used_bytes>(binding->>'maximumBytes')::bigint THEN RAISE EXCEPTION 'bounded attribution evidence required' USING ERRCODE='54000';END IF;
    SELECT * INTO STRICT physical FROM truss.journal WHERE xid=(item->>'xid')::xid8 AND seq=(item->>'seq')::bigint;
    IF to_jsonb(physical) IS DISTINCT FROM item OR physical.entity_kind<>'o' OR physical.entity_id<>selected_id
-    OR physical.entity_type<>selected_type OR physical.ver<>selected_version OR physical.xid<>attempt.writer_xid
+    OR physical.entity_type<>selected_type OR physical.ver<>selected_version OR physical.xid<>writer
    THEN RAISE EXCEPTION 'original attribution journal correspondence required' USING ERRCODE='55000';END IF;
    original:=decode(physical.new_value->>'bytesBase64','base64');
    IF physical.new_value IS DISTINCT FROM truss.runtime_exact_wrapper('event',original)
@@ -65,10 +78,10 @@ BEGIN
    event:=convert_from(original,'UTF8')::jsonb;
    IF event->>'interfaceVersion' IS DISTINCT FROM 'truss-history-event/0.2.0-proposal'
     OR event->>'sourceEpoch' IS DISTINCT FROM epoch
-    OR event->>'historyProfile' IS DISTINCT FROM (CASE selected_version WHEN 1 THEN 'truss-native-scalar-create/0.2' ELSE 'truss-native-scalar-mutation/0.1' END)
+    OR event->>'historyProfile' IS DISTINCT FROM history_profile
     OR physical.op IS DISTINCT FROM (CASE event->>'operation' WHEN 'property' THEN 'update' ELSE event->>'operation' END)
     OR physical.prop_id IS DISTINCT FROM (event->>'propertyId')::int
-    OR event->'origin'->'asserted' IS DISTINCT FROM (convert_from(attempt.input_bytes,'UTF8')::jsonb)->'assertedOrigin'
+    OR event->'origin'->'asserted' IS DISTINCT FROM asserted
     OR event->>'xid' IS DISTINCT FROM physical.xid::text OR event->>'seq' IS DISTINCT FROM physical.seq::text
     OR event->>'eventVersion' IS DISTINCT FROM selected_version::text OR event->>'eventCatalogRevision' IS DISTINCT FROM physical.rev::text
     OR event->'identity'->>'id' IS DISTINCT FROM selected_id::text OR event->'identity'->>'typeId' IS DISTINCT FROM selected_type::text
@@ -89,7 +102,7 @@ BEGIN
    THEN RAISE EXCEPTION 'original creation attribution required' USING ERRCODE='55000';END IF;
   END LOOP;
   IF event_group IS DISTINCT FROM jsonb_build_object('profile','truss-history-group/0.1.0','eventCount',events::text,'orderedEventDigest',encode(sha256(convert_to(semantic_events::text,'UTF8')),'hex'))
-   OR selected_version>1 AND result->'events' IS DISTINCT FROM event_refs
+   OR selected_version>1 AND registration.registration_id IS NULL AND result->'events' IS DISTINCT FROM event_refs
   THEN RAISE EXCEPTION 'complete original attribution event group required' USING ERRCODE='55000';END IF;
   IF events=0 THEN RAISE EXCEPTION 'missing attribution events' USING ERRCODE='55000';END IF;
   IF selected_version=1 THEN created_actor:=actor;END IF;
