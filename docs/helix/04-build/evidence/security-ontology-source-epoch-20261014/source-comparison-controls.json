@@ -1,0 +1,31 @@
+{
+  "originalSnapshot": true,
+  "controls": [
+    {
+      "control": "native revision integer",
+      "refused": true,
+      "diagnostic": "Original physical graph and compiler source correspondence required"
+    },
+    {
+      "control": "bool/int census coercion",
+      "refused": true,
+      "diagnostic": "Original physical graph and compiler source correspondence required"
+    },
+    {
+      "control": "authored/native revision conflation",
+      "refused": true,
+      "diagnostic": "Original physical graph and compiler source correspondence required"
+    },
+    {
+      "control": "stale authored revision",
+      "refused": true,
+      "diagnostic": "Original physical graph and compiler source correspondence required"
+    },
+    {
+      "control": "source hash substitution",
+      "refused": true,
+      "diagnostic": "Original physical graph and compiler source correspondence required"
+    }
+  ],
+  "scope": "Exact original carrier/source comparisons; altered hashes recomputed for semantic carrier controls, not issuer authenticity or formal refinement."
+}

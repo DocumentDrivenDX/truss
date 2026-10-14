@@ -1,0 +1,25 @@
+setUpClass (test_security_catalog_source_installation_native.CatalogSourceInstallationTests) ... ERROR
+setUpClass (test_security_catalog_source_factory_native.CatalogSourceFactoryNativeTests) ... ERROR
+
+======================================================================
+ERROR: setUpClass (test_security_catalog_source_installation_native.CatalogSourceInstallationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_mapping_native.py", line 20, in setUpClass
+    if not path:raise RuntimeError('Original Weft mapping extension path is a required native qualification input')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Original Weft mapping extension path is a required native qualification input
+
+======================================================================
+ERROR: setUpClass (test_security_catalog_source_factory_native.CatalogSourceFactoryNativeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_mapping_native.py", line 20, in setUpClass
+    if not path:raise RuntimeError('Original Weft mapping extension path is a required native qualification input')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Original Weft mapping extension path is a required native qualification input
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.001s
+
+FAILED (errors=2)

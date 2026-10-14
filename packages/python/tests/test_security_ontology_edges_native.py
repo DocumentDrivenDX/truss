@@ -397,3 +397,74 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         if directory:
             folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
             (folder/'revocation-order.json').write_text(json.dumps({'observations':drain_rows,'beforeRevocationDecision':drain_decisions[0],'scope':'One actual Assignment.active writer/read cut and native commit acknowledgment; complete policy/role/mapping/cache/paging/clock generation lifecycle not qualified.'},indent=2)+'\n')
+
+        if os.environ.get('TRUSS_SECURITY_ONTOLOGY_SOURCE_FACTORY'):
+            self.assertTrue(compiled_results,'Original owner compiler output required for graph source factory')
+            from dataclasses import replace
+            from truss._security_graph_source import PreparedGraphSecuritySource,snapshot_graph_security_source
+            from truss._security_catalog_source_installation import bootstrap_catalog_source_marker_in_transaction,verify_catalog_source_archive_with_cursor
+            from truss._security_home_installation import bootstrap_security_homes_in_transaction
+            from truss._security_source_epoch_installation import bootstrap_source_epoch_infrastructure_in_transaction
+            from truss._security_catalog_source_epoch import issue_initial_catalog_source_epoch_in_transaction
+            from truss._psycopg_fact_cut import _FactRelationComparison,_FactColumnComparison
+            record=compiled_results[0];original_compiler=record['request'].encode()
+            assessment=json.loads(original_compiler)['bindingJson'];assessment=json.loads(assessment)['inventoryJson'].encode()
+            # Preserve the exact native assessment carrier, not a reserialized census.
+            from truss._security_catalog_assessment import capture_accepted_catalog
+            self.admin.execute('BEGIN');factory_host=adopt_psycopg_host(self.admin,operation_timeout_ms=30000);factory_tx=factory_host.adopt_transaction().value
+            self.addCleanup(factory_host.detach)
+            with self.admin.cursor() as cursor:actual_assessment=capture_accepted_catalog(cursor,request)
+            self.assertEqual(json.loads(actual_assessment),json.loads(assessment))
+            profile=sha256(original_compiler).digest();guard=(self.installation.installation_id.encode(),profile,1)
+            graph=PreparedGraphSecuritySource(request,record['output'].encode(),actual_assessment,original_compiler,guard)
+            graph=snapshot_graph_security_source(graph)
+            homes=bootstrap_security_homes_in_transaction(factory_host,factory_tx,installation_identity=guard[0],authored_profile=profile,max_retained=8)
+            self.assertIsInstance(homes,Ok,str(factory_host._custody.last_attempt.error))
+            marked=bootstrap_catalog_source_marker_in_transaction(factory_host,factory_tx,graph)
+            self.assertIsInstance(marked,Ok,str(factory_host._custody.last_attempt.error))
+            self.assertIsInstance(bootstrap_catalog_source_marker_in_transaction(factory_host,factory_tx,graph),Error)
+            infrastructure=bootstrap_source_epoch_infrastructure_in_transaction(factory_host,factory_tx,installation_identity=guard[0])
+            self.assertIsInstance(infrastructure,Ok,str(factory_host._custody.last_attempt.error))
+            source=(Path(__file__).resolve().parents[3]/'packages/postgresql/native/authorization-fact-write-fence.sql').read_text()
+            self.admin.execute(source)
+            self.admin.execute(sql.SQL('ALTER FUNCTION truss.runtime_fence_authorization_fact_write() OWNER TO {}').format(sql.Identifier(self.installation.owner_role)))
+            facts=[]
+            for name in ('object','edge','catalog_subject_map'):
+                self.admin.execute(sql.SQL('CREATE TRIGGER fact_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON {} FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_authorization_fact_write()').format(sql.Identifier('truss',name)))
+                self.admin.execute(sql.SQL('ALTER TABLE {} ENABLE ALWAYS TRIGGER fact_write_fence').format(sql.Identifier('truss',name)))
+                oid,owner=self.admin.execute('SELECT oid,relowner FROM pg_catalog.pg_class WHERE oid=%s::pg_catalog.regclass',('truss.'+name,)).fetchone()
+                columns=self.admin.execute('SELECT attname,attnum,atttypid,atttypmod,attnotnull,attcollation,attgenerated,attidentity FROM pg_catalog.pg_attribute WHERE attrelid=%s AND attnum>0 AND NOT attisdropped ORDER BY attnum',(oid,)).fetchall()
+                facts.append(_FactRelationComparison('truss',name,oid,owner,source.split('AS $$',1)[1].split('$$;',1)[0],tuple(_FactColumnComparison(*c) for c in columns)))
+            inputs=dict(mapping=graph,marker=marked.value,infrastructure=infrastructure.value,fact_relations=tuple(facts),subject_source=(Path(__file__).resolve().parents[3]/'scripts/security_ontology_native_subject_read.py').read_bytes())
+            self.admin.execute("CREATE TEMP TABLE graph_factory_prior(value text);INSERT INTO graph_factory_prior VALUES('kept');SAVEPOINT before_graph_epoch")
+            issued=issue_initial_catalog_source_epoch_in_transaction(factory_host,factory_tx,**inputs)
+            self.assertIsInstance(issued,Ok,str(factory_host._custody.last_attempt.error))
+            comparison=issued.value.comparison
+            self.assertIn(b'truss-owned-graph-source-profile/0.1-candidate',comparison.profile)
+            self.assertEqual(self.admin.execute('SELECT source_epoch,profile_bytes,evidence_bytes FROM truss.source_epoch_registry').fetchall(),[(comparison.epoch,comparison.profile,actual_assessment)])
+            with self.admin.cursor() as cursor:verify_catalog_source_archive_with_cursor(cursor,graph,self.installation.installation_id)
+            self.assertIsInstance(issue_initial_catalog_source_epoch_in_transaction(factory_host,factory_tx,**inputs),Error)
+            self.admin.execute('ROLLBACK TO before_graph_epoch')
+            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),(0,))
+            self.assertEqual(self.admin.execute('TABLE graph_factory_prior').fetchall(),[('kept',)])
+            stale=replace(graph,native_guard=(guard[0],profile,2))
+            self.assertIsInstance(issue_initial_catalog_source_epoch_in_transaction(factory_host,factory_tx,**{**inputs,'mapping':stale}),Error)
+            self.assertEqual(str(factory_host._custody.last_attempt.error),'Original source factory current guard required')
+            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),(0,))
+            malformed=replace(graph,native_dependencies=b'{}')
+            self.assertIsInstance(issue_initial_catalog_source_epoch_in_transaction(factory_host,factory_tx,**{**inputs,'mapping':malformed}),Error)
+            self.assertIsInstance(issue_initial_catalog_source_epoch_in_transaction(factory_host,factory_tx,**{**inputs,'fact_relations':tuple(facts[:-1])}),Error)
+            incomplete=(replace(facts[0],columns=facts[0].columns[:-1]),*facts[1:])
+            self.assertIsInstance(issue_initial_catalog_source_epoch_in_transaction(factory_host,factory_tx,**{**inputs,'fact_relations':incomplete}),Error)
+            self.assertEqual(str(factory_host._custody.last_attempt.error),'Complete original graph fact column census required')
+            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),(0,))
+            issued=issue_initial_catalog_source_epoch_in_transaction(factory_host,factory_tx,**inputs)
+            self.assertIsInstance(issued,Ok,str(factory_host._custody.last_attempt.error));comparison=issued.value.comparison
+            factory_host.detach();self.admin.commit()
+            self.assertEqual(self.admin.execute('SELECT source_epoch,profile_bytes,evidence_bytes FROM truss.source_epoch_registry').fetchall(),[(comparison.epoch,comparison.profile,actual_assessment)])
+            directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_SOURCE_EVIDENCE')
+            if directory:
+                folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
+                for name,data in (('physical-request.json',request),('compiler-request.json',original_compiler),('compiler-output.json',record['output'].encode()),('accepted-catalog.json',actual_assessment),('issued-profile.json',comparison.profile)):(folder/name).write_bytes(data)
+                archive=self.admin.execute("SELECT artifact_role,artifact_identity,pg_catalog.encode(artifact_sha256,'hex'),pg_catalog.encode(artifact_identity_sha256,'hex'),installation_id FROM truss.installation_archive ORDER BY artifact_identity COLLATE pg_catalog.\"C\"").fetchall()
+                (folder/'native-source-epoch.json').write_text(json.dumps({'epoch':comparison.epoch,'installation':comparison.installation,'incarnation':comparison.incarnation,'archives':archive,'committedReadback':True,'controls':['no repair/reuse','outer rollback retains prior work','stale generation','malformed graph preflight','omitted fact relation','omitted fact column'],'securityReady':False,'scope':'Original graph archive and initial native source epoch under trusted original compiler/administrator/routine/DDL custody; registered Subject/native compiler admission pending.'},indent=2)+'\n')

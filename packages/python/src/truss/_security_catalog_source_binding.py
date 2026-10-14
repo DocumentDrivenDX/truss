@@ -2,13 +2,14 @@
 from dataclasses import replace
 import hashlib,json
 from ._security_mapping import PreparedSecurityMapping
+from ._security_graph_source import PreparedGraphSecuritySource,snapshot_graph_security_source
 from ._security_source_epoch_installation import _MANIFEST_SHA256
 
 def _snapshot_source_binding(mapping,fact_relations,barrier):
     """Private byte/recipe binding packet; not an authenticated issuer artifact."""
     from ._psycopg_fact_cut import _prepare_fenced_fact_cut,_FactRelationComparison,_FactColumnComparison
-    if type(mapping) is not PreparedSecurityMapping:raise ValueError('Exact bounded catalog source binding bytes required')
-    mapping=replace(mapping)
+    if type(mapping) not in (PreparedSecurityMapping,PreparedGraphSecuritySource):raise ValueError('Exact bounded catalog source binding bytes required')
+    mapping=snapshot_graph_security_source(mapping) if type(mapping) is PreparedGraphSecuritySource else replace(mapping)
     request,assessment=mapping.original_request,mapping.accepted_catalog_assessment
     if (type(request) is not bytes or not 1<=len(request)<=4000000
             or type(assessment) is not bytes or not 1<=len(assessment)<=1048576):
@@ -46,6 +47,10 @@ def derive_catalog_source_epoch_profile(mapping,fact_relations,barrier,*,subject
             'subjectHelperSha256':hashlib.sha256(subject_source).hexdigest(),
             'ddlBarrier':{'ownerOid':barrier.owner_oid,'functionOid':barrier.function_oid,'sourceSha256':hashlib.sha256(barrier.source.encode('utf8')).hexdigest(),'includeAlterRoutine':barrier.include_alter_routine,'includeSchemaDdl':barrier.include_schema_ddl,'includeDatabaseDdl':barrier.include_database_ddl},
             'factCuts':recipes}
+    if type(mapping) is PreparedGraphSecuritySource:
+        packet['interfaceVersion']='truss-owned-graph-source-profile/0.1-candidate'
+        packet['compilerRequestSha256']=hashlib.sha256(mapping.native_dependencies).hexdigest()
+        packet['compilerOutputSha256']=hashlib.sha256(mapping.original_response).hexdigest()
     raw=json.dumps(packet,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode('utf8')
     if len(raw)>65536:raise ValueError('Bounded native catalog source profile required')
     return raw

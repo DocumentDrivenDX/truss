@@ -10,6 +10,7 @@ import json
 from .execution import Error,ExecutionFailure
 from .psycopg_host import PsycopgHost
 from ._security_mapping import PreparedSecurityMapping
+from ._security_graph_source import PreparedGraphSecuritySource,snapshot_graph_security_source,graph_source_archives,acquire_graph_source_catalog_cut
 from ._security_catalog_mapping import map_catalog_dependencies
 from ._security_catalog_assessment import capture_accepted_catalog
 from ._installation_privileges import installation_administrator_with_cursor
@@ -26,6 +27,7 @@ class PendingCatalogSourceMarker:
 
 
 def _catalog_mapping_snapshot(mapping):
+ if type(mapping) is PreparedGraphSecuritySource:return snapshot_graph_security_source(mapping)
  if type(mapping) is not PreparedSecurityMapping:
   raise ValueError('Original catalog mapping archive required')
  request,response,assessment,dependencies=(mapping.original_request,mapping.original_response,
@@ -37,6 +39,7 @@ def _catalog_mapping_snapshot(mapping):
 
 
 def _catalog_source_archives(mapping,release):
+ if type(mapping) is PreparedGraphSecuritySource:return graph_source_archives(mapping,release)
  request,response,assessment,dependencies=(mapping.original_request,mapping.original_response,
      mapping.accepted_catalog_assessment,mapping.native_dependencies)
  if map_catalog_dependencies(assessment,response,request)!=dependencies:
@@ -66,10 +69,10 @@ def verify_catalog_source_archive_with_cursor(cursor,mapping,installation):
 
 
 def bootstrap_catalog_source_marker_in_transaction(host,transaction,mapping):
- if type(host) is not PsycopgHost or type(mapping) is not PreparedSecurityMapping:
+ if type(host) is not PsycopgHost or type(mapping) not in (PreparedSecurityMapping,PreparedGraphSecuritySource):
   return Error(ExecutionFailure('execution_obligation','Original catalog source installation required'))
  try:mapping=_catalog_mapping_snapshot(mapping)
- except ValueError:
+ except (ValueError,TypeError,KeyError,AttributeError):
   return Error(ExecutionFailure('execution_obligation','Exact bounded catalog mapping archive required'))
  request=mapping.original_request;assessment=mapping.accepted_catalog_assessment
  if type(request) is not bytes or type(assessment) is not bytes or not 1<=len(request)<=4000000 or not 1<=len(assessment)<=1048576:
@@ -92,6 +95,7 @@ def bootstrap_catalog_source_marker_in_transaction(host,transaction,mapping):
   rows=cursor.fetchmany(2)
   if len(rows)!=1:raise ValueError('Unique original catalog installation required')
   identity,owner=rows[0];installation_administrator_with_cursor(cursor,owner)
+  if type(mapping) is PreparedGraphSecuritySource:acquire_graph_source_catalog_cut(cursor)
   if capture_accepted_catalog(cursor,request)!=assessment:raise ValueError('Original accepted catalog source correspondence required')
   cursor.execute("SELECT (SELECT count(*) FROM truss.installation_marker),(SELECT count(*) FROM truss.installation_archive),(SELECT count(*) FROM truss.source_epoch_registry),(SELECT count(*) FROM truss.source_epoch_current)",prepare=False)
   if cursor.fetchmany(2)!=[(0,0,0,0)]:raise ValueError('Existing catalog source installation requires migration; no repair')
