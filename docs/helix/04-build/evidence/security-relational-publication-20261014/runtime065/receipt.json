@@ -1,0 +1,12 @@
+{
+  "result": "native1/84.709s passes",
+  "baseline": "413cf1fd333ec165ff2ae1faf87ded4b982c138d",
+  "runtime": "0.65",
+  "sourceSha256": {
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "aada6da87a2ff1cf522f846d463ce1ae3d883bb88d435de6f9c8ca2d2263daa6",
+    "scripts/security_relational_capture.py": "9d776e18e76378fc17688a87db89f2e5b6e6e8921f0a56615cae7cdded7657a8",
+    "scripts/security_relational_publication.py": "e4b3f8b8b1cc99e81b271a35c4d4a01f6c0633043816056d99dd5496e28cc61c",
+    "packages/python/tests/test_security_ontology_edges_native.py": "dfb10b7b873a1d6117b4759b6d91292d5d3bd70e45e3d7fa3a0776a6fa4efa82"
+  },
+  "scope": "Full selected scalar ontology/direct01/relational02 filtered/count/group/stage/publication/lifecycle/role replay; notownership-write policy or all132 qualification."
+}
