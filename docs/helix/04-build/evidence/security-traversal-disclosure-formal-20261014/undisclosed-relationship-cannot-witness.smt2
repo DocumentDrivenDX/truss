@@ -1,0 +1,16 @@
+; benchmark generated from python API
+(set-info :status unknown)
+(declare-sort RecordIdentity 0)
+(declare-fun relationship_world1 (RecordIdentity RecordIdentity) Bool)
+(declare-fun target () RecordIdentity)
+(declare-fun source () RecordIdentity)
+(declare-fun relationship_disclosable (RecordIdentity RecordIdentity) Bool)
+(declare-fun target_eligible (RecordIdentity) Bool)
+(declare-fun source_eligible (RecordIdentity) Bool)
+(assert
+ (let (($x30 (relationship_disclosable source target)))
+(let (($x28 (target_eligible target)))
+(let (($x14 (source_eligible source)))
+(let (($x32 (and $x14 $x28 $x30 (relationship_world1 source target))))
+(and (not $x30) $x32))))))
+(check-sat)
