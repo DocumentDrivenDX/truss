@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "scope": "Original stock native SCRAM connection continuity through pre-RR capture, RR operation and acknowledged COMMIT. No human/action-role/authority/seal admission.",
+  "sourceHashes": {
+    "packages/python/src/truss/_engine_preparation.py": "4fecd8c34bf7f534769e046a37585f57e2b596f8d9f1dd05ee20c22964e0911c",
+    "packages/python/src/truss/_scram_preparation_login.py": "1b7ca2b2fbd268808063a7d38f689e4db1003049609c8b238730c2457cec53e4",
+    "packages/python/tests/test_engine_preparation.py": "968592f2b553210b493a5c853c4b2ce294ae0ad389ef6992ae15473782eb1456",
+    "packages/python/tests/test_engine_preparation_scram_native.py": "71f95b0308c5a4dbfe4feb1828a942d10edf51c907a8eb427209b7541133fe6a"
+  },
+  "files": {
+    "native-r1.log": "0aaafa1fa5ad240302d26444be37d1a8ddc7f6bf30969c6850018183a7df20b6"
+  },
+  "nativeResult": "1 test passed in3.870s",
+  "localResult": "24 basic lifecycle/publiccontract/assembly tests passed",
+  "review": "Astra Ultra completed source/native iteration approved",
+  "limits": [
+    "Session drops its credential-bearing provider reference; caller-owned provider/libpq/password memory are not erased.",
+    "Provider login connect5s and statement10s budgets precede the session operation deadline.",
+    "Generic DSN scaffolding is not protected authentication."
+  ]
+}

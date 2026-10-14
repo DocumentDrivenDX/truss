@@ -1,0 +1,7 @@
+# Original SCRAM login in the preparation session
+
+The private `_EnginePreparationSession.from_scram_login` accepts the original security-owned `ScramPreparationLogin` and uses its returned physical connection for pre-snapshot native capture, RR adoption, native work and transaction completion. It consumes the connection-open allowance and drops the session's provider reference before dispatch, contains ordinary provider failures with fixed diagnostics, and refuses fallback, reopening and restart. Closing an unused session drops that reference. This does not erase the caller-owned provider, libpq credentials or password memory.
+
+The native PG18.6 test loads an explicit SCRAM HBA profile and confirms password exchange, the same connection and backend PID through pre-RR capture and RR work, acknowledged COMMIT, and refused restart. It passed once in 3.870s; two basic unit controls cover failed-provider redaction/no fallback and unused-reference cleanup. All 24 basic lifecycle/public contract/assembly tests pass. Exact executed source hashes and the native log are retained under `evidence/engine-preparation-scram-20261014/`; Astra Ultra approved this completed increment.
+
+The shared provider's 5s connection and 10s statement bootstrap budgets precede the preparation session's operation deadline. Generic DSN scaffolding remains available for existing nonprotected development paths. Neither path alone establishes human identity, action-role membership, native authority, a seal or protected bulk execution.
