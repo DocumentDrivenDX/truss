@@ -33,3 +33,23 @@ The source is not loaded by `_release`, is absent from the current manifest and
 has no public callable export. No enabled/released rebinding support is claimed.
 Truss23/Weft24 publication is independently confirmed by successful release
 workflows38492829110/38492277370.
+
+## UMF storage capture
+
+`scripts/capture-catalog-rebind-storage.ts` now retains the exact storage prefix
+in the UMF PostgreSQL adapter and regenerates it with the owner SQL exporter.
+Saved-model reload/export equality and deterministic `--check` pass. The core
+projection contains all twelve transition columns and the actual referenced
+registration/schema-revision primary-key columns. The integer revision FK is a
+core Relationship; the UUID registration FK retains its original native
+declaration and column/Record correspondence through core references, since
+portable UUID key equality is not defined by UMF core. UUID, xid8, oid and JSONB
+columns retain their native declarations without invented scalar semantics.
+Core validation is valid but incomplete, as expected for retained native meaning.
+
+The generated owner-export DDL, followed by the original helper suffix, compiles
+on an isolated public-host Truss23 installation using PostgreSQL18.6. Native
+inspection confirms twelve columns and both foreign keys, with registration's
+DEFERRABLE INITIALLY DEFERRED timing preserved. All three helper definitions
+compile. This remains storage/source evidence: registration, mutation, report,
+history and query rebinding are not enabled by this capture.
