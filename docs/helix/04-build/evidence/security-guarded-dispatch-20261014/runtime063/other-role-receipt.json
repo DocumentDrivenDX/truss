@@ -1,0 +1,10 @@
+{
+  "result": "native1/41.296s passes",
+  "runtime": "0.63",
+  "testSourceSha256": "bbeaed9a7072f28e2545ee01ff37bd8955e44b1a88732afe1a237c2d015b473a",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC5"
+  ],
+  "plannedCaseContribution": "truss.B05",
+  "scope": "Administrative fixture grants Bob role to revoked Alice; actual SESSION_USER Alice/CURRENT_USER Bob native state refuses protected publication and retains no ShareLocks. Not complete owner/super/internal-role escalation/pool-reset qualification."
+}

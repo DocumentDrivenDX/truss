@@ -609,14 +609,18 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                         from truss._security_guarded_source import capture_guarded_source_comparison
                         guarded_source=capture_guarded_source_comparison(graph.native_dependencies,graph.guarded_response)
                     composed=[]
-                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('AliceGuarded',[]),('OutsiderGuarded',[]),('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None)) if guarded_binary else ()),('BobSetRole',None),('BobOldSnapshot',None),('BobRevoked',[]),('BobReactivated',['RB']),('BobStreaming',None),('BobProfileDrift',None),('BobProfileRestored',['RB']),('BobPublicIssuer',None)):
+                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('AliceGuarded',[]),('OutsiderGuarded',[]),('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None)) if guarded_binary else ()),('AliceOtherRole',None),('BobSetRole',None),('BobOldSnapshot',None),('BobRevoked',[]),('BobReactivated',['RB']),('BobStreaming',None),('BobProfileDrift',None),('BobProfileRestored',['RB']),('BobPublicIssuer',None)):
+                        if name=='AliceOtherRole':self.admin.execute(sql.SQL('GRANT {} TO {}').format(sql.Identifier(roles['Bob']),sql.Identifier(roles['Alice'])))
                         if name=='BobProfileDrift':self.admin.execute("UPDATE truss.catalog_graph_subject_profile SET document_revision='tampered'")
                         if name=='BobPublicIssuer':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.graph_subject_current() TO PUBLIC')
                         with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
                             private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
-                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice' if name=='AliceGuarded' else 'Outsider' if name=='OutsiderGuarded' else 'Bob' if name in ('BobPublicIssuer','BobSetRole','BobOldSnapshot','BobRevoked','BobReactivated','BobStreaming','BobProfileDrift','BobProfileRestored','BobGuarded','BobGuardedId','BobGuardedCorrupt') else name]
+                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice' if name in ('AliceGuarded','AliceOtherRole') else 'Outsider' if name=='OutsiderGuarded' else 'Bob' if name in ('BobPublicIssuer','AliceOtherRole','BobSetRole','BobOldSnapshot','BobRevoked','BobReactivated','BobStreaming','BobProfileDrift','BobProfileRestored','BobGuarded','BobGuardedId','BobGuardedCorrupt') else name]
                             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                                 connection.execute('BEGIN ISOLATION LEVEL REPEATABLE READ' if name=='BobOldSnapshot' else 'BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction(isolation='repeatable_read' if name=='BobOldSnapshot' else 'read_committed').value;released=[]
+                                if name=='AliceOtherRole':
+                                    connection.execute(sql.SQL('SET LOCAL ROLE {}').format(sql.Identifier(roles['Bob'])))
+                                    self.assertEqual(connection.execute('SELECT SESSION_USER::text,CURRENT_USER::text').fetchone(),(roles['Alice'],roles['Bob']))
                                 if name=='BobSetRole':
                                     connection.execute('SET LOCAL ROLE '+sql.Identifier(roles['Bob']).as_string(connection))
                                 if name=='BobOldSnapshot':
@@ -655,7 +659,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                     result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,subjects.bindings,receiver,compiler=selected_compiler,cut_issuer=cut_issuer,source_epoch=composed_context,subject_registration=subjects,query_results=is_guarded_query)
                                 if expected is None:
                                     self.assertIsInstance(result,Error);self.assertEqual(released,[])
-                                    if name=='BobSetRole':
+                                    if name in ('AliceOtherRole','BobSetRole'):
                                         for session in (private,connection):self.assertEqual(session.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,))
                                     elif name=='BobOldSnapshot':
                                         self.assertEqual(str(caller._custody.last_attempt.error),'Original fresh native ontology caller transaction required')
@@ -678,13 +682,14 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                     else:self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
                                 caller.detach();connection.rollback()
                             executor.detach();private.rollback()
+                        if name=='AliceOtherRole':self.admin.execute(sql.SQL('REVOKE {} FROM {}').format(sql.Identifier(roles['Bob']),sql.Identifier(roles['Alice'])))
                         if name=='BobRevoked':self.admin.execute("UPDATE truss.object SET props=pg_catalog.jsonb_set(props,ARRAY[%s,'value'],'true'::pg_catalog.jsonb) WHERE id=%s",(active_property,identities['ba']))
                         if name=='BobProfileDrift':
                             document_revision=json.loads(graph.native_dependencies)['bindingJson']
                             document_revision=json.loads(document_revision)['physicalModule']['pin']['revision']
                             self.admin.execute('UPDATE truss.catalog_graph_subject_profile SET document_revision=%s',(document_revision,))
                         if name=='BobPublicIssuer':self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.graph_subject_current() FROM PUBLIC')
-                        composed.append({'principal':name,'outcome':('setRoleRefused' if name=='BobSetRole' else 'oldSnapshotRefusedAfterRevocationAck' if name=='BobOldSnapshot' else 'guardedResultRefused' if name=='BobGuardedCorrupt' else 'subjectProfileRefused' if name=='BobProfileDrift' else 'issuerAclRefused'),'released':False} if expected is None else {'principal':name,'resources':expected,'queryCellsPublished':is_guarded_query,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
+                        composed.append({'principal':name,'outcome':('otherPrincipalRoleRefused' if name=='AliceOtherRole' else 'setRoleRefused' if name=='BobSetRole' else 'oldSnapshotRefusedAfterRevocationAck' if name=='BobOldSnapshot' else 'guardedResultRefused' if name=='BobGuardedCorrupt' else 'subjectProfileRefused' if name=='BobProfileDrift' else 'issuerAclRefused'),'released':False} if expected is None else {'principal':name,'resources':expected,'queryCellsPublished':is_guarded_query,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
                     directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_SUBJECT_COMPOSITION_EVIDENCE')
                     if directory:
                         folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
