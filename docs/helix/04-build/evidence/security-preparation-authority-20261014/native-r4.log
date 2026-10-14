@@ -1,0 +1,6 @@
+test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 7.213s
+
+OK

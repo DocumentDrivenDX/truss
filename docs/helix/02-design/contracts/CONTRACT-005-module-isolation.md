@@ -574,3 +574,42 @@ Dependency metadata0.2 binds original ontology bytes to the Weft handoff, then m
 ### Core0.8 original keys and native population prerequisite — 2026-10-13
 
 Separate original UMF7c0f0c98 key encoder3.0.0 now supports exact0.8 sources through the existing key batch API; old0.7 encoder2.0.0/assets remain unchanged. String tuple profile1 bytes and source/receipt correspondence are preserved. Nine source and nine installed unit cases, plus installed native0.8 create/commit/read/replay, single/composite lookup/reversed nonmatch and legacy regression pass. [Evidence](../../04-build/evidence/core08-native-keys-20261013/receipt.json) retains reviewed source pins, wheel verification and failed-test corrections. This removes the discovered0.7-only data prerequisite before US-056-AC2/6/9/10 native predicate implementation. Protected security stays unqualified; no required backend case is promoted. Next lower original logical predicates on these actual accepted/populated homes.
+
+
+### Fixed-data/current-authority preparation component — 2026-10-14
+
+The private `truss-preparation-authority-exclusion/0.1-candidate` component
+implements a distinct zero-argument native `acquire_preparation_authority_lock()`
+issuer. A trusted privileged installer fixes its original source, ABI, excluded
+owner and one ordinary executor ACL. It admits only PostgreSQL18.6 READ COMMITTED
+read/write execution and takes NOWAIT native SHARE cuts over `module_access`,
+`pg_authid` and `pg_auth_members`. It acquires no catalog head or business data
+lock; original source/head admission must precede this authority level. The
+component neither changes ordinary READ COMMITTED admission nor admits an
+ordinary REPEATABLE READ facade. Missing locks or original issuer correspondence
+refuses. An acquisition error does not establish release/termination.
+
+`capture_preparation_data_with_cursor` is used only inside the original engine
+RR/read-write guarded callback. It copies native database, person, backend and
+transaction incarnations, xid8, snapshot text and a local application challenge.
+`verify_preparation_data_with_cursor` compares that original context/cut;
+`verify_preparation_peer_with_cursor` independently observes the live peer from
+a fresh coordinator transaction after clearing the statistics snapshot. The
+original full xid8 is retained; the peer's xid32 is checked only for native
+correspondence modulo2^32. It is never promoted to a portable ordered commit
+version. Ended/disconnected/changed/foreign peers refuse. These copied Python
+comparisons and pending-installation reports are **not authority leases or cut
+issuers**, and carry `security_ready=false`. Trusted engine construction remains
+a premise; arbitrary process objects/digests cannot supply it.
+
+Native evidence in [the component receipt](../../04-build/evidence/security-preparation-authority-20261014/receipt.json)
+shows an actual ordinary RR snapshot retaining revoked membership while fresh
+RC observes its removal; held cuts block membership, role-attribute and
+module-policy changes. Context substitution, transaction end and disconnect
+refuse. Native statement-level ACL refusal is preserved as a refusal, never a
+withheld cell. The first incorrect test expectation and cleanup failure remain
+retained. Complete helper/ACL/DDL/source closure, original complete owner union,
+current ontology/field-action evaluation, issuer/connection/cut binding,
+pre-seal finalization and exclusions through original seal COMMIT acknowledgement
+remain required **before a preparation lease or protected seal can be admitted**.
+No US-046 or original shared-security backend case is promoted by this component.
