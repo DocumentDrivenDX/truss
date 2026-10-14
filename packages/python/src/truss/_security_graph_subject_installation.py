@@ -143,15 +143,18 @@ def snapshot_graph_subjects(subjects):
  return replace(subjects,bindings=tuple((oid,key) for oid,key in subjects.bindings))
 
 
-def verify_registered_graph_subjects_with_cursor(cursor,subjects,*,caller_pid):
+def verify_registered_graph_subjects_with_cursor(cursor,subjects,*,caller_pid,source):
  """Profile cut belongs to the reserved real caller; role/map cuts are separate."""
  subjects=snapshot_graph_subjects(subjects)
  if type(caller_pid) is not int or not 1<=caller_pid<=2147483647:raise ValueError('Original graph Subject caller backend required')
  issuer=verify_graph_subject_issuer_with_cursor(cursor,subjects)
  homes=_text_rows(cursor,"SELECT c.relowner::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,c.relrowsecurity::pg_catalog.text,c.relforcerowsecurity::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid)::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_locks l WHERE l.pid OPERATOR(pg_catalog.=) %s AND l.locktype OPERATOR(pg_catalog.=) 'relation' AND l.database OPERATOR(pg_catalog.=) (SELECT oid FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database()) AND l.relation OPERATOR(pg_catalog.=) c.oid AND l.mode OPERATOR(pg_catalog.=) 'ShareLock' AND l.granted)::pg_catalog.text FROM pg_catalog.pg_class c WHERE c.oid OPERATOR(pg_catalog.=) 'truss.catalog_graph_subject_profile'::pg_catalog.regclass",(caller_pid,),1)
  if homes!=[(str(subjects.owner_oid),'r','p','false','false','false','true')]:raise ValueError('Original held graph Subject profile required')
- rows=_text_rows(cursor,"SELECT installation_id::pg_catalog.text,pg_catalog.encode(profile_bytes,'hex') FROM ONLY truss.catalog_graph_subject_profile WHERE singleton OPERATOR(pg_catalog.=) 1",limit=1)
- if rows!=[(subjects.installation_id,subjects.profile_bytes.hex())]:raise ValueError('Original current registered graph Subject profile required')
+ source=snapshot_graph_security_source(source)
+ pin,type_id,property_id,revision,request=_recipe(source)
+ if subjects.profile_bytes!=derive_graph_subject_profile(source):raise ValueError('Original selected registered graph Subject source required')
+ rows=_text_rows(cursor,"SELECT singleton::pg_catalog.text,installation_id::pg_catalog.text,native_revision::pg_catalog.text,type_id::pg_catalog.text,property_id::pg_catalog.text,document_id::pg_catalog.text,document_revision::pg_catalog.text,document_sha256::pg_catalog.text,module_id::pg_catalog.text,pg_catalog.encode(profile_bytes,'hex') FROM ONLY truss.catalog_graph_subject_profile",limit=1)
+ if rows!=[('1',subjects.installation_id,str(revision),str(type_id),str(property_id),pin['documentId'],pin['revision'],pin['sha256'],'m',subjects.profile_bytes.hex())]:raise ValueError('Original current registered graph Subject profile required')
  if _text_rows(cursor,'SELECT installation_id::pg_catalog.text,owner_oid::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton',limit=1)!=[(subjects.installation_id,str(subjects.owner_oid))]:raise ValueError('Original registered graph Subject installation required')
  return issuer
 

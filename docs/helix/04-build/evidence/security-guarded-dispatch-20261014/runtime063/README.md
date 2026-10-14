@@ -1,0 +1,5 @@
+# Guarded publication replay on merged runtime0.63
+
+The unchanged protected direct-query/publication fixture passes1/66.810s after preserving the concurrent keyed-rebind runtime0.63. An additional check now compares the complete native Subject profile row to the original source-derived singleton/install/revision/type/property/document revision/SHA/module/profile bytes before and after execution, under the real caller profile cut. It separately requires profile-byte derivation from the selected archived graph source. Full profile replay passes1/56.214s with existing native query-cell projection/withholding/corruption/ACL/source-epoch controls.
+
+Native logs, observations and source/runtime hashes are retained. Compiler/source/installer/authentication/routine/DDL custody remain premises; no native lifetime theorem, public activation, broader SQL or original132 acceptance promotion is claimed. Additional Astra review remains unavailable due reviewer usage limit. Complete-profile mutation negatives and wider storage/key models remain required.

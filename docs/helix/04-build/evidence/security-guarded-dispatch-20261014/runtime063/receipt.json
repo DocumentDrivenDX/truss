@@ -1,0 +1,11 @@
+{
+  "runtime": "0.63",
+  "mergedReplay": "1/66.810s passes",
+  "completeProfileReplay": "1/56.214s passes",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_graph_subject_installation.py": "9c8c06da7e7ecebbe56d1519450bac34be350465c155f7cc7e3cf20aefeba372",
+    "scripts/security_ontology_native_subject_read.py": "99b41f6bfa84804a12c3abc5fa205092747d7b83f4c57d4cd2f267e42e839fa3",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "ef8766e6b9bab4da2546486bc1778799a1ba708967e39efbfa080460c1cb7d51"
+  },
+  "scope": "Selected guarded direct publication and complete current native Subject profile correspondence; not all132 qualification or public admission."
+}

@@ -135,7 +135,7 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
             if subject_registration is not None:
                 from truss._security_graph_subject_installation import read_own_graph_subject_with_cursor,verify_registered_graph_subjects_with_cursor
                 own_subject=read_own_graph_subject_with_cursor(cursor,subject_registration,identity)
-                verified_issuer=verify_registered_graph_subjects_with_cursor(private,subject_registration,caller_pid=int(observed[0][0]))
+                verified_issuer=verify_registered_graph_subjects_with_cursor(private,subject_registration,caller_pid=int(observed[0][0]),source=source_epoch.source)
             subject=_registered_subject(private,identity,bindings,private_reader,verified_issuer)
             if subject_registration is not None and own_subject!=subject:raise ValueError('Original issuer and native mapping Subject correspondence required')
             raw=_prepare_ontology_resource_operation(request,subject,compiler=selected_compiler,existing_locks=cut_issuer is not None,query_results=query_results)(private,private_observed)
@@ -143,7 +143,7 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
                 from truss._security_graph_epoch_read import verify_held_graph_epoch_read
                 verify_held_graph_epoch_read(private,source_epoch)
             if subject_registration is not None:
-                if verify_registered_graph_subjects_with_cursor(private,subject_registration,caller_pid=int(observed[0][0]))!=verified_issuer or read_own_graph_subject_with_cursor(cursor,subject_registration,identity)!=subject:raise ValueError('Original registered graph Subject changed')
+                if verify_registered_graph_subjects_with_cursor(private,subject_registration,caller_pid=int(observed[0][0]),source=source_epoch.source)!=verified_issuer or read_own_graph_subject_with_cursor(cursor,subject_registration,identity)!=subject:raise ValueError('Original registered graph Subject changed')
             if _registered_subject(private,identity,bindings,private_reader,verified_issuer)!=subject:raise ValueError('Original native ontology Subject changed')
             _verify_native_peer(private,identity,observed[0][0],challenge)
             return raw
