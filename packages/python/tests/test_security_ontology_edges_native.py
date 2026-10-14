@@ -232,3 +232,73 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         if directory:
             folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
             (folder/'native-caller-decisions.json').write_text(json.dumps({'results':native_results,'unregisteredRefusedBeforeEvaluation':True,'scope':'Native caller identity and held role/map/graph/source cuts; trusted registration/private administrative executor/routine and authentication custody, not original checked compiler admission.'},indent=2)+'\n')
+        # A real revocation waits for the admitted reader's outer transaction;
+        # commit acknowledgment precedes a fresh read which must see revocation.
+        import threading,time
+        started=threading.Event();acknowledged=threading.Event();writer_state={};writer_errors=[]
+        def revoke():
+            try:
+                with psycopg.connect(self.info.connection_uri,connect_timeout=2,options='-c statement_timeout=10000 -c lock_timeout=8000') as writer:
+                    writer_state['connection']=writer
+                    writer_state['pid']=writer.execute('SELECT pg_catalog.pg_backend_pid()').fetchone()[0]
+                    started.set()
+                    writer.execute("UPDATE truss.object SET props=pg_catalog.jsonb_set(props,ARRAY[%s,'value'],'false'::pg_catalog.jsonb) WHERE id=%s",(active_property,identities['aa']))
+                    writer.commit();acknowledged.set()
+            except Exception as error:writer_errors.append(repr(error));started.set()
+        worker=threading.Thread(target=revoke)
+        drain_rows=[];drain_decisions=[]
+        parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice']
+        self.admin.execute('BEGIN');executor=adopt_psycopg_host(self.admin);executor_transaction=executor.adopt_transaction().value
+        def receive_before_revocation(raw):
+            drain_decisions.append(json.loads(raw));worker.start()
+            self.assertTrue(started.wait(2));self.assertEqual(writer_errors,[])
+            deadline=time.monotonic()+2
+            with psycopg.connect(self.info.connection_uri,autocommit=True) as observer:
+                while time.monotonic()<deadline:
+                    waiting=observer.execute("SELECT l.mode,l.granted FROM pg_catalog.pg_locks l WHERE l.pid=%s AND l.relation='truss.object'::pg_catalog.regclass AND l.mode='RowExclusiveLock'",(writer_state['pid'],)).fetchall()
+                    if waiting==[('RowExclusiveLock',False)]:break
+                    time.sleep(.01)
+                blockers=observer.execute('SELECT pg_catalog.pg_blocking_pids(%s)',(writer_state['pid'],)).fetchone()[0]
+            self.assertEqual(waiting,[('RowExclusiveLock',False)]);self.assertFalse(acknowledged.is_set())
+            self.assertIn(self.admin.info.backend_pid,blockers)
+            drain_rows.append({'stage':'receiver','writerLock':'RowExclusiveLock','granted':False,'acknowledged':False,'originalExecutorIsNativeBlocker':True})
+        try:
+            with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
+                connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_transaction=caller.adopt_transaction().value
+                try:
+                    result=native_read.publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,request,bindings,receive_before_revocation)
+                    self.assertIsInstance(result,Ok,str(caller._custody.last_attempt.error)+' '+str(executor._custody.last_attempt.error))
+                    self.assertEqual([r['key'][0]['string'] for r in drain_decisions[0]['rows']],['RA'])
+                    self.assertFalse(acknowledged.is_set());self.assertTrue(worker.is_alive())
+                    drain_rows.append({'stage':'after_receiver_before_outer_settlement','acknowledged':False})
+                finally:caller.detach();connection.rollback()
+        finally:
+            try:executor.detach();self.admin.rollback()
+            finally:
+                if worker.ident is not None:
+                    worker.join(3)
+                    if worker.is_alive():
+                        try:
+                            pending_connection=writer_state.get('connection')
+                            if pending_connection is not None:pending_connection.cancel_safe(timeout=1.0)
+                        finally:worker.join(3)
+                    self.assertFalse(worker.is_alive())
+        self.assertEqual(writer_errors,[]);self.assertTrue(acknowledged.is_set())
+        self.assertEqual(self.admin.execute('SELECT props->%s->>\'value\' FROM truss.object WHERE id=%s',(active_property,identities['aa'])).fetchone(),('false',))
+        drain_rows.append({'stage':'after_outer_settlement','acknowledged':True})
+        self.admin.execute('BEGIN');executor=adopt_psycopg_host(self.admin);executor_transaction=executor.adopt_transaction().value
+        try:
+            with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
+                connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_transaction=caller.adopt_transaction().value
+                try:
+                    delivered=[]
+                    result=native_read.publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,request,bindings,delivered.append)
+                    self.assertIsInstance(result,Ok,str(caller._custody.last_attempt.error)+' '+str(executor._custody.last_attempt.error))
+                    self.assertEqual(json.loads(delivered[0])['rows'],[])
+                    drain_rows.append({'stage':'fresh_admission_after_commit_ack','resources':[]})
+                finally:caller.detach();connection.rollback()
+        finally:executor.detach();self.admin.rollback()
+        directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_REVOCATION_EVIDENCE')
+        if directory:
+            folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
+            (folder/'revocation-order.json').write_text(json.dumps({'observations':drain_rows,'beforeRevocationDecision':drain_decisions[0],'scope':'One actual Assignment.active writer/read cut and native commit acknowledgment; complete policy/role/mapping/cache/paging/clock generation lifecycle not qualified.'},indent=2)+'\n')

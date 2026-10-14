@@ -1,0 +1,46 @@
+{
+  "observations": [
+    {
+      "stage": "receiver",
+      "writerLock": "RowExclusiveLock",
+      "granted": false,
+      "acknowledged": false,
+      "originalExecutorIsNativeBlocker": true
+    },
+    {
+      "stage": "after_receiver_before_outer_settlement",
+      "acknowledged": false
+    },
+    {
+      "stage": "after_outer_settlement",
+      "acknowledged": true
+    },
+    {
+      "stage": "fresh_admission_after_commit_ack",
+      "resources": []
+    }
+  ],
+  "beforeRevocationDecision": {
+    "kind": "owned-resource-list-fixture/0.1",
+    "rows": [
+      {
+        "key": [
+          {
+            "string": "RA"
+          }
+        ],
+        "output": [
+          {
+            "field": {
+              "documentId": "domain",
+              "moduleId": "m",
+              "elementId": "salary"
+            },
+            "disposition": "withheld"
+          }
+        ]
+      }
+    ]
+  },
+  "scope": "One actual Assignment.active writer/read cut and native commit acknowledgment; complete policy/role/mapping/cache/paging/clock generation lifecycle not qualified."
+}
