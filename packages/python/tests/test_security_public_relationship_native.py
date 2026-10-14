@@ -70,6 +70,10 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
    with self.admin.transaction():
     self.admin.execute(sql.SQL('LOCK TABLE {} IN SHARE MODE').format(sql.SQL(',').join(sql.Identifier('truss',name) for name in SOURCE_TABLES)))
     with self.admin.cursor() as cursor:assessment=capture_accepted_catalog(cursor,physical_request)
+    relationship_binary=os.environ.get('TRUSS_SECURITY_RELATIONSHIP_COMPILER_BINARY')
+    if relationship_binary:
+     self.admin.execute('CREATE TABLE truss.catalog_subject_map(role_oid pg_catalog.oid PRIMARY KEY,staff_key pg_catalog.text NOT NULL)')
+     self.admin.execute('LOCK TABLE truss.object,truss.edge,truss.catalog_subject_map IN SHARE MODE')
     (out/'accepted-assessment.json').write_bytes(assessment)
     import runpy
     derive=runpy.run_path(str(root/'scripts/prepare-security-relationship-correspondence.py'))['derive_relationship_correspondence']
@@ -92,6 +96,22 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
      self.assertEqual(selected_request['policyJson'].encode(),sources['policy'])
      self.assertEqual(json.loads(selected_request['queryProfileJson'])['binding']['sha256'],sha256(selected_request['bindingJson'].encode()).hexdigest())
      (out/('compiler-request'+suffix+'.json')).write_bytes(request)
+     if relationship_binary:
+      import subprocess
+      from security_relationship_codecs import prepare_owned_relationship_codec_checker
+      from security_relationship_inspection import prepare_owned_relationship_inspector
+      from security_relationship_capture import execute_relationship_program
+      output=subprocess.run([relationship_binary],input=request,capture_output=True,check=True,timeout=15).stdout
+      checker=prepare_owned_relationship_codec_checker(Path(relationship_binary).with_name('security_relationship_codecs'))
+      inspector=prepare_owned_relationship_inspector(Path(relationship_binary).with_name('security_relationship_result'))
+      observations=[]
+      for subject,alias in [('Alice','alice'),('Bob','bob'),('Outsider','outsider')]:
+       with self.admin.cursor() as cursor:executed=execute_relationship_program(cursor,request,output,ids[alias],checker,inspector)
+       rows=json.loads(executed['batch'])['rows']
+       expected=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' and not suffix else []
+       self.assertEqual(rows,expected)
+       observations.append({'subjectDataKey':subject,'expected':expected,'observed':rows,'operandBatch':executed['operandBatch'].decode(),'batch':executed['batch'].decode(),'inspection':executed['inspection'].decode()})
+      (out/('excluded-assessor-sql'+suffix+'.json')).write_text(json.dumps({'scope':'Excluded fixture assessor with supplied native Staff locator; not authenticated ordinary caller or protected publication','securityReady':False,'observations':observations},indent=2)+'\n')
    (out/'physical-request.json').write_bytes(physical_request)
    catalog={}
    for name,table,order in (('types','type_def','type_id'),('properties','prop_def','prop_id'),('keys','key_def','type_id,key_num'),('relationships','rel_def','rel_type_id'),('endpoints','rel_endpoint','rel_type_id,source_type,target_type')):

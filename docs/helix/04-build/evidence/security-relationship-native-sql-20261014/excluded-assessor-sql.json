@@ -1,0 +1,50 @@
+{
+  "scope": "Excluded fixture assessor with supplied native Staff locator; not authenticated ordinary caller or protected publication",
+  "securityReady": false,
+  "observations": [
+    {
+      "subjectDataKey": "Alice",
+      "expected": [],
+      "observed": [],
+      "operandBatch": "{\"version\":\"weft.security.operand-values/0.1-candidate\",\"contextSha256\":\"dc127525d30dd2c99034fcb1986638d284844074b60d8959c69eb24397c2fdc2\",\"scans\":[{\"scan\":\"s0\",\"rows\":[{\"operands\":[],\"nativeRowId\":\"7\"}]},{\"scan\":\"t0\",\"rows\":[{\"operands\":[{\"cell\":{\"value\":{\"string\":\"RA\"},\"disposition\":\"original\"},\"index\":0}],\"nativeRowId\":\"7\"}]}]}",
+      "batch": "{\"version\":\"weft.security.cells/0.1.0\",\"resultContractSha256\":\"c4d3d9845ae095ff54a45a1a58953c5dbf3fcfc270ff93e75572b72415f99047\",\"rows\":[]}",
+      "inspection": "{\"batchSha256\":\"d53538efa71f7523b4e089d40bbfb465bb5130c3ca6fcfd34c233c95d3a57b33\",\"inspected\":true,\"nativeAdmission\":\"required\",\"operandBatchSha256\":\"146551610fe2240267ce353ee46117454874bafad33ae0378046fb29b6a91847\",\"operandCounts\":{\"s0\":1,\"t0\":1},\"queryContextSha256\":\"dc127525d30dd2c99034fcb1986638d284844074b60d8959c69eb24397c2fdc2\",\"securityReady\":false,\"sourceContextSha256\":\"50ea3353a58b85ce44d1dcf24301a7e08ae25773d27c7d7e869944dd8c535437\",\"sourceOutputSha256\":\"b6bf56eba31f5772a729778ff894e833783cf277eb3e19f4aaf8993030f997ed\",\"sourceRequestSha256\":\"98f062d8bf88da632201286e6212f0731b1f42cf21197e89dce2c9af18bfaeb2\",\"version\":\"weft.truss.security.relational-result.inspected/0.2-candidate\"}\n"
+    },
+    {
+      "subjectDataKey": "Bob",
+      "expected": [
+        [
+          {
+            "outcomeId": "original",
+            "disposition": "original",
+            "value": {
+              "string": "RB"
+            }
+          }
+        ]
+      ],
+      "observed": [
+        [
+          {
+            "value": {
+              "string": "RB"
+            },
+            "outcomeId": "original",
+            "disposition": "original"
+          }
+        ]
+      ],
+      "operandBatch": "{\"version\":\"weft.security.operand-values/0.1-candidate\",\"contextSha256\":\"dc127525d30dd2c99034fcb1986638d284844074b60d8959c69eb24397c2fdc2\",\"scans\":[{\"scan\":\"s0\",\"rows\":[{\"operands\":[],\"nativeRowId\":\"8\"}]},{\"scan\":\"t0\",\"rows\":[{\"operands\":[{\"cell\":{\"value\":{\"string\":\"RB\"},\"disposition\":\"original\"},\"index\":0}],\"nativeRowId\":\"8\"}]}]}",
+      "batch": "{\"version\":\"weft.security.cells/0.1.0\",\"resultContractSha256\":\"c4d3d9845ae095ff54a45a1a58953c5dbf3fcfc270ff93e75572b72415f99047\",\"rows\":[[{\"value\":{\"string\":\"RB\"},\"outcomeId\":\"original\",\"disposition\":\"original\"}]]}",
+      "inspection": "{\"batchSha256\":\"e1f736f403cb5bc6f09c499676ff3e8b17aab48a50cfb319bd624b1e0049feb1\",\"inspected\":true,\"nativeAdmission\":\"required\",\"operandBatchSha256\":\"9b527542faabf05d9fe3b2665ccfaa33bb13ae938b2f72ad99dc1f918abd02e9\",\"operandCounts\":{\"s0\":1,\"t0\":1},\"queryContextSha256\":\"dc127525d30dd2c99034fcb1986638d284844074b60d8959c69eb24397c2fdc2\",\"securityReady\":false,\"sourceContextSha256\":\"50ea3353a58b85ce44d1dcf24301a7e08ae25773d27c7d7e869944dd8c535437\",\"sourceOutputSha256\":\"b6bf56eba31f5772a729778ff894e833783cf277eb3e19f4aaf8993030f997ed\",\"sourceRequestSha256\":\"98f062d8bf88da632201286e6212f0731b1f42cf21197e89dce2c9af18bfaeb2\",\"version\":\"weft.truss.security.relational-result.inspected/0.2-candidate\"}\n"
+    },
+    {
+      "subjectDataKey": "Outsider",
+      "expected": [],
+      "observed": [],
+      "operandBatch": "{\"version\":\"weft.security.operand-values/0.1-candidate\",\"contextSha256\":\"dc127525d30dd2c99034fcb1986638d284844074b60d8959c69eb24397c2fdc2\",\"scans\":[{\"scan\":\"s0\",\"rows\":[]},{\"scan\":\"t0\",\"rows\":[]}]}",
+      "batch": "{\"version\":\"weft.security.cells/0.1.0\",\"resultContractSha256\":\"c4d3d9845ae095ff54a45a1a58953c5dbf3fcfc270ff93e75572b72415f99047\",\"rows\":[]}",
+      "inspection": "{\"batchSha256\":\"d53538efa71f7523b4e089d40bbfb465bb5130c3ca6fcfd34c233c95d3a57b33\",\"inspected\":true,\"nativeAdmission\":\"required\",\"operandBatchSha256\":\"6c19ae9ac80083dae3c86f061a07d53e5bc677c2aac5a075831ed807c3e986b8\",\"operandCounts\":{\"s0\":0,\"t0\":0},\"queryContextSha256\":\"dc127525d30dd2c99034fcb1986638d284844074b60d8959c69eb24397c2fdc2\",\"securityReady\":false,\"sourceContextSha256\":\"50ea3353a58b85ce44d1dcf24301a7e08ae25773d27c7d7e869944dd8c535437\",\"sourceOutputSha256\":\"b6bf56eba31f5772a729778ff894e833783cf277eb3e19f4aaf8993030f997ed\",\"sourceRequestSha256\":\"98f062d8bf88da632201286e6212f0731b1f42cf21197e89dce2c9af18bfaeb2\",\"version\":\"weft.truss.security.relational-result.inspected/0.2-candidate\"}\n"
+    }
+  ]
+}

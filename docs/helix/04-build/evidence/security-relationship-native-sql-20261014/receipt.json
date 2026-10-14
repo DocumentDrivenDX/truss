@@ -1,0 +1,21 @@
+{
+  "nativeTests": 1,
+  "nativeSeconds": 46.688,
+  "terminalExit": 0,
+  "semanticOutcomes": 6,
+  "boundaryTests": 3,
+  "boundarySeconds": 4.041,
+  "weftSourceCommit": "b1a90ddb40e6ee413953ec6780b5740f67abf883",
+  "binaryDigests": {
+    "security_relationship_candidate": "d2f124d215827138d3c661a6ff497ccf98f72991ea18e8554fd723c815b77a97",
+    "security_relationship_result": "5c084132f181b6491c85ed39de85cb621fd9fcc136bf24c659f3d270fecb2bcc",
+    "security_relationship_codecs": "47d1491665bdde89fe5d0e41dfefb41c4cabb511255cc820f13e91ac53f6b0a3"
+  },
+  "sourceDigests": {
+    "scripts/security_relationship_capture.py": "6f507f95cf3270c36de50a73c73678085fc8dd218af37f55bc0574a2044c4f05",
+    "scripts/security_relationship_codecs.py": "e0f0aeff52e4b01cf5be1b0a7940551a06dfcfdcd1bc1a3a372edd7a54636898",
+    "scripts/security_relationship_inspection.py": "c926136d0b849e22b276c9b2decf89060174d234c9fc338b102cd8fbc28e9ced",
+    "packages/python/tests/test_security_public_relationship_native.py": "ca56bdb828e301f7a4bd763971af91f704f38dbb88de69a7068f0c02cf4cd297",
+    "packages/python/tests/test_security_relationship_boundaries.py": "5b6e06c61dd5f0d7c99204dffcfdb2a15da64f9e040d26b68e96164f957bde30"
+  }
+}

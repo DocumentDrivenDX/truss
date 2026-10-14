@@ -1,0 +1,30 @@
+{
+  "scope": "Excluded fixture assessor with supplied native Staff locator; not authenticated ordinary caller or protected publication",
+  "securityReady": false,
+  "observations": [
+    {
+      "subjectDataKey": "Alice",
+      "expected": [],
+      "observed": [],
+      "operandBatch": "{\"version\":\"weft.security.operand-values/0.1-candidate\",\"contextSha256\":\"17d802fa53dcbd3de0d5bebdf87fa509ad903705777f0465c308cec9cdbfb39c\",\"scans\":[{\"scan\":\"s0\",\"rows\":[{\"operands\":[],\"nativeRowId\":\"7\"}]},{\"scan\":\"t0\",\"rows\":[{\"operands\":[{\"cell\":{\"value\":{\"string\":\"RA\"},\"disposition\":\"original\"},\"index\":0}],\"nativeRowId\":\"7\"}]}]}",
+      "batch": "{\"version\":\"weft.security.cells/0.1.0\",\"resultContractSha256\":\"c4d3d9845ae095ff54a45a1a58953c5dbf3fcfc270ff93e75572b72415f99047\",\"rows\":[]}",
+      "inspection": "{\"batchSha256\":\"d53538efa71f7523b4e089d40bbfb465bb5130c3ca6fcfd34c233c95d3a57b33\",\"inspected\":true,\"nativeAdmission\":\"required\",\"operandBatchSha256\":\"8dfe3dbb6f0ff3c28340ad53d95d82525372baa105ee2d5546fe039e2f6e6f5d\",\"operandCounts\":{\"s0\":1,\"t0\":1},\"queryContextSha256\":\"17d802fa53dcbd3de0d5bebdf87fa509ad903705777f0465c308cec9cdbfb39c\",\"securityReady\":false,\"sourceContextSha256\":\"78f7adefdde11ba94997be3855a7b253691b613288b17f64864066bbd09bfc34\",\"sourceOutputSha256\":\"e4486a1acff18022756075b7e19507f308d2b2709cb19d057050e86d8b6efae6\",\"sourceRequestSha256\":\"8e42870409d4ccc0ed5eb7f12d75d436885d771e381e3307a1480c2aaee2f1d5\",\"version\":\"weft.truss.security.relational-result.inspected/0.2-candidate\"}\n"
+    },
+    {
+      "subjectDataKey": "Bob",
+      "expected": [],
+      "observed": [],
+      "operandBatch": "{\"version\":\"weft.security.operand-values/0.1-candidate\",\"contextSha256\":\"17d802fa53dcbd3de0d5bebdf87fa509ad903705777f0465c308cec9cdbfb39c\",\"scans\":[{\"scan\":\"s0\",\"rows\":[{\"operands\":[],\"nativeRowId\":\"8\"}]},{\"scan\":\"t0\",\"rows\":[{\"operands\":[{\"cell\":{\"value\":{\"string\":\"RB\"},\"disposition\":\"original\"},\"index\":0}],\"nativeRowId\":\"8\"}]}]}",
+      "batch": "{\"version\":\"weft.security.cells/0.1.0\",\"resultContractSha256\":\"c4d3d9845ae095ff54a45a1a58953c5dbf3fcfc270ff93e75572b72415f99047\",\"rows\":[]}",
+      "inspection": "{\"batchSha256\":\"d53538efa71f7523b4e089d40bbfb465bb5130c3ca6fcfd34c233c95d3a57b33\",\"inspected\":true,\"nativeAdmission\":\"required\",\"operandBatchSha256\":\"eafdde673c7ee9b90efc18d9d5815dc11aaef04cc5460b3b95c9bb4590e67922\",\"operandCounts\":{\"s0\":1,\"t0\":1},\"queryContextSha256\":\"17d802fa53dcbd3de0d5bebdf87fa509ad903705777f0465c308cec9cdbfb39c\",\"securityReady\":false,\"sourceContextSha256\":\"78f7adefdde11ba94997be3855a7b253691b613288b17f64864066bbd09bfc34\",\"sourceOutputSha256\":\"e4486a1acff18022756075b7e19507f308d2b2709cb19d057050e86d8b6efae6\",\"sourceRequestSha256\":\"8e42870409d4ccc0ed5eb7f12d75d436885d771e381e3307a1480c2aaee2f1d5\",\"version\":\"weft.truss.security.relational-result.inspected/0.2-candidate\"}\n"
+    },
+    {
+      "subjectDataKey": "Outsider",
+      "expected": [],
+      "observed": [],
+      "operandBatch": "{\"version\":\"weft.security.operand-values/0.1-candidate\",\"contextSha256\":\"17d802fa53dcbd3de0d5bebdf87fa509ad903705777f0465c308cec9cdbfb39c\",\"scans\":[{\"scan\":\"s0\",\"rows\":[]},{\"scan\":\"t0\",\"rows\":[]}]}",
+      "batch": "{\"version\":\"weft.security.cells/0.1.0\",\"resultContractSha256\":\"c4d3d9845ae095ff54a45a1a58953c5dbf3fcfc270ff93e75572b72415f99047\",\"rows\":[]}",
+      "inspection": "{\"batchSha256\":\"d53538efa71f7523b4e089d40bbfb465bb5130c3ca6fcfd34c233c95d3a57b33\",\"inspected\":true,\"nativeAdmission\":\"required\",\"operandBatchSha256\":\"7788c5d1a3f87bfc3525d666049c755343438473507aa272d836f710d6d3d11e\",\"operandCounts\":{\"s0\":0,\"t0\":0},\"queryContextSha256\":\"17d802fa53dcbd3de0d5bebdf87fa509ad903705777f0465c308cec9cdbfb39c\",\"securityReady\":false,\"sourceContextSha256\":\"78f7adefdde11ba94997be3855a7b253691b613288b17f64864066bbd09bfc34\",\"sourceOutputSha256\":\"e4486a1acff18022756075b7e19507f308d2b2709cb19d057050e86d8b6efae6\",\"sourceRequestSha256\":\"8e42870409d4ccc0ed5eb7f12d75d436885d771e381e3307a1480c2aaee2f1d5\",\"version\":\"weft.truss.security.relational-result.inspected/0.2-candidate\"}\n"
+    }
+  ]
+}
