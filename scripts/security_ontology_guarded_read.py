@@ -20,11 +20,14 @@ ROOT=Path(__file__).resolve().parent.parent
 TABLES=('object','edge','schema_head','schema_rev','schema_doc',
         'catalog_registration_request','catalog_acceptance_report',
         'type_def','prop_def','key_def','rel_def','rel_endpoint',
-        'relationship_lineage','schema_change','catalog_runtime_installation','runtime_release')
+        'relationship_lineage','schema_change','catalog_runtime_installation','runtime_release',
+        'runtime_catalog_rebind_transition')
 
 
 def _capture(cursor,request):
-    assessment=capture_accepted_catalog(cursor,request)
+    from security_ontology_read_cut import verify_held_ontology_fact_cut
+    verify_held_ontology_fact_cut(cursor)
+    assessment=capture_accepted_catalog(cursor,request,existing_source_cut=True)
     inventory=json.loads(assessment)['inventory']
     def one(rows):
         if len(rows)!=1:raise ValueError('Unique original ontology source home required')
@@ -70,7 +73,7 @@ def _capture(cursor,request):
     return assessment,raw_objects,edges,cells
 
 
-def _prepare_ontology_resource_operation(original_request,subject):
+def _prepare_ontology_resource_operation(original_request,subject,*,compiler=None,existing_locks=False):
     """Prepare the fixed source/fact/evaluation operation, without disclosure.
 
     No caller-supplied SQL or evaluator; exact request bytes are copied before
@@ -81,6 +84,7 @@ def _prepare_ontology_resource_operation(original_request,subject):
             or not 1<=len(original_request)<=4000000 or type(subject) is not str
             or not 1<=len(subject.encode())<=4096):
         raise ValueError('Original bounded ontology publication context required')
+    if type(existing_locks) is not bool:raise ValueError('Exact ontology existing lock mode required')
     request=bytes(original_request);prepared=_pin_owned_evaluator_sources()
     sources=(Path(__file__),ROOT/'scripts/security_ontology_edge_projection.py')
     pins=tuple((p,sha256(p.read_bytes()).digest()) for p in sources)+tuple(prepared.pins)
@@ -92,8 +96,9 @@ def _prepare_ontology_resource_operation(original_request,subject):
         if len(previous)!=1:raise ValueError('Original ontology search path required')
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
         from psycopg import sql
-        for table in TABLES:
-            cursor.execute(sql.SQL('LOCK TABLE ONLY {} IN SHARE MODE NOWAIT').format(sql.Identifier('truss',table)),prepare=False)
+        if not existing_locks:
+            for table in TABLES:
+                cursor.execute(sql.SQL('LOCK TABLE ONLY {} IN SHARE MODE NOWAIT').format(sql.Identifier('truss',table)),prepare=False)
         before=_capture(cursor,request)
         staff=[g for g in before[3] if g['fields']==[[['domain','m','staffId'],'staffId',25]]]
         if len(staff)!=1 or [subject] not in staff[0]['rows']:
@@ -103,6 +108,12 @@ def _prepare_ontology_resource_operation(original_request,subject):
         evaluated=subprocess.run([os.environ.get('TRUSS_BUN_EXECUTABLE','bun'),str(prepared.tool),'--named-source'],cwd=ROOT,input=payload,capture_output=True,text=True,timeout=10)
         if evaluated.returncode or len(evaluated.stdout.encode())>65536:raise ValueError('Original ontology policy evaluation refused')
         decision=_read_owned_resource_receipt(evaluated.stdout)
+        if compiler is not None:
+            compiled_receipt=compiler(cursor,request,before,subject,decision)
+            if type(compiled_receipt) is not dict:
+                import inspect
+                if inspect.iscoroutine(compiled_receipt) or inspect.isgenerator(compiled_receipt):compiled_receipt.close()
+                raise ValueError('Original synchronous graph compiler correspondence receipt required')
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
         if _capture(cursor,request)!=before:raise ValueError('Original ontology source/facts changed before publication')
         if any(sha256(p.read_bytes()).digest()!=digest for p,digest in pins):raise ValueError('Original ontology evaluator sources changed')

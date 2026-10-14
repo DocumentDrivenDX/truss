@@ -1,0 +1,19 @@
+test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission. ... FAIL
+
+======================================================================
+FAIL: test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_ontology_edges_native.py", line 291, in test_original_public_ontology_population_and_endpoint_oracle
+    self.assertEqual(str(executor._custody.last_attempt.error),reason)
+AssertionError: 'Bounded exact Subject installation rows required' != 'Exact private graph cut issuer ACL required'
+- Bounded exact Subject installation rows required
++ Exact private graph cut issuer ACL required
+
+
+----------------------------------------------------------------------
+Ran 1 test in 25.708s
+
+FAILED (failures=1)

@@ -1,0 +1,7 @@
+test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 25.527s
+
+OK

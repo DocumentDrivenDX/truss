@@ -1,0 +1,87 @@
+{
+  "scope": "Offline original retained-packet and synthetic descriptor/preflight controls; no native execution or authentication proof",
+  "controls": [
+    {
+      "name": "genuine retained snapshot",
+      "passed": true
+    },
+    {
+      "name": "native revision integer",
+      "passed": true
+    },
+    {
+      "name": "physical revision substituted",
+      "passed": true
+    },
+    {
+      "name": "unmatched compiler original bytes",
+      "passed": true
+    },
+    {
+      "name": "mutable original request",
+      "passed": true
+    },
+    {
+      "name": "missing compiler binding",
+      "passed": true
+    },
+    {
+      "name": "rehashed Boolean versus native integer census",
+      "passed": true
+    },
+    {
+      "name": "outer ready numeric zero",
+      "passed": true
+    },
+    {
+      "name": "inner ready numeric zero",
+      "passed": true
+    },
+    {
+      "name": "inner source mismatch",
+      "passed": true
+    },
+    {
+      "name": "immutable carrier snapshot detached from replaced dataclass field",
+      "passed": true
+    },
+    {
+      "name": "six exact committed archive digests and identities",
+      "passed": true
+    },
+    {
+      "name": "graph profile original byte digests",
+      "passed": true
+    },
+    {
+      "name": "exact three native fact recipe names",
+      "passed": true
+    },
+    {
+      "name": "complete native count accepts",
+      "passed": true
+    },
+    {
+      "name": "omitted native column count refuses",
+      "passed": true
+    },
+    {
+      "name": "foreign count descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "duplicate recipe cannot satisfy count",
+      "passed": true
+    },
+    {
+      "name": "missing graph key returns bounded Error",
+      "passed": true
+    },
+    {
+      "name": "invalid UTF8 returns bounded Error",
+      "passed": true
+    }
+  ],
+  "passed": 20,
+  "failed": 0
+}

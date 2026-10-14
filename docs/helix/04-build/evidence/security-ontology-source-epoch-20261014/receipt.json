@@ -1,0 +1,52 @@
+{
+  "version": "truss.graph-source-epoch-evidence/0.1-candidate",
+  "acceptanceReferences": [
+    "US-056-AC2",
+    "US-056-AC6",
+    "US-056-AC9",
+    "US-056-AC10",
+    "CONTRACT-062",
+    "CONTRACT-063",
+    "STP-056",
+    "STP-057"
+  ],
+  "validation": {
+    "graphNative": "1 passed, 25.619 seconds, finalr3",
+    "namedSourceNativeRegression": "14 passed, 72.841 seconds",
+    "sourceCarrierControls": "original positive and five tamper refusals",
+    "moduleBoundaries": "1039 imports passed",
+    "diffCheck": "passed"
+  },
+  "runtime": "truss-catalog-runtime/0.60-candidate",
+  "native": "PostgreSQL18.6",
+  "compiler": "original producer/checker from Weft61865, unchanged producer behavior under later diagnostic checkpoints",
+  "sourceHashes": {
+    "packages/python/src/truss/_security_graph_source.py": "d226cbaf4fa019aa3483e85e448d0efbbc71c9a9aad1cdec33dfc19fa98eece8",
+    "packages/python/src/truss/_security_catalog_source_installation.py": "8cbe5680cf8b7402cccb1678c4d22aa96635989ece0f1a71a8e537cee956ec58",
+    "packages/python/src/truss/_security_catalog_source_binding.py": "b26b63a734badf34f27767978ee7987b0df799ffb7fe6a928f866fe61fda7fba",
+    "packages/python/src/truss/_security_catalog_source_epoch.py": "82e95e97d5567f8818ad6712273dfabeb684f51bcdffad546fbb56efb70df4ab",
+    "packages/python/tests/test_security_ontology_edges_native.py": "c0d20356ccb63fddc7d122e832851e58e946a0f8abcbe1b4ae047125ae03c8d2",
+    "scripts/check-module-boundaries.py": "2b1811f40c73cd5fed918f6e9629065ab50b9bb1bc4eac0ed9d6c4f3689f95f3"
+  },
+  "evidenceHashes": {
+    "compiler-request.json": "2362926c7a79c0a50be55747752b1c1073184c45bff4c07ded4010fb33b68dc9",
+    "native-source-epoch.json": "b7af2b9e466697b4887ee21f51911783dad2a7bd3c7d7206080ccb9d0acc08fb",
+    "named-regression-r2.log": "ddada326f0bcb4da50d76e73853b725009a735ad27c6e28177fafe11e2a0a008",
+    "named-regression-r1.log": "4c2d9b319005ac252060b38be1ca5da213650c12d9a58398da423493e09aec1d",
+    "native-r1.log": "146532f0a50e363a2dc814f0b11326d580ce0b558496c5aed44759347b0591d8",
+    "accepted-catalog.json": "8c96e92feca41a440306b009b6f6eac701c36abfd3761b5adc6b1284e353da00",
+    "native-r2.log": "d3307c669344b96d4e080428da3dc1a9663fc3d00afe685d104813427010e5f7",
+    "native-r3.log": "2479ec1659d264173b4bd9fcf07e5ec41c518404656d3c1c2ef7c02253840b59",
+    "README.md": "f879bc5767510c42999e8c2d851983894914d3f356dc3229375807890022cb00",
+    "issued-profile.json": "d4468c77fec5fbb79be23a2145b43bdf03be97d693438bb6e5cb55ce2c5f21c1",
+    "compiler-output.json": "14ff03471f5ac274d14806684033225ee83fe876deb980db419d3ceeaa72e5be",
+    "source-comparison-controls.json": "1f598fd5f07d76cbc30ba565c8905d4a50e96a6dd2d18b694ff8269de8cc1987",
+    "physical-request.json": "5596ea1dd2132ea458d7f2fa02d98264dfd080769103062c040a00ba790665be",
+    "check-source-comparisons.py": "bf6583af0dd9096005528d3a56340e4b968f294b0aa4445610cb4d068b7a1061"
+  },
+  "scope": "Fresh trusted direct administrator archive and initial graph source epoch issuance, exact committed readback and containment. Original compiler, Subject script, installer, native routine/authentication and DDL lifetime remain custody premises. No public/native compiler admission or backend acceptance promotion. All132 original cases remain required.",
+  "postRunOriginalBinaryComparisons": {
+    "security_graph_candidate": "c4584b92b125a1a4fdffaa8fbb8055b68a6eaaa65f2f7d60bd5e6582327aea6f",
+    "security_graph_result": "d3ef9acce176a10575c860c567e9feba75b05f4c05c8c88ed6ec3452f06fc573"
+  }
+}

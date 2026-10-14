@@ -11,15 +11,27 @@ from .catalog_runtime import _release
 from .weft import _decode
 
 MAX_BYTES=16777216
+SOURCE_TABLES=('schema_head','schema_rev','schema_doc','catalog_registration_request','catalog_acceptance_report',
+              'type_def','prop_def','key_def','rel_def','rel_endpoint','relationship_lineage','schema_change',
+              'catalog_runtime_installation','runtime_release','runtime_catalog_rebind_transition')
 
-def capture_accepted_catalog(cursor,original_request):
+
+def verify_held_accepted_catalog_source_cut(cursor):
+    """Read-only capture requires original native table cuts, never a flag alone."""
+    cursor.execute("SELECT c.relname::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,c.relrowsecurity::pg_catalog.text,c.relforcerowsecurity::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid)::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_locks l WHERE l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.locktype OPERATOR(pg_catalog.=) 'relation' AND l.database OPERATOR(pg_catalog.=) (SELECT oid FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database()) AND l.relation OPERATOR(pg_catalog.=) c.oid AND l.mode OPERATOR(pg_catalog.=) 'ShareLock' AND l.granted)::pg_catalog.text FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) c.relnamespace WHERE n.nspname OPERATOR(pg_catalog.=) 'truss' AND c.relname OPERATOR(pg_catalog.=) ANY(%s::pg_catalog.text[]) ORDER BY c.relname",(list(SOURCE_TABLES),),prepare=False,binary=False)
+    if cursor.description is None or len(cursor.description)!=7 or any(d.type_code!=25 for d in cursor.description):raise ValueError('Exact held accepted source cut TEXT descriptors required')
+    if cursor.fetchmany(len(SOURCE_TABLES)+1)!=[(n,'r','p','false','false','false','true') for n in sorted(SOURCE_TABLES)]:raise ValueError('Original held complete accepted catalog source cut required')
+
+def capture_accepted_catalog(cursor,original_request,*,existing_source_cut=False):
+    if type(existing_source_cut) is not bool:raise ValueError('Exact accepted source lock mode required')
+    if existing_source_cut:verify_held_accepted_catalog_source_cut(cursor)
     _,request=_decode(original_request,4_000_000,'mapping_input')
     manifest,digest,_=_release()
     cursor.execute('SELECT installation_id::text,release_id,release_sha256 FROM truss.runtime_current_installation()',prepare=False)
     installation=cursor.fetchmany(2)
     if len(installation)!=1 or installation[0][1:]!=(manifest['releaseId'],digest):
         raise ValueError('Original installed catalog release required')
-    cursor.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE',prepare=False)
+    cursor.execute('SELECT rev FROM truss.schema_head WHERE id=1'+('' if existing_source_cut else ' FOR SHARE'),prepare=False)
     heads=cursor.fetchmany(2)
     if len(heads)!=1 or type(heads[0][0]) is not int or heads[0][0]<1:
         raise ValueError('Positive accepted catalog revision required')

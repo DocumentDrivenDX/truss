@@ -1,0 +1,109 @@
+{
+  "legacyEqualityWitnesses": [
+    {
+      "securityReady": 0,
+      "legacyBareEqualityRefuses": false
+    },
+    {
+      "securityReady": 0.0,
+      "legacyBareEqualityRefuses": false
+    }
+  ],
+  "scope": "Original source predicate isolated, plus offline retained native packet correspondence; no subprocess/native execution or refinement theorem.",
+  "sourceSha256": "bd37282daa78476b11abf5143769ae727d83b14f67651d24d356fd264aa0bfe5",
+  "packetSha256": "0020bd32617ef51346ccf84db0bea3ea6f685a0185970e235f12f25dc2d30864",
+  "predicate": "type(result_check) is not dict or result_check.get('securityReady') is not False or result_check != {'version': 'weft.truss.security.graph-result/0.1-candidate', 'status': 'inspected', 'securityReady': False, 'sourceRequestSha256': sha256(request).hexdigest(), 'sourceOutputSha256': sha256(compiled.stdout).hexdigest(), 'batchSha256': sha256(batch.encode()).hexdigest()}",
+  "controls": [
+    {
+      "control": "retained-Alice",
+      "passed": true
+    },
+    {
+      "control": "retained-Bob",
+      "passed": true
+    },
+    {
+      "control": "retained-Outsider",
+      "passed": true
+    },
+    {
+      "control": "exact",
+      "expectedRefuse": false,
+      "observedRefuse": false,
+      "passed": true
+    },
+    {
+      "control": "securityReady-0",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "securityReady-0.0",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "securityReady-True",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "securityReady-None",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "securityReady-'false'",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "extra",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "missing",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "wrong-status",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "wrong-batch-hash",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "wrong-request-hash",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "wrong-output-hash",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    },
+    {
+      "control": "wrong-version",
+      "expectedRefuse": true,
+      "observedRefuse": true,
+      "passed": true
+    }
+  ],
+  "allPassed": true
+}

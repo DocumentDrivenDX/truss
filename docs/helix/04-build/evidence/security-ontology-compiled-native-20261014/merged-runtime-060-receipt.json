@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "runtime": "truss-catalog-runtime/0.60-candidate",
+  "engine": "PostgreSQL18.6",
+  "tests": 1,
+  "seconds": 24.171,
+  "sourceDigests": {
+    "scripts/security_ontology_guarded_read.py": "b82e2ccc9a2502e5778b08b8910eea61ee22e8ce6716125c3c234007bf09493e",
+    "scripts/security_ontology_compiled_read.py": "bd37282daa78476b11abf5143769ae727d83b14f67651d24d356fd264aa0bfe5",
+    "scripts/security_ontology_native_subject_read.py": "33c28c4b0400b6df6d99b16cc087205ab26a026f7479b0f4c11a537b6198211b",
+    "packages/python/tests/test_security_ontology_edges_native.py": "781acd66ac3d6f84ab576fa17f3e108d553db00c36a1b60c0cc6f26eb83a854c",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "bd553857a7087d81d9e03eefed658f1ba99dd446ff097b004c5eae0fb0ca9239"
+  },
+  "logSha256": "49fa4d3051638c758314b37a5133d39d957f0323cd5e8acd0cd3ac9869562d6a",
+  "sourceCutChange": "catalog_make_report now reads runtime_catalog_rebind_transition; fixed held cut includes that original dependency. All17fixed relations tested during evaluation and after outer rollback; originalrole/map/graph/compiler/checker stages replay.",
+  "scope": "Merged-runtime replay, separate from retained runtime0.59 compiled-native packet. No native/public admission or case promotion."
+}

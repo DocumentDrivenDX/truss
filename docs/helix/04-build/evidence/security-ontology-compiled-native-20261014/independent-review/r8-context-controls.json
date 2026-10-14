@@ -1,0 +1,108 @@
+{
+  "scope": "Actual source predicate isolation only; trusted original owner binary remains a premise.",
+  "sourceSha256": "bd37282daa78476b11abf5143769ae727d83b14f67651d24d356fd264aa0bfe5",
+  "packetSha256": "0020bd32617ef51346ccf84db0bea3ea6f685a0185970e235f12f25dc2d30864",
+  "predicates": [
+    "query['version'] != 'weft.truss.security.graph-query/0.1-candidate' or query['securityReady'] is not False or query['nativeAdmission'] != 'required' or (query['contextSha256'] != output['contextSha256']) or (query['graphSourceSha256'] != output['graph']['graphSourceSha256']) or (execution['policyParameterTypes'] != ['boolean']) or (type(execution['policyParameters']) is not list) or (len(execution['policyParameters']) != 1) or (execution['policyParameters'][0] is not True) or (type(slot['ordinal']) is not int) or (slot['ordinal'] != 2) or (type(slot['nativeTypeId']) is not int) or (slot['physicalType'] != 'int8') or (slot['logicalSubject'] != {'documentId': 'domain', 'moduleId': 'm', 'elementId': 'Staff'}) or (slot['supplier'] != 'original_authenticated_guarded_host_only')",
+    "len(staff) != 1 or slot['nativeTypeId'] != staff[0]['type_id']"
+  ],
+  "controls": [
+    {
+      "control": "exact",
+      "expectedRefusal": false,
+      "observedRefusal": false,
+      "passed": true
+    },
+    {
+      "control": "policyParameters-[1]",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "policyParameters-[1.0]",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "policyParameters-[False]",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "policyParameters-[]",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "policyParameters-[True, True]",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "policyParameters-True",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "policyParameters-None",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "ordinal-2.0",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "ordinal-'2'",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "ordinal-None",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "ordinal-3",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "nativeTypeId-6.0",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "nativeTypeId-'6'",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "nativeTypeId-None",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    },
+    {
+      "control": "nativeTypeId-7",
+      "expectedRefusal": true,
+      "observedRefusal": true,
+      "passed": true
+    }
+  ],
+  "allPassed": true
+}

@@ -1,0 +1,28 @@
+{
+  "results": [
+    {
+      "caller": "Alice",
+      "resources": [
+        "RA"
+      ],
+      "rawSelect": false,
+      "roleAndMapCutsThroughRelease": true
+    },
+    {
+      "caller": "Bob",
+      "resources": [
+        "RB"
+      ],
+      "rawSelect": false,
+      "roleAndMapCutsThroughRelease": true
+    },
+    {
+      "caller": "Outsider",
+      "resources": [],
+      "rawSelect": false,
+      "roleAndMapCutsThroughRelease": true
+    }
+  ],
+  "unregisteredRefusedBeforeEvaluation": true,
+  "scope": "Native caller identity and held role/map/graph/source cuts; trusted registration/private administrative executor/routine and authentication custody, not original checked compiler admission."
+}
