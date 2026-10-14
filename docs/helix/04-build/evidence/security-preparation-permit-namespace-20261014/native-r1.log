@@ -1,0 +1,19 @@
+test_reserved_two_integer_permit_namespace_requires_native_issuer (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_reserved_two_integer_permit_namespace_requires_native_issuer)
+Dedicated disposable DB privilege witness, not permit admission. ... ERROR
+
+======================================================================
+ERROR: test_reserved_two_integer_permit_namespace_requires_native_issuer (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_reserved_two_integer_permit_namespace_requires_native_issuer)
+Dedicated disposable DB privilege witness, not permit admission.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 41, in tearDown
+    self.admin.execute('DROP ROLE consumer')
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.DependentObjectsStillExist: role "consumer" cannot be dropped because some objects depend on it
+DETAIL:  privileges for function preparation_mint_probe()
+
+----------------------------------------------------------------------
+Ran 1 test in 6.092s
+
+FAILED (errors=1)

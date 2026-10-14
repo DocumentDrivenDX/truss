@@ -1,0 +1,22 @@
+{
+  "status": "native-drift-refusals-passed",
+  "postgresql": "18.6",
+  "tests": 1,
+  "subtests": 4,
+  "seconds": 5.814,
+  "sourceSha256": "fb1c0ac50974d217375656c3990425a4109e946978b829d4d4d5a2b1983c2ea5",
+  "files": {
+    "native-r1.log": "839c95c1bffc54a4acd0a87a5a3c693b007ad977c4e685d3dd90215790bcbbfd",
+    "test_preparation_source_inventory_native.py": "53a6c1bad7713869937d9c3633007a3f2d6cffc2bc9b420ff049b1d2f2c1d732"
+  },
+  "scope": [
+    "Original158-routine inventory capture succeeds.",
+    "Native query_objects PARALLEL SAFE, changed search_path, PUBLIC execution grant and changed owner each refuse original inventory capture.",
+    "Original transaction rollback restores byte-identical captured inventory after each mutation."
+  ],
+  "limits": [
+    "Direct private collector witness, not an original end-to-end initializer refusal/epoch rollback test.",
+    "Does not prove concurrent DDL exclusion, all alternate callable paths or production permit admission.",
+    "No backend case promotion."
+  ]
+}

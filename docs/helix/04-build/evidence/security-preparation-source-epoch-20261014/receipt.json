@@ -1,0 +1,29 @@
+{
+  "status": "genuine-native-metadata-source-epoch-passed",
+  "sourceHashes": {
+    "packages/python/src/truss/_preparation_source_epoch.py": "fb1c0ac50974d217375656c3990425a4109e946978b829d4d4d5a2b1983c2ea5",
+    "scripts/export-products-native-binding.py": "a7ac267d6395b0137c241ec3b9f6baa0c1fa327a7811cd17d1341714fc81a041"
+  },
+  "python": "3.11.17",
+  "postgresql": "18.6",
+  "originalModelSha256": "b7f8ad91d22eeae35d9c7a966090d9120a2f436c84e29a6ba56d5979a6b712b5",
+  "scope": "Original public installation/catalog acceptance then original marker/infrastructure/genuine epoch issuance, actual committed epoch readback and ordinary products create/read/export.",
+  "files": {
+    "native-runtime-manifest.json": "aada6da87a2ff1cf522f846d463ce1ae3d883bb88d435de6f9c8ca2d2263daa6",
+    "accepted-document.json": "b7f8ad91d22eeae35d9c7a966090d9120a2f436c84e29a6ba56d5979a6b712b5",
+    "original-demo-model.json": "b5ec19900e4355538395200f65e3f70a4edf2e6b9dd1753deac04a6d9ef41337",
+    "native-query-bundle.json": "8bc922f21966a31d1b6b2ab9163f1e9be39e823314afcf758da8db6d355d161c",
+    "original-prepared-acceptance.json": "82de724c3eef3a2ed934c5bf483a85b06ea2bbdf3ea76fd958050123a162a6d1",
+    "native-receipt.json": "bea42e77f209891d7adf04775082d5cc774199b4d7df9741a41dc1ec1cc2b082",
+    "native-r1.log": "bea42e77f209891d7adf04775082d5cc774199b4d7df9741a41dc1ec1cc2b082",
+    "native-binding.json": "b1120edc4ec533c98bb8e851e38a1b1b2d61137d6f24c268a8da4d1691ed2a2f",
+    "export-products-native-binding.py": "a7ac267d6395b0137c241ec3b9f6baa0c1fa327a7811cd17d1341714fc81a041",
+    "_preparation_source_epoch.py": "fb1c0ac50974d217375656c3990425a4109e946978b829d4d4d5a2b1983c2ea5"
+  },
+  "limits": [
+    "Metadata/runtime-source only, not action eligibility, protected RR selection, native permit or seal.",
+    "Owner source remains under concurrent review; retained hashes describe only the source executed.",
+    "Store stopped after runner; original native binding belongs only to its original installation, not a future live store.",
+    "No backend acceptance case promotion."
+  ]
+}

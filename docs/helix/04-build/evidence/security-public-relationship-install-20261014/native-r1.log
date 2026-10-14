@@ -1,0 +1,19 @@
+test_actual_authored_resource_relationship_and_population (test_security_public_relationship_native.PublicRelationshipNativeTests.test_actual_authored_resource_relationship_and_population) ... ERROR
+
+======================================================================
+ERROR: test_actual_authored_resource_relationship_and_population (test_security_public_relationship_native.PublicRelationshipNativeTests.test_actual_authored_resource_relationship_and_population)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_public_relationship_native.py", line 46, in test_actual_authored_resource_relationship_and_population
+    capture={'status':'native-installation-population-prerequisite-passed','securityReady':False,'serverVersion':self.admin.execute('SHOW server_version').fetchone()[0],'relationId':str(refs['ResourceRelatedResource'].relationship_id),'expectedEdges':expected,'observedEdges':observed,'objectIds':ids,'catalogRelations':[r[0] for r in self.admin.execute('SELECT pg_catalog.to_jsonb(r)::pg_catalog.text FROM truss.rel_def r ORDER BY id').fetchall()],'nativeEdges':[r[0] for r in self.admin.execute('SELECT pg_catalog.to_jsonb(e)::pg_catalog.text FROM truss.edge e ORDER BY id').fetchall()]}
+                                                                                                                                                                                                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UndefinedColumn: column "id" does not exist
+LINE 1: ...o_jsonb(r)::pg_catalog.text FROM truss.rel_def r ORDER BY id
+                                                                     ^
+
+----------------------------------------------------------------------
+Ran 1 test in 21.252s
+
+FAILED (errors=1)

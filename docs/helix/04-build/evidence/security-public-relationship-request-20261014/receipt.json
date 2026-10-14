@@ -1,0 +1,11 @@
+{
+  "terminalExit": 0,
+  "tests": 1,
+  "seconds": 17.99,
+  "closedMappingRequestSchemaValid": true,
+  "schemaSha256": "fde090ebfdb09b5997970f48b74c7df24cb6dd1c6504185ee85a35b716fdd20c",
+  "sourceDigests": {
+    "scripts/security_relationship_request.py": "511de55d6635ba5599740daeae0be895476901dc6fe5d60f069a2ebd7d2760f3",
+    "packages/python/tests/test_security_public_relationship_native.py": "e548d11e0fc4c606991c4780080ec0eb725edde09485cc081190cfb2578acfa1"
+  }
+}

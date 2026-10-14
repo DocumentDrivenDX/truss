@@ -1,0 +1,10 @@
+{
+  "factoryNativeSeconds": 25.378,
+  "relationshipSubjectNativeSeconds": 27.783,
+  "legacyProtectedNativeSeconds": 122.038,
+  "sourceDigests": {
+    "packages/python/src/truss/_security_graph_subject_installation.py": "f7b9dadc728da07cda087aec52ce410a11cfefae8cd6c002587e4a8432a0d9a0",
+    "packages/python/tests/test_security_public_relationship_native.py": "3f9ca356c278d7d3c6d413221972bbe85723b0fa7154373b3e1f6f308af47303",
+    "scripts/check-module-boundaries.py": "7a197568f1e669edeb0a1844587cd1097f74badcdbd7dbf357fb71d10e80c2cb"
+  }
+}

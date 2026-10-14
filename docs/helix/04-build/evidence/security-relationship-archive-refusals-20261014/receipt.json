@@ -1,0 +1,11 @@
+{
+  "tests": 5,
+  "terminalExit": 0,
+  "seconds": 4.17,
+  "sourceDigests": {
+    "packages/python/src/truss/_security_relationship_source.py": "af9c487ebea306cfe689df80cf638613d540cb46bbe8881d1e7e6e05770ce548",
+    "packages/python/src/truss/_security_relational_source.py": "72ac031c18d0e24f13f154f539e65e42cfb1b52df347264049c0ac7f02acf611",
+    "packages/python/tests/test_security_relationship_source.py": "292acef4b2649cdac9c45b4225ec270a37547ccbbe9b10318b0e4ecaf0b038f9",
+    "scripts/check-module-boundaries.py": "5d8ed1f7ec03d7aac5ac5b59a0dc09d7a24ac6bf9f887925e619de6e1d5f4e4c"
+  }
+}

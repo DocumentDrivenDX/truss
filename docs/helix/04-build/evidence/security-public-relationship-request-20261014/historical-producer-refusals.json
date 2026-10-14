@@ -1,0 +1,14 @@
+[
+  {
+    "request": "compiler-request",
+    "exit": 1,
+    "stdoutBytes": 0,
+    "diagnostic": "{\"code\":\"WFT-SECURITY-QUERY-PROFILE\",\"severity\":\"error\",\"message\":\"Security query profile admission refused\",\"phase\":\"model\"}\n"
+  },
+  {
+    "request": "compiler-request-observation-denied",
+    "exit": 1,
+    "stdoutBytes": 0,
+    "diagnostic": "{\"code\":\"WFT-SECURITY-QUERY-PROFILE\",\"severity\":\"error\",\"message\":\"Security query profile admission refused\",\"phase\":\"model\"}\n"
+  }
+]

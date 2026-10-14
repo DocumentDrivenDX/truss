@@ -1,0 +1,26 @@
+{
+  "securityReady": false,
+  "observations": [
+    {
+      "subject": "Alice",
+      "expected": [],
+      "observed": [],
+      "ownNativeCallerAndPrivatePeer": true,
+      "cutsHeldThroughReceiver": true
+    },
+    {
+      "subject": "Bob",
+      "expected": [],
+      "observed": [],
+      "ownNativeCallerAndPrivatePeer": true,
+      "cutsHeldThroughReceiver": true
+    },
+    {
+      "subject": "Outsider",
+      "expected": [],
+      "observed": [],
+      "ownNativeCallerAndPrivatePeer": true,
+      "cutsHeldThroughReceiver": true
+    }
+  ]
+}

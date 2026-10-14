@@ -14,6 +14,7 @@ from ._installation_privileges import installation_administrator_with_cursor
 from ._security_catalog_source_installation import (PendingCatalogSourceMarker,
     _catalog_mapping_snapshot,verify_catalog_source_archive_with_cursor)
 from ._security_catalog_assessment import capture_accepted_catalog
+from ._security_relationship_source import PreparedRelationshipSecuritySource
 from ._security_graph_source import PreparedGraphSecuritySource,acquire_graph_source_catalog_cut,verify_graph_fact_recipe_completeness
 from ._security_source_epoch_installation import (PendingSourceEpochInfrastructure,
     _sources,_verify,_MANIFEST_SHA256,_text_rows)
@@ -47,7 +48,7 @@ def issue_initial_catalog_source_epoch_in_transaction(host,transaction,*,mapping
       or any(type(r) is not _FactRelationComparison or type(r.columns) is not tuple or len(r.columns)>1600 or any(type(c) is not _FactColumnComparison for c in r.columns) for r in fact_relations)):
    raise ValueError('Original bounded catalog source factory comparison required')
   fact_relations=tuple(replace(r,columns=tuple(replace(c) for c in r.columns)) for r in fact_relations)
-  if type(mapping) is PreparedGraphSecuritySource and (len(fact_relations)!=3 or {(r.schema,r.name) for r in fact_relations}!={('truss','object'),('truss','edge'),('truss','catalog_subject_map')} or any(not r.columns for r in fact_relations)):
+  if type(mapping) in (PreparedGraphSecuritySource,PreparedRelationshipSecuritySource) and (len(fact_relations)!=3 or {(r.schema,r.name) for r in fact_relations}!={('truss','object'),('truss','edge'),('truss','catalog_subject_map')} or any(not r.columns for r in fact_relations)):
    raise ValueError('Complete original graph fact recipes required')
   profile=derive_catalog_source_epoch_profile(mapping,fact_relations,infrastructure.barrier,subject_source=subject_source)
   sources=_sources()
@@ -66,7 +67,7 @@ def issue_initial_catalog_source_epoch_in_transaction(host,transaction,*,mapping
   if actor[0]!=infrastructure.barrier.owner_oid:raise ValueError('Original source factory handler owner required')
   if _text_rows(cursor,'SELECT release_id::text,release_sha256::text FROM truss.runtime_current_installation()',limit=1)!=[(manifest['releaseId'],digest)]:raise ValueError('Original source factory release required')
   if marker.release_sha256!=digest or marker.inventory_sha256!=sha256(mapping.accepted_catalog_assessment).hexdigest():raise ValueError('Original source factory marker sources required')
-  if type(mapping) is PreparedGraphSecuritySource:acquire_graph_source_catalog_cut(cursor)
+  if type(mapping) in (PreparedGraphSecuritySource,PreparedRelationshipSecuritySource):acquire_graph_source_catalog_cut(cursor)
   verify_catalog_source_archive_with_cursor(cursor,mapping,marker.installation_id)
   if capture_accepted_catalog(cursor,mapping.original_request)!=mapping.accepted_catalog_assessment:raise ValueError('Original source factory current catalog required')
   def current_guard():
@@ -86,7 +87,7 @@ def issue_initial_catalog_source_epoch_in_transaction(host,transaction,*,mapping
   cursor.execute('LOCK TABLE truss.source_epoch_current,truss.source_epoch_registry IN ROW EXCLUSIVE MODE NOWAIT',prepare=False)
   if _text_rows(cursor,'SELECT (SELECT count(*) FROM truss.source_epoch_current)::text,(SELECT count(*) FROM truss.source_epoch_registry)::text',limit=1)!=[('0','0')]:raise ValueError('Existing source factory epoch requires explicit transition')
   def produce(c):
-   if type(mapping) is PreparedGraphSecuritySource:verify_graph_fact_recipe_completeness(c,fact_relations)
+   if type(mapping) in (PreparedGraphSecuritySource,PreparedRelationshipSecuritySource):verify_graph_fact_recipe_completeness(c,fact_relations)
    c.execute('SELECT truss.runtime_issue_source_epoch(%s,NULL,%s,%s,%s)',(marker.installation_id,incarnation.decode(),profile,mapping.accepted_catalog_assessment),prepare=False,binary=False)
    if c.description is None or len(c.description)!=1 or c.description[0].type_code!=25:raise ValueError('Exact issued source epoch descriptor required')
    rows=c.fetchmany(2)

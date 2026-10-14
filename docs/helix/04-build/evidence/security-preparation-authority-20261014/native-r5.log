@@ -1,0 +1,16 @@
+test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr) ... FAIL
+
+======================================================================
+FAIL: test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_preparation_authority_native.py", line 72, in test_current_authority_exclusion_does_not_refresh_or_admit_rr
+    self.assertIsInstance(fresh, Ok, str(host._custody.last_attempt.error))
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42601', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : unterminated quoted identifier at or near ""C"
+LINE 14: ...OLLATE pg_catalog."C",(m.value->>'id') COLLATE pg_catalog."C
+                                                                      ^
+
+----------------------------------------------------------------------
+Ran 1 test in 5.852s
+
+FAILED (failures=1)

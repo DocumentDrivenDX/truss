@@ -1,0 +1,57 @@
+{
+  "securityReady": false,
+  "profile": {
+    "acceptedCatalogSha256": "326524a7cd868baf463bc247eca8f4b6b48d0c482a36c29fabbdce013c45aae8",
+    "compilerOutputSha256": "3cfb71a18da4ac6318dd036eaf3c6dfd6c5d19d94d9f34f7e41ec3ce3fdecad0",
+    "compilerRequestSha256": "21c2142c6ff968590429168d75d1d52327490919dbcf6115774732bafed4d711",
+    "ddlBarrier": {
+      "functionOid": 18878,
+      "includeAlterRoutine": true,
+      "includeDatabaseDdl": true,
+      "includeSchemaDdl": true,
+      "ownerOid": 10,
+      "sourceSha256": "abf70fd6bc7860ea896afb25d9d139cb055fb29fa13fbeec5921bf94fcd208ab"
+    },
+    "factCuts": [
+      {
+        "columnCount": 10,
+        "columnsSha256": "d38ce902b75407a924e4be7ee84ad9cd1d10283fc78e956254709f06a03be8c1",
+        "guardSha256": "2a0cae24a325172b1c5af1684d991a4d6a718ab4c2a69772663a63e806443f70",
+        "name": "object",
+        "oid": 16645,
+        "ownerOid": 18433,
+        "schema": "truss"
+      },
+      {
+        "columnCount": 13,
+        "columnsSha256": "5059be099d805987ab373190bd82fd47922874c4325bc8f26747d1ac95392314",
+        "guardSha256": "2a0cae24a325172b1c5af1684d991a4d6a718ab4c2a69772663a63e806443f70",
+        "name": "edge",
+        "oid": 16683,
+        "ownerOid": 18433,
+        "schema": "truss"
+      },
+      {
+        "columnCount": 2,
+        "columnsSha256": "ccf4c551876c178e977b516a163f9e39cdeb51449fcdf3e696f28a0196f37b18",
+        "guardSha256": "2a0cae24a325172b1c5af1684d991a4d6a718ab4c2a69772663a63e806443f70",
+        "name": "catalog_subject_map",
+        "oid": 18887,
+        "ownerOid": 18433,
+        "schema": "truss"
+      }
+    ],
+    "interfaceVersion": "truss-owned-relationship-source-profile/0.1-candidate",
+    "requestSha256": "9be286a5add9a2c9200cf66622cf6075f6944709a2601ee24cc8cc7d0402bd3a",
+    "sourceContextSha256": "2d6d296467bb3c54fc942c2be0b0cbe352b8c9fd2f245fddbf37d31e1bb16e8e",
+    "sourceEpochManifestSha256": "56b6f870104e6f79ebb7e9e860740a3002514641195a3fff3e65e51a3775b2a1",
+    "subjectHelperSha256": "0520931a9060692a99282b18d98b6f9becff7c00e735562a2ed7d1b69e83c0b8"
+  },
+  "epoch": "efcedff1-7526-4834-8b21-d756b4346f68",
+  "exactReadback": true,
+  "reuseRefused": true,
+  "rollbackKeepsPriorWork": true,
+  "staleGuardNoEpoch": true,
+  "freshSuccessorIssued": true,
+  "scope": "Actual initial native source epoch registration only; ordinary Subject/read/publication admission remains separate"
+}

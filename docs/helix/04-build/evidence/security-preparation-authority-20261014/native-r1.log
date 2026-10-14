@@ -1,0 +1,124 @@
+test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr) ... ERROR
+test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr) ... ERROR
+test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr) ... ERROR
+test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr) ... ERROR
+
+======================================================================
+ERROR: test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_preparation_authority_native.py", line 70, in test_current_authority_exclusion_does_not_refresh_or_admit_rr
+    data.execute('SELECT truss.reader_catalog(256,1048576,%s,%s)',
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.InsufficientPrivilege: permission denied for schema truss
+LINE 1: SELECT truss.reader_catalog(256,1048576,$1,$2)
+               ^
+
+======================================================================
+ERROR: test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_catalog_runtime_native.py", line 40, in tearDown
+    self.admin.execute('DROP SCHEMA IF EXISTS truss CASCADE')
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.LockNotAvailable: canceling statement due to lock timeout
+
+======================================================================
+ERROR: test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.DependentObjectsStillExist: role "group_writer" cannot be dropped because some objects depend on it
+DETAIL:  privileges for schema truss
+privileges for function truss.get_object(text,text,text,bigint,integer,text,text)
+privileges for function truss.group_context(text,text)
+privileges for function truss.group_create_metadata(bytea,bytea,text,text)
+privileges for function truss.apply_create_group(bytea,bytea,bytea,bytea,text,text)
+privileges for function truss.group_type_reference(text,text,text,text,text)
+privileges for function truss.reader_catalog(integer,integer,text,text)
+privileges for function truss.accepted_document(text,integer,text,text)
+privileges for function truss.key_read_selection(text,text,text,text,bytea,text,text)
+privileges for function truss.lookup_string_key(text,text,text,text,bytea,bytea,bytea,integer,text,text)
+privileges for function truss.page_objects(text,text,text,integer,integer,bytea,text,text)
+privileges for function truss.object_group_begin(bytea,bytea,bytea,text,text,bytea,boolean)
+privileges for function truss.object_group_metadata(uuid,integer)
+privileges for function truss.object_group_step(uuid,integer,bytea)
+privileges for function truss.object_group_finish(uuid)
+privileges for function truss.get_edge(text,text,text,bigint,integer,text,text)
+privileges for function truss.page_edges(text,text,text,jsonb,text,integer,integer,bytea,text,text)
+privileges for function truss.reached(bytea,integer,text,text)
+privileges for function truss.group_condition_key_metadata(bytea,bytea,text,text)
+privileges for function truss.group_relationship_reference(text,text,text,text,text)
+privileges for function truss.import_context(text,text)
+privileges for function truss.import_key_selection(text,text,text,text,text)
+privileges for function truss.import_object_identity(bytea,bytea,bytea,text,text)
+privileges for function truss.import_record_source(uuid,bytea,text)
+privileges for function truss.import_edge_identity(bytea,text,text)
+privileges for function truss.import_identity_key_selection(bytea,text,text)
+privileges for function truss.import_report_record_authority(bytea,text,text,text)
+privileges for function truss.feed_reached(text,bytea,integer,text,text)
+privileges for function truss.read_history(jsonb,bytea,bigint,integer,integer,text,text)
+privileges for function truss.lookup_import_source(jsonb,integer,text,text)
+privileges for function truss.query_timestamp_instant_key(text,text)
+privileges for function truss.query_numeric_value(text,text)
+privileges for function truss.query_scope(jsonb)
+privileges for function truss.query_binding(jsonb,integer,integer,integer,text,text)
+privileges for function truss.query_objects(jsonb,integer)
+privileges for function truss.query_edges(jsonb,integer)
+privileges for function truss.query_page_objects(jsonb,integer,text)
+privileges for function truss.query_object_attribution(jsonb,integer,bigint)
+privileges for function truss.query_complete_related_keys(jsonb,integer,integer)
+privileges for function truss.query_object_times(jsonb,integer,bigint)
+privileges for function truss.query_object_load_id(jsonb,integer,bigint)
+privileges for function truss.traverse_objects(jsonb,jsonb,integer,integer,integer,text,text)
+
+======================================================================
+ERROR: test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.DependentObjectsStillExist: role "group_reader" cannot be dropped because some objects depend on it
+DETAIL:  privileges for schema truss
+privileges for function truss.get_object(text,text,text,bigint,integer,text,text)
+privileges for function truss.group_context(text,text)
+privileges for function truss.group_type_reference(text,text,text,text,text)
+privileges for function truss.reader_catalog(integer,integer,text,text)
+privileges for function truss.accepted_document(text,integer,text,text)
+privileges for function truss.key_read_selection(text,text,text,text,bytea,text,text)
+privileges for function truss.lookup_string_key(text,text,text,text,bytea,bytea,bytea,integer,text,text)
+privileges for function truss.page_objects(text,text,text,integer,integer,bytea,text,text)
+privileges for function truss.get_edge(text,text,text,bigint,integer,text,text)
+privileges for function truss.page_edges(text,text,text,jsonb,text,integer,integer,bytea,text,text)
+privileges for function truss.reached(bytea,integer,text,text)
+privileges for function truss.group_relationship_reference(text,text,text,text,text)
+privileges for function truss.import_context(text,text)
+privileges for function truss.import_key_selection(text,text,text,text,text)
+privileges for function truss.import_object_identity(bytea,bytea,bytea,text,text)
+privileges for function truss.import_record_source(uuid,bytea,text)
+privileges for function truss.import_edge_identity(bytea,text,text)
+privileges for function truss.import_identity_key_selection(bytea,text,text)
+privileges for function truss.import_report_record_authority(bytea,text,text,text)
+privileges for function truss.feed_reached(text,bytea,integer,text,text)
+privileges for function truss.read_history(jsonb,bytea,bigint,integer,integer,text,text)
+privileges for function truss.lookup_import_source(jsonb,integer,text,text)
+privileges for function truss.query_timestamp_instant_key(text,text)
+privileges for function truss.query_numeric_value(text,text)
+privileges for function truss.query_scope(jsonb)
+privileges for function truss.query_binding(jsonb,integer,integer,integer,text,text)
+privileges for function truss.query_objects(jsonb,integer)
+privileges for function truss.query_edges(jsonb,integer)
+privileges for function truss.query_page_objects(jsonb,integer,text)
+privileges for function truss.query_object_attribution(jsonb,integer,bigint)
+privileges for function truss.query_complete_related_keys(jsonb,integer,integer)
+privileges for function truss.query_object_times(jsonb,integer,bigint)
+privileges for function truss.query_object_load_id(jsonb,integer,bigint)
+privileges for function truss.traverse_objects(jsonb,jsonb,integer,integer,integer,text,text)
+
+----------------------------------------------------------------------
+Ran 1 test in 6.814s
+
+FAILED (errors=4)

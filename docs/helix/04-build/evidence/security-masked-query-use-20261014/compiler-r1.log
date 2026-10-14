@@ -1,0 +1,6 @@
+test_withheld_field_cannot_drive_collection_operators (test_security_masked_query_use.MaskedQueryUseTests.test_withheld_field_cannot_drive_collection_operators) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 1.345s
+
+OK

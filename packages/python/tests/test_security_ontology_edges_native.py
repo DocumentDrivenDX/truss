@@ -609,7 +609,8 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                         from truss._security_guarded_source import capture_guarded_source_comparison
                         guarded_source=capture_guarded_source_comparison(graph.native_dependencies,graph.guarded_response)
                     composed=[]
-                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('AliceGuarded',[]),('OutsiderGuarded',[]),('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None),('BobGuardedReceiptSwap',None),*((('BobGuardedCount',['RB']),) if os.environ.get('TRUSS_SECURITY_RELATIONAL_COMPILER_BINARY') else ())) if guarded_binary else ()),('BobMapColumnWrite',None),('BobProfileColumnWrite',None),('BobProfilePublicWrite',None),('AliceInheritedWrite',None),('BobPrivilegedRoles',['RB']),('AliceOtherRole',None),('BobSetRole',None),('BobOldSnapshot',None),('BobRevoked',[]),('BobReactivated',['RB']),('BobStreaming',None),('BobProfileDrift',None),('BobProfileRestored',['RB']),('BobPublicIssuer',None)):
+                    missing_endpoints={'BobMissingEndpoint':('ob','pb'),'BobMissingResourceEndpoint':('ob','rb'),'BobMissingPrivateProjectEndpoint':('ai','pb'),'BobMissingPrivateStaffEndpoint':('alice','ai')}
+                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('AliceGuarded',[]),('OutsiderGuarded',[]),('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None),('BobGuardedReceiptSwap',None),*((('BobGuardedCount',['RB']),('BobGuardedJoin',['RB']),('AliceGuardedJoin',[]),('OutsiderGuardedJoin',[]),('BobGuardedJoinSwap',None)) if os.environ.get('TRUSS_SECURITY_RELATIONAL_COMPILER_BINARY') else ())) if guarded_binary else ()),('BobMapColumnWrite',None),('BobProfileColumnWrite',None),('BobProfilePublicWrite',None),('AliceInheritedWrite',None),('BobPrivilegedRoles',['RB']),('AliceOtherRole',None),('BobSetRole',None),('BobOldSnapshot',None),('BobRevoked',[]),('BobReactivated',['RB']),('BobStreaming',None),('BobProfileDrift',None),('BobProfileRestored',['RB']),('BobMissingEndpoint',None),('BobMissingResourceEndpoint',None),('BobMissingPrivateProjectEndpoint',None),('BobMissingPrivateStaffEndpoint',None),('BobEndpointRestored',['RB']),('BobPublicIssuer',None)):
                         if name in ('BobMapColumnWrite','BobProfileColumnWrite'):
                             writable_home,writable_column=('catalog_subject_map','staff_key') if name=='BobMapColumnWrite' else ('catalog_graph_subject_profile','profile_bytes')
                             self.admin.execute(sql.SQL('GRANT UPDATE({}) ON {} TO {}').format(sql.Identifier(writable_column),sql.Identifier('truss',writable_home),sql.Identifier(roles['Bob'])))
@@ -620,11 +621,14 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                             self.admin.execute(sql.SQL('GRANT {} TO {}').format(sql.Identifier(inherited_writer),sql.Identifier(roles['Alice'])))
                         if name=='BobProfilePublicWrite':self.admin.execute('GRANT UPDATE(profile_bytes) ON truss.catalog_graph_subject_profile TO PUBLIC')
                         if name=='AliceOtherRole':self.admin.execute(sql.SQL('GRANT {} TO {}').format(sql.Identifier(roles['Bob']),sql.Identifier(roles['Alice'])))
+                        if name in missing_endpoints:
+                            removed_endpoint=self.admin.execute('DELETE FROM truss.edge WHERE source_id=%s AND target_id=%s RETURNING pg_catalog.to_jsonb(edge)::pg_catalog.text',tuple(identities[alias] for alias in missing_endpoints[name])).fetchall()
+                            self.assertEqual(len(removed_endpoint),1)
                         if name=='BobProfileDrift':self.admin.execute("UPDATE truss.catalog_graph_subject_profile SET document_revision='tampered'")
                         if name=='BobPublicIssuer':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.graph_subject_current() TO PUBLIC')
                         with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
                             private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
-                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice' if name in ('AliceGuarded','AliceOtherRole','AliceInheritedWrite') else 'Outsider' if name=='OutsiderGuarded' else 'Bob' if name in ('BobPublicIssuer','BobMapColumnWrite','BobProfileColumnWrite','BobProfilePublicWrite','BobPrivilegedRoles','AliceOtherRole','BobSetRole','BobOldSnapshot','BobRevoked','BobReactivated','BobStreaming','BobProfileDrift','BobProfileRestored','BobGuarded','BobGuardedId','BobGuardedCorrupt','BobGuardedReceiptSwap','BobGuardedCount') else name]
+                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice' if name in ('AliceGuarded','AliceGuardedJoin','AliceOtherRole','AliceInheritedWrite') else 'Outsider' if name in ('OutsiderGuarded','OutsiderGuardedJoin') else 'Bob' if name in missing_endpoints or name in ('BobPublicIssuer','BobMapColumnWrite','BobProfileColumnWrite','BobProfilePublicWrite','BobPrivilegedRoles','AliceOtherRole','BobSetRole','BobOldSnapshot','BobRevoked','BobReactivated','BobStreaming','BobProfileDrift','BobProfileRestored','BobGuarded','BobGuardedId','BobGuardedCorrupt','BobGuardedReceiptSwap','BobGuardedCount','BobGuardedJoin','BobGuardedJoinSwap','BobMissingEndpoint','BobEndpointRestored') else name]
                             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                                 connection.execute('BEGIN ISOLATION LEVEL REPEATABLE READ' if name=='BobOldSnapshot' else 'BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction(isolation='repeatable_read' if name=='BobOldSnapshot' else 'read_committed').value;released=[]
                                 if name=='AliceInheritedWrite':self.assertEqual(connection.execute("SELECT pg_catalog.has_any_column_privilege(CURRENT_USER,'truss.catalog_graph_subject_profile','UPDATE')").fetchone(),(True,))
@@ -654,10 +658,10 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         for table in ('catalog_subject_map','catalog_graph_subject_profile'):
                                             with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
                                     released.append(raw)
-                                is_guarded_query=name.endswith('Guarded') or name.startswith('BobGuarded') or (name=='BobRevoked' and guarded_binary is not None)
+                                is_guarded_query=name in ('AliceGuardedJoin','OutsiderGuardedJoin') or name.endswith('Guarded') or name.startswith('BobGuarded') or (name=='BobRevoked' and guarded_binary is not None)
                                 selected_compiler=prepare_owned_graph_compiler(guarded_binary,str(Path(guarded_binary).with_name('security_guarded_result')),guarded=True,query_sql=('SELECT q.resourceId FROM Resource q' if name=='BobGuardedId' else 'SELECT q.resourceId, q.salary FROM Resource q'),source_comparison=guarded_source) if is_guarded_query else native_compiler
                                 relational_binary=os.environ.get('TRUSS_SECURITY_RELATIONAL_COMPILER_BINARY')
-                                if relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded','BobGuardedCount'):
+                                if relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded','BobGuardedCount','BobGuardedJoin','AliceGuardedJoin','OutsiderGuardedJoin','BobGuardedJoinSwap'):
                                     prior_compiler=selected_compiler
                                     def capture_then_direct(cursor,physical,before,subject,semantic):
                                         from security_ontology_compiled_read import _original_request
@@ -689,6 +693,21 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         matching=execute_relational_program(cursor,matching_request,matching_output,locators[0],checker,inspector)
                                         expected_cells=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
                                         self.assertEqual(json.loads(matching['batch'])['rows'],expected_cells)
+                                        forbidden_request=_original_request(physical,before[0],'SELECT SUM(r.salary) AS total FROM Resource r')
+                                        refused=original_run([relational_binary],input=forbidden_request,capture_output=True,timeout=15)
+                                        self.assertNotEqual(refused.returncode,0);self.assertEqual(refused.stdout,b'')
+                                        ordered_request=_original_request(physical,before[0],'SELECT r.resourceId FROM Resource r ORDER BY r.resourceId DESC LIMIT 1')
+                                        ordered_output=original_run([relational_binary],input=ordered_request,capture_output=True,check=True,timeout=15).stdout
+                                        self.assertEqual(capture_relational_source_comparison(ordered_request,ordered_output),guarded_source)
+                                        ordered=execute_relational_program(cursor,ordered_request,ordered_output,locators[0],checker,inspector)
+                                        ordered_expected=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
+                                        self.assertEqual(json.loads(ordered['batch'])['rows'],ordered_expected)
+                                        joined_request=_original_request(physical,before[0],'SELECT r.resourceId AS left_id, s.resourceId AS right_id FROM Resource r JOIN Resource s ON r.resourceId = s.resourceId')
+                                        joined_output=original_run([relational_binary],input=joined_request,capture_output=True,check=True,timeout=15).stdout
+                                        self.assertEqual(capture_relational_source_comparison(joined_request,joined_output),guarded_source)
+                                        joined=execute_relational_program(cursor,joined_request,joined_output,locators[0],checker,inspector)
+                                        joined_expected=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}},{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
+                                        self.assertEqual(json.loads(joined['batch'])['rows'],joined_expected)
                                         count_request=_original_request(physical,before[0],'SELECT COUNT(*) AS n FROM Resource r')
                                         count_output=original_run([relational_binary],input=count_request,capture_output=True,check=True,timeout=15).stdout
                                         self.assertEqual(capture_relational_source_comparison(count_request,count_output),guarded_source)
@@ -702,10 +721,11 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         grouped=execute_relational_program(cursor,grouped_request,grouped_output,locators[0],checker,inspector)
                                         expected_group=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}},{'outcomeId':'computed','disposition':'computed','value':{'integerToken':'1'}}]] if subject=='Bob' else []
                                         self.assertEqual(json.loads(grouped['batch'])['rows'],expected_group)
+                                        if name in ('BobGuardedJoin','AliceGuardedJoin','OutsiderGuardedJoin','BobGuardedJoinSwap'):return {'request':joined_request.decode(),'output':joined_output.decode(),'operandBatch':joined['operandBatch'].decode(),'batch':joined['batch'].decode(),'resultCheck':joined['inspection'].decode()}
                                         if name=='BobGuardedCount':return {'request':count_request.decode(),'output':count_output.decode(),'operandBatch':counted['operandBatch'].decode(),'batch':counted['batch'].decode(),'resultCheck':counted['inspection'].decode()}
                                         return {'request':matching_request.decode(),'output':matching_output.decode(),'operandBatch':matching['operandBatch'].decode(),'batch':matching['batch'].decode(),'resultCheck':matching['inspection'].decode()}
                                     selected_compiler=capture_then_direct
-                                if name=='BobGuardedReceiptSwap':
+                                if name in ('BobGuardedReceiptSwap','BobGuardedJoinSwap'):
                                     original_selected_compiler=selected_compiler
                                     def swapped_receipt(*args):
                                         receipt=original_selected_compiler(*args)
@@ -744,21 +764,25 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         self.assertEqual(str(caller._custody.last_attempt.error),'Original fresh native ontology caller transaction required')
                                         for session in (private,connection):self.assertEqual(session.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,))
                                     elif name in ('BobMapColumnWrite','BobProfileColumnWrite','BobProfilePublicWrite','AliceInheritedWrite'):self.assertEqual(str(executor._custody.last_attempt.error),'Unmediated registered Subject writes refused')
-                                    elif name=='BobGuardedReceiptSwap':self.assertEqual(str(executor._custody.last_attempt.error),'Original inspected query publication correspondence required')
+                                    elif name in ('BobGuardedReceiptSwap','BobGuardedJoinSwap'):self.assertEqual(str(executor._custody.last_attempt.error),'Original inspected relational publication correspondence required' if name=='BobGuardedJoinSwap' else 'Original inspected query publication correspondence required')
+                                    elif name in missing_endpoints:
+                                        self.assertEqual(str(executor._custody.last_attempt.error),'Original complete typed ontology edge projection required')
+                                        for session in (private,connection):self.assertEqual(session.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,))
                                     elif name!='BobProfileDrift':self.assertEqual(str(executor._custody.last_attempt.error),'Original graph compiler result contract refused' if name=='BobGuardedCorrupt' else 'Exact registered graph Subject issuer ACL required')
                                     if name=='BobProfileDrift':
                                         for session in (private,connection):self.assertEqual(session.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,))
-                                    if name in ('BobGuardedCorrupt','BobGuardedReceiptSwap'):
+                                    if name in ('BobGuardedCorrupt','BobGuardedReceiptSwap','BobGuardedJoinSwap'):
                                         if name=='BobGuardedCorrupt':self.assertEqual(corruption,[True])
                                         for session in (private,connection):self.assertEqual(session.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,))
                                 else:
                                     self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual(released,[result.value])
                                     if is_guarded_query:
-                                        published=json.loads(result.value);self.assertEqual(published['version'],'truss.guarded-query-result/0.2-candidate' if relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded','BobGuardedCount') else 'truss.guarded-query-result/0.1-candidate')
+                                        published=json.loads(result.value);self.assertEqual(published['version'],'truss.guarded-query-result/0.2-candidate' if relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded','BobGuardedCount','BobGuardedJoin','AliceGuardedJoin','OutsiderGuardedJoin','BobGuardedJoinSwap') else 'truss.guarded-query-result/0.1-candidate')
                                         cells=json.loads(published['batchJson']);contract=json.loads(published['resultContractJson'])
                                         self.assertEqual(len(contract['columns']),1 if name=='BobGuardedId' or relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded','BobGuardedCount') else 2)
                                         expected_cells=[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]
                                         if name=='BobGuarded' and not relational_binary:expected_cells.append({'outcomeId':'withheld','disposition':'withheld'})
+                                        if name in ('BobGuardedJoin','AliceGuardedJoin','OutsiderGuardedJoin'):expected_cells=expected_cells*2
                                         if name=='BobGuardedCount':expected_cells=[{'outcomeId':'computed','disposition':'computed','value':{'integerToken':'1'}}]
                                         self.assertEqual(cells['rows'],[expected_cells] if expected else [])
                                     else:self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
@@ -776,8 +800,11 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                             document_revision=json.loads(graph.native_dependencies)['bindingJson']
                             document_revision=json.loads(document_revision)['physicalModule']['pin']['revision']
                             self.admin.execute('UPDATE truss.catalog_graph_subject_profile SET document_revision=%s',(document_revision,))
+                        if name in missing_endpoints:
+                            self.admin.execute('INSERT INTO truss.edge SELECT restored.* FROM pg_catalog.jsonb_populate_record(NULL::truss.edge,%s::pg_catalog.jsonb) restored',(removed_endpoint[0][0],))
+                            self.assertEqual(self.admin.execute('SELECT pg_catalog.to_jsonb(edge)::pg_catalog.text FROM truss.edge WHERE source_id=%s AND target_id=%s',tuple(identities[alias] for alias in missing_endpoints[name])).fetchall(),removed_endpoint)
                         if name=='BobPublicIssuer':self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.graph_subject_current() FROM PUBLIC')
-                        composed.append({'principal':name,'outcome':('subjectWriteGrantRefused' if name in ('BobMapColumnWrite','BobProfileColumnWrite','BobProfilePublicWrite','AliceInheritedWrite') else 'otherPrincipalRoleRefused' if name=='AliceOtherRole' else 'setRoleRefused' if name=='BobSetRole' else 'oldSnapshotRefusedAfterRevocationAck' if name=='BobOldSnapshot' else 'inspectedBatchSubstitutionRefused' if name=='BobGuardedReceiptSwap' else 'guardedResultRefused' if name=='BobGuardedCorrupt' else 'subjectProfileRefused' if name=='BobProfileDrift' else 'issuerAclRefused'),'released':False} if expected is None else {'principal':name,'resources':expected,'queryCellsPublished':is_guarded_query,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
+                        composed.append({'principal':name,'outcome':('subjectWriteGrantRefused' if name in ('BobMapColumnWrite','BobProfileColumnWrite','BobProfilePublicWrite','AliceInheritedWrite') else 'otherPrincipalRoleRefused' if name=='AliceOtherRole' else 'setRoleRefused' if name=='BobSetRole' else 'oldSnapshotRefusedAfterRevocationAck' if name=='BobOldSnapshot' else 'inspectedBatchSubstitutionRefused' if name in ('BobGuardedReceiptSwap','BobGuardedJoinSwap') else 'guardedResultRefused' if name=='BobGuardedCorrupt' else 'subjectProfileRefused' if name=='BobProfileDrift' else 'missingEndpointRefused' if name in missing_endpoints else 'issuerAclRefused'),'released':False} if expected is None else {'principal':name,'resources':expected,'queryCellsPublished':is_guarded_query,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
                     directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_SUBJECT_COMPOSITION_EVIDENCE')
                     if directory:
                         folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)

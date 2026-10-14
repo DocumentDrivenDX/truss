@@ -57,3 +57,32 @@ def project_full_ontology_edge_cells(objects,edges,types,relationships):
         else:values=[fields['ownershipId'],endpoint('OwnershipResource',identity),endpoint('OwnershipProject',identity)]
         groups[name]['rows'].append(values)
     return list(groups.values())
+
+
+def project_public_relationship_edge_cells(objects,edges,types,relationships):
+    """Separate six-relationship fixture projection; no query permission issued.
+
+    Public relationship occurrences are retained independently of private policy
+    facts. Native source identity, codecs and held cuts remain caller premises.
+    """
+    def refuse():raise ValueError('Original complete public relationship projection required')
+    if type(relationships) is not dict or set(relationships)!=set(PAIRS)|{'ResourceRelatedResource'}:refuse()
+    if type(edges) is not tuple or len(edges)>100 or type(objects) is not tuple or len(objects)>100:refuse()
+    query_id=relationships['ResourceRelatedResource']
+    if type(query_id) is not str or not query_id.isascii() or not query_id.isdigit() or query_id[0:1]=='0' or not 1<=int(query_id)<=2147483647:refuse()
+    if query_id in [relationships[n] for n in PAIRS]:refuse()
+    policy=[];query=[];seen=set()
+    for row in edges:
+        if type(row) is not tuple or len(row)!=6 or any(type(v) is not str for v in row) or row[0] in seen:refuse()
+        seen.add(row[0])
+        if row[1]==query_id:query.append(row)
+        else:policy.append(row)
+    # Original whole policy projection validates every native object/key and
+    # required private endpoint; query edges cannot hide those obligations.
+    facts=project_full_ontology_edge_cells(objects,tuple(policy),types,{n:relationships[n] for n in PAIRS})
+    resource_type=types['Resource'];nodes={(row[0],row[1]) for row in objects}
+    for edge in query:
+        for value,maximum in ((edge[0],9223372036854775807),(edge[2],9223372036854775807),(edge[4],9223372036854775807),(edge[3],2147483647),(edge[5],2147483647)):
+            if type(value) is not str or not value.isascii() or not value.isdigit() or value[0:1]=='0' or not 1<=int(value)<=maximum:refuse()
+        if edge[3]!=resource_type or edge[5]!=resource_type or (edge[2],edge[3]) not in nodes or (edge[4],edge[5]) not in nodes:refuse()
+    return {'policyFacts':facts,'queryRelationshipOccurrences':tuple(query),'queryResourceIdentities':tuple((row[0],row[1],row[2]['resourceId']) for row in objects if row[1]==resource_type)}

@@ -1,0 +1,36 @@
+{
+  "status": "authored-uninstalled-fixture",
+  "sources": {
+    "document": "8a323a981e3b9596093d53353a58062363936d6d678608626aa1034482c9e7d6",
+    "ontology": "3b1f3714f8ec1a5fe255fb2d543fb7e202ef63c3cd82af58629f43d554070854",
+    "policy": "14ff63c24229204c5d790b4721147be6dcf5e21485ec5824454c2b027922de63",
+    "policy-observation-denied": "34808c1aa4e5f2131048f44627189e1555b2ba99b20d82d9007e2010bbe0f430"
+  },
+  "originalReadRulesUnchanged": true,
+  "nativeCorrespondence": null,
+  "bindingDigestPlaceholder": "0000000000000000000000000000000000000000000000000000000000000000",
+  "requiredNativeEdges": [
+    [
+      "RB",
+      "RB"
+    ],
+    [
+      "RB",
+      "RA"
+    ],
+    [
+      "RA",
+      "RB"
+    ],
+    [
+      "RO",
+      "RB"
+    ]
+  ],
+  "expectedBob": [
+    "RB"
+  ],
+  "expectedRevokedAlice": [],
+  "expectedOutsider": [],
+  "expectedObservationDeniedBob": []
+}

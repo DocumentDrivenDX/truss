@@ -1,0 +1,56 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceSha256": "3eb622c627929f2bdd5a26b89516643eaeaabafe719f9c10f3052363cb83fe57",
+  "queries": [
+    {
+      "id": "hidden-source-no-public-witness",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "fdb5300b375f5bbec99da7924c6aca3407c31d1a5a63219e923910cc137b6802"
+    },
+    {
+      "id": "hidden-target-cannot-witness",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "91e0a54136d3315dd669e3e43983fcb5c12e2b367c095031756c8701c34b30e4"
+    },
+    {
+      "id": "undisclosed-relationship-cannot-witness",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "cae9d6c5bfc8e4142f78feced37ff75d96c99cb7f725d2ac77feb96117013792"
+    },
+    {
+      "id": "visible-projection-noninterference",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "42bc6cca145717f74a45ada40b4c98ea35ec7d9e6d8b95499e1684482a11473a"
+    },
+    {
+      "id": "private-witness-is-not-query-permission",
+      "expected": "sat",
+      "observed": "sat",
+      "model": "[source = RecordIdentity!val!0,\n source_eligible = [else -> True],\n matches_original_target_key = [else -> True],\n target_eligible = [else -> False],\n relationship_disclosable = [else -> False],\n relationship_world1 = [else -> True]]",
+      "smt2Sha256": "6536fa1c3f705d2b99cb316e5f894f376b1aed769058c09cebb40b23aa65aa62"
+    },
+    {
+      "id": "raw-lookahead-leaks-hidden-cardinality",
+      "expected": "sat",
+      "observed": "sat",
+      "model": "[requested_bound = 1,\n eligible_related_occurrences = 0,\n hidden_related_occurrences = 2]",
+      "smt2Sha256": "2892fb2aa2041a8201705738d3a13979e35a7fedcb16f2a138b9692a7e905844"
+    }
+  ],
+  "scope": "Uninterpreted record identities and relationship relations; eligible/disclosable projection invariance for existential original-key traversal. Arbitrary nonnegative integer cardinalities demonstrate raw truncation leakage.",
+  "limitations": [
+    "Eligibility, original identity/key correspondence and relationship disclosure are assumed; no new policy permission is granted.",
+    "Private witness is modeled only as existence, not as a complete policy decision.",
+    "No compiler/native SQL/codec/authority/cut/publication refinement theorem.",
+    "No path/multiplicity/outer-join/order/cardinality reconstruction theorem or backend case promotion."
+  ]
+}

@@ -1,0 +1,9 @@
+test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr) ... ok
+test_data_owned_authority_exclusion_survives_coordinator_disconnect (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_data_owned_authority_exclusion_survives_coordinator_disconnect) ... ok
+test_reserved_two_integer_permit_namespace_requires_native_issuer (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_reserved_two_integer_permit_namespace_requires_native_issuer)
+Dedicated disposable DB privilege witness, not permit admission. ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 11.617s
+
+OK

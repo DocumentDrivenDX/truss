@@ -1,0 +1,9 @@
+{
+  "terminalExit": 0,
+  "tests": 1,
+  "seconds": 22.15,
+  "sourceDigests": {
+    "scripts/prepare-security-relationship-correspondence.py": "b3c2c63e67bcf3f259f8ec4804aa2a4b6a1434d08d336f637c78d3bbebb4aa5c",
+    "packages/python/tests/test_security_public_relationship_native.py": "fc1be2b397fbc0e1b35896b6d3a614c1da32d8ad74de4b0b3c7eebb23749a50e"
+  }
+}

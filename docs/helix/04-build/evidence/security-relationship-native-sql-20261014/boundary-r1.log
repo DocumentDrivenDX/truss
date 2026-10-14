@@ -1,0 +1,21 @@
+test_security_relationship_boundaries (unittest.loader._FailedTest.test_security_relationship_boundaries) ... ERROR
+
+======================================================================
+ERROR: test_security_relationship_boundaries (unittest.loader._FailedTest.test_security_relationship_boundaries)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_security_relationship_boundaries
+Traceback (most recent call last):
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/loader.py", line 162, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_relationship_boundaries.py", line 6, in <module>
+    from security_relationship_capture import capture_relationship_operands
+  File "/private/tmp/truss-security-main-integration/scripts/security_relationship_capture.py", line 7, in <module>
+    from psycopg import sql
+ModuleNotFoundError: No module named 'psycopg'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

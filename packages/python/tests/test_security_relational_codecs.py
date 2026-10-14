@@ -16,3 +16,21 @@ class RelationalCodecTests(unittest.TestCase):
   self.assertEqual(json.loads(check(request,output,operands))['operandCount'],0)
   changed=json.loads(operands);changed['contextSha256']='0'*64
   with self.assertRaisesRegex(ValueError,'Original PostgreSQL codec preflight refused'):check(request,output,json.dumps(changed).encode())
+
+  # A successful subprocess is not evidence unless its closed acknowledgment
+  # preserves strict types, context and native-admission requirements.
+  from unittest.mock import patch
+  from types import SimpleNamespace
+  original_run=subprocess.run
+  corruptions=(('parameterCount',True),('operandCount',False),
+               ('securityReady',True),('nativeSessionAdmission','optional'),
+               ('contextSha256','0'*64),('unexpected',True))
+  for field,value in corruptions:
+   with self.subTest(field=field):
+    def changed_ack(*args,**kwargs):
+     result=original_run(*args,**kwargs)
+     acknowledgment=json.loads(result.stdout);acknowledgment[field]=value
+     return SimpleNamespace(returncode=0,stdout=json.dumps(acknowledgment).encode())
+    with patch('security_relational_codecs.subprocess.run',side_effect=changed_ack):
+     with self.assertRaisesRegex(ValueError,'Original PostgreSQL codec lineage required'):
+      check(request,output)

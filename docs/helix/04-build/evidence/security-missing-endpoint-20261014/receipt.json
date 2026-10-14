@@ -1,0 +1,10 @@
+{
+  "terminalExit": 0,
+  "tests": 1,
+  "seconds": 111.014,
+  "sourceDigests": {
+    "packages/python/tests/test_security_ontology_edges_native.py": "8b1031e34879558a9412d25ab194894e061d1ba500e4ce80d5ad1ec5d7bd4598",
+    "scripts/security_ontology_edge_projection.py": "f7f8bbd48c30652393a25fef6a1819cafce4713e9c11425e3df01877e8b8727c",
+    "scripts/security_ontology_native_subject_read.py": "69fad12a8235baf144ba45f579aee1b4cfbd7b9a2958c2bf9bad1c400f68840a"
+  }
+}

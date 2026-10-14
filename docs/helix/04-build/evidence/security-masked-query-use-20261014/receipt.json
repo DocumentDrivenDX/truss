@@ -1,0 +1,11 @@
+{
+  "tests": 1,
+  "operatorPairs": 5,
+  "terminalExit": 0,
+  "seconds": 1.345,
+  "sourceDigests": {
+    "packages/python/tests/test_security_masked_query_use.py": "45dd53999cad81d2589d20d19a96c1c253f0fb4f24231796e0703ab69a9baa41",
+    "docs/helix/04-build/evidence/security-graph-subject-registration-20261014/compiler-request.json": "beb2dec4d51812ad67177907aa9a9c78fedf4226ac9c60a5a622162b51a774e0",
+    "/private/tmp/weft-compatible-latest-target/debug/examples/security_relational_candidate": "f955df9d182d8c4a0fd7a8a8a61a7e83224e11574cb198a0a8db29c3e91a2368"
+  }
+}
