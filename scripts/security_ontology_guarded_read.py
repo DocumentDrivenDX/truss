@@ -73,7 +73,8 @@ def _capture(cursor,request):
 def _inspected_query_publication(receipt):
     """Copy original inspected bytes; digest comparisons authenticate no issuer."""
     copied={key:receipt[key] for key in ('request','output','batch','resultCheck')}
-    if any(type(raw) is not str or not raw or len(raw.encode())>16000000 for raw in copied.values()):raise ValueError('Bounded inspected query publication required')
+    limits={'request':4000000,'output':16000000,'batch':4000000,'resultCheck':65536}
+    if any(type(raw) is not str or not raw or len(raw.encode())>limits[key] for key,raw in copied.items()):raise ValueError('Bounded inspected query publication required')
     packet=decode_owner_evidence_json(copied['output'].encode())
     check=decode_owner_evidence_json(copied['resultCheck'].encode())
     query=packet['query'];batch=decode_owner_evidence_json(copied['batch'].encode())

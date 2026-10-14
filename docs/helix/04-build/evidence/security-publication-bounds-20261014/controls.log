@@ -1,0 +1,8 @@
+test_inspected_bytes_are_frozen_and_substitution_refuses (test_security_query_publication.QueryPublicationTests.test_inspected_bytes_are_frozen_and_substitution_refuses) ... ok
+test_wrong_original_source_refuses_before_cursor (test_security_guarded_preflight.GuardedPreflightTests.test_wrong_original_source_refuses_before_cursor) ... ok
+test_original_query_separation_and_source_mutations (test_security_guarded_source.GuardedSourceTests.test_original_query_separation_and_source_mutations) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.664s
+
+OK
