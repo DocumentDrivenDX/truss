@@ -1,0 +1,9 @@
+{
+  "tests": 1,
+  "terminalExit": 0,
+  "seconds": 23.16,
+  "sourceDigests": {
+    "scripts/security_ontology_edge_projection.py": "ae2c2e6c7d763e7d64f4f1b2e644f9426a3795862770e27a6abde28207973ce7",
+    "packages/python/tests/test_security_public_relationship_native.py": "4bac3697d171b71e6b95fe17e4a3141a50444c89b036a984c20aebc49ebdc9b8"
+  }
+}

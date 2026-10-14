@@ -38,10 +38,30 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
   self.assertEqual(observed,expected)
   self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(14,))
   self.assertEqual(len(observed),16)
+  reader,reader_host,reader_assembly,reader_tx=self.consumer()
+  from truss import ObjectFound
+  actual_objects=[]
+  for record,alias,fields in rows:
+   found=reader_assembly.get_object_in_transaction(reader_tx,document_id='adoc',module_id='m',record_id=record,object_id=ids[alias]).value
+   self.assertIsInstance(found,ObjectFound)
+   actual_fields={name:(int(value.text) if name=='salary' else value.text) if isinstance(value,TextValue) else value for name,value in found.object.values}
+   self.assertEqual(actual_fields,fields)
+   actual_objects.append((str(ids[alias]),str(self.types[('adoc',record)].type_id),actual_fields))
+  reader_host.detach();reader.rollback()
+  actual_edges=tuple(tuple(str(value) for value in row) for row in self.admin.execute('SELECT id,rel_type_id,source_id,source_type,target_id,target_type FROM truss.edge ORDER BY id').fetchall())
+  from security_ontology_edge_projection import project_public_relationship_edge_cells
+  selection={name:str(ref.relationship_id) for name,ref in refs.items()};type_selection={name:str(self.types[('adoc',name)].type_id) for name in ('Client','Project','Staff','Resource','Assignment','Ownership')}
+  projected=project_public_relationship_edge_cells(tuple(actual_objects),actual_edges,type_selection,selection)
+  self.assertEqual({(e[2],e[4]) for e in projected['queryRelationshipOccurrences']},{(str(ids[s]),str(ids[t])) for _,s,t in query_links})
+  self.assertEqual(len(projected['queryRelationshipOccurrences']),4)
+  for missing,wrong_type in ((False,True),(True,False)):
+   changed=list(actual_edges);index=next(i for i,e in enumerate(changed) if e[1]==selection['ResourceRelatedResource']);edge=list(changed[index]);edge[5]=type_selection['Staff'] if wrong_type else edge[5];edge[4]='9223372036854775807' if missing else edge[4];changed[index]=tuple(edge)
+   with self.assertRaisesRegex(ValueError,'Original complete public relationship projection required'):project_public_relationship_edge_cells(tuple(actual_objects),tuple(changed),type_selection,selection)
   # Native catalog identity is observed, never copied from the old fixture IDs.
   directory=os.environ.get('TRUSS_SECURITY_PUBLIC_RELATIONSHIP_EVIDENCE')
   if directory:
    out=Path(directory);out.mkdir(parents=True,exist_ok=True)
+   (out/'projected-relationship-facts.json').write_text(json.dumps(projected,indent=2)+'\n')
    for document in self.documents:(out/(document.document_id+'-accepted-source.json')).write_bytes(document.content)
    from hashlib import sha256
    from truss._security_catalog_assessment import capture_accepted_catalog,SOURCE_TABLES
