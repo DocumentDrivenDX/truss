@@ -1,0 +1,42 @@
+{
+  "trussWorkflow": 38504654064,
+  "trussConclusion": "success",
+  "weftWorkflow": 38504101114,
+  "weftConclusion": "success",
+  "publishedPins": {
+    "tag": "v0.0.25",
+    "commit": "4bc1f677978e11870f218db01c9f64b1e9489104",
+    "distribution": "truss-toolkit",
+    "version": "0.0.25",
+    "runtime": "truss-catalog-runtime/0.61-candidate",
+    "runtimeManifestSha256": "364b2a908fd5bc53e4ccaa81ada2633e696cce441fc5df152a8698c597f5ec01",
+    "layout": {
+      "identity": "truss-layout",
+      "version": "1.0",
+      "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+    },
+    "weftRelease": "v0.4.26",
+    "weftBackend": "0.4.31",
+    "pgserver": "pgserver-pg18==18.6.1",
+    "pgserverRelease": "pg18.6-pgv0.8.6-r2",
+    "psycopg": "3.3.6",
+    "bun": "1.4.2",
+    "nativePlatforms": [
+      "linux-x86_64",
+      "macos-arm64"
+    ],
+    "timestampComparisonProfile": "umf-rfc3339-exact-instant/1.0.0",
+    "umfExactInstantCommit": "cbb6fb87",
+    "umf08CatalogSupport": {
+      "identity": "truss-fresh-catalog-support",
+      "version": "0.14.0",
+      "sha256": "1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"
+    },
+    "umf08CatalogReportInterface": "truss-catalog-registration-report/0.2",
+    "catalogSourceReferenceFormat": "truss-catalog-source-reference/0.1",
+    "catalogRebindReportInterface": "truss-catalog-registration-report/0.3",
+    "catalogRebindProfile": "truss-native-catalog-rebind/0.2"
+  },
+  "archivedNative61ManifestMatchesPublished": true,
+  "consumerHandoff": "pending new-release authorization after automatic approval rejection"
+}
