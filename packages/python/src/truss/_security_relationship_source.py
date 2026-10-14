@@ -24,6 +24,7 @@ class PreparedRelationshipSecuritySource:
  accepted_catalog_assessment:bytes
  native_dependencies:bytes # original authored relationship compiler request
  original_response:bytes # original separate relationship producer output
+ native_guard:tuple[bytes,bytes,int]|None=None
  security_ready:bool=field(default=False,init=False)
 
 

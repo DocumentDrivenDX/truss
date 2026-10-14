@@ -1,0 +1,15 @@
+{
+  "bindingTests": 3,
+  "bindingSeconds": 1.893,
+  "legacyNativeTests": 6,
+  "legacyNativeSeconds": 61.896,
+  "terminalExit": 0,
+  "originalMappingModuleSha256": "2c62713f8b0b2f06d8537267405cad027cf44db3d832faefbd37920ba958bc0f",
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_source_installation.py": "721702c4ba00c979e84080fd69a4cbf9c9f1c592c59e2d9557cc766695198952",
+    "packages/python/src/truss/_security_catalog_source_binding.py": "37242aef34ca7cca2fce361f7489fb460063a522ec2898ba6b670eecab78de1b",
+    "packages/python/src/truss/_security_catalog_source_epoch.py": "4f4c170ff0b3ae42448ab2fcca23fcffdfd8f9491ffa201e218189d227c7f501",
+    "packages/python/src/truss/_security_relationship_source.py": "533cedea20a12bc7bb4814cc9fb3db881e3e106f7a62eed3b0e7a25ff18fc723",
+    "packages/python/tests/test_security_relationship_source.py": "0ca5441111c3bc97f1e1be7d9d5a9a51ae58e9389374e5a5d91dd8e672522794"
+  }
+}

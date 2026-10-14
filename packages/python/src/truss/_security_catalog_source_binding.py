@@ -2,14 +2,15 @@
 from dataclasses import replace
 import hashlib,json
 from ._security_mapping import PreparedSecurityMapping
+from ._security_relationship_source import PreparedRelationshipSecuritySource,snapshot_relationship_security_source,capture_relationship_source_comparison
 from ._security_graph_source import PreparedGraphSecuritySource,snapshot_graph_security_source
 from ._security_source_epoch_installation import _MANIFEST_SHA256
 
 def _snapshot_source_binding(mapping,fact_relations,barrier):
     """Private byte/recipe binding packet; not an authenticated issuer artifact."""
     from ._psycopg_fact_cut import _prepare_fenced_fact_cut,_FactRelationComparison,_FactColumnComparison
-    if type(mapping) not in (PreparedSecurityMapping,PreparedGraphSecuritySource):raise ValueError('Exact bounded catalog source binding bytes required')
-    mapping=snapshot_graph_security_source(mapping) if type(mapping) is PreparedGraphSecuritySource else replace(mapping)
+    if type(mapping) not in (PreparedSecurityMapping,PreparedGraphSecuritySource,PreparedRelationshipSecuritySource):raise ValueError('Exact bounded catalog source binding bytes required')
+    mapping=snapshot_relationship_security_source(mapping) if type(mapping) is PreparedRelationshipSecuritySource else snapshot_graph_security_source(mapping) if type(mapping) is PreparedGraphSecuritySource else replace(mapping)
     request,assessment=mapping.original_request,mapping.accepted_catalog_assessment
     if (type(request) is not bytes or not 1<=len(request)<=4000000
             or type(assessment) is not bytes or not 1<=len(assessment)<=1048576):
@@ -54,6 +55,11 @@ def derive_catalog_source_epoch_profile(mapping,fact_relations,barrier,*,subject
         if mapping.guarded_response is not None:
             from ._security_guarded_source import capture_guarded_source_comparison
             packet['sourceContextSha256']=capture_guarded_source_comparison(mapping.native_dependencies,mapping.guarded_response).source_sha256
+    if type(mapping) is PreparedRelationshipSecuritySource:
+        packet['interfaceVersion']='truss-owned-relationship-source-profile/0.1-candidate'
+        packet['compilerRequestSha256']=hashlib.sha256(mapping.native_dependencies).hexdigest()
+        packet['compilerOutputSha256']=hashlib.sha256(mapping.original_response).hexdigest()
+        packet['sourceContextSha256']=capture_relationship_source_comparison(mapping.native_dependencies,mapping.original_response).source_sha256
     raw=json.dumps(packet,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode('utf8')
     if len(raw)>65536:raise ValueError('Bounded native catalog source profile required')
     return raw
