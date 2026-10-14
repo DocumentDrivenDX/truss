@@ -483,7 +483,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                 installation_host.detach();self.admin.commit()
                 context=GraphEpochReadContext(graph,comparison,installed.value,inputs['subject_source'])
                 observations=[]
-                for label,selected in (('current',context),('stale',replace(context,comparison=replace(comparison,epoch='stale-epoch'))),('guard-drift',context),('archive-drift',context),('epoch-rls',context),('issuer-public',context),('compiler-drift',context),('guard-writable',context),('issuer-owner-member',context),('advanced',context),('advanced-current',context)):
+                for label,selected in (('current',context),('stale',replace(context,comparison=replace(comparison,epoch='stale-epoch'))),('guard-drift',context),('archive-drift',context),*((('capsule-drift',context),) if graph.guarded_response is not None else ()),('epoch-rls',context),('issuer-public',context),('compiler-drift',context),('guard-writable',context),('issuer-owner-member',context),('advanced',context),('advanced-current',context)):
                     if label=='advanced':
                         advanced_epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,%s,%s,%s,%s)',(comparison.installation,comparison.epoch,comparison.incarnation,comparison.profile,comparison.evidence)).fetchone()[0]
                         self.assertNotEqual(advanced_epoch,comparison.epoch)
@@ -494,6 +494,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                     if label=='guard-writable':self.admin.execute(sql.SQL('GRANT UPDATE(generation) ON truss.policy_generation_guard TO {}').format(sql.Identifier(private_executor)))
                     if label=='guard-drift':self.admin.execute('UPDATE truss.policy_generation_guard SET generation=2')
                     if label=='archive-drift':self.admin.execute("UPDATE truss.installation_archive SET artifact_bytes=artifact_bytes || decode('20','hex') WHERE artifact_identity='graph:original-compiler-output'")
+                    if label=='capsule-drift':self.admin.execute("UPDATE truss.installation_archive SET artifact_bytes=artifact_bytes || decode('20','hex') WHERE artifact_identity='graph:original-source-context'")
                     if label=='epoch-rls':self.admin.execute('ALTER TABLE truss.source_epoch_current ENABLE ROW LEVEL SECURITY')
                     if label=='issuer-public':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_graph_epoch_read_cut() TO PUBLIC')
                     with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
@@ -517,7 +518,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                 self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],['RB']);self.assertEqual(released,[result.value])
                                 observations.append({'case':label,'resources':['RB'],'withheldSalary':True,'epochArchiveGuardCutsThroughReceiver':True,'ordinaryExecutorNoEpochUpdate':True})
                             else:
-                                self.assertIsInstance(result,Error);self.assertEqual(released,[]);self.assertEqual(str(executor._custody.last_attempt.error),{'stale':'Original current graph source epoch required','advanced':'Original current graph source epoch required','guard-drift':'Original current graph authority guard required','archive-drift':'Original current graph source archive required','epoch-rls':'Original complete unfiltered graph epoch homes and cuts required','issuer-public':'Exact private graph epoch cut ACL required','compiler-drift':'Original current graph compiler source correspondence required','guard-writable':'Original private read-only graph epoch homes required','issuer-owner-member':'Original excluded privileged graph epoch cut owner required'}[label])
+                                self.assertIsInstance(result,Error);self.assertEqual(released,[]);self.assertEqual(str(executor._custody.last_attempt.error),{'stale':'Original current graph source epoch required','advanced':'Original current graph source epoch required','guard-drift':'Original current graph authority guard required','archive-drift':'Original current graph source archive required','capsule-drift':'Original current graph source archive required','epoch-rls':'Original complete unfiltered graph epoch homes and cuts required','issuer-public':'Exact private graph epoch cut ACL required','compiler-drift':'Original current graph compiler source correspondence required','guard-writable':'Original private read-only graph epoch homes required','issuer-owner-member':'Original excluded privileged graph epoch cut owner required'}[label])
                                 self.assertEqual(private.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,));observations.append({'case':label,'refusedBeforeRelease':True,'noRetainedCuts':True})
                             caller.detach();connection.rollback()
                         executor.detach();private.rollback()
@@ -525,6 +526,10 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                     if label=='guard-writable':self.admin.execute(sql.SQL('REVOKE UPDATE(generation) ON truss.policy_generation_guard FROM {}').format(sql.Identifier(private_executor)))
                     if label=='guard-drift':self.admin.execute('UPDATE truss.policy_generation_guard SET generation=1')
                     if label=='archive-drift':self.admin.execute("UPDATE truss.installation_archive SET artifact_bytes=%s WHERE artifact_identity='graph:original-compiler-output'",(graph.original_response,))
+                    if label=='capsule-drift':
+                        from truss._security_guarded_source import capture_guarded_source_comparison
+                        capsule=capture_guarded_source_comparison(graph.native_dependencies,graph.guarded_response)
+                        self.admin.execute("UPDATE truss.installation_archive SET artifact_bytes=%s WHERE artifact_identity='graph:original-source-context'",(capsule.source_bytes,))
                     if label=='epoch-rls':self.admin.execute('ALTER TABLE truss.source_epoch_current DISABLE ROW LEVEL SECURITY')
                     if label=='issuer-public':self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.acquire_graph_epoch_read_cut() FROM PUBLIC')
                 directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_EPOCH_READ_EVIDENCE')
