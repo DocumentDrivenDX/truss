@@ -1,0 +1,5 @@
+# Original PostgreSQL relational codec preflight adapter
+
+The separate pinned adapter invokes the original owner PostgreSQL18.6 codec checker with request-only preflight or request plus supplied operand batches. It compares exact context, parameter counts excluding the unvalued native Subject, operand-cell counts, strict false-ready and required native-session admission. Original binary and adapter bytes are checked before/after; no SQL executes through this adapter and hashes/counts are not authority credentials.
+
+Three relational codec/inspection/source test methods pass, including actual parameter-only and empty supplied-capture preflight and stale operand-context refusal. Empty capture is correspondence only. Native integration must invoke parameter preflight before ANY SQL, including anchors/captures, and operand preflight before grouped/relational evaluation; it must independently derive the Subject locator, establish actual PostgreSQL build/session/source/population/authority and protect release. Those ordering/capture/publication requirements and all132 cases remain open.

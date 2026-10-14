@@ -1,0 +1,10 @@
+{
+  "result": "native1/45.894s passes",
+  "runtime": "0.64",
+  "testSourceSha256": "c643d66c71107f3efabe157d3e3bdf8bf85ab0ccd8109cd79a7441bb05890655",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC5",
+    "US-056-AC9"
+  ],
+  "scope": "A separate unregistered NOLOGIN role holds profile column UPDATE; Alice inherits that role, native effective privilege readback is true, protected publication refuses. Grant/membership revoked and role dropped; no complete privilege closure/all132 promotion."
+}
