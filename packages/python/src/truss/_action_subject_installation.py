@@ -15,19 +15,21 @@ from ._installation_privileges import installation_administrator_with_cursor
 from ._security_catalog_subject_installation import _text_rows
 
 _CUT_SHA256 = '5b070599774386b6c995b46e6d4154534e951acde27a5ae22604ff10cc7ded1d'
+_MAPPING_CUT_SHA256 = '888202b45d9af4526a2f732a402642a03742e22eb5d5d44ad6e05e45b1d22481'
 
 
 @dataclass(frozen=True, slots=True)
 class PendingActionSubjects:
     installation_id: str
     bindings: tuple[tuple[int, bytes, str], ...]
+    mapping_cut: bool = False
     status: str = 'pending_commit'
     security_ready: bool = False
 
 
-def bootstrap_action_subjects_in_transaction(host, transaction, *, bindings):
+def bootstrap_action_subjects_in_transaction(host, transaction, *, bindings, with_action_roles=False):
     """Explicit native LOGIN→opaque identity/kind association, not a login API."""
-    if (type(host) is not PsycopgHost or type(bindings) is not tuple
+    if (type(host) is not PsycopgHost or type(bindings) is not tuple or type(with_action_roles) is not bool
             or not 1 <= len(bindings) <= 256
             or any(type(row) is not tuple or len(row) != 3
                 or type(row[0]) is not str or not row[0] or '\0' in row[0]
@@ -88,8 +90,22 @@ def bootstrap_action_subjects_in_transaction(host, transaction, *, bindings):
         expected = sorted([(owner, owner, 'EXECUTE', 'false'), *[(str(oid), owner, 'EXECUTE', 'false') for oid, _, _ in enrolled]], key=lambda row: int(row[0]))
         if grants != expected:
             raise ValueError('Exact private Subject cut enrollment ACL required')
+        if with_action_roles:
+            home = _text_rows(cursor, "SELECT c.relowner::text,c.relkind::text,c.relpersistence::text,c.relrowsecurity::text,c.relforcerowsecurity::text FROM pg_catalog.pg_class c WHERE c.oid=pg_catalog.to_regclass('truss.action_role_binding')", limit=1)
+            if home != [(owner,'r','p','false','false')]:
+                raise ValueError('Original private action role mapping home required')
+            source = files('truss').joinpath('_security_bootstrap','action-mapping-cut.sql').read_bytes()
+            if sha256(source).hexdigest() != _MAPPING_CUT_SHA256:
+                raise ValueError('Original combined mapping cut source required')
+            cursor.execute(source.decode(),prepare=False)
+            cursor.execute(sql.SQL('ALTER FUNCTION truss.acquire_action_mapping_cut() OWNER TO {}').format(sql.Identifier(owner_row[0][0])),prepare=False)
+            for name, principal, kind in bindings:
+                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.acquire_action_mapping_cut() TO {}').format(sql.Identifier(name)),prepare=False)
+            grants = _text_rows(cursor,"SELECT a.grantee::text,a.grantor::text,a.privilege_type::text,a.is_grantable::text FROM pg_catalog.pg_proc p CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a WHERE p.oid='truss.acquire_action_mapping_cut()'::regprocedure ORDER BY a.grantee",limit=257)
+            if grants != expected:
+                raise ValueError('Exact combined mapping cut enrollment ACL required')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)", (prior[0][0],), prepare=False)
         if cursor.fetchone() != (prior[0][0],):
             raise ValueError('Original Subject installation context restoration required')
-        return PendingActionSubjects(identity, tuple(sorted(enrolled)))
+        return PendingActionSubjects(identity, tuple(sorted(enrolled)), mapping_cut=with_action_roles)
     return host._run_operation(transaction, install)

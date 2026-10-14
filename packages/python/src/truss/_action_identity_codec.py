@@ -25,3 +25,16 @@ def encode_action_family(module, action):
 
 def encode_action_role(role):
     return _bounded_string(role)
+
+
+def encode_action_store_identity(store):
+    """Original JSON string codec; first native profile bounds 256 UTF-16 units."""
+    return _bounded_string(store)
+
+
+def encode_action_tenant_identity(tenant):
+    return _bounded_string(tenant)
+
+
+def encode_action_namespace_epoch(epoch):
+    return _bounded_string(epoch)

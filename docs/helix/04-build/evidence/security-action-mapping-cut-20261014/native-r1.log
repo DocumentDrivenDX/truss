@@ -1,0 +1,9 @@
+test_original_registry_ticket_and_complete_native_role_mapping (test_action_role_installation_native.ActionRoleInstallationNativeTests.test_original_registry_ticket_and_complete_native_role_mapping) ... ok
+test_private_explicit_subject_kind_and_original_commit (test_action_subject_installation_native.ActionSubjectInstallationNativeTests.test_private_explicit_subject_kind_and_original_commit) ... ok
+test_original_reference_oracle (test_action_identity_codec.ActionIdentityCodecTests.test_original_reference_oracle) ... ok
+test_original_utf16_bounds_and_exact_identity (test_action_identity_codec.ActionIdentityCodecTests.test_original_utf16_bounds_and_exact_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 17.737s
+
+OK

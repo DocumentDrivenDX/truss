@@ -2,7 +2,8 @@
 import json
 from pathlib import Path
 import unittest
-from truss._action_identity_codec import encode_action_family, encode_action_role
+from truss._action_identity_codec import (encode_action_family, encode_action_role,
+    encode_action_store_identity, encode_action_tenant_identity, encode_action_namespace_epoch)
 
 
 class ActionIdentityCodecTests(unittest.TestCase):
@@ -13,6 +14,8 @@ class ActionIdentityCodecTests(unittest.TestCase):
             with self.subTest(module=repr(row['module']), action=repr(row['action'])):
                 self.assertEqual(encode_action_family(row['module'], row['action']).hex(), row['familyHex'])
                 self.assertEqual(encode_action_role(row['action']).hex(), row['roleHex'])
+                for encoder in (encode_action_store_identity,encode_action_tenant_identity,encode_action_namespace_epoch):
+                    self.assertEqual(encoder(row['action']).hex(), row['roleHex'])
 
     def test_original_utf16_bounds_and_exact_identity(self):
         for invalid in ('', 'a'*257, '\U0001f680'*129, None, 1, b'sales'):

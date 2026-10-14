@@ -1,0 +1,31 @@
+{
+  "status": "native-mapping-cut-and-string-codecs-passed",
+  "postgresql": "18.6",
+  "tests": 4,
+  "seconds": 17.737,
+  "sourceHashes": {
+    "packages/python/src/truss/_action_subject_installation.py": "7155249f3ecf5a24ce8e5974000d816cdfd6b0d363fef257363456597b5ce7b5",
+    "packages/python/src/truss/_security_bootstrap/action-mapping-cut.sql": "888202b45d9af4526a2f732a402642a03742e22eb5d5d44ad6e05e45b1d22481",
+    "packages/python/src/truss/_action_identity_codec.py": "919d5975859d8938e6bf85bcca98602d9f30215c52ee9f7f300466e249ceb725",
+    "packages/python/tests/test_action_role_installation_native.py": "0656471c537ed7c92cc3196ac6a4e4be6bbfc64c56999d3fb83c61a8668105c5",
+    "packages/python/tests/test_action_identity_codec.py": "08051395b2b2026e95951e1d2d75afa2606293d334453ec8304a966192b09ac0"
+  },
+  "logs": {
+    "store-codec.log": "8a6bff66b37b08464de7481a5680e69564a550a22e58e23b57908bdd586d91e1",
+    "native-r1.log": "208e9b709cf6b6a467ebf16051beaede1c6eb58f676aa2f6c7ba95940a80e311",
+    "boundaries.log": "1c812903c7fd2b3dafd40fe33134a59362ff55c8b3312d0b76e4b0ccf18f3150"
+  },
+  "scope": [
+    "Explicit with_action_roles enrollment installs original pinned zero-argument lock-only mapping cut with exact enrolled role ACL.",
+    "Original ordinary RR holds Subject and role maps through actual COMMIT; competing writes refuse; after COMMIT write succeeds.",
+    "Committed post-snapshot role-map UPDATE causes serialization refusal rather than refreshed snapshot.",
+    "Named store/tenant/namespace-epoch string codecs agree with original Bun JSON string oracle, bounded first native profile 1..256UTF16 units."
+  ],
+  "limits": [
+    "No hidden upgrade: Subject-only bootstrap defaults to no combined cut; existing homes require migration.",
+    "Invisible post-snapshot INSERT is not detected by row-lock cut; complete fresh RC correspondence remains mandatory.",
+    "Source/helper/DDL complete closure, current native store capability and role lifecycle/permit composition remain open.",
+    "New cut and named wrappers receive no approval inheritance from earlier Astra source pins.",
+    "No protected selection/seal/backend case promotion."
+  ]
+}
