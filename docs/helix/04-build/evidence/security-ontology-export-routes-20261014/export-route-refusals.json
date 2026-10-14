@@ -1,0 +1,25 @@
+{
+  "observations": [
+    {
+      "route": "AliceDefiner",
+      "salaryBeforeProfileCheck": {
+        "kind": "integer",
+        "text": "100"
+      },
+      "ordinaryRawSelect": false,
+      "refusedBeforeEvaluatorAndReceiver": true,
+      "hostileOperatorControl": true
+    },
+    {
+      "route": "AliceView",
+      "salaryBeforeProfileCheck": {
+        "kind": "integer",
+        "text": "100"
+      },
+      "ordinaryRawSelect": false,
+      "refusedBeforeEvaluatorAndReceiver": true,
+      "hostileOperatorControl": true
+    }
+  ],
+  "scope": "Unsafe accessible definer/view installation is refused; routes are not repaired by this checker. DDL/routine lifetime remains an external premise."
+}

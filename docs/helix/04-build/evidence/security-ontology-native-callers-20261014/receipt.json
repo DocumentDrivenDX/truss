@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "runtime": "truss-catalog-runtime/0.59-candidate",
+  "engine": "PostgreSQL18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "tests": 1,
+  "seconds": 18.138,
+  "sourceDigests": {
+    "scripts/security_ontology_native_subject_read.py": "60ea27efa637aecfd71b30965f0371a77e0be2ca40eef3417818061b4ea37800",
+    "scripts/security_ontology_guarded_read.py": "3c19bf8c106eeaa1c4c422167ad978b050d5cf1a79732e7e3a6d08b7efec0475",
+    "scripts/security_ontology_edge_projection.py": "f7f8bbd48c30652393a25fef6a1819cafce4713e9c11425e3df01877e8b8727c",
+    "packages/python/tests/test_security_ontology_edges_native.py": "ae485f6614ce2fff39e574966fc317cd1a5c2a4e345b43348ac2364380eab920",
+    "packages/python/src/truss/psycopg_host.py": "6e80fea510d18f789b6bda7ffdc54877e5650bc6ddec9c86c5e622f9ef91a398",
+    "packages/python/src/truss/_security_catalog_subject_installation.py": "1cc850248bcb20d96315ba8a52b11f12d00c1f82115db1b0845d631611029625",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "1f5f67f9e138c08a1b13f49c4a8080f51ce79e5d7f6593f7382fec0a0cf13373"
+  },
+  "packets": {
+    "native-r5.log": "56fd487c302fa6fd2d387321a22c40fc14062543cd3c2e90bb658378551e6ab3",
+    "native-caller-decisions.json": "6434d6ecfedf83c98b592932429f0d3113c05a59a323061b45dcb86cd2145d2b"
+  },
+  "criteria": [
+    "US-056-AC2",
+    "US-056-AC10"
+  ],
+  "checks": [
+    "Actual independent ordinary SESSION_USERs map to AliceRA/BobRB/Outsidernone on original14-object12-edge graph",
+    "No API Staff-name argument; native roleOID/dbOID observed under original caller host",
+    "Two original hosts reserved through buffered receiver",
+    "Fresh private live native PID/db/role/application challenge checked before/after evaluation, prior application_name restored",
+    "Both shared role catalog cuts and private subject map/install cut held with full16source/fact cuts",
+    "Opposing ALTER ROLE,owner-role GRANT,map/edge writes blocked during evaluation and receiver",
+    "Unregistered caller,wrong native peer challenge and effective raw column read grant refused before evaluation/publication",
+    "Prior graph source/late mutation/stale RR/SERIAL controls replayed"
+  ],
+  "premises": [
+    "Host authentication/ordinary connection origin",
+    "Original trusted registration and physical/logical mapping custody",
+    "Trusted private privileged executor and native routine/activity source/DDL/config/filesystem custody"
+  ],
+  "scope": "Native caller correspondence and guarded full graph semantic read composition. Not original checked compiler admission or complete authority-generation/writer/transport/profile qualification.",
+  "acceptancePromotion": false,
+  "requiredCasesRetained": 132
+}

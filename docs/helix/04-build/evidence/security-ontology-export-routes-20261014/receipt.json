@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "runtime": "truss-catalog-runtime/0.59-candidate",
+  "engine": "PostgreSQL18.6",
+  "tests": 1,
+  "seconds": 20.116,
+  "sourceDigests": {
+    "scripts/security_ontology_native_subject_read.py": "fb591017642f778d8164985d150158883dd6feef47d205ff50172a7d8c50e6ae",
+    "scripts/security_ontology_guarded_read.py": "3c19bf8c106eeaa1c4c422167ad978b050d5cf1a79732e7e3a6d08b7efec0475",
+    "packages/python/tests/test_security_ontology_edges_native.py": "c2cef362e6c2ffdbdf360cce61f9b9ced19c37588f7556d5e7c86f1ccecc7fc3",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "1f5f67f9e138c08a1b13f49c4a8080f51ce79e5d7f6593f7382fec0a0cf13373"
+  },
+  "packets": {
+    "initial-native.log": "b63f69952a398736c871b72908fae2f064f54c7ca4a9f165a0985f00b3a7d09b",
+    "final-native.log": "a43f65e8138a0f82e2688ad6116d9ac2911ad6e8000ea9f085a2942a5741a021",
+    "export-route-refusals.json": "8fae43d645cb00fb694e1d6d7f70da8db20310d2fc4528b61102aeab44268123"
+  },
+  "criteria": [
+    "US-056-AC9",
+    "US-056-AC10"
+  ],
+  "checks": [
+    "Real ordinary caller reads exact salary integer100 through accessible PUBLIC definer function despite false raw tableSELECT",
+    "Real ordinary caller reads exact salary integer100 through granted owner-executed view despite false raw tableSELECT",
+    "Both unsafe installations refuse selected nativecaller profile before evaluator/receiver",
+    "Hostile name<> and char= native operators demonstrably returnfalse; explicit pg_catalog operator scan still detects both routes",
+    "All prior fullontology/nativecaller/sourcecut/stalesnapshot/rolegrant/latecontainment/revocation controls replay"
+  ],
+  "subset": "Selected no-export-route profile: conservative direct user-schema SECURITY DEFINER/view/materialized-view accessibility checks for complete registered role set. Harmless accessible routes also refuse.",
+  "premises": [
+    "Trusted native catalog/server/authentication/registration",
+    "Routine/view/ACL/source DDL lifetime and privileged host custody remain external premises"
+  ],
+  "notQualified": [
+    "Transitive callable reachability",
+    "pg_catalog/information_schema export routes",
+    "FDW/OS routes",
+    "Inherited SET ROLE/export privileges",
+    "Native DDL lifetime",
+    "Original checked compiler/native admission and complete authority-generation profile"
+  ],
+  "acceptancePromotion": false,
+  "requiredCasesRetained": 132
+}

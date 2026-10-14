@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "runtime": "truss-catalog-runtime/0.59-candidate",
+  "engine": "PostgreSQL18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "tests": 1,
+  "seconds": 18.449,
+  "sourceDigests": {
+    "packages/python/tests/test_security_ontology_edges_native.py": "aa52b2c8f1afc19d6b30192b4dd12f485a936f4168a8c8f50dcc5c55cea7feb1",
+    "scripts/security_ontology_native_subject_read.py": "60ea27efa637aecfd71b30965f0371a77e0be2ca40eef3417818061b4ea37800",
+    "scripts/security_ontology_guarded_read.py": "3c19bf8c106eeaa1c4c422167ad978b050d5cf1a79732e7e3a6d08b7efec0475",
+    "scripts/security_ontology_edge_projection.py": "f7f8bbd48c30652393a25fef6a1819cafce4713e9c11425e3df01877e8b8727c",
+    "packages/python/src/truss/psycopg_host.py": "6e80fea510d18f789b6bda7ffdc54877e5650bc6ddec9c86c5e622f9ef91a398",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "1f5f67f9e138c08a1b13f49c4a8080f51ce79e5d7f6593f7382fec0a0cf13373"
+  },
+  "packets": {
+    "native-r1.log": "e3eaa36c4164a49a5309b5bb86023653c514ecc9e8a38294e3811bce03073315",
+    "native-r2.log": "d09c1c0afc71afad9ffcecd775454eb53747fa54a2a22d600e5fd027cb0abf80",
+    "native-r3.log": "49a9c0ec00b0eb0f6f19ee3f74ad58aceb471922fe7c439dccdab5bef6380a42",
+    "revocation-order.json": "aefe88dfb0482df70ee57ec284ca7763efd571bd41e1a1af4182ce85f80baf43"
+  },
+  "criteria": [
+    "US-057-AC1",
+    "US-057-AC2"
+  ],
+  "checks": [
+    "Actual independent Assignment.active revocation writer requests RowExclusiveLock",
+    "Native pg_locks confirms ungranted object relation write lock during synchronous receiver and pg_blocking_pids identifies original executor; admitted read returnsRA",
+    "No commit acknowledgment before receiver completion/outer reader settlement",
+    "Writer successful native commit acknowledgment after outer rollback; independent current active=false readback",
+    "Fresh actual sameordinaryAlice admitted READ COMMITTED read after acknowledgment returns noresources",
+    "Original full14-object12-edge source and all prior nativecaller/role/map/peer/rawcolumn/stalesnapshot/latecontainment controls also replay",
+    "Worker settlement in nested finally survives executor cleanup errors; bounded connect/join/cancel_safe(timeout=1)/finaljoin; source-reviewed fallback, final successful native replay"
+  ],
+  "premises": [
+    "Trusted administrative writer and original mapping/registration",
+    "Native host/server/activity/routine/DDL/config/source custody",
+    "No retained protected cursor/cache tokens or valid-time clock transitions admitted"
+  ],
+  "scope": "Selected Assignment writer/read drain ordering and post-commit freshness only. Compiler admission and complete policy/role/subject/mapping/cache/paging/clock authority generation lifecycle remain unqualified.",
+  "acceptancePromotion": false,
+  "requiredCasesRetained": 132
+}
