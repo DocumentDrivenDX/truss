@@ -48,6 +48,35 @@ def _native_path(cursor):
         raise ValueError('Original preparation native namespace required')
 
 
+def verify_preparation_mint_exclusion_with_cursor(cursor, caller_oid, issuer_owner_oid):
+    """Negative privilege prerequisite only; never issues a native permit.
+
+    OIDs must come from original native capture/installation custody. This
+    rejects effective mint rights and SET ROLE reachability to the issuer;
+    helper/DDL closure and concurrent exclusions remain separate obligations.
+    """
+    _native_path(cursor)
+    if any(type(value) is not int or not 0 < value < 2**32
+           for value in (caller_oid, issuer_owner_oid)):
+        raise ValueError('Original native preparation role OIDs required')
+    role = _text_rows(cursor, """SELECT r.rolsuper::text,
+        pg_catalog.pg_has_role(r.oid,%s::pg_catalog.oid,'MEMBER')::text
+        FROM pg_catalog.pg_roles r WHERE r.oid=%s::pg_catalog.oid""",
+        (issuer_owner_oid, caller_oid), 1)
+    if role != [('false', 'false')]:
+        raise ValueError('Preparation caller can reach native mint owner')
+    names = ('pg_advisory_lock', 'pg_advisory_lock_shared',
+             'pg_try_advisory_lock', 'pg_try_advisory_lock_shared',
+             'pg_advisory_xact_lock', 'pg_advisory_xact_lock_shared',
+             'pg_try_advisory_xact_lock', 'pg_try_advisory_xact_lock_shared')
+    for name in names:
+        signature = 'pg_catalog.' + name + '(integer,integer)'
+        rows = _text_rows(cursor, "SELECT pg_catalog.has_function_privilege(%s::pg_catalog.oid,%s::pg_catalog.text,'EXECUTE')::text",
+                          (caller_oid, signature), 1)
+        if rows != [('false',)]:
+            raise ValueError('Preparation caller has effective advisory mint rights')
+
+
 def _data_identity(cursor):
     _native_path(cursor)
     if _text_rows(cursor, "SELECT pg_catalog.current_setting('server_version_num')::text,pg_catalog.current_setting('transaction_isolation')::text,pg_catalog.current_setting('transaction_read_only')::text,pg_catalog.current_setting('role')::text", limit=1) != [('180006', 'repeatable read', 'off', 'none')]:

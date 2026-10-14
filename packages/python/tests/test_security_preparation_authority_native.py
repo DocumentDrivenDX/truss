@@ -10,6 +10,7 @@ from truss._security_preparation_authority import (
     verify_preparation_peer_with_cursor,
     observe_preparation_owners_with_cursor,
     bootstrap_preparation_data_authority_lock_in_transaction,
+    verify_preparation_mint_exclusion_with_cursor,
 )
 
 
@@ -35,6 +36,29 @@ class PreparationAuthorityNativeTests(base.PublicCreateGroupTests):
         self.admin.execute('ALTER FUNCTION public.preparation_mint_probe() OWNER TO preparation_mint_owner')
         self.admin.execute('REVOKE ALL ON FUNCTION public.preparation_mint_probe() FROM PUBLIC')
         self.admin.execute('GRANT EXECUTE ON FUNCTION public.preparation_mint_probe() TO consumer')
+        caller_oid = self.admin.execute("SELECT oid FROM pg_catalog.pg_roles WHERE rolname='consumer'").fetchone()[0]
+        owner_oid = self.admin.execute("SELECT oid FROM pg_catalog.pg_roles WHERE rolname='preparation_mint_owner'").fetchone()[0]
+        with self.admin.cursor() as cursor:
+            verify_preparation_mint_exclusion_with_cursor(cursor, caller_oid, owner_oid)
+        self.admin.execute('CREATE ROLE preparation_mint_escape NOLOGIN')
+        self.addCleanup(self.admin.execute, 'DROP ROLE preparation_mint_escape')
+        self.addCleanup(self.admin.execute, 'DROP OWNED BY preparation_mint_escape')
+        self.admin.execute('GRANT EXECUTE ON FUNCTION pg_catalog.pg_advisory_xact_lock(int4,int4) TO preparation_mint_escape')
+        self.admin.execute('GRANT preparation_mint_escape TO consumer WITH INHERIT TRUE')
+        with self.admin.cursor() as cursor:
+            with self.assertRaises(ValueError):
+                verify_preparation_mint_exclusion_with_cursor(cursor, caller_oid, owner_oid)
+        data.execute('BEGIN')
+        data.execute('SELECT pg_catalog.pg_advisory_xact_lock(19001,19002)')
+        data.execute('ROLLBACK')
+        self.admin.execute('REVOKE preparation_mint_escape FROM consumer')
+        with self.admin.cursor() as cursor:
+            verify_preparation_mint_exclusion_with_cursor(cursor, caller_oid, owner_oid)
+        self.admin.execute('GRANT preparation_mint_owner TO consumer WITH INHERIT FALSE, SET TRUE')
+        with self.admin.cursor() as cursor:
+            with self.assertRaises(ValueError):
+                verify_preparation_mint_exclusion_with_cursor(cursor, caller_oid, owner_oid)
+        self.admin.execute('REVOKE preparation_mint_owner FROM consumer')
         for name in names:
             with self.assertRaises(psycopg.errors.InsufficientPrivilege):
                 data.execute(f'SELECT pg_catalog.{name}(19001,19002)')
