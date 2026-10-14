@@ -1,0 +1,71 @@
+{
+  "observations": [
+    {
+      "case": "current",
+      "resources": [
+        "RB"
+      ],
+      "withheldSalary": true,
+      "epochArchiveGuardCutsThroughReceiver": true,
+      "ordinaryExecutorNoEpochUpdate": true
+    },
+    {
+      "case": "stale",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "guard-drift",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "archive-drift",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "epoch-rls",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "issuer-public",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "compiler-drift",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "guard-writable",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "issuer-owner-member",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "advanced",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "advanced-current",
+      "resources": [
+        "RB"
+      ],
+      "withheldSalary": true,
+      "epochArchiveGuardCutsThroughReceiver": true,
+      "ordinaryExecutorNoEpochUpdate": true
+    }
+  ],
+  "epoch": "e1a287b4-8873-4745-9026-d17a02de5148",
+  "advancedEpoch": "310341f3-3ff4-43ef-aea1-29cfac945502",
+  "securityReady": false,
+  "scope": "Selected actual ordinary epoch/archive/guard reads, trusted compiler/installer/routine/DDL/authentication custody; registered Subject issuer and public compiler admission pending."
+}

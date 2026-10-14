@@ -468,3 +468,62 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                 for name,data in (('physical-request.json',request),('compiler-request.json',original_compiler),('compiler-output.json',record['output'].encode()),('accepted-catalog.json',actual_assessment),('issued-profile.json',comparison.profile)):(folder/name).write_bytes(data)
                 archive=self.admin.execute("SELECT artifact_role,artifact_identity,pg_catalog.encode(artifact_sha256,'hex'),pg_catalog.encode(artifact_identity_sha256,'hex'),installation_id FROM truss.installation_archive ORDER BY artifact_identity COLLATE pg_catalog.\"C\"").fetchall()
                 (folder/'native-source-epoch.json').write_text(json.dumps({'epoch':comparison.epoch,'installation':comparison.installation,'incarnation':comparison.incarnation,'archives':archive,'committedReadback':True,'controls':['no repair/reuse','outer rollback retains prior work','stale generation','malformed graph preflight','omitted fact relation','omitted fact column'],'securityReady':False,'scope':'Original graph archive and initial native source epoch under trusted original compiler/administrator/routine/DDL custody; registered Subject/native compiler admission pending.'},indent=2)+'\n')
+
+            if os.environ.get('TRUSS_SECURITY_ONTOLOGY_EPOCH_READ'):
+                self.assertIsNotNone(private_parameters,'Actual ordinary private executor required')
+                from truss._security_graph_epoch_read import bootstrap_graph_epoch_read_cut_in_transaction,GraphEpochReadContext
+                self.admin.execute('BEGIN');installation_host=adopt_psycopg_host(self.admin);installation_tx=installation_host.adopt_transaction().value
+                installed=bootstrap_graph_epoch_read_cut_in_transaction(installation_host,installation_tx,executor_role=private_executor)
+                self.assertIsInstance(installed,Ok,str(installation_host._custody.last_attempt.error))
+                self.assertIsInstance(bootstrap_graph_epoch_read_cut_in_transaction(installation_host,installation_tx,executor_role=private_executor),Error)
+                installation_host.detach();self.admin.commit()
+                context=GraphEpochReadContext(graph,comparison,installed.value,inputs['subject_source'])
+                observations=[]
+                for label,selected in (('current',context),('stale',replace(context,comparison=replace(comparison,epoch='stale-epoch'))),('guard-drift',context),('archive-drift',context),('epoch-rls',context),('issuer-public',context),('compiler-drift',context),('guard-writable',context),('issuer-owner-member',context),('advanced',context),('advanced-current',context)):
+                    if label=='advanced':
+                        advanced_epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,%s,%s,%s,%s)',(comparison.installation,comparison.epoch,comparison.incarnation,comparison.profile,comparison.evidence)).fetchone()[0]
+                        self.assertNotEqual(advanced_epoch,comparison.epoch)
+                    if label=='advanced-current':selected=replace(context,comparison=replace(comparison,epoch=advanced_epoch))
+                    if label=='issuer-owner-member':
+                        issuer_owner=self.admin.execute('SELECT rolname FROM pg_catalog.pg_roles WHERE oid=%s',(installed.value.owner_oid,)).fetchone()[0]
+                        self.admin.execute(sql.SQL('GRANT {} TO {}').format(sql.Identifier(issuer_owner),sql.Identifier(private_executor)))
+                    if label=='guard-writable':self.admin.execute(sql.SQL('GRANT UPDATE(generation) ON truss.policy_generation_guard TO {}').format(sql.Identifier(private_executor)))
+                    if label=='guard-drift':self.admin.execute('UPDATE truss.policy_generation_guard SET generation=2')
+                    if label=='archive-drift':self.admin.execute("UPDATE truss.installation_archive SET artifact_bytes=artifact_bytes || decode('20','hex') WHERE artifact_identity='graph:original-compiler-output'")
+                    if label=='epoch-rls':self.admin.execute('ALTER TABLE truss.source_epoch_current ENABLE ROW LEVEL SECURITY')
+                    if label=='issuer-public':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_graph_epoch_read_cut() TO PUBLIC')
+                    with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
+                        private.execute('BEGIN');executor=adopt_psycopg_host(private);executor_tx=executor.adopt_transaction().value
+                        self.assertEqual(private.execute("SELECT pg_catalog.has_table_privilege('truss.source_epoch_current','UPDATE')").fetchone(),(False,))
+                        parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Bob']
+                        with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
+                            connection.execute('BEGIN');caller=adopt_psycopg_host(connection);caller_tx=caller.adopt_transaction().value;released=[]
+                            def receiver(raw):
+                                with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+                                    for table in ('source_epoch_current','source_epoch_registry','installation_archive','policy_generation_guard'):
+                                        with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
+                                    with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute('SELECT truss.runtime_issue_source_epoch(%s,%s,%s,%s,%s)',(selected.comparison.installation,selected.comparison.epoch,selected.comparison.incarnation,selected.comparison.profile,selected.comparison.evidence))
+                                released.append(raw)
+                            def selected_epoch_compiler(*args):
+                                receipt=native_compiler(*args)
+                                if label=='compiler-drift':receipt={**receipt,'output':receipt['output']+' '}
+                                return receipt
+                            result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,bindings,receiver,compiler=selected_epoch_compiler,cut_issuer=cut_issuer,source_epoch=selected)
+                            if label in ('current','advanced-current'):
+                                self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],['RB']);self.assertEqual(released,[result.value])
+                                observations.append({'case':label,'resources':['RB'],'withheldSalary':True,'epochArchiveGuardCutsThroughReceiver':True,'ordinaryExecutorNoEpochUpdate':True})
+                            else:
+                                self.assertIsInstance(result,Error);self.assertEqual(released,[]);self.assertEqual(str(executor._custody.last_attempt.error),{'stale':'Original current graph source epoch required','advanced':'Original current graph source epoch required','guard-drift':'Original current graph authority guard required','archive-drift':'Original current graph source archive required','epoch-rls':'Original complete unfiltered graph epoch homes and cuts required','issuer-public':'Exact private graph epoch cut ACL required','compiler-drift':'Original current graph compiler source correspondence required','guard-writable':'Original private read-only graph epoch homes required','issuer-owner-member':'Original excluded privileged graph epoch cut owner required'}[label])
+                                self.assertEqual(private.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,));observations.append({'case':label,'refusedBeforeRelease':True,'noRetainedCuts':True})
+                            caller.detach();connection.rollback()
+                        executor.detach();private.rollback()
+                    if label=='issuer-owner-member':self.admin.execute(sql.SQL('REVOKE {} FROM {}').format(sql.Identifier(issuer_owner),sql.Identifier(private_executor)))
+                    if label=='guard-writable':self.admin.execute(sql.SQL('REVOKE UPDATE(generation) ON truss.policy_generation_guard FROM {}').format(sql.Identifier(private_executor)))
+                    if label=='guard-drift':self.admin.execute('UPDATE truss.policy_generation_guard SET generation=1')
+                    if label=='archive-drift':self.admin.execute("UPDATE truss.installation_archive SET artifact_bytes=%s WHERE artifact_identity='graph:original-compiler-output'",(graph.original_response,))
+                    if label=='epoch-rls':self.admin.execute('ALTER TABLE truss.source_epoch_current DISABLE ROW LEVEL SECURITY')
+                    if label=='issuer-public':self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.acquire_graph_epoch_read_cut() FROM PUBLIC')
+                directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_EPOCH_READ_EVIDENCE')
+                if directory:
+                    folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
+                    (folder/'ordinary-epoch-read.json').write_text(json.dumps({'observations':observations,'epoch':comparison.epoch,'advancedEpoch':advanced_epoch,'securityReady':False,'scope':'Selected actual ordinary epoch/archive/guard reads, trusted compiler/installer/routine/DDL/authentication custody; registered Subject issuer and public compiler admission pending.'},indent=2)+'\n')

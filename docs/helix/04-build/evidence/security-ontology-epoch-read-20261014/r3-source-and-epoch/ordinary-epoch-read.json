@@ -1,0 +1,61 @@
+{
+  "observations": [
+    {
+      "case": "current",
+      "resources": [
+        "RB"
+      ],
+      "withheldSalary": true,
+      "epochArchiveGuardCutsThroughReceiver": true,
+      "ordinaryExecutorNoEpochUpdate": true
+    },
+    {
+      "case": "stale",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "guard-drift",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "archive-drift",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "epoch-rls",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "issuer-public",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "compiler-drift",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "advanced",
+      "refusedBeforeRelease": true,
+      "noRetainedCuts": true
+    },
+    {
+      "case": "advanced-current",
+      "resources": [
+        "RB"
+      ],
+      "withheldSalary": true,
+      "epochArchiveGuardCutsThroughReceiver": true,
+      "ordinaryExecutorNoEpochUpdate": true
+    }
+  ],
+  "epoch": "c91ce1e1-480b-4361-a8f9-b388d22e3c2d",
+  "advancedEpoch": "916b3e02-6f9a-4338-8b1a-3f34b707bafb",
+  "securityReady": false,
+  "scope": "Selected actual ordinary epoch/archive/guard reads, trusted compiler/installer/routine/DDL/authentication custody; registered Subject issuer and public compiler admission pending."
+}

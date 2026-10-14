@@ -1,0 +1,60 @@
+{
+  "epoch": "f7484e8b-d912-4234-a642-76f1c42501d3",
+  "installation": "5add3ab5-d0d6-4bc6-8510-a2458ea46ec7",
+  "incarnation": "{\"databaseOid\":\"5\",\"interfaceVersion\":\"truss-catalog-source-target/0.1.0\",\"schemaOid\":\"16385\"}",
+  "archives": [
+    [
+      "expected_inventory",
+      "graph:original-accepted-assessment",
+      "6bf73a709036c107ba77a5628812a8a40b703f762c6d8a05bf34d26b7f4dfef7",
+      "e8815e7af1b64492c515c2bc82ec73bc540ccaf0c70f6f569e5a5d524c14ee06",
+      "5add3ab5-d0d6-4bc6-8510-a2458ea46ec7"
+    ],
+    [
+      "input",
+      "graph:original-compiler-output",
+      "b3b07df06a8328d47d8dc5e0e5ffdd44b0eabbf76dc6e4d9c064e14f5f902584",
+      "aafecb87e6fb58eb853cf64f1337139defe65b9c73ad29638ec2c99c22153b8b",
+      "5add3ab5-d0d6-4bc6-8510-a2458ea46ec7"
+    ],
+    [
+      "input",
+      "graph:original-compiler-request",
+      "ed69cc0e6d311a62ff7fa36462ada679aea27a8903ac3b5e78fc5699c3afabac",
+      "f06f3dc97e1bfaf47e01079a073676d6acd214a7a70408e5a058c8cf273fea2a",
+      "5add3ab5-d0d6-4bc6-8510-a2458ea46ec7"
+    ],
+    [
+      "input",
+      "graph:original-physical-request",
+      "5596ea1dd2132ea458d7f2fa02d98264dfd080769103062c040a00ba790665be",
+      "1e16376c09d406aac18651849f54225f28931c7bbb530709bef7716451393a99",
+      "5add3ab5-d0d6-4bc6-8510-a2458ea46ec7"
+    ],
+    [
+      "bundle",
+      "graph:original-release-manifest",
+      "bd553857a7087d81d9e03eefed658f1ba99dd446ff097b004c5eae0fb0ca9239",
+      "ac7407ed892f62b88c8fe866848a8a3add0761d0f52acfc47a1b81707ba1d608",
+      "5add3ab5-d0d6-4bc6-8510-a2458ea46ec7"
+    ],
+    [
+      "installed_inventory",
+      "graph:recaptured-accepted-assessment",
+      "6bf73a709036c107ba77a5628812a8a40b703f762c6d8a05bf34d26b7f4dfef7",
+      "dc1e059bf03cffb59f11da1cf2003eae6fe7fedb1676d6457d03f409c18f6243",
+      "5add3ab5-d0d6-4bc6-8510-a2458ea46ec7"
+    ]
+  ],
+  "committedReadback": true,
+  "controls": [
+    "no repair/reuse",
+    "outer rollback retains prior work",
+    "stale generation",
+    "malformed graph preflight",
+    "omitted fact relation",
+    "omitted fact column"
+  ],
+  "securityReady": false,
+  "scope": "Original graph archive and initial native source epoch under trusted original compiler/administrator/routine/DDL custody; registered Subject/native compiler admission pending."
+}

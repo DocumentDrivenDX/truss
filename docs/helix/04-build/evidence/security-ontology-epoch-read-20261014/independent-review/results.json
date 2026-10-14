@@ -1,0 +1,136 @@
+{
+  "scope": "Offline selected source, preflight, held-home descriptor and extracted exact wrapper controls. No native lifecycle or arbitrary configured-code containment claim.",
+  "passed": 31,
+  "failed": 0,
+  "sourceSha256": {
+    "packages/python/src/truss/_security_graph_epoch_read.py": "32f68672d805124fcea2ba02e8642f9cb04bad7ec726b4a1c16c91a1daef858d",
+    "packages/python/src/truss/_security_bootstrap/graph-epoch-read-cut.sql": "dd3ed9553c33a0a72274f24caf9f37ed5af1162832aaa25a4cc70929d3203d26",
+    "scripts/security_ontology_native_subject_read.py": "2b66393a8e23146ed04e686d8b19f472c7f71d12d290b75c9761b2259699f00f"
+  },
+  "controls": [
+    {
+      "name": "original fixed SQL byte digest",
+      "passed": true
+    },
+    {
+      "name": "matching copied epoch context",
+      "passed": true
+    },
+    {
+      "name": "Boolean guard generation",
+      "passed": true
+    },
+    {
+      "name": "mutable profile bytes",
+      "passed": true
+    },
+    {
+      "name": "different issuer installation",
+      "passed": true
+    },
+    {
+      "name": "different assessment bytes",
+      "passed": true
+    },
+    {
+      "name": "different Subject source digest",
+      "passed": true
+    },
+    {
+      "name": "valid epoch path reaches reserved host boundary",
+      "passed": true
+    },
+    {
+      "name": "legacy no-epoch diagnostic preflight retained",
+      "passed": true
+    },
+    {
+      "name": "epoch without compiler refuses before host",
+      "passed": true
+    },
+    {
+      "name": "empty issuer tuple",
+      "passed": true
+    },
+    {
+      "name": "short issuer tuple",
+      "passed": true
+    },
+    {
+      "name": "list issuer",
+      "passed": true
+    },
+    {
+      "name": "Boolean issuer OID",
+      "passed": true
+    },
+    {
+      "name": "issuer same owner and caller",
+      "passed": true
+    },
+    {
+      "name": "self-consistent prior Subject source refuses current file",
+      "passed": true
+    },
+    {
+      "name": "exact original compiler request and output accepts",
+      "passed": true
+    },
+    {
+      "name": "different compiler request",
+      "passed": true
+    },
+    {
+      "name": "different compiler output",
+      "passed": true
+    },
+    {
+      "name": "nonstring request",
+      "passed": true
+    },
+    {
+      "name": "nondict receipt",
+      "passed": true
+    },
+    {
+      "name": "compiler receipt string subclass refuses",
+      "passed": true
+    },
+    {
+      "name": "started returned generator closes before refusal",
+      "passed": true
+    },
+    {
+      "name": "cold returned coroutine closes before refusal",
+      "passed": true
+    },
+    {
+      "name": "four exact unfiltered held homes accepts",
+      "passed": true
+    },
+    {
+      "name": "RLS enabled",
+      "passed": true
+    },
+    {
+      "name": "FORCE RLS enabled",
+      "passed": true
+    },
+    {
+      "name": "inheritance present",
+      "passed": true
+    },
+    {
+      "name": "missing held ShareLock",
+      "passed": true
+    },
+    {
+      "name": "temporary home",
+      "passed": true
+    },
+    {
+      "name": "foreign home descriptor refuses before fetch",
+      "passed": true
+    }
+  ]
+}
