@@ -1,0 +1,30 @@
+{
+  "status": "original-reference-codec-interoperability-passed",
+  "bun": "1.4.2",
+  "python": "3.11.17",
+  "tests": 2,
+  "oracleVectors": 8,
+  "sourceHashes": {
+    "packages/python/src/truss/_action_identity_codec.py": "d6d56bd6df071cda8524c93740d77e1ccdde0b5d8ead4d0eead40c61eb637990",
+    "packages/python/tests/test_action_identity_codec.py": "fcbdae3bd6daef4463c03b7ff2bbdf7d0edb22e9a6fd3b8d46908facb613a8fa",
+    "packages/python/tests/fixtures/action-family-codec.json": "82cc4145533ae642d167c51002283914f7e154a2d6b1d19389f877009aa9421b"
+  },
+  "originalOwnerSources": {
+    "scripts/actions-reference/codec.ts": "e3d46d4a48cefbed427b61f394d89ce7dee32f056d07685ed1256efdff974720",
+    "src/model/schema-literals.ts": "ade564372bfd387bfe6d3d4a7c20a6517562f0a9d235743a5622bcbba54fe89d",
+    "src/model/json.ts": "c58fac512cbbea7746f4a6cb0119ac13c8bad4ebf769c7bfc48c30b1b80d5cf5"
+  },
+  "logs": {
+    "oracle.ts": "bc135d7defa1c647ebfb97920d0f6669c48385cf51da306d5c092ad3563084ef",
+    "boundaries.log": "9688fbf7028aa1079d8e19dd15be02eef44f130646f419a04e1ed5825ec23708",
+    "inputs.json": "a4aa0ddec16d193fee550aee06f4dccb1795fc4f926c8c90bd54d1348f63c4b2",
+    "tests.log": "a623239a8fa6719d5266d8457d66448adc9790a1de915f7f0e41bee1cbfede69"
+  },
+  "scope": "Original canonical JSON [module,action] family pair and exact JSON-string role encoding. UTF16 bounds, NUL/control/quotes/backslash, Unicode combining distinctions, astral and lone/paired surrogates retained.",
+  "limits": [
+    "String pair subset only; not arbitrary canonical JSON interoperability.",
+    "No registration/native role mapping/store binding/action revision/authority or replay admission.",
+    "Original owner runtime source used as independent oracle; no held-source or runtime refinement proof.",
+    "No backend acceptance case promotion."
+  ]
+}
