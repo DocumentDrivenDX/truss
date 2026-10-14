@@ -417,6 +417,10 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
             self.assertEqual(json.loads(actual_assessment),json.loads(assessment))
             profile=sha256(original_compiler).digest();guard=(self.installation.installation_id.encode(),profile,1)
             graph=PreparedGraphSecuritySource(request,record['output'].encode(),actual_assessment,original_compiler,guard)
+            guarded_binary=os.environ.get('TRUSS_SECURITY_GUARDED_COMPILER_BINARY')
+            if guarded_binary:
+                guarded_output=original_run([guarded_binary],input=original_compiler,capture_output=True,check=True,timeout=15).stdout
+                graph=replace(graph,guarded_response=guarded_output)
             graph=snapshot_graph_security_source(graph)
             homes=bootstrap_security_homes_in_transaction(factory_host,factory_tx,installation_identity=guard[0],authored_profile=profile,max_retained=8)
             self.assertIsInstance(homes,Ok,str(factory_host._custody.last_attempt.error))
