@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "runtime": "truss-catalog-runtime/0.58-candidate",
+  "tests": 1,
+  "seconds": 33.397,
+  "covers": [
+    "US-056-AC2",
+    "US-056-AC10"
+  ],
+  "sourceDigests": {
+    "scripts/security_ontology_edge_projection.py": "f7f8bbd48c30652393a25fef6a1819cafce4713e9c11425e3df01877e8b8727c",
+    "packages/python/tests/test_security_ontology_edges_native.py": "ed4fab8eeddf2e11e8f2115feed88891881a937bee8be27769c7033e39419a0f",
+    "tools/security/prove-ontology-edge-projection.py": "bb3ec6a1e9c6f7816d04e6b8e2e796254090d1ffb562de77269aa51b9b5108d3",
+    "scripts/evaluate-security-captured-identity-fixture.ts": "ad46b94d14a62f0ff20b56a5a8f537441e37ec4bb95bc45e7d356bb3549ac0c1",
+    "scripts/security-named-source-fixture.ts": "bcf5e800cb0fce712db993128673499c601d92c33a169b211bd32a270430c481",
+    "docs/helix/04-build/evidence/security-named-source-profile/policy.json": "ac1dc5841de60f64b8c268417124818c089ef247549fa75a621f1785f0b6ec97",
+    "docs/helix/04-build/evidence/security-named-source-profile/resolution.json": "d6591a68b48b4f4a56b1631fce26dd66ac99a9d4f1f60c02c77c178bb3636e74",
+    "docs/helix/04-build/evidence/security-named-source-profile/transport.json": "83ce25c40a5840b09c5eb4e95d1b4f756e4cb57c8d3429ba5c2e4dc850df48c6",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "5eaac785787830c02bfed3758360e148fce3434480fbfee01c9e66ca671808a3"
+  },
+  "packets": {
+    "adoc.json": "37ba63adcfb8c618902fd708d09b5a0837674e393bc8817373b92e78a5bcfd73",
+    "population.json": "630056f3339e5e9a592ffd8453f9054804118299ec5dabc8fb71851d7921c30f",
+    "formal.json": "eb7501afdc1cd5ed9c7c9958f30fcfc2e123d9b4b00e9d72b9455d4102ef960d",
+    "final-native.log": "fd9446dc4f9064b61e0c00a0ed0c11c10a79cc062985b488cacdc023ed752eea",
+    "inventory-final-native.log": "f124042fd376c98cbc2519c05f262a924f25c466938071e5bb88e65d3b01e1c0",
+    "native-inventory.json": "4160caee59523a7a5fd33f21a6cf039b7004cd0bf0034028ef478b06df9035df",
+    "binding-correspondence.json": "bf63104b7ab83b4eeaf60b08b1543341dd9a24100bf4ca13b606f3a5cff84fe1"
+  },
+  "scope": "Explicit graph-to-original-logical-field binding on actual public14-object12-edge population. Shared unchanged UMF policy agrees with independently expected native-incidence oracle and withholds salary; missing/duplicate edges refuse. Row/key/selected output limits, not totalCPU/heap. Salary retained in native source but not consumed as policy operand. Six unbounded conditional formal queries, not program/SQL refinement. Trusted mapping, administrative subject/quiescence and source custody remain premises; no original authenticated guarded compiler/native/publication admission. All132 cases retained.",
+  "reviewScope": "Retained independent Astra review covers the projection/proof and 20.536-second run; subsequent metadata-only export and 33.397-second replay are separately recorded."
+}

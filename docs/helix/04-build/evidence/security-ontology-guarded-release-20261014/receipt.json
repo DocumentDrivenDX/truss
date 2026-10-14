@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "runtime": "truss-catalog-runtime/0.59-candidate",
+  "engine": "PostgreSQL18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "tests": 1,
+  "seconds": 14.789,
+  "sourceDigests": {
+    "scripts/security_ontology_guarded_read.py": "58cbfefbd95c34b4894d3e7585ca523601e50ce688d3bede7ea9e31adc85854d",
+    "scripts/security_ontology_edge_projection.py": "f7f8bbd48c30652393a25fef6a1819cafce4713e9c11425e3df01877e8b8727c",
+    "packages/python/tests/test_security_ontology_edges_native.py": "cea7d23684ec335c42a72cebac8671fc2e7bcea832d086c8585bbff2b3412313",
+    "packages/python/src/truss/_security_catalog_assessment.py": "b2d6864b7eb3ae7c56d6f678adb1a6005caf614fabf4708db5c2219f733096e2",
+    "packages/python/src/truss/psycopg_host.py": "6e80fea510d18f789b6bda7ffdc54877e5650bc6ddec9c86c5e622f9ef91a398",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "1f5f67f9e138c08a1b13f49c4a8080f51ce79e5d7f6593f7382fec0a0cf13373"
+  },
+  "logSha256": "d4dcabf83143a3b9d8d461c611aad0b5d840de04dbdf0d3c3ee523cbba3d7d71",
+  "criteria": [
+    "US-056-AC2",
+    "US-056-AC10"
+  ],
+  "checks": [
+    "Original full public14-object12-edge ontology and unchanged policy",
+    "AliceRA with withheld salary",
+    "All16 source/fact dependency homes exclude independent ROW EXCLUSIVE locks during evaluation and synchronous receiver",
+    "Actual late same-transaction deletion leaves11edges before recheck; exact projection refusal, contained phase and no cleanup error; no additional receiver call; rollback restores12edges and preserves prior work",
+    "All16selected table cuts released after outer rollback",
+    "Original host observed READ COMMITTED/read-write required before locks; RR and SERIALIZABLE snapshots demonstrably retain active=true after independent committed revocation to false, but refuse with zero evaluator/receiver calls"
+  ],
+  "premises": [
+    "Trusted administrative host and chosen subject",
+    "Trusted native routine, role/configuration and filesystem source custody",
+    "Fixed bounded full-population fixture, not arbitrary model lowering",
+    "Compiler admission and authenticated authority composition remain unfinished"
+  ],
+  "acceptancePromotion": false,
+  "requiredCasesRetained": 132,
+  "log": "native-r7.log"
+}

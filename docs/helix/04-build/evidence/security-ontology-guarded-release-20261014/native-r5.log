@@ -1,0 +1,17 @@
+test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission. ... ERROR
+
+======================================================================
+ERROR: test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_ontology_edges_native.py", line 155, in test_original_public_ontology_population_and_endpoint_oracle
+    host=adopt_psycopg_host(self.admin);transaction=host.adopt_transaction().value
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Error' object has no attribute 'value'
+
+----------------------------------------------------------------------
+Ran 1 test in 16.086s
+
+FAILED (errors=1)

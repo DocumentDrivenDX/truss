@@ -62,6 +62,25 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
             observed[staff]=sorted(alias.upper() for alias in ('ra','rb','ro') if any(resource==identities[alias] and project in projects for resource,project in owned))
         self.assertEqual(observed,{'alice':['RA'],'bob':['RB'],'outsider':[]})
         self.assertEqual(endpoints['ProjectClient'],{(identities['pa'],identities['c']),(identities['pb'],identities['c'])})
+        from security_ontology_edge_projection import project_full_ontology_edge_cells
+        from security_owned_read import _pin_owned_evaluator_sources,_read_owned_resource_receipt
+        import subprocess
+        types={name:self.types[('adoc',name)].type_id for name in {row[0] for row in rows}}
+        relations={name:reference.relationship_id for name,reference in refs.items()}
+        objects=tuple((str(identities[alias]),types[record],stored[alias]) for record,alias,_ in rows)
+        edge_rows=tuple(tuple(str(value) for value in row) for row in self.admin.execute('SELECT id,rel_type_id,source_id,source_type,target_id,target_type FROM truss.edge ORDER BY id').fetchall())
+        cells=project_full_ontology_edge_cells(objects,edge_rows,types,relations)
+        prepared=_pin_owned_evaluator_sources();evaluated={}
+        for subject,expected_keys in (('Alice',['RA']),('Bob',['RB']),('Outsider',[])):
+            payload=json.dumps({'cells':cells,'subjectKey':[{'string':subject}],'resultMode':'resources'})
+            evaluated_run=subprocess.run([os.environ.get('TRUSS_BUN_EXECUTABLE','bun'),str(prepared.tool),'--named-source'],cwd=Path(__file__).resolve().parents[3],input=payload,capture_output=True,text=True,timeout=10)
+            self.assertEqual(evaluated_run.returncode,0,evaluated_run.stderr)
+            decision=_read_owned_resource_receipt(evaluated_run.stdout)
+            self.assertEqual([r['key'][0]['string'] for r in decision['rows']],expected_keys)
+            for resource in decision['rows']:self.assertEqual(resource['output'][0]['disposition'],'withheld')
+            evaluated[subject]=decision
+        for damaged in (edge_rows[:-1],edge_rows+(edge_rows[0],)):
+            with self.assertRaises(ValueError):project_full_ontology_edge_cells(objects,damaged,types,relations)
         # Actual native endpoint validation through the public mutation boundary.
         context=a.group_context_in_transaction(t).value
         from truss.groups import StoredObjectReference
@@ -81,4 +100,73 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         if directory:
             folder=Path(directory)
             for document in self.documents:(folder/(document.document_id+'.json')).write_bytes(document.content)
-            (folder/'population.json').write_text(json.dumps({'aliases':identities,'storedValues':stored,'edges':actual,'oracle':observed,'expectedOracle':{'alice':['RA'],'bob':['RB'],'outsider':[]},'nativeEndpointRefusals':refusals,'scope':'Original public seed and independent graph incidence oracle; not protected visibility admission.'},indent=2,default=lambda value:{'kind':value.kind,'text':value.text})+'\n')
+            inventory={}
+            for name,table,order in (('types','type_def','type_id'),('properties','prop_def','prop_id'),('keys','key_def','type_id,key_num'),('relationships','rel_def','rel_type_id'),('endpoints','rel_endpoint','rel_type_id,source_type,target_type')):
+                inventory[name]=[row[0] for row in self.admin.execute('SELECT to_jsonb(t) FROM truss.'+table+' t ORDER BY '+order).fetchall()]
+            (folder/'native-inventory.json').write_text(json.dumps({'scope':'Excluded native assessor capture, not authenticated compiler/host admission.','inventory':inventory,'typeSelection':types,'relationshipSelection':relations},indent=2)+'\n')
+            (folder/'population.json').write_text(json.dumps({'aliases':identities,'storedValues':stored,'edges':actual,'oracle':observed,'sharedPolicyDecisions':evaluated,'expectedOracle':{'alice':['RA'],'bob':['RB'],'outsider':[]},'nativeEndpointRefusals':refusals,'scope':'Original public seed, explicit graph endpoint binding, shared semantic policy and independent incidence oracle; no authenticated protected visibility admission.'},indent=2,default=lambda value:{'kind':value.kind,'text':value.text})+'\n')
+        # Continuous complete source/fact cut through the buffered release.
+        # Administrative actor/subject and routine closure remain premises.
+        from hashlib import sha256
+        from unittest.mock import patch
+        from truss import adopt_psycopg_host,Ok,Error
+        import psycopg
+        import security_ontology_guarded_read as guarded
+        request=json.dumps({'modules':[{'pin':{'documentId':d.document_id,'revision':d.document_revision,'umfVersion':'0.8.0','sha256':sha256(d.content).hexdigest()},'documentJson':d.content.decode()} for d in self.documents]}).encode()
+        self.admin.execute('BEGIN')
+        host=adopt_psycopg_host(self.admin);transaction=host.adopt_transaction().value
+        self.admin.execute("CREATE TEMP TABLE graph_guard_prior(value text);INSERT INTO graph_guard_prior VALUES('kept')")
+        observations=[];released=[];original_run=guarded.subprocess.run
+        def verify_exclusion(stage):
+            with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+                for table in guarded.TABLES:
+                    with self.assertRaises(psycopg.errors.LockNotAvailable):
+                        with writer.transaction():
+                            writer.execute('LOCK TABLE ONLY truss.'+table+' IN ROW EXCLUSIVE MODE NOWAIT')
+            observations.append(stage)
+        def evaluating(*args,**kwargs):verify_exclusion('evaluation');return original_run(*args,**kwargs)
+        def publish(raw):verify_exclusion('publication');released.append(json.loads(raw))
+        with patch.object(guarded.subprocess,'run',evaluating):
+            protected=guarded.publish_owned_ontology_resource_read(host,transaction,request,'Alice',publish)
+        self.assertIsInstance(protected,Ok,str(host._custody.last_attempt.error))
+        self.assertEqual(observations,['evaluation','publication'])
+        self.assertEqual([r['key'] for r in released[0]['rows']],[[{'string':'RA'}]])
+        self.assertEqual(released[0]['rows'][0]['output'][0]['disposition'],'withheld')
+        # Same-transaction fact substitution by trusted callback is caught by
+        # late recapture; rollback contains it and no bytes reach the receiver.
+        changed_counts=[]
+        def changed(*args,**kwargs):
+            answer=original_run(*args,**kwargs)
+            self.admin.execute('DELETE FROM truss.edge WHERE id=(SELECT max(id) FROM truss.edge)')
+            changed_counts.append(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone()[0])
+            return answer
+        with patch.object(guarded.subprocess,'run',changed):
+            refused=guarded.publish_owned_ontology_resource_read(host,transaction,request,'Alice',publish)
+        self.assertIsInstance(refused,Error);self.assertEqual(len(released),1);self.assertEqual(changed_counts,[11])
+        self.assertEqual(str(host._custody.last_attempt.error),'Original complete typed ontology edge projection required')
+        self.assertEqual(host._custody.last_attempt.phase,'contained');self.assertIsNone(host._custody.last_attempt.cleanup_error)
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(12,))
+        self.assertEqual(self.admin.execute('TABLE graph_guard_prior').fetchall(),[('kept',)])
+        host.detach();self.admin.rollback()
+        with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+            with writer.transaction():
+                for table in guarded.TABLES:writer.execute('LOCK TABLE ONLY truss.'+table+' IN ROW EXCLUSIVE MODE NOWAIT')
+        active_property=str(self.admin.execute("SELECT prop_id FROM truss.prop_def WHERE element='active'").fetchone()[0])
+        for isolation in ('REPEATABLE READ','SERIALIZABLE'):
+            self.admin.execute('BEGIN ISOLATION LEVEL '+isolation)
+            # Materialize a native snapshot before the revocation commits.
+            self.assertEqual(self.admin.execute('SELECT props->%s->>\'value\' FROM truss.object WHERE id=%s',(active_property,identities['aa'])).fetchone(),('true',))
+            host=adopt_psycopg_host(self.admin);adopted=host.adopt_transaction(isolation=isolation.lower().replace(' ','_'))
+            self.assertIsInstance(adopted,Ok,str(host._custody.last_attempt.error));transaction=adopted.value
+            with psycopg.connect(self.info.connection_uri,autocommit=True) as writer:
+                writer.execute("UPDATE truss.object SET props=pg_catalog.jsonb_set(props,ARRAY[%s,'value'],'false'::pg_catalog.jsonb) WHERE id=%s",(active_property,identities['aa']))
+                self.assertEqual(writer.execute('SELECT props->%s->>\'value\' FROM truss.object WHERE id=%s',(active_property,identities['aa'])).fetchone(),('false',))
+            self.assertEqual(self.admin.execute('SELECT props->%s->>\'value\' FROM truss.object WHERE id=%s',(active_property,identities['aa'])).fetchone(),('true',))
+            with patch.object(guarded.subprocess,'run') as evaluator:
+                refused=guarded.publish_owned_ontology_resource_read(host,transaction,request,'Alice',publish)
+                evaluator.assert_not_called()
+            self.assertIsInstance(refused,Error);self.assertEqual(len(released),1)
+            self.assertIn('fresh READ COMMITTED',str(host._custody.last_attempt.error))
+            host.detach();self.admin.rollback()
+            with psycopg.connect(self.info.connection_uri,autocommit=True) as writer:
+                writer.execute("UPDATE truss.object SET props=pg_catalog.jsonb_set(props,ARRAY[%s,'value'],'true'::pg_catalog.jsonb) WHERE id=%s",(active_property,identities['aa']))
