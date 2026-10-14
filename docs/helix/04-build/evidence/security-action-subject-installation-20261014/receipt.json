@@ -1,0 +1,30 @@
+{
+  "status": "native-enrollment-component-passed",
+  "postgresql": "18.6",
+  "tests": 1,
+  "seconds": 5.655,
+  "sourceHashes": {
+    "packages/python/src/truss/_action_subject_installation.py": "672bf75ecabfffb07c013285a5a96e4ebf06ae8d92fa7603ad2be9a333038eea",
+    "packages/python/tests/test_action_subject_installation_native.py": "320d870557ff87b525c17152836256160982267d5238002294c054cc120f6bc4",
+    "scripts/check-module-boundaries.py": "734a570c8319152c1826ee91b72a15816d55d1275e317a1b87aafca555ec8185"
+  },
+  "logs": {
+    "native-r1.log": "14aad49d4cd35a053d8e24b5aaa3269a4b4c859538693653cf6830163b44b1cc",
+    "native-r2.log": "ddbf8372be86a6bbbdeecb9363000b442be33b0c59e84a079dca31550db5e138",
+    "boundaries.log": "c6780ffe6e80e83b74363354f355e07af03234f3993ab5a6823244dd8e784e35"
+  },
+  "scope": [
+    "Deployment-owned private installation-FK Subject home with native LOGIN OIDs and explicit human/service kind, exact opaque identities and local SCRAM profile.",
+    "Original administrator commit and exact native readback.",
+    "Ordinary caller SELECT/INSERT/UPDATE/DELETE refuse; repeated bootstrap refuses rebinding without migration."
+  ],
+  "acceptanceLinks": [
+    "US-049-AC2 enrollment prerequisite only"
+  ],
+  "limits": [
+    "Not invocation authentication or external-person proof; separate SCRAM and host provenance are required.",
+    "No current Subject observation, action-role mapping, role lifecycle/OID-reuse protection, mapping cuts or complete helper/DDL closure.",
+    "No full permit/selection/seal or backend acceptance-case promotion.",
+    "r1 precedes installation-FK addition; r2 corresponds to retained source."
+  ]
+}
