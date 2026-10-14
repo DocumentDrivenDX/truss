@@ -59,7 +59,7 @@ def _registered_subject(cursor,identity,bindings):
     return subjects[0]
 
 
-def publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,original_request,registered_bindings,publisher):
+def publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,original_request,registered_bindings,publisher,*,compiler=None):
     """Selected original comparisons, not public query/credential admission.
 
     Caller and executor host custody are reserved through the final receiver.
@@ -71,7 +71,8 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
             or type(registered_bindings) is not tuple or not 1<=len(registered_bindings)<=256
             or any(type(b) is not tuple or len(b)!=2 or type(b[0]) is not int or not 1<=b[0]<=4294967295 or type(b[1]) is not str or not 1<=len(b[1].encode())<=4096 for b in registered_bindings)
             or tuple(sorted(registered_bindings))!=registered_bindings
-            or len({b[0] for b in registered_bindings})!=len(registered_bindings) or not callable(publisher)):
+            or len({b[0] for b in registered_bindings})!=len(registered_bindings) or not callable(publisher)
+            or (compiler is not None and not callable(compiler))):
         raise ValueError('Original bounded registered ontology read context required')
     request=bytes(original_request);bindings=tuple((oid,key) for oid,key in registered_bindings)
     source=Path(__file__);pin=sha256(source.read_bytes()).digest()
@@ -89,7 +90,7 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
             _verify_native_peer(private,identity,observed[0][0],challenge)
             private.execute('LOCK TABLE ONLY truss.catalog_subject_map,truss.catalog_runtime_installation IN SHARE MODE NOWAIT',prepare=False)
             subject=_registered_subject(private,identity,bindings)
-            raw=_prepare_ontology_resource_operation(request,subject)(private,private_observed)
+            raw=_prepare_ontology_resource_operation(request,subject,compiler=compiler)(private,private_observed)
             if _registered_subject(private,identity,bindings)!=subject:raise ValueError('Original native ontology Subject changed')
             _verify_native_peer(private,identity,observed[0][0],challenge)
             return raw

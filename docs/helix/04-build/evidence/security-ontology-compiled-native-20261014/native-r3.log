@@ -1,0 +1,28 @@
+test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission. ... FAIL
+
+======================================================================
+FAIL: test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_ontology_edges_native.py", line 248, in test_original_public_ontology_population_and_endpoint_oracle
+    self.assertEqual(cuts,['evaluation','publication']);self.assertEqual(delivered,[result.value])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['evaluation', 'evaluation', 'evaluation', 'publication'] != ['evaluation', 'publication']
+
+First differing element 1:
+'evaluation'
+'publication'
+
+First list contains 2 additional elements.
+First extra element 2:
+'evaluation'
+
+- ['evaluation', 'evaluation', 'evaluation', 'publication']
++ ['evaluation', 'publication']
+
+----------------------------------------------------------------------
+Ran 1 test in 20.335s
+
+FAILED (failures=1)

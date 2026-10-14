@@ -185,11 +185,24 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         self.admin.execute(sql.SQL('ALTER TABLE truss.catalog_subject_map OWNER TO {}').format(sql.Identifier(self.installation.owner_role)))
         for binding in bindings:self.admin.execute('INSERT INTO truss.catalog_subject_map VALUES(%s,%s)',binding)
         native_results=[]
+        compiled_results=[]
+        compiler_binary=os.environ.get('TRUSS_SECURITY_GRAPH_COMPILER_BINARY')
+        native_compiler=None
+        if compiler_binary:
+            from security_ontology_compiled_read import prepare_owned_graph_compiler
+            result_binary=os.environ.get('TRUSS_SECURITY_GRAPH_RESULT_BINARY')
+            if not result_binary:raise RuntimeError('Original Weft graph result checker required')
+            compile_graph=prepare_owned_graph_compiler(compiler_binary,result_binary)
+            def native_compiler(cursor,request,before,subject,semantic):
+                report=compile_graph(cursor,request,before,subject,semantic)
+                compiled_results.append({'subject':subject,**report});return report
         route_refusals=[]
         salary_property=str(self.admin.execute("SELECT prop_id FROM truss.prop_def WHERE element='salary'").fetchone()[0])
         self.admin.execute("CREATE SCHEMA ontology_hostile;CREATE FUNCTION ontology_hostile.hide_name(pg_catalog.name,pg_catalog.name) RETURNS pg_catalog.bool LANGUAGE sql IMMUTABLE AS 'SELECT false';CREATE OPERATOR ontology_hostile.<> (LEFTARG=pg_catalog.name,RIGHTARG=pg_catalog.name,PROCEDURE=ontology_hostile.hide_name);CREATE FUNCTION ontology_hostile.hide_kind(pg_catalog.\"char\",pg_catalog.\"char\") RETURNS pg_catalog.bool LANGUAGE sql IMMUTABLE AS 'SELECT false';CREATE OPERATOR ontology_hostile.= (LEFTARG=pg_catalog.\"char\",RIGHTARG=pg_catalog.\"char\",PROCEDURE=ontology_hostile.hide_kind)")
         original_peer=native_read._verify_native_peer
-        for name,expected in (('Alice',['RA']),('Bob',['RB']),('Outsider',[]),('Unregistered',None),('AliceRaw',None),('AliceWrongPeer',None),('AliceDefiner',None),('AliceView',None)):
+        cases=[('Alice',['RA']),('Bob',['RB']),('Outsider',[]),('Unregistered',None),('AliceRaw',None),('AliceWrongPeer',None),('AliceDefiner',None),('AliceView',None)]
+        if native_compiler:cases.extend([('AliceStaleSource',None),('AliceCorruptCells',None)])
+        for name,expected in cases:
             if name=='AliceRaw':self.admin.execute(sql.SQL('GRANT SELECT(props) ON truss.object TO {}').format(sql.Identifier(roles['Bob'])))
             if name=='AliceDefiner':
                 self.admin.execute("CREATE FUNCTION public.ontology_export() RETURNS pg_catalog.text LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$SELECT props::pg_catalog.text FROM truss.object WHERE id="+str(identities['ra'])+'$$')
@@ -208,7 +221,15 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                     for statement in (sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(roles['Bob'])),sql.SQL('GRANT {} TO {}').format(sql.Identifier(self.installation.owner_role),sql.Identifier(roles['Alice'])),'DELETE FROM truss.catalog_subject_map WHERE false','DELETE FROM truss.edge WHERE false'):
                         with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(statement)
                 cuts.append(stage)
-            def evaluating_native(*args,**kwargs):assert_native_cuts('evaluation');return original_run(*args,**kwargs)
+            def evaluating_native(*args,**kwargs):
+                executable=args[0][0]
+                stage='compilation' if compiler_binary and executable==compiler_binary else 'result_check' if compiler_binary and executable==result_binary else 'evaluation'
+                if name=='AliceCorruptCells' and stage=='result_check':
+                    checker_input=json.loads(kwargs['input']);batch=json.loads(checker_input['batchJson'])
+                    self.assertEqual(batch['rows'][0][1],{'outcomeId':'withheld','disposition':'withheld'})
+                    batch['rows'][0][1]['value']={'integerToken':'100'}
+                    checker_input['batchJson']=json.dumps(batch);kwargs['input']=json.dumps(checker_input).encode()
+                assert_native_cuts(stage);return original_run(*args,**kwargs)
             def publish_native(raw):assert_native_cuts('publication');delivered.append(raw)
             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                 connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000)
@@ -226,16 +247,19 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                         if name=='AliceWrongPeer':
                             def wrong_peer(cursor,identity,pid,challenge):return original_peer(cursor,identity,pid,challenge+'-wrong')
                             patches.enter_context(patch.object(native_read,'_verify_native_peer',wrong_peer))
-                        result=native_read.publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,request,bindings,publish_native)
+                        selected_request=request
+                        if name=='AliceStaleSource':
+                            stale=json.loads(request);stale['modules'][0]['pin']['revision']='r2';selected_request=json.dumps(stale).encode()
+                        result=native_read.publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,selected_request,bindings,publish_native,compiler=native_compiler)
                     self.assertEqual(connection.execute("SELECT pg_catalog.current_setting('application_name')").fetchone(),('caller-owned-context',))
                     if expected is None:
-                        self.assertIsInstance(result,Error);self.assertEqual(delivered,[]);self.assertEqual(cuts,[])
-                        reason={'Unregistered':'Original native caller has no registered ontology Subject','AliceRaw':'Unmediated registered ontology raw reads refused','AliceWrongPeer':'Original live native ontology caller/executor correspondence required','AliceDefiner':'Unmediated registered ontology definer/view routes refused','AliceView':'Unmediated registered ontology definer/view routes refused'}[name]
+                        self.assertIsInstance(result,Error);self.assertEqual(delivered,[]);self.assertEqual(cuts,['evaluation','compilation','result_check'] if name=='AliceCorruptCells' else [])
+                        reason={'Unregistered':'Original native caller has no registered ontology Subject','AliceRaw':'Unmediated registered ontology raw reads refused','AliceWrongPeer':'Original live native ontology caller/executor correspondence required','AliceDefiner':'Unmediated registered ontology definer/view routes refused','AliceView':'Unmediated registered ontology definer/view routes refused','AliceStaleSource':'Exact accepted compiler source correspondence required','AliceCorruptCells':'Original graph compiler result contract refused'}[name]
                         self.assertEqual(str(executor._custody.last_attempt.error),reason)
                         if name in ('AliceDefiner','AliceView'):route_refusals.append({'route':name,'salaryBeforeProfileCheck':{'kind':'integer','text':'100'},'ordinaryRawSelect':False,'refusedBeforeEvaluatorAndReceiver':True,'hostileOperatorControl':True})
                     else:
                         self.assertIsInstance(result,Ok,str(caller._custody.last_attempt.error)+' '+str(executor._custody.last_attempt.error))
-                        self.assertEqual(cuts,['evaluation','publication']);self.assertEqual(delivered,[result.value])
+                        self.assertEqual(cuts,['evaluation','compilation','result_check','publication'] if native_compiler else ['evaluation','publication']);self.assertEqual(delivered,[result.value])
                         decision=json.loads(delivered[0]);self.assertEqual([r['key'][0]['string'] for r in decision['rows']],expected)
                         for r in decision['rows']:self.assertEqual(r['output'][0]['disposition'],'withheld')
                         native_results.append({'caller':name,'resources':expected,'rawSelect':False,'roleAndMapCutsThroughRelease':True})
@@ -252,6 +276,11 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         if directory:
             folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
             (folder/'export-route-refusals.json').write_text(json.dumps({'observations':route_refusals,'scope':'Unsafe accessible definer/view installation is refused; routes are not repaired by this checker. DDL/routine lifetime remains an external premise.'},indent=2)+'\n')
+        directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_COMPILED_EVIDENCE')
+        if directory:
+            self.assertEqual([r['subject'] for r in compiled_results],['Alice','Bob','Outsider'])
+            folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
+            (folder/'compiled-native-results.json').write_text(json.dumps({'results':compiled_results,'scope':'Original compiler SQL/guards under authentic nativecaller role/map/source/fact cut and independent semantic bag comparison; no compiler/native admission credential.'},indent=2)+'\n')
         # A real revocation waits for the admitted reader's outer transaction;
         # commit acknowledgment precedes a fresh read which must see revocation.
         import threading,time

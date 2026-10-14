@@ -1,0 +1,58 @@
+{
+  "status": "passed",
+  "runtime": "truss-catalog-runtime/0.59-candidate",
+  "engine": "PostgreSQL18.6",
+  "driver": "psycopg3.3.6 binary/libpq18.6",
+  "tests": 1,
+  "seconds": 25.527,
+  "sourceDigests": {
+    "scripts/security_ontology_compiled_read.py": "bd37282daa78476b11abf5143769ae727d83b14f67651d24d356fd264aa0bfe5",
+    "scripts/security_ontology_native_subject_read.py": "33c28c4b0400b6df6d99b16cc087205ab26a026f7479b0f4c11a537b6198211b",
+    "scripts/security_ontology_guarded_read.py": "ff4040b2454978b738b651688a3a3d3021f486232787614704e1201a9a509d68",
+    "scripts/security_ontology_edge_projection.py": "f7f8bbd48c30652393a25fef6a1819cafce4713e9c11425e3df01877e8b8727c",
+    "packages/python/tests/test_security_ontology_edges_native.py": "781acd66ac3d6f84ab576fa17f3e108d553db00c36a1b60c0cc6f26eb83a854c",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "1f5f67f9e138c08a1b13f49c4a8080f51ce79e5d7f6593f7382fec0a0cf13373"
+  },
+  "ownerSecuritySourceCommit": "6de199f98f0f93b4025a3436519f7a18df20c160",
+  "ownerCorrectedMain": "61865a6fe7f390c1baeaf4fba265e837e18db34b",
+  "ownerSourceDigests": {
+    "crates/weft-postgresql/src/security_graph_binding.rs": "8f3b5da864fa32a1e674e30dc249082b9aaf637b9bc0b7fc477f544849bed685",
+    "crates/weft-postgresql/src/security_graph_query.rs": "8c4ffc5cb4d2a3b1d2e4a7a8eb5c6e84ba3071535477d2a1ad76147dddca237a",
+    "crates/weft-postgresql/src/security_predicate_spike.rs": "cc308858345fb7d7119e0ceaa1ed7cd01867f1a35bf6875cd22087da81ab2c98",
+    "crates/weft-postgresql/examples/security_graph_candidate.rs": "fb4646a87876658b8f687625880b492d5b07ac6e7c4034641e342af27913c374",
+    "crates/weft-postgresql/examples/security_graph_result.rs": "63ac7d05df6f0864c51e93195b6182161b066fc514cd612f5e305032a90200b1",
+    "Cargo.lock": "4b0ece5f687577e257a7f5ee3e2be1649db456d8ce469d742f07ead85ee2b9b9"
+  },
+  "packets": {
+    "native-r7.log": "e70c05a51223c6ab42d01a80078895e951b469b137a88ab9d951c5bf1a1a819d",
+    "native-r8.log": "125c71c283aee34c3d2ea447f349e322c7aefe135f450737decb6ec9331e7e56",
+    "compiled-native-results.json": "0020bd32617ef51346ccf84db0bea3ea6f685a0185970e235f12f25dc2d30864",
+    "owner-source.zip": "d576fd40b7fac9e993e4266d46da8c7e9b00de8ed3c4da9c7623e35e8434be01"
+  },
+  "criteria": [
+    "US-056-AC2",
+    "US-056-AC9",
+    "US-056-AC10"
+  ],
+  "checks": [
+    "Native caller AliceRA/withheld BobRB/withheld outsider[] from original owner two-column SQL",
+    "Original4complete endpoint+subject+trivalenttruth guards execute under16source/fact+role/map cuts",
+    "Subject native int8 locator derived from actualauthenticated registeredStaff capturedsource, never clientlocator",
+    "Complete native projected bag equals independent original semantic policy bag",
+    "Original owner typed result checker validates exact original source/producer stdout includingnewline and entire nativecellbatch",
+    "Exact checkerreport binds originalrequest/output/batch hashes with strictfalse boolean",
+    "Writer exclusion observed at semantic evaluation/compilation/resultcheck/receiver",
+    "Stale authored r2 pin with unchanged bytes refuses before evaluator/compiler; corruptedwithheldcell value refuses before receiver",
+    "Prior full ontology/source/role/export-route/peer/stale-snapshot/late-change/revocation controls replay",
+    "Exact Boolean policy slot and integer locator metadata; rebuilt original producer/checker from corrected Weft main61865a6"
+  ],
+  "subset": "Selected original direct Resource.resourceId+salary projection, boolean policy slot and authenticated int8 subject locator. Candidate declarations, not native admission.",
+  "premises": [
+    "Trusted original compiler/checker source and binaries",
+    "Host authentication/registration/private privileged executor",
+    "Native routine/catalog/activity/DDL/configuration/filesystem source custody"
+  ],
+  "acceptancePromotion": false,
+  "requiredCasesRetained": 132,
+  "ownerPinnedCommit": "61865a6fe7f390c1baeaf4fba265e837e18db34b"
+}

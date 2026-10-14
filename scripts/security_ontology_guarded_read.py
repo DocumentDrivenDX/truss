@@ -70,7 +70,7 @@ def _capture(cursor,request):
     return assessment,raw_objects,edges,cells
 
 
-def _prepare_ontology_resource_operation(original_request,subject):
+def _prepare_ontology_resource_operation(original_request,subject,*,compiler=None):
     """Prepare the fixed source/fact/evaluation operation, without disclosure.
 
     No caller-supplied SQL or evaluator; exact request bytes are copied before
@@ -103,6 +103,12 @@ def _prepare_ontology_resource_operation(original_request,subject):
         evaluated=subprocess.run([os.environ.get('TRUSS_BUN_EXECUTABLE','bun'),str(prepared.tool),'--named-source'],cwd=ROOT,input=payload,capture_output=True,text=True,timeout=10)
         if evaluated.returncode or len(evaluated.stdout.encode())>65536:raise ValueError('Original ontology policy evaluation refused')
         decision=_read_owned_resource_receipt(evaluated.stdout)
+        if compiler is not None:
+            compiled_receipt=compiler(cursor,request,before,subject,decision)
+            if type(compiled_receipt) is not dict:
+                import inspect
+                if inspect.iscoroutine(compiled_receipt) or inspect.isgenerator(compiled_receipt):compiled_receipt.close()
+                raise ValueError('Original synchronous graph compiler correspondence receipt required')
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
         if _capture(cursor,request)!=before:raise ValueError('Original ontology source/facts changed before publication')
         if any(sha256(p.read_bytes()).digest()!=digest for p,digest in pins):raise ValueError('Original ontology evaluator sources changed')
