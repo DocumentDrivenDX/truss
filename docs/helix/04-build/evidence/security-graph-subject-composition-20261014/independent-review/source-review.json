@@ -1,0 +1,12 @@
+{
+  "status": "source review clean after two corrected findings; native composition qualification pending",
+  "head": "4e28d6c66a795fcc77f96f8976cccde787a555da",
+  "scope": "Registered own-session Subject issuer + paired original source/epoch/compiler/read composition. Read-only review; no reviewer native lifecycle.",
+  "fixedFindings": ["Host native PID is TEXT; both verifier calls now convert the validated original PID to bounded integer comparison.","Registered source profile now derives from the captured original graph source; missing epoch and any profile-byte difference refuse before host entry."],
+  "independentControls": 40,
+  "sourceSha256": {"packages/python/src/truss/_security_graph_subject_installation.py":"d16139a0ca6eeb80df6bc939c5e787ef77006847d2bfe609764da7cc4b81858f","packages/python/src/truss/_security_bootstrap/graph-subject.sql":"0520931a9060692a99282b18d98b6f9becff7c00e735562a2ed7d1b69e83c0b8","scripts/security_ontology_native_subject_read.py":"defeef7eec70b84f7a1e8ab99ed5aec869b98ac6d622afff7fd81247b6a6bc93","packages/python/tests/test_security_ontology_edges_native.py":"c7395149115214fe9e0fdd0651bcecf824ce41c716590df38bb891f30ea700ec"},
+  "independentSha256": {"check.py":"cbe95f45d1ebcfb52c2a1f9381bd20045ba0f317dc9045ef3f26331dbe128cbe","results.json":"324b2ac815c64e2a08687d58d9cca06b76f8c1c4316f427390680ae1a56db14b","before.py":"aa37a572b83d8854d7a962d11ae87f84a7db4bee814c79e7b84f8028b77e6f2b","before.json":"f87c47e8e89949110298965df7e3c3621c27193ee082c559a17bc618cbf071bd","registration-before.py":"b1a41ab157a53e30fcb125b885ad3e59fdd17af0203071503f91ba3b1d67869b","composition-before.py":"274d30b41611fec5a101f7bbe2c55d0f04dd1fd0c874d09c3c36197233507f38"},
+  "native": "Parent r1 and r2 logs fail before new composition at the earlier legacy line 294 operation deadline; no native success asserted by this receipt.",
+  "scopeLimits": "Original source/compiler/installer and host authentication, routine/DDL/configuration custody remain premises. Endpoint comparisons are not lifetime or ABA proof. No full native admission or 132-case promotion.",
+  "withdrawnNote": "A questioned missing setup COMMIT was withdrawn after verifying inherited admin autocommit=True; no defect or fix claimed."
+}

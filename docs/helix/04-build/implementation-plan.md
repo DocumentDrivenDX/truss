@@ -8014,3 +8014,12 @@ duplicate-create workflows pass227.451s. Catalog capability0.8 retains0.7;
 archived native61 manifest matches published25. Release workflows are prepared;
 publication remains pending. Existing/primary key changes and newly rebound key
 components remain later feature tranches; the full goal remains active.
+## Source-validated graph Subject registration — 2026-10-14
+
+[Graph Subject evidence](evidence/security-graph-subject-registration-20261014/README.md) constructs a fresh private map/profile from actual accepted graph/type/key/scalar/binding and ordinary native principals. A fixed no-target own-SESSION_USER issuer returns only Subject identity metadata; exact source/body/owner/ACL/ABI and selected owner read/SHARE privileges are verified. Native missing-Staff/reuse/PUBLIC/owner-privilege refusals and rollback preservation pass alongside real3caller tuples/raw-read denial. Finalr4 full native1/48.778s on runtime0.61 and1065 boundaries pass. This standalone phase is not yet composed into the protected graph read's route/profile gates; that integration and complete authority/role/DDL/cache/cursor/transport/write/public compiler admission remain required. All132 original cases remain unchanged, with no acceptance promotion.
+
+## Registered Subject protected-read composition — 2026-10-14
+
+[Composition evidence](evidence/security-graph-subject-composition-20261014/README.md) records exact registered-source/epoch binding, real own-session Subject resolution, verified-helper-only route exception and early/late profile/caller checks. Astra Ultra40 controls and1065 import boundaries pass after two corrected findings. Native r1/r2 fail in the earlier legacy deadline path before reaching this scenario; native composition qualification remains pending. Direct main integration preserves this explicit candidate status. Public admission, complete lifecycle closure and all132 original acceptance cases remain outstanding and unchanged.
+
+The aligned-budget native composition replay r3 passes1/79.661s, with actual three-principal protected reads and held Subject profile/map cuts. See the same composition evidence folder for terminal log/result/source receipt. Complete public admission/lifecycle and original132 acceptance remain open.

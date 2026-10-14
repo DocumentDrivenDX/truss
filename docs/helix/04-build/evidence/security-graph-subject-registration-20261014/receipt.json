@@ -1,0 +1,27 @@
+{
+  "version": "truss.graph-subject-registration-evidence/0.1-candidate",
+  "acceptanceReferences": [
+    "US-056-AC2",
+    "US-056-AC6",
+    "US-056-AC9",
+    "US-056-AC10",
+    "CONTRACT-062",
+    "CONTRACT-063",
+    "STP-056",
+    "STP-057"
+  ],
+  "runtime": "truss-catalog-runtime/0.61-candidate",
+  "native": "PostgreSQL18.6",
+  "validation": {
+    "native": "finalr4:1 passed,48.778seconds",
+    "boundaries": "1065 imports passed",
+    "diffCheck": "passed"
+  },
+  "sources": {
+    "packages/python/src/truss/_security_graph_subject_installation.py": "a3338d4d5ac3deb08e1f5343733e517b85351d6b060c2392a960770d985884d6",
+    "packages/python/src/truss/_security_bootstrap/graph-subject.sql": "0520931a9060692a99282b18d98b6f9becff7c00e735562a2ed7d1b69e83c0b8",
+    "packages/python/tests/test_security_ontology_edges_native.py": "1deee70717268635d9573387dfc4eed961458b06a205b3ab6798fbfbb72d2303",
+    "scripts/check-module-boundaries.py": "65edcf5ad847a48543c4e0aa7343b1ccf77374286709ff93ed7a0a662c7aabdd"
+  },
+  "scope": "Fresh source-validated selected single-string graph Staff registration and own-session metadata issuer; standalone after existing protected graph/epoch tests. Original source/compiler/admin/DDL/routine custody remains required. Protected query composition, complete role/auth/route lifetime and public native compiler admission remain pending; all132 original cases retained, none promoted."
+}

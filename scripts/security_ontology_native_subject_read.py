@@ -38,7 +38,7 @@ def _caller(cursor,observed):
     return rows[0][:3]
 
 
-def _registered_subject(cursor,identity,bindings,private_reader_oid=None):
+def _registered_subject(cursor,identity,bindings,private_reader_oid=None,verified_issuer_oid=None):
     # The private executor already holds both shared role catalog locks and the
     # Subject map cut. Original registration comparisons are trusted custody.
     installation=_text_rows(cursor,"SELECT owner_oid::pg_catalog.text,(SELECT oid FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database())::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton",limit=1)
@@ -53,14 +53,14 @@ def _registered_subject(cursor,identity,bindings,private_reader_oid=None):
     if roles!=[(str(oid),'true','false','false','false','false','false','false') for oid,key in bindings]:raise ValueError('Original ordinary registered ontology roles required')
     raw_access=_text_rows(cursor,"SELECT r.oid::pg_catalog.text,pg_catalog.has_any_column_privilege(r.oid,'truss.object','SELECT')::pg_catalog.text,pg_catalog.has_any_column_privilege(r.oid,'truss.edge','SELECT')::pg_catalog.text,pg_catalog.has_any_column_privilege(r.oid,'truss.catalog_subject_map','SELECT')::pg_catalog.text FROM pg_catalog.pg_roles r WHERE r.oid OPERATOR(pg_catalog.=) ANY(%s::pg_catalog.oid[]) ORDER BY r.oid",([oid for oid,key in bindings],),256)
     if raw_access!=[(str(oid),'false','false','false') for oid,key in bindings]:raise ValueError('Unmediated registered ontology raw reads refused')
-    routes=_text_rows(cursor,"SELECT r.oid::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace WHERE p.prosecdef AND n.nspname OPERATOR(pg_catalog.<>) 'pg_catalog' AND n.nspname OPERATOR(pg_catalog.<>) 'information_schema' AND pg_catalog.has_schema_privilege(r.oid,n.oid,'USAGE') AND pg_catalog.has_function_privilege(r.oid,p.oid,'EXECUTE'))::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) c.relnamespace WHERE (c.relkind OPERATOR(pg_catalog.=) 'v' OR c.relkind OPERATOR(pg_catalog.=) 'm') AND n.nspname OPERATOR(pg_catalog.<>) 'pg_catalog' AND n.nspname OPERATOR(pg_catalog.<>) 'information_schema' AND pg_catalog.has_schema_privilege(r.oid,n.oid,'USAGE') AND pg_catalog.has_any_column_privilege(r.oid,c.oid,'SELECT'))::pg_catalog.text FROM pg_catalog.pg_roles r WHERE r.oid OPERATOR(pg_catalog.=) ANY(%s::pg_catalog.oid[]) ORDER BY r.oid",([oid for oid,key in bindings],),256)
+    routes=_text_rows(cursor,"SELECT r.oid::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace WHERE p.prosecdef AND p.oid OPERATOR(pg_catalog.<>) %s::pg_catalog.oid AND n.nspname OPERATOR(pg_catalog.<>) 'pg_catalog' AND n.nspname OPERATOR(pg_catalog.<>) 'information_schema' AND pg_catalog.has_schema_privilege(r.oid,n.oid,'USAGE') AND pg_catalog.has_function_privilege(r.oid,p.oid,'EXECUTE'))::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) c.relnamespace WHERE (c.relkind OPERATOR(pg_catalog.=) 'v' OR c.relkind OPERATOR(pg_catalog.=) 'm') AND n.nspname OPERATOR(pg_catalog.<>) 'pg_catalog' AND n.nspname OPERATOR(pg_catalog.<>) 'information_schema' AND pg_catalog.has_schema_privilege(r.oid,n.oid,'USAGE') AND pg_catalog.has_any_column_privilege(r.oid,c.oid,'SELECT'))::pg_catalog.text FROM pg_catalog.pg_roles r WHERE r.oid OPERATOR(pg_catalog.=) ANY(%s::pg_catalog.oid[]) ORDER BY r.oid",(verified_issuer_oid or 0,[oid for oid,key in bindings]),256)
     if routes!=[(str(oid),'false','false') for oid,key in bindings]:raise ValueError('Unmediated registered ontology definer/view routes refused')
     subjects=[key for oid,key in bindings if str(oid)==identity[1]]
     if len(subjects)!=1:raise ValueError('Original native caller has no registered ontology Subject')
     return subjects[0]
 
 
-def publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,original_request,registered_bindings,publisher,*,compiler=None,cut_issuer=None,source_epoch=None):
+def publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,original_request,registered_bindings,publisher,*,compiler=None,cut_issuer=None,source_epoch=None,subject_registration=None):
     """Selected original comparisons, not public query/credential admission.
 
     Caller and executor host custody are reserved through the final receiver.
@@ -82,6 +82,11 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
         from truss._security_graph_epoch_read import snapshot_graph_epoch_read_context
         source_epoch=snapshot_graph_epoch_read_context(source_epoch)
         if source_epoch.source.original_request!=original_request or compiler is None or cut_issuer is None or source_epoch.issuer.caller_oid!=cut_issuer[1]:raise ValueError('Original graph epoch and caller cut correspondence required')
+    if subject_registration is not None:
+        from truss._security_graph_subject_installation import snapshot_graph_subjects,derive_graph_subject_profile
+        subject_registration=snapshot_graph_subjects(subject_registration)
+        if subject_registration.bindings!=registered_bindings:raise ValueError('Original registered graph Subject bindings required')
+        if source_epoch is None or subject_registration.profile_bytes!=derive_graph_subject_profile(source_epoch.source):raise ValueError('Original registered Subject and graph source correspondence required')
     request=bytes(original_request);bindings=tuple((oid,key) for oid,key in registered_bindings)
     source=Path(__file__);source_bytes=source.read_bytes();pin=sha256(source_bytes).digest()
     if source_epoch is not None and source_epoch.subject_source!=source_bytes:raise ValueError('Original current graph Subject source correspondence required')
@@ -115,12 +120,20 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
             _verify_native_peer(private,identity,observed[0][0],challenge)
             if cut_issuer is None:private.execute('LOCK TABLE ONLY truss.catalog_subject_map,truss.catalog_runtime_installation IN SHARE MODE NOWAIT',prepare=False)
             private_reader=None if cut_issuer is None else cut_issuer[1]
-            subject=_registered_subject(private,identity,bindings,private_reader)
+            verified_issuer=None
+            if subject_registration is not None:
+                from truss._security_graph_subject_installation import read_own_graph_subject_with_cursor,verify_registered_graph_subjects_with_cursor
+                own_subject=read_own_graph_subject_with_cursor(cursor,subject_registration,identity)
+                verified_issuer=verify_registered_graph_subjects_with_cursor(private,subject_registration,caller_pid=int(observed[0][0]))
+            subject=_registered_subject(private,identity,bindings,private_reader,verified_issuer)
+            if subject_registration is not None and own_subject!=subject:raise ValueError('Original issuer and native mapping Subject correspondence required')
             raw=_prepare_ontology_resource_operation(request,subject,compiler=selected_compiler,existing_locks=cut_issuer is not None)(private,private_observed)
             if source_epoch is not None:
                 from truss._security_graph_epoch_read import verify_held_graph_epoch_read
                 verify_held_graph_epoch_read(private,source_epoch)
-            if _registered_subject(private,identity,bindings,private_reader)!=subject:raise ValueError('Original native ontology Subject changed')
+            if subject_registration is not None:
+                if verify_registered_graph_subjects_with_cursor(private,subject_registration,caller_pid=int(observed[0][0]))!=verified_issuer or read_own_graph_subject_with_cursor(cursor,subject_registration,identity)!=subject:raise ValueError('Original registered graph Subject changed')
+            if _registered_subject(private,identity,bindings,private_reader,verified_issuer)!=subject:raise ValueError('Original native ontology Subject changed')
             _verify_native_peer(private,identity,observed[0][0],challenge)
             return raw
         result=executor._run_operation(executor_transaction,evaluate)

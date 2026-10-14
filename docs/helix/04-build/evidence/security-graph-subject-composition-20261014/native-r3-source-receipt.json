@@ -1,0 +1,9 @@
+{
+  "nativeResult": "1 test passes in79.661s",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_graph_subject_installation.py": "d16139a0ca6eeb80df6bc939c5e787ef77006847d2bfe609764da7cc4b81858f",
+    "scripts/security_ontology_native_subject_read.py": "defeef7eec70b84f7a1e8ab99ed5aec869b98ac6d622afff7fd81247b6a6bc93",
+    "packages/python/tests/test_security_ontology_edges_native.py": "71a06917d8f3aabcaa49c5376edacdbddfb1bbf3087e598cca32bf76ab9b1751"
+  },
+  "scope": "Registered Subject protected-read composition; original132 cases unchanged; public admission pending"
+}

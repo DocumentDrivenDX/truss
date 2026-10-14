@@ -1,0 +1,9 @@
+{
+  "scope": "Offline actual pre-fix function controls with synthetic host-entry sentinel and selected comparison context; not native authority or successful disclosure",
+  "nativeTextPidRefuses": "Original graph Subject caller backend required",
+  "differentRegistrationPolicyHashReachesHost": true,
+  "sourceSha256": {
+    "registration-before.py": "b1a41ab157a53e30fcb125b885ad3e59fdd17af0203071503f91ba3b1d67869b",
+    "composition-before.py": "274d30b41611fec5a101f7bbe2c55d0f04dd1fd0c874d09c3c36197233507f38"
+  }
+}

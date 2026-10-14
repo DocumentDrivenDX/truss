@@ -1,0 +1,171 @@
+{
+  "scope": "Offline actual preflight/native-row comparisons with trusted comparison context and host sentinel. Retained original inputs plus reauthored current-script hash are comparison fixtures, not native issued authority. No new native execution.",
+  "passed": 40,
+  "failed": 0,
+  "sourceSha256": {
+    "packages/python/src/truss/_security_graph_subject_installation.py": "d16139a0ca6eeb80df6bc939c5e787ef77006847d2bfe609764da7cc4b81858f",
+    "scripts/security_ontology_native_subject_read.py": "defeef7eec70b84f7a1e8ab99ed5aec869b98ac6d622afff7fd81247b6a6bc93"
+  },
+  "controls": [
+    {
+      "name": "derived profile equals exact retained registration bytes",
+      "passed": true
+    },
+    {
+      "name": "matching source profile reaches host boundary",
+      "passed": true
+    },
+    {
+      "name": "registered composition without source epoch refuses before host",
+      "passed": true
+    },
+    {
+      "name": "different registered binding refuses before host",
+      "passed": true
+    },
+    {
+      "name": "different registration physicalRequestSha256 refuses before host",
+      "passed": true
+    },
+    {
+      "name": "different registration acceptedCatalogSha256 refuses before host",
+      "passed": true
+    },
+    {
+      "name": "different registration graphBindingSha256 refuses before host",
+      "passed": true
+    },
+    {
+      "name": "different registration ontologySha256 refuses before host",
+      "passed": true
+    },
+    {
+      "name": "different registration policySha256 refuses before host",
+      "passed": true
+    },
+    {
+      "name": "different registration nativeTypeId refuses before host",
+      "passed": true
+    },
+    {
+      "name": "different registration nativePropertyId refuses before host",
+      "passed": true
+    },
+    {
+      "name": "different registration version refuses before host",
+      "passed": true
+    },
+    {
+      "name": "different registration physicalPin refuses before host",
+      "passed": true
+    },
+    {
+      "name": "legacy unregistered diagnostic path preserved",
+      "passed": true
+    },
+    {
+      "name": "exact reserved caller profile cut and installation accepts",
+      "passed": true
+    },
+    {
+      "name": "wrong owner refuses",
+      "passed": true
+    },
+    {
+      "name": "view home refuses",
+      "passed": true
+    },
+    {
+      "name": "temporary home refuses",
+      "passed": true
+    },
+    {
+      "name": "RLS home refuses",
+      "passed": true
+    },
+    {
+      "name": "FORCE RLS home refuses",
+      "passed": true
+    },
+    {
+      "name": "inheritance refuses",
+      "passed": true
+    },
+    {
+      "name": "missing caller ShareLock refuses",
+      "passed": true
+    },
+    {
+      "name": "different stored profile refuses",
+      "passed": true
+    },
+    {
+      "name": "different native installation refuses",
+      "passed": true
+    },
+    {
+      "name": "bool verifier PID refuses before query",
+      "passed": true
+    },
+    {
+      "name": "text verifier PID refuses before query",
+      "passed": true
+    },
+    {
+      "name": "zero verifier PID refuses before query",
+      "passed": true
+    },
+    {
+      "name": "overflow verifier PID refuses before query",
+      "passed": true
+    },
+    {
+      "name": "own-session exact native tuple accepts",
+      "passed": true
+    },
+    {
+      "name": "different own-session key refuses",
+      "passed": true
+    },
+    {
+      "name": "different own-session installation refuses",
+      "passed": true
+    },
+    {
+      "name": "different own-session database refuses",
+      "passed": true
+    },
+    {
+      "name": "different own-session role refuses",
+      "passed": true
+    },
+    {
+      "name": "different own-session profile refuses",
+      "passed": true
+    },
+    {
+      "name": "duplicate own-session tuple refuses",
+      "passed": true
+    },
+    {
+      "name": "missing own-session tuple refuses",
+      "passed": true
+    },
+    {
+      "name": "foreign own-session descriptor refuses before fetch",
+      "passed": true
+    },
+    {
+      "name": "sole verified issuer OID exclusion selected",
+      "passed": true
+    },
+    {
+      "name": "legacy route scanner has no native OID exclusion",
+      "passed": true
+    },
+    {
+      "name": "other reachable export route refuses",
+      "passed": true
+    }
+  ]
+}

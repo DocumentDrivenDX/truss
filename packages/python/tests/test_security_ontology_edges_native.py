@@ -241,7 +241,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
             parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=role
             executor_connection=self.admin if private_parameters is None else psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000')
             if private_parameters:self.addCleanup(executor_connection.close)
-            executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection);executor_transaction=executor.adopt_transaction().value
+            executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_transaction=executor.adopt_transaction().value
             if private_parameters:
                 self.assertEqual(executor_connection.execute("SELECT rolsuper,rolbypassrls FROM pg_catalog.pg_roles WHERE rolname=CURRENT_USER").fetchone(),(False,False))
                 self.assertEqual(executor_connection.execute("SELECT pg_catalog.has_table_privilege('truss.schema_head','UPDATE')").fetchone(),(False,))
@@ -338,7 +338,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         drain_rows=[];drain_decisions=[]
         parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice']
         executor_connection=self.admin if private_parameters is None else psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000')
-        executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection);executor_transaction=executor.adopt_transaction().value
+        executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_transaction=executor.adopt_transaction().value
         def receive_before_revocation(raw):
             drain_decisions.append(json.loads(raw));worker.start()
             self.assertTrue(started.wait(2));self.assertEqual(writer_errors,[])
@@ -379,7 +379,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         self.assertEqual(self.admin.execute('SELECT props->%s->>\'value\' FROM truss.object WHERE id=%s',(active_property,identities['aa'])).fetchone(),('false',))
         drain_rows.append({'stage':'after_outer_settlement','acknowledged':True})
         executor_connection=self.admin if private_parameters is None else psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000')
-        executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection);executor_transaction=executor.adopt_transaction().value
+        executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_transaction=executor.adopt_transaction().value
         try:
             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                 connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_transaction=caller.adopt_transaction().value
@@ -493,11 +493,11 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                     if label=='epoch-rls':self.admin.execute('ALTER TABLE truss.source_epoch_current ENABLE ROW LEVEL SECURITY')
                     if label=='issuer-public':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_graph_epoch_read_cut() TO PUBLIC')
                     with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
-                        private.execute('BEGIN');executor=adopt_psycopg_host(private);executor_tx=executor.adopt_transaction().value
+                        private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
                         self.assertEqual(private.execute("SELECT pg_catalog.has_table_privilege('truss.source_epoch_current','UPDATE')").fetchone(),(False,))
                         parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Bob']
                         with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
-                            connection.execute('BEGIN');caller=adopt_psycopg_host(connection);caller_tx=caller.adopt_transaction().value;released=[]
+                            connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction().value;released=[]
                             def receiver(raw):
                                 with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
                                     for table in ('source_epoch_current','source_epoch_registry','installation_archive','policy_generation_guard'):
@@ -527,3 +527,94 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                 if directory:
                     folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
                     (folder/'ordinary-epoch-read.json').write_text(json.dumps({'observations':observations,'epoch':comparison.epoch,'advancedEpoch':advanced_epoch,'securityReady':False,'scope':'Selected actual ordinary epoch/archive/guard reads, trusted compiler/installer/routine/DDL/authentication custody; registered Subject issuer and public compiler admission pending.'},indent=2)+'\n')
+
+            if os.environ.get('TRUSS_SECURITY_ONTOLOGY_REGISTERED_SUBJECT'):
+                from truss._security_graph_subject_installation import bootstrap_graph_subjects_in_transaction,verify_graph_subject_issuer_with_cursor
+                self.admin.execute("BEGIN;CREATE TEMP TABLE graph_subject_prior(value text);INSERT INTO graph_subject_prior VALUES('kept');SAVEPOINT before_graph_subject_registration;DROP TABLE truss.catalog_subject_map")
+                registration_host=adopt_psycopg_host(self.admin,operation_timeout_ms=30000);registration_tx=registration_host.adopt_transaction().value
+                self.addCleanup(registration_host.detach)
+                role_bindings=tuple((roles[name],name) for name in ('Alice','Bob','Outsider'))
+                missing=bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=((roles['Alice'],'missing-staff'),))
+                self.assertIsInstance(missing,Error);self.assertEqual(str(registration_host._custody.last_attempt.error),'Unique original stored graph Staff identity required')
+                self.assertEqual(self.admin.execute("SELECT count(*) FROM pg_catalog.pg_class WHERE oid=pg_catalog.to_regclass('truss.catalog_subject_map')").fetchone(),(0,))
+                self.admin.execute(sql.SQL('REVOKE SELECT ON truss.object FROM {}').format(sql.Identifier(self.installation.owner_role)))
+                refused=bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=role_bindings)
+                self.assertIsInstance(refused,Error);self.assertEqual(str(registration_host._custody.last_attempt.error),'Original graph Subject owner read privileges required')
+                self.admin.execute(sql.SQL('GRANT SELECT ON truss.object TO {}').format(sql.Identifier(self.installation.owner_role)))
+                self.admin.execute(sql.SQL('REVOKE MAINTAIN,UPDATE,DELETE,TRUNCATE ON truss.object FROM {}').format(sql.Identifier(self.installation.owner_role)))
+                refused=bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=role_bindings)
+                self.assertIsInstance(refused,Error);self.assertEqual(str(registration_host._custody.last_attempt.error),'Original graph Subject owner SHARE privileges required')
+                self.admin.execute(sql.SQL('GRANT MAINTAIN,UPDATE,DELETE,TRUNCATE ON truss.object TO {}').format(sql.Identifier(self.installation.owner_role)))
+                self.admin.execute('SAVEPOINT graph_subject_installation')
+                rolled=bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=role_bindings)
+                self.assertIsInstance(rolled,Ok,str(registration_host._custody.last_attempt.error))
+                self.admin.execute('ROLLBACK TO graph_subject_installation')
+                self.assertEqual(self.admin.execute('TABLE graph_subject_prior').fetchall(),[('kept',)])
+                self.assertEqual(self.admin.execute("SELECT pg_catalog.to_regclass('truss.catalog_subject_map')::text,pg_catalog.to_regclass('truss.catalog_graph_subject_profile')::text,pg_catalog.to_regprocedure('truss.graph_subject_current()')::text").fetchone(),(None,None,None))
+                registered=bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=role_bindings)
+                self.assertIsInstance(registered,Ok,str(registration_host._custody.last_attempt.error))
+                subjects=registered.value
+                self.assertIsInstance(bootstrap_graph_subjects_in_transaction(registration_host,registration_tx,source=graph,bindings=role_bindings),Error)
+                with self.admin.cursor() as cursor:verify_graph_subject_issuer_with_cursor(cursor,subjects)
+                # Commit only this disposable fixture's explicit fresh registration.
+                registration_host.detach();self.admin.commit()
+                own_subjects=[]
+                for name in ('Alice','Bob','Outsider'):
+                    parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles[name]
+                    with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
+                        connection.execute('BEGIN')
+                        self.assertEqual(connection.execute("SELECT pg_catalog.has_table_privilege('truss.catalog_subject_map','SELECT'),pg_catalog.has_table_privilege('truss.object','SELECT')").fetchone(),(False,False))
+                        rows=connection.execute('SELECT * FROM truss.graph_subject_current()').fetchall()
+                        oid=self.admin.execute('SELECT oid::text FROM pg_catalog.pg_roles WHERE rolname=%s',(roles[name],)).fetchone()[0]
+                        db=self.admin.execute('SELECT oid::text FROM pg_catalog.pg_database WHERE datname=current_database()').fetchone()[0]
+                        self.assertEqual(rows,[(name,self.installation.installation_id,db,oid,sha256(subjects.profile_bytes).hexdigest())])
+                        self.assertEqual(connection.execute('SELECT SESSION_USER::text,CURRENT_USER::text').fetchone(),(roles[name],roles[name]))
+                        connection.rollback();own_subjects.append({'principal':name,'subjectKey':name,'ownNativeSession':True,'rawReads':False})
+                parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Unregistered']
+                with psycopg.connect(**parameters,autocommit=True) as connection:
+                    with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute('SELECT * FROM truss.graph_subject_current()')
+                self.admin.execute('GRANT EXECUTE ON FUNCTION truss.graph_subject_current() TO PUBLIC')
+                with self.admin.cursor() as cursor:
+                    with self.assertRaisesRegex(ValueError,'Exact registered graph Subject issuer ACL required'):verify_graph_subject_issuer_with_cursor(cursor,subjects)
+                self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.graph_subject_current() FROM PUBLIC')
+                directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_REGISTERED_SUBJECT_EVIDENCE')
+                if directory:
+                    folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
+                    (folder/'subject-profile.json').write_bytes(subjects.profile_bytes)
+                    (folder/'native-subject-registration.json').write_text(json.dumps({'observations':own_subjects,'missingStaffNoEffects':True,'revokedOwnerSelectRefused':True,'revokedOwnerShareRefused':True,'rollbackPreservesPriorWork':True,'reuseRefused':True,'unregisteredExecuteRefused':True,'publicAclDriftRefused':True,'securityReady':False,'scope':'Source-validated fresh graph Subject registration and own-session metadata issuer in disposable full ontology fixture. Protected query composition/registered native compiler admission remain pending.'},indent=2)+'\n')
+
+                if os.environ.get('TRUSS_SECURITY_ONTOLOGY_SUBJECT_COMPOSITION'):
+                    self.admin.execute(sql.SQL('GRANT SELECT ON truss.catalog_subject_map,truss.catalog_graph_subject_profile TO {}').format(sql.Identifier(private_executor)))
+                    self.admin.execute('CREATE TRIGGER fact_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.catalog_subject_map FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_authorization_fact_write();ALTER TABLE truss.catalog_subject_map ENABLE ALWAYS TRIGGER fact_write_fence')
+                    new_facts=[]
+                    for name in ('object','edge','catalog_subject_map'):
+                        oid,owner=self.admin.execute('SELECT oid,relowner FROM pg_catalog.pg_class WHERE oid=%s::pg_catalog.regclass',('truss.'+name,)).fetchone()
+                        cols=self.admin.execute('SELECT attname,attnum,atttypid,atttypmod,attnotnull,attcollation,attgenerated,attidentity FROM pg_catalog.pg_attribute WHERE attrelid=%s AND attnum>0 AND NOT attisdropped ORDER BY attnum',(oid,)).fetchall()
+                        new_facts.append(_FactRelationComparison('truss',name,oid,owner,source.split('AS $$',1)[1].split('$$;',1)[0],tuple(_FactColumnComparison(*c) for c in cols)))
+                    from truss._security_catalog_source_binding import derive_catalog_source_epoch_profile
+                    from truss._psycopg_epoch_cut import _EpochComparison
+                    new_profile=derive_catalog_source_epoch_profile(graph,tuple(new_facts),infrastructure.value.barrier,subject_source=inputs['subject_source'])
+                    new_epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,%s,%s,%s,%s)',(comparison.installation,advanced_epoch,comparison.incarnation,new_profile,comparison.evidence)).fetchone()[0]
+                    composed_context=replace(context,comparison=_EpochComparison(comparison.installation,new_epoch,comparison.incarnation,new_profile,comparison.evidence))
+                    composed=[]
+                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[])):
+                        with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
+                            private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
+                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles[name]
+                            with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
+                                connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction().value;released=[]
+                                def receiver(raw):
+                                    with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+                                        for table in ('catalog_subject_map','catalog_graph_subject_profile'):
+                                            with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
+                                    released.append(raw)
+                                result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,subjects.bindings,receiver,compiler=native_compiler,cut_issuer=cut_issuer,source_epoch=composed_context,subject_registration=subjects)
+                                self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual(released,[result.value])
+                                self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
+                                caller.detach();connection.rollback()
+                            executor.detach();private.rollback()
+                        composed.append({'principal':name,'resources':expected,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
+                    directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_SUBJECT_COMPOSITION_EVIDENCE')
+                    if directory:
+                        folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
+                        (folder/'registered-subject-protected-read.json').write_text(json.dumps({'observations':composed,'epoch':new_epoch,'securityReady':False,'scope':'Actual own-session registered Subject + peer/role/source/fact/current epoch/compiler/result guarded buffered reads; complete native admission/lifetime and all132 remain pending.'},indent=2)+'\n')
