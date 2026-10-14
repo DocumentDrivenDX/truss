@@ -30,11 +30,17 @@ future distributed changes receive a new package version.
 
 ## Next release candidate
 
-Alternate-key backfill over existing required scalar fields is being implemented.
-It will preserve existing key identities and pure-backfill object versions,
-produce exact tuples through UMF, and refuse duplicate candidates before changes.
-It is not callable or published yet. Newly rebound key components, existing-key
-changes and recursive rebinding remain unfinished.
+SDK26/native62 alternate-key backfill over existing required scalar fields is
+implemented and tested; its release workflow is running. It preserves existing
+key identities and pure-backfill object versions, produces exact UMF tuples,
+and refuses duplicates before changes.
+
+SDK27/native63 additionally registers a genuinely new required scalar field and
+its alternate key together using retained cells. Four basic UMF0.7/0.8 workflows
+and one populated local native62 upgrade pass, including lookup, query and
+post-commit history. Matching Weft28/backend33 is committed; publication remains
+pending. See the [report contract](../../docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md).
+Existing-key changes and recursive rebinding remain unfinished.
 
 ## Install the release
 
@@ -236,7 +242,7 @@ reported fields, not interchangeable IDs.
 
 Compatible evolution supports additional Records, optional scalar properties,
 relaxing non-key presence and widening independent relationship multiplicity or
-adding endpoints. Unchanged IDs/pins remain stable. Key backfill, retirement,
+adding endpoints. Unchanged IDs/pins remain stable. Candidate key-backfill support is described above. Retirement,
 removal, identity rebinding and structured changes are unsupported. Incompatible
 scalar/retained-name changes return typed rules and affected counts subject to
 current authority. New optional properties do not manufacture object updates.
@@ -344,13 +350,13 @@ original document, including modules the SQL does not name.
 
 `query_page_in_transaction(tx, sql=sql, document_ids=(document_id,), limit=100, cursor=None)` returns `QueryPage(columns, rows, catalog_revision, next_cursor)`. Pass `next_cursor` back to continue; `None` means the last page. The same call is available through the compiled-execution capability. Weft resolves the authored primary key, adds key ordering and continuation, and supplies hidden key outputs that Truss removes. The original SQL need not project the key or contain `ORDER BY`.
 
-This public page call initially supports one nonaggregated source with a complete required-string primary key. Caller `ORDER BY`/`LIMIT`, joins and relationship predicates refuse. Cursors bind the original SQL, exact parameters, document selection, connecting person, catalog/installation/release context, limit and resource budgets. Keep those inputs unchanged for continuation. Each page rechecks current authority in the caller's transaction; pages are live, so concurrent changes can affect traversal.
+This public page call supports one nonaggregated source with a complete required primary key, including exact signed64, supported fixed-decimal and boolean components alongside strings. Returned numeric cells preserve Python integer/Decimal precision; continuation retains lossless lexical key tokens. Caller `ORDER BY`/`LIMIT`, joins and relationship predicates refuse. Cursors bind the original SQL, exact parameters, document selection, connecting person, catalog/installation/release context, limit and resource budgets. Keep those inputs unchanged for continuation. Each page rechecks current authority in the caller's transaction; pages are live, so concurrent changes can affect traversal.
 
 `entity-page` and `related-entity-page` query profiles require complete authored
-keys in `ORDER BY`, an explicit limit and caller-supplied continuation predicates.
+required-string keys in `ORDER BY`, an explicit limit and caller-supplied continuation predicates.
 `count-summary` supports ungrouped counts and grouped counts on required, non-nullable string/boolean fields. Grouped summaries require the complete grouping order and an explicit `LIMIT`. Query continuation is live, not a
-stable snapshot or exactly-once traversal. Multi-hop relationships, non-string
-page keys and optional/numeric grouped keys remain unsupported. Bounded sources are checked
+stable snapshot or exactly-once traversal. Multi-hop relationships, optional primary-key
+components and optional/numeric grouped keys remain unsupported. Bounded sources are checked
 before filters/limits; resource overflow refuses rather than truncating a source.
 
 ## Feed and receipt visibility
