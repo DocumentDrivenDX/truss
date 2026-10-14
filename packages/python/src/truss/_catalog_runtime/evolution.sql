@@ -27,7 +27,7 @@ BEGIN
    scope:=jsonb_build_object('documentId',rec->>'documentId','moduleId',rec->>'moduleId',
     'recordId',rec->>'elementId','fieldModuleId',field->>'fieldModule','fieldId',field->>'fieldId');
    SELECT count(*) FILTER (WHERE field->'declaration'->>'nullability'='required'
-     AND (property_id IS NULL OR NOT o.props ? property_id::text OR o.props->property_id::text='{"kind":"null"}'::jsonb)),
+     AND property_id IS NOT NULL AND (NOT o.props ? property_id::text OR o.props->property_id::text='{"kind":"null"}'::jsonb)),
     count(*) FILTER (WHERE field->'declaration'->>'cardinality'='one' AND property_id IS NOT NULL AND o.props ? property_id::text
      AND o.props->property_id::text<>'{"kind":"null"}'::jsonb
      AND truss.valid_scalar_cell(o.props->property_id::text,field->'declaration'->>'scalarType',true) IS NOT TRUE)
@@ -41,7 +41,7 @@ BEGIN
    IF missing_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.required','affectedObjectCount',missing_count::text));END IF;
    IF family_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.scalar_type','affectedObjectCount',family_count::text));END IF;
    IF facet_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.facets','affectedObjectCount',facet_count::text));END IF;
-   IF retained_count>0 AND NOT (property_id IS NULL AND field->'declaration'->>'nullability'='absent-allowed') THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.retained_name_collision','affectedObjectCount',retained_count::text));END IF;
+   IF retained_count>0 AND property_id IS NOT NULL THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.retained_name_collision','affectedObjectCount',retained_count::text));END IF;
   END LOOP;
  END LOOP;
  -- Existing independent relationship bounds are checked before publication.

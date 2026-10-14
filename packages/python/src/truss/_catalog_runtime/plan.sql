@@ -63,8 +63,8 @@ BEGIN
   assigned:=(type_map->> (row->>'type_id'))::int;
   SELECT v.value INTO old FROM jsonb_array_elements(properties) v WHERE v.value->>'type_id'=assigned::text AND v.value->>'declaration_module'=row->>'declaration_module' AND v.value->>'element'=row->>'element';
   IF old IS NULL THEN
-   IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'type_def') t WHERE t.value->>'type_id'=assigned::text) AND row->>'nullability' IS DISTINCT FROM 'absent-allowed' THEN
-    RAISE EXCEPTION 'new retained field must allow absence' USING ERRCODE='0A000';END IF;
+   IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'type_def') t WHERE t.value->>'type_id'=assigned::text) AND row->>'nullability' NOT IN ('required','absent-allowed') THEN
+    RAISE EXCEPTION 'supported new field nullability required' USING ERRCODE='0A000';END IF;
    property_next:=property_next+1;
   END IF;
   property_map:=property_map||jsonb_build_object(row->>'prop_id',CASE WHEN old IS NULL THEN property_next ELSE (old->>'prop_id')::int END);

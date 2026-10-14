@@ -44,7 +44,7 @@ BEGIN
     IF registration.writer_xid IS DISTINCT FROM rebound.writer_xid OR registration.actor_oid IS DISTINCT FROM rebound.actor_oid OR registration.revision IS DISTINCT FROM rebound.revision THEN RAISE EXCEPTION 'original catalog attribution source required' USING ERRCODE='55000';END IF;
     PERFORM truss.catalog_rebind_transition_reader(rebound);
     journals:=rebound.journal;after_image:=rebound.after_object;expected_actor:=registration.actor_name;
-    writer:=registration.writer_xid;asserted:=convert_from(registration.origin_bytes,'UTF8')::jsonb;history_profile:='truss-native-catalog-rebind/0.1';
+    writer:=registration.writer_xid;asserted:=convert_from(registration.origin_bytes,'UTF8')::jsonb;history_profile:=truss.catalog_rebind_profile(rebound.journal);
    ELSE
    SELECT * INTO STRICT transition FROM truss.runtime_object_transition t
     WHERE t.object_id=selected_id AND t.type_id=selected_type AND (t.after_object->>'ver')::bigint=selected_version;

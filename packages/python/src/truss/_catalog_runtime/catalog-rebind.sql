@@ -1,4 +1,4 @@
--- Native60 candidate: storage prefix is retained source; install uses the UMF owner export.
+-- Native61 candidate: storage prefix is retained source; install uses the UMF owner export.
 -- Registration-owned retained-value transitions; never ordinary mutation attempts.
 CREATE TABLE truss.runtime_catalog_rebind_transition (
  transition_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_object_transition_seq'),
@@ -117,9 +117,9 @@ BEGIN
   FOR property IN SELECT * FROM truss.prop_def p WHERE p.type_id=object_row.type_id AND p.since_rev=request.revision
    AND object_row.retained ? p.name ORDER BY p.prop_id LOOP
    property_count:=property_count+1;
-   IF property_count>127 OR property.nullability IS DISTINCT FROM 'absent-allowed' OR object_row.props ? property.prop_id::text
+   IF property_count>127 OR property.nullability NOT IN ('required','absent-allowed') OR object_row.props ? property.prop_id::text
     OR EXISTS(SELECT 1 FROM truss.key_def k WHERE k.type_id=property.type_id AND property.prop_id=ANY(k.prop_ids))
-    OR truss.valid_property_value(object_row.retained->property.name,property) IS NOT TRUE THEN
+    OR truss.valid_property_definition(property) IS NOT TRUE OR truss.valid_property_value(object_row.retained->property.name,property) IS NOT TRUE THEN
     RAISE EXCEPTION 'valid absent non-key catalog rebind destination required' USING ERRCODE='22023';END IF;
    SELECT definition_pin INTO STRICT pin FROM truss.catalog_rebind_definition('property',property.type_id,property.prop_id,planned_basis);
    effects:=effects||jsonb_build_array(jsonb_build_object('propertyId',property.prop_id::text,'originalName',property.name,
@@ -140,7 +140,7 @@ BEGIN
   events:=events||jsonb_build_array(jsonb_build_object('operation','metadata','before',before_record,'after',after_record));
   FOR event_index IN 0..jsonb_array_length(events)-1 LOOP
    event:=(events->event_index)||jsonb_build_object('interfaceVersion','truss-history-event/0.2.0-proposal',
-    'historyProfile','truss-native-catalog-rebind/0.1','sourceEpoch',installation.source_epoch::text,
+    'historyProfile','truss-native-catalog-rebind/0.2','sourceEpoch',installation.source_epoch::text,
     'xid',request.writer_xid::text,'seq',nextval('truss.journal_seq')::text,
     'identity',identity,'eventVersion',object_row.ver::text,'eventCatalogRevision',request.revision::text,
     'origin',jsonb_build_object('asserted',convert_from(request.origin_bytes,'UTF8')::jsonb,'databaseRole',session_user::text));
@@ -173,7 +173,7 @@ REVOKE ALL ON FUNCTION truss.catalog_rebind_objects(truss.catalog_registration_r
 -- Check retained candidates against the actual native planned property definition.
 CREATE FUNCTION truss.catalog_rebind_violations(planned_basis jsonb,revision int) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE property truss.prop_def%ROWTYPE;owner truss.type_def%ROWTYPE;affected bigint;violations jsonb:='[]';
+DECLARE property truss.prop_def%ROWTYPE;owner truss.type_def%ROWTYPE;affected bigint;missing bigint;violations jsonb:='[]';
 BEGIN
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p WHERE p.since_rev=revision LOOP
   SELECT * INTO STRICT owner FROM jsonb_populate_recordset(NULL::truss.type_def,planned_basis->'type_def') t WHERE t.type_id=property.type_id;
@@ -182,8 +182,17 @@ BEGIN
    OR truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
    OR property.cardinality IN ('array','map') AND truss.runtime_can_read(property.item->>'documentId',property.item->'reference'->>'module') IS NOT TRUE THEN
    RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
-  SELECT count(*) INTO affected FROM truss.object o WHERE o.type_id=property.type_id AND o.retained ? property.name
-   AND (property.nullability IS DISTINCT FROM 'absent-allowed' OR o.props ? property.prop_id::text
+  IF truss.valid_property_definition(property) IS NOT TRUE THEN RAISE EXCEPTION 'supported planned rebind property required' USING ERRCODE='0A000';END IF;
+  SELECT count(*) INTO missing FROM truss.object o WHERE o.type_id=property.type_id AND property.nullability='required'
+   AND (coalesce(o.retained ? property.name,false) IS NOT TRUE OR o.retained->property.name='{"kind":"null"}'::jsonb);
+  IF missing>0 THEN
+   violations:=violations||jsonb_build_array(jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module,
+    'recordId',owner.element,'fieldModuleId',property.declaration_module,'fieldId',property.element,
+    'rule','property.required','affectedObjectCount',missing::text));
+  END IF;
+  SELECT count(*) INTO affected FROM truss.object o WHERE o.type_id=property.type_id AND coalesce(o.retained ? property.name,false)
+   AND NOT (property.nullability='required' AND o.retained->property.name='{"kind":"null"}'::jsonb)
+   AND (property.nullability NOT IN ('required','absent-allowed') OR o.props ? property.prop_id::text
     OR EXISTS(SELECT 1 FROM jsonb_populate_recordset(NULL::truss.key_def,planned_basis->'key_def') k WHERE k.type_id=property.type_id AND property.prop_id=ANY(k.prop_ids))
     OR truss.valid_property_value(o.retained->property.name,property) IS NOT TRUE);
   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE
@@ -247,7 +256,7 @@ CREATE FUNCTION truss.catalog_rebind_history_group(entity jsonb,writer xid8,vers
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE transition truss.runtime_catalog_rebind_transition%ROWTYPE;request truss.catalog_registration_request%ROWTYPE;
  basis jsonb;entry jsonb;event jsonb;before_record jsonb;after_record jsonb;identity jsonb;
- moved_props jsonb;moved_retained jsonb;seen text[]:='{}';metadata_count int:=0;physical jsonb;
+ history_profile text;moved_props jsonb;moved_retained jsonb;seen text[]:='{}';metadata_count int:=0;physical jsonb;
 BEGIN
  SELECT * INTO STRICT transition FROM truss.runtime_catalog_rebind_transition t
   WHERE t.object_id=(entity->>'id')::bigint AND t.type_id=(entity->>'typeId')::int AND t.writer_xid=writer AND (t.after_object->>'ver')::bigint=version;
@@ -255,6 +264,7 @@ BEGIN
  IF request.writer_xid IS DISTINCT FROM writer OR request.actor_oid IS DISTINCT FROM transition.actor_oid OR request.revision IS DISTINCT FROM transition.revision
   OR (transition.before_object->>'ver')::bigint+1<>version THEN RAISE EXCEPTION 'original registration-owned history transition required' USING ERRCODE='55000';END IF;
  PERFORM truss.catalog_rebind_transition_reader(transition);
+ history_profile:=truss.catalog_rebind_profile(transition.journal);
  basis:=truss.catalog_all_expected_records(request.revision);
  identity:=jsonb_build_object('id',entity->>'id','typeId',entity->>'typeId','owner',jsonb_build_object('documentId',entity->>'documentId','moduleId',entity->>'moduleId'));
  before_record:=truss.runtime_object_history(transition.before_object,identity);
@@ -264,7 +274,7 @@ BEGIN
   SELECT to_jsonb(j) INTO STRICT physical FROM truss.journal j WHERE j.xid=writer AND j.seq=(entry->>'seq')::bigint;
   IF physical IS DISTINCT FROM entry THEN RAISE EXCEPTION 'original registration journal row required' USING ERRCODE='55000';END IF;
   event:=convert_from(decode(entry->'new_value'->>'bytesBase64','base64'),'UTF8')::jsonb;
-  IF event->'origin'->>'databaseRole' IS DISTINCT FROM request.actor_name OR event->'origin'->'asserted' IS DISTINCT FROM convert_from(request.origin_bytes,'UTF8')::jsonb THEN
+  IF event->>'historyProfile' IS DISTINCT FROM history_profile OR event->'origin'->>'databaseRole' IS DISTINCT FROM request.actor_name OR event->'origin'->'asserted' IS DISTINCT FROM convert_from(request.origin_bytes,'UTF8')::jsonb THEN
    RAISE EXCEPTION 'original registration history actor and origin required' USING ERRCODE='55000';END IF;
   IF event->>'operation'='rebind' THEN
    IF event->>'propertyId'=ANY(seen) OR NOT moved_retained ? (event->>'retainedName') OR moved_props ? (event->>'propertyId')
@@ -288,6 +298,30 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_rebind_history_group(jsonb,xid8,bigint) FROM PUBLIC;
+
+-- Derive semantic selection from retained bytes, never the current engine version.
+CREATE FUNCTION truss.catalog_rebind_profile(journal jsonb) RETURNS text
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE entry jsonb;event jsonb;original bytea;selected text;candidate text;
+BEGIN
+ IF jsonb_typeof(journal) IS DISTINCT FROM 'array' OR jsonb_array_length(journal) NOT BETWEEN 2 AND 128 THEN
+  RAISE EXCEPTION 'bounded original rebind group required' USING ERRCODE='55000';END IF;
+ FOR entry IN SELECT value FROM jsonb_array_elements(journal) LOOP
+  original:=decode(entry->'new_value'->>'bytesBase64','base64');
+  IF entry->'new_value' IS DISTINCT FROM truss.runtime_exact_wrapper('event',original)
+   OR (convert_from(original,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
+   RAISE EXCEPTION 'original rebind profile bytes required' USING ERRCODE='55000';END IF;
+  event:=convert_from(original,'UTF8')::jsonb;candidate:=event->>'historyProfile';
+  IF event->>'interfaceVersion' IS DISTINCT FROM 'truss-history-event/0.2.0-proposal'
+   OR (candidate IN ('truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2')) IS NOT TRUE
+   OR selected IS NOT NULL AND selected IS DISTINCT FROM candidate THEN
+   RAISE EXCEPTION 'one supported original rebind profile required' USING ERRCODE='55000';END IF;
+  selected:=candidate;
+ END LOOP;
+ RETURN selected;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_rebind_profile(jsonb) FROM PUBLIC;
 
 CREATE CONSTRAINT TRIGGER runtime_catalog_rebind_commit AFTER INSERT ON truss.runtime_catalog_rebind_transition
  DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_object_commit_check();

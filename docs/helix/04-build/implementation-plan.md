@@ -7961,6 +7961,13 @@ Truss24/native60 now composes new optional non-key scalar/flat-container retaine
 
 [Native export evidence](evidence/security-ontology-export-routes-20261014/README.md) demonstrates exact salary disclosure via a public user-schema definer and a granted owner-executed view despite denied raw table reads. Selected nativecaller no-export-route admission now refuses both before evaluation/release, across all registered roles. Explicit pg_catalog operators preserve the scan under armed hostile name/char operators. Complete existing case passes20.116s on PostgreSQL18.6/runtime0.59. Conservative direct-route comparisons do not establish transitive/system/FDW/OS/SET ROLE or DDL lifetime closure; no original case promotion, all132 retained.
 
+### Required retained-value rebinding tranche — 2026-10-14
+
+Truss24 and Weft25 publication succeeded. SDK25/native61 adds required non-key
+scalar/flat-container rebinding, qualified missing/null counts across all
+objects, and original historical report profile selection. Five basic tests pass
+with matching Weft26/backend31, including genuine native60 report preservation.
+Astra Ultra approved promotion. Key backfill and recursive values remain open.
 ## Original compiled graph query under native caller/source guard — 2026-10-14
 
 [Compiled native evidence](evidence/security-ontology-compiled-native-20261014/README.md) now runs original Weft graph SQL, endpoint/subject/truth guards and exact typed result checker inside the existing nativecaller role/map/source/fact cuts. Actual complete Resource.resourceId+withheldsalary bags match independent semantic results for Alice/Bob/Outsider. Native stale authoredsource pins and withheldcell corruption refuse before release. Final existing case passes25.527s on PostgreSQL18.6/runtime0.59, including prior lifecycle controls. Original source/checker comparisons do not issue native admission or activate public compilation; complete source/authority/cache/cursor/transport closure and all132 original cases remain required.

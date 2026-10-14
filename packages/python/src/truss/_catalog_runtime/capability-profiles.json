@@ -4,10 +4,10 @@
       "name": "catalog",
       "pin": {
         "identity": "truss-native-catalog-capability",
-        "version": "0.6",
-        "sha256": "3013995b3009c1d45231301fda3f52a32a15acedf33f56d6acc006ee4fbcd134"
+        "version": "0.7",
+        "sha256": "482a5527045a3475395e07e71b04005b86cf6b50d4bb4e2a7fa0683d7d6aa706"
       },
-      "definition": "Native catalog capability/0.6: explicit original UMF preparation; current compatible acceptance and unchanged/historical retry; exact original reports; complete native catalog view; person-scoped module/source reads; caller-owned transaction; no administrative installation or module grants. Compatible non-key scalar refinement admits unfaceted to/from supported signed64 or decimal(18,4) or decimal(18,2) facets with native existing-value validation and exact typed property.facets refusal counts; key facet evolution remains unsupported. Name-only Field presentation changes retain property and business-key identities; occupied prior names and retained-value collisions refuse. Selected UMF0.8 source-reference reports retain exact document bytes once in acceptedInput; document title is retained metadata. Native60 registration moves valid retained values into new absent-allowed non-key scalar/flat properties, increments each affected object once, and retains original registration-owned effects and complete history. Invalid candidates refuse by qualified property and count; required/key rebinding remains unsupported.",
+      "definition": "Native catalog capability/0.7: explicit original UMF preparation; current compatible acceptance and unchanged/historical retry; exact original reports; complete native catalog view; person-scoped module/source reads; caller-owned transaction; no administrative installation or module grants. Compatible non-key scalar refinement admits unfaceted to/from supported signed64 or decimal(18,4) or decimal(18,2) facets with native existing-value validation and exact typed property.facets refusal counts; key facet evolution remains unsupported. Name-only Field presentation changes retain property and business-key identities; occupied prior names and retained-value collisions refuse. Selected UMF0.8 source-reference reports retain exact document bytes once in acceptedInput; document title is retained metadata. Native60 registration moves valid retained values into new absent-allowed non-key scalar/flat properties, increments each affected object once, and retains original registration-owned effects and complete history. Invalid candidates refuse by qualified property and count; key rebinding remains unsupported. Native61 also admits new required non-key scalar/flat fields when all existing objects have valid non-null retained candidates. Missing/null candidates return property.required counts and invalid candidates property.rebind_value counts before persistence; empty containers remain present values. Original stored event profiles select report/history attribution, preserving older optional-only reports.",
       "policyDefinition": "Native catalog policy/0.2: ordinary authenticated person; registrar membership for acceptance, original reports and complete catalog view; current module reader or writer for person-scoped catalog and accepted document reads; exact installed release; READ COMMITTED; no installation administration authority. Rebinding requires affected module writer and complete original property/item read authority. Any report containing rebind data requires current original owner/property/item readers on acceptance, replay, unchanged and report reads, including after objects are deleted.",
       "policyPin": {
         "identity": "truss-native-catalog-policy",
@@ -162,6 +162,21 @@
         "identity": "truss-native-catalog-policy",
         "version": "0.1",
         "sha256": "179811eea96539288c0540b22386c0b5e0d645fe5b2a048d083a82d8a6717388"
+      }
+    },
+    {
+      "name": "catalog",
+      "pin": {
+        "identity": "truss-native-catalog-capability",
+        "version": "0.6",
+        "sha256": "3013995b3009c1d45231301fda3f52a32a15acedf33f56d6acc006ee4fbcd134"
+      },
+      "definition": "Native catalog capability/0.6: explicit original UMF preparation; current compatible acceptance and unchanged/historical retry; exact original reports; complete native catalog view; person-scoped module/source reads; caller-owned transaction; no administrative installation or module grants. Compatible non-key scalar refinement admits unfaceted to/from supported signed64 or decimal(18,4) or decimal(18,2) facets with native existing-value validation and exact typed property.facets refusal counts; key facet evolution remains unsupported. Name-only Field presentation changes retain property and business-key identities; occupied prior names and retained-value collisions refuse. Selected UMF0.8 source-reference reports retain exact document bytes once in acceptedInput; document title is retained metadata. Native60 registration moves valid retained values into new absent-allowed non-key scalar/flat properties, increments each affected object once, and retains original registration-owned effects and complete history. Invalid candidates refuse by qualified property and count; required/key rebinding remains unsupported.",
+      "policyDefinition": "Native catalog policy/0.2: ordinary authenticated person; registrar membership for acceptance, original reports and complete catalog view; current module reader or writer for person-scoped catalog and accepted document reads; exact installed release; READ COMMITTED; no installation administration authority. Rebinding requires affected module writer and complete original property/item read authority. Any report containing rebind data requires current original owner/property/item readers on acceptance, replay, unchanged and report reads, including after objects are deleted.",
+      "policyPin": {
+        "identity": "truss-native-catalog-policy",
+        "version": "0.2",
+        "sha256": "7fef95e16df8fe2fbc73a50a6fcb131d33ff4eee4bcb6b18ad86baacd15d212a"
       }
     }
   ]

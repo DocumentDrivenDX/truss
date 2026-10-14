@@ -11,29 +11,31 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.23`,
-native runtime `0.59-candidate`, layout `1.0`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.29`. The tested local
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.24`,
+native runtime `0.60-candidate`, layout `1.0`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.30`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The current release is [v0.0.23](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.23).
+The current release is [v0.0.24](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.24).
+Registration-owned optional non-key rebinding is included in24; its
+[report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.1.md)
+retains original effects/events and requires current data-reader authority.
+
 The Python distribution version is distinct from native runtime/layout versions;
 future distributed changes receive a new package version.
 
 ## Next release candidate
 
-Truss0.0.24/native60 with Weft0.4.25/backend0.4.30 adds registration-owned
-rebinding of retained values into new optional, non-key scalar/flat-container
-fields. Public reads, complete history, SQL and committed feeds expose the
-new version. The [report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.1.md)
-retains exact effects/events and requires current data-reader authority.
-Old reports stay unchanged. Native59 upgrades additively. Basic UMF0.7/0.8
-workflows and populated upgrade pass; publication awaits the release workflow.
-Required/key rebinding and recursive values remain unfinished.
+Truss0.0.25/native61 with Weft0.4.26/backend0.4.31 adds new required non-key
+scalar/flat fields when every existing object has a valid non-null retained
+candidate. Missing/null values and invalid values refuse before persistence.
+Original optional-only reports remain unchanged. This next candidate is still
+being implemented and tested; it is not a published release. Key backfill and
+recursive rebinding remain unfinished.
 
 ## Install the release
 
@@ -42,15 +44,15 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.23 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.24 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.24 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.25 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.23'
+  'truss-toolkit[local,native,query]==0.0.24'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release
 publishes package checksums and source/runtime/backend pins. The Truss release
-workflow exercises the exact uploaded wheel with published Weft0.4.24 and verified
+workflow exercises the exact uploaded wheel with published Weft0.4.25 and verified
 PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
