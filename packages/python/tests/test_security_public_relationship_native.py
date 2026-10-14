@@ -65,6 +65,13 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
      self.assertEqual(mapped['logicalSourceDigests']['policy'],sha256(sources['policy']).hexdigest())
      self.assertEqual(mapped['queryRelationships'][0]['nativeRelationshipId'],str(refs['ResourceRelatedResource'].relationship_id))
      (out/('live-correspondence'+suffix+'.json')).write_bytes(correspondence)
+     from security_relationship_request import prepare_relationship_request
+     request=prepare_relationship_request(physical_request,assessment,observation_denied=bool(suffix))
+     selected_request=json.loads(request)
+     self.assertEqual(json.loads(selected_request['bindingJson'])['inventoryJson'].encode(),assessment)
+     self.assertEqual(selected_request['policyJson'].encode(),sources['policy'])
+     self.assertEqual(json.loads(selected_request['queryProfileJson'])['binding']['sha256'],sha256(selected_request['bindingJson'].encode()).hexdigest())
+     (out/('compiler-request'+suffix+'.json')).write_bytes(request)
    (out/'physical-request.json').write_bytes(physical_request)
    catalog={}
    for name,table,order in (('types','type_def','type_id'),('properties','prop_def','prop_id'),('keys','key_def','type_id,key_num'),('relationships','rel_def','rel_type_id'),('endpoints','rel_endpoint','rel_type_id,source_type,target_type')):
