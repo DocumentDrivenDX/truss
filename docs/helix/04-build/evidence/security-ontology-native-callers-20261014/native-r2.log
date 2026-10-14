@@ -1,0 +1,19 @@
+test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission. ... ERROR
+
+======================================================================
+ERROR: test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_ontology_edges_native.py", line 204, in test_original_public_ontology_population_and_endpoint_oracle
+    self.assertEqual(connection.execute('SELECT pg_catalog.has_table_privilege(%s,\'SELECT\')',(table,)).fetchone(),(False,))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.InsufficientPrivilege: permission denied for schema truss
+
+----------------------------------------------------------------------
+Ran 1 test in 17.501s
+
+FAILED (errors=1)

@@ -70,16 +70,16 @@ def _capture(cursor,request):
     return assessment,raw_objects,edges,cells
 
 
-def publish_owned_ontology_resource_read(host,transaction,original_request,subject,publisher):
-    """Original accepted source plus complete selected graph in one host lease.
+def _prepare_ontology_resource_operation(original_request,subject):
+    """Prepare the fixed source/fact/evaluation operation, without disclosure.
 
     No caller-supplied SQL or evaluator; exact request bytes are copied before
     host entry. Other installed populations refuse rather than silently filter.
     Bounded retained inputs/output; no total process-allocation claim.
     """
-    if (type(host) is not PsycopgHost or type(original_request) is not bytes
+    if (type(original_request) is not bytes
             or not 1<=len(original_request)<=4000000 or type(subject) is not str
-            or not 1<=len(subject.encode())<=4096 or not callable(publisher)):
+            or not 1<=len(subject.encode())<=4096):
         raise ValueError('Original bounded ontology publication context required')
     request=bytes(original_request);prepared=_pin_owned_evaluator_sources()
     sources=(Path(__file__),ROOT/'scripts/security_ontology_edge_projection.py')
@@ -95,6 +95,9 @@ def publish_owned_ontology_resource_read(host,transaction,original_request,subje
         for table in TABLES:
             cursor.execute(sql.SQL('LOCK TABLE ONLY {} IN SHARE MODE NOWAIT').format(sql.Identifier('truss',table)),prepare=False)
         before=_capture(cursor,request)
+        staff=[g for g in before[3] if g['fields']==[[['domain','m','staffId'],'staffId',25]]]
+        if len(staff)!=1 or [subject] not in staff[0]['rows']:
+            raise ValueError('Original captured ontology Staff Subject required')
         payload=json.dumps({'cells':before[3],'subjectKey':[{'string':subject}],'resultMode':'resources'})
         if len(payload.encode())>1048576:raise ValueError('Bounded ontology policy input required')
         evaluated=subprocess.run([os.environ.get('TRUSS_BUN_EXECUTABLE','bun'),str(prepared.tool),'--named-source'],cwd=ROOT,input=payload,capture_output=True,text=True,timeout=10)
@@ -105,4 +108,12 @@ def publish_owned_ontology_resource_read(host,transaction,original_request,subje
         if any(sha256(p.read_bytes()).digest()!=digest for p,digest in pins):raise ValueError('Original ontology evaluator sources changed')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(previous[0][0],),prepare=False)
         return json.dumps(decision,separators=(',',':'),ensure_ascii=False).encode()
+    return execute
+
+
+def publish_owned_ontology_resource_read(host,transaction,original_request,subject,publisher):
+    """Administrative selected subject; fixed buffered publication operation."""
+    if type(host) is not PsycopgHost or not callable(publisher):
+        raise ValueError('Original bounded ontology publication context required')
+    execute=_prepare_ontology_resource_operation(original_request,subject)
     return host._run_published_operation(transaction,execute,publisher)

@@ -170,3 +170,65 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
             host.detach();self.admin.rollback()
             with psycopg.connect(self.info.connection_uri,autocommit=True) as writer:
                 writer.execute("UPDATE truss.object SET props=pg_catalog.jsonb_set(props,ARRAY[%s,'value'],'true'::pg_catalog.jsonb) WHERE id=%s",(active_property,identities['aa']))
+        # Full graph decisions now derive from native SESSION_USER/OID on an
+        # independent ordinary connection; caller has no fact or map access.
+        import uuid
+        from psycopg import sql
+        import security_ontology_native_subject_read as native_read
+        roles={name:'ontology_'+name.lower()+'_'+uuid.uuid4().hex[:10] for name in ('Alice','Bob','Outsider','Unregistered')}
+        for role in roles.values():
+            self.admin.execute(sql.SQL('CREATE ROLE {} LOGIN').format(sql.Identifier(role)))
+            self.admin.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(role)))
+            self.addCleanup(self.admin.execute,sql.SQL('DROP OWNED BY {};DROP ROLE {}').format(sql.Identifier(role),sql.Identifier(role)))
+        bindings=tuple(sorted((self.admin.execute('SELECT oid FROM pg_catalog.pg_roles WHERE rolname=%s',(role,)).fetchone()[0],name) for name,role in roles.items() if name!='Unregistered'))
+        self.admin.execute('CREATE TABLE truss.catalog_subject_map(role_oid pg_catalog.oid PRIMARY KEY,staff_key pg_catalog.text COLLATE pg_catalog."C" NOT NULL)')
+        self.admin.execute(sql.SQL('ALTER TABLE truss.catalog_subject_map OWNER TO {}').format(sql.Identifier(self.installation.owner_role)))
+        for binding in bindings:self.admin.execute('INSERT INTO truss.catalog_subject_map VALUES(%s,%s)',binding)
+        native_results=[]
+        original_peer=native_read._verify_native_peer
+        for name,expected in (('Alice',['RA']),('Bob',['RB']),('Outsider',[]),('Unregistered',None),('AliceRaw',None),('AliceWrongPeer',None)):
+            if name=='AliceRaw':self.admin.execute(sql.SQL('GRANT SELECT(props) ON truss.object TO {}').format(sql.Identifier(roles['Bob'])))
+            role=roles['Alice' if name.startswith('Alice') else name]
+            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=role
+            self.admin.execute('BEGIN');executor=adopt_psycopg_host(self.admin);executor_transaction=executor.adopt_transaction().value
+            delivered=[];cuts=[]
+            def assert_native_cuts(stage):
+                with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+                    for statement in (sql.SQL('ALTER ROLE {} BYPASSRLS').format(sql.Identifier(roles['Bob'])),sql.SQL('GRANT {} TO {}').format(sql.Identifier(self.installation.owner_role),sql.Identifier(roles['Alice'])),'DELETE FROM truss.catalog_subject_map WHERE false','DELETE FROM truss.edge WHERE false'):
+                        with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(statement)
+                cuts.append(stage)
+            def evaluating_native(*args,**kwargs):assert_native_cuts('evaluation');return original_run(*args,**kwargs)
+            def publish_native(raw):assert_native_cuts('publication');delivered.append(raw)
+            with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
+                connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000)
+                adopted=caller.adopt_transaction();self.assertIsInstance(adopted,Ok,str(caller._custody.last_attempt.error));caller_transaction=adopted.value
+                try:
+                    self.assertEqual(connection.execute('SELECT SESSION_USER::pg_catalog.text').fetchone(),(role,))
+                    connection.execute("SET LOCAL application_name='caller-owned-context'")
+                    for table in ('truss.object','truss.edge','truss.catalog_subject_map'):
+                        self.assertEqual(connection.execute('SELECT pg_catalog.has_table_privilege(%s,\'SELECT\')',(table,)).fetchone(),(False,))
+                    from contextlib import ExitStack
+                    with ExitStack() as patches:
+                        patches.enter_context(patch.object(guarded.subprocess,'run',evaluating_native))
+                        if name=='AliceWrongPeer':
+                            def wrong_peer(cursor,identity,pid,challenge):return original_peer(cursor,identity,pid,challenge+'-wrong')
+                            patches.enter_context(patch.object(native_read,'_verify_native_peer',wrong_peer))
+                        result=native_read.publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,request,bindings,publish_native)
+                    self.assertEqual(connection.execute("SELECT pg_catalog.current_setting('application_name')").fetchone(),('caller-owned-context',))
+                    if expected is None:
+                        self.assertIsInstance(result,Error);self.assertEqual(delivered,[]);self.assertEqual(cuts,[])
+                        reason={'Unregistered':'Original native caller has no registered ontology Subject','AliceRaw':'Unmediated registered ontology raw reads refused','AliceWrongPeer':'Original live native ontology caller/executor correspondence required'}[name]
+                        self.assertEqual(str(executor._custody.last_attempt.error),reason)
+                    else:
+                        self.assertIsInstance(result,Ok,str(caller._custody.last_attempt.error)+' '+str(executor._custody.last_attempt.error))
+                        self.assertEqual(cuts,['evaluation','publication']);self.assertEqual(delivered,[result.value])
+                        decision=json.loads(delivered[0]);self.assertEqual([r['key'][0]['string'] for r in decision['rows']],expected)
+                        for r in decision['rows']:self.assertEqual(r['output'][0]['disposition'],'withheld')
+                        native_results.append({'caller':name,'resources':expected,'rawSelect':False,'roleAndMapCutsThroughRelease':True})
+                finally:caller.detach();connection.rollback()
+            executor.detach();self.admin.rollback()
+            if name=='AliceRaw':self.admin.execute(sql.SQL('REVOKE SELECT(props) ON truss.object FROM {}').format(sql.Identifier(roles['Bob'])))
+        directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_NATIVE_SUBJECT_EVIDENCE')
+        if directory:
+            folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
+            (folder/'native-caller-decisions.json').write_text(json.dumps({'results':native_results,'unregisteredRefusedBeforeEvaluation':True,'scope':'Native caller identity and held role/map/graph/source cuts; trusted registration/private administrative executor/routine and authentication custody, not original checked compiler admission.'},indent=2)+'\n')
