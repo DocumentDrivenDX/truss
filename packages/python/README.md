@@ -350,13 +350,13 @@ original document, including modules the SQL does not name.
 
 `query_page_in_transaction(tx, sql=sql, document_ids=(document_id,), limit=100, cursor=None)` returns `QueryPage(columns, rows, catalog_revision, next_cursor)`. Pass `next_cursor` back to continue; `None` means the last page. The same call is available through the compiled-execution capability. Weft resolves the authored primary key, adds key ordering and continuation, and supplies hidden key outputs that Truss removes. The original SQL need not project the key or contain `ORDER BY`.
 
-This public page call initially supports one nonaggregated source with a complete required-string primary key. Caller `ORDER BY`/`LIMIT`, joins and relationship predicates refuse. Cursors bind the original SQL, exact parameters, document selection, connecting person, catalog/installation/release context, limit and resource budgets. Keep those inputs unchanged for continuation. Each page rechecks current authority in the caller's transaction; pages are live, so concurrent changes can affect traversal.
+This public page call supports one nonaggregated source with a complete required primary key, including exact signed64, supported fixed-decimal and boolean components alongside strings. Returned numeric cells preserve Python integer/Decimal precision; continuation retains lossless lexical key tokens. Caller `ORDER BY`/`LIMIT`, joins and relationship predicates refuse. Cursors bind the original SQL, exact parameters, document selection, connecting person, catalog/installation/release context, limit and resource budgets. Keep those inputs unchanged for continuation. Each page rechecks current authority in the caller's transaction; pages are live, so concurrent changes can affect traversal.
 
 `entity-page` and `related-entity-page` query profiles require complete authored
-keys in `ORDER BY`, an explicit limit and caller-supplied continuation predicates.
+required-string keys in `ORDER BY`, an explicit limit and caller-supplied continuation predicates.
 `count-summary` supports ungrouped counts and grouped counts on required, non-nullable string/boolean fields. Grouped summaries require the complete grouping order and an explicit `LIMIT`. Query continuation is live, not a
-stable snapshot or exactly-once traversal. Multi-hop relationships, non-string
-page keys and optional/numeric grouped keys remain unsupported. Bounded sources are checked
+stable snapshot or exactly-once traversal. Multi-hop relationships, optional primary-key
+components and optional/numeric grouped keys remain unsupported. Bounded sources are checked
 before filters/limits; resource overflow refuses rather than truncating a source.
 
 ## Feed and receipt visibility
