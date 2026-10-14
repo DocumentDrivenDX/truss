@@ -582,3 +582,39 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                     folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
                     (folder/'subject-profile.json').write_bytes(subjects.profile_bytes)
                     (folder/'native-subject-registration.json').write_text(json.dumps({'observations':own_subjects,'missingStaffNoEffects':True,'revokedOwnerSelectRefused':True,'revokedOwnerShareRefused':True,'rollbackPreservesPriorWork':True,'reuseRefused':True,'unregisteredExecuteRefused':True,'publicAclDriftRefused':True,'securityReady':False,'scope':'Source-validated fresh graph Subject registration and own-session metadata issuer in disposable full ontology fixture. Protected query composition/registered native compiler admission remain pending.'},indent=2)+'\n')
+
+                if os.environ.get('TRUSS_SECURITY_ONTOLOGY_SUBJECT_COMPOSITION'):
+                    self.admin.execute(sql.SQL('GRANT SELECT ON truss.catalog_subject_map,truss.catalog_graph_subject_profile TO {}').format(sql.Identifier(private_executor)))
+                    self.admin.execute('CREATE TRIGGER fact_write_fence BEFORE INSERT OR UPDATE OR DELETE OR TRUNCATE ON truss.catalog_subject_map FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_fence_authorization_fact_write();ALTER TABLE truss.catalog_subject_map ENABLE ALWAYS TRIGGER fact_write_fence')
+                    new_facts=[]
+                    for name in ('object','edge','catalog_subject_map'):
+                        oid,owner=self.admin.execute('SELECT oid,relowner FROM pg_catalog.pg_class WHERE oid=%s::pg_catalog.regclass',('truss.'+name,)).fetchone()
+                        cols=self.admin.execute('SELECT attname,attnum,atttypid,atttypmod,attnotnull,attcollation,attgenerated,attidentity FROM pg_catalog.pg_attribute WHERE attrelid=%s AND attnum>0 AND NOT attisdropped ORDER BY attnum',(oid,)).fetchall()
+                        new_facts.append(_FactRelationComparison('truss',name,oid,owner,source.split('AS $$',1)[1].split('$$;',1)[0],tuple(_FactColumnComparison(*c) for c in cols)))
+                    from truss._security_catalog_source_binding import derive_catalog_source_epoch_profile
+                    from truss._psycopg_epoch_cut import _EpochComparison
+                    new_profile=derive_catalog_source_epoch_profile(graph,tuple(new_facts),infrastructure.value.barrier,subject_source=inputs['subject_source'])
+                    new_epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,%s,%s,%s,%s)',(comparison.installation,advanced_epoch,comparison.incarnation,new_profile,comparison.evidence)).fetchone()[0]
+                    composed_context=replace(context,comparison=_EpochComparison(comparison.installation,new_epoch,comparison.incarnation,new_profile,comparison.evidence))
+                    composed=[]
+                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[])):
+                        with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
+                            private.execute('BEGIN');executor=adopt_psycopg_host(private);executor_tx=executor.adopt_transaction().value
+                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles[name]
+                            with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
+                                connection.execute('BEGIN');caller=adopt_psycopg_host(connection);caller_tx=caller.adopt_transaction().value;released=[]
+                                def receiver(raw):
+                                    with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+                                        for table in ('catalog_subject_map','catalog_graph_subject_profile'):
+                                            with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
+                                    released.append(raw)
+                                result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,subjects.bindings,receiver,compiler=native_compiler,cut_issuer=cut_issuer,source_epoch=composed_context,subject_registration=subjects)
+                                self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual(released,[result.value])
+                                self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
+                                caller.detach();connection.rollback()
+                            executor.detach();private.rollback()
+                        composed.append({'principal':name,'resources':expected,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
+                    directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_SUBJECT_COMPOSITION_EVIDENCE')
+                    if directory:
+                        folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
+                        (folder/'registered-subject-protected-read.json').write_text(json.dumps({'observations':composed,'epoch':new_epoch,'securityReady':False,'scope':'Actual own-session registered Subject + peer/role/source/fact/current epoch/compiler/result guarded buffered reads; complete native admission/lifetime and all132 remain pending.'},indent=2)+'\n')

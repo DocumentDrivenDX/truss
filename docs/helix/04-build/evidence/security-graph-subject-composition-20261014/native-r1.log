@@ -1,0 +1,16 @@
+test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission. ... FAIL
+
+======================================================================
+FAIL: test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_ontology_edges_native.py", line 294, in test_original_public_ontology_population_and_endpoint_oracle
+    self.assertIsInstance(result,Ok,str(caller._custody.last_attempt.error)+' '+str(executor._custody.last_attempt.error))
+AssertionError: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Original private native ontology execution refused Original operation deadline expired
+
+----------------------------------------------------------------------
+Ran 1 test in 120.611s
+
+FAILED (failures=1)

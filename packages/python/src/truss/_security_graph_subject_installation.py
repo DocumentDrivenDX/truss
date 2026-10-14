@@ -100,7 +100,7 @@ def bootstrap_graph_subjects_in_transaction(host,transaction,*,source,bindings):
    matches=_text_rows(cursor,"SELECT id::pg_catalog.text FROM ONLY truss.object WHERE type_id OPERATOR(pg_catalog.=) %s AND root_id IS NULL AND pg_catalog.jsonb_typeof(props OPERATOR(pg_catalog.->) %s) OPERATOR(pg_catalog.=) 'object' AND (props OPERATOR(pg_catalog.->) %s) OPERATOR(pg_catalog.->>) 'kind' OPERATOR(pg_catalog.=) 'string' AND pg_catalog.jsonb_typeof((props OPERATOR(pg_catalog.->) %s) OPERATOR(pg_catalog.->) 'text') OPERATOR(pg_catalog.=) 'string' AND ((props OPERATOR(pg_catalog.->) %s) OPERATOR(pg_catalog.->>) 'text') COLLATE pg_catalog.\"C\" OPERATOR(pg_catalog.=) %s COLLATE pg_catalog.\"C\"",(type_id,str(property_id),str(property_id),str(property_id),str(property_id),key),2)
    if len(matches)!=1:raise ValueError('Unique original stored graph Staff identity required')
    principals.append((int(principal[0][0]),key))
-  profile=json.dumps({'version':'truss.registered-graph-subject/0.1-candidate','physicalRequestSha256':sha256(source.original_request).hexdigest(),'acceptedCatalogSha256':sha256(source.accepted_catalog_assessment).hexdigest(),'graphBindingSha256':sha256(request['bindingJson'].encode()).hexdigest(),'ontologySha256':sha256(request['ontologyJson'].encode()).hexdigest(),'policySha256':sha256(request['policyJson'].encode()).hexdigest(),'physicalPin':pin,'nativeTypeId':str(type_id),'nativePropertyId':str(property_id)},sort_keys=True,separators=(',',':')).encode()
+  profile=derive_graph_subject_profile(source)
   cursor.execute('CREATE TABLE truss.catalog_subject_map(role_oid pg_catalog.oid PRIMARY KEY,staff_key pg_catalog.text COLLATE pg_catalog."C" NOT NULL);CREATE TABLE truss.catalog_graph_subject_profile(singleton pg_catalog.int2 PRIMARY KEY CHECK(singleton=1),installation_id pg_catalog.uuid NOT NULL,native_revision pg_catalog.int4 NOT NULL,type_id pg_catalog.int4 NOT NULL,property_id pg_catalog.int4 NOT NULL,document_id pg_catalog.text NOT NULL,document_revision pg_catalog.text NOT NULL,document_sha256 pg_catalog.text NOT NULL,module_id pg_catalog.text NOT NULL,profile_bytes pg_catalog.bytea NOT NULL CHECK(octet_length(profile_bytes) BETWEEN 1 AND 65536))',prepare=False)
   owner_name=_text_rows(cursor,'SELECT rolname::pg_catalog.text FROM pg_catalog.pg_roles WHERE oid OPERATOR(pg_catalog.=) %s::pg_catalog.oid',(owner,),1)
   if len(owner_name)!=1:raise ValueError('Original graph Subject owner required')
@@ -141,3 +141,32 @@ def snapshot_graph_subjects(subjects):
      or tuple(sorted(subjects.bindings))!=subjects.bindings or len({b[0] for b in subjects.bindings})!=len(subjects.bindings)):
   raise ValueError('Original bounded graph Subject registration comparisons required')
  return replace(subjects,bindings=tuple((oid,key) for oid,key in subjects.bindings))
+
+
+def verify_registered_graph_subjects_with_cursor(cursor,subjects,*,caller_pid):
+ """Profile cut belongs to the reserved real caller; role/map cuts are separate."""
+ subjects=snapshot_graph_subjects(subjects)
+ if type(caller_pid) is not int or not 1<=caller_pid<=2147483647:raise ValueError('Original graph Subject caller backend required')
+ issuer=verify_graph_subject_issuer_with_cursor(cursor,subjects)
+ homes=_text_rows(cursor,"SELECT c.relowner::pg_catalog.text,c.relkind::pg_catalog.text,c.relpersistence::pg_catalog.text,c.relrowsecurity::pg_catalog.text,c.relforcerowsecurity::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid OPERATOR(pg_catalog.=) c.oid OR i.inhparent OPERATOR(pg_catalog.=) c.oid)::pg_catalog.text,EXISTS(SELECT 1 FROM pg_catalog.pg_locks l WHERE l.pid OPERATOR(pg_catalog.=) %s AND l.locktype OPERATOR(pg_catalog.=) 'relation' AND l.database OPERATOR(pg_catalog.=) (SELECT oid FROM pg_catalog.pg_database WHERE datname OPERATOR(pg_catalog.=) pg_catalog.current_database()) AND l.relation OPERATOR(pg_catalog.=) c.oid AND l.mode OPERATOR(pg_catalog.=) 'ShareLock' AND l.granted)::pg_catalog.text FROM pg_catalog.pg_class c WHERE c.oid OPERATOR(pg_catalog.=) 'truss.catalog_graph_subject_profile'::pg_catalog.regclass",(caller_pid,),1)
+ if homes!=[(str(subjects.owner_oid),'r','p','false','false','false','true')]:raise ValueError('Original held graph Subject profile required')
+ rows=_text_rows(cursor,"SELECT installation_id::pg_catalog.text,pg_catalog.encode(profile_bytes,'hex') FROM ONLY truss.catalog_graph_subject_profile WHERE singleton OPERATOR(pg_catalog.=) 1",limit=1)
+ if rows!=[(subjects.installation_id,subjects.profile_bytes.hex())]:raise ValueError('Original current registered graph Subject profile required')
+ if _text_rows(cursor,'SELECT installation_id::pg_catalog.text,owner_oid::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton',limit=1)!=[(subjects.installation_id,str(subjects.owner_oid))]:raise ValueError('Original registered graph Subject installation required')
+ return issuer
+
+
+def read_own_graph_subject_with_cursor(cursor,subjects,identity):
+ """Native own-session projection only; caller/peer authentication is separate."""
+ subjects=snapshot_graph_subjects(subjects)
+ verify_graph_subject_issuer_with_cursor(cursor,subjects)
+ rows=_text_rows(cursor,'SELECT * FROM truss.graph_subject_current()',limit=2)
+ keys=[key for oid,key in subjects.bindings if str(oid)==identity[1]]
+ if len(keys)!=1 or rows!=[(keys[0],subjects.installation_id,identity[0],identity[1],sha256(subjects.profile_bytes).hexdigest())]:raise ValueError('Original own-session graph Subject correspondence required')
+ return keys[0]
+
+
+def derive_graph_subject_profile(source):
+ source=snapshot_graph_security_source(source)
+ pin,type_id,property_id,revision,request=_recipe(source)
+ return json.dumps({'version':'truss.registered-graph-subject/0.1-candidate','physicalRequestSha256':sha256(source.original_request).hexdigest(),'acceptedCatalogSha256':sha256(source.accepted_catalog_assessment).hexdigest(),'graphBindingSha256':sha256(request['bindingJson'].encode()).hexdigest(),'ontologySha256':sha256(request['ontologyJson'].encode()).hexdigest(),'policySha256':sha256(request['policyJson'].encode()).hexdigest(),'physicalPin':pin,'nativeTypeId':str(type_id),'nativePropertyId':str(property_id)},sort_keys=True,separators=(',',':')).encode()

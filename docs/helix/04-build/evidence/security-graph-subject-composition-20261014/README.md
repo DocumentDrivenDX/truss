@@ -1,0 +1,9 @@
+# Registered Subject protected-read composition — native qualification pending
+
+The candidate read now requires the exact registered Subject profile derived from the selected original graph source and an issued source epoch. The real caller invokes the fixed own-session helper; the paired private executor verifies its exact definition/ACL and the native caller-held profile cut. Only that verified helper OID receives the conservative definer-route exception. Subject, profile, native peer and original source/epoch/compiler checks repeat before publication.
+
+Astra Ultra found and independently verified fixes for native PID TEXT conversion and registration-to-selected-source binding. Forty bounded independent controls pass; source hashes and limits are retained in independent-review/source-review.json. Python module boundaries pass (1065 imports), and git diff checking passes.
+
+Both native r1/r2 failed on the earlier legacy positive read at test line294 with Original operation deadline expired (120.611s and117.433s respectively), before reaching the new composition. The observed host load average was about40. These failures are retained without attributing them conclusively to load or claiming native success. The appended native scenario remains unqualified and requires a successful replay.
+
+This is reviewed candidate implementation, not public native admission. Original source/compiler/installer, host authentication and routine/DDL/configuration custody remain premises. No native logical/program refinement proof, complete lifecycle closure or original132-case acceptance promotion is claimed.
