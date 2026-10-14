@@ -8008,3 +8008,5 @@ The ordinary epoch path also passes1/28.330s after preserving concurrent runtime
 ## Registered Subject protected-read composition — 2026-10-14
 
 [Composition evidence](evidence/security-graph-subject-composition-20261014/README.md) records exact registered-source/epoch binding, real own-session Subject resolution, verified-helper-only route exception and early/late profile/caller checks. Astra Ultra40 controls and1065 import boundaries pass after two corrected findings. Native r1/r2 fail in the earlier legacy deadline path before reaching this scenario; native composition qualification remains pending. Direct main integration preserves this explicit candidate status. Public admission, complete lifecycle closure and all132 original acceptance cases remain outstanding and unchanged.
+
+The aligned-budget native composition replay r3 passes1/79.661s, with actual three-principal protected reads and held Subject profile/map cuts. See the same composition evidence folder for terminal log/result/source receipt. Complete public admission/lifecycle and original132 acceptance remain open.
