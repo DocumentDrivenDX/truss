@@ -21,6 +21,11 @@ class CatalogKeyedRebindTests(base.CatalogKeyBackfillTests):
         record['keys'].append({'id':'a-backfill','name':'backfill',
             'fields':[{'module':'m','element':'giftCode'}],'primary':False})
         return CatalogDocument('adoc','r2',json.dumps(source).encode())
+    def register(self,a,t):
+        catalog=a.catalog(a.catalog_selection).capability
+        prepared=catalog.prepare_catalog((self.with_key(),),source_version=self.source_version,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        return catalog.accept_in_transaction(t,prepared,request_key='new-alternate-key',bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+
     # The inherited duplicate workflow also proves that failed acceptance leaves
     # the original revision selected. The successful workflow differs because
     # the rebind changes the object version and declared query field.

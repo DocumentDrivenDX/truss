@@ -46,8 +46,8 @@ class _NativeCapability(Generic[Family]):
 @dataclass(frozen=True,slots=True,kw_only=True)
 class NativeCatalogCapability(_NativeCapability[Literal['catalog']]):
     """Actual UMF preparation, acceptance, original reports and reader views."""
-    def prepare_catalog(self, documents: tuple[CatalogDocument, ...], *, bun_executable: str='bun') -> PreparedAcceptance:
-        return self._assembly.prepare_catalog(documents, bun_executable=bun_executable)
+    def prepare_catalog(self, documents: tuple[CatalogDocument, ...], *, bun_executable: str='bun', source_version: str='0.7.0') -> PreparedAcceptance:
+        return self._assembly.prepare_catalog(documents, bun_executable=bun_executable, source_version=source_version)
 
     def accept_in_transaction(self, transaction: TransactionHandle, prepared: PreparedAcceptance, *, request_key: str,
                               origin_bytes: bytes=b'{}',bun_executable: str='bun') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
