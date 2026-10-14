@@ -1,0 +1,10 @@
+{
+  "result": "native1/44.898s passes",
+  "runtime": "0.64",
+  "testSourceSha256": "edd3e9f5edb8d6ffc68f6534e2d69348be9290ed0e5aa2e8d6a962e6ae59f6fb",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC5",
+    "US-056-AC9"
+  ],
+  "scope": "Ordinary Bob constant UPDATE attempts on Subject map/profile (no SELECT dependency) return native InsufficientPrivilege; savepoint rollback preserves authorized read. Not future write-grant drift detection or full case promotion."
+}

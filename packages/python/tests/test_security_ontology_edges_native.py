@@ -619,6 +619,10 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                                 connection.execute('BEGIN ISOLATION LEVEL REPEATABLE READ' if name=='BobOldSnapshot' else 'BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction(isolation='repeatable_read' if name=='BobOldSnapshot' else 'read_committed').value;released=[]
                                 if name=='BobPrivilegedRoles':
+                                    for statement in ("UPDATE truss.catalog_subject_map SET staff_key='Outsider'","UPDATE truss.catalog_graph_subject_profile SET profile_bytes=pg_catalog.decode('00','hex')"):
+                                        connection.execute('SAVEPOINT denied_subject_write')
+                                        with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute(statement)
+                                        connection.execute('ROLLBACK TO SAVEPOINT denied_subject_write');connection.execute('RELEASE SAVEPOINT denied_subject_write')
                                     for forbidden_role in (self.installation.owner_role,private_executor):
                                         for setter in ('SET LOCAL ROLE {}','SET LOCAL SESSION AUTHORIZATION {}'):
                                             connection.execute('SAVEPOINT denied_role')
