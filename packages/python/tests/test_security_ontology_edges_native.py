@@ -692,14 +692,12 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         forbidden_request=_original_request(physical,before[0],'SELECT SUM(r.salary) AS total FROM Resource r')
                                         refused=original_run([relational_binary],input=forbidden_request,capture_output=True,timeout=15)
                                         self.assertNotEqual(refused.returncode,0);self.assertEqual(refused.stdout,b'')
-                                        # Pending original DESC support; retain the exact hidden-row limit control.
-                                        if os.environ.get('TRUSS_SECURITY_ONTOLOGY_DESC_LIMIT') == '1':
-                                            ordered_request=_original_request(physical,before[0],'SELECT r.resourceId FROM Resource r ORDER BY r.resourceId DESC LIMIT 1')
-                                            ordered_output=original_run([relational_binary],input=ordered_request,capture_output=True,check=True,timeout=15).stdout
-                                            self.assertEqual(capture_relational_source_comparison(ordered_request,ordered_output),guarded_source)
-                                            ordered=execute_relational_program(cursor,ordered_request,ordered_output,locators[0],checker,inspector)
-                                            ordered_expected=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
-                                            self.assertEqual(json.loads(ordered['batch'])['rows'],ordered_expected)
+                                        ordered_request=_original_request(physical,before[0],'SELECT r.resourceId FROM Resource r ORDER BY r.resourceId DESC LIMIT 1')
+                                        ordered_output=original_run([relational_binary],input=ordered_request,capture_output=True,check=True,timeout=15).stdout
+                                        self.assertEqual(capture_relational_source_comparison(ordered_request,ordered_output),guarded_source)
+                                        ordered=execute_relational_program(cursor,ordered_request,ordered_output,locators[0],checker,inspector)
+                                        ordered_expected=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
+                                        self.assertEqual(json.loads(ordered['batch'])['rows'],ordered_expected)
                                         count_request=_original_request(physical,before[0],'SELECT COUNT(*) AS n FROM Resource r')
                                         count_output=original_run([relational_binary],input=count_request,capture_output=True,check=True,timeout=15).stdout
                                         self.assertEqual(capture_relational_source_comparison(count_request,count_output),guarded_source)
