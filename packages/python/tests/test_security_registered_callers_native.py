@@ -202,7 +202,9 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
   self.source_setup();executor='private_cut_'+uuid.uuid4().hex[:12]
   self.admin.execute(sql.SQL('CREATE ROLE {} LOGIN').format(sql.Identifier(executor)))
   self.addCleanup(self.admin.execute,sql.SQL('DROP OWNED BY {};DROP ROLE {}').format(sql.Identifier(executor),sql.Identifier(executor)))
-  self.admin.execute((source.ROOT/'packages/postgresql/native/catalog-read-table-cut.sql').read_text())
+  from truss._security_catalog_read_cut_installation import bootstrap_catalog_read_table_cut_issuer_in_transaction,acquire_issued_catalog_read_table_cut_with_cursor
+  installed=bootstrap_catalog_read_table_cut_issuer_in_transaction(self.host,self.tx,executor_role=executor)
+  self.assertIsInstance(installed,Ok,str(self.host._custody.last_attempt.error));self.assertFalse(installed.value.security_ready)
   self.admin.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {};GRANT SELECT ON truss.object TO {};GRANT EXECUTE ON FUNCTION truss.acquire_catalog_read_table_cut() TO {}').format(*[sql.Identifier(executor)]*3))
   self.host.detach();self.admin.commit()
   parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=executor
@@ -212,7 +214,7 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
    reader.execute('SAVEPOINT direct_lock')
    with self.assertRaises(psycopg.errors.InsufficientPrivilege):reader.execute('LOCK TABLE ONLY truss.object IN SHARE MODE NOWAIT')
    reader.execute('ROLLBACK TO SAVEPOINT direct_lock');reader.execute('RELEASE SAVEPOINT direct_lock')
-   reader.execute('SELECT truss.acquire_catalog_read_table_cut()')
+   with reader.cursor() as cursor:acquire_issued_catalog_read_table_cut_with_cursor(cursor,owner_oid=installed.value.owner_oid,caller_oid=installed.value.caller_oid)
    tables=('object','catalog_subject_map','installation_archive','source_epoch_current','source_epoch_registry','policy_generation_guard')
    for table in tables:
     self.assertEqual(reader.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND granted AND mode='ShareLock' AND relation=pg_catalog.to_regclass(%s)",('truss.'+table,)).fetchone(),(1,))
@@ -225,3 +227,13 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
    reader.rollback()
   with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
    for table in tables:writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
+  self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_catalog_read_table_cut() TO PUBLIC')
+  try:
+   with psycopg.connect(**parameters,autocommit=True) as reader:
+    reader.execute('BEGIN')
+    with reader.cursor() as cursor:
+     with self.assertRaisesRegex(ValueError,'Bounded exact Subject installation rows required'):
+      acquire_issued_catalog_read_table_cut_with_cursor(cursor,owner_oid=installed.value.owner_oid,caller_oid=installed.value.caller_oid)
+    self.assertEqual(reader.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND granted AND mode='ShareLock'").fetchone(),(0,))
+    reader.rollback()
+  finally:self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.acquire_catalog_read_table_cut() FROM PUBLIC')

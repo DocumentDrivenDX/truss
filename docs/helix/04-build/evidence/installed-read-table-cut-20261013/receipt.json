@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "tests": 1,
+  "seconds": 12.558,
+  "covers": [
+    "US-056-AC9"
+  ],
+  "sourceDigests": {
+    "packages/python/src/truss/_security_catalog_read_cut_installation.py": "8963b914be8ec21764443aeb416da1028a7946f58e3270f8202943280266b5a2",
+    "packages/python/src/truss/_security_bootstrap/catalog-read-table-cut.sql": "9d28c88fd82ec7a08750701e28847f2d5b95b673c1c04a5dcc4aec13355f1842",
+    "packages/postgresql/native/catalog-read-table-cut.sql": "9d28c88fd82ec7a08750701e28847f2d5b95b673c1c04a5dcc4aec13355f1842",
+    "packages/python/tests/test_security_registered_callers_native.py": "bd76dd5e721eb3077fca3f411d17e681bedbba5b43969c0ff5cbc8a2d03a8eda",
+    "scripts/check-module-boundaries.py": "003ba3d1298f71ecda974f88ab802a8cf5e87633b283390f69ba31e4872d4ce8"
+  },
+  "scope": "Original source-pinned installer pendingfalse; exact helperowner/body/config/directACL and nativecaller verified before invocation. Six exact current-backend relation ShareLocks on real populated graph/source homes; ordinary executor read-only; independent writers excluded then allowed after rollback. Committed PUBLIC grant refuses with zero ShareLocks. Expected identity custody/heldDDLcut remain premises. No complete source/issuer lifetime, ordinary producer or backend admission.132 inventory unchanged."
+}
