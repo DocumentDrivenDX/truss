@@ -48,9 +48,13 @@ def _text_result(cursor,statement,params=()):
     return rows
 
 
-def prepare_owned_graph_compiler(binary,result_binary,*,guarded=False,query_sql=None):
+def prepare_owned_graph_compiler(binary,result_binary,*,guarded=False,query_sql=None,source_comparison=None):
     """Pin original trusted producer; no path/hash-based authority issuance."""
     if type(guarded) is not bool or (not guarded and query_sql is not None):raise ValueError('Distinct original guarded compiler mode required')
+    if guarded:
+        from truss._security_guarded_source import snapshot_guarded_source_comparison
+        source_comparison=snapshot_guarded_source_comparison(source_comparison)
+    elif source_comparison is not None:raise ValueError('Distinct original guarded source comparison required')
     binary=Path(binary).resolve();original=binary.read_bytes()
     if not original or len(original)>64000000:raise ValueError('Bounded original graph compiler binary required')
     digest=sha256(original).digest()
@@ -67,8 +71,8 @@ def prepare_owned_graph_compiler(binary,result_binary,*,guarded=False,query_sql=
         if len(compiled.stdout)>16000000:raise ValueError('Original graph compiler lowering output exceeded')
         output=decode_owner_evidence_json(compiled.stdout)
         if guarded:
-            from truss._security_guarded_source import capture_guarded_source_comparison
-            capture_guarded_source_comparison(request,compiled.stdout)
+            from truss._security_guarded_source import require_same_guarded_source
+            require_same_guarded_source(source_comparison,request,compiled.stdout)
             context_sha=output['queryContextSha256']
             graph_sha=output['query']['graphSourceSha256']
         else:

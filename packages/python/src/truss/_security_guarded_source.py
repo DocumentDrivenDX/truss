@@ -39,12 +39,17 @@ def capture_guarded_source_comparison(original_request,original_output):
  return GuardedSourceComparison(raw,sha256(raw).hexdigest())
 
 
-def require_same_guarded_source(comparison,original_request,original_output):
+def snapshot_guarded_source_comparison(comparison):
  if (type(comparison) is not GuardedSourceComparison or type(comparison.source_bytes) is not bytes
      or not 1<=len(comparison.source_bytes)<=16000000
      or type(comparison.source_sha256) is not str
      or sha256(comparison.source_bytes).hexdigest()!=comparison.source_sha256):
   raise ValueError('Original bounded guarded source comparison required')
+ return replace(comparison)
+
+
+def require_same_guarded_source(comparison,original_request,original_output):
+ comparison=snapshot_guarded_source_comparison(comparison)
  captured=capture_guarded_source_comparison(original_request,original_output)
  if captured!=replace(comparison):raise ValueError('Original selected guarded source changed')
  return captured

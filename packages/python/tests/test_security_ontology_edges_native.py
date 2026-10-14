@@ -605,12 +605,15 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                     new_profile=derive_catalog_source_epoch_profile(graph,tuple(new_facts),infrastructure.value.barrier,subject_source=inputs['subject_source'])
                     new_epoch=self.admin.execute('SELECT truss.runtime_issue_source_epoch(%s,%s,%s,%s,%s)',(comparison.installation,advanced_epoch,comparison.incarnation,new_profile,comparison.evidence)).fetchone()[0]
                     composed_context=replace(context,comparison=_EpochComparison(comparison.installation,new_epoch,comparison.incarnation,new_profile,comparison.evidence))
+                    if guarded_binary:
+                        from truss._security_guarded_source import capture_guarded_source_comparison
+                        guarded_source=capture_guarded_source_comparison(graph.native_dependencies,graph.guarded_response)
                     composed=[]
-                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('BobGuarded',['RB']),) if guarded_binary else ()),('BobPublicIssuer',None)):
+                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('BobGuarded',['RB']),('BobGuardedCorrupt',None)) if guarded_binary else ()),('BobPublicIssuer',None)):
                         if name=='BobPublicIssuer':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.graph_subject_current() TO PUBLIC')
                         with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
                             private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
-                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Bob' if name in ('BobPublicIssuer','BobGuarded') else name]
+                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Bob' if name in ('BobPublicIssuer','BobGuarded','BobGuardedCorrupt') else name]
                             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                                 connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction().value;released=[]
                                 def receiver(raw):
@@ -618,17 +621,31 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         for table in ('catalog_subject_map','catalog_graph_subject_profile'):
                                             with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
                                     released.append(raw)
-                                result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,subjects.bindings,receiver,compiler=(prepare_owned_graph_compiler(guarded_binary,str(Path(guarded_binary).with_name('security_guarded_result')),guarded=True,query_sql='SELECT q.resourceId, q.salary FROM Resource q') if name=='BobGuarded' else native_compiler),cut_issuer=cut_issuer,source_epoch=composed_context,subject_registration=subjects)
+                                selected_compiler=prepare_owned_graph_compiler(guarded_binary,str(Path(guarded_binary).with_name('security_guarded_result')),guarded=True,query_sql='SELECT q.resourceId, q.salary FROM Resource q',source_comparison=guarded_source) if name.startswith('BobGuarded') else native_compiler
+                                corruption=[]
+                                def corrupt_guarded_check(*args,**kwargs):
+                                    if args[0][0]==str(Path(guarded_binary).with_name('security_guarded_result')):
+                                        checker_input=json.loads(kwargs['input']);batch=json.loads(checker_input['batchJson'])
+                                        self.assertEqual(batch['rows'][0][1],{'outcomeId':'withheld','disposition':'withheld'})
+                                        batch['rows'][0][1]['value']={'integerToken':'200'}
+                                        checker_input['batchJson']=json.dumps(batch);kwargs['input']=json.dumps(checker_input).encode();corruption.append(True)
+                                    return original_run(*args,**kwargs)
+                                from contextlib import nullcontext
+                                with patch.object(guarded.subprocess,'run',corrupt_guarded_check) if name=='BobGuardedCorrupt' else nullcontext():
+                                    result=native_read.publish_native_ontology_resource_read(caller,caller_tx,executor,executor_tx,request,subjects.bindings,receiver,compiler=selected_compiler,cut_issuer=cut_issuer,source_epoch=composed_context,subject_registration=subjects)
                                 if expected is None:
                                     self.assertIsInstance(result,Error);self.assertEqual(released,[])
-                                    self.assertEqual(str(executor._custody.last_attempt.error),'Exact registered graph Subject issuer ACL required')
+                                    self.assertEqual(str(executor._custody.last_attempt.error),'Original graph compiler result contract refused' if name=='BobGuardedCorrupt' else 'Exact registered graph Subject issuer ACL required')
+                                    if name=='BobGuardedCorrupt':
+                                        self.assertEqual(corruption,[True])
+                                        for session in (private,connection):self.assertEqual(session.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND mode='ShareLock' AND granted").fetchone(),(0,))
                                 else:
                                     self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual(released,[result.value])
                                     self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
                                 caller.detach();connection.rollback()
                             executor.detach();private.rollback()
                         if name=='BobPublicIssuer':self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.graph_subject_current() FROM PUBLIC')
-                        composed.append({'principal':name,'outcome':'issuerAclRefused','released':False} if expected is None else {'principal':name,'resources':expected,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
+                        composed.append({'principal':name,'outcome':('guardedResultRefused' if name=='BobGuardedCorrupt' else 'issuerAclRefused'),'released':False} if expected is None else {'principal':name,'resources':expected,'ownSessionIssuerAndCurrentEpoch':True,'subjectProfileAndMapCutsThroughReceiver':True})
                     directory=os.environ.get('TRUSS_SECURITY_ONTOLOGY_SUBJECT_COMPOSITION_EVIDENCE')
                     if directory:
                         folder=Path(directory);folder.mkdir(parents=True,exist_ok=True)
