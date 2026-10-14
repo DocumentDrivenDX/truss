@@ -1,0 +1,30 @@
+{
+  "status": "owner-private-native-physical-check-passed",
+  "postgresql": "18.6",
+  "tests": 1,
+  "seconds": 4.786,
+  "sourceHashes": {
+    "packages/python/src/truss/_security_bootstrap/preparation-permit-binding-check.sql": "d845a18bb1041c9a83734318deb9af8eb6ae491dfa643ba84d6af86ea182a696",
+    "packages/python/src/truss/_security_bootstrap/preparation-permit-mint.sql": "3f730e626b95bec11868ec06d92ffca562132406006f9beebfedab898a9245c9",
+    "packages/python/tests/test_preparation_permit_binding_native.py": "ee08781fc9ebf293a73a7b6e631acf9834b42506fb945a1f32424c857f482b73"
+  },
+  "logs": {
+    "native-r1.log": "7f3f9e91d5064fc17ce5e1fb3e279c8a4113f12c2223fbcde722034bb54e88fa",
+    "native-r2.log": "e51048d734493698f9d45e5660a6b57b6dc49f502d170bd1fc5f89f29f5e1c53"
+  },
+  "scope": [
+    "Checker derives actual data backendPID/fullxid8; requires coherent five-field native tuple under one live coordinator/database.",
+    "Private checker and mint denied to ordinary caller; diagnostic wrapper returns predicate only.",
+    "Foreign data session and mismatched anchor/coordinator cannot match.",
+    "Actual coordinator COMMIT/loss invalidates predicate while original RR snapshot stays fixed.",
+    "Weakened control: same tuple can be re-minted in later coordinator TX, proving no historical attempt/anchor authority."
+  ],
+  "limits": [
+    "Owner-private predicate, not authorization or a portable authority capsule.",
+    "Stats privilege and original helper/role/ACL/DDL custody remain qualification dependencies.",
+    "No immutable anchor/original coordinator incarnation, issued store, program/source scope, current Subject/action permission or historical one-use enforcement.",
+    "Diagnostic wrapper is fixture-only; no production installer or selector/seal consumer exists.",
+    "r1 precedes explicit later-TX remint control; r2 matches final source.",
+    "No backend acceptance promotion."
+  ]
+}

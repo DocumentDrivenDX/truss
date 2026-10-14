@@ -92,8 +92,9 @@ implements current native owner/person observation, original peer/cut checks,
 separate RC and RR lock-only issuers, and actual coordinator-disconnect/data
 completion exclusion controls. These comparisons remain `security_ready=false`.
 
-Still required: original generic products source-epoch issuance and source/DDL
-barriers; protected anchor/permit homes and immutable native enrollment;
+The original generic products metadata source-epoch issuer now has retained
+native evidence. Still required: complete source/DDL barriers beyond that
+metadata-only profile; protected anchor/permit homes and immutable native enrollment;
 advisory privilege/namespace/one-permit closure; shared human/action-role binding;
 same-store original current Weft selection enrollment; native direct-call,
 cross-session/replay/expiry/connection-loss and seal-COMMIT race tests. Missing
@@ -124,3 +125,20 @@ and its repair using the exact integral quotient. The earlier bit-vector theorem
 did not establish PostgreSQL division semantics. Ten native boundary vectors,
 concurrent coherent backends, duplicate-tuple refusal and completion release now
 pass; there is still no all-input SQL refinement theorem or permit activation.
+
+`preparation-permit-binding-check.sql` now provides the owner-private candidate
+`check_preparation_permit_binding(int4 anchor, int4 coordinator_pid) → bool`.
+It derives the actual data PID/full xid8 inside the original RR backend and
+requires all five addresses under one live native coordinator PID/database.
+PUBLIC execution is revoked. The native test uses a diagnostic wrapper solely
+to observe the predicate; no protected data or production guard is exposed.
+
+[Checker evidence](../../04-build/evidence/security-preparation-permit-check-20261014/receipt.json)
+covers true original binding, foreign data and anchor/coordinator mismatch,
+original COMMIT and actual coordinator disconnect while the data snapshot stays
+fixed. A retained weakened control deliberately re-mints the same tuple in a new
+coordinator transaction: the bare predicate becomes true again. Therefore it
+does **not** establish original anchor/attempt/coordinator incarnation, historical
+single issuance, current authority or scope. Only the original guarded issuer
+and protected consumer may compose those obligations; a true predicate or copied
+Python comparison cannot authorize selection or seal.
