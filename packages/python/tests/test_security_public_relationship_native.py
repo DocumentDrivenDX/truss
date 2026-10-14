@@ -189,6 +189,21 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
    self.assertIsInstance(issue_initial_catalog_source_epoch_in_transaction(factory,factory_tx,**{**inputs,'mapping':stale}),Error)
    self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.source_epoch_registry').fetchone(),(0,))
    issued=issue_initial_catalog_source_epoch_in_transaction(factory,factory_tx,**inputs);self.assertIsInstance(issued,Ok,str(factory._custody.last_attempt.error))
+   relationship_context=None
+   if os.environ.get('TRUSS_SECURITY_RELATIONSHIP_EPOCH_READ'):
+    from truss._security_relationship_epoch_read import bootstrap_relationship_epoch_read_cut_in_transaction,RelationshipEpochReadContext
+    private_role='relationship_executor_'+__import__('uuid').uuid4().hex[:8]
+    self.admin.execute(sql.SQL('CREATE ROLE {} LOGIN NOINHERIT').format(sql.Identifier(private_role)))
+    self.admin.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(private_role)))
+    from truss._security_catalog_assessment import SOURCE_TABLES
+    for table in ('object','edge','catalog_subject_map')+SOURCE_TABLES:self.admin.execute(sql.SQL('GRANT SELECT ON {} TO {}').format(sql.Identifier('truss',table),sql.Identifier(private_role)))
+    routines=self.admin.execute("SELECT p.oid::pg_catalog.regprocedure::pg_catalog.text FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' AND NOT p.prosecdef AND p.prokind='f'").fetchall()
+    for routine, in routines:self.admin.execute(sql.SQL('GRANT EXECUTE ON FUNCTION '+routine+' TO {}').format(sql.Identifier(private_role)))
+    original_cut=(root/'scripts/security-ontology-read-cut.sql').read_text();self.admin.execute(original_cut)
+    self.admin.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.acquire_ontology_read_cut() TO {}').format(sql.Identifier(private_role)))
+    issuer=bootstrap_relationship_epoch_read_cut_in_transaction(factory,factory_tx,executor_role=private_role)
+    self.assertIsInstance(issuer,Ok,str(factory._custody.last_attempt.error))
+    relationship_context=RelationshipEpochReadContext(selected,issued.value.comparison,issuer.value,inputs['subject_source'])
    if directory:
     (out/'source-epoch-issuance.json').write_text(json.dumps({'securityReady':False,'profile':json.loads(issued.value.comparison.profile),'epoch':issued.value.comparison.epoch,'exactReadback':True,'reuseRefused':True,'rollbackKeepsPriorWork':True,'staleGuardNoEpoch':True,'freshSuccessorIssued':True,'scope':'Actual initial native source epoch registration only; ordinary Subject/read/publication admission remains separate'},indent=2)+'\n')
    factory.detach()
@@ -205,4 +220,19 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
       with ordinary.cursor() as cursor:self.assertEqual(read_own_graph_subject_with_cursor(cursor,subjects,identity),name)
       with self.assertRaises(psycopg.errors.InsufficientPrivilege):ordinary.execute('SELECT * FROM truss.catalog_subject_map')
       observed.append({'subject':name,'ownNativeSession':True,'rawMapSelectDenied':True})
+    if relationship_context is not None:
+     from truss._security_relationship_epoch_read import acquire_relationship_epoch_read,verify_held_relationship_epoch_read,snapshot_relationship_epoch_read_context
+     from truss._security_graph_epoch_read import snapshot_graph_epoch_read_context
+     from security_ontology_read_cut import acquire_issued_ontology_read_cut
+     parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=private_role
+     with psycopg.connect(**parameters,autocommit=True) as private:
+      private.execute('BEGIN')
+      with private.cursor() as cursor:
+       acquire_issued_ontology_read_cut(cursor,relationship_context.issuer.owner_oid,relationship_context.issuer.caller_oid)
+       acquire_relationship_epoch_read(cursor,relationship_context);verify_held_relationship_epoch_read(cursor,relationship_context)
+       stale_context=replace(relationship_context,comparison=replace(relationship_context.comparison,epoch='stale-epoch'))
+       with self.assertRaisesRegex(ValueError,'Original current graph source epoch required'):verify_held_relationship_epoch_read(cursor,stale_context)
+       with self.assertRaises(ValueError):snapshot_graph_epoch_read_context(relationship_context)
+      private.rollback()
+     if directory:(out/'relationship-epoch-read.json').write_text(json.dumps({'securityReady':False,'privateExecutorOwnSession':True,'actualSourceFactAndEpochCuts':True,'currentArchivesGuardCensusVerified':True,'staleEpochRefused':True,'legacyContextRefused':True,'scope':'Ordinary private executor source epoch read, not protected Resource query/publication'},indent=2)+'\n')
     if directory:(out/'registered-subjects.json').write_text(json.dumps({'securityReady':False,'profile':json.loads(subjects.profile_bytes),'observations':observed,'scope':'Actual ordinary own-session metadata issuer only; protected Resource traversal/publication remains pending'},indent=2)+'\n')

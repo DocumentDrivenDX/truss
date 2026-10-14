@@ -1,0 +1,9 @@
+{
+  "securityReady": false,
+  "privateExecutorOwnSession": true,
+  "actualSourceFactAndEpochCuts": true,
+  "currentArchivesGuardCensusVerified": true,
+  "staleEpochRefused": true,
+  "legacyContextRefused": true,
+  "scope": "Ordinary private executor source epoch read, not protected Resource query/publication"
+}
