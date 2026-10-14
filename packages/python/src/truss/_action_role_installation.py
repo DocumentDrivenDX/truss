@@ -75,7 +75,7 @@ def bootstrap_action_roles_in_transaction(host, transaction, *, registration, en
                 if len(found) != 1 or found[0][1:] != ('false',)*7:
                     raise ValueError('Explicit ordinary NOLOGIN action role required')
                 rows.append((policy.family_identity, encode_action_role(role), int(found[0][0]), policy.action_pin))
-        if sum(len(family)+len(role)+len(pin)+32 for family,role,oid,pin in rows) > 4194304:
+        if sum(len(store_identity)+len(family)+len(role)+len(pin)+32 for family,role,oid,pin in rows) > 4194304:
             raise ValueError('Complete native action role enrollment capacity exceeded')
         # A surrogate PK avoids PostgreSQL B-tree's per-entry size ceiling.
         # Full semantic uniqueness is established by this closed fresh producer;

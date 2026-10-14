@@ -1,0 +1,77 @@
+{
+  "status": "one-new-capacity-accounting-finding-pending",
+  "reviewer": "Astra Ultra independent read-only source review",
+  "head": "2848c33de8eb574a94f818a75bfb590b2c9e1384",
+  "workingTree": "Committed role installer store-identity increment; exact source hashes below.",
+  "fixedFindings": [
+    {
+      "priority": "P1",
+      "file": "packages/python/src/truss/_action_subject_installation.py",
+      "line": 42,
+      "issue": "Unqualified text cast before search-path pin could invoke a hostile text domain.",
+      "resolution": "Qualified pg_catalog.text before pin; parent native hostile-domain and exact restoration control passed."
+    },
+    {
+      "priority": "P2",
+      "file": "packages/python/src/truss/_action_subject_installation.py",
+      "line": 82,
+      "issue": "Fresh enrolled service received EXECUTE but no schema USAGE.",
+      "resolution": "Explicit USAGE grant and native readback; parent fresh service invokes cut and raw SELECT remains denied."
+    }
+  ],
+  "independentControls": {
+    "count": 290,
+    "bunStringifyVectors": 262,
+    "scope": "Finite UTF-16 byte correspondence; synthetic owner local family-policy shape, bound, identity and original-source correspondence.",
+    "results": "results.json",
+    "resultsSha256": "7d0be7e9c58b112092c4891dccd673d312fda2730679a88efb16a31ba4cb5fd4",
+    "script": "check.py",
+    "scriptSha256": "a701b39982b8e252c1d9b41e6175d66292c41bb3a9e7ba5321bf7d8ec8704ac7"
+  },
+  "originalOwnerProbe": {
+    "file": "surrogate-results.json",
+    "sha256": "0b7e8fe1b765bb87cf892b179942508ddfe9f27dd89066f1a55deba5a7247633",
+    "result": "Original owner refused lone-surrogate role/action artifacts; accepted NUL role and gateway preserved it. Codec-level lone-surrogate support does not enlarge owner artifact admission."
+  },
+  "suppliedCodecTests": "Independently rerun two unit tests, including eight retained original reference vectors; passed.",
+  "newRoleInstaller": "Source inspection plus parent native log only: complete ticket-selected role set, exact original byte keys, bounded private fresh native enrollment, ordinary NOLOGIN mapping, nonunique digest routing and owner-only table/allocator ACL. No additional native job run. Final increment keeps store identity separate from family/installation and compares full native bytes; capacity omission noted.",
+  "nativeEvidence": {
+    "file": "parent-native-r2.log",
+    "sha256": "407016895d24f6f400e273f4c228b4846037f21308a79d1f73e1577857bd5742",
+    "result": "Parent final r2 terminal 2 tests / 15.518 seconds / OK; inspected, not rerun. Historical r1 preserved separately."
+  },
+  "boundaryChange": "One exact module import allowance for _action_role_installation; no directory exception.",
+  "sourceHashes": {
+    "packages/python/src/truss/_action_subject_installation.py": "d115dabc7e870299afa19fa149fa44fcbdf7aa5cd78500a3e59bee8695ae9de4",
+    "packages/python/src/truss/_security_bootstrap/action-subject-cut.sql": "5b070599774386b6c995b46e6d4154534e951acde27a5ae22604ff10cc7ded1d",
+    "packages/python/src/truss/_action_identity_codec.py": "d6d56bd6df071cda8524c93740d77e1ccdde0b5d8ead4d0eead40c61eb637990",
+    "packages/python/src/truss/bulk_action_gateway.py": "10f35fca05c1a37709d32e8868de5f09512e8de00773affb66ba81c3a4edaef8",
+    "packages/python/src/truss/_action_role_installation.py": "95c41c80481d9f30e350c2397a8242ef69639762a87438f141e9c54ddbaf8422",
+    "packages/python/src/truss/weft.py": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
+    "packages/python/tests/test_action_subject_installation_native.py": "33121f033dd4954821df0d4fd2650e6fe276b26a7547d271ff77abb2365a3958",
+    "packages/python/tests/test_action_role_installation_native.py": "02e5ea20bcfc430c099224573ebcab378eb4323bac49e4d9f7ae6dc6d2720950",
+    "packages/python/tests/test_action_identity_codec.py": "fcbdae3bd6daef4463c03b7ff2bbdf7d0edb22e9a6fd3b8d46908facb613a8fa",
+    "packages/python/tests/fixtures/action-family-codec.json": "82cc4145533ae642d167c51002283914f7e154a2d6b1d19389f877009aa9421b",
+    "packages/python/tests/test_bulk_action_gateway.py": "8b0e411f1ccdcf72d697487fc5e77aad4a9ec252a5e8afbe6cccf9bd93f96f19",
+    "packages/python/tests/owner_action_preparation.ts": "489eb6c2345c51979c70d3fb86f29e4d612f96d04b42066e77b1f6bfea244a0f",
+    "scripts/check-module-boundaries.py": "c9bea69200c43a96703f52169e3fc98702f7d740536b64cd2497c7ba387d6e5d"
+  },
+  "historicalSource": {
+    "file": "enrollment-before.py",
+    "sha256": "d115dabc7e870299afa19fa149fa44fcbdf7aa5cd78500a3e59bee8695ae9de4"
+  },
+  "limits": [
+    "Trusted original owner preparation, installation administrator, native SQL/runtime and quiescent initialization remain premises.",
+    "Role lifecycle and OID reuse, current membership/authentication, complete helper/source/DDL/ACL lifetime, native permit and seal activation remain unqualified.",
+    "No total heap/CPU proof, native lifecycle failure injection, full backend admission or promotion of any of the 132 required cases."
+  ],
+  "newFindings": [
+    {
+      "priority": "P2",
+      "file": "packages/python/src/truss/_action_role_installation.py",
+      "line": 78,
+      "issue": "Per-row 4 MiB aggregate gate omits newly repeated store_identity. 4096 rows x 4096 store bytes alone add 16 MiB, doubled by hex readback.",
+      "recommendation": "Charge len(store_identity) for every row before any CREATE/INSERT, or state and enforce a distinct full payload limit."
+    }
+  ]
+}

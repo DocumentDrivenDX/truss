@@ -1,0 +1,7 @@
+test_original_registry_ticket_and_complete_native_role_mapping (test_action_role_installation_native.ActionRoleInstallationNativeTests.test_original_registry_ticket_and_complete_native_role_mapping) ... ok
+test_private_explicit_subject_kind_and_original_commit (test_action_subject_installation_native.ActionSubjectInstallationNativeTests.test_private_explicit_subject_kind_and_original_commit) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 14.391s
+
+OK

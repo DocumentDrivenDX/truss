@@ -1,0 +1,19 @@
+[
+  {
+    "name": "role-lone",
+    "ownerExit": 1,
+    "stderr": "3 | import {readJsonValue,assertExactJsonNumber} from '../../model/serialization';\n4 | import {UmfError,type Json} from '../../model/types';\n5 | import {canonicalSchemaJson} from '../../model/schema-literals';\n6 | import type {ActionPlanArtifact} from './plan-types';\n7 | export const PLAN_BYTES=1048576;\n8 | export const planError=(code:string,message:string,path=''):never=>{throw new UmfError(code,message,path);};\n                                                                              ^\nUmfError: Unpaired Unicode surrogate\n path: \"\",\n code: \"PAP_INVALID\"\n\n      at planError (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:8:75)\n      at validUnicode (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:10:141)\n      at string (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:31:220)\n      at visit (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:32:156)\n      at visit (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:32:570)\n      at visit (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:32:570)\n      at visit (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:32:570)\n      at visit (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:32:570)\n      at visit (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:32:570)\n      at visit (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:32:570)\n\nBun v1.4.2 (macOS arm64)\n"
+  },
+  {
+    "name": "action-lone",
+    "ownerExit": 1,
+    "stderr": "3 | import {readJsonValue,assertExactJsonNumber} from '../../model/serialization';\n4 | import {UmfError,type Json} from '../../model/types';\n5 | import {canonicalSchemaJson} from '../../model/schema-literals';\n6 | import type {ActionPlanArtifact} from './plan-types';\n7 | export const PLAN_BYTES=1048576;\n8 | export const planError=(code:string,message:string,path=''):never=>{throw new UmfError(code,message,path);};\n                                                                              ^\nUmfError: Unpaired Unicode surrogate\n path: \"\",\n code: \"PAP_INVALID\"\n\n      at planError (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:8:75)\n      at validUnicode (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:10:225)\n      at validatePlanStrings (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:13:29)\n      at validatePlanStrings (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:13:154)\n      at validatePlanStrings (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plan-artifacts.ts:13:154)\n      at copy (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plans.ts:14:48)\n      at resolveActionPlanContext (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plans.ts:22:38)\n      at prepareActionPlanModel (/Users/erik/.codex/worktrees/0ede/umf/src/extensions/actions/plans.ts:54:17)\n      at /private/tmp/truss-security-main-integration/packages/python/tests/owner_action_preparation.ts:5:25\n\nBun v1.4.2 (macOS arm64)\n"
+  },
+  {
+    "name": "nul-positive",
+    "ownerExit": 0,
+    "stderr": "",
+    "gateway": "accepted",
+    "familyHex": "5b2273616c6573222c227365742d616374697665225d"
+  }
+]

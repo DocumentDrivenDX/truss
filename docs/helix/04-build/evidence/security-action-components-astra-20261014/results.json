@@ -1,0 +1,1182 @@
+{
+  "status": "passed",
+  "controls": 290,
+  "bunVectors": 262,
+  "sourceHashes": {
+    "packages/python/src/truss/_action_subject_installation.py": "d115dabc7e870299afa19fa149fa44fcbdf7aa5cd78500a3e59bee8695ae9de4",
+    "packages/python/src/truss/_security_bootstrap/action-subject-cut.sql": "5b070599774386b6c995b46e6d4154534e951acde27a5ae22604ff10cc7ded1d",
+    "packages/python/src/truss/_action_identity_codec.py": "d6d56bd6df071cda8524c93740d77e1ccdde0b5d8ead4d0eead40c61eb637990",
+    "packages/python/src/truss/bulk_action_gateway.py": "10f35fca05c1a37709d32e8868de5f09512e8de00773affb66ba81c3a4edaef8",
+    "packages/python/tests/test_action_identity_codec.py": "fcbdae3bd6daef4463c03b7ff2bbdf7d0edb22e9a6fd3b8d46908facb613a8fa",
+    "packages/python/tests/fixtures/action-family-codec.json": "82cc4145533ae642d167c51002283914f7e154a2d6b1d19389f877009aa9421b",
+    "packages/python/tests/test_bulk_action_gateway.py": "8b0e411f1ccdcf72d697487fc5e77aad4a9ec252a5e8afbe6cccf9bd93f96f19",
+    "packages/python/tests/test_action_subject_installation_native.py": "33121f033dd4954821df0d4fd2650e6fe276b26a7547d271ff77abb2365a3958"
+  },
+  "checks": [
+    {
+      "name": "original-bun-utf16-0",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-1",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-2",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-3",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-4",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-5",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-6",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-7",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-8",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-9",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-10",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-11",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-12",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-13",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-14",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-15",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-16",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-17",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-18",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-19",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-20",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-21",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-22",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-23",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-24",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-25",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-26",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-27",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-28",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-29",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-30",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-31",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-32",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-33",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-34",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-35",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-36",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-37",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-38",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-39",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-40",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-41",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-42",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-43",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-44",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-45",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-46",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-47",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-48",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-49",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-50",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-51",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-52",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-53",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-54",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-55",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-56",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-57",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-58",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-59",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-60",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-61",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-62",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-63",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-64",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-65",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-66",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-67",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-68",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-69",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-70",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-71",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-72",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-73",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-74",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-75",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-76",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-77",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-78",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-79",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-80",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-81",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-82",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-83",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-84",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-85",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-86",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-87",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-88",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-89",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-90",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-91",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-92",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-93",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-94",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-95",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-96",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-97",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-98",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-99",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-100",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-101",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-102",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-103",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-104",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-105",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-106",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-107",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-108",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-109",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-110",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-111",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-112",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-113",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-114",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-115",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-116",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-117",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-118",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-119",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-120",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-121",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-122",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-123",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-124",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-125",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-126",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-127",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-128",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-129",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-130",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-131",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-132",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-133",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-134",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-135",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-136",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-137",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-138",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-139",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-140",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-141",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-142",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-143",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-144",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-145",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-146",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-147",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-148",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-149",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-150",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-151",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-152",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-153",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-154",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-155",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-156",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-157",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-158",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-159",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-160",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-161",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-162",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-163",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-164",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-165",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-166",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-167",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-168",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-169",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-170",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-171",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-172",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-173",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-174",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-175",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-176",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-177",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-178",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-179",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-180",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-181",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-182",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-183",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-184",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-185",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-186",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-187",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-188",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-189",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-190",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-191",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-192",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-193",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-194",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-195",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-196",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-197",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-198",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-199",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-200",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-201",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-202",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-203",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-204",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-205",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-206",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-207",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-208",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-209",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-210",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-211",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-212",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-213",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-214",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-215",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-216",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-217",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-218",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-219",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-220",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-221",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-222",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-223",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-224",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-225",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-226",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-227",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-228",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-229",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-230",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-231",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-232",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-233",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-234",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-235",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-236",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-237",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-238",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-239",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-240",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-241",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-242",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-243",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-244",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-245",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-246",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-247",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-248",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-249",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-250",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-251",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-252",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-253",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-254",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-255",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-256",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-257",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-258",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-259",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-260",
+      "status": "passed"
+    },
+    {
+      "name": "original-bun-utf16-261",
+      "status": "passed"
+    },
+    {
+      "name": "invalid-identity-0",
+      "status": "passed"
+    },
+    {
+      "name": "invalid-identity-1",
+      "status": "passed"
+    },
+    {
+      "name": "invalid-identity-2",
+      "status": "passed"
+    },
+    {
+      "name": "invalid-identity-3",
+      "status": "passed"
+    },
+    {
+      "name": "invalid-identity-4",
+      "status": "passed"
+    },
+    {
+      "name": "invalid-identity-5",
+      "status": "passed"
+    },
+    {
+      "name": "family-baseline",
+      "status": "passed"
+    },
+    {
+      "name": "authorization-kind",
+      "status": "passed"
+    },
+    {
+      "name": "authorization-version",
+      "status": "passed"
+    },
+    {
+      "name": "authorization-extra",
+      "status": "passed"
+    },
+    {
+      "name": "roles-empty",
+      "status": "passed"
+    },
+    {
+      "name": "roles-over64",
+      "status": "passed"
+    },
+    {
+      "name": "roles-duplicate",
+      "status": "passed"
+    },
+    {
+      "name": "roles-bool",
+      "status": "passed"
+    },
+    {
+      "name": "roles-long",
+      "status": "passed"
+    },
+    {
+      "name": "attribution-missing",
+      "status": "passed"
+    },
+    {
+      "name": "attribution-extra",
+      "status": "passed"
+    },
+    {
+      "name": "module-duplicate",
+      "status": "passed"
+    },
+    {
+      "name": "action-duplicate",
+      "status": "passed"
+    },
+    {
+      "name": "preparation-protocol",
+      "status": "passed"
+    },
+    {
+      "name": "preparation-action",
+      "status": "passed"
+    },
+    {
+      "name": "preparation-model",
+      "status": "passed"
+    },
+    {
+      "name": "identity-extra",
+      "status": "passed"
+    },
+    {
+      "name": "identity-missing-module",
+      "status": "passed"
+    },
+    {
+      "name": "preserve-roles-286",
+      "status": "passed"
+    },
+    {
+      "name": "preserve-roles-287",
+      "status": "passed"
+    },
+    {
+      "name": "preserve-roles-288",
+      "status": "passed"
+    },
+    {
+      "name": "preserve-roles-289",
+      "status": "passed"
+    }
+  ],
+  "limits": [
+    "Synthetic policy ports qualify local correspondence and refusal, not original owner semantics or authentication.",
+    "No native process run.",
+    "Bun vectors are finite independent codec correspondences, not a universal codec proof."
+  ]
+}

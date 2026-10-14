@@ -1,0 +1,88 @@
+{
+  "status": "reviewed-no-remaining-actionable-finding-in-stated-scope",
+  "reviewer": "Astra Ultra independent read-only source review",
+  "head": "2848c33de8eb574a94f818a75bfb590b2c9e1384",
+  "workingTree": "Reviewed uncommitted per-row store-identity charge on committed enrollment baseline; new authority observer explicitly excluded.",
+  "fixedFindings": [
+    {
+      "priority": "P1",
+      "file": "packages/python/src/truss/_action_subject_installation.py",
+      "line": 42,
+      "issue": "Unqualified text cast before search-path pin could invoke a hostile text domain.",
+      "resolution": "Qualified pg_catalog.text before pin; parent native hostile-domain and exact restoration control passed."
+    },
+    {
+      "priority": "P2",
+      "file": "packages/python/src/truss/_action_subject_installation.py",
+      "line": 82,
+      "issue": "Fresh enrolled service received EXECUTE but no schema USAGE.",
+      "resolution": "Explicit USAGE grant and native readback; parent fresh service invokes cut and raw SELECT remains denied."
+    },
+    {
+      "priority": "P2",
+      "file": "packages/python/src/truss/_action_role_installation.py",
+      "line": 78,
+      "issue": "Per-row 4 MiB aggregate gate omits newly repeated store_identity. 4096 rows x 4096 store bytes alone add 16 MiB, doubled by hex readback.",
+      "resolution": "Current sum charges len(store_identity) for every row before CREATE/INSERT; four exact-expression controls passed."
+    }
+  ],
+  "independentControls": {
+    "count": 290,
+    "bunStringifyVectors": 262,
+    "scope": "Finite UTF-16 byte correspondence; synthetic owner local family-policy shape, bound, identity and original-source correspondence.",
+    "results": "results.json",
+    "resultsSha256": "7d0be7e9c58b112092c4891dccd673d312fda2730679a88efb16a31ba4cb5fd4",
+    "script": "check.py",
+    "scriptSha256": "a701b39982b8e252c1d9b41e6175d66292c41bb3a9e7ba5321bf7d8ec8704ac7"
+  },
+  "originalOwnerProbe": {
+    "file": "surrogate-results.json",
+    "sha256": "0b7e8fe1b765bb87cf892b179942508ddfe9f27dd89066f1a55deba5a7247633",
+    "result": "Original owner refused lone-surrogate role/action artifacts; accepted NUL role and gateway preserved it. Codec-level lone-surrogate support does not enlarge owner artifact admission."
+  },
+  "suppliedCodecTests": "Independently rerun two unit tests, including eight retained original reference vectors; passed.",
+  "newRoleInstaller": "Source review of original-ticket family/roles, separate opaque store identity, exact native bytes and private fresh enrollment. The full per-row selected payload gate now includes store bytes. Digest indexes route only; no arbitrary writer theorem.",
+  "nativeEvidence": {
+    "file": "parent-native-r2.log",
+    "sha256": "407016895d24f6f400e273f4c228b4846037f21308a79d1f73e1577857bd5742",
+    "result": "Parent r2 terminal 2 tests / 15.518 seconds / OK on source before the subsequent one-line store accounting correction; inspected, not rerun. Historical r1 preserved."
+  },
+  "boundaryChange": "Reviewed exact _action_role_installation import allowance. Other newer authority-observer boundary changes are outside this review; whole-file hash records observation only.",
+  "sourceHashes": {
+    "packages/python/src/truss/_action_subject_installation.py": "d115dabc7e870299afa19fa149fa44fcbdf7aa5cd78500a3e59bee8695ae9de4",
+    "packages/python/src/truss/_security_bootstrap/action-subject-cut.sql": "5b070599774386b6c995b46e6d4154534e951acde27a5ae22604ff10cc7ded1d",
+    "packages/python/src/truss/_action_identity_codec.py": "d6d56bd6df071cda8524c93740d77e1ccdde0b5d8ead4d0eead40c61eb637990",
+    "packages/python/src/truss/bulk_action_gateway.py": "10f35fca05c1a37709d32e8868de5f09512e8de00773affb66ba81c3a4edaef8",
+    "packages/python/src/truss/_action_role_installation.py": "f1a54cd4eb7135f9b56f7d4a922496c145bd6e057a61c53d995205a5e77197ba",
+    "packages/python/src/truss/weft.py": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
+    "packages/python/tests/test_action_subject_installation_native.py": "33121f033dd4954821df0d4fd2650e6fe276b26a7547d271ff77abb2365a3958",
+    "packages/python/tests/test_action_role_installation_native.py": "9f6ba09220c8121fdd28714159da42c534219fdfcd704eab096adfade891c3f3",
+    "packages/python/tests/test_action_identity_codec.py": "fcbdae3bd6daef4463c03b7ff2bbdf7d0edb22e9a6fd3b8d46908facb613a8fa",
+    "packages/python/tests/fixtures/action-family-codec.json": "82cc4145533ae642d167c51002283914f7e154a2d6b1d19389f877009aa9421b",
+    "packages/python/tests/test_bulk_action_gateway.py": "8b0e411f1ccdcf72d697487fc5e77aad4a9ec252a5e8afbe6cccf9bd93f96f19",
+    "packages/python/tests/owner_action_preparation.ts": "489eb6c2345c51979c70d3fb86f29e4d612f96d04b42066e77b1f6bfea244a0f",
+    "scripts/check-module-boundaries.py": "c273778b3df5ae4cb6b2c791425a9024e39b467690064e50a2647692d38e1799"
+  },
+  "historicalSource": {
+    "file": "enrollment-pre-fix-10701.py",
+    "sha256": "1156970ee9622f2e0dbf4431d881102cbcd37c9dd372e0adc2eabc76b2c0fea9",
+    "provenance": "git show 10701e15853e89d135eca10ebc2129d7857042be:packages/python/src/truss/_action_subject_installation.py",
+    "correction": "Earlier enrollment-before.py was captured after the concurrent fix despite its name; preserved but not pre-fix evidence. Earlier receipts remain unchanged."
+  },
+  "limits": [
+    "Trusted original owner preparation, installation administrator, native SQL/runtime and quiescent initialization remain premises.",
+    "Role lifecycle and OID reuse, current membership/authentication, complete helper/source/DDL/ACL lifetime, native permit and seal activation remain unqualified.",
+    "No total heap/CPU proof, native lifecycle failure injection, full backend admission or promotion of any of the 132 required cases."
+  ],
+  "capacityControls": {
+    "file": "accounting-results.json",
+    "sha256": "fe4c9bee80d82c7f8b626dd29b65094b1306e5f12be9a39ee19ba1e93a387a68",
+    "script": "check-accounting.py",
+    "scriptSha256": "ddf25573645b21fd8cd2c0de044c93ec769fa56c9ca3d532bed04bf484a47b30",
+    "count": 4,
+    "scope": "Actual parsed capacity expressions only; not full native producer/heap proof. Initial local evaluator harness scope failure was corrected; no product change resulted."
+  },
+  "excludedScope": [
+    "New _action_authority_observation.py and its tests receive no approval or evidence inheritance from this enrollment/codec/family review."
+  ]
+}

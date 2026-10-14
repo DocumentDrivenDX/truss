@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "name": "former-store-amplification-admitted",
+      "passed": true
+    },
+    {
+      "name": "fixed-store-amplification-refused",
+      "passed": true
+    },
+    {
+      "name": "exact-four-MiB-admitted",
+      "passed": true
+    },
+    {
+      "name": "one-byte-per-row-over-refused",
+      "passed": true
+    }
+  ],
+  "sourceSha256": "f1a54cd4eb7135f9b56f7d4a922496c145bd6e057a61c53d995205a5e77197ba",
+  "priorSourceSha256": "95c41c80481d9f30e350c2397a8242ef69639762a87438f141e9c54ddbaf8422",
+  "scope": "Executes only the exact parsed old/current capacity expression over controlled tuples. Does not qualify full native enrollment, original ticket admissibility, total heap, or SQL storage overhead."
+}

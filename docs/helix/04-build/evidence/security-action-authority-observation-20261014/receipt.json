@@ -1,0 +1,38 @@
+{
+  "status": "native-current-role-observation-component-passed",
+  "postgresql": "18.6",
+  "tests": 2,
+  "seconds": 15.989,
+  "sourceHashes": {
+    "packages/python/src/truss/_action_authority_observation.py": "186bcf1720526321f4e016279f964d7c265a33ddc9faacd44790c82853111a3c",
+    "packages/python/src/truss/_action_role_installation.py": "f1a54cd4eb7135f9b56f7d4a922496c145bd6e057a61c53d995205a5e77197ba",
+    "packages/python/tests/test_action_role_installation_native.py": "9f6ba09220c8121fdd28714159da42c534219fdfcd704eab096adfade891c3f3",
+    "packages/python/tests/test_action_subject_installation_native.py": "33121f033dd4954821df0d4fd2650e6fe276b26a7547d271ff77abb2365a3958"
+  },
+  "logs": {
+    "native-r1.log": "5b58d4483d786516b24cac78fb6aa5b5b2b9bb078858ffb6a0ad7cf18d177400",
+    "native-r2.log": "72d9e9790612ea805d1b71b98806b524fd7218e19fe7a18dcfd27a3907cb9d00",
+    "boundaries.log": "1c812903c7fd2b3dafd40fe33134a59362ff55c8b3312d0b76e4b0ccf18f3150",
+    "native-r3.log": "3d8200cd93be4cce08a3e758c70d5626bcfaab19246894b71b281a39f6a023d3"
+  },
+  "scope": [
+    "Original-owner-admitted two-role OR: no action role denies despite module writer; second role alone matches.",
+    "Fresh guarded RC collector verifies actual original peer and complete private mapping/role cuts.",
+    "Native revocation and role-map UPDATE block under held cuts.",
+    "Service enrollment can match role while human_enrolled remains false; flags are separate.",
+    "Original RR still sees revoked membership; fresh RC observation denies.",
+    "Astra enrollment accounting fix charges store bytes in each row; reviewer receipt retained separately."
+  ],
+  "acceptanceLinks": [
+    "US-049-AC2 current-role observation prerequisite only",
+    "US-049-AC5 original role OR comparison prerequisite only"
+  ],
+  "limits": [
+    "Direct privileged diagnostic collector and trust-authenticated fixture data peer; not composed SCRAM/human invocation admission.",
+    "Opaque diagnostic store configuration is not an issued native action store; original store issuer remains required.",
+    "No complete mapping/role lifecycle, source/DDL/ACL writer closure or data-through-COMMIT permit.",
+    "Astra enrollment/codec/family review explicitly excludes this new collector.",
+    "No full backend criterion or native permit/selection/seal promotion.",
+    "r1/r2 are earlier controls; r3 matches retained test source."
+  ]
+}
