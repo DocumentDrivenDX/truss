@@ -5,13 +5,13 @@ property values typed by [UMF](https://github.com/DocumentDrivenDX/umf) schemas.
 
 **Status:** experimental Python reference implementation. The
 [Python interface](packages/python/README.md) provides installation and upgrades,
-catalog registration, scalar object and independent edge mutations/reads,
+catalog registration, exact scalar/nested-container object and independent edge mutations/reads,
 preconditions, idempotent receipts, host-owned imports, history, committed feeds
 and Weft-compiled scalar and relationship queries. The local baseline is DocumentDrivenDX
 `pgserver-pg18==18.6.1` (PostgreSQL18.6) with psycopg3.3.6. Start with the [runnable adopter workflow](packages/python/examples/adopter_workflow.py).
 
-Multi-hop relationship queries, structured values, broader import execution and
-managed-service qualification remain unfinished. Design and evidence live in
+Cyclic schema definitions, record-valued properties, composition/owned objects,
+history offload and managed-service qualification remain unfinished. Design and evidence live in
 [`docs/helix/`](docs/helix/README.md).
 
 ## Relationship to other DocumentDrivenDX projects

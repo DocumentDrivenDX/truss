@@ -43,7 +43,12 @@ implementation gaps; accepting the Python carrier alone does not close them.
    retain one exact before/after and journal inventory per affected typed object,
    preserving original transitions and report bytes. Capture any physical
    constraint change through UMF and use the owner SQL exporter; add a populated
-   predecessor upgrade to the existing basic workflow.
+   predecessor upgrade to the existing basic workflow. Edge transitions also
+   retain closed operation-time endpoint ownership contexts with their own
+   catalog revision/root pins, including unchanged transitions. Distinguish
+   absent before/after edge sides from rootless endpoints. Legacy SQL NULL is
+   admitted only through verified original pre-owned profiles; do not backfill
+   synthetic roots or use these historical contexts for live ownership.
 3. Implement owned creation through stored roots and earlier aliases, ordinary
    updates and ownership changes, owned edges, and complete atomic cascades.
    Lock/recheck the entire affected root/object/edge and module closure using the
