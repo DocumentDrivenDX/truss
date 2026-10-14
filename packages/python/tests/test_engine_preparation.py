@@ -15,6 +15,23 @@ class EnginePreparationTests(unittest.TestCase):
         session._original_host=session.host;session._transaction=object()
         return session
 
+    def test_failed_scram_login_has_no_default_connection_fallback(self):
+        from truss._scram_preparation_login import ScramPreparationLogin
+        login=ScramPreparationLogin('/unused',5432,'postgres','person','private-test-value')
+        session=_EnginePreparationSession.from_scram_login(login,1000,1000)
+        with patch.object(ScramPreparationLogin,'open_connection',side_effect=RuntimeError('private-test-value')) as opener, patch.object(_EngineImportSession,'_open_connection') as fallback:
+            with self.assertRaisesRegex(ValueError,'^Original SCRAM preparation login refused$'):
+                session.prepare_connection()
+            with self.assertRaises(ValueError):session.prepare_connection()
+            opener.assert_called_once();fallback.assert_not_called()
+        self.assertIsNone(session._scram_login)
+
+    def test_close_unused_scram_session_drops_factory_reference(self):
+        from truss._scram_preparation_login import ScramPreparationLogin
+        session=_EnginePreparationSession.from_scram_login(ScramPreparationLogin('/unused',5432,'postgres','person','private-test-value'),1000,1000)
+        session.close()
+        self.assertIsNone(session._scram_login)
+
     def test_failed_start_cannot_replace_original_cut(self):
         session=self.session()
         with patch.object(session,'_prepare_locked',side_effect=ValueError('start failed')):

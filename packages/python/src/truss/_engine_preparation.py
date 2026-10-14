@@ -34,11 +34,33 @@ class _EnginePreparationSession(_EngineImportSession):
         self._original_connection=None
         self._backend_pid=None
         self._connection_cap=None
+        self._scram_required=False
+        self._scram_login=None
+
+    @classmethod
+    def from_scram_login(cls, login, statement_timeout_ms, operation_timeout_ms):
+        from ._scram_preparation_login import ScramPreparationLogin
+        if cls is not _EnginePreparationSession or type(login) is not ScramPreparationLogin:
+            raise ValueError('Original closed SCRAM preparation login required')
+        session=cls(None,statement_timeout_ms,operation_timeout_ms)
+        session._scram_required=True
+        session._scram_login=login
+        return session
 
     def _open_connection(self):
         if self._physical_opened:
             raise ValueError('Original preparation connection cannot reopen')
         self._physical_opened=True
+        if self._scram_required:
+            from ._scram_preparation_login import ScramPreparationLogin
+            login=self._scram_login
+            self._scram_login=None
+            if type(login) is not ScramPreparationLogin:
+                raise ValueError('Original SCRAM preparation login unavailable')
+            try:
+                return login.open_connection()
+            except Exception:
+                raise ValueError('Original SCRAM preparation login refused') from None
         return super()._open_connection()
 
     def _idle_original(self):
@@ -164,6 +186,7 @@ class _EnginePreparationSession(_EngineImportSession):
         with self._phase_lock:
             if self._phase=='capturing':raise ValueError('Cannot close during native capture')
             self._phase='closed';self._connection_cap=None
+            self._scram_login=None
             return super().close()
 
     def run_operation(self, callback):
