@@ -620,10 +620,11 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                 connection.execute('BEGIN ISOLATION LEVEL REPEATABLE READ' if name=='BobOldSnapshot' else 'BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction(isolation='repeatable_read' if name=='BobOldSnapshot' else 'read_committed').value;released=[]
                                 if name=='BobPrivilegedRoles':
                                     for forbidden_role in (self.installation.owner_role,private_executor):
-                                        connection.execute('SAVEPOINT denied_role')
-                                        with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute(sql.SQL('SET LOCAL ROLE {}').format(sql.Identifier(forbidden_role)))
-                                        connection.execute('ROLLBACK TO SAVEPOINT denied_role');connection.execute('RELEASE SAVEPOINT denied_role')
-                                        self.assertEqual(connection.execute("SELECT SESSION_USER::text,CURRENT_USER::text,pg_catalog.current_setting('role')").fetchone(),(roles['Bob'],roles['Bob'],'none'))
+                                        for setter in ('SET LOCAL ROLE {}','SET LOCAL SESSION AUTHORIZATION {}'):
+                                            connection.execute('SAVEPOINT denied_role')
+                                            with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute(sql.SQL(setter).format(sql.Identifier(forbidden_role)))
+                                            connection.execute('ROLLBACK TO SAVEPOINT denied_role');connection.execute('RELEASE SAVEPOINT denied_role')
+                                            self.assertEqual(connection.execute("SELECT SESSION_USER::text,CURRENT_USER::text,pg_catalog.current_setting('role')").fetchone(),(roles['Bob'],roles['Bob'],'none'))
                                 if name=='AliceOtherRole':
                                     connection.execute(sql.SQL('SET LOCAL ROLE {}').format(sql.Identifier(roles['Bob'])))
                                     self.assertEqual(connection.execute('SELECT SESSION_USER::text,CURRENT_USER::text').fetchone(),(roles['Alice'],roles['Bob']))
