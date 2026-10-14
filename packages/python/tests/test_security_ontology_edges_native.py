@@ -661,7 +661,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                     prior_compiler=selected_compiler
                                     def capture_then_direct(cursor,physical,before,subject,semantic):
                                         from security_ontology_compiled_read import _original_request
-                                        from security_relational_capture import capture_relational_operands
+                                        from security_relational_capture import execute_relational_program
                                         from security_relational_codecs import prepare_owned_relational_codec_checker
                                         from truss._security_guarded_source import capture_guarded_source_comparison
                                         from truss._security_relational_source import capture_relational_source_comparison
@@ -674,11 +674,21 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         locators=[int(oid) for oid,tid,raw,root in before[1] if tid==str(staff_type) and root=='false' and json.loads(raw).get(str(staff_prop))=={'kind':'string','text':subject}]
                                         self.assertEqual(len(locators),1)
                                         checker=prepare_owned_relational_codec_checker(Path(relational_binary).with_name('security_postgresql_codecs'))
-                                        captured=capture_relational_operands(cursor,relational_request,produced,locators[0],checker)
+                                        from security_relational_inspection import prepare_owned_relational_inspector
+                                        inspector=prepare_owned_relational_inspector(Path(relational_binary).with_name('security_relational_result'))
+                                        relational_result=execute_relational_program(cursor,relational_request,produced,locators[0],checker,inspector)
+                                        self.assertEqual(json.loads(relational_result['batch'])['rows'],[])
+                                        captured=relational_result['operandBatch']
                                         scans=json.loads(captured)['scans'];self.assertEqual(len(scans),1)
                                         self.assertEqual(len(scans[0]['rows']),len(semantic['rows']))
                                         self.assertEqual(len(scans[0]['rows']),1 if subject=='Bob' else 0)
                                         self.assertEqual({r['nativeRowId'] for r in scans[0]['rows']},{str(identities['rb'])} if subject=='Bob' else set())
+                                        matching_request=_original_request(physical,before[0],"SELECT r.resourceId FROM Resource r WHERE r.resourceId = 'RB'")
+                                        matching_output=original_run([relational_binary],input=matching_request,capture_output=True,check=True,timeout=15).stdout
+                                        self.assertEqual(capture_relational_source_comparison(matching_request,matching_output),guarded_source)
+                                        matching=execute_relational_program(cursor,matching_request,matching_output,locators[0],checker,inspector)
+                                        expected_cells=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
+                                        self.assertEqual(json.loads(matching['batch'])['rows'],expected_cells)
                                         return prior_compiler(cursor,physical,before,subject,semantic)
                                     selected_compiler=capture_then_direct
                                 if name=='BobGuardedReceiptSwap':

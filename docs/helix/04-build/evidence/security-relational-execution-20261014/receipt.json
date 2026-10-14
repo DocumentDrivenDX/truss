@@ -1,0 +1,11 @@
+{
+  "result": "native1/47.121s passes",
+  "runtime": "0.64",
+  "implementationSha256": "08b70351dd98c760fdb59ce2916dc86072508ebb0b63d8a9c4eb7b0e5f501f31",
+  "testSourceSha256": "1b4dcff247f58b6800365bcb586c9067045b732417cbbc8454d7abe4f9498e52",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC2",
+    "US-056-AC10"
+  ],
+  "scope": "Original0.2 empty/matching string filters execute/check/inspect under genuine existing native cuts; capture identities and result cells match fixture oracle. No0.2 publication/general operators/arithmetic or132 promotion."
+}
