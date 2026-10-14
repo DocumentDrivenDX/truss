@@ -26,3 +26,10 @@ No managed database, cyclic definition or composed-record support is claimed.
 Weft module boundaries pass11 workspace packages. Concurrent security owner
 parameter and guarded relational SQL modules are merged into final source
 41dbbf81312d23468b9f3b4802e92c92edb3a199; the Truss source builder pins that commit.
+
+Weft v0.4.29 publication workflow38518880181 completed successfully on all five
+platforms. The published ARM ABI3 wheel checksum is
+a46524fcc2a5852d3387b5dae19bb0ba24d4b97b67e7fac4f2816269d7dc5eb2.
+Release pins identify source41dbbf81312d23468b9f3b4802e92c92edb3a199 and
+backend0.4.34. Truss v0.0.28 tag selects reviewed source
+f88b968bd1cf00c95e7a76c68ba16fe55b9cf153; its publication gates remain pending.
