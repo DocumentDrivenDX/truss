@@ -1,0 +1,10 @@
+{
+  "result": "Native1/53.548s passes onruntime0.62",
+  "sourceSha256": {
+    "scripts/security_ontology_compiled_read.py": "614eebfff23fc4da5bb80a140e7ae1083f4e66271b250d0a53e83f88c72ace2f",
+    "scripts/security_ontology_native_subject_read.py": "b91d72d27ad129198e1f861610cd1d44a596b4ecaddadae807a86508b6dafc9e",
+    "packages/python/tests/test_security_ontology_edges_native.py": "2ad48fd6e1574d609ef1f2c0c130d70c4616dd827b03bf300215d5fc8762aa9f"
+  },
+  "scope": "Distinct guarded query request with changed alias, same projection semantics and one genuine source epoch/registered Subject; selected bool/int8 parameters and original guards/checker. Not general SQL or public native admission.",
+  "independentReview": "Additional Astra review unavailable due reviewer usage limit."
+}

@@ -14,9 +14,10 @@ BASE=ROOT/'docs/helix/04-build/evidence/security-named-source-profile'
 BINDING=ROOT/'docs/helix/04-build/evidence/security-ontology-shared-policy-20261014/binding-correspondence.json'
 
 
-def _original_request(physical_request,assessment):
+def _original_request(physical_request,assessment,query_sql=None):
     logical=decode_owner_evidence_json((BASE/'mapping-request.json').read_bytes())
-    logical['sql']='SELECT r.resourceId, r.salary FROM Resource r'
+    if query_sql is not None and (type(query_sql) is not str or not 1<=len(query_sql.encode())<=4000000):raise ValueError('Bounded original graph query required')
+    logical['sql']='SELECT r.resourceId, r.salary FROM Resource r' if query_sql is None else query_sql
     native=decode_owner_evidence_json(assessment)
     physical=decode_owner_evidence_json(physical_request)
     if len(physical['modules'])!=1:raise ValueError('Original single physical graph source required')
@@ -47,8 +48,9 @@ def _text_result(cursor,statement,params=()):
     return rows
 
 
-def prepare_owned_graph_compiler(binary,result_binary):
+def prepare_owned_graph_compiler(binary,result_binary,*,guarded=False,query_sql=None):
     """Pin original trusted producer; no path/hash-based authority issuance."""
+    if type(guarded) is not bool or (not guarded and query_sql is not None):raise ValueError('Distinct original guarded compiler mode required')
     binary=Path(binary).resolve();original=binary.read_bytes()
     if not original or len(original)>64000000:raise ValueError('Bounded original graph compiler binary required')
     digest=sha256(original).digest()
@@ -58,20 +60,27 @@ def prepare_owned_graph_compiler(binary,result_binary):
     files=(Path(__file__),BINDING,BASE/'mapping-request.json',BASE/'resolution.json',BASE/'transport.json')
     pins=tuple((p,sha256(p.read_bytes()).digest()) for p in files)
     def execute(cursor,physical_request,before,subject,semantic):
-        request=_original_request(physical_request,before[0])
+        request=_original_request(physical_request,before[0],query_sql)
         compiled=subprocess.run([str(binary)],input=request,capture_output=True,timeout=15)
         if compiled.returncode:
             raise ValueError('Original graph compiler lowering refused: '+compiled.stderr.decode(errors='replace')[:1024])
         if len(compiled.stdout)>16000000:raise ValueError('Original graph compiler lowering output exceeded')
         output=decode_owner_evidence_json(compiled.stdout)
-        if (output['version']!='weft.truss.security.graph-lowering/0.1-candidate' or output['securityReady'] is not False
-                or output['sourceRequestSha256']!=sha256(request).hexdigest()
-                or output['bindingSha256']!=sha256(json.loads(request)['bindingJson'].encode()).hexdigest()):
-            raise ValueError('Original graph compiler source correspondence required')
+        if guarded:
+            from truss._security_guarded_source import capture_guarded_source_comparison
+            capture_guarded_source_comparison(request,compiled.stdout)
+            context_sha=output['queryContextSha256']
+            graph_sha=output['query']['graphSourceSha256']
+        else:
+            if (output['version']!='weft.truss.security.graph-lowering/0.1-candidate' or output['securityReady'] is not False
+                    or output['sourceRequestSha256']!=sha256(request).hexdigest()
+                    or output['bindingSha256']!=sha256(json.loads(request)['bindingJson'].encode()).hexdigest()):
+                raise ValueError('Original graph compiler source correspondence required')
+            context_sha=output['contextSha256'];graph_sha=output['graph']['graphSourceSha256']
         query=output['query'];execution=query['execution'];slot=execution['subjectSlot']
         if (query['version']!='weft.truss.security.graph-query/0.1-candidate' or query['securityReady'] is not False
-                or query['nativeAdmission']!='required' or query['contextSha256']!=output['contextSha256']
-                or query['graphSourceSha256']!=output['graph']['graphSourceSha256']
+                or query['nativeAdmission']!='required' or query['contextSha256']!=context_sha
+                or query['graphSourceSha256']!=graph_sha
                 or execution['policyParameterTypes']!=['boolean'] or type(execution['policyParameters']) is not list
                 or len(execution['policyParameters'])!=1 or execution['policyParameters'][0] is not True
                 or type(slot['ordinal']) is not int or slot['ordinal']!=2 or type(slot['nativeTypeId']) is not int or slot['physicalType']!='int8'
@@ -114,13 +123,15 @@ def prepare_owned_graph_compiler(binary,result_binary):
         if sorted(json.dumps(r,sort_keys=True) for r in cells)!=sorted(json.dumps(r,sort_keys=True) for r in expected):
             raise ValueError('Original compiler projected bag differs from shared semantic oracle')
         batch=json.dumps({'version':'weft.security.cells/0.1.0','resultContractSha256':query['resultContractSha256'],'rows':cells},separators=(',',':'))
-        check_input=json.dumps({'version':'weft.truss.security.graph-result/0.1-candidate','sourceRequestJson':request.decode(),'sourceOutputJson':compiled.stdout.decode(),'batchJson':batch}).encode()
+        check_input=json.dumps({'version':('weft.truss.security.guarded-result/0.1-candidate' if guarded else 'weft.truss.security.graph-result/0.1-candidate'),'sourceRequestJson':request.decode(),'sourceOutputJson':compiled.stdout.decode(),'batchJson':batch}).encode()
         checked=subprocess.run([str(result_binary)],input=check_input,capture_output=True,timeout=15)
         if checked.returncode or len(checked.stdout)>65536:raise ValueError('Original graph compiler result contract refused')
         result_check=decode_owner_evidence_json(checked.stdout)
-        if type(result_check) is not dict or result_check.get('securityReady') is not False or result_check!={'version':'weft.truss.security.graph-result/0.1-candidate','status':'inspected','securityReady':False,
+        expected_check={'version':('weft.truss.security.guarded-result/0.1-candidate' if guarded else 'weft.truss.security.graph-result/0.1-candidate'),'status':'inspected','securityReady':False,
                 'sourceRequestSha256':sha256(request).hexdigest(),'sourceOutputSha256':sha256(compiled.stdout).hexdigest(),
-                'batchSha256':sha256(batch.encode()).hexdigest()}:
+                'batchSha256':sha256(batch.encode()).hexdigest()}
+        if guarded:expected_check.update(sourceContextSha256=output['sourceContextSha256'],queryContextSha256=output['queryContextSha256'])
+        if type(result_check) is not dict or result_check!=expected_check:
             raise ValueError('Original graph result checker correspondence required')
         if (sha256(binary.read_bytes()).digest()!=digest or sha256(result_binary.read_bytes()).digest()!=result_digest
                 or any(sha256(p.read_bytes()).digest()!=d for p,d in pins)):raise ValueError('Original graph compiler sources changed')
