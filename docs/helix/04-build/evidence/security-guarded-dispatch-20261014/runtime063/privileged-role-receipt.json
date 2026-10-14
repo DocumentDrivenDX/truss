@@ -1,0 +1,10 @@
+{
+  "result": "native1/43.968s passes",
+  "runtime": "0.63",
+  "testSourceSha256": "c1e230f0ff9eb63ad635862bc6503f8e0464d84cfec536e9ba7c9c97936a2546",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC5"
+  ],
+  "plannedCaseContribution": "truss.B05",
+  "scope": "Ordinary Bob SET LOCAL ROLE owner/private executor attempts return native InsufficientPrivilege; savepoint rollback retains SESSION_USER/CURRENT_USER Bob and role none, then protected read returns RB. Other escalation avenues remain required; no full case promotion."
+}

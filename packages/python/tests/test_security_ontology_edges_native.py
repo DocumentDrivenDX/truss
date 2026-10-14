@@ -609,15 +609,21 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                         from truss._security_guarded_source import capture_guarded_source_comparison
                         guarded_source=capture_guarded_source_comparison(graph.native_dependencies,graph.guarded_response)
                     composed=[]
-                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('AliceGuarded',[]),('OutsiderGuarded',[]),('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None)) if guarded_binary else ()),('AliceOtherRole',None),('BobSetRole',None),('BobOldSnapshot',None),('BobRevoked',[]),('BobReactivated',['RB']),('BobStreaming',None),('BobProfileDrift',None),('BobProfileRestored',['RB']),('BobPublicIssuer',None)):
+                    for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[]),*((('AliceGuarded',[]),('OutsiderGuarded',[]),('BobGuarded',['RB']),('BobGuardedId',['RB']),('BobGuardedCorrupt',None)) if guarded_binary else ()),('BobPrivilegedRoles',['RB']),('AliceOtherRole',None),('BobSetRole',None),('BobOldSnapshot',None),('BobRevoked',[]),('BobReactivated',['RB']),('BobStreaming',None),('BobProfileDrift',None),('BobProfileRestored',['RB']),('BobPublicIssuer',None)):
                         if name=='AliceOtherRole':self.admin.execute(sql.SQL('GRANT {} TO {}').format(sql.Identifier(roles['Bob']),sql.Identifier(roles['Alice'])))
                         if name=='BobProfileDrift':self.admin.execute("UPDATE truss.catalog_graph_subject_profile SET document_revision='tampered'")
                         if name=='BobPublicIssuer':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.graph_subject_current() TO PUBLIC')
                         with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
                             private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
-                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice' if name in ('AliceGuarded','AliceOtherRole') else 'Outsider' if name=='OutsiderGuarded' else 'Bob' if name in ('BobPublicIssuer','AliceOtherRole','BobSetRole','BobOldSnapshot','BobRevoked','BobReactivated','BobStreaming','BobProfileDrift','BobProfileRestored','BobGuarded','BobGuardedId','BobGuardedCorrupt') else name]
+                            parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice' if name in ('AliceGuarded','AliceOtherRole') else 'Outsider' if name=='OutsiderGuarded' else 'Bob' if name in ('BobPublicIssuer','BobPrivilegedRoles','AliceOtherRole','BobSetRole','BobOldSnapshot','BobRevoked','BobReactivated','BobStreaming','BobProfileDrift','BobProfileRestored','BobGuarded','BobGuardedId','BobGuardedCorrupt') else name]
                             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                                 connection.execute('BEGIN ISOLATION LEVEL REPEATABLE READ' if name=='BobOldSnapshot' else 'BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction(isolation='repeatable_read' if name=='BobOldSnapshot' else 'read_committed').value;released=[]
+                                if name=='BobPrivilegedRoles':
+                                    for forbidden_role in (self.installation.owner_role,private_executor):
+                                        connection.execute('SAVEPOINT denied_role')
+                                        with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute(sql.SQL('SET LOCAL ROLE {}').format(sql.Identifier(forbidden_role)))
+                                        connection.execute('ROLLBACK TO SAVEPOINT denied_role');connection.execute('RELEASE SAVEPOINT denied_role')
+                                        self.assertEqual(connection.execute("SELECT SESSION_USER::text,CURRENT_USER::text,pg_catalog.current_setting('role')").fetchone(),(roles['Bob'],roles['Bob'],'none'))
                                 if name=='AliceOtherRole':
                                     connection.execute(sql.SQL('SET LOCAL ROLE {}').format(sql.Identifier(roles['Bob'])))
                                     self.assertEqual(connection.execute('SELECT SESSION_USER::text,CURRENT_USER::text').fetchone(),(roles['Alice'],roles['Bob']))
