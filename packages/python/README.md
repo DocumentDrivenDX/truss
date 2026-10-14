@@ -11,18 +11,18 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.24`,
-native runtime `0.60-candidate`, layout `1.0`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.30`. The tested local
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.25`,
+native runtime `0.61-candidate`, layout `1.0`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.31`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The current release is [v0.0.24](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.24).
-Registration-owned optional non-key rebinding is included in24; its
-[report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.1.md)
+The current release is [v0.0.25](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.25).
+Registration-owned optional and required non-key rebinding is included in25; its
+[report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.2.md)
 retains original effects/events and requires current data-reader authority.
 
 The Python distribution version is distinct from native runtime/layout versions;
@@ -30,12 +30,11 @@ future distributed changes receive a new package version.
 
 ## Next release candidate
 
-Truss0.0.25/native61 with Weft0.4.26/backend0.4.31 adds new required non-key
-scalar/flat fields when every existing object has a valid non-null retained
-candidate. Missing/null values and invalid values refuse before persistence.
-Original optional-only reports remain unchanged. This next candidate is still
-being implemented and tested; it is not a published release. Key backfill and
-recursive rebinding remain unfinished.
+Alternate-key backfill over existing required scalar fields is being implemented.
+It will preserve existing key identities and pure-backfill object versions,
+produce exact tuples through UMF, and refuse duplicate candidates before changes.
+It is not callable or published yet. Newly rebound key components, existing-key
+changes and recursive rebinding remain unfinished.
 
 ## Install the release
 
@@ -44,10 +43,10 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.24 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.25 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.25 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.26 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.24'
+  'truss-toolkit[local,native,query]==0.0.25'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release
@@ -380,9 +379,9 @@ The public workflow and JSON preview use installed packages on the exact local
 PG18 tuple. Evidence is recorded in
 [the mixed-catalog, upgrade and preview receipt](../../docs/helix/04-build/evidence/python-mixed-catalog-20261012.json)
 and [receipt/feed integration](../../docs/helix/04-build/evidence/python-feed-reached-20261012.json).
-The full original consumer corpus, genuinely independent native interchange,
-stable layout, broader value/query support and managed-service qualification
-remain open. Experimental pg8000 and older private profiles are historical paths.
+Broader value/query support, security activation and managed-service qualification
+remain open. Independent implementation interchange is deferred under the owner’s
+accepted scope amendment. Experimental pg8000 and older private profiles are historical paths.
 
 The [runtime history](docs/runtime-history.md) preserves the earlier release diary.
 Its old limitations describe their named versions, not the current interface.
