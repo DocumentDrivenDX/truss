@@ -77,3 +77,5 @@ matching Weft0.4.25/backend30. Python1031-import and Weft11-package boundary che
 pass; workspace Rust checking passes. A broad exploratory mypy invocation reports
 existing dependency-stub and implementation typing gaps and is not a successful
 package typing claim. Publication and the broader feature goal remain pending.
+
+Final authority correction rechecks every selected object's current-transaction rebind before latest-image selection, so an ordinary later update/delete cannot suppress original registration/writer/reader obligations. Astra confirms the exact diff. Final v10 wheel SHA2566fc5fa25406d1096819c29895fc7d5e98db6e64ff6deaa9720bcbf486fbda1b6 passes the same seven cases52.592s, now including create→rebind→ordinary update→commit at version3. Module boundaries remain1031 imports.

@@ -3,7 +3,7 @@ import json, os
 from dataclasses import replace
 from truss import Ok, Error, CatalogDocument, CatalogRegistration, CatalogAcceptanceRefused, ObjectFound, HistoryEntity, HistoricalRecord, QueryRows, FeedPage, ModuleAccessGrant, adopt_psycopg_host, create_reference_assembly, CatalogRuntimeConfiguration
 from truss.contracts import BooleanValue, NullValue, SequenceValue, TextValue, MapValue
-from truss.groups import AuthoredValue, GroupSuccess
+from truss.groups import AuthoredValue, GroupSuccess, UpdateObject, StoredObjectReference
 import test_group_create_native as base
 
 class CatalogRebindTests(base.PublicCreateGroupTests):
@@ -122,8 +122,13 @@ class CatalogRebindTests(base.PublicCreateGroupTests):
         accepted=a.accept_in_transaction(t,prepared,request_key='same-transaction-rebind')
         self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))
         self.assertIsInstance(accepted.value,CatalogRegistration)
+        self.documents=tuple(document if d.document_id=='adoc' else d for d in self.documents)
+        current=a.get_object_in_transaction(t,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id)).value.object.identity
+        context=a.group_context_in_transaction(t).value
+        updated=self.apply(a,t,context.input((UpdateObject(target=StoredObjectReference(identity=current),set=(AuthoredValue(name='giftWrap',value=BooleanValue(value=False)),),unset=()),),MapValue(entries=())),context.request('same-transaction-after-rebind'))
+        self.assertIsInstance(updated,GroupSuccess)
         h.detach();c.commit()
-        self.assertEqual(self.admin.execute('SELECT ver FROM truss.object WHERE id=%s',(int(identity.id),)).fetchone(),(2,))
+        self.assertEqual(self.admin.execute('SELECT ver FROM truss.object WHERE id=%s',(int(identity.id),)).fetchone(),(3,))
 
 class CatalogRebind08Tests(CatalogRebindTests):
     source_version='0.8.0'

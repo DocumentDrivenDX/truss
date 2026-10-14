@@ -499,9 +499,17 @@ REVOKE ALL ON FUNCTION truss.object_group_step(uuid,int,bytea) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_object_validate(selected_id bigint,selected_type int) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE latest record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;
+DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;
 BEGIN
  current_actor:=truss.runtime_person(false);
+ -- Later ordinary mutations cannot suppress original registration dependencies.
+ FOR rebind IN SELECT * FROM truss.runtime_catalog_rebind_transition t WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id() LOOP
+  IF rebind.actor_oid IS DISTINCT FROM current_actor OR NOT EXISTS(SELECT 1 FROM truss.catalog_registration_request r
+   WHERE r.registration_id=rebind.registration_id AND r.revision=rebind.revision AND r.writer_xid=rebind.writer_xid
+    AND r.actor_oid=current_actor AND r.actor_name=session_user::text) THEN RAISE EXCEPTION 'current original rebind registration required' USING ERRCODE='55000';END IF;
+  PERFORM truss.runtime_module_writer((SELECT document_id FROM truss.type_def WHERE type_id=selected_type),(SELECT module FROM truss.type_def WHERE type_id=selected_type));
+  PERFORM truss.catalog_rebind_transition_reader((SELECT t FROM truss.runtime_catalog_rebind_transition t WHERE t.transition_id=rebind.transition_id));
+ END LOOP;
  SELECT * INTO latest FROM (
   SELECT transition_id,writer_xid,after_object,after_keys,attempt_id,NULL::uuid registration_id FROM truss.runtime_object_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()
   UNION ALL SELECT transition_id,writer_xid,after_object,after_keys,NULL::uuid,registration_id FROM truss.runtime_catalog_rebind_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) t ORDER BY transition_id DESC LIMIT 1;
