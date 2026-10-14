@@ -69,6 +69,22 @@ def _capture(cursor,request):
     return assessment,raw_objects,edges,cells
 
 
+
+def _inspected_query_publication(receipt):
+    """Copy original inspected bytes; digest comparisons authenticate no issuer."""
+    copied={key:receipt[key] for key in ('request','output','batch','resultCheck')}
+    if any(type(raw) is not str or not raw or len(raw.encode())>16000000 for raw in copied.values()):raise ValueError('Bounded inspected query publication required')
+    packet=decode_owner_evidence_json(copied['output'].encode())
+    check=decode_owner_evidence_json(copied['resultCheck'].encode())
+    query=packet['query'];batch=decode_owner_evidence_json(copied['batch'].encode())
+    expected={'version':'weft.truss.security.guarded-result/0.1-candidate','status':'inspected','securityReady':False,'sourceRequestSha256':sha256(copied['request'].encode()).hexdigest(),'sourceOutputSha256':sha256(copied['output'].encode()).hexdigest(),'batchSha256':sha256(copied['batch'].encode()).hexdigest(),'sourceContextSha256':packet['sourceContextSha256'],'queryContextSha256':packet['queryContextSha256']}
+    if (packet['version']!='weft.truss.security.guarded-candidate/0.1-candidate' or packet['securityReady'] is not False or check.get('securityReady') is not False or check!=expected or batch['resultContractSha256']!=query['resultContractSha256'] or sha256(query['resultContractJson'].encode()).hexdigest()!=query['resultContractSha256']):raise ValueError('Original inspected query publication correspondence required')
+    result={'version':'truss.guarded-query-result/0.1-candidate','securityReady':False,'sourceContextSha256':packet['sourceContextSha256'],'queryContextSha256':packet['queryContextSha256'],'resultContractJson':query['resultContractJson'],'batchJson':copied['batch']}
+    raw=json.dumps(result,separators=(',',':'),ensure_ascii=False).encode()
+    if len(raw)>4000000:raise ValueError('Bounded guarded buffered result required')
+    return raw
+
+
 def _prepare_ontology_resource_operation(original_request,subject,*,compiler=None,existing_locks=False,query_results=False):
     """Prepare the fixed source/fact/evaluation operation, without disclosure.
 
@@ -111,14 +127,12 @@ def _prepare_ontology_resource_operation(original_request,subject,*,compiler=Non
                 import inspect
                 if inspect.iscoroutine(compiled_receipt) or inspect.isgenerator(compiled_receipt):compiled_receipt.close()
                 raise ValueError('Original synchronous graph compiler correspondence receipt required')
+        publication=_inspected_query_publication(compiled_receipt) if query_results else None
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
         if _capture(cursor,request)!=before:raise ValueError('Original ontology source/facts changed before publication')
         if any(sha256(p.read_bytes()).digest()!=digest for p,digest in pins):raise ValueError('Original ontology evaluator sources changed')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(previous[0][0],),prepare=False)
-        if query_results:
-            packet=decode_owner_evidence_json(compiled_receipt['output'].encode())
-            if packet['version']!='weft.truss.security.guarded-candidate/0.1-candidate':raise ValueError('Original guarded query result required')
-            decision={'version':'truss.guarded-query-result/0.1-candidate','securityReady':False,'sourceContextSha256':packet['sourceContextSha256'],'queryContextSha256':packet['queryContextSha256'],'resultContractJson':packet['query']['resultContractJson'],'batchJson':compiled_receipt['batch']}
+        if query_results:return publication
         raw=json.dumps(decision,separators=(',',':'),ensure_ascii=False).encode()
         if len(raw)>4000000:raise ValueError('Bounded guarded buffered result required')
         return raw

@@ -1,0 +1,11 @@
+{
+  "native": "1/42.906s passes onruntime0.63",
+  "compilerControls": "3 pass",
+  "implementationSha256": "e53a93268da9063153bbf6cd483c03fe5edf520cc53b40c53a2d6b675808dcd0",
+  "testSha256": "e741e6828dc232a9bca4fcb71aba8ca2e79686b585307345449e62fab8b04291",
+  "acceptanceCriteriaContributions": [
+    "US-056-AC6",
+    "US-056-AC10"
+  ],
+  "scope": "Exact copied inspected batch/contract/source/query lineage publication; digests do not authenticate compiler/native issuer; full132/public admission remain required."
+}

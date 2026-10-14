@@ -1,0 +1,5 @@
+# Exact inspected publication buffer
+
+The diagnostic query publication path copies original request/output/batch/inspection strings, compares exact inspection acknowledgments and batch/contract/source/query digests, and creates immutable bounded publication bytes before the late native source/fact/Subject/epoch checks. It no longer rereads a mutable compiler receipt after those checks. Numeric zero cannot substitute for the required false inspection flag. These are correspondence checks under trusted original compiler/source custody, not authority credentials.
+
+Original compiler-backed controls pass for post-inspection batch-byte substitution, immutability of an already constructed publication buffer, numeric false substitution refusal, source preflight and source/query separation. Final native1/42.906s on runtime0.63 passes full guarded direct publication/lifecycle/role/corruption cases. Earlier native r1 before the numeric-boolean tightening is retained separately. This contributes to US-056-AC6/AC10 only; all132 complete cases, public activation, wider query/storage models and lifetime closure remain required.
