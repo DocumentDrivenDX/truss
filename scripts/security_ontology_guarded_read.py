@@ -72,6 +72,9 @@ def _capture(cursor,request):
 
 def _inspected_query_publication(receipt):
     """Copy original inspected bytes; digest comparisons authenticate no issuer."""
+    if decode_owner_evidence_json(receipt['output'].encode()).get('version')=='weft.truss.security.relational-candidate/0.2-candidate':
+        from security_relational_publication import inspected_relational_publication
+        return inspected_relational_publication(receipt)
     copied={key:receipt[key] for key in ('request','output','batch','resultCheck')}
     limits={'request':4000000,'output':16000000,'batch':4000000,'resultCheck':65536}
     if any(type(raw) is not str or not raw or len(raw.encode())>limits[key] for key,raw in copied.items()):raise ValueError('Bounded inspected query publication required')

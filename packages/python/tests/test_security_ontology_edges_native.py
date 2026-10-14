@@ -689,7 +689,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         matching=execute_relational_program(cursor,matching_request,matching_output,locators[0],checker,inspector)
                                         expected_cells=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]] if subject=='Bob' else []
                                         self.assertEqual(json.loads(matching['batch'])['rows'],expected_cells)
-                                        return prior_compiler(cursor,physical,before,subject,semantic)
+                                        return {'request':matching_request.decode(),'output':matching_output.decode(),'operandBatch':matching['operandBatch'].decode(),'batch':matching['batch'].decode(),'resultCheck':matching['inspection'].decode()}
                                     selected_compiler=capture_then_direct
                                 if name=='BobGuardedReceiptSwap':
                                     original_selected_compiler=selected_compiler
@@ -740,11 +740,11 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                 else:
                                     self.assertIsInstance(result,Ok,str(executor._custody.last_attempt.error));self.assertEqual(released,[result.value])
                                     if is_guarded_query:
-                                        published=json.loads(result.value);self.assertEqual(published['version'],'truss.guarded-query-result/0.1-candidate')
+                                        published=json.loads(result.value);self.assertEqual(published['version'],'truss.guarded-query-result/0.2-candidate' if relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded') else 'truss.guarded-query-result/0.1-candidate')
                                         cells=json.loads(published['batchJson']);contract=json.loads(published['resultContractJson'])
-                                        self.assertEqual(len(contract['columns']),1 if name=='BobGuardedId' else 2)
+                                        self.assertEqual(len(contract['columns']),1 if name=='BobGuardedId' or relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded') else 2)
                                         expected_cells=[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}}]
-                                        if name=='BobGuarded':expected_cells.append({'outcomeId':'withheld','disposition':'withheld'})
+                                        if name=='BobGuarded' and not relational_binary:expected_cells.append({'outcomeId':'withheld','disposition':'withheld'})
                                         self.assertEqual(cells['rows'],[expected_cells] if expected else [])
                                     else:self.assertEqual([r['key'][0]['string'] for r in json.loads(result.value)['rows']],expected)
                                 caller.detach();connection.rollback()
