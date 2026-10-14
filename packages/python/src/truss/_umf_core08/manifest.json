@@ -40,7 +40,7 @@
     "licenses/json-schema-traverse.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
     "licenses/require-from-string.txt": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
     "licenses/yaml.txt": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
-    "preparation.mjs": "d370afb00dc2ead829c77360d3fd798b0aa1ea8a1923f5433979d080e4553c04",
+    "preparation.mjs": "184896785bf855f60335b10e0942b2278d55b96c7afa7fb9176757f4283655be",
     "producer-manifest.json": "3123647a3443894052b670de8444e6ba0197abd83f647819faaad01fcaaedc81",
     "producer.js": "88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3",
     "receiver.mjs": "08d0ca7d3122374505287a016c66c47b864c0feb17a45d5c2c9687afb8994443"

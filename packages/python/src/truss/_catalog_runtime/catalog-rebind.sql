@@ -102,7 +102,8 @@ BEGIN
   OR request.writer_xid IS DISTINCT FROM pg_current_xact_id() OR request.registration_id IS NULL THEN
   RAISE EXCEPTION 'current original catalog registration required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- selected_profile:=CASE WHEN EXISTS(
+ selected_profile:=CASE WHEN EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.since_rev=request.revision AND p.cardinality IN ('array','map') AND p.item ? 'descendants')
+  THEN 'truss-native-catalog-rebind/0.4' WHEN EXISTS(
   SELECT 1 FROM jsonb_populate_recordset(NULL::truss.key_def,planned_basis->'key_def') k
   JOIN jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p ON p.type_id=k.type_id AND p.prop_id=ANY(k.prop_ids)
   WHERE k.since_rev=request.revision AND NOT k.is_primary AND p.since_rev=request.revision)
@@ -188,7 +189,7 @@ BEGIN
   IF NOT EXISTS(SELECT 1 FROM truss.type_def WHERE type_id=property.type_id) THEN CONTINUE;END IF;
   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE
    OR truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
-   OR property.cardinality IN ('array','map') AND truss.runtime_can_read(property.item->>'documentId',property.item->'reference'->>'module') IS NOT TRUE THEN
+   OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
    RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
   IF truss.valid_property_definition(property) IS NOT TRUE THEN RAISE EXCEPTION 'supported planned rebind property required' USING ERRCODE='0A000';END IF;
   SELECT count(*) INTO missing FROM truss.object o WHERE o.type_id=property.type_id AND property.nullability='required'
@@ -208,7 +209,7 @@ BEGIN
     OR truss.valid_property_value(o.retained->property.name,property) IS NOT TRUE);
   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE
    OR truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
-   OR property.cardinality IN ('array','map') AND truss.runtime_can_read(property.item->>'documentId',property.item->'reference'->>'module') IS NOT TRUE THEN
+   OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
    RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
   IF affected>0 THEN
    violations:=violations||jsonb_build_array(jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module,
@@ -220,7 +221,7 @@ BEGIN
   SELECT * INTO STRICT owner FROM jsonb_populate_recordset(NULL::truss.type_def,planned_basis->'type_def') t WHERE t.type_id=property.type_id;
   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE
    OR truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
-   OR property.cardinality IN ('array','map') AND truss.runtime_can_read(property.item->>'documentId',property.item->'reference'->>'module') IS NOT TRUE THEN
+   OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
    RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
  END LOOP;
  IF violations='[]'::jsonb THEN RETURN NULL;END IF;
@@ -245,7 +246,7 @@ BEGIN
   FOR property_id IN SELECT jsonb_object_keys(transition.after_object->'props') LOOP
    SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=transition.type_id AND p.prop_id=property_id::int;
    IF truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
-    OR property.cardinality IN ('array','map') AND truss.runtime_can_read(property.item->>'documentId',property.item->'reference'->>'module') IS NOT TRUE THEN
+    OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
     RAISE EXCEPTION 'current original rebind property/item reader required' USING ERRCODE='42501';END IF;
   END LOOP;
 END;
@@ -325,7 +326,7 @@ BEGIN
    RAISE EXCEPTION 'original rebind profile bytes required' USING ERRCODE='55000';END IF;
   event:=convert_from(original,'UTF8')::jsonb;candidate:=event->>'historyProfile';
   IF event->>'interfaceVersion' IS DISTINCT FROM 'truss-history-event/0.2.0-proposal'
-   OR (candidate IN ('truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3')) IS NOT TRUE
+   OR (candidate IN ('truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4')) IS NOT TRUE
    OR selected IS NOT NULL AND selected IS DISTINCT FROM candidate THEN
    RAISE EXCEPTION 'one supported original rebind profile required' USING ERRCODE='55000';END IF;
   selected:=candidate;

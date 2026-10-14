@@ -61,7 +61,7 @@ BEGIN
     SELECT * INTO property FROM truss.prop_def p WHERE p.type_id=selected.type_id AND p.name=condition->>'name' AND p.retired_rev IS NULL;
     IF FOUND THEN entry:=entry||jsonb_build_object('propertyId',property.prop_id::text);
      scopes:=scopes||jsonb_build_array(jsonb_build_object('documentId',selected.document_id,'moduleId',property.declaration_module));
-     IF property.cardinality IN ('array','map') THEN scopes:=scopes||jsonb_build_array(jsonb_build_object('documentId',property.item->>'documentId','moduleId',property.item->'reference'->>'module'));END IF;
+     IF property.cardinality IN ('array','map') THEN scopes:=scopes||(SELECT jsonb_agg(jsonb_build_object('documentId',node.value->>'documentId','moduleId',node.value->'reference'->>'module')) FROM jsonb_array_elements(jsonb_build_array(property.item)||coalesce(property.item->'descendants','[]'::jsonb)) node);END IF;
     END IF;
    END IF;
   ELSIF condition->>'condition'='key_absent' THEN

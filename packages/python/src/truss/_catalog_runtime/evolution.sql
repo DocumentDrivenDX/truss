@@ -3,7 +3,7 @@ CREATE FUNCTION truss.catalog_scalar_violations(declarations_bytes bytea) RETURN
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE rec jsonb;field jsonb;selected_type int;property_id int;missing_count bigint;family_count bigint;retained_count bigint;facet_count bigint;
  rel jsonb;old_relation jsonb;tightening boolean;selected_relation truss.rel_def%ROWTYPE;side text;minimum int;maximum int;low_count bigint;high_count bigint;
- violations jsonb:='[]';scope jsonb;scopes jsonb:='[]';owner record;
+ violations jsonb:='[]';scope jsonb;scopes jsonb:='[]';owner record;original_item jsonb;
 BEGIN
  -- The caller holds the exclusive head lock, excluding supported graph writers.
  FOR rec IN SELECT r.value FROM jsonb_array_elements(convert_from(declarations_bytes,'UTF8')::jsonb) d
@@ -24,6 +24,11 @@ BEGIN
    END IF;
    SELECT prop_id INTO property_id FROM truss.prop_def p WHERE p.type_id=selected_type
     AND p.declaration_module=field->>'fieldModule' AND p.element=field->>'fieldId' AND p.retired_rev IS NULL;
+   SELECT p.item INTO original_item FROM truss.prop_def p WHERE p.prop_id=property_id AND p.cardinality IN ('array','map');
+   IF original_item IS NOT NULL THEN
+    IF truss.runtime_item_chain_readable(original_item) IS NOT TRUE THEN RAISE EXCEPTION 'complete current item readers required for compatibility counts' USING ERRCODE='42501';END IF;
+    scopes:=scopes||(SELECT jsonb_agg(jsonb_build_object('documentId',node.value->>'documentId','moduleId',node.value->'reference'->>'module')) FROM jsonb_array_elements(jsonb_build_array(original_item)||coalesce(original_item->'descendants','[]'::jsonb)) node);
+   END IF;
    scope:=jsonb_build_object('documentId',rec->>'documentId','moduleId',rec->>'moduleId',
     'recordId',rec->>'elementId','fieldModuleId',field->>'fieldModule','fieldId',field->>'fieldId');
    SELECT count(*) FILTER (WHERE field->'declaration'->>'nullability'='required'
@@ -89,3 +94,27 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_scalar_violations(bytea) FROM PUBLIC;
+
+-- The current acceptance route supplies exact original candidate documents.
+CREATE FUNCTION truss.catalog_scalar_violations_with_sources(declarations_bytes bytea,documents_bytes bytea) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE rec jsonb;field jsonb;doc jsonb;item jsonb;node jsonb;scopes jsonb:='[]';result bytea;
+BEGIN
+ FOR rec IN SELECT r.value FROM jsonb_array_elements(convert_from(declarations_bytes,'UTF8')::jsonb) d CROSS JOIN LATERAL jsonb_array_elements(d.value->'records') r LOOP
+  IF NOT EXISTS(SELECT 1 FROM truss.type_def t WHERE t.document_id=rec->>'documentId' AND t.module=rec->>'moduleId' AND t.element=rec->>'elementId' AND t.retired_rev IS NULL) THEN CONTINUE;END IF;
+  FOR field IN SELECT value FROM jsonb_array_elements(rec->'fields') LOOP
+   IF field->'declaration'->>'cardinality' NOT IN ('array','map') THEN CONTINUE;END IF;
+   SELECT value INTO STRICT doc FROM jsonb_array_elements(convert_from(documents_bytes,'UTF8')::jsonb) d WHERE d.value->>'documentId'=rec->>'documentId';
+   item:=truss.catalog_item_definition(doc->>'originalText',rec->>'documentId',1,0,field->'declaration'->'itemType');
+   IF truss.runtime_item_chain_readable(item) IS NOT TRUE THEN RAISE EXCEPTION 'complete candidate item readers required for compatibility counts' USING ERRCODE='42501';END IF;
+   scopes:=scopes||(SELECT jsonb_agg(jsonb_build_object('documentId',n.value->>'documentId','moduleId',n.value->'reference'->>'module')) FROM jsonb_array_elements(jsonb_build_array(item)||coalesce(item->'descendants','[]'::jsonb)) n);
+  END LOOP;
+ END LOOP;
+ result:=truss.catalog_scalar_violations(declarations_bytes);
+ FOR node IN SELECT value FROM jsonb_array_elements(scopes) LOOP
+  IF truss.runtime_can_read(node->>'documentId',node->>'moduleId') IS NOT TRUE THEN RAISE EXCEPTION 'candidate item authority changed during compatibility counts' USING ERRCODE='42501';END IF;
+ END LOOP;
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_scalar_violations_with_sources(bytea,bytea) FROM PUBLIC;

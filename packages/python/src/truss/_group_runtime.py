@@ -3,7 +3,7 @@ from dataclasses import dataclass, fields, is_dataclass
 from hashlib import sha256
 import base64
 import json
-from .contracts import SequenceValue,ABSENT, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, TextValue, NullValue, BooleanValue
+from .contracts import SequenceValue,ABSENT, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, MapEntry, TextValue, NullValue, BooleanValue
 from .execution import Ok, Error, Outcome
 from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, CreateEdge, UpdateObject, UpdateEdge, Delete, StoredObjectReference, AliasObjectReference, RootlessOwnership,
     RequestNone, RequestPresent, RequestIdentity, GroupSuccess, GroupFailed, GroupUnavailable,
@@ -133,10 +133,25 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     if not 1<=len(input.operations)<=128 or any(len(op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())>1024 for op in input.operations):
         return Ok(GroupUnavailable(reason='resource'))
     def scalar(value):return type(value) in (NullValue,TextValue,BooleanValue)
-    def flat(value):
-        return scalar(value) or type(value) is SequenceValue and len(value.items)<=1024 and all(scalar(v) for v in value.items) or type(value) is MapValue and len(value.entries)<=1024 and all(scalar(e.value) for e in value.entries)
+    def container(value):
+        pending=[(value,0)];count=0
+        while pending:
+            member,depth=pending.pop();count+=1
+            if depth>32 or count>4096:return False
+            if scalar(member):continue
+            if type(member) is SequenceValue:
+                if type(member.items) is not tuple or len(member.items)>1024:return False
+                pending.extend((child,depth+1) for child in member.items)
+            elif type(member) is MapValue:
+                if type(member.entries) is not tuple or len(member.entries)>1024:return False
+                if any(type(entry) is not MapEntry or type(entry.key) is not str for entry in member.entries):return False
+                if len({entry.key for entry in member.entries})!=len(member.entries):return False
+                pending.extend((entry.value,depth+1) for entry in member.entries)
+            else:return False
+            if count+len(pending)>4096:return False
+        return True
     def origin_scalar(value):return type(value) is NullValue or (type(value) is TextValue and value.kind=='string')
-    if any(not (flat(v.value) if type(op) in (CreateObject,UpdateObject) else scalar(v.value)) for op in input.operations for v in (op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
+    if any(not (container(v.value) if type(op) in (CreateObject,UpdateObject) else scalar(v.value)) for op in input.operations for v in (op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())) or any(not origin_scalar(e.value) for e in input.asserted_origin.entries):
         return Ok(GroupUnavailable(reason='profile'))
     if type(documents) is not tuple or not 1<=len(documents)<=512 or any(type(d) is not CatalogDocument or type(d.document_id) is not str or type(d.content) is not bytes for d in documents):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"original_documents"}'))))

@@ -1,2 +1,2 @@
 """Generated original core0.8 producer pin; no native admission authority."""
-MANIFEST_SHA256 = 'c83fba1ee18300455b58ed82a679eb41490b5f6ba9b794953dff0caa89cd4a74'
+MANIFEST_SHA256 = 'fcc8b6ce5abbb4ae58ea41114fbaf75e56488b7cbb9032b7d588cfeea1b3b2a8'

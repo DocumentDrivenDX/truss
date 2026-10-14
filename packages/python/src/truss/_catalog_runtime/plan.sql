@@ -74,7 +74,7 @@ BEGIN
    RAISE EXCEPTION 'field name occupied in prior catalog' USING ERRCODE='0A000';END IF;
   IF old IS NOT NULL THEN
    IF old->>'cardinality' IN ('array','map') THEN
-    IF old->'item'->'reference' IS DISTINCT FROM candidate->'item'->'reference' OR old->'item'->'declaration' IS DISTINCT FROM candidate->'item'->'declaration' THEN RAISE EXCEPTION 'container item evolution requires explicit support' USING ERRCODE='0A000';END IF;
+    IF truss.catalog_item_meaning(old->'item') IS DISTINCT FROM truss.catalog_item_meaning(candidate->'item') THEN RAISE EXCEPTION 'container item evolution requires explicit support' USING ERRCODE='0A000';END IF;
     candidate:=candidate||jsonb_build_object('item',old->'item');
    END IF;
    IF old->'_originalField'=row->'_originalField' THEN CONTINUE;END IF;

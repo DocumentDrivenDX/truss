@@ -38,7 +38,7 @@ BEGIN
  SELECT * INTO STRICT pin FROM truss.runtime_definition('property',selected_type,property_id,revision);
  IF pin.definition_pin IS DISTINCT FROM definition_pin THEN RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
  IF NOT truss.runtime_can_read(property.definition_document_id,property.declaration_module) THEN RAISE EXCEPTION 'current historical property reader required' USING ERRCODE='42501';END IF;
- IF property.cardinality IN ('array','map') AND truss.runtime_can_read(property.item->>'documentId',property.item->'reference'->>'module') IS NOT TRUE THEN RAISE EXCEPTION 'current historical item reader required' USING ERRCODE='42501';END IF;
+ IF property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN RAISE EXCEPTION 'current historical item reader required' USING ERRCODE='42501';END IF;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_history_property(int,int,int,text) FROM PUBLIC;
@@ -86,7 +86,7 @@ BEGIN
   OR (convert_from(original,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'original exact history wrapper required' USING ERRCODE='55000';END IF;
   event:=convert_from(original,'UTF8')::jsonb;
   IF event->>'interfaceVersion' IS DISTINCT FROM 'truss-history-event/0.2.0-proposal'
-  OR (event->>'historyProfile' IN ('truss-native-scalar-create/0.2','truss-native-scalar-mutation/0.1','truss-native-edge-mutation/0.1','truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3')) IS NOT TRUE
+  OR (event->>'historyProfile' IN ('truss-native-scalar-create/0.2','truss-native-scalar-mutation/0.1','truss-native-edge-mutation/0.1','truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4')) IS NOT TRUE
   OR event->>'sourceEpoch' IS DISTINCT FROM entity->>'sourceEpoch' OR event->>'xid' IS DISTINCT FROM physical.xid::text
   OR event->>'seq' IS DISTINCT FROM physical.seq::text OR event->>'eventVersion' IS DISTINCT FROM physical.ver::text
   OR event->>'eventCatalogRevision' IS DISTINCT FROM physical.rev::text
@@ -102,7 +102,7 @@ BEGIN
   IF event->>'operation'='property' THEN
    PERFORM truss.runtime_history_property(physical.entity_type,physical.prop_id,physical.rev,event->>'definitionPin');
   ELSIF event->>'operation'='rebind' THEN
-   IF (event->>'historyProfile' IN ('truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3')) IS NOT TRUE THEN RAISE EXCEPTION 'original catalog rebind profile required' USING ERRCODE='55000';END IF;
+   IF (event->>'historyProfile' IN ('truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4')) IS NOT TRUE THEN RAISE EXCEPTION 'original catalog rebind profile required' USING ERRCODE='55000';END IF;
    PERFORM truss.runtime_history_property(physical.entity_type,physical.prop_id,physical.rev,event->>'afterDefinitionPin');
    PERFORM truss.catalog_rebind_history_group(entity,writer,version);
   ELSIF event->>'operation'='create' THEN PERFORM truss.runtime_history_image(event->'after',entity,version);
