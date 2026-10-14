@@ -1,0 +1,15 @@
+{
+  "baseline": "acf9b5f4",
+  "result": "1 native case passes in37.596s",
+  "runtime": "0.62",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_catalog_assessment.py": "252bcdb5443bd6db0051b2a3b7755cbf2e3f89add3745d73c19136ec9343b30f",
+    "scripts/security-ontology-read-cut.sql": "ef86642d6b38a398867962fe3fcbc12608667616b27c50eae69e6544b65c4e7d",
+    "scripts/security_ontology_guarded_read.py": "84aacb6780d71072f4df84278c43fce8768feb0e57f7d7b7ff622398b30f68c2",
+    "scripts/security_ontology_read_cut.py": "d95779eb9ed4f6b774d8093f6a30ce0f7e53f3fe74ed8c556e03f98d7f832369",
+    "packages/python/tests/test_security_ontology_edges_native.py": "47a0c3ba30596df44a92359aec2d0bfd0af47363e2acd78659fbcc3fbe103401",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "ed0f53e66db6907fed2659a5f5086c44ad8eb8a2e1dc93fbc07a19185bcc9066"
+  },
+  "scope": "Full fixture including registered Subject protected read, native ACL refusal and current epoch; no original132 acceptance promotion.",
+  "independentReview": "Additional Astra review unavailable due reviewer usage limit; prior component reviews retain their scope."
+}
