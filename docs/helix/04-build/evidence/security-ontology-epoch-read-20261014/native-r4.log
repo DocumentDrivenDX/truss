@@ -1,0 +1,18 @@
+test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission. ... FAIL
+
+======================================================================
+FAIL: test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_ontology_edges_native.py", line 477, in test_original_public_ontology_population_and_endpoint_oracle
+    self.assertIsInstance(installed,Ok,str(installation_host._custody.last_attempt.error))
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='42804', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : argument of NOT must be type boolean, not type text
+LINE 1: SELECT NOT EXISTS(SELECT 1 FROM pg_catalog.pg_class c JOIN p...
+                   ^
+
+----------------------------------------------------------------------
+Ran 1 test in 26.279s
+
+FAILED (failures=1)

@@ -60,7 +60,7 @@ def _registered_subject(cursor,identity,bindings,private_reader_oid=None):
     return subjects[0]
 
 
-def publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,original_request,registered_bindings,publisher,*,compiler=None,cut_issuer=None):
+def publish_native_ontology_resource_read(caller,caller_transaction,executor,executor_transaction,original_request,registered_bindings,publisher,*,compiler=None,cut_issuer=None,source_epoch=None):
     """Selected original comparisons, not public query/credential admission.
 
     Caller and executor host custody are reserved through the final receiver.
@@ -75,8 +75,25 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
             or len({b[0] for b in registered_bindings})!=len(registered_bindings) or not callable(publisher)
             or (compiler is not None and not callable(compiler))):
         raise ValueError('Original bounded registered ontology read context required')
+    if cut_issuer is not None:
+        if type(cut_issuer) is not tuple or len(cut_issuer)!=2 or any(type(v) is not int or not 1<=v<=4294967295 for v in cut_issuer) or cut_issuer[0]==cut_issuer[1]:raise ValueError('Original graph cut issuer comparison required')
+        cut_issuer=tuple(cut_issuer)
+    if source_epoch is not None:
+        from truss._security_graph_epoch_read import snapshot_graph_epoch_read_context
+        source_epoch=snapshot_graph_epoch_read_context(source_epoch)
+        if source_epoch.source.original_request!=original_request or compiler is None or cut_issuer is None or source_epoch.issuer.caller_oid!=cut_issuer[1]:raise ValueError('Original graph epoch and caller cut correspondence required')
     request=bytes(original_request);bindings=tuple((oid,key) for oid,key in registered_bindings)
-    source=Path(__file__);pin=sha256(source.read_bytes()).digest()
+    source=Path(__file__);source_bytes=source.read_bytes();pin=sha256(source_bytes).digest()
+    if source_epoch is not None and source_epoch.subject_source!=source_bytes:raise ValueError('Original current graph Subject source correspondence required')
+    def epoch_compiler(cursor,physical,before,subject,semantic):
+        receipt=compiler(cursor,physical,before,subject,semantic)
+        if type(receipt) is not dict:
+            import inspect
+            if inspect.iscoroutine(receipt) or inspect.isgenerator(receipt):receipt.close()
+            raise ValueError('Original current graph compiler source correspondence required')
+        if type(receipt.get('request')) is not str or type(receipt.get('output')) is not str or receipt['request']!=source_epoch.source.native_dependencies.decode() or receipt['output']!=source_epoch.source.original_response.decode():raise ValueError('Original current graph compiler source correspondence required')
+        return receipt
+    selected_compiler=compiler if source_epoch is None else epoch_compiler
     def execute(cursor,observed):
         identity=_caller(cursor,observed)
         previous=_text_rows(cursor,"SELECT pg_catalog.current_setting('application_name')::pg_catalog.text",limit=1)
@@ -92,11 +109,17 @@ def publish_native_ontology_resource_read(caller,caller_transaction,executor,exe
                 from security_ontology_read_cut import acquire_issued_ontology_read_cut
                 if type(cut_issuer) is not tuple or len(cut_issuer)!=2:raise ValueError('Original graph cut issuer comparison required')
                 acquire_issued_ontology_read_cut(private,*cut_issuer)
+            if source_epoch is not None:
+                from truss._security_graph_epoch_read import acquire_graph_epoch_read
+                acquire_graph_epoch_read(private,source_epoch)
             _verify_native_peer(private,identity,observed[0][0],challenge)
             if cut_issuer is None:private.execute('LOCK TABLE ONLY truss.catalog_subject_map,truss.catalog_runtime_installation IN SHARE MODE NOWAIT',prepare=False)
             private_reader=None if cut_issuer is None else cut_issuer[1]
             subject=_registered_subject(private,identity,bindings,private_reader)
-            raw=_prepare_ontology_resource_operation(request,subject,compiler=compiler,existing_locks=cut_issuer is not None)(private,private_observed)
+            raw=_prepare_ontology_resource_operation(request,subject,compiler=selected_compiler,existing_locks=cut_issuer is not None)(private,private_observed)
+            if source_epoch is not None:
+                from truss._security_graph_epoch_read import verify_held_graph_epoch_read
+                verify_held_graph_epoch_read(private,source_epoch)
             if _registered_subject(private,identity,bindings,private_reader)!=subject:raise ValueError('Original native ontology Subject changed')
             _verify_native_peer(private,identity,observed[0][0],challenge)
             return raw
