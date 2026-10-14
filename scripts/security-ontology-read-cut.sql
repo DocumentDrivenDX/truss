@@ -20,6 +20,7 @@ BEGIN
   LOCK TABLE ONLY truss.catalog_runtime_installation IN SHARE MODE NOWAIT;
   LOCK TABLE ONLY truss.runtime_release IN SHARE MODE NOWAIT;
   LOCK TABLE ONLY truss.runtime_catalog_rebind_transition IN SHARE MODE NOWAIT;
+  LOCK TABLE ONLY truss.runtime_catalog_key_backfill IN SHARE MODE NOWAIT;
   LOCK TABLE ONLY truss.catalog_subject_map IN SHARE MODE NOWAIT;
 END;
 $$;

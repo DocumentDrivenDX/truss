@@ -1,0 +1,20 @@
+test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission. ... ERROR
+
+======================================================================
+ERROR: test_original_public_ontology_population_and_endpoint_oracle (test_security_ontology_edges_native.SecurityOntologyEdgesNativeTests.test_original_public_ontology_population_and_endpoint_oracle)
+@covers US-056-AC2; full ontology/typed-edge prerequisite, not B01/B02 admission.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_security_ontology_edges_native.py", line 206, in test_original_public_ontology_population_and_endpoint_oracle
+    with self.admin.cursor() as cursor:verify_ontology_read_cut_issuer(cursor,owner_oid,private_oid)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/scripts/security_ontology_read_cut.py", line 18, in verify_ontology_read_cut_issuer
+    if sha256(source).hexdigest()!=DIGEST:raise ValueError('Original graph cut issuer source required')
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original graph cut issuer source required
+
+----------------------------------------------------------------------
+Ran 1 test in 23.974s
+
+FAILED (errors=1)
