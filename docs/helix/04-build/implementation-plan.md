@@ -8001,6 +8001,19 @@ rebound key components and existing/primary key changes remain later tranches.
 
 The ordinary epoch path also passes1/28.330s after preserving concurrent runtime0.61 main work. Separate [merged replay](evidence/security-ontology-epoch-read-20261014/merged-runtime061/receipt.json) pins the unchanged reviewed security code and current runtime/report dependencies; prior0.60 packets remain historical.
 
+### Public alternate-key backfill implementation — 2026-10-14
+
+SDK26/native62 and Weft27/backend32 implement new alternate keys over existing
+required scalar fields. Original UMF receipts bind locked candidates; qualified
+duplicate counts precede persistence. Registration-owned membership/reservation
+facts retain complete original bytes and generations in report0.4. Pure backfill
+preserves object versions/history; shared deferred validation supports subsequent
+ordinary mutation. UMF owns the new storage DDL. Five basic installed07/08 and
+published native61 upgrade cases pass267.394s; two follow-up history/update/
+duplicate-create workflows pass227.451s. Catalog capability0.8 retains0.7;
+archived native61 manifest matches published25. Release workflows are prepared;
+publication remains pending. Existing/primary key changes and newly rebound key
+components remain later feature tranches; the full goal remains active.
 ## Source-validated graph Subject registration — 2026-10-14
 
 [Graph Subject evidence](evidence/security-graph-subject-registration-20261014/README.md) constructs a fresh private map/profile from actual accepted graph/type/key/scalar/binding and ordinary native principals. A fixed no-target own-SESSION_USER issuer returns only Subject identity metadata; exact source/body/owner/ACL/ABI and selected owner read/SHARE privileges are verified. Native missing-Staff/reuse/PUBLIC/owner-privilege refusals and rollback preservation pass alongside real3caller tuples/raw-read denial. Finalr4 full native1/48.778s on runtime0.61 and1065 boundaries pass. This standalone phase is not yet composed into the protected graph read's route/profile gates; that integration and complete authority/role/DDL/cache/cursor/transport/write/public compiler admission remain required. All132 original cases remain unchanged, with no acceptance promotion.

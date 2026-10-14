@@ -31,7 +31,7 @@ DECLARE result jsonb:=prior;types jsonb:=coalesce(prior->'type_def','[]');proper
  changes jsonb:=coalesce(prior->'schema_change','[]');type_map jsonb:='{}';property_map jsonb:='{}';relationship_map jsonb:='{}';
  row jsonb;old jsonb;candidate jsonb;old_source jsonb;new_source jsonb;component jsonb;remapped jsonb;
  tightening boolean;facet_map jsonb;
- assigned int;type_next int;property_next int;relationship_next int;sequence int:=0;revision int;
+ assigned int;type_next int;property_next int;relationship_next int;key_next int;sequence int:=0;revision int;
 BEGIN
  SELECT coalesce(max((v.value->>'type_id')::int),0) INTO type_next FROM jsonb_array_elements(types) v;
  SELECT coalesce(max((v.value->>'prop_id')::int),0) INTO property_next FROM jsonb_array_elements(properties) v;
@@ -50,7 +50,8 @@ BEGIN
   IF old IS NOT NULL THEN
    old_source:=truss.catalog_plan_source(prior,old);new_source:=truss.catalog_plan_source(fresh,row);
    IF old_source=new_source THEN CONTINUE;END IF;
-   IF old_source-ARRAY['members','name'] IS DISTINCT FROM new_source-ARRAY['members','name']
+   IF old_source-ARRAY['members','name','keys'] IS DISTINCT FROM new_source-ARRAY['members','name','keys']
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements(coalesce(old_source->'keys','[]')) k WHERE NOT EXISTS(SELECT 1 FROM jsonb_array_elements(coalesce(new_source->'keys','[]')) n WHERE n.value=k.value))
     OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'members') m GROUP BY m.value HAVING count(*)>(SELECT count(*) FROM jsonb_array_elements(new_source->'members') n WHERE n.value=m.value)) THEN
     RAISE EXCEPTION 'existing record keys, meaning and retained members require explicit evolution support' USING ERRCODE='0A000';END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
@@ -121,8 +122,15 @@ BEGIN
   IF old IS NOT NULL THEN
    IF old->'prop_ids' IS DISTINCT FROM remapped OR old->'is_primary' IS DISTINCT FROM row->'is_primary' THEN RAISE EXCEPTION 'existing key change requires backfill support' USING ERRCODE='0A000';END IF;
   ELSE
-   IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'type_def') t WHERE t.value->>'type_id'=assigned::text) THEN RAISE EXCEPTION 'new key on retained record requires backfill support' USING ERRCODE='0A000';END IF;
-   keys:=keys||jsonb_build_array(row||jsonb_build_object('type_id',assigned,'prop_ids',remapped));
+   IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'type_def') t WHERE t.value->>'type_id'=assigned::text) THEN
+    IF (row->>'is_primary')::boolean IS NOT FALSE OR EXISTS(SELECT 1 FROM jsonb_array_elements(remapped) component WHERE NOT EXISTS(
+     SELECT 1 FROM jsonb_array_elements(prior->'prop_def') p WHERE p.value->>'type_id'=assigned::text AND p.value->>'prop_id'=component.value#>>'{}'
+      AND p.value->>'nullability'='required' AND p.value->>'cardinality'='one' AND p.value->>'scalar_type' IN ('string','integer','decimal','boolean','binary'))) THEN
+     RAISE EXCEPTION 'new alternate key requires existing required scalar components' USING ERRCODE='0A000';END IF;
+    SELECT coalesce(max((k.value->>'key_num')::int),0)+1 INTO key_next FROM jsonb_array_elements(keys) k WHERE k.value->>'type_id'=assigned::text;
+    IF key_next>32767 THEN RAISE EXCEPTION 'owner-local key range exhausted' USING ERRCODE='54000';END IF;
+   ELSE key_next:=(row->>'key_num')::int;END IF;
+   keys:=keys||jsonb_build_array(row||jsonb_build_object('type_id',assigned,'prop_ids',remapped,'key_num',key_next));
   END IF;
  END LOOP;
  -- Relationship IDs and lineage remain stable; independent multiplicity evolution retains endpoints.

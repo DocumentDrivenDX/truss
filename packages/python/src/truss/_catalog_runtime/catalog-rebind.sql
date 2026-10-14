@@ -245,6 +245,7 @@ CREATE FUNCTION truss.catalog_rebind_report_reader(selected_registration uuid,pl
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_catalog_rebind_transition%ROWTYPE;
 BEGIN
+ PERFORM truss.catalog_key_backfill_report_reader(selected_registration,planned_basis);
  FOR transition IN SELECT * FROM truss.runtime_catalog_rebind_transition WHERE registration_id=selected_registration LOOP
   PERFORM truss.catalog_rebind_transition_reader(transition,planned_basis);
  END LOOP;
