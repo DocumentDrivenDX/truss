@@ -1,0 +1,21 @@
+test_original_inventory_rejects_native_execution_drift (test_preparation_source_inventory_native.SourceInventoryNativeTests.test_original_inventory_rejects_native_execution_drift) ... ok
+test_changed_native_transaction_prevents_commit (test_engine_preparation.EnginePreparationTests.test_changed_native_transaction_prevents_commit) ... ok
+test_confirmed_commit_survives_cleanup_error (test_engine_preparation.EnginePreparationTests.test_confirmed_commit_survives_cleanup_error) ... ok
+test_control_exception_after_dispatch_preserves_unknown (test_engine_preparation.EnginePreparationTests.test_control_exception_after_dispatch_preserves_unknown) ... ok
+test_failed_physical_open_burns_allowance (test_engine_preparation.EnginePreparationTests.test_failed_physical_open_burns_allowance) ... ok
+test_failed_start_cannot_replace_original_cut (test_engine_preparation.EnginePreparationTests.test_failed_start_cannot_replace_original_cut) ... ok
+test_foreign_capture_cap_has_no_dispatch (test_engine_preparation.EnginePreparationTests.test_foreign_capture_cap_has_no_dispatch) ... ok
+test_interruption_after_ack_retains_commit (test_engine_preparation.EnginePreparationTests.test_interruption_after_ack_retains_commit) ... ok
+test_unknown_commit_is_not_retried (test_engine_preparation.EnginePreparationTests.test_unknown_commit_is_not_retried) ... ok
+test_unresolved_operation_withholds_commit (test_engine_preparation.EnginePreparationTests.test_unresolved_operation_withholds_commit) ... ok
+test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr) ... ok
+test_data_owned_authority_exclusion_survives_coordinator_disconnect (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_data_owned_authority_exclusion_survives_coordinator_disconnect) ... ok
+test_pre_snapshot_anchor_does_not_make_later_authority_rr_visible (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_pre_snapshot_anchor_does_not_make_later_authority_rr_visible)
+Native visibility/ACL witness only, not an authenticated anchor issuer. ... ok
+test_reserved_two_integer_permit_namespace_requires_native_issuer (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_reserved_two_integer_permit_namespace_requires_native_issuer)
+Dedicated disposable DB privilege witness, not permit admission. ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 19.090s
+
+OK
