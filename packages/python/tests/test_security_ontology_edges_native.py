@@ -695,6 +695,13 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                         counted=execute_relational_program(cursor,count_request,count_output,locators[0],checker,inspector)
                                         count_cells=json.loads(counted['batch'])['rows']
                                         self.assertEqual(count_cells,[[{'outcomeId':'computed','disposition':'computed','value':{'integerToken':str(len(semantic['rows']))}}]])
+                                        grouped_request=_original_request(physical,before[0],'SELECT r.resourceId, COUNT(*) AS n FROM Resource r GROUP BY r.resourceId')
+                                        grouped_output=original_run([relational_binary],input=grouped_request,capture_output=True,check=True,timeout=15).stdout
+                                        grouped_packet=json.loads(grouped_output)
+                                        self.assertTrue(any(c['stage']=='afterOperandValidation' for c in grouped_packet['checks']))
+                                        grouped=execute_relational_program(cursor,grouped_request,grouped_output,locators[0],checker,inspector)
+                                        expected_group=[[{'outcomeId':'original','disposition':'original','value':{'string':'RB'}},{'outcomeId':'computed','disposition':'computed','value':{'integerToken':'1'}}]] if subject=='Bob' else []
+                                        self.assertEqual(json.loads(grouped['batch'])['rows'],expected_group)
                                         return {'request':matching_request.decode(),'output':matching_output.decode(),'operandBatch':matching['operandBatch'].decode(),'batch':matching['batch'].decode(),'resultCheck':matching['inspection'].decode()}
                                     selected_compiler=capture_then_direct
                                 if name=='BobGuardedReceiptSwap':

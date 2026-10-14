@@ -1,0 +1,6 @@
+test_preflight_precedes_every_cursor_statement (test_security_relational_capture.RelationalCaptureTests.test_preflight_precedes_every_cursor_statement) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.497s
+
+OK
