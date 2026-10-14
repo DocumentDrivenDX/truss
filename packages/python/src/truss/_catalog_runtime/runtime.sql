@@ -173,7 +173,12 @@ BEGIN
     FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id));
  END IF;
  IF EXISTS(SELECT 1 FROM truss.runtime_catalog_key_backfill t WHERE t.registration_id=request.registration_id) THEN
-  report:=report||jsonb_build_object('interfaceVersion','truss-catalog-registration-report/0.4','keyBackfillProfile','truss-catalog-key-backfill/0.1',
+  report:=report||jsonb_build_object('interfaceVersion','truss-catalog-registration-report/0.4','keyBackfillProfile',CASE WHEN EXISTS(
+    SELECT 1 FROM truss.runtime_catalog_key_backfill b CROSS JOIN LATERAL jsonb_array_elements(b.effects) e
+    JOIN jsonb_populate_recordset(NULL::truss.key_def,basis->'key_def') k ON k.type_id=b.type_id AND k.key_num=(e.value->>'keyNumber')::smallint
+    JOIN jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p ON p.type_id=k.type_id AND p.prop_id=ANY(k.prop_ids)
+    WHERE b.registration_id=request.registration_id AND p.since_rev=request.revision)
+    THEN 'truss-catalog-key-backfill/0.2' ELSE 'truss-catalog-key-backfill/0.1' END,
    'keyBackfills',(SELECT jsonb_agg(jsonb_build_object('objectId',t.object_id::text,'typeId',t.type_id::text,
     'objectVersion',t.object_image->>'ver','effects',t.effects) ORDER BY t.type_id,t.object_id)
     FROM truss.runtime_catalog_key_backfill t WHERE t.registration_id=request.registration_id));
@@ -404,7 +409,7 @@ BEGIN
  IF preview_mode IS NULL THEN RAISE EXCEPTION 'explicit catalog mode required' USING ERRCODE='22023';END IF;
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.62-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.63-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;

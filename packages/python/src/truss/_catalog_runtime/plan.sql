@@ -124,9 +124,16 @@ BEGIN
   ELSE
    IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'type_def') t WHERE t.value->>'type_id'=assigned::text) THEN
     IF (row->>'is_primary')::boolean IS NOT FALSE OR EXISTS(SELECT 1 FROM jsonb_array_elements(remapped) component WHERE NOT EXISTS(
-     SELECT 1 FROM jsonb_array_elements(prior->'prop_def') p WHERE p.value->>'type_id'=assigned::text AND p.value->>'prop_id'=component.value#>>'{}'
+     SELECT 1 FROM jsonb_array_elements(properties) p WHERE p.value->>'type_id'=assigned::text AND p.value->>'prop_id'=component.value#>>'{}'
+      AND (EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'prop_def') old_property
+        WHERE old_property.value->>'prop_id'=p.value->>'prop_id' AND old_property.value->>'type_id'=assigned::text
+         AND old_property.value->>'nullability'='required' AND old_property.value->>'cardinality'='one'
+         AND old_property.value->>'scalar_type' IN ('string','integer','decimal','boolean','binary'))
+       OR ((p.value->>'since_rev')::int=revision AND NOT EXISTS(
+        SELECT 1 FROM jsonb_array_elements(prior->'prop_def') old_property
+         WHERE old_property.value->>'prop_id'=p.value->>'prop_id' AND old_property.value->>'type_id'=assigned::text)))
       AND p.value->>'nullability'='required' AND p.value->>'cardinality'='one' AND p.value->>'scalar_type' IN ('string','integer','decimal','boolean','binary'))) THEN
-     RAISE EXCEPTION 'new alternate key requires existing required scalar components' USING ERRCODE='0A000';END IF;
+     RAISE EXCEPTION 'new alternate key requires existing or newly rebound required scalar components' USING ERRCODE='0A000';END IF;
     SELECT coalesce(max((k.value->>'key_num')::int),0)+1 INTO key_next FROM jsonb_array_elements(keys) k WHERE k.value->>'type_id'=assigned::text;
     IF key_next>32767 THEN RAISE EXCEPTION 'owner-local key range exhausted' USING ERRCODE='54000';END IF;
    ELSE key_next:=(row->>'key_num')::int;END IF;

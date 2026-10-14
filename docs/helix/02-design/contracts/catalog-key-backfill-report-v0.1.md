@@ -28,3 +28,18 @@ original owners and key components. Registrar authority alone cannot disclose
 key values. These effects survive later object updates/deletion through immutable
 registration storage and the original report. The caller settles the complete
 transaction; pending results do not confirm durability.
+
+## Native63 extension
+
+A registration may also add a genuinely new required singular scalar field and
+use it in a genuinely new alternate key. Existing objects must supply complete
+valid non-null retained cells. Planned declaration-module reader authority is
+required when collecting and releasing candidates. Original UMF receipts encode
+those exact cells with their planned facets before persistence.
+
+Each affected object advances once for rebinding. The same registration records
+final key memberships and uses `truss-native-catalog-rebind/0.3` and
+`truss-catalog-key-backfill/0.2`. Historical registration effects and original
+basis select these profiles; later catalog changes cannot rewrite earlier reports.
+Existing optional fields tightened to required do not qualify for this extension.
+Changes to existing or primary keys remain unsupported.
