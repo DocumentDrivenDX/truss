@@ -80,3 +80,19 @@ and independent-edge rules above before implementation. Cyclic schema definition
 value Records, general physical row homes, retained history offload and managed
 service qualification remain in the full release goal. No support claim follows
 from this plan or from an existing schema column.
+
+## Storage implementation checkpoint — 2026-10-14
+
+The native65 candidate installs the UMF-exported multi-member object/edge
+transition uniqueness and nullable endpoint ownership context. The populated
+published Truss0.0.29/native64 predecessor workflow passes (one test, 9.362s):
+original rows and committed receipt replay survive, followed by an atomic
+object update and edge replacement with retained before/after endpoint contexts.
+Legacy edge contexts remain SQL NULL. Astra Ultra reviewed the implementation;
+the original four-argument edge history call and owner-only upgrade helper ACL
+check are corrected. Matching Weft backend0.4.35 admits this runtime namespace;
+two ordinary recursive-container query workflows passed against its local wheel.
+
+This checkpoint does not activate owned inputs, cascade, ownership reads or
+historical context enforcement. SDK0.0.30 and Weft0.4.30 are unreleased development
+versions until the ownership tranche is complete.
