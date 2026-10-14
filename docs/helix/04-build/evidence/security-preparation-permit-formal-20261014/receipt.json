@@ -1,0 +1,77 @@
+{
+  "status": "conditional-model-passed",
+  "solver": "4.15.4",
+  "sourceSha256": "b6b70d6a6e6ba3b0ffbc8999ed49c5974e73ef55d3086803355d21736cffdbcf",
+  "queries": [
+    {
+      "id": "full-xid8-pieces-injective",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "df1f752c6ee7bbbf2839427c64b8ac4365353e0621ca781b0fc73c409948c69f"
+    },
+    {
+      "id": "xid32-only-allows-foreign-cut",
+      "expected": "sat",
+      "observed": "sat",
+      "model": "[original_data_xid8 = 18446726477228539904,\n supplied_data_xid8 = 17592186044416]",
+      "smt2Sha256": "735210714df2b309ef632abeb4bc108be75ed3b412bd0e864606b4df50abad3e"
+    },
+    {
+      "id": "fresh-authority-denies-stale-snapshot",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "e90c35f8cc4dcf350aae8efde380b34deeb1e64e6a7c7a8261d8218ab99b1c73"
+    },
+    {
+      "id": "stale-snapshot-authority-control",
+      "expected": "sat",
+      "observed": "sat",
+      "model": "[current_permission = False,\n original_source_match = True,\n old_permission = True,\n authentic_issuer = True,\n original_coordinator_live = True,\n native_data_exclusion = True]",
+      "smt2Sha256": "4f6c1eb7a078ddfdc0731a9948ce0dce39f1782de3c204f59ea64c1045380d08"
+    },
+    {
+      "id": "lost-coordinator-refuses-new-stage",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "ccb0af9d92fb22bc66a040b4eacf80b61db80f15340fcc803b0fb29c60c80edf"
+    },
+    {
+      "id": "data-held-fence-closes-commit-loss-window",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "ba53ce6005c557a928dbe6d275c25ee95336aed0a9be8efcd3e620dc7cceeb53"
+    },
+    {
+      "id": "coordinator-only-fence-leaves-commit-loss-window",
+      "expected": "sat",
+      "observed": "sat",
+      "model": "[data_commit_in_progress = True,\n coordinator_lost = True,\n authority_changed = True,\n original_data_transaction_holds_authority_exclusion = False]",
+      "smt2Sha256": "de5fb7452ca4fd4c6bc0e319cc96fa1c426a232c076f4a0609cf406c05f9fac0"
+    },
+    {
+      "id": "one-original-permit-prohibits-fragment-union",
+      "expected": "unsat",
+      "observed": "unsat",
+      "model": null,
+      "smt2Sha256": "94e894edc1e9ed6e253c36e203d088474495fa01af9a53015408aadf2419d464"
+    },
+    {
+      "id": "multiple-permits-enable-fragment-union",
+      "expected": "sat",
+      "observed": "sat",
+      "model": "[candidate_anchor = 1,\n candidate_hi = -1,\n pid_b = -1,\n candidate_lo = 0,\n anchor_a = 1,\n lo_a = 0,\n anchor_b = 0,\n lo_b = -1,\n hi_a = -1,\n pid_a = 0,\n hi_b = 0,\n candidate_pid = -1]",
+      "smt2Sha256": "3918496a6cef3f927b8cc0dc6e288f0336bc97ee03585dd1954df4b5fa6d0e52"
+    }
+  ],
+  "scope": "Exact 64-bit xid partition, Boolean current-authority admission, data-held exclusion and original complete permit tuple versus fragment union.",
+  "limitations": [
+    "No native issuer, anchor, privilege, pg_locks, peer, SQL or original Weft selection refinement theorem.",
+    "Authentic issuer, complete original source/scope, live coordinator and exact participating writer fence are premises.",
+    "One permit per original coordinator transaction must be independently enforced; the union counterexample shows why.",
+    "No cryptographic token or Python comparison issues authority; no preparation/seal/backend acceptance promotion."
+  ]
+}

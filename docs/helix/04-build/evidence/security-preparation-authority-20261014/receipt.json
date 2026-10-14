@@ -7,23 +7,29 @@
   },
   "native": {
     "command": "python -m unittest test_security_preparation_authority_native -v",
-    "passed": 1,
-    "seconds": 10.289,
+    "passed": 2,
+    "seconds": 10.635,
     "attempts": [
       "native-r1.log",
       "native-r2.log",
       "native-r3.log",
       "native-r4.log",
       "native-r5.log",
-      "native-r6.log"
+      "native-r6.log",
+      "native-r7.log",
+      "native-r8.log",
+      "native-r9.log"
     ]
   },
   "sourceDigests": {
-    "packages/python/src/truss/_security_preparation_authority.py": "0afb586a87913d6f078df893089f7f27a1dd7a72d5dba8afb4e797a3bead30fb",
+    "packages/python/src/truss/_security_preparation_authority.py": "948c282c90e4da3aae2b1bc3078ff6a0206aaae05f64e22d395144dd47193009",
     "packages/python/src/truss/_security_bootstrap/preparation-authority-lock.sql": "8105c84fa96b7afbfd9cedb01a6aef0fdecaaf1dec5d53b80804e0f0f2095481",
-    "packages/python/tests/test_security_preparation_authority_native.py": "644c81c38f7f63f44d311579864190d5443461dff94573f2e94a86caccf0903b",
+    "packages/python/tests/test_security_preparation_authority_native.py": "07c92b76a57d2576726fd272443b690e48537fe7ddf8cfd25e2f0e3b2256d4eb",
     "scripts/check-module-boundaries.py": "2b017e40d8f94f9b6504e45a3470c936d024bf2c9eba09a8e9d5c5c19209d3ec",
-    "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md": "6c65abbc5d86104dd3973b568f19d7ba34059a4d4f49ecc873d698da7bb63475"
+    "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md": "bbdeeb40236f1957fdd3089f56288529a65c84eda192f0324df854e19c73d442",
+    "packages/python/src/truss/_security_bootstrap/preparation-data-authority-lock.sql": "e8bd655e40ecd6bbbaa4b83d4e6660577bfca12dfb4353ea189948545260ba4b",
+    "scripts/prove-security-preparation-permit.py": "b6b70d6a6e6ba3b0ffbc8999ed49c5974e73ef55d3086803355d21736cffdbcf",
+    "docs/helix/02-design/contracts/preparation-authority-bridge.proposal.md": "f138149e7cdd151b9e3ae4dae472b04ddd4e2f05aa9350cc208a1f83269b5be3"
   },
   "boundaries": {
     "imports": 1107,
@@ -42,7 +48,11 @@
     "RR authority lock issuer refused",
     "unrelated data person lacks EXECUTE",
     "Original current native catalog derives all qualified module owners; no caller owner tuple",
-    "Same original caller denied before fresh regrant and permitted after regrant; observations remain falseReady"
+    "Same original caller denied before fresh regrant and permitted after regrant; observations remain falseReady",
+    "Original RR lock-only issuer owns native policy/role cuts through actual data completion",
+    "Coordinator native backend disconnected; revocation still blocked by data-owned cuts",
+    "Original native COMMIT acknowledged then revocation succeeds",
+    "Shadowing namespace refuses before private context queries"
   ],
   "notProven": [
     "full source/helper/ACL/DDL closure",

@@ -624,3 +624,15 @@ revocation/regrant. These `security_ready=false` observations are deliberately
 not an admitted selected field/relationship/history scope: held frozen/current
 source correspondence and original logical action/field meaning must still be
 composed before issuing any lease.
+
+
+The separate `acquire_preparation_data_authority_lock()` is now implemented for
+PG18.6 RR/read-write/no-SET-ROLE contexts. It takes native module/role SHARE cuts
+and bounded policy-row SHARE locks; it neither checks current permission nor
+issues a lease. Native coordinator-disconnect testing confirms data-owned cuts
+continue blocking revocation through the original data transaction's actual
+COMMIT acknowledgement. No seal is written by this component. The private
+comparison APIs refuse a namespace that places other schemas before pg_catalog.
+The [original-caller bridge proposal](preparation-authority-bridge.proposal.md)
+records native anchor/permit/selection/finalization gates and the nine qualified
+conditional proof queries; complete preparation admission remains unavailable.

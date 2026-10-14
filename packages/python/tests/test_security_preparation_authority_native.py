@@ -9,12 +9,68 @@ from truss._security_preparation_authority import (
     capture_preparation_data_with_cursor, verify_preparation_data_with_cursor,
     verify_preparation_peer_with_cursor,
     observe_preparation_owners_with_cursor,
+    bootstrap_preparation_data_authority_lock_in_transaction,
 )
 
 
 class PreparationAuthorityNativeTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[_name] = None
+
+    def test_data_owned_authority_exclusion_survives_coordinator_disconnect(self):
+        data, old_host, assembly, old_tx = self.ready(document_ids=('adoc',))
+        old_host.detach(); data.commit()
+        self.admin.execute('CREATE ROLE preparation_executor LOGIN NOINHERIT')
+        self.addCleanup(self.admin.execute, 'DROP ROLE preparation_executor')
+        self.addCleanup(self.admin.execute, 'DROP OWNED BY preparation_executor')
+        self.admin.execute('GRANT pg_read_all_stats TO preparation_executor WITH INHERIT TRUE')
+        self.admin.execute('GRANT SELECT ON truss.catalog_runtime_installation,truss.schema_head,truss.schema_doc,truss.module_access TO preparation_executor')
+        self.admin.execute('BEGIN')
+        installer = adopt_psycopg_host(self.admin)
+        install_tx = installer.adopt_transaction().value
+        authority = bootstrap_preparation_authority_lock_in_transaction(installer, install_tx, executor_role='preparation_executor')
+        data_lock = bootstrap_preparation_data_authority_lock_in_transaction(installer, install_tx, executor_role='consumer')
+        self.assertIsInstance(authority, Ok, str(installer._custody.last_attempt.error))
+        self.assertIsInstance(data_lock, Ok, str(installer._custody.last_attempt.error))
+        installer.detach(); self.admin.commit()
+        data.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
+        data_host = adopt_psycopg_host(data)
+        self.consumer_connections.append((data, data_host))
+        data_tx = data_host.adopt_transaction(isolation='repeatable_read').value
+        def hold(cursor, observed):
+            acquire_preparation_authority_lock_with_cursor(cursor, data_lock.value)
+            return capture_preparation_data_with_cursor(cursor)
+        captured = data_host._run_operation(data_tx, hold)
+        self.assertIsInstance(captured, Ok, str(data_host._custody.last_attempt.error))
+        params = psycopg.conninfo.conninfo_to_dict(self.info.connection_uri); params['user'] = 'preparation_executor'
+        coordinator = psycopg.connect(**params, autocommit=True, options='-c statement_timeout=10000')
+        self.addCleanup(coordinator.close)
+        coordinator.execute('BEGIN')
+        host = adopt_psycopg_host(coordinator, statement_timeout_ms=10000, operation_timeout_ms=30000)
+        self.consumer_connections.append((coordinator, host))
+        adopted = host.adopt_transaction()
+        self.assertIsInstance(adopted, Ok, str(host._custody.last_attempt.error))
+        tx = adopted.value
+        observed = host._run_operation(tx, lambda cursor, identity: observe_preparation_owners_with_cursor(cursor, authority.value, captured.value))
+        self.assertIsInstance(observed, Ok, str(host._custody.last_attempt.error))
+        self.assertEqual(observed.value.owners, (('adoc', 'm', 'group_reader', 'group_writer', 'true'),))
+        self.admin.execute("SET lock_timeout='150ms'")
+        with self.assertRaises(psycopg.errors.LockNotAvailable):
+            self.admin.execute('REVOKE group_writer FROM consumer')
+        coordinator_pid = coordinator.info.backend_pid
+        coordinator.close()
+        self.admin.execute('SELECT pg_catalog.pg_stat_clear_snapshot()')
+        self.assertEqual(self.admin.execute('SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_stat_activity WHERE pid=%s)', (coordinator_pid,)).fetchone(), (False,))
+        with self.assertRaises(psycopg.errors.LockNotAvailable):
+            self.admin.execute('REVOKE group_writer FROM consumer')
+        live_data = data_host._run_operation(data_tx, lambda cursor, identity: verify_preparation_data_with_cursor(cursor, captured.value))
+        self.assertIsInstance(live_data, Ok)
+        data_host.detach()
+        # Actual original native completion of this diagnostic transaction;
+        # no selection/manifest/seal is written or qualified by the test.
+        self.assertEqual(data.execute('COMMIT').statusmessage, 'COMMIT')
+        self.admin.execute('REVOKE group_writer FROM consumer')
+        self.admin.execute("SET lock_timeout='0'")
 
     def test_current_authority_exclusion_does_not_refresh_or_admit_rr(self):
         data, data_host, assembly, data_tx = self.ready(document_ids=('adoc',))
@@ -29,6 +85,11 @@ class PreparationAuthorityNativeTests(base.PublicCreateGroupTests):
         with data.cursor() as cursor:
             captured = capture_preparation_data_with_cursor(cursor)
             verify_preparation_data_with_cursor(cursor, captured)
+        data.execute('SET LOCAL search_path=public,pg_catalog')
+        with data.cursor() as cursor:
+            with self.assertRaises(ValueError):
+                verify_preparation_data_with_cursor(cursor, captured)
+        data.execute('SET LOCAL search_path=pg_catalog,pg_temp')
         self.assertFalse(captured.security_ready)
         self.admin.execute('REVOKE group_writer FROM consumer')
         self.assertEqual(data.execute(membership).fetchone(), (True,))

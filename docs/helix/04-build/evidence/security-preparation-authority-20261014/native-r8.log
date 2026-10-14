@@ -1,0 +1,7 @@
+test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr) ... ok
+test_data_owned_authority_exclusion_survives_coordinator_disconnect (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_data_owned_authority_exclusion_survives_coordinator_disconnect) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 9.482s
+
+OK

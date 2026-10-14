@@ -28,6 +28,11 @@ class PendingPreparationAuthorityLock:
 
 
 @dataclass(frozen=True, slots=True)
+class PendingPreparationDataAuthorityLock(PendingPreparationAuthorityLock):
+    """Installed RR lock-only comparison; never current authority."""
+
+
+@dataclass(frozen=True, slots=True)
 class PreparationDataComparison:
     """Native comparison copied inside original guarded engine cursor; no lease."""
     identity: tuple[str, ...]
@@ -36,7 +41,15 @@ class PreparationDataComparison:
     security_ready: bool = False
 
 
+def _native_path(cursor):
+    # The new engine-owned profile has no adopted caller/temp context. Reject a
+    # path that could shadow operators/types before evaluating private queries.
+    if _text_rows(cursor, 'SELECT (pg_catalog.current_schemas(true))[1]::pg_catalog.text', limit=1) != [('pg_catalog',)]:
+        raise ValueError('Original preparation native namespace required')
+
+
 def _data_identity(cursor):
+    _native_path(cursor)
     if _text_rows(cursor, "SELECT pg_catalog.current_setting('server_version_num')::text,pg_catalog.current_setting('transaction_isolation')::text,pg_catalog.current_setting('transaction_read_only')::text,pg_catalog.current_setting('role')::text", limit=1) != [('180006', 'repeatable read', 'off', 'none')]:
         raise ValueError('Original writable RR preparation context required')
     rows = _text_rows(cursor, """SELECT a.datid::text,a.usesysid::text,a.pid::text,
@@ -71,6 +84,7 @@ def verify_preparation_peer_with_cursor(cursor, original):
     """Fresh original native peer comparison, not source/authority admission."""
     if type(original) is not PreparationDataComparison:
         raise ValueError('Original preparation data comparison required')
+    _native_path(cursor)
     if _text_rows(cursor, "SELECT pg_catalog.current_setting('transaction_isolation')::text,pg_catalog.current_setting('transaction_read_only')::text", limit=1) != [('read committed', 'off')]:
         raise ValueError('Fresh preparation coordinator context required')
     # Statistics snapshots must not hide an observed context/end change.
@@ -144,19 +158,27 @@ def observe_preparation_owners_with_cursor(cursor, issuer, original):
     return PreparationOwnerObservation(header[0][0], header[0][1], original.identity[1], tuple(owners))
 
 
-_SOURCE_SHA256 = '8105c84fa96b7afbfd9cedb01a6aef0fdecaaf1dec5d53b80804e0f0f2095481'
+_SOURCES = {
+    PendingPreparationAuthorityLock: ('acquire_preparation_authority_lock', 'preparation-authority-lock.sql', '8105c84fa96b7afbfd9cedb01a6aef0fdecaaf1dec5d53b80804e0f0f2095481'),
+    PendingPreparationDataAuthorityLock: ('acquire_preparation_data_authority_lock', 'preparation-data-authority-lock.sql', 'e8bd655e40ecd6bbbaa4b83d4e6660577bfca12dfb4353ea189948545260ba4b'),
+}
 
-def _source():
-    raw = files('truss').joinpath('_security_bootstrap', 'preparation-authority-lock.sql').read_bytes()
-    if sha256(raw).hexdigest() != _SOURCE_SHA256:
+def _source(kind=PendingPreparationAuthorityLock):
+    if kind not in _SOURCES:
+        raise ValueError('Original preparation lock kind required')
+    name, path, expected = _SOURCES[kind]
+    raw = files('truss').joinpath('_security_bootstrap', path).read_bytes()
+    if sha256(raw).hexdigest() != expected:
         raise ValueError('Original preparation lock source pin required')
     return raw
 
 
 def _verify(cursor, issuer):
-    if type(issuer) is not PendingPreparationAuthorityLock:
+    if type(issuer) not in _SOURCES:
         raise ValueError('Original preparation lock comparison required')
-    raw = _source()
+    _native_path(cursor)
+    raw = _source(type(issuer))
+    name = _SOURCES[type(issuer)][0]
     if sha256(raw).hexdigest() != issuer.source_sha256:
         raise ValueError('Original preparation lock source required')
     body = raw.decode().split('AS $$', 1)[1].split('$$;', 1)[0]
@@ -167,7 +189,7 @@ def _verify(cursor, issuer):
         p.prosrc,(p.prosqlbody IS NULL)::text
         FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace
         JOIN pg_catalog.pg_language l ON l.oid=p.prolang
-        WHERE n.nspname='truss' AND p.proname='acquire_preparation_authority_lock'""", limit=1)
+        WHERE n.nspname='truss' AND p.proname=%s""", (name,), 1)
     if rows != [(str(issuer.owner_oid), 'plpgsql', 'f', '0', '', '2278',
                  'false', 'true', 'v', 'u', 'false', '0',
                  '["search_path=pg_catalog, pg_temp"]', body, 'true')]:
@@ -176,8 +198,8 @@ def _verify(cursor, issuer):
         a.privilege_type::text,a.is_grantable::text FROM pg_catalog.pg_proc p
         CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,
         pg_catalog.acldefault('f',p.proowner))) a
-        WHERE p.oid='truss.acquire_preparation_authority_lock()'::regprocedure
-        ORDER BY a.grantee""", limit=3)
+        WHERE p.oid=%s::pg_catalog.regprocedure
+        ORDER BY a.grantee""", ('truss.'+name+'()',), 3)
     expected = sorted([(str(oid), str(issuer.owner_oid), 'EXECUTE', 'false')
                        for oid in (issuer.owner_oid, issuer.caller_oid)], key=lambda row: int(row[0]))
     if acl != expected:
@@ -189,12 +211,13 @@ def _verify(cursor, issuer):
         raise ValueError('Excluded privileged preparation lock owner required')
 
 
-def bootstrap_preparation_authority_lock_in_transaction(host, transaction, *, executor_role):
+def _bootstrap_lock(host, transaction, executor_role, kind):
     if (type(host) is not PsycopgHost or type(executor_role) is not str
             or not executor_role or '\0' in executor_role or len(executor_role.encode()) > 63):
         return Error(ExecutionFailure('execution_obligation', 'Bounded preparation executor required'))
     def install(cursor, observed):
         _pin_cursor(cursor)
+        _native_path(cursor)
         if _text_rows(cursor, "SELECT pg_catalog.current_setting('server_version_num')::text,pg_catalog.current_setting('transaction_isolation')::text,pg_catalog.current_setting('transaction_read_only')::text", limit=1) != [('180006', 'read committed', 'off')]:
             raise ValueError('Original fresh preparation lock installation required')
         target = _text_rows(cursor, 'SELECT installation_id::text,owner_oid::text FROM truss.catalog_runtime_installation WHERE singleton FOR SHARE NOWAIT', limit=1)
@@ -205,24 +228,25 @@ def bootstrap_preparation_authority_lock_in_transaction(host, transaction, *, ex
         caller = _text_rows(cursor, "SELECT oid::text,rolcanlogin::text,rolsuper::text,rolcreatedb::text,rolcreaterole::text,rolreplication::text,rolbypassrls::text FROM pg_catalog.pg_roles WHERE rolname=%s", (executor_role,), 1)
         if len(owner) != 1 or len(caller) != 1 or caller[0][1:] != ('true', 'false', 'false', 'false', 'false', 'false'):
             raise ValueError('Ordinary preparation executor and privileged installer required')
-        if _text_rows(cursor, "SELECT oid::text FROM pg_catalog.pg_proc WHERE pronamespace='truss'::regnamespace AND proname='acquire_preparation_authority_lock'", limit=1):
+        name = _SOURCES[kind][0]
+        if _text_rows(cursor, "SELECT oid::text FROM pg_catalog.pg_proc WHERE pronamespace='truss'::regnamespace AND proname=%s", (name,), 1):
             raise ValueError('Existing preparation lock requires explicit migration')
-        raw = _source()
+        raw = _source(kind)
         cursor.execute(raw.decode(), prepare=False)
-        cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.acquire_preparation_authority_lock() TO {}').format(sql.Identifier(executor_role)), prepare=False)
+        cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{}() TO {}').format(sql.Identifier(name), sql.Identifier(executor_role)), prepare=False)
         cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(executor_role)), prepare=False)
-        issuer = PendingPreparationAuthorityLock(target[0][0], int(owner[0][0]), int(caller[0][0]), sha256(raw).hexdigest())
+        issuer = kind(target[0][0], int(owner[0][0]), int(caller[0][0]), sha256(raw).hexdigest())
         _verify(cursor, issuer)
         return issuer
     return host._run_operation(transaction, install)
 
 
 def acquire_preparation_authority_lock_with_cursor(cursor, issuer):
-    """Locks current authority inputs; neither supplied PID nor lease is accepted."""
+    """Locks authority inputs without granting freshness, scope or a lease."""
     _verify(cursor, issuer)
     if _text_rows(cursor, 'SELECT oid::text FROM pg_catalog.pg_roles WHERE rolname=CURRENT_USER AND rolname=SESSION_USER', limit=1) != [(str(issuer.caller_oid),)]:
         raise ValueError('Original preparation executor required')
-    cursor.execute('SELECT truss.acquire_preparation_authority_lock()', prepare=False)
+    cursor.execute(sql.SQL('SELECT truss.{}()').format(sql.Identifier(_SOURCES[type(issuer)][0])), prepare=False)
     if cursor.description is None or len(cursor.description) != 1 or cursor.description[0].type_code != 2278 or cursor.fetchmany(2) != [('',)]:
         raise ValueError('Exact native preparation lock VOID result required')
     held = _text_rows(cursor, """SELECT n.nspname::text,c.relname::text FROM pg_catalog.pg_locks l
@@ -235,3 +259,11 @@ def acquire_preparation_authority_lock_with_cursor(cursor, issuer):
     if held != [('pg_catalog', 'pg_auth_members'), ('pg_catalog', 'pg_authid'), ('truss', 'module_access')]:
         raise ValueError('Original native preparation authority exclusions required')
     _verify(cursor, issuer)
+
+
+def bootstrap_preparation_authority_lock_in_transaction(host, transaction, *, executor_role):
+    return _bootstrap_lock(host, transaction, executor_role, PendingPreparationAuthorityLock)
+
+
+def bootstrap_preparation_data_authority_lock_in_transaction(host, transaction, *, executor_role):
+    return _bootstrap_lock(host, transaction, executor_role, PendingPreparationDataAuthorityLock)
