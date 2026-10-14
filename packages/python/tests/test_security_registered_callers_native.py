@@ -196,3 +196,32 @@ class RegisteredCallersNativeTests(source.CatalogSourceCutTests):
    self.assertEqual(self.admin.execute("SELECT pg_catalog.to_regprocedure('truss.acquire_registered_role_catalog_cut()')").fetchone(),(None,))
    self.assertEqual(self.admin.execute('SELECT value FROM prior_role_issuer_work').fetchall(),[('kept',)])
   finally:self.admin.execute(sql.SQL('ALTER DEFAULT PRIVILEGES REVOKE EXECUTE ON FUNCTIONS FROM {}').format(sql.Identifier(self.outsider)))
+
+ def test_read_only_executor_uses_fixed_table_cut_without_update_grants(self):
+  """@covers US-056-AC9; selected real native graph/source table lock primitive."""
+  self.source_setup();executor='private_cut_'+uuid.uuid4().hex[:12]
+  self.admin.execute(sql.SQL('CREATE ROLE {} LOGIN').format(sql.Identifier(executor)))
+  self.addCleanup(self.admin.execute,sql.SQL('DROP OWNED BY {};DROP ROLE {}').format(sql.Identifier(executor),sql.Identifier(executor)))
+  self.admin.execute((source.ROOT/'packages/postgresql/native/catalog-read-table-cut.sql').read_text())
+  self.admin.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {};GRANT SELECT ON truss.object TO {};GRANT EXECUTE ON FUNCTION truss.acquire_catalog_read_table_cut() TO {}').format(*[sql.Identifier(executor)]*3))
+  self.host.detach();self.admin.commit()
+  parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=executor
+  with psycopg.connect(**parameters,autocommit=True) as reader:
+   reader.execute('BEGIN')
+   self.assertEqual(reader.execute("SELECT pg_catalog.has_table_privilege('truss.object','SELECT'),pg_catalog.has_table_privilege('truss.object','UPDATE')").fetchone(),(True,False))
+   reader.execute('SAVEPOINT direct_lock')
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege):reader.execute('LOCK TABLE ONLY truss.object IN SHARE MODE NOWAIT')
+   reader.execute('ROLLBACK TO SAVEPOINT direct_lock');reader.execute('RELEASE SAVEPOINT direct_lock')
+   reader.execute('SELECT truss.acquire_catalog_read_table_cut()')
+   tables=('object','catalog_subject_map','installation_archive','source_epoch_current','source_epoch_registry','policy_generation_guard')
+   for table in tables:
+    self.assertEqual(reader.execute("SELECT count(*) FROM pg_catalog.pg_locks WHERE pid=pg_catalog.pg_backend_pid() AND granted AND mode='ShareLock' AND relation=pg_catalog.to_regclass(%s)",('truss.'+table,)).fetchone(),(1,))
+    with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+     with self.assertRaises(psycopg.errors.LockNotAvailable):writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))
+   self.assertGreater(reader.execute('SELECT count(*) FROM truss.object').fetchone()[0],0)
+   reader.execute('SAVEPOINT direct_write')
+   with self.assertRaises(psycopg.errors.InsufficientPrivilege):reader.execute('UPDATE truss.object SET props=props WHERE false')
+   reader.execute('ROLLBACK TO SAVEPOINT direct_write');reader.execute('RELEASE SAVEPOINT direct_write')
+   reader.rollback()
+  with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
+   for table in tables:writer.execute(sql.SQL('DELETE FROM {} WHERE false').format(sql.Identifier('truss',table)))

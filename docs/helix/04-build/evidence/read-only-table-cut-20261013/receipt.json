@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "tests": 1,
+  "seconds": 10.88,
+  "covers": [
+    "US-056-AC9"
+  ],
+  "sourceDigests": {
+    "packages/postgresql/native/catalog-read-table-cut.sql": "9d28c88fd82ec7a08750701e28847f2d5b95b673c1c04a5dcc4aec13355f1842",
+    "packages/python/tests/test_security_registered_callers_native.py": "42fcc3dc1c467ae1c2f0899247b9c6844c444b33e70115eefd5edf02e1bd58cc"
+  },
+  "scope": "Fixed privileged lock-only primitive on six real accepted graph/source homes. Dedicated ordinary executor has SELECT object and no UPDATE; direct SHARE lock and UPDATE refuse42501; fixed helper acquires six own ShareLocks. Independent zero-effect DELETE statements refuse55P03, then succeed after rollback. No native mutation semantics, complete source cuts, issuer installer/owner/ACL closure, ordinary producer or backend admission.132 inventory unchanged."
+}
