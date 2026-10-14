@@ -1,0 +1,23 @@
+{
+  "status": "no actionable finding in test-only timeout amendment",
+  "head": "a453df5a23084fb6187e6937884e303703cdfa32",
+  "checked": "AST-normalized comparison confirms exactly seven fixture adopt_psycopg_host calls add statement_timeout_ms=10000 and operation_timeout_ms=30000; all remaining test statements/assertions identical.",
+  "changedCallLines": [
+    341,
+    382,
+    244,
+    496,
+    500,
+    602,
+    605
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_security_graph_subject_installation.py": "d16139a0ca6eeb80df6bc939c5e787ef77006847d2bfe609764da7cc4b81858f",
+    "scripts/security_ontology_native_subject_read.py": "defeef7eec70b84f7a1e8ab99ed5aec869b98ac6d622afff7fd81247b6a6bc93",
+    "packages/python/tests/test_security_ontology_edges_native.py": "71a06917d8f3aabcaa49c5376edacdbddfb1bbf3087e598cca32bf76ab9b1751",
+    "packages/python/src/truss/psycopg_host.py": "6e80fea510d18f789b6bda7ffdc54877e5650bc6ddec9c86c5e622f9ef91a398"
+  },
+  "originalTestSha256": "c7395149115214fe9e0fdd0651bcecf824ce41c716590df38bb891f30ea700ec",
+  "scope": "Instrumented fixture budget only. Product defaults remain statement 2000ms/operation 5000ms; no latency or default-budget qualification. Forty earlier bounded source controls remain tied to identical implementation bytes.",
+  "native": "r3 in progress when inspected; no native pass asserted. r1/r2 earlier legacy deadline failures remain historical."
+}

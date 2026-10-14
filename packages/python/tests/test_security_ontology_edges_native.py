@@ -241,7 +241,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
             parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=role
             executor_connection=self.admin if private_parameters is None else psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000')
             if private_parameters:self.addCleanup(executor_connection.close)
-            executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection);executor_transaction=executor.adopt_transaction().value
+            executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_transaction=executor.adopt_transaction().value
             if private_parameters:
                 self.assertEqual(executor_connection.execute("SELECT rolsuper,rolbypassrls FROM pg_catalog.pg_roles WHERE rolname=CURRENT_USER").fetchone(),(False,False))
                 self.assertEqual(executor_connection.execute("SELECT pg_catalog.has_table_privilege('truss.schema_head','UPDATE')").fetchone(),(False,))
@@ -338,7 +338,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         drain_rows=[];drain_decisions=[]
         parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Alice']
         executor_connection=self.admin if private_parameters is None else psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000')
-        executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection);executor_transaction=executor.adopt_transaction().value
+        executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_transaction=executor.adopt_transaction().value
         def receive_before_revocation(raw):
             drain_decisions.append(json.loads(raw));worker.start()
             self.assertTrue(started.wait(2));self.assertEqual(writer_errors,[])
@@ -379,7 +379,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         self.assertEqual(self.admin.execute('SELECT props->%s->>\'value\' FROM truss.object WHERE id=%s',(active_property,identities['aa'])).fetchone(),('false',))
         drain_rows.append({'stage':'after_outer_settlement','acknowledged':True})
         executor_connection=self.admin if private_parameters is None else psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000')
-        executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection);executor_transaction=executor.adopt_transaction().value
+        executor_connection.execute('BEGIN');executor=adopt_psycopg_host(executor_connection,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_transaction=executor.adopt_transaction().value
         try:
             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
                 connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_transaction=caller.adopt_transaction().value
@@ -493,11 +493,11 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                     if label=='epoch-rls':self.admin.execute('ALTER TABLE truss.source_epoch_current ENABLE ROW LEVEL SECURITY')
                     if label=='issuer-public':self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_graph_epoch_read_cut() TO PUBLIC')
                     with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
-                        private.execute('BEGIN');executor=adopt_psycopg_host(private);executor_tx=executor.adopt_transaction().value
+                        private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
                         self.assertEqual(private.execute("SELECT pg_catalog.has_table_privilege('truss.source_epoch_current','UPDATE')").fetchone(),(False,))
                         parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles['Bob']
                         with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
-                            connection.execute('BEGIN');caller=adopt_psycopg_host(connection);caller_tx=caller.adopt_transaction().value;released=[]
+                            connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction().value;released=[]
                             def receiver(raw):
                                 with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
                                     for table in ('source_epoch_current','source_epoch_registry','installation_archive','policy_generation_guard'):
@@ -599,10 +599,10 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                     composed=[]
                     for name,expected in (('Alice',[]),('Bob',['RB']),('Outsider',[])):
                         with psycopg.connect(**private_parameters,autocommit=True,options='-c statement_timeout=10000') as private:
-                            private.execute('BEGIN');executor=adopt_psycopg_host(private);executor_tx=executor.adopt_transaction().value
+                            private.execute('BEGIN');executor=adopt_psycopg_host(private,statement_timeout_ms=10000,operation_timeout_ms=30000);executor_tx=executor.adopt_transaction().value
                             parameters=psycopg.conninfo.conninfo_to_dict(self.info.connection_uri);parameters['user']=roles[name]
                             with psycopg.connect(**parameters,autocommit=True,options='-c statement_timeout=10000') as connection:
-                                connection.execute('BEGIN');caller=adopt_psycopg_host(connection);caller_tx=caller.adopt_transaction().value;released=[]
+                                connection.execute('BEGIN');caller=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);caller_tx=caller.adopt_transaction().value;released=[]
                                 def receiver(raw):
                                     with psycopg.connect(self.info.connection_uri,autocommit=True,options='-c lock_timeout=100ms') as writer:
                                         for table in ('catalog_subject_map','catalog_graph_subject_profile'):
