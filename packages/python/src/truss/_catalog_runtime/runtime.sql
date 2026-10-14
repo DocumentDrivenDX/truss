@@ -133,7 +133,7 @@ $$;
 
 CREATE FUNCTION truss.catalog_make_report(request truss.catalog_registration_request,planned_basis jsonb DEFAULT NULL) RETURNS bytea
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET bytea_output='hex' AS $$
-DECLARE report jsonb; source jsonb; basis jsonb;
+DECLARE report jsonb; source jsonb; basis jsonb;rebind_profile text;profile_count int;
 BEGIN
  basis:=coalesce(planned_basis,truss.catalog_all_expected_records(request.revision));
  source:=convert_from(request.source_bytes,'UTF8')::jsonb;
@@ -164,7 +164,9 @@ BEGIN
       OR (p.scalar_type='decimal' AND p.facets IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb))))));
  END IF;
  IF EXISTS(SELECT 1 FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id) THEN
-  report:=report||jsonb_build_object('interfaceVersion','truss-catalog-registration-report/0.3','rebindProfile','truss-native-catalog-rebind/0.1',
+  SELECT min(truss.catalog_rebind_profile(t.journal)),count(DISTINCT truss.catalog_rebind_profile(t.journal)) INTO rebind_profile,profile_count FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id;
+  IF profile_count<>1 THEN RAISE EXCEPTION 'one original registration rebind profile required' USING ERRCODE='55000';END IF;
+  report:=report||jsonb_build_object('interfaceVersion','truss-catalog-registration-report/0.3','rebindProfile',rebind_profile,
    'rebinds',(SELECT jsonb_agg(jsonb_build_object('objectId',t.object_id::text,'typeId',t.type_id::text,
     'beforeVersion',t.before_object->>'ver','afterVersion',t.after_object->>'ver','effects',t.effects,
     'events',(SELECT jsonb_agg(j.value->'new_value' ORDER BY j.ordinality) FROM jsonb_array_elements(t.journal) WITH ORDINALITY j)) ORDER BY t.type_id,t.object_id)
@@ -395,7 +397,7 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.60-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.61-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
