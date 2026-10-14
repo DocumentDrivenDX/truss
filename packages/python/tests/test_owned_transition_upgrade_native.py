@@ -1,0 +1,56 @@
+"""One public populated predecessor upgrade for cascade transition storage."""
+import os,pickle,subprocess,sys,tempfile,unittest
+from pathlib import Path
+import psycopg
+from truss import LocalPostgres,Ok,CatalogRuntimeConfiguration,adopt_psycopg_host,create_reference_assembly,EdgeFound,ObjectFound
+from truss.contracts import TextValue,MapValue
+from truss.groups import AuthoredValue,UpdateObject,Delete,CreateEdge,NullOrderKey,StoredObjectReference,GroupSuccess,CommittedReceiptReplay
+
+@unittest.skipUnless(os.environ.get('TRUSS_OWNED_UPGRADE_SOURCE_PACKAGE'),'Published native64 predecessor required')
+class OwnedTransitionUpgradeTests(unittest.TestCase):
+    def test_preserve_transitions_and_receipt_then_continue(self):
+        with tempfile.TemporaryDirectory(prefix='truss-owned-upgrade-') as directory:
+            with LocalPostgres(Path(directory)/'data') as runtime:
+                tests=Path(__file__).parent.resolve();artifact=Path(directory)/'original.pickle'
+                env={**os.environ,'PYTHONPATH':os.environ['TRUSS_OWNED_UPGRADE_SOURCE_PACKAGE']+os.pathsep+str(tests)}
+                subprocess.run([sys.executable,str(tests/'_seed_owned_upgrade_064.py'),runtime.info.connection_uri,str(artifact)],env=env,check=True,timeout=120)
+                documents,object_identity,edge_identity,input,request,semantic=pickle.loads(artifact.read_bytes())
+                with psycopg.connect(runtime.info.connection_uri,autocommit=True,options='-c statement_timeout=10000') as admin:
+                    objects=admin.execute('SELECT to_jsonb(t)::text FROM truss.runtime_object_transition t ORDER BY transition_id').fetchall()
+                    edges=admin.execute('SELECT to_jsonb(t)::text FROM truss.runtime_edge_transition t ORDER BY transition_id').fetchall()
+                    self.assertEqual(len(objects),1);self.assertEqual(len(edges),1)
+                    admin.execute('BEGIN');host=adopt_psycopg_host(admin,statement_timeout_ms=10000,operation_timeout_ms=30000)
+                    assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value;tx=host.adopt_transaction().value
+                    upgraded=assembly.upgrade_in_transaction(tx)
+                    self.assertIsInstance(upgraded,Ok,repr(upgraded)+' '+str(host._custody.last_attempt.error))
+                    self.assertEqual(upgraded.value.previous_release_id,'truss-catalog-runtime/0.64-candidate')
+                    self.assertEqual(upgraded.value.release_id,'truss-catalog-runtime/0.65-candidate')
+                    self.assertEqual(upgraded.value.outcome,'upgraded');host.detach();admin.commit()
+                    self.assertEqual(admin.execute('SELECT to_jsonb(t)::text FROM truss.runtime_object_transition t ORDER BY transition_id').fetchall(),objects)
+                    self.assertEqual(admin.execute("SELECT (to_jsonb(t)-'endpoint_ownership')::text FROM truss.runtime_edge_transition t ORDER BY transition_id").fetchall(),edges)
+                    self.assertEqual(admin.execute('SELECT endpoint_ownership FROM truss.runtime_edge_transition').fetchall(),[(None,)])
+                params=psycopg.conninfo.conninfo_to_dict(runtime.info.connection_uri);params['user']='consumer'
+                with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as connection:
+                    connection.execute('BEGIN');host=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000)
+                    assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value;tx=host.adopt_transaction().value
+                    replay=assembly.apply_in_transaction(tx,input,request,documents=documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+                    self.assertIsInstance(replay.value.response,CommittedReceiptReplay,repr(replay))
+                    self.assertEqual(replay.value.response.semantic,semantic)
+                    edge=assembly.get_edge_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B',edge_id=int(edge_identity.id)).value
+                    self.assertIsInstance(edge,EdgeFound)
+                    found=assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(object_identity.id))
+                    self.assertIsInstance(found.value,ObjectFound)
+                    context=assembly.group_context_in_transaction(tx).value
+                    update=UpdateObject(target=StoredObjectReference(identity=found.value.object.identity),set=(AuthoredValue(name='value',value=TextValue(kind='string',text='after-upgrade')),),unset=())
+                    unchanged=Delete(operation='delete_edge',target=StoredObjectReference(identity=edge.edge.identity))
+                    parallel=CreateEdge(relationship_definition_pin=edge.edge.identity.definition_pin,source=StoredObjectReference(identity=edge.edge.source),target=StoredObjectReference(identity=edge.edge.target),values=(),order_key=NullOrderKey())
+                    changed=assembly.apply_in_transaction(tx,context.input((update,unchanged,parallel),MapValue(entries=())),context.request('post-upgrade'),documents=documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+                    self.assertIsInstance(changed,Ok,repr(changed)+str(host._custody.last_attempt.error));self.assertIsInstance(changed.value,GroupSuccess,repr(changed));host.detach();connection.commit()
+                with psycopg.connect(runtime.info.connection_uri,autocommit=True) as admin:
+                    contexts=admin.execute('SELECT endpoint_ownership::text FROM truss.runtime_edge_transition WHERE endpoint_ownership IS NOT NULL ORDER BY transition_id').fetchall()
+                    self.assertEqual(len(contexts),2)
+                    import json
+                    first,second=(json.loads(row[0]) for row in contexts)
+                    self.assertEqual(first['before']['source']['ownership'],{'state':'rootless'})
+                    self.assertIsNone(first['after'])
+                    self.assertIsNone(second['before']);self.assertEqual(second['after']['source']['ownership'],{'state':'rootless'})

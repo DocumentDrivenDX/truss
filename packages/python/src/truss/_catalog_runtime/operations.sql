@@ -9,11 +9,7 @@ CREATE TABLE truss.runtime_object_attempt (
 CREATE INDEX runtime_object_attempt_writer ON truss.runtime_object_attempt(writer_xid);
 CREATE UNIQUE INDEX runtime_object_attempt_receipt ON truss.runtime_object_attempt(receipt_id) WHERE receipt_id IS NOT NULL;
 CREATE SEQUENCE truss.runtime_object_transition_seq;
-CREATE TABLE truss.runtime_object_transition (
- transition_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_object_transition_seq'),attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt(id),
- operation_index int NOT NULL,writer_xid xid8 NOT NULL,object_id bigint NOT NULL,type_id int NOT NULL,
- before_object jsonb NOT NULL,after_object jsonb,after_keys jsonb NOT NULL,journal jsonb NOT NULL,
- UNIQUE(attempt_id,operation_index));
+CREATE TABLE truss.runtime_object_transition (transition_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_object_transition_seq'), attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL, writer_xid xid8 NOT NULL, object_id bigint NOT NULL, type_id int NOT NULL, before_object jsonb NOT NULL, after_object jsonb, after_keys jsonb NOT NULL, journal jsonb NOT NULL, UNIQUE (attempt_id, operation_index, object_id, type_id));
 CREATE INDEX runtime_object_transition_owner ON truss.runtime_object_transition(object_id,type_id,transition_id DESC);
 CREATE TRIGGER runtime_object_transition_immutable BEFORE UPDATE OR DELETE ON truss.runtime_object_transition
  FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
@@ -749,11 +745,7 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_edge_metadata(uuid,int) FROM PUBLIC;
 
 CREATE SEQUENCE truss.runtime_edge_transition_seq;
-CREATE TABLE truss.runtime_edge_transition (
- transition_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_edge_transition_seq'),
- attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt(id),operation_index int NOT NULL,writer_xid xid8 NOT NULL,
- edge_id bigint NOT NULL,rel_type_id int NOT NULL,before_edge jsonb,after_edge jsonb,journal jsonb NOT NULL,
- old_source jsonb,old_target jsonb,source_identity jsonb NOT NULL,target_identity jsonb NOT NULL,UNIQUE(attempt_id,operation_index));
+CREATE TABLE truss.runtime_edge_transition (transition_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_edge_transition_seq'), attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL, writer_xid xid8 NOT NULL, edge_id bigint NOT NULL, rel_type_id int NOT NULL, before_edge jsonb, after_edge jsonb, journal jsonb NOT NULL, old_source jsonb, old_target jsonb, source_identity jsonb NOT NULL, target_identity jsonb NOT NULL, UNIQUE (attempt_id, operation_index, edge_id, rel_type_id), endpoint_ownership jsonb);
 CREATE INDEX runtime_edge_transition_owner ON truss.runtime_edge_transition(edge_id,rel_type_id,transition_id DESC);
 CREATE TRIGGER runtime_edge_transition_immutable BEFORE UPDATE OR DELETE ON truss.runtime_edge_transition
  FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
@@ -783,12 +775,15 @@ CREATE FUNCTION truss.runtime_edge_step(attempt_id uuid,operation_index int,meta
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;operation jsonb;input jsonb;row_image truss.edge%ROWTYPE;
  identity jsonb;before_image jsonb;after_image jsonb;before_record jsonb;after_record jsonb;result jsonb;event jsonb;
- installation truss.catalog_runtime_installation%ROWTYPE;journal truss.journal%ROWTYPE;event_refs jsonb;revision int;version bigint;entry jsonb;
+ installation truss.catalog_runtime_installation%ROWTYPE;journal truss.journal%ROWTYPE;event_refs jsonb;revision int;version bigint;entry jsonb;ownership_context jsonb;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->operation_index;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
  before_image:=nullif(metadata->'prior','null'::jsonb);identity:=metadata->'identity';
+ ownership_context:=jsonb_build_object('profile','truss-edge-endpoint-ownership/0.1','captureCatalogRevision',revision::text,
+  'before',CASE WHEN before_image IS NULL THEN NULL ELSE jsonb_build_object('source',truss.runtime_endpoint_ownership(metadata->'oldSource',revision),'target',truss.runtime_endpoint_ownership(metadata->'oldTarget',revision)) END,
+  'after',NULL);
  IF operation->>'operation'='create_edge' THEN
   row_image.id:=nextval('truss.id_seq');row_image.rel_type_id:=(metadata->>'typeId')::int;row_image.props:='{}';
   row_image.ver:=1;row_image.created_at:=clock_timestamp();
@@ -800,8 +795,9 @@ BEGIN
   AND row_image.target_type::text=metadata->'target'->>'typeId' AND coalesce(row_image.retained,'{}')=metadata->'retained'
   AND row_image.order_key IS NOT DISTINCT FROM metadata->'orderKey'->>'text' THEN
   result:=jsonb_build_object('outcome','unchanged','operation','update_edge','identity',identity,'version',row_image.ver::text,'events','[]'::jsonb);
-  INSERT INTO truss.runtime_edge_transition(attempt_id,operation_index,writer_xid,edge_id,rel_type_id,before_edge,after_edge,journal,old_source,old_target,source_identity,target_identity)
-   VALUES(attempt_id,operation_index,attempt.writer_xid,row_image.id,row_image.rel_type_id,before_image,before_image,'[]'::jsonb,metadata->'oldSource',metadata->'oldTarget',metadata->'source',metadata->'target');
+  ownership_context:=jsonb_set(ownership_context,'{after}',CASE WHEN operation->>'operation'='delete_edge' THEN 'null'::jsonb ELSE jsonb_build_object('source',truss.runtime_endpoint_ownership(metadata->'source',revision),'target',truss.runtime_endpoint_ownership(metadata->'target',revision)) END);
+  INSERT INTO truss.runtime_edge_transition(attempt_id,operation_index,writer_xid,edge_id,rel_type_id,before_edge,after_edge,journal,old_source,old_target,source_identity,target_identity,endpoint_ownership)
+   VALUES(attempt_id,operation_index,attempt.writer_xid,row_image.id,row_image.rel_type_id,before_image,before_image,'[]'::jsonb,metadata->'oldSource',metadata->'oldTarget',metadata->'source',metadata->'target',ownership_context);
  ELSE
   IF before_image IS NOT NULL THEN
    IF row_image.ver=9223372036854775807 THEN RAISE EXCEPTION 'edge version exhausted' USING ERRCODE='54000';END IF;
@@ -839,9 +835,10 @@ BEGIN
   journal.new_value:=truss.runtime_exact_wrapper('event',convert_to(event::text,'UTF8'));journal.rev:=revision;
   journal.origin:=truss.runtime_exact_wrapper('origin',convert_to((event->'origin')::text,'UTF8'));
   INSERT INTO truss.journal SELECT (jsonb_populate_record(NULL::truss.journal,to_jsonb(journal))).*;
-  INSERT INTO truss.runtime_edge_transition(attempt_id,operation_index,writer_xid,edge_id,rel_type_id,before_edge,after_edge,journal,old_source,old_target,source_identity,target_identity)
+  ownership_context:=jsonb_set(ownership_context,'{after}',CASE WHEN operation->>'operation'='delete_edge' THEN 'null'::jsonb ELSE jsonb_build_object('source',truss.runtime_endpoint_ownership(metadata->'source',revision),'target',truss.runtime_endpoint_ownership(metadata->'target',revision)) END);
+  INSERT INTO truss.runtime_edge_transition(attempt_id,operation_index,writer_xid,edge_id,rel_type_id,before_edge,after_edge,journal,old_source,old_target,source_identity,target_identity,endpoint_ownership)
    VALUES(attempt_id,operation_index,attempt.writer_xid,row_image.id,row_image.rel_type_id,before_image,after_image,jsonb_build_array(to_jsonb(journal)),
-    metadata->'oldSource',metadata->'oldTarget',metadata->'source',metadata->'target');
+    metadata->'oldSource',metadata->'oldTarget',metadata->'source',metadata->'target',ownership_context);
   event_refs:=jsonb_build_array(jsonb_build_object('sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-edge-mutation/0.1','xid',attempt.writer_xid::text,'seq',journal.seq::text));
   IF operation->>'operation'='create_edge' THEN result:=jsonb_build_object('outcome','created','operation','create_edge','identity',identity,'version',version::text,'events',event_refs);
    IF operation ? 'alias' THEN result:=result||jsonb_build_object('alias',operation->>'alias');END IF;
