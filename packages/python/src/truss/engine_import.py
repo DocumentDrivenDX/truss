@@ -15,7 +15,14 @@ class _EngineImportSession:
         self.operation_timeout_ms=operation_timeout_ms
         self.connection=None;self.host=None;self.last_settlement=None;self.reconnect=False;self.submitted=False
 
-    def begin(self):
+    def _open_connection(self):
+        import psycopg
+        return psycopg.connect(self.connection_info,autocommit=True,connect_timeout=10,
+            options='-c statement_timeout='+str(self.statement_timeout_ms))
+
+    def begin(self, *, isolation="read_committed"):
+        if type(isolation) is not str or isolation not in ("read_committed", "repeatable_read"):
+            raise ValueError("Supported engine transaction isolation required")
         import psycopg
         from psycopg import pq
         from .psycopg_host import adopt_psycopg_host
@@ -25,17 +32,16 @@ class _EngineImportSession:
             self.host=None
         if self.reconnect:self.close();self.reconnect=False
         if self.connection is None or self.connection.closed or self.connection.broken:
-            self.connection=psycopg.connect(self.connection_info,autocommit=True,connect_timeout=10,
-                options='-c statement_timeout='+str(self.statement_timeout_ms))
+            self.connection=self._open_connection()
         if self.connection.info.transaction_status!=pq.TransactionStatus.IDLE:
             # Only this runner owns the outer transaction, including readmission.
             _,error=self.control('ROLLBACK',None)
             if error is not None:raise ValueError('Engine transaction cleanup unresolved')
-        _,error=self.control('BEGIN ISOLATION LEVEL READ COMMITTED READ WRITE',None)
+        _,error=self.control('BEGIN ISOLATION LEVEL '+isolation.replace('_',' ').upper()+' READ WRITE',None)
         if error is not None:raise ValueError('Engine transaction start unavailable')
         self.host=adopt_psycopg_host(self.connection,statement_timeout_ms=self.statement_timeout_ms,
             operation_timeout_ms=self.operation_timeout_ms)
-        adopted=self.host.adopt_transaction()
+        adopted=self.host.adopt_transaction(isolation=isolation)
         if isinstance(adopted,Error):raise ValueError('Engine transaction adoption unavailable')
         return self.host,adopted.value
 
