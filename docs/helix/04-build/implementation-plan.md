@@ -7981,3 +7981,17 @@ Merged runtime0.60 replay passes24.171s after adding the original report depende
 ## Original reified graph source archive and native initial epoch — 2026-10-14
 
 [Graph source/epoch evidence](evidence/security-ontology-source-epoch-20261014/README.md) adds a distinct original physical request/accepted census/compiler request/output archive carrier, preserving authored adoc/m/r1 and native revision text separately from logical identities. Fresh graph archive installation and existing native epoch issuance acquire all15 complete source cuts and require object+edge+Subjectmap recipes with full native column census and ALWAYS fact fences. Actual epoch/archives are committed and independently read back; reuse, rollback, stale generation, malformed graph and missing relation/column controls pass. Final full ontology native1/25.619s, named source regressions14/72.841s and1039 boundary imports pass. Original compiler/admin/Subject script/routine/DDL/authentication custody remains explicit; ordinary fresh epoch consumption and registered Subject/profile/compiler admission are next. No public activation or original case promotion; all132 requirements remain unchanged.
+
+### Next public alternate-key backfill tranche — 2026-10-14
+
+Astra Ultra approves a first tranche adding non-primary keys over already-defined
+required supported scalar properties. Preserve old keys and allocate new local
+numbers after the retained maximum. Under the same catalog lock/savepoint,
+collect exact cells, obtain original UMF tuples/receipts, recheck the candidate
+images and compare full tuple bytes for qualified duplicate refusals. Persist
+registration-owned membership/reservation effects, original receipts and bucket
+generations separately from object history; pure key backfill preserves object
+version/revision/timestamps. Extend deferred custody for create/update/rebind then
+backfill in the same caller transaction. Basic tests cover lookup/query, later
+key-based mutation, duplicate refusal and unchanged pure-backfill history. Newly
+rebound key components and existing/primary key changes remain later tranches.
