@@ -1,0 +1,11 @@
+test_current_authority_exclusion_does_not_refresh_or_admit_rr (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_current_authority_exclusion_does_not_refresh_or_admit_rr) ... ok
+test_data_owned_authority_exclusion_survives_coordinator_disconnect (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_data_owned_authority_exclusion_survives_coordinator_disconnect) ... ok
+test_pre_snapshot_anchor_does_not_make_later_authority_rr_visible (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_pre_snapshot_anchor_does_not_make_later_authority_rr_visible)
+Native visibility/ACL witness only, not an authenticated anchor issuer. ... ok
+test_reserved_two_integer_permit_namespace_requires_native_issuer (test_security_preparation_authority_native.PreparationAuthorityNativeTests.test_reserved_two_integer_permit_namespace_requires_native_issuer)
+Dedicated disposable DB privilege witness, not permit admission. ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 13.354s
+
+OK

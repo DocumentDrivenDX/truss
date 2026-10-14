@@ -18,6 +18,36 @@ class PreparationAuthorityNativeTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[_name] = None
 
+    def test_pre_snapshot_anchor_does_not_make_later_authority_rr_visible(self):
+        """Native visibility/ACL witness only, not an authenticated anchor issuer."""
+        data, host, assembly, tx = self.ready(document_ids=('adoc',))
+        host.detach(); data.commit()
+        self.admin.execute('CREATE TABLE public.preparation_anchor_probe(id int4 PRIMARY KEY, caller_oid oid NOT NULL, backend_pid int4 NOT NULL, backend_start timestamptz NOT NULL)')
+        self.admin.execute('CREATE TABLE public.preparation_later_authority_probe(anchor_id int4 PRIMARY KEY REFERENCES public.preparation_anchor_probe)')
+        # Independently observed actual native caller/incarnation, committed
+        # before the original consumer establishes its RR snapshot.
+        self.admin.execute('INSERT INTO public.preparation_anchor_probe SELECT 1,usesysid,pid,backend_start FROM pg_catalog.pg_stat_activity WHERE pid=%s', (data.info.backend_pid,))
+        self.admin.execute("CREATE FUNCTION public.preparation_anchor_read_probe() RETURNS TABLE(anchor_count int8, later_count int8) LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$ SELECT (SELECT count(*) FROM public.preparation_anchor_probe a JOIN pg_catalog.pg_stat_activity p ON p.pid=pg_catalog.pg_backend_pid() AND a.caller_oid=p.usesysid AND a.backend_pid=p.pid AND a.backend_start=p.backend_start),(SELECT count(*) FROM public.preparation_later_authority_probe) $$")
+        self.admin.execute('REVOKE ALL ON FUNCTION public.preparation_anchor_read_probe() FROM PUBLIC')
+        self.admin.execute('GRANT EXECUTE ON FUNCTION public.preparation_anchor_read_probe() TO consumer')
+        for query in ('SELECT * FROM public.preparation_anchor_probe',
+                      'INSERT INTO public.preparation_later_authority_probe VALUES(1)',
+                      'UPDATE public.preparation_anchor_probe SET caller_oid=0'):
+            with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                data.execute(query)
+        data.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
+        self.assertEqual(data.execute('SELECT * FROM public.preparation_anchor_read_probe()').fetchone(), (1, 0))
+        before = data.execute('SELECT pg_catalog.pg_current_snapshot()::text').fetchone()
+        self.admin.execute('INSERT INTO public.preparation_later_authority_probe VALUES(1)')
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM public.preparation_later_authority_probe').fetchone(), (1,))
+        self.assertEqual(data.execute('SELECT * FROM public.preparation_anchor_read_probe()').fetchone(), (1, 0))
+        self.assertEqual(data.execute('SELECT pg_catalog.pg_current_snapshot()::text').fetchone(), before)
+        self.assertEqual(data.execute('ROLLBACK').statusmessage, 'ROLLBACK')
+        # A fresh transaction sees the later row, but is a different data cut.
+        self.assertEqual(data.execute('SELECT * FROM public.preparation_anchor_read_probe()').fetchone(), (1, 1))
+        self.admin.execute('DROP FUNCTION public.preparation_anchor_read_probe()')
+        self.admin.execute('DROP TABLE public.preparation_later_authority_probe,public.preparation_anchor_probe')
+
     def test_reserved_two_integer_permit_namespace_requires_native_issuer(self):
         """Dedicated disposable DB privilege witness, not permit admission."""
         data, host, assembly, tx = self.ready(document_ids=('adoc',))

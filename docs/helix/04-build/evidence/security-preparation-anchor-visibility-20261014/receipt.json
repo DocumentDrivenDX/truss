@@ -1,0 +1,19 @@
+{
+  "status": "native-visibility-component-passed",
+  "postgresql": "18.6",
+  "tests": 4,
+  "seconds": 13.354,
+  "sourceSha256": "cfa753990ab9923e0086ac6550e388b9dbc66413918172798d2fce7566ec3cf6",
+  "logSha256": "08e18460dfa3efec204b5eb1f455a659569771d57441a8f5cbdef252e8c5f09d",
+  "scope": [
+    "Pre-RR committed diagnostic anchor matches actual native login OID/backend PID/start and is visible through SECDEF without direct table privileges.",
+    "Post-cut committed diagnostic authority row is visible to fresh administrator but remains absent inside original RR SECDEF reads.",
+    "Original native snapshot text is unchanged; a new transaction sees later row.",
+    "Ordinary caller cannot directly select/update anchor or insert authority row."
+  ],
+  "limits": [
+    "Fixture writer and SECDEF owner are privileged diagnostic administrator, not admitted native anchor/permit issuer.",
+    "No immutable-trigger/DDL/ACL/source closure, action-role/provider custody, one-permit or original seal qualification.",
+    "No backend acceptance case promotion; native visibility is only one design prerequisite."
+  ]
+}
