@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "runtime": "truss-catalog-runtime/0.59-candidate",
+  "tests": 1,
+  "seconds": 17.059,
+  "testSha256": "ed4fab8eeddf2e11e8f2115feed88891881a937bee8be27769c7033e39419a0f",
+  "manifestSha256": "1f5f67f9e138c08a1b13f49c4a8080f51ce79e5d7f6593f7382fec0a0cf13373",
+  "logSha256": "df1de00d05580d9f8d75b469a1b0316a60aeb34f2c1a090c8b0fd75b9a077283",
+  "scope": "Merged-runtime replay only. Prior captured packets retain runtime0.58 provenance; no authenticated backend acceptance promoted."
+}
