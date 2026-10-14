@@ -1,3 +1,4 @@
+import {compactCatalogSources} from './catalog-source-reference';
 /** Complete original value positions with explicitly incomplete assertion interpretation. */
 import {indexSourceJsonOccurrences,originalSourceOccurrenceBytes} from '../../postgresql/src/acceptance-json';
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
@@ -10,6 +11,7 @@ type Index=ReturnType<typeof indexSourceJsonOccurrences>;
 const issued=new WeakMap<object,{prepared:Prepared;indexes:readonly Index[]}>();
 export function collectCatalogOriginalOccurrenceInventory(prepared:Prepared,collection:Collection,recordTypes?:ReturnType<typeof collectCatalogRecordTypeRuleFamilies>){
  requireOriginalCatalogPreparation(prepared);
+ if(compactCatalogSources(prepared))throw Error('Compact source references require the versioned Python/native catalog report path');
  if(recordTypes!==undefined)requireOriginalCatalogRecordTypeRuleFamilies(prepared,recordTypes);
  // This call also requires original observation collection custody. No caller supplied classifications.
  const core=collectCatalogCoreAssertionIdentities(prepared,collection),indexes:Index[]=[];

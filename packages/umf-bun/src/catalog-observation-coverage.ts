@@ -1,3 +1,4 @@
+import {compactCatalogSources,catalogObservationIdentity,SOURCE_REFERENCE_FORMAT} from './catalog-source-reference';
 /** Observation correspondence only: never an enforcement or complete assertion report. */
 import {createHash} from 'node:crypto';
 import {UMF_CORE08_CATALOG_SOURCE,UMF_SCALAR_TYPE_SOURCE,UMF_RECORD_MEMBERS_SOURCE,UMF_REFERENCE_LINKS_SOURCE} from './index';
@@ -41,9 +42,9 @@ export function assessCatalogObservationCoverage(prepared:Prepared,collection:Co
   if(observed.documentId!==document.documentId||observed.operation!==requirement.operation||observed.basis!==requirement.basis||JSON.stringify(observed.identity)!==JSON.stringify(requirement.identity))throw Error('Original ordered observation identity/basis mismatch');
   const result=observed.result as {state?:unknown;code?:unknown;path?:unknown};
   if(!result||!['observed','unavailable'].includes(result.state as string))throw Error('Explicit observation availability required');
-  const original=JSON.stringify({profile:requirement.operation==='referenceLinks'?collection.referenceLinksProfile:requirement.operation==='members'?collection.membersProfile:requirement.operation==='scalarType'?collection.scalarProfile:requirement.field?collection.fieldProfile:collection.profile,documentId:document.documentId,contentSha256:prepared.original.documents[requirement.documentIndex].sha256,basis:requirement.basis,operation:requirement.operation,identity:requirement.identity,result:observed.result});
+  const original=JSON.stringify({...(compactCatalogSources(prepared)?{sourceFormat:SOURCE_REFERENCE_FORMAT}:{}),profile:requirement.operation==='referenceLinks'?collection.referenceLinksProfile:requirement.operation==='members'?collection.membersProfile:requirement.operation==='scalarType'?collection.scalarProfile:requirement.field?collection.fieldProfile:collection.profile,documentId:document.documentId,contentSha256:prepared.original.documents[requirement.documentIndex].sha256,basis:requirement.basis,operation:requirement.operation,identity:requirement.identity,result:observed.result});
   const bytes=Buffer.from(original,'utf8');bytesRetained+=bytes.length;if(bytesRetained>4194304)throw Error('Observation coverage evidence capacity exceeded');
-  if(observed.evidence.bytesBase64!==bytes.toString('base64')||observed.evidence.sha256!==createHash('sha256').update(bytes).digest('hex')||observed.evidence.identity!=='truss.owner-declaration-observation/'+requirement.documentIndex+'/'+index)throw Error('Original observation evidence correspondence required');
+  if(observed.evidence.bytesBase64!==bytes.toString('base64')||observed.evidence.sha256!==createHash('sha256').update(bytes).digest('hex')||observed.evidence.identity!==catalogObservationIdentity(prepared,requirement.documentIndex,index))throw Error('Original observation evidence correspondence required');
   if(result.state==='unavailable'){
    if(!(result.code===null||typeof result.code==='string')||!(result.path===null||typeof result.path==='string'))throw Error('Original unavailable result required');
    unavailable.push(Object.freeze({documentId:document.documentId,operation:requirement.operation,identity:Object.freeze(requirement.identity as object),code:result.code,path:result.path}));

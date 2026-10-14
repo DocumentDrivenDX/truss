@@ -20,7 +20,7 @@ server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The current release is [v0.0.19](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.19).
+The current release is [v0.0.21](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.21).
 The Python distribution version is distinct from native runtime/layout versions;
 future distributed changes receive a new package version.
 
@@ -31,15 +31,15 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.19 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.20 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.21 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.22 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.19'
+  'truss-toolkit[local,native,query]==0.0.21'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release
 publishes package checksums and source/runtime/backend pins. The Truss release
-workflow exercises the exact uploaded wheel with published Weft0.4.20 and verified
+workflow exercises the exact uploaded wheel with published Weft0.4.22 and verified
 PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
@@ -794,6 +794,21 @@ Empty bytes remain a value. The new optional-equality capability is refused by
 the retained required-only backend0.4.24. No timestamp, ordering, grouping or
 null-parameter support is implied. Wire0.2.5 remains unchanged.
 
-## Decimal(18,2) and field-name candidate (v0.0.21)
+## Decimal(18,2) and field names (v0.0.21)
 
-Adds original decimal(18,2) facets alongside decimal(18,4) across catalog acceptance, writes/imports, reads, business keys and Weft queries/pages. Exact tokens are preserved, including redundant zeros. Maximum9999999999999999.99 is valid; excess precision or nonrepresentable scale refuses. Name-only Field evolution retains property/key identities. Native57 upgrades56 transactionally and requires matching Weft0.4.22/backend0.4.27. The unpublished20 candidate failed retained-extension checks;21 corrects that omission. Publication is pending the release workflow; the installation example above remains on the published release.
+Adds original decimal(18,2) facets alongside decimal(18,4) across catalog acceptance, writes/imports, reads, business keys and Weft queries/pages. Exact tokens are preserved, including redundant zeros. Maximum9999999999999999.99 is valid; excess precision or nonrepresentable scale refuses. Name-only Field evolution retains property/key identities. Native57 upgrades56 transactionally and requires matching Weft0.4.22/backend0.4.27. The unpublished20 candidate failed retained-extension checks;21 corrects that omission. Published21 passed its release workflows on both declared native platforms.
+
+## Original documents and compact reports (v0.0.22 candidate)
+
+Prepare a model without starting PostgreSQL:
+
+```python
+from truss import CatalogDocument, prepare_catalog
+
+prepared = prepare_catalog((CatalogDocument(document_id, revision, original_bytes),),
+                           source_version="0.8.0")
+```
+
+The assembly method uses the same preparation. Registration still uses the caller's transaction. UMF0.8 support0.14 preserves top-level title metadata and emits catalog report0.2 with same-report source references; exact source bytes remain in acceptedInput. Use public `resolve_catalog_report_source(report_bytes, entry["source"])` to retrieve their checked bytes, digest, identity and revision. Occurrence locations and required-field inventory remain in assertion entries; unknown extension content stays intact. See the [source-reference contract](../../docs/helix/02-design/contracts/catalog-source-reference-v0.1.md).
+
+One unchanged original commerce slice is tested through registration, supplier/product/required relationship creation, key lookup, exact decimal(18,2) queries, committed replay and feed. Other packs are separately unqualified. Matching native58/layout1.0 and Weft0.4.23/backend0.4.28 are required; native57 upgrades transactionally. Publication remains pending; the install example above stays on published21.

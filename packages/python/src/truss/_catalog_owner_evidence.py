@@ -1,3 +1,4 @@
+from ._catalog_source_reference import compact_catalog_sources,SOURCE_REFERENCE_FORMAT
 """Original packaged owner observation correspondence; no support authority."""
 import base64
 import hashlib
@@ -15,6 +16,9 @@ def require_catalog_owner_evidence(prepared, evidence):
     core=evidence.get('coreAssertionIdentities')
     if not all(type(value) is dict for value in (collection,coverage,core)):
         raise ValueError('Complete original owner report observations required')
+    compact=compact_catalog_sources(prepared)
+    if (collection.get('sourceFormat')==SOURCE_REFERENCE_FORMAT) is not compact:
+        raise ValueError('Explicit observation source format required')
     documents={d['documentId']:d['artifact']['sha256'] for d in prepared.input()['documents']}
     profiles={'schema_properties':'profile','relationships':'profile','keys':'profile',
               'kind':'fieldProfile','nullability':'fieldProfile','cardinality':'fieldProfile','facets':'fieldProfile',
@@ -69,10 +73,12 @@ def require_catalog_owner_evidence(prepared, evidence):
         expected={'profile':collection[profiles[operation]],'documentId':document,
                   'contentSha256':documents[document],'basis':observed['basis'],
                   'operation':operation,'identity':observed['identity'],'result':observed['result']}
+        if compact:expected['sourceFormat']=SOURCE_REFERENCE_FORMAT
         if not same_owner_evidence(payload,expected):
             raise ValueError('Original document and observation correspondence required')
         document_index=list(documents).index(document)
-        if artifact['identity']!=f'truss.owner-declaration-observation/{document_index}/{index}':
+        prefix='truss.owner-declaration-observation-references/0.1' if compact else 'truss.owner-declaration-observation'
+        if artifact['identity']!=f'{prefix}/{document_index}/{index}':
             raise ValueError('Original ordered observation identity required')
         result=observed['result']
         if result['state']=='unavailable':
