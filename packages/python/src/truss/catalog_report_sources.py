@@ -42,7 +42,7 @@ def resolve_catalog_report_source(report_bytes: bytes, source: dict[str, object]
         report=json.loads(report_bytes.decode('utf8'),object_pairs_hook=pairs,parse_float=number,parse_constant=nonfinite)
     except (UnicodeError,RecursionError) as error:
         raise ValueError('Catalog report encoding required') from error
-    if type(report) is not dict or report.get('interfaceVersion') not in ('truss-catalog-registration-report/0.2','truss-catalog-registration-report/0.3'):
+    if type(report) is not dict or report.get('interfaceVersion') not in ('truss-catalog-registration-report/0.2','truss-catalog-registration-report/0.3','truss-catalog-registration-report/0.4'):
         raise ValueError('Source-reference catalog report/0.2 required')
     if (type(source) is not dict or set(source)!={'identity','sha256','reference'}
         or type(source['identity']) is not str or not 1<=len(source['identity'])<=4096

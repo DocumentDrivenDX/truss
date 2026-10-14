@@ -81,7 +81,7 @@ for(const {definition:c,source,target} of foreign){
 if(module.elements.filter((e:any)=>e.kind==='field').length!==14||module.relationships.length!==1)throw Error('Complete 12 transition columns and two referenced keys/FKs required');
 const core:any={umf:'0.8.0',id:'truss-catalog-rebind-core-0.1',vocabularies:{'truss.layout.native':{version:'0.1.0'}},modules:[module],
  extensions:{'truss.layout.native':{sourceModel:paths.native,sourceSha256:hash(nativeBytes),runtimeSource:base+'catalog-rebind.sql',runtimeSourceSha256:hash(source),parentSources,
- scope:'Native61 registration-owned transition candidate. Core columns and physical FK relationships; complete native AST drives UMF SQL export. Capture validation alone does not qualify callable rebinding or a published release.'}}};
+ scope:'Native62 registration-owned transition candidate. Core columns and physical FK relationships; complete native AST drives UMF SQL export. Capture validation alone does not qualify callable rebinding or a published release.'}}};
 const validation=validateDocument(core),errors=validation.diagnostics.filter(d=>d.severity==='error');
 if(errors.length)throw Error(JSON.stringify(errors));
 const coreBytes=JSON.stringify(core)+'\n';

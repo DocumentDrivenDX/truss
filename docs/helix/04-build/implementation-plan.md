@@ -8000,3 +8000,17 @@ rebound key components and existing/primary key changes remain later tranches.
 [Ordinary epoch evidence](evidence/security-ontology-epoch-read-20261014/README.md) connects original full graph native callers, shared semantic evaluator and original compiler/checker to an issued native source epoch through a fixed private4-home issuer. Current epoch/profile/evidence, exact6 source archives, authority guard, accepted census, Subject script and actual compiler request/output are checked before and after execution under held cuts. Native RLS/source/privilege drift refusals include actual column UPDATE and issuer-owner membership; a real committed successor epoch rejects the old comparison and admits the fresh one. Finalr6 native1/29.918s on runtime0.60, Astra41 bounded controls and1052 boundaries pass. Registered Subject/profile/public compiler admission, complete production privilege and authority/cache/cursor/transport/write closure remain required. No case promotion; all132 unchanged.
 
 The ordinary epoch path also passes1/28.330s after preserving concurrent runtime0.61 main work. Separate [merged replay](evidence/security-ontology-epoch-read-20261014/merged-runtime061/receipt.json) pins the unchanged reviewed security code and current runtime/report dependencies; prior0.60 packets remain historical.
+
+### Public alternate-key backfill implementation — 2026-10-14
+
+SDK26/native62 and Weft27/backend32 implement new alternate keys over existing
+required scalar fields. Original UMF receipts bind locked candidates; qualified
+duplicate counts precede persistence. Registration-owned membership/reservation
+facts retain complete original bytes and generations in report0.4. Pure backfill
+preserves object versions/history; shared deferred validation supports subsequent
+ordinary mutation. UMF owns the new storage DDL. Five basic installed07/08 and
+published native61 upgrade cases pass267.394s; two follow-up history/update/
+duplicate-create workflows pass227.451s. Catalog capability0.8 retains0.7;
+archived native61 manifest matches published25. Release workflows are prepared;
+publication remains pending. Existing/primary key changes and newly rebound key
+components remain later feature tranches; the full goal remains active.

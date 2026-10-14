@@ -172,6 +172,12 @@ BEGIN
     'events',(SELECT jsonb_agg(j.value->'new_value' ORDER BY j.ordinality) FROM jsonb_array_elements(t.journal) WITH ORDINALITY j)) ORDER BY t.type_id,t.object_id)
     FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id));
  END IF;
+ IF EXISTS(SELECT 1 FROM truss.runtime_catalog_key_backfill t WHERE t.registration_id=request.registration_id) THEN
+  report:=report||jsonb_build_object('interfaceVersion','truss-catalog-registration-report/0.4','keyBackfillProfile','truss-catalog-key-backfill/0.1',
+   'keyBackfills',(SELECT jsonb_agg(jsonb_build_object('objectId',t.object_id::text,'typeId',t.type_id::text,
+    'objectVersion',t.object_image->>'ver','effects',t.effects) ORDER BY t.type_id,t.object_id)
+    FROM truss.runtime_catalog_key_backfill t WHERE t.registration_id=request.registration_id));
+ END IF;
  RETURN convert_to(report::text,'UTF8');
 END;
 $$;
@@ -384,8 +390,8 @@ BEGIN
 END;
 $$;
 
-CREATE FUNCTION truss.catalog_accept(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea,
- source_bytes bytea,origin_bytes bytea,request_key text)
+CREATE FUNCTION truss.catalog_accept_with_keys(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea,
+ source_bytes bytea,origin_bytes bytea,request_key text,key_receipts bytea,preview_mode boolean)
 RETURNS TABLE(revision text,registration_id text,report_bytes bytea,replayed boolean,unchanged boolean,actor_name text,violations_bytes bytea)
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output='hex' AS $$
 DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
@@ -393,11 +399,12 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
  alias_request truss.catalog_unchanged_request%ROWTYPE;
  stored_alias truss.catalog_unchanged_request%ROWTYPE;
  expected jsonb; prior_expected jsonb; origin bytea; original_report bytea; table_name text; columns text; assignments text;identity_column text; rows jsonb; raw bytea; total bigint:=0; request_count bigint;
- prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;violations bytea;
+ prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;violations bytea;key_candidates jsonb;verified_keys jsonb;
 BEGIN
+ IF preview_mode IS NULL THEN RAISE EXCEPTION 'explicit catalog mode required' USING ERRCODE='22023';END IF;
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.61-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.62-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
@@ -413,10 +420,10 @@ BEGIN
  prior_expected:=truss.catalog_all_expected_records();
  PERFORM truss.catalog_check_records(prior_expected);
  SELECT count(*) INTO request_count FROM (
-  SELECT 1 FROM truss.catalog_registration_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept.request_key
-  UNION ALL SELECT 1 FROM truss.catalog_unchanged_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept.request_key) requests;
+  SELECT 1 FROM truss.catalog_registration_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept_with_keys.request_key
+  UNION ALL SELECT 1 FROM truss.catalog_unchanged_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept_with_keys.request_key) requests;
  IF request_count>1 THEN RAISE EXCEPTION 'unambiguous catalog request required' USING ERRCODE='55000'; END IF;
- SELECT * INTO existing FROM truss.catalog_registration_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept.request_key;
+ SELECT * INTO existing FROM truss.catalog_registration_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept_with_keys.request_key;
  IF FOUND THEN
   IF existing.input_bytes IS DISTINCT FROM input_bytes OR existing.document_bytes IS DISTINCT FROM documents_bytes
    OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes OR existing.source_bytes IS DISTINCT FROM source_bytes OR existing.origin_bytes IS DISTINCT FROM origin_bytes THEN
@@ -430,7 +437,7 @@ BEGIN
   RETURN;
  END IF;
  SELECT * INTO alias_request FROM truss.catalog_unchanged_request r
-  WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept.request_key;
+  WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept_with_keys.request_key;
  IF FOUND THEN
   SELECT * INTO STRICT existing FROM truss.catalog_registration_request r WHERE r.registration_id=alias_request.registration_id;
   IF existing.input_bytes IS DISTINCT FROM input_bytes OR existing.document_bytes IS DISTINCT FROM documents_bytes
@@ -592,13 +599,14 @@ BEGIN
  END;
 
  SELECT r.* INTO existing FROM truss.catalog_registration_request r
-  WHERE r.input_bytes=catalog_accept.input_bytes AND r.document_bytes=catalog_accept.documents_bytes AND r.declaration_bytes=catalog_accept.declarations_bytes AND r.source_bytes=catalog_accept.source_bytes
-  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(catalog_accept.documents_bytes,'UTF8')::jsonb) d
+  WHERE r.input_bytes=catalog_accept_with_keys.input_bytes AND r.document_bytes=catalog_accept_with_keys.documents_bytes AND r.declaration_bytes=catalog_accept_with_keys.declarations_bytes AND r.source_bytes=catalog_accept_with_keys.source_bytes
+  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(catalog_accept_with_keys.documents_bytes,'UTF8')::jsonb) d
    WHERE NOT EXISTS(SELECT 1 FROM truss.schema_doc current_doc WHERE current_doc.doc_id=d.value->>'documentId'
     AND current_doc.rev=(SELECT max(latest.rev) FROM truss.schema_doc latest WHERE latest.doc_id=current_doc.doc_id)
     AND current_doc.document=d.value->>'originalText' AND current_doc.doc_revision=d.value->>'revision'));
  IF FOUND THEN
   PERFORM truss.catalog_require_sources(input_bytes,documents_bytes,declarations_bytes);
+  IF NOT preview_mode THEN
   INSERT INTO truss.catalog_unchanged_request VALUES(installation.installation_id,actor,session_user::text,request_key,existing.registration_id,origin_bytes)
    RETURNING * INTO alias_request;
   IF alias_request.installation_id IS DISTINCT FROM installation.installation_id OR alias_request.actor_oid IS DISTINCT FROM actor
@@ -606,8 +614,9 @@ BEGIN
    OR alias_request.registration_id IS DISTINCT FROM existing.registration_id OR alias_request.origin_bytes IS DISTINCT FROM origin_bytes THEN
    RAISE EXCEPTION 'complete unchanged request required' USING ERRCODE='55000'; END IF;
   SELECT * INTO STRICT stored_alias FROM truss.catalog_unchanged_request r
-   WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept.request_key;
+   WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept_with_keys.request_key;
   IF stored_alias IS DISTINCT FROM alias_request THEN RAISE EXCEPTION 'original unchanged request readback required' USING ERRCODE='55000'; END IF;
+  ELSE alias_request.actor_name:=session_user::text;END IF;
   PERFORM truss.catalog_actor();
   PERFORM truss.catalog_rebind_report_reader(existing.registration_id);
   RETURN QUERY SELECT existing.revision::text,existing.registration_id::text,r.report_bytes,false,true,alias_request.actor_name,NULL::bytea
@@ -645,6 +654,18 @@ BEGIN
   PERFORM truss.catalog_actor();
   RETURN QUERY SELECT prior_revision::text,NULL::text,NULL::bytea,false,false,session_user::text,violations;RETURN;
  END IF;
+ key_candidates:=truss.catalog_key_backfill_candidates(expected,new_revision);
+ IF preview_mode THEN
+  RETURN QUERY SELECT prior_revision::text,NULL::text,
+   convert_to(jsonb_build_object('interfaceVersion','truss-catalog-key-candidates/0.1','candidates',key_candidates)::text,'UTF8'),
+   false,false,session_user::text,NULL::bytea;RETURN;
+ END IF;
+ verified_keys:=truss.catalog_key_backfill_verify(expected,new_revision,coalesce(key_receipts,convert_to('[]','UTF8')));
+ violations:=truss.catalog_key_backfill_violations(verified_keys);
+ IF violations IS NOT NULL THEN
+  PERFORM truss.catalog_actor();
+  RETURN QUERY SELECT prior_revision::text,NULL::text,NULL::bytea,false,false,session_user::text,violations;RETURN;
+ END IF;
  FOREACH table_name IN ARRAY ARRAY['schema_rev','schema_doc','type_def','prop_def','key_def','rel_def','relationship_lineage','rel_endpoint','schema_change'] LOOP
   rows:=expected->table_name;
   SELECT string_agg(format('%I',a.attname),',' ORDER BY a.attnum),string_agg(format('%I=EXCLUDED.%I',a.attname,a.attname),',' ORDER BY a.attnum) INTO columns,assignments FROM pg_attribute a
@@ -666,6 +687,7 @@ BEGIN
  request.input_bytes:=input_bytes;request.document_bytes:=documents_bytes;request.declaration_bytes:=declarations_bytes;
  request.source_bytes:=source_bytes;request.origin_bytes:=origin_bytes;
  PERFORM truss.catalog_rebind_objects(request,expected);
+ PERFORM truss.catalog_key_backfill_apply(request,verified_keys);
  PERFORM truss.catalog_rebind_report_reader(request.registration_id,expected);
  original_report:=truss.catalog_make_report(request,expected);request.report_sha256:=sha256(original_report);
  IF octet_length(original_report)>16777216 THEN RAISE EXCEPTION 'bounded original registration report required' USING ERRCODE='54000';END IF;
@@ -682,6 +704,19 @@ BEGIN
  RETURN QUERY SELECT request.revision::text,request.registration_id::text,original_report,false,false,request.actor_name,NULL::bytea;
 END;
 $$;
+
+REVOKE ALL ON FUNCTION truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.catalog_accept(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea,source_bytes bytea,origin_bytes bytea,request_key text)
+RETURNS TABLE(revision text,registration_id text,report_bytes bytea,replayed boolean,unchanged boolean,actor_name text,violations_bytes bytea)
+LANGUAGE sql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT * FROM truss.catalog_accept_with_keys(input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes,request_key,NULL,false);
+$$;
+CREATE FUNCTION truss.catalog_accept_preview(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea,source_bytes bytea,origin_bytes bytea,request_key text)
+RETURNS TABLE(revision text,registration_id text,report_bytes bytea,replayed boolean,unchanged boolean,actor_name text,violations_bytes bytea)
+LANGUAGE sql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT * FROM truss.catalog_accept_with_keys(input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes,request_key,NULL,true);
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_accept_preview(bytea,bytea,bytea,bytea,bytea,text) FROM PUBLIC;
 
 CREATE FUNCTION truss.catalog_report(selected_revision int) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$

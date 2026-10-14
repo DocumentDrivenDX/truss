@@ -50,8 +50,8 @@ class NativeCatalogCapability(_NativeCapability[Literal['catalog']]):
         return self._assembly.prepare_catalog(documents, bun_executable=bun_executable)
 
     def accept_in_transaction(self, transaction: TransactionHandle, prepared: PreparedAcceptance, *, request_key: str,
-                              origin_bytes: bytes=b'{}') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
-        return self._assembly.accept_in_transaction(transaction,prepared,request_key=request_key,origin_bytes=origin_bytes)
+                              origin_bytes: bytes=b'{}',bun_executable: str='bun') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
+        return self._assembly.accept_in_transaction(transaction,prepared,request_key=request_key,origin_bytes=origin_bytes,bun_executable=bun_executable)
 
     def report_in_transaction(self, transaction: TransactionHandle, revision: int=1) -> Outcome[CatalogReport]:
         return self._assembly.report_in_transaction(transaction,revision)
