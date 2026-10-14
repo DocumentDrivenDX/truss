@@ -656,6 +656,31 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
                                     released.append(raw)
                                 is_guarded_query=name.endswith('Guarded') or name.startswith('BobGuarded') or (name=='BobRevoked' and guarded_binary is not None)
                                 selected_compiler=prepare_owned_graph_compiler(guarded_binary,str(Path(guarded_binary).with_name('security_guarded_result')),guarded=True,query_sql=('SELECT q.resourceId FROM Resource q' if name=='BobGuardedId' else 'SELECT q.resourceId, q.salary FROM Resource q'),source_comparison=guarded_source) if is_guarded_query else native_compiler
+                                relational_binary=os.environ.get('TRUSS_SECURITY_RELATIONAL_COMPILER_BINARY')
+                                if relational_binary and name in ('AliceGuarded','OutsiderGuarded','BobGuarded'):
+                                    prior_compiler=selected_compiler
+                                    def capture_then_direct(cursor,physical,before,subject,semantic):
+                                        from security_ontology_compiled_read import _original_request
+                                        from security_relational_capture import capture_relational_operands
+                                        from security_relational_codecs import prepare_owned_relational_codec_checker
+                                        from truss._security_guarded_source import capture_guarded_source_comparison
+                                        from truss._security_relational_source import capture_relational_source_comparison
+                                        relational_request=_original_request(physical,before[0],"SELECT r.resourceId FROM Resource r WHERE r.resourceId = 'never'")
+                                        produced=original_run([relational_binary],input=relational_request,capture_output=True,check=True,timeout=15).stdout
+                                        self.assertEqual(capture_relational_source_comparison(relational_request,produced),guarded_source)
+                                        inventory=json.loads(before[0])['inventory']
+                                        staff_type=next(t['type_id'] for t in inventory['types'] if t['element']=='Staff' and t['retired_rev'] is None)
+                                        staff_prop=next(p['prop_id'] for p in inventory['properties'] if p['type_id']==staff_type and p['element']=='staffId' and p['retired_rev'] is None)
+                                        locators=[int(oid) for oid,tid,raw,root in before[1] if tid==str(staff_type) and root=='false' and json.loads(raw).get(str(staff_prop))=={'kind':'string','text':subject}]
+                                        self.assertEqual(len(locators),1)
+                                        checker=prepare_owned_relational_codec_checker(Path(relational_binary).with_name('security_postgresql_codecs'))
+                                        captured=capture_relational_operands(cursor,relational_request,produced,locators[0],checker)
+                                        scans=json.loads(captured)['scans'];self.assertEqual(len(scans),1)
+                                        self.assertEqual(len(scans[0]['rows']),len(semantic['rows']))
+                                        self.assertEqual(len(scans[0]['rows']),1 if subject=='Bob' else 0)
+                                        self.assertEqual({r['nativeRowId'] for r in scans[0]['rows']},{str(identities['rb'])} if subject=='Bob' else set())
+                                        return prior_compiler(cursor,physical,before,subject,semantic)
+                                    selected_compiler=capture_then_direct
                                 if name=='BobGuardedReceiptSwap':
                                     original_selected_compiler=selected_compiler
                                     def swapped_receipt(*args):
