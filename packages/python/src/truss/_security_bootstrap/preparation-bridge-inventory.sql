@@ -11,10 +11,12 @@ BEGIN
  FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
  WHERE (n.nspname='truss' AND c.relname IN
   ('preparation_attempt_anchor','preparation_program_registration','action_store_registration',
-   'preparation_attempt_anchor_seq','preparation_program_registration_program_id_seq','action_store_control_seq'))
+   'preparation_attempt_anchor_seq','preparation_program_registration_program_id_seq','action_store_control_seq',
+   'preparation_program_sources'))
  OR (n.nspname='umf_security' AND c.relname='preparation_data_claim');
- IF cardinality(homes) IS DISTINCT FROM 7 THEN
-  RAISE EXCEPTION 'exact seven bridge table/sequence homes required' USING ERRCODE='55000';END IF;
+ IF cardinality(homes) IS DISTINCT FROM
+  (CASE WHEN to_regclass('truss.preparation_program_sources') IS NULL THEN 7 ELSE 8 END) THEN
+  RAISE EXCEPTION 'exact bridge table/sequence homes required' USING ERRCODE='55000';END IF;
  SELECT array_agg(p.oid ORDER BY p.oid) INTO routines
  FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace
  WHERE (n.nspname='umf_security' AND p.proname IN ('claim_preparation_data','require_preparation_data_claim'))
@@ -24,7 +26,7 @@ BEGIN
    'resolve_preparation_program_binding','acquire_action_store_source_cut',
    'acquire_preparation_catalog_cut','observe_action_store_original',
    'runtime_fence_routine_ddl_writer','preparation_bridge_inventory',
-   'acquire_preparation_bridge_cut','observe_preparation_bridge'));
+   'acquire_preparation_bridge_cut','observe_preparation_bridge','read_preparation_program_sources'));
  -- This is an explicit adjunct, not a PL/pgSQL dependency-closure claim.
  SELECT jsonb_build_object(
   'profile','truss.preparation-bridge-definitions/0.1','authority',false,
@@ -62,6 +64,28 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.preparation_bridge_inventory() FROM PUBLIC;
 
+-- Legacy metadata-only fixtures have no source attachment home. A selected
+-- source-aware profile must require this non-null attachment; no fallback from
+-- an installed but missing/uncommitted program attachment is allowed.
+-- Original MVCC visibility from another issuer proves durable settlement; do
+-- not depend on retained historical CLOG status for this long-lived row.
+CREATE FUNCTION truss.read_preparation_program_sources(original_program pg_catalog.int8)
+RETURNS pg_catalog.jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path=pg_catalog,pg_temp SET lock_timeout='1ms' AS $$
+DECLARE result pg_catalog.jsonb;
+BEGIN
+ IF to_regclass('truss.preparation_program_sources') IS NULL THEN RETURN NULL;END IF;
+ LOCK TABLE ONLY truss.preparation_program_sources IN ACCESS SHARE MODE NOWAIT;
+ SELECT jsonb_build_object('programId',s.program_id::text,
+  'packetHex',encode(s.original_source_packet,'hex'),'producerHex',encode(s.producer_identity,'hex'),
+  'issuerXid',s.issuer_xid::text) INTO result FROM ONLY truss.preparation_program_sources s
+  WHERE s.program_id=original_program AND s.issuer_xid IS DISTINCT FROM pg_current_xact_id() FOR SHARE NOWAIT;
+ IF NOT FOUND THEN RAISE EXCEPTION 'original committed program sources required' USING ERRCODE='55000';END IF;
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.read_preparation_program_sources(int8) FROM PUBLIC;
+
 CREATE FUNCTION truss.acquire_preparation_bridge_cut(original_anchor pg_catalog.int4, original_nonce pg_catalog.uuid)
 RETURNS pg_catalog.jsonb LANGUAGE plpgsql SECURITY DEFINER
 SET search_path=pg_catalog,pg_temp SET lock_timeout='1ms' AS $$
@@ -73,6 +97,9 @@ BEGIN
  LOCK TABLE ONLY truss.preparation_attempt_anchor, truss.action_store_registration,
   umf_security.preparation_data_claim IN ROW EXCLUSIVE MODE NOWAIT;
  original_program:=truss.resolve_preparation_program_binding(original_anchor,original_nonce,pg_current_xact_id());
+ IF to_regclass('truss.preparation_program_sources') IS NOT NULL THEN
+  LOCK TABLE ONLY truss.preparation_program_sources IN SHARE MODE NOWAIT;
+ END IF;
  IF current_setting('event_triggers') IS DISTINCT FROM 'on' OR NOT EXISTS(
   SELECT 1 FROM pg_catalog.pg_event_trigger e JOIN pg_catalog.pg_proc p ON p.oid=e.evtfoid
   JOIN pg_catalog.pg_roles r ON r.oid=e.evtowner JOIN pg_catalog.pg_language l ON l.oid=p.prolang
@@ -89,7 +116,8 @@ BEGIN
    AND NOT EXISTS(SELECT 1 FROM aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a
     WHERE a.grantee<>p.proowner OR a.grantor<>p.proowner OR a.privilege_type<>'EXECUTE' OR a.is_grantable)) THEN
   RAISE EXCEPTION 'original all-tag source epoch DDL barrier required' USING ERRCODE='55000';END IF;
- RETURN truss.preparation_bridge_inventory();
+ RETURN truss.preparation_bridge_inventory() || jsonb_build_object(
+  'sourceAttachment',truss.read_preparation_program_sources(original_program));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.acquire_preparation_bridge_cut(int4,uuid) FROM PUBLIC;
@@ -106,6 +134,9 @@ BEGIN
   truss.action_store_registration,umf_security.preparation_data_claim,
   truss.source_epoch_current,truss.source_epoch_registry,
   truss.catalog_runtime_installation IN ACCESS SHARE MODE NOWAIT;
+ IF to_regclass('truss.preparation_program_sources') IS NOT NULL THEN
+  LOCK TABLE ONLY truss.preparation_program_sources IN ACCESS SHARE MODE NOWAIT;
+ END IF;
  FOR pass IN 1..2 LOOP
  SELECT * INTO STRICT claim FROM umf_security.require_preparation_data_claim(original_anchor,original_nonce);
  FOR relation_name,required_mode IN SELECT * FROM (VALUES
@@ -120,9 +151,15 @@ BEGIN
    AND l.relation=to_regclass(relation_name) AND l.mode=required_mode AND l.granted) THEN
    RAISE EXCEPTION 'original live D bridge exclusions required' USING ERRCODE='55000';END IF;
  END LOOP;
+ IF to_regclass('truss.preparation_program_sources') IS NOT NULL AND NOT EXISTS(
+  SELECT 1 FROM pg_catalog.pg_locks l WHERE l.locktype='relation' AND l.pid=claim.data_pid
+  AND l.database=(SELECT oid FROM pg_database WHERE datname=current_database())
+  AND l.relation=to_regclass('truss.preparation_program_sources') AND l.mode='ShareLock' AND l.granted) THEN
+  RAISE EXCEPTION 'original live D source attachment exclusion required' USING ERRCODE='55000';END IF;
  -- require_preparation_data_claim established original PID/full XID, not merely
  -- a historical successful-cut flag. Snapshot-reset/reconnect is never attempted.
- IF pass=1 THEN inventory:=truss.preparation_bridge_inventory();END IF;
+ IF pass=1 THEN inventory:=truss.preparation_bridge_inventory() || jsonb_build_object(
+  'sourceAttachment',truss.read_preparation_program_sources(claim.program_id));END IF;
  END LOOP;
  RETURN inventory;
 END;

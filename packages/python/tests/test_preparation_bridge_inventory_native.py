@@ -12,12 +12,13 @@ import test_preparation_data_claim_native as original
 
 
 class PreparationBridgeInventoryNativeTests(original.PreparationDataClaimNativeTests):
+    expected_home_count = 7
     def prepare_component(self, admin, owner):
         for name in ('preparation-catalog-cut.sql', 'preparation-program-binding.sql'):
             admin.execute(files('truss').joinpath('_security_bootstrap', name).read_text())
         admin.execute(preparation_bridge_inventory_source())
         for signature in ('acquire_preparation_catalog_cut()', 'resolve_preparation_program_binding(int4,uuid,xid8)',
-                          'preparation_bridge_inventory()', 'acquire_preparation_bridge_cut(int4,uuid)',
+                          'read_preparation_program_sources(int8)', 'preparation_bridge_inventory()', 'acquire_preparation_bridge_cut(int4,uuid)',
                           'observe_preparation_bridge(int4,uuid)'):
             admin.execute(sql.SQL('ALTER FUNCTION truss.'+signature+' OWNER TO {}').format(sql.Identifier(owner)))
         # Fixture assessor only. No production installer or ordinary SDK grants.
@@ -46,7 +47,7 @@ class PreparationBridgeInventoryNativeTests(original.PreparationDataClaimNativeT
         data.execute('SAVEPOINT bridge_cut')
         self.original_inventory = data.execute('SELECT truss.bridge_inventory_probe(%s,%s,true)', (anchor, nonce)).fetchone()[0]
         self.original_snapshot = data.execute('SELECT pg_current_snapshot()::text,pg_current_xact_id()::text').fetchone()
-        self.assertEqual(len(self.original_inventory['homes']), 7)
+        self.assertEqual(len(self.original_inventory['homes']), self.expected_home_count)
         self.assertEqual(len(self.original_inventory['sequenceDefinitions']), 3)
         self.assertFalse(self.original_inventory['authority'])
         self.assertEqual({h['kind'] for h in self.original_inventory['homes']}, {'r', 'S'})
