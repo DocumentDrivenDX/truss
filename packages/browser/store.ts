@@ -1,4 +1,5 @@
 import {PGlite} from '@electric-sql/pglite';
+import {createMaterializer,createSealer,captureSeal,captureSealReference,captureMaterialize,type MaterializeInput,type Materialization,type FrozenWork,type SealRequest,type SealReference,type SealOutcome} from './materialize';
 import {createActionIssuer,captureAction,type ActionIdentity,type LocalAction,type BrowserActionRegistration,type SelectionReadRegistration} from './actions';
 import {captureDocument,prepareDocument,registerCatalog,readCatalog,type DocumentInput,type CatalogSnapshot,type Registration} from './catalog';
 
@@ -16,6 +17,9 @@ export interface BrowserStore {
   catalog(owner:LocalOwner):Promise<CatalogSnapshot|null>;
   registerAction(owner:LocalOwner,input:ActionIdentity):Promise<BrowserActionRegistration>;
   grantSelectionRead(owner:LocalOwner,action:LocalAction):Promise<SelectionReadRegistration>;
+  materialize(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:MaterializeInput):Promise<Materialization>;
+  seal(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,work:FrozenWork,input:SealRequest):Promise<SealOutcome>;
+  recoverSeal(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,reference:SealReference):Promise<SealOutcome>;
   close(owner:LocalOwner):Promise<void>;
 }
 export type StoreOpen={outcome:'available';store:BrowserStore;owner:LocalOwner}|{outcome:'unavailable';reason:'store_in_use'};
@@ -72,6 +76,8 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
       const owner=Object.freeze(Object.create(null)) as LocalOwner;
       let state:'open'|'closing'|'closed'|'fenced'='open';
       const issuer=createActionIssuer(info,()=>state==='open');
+      const materializer=createMaterializer(actual,info,issuer,()=>state==='open',()=>{state='fenced';});
+      const sealer=createSealer(actual,info,issuer,materializer,()=>state==='open',()=>{state='fenced';});
       const currentCatalog=()=>readCatalog(actual).catch(error=>{state='fenced';throw error;});
       const check=(cap:LocalOwner)=>{if(cap!==owner||state!=='open')throw new Error('Current issued local owner required');};
       let queue:Promise<void>=Promise.resolve();
@@ -99,6 +105,16 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
         },
         grantSelectionRead(cap:LocalOwner,action:LocalAction){
           return schedule(cap,async()=>issuer.grant(await currentCatalog(),action));
+        },
+        materialize(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:MaterializeInput){
+          check(cap);const captured=captureMaterialize(input);
+          return schedule(cap,()=>materializer.materialize(action,grant,captured));
+        },
+        seal(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,work:FrozenWork,input:SealRequest){
+          check(cap);const captured=captureSeal(input);return schedule(cap,()=>sealer.seal(action,grant,work,captured));
+        },
+        recoverSeal(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SealReference){
+          check(cap);const captured=captureSealReference(input);return schedule(cap,()=>sealer.recover(action,grant,captured));
         },
         async close(cap:LocalOwner){
           check(cap);state='closing';

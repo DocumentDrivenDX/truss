@@ -84,6 +84,33 @@ preflights, including fields unused by the predicate. Basic Rust checks retain
 native65/66 behavior and the64-member browser mapping; actual Chromium executes
 the resulting selection SQL against a real registered Truss catalog in PGlite.
 That component test explicitly installs original scalars.sql and seeds rows
-administratively. Provider selection/read-grant consumption, helper installation
-and worker action execution remain unfinished. This source checkpoint is not a
+administratively. Provider selection/read-grant consumption and helper installation are now
+implemented below; worker action execution remains unfinished. This source checkpoint is not a
 new published wheel or an enabled executor.
+
+The worker now also provides `materialize(owner, action, grant, input)`,
+`seal(owner, action, grant, work, {requestKey, attempt})` and
+`recoverSeal(owner, freshAction, freshGrant, reference)`. Materialization invokes
+original Weft WASM, validates the complete target population, selects actual
+IDs/versions and constructs the original UMF manifest with exact Key receipts.
+The manifest retains the accepted authored document revision as its action
+revision; the source content digest remains a separate pin. Work handles stay
+inside the issuing worker and open store.
+
+Persist the pending request key, attempt and reference before calling `seal`.
+The reference contains profile `truss-browser-seal-reference/0.1`, storeId,
+incarnation, requestKey, attempt, manifestSha256, planSha256 and modelSha256.
+It is recovery metadata, not authority. Identical retries return the original
+receipt bytes; different input under the same key conflicts. Recovery after
+reopen requires freshly issued action/read-grant capabilities. Missing records
+are unresolved and do not authorize a new attempt. Confirmed callback rollback
+is reported separately from ambiguous commit/flush outcomes; uncertainty fences
+the store. No automatic retry loop is provided.
+
+The basic Chromium workflow materializes three rows into batches of two and
+one, seals, replays and recovers after reopen. Its rows are administrative test
+fixtures. Production bootstrap/import, batch mutation, effects, journal/feed and
+execution receipts remain unfinished. Seal recovery alone is not crash safety
+qualification or action execution. The owned bundle includes unchanged pinned
+Weft JS/WASM and available original notices; its producer metadata records the
+limited notice inventory without claiming complete licensing closure.
