@@ -7,7 +7,7 @@ export interface JobRef {namespace:string;id:string}
 export type JobReview={state:JobState;manifest:Artifact}|{status:'unsupported';code:'JOB_UNAVAILABLE'};
 class JobRefusal extends Error {}
 export interface SubmitInput {key:string;reference:SealReference;control:SealRequest}
-export interface JobState {status:'queued'|'running'|'reconciling'|'stopped'|'completed';job:JobRef;manifestSha256:string;nextBatch:number;committedBatches:number;unresolvedBatch:number|null;stop:{batch:number;code:string}|null}
+export interface JobState {status:'queued'|'running'|'reconciling'|'stopped'|'completed'|'cancelled';job:JobRef;manifestSha256:string;nextBatch:number;committedBatches:number;unresolvedBatch:number|null;stop:{batch:number;code:string}|null}
 export type SubmitResult={status:'submitted';state:JobState}
  |{status:'conflict';code:'TOKEN_REUSE'}
  |{status:'unsupported';code:string}
@@ -22,6 +22,14 @@ export type ClaimResult={status:'claimed';job:JobRef;batch:number;fence:string;l
  |{status:'control-unknown';operation:'claim';control:SealRequest}
  |{status:'control-failure';operation:'claim';control:SealRequest;code:'CONTROL_NONCOMMIT';settlement:'current_attempt_rolled_back'}
  |{status:'unresolved';code:'not_found';operation:'claim';control:SealRequest};
+export type CancelInput=ClaimInput;
+export type CancelResult={status:'cancelled'|'state';state:JobState}
+ |{status:'cancel-requested';job:JobRef}
+ |{status:'unsupported';code:string}
+ |{status:'conflict';code:'TOKEN_REUSE'}
+ |{status:'control-unknown';operation:'cancel';control:SealRequest}
+ |{status:'control-failure';operation:'cancel';control:SealRequest;code:'CONTROL_NONCOMMIT';settlement:'current_attempt_rolled_back'}
+ |{status:'unresolved';code:'not_found';operation:'cancel';control:SealRequest};
 export function captureClaim(input:ClaimInput):ClaimInput{
  if(!input||Object.keys(input).sort().join(',')!=='control,job')throw Error('Exact claim input required');
  const {job,control}=input;return Object.freeze({job:captureJob(job),control:captureSeal(control)});
@@ -61,7 +69,7 @@ export function createBulk(db:PGlite,info:StoreInfo,sealer:ReturnType<typeof cre
   if(stored.profile!==profile||typeof stored.inputUtf8!=='string'||typeof stored.resultUtf8!=='string'||await hash(stored.inputUtf8)!==stored.inputSha256||await hash(stored.resultUtf8)!==stored.resultSha256)throw Error('Original control custody required');
   return stored.inputUtf8===inputUtf8?JSON.parse(stored.resultUtf8) as T:{status:'conflict',code:'TOKEN_REUSE'} as T;
  }
- async function saveControl(tx:Pick<PGlite,'query'>,key:string,inputUtf8:string,result:SubmitResult|ClaimResult,profile='truss-browser-submit-control/0.1'){
+ async function saveControl(tx:Pick<PGlite,'query'>,key:string,inputUtf8:string,result:SubmitResult|ClaimResult|CancelResult,profile='truss-browser-submit-control/0.1'){
   const resultUtf8=JSON.stringify(result);
   await tx.query('INSERT INTO truss.setting(key,value) VALUES($1,$2::jsonb)',[key,JSON.stringify({profile,inputUtf8,inputSha256:await hash(inputUtf8),resultUtf8,resultSha256:await hash(resultUtf8)})]);
  }
@@ -98,7 +106,7 @@ export function createBulk(db:PGlite,info:StoreInfo,sealer:ReturnType<typeof cre
   record.state.unresolvedBatch=null;record.claim=null;
   if(result.status==='committed'){
    record.state.nextBatch=input.batch+1;record.state.committedBatches=input.batch+1;record.state.stop=null;
-   record.state.status=record.state.nextBatch===JSON.parse(JSON.parse(record.sourceUtf8).manifest.utf8).batches.length?'completed':'queued';
+   record.state.status=record.cancelRequested?'cancelled':record.state.nextBatch===JSON.parse(JSON.parse(record.sourceUtf8).manifest.utf8).batches.length?'completed':'queued';
   }else if(result.status==='conflict'||result.status==='rejected'||result.status==='failed'){
    record.state.status='stopped';record.state.stop={batch:input.batch,code:result.code};
   }else throw new SealCustodyUnavailable('Terminal batch result required');
@@ -164,7 +172,8 @@ export function createBulk(db:PGlite,info:StoreInfo,sealer:ReturnType<typeof cre
       if(!Number.isInteger(state.nextBatch)||state.nextBatch<0||state.nextBatch>body.batches.length||state.committedBatches!==state.nextBatch||state.manifestSha256!==source.manifest.sha256)throw new SealCustodyUnavailable('Original contiguous job progress required');
       if(state.status==='completed'){
        if(state.nextBatch!==body.batches.length)throw new SealCustodyUnavailable('Complete original job progress required');result={status:'idle',job:copy(input.job)};
-      }else if(state.status==='stopped')result={status:'unsupported',code:'PAP_ORDER'};
+      }else if(state.status==='cancelled')result={status:'unsupported',code:'PAP_CANCELLED'};
+      else if(state.status==='stopped')result={status:'unsupported',code:'PAP_ORDER'};
       else if(state.status==='running'||state.status==='reconciling'){
        const active=record.claim;if(!active||active.status!=='claimed'||active.job?.namespace!==input.job.namespace||active.job?.id!==input.job.id||active.batch!==state.nextBatch||typeof active.fence!=='string'||!/^[1-9][0-9]{0,63}$/.test(active.fence)||active.fence!==record.lastFence||typeof active.leaseUntil!=='string')throw new SealCustodyUnavailable('Original active claim required');
        result={status:'unsupported',code:state.status==='reconciling'?'PAP_RECOVERY':'PAP_FENCE'};
@@ -191,6 +200,53 @@ export function createBulk(db:PGlite,info:StoreInfo,sealer:ReturnType<typeof cre
     try{await db.transaction(async tx=>{const prior=await storedControl<ClaimResult>(tx,key,retainedInput,profile);if(prior)throw Error('Unexpected original claim control');await saveControl(tx,key,retainedInput,result,profile);});await db.syncToFs();if(!isOpen())throw Error('Current local owner required');return result;}catch{fence();return unknown();}
    }
   },
+  async cancel(action:LocalAction,grant:SelectionReadGrant,input:CancelInput,recovery=false):Promise<CancelResult>{
+   if(!isOpen())return {status:'unsupported',code:'STORE_NOT_OPEN'};
+   const profile='truss-browser-cancel-control/0.1',key='browser:bulk-cancel-control:0.1:'+hex(input.control.requestKey);
+   const unknown=():CancelResult=>({status:'control-unknown',operation:'cancel',control:copy(input.control)});
+   let inputUtf8:string|undefined;const sentinel=Symbol();let callbackFailure:unknown=sentinel;
+   try{
+    const result=await db.transaction<CancelResult>(async tx=>{try{
+     const authorization=await sealer.authorize(tx,action,grant);if(authorization.outcome!=='authorized')return {status:'unsupported',code:'ACTION_ADMISSION_REFUSED'};
+     inputUtf8=JSON.stringify({profile:'truss-browser-cancel/0.1',operation:'cancel',storeId:info.storeId,incarnation:info.incarnation,authorization,input});
+     const prior=await storedControl<CancelResult>(tx,key,inputUtf8,profile);if(prior)return prior;
+     if(recovery)return {status:'unresolved',code:'not_found',operation:'cancel',control:copy(input.control)};
+     let result:CancelResult,record:any;
+     try{
+      const admitted=await authorizedJob(tx,input.job,authorization,action,grant);record=admitted.record;const source=admitted.source;
+      const state=record.state,body=JSON.parse(source.manifest.utf8);
+      if(!Number.isInteger(state.nextBatch)||state.nextBatch<0||state.nextBatch>body.batches.length||state.committedBatches!==state.nextBatch||state.manifestSha256!==source.manifest.sha256)throw new SealCustodyUnavailable('Original contiguous job progress required');
+      if(['queued','running','reconciling'].includes(state.status)){
+       if(state.nextBatch>=body.batches.length)throw new SealCustodyUnavailable('Original pending batch required');
+       const admission=(await tx.query<{value:any}>('SELECT value FROM truss.setting WHERE key=$1',[admissionKey({job:input.job,batch:state.nextBatch})])).rows;
+       if(state.status==='reconciling'){
+        const active=record.claim;
+        if(!active||active.status!=='claimed'||typeof active.fence!=='string'||!/^[1-9][0-9]{0,63}$/.test(active.fence)||typeof active.leaseUntil!=='string')throw new SealCustodyUnavailable('Original active claim required');
+        const execution:ExecuteInput={job:input.job,batch:state.nextBatch,fence:active.fence};
+        const custody=await batchCustody(tx,execution,record.sourceUtf8);
+        if(!admission.length||!custody?.admission||custody.result.status!=='indeterminate'||!await liveClaim(tx,record,execution,true))throw new SealCustodyUnavailable('Original unresolved batch custody required');
+       }else if(admission.length)throw new SealCustodyUnavailable('Unsettled effect admission forbids cancellation acknowledgement');
+      }
+      if(state.status==='completed'&&state.nextBatch!==body.batches.length)throw new SealCustodyUnavailable('Original complete progress required');
+      if(state.status==='reconciling'){
+       if(state.unresolvedBatch!==state.nextBatch)throw new SealCustodyUnavailable('Original unresolved admission required');
+       record.cancelRequested=true;result={status:'cancel-requested',job:copy(input.job)};
+      }else if(['queued','running','cancelled','completed','stopped'].includes(state.status)){
+       if(state.unresolvedBatch!==null)throw new SealCustodyUnavailable('Original settled prefix required');
+       if(state.status==='queued'||state.status==='running'){state.status='cancelled';record.claim=null;record.cancelRequested=true;}
+       result={status:state.status==='cancelled'?'cancelled':'state',state:copy(state)};
+      }else throw new SealCustodyUnavailable('Original job state required');
+      await tx.query('UPDATE truss.setting SET value=$2::jsonb WHERE key=$1',[jobKey(input.job),JSON.stringify(record)]);
+     }catch(error){if(error instanceof JobRefusal||error instanceof SealAdmissionRefusal)result={status:'unsupported',code:'JOB_UNAVAILABLE'};else throw error;}
+     await saveControl(tx,key,inputUtf8,result,profile);if(!isOpen())throw Error('Current local owner required');return result;
+    }catch(error){callbackFailure=error;throw error;}});
+    await db.syncToFs();if(!isOpen()){fence();return unknown();}return result;
+   }catch(error){
+    if(recovery||callbackFailure!==error||inputUtf8===undefined||error instanceof SealCustodyUnavailable){fence();return unknown();}
+    const result:CancelResult={status:'control-failure',operation:'cancel',control:copy(input.control),code:'CONTROL_NONCOMMIT',settlement:'current_attempt_rolled_back'},retainedInput=inputUtf8;
+    try{await db.transaction(async tx=>{const prior=await storedControl<CancelResult>(tx,key,retainedInput,profile);if(prior)throw Error('Unexpected original claim control');await saveControl(tx,key,retainedInput,result,profile);});await db.syncToFs();if(!isOpen())throw Error('Current local owner required');return result;}catch{fence();return unknown();}
+   }
+  },
   async execute(action:LocalAction,grant:SelectionReadGrant,input:ExecuteInput,recovery=false):Promise<BatchOutcome>{
    if(!isOpen())return {status:'unsupported',code:'STORE_NOT_OPEN'};
    let dispatch:{id:string;sourceUtf8:string}|undefined;
@@ -200,6 +256,7 @@ export function createBulk(db:PGlite,info:StoreInfo,sealer:ReturnType<typeof cre
      let record:any;try{record=(await authorizedJob(tx,input.job,authorization,action,grant)).record;}catch(error){if(error instanceof JobRefusal)return {status:'unsupported',code:'JOB_UNAVAILABLE'} as BatchOutcome;throw error;}
      const prior=await batchCustody(tx,input,record.sourceUtf8);if(prior)return prior.result;
      if(recovery)return indeterminate(input);
+     if(record.state.status==='cancelled')return {status:'unsupported',code:'PAP_CANCELLED'} as BatchOutcome;
      if(!await liveClaim(tx,record,input,false))return {status:'unsupported',code:'PAP_FENCE'} as BatchOutcome;
      const id=crypto.randomUUID(),inputUtf8=JSON.stringify(input),sourceUtf8=record.sourceUtf8;
      await tx.query('INSERT INTO truss.setting(key,value) VALUES($1,$2::jsonb)',[admissionKey(input),JSON.stringify({profile:'truss-browser-effect-admission/0.1',id,inputUtf8,inputSha256:await hash(inputUtf8),sourceUtf8,sourceSha256:await hash(sourceUtf8)})]);

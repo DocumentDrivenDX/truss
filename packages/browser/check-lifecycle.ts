@@ -110,6 +110,17 @@ try{
     const seal=await call(a,{command:'seal',request:{requestKey:key+'-seal',attempt:'1'}});if(seal.outcome!=='sealed')throw Error(JSON.stringify(seal));
     const submitted=await call(a,{command:'submit',input:{key,reference:seal.reference,control:{requestKey:key+'-submit',attempt:'1'}}});if(submitted.status!=='submitted')throw Error(JSON.stringify(submitted));return submitted.state.job;
   }
+  const cancelJob=await newJob("UPDATE products SET name='Cancelled' WHERE name='Bulk'",'cancelled');
+  const cancelInput={job:cancelJob,control:{requestKey:'cancel-job',attempt:'1'}};
+  const cancelled=await call(a,{command:'cancel',input:cancelInput});
+  if(cancelled.status!=='cancelled'||cancelled.state.status!=='cancelled'||cancelled.state.committedBatches!==0)throw Error(JSON.stringify(cancelled));
+  const cancelReplay=await call(a,{command:'cancel',input:cancelInput});if(JSON.stringify(cancelReplay)!==JSON.stringify(cancelled))throw Error('Cancel replay changed');
+  const cancelClaim=await call(a,{command:'claim',input:{job:cancelJob,control:{requestKey:'cancelled-claim',attempt:'1'}}});if(cancelClaim.code!=='PAP_CANCELLED')throw Error(JSON.stringify(cancelClaim));
+  const cancelExecution=await call(a,{command:'executeBatch',input:{job:cancelJob,batch:0,fence:'1'}});if(cancelExecution.code!=='PAP_CANCELLED')throw Error(JSON.stringify(cancelExecution));
+  await call(a,{command:'close'});await prepare(a);const cancelReopen=await call(a,{command:'open',name:'lifecycle-basic'});if(cancelReopen.outcome!=='available')throw Error(JSON.stringify(cancelReopen));
+  await call(a,{command:'action'});
+  const cancelRecovered=await call(a,{command:'recoverCancel',input:cancelInput});if(JSON.stringify(cancelRecovered)!==JSON.stringify(cancelled))throw Error('Cancel recovery changed');
+  const afterCancel=await call(a,{command:'readObjects'});if(JSON.stringify(afterCancel)!==JSON.stringify(finalObjects))throw Error('Cancelled job changed objects');
   const noOpJob=await newJob("UPDATE products SET name='Bulk' WHERE name='Bulk'",'noop'),noOpResults=[];
   for(let batch=0;batch<2;batch++){
     const claim=await call(a,{command:'claim',input:{job:noOpJob,control:{requestKey:'noop-claim-'+batch,attempt:'1'}}});if(claim.status!=='claimed')throw Error(JSON.stringify(claim));
@@ -152,7 +163,7 @@ try{
   const recoveredLoad=await call(a,{command:'recoverLoad'});if(JSON.stringify(recoveredLoad)!==JSON.stringify(seeded.loaded))throw Error('Recovered load changed original outcome');
   await call(a,{command:'close'});
   const physical=await call(a,{command:'inspectStorage'});if(physical.objects!=='4'||physical.keys!=='4'||physical.reservations!=='4'||physical.journal!=='8'||physical.generation!=='1'||physical.exact!==true)throw Error(JSON.stringify(physical));
-  const receipt={scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
+  const receipt={cancellation:{cancelled,cancelReplay,cancelClaim,cancelExecution,cancelRecovered},scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
     feed:{pages:feedPages,events:feedEvents.length,foreignCursor:foreignCursor.code,emptyAfterReopen:emptyFeed},
     staleGuard:{result:stale,recoveredByteEqual:true,firstItemUnchanged:true},
     noOp:{results:noOpResults,unchanged:true},

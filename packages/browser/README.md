@@ -6,7 +6,7 @@ functional path is register document → load objects → register action/read g
 Supported objects are rootless Records with required singular String Fields and
 one single-member primary Key. Actions are the original UMF bounded constant
 `graph-write/1` set recipe under `umf.actions.local-tx/1`. Relationships, wider
-value domains, catalog evolution, cancellation, feed acknowledgements and retention are unfinished.
+value domains, catalog evolution, feed acknowledgements and shorter retention are unfinished.
 This is not complete local-bulk qualification or native66 installation/security.
 
 ## Worker lifecycle and catalog
@@ -159,3 +159,21 @@ exact text. Returned event/origin artifacts preserve the stored bytes and hashes
 Pages may split a committed batch. Sequence gaps from rolled-back work are valid.
 This owner-only local journal reader does not provide ACKs, retention management
 or the native feed's transaction/checkpoint guarantees.
+
+## Cancellation and retention
+
+`cancel(owner,action,grant,{job,control})` persists cancellation and its original
+control result together. Retain the exact input before RPC; a lost response uses
+`recoverCancel` with that same input. Missing recovery stays unresolved. Repeating
+the original control returns its original sampled result, including after reopen.
+
+Cancellation before effect admission clears the claim and blocks later writes
+with `PAP_CANCELLED`. Committed batches remain committed. An unresolved admitted
+batch stays reconciling with a cancel request; cancellation never establishes its
+rollback. Completed and stopped jobs keep their original terminal state. Original
+batch outcomes remain recoverable after cancellation. This serialized worker does
+not interrupt a running transaction or compensate its effects.
+
+Manifests, controls, admissions and outcomes are retained for the lifetime of the
+store incarnation. There is no automatic purge or token reuse. Browser eviction
+or storage clearing is not promised recovery. Shorter retention remains unfinished.

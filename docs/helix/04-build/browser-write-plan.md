@@ -124,3 +124,28 @@ with store/incarnation cursors and exact original event/origin bytes. Astra Ultr
 review and the final basic Chromium workflow passed; see
 [evidence](evidence/browser-feed-20261015/README.md). Pages may split a batch;
 ACKs, retention and native-feed guarantees remain unfinished.
+
+## Cancellation tranche — 2026-10-15
+
+Implement `cancel` and `recoverCancel` with exact `{job,control}` inputs, current
+issued owner/action/read-grant admission, and immutable original control results.
+Serialize through the existing worker queue and job transaction. Cancel before
+effect admission makes the job cancelled and invalidates its claim; retain the
+committed prefix. An already admitted unresolved batch stays reconciling with a
+retained cancel request, never an inferred rollback. Terminal original outcomes
+remain recoverable. Completed/stopped/cancelled jobs retain their terminal state.
+Claim and fresh execution of cancelled work refuse `PAP_CANCELLED`. Persist the
+control result atomically with the state change and await flush. Lost responses
+use recovery only; missing remains unresolved. Retain manifests/outcomes for the
+store incarnation lifetime with no purge or token reuse. This follows original
+UMF CONTRACT-904/905; it adds no native security or crash-recovery claim.
+
+Basic witness: cancel a queued public job, exact replay and reopen recovery,
+claim/execution refusal, and unchanged business/journal rows. Astra Ultra reviews
+the plan and completed implementation before commit.
+
+Cancellation checkpoint: public cancel/recoverCancel implemented and reviewed by
+Astra Ultra; strict TypeScript, actual Chromium and two-CWD packaging passed.
+See [basic evidence](evidence/browser-cancel-20261015/README.md). Lifetime retention
+is explicit; no purge is implemented. Full local-bulk qualification, broader
+browser values, consumer integration and native owned/security work remain.
