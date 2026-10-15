@@ -31,6 +31,16 @@ current read profile. Native65 adds multi-object transition storage. Neither
 change enables owned execution; accepting the Python carrier alone does not close
 that gap.
 
+## Accepted retargeting decision — 2026-10-15
+
+Retargeting an owned edge does not implicitly reparent its target subtree. The
+caller must include an explicit `UpdateObject.ownership_change` alongside
+`UpdateEdge.endpoint_change` in the same atomic group when reparenting is needed.
+Truss preserves ordered operation results, updates descendant aggregate-root
+references, and validates the final ownership graph before committing. An edge
+change without the required explicit ownership change refuses if the final graph
+is inconsistent. This accepted contract does not activate the unfinished provider.
+
 ## Implementation order
 
 1. Finish reviewed semantics for aggregate membership and owned relationship
