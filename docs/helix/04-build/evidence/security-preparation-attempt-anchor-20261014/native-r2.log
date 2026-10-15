@@ -1,0 +1,22 @@
+E
+======================================================================
+ERROR: test_original_anchor_rejects_same_backend_new_transaction_remint (test_preparation_attempt_anchor_native.PreparationAttemptAnchorNativeTests.test_original_anchor_rejects_same_backend_new_transaction_remint)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_preparation_attempt_anchor_native.py", line 120, in test_original_anchor_rejects_same_backend_new_transaction_remint
+    self.assertFalse(check(nonce))
+                     ^^^^^^^^^^^^
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_preparation_attempt_anchor_native.py", line 94, in check
+    def check(nonce_value=nonce):return data.execute('SELECT truss.anchor_data_probe(%s,%s,%s)',(anchor,nonce_value,coordinator.info.backend_pid)).fetchone()[0]
+                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/_connection_info.py", line 179, in backend_pid
+    return self.pgconn.backend_pid
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "psycopg_binary/pq/pgconn.pyx", line 260, in psycopg_binary.pq.PGconn.backend_pid.__get__
+  File "psycopg_binary/pq/pgconn.pyx", line 880, in psycopg_binary.pq._call_libpq_int
+psycopg.OperationalError: the connection is closed
+
+----------------------------------------------------------------------
+Ran 1 test in 10.170s
+
+FAILED (errors=1)

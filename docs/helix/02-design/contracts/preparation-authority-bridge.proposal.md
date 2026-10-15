@@ -197,3 +197,35 @@ current authority. Original registration receipts and replay namespaces remain
 recognizable after fencing; rotating the guard epoch never creates a fresh
 replay scope. Protected anchor storage/issuer, registered selection closure,
 finalizer and the complete composed negative controls remain unimplemented.
+
+
+## Implemented private attempt identity checkpoint
+
+The [native anchor identity receipt](../../04-build/evidence/security-preparation-attempt-anchor-20261014/receipt.json)
+now qualifies a private PG18.6 component of the candidate handshake. Original UMF
+exports the immutable native storage. A direct trusted control issuer captures
+the genuine shared store receipt, original idle data backend/person/incarnation
+and active same-person coordinator/backend/full xid, then requires original
+control COMMIT before the anchor can be read under a new data RR snapshot.
+Owner-private coordinator/data predicates reject a later transaction on the
+same coordinator backend even when unchecked fixture code re-mints identical
+advisory markers. Native pending/same-snapshot visibility, wrong nonce/foreign
+data, mutation denial and actual disconnect controls pass.
+
+The anchor retains opaque program bytes without interpreting them as an
+admitted program, policy or permission. No production installer or ordinary
+anchor/mint/check grants exist. Diagnostic test wrappers expose predicates and
+unchecked marker minting solely to retain the weakened counterexample. The
+pre-RR anchor binds the data backend; its identity predicate alone is not a
+historical one-use guarantee for a data transaction. Complete guarded issuance
+must bind the actual D full xid, enforce lifecycle/scope and current permission,
+and consume original registered selection before protected work.
+
+The six new conditional identity queries (3 UNSAT, 3 SAT) include bare-tuple
+replacement and identity-without-permission witnesses; they are not SQL
+refinement or authorization proofs. Astra Ultra independently reproduced the
+storage build and formal queries and inspected the source-pinned native log,
+with no finding in this narrow scope. Source/helper/DDL custody, actual PID
+reuse/wrap, historical one-use/savepoint behavior, current authority, protected
+selection/finalization and COMMIT-loss closure remain open. No complete
+CONTRACT-005 or owner-worktree bulk acceptance criterion is promoted.

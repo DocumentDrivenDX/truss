@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "results": [
+    {
+      "path": "docs/helix/02-design/models/truss-preparation-attempt-anchor-storage-0.1.proposal.umf.json",
+      "byteEqual": true,
+      "sha256": "8aaaaa8db2dbd847106953168e05cb975776ba0787af7112e41fdde9dfd015ad"
+    },
+    {
+      "path": "docs/helix/04-build/preparation-attempt-anchor.generated.sql",
+      "byteEqual": true,
+      "sha256": "5d8b6dad7c147a5eedf67aa144038efe66f4e7a5524010a957ee7eefec45c416"
+    },
+    {
+      "path": "packages/python/src/truss/_security_bootstrap/preparation-attempt-anchor-storage.sql",
+      "byteEqual": true,
+      "sha256": "5d8b6dad7c147a5eedf67aa144038efe66f4e7a5524010a957ee7eefec45c416"
+    }
+  ],
+  "ownerRoot": "/Users/erik/.codex/worktrees/0ede/umf",
+  "ownerHead": "13335dc7caa9b5e262194da8f11912eb3a203f53",
+  "ownerRuntimeSha256": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751",
+  "ownerAdapterSha256": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4",
+  "scope": "Original native PostgreSQL adapter build replay in private temporary directory; exact saved JSON/generated SQL/packaged SQL correspondence, not native SQL refinement."
+}

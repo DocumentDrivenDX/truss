@@ -1,0 +1,7 @@
+{
+  "scripts/build-preparation-anchor.ts": "c198bd1d23c3f6c03f19e114c1b6d0fe2cdbc2189c0d85c41f30c24690c32dd3",
+  "scripts/prove-preparation-attempt-anchor.py": "ca264ecee3699eace69bdf56990a374ef4e0a0358f34484de8df20d637876da3",
+  "packages/python/src/truss/_security_bootstrap/preparation-attempt-anchor-storage.sql": "5d8b6dad7c147a5eedf67aa144038efe66f4e7a5524010a957ee7eefec45c416",
+  "packages/python/src/truss/_security_bootstrap/preparation-attempt-anchor.sql": "a79512e4e8ead804f2843ca29ea2aa324010845d8e4a5fb829d2a5119483265b",
+  "packages/python/tests/test_preparation_attempt_anchor_native.py": "8fa4cd1a23943ed1878e2f15e9a3f91ec3dd2c6155abbb1903e1ddd5e9ff4aa2"
+}

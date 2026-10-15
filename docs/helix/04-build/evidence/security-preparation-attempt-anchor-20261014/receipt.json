@@ -1,0 +1,84 @@
+{
+  "status": "owner-private-anchor-identity-component-passed",
+  "baseline": "89c2860935cc4a6a83021f1c1121725eac2138d0",
+  "umfOwner": "1cf249c8ebfab144cc4e7a21a66935a6768d125f",
+  "postgresql": "18.6",
+  "native": {
+    "tests": 1,
+    "seconds": 5.146,
+    "exitCode": 0,
+    "finalLog": "native-r4.log"
+  },
+  "formal": {
+    "solver": "4.15.4",
+    "queries": 6,
+    "unsat": 3,
+    "sat": 3,
+    "passed": true,
+    "scope": "Conditional identity laws, not SQL refinement, native complete lifecycle or authorization theorem."
+  },
+  "sourceHashes": {
+    "scripts/build-preparation-anchor.ts": "c198bd1d23c3f6c03f19e114c1b6d0fe2cdbc2189c0d85c41f30c24690c32dd3",
+    "scripts/prove-preparation-attempt-anchor.py": "ca264ecee3699eace69bdf56990a374ef4e0a0358f34484de8df20d637876da3",
+    "packages/python/tests/test_preparation_attempt_anchor_native.py": "a774fcb8c9aeaeda1fac20630d5507e7d30166e41bf71cac8e6198f763854ffa",
+    "docs/helix/02-design/models/truss-preparation-attempt-anchor-storage-0.1.proposal.umf.json": "8aaaaa8db2dbd847106953168e05cb975776ba0787af7112e41fdde9dfd015ad",
+    "docs/helix/04-build/preparation-attempt-anchor.generated.sql": "5d8b6dad7c147a5eedf67aa144038efe66f4e7a5524010a957ee7eefec45c416",
+    "packages/python/src/truss/_security_bootstrap/preparation-attempt-anchor-storage.sql": "5d8b6dad7c147a5eedf67aa144038efe66f4e7a5524010a957ee7eefec45c416",
+    "packages/python/src/truss/_security_bootstrap/preparation-attempt-anchor.sql": "a79512e4e8ead804f2843ca29ea2aa324010845d8e4a5fb829d2a5119483265b",
+    "packages/python/src/truss/_security_bootstrap/preparation-peer-xid.sql": "2006fa1bafe2ff009faa5300e8d64db97b9722f637c799b04c4e80f454a4e561",
+    "packages/python/src/truss/_security_bootstrap/preparation-permit-mint.sql": "3f730e626b95bec11868ec06d92ffca562132406006f9beebfedab898a9245c9",
+    "packages/python/src/truss/_security_bootstrap/preparation-permit-binding-check.sql": "d845a18bb1041c9a83734318deb9af8eb6ae491dfa643ba84d6af86ea182a696",
+    "packages/python/src/truss/_security_bootstrap/action-store-issuer.sql": "7181f92898912785300bb4984f41a275287e982c67ca3fde1da90fd5735d520b",
+    "packages/python/src/truss/_action_store.py": "efbfd91bf3af1bbe08551024e267f88f2801d0d9721dedf8158e2a25035db9a2"
+  },
+  "evidenceHashes": {
+    "source.zip": "3e4d84e79a049aefa8eee59d01e025b90eaa8bdd12b4e565e6e48d7b487e209b",
+    "r1-source-hashes.json": "64a3c99b3a9f23ea248c18529abc8eeeded6ed8fa764f684a2ca2f2116917110",
+    "native-r4.log": "104d41480370aecd8545839e19dc5e1902ac85cd67fff6f93f94552e88db7aab",
+    "native-r1.log": "fe159b70ab9140e3c4ae2358610fceeddff7f029bee0230750b10806d9616aaa",
+    "native-r2.log": "c51e8e7e56881fc91b1f756e20ed49bd61c27316425be875514038c03eab247b",
+    "native-r3.log": "1e295bd2d786dd766225bc4604d328e6ba137fcd524ccd5a6dd29c2dacf31adf",
+    "formal.json": "5b04c94b6ff9e66c61997e7f0292147c80b31dd53a84b4500682890b6a141319",
+    "build.log": "7899883128a7097b6ad42e30c70565d215cc0c16cc4b707fc4e6e5e1da117a25",
+    "astra/build-preparation-anchor.ts": "c198bd1d23c3f6c03f19e114c1b6d0fe2cdbc2189c0d85c41f30c24690c32dd3",
+    "astra/prove-preparation-attempt-anchor.py": "ca264ecee3699eace69bdf56990a374ef4e0a0358f34484de8df20d637876da3",
+    "astra/native-r4.log": "104d41480370aecd8545839e19dc5e1902ac85cd67fff6f93f94552e88db7aab",
+    "astra/build-correspondence.json": "ce53244bb90887620f1ef5fabf5c22009b80ca2838ceb1d4d13e667de25fb372",
+    "astra/formal.json": "5b04c94b6ff9e66c61997e7f0292147c80b31dd53a84b4500682890b6a141319",
+    "astra/review.json": "8283eaa9c894074fd06c12a2f70d239fae3fe0c1ec9599c53f2143cdea5b1887",
+    "astra/build.log": "7899883128a7097b6ad42e30c70565d215cc0c16cc4b707fc4e6e5e1da117a25",
+    "astra/docs/helix/02-design/models/truss-preparation-attempt-anchor-storage-0.1.proposal.umf.json": "8aaaaa8db2dbd847106953168e05cb975776ba0787af7112e41fdde9dfd015ad",
+    "astra/docs/helix/04-build/preparation-attempt-anchor.generated.sql": "5d8b6dad7c147a5eedf67aa144038efe66f4e7a5524010a957ee7eefec45c416",
+    "astra/packages/python/src/truss/_security_bootstrap/preparation-attempt-anchor-storage.sql": "5d8b6dad7c147a5eedf67aa144038efe66f4e7a5524010a957ee7eefec45c416"
+  },
+  "controls": [
+    "Original UMF native adapter produces saved-roundtrip-identical storage; independent Astra build is byte-identical.",
+    "Genuine catalog/source epoch and shared store issuance, no fabricated native epoch or store bytes.",
+    "Private immutable anchor binds original data backend/login/incarnation, original coordinator backend/login/incarnation/full xid, actual control issuer and issued store receipt. Opaque program identity is retained without interpreted permission.",
+    "Raw ordinary table/sequence/issuer/coordinator-check calls denied; native UPDATE/DELETE/TRUNCATE effects refused.",
+    "Forged full xid epoch and nonidle data backend refuse before anchor issuance.",
+    "Identity-only probe false while original anchor uncommitted; still false after C COMMIT in unchanged original RR; fresh RR identity true before markers, combined probe false until markers.",
+    "Original coordinator/full data tuple succeeds; wrong nonce and foreign data backend refuse.",
+    "Original coordinator COMMIT, later same-PID new transaction and actual disconnect refuse under unchanged data RR. Bare tuple explicitly matches later remint, so refusal comes from original transaction identity."
+  ],
+  "history": [
+    "r1 initial identity/remint controls passed29.646s; exact original source hashes retained.",
+    "r2 added actual disconnect but fixture read PID from closed psycopg connection, causing error. Original native failure retained.",
+    "r3 captures original PID before close; passed9.971s.",
+    "r4 additionally separates pending-anchor identity from absent-marker refusal; exact final-source native test passed5.146s."
+  ],
+  "acceptance": {
+    "promotedCases": [],
+    "governing": "CONTRACT-005 native original-peer/binding obligations, component scope only.",
+    "bulkAlignment": "Owner-worktree planned US-046-AC3/AC5 original connection/transaction substitution and withheld admission; no complete ordinary protected materialization/seal assertion."
+  },
+  "limits": [
+    "Owner-private identity component only; no production installer or direct ordinary grants. Fixture-only unchecked marker/probe wrappers must never ship as protected entrypoints.",
+    "No admitted Weft program registration, native current Subject/action-role/owner permission, complete source/helper/ACL/DDL closure, protected selector/finalizer/seal or backend acceptance promotion.",
+    "Pre-RR data backend binding alone is not historical one-use of a data transaction. Actual D full xid comes from the tuple checker; arbitrary savepoint rollback, reset/reuse and data re-entry remain lifecycle obligations.",
+    "Trusted direct-superuser C issuer, immutable/helper custody, genuine shared store and exclusively engine-owned D/A sequencing are premises.",
+    "Sampled native liveness is not an authority lease or atomic protection of subsequent work. Data-owned authorization exclusions and completion custody still require composition.",
+    "Formal proof assumes authenticated immutable native identity and issuance; native tests are finite and do not prove all-input SQL refinement, actual PID reuse or transaction-ID wraparound.",
+    "Astra independently built/proved and inspected parent native log; no independent native execution claimed."
+  ]
+}
