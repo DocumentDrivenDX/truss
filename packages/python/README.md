@@ -44,6 +44,19 @@ The [owned-object implementation plan](../../docs/helix/04-build/python-owned-ob
 covers ownership inputs, complete cascades, historical/replay authority and
 matching queries. Its UMF storage candidates are not callable ownership support.
 
+## Unreleased native66 candidate
+
+UMF0.8 support0.17 admits otherwise-supported standalone singular scalar Fields
+as declarations. Their original assertions remain in the accepted source/report;
+no stored property is allocated until a Field is a Record member. The supplied
+`CatalogDocument.document_revision` is preserved independently of its content
+SHA256. Unknown selected shapes and standalone containers refuse.
+
+The exact consumer model passes public accept/apply/readback and native binding
+export. Populated native65 upgrades preserve transitions and receipt replay.
+Matching Weft wheels remain pending, so native66 is not a published supported
+query pairing. See the [candidate notes](../../docs/helix/04-build/releases/v0.0.30.md).
+
 ## Install the release
 
 Use a fresh Python3.11+ environment on the declared Linuxx86_64/macOSarm64
