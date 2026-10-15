@@ -38,3 +38,19 @@ PYTHONPATH=packages/python/src:/path/to/published-weft-install python docs/helix
 
 Fresh store identities are expected to differ. This is compiler compatibility
 evidence, not a working native bulk API or a browser/local-store profile.
+
+## Source fix and native workflow
+
+Weft commit `e389d60` adds native66 registration through the unchanged full
+binding validator, retaining native65 and its original lowering obligations.
+Its [retained evidence](https://github.com/DocumentDrivenDX/weft/tree/e389d60/docs/helix/04-build/evidence/truss066-mutation-20261015)
+includes a basic Rust test, Python bridge checks and a fresh PostgreSQL18.6
+workflow: original Products acceptance and public seeds, native population
+preflights/selection, then public Truss update and readback. The selected product
+changes to `Foo`; the other remains unchanged. Astra Ultra reviewed the source
+and evidence. The bridge hash is
+`3d1f9363cae5c8a8949d33ff1303446a2ef5e0d042ae6510106096f92c183c0f`.
+This is an unpublished local dev build, requiring a later wheel release; it does
+not change the published0.4.30 refusal above. The administrative selector remains
+an excluded test assessor, with protected selection, authorization, sealed bulk
+execution and browser support still unfinished.
