@@ -52,6 +52,9 @@ no stored property is allocated until a Field is a Record member. The supplied
 `CatalogDocument.document_revision` is preserved independently of its content
 SHA256. Unknown selected shapes and standalone containers refuse.
 
+Direct object, key and page results expose `object.ownership.state` as
+`rootless` for the currently supported read profile. Owned reads remain unfinished.
+
 The exact consumer model passes public accept/apply/readback and native binding
 export. Populated native65 upgrades preserve transitions and receipt replay.
 Matching Weft wheels remain pending, so native66 is not a published supported

@@ -117,6 +117,7 @@ def run(source_path,scenarios_path,output,bun='bun'):
                     for fact,identity in zip(facts,identities,strict=True):
                         target=fact['type']
                         obj=expect(success(assembly.get_object_in_transaction(tx,document_id=document['id'],module_id=target['moduleId'],record_id=target['elementId'],object_id=int(identity.id))),ObjectFound).object
+                        if obj.ownership.state!='rootless':raise ValueError('Original rootless seed ownership required')
                         actual={name:_literal(value) for name,value in obj.values}
                         expected={fields[(v['field']['moduleId'],v['field']['elementId'])]['name']:v['value'] for v in fact['fields']}
                         if actual!=expected or obj.retained:raise ValueError('Complete original seed values required')

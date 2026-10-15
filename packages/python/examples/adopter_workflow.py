@@ -138,9 +138,11 @@ def run_workflow(directory, *, bun_executable='bun'):
                     behind = expect(success(assembly.reached_in_transaction(tx, token, consumer_id='demo-sink')), ReceiptIncluded)
                     if behind.included or behind.comparison_profile == included.comparison_profile:
                         raise RuntimeError('Expected distinct feed comparison before ACK')
-                    expect(success(assembly.lookup_key_in_transaction(tx, document_id='notes',
+                    found = expect(success(assembly.lookup_key_in_transaction(tx, document_id='notes',
                         module_id='notes', record_id='Note', key_id='title-key', values=('first',),
                         bun_executable=bun_executable)), ObjectFound)
+                    if found.object.ownership.state != 'rootless':
+                        raise RuntimeError('Unexpected ownership for the rootless note')
                     selected = expect(assembly.compiled_execution(assembly.compiled_selection), CapabilityAvailable)
                     rows = expect(success(selected.capability.query_in_transaction(tx,
                         sql='SELECT n.title,RELATED_KEYS(n.references,10) AS linked FROM Note n '

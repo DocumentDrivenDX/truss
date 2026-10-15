@@ -157,6 +157,8 @@ def _active_operation(method):
 
 def _object_result(raw,manifest,digest):
     basis=json.loads(bytes(raw))
+    if basis.get('profile')!='truss-python-scalar-object/0.4':
+        raise ValueError('Exact selected object read profile required')
     if basis['releaseId']!=manifest['releaseId'] or basis['releaseSha256']!=digest:
         raise ValueError('Exact selected installed runtime required')
     def logical(value):
