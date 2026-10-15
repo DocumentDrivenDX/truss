@@ -116,6 +116,8 @@ export function createMaterializer(db:PGlite,info:StoreInfo,issuer:ReturnType<ty
  });
 }
 
+export class SealAdmissionRefusal extends Error {}
+export class SealCustodyUnavailable extends Error {}
 export interface SealRequest {requestKey:string;attempt:string}
 export interface SealReference {profile:'truss-browser-seal-reference/0.1';storeId:string;incarnation:string;requestKey:string;attempt:string;manifestSha256:string;planSha256:string;modelSha256:string}
 export type SealOutcome={outcome:'sealed';reference:SealReference;manifest:Artifact;receipt:Artifact}
@@ -156,6 +158,17 @@ export function createSealer(db:PGlite,info:StoreInfo,issuer:ReturnType<typeof c
  };
  const matches=(a:SealReference,b:SealReference)=>['profile','storeId','incarnation','requestKey','attempt','manifestSha256','planSha256','modelSha256'].every(k=>(a as any)?.[k]===(b as any)?.[k]);
  return Object.freeze({
+  async authorize(tx:Pick<PGlite,'query'>,action:LocalAction,grant:SelectionReadGrant){
+   open();const catalog=await readCatalog(tx);
+   try{const original=issuer.requireGrant(catalog,action,grant);return {outcome:'authorized' as const,cut:original.cut,actionPin:copy(original.actionPin)};}catch{return {outcome:'refused' as const};}
+  },
+  async retained(tx:Pick<PGlite,'query'>,action:LocalAction,grant:SelectionReadGrant,reference:SealReference){
+   open();const original=issuer.requireGrant(await readCatalog(tx),action,grant);
+   if(reference.storeId!==info.storeId||reference.incarnation!==info.incarnation||reference.modelSha256!==original.model.sha256)throw new SealAdmissionRefusal('Original local seal scope required');
+   let found;try{found=await readOriginal(tx,reference);}catch(error){throw new SealCustodyUnavailable(String(error));}
+   if(!found||!matches(found.outcome.reference,reference)||found.input.cut!==original.cut||JSON.stringify(found.input.actionPin)!==JSON.stringify(original.actionPin))throw new SealAdmissionRefusal('Exact retained original seal required');
+   return {input:copy(found.input),outcome:copy(found.outcome)};
+  },
   async seal(action:LocalAction,grant:SelectionReadGrant,work:FrozenWork,request:Readonly<SealRequest>):Promise<SealOutcome>{
    let catalog:CatalogSnapshot|null,original:ReturnType<typeof issuer.requireGrant>,frozen:ReturnType<typeof materializer.original>;
    if(!isOpen())return {outcome:'refused',code:'store_not_open',control:copy(request),reason:'Current open store required'};

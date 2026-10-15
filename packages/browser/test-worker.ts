@@ -82,6 +82,13 @@ self.onmessage=event=>{
       }else if(event.data.command==='recoverSeal'){
         if(current?.outcome!=='available')throw Error('Available test store required');
         self.postMessage(await current.store.recoverSeal(current.owner,registeredAction,readGrant,event.data.reference));
+      }else if(event.data.command==='submit'||event.data.command==='recoverSubmit'){
+        if(current?.outcome!=='available')throw Error('Available store required');
+        const method=event.data.command==='submit'?current.store.submit:current.store.recoverSubmit;
+        self.postMessage(await method(current.owner,registeredAction,readGrant,event.data.input));
+      }else if(event.data.command==='reviewJob'){
+        if(current?.outcome!=='available')throw Error('Available store required');
+        self.postMessage(await current.store.reviewJob(current.owner,registeredAction,readGrant,event.data.job));
       }else if(event.data.command==='catalog'){
         if(current?.outcome!=='available')throw Error('Available test store required');
         self.postMessage({outcome:'catalog',catalog:await current.store.catalog(current.owner)});

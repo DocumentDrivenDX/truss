@@ -161,3 +161,33 @@ The basic Chromium check now exercises public loading, logical readback, exact
 replay/reopen recovery, atomic duplicate refusal, and physical key/journal
 correspondence before the existing materialization/seal flow. Action batch
 execution, production feed and execution receipts are the next tranche.
+
+Sealed work can now enter a persistent job registry:
+
+```ts
+const input = {key: 'products-bulk', reference: sealed.reference,
+  control: {requestKey: 'submit-control-1', attempt: 'attempt-1'}};
+const submitted = await store.submit(owner, action, grant, input);
+if (submitted.status !== 'submitted') throw new Error(submitted.status);
+const recovered = await store.recoverSubmit(owner, freshAction, freshGrant, input);
+const review = await store.reviewJob(owner, freshAction, freshGrant, submitted.state.job);
+```
+
+Retain the exact input before RPC. The submission key identifies the job intent;
+the control key/attempt identifies one sampled operation result. Same-control
+replay/recovery returns the original result. A fresh control for the same key
+and full frozen manifest/source intent observes the same job's current state.
+A distinct genuine seal of that same work does not change submission intent;
+the first complete original seal remains retained as evidence. Changed intent
+under a submission key or changed input under a control key conflicts.
+
+Current owner/action/read-grant authorization precedes all control observation.
+Recorded results, including semantic refusals, are recovered before fresh seal
+admission. Recovery missing is unresolved and performs no mutation. Job, route
+and original control outcome commit together; acknowledgement waits for flush.
+A confirmed control rollback requires a separately persisted noncommit result;
+uncertain result persistence is control-unknown and fences the store. Review
+returns retained manifest bytes and authorized state; metadata never executes
+work. This tranche exposes queued jobs and completed empty work only. Claim,
+execution, cancellation, feed and retention are still unfinished; no complete
+local-bulk/1 support claim is made.

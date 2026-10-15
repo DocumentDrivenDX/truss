@@ -63,6 +63,16 @@ try{
   const sealed=await call(a,{command:'seal',request:sealRequest});if(sealed.outcome!=='sealed')throw Error(JSON.stringify(sealed));
   const replay=await call(a,{command:'seal',request:sealRequest});if(JSON.stringify(replay)!==JSON.stringify(sealed))throw Error('Seal replay changed original outcome bytes');
   const conflict=await call(a,{command:'seal',request:{...sealRequest,attempt:'attempt-2'}});if(conflict.outcome!=='conflict'||conflict.code!=='request_key_conflict')throw Error(JSON.stringify(conflict));
+  const submitInput={key:'products-bulk',reference:sealed.reference,control:{requestKey:'submit-1',attempt:'attempt-1'}};
+  const submitted=await call(a,{command:'submit',input:submitInput});if(submitted.status!=='submitted'||submitted.state.status!=='queued')throw Error(JSON.stringify(submitted));
+  const submitReplay=await call(a,{command:'submit',input:submitInput});if(JSON.stringify(submitReplay)!==JSON.stringify(submitted))throw Error('Original submission replay changed');
+  const sameJob=await call(a,{command:'submit',input:{...submitInput,control:{requestKey:'submit-2',attempt:'attempt-2'}}});if(sameJob.status!=='submitted'||sameJob.state.job.id!==submitted.state.job.id||sameJob.state.job.namespace!==submitted.state.job.namespace||sameJob.state.status!=='queued'||sameJob.state.nextBatch!==0)throw Error('Same submit key created another job');
+  const secondSeal=await call(a,{command:'seal',request:{requestKey:'second-genuine-seal',attempt:'seal-2'}});if(secondSeal.outcome!=='sealed')throw Error(JSON.stringify(secondSeal));
+  const sameManifest=await call(a,{command:'submit',input:{...submitInput,reference:secondSeal.reference,control:{requestKey:'submit-3',attempt:'attempt-3'}}});if(sameManifest.status!=='submitted'||sameManifest.state.job.id!==submitted.state.job.id)throw Error('Genuine second seal changed submission intent');
+  const refusalInput={...submitInput,reference:{...sealed.reference,requestKey:'absent-seal'},control:{requestKey:'submit-refused',attempt:'attempt-refused'}};
+  const submitRefusal=await call(a,{command:'submit',input:refusalInput});if(submitRefusal.status!=='unsupported')throw Error(JSON.stringify(submitRefusal));
+  const refusalRecovery=await call(a,{command:'recoverSubmit',input:refusalInput});if(JSON.stringify(refusalRecovery)!==JSON.stringify(submitRefusal))throw Error('Recorded refusal recovery repeated fresh seal admission');
+  const controlConflict=await call(a,{command:'submit',input:{...submitInput,key:'changed-key'}});if(controlConflict.status!=='conflict')throw Error(JSON.stringify(controlConflict));
   const forged=await call(a,{command:'forged'});
   if(forged.outcome!=='refused')throw Error(JSON.stringify(forged));
   const second=await call(b,{command:'open',name:'lifecycle-basic'});
@@ -80,10 +90,13 @@ try{
   const recoveryAction=await call(a,{command:'action'});if(recoveryAction.outcome!=='action_registered')throw Error(JSON.stringify(recoveryAction));
   const recovered=await call(a,{command:'recoverSeal',reference:Object.fromEntries(Object.entries(sealed.reference).reverse())});if(JSON.stringify(recovered)!==JSON.stringify(sealed))throw Error('Recovered seal changed original outcome');
   const missing=await call(a,{command:'recoverSeal',reference:{...sealed.reference,requestKey:'missing-seal'}});if(missing.outcome!=='unresolved'||missing.code!=='not_found')throw Error(JSON.stringify(missing));
+  const recoveredSubmit=await call(a,{command:'recoverSubmit',input:submitInput});if(JSON.stringify(recoveredSubmit)!==JSON.stringify(submitted))throw Error('Recovered submission changed');
+  const reviewedJob=await call(a,{command:'reviewJob',job:submitted.state.job});if(JSON.stringify(reviewedJob.state)!==JSON.stringify(sameJob.state)||JSON.stringify(reviewedJob.manifest)!==JSON.stringify(sealed.manifest))throw Error('Retained job source/state changed');
   const recoveredLoad=await call(a,{command:'recoverLoad'});if(JSON.stringify(recoveredLoad)!==JSON.stringify(seeded.loaded))throw Error('Recovered load changed original outcome');
   await call(a,{command:'close'});
   const physical=await call(a,{command:'inspectStorage'});if(physical.objects!=='4'||physical.keys!=='4'||physical.reservations!=='4'||physical.journal!=='4'||physical.generation!=='1'||physical.exact!==true)throw Error(JSON.stringify(physical));
   const receipt={scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
+    submit:{result:submitted,replayedByteEqual:true,recoveredByteEqual:true,sameJob:true,controlConflict:controlConflict.status,secondGenuineSealSameJob:true,refusalReplayedByteEqual:true},
     load:{...seeded,recoveredByteEqual:true,physical},
     materialization:{count:materialized.count,batches:materialized.batches,planSha256:materialized.plan.sha256,manifestSha256:materialized.manifest.sha256,keys:body.items.map((item:any)=>item.entity.components[0].string),forgedGrant:forgedGrant.outcome},
     seal:{reference:sealed.reference,receipt:sealed.receipt,replayedByteEqual:true,recoveredByteEqual:true,conflict:conflict.outcome,missing:missing.outcome},

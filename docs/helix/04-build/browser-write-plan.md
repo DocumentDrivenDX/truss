@@ -60,3 +60,17 @@ TypeScript pass. Evidence: evidence/browser-load-20261015/. It uses explicit bro
 versions and an installed two-CHECK/partition adjunct, rather than claiming
 native history compatibility. Frozen batch execution remains next. No new
 release or crash-safety claim yet.
+
+## Submission checkpoint
+
+Astra approved separating persistent submit/control/review from execution.
+The implemented API uses a job submission key independently of a stable caller
+control key/attempt. Full frozen manifest/source intent excludes seal-control
+IDs, so two genuine seals of the same work identify one job. Original full first
+seal remains evidence. Current action/model/cut authorization binds control
+input; exact original outcome lookup precedes fresh seal admission. Semantic
+refusals are retained as refusals, control rollback requires durable separate
+noncommit confirmation, and unknown settlement fences. Recovery never executes.
+Actual basic Chromium verifies original replay/reopen recovery, same-job fresh
+control, distinct genuine seal equivalence and retained refusal recovery.
+Claim and execution remain the next implementation step.

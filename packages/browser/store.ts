@@ -1,3 +1,4 @@
+import {createBulk,captureSubmit,captureJob,type SubmitInput,type SubmitResult,type JobRef,type JobState,type JobReview} from './bulk';
 import {createObjectAccess,captureLoad,captureTarget,journalHorizon,type LoadInput,type LoadOutcome,type RecordIdentity} from './objects';
 import {PGlite} from '@electric-sql/pglite';
 import {createMaterializer,createSealer,captureSeal,captureSealReference,captureMaterialize,type MaterializeInput,type Materialization,type FrozenWork,type SealRequest,type SealReference,type SealOutcome} from './materialize';
@@ -24,6 +25,9 @@ export interface BrowserStore {
   loadObjects(owner:LocalOwner,input:LoadInput):Promise<LoadOutcome>;
   recoverLoad(owner:LocalOwner,input:LoadInput):Promise<LoadOutcome>;
   readObjects(owner:LocalOwner,target:RecordIdentity):Promise<{id:string;typeId:string;version:string;fields:{module:string;field:string;value:string}[]}[]>;
+  submit(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SubmitInput):Promise<SubmitResult>;
+  recoverSubmit(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SubmitInput):Promise<SubmitResult>;
+  reviewJob(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,job:JobRef):Promise<JobReview>;
   close(owner:LocalOwner):Promise<void>;
 }
 export type StoreOpen={outcome:'available';store:BrowserStore;owner:LocalOwner}|{outcome:'unavailable';reason:'store_in_use'};
@@ -83,6 +87,7 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
       const issuer=createActionIssuer(info,()=>state==='open');
       const materializer=createMaterializer(actual,info,issuer,()=>state==='open',()=>{state='fenced';});
       const sealer=createSealer(actual,info,issuer,materializer,()=>state==='open',()=>{state='fenced';});
+      const bulk=createBulk(actual,info,sealer,()=>state==='open',()=>{state='fenced';});
       const objectAccess=createObjectAccess(actual,info,()=>state==='open',()=>{state='fenced';});
       const currentCatalog=()=>readCatalog(actual).catch(error=>{state='fenced';throw error;});
       const check=(cap:LocalOwner)=>{if(cap!==owner||state!=='open')throw new Error('Current issued local owner required');};
@@ -125,6 +130,9 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
         loadObjects(cap:LocalOwner,input:LoadInput){check(cap);const captured=captureLoad(input);return schedule(cap,()=>objectAccess.load(captured));},
         recoverLoad(cap:LocalOwner,input:LoadInput){check(cap);const captured=captureLoad(input);return schedule(cap,()=>objectAccess.load(captured,true));},
         readObjects(cap:LocalOwner,input:RecordIdentity){check(cap);const captured=captureTarget(input);return schedule(cap,()=>objectAccess.read(captured));},
+        submit(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SubmitInput){check(cap);const captured=captureSubmit(input);return schedule(cap,()=>bulk.submit(action,grant,captured));},
+        recoverSubmit(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SubmitInput){check(cap);const captured=captureSubmit(input);return schedule(cap,()=>bulk.submit(action,grant,captured,true));},
+        reviewJob(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:JobRef){check(cap);const captured=captureJob(input);return schedule(cap,()=>bulk.status(action,grant,captured));},
         async close(cap:LocalOwner){
           check(cap);state='closing';
           try{await queue;if((state as string)==='fenced')throw Error('Store is fenced');await actual.syncToFs();await actual.close();release();await lockTask;state='closed';}
