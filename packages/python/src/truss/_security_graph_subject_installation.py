@@ -89,6 +89,8 @@ def bootstrap_graph_subjects_in_transaction(host,transaction,*,source,bindings):
   prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",limit=1)
   if len(prior)!=1 or observed[0][2:]!=('read_committed','read_write'):raise ValueError('Original fresh graph Subject installation required')
   cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+  from ._current_query_protection import require_unprotected_configuration
+  require_unprotected_configuration(cursor,allow_uninstalled=True)
   if _text_rows(cursor,"SELECT pg_catalog.current_setting('server_version_num')::pg_catalog.text",limit=1)!=[('180006',)]:raise ValueError('Original supported graph Subject server required')
   target=_text_rows(cursor,'SELECT installation_id::pg_catalog.text,owner_oid::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton FOR SHARE NOWAIT',limit=1)
   if len(target)!=1:raise ValueError('Original graph Subject installation identity required')

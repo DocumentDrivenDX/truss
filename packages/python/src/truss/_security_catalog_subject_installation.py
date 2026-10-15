@@ -68,6 +68,8 @@ def bootstrap_catalog_subjects_in_transaction(host,transaction,*,mapping,binding
   prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",limit=1)
   if len(prior)!=1:raise ValueError('Original Subject installation path required')
   cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+  from ._current_query_protection import require_unprotected_configuration
+  require_unprotected_configuration(cursor,allow_uninstalled=True)
   if _text_rows(cursor,"SELECT pg_catalog.current_setting('server_version_num')::text,pg_catalog.current_setting('transaction_isolation')::text,pg_catalog.current_setting('transaction_read_only')::text",limit=1)!=[('180006','read committed','off')]:raise ValueError('Original supported Subject installation transaction required')
   cursor.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR UPDATE NOWAIT',prepare=False)
   if len(cursor.fetchmany(2))!=1:raise ValueError('Original Subject installation head required')
@@ -197,6 +199,8 @@ def bootstrap_role_catalog_cut_issuer_in_transaction(host,transaction,*,executor
   prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",limit=1)
   if len(prior)!=1:raise ValueError('Original role cut installer path required')
   cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+  from ._current_query_protection import require_unprotected_configuration
+  require_unprotected_configuration(cursor,allow_uninstalled=True)
   if _text_rows(cursor,"SELECT pg_catalog.current_setting('server_version_num')::pg_catalog.text,pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,pg_catalog.current_setting('transaction_read_only')::pg_catalog.text",limit=1)!=[('180006','read committed','off')]:raise ValueError('Original supported role cut installation transaction required')
   target=_text_rows(cursor,'SELECT installation_id::pg_catalog.text,owner_oid::pg_catalog.text FROM truss.catalog_runtime_installation WHERE singleton FOR SHARE NOWAIT',limit=1)
   if len(target)!=1:raise ValueError('Original role cut installation required')

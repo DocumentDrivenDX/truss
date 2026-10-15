@@ -425,3 +425,48 @@ predicate with masked output; all-read-denied population; and empty Resource
 population. Both empty cases also refuse prohibited salary ordering with a false
 predicate. This is an unreleased continuation of the pinned ABI2 candidate,
 not a new deployment or aggregate support claim.
+
+
+## Installation-wide protected activation — 2026-10-15
+
+Independent consumer evidence showed that an ordinary person could call granted
+legacy `query_binding` and `query_objects` directly and retrieve the denied second
+resource's original salary and token. A correct guarded query and absence of raw
+object-table SELECT did not close those alternate SECURITY DEFINER interfaces.
+
+The explicit public `activate_current_query_protection_in_transaction` now closes
+all ordinary routine grants except exact scoped catalog/document metadata and
+the verified own-session Subject helper. Its exact owner-only activation marker
+binds the current original inventory. Guarded query execution requires that
+activation and checks it again before release. Complete routine ACL inspection
+includes overloads and procedures; complete relation/column checks include
+partitions, views and sequences. All CONNECT-capable LOGINs except the exact activating administrator undergo
+effective membership/SET-reachable authority checks, including predefined raw
+access and elevated roles. The administrator OID is retained in the exact
+source-bound activation marker. External SECURITY DEFINER owners join the
+native authority closure regardless of EXECUTE grants: a trigger can invoke a
+private function without a firing-time EXECUTE check. This first profile
+conservatively refuses benign privileged external definers too. Inheritance
+closure includes ancestors and descendants. Native rewrite dependencies trace
+external views/materialized views/rules transitively; SELECT, DML and column
+grants are checked. Existing wrappers and delegated views must be removed or
+replaced before activation. Arbitrary administrator DDL and unqualified native
+extensions remain outside this local profile.
+
+Activation requires the trusted host to stop ordinary traffic and new connections
+until commit; it refuses if other database client sessions remain. REVOKE cannot
+cancel an existing result or running read. Activation and all supported grant
+configuration paths share one NOWAIT installation exclusion before marker checks.
+Module configuration, feed enrollment, upgrades and existing privileged adjunct
+installers refuse once protected, rather than silently regranting unsafe entry
+points. Their shared gate runs after native path pinning and before side effects. This initial activated profile is
+read-only through the current-policy query provider: legacy writes, imports,
+direct reads, history, feed and other legacy calls remain unavailable until they
+receive equivalent policy enforcement. Historical unactivated runtime behavior
+is unchanged; this does not complete the full protected interface goal.
+
+Basic native checks retain the positive exact signed64/masked query, both empty
+population cases, direct calls to the former query/get/page/edge/history/feed
+facades using a cached pre-activation binding, public direct-read refusal, scoped
+catalog availability, and configuration/feed regrant refusal. No new compiler,
+policy semantics, instrumentation or custom database extension is introduced.

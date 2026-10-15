@@ -87,6 +87,8 @@ def bootstrap_preparation_catalog_cut_in_transaction(host,transaction,*,executor
         prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::text",limit=1)
         if len(prior)!=1:raise ValueError('Original preparation installer path required')
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+        from ._current_query_protection import require_unprotected_configuration
+        require_unprotected_configuration(cursor,allow_uninstalled=True)
         state=_text_rows(cursor,"SELECT pg_catalog.current_setting('server_version_num'),pg_catalog.current_setting('transaction_isolation'),pg_catalog.current_setting('transaction_read_only')",limit=1)
         if state!=[('180006','read committed','off')]:raise ValueError('Original preparation cut installation transaction required')
         installed=_text_rows(cursor,'SELECT installation_id::text,owner_oid::text FROM truss.catalog_runtime_installation WHERE singleton FOR SHARE NOWAIT',limit=1)

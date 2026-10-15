@@ -147,6 +147,8 @@ def register_current_query_subjects_in_transaction(host, transaction, *, binding
         _pin_cursor(cursor)
         prior = _text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::text",limit=1)
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+        from ._current_query_protection import require_unprotected_configuration
+        require_unprotected_configuration(cursor,allow_uninstalled=True)
         captured = capture_current_query_sources_with_cursor(cursor)
         owner = _text_rows(cursor,'SELECT owner_oid::text FROM truss.catalog_runtime_installation WHERE singleton',limit=1)
         if len(owner) != 1:

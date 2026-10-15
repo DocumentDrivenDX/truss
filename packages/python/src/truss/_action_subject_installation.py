@@ -43,6 +43,8 @@ def bootstrap_action_subjects_in_transaction(host, transaction, *, bindings, wit
         _pin_cursor(cursor)
         prior = _text_rows(cursor, "SELECT pg_catalog.current_setting('search_path')::pg_catalog.text", limit=1)
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog,pg_temp',true)", prepare=False)
+        from ._current_query_protection import require_unprotected_configuration
+        require_unprotected_configuration(cursor,allow_uninstalled=True)
         cursor.fetchone()
         if _text_rows(cursor, "SELECT pg_catalog.current_setting('server_version_num'),pg_catalog.current_setting('transaction_isolation'),pg_catalog.current_setting('transaction_read_only')", limit=1) != [('180006', 'read committed', 'off')]:
             raise ValueError('Original native action Subject installation context required')

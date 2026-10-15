@@ -541,6 +541,8 @@ class CatalogReferenceAssembly:
             _pin_cursor(cursor)
             cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False);original_path=cursor.fetchone()[0]
             cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+            from ._current_query_protection import require_unprotected_configuration
+            require_unprotected_configuration(cursor)
             from ._installation_privileges import installation_administrator_with_cursor
             installation_administrator_with_cursor(cursor)
             cursor.execute("SELECT current_setting('server_version_num')",prepare=False)
@@ -913,6 +915,8 @@ class CatalogReferenceAssembly:
             cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False)
             original_path=cursor.fetchone()[0]
             cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+            from ._current_query_protection import require_unprotected_configuration
+            require_unprotected_configuration(cursor)
             cursor.execute("""SELECT current_user=session_user,pg_catalog.current_setting('role')='none',
               pg_catalog.current_setting('transaction_isolation')='read committed',
               pg_catalog.current_setting('transaction_read_only')='off'""",prepare=False)
@@ -1453,6 +1457,8 @@ class CatalogReferenceAssembly:
             cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False)
             original_path=cursor.fetchone()[0]
             cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+            from ._current_query_protection import require_unprotected_configuration
+            require_unprotected_configuration(cursor)
             from ._installation_privileges import installation_administrator_with_cursor
             cursor.execute('SELECT owner_oid FROM truss.catalog_runtime_installation',prepare=False)
             installation_administrator_with_cursor(cursor,cursor.fetchone()[0])

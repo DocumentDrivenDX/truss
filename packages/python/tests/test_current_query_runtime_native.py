@@ -2,7 +2,9 @@
 import os
 import shutil
 from typing import get_type_hints
-from truss import (Ok, CurrentQueryExecutor, adopt_psycopg_host)
+from truss import (Ok, Error, CurrentQueryExecutor, adopt_psycopg_host, activate_current_query_protection_in_transaction)
+import psycopg
+import json
 from truss.contracts import TextValue,BooleanValue,MapValue
 from truss.groups import CreateObject,AuthoredValue,RootlessOwnership,RequestNone,GroupSuccess
 from truss.query import QueryRows, QueryRefused
@@ -14,7 +16,7 @@ class CurrentQueryRuntimeNativeTests(full.CurrentQueryFullSourcesNativeTests):
     for name in tuple(n for n in dir(full.CurrentQueryFullSourcesNativeTests) if n.startswith('test_')):
         locals()[name]=None
 
-    def create_query_graph(self, *, active=True, resources=True):
+    def create_query_graph(self, *, active=True, resources=True, exercise_activation_refusals=False):
         subject.CurrentQuerySubjectsNativeTests.test_ordinary_session_observes_only_enrolled_subject_and_original_key(self)
         bun=os.environ.get('TRUSS_BUN_EXECUTABLE',shutil.which('bun') or 'bun')
         for connection,host in self.consumer_connections:
@@ -37,6 +39,50 @@ class CurrentQueryRuntimeNativeTests(full.CurrentQueryFullSourcesNativeTests):
         result=a.apply_in_transaction(t,context.input(tuple(operations),MapValue(entries=())),RequestNone(),documents=self.current_source_documents,bun_executable=bun)
         self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
         h.detach();c.commit()
+        # Retain a real pre-activation binding: cached facade inputs must not
+        # preserve ordinary data access after the committed lockdown.
+        from truss.catalog_runtime import _release
+        manifest,digest,_=_release()
+        c,h,a,t=self.consumer()
+        self.legacy_binding=json.loads(bytes(c.execute('SELECT truss.query_binding(%s::jsonb,%s,%s,%s,%s,%s)',
+            (json.dumps(['domain']),10000,10000,16777216,manifest['releaseId'],digest)).fetchone()[0]))
+        for connection,host in self.consumer_connections:
+            if not connection.closed:
+                host.detach();connection.rollback();connection.close()
+        self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,operation_timeout_ms=30000)
+        self.tx=self.host.adopt_transaction().value
+        if exercise_activation_refusals:
+            owner=self.current_subject_registration.owner_oid
+            owner_name=self.admin.execute('SELECT rolname FROM pg_roles WHERE oid=%s',(owner,)).fetchone()[0]
+            from psycopg import sql as pgsql
+            # A pre-existing external definer is a real alternate entry point even
+            # if no ordinary role has direct SELECT on the original object table.
+            self.admin.execute("CREATE FUNCTION public.preexisting_raw_resource() RETURNS jsonb LANGUAGE sql SECURITY DEFINER AS 'SELECT jsonb_agg(props) FROM truss.object'")
+            self.admin.execute(pgsql.SQL('ALTER FUNCTION public.preexisting_raw_resource() OWNER TO {}').format(pgsql.Identifier(owner_name)))
+            refused=activate_current_query_protection_in_transaction(self.host,self.tx,subject_registration=self.current_subject_registration)
+            self.assertIsInstance(refused,Error)
+            self.assertIn('externally delegated',str(self.host._custody.last_attempt.error))
+            self.admin.execute('REVOKE ALL ON FUNCTION public.preexisting_raw_resource() FROM PUBLIC')
+            refused=activate_current_query_protection_in_transaction(self.host,self.tx,subject_registration=self.current_subject_registration)
+            self.assertIsInstance(refused,Error)
+            self.assertIn('externally delegated',str(self.host._custody.last_attempt.error))
+            self.admin.execute('DROP FUNCTION public.preexisting_raw_resource()')
+            self.admin.execute('CREATE VIEW public.preexisting_resource_view AS SELECT props FROM truss.object')
+            self.admin.execute('CREATE VIEW public.preexisting_resource_outer AS SELECT props FROM public.preexisting_resource_view')
+            self.admin.execute('GRANT SELECT(props) ON public.preexisting_resource_outer TO subject_outsider')
+            refused=activate_current_query_protection_in_transaction(self.host,self.tx,subject_registration=self.current_subject_registration)
+            self.assertIsInstance(refused,Error)
+            self.assertIn('externally delegated',str(self.host._custody.last_attempt.error))
+            self.admin.execute('DROP VIEW public.preexisting_resource_outer')
+            self.admin.execute('DROP VIEW public.preexisting_resource_view')
+            self.admin.execute('ALTER ROLE subject_outsider BYPASSRLS')
+            refused=activate_current_query_protection_in_transaction(self.host,self.tx,subject_registration=self.current_subject_registration)
+            self.assertIsInstance(refused,Error)
+            self.assertIn('externally delegated',str(self.host._custody.last_attempt.error))
+            self.admin.execute('ALTER ROLE subject_outsider NOBYPASSRLS')
+        activated=activate_current_query_protection_in_transaction(self.host,self.tx,subject_registration=self.current_subject_registration)
+        self.assertIsInstance(activated,Ok,str(self.host._custody.last_attempt.error))
+        self.host.detach();self.admin.commit()
         return bun
 
     def test_public_masked_projection_with_authorized_exact_raw_predicate(self):
@@ -119,3 +165,49 @@ class CurrentQueryRuntimeNativeTests(full.CurrentQueryFullSourcesNativeTests):
 
     def test_empty_population_returns_empty_rows(self):
         self.assert_empty_query(resources=False)
+
+    def test_protected_activation_closes_legacy_data_facades(self):
+        self.create_query_graph(exercise_activation_refusals=True)
+        from truss.catalog_runtime import _release
+        manifest,digest,_=_release()
+        c,h,a,t=self.consumer()
+        binding=self.legacy_binding['bindingJson']
+        resource=next(r for r in self.legacy_binding['binding']['records'] if r['identity']['element']=='Resource')
+        calls=[('SELECT * FROM truss.query_objects(%s::jsonb,%s)',(binding,int(resource['typeId']))),
+               ('SELECT * FROM truss.query_edges(%s::jsonb,%s)',(binding,1)),
+               ('SELECT * FROM truss.query_page_objects(%s::jsonb,%s,%s)',(binding,int(resource['typeId']),'pk')),
+               ('SELECT truss.get_object(%s,%s,%s,%s::bigint,%s,%s,%s)',('domain','m','Resource',3,1048576,manifest['releaseId'],digest)),
+               ('SELECT truss.read_history(%s::jsonb,%s,%s::bigint,%s,%s,%s,%s)',('{}',b'',1,100,1048576,manifest['releaseId'],digest)),
+               ('SELECT truss.read_feed(%s,%s,%s,%s,%s)',('probe',100,1048576,manifest['releaseId'],digest))]
+        for statement,parameters in calls:
+            with self.subTest(statement=statement),self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                with c.transaction():
+                    c.execute(statement,parameters)
+        result=a.get_object_in_transaction(t,document_id='domain',module_id='m',record_id='Resource',object_id=3)
+        self.assertIsInstance(result,Error)
+        self.assertEqual(result.error.sql_state,'42501')
+        self.assertEqual(c.execute("SELECT has_table_privilege('truss.object','SELECT')").fetchone(),(False,))
+        self.assertIsInstance(a.reader_catalog_in_transaction(t),Ok)
+
+        # Supported configuration methods cannot silently restore the revoked
+        # legacy grants, including replay of an existing feed registration.
+        from truss import create_reference_assembly,CatalogRuntimeConfiguration,ModuleAccessGrant
+        self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,operation_timeout_ms=30000)
+        self.tx=self.host.adopt_transaction().value
+        admin_assembly=create_reference_assembly(CatalogRuntimeConfiguration(),self.host).value
+        blocked=admin_assembly.configure_module_access_in_transaction(self.tx,(ModuleAccessGrant('domain','m','subject_reader','subject_writer'),))
+        self.assertIsInstance(blocked,Error)
+        blocked=admin_assembly.register_feed_consumer_in_transaction(self.tx,consumer_id='protected',reader_role='subject_reader')
+        self.assertIsInstance(blocked,Error)
+        from truss._preparation_catalog_cut import bootstrap_preparation_catalog_cut_in_transaction
+        blocked=bootstrap_preparation_catalog_cut_in_transaction(self.host,self.tx,executor_role='consumer')
+        self.assertIsInstance(blocked,Error)
+        self.assertIn('protection migration',str(self.host._custody.last_attempt.error))
+        self.assertEqual(self.admin.execute("SELECT to_regprocedure('truss.acquire_preparation_catalog_cut()')").fetchone(),(None,))
+        from truss._security_catalog_subject_installation import bootstrap_role_catalog_cut_issuer_in_transaction
+        blocked=bootstrap_role_catalog_cut_issuer_in_transaction(self.host,self.tx,executor_role='consumer')
+        self.assertIsInstance(blocked,Error)
+        self.assertIn('protection migration',str(self.host._custody.last_attempt.error))
+        self.assertEqual(self.admin.execute("SELECT to_regprocedure('truss.acquire_registered_role_catalog_cut()')").fetchone(),(None,))
+        self.host.detach();self.admin.rollback()
+        self.assertEqual(c.execute("SELECT has_function_privilege('truss.query_objects(jsonb,integer)','EXECUTE')").fetchone(),(False,))

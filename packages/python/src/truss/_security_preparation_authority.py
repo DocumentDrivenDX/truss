@@ -247,6 +247,8 @@ def _bootstrap_lock(host, transaction, executor_role, kind):
     def install(cursor, observed):
         _pin_cursor(cursor)
         _native_path(cursor)
+        from ._current_query_protection import require_unprotected_configuration
+        require_unprotected_configuration(cursor,allow_uninstalled=True)
         if _text_rows(cursor, "SELECT pg_catalog.current_setting('server_version_num')::text,pg_catalog.current_setting('transaction_isolation')::text,pg_catalog.current_setting('transaction_read_only')::text", limit=1) != [('180006', 'read committed', 'off')]:
             raise ValueError('Original fresh preparation lock installation required')
         target = _text_rows(cursor, 'SELECT installation_id::text,owner_oid::text FROM truss.catalog_runtime_installation WHERE singleton FOR SHARE NOWAIT', limit=1)

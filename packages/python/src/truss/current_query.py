@@ -6,7 +6,7 @@ profile does not qualify managed databases or an adversarial administrator.
 Neither connection is committed, rolled back or closed by Truss.
 """
 from dataclasses import dataclass
-from .execution import TransactionHandle
+from .execution import TransactionHandle, Outcome
 from .psycopg_host import PsycopgHost
 from ._current_query_originals import CurrentQueryOriginals, prepare_current_query_originals
 
@@ -23,6 +23,14 @@ class CurrentQuerySubjectRegistration:
     status: str = 'pending_commit'
 
 
+@dataclass(frozen=True,slots=True)
+class CurrentQueryProtection:
+    installation_id: str
+    inventory_digest: str
+    trusted_administrator_oid: int
+    status: str='pending_commit'
+
+
 def register_current_query_sources_in_transaction(host,transaction,*,initialize_bytes,accepted_request_bytes,query_originals=None):
     """Retain original sources through a trusted installer; caller settles."""
     from ._current_query_sources import register_current_query_sources_in_transaction as install
@@ -34,6 +42,16 @@ def register_current_query_subjects_in_transaction(host,transaction,*,bindings):
     """Enroll native Subjects through a trusted installer; caller settles."""
     from ._current_query_subjects import register_current_query_subjects_in_transaction as install
     return install(host,transaction,bindings=bindings)
+
+
+def activate_current_query_protection_in_transaction(host: PsycopgHost,transaction: TransactionHandle,*,
+        subject_registration: CurrentQuerySubjectRegistration) -> Outcome[CurrentQueryProtection]:
+    """Lock down legacy data interfaces during quiesced trusted bootstrap.
+
+    The host commits activation before opening protected ordinary callers.
+    """
+    from ._current_query_protection import activate_current_query_protection_in_transaction as activate
+    return activate(host,transaction,subject_registration=subject_registration)
 
 
 @dataclass(frozen=True,slots=True)

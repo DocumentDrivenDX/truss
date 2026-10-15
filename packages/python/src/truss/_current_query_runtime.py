@@ -8,6 +8,7 @@ from ._current_query_facts import capture_current_query_facts_with_cursor
 from ._current_query_subjects import observe_current_query_subject_in_transaction, _verify_helper
 from ._current_query_evaluation import evaluate_current_query, CurrentQueryLimit
 from ._current_query_stage import stage_and_execute
+from ._current_query_protection import verify_current_query_protection
 from ._current_query_pipe import CurrentQueryPipeError
 from ._owner_evidence_json import decode_owner_evidence_json
 from ._security_catalog_subject_installation import _text_rows
@@ -61,6 +62,7 @@ def run_current_query(host,transaction,executor,*,sql,document_ids,parameters,ma
                 cursor.execute('LOCK TABLE ONLY truss.module_access IN SHARE MODE NOWAIT',prepare=False)
                 cursor.execute('LOCK TABLE pg_catalog.pg_authid,pg_catalog.pg_auth_members IN SHARE MODE NOWAIT',prepare=False)
                 cursor.execute('LOCK TABLE ONLY truss.catalog_subject_map,truss.object,truss.object_key_bucket IN SHARE MODE NOWAIT',prepare=False)
+                verify_current_query_protection(cursor,sources,executor.subject_registration)
                 request=decode_owner_evidence_json(sources.accepted_request_bytes)
                 expected_modules={}
                 for module in request['modules']:
@@ -127,6 +129,7 @@ def run_current_query(host,transaction,executor,*,sql,document_ids,parameters,ma
                     raise ValueError('Original caller/Subject/access changed before release')
                 if capture_current_query_sources_with_cursor(cursor)!=sources:
                     raise ValueError('Original query source changed before release')
+                verify_current_query_protection(cursor,sources,executor.subject_registration)
                 cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(prior[0][0],),prepare=False)
                 if cursor.fetchmany(2)!=prior:raise ValueError('Original private executor search path restoration required')
                 cursor._deadline.check()

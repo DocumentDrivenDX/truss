@@ -73,6 +73,27 @@ The [basic workflow](tests/test_current_query_runtime_native.py) creates data
 through the public API and queries an exact signed64 salary while returning its
 masked String value.
 
+Before opening protected callers, finish bootstrap data and Subject enrollment,
+quiesce all other client sessions and prevent new connections, then call
+`activate_current_query_protection_in_transaction(installer, tx,
+subject_registration=subjects)` and commit. Activation checks that no other
+client sessions remain. It revokes every ordinary legacy data routine grant;
+only scoped catalog metadata and the verified own-session Subject facade remain.
+Guarded queries require this committed activation. Cached legacy query bindings
+do not retain access. Module configuration, feed enrollment, runtime upgrades and privileged bootstrap
+installers refuse after activation until an explicit protection migration exists.
+
+This first protected profile supports reads through `query_current_in_transaction`.
+Legacy mutations, imports, direct reads, history and feed are unavailable after
+activation until equivalent policy-aware providers land. Activation records the activating administrator as the sole trusted login for
+this first profile. Other CONNECT-capable logins cannot have direct, inherited,
+or SET-reachable raw authority. Pre-existing external SECURITY DEFINER functions
+whose owners reach privileged/raw authority refuse activation even when private;
+this conservatively includes benign admin-owned extension functions. Externally
+accessible views or rewrite rules over Truss data also refuse. The activating
+administrator must keep database/role DDL quiescent; this profile does not protect
+against that administrator or qualify arbitrary database extensions.
+
 The host supplies a separate privileged connection and a fresh transaction
 dedicated to one query. It also keeps administrative runtime DDL quiescent.
 Truss does not commit, roll back or close either connection. After the operation,

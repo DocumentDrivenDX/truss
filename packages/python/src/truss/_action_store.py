@@ -169,6 +169,8 @@ def register_action_store_in_transaction(host,transaction,*,tenant,registration_
     except (ValueError,TypeError,UnicodeError):return Error(ExecutionFailure('execution_obligation','Original bounded shared store registration required'))
     def register(cursor,observed):
         path,identity,owner,actor=_context(cursor);_runtime_inventory(cursor,sources,owner)
+        from ._current_query_protection import require_unprotected_configuration
+        require_unprotected_configuration(cursor,allow_uninstalled=True)
         selected_executors=[]
         for role in executor_roles:
             roles=_text_rows(cursor,"SELECT oid::text,rolcanlogin::text,rolsuper::text,rolcreaterole::text,rolcreatedb::text,rolreplication::text,rolbypassrls::text,pg_catalog.pg_has_role(oid,%s::oid,'MEMBER')::text FROM pg_catalog.pg_roles WHERE rolname=%s",(owner,role),1)

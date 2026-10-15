@@ -1,0 +1,51 @@
+{
+  "scope": "Unreleased local PG18.6 protected read-only current-query activation; legacy interfaces disabled, no full protected mutation/feed or managed deployment claim",
+  "baseCommit": "7f68acf0",
+  "consumer": "Existing exact candidate Weft ABI2 cohort, original UMF child unchanged; not release0.4.33 adoption",
+  "checks": [
+    {
+      "suite": "test_current_query_runtime_native",
+      "tests": 4,
+      "seconds": 29.187,
+      "session": 41941,
+      "result": "OK",
+      "scope": "Full basic workflows before final missed second-installer guard correction"
+    },
+    {
+      "suite": "test_current_query_runtime_native.CurrentQueryRuntimeNativeTests.test_protected_activation_closes_legacy_data_facades",
+      "tests": 1,
+      "seconds": 6.015,
+      "session": 23056,
+      "result": "OK",
+      "scope": "Final sources: native alternative facades, external public/private definer, transitive outsider view column grant, elevated outsider LOGIN, configuration/feed and both private installer regrant refusals"
+    }
+  ],
+  "sources": {
+    "docs/helix/04-build/current-query-native-integration.md": "c77d2d858efedfbcaff1e2e5934c4a267c01a7c4a173beac93b8d548a1cd26fd",
+    "packages/python/README.md": "db2da7b2c22417fdf75eee575b2065c40a5fda7f6103756332d823777ba01708",
+    "packages/python/src/truss/__init__.py": "01d0ebb8b573023201dd51309db3e3164b054fcd7665eb120436eae05864e065",
+    "packages/python/src/truss/_action_store.py": "bd4404e034b5a64aa04438fef33d254541460145ddfe7e1b1c5a2d1c4dcb8972",
+    "packages/python/src/truss/_action_subject_installation.py": "d782304a3b752f57b76eb067bb631eafcb9985aa08b61e67ab5ecf9e0aab76eb",
+    "packages/python/src/truss/_current_query_runtime.py": "8b0d494f5b925be500be92c2e98516185a4015d26cdfd616ce0236b354d894e3",
+    "packages/python/src/truss/_current_query_subjects.py": "05ede4253384d963e6785c4a319b81b59ff8c7c2134bba69b8d614ecca1f0365",
+    "packages/python/src/truss/_preparation_catalog_cut.py": "38005401c253f93cc3bc801574eb7a9b79f9ad94da08dc773bbeb8cae2d027dd",
+    "packages/python/src/truss/_security_catalog_read_cut_installation.py": "d040e078e782f3dc53b641c5f9ec8892b8231b0382ad1438a0c7d879c04bc159",
+    "packages/python/src/truss/_security_catalog_subject_installation.py": "d71beb0bc4323ea51bdadad7d1ab5ce08f67ebf26434c3e7b6eec913db8b0444",
+    "packages/python/src/truss/_security_graph_epoch_read.py": "436f241859b1876b5b9ed6927ea63687c9c1f6823937c470b560c8c1a5d98345",
+    "packages/python/src/truss/_security_graph_subject_installation.py": "af97889706f118ed32b37a83a431d4693ee73ca560af3060f6756bc590f64589",
+    "packages/python/src/truss/_security_preparation_authority.py": "c7a4f8105398370544f4d2e34c2c8d5a523aa3004b3745cb4198868f0f9ac4c3",
+    "packages/python/src/truss/_security_relationship_epoch_read.py": "8d71ddf5425453b326e8f3e2877168b02f53f066b9b7f4f49a897919be4a8148",
+    "packages/python/src/truss/catalog_runtime.py": "9efc7a2c4edb622b3663517d31cda8b88be238af2813637cbaa5c171b2596e2f",
+    "packages/python/src/truss/current_query.py": "174e860eea2b41a8c0d9cf37479b56f1c61e116da108f1caa3a148f93180cce9",
+    "packages/python/tests/test_current_query_runtime_native.py": "7da0867191f3674f98484cb80e13b9739256cd9f43c2cf273ee02a297ab94eed",
+    "packages/python/src/truss/_current_query_protection.py": "b02dc906d581c6e1e1e9000a85e85a73857867c357dbc40c732564fd25fa01ff"
+  },
+  "review": "Astra Ultra reviewed plan and implementation. Corrected NULL-poisoned allowlist, native path pinning, shared exclusion/recheck, explicit activating administrator identity, global external definer/rewrite/inheritance authority closure, and additional private installers including the second role-cut installer. Final source approval granted; targeted final test passed.",
+  "boundary": [
+    "Trusted host prevents new connections and quiesces all other client sessions until activation commits",
+    "Only exact activating administrator LOGIN exempt; other CONNECT-capable elevated principals refuse",
+    "Privileged external SECURITY DEFINER functions refuse even private, conservatively including benign extensions",
+    "Historical unactivated runtime unchanged; active profile cannot use legacy writes/imports/direct reads/history/feed pending equivalent policy providers",
+    "Trusted administrator DDL quiescence and original native engine/extensions remain required"
+  ]
+}
