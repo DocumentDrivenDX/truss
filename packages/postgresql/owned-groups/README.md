@@ -35,12 +35,26 @@ Explicit `nodeOrder` and `ownedEdgeOrder` arrays retain local-to-native identity
 correspondence. Stored root membership without a connecting owned-edge path
 refuses; the helper never fabricates that missing edge.
 
-Three basic PostgreSQL 18 tests cover exact create/update values, an invalid
+`transition.generated.sql` and `transition-upgrade.generated.sql` come from
+UMF's native PostgreSQL exporter via `scripts/build-unified-object-transition.ts`.
+The separate 0.2 native/core models remove the physical before-image NOT NULL
+constraint without changing the original 0.1 models. SQL NULL represents an
+absent before-image; it does not by itself prove a create. The future executor
+must bind genuine version-1 creates to original input/profile evidence, retain
+creation reservations and one journal custodian, and update attribution/history
+guards. These candidate files are not installed by native66.
+
+Four basic PostgreSQL 18 tests cover exact create/update values, an invalid
 required-field removal, unchanged graph/journal/key/receipt row counts, and a
 subtree move with parallel edges followed by a cycle refusal. The scope case uses
 public catalog acceptance/object creation, then rolled-back administrative graph
 fixture rows to test complete component/boundary images and lifecycle refusal;
-it does not demonstrate a public owned mutation workflow:
+it does not demonstrate a public owned mutation workflow.
+
+The transition case applies the owner-generated ALTER to a real committed public
+update, verifies the original transition is unchanged, and rolls back the DDL.
+It does not enable unified create execution or qualify the complete next upgrade.
+Run all four cases with:
 
 ```sh
 PYTHONPATH=packages/python/src:packages/python/tests python -m unittest discover -s packages/postgresql/owned-groups -p 'test_*.py' -v
