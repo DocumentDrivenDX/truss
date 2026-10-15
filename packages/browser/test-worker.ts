@@ -43,23 +43,30 @@ self.onmessage=event=>{
         catch(error){if(String(error).includes('Previous action admitted'))throw error;}
         self.postMessage({outcome:'previous_action_refused',info:current.store.info(current.owner)});
       }else if(event.data.command==='seedFixture'){
-        if(current?.outcome!=='available')throw Error('Available test store required');
-        const info=current.store.info(current.owner),name=event.data.name;
-        await current.store.close(current.owner);
-        // Test-only administrative fixture setup; this is not a provider mutation API.
-        await navigator.locks.request(info.namespace,async()=>{
-          const db=new PGlite('idb://'+info.namespace,{relaxedDurability:false});
-          try{await db.transaction(async tx=>{
-            const type=(await tx.query<{type_id:number}>('SELECT type_id FROM truss.type_def')).rows[0]!.type_id;
-            const props=(await tx.query<{prop_id:number;name:string}>('SELECT prop_id,name FROM truss.prop_def ORDER BY prop_id')).rows;
-            for(const [id,name] of [['bar','Sample'],['baz','Sample'],['qux','Sample'],['spare','Untouched']]){
-              const values=Object.fromEntries(props.map(p=>[p.prop_id,{kind:'string',text:p.name==='id'?id:name}]));
-              await tx.query('INSERT INTO truss.object(type_id,props,rev) VALUES($1,$2::jsonb,1)',[type,JSON.stringify(values)]);
-            }
-          });await db.syncToFs();}finally{await db.close();}
+        if(current?.outcome!=='available')throw Error('Available store required');
+        const target={documentId:'product-local-action-demo',module:'sales',record:'products'};
+        const rows=[['bar','Sample'],['baz','Sample'],['qux','Sample'],['spare','Untouched']].map(([id,name])=>({fields:[{module:'sales',field:'product-id',value:id!},{module:'sales',field:'product-name',value:name!}]}));
+        const input={target,rows,request:{requestKey:'initial-products',attempt:'load-1'}};
+        const loaded=await current.store.loadObjects(current.owner,input);
+        if(loaded.outcome!=='loaded')throw Error(JSON.stringify(loaded));
+        const replay=await current.store.loadObjects(current.owner,input);
+        if(JSON.stringify(replay)!==JSON.stringify(loaded))throw Error('Load replay changed');
+        const refused=await current.store.loadObjects(current.owner,{...input,rows:[{fields:[{module:'sales',field:'product-id',value:'would-be-new'},{module:'sales',field:'product-name',value:'New'}]},rows[0]!],request:{requestKey:'duplicate-load',attempt:'load-2'}});
+        if(refused.outcome!=='failure'||refused.settlement!=='current_attempt_rolled_back')throw Error('Duplicate key must refuse full load');
+        const read=await current.store.readObjects(current.owner,target);
+        if(read.length!==4||read.some(r=>r.fields.some(f=>f.value==='would-be-new')))throw Error('Partial load leaked');
+        self.postMessage({outcome:'public_objects_loaded',loaded,replayedByteEqual:true,duplicate:refused.outcome,read});
+      }else if(event.data.command==='recoverLoad'){
+        if(current?.outcome!=='available')throw Error('Available store required');
+        const target={documentId:'product-local-action-demo',module:'sales',record:'products'};
+        const rows=[['bar','Sample'],['baz','Sample'],['qux','Sample'],['spare','Untouched']].map(([id,name])=>({fields:[{module:'sales',field:'product-id',value:id!},{module:'sales',field:'product-name',value:name!}]}));
+        self.postMessage(await current.store.recoverLoad(current.owner,{target,rows,request:{requestKey:'initial-products',attempt:'load-1'}}));
+      }else if(event.data.command==='inspectStorage'){
+        // Read-only physical evidence after the public owner releases its lock.
+        await navigator.locks.request('truss-browser:lifecycle-basic',async()=>{
+          const db=new PGlite('idb://truss-browser:lifecycle-basic',{relaxedDurability:false});
+          try{self.postMessage((await db.query(`SELECT (SELECT count(*)::text FROM truss.object) AS objects,(SELECT count(*)::text FROM truss.object_key_bucket) AS keys,(SELECT count(*)::text FROM truss.object_key_reservation_bucket) AS reservations,(SELECT count(*)::text FROM truss.journal) AS journal,(SELECT min(generation)::text FROM truss.key_bucket_guard) AS generation,(SELECT bool_and(new_value->>'interfaceVersion'='truss-browser-journal-exact-bytes/0.1' AND new_value->>'bytesSha256'=encode(sha256(decode(new_value->>'bytesBase64','base64')),'hex') AND origin->>'interfaceVersion'='truss-browser-journal-exact-bytes/0.1') FROM truss.journal) AS exact`)).rows[0]);}finally{await db.close();}
         });
-        current=await openBrowserStore({name,layoutSql:await(await fetch(new URL('layout.sql',import.meta.url))).text()});
-        self.postMessage({outcome:'test_fixture_seeded'});
       }else if(event.data.command==='materialize'){
         if(current?.outcome!=='available')throw Error('Available test store required');
         materialized=await current.store.materialize(current.owner,registeredAction,readGrant,{sql:"UPDATE products SET name='Bulk' WHERE name='Sample'",parameters:{},batchSize:2,maxItems:10});

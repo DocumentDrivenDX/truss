@@ -108,9 +108,56 @@ is reported separately from ambiguous commit/flush outcomes; uncertainty fences
 the store. No automatic retry loop is provided.
 
 The basic Chromium workflow materializes three rows into batches of two and
-one, seals, replays and recovers after reopen. Its rows are administrative test
-fixtures. Production bootstrap/import, batch mutation, effects, journal/feed and
-execution receipts remain unfinished. Seal recovery alone is not crash safety
+one, seals, replays and recovers after reopen. That earlier checkpoint used administrative test
+fixtures; the current workflow loads rows through the public API below. At that checkpoint production bootstrap/import, batch mutation, effects,
+journal/feed and execution receipts remained unfinished; public loading and
+creation journal are implemented below. Seal recovery alone is not crash safety
 qualification or action execution. The owned bundle includes unchanged pinned
 Weft JS/WASM and available original notices; its producer metadata records the
 limited notice inventory without claiming complete licensing closure.
+
+Public local loading now replaces administrative seeding:
+
+```ts
+const input = {
+  target: {documentId: 'product-local-action-demo', module: 'sales', record: 'products'},
+  rows: [{fields: [
+    {module: 'sales', field: 'product-id', value: 'bar'},
+    {module: 'sales', field: 'product-name', value: 'Sample'}
+  ]}],
+  request: {requestKey: 'initial-products', attempt: 'load-1'}
+};
+const loaded = await store.loadObjects(owner, input);
+const objects = await store.readObjects(owner, input.target);
+// After an unknown outcome/reopen, retain and use the original input:
+const recovered = await store.recoverLoad(owner, input);
+```
+
+This is an atomic local import for the accepted required-String, rootless Record
+profile. Each row supplies all members by qualified Field identity. Loads accept
+1–100 rows and at most1MiB of input; readback refuses above100 rows or8MiB rather
+than returning a truncated population. Objects, original UMF Key custody, guard
+generations, permanent key reservations, creation journal and original load
+outcome commit together. IDs/versions are exact text. Duplicate/reserved keys
+refuse the whole load. The caller retains the entire original input before RPC;
+identical retries/recovery return the original outcome. Missing recovery is
+unresolved. Recovery failure never establishes rollback of the original load.
+
+The journal uses an explicit browser-only layout adjunct, recorded in
+`browser:journal:0.1`: one finite partition (previous month through13 months
+ahead) and the two payload/origin CHECKs select
+`truss-browser-journal-exact-bytes/0.1`. Event/record versions are
+`truss-browser-history-event/0.1` and `truss-browser-history-record/0.1`.
+These contain actual local store/incarnation, request/index, xid/seq, complete
+rootless after-images and source digest. Exact envelopes retain SHA256 and
+base64 of actual PostgreSQL JSONB text bytes. They are browser carriers; native
+history decoders and native66 installation are not claimed. The original
+foundation layout SQL/hash is unchanged; installed adjunct CHECK definitions
+and partition bounds are verified separately, observing the private connection
+in UTC/ISO. Foreign/partial adjuncts refuse. Expiry blocks new writes; replay,
+recovery and readback remain available. No silent horizon extension occurs.
+
+The basic Chromium check now exercises public loading, logical readback, exact
+replay/reopen recovery, atomic duplicate refusal, and physical key/journal
+correspondence before the existing materialization/seal flow. Action batch
+execution, production feed and execution receipts are the next tranche.

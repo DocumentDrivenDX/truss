@@ -54,6 +54,9 @@ must read committed outcomes. Required basic witnesses include three items/two
 batches, all-or-nothing failed batch, stale key/version, duplicate submit and
 reload recovery. Broader verification follows the functional interface.
 
-Status: proposal awaiting Astra Ultra review before implementation. Existing
-materialize/seal checkpoint f8495ec6 is committed; neither loading nor execution
-is implemented by that checkpoint. No new release or crash-safety claim yet.
+Status: Astra Ultra approved the plan with finite source corrections. The local
+load/read/recovery tranche is implemented; final basic Chromium and strict
+TypeScript pass. Evidence: evidence/browser-load-20261015/. It uses explicit browser event/envelope
+versions and an installed two-CHECK/partition adjunct, rather than claiming
+native history compatibility. Frozen batch execution remains next. No new
+release or crash-safety claim yet.

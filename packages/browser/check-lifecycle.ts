@@ -52,7 +52,7 @@ try{
   const oldAction=await call(a,{command:'reopenAction',name:'lifecycle-basic'});
   if(oldAction.outcome!=='previous_action_refused'||JSON.stringify(oldAction.info)!==JSON.stringify(first.info))throw Error(JSON.stringify(oldAction));
   const reissuedAction=await call(a,{command:'action'});if(reissuedAction.outcome!=='action_registered'||reissuedAction.preparationSha256!==action.preparationSha256)throw Error(JSON.stringify(reissuedAction));
-  const seeded=await call(a,{command:'seedFixture',name:'lifecycle-basic'});if(seeded.outcome!=='test_fixture_seeded')throw Error(JSON.stringify(seeded));
+  const seeded=await call(a,{command:'seedFixture',name:'lifecycle-basic'});if(seeded.outcome!=='public_objects_loaded')throw Error(JSON.stringify(seeded));
   const readyAction=await call(a,{command:'action'});if(readyAction.outcome!=='action_registered')throw Error(JSON.stringify(readyAction));
   const forgedGrant=await call(a,{command:'forgedGrant'});if(forgedGrant.outcome!=='refused')throw Error(JSON.stringify(forgedGrant));
   const materialized=await call(a,{command:'materialize'});
@@ -80,8 +80,11 @@ try{
   const recoveryAction=await call(a,{command:'action'});if(recoveryAction.outcome!=='action_registered')throw Error(JSON.stringify(recoveryAction));
   const recovered=await call(a,{command:'recoverSeal',reference:Object.fromEntries(Object.entries(sealed.reference).reverse())});if(JSON.stringify(recovered)!==JSON.stringify(sealed))throw Error('Recovered seal changed original outcome');
   const missing=await call(a,{command:'recoverSeal',reference:{...sealed.reference,requestKey:'missing-seal'}});if(missing.outcome!=='unresolved'||missing.code!=='not_found')throw Error(JSON.stringify(missing));
+  const recoveredLoad=await call(a,{command:'recoverLoad'});if(JSON.stringify(recoveredLoad)!==JSON.stringify(seeded.loaded))throw Error('Recovered load changed original outcome');
   await call(a,{command:'close'});
-  const receipt={scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; administrative fixture data only',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
+  const physical=await call(a,{command:'inspectStorage'});if(physical.objects!=='4'||physical.keys!=='4'||physical.reservations!=='4'||physical.journal!=='4'||physical.generation!=='1'||physical.exact!==true)throw Error(JSON.stringify(physical));
+  const receipt={scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
+    load:{...seeded,recoveredByteEqual:true,physical},
     materialization:{count:materialized.count,batches:materialized.batches,planSha256:materialized.plan.sha256,manifestSha256:materialized.manifest.sha256,keys:body.items.map((item:any)=>item.entity.components[0].string),forgedGrant:forgedGrant.outcome},
     seal:{reference:sealed.reference,receipt:sealed.receipt,replayedByteEqual:true,recoveredByteEqual:true,conflict:conflict.outcome,missing:missing.outcome},
     action:{registered:action,forged:forgedAction,previousOpen:oldAction.outcome,reissued:reissuedAction.outcome},

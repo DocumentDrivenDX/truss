@@ -1,3 +1,4 @@
+import {createObjectAccess,captureLoad,captureTarget,journalHorizon,type LoadInput,type LoadOutcome,type RecordIdentity} from './objects';
 import {PGlite} from '@electric-sql/pglite';
 import {createMaterializer,createSealer,captureSeal,captureSealReference,captureMaterialize,type MaterializeInput,type Materialization,type FrozenWork,type SealRequest,type SealReference,type SealOutcome} from './materialize';
 import {createActionIssuer,captureAction,type ActionIdentity,type LocalAction,type BrowserActionRegistration,type SelectionReadRegistration} from './actions';
@@ -20,6 +21,9 @@ export interface BrowserStore {
   materialize(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:MaterializeInput):Promise<Materialization>;
   seal(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,work:FrozenWork,input:SealRequest):Promise<SealOutcome>;
   recoverSeal(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,reference:SealReference):Promise<SealOutcome>;
+  loadObjects(owner:LocalOwner,input:LoadInput):Promise<LoadOutcome>;
+  recoverLoad(owner:LocalOwner,input:LoadInput):Promise<LoadOutcome>;
+  readObjects(owner:LocalOwner,target:RecordIdentity):Promise<{id:string;typeId:string;version:string;fields:{module:string;field:string;value:string}[]}[]>;
   close(owner:LocalOwner):Promise<void>;
 }
 export type StoreOpen={outcome:'available';store:BrowserStore;owner:LocalOwner}|{outcome:'unavailable';reason:'store_in_use'};
@@ -67,7 +71,8 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
         ||typeof marker.storeId!=='string'||typeof marker.incarnation!=='string'
         ||!uuid.test(marker.storeId)||!uuid.test(marker.incarnation))
         throw new Error('Original store incarnation marker required; no automatic reset');
-      const tables=(await actual.query<{n:string}>("SELECT count(*)::text AS n FROM pg_catalog.pg_tables WHERE schemaname='truss'")).rows[0];
+      await journalHorizon(actual,false);
+      const tables=(await actual.query<{n:string}>("SELECT count(*)::text AS n FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss' AND c.relkind IN ('r','p') AND NOT c.relispartition")).rows[0];
       const head=(await actual.query<{rev:number}>('SELECT rev FROM truss.schema_head WHERE id=1')).rows;
       if(tables?.n!=='48'||head.length!==1||!Number.isSafeInteger(head[0]!.rev)||head[0]!.rev<0)
         throw new Error('Complete original layout inventory required');
@@ -78,6 +83,7 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
       const issuer=createActionIssuer(info,()=>state==='open');
       const materializer=createMaterializer(actual,info,issuer,()=>state==='open',()=>{state='fenced';});
       const sealer=createSealer(actual,info,issuer,materializer,()=>state==='open',()=>{state='fenced';});
+      const objectAccess=createObjectAccess(actual,info,()=>state==='open',()=>{state='fenced';});
       const currentCatalog=()=>readCatalog(actual).catch(error=>{state='fenced';throw error;});
       const check=(cap:LocalOwner)=>{if(cap!==owner||state!=='open')throw new Error('Current issued local owner required');};
       let queue:Promise<void>=Promise.resolve();
@@ -116,6 +122,9 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
         recoverSeal(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SealReference){
           check(cap);const captured=captureSealReference(input);return schedule(cap,()=>sealer.recover(action,grant,captured));
         },
+        loadObjects(cap:LocalOwner,input:LoadInput){check(cap);const captured=captureLoad(input);return schedule(cap,()=>objectAccess.load(captured));},
+        recoverLoad(cap:LocalOwner,input:LoadInput){check(cap);const captured=captureLoad(input);return schedule(cap,()=>objectAccess.load(captured,true));},
+        readObjects(cap:LocalOwner,input:RecordIdentity){check(cap);const captured=captureTarget(input);return schedule(cap,()=>objectAccess.read(captured));},
         async close(cap:LocalOwner){
           check(cap);state='closing';
           try{await queue;if((state as string)==='fenced')throw Error('Store is fenced');await actual.syncToFs();await actual.close();release();await lockTask;state='closed';}

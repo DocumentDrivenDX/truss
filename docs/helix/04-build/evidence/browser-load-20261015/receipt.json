@@ -1,0 +1,295 @@
+{
+  "scope": "Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback",
+  "assetPrefix": "/example/truss/",
+  "chromium": "153.0.8010.12",
+  "bundle": {
+    "manifestSha256": "c24264d1eaf3e818c04c10ff620570bc9fed7d2adf27ca5a56f8d8b243d5d97f",
+    "providerSha256": "b6f45724dfa1d6ef1c9992017208cc71ea6fbeba68a4f615b07172850971d802"
+  },
+  "first": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:55439",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "0df25c0f-a92c-4d20-a3b1-243e82281c0c",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "4268ad70-78f7-4168-997b-2b0571e6d1b7",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "forged": {
+    "outcome": "refused"
+  },
+  "second": {
+    "outcome": "unavailable",
+    "reason": "store_in_use"
+  },
+  "takeover": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:55439",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "0df25c0f-a92c-4d20-a3b1-243e82281c0c",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "4268ad70-78f7-4168-997b-2b0571e6d1b7",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "reopened": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:55439",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "0df25c0f-a92c-4d20-a3b1-243e82281c0c",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "4268ad70-78f7-4168-997b-2b0571e6d1b7",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "load": {
+    "outcome": "public_objects_loaded",
+    "loaded": {
+      "outcome": "loaded",
+      "request": {
+        "requestKey": "initial-products",
+        "attempt": "load-1"
+      },
+      "objects": [
+        {
+          "id": "1",
+          "typeId": "1",
+          "version": "1"
+        },
+        {
+          "id": "2",
+          "typeId": "1",
+          "version": "1"
+        },
+        {
+          "id": "3",
+          "typeId": "1",
+          "version": "1"
+        },
+        {
+          "id": "4",
+          "typeId": "1",
+          "version": "1"
+        }
+      ],
+      "journal": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    "replayedByteEqual": true,
+    "duplicate": "failure",
+    "read": [
+      {
+        "id": "1",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "bar"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Sample"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "baz"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Sample"
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "qux"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Sample"
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "spare"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Untouched"
+          }
+        ]
+      }
+    ],
+    "recoveredByteEqual": true,
+    "physical": {
+      "objects": "4",
+      "keys": "4",
+      "reservations": "4",
+      "journal": "4",
+      "generation": "1",
+      "exact": true
+    }
+  },
+  "materialization": {
+    "count": 3,
+    "batches": [
+      {
+        "count": 2,
+        "ordinal": 0,
+        "start": 0
+      },
+      {
+        "count": 1,
+        "ordinal": 1,
+        "start": 2
+      }
+    ],
+    "planSha256": "c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587",
+    "manifestSha256": "2d40a6a652743696a9facbc307add93d1f7aff9e8b9c7410b1d242d663ceb1e2",
+    "keys": [
+      "bar",
+      "baz",
+      "qux"
+    ],
+    "forgedGrant": "refused"
+  },
+  "seal": {
+    "reference": {
+      "profile": "truss-browser-seal-reference/0.1",
+      "storeId": "0df25c0f-a92c-4d20-a3b1-243e82281c0c",
+      "incarnation": "4268ad70-78f7-4168-997b-2b0571e6d1b7",
+      "requestKey": "basic-seal",
+      "attempt": "attempt-1",
+      "manifestSha256": "2d40a6a652743696a9facbc307add93d1f7aff9e8b9c7410b1d242d663ceb1e2",
+      "planSha256": "c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587",
+      "modelSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27"
+    },
+    "receipt": {
+      "mediaType": "application/json",
+      "utf8": "{\"profile\":\"truss-browser-seal-receipt/0.1\",\"reference\":{\"profile\":\"truss-browser-seal-reference/0.1\",\"storeId\":\"0df25c0f-a92c-4d20-a3b1-243e82281c0c\",\"incarnation\":\"4268ad70-78f7-4168-997b-2b0571e6d1b7\",\"requestKey\":\"basic-seal\",\"attempt\":\"attempt-1\",\"manifestSha256\":\"2d40a6a652743696a9facbc307add93d1f7aff9e8b9c7410b1d242d663ceb1e2\",\"planSha256\":\"c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587\",\"modelSha256\":\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\"},\"inputSha256\":\"073ae36fbaab4b5e21864b8d6375ce3cc3e7534761944eb2c13ff2140447712a\",\"writerXid\":\"757\",\"manifestSha256\":\"2d40a6a652743696a9facbc307add93d1f7aff9e8b9c7410b1d242d663ceb1e2\"}",
+      "sha256": "d65d0a6a096f6967f254ab3619a508acc8de13ff3070fcc48decda803d162e5e"
+    },
+    "replayedByteEqual": true,
+    "recoveredByteEqual": true,
+    "conflict": "conflict",
+    "missing": "unresolved"
+  },
+  "action": {
+    "registered": {
+      "outcome": "action_registered",
+      "modelSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+      "preparationSha256": "6f5e69462c327da970f07ca1f6253dbacc4db0badf1335b7d91e3f38eb67ad40",
+      "declaration": {
+        "profile": {
+          "id": "umf.actions.local-store-read",
+          "version": "1"
+        },
+        "target": {
+          "element": "products",
+          "key": "pk",
+          "module": "sales"
+        },
+        "fields": [
+          {
+            "module": "sales",
+            "element": "product-id"
+          },
+          {
+            "module": "sales",
+            "element": "product-name"
+          }
+        ],
+        "view": "complete-canonical-target-population",
+        "disposition": "original"
+      },
+      "opaque": true
+    },
+    "forged": {
+      "outcome": "refused"
+    },
+    "previousOpen": "previous_action_refused",
+    "reissued": "action_registered"
+  },
+  "catalog": {
+    "registration": "registered",
+    "retry": "unchanged",
+    "revision": "1",
+    "sourceSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+    "types": [
+      {
+        "typeId": "1",
+        "moduleId": "sales",
+        "recordId": "products",
+        "documentId": "product-local-action-demo",
+        "lineageHex": "74727573732d63616e6f6e6963616c2f302e312e300a74727573732d747970652d6c696e656167652f302e312e300a5b2270726f647563742d6c6f63616c2d616374696f6e2d64656d6f222c2273616c6573222c2270726f6475637473225d",
+        "lineageProfile": "truss-type-lineage/0.1.0"
+      }
+    ],
+    "properties": [
+      {
+        "name": "id",
+        "typeId": "1",
+        "fieldId": "product-id",
+        "moduleId": "sales",
+        "propertyId": "1"
+      },
+      {
+        "name": "name",
+        "typeId": "1",
+        "fieldId": "product-name",
+        "moduleId": "sales",
+        "propertyId": "2"
+      }
+    ],
+    "keys": [
+      {
+        "keyId": "pk",
+        "typeId": "1",
+        "primary": true,
+        "keyNumber": "1",
+        "propertyIds": [
+          "1"
+        ]
+      }
+    ],
+    "changeCount": 3
+  },
+  "actionExecution": false,
+  "selectionReadGrant": true,
+  "crashRecovery": false
+}
