@@ -154,3 +154,22 @@ and invoke final forest validation at the agreed deferred point. Two basic
 PostgreSQL18 tests pass (11.042s): exact numeric values/requiredness/no graph
 effects and subtree reparenting with parallel edges/cycle refusal. These
 components do not install a public owned-object provider.
+
+## Operation persistence and adopter workflow — 2026-10-15
+
+Keep one private immutable `runtime_owned_operation` row per original attempt
+and operation index. It retains the complete affected inventory for a reparent
+or cascade, including original before/after object and edge interpretations.
+Existing transition keys connect each descendant's own journal to that original
+operation. This also covers eventless no-ops without fabricating child inputs.
+The existing attempt context stays immutable. The table's four columns and
+attempt foreign key have saved UMF core/native models and owner-exported DDL in
+`packages/postgresql/owned-groups/operation-storage.generated.sql`.
+
+Astra Ultra approved keeping this proof private. Public events keep the existing
+event0.2/wrapper0.2 shape, selecting an explicit owned history profile; they do
+not embed the complete private inventory or new fields. History and query
+attribution must interpret original roots from retained evidence after deletion.
+The public adopter target is `test_owned_objects_native.py`: its UMF0.8 catalog
+accepts, and its first owned create currently refuses as unavailable/profile.
+The table and workflow are implementation inputs, not installed owned support.
