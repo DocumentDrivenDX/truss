@@ -1,0 +1,31 @@
+{
+  "profile": "truss.preparation-bridge-definitions/0.1",
+  "postgresql": "18.6",
+  "pgserver-pg18": "18.6.1",
+  "psycopg": "3.3.6",
+  "umfClaimSource": "a8f73415aef8052e2dedeb3bc644426824675d14",
+  "weftSource": "c0c6449481a87eed38d3f7a6ebebc1f4ab4beeb4",
+  "nativeTests": {
+    "selectedBridge": {
+      "passed": 1,
+      "seconds": 5.798
+    },
+    "originalScramClaim": {
+      "passed": 1,
+      "seconds": 6.137
+    }
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_preparation_bridge_inventory.py": "89536c31777d0332f1b440b99ce548493ff93778756b94b0bb39d0f35dd4f1b0",
+    "packages/python/src/truss/_security_bootstrap/preparation-bridge-inventory.sql": "6c8c99ef7cc80fe70af9d6dfd6f6ab512a2bc366e8f3438b1a654206b586a4e8",
+    "packages/python/tests/test_preparation_bridge_inventory_native.py": "36a970e9eb82bda5ae6fceba97523c959774971c7cb56fd2cd87123f7cce990c",
+    "packages/python/tests/test_preparation_data_claim_native.py": "45fb925557dfa9ee4d3871618894082ba67aae42f80e66341e1e04f90ffed98b"
+  },
+  "inventorySha256": "a01c22d07fa2e5ccc27e1e79715eadefcb9040a1adf9b334ea4aa8b3f3a02c1d",
+  "authority": false,
+  "productionInstaller": false,
+  "ordinaryCoordinatorSdk": false,
+  "fullInstalledProfile": false,
+  "sharedRoleAndAllocatorStability": false,
+  "byteaOutputCorrespondence": "D hex, C escape; inventory pins hex"
+}

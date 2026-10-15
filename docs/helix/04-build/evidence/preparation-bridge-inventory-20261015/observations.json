@@ -1,0 +1,14 @@
+{
+  "ddlRefusals": [
+    "55P03",
+    "55P03",
+    "55P03"
+  ],
+  "queuedExplicitLockRefused": true,
+  "queuedRefusalSeconds": 0.00017733301501721144,
+  "originalSnapshotAndXidRetained": true,
+  "rolledBackCutRefused": true,
+  "uncommittedDdlExcludedD": true,
+  "ordinaryDirectCallRefused": true,
+  "authority": false
+}

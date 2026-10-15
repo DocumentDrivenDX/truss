@@ -26,6 +26,15 @@ _OWNER_SQL_SHA = 'b91e5df98c96edb3643da58a28b76b876d1ef53142529cd773e55d0b14f07c
 
 @unittest.skipIf(original.MutationCompiler is None, 'Requires original Weft mutation bridge')
 class PreparationDataClaimNativeTests(unittest.TestCase):
+    def prepare_component(self, admin, owner):
+        pass
+
+    def before_claim(self, admin, session, coordinator, anchor, nonce, params):
+        pass
+
+    def after_claim_commit(self, admin, session, coordinator, anchor, nonce, params):
+        pass
+
     def exercise(self, admin, unused_data, params, enrolled):
         from adopter_workflow import transaction, success
         owner = admin.execute('SELECT r.rolname FROM truss.catalog_runtime_installation i JOIN pg_catalog.pg_roles r ON r.oid=i.owner_oid WHERE i.singleton').fetchone()[0]
@@ -52,6 +61,7 @@ class PreparationDataClaimNativeTests(unittest.TestCase):
         admin.execute(sql.SQL('ALTER FUNCTION truss.engine_claim_probe(int4,uuid) OWNER TO {}').format(sql.Identifier(owner)))
         admin.execute('REVOKE ALL ON FUNCTION truss.engine_claim_probe(int4,uuid) FROM PUBLIC')
         admin.execute('GRANT EXECUTE ON FUNCTION truss.engine_claim_probe(int4,uuid) TO products_person')
+        self.prepare_component(admin, owner)
         password = secrets.token_urlsafe(32)
         admin.execute("SET password_encryption='scram-sha-256'")
         admin.execute(sql.SQL('ALTER ROLE products_person PASSWORD {}').format(sql.Literal(password)))
@@ -84,11 +94,14 @@ class PreparationDataClaimNativeTests(unittest.TestCase):
                     session.begin()
                     data = success(capture_preparation_claim_data(session))
                     self.assertEqual(data.data_pid, data_pid)
+                    self.before_claim(admin, session, coordinator, anchor, nonce, params)
                     with transaction(admin) as (assembly, tx):
+                        admin.execute("SET LOCAL lock_timeout='1ms'")
                         pending = success(issue_preparation_data_claim_in_transaction(assembly._host, tx, anchor_id=anchor, anchor_nonce=str(nonce), data=data))
                         with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
                             with coordinator.transaction():
                                 coordinator.execute('SELECT * FROM truss.engine_claim_probe(%s,%s)', (anchor, nonce))
+                    self.after_claim_commit(admin, session, coordinator, anchor, nonce, params)
                     row = coordinator.execute('SELECT * FROM truss.engine_claim_probe(%s,%s)', (anchor, nonce)).fetchone()
                     self.assertEqual((str(row[0]), row[1], row[2]), (pending.claim_id, data.data_pid, data.data_xid))
                     program_id = admin.execute('SELECT program_id FROM truss.preparation_program_registration WHERE program_identity=%s::uuid',
@@ -96,6 +109,7 @@ class PreparationDataClaimNativeTests(unittest.TestCase):
                     self.assertEqual(row[3], program_id)
                     self.assertFalse(pending.authority)
                     with transaction(admin) as (assembly, tx):
+                        admin.execute("SET LOCAL lock_timeout='1ms'")
                         retry = success(issue_preparation_data_claim_in_transaction(assembly._host, tx, anchor_id=anchor, anchor_nonce=str(nonce), data=data))
                         self.assertEqual(retry, pending)
                     acknowledged, error = session.complete(commit=False, committed=object(), rolled_back=object())
