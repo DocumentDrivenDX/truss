@@ -10,8 +10,20 @@ use this component for its planned images and persistence.
 Inputs and stored values are bounded to 1 MiB; the complete result is bounded to
 4 MiB. The function is security-invoker and revoked from PUBLIC.
 
-The single basic PostgreSQL 18 test covers exact create/update values, an invalid
-required-field removal and unchanged graph/journal/key/receipt row counts:
+`forest.sql` derives immediate parents and aggregate roots for every node in a
+complete simulated forest, including isolated roots and parallel owned edges.
+Its local node/edge ordinals support existing objects and pending aliases without
+allocating native IDs. The eventual executor must retain the separate exact
+identity/alias map, prove complete scoped closure and admit catalog lifecycle,
+permissions and effects. This helper provides none of those guarantees. Invoke it
+only at states requiring forest validity; it does not change the deferred timing
+of final group validation. It permits 128 nodes and 1,024 edges and refuses cycles
+or multiple distinct parents. It is uninstalled, security-invoker and revoked
+from PUBLIC.
+
+Two basic PostgreSQL 18 tests cover exact create/update values, an invalid
+required-field removal, unchanged graph/journal/key/receipt row counts, and a
+subtree move with parallel edges followed by a cycle refusal:
 
 ```sh
 PYTHONPATH=packages/python/src:packages/python/tests python -m unittest discover -s packages/postgresql/owned-groups -p test_values.py -v

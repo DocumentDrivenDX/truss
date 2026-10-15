@@ -1,4 +1,4 @@
-"""Basic ordered value simulation on a publicly accepted numeric catalog."""
+"""Basic value and forest simulation on a publicly accepted numeric catalog."""
 import json
 from pathlib import Path
 import psycopg
@@ -35,3 +35,27 @@ class OwnedValueSimulationTests(numeric.NumericFacetTests):
             simulate({'operation':'update_object','set':[],'unset':['quantity']},second)
         self.assertEqual(refused.exception.sqlstate,'22023')
         self.assertEqual(inventory(),original)
+
+    def test_complete_subtree_roots_with_pending_local_references(self):
+        connection,host,assembly,tx=self.ready(self.fields)
+        host.detach();connection.rollback()
+        self.admin.execute(Path(__file__).with_name('forest.sql').read_text())
+        def project(edges):
+            return self.admin.execute('SELECT truss.owned_forest_projection(4,%s::jsonb)',
+                                     (json.dumps(edges),)).fetchone()[0]
+        # Local nodes: A, child, grandchild, B. No database IDs are allocated.
+        original=[{'edge':9,'source':1,'target':2},
+                  {'edge':4,'source':0,'target':1},
+                  {'edge':3,'source':0,'target':1}]
+        first=project(original)
+        self.assertEqual([n['root'] for n in first],[None,0,0,None])
+        self.assertEqual(first[1]['incomingEdges'],[3,4])
+        moved=[dict(e,source=3) if e['target']==1 else e for e in original]
+        second=project(moved)
+        self.assertEqual([n['root'] for n in second],[None,3,3,None])
+        self.assertEqual([n['parent'] for n in second],[None,3,1,None])
+        self.assertEqual(second[1]['incomingEdges'],first[1]['incomingEdges'])
+        self.assertEqual(first[2]['root'],0)
+        with self.assertRaises(psycopg.Error) as refused:
+            project(moved+[{'edge':10,'source':2,'target':3}])
+        self.assertEqual(refused.exception.sqlstate,'22023')

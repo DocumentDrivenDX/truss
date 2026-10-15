@@ -26,9 +26,10 @@ connected by owned-lifecycle edges; identity-free Records remain structured
 property values, a separate unfinished feature.
 
 Current providers refuse owned objects, ownership changes and owned edges.
-`ScalarObject` also omits ownership. Native storage already has the root pair,
-but ordinary transitions permit only one object per operation. These are real
-implementation gaps; accepting the Python carrier alone does not close them.
+`ScalarObject.ownership` now reports the rootless selection guaranteed by its
+current read profile. Native65 adds multi-object transition storage. Neither
+change enables owned execution; accepting the Python carrier alone does not close
+that gap.
 
 ## Implementation order
 
@@ -131,3 +132,15 @@ may permit deletion, but a later removal cannot retroactively rescue it, nor can
 a later operation restore an already-deleted child by referring to its old alias.
 Astra Ultra reviewed these implementation constraints; they are not installed
 ownership support.
+
+## Value and forest implementation checkpoint — 2026-10-15
+
+Uninstalled native components in `packages/postgresql/owned-groups/` now derive
+exact value images and complete valid-forest roots for the future group executor.
+Local ordinals represent existing identities and pending aliases without ID
+allocation. The executor must retain their exact correspondence, discover and
+authorize the complete affected closure, preserve ordered operation semantics
+and invoke final forest validation at the agreed deferred point. Two basic
+PostgreSQL18 tests pass (11.042s): exact numeric values/requiredness/no graph
+effects and subtree reparenting with parallel edges/cycle refusal. These
+components do not install a public owned-object provider.
