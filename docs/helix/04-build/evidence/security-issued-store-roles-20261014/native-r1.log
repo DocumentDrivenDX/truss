@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_original_registry_ticket_and_complete_native_role_mapping (test_action_role_installation_native.ActionRoleInstallationNativeTests.test_original_registry_ticket_and_complete_native_role_mapping)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-security-main-integration/packages/python/tests/test_action_role_installation_native.py", line 96, in test_original_registry_ticket_and_complete_native_role_mapping
+    self.assertIsInstance(installed, Ok, str(host._custody.last_attempt.error))
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='55000', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : selected epoch cut excludes routine DDL
+CONTEXT:  PL/pgSQL function truss.runtime_fence_routine_ddl_writer() line 18 at RAISE
+
+----------------------------------------------------------------------
+Ran 1 test in 57.316s
+
+FAILED (failures=1)

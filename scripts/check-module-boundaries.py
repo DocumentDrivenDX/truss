@@ -13,8 +13,8 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
-    '_action_authority_observation': {'dataclasses','truss.bulk_action_gateway','truss._action_identity_codec','truss._security_preparation_authority','truss._security_catalog_subject_installation'},
-    '_action_role_installation': {'dataclasses','psycopg','truss.bulk_action_gateway','truss._action_identity_codec','truss.psycopg_host','truss.execution','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation'},
+    '_action_authority_observation': {'truss._action_store','dataclasses','truss.bulk_action_gateway','truss._action_identity_codec','truss._security_preparation_authority','truss._security_catalog_subject_installation'},
+    '_action_role_installation': {'truss._action_store','dataclasses','psycopg','truss.bulk_action_gateway','truss._action_identity_codec','truss.psycopg_host','truss.execution','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation'},
     'bulk_action_gateway': {'dataclasses','hashlib','inspect','threading','truss.weft','truss._bulk_set_values','truss._action_identity_codec'},
     '_bulk_set_values': {'decimal','re'},
     '_action_store': {'dataclasses','hashlib','importlib.resources','json','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._preparation_source_epoch','truss._action_identity_codec','truss._security_catalog_subject_installation'},

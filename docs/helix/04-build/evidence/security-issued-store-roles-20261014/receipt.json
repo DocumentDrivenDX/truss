@@ -1,0 +1,40 @@
+{
+  "status": "issued-store-role-component-integration-passed",
+  "postgresql": "18.6",
+  "tests": 1,
+  "seconds": 34.523,
+  "exitCode": 0,
+  "sourceHashes": {
+    "packages/python/src/truss/_action_role_installation.py": "b6e6a650372bf3eb4a816aba0538fe973dc2b236f2f97a2362c0826e82d79562",
+    "packages/python/src/truss/_action_authority_observation.py": "73167e1fbfe3cfa63bbb6ce84c2dd70034186edabc15f6b12478b2868d09f8d0",
+    "packages/python/src/truss/_action_store.py": "efbfd91bf3af1bbe08551024e267f88f2801d0d9721dedf8158e2a25035db9a2",
+    "packages/python/tests/test_action_role_installation_native.py": "1d6c7ebe0062817761fe95c3bcfe3b2a29676c43e726b9786b0317943bca147a",
+    "scripts/check-module-boundaries.py": "e09e52e5224767656ad51aef8ff8d0c0759342f1722a418b2951a4be8fcb564e"
+  },
+  "logs": {
+    "native-r1.log": "b77f57afd99b13cafc802b038dd04e96c1238e8af967cd60d51617a4c102cd8a",
+    "native-r2.log": "a29e392723ad1de700354c540ac915932619695faa6a17627d088e3515c12a0b"
+  },
+  "scope": [
+    "Genuine original accepted catalog, metadata source epoch, shared store issuance and independent committed observation; no seeded epoch or diagnostic store bytes.",
+    "Role enrollment requires original committed context; raw bytes, pending and fenced contexts refuse.",
+    "Forged store identity, tenant, guard epoch or original receipt refuses before creating role mapping home.",
+    "Initial trusted quiescent administrative enrollment holds immutable store home and compares native receipt/identity/physical installation/committed issuer. It deliberately does not acquire the operational source cut before DDL.",
+    "Fresh diagnostic RC role observation uses normal issued-store verification/source cuts before mapping and role catalogs; full exact role map and action revision still required.",
+    "Original two-role OR, native module-writer versus action-role distinction, nonhuman service, blocked revocation/mapping UPDATE, stale RR permission versus fresh RC revocation and data-held mapping cuts replayed."
+  ],
+  "history": [
+    "r1 failed because operational store verification held a source epoch SHARE cut that correctly excludes subsequent routine DDL. Fence retained; initial enrollment now uses separate immutable issued-row comparison under administrative quiescence.",
+    "r2 matches final source; passing native component integration."
+  ],
+  "moduleBoundaries": {
+    "passed": true,
+    "imports": 1201
+  },
+  "limits": [
+    "No authenticated SCRAM/human/current-source/native permit composition is admitted. Diagnostic observation remains security_ready=false.",
+    "Enrollment is initial trusted quiescent administrative production only; no concurrent arbitrary administrative mutation/migration, full source closure or mapping lifecycle qualification.",
+    "Binding store identity does not make guard epoch a replay namespace and does not authenticate any caller.",
+    "No original anchor, protected selection, finalizer or backend acceptance case promotion."
+  ]
+}

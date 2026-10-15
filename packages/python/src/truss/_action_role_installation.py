@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from psycopg import sql
 from .bulk_action_gateway import ActionRegistration
 from ._action_identity_codec import encode_action_role
+from ._action_store import ActionStoreObservation
 from .psycopg_host import PsycopgHost
 from .execution import Error, ExecutionFailure
 from .catalog_runtime import _pin_cursor
@@ -25,13 +26,15 @@ class PendingActionRoles:
     security_ready: bool = False
 
 
-def bootstrap_action_roles_in_transaction(host, transaction, *, registration, entries, store_identity):
+def bootstrap_action_roles_in_transaction(host, transaction, *, registration, entries, store_context):
     """One fresh complete enrollment; existing home requires explicit migration."""
     try:
         if (type(host) is not PsycopgHost or type(registration) is not ActionRegistration
                 or type(entries) is not tuple or not 1 <= len(entries) <= 64
-                or type(store_identity) is not bytes or not 1 <= len(store_identity) <= 4096):
+                or type(store_context) is not ActionStoreObservation
+                or store_context.authority is not False or not store_context.binding_matches):
             raise ValueError('Original registry and bounded entries required')
+        store_identity = store_context.store_identity
         selected = []
         for entry in entries:
             if type(entry) is not tuple or len(entry) != 2:
@@ -68,6 +71,31 @@ def bootstrap_action_roles_in_transaction(host, transaction, *, registration, en
         owners = _text_rows(cursor, 'SELECT rolname::text,rolcanlogin::text,rolsuper::text,rolcreaterole::text,rolcreatedb::text,rolreplication::text,rolbypassrls::text FROM pg_catalog.pg_roles WHERE oid=%s::oid', (owner,), 1)
         if len(owners) != 1 or owners[0][1:] != ('false',)*6:
             raise ValueError('Original excluded action role owner required')
+        # Initial administrative DDL cannot consume the operational source cut:
+        # its routine-DDL fence intentionally refuses later DDL in that tx.
+        # Under the required trusted quiescent install, hold the immutable store
+        # home and compare the actual committed issuance instead. This does not
+        # admit current source or authority; operational observations use the
+        # separate normal store verifier and its source cuts.
+        cursor.execute('LOCK TABLE ONLY truss.action_store_registration IN SHARE MODE NOWAIT', prepare=False)
+        issued = _text_rows(cursor, """SELECT pg_catalog.encode(r.initial_receipt_bytes,'hex'),
+            pg_catalog.encode(r.store_identity,'hex'),pg_catalog.encode(r.tenant_identity,'hex'),
+            pg_catalog.encode(r.epoch_identity,'hex'),r.installation_id::text
+            FROM ONLY truss.action_store_registration r
+            JOIN truss.catalog_runtime_installation i ON i.installation_id=r.installation_id AND i.singleton
+            WHERE r.singleton AND r.registration_key=%s
+            AND r.database_oid=(SELECT oid FROM pg_catalog.pg_database WHERE datname=pg_catalog.current_database())
+            AND r.schema_oid=(SELECT oid FROM pg_catalog.pg_namespace WHERE nspname='truss')
+            AND r.postmaster_started_at=pg_catalog.pg_postmaster_start_time()
+            AND r.runtime_release_id=i.release_id AND r.runtime_release_sha256=pg_catalog.decode(i.release_sha256,'hex')
+            AND r.initial_receipt_bytes=truss.action_store_original_receipt(r)
+            AND pg_catalog.pg_xact_status(r.issuer_xid)='committed'
+            FOR SHARE OF r NOWAIT""", (store_context.registration_key,), 1)
+        if issued != [(store_context.receipt_bytes.hex(),store_identity.hex(),store_context.tenant_identity.hex(),
+                       store_context.epoch_identity.hex(),store_context.installation_id)]:
+            raise ValueError('Original committed issued store enrollment required')
+        if store_context.installation_id != identity:
+            raise ValueError('Original issued store installation required')
         rows = []
         for policy, mappings in selected:
             for role, native in mappings:

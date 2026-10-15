@@ -1,5 +1,6 @@
 """Original owner ticket→private native role enrollment, not permission."""
 import json
+from dataclasses import replace
 import hashlib
 from pathlib import Path
 import subprocess
@@ -7,6 +8,9 @@ import psycopg
 import test_group_create_native as base
 from truss import Ok, Error, adopt_psycopg_host
 from truss.bulk_action_gateway import ActionRegistration
+from truss._preparation_source_epoch import bootstrap_preparation_source_marker_in_transaction, issue_initial_preparation_source_epoch_in_transaction
+from truss._security_source_epoch_installation import bootstrap_source_epoch_infrastructure_in_transaction
+from truss._action_store import register_action_store_in_transaction, observe_action_store_in_transaction, verify_action_store_context_with_cursor
 from truss._action_role_installation import bootstrap_action_roles_in_transaction
 from truss._action_subject_installation import bootstrap_action_subjects_in_transaction
 from truss._security_preparation_authority import capture_preparation_data_with_cursor
@@ -20,6 +24,21 @@ class ActionRoleInstallationNativeTests(base.PublicCreateGroupTests):
     def test_original_registry_ticket_and_complete_native_role_mapping(self):
         data, old_host, assembly, old_tx = self.ready(document_ids=('adoc',))
         old_host.detach(); data.commit()
+        self.admin.execute('BEGIN')
+        host = adopt_psycopg_host(self.admin); tx = host.adopt_transaction().value
+        def checked(result):
+            self.assertIsInstance(result, Ok, str(host._custody.last_attempt.error))
+            return result.value
+        marker = checked(bootstrap_preparation_source_marker_in_transaction(host,tx))
+        infrastructure = checked(bootstrap_source_epoch_infrastructure_in_transaction(host,tx,installation_identity=marker.installation_id.encode()))
+        checked(issue_initial_preparation_source_epoch_in_transaction(host,tx,marker=marker,infrastructure=infrastructure))
+        pending = checked(register_action_store_in_transaction(host,tx,tenant='action-role-native',registration_key=b'original-role-store',executor_roles=('consumer',)))
+        host.detach(); self.admin.commit()
+        self.admin.execute('BEGIN')
+        host = adopt_psycopg_host(self.admin); tx = host.adopt_transaction().value
+        store = checked(observe_action_store_in_transaction(host,tx,registration_key=b'original-role-store'))
+        self.assertFalse(store.authority)
+        host.detach(); self.admin.commit()
         fixture = json.loads(Path('/Users/erik/Projects/weft/tests/mutation/fixtures/postgres-owner-plan.json').read_text())
         request = fixture['request']
         # Original owner admits a two-role OR variant; only the second role
@@ -43,20 +62,40 @@ class ActionRoleInstallationNativeTests(base.PublicCreateGroupTests):
         model_bytes = json.dumps(request['model']).encode()
         action_bytes = json.dumps(request['action']).encode()
         ticket = registry.register(model_bytes,action_bytes,original_owner(model_bytes,action_bytes))
+        # Raw configuration, a pending registration and fenced observations do
+        # not identify an original committed current store.
+        self.admin.execute('BEGIN')
+        host = adopt_psycopg_host(self.admin); tx = host.adopt_transaction().value
+        for invalid_store in (b'original-store-config',pending,replace(store,binding_correspondence='fenced')):
+            refused = bootstrap_action_roles_in_transaction(host,tx,registration=registry,
+                entries=((ticket,(('bulk-editor','group_reader'),('reviewer','action_reviewer'))),),store_context=invalid_store)
+            self.assertIsInstance(refused,Error)
+        host.detach(); self.admin.rollback()
+        # Dataclass construction is not issuance: every changed original native
+        # component must fail before the enrollment home is created.
+        for forged in (replace(store,store_identity=b'forged-store'),replace(store,tenant_identity=b'forged-tenant'),
+                       replace(store,epoch_identity=b'forged-epoch'),replace(store,receipt_bytes=store.receipt_bytes+b' ')):
+            self.admin.execute('BEGIN')
+            host = adopt_psycopg_host(self.admin); tx = host.adopt_transaction().value
+            refused = bootstrap_action_roles_in_transaction(host,tx,registration=registry,
+                entries=((ticket,(('bulk-editor','group_reader'),('reviewer','action_reviewer'))),),store_context=forged)
+            self.assertIsInstance(refused,Error)
+            host.detach(); self.admin.rollback()
+            self.assertEqual(self.admin.execute("SELECT pg_catalog.to_regclass('truss.action_role_binding')").fetchone(),(None,))
         self.admin.execute('BEGIN')
         host = adopt_psycopg_host(self.admin); tx = host.adopt_transaction().value
         for invalid in ((), (('not-declared','group_reader'),), (('bulk-editor','consumer'),('reviewer','action_reviewer'))):
-            refused = bootstrap_action_roles_in_transaction(host,tx,registration=registry,entries=((ticket,invalid),),store_identity=b'original-store-config')
+            refused = bootstrap_action_roles_in_transaction(host,tx,registration=registry,entries=((ticket,invalid),),store_context=store)
             self.assertIsInstance(refused, Error)
         # The native LOGIN rejection is a guarded operation failure; reconcile
         # the original installer transaction rather than reusing its handle.
         host.detach(); self.admin.rollback()
         self.admin.execute('BEGIN')
         host = adopt_psycopg_host(self.admin); tx = host.adopt_transaction().value
-        installed = bootstrap_action_roles_in_transaction(host,tx,registration=registry,entries=((ticket,(('bulk-editor','group_reader'),('reviewer','action_reviewer'))),),store_identity=b'original-store-config')
+        installed = bootstrap_action_roles_in_transaction(host,tx,registration=registry,entries=((ticket,(('bulk-editor','group_reader'),('reviewer','action_reviewer'))),),store_context=store)
         self.assertIsInstance(installed, Ok, str(host._custody.last_attempt.error))
         self.assertFalse(installed.value.security_ready)
-        self.assertEqual(installed.value.store_identity,b'original-store-config')
+        self.assertEqual(installed.value.store_identity,store.store_identity)
         subject = bootstrap_action_subjects_in_transaction(host,tx,bindings=(('consumer',b'original-human','human'),),with_action_roles=True)
         self.assertIsInstance(subject, Ok, str(host._custody.last_attempt.error))
         self.assertTrue(subject.value.mapping_cut)
@@ -71,11 +110,13 @@ class ActionRoleInstallationNativeTests(base.PublicCreateGroupTests):
             original = capture_preparation_data_with_cursor(cursor)
         def observe():
             self.admin.execute('BEGIN')
+            with self.admin.cursor() as cursor:
+                verify_action_store_context_with_cursor(cursor,store)
             self.admin.execute('LOCK TABLE ONLY truss.action_subject_binding,truss.action_role_binding IN SHARE MODE NOWAIT')
             self.admin.execute('LOCK TABLE pg_catalog.pg_authid,pg_catalog.pg_auth_members IN SHARE MODE NOWAIT')
             with self.admin.cursor() as cursor:
                 return observe_current_action_authority_with_cursor(cursor,original=original,
-                    registration=registry,ticket=ticket,store_identity=b'original-store-config')
+                    registration=registry,ticket=ticket,store_context=store)
         denied = observe()
         self.assertTrue(denied.human_enrolled)
         self.assertFalse(denied.role_match)  # Module writer is not bulk-editor.

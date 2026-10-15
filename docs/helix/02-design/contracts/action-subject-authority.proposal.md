@@ -103,9 +103,13 @@ remain required before any action or preparation admission claim.
 the original `ActionRegistration` ticket's retained family/known role obligations,
 requires a complete explicit mapping to ordinary NOLOGIN native roles, and stores
 the original revision pin separately. Store identity bytes are retained separately
-from installation and family; their original protected store correspondence must
-still be admitted before use. The native test uses diagnostic store configuration
-bytes and does not establish an original live store issuer.
+from installation and family. The historical enrollment evidence below used
+explicit diagnostic configuration only. The current private enrollment API
+requires an original committed `ActionStoreObservation`; it compares the held
+immutable native store row, receipt, exact identity fields, installation and
+committed issuer before creating role mappings. Raw configuration bytes and
+pending/fenced or forged contexts refuse. Current diagnostic role observation
+uses the normal RC native store verifier and its operational source cuts.
 
 The private fresh producer checks complete full-byte family/role uniqueness.
 A surrogate native key and **nonunique** digest routing avoid oversized B-tree
@@ -118,3 +122,16 @@ refuse; enrollment itself never evaluates current membership or grants access.
 [Native role/enrollment evidence](../../04-build/evidence/security-action-role-installation-20261014/receipt.json)
 also retains Astra's addressed pre-pin type-shadowing and missing schema-USAGE
 findings, with actual hostile-domain/path-restoration and fresh-service controls.
+
+
+[Issued-store integration evidence](../../04-build/evidence/security-issued-store-roles-20261014/receipt.json)
+replays the actual original source/store producer and complete role-observation
+schedule. Initial role DDL remains a trusted quiescent administrative operation:
+it cannot hold an operational source epoch SHARE cut that correctly forbids
+routine DDL. It therefore uses separate immutable committed-store comparison;
+this is not current-source or authority admission. The initial failed composition
+and its repair are retained. All observation outputs remain
+`security_ready=false`; authenticated human, native guard/anchor, full source
+closure and protected selector/finalizer obligations remain open. Guard epochs
+remain separate from replay identity. No historical Astra approval is extended
+to this new integration and no backend acceptance case is promoted.

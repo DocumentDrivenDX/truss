@@ -7,6 +7,7 @@ there is no enrolled production SECURITY DEFINER admission surface here.
 from dataclasses import dataclass
 from .bulk_action_gateway import ActionRegistration
 from ._action_identity_codec import encode_action_role
+from ._action_store import ActionStoreObservation, verify_action_store_context_with_cursor
 from ._security_preparation_authority import _native_path, verify_preparation_peer_with_cursor
 from ._security_catalog_subject_installation import _text_rows, verify_held_registered_role_catalog_cut_with_cursor
 
@@ -20,13 +21,15 @@ class ActionAuthorityObservation:
     security_ready: bool = False
 
 
-def observe_current_action_authority_with_cursor(cursor, *, original, registration, ticket, store_identity):
+def observe_current_action_authority_with_cursor(cursor, *, original, registration, ticket, store_context):
     """Requires both original mapping SHARE cuts before native role cuts."""
-    if (type(registration) is not ActionRegistration or type(store_identity) is not bytes
-            or not 1 <= len(store_identity) <= 4096):
+    if (type(registration) is not ActionRegistration or type(store_context) is not ActionStoreObservation
+            or store_context.authority is not False or not store_context.binding_matches):
         raise ValueError('Original action registry/store comparison required')
     policy = registration.family_policy(ticket)
     _native_path(cursor)
+    verify_action_store_context_with_cursor(cursor, store_context)
+    store_identity = store_context.store_identity
     verify_preparation_peer_with_cursor(cursor, original)
     verify_held_registered_role_catalog_cut_with_cursor(cursor)
     held = _text_rows(cursor, """SELECT c.relname::text FROM pg_catalog.pg_class c
