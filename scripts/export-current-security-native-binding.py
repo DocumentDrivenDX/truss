@@ -6,6 +6,7 @@ A typed admission refusal is retained as such, without fabricating a binding.
 import argparse
 from dataclasses import asdict
 from hashlib import sha256
+from importlib.resources import files
 import json
 from pathlib import Path
 import sys
@@ -59,6 +60,8 @@ def run(source_path,scenarios_path,output,bun='bun'):
     for name,raw in (('original-source.json',original),('original-read-scenarios.json',scenario_bytes),('original-core.json',content)):
         (output/name).write_bytes(raw)
     manifest,digest,_=_release()
+    manifest_bytes=files('truss').joinpath('_catalog_runtime/manifest.json').read_bytes()
+    if sha256(manifest_bytes).hexdigest()!=digest:raise ValueError('Original runtime manifest bytes required')
     report={'status':'pending','authority':False,'securityReady':False,'sourceSha256':_SOURCE,'scenariosSha256':_SCENARIOS,
         'coreExtraction':{'pointer':'/closure/documents/0/document','serialization':'UTF-8 compact JSON; original object/list order and values retained; exact original envelope archived',
                           'logicalRevision':logical_revision,'contentSha256':content_sha},
@@ -130,10 +133,12 @@ def run(source_path,scenarios_path,output,bun='bun'):
                 bundle=json.loads(bundle_bytes);binding=bundle['bindingJson'].encode('utf8')
                 if json.loads(binding)!=bundle['binding'] or bundle['binding']['releaseId']!=manifest['releaseId'] or bundle['binding']['releaseSha256']!=digest:
                     raise ValueError('Exact actual native binding required')
+                if any(field['identity']['element']=='clear' for record in bundle['binding']['records'] for field in record['fields']):
+                    raise ValueError('Declaration-only clear must have no storage property')
                 report.update(status='exported',actorOid=bundle['actorOid'],catalogRevision=accepted_source.catalog_revision,
                     revisionCorrespondence={'originalLogicalRevision':logical_revision,'acceptedDocumentRevision':accepted_source.document_revision,'acceptedContentSha256':accepted_source.sha256,'artifactIdentity':accepted_source.artifact_identity})
                 for name,raw in (('accepted-document.json',accepted_source.content),('native-query-bundle.json',bundle_bytes),('native-binding.json',binding),
-                    ('native-runtime-manifest.json',_bytes(manifest)),('seed-readbacks.json',_bytes(readbacks)),('original-owner-storage.json',_bytes(source['owner']))):
+                    ('native-runtime-manifest.json',manifest_bytes),('seed-readbacks.json',_bytes(readbacks)),('original-owner-storage.json',_bytes(source['owner']))):
                     (output/name).write_bytes(raw)
     return finish()
 

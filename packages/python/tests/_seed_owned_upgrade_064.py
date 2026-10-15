@@ -11,7 +11,7 @@ assert Path(truss.__file__).resolve().is_relative_to(Path(os.environ['TRUSS_OWNE
 f=EdgeMutationTests('test_link_retarget_unlink_and_original_retry')
 f.info=SimpleNamespace(connection_uri=sys.argv[1]);f.setUp()
 c,h,a,t,first,second,pin=f.initialized()
-assert f.installation.release_id=='truss-catalog-runtime/0.64-candidate'
+assert f.installation.release_id==os.environ.get('TRUSS_OWNED_UPGRADE_SOURCE_RELEASE','truss-catalog-runtime/0.64-candidate')
 edge=f.link(pin,StoredObjectReference(identity=first),StoredObjectReference(identity=second))
 update=UpdateObject(target=StoredObjectReference(identity=first),set=(AuthoredValue(name='value',value=TextValue(kind='string',text='before-upgrade')),),unset=())
 result,input,request=f.run_group(a,t,(edge,update),'pre-owned-transitions')

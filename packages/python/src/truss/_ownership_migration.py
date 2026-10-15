@@ -63,3 +63,26 @@ def upgrade_transition_storage(cursor, generated_sql: str, owner_oid: int):
     cursor.execute('SELECT EXISTS(SELECT 1 FROM truss.runtime_edge_transition WHERE endpoint_ownership IS NOT NULL)', prepare=False)
     if cursor.fetchone() != (False,):
         raise ValueError('Legacy contexts must remain absent rather than backfilled')
+
+
+def verify_transition_storage(cursor, owner_oid: int):
+    """Verify the already-installed target without rewriting original contexts."""
+    cursor.execute('LOCK TABLE truss.runtime_object_transition, truss.runtime_edge_transition IN ACCESS EXCLUSIVE MODE NOWAIT', prepare=False)
+    for table, columns in _COLUMNS.items():
+        cursor.execute('SELECT relowner FROM pg_class WHERE oid=%s::regclass', ('truss.'+table,), prepare=False)
+        if cursor.fetchone() != (owner_oid,):
+            raise ValueError('Original protected transition owner required')
+        cursor.execute('SELECT attname FROM pg_attribute WHERE attrelid=%s::regclass AND attnum>0 AND NOT attisdropped ORDER BY attnum', ('truss.'+table,), prepare=False)
+        expected=columns+(('endpoint_ownership',) if table=='runtime_edge_transition' else ())
+        if tuple(row[0] for row in cursor.fetchall()) != expected:
+            raise ValueError('Complete target transition column inventory required')
+        cursor.execute("""SELECT c.condeferrable,c.condeferred,c.convalidated,
+            ARRAY(SELECT a.attname::text FROM unnest(c.conkey) WITH ORDINALITY k(n,ord)
+                JOIN pg_attribute a ON a.attrelid=c.conrelid AND a.attnum=k.n ORDER BY k.ord)
+            FROM pg_constraint c WHERE c.conrelid=%s::regclass AND c.contype='u'""", ('truss.'+table,), prepare=False)
+        if cursor.fetchall() != [(False,False,True,list(_KEYS[table]))]:
+            raise ValueError('Exact immediate multi-entity transition constraint required')
+    cursor.execute("""SELECT format_type(atttypid,atttypmod),attnotnull,atthasdef FROM pg_attribute
+        WHERE attrelid='truss.runtime_edge_transition'::regclass AND attname='endpoint_ownership' AND NOT attisdropped""", prepare=False)
+    if cursor.fetchone() != ('jsonb',False,False):
+        raise ValueError('Nullable original endpoint context without synthetic default required')

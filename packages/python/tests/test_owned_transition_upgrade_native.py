@@ -6,7 +6,7 @@ from truss import LocalPostgres,Ok,CatalogRuntimeConfiguration,adopt_psycopg_hos
 from truss.contracts import TextValue,MapValue
 from truss.groups import AuthoredValue,UpdateObject,Delete,CreateEdge,NullOrderKey,StoredObjectReference,GroupSuccess,CommittedReceiptReplay
 
-@unittest.skipUnless(os.environ.get('TRUSS_OWNED_UPGRADE_SOURCE_PACKAGE'),'Published native64 predecessor required')
+@unittest.skipUnless(os.environ.get('TRUSS_OWNED_UPGRADE_SOURCE_PACKAGE'),'Retained predecessor package required')
 class OwnedTransitionUpgradeTests(unittest.TestCase):
     def test_preserve_transitions_and_receipt_then_continue(self):
         with tempfile.TemporaryDirectory(prefix='truss-owned-upgrade-') as directory:
@@ -23,12 +23,16 @@ class OwnedTransitionUpgradeTests(unittest.TestCase):
                     assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value;tx=host.adopt_transaction().value
                     upgraded=assembly.upgrade_in_transaction(tx)
                     self.assertIsInstance(upgraded,Ok,repr(upgraded)+' '+str(host._custody.last_attempt.error))
-                    self.assertEqual(upgraded.value.previous_release_id,'truss-catalog-runtime/0.64-candidate')
-                    self.assertEqual(upgraded.value.release_id,'truss-catalog-runtime/0.65-candidate')
+                    self.assertEqual(upgraded.value.previous_release_id,os.environ.get('TRUSS_OWNED_UPGRADE_SOURCE_RELEASE','truss-catalog-runtime/0.64-candidate'))
+                    from truss.catalog_runtime import _release
+                    self.assertEqual(upgraded.value.release_id,_release()[0]['releaseId'])
                     self.assertEqual(upgraded.value.outcome,'upgraded');host.detach();admin.commit()
                     self.assertEqual(admin.execute('SELECT to_jsonb(t)::text FROM truss.runtime_object_transition t ORDER BY transition_id').fetchall(),objects)
-                    self.assertEqual(admin.execute("SELECT (to_jsonb(t)-'endpoint_ownership')::text FROM truss.runtime_edge_transition t ORDER BY transition_id").fetchall(),edges)
-                    self.assertEqual(admin.execute('SELECT endpoint_ownership FROM truss.runtime_edge_transition').fetchall(),[(None,)])
+                    if upgraded.value.previous_release_id=='truss-catalog-runtime/0.64-candidate':
+                        self.assertEqual(admin.execute("SELECT (to_jsonb(t)-'endpoint_ownership')::text FROM truss.runtime_edge_transition t ORDER BY transition_id").fetchall(),edges)
+                        self.assertEqual(admin.execute('SELECT endpoint_ownership FROM truss.runtime_edge_transition').fetchall(),[(None,)])
+                    else:
+                        self.assertEqual(admin.execute('SELECT to_jsonb(t)::text FROM truss.runtime_edge_transition t ORDER BY transition_id').fetchall(),edges)
                 params=psycopg.conninfo.conninfo_to_dict(runtime.info.connection_uri);params['user']='consumer'
                 with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as connection:
                     connection.execute('BEGIN');host=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000)
@@ -48,7 +52,8 @@ class OwnedTransitionUpgradeTests(unittest.TestCase):
                     self.assertIsInstance(changed,Ok,repr(changed)+str(host._custody.last_attempt.error));self.assertIsInstance(changed.value,GroupSuccess,repr(changed));host.detach();connection.commit()
                 with psycopg.connect(runtime.info.connection_uri,autocommit=True) as admin:
                     contexts=admin.execute('SELECT endpoint_ownership::text FROM truss.runtime_edge_transition WHERE endpoint_ownership IS NOT NULL ORDER BY transition_id').fetchall()
-                    self.assertEqual(len(contexts),2)
+                    self.assertEqual(len(contexts),2 if upgraded.value.previous_release_id=='truss-catalog-runtime/0.64-candidate' else 3)
+                    contexts=contexts[-2:]
                     import json
                     first,second=(json.loads(row[0]) for row in contexts)
                     self.assertEqual(first['before']['source']['ownership'],{'state':'rootless'})
