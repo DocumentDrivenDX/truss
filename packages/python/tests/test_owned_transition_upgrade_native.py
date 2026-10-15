@@ -4,7 +4,7 @@ from pathlib import Path
 import psycopg
 from truss import LocalPostgres,Ok,CatalogRuntimeConfiguration,adopt_psycopg_host,create_reference_assembly,EdgeFound,ObjectFound
 from truss.contracts import TextValue,MapValue
-from truss.groups import AuthoredValue,UpdateObject,Delete,CreateEdge,NullOrderKey,StoredObjectReference,GroupSuccess,CommittedReceiptReplay
+from truss.groups import AuthoredValue,UpdateObject,Delete,CreateEdge,CreateObject,RootlessOwnership,AliasObjectReference,NullOrderKey,StoredObjectReference,GroupSuccess,CommittedReceiptReplay
 
 @unittest.skipUnless(os.environ.get('TRUSS_OWNED_UPGRADE_SOURCE_PACKAGE'),'Retained predecessor package required')
 class OwnedTransitionUpgradeTests(unittest.TestCase):
@@ -49,7 +49,20 @@ class OwnedTransitionUpgradeTests(unittest.TestCase):
                     unchanged=Delete(operation='delete_edge',target=StoredObjectReference(identity=edge.edge.identity))
                     parallel=CreateEdge(relationship_definition_pin=edge.edge.identity.definition_pin,source=StoredObjectReference(identity=edge.edge.source),target=StoredObjectReference(identity=edge.edge.target),values=(),order_key=NullOrderKey())
                     changed=assembly.apply_in_transaction(tx,context.input((update,unchanged,parallel),MapValue(entries=())),context.request('post-upgrade'),documents=documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
-                    self.assertIsInstance(changed,Ok,repr(changed)+str(host._custody.last_attempt.error));self.assertIsInstance(changed.value,GroupSuccess,repr(changed));host.detach();connection.commit()
+                    self.assertIsInstance(changed,Ok,repr(changed)+str(host._custody.last_attempt.error));self.assertIsInstance(changed.value,GroupSuccess,repr(changed))
+                    # New creation and deletion use the upgraded provider in one group.
+                    created=CreateObject(type_definition_pin=found.value.object.identity.definition_pin,
+                        values=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='new-after-upgrade')),
+                                AuthoredValue(name='A-value',value=TextValue(kind='string',text='new-after-upgrade'))),
+                        ownership=RootlessOwnership(),alias='new-after-upgrade')
+                    removed=Delete(operation='delete_object',target=AliasObjectReference(alias='new-after-upgrade'),expected_version='1')
+                    continued=assembly.apply_in_transaction(tx,context.input((created,removed),MapValue(entries=())),
+                        context.request('post-upgrade-create-delete'),documents=documents,
+                        bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+                    self.assertIsInstance(continued,Ok,repr(continued)+str(host._custody.last_attempt.error))
+                    self.assertIsInstance(continued.value,GroupSuccess,repr(continued))
+                    self.assertEqual([r.outcome for r in continued.value.response.semantic.results],['created','deleted'])
+                    host.detach();connection.commit()
                 with psycopg.connect(runtime.info.connection_uri,autocommit=True) as admin:
                     contexts=admin.execute('SELECT endpoint_ownership::text FROM truss.runtime_edge_transition WHERE endpoint_ownership IS NOT NULL ORDER BY transition_id').fetchall()
                     self.assertEqual(len(contexts),2 if upgraded.value.previous_release_id=='truss-catalog-runtime/0.64-candidate' else 3)

@@ -9,7 +9,7 @@ CREATE TABLE truss.runtime_object_attempt (
 CREATE INDEX runtime_object_attempt_writer ON truss.runtime_object_attempt(writer_xid);
 CREATE UNIQUE INDEX runtime_object_attempt_receipt ON truss.runtime_object_attempt(receipt_id) WHERE receipt_id IS NOT NULL;
 CREATE SEQUENCE truss.runtime_object_transition_seq;
-CREATE TABLE truss.runtime_object_transition (transition_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_object_transition_seq'), attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL, writer_xid xid8 NOT NULL, object_id bigint NOT NULL, type_id int NOT NULL, before_object jsonb NOT NULL, after_object jsonb, after_keys jsonb NOT NULL, journal jsonb NOT NULL, UNIQUE (attempt_id, operation_index, object_id, type_id));
+CREATE TABLE truss.runtime_object_transition (transition_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_object_transition_seq'), attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL, writer_xid xid8 NOT NULL, object_id bigint NOT NULL, type_id int NOT NULL, before_object jsonb, after_object jsonb, after_keys jsonb NOT NULL, journal jsonb NOT NULL, UNIQUE (attempt_id, operation_index, object_id, type_id));
 CREATE INDEX runtime_object_transition_owner ON truss.runtime_object_transition(object_id,type_id,transition_id DESC);
 CREATE TRIGGER runtime_object_transition_immutable BEFORE UPDATE OR DELETE ON truss.runtime_object_transition
  FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
@@ -427,7 +427,10 @@ BEGIN
    RAISE EXCEPTION 'create operation refused' USING ERRCODE=native_state;
   END IF;
   result:=raw->'semantic'->'results'->0;
-  UPDATE truss.runtime_object_attempt SET next_index=next_index+1,results=results||jsonb_build_array(result),aliases=aliases||(raw->'semantic'->'aliases') WHERE id=attempt_id;
+  -- The create leaf owns insertion AND one-shot outer progress advancement.
+  IF NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt a WHERE a.id=attempt_id
+   AND a.next_index=operation_index+1 AND a.results->operation_index=result) THEN
+   RAISE EXCEPTION 'original atomic create progress required' USING ERRCODE='55000';END IF;
   RETURN convert_to(result::text,'UTF8');
  END IF;
  identity:=metadata->'identity';old_image:=metadata->'prior';
@@ -489,11 +492,76 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.object_group_step(uuid,int,bytea) FROM PUBLIC;
 
+-- Creation evidence remains in the original inner group; this transition carries
+-- state ordering only. Never call the member validator here: it calls us back.
+CREATE FUNCTION truss.runtime_create_transition_validate(selected_transition bigint) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
+ member truss.runtime_create_member%ROWTYPE;creation truss.runtime_create_group%ROWTYPE;
+ input jsonb;operation jsonb;result jsonb;expected jsonb;semantic jsonb;keys jsonb;key_expected jsonb;
+ actual jsonb;generation bigint;
+BEGIN
+ SELECT * INTO STRICT transition FROM truss.runtime_object_transition WHERE transition_id=selected_transition;
+ SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
+ IF attempt.context->'creationTransitionProfile' IS DISTINCT FROM '{"identity":"truss-unified-create-transition","version":"0.1","sha256":"765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"}'::jsonb
+  OR transition.before_object IS NOT NULL OR transition.after_object IS NULL OR transition.journal IS DISTINCT FROM '[]'::jsonb
+  OR attempt.writer_xid IS DISTINCT FROM transition.writer_xid OR attempt.writer_xid IS DISTINCT FROM pg_current_xact_id()
+  OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false)
+  OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
+  OR jsonb_array_length(attempt.results)<>attempt.next_index THEN
+  RAISE EXCEPTION 'original native creation transition profile and progress required' USING ERRCODE='55000';END IF;
+ input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+ operation:=input->'operations'->transition.operation_index;result:=attempt.results->transition.operation_index;
+ SELECT * INTO STRICT member FROM truss.runtime_create_member
+  WHERE object_id=transition.object_id AND type_id=transition.type_id;
+ SELECT * INTO STRICT creation FROM truss.runtime_create_group WHERE group_id=member.group_id;
+ expected:=creation.expected_members->0;semantic:=convert_from(creation.semantic_bytes,'UTF8')::jsonb;
+ IF member.operation_index<>0 OR jsonb_array_length(creation.expected_members)<>1
+  OR creation.writer_xid IS DISTINCT FROM attempt.writer_xid OR creation.actor_oid IS DISTINCT FROM attempt.actor_oid
+  OR creation.actor_name IS DISTINCT FROM session_user::text
+  OR creation.original_document_bytes IS DISTINCT FROM attempt.documents_bytes
+  OR creation.original_input_bytes IS DISTINCT FROM convert_to(jsonb_set(input-'preconditions','{operations}',jsonb_build_array(operation))::text,'UTF8')
+  OR creation.original_key_bytes IS DISTINCT FROM convert_to('[]','UTF8') OR creation.receipt_storage_row_id IS NOT NULL
+  OR operation->>'operation' IS DISTINCT FROM 'create_object' OR result->>'operation' IS DISTINCT FROM 'create_object'
+  OR result->>'outcome' IS DISTINCT FROM 'created' OR result->>'version' IS DISTINCT FROM '1'
+  OR result->'identity'->>'id' IS DISTINCT FROM transition.object_id::text
+  OR result->'identity'->>'typeId' IS DISTINCT FROM transition.type_id::text
+  OR semantic->'results' IS DISTINCT FROM jsonb_build_array(result)
+  OR semantic->'mutationProfile' IS DISTINCT FROM input->'mutationProfile'
+  OR semantic->'layoutProfile' IS DISTINCT FROM input->'layoutProfile'
+  OR transition.after_object IS DISTINCT FROM expected->'object'
+  OR transition.after_object->>'ver' IS DISTINCT FROM '1'
+  OR transition.after_object->>'id' IS DISTINCT FROM transition.object_id::text
+  OR transition.after_object->>'type_id' IS DISTINCT FROM transition.type_id::text THEN
+  RAISE EXCEPTION 'exact original inner and outer creation correspondence required' USING ERRCODE='55000';END IF;
+ SELECT coalesce(jsonb_agg(k.value->'membership' ORDER BY (k.value->'membership'->>'key_num')::int),'[]'::jsonb)
+  INTO keys FROM jsonb_array_elements(expected->'keys') k;
+ IF transition.after_keys IS DISTINCT FROM keys THEN RAISE EXCEPTION 'original creation key image required' USING ERRCODE='55000';END IF;
+ -- Validate original reservations even if later same-transaction changes/deletes
+ -- have superseded the original live key memberships and object image.
+ FOR key_expected IN SELECT value FROM jsonb_array_elements(expected->'keys') LOOP
+  SELECT to_jsonb(r) INTO actual FROM truss.object_key_reservation_bucket r
+   WHERE storage_row_id=(key_expected->'reservation'->>'storage_row_id')::bigint;
+  SELECT g.generation INTO generation FROM truss.key_bucket_guard g
+   WHERE namespace_sha256=decode(substring(key_expected->'membership'->>'namespace_sha256' FROM 3),'hex')
+    AND key_sha256=decode(substring(key_expected->'membership'->>'key_sha256' FROM 3),'hex');
+  IF actual IS DISTINCT FROM key_expected->'reservation' OR generation IS NULL
+   OR generation<(key_expected->>'generation')::bigint THEN
+   RAISE EXCEPTION 'original creation reservation and generation required' USING ERRCODE='55000';END IF;
+ END LOOP;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_create_transition_validate(bigint) FROM PUBLIC;
+
 CREATE FUNCTION truss.runtime_object_validate(selected_id bigint,selected_type int) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;
+DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;creation_transition bigint;
 BEGIN
  current_actor:=truss.runtime_person(false);
+ FOR creation_transition IN SELECT transition_id FROM truss.runtime_object_transition
+  WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id() AND before_object IS NULL LOOP
+  PERFORM truss.runtime_create_transition_validate(creation_transition);
+ END LOOP;
  -- Later ordinary mutations cannot suppress original registration dependencies.
  FOR rebind IN SELECT * FROM truss.runtime_catalog_rebind_transition t WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id() LOOP
   IF rebind.actor_oid IS DISTINCT FROM current_actor OR NOT EXISTS(SELECT 1 FROM truss.catalog_registration_request r
@@ -547,6 +615,19 @@ BEGIN
  IF attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false) OR attempt.complete THEN RAISE EXCEPTION 'current unfinished group required' USING ERRCODE='55000';END IF;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;request:=convert_from(attempt.request_bytes,'UTF8')::jsonb;
  IF attempt.next_index<>jsonb_array_length(input->'operations') OR jsonb_array_length(attempt.results)<>attempt.next_index THEN RAISE EXCEPTION 'complete ordered results required' USING ERRCODE='55000';END IF;
+ IF attempt.context ? 'creationTransitionProfile' THEN
+  IF attempt.context->'creationTransitionProfile' IS DISTINCT FROM '{"identity":"truss-unified-create-transition","version":"0.1","sha256":"765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"}'::jsonb THEN
+   RAISE EXCEPTION 'known original creation storage profile required' USING ERRCODE='55000';END IF;
+  FOR index IN 0..attempt.next_index-1 LOOP
+   IF input->'operations'->index->>'operation'='create_object' AND
+    (SELECT count(*) FROM truss.runtime_object_transition t WHERE t.attempt_id=attempt.id
+      AND t.operation_index=index AND t.before_object IS NULL
+      AND t.object_id::text=attempt.results->index->'identity'->>'id'
+      AND t.type_id::text=attempt.results->index->'identity'->>'typeId')<>1 THEN
+    RAISE EXCEPTION 'one original transition for every completed create required' USING ERRCODE='55000';END IF;
+  END LOOP;
+ ELSIF EXISTS(SELECT 1 FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=attempt.id AND before_object IS NULL) THEN
+  RAISE EXCEPTION 'historical attempts have no synthetic creation transitions' USING ERRCODE='55000';END IF;
  PERFORM truss.runtime_graph_validate(true);
  PERFORM truss.runtime_edge_authorize(attempt_id);
  FOR owner IN SELECT DISTINCT edge_id,rel_type_id FROM truss.runtime_edge_transition WHERE runtime_edge_transition.attempt_id=object_group_finish.attempt_id LOOP PERFORM truss.runtime_edge_validate(owner.edge_id,owner.rel_type_id);END LOOP;

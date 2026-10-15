@@ -40,7 +40,14 @@ _ABI2_WEFT_033_LINUX_X64={**_ABI2_CONSUMER,
     'weftWheelSha256':'5eddce42e8fc1497bad36413fe8153c85973d69e579ad5d6d261ff1b1ca1dd63',
     'weftModuleSha256':'7e62d921d83cb9cefbf97d74819e41573339a6219793217edfe52402a6384134',
 }
-_CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_ARM,_ABI2_WEFT_033_LINUX_X64)
+# Finished owner candidate for native68. The exact published artifact replaces
+# this development selection explicitly; earlier registrations never migrate.
+_ABI2_WEFT_034_ARM={**_ABI2_CONSUMER,
+    'weftRevision':'e4ccbd9d2a0d6aee53993a40e0c7be35ecf59456',
+    'weftWheelSha256':'8d22c78c29b32bef3fcffb6063c2eea55946e3eb2b10e4ed251bee4ca90df00f',
+    'weftModuleSha256':'19010ec2bacae8effcdd77df5c6777118a689dcd6fef9a0c817f6a180a511d64',
+}
+_CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_ARM,_ABI2_WEFT_033_LINUX_X64,_ABI2_WEFT_034_ARM)
 
 
 def _actual_consumer():

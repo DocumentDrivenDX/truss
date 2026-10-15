@@ -1,0 +1,57 @@
+{
+  "scope": "Integrated rootless creation transition precursor; not owned CRUD or released native68 compiler support",
+  "runtime": "truss-catalog-runtime/0.68-candidate",
+  "runtimeManifestSha256": "3588cf030cb46c7d12368557e351bd767c10b4dd2e1644f7f100cec54602a2fc",
+  "ownerGeneratedBeforeImageAlterSha256": "8395a5eee550e9c2d202fa3a29e768bd07f1b58e227eaabe2d3218b948eb9c39",
+  "originalPredecessorManifestSha256": "8c553480e1bcb95ccaebb9aa04150a0253217838c8df6ad09acd5ecece2402ee",
+  "basicWorkflows": {
+    "session": 35403,
+    "tests": 3,
+    "seconds": 23.775,
+    "status": "OK",
+    "coverage": [
+      "Public create/update/read/dryrun/delete/durable retry",
+      "Ordered create/update/delete with exact committed replay after deletion and failed-batch rollback",
+      "Populated native67 upgrade preserves original rows and durable replay, then executes new create/delete"
+    ]
+  },
+  "finiteReviewFixes": {
+    "changes": [
+      "Native manifest version0.68",
+      "Capture exact original five native67 key helper OIDs/owners/ACLs before replacement"
+    ],
+    "upgradeRerun": {
+      "session": 73026,
+      "tests": 1,
+      "seconds": 12.25,
+      "status": "OK"
+    }
+  },
+  "review": "Astra Ultra approved plan, atomic bidirectional one-shot linkage, every original nullable-before transition proof, retained single creation journal custody, reservations/generation, and corrected upgrade. No broader test campaign requested.",
+  "pending": "Published matching Weft wheels and release assets; complete owned CRUD remains the next feature tranche. Native68 ordinary and existing protected-query integration pass locally.",
+  "artifacts": {
+    "native-runtime-manifest.json": "3588cf030cb46c7d12368557e351bd767c10b4dd2e1644f7f100cec54602a2fc",
+    "native-query-bundle.json": "aef42b7fd76aeb75af8e1f7083ddacbcc7325cecdf142683da48f2a7b57f6fa7"
+  },
+  "matchingCompilerWorkflow": {
+    "session": 52286,
+    "tests": 1,
+    "seconds": 6.201,
+    "status": "OK",
+    "test": "test_compiled_query_native.CompiledQueryTests.test_public_mutations_filter_count_complete_record_and_readonly_query",
+    "weftVersion": "0.4.34",
+    "backend": "0.4.37",
+    "candidateWheelSha256": "8d22c78c29b32bef3fcffb6063c2eea55946e3eb2b10e4ed251bee4ca90df00f",
+    "nativeModuleSha256": "19010ec2bacae8effcdd77df5c6777118a689dcd6fef9a0c817f6a180a511d64",
+    "scope": "Actual Truss public registration/create/filter/count/complete record and read-only query. Candidate compiler, not published wheel or protected query qualification.",
+    "weftRevision": "e4ccbd9d2a0d6aee53993a40e0c7be35ecf59456"
+  },
+  "protectedQueryWorkflow": {
+    "session": 27924,
+    "tests": 1,
+    "seconds": 15.152,
+    "status": "OK",
+    "test": "test_current_query_runtime_native.CurrentQueryRuntimeNativeTests.test_public_masked_projection_with_authorized_exact_raw_predicate",
+    "scope": "Explicit new ARM64 candidate ABI2 consumer cohort; unchanged UMF579675bd owner child. No ABI3/4, aggregate or owned-policy admission."
+  }
+}

@@ -161,6 +161,15 @@
         "sha256": "bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"
       },
       "definition": "truss-import-payload/0.1.0 numeric-free duplicate-free UTF8 JSON;rootless object values or independent directed edge values/order;exact scalar cells;optional exact map source;known author/at/system string or null;identity-bearing payload fields must agree;decode only after eligible identity"
+    },
+    {
+      "name": "creationTransitionProfile",
+      "pin": {
+        "identity": "truss-unified-create-transition",
+        "version": "0.1",
+        "sha256": "765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"
+      },
+      "definition": "truss-unified-create-transition/0.1;native issued immutable attempt context;one atomic outer create progress and original inner creation group;SQL NULL before only for proven version1 creation;original creation journal is sole custodian;empty transition journal;exact original input documents actor writer result image keys reservations and generation correspondence;every inner group and outer create linked exactly once;legacy absent storage pin retains original history;unknown pin refuses"
     }
   ],
   "retainedProfiles": [

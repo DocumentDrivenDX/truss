@@ -21,6 +21,16 @@ unfinished; this runtime enforces its installed ordinary-person/module boundarie
 and includes the explicitly activated policy-query profile described below.
 
 This release is [v0.0.33](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.33).
+
+Development main is `0.0.34.dev0` with native runtime `0.68-candidate` and
+Weft backend `0.4.37` / compiler `0.4.34`. Creation now joins the common object
+transition ledger while preserving its original journal and receipt evidence.
+The public mutation/query workflow, populated native67 upgrade and existing
+protected-query workflow pass locally on PostgreSQL18.6/macOS ARM64 with the
+finished owner compiler candidate. Its matching release wheels are pending;
+this development checkpoint does not enable owned objects or change the public
+rootless read profile. The packaged published pairing remains the release above.
+
 Registration-owned optional and required non-key rebinding is included in25; its
 [report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.2.md)
 retains original effects/events and requires current data-reader authority.

@@ -107,3 +107,21 @@ def verify_transition_storage(cursor, owner_oid: int):
         WHERE attrelid='truss.runtime_edge_transition'::regclass AND attname='endpoint_ownership' AND NOT attisdropped""", prepare=False)
     if cursor.fetchone() != ('jsonb',False,False):
         raise ValueError('Nullable original endpoint context without synthetic default required')
+
+
+def upgrade_creation_transition_storage(cursor, generated_sql: str, owner_oid: int):
+    """Drop only the owner-generated before-image constraint; retain legacy rows."""
+    # Existing upgrade code handles the older single-member constraints first.
+    # This function is called only after that storage has reached native65 shape.
+    verify_owned_transition_storage(cursor, owner_oid)
+    cursor.execute("""SELECT format_type(atttypid,atttypmod),attnotnull,atthasdef
+        FROM pg_attribute WHERE attrelid='truss.runtime_object_transition'::regclass
+        AND attname='before_object' AND NOT attisdropped""",prepare=False)
+    if cursor.fetchone()!=('jsonb',True,False):
+        raise ValueError('Original required before-image without default required')
+    cursor.execute(generated_sql,prepare=False)
+    cursor.execute("""SELECT format_type(atttypid,atttypmod),attnotnull,atthasdef
+        FROM pg_attribute WHERE attrelid='truss.runtime_object_transition'::regclass
+        AND attname='before_object' AND NOT attisdropped""",prepare=False)
+    if cursor.fetchone()!=('jsonb',False,False):
+        raise ValueError('Nullable absent before-image without synthetic default required')

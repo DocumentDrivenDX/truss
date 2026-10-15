@@ -59,7 +59,7 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
 
     def test_mixed_alias_batch_and_failed_batch_are_atomic(self):
         connection,host,assembly,tx=self.ready()
-        result,_,_=self.run_group(assembly,tx,(self.create(alias='new'),
+        result,mixed_input,mixed_request=self.run_group(assembly,tx,(self.create(alias='new'),
             UpdateObject(target=AliasObjectReference(alias='new'),set=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='changed')),),unset=(),expected_version='1'),
             Delete(operation='delete_object',target=AliasObjectReference(alias='new'),expected_version='2')),'mixed')
         self.assertIsInstance(result,GroupSuccess)
@@ -67,6 +67,10 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
         identity=result.response.semantic.results[0].identity
         self.assertIsInstance(self.read(assembly,tx,identity),ObjectNotFound)
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
+        replay=assembly.apply_in_transaction(tx,mixed_input,mixed_request,documents=self.documents,
+            bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        self.assertIsInstance(replay,Ok);self.assertIsInstance(replay.value.response,CommittedReceiptReplay)
+        self.assertEqual(replay.value.response.semantic.results,result.response.semantic.results)
         result,_,_=self.run_group(assembly,tx,(self.create(label='kept',value='other'),),'kept')
         identity=result.response.semantic.results[0].identity
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()

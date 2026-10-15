@@ -57,6 +57,7 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT jsonb_build_object(
+'creationTransitionProfile',jsonb_build_object('identity','truss-unified-create-transition','version','0.1','sha256','765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396'),
 'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-graph','version','0.4','sha256','b814eb5b33ff59340d2f9bd13866ccb97d49f42fd38ce1e9c97facab5668a2f8'),
 'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.4','sha256','097050463d22e40cbc3e0a6800eed7a97bb7f1dc6125748355e64a353d0df4ac'),
 'canonicalizationProfile',jsonb_build_object('identity','truss-pg18-jsonb-text','version','0.1','sha256','e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97'),
@@ -200,6 +201,10 @@ BEGIN
  IF group_row.writer_xid<>pg_current_xact_id() OR group_row.actor_name<>session_user::text OR group_row.actor_oid IS DISTINCT FROM (SELECT oid FROM pg_roles WHERE rolname=session_user) THEN
   RAISE EXCEPTION 'current actual group member required' USING ERRCODE='55000'; END IF;
  expected:=group_row.expected_members->member.operation_index;
+ IF (SELECT count(*) FROM truss.runtime_object_transition t
+  WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=group_row.writer_xid
+   AND t.before_object IS NULL)<>1 THEN
+  RAISE EXCEPTION 'one original outer creation transition required' USING ERRCODE='55000';END IF;
  IF EXISTS(SELECT 1 FROM truss.runtime_object_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) OR EXISTS(SELECT 1 FROM truss.runtime_catalog_rebind_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) OR EXISTS(SELECT 1 FROM truss.runtime_catalog_key_backfill WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) THEN
   PERFORM truss.runtime_object_validate(selected_id,selected_type);
   SELECT to_jsonb(j) INTO actual_journal FROM truss.journal j WHERE j.at=(expected->'journal'->>'at')::timestamptz AND j.seq=(expected->'journal'->>'seq')::bigint;
@@ -207,6 +212,11 @@ BEGIN
   FOR key_expected IN SELECT value FROM jsonb_array_elements(expected->'keys') LOOP
    SELECT to_jsonb(r) INTO actual_reservation FROM truss.object_key_reservation_bucket r WHERE storage_row_id=(key_expected->'reservation'->>'storage_row_id')::bigint;
    IF actual_reservation IS DISTINCT FROM key_expected->'reservation' THEN RAISE EXCEPTION 'original creation reservation required' USING ERRCODE='55000';END IF;
+   SELECT generation INTO current_generation FROM truss.key_bucket_guard
+    WHERE namespace_sha256=decode(substring(key_expected->'membership'->>'namespace_sha256' FROM 3),'hex')
+     AND key_sha256=decode(substring(key_expected->'membership'->>'key_sha256' FROM 3),'hex');
+   IF current_generation IS NULL OR current_generation<(key_expected->>'generation')::bigint THEN
+    RAISE EXCEPTION 'original creation key generation required' USING ERRCODE='55000';END IF;
   END LOOP;
   RETURN;
  END IF;
@@ -289,6 +299,7 @@ ALTER TABLE truss.runtime_create_group ENABLE ALWAYS TRIGGER runtime_created_gro
 
 CREATE FUNCTION truss.apply_create_group(original_input bytea,original_documents bytea,original_keys bytea,original_request bytea,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+<<creation_leaf>>
 DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;installation truss.catalog_runtime_installation%ROWTYPE;
  source_pin record;actor_oid oid;writer xid8;group_uuid uuid:=gen_random_uuid();current_index int:=0;operation jsonb;operation_meta jsonb;
  selected_type truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;key_definition truss.key_def%ROWTYPE;
@@ -301,7 +312,7 @@ DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;
  membership truss.object_key_bucket%ROWTYPE;reservation truss.object_key_reservation_bucket%ROWTYPE;
  receipt truss.request_receipt%ROWTYPE;existing truss.request_receipt%ROWTYPE;receipt_json jsonb;receipt_bytes bytea;
  semantic jsonb;semantic_bytes bytea;observation_bytes bytea;request_namespace bytea;request_bytes bytea;request_route bigint;new_generation bigint;
- captured_revision int;old_request_generation bigint;intended_group truss.runtime_create_group%ROWTYPE;scope_identity text;outcome jsonb;native_state text;candidate_count int;
+ captured_revision int;old_request_generation bigint;intended_group truss.runtime_create_group%ROWTYPE;scope_identity text;outcome jsonb;native_state text;candidate_count int;outer_attempt record;
 BEGIN
  -- Metadata locks head and every requested policy, then revalidates full sources.
  metadata:=convert_from(truss.group_create_metadata(original_input,original_documents,expected_release,expected_digest),'UTF8')::jsonb;
@@ -379,6 +390,17 @@ BEGIN
     'observationBase64',replace(encode(observation_bytes,'base64'),chr(10),''),'observationSha256',encode(sha256(observation_bytes),'hex'))::text,'UTF8');
   END IF;
  END IF;
+ -- New writes belong to one native-issued outer operation. Receipt replay above
+ -- remains independent of live progress. The leaf advances progress atomically.
+ SELECT a.* INTO STRICT outer_attempt FROM truss.runtime_object_attempt a
+ WHERE a.writer_xid=writer AND a.actor_oid=creation_leaf.actor_oid AND NOT a.complete
+  AND a.context->'creationTransitionProfile'=creation_leaf.context->'creationTransitionProfile'
+  AND a.documents_bytes=original_documents AND jsonb_array_length(a.results)=a.next_index
+  AND convert_to(jsonb_set(convert_from(a.input_bytes,'UTF8')::jsonb-'preconditions',
+      '{operations}',jsonb_build_array(convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index))::text,'UTF8')=original_input
+  AND convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index->>'operation'='create_object'
+  AND request='{"state":"none"}'::jsonb
+ FOR UPDATE NOWAIT;
  IF (SELECT count(*) FROM (SELECT 1 FROM truss.runtime_create_group WHERE writer_xid=writer LIMIT 129) g)>=128 THEN
   RAISE EXCEPTION 'bounded groups per transaction required' USING ERRCODE='54000'; END IF;
  IF jsonb_typeof(key_inputs) IS DISTINCT FROM 'array' OR jsonb_array_length(key_inputs)>512 THEN
@@ -579,8 +601,19 @@ BEGIN
  FOR current_index IN 0..jsonb_array_length(members)-1 LOOP
   INSERT INTO truss.runtime_create_member VALUES((members->current_index->'object'->>'id')::bigint,
    (members->current_index->'object'->>'type_id')::int,group_uuid,current_index);
-  PERFORM truss.runtime_create_validate_member((members->current_index->'object'->>'id')::bigint,(members->current_index->'object'->>'type_id')::int);
  END LOOP;
+ IF jsonb_array_length(members)<>1 THEN RAISE EXCEPTION 'one original inner create member required' USING ERRCODE='55000';END IF;
+ INSERT INTO truss.runtime_object_transition(attempt_id,operation_index,writer_xid,object_id,type_id,before_object,after_object,after_keys,journal)
+ VALUES(outer_attempt.id,outer_attempt.next_index,writer,(members->0->'object'->>'id')::bigint,
+  (members->0->'object'->>'type_id')::int,NULL,members->0->'object',
+  (SELECT coalesce(jsonb_agg(k.value->'membership' ORDER BY (k.value->'membership'->>'key_num')::int),'[]'::jsonb)
+   FROM jsonb_array_elements(members->0->'keys') k),'[]'::jsonb);
+ UPDATE truss.runtime_object_attempt a SET next_index=a.next_index+1,
+  results=a.results||jsonb_build_array(results_of_create.value),aliases=a.aliases||(semantic->'aliases')
+ FROM (SELECT semantic->'results'->0 AS value) results_of_create
+ WHERE a.id=outer_attempt.id AND a.next_index=outer_attempt.next_index AND NOT a.complete;
+ IF NOT FOUND THEN RAISE EXCEPTION 'one atomic outer create progress required' USING ERRCODE='55000';END IF;
+ PERFORM truss.runtime_create_validate_member((members->0->'object'->>'id')::bigint,(members->0->'object'->>'type_id')::int);
  PERFORM truss.runtime_create_validate_group(group_uuid);
  FOR operation_meta IN SELECT value FROM jsonb_array_elements(metadata) LOOP
   PERFORM truss.runtime_module_writer(operation_meta->>'documentId',operation_meta->>'moduleId');
