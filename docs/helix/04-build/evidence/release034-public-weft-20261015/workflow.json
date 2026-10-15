@@ -1,0 +1,34 @@
+{
+  "scope": "Installed native68 Truss0.0.34 preparation with actual published Weft0.4.34, macOS ARM64/PostgreSQL18.6. Unfinished native69 files excluded. Linux is gated by release workflow before publication.",
+  "trussSourceBase": "a2a8a8ad",
+  "runtimeManifestSha256": "3588cf030cb46c7d12368557e351bd767c10b4dd2e1644f7f100cec54602a2fc",
+  "weftRelease": "https://github.com/DocumentDrivenDX/weft/releases/tag/v0.4.34",
+  "weftSource": "86273dd3c2b4c2b99c8d0268c9dff8537e6ce20e",
+  "weftWheelSha256": "fb0d79679c158208418199df144cfc21917b3955c382ef933980bb89645eed37",
+  "weftNativeSha256": "877bfafd51a7f50478be954c0cbabd0cba0a705f004a5b5e99d317fd087f19d9",
+  "localPackages": {
+    "truss_toolkit-0.0.34-py3-none-any.whl": "c76b069371973504825b73ed578dd16714d248929478940b3ce4a49cd5a80add",
+    "truss_toolkit-0.0.34.tar.gz": "849c0863ee6846b96260a08b2d96b2e95dee8b425bb542d47fa300b19d3b7522"
+  },
+  "basicInstalledWorkflows": {
+    "session": 52483,
+    "tests": 2,
+    "seconds": 20.129,
+    "status": "OK",
+    "coverage": [
+      "Public mutation/filter/count/complete record/read-only query",
+      "Existing protected masked projection with authorized exact signed64 predicate"
+    ]
+  },
+  "cohortSelection": "Separate explicit public ARM/Linux tuples; development and older selections retain their original whole pins. No implicit registration migration.",
+  "excluded": [
+    "Native69 owned provider",
+    "ABI3/4",
+    "Aggregate security",
+    "Managed-database qualification"
+  ],
+  "officialWeftPins": {
+    "url": "https://github.com/DocumentDrivenDX/weft/releases/download/v0.4.34/release-pins.json",
+    "sha256": "0c5998e4fe7a32eda3ef80a6ed7d9c206d40d25f3638ced263995491afccc96d"
+  }
+}

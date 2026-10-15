@@ -40,14 +40,25 @@ _ABI2_WEFT_033_LINUX_X64={**_ABI2_CONSUMER,
     'weftWheelSha256':'5eddce42e8fc1497bad36413fe8153c85973d69e579ad5d6d261ff1b1ca1dd63',
     'weftModuleSha256':'7e62d921d83cb9cefbf97d74819e41573339a6219793217edfe52402a6384134',
 }
-# Finished owner candidate for native68. The exact published artifact replaces
-# this development selection explicitly; earlier registrations never migrate.
+# Finished owner candidate for native68. Published artifacts have their own
+# exact whole selections; earlier registrations never migrate implicitly.
 _ABI2_WEFT_034_ARM={**_ABI2_CONSUMER,
     'weftRevision':'e4ccbd9d2a0d6aee53993a40e0c7be35ecf59456',
     'weftWheelSha256':'8d22c78c29b32bef3fcffb6063c2eea55946e3eb2b10e4ed251bee4ca90df00f',
     'weftModuleSha256':'19010ec2bacae8effcdd77df5c6777118a689dcd6fef9a0c817f6a180a511d64',
 }
-_CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_ARM,_ABI2_WEFT_033_LINUX_X64,_ABI2_WEFT_034_ARM)
+_ABI2_WEFT_034_PUBLIC_ARM={**_ABI2_CONSUMER,
+    'weftRevision':'86273dd3c2b4c2b99c8d0268c9dff8537e6ce20e',
+    'weftWheelSha256':'fb0d79679c158208418199df144cfc21917b3955c382ef933980bb89645eed37',
+    'weftModuleSha256':'877bfafd51a7f50478be954c0cbabd0cba0a705f004a5b5e99d317fd087f19d9',
+}
+_ABI2_WEFT_034_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
+    'weftRevision':'86273dd3c2b4c2b99c8d0268c9dff8537e6ce20e',
+    'weftWheelSha256':'bfc70a4d1f9146c3630ebb177be5a4f52231fd81b276233b3e0aa1a2c5e73246',
+    'weftModuleSha256':'6de57d7dfcd604fbdbd78534fcb5bca16c59a9fb71ccae58df0e08a67457e22c',
+}
+_CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_ARM,_ABI2_WEFT_033_LINUX_X64,
+                  _ABI2_WEFT_034_ARM,_ABI2_WEFT_034_PUBLIC_ARM,_ABI2_WEFT_034_PUBLIC_LINUX_X64)
 
 
 def _actual_consumer():

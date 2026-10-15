@@ -11,25 +11,21 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.33`,
-native runtime `0.67-candidate`, layout `1.0`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.36`. The tested local
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.34`,
+native runtime `0.68-candidate`, layout `1.0`
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.37`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected engine remains
 unfinished; this runtime enforces its installed ordinary-person/module boundaries
 and includes the explicitly activated policy-query profile described below.
 
-This release is [v0.0.33](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.33).
+This release is [v0.0.34](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.34).
 
-Development main is `0.0.34.dev0` with native runtime `0.68-candidate` and
-Weft backend `0.4.37` / compiler `0.4.34`. Creation now joins the common object
-transition ledger while preserving its original journal and receipt evidence.
-The public mutation/query workflow, populated native67 upgrade and existing
-protected-query workflow pass locally on PostgreSQL18.6/macOS ARM64 with the
-finished owner compiler candidate. Its matching release wheels are pending;
-this development checkpoint does not enable owned objects or change the public
-rootless read profile. The packaged published pairing remains the release above.
+Creation now joins the common object transition ledger while retaining its sole
+original journal and receipt evidence. Populated native67 installations can
+upgrade without rewriting original rows or committed receipts. Owned objects
+remain unfinished; the public rootless read profile is unchanged.
 
 Registration-owned optional and required non-key rebinding is included in25; its
 [report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.2.md)
@@ -67,14 +63,14 @@ Direct object, key and page results expose `object.ownership.state` as
 
 The exact consumer model passes public accept/apply/readback and native binding
 export. Populated native65 upgrades preserve transitions and receipt replay.
-SDK0.0.33 selects Weft0.4.33 for native67 queries and original
+SDK0.0.34 selects Weft0.4.34 for native68 queries and original
 mutation-selection registration/lowering, preserving native65. See the
-[SDK33 release evidence](../../docs/helix/04-build/releases/v0.0.33.md).
+[SDK34 release evidence](../../docs/helix/04-build/releases/v0.0.34.md).
 This compiler support does not enable a protected bulk-action executor.
 
 ## Install the release
 
-SDK0.0.33 includes the experimental **current-policy query interface**:
+SDK0.0.34 includes the experimental **current-policy query interface**:
 `assembly.query_current_in_transaction(tx, executor=..., sql=...,
 document_ids=(...), parameters=...)`. It composes an ordinary caller's actual
 Subject and module access, original UMF policy evaluation, original Weft query
@@ -151,7 +147,7 @@ Unknown modules refuse. Reopening a registration under another known wheel still
 requires an explicit migration; the factory never upgrades retained pins.
 
 This first local PostgreSQL18.6 profile uses exact original candidate Weft ABI2
-and UMF child pins. The published Weft0.4.33 macOS ARM and Linux x64 wheels
+and UMF child pins. The published Weft0.4.34 macOS ARM and Linux x64 wheels
 are selected explicitly and checked in installed public workflows on both
 platforms. Other platforms and newer result ABIs remain outside this profile.
 It currently requires rootless, present String or explicit signed64 query
@@ -171,17 +167,17 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.33 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.33 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.34 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.34 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.33'
+  'truss-toolkit[local,native,query]==0.0.34'
 ```
 
-Bun1.4.2 is still required for UMF preparation. SDK 0.0.33 /
-native 0.67 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
+Bun1.4.2 is still required for UMF preparation. SDK 0.0.34 /
+native 0.68 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
 catalogs. Create/update, imports, preconditions, backfills and lookups require no
 client encoder or per-key receipt. Existing stored key and namespace bytes are
-preserved. Weft remains optional through `query` (version 0.4.33); it is not a
+preserved. Weft remains optional through `query` (version 0.4.34); it is not a
 key-encoding dependency. The separate protected security observation retains its
 original producer boundary.
 The older released installation example above retains its historical dependency
@@ -192,10 +188,10 @@ PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.33 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.34 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.33 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.34 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
 ```
