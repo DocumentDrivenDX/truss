@@ -1,0 +1,27 @@
+{
+  "scope": "Trusted administrative original compiler byte enrollment, not native program admission or permission",
+  "compilerSource": "c0c6449481a87eed38d3f7a6ebebc1f4ab4beeb4",
+  "compilerModuleSha256": "2f91cbd5de07f04492d6fdbd964bf86cce84245adc18cd6debe3c17f61ef6843",
+  "sourceHashes": {
+    "packages/python/src/truss/_preparation_program.py": "67940179468c4176925663f971e88bf1e1b7953f20156f72250b874698eabd36",
+    "scripts/build-preparation-program.ts": "ef8a7dd72c7c1d04f9a364693501028487faa3e3289fd12a929614e40be1a62d",
+    "scripts/export-products-native-binding.py": "b7b42396ef792980c0d836f6a07100930b54af7aca27c515ca234f4e06a54815",
+    "packages/python/tests/test_preparation_program_native.py": "49c2632c9208e4951433842f92003fe82915a4bf170030fa9e465c48e0a1b39f",
+    "packages/python/src/truss/_security_bootstrap/preparation-program-storage.sql": "28947337a81df0bc05d27e102a206be4e74278bb708f3bf33bbca352a992ec99"
+  },
+  "artifactHashes": {
+    "program-configuration.json": "1cbb2b21c79a1483f062bfaef69877636cc07126bcace03ce3836ba37dc558de",
+    "original-demo-model.json": "b5ec19900e4355538395200f65e3f70a4edf2e6b9dd1753deac04a6d9ef41337",
+    "program-binding.json": "370ec89b86f7627878eb3f0aff607c77506682035e950199c1249e5ec5b80498",
+    "workflow-receipt.json": "e6153c080ddc3f18da0d33ae2c79b69f883a5230539cb94bed40712748bccd20",
+    "program-compile-response.json": "442b3525f0b8ff63c9d18300c27a87376928b71a1b0ea43e637be8452447bce0",
+    "program-request.json": "020ba8534978c9ff6ef9f142a188139327a0cbc466228ed23783d354a91fbbeb",
+    "program-registration.json": "07cfa601055fb968d1db3a3703e1de85d6bf89dbea20a296b4d30de8469c190f",
+    "workflow-native-binding.json": "9ab654de51a8e094430105d00b9d04e48dd4fcde2f3e9cf2df1f89352d503af6",
+    "program-lowering-invocation.json": "751508f4570e01cc9c7d8d2615979f1c9c4d8f24b7e5f712e8dd7b56e1af1972"
+  },
+  "nativeTest": "1 passed in 6.135s",
+  "authority": false,
+  "executionEnabled": false,
+  "astraUltraReview": "Approved for commit within documented private administrative scope; no remaining scope-blocking defects. No compiler authentication, full DDL qualification, anchor admission or SQL execution claim."
+}

@@ -18,7 +18,7 @@ from truss.groups import AuthoredValue,CreateObject,RootlessOwnership,GroupSucce
 from truss.catalog_runtime import _release,_pin_cursor
 
 
-def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storage=False,register_action_store=False):
+def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storage=False,register_action_store=False,register_preparation_program=False):
     source_epoch=None;seal_storage=None;action_store=None
     output=output.resolve()
     if output.exists() and any(output.iterdir()):raise ValueError('New empty output directory required')
@@ -116,6 +116,34 @@ def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storag
                         if len(rows)!=1:raise ValueError('Original complete native query binding required')
                         return bytes(rows[0][0])
                     bundle_bytes=success(assembly._host._run_operation(tx,export))
+                if register_preparation_program:
+                    import weft
+                    from dataclasses import replace
+                    from truss._preparation_program import compile_preparation_program,register_preparation_program_in_transaction
+                    if action_store is None:raise ValueError('Original committed action store required')
+                    source_packet=json.loads(original)
+                    binding_text=json.loads(bundle_bytes)['bindingJson']
+                    binding_artifact=json.dumps({'mediaType':'application/json','utf8':binding_text,'sha256':hashlib.sha256(binding_text.encode()).hexdigest()},separators=(',',':')).encode()
+                    program=compile_preparation_program(weft.MutationCompiler,
+                        compiler_source_pin='c0c6449481a87eed38d3f7a6ebebc1f4ab4beeb4',
+                        configuration=json.dumps(source_packet['configuration'],separators=(',',':')).encode(),
+                        request=json.dumps(source_packet['request'],separators=(',',':')).encode(),
+                        binding_artifact=binding_artifact,evidence=('Original same-installation products binding; byte enrollment only',))
+                    with transaction(admin) as (assembly,tx):
+                        enrolled=success(register_preparation_program_in_transaction(assembly._host,tx,store_context=action_store,registration_key=b'products-program',program=program))
+                    with transaction(admin) as (assembly,tx):
+                        replayed=success(register_preparation_program_in_transaction(assembly._host,tx,store_context=action_store,registration_key=b'products-program',program=program))
+                        if replayed!=enrolled:raise ValueError('Exact original program registration retry required')
+                        changed=replace(program,configuration=program.configuration+b' ')
+                        if not isinstance(register_preparation_program_in_transaction(assembly._host,tx,store_context=action_store,registration_key=b'products-program',program=changed),Error):raise ValueError('Changed original bytes must conflict on retry')
+                    row=admin.execute('SELECT program_identity::text,original_configuration,original_request,original_plan_artifact,original_binding_artifact,original_lowering FROM truss.preparation_program_registration').fetchone()
+                    if json.loads(enrolled.program_identity)!=row[0] or row[1:]!=(program.configuration,program.request,program.compile_response,program.binding_artifact,program.lowering):raise ValueError('Committed original program bytes required')
+                    try:person.execute('SELECT * FROM truss.preparation_program_registration')
+                    except psycopg.errors.InsufficientPrivilege:pass
+                    else:raise ValueError('Ordinary caller cannot read private compiler packet')
+                    for label,raw in [('configuration',program.configuration),('request',program.request),('compile-response',program.compile_response),('binding',program.binding_artifact),('lowering-invocation',program.lowering)]:
+                        (output/('program-'+label+'.json')).write_bytes(raw)
+                    (output/'program-registration.json').write_text(json.dumps({'programIdentity':json.loads(enrolled.program_identity),'authority':False,'scope':'Trusted administrative original compiler byte enrollment; not native program admission.'},indent=2)+'\n')
     bundle=json.loads(bundle_bytes)
     binding=bundle['bindingJson'].encode('utf8')
     if json.loads(binding)!=bundle['binding'] or bundle['binding']['releaseId']!=manifest['releaseId'] or bundle['binding']['releaseSha256']!=digest:
@@ -145,5 +173,6 @@ if __name__=='__main__':
     parser.add_argument('--bun',default='bun')
     parser.add_argument('--bootstrap-source-epoch',action='store_true')
     parser.add_argument('--install-seal-storage',action='store_true')
-    parser.add_argument('--register-action-store',action='store_true');args=parser.parse_args()
-    run(args.model,args.output,args.bun,bootstrap_source_epoch=args.bootstrap_source_epoch,install_seal_storage=args.install_seal_storage,register_action_store=args.register_action_store)
+    parser.add_argument('--register-action-store',action='store_true')
+    parser.add_argument('--register-preparation-program',action='store_true');args=parser.parse_args()
+    run(args.model,args.output,args.bun,bootstrap_source_epoch=args.bootstrap_source_epoch,install_seal_storage=args.install_seal_storage,register_action_store=args.register_action_store,register_preparation_program=args.register_preparation_program)

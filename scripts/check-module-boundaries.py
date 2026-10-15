@@ -18,6 +18,7 @@ ALLOWED = {
     'bulk_action_gateway': {'dataclasses','hashlib','inspect','threading','truss.weft','truss._bulk_set_values','truss._action_identity_codec'},
     '_bulk_set_values': {'decimal','re'},
     '_action_store': {'dataclasses','hashlib','importlib.resources','json','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._preparation_source_epoch','truss._action_identity_codec','truss._security_catalog_subject_installation'},
+    '_preparation_program': {'dataclasses','hashlib','json','re','importlib.resources','psycopg','truss.weft','truss._action_store','truss._preparation_source_epoch','truss.psycopg_host','truss.execution'},
     '_action_identity_codec': {'json'},
     '_action_subject_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.psycopg_host','truss.execution','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation'},
     '_scram_preparation_login': {'dataclasses','psycopg'},

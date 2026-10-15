@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/private/tmp/truss-main-integration-20261010/scripts/export-products-native-binding.py", line 175, in <module>
+    run(args.model,args.output,args.bun,bootstrap_source_epoch=args.bootstrap_source_epoch,install_seal_storage=args.install_seal_storage,register_action_store=args.register_action_store,register_preparation_program=args.register_preparation_program)
+  File "/private/tmp/truss-main-integration-20261010/scripts/export-products-native-binding.py", line 126, in run
+    program=compile_preparation_program(weft.MutationCompiler,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-main-integration-20261010/packages/python/src/truss/_preparation_program.py", line 99, in compile_preparation_program
+    handle = compiler.register_truss_selection(registration_raw.decode('utf-8'))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: WFT-MUTATION-TRUSS-CURRENT: Original action model revision must equal accepted native revision
