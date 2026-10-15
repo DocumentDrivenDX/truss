@@ -327,3 +327,53 @@ selection/finalization and dispatch/COMMIT acknowledgement remain required.
 Data-owned policy locks improve lifetime custody but do not discharge those
 other duties. This component does not activate the protected public profile or
 change the false authority/security-ready claims of earlier diagnostics.
+
+## Private internally guarded selection — 2026-10-15
+
+`packages/python/src/truss/_security_bootstrap/preparation-literal-selection.sql`
+adds `select_preparation_literal_rows(int4,uuid) → jsonb`. It derives the
+original immutable program from the anchor, invokes the native permit check
+before data access and again after buffering/validation, and returns no rows
+if the closing check fails. The original enrolled producer/source association
+remains c0c64494/98ee88f1; this is not a new compiler or renderer.
+
+This first native profile requires the original target's one required scalar
+String key and its exact three retained columns: identity, version and key0.
+The key Field is resolved from the original UMF target/key declaration. Exact
+`p1` through `pN` String carriers (`N ≤ 64`) become a one-dimensional native TEXT
+array; other carriers refuse. Private leaf routines execute the original `$n`
+SQL unchanged with fixed TEXT bindings. Their `RETURN QUERY` enforces native
+positional arity/types even for empty results. Original aliases/Field mapping
+are validated from the immutable lowering; these leaves do not independently
+inspect the SQL aliases. No ordinary caller receives the leaves or raw SQL.
+
+Before preflights, the original binding is compared with D's frozen active
+installation/release/hash, catalog revision and document revisions/digests.
+Every original whole-population preflight must produce exactly one non-null
+TEXT `0` before selection. Native IDs/versions stay positive int64 text and
+selection stays in ascending native identity order. Overflow refuses without
+trimming. Both the buffered row representation and complete returned JSONB text
+must fit the original byte bounds. The packet retains original columns and raw
+TEXT rows with `authority=false` and `securityReady=false`; it creates no UMF
+key encoding, prepared manifest or seal.
+
+PostgreSQL `RETURN QUERY` materializes its result internally. These byte checks
+bound the returned packet, **not** backend scratch allocation or temporary
+storage. The caller must supply a PostgreSQL statement timeout of 1–60000 ms;
+the component refuses an unbounded setting. Original engine operation-deadline
+integration remains separate unfinished work. No custom accounting is added.
+
+The basic native workflow in `test_preparation_literal_selection_native.py`
+uses the original SCRAM D/C/E and producer chain, refuses a missing permit,
+selects the seeded `bar` through actual enrolled Weft SQL, refuses a malformed
+unselected `baz` storage cell in the original D transaction, and refuses after
+C's permit is rolled back. Fixture-only dispatch/corruption helpers remain
+excluded from production. Broader parameter/key families, empty/overflow
+variants, complete authority/source/writer closure, protected finalization and
+commit publication remain unqualified. This private component introduces no
+ordinary SDK grant or protected public activation.
+
+The final corrected original-attempt workflow passed (1 test, 9.831 seconds).
+Astra Ultra approved the source conditional on this exact native pass; see
+[the component receipt](../../04-build/evidence/preparation-literal-selection-20261015.json)
+for original pins, source hashes, observations and corrected preliminary runs.

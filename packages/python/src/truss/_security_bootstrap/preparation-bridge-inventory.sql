@@ -33,6 +33,8 @@ BEGIN
    'require_preparation_literal_data_cut','acquire_preparation_literal_permit_cut',
    'issue_preparation_literal_permit','require_preparation_literal_permit',
    'mint_preparation_permit_binding','check_preparation_permit_binding',
+   'preparation_literal_parameters','execute_preparation_literal_preflight',
+   'execute_preparation_literal_selection','select_preparation_literal_rows',
    'acquire_action_mapping_cut','acquire_action_subject_cut','acquire_preparation_authority_lock'));
  -- This is an explicit adjunct, not a PL/pgSQL dependency-closure claim.
  SELECT jsonb_build_object(
