@@ -30,6 +30,9 @@ BEGIN
    'runtime_fence_routine_ddl_writer','preparation_bridge_inventory',
    'acquire_preparation_bridge_cut','observe_preparation_bridge','read_preparation_program_sources',
    'check_preparation_module_authority','check_preparation_literal_authority',
+   'require_preparation_literal_data_cut','acquire_preparation_literal_permit_cut',
+   'issue_preparation_literal_permit','require_preparation_literal_permit',
+   'mint_preparation_permit_binding','check_preparation_permit_binding',
    'acquire_action_mapping_cut','acquire_action_subject_cut','acquire_preparation_authority_lock'));
  -- This is an explicit adjunct, not a PL/pgSQL dependency-closure claim.
  SELECT jsonb_build_object(

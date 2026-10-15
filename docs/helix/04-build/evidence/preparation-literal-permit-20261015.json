@@ -1,0 +1,53 @@
+{
+  "component": "truss.preparation-literal-permit/0.1-candidate",
+  "date": "2026-10-15",
+  "authority": false,
+  "securityReady": false,
+  "productionActivated": false,
+  "runtime": {
+    "postgresql": "18.6",
+    "pgserver-pg18": "18.6.1",
+    "psycopg": "3.3.6"
+  },
+  "originalSources": {
+    "claim": "a8f73415aef8052e2dedeb3bc644426824675d14",
+    "sourceCompiler": "98ee88f193f5d70ccf21bd78ef6c37fffddc5eab",
+    "weftMutationCompiler": "c0c6449481a87eed38d3f7a6ebebc1f4ab4beeb4",
+    "subjectWitnessCheckpoint": "03a241d035a187440f2efa36465b8033f95f96b3"
+  },
+  "verification": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/src:/private/tmp/weft-mutation-wheel-installed /private/tmp/truss-clean-install-20261013/bin/python -m unittest discover -s packages/python/tests -p test_preparation_literal_permit_native.py -v",
+    "tests": 2,
+    "seconds": 20.538,
+    "result": "PASS",
+    "observed": [
+      "original SCRAM D/C/E and both original producers",
+      "successful current native checks plus original guarded mint/D check",
+      "missing D cuts and missing permit refuse",
+      "duplicate mint refuses",
+      "active C refuses; original idle C succeeds",
+      "same backend later C transaction cannot remint or satisfy D",
+      "actual D source/policy rollback refuses without implicit repair",
+      "C savepoint rollback removes actual permit addresses",
+      "actual role revocation conflicts with D-owned exclusion after C permit and locks roll back",
+      "ordinary direct issuer invocation refuses"
+    ]
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_security_bootstrap/preparation-literal-permit.sql": "c3253439874a49057c10628ec133489f23bb7b5c9d8f9e954906bb720e253592",
+    "packages/python/src/truss/_security_bootstrap/preparation-bridge-inventory.sql": "b87a4c4f1bc18da761e01d33bf57529ea1d6b371fc7a99b58a0a7db2062d8573",
+    "packages/python/tests/test_preparation_literal_permit_native.py": "7030753dbf016be7c0d1e3e4cc4c6c482cedc313dc0c1c739727fd07c6675d28"
+  },
+  "remaining": [
+    "complete original helper/DDL/shared-writer/legacy/effect closure",
+    "exclude ordinary raw advisory mint bypass",
+    "guarded operation deadline integration",
+    "protected selector/finalizer integration",
+    "original data COMMIT acknowledgement/unknown outcome integration"
+  ],
+  "trustedEnginePremises": [
+    "original C successfully completes issuer and stays idle until D settlement",
+    "D holds original cuts continuously after issuance; any rollback potentially releasing cuts invalidates entire attempt",
+    "native lock census proves present ownership, not historical continuity"
+  ]
+}
