@@ -1,0 +1,25 @@
+{
+  "scope": "private own-session Subject/Key observation only; no query permit, SCRAM human claim, continuous role/DDL exclusion or executor handoff",
+  "postgres": "18.6",
+  "driver": "psycopg 3.3.6",
+  "tests": 1,
+  "seconds": 5.891,
+  "exitCode": 0,
+  "workflow": [
+    "public catalog acceptance",
+    "public rootless Staff creation and caller commit",
+    "private source registration",
+    "missing Subject enrollment refused",
+    "native ordinary LOGIN enrollment and caller commit",
+    "actual session own-Subject lookup and original UMF Key receipt",
+    "changed codec document and Key identity refused before encoder invocation",
+    "no raw object/map SELECT",
+    "outsider helper invocation refused"
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_current_query_subjects.py": "0038064cb2a7ef74a0c624ea63550f2a332f11e07d1fa398e9ac61273c52e099",
+    "packages/python/tests/test_current_query_subjects_native.py": "f832a34ead71514702f143e9478abe4ac0c78f53e0120ff27f54e60ff863e6aa",
+    "packages/python/tests/fixtures/current-query-initialize.json": "f064f26a61f9616137d9289ed9d8a661218dbe5d89716669482fbbe13df92852",
+    "docs/helix/04-build/current-query-native-integration.md": "61f9f4d850381ae5c180587a87ec743e9c7ad1fe22546d569b69da8cb47dacbc"
+  }
+}

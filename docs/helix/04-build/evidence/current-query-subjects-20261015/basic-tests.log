@@ -1,0 +1,5 @@
+test_ordinary_session_observes_only_enrolled_subject_and_original_key (test_current_query_subjects_native.CurrentQuerySubjectsNativeTests.test_ordinary_session_observes_only_enrolled_subject_and_original_key) ... ok
+
+Ran 1 test in 5.891s
+
+OK

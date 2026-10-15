@@ -243,3 +243,37 @@ explicitly authored named-Field/Record variant of UMF's catalogRuntimeFixture at
 original UMF compiler. Its distinct source bytes are retained, not relabeled as
 the unchanged owner fixture. The storage test does not evaluate policy or issue
 a current-security permit. Subject/fact/current-cut composition remains next.
+
+## Own-session Subject realization — 2026-10-15
+
+The first Subject component selects the actual source ontology's qualified
+Subject Record and declared Key against the accepted native catalog. It supports
+one required singular String Key on a rootless Record; other shapes refuse.
+A direct trusted administrator enrolls native ordinary LOGIN role OIDs to stored
+Subject keys. Fresh installation uses the existing `catalog_subject_map` home;
+legacy/existing enrollment requires explicit migration. No source archive is
+added or silently reinterpreted.
+
+`current_query_subject_current()` takes no actor or key argument. Its runtime-owner
+SECURITY DEFINER body uses `runtime_person(false)` and binds its exact original
+Subject document/Record/Field/key, source receipt, marker inventory digest and
+catalog revision in its retained definition. Source/catalog cuts precede map and
+object cuts. Only enrolled roles receive EXECUTE; neither raw map nor object
+SELECT is granted. It returns the current session's actual actor, unique Subject
+object identity/version and exact key with source/installation correspondence.
+
+The private Python observer invokes that actual routine through the adopted
+caller's transaction, uses original UMF Key encoding on the retained accepted
+document, and reobserves native actor/key/object/version/source after encoding
+inside the same guarded callback. Search path is pinned and restored. The output
+is a detached observation, never a credential or permission. Native role checks
+are observations; continuous role/DDL exclusion, SCRAM/human authentication,
+source/fact epochs and the qualified handoff to the private executor remain
+separate required work before protected query release.
+
+The verified native Subject routine also returns the original codec document
+SHA-256 and full document/module/Record/key coordinates. The observer compares
+these with the actual retained codec inputs before invoking UMF. Replacing a
+constructible registration's document or key selection therefore refuses without
+producing a receipt for another Key. Malformed codec inputs return a typed
+execution-obligation refusal before host work.
