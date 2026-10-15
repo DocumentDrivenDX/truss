@@ -1,0 +1,12 @@
+{
+  "scope": "private POSIX framing and pure computation process custody only; no original UMF semantic driver or native security admission",
+  "python": "Python 3.12.14",
+  "bun": "1.4.2",
+  "tests": 2,
+  "exitCode": 0,
+  "sourceSha256": {
+    "packages/python/src/truss/_current_query_pipe.py": "39c7ab62660f64241f59008f5cb0b16b721f741657c44d321189237655031d7f",
+    "packages/python/tests/test_current_query_pipe.py": "8b55c27b4151d382b6d0998d59cb3ed694d8c755dd24abd340020e67968871b1",
+    "docs/helix/04-build/current-query-native-integration.md": "770cd1a3f653e8496df3465aca115278a3da8f79b4d8036c497174b013d5fe10"
+  }
+}

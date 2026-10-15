@@ -1,0 +1,7 @@
+test_numeric_envelope_id_does_not_become_text (test_current_query_pipe.CurrentQueryPipeTests.test_numeric_envelope_id_does_not_become_text) ... ok
+test_original_frames_share_child_and_retain_exact_response (test_current_query_pipe.CurrentQueryPipeTests.test_original_frames_share_child_and_retain_exact_response) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.060s
+
+OK
