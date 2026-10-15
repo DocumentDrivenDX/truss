@@ -1,0 +1,27 @@
+{
+  "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.35",
+  "publishedAt": "2026-10-15T23:22:57Z",
+  "workflow": "https://github.com/DocumentDrivenDX/truss/actions/runs/38821697242",
+  "jobs": {
+    "package": "success",
+    "native (macos-14)": "success",
+    "native (ubuntu-24.04)": "success",
+    "publish": "success"
+  },
+  "tagCommit": "238e80884b6b2c350d2153befd7589135c784084",
+  "runtimeManifestSha256": "3588cf030cb46c7d12368557e351bd767c10b4dd2e1644f7f100cec54602a2fc",
+  "downloadedAssets": {
+    "SHA256SUMS": "4127723a8903b7e50a406ece0d77ef317c56f7c321edb4a257feff82b76fa075",
+    "release-pins.json": "d5ecdcbc8b56becb9def1f42d6c8c154405d3bcfe685752f72d8712f1eee9073",
+    "truss_toolkit-0.0.35-py3-none-any.whl": "7fb3ac4c2e407f7811ced8b69e9b243323d1812ffe7b3a94d6d8ce8be80d6559",
+    "truss_toolkit-0.0.35.tar.gz": "7867eeb42eaee70f8bbafefbb81bee3574f4d8d8f1b07323e927c4cb83fc175b"
+  },
+  "publishedPackageSourceComparison": {
+    "files": 469,
+    "matchesLocallyTestedWheel": true,
+    "native69Excluded": true
+  },
+  "matchingWeftRelease": "v0.4.34",
+  "currentQueryWeftSource": "86273dd3c2b4c2b99c8d0268c9dff8537e6ce20e",
+  "scope": "Native68/PG18.6 Linux x64 and macOS ARM64; original UMF579675 child. No owned provider or projection-child V2 adoption."
+}
