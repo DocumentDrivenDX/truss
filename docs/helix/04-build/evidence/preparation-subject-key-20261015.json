@@ -1,0 +1,45 @@
+{
+  "scope": "selected original native principal to UMF String Key correspondence, not Subject existence or authority",
+  "runtime": {
+    "postgresql": "18.6",
+    "pgserver-pg18": "18.6.1",
+    "psycopg": "3.3.6"
+  },
+  "ownerSource": "98ee88f193f5d70ccf21bd78ef6c37fffddc5eab",
+  "witnessVersion": "truss.preparation-native-subject-key/0.1-candidate",
+  "originalOwnerResultUtf8": "[{\"native\":{\"actorOid\":\"18515\",\"installationId\":\"3b739e4d-270b-43dc-bf48-9e6c02dca572\",\"principalHex\":\"2270726f64756374732d706572736f6e22\",\"kind\":\"human\",\"authenticationProfile\":\"truss.local-scram/0.1\"},\"sourcePins\":{\"subjectMapping\":\"de7d966f330324b7340a366a41a2030cea666b5ebb76cf97dea5c7a271c50f1b\",\"coreClosure\":\"1d4b2055695386a728bc68905c373326efa861833b34b659493b3d069dfde0b2\"},\"original\":{\"key\":[{\"string\":\"products-person\"}],\"receipt\":{\"operation\":\"encode-core-key-tuple\",\"version\":\"3.0.0\",\"profile\":\"umf-key-tuple-v1\",\"source\":{\"umf\":\"0.8.0\",\"id\":\"bulk-subject-domain\",\"vocabularies\":{},\"modules\":[{\"id\":\"identity\",\"namespace\":\"identity\",\"elements\":[{\"id\":\"principal-id\",\"kind\":\"field\",\"scalarType\":\"string\",\"cardinality\":\"one\",\"nullability\":\"required\",\"extensions\":{}},{\"id\":\"person\",\"kind\":\"record\",\"members\":[{\"module\":\"identity\",\"element\":\"principal-id\"}],\"keys\":[{\"id\":\"pk\",\"name\":\"primary\",\"primary\":true,\"fields\":[{\"module\":\"identity\",\"element\":\"principal-id\"}]}],\"extensions\":{}}]}]},\"identity\":{\"module\":\"identity\",\"element\":\"person\",\"key\":\"pk\"},\"values\":[{\"string\":\"products-person\"}],\"keyPath\":\"/modules/0/elements/1/keys/0\",\"bytesHex\":\"554d464b3101040f70726f64756374732d706572736f6e\"},\"authority\":false}}]\n",
+  "producerIdentityBytes": 2343,
+  "totalProducerIdentityLimitBytes": 8192,
+  "nativeTests": {
+    "positiveAndChangedNativePrincipal": {
+      "passed": 2,
+      "seconds": 22.261
+    },
+    "metadataOnlySourceRegression": {
+      "passed": 1,
+      "seconds": 7.745
+    }
+  },
+  "observations": {
+    "nativeBindingsCapturedByIssuer": 1,
+    "nativeTextDescriptorsRequired": true,
+    "sourceStoreBeforeSubjectCut": true,
+    "actualNativeTupleRechecked": true,
+    "manifestVerifiedOwnerInvoked": true,
+    "originalOperationDeadlinePreserved": true,
+    "rawOwnerResultRetained": true,
+    "changedNativePrincipalRefused": "55000",
+    "actionRoleAndRecordWriterRefusalsRetained": true
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_preparation_sources.py": "ce0d73918481c387ce32194988d6b201c5cbf010559f97bb2f845d0f510cbf70",
+    "packages/python/src/truss/_security_bootstrap/preparation-literal-authority.sql": "7b89f483a8f551b154a905d2c7a1fc627c745d371a8c32dc67975cf09857729b",
+    "packages/python/tests/test_preparation_literal_authority_native.py": "a189387224b0ba69e2d5c4ed3ec5a10702c7716e619440706ca9975b8dbe6e26"
+  },
+  "review": "Astra Ultra approved bounded source; documentation/comment cleanup applied",
+  "authority": false,
+  "securityReady": false,
+  "logicalSubjectRecordExistence": false,
+  "completeAuthorityOrLegacyClosure": false,
+  "protectedExecution": false
+}

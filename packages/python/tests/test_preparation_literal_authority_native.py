@@ -39,6 +39,8 @@ class PreparationLiteralAuthorityNativeTests(original.PreparationSourcesNativeTe
         admin.execute('CREATE FUNCTION truss.literal_authority_probe(a int4,n uuid) RETURNS jsonb LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET lock_timeout=\'1ms\' AS $$ SELECT truss.check_preparation_literal_authority(a,n) $$')
         admin.execute('REVOKE ALL ON FUNCTION truss.literal_authority_probe(int4,uuid) FROM PUBLIC')
         admin.execute('GRANT EXECUTE ON FUNCTION truss.literal_authority_probe(int4,uuid) TO products_person')
+        if getattr(self,'replace_subject_before_data',False):
+            admin.execute("UPDATE truss.action_subject_binding SET principal_identity=%s WHERE role_oid=(SELECT oid FROM pg_roles WHERE rolname='products_person')",(b'"products-person-v2"',))
 
     def before_claim(self, admin, session, coordinator, anchor, nonce, params):
         super().before_claim(admin,session,coordinator,anchor,nonce,params)
@@ -49,11 +51,19 @@ class PreparationLiteralAuthorityNativeTests(original.PreparationSourcesNativeTe
         # Keep the inherited D/C source and queued-lock controls first; their
         # savepoint rollback/reacquisition also exercises original mapping cuts.
         super().after_claim_commit(admin,session,coordinator,anchor,nonce,params)
+        if getattr(self,'replace_subject_before_data',False):
+            with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
+                with coordinator.transaction():
+                    coordinator.execute('SELECT truss.literal_authority_probe(%s,%s)',(anchor,nonce))
+            return
         with coordinator.transaction(force_rollback=True):
             checked = coordinator.execute('SELECT truss.literal_authority_probe(%s,%s)',(anchor,nonce)).fetchone()[0]
             self.assertTrue(checked['currentChecksPassed'])
             self.assertFalse(checked['authority']);self.assertFalse(checked['securityReady'])
             self.assertEqual(checked['remainingNativeObligations']['status'],'required')
+            self.assertEqual(checked['subjectKeyCorrespondence']['key'],[{'string':'products-person'}])
+            self.assertEqual(checked['subjectKeyCorrespondence']['receipt']['bytesHex'],'554d464b3101040f70726f64756374732d706572736f6e')
+            self.assertFalse(checked['subjectKeyCorrespondence']['authority'])
         # A committed membership revocation after D's snapshot must be observed
         # by fresh C, without replacing D's original snapshot or XID.
         admin.execute('REVOKE preparation_bulk_editor FROM products_person')
@@ -78,3 +88,7 @@ class PreparationLiteralAuthorityNativeTests(original.PreparationSourcesNativeTe
         directory = os.environ.get('TRUSS_BRIDGE_INVENTORY_EVIDENCE')
         if directory:
             (Path(directory)/'current-check.json').write_text(json.dumps(checked,indent=2)+'\n')
+
+    def test_changed_native_principal_refuses_original_subject_key(self):
+        self.replace_subject_before_data = True
+        self.test_engine_capture_and_independently_committed_native_claim()

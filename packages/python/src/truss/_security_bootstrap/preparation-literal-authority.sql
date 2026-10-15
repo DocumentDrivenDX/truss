@@ -33,7 +33,7 @@ DECLARE observation pg_catalog.jsonb; packet pg_catalog.jsonb; producer pg_catal
  requirement pg_catalog.jsonb; field pg_catalog.jsonb; rule pg_catalog.jsonb; configured pg_catalog.jsonb;
  selected_role record; person pg_catalog.oid; relation_name pg_catalog.text;
  expected_roles pg_catalog.bytea[]; role_index pg_catalog.int4; role_match pg_catalog.bool:=false;
- needed_actions pg_catalog.text[]:='{}'; action pg_catalog.text;
+ needed_actions pg_catalog.text[]:='{}'; action pg_catalog.text; witness pg_catalog.jsonb; subject_mapping pg_catalog.jsonb;
 BEGIN
  -- Home prelocks precede private claim/source reads and policy/role cuts.
  LOCK TABLE ONLY truss.action_family_registration,truss.action_subject_binding,
@@ -73,12 +73,33 @@ BEGIN
    AND b.authentication_profile='truss.local-scram/0.1'
    AND b.installation_id=(SELECT installation_id FROM truss.catalog_runtime_installation WHERE singleton);
  IF NOT FOUND THEN RAISE EXCEPTION 'current enrolled human required' USING ERRCODE='42501';END IF;
- -- Raw principal/key semantics remain with the original UMF carrier adapter;
- -- this check establishes native enrolled human identity, not a codec receipt.
+ -- Native human identity and the original issued UMF codec witness are
+ -- checked separately. This is correspondence, not logical Subject existence.
  person:=truss.check_preparation_module_authority(packet);
  IF person IS DISTINCT FROM subject.role_oid OR person IS DISTINCT FROM
   (SELECT data_role_oid FROM truss.preparation_attempt_anchor WHERE anchor_id=original_anchor AND anchor_nonce=original_nonce) THEN
   RAISE EXCEPTION 'original native authenticated person required' USING ERRCODE='42501';END IF;
+ IF producer->'subjectWitness'->>'version' IS DISTINCT FROM 'truss.preparation-native-subject-key/0.1-candidate' THEN
+  RAISE EXCEPTION 'original native Subject codec witness required' USING ERRCODE='55000';END IF;
+ SELECT value INTO STRICT witness FROM jsonb_array_elements(
+  (producer->'subjectWitness'->>'originalOwnerResultUtf8')::jsonb)
+  WHERE value->'native'->>'actorOid'=person::text;
+ subject_mapping:=(packet->'original'->'subjectMapping'->>'utf8')::jsonb;
+ IF witness->'native' IS DISTINCT FROM jsonb_build_object('actorOid',person::text,
+   'installationId',subject.installation_id::text,'principalHex',encode(subject.principal_identity,'hex'),
+   'kind',subject.subject_kind,'authenticationProfile',subject.authentication_profile)
+  OR witness->'sourcePins' IS DISTINCT FROM jsonb_build_object(
+   'subjectMapping',packet->'original'->'subjectMapping'->>'sha256','coreClosure',packet->'original'->'coreClosure'->>'sha256')
+  OR witness->'original'->'authority' IS DISTINCT FROM 'false'::jsonb
+  OR witness->'original'->'receipt'->>'operation' IS DISTINCT FROM 'encode-core-key-tuple'
+  OR witness->'original'->'receipt'->>'version' IS DISTINCT FROM '3.0.0'
+  OR witness->'original'->'receipt'->>'profile' IS DISTINCT FROM 'umf-key-tuple-v1'
+  OR witness->'original'->'receipt'->'values' IS DISTINCT FROM witness->'original'->'key'
+  OR witness->'original'->'receipt'->'identity' IS DISTINCT FROM jsonb_build_object(
+   'module',subject_mapping->'type'->>'moduleId','element',subject_mapping->'type'->>'elementId','key',subject_mapping->>'keyId')
+  OR witness->'original'->'receipt'->'source'->>'id' IS DISTINCT FROM subject_mapping->'type'->>'documentId' THEN
+  RAISE EXCEPTION 'exact current native Subject and original codec correspondence required' USING ERRCODE='55000';END IF;
+
  SELECT * INTO STRICT family FROM ONLY truss.action_family_registration f
   WHERE f.family_identity=decode(producer->>'nativeFamilyHex','hex')
    AND f.store_control_id=program.store_control_id
@@ -151,7 +172,8 @@ BEGIN
    RAISE EXCEPTION 'original D mapping cut ended' USING ERRCODE='55000';END IF;
  END LOOP;
  RETURN jsonb_build_object('currentChecksPassed',true,'personOid',person::text,'programId',claim.program_id::text,
-  'authority',false,'securityReady',false,'remainingNativeObligations',packet->'nativeObligations'->1);
+  'authority',false,'securityReady',false,'subjectKeyCorrespondence',witness->'original',
+  'remainingNativeObligations',packet->'nativeObligations'->1);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.check_preparation_literal_authority(int4,uuid) FROM PUBLIC;

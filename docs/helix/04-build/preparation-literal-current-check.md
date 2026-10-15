@@ -1,6 +1,6 @@
 # Private literal current-check consumer
 
-The native component now consumes the original committed source attachment and
+The initial `75945564` checkpoint consumes the original committed source attachment and
 checks the selected authenticated human, complete action-role bindings and
 current module authority. It is owner-private and returns
 `currentChecksPassed:true`, `authority:false`, `securityReady:false`; the original
@@ -48,3 +48,12 @@ and permit composition remain unqualified. The native human association does
 not qualify the logical Subject codec. The test does not qualify general UMF
 policy operators, protection, blind writes or cross-system enforcement. No
 original remaining obligation has been relabeled satisfied.
+
+## Subsequent Subject Key correspondence
+
+The [bounded Subject Key witness](preparation-subject-key-correspondence.md) now
+uses the original UMF constructor over actual native bindings and matches its
+original receipt to the current actor. The initial receipt above remains
+historical evidence without that qualification. Logical Subject record
+existence, complete authority and all remaining native obligations remain
+separate; positive current-check outputs still grant no permission.
