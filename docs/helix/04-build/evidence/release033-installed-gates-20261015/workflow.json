@@ -1,0 +1,19 @@
+{
+  "scope": "Frozen Truss33 installed release gates; publication still pending tag workflow",
+  "sourceCommit": "ad794577539be9d059708a1f7e3a71857c644cbc",
+  "workflowRun": 38809024086,
+  "workflowUrl": "https://github.com/DocumentDrivenDX/truss/actions/runs/38809024086",
+  "conclusion": "success",
+  "jobs": {
+    "package": "success",
+    "native (macos-14)": "success",
+    "native (ubuntu-24.04)": "success",
+    "publish": "skipped (build-only)"
+  },
+  "runtime": "truss-catalog-runtime/0.67-candidate",
+  "runtimeManifestSha256": "8c553480e1bcb95ccaebb9aa04150a0253217838c8df6ad09acd5ecece2402ee",
+  "weftRelease": "v0.4.33",
+  "installedSource": "Built Truss wheel plus checksum-verified actual published matching Weft wheel on both native platforms",
+  "coverage": "Existing release workflow including current policy query/activation and runnable public-only example, numeric facets, ordinary adopter, mutation, catalog evolution, import, reads and query workflows",
+  "next": "Docs-only release finalization and tag workflow; in-progress native68 source excluded"
+}

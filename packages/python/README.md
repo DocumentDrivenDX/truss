@@ -11,16 +11,16 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.32`,
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.33`,
 native runtime `0.67-candidate`, layout `1.0`
 candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.36`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
-server versions are not qualified. The broader protected-engine security
-activation remains unfinished; this runtime does enforce its own installed
-ordinary-person/module boundaries.
+server versions are not qualified. The broader protected engine remains
+unfinished; this runtime enforces its installed ordinary-person/module boundaries
+and includes the explicitly activated policy-query profile described below.
 
-This release is [v0.0.32](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.32).
+This release is [v0.0.33](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.33).
 Registration-owned optional and required non-key rebinding is included in25; its
 [report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.2.md)
 retains original effects/events and requires current data-reader authority.
@@ -44,7 +44,7 @@ The [owned-object implementation plan](../../docs/helix/04-build/python-owned-ob
 covers ownership inputs, complete cascades, historical/replay authority and
 matching queries. Its UMF storage candidates are not callable ownership support.
 
-## Native66 scope and compiler pairing
+## Storage and compiler pairing
 
 UMF0.8 support0.17 admits otherwise-supported standalone singular scalar Fields
 as declarations. Their original assertions remain in the accepted source/report;
@@ -57,14 +57,14 @@ Direct object, key and page results expose `object.ownership.state` as
 
 The exact consumer model passes public accept/apply/readback and native binding
 export. Populated native65 upgrades preserve transitions and receipt replay.
-Published SDK0.0.32 selects Weft0.4.32 for native66 queries and original
+SDK0.0.33 selects Weft0.4.33 for native67 queries and original
 mutation-selection registration/lowering, preserving native65. See the
-[SDK31 release evidence](../../docs/helix/04-build/releases/v0.0.32.md).
+[SDK33 release evidence](../../docs/helix/04-build/releases/v0.0.33.md).
 This compiler support does not enable a protected bulk-action executor.
 
 ## Install the release
 
-The main checkout also contains an **unreleased current-policy query candidate**:
+SDK0.0.33 includes the experimental **current-policy query interface**:
 `assembly.query_current_in_transaction(tx, executor=..., sql=...,
 document_ids=(...), parameters=...)`. It composes an ordinary caller's actual
 Subject and module access, original UMF policy evaluation, original Weft query
@@ -140,11 +140,10 @@ source bytes and selects an explicitly supported installed computation cohort.
 Unknown modules refuse. Reopening a registration under another known wheel still
 requires an explicit migration; the factory never upgrades retained pins.
 
-This first local PostgreSQL18.6/macOS ARM profile uses exact original candidate
-Weft ABI2 and UMF child pins. Published Weft0.4.32 lacks the needed CQP feature;
-The exact standard-feature Weft0.4.33 macOS ARM CI wheel is additionally
-qualified for this existing ABI2 flow. Published bytes and other platforms still
-need explicit qualification before a wider release claim.
+This first local PostgreSQL18.6 profile uses exact original candidate Weft ABI2
+and UMF child pins. The published Weft0.4.33 macOS ARM and Linux x64 wheels
+are selected explicitly and checked in installed public workflows on both
+platforms. Other platforms and newer result ABIs remain outside this profile.
 It currently requires rootless, present String or explicit signed64 query
 domains. Empty or all-read-denied populations return empty rows when genuine
 compiled operator routes establish one unambiguous original projection domain;
@@ -162,17 +161,17 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.32 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.32 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.33 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.33 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.32'
+  'truss-toolkit[local,native,query]==0.0.33'
 ```
 
-Bun1.4.2 is still required for UMF preparation. SDK 0.0.32 /
+Bun1.4.2 is still required for UMF preparation. SDK 0.0.33 /
 native 0.67 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
 catalogs. Create/update, imports, preconditions, backfills and lookups require no
 client encoder or per-key receipt. Existing stored key and namespace bytes are
-preserved. Weft remains optional through `query` (version 0.4.32); it is not a
+preserved. Weft remains optional through `query` (version 0.4.33); it is not a
 key-encoding dependency. The separate protected security observation retains its
 original producer boundary.
 The older released installation example above retains its historical dependency
@@ -183,10 +182,10 @@ PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.32 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.33 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.32 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.33 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
 ```
@@ -346,9 +345,9 @@ Separate broad `mutations` and physical-optimization families remain unavailable
 
 A `CatalogDocument(document_id, document_revision, content)` carries exact
 original UTF-8 document bytes. Preparation runs the bundled UMF owner producer
-through Bun; registration still requires Bun in the app image. The unreleased
-prepared key boundary removes that requirement from ordinary key operations,
-while leaving catalog admission with the broader UMF producer.
+through Bun; registration still requires Bun in the app image. Ordinary key
+operations derive keys in PostgreSQL, while catalog admission uses the broader
+UMF producer.
 Native accepted IDs and definition pins come from the catalog, not fixtures.
 Addresses are document-qualified. The authenticated person is recorded separately
 from asserted origin, such as `origin_bytes=b'{"x-action":"register"}'`.
