@@ -65,9 +65,16 @@ The Chromium check builds and exercises this exact output. No temporary checkout
 or compilation service is a runtime dependency. The package remains private and
 unpublished; this build is the current source-vendor interface.
 
-Weft main `535b5c7` now compiles the original local Products UPDATE through its
-Rust mutation registry and production WASM `MutationCompiler`. Exact local
-invocation/producer admission remains separate from native transaction admission.
-Its basic Rust and Chromium checks pass; Truss physical binding/lowering and
-worker action execution remain the next integration work. This source checkpoint
-is not a new published wheel or an enabled executor.
+Weft main `4f5b73d` compiles the original local Products UPDATE through its
+Rust mutation registry and production WASM `MutationCompiler`. Building with
+`--features truss-browser-local` adds `register_browser_selection` and
+`lower_selection_json` over the separate `truss-browser-binding/0.1` profile.
+It preserves native transaction admission and validates original ordered member
+and primary-key mappings. All Record members enter complete-population
+preflights, including fields unused by the predicate. Basic Rust checks retain
+native65/66 behavior and the64-member browser mapping; actual Chromium executes
+the resulting selection SQL against a real registered Truss catalog in PGlite.
+That component test explicitly installs original scalars.sql and seeds rows
+administratively. Provider-issued owner/read-grant integration, helper installation
+and worker action execution remain unfinished. This source checkpoint is not a
+new published wheel or an enabled executor.
