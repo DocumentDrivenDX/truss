@@ -1,0 +1,33 @@
+{
+  "scope": "Published compiler selection; Truss release and installed Linux qualification pending",
+  "weftRelease": "https://github.com/DocumentDrivenDX/weft/releases/tag/v0.4.33",
+  "weftSource": "cc943a2f0ad87e3742cccdc171184bad7d4dbf60",
+  "publishedWheels": {
+    "macosARM": {
+      "wheel": "8ea8e06b7e8cf3623df69dd1e27c3bde3a1189f3adbd01c43f4a1519431b2b35",
+      "native": "60b977a1c8b8a355b86be40375aab209ed894b172dbed972498721eab8bbddae"
+    },
+    "linuxX64": {
+      "wheel": "5eddce42e8fc1497bad36413fe8153c85973d69e579ad5d6d261ff1b1ca1dd63",
+      "native": "7e62d921d83cb9cefbf97d74819e41573339a6219793217edfe52402a6384134"
+    }
+  },
+  "shimSha256": "cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d",
+  "verification": "Actual downloaded public ZIPs and published SHA256SUMS match; native modules unchanged. Replaced unique cohorts, no implicit retained registration migration.",
+  "installedPublicExample": {
+    "session": 63435,
+    "exitCode": 0,
+    "output": {
+      "columns": [
+        "salary"
+      ],
+      "rows": [
+        [
+          "[private]"
+        ]
+      ]
+    },
+    "trussCandidateWheelSha256": "4a717bda0982ee32688b1a5bf763683e909e555df473dd0ac61375f376e60792"
+  },
+  "pending": "Exact pushed main build-only workflow on Linux x64 and macOS ARM before tag"
+}

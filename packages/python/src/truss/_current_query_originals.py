@@ -26,21 +26,21 @@ _ABI2_CONSUMER={
     'weftModuleSha256':'6b8af80b8d6da4216b1338e79e869faee4f5cd25af8500034368ef709005f523',
     'resultAbi':'weft.postgresql.current-values/0.2-candidate',
 }
-# Actual standard-feature CI wheel, qualified only for the existing ABI2 flow.
+# Published standard-feature wheel, qualified only for the existing ABI2 flow.
 # Extra APIs in that wheel do not enroll aggregates or a newer result ABI.
-_ABI2_WEFT_033_CI_ARM={**_ABI2_CONSUMER,
+_ABI2_WEFT_033_ARM={**_ABI2_CONSUMER,
     'weftRevision':'cc943a2f0ad87e3742cccdc171184bad7d4dbf60',
-    'weftWheelSha256':'dfe0fa7f8286758c6e1f24e417e62e11f252dce9896ecf99800f5151b49c9fb3',
+    'weftWheelSha256':'8ea8e06b7e8cf3623df69dd1e27c3bde3a1189f3adbd01c43f4a1519431b2b35',
     'weftModuleSha256':'60b977a1c8b8a355b86be40375aab209ed894b172dbed972498721eab8bbddae',
 }
-# Exact Linux x64 CI artifact; native admission is gated by the installed
+# Exact published Linux x64 artifact; native admission is gated by the installed
 # release workflow before a release claim. No other platform is enrolled.
-_ABI2_WEFT_033_CI_LINUX_X64={**_ABI2_CONSUMER,
+_ABI2_WEFT_033_LINUX_X64={**_ABI2_CONSUMER,
     'weftRevision':'cc943a2f0ad87e3742cccdc171184bad7d4dbf60',
-    'weftWheelSha256':'57f29457842e2339ec9e9834030399afd33c081a8d9022a0d22d1f35d7ff13cd',
+    'weftWheelSha256':'5eddce42e8fc1497bad36413fe8153c85973d69e579ad5d6d261ff1b1ca1dd63',
     'weftModuleSha256':'7e62d921d83cb9cefbf97d74819e41573339a6219793217edfe52402a6384134',
 }
-_CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_CI_ARM,_ABI2_WEFT_033_CI_LINUX_X64)
+_CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_ARM,_ABI2_WEFT_033_LINUX_X64)
 
 
 def _actual_consumer():
