@@ -1,0 +1,17 @@
+{
+  "scope": "Actual original SCRAM C and engine D providers composed with pending/committed native data claims; not human identity, current authority or protected execution",
+  "baseline": "270f9ad1a9ceaca761d2c3f9dce86a343fec1f34",
+  "sourceHashes": {
+    "packages/python/tests/test_preparation_data_claim_native.py": "758836bf68397bc6a3f39f6c347f3acd34bd5d310980639b1b9842b6f1c1ab23",
+    "packages/python/src/truss/_preparation_data_claim.py": "b5c0f9d200b44aadd6b3d4e4b5dbb0f379c0c637b5e6efeb7de6be7b47582e0e",
+    "packages/python/src/truss/_scram_preparation_login.py": "57f8088e3976d302f9e7f221cebb0853bf788d681e195c8e29d0774f746c0c77",
+    "packages/python/src/truss/_engine_preparation.py": "4fecd8c34bf7f534769e046a37585f57e2b596f8d9f1dd05ee20c22964e0911c"
+  },
+  "result": "1 native test passed in8.262s",
+  "runtime": "PostgreSQL18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6",
+  "credentialsRetained": false,
+  "ownerSql": "UMF a8f73415 / SHA256 b91e5df98c96edb3643da58a28b76b876d1ef53142529cd773e55d0b14f07c96",
+  "originalHbaBytesRestored": true,
+  "authority": false,
+  "astraUltra": "Completed SCRAM composition delta approved; no broader authority claim"
+}

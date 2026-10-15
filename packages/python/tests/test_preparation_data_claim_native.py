@@ -5,14 +5,17 @@ import io
 import json
 from pathlib import Path
 import shutil
+import secrets
 import subprocess
 import tempfile
+import time
 import unittest
 from hashlib import sha256
 import psycopg
 from psycopg import sql
 from truss import Error
 from truss._engine_preparation import _EnginePreparationSession
+from truss._scram_preparation_login import ScramPreparationLogin
 from truss._preparation_data_claim import capture_preparation_claim_data, issue_preparation_data_claim_in_transaction
 import test_preparation_program_native as original
 
@@ -49,17 +52,30 @@ class PreparationDataClaimNativeTests(unittest.TestCase):
         admin.execute(sql.SQL('ALTER FUNCTION truss.engine_claim_probe(int4,uuid) OWNER TO {}').format(sql.Identifier(owner)))
         admin.execute('REVOKE ALL ON FUNCTION truss.engine_claim_probe(int4,uuid) FROM PUBLIC')
         admin.execute('GRANT EXECUTE ON FUNCTION truss.engine_claim_probe(int4,uuid) TO products_person')
-        conninfo = psycopg.conninfo.make_conninfo(**dict(params, user='products_person', options='-c statement_timeout=10000'))
-        # Generic local native login is an engine lifecycle fixture, not a new
-        # SCRAM authentication qualification; that provider has separate evidence.
-        session = _EnginePreparationSession(conninfo, 10000, 10000)
+        password = secrets.token_urlsafe(32)
+        admin.execute("SET password_encryption='scram-sha-256'")
+        admin.execute(sql.SQL('ALTER ROLE products_person PASSWORD {}').format(sql.Literal(password)))
+        hba = Path(admin.execute('SHOW hba_file').fetchone()[0])
+        original_hba = hba.read_bytes()
+        login = ScramPreparationLogin(params['host'], int(params.get('port', '5432')),
+                                      params.get('dbname', 'postgres'), 'products_person', password)
+        session = _EnginePreparationSession.from_scram_login(login, 10000, 10000)
         try:
+            hba.write_bytes(b'local all products_person scram-sha-256\n'+original_hba)
+            before = admin.execute('SELECT pg_catalog.pg_conf_load_time()').fetchone()[0]
+            admin.execute('SELECT pg_catalog.pg_reload_conf()')
+            deadline = time.monotonic()+5
+            while admin.execute('SELECT pg_catalog.pg_conf_load_time()').fetchone()[0] == before:
+                if time.monotonic() >= deadline: self.fail('Original SCRAM HBA reload not observed')
+                time.sleep(.01)
             cap = session.prepare_connection()
+            self.assertTrue(session.connection.pgconn.used_password)
             def capture_pid(cursor):
                 cursor.execute('SELECT pg_catalog.pg_backend_pid()::text', prepare=False)
                 return int(cursor.fetchone()[0])
             data_pid = session.capture_before_snapshot(cap, capture_pid)
-            with psycopg.connect(conninfo, autocommit=True) as coordinator:
+            with login.open_connection() as coordinator:
+                self.assertTrue(coordinator.pgconn.used_password)
                 coordinator.execute('BEGIN')
                 try:
                     cxid = coordinator.execute('SELECT pg_current_xact_id()::text').fetchone()[0]
@@ -94,7 +110,11 @@ class PreparationDataClaimNativeTests(unittest.TestCase):
                 finally:
                     coordinator.execute('ROLLBACK')
         finally:
-            session.close()
+            try:
+                session.close()
+            finally:
+                hba.write_bytes(original_hba)
+                admin.execute('SELECT pg_catalog.pg_reload_conf()')
 
     def test_engine_capture_and_independently_committed_native_claim(self):
         source = _ROOT / 'scripts/export-products-native-binding.py'
