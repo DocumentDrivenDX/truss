@@ -1,0 +1,33 @@
+{
+  "scope": "Release preparation only; no published Truss33 or Linux native qualification claim",
+  "runtimeManifestSha256": "8c553480e1bcb95ccaebb9aa04150a0253217838c8df6ad09acd5ecece2402ee",
+  "weftSource": "cc943a2f0ad87e3742cccdc171184bad7d4dbf60",
+  "weftCiWheelSha256": "dfe0fa7f8286758c6e1f24e417e62e11f252dce9896ecf99800f5151b49c9fb3",
+  "weftCiModuleSha256": "60b977a1c8b8a355b86be40375aab209ed894b172dbed972498721eab8bbddae",
+  "localAssets": {
+    "truss_toolkit-0.0.33.tar.gz": "8ee4fa962dae51c5d5a4576c8df97321dab233090286c9cbdd24b159c926d27e",
+    "truss_toolkit-0.0.33-py3-none-any.whl": "f6d78b93ee4c06370e667137395b879fdf6c2f42fbf15826d58156bc8e7c57c1"
+  },
+  "builtWheelPythonSourceFilesMatched": 187,
+  "installedWorkflow": {
+    "session": 8517,
+    "tests": 6,
+    "seconds": 60.771,
+    "status": "OK",
+    "scope": "Actual installed candidate wheel, four current-policy/activation workflows and UMF0.7/0.8 signed64 decimal18,4 accept/write/import/read/query workflows",
+    "environment": "PYTHONPATH=/private/tmp/truss033-candidate-installed:packages/python/tests:/private/tmp/weft-release033-ci-arm-installed; source package directory excluded"
+  },
+  "review": "Astra Ultra approved plan and completed source/workflow review. Release notes explicitly candidate/pending. No additional test campaign requested.",
+  "pending": [
+    "Compare actual published Weft33 wheel/module/source bytes; update unique cohort if rebuilt",
+    "Build-only Truss release workflow with exact published compiler on Linuxx64 andmacOSARM before tagging",
+    "Publish Truss33 through the release workflow after those gates pass"
+  ],
+  "sourceSha256": {
+    "packages/python/pyproject.toml": "9664520fe6044d1d07e7d39499893f485743ded082f0006873de6d5d887f7760",
+    "packages/python/src/truss/_query_runtime.py": "60aa1cfcf59b0b4697ab4d1cb5a6c0bb166b839b7a3d159ada1f88656ae5cfde",
+    "packages/python/src/truss/_current_query_originals.py": "e283d87b1624ddfe6160343a616d1a0fc76b3da373a7f817ecfa9333cdb96625",
+    "scripts/build-weft-runtime-python.py": "17c1cd2772751aa587c803bfe0fdeb7a2b6e28600b65d5dfc5305af029da570f",
+    ".github/workflows/release.yml": "3c3905fc204c02eb0eb82c5c211b63f052467f19b43eac30b4cd616fd94219a8"
+  }
+}

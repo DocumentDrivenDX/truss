@@ -33,7 +33,14 @@ _ABI2_WEFT_033_CI_ARM={**_ABI2_CONSUMER,
     'weftWheelSha256':'dfe0fa7f8286758c6e1f24e417e62e11f252dce9896ecf99800f5151b49c9fb3',
     'weftModuleSha256':'60b977a1c8b8a355b86be40375aab209ed894b172dbed972498721eab8bbddae',
 }
-_CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_CI_ARM)
+# Exact Linux x64 CI artifact; native admission is gated by the installed
+# release workflow before a release claim. No other platform is enrolled.
+_ABI2_WEFT_033_CI_LINUX_X64={**_ABI2_CONSUMER,
+    'weftRevision':'cc943a2f0ad87e3742cccdc171184bad7d4dbf60',
+    'weftWheelSha256':'57f29457842e2339ec9e9834030399afd33c081a8d9022a0d22d1f35d7ff13cd',
+    'weftModuleSha256':'7e62d921d83cb9cefbf97d74819e41573339a6219793217edfe52402a6384134',
+}
+_CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_CI_ARM,_ABI2_WEFT_033_CI_LINUX_X64)
 
 
 def _actual_consumer():

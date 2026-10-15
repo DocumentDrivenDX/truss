@@ -11,7 +11,7 @@ import tarfile
 import tempfile
 import tomllib
 
-REVISION = 'f87939f4e6b41c08fa021e7be0630415115395cc'
+REVISION = 'cc943a2f0ad87e3742cccdc171184bad7d4dbf60'
 
 
 def check_wheel(wheel: Path, expected_version: str):
@@ -32,9 +32,12 @@ for module in (weft, native):
         raise RuntimeError('Weft imported outside the temporary wheel installation')
 if weft.__version__ != sys.argv[2] or importlib.metadata.version('weft-sql') != sys.argv[2]:
     raise RuntimeError('Unexpected Weft wheel version')
-for name in ('compile_truss_runtime_json', 'compile_truss_runtime_page_json'):
+for name in ('compile_truss_runtime_json', 'compile_truss_runtime_page_json', 'prepare_application_lineage'):
     if not callable(getattr(weft, name, None)):
         raise RuntimeError('Missing public Weft API: ' + name)
+for name in ('native_request_json', 'lower_postgresql_current_rows_candidate_json'):
+    if not callable(getattr(getattr(native, 'CurrentQueryPreparation', None), name, None)):
+        raise RuntimeError('Missing original Weft current-query API: ' + name)
 """, target, expected_version], check=True)
 
 
@@ -60,7 +63,7 @@ def main():
         raise RuntimeError('Install maturin==1.9.6 in the caller Python environment')
     maturin = Path(sysconfig.get_path('scripts')) / ('maturin.exe' if os.name == 'nt' else 'maturin')
     command = [str(maturin), 'build', '--manifest-path', 'crates/weft-python/Cargo.toml',
-               '--locked', '--features', 'truss-postgresql-pg18',
+               '--locked', '--features', 'truss-postgresql-pg18,current-postgresql-scalar-candidate',
                '--interpreter', sys.executable, '--out', str(output / 'wheels')]
     if args.profile == 'release':
         command.append('--release')
