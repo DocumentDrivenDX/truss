@@ -1,0 +1,19 @@
+{
+  "scope": "private actual producer replay; no SQL/database execution or authority",
+  "weftSource": "c0c6449481a87eed38d3f7a6ebebc1f4ab4beeb4",
+  "nativeSha256": "2f91cbd5de07f04492d6fdbd964bf86cce84245adc18cd6debe3c17f61ef6843",
+  "originalArtifactCount": 5,
+  "test": {
+    "passed": 1,
+    "seconds": 0.35,
+    "originalReplay": true,
+    "changedSqlRefused": true,
+    "changedBinaryRefused": true
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_preparation_compiler_replay.py": "7770c92c4e48c5ef33a5cd43bb7e22f1446e79599f47da21b5ea6dbf4626579f",
+    "packages/python/tests/test_preparation_compiler_replay.py": "479b9b45e90213f8e0d7e0e8eb62720142cbe528a81ad4baff1fd799154eded8"
+  },
+  "review": "Astra Ultra approved; trusted executable/source/immutable filesystem premises retained",
+  "authority": false
+}
