@@ -1,0 +1,47 @@
+{
+  "scope": "Chromium worker lifecycle and IndexedDB reopen only",
+  "chromium": "153.0.8010.12",
+  "first": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:58484",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "d7ca857f-95c0-476a-98c2-c4f239d18870",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "b9aec00d-84f5-434c-9b0b-99cdeff7a1e6",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "forged": {
+    "outcome": "refused"
+  },
+  "second": {
+    "outcome": "unavailable",
+    "reason": "store_in_use"
+  },
+  "takeover": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:58484",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "d7ca857f-95c0-476a-98c2-c4f239d18870",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "b9aec00d-84f5-434c-9b0b-99cdeff7a1e6",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "reopened": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:58484",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "d7ca857f-95c0-476a-98c2-c4f239d18870",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "b9aec00d-84f5-434c-9b0b-99cdeff7a1e6",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "actionExecution": false,
+  "selectionReadGrant": false,
+  "crashRecovery": false
+}
