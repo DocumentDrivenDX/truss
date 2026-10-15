@@ -7,6 +7,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import unittest
+from truss.catalog_runtime import _release
 
 _ROOT = Path(__file__).resolve().parents[3]
 
@@ -21,7 +22,7 @@ class PreparationSealStorageNativeTests(unittest.TestCase):
             with contextlib.redirect_stdout(io.StringIO()):
                 module.run(model,output,shutil.which('bun') or 'bun',bootstrap_source_epoch=True,install_seal_storage=True)
             report=json.loads((output/'receipt.json').read_bytes())
-            self.assertEqual(report['runtime'],'truss-catalog-runtime/0.67-candidate')
+            self.assertEqual(report['runtime'],_release()[0]['releaseId'])
             self.assertEqual(report['nativeObjectIds'],['1','2'])
             self.assertEqual(report['metadataSourceEpoch']['installation'],report['sealStorage']['installation'])
             self.assertEqual(report['sealStorage']['sourceSha256'],'235f2ce982eeda53eaee09f7608a388f96a815cde5354f4ce6db9bb3091422fe')

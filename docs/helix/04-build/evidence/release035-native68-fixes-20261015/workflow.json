@@ -1,0 +1,40 @@
+{
+  "scope": "Local actual installed Truss0.0.35 wheel; frozen native68, macOS ARM64/PostgreSQL18.6. Linux/macOS publication remains gated by normal release workflow.",
+  "sourceBase": "6074e761f42aecff75464c777e77c7d8d71dff2d",
+  "runtimeManifestSha256": "3588cf030cb46c7d12368557e351bd767c10b4dd2e1644f7f100cec54602a2fc",
+  "changes": [
+    "Current-target upgrade/storage assertions use packaged release identity",
+    "Private metadata-source routine count164; complete original body/signature/owner/ACL verification unchanged"
+  ],
+  "failedPriorWorkflow": {
+    "url": "https://github.com/DocumentDrivenDX/truss/actions/runs/38820257481",
+    "status": "failure",
+    "publish": "skipped",
+    "cause": "Both platforms: stale native67 assertion after successful native68 upgrade",
+    "tag": "v0.0.34 remains unchanged"
+  },
+  "localPackages": {
+    "truss_toolkit-0.0.35-py3-none-any.whl": "39767f619cce2fb04c128680a119ad52eaa6565169eccc776490fbd60da9f11b",
+    "truss_toolkit-0.0.35.tar.gz": "8beae2a4a5b38b2c668a10aa7945f4d318d3a4bab9a4e8ad4067973b939290cd"
+  },
+  "basicInstalledWorkflows": {
+    "session": 82896,
+    "tests": 2,
+    "seconds": 11.211,
+    "status": "OK",
+    "coverage": [
+      "Exact original native65 upgrade; stored key and reservation bytes unchanged; new native key lookup/update",
+      "Committed private metadata-source and preparation-seal storage with public Products registration/create/read"
+    ]
+  },
+  "weft": {
+    "version": "0.4.34",
+    "source": "86273dd3c2b4c2b99c8d0268c9dff8537e6ce20e",
+    "selection": "Unchanged exact public ARM/Linux and retained original cohorts from release34 commit"
+  },
+  "excluded": [
+    "Native69 ownership source/composition",
+    "UMF projection-child V2 adoption",
+    "Managed database qualification"
+  ]
+}

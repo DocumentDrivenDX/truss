@@ -3,6 +3,7 @@ import json,os,pickle,subprocess,sys,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
 import psycopg
+from truss.catalog_runtime import _release
 from truss import LocalPostgres,Ok,CatalogDocument,CatalogRegistration,ObjectFound,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
 from truss.contracts import MapValue,TextValue
 from truss.groups import UpdateObject,StoredObjectReference,AuthoredValue,RequestNone,GroupSuccess
@@ -20,7 +21,7 @@ class DatabaseKeyUpgradeTests(unittest.TestCase):
                     admin.execute('BEGIN');h=adopt_psycopg_host(admin);a=create_reference_assembly(CatalogRuntimeConfiguration(),h).value;t=h.adopt_transaction().value
                     upgraded=a.upgrade_in_transaction(t)
                     self.assertIsInstance(upgraded,Ok,repr(upgraded)+' '+str(h._custody.last_attempt.error))
-                    self.assertEqual(upgraded.value.release_id,'truss-catalog-runtime/0.67-candidate')
+                    self.assertEqual(upgraded.value.release_id,_release()[0]['releaseId'])
                     h.detach();admin.commit()
                     self.assertEqual(admin.execute('SELECT storage_row_id,namespace_bytes,key_bytes,original_context_bytes FROM truss.object_key_bucket ORDER BY storage_row_id').fetchall(),keys)
                     self.assertEqual(admin.execute('SELECT storage_row_id,namespace_bytes,key_bytes,original_reservation_bytes FROM truss.object_key_reservation_bucket ORDER BY storage_row_id').fetchall(),reservations)
