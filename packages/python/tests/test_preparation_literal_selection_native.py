@@ -1,5 +1,7 @@
 """Original enrolled Weft SQL inside private native permit checks."""
 from importlib.resources import files
+import json
+from truss._umf_key_tuples import KeyTupleRequest,encode_key_tuples
 import psycopg
 import test_preparation_literal_permit_native as original
 
@@ -34,6 +36,14 @@ class PreparationLiteralSelectionNativeTests(original.PreparationLiteralPermitNa
             self.assertEqual(result['preflightsCompleted'],4)
             self.assertEqual(len(result['rows']),1)
             self.assertEqual(result['rows'][0][2],'bar')
+            original_request = json.loads(admin.execute('SELECT original_request FROM truss.preparation_program_registration WHERE program_id=%s',(int(result['programId']),)).fetchone()[0])
+            target = original_request['target']
+            keys = encode_key_tuples(original_request['model']['utf8'].encode('utf8'),
+                (KeyTupleRequest(target['module'],target['element'],target['key'],(result['rows'][0][2],)),))
+            self.assertEqual(keys[0].tuple_bytes.hex(),'554d464b31010403626172')
+            receipt = json.loads(keys[0].original_receipt_bytes)
+            self.assertEqual(receipt['version'],'3.0.0')
+            self.assertEqual(receipt['values'],[{'string':'bar'}])
             # Same-D mutation of a different, unselected row must still fail
             # population validation before any authorized selected row returns.
             with data.transaction(force_rollback=True):

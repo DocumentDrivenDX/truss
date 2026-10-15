@@ -16,7 +16,7 @@ class PreparationLiteralPermitNativeTests(original.PreparationLiteralAuthorityNa
 
     def prepare_component(self, admin, owner):
         super().prepare_component(admin,owner)
-        for name in ('preparation-permit-mint.sql','preparation-permit-binding-check.sql','preparation-literal-permit.sql'):
+        for name in ('preparation-advisory-exclusion.sql','preparation-permit-mint.sql','preparation-permit-binding-check.sql','preparation-literal-permit.sql'):
             admin.execute(files('truss').joinpath('_security_bootstrap',name).read_text())
         # Assessor-only dispatch, no production installer/SDK grant. The raw
         # private primitives themselves remain inaccessible to the person.

@@ -58,12 +58,14 @@ BEGIN
  SELECT * INTO STRICT claim FROM umf_security.require_preparation_data_claim(original_anchor,original_nonce);
  PERFORM truss.require_preparation_literal_data_cut(claim.data_pid);
  PERFORM truss.check_preparation_literal_authority(original_anchor,original_nonce);
+ PERFORM truss.require_preparation_advisory_exclusion();
  PERFORM truss.mint_preparation_permit_binding(original_anchor,claim.data_pid,claim.data_xid);
  SELECT * INTO STRICT after_claim FROM umf_security.require_preparation_data_claim(original_anchor,original_nonce);
  IF after_claim IS DISTINCT FROM claim OR truss.check_preparation_attempt_coordinator(original_anchor,original_nonce) IS NOT TRUE
   OR truss.observe_preparation_bridge(original_anchor,original_nonce) IS DISTINCT FROM original_observation THEN
   RAISE EXCEPTION 'original claim/coordinator/source changed during mint' USING ERRCODE='55000';END IF;
  PERFORM truss.require_preparation_literal_data_cut(claim.data_pid);
+ PERFORM truss.require_preparation_advisory_exclusion();
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.issue_preparation_literal_permit(int4,uuid) FROM PUBLIC;
@@ -100,6 +102,7 @@ BEGIN
    program_id:=truss.resolve_preparation_program_binding(original_anchor,original_nonce,pg_current_xact_id());
    PERFORM truss.read_preparation_program_sources(program_id);
   END IF;
+  PERFORM truss.require_preparation_advisory_exclusion();
   IF truss.check_preparation_permit_binding(original_anchor,anchor.coordinator_pid) IS NOT TRUE THEN
    RAISE EXCEPTION 'original guarded coordinator permit required' USING ERRCODE='55000';END IF;
  END LOOP;

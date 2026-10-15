@@ -33,9 +33,13 @@ BEGIN
    'require_preparation_literal_data_cut','acquire_preparation_literal_permit_cut',
    'issue_preparation_literal_permit','require_preparation_literal_permit',
    'mint_preparation_permit_binding','check_preparation_permit_binding',
+   'require_preparation_advisory_exclusion',
    'preparation_literal_parameters','execute_preparation_literal_preflight',
    'execute_preparation_literal_selection','select_preparation_literal_rows',
-   'acquire_action_mapping_cut','acquire_action_subject_cut','acquire_preparation_authority_lock'));
+   'acquire_action_mapping_cut','acquire_action_subject_cut','acquire_preparation_authority_lock'))
+ OR (n.nspname='pg_catalog' AND p.pronargs=2 AND p.proargtypes='23 23'::oidvector
+  AND p.proname IN ('pg_advisory_lock','pg_advisory_lock_shared','pg_try_advisory_lock','pg_try_advisory_lock_shared',
+   'pg_advisory_xact_lock','pg_advisory_xact_lock_shared','pg_try_advisory_xact_lock','pg_try_advisory_xact_lock_shared'));
  -- This is an explicit adjunct, not a PL/pgSQL dependency-closure claim.
  SELECT jsonb_build_object(
   'profile','truss.preparation-bridge-definitions/0.1','authority',false,

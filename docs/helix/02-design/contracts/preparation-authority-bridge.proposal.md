@@ -377,3 +377,54 @@ The final corrected original-attempt workflow passed (1 test, 9.831 seconds).
 Astra Ultra approved the source conditional on this exact native pass; see
 [the component receipt](../../04-build/evidence/preparation-literal-selection-20261015.json)
 for original pins, source hashes, observations and corrected preliminary runs.
+
+## Private direct advisory acquisition exclusion — 2026-10-15
+
+`preparation-advisory-exclusion.sql` is an explicit privileged installation step
+for the private profile, before its original C/D connections are opened. It
+revokes PUBLIC EXECUTE on the eight exact two-int acquisition overloads:
+`pg_advisory_lock`, `pg_advisory_lock_shared`, `pg_try_advisory_lock`,
+`pg_try_advisory_lock_shared`, `pg_advisory_xact_lock`,
+`pg_advisory_xact_lock_shared`, `pg_try_advisory_xact_lock` and
+`pg_try_advisory_xact_lock_shared`. The one-bigint family uses a different native
+advisory namespace and cannot supply the expected two-int binding addresses.
+This SQL is not added to the ordinary public runtime installer and is not a
+managed-service installation claim.
+
+Private `require_preparation_advisory_exclusion() → void` derives the actual
+SESSION_USER OID, requires an ordinary login, and checks effective EXECUTE for
+that actor and every SET-reachable native role. A SET-reachable role's inherited
+privileges are included; checking only direct ACL grantees or the actor's
+inherited privileges would miss this route. Missing routines/privilege evidence
+refuse. The eight exact native procedures and this helper join the explicit
+bridge source/ACL inventory. Original C checks the exclusion under its fresh
+held role/source cuts before mint and again before return. D checks it during
+verification, but D's old RR catalog view is **not a new fresh role-policy
+proof**; original C remains the fresh authority observer.
+
+Revocation does not remove already-held advisory locks. The trusted engine
+must open original C/D only **after this installation commits** and retain the
+existing successful-issuer/parked-C/continuous-D-cut protocol. The native fixture
+performs that ordering before opening both original SCRAM connections. It does
+not qualify arbitrary legacy sessions. SECURITY DEFINER wrappers, extensions,
+other privileged dispatch paths and complete helper/writer closure remain
+separate obligations. Existing runtime helpers that use these builtins need
+their own original owner/dispatch qualification before production activation;
+this step does not grant them blanket execution.
+
+The focused native test `test_preparation_advisory_exclusion_native.py`
+observes denial of all eight direct ordinary calls while private guarded mint
+still works. A separate real role arrangement grants the actor SET without
+inheritance into a role that inherits EXECUTE from a second role: the actor's
+direct effective privilege is false, but the guarded issuer correctly refuses.
+No production grant, new registry or protected public activation is introduced.
+
+Astra Ultra approved the scoped plan and completed source. The two exclusion
+workflows passed in 21.696 seconds; guarded selection still passed in 9.834
+seconds and fed its actual selected `bar` key to the existing UMF Core3.0.0
+producer (`554d464b31010403626172`). No new key codec was introduced. The
+bundled producer revision is 7c0f0c98; its key-tuple/schema-literal source files
+are unchanged through the enrolled 98ee88f1 source revision. See
+[the exact component receipt](../../04-build/evidence/preparation-advisory-exclusion-20261015.json).
+Owner action-manifest materialization is still a distinct missing integration;
+these actual key receipts do not substitute for it.
