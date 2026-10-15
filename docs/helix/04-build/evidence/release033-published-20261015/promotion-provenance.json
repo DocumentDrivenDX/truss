@@ -1,0 +1,77 @@
+{
+  "sourceRun": 38811140485,
+  "sourceAttempt": 1,
+  "tag": "v0.0.33",
+  "sourceCommit": "427c2ba8acb91bf4070c91f4d11e79de3f794c14",
+  "promotionWorkflowCommit": "a5a07e2a6c2163c0d1862d69b2db46c3dd045e8e",
+  "promotionWorkflowRun": "38814109764",
+  "testedPackageSha256": {
+    "truss_toolkit-0.0.33-py3-none-any.whl": "15d4911e4e2ea32fe51944d75969c1ac8cbf1c76cbf35250dc8640b7a4dfa8e1",
+    "truss_toolkit-0.0.33.tar.gz": "0c6f8726f7c35e07c174e6cef2b566ac14ae15d949876dbd4e5526d551120e8b"
+  },
+  "artifact": {
+    "id": 12008806217,
+    "name": "python-package",
+    "digest": "sha256:24285566258b466da8dec7faf750728342950ea48e38dba2d2797f9698580af4",
+    "size_in_bytes": 4963033,
+    "created_at": "2026-10-15T21:36:44Z"
+  },
+  "gates": [
+    {
+      "id": 116684355010,
+      "name": "package",
+      "conclusion": "success",
+      "run_attempt": 1
+    },
+    {
+      "id": 116684553574,
+      "name": "native (macos-14)",
+      "conclusion": "success",
+      "run_attempt": 1
+    },
+    {
+      "id": 116684553686,
+      "name": "native (ubuntu-24.04)",
+      "conclusion": "cancelled",
+      "run_attempt": 1
+    },
+    {
+      "id": 116690768635,
+      "name": "publish",
+      "conclusion": "skipped",
+      "run_attempt": 1
+    }
+  ],
+  "requiredNativeSteps": [
+    "Install exact released compiler and verify its checksum",
+    "Install checksum-verified PG18 and this exact Truss wheel",
+    "Run the installed public adopter workflow",
+    "Run installed current-policy query and activation workflows",
+    "Run the public-only policy query reference example",
+    "Run both installed numeric facet workflows",
+    "Run public offline preparation and unchanged commerce workflow",
+    "Run both installed decimal scale2 workflows",
+    "Run public registration-owned rebinding workflows",
+    "Run public recursive-container workflows",
+    "Upgrade the published native63 predecessor",
+    "Run both installed exact timestamp workflows",
+    "Run both installed binary equality workflows",
+    "Run both installed optional binary workflows",
+    "Run both installed typed business-key workflows",
+    "Upgrade native65 without rewriting stored keys",
+    "Run installed bounded traversal and module-owner workflows",
+    "Run both installed numeric facet evolution workflows",
+    "Run both installed scalar container workflows",
+    "Run both installed typed relationship key workflows",
+    "Run installed typed and string SQL page workflows",
+    "Run installed field-name evolution workflows",
+    "Run installed Record rename and member-order workflows",
+    "Run installed required-field evolution workflows",
+    "Run installed relationship-bound evolution workflows",
+    "Run installed flat-container requiredness workflows",
+    "Run installed engine import and original diagnostic workflows",
+    "Run installed parallel-edge workflow",
+    "Run installed relationship-name evolution workflows"
+  ],
+  "scope": "Original tested wheel/sdist; timeout recovery only after every required step succeeded"
+}

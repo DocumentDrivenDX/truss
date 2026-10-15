@@ -1,0 +1,9 @@
+{
+  "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.33",
+  "published": true,
+  "promotionRun": 38814109764,
+  "promotionConclusion": "success",
+  "publishedAssetDigestsMatchOriginalTestedPackages": true,
+  "runtimeManifestSha256": "8c553480e1bcb95ccaebb9aa04150a0253217838c8df6ad09acd5ecece2402ee",
+  "scope": "Published original tested wheel and sdist. Original Linux job hit its 15-minute job limit after all test steps succeeded; guarded promotion retained provenance. No package rebuild."
+}
