@@ -1,0 +1,7 @@
+{
+  "name": "@documentdrivendx/truss-browser",
+  "private": true,
+  "type": "module",
+  "scripts": {"check:layout": "bun check-layout.ts"},
+  "dependencies": {"@electric-sql/pglite": "0.5.10"}
+}

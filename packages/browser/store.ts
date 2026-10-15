@@ -1,0 +1,89 @@
+import {PGlite} from '@electric-sql/pglite';
+
+const LAYOUT='c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294';
+const PROFILE='truss-browser-layout/0.1';
+declare const ownerBrand:unique symbol;
+export interface LocalOwner {readonly [ownerBrand]:true}
+export interface StoreInfo {
+  readonly profile:typeof PROFILE;readonly namespace:string;readonly origin:string;
+  readonly storeId:string;readonly incarnation:string;readonly layoutSha256:string;
+}
+export interface BrowserStore {
+  info(owner:LocalOwner):StoreInfo;
+  close(owner:LocalOwner):Promise<void>;
+}
+export type StoreOpen={outcome:'available';store:BrowserStore;owner:LocalOwner}|{outcome:'unavailable';reason:'store_in_use'};
+
+/** Worker-local capability. No SQL connection or action/read authority is exported. */
+export async function openBrowserStore(input:{name:string;layoutSql:string}):Promise<StoreOpen>{
+  const WorkerScope=(globalThis as any).WorkerGlobalScope;
+  if(!WorkerScope||!(globalThis instanceof WorkerScope)||!navigator.locks||!globalThis.indexedDB)
+    throw new Error('Browser worker, Web Locks and IndexedDB required');
+  if(!input)throw new Error('Original store input required');
+  const name=input.name,layoutSql=input.layoutSql;
+  if(typeof name!=='string'||!/^[a-z0-9][a-z0-9-]{0,63}$/.test(name)
+    ||typeof layoutSql!=='string'||layoutSql.length>1048576)
+    throw new Error('Bounded canonical store name and original layout required');
+  const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(layoutSql))))
+    .map(x=>x.toString(16).padStart(2,'0')).join('');
+  if(digest!==LAYOUT)throw new Error('Original generated Truss layout required');
+  const namespace='truss-browser:'+name,origin=location.origin;
+  let release!:()=>void;
+  const held=new Promise<void>(resolve=>{release=resolve;});
+  let ready!:(result:StoreOpen)=>void,fail!:(error:unknown)=>void;
+  const opening=new Promise<StoreOpen>((resolve,reject)=>{ready=resolve;fail=reject;});
+  const lockTask:Promise<void>=navigator.locks.request(namespace,{mode:'exclusive',ifAvailable:true},async lock=>{
+    if(!lock){ready({outcome:'unavailable',reason:'store_in_use'});return;}
+    let db:PGlite|undefined;
+    try{
+      db=new PGlite('idb://'+namespace,{relaxedDurability:false});
+      const actual=db;
+      const version=(await actual.query<{n:string;version:string}>('SELECT current_setting(\'server_version_num\') AS n,version()')).rows[0];
+      if(version?.n!=='180006'||!version.version.includes('PGlite 0.5.10'))throw new Error('PGlite0.5.10/PostgreSQL18.6 required');
+      const exists=(await actual.query<{present:boolean}>("SELECT EXISTS(SELECT 1 FROM pg_namespace WHERE nspname='truss') AS present")).rows[0]!.present;
+      if(!exists){
+        await actual.transaction(async tx=>{
+          await tx.exec(layoutSql);
+          const marker:StoreInfo={profile:PROFILE,namespace,origin,storeId:crypto.randomUUID(),incarnation:crypto.randomUUID(),layoutSha256:LAYOUT};
+          await tx.query("INSERT INTO truss.setting(key,value) VALUES('browser_store_marker',$1::jsonb)",[JSON.stringify(marker)]);
+        });
+        await actual.syncToFs();
+      }
+      const rows=(await actual.query<{value:StoreInfo}>("SELECT value FROM truss.setting WHERE key='browser_store_marker'")).rows;
+      const marker=rows[0]?.value;
+      const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+      if(rows.length!==1||!marker||Object.keys(marker).sort().join(',')!=='incarnation,layoutSha256,namespace,origin,profile,storeId'
+        ||marker.profile!==PROFILE||marker.namespace!==namespace||marker.origin!==origin||marker.layoutSha256!==LAYOUT
+        ||typeof marker.storeId!=='string'||typeof marker.incarnation!=='string'
+        ||!uuid.test(marker.storeId)||!uuid.test(marker.incarnation))
+        throw new Error('Original store incarnation marker required; no automatic reset');
+      const tables=(await actual.query<{n:string}>("SELECT count(*)::text AS n FROM pg_catalog.pg_tables WHERE schemaname='truss'")).rows[0];
+      const head=(await actual.query<{rev:number}>('SELECT rev FROM truss.schema_head WHERE id=1')).rows;
+      if(tables?.n!=='48'||head.length!==1||!Number.isSafeInteger(head[0]!.rev)||head[0]!.rev<0)
+        throw new Error('Complete original layout inventory required');
+      const info=Object.freeze({...marker});
+      await actual.syncToFs();
+      const owner=Object.freeze(Object.create(null)) as LocalOwner;
+      let state:'open'|'closing'|'closed'|'fenced'='open';
+      const check=(cap:LocalOwner)=>{if(cap!==owner||state!=='open')throw new Error('Current issued local owner required');};
+      const store:BrowserStore=Object.freeze({
+        info(cap:LocalOwner){check(cap);return info;},
+        async close(cap:LocalOwner){
+          check(cap);state='closing';
+          try{await actual.syncToFs();await actual.close();release();await lockTask;state='closed';}
+          catch(error){state='fenced';throw error;}
+        }
+      });
+      ready({outcome:'available',store,owner});
+      await held;
+    }catch(error){
+      fail(error);
+      // PGlite close may hide shutdown errors. An initialization/flush failure
+      // fences this worker; do not release its lock on an inferred cleanup.
+      // The caller sees rejection immediately and can terminate the worker.
+      if(db)await held;
+    }
+  });
+  void lockTask.catch(fail);
+  return opening;
+}

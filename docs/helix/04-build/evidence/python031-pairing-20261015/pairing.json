@@ -1,0 +1,28 @@
+{
+  "scope": "Installed local SDK31 candidate with actual published Weft31; not the future published Truss wheel",
+  "weftReleasePins": {
+    "tag": "v0.4.31",
+    "commit": "f87939f4e6b41c08fa021e7be0630415115395cc",
+    "workflowCommit": "f87939f4e6b41c08fa021e7be0630415115395cc",
+    "distribution": "weft-sql",
+    "version": "0.4.31",
+    "features": [
+      "truss-postgresql-pg18"
+    ],
+    "trussBackend": "0.4.36",
+    "trussRuntime": "truss-catalog-runtime/0.66-candidate",
+    "trussRuntimeSha256": "99ae7218e0e3e68e0a3682e43949089185d967eb21bbf31deb0b8f8f6fc2de9a",
+    "trussSupportProfile": "0.17",
+    "timestampComparisonProfile": "umf-rfc3339-exact-instant/1.0.0",
+    "umfExactInstantCommit": "cbb6fb87",
+    "rust": "1.90.0",
+    "maturin": "1.9.6"
+  },
+  "weftWorkflow": 38768143541,
+  "allFivePublishedChecksumsVerified": true,
+  "files": {
+    "truss_toolkit-0.0.31-py3-none-any.whl": "975f7856750ff28943d3a92472f5f6428ab62045aa90a52de9030262f5f23a4b",
+    "weft_sql-0.4.31-cp39-abi3-macosx_11_0_arm64.whl": "288a33aaa2ebeb27961d6e1246c7c45815b5c986f652c585bd6f13d62bc4ac8c",
+    "weft.abi3.so": "a27e3b25f39b18058fa4923d09fd8e77821fb213c14128ca227116bc9e4e7c26"
+  }
+}
