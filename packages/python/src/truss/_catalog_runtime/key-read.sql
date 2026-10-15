@@ -6,7 +6,7 @@ BEGIN
  PERFORM truss.runtime_person(false);
  IF selected_document IS NULL OR selected_module IS NULL OR selected_record IS NULL OR selected_key IS NULL
  OR octet_length(selected_document) NOT BETWEEN 1 AND 4096 OR octet_length(selected_module) NOT BETWEEN 1 AND 4096 OR octet_length(selected_record) NOT BETWEEN 1 AND 4096 OR octet_length(selected_key) NOT BETWEEN 1 AND 4096
- OR original_document IS NULL OR octet_length(original_document) NOT BETWEEN 1 AND 1048576 THEN RAISE EXCEPTION 'bounded key selection required' USING ERRCODE='22023';END IF;
+ OR (original_document IS NOT NULL AND octet_length(original_document) NOT BETWEEN 1 AND 1048576) THEN RAISE EXCEPTION 'bounded key selection required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RAISE EXCEPTION 'selected installed runtime required' USING ERRCODE='0A000';END IF;
  IF current_setting('transaction_read_only')='on' THEN SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
@@ -28,7 +28,7 @@ BEGIN
  END LOOP;
  IF counted<>cardinality(key_definition.prop_ids) THEN RAISE EXCEPTION 'complete native key definition required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=record_type.document_id ORDER BY rev DESC LIMIT 1;
- IF original_document IS DISTINCT FROM convert_to(archive.document,'UTF8') OR archive.doc_id IS DISTINCT FROM selected_document OR encode(sha256(original_document),'hex') IS DISTINCT FROM archive.content_sha256 THEN RAISE EXCEPTION 'original accepted key source required' USING ERRCODE='22023';END IF;
+ IF (original_document IS NOT NULL AND original_document IS DISTINCT FROM convert_to(archive.document,'UTF8')) OR archive.doc_id IS DISTINCT FROM selected_document OR encode(sha256(convert_to(archive.document,'UTF8')),'hex') IS DISTINCT FROM archive.content_sha256 THEN RAISE EXCEPTION 'original accepted key source required' USING ERRCODE='22023';END IF;
  PERFORM truss.runtime_person(false);
  IF NOT truss.runtime_can_read(selected_document,selected_module) THEN RETURN NULL;END IF;
  FOR component IN SELECT DISTINCT p.declaration_module FROM unnest(key_definition.prop_ids) i(prop_id) JOIN truss.prop_def p ON p.prop_id=i.prop_id AND p.type_id=record_type.type_id LOOP
@@ -49,7 +49,7 @@ BEGIN
  selection_bytes:=truss.key_read_selection(selected_document,selected_module,selected_record,selected_key,original_document,expected_release,expected_digest);
  IF selection_bytes IS NULL THEN RETURN NULL;END IF;
  selection:=convert_from(selection_bytes,'UTF8')::jsonb;
- IF maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 OR values_bytes IS NULL OR octet_length(values_bytes) NOT BETWEEN 1 AND 1048576 OR tuple_bytes IS NULL OR octet_length(tuple_bytes) NOT BETWEEN 1 AND 1048576 THEN RAISE EXCEPTION 'bounded key values required' USING ERRCODE='22023';END IF;
+ IF maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 OR values_bytes IS NULL OR octet_length(values_bytes) NOT BETWEEN 1 AND 1048576 OR tuple_bytes IS NOT NULL THEN RAISE EXCEPTION 'bounded key values required' USING ERRCODE='22023';END IF;
  values_json:=convert_from(values_bytes,'UTF8')::jsonb;
  IF jsonb_typeof(values_json) IS DISTINCT FROM 'array' OR jsonb_array_length(values_json)<>(selection->>'componentCount')::int THEN RAISE EXCEPTION 'ordered exact key values required' USING ERRCODE='22023';END IF;
  -- Retain the original bare-string native entry shape while admitting typed cells.
@@ -58,10 +58,7 @@ BEGIN
  SELECT jsonb_agg(coalesce(p.facets,'{}'::jsonb) ORDER BY i.ord) INTO key_facets FROM truss.key_def k
   CROSS JOIN LATERAL unnest(k.prop_ids) WITH ORDINALITY i(prop_id,ord) JOIN truss.prop_def p ON p.type_id=k.type_id AND p.prop_id=i.prop_id
   WHERE k.type_id=(selection->>'typeId')::int AND k.key_num=(selection->>'keyNumber')::smallint;
- IF EXISTS(SELECT 1 FROM truss.key_def k CROSS JOIN LATERAL unnest(k.prop_ids) WITH ORDINALITY i(prop_id,ord)
-  JOIN truss.prop_def p ON p.type_id=k.type_id AND p.prop_id=i.prop_id WHERE k.type_id=(selection->>'typeId')::int AND k.key_num=(selection->>'keyNumber')::smallint
-  AND truss.valid_scalar_property(values_json->(i.ord::int-1),p.scalar_type,false,p.facets) IS NOT TRUE)
-  OR truss.verify_umf_scalar_key_tuple(tuple_bytes,values_json,key_facets) IS NOT TRUE THEN RAISE EXCEPTION 'original key encoding required' USING ERRCODE='22023';END IF;
+ tuple_bytes:=truss.derive_catalog_key_tuple((selection->>'typeId')::int,(selection->>'keyNumber')::smallint,values_json);
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  SELECT * INTO STRICT source_pin FROM truss.runtime_definition('key',(selection->>'typeId')::int,(selection->>'keyNumber')::int);
  namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,

@@ -1,0 +1,9 @@
+test_public_typed_composite_workflow (test_typed_keys_native.TypedKey08Tests.test_public_typed_composite_workflow) ... ok
+test_thousand_native_key_lookups_without_bun (test_typed_keys_native.TypedKey08Tests.test_thousand_native_key_lookups_without_bun) ... ok
+test_public_typed_composite_workflow (test_typed_keys_native.TypedKeyTests.test_public_typed_composite_workflow) ... ok
+test_thousand_native_key_lookups_without_bun (test_typed_keys_native.TypedKeyTests.test_thousand_native_key_lookups_without_bun) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 108.623s
+
+OK

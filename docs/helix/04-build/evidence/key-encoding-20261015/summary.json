@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-15",
+  "scope": "UMF-defined prepared key encoding for already admitted core0.7/0.8 catalogs; no complete admission or release claim",
+  "versions": {
+    "truss": "0.0.31",
+    "weft": "0.4.31",
+    "rust": "1.90.0",
+    "python": [
+      "3.11",
+      "3.12"
+    ],
+    "postgresql": "18.6",
+    "bunOracle": "1.4.2"
+  },
+  "checks": {
+    "pythonDifferentialAndRefusalTests": {
+      "3.11": 21,
+      "3.12": 21
+    },
+    "rustLibraryTests": 277,
+    "rustKeyTests": 3,
+    "postgresqlWorkflowTests": 4,
+    "nativeLookupCalls": 2000,
+    "allPassed": true
+  },
+  "browser": {
+    "cases": 30,
+    "browser": "151.0.7922.34",
+    "byteParity": true,
+    "external": [],
+    "wasmSha256": "35705f3e0be93da801ce240764dd00300cbb087cc07182faed715ae4bc032cc4"
+  },
+  "benchmark": {
+    "scope": "Encoder only, including full receipt transport/decoding; not database/import throughput",
+    "sourceBytes": 8992,
+    "coldSeconds": 0.0027077909326180816,
+    "warmKeys": 10000,
+    "warmMeanSeconds": 0.0004306321241077967,
+    "warmMedianSeconds": 0.00041216600220650434,
+    "warmP95Seconds": 0.0005212909309193492,
+    "batch200Seconds": 0.08480358403176069,
+    "bunSingleSeconds": 0.17654516699258238,
+    "speedup": 409.96748061551773
+  },
+  "sourceSha256": {
+    "truss": {
+      "_umf_key_tuples.py": "f6ecfcf3ebb813d177920aaf13371a5e31d6f43c557f13ad6e8167c41c0127df",
+      "_native_key_tuples.py": "5df76fb6dd89044686892a28903e18a5afd3ca2d0eafc2275a58062d42da363f"
+    },
+    "weft": {
+      "crates/weft-core/src/key_tuple.rs": "a9376eb814f6bc641a1bcb619f985886970366ba54981b00183766bfb90b95bf",
+      "crates/weft-core/tests/key_tuple.rs": "632c0e8e692f8e1461a140fceefd2e8654d982d0099efe606a981be38b694c43",
+      "crates/weft-python/src/lib.rs": "71dbb6d84907dd9776367a30ef130692f0078baaf2884594108ac118368c81c7",
+      "crates/weft-wasm/src/lib.rs": "41b981a50deb9a408ce89908101f3fc2d2bc3ea2ae5be733f45faf80fec1ac1a",
+      "crates/weft-runtime/src/lib.rs": "e3a3bd402189290a889b8fbf94b13a50a15c5affbae26afa7db875acd9fbb73a",
+      "packages/weft-browser/src/index.ts": "ed54322c19027cfcfefaeabc585677dcb0fc63e4d94d50d66cd086561a93f08f",
+      "tests/key-tuples/umf-vectors.json": "3e23278aaf0822bc830be767672663c5bc1ad6a3328f7ffe1259ead175c77e4c",
+      "tests/key-tuples/hosts.py": "3e21f01efc017abdd03a75279ce1b13072a18a7f97e2ff25906e027fe6bdc658",
+      "tests/key-tuples/browser.mjs": "f46bf75c151df597bf91dc416861a56f87730903a881e6ecd38b76d4a3740e0e"
+    }
+  },
+  "oraclePins": {
+    "_umf_keys": {
+      "manifestSha256": "4e90f95322267ed1e7297a3eb2850f47ff86cdbba107c6859ea70a93b88b6537",
+      "ownerRevision": "16c35e8d943769ccfa7bb57d16785aa7159abe65",
+      "producerSha256": "f005ab0edc21852dae7d3cd9f42e29faec0ddaf465573db8a364f133e0601300"
+    },
+    "_umf_keys08": {
+      "manifestSha256": "3ce2df6a1abf84eef7d9a9f0586b09638939a06df9a261242d49cf58e772fad8",
+      "ownerRevision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+      "producerSha256": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651"
+    }
+  },
+  "review": "Astra reviewed plan and final implementation; no remaining concrete blockers under admitted-catalog boundary. Review found historical facet and WASM scale issues, corrected and covered.",
+  "wheels": {
+    "truss_toolkit-0.0.31-py3-none-any.whl": "a5a428cd90415de93dc1db86c4e5e59f1b8421171c51a26f983e4834810c5044",
+    "weft_sql-0.4.31-cp39-abi3-macosx_11_0_arm64.whl": "4d4696754e64e3cde1062e3191916e4d3b4b7ff44770eea2753b01115a681cd1"
+  },
+  "limits": [
+    "Registration still requires broader UMF Bun preparation",
+    "No 10000-record database import throughput measurement; 10000 encoder calls measured",
+    "Full repository/remote release CI and Linux wheel qualification not run",
+    "Local SDK27 Mach-O string-pool alignment repaired and binary re-signed before paired wheel smoke; wheel RECORD regenerated and verified",
+    "Cache4MiB limit measures original source bytes, not total native process memory"
+  ]
+}

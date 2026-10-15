@@ -213,6 +213,11 @@ BEGIN
   IF convert_to(source_text,'UTF8') IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'exact original source required' USING ERRCODE='22023';END IF;
   index:=index+1;
  END LOOP;
+ -- Predicate owners can differ from all operation owners. Preserve exact
+ -- original-source correspondence inside the database before evaluating them.
+ IF input ? 'preconditions' THEN
+  PERFORM truss.group_condition_key_metadata(original_input,original_documents,expected_release,expected_digest);
+ END IF;
  PERFORM truss.runtime_evaluate_preconditions(input,original_condition_keys);
  INSERT INTO truss.runtime_object_attempt(writer_xid,actor_oid,input_bytes,documents_bytes,request_bytes,context)
  VALUES(writer,person,original_input,original_documents,original_request,context) RETURNING * INTO attempt;
@@ -354,6 +359,7 @@ BEGIN
  IF original_keys IS NULL OR octet_length(original_keys) NOT BETWEEN 1 AND 8388608 OR (convert_from(original_keys,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN
   RAISE EXCEPTION 'bounded original key inventory required' USING ERRCODE='22023';END IF;
  keys:=convert_from(original_keys,'UTF8')::jsonb;
+ IF keys<>'[]'::jsonb THEN RAISE EXCEPTION 'client key encoding is no longer accepted' USING ERRCODE='22023';END IF;
  FOR key_definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY key_num LOOP
   values_text:=ARRAY[]::text[];values_cells:='[]';key_facets:='[]';
   FOR component IN SELECT p.* FROM unnest(key_definition.prop_ids) WITH ORDINALITY i(prop_id,ord) JOIN truss.prop_def p ON p.prop_id=i.prop_id AND p.type_id=selected_type ORDER BY i.ord LOOP
@@ -363,16 +369,7 @@ BEGIN
    values_cells:=values_cells||jsonb_build_array(desired_props->component.prop_id::text);
    key_facets:=key_facets||jsonb_build_array(coalesce(component.facets,'{}'::jsonb));
   END LOOP;
-  SELECT value INTO STRICT key_input FROM jsonb_array_elements(keys) WHERE value->>'keyNumber'=key_definition.key_num::text;
-  tuple_bytes:=decode(key_input->>'tupleHex','hex');
-  IF NOT truss.verify_umf_scalar_key_tuple(tuple_bytes,values_cells,key_facets) THEN RAISE EXCEPTION 'key tuple disagrees with final values' USING ERRCODE='22023';END IF;
-  owner_receipt:=convert_from(decode(key_input->>'receiptBase64','base64'),'UTF8')::jsonb;
-  IF owner_receipt->>'operation' IS DISTINCT FROM 'encode-core-key-tuple' OR owner_receipt->>'profile' IS DISTINCT FROM 'umf-key-tuple-v1'
-   OR owner_receipt->>'bytesHex' IS DISTINCT FROM encode(tuple_bytes,'hex') OR owner_receipt->'identity' IS DISTINCT FROM
-    (SELECT jsonb_build_object('module',t.module,'element',t.element,'key',key_definition.key_id) FROM truss.type_def t WHERE t.type_id=selected_type)
-   OR owner_receipt->'values' IS DISTINCT FROM truss.umf_key_values(values_cells)
-   OR owner_receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.type_def t JOIN truss.schema_doc d ON d.doc_id=t.document_id WHERE t.type_id=selected_type ORDER BY d.rev DESC LIMIT 1) THEN
-   RAISE EXCEPTION 'original UMF key receipt required' USING ERRCODE='22023';END IF;
+  tuple_bytes:=truss.derive_catalog_key_tuple(selected_type,key_definition.key_num,values_cells);
   SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected_type,key_definition.key_num);
   ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
    'sourceEpoch',installation.source_epoch::text,'typeId',selected_type::text,'keyNumber',key_definition.key_num::text,
@@ -380,9 +377,8 @@ BEGIN
   transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');
   SELECT * INTO STRICT old FROM truss.object_key_bucket k WHERE k.object_id=runtime_object_update_keys.object_id AND k.type_id=selected_type AND k.key_num=key_definition.key_num;
   planned:=planned||jsonb_build_array(jsonb_build_object('keyNumber',key_definition.key_num,'ns',encode(ns,'hex'),'transport',encode(transport,'hex'),
-   'oldId',old.storage_row_id,'oldNs',encode(old.namespace_bytes,'hex'),'oldTransport',encode(old.key_bytes,'hex'),'ownerReceiptBase64',key_input->>'receiptBase64'));
+   'oldId',old.storage_row_id,'oldNs',encode(old.namespace_bytes,'hex'),'oldTransport',encode(old.key_bytes,'hex')));
  END LOOP;
- IF jsonb_array_length(keys)<>jsonb_array_length(planned) THEN RAISE EXCEPTION 'complete key inventory required' USING ERRCODE='22023';END IF;
  FOR route IN SELECT DISTINCT routes.ns,routes.transport FROM (
   SELECT decode(value->>'ns','hex') ns,decode(value->>'transport','hex') transport FROM jsonb_array_elements(planned)
   UNION ALL SELECT decode(value->>'oldNs','hex'),decode(value->>'oldTransport','hex') FROM jsonb_array_elements(planned)) routes
@@ -400,8 +396,8 @@ BEGIN
   UPDATE truss.key_bucket_guard SET generation=generation+1 WHERE namespace_sha256=sha256(decode(entry->>'oldNs','hex')) AND key_sha256=sha256(decode(entry->>'oldTransport','hex'));
   INSERT INTO truss.object_key_bucket(type_id,key_num,object_id,namespace_bytes,key_bytes,original_context_bytes)
   VALUES(selected_type,(entry->>'keyNumber')::smallint,object_id,ns,transport,
-   convert_to(jsonb_build_object('profile','truss-updated-key-context/0.1','attemptId',attempt_id::text,'operationIndex',operation_index::text,
-    'objectId',object_id::text,'xid',pg_current_xact_id()::text,'ownerReceiptBase64',entry->>'ownerReceiptBase64')::text,'UTF8'));
+   convert_to(jsonb_build_object('profile','truss-updated-key-context/0.2','attemptId',attempt_id::text,'operationIndex',operation_index::text,
+    'objectId',object_id::text,'xid',pg_current_xact_id()::text,'derivation','postgresql-umf-key-tuple-v1')::text,'UTF8'));
   INSERT INTO truss.object_key_reservation_bucket(namespace_bytes,key_bytes,original_reservation_bytes) VALUES(ns,transport,
    convert_to(jsonb_build_object('profile','truss-updated-key-reservation/0.1','attemptId',attempt_id::text,'operationIndex',operation_index::text,
     'objectId',object_id::text,'typeId',selected_type::text,'keyNumber',entry->>'keyNumber','xid',pg_current_xact_id()::text)::text,'UTF8'));

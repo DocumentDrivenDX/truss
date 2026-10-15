@@ -1,0 +1,27 @@
+test_allowed_values_defaults_and_no_weft_or_client_encoder (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_allowed_values_defaults_and_no_weft_or_client_encoder) ... ok
+test_cross_document_key_predicate_requires_exact_source (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_cross_document_key_predicate_requires_exact_source) ... ok
+test_native_refusals_and_helpers_are_owner_only (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_native_refusals_and_helpers_are_owner_only) ... ok
+test_native_scalar_vectors_match_original_producers (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_native_scalar_vectors_match_original_producers) ... ok
+test_upgrade_preserves_original_key_bytes_and_derives_new_keys (test_database_key_upgrade_native.DatabaseKeyUpgradeTests.test_upgrade_preserves_original_key_bytes_and_derives_new_keys) ... ok
+test_all_failures_keep_ids_reasons_and_no_group_effects (test_group_preconditions_native.GroupPreconditionTests.test_all_failures_keep_ids_reasons_and_no_group_effects) ... ok
+test_success_replay_and_explicit_invalid_unauthorized (test_group_preconditions_native.GroupPreconditionTests.test_success_replay_and_explicit_invalid_unauthorized) ... ok
+test_preserve_transitions_and_receipt_then_continue (test_owned_transition_upgrade_native.OwnedTransitionUpgradeTests.test_preserve_transitions_and_receipt_then_continue) ... skipped 'Published native64 predecessor required'
+test_install_commit_private_storage_and_public_products_workflow (test_preparation_seal_storage_native.PreparationSealStorageNativeTests.test_install_commit_private_storage_and_public_products_workflow) ... ERROR
+
+======================================================================
+ERROR: test_install_commit_private_storage_and_public_products_workflow (test_preparation_seal_storage_native.PreparationSealStorageNativeTests.test_install_commit_private_storage_and_public_products_workflow)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-key-encoding-20261015/packages/python/tests/test_preparation_seal_storage_native.py", line 22, in test_install_commit_private_storage_and_public_products_workflow
+    module.run(model,output,shutil.which('bun') or 'bun',bootstrap_source_epoch=True,install_seal_storage=True)
+  File "/private/tmp/truss-key-encoding-20261015/scripts/export-products-native-binding.py", line 55, in run
+    marker=success(bootstrap_preparation_source_marker_in_transaction(assembly._host,tx))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-key-encoding-20261015/packages/python/examples/adopter_workflow.py", line 25, in success
+    raise RuntimeError(f'Truss operation failed: {result!r}')
+RuntimeError: Truss operation failed: Error(error=ExecutionFailure(code='invalid_transaction', message='Original transaction/profile admission refused', retry_scope='none', sql_state=None, catalog_code=None), status='error')
+
+----------------------------------------------------------------------
+Ran 9 tests in 37.415s
+
+FAILED (errors=1, skipped=1)

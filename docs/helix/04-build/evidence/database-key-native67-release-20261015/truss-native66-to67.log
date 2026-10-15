@@ -1,0 +1,6 @@
+test_upgrade_preserves_original_key_bytes_and_derives_new_keys (test_database_key_upgrade_native.DatabaseKeyUpgradeTests.test_upgrade_preserves_original_key_bytes_and_derives_new_keys) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 7.639s
+
+OK

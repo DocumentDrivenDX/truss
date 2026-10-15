@@ -73,66 +73,9 @@ REVOKE ALL ON FUNCTION truss.umf_key_values(jsonb) FROM PUBLIC;
 
 CREATE FUNCTION truss.verify_umf_scalar_key_tuple(tuple_bytes bytea,cells jsonb,facets jsonb) RETURNS boolean
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE position int:=5;total int;component_count int;number bigint;multiplier bigint;digit int;octet int;prefix_count int;
- cell jsonb;facet jsonb;family text;tag int;payload bytea;token text;mantissa text;coefficient text;exponent_token text;exponent_sign text;
- fraction_length int;exponent_value int;shift int;component_index int:=0;
 BEGIN
- IF tuple_bytes IS NULL OR jsonb_typeof(cells) IS DISTINCT FROM 'array' OR jsonb_typeof(facets) IS DISTINCT FROM 'array'
-  OR jsonb_array_length(cells) NOT BETWEEN 1 AND 1024 OR jsonb_array_length(cells)<>jsonb_array_length(facets) THEN RETURN false;END IF;
- total:=octet_length(tuple_bytes);
- IF total NOT BETWEEN 7 AND 1048576 OR substring(tuple_bytes FROM 1 FOR 5)<>convert_to('UMFK1','UTF8') THEN RETURN false;END IF;
- number:=0;multiplier:=1;prefix_count:=0;
- LOOP
-  IF position>=total OR prefix_count>=3 THEN RETURN false;END IF;
-  octet:=get_byte(tuple_bytes,position);position:=position+1;prefix_count:=prefix_count+1;digit:=octet & 127;number:=number+digit*multiplier;
-  IF number>1024 THEN RETURN false;END IF;
-  IF octet<128 THEN IF prefix_count>1 AND digit=0 THEN RETURN false;END IF;EXIT;END IF;
-  multiplier:=multiplier*128;
- END LOOP;
- component_count:=number::int;
- IF component_count<>jsonb_array_length(cells) THEN RETURN false;END IF;
- FOR cell IN SELECT value FROM jsonb_array_elements(cells) LOOP
-  family:=cell->>'kind';facet:=facets->component_index;component_index:=component_index+1;
-  IF family NOT IN ('string','integer','decimal','boolean','binary') OR family IS NULL
-   OR truss.valid_scalar_property(cell,family,false,facet) IS NOT TRUE THEN RETURN false;END IF;
-  token:=cell->>'text';
-  CASE family
-   WHEN 'string' THEN tag:=4;payload:=convert_to(token,'UTF8');
-   WHEN 'binary' THEN tag:=5;payload:=decode(token,'base64');
-   WHEN 'boolean' THEN tag:=1;payload:=CASE WHEN (cell->>'value')::boolean THEN decode('01','hex') ELSE decode('00','hex') END;
-   WHEN 'integer' THEN tag:=2;payload:=convert_to(CASE WHEN token='-0' THEN '0' ELSE token END,'UTF8');
-   WHEN 'decimal' THEN
-    IF (facet IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS DISTINCT FROM TRUE THEN RETURN false;END IF;
-    tag:=3;mantissa:=split_part(lower(token),'e',1);fraction_length:=length(split_part(mantissa,'.',2));
-    coefficient:=ltrim(replace(ltrim(mantissa,'-'),'.',''),'0');
-    IF coefficient='' THEN coefficient:='0';
-    ELSE
-     exponent_value:=0;exponent_token:=split_part(lower(token),'e',2);
-     IF exponent_token<>'' THEN
-      exponent_sign:=left(exponent_token,1);exponent_token:=ltrim(ltrim(exponent_token,'+-'),'0');
-      IF length(exponent_token)>7 THEN RETURN false;END IF;
-      exponent_value:=CASE WHEN exponent_token='' THEN 0 ELSE exponent_token::int END;
-      IF exponent_sign='-' THEN exponent_value:=-exponent_value;END IF;
-     END IF;
-     shift:=(facet->>'scale')::int-fraction_length+exponent_value;
-     IF shift>=0 THEN coefficient:=coefficient||repeat('0',shift);ELSE coefficient:=left(coefficient,length(coefficient)+shift);END IF;
-     IF left(token,1)='-' THEN coefficient:='-'||coefficient;END IF;
-    END IF;
-    payload:=decode(CASE facet->>'scale' WHEN '2' THEN '02' ELSE '04' END,'hex')||convert_to(coefficient,'UTF8');
-  END CASE;
-  IF position>=total OR get_byte(tuple_bytes,position)<>tag THEN RETURN false;END IF;
-  position:=position+1;number:=0;multiplier:=1;prefix_count:=0;
-  LOOP
-   IF position>=total OR prefix_count>=3 THEN RETURN false;END IF;
-   octet:=get_byte(tuple_bytes,position);position:=position+1;prefix_count:=prefix_count+1;digit:=octet & 127;number:=number+digit*multiplier;
-   IF number>1048576 THEN RETURN false;END IF;
-   IF octet<128 THEN IF prefix_count>1 AND digit=0 THEN RETURN false;END IF;EXIT;END IF;
-   multiplier:=multiplier*128;
-  END LOOP;
-  IF number<>octet_length(payload) OR number>total-position OR substring(tuple_bytes FROM position+1 FOR number::int)<>payload THEN RETURN false;END IF;
-  position:=position+number::int;
- END LOOP;
- RETURN position=total;
+ RETURN tuple_bytes IS NOT NULL AND tuple_bytes=truss.encode_umf_scalar_key_tuple(cells,facets);
+EXCEPTION WHEN invalid_parameter_value OR feature_not_supported OR program_limit_exceeded THEN RETURN false;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.verify_umf_scalar_key_tuple(bytea,jsonb,jsonb) FROM PUBLIC;

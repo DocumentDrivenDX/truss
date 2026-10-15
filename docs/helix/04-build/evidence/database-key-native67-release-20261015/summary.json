@@ -1,0 +1,23 @@
+{
+  "qualification": "local preflight; remote full release CI pending",
+  "sdk": "0.0.31",
+  "native": "0.67-candidate",
+  "manifestSha256": "8c553480e1bcb95ccaebb9aa04150a0253217838c8df6ad09acd5ecece2402ee",
+  "queryCompiler": "Weft0.4.31/backend0.4.36",
+  "weftWheelSource": "GitHub Actions38761334527 macOS ARM artifact",
+  "releaseSelections": {
+    "tests": 62,
+    "passed": 62,
+    "seconds": 618.65
+  },
+  "upgrades": [
+    "published native63: pass",
+    "original native65 stored key and reservation bytes: preserved",
+    "original native66 stored key and reservation bytes: preserved"
+  ],
+  "limits": [
+    "Remote Weft full conformance in progress after correcting stale decimal mutation target",
+    "Remote Truss full native release matrix waits for published Weft0.4.31",
+    "No UMF release or encoding format change"
+  ]
+}

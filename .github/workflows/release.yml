@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -45,6 +46,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -132,7 +134,18 @@ jobs:
         env:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_typed_keys_native.TypedKeyTests.test_public_typed_composite_workflow test_typed_keys_native.TypedKey08Tests.test_public_typed_composite_workflow
+        run: python -m unittest test_typed_keys_native.TypedKeyTests.test_public_typed_composite_workflow test_typed_keys_native.TypedKey08Tests.test_public_typed_composite_workflow test_database_key_derivation_native.DatabaseKeyDerivationTests
+      - name: Upgrade native65 without rewriting stored keys
+        env:
+          TRUSS_BUN_EXECUTABLE: bun
+          PYTHONPATH: packages/python/tests
+        run: |
+          mkdir -p "$RUNNER_TEMP/truss-native65"
+          git archive a150b189206d785bf795fbcbcdcbcc53cfda2639 packages/python/src/truss | tar -x -C "$RUNNER_TEMP/truss-native65"
+          TRUSS_DB_KEY_PREDECESSOR="$RUNNER_TEMP/truss-native65/packages/python/src" python -m unittest test_database_key_upgrade_native
+          mkdir -p "$RUNNER_TEMP/truss-native66"
+          git archive c656f35d packages/python/src/truss | tar -x -C "$RUNNER_TEMP/truss-native66"
+          TRUSS_DB_KEY_PREDECESSOR="$RUNNER_TEMP/truss-native66/packages/python/src" python -m unittest test_database_key_upgrade_native
       - name: Run installed bounded traversal and module-owner workflows
         env:
           PYTHONPATH: packages/python/tests
@@ -220,6 +233,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
           name: python-package

@@ -13,6 +13,12 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    '_preparation_bridge_inventory': {'importlib.resources','truss._security_source_epoch_installation'},
+    '_preparation_compiler_replay': {'dataclasses','hashlib','json','os','pathlib','subprocess','sys','truss._preparation_program','truss.weft'},
+    '_preparation_selection': {'dataclasses','psycopg','psycopg.rows','psycopg.types.string','truss._preparation_compiler_replay','truss._preparation_program','uuid'},
+    '_preparation_sources': {'dataclasses','hashlib','importlib.resources','json','pathlib','psycopg','shutil','subprocess','tempfile','time','truss._action_identity_codec','truss._preparation_compiler_replay','truss._preparation_program','truss._preparation_source_epoch','truss._preparation_sources_release','truss.execution','truss.psycopg_host','truss.weft'},
+    '_preparation_sources_release': {},
+
     '_action_authority_observation': {'json','truss._action_store','dataclasses','truss.bulk_action_gateway','truss._action_identity_codec','truss._security_preparation_authority','truss._security_catalog_subject_installation'},
     '_action_role_installation': {'hashlib','importlib.resources','json','truss._action_store','dataclasses','psycopg','truss.bulk_action_gateway','truss._action_identity_codec','truss.psycopg_host','truss.execution','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation'},
     'bulk_action_gateway': {'dataclasses','hashlib','inspect','threading','truss.weft','truss._bulk_set_values','truss._action_identity_codec'},
@@ -64,7 +70,7 @@ ALLOWED = {
     'receipt_visibility': {'truss.contracts','dataclasses','typing'},
     'traversal': {'dataclasses','typing','truss.catalog_view','truss.object_read'},
     'edge_read': {'truss.contracts','dataclasses','typing'},
-    'object_read': {'truss.contracts','dataclasses','typing'},
+    'object_read': {'truss.contracts','truss.groups','dataclasses','typing'},
     'catalog_view': {'dataclasses','typing','truss.contracts'},
     '_catalog_view_build': {'base64','dataclasses','hashlib','json','truss.contracts','truss.catalog_view','truss._catalog_definition_source','truss._owner_evidence_json'},
     'reader_catalog': {'dataclasses','typing'},

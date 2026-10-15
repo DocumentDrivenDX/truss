@@ -1,0 +1,9 @@
+test_upgrade_preserves_original_key_bytes_and_derives_new_keys (test_database_key_upgrade_native.DatabaseKeyUpgradeTests.test_upgrade_preserves_original_key_bytes_and_derives_new_keys) ... ok
+test_allowed_values_defaults_and_no_weft_or_client_encoder (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_allowed_values_defaults_and_no_weft_or_client_encoder) ... ok
+test_native_refusals_and_helpers_are_owner_only (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_native_refusals_and_helpers_are_owner_only) ... ok
+test_native_scalar_vectors_match_original_producers (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_native_scalar_vectors_match_original_producers) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 21.471s
+
+OK

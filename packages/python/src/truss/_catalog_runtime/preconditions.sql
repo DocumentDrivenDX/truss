@@ -141,27 +141,15 @@ BEGIN
  inventory:=truss.runtime_condition_inventory(input);
  IF original_keys IS NULL OR octet_length(original_keys) NOT BETWEEN 1 AND 8388608 OR (convert_from(original_keys,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'original predicate key inventory required' USING ERRCODE='22023';END IF;
  keys:=convert_from(original_keys,'UTF8')::jsonb;
- IF jsonb_array_length(keys)<>(SELECT count(*) FROM jsonb_array_elements(inventory) WHERE value->'condition'->>'condition'='key_absent') THEN RAISE EXCEPTION 'complete predicate keys required' USING ERRCODE='22023';END IF;
+ IF keys<>'[]'::jsonb THEN RAISE EXCEPTION 'client predicate key encoding is no longer accepted' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  -- Acquire the complete object cut before evaluating any predicate.
  FOR target IN SELECT DISTINCT (o.value->>'id')::bigint AS id,(o.value->>'typeId')::int AS type_id FROM jsonb_array_elements(inventory) e CROSS JOIN LATERAL jsonb_array_elements(e.value->'objects') o ORDER BY id,type_id LOOP
   PERFORM 1 FROM truss.object WHERE id=target.id AND type_id=target.type_id FOR UPDATE NOWAIT;
  END LOOP;
  FOR entry IN SELECT value FROM jsonb_array_elements(inventory) WHERE value->'condition'->>'condition'='key_absent' LOOP
-  SELECT value INTO STRICT key_input FROM jsonb_array_elements(keys) WHERE value->>'conditionIndex'=entry->>'index';
-  tuple_bytes:=decode(key_input->>'tupleHex','hex');
-  SELECT jsonb_agg(coalesce(p.facets,'{}'::jsonb) ORDER BY i.ord) INTO key_facets FROM truss.key_def k
-   CROSS JOIN LATERAL unnest(k.prop_ids) WITH ORDINALITY i(prop_id,ord) JOIN truss.prop_def p ON p.type_id=k.type_id AND p.prop_id=i.prop_id
-   WHERE k.type_id=(entry->>'typeId')::int AND k.key_num=(entry->>'keyNumber')::smallint;
-  IF EXISTS(SELECT 1 FROM truss.key_def k CROSS JOIN LATERAL unnest(k.prop_ids) WITH ORDINALITY i(prop_id,ord)
-   JOIN truss.prop_def p ON p.type_id=k.type_id AND p.prop_id=i.prop_id WHERE k.type_id=(entry->>'typeId')::int AND k.key_num=(entry->>'keyNumber')::smallint
-    AND truss.valid_scalar_property(entry->'values'->(i.ord::int-1),p.scalar_type,false,p.facets) IS NOT TRUE)
-   OR NOT truss.verify_umf_scalar_key_tuple(tuple_bytes,entry->'values',key_facets) THEN RAISE EXCEPTION 'predicate key bytes disagree' USING ERRCODE='22023';END IF;
-  receipt:=convert_from(decode(key_input->>'receiptBase64','base64'),'UTF8')::jsonb;
-  IF receipt->>'operation' IS DISTINCT FROM 'encode-core-key-tuple' OR receipt->>'profile' IS DISTINCT FROM 'umf-key-tuple-v1' OR receipt->>'bytesHex' IS DISTINCT FROM encode(tuple_bytes,'hex')
-   OR receipt->'identity' IS DISTINCT FROM jsonb_build_object('module',entry->>'moduleId','element',entry->>'recordId','key',entry->>'keyId')
-   OR receipt->'values' IS DISTINCT FROM truss.umf_key_values(entry->'values')
-   OR receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.type_def t JOIN truss.schema_doc d ON d.doc_id=t.document_id WHERE t.type_id=(entry->>'typeId')::int ORDER BY d.rev DESC LIMIT 1) THEN RAISE EXCEPTION 'original UMF predicate key receipt required' USING ERRCODE='22023';END IF;
+  tuple_bytes:=truss.derive_catalog_key_tuple((entry->>'typeId')::int,(entry->>'keyNumber')::smallint,entry->'values');
+  keys:=keys||jsonb_build_array(jsonb_build_object('conditionIndex',entry->>'index','tupleHex',encode(tuple_bytes,'hex')));
   SELECT * INTO STRICT pin FROM truss.runtime_definition('key',(entry->>'typeId')::int,(entry->>'keyNumber')::int);
   ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
    'typeId',entry->>'typeId','keyNumber',entry->>'keyNumber','definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
