@@ -21,12 +21,29 @@ of final group validation. It permits 128 nodes and 1,024 edges and refuses cycl
 or multiple distinct parents. It is uninstalled, security-invoker and revoked
 from PUBLIC.
 
-Two basic PostgreSQL 18 tests cover exact create/update values, an invalid
+`scope.sql` captures one statement-snapshot image of complete existing ownership
+components and all their incident edges. Independent outside endpoints and their
+referenced roots remain bounded observed witnesses, not traversed components or
+proofs of those components' validity. Unknown lifecycles refuse. The complete
+image retains actual rows, catalog owners and root correspondence. Limits are
+128 component nodes, 1,024 incident edges, 256 boundary witnesses and 4 MiB for
+the complete returned image. This uninstalled security-invoker helper issues no
+authority and takes no locks. The executor must collect earlier guards, acquire
+the common graph gate, reobserve the whole image and refuse expanded earlier
+guard scope before effects.
+Explicit `nodeOrder` and `ownedEdgeOrder` arrays retain local-to-native identity
+correspondence. Stored root membership without a connecting owned-edge path
+refuses; the helper never fabricates that missing edge.
+
+Three basic PostgreSQL 18 tests cover exact create/update values, an invalid
 required-field removal, unchanged graph/journal/key/receipt row counts, and a
-subtree move with parallel edges followed by a cycle refusal:
+subtree move with parallel edges followed by a cycle refusal. The scope case uses
+public catalog acceptance/object creation, then rolled-back administrative graph
+fixture rows to test complete component/boundary images and lifecycle refusal;
+it does not demonstrate a public owned mutation workflow:
 
 ```sh
-PYTHONPATH=packages/python/src:packages/python/tests python -m unittest discover -s packages/postgresql/owned-groups -p test_values.py -v
+PYTHONPATH=packages/python/src:packages/python/tests python -m unittest discover -s packages/postgresql/owned-groups -p 'test_*.py' -v
 ```
 
 Use the project Python environment with psycopg and pgserver-pg18. Bun must be on
