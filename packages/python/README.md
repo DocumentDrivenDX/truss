@@ -71,7 +71,18 @@ Subject and module access, original UMF policy evaluation, original Weft query
 preparation, private PostgreSQL staging and guarded `QueryRows` release.
 The [basic workflow](tests/test_current_query_runtime_native.py) creates data
 through the public API and queries an exact signed64 salary while returning its
-masked String value.
+masked String value. A complete public-API reference example includes installation,
+ordinary-person catalog/data writes, Subject/source enrollment, activation,
+transaction adoption and the masked query. From a source checkout with the
+matching wheels and Bun installed:
+
+```sh
+python packages/python/examples/current_query_workflow.py /tmp/truss-policy-example --bun bun
+```
+
+It prints `{"columns": ["salary"], "rows": [["[private]"]]}`. The adjacent model,
+policy and static binding are the original reference fixture; they are not a
+universal security configuration or a protected-write API.
 
 Before opening protected callers, finish bootstrap data and Subject enrollment,
 quiesce all other client sessions and prevent new connections, then call

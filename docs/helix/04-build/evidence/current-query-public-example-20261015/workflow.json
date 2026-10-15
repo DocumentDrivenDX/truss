@@ -1,0 +1,19 @@
+{
+  "scope": "Public-only reference example; local installed candidate, not publication qualification",
+  "fixtureSha256": "192614d9e7b0dee56364299a9d7cfee0d72b0a7c8778b91640da818cb8ef8ad4",
+  "trussCandidateWheelSha256": "f6d78b93ee4c06370e667137395b879fdf6c2f42fbf15826d58156bc8e7c57c1",
+  "weftCiWheelSha256": "dfe0fa7f8286758c6e1f24e417e62e11f252dce9896ecf99800f5151b49c9fb3",
+  "session": 88149,
+  "exitCode": 0,
+  "output": {
+    "columns": [
+      "salary"
+    ],
+    "rows": [
+      [
+        "[private]"
+      ]
+    ]
+  },
+  "review": "Astra Ultra approved completed example, timeout and confirmed-detachment handling, exact original fixture, README and release smoke. No remaining findings."
+}

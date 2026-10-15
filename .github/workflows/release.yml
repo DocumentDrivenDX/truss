@@ -90,6 +90,8 @@ jobs:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
         run: python -m unittest test_current_query_runtime_native -v
+      - name: Run the public-only policy query reference example
+        run: python packages/python/examples/current_query_workflow.py "$RUNNER_TEMP/truss-policy-example" --bun bun
       - name: Run both installed numeric facet workflows
         env:
           TRUSS_BUN_EXECUTABLE: bun
