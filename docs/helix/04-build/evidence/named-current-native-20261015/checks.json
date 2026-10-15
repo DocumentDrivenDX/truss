@@ -42,6 +42,31 @@
       },
       "published": false,
       "runtimeManifestSha256": "99ae7218e0e3e68e0a3682e43949089185d967eb21bbf31deb0b8f8f6fc2de9a"
+    },
+    {
+      "command": "Installed final ownership-interface wheel -> exact5record consumer workflow",
+      "result": "exported",
+      "covers": "All5 actual native object readbacks expose rootlessownership; exact0.4 profileguard; native66 catalog/apply/readback/binding remains unchanged",
+      "wheelSha256": "c6f8b5c22b20f710aedcfddc740adf638dc3dc515dbc046bef13375a34d4ed40",
+      "sourceBaseCommit": "c656f35d7fceec44b3c2e3e6935220e74e98dc04",
+      "uncommittedPackageInputs": [
+        {
+          "path": "packages/python/README.md",
+          "sha256": "c5f3dfc52b530515922517f8a45c897b246aaf5bf564486946f88f8e547d68d4"
+        },
+        {
+          "path": "packages/python/src/truss/object_read.py",
+          "sha256": "ecb79403c5eea3fb46b1328830648c0b29dded4f6d3b8b11e3a7f68f9ade6e7b"
+        },
+        {
+          "path": "packages/python/src/truss/catalog_runtime.py",
+          "sha256": "5a64a7b87b96df07cd5d01f1eb2448f71cd60c214846f2fcea0885310f84db53"
+        }
+      ],
+      "workflowSha256": "2e7deea82b81144f731f3179b606bc121c900fc2e95beed7d494ca2b7db96405",
+      "packagedPythonFilesMatchingSource": 176,
+      "published": false,
+      "runtimeManifestSha256": "99ae7218e0e3e68e0a3682e43949089185d967eb21bbf31deb0b8f8f6fc2de9a"
     }
   ],
   "nativeReleaseSha256": "99ae7218e0e3e68e0a3682e43949089185d967eb21bbf31deb0b8f8f6fc2de9a"

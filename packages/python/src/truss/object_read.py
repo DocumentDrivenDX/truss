@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 from typing import Literal
 from .contracts import SequenceValue, MapValue, TextValue, TypedIdentity, QualifiedOwner
+from .groups import RootlessOwnership
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ScalarObject:
@@ -19,6 +20,11 @@ class ScalarObject:
     values: tuple[tuple[str, str | bool | TextValue | SequenceValue | MapValue | None], ...]
     retained: tuple[tuple[str, str | bool | TextValue | SequenceValue | MapValue | None], ...]
     profile: Literal['truss-python-scalar-object/0.4'] = field(default='truss-python-scalar-object/0.4', init=False)
+
+    @property
+    def ownership(self) -> RootlessOwnership:
+        """Ownership guaranteed by this rootless native read profile."""
+        return RootlessOwnership()
 
     @property
     def identity(self) -> TypedIdentity:
