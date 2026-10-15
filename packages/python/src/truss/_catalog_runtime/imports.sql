@@ -75,7 +75,8 @@ BEGIN
    OR component->>'definitionPin' IS DISTINCT FROM metadata->'components'->component_index->>'definitionPin' OR truss.valid_scalar_property(component->'value',metadata->'components'->component_index->>'scalarType',false,metadata->'components'->component_index->'facets') IS NOT TRUE THEN RAISE EXCEPTION 'exact ordered primary component required' USING ERRCODE='22023';END IF;
   values_cells:=values_cells||jsonb_build_array(component->'value');key_facets:=key_facets||jsonb_build_array(metadata->'components'->component_index->'facets');fields:=fields||jsonb_build_array(jsonb_build_object('name',metadata->'components'->component_index->>'name','value',component->'value'));component_index:=component_index+1;
  END LOOP;
- IF truss.verify_umf_scalar_key_tuple(tuple_bytes,values_cells,key_facets) IS NOT TRUE THEN RAISE EXCEPTION 'original UMF primary tuple required' USING ERRCODE='22023';END IF;
+ IF tuple_bytes IS NOT NULL THEN RAISE EXCEPTION 'client key encoding is no longer accepted' USING ERRCODE='22023';END IF;
+ tuple_bytes:=truss.derive_catalog_key_tuple(selected.type_id,(metadata->>'keyNumber')::smallint,values_cells);
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
   'typeId',metadata->'type'->>'typeId','keyNumber',metadata->>'keyNumber','definitionPin',metadata->>'keyDefinitionPin','encoding','umf-key-tuple-v1')::text,'UTF8');

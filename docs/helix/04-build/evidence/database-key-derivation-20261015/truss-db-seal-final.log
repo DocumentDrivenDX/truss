@@ -1,0 +1,6 @@
+test_install_commit_private_storage_and_public_products_workflow (test_preparation_seal_storage_native.PreparationSealStorageNativeTests.test_install_commit_private_storage_and_public_products_workflow) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 5.110s
+
+OK

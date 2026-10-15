@@ -101,62 +101,19 @@ REVOKE ALL ON FUNCTION truss.catalog_key_backfill_candidates(jsonb,int) FROM PUB
 
 CREATE FUNCTION truss.catalog_key_backfill_verify(planned_basis jsonb,selected_revision int,original_receipts bytea) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE candidates jsonb;receipts jsonb;observed jsonb;entry jsonb;receipt jsonb;tuple_bytes bytea;
- definition truss.key_def%ROWTYPE;property truss.prop_def%ROWTYPE;archive truss.schema_doc%ROWTYPE;component int;facets jsonb;module_index bigint;element_index bigint;key_index bigint;key_path text;
+DECLARE candidates jsonb;entry jsonb;result jsonb:='[]';tuple_bytes bytea;
 BEGIN
+ IF original_receipts IS NOT NULL AND original_receipts<>convert_to('[]','UTF8') THEN
+  RAISE EXCEPTION 'client key receipts are no longer accepted' USING ERRCODE='22023';END IF;
  candidates:=truss.catalog_key_backfill_candidates(planned_basis,selected_revision);
- IF original_receipts IS NULL OR octet_length(original_receipts) NOT BETWEEN 2 AND 8388608
-  OR (convert_from(original_receipts,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN
-  RAISE EXCEPTION 'bounded original key receipts required' USING ERRCODE='22023';END IF;
- receipts:=convert_from(original_receipts,'UTF8')::jsonb;
- SELECT coalesce(jsonb_agg(e.value-ARRAY['tupleHex','receiptBase64'] ORDER BY e.ordinality),'[]') INTO observed
-  FROM jsonb_array_elements(receipts) WITH ORDINALITY e;
- IF observed IS DISTINCT FROM candidates THEN
-  RAISE EXCEPTION 'unchanged complete locked key candidates required' USING ERRCODE='55000';END IF;
- FOR entry IN SELECT value FROM jsonb_array_elements(receipts) LOOP
-  IF NOT (entry ? 'tupleHex' AND entry ? 'receiptBase64') OR jsonb_typeof(entry->'tupleHex') IS DISTINCT FROM 'string'
-   OR jsonb_typeof(entry->'receiptBase64') IS DISTINCT FROM 'string' THEN
-   RAISE EXCEPTION 'original complete owner key receipts required' USING ERRCODE='22023';END IF;
-  tuple_bytes:=decode(entry->>'tupleHex','hex');
-  IF encode(tuple_bytes,'hex') IS DISTINCT FROM entry->>'tupleHex' THEN
-   RAISE EXCEPTION 'canonical full tuple byte carrier required' USING ERRCODE='22023';END IF;
-  SELECT * INTO STRICT definition FROM jsonb_populate_recordset(NULL::truss.key_def,planned_basis->'key_def') k
-   WHERE k.type_id=(entry->>'typeId')::int AND k.key_num=(entry->>'keyNumber')::smallint;
-  facets:='[]';
-  FOREACH component IN ARRAY definition.prop_ids LOOP
-   SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p
-    WHERE p.prop_id=component AND p.type_id=definition.type_id;
-   facets:=facets||jsonb_build_array(coalesce(property.facets,'{}'));
-  END LOOP;
-  IF truss.verify_umf_scalar_key_tuple(tuple_bytes,entry->'values',facets) IS NOT TRUE THEN
-   RAISE EXCEPTION 'original UMF tuple disagrees with final key values' USING ERRCODE='22023';END IF;
-  SELECT * INTO STRICT archive FROM jsonb_populate_recordset(NULL::truss.schema_doc,planned_basis->'schema_doc') d
-   WHERE d.rev=definition.definition_rev AND d.ord=definition.definition_doc_ord AND d.doc_id=definition.definition_document_id;
-  IF (convert_from(decode(entry->>'receiptBase64','base64'),'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
-   RAISE EXCEPTION 'original owner receipt object required' USING ERRCODE='22023';END IF;
-  receipt:=convert_from(decode(entry->>'receiptBase64','base64'),'UTF8')::jsonb;
-  IF (SELECT count(*) FROM jsonb_object_keys(receipt))<>8 OR NOT receipt ?& ARRAY['operation','version','profile','source','identity','values','keyPath','bytesHex'] THEN
-   RAISE EXCEPTION 'complete closed original owner receipt required' USING ERRCODE='22023';END IF;
-  SELECT m.ordinality-1,e.ordinality-1,k.ordinality-1 INTO STRICT module_index,element_index,key_index
-   FROM jsonb_array_elements(archive.document::jsonb->'modules') WITH ORDINALITY m
-   CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') WITH ORDINALITY e
-   CROSS JOIN LATERAL jsonb_array_elements(e.value->'keys') WITH ORDINALITY k
-   WHERE m.value->>'id'=entry->>'moduleId' AND e.value->>'id'=entry->>'recordId' AND k.value->>'id'=entry->>'keyId';
-  key_path:='/modules/'||module_index||'/elements/'||element_index||'/keys/'||key_index;
-  IF receipt->>'keyPath' IS DISTINCT FROM key_path THEN
-   RAISE EXCEPTION 'original owner key source path required' USING ERRCODE='22023';END IF;
-  IF receipt->>'operation' IS DISTINCT FROM 'encode-core-key-tuple' OR receipt->>'profile' IS DISTINCT FROM 'umf-key-tuple-v1'
-   OR receipt->>'version' IS DISTINCT FROM (CASE archive.umf_version WHEN '0.7.0' THEN '2.0.0' WHEN '0.8.0' THEN '3.0.0' ELSE NULL END)
-   OR receipt->>'bytesHex' IS DISTINCT FROM entry->>'tupleHex'
-   OR receipt->'identity' IS DISTINCT FROM jsonb_build_object('module',entry->>'moduleId','element',entry->>'recordId','key',entry->>'keyId')
-   OR receipt->'values' IS DISTINCT FROM truss.umf_key_values(entry->'values')
-   OR receipt->'source' IS DISTINCT FROM archive.document::jsonb THEN
-   RAISE EXCEPTION 'original source-qualified UMF key receipt required' USING ERRCODE='22023';END IF;
+ FOR entry IN SELECT value FROM jsonb_array_elements(candidates) LOOP
+  tuple_bytes:=truss.derive_catalog_key_tuple((entry->>'typeId')::int,(entry->>'keyNumber')::smallint,entry->'values',planned_basis);
+  result:=result||jsonb_build_array(entry||jsonb_build_object('tupleHex',encode(tuple_bytes,'hex')));
+  IF octet_length(result::text)>8388608 THEN RAISE EXCEPTION 'bounded native key backfill required' USING ERRCODE='54000';END IF;
  END LOOP;
- -- Recheck actual original images and current disclosure after buffering receipts.
  IF truss.catalog_key_backfill_candidates(planned_basis,selected_revision) IS DISTINCT FROM candidates THEN
-  RAISE EXCEPTION 'original key candidates changed during receipt verification' USING ERRCODE='55000';END IF;
- RETURN receipts;
+  RAISE EXCEPTION 'key candidates changed during native derivation' USING ERRCODE='55000';END IF;
+ RETURN result;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_key_backfill_verify(jsonb,int,bytea) FROM PUBLIC;
@@ -224,8 +181,8 @@ BEGIN
    SELECT * INTO STRICT observed FROM truss.lock_string_key_bucket(ns,transport);prior_generation:=observed.generation;
    IF cardinality(observed.member_ids)>0 OR cardinality(observed.reservation_ids)>0 THEN
     RAISE EXCEPTION 'new key already allocated or reserved' USING ERRCODE='23505';END IF;
-   context_bytes:=convert_to(jsonb_build_object('profile','truss-catalog-key-backfill-context/0.1','registrationId',request.registration_id::text,
-    'objectId',selected.object_id::text,'xid',request.writer_xid::text,'ownerReceiptBase64',entry->>'receiptBase64')::text,'UTF8');
+   context_bytes:=convert_to(jsonb_build_object('profile','truss-catalog-key-backfill-context/0.2','registrationId',request.registration_id::text,
+    'objectId',selected.object_id::text,'xid',request.writer_xid::text,'derivation','postgresql-umf-key-tuple-v1')::text,'UTF8');
    reservation_bytes:=convert_to(jsonb_build_object('profile','truss-catalog-key-backfill-reservation/0.1','registrationId',request.registration_id::text,
     'objectId',selected.object_id::text,'typeId',selected.type_id::text,'keyNumber',definition.key_num::text,'xid',request.writer_xid::text)::text,'UTF8');
    membership.storage_row_id:=nextval('truss.key_storage_row_seq');membership.type_id:=selected.type_id;
@@ -247,7 +204,7 @@ BEGIN
     RAISE EXCEPTION 'exact applied backfill key bucket required' USING ERRCODE='55000';END IF;
    effects:=effects||jsonb_build_array(jsonb_build_object('keyId',definition.key_id,'keyNumber',definition.key_num::text,
     'definitionPin',pin.definition_pin,'namespaceBase64',replace(encode(ns,'base64'),chr(10),''),'tupleHex',entry->>'tupleHex',
-    'ownerReceiptBase64',entry->>'receiptBase64','memberId',member_id::text,'reservationId',reservation_id::text,
+    'derivation','postgresql-umf-key-tuple-v1','memberId',member_id::text,'reservationId',reservation_id::text,
     'priorGeneration',prior_generation::text,'generation',observed.generation::text,
     'contextBase64',replace(encode(context_bytes,'base64'),chr(10),''),'reservationBase64',replace(encode(reservation_bytes,'base64'),chr(10),'')));
   END LOOP;

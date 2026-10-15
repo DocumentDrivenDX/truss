@@ -314,7 +314,9 @@ BEGIN
   RAISE EXCEPTION 'bounded group keys and request required' USING ERRCODE='54000'; END IF;
  IF (convert_from(original_keys,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE OR (convert_from(original_request,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'unique key/request JSON members required' USING ERRCODE='22023'; END IF;
  input:=convert_from(original_input,'UTF8')::jsonb;request:=convert_from(original_request,'UTF8')::jsonb;
- key_inputs:=convert_from(original_keys,'UTF8')::jsonb;scope_identity:=context->>'authorizedScopeIdentity';
+ key_inputs:=convert_from(original_keys,'UTF8')::jsonb;
+ IF key_inputs<>'[]'::jsonb THEN RAISE EXCEPTION 'client key encoding is no longer accepted' USING ERRCODE='22023';END IF;
+ scope_identity:=context->>'authorizedScopeIdentity';
  IF input-ARRAY['interfaceVersion','layoutProfile','mutationProfile','valueProfile','catalog','operations','assertedOrigin']<>'{}'::jsonb
  OR input->'assertedOrigin'->>'kind' IS DISTINCT FROM 'map' OR jsonb_typeof(input->'assertedOrigin'->'entries') IS DISTINCT FROM 'array'
  OR (input->'assertedOrigin')-ARRAY['kind','entries']<>'{}'::jsonb THEN
@@ -432,17 +434,7 @@ BEGIN
     key_facets:=key_facets||jsonb_build_array(coalesce(component.facets,'{}'::jsonb));
    END LOOP;
    IF jsonb_array_length(values_cells)<>cardinality(key_definition.prop_ids) THEN RAISE EXCEPTION 'complete key components required' USING ERRCODE='55000'; END IF;
-   SELECT k.value INTO STRICT key_input FROM jsonb_array_elements(key_inputs) k WHERE k.value->>'operationIndex'=current_index::text
-    AND k.value->>'keyNumber'=key_definition.key_num::text;
-   tuple_bytes:=decode(key_input->>'tupleHex','hex');
-   IF NOT truss.verify_umf_scalar_key_tuple(tuple_bytes,values_cells,key_facets) THEN RAISE EXCEPTION 'original key values disagree' USING ERRCODE='22023'; END IF;
-   owner_receipt:=convert_from(decode(key_input->>'receiptBase64','base64'),'UTF8')::jsonb;
-   IF owner_receipt->>'operation' IS DISTINCT FROM 'encode-core-key-tuple' OR owner_receipt->>'profile' IS DISTINCT FROM 'umf-key-tuple-v1'
-    OR owner_receipt->>'bytesHex' IS DISTINCT FROM encode(tuple_bytes,'hex')
-    OR owner_receipt->'identity' IS DISTINCT FROM jsonb_build_object('module',selected_type.module,'element',selected_type.element,'key',key_definition.key_id)
-    OR owner_receipt->'values' IS DISTINCT FROM truss.umf_key_values(values_cells)
-    OR owner_receipt->'source' IS DISTINCT FROM (SELECT d.document::jsonb FROM truss.schema_doc d WHERE d.doc_id=selected_type.document_id ORDER BY d.rev DESC LIMIT 1) THEN
-    RAISE EXCEPTION 'original owner key receipt required' USING ERRCODE='22023'; END IF;
+   tuple_bytes:=truss.derive_catalog_key_tuple(selected_type.type_id,key_definition.key_num,values_cells);
    SELECT * INTO STRICT source_pin FROM truss.runtime_definition('key',selected_type.type_id,key_definition.key_num);
    namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
     'sourceEpoch',installation.source_epoch::text,'typeId',selected_type.type_id::text,'keyNumber',key_definition.key_num::text,
@@ -450,12 +442,11 @@ BEGIN
    transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');
    planned_keys:=planned_keys||jsonb_build_array(jsonb_build_object('operationIndex',current_index,'typeId',selected_type.type_id,
     'keyNumber',key_definition.key_num,'namespace',encode(namespace,'hex'),'transport',encode(transport,'hex'),
-    'tupleHex',encode(tuple_bytes,'hex'),'receiptBase64',key_input->>'receiptBase64'));
+    'tupleHex',encode(tuple_bytes,'hex')));
   END LOOP;
   current_index:=current_index+1;
  END LOOP;
- IF jsonb_array_length(key_inputs)<>jsonb_array_length(planned_keys)
-  OR jsonb_array_length(planned_keys)<>(SELECT count(DISTINCT (k.value->>'namespace',k.value->>'transport')) FROM jsonb_array_elements(planned_keys) k)
+ IF jsonb_array_length(planned_keys)<>(SELECT count(DISTINCT (k.value->>'namespace',k.value->>'transport')) FROM jsonb_array_elements(planned_keys) k)
   OR (SELECT count(*) FROM jsonb_array_elements(input->'operations') o WHERE o.value ? 'alias')
    <>(SELECT count(DISTINCT o.value->>'alias') FROM jsonb_array_elements(input->'operations') o WHERE o.value ? 'alias') THEN
   RAISE EXCEPTION 'unique complete group keys and aliases required' USING ERRCODE='22023'; END IF;
@@ -490,10 +481,10 @@ BEGIN
    membership.storage_row_id:=nextval('truss.key_storage_row_seq');membership.type_id:=object_row.type_id;
    membership.key_num:=(key_plan->>'keyNumber')::smallint;membership.object_id:=object_row.id;
    membership.namespace_bytes:=namespace;membership.key_bytes:=transport;
-   membership.original_context_bytes:=convert_to(jsonb_build_object('profile','truss-created-key-context/0.1',
+   membership.original_context_bytes:=convert_to(jsonb_build_object('profile','truss-created-key-context/0.2',
     'groupId',group_uuid::text,'sourceEpoch',installation.source_epoch::text,'xid',writer::text,
     'actorOid',actor_oid::text,'actor',session_user::text,'operationIndex',current_index::text,
-    'ownerReceiptBase64',key_plan->>'receiptBase64')::text,'UTF8');
+    'derivation','postgresql-umf-key-tuple-v1')::text,'UTF8');
    membership.namespace_sha256:=sha256(namespace);membership.key_sha256:=sha256(transport);
    planned_row:=to_jsonb(membership);
    INSERT INTO truss.object_key_bucket(storage_row_id,type_id,key_num,object_id,namespace_bytes,key_bytes,original_context_bytes)

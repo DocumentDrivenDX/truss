@@ -131,5 +131,36 @@ Experimental imports alone still do not qualify complete runtime support.
 
 ## References
 
+## Owner-directed database key derivation — 2026-10-15
+
+The owner selects database-owned derivation after Astra review. PostgreSQL
+MUST derive `umf-key-tuple-v1` bytes from accepted key definitions and the
+actual typed values, including final values after alias/update resolution.
+UMF retains semantic ownership. Truss qualifies its native realization against
+the pinned owner producers; it does not invent a new key format.
+
+Ordinary group, predicate, lookup, import and key-backfill calls MUST NOT
+require client encoding, per-key full-document receipts, Bun or a new Weft
+key API. Weft remains an optional query dependency; its compatibility release accepts
+native 0.65/0.66 without adding a key encoder.
+The preceding unreleased Rust-client proposal is superseded for Truss.
+Existing protected security observation producers retain their separately
+qualified original-UMF evidence contract; they are outside this ordinary
+catalog-runtime change.
+
+Preserve exact tuple bytes, hex transport, namespaces, definition pins,
+source epochs, collision-safe routing/locking, accepted-source checks,
+transaction custody and final authorization/current-value checks. Native
+selected-key validation MUST preserve allowed-value membership, exact
+numeric normalization and refusal of unknown relevant metadata. Defaults
+MUST NOT fill missing key components. Native decimal support remains the
+qualified precision18/scale2 or4 subset.
+
+Historical context/receipt bytes remain untouched. New contexts use explicit
+native-derivation profiles without fabricated owner receipts. Runtime0.66
+updates procedures and its release ledger; it does not rewrite stored keys.
+Registration still uses broader UMF Bun preparation. See
+[execution plan](../../04-build/key-encoding-performance.md).
+
 - [ADR-001](ADR-001-language-and-portable-core.md), [ADR-002](ADR-002-storage-strategy.md)
 - [CONTRACT-001](../contracts/CONTRACT-001-storage-layout.md), [CONTRACT-002](../contracts/CONTRACT-002-journal.md), [CONTRACT-003](../contracts/CONTRACT-003-catalog-revision.md), [CONTRACT-004](../contracts/CONTRACT-004-mutation-and-conformance.md)

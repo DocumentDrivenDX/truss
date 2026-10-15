@@ -24,7 +24,7 @@ class OwnedTransitionUpgradeTests(unittest.TestCase):
                     upgraded=assembly.upgrade_in_transaction(tx)
                     self.assertIsInstance(upgraded,Ok,repr(upgraded)+' '+str(host._custody.last_attempt.error))
                     self.assertEqual(upgraded.value.previous_release_id,'truss-catalog-runtime/0.64-candidate')
-                    self.assertEqual(upgraded.value.release_id,'truss-catalog-runtime/0.65-candidate')
+                    self.assertEqual(upgraded.value.release_id,'truss-catalog-runtime/0.66-candidate')
                     self.assertEqual(upgraded.value.outcome,'upgraded');host.detach();admin.commit()
                     self.assertEqual(admin.execute('SELECT to_jsonb(t)::text FROM truss.runtime_object_transition t ORDER BY transition_id').fetchall(),objects)
                     self.assertEqual(admin.execute("SELECT (to_jsonb(t)-'endpoint_ownership')::text FROM truss.runtime_edge_transition t ORDER BY transition_id").fetchall(),edges)

@@ -57,7 +57,15 @@ python -m pip install --only-binary=:all: \
   'truss-toolkit[local,native,query]==0.0.29'
 ```
 
-Bun1.4.2 is still required for UMF preparation and key production. Each release
+Bun1.4.2 is still required for UMF preparation. Unreleased SDK 0.0.31 /
+native 0.66 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
+catalogs. Create/update, imports, preconditions, backfills and lookups require no
+client encoder or per-key receipt. Existing stored key and namespace bytes are
+preserved. Weft remains optional through `query` (version 0.4.31); it is not a
+key-encoding dependency. The separate protected security observation retains its
+original producer boundary.
+The older released installation example above retains its historical dependency
+requirements. Each release
 publishes package checksums and source/runtime/backend pins. The Truss release
 workflow exercises the exact uploaded wheel with its exactly paired published Weft wheels and verified
 PG18 dependency wheels on both declared native platforms.
@@ -227,7 +235,9 @@ Separate broad `mutations` and physical-optimization families remain unavailable
 
 A `CatalogDocument(document_id, document_revision, content)` carries exact
 original UTF-8 document bytes. Preparation runs the bundled UMF owner producer
-through Bun; registration and key production still require Bun in the app image.
+through Bun; registration still requires Bun in the app image. The unreleased
+prepared key boundary removes that requirement from ordinary key operations,
+while leaving catalog admission with the broader UMF producer.
 Native accepted IDs and definition pins come from the catalog, not fixtures.
 Addresses are document-qualified. The authenticated person is recorded separately
 from asserted origin, such as `origin_bytes=b'{"x-action":"register"}'`.

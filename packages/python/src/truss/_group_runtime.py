@@ -12,7 +12,6 @@ from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, Cu
     GroupPrecondition, UnauthorizedPerson, PreconditionFailed, FailedPrecondition, Created, Changed, Unchanged, Deleted, DeletedIdentity, AliasIdentity, JournalEventReference)
 from .preparation import CatalogDocument
 from ._receipt_position import decode_receipt_position
-from ._umf_key_tuples import KeyTupleRequest, encode_key_tuples, key_value_from_cell
 
 _DIAGNOSTIC=ProfilePin(identity='truss-native-create-diagnostic',version='0.1',
     sha256=sha256(b'Native create result: closed outcome/code/operationIndex/nativeState; no database source diagnostic disclosure; v1').hexdigest())
@@ -164,7 +163,6 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"transport"}'))))
     if len(original_input)>1048576 or len(original_request)>65536 or len(original_documents)>4194304:
         return Ok(GroupUnavailable(reason='resource'))
-    sources={d.document_id:d.content for d in documents}
     operation_index=[0]
     def apply(cursor,observed):
         pin_cursor(cursor)
@@ -173,38 +171,15 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
                 (original_input,original_documents,original_request,manifest['releaseId'],digest,b'[]'),prepare=False)
             probe=json.loads(bytes(cursor.fetchone()[0]))
             if probe['outcome']!='miss':return _result(_bytes(probe))
-        condition_keys=[]
-        if input.preconditions:
-            cursor.execute('SELECT truss.group_condition_key_metadata(%s,%s,%s,%s)',
-                (original_input,original_documents,manifest['releaseId'],digest),prepare=False)
-            for metadata in json.loads(bytes(cursor.fetchone()[0])):
-                key_request=KeyTupleRequest(metadata['moduleId'],metadata['recordId'],metadata['keyId'],tuple(key_value_from_cell(v) for v in metadata['values']))
-                original=encode_key_tuples(sources[metadata['documentId']],(key_request,),bun_executable=bun_executable)[0]
-                condition_keys.append({'conditionIndex':str(metadata['index']),'tupleHex':original.tuple_bytes.hex(),
-                    'receiptBase64':base64.b64encode(original.original_receipt_bytes).decode('ascii')})
-        cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s,%s)',
-            (original_input,original_documents,original_request,manifest['releaseId'],digest,_bytes(condition_keys)),prepare=False)
+        cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s)',
+            (original_input,original_documents,original_request,manifest['releaseId'],digest),prepare=False)
         begin=json.loads(bytes(cursor.fetchone()[0]))
         if begin['outcome']!='execute':return _result(_bytes(begin))
         attempt_id=begin['attemptId']
         if _attempt_capture is not None:_attempt_capture.append(attempt_id)
         for index,operation in enumerate(input.operations):
             operation_index[0]=index
-            cursor.execute('SELECT truss.object_group_metadata(%s::uuid,%s)',(attempt_id,index),prepare=False)
-            metadata=json.loads(bytes(cursor.fetchone()[0]));encoded_keys=[];requests=[];addresses=[]
-            values={v['name']:v['value'] for v in metadata['values']}
-            for key in metadata['keys']:
-                if any(name not in values for name in key['names']):continue
-                requests.append(KeyTupleRequest(metadata['moduleId'],metadata['recordId'],key['keyId'],tuple(key_value_from_cell(values[name]) for name in key['names'])))
-                addresses.append(key['keyNumber'])
-            if requests:
-                originals=encode_key_tuples(sources[metadata['documentId']],tuple(requests),bun_executable=bun_executable)
-                for address,original in zip(addresses,originals):
-                    encoded_keys.append({'operationIndex':'0','keyNumber':address,'tupleHex':original.tuple_bytes.hex(),
-                        'receiptBase64':base64.b64encode(original.original_receipt_bytes).decode('ascii')})
-            original_keys=_bytes(encoded_keys)
-            if len(original_keys)>8388608:raise ValueError('Bounded original key inventory required')
-            cursor.execute('SELECT truss.object_group_step(%s::uuid,%s,%s)',(attempt_id,index,original_keys),prepare=False)
+            cursor.execute("SELECT truss.object_group_step(%s::uuid,%s,convert_to('[]','UTF8'))",(attempt_id,index),prepare=False)
             cursor.fetchone()
         cursor.execute('SELECT truss.object_group_finish(%s::uuid)',(attempt_id,),prepare=False)
         return _result(bytes(cursor.fetchone()[0]))

@@ -21,7 +21,7 @@ class PreparationSealStorageNativeTests(unittest.TestCase):
             with contextlib.redirect_stdout(io.StringIO()):
                 module.run(model,output,shutil.which('bun') or 'bun',bootstrap_source_epoch=True,install_seal_storage=True)
             report=json.loads((output/'receipt.json').read_bytes())
-            self.assertEqual(report['runtime'],'truss-catalog-runtime/0.65-candidate')
+            self.assertEqual(report['runtime'],'truss-catalog-runtime/0.66-candidate')
             self.assertEqual(report['nativeObjectIds'],['1','2'])
             self.assertEqual(report['metadataSourceEpoch']['installation'],report['sealStorage']['installation'])
             self.assertEqual(report['sealStorage']['sourceSha256'],'235f2ce982eeda53eaee09f7608a388f96a815cde5354f4ce6db9bb3091422fe')

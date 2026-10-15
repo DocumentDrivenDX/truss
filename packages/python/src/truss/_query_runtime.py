@@ -18,7 +18,7 @@ BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.35',
 def compiler():
     try:
         import weft
-        if weft.__version__ != '0.4.30':
+        if weft.__version__ != '0.4.31':
             return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):

@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -45,6 +46,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -57,11 +59,11 @@ jobs:
           path: dist
       - name: Install exact released compiler and verify its checksum
         run: |
-          python -m pip download --only-binary=:all: --no-deps --no-index --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.29 --dest /tmp/weft-wheels weft-sql==0.4.29
+          python -m pip download --only-binary=:all: --no-deps --no-index --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.31 --dest /tmp/weft-wheels weft-sql==0.4.31
           python - <<'PYTHON'
           import hashlib,pathlib,urllib.request
           root=pathlib.Path('/tmp/weft-wheels');wheels=list(root.glob('*.whl'));assert len(wheels)==1
-          text=urllib.request.urlopen('https://github.com/DocumentDrivenDX/weft/releases/download/v0.4.29/SHA256SUMS',timeout=30).read().decode()
+          text=urllib.request.urlopen('https://github.com/DocumentDrivenDX/weft/releases/download/v0.4.31/SHA256SUMS',timeout=30).read().decode()
           entries={line.split()[1]:line.split()[0] for line in text.splitlines()}
           assert hashlib.sha256(wheels[0].read_bytes()).hexdigest()==entries[wheels[0].name]
           PYTHON
@@ -74,7 +76,7 @@ jobs:
           import importlib.metadata,pathlib,tomllib,truss,weft
           expected=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['version']
           assert importlib.metadata.version('truss-toolkit')==expected
-          assert importlib.metadata.version('weft-sql')==weft.__version__=='0.4.29'
+          assert importlib.metadata.version('weft-sql')==weft.__version__=='0.4.31'
           assert not pathlib.Path(truss.__file__).resolve().is_relative_to(pathlib.Path('packages/python/src').resolve())
           PYTHON
           python packages/python/examples/adopter_workflow.py "$RUNNER_TEMP/truss-release-demo" --bun bun
@@ -127,7 +129,15 @@ jobs:
         env:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_typed_keys_native.TypedKeyTests.test_public_typed_composite_workflow test_typed_keys_native.TypedKey08Tests.test_public_typed_composite_workflow
+        run: python -m unittest test_typed_keys_native.TypedKeyTests.test_public_typed_composite_workflow test_typed_keys_native.TypedKey08Tests.test_public_typed_composite_workflow test_database_key_derivation_native.DatabaseKeyDerivationTests
+      - name: Upgrade native65 without rewriting stored keys
+        env:
+          TRUSS_BUN_EXECUTABLE: bun
+          PYTHONPATH: packages/python/tests
+        run: |
+          mkdir -p "$RUNNER_TEMP/truss-native65"
+          git archive a150b189206d785bf795fbcbcdcbcc53cfda2639 packages/python/src/truss | tar -x -C "$RUNNER_TEMP/truss-native65"
+          TRUSS_DB_KEY_PREDECESSOR="$RUNNER_TEMP/truss-native65/packages/python/src" python -m unittest test_database_key_upgrade_native
       - name: Run installed bounded traversal and module-owner workflows
         env:
           PYTHONPATH: packages/python/tests
@@ -215,6 +225,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/download-artifact@v4
         with:
           name: python-package
@@ -234,7 +245,7 @@ jobs:
           (root/'catalog-rebind-report-v0.4.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-rebind-report-v0.4.md').read_bytes())
           (root/'catalog-source-reference-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-source-reference-v0.1.md').read_bytes())
           manifest=pathlib.Path('packages/python/src/truss/_catalog_runtime/manifest.json');runtime=json.loads(manifest.read_bytes())
-          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v0.4.29','weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','bun':'1.4.2','nativePlatforms':['linux-x86_64','macos-arm64']}
+          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v0.4.31','weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','bun':'1.4.2','nativePlatforms':['linux-x86_64','macos-arm64']}
           profile=pathlib.Path('packages/python/src/truss/_profiles/fresh-catalog-support-recursive08.json')
           pins.update(timestampComparisonProfile='umf-rfc3339-exact-instant/1.0.0',umfExactInstantCommit='cbb6fb87',umf08CatalogSupport={'identity':'truss-fresh-catalog-support','version':'0.16.0','sha256':hashlib.sha256(profile.read_bytes()).hexdigest()},umf08CatalogReportInterface='truss-catalog-registration-report/0.2',catalogSourceReferenceFormat='truss-catalog-source-reference/0.1',catalogRebindReportInterface='truss-catalog-registration-report/0.3',catalogRebindProfile='truss-native-catalog-rebind/0.4',catalogRebindSupportedProfiles=['truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4'])
           (root/'catalog-key-backfill-report-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md').read_bytes())

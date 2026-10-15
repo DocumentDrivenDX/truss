@@ -1,0 +1,7 @@
+test_register_existing_objects_lookup_and_query (test_catalog_key_backfill_native.CatalogKeyBackfill08Tests.test_register_existing_objects_lookup_and_query) ... ok
+test_install_commit_private_storage_and_public_products_workflow (test_preparation_seal_storage_native.PreparationSealStorageNativeTests.test_install_commit_private_storage_and_public_products_workflow) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 15.266s
+
+OK

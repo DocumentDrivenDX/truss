@@ -21,6 +21,18 @@ ddx:
 
 # Truss architecture
 
+## Database-owned key derivation — owner direction 2026-10-15
+
+The accepted catalog and actual native typed values are the key derivation
+inputs. Private PostgreSQL helpers implement the pinned UMF grammar and
+selected-key constraints. Protected write/read/import/registration routines
+invoke them; hosts pass values and expected context, not tuple bytes or owner
+key receipts. Stored tuple/transport/namespace bytes remain unchanged. Existing
+receipts remain historical evidence; new contexts identify native derivation.
+The Python host has no ordinary-runtime key encoder or new native dependency.
+Broader catalog preparation and protected security observations retain their
+separate original-owner pipelines.
+
 ## Baseline adapter and resource architecture — 2026-10-11
 
 Python uses maintained stock psycopg 3 and supported driver APIs under ADR-003. Keep database transport in the adapter and keep core, Weft and authorization boundaries unchanged. The adapter uses exact text projections/qualified loaders, parameterized statements, bounded pages/batches/values, supported incremental retrieval where needed, host-owned connection arbitration and tested transaction/error handling. Use ordinary driver completion/status/error APIs with independently observed native outcomes; an unavailable or contradictory outcome remains unknown. No custom frame parser, receive hook or libpq allocation instrumentation is required for this baseline.

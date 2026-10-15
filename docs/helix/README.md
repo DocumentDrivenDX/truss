@@ -1,5 +1,11 @@
 # truss project documentation
 
+Unreleased 0.0.31 / native 0.66 derives ordinary keys directly in PostgreSQL
+from admitted UMF 0.7/0.8 catalogs. Stored tuple and namespace bytes remain
+unchanged; client encoders and per-key source receipts are removed. Registration
+still uses broader UMF Bun preparation. Weft is optional for queries. See the
+[performance plan and evidence](04-build/key-encoding-performance.md).
+
 ## First-release scope — owner direction, 2026-10-13
 
 Python is the first-release public interface. Truss TypeScript implementation
@@ -18,7 +24,7 @@ UMF0.7/0.8 and Weft0.4.12. New feature tranches are released independently;
 see the package README and release notes for later exact pairings.
 The tested local tuple is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL18.6
 and psycopg3.3.6 binary/libpq18.6. The host supplies its authenticated connection
-and owns outer transactions; Bun1.4.2 remains required for UMF preparation/keys.
+and owns outer transactions; Bun1.4.2 remains required for UMF preparation.
 
 Available operations include installation/status and additive predecessor
 upgrades, accepted catalogs/reports/original source, compatible scalar evolution,
