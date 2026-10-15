@@ -28,5 +28,13 @@
     "packages/python/tests/test_current_query_facts_native.py": "7b1843eb5d4e613562f092f5c9094397739cfbfce95b2eb51bad1300012021d8",
     "packages/python/tests/test_current_query_subjects_native.py": "9ecbe8be951c289c133c2c77dcf0fa007d04d69d196694caf9440e16b95a583b",
     "packages/python/pyproject.toml": "a3d8880e910825bf29e4922fbfe1e0fddc06911833b890b279072f41ddf873ea"
+  },
+  "mergedNative67": {
+    "originCommit": "e0e9520a",
+    "tests": 2,
+    "status": "passed",
+    "seconds": 8.131,
+    "session": 8918,
+    "scope": "Same complete public object -> original policy workflow after concurrent native67 key derivation merge"
   }
 }
