@@ -105,6 +105,9 @@ self.onmessage=event=>{
         if(current?.outcome!=='available')throw Error('Available store required');
         const method=event.data.command==='executeBatch'?current.store.executeBatch:current.store.recoverBatch;
         self.postMessage(await method(current.owner,registeredAction,readGrant,event.data.input));
+      }else if(event.data.command==='readFeed'){
+        if(current?.outcome!=='available')throw Error('Available store required');
+        self.postMessage(await current.store.readFeed(current.owner,event.data.input));
       }else if(event.data.command==='readObjects'){
         if(current?.outcome!=='available')throw Error('Available store required');
         self.postMessage(await current.store.readObjects(current.owner,{documentId:'product-local-action-demo',module:'sales',record:'products'}));

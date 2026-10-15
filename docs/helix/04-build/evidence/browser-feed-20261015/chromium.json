@@ -1,0 +1,1286 @@
+{
+  "scope": "Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback",
+  "assetPrefix": "/example/truss/",
+  "chromium": "153.0.8010.12",
+  "bundle": {
+    "manifestSha256": "fe4433afb66c1cd1f25631c766b9a61eb531f3cfbe53e23d64b29f3d3c78c46b",
+    "providerSha256": "895ba64b6d0fe09d94ca320ebd5dc2c30955b851f34c49a9c28dd9214bd02a96"
+  },
+  "first": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:62103",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "46610993-e16d-4931-b224-76412f5c6db2",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "forged": {
+    "outcome": "refused"
+  },
+  "second": {
+    "outcome": "unavailable",
+    "reason": "store_in_use"
+  },
+  "takeover": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:62103",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "46610993-e16d-4931-b224-76412f5c6db2",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "reopened": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:62103",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "46610993-e16d-4931-b224-76412f5c6db2",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "feed": {
+    "pages": [
+      {
+        "status": "page",
+        "profile": "truss-browser-journal-page/0.1",
+        "events": [
+          {
+            "context": {
+              "kind": "load",
+              "request": {
+                "requestKey": "initial-products",
+                "attempt": "load-1"
+              },
+              "index": "0"
+            },
+            "sequence": "1",
+            "transactionId": "755",
+            "at": "2026-10-15T18:55:01.403000Z",
+            "operation": "create",
+            "catalogRevision": "1",
+            "target": {
+              "documentId": "product-local-action-demo",
+              "module": "sales",
+              "record": "products"
+            },
+            "before": null,
+            "after": {
+              "id": "1",
+              "typeId": "1",
+              "version": "1",
+              "createdAt": "2026-10-15T18:55:01.400000Z",
+              "updatedAt": "2026-10-15T18:55:01.400000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "bar"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Sample"
+                }
+              ]
+            },
+            "change": null,
+            "event": {
+              "mediaType": "application/json",
+              "utf8": "{\"seq\": \"1\", \"xid\": \"755\", \"after\": {\"kind\": \"object\", \"identity\": {\"id\": \"1\", \"typeId\": \"1\", \"version\": \"1\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.400000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:01.400000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"bar\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Sample\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"1\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"origin\": {\"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}, \"request\": {\"attempt\": \"load-1\", \"requestKey\": \"initial-products\"}, \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"identity\": {\"id\": \"1\", \"typeId\": \"1\", \"version\": \"1\"}, \"operation\": \"create\", \"inputIndex\": \"0\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\", \"eventVersion\": \"1\", \"historyProfile\": \"truss-browser-create/0.1\", \"interfaceVersion\": \"truss-browser-history-event/0.1\", \"eventCatalogRevision\": \"1\"}",
+              "sha256": "e7c444d8a46e4c55fb8456be8db9bd15d79b093f12647d5c9d4df3b84f827865"
+            },
+            "origin": {
+              "mediaType": "application/json",
+              "utf8": "{\"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}",
+              "sha256": "a0f0de125a7a99658fe65c39d9923dad9ce993d0036ee31053af9b09e65c254f"
+            }
+          },
+          {
+            "context": {
+              "kind": "load",
+              "request": {
+                "requestKey": "initial-products",
+                "attempt": "load-1"
+              },
+              "index": "1"
+            },
+            "sequence": "2",
+            "transactionId": "755",
+            "at": "2026-10-15T18:55:01.406000Z",
+            "operation": "create",
+            "catalogRevision": "1",
+            "target": {
+              "documentId": "product-local-action-demo",
+              "module": "sales",
+              "record": "products"
+            },
+            "before": null,
+            "after": {
+              "id": "2",
+              "typeId": "1",
+              "version": "1",
+              "createdAt": "2026-10-15T18:55:01.405000Z",
+              "updatedAt": "2026-10-15T18:55:01.405000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "baz"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Sample"
+                }
+              ]
+            },
+            "change": null,
+            "event": {
+              "mediaType": "application/json",
+              "utf8": "{\"seq\": \"2\", \"xid\": \"755\", \"after\": {\"kind\": \"object\", \"identity\": {\"id\": \"2\", \"typeId\": \"1\", \"version\": \"1\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.405000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:01.405000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"baz\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Sample\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"1\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"origin\": {\"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}, \"request\": {\"attempt\": \"load-1\", \"requestKey\": \"initial-products\"}, \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"identity\": {\"id\": \"2\", \"typeId\": \"1\", \"version\": \"1\"}, \"operation\": \"create\", \"inputIndex\": \"1\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\", \"eventVersion\": \"1\", \"historyProfile\": \"truss-browser-create/0.1\", \"interfaceVersion\": \"truss-browser-history-event/0.1\", \"eventCatalogRevision\": \"1\"}",
+              "sha256": "df1d1bc2219a594b38cc35821a7ab8f4e0592d46752cd7741397197f6cecc5f9"
+            },
+            "origin": {
+              "mediaType": "application/json",
+              "utf8": "{\"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}",
+              "sha256": "a0f0de125a7a99658fe65c39d9923dad9ce993d0036ee31053af9b09e65c254f"
+            }
+          },
+          {
+            "context": {
+              "kind": "load",
+              "request": {
+                "requestKey": "initial-products",
+                "attempt": "load-1"
+              },
+              "index": "2"
+            },
+            "sequence": "3",
+            "transactionId": "755",
+            "at": "2026-10-15T18:55:01.408000Z",
+            "operation": "create",
+            "catalogRevision": "1",
+            "target": {
+              "documentId": "product-local-action-demo",
+              "module": "sales",
+              "record": "products"
+            },
+            "before": null,
+            "after": {
+              "id": "3",
+              "typeId": "1",
+              "version": "1",
+              "createdAt": "2026-10-15T18:55:01.406000Z",
+              "updatedAt": "2026-10-15T18:55:01.406000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "qux"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Sample"
+                }
+              ]
+            },
+            "change": null,
+            "event": {
+              "mediaType": "application/json",
+              "utf8": "{\"seq\": \"3\", \"xid\": \"755\", \"after\": {\"kind\": \"object\", \"identity\": {\"id\": \"3\", \"typeId\": \"1\", \"version\": \"1\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.406000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:01.406000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"qux\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Sample\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"1\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"origin\": {\"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}, \"request\": {\"attempt\": \"load-1\", \"requestKey\": \"initial-products\"}, \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"identity\": {\"id\": \"3\", \"typeId\": \"1\", \"version\": \"1\"}, \"operation\": \"create\", \"inputIndex\": \"2\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\", \"eventVersion\": \"1\", \"historyProfile\": \"truss-browser-create/0.1\", \"interfaceVersion\": \"truss-browser-history-event/0.1\", \"eventCatalogRevision\": \"1\"}",
+              "sha256": "83de9323f1790506729b509ddf4c3c696e3a030c02c52a465181c83d195ba653"
+            },
+            "origin": {
+              "mediaType": "application/json",
+              "utf8": "{\"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}",
+              "sha256": "a0f0de125a7a99658fe65c39d9923dad9ce993d0036ee31053af9b09e65c254f"
+            }
+          }
+        ],
+        "cursor": {
+          "profile": "truss-browser-feed-cursor/0.1",
+          "storeId": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+          "incarnation": "46610993-e16d-4931-b224-76412f5c6db2",
+          "afterSeq": "3"
+        },
+        "hasMore": true
+      },
+      {
+        "status": "page",
+        "profile": "truss-browser-journal-page/0.1",
+        "events": [
+          {
+            "context": {
+              "kind": "load",
+              "request": {
+                "requestKey": "initial-products",
+                "attempt": "load-1"
+              },
+              "index": "3"
+            },
+            "sequence": "4",
+            "transactionId": "755",
+            "at": "2026-10-15T18:55:01.409000Z",
+            "operation": "create",
+            "catalogRevision": "1",
+            "target": {
+              "documentId": "product-local-action-demo",
+              "module": "sales",
+              "record": "products"
+            },
+            "before": null,
+            "after": {
+              "id": "4",
+              "typeId": "1",
+              "version": "1",
+              "createdAt": "2026-10-15T18:55:01.408000Z",
+              "updatedAt": "2026-10-15T18:55:01.408000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "spare"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Untouched"
+                }
+              ]
+            },
+            "change": null,
+            "event": {
+              "mediaType": "application/json",
+              "utf8": "{\"seq\": \"4\", \"xid\": \"755\", \"after\": {\"kind\": \"object\", \"identity\": {\"id\": \"4\", \"typeId\": \"1\", \"version\": \"1\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.408000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:01.408000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"spare\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Untouched\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"1\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"origin\": {\"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}, \"request\": {\"attempt\": \"load-1\", \"requestKey\": \"initial-products\"}, \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"identity\": {\"id\": \"4\", \"typeId\": \"1\", \"version\": \"1\"}, \"operation\": \"create\", \"inputIndex\": \"3\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\", \"eventVersion\": \"1\", \"historyProfile\": \"truss-browser-create/0.1\", \"interfaceVersion\": \"truss-browser-history-event/0.1\", \"eventCatalogRevision\": \"1\"}",
+              "sha256": "091ab1eee7b1814eed97b9739f09c952a762bbbe7ee49b3b6a670dae76d9117e"
+            },
+            "origin": {
+              "mediaType": "application/json",
+              "utf8": "{\"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}",
+              "sha256": "a0f0de125a7a99658fe65c39d9923dad9ce993d0036ee31053af9b09e65c254f"
+            }
+          },
+          {
+            "context": {
+              "kind": "batch",
+              "job": {
+                "id": "ab6ae74c-e911-47bd-ab31-e3bfcbed3f06",
+                "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6"
+              },
+              "batch": 0,
+              "item": 0
+            },
+            "sequence": "5",
+            "transactionId": "766",
+            "at": "2026-10-15T18:55:02.206000Z",
+            "operation": "property",
+            "catalogRevision": "1",
+            "target": {
+              "documentId": "product-local-action-demo",
+              "module": "sales",
+              "record": "products"
+            },
+            "before": {
+              "id": "1",
+              "typeId": "1",
+              "version": "1",
+              "createdAt": "2026-10-15T18:55:01.400000Z",
+              "updatedAt": "2026-10-15T18:55:01.400000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "bar"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Sample"
+                }
+              ]
+            },
+            "after": {
+              "id": "1",
+              "typeId": "1",
+              "version": "2",
+              "createdAt": "2026-10-15T18:55:01.400000Z",
+              "updatedAt": "2026-10-15T18:55:02.206000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "bar"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Bulk"
+                }
+              ]
+            },
+            "change": {
+              "module": "sales",
+              "field": "product-name",
+              "name": "name",
+              "before": "Sample",
+              "after": "Bulk"
+            },
+            "event": {
+              "mediaType": "application/json",
+              "utf8": "{\"job\": {\"id\": \"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"seq\": \"5\", \"xid\": \"766\", \"after\": {\"kind\": \"object\", \"identity\": {\"id\": \"1\", \"typeId\": \"1\", \"version\": \"2\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.400000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:02.206000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"bar\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Bulk\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"2\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"batch\": 0, \"before\": {\"kind\": \"object\", \"identity\": {\"id\": \"1\", \"typeId\": \"1\", \"version\": \"1\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.400000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:01.400000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"bar\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Sample\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"1\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"origin\": {\"job\": {\"id\": \"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"item\": 0, \"batch\": 0, \"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}, \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"identity\": {\"id\": \"1\", \"typeId\": \"1\", \"version\": \"2\"}, \"newValue\": {\"string\": \"Bulk\"}, \"oldValue\": {\"string\": \"Sample\"}, \"operation\": \"property\", \"inputIndex\": \"0\", \"propertyId\": \"2\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\", \"eventVersion\": \"2\", \"historyProfile\": \"truss-browser-set/0.1\", \"interfaceVersion\": \"truss-browser-history-event/0.1\", \"eventCatalogRevision\": \"1\"}",
+              "sha256": "4b1d62f7bd4b35037e9593097cb18373a7d722d65336436ba5ee0f4e790d1c69"
+            },
+            "origin": {
+              "mediaType": "application/json",
+              "utf8": "{\"job\": {\"id\": \"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"item\": 0, \"batch\": 0, \"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}",
+              "sha256": "76d6e1f29ea905410f1528545dc77711b5d2cd9475f93a4cb912f5061ff946dc"
+            }
+          },
+          {
+            "context": {
+              "kind": "batch",
+              "job": {
+                "id": "ab6ae74c-e911-47bd-ab31-e3bfcbed3f06",
+                "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6"
+              },
+              "batch": 0,
+              "item": 1
+            },
+            "sequence": "6",
+            "transactionId": "766",
+            "at": "2026-10-15T18:55:02.207000Z",
+            "operation": "property",
+            "catalogRevision": "1",
+            "target": {
+              "documentId": "product-local-action-demo",
+              "module": "sales",
+              "record": "products"
+            },
+            "before": {
+              "id": "2",
+              "typeId": "1",
+              "version": "1",
+              "createdAt": "2026-10-15T18:55:01.405000Z",
+              "updatedAt": "2026-10-15T18:55:01.405000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "baz"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Sample"
+                }
+              ]
+            },
+            "after": {
+              "id": "2",
+              "typeId": "1",
+              "version": "2",
+              "createdAt": "2026-10-15T18:55:01.405000Z",
+              "updatedAt": "2026-10-15T18:55:02.207000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "baz"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Bulk"
+                }
+              ]
+            },
+            "change": {
+              "module": "sales",
+              "field": "product-name",
+              "name": "name",
+              "before": "Sample",
+              "after": "Bulk"
+            },
+            "event": {
+              "mediaType": "application/json",
+              "utf8": "{\"job\": {\"id\": \"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"seq\": \"6\", \"xid\": \"766\", \"after\": {\"kind\": \"object\", \"identity\": {\"id\": \"2\", \"typeId\": \"1\", \"version\": \"2\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.405000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:02.207000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"baz\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Bulk\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"2\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"batch\": 0, \"before\": {\"kind\": \"object\", \"identity\": {\"id\": \"2\", \"typeId\": \"1\", \"version\": \"1\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.405000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:01.405000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"baz\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Sample\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"1\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"origin\": {\"job\": {\"id\": \"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"item\": 1, \"batch\": 0, \"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}, \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"identity\": {\"id\": \"2\", \"typeId\": \"1\", \"version\": \"2\"}, \"newValue\": {\"string\": \"Bulk\"}, \"oldValue\": {\"string\": \"Sample\"}, \"operation\": \"property\", \"inputIndex\": \"1\", \"propertyId\": \"2\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\", \"eventVersion\": \"2\", \"historyProfile\": \"truss-browser-set/0.1\", \"interfaceVersion\": \"truss-browser-history-event/0.1\", \"eventCatalogRevision\": \"1\"}",
+              "sha256": "720f51defa60629730fc041ee2ce64f4990df25bd5b3ebc3ce7ef626e1328628"
+            },
+            "origin": {
+              "mediaType": "application/json",
+              "utf8": "{\"job\": {\"id\": \"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"item\": 1, \"batch\": 0, \"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}",
+              "sha256": "c6d6f2ebd444eaf068d4290f713ce1e48c8c38a64fe6b7776cc277ec1f82d6e8"
+            }
+          }
+        ],
+        "cursor": {
+          "profile": "truss-browser-feed-cursor/0.1",
+          "storeId": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+          "incarnation": "46610993-e16d-4931-b224-76412f5c6db2",
+          "afterSeq": "6"
+        },
+        "hasMore": true
+      },
+      {
+        "status": "page",
+        "profile": "truss-browser-journal-page/0.1",
+        "events": [
+          {
+            "context": {
+              "kind": "batch",
+              "job": {
+                "id": "ab6ae74c-e911-47bd-ab31-e3bfcbed3f06",
+                "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6"
+              },
+              "batch": 1,
+              "item": 2
+            },
+            "sequence": "34",
+            "transactionId": "769",
+            "at": "2026-10-15T18:55:05.444000Z",
+            "operation": "property",
+            "catalogRevision": "1",
+            "target": {
+              "documentId": "product-local-action-demo",
+              "module": "sales",
+              "record": "products"
+            },
+            "before": {
+              "id": "3",
+              "typeId": "1",
+              "version": "1",
+              "createdAt": "2026-10-15T18:55:01.406000Z",
+              "updatedAt": "2026-10-15T18:55:01.406000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "qux"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Sample"
+                }
+              ]
+            },
+            "after": {
+              "id": "3",
+              "typeId": "1",
+              "version": "2",
+              "createdAt": "2026-10-15T18:55:01.406000Z",
+              "updatedAt": "2026-10-15T18:55:05.443000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "qux"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Bulk"
+                }
+              ]
+            },
+            "change": {
+              "module": "sales",
+              "field": "product-name",
+              "name": "name",
+              "before": "Sample",
+              "after": "Bulk"
+            },
+            "event": {
+              "mediaType": "application/json",
+              "utf8": "{\"job\": {\"id\": \"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"seq\": \"34\", \"xid\": \"769\", \"after\": {\"kind\": \"object\", \"identity\": {\"id\": \"3\", \"typeId\": \"1\", \"version\": \"2\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.406000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:05.443000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"qux\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Bulk\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"2\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"batch\": 1, \"before\": {\"kind\": \"object\", \"identity\": {\"id\": \"3\", \"typeId\": \"1\", \"version\": \"1\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.406000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:01.406000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"qux\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Sample\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"1\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"origin\": {\"job\": {\"id\": \"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"item\": 2, \"batch\": 1, \"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}, \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"identity\": {\"id\": \"3\", \"typeId\": \"1\", \"version\": \"2\"}, \"newValue\": {\"string\": \"Bulk\"}, \"oldValue\": {\"string\": \"Sample\"}, \"operation\": \"property\", \"inputIndex\": \"2\", \"propertyId\": \"2\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\", \"eventVersion\": \"2\", \"historyProfile\": \"truss-browser-set/0.1\", \"interfaceVersion\": \"truss-browser-history-event/0.1\", \"eventCatalogRevision\": \"1\"}",
+              "sha256": "b1aadc9d8f02f3be93c9ab172a460daabc99e661150e35b1c83a85a11c7311d7"
+            },
+            "origin": {
+              "mediaType": "application/json",
+              "utf8": "{\"job\": {\"id\": \"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"item\": 2, \"batch\": 1, \"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}",
+              "sha256": "315cc684c6763e3aa411ff7f19126d6c1ed1f126e60571b2b8c63ed1951976a3"
+            }
+          },
+          {
+            "context": {
+              "kind": "batch",
+              "job": {
+                "id": "9285d782-cc25-47d6-aa88-b901f3335146",
+                "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6"
+              },
+              "batch": 0,
+              "item": 0
+            },
+            "sequence": "100",
+            "transactionId": "796",
+            "at": "2026-10-15T18:55:07.833000Z",
+            "operation": "property",
+            "catalogRevision": "1",
+            "target": {
+              "documentId": "product-local-action-demo",
+              "module": "sales",
+              "record": "products"
+            },
+            "before": {
+              "id": "2",
+              "typeId": "1",
+              "version": "2",
+              "createdAt": "2026-10-15T18:55:01.405000Z",
+              "updatedAt": "2026-10-15T18:55:02.207000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "baz"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Bulk"
+                }
+              ]
+            },
+            "after": {
+              "id": "2",
+              "typeId": "1",
+              "version": "3",
+              "createdAt": "2026-10-15T18:55:01.405000Z",
+              "updatedAt": "2026-10-15T18:55:07.832000Z",
+              "fields": [
+                {
+                  "module": "sales",
+                  "field": "product-id",
+                  "name": "id",
+                  "value": "baz"
+                },
+                {
+                  "module": "sales",
+                  "field": "product-name",
+                  "name": "name",
+                  "value": "Changed"
+                }
+              ]
+            },
+            "change": {
+              "module": "sales",
+              "field": "product-name",
+              "name": "name",
+              "before": "Bulk",
+              "after": "Changed"
+            },
+            "event": {
+              "mediaType": "application/json",
+              "utf8": "{\"job\": {\"id\": \"9285d782-cc25-47d6-aa88-b901f3335146\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"seq\": \"100\", \"xid\": \"796\", \"after\": {\"kind\": \"object\", \"identity\": {\"id\": \"2\", \"typeId\": \"1\", \"version\": \"3\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.405000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:07.832000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"baz\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Changed\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"3\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"batch\": 0, \"before\": {\"kind\": \"object\", \"identity\": {\"id\": \"2\", \"typeId\": \"1\", \"version\": \"2\"}, \"retained\": [], \"createdAt\": \"2026-10-15T18:55:01.405000Z\", \"ownership\": {\"state\": \"rootless\"}, \"updatedAt\": \"2026-10-15T18:55:02.207000Z\", \"properties\": [{\"value\": {\"kind\": \"string\", \"text\": \"baz\"}, \"propertyId\": \"1\"}, {\"value\": {\"kind\": \"string\", \"text\": \"Bulk\"}, \"propertyId\": \"2\"}], \"recordVersion\": \"2\", \"documentSha256\": \"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\", \"catalogRevision\": \"1\", \"interfaceVersion\": \"truss-browser-history-record/0.1\"}, \"origin\": {\"job\": {\"id\": \"9285d782-cc25-47d6-aa88-b901f3335146\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"item\": 0, \"batch\": 0, \"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}, \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"identity\": {\"id\": \"2\", \"typeId\": \"1\", \"version\": \"3\"}, \"newValue\": {\"string\": \"Changed\"}, \"oldValue\": {\"string\": \"Bulk\"}, \"operation\": \"property\", \"inputIndex\": \"0\", \"propertyId\": \"2\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\", \"eventVersion\": \"3\", \"historyProfile\": \"truss-browser-set/0.1\", \"interfaceVersion\": \"truss-browser-history-event/0.1\", \"eventCatalogRevision\": \"1\"}",
+              "sha256": "9f2e90016f5cd6de72e2b835af202d7adc3fe818cb424459774c2da03574b58e"
+            },
+            "origin": {
+              "mediaType": "application/json",
+              "utf8": "{\"job\": {\"id\": \"9285d782-cc25-47d6-aa88-b901f3335146\", \"namespace\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\"}, \"item\": 0, \"batch\": 0, \"profile\": \"truss-browser-local-origin/0.1\", \"storeId\": \"fb2c801c-1537-4754-8310-e62d14f6f2c6\", \"incarnation\": \"46610993-e16d-4931-b224-76412f5c6db2\"}",
+              "sha256": "5cd2d72d607997e398dde43bb83c67047eec58d226dd0af69a58b31306746126"
+            }
+          }
+        ],
+        "cursor": {
+          "profile": "truss-browser-feed-cursor/0.1",
+          "storeId": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+          "incarnation": "46610993-e16d-4931-b224-76412f5c6db2",
+          "afterSeq": "100"
+        },
+        "hasMore": false
+      }
+    ],
+    "events": 8,
+    "foreignCursor": "CURSOR_SCOPE",
+    "emptyAfterReopen": {
+      "status": "page",
+      "profile": "truss-browser-journal-page/0.1",
+      "events": [],
+      "cursor": {
+        "profile": "truss-browser-feed-cursor/0.1",
+        "storeId": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+        "incarnation": "46610993-e16d-4931-b224-76412f5c6db2",
+        "afterSeq": "100"
+      },
+      "hasMore": false
+    }
+  },
+  "staleGuard": {
+    "result": {
+      "status": "conflict",
+      "job": {
+        "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+        "id": "bfe9fe02-27c2-4ce4-a76a-7a7cdfe152b3"
+      },
+      "batch": 0,
+      "code": "PAP_GUARD",
+      "item": 1
+    },
+    "recoveredByteEqual": true,
+    "firstItemUnchanged": true
+  },
+  "noOp": {
+    "results": [
+      {
+        "status": "committed",
+        "job": {
+          "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+          "id": "02d68e2c-ec64-49f7-b059-ddbf8c0410f7"
+        },
+        "batch": 0,
+        "manifestSha256": "2fb9226348578342ce35d822fa9464cb953e0827ad183024ec4b7294af32e485",
+        "items": [
+          {
+            "ordinal": 0,
+            "result": {
+              "status": "committed",
+              "token": "pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/02d68e2c-ec64-49f7-b059-ddbf8c0410f7/0/0",
+              "noOp": true,
+              "identity": {
+                "id": "1",
+                "typeId": "1"
+              },
+              "version": "2",
+              "changes": [],
+              "verification": {
+                "profile": "truss-browser-set-verification/0.1",
+                "requiredEffects": true,
+                "frame": true,
+                "keysUnchanged": true
+              }
+            }
+          },
+          {
+            "ordinal": 1,
+            "result": {
+              "status": "committed",
+              "token": "pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/02d68e2c-ec64-49f7-b059-ddbf8c0410f7/0/1",
+              "noOp": true,
+              "identity": {
+                "id": "2",
+                "typeId": "1"
+              },
+              "version": "2",
+              "changes": [],
+              "verification": {
+                "profile": "truss-browser-set-verification/0.1",
+                "requiredEffects": true,
+                "frame": true,
+                "keysUnchanged": true
+              }
+            }
+          }
+        ],
+        "receipt": {
+          "mediaType": "application/json",
+          "utf8": "{\"profile\":\"truss-browser-batch-receipt/0.1\",\"storeId\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"incarnation\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"job\":{\"namespace\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"id\":\"02d68e2c-ec64-49f7-b059-ddbf8c0410f7\"},\"batch\":0,\"manifestSha256\":\"2fb9226348578342ce35d822fa9464cb953e0827ad183024ec4b7294af32e485\",\"writerXid\":\"775\",\"journal\":[],\"items\":[{\"ordinal\":0,\"result\":{\"status\":\"committed\",\"token\":\"pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/02d68e2c-ec64-49f7-b059-ddbf8c0410f7/0/0\",\"noOp\":true,\"identity\":{\"id\":\"1\",\"typeId\":\"1\"},\"version\":\"2\",\"changes\":[],\"verification\":{\"profile\":\"truss-browser-set-verification/0.1\",\"requiredEffects\":true,\"frame\":true,\"keysUnchanged\":true}}},{\"ordinal\":1,\"result\":{\"status\":\"committed\",\"token\":\"pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/02d68e2c-ec64-49f7-b059-ddbf8c0410f7/0/1\",\"noOp\":true,\"identity\":{\"id\":\"2\",\"typeId\":\"1\"},\"version\":\"2\",\"changes\":[],\"verification\":{\"profile\":\"truss-browser-set-verification/0.1\",\"requiredEffects\":true,\"frame\":true,\"keysUnchanged\":true}}}]}",
+          "sha256": "f0c68d1c24581ca29eafa89c45b2427628713be34cd29849f9f147c68a060748"
+        }
+      },
+      {
+        "status": "committed",
+        "job": {
+          "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+          "id": "02d68e2c-ec64-49f7-b059-ddbf8c0410f7"
+        },
+        "batch": 1,
+        "manifestSha256": "2fb9226348578342ce35d822fa9464cb953e0827ad183024ec4b7294af32e485",
+        "items": [
+          {
+            "ordinal": 2,
+            "result": {
+              "status": "committed",
+              "token": "pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/02d68e2c-ec64-49f7-b059-ddbf8c0410f7/1/2",
+              "noOp": true,
+              "identity": {
+                "id": "3",
+                "typeId": "1"
+              },
+              "version": "2",
+              "changes": [],
+              "verification": {
+                "profile": "truss-browser-set-verification/0.1",
+                "requiredEffects": true,
+                "frame": true,
+                "keysUnchanged": true
+              }
+            }
+          }
+        ],
+        "receipt": {
+          "mediaType": "application/json",
+          "utf8": "{\"profile\":\"truss-browser-batch-receipt/0.1\",\"storeId\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"incarnation\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"job\":{\"namespace\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"id\":\"02d68e2c-ec64-49f7-b059-ddbf8c0410f7\"},\"batch\":1,\"manifestSha256\":\"2fb9226348578342ce35d822fa9464cb953e0827ad183024ec4b7294af32e485\",\"writerXid\":\"778\",\"journal\":[],\"items\":[{\"ordinal\":2,\"result\":{\"status\":\"committed\",\"token\":\"pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/02d68e2c-ec64-49f7-b059-ddbf8c0410f7/1/2\",\"noOp\":true,\"identity\":{\"id\":\"3\",\"typeId\":\"1\"},\"version\":\"2\",\"changes\":[],\"verification\":{\"profile\":\"truss-browser-set-verification/0.1\",\"requiredEffects\":true,\"frame\":true,\"keysUnchanged\":true}}}]}",
+          "sha256": "f53c04ee0bdf5e3c4f1a98f87e6c5d23e36558ed3c8f701c1720d684d2d21d83"
+        }
+      }
+    ],
+    "unchanged": true
+  },
+  "atomicRollback": {
+    "result": {
+      "status": "failed",
+      "job": {
+        "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+        "id": "d5ea516d-4f78-4960-9752-8d9d3a7a789e"
+      },
+      "batch": 0,
+      "code": "BATCH_ROLLED_BACK"
+    },
+    "recoveredByteEqual": true,
+    "unchanged": true,
+    "state": {
+      "state": {
+        "job": {
+          "id": "d5ea516d-4f78-4960-9752-8d9d3a7a789e",
+          "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6"
+        },
+        "stop": {
+          "code": "BATCH_ROLLED_BACK",
+          "batch": 0
+        },
+        "status": "stopped",
+        "nextBatch": 0,
+        "manifestSha256": "2c686f32114c89a384edf3d8fce755effbefc2c592bcd8af302b332b0dc24199",
+        "unresolvedBatch": null,
+        "committedBatches": 0
+      },
+      "manifest": {
+        "mediaType": "application/json",
+        "utf8": "{\"action\":{\"documentSha256\":\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\",\"invocation\":{\"id\":\"umf.actions.local-tx\",\"version\":\"1\"},\"target\":{\"action\":\"set-name-local\",\"module\":\"sales\",\"revision\":\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\"}},\"basis\":{\"cut\":\"1:779:5e98be4ae425007d5e0c3b55d8b14a7d8d1c03b5b5a8cad7a70e0c6fd17194c6\",\"epoch\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"profile\":{\"id\":\"truss-browser-store-cut\",\"version\":\"1\"},\"selectionSha256\":\"07070a99c7b9e8442b476af15ca07b4cfc34d893da7b99b456284110831a3a95\",\"store\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\"},\"batches\":[{\"count\":2,\"ordinal\":0,\"start\":0},{\"count\":1,\"ordinal\":1,\"start\":2}],\"items\":[{\"entity\":{\"components\":[{\"string\":\"bar\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}},\"expectedVersions\":[{\"frame\":\"customer-write\",\"version\":\"2\"}],\"guard\":{\"epoch\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"identity\":\"1\",\"profile\":{\"id\":\"truss-browser-object-version\",\"version\":\"1\"},\"store\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"version\":\"2\"},\"inputs\":{\"name-value\":{\"string\":\"Fail\"},\"products\":{\"components\":[{\"string\":\"bar\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}}},\"ordinal\":0},{\"entity\":{\"components\":[{\"string\":\"baz\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}},\"expectedVersions\":[{\"frame\":\"customer-write\",\"version\":\"2\"}],\"guard\":{\"epoch\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"identity\":\"2\",\"profile\":{\"id\":\"truss-browser-object-version\",\"version\":\"1\"},\"store\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"version\":\"2\"},\"inputs\":{\"name-value\":{\"string\":\"Fail\"},\"products\":{\"components\":[{\"string\":\"baz\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}}},\"ordinal\":1},{\"entity\":{\"components\":[{\"string\":\"qux\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}},\"expectedVersions\":[{\"frame\":\"customer-write\",\"version\":\"2\"}],\"guard\":{\"epoch\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"identity\":\"3\",\"profile\":{\"id\":\"truss-browser-object-version\",\"version\":\"1\"},\"store\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"version\":\"2\"},\"inputs\":{\"name-value\":{\"string\":\"Fail\"},\"products\":{\"components\":[{\"string\":\"qux\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}}},\"ordinal\":2}],\"plan\":{\"mediaType\":\"application/json\",\"sha256\":\"9ecb240326abe64dfa61af6b8ebe1483d44cc5e7325b6303e6947f2e5e1d0197\",\"utf8\":\"{\\\"action\\\":{\\\"documentSha256\\\":\\\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\\\",\\\"identity\\\":{\\\"action\\\":\\\"set-name-local\\\",\\\"module\\\":\\\"sales\\\"},\\\"invocation\\\":{\\\"id\\\":\\\"umf.actions.local-tx\\\",\\\"version\\\":\\\"1\\\"}},\\\"execution\\\":{\\\"atomicity\\\":\\\"batch\\\",\\\"batchSize\\\":2,\\\"conflict\\\":\\\"stop\\\",\\\"partition\\\":\\\"manifest-order\\\",\\\"selection\\\":\\\"frozen\\\"},\\\"inputs\\\":{\\\"assignments\\\":[{\\\"field\\\":{\\\"element\\\":\\\"product-name\\\",\\\"module\\\":\\\"sales\\\"},\\\"input\\\":\\\"name-value\\\",\\\"value\\\":{\\\"string\\\":\\\"Fail\\\"}}],\\\"entityParameter\\\":\\\"products\\\"},\\\"limits\\\":{\\\"maxItems\\\":10,\\\"maxManifestBytes\\\":16777216},\\\"model\\\":{\\\"documentId\\\":\\\"product-local-action-demo\\\",\\\"revision\\\":\\\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\\\",\\\"sha256\\\":\\\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\\\",\\\"umfVersion\\\":\\\"0.8.0\\\"},\\\"protocol\\\":\\\"umf.actions.plan/1\\\",\\\"selection\\\":{\\\"artifact\\\":{\\\"mediaType\\\":\\\"application/json\\\",\\\"sha256\\\":\\\"07070a99c7b9e8442b476af15ca07b4cfc34d893da7b99b456284110831a3a95\\\",\\\"utf8\\\":\\\"{\\\\\\\"key\\\\\\\":{\\\\\\\"element\\\\\\\":\\\\\\\"products\\\\\\\",\\\\\\\"key\\\\\\\":\\\\\\\"pk\\\\\\\",\\\\\\\"module\\\\\\\":\\\\\\\"sales\\\\\\\"},\\\\\\\"predicate\\\\\\\":{\\\\\\\"compare\\\\\\\":{\\\\\\\"field\\\\\\\":{\\\\\\\"element\\\\\\\":\\\\\\\"product-name\\\\\\\",\\\\\\\"module\\\\\\\":\\\\\\\"sales\\\\\\\"},\\\\\\\"op\\\\\\\":\\\\\\\"eq\\\\\\\",\\\\\\\"value\\\\\\\":{\\\\\\\"string\\\\\\\":\\\\\\\"Bulk\\\\\\\"}}},\\\\\\\"protocol\\\\\\\":\\\\\\\"weft.update-selection/1\\\\\\\",\\\\\\\"record\\\\\\\":{\\\\\\\"element\\\\\\\":\\\\\\\"products\\\\\\\",\\\\\\\"module\\\\\\\":\\\\\\\"sales\\\\\\\"}}\\\"},\\\"dependencies\\\":[{\\\"element\\\":\\\"product-name\\\",\\\"module\\\":\\\"sales\\\"}],\\\"profile\\\":{\\\"id\\\":\\\"weft.update-selection\\\",\\\"version\\\":\\\"1\\\"}},\\\"source\\\":{\\\"mediaType\\\":\\\"application/json\\\",\\\"sha256\\\":\\\"5d10c56b115459de49cb6c2810369800ba06b26ce1c851fa1a94513bff8c2a99\\\",\\\"utf8\\\":\\\"{\\\\\\\"dialect\\\\\\\":\\\\\\\"weft-mutation/0.1.0\\\\\\\",\\\\\\\"parameters\\\\\\\":{},\\\\\\\"sql\\\\\\\":\\\\\\\"UPDATE products SET name='Fail' WHERE name='Bulk'\\\\\\\"}\\\"},\\\"target\\\":{\\\"element\\\":\\\"products\\\",\\\"key\\\":\\\"pk\\\",\\\"module\\\":\\\"sales\\\"}}\"},\"protocol\":\"umf.actions.manifest/1\"}",
+        "sha256": "2c686f32114c89a384edf3d8fce755effbefc2c592bcd8af302b332b0dc24199"
+      }
+    }
+  },
+  "execution": {
+    "first": {
+      "status": "committed",
+      "job": {
+        "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+        "id": "ab6ae74c-e911-47bd-ab31-e3bfcbed3f06"
+      },
+      "batch": 0,
+      "manifestSha256": "d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319",
+      "items": [
+        {
+          "ordinal": 0,
+          "result": {
+            "status": "committed",
+            "token": "pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/ab6ae74c-e911-47bd-ab31-e3bfcbed3f06/0/0",
+            "noOp": false,
+            "identity": {
+              "id": "1",
+              "typeId": "1"
+            },
+            "version": "2",
+            "changes": [
+              {
+                "propertyId": "2",
+                "before": {
+                  "string": "Sample"
+                },
+                "after": {
+                  "string": "Bulk"
+                }
+              }
+            ],
+            "verification": {
+              "profile": "truss-browser-set-verification/0.1",
+              "requiredEffects": true,
+              "frame": true,
+              "keysUnchanged": true
+            }
+          }
+        },
+        {
+          "ordinal": 1,
+          "result": {
+            "status": "committed",
+            "token": "pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/ab6ae74c-e911-47bd-ab31-e3bfcbed3f06/0/1",
+            "noOp": false,
+            "identity": {
+              "id": "2",
+              "typeId": "1"
+            },
+            "version": "2",
+            "changes": [
+              {
+                "propertyId": "2",
+                "before": {
+                  "string": "Sample"
+                },
+                "after": {
+                  "string": "Bulk"
+                }
+              }
+            ],
+            "verification": {
+              "profile": "truss-browser-set-verification/0.1",
+              "requiredEffects": true,
+              "frame": true,
+              "keysUnchanged": true
+            }
+          }
+        }
+      ],
+      "receipt": {
+        "mediaType": "application/json",
+        "utf8": "{\"profile\":\"truss-browser-batch-receipt/0.1\",\"storeId\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"incarnation\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"job\":{\"namespace\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"id\":\"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\"},\"batch\":0,\"manifestSha256\":\"d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319\",\"writerXid\":\"766\",\"journal\":[\"5\",\"6\"],\"items\":[{\"ordinal\":0,\"result\":{\"status\":\"committed\",\"token\":\"pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/ab6ae74c-e911-47bd-ab31-e3bfcbed3f06/0/0\",\"noOp\":false,\"identity\":{\"id\":\"1\",\"typeId\":\"1\"},\"version\":\"2\",\"changes\":[{\"propertyId\":\"2\",\"before\":{\"string\":\"Sample\"},\"after\":{\"string\":\"Bulk\"}}],\"verification\":{\"profile\":\"truss-browser-set-verification/0.1\",\"requiredEffects\":true,\"frame\":true,\"keysUnchanged\":true}}},{\"ordinal\":1,\"result\":{\"status\":\"committed\",\"token\":\"pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/ab6ae74c-e911-47bd-ab31-e3bfcbed3f06/0/1\",\"noOp\":false,\"identity\":{\"id\":\"2\",\"typeId\":\"1\"},\"version\":\"2\",\"changes\":[{\"propertyId\":\"2\",\"before\":{\"string\":\"Sample\"},\"after\":{\"string\":\"Bulk\"}}],\"verification\":{\"profile\":\"truss-browser-set-verification/0.1\",\"requiredEffects\":true,\"frame\":true,\"keysUnchanged\":true}}}]}",
+        "sha256": "93b3cb22c05f3e639868b5cb4c7d5d0fc6e5e6f0f944eb7f7a04e199af2ad77f"
+      }
+    },
+    "second": {
+      "status": "committed",
+      "job": {
+        "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+        "id": "ab6ae74c-e911-47bd-ab31-e3bfcbed3f06"
+      },
+      "batch": 1,
+      "manifestSha256": "d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319",
+      "items": [
+        {
+          "ordinal": 2,
+          "result": {
+            "status": "committed",
+            "token": "pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/ab6ae74c-e911-47bd-ab31-e3bfcbed3f06/1/2",
+            "noOp": false,
+            "identity": {
+              "id": "3",
+              "typeId": "1"
+            },
+            "version": "2",
+            "changes": [
+              {
+                "propertyId": "2",
+                "before": {
+                  "string": "Sample"
+                },
+                "after": {
+                  "string": "Bulk"
+                }
+              }
+            ],
+            "verification": {
+              "profile": "truss-browser-set-verification/0.1",
+              "requiredEffects": true,
+              "frame": true,
+              "keysUnchanged": true
+            }
+          }
+        }
+      ],
+      "receipt": {
+        "mediaType": "application/json",
+        "utf8": "{\"profile\":\"truss-browser-batch-receipt/0.1\",\"storeId\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"incarnation\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"job\":{\"namespace\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"id\":\"ab6ae74c-e911-47bd-ab31-e3bfcbed3f06\"},\"batch\":1,\"manifestSha256\":\"d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319\",\"writerXid\":\"769\",\"journal\":[\"34\"],\"items\":[{\"ordinal\":2,\"result\":{\"status\":\"committed\",\"token\":\"pap1/fb2c801c-1537-4754-8310-e62d14f6f2c6/ab6ae74c-e911-47bd-ab31-e3bfcbed3f06/1/2\",\"noOp\":false,\"identity\":{\"id\":\"3\",\"typeId\":\"1\"},\"version\":\"2\",\"changes\":[{\"propertyId\":\"2\",\"before\":{\"string\":\"Sample\"},\"after\":{\"string\":\"Bulk\"}}],\"verification\":{\"profile\":\"truss-browser-set-verification/0.1\",\"requiredEffects\":true,\"frame\":true,\"keysUnchanged\":true}}}]}",
+        "sha256": "c88d3327ccfb7f7f92b5cf334a621fd06a5406cc4307b9f89ef8f0c263b62dbe"
+      }
+    },
+    "replayedByteEqual": true,
+    "recoveredByteEqual": true,
+    "finalState": {
+      "state": {
+        "job": {
+          "id": "ab6ae74c-e911-47bd-ab31-e3bfcbed3f06",
+          "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6"
+        },
+        "stop": null,
+        "status": "completed",
+        "nextBatch": 2,
+        "manifestSha256": "d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319",
+        "unresolvedBatch": null,
+        "committedBatches": 2
+      },
+      "manifest": {
+        "mediaType": "application/json",
+        "utf8": "{\"action\":{\"documentSha256\":\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\",\"invocation\":{\"id\":\"umf.actions.local-tx\",\"version\":\"1\"},\"target\":{\"action\":\"set-name-local\",\"module\":\"sales\",\"revision\":\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\"}},\"basis\":{\"cut\":\"1:756:5e98be4ae425007d5e0c3b55d8b14a7d8d1c03b5b5a8cad7a70e0c6fd17194c6\",\"epoch\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"profile\":{\"id\":\"truss-browser-store-cut\",\"version\":\"1\"},\"selectionSha256\":\"acbe50c3d290115ca64ae7891a93ba6e1f9dd2f6c1ed78f1e7a7b2e123b3ab84\",\"store\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\"},\"batches\":[{\"count\":2,\"ordinal\":0,\"start\":0},{\"count\":1,\"ordinal\":1,\"start\":2}],\"items\":[{\"entity\":{\"components\":[{\"string\":\"bar\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}},\"expectedVersions\":[{\"frame\":\"customer-write\",\"version\":\"1\"}],\"guard\":{\"epoch\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"identity\":\"1\",\"profile\":{\"id\":\"truss-browser-object-version\",\"version\":\"1\"},\"store\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"version\":\"1\"},\"inputs\":{\"name-value\":{\"string\":\"Bulk\"},\"products\":{\"components\":[{\"string\":\"bar\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}}},\"ordinal\":0},{\"entity\":{\"components\":[{\"string\":\"baz\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}},\"expectedVersions\":[{\"frame\":\"customer-write\",\"version\":\"1\"}],\"guard\":{\"epoch\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"identity\":\"2\",\"profile\":{\"id\":\"truss-browser-object-version\",\"version\":\"1\"},\"store\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"version\":\"1\"},\"inputs\":{\"name-value\":{\"string\":\"Bulk\"},\"products\":{\"components\":[{\"string\":\"baz\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}}},\"ordinal\":1},{\"entity\":{\"components\":[{\"string\":\"qux\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}},\"expectedVersions\":[{\"frame\":\"customer-write\",\"version\":\"1\"}],\"guard\":{\"epoch\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"identity\":\"3\",\"profile\":{\"id\":\"truss-browser-object-version\",\"version\":\"1\"},\"store\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"version\":\"1\"},\"inputs\":{\"name-value\":{\"string\":\"Bulk\"},\"products\":{\"components\":[{\"string\":\"qux\"}],\"key\":{\"element\":\"products\",\"key\":\"pk\",\"module\":\"sales\"}}},\"ordinal\":2}],\"plan\":{\"mediaType\":\"application/json\",\"sha256\":\"c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587\",\"utf8\":\"{\\\"action\\\":{\\\"documentSha256\\\":\\\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\\\",\\\"identity\\\":{\\\"action\\\":\\\"set-name-local\\\",\\\"module\\\":\\\"sales\\\"},\\\"invocation\\\":{\\\"id\\\":\\\"umf.actions.local-tx\\\",\\\"version\\\":\\\"1\\\"}},\\\"execution\\\":{\\\"atomicity\\\":\\\"batch\\\",\\\"batchSize\\\":2,\\\"conflict\\\":\\\"stop\\\",\\\"partition\\\":\\\"manifest-order\\\",\\\"selection\\\":\\\"frozen\\\"},\\\"inputs\\\":{\\\"assignments\\\":[{\\\"field\\\":{\\\"element\\\":\\\"product-name\\\",\\\"module\\\":\\\"sales\\\"},\\\"input\\\":\\\"name-value\\\",\\\"value\\\":{\\\"string\\\":\\\"Bulk\\\"}}],\\\"entityParameter\\\":\\\"products\\\"},\\\"limits\\\":{\\\"maxItems\\\":10,\\\"maxManifestBytes\\\":16777216},\\\"model\\\":{\\\"documentId\\\":\\\"product-local-action-demo\\\",\\\"revision\\\":\\\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\\\",\\\"sha256\\\":\\\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\\\",\\\"umfVersion\\\":\\\"0.8.0\\\"},\\\"protocol\\\":\\\"umf.actions.plan/1\\\",\\\"selection\\\":{\\\"artifact\\\":{\\\"mediaType\\\":\\\"application/json\\\",\\\"sha256\\\":\\\"acbe50c3d290115ca64ae7891a93ba6e1f9dd2f6c1ed78f1e7a7b2e123b3ab84\\\",\\\"utf8\\\":\\\"{\\\\\\\"key\\\\\\\":{\\\\\\\"element\\\\\\\":\\\\\\\"products\\\\\\\",\\\\\\\"key\\\\\\\":\\\\\\\"pk\\\\\\\",\\\\\\\"module\\\\\\\":\\\\\\\"sales\\\\\\\"},\\\\\\\"predicate\\\\\\\":{\\\\\\\"compare\\\\\\\":{\\\\\\\"field\\\\\\\":{\\\\\\\"element\\\\\\\":\\\\\\\"product-name\\\\\\\",\\\\\\\"module\\\\\\\":\\\\\\\"sales\\\\\\\"},\\\\\\\"op\\\\\\\":\\\\\\\"eq\\\\\\\",\\\\\\\"value\\\\\\\":{\\\\\\\"string\\\\\\\":\\\\\\\"Sample\\\\\\\"}}},\\\\\\\"protocol\\\\\\\":\\\\\\\"weft.update-selection/1\\\\\\\",\\\\\\\"record\\\\\\\":{\\\\\\\"element\\\\\\\":\\\\\\\"products\\\\\\\",\\\\\\\"module\\\\\\\":\\\\\\\"sales\\\\\\\"}}\\\"},\\\"dependencies\\\":[{\\\"element\\\":\\\"product-name\\\",\\\"module\\\":\\\"sales\\\"}],\\\"profile\\\":{\\\"id\\\":\\\"weft.update-selection\\\",\\\"version\\\":\\\"1\\\"}},\\\"source\\\":{\\\"mediaType\\\":\\\"application/json\\\",\\\"sha256\\\":\\\"a6399dc37a07720d12a3bee9a2f2016066bdb5dd4e9da75ced3c32bc90af4f2f\\\",\\\"utf8\\\":\\\"{\\\\\\\"dialect\\\\\\\":\\\\\\\"weft-mutation/0.1.0\\\\\\\",\\\\\\\"parameters\\\\\\\":{},\\\\\\\"sql\\\\\\\":\\\\\\\"UPDATE products SET name='Bulk' WHERE name='Sample'\\\\\\\"}\\\"},\\\"target\\\":{\\\"element\\\":\\\"products\\\",\\\"key\\\":\\\"pk\\\",\\\"module\\\":\\\"sales\\\"}}\"},\"protocol\":\"umf.actions.manifest/1\"}",
+        "sha256": "d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319"
+      }
+    },
+    "finalObjects": [
+      {
+        "id": "1",
+        "typeId": "1",
+        "version": "2",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "bar"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Bulk"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "typeId": "1",
+        "version": "2",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "baz"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Bulk"
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "typeId": "1",
+        "version": "2",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "qux"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Bulk"
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "spare"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Untouched"
+          }
+        ]
+      }
+    ]
+  },
+  "claim": {
+    "result": {
+      "status": "claimed",
+      "job": {
+        "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+        "id": "ab6ae74c-e911-47bd-ab31-e3bfcbed3f06"
+      },
+      "batch": 0,
+      "fence": "1",
+      "leaseUntil": "2026-10-15T18:56:02.023000Z"
+    },
+    "replayedByteEqual": true,
+    "recoveredByteEqual": true,
+    "competingClaim": {
+      "status": "unsupported",
+      "code": "PAP_FENCE"
+    }
+  },
+  "submit": {
+    "result": {
+      "status": "submitted",
+      "state": {
+        "status": "queued",
+        "job": {
+          "namespace": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+          "id": "ab6ae74c-e911-47bd-ab31-e3bfcbed3f06"
+        },
+        "manifestSha256": "d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319",
+        "nextBatch": 0,
+        "committedBatches": 0,
+        "unresolvedBatch": null,
+        "stop": null
+      }
+    },
+    "replayedByteEqual": true,
+    "recoveredByteEqual": true,
+    "sameJob": true,
+    "controlConflict": "conflict",
+    "secondGenuineSealSameJob": true,
+    "refusalReplayedByteEqual": true
+  },
+  "load": {
+    "outcome": "public_objects_loaded",
+    "loaded": {
+      "outcome": "loaded",
+      "request": {
+        "requestKey": "initial-products",
+        "attempt": "load-1"
+      },
+      "objects": [
+        {
+          "id": "1",
+          "typeId": "1",
+          "version": "1"
+        },
+        {
+          "id": "2",
+          "typeId": "1",
+          "version": "1"
+        },
+        {
+          "id": "3",
+          "typeId": "1",
+          "version": "1"
+        },
+        {
+          "id": "4",
+          "typeId": "1",
+          "version": "1"
+        }
+      ],
+      "journal": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    "replayedByteEqual": true,
+    "duplicate": "failure",
+    "read": [
+      {
+        "id": "1",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "bar"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Sample"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "baz"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Sample"
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "qux"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Sample"
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "spare"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Untouched"
+          }
+        ]
+      }
+    ],
+    "recoveredByteEqual": true,
+    "physical": {
+      "objects": "4",
+      "keys": "4",
+      "reservations": "4",
+      "journal": "8",
+      "generation": "1",
+      "exact": true
+    }
+  },
+  "materialization": {
+    "count": 3,
+    "batches": [
+      {
+        "count": 2,
+        "ordinal": 0,
+        "start": 0
+      },
+      {
+        "count": 1,
+        "ordinal": 1,
+        "start": 2
+      }
+    ],
+    "planSha256": "c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587",
+    "manifestSha256": "d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319",
+    "keys": [
+      "bar",
+      "baz",
+      "qux"
+    ],
+    "forgedGrant": "refused"
+  },
+  "seal": {
+    "reference": {
+      "profile": "truss-browser-seal-reference/0.1",
+      "storeId": "fb2c801c-1537-4754-8310-e62d14f6f2c6",
+      "incarnation": "46610993-e16d-4931-b224-76412f5c6db2",
+      "requestKey": "basic-seal",
+      "attempt": "attempt-1",
+      "manifestSha256": "d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319",
+      "planSha256": "c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587",
+      "modelSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27"
+    },
+    "receipt": {
+      "mediaType": "application/json",
+      "utf8": "{\"profile\":\"truss-browser-seal-receipt/0.1\",\"reference\":{\"profile\":\"truss-browser-seal-reference/0.1\",\"storeId\":\"fb2c801c-1537-4754-8310-e62d14f6f2c6\",\"incarnation\":\"46610993-e16d-4931-b224-76412f5c6db2\",\"requestKey\":\"basic-seal\",\"attempt\":\"attempt-1\",\"manifestSha256\":\"d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319\",\"planSha256\":\"c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587\",\"modelSha256\":\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\"},\"inputSha256\":\"8cbd8cf538b138c43ddab01ca114dbcfefe39f059de99841a8fe2840ec0cf19e\",\"writerXid\":\"757\",\"manifestSha256\":\"d5d0676409383c3aa1989fb1abf4854d3e2fe6fa4248b7034dccc07de754a319\"}",
+      "sha256": "a4aacd8c8c5a4f7f7d7b1f40ee42a1dddfb7bd4b93307ce82c080090d633872f"
+    },
+    "replayedByteEqual": true,
+    "recoveredByteEqual": true,
+    "conflict": "conflict",
+    "missing": "unresolved"
+  },
+  "action": {
+    "registered": {
+      "outcome": "action_registered",
+      "modelSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+      "preparationSha256": "6f5e69462c327da970f07ca1f6253dbacc4db0badf1335b7d91e3f38eb67ad40",
+      "declaration": {
+        "profile": {
+          "id": "umf.actions.local-store-read",
+          "version": "1"
+        },
+        "target": {
+          "element": "products",
+          "key": "pk",
+          "module": "sales"
+        },
+        "fields": [
+          {
+            "module": "sales",
+            "element": "product-id"
+          },
+          {
+            "module": "sales",
+            "element": "product-name"
+          }
+        ],
+        "view": "complete-canonical-target-population",
+        "disposition": "original"
+      },
+      "opaque": true
+    },
+    "forged": {
+      "outcome": "refused"
+    },
+    "previousOpen": "previous_action_refused",
+    "reissued": "action_registered"
+  },
+  "catalog": {
+    "registration": "registered",
+    "retry": "unchanged",
+    "revision": "1",
+    "sourceSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+    "types": [
+      {
+        "typeId": "1",
+        "moduleId": "sales",
+        "recordId": "products",
+        "documentId": "product-local-action-demo",
+        "lineageHex": "74727573732d63616e6f6e6963616c2f302e312e300a74727573732d747970652d6c696e656167652f302e312e300a5b2270726f647563742d6c6f63616c2d616374696f6e2d64656d6f222c2273616c6573222c2270726f6475637473225d",
+        "lineageProfile": "truss-type-lineage/0.1.0"
+      }
+    ],
+    "properties": [
+      {
+        "name": "id",
+        "typeId": "1",
+        "fieldId": "product-id",
+        "moduleId": "sales",
+        "propertyId": "1"
+      },
+      {
+        "name": "name",
+        "typeId": "1",
+        "fieldId": "product-name",
+        "moduleId": "sales",
+        "propertyId": "2"
+      }
+    ],
+    "keys": [
+      {
+        "keyId": "pk",
+        "typeId": "1",
+        "primary": true,
+        "keyNumber": "1",
+        "propertyIds": [
+          "1"
+        ]
+      }
+    ],
+    "changeCount": 3
+  },
+  "actionExecution": true,
+  "selectionReadGrant": true,
+  "crashRecovery": false
+}

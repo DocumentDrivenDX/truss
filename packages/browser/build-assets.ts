@@ -3,7 +3,7 @@ import {mkdir,cp,readFile,readdir,writeFile} from 'node:fs/promises';
 import {join,resolve,isAbsolute} from 'node:path';
 const root=resolve(import.meta.dir,'../..');
 const hash=(bytes:Uint8Array|string)=>new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
-const inputs=['packages/browser/store.ts','packages/browser/catalog.ts','packages/browser/actions.ts','packages/browser/materialize.ts','packages/browser/objects.ts','packages/browser/bulk.ts','packages/browser/batch.ts','packages/browser/build-assets.ts','packages/browser/package.json','bun.lock',
+const inputs=['packages/browser/store.ts','packages/browser/catalog.ts','packages/browser/actions.ts','packages/browser/materialize.ts','packages/browser/objects.ts','packages/browser/bulk.ts','packages/browser/batch.ts','packages/browser/feed.ts','packages/browser/build-assets.ts','packages/browser/package.json','bun.lock',
   'packages/postgresql/src/acceptance-json.ts','packages/postgresql/src/original-byte-custody.ts',
   'packages/umf-bun/src/catalog-declarations.ts',
   ...['layout.sql','scalars.sql','lineage.sql','containers.sql','plan.sql'].map(x=>'packages/python/src/truss/_catalog_runtime/'+x),
@@ -69,7 +69,7 @@ export async function buildBrowserAssets(directory:string){
     umfCoreProducer:{revision:'7c0f0c98beee2cc1a5a407992b5c53cc2616da8e',bundleSha256:sourceHashes['packages/python/src/truss/_umf_core08/producer.js']},
     umfActionsProducer:{revision:'40f011402bf8f0c9512225975b62a034f1da325c',producer:'sha256:633f8ad623cc150fd3f6e2c5fe5324a0a128393036aa34d9929bfadf1142c6e4',bundleSha256:assets['owners/umf-actions.js']!.sha256},
     weftProducer:{revision:weftProducer.revision,features:weftProducer.features,wasmSha256:assets['owners/weft/weft_wasm_bg.wasm']!.sha256},
-    scope:{lifecycle:true,coreCatalog:true,actionRegistration:true,selectionReadGrant:true,materialization:true,manifestSealing:true,sealRecovery:true,objectLoad:true,objectRead:true,loadRecovery:true,submission:true,submissionRecovery:true,jobReview:true,claims:true,claimRecovery:true,actionExecution:true,batchRecovery:true,effects:true},
+    scope:{lifecycle:true,coreCatalog:true,actionRegistration:true,selectionReadGrant:true,materialization:true,manifestSealing:true,sealRecovery:true,objectLoad:true,objectRead:true,loadRecovery:true,submission:true,submissionRecovery:true,jobReview:true,claims:true,claimRecovery:true,actionExecution:true,batchRecovery:true,journalPages:true,effects:true},
     sourceHashes,assets:Object.fromEntries(Object.entries(assets).sort(([a],[b])=>a<b?-1:a>b?1:0))};
   const encoded=JSON.stringify(manifest,null,2)+'\n';await writeFile(join(directory,'manifest.json'),encoded);
   return {directory,manifestSha256:hash(encoded),providerSha256:assets['store.js']!.sha256};

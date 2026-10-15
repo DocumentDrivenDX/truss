@@ -139,10 +139,21 @@ try{
   const firstAfterStale=afterStale.find((o:any)=>o.fields.some((f:any)=>f.field==='product-id'&&f.value==='bar'));
   if(firstAfterStale.version!=='2'||!firstAfterStale.fields.some((f:any)=>f.field==='product-name'&&f.value==='Bulk')||afterStale.some((o:any)=>o.fields.some((f:any)=>f.value==='WouldRollback')))throw Error('Stale batch leaked first-item changes');
   const staleRecovery=await call(a,{command:'recoverBatch',input:staleInput});if(JSON.stringify(staleRecovery)!==JSON.stringify(stale))throw Error('Stale outcome recovery changed');
+  let feedCursor:any=null;const feedPages:any[]=[],feedEvents:any[]=[];
+  do{
+    const page=await call(a,{command:'readFeed',input:{cursor:feedCursor,limit:3}});if(page.status!=='page')throw Error(JSON.stringify(page));feedPages.push(page);feedEvents.push(...page.events);feedCursor=page.cursor;if(!page.hasMore)break;
+  }while(feedPages.length<4);
+  if(feedEvents.length!==8||feedEvents.filter(e=>e.operation==='create').length!==4||feedEvents.filter(e=>e.operation==='property').length!==4||!feedEvents.some((e,i)=>i>0&&BigInt(e.sequence)>BigInt(feedEvents[i-1].sequence)+1n)||feedCursor.afterSeq!==feedEvents.at(-1).sequence)throw Error('Incomplete journal pages or rollback-gap cursor');
+  if(feedEvents.some(e=>e.after.fields.some((f:any)=>f.value==='Fail'||f.value==='WouldRollback'))||feedEvents.at(-1).change?.after!=='Changed')throw Error('Failed business event leaked or logical decode failed');
+  const foreignCursor=await call(a,{command:'readFeed',input:{cursor:{...feedCursor,storeId:'00000000-0000-4000-8000-000000000000'},limit:3}});if(foreignCursor.status!=='refused'||foreignCursor.code!=='CURSOR_SCOPE')throw Error(JSON.stringify(foreignCursor));
+  const feedReopen=await call(a,{command:'reopenAction',name:'lifecycle-basic'});if(feedReopen.outcome!=='previous_action_refused')throw Error(JSON.stringify(feedReopen));
+  await call(a,{command:'action'});
+  const emptyFeed=await call(a,{command:'readFeed',input:{cursor:feedCursor,limit:3}});if(emptyFeed.status!=='page'||emptyFeed.events.length||emptyFeed.hasMore||JSON.stringify(emptyFeed.cursor)!==JSON.stringify(feedCursor))throw Error('Empty reopened feed advanced cursor');
   const recoveredLoad=await call(a,{command:'recoverLoad'});if(JSON.stringify(recoveredLoad)!==JSON.stringify(seeded.loaded))throw Error('Recovered load changed original outcome');
   await call(a,{command:'close'});
   const physical=await call(a,{command:'inspectStorage'});if(physical.objects!=='4'||physical.keys!=='4'||physical.reservations!=='4'||physical.journal!=='8'||physical.generation!=='1'||physical.exact!==true)throw Error(JSON.stringify(physical));
   const receipt={scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
+    feed:{pages:feedPages,events:feedEvents.length,foreignCursor:foreignCursor.code,emptyAfterReopen:emptyFeed},
     staleGuard:{result:stale,recoveredByteEqual:true,firstItemUnchanged:true},
     noOp:{results:noOpResults,unchanged:true},
     atomicRollback:{result:failed,recoveredByteEqual:true,unchanged:true,state:failedState},

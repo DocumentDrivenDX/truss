@@ -6,7 +6,7 @@ functional path is register document → load objects → register action/read g
 Supported objects are rootless Records with required singular String Fields and
 one single-member primary Key. Actions are the original UMF bounded constant
 `graph-write/1` set recipe under `umf.actions.local-tx/1`. Relationships, wider
-value domains, catalog evolution, cancellation, feed and retention are unfinished.
+value domains, catalog evolution, cancellation, feed acknowledgements and retention are unfinished.
 This is not complete local-bulk qualification or native66 installation/security.
 
 ## Worker lifecycle and catalog
@@ -147,3 +147,15 @@ prefixes; mutable checkouts/compilation services are not runtime dependencies.
 Two-CWD builds verify reproducible assets. Notice inventories do not invent
 missing project licenses or claim complete licensing closure. This private
 source delivery does not publish new Python/Weft wheels.
+
+## Local journal pages
+
+`readFeed(owner,{cursor:null,limit:3})` returns committed local journal rows and
+a `truss-browser-feed-cursor/0.1` cursor scoped to this store and incarnation.
+Pass that cursor to read the next page. Limits are 1–100 rows and 8MiB; an
+oversized page refuses without truncation. IDs, versions and sequences remain
+exact text. Returned event/origin artifacts preserve the stored bytes and hashes.
+
+Pages may split a committed batch. Sequence gaps from rolled-back work are valid.
+This owner-only local journal reader does not provide ACKs, retention management
+or the native feed's transaction/checkpoint guarantees.

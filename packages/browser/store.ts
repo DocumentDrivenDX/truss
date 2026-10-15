@@ -1,3 +1,4 @@
+import {createFeed,captureFeed,type FeedInput,type FeedPage} from './feed';
 import {createBulk,captureExecute,captureClaim,captureSubmit,captureJob,type SubmitInput,type SubmitResult,type JobRef,type JobState,type JobReview,type ClaimInput,type ClaimResult,type ExecuteInput,type BatchOutcome} from './bulk';
 import {createObjectAccess,captureLoad,captureTarget,journalHorizon,type LoadInput,type LoadOutcome,type RecordIdentity} from './objects';
 import {PGlite} from '@electric-sql/pglite';
@@ -32,6 +33,7 @@ export interface BrowserStore {
   executeBatch(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ExecuteInput):Promise<BatchOutcome>;
   recoverBatch(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ExecuteInput):Promise<BatchOutcome>;
   reviewJob(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,job:JobRef):Promise<JobReview>;
+  readFeed(owner:LocalOwner,input:FeedInput):Promise<FeedPage>;
   close(owner:LocalOwner):Promise<void>;
 }
 export type StoreOpen={outcome:'available';store:BrowserStore;owner:LocalOwner}|{outcome:'unavailable';reason:'store_in_use'};
@@ -92,6 +94,7 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
       const materializer=createMaterializer(actual,info,issuer,()=>state==='open',()=>{state='fenced';});
       const sealer=createSealer(actual,info,issuer,materializer,()=>state==='open',()=>{state='fenced';});
       const bulk=createBulk(actual,info,sealer,()=>state==='open',()=>{state='fenced';});
+      const readFeed=createFeed(actual,info,()=>state==='open',()=>{state='fenced';});
       const objectAccess=createObjectAccess(actual,info,()=>state==='open',()=>{state='fenced';});
       const currentCatalog=()=>readCatalog(actual).catch(error=>{state='fenced';throw error;});
       const check=(cap:LocalOwner)=>{if(cap!==owner||state!=='open')throw new Error('Current issued local owner required');};
@@ -141,6 +144,7 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
         executeBatch(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ExecuteInput){check(cap);const captured=captureExecute(input);return schedule(cap,()=>bulk.execute(action,grant,captured));},
         recoverBatch(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ExecuteInput){check(cap);const captured=captureExecute(input);return schedule(cap,()=>bulk.execute(action,grant,captured,true));},
         reviewJob(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:JobRef){check(cap);const captured=captureJob(input);return schedule(cap,()=>bulk.status(action,grant,captured));},
+        readFeed(cap:LocalOwner,input:FeedInput){check(cap);const captured=captureFeed(input);return schedule(cap,()=>readFeed(captured));},
         async close(cap:LocalOwner){
           check(cap);state='closing';
           try{await queue;if((state as string)==='fenced')throw Error('Store is fenced');await actual.syncToFs();await actual.close();release();await lockTask;state='closed';}

@@ -116,3 +116,11 @@ committed journal/feed reads, cancellation, retention, consumer integration and
 release packaging. Native Python ownership/current0.2 protected execution and
 other full-goal work retain their existing scope; this browser checkpoint does
 not replace them. Native66/67 or published wheels are unchanged.
+
+## Local journal-page checkpoint — 2026-10-15
+
+The public owner-only `readFeed` now returns bounded committed journal row pages
+with store/incarnation cursors and exact original event/origin bytes. Astra Ultra
+review and the final basic Chromium workflow passed; see
+[evidence](evidence/browser-feed-20261015/README.md). Pages may split a batch;
+ACKs, retention and native-feed guarantees remain unfinished.
