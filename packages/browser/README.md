@@ -64,3 +64,10 @@ It records every emitted asset except itself; the command returns its own digest
 The Chromium check builds and exercises this exact output. No temporary checkout
 or compilation service is a runtime dependency. The package remains private and
 unpublished; this build is the current source-vendor interface.
+
+Weft main `535b5c7` now compiles the original local Products UPDATE through its
+Rust mutation registry and production WASM `MutationCompiler`. Exact local
+invocation/producer admission remains separate from native transaction admission.
+Its basic Rust and Chromium checks pass; Truss physical binding/lowering and
+worker action execution remain the next integration work. This source checkpoint
+is not a new published wheel or an enabled executor.
