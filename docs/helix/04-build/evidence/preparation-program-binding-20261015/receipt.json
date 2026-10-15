@@ -1,0 +1,18 @@
+{
+  "scope": "Native anchor to original enrolled program identity only; no permission, selector execution or first-data-transaction guarantee",
+  "baseline": "dc68736663e0e0fc265a8d76a4600d7b2e8158c5",
+  "server": "PostgreSQL18.6 / pgserver-pg18 18.6.1",
+  "sourceHashes": {
+    "packages/python/src/truss/_security_bootstrap/preparation-program-binding.sql": "033eb25d24e292d15608dfdf75ea012ec1ad0b82e0ce874ee2431ca9f44874bb",
+    "packages/python/tests/test_preparation_program_binding_native.py": "5d24995b5c545356af890f09c7d4819996c580dbf73dfb99922a0e68328b6f35",
+    "packages/python/src/truss/_security_bootstrap/preparation-attempt-anchor.sql": "a79512e4e8ead804f2843ca29ea2aa324010845d8e4a5fb829d2a5119483265b",
+    "packages/python/src/truss/_security_bootstrap/action-store-issuer.sql": "7181f92898912785300bb4984f41a275287e982c67ca3fde1da90fd5735d520b",
+    "scripts/export-products-native-binding.py": "b7b42396ef792980c0d836f6a07100930b54af7aca27c515ca234f4e06a54815"
+  },
+  "result": "1 test passed in6.782s",
+  "astraUltra": "Completed component approved; added cross-data replay negative passed",
+  "ordinaryGrants": "None in production; fixture-only narrow assessor wrapper",
+  "authority": false,
+  "protectedExecution": false,
+  "crossDataConnection": "Original anchor refuses a different physical RR data connection with identical person/store/program and its own actual fullxid"
+}
