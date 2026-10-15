@@ -12,10 +12,12 @@ BEGIN
  WHERE (n.nspname='truss' AND c.relname IN
   ('preparation_attempt_anchor','preparation_program_registration','action_store_registration',
    'preparation_attempt_anchor_seq','preparation_program_registration_program_id_seq','action_store_control_seq',
-   'preparation_program_sources'))
+   'preparation_program_sources','action_family_registration','action_role_binding','action_subject_binding',
+   'action_family_registration_family_registration_id_seq','action_role_binding_binding_id_seq'))
  OR (n.nspname='umf_security' AND c.relname='preparation_data_claim');
  IF cardinality(homes) IS DISTINCT FROM
-  (CASE WHEN to_regclass('truss.preparation_program_sources') IS NULL THEN 7 ELSE 8 END) THEN
+  (7 + CASE WHEN to_regclass('truss.preparation_program_sources') IS NULL THEN 0 ELSE 1 END
+     + CASE WHEN to_regclass('truss.action_family_registration') IS NULL THEN 0 ELSE 5 END) THEN
   RAISE EXCEPTION 'exact bridge table/sequence homes required' USING ERRCODE='55000';END IF;
  SELECT array_agg(p.oid ORDER BY p.oid) INTO routines
  FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace
@@ -26,7 +28,9 @@ BEGIN
    'resolve_preparation_program_binding','acquire_action_store_source_cut',
    'acquire_preparation_catalog_cut','observe_action_store_original',
    'runtime_fence_routine_ddl_writer','preparation_bridge_inventory',
-   'acquire_preparation_bridge_cut','observe_preparation_bridge','read_preparation_program_sources'));
+   'acquire_preparation_bridge_cut','observe_preparation_bridge','read_preparation_program_sources',
+   'check_preparation_module_authority','check_preparation_literal_authority',
+   'acquire_action_mapping_cut','acquire_action_subject_cut','acquire_preparation_authority_lock'));
  -- This is an explicit adjunct, not a PL/pgSQL dependency-closure claim.
  SELECT jsonb_build_object(
   'profile','truss.preparation-bridge-definitions/0.1','authority',false,
@@ -97,6 +101,9 @@ BEGIN
  LOCK TABLE ONLY truss.preparation_attempt_anchor, truss.action_store_registration,
   umf_security.preparation_data_claim IN ROW EXCLUSIVE MODE NOWAIT;
  original_program:=truss.resolve_preparation_program_binding(original_anchor,original_nonce,pg_current_xact_id());
+ IF to_regclass('truss.action_family_registration') IS NOT NULL THEN
+  PERFORM truss.acquire_action_mapping_cut();
+ END IF;
  IF to_regclass('truss.preparation_program_sources') IS NOT NULL THEN
   LOCK TABLE ONLY truss.preparation_program_sources IN SHARE MODE NOWAIT;
  END IF;

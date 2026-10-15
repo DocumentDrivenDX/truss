@@ -1,0 +1,70 @@
+{
+  "scope": "private selected literal current-check consumer; no permit or whole authority closure",
+  "runtime": {
+    "postgresql": "18.6",
+    "pgserver-pg18": "18.6.1",
+    "psycopg": "3.3.6"
+  },
+  "nativeTest": {
+    "passed": 1,
+    "seconds": 7.901
+  },
+  "regressions": {
+    "sourceAware": {
+      "passed": 1,
+      "seconds": 9.294
+    },
+    "metadataOnly": {
+      "passed": 1,
+      "seconds": 5.795
+    }
+  },
+  "sourceCompiler": "98ee88f193f5d70ccf21bd78ef6c37fffddc5eab",
+  "equivalentIntegratedUmfSource": "7a92b713791e322d51082c0010874a94785a80d1",
+  "observations": {
+    "homeCount": 13,
+    "sequenceDefinitionCount": 5,
+    "actualOriginalMappingShareCuts": 3,
+    "nativeHumanActionModulePositive": true,
+    "freshActionRoleRevocationRefused": "42501",
+    "independentRecordWriterRevocationRefused": "42501",
+    "regrantRestoresPositive": true,
+    "originalDataSnapshotAndFullXidRetained": true
+  },
+  "currentCheck": {
+    "authority": false,
+    "personOid": "18515",
+    "programId": "1",
+    "securityReady": false,
+    "currentChecksPassed": true,
+    "remainingNativeObligations": {
+      "kind": "native-identity-and-current-authority",
+      "checks": [
+        "all-exact-enrolled-compiler-and-authored-owner-source-bytes-and-provenance",
+        "issued-store-program-anchor-nonce",
+        "D-fullxid-one-shot-committed-claim",
+        "current-native-human-and-exact-action-role",
+        "current-owner-per-action-and-Field-cuts",
+        "all-applicable-native-home-DDL-legacy-facade-and-serving-copy-inventory",
+        "complete-authorized-population-preflights-and-overflow-refusal",
+        "protected-selector-finalizer-and-effect-custody"
+      ],
+      "status": "required"
+    }
+  },
+  "originalSourceAttachmentSha256": "d56054dc641a12f80aa99ee4dae42a2dd5e567cb11c4954a8f940e003ba40d08",
+  "sourceSha256": {
+    "packages/python/src/truss/_security_bootstrap/preparation-literal-authority.sql": "75432119a20857141a415a0ffac84b1000ab51c9e6f2daaf997a6f1b4b95f5e9",
+    "packages/python/src/truss/_security_bootstrap/preparation-bridge-inventory.sql": "1a2ed7ae16eeb7ca846ab2ce241fabb1a6864794e15dbaf6b7376e848061ad54",
+    "packages/python/src/truss/_preparation_sources.py": "44a245999017ef5ca75b889ece0401f488f80e87189c3bed5a4636279773795b",
+    "packages/python/tests/test_preparation_literal_authority_native.py": "042f3499ba8729011de1fb76cb2ecaaf1eced4813dbb4e5b06a94ebacf49fe4d",
+    "packages/python/tests/test_preparation_bridge_inventory_native.py": "33db4a07c94f92482f29658bf5a175495f55a8355745a37b62b929d4cd5d1fc2"
+  },
+  "authority": false,
+  "securityReady": false,
+  "subjectKeyCodecQualification": false,
+  "completeDependencyLegacyServingClosure": false,
+  "protectedSqlExecution": false,
+  "productionInstaller": false,
+  "review": "Astra Ultra approved; no remaining scoped blocker"
+}

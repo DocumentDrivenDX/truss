@@ -9,6 +9,7 @@ import subprocess
 import tempfile
 from ._preparation_compiler_replay import replay_preparation_program
 from ._preparation_program import OriginalPreparationProgram
+from ._action_identity_codec import encode_action_family, encode_action_role
 from ._preparation_sources_release import MANIFEST_SHA256
 from .weft import _decode
 
@@ -67,8 +68,13 @@ def compile_preparation_sources(program, source_inputs, *, native_module_path, b
         raise ValueError('Original non-authoritative owner packet required')
     identity = json.dumps({'umfSource':manifest['revision'],'manifestSha256':MANIFEST_SHA256,
         'bundleSha256':manifest['files']['producer.js'],'weftSource':replay.source_commit,
+        'nativeFamilyHex':encode_action_family(packet['actionRoles']['pin']['identity']['module'],
+            packet['actionRoles']['pin']['identity']['action']).hex(),
+        'nativeRoleHex':[encode_action_role(role).hex() for role in packet['actionRoles']['roles']],
         'weftNativeSha256':replay.native_sha256,'originalProgramSha256':replay.original_packet_sha256},
         separators=(',',':')).encode('utf8')
+    if len(identity) > 8192:
+        raise ValueError('Bounded complete native identity correspondence required')
     return OriginalPreparationSources(result.stdout, identity)
 
 

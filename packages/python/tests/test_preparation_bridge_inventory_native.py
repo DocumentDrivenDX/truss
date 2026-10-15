@@ -13,6 +13,7 @@ import test_preparation_data_claim_native as original
 
 class PreparationBridgeInventoryNativeTests(original.PreparationDataClaimNativeTests):
     expected_home_count = 7
+    expected_sequence_count = 3
     def prepare_component(self, admin, owner):
         for name in ('preparation-catalog-cut.sql', 'preparation-program-binding.sql'):
             admin.execute(files('truss').joinpath('_security_bootstrap', name).read_text())
@@ -48,7 +49,7 @@ class PreparationBridgeInventoryNativeTests(original.PreparationDataClaimNativeT
         self.original_inventory = data.execute('SELECT truss.bridge_inventory_probe(%s,%s,true)', (anchor, nonce)).fetchone()[0]
         self.original_snapshot = data.execute('SELECT pg_current_snapshot()::text,pg_current_xact_id()::text').fetchone()
         self.assertEqual(len(self.original_inventory['homes']), self.expected_home_count)
-        self.assertEqual(len(self.original_inventory['sequenceDefinitions']), 3)
+        self.assertEqual(len(self.original_inventory['sequenceDefinitions']), self.expected_sequence_count)
         self.assertFalse(self.original_inventory['authority'])
         self.assertEqual({h['kind'] for h in self.original_inventory['homes']}, {'r', 'S'})
 
