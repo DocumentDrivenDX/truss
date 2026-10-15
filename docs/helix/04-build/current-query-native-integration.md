@@ -402,3 +402,26 @@ are restored. All-read-denied or empty populations still refuse when an effectiv
 domain cannot be established; nullable/structured output, ABI3 aggregates, vault
 scopes, managed deployment and published multi-platform consumer pairing remain
 required work. This checkpoint does not close the complete release goal.
+
+
+## Empty public results — 2026-10-15
+
+The public current-policy query now returns empty rows for empty or entirely
+read-denied populations when genuine compiled routes for the same scan, type
+and Field establish a single admitted scalar projection. Original UMF
+`branch.projection` supplies the public Field and exposure independently of the
+raw query operand. Every possible branch must agree, and the branch set must be
+nonempty. Every actual operator route retains its own policy and transform
+checks. No synthetic predicate route or Truss policy parser is introduced.
+Projection-only fields without genuine route metadata remain unsupported.
+
+Original read/action and complete fact-coverage evaluation still precede SQL.
+Output descriptors are checked before decoding any rows, so an empty SQL result
+cannot bypass domain, exposure, position or encoding checks. Caller budgets
+continue to count only admitted occurrences and public scalar bytes.
+
+Three basic public PostgreSQL18.6 workflows passed: existing exact signed64
+predicate with masked output; all-read-denied population; and empty Resource
+population. Both empty cases also refuse prohibited salary ordering with a false
+predicate. This is an unreleased continuation of the pinned ABI2 candidate,
+not a new deployment or aggregate support claim.

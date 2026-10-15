@@ -109,7 +109,9 @@ This first local PostgreSQL18.6/macOS ARM profile uses exact original candidate
 Weft ABI2 and UMF child pins. Published Weft0.4.32 lacks the needed CQP feature;
 matching published wheels are being prepared before a Truss release claim.
 It currently requires rootless, present String or explicit signed64 query
-domains and an observed eligible domain. All-read-denied/empty populations,
+domains. Empty or all-read-denied populations return empty rows when genuine
+compiled operator routes establish one unambiguous original projection domain;
+prohibited routes still refuse. Projection-only fields without that metadata,
 nullable/structured outputs, aggregates and keyed/vault comparison scopes remain
 unfinished. Prohibited routes refuse; logical limits return `QueryRefused`
 with code `limits` after cleanup. Existing `query_in_transaction` retains its

@@ -1,0 +1,21 @@
+{
+  "scope": "Unreleased original UMF/Weft ABI2 current-policy public query: empty and all-read-denied populations with genuine route projection metadata",
+  "runtime": "PostgreSQL18.6, psycopg3.3.6, Python3.12, macOS ARM; existing pinned candidate Weft module and original UMF child unchanged",
+  "command": "PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/weft-current-rows-installed TRUSS_BUN_EXECUTABLE=/opt/homebrew/bin/bun /private/tmp/truss-clean-install-20261013/bin/python -m unittest test_current_query_runtime_native -v",
+  "result": {
+    "tests": 3,
+    "seconds": 26.279,
+    "status": "OK",
+    "session": 19929
+  },
+  "sources": {
+    "packages/python/src/truss/_current_query_stage.py": "fc199b5e34a71f26c516b0fd3eb5fc131b9d4d1c14e190c3c12487c5dd529dd4",
+    "packages/python/tests/test_current_query_runtime_native.py": "299cfd942b1c412f55d2975512668d7be9fd2ad3318d95985168899df2112dfd"
+  },
+  "review": "Astra Ultra reviewed plan and final implementation. Corrected empty original-authorized raw operands to derive their canonical domain independently of public projection metadata. Final source-matching basic rerun passed.",
+  "limits": [
+    "Projection-only Fields without genuine operator metadata unsupported",
+    "No new aggregate, nullable, structured, vault or managed deployment claim",
+    "Published matching wheel qualification remains pending"
+  ]
+}

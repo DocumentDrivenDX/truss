@@ -41,6 +41,26 @@ def _literal(value,family):
     return int(raw)
 
 
+def _empty_projection(packet,evaluated,scan,field):
+    """Use original projection metadata only from genuine compiled uses."""
+    projections=[]
+    for index,route in enumerate(packet['routes']):
+        if route['scan']!=scan or route['field']!=field:continue
+        result=evaluated['routeResults'][index]['result']
+        if result['status']!='evaluated' or result['authority'] is not False or result['plan']['use']!=route:
+            raise ValueError('Original empty projection route correspondence required')
+        branches=result['plan']['branches']
+        if not branches:raise ValueError('Nonempty possible projection branches required')
+        for branch in branches:
+            projection=branch['projection']
+            if projection['kind'] not in ('original','transformed') or 'field' not in projection:
+                raise ValueError('Exact admitted empty projection domain required')
+            projections.append((projection['field'],projection['kind']))
+    if not projections or len({identity(p) for p in projections})!=1:
+        raise ValueError('Uniform genuine empty projection metadata required')
+    return projections[0]
+
+
 def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_rows,maximum_bytes):
     native,current,packet,designation,evaluated,owner,modules=evaluation
     facts=json.loads(captured.facts_bytes)
@@ -61,9 +81,6 @@ def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_row
         rendered={n:{identity(c['field']):c for c in row} for (n,_),row in zip(eligible,cells['rows'],strict=True)}
         if any(len(rendered[n])!=len(row) for (n,_),row in zip(eligible,cells['rows'],strict=True)):
             raise ValueError('Distinct original rendered Fields required')
-        # The current ABI needs one effective scalar domain per use. Do not
-        # guess an output domain from examples when no eligible row supplies it.
-        if not eligible:raise ValueError('Initial guarded scalar profile requires an eligible domain observation')
         selected=[]
         for projection in packet['projections']:
             if projection['scan']==scan_id:selected.append((projection['path'],ref(projection['field']),None,None))
@@ -87,7 +104,12 @@ def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_row
                     if branch['status'] not in ('requires-original-action','compatible-disclosed-properties'):
                         raise ValueError('Original route properties refused')
                     signatures.append((branch['status'],identity(branch['queryValue']),identity(branch['constraints'])))
-            if len(set(signatures))!=1:raise ValueError('Uniform effective per-use route domain required')
+            if not eligible:
+                for branch in result['plan']['branches']:
+                    if branch['status'] not in ('requires-original-action','compatible-disclosed-properties'):
+                        raise ValueError('Original possible route properties refused')
+                    signatures.append((branch['status'],identity(branch['queryValue']),identity(branch['constraints'])))
+            if not signatures or len(set(signatures))!=1:raise ValueError('Uniform effective per-use route domain required')
             mode='original-authorized' if signatures[0][0]=='requires-original-action' else 'disclosed'
             storage=[s for s in owner['storage'] if s['type']==scan['type'] and s['field']==route['field']]
             if len(storage)!=1 or storage[0]['storageEffect']!='canonical':
@@ -104,7 +126,7 @@ def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_row
                 # domain hash. The initial disclosed transform is a pure
                 # constant mask; other transformations await real scope input.
                 for branch in result['plan']['branches']:
-                    if branch['index'] not in {i for row in result['rows'] for i in row['activeBranches']}:continue
+                    if eligible and branch['index'] not in {i for row in result['rows'] for i in row['activeBranches']}:continue
                     disposition=branch['representativeDisposition']
                     if disposition['kind']=='transformed':
                         transforms=[t['declaration'] for t in result['plan']['transforms'] if
@@ -127,6 +149,19 @@ def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_row
                     effective=cell.get('outputType',field);value=cell['value'];exposure=cell['disposition']
                 domain,family=_domain(modules,effective)
                 observations.append((domain,family,exposure,_literal(value,family)))
+            if not eligible:
+                if mode=='original-authorized':
+                    effective=field;exposure=None
+                else:
+                    effective,exposure=_empty_projection(packet,evaluated,scan_id,field)
+                if mode=='disclosed':
+                    routes=[evaluated['routeResults'][i]['result']['plan'] for i,r in enumerate(packet['routes'])
+                            if r['scan']==scan_id and r['path']==path]
+                    if len(routes)!=1 or any(b['queryValue']['field']!=effective or
+                            b['queryValue']['origin'] not in ('live-field','read-transform-output') for b in routes[0]['branches']):
+                        raise ValueError('Exact empty disclosed operand domain required')
+                domain,family=_domain(modules,effective)
+                observations=[(domain,family,None if mode=='original-authorized' else exposure,None)]
             if len({identity([d,f,e]) for d,f,e,_ in observations})!=1:
                 raise ValueError('Uniform effective native query domain required')
             domain,family,exposure,_=observations[0];column='value_'+str(len(columns));columns.append((column,family))
@@ -134,7 +169,7 @@ def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_row
             bindings.append({'path':path,'scan':scan_id,'field':next(p['field'] for p in packet['projections'] if p['path']==path) if mode is None else next(x['input']['identity'] for op in packet['operations'] for x in op['operands'] if x['path']==path),
                              'column':column,'domain':domain,'comparisonScope':scope,'mode':mode,
                              'originalAction':action,'exposure':exposure if mode is None else None})
-            for (index,_),(_,_,_,value) in zip(eligible,observations,strict=True):values_by_row[index][column]=value
+            for (index,_),(_,_,_,value) in zip(eligible,observations if eligible else (),strict=True):values_by_row[index][column]=value
         name='truss_current_'+uuid4().hex
         definitions=[sql.SQL('eligible boolean NOT NULL'),sql.SQL('private_key text COLLATE "C" NOT NULL UNIQUE')]
         definitions.extend(sql.SQL('{} {} NOT NULL').format(sql.Identifier(c),sql.SQL('text COLLATE "C"' if f=='string' else 'bigint')) for c,f in columns)
@@ -179,6 +214,20 @@ def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_row
                 or logical!={'family':family,'nullable':False,'facets':{} if family=='string' else {'integerWidth':{'bits':64,'signed':True}}}):
             raise ValueError('Exact original native parameter descriptor required')
         _literal({'string' if family=='string' else 'integerToken':parameter['value']},family)
+    output_bindings=[]
+    if len(compiled['publicCellSources'])!=width:raise ValueError('Complete public cell correspondence required')
+    for position,(descriptor,cell) in enumerate(zip(descriptors,compiled['publicCellSources'],strict=True)):
+        candidates=[v for v in bindings if v['path']==cell['sourcePath'] and v['scan']==cell['scan'] and v['mode'] is None]
+        if (len(candidates)!=1 or cell['position']!=position or descriptor['position']!=position
+                or candidates[0]['field']!=cell['field'] or candidates[0]['domain']!=descriptor['effectiveDomain']):
+            raise ValueError('Original output cell/domain correspondence required')
+        candidate=candidates[0]
+        domain=candidate['domain']
+        _,family=_domain(modules,{'documentId':domain['documentId'],'moduleId':domain['module'],'elementId':domain['element']})
+        if (descriptor['encoding']!='native-text-exact-required' or descriptor['exposure']!=candidate['exposure']
+                or descriptor['logicalType']!={'family':family,'nullable':False,'facets':{} if family=='string' else {'integerWidth':{'bits':64,'signed':True}}}):
+            raise ValueError('Exact effective output scalar descriptor required')
+        output_bindings.append((cell,candidate))
     rows=[]
     with RawCursor(cursor.connection,row_factory=tuple_row) as raw:
         from .catalog_runtime import _pin_cursor
@@ -211,17 +260,8 @@ def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_row
                 keys[contribution['scan']]=contribution['key']
                 if contribution['key'] not in stage_maps[contribution['scan']]:raise ValueError('Unknown private contributor')
             decoded=[]
-            if len(compiled['publicCellSources'])!=width:raise ValueError('Complete public cell correspondence required')
-            for position,(value,descriptor,cell) in enumerate(zip(row[:width],descriptors,compiled['publicCellSources'],strict=True)):
-                candidates=[v for v in bindings if v['path']==cell['sourcePath'] and v['scan']==cell['scan'] and v['mode'] is None]
-                if (len(candidates)!=1 or cell['position']!=position or descriptor['position']!=position
-                        or candidates[0]['field']!=cell['field'] or candidates[0]['domain']!=descriptor['effectiveDomain']):
-                    raise ValueError('Original output cell/domain correspondence required')
-                expected=stage_maps[cell['scan']][keys[cell['scan']]][candidates[0]['column']]
-                family='integer' if type(expected) is int else 'string'
-                if (descriptor['encoding']!='native-text-exact-required' or descriptor['exposure']!=candidates[0]['exposure']
-                        or descriptor['logicalType']!={'family':family,'nullable':False,'facets':{} if family=='string' else {'integerWidth':{'bits':64,'signed':True}}}):
-                    raise ValueError('Exact effective output scalar descriptor required')
+            for value,(cell,candidate) in zip(row[:width],output_bindings,strict=True):
+                expected=stage_maps[cell['scan']][keys[cell['scan']]][candidate['column']]
                 if value!=str(expected):raise ValueError('Native output cell differs from held disclosed value')
                 decoded.append(expected)
             rows.append(tuple(decoded))
