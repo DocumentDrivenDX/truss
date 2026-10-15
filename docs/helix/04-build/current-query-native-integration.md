@@ -309,3 +309,38 @@ The test's owner realization and supplied cut are diagnostic inputs. Registered
 native owner/static Weft originals, authenticated executor handoff, complete
 source/role lifetime and guarded SQL/result release remain required before this
 becomes a public protected-query provider.
+
+## Complete original query-source registration — 2026-10-15
+
+Private source profile `truss-current-query-sources/0.2-candidate` extends the
+four source-only archives with two originals: the complete Weft `opaqueSources`
+array and an explicit computation-consumer selection. The six opaque roles are
+policy, ontology, catalog, owner, native-binding and query-designation. Their
+inner UTF-8 strings remain unchanged. Registration and recapture check original
+hashes/identities, initializer correspondence, accepted model pins and static
+binding correspondence. UMF and Weft still own semantic admission.
+The initializer's complete closure documents and revision pins must match the
+same accepted model originals. The retained binding in this basic test explicitly
+says `fixture: true` and `not installed`; retaining it does not install a physical
+mapping or authorize its execution.
+
+The child receipt continues to hash only the framed initialize bytes. Capture
+also returns the installed source profile and complete inventory digest, which
+bind the additional owner/binding/consumer originals. Newly enrolled Subject
+helpers embed that exact profile and digest. Existing0.1 registrations remain
+source-only; a runtime upgrade or source change does not silently migrate them.
+
+The first private consumer selection explicitly matches the packaged UMF
+`579675bd` child and the original Weft `718a9649` macOS ARM ABI2 candidate wheel
+and native-module hashes. Actual installed owner assets and loaded native-module
+bytes are checked; a caller's claimed pin or the original static binding's
+backend version cannot admit another consumer. This is a private development
+pairing, not a released or multi-platform protected-query claim. Other exact
+consumers and ABI3 need their own integration. Bun runtime verification remains
+at actual child launch.
+
+The basic PG18 test uses original Weft source bytes from `86fa36ba`, public
+catalog/Staff creation and the real ordinary-session Subject observation. It
+checks recaptured originals, the six-archive census and the helper's exact
+profile/digest. This is storage and Subject correspondence; the private native
+executor and guarded public query release remain unfinished.

@@ -1,0 +1,33 @@
+{
+  "scope": "Private original source/consumer correspondence and native Subject binding; no protected-query permission or release",
+  "postgres": "18.6 / pgserver-pg18 18.6.1",
+  "python": "3.12",
+  "psycopg": "3.3.6",
+  "bun": "1.4.2",
+  "sourceProfile": "truss-current-query-sources/0.2-candidate",
+  "archives": 6,
+  "sourceFixtureRevision": "86fa36badecbae7ba8aff9df00b7cd9936e97ebe",
+  "fixtureUnmodified": true,
+  "testResult": {
+    "session": 98244,
+    "tests": 3,
+    "seconds": 13.253,
+    "status": "passed",
+    "command": "PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/weft-current-rows-installed TRUSS_BUN_EXECUTABLE=/opt/homebrew/bin/bun python -m unittest test_current_query_full_sources_native test_current_query_facts_native -v"
+  },
+  "files": {
+    "packages/python/src/truss/_current_query_originals.py": "342121b7a7e8cc4b1b69686841e15549849f88b49ee647ad875bd0f5e84a388c",
+    "packages/python/src/truss/_current_query_sources.py": "5e5e50caba86a026233e3a8c3714142d68a5d1534485f2909559a8366b4ae277",
+    "packages/python/src/truss/_current_query_subjects.py": "424c09c7ddfe3fc2545c205e929bdda7fe81c34964e801964269b66ee0dc8728",
+    "packages/python/src/truss/_current_query_computation.py": "19c9f70464d15056c2144e831414b464fb2e07024a54800d123ad6fd24b89752",
+    "packages/python/tests/test_current_query_full_sources_native.py": "b3e78e579f5cabb790b2b6c2471509426a5553cc5b3554ec2a7fe783f0c2b044",
+    "packages/python/tests/test_current_query_subjects_native.py": "f41417054e75362739fa131382561df2a61354d7d8ee8e271eea6c88cbebff4e",
+    "packages/python/tests/fixtures/current-query-weft-request.json": "192614d9e7b0dee56364299a9d7cfee0d72b0a7c8778b91640da818cb8ef8ad4",
+    "packages/python/src/truss/_current_query_facts.py": "92257e442736bc621ae741b019ac02fa4e40db9a585196e7dad11ea65a665109"
+  },
+  "finiteReviewFixes": [
+    "Complete initializer closure documents/pins match accepted model originals",
+    "Non-object ontology returns ValueError before field access"
+  ],
+  "staticBindingScope": "Original retained Weft fixture explicitly declares fixture:true and not installed; no physical mapping or native execution admission"
+}

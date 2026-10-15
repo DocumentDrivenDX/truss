@@ -20,10 +20,13 @@ class CurrentQuerySubjectsNativeTests(catalog.PublicCatalogRuntimeTests):
     for name in tuple(n for n in dir(catalog.PublicCatalogRuntimeTests) if n.startswith('test_')):
         locals()[name] = None
 
+    def source_inputs(self):
+        return (Path(__file__).parent/'fixtures/current-query-initialize.json').read_bytes(),None
+
     def test_ordinary_session_observes_only_enrolled_subject_and_original_key(self):
         bun = os.environ.get('TRUSS_BUN_EXECUTABLE',shutil.which('bun') or 'bun')
         self.install()
-        initialize = (Path(__file__).parent/'fixtures/current-query-initialize.json').read_bytes()
+        initialize,query_originals = self.source_inputs()
         closure = json.loads(initialize)['sources']['closure']
         modules, documents = [], []
         for entry in closure['documents']:
@@ -54,7 +57,7 @@ class CurrentQuerySubjectsNativeTests(catalog.PublicCatalogRuntimeTests):
         h.detach();c.commit()
         self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,operation_timeout_ms=30000);self.tx=self.host.adopt_transaction().value
         stored = register_current_query_sources_in_transaction(self.host,self.tx,initialize_bytes=initialize,
-            accepted_request_bytes=json.dumps({'modules':modules},separators=(',',':')).encode())
+            accepted_request_bytes=json.dumps({'modules':modules},separators=(',',':')).encode(),query_originals=query_originals)
         self.assertIsInstance(stored,Ok,str(self.host._custody.last_attempt.error))
         missing = register_current_query_subjects_in_transaction(self.host,self.tx,bindings=(('consumer','missing'),))
         self.assertIsInstance(missing,Error)

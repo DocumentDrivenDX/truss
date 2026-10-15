@@ -111,7 +111,7 @@ BEGIN
  AND NOT r.rolcreatedb AND NOT r.rolcreaterole AND NOT r.rolreplication AND NOT r.rolbypassrls
  AND NOT pg_catalog.pg_has_role(r.oid,i.owner_oid,'MEMBER')
  AND i.installation_id::text={installation} AND h.rev::text={revision}
- AND a.inventory_profile='truss-current-query-sources/0.1-candidate'
+ AND a.inventory_profile={source_profile}
  AND pg_catalog.encode(a.inventory_sha256,'hex')={inventory}
  AND t.document_id={document_id} AND t.module={module_id} AND t.element={record_id}
  AND t.kind='record' AND NOT t.provisional
@@ -125,7 +125,7 @@ BEGIN
  AND (o.props->{property_text}->>'text') COLLATE pg_catalog."C"=m.staff_key COLLATE pg_catalog."C";
 END;
 ''').format(receipt=sql.Literal(captured.source_receipt),installation=sql.Literal(captured.installation_id),
-            revision=sql.Literal(captured.accepted_revision),inventory=sql.Literal(marker[0][0]),
+            revision=sql.Literal(captured.accepted_revision),inventory=sql.Literal(captured.inventory_digest),source_profile=sql.Literal(captured.source_profile),
             type_id=sql.Literal(type_id),property_id=sql.Literal(property_id),property_text=sql.Literal(str(property_id)),
             document_id=sql.Literal(subject['documentId']),module_id=sql.Literal(subject['moduleId']),record_id=sql.Literal(subject['elementId']),
             field_document=sql.Literal(field['definition_document_id']),field_module=sql.Literal(field['declaration_module']),field_id=sql.Literal(field['element']),key_id=sql.Literal(key_id),document_sha=sql.Literal(sha256(document).hexdigest()))

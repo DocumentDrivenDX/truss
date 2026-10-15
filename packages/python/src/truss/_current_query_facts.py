@@ -12,7 +12,8 @@ from ._current_query_pipe import _envelope
 from ._owner_evidence_json import decode_owner_evidence_json
 from ._security_catalog_subject_installation import _text_rows
 from ._umf_key_tuples import (KeyTupleRequest, encode_key_tuples, key_value_from_cell,
-                             _owner_key_value, _same_json_meaning)
+                             _owner_key_value)
+from ._current_query_originals import require_current_model_correspondence
 
 
 @dataclass(frozen=True, slots=True)
@@ -72,22 +73,8 @@ def _key_batches(document, pending):
 
 def _recipes(sources):
     original = _envelope(sources.initialize_bytes)['sources']
-    request = decode_owner_evidence_json(sources.accepted_request_bytes)
     assessment = decode_owner_evidence_json(sources.accepted_assessment_bytes)
-    modules = {m['pin']['documentId']:m for m in request['modules']}
-    closure = original['closure']
-    if len(closure['documents']) != len(modules) or len(closure['pins']) != len(modules):
-        raise ValueError('Complete original fact source closure required')
-    seen = set()
-    for entry in closure['documents']:
-        document = entry['document'];name = document['id']
-        if name in seen or name not in modules:
-            raise ValueError('Exact original fact source documents required')
-        seen.add(name);module = modules[name]
-        if (entry['revision'] != module['pin']['revision']
-                or [p for p in closure['pins'] if p['documentId'] == name] != [{'documentId':name,'revision':entry['revision']}]
-                or not _same_json_meaning(document,decode_owner_evidence_json(module['documentJson'].encode()))):
-            raise ValueError('Original accepted fact source correspondence required')
+    modules=require_current_model_correspondence(sources.initialize_bytes,sources.accepted_request_bytes)
     ontology = original['ontology']
     if ontology['context']:
         raise ValueError('Declared context fact capture is not implemented')
