@@ -88,3 +88,31 @@ are atomic. No business effects or claimed full local-bulk capability follow.
 The basic existing Chromium workflow covers claim/replay/competing refusal and
 reopen recovery, retaining physical creation-only state. Actual batch execution
 remains next.
+
+## Execution checkpoint
+
+Astra approved an existing-PGlite effect-admission record committed and flushed
+before the actual business transaction; no sidecar or pg_xact_status rollback
+inference. The implemented executeBatch/recoverBatch path binds current owner,
+action/read grant, exact source/seal and original batch/fence. Once admitted,
+lease expiry cannot interrupt the serialized transaction; subsequent checks
+retain exact ownership/fence/state correspondence. Existing admission returns
+only retained original terminal outcome or indeterminate, never redispatch.
+
+Original UMF preparation/manifest/inputs/selectors/Key receipts and current
+object/key/version checks preflight the entire batch. Actual constant String
+sets, versions, exact browser history, verified item outcomes, receipt and
+contiguous progress are atomic. No-op preserves version/journal while retaining
+its outcome. Same-instance callback rollback is confirmed before separate durable
+conflict/rejected/failed terminal outcome; unknown commit/rollback/result flush
+fences and prohibits retry/replacement fence. Basic Chromium now passes actual
+three-item/two-batch updates, original replay/reopen recovery, no-op, stale second
+item without first-item effects, and a test-only second-update SQL fault proving
+rollback of first-item changes/history. There is no administrative business seed.
+
+Scope remains required-String rootless Records and original bounded constant set
+actions, not full local-bulk qualification/native904. Remaining browser work:
+committed journal/feed reads, cancellation, retention, consumer integration and
+release packaging. Native Python ownership/current0.2 protected execution and
+other full-goal work retain their existing scope; this browser checkpoint does
+not replace them. Native66/67 or published wheels are unchanged.

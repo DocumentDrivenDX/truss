@@ -36,7 +36,7 @@ export function captureLoad(input:LoadInput):LoadInput{
  if(utf8(JSON.stringify(rows)).length>1048576)throw Error('Load byte limit');
  return Object.freeze({target,request,rows}) as unknown as LoadInput;
 }
-async function targetSource(catalog:CatalogSnapshot|null,target:RecordIdentity){
+export async function targetSource(catalog:CatalogSnapshot|null,target:RecordIdentity){
  if(!catalog||catalog.document.documentId!==target.documentId)throw Error('Accepted document required');
  const prepared=await prepareDocument({documentId:target.documentId,documentRevision:catalog.document.documentRevision as string,sourceUtf8:catalog.document.sourceUtf8 as string});
  const types=(catalog.types as any[]).filter(t=>t.documentId===target.documentId&&t.moduleId===target.module&&t.recordId===target.record);

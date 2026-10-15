@@ -1,4 +1,4 @@
-import {createBulk,captureClaim,captureSubmit,captureJob,type SubmitInput,type SubmitResult,type JobRef,type JobState,type JobReview,type ClaimInput,type ClaimResult} from './bulk';
+import {createBulk,captureExecute,captureClaim,captureSubmit,captureJob,type SubmitInput,type SubmitResult,type JobRef,type JobState,type JobReview,type ClaimInput,type ClaimResult,type ExecuteInput,type BatchOutcome} from './bulk';
 import {createObjectAccess,captureLoad,captureTarget,journalHorizon,type LoadInput,type LoadOutcome,type RecordIdentity} from './objects';
 import {PGlite} from '@electric-sql/pglite';
 import {createMaterializer,createSealer,captureSeal,captureSealReference,captureMaterialize,type MaterializeInput,type Materialization,type FrozenWork,type SealRequest,type SealReference,type SealOutcome} from './materialize';
@@ -29,6 +29,8 @@ export interface BrowserStore {
   recoverSubmit(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SubmitInput):Promise<SubmitResult>;
   claim(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ClaimInput):Promise<ClaimResult>;
   recoverClaim(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ClaimInput):Promise<ClaimResult>;
+  executeBatch(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ExecuteInput):Promise<BatchOutcome>;
+  recoverBatch(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ExecuteInput):Promise<BatchOutcome>;
   reviewJob(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,job:JobRef):Promise<JobReview>;
   close(owner:LocalOwner):Promise<void>;
 }
@@ -136,6 +138,8 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
         recoverSubmit(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SubmitInput){check(cap);const captured=captureSubmit(input);return schedule(cap,()=>bulk.submit(action,grant,captured,true));},
         claim(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ClaimInput){check(cap);const captured=captureClaim(input);return schedule(cap,()=>bulk.claim(action,grant,captured));},
         recoverClaim(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ClaimInput){check(cap);const captured=captureClaim(input);return schedule(cap,()=>bulk.claim(action,grant,captured,true));},
+        executeBatch(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ExecuteInput){check(cap);const captured=captureExecute(input);return schedule(cap,()=>bulk.execute(action,grant,captured));},
+        recoverBatch(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ExecuteInput){check(cap);const captured=captureExecute(input);return schedule(cap,()=>bulk.execute(action,grant,captured,true));},
         reviewJob(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:JobRef){check(cap);const captured=captureJob(input);return schedule(cap,()=>bulk.status(action,grant,captured));},
         async close(cap:LocalOwner){
           check(cap);state='closing';

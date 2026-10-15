@@ -1,122 +1,38 @@
-# Truss browser store in progress
+# Truss browser store
 
-`openBrowserStore({name,layoutSql})` runs in a browser worker. Supply the exact
-generated Truss layout SQL; its hash is checked before opening IndexedDB.
-An available result contains `{store,owner}`. Keep the issued owner inside that
-worker: `store.info(owner)` and `await store.close(owner)` require its original
-identity. A second owner of the same canonical name returns `store_in_use`
-immediately. This package exports no connection or raw SQL API.
+Private browser-worker implementation on PGlite0.5.10/PostgreSQL18.6. The current
+functional path is register document → load objects → register action/read grant
+→ Weft materialize → seal → submit → claim → execute frozen batches → recover.
+Supported objects are rootless Records with required singular String Fields and
+one single-member primary Key. Actions are the original UMF bounded constant
+`graph-write/1` set recipe under `umf.actions.local-tx/1`. Relationships, wider
+value domains, catalog evolution, cancellation, feed and retention are unfinished.
+This is not complete local-bulk qualification or native66 installation/security.
 
-`await store.registerDocument(owner,{documentId,documentRevision,sourceUtf8})`
-registers one complete core0.8 Record with required singular String Fields and
-one single-member primary Key. It uses original UMF inspection and the existing
-Truss SQL catalog/lineage planner. Original UTF8, authored revision, validation
-observations, definition coordinates, key order and catalog changes are retained.
-An exact ID/revision/full-source repeat returns `unchanged`; changed documents
-or another registration return `refused` until catalog evolution is implemented.
-`await store.catalog(owner)` returns that metadata, or null before registration.
-Registration, metadata reads and close are serialized and registration flushes
-before returning success. Other relevant unknown meanings refuse. The opaque
-`umf.actions/0.1.0` extension is retained, without admitting its action semantics.
+## Worker lifecycle and catalog
 
-One exclusive Web Lock protects the named IndexedDB store while its worker lives.
-Original layout and the origin/name-bound store marker initialize atomically.
-Opening an existing partial or foreign marker refuses without resetting it.
-PGlite uses `relaxedDurability:false`; readiness and close await explicit flush.
-Successful close is PGlite's lifecycle acknowledgement after that flush, not
-proof of crash-safe physical IndexedDB shutdown. It also waits for Web Lock
-handback before resolving. A reported lifecycle failure
-fences the instance and retains its lock until the worker terminates.
+`openBrowserStore({name,layoutSql})` requires the exact original generated Truss
+layout SQL. It returns `{outcome:'available',store,owner}` or `store_in_use`.
+Keep owner/action/grant/work capabilities inside the worker. No connection/raw
+SQL API is exported. A Web Lock protects the named IndexedDB store; partial or
+foreign markers refuse without reset. Origin/name/store/incarnation are retained.
+PGlite uses `relaxedDurability:false`; acknowledged writes/readiness/close await
+explicit flush. Close also waits for lock handback. Uncertain storage fences the
+instance and retains its lock until worker termination. Successful close is a
+PGlite lifecycle acknowledgement, not arbitrary crash/restore qualification.
 
-`await store.registerAction(owner,{module,action})` derives original UMF local
-preparation from the registered source and returns an opaque action handle plus
-separate model/pin/preparation metadata copies. `await store.grantSelectionRead(owner,action)`
-issues a separate opaque grant and an informational declaration over the full
-canonical target population and all original members. Keep both handles inside
-the worker. Forged, foreign and previous-open action handles refuse; persisted
-store identity does not preserve issued handle identity across opens.
+`registerDocument(owner,{documentId,documentRevision,sourceUtf8})` registers the
+supported core0.8 catalog through original UMF inspection and Truss SQL catalog/
+lineage generation. Exact source, authored revision, validation observations,
+definition identities, member/key order and changes are retained. Exact repeat
+is unchanged; changed documents refuse. `catalog(owner)` returns the snapshot.
+Catalog registration preserves the actions extension opaquely; only separate
+`registerAction(owner,{module,action})` admits its original local preparation.
+`grantSelectionRead(owner,action)` issues a separate capability over the complete
+canonical target population and all original members. Metadata copies are inert.
+Forged/foreign/previous-open handles refuse; reopen requires fresh issuance.
 
-The current API supplies lifecycle, this core catalog subset and local action/read
-grant issuance. Original local-profile Weft selection integration,
-keys, sealed manifests, effects, replay and recovery remain unfinished under
-UMF CONTRACT905 at40f01140. Owner possession does not grant selection/action
-authority. There is no native person/SCRAM/C-D-E claim or production provider.
-
-Basic checks from the repository root:
-
-```sh
-bun install --frozen-lockfile
-bun node_modules/typescript/bin/tsc -p packages/browser/tsconfig.json
-bun packages/browser/check-lifecycle.ts /path/to/package.json /new/receipt.json
-```
-
-The supplied package.json must resolve an installed Playwright and Chromium.
-The harness serves original PGlite distribution assets without rewriting them
-and exercises real workers, two-tab exclusion, immediate handoff, owner identity and IndexedDB
-reopen. The retained Chromium153 result is in
-`../../docs/helix/04-build/evidence/browser-lifecycle-20261015/receipt.json`.
-It is not an interruption/quota/crash/restore or action-execution qualification.
-
-Build a fixed website-consumable bundle with:
-
-```sh
-bun packages/browser/build-assets.ts /absolute/new/browser-bundle
-```
-
-The fresh directory contains `store.js`, original `layout.sql`, pinned PGlite
-distribution assets and licenses, unchanged UMF local-action ESM under `owners/`,
-its original notice inventory/files, plus `manifest.json`. Import `store.js` inside
-the website worker; keep capabilities there. All asset URLs are relative, so the
-bundle can live under a GitHub Pages prefix. The manifest distinguishes original
-UMF input hashes, actual Truss/build input hashes and the generated provider hash.
-It records every emitted asset except itself; the command returns its own digest.
-The Chromium check builds and exercises this exact output. No temporary checkout
-or compilation service is a runtime dependency. The package remains private and
-unpublished; this build is the current source-vendor interface.
-
-Weft main `4f5b73d` compiles the original local Products UPDATE through its
-Rust mutation registry and production WASM `MutationCompiler`. Building with
-`--features truss-browser-local` adds `register_browser_selection` and
-`lower_selection_json` over the separate `truss-browser-binding/0.1` profile.
-It preserves native transaction admission and validates original ordered member
-and primary-key mappings. All Record members enter complete-population
-preflights, including fields unused by the predicate. Basic Rust checks retain
-native65/66 behavior and the64-member browser mapping; actual Chromium executes
-the resulting selection SQL against a real registered Truss catalog in PGlite.
-That component test explicitly installs original scalars.sql and seeds rows
-administratively. Provider selection/read-grant consumption and helper installation are now
-implemented below; worker action execution remains unfinished. This source checkpoint is not a
-new published wheel or an enabled executor.
-
-The worker now also provides `materialize(owner, action, grant, input)`,
-`seal(owner, action, grant, work, {requestKey, attempt})` and
-`recoverSeal(owner, freshAction, freshGrant, reference)`. Materialization invokes
-original Weft WASM, validates the complete target population, selects actual
-IDs/versions and constructs the original UMF manifest with exact Key receipts.
-The manifest retains the accepted authored document revision as its action
-revision; the source content digest remains a separate pin. Work handles stay
-inside the issuing worker and open store.
-
-Persist the pending request key, attempt and reference before calling `seal`.
-The reference contains profile `truss-browser-seal-reference/0.1`, storeId,
-incarnation, requestKey, attempt, manifestSha256, planSha256 and modelSha256.
-It is recovery metadata, not authority. Identical retries return the original
-receipt bytes; different input under the same key conflicts. Recovery after
-reopen requires freshly issued action/read-grant capabilities. Missing records
-are unresolved and do not authorize a new attempt. Confirmed callback rollback
-is reported separately from ambiguous commit/flush outcomes; uncertainty fences
-the store. No automatic retry loop is provided.
-
-The basic Chromium workflow materializes three rows into batches of two and
-one, seals, replays and recovers after reopen. That earlier checkpoint used administrative test
-fixtures; the current workflow loads rows through the public API below. At that checkpoint production bootstrap/import, batch mutation, effects,
-journal/feed and execution receipts remained unfinished; public loading and
-creation journal are implemented below. Seal recovery alone is not crash safety
-qualification or action execution. The owned bundle includes unchanged pinned
-Weft JS/WASM and available original notices; its producer metadata records the
-limited notice inventory without claiming complete licensing closure.
-
-Public local loading now replaces administrative seeding:
+## Public object loading and readback
 
 ```ts
 const input = {
@@ -127,91 +43,107 @@ const input = {
   ]}],
   request: {requestKey: 'initial-products', attempt: 'load-1'}
 };
-const loaded = await store.loadObjects(owner, input);
+const result = await store.loadObjects(owner, input);
 const objects = await store.readObjects(owner, input.target);
-// After an unknown outcome/reopen, retain and use the original input:
 const recovered = await store.recoverLoad(owner, input);
 ```
 
-This is an atomic local import for the accepted required-String, rootless Record
-profile. Each row supplies all members by qualified Field identity. Loads accept
-1–100 rows and at most1MiB of input; readback refuses above100 rows or8MiB rather
-than returning a truncated population. Objects, original UMF Key custody, guard
-generations, permanent key reservations, creation journal and original load
-outcome commit together. IDs/versions are exact text. Duplicate/reserved keys
-refuse the whole load. The caller retains the entire original input before RPC;
-identical acknowledged replay/recovery returns the original outcome. After
-any dispatched request with a lost or unknown response, use recoverLoad only;
-missing recovery never authorizes redispatch of loadObjects or a new key. Missing recovery is
-unresolved. Recovery failure never establishes rollback of the original load.
+Retain exact input before dispatch. Loads accept 1–100 complete rows and 1MiB;
+readback refuses above 100 rows/8MiB without truncation. Objects, original UMF Key
+custody, guard generations, permanent reservations, creation journal and original
+outcome commit together. IDs/versions remain exact text. Duplicate/reserved keys
+refuse the whole load. After any dispatched request loses its response, use
+recoverLoad only. Missing recovery is unresolved and never permits redispatch or
+a new key. Recovery failure cannot establish original rollback.
 
-The journal uses an explicit browser-only layout adjunct, recorded in
-`browser:journal:0.1`: one finite partition (previous month through13 months
-ahead) and the two payload/origin CHECKs select
-`truss-browser-journal-exact-bytes/0.1`. Event/record versions are
-`truss-browser-history-event/0.1` and `truss-browser-history-record/0.1`.
-These contain actual local store/incarnation, request/index, xid/seq, complete
-rootless after-images and source digest. Exact envelopes retain SHA256 and
-base64 of actual PostgreSQL JSONB text bytes. They are browser carriers; native
-history decoders and native66 installation are not claimed. The original
-foundation layout SQL/hash is unchanged; installed adjunct CHECK definitions
-and partition bounds are verified separately, observing the private connection
-in UTC/ISO. Foreign/partial adjuncts refuse. Expiry blocks new writes; replay,
-recovery and readback remain available. No silent horizon extension occurs.
+## Materialization, seals and jobs
 
-The basic Chromium check now exercises public loading, logical readback, exact
-replay/reopen recovery, atomic duplicate refusal, and physical key/journal
-correspondence before the existing materialization/seal flow. Action batch
-execution, production feed and execution receipts are the next tranche.
+`materialize(owner,action,grant,{sql,parameters,batchSize,maxItems})` invokes pinned
+original Weft WASM, validates the complete population, selects actual Key/ID/
+version rows and constructs the original UMF manifest with original Key receipts.
+Parameters currently contain exact `{string:value}` literals. Work handles stay
+inside the issuing open worker. Manifest action revision retains the accepted
+authored document revision; the source digest is a separate pin.
 
-Sealed work can now enter a persistent job registry:
+`seal(owner,action,grant,work,{requestKey,attempt})` persists original work and
+receipt bytes. Retain pending key/attempt/reference before RPC. The inert reference
+has profile `truss-browser-seal-reference/0.1`, storeId, incarnation, requestKey,
+attempt, manifestSha256, planSha256 and modelSha256. `recoverSeal` takes fresh
+capabilities and that reference after reopen. Exact replay returns original
+bytes; changed input under the key conflicts. Missing is unresolved.
+
+`submit(owner,action,grant,{key,reference,control:{requestKey,attempt}})` persists
+one job and its original sampled control result. Submission key identifies full
+frozen manifest/source intent; control key identifies one observation. Same
+control replays exactly. New control for the same intent observes the same job's
+current state. Distinct genuine seals of identical work identify the same job;
+first original full seal remains evidence. `recoverSubmit` observes exact original
+input without mutation. Recorded semantic refusals recover before fresh seal
+admission. `reviewJob(owner,action,grant,job)` returns retained manifest/state.
+
+`claim(owner,action,grant,{job,control})` persists a claim for the next batch and
+its original result together. It returns batch ordinal, exact decimal fence and
+actual PostgreSQL 60-second lease. `recoverClaim` never renews the original fence/
+deadline. A fresh claim while active refuses, even after expiry. Persistent
+lastFence survives batch advancement; exhaustion refuses without wrap. A recovered
+claim is an observation, never proof of current execution eligibility.
+
+## Atomic execution and recovery
 
 ```ts
-const input = {key: 'products-bulk', reference: sealed.reference,
-  control: {requestKey: 'submit-control-1', attempt: 'attempt-1'}};
-const submitted = await store.submit(owner, action, grant, input);
-if (submitted.status !== 'submitted') throw new Error(submitted.status);
-const recovered = await store.recoverSubmit(owner, freshAction, freshGrant, input);
-const review = await store.reviewJob(owner, freshAction, freshGrant, submitted.state.job);
+const input = {job: claimed.job, batch: claimed.batch, fence: claimed.fence};
+const outcome = await store.executeBatch(owner, action, grant, input);
+// After a lost/indeterminate reply, observe only; retain the original input.
+const recovered = await store.recoverBatch(owner, freshAction, freshGrant, input);
 ```
 
-Retain the exact input before RPC. The submission key identifies the job intent;
-the control key/attempt identifies one sampled operation result. Same-control
-replay/recovery returns the original result. A fresh control for the same key
-and full frozen manifest/source intent observes the same job's current state.
-A distinct genuine seal of that same work does not change submission intent;
-the first complete original seal remains retained as evidence. Changed intent
-under a submission key or changed input under a control key conflicts.
+Current issued owner/action/read grant and exact retained source/seal are required.
+The engine checks the live claim, commits an effect-admission record and flushes
+it before invoking the business transaction. Existing admission can return only
+the original terminal outcome or indeterminate; it never redispatches effects.
+Lease expiry cannot interrupt the already-admitted serialized transaction.
 
-Current owner/action/read-grant authorization precedes all control observation.
-Recorded results, including semantic refusals, are recovered before fresh seal
-admission. Recovery missing is unresolved and performs no mutation. Job, route
-and original control outcome commit together; acknowledgement waits for flush.
-A confirmed control rollback requires a separately persisted noncommit result;
-uncertain result persistence is control-unknown and fences the store. Review
-returns retained manifest bytes and authorized state; metadata never executes
-work. That submission checkpoint exposed queued jobs and completed empty work only;
-claims are now implemented below. Execution, cancellation, feed and retention
-are still unfinished; no complete
-local-bulk/1 support claim is made.
+Original UMF preparation, manifest/input/frame/Key interpreters validate the
+entire batch before effects. Current identity/version/key membership/reservation
+must match the frozen work; Key Fields cannot change. Successful property changes,
+version increments, full before/after journal events, complete item verification,
+receipt, original batch outcome and contiguous job progress commit atomically.
+No-op items retain version and emit no business journal entry while keeping a
+durable outcome. Replayed outcomes retain original bytes. A confirmed original
+same-instance callback rollback records a stopped conflict/rejected/failed outcome
+in a separate acknowledged transaction. Commit/rollback/flush/custody uncertainty
+fences; admission without outcome remains indeterminate and prohibits redispatch
+or a replacement fence. No pg_xact_status inference or new sidecar is used.
 
-Job claims are now persisted through `claim(owner, action, grant, {job, control})`
-and observed through `recoverClaim` with the same original input and fresh
-capabilities after reopen. Retain the exact pending input before dispatch.
-The result is `claimed` with batch ordinal, exact decimal fence and an actual
-PostgreSQL-observed 60-second lease. Claim, job state and original sampled result
-commit together before flush acknowledgement. Replaying the same control returns
-the original fence/deadline without renewal. A fresh control cannot replace an
-active claim, including an expired one; expiry alone establishes no termination
-or permission to execute. A persistent per-job lastFence counter survives claim
-removal and later batch advancement; exhaustion refuses rather than wrapping.
+## Journal and checks
 
-Fresh admission checks full original job/seal/source correspondence and
-contiguous batch progress. Missing/foreign job and competing claim are semantic
-refusals; storage/custody uncertainty fences. Recovery missing is unresolved
-and cannot allocate a claim. Completed empty work returns idle without issuing
-a fence. A recovered claim is an original observation, not proof of current
-execution eligibility. The basic Chromium workflow verifies first claim,
-identical replay, competing claim refusal and identical reopen recovery.
-Execution/effect admission and original batch-custody reconciliation remain
-unfinished; no action mutation is enabled by this claim checkpoint.
+An explicit browser-only two-CHECK/finite-partition adjunct selects
+`truss-browser-journal-exact-bytes/0.1` with browser history event/record0.1.
+Original foundation layout SQL/hash stays unchanged. Marker-retained CHECKs and
+partition bounds are verified in UTC/ISO. Actual PostgreSQL JSONB text bytes,
+base64 and SHA256 are retained; native history decoders are excluded. Creation
+and property events carry actual store/incarnation, xid/seq, original control or
+job/batch/item, and full rootless images/source digest. The finite horizon spans
+the previous month through 13 months ahead; expiry blocks new events without
+silently extending it. Existing readback/replay/recovery remains available.
+
+```sh
+bun install --frozen-lockfile
+bun node_modules/typescript/bin/tsc -p packages/browser/tsconfig.json
+bun packages/browser/check-lifecycle.ts /path/to/playwright/package.json /new/receipt.json
+bun packages/browser/build-assets.ts /absolute/new/browser-bundle
+```
+
+The real Chromium worker check covers public load/read, original Weft/UMF work,
+three updates in two batches, exact replay/reopen recovery, no-op, stale second
+item and a real SQL second-item fault proving whole-batch rollback. Test-only
+fault injection is separate from the production provider. No administrative
+business seeding or arbitrary crash/eviction/restore qualification is claimed.
+
+Owned bundles contain original layout, pinned PGlite, original UMF core7c0f0c98
+and local-action40f01140/producer633f8ad6, original Weft4f5b73df JS/WASM, existing
+notices and complete emitted-asset manifest. Runtime URLs are relative for Pages
+prefixes; mutable checkouts/compilation services are not runtime dependencies.
+Two-CWD builds verify reproducible assets. Notice inventories do not invent
+missing project licenses or claim complete licensing closure. This private
+source delivery does not publish new Python/Weft wheels.

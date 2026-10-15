@@ -77,6 +77,9 @@ try{
   const claimed=await call(a,{command:'claim',input:claimInput});if(claimed.status!=='claimed'||claimed.batch!==0||claimed.fence!=='1'||typeof claimed.leaseUntil!=='string')throw Error(JSON.stringify(claimed));
   const claimReplay=await call(a,{command:'claim',input:claimInput});if(JSON.stringify(claimReplay)!==JSON.stringify(claimed))throw Error('Original claim replay renewed or changed');
   const secondClaim=await call(a,{command:'claim',input:{...claimInput,control:{requestKey:'claim-2',attempt:'attempt-claim-2'}}});if(secondClaim.status!=='unsupported'||secondClaim.code!=='PAP_FENCE')throw Error(JSON.stringify(secondClaim));
+  const executeInput={job:claimed.job,batch:claimed.batch,fence:claimed.fence};
+  const executed=await call(a,{command:'executeBatch',input:executeInput});if(executed.status!=='committed'||executed.items.length!==2||executed.items.some((i:any)=>i.result.version!=='2'||i.result.noOp))throw Error(JSON.stringify(executed));
+  const executeReplay=await call(a,{command:'executeBatch',input:executeInput});if(JSON.stringify(executeReplay)!==JSON.stringify(executed))throw Error('Batch replay changed original outcome');
   const forged=await call(a,{command:'forged'});
   if(forged.outcome!=='refused')throw Error(JSON.stringify(forged));
   const second=await call(b,{command:'open',name:'lifecycle-basic'});
@@ -95,12 +98,55 @@ try{
   const recovered=await call(a,{command:'recoverSeal',reference:Object.fromEntries(Object.entries(sealed.reference).reverse())});if(JSON.stringify(recovered)!==JSON.stringify(sealed))throw Error('Recovered seal changed original outcome');
   const missing=await call(a,{command:'recoverSeal',reference:{...sealed.reference,requestKey:'missing-seal'}});if(missing.outcome!=='unresolved'||missing.code!=='not_found')throw Error(JSON.stringify(missing));
   const recoveredSubmit=await call(a,{command:'recoverSubmit',input:submitInput});if(JSON.stringify(recoveredSubmit)!==JSON.stringify(submitted))throw Error('Recovered submission changed');
-  const reviewedJob=await call(a,{command:'reviewJob',job:submitted.state.job});if(reviewedJob.state?.status!=='running'||reviewedJob.state?.job?.id!==submitted.state.job.id||JSON.stringify(reviewedJob.manifest)!==JSON.stringify(sealed.manifest))throw Error('Retained job source/state changed');
+  const reviewedJob=await call(a,{command:'reviewJob',job:submitted.state.job});if(reviewedJob.state?.status!=='queued'||reviewedJob.state?.job?.id!==submitted.state.job.id||JSON.stringify(reviewedJob.manifest)!==JSON.stringify(sealed.manifest))throw Error('Retained job source/state changed');
   const recoveredClaim=await call(a,{command:'recoverClaim',input:claimInput});if(JSON.stringify(recoveredClaim)!==JSON.stringify(claimed))throw Error('Recovered claim renewed or changed');
+  const recoveredBatch=await call(a,{command:'recoverBatch',input:executeInput});if(JSON.stringify(recoveredBatch)!==JSON.stringify(executed))throw Error('Batch reopen recovery changed original outcome');
+  const claimedSecond=await call(a,{command:'claim',input:{job:claimed.job,control:{requestKey:'claim-next',attempt:'attempt-next'}}});if(claimedSecond.status!=='claimed'||claimedSecond.batch!==1||claimedSecond.fence!=='2')throw Error(JSON.stringify(claimedSecond));
+  const executedSecond=await call(a,{command:'executeBatch',input:{job:claimedSecond.job,batch:claimedSecond.batch,fence:claimedSecond.fence}});if(executedSecond.status!=='committed'||executedSecond.items.length!==1||executedSecond.items[0].result.version!=='2')throw Error(JSON.stringify(executedSecond));
+  const finalState=await call(a,{command:'reviewJob',job:claimed.job});if(finalState.state?.status!=='completed'||finalState.state?.committedBatches!==2)throw Error(JSON.stringify(finalState));
+  const finalObjects=await call(a,{command:'readObjects'});if(finalObjects.length!==4||finalObjects.filter((o:any)=>o.fields.some((f:any)=>f.field==='product-name'&&f.value==='Bulk')).length!==3)throw Error(JSON.stringify(finalObjects));
+  async function newJob(sql:string,key:string,count=3){
+    const work=await call(a,{command:'materialize',sql});if(work.outcome!=='materialized'||work.count!==count)throw Error(JSON.stringify(work));
+    const seal=await call(a,{command:'seal',request:{requestKey:key+'-seal',attempt:'1'}});if(seal.outcome!=='sealed')throw Error(JSON.stringify(seal));
+    const submitted=await call(a,{command:'submit',input:{key,reference:seal.reference,control:{requestKey:key+'-submit',attempt:'1'}}});if(submitted.status!=='submitted')throw Error(JSON.stringify(submitted));return submitted.state.job;
+  }
+  const noOpJob=await newJob("UPDATE products SET name='Bulk' WHERE name='Bulk'",'noop'),noOpResults=[];
+  for(let batch=0;batch<2;batch++){
+    const claim=await call(a,{command:'claim',input:{job:noOpJob,control:{requestKey:'noop-claim-'+batch,attempt:'1'}}});if(claim.status!=='claimed')throw Error(JSON.stringify(claim));
+    const result=await call(a,{command:'executeBatch',input:{job:noOpJob,batch,fence:claim.fence}});if(result.status!=='committed'||result.items.some((i:any)=>!i.result.noOp||i.result.version!=='2'||i.result.changes.length))throw Error(JSON.stringify(result));noOpResults.push(result);
+  }
+  const afterNoOp=await call(a,{command:'readObjects'});if(JSON.stringify(afterNoOp)!==JSON.stringify(finalObjects))throw Error('No-op changed objects');
+  const failedJob=await newJob("UPDATE products SET name='Fail' WHERE name='Bulk'",'rollback');
+  const failedClaim=await call(a,{command:'claim',input:{job:failedJob,control:{requestKey:'rollback-claim',attempt:'1'}}});if(failedClaim.status!=='claimed')throw Error(JSON.stringify(failedClaim));
+  const secondId=finalObjects.find((o:any)=>o.fields.some((f:any)=>f.field==='product-id'&&f.value==='baz')).id;
+  const fault=await call(a,{command:'batchFault',id:secondId});if(fault.outcome!=='fault_installed')throw Error(JSON.stringify(fault));
+  const faultAction=await call(a,{command:'action'});if(faultAction.outcome!=='action_registered')throw Error(JSON.stringify(faultAction));
+  const failedInput={job:failedJob,batch:0,fence:failedClaim.fence};
+  const failed=await call(a,{command:'executeBatch',input:failedInput});if(failed.status!=='failed'||failed.code!=='BATCH_ROLLED_BACK')throw Error(JSON.stringify(failed));
+  const afterFailure=await call(a,{command:'readObjects'});if(JSON.stringify(afterFailure)!==JSON.stringify(finalObjects))throw Error('Failed batch leaked first-item changes');
+  const failedRecovery=await call(a,{command:'recoverBatch',input:failedInput});if(JSON.stringify(failedRecovery)!==JSON.stringify(failed))throw Error('Confirmed failed batch recovery changed');
+  const failedState=await call(a,{command:'reviewJob',job:failedJob});if(failedState.state?.status!=='stopped'||failedState.state?.committedBatches!==0)throw Error(JSON.stringify(failedState));
+  const removed=await call(a,{command:'batchFault',id:secondId,remove:true});if(removed.outcome!=='fault_removed')throw Error(JSON.stringify(removed));
+  await call(a,{command:'action'});
+  const staleJob=await newJob("UPDATE products SET name='WouldRollback' WHERE name='Bulk'",'stale');
+  const interventionJob=await newJob("UPDATE products SET name='Changed' WHERE id='baz'",'intervention',1);
+  const interventionClaim=await call(a,{command:'claim',input:{job:interventionJob,control:{requestKey:'intervention-claim',attempt:'1'}}});if(interventionClaim.status!=='claimed')throw Error(JSON.stringify(interventionClaim));
+  const intervention=await call(a,{command:'executeBatch',input:{job:interventionJob,batch:0,fence:interventionClaim.fence}});if(intervention.status!=='committed'||intervention.items[0].result.version!=='3')throw Error(JSON.stringify(intervention));
+  const staleClaim=await call(a,{command:'claim',input:{job:staleJob,control:{requestKey:'stale-claim',attempt:'1'}}});if(staleClaim.status!=='claimed')throw Error(JSON.stringify(staleClaim));
+  const staleInput={job:staleJob,batch:0,fence:staleClaim.fence};
+  const stale=await call(a,{command:'executeBatch',input:staleInput});if(stale.status!=='conflict'||stale.code!=='PAP_GUARD'||stale.item!==1)throw Error(JSON.stringify(stale));
+  const afterStale=await call(a,{command:'readObjects'});
+  const firstAfterStale=afterStale.find((o:any)=>o.fields.some((f:any)=>f.field==='product-id'&&f.value==='bar'));
+  if(firstAfterStale.version!=='2'||!firstAfterStale.fields.some((f:any)=>f.field==='product-name'&&f.value==='Bulk')||afterStale.some((o:any)=>o.fields.some((f:any)=>f.value==='WouldRollback')))throw Error('Stale batch leaked first-item changes');
+  const staleRecovery=await call(a,{command:'recoverBatch',input:staleInput});if(JSON.stringify(staleRecovery)!==JSON.stringify(stale))throw Error('Stale outcome recovery changed');
   const recoveredLoad=await call(a,{command:'recoverLoad'});if(JSON.stringify(recoveredLoad)!==JSON.stringify(seeded.loaded))throw Error('Recovered load changed original outcome');
   await call(a,{command:'close'});
-  const physical=await call(a,{command:'inspectStorage'});if(physical.objects!=='4'||physical.keys!=='4'||physical.reservations!=='4'||physical.journal!=='4'||physical.generation!=='1'||physical.exact!==true)throw Error(JSON.stringify(physical));
+  const physical=await call(a,{command:'inspectStorage'});if(physical.objects!=='4'||physical.keys!=='4'||physical.reservations!=='4'||physical.journal!=='8'||physical.generation!=='1'||physical.exact!==true)throw Error(JSON.stringify(physical));
   const receipt={scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
+    staleGuard:{result:stale,recoveredByteEqual:true,firstItemUnchanged:true},
+    noOp:{results:noOpResults,unchanged:true},
+    atomicRollback:{result:failed,recoveredByteEqual:true,unchanged:true,state:failedState},
+    execution:{first:executed,second:executedSecond,replayedByteEqual:true,recoveredByteEqual:true,finalState,finalObjects},
     claim:{result:claimed,replayedByteEqual:true,recoveredByteEqual:true,competingClaim:secondClaim},
     submit:{result:submitted,replayedByteEqual:true,recoveredByteEqual:true,sameJob:true,controlConflict:controlConflict.status,secondGenuineSealSameJob:true,refusalReplayedByteEqual:true},
     load:{...seeded,recoveredByteEqual:true,physical},
@@ -108,6 +154,6 @@ try{
     seal:{reference:sealed.reference,receipt:sealed.receipt,replayedByteEqual:true,recoveredByteEqual:true,conflict:conflict.outcome,missing:missing.outcome},
     action:{registered:action,forged:forgedAction,previousOpen:oldAction.outcome,reissued:reissuedAction.outcome},
     catalog:{registration:registered.outcome,retry:unchanged.outcome,revision:catalog.catalog.catalogRevision,sourceSha256:catalog.catalog.document.sourceSha256,types:catalog.catalog.types,properties:catalog.catalog.properties,keys:catalog.catalog.keys,changeCount:catalog.catalog.changes.length},
-    actionExecution:false,selectionReadGrant:true,crashRecovery:false};
+    actionExecution:true,selectionReadGrant:true,crashRecovery:false};
   const encoded=JSON.stringify(receipt,null,2)+'\n';if(Bun.argv[3])await Bun.write(Bun.argv[3],encoded);console.log(encoded);
 }finally{await browser.close();server.stop(true);await rm(temporary,{recursive:true,force:true});}

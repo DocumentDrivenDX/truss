@@ -67,9 +67,24 @@ self.onmessage=event=>{
           const db=new PGlite('idb://truss-browser:lifecycle-basic',{relaxedDurability:false});
           try{self.postMessage((await db.query(`SELECT (SELECT count(*)::text FROM truss.object) AS objects,(SELECT count(*)::text FROM truss.object_key_bucket) AS keys,(SELECT count(*)::text FROM truss.object_key_reservation_bucket) AS reservations,(SELECT count(*)::text FROM truss.journal) AS journal,(SELECT min(generation)::text FROM truss.key_bucket_guard) AS generation,(SELECT bool_and(new_value->>'interfaceVersion'='truss-browser-journal-exact-bytes/0.1' AND new_value->>'bytesSha256'=encode(sha256(decode(new_value->>'bytesBase64','base64')),'hex') AND origin->>'interfaceVersion'='truss-browser-journal-exact-bytes/0.1') FROM truss.journal) AS exact`)).rows[0]);}finally{await db.close();}
         });
+      }else if(event.data.command==='batchFault'){
+        if(current?.outcome!=='available')throw Error('Available store required');
+        const id=event.data.id;if(typeof id!=='string'||!/^[1-9][0-9]{0,18}$/.test(id))throw Error('Exact fixture identity required');
+        const info=current.store.info(current.owner);await current.store.close(current.owner);
+        // Test-only fault injection; all business objects still use public loading.
+        await navigator.locks.request(info.namespace,async()=>{
+          const db=new PGlite('idb://'+info.namespace,{relaxedDurability:false});
+          try{
+            if(event.data.remove)await db.exec('DROP TRIGGER test_batch_fault ON truss.object; DROP FUNCTION truss.test_batch_fault()');
+            else await db.exec(`CREATE FUNCTION truss.test_batch_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF OLD.id=${id}::bigint THEN RAISE EXCEPTION 'test second-item update failure'; END IF; RETURN NEW; END $$; CREATE TRIGGER test_batch_fault BEFORE UPDATE ON truss.object FOR EACH ROW EXECUTE FUNCTION truss.test_batch_fault()`);
+            await db.syncToFs();
+          }finally{await db.close();}
+        });
+        current=await openBrowserStore({name:'lifecycle-basic',layoutSql:await(await fetch(new URL('layout.sql',import.meta.url))).text()});
+        self.postMessage({outcome:event.data.remove?'fault_removed':'fault_installed'});
       }else if(event.data.command==='materialize'){
         if(current?.outcome!=='available')throw Error('Available test store required');
-        materialized=await current.store.materialize(current.owner,registeredAction,readGrant,{sql:"UPDATE products SET name='Bulk' WHERE name='Sample'",parameters:{},batchSize:2,maxItems:10});
+        materialized=await current.store.materialize(current.owner,registeredAction,readGrant,{sql:event.data.sql??"UPDATE products SET name='Bulk' WHERE name='Sample'",parameters:{},batchSize:2,maxItems:10});
         self.postMessage({outcome:'materialized',plan:materialized.plan,manifest:materialized.manifest,count:materialized.count,batches:materialized.batches});
       }else if(event.data.command==='forgedGrant'){
         if(current?.outcome!=='available')throw Error('Available test store required');
@@ -86,6 +101,13 @@ self.onmessage=event=>{
         if(current?.outcome!=='available')throw Error('Available store required');
         const method=event.data.command==='submit'?current.store.submit:current.store.recoverSubmit;
         self.postMessage(await method(current.owner,registeredAction,readGrant,event.data.input));
+      }else if(event.data.command==='executeBatch'||event.data.command==='recoverBatch'){
+        if(current?.outcome!=='available')throw Error('Available store required');
+        const method=event.data.command==='executeBatch'?current.store.executeBatch:current.store.recoverBatch;
+        self.postMessage(await method(current.owner,registeredAction,readGrant,event.data.input));
+      }else if(event.data.command==='readObjects'){
+        if(current?.outcome!=='available')throw Error('Available store required');
+        self.postMessage(await current.store.readObjects(current.owner,{documentId:'product-local-action-demo',module:'sales',record:'products'}));
       }else if(event.data.command==='claim'||event.data.command==='recoverClaim'){
         if(current?.outcome!=='available')throw Error('Available store required');
         const method=event.data.command==='claim'?current.store.claim:current.store.recoverClaim;
