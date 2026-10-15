@@ -46,6 +46,15 @@ module membership proves neither of those obligations.
   original live coordinator and all its native permit addresses. It never
   accepts Python/JSON/GUC markers, an old grant row or a newly inserted lease row
   as authority. Direct enrolled callers without that native permit refuse.
+- An explicit assignment requires its original object/Field action and original
+  read or declared/granted blind-write authority **before inspecting whether the
+  stored value equals the assigned value**. The same check applies to a no-op.
+  Otherwise acknowledgement for equality and refusal for inequality creates a
+  hidden-value guessing oracle. Retain the original assignment-derived
+  `writeRequirements` and `readRequirements` unconditionally; do not replace
+  assignment intent with the logical delta evaluator's changed-fields result.
+  Stable RR data and SHARE locks do not establish fresh permission: the original
+  RC coordinator and native caller/source/claim checks remain required.
 - Bounded selection executes only the enrolled original Weft program and typed
   parameters. Every original preflight runs over the full authorized population
   in the same RR cut; nonzero violations and maxItems+1 overflow refuse without
@@ -229,3 +238,32 @@ with no finding in this narrow scope. Source/helper/DDL custody, actual PID
 reuse/wrap, historical one-use/savepoint behavior, current authority, protected
 selection/finalization and COMMIT-loss closure remain open. No complete
 CONTRACT-005 or owner-worktree bulk acceptance criterion is promoted.
+
+## Excluded selection diagnostic — 2026-10-15
+
+`packages/python/src/truss/_preparation_selection.py` executes the original
+immutable enrolled program only through a direct administrative PG18.6
+RR/read-only connection. It invokes the pinned native Weft replay itself,
+checks the snapshot's installation/catalog/document pins, and submits the
+original `$n` SQL through psycopg's raw cursors with stock UTF-8 TEXT adapters.
+Every original population preflight precedes selection, including when a
+predicate would select nothing. A nonzero count refuses. The server cursor
+retrieves rows incrementally, refuses maxItems+1 without trimming and checks
+raw UTF-8 bytes plus the JSON diagnostic row representation against the original
+bounds. These are diagnostic row bounds, not a claim that a future prepared
+manifest including its metadata fits those bounds. No prepared manifest is
+created. The original lowering bytes retain parameter and column mappings.
+The cursor closes and the original transaction context is rechecked before
+buffered rows return, with `authority=false` and `security_ready=false`.
+
+Basic native evidence: `test_preparation_selection_native.py` executes the
+freshly enrolled original compiler program against the two seeded products,
+selects `bar`, refuses an ordinary RR/read-only caller, then refuses an invalid
+storage cell outside that selection. The basic PG18.6 workflow passed
+(1 test, 7.413 seconds); Astra Ultra reviewed the plan and completed component.
+This does not qualify WHERE-false/LIMIT-zero variants, overflow, complete
+source/DDL/writer closure, current authority, permit minting, protected
+selection/finalization or hold-through-COMMIT. No ordinary grants, public
+assembly provider, new registry or native helper are introduced. The next
+integration remains the source-owned guard composition above; this diagnostic
+must never be accepted as its permit or authorization result.
