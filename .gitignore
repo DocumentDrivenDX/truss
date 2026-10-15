@@ -8,3 +8,7 @@ website/resources/
 website/.hugo_build.lock
 node_modules/
 *.tgz
+
+# Python-generated caches
+__pycache__/
+*.py[cod]
