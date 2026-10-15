@@ -1,6 +1,7 @@
 """Basic public ordinary-person query with original UMF/Weft and private SQL."""
 import os
 import shutil
+from typing import get_type_hints
 from truss import (Ok, CurrentQueryExecutor, adopt_psycopg_host)
 from truss.contracts import TextValue,BooleanValue,MapValue
 from truss.groups import CreateObject,AuthoredValue,RootlessOwnership,RequestNone,GroupSuccess
@@ -19,6 +20,7 @@ class CurrentQueryRuntimeNativeTests(full.CurrentQueryFullSourcesNativeTests):
         for connection,host in self.consumer_connections:
             host.detach();connection.rollback();connection.close()
         c,h,a,t=self.consumer()
+        self.assertIs(get_type_hints(a.query_current_in_transaction)['executor'],CurrentQueryExecutor)
         view=a.catalog_view_in_transaction(t,a.catalog_view_request()).value.view
         types={d.reference.authored_identity:d.reference for d in view.definitions if d.reference.kind=='type'}
         inputs=[('Project',{'projectId':'p1'}),

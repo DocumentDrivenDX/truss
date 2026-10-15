@@ -26,25 +26,41 @@ _ABI2_CONSUMER={
     'weftModuleSha256':'6b8af80b8d6da4216b1338e79e869faee4f5cd25af8500034368ef709005f523',
     'resultAbi':'weft.postgresql.current-values/0.2-candidate',
 }
+_CONSUMER_COHORTS=(_ABI2_CONSUMER,)
+
+
+def _actual_consumer():
+    try:
+        native=import_module('weft.weft')
+        digest=sha256(Path(native.__file__).read_bytes()).hexdigest()
+        cohorts=[c for c in _CONSUMER_COHORTS if c['weftModuleSha256']==digest]
+        if (len(cohorts)!=1 or not callable(native.CurrentQueryPreparation.native_request_json)
+                or not callable(native.CurrentQueryPreparation.lower_postgresql_current_rows_candidate_json)):
+            raise ValueError('Actual selected original Weft ABI2 module required')
+    except (ImportError,AttributeError,OSError) as error:
+        raise ValueError('Actual selected original Weft ABI2 module required') from error
+    return dict(cohorts[0])
 
 
 def _match_consumer(consumer):
-    # First private macOS ARM candidate. Other platform/release/ABI selections
-    # require their own original pairing; no version-range or backend inference.
-    if consumer!=_ABI2_CONSUMER:
+    # Compare the whole retained selection with the actual module's exact
+    # cohort. Another known wheel still requires explicit source migration.
+    if not same_owner_evidence(consumer,_actual_consumer()):
         raise ValueError('Unsupported exact query consumer selection')
     root=verify_current_query_owner_assets()
     if (sha256(root.joinpath('manifest.json').read_bytes()).hexdigest()!=consumer['umfManifestSha256']
             or sha256(root.joinpath('current-query-child.mjs').read_bytes()).hexdigest()!=consumer['umfBundleSha256']):
         raise ValueError('Actual original UMF consumer required')
-    try:
-        native=import_module('weft.weft')
-        if (sha256(Path(native.__file__).read_bytes()).hexdigest()!=consumer['weftModuleSha256']
-                or not callable(native.CurrentQueryPreparation.native_request_json)
-                or not callable(native.CurrentQueryPreparation.lower_postgresql_current_rows_candidate_json)):
-            raise ValueError('Actual selected original Weft ABI2 module required')
-    except (ImportError,AttributeError,OSError) as error:
-        raise ValueError('Actual selected original Weft ABI2 module required') from error
+
+
+def prepare_current_query_originals(opaque_sources_bytes):
+    """Select known installed computation bytes; native registration validates sources."""
+    if type(opaque_sources_bytes) is not bytes or not 1<=len(opaque_sources_bytes)<=4194304:
+        raise ValueError('Bounded immutable original opaque source bytes required')
+    consumer=_actual_consumer()
+    _match_consumer(consumer)
+    import json
+    return CurrentQueryOriginals(opaque_sources_bytes,json.dumps(consumer,separators=(',',':')).encode())
 
 
 def require_current_model_correspondence(initialize_bytes,accepted_request_bytes):

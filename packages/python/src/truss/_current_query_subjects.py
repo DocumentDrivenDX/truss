@@ -17,18 +17,7 @@ from ._umf_key_tuples import KeyTupleRequest, encode_string_key_tuples
 from .catalog_runtime import _pin_cursor
 from .psycopg_host import PsycopgHost
 from .execution import Error, ExecutionFailure
-
-
-@dataclass(frozen=True, slots=True)
-class CurrentQuerySubjectRegistration:
-    installation_id: str
-    source_receipt: str
-    original_document: bytes
-    identity: tuple[str,str,str]
-    helper_source: str
-    owner_oid: int
-    bindings: tuple[tuple[int,str],...]
-    status: str = 'pending_commit'
+from .current_query import CurrentQuerySubjectRegistration
 
 
 @dataclass(frozen=True, slots=True)

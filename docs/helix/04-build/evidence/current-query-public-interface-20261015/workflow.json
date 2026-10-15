@@ -1,0 +1,26 @@
+{
+  "scope": "Public source preparation and annotation usability; no new runtime or source format",
+  "test": {
+    "name": "test_current_query_runtime_native",
+    "tests": 1,
+    "status": "passed",
+    "seconds": 16.428,
+    "session": 60387
+  },
+  "checks": [
+    "Original opaque source bytes preserved by public factory",
+    "Exact actual module cohort/full retained manifest match; no version fallback or automatic migration",
+    "Public query and executor annotations resolve with typing.get_type_hints",
+    "Existing actual PG18 public guarded-query workflow unchanged"
+  ],
+  "review": "Astra Ultra reviewed plan and completed source; approved conditional on the source-matching workflow, which passed. No additional test campaign requested.",
+  "files": {
+    "packages/python/src/truss/_current_query_originals.py": "842959eee2c8548350e49b1732b94216cc09ced57349f8801ae7a4887cb5e35a",
+    "packages/python/src/truss/current_query.py": "807be0bf3dc55d04c6b9a330e2639d1215ccba7d3feb101e49e852f51e55c563",
+    "packages/python/src/truss/_current_query_subjects.py": "42fb56e63950787eeb83d83222e05e971e30b05784905b06ff5a51f4ceb3b19b",
+    "packages/python/src/truss/catalog_runtime.py": "336ba39afdc2bbe15ef955b18b55ab1333c4e923b9a0d6d63040200cba042473",
+    "packages/python/src/truss/__init__.py": "daa63d1035bba683b804fd9911071733266931f76acd09a4ef36abfa6bda8be2",
+    "packages/python/tests/test_current_query_full_sources_native.py": "a22cfcd4148d4bf23ec2d0f987245595e054097ccae6410ed20cd47a36d7bcbb",
+    "packages/python/tests/test_current_query_runtime_native.py": "761c1415b5dedc543b76d5abbf68284a91c2a25d4cf91e96659b298c898d3586"
+  }
+}

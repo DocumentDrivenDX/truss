@@ -100,6 +100,10 @@ The original source/Subject registrations must already be committed. Their
 installers are exported as `register_current_query_sources_in_transaction` and
 `register_current_query_subjects_in_transaction`; installer authority is checked
 natively. These registrations do not themselves grant query permission.
+`prepare_current_query_originals(opaque_sources_bytes)` preserves the original
+source bytes and selects an explicitly supported installed computation cohort.
+Unknown modules refuse. Reopening a registration under another known wheel still
+requires an explicit migration; the factory never upgrades retained pins.
 
 This first local PostgreSQL18.6/macOS ARM profile uses exact original candidate
 Weft ABI2 and UMF child pins. Published Weft0.4.32 lacks the needed CQP feature;

@@ -16,9 +16,8 @@ import base64
 from uuid import uuid4
 from threading import RLock
 from functools import wraps
-from typing import Literal, overload, TypeVar, Mapping, TYPE_CHECKING
-if TYPE_CHECKING:
-    from .current_query import CurrentQueryExecutor
+from typing import Literal, overload, TypeVar, Mapping
+from .current_query import CurrentQueryExecutor
 from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport)
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
     NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability, NativeCompiledExecutionCapability)

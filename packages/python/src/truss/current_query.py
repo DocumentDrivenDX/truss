@@ -8,10 +8,32 @@ Neither connection is committed, rolled back or closed by Truss.
 from dataclasses import dataclass
 from .execution import TransactionHandle
 from .psycopg_host import PsycopgHost
-from ._current_query_subjects import CurrentQuerySubjectRegistration
-from ._current_query_subjects import register_current_query_subjects_in_transaction
-from ._current_query_originals import CurrentQueryOriginals
-from ._current_query_sources import register_current_query_sources_in_transaction
+from ._current_query_originals import CurrentQueryOriginals, prepare_current_query_originals
+
+
+@dataclass(frozen=True,slots=True)
+class CurrentQuerySubjectRegistration:
+    installation_id: str
+    source_receipt: str
+    original_document: bytes
+    identity: tuple[str,str,str]
+    helper_source: str
+    owner_oid: int
+    bindings: tuple[tuple[int,str],...]
+    status: str = 'pending_commit'
+
+
+def register_current_query_sources_in_transaction(host,transaction,*,initialize_bytes,accepted_request_bytes,query_originals=None):
+    """Retain original sources through a trusted installer; caller settles."""
+    from ._current_query_sources import register_current_query_sources_in_transaction as install
+    return install(host,transaction,initialize_bytes=initialize_bytes,
+                   accepted_request_bytes=accepted_request_bytes,query_originals=query_originals)
+
+
+def register_current_query_subjects_in_transaction(host,transaction,*,bindings):
+    """Enroll native Subjects through a trusted installer; caller settles."""
+    from ._current_query_subjects import register_current_query_subjects_in_transaction as install
+    return install(host,transaction,bindings=bindings)
 
 
 @dataclass(frozen=True,slots=True)

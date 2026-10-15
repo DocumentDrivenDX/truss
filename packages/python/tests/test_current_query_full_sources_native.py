@@ -3,8 +3,8 @@ from pathlib import Path
 from hashlib import sha256
 import json
 import weft
-from truss import Ok, adopt_psycopg_host
-from truss._current_query_originals import CurrentQueryOriginals, _ABI2_CONSUMER, check_query_originals
+from truss import Ok, adopt_psycopg_host, CurrentQueryOriginals, prepare_current_query_originals
+from truss._current_query_originals import check_query_originals
 from truss._current_query_sources import capture_current_query_sources_with_cursor
 import test_current_query_subjects_native as subject
 
@@ -27,8 +27,9 @@ class CurrentQueryFullSourcesNativeTests(subject.CurrentQuerySubjectsNativeTests
         initialize=json.dumps({'kind':'initialize','requestId':'initialize','sources':{
             'policy':source['policy'],'catalog':source['catalog'],'ontology':source['ontology'],
             'closure':closure,'associationBindings':[],'extensionSelection':None}},separators=(',',':')).encode()
-        self.originals=CurrentQueryOriginals(json.dumps(opaque,separators=(',',':')).encode(),
-            json.dumps(_ABI2_CONSUMER,separators=(',',':')).encode())
+        original_bytes=json.dumps(opaque,separators=(',',':')).encode()
+        self.originals=prepare_current_query_originals(original_bytes)
+        self.assertIs(self.originals.opaque_sources_bytes,original_bytes)
         return initialize,self.originals
 
     def test_full_original_sources_bind_actual_subject_helper(self):

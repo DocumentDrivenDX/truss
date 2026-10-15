@@ -122,7 +122,7 @@ from .catalog_preparation import prepare_catalog
 __all__ += ['prepare_catalog']
 
 from .current_query import (CurrentQueryExecutor, CurrentQueryOriginals,
-    CurrentQuerySubjectRegistration, register_current_query_sources_in_transaction,
+    CurrentQuerySubjectRegistration, prepare_current_query_originals, register_current_query_sources_in_transaction,
     register_current_query_subjects_in_transaction)
 __all__ += ['CurrentQueryExecutor','CurrentQueryOriginals','CurrentQuerySubjectRegistration',
-    'register_current_query_sources_in_transaction','register_current_query_subjects_in_transaction']
+    'prepare_current_query_originals','register_current_query_sources_in_transaction','register_current_query_subjects_in_transaction']
