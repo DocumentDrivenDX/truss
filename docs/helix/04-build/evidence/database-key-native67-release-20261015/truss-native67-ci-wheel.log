@@ -1,0 +1,11 @@
+test_public_typed_composite_workflow (test_typed_keys_native.TypedKeyTests.test_public_typed_composite_workflow) ... ok
+test_public_typed_composite_workflow (test_typed_keys_native.TypedKey08Tests.test_public_typed_composite_workflow) ... ok
+test_duplicate_candidates_refuse_without_catalog_effects (test_catalog_key_backfill_native.CatalogKeyBackfillTests.test_duplicate_candidates_refuse_without_catalog_effects) ... ok
+test_register_existing_objects_lookup_and_query (test_catalog_key_backfill_native.CatalogKeyBackfillTests.test_register_existing_objects_lookup_and_query) ... ok
+test_duplicate_candidates_refuse_without_catalog_effects (test_catalog_key_backfill_native.CatalogKeyBackfill08Tests.test_duplicate_candidates_refuse_without_catalog_effects) ... ok
+test_register_existing_objects_lookup_and_query (test_catalog_key_backfill_native.CatalogKeyBackfill08Tests.test_register_existing_objects_lookup_and_query) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 51.457s
+
+OK

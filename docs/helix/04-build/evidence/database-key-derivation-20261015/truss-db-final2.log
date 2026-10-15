@@ -1,0 +1,18 @@
+test_cross_document_key_predicate_requires_exact_source (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_cross_document_key_predicate_requires_exact_source) ... ERROR
+test_upgrade_preserves_original_key_bytes_and_derives_new_keys (test_database_key_upgrade_native.DatabaseKeyUpgradeTests.test_upgrade_preserves_original_key_bytes_and_derives_new_keys) ... ok
+
+======================================================================
+ERROR: test_cross_document_key_predicate_requires_exact_source (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_cross_document_key_predicate_requires_exact_source)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-key-encoding-20261015/packages/python/tests/test_database_key_derivation_native.py", line 38, in test_cross_document_key_predicate_requires_exact_source
+    self.assertEqual(c.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-clean-install-20261013/lib/python3.12/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.InsufficientPrivilege: permission denied for table object
+
+----------------------------------------------------------------------
+Ran 2 tests in 12.396s
+
+FAILED (errors=1)

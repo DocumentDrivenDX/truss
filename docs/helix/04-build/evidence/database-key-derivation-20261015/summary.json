@@ -1,0 +1,36 @@
+{
+  "status": "local-qualified-unpublished",
+  "python": "3.12",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "pgserver-pg18": "18.6.1",
+  "truss": "0.0.31",
+  "native": "0.66-candidate",
+  "weftOptionalQuery": "0.4.31/backend0.4.35",
+  "review": "Astra: no blockers; preserve actual runtime query identity with explicit native65/66 compatibility",
+  "preserved": "Full prior-native65 key rows and reservations including tuple/namespace/context bytes; no data rewrite",
+  "checks": {
+    "derivation": 4,
+    "genuineNative65Upgrade": 1,
+    "typedWorkflowsAnd1000LookupsPerUmfVersion": 4,
+    "preconditions": 2,
+    "backfillAndQueryBothUmfVersions": 4,
+    "protectedPreparationSealStorage": 1,
+    "installedWheel": 5,
+    "finalInstalledWheel": 2,
+    "optionalCompilerReleaseGuardsQueryPageMutation": 2
+  },
+  "limits": [
+    "No remote release/Linux CI execution",
+    "No end-to-end throughput benchmark",
+    "Native64 predecessor upgrade test skipped locally; native65 upgrade passed",
+    "Registration and separate protected security observation retain original Bun preparation",
+    "Optional query compiler compatibility release must precede Truss query-extra publication"
+  ],
+  "earlierFailures": "The verification log includes the routine-inventory failure before correction; seal-final supersedes it. final2 includes an assessor permission error; crossdoc-final supersedes it. Backfill compiler compatibility failures were corrected by the minimal optional Weft release.",
+  "artifactCaveat": "Local macOS SDK27 Mach-O string-table alignment repair, ad-hoc signature and RECORD regeneration; release CI builds remain required.",
+  "wheels": {
+    "truss_toolkit-0.0.31-py3-none-any.whl": "3b4e1a86055a74ad8f1003c660206be324b8d676ac1f0a7c03cf2548b08712c2",
+    "weft_sql-0.4.31-cp39-abi3-macosx_11_0_arm64.whl": "3e00bc83d4fe42b48ab343c70fced81d71ade0b8f399cc4094096ae5468e58d7"
+  }
+}

@@ -1,0 +1,6 @@
+test_cross_document_key_predicate_requires_exact_source (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_cross_document_key_predicate_requires_exact_source) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 4.877s
+
+OK

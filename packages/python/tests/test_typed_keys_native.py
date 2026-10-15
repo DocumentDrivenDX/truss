@@ -12,6 +12,18 @@ class TypedKeyTests(groups.PublicCreateGroupTests):
     for name in tuple(n for n in dir(groups.PublicCreateGroupTests) if n.startswith('test_')):locals()[name]=None
     source_version='0.7.0'
 
+    def ready(self,*args,**kwargs):
+        result=super().ready(*args,**kwargs)
+        # Registration retains the broader owner preparation dependency;
+        # Ordinary operations must not call any client key encoder.
+        from unittest.mock import patch
+        producer=patch('truss._umf_key_tuples._capture',side_effect=AssertionError('Key operation spawned Bun'))
+        producer.start();self.addCleanup(producer.stop)
+        for name in ('encode_key_tuples','encode_string_key_tuples','encode_literal_key_tuple'):
+            encoder=patch('truss._umf_key_tuples.'+name,side_effect=AssertionError('Client key encoding'))
+            encoder.start();self.addCleanup(encoder.stop)
+        return result
+
     def fields(self,source):
         source['umf']=self.source_version;module=source['modules'][0];module['relationships']=[]
         record=next(e for e in module['elements'] if e['id']=='A')
@@ -71,15 +83,13 @@ class TypedKeyTests(groups.PublicCreateGroupTests):
         # legacy compatibility branch (Astra's concrete regression finding).
         import json,psycopg
         from truss._group_runtime import _wire
-        from truss._umf_key_tuples import KeyTupleRequest,encode_key_tuples
         from truss.catalog_runtime import _release
         source=next(d.content for d in self.documents if d.document_id=='adoc')
-        encoded=encode_key_tuples(source,(KeyTupleRequest('m','A','a-primary',tuple(c.value for c in built.value.identity.components)),),bun_executable=BUN)[0]
         raw_identity=_wire(built.value.identity);del raw_identity['keyEncodingProfile'];manifest,digest,_=_release()
         c.execute('SAVEPOINT missing_key_profile')
         try:
             with self.assertRaises(psycopg.errors.InvalidParameterValue):
-                c.execute('SELECT truss.import_object_identity(%s,%s,%s,%s,%s)',(json.dumps(raw_identity).encode(),source,encoded.tuple_bytes,manifest['releaseId'],digest))
+                c.execute('SELECT truss.import_object_identity(%s,%s,%s,%s,%s)',(json.dumps(raw_identity).encode(),source,None,manifest['releaseId'],digest))
         finally:
             c.execute('ROLLBACK TO SAVEPOINT missing_key_profile');c.execute('RELEASE SAVEPOINT missing_key_profile')
         invalid_record=a.object_import_record_in_transaction(t,document_id='adoc',module_id='m',record_id='A',values=self.values('badimport',amount='1.23001')).value
@@ -97,6 +107,13 @@ class TypedKeyTests(groups.PublicCreateGroupTests):
         h=adopt_psycopg_host(c);self.addCleanup(h.detach);t=h.adopt_transaction(access_mode='read_only').value;a=create_reference_assembly(CatalogRuntimeConfiguration(),h).value
         self.assertIsInstance(self.lookup(a,t,quantity='9007199254740994'),ObjectFound)
         h.detach();c.rollback()
+
+    def test_thousand_native_key_lookups_without_bun(self):
+        c,h,a,t=self.ready(self.fields)
+        create=CreateObject(type_definition_pin=self.types[('adoc','A')].definition_pin,values=self.values(),ownership=RootlessOwnership())
+        original,request=self.input(a,t,(create,))
+        self.assertIsInstance(self.apply(a,t,original,request),GroupSuccess)
+        for _ in range(1000):self.assertIsInstance(self.lookup(a,t),ObjectFound)
 
 class TypedKey08Tests(TypedKeyTests):
     source_version='0.8.0'

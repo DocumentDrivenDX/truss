@@ -33,6 +33,28 @@ ddx:
 **Status**: draft
 **Related**: ADR-002 (storage strategy), ADR-001 (language and portable core), SPIKE-002, SPIKE-003, the storage layout review, CONTRACT-002 (journal), CONTRACT-003 (catalog), CONTRACT-004 (mutation and conformance)
 
+## Database-owned portable-key realization — owner direction2026-10-15
+
+This amendment supersedes statements below that require a client/UMF process
+to produce every ordinary runtime key. UMF still owns the semantics. The
+qualified PostgreSQL runtime MUST derive `umf-key-tuple-v1` from accepted
+ordered key/property definitions and actual typed values. It MUST preserve
+allowed-value checks and exact normalization/refusals within the selected
+native subset. Missing/null/undefined key components MUST refuse; defaults
+MUST NOT supply components. Native decimal support remains precision18 with
+scale2 or4. Unknown relevant qualifiers MUST refuse admission/derivation.
+
+The bytes, `umf-key-tuple-v1:hex:` transport, namespace construction, complete
+collision comparisons and locking MUST remain unchanged. Historical key and
+receipt/context bytes MUST NOT be rewritten. New native contexts identify
+native derivation and MUST NOT claim an original owner operation receipt.
+Per-key client receipts and caller-encoded bytes are no longer ordinary
+runtime inputs; legacy ABI placeholders accept only empty/NULL carriers.
+Definition/source pins and role/current-row checks remain required. Native
+runtime0.66 is an explicit procedure/release-ledger upgrade with no key-table
+rewrite. Full UMF admission and protected security producer evidence remain
+separate boundaries.
+
 ## Purpose
 
 Defines the fixed set of PostgreSQL tables truss stores UMF-described property-graph data in, so that any implementation, in any language, reads and writes the same tables. The executable form is [`storage-layout.sql`](storage-layout.sql), checked by [`storage-layout.check.sql`](storage-layout.check.sql). A conforming implementation is interchangeable with another over the same database.
