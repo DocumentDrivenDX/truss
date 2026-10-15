@@ -11,8 +11,7 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.31`
-in development, native runtime `0.66-candidate`, layout `1.0`
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.31`, native runtime `0.66-candidate`, layout `1.0`
 candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.36`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
@@ -20,7 +19,7 @@ server versions are not qualified. The broader protected-engine security
 activation remains unfinished; this runtime does enforce its own installed
 ordinary-person/module boundaries.
 
-The current release is [v0.0.30](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.30).
+The current release is [v0.0.31](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.31).
 Registration-owned optional and required non-key rebinding is included in25; its
 [report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.2.md)
 retains original effects/events and requires current data-reader authority.
@@ -30,7 +29,7 @@ future distributed changes receive a new package version.
 
 ## Current feature scope
 
-SDK30/native66 is published with matching Weft30/backend36. It supports required
+SDK31/native66 is published with matching Weft31/backend36. It supports required
 scalar-field/key backfill and acyclic nested array/map properties with required
 item Fields and exact scalar leaves, including writes, reads, history, imports,
 Weft queries and retained-cell rebinding. The
@@ -44,7 +43,7 @@ The [owned-object implementation plan](../../docs/helix/04-build/python-owned-ob
 covers ownership inputs, complete cascades, historical/replay authority and
 matching queries. Its UMF storage candidates are not callable ownership support.
 
-## Native66 scope and next compiler pairing
+## Native66 scope and compiler pairing
 
 UMF0.8 support0.17 admits otherwise-supported standalone singular scalar Fields
 as declarations. Their original assertions remain in the accepted source/report;
@@ -57,10 +56,9 @@ Direct object, key and page results expose `object.ownership.state` as
 
 The exact consumer model passes public accept/apply/readback and native binding
 export. Populated native65 upgrades preserve transitions and receipt replay.
-Published Weft0.4.30 supplies native66 queries. The next SDK0.0.31 query extra
-selects Weft0.4.31, adding original native66 mutation-selection registration and
-lowering while preserving native65. Its release is pending; see the
-[SDK30 release evidence](../../docs/helix/04-build/releases/v0.0.30.md).
+Published SDK0.0.31 selects Weft0.4.31 for native66 queries and original
+mutation-selection registration/lowering, preserving native65. See the
+[SDK31 release evidence](../../docs/helix/04-build/releases/v0.0.31.md).
 This compiler support does not enable a protected bulk-action executor.
 
 ## Install the release
@@ -70,10 +68,10 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.30 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.30 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.31 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.31 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.30'
+  'truss-toolkit[local,native,query]==0.0.31'
 ```
 
 Bun1.4.2 is still required for UMF preparation and key production. Each release
@@ -83,10 +81,10 @@ PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.30 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.31 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.30 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.31 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
 ```
