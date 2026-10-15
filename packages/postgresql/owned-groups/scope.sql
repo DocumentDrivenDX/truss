@@ -11,7 +11,7 @@ DECLARE node_keys text[]:='{}';edge_keys text[]:='{}';boundary_keys text[]:='{}'
  result_json jsonb;used_bytes bigint:=0;head int;
 BEGIN
  IF jsonb_typeof(seeds) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'explicit typed scope seeds required' USING ERRCODE='22023';END IF;
- IF jsonb_array_length(seeds) NOT BETWEEN 1 AND 128 OR octet_length(convert_to(seeds::text,'UTF8'))>1048576 THEN
+ IF jsonb_array_length(seeds) NOT BETWEEN 0 AND 128 OR octet_length(convert_to(seeds::text,'UTF8'))>1048576 THEN
   RAISE EXCEPTION 'bounded scope seeds required' USING ERRCODE='54000';END IF;
  FOR entry IN SELECT value FROM jsonb_array_elements(seeds) LOOP
   IF jsonb_typeof(entry) IS DISTINCT FROM 'object' THEN RAISE EXCEPTION 'typed scope seed required' USING ERRCODE='22023';END IF;
@@ -125,3 +125,63 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.owned_graph_scope(jsonb) FROM PUBLIC;
+
+
+-- Discover stored components from original operations before acquiring graph
+-- locks. This grants no authority; the caller must authorize all discovered
+-- owners, acquire the common gate, and compare a second observation.
+CREATE FUNCTION truss.runtime_owned_input_scope(input jsonb) RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE operation jsonb;object_references jsonb;reference jsonb;identity jsonb;
+ seeds jsonb:='[]';seed jsonb;stored_edge truss.edge%ROWTYPE;reference_type truss.type_def%ROWTYPE;
+BEGIN
+ IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
+  OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128 THEN
+  RAISE EXCEPTION 'bounded original operations required' USING ERRCODE='22023';END IF;
+ FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
+  object_references:='[]';
+  IF operation->>'operation' IN ('update_edge','delete_edge') THEN
+   reference:=operation->'target';
+   IF reference->>'state'='stored' THEN
+    identity:=reference->'identity';
+    SELECT * INTO stored_edge FROM truss.edge
+     WHERE id=(identity->>'id')::bigint AND rel_type_id=(identity->>'typeId')::int;
+    IF NOT FOUND THEN RAISE EXCEPTION 'target edge absent' USING ERRCODE='P1004';END IF;
+    -- Native witnesses stay separate from all caller-authored references.
+    FOR seed IN SELECT value FROM jsonb_array_elements(jsonb_build_array(
+     jsonb_build_object('id',stored_edge.source_id::text,'typeId',stored_edge.source_type::text),
+     jsonb_build_object('id',stored_edge.target_id::text,'typeId',stored_edge.target_type::text))) LOOP
+     IF NOT seeds @> jsonb_build_array(seed) THEN seeds:=seeds||jsonb_build_array(seed);END IF;
+    END LOOP;
+   END IF;
+  ELSIF operation->>'operation' IN ('update_object','delete_object') THEN
+   object_references:=object_references||jsonb_build_array(operation->'target');
+  END IF;
+  IF operation->>'operation'='create_edge' THEN
+   object_references:=object_references||jsonb_build_array(operation->'source',operation->'target');END IF;
+  IF operation ? 'endpointChange' THEN
+   object_references:=object_references||jsonb_build_array(operation->'endpointChange'->'source',operation->'endpointChange'->'target');END IF;
+  IF operation->'ownership'->>'state'='owned' THEN
+   object_references:=object_references||jsonb_build_array(operation->'ownership'->'root');END IF;
+  IF operation->'ownershipChange'->>'state'='owned' THEN
+   object_references:=object_references||jsonb_build_array(operation->'ownershipChange'->'root');END IF;
+  FOR reference IN SELECT value FROM jsonb_array_elements(object_references) LOOP
+   IF reference->>'state'='stored' THEN
+    IF reference-ARRAY['state','identity']<>'{}'::jsonb THEN
+     RAISE EXCEPTION 'closed caller object reference required' USING ERRCODE='22023';END IF;
+    identity:=reference->'identity';reference_type:=truss.runtime_condition_type(identity);
+    IF NOT truss.runtime_can_read(reference_type.document_id,reference_type.module) THEN
+     RAISE EXCEPTION 'selected object reference reader required' USING ERRCODE='42501';END IF;
+    IF NOT EXISTS(
+     SELECT 1 FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=reference_type.type_id) THEN
+     RAISE EXCEPTION 'target object absent' USING ERRCODE='P1004';END IF;
+    seed:=jsonb_build_object('id',identity->'id','typeId',identity->'typeId');
+    IF NOT seeds @> jsonb_build_array(seed) THEN seeds:=seeds||jsonb_build_array(seed);END IF;
+   END IF;
+  END LOOP;
+ END LOOP;
+ -- The scope observer checks exact native ranges and complete membership.
+ RETURN truss.owned_graph_scope(seeds);
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_input_scope(jsonb) FROM PUBLIC;
