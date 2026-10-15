@@ -1,0 +1,12 @@
+test_allowed_values_defaults_and_no_weft_or_client_encoder (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_allowed_values_defaults_and_no_weft_or_client_encoder) ... ok
+test_cross_document_key_predicate_requires_exact_source (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_cross_document_key_predicate_requires_exact_source) ... ok
+test_native_refusals_and_helpers_are_owner_only (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_native_refusals_and_helpers_are_owner_only) ... ok
+test_native_scalar_vectors_match_original_producers (test_database_key_derivation_native.DatabaseKeyDerivationTests.test_native_scalar_vectors_match_original_producers) ... ok
+test_upgrade_preserves_original_key_bytes_and_derives_new_keys (test_database_key_upgrade_native.DatabaseKeyUpgradeTests.test_upgrade_preserves_original_key_bytes_and_derives_new_keys) ... ok
+test_native_scalar_declaration_does_not_admit_unknown_or_container_homes (test_catalog_declarative_native.DeclarativeCatalogNativeTests.test_native_scalar_declaration_does_not_admit_unknown_or_container_homes) ... ok
+test_install_commit_private_storage_and_public_products_workflow (test_preparation_seal_storage_native.PreparationSealStorageNativeTests.test_install_commit_private_storage_and_public_products_workflow) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 33.443s
+
+OK
