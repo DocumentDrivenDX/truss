@@ -28,8 +28,16 @@ proof of crash-safe physical IndexedDB shutdown. It also waits for Web Lock
 handback before resolving. A reported lifecycle failure
 fences the instance and retains its lock until the worker terminates.
 
-The current API supplies lifecycle and this core catalog subset. Action registration,
-separate issued selection-read grants, original local-profile Weft lowering,
+`await store.registerAction(owner,{module,action})` derives original UMF local
+preparation from the registered source and returns an opaque action handle plus
+separate model/pin/preparation metadata copies. `await store.grantSelectionRead(owner,action)`
+issues a separate opaque grant and an informational declaration over the full
+canonical target population and all original members. Keep both handles inside
+the worker. Forged, foreign and previous-open action handles refuse; persisted
+store identity does not preserve issued handle identity across opens.
+
+The current API supplies lifecycle, this core catalog subset and local action/read
+grant issuance. Original local-profile Weft selection integration,
 keys, sealed manifests, effects, replay and recovery remain unfinished under
 UMF CONTRACT905 at40f01140. Owner possession does not grant selection/action
 authority. There is no native person/SCRAM/C-D-E claim or production provider.
@@ -56,7 +64,8 @@ bun packages/browser/build-assets.ts /absolute/new/browser-bundle
 ```
 
 The fresh directory contains `store.js`, original `layout.sql`, pinned PGlite
-distribution assets and licenses, plus `manifest.json`. Import `store.js` inside
+distribution assets and licenses, unchanged UMF local-action ESM under `owners/`,
+its original notice inventory/files, plus `manifest.json`. Import `store.js` inside
 the website worker; keep capabilities there. All asset URLs are relative, so the
 bundle can live under a GitHub Pages prefix. The manifest distinguishes original
 UMF input hashes, actual Truss/build input hashes and the generated provider hash.
@@ -75,6 +84,6 @@ preflights, including fields unused by the predicate. Basic Rust checks retain
 native65/66 behavior and the64-member browser mapping; actual Chromium executes
 the resulting selection SQL against a real registered Truss catalog in PGlite.
 That component test explicitly installs original scalars.sql and seeds rows
-administratively. Provider-issued owner/read-grant integration, helper installation
+administratively. Provider selection/read-grant consumption, helper installation
 and worker action execution remain unfinished. This source checkpoint is not a
 new published wheel or an enabled executor.

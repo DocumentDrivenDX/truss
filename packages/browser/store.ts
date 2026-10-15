@@ -1,4 +1,5 @@
 import {PGlite} from '@electric-sql/pglite';
+import {createActionIssuer,captureAction,type ActionIdentity,type LocalAction,type BrowserActionRegistration,type SelectionReadRegistration} from './actions';
 import {captureDocument,prepareDocument,registerCatalog,readCatalog,type DocumentInput,type CatalogSnapshot,type Registration} from './catalog';
 
 const LAYOUT='c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294';
@@ -13,6 +14,8 @@ export interface BrowserStore {
   info(owner:LocalOwner):StoreInfo;
   registerDocument(owner:LocalOwner,input:DocumentInput):Promise<Registration>;
   catalog(owner:LocalOwner):Promise<CatalogSnapshot|null>;
+  registerAction(owner:LocalOwner,input:ActionIdentity):Promise<BrowserActionRegistration>;
+  grantSelectionRead(owner:LocalOwner,action:LocalAction):Promise<SelectionReadRegistration>;
   close(owner:LocalOwner):Promise<void>;
 }
 export type StoreOpen={outcome:'available';store:BrowserStore;owner:LocalOwner}|{outcome:'unavailable';reason:'store_in_use'};
@@ -68,6 +71,8 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
       await actual.syncToFs();
       const owner=Object.freeze(Object.create(null)) as LocalOwner;
       let state:'open'|'closing'|'closed'|'fenced'='open';
+      const issuer=createActionIssuer(info,()=>state==='open');
+      const currentCatalog=()=>readCatalog(actual).catch(error=>{state='fenced';throw error;});
       const check=(cap:LocalOwner)=>{if(cap!==owner||state!=='open')throw new Error('Current issued local owner required');};
       let queue:Promise<void>=Promise.resolve();
       const schedule=<T>(cap:LocalOwner,operation:()=>Promise<T>):Promise<T>=>{
@@ -88,6 +93,13 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
         catalog(cap:LocalOwner){return schedule(cap,async()=>{
           try{return await readCatalog(actual);}catch(error){state='fenced';throw error;}
         });},
+        registerAction(cap:LocalOwner,input:ActionIdentity){
+          check(cap);const captured=captureAction(input);
+          return schedule(cap,async()=>issuer.register(await currentCatalog(),captured));
+        },
+        grantSelectionRead(cap:LocalOwner,action:LocalAction){
+          return schedule(cap,async()=>issuer.grant(await currentCatalog(),action));
+        },
         async close(cap:LocalOwner){
           check(cap);state='closing';
           try{await queue;if((state as string)==='fenced')throw Error('Store is fenced');await actual.syncToFs();await actual.close();release();await lockTask;state='closed';}

@@ -44,6 +44,14 @@ try{
   if(registered.catalog.document.sourceUtf8!==original||registered.catalog.document.sourceSha256!=='b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27')throw Error('Original document custody mismatch');
   const unchanged=await call(a,{command:'register'});
   if(unchanged.outcome!=='unchanged')throw Error(JSON.stringify(unchanged));
+  const action=await call(a,{command:'action'});
+  if(action.outcome!=='action_registered'||action.preparationSha256!=='6f5e69462c327da970f07ca1f6253dbacc4db0badf1335b7d91e3f38eb67ad40'||!action.opaque)throw Error(JSON.stringify(action));
+  const expectedGrant={profile:{id:'umf.actions.local-store-read',version:'1'},target:{element:'products',key:'pk',module:'sales'},fields:[{module:'sales',element:'product-id'},{module:'sales',element:'product-name'}],view:'complete-canonical-target-population',disposition:'original'};
+  if(JSON.stringify(action.declaration)!==JSON.stringify(expectedGrant))throw Error(JSON.stringify(action.declaration));
+  const forgedAction=await call(a,{command:'forgedAction'});if(forgedAction.outcome!=='refused')throw Error(JSON.stringify(forgedAction));
+  const oldAction=await call(a,{command:'reopenAction',name:'lifecycle-basic'});
+  if(oldAction.outcome!=='previous_action_refused'||JSON.stringify(oldAction.info)!==JSON.stringify(first.info))throw Error(JSON.stringify(oldAction));
+  const reissuedAction=await call(a,{command:'action'});if(reissuedAction.outcome!=='action_registered'||reissuedAction.preparationSha256!==action.preparationSha256)throw Error(JSON.stringify(reissuedAction));
   const forged=await call(a,{command:'forged'});
   if(forged.outcome!=='refused')throw Error(JSON.stringify(forged));
   const second=await call(b,{command:'open',name:'lifecycle-basic'});
@@ -59,8 +67,9 @@ try{
   const catalog=await call(a,{command:'catalog'});
   if(catalog.outcome!=='catalog'||JSON.stringify(catalog.catalog)!==JSON.stringify(registered.catalog))throw Error('Catalog changed across IndexedDB reopen');
   await call(a,{command:'close'});
-  const receipt={scope:'Chromium worker lifecycle, original core catalog registration and IndexedDB reopen',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
+  const receipt={scope:'Chromium worker lifecycle, original core catalog and local action/read-grant issuance with IndexedDB reopen',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
+    action:{registered:action,forged:forgedAction,previousOpen:oldAction.outcome,reissued:reissuedAction.outcome},
     catalog:{registration:registered.outcome,retry:unchanged.outcome,revision:catalog.catalog.catalogRevision,sourceSha256:catalog.catalog.document.sourceSha256,types:catalog.catalog.types,properties:catalog.catalog.properties,keys:catalog.catalog.keys,changeCount:catalog.catalog.changes.length},
-    actionExecution:false,selectionReadGrant:false,crashRecovery:false};
+    actionExecution:false,selectionReadGrant:true,crashRecovery:false};
   const encoded=JSON.stringify(receipt,null,2)+'\n';if(Bun.argv[3])await Bun.write(Bun.argv[3],encoded);console.log(encoded);
 }finally{await browser.close();server.stop(true);await rm(temporary,{recursive:true,force:true});}

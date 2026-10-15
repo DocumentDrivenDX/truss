@@ -1,4 +1,5 @@
 import {openBrowserStore,type StoreOpen} from './store';
+let registeredAction:any,readGrant:any,previousAction:any;
 declare const self:DedicatedWorkerGlobalScope;
 let current:StoreOpen|undefined;
 let pending=Promise.resolve();
@@ -21,6 +22,25 @@ self.onmessage=event=>{
         const sourceUtf8=await(await fetch(new URL('model.json',import.meta.url))).text();
         const result=await current.store.registerDocument(current.owner,{documentId:'product-local-action-demo',documentRevision:'b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27',sourceUtf8});
         self.postMessage(result);
+      }else if(event.data.command==='action'){
+        if(current?.outcome!=='available')throw Error('Available test store required');
+        const registered=await current.store.registerAction(current.owner,{module:'sales',action:'set-name-local'});
+        registeredAction=registered.action;
+        const granted=await current.store.grantSelectionRead(current.owner,registeredAction);readGrant=granted.grant;
+        self.postMessage({outcome:'action_registered',modelSha256:registered.model.sha256,preparationSha256:registered.preparation.sha256,declaration:granted.declaration,opaque:JSON.stringify(registered.action)==='{}'&&JSON.stringify(readGrant)==='{}'});
+      }else if(event.data.command==='forgedAction'){
+        if(current?.outcome!=='available')throw Error('Available test store required');
+        try{await current.store.grantSelectionRead(current.owner,{} as any);throw Error('Forged action admitted');}
+        catch(error){if(String(error).includes('Forged action admitted'))throw error;}
+        self.postMessage({outcome:'refused'});
+      }else if(event.data.command==='reopenAction'){
+        if(current?.outcome!=='available')throw Error('Available test store required');
+        previousAction=registeredAction;const name=event.data.name;
+        await current.store.close(current.owner);current=await openBrowserStore({name,layoutSql:await(await fetch(new URL('layout.sql',import.meta.url))).text()});
+        if(current.outcome!=='available')throw Error('Reopen required');
+        try{await current.store.grantSelectionRead(current.owner,previousAction);throw Error('Previous action admitted');}
+        catch(error){if(String(error).includes('Previous action admitted'))throw error;}
+        self.postMessage({outcome:'previous_action_refused',info:current.store.info(current.owner)});
       }else if(event.data.command==='catalog'){
         if(current?.outcome!=='available')throw Error('Available test store required');
         self.postMessage({outcome:'catalog',catalog:await current.store.catalog(current.owner)});

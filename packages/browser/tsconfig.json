@@ -4,5 +4,5 @@
     "lib": ["ES2022", "WebWorker"], "types": [],
     "strict": true, "noEmit": true, "skipLibCheck": true
   },
-  "include": ["store.ts", "catalog.ts", "assets.d.ts", "test-worker.ts"]
+  "include": ["store.ts", "catalog.ts", "actions.ts", "assets.d.ts", "test-worker.ts"]
 }
