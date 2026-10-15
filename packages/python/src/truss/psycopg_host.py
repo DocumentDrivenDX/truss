@@ -51,7 +51,7 @@ class _HostPairReservation:
     def __init__(self, first, second):
         if type(first) is not PsycopgHost or type(second) is not PsycopgHost or first._custody is second._custody:
             raise ValueError('Two separate original hosts required')
-        self.hosts=(first,second);self.thread=get_ident();self.active=False
+        self.hosts=(first,second);self.thread=get_ident();self.active=False;self.deadline=None
         self.custodies=tuple(sorted((first._custody,second._custody),key=id))
     def __enter__(self):
         acquired=[]
@@ -276,9 +276,9 @@ class PsycopgHost:
     def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None):
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
-        reservation=self._custody.reservation
-        reserved=(type(reservation) in (_HostPairReservation,_HostOperationReservation) and reservation.active
-                  and reservation.thread==get_ident() and any(h is self for h in reservation.hosts))
+        host_reservation=self._custody.reservation
+        reserved=(type(host_reservation) in (_HostPairReservation,_HostOperationReservation) and host_reservation.active
+                  and host_reservation.thread==get_ident() and any(h is self for h in host_reservation.hosts))
         if reserved:
             if self._custody.pending is not None:
                 return _failure('execution_obligation', 'Connection operation already in flight')
@@ -335,7 +335,12 @@ class PsycopgHost:
                     if issued.outcome != 'issued':
                         raise ValueError('Semantic operation ordinal unavailable')
 
-                deadline = _Deadline(self.connection, self._deadline_ms)
+                milliseconds=self._deadline_ms
+                parent=getattr(host_reservation,'deadline',None) if reserved else None
+                if parent is not None:
+                    parent.check()
+                    milliseconds=min(milliseconds,max(1,int((parent.end-monotonic())*1000)))
+                deadline = _Deadline(self.connection, milliseconds)
                 cursor = _GuardedCursor(self._cursor(), deadline)
                 if parameter_producer is not None:
                     from psycopg.types.string import (StrBinaryDumper, StrDumperUnknown,

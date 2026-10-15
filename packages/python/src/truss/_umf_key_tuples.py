@@ -6,6 +6,8 @@ from importlib.resources import files
 import json
 import base64
 import shutil
+import subprocess
+from time import monotonic
 from .contracts import TextValue, BooleanValue
 from .preparation import _capture
 from ._owner_evidence_json import decode_owner_evidence_json
@@ -60,13 +62,13 @@ def _owner_key_value(value):
     raise ValueError('Exact UMF key carrier required')
 
 
-def encode_string_key_tuples(original_document: bytes,requests: tuple[KeyTupleRequest,...],*,bun_executable: str='bun') -> tuple[OriginalKeyTuple,...]:
+def encode_string_key_tuples(original_document: bytes,requests: tuple[KeyTupleRequest,...],*,bun_executable: str='bun',deadline=None) -> tuple[OriginalKeyTuple,...]:
     if type(requests) is not tuple or any(type(r) is not KeyTupleRequest or type(r.values) is not tuple or any(type(v) is not str for v in r.values) for r in requests):
         raise ValueError('Immutable string key requests required')
-    return encode_key_tuples(original_document,requests,bun_executable=bun_executable)
+    return encode_key_tuples(original_document,requests,bun_executable=bun_executable,deadline=deadline)
 
 
-def encode_key_tuples(original_document: bytes,requests: tuple[KeyTupleRequest,...],*,bun_executable: str='bun') -> tuple[OriginalKeyTuple,...]:
+def encode_key_tuples(original_document: bytes,requests: tuple[KeyTupleRequest,...],*,bun_executable: str='bun',deadline=None) -> tuple[OriginalKeyTuple,...]:
     if type(original_document) is not bytes or not 0<len(original_document)<=1048576:
         raise ValueError('Bounded original accepted document bytes required')
     source=decode_owner_evidence_json(original_document)
@@ -94,9 +96,18 @@ def encode_key_tuples(original_document: bytes,requests: tuple[KeyTupleRequest,.
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=digest:raise ValueError('Original key producer assets required')
     executable=shutil.which(bun_executable)
     if executable is None:raise ValueError('Selected Bun runtime unavailable')
-    version=_capture([executable,'--version'],limit=256,timeout=5)
+    def timeout(maximum):
+        if deadline is None:return maximum
+        deadline.check()
+        return min(maximum,max(0.001,deadline.end-monotonic()))
+    def capture(command,*,maximum,**kwargs):
+        try:return _capture(command,timeout=timeout(maximum),**kwargs)
+        except subprocess.TimeoutExpired:
+            if deadline is not None:deadline.check()
+            raise
+    version=capture([executable,'--version'],limit=256,maximum=5)
     if version.returncode or version.stdout.strip().decode()!=manifest['runtimeVersion']:raise ValueError('Selected Bun runtime required')
-    result=_capture([executable,str(root.joinpath('bridge.mjs'))],input_bytes=payload,limit=8388608,timeout=10)
+    result=capture([executable,str(root.joinpath('bridge.mjs'))],input_bytes=payload,limit=8388608,maximum=10)
     if result.returncode:raise ValueError('Original key producer unavailable')
     response=decode_owner_evidence_json(result.stdout)
     if type(response) is not dict or set(response)!= {'status','receiptTexts'} or response['status']!='encoded' or type(response['receiptTexts']) is not list or len(response['receiptTexts'])!=len(requests):

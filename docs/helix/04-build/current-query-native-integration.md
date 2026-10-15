@@ -344,3 +344,61 @@ catalog/Staff creation and the real ordinary-session Subject observation. It
 checks recaptured originals, the six-archive census and the helper's exact
 profile/digest. This is storage and Subject correspondence; the private native
 executor and guarded public query release remain unfinished.
+
+## First whole public query — 2026-10-15
+
+`CatalogReferenceAssembly.query_current_in_transaction` now composes the actual
+ordinary caller and a host-supplied `CurrentQueryExecutor`. Both distinct adopted
+hosts remain reserved through final result handoff. The private transaction must
+have no assigned XID at entry: it is dedicated to one query, with no unrelated
+uncommitted base writes. Caller writes conflicting with the required cuts refuse
+with NOWAIT. The host owns settlement; Truss never commits or closes a connection.
+
+The executor acquires source epoch/marker/catalog/archive cuts, then module-access
+and role cuts, then Subject-map/object/key cuts. The actual ordinary connection
+uses the installed Subject helper and `reader_catalog` definer facade. It must
+read the complete accepted source/prerequisite/declaration module union. Native
+backend, virtual transaction, database, actor, Subject object/version and original
+Key correspondence are checked against the private capture. Elevated executor
+visibility never substitutes for the ordinary caller's grant.
+
+Actual CQP native descriptors derive the original UMF operations and routes.
+Only explicit read denial removes rows; indeterminate/refused/conflicting
+results refuse the operation. Separate original-value actions must permit each
+read-eligible resource. Disclosed public cells and authorized canonical raw
+operands occupy separate per-use stage columns. Initial supported domains are
+present String and explicit signed64; native UTF8, scalar types, C collation,
+private relation ownership/ACL/columns and compiled parameter descriptors are
+checked. Stored-transformed/keyed comparisons refuse until genuine runtime
+provenance exists; a comparison-scope hash cannot establish that provenance.
+
+The same original CQP lowers the actual stage mapping. Truss executes its exact
+SQL and bound parameters on the private cursor and checks every output cell
+against the private contributor sideband and held disclosed values. It does not
+implement a second SQL evaluator. Stages are dropped, caller/source state is
+reobserved, the private host completes, and a final ordinary host operation must
+complete before `QueryRows` handoff. Either host's unresolved cleanup/disposal
+discards output. Inner failures retain their classification, and poisoned private
+cleanup takes precedence. Nested operations, Key producers and the child share
+the outer deadline; transport failure is not a semantic unsupported-query result.
+
+This selected local profile requires trusted administrative DDL quiescence.
+Its complete-table cuts provide the operation's held snapshot; it does not issue
+a reusable source-epoch credential or qualify hostile administrators, managed
+databases or other deployment profiles. The original static binding remains a
+fixture source identity; the actual physical mapping is created and checked for
+each private use.
+The worker needs local administrative authority including shared role-catalog
+locks. Caller scan limits charge only admitted original scan occurrences; public
+byte limits charge only public cells. Private facts and contribution carriers
+use separate fixed caps. Private keys have fixed-width random identities, and
+private census/carrier sizes do not affect a caller-selected budget.
+
+The basic public workflow uses two same-salary resources, only one policy-readable.
+It returns only `[private]` for exact predicate `9007199254740993`, returns no rows
+for neighboring `9007199254740992`, refuses prohibited salary ordering, and checks
+logical byte-limit refusal with stage cleanup. Custom caller/private search paths
+are restored. All-read-denied or empty populations still refuse when an effective
+domain cannot be established; nullable/structured output, ABI3 aggregates, vault
+scopes, managed deployment and published multi-platform consumer pairing remain
+required work. This checkpoint does not close the complete release goal.

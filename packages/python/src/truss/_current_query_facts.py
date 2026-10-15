@@ -166,7 +166,7 @@ def capture_current_query_facts_with_cursor(cursor, *, bun_executable='bun'):
         # Original UMF keeps its own per-call limits. No partial result escapes.
         for batch in _key_batches(document,pending):
             cursor._deadline.check()
-            encoded=encode_key_tuples(document,tuple(item[2] for item in batch),bun_executable=bun_executable)
+            encoded=encode_key_tuples(document,tuple(item[2] for item in batch),bun_executable=bun_executable,deadline=cursor._deadline)
             cursor._deadline.check()
             for (object_id,version,request,values,absent),original in zip(batch,encoded,strict=True):
                 transport=('umf-key-tuple-v1:hex:'+original.tuple_bytes.hex()).encode('ascii')

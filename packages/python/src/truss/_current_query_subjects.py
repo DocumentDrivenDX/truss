@@ -237,7 +237,7 @@ def observe_current_query_subject_in_transaction(host, transaction, registration
                 raise ValueError('Native-bound original Subject codec coordinates required')
             return rows[0]
         row = current()
-        key = encode_string_key_tuples(document,(KeyTupleRequest(*identity,(row[2],)),),bun_executable=bun_executable)[0]
+        key = encode_string_key_tuples(document,(KeyTupleRequest(*identity,(row[2],)),),bun_executable=bun_executable,deadline=cursor._deadline)[0]
         if current() != row:
             raise ValueError('Original Subject changed during Key encoding')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(prior[0][0],),prepare=False)

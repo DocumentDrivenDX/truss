@@ -16,7 +16,9 @@ import base64
 from uuid import uuid4
 from threading import RLock
 from functools import wraps
-from typing import Literal, overload, TypeVar, Mapping
+from typing import Literal, overload, TypeVar, Mapping, TYPE_CHECKING
+if TYPE_CHECKING:
+    from .current_query import CurrentQueryExecutor
 from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport)
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
     NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability, NativeCompiledExecutionCapability)
@@ -313,6 +315,21 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         return run_query(self._host,transaction,sql=sql,document_ids=document_ids,parameters={} if parameters is None else parameters,
             maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=read_profile)
+
+    @_active_operation
+    def query_current_in_transaction(self,transaction: TransactionHandle,*,executor: CurrentQueryExecutor,sql: str,
+                                     document_ids: tuple[str,...],parameters: Mapping[str,str|int] | None=None,
+                                     maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryRows | QueryRefused]:
+        """Current-policy query with a host-configured dedicated private executor."""
+        from .current_query import CurrentQueryExecutor
+        from ._current_query_runtime import run_current_query
+        if type(executor) is not CurrentQueryExecutor:
+            return Ok(QueryRefused('invalid_query'))
+        try:values={} if parameters is None else dict(parameters)
+        except (TypeError,ValueError,RuntimeError):return Ok(QueryRefused('invalid_query'))
+        return run_current_query(self._host,transaction,executor,sql=sql,document_ids=document_ids,
+            parameters=values,maximum_rows=maximum_rows,
+            maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)
 
     @_active_operation
     def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,

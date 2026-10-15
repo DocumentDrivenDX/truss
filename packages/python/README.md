@@ -64,6 +64,56 @@ This compiler support does not enable a protected bulk-action executor.
 
 ## Install the release
 
+The main checkout also contains an **unreleased current-policy query candidate**:
+`assembly.query_current_in_transaction(tx, executor=..., sql=...,
+document_ids=(...), parameters=...)`. It composes an ordinary caller's actual
+Subject and module access, original UMF policy evaluation, original Weft query
+preparation, private PostgreSQL staging and guarded `QueryRows` release.
+The [basic workflow](tests/test_current_query_runtime_native.py) creates data
+through the public API and queries an exact signed64 salary while returning its
+masked String value.
+
+The host supplies a separate privileged connection and a fresh transaction
+dedicated to one query. It also keeps administrative runtime DDL quiescent.
+Truss does not commit, roll back or close either connection. After the operation,
+the host should settle the private transaction to release its table/role cuts:
+
+```python
+from truss import CurrentQueryExecutor, adopt_psycopg_host
+
+worker_connection.execute("BEGIN")
+worker = adopt_psycopg_host(worker_connection, operation_timeout_ms=30000)
+worker_tx = worker.adopt_transaction().value
+try:
+    executor = CurrentQueryExecutor(worker, worker_tx, subject_registration)
+    result = assembly.query_current_in_transaction(
+        tx, executor=executor,
+        sql="SELECT r.salary FROM Resource r WHERE r.salary=:minimum",
+        document_ids=("domain",), parameters={"minimum": 9007199254740993},
+    )
+finally:
+    worker.detach()
+    worker_connection.rollback()
+```
+
+The original source/Subject registrations must already be committed. Their
+installers are exported as `register_current_query_sources_in_transaction` and
+`register_current_query_subjects_in_transaction`; installer authority is checked
+natively. These registrations do not themselves grant query permission.
+
+This first local PostgreSQL18.6/macOS ARM profile uses exact original candidate
+Weft ABI2 and UMF child pins. Published Weft0.4.32 lacks the needed CQP feature;
+matching published wheels are being prepared before a Truss release claim.
+It currently requires rootless, present String or explicit signed64 query
+domains and an observed eligible domain. All-read-denied/empty populations,
+nullable/structured outputs, aggregates and keyed/vault comparison scopes remain
+unfinished. Prohibited routes refuse; logical limits return `QueryRefused`
+with code `limits` after cleanup. Existing `query_in_transaction` retains its
+published module-access behavior.
+Caller scan limits count read-admitted source occurrences, and caller byte limits
+count public scalar carriers. Private fact capture and contributor metadata have
+separate fixed limits; denied facts do not consume a caller-selected budget.
+
 Use a fresh Python3.11+ environment on the declared Linuxx86_64/macOSarm64
 PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
