@@ -1,4 +1,5 @@
 import {PGlite} from '@electric-sql/pglite';
+import {captureDocument,prepareDocument,registerCatalog,readCatalog,type DocumentInput,type CatalogSnapshot,type Registration} from './catalog';
 
 const LAYOUT='c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294';
 const PROFILE='truss-browser-layout/0.1';
@@ -10,6 +11,8 @@ export interface StoreInfo {
 }
 export interface BrowserStore {
   info(owner:LocalOwner):StoreInfo;
+  registerDocument(owner:LocalOwner,input:DocumentInput):Promise<Registration>;
+  catalog(owner:LocalOwner):Promise<CatalogSnapshot|null>;
   close(owner:LocalOwner):Promise<void>;
 }
 export type StoreOpen={outcome:'available';store:BrowserStore;owner:LocalOwner}|{outcome:'unavailable';reason:'store_in_use'};
@@ -66,11 +69,28 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
       const owner=Object.freeze(Object.create(null)) as LocalOwner;
       let state:'open'|'closing'|'closed'|'fenced'='open';
       const check=(cap:LocalOwner)=>{if(cap!==owner||state!=='open')throw new Error('Current issued local owner required');};
+      let queue:Promise<void>=Promise.resolve();
+      const schedule=<T>(cap:LocalOwner,operation:()=>Promise<T>):Promise<T>=>{
+        check(cap);
+        const task=queue.then(()=>{if(state==='fenced'||state==='closed')throw Error('Store is fenced or closed');return operation();});
+        queue=task.then(()=>{},()=>{});return task;
+      };
       const store:BrowserStore=Object.freeze({
         info(cap:LocalOwner){check(cap);return info;},
+        registerDocument(cap:LocalOwner,input:DocumentInput){
+          check(cap);const captured=captureDocument(input);
+          return schedule(cap,async()=>{
+            const prepared=await prepareDocument(captured);
+            try{const result=await registerCatalog(actual,prepared);await actual.syncToFs();return result;}
+            catch(error){state='fenced';throw error;}
+          });
+        },
+        catalog(cap:LocalOwner){return schedule(cap,async()=>{
+          try{return await readCatalog(actual);}catch(error){state='fenced';throw error;}
+        });},
         async close(cap:LocalOwner){
           check(cap);state='closing';
-          try{await actual.syncToFs();await actual.close();release();await lockTask;state='closed';}
+          try{await queue;if((state as string)==='fenced')throw Error('Store is fenced');await actual.syncToFs();await actual.close();release();await lockTask;state='closed';}
           catch(error){state='fenced';throw error;}
         }
       });
