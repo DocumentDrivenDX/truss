@@ -1,6 +1,6 @@
 # truss project documentation
 
-Unreleased 0.0.31 / native 0.67 derives ordinary keys directly in PostgreSQL
+SDK 0.0.31 / native 0.67 derives ordinary keys directly in PostgreSQL
 from admitted UMF 0.7/0.8 catalogs. Stored tuple and namespace bytes remain
 unchanged; client encoders and per-key source receipts are removed. Registration
 still uses broader UMF Bun preparation. Weft is optional for queries. See the
