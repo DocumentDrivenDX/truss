@@ -277,3 +277,35 @@ these with the actual retained codec inputs before invoking UMF. Replacing a
 constructible registration's document or key selection therefore refuses without
 producing a receipt for another Key. Malformed codec inputs return a typed
 execution-obligation refusal before host work.
+
+## Complete scalar facts and original evaluation — 2026-10-15
+
+The private fact capture now reads the complete population of every ontology
+Record before any query filtering. Its first profile supports rootless singular
+JSON-home String, Boolean, Integer, Decimal and Binary fields. Timestamp fields,
+declared context and core-relationship graph sources refuse, including empty
+populations. Record-member associations use their actual captured records.
+Every object must have exactly one selected Key membership. Original UMF Key
+encoding must match both the complete native namespace and stored ASCII key
+transport; no guard rows are written by this read.
+
+Logical population, property, key-receipt and output limits refuse complete
+capture on overflow. They do not claim backend allocation or cumulative work
+accounting. Source/catalog and object/key table cuts remain held through host
+settlement. The output retains native object identities/versions and original
+Key receipts privately, preserving integer/decimal tokens and binary bytes.
+
+The Python wheel includes the unmodified UMF computation child and its notices
+from committed owner revision `579675bdad79c349b06e25979108f8ac1bb7f7e0`.
+The loader verifies the packaged owner assets and Bun1.4.2 before using the
+existing framed private pipe. No Truss policy evaluator is introduced.
+
+The basic PG18 workflow creates all business objects through the public API,
+captures six facts across five types, and evaluates them with the original child.
+It asserts `r1` permits, `r2` denies, and only the permitted salary is rendered as
+exact `integerToken: "9007199254740993"`. See
+[workflow evidence](evidence/current-query-facts-20261015/workflow.json).
+The test's owner realization and supplied cut are diagnostic inputs. Registered
+native owner/static Weft originals, authenticated executor handoff, complete
+source/role lifetime and guarded SQL/result release remain required before this
+becomes a public protected-query provider.

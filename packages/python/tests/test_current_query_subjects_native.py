@@ -64,6 +64,9 @@ class CurrentQuerySubjectsNativeTests(catalog.PublicCatalogRuntimeTests):
         c,h,a,t = self.consumer()
         observed = observe_current_query_subject_in_transaction(h,t,enrolled.value,bun_executable=bun)
         self.assertIsInstance(observed,Ok,str(h._custody.last_attempt.error))
+        self.current_subject_observation=observed.value
+        self.current_subject_registration=enrolled.value
+        self.current_source_documents=tuple(documents)
         self.assertEqual(observed.value.key,'alice')
         for changed in (replace(enrolled.value,identity=('m','Project','pk')),
                         replace(enrolled.value,original_document=enrolled.value.original_document+b' ')):

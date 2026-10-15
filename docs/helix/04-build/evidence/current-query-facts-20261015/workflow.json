@@ -1,0 +1,32 @@
+{
+  "scope": "Private native fact capture and original UMF supplied-cut evaluation; no protected query or native permission claim",
+  "database": "PostgreSQL 18.6 / pgserver-pg18 18.6.1",
+  "python": "3.12",
+  "driver": "psycopg 3.3.6",
+  "bun": "1.4.2",
+  "command": "PYTHONPATH=packages/python/src:packages/python/tests TRUSS_BUN_EXECUTABLE=/opt/homebrew/bin/bun python -m unittest test_current_query_facts_native -v",
+  "result": {
+    "tests": 2,
+    "status": "passed",
+    "seconds": 9.246,
+    "session": 93950
+  },
+  "workflow": [
+    "Public catalog acceptance and public object creation",
+    "Ordinary enrolled native-session Subject observation",
+    "Complete six-object/five-type fact capture and original UMF Key receipts",
+    "Original committed UMF child initialize / inspect-routes / evaluate",
+    "Resource r1 permit; r2 deny",
+    "Only permitted salary rendered as exact integerToken 9007199254740993",
+    "Pre-dispatch Key partition respects existing aggregate source and exact escaped-wire input limits"
+  ],
+  "ownerRevision": "579675bdad79c349b06e25979108f8ac1bb7f7e0",
+  "ownerManifest": "98eed644128b6f77d087293360e062fc06cce941dcb686e09c35632a5560f03d",
+  "files": {
+    "packages/python/src/truss/_current_query_facts.py": "0614b7f7ed712c3457b9644e27bff98124c9ff5d3a700298b28f787878d86de6",
+    "packages/python/src/truss/_current_query_computation.py": "e6a99e703e74463084c238094394ab5a000910fc63c4697262ed6b1ddc4d03de",
+    "packages/python/tests/test_current_query_facts_native.py": "7b1843eb5d4e613562f092f5c9094397739cfbfce95b2eb51bad1300012021d8",
+    "packages/python/tests/test_current_query_subjects_native.py": "9ecbe8be951c289c133c2c77dcf0fa007d04d69d196694caf9440e16b95a583b",
+    "packages/python/pyproject.toml": "a3d8880e910825bf29e4922fbfe1e0fddc06911833b890b279072f41ddf873ea"
+  }
+}
