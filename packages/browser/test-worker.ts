@@ -86,6 +86,10 @@ self.onmessage=event=>{
         if(current?.outcome!=='available')throw Error('Available store required');
         const method=event.data.command==='submit'?current.store.submit:current.store.recoverSubmit;
         self.postMessage(await method(current.owner,registeredAction,readGrant,event.data.input));
+      }else if(event.data.command==='claim'||event.data.command==='recoverClaim'){
+        if(current?.outcome!=='available')throw Error('Available store required');
+        const method=event.data.command==='claim'?current.store.claim:current.store.recoverClaim;
+        self.postMessage(await method(current.owner,registeredAction,readGrant,event.data.input));
       }else if(event.data.command==='reviewJob'){
         if(current?.outcome!=='available')throw Error('Available store required');
         self.postMessage(await current.store.reviewJob(current.owner,registeredAction,readGrant,event.data.job));

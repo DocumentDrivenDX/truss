@@ -140,7 +140,9 @@ than returning a truncated population. Objects, original UMF Key custody, guard
 generations, permanent key reservations, creation journal and original load
 outcome commit together. IDs/versions are exact text. Duplicate/reserved keys
 refuse the whole load. The caller retains the entire original input before RPC;
-identical retries/recovery return the original outcome. Missing recovery is
+identical acknowledged replay/recovery returns the original outcome. After
+any dispatched request with a lost or unknown response, use recoverLoad only;
+missing recovery never authorizes redispatch of loadObjects or a new key. Missing recovery is
 unresolved. Recovery failure never establishes rollback of the original load.
 
 The journal uses an explicit browser-only layout adjunct, recorded in
@@ -188,6 +190,28 @@ and original control outcome commit together; acknowledgement waits for flush.
 A confirmed control rollback requires a separately persisted noncommit result;
 uncertain result persistence is control-unknown and fences the store. Review
 returns retained manifest bytes and authorized state; metadata never executes
-work. This tranche exposes queued jobs and completed empty work only. Claim,
-execution, cancellation, feed and retention are still unfinished; no complete
+work. That submission checkpoint exposed queued jobs and completed empty work only;
+claims are now implemented below. Execution, cancellation, feed and retention
+are still unfinished; no complete
 local-bulk/1 support claim is made.
+
+Job claims are now persisted through `claim(owner, action, grant, {job, control})`
+and observed through `recoverClaim` with the same original input and fresh
+capabilities after reopen. Retain the exact pending input before dispatch.
+The result is `claimed` with batch ordinal, exact decimal fence and an actual
+PostgreSQL-observed 60-second lease. Claim, job state and original sampled result
+commit together before flush acknowledgement. Replaying the same control returns
+the original fence/deadline without renewal. A fresh control cannot replace an
+active claim, including an expired one; expiry alone establishes no termination
+or permission to execute. A persistent per-job lastFence counter survives claim
+removal and later batch advancement; exhaustion refuses rather than wrapping.
+
+Fresh admission checks full original job/seal/source correspondence and
+contiguous batch progress. Missing/foreign job and competing claim are semantic
+refusals; storage/custody uncertainty fences. Recovery missing is unresolved
+and cannot allocate a claim. Completed empty work returns idle without issuing
+a fence. A recovered claim is an original observation, not proof of current
+execution eligibility. The basic Chromium workflow verifies first claim,
+identical replay, competing claim refusal and identical reopen recovery.
+Execution/effect admission and original batch-custody reconciliation remain
+unfinished; no action mutation is enabled by this claim checkpoint.

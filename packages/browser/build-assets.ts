@@ -69,7 +69,7 @@ export async function buildBrowserAssets(directory:string){
     umfCoreProducer:{revision:'7c0f0c98beee2cc1a5a407992b5c53cc2616da8e',bundleSha256:sourceHashes['packages/python/src/truss/_umf_core08/producer.js']},
     umfActionsProducer:{revision:'40f011402bf8f0c9512225975b62a034f1da325c',producer:'sha256:633f8ad623cc150fd3f6e2c5fe5324a0a128393036aa34d9929bfadf1142c6e4',bundleSha256:assets['owners/umf-actions.js']!.sha256},
     weftProducer:{revision:weftProducer.revision,features:weftProducer.features,wasmSha256:assets['owners/weft/weft_wasm_bg.wasm']!.sha256},
-    scope:{lifecycle:true,coreCatalog:true,actionRegistration:true,selectionReadGrant:true,materialization:true,manifestSealing:true,sealRecovery:true,objectLoad:true,objectRead:true,loadRecovery:true,submission:true,submissionRecovery:true,jobReview:true,actionExecution:false,effects:true},
+    scope:{lifecycle:true,coreCatalog:true,actionRegistration:true,selectionReadGrant:true,materialization:true,manifestSealing:true,sealRecovery:true,objectLoad:true,objectRead:true,loadRecovery:true,submission:true,submissionRecovery:true,jobReview:true,claims:true,claimRecovery:true,actionExecution:false,effects:true},
     sourceHashes,assets:Object.fromEntries(Object.entries(assets).sort(([a],[b])=>a<b?-1:a>b?1:0))};
   const encoded=JSON.stringify(manifest,null,2)+'\n';await writeFile(join(directory,'manifest.json'),encoded);
   return {directory,manifestSha256:hash(encoded),providerSha256:assets['store.js']!.sha256};

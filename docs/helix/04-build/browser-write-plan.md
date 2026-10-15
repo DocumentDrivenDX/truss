@@ -74,3 +74,17 @@ noncommit confirmation, and unknown settlement fences. Recovery never executes.
 Actual basic Chromium verifies original replay/reopen recovery, same-job fresh
 control, distinct genuine seal equivalence and retained refusal recovery.
 Claim and execution remain the next implementation step.
+
+## Claim checkpoint
+
+Astra approved a separate claim/recoverClaim control tranche. Actual PostgreSQL
+clock supplies the retained 60-second lease; exact monotone lastFence persists
+per job independently of active claims. Current authorization binds operation
+and captured input before original control lookup. Replay never renews; expired
+running claim refuses fresh claims until later explicit custody reconciliation.
+Fresh admission verifies full retained source, contiguous progress and active
+claim correspondence. Active claim, running state and original sampled result
+are atomic. No business effects or claimed full local-bulk capability follow.
+The basic existing Chromium workflow covers claim/replay/competing refusal and
+reopen recovery, retaining physical creation-only state. Actual batch execution
+remains next.

@@ -1,0 +1,336 @@
+{
+  "scope": "Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback",
+  "assetPrefix": "/example/truss/",
+  "chromium": "153.0.8010.12",
+  "bundle": {
+    "manifestSha256": "cef94c0f606d945db3b41523df7763911233d256342f763e15d87847c1e92c30",
+    "providerSha256": "28355a32b0f5574bb462444c217fec194c54c03c6f7192e6c65644743034beff"
+  },
+  "first": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:58803",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "8f3f1aa1-b287-4ec0-94ea-8d0e9d134c35",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "3909f149-554c-4974-9aec-9f0191ab390f",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "forged": {
+    "outcome": "refused"
+  },
+  "second": {
+    "outcome": "unavailable",
+    "reason": "store_in_use"
+  },
+  "takeover": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:58803",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "8f3f1aa1-b287-4ec0-94ea-8d0e9d134c35",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "3909f149-554c-4974-9aec-9f0191ab390f",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "reopened": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:58803",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "8f3f1aa1-b287-4ec0-94ea-8d0e9d134c35",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "3909f149-554c-4974-9aec-9f0191ab390f",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "claim": {
+    "result": {
+      "status": "claimed",
+      "job": {
+        "namespace": "8f3f1aa1-b287-4ec0-94ea-8d0e9d134c35",
+        "id": "0967c997-106c-4017-9805-25f10636a286"
+      },
+      "batch": 0,
+      "fence": "1",
+      "leaseUntil": "2026-10-15T18:30:47.445000Z"
+    },
+    "replayedByteEqual": true,
+    "recoveredByteEqual": true,
+    "competingClaim": {
+      "status": "unsupported",
+      "code": "PAP_FENCE"
+    }
+  },
+  "submit": {
+    "result": {
+      "status": "submitted",
+      "state": {
+        "status": "queued",
+        "job": {
+          "namespace": "8f3f1aa1-b287-4ec0-94ea-8d0e9d134c35",
+          "id": "0967c997-106c-4017-9805-25f10636a286"
+        },
+        "manifestSha256": "f3a0651334de1690f1221a7e6491ca8b329d602e47b86194c21d111d87380317",
+        "nextBatch": 0,
+        "committedBatches": 0,
+        "unresolvedBatch": null,
+        "stop": null
+      }
+    },
+    "replayedByteEqual": true,
+    "recoveredByteEqual": true,
+    "sameJob": true,
+    "controlConflict": "conflict",
+    "secondGenuineSealSameJob": true,
+    "refusalReplayedByteEqual": true
+  },
+  "load": {
+    "outcome": "public_objects_loaded",
+    "loaded": {
+      "outcome": "loaded",
+      "request": {
+        "requestKey": "initial-products",
+        "attempt": "load-1"
+      },
+      "objects": [
+        {
+          "id": "1",
+          "typeId": "1",
+          "version": "1"
+        },
+        {
+          "id": "2",
+          "typeId": "1",
+          "version": "1"
+        },
+        {
+          "id": "3",
+          "typeId": "1",
+          "version": "1"
+        },
+        {
+          "id": "4",
+          "typeId": "1",
+          "version": "1"
+        }
+      ],
+      "journal": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    "replayedByteEqual": true,
+    "duplicate": "failure",
+    "read": [
+      {
+        "id": "1",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "bar"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Sample"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "baz"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Sample"
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "qux"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Sample"
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "typeId": "1",
+        "version": "1",
+        "fields": [
+          {
+            "module": "sales",
+            "field": "product-id",
+            "value": "spare"
+          },
+          {
+            "module": "sales",
+            "field": "product-name",
+            "value": "Untouched"
+          }
+        ]
+      }
+    ],
+    "recoveredByteEqual": true,
+    "physical": {
+      "objects": "4",
+      "keys": "4",
+      "reservations": "4",
+      "journal": "4",
+      "generation": "1",
+      "exact": true
+    }
+  },
+  "materialization": {
+    "count": 3,
+    "batches": [
+      {
+        "count": 2,
+        "ordinal": 0,
+        "start": 0
+      },
+      {
+        "count": 1,
+        "ordinal": 1,
+        "start": 2
+      }
+    ],
+    "planSha256": "c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587",
+    "manifestSha256": "f3a0651334de1690f1221a7e6491ca8b329d602e47b86194c21d111d87380317",
+    "keys": [
+      "bar",
+      "baz",
+      "qux"
+    ],
+    "forgedGrant": "refused"
+  },
+  "seal": {
+    "reference": {
+      "profile": "truss-browser-seal-reference/0.1",
+      "storeId": "8f3f1aa1-b287-4ec0-94ea-8d0e9d134c35",
+      "incarnation": "3909f149-554c-4974-9aec-9f0191ab390f",
+      "requestKey": "basic-seal",
+      "attempt": "attempt-1",
+      "manifestSha256": "f3a0651334de1690f1221a7e6491ca8b329d602e47b86194c21d111d87380317",
+      "planSha256": "c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587",
+      "modelSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27"
+    },
+    "receipt": {
+      "mediaType": "application/json",
+      "utf8": "{\"profile\":\"truss-browser-seal-receipt/0.1\",\"reference\":{\"profile\":\"truss-browser-seal-reference/0.1\",\"storeId\":\"8f3f1aa1-b287-4ec0-94ea-8d0e9d134c35\",\"incarnation\":\"3909f149-554c-4974-9aec-9f0191ab390f\",\"requestKey\":\"basic-seal\",\"attempt\":\"attempt-1\",\"manifestSha256\":\"f3a0651334de1690f1221a7e6491ca8b329d602e47b86194c21d111d87380317\",\"planSha256\":\"c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587\",\"modelSha256\":\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\"},\"inputSha256\":\"852fea80350171d5736c76b7bfd488d0bd2000f27d53f1418eee61f79accf113\",\"writerXid\":\"757\",\"manifestSha256\":\"f3a0651334de1690f1221a7e6491ca8b329d602e47b86194c21d111d87380317\"}",
+      "sha256": "efbf27459f501673adef623e3048b39edc45cd216dfa24fda2f73c76c4face98"
+    },
+    "replayedByteEqual": true,
+    "recoveredByteEqual": true,
+    "conflict": "conflict",
+    "missing": "unresolved"
+  },
+  "action": {
+    "registered": {
+      "outcome": "action_registered",
+      "modelSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+      "preparationSha256": "6f5e69462c327da970f07ca1f6253dbacc4db0badf1335b7d91e3f38eb67ad40",
+      "declaration": {
+        "profile": {
+          "id": "umf.actions.local-store-read",
+          "version": "1"
+        },
+        "target": {
+          "element": "products",
+          "key": "pk",
+          "module": "sales"
+        },
+        "fields": [
+          {
+            "module": "sales",
+            "element": "product-id"
+          },
+          {
+            "module": "sales",
+            "element": "product-name"
+          }
+        ],
+        "view": "complete-canonical-target-population",
+        "disposition": "original"
+      },
+      "opaque": true
+    },
+    "forged": {
+      "outcome": "refused"
+    },
+    "previousOpen": "previous_action_refused",
+    "reissued": "action_registered"
+  },
+  "catalog": {
+    "registration": "registered",
+    "retry": "unchanged",
+    "revision": "1",
+    "sourceSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+    "types": [
+      {
+        "typeId": "1",
+        "moduleId": "sales",
+        "recordId": "products",
+        "documentId": "product-local-action-demo",
+        "lineageHex": "74727573732d63616e6f6e6963616c2f302e312e300a74727573732d747970652d6c696e656167652f302e312e300a5b2270726f647563742d6c6f63616c2d616374696f6e2d64656d6f222c2273616c6573222c2270726f6475637473225d",
+        "lineageProfile": "truss-type-lineage/0.1.0"
+      }
+    ],
+    "properties": [
+      {
+        "name": "id",
+        "typeId": "1",
+        "fieldId": "product-id",
+        "moduleId": "sales",
+        "propertyId": "1"
+      },
+      {
+        "name": "name",
+        "typeId": "1",
+        "fieldId": "product-name",
+        "moduleId": "sales",
+        "propertyId": "2"
+      }
+    ],
+    "keys": [
+      {
+        "keyId": "pk",
+        "typeId": "1",
+        "primary": true,
+        "keyNumber": "1",
+        "propertyIds": [
+          "1"
+        ]
+      }
+    ],
+    "changeCount": 3
+  },
+  "actionExecution": false,
+  "selectionReadGrant": true,
+  "crashRecovery": false
+}
