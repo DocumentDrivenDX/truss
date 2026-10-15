@@ -10,6 +10,12 @@
         "typescript": "7.0.2",
       },
     },
+    "packages/browser": {
+      "name": "@documentdrivendx/truss-browser",
+      "dependencies": {
+        "@electric-sql/pglite": "0.5.10",
+      },
+    },
     "packages/pg-runtime": {
       "name": "@documentdrivendx/truss-pg-runtime",
       "version": "0.0.0-experimental.1",
@@ -41,6 +47,8 @@
     },
   },
   "packages": {
+    "@documentdrivendx/truss-browser": ["@documentdrivendx/truss-browser@workspace:packages/browser"],
+
     "@documentdrivendx/truss-pg-runtime": ["@documentdrivendx/truss-pg-runtime@workspace:packages/pg-runtime"],
 
     "@documentdrivendx/truss-postgresql": ["@documentdrivendx/truss-postgresql@workspace:packages/postgresql"],
@@ -52,6 +60,8 @@
     "@documentdrivendx/truss-weft-bun": ["@documentdrivendx/truss-weft-bun@workspace:packages/weft-bun"],
 
     "@documentdrivendx/truss-weft-pg-probe": ["@documentdrivendx/truss-weft-pg-probe@workspace:packages/weft-pg-probe"],
+
+    "@electric-sql/pglite": ["@electric-sql/pglite@0.5.10", "", {}, "sha512-tXc/25U3ulOkiRQuTFdwIv+JhBqtMdAF7Gvo6CfZZWtSB4+hgC4Wr2vwK5ngvvN5PJfAAEGIsfyCVy1JhCOBYw=="],
 
     "@types/node": ["@types/node@26.6.4", "", { "dependencies": { "undici-types": "~8.9.0" } }, "sha512-ldVPDCzj7fsaGZrLB0NuHuTvJcsNasysBAqMolr/cgxrLd1xbqxIr3XJiPnHHJUCxj5sNF1vnRj9aWnrVh5Jcg=="],
 
