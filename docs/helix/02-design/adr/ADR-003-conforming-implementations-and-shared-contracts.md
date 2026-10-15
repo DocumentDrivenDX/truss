@@ -142,7 +142,7 @@ the pinned owner producers; it does not invent a new key format.
 Ordinary group, predicate, lookup, import and key-backfill calls MUST NOT
 require client encoding, per-key full-document receipts, Bun or a new Weft
 key API. Weft remains an optional query dependency; its compatibility release accepts
-native 0.65/0.66 without adding a key encoder.
+native 0.65/0.66/0.67 without adding a key encoder.
 The preceding unreleased Rust-client proposal is superseded for Truss.
 Existing protected security observation producers retain their separately
 qualified original-UMF evidence contract; they are outside this ordinary
@@ -157,7 +157,7 @@ MUST NOT fill missing key components. Native decimal support remains the
 qualified precision18/scale2 or4 subset.
 
 Historical context/receipt bytes remain untouched. New contexts use explicit
-native-derivation profiles without fabricated owner receipts. Runtime0.66
+native-derivation profiles without fabricated owner receipts. Runtime0.67
 updates procedures and its release ledger; it does not rewrite stored keys.
 Registration still uses broader UMF Bun preparation. See
 [execution plan](../../04-build/key-encoding-performance.md).

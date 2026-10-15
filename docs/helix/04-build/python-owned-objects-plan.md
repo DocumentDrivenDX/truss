@@ -94,5 +94,40 @@ check are corrected. Matching Weft backend0.4.35 admits this runtime namespace;
 two ordinary recursive-container query workflows passed against its local wheel.
 
 This checkpoint does not activate owned inputs, cascade, ownership reads or
-historical context enforcement. SDK0.0.30 and Weft0.4.30 are unreleased development
-versions until the ownership tranche is complete.
+historical context enforcement. SDK0.0.30 and Weft0.4.30 were development versions at this checkpoint.
+Completed feature tranches ship independently under the owner release direction;
+the later native66 standalone-scalar candidate is described in
+[its release notes](releases/v0.0.30.md). Its matching compiler is pending.
+Owned-object functionality remains unfinished and is not implied by that release.
+
+## Next implementation realization — 2026-10-15
+
+Use an additional common graph-write serialization gate to keep the first owned
+provider practical: transaction-held `SHARE ROW EXCLUSIVE` locks on `object`, then
+`edge`, both `NOWAIT`. Place this level after catalog/configuration/policy and
+request exclusion, before key/root/object/edge guards. Every participating group,
+ordinary single-operation and import writer follows it. The existing replay probe retains
+request locks on a miss; acquiring the gate after that request level avoids an
+inversion. Pure receipt replay preserves its original results and rechecks current
+disclosure authority; it does not recheck live ownership or require the new
+writer realization.
+
+Privately discover the complete candidate owner/closure scope before acquiring
+its ordered policy guards and the gate. Reobserve the closure under the gate; a
+new earlier owner/guard requirement refuses before effects rather than acquiring
+that guard late. The gate stabilizes this revalidation; it does not replace
+complete affected-closure planning, authorization, ordered simulation or canonical
+key/row locking before graph effects. Bound the complete closure and all planned effects; overflow
+refuses the whole group. Do not enumerate unrelated graph data or turn a partial
+scope into a complete closure. This is a serialization choice, not a performance
+claim or a replacement for current authority checks.
+
+Apply an explicit ownership selection at its own operation. A child created under
+A and later moved to B retains both ordered states, results and version changes.
+Only final forest/root-edge consistency is deferred. Omitted ownership changes
+remain omitted; an equal explicit selection is that operation's no-op. Cascades
+use the graph at their operation: earlier removal of an independent incident edge
+may permit deletion, but a later removal cannot retroactively rescue it, nor can
+a later operation restore an already-deleted child by referring to its old alias.
+Astra Ultra reviewed these implementation constraints; they are not installed
+ownership support.

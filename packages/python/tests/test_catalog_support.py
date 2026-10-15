@@ -41,6 +41,20 @@ class CatalogSupportTests(unittest.TestCase):
         source['modules'][0]['elements'][0]['members']=[]
         self.assertEqual(evaluate_catalog_support(selected(source))['closedSourceInventory']['state'],'unavailable')
 
+    def test_declaration_only_scalar_inventory_is_explicit_and_unenforced(self):
+        from truss._catalog_support import _closed_source_inventory
+        source=json.loads(native_document('support').content)
+        source['modules'][0]['elements'][0]['members']=[]
+        original=selected(source)
+        evidence=json.loads(original.report_evidence_bytes)
+        args=(original,evidence['ownerObservations'],evidence['coreAssertionIdentities'])
+        self.assertEqual(_closed_source_inventory(*args)['state'],'unavailable')
+        inventory=_closed_source_inventory(*args,standalone_scalars=True)
+        self.assertEqual(inventory['state'],'inventoried')
+        self.assertTrue(inventory['assertionOccurrenceCoverageComplete'])
+        self.assertTrue(all(e['enforcement']=='none' for e in inventory['entries']))
+        self.assertFalse(inventory['acceptedReportQualified'])
+
     def test_closed_source_empty_record_and_shared_field_occurrences(self):
         source=json.loads(native_document('support').content)
         module=source['modules'][0]

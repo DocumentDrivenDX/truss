@@ -3,7 +3,7 @@ from hashlib import sha256
 from importlib.resources import files
 import json
 from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, prepare_core08_acceptance
-from ._catalog_source_reference import REFERENCE08_PROFILE,RECURSIVE08_PROFILE
+from ._catalog_source_reference import REFERENCE08_PROFILE,RECURSIVE08_PROFILE,DECLARATIVE08_PROFILE
 from ._catalog_support import DECIMAL207_PROFILE,RECURSIVE07_PROFILE
 from ._catalog_report_semantics import canonical_numeric_free
 
@@ -17,7 +17,9 @@ def _configuration(source_version, manifest=None):
         raise ValueError('Original preparation baseline required')
     configuration=json.loads(raw)
     configuration['layoutProfile']=manifest['layoutProfile']
-    configuration['supportProfile']=dict((RECURSIVE08_PROFILE if source_version=='0.8.0' else RECURSIVE07_PROFILE) if manifest['releaseId'] in ('truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate') else (REFERENCE08_PROFILE if source_version=='0.8.0' else DECIMAL207_PROFILE))
+    configuration['supportProfile']=dict((RECURSIVE08_PROFILE if source_version=='0.8.0' else RECURSIVE07_PROFILE) if manifest['releaseId'] in ('truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate') else (REFERENCE08_PROFILE if source_version=='0.8.0' else DECIMAL207_PROFILE))
+    if manifest['releaseId'] in ('truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate'):
+        configuration['supportProfile']=dict(DECLARATIVE08_PROFILE if source_version=='0.8.0' else RECURSIVE07_PROFILE)
     return configuration
 
 

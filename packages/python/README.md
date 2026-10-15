@@ -44,6 +44,19 @@ The [owned-object implementation plan](../../docs/helix/04-build/python-owned-ob
 covers ownership inputs, complete cascades, historical/replay authority and
 matching queries. Its UMF storage candidates are not callable ownership support.
 
+## Unreleased native66 candidate
+
+UMF0.8 support0.17 admits otherwise-supported standalone singular scalar Fields
+as declarations. Their original assertions remain in the accepted source/report;
+no stored property is allocated until a Field is a Record member. The supplied
+`CatalogDocument.document_revision` is preserved independently of its content
+SHA256. Unknown selected shapes and standalone containers refuse.
+
+The exact consumer model passes public accept/apply/readback and native binding
+export. Populated native65 upgrades preserve transitions and receipt replay.
+Matching Weft wheels remain pending, so native66 is not a published supported
+query pairing. See the [candidate notes](../../docs/helix/04-build/releases/v0.0.30.md).
+
 ## Install the release
 
 Use a fresh Python3.11+ environment on the declared Linuxx86_64/macOSarm64
@@ -58,7 +71,7 @@ python -m pip install --only-binary=:all: \
 ```
 
 Bun1.4.2 is still required for UMF preparation. Unreleased SDK 0.0.31 /
-native 0.66 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
+native 0.67 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
 catalogs. Create/update, imports, preconditions, backfills and lookups require no
 client encoder or per-key receipt. Existing stored key and namespace bytes are
 preserved. Weft remains optional through `query` (version 0.4.31); it is not a

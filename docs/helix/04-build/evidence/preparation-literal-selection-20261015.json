@@ -1,0 +1,61 @@
+{
+  "component": "truss.preparation-native-selection/0.1-candidate",
+  "date": "2026-10-15",
+  "authority": false,
+  "securityReady": false,
+  "productionActivated": false,
+  "runtime": {
+    "postgresql": "18.6",
+    "pgserver-pg18": "18.6.1",
+    "psycopg": "3.3.6"
+  },
+  "originalSources": {
+    "nativePermitCheckpoint": "2f1c0fef",
+    "weftMutationCompiler": "c0c6449481a87eed38d3f7a6ebebc1f4ab4beeb4",
+    "sourceCompiler": "98ee88f193f5d70ccf21bd78ef6c37fffddc5eab",
+    "claim": "a8f73415aef8052e2dedeb3bc644426824675d14"
+  },
+  "selectedProfile": {
+    "key": "one required scalar String",
+    "resultColumns": [
+      "identity:TEXT",
+      "version:TEXT",
+      "key0:TEXT"
+    ],
+    "parameters": "closed p1..pN String carriers, N<=64",
+    "sql": "original immutable lowering unchanged; no rewrite",
+    "deadline": "caller-owned PostgreSQL statement_timeout 1..60000ms"
+  },
+  "verification": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/src:/private/tmp/weft-mutation-wheel-installed /private/tmp/truss-clean-install-20261013/bin/python -m unittest discover -s packages/python/tests -p test_preparation_literal_selection_native.py -v",
+    "tests": 1,
+    "seconds": 9.831,
+    "result": "PASS",
+    "observed": [
+      "original untouched D source/mapping/authority cuts retained",
+      "original SCRAM D/C/E claim and actual producers",
+      "missing permit refuses before protected selection",
+      "native guarded mint and actual original selection return bar",
+      "four original population preflights complete before selector",
+      "unselected baz corruption in later D savepoint refuses before rows return",
+      "later corruption rollback preserves original cuts and result",
+      "C permit rollback refuses subsequent selection"
+    ],
+    "correctedBeforeFinalRun": [
+      "PL/pgSQL program_id/document variable collisions",
+      "inherited negative campaign had invalidated original D attempt; corrected positive uses original untouched cuts"
+    ]
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_security_bootstrap/preparation-literal-selection.sql": "41b4b9e58d6a083760ce4d5e11f35be1acff636563968627514e7f49f9c7f8bd",
+    "packages/python/src/truss/_security_bootstrap/preparation-bridge-inventory.sql": "6080a1b14d8527dfd391f57ecb41ced4f36578596c0291cda75a76adbca3a589",
+    "packages/python/tests/test_preparation_literal_selection_native.py": "e9be68d677dba1f3f8632e7f83241fa2c2eb2c12c20f243620fe7da17adc63e7"
+  },
+  "review": "Astra Ultra approved source conditional on corrected native pass; final exact sources passed",
+  "limits": [
+    "positional arity/types enforced natively; aliases checked from retained lowering, not independently inspected from SQL output",
+    "RETURN QUERY materializes internally; result byte bounds do not bound backend scratch/temp allocation",
+    "no prepared manifest, UMF key encoding, seal or finalizer",
+    "no public activation or ordinary grants; complete source/authority/advisory/writer/lifecycle closure remains required"
+  ]
+}

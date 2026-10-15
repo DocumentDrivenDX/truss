@@ -1,0 +1,38 @@
+{
+  "status": "refused",
+  "authority": false,
+  "securityReady": false,
+  "sourceSha256": "2216a7ad3093c90437db035fb337d21ac67589dee5eb148b0eb4d7fd1ff75059",
+  "scenariosSha256": "de7e5a72f59fde30b5d57704f9f1513bafbf0e77a8f9094ae566fbbd582ecc3f",
+  "coreExtraction": {
+    "pointer": "/closure/documents/0/document",
+    "serialization": "UTF-8 compact JSON; original object/list order and values retained; exact original envelope archived",
+    "logicalRevision": "named-query-core-r1",
+    "contentSha256": "acec104f93bd9f78ebe1b7872c04ae777827415c36d7c8532d1e9177aafd446a"
+  },
+  "runtime": "truss-catalog-runtime/0.65-candidate",
+  "runtimeSha256": "aada6da87a2ff1cf522f846d463ce1ae3d883bb88d435de6f9c8ca2d2263daa6",
+  "layout": {
+    "identity": "truss-layout",
+    "version": "1.0",
+    "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+  },
+  "scope": "Public catalog/mutation/readback and actual native layout only. No installed policy/ontology/protection, Subject mapping, token implementation or current-query authority.",
+  "stage": "accept_in_transaction",
+  "failure": {
+    "code": "invalid_transaction",
+    "message": "Original transaction/profile admission refused",
+    "retry_scope": "none",
+    "sql_state": null,
+    "catalog_code": "unsupported_profile"
+  },
+  "catalogHead": 0,
+  "acceptedDocumentCount": 0,
+  "artifacts": {
+    "original-source.json": "2216a7ad3093c90437db035fb337d21ac67589dee5eb148b0eb4d7fd1ff75059",
+    "original-read-scenarios.json": "de7e5a72f59fde30b5d57704f9f1513bafbf0e77a8f9094ae566fbbd582ecc3f",
+    "original-prepared-acceptance.json": "77b6eeb285ac4617e46293e5b52e92fa2d9c6955e12d39775d20fffa18897383",
+    "postgres.truss-runtime.lock": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original-core.json": "acec104f93bd9f78ebe1b7872c04ae777827415c36d7c8532d1e9177aafd446a"
+  }
+}

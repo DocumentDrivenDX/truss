@@ -59,11 +59,15 @@ jobs:
           path: dist
       - name: Install exact released compiler and verify its checksum
         run: |
-          python -m pip download --only-binary=:all: --no-deps --no-index --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.31 --dest /tmp/weft-wheels weft-sql==0.4.31
           python - <<'PYTHON'
-          import hashlib,pathlib,urllib.request
+          import hashlib,pathlib,subprocess,sys,tomllib,urllib.request
+          requirement=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['optional-dependencies']['query'][0]
+          assert requirement.startswith('weft-sql==')
+          version=requirement.removeprefix('weft-sql==')
+          assert version and all(part.isdecimal() for part in version.split('.'))
+          subprocess.run([sys.executable,'-m','pip','download','--only-binary=:all:','--no-deps','--no-index','--find-links',f'https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v{version}','--dest','/tmp/weft-wheels',requirement],check=True)
           root=pathlib.Path('/tmp/weft-wheels');wheels=list(root.glob('*.whl'));assert len(wheels)==1
-          text=urllib.request.urlopen('https://github.com/DocumentDrivenDX/weft/releases/download/v0.4.31/SHA256SUMS',timeout=30).read().decode()
+          text=urllib.request.urlopen(f'https://github.com/DocumentDrivenDX/weft/releases/download/v{version}/SHA256SUMS',timeout=30).read().decode()
           entries={line.split()[1]:line.split()[0] for line in text.splitlines()}
           assert hashlib.sha256(wheels[0].read_bytes()).hexdigest()==entries[wheels[0].name]
           PYTHON
@@ -74,9 +78,10 @@ jobs:
         run: |
           python - <<'PYTHON'
           import importlib.metadata,pathlib,tomllib,truss,weft
-          expected=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['version']
-          assert importlib.metadata.version('truss-toolkit')==expected
-          assert importlib.metadata.version('weft-sql')==weft.__version__=='0.4.31'
+          project=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']
+          assert importlib.metadata.version('truss-toolkit')==project['version']
+          expected_compiler=project['optional-dependencies']['query'][0].removeprefix('weft-sql==')
+          assert importlib.metadata.version('weft-sql')==weft.__version__==expected_compiler
           assert not pathlib.Path(truss.__file__).resolve().is_relative_to(pathlib.Path('packages/python/src').resolve())
           PYTHON
           python packages/python/examples/adopter_workflow.py "$RUNNER_TEMP/truss-release-demo" --bun bun
@@ -89,7 +94,7 @@ jobs:
         env:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_catalog_preparation_public test_commerce_source_native
+        run: python -m unittest test_catalog_preparation_public test_commerce_source_native test_catalog_declarative test_catalog_declarative_native
       - name: Run both installed decimal scale2 workflows
         env:
           TRUSS_BUN_EXECUTABLE: bun
@@ -138,6 +143,9 @@ jobs:
           mkdir -p "$RUNNER_TEMP/truss-native65"
           git archive a150b189206d785bf795fbcbcdcbcc53cfda2639 packages/python/src/truss | tar -x -C "$RUNNER_TEMP/truss-native65"
           TRUSS_DB_KEY_PREDECESSOR="$RUNNER_TEMP/truss-native65/packages/python/src" python -m unittest test_database_key_upgrade_native
+          mkdir -p "$RUNNER_TEMP/truss-native66"
+          git archive c656f35d packages/python/src/truss | tar -x -C "$RUNNER_TEMP/truss-native66"
+          TRUSS_DB_KEY_PREDECESSOR="$RUNNER_TEMP/truss-native66/packages/python/src" python -m unittest test_database_key_upgrade_native
       - name: Run installed bounded traversal and module-owner workflows
         env:
           PYTHONPATH: packages/python/tests
@@ -245,9 +253,10 @@ jobs:
           (root/'catalog-rebind-report-v0.4.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-rebind-report-v0.4.md').read_bytes())
           (root/'catalog-source-reference-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-source-reference-v0.1.md').read_bytes())
           manifest=pathlib.Path('packages/python/src/truss/_catalog_runtime/manifest.json');runtime=json.loads(manifest.read_bytes())
-          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v0.4.31','weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','bun':'1.4.2','nativePlatforms':['linux-x86_64','macos-arm64']}
-          profile=pathlib.Path('packages/python/src/truss/_profiles/fresh-catalog-support-recursive08.json')
-          pins.update(timestampComparisonProfile='umf-rfc3339-exact-instant/1.0.0',umfExactInstantCommit='cbb6fb87',umf08CatalogSupport={'identity':'truss-fresh-catalog-support','version':'0.16.0','sha256':hashlib.sha256(profile.read_bytes()).hexdigest()},umf08CatalogReportInterface='truss-catalog-registration-report/0.2',catalogSourceReferenceFormat='truss-catalog-source-reference/0.1',catalogRebindReportInterface='truss-catalog-registration-report/0.3',catalogRebindProfile='truss-native-catalog-rebind/0.4',catalogRebindSupportedProfiles=['truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4'])
+          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('weft-sql=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','bun':'1.4.2','nativePlatforms':['linux-x86_64','macos-arm64']}
+          profile=pathlib.Path('packages/python/src/truss/_profiles/fresh-catalog-support-declarative08.json')
+          policy=json.loads(profile.read_bytes())
+          pins.update(timestampComparisonProfile='umf-rfc3339-exact-instant/1.0.0',umfExactInstantCommit='cbb6fb87',umf08CatalogSupport={'identity':policy['identity'],'version':policy['version'],'sha256':hashlib.sha256(profile.read_bytes()).hexdigest()},umf08CatalogReportInterface='truss-catalog-registration-report/0.2',catalogSourceReferenceFormat='truss-catalog-source-reference/0.1',catalogRebindReportInterface='truss-catalog-registration-report/0.3',catalogRebindProfile='truss-native-catalog-rebind/0.4',catalogRebindSupportedProfiles=['truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4'])
           (root/'catalog-key-backfill-report-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md').read_bytes())
           pins.update(catalogKeyBackfillReportInterface='truss-catalog-registration-report/0.4',catalogKeyBackfillProfile='truss-catalog-key-backfill/0.2',catalogKeyBackfillSupportedProfiles=['truss-catalog-key-backfill/0.1','truss-catalog-key-backfill/0.2'])
           (root/'release-pins.json').write_text(json.dumps(pins,indent=2)+'\n')

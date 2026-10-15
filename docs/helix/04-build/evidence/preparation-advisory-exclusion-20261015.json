@@ -1,0 +1,67 @@
+{
+  "component": "truss.preparation-direct-advisory-exclusion/0.1-candidate",
+  "date": "2026-10-15",
+  "authority": false,
+  "securityReady": false,
+  "productionActivated": false,
+  "runtime": {
+    "postgresql": "18.6",
+    "pgserver-pg18": "18.6.1",
+    "psycopg": "3.3.6"
+  },
+  "verification": [
+    {
+      "test": "test_preparation_advisory_exclusion_native.py",
+      "tests": 2,
+      "seconds": 21.696,
+      "result": "PASS",
+      "observed": [
+        "eight exact two-int native acquisition overloads deny ordinary executor",
+        "excluded guarded native mint and D check still succeed",
+        "ordinary direct privilege false but SET-reachable role inherits EXECUTE from second role; C issuer refuses"
+      ]
+    },
+    {
+      "test": "test_preparation_literal_selection_native.py",
+      "tests": 1,
+      "seconds": 9.834,
+      "result": "PASS",
+      "observed": [
+        "original uninterrupted guarded selection/preflight/closing checks still pass after exclusion",
+        "real selected bar passed to existing original UMFCore key producer, original receipt version3.0.0",
+        "original key bytes 554d464b31010403626172"
+      ]
+    }
+  ],
+  "existingKeyProducer": {
+    "umfRevision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+    "coreKeySourcesUnchangedThrough": "98ee88f193f5d70ccf21bd78ef6c37fffddc5eab",
+    "checkedPaths": [
+      "src/model/key-tuple.ts",
+      "src/model/schema-literals.ts"
+    ],
+    "newCodec": false,
+    "manifestMaterializer": false
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_security_bootstrap/preparation-advisory-exclusion.sql": "5981a13fa594d40317ee2958bcb8aeaca73778ec82f8c363095464983ed84b7e",
+    "packages/python/src/truss/_security_bootstrap/preparation-literal-permit.sql": "ae6fb0af722d2f1d189c073597238d1026813b54bbc9c4ea786ea37cfb060706",
+    "packages/python/src/truss/_security_bootstrap/preparation-bridge-inventory.sql": "1b0a45fa10a296280a9576968f15b16c9a898ab4409ca4c2e49c225399d76ba0",
+    "packages/python/tests/test_preparation_literal_permit_native.py": "ec08020d24a384575206ac0530546a0e72728dc8356eaf627f100549492f5af4",
+    "packages/python/tests/test_preparation_advisory_exclusion_native.py": "8502e2d5d8c7b36d5e7b09ca977cb4d602ba15c52818cbfa0ee1f457756a63b7",
+    "packages/python/tests/test_preparation_literal_selection_native.py": "8970bfaab2a5f72b16e4f1f0d45ae2d562489d3edf5a79b4ecfee2d253107fac"
+  },
+  "review": "Astra Ultra reviewed plan and completed source; approved scoped checkpoint; no extra campaign requested",
+  "premises": [
+    "explicit private exclusion installation committed before fresh original SCRAM C/D open",
+    "fresh C checks are authoritative; D old RR census is not a fresh role-policy proof",
+    "successful original C stays parked; D retains cuts continuously"
+  ],
+  "remaining": [
+    "already-held legacy advisory locks are not removed by revocation",
+    "SECURITY DEFINER wrapper and extension dispatch routes",
+    "existing native runtime helper permissions need original source qualification",
+    "complete source/shared-writer/legacy/effect closure and protected public activation",
+    "actual owner preparation manifest/finalizer contract still pending"
+  ]
+}

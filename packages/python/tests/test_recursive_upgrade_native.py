@@ -21,7 +21,8 @@ class RecursiveUpgradeTests(unittest.TestCase):
                     upgraded=assembly.upgrade_in_transaction(tx)
                     self.assertIsInstance(upgraded,Ok,repr(upgraded)+' '+str(host._custody.last_attempt.error))
                     self.assertEqual(upgraded.value.previous_release_id,'truss-catalog-runtime/0.63-candidate')
-                    self.assertEqual(upgraded.value.release_id,'truss-catalog-runtime/0.64-candidate')
+                    from truss.catalog_runtime import _release
+                    self.assertEqual(upgraded.value.release_id,_release()[0]['releaseId'])
                     self.assertEqual(upgraded.value.outcome,'upgraded')
                     host.detach();admin.commit()
                 params=psycopg.conninfo.conninfo_to_dict(runtime.info.connection_uri);params['user']='consumer'

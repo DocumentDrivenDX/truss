@@ -4,9 +4,10 @@ type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation
 export const SOURCE_REFERENCE_FORMAT='truss-catalog-source-reference/0.1';
 const SUPPORT={identity:'truss-fresh-catalog-support',version:'0.14.0',sha256:'1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56'};
 const RECURSIVE_SUPPORT={"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"};
+const DECLARATIVE_SUPPORT={"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"};
 export function compactCatalogSources(prepared:Prepared):boolean{
  const pin=prepared.original.input.supportProfile;
- return [SUPPORT,RECURSIVE_SUPPORT].some(selected=>pin.identity===selected.identity&&pin.version===selected.version&&pin.sha256===selected.sha256);
+ return [SUPPORT,RECURSIVE_SUPPORT,DECLARATIVE_SUPPORT].some(selected=>pin.identity===selected.identity&&pin.version===selected.version&&pin.sha256===selected.sha256);
 }
 export function catalogSourceReference(prepared:Prepared,index:number,basis:'original'|'reversible_target'){
  const document=prepared.documents[index];if(!document)throw Error('Same-request source document required');

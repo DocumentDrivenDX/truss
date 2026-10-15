@@ -267,3 +267,164 @@ selection/finalization or hold-through-COMMIT. No ordinary grants, public
 assembly provider, new registry or native helper are introduced. The next
 integration remains the source-owned guard composition above; this diagnostic
 must never be accepted as its permit or authorization result.
+
+## Private selected-literal permit composition — 2026-10-15
+
+The source-owned component
+`packages/python/src/truss/_security_bootstrap/preparation-literal-permit.sql`
+composes the existing original anchor, a8f73415 independently committed claim,
+03a241d0 Subject correspondence and literal current checks with the existing
+private native advisory binding. All four new routines remain excluded-owner
+private, with PUBLIC execution revoked; there is no production installer or
+ordinary SDK grant:
+
+- `acquire_preparation_literal_permit_cut(int4,uuid) → void` runs on original D.
+  It acquires original source/head/mapping cuts before lock-only SHARE on
+  module access and the two native role catalogs. It evaluates no current
+  permission from D's old RR snapshot.
+- `require_preparation_literal_data_cut(int4) → void` verifies the actual held
+  relation modes over the selected source, bridge, mapping and authority homes.
+  Shared role catalogs use native shared-database lock identity. It never
+  acquires or repairs a missing cut.
+- `issue_preparation_literal_permit(int4,uuid) → void` runs inside original C.
+  It derives the committed original claim, requires D's held cuts, invokes the
+  actual original literal checks and private mint, then rechecks original
+  coordinator/claim/source/cut correspondence. No supplied success flag, actor,
+  SQL or transport token can mint a permit.
+- `require_preparation_literal_permit(int4,uuid) → void` runs inside original D.
+  It verifies held cuts **before** existing identity helpers that could otherwise
+  reacquire them. It verifies the original immutable anchor/program/source and
+  actual D full xid8 against original C's physical binding. It never reads E's
+  later claim through D's older snapshot. Original C must be idle in its
+  original transaction/incarnation before and after verification.
+
+Successful C statement completion and leaving that original connection idle
+until D settles are trusted engine sequencing requirements. After issuance,
+the engine must retain D's original cuts continuously; any rollback that could
+release them invalidates the whole attempt. Reacquiring the same lock modes
+cannot prove uninterrupted custody and cannot resume an admitted operation.
+The native lock census establishes present ownership, not lock history. Mint locks become
+visible before the C issuer's final checks finish; an active C is therefore
+insufficient. The native physical binding itself is not an authenticated
+issuance receipt. The source-owned protected selector and finalizer must call
+this check internally before any protected effect; neither is implemented by
+these routines. No ordinary caller receives this checker as a permission API.
+
+`test_preparation_literal_permit_native.py` exercises the original SCRAM D/C/E
+workflow with actual original producers. It covers successful mint/check,
+missing permit or D exclusions, duplicate mint, active C, same-PID later C
+transaction, rollback-lost policy/source cuts without implicit repair, removal
+of C's permit addresses, a blocked real membership revocation after C releases
+its permit and authority locks, and refusal of
+direct ordinary invocation. The selected original snapshot/full xid8 survives
+the rollback controls. Both focused PG18.6 workflows passed (2 tests,
+20.538 seconds); see [the compact component receipt](../../04-build/evidence/preparation-literal-permit-20261015.json).
+These are component workflows, not full guard qualification.
+
+Full original helper/DDL/shared-writer/legacy-serving/effect closure, exclusion
+of ordinary raw advisory mint routes, guarded operation deadlines, protected
+selection/finalization and dispatch/COMMIT acknowledgement remain required.
+Data-owned policy locks improve lifetime custody but do not discharge those
+other duties. This component does not activate the protected public profile or
+change the false authority/security-ready claims of earlier diagnostics.
+
+## Private internally guarded selection — 2026-10-15
+
+`packages/python/src/truss/_security_bootstrap/preparation-literal-selection.sql`
+adds `select_preparation_literal_rows(int4,uuid) → jsonb`. It derives the
+original immutable program from the anchor, invokes the native permit check
+before data access and again after buffering/validation, and returns no rows
+if the closing check fails. The original enrolled producer/source association
+remains c0c64494/98ee88f1; this is not a new compiler or renderer.
+
+This first native profile requires the original target's one required scalar
+String key and its exact three retained columns: identity, version and key0.
+The key Field is resolved from the original UMF target/key declaration. Exact
+`p1` through `pN` String carriers (`N ≤ 64`) become a one-dimensional native TEXT
+array; other carriers refuse. Private leaf routines execute the original `$n`
+SQL unchanged with fixed TEXT bindings. Their `RETURN QUERY` enforces native
+positional arity/types even for empty results. Original aliases/Field mapping
+are validated from the immutable lowering; these leaves do not independently
+inspect the SQL aliases. No ordinary caller receives the leaves or raw SQL.
+
+Before preflights, the original binding is compared with D's frozen active
+installation/release/hash, catalog revision and document revisions/digests.
+Every original whole-population preflight must produce exactly one non-null
+TEXT `0` before selection. Native IDs/versions stay positive int64 text and
+selection stays in ascending native identity order. Overflow refuses without
+trimming. Both the buffered row representation and complete returned JSONB text
+must fit the original byte bounds. The packet retains original columns and raw
+TEXT rows with `authority=false` and `securityReady=false`; it creates no UMF
+key encoding, prepared manifest or seal.
+
+PostgreSQL `RETURN QUERY` materializes its result internally. These byte checks
+bound the returned packet, **not** backend scratch allocation or temporary
+storage. The caller must supply a PostgreSQL statement timeout of 1–60000 ms;
+the component refuses an unbounded setting. Original engine operation-deadline
+integration remains separate unfinished work. No custom accounting is added.
+
+The basic native workflow in `test_preparation_literal_selection_native.py`
+uses the original SCRAM D/C/E and producer chain, refuses a missing permit,
+selects the seeded `bar` through actual enrolled Weft SQL, refuses a malformed
+unselected `baz` storage cell in the original D transaction, and refuses after
+C's permit is rolled back. Fixture-only dispatch/corruption helpers remain
+excluded from production. Broader parameter/key families, empty/overflow
+variants, complete authority/source/writer closure, protected finalization and
+commit publication remain unqualified. This private component introduces no
+ordinary SDK grant or protected public activation.
+
+The final corrected original-attempt workflow passed (1 test, 9.831 seconds).
+Astra Ultra approved the source conditional on this exact native pass; see
+[the component receipt](../../04-build/evidence/preparation-literal-selection-20261015.json)
+for original pins, source hashes, observations and corrected preliminary runs.
+
+## Private direct advisory acquisition exclusion — 2026-10-15
+
+`preparation-advisory-exclusion.sql` is an explicit privileged installation step
+for the private profile, before its original C/D connections are opened. It
+revokes PUBLIC EXECUTE on the eight exact two-int acquisition overloads:
+`pg_advisory_lock`, `pg_advisory_lock_shared`, `pg_try_advisory_lock`,
+`pg_try_advisory_lock_shared`, `pg_advisory_xact_lock`,
+`pg_advisory_xact_lock_shared`, `pg_try_advisory_xact_lock` and
+`pg_try_advisory_xact_lock_shared`. The one-bigint family uses a different native
+advisory namespace and cannot supply the expected two-int binding addresses.
+This SQL is not added to the ordinary public runtime installer and is not a
+managed-service installation claim.
+
+Private `require_preparation_advisory_exclusion() → void` derives the actual
+SESSION_USER OID, requires an ordinary login, and checks effective EXECUTE for
+that actor and every SET-reachable native role. A SET-reachable role's inherited
+privileges are included; checking only direct ACL grantees or the actor's
+inherited privileges would miss this route. Missing routines/privilege evidence
+refuse. The eight exact native procedures and this helper join the explicit
+bridge source/ACL inventory. Original C checks the exclusion under its fresh
+held role/source cuts before mint and again before return. D checks it during
+verification, but D's old RR catalog view is **not a new fresh role-policy
+proof**; original C remains the fresh authority observer.
+
+Revocation does not remove already-held advisory locks. The trusted engine
+must open original C/D only **after this installation commits** and retain the
+existing successful-issuer/parked-C/continuous-D-cut protocol. The native fixture
+performs that ordering before opening both original SCRAM connections. It does
+not qualify arbitrary legacy sessions. SECURITY DEFINER wrappers, extensions,
+other privileged dispatch paths and complete helper/writer closure remain
+separate obligations. Existing runtime helpers that use these builtins need
+their own original owner/dispatch qualification before production activation;
+this step does not grant them blanket execution.
+
+The focused native test `test_preparation_advisory_exclusion_native.py`
+observes denial of all eight direct ordinary calls while private guarded mint
+still works. A separate real role arrangement grants the actor SET without
+inheritance into a role that inherits EXECUTE from a second role: the actor's
+direct effective privilege is false, but the guarded issuer correctly refuses.
+No production grant, new registry or protected public activation is introduced.
+
+Astra Ultra approved the scoped plan and completed source. The two exclusion
+workflows passed in 21.696 seconds; guarded selection still passed in 9.834
+seconds and fed its actual selected `bar` key to the existing UMF Core3.0.0
+producer (`554d464b31010403626172`). No new key codec was introduced. The
+bundled producer revision is 7c0f0c98; its key-tuple/schema-literal source files
+are unchanged through the enrolled 98ee88f1 source revision. See
+[the exact component receipt](../../04-build/evidence/preparation-advisory-exclusion-20261015.json).
+Owner action-manifest materialization is still a distinct missing integration;
+these actual key receipts do not substitute for it.

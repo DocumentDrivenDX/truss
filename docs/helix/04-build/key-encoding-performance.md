@@ -28,13 +28,13 @@ within the admitted native subset: string, integer, boolean, binary, and decimal
 precision 18 with scale 2 or 4. Apply selected Field allowedValues using canonical
 scalar bytes; defaults never fill missing key components. Independent bundled
 UMF producers remain differential test oracles. Optional query compilation uses the minimal Weft 0.4.31 compatibility release
-(backend unchanged), accepting actual native 0.65/0.66 bindings. Registration's broader UMF
+(backend unchanged), accepting actual native 0.65/0.66/0.67 bindings. Registration's broader UMF
 preparation and the separate protected security observation retain their Bun
 requirements.
 
 ## Implementation
 
-SDK 0.0.31 / native 0.66 derives create/update, precondition, lookup, import and
+SDK 0.0.31 / native 0.67 derives create/update, precondition, lookup, import and
 catalog-backfill keys in PostgreSQL. Compatibility parameters accept empty or
 NULL client key payloads; supplied encoded tuples/receipts are rejected.
 New key contexts identify native derivation, while historical contexts and key
