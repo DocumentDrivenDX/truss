@@ -74,6 +74,28 @@ def _private_homes(cursor,owner):
     if cursor.fetchone()!=(False,):raise ValueError('Owner-only complete runtime relations and columns required')
 
 
+def _routine_attachments(cursor):
+    # EXECUTE revocation does not detach existing triggers/operators/casts.
+    # Only relation-owned attachments on the private native homes are admitted;
+    # this profile has no expected inter-routine catalog dependency exception.
+    cursor.execute(_HOMES+'''SELECT EXISTS(
+        SELECT 1 FROM pg_catalog.pg_trigger t JOIN pg_catalog.pg_proc p ON p.oid=t.tgfoid
+        JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss'
+            AND NOT EXISTS(SELECT 1 FROM homes h WHERE h.oid=t.tgrelid))
+        OR EXISTS(SELECT 1 FROM pg_catalog.pg_depend d JOIN pg_catalog.pg_proc p ON p.oid=d.refobjid
+            AND d.refclassid='pg_catalog.pg_proc'::pg_catalog.regclass
+            JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' AND NOT (
+                (d.classid='pg_catalog.pg_trigger'::pg_catalog.regclass AND EXISTS(
+                    SELECT 1 FROM pg_catalog.pg_trigger t JOIN homes h ON h.oid=t.tgrelid WHERE t.oid=d.objid))
+                OR (d.classid='pg_catalog.pg_attrdef'::pg_catalog.regclass AND EXISTS(
+                    SELECT 1 FROM pg_catalog.pg_attrdef a JOIN homes h ON h.oid=a.adrelid WHERE a.oid=d.objid))
+                OR (d.classid='pg_catalog.pg_constraint'::pg_catalog.regclass AND EXISTS(
+                    SELECT 1 FROM pg_catalog.pg_constraint c JOIN homes h ON h.oid=c.conrelid WHERE c.oid=d.objid))
+                OR (d.classid='pg_catalog.pg_rewrite'::pg_catalog.regclass AND EXISTS(
+                    SELECT 1 FROM pg_catalog.pg_rewrite r JOIN homes h ON h.oid=r.ev_class WHERE r.oid=d.objid))))''',prepare=False)
+    if cursor.fetchone()!=(False,):raise ValueError('External routine attachments require an explicit protection migration')
+
+
 def _allowed_oids(cursor,owner):
     allowed=[]
     for signature in (*_METADATA,_SUBJECT):
@@ -149,6 +171,7 @@ def verify_current_query_protection(cursor,sources,registration):
         AND (p.oid<>ALL(%s::oid[]) OR a.grantee=0)))))''',(owner,allowed),prepare=False)
     if cursor.fetchone()!=(False,):raise ValueError('Protected query requires closed ordinary routine grants')
     _private_homes(cursor,owner)
+    _routine_attachments(cursor)
     _ordinary_roles(cursor,registration,administrator)
 
 

@@ -90,7 +90,10 @@ this first profile. Other CONNECT-capable logins cannot have direct, inherited,
 or SET-reachable raw authority. Pre-existing external SECURITY DEFINER functions
 whose owners reach privileged/raw authority refuse activation even when private;
 this conservatively includes benign admin-owned extension functions. Externally
-accessible views or rewrite rules over Truss data also refuse. The activating
+accessible views or rewrite rules over Truss data also refuse. External triggers
+(including disabled ones), operators, casts and other catalog attachments to
+Truss routines refuse; only attachments on original private relation homes are
+admitted. The activating
 administrator must keep database/role DDL quiescent; this profile does not protect
 against that administrator or qualify arbitrary database extensions.
 
@@ -128,7 +131,9 @@ requires an explicit migration; the factory never upgrades retained pins.
 
 This first local PostgreSQL18.6/macOS ARM profile uses exact original candidate
 Weft ABI2 and UMF child pins. Published Weft0.4.32 lacks the needed CQP feature;
-matching published wheels are being prepared before a Truss release claim.
+The exact standard-feature Weft0.4.33 macOS ARM CI wheel is additionally
+qualified for this existing ABI2 flow. Published bytes and other platforms still
+need explicit qualification before a wider release claim.
 It currently requires rootless, present String or explicit signed64 query
 domains. Empty or all-read-denied populations return empty rows when genuine
 compiled operator routes establish one unambiguous original projection domain;

@@ -1,0 +1,64 @@
+{
+  "scope": "Exact Weft0.4.33 macOS ARM CI wheel with existing native ABI2 public policy-query flow; no published rebuild/other-platform/aggregate qualification",
+  "baseCommit": "123cd2ec6b02e6ad12785ade28972d61159a3d5a",
+  "consumer": {
+    "scope": "Exact installed standard wheel current-query source/conditional SQL APIs only; no database/native permission or security qualification",
+    "sourceCommit": "cc943a2f0ad87e3742cccdc171184bad7d4dbf60",
+    "version": "0.4.33",
+    "wheel": "weft_sql-0.4.33-cp39-abi3-macosx_11_0_arm64.whl",
+    "pinsBeforeAfter": {
+      "wheelSha256": "dfe0fa7f8286758c6e1f24e417e62e11f252dce9896ecf99800f5151b49c9fb3",
+      "nativeModuleSha256": "60b977a1c8b8a355b86be40375aab209ed894b172dbed972498721eab8bbddae",
+      "shimSha256": "cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d"
+    },
+    "python": "3.11.9 (v3.11.9:de54cf5be3, Apr  2 2024, 07:12:50) [Clang 13.0.0 (clang-1300.0.29.30)]",
+    "checks": [
+      {
+        "id": "original-source-custody-and-abi2-masked-read-raw-predicate",
+        "compiledSha256": "6d98d085ba0089bf867663917e93e289bfd7c72cdb00f259ca033a81676e21f0"
+      },
+      {
+        "id": "abi3-complete-count-bag",
+        "compiledSha256": "eccce4c031e4de9ee1fb1a081a9e438f4b6937f5be3757ead4a60c49cdd9e47d"
+      },
+      {
+        "id": "explicit-abi4-original-sum",
+        "compiledSha256": "ecfd1ac02fce24efadf64131764ea5598964825c7343340d3987e2a66a3a30c3"
+      },
+      {
+        "id": "no-context-downgrade",
+        "refused": true
+      }
+    ],
+    "nativeAdmission": false,
+    "securityReady": false
+  },
+  "nativeWorkflow": {
+    "command": "PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/weft-release033-ci-arm-installed TRUSS_BUN_EXECUTABLE=/opt/homebrew/bin/bun /private/tmp/truss-clean-install-20261013/bin/python -m unittest test_current_query_runtime_native -v",
+    "tests": 4,
+    "seconds": 32.326,
+    "session": 98923,
+    "status": "OK"
+  },
+  "checks": [
+    "Exact wheel and installed native module SHA matched CI owner receipt before test",
+    "Masked output with exact signed64 raw predicate and denied second resource",
+    "Empty and all-read-denied queries retain prohibited-route refusal",
+    "Legacy SQL/public data facades cannot bypass activated policy query",
+    "External private/public definer, transitive outsider view column grant and elevated outsider activation refused",
+    "Disabled external trigger attachment to internal Truss routine refuses activation",
+    "Configuration/feed and private bootstrap regrants refused"
+  ],
+  "sourceSha256": {
+    "packages/python/src/truss/_current_query_originals.py": "c5fc6af30a6b2195179e4bc8a1cda6d350a04cf51f4b3429184a251761f16071",
+    "packages/python/src/truss/_current_query_protection.py": "60ea36623f2030b42107ad1285e3c321c727443556c55ec3251be87a5e485eb8",
+    "packages/python/tests/test_current_query_runtime_native.py": "386377040c751549a0a3967e6811e3fdf8c5db559a8cc90b0c6634f783b34329"
+  },
+  "review": "Astra Ultra approved plans and completed finite implementation; four source-matching workflows passed. Original UMF/Bun pins and ABI2 retained; no automatic registration migration.",
+  "limitations": [
+    "Unreleased Truss current-policy query profile",
+    "Matching CI bytes only until published-byte verification",
+    "Initial activated interface remains read-only; protected mutation/import/direct read/history/feed remain unfinished",
+    "Trusted bootstrap quiescence and sole activating administrator boundary remain required"
+  ]
+}

@@ -470,3 +470,28 @@ population cases, direct calls to the former query/get/page/edge/history/feed
 facades using a cached pre-activation binding, public direct-read refusal, scoped
 catalog availability, and configuration/feed regrant refusal. No new compiler,
 policy semantics, instrumentation or custom database extension is introduced.
+
+
+## Routine attachments and matching CI wheel — 2026-10-15
+
+Activation and both guarded-query verification points now inspect every native
+catalog dependency on a Truss routine and every trigger attachment, including
+disabled triggers. Only exact private-home relation attachments (triggers,
+defaults, constraints and rewrite rules) are admitted. Unknown execution classes,
+external operators/casts/support objects and external trigger attachments refuse.
+This closes the route where a pre-existing trigger could call a now-private
+internal function without a firing-time EXECUTE check. The basic regression uses
+a disabled trigger on an ordinary-owned external table, invoking the original
+feed-configuration function; activation refuses before it can be enabled.
+
+The exact standard-feature Weft0.4.33 macOS ARM CI wheel from source
+`cc943a2f0ad87e3742cccdc171184bad7d4dbf60` is a separate explicitly pinned ABI2
+consumer cohort. Its wheel digest is
+`dfe0fa7f8286758c6e1f24e417e62e11f252dce9896ecf99800f5151b49c9fb3`;
+its native module digest is
+`60b977a1c8b8a355b86be40375aab209ed894b172dbed972498721eab8bbddae`.
+UMF source, bundle and manifest pins, Bun version and result ABI remain unchanged.
+Retained registrations still require exact complete consumer correspondence;
+knowing another cohort does not migrate an existing registration. The wheel's
+additional aggregate APIs do not enable aggregates in Truss. CI-byte evidence
+is not published-byte or other-platform qualification.
