@@ -50,3 +50,18 @@ private. The original standalone SCRAM claim test also passes. Inventory bytea r
 pinned to hex; comparison passes even when C uses escape output. The retained
 [receipt](evidence/preparation-bridge-inventory-20261015/receipt.json) records exact
 source hashes and native results. Astra Ultra reviewed the plan and implementation.
+
+## Selected native role-writer settlement
+
+The stock PostgreSQL18.6 `ALTER ROLE CONNECTION LIMIT`, membership `GRANT` and
+`REVOKE` routes retain conflicting catalog writer locks through transaction
+settlement. The [original source](https://github.com/postgres/postgres/blob/REL_18_6/src/backend/commands/user.c)
+uses `NoLock` when closing these catalogs; their behavior differs from the
+early-release routine-definition path. One basic native test observes the
+granted RowExclusive lock after each actual state-changing statement returns,
+then verifies fresh C SHARE-cut refusal while the writer remains uncommitted.
+It also verifies actual writer refusal while a fresh cut is held. Astra Ultra
+approved this selected source/runtime checkpoint; the
+[receipt](evidence/preparation-role-settlement-20261015.json) records its exact
+scope. This does not establish fresh permission evaluation, all shared-role or
+configuration writers, complete authority closure or production guard admission.

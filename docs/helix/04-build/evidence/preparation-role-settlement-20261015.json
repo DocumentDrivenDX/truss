@@ -1,0 +1,31 @@
+{
+  "profile": "selected PG18.6 role-writer catalog settlement",
+  "runtime": {
+    "postgresql": "18.6",
+    "pgserver-pg18": "18.6.1",
+    "psycopg": "3.3.6"
+  },
+  "nativeTest": {
+    "passed": 1,
+    "seconds": 4.411
+  },
+  "commands": [
+    "ALTER ROLE CONNECTION LIMIT",
+    "GRANT role membership",
+    "REVOKE role membership"
+  ],
+  "observations": {
+    "actualStateChange": true,
+    "writerRowExclusiveRetainedAfterStatement": true,
+    "pendingWriterRefusesFreshCut": "55P03",
+    "heldFreshCutRefusesWriter": "55P03"
+  },
+  "postgresqlSource": "https://github.com/postgres/postgres/blob/REL_18_6/src/backend/commands/user.c",
+  "sourceSha256": {
+    "packages/python/tests/test_preparation_role_settlement_native.py": "f8d51b8e752cf5ddf3cc80d6ccbafcd9b478079c6f6bcdea02443771d2e36bc2"
+  },
+  "authority": false,
+  "fullRoleClosure": false,
+  "productionAdmission": false,
+  "review": "Astra Ultra approved"
+}
