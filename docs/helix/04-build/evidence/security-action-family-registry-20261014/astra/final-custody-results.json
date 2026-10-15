@@ -1,0 +1,139 @@
+{
+  "status": "passed",
+  "count": 32,
+  "sourceSha256": {
+    "packages/python/src/truss/_action_store.py": "2872d47cd8e69e908f7dd36cf2f3fc4c2ba2dcab5d944f521d20dcc68c2b1f06",
+    "packages/python/src/truss/_action_role_installation.py": "7d4ec93222fc58c81280d02830c2bff62a48474cd499bb86785228c38bb6d9e8"
+  },
+  "checks": [
+    {
+      "name": "registration_key-bytearray-before-host",
+      "status": "passed"
+    },
+    {
+      "name": "registration_key-memoryview-before-host",
+      "status": "passed"
+    },
+    {
+      "name": "receipt_bytes-bytearray-before-host",
+      "status": "passed"
+    },
+    {
+      "name": "receipt_bytes-memoryview-before-host",
+      "status": "passed"
+    },
+    {
+      "name": "store_identity-bytearray-before-host",
+      "status": "passed"
+    },
+    {
+      "name": "store_identity-memoryview-before-host",
+      "status": "passed"
+    },
+    {
+      "name": "tenant_identity-bytearray-before-host",
+      "status": "passed"
+    },
+    {
+      "name": "tenant_identity-memoryview-before-host",
+      "status": "passed"
+    },
+    {
+      "name": "epoch_identity-bytearray-before-host",
+      "status": "passed"
+    },
+    {
+      "name": "epoch_identity-memoryview-before-host",
+      "status": "passed"
+    },
+    {
+      "name": "malformed-receipt-ab54e0e8",
+      "status": "passed"
+    },
+    {
+      "name": "malformed-receipt-a8100ae6",
+      "status": "passed"
+    },
+    {
+      "name": "malformed-receipt-021fb596",
+      "status": "passed"
+    },
+    {
+      "name": "malformed-receipt-44136fa3",
+      "status": "passed"
+    },
+    {
+      "name": "all-eight-original-slots-mutated-during-parse-private-copy-retained",
+      "status": "passed"
+    },
+    {
+      "name": "enrollment-comparator-valid",
+      "status": "passed"
+    },
+    {
+      "name": "enrollment-comparator-missing",
+      "status": "passed"
+    },
+    {
+      "name": "enrollment-comparator-duplicate",
+      "status": "passed"
+    },
+    {
+      "name": "enrollment-comparator-wrong-installation-input",
+      "status": "passed"
+    },
+    {
+      "name": "enrollment-comparator-changed-native-field-0",
+      "status": "passed"
+    },
+    {
+      "name": "enrollment-comparator-changed-native-field-1",
+      "status": "passed"
+    },
+    {
+      "name": "enrollment-comparator-changed-native-field-2",
+      "status": "passed"
+    },
+    {
+      "name": "enrollment-comparator-changed-native-field-3",
+      "status": "passed"
+    },
+    {
+      "name": "enrollment-comparator-changed-native-field-4",
+      "status": "passed"
+    },
+    {
+      "name": "enrollment-original-object-mutation-after-cut-entry-ignored",
+      "status": "passed"
+    },
+    {
+      "name": "native-enrollment-profile-field-0-refused-before-lock",
+      "status": "passed"
+    },
+    {
+      "name": "native-enrollment-profile-field-1-refused-before-lock",
+      "status": "passed"
+    },
+    {
+      "name": "native-enrollment-profile-field-2-refused-before-lock",
+      "status": "passed"
+    },
+    {
+      "name": "native-enrollment-profile-field-3-refused-before-lock",
+      "status": "passed"
+    },
+    {
+      "name": "original-owner-build-byte-equality:docs/helix/02-design/models/truss-action-role-registry-storage-0.1.proposal.umf.json",
+      "status": "passed"
+    },
+    {
+      "name": "original-owner-build-byte-equality:docs/helix/04-build/action-role-registry.generated.sql",
+      "status": "passed"
+    },
+    {
+      "name": "original-owner-build-byte-equality:packages/python/src/truss/_security_bootstrap/action-role-registry-storage.sql",
+      "status": "passed"
+    }
+  ],
+  "scope": "Actual Python immutable input preflight/capture and exact comparison over finite synthetic native rows, plus original owner export byte equality. Host/native authority guards are not executed or established by these controls."
+}

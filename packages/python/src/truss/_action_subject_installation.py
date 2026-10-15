@@ -15,7 +15,7 @@ from ._installation_privileges import installation_administrator_with_cursor
 from ._security_catalog_subject_installation import _text_rows
 
 _CUT_SHA256 = '5b070599774386b6c995b46e6d4154534e951acde27a5ae22604ff10cc7ded1d'
-_MAPPING_CUT_SHA256 = '888202b45d9af4526a2f732a402642a03742e22eb5d5d44ad6e05e45b1d22481'
+_MAPPING_CUT_SHA256 = 'fd1a0724ac93a977643b059f618d0a111b7e3320536d413c2dc8b6fefac8ba68'
 
 
 @dataclass(frozen=True, slots=True)
@@ -91,9 +91,10 @@ def bootstrap_action_subjects_in_transaction(host, transaction, *, bindings, wit
         if grants != expected:
             raise ValueError('Exact private Subject cut enrollment ACL required')
         if with_action_roles:
-            home = _text_rows(cursor, "SELECT c.relowner::text,c.relkind::text,c.relpersistence::text,c.relrowsecurity::text,c.relforcerowsecurity::text FROM pg_catalog.pg_class c WHERE c.oid=pg_catalog.to_regclass('truss.action_role_binding')", limit=1)
-            if home != [(owner,'r','p','false','false')]:
-                raise ValueError('Original private action role mapping home required')
+            for table in ('action_family_registration','action_role_binding'):
+                home = _text_rows(cursor, "SELECT c.relowner::text,c.relkind::text,c.relpersistence::text,c.relrowsecurity::text,c.relforcerowsecurity::text FROM pg_catalog.pg_class c WHERE c.oid=pg_catalog.to_regclass(%s)", ('truss.'+table,), 1)
+                if home != [(owner,'r','p','false','false')]:
+                    raise ValueError('Original private action declaration/mapping home required')
             source = files('truss').joinpath('_security_bootstrap','action-mapping-cut.sql').read_bytes()
             if sha256(source).hexdigest() != _MAPPING_CUT_SHA256:
                 raise ValueError('Original combined mapping cut source required')

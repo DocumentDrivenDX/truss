@@ -1,0 +1,71 @@
+{
+  "status": "review_complete_no_remaining_actionable_findings_within_stated_scope",
+  "reviewer": "Independent Astra Ultra review requested by user",
+  "reviewedAt": "2026-10-15T00:28:54.852000+00:00",
+  "repository": "/private/tmp/truss-security-main-integration",
+  "baseHead": "ac693499520ca05bfac30493ecb6472391b4e8a9",
+  "sourcePins": {
+    "file": "source-pins.json",
+    "sha256": "dee1ae0aca40ac697fa5f2483e53d83bcbbbecc859f80d80d5cc1797b4b898cd"
+  },
+  "fixedFindings": [
+    {
+      "issue": "Invalid current declaration/role rows could disappear behind INNER JOIN or validity WHERE filters.",
+      "resolution": "LEFT JOIN retains candidates; exact full-family row comparisons reject invalid, missing, duplicate or additional mappings.",
+      "evidence": "29 collector controls; source review; final native missing-role/extra-unresolved-role controls."
+    },
+    {
+      "issue": "Caller-owned mutable store fields could alias PendingActionRoles; validating before capture allowed slot substitution.",
+      "resolution": "All eight slots captured once; five exact immutable bounded byte carriers and exact labels validated only on private copy; malformed receipt exceptions normalized.",
+      "evidence": "Retained pre-fix actual-installer synthetic alias witness; final mutation/bytearray/memoryview/deep-receipt controls and supplied unit tests."
+    },
+    {
+      "issue": "Enrollment compared original store release to immutable genesis labels, allowing stale comparison after a current release overlay.",
+      "resolution": "Original runtime_current_installation() now supplies current release and digest.",
+      "evidence": "Source and native synthetic-ledger overlay countercontrol; explicitly not a genuine runtime upgrade test."
+    },
+    {
+      "issue": "pg_xact_status imposed undocumented recent-transaction lifetime on immutable stores.",
+      "resolution": "Visible distinct top-level issuer under exact native18.6/RC/read-write/no-SET-ROLE and original immutable issuance; actual same-issuer pending context refuses.",
+      "evidence": "Source/native test review; official PG18 documentation confirms aged-out pg_xact_status returns NULL.",
+      "source": "https://www.postgresql.org/docs/18/functions-info.html"
+    }
+  ],
+  "independentChecks": {
+    "collectorFiniteControls": 29,
+    "captureAndComparisonControls": 29,
+    "originalOwnerGeneratedArtifactByteComparisons": 3,
+    "suppliedUnitTests": 2,
+    "results": [
+      "collector-results.json",
+      "final-custody-results.json",
+      "context-unit-final.log",
+      "build.log"
+    ],
+    "nativeLifecycleRerun": false
+  },
+  "parentNativeEvidence": {
+    "file": "truss-action-family-native-r8.log",
+    "sha256": "2cf461d4ad2fddc9a7ed6643a6840b7bff785ced85833965eca5b211ee08b04d",
+    "tests": 6,
+    "unittestSeconds": 105.38,
+    "composition": "Four native component test methods plus two pure context methods. Parent run inspected, not reviewer-run.",
+    "sourceManifest": "truss-action-family-native-r8-source.json",
+    "manifestSha256": "a0fdc895519add1b85cce93448d5a53f16ffc870148532d83f8a1da253534b56",
+    "all16SourcePinsMatch": true
+  },
+  "sourceReview": [
+    "Complete exact artifact/ordered role retention, parent/store correspondence, byte equality rather than digest identity, and missing-role refusal before OR observation.",
+    "Store \u2192 declaration \u2192 Subject \u2192 role mapping \u2192 native role catalog lock ordering; existing RR visibility caveat retained.",
+    "4MiB retained-artifact/mapping ledger includes repeated store identity; original storage byte correspondence and module-specific added imports reviewed.",
+    "Exact source pins, hostile namespace restoration, owner-only homes/allocators and direct trusted quiescent enrollment premises retained."
+  ],
+  "limits": [
+    "Finite synthetic controls establish Python boundary behavior only, not SQL/native refinement or authentication.",
+    "No arbitrary administrative mutation, later migration, complete source/helper/ACL/role lifecycle closure, native guard/program/permit/seal or production caller grants qualified.",
+    "Retained payload and row bounds do not bound total native scan, libpq heap, parser allocation or all CPU.",
+    "Original owner/driver/admin/source code are trusted configuration premises. No original required backend case is promoted; all132 remain in scope.",
+    "Historical r1-r7 evidence is retained separately and does not qualify final-source r8 by inheritance.",
+    "Initial local final-custody harness ran while the native context gate was being added and failed its synthetic positive setup; final harness supplies that gate explicitly. This was a test-double mismatch, not native product evidence."
+  ]
+}

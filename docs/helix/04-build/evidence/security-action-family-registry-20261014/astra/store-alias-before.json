@@ -1,0 +1,10 @@
+{
+  "status": "reproduced",
+  "actualInstallerExecuted": true,
+  "scope": "Synthetic native query/host doubles exercise the actual captured installer control flow and returned object alias; not native issuer or SQL evidence.",
+  "storeFieldType": "bytearray",
+  "returnedIdentityAliasesInput": true,
+  "beforeHex": "6f726967696e616c2d73746f7265",
+  "afterHex": "6368616e6765642d61667465722d72657475726e",
+  "sourceSha256": "a757e1d0c6514d3b4110260d9488c3476c442e5542ca3108a6eae7cc21233598"
+}

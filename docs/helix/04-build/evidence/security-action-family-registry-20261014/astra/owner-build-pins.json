@@ -1,0 +1,15 @@
+{
+  "root": "/Users/erik/.codex/worktrees/0ede/umf",
+  "head": "13335dc7caa9b5e262194da8f11912eb3a203f53",
+  "clean": false,
+  "sourceHashes": {
+    "native/postgresql/runtime.ts": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751",
+    "src/adapters/postgresql/index.ts": "7baa071d95e5f9863a4ce2bf892d87fb27cab9d8605ba4cf8887016d14ca17b4",
+    "src/model/document.ts": "a0422042659defdea425dff8bb0618eaa4bbf125f68da16aa5ad21af0b6c282f",
+    "src/model/serialization.ts": "f7433286728e97c708f6eaa0850233d7de86547d14f7dc51c04829932a62b8c7",
+    "package.json": "e82680c3e3eacd083bf2555b1605a60ff4cd65dc59288256ad0bc1e8f811afc1",
+    "bun.lock": "35d4053486465fc2d59a5fb6b91084968ebf3a4b9697ec01a053be55aa03df04"
+  },
+  "parserVersion": "@libpg-query/parser@17.6.10",
+  "qualification": "Actual owner checkout replay, including working-tree sources; not a clean released-package or whole-toolchain provenance assertion."
+}

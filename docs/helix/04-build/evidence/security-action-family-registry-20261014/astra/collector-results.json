@@ -1,0 +1,124 @@
+{
+  "status": "passed",
+  "count": 29,
+  "sourceSha256": "ca1201e59dcd9be272a69cc9354d4f6ca7e0fc8d4b557dea8e1c0397423ac471",
+  "checks": [
+    {
+      "name": "second-only-role-OR",
+      "status": "passed"
+    },
+    {
+      "name": "neither-role",
+      "status": "passed"
+    },
+    {
+      "name": "both-roles",
+      "status": "passed"
+    },
+    {
+      "name": "first-only-role",
+      "status": "passed"
+    },
+    {
+      "name": "service-not-human",
+      "status": "passed"
+    },
+    {
+      "name": "missing-mapping-cut-0",
+      "status": "passed"
+    },
+    {
+      "name": "missing-mapping-cut-1",
+      "status": "passed"
+    },
+    {
+      "name": "missing-mapping-cut-2",
+      "status": "passed"
+    },
+    {
+      "name": "missing-declaration",
+      "status": "passed"
+    },
+    {
+      "name": "duplicate-declaration",
+      "status": "passed"
+    },
+    {
+      "name": "declaration-field-1",
+      "status": "passed"
+    },
+    {
+      "name": "declaration-field-2",
+      "status": "passed"
+    },
+    {
+      "name": "declaration-field-3",
+      "status": "passed"
+    },
+    {
+      "name": "declaration-field-4",
+      "status": "passed"
+    },
+    {
+      "name": "declaration-field-5",
+      "status": "passed"
+    },
+    {
+      "name": "declaration-field-6",
+      "status": "passed"
+    },
+    {
+      "name": "reordered-declared-roles",
+      "status": "passed"
+    },
+    {
+      "name": "missing-role-0",
+      "status": "passed"
+    },
+    {
+      "name": "missing-role-1",
+      "status": "passed"
+    },
+    {
+      "name": "duplicate-role",
+      "status": "passed"
+    },
+    {
+      "name": "extra-unresolved-role",
+      "status": "passed"
+    },
+    {
+      "name": "role-field-0",
+      "status": "passed"
+    },
+    {
+      "name": "role-field-1",
+      "status": "passed"
+    },
+    {
+      "name": "role-field-2",
+      "status": "passed"
+    },
+    {
+      "name": "role-field-3",
+      "status": "passed"
+    },
+    {
+      "name": "role-field-4",
+      "status": "passed"
+    },
+    {
+      "name": "missing-subject",
+      "status": "passed"
+    },
+    {
+      "name": "invalid-subject-kind",
+      "status": "passed"
+    },
+    {
+      "name": "late-peer-refusal",
+      "status": "passed"
+    }
+  ],
+  "scope": "Actual Python collector over finite synthetic native rows and native guard doubles. Establishes local complete-row comparisons and OR/Subject output behavior; not SQL/native/refinement or original owner authentication."
+}

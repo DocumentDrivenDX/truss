@@ -16,8 +16,13 @@ OID and an opaque external Subject identity, with an explicit human/service kind
 Truss verifies native connection custody and protected enrollment; it does not
 create accounts or infer authentication from supplied actor text.
 
-Use two installation-owned, persistent, private homes:
+Use three installation-owned, persistent, private homes:
 
+- `action_family_registration`: original model Artifact, original action pin,
+  owner preparation Artifact, ordered exact declared role identities and the
+  person-required declaration. It references the actual issued store control
+  and original installation. Native immutable declaration custody does not
+  enroll a Weft selection program or grant permission.
 - `action_subject_binding`: installation identity, native LOGIN role OID,
   external identity bytes and exact kind (`human` or `service`). One binding per
   installation/native role. Identity bytes are nonempty, bounded and compared
@@ -135,3 +140,39 @@ and its repair are retained. All observation outputs remain
 closure and protected selector/finalizer obligations remain open. Guard epochs
 remain separate from replay identity. No historical Astra approval is extended
 to this new integration and no backend acceptance case is promoted.
+
+
+## Native declaration and immutable comparison checkpoint — 2026-10-14
+
+The [declaration integration receipt](../../04-build/evidence/security-action-family-registry-20261014/receipt.json)
+qualifies an initial closed producer that consumes original registered tickets,
+retains their exact source/model/preparation bytes and role inventory, and binds
+each native role mapping to its declaration by foreign key. Original UMF native
+storage import/export owns the saved SQL representation. Complete semantic-key
+uniqueness remains the closed producer's responsibility; digest indexes route
+only, and no arbitrary administrative writer or migration is admitted.
+
+Current diagnostic observation reads every row for the selected full
+store/family before validating original installation, native role/profile,
+source pin and parent correspondence. Invalid rows cannot disappear through a
+filtering join. Missing or extra/unresolved role mappings refuse even if another
+declared role matches. The data-owned mapping cut acquires the issued store,
+then immutable declaration, then Subject and role mappings; metadata/source
+admission still precedes this prefix under the full bridge design.
+
+Exact immutable store fields are captured before host entry; a frozen dataclass
+containing a bytearray is not an immutable comparison. Mutable/nonexact fields,
+changed receipt components, missing keys and excessive parser nesting refuse.
+The initial enrollment comparator uses the original current runtime view rather
+than immutable genesis release labels. Its RC visibility check excludes the
+issuing transaction; it does not depend on retained historical CLOG status for
+a long-lived store. These facts remain comparison custody, not credentials.
+
+The native release-row mutation is an isolated synthetic overlay control, not
+a genuine runtime-upgrade qualification. The exact owner port, trusted
+administrative quiescence, immutable/helper/DDL/default-ACL custody and native
+source profile remain premises. The 4MiB enrollment payload ledger charges the
+retained declaration artifacts and mapping rows; it is not a total heap/CPU
+bound. The observer remains private and `security_ready=false`; original
+SCRAM/human invocation, registered selection source, guarded permits, finalizer
+and protected release remain open. No backend or owner bulk criterion is promoted.

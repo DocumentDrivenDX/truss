@@ -10,7 +10,7 @@ from truss import Ok, Error, adopt_psycopg_host
 from truss.bulk_action_gateway import ActionRegistration
 from truss._preparation_source_epoch import bootstrap_preparation_source_marker_in_transaction, issue_initial_preparation_source_epoch_in_transaction
 from truss._security_source_epoch_installation import bootstrap_source_epoch_infrastructure_in_transaction
-from truss._action_store import register_action_store_in_transaction, observe_action_store_in_transaction, verify_action_store_context_with_cursor
+from truss._action_store import ActionStoreObservation, register_action_store_in_transaction, observe_action_store_in_transaction, verify_action_store_context_with_cursor, verify_action_store_enrollment_context_with_cursor
 from truss._action_role_installation import bootstrap_action_roles_in_transaction
 from truss._action_subject_installation import bootstrap_action_subjects_in_transaction
 from truss._security_preparation_authority import capture_preparation_data_with_cursor
@@ -33,12 +33,41 @@ class ActionRoleInstallationNativeTests(base.PublicCreateGroupTests):
         infrastructure = checked(bootstrap_source_epoch_infrastructure_in_transaction(host,tx,installation_identity=marker.installation_id.encode()))
         checked(issue_initial_preparation_source_epoch_in_transaction(host,tx,marker=marker,infrastructure=infrastructure))
         pending = checked(register_action_store_in_transaction(host,tx,tenant='action-role-native',registration_key=b'original-role-store',executor_roles=('consumer',)))
+        raw=json.loads(pending.receipt_bytes)
+        uncommitted=ActionStoreObservation(pending.registration_key,pending.receipt_bytes,
+            bytes.fromhex(raw['storeIdentityHex']),bytes.fromhex(raw['tenantIdentityHex']),
+            bytes.fromhex(raw['epochIdentityHex']),raw['installationId'],'matches')
+        with self.admin.cursor() as cursor:
+            with self.assertRaisesRegex(ValueError,'Original committed issued store enrollment required'):
+                verify_action_store_enrollment_context_with_cursor(cursor,uncommitted,uncommitted.installation_id)
         host.detach(); self.admin.commit()
         self.admin.execute('BEGIN')
         host = adopt_psycopg_host(self.admin); tx = host.adopt_transaction().value
         store = checked(observe_action_store_in_transaction(host,tx,registration_key=b'original-role-store'))
         self.assertFalse(store.authority)
         host.detach(); self.admin.commit()
+        # Isolated native ledger control, not a genuine runtime upgrade:
+        # immutable genesis remains unchanged while the original current-view
+        # function overlays a different release. Historical store comparison
+        # must follow that function rather than accept the genesis label.
+        original_release = self.admin.execute('SELECT release_id,release_sha256,layout_profile FROM truss.runtime_current_installation()').fetchone()
+        self.admin.execute('BEGIN')
+        with self.admin.cursor() as cursor:
+            verify_action_store_enrollment_context_with_cursor(cursor,store,store.installation_id)
+        self.admin.execute("""INSERT INTO truss.runtime_release(previous_release_id,previous_release_sha256,
+            release_id,release_sha256,manifest_bytes,actor_oid)
+            VALUES(%s,%s,'fixture-synthetic-current-release',%s,%s,(SELECT oid FROM pg_catalog.pg_roles WHERE rolname=session_user))""",
+            (original_release[0],original_release[1],'0'*64,json.dumps({'layoutProfile':original_release[2]}).encode()))
+        self.assertEqual(self.admin.execute('SELECT release_id FROM truss.catalog_runtime_installation WHERE singleton').fetchone(),(original_release[0],))
+        self.assertEqual(self.admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone(),('fixture-synthetic-current-release',))
+        weakened = self.admin.execute("""SELECT EXISTS(SELECT 1 FROM truss.action_store_registration s
+            JOIN truss.catalog_runtime_installation i ON i.installation_id=s.installation_id AND i.singleton
+            WHERE s.runtime_release_id=i.release_id AND s.runtime_release_sha256=decode(i.release_sha256,'hex'))""").fetchone()[0]
+        self.assertTrue(weakened)
+        with self.admin.cursor() as cursor:
+            with self.assertRaisesRegex(ValueError,'Original committed issued store enrollment required'):
+                verify_action_store_enrollment_context_with_cursor(cursor,store,store.installation_id)
+        self.admin.execute('ROLLBACK')
         fixture = json.loads(Path('/Users/erik/Projects/weft/tests/mutation/fixtures/postgres-owner-plan.json').read_text())
         request = fixture['request']
         # Original owner admits a two-role OR variant; only the second role
@@ -66,7 +95,9 @@ class ActionRoleInstallationNativeTests(base.PublicCreateGroupTests):
         # not identify an original committed current store.
         self.admin.execute('BEGIN')
         host = adopt_psycopg_host(self.admin); tx = host.adopt_transaction().value
-        for invalid_store in (b'original-store-config',pending,replace(store,binding_correspondence='fenced')):
+        mutable = tuple(replace(store,**{name:bytearray(getattr(store,name))}) for name in
+                        ('registration_key','receipt_bytes','store_identity','tenant_identity','epoch_identity'))
+        for invalid_store in (b'original-store-config',pending,replace(store,binding_correspondence='fenced'),*mutable):
             refused = bootstrap_action_roles_in_transaction(host,tx,registration=registry,
                 entries=((ticket,(('bulk-editor','group_reader'),('reviewer','action_reviewer'))),),store_context=invalid_store)
             self.assertIsInstance(refused,Error)
@@ -95,24 +126,33 @@ class ActionRoleInstallationNativeTests(base.PublicCreateGroupTests):
         installed = bootstrap_action_roles_in_transaction(host,tx,registration=registry,entries=((ticket,(('bulk-editor','group_reader'),('reviewer','action_reviewer'))),),store_context=store)
         self.assertIsInstance(installed, Ok, str(host._custody.last_attempt.error))
         self.assertFalse(installed.value.security_ready)
+        self.assertIs(type(installed.value.store_identity),bytes)
         self.assertEqual(installed.value.store_identity,store.store_identity)
         subject = bootstrap_action_subjects_in_transaction(host,tx,bindings=(('consumer',b'original-human','human'),),with_action_roles=True)
         self.assertIsInstance(subject, Ok, str(host._custody.last_attempt.error))
         self.assertTrue(subject.value.mapping_cut)
         host.detach(); self.admin.commit()
+        originals = self.admin.execute('SELECT original_model_artifact,original_action_pin,original_preparation_artifact,declared_roles,person_required FROM truss.action_family_registration').fetchall()
+        held_original = registry.original(ticket)
+        self.assertEqual(originals,[(held_original.model,held_original.action_pin,held_original.preparation,[b'"bulk-editor"',b'"reviewer"'],True)])
+        for query in ('UPDATE truss.action_family_registration SET original_action_pin=original_action_pin',
+                      'DELETE FROM truss.action_family_registration','TRUNCATE truss.action_family_registration CASCADE'):
+            with self.assertRaises(psycopg.Error):self.admin.execute(query)
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.action_family_registration').fetchone(),(1,))
         rows = self.admin.execute('SELECT family_identity,role_identity,r.rolname FROM truss.action_role_binding b JOIN pg_catalog.pg_roles r ON r.oid=b.native_role_oid ORDER BY role_identity').fetchall()
         self.assertEqual(rows,[(b'["sales","set-active"]',b'"bulk-editor"','group_reader'),(b'["sales","set-active"]',b'"reviewer"','action_reviewer')])
-        for query in ('SELECT * FROM truss.action_role_binding','DELETE FROM truss.action_role_binding',"SELECT nextval('truss.action_role_binding_binding_id_seq')"):
+        for query in ('SELECT * FROM truss.action_family_registration','DELETE FROM truss.action_family_registration',"SELECT nextval('truss.action_family_registration_family_registration_id_seq')",'SELECT * FROM truss.action_role_binding','DELETE FROM truss.action_role_binding',"SELECT nextval('truss.action_role_binding_binding_id_seq')"):
             with self.assertRaises(psycopg.errors.InsufficientPrivilege):
                 data.execute(query)
         data.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
         with data.cursor() as cursor:
             original = capture_preparation_data_with_cursor(cursor)
-        def observe():
+        def observe(mutation=None):
             self.admin.execute('BEGIN')
             with self.admin.cursor() as cursor:
                 verify_action_store_context_with_cursor(cursor,store)
-            self.admin.execute('LOCK TABLE ONLY truss.action_subject_binding,truss.action_role_binding IN SHARE MODE NOWAIT')
+            if mutation is not None:self.admin.execute(mutation)
+            self.admin.execute('LOCK TABLE ONLY truss.action_family_registration,truss.action_subject_binding,truss.action_role_binding IN SHARE MODE NOWAIT')
             self.admin.execute('LOCK TABLE pg_catalog.pg_authid,pg_catalog.pg_auth_members IN SHARE MODE NOWAIT')
             with self.admin.cursor() as cursor:
                 return observe_current_action_authority_with_cursor(cursor,original=original,
@@ -166,4 +206,28 @@ class ActionRoleInstallationNativeTests(base.PublicCreateGroupTests):
         writer.execute('UPDATE truss.action_role_binding SET native_role_oid=native_role_oid')
         with self.assertRaises(psycopg.errors.SerializationFailure):
             data.execute('SELECT truss.acquire_action_mapping_cut()')
+        data.execute('ROLLBACK')
+        # Independent weakened native control: an incomplete map cannot be
+        # accepted merely because the remaining declared role still matches.
+        data.execute('BEGIN ISOLATION LEVEL REPEATABLE READ')
+        with data.cursor() as cursor:
+            original = capture_preparation_data_with_cursor(cursor)
+        self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE')
+        with self.assertRaisesRegex(ValueError,'Complete exact original current role mapping required'):
+            observe("DELETE FROM truss.action_role_binding WHERE role_identity=convert_to('\"reviewer\"','UTF8')")
+        self.admin.execute('ROLLBACK')
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.action_role_binding').fetchone(),(2,))
+        # An unresolved extra target must not disappear behind an inner join
+        # while the complete valid role map remains present.
+        extra = """INSERT INTO truss.action_role_binding(family_registration_id,installation_id,
+            store_identity,family_identity,role_identity,native_role_oid,original_action_pin,profile_id,profile_version)
+            SELECT family_registration_id,installation_id,store_identity,family_identity,
+            convert_to('"future-role"','UTF8'),0::oid,original_action_pin,profile_id,profile_version
+            FROM truss.action_role_binding ORDER BY binding_id LIMIT 1"""
+        with self.assertRaisesRegex(ValueError,'Complete exact original current role mapping required'):
+            observe(extra)
+        self.admin.execute('ROLLBACK')
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.action_role_binding').fetchone(),(2,))
+        self.assertTrue(observe().role_match)
+        self.admin.execute('COMMIT')
         data.execute('ROLLBACK')

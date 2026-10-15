@@ -1,0 +1,48 @@
+{
+  "classes": [
+    "test_action_store_context.ActionStoreContextTests",
+    "test_action_role_installation_native.ActionRoleInstallationNativeTests",
+    "test_action_subject_installation_native.ActionSubjectInstallationNativeTests",
+    "test_action_store_native.ActionStoreNativeTests",
+    "test_preparation_attempt_anchor_native.PreparationAttemptAnchorNativeTests"
+  ],
+  "exitCode": 0,
+  "seconds": 50.569,
+  "sourceHashes": {
+    "packages/python/src/truss/_action_store.py": "292014733039020ede3585370f8d8b7c55ac2e790dcbc33eae3a755492da9843",
+    "packages/python/src/truss/_action_role_installation.py": "7d4ec93222fc58c81280d02830c2bff62a48474cd499bb86785228c38bb6d9e8",
+    "packages/python/src/truss/_action_authority_observation.py": "ca1201e59dcd9be272a69cc9354d4f6ca7e0fc8d4b557dea8e1c0397423ac471",
+    "packages/python/src/truss/_action_subject_installation.py": "140ad9c52bab1ad6168a592f1f589ea1e71ad3f12ca3aa62c42b3becd9628573",
+    "packages/python/src/truss/_security_bootstrap/action-role-registry-storage.sql": "e4b8502c3ca7f6515f9b0491e4d2fc8ff9bbca18c96b4b66e6b86bf5ceaa6bb2",
+    "packages/python/src/truss/_security_bootstrap/action-mapping-cut.sql": "fd1a0724ac93a977643b059f618d0a111b7e3320536d413c2dc8b6fefac8ba68",
+    "packages/python/tests/test_action_role_installation_native.py": "814217d5f2fec8369c69140960c3f859dd3cb77a4652c529449a6be7598900b7",
+    "packages/python/tests/test_action_store_context.py": "6b6a04d0b40bbb372fb878e484e49196d9ade98f3b371df199199abf877efb07",
+    "packages/python/tests/test_action_subject_installation_native.py": "33121f033dd4954821df0d4fd2650e6fe276b26a7547d271ff77abb2365a3958",
+    "packages/python/tests/test_action_store_native.py": "ec87b58c75942ce757d579a814d90e56e3c7f1f88195dc98cac121fe088c6ea2",
+    "packages/python/tests/test_preparation_attempt_anchor_native.py": "a774fcb8c9aeaeda1fac20630d5507e7d30166e41bf71cac8e6198f763854ffa",
+    "packages/python/tests/owner_action_preparation.ts": "489eb6c2345c51979c70d3fb86f29e4d612f96d04b42066e77b1f6bfea244a0f",
+    "scripts/build-action-role-registry.ts": "ba8756bc1533d909cf3100565ddc0141b1f648cf70a7990e3656e14b1131ebe1",
+    "scripts/check-module-boundaries.py": "d65bbdfd1b8d9fbde116458e42478be9db9adcc5518ddf89451874b9cd025931",
+    "docs/helix/02-design/models/truss-action-role-registry-storage-0.1.proposal.umf.json": "e7f0586acaf2a4b019aef0f27310c497dbba6f12150e2c534632591a5d62f104",
+    "docs/helix/04-build/action-role-registry.generated.sql": "e4b8502c3ca7f6515f9b0491e4d2fc8ff9bbca18c96b4b66e6b86bf5ceaa6bb2"
+  },
+  "sourceUnchanged": true,
+  "sourceHashesAfter": {
+    "packages/python/src/truss/_action_store.py": "292014733039020ede3585370f8d8b7c55ac2e790dcbc33eae3a755492da9843",
+    "packages/python/src/truss/_action_role_installation.py": "7d4ec93222fc58c81280d02830c2bff62a48474cd499bb86785228c38bb6d9e8",
+    "packages/python/src/truss/_action_authority_observation.py": "ca1201e59dcd9be272a69cc9354d4f6ca7e0fc8d4b557dea8e1c0397423ac471",
+    "packages/python/src/truss/_action_subject_installation.py": "140ad9c52bab1ad6168a592f1f589ea1e71ad3f12ca3aa62c42b3becd9628573",
+    "packages/python/src/truss/_security_bootstrap/action-role-registry-storage.sql": "e4b8502c3ca7f6515f9b0491e4d2fc8ff9bbca18c96b4b66e6b86bf5ceaa6bb2",
+    "packages/python/src/truss/_security_bootstrap/action-mapping-cut.sql": "fd1a0724ac93a977643b059f618d0a111b7e3320536d413c2dc8b6fefac8ba68",
+    "packages/python/tests/test_action_role_installation_native.py": "814217d5f2fec8369c69140960c3f859dd3cb77a4652c529449a6be7598900b7",
+    "packages/python/tests/test_action_store_context.py": "6b6a04d0b40bbb372fb878e484e49196d9ade98f3b371df199199abf877efb07",
+    "packages/python/tests/test_action_subject_installation_native.py": "33121f033dd4954821df0d4fd2650e6fe276b26a7547d271ff77abb2365a3958",
+    "packages/python/tests/test_action_store_native.py": "ec87b58c75942ce757d579a814d90e56e3c7f1f88195dc98cac121fe088c6ea2",
+    "packages/python/tests/test_preparation_attempt_anchor_native.py": "a774fcb8c9aeaeda1fac20630d5507e7d30166e41bf71cac8e6198f763854ffa",
+    "packages/python/tests/owner_action_preparation.ts": "489eb6c2345c51979c70d3fb86f29e4d612f96d04b42066e77b1f6bfea244a0f",
+    "scripts/build-action-role-registry.ts": "ba8756bc1533d909cf3100565ddc0141b1f648cf70a7990e3656e14b1131ebe1",
+    "scripts/check-module-boundaries.py": "d65bbdfd1b8d9fbde116458e42478be9db9adcc5518ddf89451874b9cd025931",
+    "docs/helix/02-design/models/truss-action-role-registry-storage-0.1.proposal.umf.json": "e7f0586acaf2a4b019aef0f27310c497dbba6f12150e2c534632591a5d62f104",
+    "docs/helix/04-build/action-role-registry.generated.sql": "e4b8502c3ca7f6515f9b0491e4d2fc8ff9bbca18c96b4b66e6b86bf5ceaa6bb2"
+  }
+}

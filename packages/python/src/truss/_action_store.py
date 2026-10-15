@@ -73,6 +73,37 @@ def _receipt(raw):
     return data
 
 
+def _capture_action_store_context(context):
+    """Bounded exact immutable comparison copy; never issuance or authority."""
+    if type(context) is not ActionStoreObservation:
+        raise ValueError('Original immutable store comparison required')
+    # Read each caller-owned slot once, then validate and retain only this copy.
+    context=ActionStoreObservation(context.registration_key,context.receipt_bytes,context.store_identity,
+        context.tenant_identity,context.epoch_identity,context.installation_id,context.binding_correspondence,context.authority)
+    if type(context.authority) is not bool or context.authority is not False:
+        raise ValueError('Original immutable store comparison required')
+    for name,maximum in (('registration_key',256),('receipt_bytes',4194304),
+                         ('store_identity',4096),('tenant_identity',4096),('epoch_identity',4096)):
+        value=getattr(context,name)
+        if type(value) is not bytes or not 1<=len(value)<=maximum:
+            raise ValueError('Exact bounded immutable store bytes required')
+    if (type(context.installation_id) is not str or not 1<=len(context.installation_id)<=256
+            or type(context.binding_correspondence) is not str or context.binding_correspondence not in ('matches','fenced')):
+        raise ValueError('Exact bounded immutable store labels required')
+    try:
+        receipt=_receipt(context.receipt_bytes)
+        if (bytes.fromhex(receipt['registrationKeyHex'])!=context.registration_key
+                or bytes.fromhex(receipt['storeIdentityHex'])!=context.store_identity
+                or bytes.fromhex(receipt['tenantIdentityHex'])!=context.tenant_identity
+                or bytes.fromhex(receipt['epochIdentityHex'])!=context.epoch_identity
+                or receipt['installationId']!=context.installation_id):
+            raise ValueError('Original store receipt comparison required')
+    except (KeyError,TypeError,UnicodeError,RecursionError):
+        raise ValueError('Original bounded store receipt required') from None
+    return ActionStoreObservation(context.registration_key,context.receipt_bytes,context.store_identity,
+        context.tenant_identity,context.epoch_identity,context.installation_id,context.binding_correspondence)
+
+
 def _verify(cursor,owner,executors=None):
     _,issuer=_sources();source=issuer.decode('utf8')
     cursor.execute('SELECT rolcanlogin,rolsuper,rolcreaterole,rolcreatedb,rolreplication,rolbypassrls FROM pg_catalog.pg_roles WHERE oid=%s::oid',(owner,),prepare=False)
@@ -205,9 +236,45 @@ def observe_action_store_in_transaction(host,transaction,*,registration_key):
     return host._run_operation(transaction,observe)
 
 
+def verify_action_store_enrollment_context_with_cursor(cursor,store_context,installation_id):
+    """Initial trusted quiescent administrative comparison, not a source cut.
+
+    Holding the operational epoch SHARE cut would correctly prohibit later
+    routine DDL. This immutable issued-row check therefore does not establish
+    current-source closure or authorization. Native runtime release comparison
+    uses the current overlay, never immutable genesis release labels. Under
+    native immutable issuance/RC visibility, a distinct visible issuer is
+    committed; long-lived receipts do not depend on retained CLOG history.
+    """
+    store_context=_capture_action_store_context(store_context)
+    if _text_rows(cursor,"SELECT pg_catalog.current_setting('server_version_num'),pg_catalog.current_setting('transaction_isolation'),pg_catalog.current_setting('transaction_read_only'),pg_catalog.current_setting('role')",limit=1)!=[('180006','read committed','off','none')]:
+        raise ValueError('Original native administrative enrollment context required')
+    if not store_context.binding_matches:raise ValueError('Original unfenced store comparison required')
+    cursor.execute('LOCK TABLE ONLY truss.action_store_registration IN SHARE MODE NOWAIT', prepare=False)
+    issued = _text_rows(cursor, """SELECT pg_catalog.encode(r.initial_receipt_bytes,'hex'),
+        pg_catalog.encode(r.store_identity,'hex'),pg_catalog.encode(r.tenant_identity,'hex'),
+        pg_catalog.encode(r.epoch_identity,'hex'),r.installation_id::text
+        FROM ONLY truss.action_store_registration r
+        JOIN truss.runtime_current_installation() i ON i.installation_id=r.installation_id AND i.singleton
+        WHERE r.singleton AND r.registration_key=%s
+        AND r.database_oid=(SELECT oid FROM pg_catalog.pg_database WHERE datname=pg_catalog.current_database())
+        AND r.schema_oid=(SELECT oid FROM pg_catalog.pg_namespace WHERE nspname='truss')
+        AND r.postmaster_started_at=pg_catalog.pg_postmaster_start_time()
+        AND r.runtime_release_id=i.release_id AND r.runtime_release_sha256=pg_catalog.decode(i.release_sha256,'hex')
+        AND r.initial_receipt_bytes=truss.action_store_original_receipt(r)
+        AND r.issuer_xid IS DISTINCT FROM pg_catalog.pg_current_xact_id_if_assigned()
+        FOR SHARE OF r NOWAIT""", (store_context.registration_key,), 1)
+    if issued != [(store_context.receipt_bytes.hex(),store_context.store_identity.hex(),store_context.tenant_identity.hex(),
+                   store_context.epoch_identity.hex(),store_context.installation_id)]:
+        raise ValueError('Original committed issued store enrollment required')
+    if store_context.installation_id != installation_id:
+        raise ValueError('Original issued store installation required')
+
+
 def verify_action_store_context_with_cursor(cursor,context):
     """Exact native issued-row comparison under source custody, never authorization."""
-    if type(context) is not ActionStoreObservation or context.authority is not False or not context.binding_matches:raise ValueError('Original current issued store comparison required')
+    context=_capture_action_store_context(context)
+    if not context.binding_matches:raise ValueError('Original current issued store comparison required')
     cursor.execute('SELECT truss.observe_action_store_original(%s)',(context.registration_key,),prepare=False)
     rows=cursor.fetchmany(2)
     if len(rows)!=1 or type(rows[0][0]) is not bytes:raise ValueError('Original committed store observation required')
