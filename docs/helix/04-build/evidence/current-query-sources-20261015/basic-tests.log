@@ -1,0 +1,5 @@
+test_registered_originals_survive_commit_and_refuse_changed_archive (test_current_query_sources_native.CurrentQuerySourcesNativeTests.test_registered_originals_survive_commit_and_refuse_changed_archive) ... ok
+
+Ran 1 test in 6.302s
+
+OK

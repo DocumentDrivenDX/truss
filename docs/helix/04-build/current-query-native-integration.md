@@ -213,3 +213,33 @@ scan and full Field identity. Exact descriptors stay owner-produced. Native code
 must validate every closed carrier/member/key against its held private map.
 Aggregates refuse until the original compiler supplies complete grouped bags;
 no result value or output order substitutes for resource identity.
+
+## Original-source storage checkpoint — 2026-10-15
+
+`_current_query_sources.py` now registers and recaptures the exact initialize body,
+accepted-module request, actual accepted-catalog assessment and runtime release
+in the existing installation archive. The original bootstrap marker interface is
+unchanged; `truss-current-query-sources/0.1-candidate` names this distinct inventory.
+Its marker digest binds the entire original archive, including roles, full
+identities and original byte digests/lengths. Recomputed per-row hashes alone
+cannot replace an initialize artifact. Duplicate/missing/extra rows refuse.
+
+This is a fresh-only, direct-administrator storage component. Native epoch →
+marker → catalog/archive exclusion serializes registration before its empty-home
+check. Existing source profiles refuse pending explicit migration. Successful
+registration is pending the caller's commit; it does not commit the transaction.
+Capture rechecks the installed release, database/schema identity and complete
+accepted catalog, retaining original bytes. Source epochs remain explicitly empty.
+No ordinary caller gains archive SELECT; source custody is not Subject, fact or
+query authorization. The owner realization and static Weft profile/binding still
+need their own registered originals before native query admission; this component
+must not be presented as the complete source bundle or a protected executor.
+
+The basic PG18.6 workflow accepts a core0.8 model through the public catalog API,
+registers/commits/recaptures the original bytes and refuses changed initialize
+bytes even though the generated row hash changes with them. The fixture is an
+explicitly authored named-Field/Record variant of UMF's catalogRuntimeFixture at
+`49ea52c43d9ec4fa00232baf855992d0927152d2`; it was compiled successfully by the
+original UMF compiler. Its distinct source bytes are retained, not relabeled as
+the unchanged owner fixture. The storage test does not evaluate policy or issue
+a current-security permit. Subject/fact/current-cut composition remains next.

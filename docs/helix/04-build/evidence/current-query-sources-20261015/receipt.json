@@ -1,0 +1,23 @@
+{
+  "scope": "fresh private source storage/capture only; no Subject/fact/epoch/native query permit",
+  "postgres": "18.6",
+  "driver": "psycopg 3.3.6",
+  "tests": 1,
+  "exitCode": 0,
+  "seconds": 6.302,
+  "astraUltra": "plan and corrected source approved",
+  "fixture": {
+    "origin": "UMF catalogRuntimeFixture",
+    "ownerRevision": "49ea52c43d9ec4fa00232baf855992d0927152d2",
+    "authoredChanges": "explicit names on unnamed Field/Record definitions; distinct core/ontology/policy revisions; compiled by original UMF compileRuntimeFixture",
+    "coreRevision": "truss-current-source-named-1",
+    "ontologyRevision": "truss-current-source-ontology-1",
+    "policyRevision": "truss-current-source-policy-1"
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/_current_query_sources.py": "0dfa21d46c7350e20f5352d50bdf0f9f67e2ee009389ef7974b8f8731e1bc41a",
+    "packages/python/tests/test_current_query_sources_native.py": "cadbfed56f083ff1ae911d8b39d01ec0fe74ed3fdad77135cad585c4f63356e4",
+    "packages/python/tests/fixtures/current-query-initialize.json": "f064f26a61f9616137d9289ed9d8a661218dbe5d89716669482fbbe13df92852",
+    "docs/helix/04-build/current-query-native-integration.md": "26842a44519a84583c4c0ceb497d1813e9ed4e47c06a13ce9f0f0703a1237030"
+  }
+}
