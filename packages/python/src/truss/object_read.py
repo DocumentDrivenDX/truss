@@ -1,8 +1,8 @@
-"""Public rootless logical identity reads with exact scalars and flat containers."""
+"""Public logical identity reads with exact scalars and flat containers."""
 from dataclasses import dataclass, field
 from typing import Literal
 from .contracts import SequenceValue, MapValue, TextValue, TypedIdentity, QualifiedOwner
-from .groups import RootlessOwnership
+from .groups import RootlessOwnership, OwnedOwnership
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ScalarObject:
@@ -34,8 +34,33 @@ class ScalarObject:
             owner=QualifiedOwner(document_id=self.document_id, module_id=self.module_id))
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class LogicalObject:
+    document_id: str
+    module_id: str
+    record_id: str
+    id: int
+    type_id: int
+    definition_pin: str
+    version: int
+    catalog_revision: int
+    record_revision: int
+    created_at: str
+    updated_at: str
+    values: tuple[tuple[str, str | bool | TextValue | SequenceValue | MapValue | None], ...]
+    retained: tuple[tuple[str, str | bool | TextValue | SequenceValue | MapValue | None], ...]
+    ownership: OwnedOwnership
+    profile: Literal['truss-python-logical-object/0.1'] = field(default='truss-python-logical-object/0.1', init=False)
+
+    @property
+    def identity(self) -> TypedIdentity:
+        """Current document-qualified identity usable by object and edge operations."""
+        return TypedIdentity(id=str(self.id), type_id=str(self.type_id),
+            definition_pin=self.definition_pin,
+            owner=QualifiedOwner(document_id=self.document_id, module_id=self.module_id))
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class ObjectFound:
-    object: ScalarObject
+    object: ScalarObject | LogicalObject
     outcome: Literal['found'] = field(default='found', init=False)
 
 @dataclass(frozen=True, slots=True)
@@ -68,7 +93,7 @@ class ObjectPageCursor:
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class ObjectPage:
-    objects: tuple[ScalarObject, ...]
+    objects: tuple[ScalarObject | LogicalObject, ...]
     catalog_revision: int
     continuation: ObjectPageCursor | None
     outcome: Literal['page'] = field(default='page', init=False)
