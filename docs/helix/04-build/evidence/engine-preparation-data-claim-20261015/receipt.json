@@ -1,0 +1,19 @@
+{
+  "scope": "Actual engine D capture and excluded E pending claim invocation; no native permission or protected execution",
+  "trussBaseline": "e79d67df35c6f214e2c218a5844aa938432a2436",
+  "umfOwner": "a8f73415aef8052e2dedeb3bc644426824675d14",
+  "ownerSqlSha256": "b91e5df98c96edb3643da58a28b76b876d1ef53142529cd773e55d0b14f07c96",
+  "sourceHashes": {
+    "packages/python/src/truss/_preparation_data_claim.py": "b5c0f9d200b44aadd6b3d4e4b5dbb0f379c0c637b5e6efeb7de6be7b47582e0e",
+    "packages/python/tests/test_preparation_data_claim_native.py": "ae69fa513d4232b447217bb7d6ae3f399ad41397fdc0f769dd77a28ab718190e",
+    "packages/python/src/truss/_engine_preparation.py": "4fecd8c34bf7f534769e046a37585f57e2b596f8d9f1dd05ee20c22964e0911c",
+    "scripts/export-products-native-binding.py": "b7b42396ef792980c0d836f6a07100930b54af7aca27c515ca234f4e06a54815"
+  },
+  "result": "1 native test passed in6.249s",
+  "runtime": "PostgreSQL18.6 / pgserver-pg18 18.6.1 / psycopg3.3.6",
+  "weftNativeSha256": "2f91cbd5de07f04492d6fdbd964bf86cce84245adc18cd6debe3c17f61ef6843",
+  "productionInstaller": false,
+  "ordinaryCoordinatorWrapper": false,
+  "authority": false,
+  "astraUltra": "Completed source and native workflow approved after qualified capture casts and exact coordinator program tuple comparison"
+}
