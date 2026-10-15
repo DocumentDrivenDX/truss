@@ -1,0 +1,132 @@
+{
+  "scope": "Chromium worker lifecycle, original core catalog and local action/read-grant issuance with IndexedDB reopen",
+  "assetPrefix": "/example/truss/",
+  "chromium": "153.0.8010.12",
+  "bundle": {
+    "manifestSha256": "79352c7e458393d94a860e1669b76a5d650af8a23a79e34fbabaf54777d24b0f",
+    "providerSha256": "0cc193894dd9958bbc327e877701e02afd2c097fed767955960924f0887b2f6d"
+  },
+  "first": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:65196",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "e1bad9e2-c26f-4cdf-b61c-ac90c6c0bdbe",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "33e95307-f542-414d-bdf2-f0bfd2e49eb8",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "forged": {
+    "outcome": "refused"
+  },
+  "second": {
+    "outcome": "unavailable",
+    "reason": "store_in_use"
+  },
+  "takeover": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:65196",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "e1bad9e2-c26f-4cdf-b61c-ac90c6c0bdbe",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "33e95307-f542-414d-bdf2-f0bfd2e49eb8",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "reopened": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:65196",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "e1bad9e2-c26f-4cdf-b61c-ac90c6c0bdbe",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "33e95307-f542-414d-bdf2-f0bfd2e49eb8",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "action": {
+    "registered": {
+      "outcome": "action_registered",
+      "modelSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+      "preparationSha256": "6f5e69462c327da970f07ca1f6253dbacc4db0badf1335b7d91e3f38eb67ad40",
+      "declaration": {
+        "profile": {
+          "id": "umf.actions.local-store-read",
+          "version": "1"
+        },
+        "target": {
+          "element": "products",
+          "key": "pk",
+          "module": "sales"
+        },
+        "fields": [
+          {
+            "module": "sales",
+            "element": "product-id"
+          },
+          {
+            "module": "sales",
+            "element": "product-name"
+          }
+        ],
+        "view": "complete-canonical-target-population",
+        "disposition": "original"
+      },
+      "opaque": true
+    },
+    "forged": {
+      "outcome": "refused"
+    },
+    "previousOpen": "previous_action_refused",
+    "reissued": "action_registered"
+  },
+  "catalog": {
+    "registration": "registered",
+    "retry": "unchanged",
+    "revision": "1",
+    "sourceSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+    "types": [
+      {
+        "typeId": "1",
+        "moduleId": "sales",
+        "recordId": "products",
+        "documentId": "product-local-action-demo",
+        "lineageHex": "74727573732d63616e6f6e6963616c2f302e312e300a74727573732d747970652d6c696e656167652f302e312e300a5b2270726f647563742d6c6f63616c2d616374696f6e2d64656d6f222c2273616c6573222c2270726f6475637473225d",
+        "lineageProfile": "truss-type-lineage/0.1.0"
+      }
+    ],
+    "properties": [
+      {
+        "name": "id",
+        "typeId": "1",
+        "fieldId": "product-id",
+        "moduleId": "sales",
+        "propertyId": "1"
+      },
+      {
+        "name": "name",
+        "typeId": "1",
+        "fieldId": "product-name",
+        "moduleId": "sales",
+        "propertyId": "2"
+      }
+    ],
+    "keys": [
+      {
+        "keyId": "pk",
+        "typeId": "1",
+        "primary": true,
+        "keyNumber": "1",
+        "propertyIds": [
+          "1"
+        ]
+      }
+    ],
+    "changeCount": 3
+  },
+  "actionExecution": false,
+  "selectionReadGrant": true,
+  "crashRecovery": false
+}

@@ -1,0 +1,176 @@
+{
+  "scope": "Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; administrative fixture data only",
+  "assetPrefix": "/example/truss/",
+  "chromium": "153.0.8010.12",
+  "bundle": {
+    "manifestSha256": "f7008e85bb14bda4be714f2049be7e2811db06fed6d5f88680fc341a8b874168",
+    "providerSha256": "0a621cc39375402e40f7c0774958858a8e063c203057dd2ce0ed8dc8cfff9081"
+  },
+  "first": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:53540",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "4f81a38e-0263-421d-8405-5daa0f4c1e3f",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "015c1d21-01d1-47e0-b3b3-f3607416fbf1",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "forged": {
+    "outcome": "refused"
+  },
+  "second": {
+    "outcome": "unavailable",
+    "reason": "store_in_use"
+  },
+  "takeover": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:53540",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "4f81a38e-0263-421d-8405-5daa0f4c1e3f",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "015c1d21-01d1-47e0-b3b3-f3607416fbf1",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "reopened": {
+    "outcome": "available",
+    "info": {
+      "origin": "http://127.0.0.1:53540",
+      "profile": "truss-browser-layout/0.1",
+      "storeId": "4f81a38e-0263-421d-8405-5daa0f4c1e3f",
+      "namespace": "truss-browser:lifecycle-basic",
+      "incarnation": "015c1d21-01d1-47e0-b3b3-f3607416fbf1",
+      "layoutSha256": "c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294"
+    }
+  },
+  "materialization": {
+    "count": 3,
+    "batches": [
+      {
+        "count": 2,
+        "ordinal": 0,
+        "start": 0
+      },
+      {
+        "count": 1,
+        "ordinal": 1,
+        "start": 2
+      }
+    ],
+    "planSha256": "c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587",
+    "manifestSha256": "69f57f7a4eb3eda3dd1a521e173aa63a5db7129bb3ec2b119bfcd64ed2919a01",
+    "keys": [
+      "bar",
+      "baz",
+      "qux"
+    ],
+    "forgedGrant": "refused"
+  },
+  "seal": {
+    "reference": {
+      "profile": "truss-browser-seal-reference/0.1",
+      "storeId": "4f81a38e-0263-421d-8405-5daa0f4c1e3f",
+      "incarnation": "015c1d21-01d1-47e0-b3b3-f3607416fbf1",
+      "requestKey": "basic-seal",
+      "attempt": "attempt-1",
+      "manifestSha256": "69f57f7a4eb3eda3dd1a521e173aa63a5db7129bb3ec2b119bfcd64ed2919a01",
+      "planSha256": "c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587",
+      "modelSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27"
+    },
+    "receipt": {
+      "mediaType": "application/json",
+      "utf8": "{\"profile\":\"truss-browser-seal-receipt/0.1\",\"reference\":{\"profile\":\"truss-browser-seal-reference/0.1\",\"storeId\":\"4f81a38e-0263-421d-8405-5daa0f4c1e3f\",\"incarnation\":\"015c1d21-01d1-47e0-b3b3-f3607416fbf1\",\"requestKey\":\"basic-seal\",\"attempt\":\"attempt-1\",\"manifestSha256\":\"69f57f7a4eb3eda3dd1a521e173aa63a5db7129bb3ec2b119bfcd64ed2919a01\",\"planSha256\":\"c4a434683409851178579261f6d9800ba20f0211fcccb309c15fed513ad2f587\",\"modelSha256\":\"b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27\"},\"inputSha256\":\"4410b0579c968ee77a7c78a25daebac4521d43f44015da3a542d973b26b73a7c\",\"writerXid\":\"757\",\"manifestSha256\":\"69f57f7a4eb3eda3dd1a521e173aa63a5db7129bb3ec2b119bfcd64ed2919a01\"}",
+      "sha256": "278ec1d7b8e43d58cb21151bc3528fe30dbccd28a56a5ff8f7a6d0c033fb7055"
+    },
+    "replayedByteEqual": true,
+    "recoveredByteEqual": true,
+    "conflict": "conflict",
+    "missing": "unresolved"
+  },
+  "action": {
+    "registered": {
+      "outcome": "action_registered",
+      "modelSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+      "preparationSha256": "6f5e69462c327da970f07ca1f6253dbacc4db0badf1335b7d91e3f38eb67ad40",
+      "declaration": {
+        "profile": {
+          "id": "umf.actions.local-store-read",
+          "version": "1"
+        },
+        "target": {
+          "element": "products",
+          "key": "pk",
+          "module": "sales"
+        },
+        "fields": [
+          {
+            "module": "sales",
+            "element": "product-id"
+          },
+          {
+            "module": "sales",
+            "element": "product-name"
+          }
+        ],
+        "view": "complete-canonical-target-population",
+        "disposition": "original"
+      },
+      "opaque": true
+    },
+    "forged": {
+      "outcome": "refused"
+    },
+    "previousOpen": "previous_action_refused",
+    "reissued": "action_registered"
+  },
+  "catalog": {
+    "registration": "registered",
+    "retry": "unchanged",
+    "revision": "1",
+    "sourceSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+    "types": [
+      {
+        "typeId": "1",
+        "moduleId": "sales",
+        "recordId": "products",
+        "documentId": "product-local-action-demo",
+        "lineageHex": "74727573732d63616e6f6e6963616c2f302e312e300a74727573732d747970652d6c696e656167652f302e312e300a5b2270726f647563742d6c6f63616c2d616374696f6e2d64656d6f222c2273616c6573222c2270726f6475637473225d",
+        "lineageProfile": "truss-type-lineage/0.1.0"
+      }
+    ],
+    "properties": [
+      {
+        "name": "id",
+        "typeId": "1",
+        "fieldId": "product-id",
+        "moduleId": "sales",
+        "propertyId": "1"
+      },
+      {
+        "name": "name",
+        "typeId": "1",
+        "fieldId": "product-name",
+        "moduleId": "sales",
+        "propertyId": "2"
+      }
+    ],
+    "keys": [
+      {
+        "keyId": "pk",
+        "typeId": "1",
+        "primary": true,
+        "keyNumber": "1",
+        "propertyIds": [
+          "1"
+        ]
+      }
+    ],
+    "changeCount": 3
+  },
+  "actionExecution": false,
+  "selectionReadGrant": true,
+  "crashRecovery": false
+}

@@ -1,0 +1,9 @@
+{
+  "sourceRevision": "40f011402bf8f0c9512225975b62a034f1da325c",
+  "producer": "sha256:633f8ad623cc150fd3f6e2c5fe5324a0a128393036aa34d9929bfadf1142c6e4",
+  "bundleSha256": "9d26a51a6fe47b63dfd830d5759e342d633bc1f68df3aefc15ac05a6c2c4653b",
+  "compressedSha256": "1957964b6d357984a170081da8f38a06c555bf453dbe58196b1404b7da963802",
+  "bytes": 12235921,
+  "compression": "gzip; original decompressed ESM bytes unchanged",
+  "noticeInventorySha256": "fb153552de3f60335d542bbb9123d1f29be150bab2d1a373039eda251066796b"
+}
