@@ -1,0 +1,27 @@
+{
+  "checks": [
+    {
+      "hold": false,
+      "fixedSnapshotRows": 2500,
+      "freshRcCount": 2501,
+      "freshPrivilegeDenied": true,
+      "portalStillFetchesAfterRevoke": true
+    },
+    {
+      "hold": true,
+      "fixedSnapshotRows": 2500,
+      "freshRcCount": 2501,
+      "freshPrivilegeDenied": true,
+      "portalStillFetchesAfterRevoke": true
+    },
+    {
+      "foreignTransactionPreconditionRefused": true,
+      "foreignWorkPreserved": true
+    },
+    {
+      "rollbackClosesPortal": true
+    }
+  ],
+  "ownedServerStopped": true,
+  "scope": "PostgreSQL mechanics only; no Truss or SDK qualification"
+}

@@ -1,0 +1,9 @@
+{
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "psycopg": "3.3.6",
+  "libpq": 180006,
+  "postgresql": "18.6",
+  "sourceSha256": "39b74ab081b74c420b897a9a3271f7a5f23268bb7382a7f581074e745ae5f212",
+  "resultSha256": "b0326bd77e4d9813702b19710a846357b42d9709259fb9f7212775747025a860",
+  "scope": "Synthetic PostgreSQL mechanics only. No Truss native qualification or SDK acceptance."
+}

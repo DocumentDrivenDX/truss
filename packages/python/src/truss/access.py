@@ -37,10 +37,13 @@ class TrussTarget:
     def __init__(self, operation: Callable[[timedelta],AbstractContextManager[tuple[Any,Any]]], *,
                  binding_sha256: str, platform: tuple[tuple[str,str],...],
                  default_timeout: timedelta, catalog_entries: tuple[EngineRead[Any,Any],...]=(),
-                 catalog_sources: QueryCatalogSources | None=None):
+                 catalog_sources: QueryCatalogSources | None=None,
+                 stream_operation: Callable[[timedelta],AbstractContextManager[tuple[Any,Any]]] | None=None):
         if len(binding_sha256)!=64 or any(c not in '0123456789abcdef' for c in binding_sha256):
             raise ValueError('original native binding SHA-256 required')
         if not platform or not callable(operation):raise ValueError('host operation and native platform pins required')
+        if stream_operation is not None and not callable(stream_operation):raise TypeError("Explicit owned stream operation required")
+        self.stream_operation=stream_operation
         self.operation,self.binding_sha256,self.platform=operation,binding_sha256,platform
         self.default_timeout,self.catalog_entries=default_timeout,catalog_entries
         targets=[]
@@ -151,5 +154,46 @@ class TrussTarget:
         if monotonic()>=deadline:raise TimedOut('deadline expired during page release')
         return result
     def stream(self,entry:CatalogRead[P,R],parameters:P,*,max_rows:int,timeout:timedelta|None=None)->Generator[R,None,None]:
-        raise ValueError('WEFT_BLOCKED: engine catalog bounded stream program required')
-        yield  # retains the synchronous generator ABI without executing a read
+        from .query_stream import QueryStreamTimedOut
+        try:
+            yield from self._stream_owned(entry,parameters,max_rows=max_rows,timeout=timeout)
+        except QueryStreamTimedOut as error:
+            raise TimedOut(str(error)) from error
+    def _stream_owned(self,entry:CatalogRead[P,R],parameters:P,*,max_rows:int,timeout:timedelta|None=None)->Generator[R,None,None]:
+        if type(max_rows) is not int or max_rows < 1:raise ValueError('positive required max_rows; no fixed ceiling')
+        if self.stream_operation is None:raise ValueError('Explicit qualified owned stream operation required')
+        if not isinstance(entry,EngineRead):raise ValueError('Original engine page program required')
+        program=entry.artifact();request=program['request'];target=request['target']
+        if program['version']!='weft.engine-page/0.1' or program['compiler']!='truss-runtime' or program.get('after') is not None or target!=program_json(self.native_target_json):
+            raise ValueError('Complete initial original Truss page program required')
+        values=revalidate_model(entry.parameters,parameters);budget=self._budget(timeout)
+        def validate(native):
+            if native.columns!=tuple(entry.result.model_fields):raise ValueError('Complete ordered stream DTO signature differs')
+            result=[]
+            for row in native.rows:
+                if len(row)!=len(native.columns) or any(isinstance(value,QueryAbsent) for value in row):
+                    raise ValueError('ADOPTION_MISMATCH: selected stream column absent or row shape differs')
+                result.append(entry.result.model_validate(dict(zip(native.columns,row,strict=True))))
+            return result
+        final=();first_deadline=monotonic()+budget.total_seconds()
+        with self.stream_operation(budget) as (assembly,transaction):
+            handle=assembly.query_stream_open_in_transaction(transaction,engine_program=entry.originals(),parameters=values.model_dump(mode='python'),operation_deadline=first_deadline)
+            remaining=max_rows
+            try:
+                while remaining:
+                    deadline=first_deadline if remaining==max_rows else monotonic()+budget.total_seconds();count=min(program['pageSize'],remaining)
+                    batch=assembly.query_stream_fetch_in_transaction(transaction,handle,count=count,validate=validate,operation_deadline=deadline,final_bound=remaining<=count)
+                    if monotonic()>=deadline:raise TimedOut('stream page deadline expired before release')
+                    remaining-=len(batch.items)
+                    if batch.exhausted or remaining==0:
+                        final=batch.items
+                        break
+                    yield from batch.items
+                    # Do not retain a delivered page while fetching the next one.
+                    del batch
+            finally:
+                assembly.query_stream_close_in_transaction(transaction,handle)
+        # Both portal close and owned rollback settled before this final page or
+        # normal completion becomes observable. Earlier pages remain a prefix.
+        if monotonic()>=deadline:raise TimedOut('stream final page deadline expired during cleanup')
+        yield from final

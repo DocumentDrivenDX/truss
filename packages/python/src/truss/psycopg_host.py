@@ -438,7 +438,7 @@ class PsycopgHost:
                 raise
             return False
 
-    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None):
+    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None):
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
         host_reservation=self._custody.reservation
@@ -503,6 +503,10 @@ class PsycopgHost:
                         raise ValueError('Semantic operation ordinal unavailable')
 
                 milliseconds=self._deadline_ms
+                if operation_deadline is not None:
+                    remaining=operation_deadline-monotonic()
+                    if remaining<=0:raise TimeoutError('Original operation deadline expired before dispatch')
+                    milliseconds=min(milliseconds,max(1,int(remaining*1000)))
                 parent=getattr(host_reservation,'deadline',None) if reserved else None
                 if parent is not None:
                     parent.check()
@@ -674,13 +678,18 @@ class PsycopgHost:
         custody = result.value
         return Ok(custody.handle)
 
-    def _run_operation(self, transaction, callback):
+    def _run_operation(self, transaction, callback, *, operation_deadline=None):
+        if operation_deadline is not None:
+            if type(operation_deadline) is not float or not 0<operation_deadline<float('inf'):
+                return _failure('execution_obligation','Finite original absolute deadline required')
+            if operation_deadline<=monotonic():
+                return _failure('cancelled','Original operation deadline expired before dispatch')
         custody = (self._transactions.get(transaction._key)
                    if type(transaction) is TransactionHandle and transaction._issuer is self._issuer else None)
         if (custody is None or custody.handle is not transaction
                 or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
             return _failure('invalid_transaction', 'Original issued transaction handle required')
-        return self._attempt(callback, custody)
+        return self._attempt(callback, custody, operation_deadline=operation_deadline)
 
     def _run_published_operation(self, transaction, callback, publisher):
         """Private trusted receiver hook after native completion, under lease.

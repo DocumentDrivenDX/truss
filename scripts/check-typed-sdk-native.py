@@ -22,7 +22,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'packages/python/examp
 from adopter_workflow import transaction,success,expect
 class Parameters(StrictModel):status:str
 
-parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--model-request',type=Path,required=True);parser.add_argument('--generated',type=Path,required=True);parser.add_argument('--bun-executable',type=Path,default=Path('/opt/homebrew/Cellar/bun/1.4.2/bin/bun'));parser.add_argument('--pg-bin',type=Path,default=Path('/opt/homebrew/opt/postgresql@18/bin'));args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument("--streams",action="store_true");parser.add_argument('--output',type=Path,required=True);parser.add_argument('--model-request',type=Path,required=True);parser.add_argument('--generated',type=Path,required=True);parser.add_argument('--bun-executable',type=Path,default=Path('/opt/homebrew/Cellar/bun/1.4.2/bin/bun'));parser.add_argument('--pg-bin',type=Path,default=Path('/opt/homebrew/opt/postgresql@18/bin'));args=parser.parse_args()
 root=Path(__file__).resolve().parents[1];out=args.output.absolute();out.mkdir(parents=True,exist_ok=False);pg=out/'postgres';sock=out/'socket';sock.mkdir();started=False;checks=[]
 def run(*command):
  result=subprocess.run(list(map(str,command)),text=True,capture_output=True,check=True)
@@ -149,6 +149,10 @@ try:
    generated_second=queries.selected_page(target,status='draft',after=generated_first.next_after)
    assert [r.id for r in generated_first.items]==['bar'] and [r.id for r in generated_second.items]==['baz']
    checks.append('real CLI page catalog/check and generated typed continuation retain native bytes')
+   if args.streams:
+    from typed_sdk_stream_checks import check_streams,check_large_streams
+    check_streams(admin=admin,person=person,target=target,page_entry=page_entry,Parameters=Parameters,checks=checks,out=out)
+    check_large_streams(admin=admin,person=person,target=target,Parameters=Parameters,checks=checks,out=out,documents=documents,document_id=doc["id"],generated=args.generated,bun_executable=args.bun_executable)
    admin.execute('REVOKE sdk_reader,sdk_writer FROM sdk_person')
    try:target.read(entry,Parameters(status='draft'))
    except TrussReadRefused:checks.append('native authorization revocation refuses SDK read')

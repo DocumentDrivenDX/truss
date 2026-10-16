@@ -1,0 +1,31 @@
+{
+  "files": {
+    "packages/python/src/truss/query_stream.py": "614a7ccf243daec1fc29865a416b00051b06fc3d749d14bc65451aaec3659764",
+    "packages/python/src/truss/_query_stream_runtime.py": "fbc4cb83a8ffcbec7c897db63de130ee9aae124f927f1d7e58370aeb6a675094",
+    "packages/python/src/truss/access.py": "6bc338edcc095e99f7e8d794cdd312098e39ea9c445f2772f00da96ae0e78aed",
+    "packages/python/src/truss/catalog_runtime.py": "f4548d367b6f158eab464d5755298da01b0fafb52f95ed331acec6143a3b0336",
+    "packages/python/src/truss/psycopg_host.py": "a5bfbd5c5881f84b41288f9e6ac1ff13403adddb2f450f16d9f89dd0e64bc952",
+    "packages/python/src/truss/_query_runtime.py": "8ea6d33484bca67b0fd97e52d4eab91b906ccd1932aaf99946c8fdcbc0eb9370",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "f47852623c7c52f41addf44def9cee34f7dab7653332da868a37690c41c7b060",
+    "packages/python/src/truss/_catalog_runtime/query.sql": "4ef3565932967794b2644e4734ad3d2bfc33b46b43e9aaaf7201b3d364128c66",
+    "packages/python/src/truss/_catalog_runtime/query-abi.json": "9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f",
+    "scripts/check-typed-sdk-native.py": "78c1da39ec68b93e0185296a84fe04bd7432ef0cae377f2eb3b7885af6880e9b",
+    "scripts/typed_sdk_stream_checks.py": "2419271e4b436a0e1e1a03d81fc595464f3d4d7f69801676943fa5ed77f0f217"
+  },
+  "compilerWheelSha256": "da4fad5e3dcd359c1a7138c8557e0c5895fe09d3117076e782f5a7316f39e8e8",
+  "nativeFinalCohorts": [
+    {
+      "python": "3.11.17",
+      "run": 4,
+      "checks": 25,
+      "delayedCleanupAssertion": "accepts TimedOut; not the stronger exact-branch control"
+    },
+    {
+      "python": "3.14.8",
+      "run": 5,
+      "checks": 25,
+      "delayedCleanupAssertion": "exact post-cleanup message and native idle/no-portal/no-row checks"
+    }
+  ],
+  "temporal": "HELD"
+}

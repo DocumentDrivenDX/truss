@@ -1,0 +1,15 @@
+{
+  "clientPageSize": 1,
+  "nativeMaximumScanRows": 10000,
+  "nativeSourceMaterializes": true,
+  "temporal": "HELD",
+  "protectedSecurity": false,
+  "currentTarget": {
+    "backendId": "truss.postgresql.runtime",
+    "backendVersion": "0.4.41",
+    "bindingJson": "{\"schema\": \"truss\", \"records\": [{\"keys\": [{\"keyId\": \"pk\", \"propertyIds\": [\"1\"]}], \"fields\": [{\"identity\": {\"module\": \"sales\", \"element\": \"id\", \"revision\": \"eee5746541513eaa135ff58d4b2d5da5e0746e3792df5f65e467bf0515990aff\", \"documentId\": \"typed-native-actions-e2e\"}, \"propertyId\": \"1\"}, {\"identity\": {\"module\": \"sales\", \"element\": \"status\", \"revision\": \"eee5746541513eaa135ff58d4b2d5da5e0746e3792df5f65e467bf0515990aff\", \"documentId\": \"typed-native-actions-e2e\"}, \"propertyId\": \"2\"}], \"typeId\": \"1\", \"identity\": {\"module\": \"sales\", \"element\": \"order\", \"revision\": \"eee5746541513eaa135ff58d4b2d5da5e0746e3792df5f65e467bf0515990aff\", \"documentId\": \"typed-native-actions-e2e\"}}], \"queryAbi\": {\"sha256\": \"9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f\", \"version\": \"1.1\", \"identity\": \"truss-postgresql-logical-query\"}, \"documents\": [{\"sha256\": \"eee5746541513eaa135ff58d4b2d5da5e0746e3792df5f65e467bf0515990aff\", \"revision\": \"eee5746541513eaa135ff58d4b2d5da5e0746e3792df5f65e467bf0515990aff\", \"documentId\": \"typed-native-actions-e2e\"}], \"releaseId\": \"truss-catalog-runtime/0.71-candidate\", \"maximumBytes\": 1048576, \"relationships\": [], \"releaseSha256\": \"f47852623c7c52f41addf44def9cee34f7dab7653332da868a37690c41c7b060\", \"installationId\": \"cfc5b541-cde8-4d09-8d72-d2c4140d8e66\", \"catalogRevision\": 1, \"maximumScanRows\": 10000, \"interfaceVersion\": \"truss-runtime-binding/0.5\", \"maximumResultRows\": 1000}",
+    "bindingSha256": "d5a649a0e19f825e2a80cf93b2db6a5f0e49d274636651f1c61c972c16a5d6dd",
+    "targetProfile": "truss-runtime-pg18.6/0.5"
+  },
+  "scope": "bounded ordinary module ACL cursor candidate"
+}

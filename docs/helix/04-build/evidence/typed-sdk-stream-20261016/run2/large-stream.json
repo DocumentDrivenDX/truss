@@ -1,0 +1,39 @@
+{
+  "rowsSeededPublicly": 2500,
+  "writerAddedPublicly": 1,
+  "snapshotExportRows": 2200,
+  "batches": [
+    {
+      "requested": 999,
+      "returned": 999
+    },
+    {
+      "requested": 999,
+      "returned": 999
+    },
+    {
+      "requested": 202,
+      "returned": 202
+    },
+    {
+      "requested": 999,
+      "returned": 999
+    },
+    {
+      "requested": 999,
+      "returned": 999
+    },
+    {
+      "requested": 999,
+      "returned": 503
+    },
+    {
+      "requested": 999,
+      "returned": 999
+    }
+  ],
+  "nativeMaximumScanRows": 10000,
+  "nativeMaximumBytes": 16777216,
+  "serverWork": "whole bounded source materialization and sort; not page-bounded",
+  "temporal": "HELD"
+}

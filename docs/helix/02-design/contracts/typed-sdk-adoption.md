@@ -103,5 +103,94 @@ Temporal qualification remains HELD.
 
 [Original page evidence](../../04-build/evidence/typed-sdk-native-20261016/pages/README.md)
 records the exact two-interpreter installed cohort and retained wrong-driver
-refusal. The combined compiler is unpublished; native default/ABI recapture and
-complete protected action/manifest bulk qualification remain open.
+refusal. The original read/page compiler0.4.40 is public. The separate cursor profile
+below uses an explicitly selected unpublished0.4.41.dev0 candidate cohort;
+complete protected action/manifest bulk qualification remains open.
+
+## Consistent export candidate — 2026-10-16
+
+This is an implementation design, not stream qualification. It extends the
+ordinary module-ACL subset only; protected current-policy and SDK temporal
+qualification remain held. UMF CONTRACT-072 owns the public stream behavior;
+Truss owns the following engine equivalent of its fixed-snapshot requirement.
+The corresponding explicit Truss exception must first be adopted in UMF
+CONTRACT-072; ordinary RC pages do not establish that exception.
+
+A stream consumes a complete initial `weft.engine-page/0.1` program. A distinct
+Weft-owned export entrypoint first recompiles and checks that whole original
+page program against the current native request, then constructs an authored-Key
+ordered cursor plan with no logical or native result LIMIT. This must be a
+separate delivery profile with its own obligation; ordinary read/page compiler
+selection and artifacts retain their meanings. The adapter must not remove a
+SQL LIMIT, derive physical columns, invent a Key or relabel an old artifact.
+Source/query/parameters/actor/native binding remain bound throughout the export.
+
+The Truss export owner holds a `NO SCROLL ... WITHOUT HOLD` portal in one owned
+READ COMMITTED READ ONLY transaction. PostgreSQL fixes the portal's data query
+snapshot; separate RC admission statements see current authority. Every FETCH
+must independently recapture the complete native binding, compare the original
+program and current compiler result, and run original `truss.query_scope` before
+and after fetching. The actual session actor must still match. Any drift or
+refusal discards the current buffered page and terminates the export. No
+transaction snapshot lower bound is advertised as an exact snapshot identifier.
+
+`max_rows` is a positive required integer with no fixed API ceiling. Native
+profile scan/byte/resource limits remain explicit and may refuse the export;
+they must never silently truncate it. The current native `query_binding` and
+`query_scope` permit at most10,000 scanned rows; `query_objects`/`query_edges`
+materialize complete bounded sources and root witnesses, scanning cap+1 and
+refusing excess. This is a whole-source limit, not a per-page allowance.
+An export of fewer rows can therefore refuse because its source exceeds the
+native bound. Unrestricted `max_rows` is an API property, not an uncapped native
+source claim. A scalable-source profile requires separately reviewed owner
+native-source design and E2Es; this bounded initial profile cannot close that
+remaining qualification gate. Each page holds at most the admitted page
+size (1..999 for the current original page profile), with its own timeout and
+native statement/operation deadline. The complete ordered native text signature,
+hidden authored Key fields and strict generated DTO validation are checked
+before that page is yielded. Client row buffering must depend on page size, not `max_rows`. Server source
+materialization and query processing retain the separately reported native
+whole-source limits; no page-bounded server-memory claim is made.
+No cursor deadline object may outlive its individual host operation.
+
+The host explicitly and exclusively leases an idle connection for the entire
+stream lifetime, including intervals between yielded pages. A preexisting transaction is
+refused before any BEGIN/COMMIT/ROLLBACK, preserving unrelated work. The export
+owner closes its portal and settles its owned transaction on EOF, max_rows,
+early generator close, cancellation and errors. A failed/unknown cleanup
+quarantines the connection through the original host; no rows escape a failed
+page. Final-page delivery and successful completion require positive native portal
+close and transaction rollback. Reaching `max_rows` is a bound, not a declaration
+of natural exhaustion. After any page failure the portal is terminal: a
+savepoint rollback does not rewind cursor position and must not enable retry.
+Earlier complete pages may already have been delivered; a later failure
+is explicit and must never be presented as a completed export. No internal retry
+or reconstructed continuation restarts a failed stream.
+
+### Module boundaries and required evidence
+
+Weft core owns the unbounded authored-Key logical plan. Its PostgreSQL backend
+owns cursor-delivery SQL and obligations. `weft-runtime` owns original engine
+program checking, with the same Rust implementation exported through Python and
+WASM. Truss `query_stream.py` owns public stream custody and lifecycle;
+`_query_stream_runtime.py` owns execution through the existing guarded psycopg
+host. `catalog_runtime.py` and `access.py` integrate these APIs. The SDK adapter
+imports no psycopg or SQL lowering implementation. Existing Date/compiler
+defaults and native SQL installation files are outside this slice.
+
+Qualification must exercise accepted core0.8 schema and public instance creation,
+actual ordinary-role native binding and generated SDK calls: 2,500 rows exported
+with max_rows2,200; writer commits after the first page; snapshot excludes the
+new data; grants/source drift between and during pages prevent the affected
+page; exact ordering and DTO validation; page deadline; early close; injected
+fetch/cleanup failure; foreign transaction preservation; portal inventory and
+owned server shutdown. Compiler refusal/drift controls and browser/Python
+entrypoint parity are required. The existing boundary checker must own each new
+module before promotion.
+
+The [mechanics probe](../../04-build/evidence/typed-sdk-stream-20261016/cursor-mechanics.json)
+confirms only PostgreSQL18.6 portal behavior on a synthetic table. Both HOLD and
+NO HOLD cursors retain their data snapshot but continue FETCH after SELECT
+revocation; fresh native privilege inspection observes the revocation. Therefore
+that probe cannot establish Truss authority, current-policy safety or SDK stream
+qualification. Original admission before/after each page remains mandatory.

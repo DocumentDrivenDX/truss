@@ -403,6 +403,21 @@ class CatalogReferenceAssembly:
             maximum_rows=(limit+1 if type(limit) is int else 0) if maximum_rows is None else maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,
             manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=None,page_size=limit,page_cursor=cursor,engine_program=engine_program)
 
+    @_active_operation
+    def query_stream_open_in_transaction(self,transaction,*,engine_program,parameters,operation_deadline=None):
+        from ._query_stream_runtime import open_stream
+        return open_stream(self,transaction,engine_program=engine_program,parameters=parameters,operation_deadline=operation_deadline,pin_cursor=_pin_cursor)
+
+    @_active_operation
+    def query_stream_fetch_in_transaction(self,transaction,handle,*,count,validate,operation_deadline=None,final_bound=False):
+        from ._query_stream_runtime import fetch_stream
+        return fetch_stream(self,transaction,handle,count=count,validate=validate,operation_deadline=operation_deadline,final_bound=final_bound,pin_cursor=_pin_cursor)
+
+    @_active_operation
+    def query_stream_close_in_transaction(self,transaction,handle):
+        from ._query_stream_runtime import close_stream
+        return close_stream(self,transaction,handle,pin_cursor=_pin_cursor)
+
     def mutations(self,selection: CapabilitySelection[Literal['mutation']]) -> CapabilityUnavailable:
         with self._lock:return CapabilityUnavailable(reason='disposed' if self._disposed else 'selection')
     def dispose(self) -> AssemblyDisposed:
