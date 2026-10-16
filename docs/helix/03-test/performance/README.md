@@ -421,3 +421,31 @@ validate or reconstruct state from those snapshots, preserving exact transition
 history, replay, current authorization and final graph checks. It must not
 substitute a higher operation cap or a cache for that work. Raw measurements:
 [16-record diagnostic](results/preflight-bulk16-planning-20261016.json).
+
+
+### Current main, unmodified consumer workflows (2026-10-16)
+
+Main `0dd148c0` passes all three original consumer schemas through the existing
+public workflow runner. Each registers the complete source, commits 100 objects,
+performs 1,000 ID reads and 100 key reads, commits 200 real changed updates and
+verifies selected and unselected values on a fresh connection. These cases use
+Country, Category and UseCase respectively; they do not exercise every record or
+action in those schemas. The run takes 47.34 seconds on the local macOS ARM64
+PostgreSQL 18.6 host with fsync, full-page writes and synchronous commit enabled.
+Statement and operation deadlines remain 10 and 30 seconds.
+
+| Original sample | 100 creates + commit | Commit alone | ID-read p95 | Update + commit p50 / p95 |
+| --- | ---: | ---: | ---: | ---: |
+| Pizza | 1,429.67 ms | 273.49 ms | 5.28 ms | 22.90 / 25.57 ms |
+| Northwind | 2,656.32 ms | 390.30 ms | 4.57 ms | 29.21 / 31.41 ms |
+| Catalog | 2,898.43 ms | 451.52 ms | 4.64 ms | 32.54 / 34.88 ms |
+
+All sampled operations succeed. The point-read and write results still exceed
+the provisional 1 ms and 3 ms p95 budgets. This is a shared-machine observation,
+not a controlled causal comparison or a release performance pass. The configured
+limit remains 128; actual committed group sizes are 1 and 100, with no 1,024-operation
+claim. The report marks the working tree dirty because of unrelated untracked
+build/evidence files; tracked runtime sources were clean at the recorded commit.
+The [existing runner's complete report](results/main-real-schemas-20261016.json.gz)
+retains individual samples, source/runtime identity and settings without adding a
+runtime observation protocol.
