@@ -1,0 +1,21 @@
+{
+  "decision": "Rejected: leave candidate reverted",
+  "reason": "No meaningful overall benefit in one ordered paired run; added persistent index maintenance is unjustified.",
+  "functionalResults": "Both full 1000-node/1000-edge workflows passed with commits and reopened readback.",
+  "capacityResult": "Candidate 1024 CREATE timed out during final settlement before commit; no 1024 UPDATE/replay/readback evidence.",
+  "limits": {
+    "statementTimeoutMs": 10000,
+    "operationTimeoutMs": 30000
+  },
+  "scope": "One ordered local comparison, not a causal/general performance qualification. Baseline tracked source clean; dirty report flag reflects unrelated untracked files. Candidate tracked patch saved but not adopted.",
+  "sha256": {
+    "candidate-full-small.json": "0dd4fc7e77f462f89ccbc10266097a9118ec48471c294c110b9862398795b5b8",
+    "baseline-full-small.json": "d39d2194bdd0a330e006ee023ddfb28120cb8343e8c839a5521ef041880b5bbc",
+    "capacity-failed.log": "f23137fa6b9d72a76694cc2ac06b15f7e2a0eae996abc67edbe6388ebbf7254c",
+    "safety-upgrade.log": "ea022535173c43e377d8ea29896fe09273a1b95be76df8ee181fb61033603bf6",
+    "candidate-source.json": "c6f4a92a4ad435c123f8a7899200f96a1bd67c0d52730b901747471fe74a960a",
+    "astra-paired-decision.json": "c80e6a36541efeff2778cf25483c70c80c8ec4420dead637d5665b48200fa23e",
+    "candidate.patch.gz": "8923cf6c13e69b72164b2065878bea3cea41a3fb558b5bfbac686d49e3f0d288"
+  },
+  "uncompressedPatchSha256": "ac335fdd334d45930e2e9aa407ceef0c765d4015724a694f4460978041462298"
+}

@@ -1,0 +1,25 @@
+test_1024_real_creates_updates_replay_and_ordered_public_readback (test_group_capacity_native.GroupCapacityTests.test_1024_real_creates_updates_replay_and_ordered_public_readback) ... FAIL
+
+======================================================================
+FAIL: test_1024_real_creates_updates_replay_and_ordered_public_readback (test_group_capacity_native.GroupCapacityTests.test_1024_real_creates_updates_replay_and_ordered_public_readback)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-main-integration-20261010/packages/python/tests/test_group_capacity_native.py", line 46, in test_1024_real_creates_updates_replay_and_ordered_public_readback
+    self.assertIsInstance(created,Ok,repr(created)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(created.value,GroupSuccess,repr(created))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error') canceling statement due to statement timeout
+CONTEXT:  SQL statement "SELECT *                 FROM truss.runtime_definition_in_basis('property',property.type_id,property.prop_id,written_revision,basis)"
+PL/pgSQL function truss.runtime_object_history(jsonb,jsonb) line 14 at SQL statement
+PL/pgSQL function truss.runtime_create_transition_validate_qualified(bigint,oid,jsonb,bytea,truss.runtime_object_attempt) line 25 at IF
+SQL statement "SELECT truss.runtime_create_transition_validate_qualified(selected_transition,qualified_actor,prepared_input,source_bytes,attempt)"
+PL/pgSQL function truss.runtime_owned_object_transition_validate_qualified(bigint,boolean,oid,jsonb,bytea,truss.runtime_object_attempt,jsonb) line 40 at PERFORM
+SQL statement "SELECT truss.runtime_owned_object_transition_validate_qualified(transition_id,false,current_actor,input,attempt.input_bytes,attempt,history_dictionary)"
+PL/pgSQL function truss.runtime_owned_group_validate(uuid,boolean) line 93 at PERFORM
+SQL statement "SELECT truss.runtime_owned_group_validate(attempt.id,true)"
+PL/pgSQL function truss.object_group_finish(uuid) line 68 at PERFORM
+PL/pgSQL function truss.apply_group(bytea,bytea,bytea,text,text) line 15 at assignment
+
+----------------------------------------------------------------------
+Ran 1 test in 15.280s
+
+FAILED (failures=1)

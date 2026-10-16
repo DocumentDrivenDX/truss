@@ -1,0 +1,15 @@
+{
+  "scope": "Exact uncommitted generated index candidate before paired baseline; no production adoption.",
+  "head": "3d3c2afeff81eb8109b3ba81cd9bdd5a076e1423",
+  "files": {
+    "docs/helix/02-design/models/truss-owned-operation-core-0.1.proposal.umf.json": "b7e8e1bd910d37f4e35c795240d1616363764f4f99d37a725f5f8774eb2d7f81",
+    "docs/helix/02-design/models/truss-owned-operation-storage-0.1.proposal.umf.json": "d3420ae9cd7ae66dbec778080a65ffa69e3854b9af59f586c69da26a52c29762",
+    "packages/postgresql/owned-groups/operation-storage.generated.sql": "0df7b412f0459e482555280e4c87902d80fb561223fe3ca54c5f8978f19e58b6",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "b450d16edcb183fb29a4a7ee916f5278c04c9d6125564ad7121075754e479c28",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "6baad687fb76cd491ccafc4f2d47542ab87c958aa61c2fa9f756d04483396856",
+    "packages/python/tests/test_group_capacity_native.py": "217e11482320b498b5a0758b8415e29a21bc26446846c0ea64c718cb3ba4deb5",
+    "packages/python/tests/test_owned_transition_upgrade_native.py": "34fa0dd8d0fca125ede9300c204663eaa67e80decd2673e58db396965566b585",
+    "scripts/build-owned-operation-storage.ts": "aae81c280eb53cba07724e4722c255516655379dab30fa6102fdc19e3ddf1e9d"
+  },
+  "patchSha256": "ac335fdd334d45930e2e9aa407ceef0c765d4015724a694f4460978041462298"
+}

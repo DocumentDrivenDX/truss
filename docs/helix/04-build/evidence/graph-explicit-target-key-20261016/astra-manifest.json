@@ -1,0 +1,70 @@
+{
+  "after-tests.log": {
+    "sha256": "2941fd9eb46f639bfbb48cbc86b11e6361bf6f67c84625092c5261de1ae9ef05",
+    "bytes": 1532
+  },
+  "before-regression.log": {
+    "sha256": "0c0deadb1b189af2a8162e4d11545de0c6914c0fa802446c137deffec41c1089",
+    "bytes": 2236
+  },
+  "controls.json": {
+    "sha256": "520d6ef537bf6daaba25841906afcd2956085cf2ce9956c2bd90b10e0b1f10ec",
+    "bytes": 2064
+  },
+  "controls.log": {
+    "sha256": "51c39e9e5c68478617fa8965370779f285a59eb21e4140b69c9fb921d9294aa5",
+    "bytes": 394
+  },
+  "finalize.py": {
+    "sha256": "6e3f10e7ec9b3682bfd0612c33c2fa0cd155c2f9f8e04fd217b5112bcc2ff67f",
+    "bytes": 4256
+  },
+  "packet/after/packages/python/src/truss/_current_disclosure_facts.py": {
+    "sha256": "7540068d324ebf89fdfa51d05ccf4bd09652d9a8b9462f951a92254338b7283b",
+    "bytes": 23942
+  },
+  "packet/after/packages/python/tests/test_current_disclosure_graphs.py": {
+    "sha256": "1de37a72de8655a87ad2c8b1087cf0b4c82786e44737c36cca86ecb2b7e07665",
+    "bytes": 10618
+  },
+  "packet/after.log": {
+    "sha256": "5d1107d81847046675ba6c46bc5c12ab849af9d05a0cccb46fa272d833e8b8a3",
+    "bytes": 1640
+  },
+  "packet/before/packages/python/src/truss/_current_disclosure_facts.py": {
+    "sha256": "b4a85320574bc2a3481ca53eeed53acbb6bcb7eea34f7424befef273513a5550",
+    "bytes": 23650
+  },
+  "packet/before/packages/python/tests/test_current_disclosure_graphs.py": {
+    "sha256": "301837d5009e6fff5c3432202df8ba7a75ec05d8b185a93d861ba4dd4b7a3afa",
+    "bytes": 9255
+  },
+  "packet/before.log": {
+    "sha256": "5f13aba5bdc14144f51d3c7578779e808e1f1ec4b45c0374fb812f113537030c",
+    "bytes": 2274
+  },
+  "packet/canonical-core-schema.json": {
+    "sha256": "79e72f2ebef434c7d1e09d372c74d330b24109bb8af9778745a8d41275acee6e",
+    "bytes": 26793
+  },
+  "packet/change.diff": {
+    "sha256": "e7886afb89db85072ec7d83225001582058dbf3ba382d4abd78af9527759e04e",
+    "bytes": 3591
+  },
+  "packet/manifest.json": {
+    "sha256": "eb5330b790d3a457e04b147082893dd5483fbdb392081d9d57ab0e070a40dec5",
+    "bytes": 1333
+  },
+  "packet/scope.json": {
+    "sha256": "94f3be1667521726ea58b2d019f50dfd63142e58be2a79d67f9afc7150817a88",
+    "bytes": 909
+  },
+  "review-controls.py": {
+    "sha256": "5f070c840eeba895489c7523d68cc30cadb18dacaed077d1498651b4a8a88ed1",
+    "bytes": 7171
+  },
+  "review.json": {
+    "sha256": "6181037b5ce2c80983c5aa8190b9b7325a34525eadddb3ee7f853619c07010fe",
+    "bytes": 2963
+  }
+}

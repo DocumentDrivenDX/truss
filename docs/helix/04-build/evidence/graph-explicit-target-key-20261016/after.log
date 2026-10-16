@@ -1,0 +1,14 @@
+test_complete_parallel_typed_identity_projection (test_current_disclosure_graphs.GraphCaptureTests.test_complete_parallel_typed_identity_projection) ... ok
+test_empty_population_keeps_complete_graph_coverage (test_current_disclosure_graphs.GraphCaptureTests.test_empty_population_keeps_complete_graph_coverage) ... ok
+test_expired_operation_refuses_without_partial_graph_output (test_current_disclosure_graphs.GraphCaptureTests.test_expired_operation_refuses_without_partial_graph_output) ... ok
+test_explicit_authored_target_key_required_before_empty_coverage (test_current_disclosure_graphs.GraphCaptureTests.test_explicit_authored_target_key_required_before_empty_coverage) ... ok
+test_native_population_and_census_faults_refuse (test_current_disclosure_graphs.GraphCaptureTests.test_native_population_and_census_faults_refuse) ... ok
+test_no_graph_selection_performs_no_edge_query (test_current_disclosure_graphs.GraphCaptureTests.test_no_graph_selection_performs_no_edge_query) ... ok
+test_private_endpoint_bag_must_be_complete_distinct_and_typed (test_current_disclosure_graphs.GraphCaptureTests.test_private_endpoint_bag_must_be_complete_distinct_and_typed) ... ok
+test_repeated_large_endpoint_keys_refuse_before_unbounded_join (test_current_disclosure_graphs.GraphCaptureTests.test_repeated_large_endpoint_keys_refuse_before_unbounded_join) ... ok
+test_source_and_native_correspondence_mutants_refuse_even_empty (test_current_disclosure_graphs.GraphCaptureTests.test_source_and_native_correspondence_mutants_refuse_even_empty) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.016s
+
+OK

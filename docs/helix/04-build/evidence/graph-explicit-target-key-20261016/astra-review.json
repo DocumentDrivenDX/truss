@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "independent-review/1",
+  "verdict": "clean-within-three-question-scope",
+  "completedAtUTC": "2026-10-16T18:51:53.279899+00:00",
+  "deadlineUTC": "2026-10-16T18:54:32Z",
+  "base": "4cecba63e1eb81744950fcdeec33de2530d7c0e4",
+  "diffSha256": "e7886afb89db85072ec7d83225001582058dbf3ba382d4abd78af9527759e04e",
+  "questions": [
+    {
+      "question": 1,
+      "answer": "Yes. The guard requires a single target object with an explicitly authored nonempty string Key, consistent with canonical0.8 relationshipTarget required key and id minLength1. Existing profile/identity/Key/native correspondence checks remain byte/AST-identical outside the added guard.",
+      "location": "packages/python/src/truss/_current_disclosure_facts.py:232-235"
+    },
+    {
+      "question": 2,
+      "answer": "Yes. Regression changes the closure document, regenerates accepted documentJson and its SHA256, serializes the changed closure, and pairs missing authored Key with native null. Independently invoked require_current_model_correspondence succeeds for these altered supplied packets. Original helper accepts the missing/null pair and performs four simulated graph queries; added regression fails against original helper and passes against repaired helper.",
+      "location": "packages/python/tests/test_current_disclosure_graphs.py:61-81"
+    },
+    {
+      "question": 3,
+      "answer": "Yes. Entire original test-module AST remains identical after removing exactly one added regression. All nine tests pass, including valid parallel mapping, empty population, source/native census/identity, output bounds and deadline controls."
+    }
+  ],
+  "independentChecks": {
+    "packetMembersVerified": 9,
+    "beforeFilesExactGit": 2,
+    "helperASTOnlyAddedGuard": true,
+    "allTestsPassed": 9,
+    "oldRegressionExpectedFailure": {
+      "tests": 1,
+      "failures": 2
+    },
+    "additionalControls": 15,
+    "schemaTargetValidation": true,
+    "hashAndClosureCorrespondence": true,
+    "SQLExecuted": false
+  },
+  "commands": [
+    "/private/tmp/truss-practical-performance-env/bin/python -B review-controls.py"
+  ],
+  "findings": [],
+  "scope": [
+    "Supplied metadata/cursor unit validation only. Query counts are simulated cursor records; no SQL or native campaign ran.",
+    "No native exploit, original schema-path bypass, source admission, whole-engine acceptance, performance or authority claim. Original native/schema validation may refuse these malformed declarations earlier.",
+    "Only the frozen four-line guard, its regression, canonical schema subset, and unchanged existing graph controls were reviewed. No implementation ownership, nested delegation, future-change wait or broader review."
+  ],
+  "retention": "Frozen nine input members plus original manifest, scripts/results and report are retained. working/ is a reconstructible Git baseline source tree with exact frozen helper overlay and is excluded from artifact manifest."
+}
