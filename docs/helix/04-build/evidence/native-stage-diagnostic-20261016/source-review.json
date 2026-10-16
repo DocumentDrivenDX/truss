@@ -1,0 +1,61 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "SOURCE_CLEAR_DISPOSABLE_INSTRUMENTED_DIAGNOSTIC_NATIVE_PENDING",
+  "sourceCommit": "015d48c771b29fce9a6fbd1723d5b165e697c81c",
+  "planReview": "/private/tmp/truss-native-stage-diagnostic-plan-astra-20261016.json",
+  "scope": "Exact two-function marker-only diagnostic overlay and unchanged original public workload",
+  "findings": [],
+  "resolvedInitialFindings": [
+    {
+      "priority": "blocking",
+      "file": "/private/tmp/truss-stage-diagnostic-20261016/runner.py",
+      "issue": "setUp metadata/overlay hook executes before normal installation; base setUp creates only assembly and workflow installs later",
+      "fix": "Override install and call super().install before overlay and metadata work; preserve original workload install call"
+    },
+    {
+      "priority": "blocking",
+      "file": "/private/tmp/truss-stage-diagnostic-20261016/runner.py",
+      "issue": "Log copy error can prevent original class cleanup",
+      "fix": "Run original cleanup in finally while retaining copy error"
+    },
+    {
+      "priority": "required provenance",
+      "file": "/private/tmp/build-truss-stage-diagnostic-20261016.py",
+      "issue": "pins regeneration includes prior pins.json and any future result artifacts",
+      "fix": "Use fixed five input artifact names excluding pins/output files"
+    },
+    {
+      "priority": "required provenance",
+      "file": "/private/tmp/truss-stage-diagnostic-20261016/runner.py",
+      "issue": "Main report identifies production source/manifest without explicit overlay marker",
+      "fix": "Add instrumented=true, original/overlay hashes and installed body definition hashes; preserve source guard refusal"
+    }
+  ],
+  "checks": [
+    "Removing only uniquely prefixed diagnostic declarations/assignments/RAISELOG and CREATEORREPLACE restores exact original two functions byte-for-byte.",
+    "Original function extracts match current main authored execute/finalize definitions.",
+    "Original workload method AST is identical; original repeat counts, public operations and deadline handling unchanged.",
+    "Overlay runs in install override after super().install; normal basefixture and original workflow install call preserved.",
+    "Metadata asserts OID/owner/ACL/proconfig/volatility/security/kind/input/result types equal; installed exact prosrc compared to each overlay, before/after pg_get_functiondef retained, existing routine body inventory changes restricted to two target OIDs.",
+    "Cleanup always calls original cleanup in finally; log-copy error is retained and re-raised.",
+    "Pins fixed to five input artifacts, no self-hash or result artifact inclusion; all five hashes verified.",
+    "Report explicitly sets instrumentedDiagnostic=true, overlay hashes and diagnostic-only scope.",
+    "Python AST checks pass; no new SQL execution or source-guard bypass introduced."
+  ],
+  "artifactHashes": {
+    "validate-original.sql": "cd461d7f2cdf9d1a9b168a7a198b24f457a4b2a7711b9e728e0d5fc3821fcc6e",
+    "validate-overlay.sql": "b62f956faa0c50bd267b6ce9d07d24a00ae8b61356f9b087ac0e1f33b6ac4704",
+    "prepare-original.sql": "bf92e79def1930a646b2a07632556533fb1cdb58368ee1953d8a99748b7a98b1",
+    "prepare-overlay.sql": "69b780cd3b01ae19fc17e329b345e82e9118864a0b6065e2df842ef073a1a419",
+    "runner.py": "bf79880f2730f8146c8046a261a4c06846a91fb1195ff7ce4e44e4a738950519",
+    "pins.json": "8b85e9eed6352341c33b0afaac15c713fc69433326c120e041068703d61dd206",
+    "generator.py": "f75a8c158088c5667fd50f2378662f5e1fd50d8a1f02153f290a904e605781cf"
+  },
+  "native": "Not run by reviewer or parent as of this source review",
+  "limits": [
+    "Instrumentation overhead can alter deadlines; no production latency/performance qualification.",
+    "Missing stage-end marker on refusal/cancellation denotes incomplete phase timing.",
+    "Installed definition/source attestation remains enforced; any resulting refusal is retained, not bypassed.",
+    "Install timing includes overlay/metadata work; diagnose marked SQL phases rather than comparing that install timing to production."
+  ]
+}

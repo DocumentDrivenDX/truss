@@ -1,0 +1,62 @@
+{
+  "before": [
+    [
+      17674,
+      17995,
+      "{truss_owner_614895f0c7204781=X/truss_owner_614895f0c7204781}",
+      [
+        "search_path=pg_catalog, pg_temp"
+      ],
+      "v",
+      false,
+      "f",
+      "3802 3802",
+      3802
+    ],
+    [
+      17704,
+      17995,
+      "{truss_owner_614895f0c7204781=X/truss_owner_614895f0c7204781}",
+      [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC",
+        "bytea_output=hex"
+      ],
+      "v",
+      false,
+      "f",
+      "2950 16",
+      2278
+    ]
+  ],
+  "after": [
+    [
+      17674,
+      17995,
+      "{truss_owner_614895f0c7204781=X/truss_owner_614895f0c7204781}",
+      [
+        "search_path=pg_catalog, pg_temp"
+      ],
+      "v",
+      false,
+      "f",
+      "3802 3802",
+      3802
+    ],
+    [
+      17704,
+      17995,
+      "{truss_owner_614895f0c7204781=X/truss_owner_614895f0c7204781}",
+      [
+        "search_path=pg_catalog, pg_temp",
+        "TimeZone=UTC",
+        "bytea_output=hex"
+      ],
+      "v",
+      false,
+      "f",
+      "2950 16",
+      2278
+    ]
+  ]
+}

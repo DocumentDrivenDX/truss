@@ -1,0 +1,745 @@
+{
+  "scope": "Disposable instrumented phase costs only; large calls selected by >=250ms observed total. No production performance qualification. Missing end markers mean incomplete calls, not zero cost.",
+  "calls": 644,
+  "incompleteCalls": 1,
+  "largeCallSummary": [
+    {
+      "function": "runtime_owned_group_validate",
+      "checkFinal": "false",
+      "calls": 4,
+      "incomplete": 0,
+      "phases": [
+        {
+          "phase": "authority_end",
+          "samples": 4,
+          "medianMs": 0.438,
+          "maxMs": 0.467
+        },
+        {
+          "phase": "census_end",
+          "samples": 4,
+          "medianMs": 5.4415,
+          "maxMs": 7.434
+        },
+        {
+          "phase": "history_end",
+          "samples": 4,
+          "medianMs": 6.9585,
+          "maxMs": 7.772
+        },
+        {
+          "phase": "transitions_end",
+          "samples": 4,
+          "medianMs": 1714.8105,
+          "maxMs": 1784.737
+        }
+      ]
+    },
+    {
+      "function": "runtime_owned_group_validate",
+      "checkFinal": "true",
+      "calls": 5,
+      "incomplete": 1,
+      "phases": [
+        {
+          "phase": "authority_end",
+          "samples": 5,
+          "medianMs": 0.463,
+          "maxMs": 0.539
+        },
+        {
+          "phase": "census_end",
+          "samples": 5,
+          "medianMs": 5.654,
+          "maxMs": 7.869
+        },
+        {
+          "phase": "edge_checks_end",
+          "samples": 5,
+          "medianMs": 4.776,
+          "maxMs": 5.408
+        },
+        {
+          "phase": "forest_end",
+          "samples": 4,
+          "medianMs": 224.1865,
+          "maxMs": 241.496
+        },
+        {
+          "phase": "history_end",
+          "samples": 5,
+          "medianMs": 7.507,
+          "maxMs": 8.194
+        },
+        {
+          "phase": "identities_end",
+          "samples": 5,
+          "medianMs": 538.312,
+          "maxMs": 589.404
+        },
+        {
+          "phase": "node_checks_end_before_error",
+          "samples": 5,
+          "medianMs": 5.62,
+          "maxMs": 6.402
+        },
+        {
+          "phase": "transitions_end",
+          "samples": 5,
+          "medianMs": 1820.57,
+          "maxMs": 1859.639
+        }
+      ]
+    },
+    {
+      "function": "runtime_owned_prepare",
+      "checkFinal": "<NULL>",
+      "calls": 5,
+      "incomplete": 0,
+      "phases": [
+        {
+          "phase": "forest_end",
+          "samples": 5,
+          "medianMs": 60.271,
+          "maxMs": 62.693
+        },
+        {
+          "phase": "multiplicity_end",
+          "samples": 5,
+          "medianMs": 293.185,
+          "maxMs": 305.323
+        },
+        {
+          "phase": "operation_loop_end",
+          "samples": 5,
+          "medianMs": 1829.13,
+          "maxMs": 1920.939
+        },
+        {
+          "phase": "output_end",
+          "samples": 5,
+          "medianMs": 22.619,
+          "maxMs": 28.296
+        },
+        {
+          "phase": "scope_end",
+          "samples": 5,
+          "medianMs": 67.765,
+          "maxMs": 70.378
+        }
+      ]
+    }
+  ],
+  "largeCalls": [
+    {
+      "function": "runtime_owned_prepare",
+      "pid": 63551,
+      "checkFinal": "<NULL>",
+      "attempt": "<NULL>",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.091,
+          "totalMs": 0.114
+        },
+        {
+          "phase": "scope_end",
+          "stageMs": 0.542,
+          "totalMs": 0.717
+        },
+        {
+          "phase": "operation_loop_end",
+          "stageMs": 192.39,
+          "totalMs": 193.144
+        },
+        {
+          "phase": "forest_end",
+          "stageMs": 60.02,
+          "totalMs": 253.23
+        },
+        {
+          "phase": "multiplicity_end",
+          "stageMs": 12.425,
+          "totalMs": 265.706
+        },
+        {
+          "phase": "output_end",
+          "stageMs": 15.813,
+          "totalMs": 281.555
+        }
+      ],
+      "totalMs": 281.555,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_group_validate",
+      "pid": 63551,
+      "checkFinal": "true",
+      "attempt": "e7ec9348-a73f-4ad0-b467-de55103fc305",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.027,
+          "totalMs": 0.037
+        },
+        {
+          "phase": "census_end",
+          "stageMs": 7.869,
+          "totalMs": 7.981
+        },
+        {
+          "phase": "history_end",
+          "stageMs": 3.687,
+          "totalMs": 11.733
+        },
+        {
+          "phase": "transitions_end",
+          "stageMs": 1820.57,
+          "totalMs": 1832.337
+        },
+        {
+          "phase": "authority_end",
+          "stageMs": 0.361,
+          "totalMs": 1832.764
+        },
+        {
+          "phase": "identities_end",
+          "stageMs": 15.454,
+          "totalMs": 1848.262
+        },
+        {
+          "phase": "node_checks_end_before_error",
+          "stageMs": 4.96,
+          "totalMs": 1853.265
+        },
+        {
+          "phase": "edge_checks_end",
+          "stageMs": 0.418,
+          "totalMs": 1853.717
+        },
+        {
+          "phase": "forest_end",
+          "stageMs": 124.119,
+          "totalMs": 1977.876
+        }
+      ],
+      "totalMs": 1977.876,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_group_validate",
+      "pid": 63551,
+      "checkFinal": "false",
+      "attempt": "e7ec9348-a73f-4ad0-b467-de55103fc305",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.002,
+          "totalMs": 0.004
+        },
+        {
+          "phase": "census_end",
+          "stageMs": 7.434,
+          "totalMs": 7.463
+        },
+        {
+          "phase": "history_end",
+          "stageMs": 3.522,
+          "totalMs": 11.008
+        },
+        {
+          "phase": "transitions_end",
+          "stageMs": 1726.208,
+          "totalMs": 1737.231
+        },
+        {
+          "phase": "authority_end",
+          "stageMs": 0.308,
+          "totalMs": 1737.589
+        }
+      ],
+      "totalMs": 1737.589,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_prepare",
+      "pid": 63551,
+      "checkFinal": "<NULL>",
+      "attempt": "<NULL>",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.004,
+          "totalMs": 0.006
+        },
+        {
+          "phase": "scope_end",
+          "stageMs": 36.399,
+          "totalMs": 36.453
+        },
+        {
+          "phase": "operation_loop_end",
+          "stageMs": 446.868,
+          "totalMs": 483.366
+        },
+        {
+          "phase": "forest_end",
+          "stageMs": 60.271,
+          "totalMs": 543.698
+        },
+        {
+          "phase": "multiplicity_end",
+          "stageMs": 293.185,
+          "totalMs": 836.921
+        },
+        {
+          "phase": "output_end",
+          "stageMs": 28.296,
+          "totalMs": 865.259
+        }
+      ],
+      "totalMs": 865.259,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_group_validate",
+      "pid": 63551,
+      "checkFinal": "true",
+      "attempt": "8dab14c0-c837-42b0-a3c5-9c17bd85cb9e",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.003,
+          "totalMs": 0.006
+        },
+        {
+          "phase": "census_end",
+          "stageMs": 5.654,
+          "totalMs": 5.703
+        },
+        {
+          "phase": "history_end",
+          "stageMs": 6.547,
+          "totalMs": 12.281
+        },
+        {
+          "phase": "transitions_end",
+          "stageMs": 1350.456,
+          "totalMs": 1362.756
+        },
+        {
+          "phase": "authority_end",
+          "stageMs": 0.539,
+          "totalMs": 1363.332
+        },
+        {
+          "phase": "identities_end",
+          "stageMs": 22.403,
+          "totalMs": 1385.766
+        },
+        {
+          "phase": "node_checks_end_before_error",
+          "stageMs": 6.402,
+          "totalMs": 1392.21
+        },
+        {
+          "phase": "edge_checks_end",
+          "stageMs": 5.408,
+          "totalMs": 1397.665
+        },
+        {
+          "phase": "forest_end",
+          "stageMs": 209.469,
+          "totalMs": 1607.173
+        }
+      ],
+      "totalMs": 1607.173,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_group_validate",
+      "pid": 63551,
+      "checkFinal": "false",
+      "attempt": "8dab14c0-c837-42b0-a3c5-9c17bd85cb9e",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.002,
+          "totalMs": 0.004
+        },
+        {
+          "phase": "census_end",
+          "stageMs": 5.599,
+          "totalMs": 5.629
+        },
+        {
+          "phase": "history_end",
+          "stageMs": 6.455,
+          "totalMs": 12.106
+        },
+        {
+          "phase": "transitions_end",
+          "stageMs": 1370.128,
+          "totalMs": 1382.25
+        },
+        {
+          "phase": "authority_end",
+          "stageMs": 0.467,
+          "totalMs": 1382.784
+        }
+      ],
+      "totalMs": 1382.784,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_prepare",
+      "pid": 63893,
+      "checkFinal": "<NULL>",
+      "attempt": "<NULL>",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.003,
+          "totalMs": 0.006
+        },
+        {
+          "phase": "scope_end",
+          "stageMs": 70.378,
+          "totalMs": 70.43
+        },
+        {
+          "phase": "operation_loop_end",
+          "stageMs": 1829.13,
+          "totalMs": 1899.607
+        },
+        {
+          "phase": "forest_end",
+          "stageMs": 60.177,
+          "totalMs": 1959.831
+        },
+        {
+          "phase": "multiplicity_end",
+          "stageMs": 292.16,
+          "totalMs": 2252.021
+        },
+        {
+          "phase": "output_end",
+          "stageMs": 23.368,
+          "totalMs": 2275.435
+        }
+      ],
+      "totalMs": 2275.435,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_group_validate",
+      "pid": 63893,
+      "checkFinal": "true",
+      "attempt": "922e25cf-8bf0-4357-ade8-6f688d1f38b1",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.004,
+          "totalMs": 0.007
+        },
+        {
+          "phase": "census_end",
+          "stageMs": 5.438,
+          "totalMs": 5.492
+        },
+        {
+          "phase": "history_end",
+          "stageMs": 7.507,
+          "totalMs": 13.029
+        },
+        {
+          "phase": "transitions_end",
+          "stageMs": 1710.354,
+          "totalMs": 1723.41
+        },
+        {
+          "phase": "authority_end",
+          "stageMs": 0.423,
+          "totalMs": 1723.882
+        },
+        {
+          "phase": "identities_end",
+          "stageMs": 538.312,
+          "totalMs": 2262.213
+        },
+        {
+          "phase": "node_checks_end_before_error",
+          "stageMs": 5.62,
+          "totalMs": 2267.877
+        },
+        {
+          "phase": "edge_checks_end",
+          "stageMs": 4.656,
+          "totalMs": 2272.553
+        },
+        {
+          "phase": "forest_end",
+          "stageMs": 238.904,
+          "totalMs": 2511.482
+        }
+      ],
+      "totalMs": 2511.482,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_group_validate",
+      "pid": 63893,
+      "checkFinal": "false",
+      "attempt": "922e25cf-8bf0-4357-ade8-6f688d1f38b1",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.001,
+          "totalMs": 0.003
+        },
+        {
+          "phase": "census_end",
+          "stageMs": 5.284,
+          "totalMs": 5.314
+        },
+        {
+          "phase": "history_end",
+          "stageMs": 7.772,
+          "totalMs": 13.105
+        },
+        {
+          "phase": "transitions_end",
+          "stageMs": 1703.413,
+          "totalMs": 1716.534
+        },
+        {
+          "phase": "authority_end",
+          "stageMs": 0.412,
+          "totalMs": 1716.986
+        }
+      ],
+      "totalMs": 1716.986,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_prepare",
+      "pid": 63893,
+      "checkFinal": "<NULL>",
+      "attempt": "<NULL>",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.004,
+          "totalMs": 0.007
+        },
+        {
+          "phase": "scope_end",
+          "stageMs": 67.765,
+          "totalMs": 67.838
+        },
+        {
+          "phase": "operation_loop_end",
+          "stageMs": 1849.055,
+          "totalMs": 1916.941
+        },
+        {
+          "phase": "forest_end",
+          "stageMs": 61.448,
+          "totalMs": 1978.442
+        },
+        {
+          "phase": "multiplicity_end",
+          "stageMs": 293.403,
+          "totalMs": 2271.887
+        },
+        {
+          "phase": "output_end",
+          "stageMs": 19.188,
+          "totalMs": 2291.124
+        }
+      ],
+      "totalMs": 2291.124,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_group_validate",
+      "pid": 63893,
+      "checkFinal": "true",
+      "attempt": "5c69abd0-91c6-4cd5-b045-b75e51f13793",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.004,
+          "totalMs": 0.007
+        },
+        {
+          "phase": "census_end",
+          "stageMs": 6.173,
+          "totalMs": 6.21
+        },
+        {
+          "phase": "history_end",
+          "stageMs": 8.194,
+          "totalMs": 14.438
+        },
+        {
+          "phase": "transitions_end",
+          "stageMs": 1859.639,
+          "totalMs": 1874.115
+        },
+        {
+          "phase": "authority_end",
+          "stageMs": 0.463,
+          "totalMs": 1874.614
+        },
+        {
+          "phase": "identities_end",
+          "stageMs": 558.374,
+          "totalMs": 2433.009
+        },
+        {
+          "phase": "node_checks_end_before_error",
+          "stageMs": 5.564,
+          "totalMs": 2438.622
+        },
+        {
+          "phase": "edge_checks_end",
+          "stageMs": 4.776,
+          "totalMs": 2443.423
+        },
+        {
+          "phase": "forest_end",
+          "stageMs": 241.496,
+          "totalMs": 2684.937
+        }
+      ],
+      "totalMs": 2684.937,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_group_validate",
+      "pid": 63893,
+      "checkFinal": "false",
+      "attempt": "5c69abd0-91c6-4cd5-b045-b75e51f13793",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.001,
+          "totalMs": 0.003
+        },
+        {
+          "phase": "census_end",
+          "stageMs": 5.17,
+          "totalMs": 5.213
+        },
+        {
+          "phase": "history_end",
+          "stageMs": 7.462,
+          "totalMs": 12.694
+        },
+        {
+          "phase": "transitions_end",
+          "stageMs": 1784.737,
+          "totalMs": 1797.455
+        },
+        {
+          "phase": "authority_end",
+          "stageMs": 0.464,
+          "totalMs": 1797.958
+        }
+      ],
+      "totalMs": 1797.958,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_prepare",
+      "pid": 63893,
+      "checkFinal": "<NULL>",
+      "attempt": "<NULL>",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.004,
+          "totalMs": 0.007
+        },
+        {
+          "phase": "scope_end",
+          "stageMs": 70.314,
+          "totalMs": 70.36
+        },
+        {
+          "phase": "operation_loop_end",
+          "stageMs": 1920.939,
+          "totalMs": 1991.346
+        },
+        {
+          "phase": "forest_end",
+          "stageMs": 62.693,
+          "totalMs": 2054.096
+        },
+        {
+          "phase": "multiplicity_end",
+          "stageMs": 305.323,
+          "totalMs": 2359.461
+        },
+        {
+          "phase": "output_end",
+          "stageMs": 22.619,
+          "totalMs": 2382.122
+        }
+      ],
+      "totalMs": 2382.122,
+      "complete": true
+    },
+    {
+      "function": "runtime_owned_group_validate",
+      "pid": 63893,
+      "checkFinal": "true",
+      "attempt": "394c9441-662d-4bfe-a2ed-b71431756d0c",
+      "phases": [
+        {
+          "phase": "start",
+          "stageMs": 0.004,
+          "totalMs": 0.007
+        },
+        {
+          "phase": "census_end",
+          "stageMs": 5.538,
+          "totalMs": 5.575
+        },
+        {
+          "phase": "history_end",
+          "stageMs": 7.888,
+          "totalMs": 13.492
+        },
+        {
+          "phase": "transitions_end",
+          "stageMs": 1856.469,
+          "totalMs": 1869.995
+        },
+        {
+          "phase": "authority_end",
+          "stageMs": 0.481,
+          "totalMs": 1870.512
+        },
+        {
+          "phase": "identities_end",
+          "stageMs": 589.404,
+          "totalMs": 2459.936
+        },
+        {
+          "phase": "node_checks_end_before_error",
+          "stageMs": 5.906,
+          "totalMs": 2465.886
+        },
+        {
+          "phase": "edge_checks_end",
+          "stageMs": 4.935,
+          "totalMs": 2470.851
+        }
+      ],
+      "totalMs": 2470.851,
+      "complete": false
+    }
+  ]
+}

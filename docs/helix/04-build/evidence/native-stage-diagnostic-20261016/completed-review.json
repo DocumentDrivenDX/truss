@@ -1,0 +1,40 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "DIAGNOSTIC_EVIDENCE_CLEAR_INSTRUMENTED_FAILURE_NO_PERFORMANCE_QUALIFICATION",
+  "scope": "Evidence directory only; no product source changes",
+  "baseCommit": "015d48c771b29fce9a6fbd1723d5b165e697c81c",
+  "sourceReview": "/private/tmp/truss-native-stage-diagnostic-astra-20261016.json",
+  "findings": [],
+  "checks": [
+    "All bundled original/overlay/runner pins match reviewed artifact bytes; installed pg_get_functiondef bodies equal the exact original and overlay prosrc. OID/owner/ACL/GUC metadata before/after is equal.",
+    "Raw compressed report, runnerlog, PostgreSQLlog, installeddefinitions and separate developmentCI failure log match originals byte-for-byte.",
+    "Independent recomputation reproduces4294markers/644calls/one incomplete invocation and all large-call aggregate medians; grouping by function/backend/start has no observed metadata collisions.",
+    "PID63551 contains202prepare/202finish/202commit calls: create and edge groups plus200singles. PID63893 contains13prepare/13finish/12commit calls:5single,5hundred,3thousand attempts with the third cancelled.",
+    "Completed1000update attempts922e25cf and5c69abd0 support README values: prepare2275.435/2291.124ms,finish2511.482/2684.937ms,commit transition1703.413/1784.737ms.",
+    "Attempt394c9441 lacks forest_end; observed last marker2470.851ms and native error context locates cancellation in forest projection. No omitted duration is inferred as zero.",
+    "README distinguishes >=250ms retained call subset from all raw calls and mixed create/edge/update aggregate; corrected parser reads retained gzip directly.",
+    "Report remains passed=false,functionalPassed=false,instrumentedDiagnostic=true,performanceQualification=not_evaluated. Original10000ms/30000ms deadlines retained; two1000updates committed and cleanup passed.",
+    "Separate developmentCI38905362987 actual1024create57014 failures on both platforms preserved; no implication that publishedSDK37 failed or main38 is qualified."
+  ],
+  "evidenceHashes": {
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/README.md": "0caa7dca98a757b6e6a60c5754842ff35948c71cfaa3831ae602100b1177c98c",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/analyze.py": "8b44d8541eb2941ebc21b08d907a8a9689cedd4bf7ab869bbd921e1e197b0f9a",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/development-ci-failure.log.gz": "5e76b210108a4553258eb8942013ccfdd9c526f2db4c268805df9d0ef9e8cc7d",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/diagnostic-source.json.gz": "841c7c623dabb3fd86f7d9e41371dee0bb0e7b426451ab5c0b1a79f221c54c52",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/installed-definitions.json.gz": "45d22e4e9cd3ebaacc2c03d0a8904db24632565b58bb10b356e6ca326111f6b4",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/instrumented-report.json.gz": "7f01309fe50212c1ef24738877354d13c770a93158ae86697171c5bc77930160",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/metadata.json": "cc5f1b5f7fbc929cb91292778ac24939a159b3e0266eb42b5b91a43cf02fdcf9",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/pins.json": "8b85e9eed6352341c33b0afaac15c713fc69433326c120e041068703d61dd206",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/plan-review.json": "0781b4c797482dcf9b5e0d72db63333fa4cf87196c85d72c06b96ff683a46913",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/postgres.log.gz": "88c80876b147c3bf614dc4348056726b0055052f0ddcf9a4f9f18474ddc7481c",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/runner.log.gz": "3b1593610a49860cce944a5465b4b7bbef7b0911388318cd43b81cd4c5f67c31",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/source-review.json": "63b64eeac9089574af629fe3cb1aae24cf91424ce2993b0cf0ee518736501dab",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/stage-analysis.json": "449a1d591b88b3a2353bd076417d630b47e251d62a623a536a562a49a7d8c303"
+  },
+  "nativeExecution": "Parent7346 only; reviewer ran static/evidence checks and independent parsing, no native execution",
+  "limitations": [
+    "Stage timings include logging overhead; source-manifest digest identifies underlying source, while separate hashes identify installed overlays.",
+    "Census timer includes input, actor and census work; phase timings are not individual SQL self-cost.",
+    "Later incomplete call does not establish forest duration; no causal optimization, production headroom, release-runner or whole-workload performance qualification."
+  ]
+}

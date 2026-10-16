@@ -1,0 +1,30 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "PLAN_CLEAR_DISPOSABLE_INSTRUMENTED_DIAGNOSIS_ONLY",
+  "baseCommit": "e4153b38013ac7966957cb736d847765dd0316be",
+  "sourceHashes": {
+    "packages/postgresql/owned-groups/finalize.sql": "cbadf2d23241cfc6e04f65df14ce2d02888b8036829eec0a70c7311a6292279d",
+    "packages/postgresql/owned-groups/execute.sql": "ed7acc8b5320ce228a06c03d5efa9ecfe5c08b084e2c95af3df31edd70470e85",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "fa108ffe7b2f53ead1ecfd147dde19c80d1d3769e0cb32a5a1f4ef588a96e1fa",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "31870f9b5c2f5c755b69579e0ebdf3bdea80fadb6a89706d073ed8181c776b94"
+  },
+  "scope": "Two-function temporary SQL overlay of runtime_owned_group_validate(uuid,boolean) and runtime_owned_prepare(jsonb,jsonb) in disposable normally installed test database; unchanged original matrix",
+  "findings": [],
+  "constraints": [
+    "Extract exact current function definitions; add only uniquely named local timestamps, assignment clock reads and constant-format RAISE LOG stage markers. Preserve all original executable statements/order and existing return/exception behavior.",
+    "Insert markers between complete statements only; do not add SELECT, PERFORM, diagnostic DML, per-member logging, or exception catch/rethrow wrappers. Do not alter FOUND or row-count diagnostics.",
+    "CREATE OR REPLACE same signatures; preserve VOLATILE SECURITY INVOKER, search_path and exact per-function GUCs; verify original OID, owner, ACL and function configuration remain equal.",
+    "Install only after normal runtime installation in disposable owned fixture, retaining source-custody guards. Any guard refusal remains diagnostic failure, not grounds to bypass verification.",
+    "Retain original source and overlay SHA256, explicit diff and per-function before/after definition hashes. Runtime report must state installed functions are instrumented and distinguish from production manifest bytes.",
+    "Log stage start/end and elapsed interval, function, selected_attempt/check_final when available, backend and invocation correlation; avoid JSON serialization or user value dumps. Missing end after cancellation denotes incomplete stage duration.",
+    "group_validate stages: input/census, history metadata, operation loop, current authority, final identities, node/incident comparison, edge comparison, forest. Include check_final=false early return to distinguish commit settlement from final images.",
+    "prepare stages: admission and initial-scope construction, complete operation loop, final forest, final multiplicity loop, final group-plan construction/size guard. Preserve sparse per-operation plans and complete final frame.",
+    "Run all original matrix work and existing five update repeats with10000ms statement/30000ms operation limits unchanged. Collect log before teardown; preserve primary failure and cleanup outcome.",
+    "No production source/storage/API/grant/cache/metric changes and no native execution by reviewer. Timing overhead and potential cancellation changes preclude production performance qualification."
+  ],
+  "sourceObservations": [
+    "Current prepare nonfinal plain create/update plans are sparse; final operation retains the full graph. Source does not support assuming history metadata is quadratic for ordinary updates.",
+    "Prepare final multiplicity traverses each live node and admitted relation, scanning live edges separately for outgoing and incoming counts; measure stage instead of attributing cancellation elsewhere."
+  ],
+  "nextStep": "Parent authors exact temporary overlay and runs diagnostic when coordinated CPU window is free; source overlay should remain an explicit evidence artifact."
+}
