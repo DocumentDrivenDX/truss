@@ -677,3 +677,30 @@ median1,000-update plus commit11,643.6ms. This is functional evidence with local
 timings, not hosted performance qualification or proof of provisional latency
 targets. The exact committed runtime manifest matches the result. Its dirty-tree
 flag reflects untracked build/cache files; tracked source matched main1a12.
+
+### Full Linux release job passes; macOS capacity still open
+
+[Run38976295079](https://github.com/DocumentDrivenDX/truss/actions/runs/38976295079)
+on committed main1a12f40c passed packaging and the complete Linux installed-wheel
+native job, including the original1,024-operation workflow, upgrades, current-policy
+and numeric/query checks. macOS passed17 of18 owned-graph-step cases but the
+original1,024-CREATE statement timed out in group-finalization identity resolution
+with SQLSTATE57014. [The original failed-step log](results/2026-10-16-release38976295079-failed.log)
+retains the stack. Publication was skipped; no tag was created.
+
+A subsequent local progress-only composite projection trial passed but showed no
+material whole-operation benefit: CREATE apply4,369.8ms versus4,391.6ms after
+restoring committed source. That trial was discarded.
+
+### Reuse the checked actor during metadata capture
+
+The affected-type collection now calls its existing qualified type resolver with
+capture's freshly checked actor. It previously called a wrapper that repeated the
+full person/unsafe-role-graph check for each operation. No writes intervene; every
+operation's source/identity/property-reader checks and later effect, settlement and
+commit actor checks remain unchanged. The original1,024-CREATE diagnostic passes
+and person-check calls fall from2,059 to1,035. Whole apply measured4,403.7ms versus
+a recent restored-source4,391.6ms; no whole-operation speedup is established.
+Ten existing capacity, actor/role/reader, owner-only helper, revoked-writer, owned
+graph and plan-corruption checks pass in48.318s. Astra Ultra clears the plan and
+owner/generated source, and generator `--check` verifies all manifest hashes.

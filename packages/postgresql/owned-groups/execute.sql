@@ -449,7 +449,7 @@ BEGIN
  -- same original readers as explicit operations, before graph exclusion.
  FOR selected_type IN SELECT type_id FROM (
   SELECT DISTINCT (value->>'type_id')::int type_id FROM jsonb_each(observed->'types')
-  UNION SELECT (truss.runtime_operation_type(value,input->'operations',(ordinal-1)::int)).type_id
+  UNION SELECT (truss.runtime_owned_operation_type_qualified(value,input->'operations',(ordinal-1)::int,current_actor)).type_id
    FROM jsonb_array_elements(input->'operations') WITH ORDINALITY o(value,ordinal)
    WHERE value->>'operation' IN ('create_object','update_object','delete_object')
  ) affected_types ORDER BY type_id LOOP
