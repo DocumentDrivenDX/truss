@@ -2,7 +2,7 @@
   "status": "unreleased development checkpoint",
   "sdk": "0.0.36.dev0",
   "runtime": "truss-catalog-runtime/0.69-candidate",
-  "runtimeManifestSha256": "098e8abe2758df376219a5f2b7abc465cc3a0a0c0ba30e3d2d2d1d9ffac4d3f0",
+  "runtimeManifestSha256": "37288348f5ada0f05466894ff0c7c2e3e692852f1bfa32ddceeeba433dde201c",
   "postgresql": "18.6",
   "pgserver-pg18": "18.6.1",
   "psycopg": "3.3.6",
@@ -70,6 +70,22 @@
       "passed": 1,
       "seconds": 6.451,
       "predecessorWheelSha256": "7fb3ac4c2e407f7811ced8b69e9b243323d1812ffe7b3a94d6d8ce8be80d6559"
+    },
+    {
+      "cases": [
+        "owned public object page limit2 and continuation, graph workflow"
+      ],
+      "passed": 1,
+      "seconds": 8.896,
+      "runtimeManifestSha256": "37288348f5ada0f05466894ff0c7c2e3e692852f1bfa32ddceeeba433dde201c"
+    },
+    {
+      "cases": [
+        "existing current-policy masked exact predicate query with original published Weft34 cohort"
+      ],
+      "passed": 1,
+      "seconds": 12.629,
+      "runtimeManifestSha256": "37288348f5ada0f05466894ff0c7c2e3e692852f1bfa32ddceeeba433dde201c"
     }
   ],
   "developmentWheel": {
@@ -92,5 +108,7 @@
     "owned imports",
     "owned catalog rebinding/key backfill",
     "broader value/managed-service goal scope"
-  ]
+  ],
+  "priorCheckpointRuntimeManifestSha256": "098e8abe2758df376219a5f2b7abc465cc3a0a0c0ba30e3d2d2d1d9ffac4d3f0",
+  "runScope": "Earlier runs retain their development-checkpoint scope. Only runs explicitly pinned to runtimeManifestSha256 below claim the current source manifest."
 }

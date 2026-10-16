@@ -4,7 +4,7 @@ CREATE FUNCTION truss.page_objects(selected_document text,selected_module text,s
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_type truss.type_def%ROWTYPE;
  captured_revision int;source_pin record;cursor_value jsonb;after_id bigint:=0;candidate record;
- objects jsonb:='[]';object_bytes bytea;object_value jsonb;continuation jsonb;result bytea;counted int:=0;last_id bigint;
+ objects jsonb:='[]';lookahead_root_owner jsonb;object_bytes bytea;object_value jsonb;continuation jsonb;result bytea;counted int:=0;last_id bigint;
 BEGIN
  PERFORM truss.runtime_person(false);
  IF selected_document IS NULL OR selected_module IS NULL OR selected_record IS NULL
@@ -46,6 +46,11 @@ BEGIN
  FOR candidate IN SELECT id FROM truss.object WHERE type_id=selected_type.type_id AND id>after_id ORDER BY id LIMIT page_limit+1 LOOP
   counted:=counted+1;
   IF counted>page_limit THEN
+   object_bytes:=truss.get_object(selected_document,selected_module,selected_record,candidate.id,16777216,expected_release,expected_digest);
+   IF object_bytes IS NULL THEN RAISE EXCEPTION 'page lookahead no longer admitted' USING ERRCODE='55P03';END IF;
+   object_value:=convert_from(object_bytes,'UTF8')::jsonb;
+   IF object_value->>'catalogRevision' IS DISTINCT FROM captured_revision::text THEN RAISE EXCEPTION 'catalog changed during page lookahead' USING ERRCODE='55P03';END IF;
+   IF object_value->>'profile'='truss-python-logical-object/0.1' THEN lookahead_root_owner:=object_value->'root'->'owner';END IF;
    continuation:=jsonb_build_object('profile','truss-python-object-page/0.1','installationId',installation.installation_id::text,
     'sourceEpoch',installation.source_epoch::text,'releaseSha256',installation.release_sha256,'documentId',selected_document,
     'moduleId',selected_module,'recordId',selected_record,'typeId',selected_type.type_id::text,'definitionPin',source_pin.definition_pin,
@@ -71,6 +76,8 @@ BEGIN
    object_value->'root'->'owner'->>'documentId',object_value->'root'->'owner'->>'moduleId') THEN
    RAISE EXCEPTION 'current buffered aggregate root reader required' USING ERRCODE='42501';END IF;
  END LOOP;
+ IF lookahead_root_owner IS NOT NULL AND NOT truss.runtime_can_read(lookahead_root_owner->>'documentId',lookahead_root_owner->>'moduleId') THEN
+  RAISE EXCEPTION 'current lookahead aggregate root reader required' USING ERRCODE='42501';END IF;
  RETURN result;
 END;
 $$;
