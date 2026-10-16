@@ -663,7 +663,7 @@ BEGIN
    OR transition.after_object->>'ver' IS DISTINCT FROM '1'
    OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
    OR transition.after_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM
-    truss.runtime_owned_object_image(attempt.id,transition.operation_index,'create:'||transition.operation_index::text,'after')
+    truss.runtime_owned_object_image(attempt.id,transition.operation_index,'create:'||transition.operation_index::text,'after',NULL,attempt)
    OR event->>'operation' IS DISTINCT FROM 'create' OR event->'identity' IS DISTINCT FROM identity
    OR event->'origin' IS DISTINCT FROM original_origin
    OR event->'after' IS DISTINCT FROM truss.runtime_object_history(transition.after_object,identity)
@@ -727,7 +727,7 @@ BEGIN
   RAISE EXCEPTION 'exact original inner and outer creation correspondence required' USING ERRCODE='55000';END IF;
  IF input->'mutationProfile'=truss.runtime_owned_profile() AND
   transition.after_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM
-   truss.runtime_owned_object_image(attempt.id,transition.operation_index,'create:'||transition.operation_index::text,'after') THEN
+   truss.runtime_owned_object_image(attempt.id,transition.operation_index,'create:'||transition.operation_index::text,'after',NULL,attempt) THEN
   RAISE EXCEPTION 'original owned creation plan and physical image required' USING ERRCODE='55000';END IF;
  SELECT coalesce(jsonb_agg(k.value->'membership' ORDER BY (k.value->'membership'->>'key_num')::int),'[]'::jsonb)
   INTO keys FROM jsonb_array_elements(expected->'keys') k;

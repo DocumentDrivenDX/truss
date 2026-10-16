@@ -704,3 +704,22 @@ a recent restored-source4,391.6ms; no whole-operation speedup is established.
 Ten existing capacity, actor/role/reader, owner-only helper, revoked-writer, owned
 graph and plan-corruption checks pass in48.318s. Astra Ultra clears the plan and
 owner/generated source, and generator `--check` verifies all manifest hashes.
+
+### Reuse the checked attempt in creation image validation
+
+[Release validation 38977948015](https://github.com/DocumentDrivenDX/truss/actions/runs/38977948015)
+failed the original 1,024-CREATE statement at the unchanged 10-second SQL
+deadline on both Linux and macOS; publication was skipped. Linux stopped in
+creation image validation while reloading the attempt; macOS stopped in the
+final physical-row key check. Each owned-graph step passed its other 17 cases.
+
+Both creation image checks now pass their already-loaded and identity-checked
+attempt to the existing helper. Independent plan loading, sealed create-result
+checks, root identity resolution, full member uniqueness scans, authority and
+image comparisons remain intact. Astra Ultra cleared the plan and source.
+The proposed reference-discovery shortcut was rejected and was not implemented.
+This change does not establish a timing improvement or hosted qualification.
+Seven existing PostgreSQL 18 tests passed in 42.857 seconds: original
+1,024-operation create/update/commit/replay/readback and capacity refusals,
+owned graphs, immutable plan capture and journal-row guards. Runtime generator
+`--check` verifies the packaged source hashes.
