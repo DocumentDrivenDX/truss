@@ -573,3 +573,22 @@ may be absent from those counters; inlined SQL is not separately attributed.
 Unrelated untracked files make the harness dirty flag true; tracked runtime and
 harness sources match the named main commit throughout the run. No causal speedup
 or release qualification follows, and no instrumentation is installed in Truss.
+
+
+## Original small matrix on main7a3b — 2026-10-16
+
+The [original result](results/2026-10-16-main7a3b-small.json) passes the unchanged
+1,000-node/1,000-edge public workload on local PostgreSQL18.6 at main
+`7a3b847d2a6ba77dd3a8fe3e3f4b9cdec3b7d4e8`, with 10-second SQL and
+30-second operation limits. The run includes 1,000 ID reads,100 key reads,
+200 committed changed updates, five repeated changed batches at sizes1/100/1,000,
+independent persisted counts/keys/endpoints, fresh-connection values and successful
+server cleanup. Total suite time is135.286s. Creation plus commit takes12.362s;
+edge loading plus commit13.895s; median1,000-row update plus commit12.549s.
+
+This is one local functional pass, not hosted release qualification or the larger
+scale matrix. The result's dirty-tree flag includes only untracked build/cache
+products; tracked source matched that commit. Bulk100 speedup3.93x remains a
+triage signal, not a separate release gate. The provisional latency targets are
+not achieved: ID-read p95 is6.30ms and committed single-update p95 is37.97ms.
+Full Linux/macOS release validation run38970215099 is still pending.
