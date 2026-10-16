@@ -27,7 +27,7 @@
     "preconditions.sql": "433dfc82430e509f6cd23b156a3510215f34d834bcad0f74f7e131c30f0895c9",
     "imports.sql": "c5f6704928c2b9373d39c15290ac9cb655d7f6502b018c778a15bd1c929e5941",
     "feed.sql": "4d1a3bd8938faec8dbb9654388f59e21abe7dbd4584131d251b1c1daed906e5a",
-    "capability-profiles.json": "605a0b2d0c9e8b4100b4d0329343c9b8533a20b8d3d6cb99ad17acb562d122da",
+    "capability-profiles.json": "2a7e915d701c9c286a084c17598b8f166f59774e7ac2baeac7f34b72a2e3f0bf",
     "history.sql": "cb928e892e2f4fc668113877901003ee4982f3410e9bd677228977c339644d04",
     "migrations.sql": "5637e5290a441c27202844a3c0c90ba9cc1d68c6c266a4f44b61bc2dd39c8b94",
     "preparation-baseline.json": "fecfedd6793948b915553c67710b3f4374014df5d89d9e140d591d31776d6c9e",

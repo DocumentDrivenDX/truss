@@ -11,7 +11,7 @@ import tarfile
 import tempfile
 import tomllib
 
-REVISION = 'ff3695af5ece9d386b3dcbf266cf23d632997733'
+REVISION = 'a14640f2bb288e58de0c9846fb10162e3e4030fc'
 
 
 def check_wheel(wheel: Path, expected_version: str):

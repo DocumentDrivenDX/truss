@@ -60,3 +60,11 @@ class NumericFacet08Tests(NumericFacetTests):
     def fields(self, source):
         source['umf'] = '0.8.0'
         super().fields(source)
+
+
+class NumericFacet12_2Tests(NumericFacetTests):
+    """The exact decimal domain used by the unmodified consumer models."""
+    def fields(self,source):
+        super().fields(source)
+        amount=next(e for e in source['modules'][0]['elements'] if e['id']=='amount')
+        amount['facets']={'precision':12,'scale':2}
