@@ -138,7 +138,7 @@ REVOKE ALL ON FUNCTION truss.owned_forest_projection(int,jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.owned_graph_scope(seeds jsonb) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE node_keys text[]:='{}';edge_keys text[]:='{}';boundary_keys text[]:='{}';owned_edge_order text[]:='{}';
- nodes jsonb:='{}';edges jsonb:='{}';boundary jsonb:='{}';types jsonb:='{}';relations jsonb:='{}';
+ nodes jsonb:='{}';node_images jsonb[]:='{}';edges jsonb:='{}';boundary jsonb:='{}';types jsonb:='{}';relations jsonb:='{}';
  entry jsonb;image jsonb;relation_image jsonb;witness jsonb;definition jsonb;
  node_key text;other_key text;edge_key text;root_key text;selected_type int;selected_id bigint;
  selected_node int:=1;observed record;side text;projection jsonb;local_edges jsonb:='[]';local_index int:=0;
@@ -166,7 +166,7 @@ BEGIN
   SELECT to_jsonb(t) INTO STRICT definition FROM truss.type_def t WHERE t.type_id=selected_type;
   used_bytes:=used_bytes+octet_length(convert_to(image::text,'UTF8'))+octet_length(convert_to(definition::text,'UTF8'));
   IF used_bytes>4194304 THEN RAISE EXCEPTION 'bounded complete graph image required' USING ERRCODE='54000';END IF;
-  nodes:=nodes||jsonb_build_object(node_key,image);types:=types||jsonb_build_object(selected_type::text,definition);
+  node_images:=array_append(node_images,image);types:=types||jsonb_build_object(selected_type::text,definition);
   FOR observed IN SELECT to_jsonb(e) AS edge_image,to_jsonb(r) AS relationship_image FROM truss.edge e
    JOIN truss.rel_def r ON r.rel_type_id=e.rel_type_id
    WHERE (e.source_id=selected_id AND e.source_type=selected_type) OR (e.target_id=selected_id AND e.target_type=selected_type)
@@ -196,6 +196,10 @@ BEGIN
   END LOOP;
   selected_node:=selected_node+1;
  END LOOP;
+ -- Traversal observes each node once in node_keys order. Assemble the output
+ -- map once; it is only consumed after complete component discovery.
+ SELECT coalesce(jsonb_object_agg(c.node_key,c.image),'{}'::jsonb) INTO nodes
+ FROM unnest(node_keys,node_images) AS c(node_key,image);
  -- Outside independent endpoints are witnesses, not traversed components.
  FOREACH edge_key IN ARRAY edge_keys LOOP
   image:=edges->edge_key;relation_image:=relations->(image->>'rel_type_id');
@@ -267,7 +271,7 @@ REVOKE ALL ON FUNCTION truss.owned_graph_scope(jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_owned_input_scope(input jsonb) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE operation jsonb;object_references jsonb;reference jsonb;identity jsonb;
- seeds jsonb:='[]';seed jsonb;stored_edge truss.edge%ROWTYPE;reference_type truss.type_def%ROWTYPE;current_actor oid;
+ seeds jsonb;seed_items jsonb[]:='{}';seed jsonb;stored_edge truss.edge%ROWTYPE;reference_type truss.type_def%ROWTYPE;current_actor oid;
 BEGIN
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
   OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128 THEN
@@ -285,7 +289,7 @@ BEGIN
     FOR seed IN SELECT value FROM jsonb_array_elements(jsonb_build_array(
      jsonb_build_object('id',stored_edge.source_id::text,'typeId',stored_edge.source_type::text),
      jsonb_build_object('id',stored_edge.target_id::text,'typeId',stored_edge.target_type::text))) LOOP
-     IF NOT seeds @> jsonb_build_array(seed) THEN seeds:=seeds||jsonb_build_array(seed);END IF;
+     seed_items:=array_append(seed_items,seed);
     END LOOP;
    END IF;
   ELSIF operation->>'operation' IN ('update_object','delete_object') THEN
@@ -311,10 +315,15 @@ BEGIN
      SELECT 1 FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=reference_type.type_id) THEN
      RAISE EXCEPTION 'target object absent' USING ERRCODE='P1004';END IF;
     seed:=jsonb_build_object('id',identity->'id','typeId',identity->'typeId');
-    IF NOT seeds @> jsonb_build_array(seed) THEN seeds:=seeds||jsonb_build_array(seed);END IF;
+    seed_items:=array_append(seed_items,seed);
    END IF;
   END LOOP;
  END LOOP;
+ -- Deduplicate once, preserving the original first-discovery order. Every
+ -- authored reference above is still independently validated and authorized.
+ SELECT coalesce(jsonb_agg(seed_value ORDER BY first_ordinal),'[]'::jsonb) INTO seeds
+ FROM (SELECT item seed_value,min(ordinality) first_ordinal
+  FROM unnest(seed_items) WITH ORDINALITY entries(item,ordinality) GROUP BY item) distinct_seeds;
  -- The scope observer checks exact native ranges and complete membership.
  RETURN truss.owned_graph_scope(seeds);
 END;
