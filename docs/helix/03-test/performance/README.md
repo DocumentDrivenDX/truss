@@ -477,3 +477,11 @@ functional pass above remains valid for that host, but capacity within the
 existing deadlines is not qualified on the release runners. Keep the complete
 workload and deadlines while improving the creation path; no release pass follows
 from the larger admitted bound.
+
+The next creation-path change removes a discarded `UPDATE RETURNING` progress
+image: the code immediately overwrote it with a stored-row reread. The reread,
+full expected progress comparison, transition reread and affected-row check stay
+in place. Three existing creation-custody/progress controls and the full local
+1,024-operation positive/final-fault workflows pass together (five tests,
+49.921 seconds). Suite elapsed time is not a causal performance comparison;
+installed-runner deadline qualification still requires its own successful run.

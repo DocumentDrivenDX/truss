@@ -641,9 +641,9 @@ BEGIN
  UPDATE truss.runtime_object_attempt a SET next_index=a.next_index+1,
   results=a.results||jsonb_build_array(results_of_create.value),aliases=a.aliases||(semantic->'aliases')
  FROM (SELECT semantic->'results'->0 AS value) results_of_create
- WHERE a.id=outer_attempt.id AND a.next_index=outer_attempt.next_index AND NOT a.complete
- RETURNING jsonb_build_object('actor_oid',a.actor_oid,'writer_xid',a.writer_xid::text,
-  'next_index',a.next_index,'results',a.results,'aliases',a.aliases,'complete',a.complete) INTO actual_progress;
+ WHERE a.id=outer_attempt.id AND a.next_index=outer_attempt.next_index AND NOT a.complete;
+ -- Read the stored row once below; an UPDATE RETURNING image here would be
+ -- immediately overwritten and repeatedly copy the growing complete result.
  IF NOT FOUND THEN RAISE EXCEPTION 'one atomic outer create progress required' USING ERRCODE='55000';END IF;
  SELECT jsonb_build_object('actor_oid',a.actor_oid,'writer_xid',a.writer_xid::text,
   'next_index',a.next_index,'results',a.results,'aliases',a.aliases,'complete',a.complete) INTO actual_progress
