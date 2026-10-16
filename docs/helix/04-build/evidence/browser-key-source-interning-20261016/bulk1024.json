@@ -1,0 +1,80 @@
+{
+  "sealStorage": {
+    "outcome": "seal_storage",
+    "seals": [
+      {
+        "profile": "truss-browser-seal/0.2",
+        "receipts": 1024,
+        "perReceiptSourceCopies": 0,
+        "inputBytes": 1016097
+      },
+      {
+        "profile": "truss-browser-seal/0.2",
+        "receipts": 1,
+        "perReceiptSourceCopies": 0,
+        "inputBytes": 73691
+      }
+    ]
+  },
+  "passed": true,
+  "execution": "real Chromium worker/PGlite0.5.10/PostgreSQL18.6",
+  "actualLoadedRows": 1024,
+  "actualChangedUpdates": 1025,
+  "jobs": [
+    {
+      "sql": "UPDATE products SET name='Bulk' WHERE name='Sample'",
+      "count": 1024,
+      "batches": 11,
+      "elapsedMs": 6337.8625,
+      "phaseMs": {
+        "materialize": 1306.1760000000004,
+        "seal": 66.40554200000042,
+        "submit": 54.73149999999987
+      },
+      "committedBatchMs": [
+        711.3781250000011,
+        704.0086249999986,
+        277.0019579999989,
+        294.2402499999989,
+        278.3469580000001,
+        280.3209169999991,
+        279.57824999999866,
+        318.18179099999907,
+        285.1304999999993,
+        284.5561660000003,
+        163.7158330000002
+      ],
+      "firstBatchRecoveryEqual": true,
+      "reopenedRecovery": true,
+      "planSha256": "033188dd8c5f50d95b45dee2b94ef0254617b13bfc2818e83084b1d75e7a7438",
+      "manifestSha256": "9e399986f57c67034d45aecd8da820c2cccb42fe06b6d25b6df239fac3f2c058"
+    },
+    {
+      "sql": "UPDATE products SET name='Foo' WHERE id='bar'",
+      "count": 1,
+      "batches": 1,
+      "elapsedMs": 326.2714159999996,
+      "phaseMs": {
+        "materialize": 87.35141599999952,
+        "seal": 34.22112500000003,
+        "submit": 28.14587500000016
+      },
+      "committedBatchMs": [
+        106.55620900000031
+      ],
+      "firstBatchRecoveryEqual": true,
+      "reopenedRecovery": false,
+      "planSha256": "79793b88a0b66626b82d48509e3a5213edc63d48af0ea4e2b590406d44024bc0",
+      "manifestSha256": "1124651043f39e622dcc98f00a656f359c4c3ff920f9153846517287078ec762"
+    }
+  ],
+  "allReopenedPublicValuesVerified": true,
+  "externalRequests": [],
+  "serviceWrites": 0,
+  "performanceQualified": false,
+  "provider": {
+    "directory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-browser-check-Qr344J/bundle",
+    "manifestSha256": "c240acb5a3bdbb6da002ced1afe7482c65340aa3d0800ab697e1504ace720124",
+    "providerSha256": "1c7ae8fb271e381b174ba9ef1205178c8ce9b0a032e2bc49d9c6e919c64b66bc"
+  }
+}

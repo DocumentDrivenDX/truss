@@ -1,0 +1,9 @@
+{
+  "build": {
+    "directory": "/private/tmp/truss-browser-main-interned-assets-20261016",
+    "manifestSha256": "c240acb5a3bdbb6da002ced1afe7482c65340aa3d0800ab697e1504ace720124",
+    "providerSha256": "1c7ae8fb271e381b174ba9ef1205178c8ce9b0a032e2bc49d9c6e919c64b66bc"
+  },
+  "runtimeReportsMatchExactManifestAndProvider": true,
+  "scope": "Canonical integration build emits identical assets to the independently reviewed and actually tested staging build; source commit assigned by following integration commit. Native buffering changes are excluded from browser inputs."
+}

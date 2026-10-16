@@ -1,0 +1,94 @@
+{
+  "sourceStage": "/private/tmp/truss-browser-interned-key-source-20261016",
+  "baseMain": "984d6a65569adb084c6868fcfd8f5674c5a23ea3",
+  "before": {
+    "packages/browser/store.ts": "4307e3ca08ec94a12803803fef91243959c04731324684b54e9f6e2574ad8e59",
+    "packages/browser/actions.ts": "fa040b1df307547db7d0dbecfaf77867f445f4d084ee373f94139a6f821c0c9b",
+    "packages/browser/materialize.ts": "d8fabfede35e3b49cda34f300af4e5f96381dfa817ef3a08f68255bc75c9ea14",
+    "packages/browser/objects.ts": "da95099981572bd91b1f7bd8d87ed8af491decbfe31e4a3904829ca7b97f5f33",
+    "packages/browser/bulk.ts": "50b280e86386314fcc9e8c4e3278ca8468f2f17952e279126eb1b90333ba8b33",
+    "packages/browser/batch.ts": "3892a56ece929e4a72f920fe6be93f2643152523829c2e75f87b1d330ff89051",
+    "packages/browser/build-assets.ts": "29bcde9cab84a0a9e432ac1b40977b6d7bd1b0619ffc58f6e65f8cece28fb255",
+    "packages/browser/key-receipt-storage.ts": null,
+    "packages/browser/test-worker.ts": "c35f61afb5437567325b3bdacddfad0edf5d921588848a481a9fe7e88be48361",
+    "packages/browser/check-lifecycle.ts": "677cec769a9ac98881b1cf0da5527d1116a06fcef297e272bf9e33dce689fff9",
+    "packages/browser/check-bulk1024.ts": null,
+    "packages/browser/check-seal-upgrade.ts": null,
+    "packages/browser/owners/umf-local-actions/notices/inventory.json": "fb153552de3f60335d542bbb9123d1f29be150bab2d1a373039eda251066796b",
+    "packages/browser/owners/umf-local-actions/producer.json": "295d50f8f2676821ce7ecb6859d8d4a341f979fa2f797805674cf7f9cb4834f4",
+    "packages/browser/owners/umf-local-actions/umf.js.gz": "1957964b6d357984a170081da8f38a06c555bf453dbe58196b1404b7da963802",
+    "packages/browser/owners/weft-local/producer.json": "f4cf78319dfb37c1cd2e989212653357437fa5ffe5f5f3a7453c255de8309524",
+    "packages/browser/owners/weft-local/weft_wasm_bg.wasm.gz": "760f57e80645db2f331e6e0014e3fac2c86b37172a5a28f3552a9d3b976b67e0"
+  },
+  "adopted": {
+    "packages/browser/store.ts": {
+      "sha256": "b3dd5378530b2a404eef3cdfa34728253f9cbafc8e3a924dd266edefa6b6e43b",
+      "bytes": 14721
+    },
+    "packages/browser/actions.ts": {
+      "sha256": "cdd5df370f4e929e0e83d932fdc9d1700ae82d1f132045bf091c798568197016",
+      "bytes": 6163
+    },
+    "packages/browser/materialize.ts": {
+      "sha256": "8b0e03e136095649fcc8f87f712c890bc88619a1ba356b7534a6a733ae55a4c9",
+      "bytes": 24225
+    },
+    "packages/browser/objects.ts": {
+      "sha256": "90f285aeb04bd08fd9e1fe0dfeccd05acca311ac5d793aba980e113135793d15",
+      "bytes": 23075
+    },
+    "packages/browser/bulk.ts": {
+      "sha256": "8acab370adddbf6f6ce52c48a4dc171ffe2379d279fae7d55c6012021628126c",
+      "bytes": 33037
+    },
+    "packages/browser/batch.ts": {
+      "sha256": "7eee4daf15ebb815b063dd0306edc18bed5167821c1a39b241e5449483551c24",
+      "bytes": 13814
+    },
+    "packages/browser/build-assets.ts": {
+      "sha256": "6c07323b58ba828d0eec5847e8d5350f233fb7aa7d6d3641809546d4ed916631",
+      "bytes": 7933
+    },
+    "packages/browser/key-receipt-storage.ts": {
+      "sha256": "4046606c4354ceff9310d49f25b480d1569504872aab50c50796fce1ca393b81",
+      "bytes": 2594
+    },
+    "packages/browser/test-worker.ts": {
+      "sha256": "7912d2c67d15576a7d9c39589413cafee04bad3091679a819c0bf39bcd25925b",
+      "bytes": 27849
+    },
+    "packages/browser/check-lifecycle.ts": {
+      "sha256": "aa8e6e1ba3b757dafa8004b7ffb2b786cc46d902a32996f023d379eb24631db1",
+      "bytes": 32157
+    },
+    "packages/browser/check-bulk1024.ts": {
+      "sha256": "aaeda6e3d5fe7b1b9a58fe5b7481a3644cbad4677e2e8dbdef9ccf438fcd4282",
+      "bytes": 8489
+    },
+    "packages/browser/check-seal-upgrade.ts": {
+      "sha256": "8f908fa5d323ba7ac8c70e5debecec2c568ba14da4998e1acfe026fa4d7865dd",
+      "bytes": 10488
+    },
+    "packages/browser/owners/umf-local-actions/notices/inventory.json": {
+      "sha256": "dd26874ed53f10d5f697474c5ca260d7fca06b2413fb097530384f8f86d2b7aa",
+      "bytes": 15913
+    },
+    "packages/browser/owners/umf-local-actions/producer.json": {
+      "sha256": "f935f63edc7c93752ba6a7cfd4b5d86a0768968889688a70ffae28fb982ae4cc",
+      "bytes": 721
+    },
+    "packages/browser/owners/umf-local-actions/umf.js.gz": {
+      "sha256": "90f6d82e28495f7a025e2f0803e7cd2688a395487310a4f4bf3d0150106f52a1",
+      "bytes": 1735228
+    },
+    "packages/browser/owners/weft-local/producer.json": {
+      "sha256": "9ea0d23d6d67fe2f844101800d9790a9061e7d8b1803ef8c2fd864b09d7fd053",
+      "bytes": 1378
+    },
+    "packages/browser/owners/weft-local/weft_wasm_bg.wasm.gz": {
+      "sha256": "9f19d150e41488dc2e842646bff79882fef1cab90f49808196395aa52b71258a",
+      "bytes": 1209190
+    }
+  },
+  "scope": "Reviewed browser-only candidate for canonical owner adoption; no native SQL changes or producer repin. Performance remains failed."
+}

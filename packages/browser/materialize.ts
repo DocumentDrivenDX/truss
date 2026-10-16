@@ -1,3 +1,4 @@
+import {KEY_RECEIPT_ENCODING,compactKeyReceipts,checkSealEncoding} from './key-receipt-storage';
 import * as umf from '@truss/umf-local-actions';
 import * as weft from '@truss/weft-local';
 import type {PGlite} from '@electric-sql/pglite';
@@ -29,18 +30,18 @@ export function captureMaterialize(input:MaterializeInput):Readonly<MaterializeI
  if(bytes(captured).length>1048576)throw Error('Parameter input limit');
  return Object.freeze({sql,batchSize,maxItems,parameters:Object.freeze(captured)});
 }
-const definitions=async(tx:Pick<PGlite,'query'>)=>(await tx.query<{name:string;definition:string}>("SELECT p.proname AS name,pg_get_functiondef(p.oid) AS definition FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' AND p.proname IN ('valid_scalar_cell','logical_scalar_cell','valid_scalar_property') ORDER BY p.proname,pg_get_function_identity_arguments(p.oid)")).rows;
+const definitions=async(tx:Pick<PGlite,'query'>)=>(await tx.query<{name:string;definition:string}>("SELECT p.proname AS name,pg_get_functiondef(p.oid) AS definition FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' AND p.proname IN ('valid_scalar_cell','logical_scalar_cell','valid_scalar_property','valid_decimal_facets') ORDER BY p.proname,pg_get_function_identity_arguments(p.oid)")).rows;
 async function ensureScalars(tx:Pick<PGlite,'query'|'exec'>){
  const digest=await hash(scalarsSql);
- if(digest!=='03fd6a50ed7676e855959fb80887a8c733f3965b5958fda632967e3b961d244c')throw Error('Original scalar helper required');
- const prior=(await tx.query<{value:any}>("SELECT value FROM truss.setting WHERE key='browser:scalars:0.1'")).rows;
+ if(digest!=='55ace27fc74aea7bd1765094ecae3d00fc083c7a8deef0072be49e0a909d5849')throw Error('Original scalar helper required');
+ const prior=(await tx.query<{value:any}>("SELECT value FROM truss.setting WHERE key='browser:scalars:0.2'")).rows;
  let actual=await definitions(tx);
  if(prior.length===0){
   if(actual.length)throw Error('Partial or foreign scalar helper installation');
   await tx.exec(scalarsSql);actual=await definitions(tx);
-  if(actual.length!==3)throw Error('Complete scalar helper installation required');
-  await tx.query("INSERT INTO truss.setting(key,value) VALUES('browser:scalars:0.1',$1::jsonb)",[JSON.stringify({profile:'truss-browser-scalars/0.1',sourceSha256:digest,definitions:actual})]);
- }else if(prior.length!==1||prior[0]!.value.profile!=='truss-browser-scalars/0.1'||prior[0]!.value.sourceSha256!==digest||JSON.stringify(prior[0]!.value.definitions)!==JSON.stringify(actual))throw Error('Original scalar helper correspondence required');
+  if(actual.length!==4)throw Error('Complete scalar helper installation required');
+  await tx.query("INSERT INTO truss.setting(key,value) VALUES('browser:scalars:0.2',$1::jsonb)",[JSON.stringify({profile:'truss-browser-scalars/0.2',sourceSha256:digest,definitions:actual})]);
+ }else if(prior.length!==1||prior[0]!.value.profile!=='truss-browser-scalars/0.2'||prior[0]!.value.sourceSha256!==digest||JSON.stringify(prior[0]!.value.definitions)!==JSON.stringify(actual))throw Error('Original scalar helper correspondence required');
 }
 interface RetainedWork {action:LocalAction;grant:SelectionReadGrant;cut:string;manifest:Artifact;plan:Artifact;keyReceipts:any[];rows:any[];context:any}
 export function createMaterializer(db:PGlite,info:StoreInfo,issuer:ReturnType<typeof createActionIssuer>,isOpen:()=>boolean,fence:()=>void){
@@ -90,13 +91,14 @@ export function createMaterializer(db:PGlite,info:StoreInfo,issuer:ReturnType<ty
       if(selectedRows.length*(bytes(sourceIdentity).length+4096)+Number(size)>16777216)throw Error('Original key receipt size limit');
       const xid=(await tx.query<{xid:string}>('SELECT pg_current_xact_id()::text AS xid')).rows[0]!.xid;
       if(!positive(xid))throw Error('Original transaction cut required');
+      const keyTuples=selectedRows.length?umf.prepareCoreKeyTuples(source):undefined;
       const rows=selectedRows.map(row=>{
        if(Object.keys(row).sort().join(',')!=='identity,key0,version'||!positive(row.identity)||!positive(row.version)||typeof row.key0!=='string')throw Error('Original typed identity/version/Key required');
-       const keyReceipt=umf.encodeCoreKeyTuple(source,target,[{string:row.key0}]);
+       const keyReceipt=keyTuples!.encode(target,[{string:row.key0}]);
        return {entity:{key:copy(target),components:[{string:row.key0}]},guard:{profile:{id:'truss-browser-object-version',version:'1'},store:info.storeId,epoch:info.incarnation,identity:row.identity,version:row.version},keyReceipt};
       });
       constructed=umf.constructActionManifest({plan:planArtifact,action:{target:{module:(original.actionPin.identity as any).module,action:(original.actionPin.identity as any).action,revision:original.modelPin.revision},documentSha256:original.model.sha256,invocation:{id:'umf.actions.local-tx',version:'1'}},basis:{profile:{id:'truss-browser-store-cut',version:'1'},store:info.storeId,epoch:info.incarnation,cut:catalog!.catalogRevision+':'+xid+':'+binding.sha256,selectionSha256:plan.selection.artifact.sha256},rows},context);
-      if(!umf.inspectActionManifest(constructed.artifact,context).eligible)throw Error('Original manifest inspection refused');
+      // CONTRACT-903 constructor performs complete original inspection before returning.
       issuer.requireGrant(await readCatalog(tx),action,grant);open();
       }catch(error){callbackFailure=error;throw error;}
      });
@@ -149,12 +151,12 @@ export function createSealer(db:PGlite,info:StoreInfo,issuer:ReturnType<typeof c
   const input=JSON.parse(stored.inputUtf8),outcome=JSON.parse(stored.outcomeUtf8) as Extract<SealOutcome,{outcome:'sealed'}>;
   if(outcome.outcome!=='sealed'||!outcome.receipt||await hash(outcome.receipt.utf8)!==outcome.receipt.sha256||await hash(outcome.manifest.utf8)!==outcome.manifest.sha256)throw Error('Original seal outcome integrity required');
   const receipt=JSON.parse(outcome.receipt.utf8);
-  if(input.profile!=='truss-browser-seal/0.1'||receipt.profile!=='truss-browser-seal-receipt/0.1'||receipt.inputSha256!==stored.inputSha256
+  if(!['truss-browser-seal/0.1','truss-browser-seal/0.2'].includes(input.profile)||receipt.profile!=='truss-browser-seal-receipt/0.1'||receipt.inputSha256!==stored.inputSha256
    ||!matches(input.reference,outcome.reference)||!matches(receipt.reference,outcome.reference)
    ||JSON.stringify(input.manifest)!==JSON.stringify(outcome.manifest)||outcome.manifest.sha256!==outcome.reference.manifestSha256
    ||input.plan?.sha256!==outcome.reference.planSha256||input.model?.sha256!==outcome.reference.modelSha256
    ||await hash(input.plan.utf8)!==input.plan.sha256||await hash(input.model.utf8)!==input.model.sha256||await hash(input.preparation.utf8)!==input.preparation.sha256)throw Error('Complete original seal correspondence required');
-  return {stored,input,outcome};
+  checkSealEncoding(input);return {stored,input,outcome};
  };
  const matches=(a:SealReference,b:SealReference)=>['profile','storeId','incarnation','requestKey','attempt','manifestSha256','planSha256','modelSha256'].every(k=>(a as any)?.[k]===(b as any)?.[k]);
  return Object.freeze({
@@ -167,7 +169,8 @@ export function createSealer(db:PGlite,info:StoreInfo,issuer:ReturnType<typeof c
    if(reference.storeId!==info.storeId||reference.incarnation!==info.incarnation||reference.modelSha256!==original.model.sha256)throw new SealAdmissionRefusal('Original local seal scope required');
    let found;try{found=await readOriginal(tx,reference);}catch(error){throw new SealCustodyUnavailable(String(error));}
    if(!found||!matches(found.outcome.reference,reference)||found.input.cut!==original.cut||JSON.stringify(found.input.actionPin)!==JSON.stringify(original.actionPin))throw new SealAdmissionRefusal('Exact retained original seal required');
-   return {input:copy(found.input),outcome:copy(found.outcome)};
+   // readOriginal just parsed these private values; no retained object is shared.
+   return {input:found.input,outcome:found.outcome};
   },
   async seal(action:LocalAction,grant:SelectionReadGrant,work:FrozenWork,request:Readonly<SealRequest>):Promise<SealOutcome>{
    let catalog:CatalogSnapshot|null,original:ReturnType<typeof issuer.requireGrant>,frozen:ReturnType<typeof materializer.original>;
@@ -176,7 +179,8 @@ export function createSealer(db:PGlite,info:StoreInfo,issuer:ReturnType<typeof c
    try{original=issuer.requireGrant(catalog,action,grant);frozen=materializer.original(catalog,action,grant,work);}catch(error){return {outcome:'refused',code:'admission_refused',control:copy(request),reason:String(error)};}
    const reference:SealReference={profile:'truss-browser-seal-reference/0.1',storeId:info.storeId,incarnation:info.incarnation,requestKey:request.requestKey,attempt:request.attempt,manifestSha256:frozen.manifest.sha256,planSha256:frozen.plan.sha256,modelSha256:original.model.sha256};
    // Capture the complete original control input before dispatch; keep strings intact in JSONB.
-   const inputUtf8=JSON.stringify({profile:'truss-browser-seal/0.1',reference,cut:original.cut,model:original.model,modelPin:original.modelPin,actionPin:original.actionPin,preparation:original.preparation,plan:frozen.plan,manifest:frozen.manifest,keyReceipts:frozen.keyReceipts,rows:frozen.rows}),inputSha256=await hash(inputUtf8);
+   const input={profile:'truss-browser-seal/0.2',keyReceiptEncoding:KEY_RECEIPT_ENCODING,reference,cut:original.cut,model:original.model,modelPin:original.modelPin,actionPin:original.actionPin,preparation:original.preparation,plan:frozen.plan,manifest:frozen.manifest,keyReceipts:compactKeyReceipts(frozen.keyReceipts,JSON.parse(original.model.utf8)),rows:frozen.rows};
+   const inputUtf8=JSON.stringify(input),inputSha256=await hash(inputUtf8);
    if(bytes(inputUtf8).length>33554432)return {outcome:'refused',code:'input_limit',control:copy(request),reason:'Original seal input byte limit'};
    const noCallbackFailure=Symbol();let callbackFailure:unknown=noCallbackFailure;
    try{
@@ -184,7 +188,10 @@ export function createSealer(db:PGlite,info:StoreInfo,issuer:ReturnType<typeof c
      try{
      open();issuer.requireGrant(await readCatalog(tx),action,grant);
      const existing=await readOriginal(tx,reference);
-     if(existing)return existing.stored.inputUtf8===inputUtf8&&matches(existing.outcome.reference,reference)?copy(existing.outcome):{outcome:'conflict',code:'request_key_conflict',reference};
+     if(existing){
+      const candidate=existing.input.profile==='truss-browser-seal/0.1'?JSON.stringify({profile:'truss-browser-seal/0.1',reference,cut:original.cut,model:original.model,modelPin:original.modelPin,actionPin:original.actionPin,preparation:original.preparation,plan:frozen.plan,manifest:frozen.manifest,keyReceipts:frozen.keyReceipts,rows:frozen.rows}):inputUtf8;
+      return existing.stored.inputUtf8===candidate&&matches(existing.outcome.reference,reference)?copy(existing.outcome):{outcome:'conflict',code:'request_key_conflict',reference};
+     }
      const xid=(await tx.query<{xid:string}>('SELECT pg_current_xact_id()::text AS xid')).rows[0]!.xid;if(!positive(xid))throw Error('Original seal writer required');
      const receiptUtf8=JSON.stringify({profile:'truss-browser-seal-receipt/0.1',reference,inputSha256,writerXid:xid,manifestSha256:frozen.manifest.sha256});
      const outcome:Extract<SealOutcome,{outcome:'sealed'}>={outcome:'sealed',reference,manifest:copy(frozen.manifest),receipt:{mediaType:'application/json',utf8:receiptUtf8,sha256:await hash(receiptUtf8)}};

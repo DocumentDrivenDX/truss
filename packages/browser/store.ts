@@ -1,13 +1,13 @@
 import {createFeed,captureFeed,type FeedInput,type FeedPage} from './feed';
 import {createBulk,captureExecute,captureClaim,captureSubmit,captureJob,type SubmitInput,type SubmitResult,type JobRef,type JobState,type JobReview,type ClaimInput,type ClaimResult,type CancelInput,type CancelResult,type ExecuteInput,type BatchOutcome} from './bulk';
-import {createObjectAccess,captureLoad,captureTarget,journalHorizon,type LoadInput,type LoadOutcome,type RecordIdentity} from './objects';
+import {createObjectAccess,captureLoad,captureTarget,captureObjectPage,journalHorizon,type LoadInput,type LoadOutcome,type RecordIdentity,type ObjectPageInput,type ObjectPage} from './objects';
 import {PGlite} from '@electric-sql/pglite';
 import {createMaterializer,createSealer,captureSeal,captureSealReference,captureMaterialize,type MaterializeInput,type Materialization,type FrozenWork,type SealRequest,type SealReference,type SealOutcome} from './materialize';
 import {createActionIssuer,captureAction,type ActionIdentity,type LocalAction,type BrowserActionRegistration,type SelectionReadRegistration} from './actions';
 import {captureDocument,prepareDocument,registerCatalog,readCatalog,type DocumentInput,type CatalogSnapshot,type Registration} from './catalog';
 
-const LAYOUT='c203d09418fb4eddda829d791dda11c20341227c2d1d82e86d4c24afda5e7294';
-const PROFILE='truss-browser-layout/0.1';
+const LAYOUT='1ffa72c51518e809c773e7f9207c1de1598f331c15de61e02dda0abe0fc475e0';
+const PROFILE='truss-browser-layout/0.2';
 declare const ownerBrand:unique symbol;
 export interface LocalOwner {readonly [ownerBrand]:true}
 export interface StoreInfo {
@@ -26,6 +26,7 @@ export interface BrowserStore {
   loadObjects(owner:LocalOwner,input:LoadInput):Promise<LoadOutcome>;
   recoverLoad(owner:LocalOwner,input:LoadInput):Promise<LoadOutcome>;
   readObjects(owner:LocalOwner,target:RecordIdentity):Promise<{id:string;typeId:string;version:string;fields:{module:string;field:string;value:string}[]}[]>;
+  readObjectPage(owner:LocalOwner,input:ObjectPageInput):Promise<ObjectPage>;
   submit(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SubmitInput):Promise<SubmitResult>;
   recoverSubmit(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SubmitInput):Promise<SubmitResult>;
   claim(owner:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ClaimInput):Promise<ClaimResult>;
@@ -86,7 +87,7 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
       await journalHorizon(actual,false);
       const tables=(await actual.query<{n:string}>("SELECT count(*)::text AS n FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss' AND c.relkind IN ('r','p') AND NOT c.relispartition")).rows[0];
       const head=(await actual.query<{rev:number}>('SELECT rev FROM truss.schema_head WHERE id=1')).rows;
-      if(tables?.n!=='48'||head.length!==1||!Number.isSafeInteger(head[0]!.rev)||head[0]!.rev<0)
+      if(tables?.n!=='28'||head.length!==1||!Number.isSafeInteger(head[0]!.rev)||head[0]!.rev<0)
         throw new Error('Complete original layout inventory required');
       const info=Object.freeze({...marker});
       await actual.syncToFs();
@@ -139,6 +140,7 @@ export async function openBrowserStore(input:{name:string;layoutSql:string}):Pro
         loadObjects(cap:LocalOwner,input:LoadInput){check(cap);const captured=captureLoad(input);return schedule(cap,()=>objectAccess.load(captured));},
         recoverLoad(cap:LocalOwner,input:LoadInput){check(cap);const captured=captureLoad(input);return schedule(cap,()=>objectAccess.load(captured,true));},
         readObjects(cap:LocalOwner,input:RecordIdentity){check(cap);const captured=captureTarget(input);return schedule(cap,()=>objectAccess.read(captured));},
+        readObjectPage(cap:LocalOwner,input:ObjectPageInput){check(cap);const captured=captureObjectPage(input);return schedule(cap,()=>objectAccess.readPage(captured));},
         submit(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SubmitInput){check(cap);const captured=captureSubmit(input);return schedule(cap,()=>bulk.submit(action,grant,captured));},
         recoverSubmit(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:SubmitInput){check(cap);const captured=captureSubmit(input);return schedule(cap,()=>bulk.submit(action,grant,captured,true));},
         claim(cap:LocalOwner,action:LocalAction,grant:import('./actions').SelectionReadGrant,input:ClaimInput){check(cap);const captured=captureClaim(input);return schedule(cap,()=>bulk.claim(action,grant,captured));},

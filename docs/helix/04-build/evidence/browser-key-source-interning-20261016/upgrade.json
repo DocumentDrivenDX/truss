@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "actualOldProvider": {
+    "directory": "/private/tmp/truss-browser-canonical-weft-site-bundle-20261016",
+    "manifestSha256": "d932ee3943770bcf123f614fd059633c7591a5ef66077c65bb4c80935c28e0ba",
+    "storeSha256": "7e4da46f14dfbb19b1268286dbf4c0124ac00e90c6c2dc601d49f5a808a80a31",
+    "assetsVerified": 372
+  },
+  "newProvider": {
+    "directory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-browser-check-8RBnjk/bundle",
+    "manifestSha256": "c240acb5a3bdbb6da002ced1afe7482c65340aa3d0800ab697e1504ace720124",
+    "providerSha256": "1c7ae8fb271e381b174ba9ef1205178c8ce9b0a032e2bc49d9c6e919c64b66bc"
+  },
+  "oldSealRecoveryByteEqual": true,
+  "oldSubmitClaimBatchRecoveryByteEqual": true,
+  "oldFrozenRemainingBatchExecuted": true,
+  "newCompactPointExecuted": true,
+  "reopenedPublicValuesVerified": true,
+  "crossFormatIntentBothDirections": true,
+  "crossFormatScope": "Test-only compact transport fixture derived from actual old-provider sealed bytes; not fresh authority issuance",
+  "externalRequests": []
+}

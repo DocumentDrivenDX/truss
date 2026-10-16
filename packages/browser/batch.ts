@@ -1,3 +1,4 @@
+import {expandKeyReceipts} from './key-receipt-storage';
 import * as umf from '@truss/umf-local-actions';
 import type {PGlite} from '@electric-sql/pglite';
 import {readCatalog} from './catalog';
@@ -11,7 +12,8 @@ const hex=(s:string)=>Array.from(new TextEncoder().encode(s),n=>n.toString(16).p
 const hash=async(s:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s))),n=>n.toString(16).padStart(2,'0')).join('');
 const positive=(s:unknown):s is string=>typeof s==='string'&&/^[1-9][0-9]{0,18}$/.test(s)&&BigInt(s)<=9223372036854775807n;
 export interface ItemResult {ordinal:number;result:{status:'committed';token:string;noOp:boolean;identity:{id:string;typeId:string};version:string;changes:{propertyId:string;before:{string:string};after:{string:string}}[];verification:{profile:'truss-browser-set-verification/0.1';requiredEffects:true;frame:true;keysUnchanged:true}}}
-export async function applyFrozenBatch(tx:Pick<PGlite,'query'|'exec'>,info:StoreInfo,source:any,job:JobRef,batch:number){
+type BatchTx=Pick<PGlite,'query'|'exec'>;
+function prepareFrozenSource(source:any){
  const model=JSON.parse(source.model.utf8),plan=JSON.parse(source.plan.utf8),manifest=JSON.parse(source.manifest.utf8);
  const context={registry:umf.createUmfRegistry(),models:[{pin:source.modelPin,artifact:source.model}],actions:[{pin:source.actionPin,artifact:source.model}],selections:[{profile:plan.selection.profile,inspect:(artifact:any,document:any,target:any)=>({eligible:JSON.stringify(artifact)===JSON.stringify(plan.selection.artifact)&&JSON.stringify(document)===JSON.stringify(model)&&target.module===plan.target.module&&target.element===plan.target.element&&target.key===plan.target.key,dependencies:copy(plan.selection.dependencies),diagnostics:[]})}]};
  const prepared=umf.prepareActionPlanModel(source.modelPin,source.actionPin,context);
@@ -19,6 +21,31 @@ export async function applyFrozenBatch(tx:Pick<PGlite,'query'|'exec'>,info:Store
  const preparation=JSON.parse(prepared.utf8),inspection=umf.inspectActions(model,context.registry);
  const actions=inspection.actions.filter((a:any)=>a.module===source.actionPin.identity.module&&a.action.id===source.actionPin.identity.action);
  if(actions.length!==1)throw new SealCustodyUnavailable('Exact original action required');const action=actions[0].action;
+ const keyTuples=umf.prepareCoreKeyTuples(model),identities=umf.prepareActionIdentities(model,action);
+ const keyReceipts=expandKeyReceipts(source);
+ return {source,manifest,preparation,action,keyTuples,identities,keyReceipts};
+}
+type PreparedBatch=ReturnType<typeof prepareFrozenSource>;
+const freezePrepared=<T>(value:T):T=>{if(value!==null&&typeof value==='object'&&!Object.isFrozen(value)){for(const child of Object.values(value))freezePrepared(child);Object.freeze(value);}return value;};
+/** Stateless internal entry; callers cannot supply a pre-admitted result. */
+export async function applyFrozenBatch(tx:BatchTx,info:StoreInfo,source:any,job:JobRef,batch:number){
+ return applyPreparedBatch(tx,info,prepareFrozenSource(source),job,batch);
+}
+/** Per-open, one-entry pure source cache. All native checks remain in the call. */
+export function createFrozenBatchApplier(info:StoreInfo){
+ let retained:{input:string;prepared:PreparedBatch}|undefined;
+ return async(tx:BatchTx,sourceUtf8:string,job:JobRef,batch:number)=>{
+  if(typeof sourceUtf8!=='string')throw new SealCustodyUnavailable('Exact authorized source bytes required');
+  let prepared=retained?.input===sourceUtf8?retained.prepared:undefined;
+  if(!prepared){
+   prepared=freezePrepared(prepareFrozenSource(JSON.parse(sourceUtf8)));
+   retained={input:sourceUtf8,prepared};
+  }
+  return applyPreparedBatch(tx,info,prepared,job,batch);
+ };
+}
+async function applyPreparedBatch(tx:BatchTx,info:StoreInfo,prepared:PreparedBatch,job:JobRef,batch:number){
+ const {source,manifest,preparation,action,keyTuples,identities,keyReceipts}=prepared;
  const catalog=await readCatalog(tx),metadata=await targetSource(catalog,{documentId:source.modelPin.documentId,module:preparation.target.module,record:preparation.target.element});
  const partition=manifest.batches[batch];if(!partition||partition.ordinal!==batch)throw new SealCustodyUnavailable('Original frozen partition required');
  const namespace=JSON.stringify({profile:'truss-browser-key-namespace/0.1',storeId:info.storeId,incarnation:info.incarnation,document:catalog!.document.sourceSha256,typeId:metadata.type.typeId,keyId:metadata.key.keyId,keyNumber:metadata.key.keyNumber});
@@ -26,9 +53,9 @@ export async function applyFrozenBatch(tx:Pick<PGlite,'query'|'exec'>,info:Store
  // Finish every item's input/frame/key/version check before any business effect.
  for(const item of manifest.items.slice(partition.start,partition.start+partition.count)){
   const ordinal=item.ordinal;
-  const inputs=umf.admitActionInputs(model,action,item.inputs),receipt=umf.verifyCoreKeyTuple(source.keyReceipts[ordinal],model);
+  const inputs=identities.admitInputs(item.inputs),receipt=keyTuples.verify(keyReceipts[ordinal]);
   if(!positive(item.guard.identity)||!positive(item.guard.version)||item.guard.store!==info.storeId||item.guard.epoch!==info.incarnation||ids.has(item.guard.identity))throw new BatchRefusal('conflict','PAP_GUARD',ordinal);ids.add(item.guard.identity);
-  for(const frame of [...action.reads,...action.writes])if(umf.selectActionIdentity(model,action,frame,inputs).tupleHex!==receipt.bytesHex)throw new BatchRefusal('rejected','ACTION_FRAME',ordinal);
+  for(const frame of [...action.reads,...action.writes])if(identities.select(frame.id,inputs).tupleHex!==receipt.bytesHex)throw new BatchRefusal('rejected','ACTION_FRAME',ordinal);
   const rows=(await tx.query<any>(`SELECT id::text,ver::text AS version,props,retained,root_id::text,root_type::text,rev::text,
    to_char(created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
    to_char(updated_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "updatedAt"
@@ -36,7 +63,7 @@ export async function applyFrozenBatch(tx:Pick<PGlite,'query'|'exec'>,info:Store
   if(rows.length!==1||rows[0].version!==item.guard.version)throw new BatchRefusal('conflict','PAP_GUARD',ordinal);
   const row=rows[0];if(row.root_id!==null||row.root_type!==null||row.retained!==null||Object.keys(row.props).length!==metadata.members.length)throw new BatchRefusal('rejected','UNSUPPORTED_OBJECT_PROFILE',ordinal);
   for(const member of metadata.members){const cell=row.props[member.propertyId];if(!cell||Object.keys(cell).sort().join(',')!=='kind,text'||cell.kind!=='string'||typeof cell.text!=='string')throw new BatchRefusal('rejected','INVALID_STORED_VALUE',ordinal);}
-  const actual=umf.encodeCoreKeyTuple(model,preparation.target,[{string:row.props[metadata.key.propertyIds[0]].text}]);
+  const actual=keyTuples.encode(preparation.target,[{string:row.props[metadata.key.propertyIds[0]].text}]);
   if(actual.bytesHex!==receipt.bytesHex)throw new BatchRefusal('conflict','PAP_REBOUND',ordinal);
   const keyHex=hex('umf-key-tuple-v1:hex:'+actual.bytesHex),ns=hex(namespace);
   const keys=(await tx.query<{context:string;generation:string;reserved:boolean}>(`SELECT convert_from(k.original_context_bytes,'UTF8') AS context,g.generation::text,
@@ -45,7 +72,7 @@ export async function applyFrozenBatch(tx:Pick<PGlite,'query'|'exec'>,info:Store
    WHERE k.type_id=$1::int AND k.key_num=$2::smallint AND k.object_id=$3::bigint
     AND k.namespace_sha256=sha256(decode($4,'hex')) AND k.key_sha256=sha256(decode($5,'hex')) AND k.namespace_bytes=decode($4,'hex') AND k.key_bytes=decode($5,'hex')`,[metadata.type.typeId,metadata.key.keyNumber,row.id,ns,keyHex])).rows;
   if(keys.length!==1||!keys[0]!.reserved||BigInt(keys[0]!.generation)<1n)throw new BatchRefusal('conflict','PAP_REBOUND',ordinal);
-  const custody=JSON.parse(keys[0]!.context),originalKey=umf.verifyCoreKeyTuple(JSON.parse(custody.ownerReceiptUtf8),model);
+  const custody=JSON.parse(keys[0]!.context),originalKey=keyTuples.verify(JSON.parse(custody.ownerReceiptUtf8));
   if(custody.object.id!==row.id||custody.object.typeId!==metadata.type.typeId||custody.namespaceUtf8!==namespace||originalKey.bytesHex!==actual.bytesHex)throw new SealCustodyUnavailable('Original key custody required');
   const props=copy(row.props),changes:ItemResult['result']['changes']=[];
   for(const assignment of preparation.assignments){

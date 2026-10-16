@@ -1,7 +1,7 @@
 {
   "scope": "Existing notices from exact source-map-corresponding installed packages; package declarations retained as metadata, not invented license text or legal qualification",
-  "bundleSha256": "9d26a51a6fe47b63dfd830d5759e342d633bc1f68df3aefc15ac05a6c2c4653b",
-  "sourceMapSha256": "0e9478c5226443cde5d142e4f6a9f9856b468acdf9ac687e4075711c3a5f558e",
+  "bundleSha256": "86fd188e12b2c796c41f10d4f26a9b8aaa12323d148722fa034d05ec062a43a3",
+  "sourceMapSha256": "cba464a10530f7ee5aa910e10e631dabdab79c770a82a5f65b5065ceebb3a9fa",
   "sourceMismatches": [],
   "packages": [
     {
@@ -595,5 +595,6 @@
         }
       ]
     }
-  ]
+  ],
+  "dependencySourceComparisonSha256": "70eceef8eda2404f098c8a839762a6b7da532e4c16c1f6e87e5f0beca26bd252"
 }

@@ -1,0 +1,108 @@
+{
+  "reviewedAt": "2026-10-16T11:57:01.196508+00:00",
+  "verdict": "SOURCE_CLEAR_PARENT_RUNTIME_REPORTS_INSPECTED",
+  "scope": "Private seal input0.2 source interning and original0.1 compatibility, with current actual Chromium lifecycle/upgrade/1024 reports independently inspected.",
+  "openFindings": [],
+  "resolvedFindings": [
+    "Test-only legacy job conversion recomputes full intent digest.",
+    "Upgrade checker asserts exact old manifest/provider hashes and every old asset before use."
+  ],
+  "independentChecks": {
+    "productionSourceUnchangedFromR2Review": true,
+    "oldProviderAssetsVerified": 372,
+    "allThreeConsoleReportsCorrespond": true,
+    "embeddedJsonArtifactDigestsVerified": 24,
+    "receiptDiscriminantsAndIntentBothDirectionsReviewed": true,
+    "pureHelperControls": 21,
+    "originalOutcomeComparisonsRemainByteExact": true,
+    "jobRefComparisonUsesExactNamespaceAndId": true,
+    "sealStorageInspectionIsReadOnly": true
+  },
+  "parentExecutedRuntime": {
+    "reports": {
+      "lifecycle": {
+        "path": "/private/tmp/truss-browser-interned-key-source-lifecycle-20261016.json",
+        "sha256": "d01801118544298e3d4fa10ef7032fcdd6b34390a8f4b9dee4af646739b1031b",
+        "consoleLog": "/private/tmp/truss-browser-interned-key-source-lifecycle-20261016.log",
+        "consoleSha256": "cc4fa695e8f285edfae36c1ad6e24f175d800aa16a2263d724d21b24623f188e",
+        "consoleJsonEqualsReport": true,
+        "provider": {
+          "manifestSha256": "c240acb5a3bdbb6da002ced1afe7482c65340aa3d0800ab697e1504ace720124",
+          "providerSha256": "1c7ae8fb271e381b174ba9ef1205178c8ce9b0a032e2bc49d9c6e919c64b66bc"
+        }
+      },
+      "upgrade": {
+        "path": "/private/tmp/truss-browser-interned-key-source-upgrade-20261016.json",
+        "sha256": "b6f041321486fcb65726ef2df1b9b10a45bb337449803fb442d0b92a502c7178",
+        "consoleLog": "/private/tmp/truss-browser-interned-key-source-upgrade-r3-20261016.log",
+        "consoleSha256": "29d7bd04735758f5ef5c5036bbd9cf5821580e742ce4c2ffa3f4851d279cba7d",
+        "consoleJsonEqualsReport": true,
+        "provider": {
+          "directory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-browser-check-8RBnjk/bundle",
+          "manifestSha256": "c240acb5a3bdbb6da002ced1afe7482c65340aa3d0800ab697e1504ace720124",
+          "providerSha256": "1c7ae8fb271e381b174ba9ef1205178c8ce9b0a032e2bc49d9c6e919c64b66bc"
+        }
+      },
+      "bulk1024": {
+        "path": "/private/tmp/truss-browser-interned-key-source-bulk1024-20261016.json",
+        "sha256": "434940b3735404573257d8001a1a07bf6d0eebfc08886d99dac34968487212ef",
+        "consoleLog": "/private/tmp/truss-browser-interned-key-source-bulk1024-20261016.log",
+        "consoleSha256": "a9ea831fc63a5f429d46f3155ce575a07a372ccc924a20c37722ae29eff17c5c",
+        "consoleJsonEqualsReport": true,
+        "provider": {
+          "directory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-browser-check-Qr344J/bundle",
+          "manifestSha256": "c240acb5a3bdbb6da002ced1afe7482c65340aa3d0800ab697e1504ace720124",
+          "providerSha256": "1c7ae8fb271e381b174ba9ef1205178c8ce9b0a032e2bc49d9c6e919c64b66bc"
+        }
+      }
+    },
+    "actualOldProviderUpgrade": true,
+    "originalOldSealSubmitClaimBatchRecovery": true,
+    "remainingOldFrozenBatchExecuted": true,
+    "newCompactPointExecuted": true,
+    "crossFormatIntentFixtureScope": "Explicit test-only compact transport fixture derived from genuine original sealed bytes; not fresh authority issuance.",
+    "lifecycleCrashesQualified": false,
+    "actualLoadedRows": 1024,
+    "actualChangedUpdates": 1025,
+    "bulkBatches": 11,
+    "allReopenedPublicValuesVerified": true,
+    "storedSeals": [
+      {
+        "profile": "truss-browser-seal/0.2",
+        "receipts": 1024,
+        "perReceiptSourceCopies": 0,
+        "inputBytes": 1016097
+      },
+      {
+        "profile": "truss-browser-seal/0.2",
+        "receipts": 1,
+        "perReceiptSourceCopies": 0,
+        "inputBytes": 73691
+      }
+    ]
+  },
+  "performance": {
+    "qualified": false,
+    "bulkMs": 6337.8625,
+    "pointMs": 326.2714159999996,
+    "interpretation": "Still fails the required practical latency; no statistical or causal speedup claim."
+  },
+  "sourceSha256": {
+    "packages/browser/key-receipt-storage.ts": "4046606c4354ceff9310d49f25b480d1569504872aab50c50796fce1ca393b81",
+    "packages/browser/materialize.ts": "8b0e03e136095649fcc8f87f712c890bc88619a1ba356b7534a6a733ae55a4c9",
+    "packages/browser/bulk.ts": "8acab370adddbf6f6ce52c48a4dc171ffe2379d279fae7d55c6012021628126c",
+    "packages/browser/batch.ts": "7eee4daf15ebb815b063dd0306edc18bed5167821c1a39b241e5449483551c24",
+    "packages/browser/build-assets.ts": "6c07323b58ba828d0eec5847e8d5350f233fb7aa7d6d3641809546d4ed916631",
+    "packages/browser/test-worker.ts": "7912d2c67d15576a7d9c39589413cafee04bad3091679a819c0bf39bcd25925b",
+    "packages/browser/check-lifecycle.ts": "aa8e6e1ba3b757dafa8004b7ffb2b786cc46d902a32996f023d379eb24631db1",
+    "packages/browser/check-seal-upgrade.ts": "b0274064224aa1a031d8bf4e7d5ffb678a0e6b1f99555b0d32408e59856ccbb2",
+    "packages/browser/check-bulk1024.ts": "aaeda6e3d5fe7b1b9a58fe5b7481a3644cbad4677e2e8dbdef9ccf438fcd4282"
+  },
+  "limitations": [
+    "Reviewer did not run browser/native execution; parent executed the inspected reports.",
+    "Orderly reopen, exact recovery and controlled faults do not qualify arbitrary-process-crash recovery or liveness.",
+    "1024 updates use 11 atomic batches; no atomic1024 claim.",
+    "No publication, release, full native CONTRACT904 or broader profile qualification.",
+    "Temporary new bundle directories were removed by the test runners; this review verifies report agreement/current source and the complete retained old bundle, not an independently rebuilt new bundle."
+  ]
+}

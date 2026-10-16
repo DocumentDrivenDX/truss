@@ -3,7 +3,7 @@ import {mkdir,cp,readFile,readdir,writeFile} from 'node:fs/promises';
 import {join,resolve,isAbsolute} from 'node:path';
 const root=resolve(import.meta.dir,'../..');
 const hash=(bytes:Uint8Array|string)=>new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
-const inputs=['packages/browser/store.ts','packages/browser/catalog.ts','packages/browser/actions.ts','packages/browser/materialize.ts','packages/browser/objects.ts','packages/browser/bulk.ts','packages/browser/batch.ts','packages/browser/feed.ts','packages/browser/build-assets.ts','packages/browser/package.json','bun.lock',
+const inputs=['packages/browser/key-receipt-storage.ts','packages/browser/store.ts','packages/browser/catalog.ts','packages/browser/actions.ts','packages/browser/materialize.ts','packages/browser/objects.ts','packages/browser/bulk.ts','packages/browser/batch.ts','packages/browser/feed.ts','packages/browser/build-assets.ts','packages/browser/package.json','bun.lock',
   'packages/postgresql/src/acceptance-json.ts','packages/postgresql/src/original-byte-custody.ts',
   'packages/umf-bun/src/catalog-declarations.ts',
   ...['layout.sql','scalars.sql','lineage.sql','containers.sql','plan.sql'].map(x=>'packages/python/src/truss/_catalog_runtime/'+x),
@@ -18,7 +18,7 @@ export async function buildBrowserAssets(directory:string){
   await ownerFiles('packages/browser/owners');ownerInputs.sort();const allInputs=[...inputs,...ownerInputs];
   const sourceHashes:Record<string,string>={};
   for(const file of allInputs)sourceHashes[file]=hash(await readFile(join(root,file)));
-  if(sourceHashes[ownerDirectory+'/notices/inventory.json']!=='fb153552de3f60335d542bbb9123d1f29be150bab2d1a373039eda251066796b')throw Error('Original action owner notice inventory required');
+  if(sourceHashes[ownerDirectory+'/notices/inventory.json']!=='dd26874ed53f10d5f697474c5ca260d7fca06b2413fb097530384f8f86d2b7aa')throw Error('Original action owner notice inventory required');
   const notices=JSON.parse(await readFile(join(root,ownerDirectory,'notices/inventory.json'),'utf8'));
   for(const dependency of notices.packages)for(const notice of dependency.notices){
     if(sourceHashes[ownerDirectory+'/notices/'+notice.path]!==notice.sha256)throw Error('Original action owner notice bytes required');
@@ -37,12 +37,12 @@ export async function buildBrowserAssets(directory:string){
   await cp(join(root,'packages/python/src/truss/_umf_core08/licenses'),join(directory,'licenses/umf'),{recursive:true});
   await cp(join(root,'packages/python/src/truss/_catalog_runtime/layout.sql'),join(directory,'layout.sql'));
   const originalOwner=Bun.gunzipSync(await readFile(join(root,ownerDirectory,'umf.js.gz')));
-  if(hash(originalOwner)!=='9d26a51a6fe47b63dfd830d5759e342d633bc1f68df3aefc15ac05a6c2c4653b')throw Error('Pinned original UMF local action ESM required');
+  if(hash(originalOwner)!=='86fd188e12b2c796c41f10d4f26a9b8aaa12323d148722fa034d05ec062a43a3')throw Error('Pinned original UMF local action ESM required');
   await mkdir(join(directory,'owners'));await writeFile(join(directory,'owners/umf-actions.js'),originalOwner);
   await cp(join(root,ownerDirectory,'notices'),join(directory,'licenses/umf-local-actions'),{recursive:true});
   const weftDirectory='packages/browser/owners/weft-local';
   const weftProducer=JSON.parse(await readFile(join(root,weftDirectory,'producer.json'),'utf8'));
-  if(weftProducer.assets['weft_wasm.js'].sha256!=='2711256b057a90fa8a898f1d616b871a083f993177b6bbffcd6cbd17fcaa6119'||weftProducer.revision!=='4f5b73df8b751b4291b84af3b59169c1a1b63ed0'||weftProducer.assets['weft_wasm_bg.wasm'].sha256!=='e73e77d5dfbf2118a0452838f70c17ab17658caf7bca5841abc6f31a6e91f8e5')throw Error('Original local Weft producer required');
+  if(weftProducer.assets['weft_wasm.js'].sha256!=='2711256b057a90fa8a898f1d616b871a083f993177b6bbffcd6cbd17fcaa6119'||weftProducer.revision!=='ab94595f176cc67ed213843285dda4d401033959'||weftProducer.assets['weft_wasm_bg.wasm'].sha256!=='4434aad3ba9ce064f37f21146943a74d18b26d20c9caa255bdd5e56f503b2fd2')throw Error('Original local Weft producer required');
   await mkdir(join(directory,'owners/weft'));
   for(const name of ['weft_wasm.js','weft_wasm_bg.wasm']){
     const bytes=Bun.gunzipSync(await readFile(join(root,weftDirectory,name+'.gz')));
@@ -67,9 +67,9 @@ export async function buildBrowserAssets(directory:string){
   if(assets['layout.sql']!.sha256!==sourceHashes['packages/python/src/truss/_catalog_runtime/layout.sql'])throw Error('Emitted layout differs from captured input');
   const manifest={interfaceVersion:'truss-browser-assets/0.1',bun:Bun.version,pglite:'0.5.10',
     umfCoreProducer:{revision:'7c0f0c98beee2cc1a5a407992b5c53cc2616da8e',bundleSha256:sourceHashes['packages/python/src/truss/_umf_core08/producer.js']},
-    umfActionsProducer:{revision:'40f011402bf8f0c9512225975b62a034f1da325c',producer:'sha256:633f8ad623cc150fd3f6e2c5fe5324a0a128393036aa34d9929bfadf1142c6e4',bundleSha256:assets['owners/umf-actions.js']!.sha256},
+    umfActionsProducer:{revision:'c1e316c42ebe2a3a87420a5edc7e1ae751137b5b',producer:'sha256:6b331c0b5118435a79eb19b3c66464b4ea1ed3e70134fc3b71e07913487a408b',bundleSha256:assets['owners/umf-actions.js']!.sha256},
     weftProducer:{revision:weftProducer.revision,features:weftProducer.features,wasmSha256:assets['owners/weft/weft_wasm_bg.wasm']!.sha256},
-    scope:{lifecycle:true,coreCatalog:true,actionRegistration:true,selectionReadGrant:true,materialization:true,manifestSealing:true,sealRecovery:true,objectLoad:true,objectRead:true,loadRecovery:true,submission:true,submissionRecovery:true,jobReview:true,claims:true,claimRecovery:true,actionExecution:true,batchRecovery:true,journalPages:true,effects:true},
+    scope:{lifecycle:true,coreCatalog:true,actionRegistration:true,selectionReadGrant:true,materialization:true,manifestSealing:true,sealRecovery:true,objectLoad:true,objectRead:true,objectReadPage:true,loadRecovery:true,submission:true,submissionRecovery:true,jobReview:true,claims:true,claimRecovery:true,actionExecution:true,batchRecovery:true,journalPages:true,effects:true},
     sourceHashes,assets:Object.fromEntries(Object.entries(assets).sort(([a],[b])=>a<b?-1:a>b?1:0))};
   const encoded=JSON.stringify(manifest,null,2)+'\n';await writeFile(join(directory,'manifest.json'),encoded);
   return {directory,manifestSha256:hash(encoded),providerSha256:assets['store.js']!.sha256};

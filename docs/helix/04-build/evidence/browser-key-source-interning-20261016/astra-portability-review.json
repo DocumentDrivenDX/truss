@@ -1,0 +1,16 @@
+{
+  "reviewedAt": "2026-10-16T11:58:38.200329+00:00",
+  "verdict": "SOURCE_CLEAR",
+  "scope": "Portability-only optional Bun.argv[4] old-bundle location; no execution rerun.",
+  "file": "/private/tmp/truss-browser-interned-key-source-20261016/packages/browser/check-seal-upgrade.ts",
+  "previousSha256": "b0274064224aa1a031d8bf4e7d5ffb678a0e6b1f99555b0d32408e59856ccbb2",
+  "sha256": "8f908fa5d323ba7ac8c70e5debecec2c568ba14da4998e1acfe026fa4d7865dd",
+  "checks": [
+    "Removing the one comment and argv fallback reconstructs the exact previously reviewed checker SHA.",
+    "All other nine-file review inventory entries are byte unchanged.",
+    "Default directory remains identical. Explicit relocation changes only the directory; exact old provider/manifest and all asset hashes remain mandatory."
+  ],
+  "findings": [],
+  "runtimeQualification": "Previous default-path runtime results remain scoped to their recorded checker bytes. Relocated path is source reviewed, not independently executed.",
+  "priorReview": "/private/tmp/truss-interned-key-source-astra-final-20261016.json"
+}

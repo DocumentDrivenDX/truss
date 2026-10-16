@@ -1,0 +1,110 @@
+{
+  "status": "INTEGRATION_SOURCE_CLEAR_EXACT_CANONICAL_BUILD_MATCH_PERFORMANCE_FAILED",
+  "reviewer": "Astra Ultra",
+  "scope": "Browser integration only; previously reviewed17-file candidate plus bounded evidence directory. Separate native initial-scope buffering files excluded.",
+  "base_commit": "984d6a65569adb084c6868fcfd8f5674c5a23ea3",
+  "findings": [],
+  "handoff_sha256": "0c6870be23089f48e4072b0eae583ba3fc6f5160e477416e95d300f0b5ffb620",
+  "adopted_files": {
+    "packages/browser/store.ts": {
+      "sha256": "b3dd5378530b2a404eef3cdfa34728253f9cbafc8e3a924dd266edefa6b6e43b",
+      "bytes": 14721
+    },
+    "packages/browser/actions.ts": {
+      "sha256": "cdd5df370f4e929e0e83d932fdc9d1700ae82d1f132045bf091c798568197016",
+      "bytes": 6163
+    },
+    "packages/browser/materialize.ts": {
+      "sha256": "8b0e03e136095649fcc8f87f712c890bc88619a1ba356b7534a6a733ae55a4c9",
+      "bytes": 24225
+    },
+    "packages/browser/objects.ts": {
+      "sha256": "90f285aeb04bd08fd9e1fe0dfeccd05acca311ac5d793aba980e113135793d15",
+      "bytes": 23075
+    },
+    "packages/browser/bulk.ts": {
+      "sha256": "8acab370adddbf6f6ce52c48a4dc171ffe2379d279fae7d55c6012021628126c",
+      "bytes": 33037
+    },
+    "packages/browser/batch.ts": {
+      "sha256": "7eee4daf15ebb815b063dd0306edc18bed5167821c1a39b241e5449483551c24",
+      "bytes": 13814
+    },
+    "packages/browser/build-assets.ts": {
+      "sha256": "6c07323b58ba828d0eec5847e8d5350f233fb7aa7d6d3641809546d4ed916631",
+      "bytes": 7933
+    },
+    "packages/browser/key-receipt-storage.ts": {
+      "sha256": "4046606c4354ceff9310d49f25b480d1569504872aab50c50796fce1ca393b81",
+      "bytes": 2594
+    },
+    "packages/browser/test-worker.ts": {
+      "sha256": "7912d2c67d15576a7d9c39589413cafee04bad3091679a819c0bf39bcd25925b",
+      "bytes": 27849
+    },
+    "packages/browser/check-lifecycle.ts": {
+      "sha256": "aa8e6e1ba3b757dafa8004b7ffb2b786cc46d902a32996f023d379eb24631db1",
+      "bytes": 32157
+    },
+    "packages/browser/check-bulk1024.ts": {
+      "sha256": "aaeda6e3d5fe7b1b9a58fe5b7481a3644cbad4677e2e8dbdef9ccf438fcd4282",
+      "bytes": 8489
+    },
+    "packages/browser/check-seal-upgrade.ts": {
+      "sha256": "8f908fa5d323ba7ac8c70e5debecec2c568ba14da4998e1acfe026fa4d7865dd",
+      "bytes": 10488
+    },
+    "packages/browser/owners/umf-local-actions/notices/inventory.json": {
+      "sha256": "dd26874ed53f10d5f697474c5ca260d7fca06b2413fb097530384f8f86d2b7aa",
+      "bytes": 15913
+    },
+    "packages/browser/owners/umf-local-actions/producer.json": {
+      "sha256": "f935f63edc7c93752ba6a7cfd4b5d86a0768968889688a70ffae28fb982ae4cc",
+      "bytes": 721
+    },
+    "packages/browser/owners/umf-local-actions/umf.js.gz": {
+      "sha256": "90f6d82e28495f7a025e2f0803e7cd2688a395487310a4f4bf3d0150106f52a1",
+      "bytes": 1735228
+    },
+    "packages/browser/owners/weft-local/producer.json": {
+      "sha256": "9ea0d23d6d67fe2f844101800d9790a9061e7d8b1803ef8c2fd864b09d7fd053",
+      "bytes": 1378
+    },
+    "packages/browser/owners/weft-local/weft_wasm_bg.wasm.gz": {
+      "sha256": "9f19d150e41488dc2e842646bff79882fef1cab90f49808196395aa52b71258a",
+      "bytes": 1209190
+    }
+  },
+  "evidence_sha256": {
+    "docs/helix/04-build/evidence/browser-key-source-interning-20261016/README.md": "0e580672599f029297fb55ca1952a8bb1a2fbc9d8f9598d84e8e1089c8972194",
+    "docs/helix/04-build/evidence/browser-key-source-interning-20261016/astra-portability-review.json": "4e974385558536703fe5880b315708205e0927544f49a0b700ad360e3465af5f",
+    "docs/helix/04-build/evidence/browser-key-source-interning-20261016/astra-review.json": "1282d49e63ab8ac75d8cce54d802cfccd45081f3d581051d7d44edf98e90f928",
+    "docs/helix/04-build/evidence/browser-key-source-interning-20261016/bulk1024.json": "434940b3735404573257d8001a1a07bf6d0eebfc08886d99dac34968487212ef",
+    "docs/helix/04-build/evidence/browser-key-source-interning-20261016/integrated-build.json": "311ce055e5bdffd7c1ca44a55176a159a98867fd9b983b1ef7995edf949ca7da",
+    "docs/helix/04-build/evidence/browser-key-source-interning-20261016/integration-inputs.json": "38be2046081d08e7363c9db2b6457cda482273c6d787b79287639f3515121373",
+    "docs/helix/04-build/evidence/browser-key-source-interning-20261016/lifecycle.json": "d01801118544298e3d4fa10ef7032fcdd6b34390a8f4b9dee4af646739b1031b",
+    "docs/helix/04-build/evidence/browser-key-source-interning-20261016/upgrade.json": "b6f041321486fcb65726ef2df1b9b10a45bb337449803fb442d0b92a502c7178"
+  },
+  "verified": [
+    "All17 handoff files match both reviewed staging bytes and handoff SHA256/lengths.",
+    "All81 canonical build inputs match staging byte-for-byte, including owner assets, lockfile, shared source and original layout inputs.",
+    "All copied review/runtime receipts equal their originals. Integration before/adopted inventories match base commit and handoff.",
+    "Canonical integrated manifest/provider match all three reviewed staging runtime reports; every emitted asset and source hash was independently verified.",
+    "Remaining staging/main browser differences are README, check-layout and absent check-object-pages; none are canonical build inputs or in the adoption list.",
+    "README accurately retains11 portable batches,1024 loaded rows,1025 changed updates including point, failed6.338s/326ms latency and staging/canonical evidence distinction."
+  ],
+  "canonical_build": {
+    "directory": "/private/tmp/truss-browser-main-interned-assets-20261016",
+    "manifestSha256": "c240acb5a3bdbb6da002ced1afe7482c65340aa3d0800ab697e1504ace720124",
+    "providerSha256": "1c7ae8fb271e381b174ba9ef1205178c8ce9b0a032e2bc49d9c6e919c64b66bc"
+  },
+  "canonical_asset_count": 372,
+  "canonical_source_count": 81,
+  "runtime_scope": "Previously parent-executed Chromium/PGlite lifecycle, old-provider upgrade and1024 workflow; reviewer did not rerun browser/native execution. No arbitrary-crash, atomic1024, performance or release qualification.",
+  "excluded_pending_native_files": [
+    "packages/postgresql/owned-groups/execute.sql",
+    "packages/python/src/truss/_catalog_runtime/owned.sql",
+    "packages/python/src/truss/_catalog_runtime/manifest.json"
+  ],
+  "reviewer_execution": "Static review, file/hash verification and git diff --check only."
+}

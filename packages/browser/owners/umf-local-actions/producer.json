@@ -1,9 +1,11 @@
 {
-  "sourceRevision": "40f011402bf8f0c9512225975b62a034f1da325c",
-  "producer": "sha256:633f8ad623cc150fd3f6e2c5fe5324a0a128393036aa34d9929bfadf1142c6e4",
-  "bundleSha256": "9d26a51a6fe47b63dfd830d5759e342d633bc1f68df3aefc15ac05a6c2c4653b",
-  "compressedSha256": "1957964b6d357984a170081da8f38a06c555bf453dbe58196b1404b7da963802",
-  "bytes": 12235921,
+  "sourceRevision": "c1e316c42ebe2a3a87420a5edc7e1ae751137b5b",
+  "producer": "sha256:6b331c0b5118435a79eb19b3c66464b4ea1ed3e70134fc3b71e07913487a408b",
+  "bundleSha256": "86fd188e12b2c796c41f10d4f26a9b8aaa12323d148722fa034d05ec062a43a3",
+  "compressedSha256": "90f6d82e28495f7a025e2f0803e7cd2688a395487310a4f4bf3d0150106f52a1",
+  "bytes": 12269800,
   "compression": "gzip; original decompressed ESM bytes unchanged",
-  "noticeInventorySha256": "fb153552de3f60335d542bbb9123d1f29be150bab2d1a373039eda251066796b"
+  "noticeInventorySha256": "dd26874ed53f10d5f697474c5ca260d7fca06b2413fb097530384f8f86d2b7aa",
+  "candidateOnly": true,
+  "qualification": "Astra-cleared prepared API source; dependency882sources exact original byte equality; downstream/compiler/canonical owner acceptance pending, not publication"
 }

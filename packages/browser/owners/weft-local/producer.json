@@ -1,11 +1,15 @@
 {
-  "revision": "4f5b73df8b751b4291b84af3b59169c1a1b63ed0",
-  "repository": "https://github.com/DocumentDrivenDX/weft",
+  "baseRevision": "4f5b73df8b751b4291b84af3b59169c1a1b63ed0",
+  "revision": "ab94595f176cc67ed213843285dda4d401033959",
+  "ownerRevision": "c1e316c42ebe2a3a87420a5edc7e1ae751137b5b",
+  "producer": "sha256:6b331c0b5118435a79eb19b3c66464b4ea1ed3e70134fc3b71e07913487a408b",
   "features": [
     "truss-browser-local"
   ],
   "rust": "1.90.0",
   "wasmBindgen": "0.2.105",
+  "sourceInputsManifestSha256": "ff61299dda99cd33466ef7c3e5f2b82eeb94d2ea448b76505de4cae8836926db",
+  "all3235PrePostInputHashesEqual": true,
   "assets": {
     "weft_wasm.js": {
       "sha256": "2711256b057a90fa8a898f1d616b871a083f993177b6bbffcd6cbd17fcaa6119",
@@ -13,10 +17,11 @@
       "compressedSha256": "0e3b4f1e08de78f9753855b14ecf698570e526b1fa62420384c5b8e52d75052a"
     },
     "weft_wasm_bg.wasm": {
-      "sha256": "e73e77d5dfbf2118a0452838f70c17ab17658caf7bca5841abc6f31a6e91f8e5",
-      "bytes": 4217838,
-      "compressedSha256": "760f57e80645db2f331e6e0014e3fac2c86b37172a5a28f3552a9d3b976b67e0"
+      "sha256": "4434aad3ba9ce064f37f21146943a74d18b26d20c9caa255bdd5e56f503b2fd2",
+      "bytes": 4221318,
+      "compressedSha256": "9f19d150e41488dc2e842646bff79882fef1cab90f49808196395aa52b71258a"
     }
   },
-  "licenseScope": "Existing vendored ahash notices retained; no project-level license or complete dependency licensing claim is invented."
+  "scope": "Fresh compatibility-backport build, not a build from current B008 main. Main source integration preserves concurrent features. No native authorization/publication/performance qualification; requires fresh browser reproof.",
+  "canonicalOwnerAcceptance": "Source accepted and pushed; fresh ordinary browser reproof and publication/performance qualification remain pending"
 }

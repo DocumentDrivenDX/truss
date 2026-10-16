@@ -8,7 +8,7 @@ const {chromium}=createRequire(Bun.argv[2]??import.meta.path)('playwright');
 const temporary=await mkdtemp(join(tmpdir(),'truss-browser-check-'));
 const packaged=await buildBrowserAssets(join(temporary,'bundle'));
 const built=await Bun.build({entrypoints:[new URL('./test-worker.ts',import.meta.url).pathname],target:'browser',
-  plugins:[{name:'owned-provider',setup(build){build.onResolve({filter:/^\.\/store$/},()=>({path:'./store.js',external:true}));build.onResolve({filter:/^@electric-sql\/pglite$/},()=>({path:'./pglite/index.js',external:true}));}}]});
+  plugins:[{name:'owned-provider',setup(build){build.onResolve({filter:/^\.\/store$/},()=>({path:'./store.js',external:true}));build.onResolve({filter:/^@electric-sql\/pglite$/},()=>({path:'./pglite/index.js',external:true}));build.onResolve({filter:/^@truss\/umf-local-actions$/},()=>({path:'./owners/umf-actions.js',external:true}));build.onResolve({filter:/^@truss\/weft-local$/},()=>({path:'./owners/weft/weft_wasm.js',external:true}));}}]});
 if(!built.success)throw Error(String(built.logs));
 const server=Bun.serve({hostname:'127.0.0.1',port:0,async fetch(request){
   const requested=new URL(request.url).pathname;
@@ -45,7 +45,7 @@ try{
   const unchanged=await call(a,{command:'register'});
   if(unchanged.outcome!=='unchanged')throw Error(JSON.stringify(unchanged));
   const action=await call(a,{command:'action'});
-  if(action.outcome!=='action_registered'||action.preparationSha256!=='6f5e69462c327da970f07ca1f6253dbacc4db0badf1335b7d91e3f38eb67ad40'||!action.opaque)throw Error(JSON.stringify(action));
+  if(action.outcome!=='action_registered'||action.preparationSha256!=='7ee1afaa2b4d24a2d86473341255edf9b11ad266e5d35477126e00504f1975c0'||!action.opaque)throw Error(JSON.stringify(action));
   const expectedGrant={profile:{id:'umf.actions.local-store-read',version:'1'},target:{element:'products',key:'pk',module:'sales'},fields:[{module:'sales',element:'product-id'},{module:'sales',element:'product-name'}],view:'complete-canonical-target-population',disposition:'original'};
   if(JSON.stringify(action.declaration)!==JSON.stringify(expectedGrant))throw Error(JSON.stringify(action.declaration));
   const forgedAction=await call(a,{command:'forgedAction'});if(forgedAction.outcome!=='refused')throw Error(JSON.stringify(forgedAction));
@@ -163,7 +163,66 @@ try{
   const recoveredLoad=await call(a,{command:'recoverLoad'});if(JSON.stringify(recoveredLoad)!==JSON.stringify(seeded.loaded))throw Error('Recovered load changed original outcome');
   await call(a,{command:'close'});
   const physical=await call(a,{command:'inspectStorage'});if(physical.objects!=='4'||physical.keys!=='4'||physical.reservations!=='4'||physical.journal!=='8'||physical.generation!=='1'||physical.exact!==true)throw Error(JSON.stringify(physical));
-  const receipt={cancellation:{cancelled,cancelReplay,cancelClaim,cancelExecution,cancelRecovered},scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
+  const compactStorage=await call(a,{command:'compactStorage',info:first.info});if(compactStorage.outcome!=='compact_storage')throw Error(JSON.stringify(compactStorage));
+  await call(a,{command:'open',name:'lifecycle-basic'});await call(a,{command:'action'});
+  const legacyJob=await newJob("UPDATE products SET name='Legacy' WHERE id='spare'",'legacy-compat',1);
+  await call(a,{command:'close'});
+  if((await call(a,{command:'legacyJob',info:first.info,job:legacyJob})).outcome!=='legacy_job_retained')throw Error('Legacy fixture conversion failed');
+  await call(a,{command:'open',name:'lifecycle-basic'});await call(a,{command:'action'});
+  const legacyClaim=await call(a,{command:'claim',input:{job:legacyJob,control:{requestKey:'legacy-claim',attempt:'1'}}});if(legacyClaim.status!=='claimed')throw Error(JSON.stringify(legacyClaim));
+  const legacyInput={job:legacyJob,batch:0,fence:legacyClaim.fence},legacyExecuted=await call(a,{command:'executeBatch',input:legacyInput});if(legacyExecuted.status!=='committed')throw Error(JSON.stringify(legacyExecuted));
+  await call(a,{command:'close'});
+  const legacyAfterWrite=await call(a,{command:'legacyJob',info:first.info,job:legacyJob});if(legacyAfterWrite.outcome!=='legacy_job_retained'||legacyAfterWrite.profileBefore!=='truss-browser-bulk-job/0.1')throw Error('Legacy job profile changed during control/effect writes');
+  await call(a,{command:'open',name:'lifecycle-basic'});await call(a,{command:'action'});
+  const legacyRecovered=await call(a,{command:'recoverBatch',input:legacyInput});if(JSON.stringify(legacyRecovered)!==JSON.stringify(legacyExecuted))throw Error('Legacy job/admission recovery changed original outcome');
+  await call(a,{command:'close'});
+  // Fault is installed before opening/warming the new per-open cache. It changes
+  // a later batch's version during batch0, without another job or reopen.
+  await call(a,{command:'open',name:'lifecycle-basic'});await call(a,{command:'action'});
+  const cacheObjects=await call(a,{command:'readObjects'});
+  const cacheBar=cacheObjects.find((o:any)=>o.fields.some((f:any)=>f.field==='product-id'&&f.value==='bar'));
+  const cacheQux=cacheObjects.find((o:any)=>o.fields.some((f:any)=>f.field==='product-id'&&f.value==='qux'));
+  const cacheFault=await call(a,{command:'batchFault',id:cacheBar.id,laterId:cacheQux.id});if(cacheFault.outcome!=='fault_installed')throw Error(JSON.stringify(cacheFault));
+  await call(a,{command:'action'});
+  const cacheWork=await call(a,{command:'materialize',sql:"UPDATE products SET name='CacheWarm' WHERE name='Bulk'",batchSize:1});if(cacheWork.count!==2)throw Error(JSON.stringify(cacheWork));
+  const cacheSeal=await call(a,{command:'seal',request:{requestKey:'cache-seal',attempt:'1'}});if(cacheSeal.outcome!=='sealed')throw Error(JSON.stringify(cacheSeal));
+  const cacheSubmit=await call(a,{command:'submit',input:{key:'cache-warm',reference:cacheSeal.reference,control:{requestKey:'cache-submit',attempt:'1'}}});if(cacheSubmit.status!=='submitted')throw Error(JSON.stringify(cacheSubmit));
+  const cacheJob=cacheSubmit.state.job;
+  const warmClaim=await call(a,{command:'claim',input:{job:cacheJob,control:{requestKey:'cache-claim-0',attempt:'1'}}});if(warmClaim.status!=='claimed')throw Error(JSON.stringify(warmClaim));
+  const warm=await call(a,{command:'executeBatch',input:{job:cacheJob,batch:0,fence:warmClaim.fence}});if(warm.status!=='committed')throw Error(JSON.stringify(warm));
+  const hotClaim=await call(a,{command:'claim',input:{job:cacheJob,control:{requestKey:'cache-claim-1',attempt:'1'}}});if(hotClaim.status!=='claimed')throw Error(JSON.stringify(hotClaim));
+  const hotInput={job:cacheJob,batch:1,fence:hotClaim.fence};
+  const beforeForged=await call(a,{command:'reviewJob',job:cacheJob});
+  const hotForged=await call(a,{command:'invalidExecution',input:hotInput});if(hotForged.status!=='unsupported'||hotForged.code!=='ACTION_ADMISSION_REFUSED')throw Error(JSON.stringify(hotForged));
+  const afterForged=await call(a,{command:'reviewJob',job:cacheJob});if(JSON.stringify(beforeForged)!==JSON.stringify(afterForged))throw Error('Invalid grant changed warmed job progress');
+  const beforeHot=await call(a,{command:'readObjects'});
+  const changedQux=beforeHot.find((o:any)=>o.id===cacheQux.id);if(BigInt(changedQux.version)!==BigInt(cacheQux.version)+1n)throw Error('Later target version fault did not occur exactly once');
+  const hot=await call(a,{command:'executeBatch',input:hotInput});if(hot.status!=='conflict'||hot.code!=='PAP_GUARD'||hot.item!==1)throw Error(JSON.stringify(hot));
+  const afterHot=await call(a,{command:'readObjects'});if(JSON.stringify(beforeHot)!==JSON.stringify(afterHot))throw Error('Warm cache stale batch changed native objects');
+  await call(a,{command:'close'});
+  const hotClosed=await call(a,{command:'executeBatch',input:hotInput});if(hotClosed.outcome!=='error'||hotClosed.message!=='Error: Current issued local owner required')throw Error('Closed cached owner refusal changed');
+  const cacheBoundary=await call(a,{command:'cacheBoundary',info:first.info,job:cacheJob});if(cacheBoundary.outcome!=='cache_boundary_passed')throw Error(JSON.stringify(cacheBoundary));
+  const custodyControls=[];
+  for(const mode of ['missingSeal','sourceDigest']){
+    const fault=await call(a,{command:'jobCustodyFault',info:first.info,job:cacheJob,mode});if(fault.outcome!=='custody_fault_written')throw Error(JSON.stringify(fault));
+    await call(a,{command:'open',name:'lifecycle-basic'});await call(a,{command:'action'});
+    if(mode==='missingSeal'){
+      const differentWork=await call(a,{command:'materialize',sql:"UPDATE products SET name='DifferentIntent' WHERE id='spare'"});if(differentWork.count!==1)throw Error(JSON.stringify(differentWork));
+      const differentSeal=await call(a,{command:'seal',request:{requestKey:'different-intent-seal',attempt:'1'}});if(differentSeal.outcome!=='sealed')throw Error(JSON.stringify(differentSeal));
+      const differentIntent=await call(a,{command:'submit',input:{key:'cache-warm',reference:differentSeal.reference,control:{requestKey:'different-intent-submit',attempt:'1'}}});if(differentIntent.status!=='conflict'||differentIntent.code!=='TOKEN_REUSE')throw Error(JSON.stringify(differentIntent));
+      if(JSON.stringify(await call(a,{command:'readObjects'}))!==JSON.stringify(afterHot))throw Error('Changed intent conflict fenced or changed objects');
+    }
+    const originalInput={job:cacheJob,batch:0,fence:warmClaim.fence};
+    const uncertain=await call(a,{command:'recoverBatch',input:originalInput});if(uncertain.status!=='indeterminate')throw Error(JSON.stringify(uncertain));
+    const fenced=await call(a,{command:'readObjects'});if(fenced.outcome!=='error'||fenced.message!=='Error: Current issued local owner required')throw Error('Unavailable custody did not fence owner');
+    await a.evaluate(()=>(window as any).worker.terminate());await prepare(a);
+    const restored=await call(a,{command:'jobCustodyFault',info:first.info,job:cacheJob,restore:fault.original});if(restored.outcome!=='custody_fault_written')throw Error(JSON.stringify(restored));
+    await call(a,{command:'open',name:'lifecycle-basic'});await call(a,{command:'action'});
+    const recovered=await call(a,{command:'recoverBatch',input:originalInput});if(JSON.stringify(recovered)!==JSON.stringify(warm))throw Error('Restored custody changed original committed outcome');
+    if(JSON.stringify(await call(a,{command:'readObjects'}))!==JSON.stringify(afterHot))throw Error('Custody recovery redispatched business effects');
+    await call(a,{command:'close'});custodyControls.push({mode,indeterminate:true,fenced:true,restoredOriginalOutcome:true,noRedispatch:true});
+  }
+  const receipt={normalization:{compactStorage,legacyOriginalOutcome:true,custodyControls},warmCache:{boundary:cacheBoundary,warm,stale:hot,invalidGrant:hotForged.code,closedOwner:hotClosed.outcome,noEffects:true},cancellation:{cancelled,cancelReplay,cancelClaim,cancelExecution,cancelRecovered},scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
     feed:{pages:feedPages,events:feedEvents.length,foreignCursor:foreignCursor.code,emptyAfterReopen:emptyFeed},
     staleGuard:{result:stale,recoveredByteEqual:true,firstItemUnchanged:true},
     noOp:{results:noOpResults,unchanged:true},

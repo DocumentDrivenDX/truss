@@ -4,6 +4,16 @@ import {readCatalog,prepareDocument,type CatalogSnapshot} from './catalog';
 import {captureSeal,type SealRequest} from './materialize';
 import type {StoreInfo} from './store';
 export interface RecordIdentity {documentId:string;module:string;record:string}
+export interface ObjectRow {id:string;typeId:string;version:string;fields:{module:string;field:string;value:string}[]}
+export interface ObjectPageInput {target:RecordIdentity;limit:number;afterId:string|null}
+export interface ObjectPage {objects:ObjectRow[];nextAfterId:string|null}
+export function captureObjectPage(input:ObjectPageInput):ObjectPageInput{
+ if(!input||Object.keys(input).sort().join(',')!=='afterId,limit,target')throw Error('Complete page position required');
+ const {target:rawTarget,limit,afterId}=input;
+ if(!Number.isInteger(limit)||limit<1||limit>512)throw Error('Page limit1..512 required');
+ if(afterId!==null){text(afterId,19);if(!/^[1-9][0-9]{0,18}$/.test(afterId)||afterId.length===19&&afterId>'9223372036854775807')throw Error('Native object position required');}
+ return Object.freeze({target:captureTarget(rawTarget),limit,afterId});
+}
 export interface LoadInput {target:RecordIdentity;rows:{fields:{module:string;field:string;value:string}[]}[];request:SealRequest}
 export type LoadOutcome={outcome:'loaded';request:SealRequest;objects:{id:string;typeId:string;version:string}[];journal:string[]}
  |{outcome:'refused';code:string;reason:string;request:SealRequest}
@@ -71,6 +81,12 @@ export async function journalHorizon(tx:Pick<PGlite,'query'|'exec'>,install=true
  }else if(existing.length!==1||existing[0]!.value.profile!=='truss-browser-journal/0.1'||!Array.isArray(existing[0]!.value.partitions)||existing[0]!.value.partitions.length!==actual.length||actual.some((p,i)=>{const retained=existing[0]!.value.partitions[i];return !retained||Object.keys(retained).sort().join(',')!=='bound,name'||retained.name!==p.name||retained.bound!==p.bound;}))throw Error('Original finite journal horizon required');
  if(existing.length){if(actual.length!==1||actual[0]!.name!=='journal_browser_horizon')throw Error('Exact browser journal partition required');const expected=existing[0]!.value.constraints,found=await definitions();if(!checksEqual(found,originalJournalChecks.map(c=>({...c,definition:c.definition.replace('truss-journal-exact-bytes/0.2.0-proposal','truss-browser-journal-exact-bytes/0.1')}))))throw Error('Exact browser journal constraints required');if(existing[0]!.value.eventInterfaceVersion!=='truss-browser-history-event/0.1'||existing[0]!.value.wrapperInterfaceVersion!=='truss-browser-journal-exact-bytes/0.1'||!Array.isArray(expected)||expected.length!==2||found.length!==2||found.some((c,i)=>expected[i]?.name!==c.name||expected[i]?.definition!==c.definition))throw Error('Original browser journal carrier constraints required');}
 }
+function logicalObjects(metadata:Awaited<ReturnType<typeof targetSource>>,rows:{id:string;version:string;props:Record<string,any>}[]):ObjectRow[]{
+ return rows.map(row=>{
+  if(Object.keys(row.props).length!==metadata.members.length)throw Error('Complete logical members required');
+  return {id:row.id,typeId:metadata.type.typeId,version:row.version,fields:metadata.members.map((m:any)=>{const cell=row.props[m.propertyId];if(!cell||Object.keys(cell).sort().join(',')!=='kind,text'||cell.kind!=='string'||typeof cell.text!=='string')throw Error('Original String cell required');return {module:m.module,field:m.element,value:cell.text};})};
+ });
+}
 export function createObjectAccess(db:PGlite,info:StoreInfo,isOpen:()=>boolean,fence:()=>void){
  const open=()=>{if(!isOpen())throw Error('Current issued local owner required');};
  return {
@@ -79,14 +95,24 @@ export function createObjectAccess(db:PGlite,info:StoreInfo,isOpen:()=>boolean,f
    const metadata=await targetSource(catalog,target);
    let rows:{id:string;version:string;props:Record<string,any>}[];
    try{
-    rows=(await db.query<{id:string;version:string;props:Record<string,any>}>("SELECT id::text,ver::text AS version,props FROM truss.object WHERE type_id=$1::int ORDER BY id LIMIT 101",[metadata.type.typeId])).rows;
+    rows=(await db.query<{id:string;version:string;props:Record<string,any>}>("SELECT o.id::text,o.ver::text AS version,o.props FROM truss.object o WHERE o.type_id=$1::int ORDER BY o.id LIMIT 101",[metadata.type.typeId])).rows;
    }catch(error){fence();throw error;}
     if(rows.length>100||utf8(JSON.stringify(rows)).length>8388608)throw Error('Bounded read limit');
    try{
-    return rows.map(row=>{
-     if(Object.keys(row.props).length!==metadata.members.length)throw Error('Complete logical members required');
-     return {id:row.id,typeId:metadata.type.typeId,version:row.version,fields:metadata.members.map((m:any)=>{const cell=row.props[m.propertyId];if(!cell||Object.keys(cell).sort().join(',')!=='kind,text'||cell.kind!=='string'||typeof cell.text!=='string')throw Error('Original String cell required');return {module:m.module,field:m.element,value:cell.text};})};
-    });
+    return logicalObjects(metadata,rows);
+   }catch(error){fence();throw error;}
+  },
+  async readPage(input:ObjectPageInput):Promise<ObjectPage>{
+   open();let catalog:CatalogSnapshot|null;try{catalog=await readCatalog(db);}catch(error){fence();throw error;}
+   const metadata=await targetSource(catalog,input.target);
+   let rows:{id:string;version:string;props:Record<string,any>}[];
+   try{
+    rows=(await db.query<{id:string;version:string;props:Record<string,any>}>("SELECT o.id::text,o.ver::text AS version,o.props FROM truss.object o WHERE o.type_id=$1::int AND ($2::bigint IS NULL OR o.id>$2::bigint) ORDER BY o.id LIMIT $3::int",[metadata.type.typeId,input.afterId,input.limit+1])).rows;
+   }catch(error){fence();throw error;}
+   if(utf8(JSON.stringify(rows)).length>8388608)throw Error('Bounded read byte limit');
+   try{
+    const more=rows.length>input.limit,objects=logicalObjects(metadata,rows.slice(0,input.limit));
+    return {objects,nextAfterId:more?objects[objects.length-1]!.id:null};
    }catch(error){fence();throw error;}
   },
   async load(input:LoadInput,recovery=false):Promise<LoadOutcome>{

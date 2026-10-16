@@ -9,7 +9,7 @@ export interface ActionIdentity {module:string;action:string}
 export interface BrowserActionRegistration {action:LocalAction;model:Artifact;modelPin:Record<string,string>;actionPin:Record<string,unknown>;preparation:Artifact}
 export interface SelectionReadRegistration {grant:SelectionReadGrant;declaration:Record<string,unknown>}
 interface Artifact {mediaType:string;utf8:string;sha256:string}
-const PRODUCER='sha256:633f8ad623cc150fd3f6e2c5fe5324a0a128393036aa34d9929bfadf1142c6e4';
+const PRODUCER='sha256:6b331c0b5118435a79eb19b3c66464b4ea1ed3e70134fc3b71e07913487a408b';
 const copy=<T>(value:T):T=>JSON.parse(JSON.stringify(value));
 const frozen=<T>(value:T):T=>{if(value&&typeof value==='object'){for(const child of Object.values(value))frozen(child);Object.freeze(value);}return value;};
 export function captureAction(input:ActionIdentity):Readonly<ActionIdentity>{
