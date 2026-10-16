@@ -1,0 +1,65 @@
+{
+  "review": "Astra Ultra completed diagnostic review",
+  "date": "2026-10-16",
+  "status": "EVIDENCE_CLEAR_FAILED_BEFORE_EXPLAIN",
+  "source_commit": "670f9cc505876682761e74968698811a23ebf784",
+  "parent_session": 49116,
+  "scope": "Read-only review of the temporary planner probe and its terminal failed fixture run. No product source edits, native tests, or agents launched by reviewer.",
+  "pins": [
+    {
+      "path": "/private/tmp/truss-create-lookup-plan-20261016.py",
+      "bytes": 5098,
+      "sha256": "e42a1cfb358c02a28395e03c7317cfec9c71497bc94c8710cb8958694f1f4bc7"
+    },
+    {
+      "path": "/private/tmp/truss-create-lookup-plan-report-20261016.json",
+      "bytes": 240,
+      "sha256": "ab010b720e08fd5231eb5c1ec8f9947d75ed71819431db5219c30bbc43dd25a6"
+    },
+    {
+      "path": "/private/tmp/truss-create-lookup-plan-20261016.log",
+      "bytes": 2032,
+      "sha256": "45221ee8e44c272eb71e013e09958cf23e141cc7e2ddfc9d92d7f880df143990"
+    }
+  ],
+  "static_source_review": {
+    "result": "No blocking fidelity issue in the intended two-query substitution found.",
+    "checks": [
+      "The source slice selects the original outer-attempt SELECT through FOR UPDATE NOWAIT, removes only its PL/pgSQL INTO STRICT target, and maps the original local/argument references to ten prepared parameters.",
+      "Prepared parameter types and order match the source: xid8, oid, jsonb, bytea, jsonb, uuid, bytea, jsonb, bytea, jsonb. Whole-word replacement preserves all table columns and predicate structure.",
+      "The comparison variant adds only unconditional a.id=$6 immediately before the unchanged locking clause; a source assertion checks removal of that addition reproduces the baseline query.",
+      "Both intended queries use the same nonnull selected-attempt parameters, force_generic_plan, and EXPLAIN FORMAT JSON without ANALYZE. The script does not alter production functions, indexes, or limits.",
+      "The existing public fixture uses actual 1024 CREATE operations and original 10-second statement/30-second operation limits. No synthetic incomplete attempt or manually altered progress is introduced.",
+      "Python AST parsing passed. Current tracked product diff is empty."
+    ],
+    "unexecuted_provenance_limit": "The source is read from the working groups.sql file, not verified against an installed pg_get_functiondef in this harness. Source extraction, parameters, statistics, indexes, and plans were never reached or recorded in this failed run. Do not claim observed installed-source/query-plan correspondence."
+  },
+  "observed_outcome": {
+    "unittest": "FAIL: 1 test, 20.369 seconds, 1 failure",
+    "failure_stage": "Initial public CREATE outcome assertion, temporary script line 29, before caller COMMIT and before any diagnostic lookup extraction or PREPARE/EXPLAIN.",
+    "sql_state": "57014",
+    "host_result": "Original operation cancelled and locally contained; retry_scope none.",
+    "native_context": "INSERT INTO truss.object_key_bucket ... RETURNING to_jsonb(object_key_bucket), apply_create_group_qualified line 208; private ordered step line 18; apply_group line 12.",
+    "public_1024_commit_observed": false,
+    "query_plans_observed": false,
+    "fixture_cleanup": "Report records passed after inherited teardown returned; terminal unittest log has no cleanup error.",
+    "raw_report_contents": "Only scope and fixtureCleanup=passed. The raw JSON does not itself encode the test failure; retain the terminal log and this receipt with it."
+  },
+  "conclusions": [
+    "Retain this as an unsuccessful diagnostic attempt with successful fixture teardown, not a completed planner comparison.",
+    "There is no evidence here for or against the hypothesis that the nullable fallback OR prevents an id Index Cond, and no basis to change the production query from this run.",
+    "The object-key INSERT is the cancellation position, not established cost attribution. Do not infer that lookup, keys, history, or any other stage dominates from this stack.",
+    "No observed bloat measurement, execution comparison, speedup, cross-platform qualification, or release closure follows.",
+    "Retaining the exact script, raw report, raw log, both CI logs, and their review receipts is source- and evidence-scope appropriate; no additional run is required to preserve this honest failure."
+  ],
+  "related_receipts": [
+    {
+      "path": "/private/tmp/truss-create-outer-lookup-explain-plan-astra-20261016.json",
+      "sha256": "db7ce4126d3df21579606956166d92bd1874f21e9f727f15a1ecb2c95fdfe416"
+    },
+    {
+      "path": "/private/tmp/truss-capacity-context-ci-astra-20261016.json",
+      "sha256": "d8da4229275633f295b898f5b16339450c210992c26846f1156f478d9a3e420a"
+    }
+  ]
+}

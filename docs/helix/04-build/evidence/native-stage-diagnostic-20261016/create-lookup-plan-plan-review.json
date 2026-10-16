@@ -1,0 +1,37 @@
+{
+  "review": "Astra Ultra plan review",
+  "date": "2026-10-16",
+  "status": "PLAN_CLEAR_WITH_BOUNDED_DIAGNOSTIC_CONDITIONS",
+  "repository": "/private/tmp/truss-main-integration-20261010",
+  "source_commit": "670f9cc505876682761e74968698811a23ebf784",
+  "scope": "Stock EXPLAIN without ANALYZE of the exact CREATE outer-attempt lookup; no production modification, native execution by reviewer, or performance qualification.",
+  "source_pins": {
+    "packages/python/src/truss/_catalog_runtime/groups.sql": "6ac24f17fc72f4d8968193142a98fb6222e1439a005c0a9157276b72562548f4",
+    "packages/python/src/truss/_catalog_runtime/operations.sql": "f8363af5fdcee68b39d4b17fea11a6f4b85012a2be23a118d95df14834a29b5b"
+  },
+  "findings": [
+    "The outer lookup has a nullable legacy fallback OR an explicitly selected private attempt. An added unconditional attempt-id equality is redundant only for the known nonnull private path; the legacy NULL path must remain outside any proposed rewrite.",
+    "runtime_object_attempt already has its id primary key and runtime_object_attempt_writer(writer_xid) index. Inspect actual Index Cond and Filter placement; do not assume a sequential scan or an absent index.",
+    "A committed public 1024-CREATE group creates real attempt-row update history, not necessarily 1024 attempt rows or established table bloat. Record actual relation size, row/statistics context, and index definitions.",
+    "Committed attempt rows have complete=true and final progress. They do not reproduce a live unfinished attempt. The proposed comparison can establish planner shape under selected parameters and statistics, not active-attempt behavior or query latency."
+  ],
+  "required_comparison": [
+    "Extract and pin the installed original SELECT. Remove only the PL/pgSQL INTO STRICT assignment target to make a standalone SELECT; preserve every predicate and FOR UPDATE NOWAIT.",
+    "Use identical prepared parameter identities and exact SQL types in both variants: xid8 writer, oid actor, jsonb contexts/input/request, bytea source/documents, and uuid selected attempt. Do not replace the NULL/nonnull OR with a hand-simplified branch.",
+    "Use force_generic_plan locally for both variants and add only unconditional a.id=$selected_attempt to the second query with a nonnull selected attempt.",
+    "Retain exact captured stored sources, source/manifest hashes, query text, parameter provenance, relevant role/settings, statistics, and full plans. Owner access is diagnostic access, not proof of public authorization.",
+    "Keep original fixture workload and deadlines. If real fixture creation fails, report that failure; do not fabricate row states or relax limits to obtain a favorable plan.",
+    "Do not use ANALYZE execution, disable guards or indexes, force scan methods, or change production settings. Do not mark a completed attempt incomplete."
+  ],
+  "interpretation_limits": [
+    "EXPLAIN without ANALYZE does not measure execution time, buffers, or cost attribution.",
+    "Forced generic planning does not prove the failing CI call used a generic plan.",
+    "A changed plan is a hypothesis for a separately reviewed implementation and original workload validation, not approval to alter the source query or claim a speedup."
+  ],
+  "next_step": "Review the exact temporary diagnostic harness before execution if authored; no implementation or diagnostic execution reviewed in this receipt.",
+  "reviewer_execution": {
+    "native_tests": false,
+    "source_edits": false,
+    "agents_spawned": false
+  }
+}

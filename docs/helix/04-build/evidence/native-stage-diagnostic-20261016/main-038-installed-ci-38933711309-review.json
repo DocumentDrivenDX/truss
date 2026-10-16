@@ -1,0 +1,60 @@
+{
+  "review": "Astra Ultra bounded CI evidence review",
+  "date": "2026-10-16",
+  "status": "EVIDENCE_CLEAR_FAILURE_RETAINED",
+  "workflow_run": 38933711309,
+  "source_commit": "670f9cc505876682761e74968698811a23ebf784",
+  "scope": "Verify raw cancellation context and terminal test outcomes. No runtime cost attribution, release qualification, or inferred query plan.",
+  "logs": [
+    {
+      "platform": "linux",
+      "path": "/private/tmp/truss-capacity-context-ci-linux-38933711309.log",
+      "bytes": 60228,
+      "sha256": "60e7556591d3ccc17be9f01a50b530cf473b095268ffc0fc75b2bbdb73de25c9",
+      "domain_pack_tests": {
+        "count": 21,
+        "outcome": "PASS",
+        "seconds": 68.315
+      },
+      "owned_suite": {
+        "count": 17,
+        "outcome": "FAIL",
+        "failures": 2,
+        "seconds": 67.369
+      },
+      "positive_capacity_failure": "First CREATE Ok assertion at test_group_capacity_native.py line 33: SQLSTATE 57014. Native context is the exact outer-attempt SELECT in apply_create_group_qualified, line 53.",
+      "late_fault_failure": "The index-1023 test observed 57014 instead of the required P9999 sentinel. The log does not supply its native cancellation context; do not assign it the positive test cancellation site."
+    },
+    {
+      "platform": "macos",
+      "path": "/private/tmp/truss-capacity-context-ci-macos-38933711309.log",
+      "bytes": 57845,
+      "sha256": "966371f0523642fc105f8ff0f30b8c6d1ad9a937c7933baca36252ef0acb6f57",
+      "domain_pack_tests": {
+        "count": 21,
+        "outcome": "PASS",
+        "seconds": 58.904
+      },
+      "owned_suite": {
+        "count": 17,
+        "outcome": "FAIL",
+        "failures": 1,
+        "seconds": 61.211
+      },
+      "positive_capacity_failure": "First CREATE Ok assertion at line 33: SQLSTATE 57014. Context is runtime_owned_row_validate_qualified line 63 original-mutation owner existence check, called by object_group_finish line 64.",
+      "late_fault_outcome": "No late-fault failure reported; this suite has only the positive-capacity failure."
+    }
+  ],
+  "conclusions": [
+    "Both platforms still fail the unchanged positive 1024 CREATE path. Local native successes do not close this runner blocker.",
+    "The added assertion diagnostics expose different cancellation positions on Linux and macOS. A cancellation position identifies the active statement/expression, not its cumulative cost or causal hotspot.",
+    "The Linux context is sufficient to motivate a narrow planner-shape diagnostic, but contains no actual EXPLAIN result or evidence that generic planning was used.",
+    "The 21 passing domain-pack cases remain catalog registration/replay coverage, not a general mutation/query or performance claim.",
+    "Retain both exact raw logs and hashes with honest failure wording. Eager CREATE history-metadata reuse remains unimplemented and not cleared."
+  ],
+  "reviewer_execution": {
+    "native_tests": false,
+    "source_edits": false,
+    "agents_spawned": false
+  }
+}
