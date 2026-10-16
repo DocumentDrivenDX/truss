@@ -58,6 +58,7 @@ BEGIN
  FOR member IN SELECT value FROM jsonb_array_elements(image->'properties') LOOP
   PERFORM truss.runtime_history_property((entity->>'typeId')::int,(member->>'propertyId')::int,revision,member->>'definitionPin');
  END LOOP;
+ IF entity->>'kind'='object' THEN PERFORM truss.runtime_history_ownership(image);END IF;
  IF entity->>'kind'='edge' THEN
   FOR endpoint IN SELECT value FROM jsonb_array_elements(jsonb_build_array(image->'source',image->'target')) LOOP
    SELECT * INTO STRICT endpoint_pin FROM truss.runtime_definition('type',(endpoint->>'typeId')::int,NULL,revision);
@@ -71,9 +72,9 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_history_image(jsonb,jsonb,bigint) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_history_group(entity jsonb,writer xid8,version bigint,maximum_events int,maximum_bytes int) RETURNS jsonb
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE physical truss.journal%ROWTYPE;original bytea;event jsonb;items jsonb:='[]';semantic jsonb:='[]';group_pin jsonb;
- count_events int:=0;size int:=0;expected_pin text;
+ count_events int:=0;size int:=0;expected_pin text;selected_transition bigint;
 BEGIN
  FOR physical IN SELECT * FROM truss.journal j WHERE j.entity_kind=CASE entity->>'kind' WHEN 'object' THEN 'o' ELSE 'e' END
   AND j.entity_id=(entity->>'id')::bigint AND j.entity_type=(entity->>'typeId')::int AND j.xid=writer AND j.ver=version ORDER BY j.seq LIMIT maximum_events+1 LOOP
@@ -86,7 +87,7 @@ BEGIN
   OR (convert_from(original,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'original exact history wrapper required' USING ERRCODE='55000';END IF;
   event:=convert_from(original,'UTF8')::jsonb;
   IF event->>'interfaceVersion' IS DISTINCT FROM 'truss-history-event/0.2.0-proposal'
-  OR (event->>'historyProfile' IN ('truss-native-scalar-create/0.2','truss-native-scalar-mutation/0.1','truss-native-edge-mutation/0.1','truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4')) IS NOT TRUE
+  OR (event->>'historyProfile' IN ('truss-native-scalar-create/0.2','truss-native-owned-create/0.1','truss-native-scalar-mutation/0.1','truss-native-owned-mutation/0.1','truss-native-edge-mutation/0.1','truss-native-owned-edge-mutation/0.1','truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4')) IS NOT TRUE
   OR event->>'sourceEpoch' IS DISTINCT FROM entity->>'sourceEpoch' OR event->>'xid' IS DISTINCT FROM physical.xid::text
   OR event->>'seq' IS DISTINCT FROM physical.seq::text OR event->>'eventVersion' IS DISTINCT FROM physical.ver::text
   OR event->>'eventCatalogRevision' IS DISTINCT FROM physical.rev::text
@@ -96,6 +97,19 @@ BEGIN
   OR physical.prop_id IS DISTINCT FROM (event->>'propertyId')::int
   OR physical.origin IS DISTINCT FROM truss.runtime_exact_wrapper('origin',convert_to((event->'origin')::text,'UTF8')) THEN
    RAISE EXCEPTION 'physical and semantic history correspondence required' USING ERRCODE='55000';END IF;
+  IF event->>'historyProfile'='truss-native-owned-mutation/0.1' THEN
+   SELECT t.transition_id INTO STRICT selected_transition FROM truss.runtime_object_transition t
+    CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.object_id=physical.entity_id
+     AND t.type_id=physical.entity_type AND t.writer_xid=physical.xid AND j.value=to_jsonb(physical);
+   PERFORM truss.runtime_owned_object_transition_validate(selected_transition,true);
+  END IF;
+  IF event->>'historyProfile'='truss-native-owned-edge-mutation/0.1' THEN
+   SELECT t.transition_id INTO STRICT selected_transition FROM truss.runtime_edge_transition t
+    CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
+    WHERE t.edge_id=physical.entity_id AND t.rel_type_id=physical.entity_type AND t.writer_xid=physical.xid
+     AND j.value=to_jsonb(physical);
+   PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,true);
+  END IF;
   IF entity->>'kind'='object' THEN SELECT definition_pin INTO STRICT expected_pin FROM truss.runtime_definition('type',physical.entity_type,NULL,physical.rev);
   ELSE expected_pin:=truss.runtime_relationship_pin(physical.entity_type,physical.rev);END IF;
   IF event->'identity'->>'definitionPin' IS DISTINCT FROM expected_pin THEN RAISE EXCEPTION 'original event interpretation required' USING ERRCODE='55000';END IF;

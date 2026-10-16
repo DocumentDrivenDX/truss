@@ -12,7 +12,7 @@ DECLARE object_row truss.object%ROWTYPE;owner truss.type_def%ROWTYPE;
  creation truss.runtime_create_group%ROWTYPE;member jsonb;journals jsonb;expected_actor text;after_image jsonb;
  source_row truss.record_source%ROWTYPE;source_ledger truss.runtime_import_source%ROWTYPE;
  import_record jsonb;import_payload bytea;payload_value jsonb;expected_source jsonb;source_entry jsonb;
- creation_attempt uuid;operation jsonb;result jsonb;event_group jsonb;semantic_events jsonb;event_refs jsonb;epoch text;
+ root_identity jsonb;historical_image jsonb;historical_ownership jsonb;owned_mutation boolean;creation_attempt uuid;operation jsonb;result jsonb;event_group jsonb;semantic_events jsonb;event_refs jsonb;epoch text;
 BEGIN
  PERFORM truss.query_scope(binding);
  SELECT source_epoch::text INTO STRICT epoch FROM truss.catalog_runtime_installation;
@@ -20,9 +20,9 @@ BEGIN
  THEN RAISE EXCEPTION 'selected entity metadata scope required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT owner FROM truss.type_def WHERE type_id=selected_type AND retired_rev IS NULL;
  SELECT * INTO STRICT object_row FROM truss.object WHERE id=selected_id AND type_id=selected_type;
- IF object_row.ver<1 OR object_row.root_id IS NOT NULL THEN RAISE EXCEPTION 'rootless current entity required' USING ERRCODE='0A000';END IF;
+ root_identity:=truss.query_object_root(binding,object_row);
  FOR selected_version IN SELECT DISTINCT v FROM unnest(ARRAY[1::bigint,object_row.ver::bigint]) v LOOP
-  expected_actor:=NULL;registration.registration_id:=NULL;result:=NULL;
+  expected_actor:=NULL;registration.registration_id:=NULL;result:=NULL;owned_mutation:=false;
   IF selected_version=1 THEN
    SELECT g.* INTO STRICT creation FROM truss.runtime_create_group g
     CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) m
@@ -36,7 +36,7 @@ BEGIN
        AND r.value->'identity'->>'typeId'=selected_type::text);
    creation_attempt:=attempt.id;
    journals:=jsonb_build_array(member->'journal');after_image:=member->'object';expected_actor:=creation.actor_name;
-   writer:=attempt.writer_xid;asserted:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'assertedOrigin';history_profile:='truss-native-scalar-create/0.2';
+   writer:=attempt.writer_xid;asserted:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'assertedOrigin';history_profile:=CASE WHEN (convert_from(attempt.input_bytes,'UTF8')::jsonb)->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END;
   ELSE
    SELECT * INTO rebound FROM truss.runtime_catalog_rebind_transition t WHERE t.object_id=selected_id AND t.type_id=selected_type AND (t.after_object->>'ver')::bigint=selected_version;
    IF FOUND THEN
@@ -53,16 +53,35 @@ BEGIN
     OR attempt.next_index<=transition.operation_index THEN RAISE EXCEPTION 'complete original attribution attempt required' USING ERRCODE='55000';END IF;
    operation:=convert_from(attempt.input_bytes,'UTF8')::jsonb->'operations'->transition.operation_index;
    result:=attempt.results->transition.operation_index;
-   IF operation->>'operation' IS DISTINCT FROM 'update_object' OR result->>'operation' IS DISTINCT FROM 'update_object'
+   owned_mutation:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'mutationProfile'=truss.runtime_owned_profile();
+   IF owned_mutation THEN
+    PERFORM truss.runtime_owned_object_transition_validate(transition.transition_id,true);
+   ELSIF operation->>'operation' IS DISTINCT FROM 'update_object' OR result->>'operation' IS DISTINCT FROM 'update_object'
     OR result->>'outcome' IS DISTINCT FROM 'changed' OR result->>'version' IS DISTINCT FROM selected_version::text
     OR result->'identity'->>'id' IS DISTINCT FROM selected_id::text OR result->'identity'->>'typeId' IS DISTINCT FROM selected_type::text
    THEN RAISE EXCEPTION 'original changed attribution result required' USING ERRCODE='55000';END IF;
    journals:=transition.journal;after_image:=transition.after_object;
-   writer:=attempt.writer_xid;asserted:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'assertedOrigin';history_profile:='truss-native-scalar-mutation/0.1';
+   writer:=attempt.writer_xid;asserted:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'assertedOrigin';history_profile:=CASE WHEN owned_mutation THEN 'truss-native-owned-mutation/0.1' ELSE 'truss-native-scalar-mutation/0.1' END;
    END IF;
   END IF;
   IF selected_version=object_row.ver AND after_image IS DISTINCT FROM to_jsonb(object_row)
   THEN RAISE EXCEPTION 'current entity and attribution image differ' USING ERRCODE='55000';END IF;
+  -- Original attribution can depend on roots that no longer own this object.
+  -- Their original identities must be covered by final selected-scope checks.
+  FOR historical_image IN SELECT value FROM jsonb_array_elements(jsonb_build_array(after_image,
+   CASE WHEN owned_mutation THEN transition.before_object ELSE NULL END)) WHERE value<>'null'::jsonb LOOP
+   historical_ownership:=truss.runtime_object_ownership_at(historical_image);
+   IF historical_ownership->>'state'='owned' THEN
+    IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'documents') d JOIN truss.schema_doc archive
+     ON archive.doc_id=d.value->>'documentId' AND archive.doc_revision=d.value->>'revision' AND archive.content_sha256=d.value->>'sha256'
+     WHERE archive.doc_id=historical_ownership->'root'->'owner'->>'documentId' AND archive.rev<=(binding->>'catalogRevision')::int
+      AND EXISTS(SELECT 1 FROM jsonb_array_elements(archive.document::jsonb->'modules') m
+       WHERE m.value->>'id'=historical_ownership->'root'->'owner'->>'moduleId')) THEN
+     RAISE EXCEPTION 'historical attribution root document must be selected for query' USING ERRCODE='0A000';END IF;
+    PERFORM truss.runtime_history_ownership(jsonb_build_object('identity',jsonb_build_object('id',selected_id::text,'typeId',selected_type::text),
+     'catalogRevision',historical_image->>'rev','ownership',historical_ownership));
+   END IF;
+  END LOOP;
   actor:=NULL;events:=0;event_group:=NULL;semantic_events:='[]';event_refs:='[]';
   FOR item IN SELECT value FROM jsonb_array_elements(journals) LOOP
    events:=events+1;used_bytes:=used_bytes+octet_length(item::text);
@@ -102,7 +121,7 @@ BEGIN
    THEN RAISE EXCEPTION 'original creation attribution required' USING ERRCODE='55000';END IF;
   END LOOP;
   IF event_group IS DISTINCT FROM jsonb_build_object('profile','truss-history-group/0.1.0','eventCount',events::text,'orderedEventDigest',encode(sha256(convert_to(semantic_events::text,'UTF8')),'hex'))
-   OR selected_version>1 AND registration.registration_id IS NULL AND result->'events' IS DISTINCT FROM event_refs
+   OR selected_version>1 AND registration.registration_id IS NULL AND NOT owned_mutation AND result->'events' IS DISTINCT FROM event_refs
   THEN RAISE EXCEPTION 'complete original attribution event group required' USING ERRCODE='55000';END IF;
   IF events=0 THEN RAISE EXCEPTION 'missing attribution events' USING ERRCODE='55000';END IF;
   IF selected_version=1 THEN created_actor:=actor;END IF;
@@ -145,6 +164,7 @@ BEGIN
   IF source_row.source IS DISTINCT FROM expected_source THEN RAISE EXCEPTION 'original import source facts required' USING ERRCODE='55000';END IF;
  END IF;
  PERFORM truss.query_scope(binding);
+ IF root_identity IS NOT NULL AND NOT truss.runtime_can_read(root_identity->'owner'->>'documentId',root_identity->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current attribution aggregate root reader required' USING ERRCODE='42501';END IF;
  RETURN jsonb_build_object('_version',object_row.ver::text,'_created_by',created_actor,'_updated_by',updated_actor,
   '_original_author',source_row.source->'author','_original_at',source_row.source->'at');
 END;

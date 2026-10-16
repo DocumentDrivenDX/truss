@@ -25,7 +25,11 @@ class DatabaseKeyUpgradeTests(unittest.TestCase):
                     h.detach();admin.commit()
                     self.assertEqual(admin.execute('SELECT storage_row_id,namespace_bytes,key_bytes,original_context_bytes FROM truss.object_key_bucket ORDER BY storage_row_id').fetchall(),keys)
                     self.assertEqual(admin.execute('SELECT storage_row_id,namespace_bytes,key_bytes,original_reservation_bytes FROM truss.object_key_reservation_bucket ORDER BY storage_row_id').fetchall(),reservations)
-                    for _,_,_,raw in keys:self.assertIn('ownerReceiptBase64',json.loads(raw))
+                    for _,_,_,raw in keys:
+                        original_context=json.loads(raw)
+                        if original_context.get('profile')=='truss-created-key-context/0.2':
+                            self.assertEqual(original_context['derivation'],'postgresql-umf-key-tuple-v1')
+                        else:self.assertIn('ownerReceiptBase64',original_context)
                     params=psycopg.conninfo.conninfo_to_dict(runtime.info.connection_uri);params['user']='consumer'
                     with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000') as c:
                         c.execute('BEGIN');h=adopt_psycopg_host(c);a=create_reference_assembly(CatalogRuntimeConfiguration(),h).value;t=h.adopt_transaction().value

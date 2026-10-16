@@ -1,4 +1,4 @@
-"""Public independent relationship reads with exact retained scalar values."""
+"""Public directed relationship reads with exact retained scalar values."""
 from dataclasses import dataclass,field
 from typing import Literal
 from .contracts import TypedIdentity,TextValue

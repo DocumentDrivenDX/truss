@@ -5,7 +5,7 @@ import base64
 import json
 from .contracts import SequenceValue,ABSENT, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, MapEntry, TextValue, NullValue, BooleanValue
 from .execution import Ok, Error, Outcome
-from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, CreateEdge, UpdateObject, UpdateEdge, Delete, StoredObjectReference, AliasObjectReference, RootlessOwnership,
+from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, CreateEdge, UpdateObject, UpdateEdge, Delete, StoredObjectReference, AliasObjectReference, RootlessOwnership, OwnedOwnership,
     RequestNone, RequestPresent, RequestIdentity, GroupSuccess, GroupFailed, GroupUnavailable,
     InvalidGroupInput, RequestConflict, GroupOperationFailure, AppliedPending, SameTransactionReplay,
     CommittedReceiptReplay, SameTransactionReplayEvidence, CommittedReceiptReplayEvidence,
@@ -126,8 +126,12 @@ def group_context(host,transaction,manifest,digest,pin_cursor):
 def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cursor,*,bun_executable='bun',_cursor=None,_attempt_capture=None):
     if type(input) is not GroupSemanticInput or type(request) not in (RequestNone,RequestPresent):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"shape"}'))))
+    selected_owned = input.mutation_profile == ProfilePin(identity='truss-owned-scalar-graph',version='0.1',sha256='5f5badaa3b0beb01fef08d48883395eabc8499155d4c31f7ef802e63d49a6dde')
+    def ownership(value):
+        return (type(value) is RootlessOwnership or selected_owned and type(value) is OwnedOwnership
+                and type(value.root) in (StoredObjectReference,AliasObjectReference))
     if (type(input.catalog) is not CurrentCatalog or type(input.asserted_origin) is not MapValue
-        or any(not (type(op) is CreateObject and type(op.ownership) is RootlessOwnership or type(op) is UpdateObject and op.ownership_change is ABSENT and type(op.target) in (StoredObjectReference,AliasObjectReference) or type(op) in (CreateEdge,UpdateEdge) or type(op) is Delete and op.operation in ('delete_object','delete_edge') and type(op.target) in (StoredObjectReference,AliasObjectReference)) for op in input.operations)):
+        or any(not (type(op) is CreateObject and ownership(op.ownership) or type(op) is UpdateObject and (op.ownership_change is ABSENT or selected_owned and ownership(op.ownership_change)) and type(op.target) in (StoredObjectReference,AliasObjectReference) or type(op) in (CreateEdge,UpdateEdge) or type(op) is Delete and op.operation in ('delete_object','delete_edge') and type(op.target) in (StoredObjectReference,AliasObjectReference)) for op in input.operations)):
         return Ok(GroupUnavailable(reason='profile'))
     if not 1<=len(input.operations)<=128 or any(len(op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())>1024 for op in input.operations):
         return Ok(GroupUnavailable(reason='resource'))

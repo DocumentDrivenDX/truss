@@ -45,12 +45,36 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.render_scalar_object(truss.object,truss.type_def,truss.prop_def[],boolean,text,int,int,text,text) FROM PUBLIC;
 
+-- Root identity and root row have already been frozen in the same observation.
+-- Keep the historical rootless renderer's contract intact.
+CREATE FUNCTION truss.render_logical_object(current_object truss.object,selected_type truss.type_def,properties truss.prop_def[],has_row_home boolean,definition_pin text,captured_revision int,maximum_bytes int,expected_release text,expected_digest text,root_identity jsonb) RETURNS bytea
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE scalar_copy truss.object; rendered jsonb;result bytea;
+BEGIN
+ IF current_object.root_id IS NULL AND current_object.root_type IS NULL THEN
+  IF root_identity IS NOT NULL THEN RAISE EXCEPTION 'rootless observation required' USING ERRCODE='55000';END IF;
+  RETURN truss.render_scalar_object(current_object,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,expected_release,expected_digest);
+ END IF;
+ IF current_object.root_id IS NULL OR current_object.root_type IS NULL OR current_object.root_id<=0
+  OR root_identity IS NULL OR root_identity->>'id' IS DISTINCT FROM current_object.root_id::text
+  OR root_identity->>'typeId' IS DISTINCT FROM current_object.root_type::text THEN
+  RAISE EXCEPTION 'complete frozen ownership required' USING ERRCODE='55000';END IF;
+ scalar_copy:=current_object;scalar_copy.root_id:=NULL;scalar_copy.root_type:=NULL;
+ rendered:=convert_from(truss.render_scalar_object(scalar_copy,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,expected_release,expected_digest),'UTF8')::jsonb;
+ result:=convert_to((rendered||jsonb_build_object('profile','truss-python-logical-object/0.1','root',root_identity))::text,'UTF8');
+ IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'object output budget exceeded' USING ERRCODE='54000';END IF;
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.render_logical_object(truss.object,truss.type_def,truss.prop_def[],boolean,text,int,int,text,text,jsonb) FROM PUBLIC;
+
 -- Public identity read, scalar-string object profile; no mutation authority.
 CREATE FUNCTION truss.get_object(selected_document text,selected_module text,selected_record text,selected_id bigint,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE actor_oid oid; selected_type truss.type_def%ROWTYPE; current_object truss.object%ROWTYPE;
  property truss.prop_def%ROWTYPE; cell jsonb; values_json jsonb:='[]'; retained_json jsonb:='[]';
  properties truss.prop_def[];has_row_home boolean;definition_pin text;dependency record;frozen record;
+ root_object truss.object;root_definition truss.type_def;root_identity jsonb;
  captured_revision int; result bytea; policy truss.module_access%ROWTYPE; installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
  actor_oid:=truss.runtime_person(false);
@@ -66,7 +90,7 @@ BEGIN
  END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF expected_release IS DISTINCT FROM installation.release_id OR expected_digest IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.68-candidate' THEN
+ OR installation.release_id<>'truss-catalog-runtime/0.69-candidate' THEN
   RAISE EXCEPTION 'selected installed object runtime required' USING ERRCODE='0A000'; END IF;
  IF captured_revision<1 THEN RAISE EXCEPTION 'accepted read catalog required' USING ERRCODE='0A000'; END IF;
  -- No object observation until exact document/module membership is established.
@@ -87,11 +111,28 @@ BEGIN
  IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RETURN NULL;END IF;
  SELECT coalesce(array_agg(p ORDER BY p.prop_id),ARRAY[]::truss.prop_def[]) INTO properties FROM truss.prop_def p WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL;
  SELECT d.definition_pin INTO STRICT definition_pin FROM truss.runtime_definition('type',selected_type.type_id) d;
- SELECT o AS object,EXISTS(SELECT 1 FROM truss.row_home_state r WHERE r.object_id=o.id AND r.object_type_id=o.type_id) AS row_home
- INTO frozen FROM truss.object o WHERE o.id=selected_id AND o.type_id=selected_type.type_id;
+ SELECT o AS object,ro AS root_object,rt AS root_definition,
+ EXISTS(SELECT 1 FROM truss.row_home_state r WHERE r.object_id=o.id AND r.object_type_id=o.type_id) AS row_home
+ INTO frozen FROM truss.object o
+ LEFT JOIN truss.object ro ON ro.id=o.root_id AND ro.type_id=o.root_type
+ LEFT JOIN truss.type_def rt ON rt.type_id=ro.type_id AND rt.retired_rev IS NULL AND NOT rt.provisional AND rt.kind='record'
+ WHERE o.id=selected_id AND o.type_id=selected_type.type_id;
  IF NOT FOUND THEN RETURN NULL; END IF;
  current_object:=frozen.object;has_row_home:=frozen.row_home;
- result:=truss.render_scalar_object(current_object,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,installation.release_id,installation.release_sha256);
+ root_object:=frozen.root_object;root_definition:=frozen.root_definition;
+ IF current_object.root_id IS NOT NULL OR current_object.root_type IS NOT NULL THEN
+  IF current_object.root_id IS NULL OR current_object.root_type IS NULL OR root_object.id IS NULL OR root_definition.type_id IS NULL
+   OR root_object.root_id IS NOT NULL OR root_object.root_type IS NOT NULL OR root_object.id=current_object.id AND root_object.type_id=current_object.type_id
+   THEN
+   RAISE EXCEPTION 'current aggregate root required' USING ERRCODE='55000';END IF;
+  IF root_object.rev>captured_revision OR root_definition.since_rev>captured_revision THEN
+   RAISE EXCEPTION 'catalog changed during ownership observation' USING ERRCODE='55P03';END IF;
+  IF NOT truss.runtime_can_read(root_definition.document_id,root_definition.module) THEN RETURN NULL;END IF;
+  root_identity:=jsonb_build_object('id',root_object.id::text,'typeId',root_object.type_id::text,
+   'definitionPin',(SELECT d.definition_pin FROM truss.runtime_definition('type',root_object.type_id) d),
+   'owner',jsonb_build_object('documentId',root_definition.document_id,'moduleId',root_definition.module));
+ END IF;
+ result:=truss.render_logical_object(current_object,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,installation.release_id,installation.release_sha256,root_identity);
  actor_oid:=truss.runtime_person(false);
  IF current_setting('transaction_read_only')='on' THEN
   SELECT * INTO policy FROM truss.module_access WHERE document_id=selected_document AND module=selected_module;
@@ -102,6 +143,7 @@ BEGIN
    SELECT 1 FROM pg_roles r JOIN memberships m ON m.role_oid=r.oid
    WHERE r.rolname::text IN (policy.reader_role,policy.writer_role)) THEN RETURN NULL; END IF;
  IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RETURN NULL;END IF;
+ IF root_identity IS NOT NULL AND NOT truss.runtime_can_read(root_definition.document_id,root_definition.module) THEN RETURN NULL;END IF;
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN
   RAISE EXCEPTION 'catalog changed during object observation' USING ERRCODE='55P03';END IF;
  RETURN result;

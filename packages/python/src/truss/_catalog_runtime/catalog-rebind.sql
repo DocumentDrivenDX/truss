@@ -192,6 +192,8 @@ BEGIN
    OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
    RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
   IF truss.valid_property_definition(property) IS NOT TRUE THEN RAISE EXCEPTION 'supported planned rebind property required' USING ERRCODE='0A000';END IF;
+  IF EXISTS(SELECT 1 FROM truss.object o WHERE o.type_id=property.type_id AND (o.root_id IS NOT NULL OR o.root_type IS NOT NULL) AND o.retained ? property.name) THEN
+   RAISE EXCEPTION 'owned retained-value catalog rebind requires a supported ownership profile' USING ERRCODE='0A000';END IF;
   SELECT count(*) INTO missing FROM truss.object o WHERE o.type_id=property.type_id AND property.nullability='required'
    AND (coalesce(o.retained ? property.name,false) IS NOT TRUE OR o.retained->property.name='{"kind":"null"}'::jsonb);
   IF missing>0 THEN

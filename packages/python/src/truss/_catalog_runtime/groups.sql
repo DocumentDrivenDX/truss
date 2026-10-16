@@ -58,8 +58,8 @@ REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT jsonb_build_object(
 'creationTransitionProfile',jsonb_build_object('identity','truss-unified-create-transition','version','0.1','sha256','765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396'),
-'mutationProfile',jsonb_build_object('identity','truss-rootless-scalar-graph','version','0.4','sha256','b814eb5b33ff59340d2f9bd13866ccb97d49f42fd38ce1e9c97facab5668a2f8'),
-'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.4','sha256','097050463d22e40cbc3e0a6800eed7a97bb7f1dc6125748355e64a353d0df4ac'),
+'mutationProfile',jsonb_build_object('identity','truss-owned-scalar-graph','version','0.1','sha256','5f5badaa3b0beb01fef08d48883395eabc8499155d4c31f7ef802e63d49a6dde'),
+'valueProfile',jsonb_build_object('identity','truss-scalar-string-values','version','0.5','sha256','e41946ccc3b5aad4219ccd1c6886a6162951e0c96aa849c830ea7fd6d867fc39'),
 'canonicalizationProfile',jsonb_build_object('identity','truss-pg18-jsonb-text','version','0.1','sha256','e5eec0aa3dfd5195250bb2e781626c6229f645d71a5c21095ee3d10008aadc97'),
 'requestFingerprintProfile',jsonb_build_object('identity','truss-python-create-request-bytes','version','0.1','sha256','69974e716b09892428ce6f3fe5c4b01825bad35104b25dcd861152da60965baa'),
 'adapterProfile',jsonb_build_object('identity','truss-psycopg-create-provider','version','0.1','sha256','f20735a94e87213d77f713cbbabd2bdf2e4f2b459041c53bb984f5b706112ba9'),
@@ -94,7 +94,8 @@ BEGIN
  IF revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000'; END IF;
  RETURN convert_to((truss.runtime_group_profiles()||jsonb_build_object('layoutProfile',installation.layout_profile,
   'authorizedScopeIdentity','truss-person:'||installation.installation_id||':'||person::text,
-  'installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-scalar-create/0.2'))::text,'UTF8');
+  'installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,'historyProfile',
+   CASE WHEN truss.runtime_group_profiles()->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END))::text,'UTF8');
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.group_context(text,text) FROM PUBLIC;
@@ -121,8 +122,11 @@ BEGIN
  OR jsonb_typeof(documents) IS DISTINCT FROM 'array' OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512 THEN
   RAISE EXCEPTION 'selected create group profile required' USING ERRCODE='0A000'; END IF;
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
-  IF operation->>'operation' IS DISTINCT FROM 'create_object' OR operation->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb THEN
-   RAISE EXCEPTION 'rootless creates only in selected group profile' USING ERRCODE='0A000'; END IF;
+  IF operation->>'operation' IS DISTINCT FROM 'create_object' OR
+   (operation->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb AND
+    (input->'mutationProfile'=truss.runtime_owned_profile() AND operation->'ownership'->>'state'='owned'
+     AND (operation->'ownership')-ARRAY['state','root']='{}'::jsonb) IS NOT TRUE) THEN
+   RAISE EXCEPTION 'explicit selected create ownership required' USING ERRCODE='0A000'; END IF;
   SELECT t.* INTO STRICT selected_type FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p
    WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND p.definition_pin=operation->>'typeDefinitionPin';
   PERFORM truss.runtime_module_writer(selected_type.document_id,selected_type.module);
@@ -313,9 +317,16 @@ DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;
  receipt truss.request_receipt%ROWTYPE;existing truss.request_receipt%ROWTYPE;receipt_json jsonb;receipt_bytes bytea;
  semantic jsonb;semantic_bytes bytea;observation_bytes bytea;request_namespace bytea;request_bytes bytea;request_route bigint;new_generation bigint;
  captured_revision int;old_request_generation bigint;intended_group truss.runtime_create_group%ROWTYPE;scope_identity text;outcome jsonb;native_state text;candidate_count int;outer_attempt record;
+ owned_plan jsonb;owned_state jsonb;root_reference text;root_identity jsonb;root_object truss.object%ROWTYPE;selected_history text;replay_group truss.runtime_create_group%ROWTYPE;
 BEGIN
- -- Metadata locks head and every requested policy, then revalidates full sources.
- metadata:=convert_from(truss.group_create_metadata(original_input,original_documents,expected_release,expected_digest),'UTF8')::jsonb;
+ -- Replay is admitted against its retained original group before current
+ -- new-write profiles or a newly captured owned plan are required.
+ IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576
+  OR original_documents IS NULL OR octet_length(original_documents) NOT BETWEEN 1 AND 4194304 THEN
+  RAISE EXCEPTION 'bounded original create source required' USING ERRCODE='54000';END IF;
+ IF (convert_from(original_input,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE
+  OR (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN
+  RAISE EXCEPTION 'unique original create source required' USING ERRCODE='22023';END IF;
  context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;
  actor_oid:=truss.runtime_person(false);writer:=pg_current_xact_id();
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
@@ -373,9 +384,18 @@ BEGIN
     RAISE EXCEPTION 'selected receipt profile required' USING ERRCODE='0A000'; END IF;
    IF decode(receipt_json->>'inputBase64','base64') IS DISTINCT FROM original_input THEN
     RAISE EXCEPTION 'request input or origin changed' USING ERRCODE='P1001'; END IF;
-   FOR operation_meta IN SELECT value FROM jsonb_array_elements(metadata) LOOP
-    PERFORM truss.runtime_module_writer(operation_meta->>'documentId',operation_meta->>'moduleId');
-  IF NOT truss.runtime_object_values_readable((operation_meta->>'typeId')::int) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+   SELECT * INTO STRICT replay_group FROM truss.runtime_create_group WHERE receipt_storage_row_id=existing.storage_row_id;
+   IF replay_group.original_input_bytes IS DISTINCT FROM original_input
+    OR replay_group.writer_xid IS DISTINCT FROM existing.original_writer_xid
+    OR replay_group.actor_oid IS DISTINCT FROM actor_oid OR replay_group.actor_name IS DISTINCT FROM session_user::text
+    OR replay_group.expected_receipt IS DISTINCT FROM to_jsonb(existing)
+    OR convert_from(replay_group.semantic_bytes,'UTF8')::jsonb IS DISTINCT FROM receipt_json->'semantic' THEN
+    RAISE EXCEPTION 'retained original creation receipt required' USING ERRCODE='55000';END IF;
+   FOR selected_type IN SELECT t.* FROM jsonb_array_elements(replay_group.expected_members) m
+    JOIN truss.type_def t ON t.type_id=(m.value->'object'->>'type_id')::int LOOP
+    PERFORM truss.runtime_module_writer(selected_type.document_id,selected_type.module);
+    IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN
+     RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
    END LOOP;
    observation_bytes:=convert_to(jsonb_build_object('profile','truss-native-create-replay-observation/0.1',
     'sourceEpoch',installation.source_epoch::text,'observingXid',writer::text,'originalWriterXid',existing.original_writer_xid::text,
@@ -390,6 +410,8 @@ BEGIN
     'observationBase64',replace(encode(observation_bytes,'base64'),chr(10),''),'observationSha256',encode(sha256(observation_bytes),'hex'))::text,'UTF8');
   END IF;
  END IF;
+ metadata:=convert_from(truss.group_create_metadata(original_input,original_documents,expected_release,expected_digest),'UTF8')::jsonb;
+ selected_history:=CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END;
  -- New writes belong to one native-issued outer operation. Receipt replay above
  -- remains independent of live progress. The leaf advances progress atomically.
  SELECT a.* INTO STRICT outer_attempt FROM truss.runtime_object_attempt a
@@ -401,6 +423,26 @@ BEGIN
   AND convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index->>'operation'='create_object'
   AND request='{"state":"none"}'::jsonb
  FOR UPDATE NOWAIT;
+ LOCK TABLE truss.object IN SHARE ROW EXCLUSIVE MODE NOWAIT;
+ LOCK TABLE truss.edge IN SHARE ROW EXCLUSIVE MODE NOWAIT;
+ IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
+  owned_plan:=truss.runtime_owned_plan(outer_attempt.id,outer_attempt.next_index);
+  IF owned_plan->'operation' IS DISTINCT FROM input->'operations'->0
+   OR owned_plan->>'primary' IS DISTINCT FROM 'create:'||outer_attempt.next_index::text
+   OR (owned_plan->'beforeNodes') ? (owned_plan->>'primary') THEN
+   RAISE EXCEPTION 'original ordered create plan required' USING ERRCODE='55000';END IF;
+  owned_state:=owned_plan->'afterNodes'->(owned_plan->>'primary');root_reference:=owned_state->>'root';
+  IF owned_state IS NULL OR owned_state->'deleted' IS DISTINCT FROM 'false'::jsonb THEN
+   RAISE EXCEPTION 'original live create state required' USING ERRCODE='55000';END IF;
+  IF root_reference IS NOT NULL THEN
+   root_identity:=truss.runtime_owned_identity(outer_attempt.id,outer_attempt.next_index,root_reference,'object');
+   SELECT * INTO STRICT root_object FROM truss.object WHERE id=(root_identity->>'id')::bigint AND type_id=(root_identity->>'typeId')::int;
+   IF root_object.root_id IS NOT NULL OR root_object.root_type IS NOT NULL
+    OR to_jsonb(root_object)-ARRAY['created_at','updated_at'] IS DISTINCT FROM
+     truss.runtime_owned_object_image(outer_attempt.id,outer_attempt.next_index,root_reference,'before') THEN
+    RAISE EXCEPTION 'original live rootless aggregate root state required' USING ERRCODE='55000';END IF;
+  END IF;
+ END IF;
  IF (SELECT count(*) FROM (SELECT 1 FROM truss.runtime_create_group WHERE writer_xid=writer LIMIT 129) g)>=128 THEN
   RAISE EXCEPTION 'bounded groups per transaction required' USING ERRCODE='54000'; END IF;
  IF jsonb_typeof(key_inputs) IS DISTINCT FROM 'array' OR jsonb_array_length(key_inputs)>512 THEN
@@ -489,7 +531,12 @@ BEGIN
   object_row.id:=nextval('truss.id_seq');object_row.type_id:=selected_type.type_id;
   IF object_row.id<=0 THEN RAISE EXCEPTION 'positive native object id required' USING ERRCODE='54000'; END IF;
   object_row.props:=key_plan->'props';object_row.retained:=NULLIF(key_plan->'retained','{}'::jsonb);
-  object_row.root_id:=NULL;object_row.root_type:=NULL;object_row.rev:=captured_revision;object_row.ver:=1;
+  object_row.root_id:=(root_identity->>'id')::bigint;object_row.root_type:=(root_identity->>'typeId')::int;
+  object_row.rev:=captured_revision;object_row.ver:=1;
+  IF owned_state IS NOT NULL AND
+   ((owned_state->'image')-ARRAY['id','created_at','updated_at']) IS DISTINCT FROM
+   (to_jsonb(object_row)-ARRAY['id','root_id','root_type','created_at','updated_at']) THEN
+   RAISE EXCEPTION 'original planned create values required' USING ERRCODE='55000';END IF;
   object_row.created_at:=clock_timestamp();object_row.updated_at:=object_row.created_at;
   planned_row:=to_jsonb(object_row);
   INSERT INTO truss.object SELECT (jsonb_populate_record(NULL::truss.object,planned_row)).* RETURNING to_jsonb(object) INTO actual_row;
@@ -529,25 +576,12 @@ BEGIN
   END LOOP;
   object_identity:=jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text,'definitionPin',operation->>'typeDefinitionPin',
    'owner',jsonb_build_object('documentId',selected_type.document_id,'moduleId',selected_type.module));
-  properties_json:='[]';
-  FOR property IN SELECT * FROM truss.prop_def WHERE type_id=object_row.type_id AND retired_rev IS NULL ORDER BY prop_id LOOP
-   IF object_row.props ? property.prop_id::text THEN
-    SELECT * INTO STRICT source_pin FROM truss.runtime_definition('property',object_row.type_id,property.prop_id);
-    properties_json:=properties_json||jsonb_build_array(jsonb_build_object('propertyId',property.prop_id::text,
-     'definitionPin',source_pin.definition_pin,'value',object_row.props->property.prop_id::text));
-   END IF;
-  END LOOP;
-  SELECT coalesce(jsonb_agg(jsonb_build_object('name',key,'value',value) ORDER BY key COLLATE "C"),'[]'::jsonb) INTO retained_json
-   FROM jsonb_each(coalesce(object_row.retained,'{}'::jsonb));
-  after_record:=jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','object','identity',object_identity,
-   'recordVersion','1','catalogRevision',captured_revision::text,'createdAt',to_char(object_row.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
-   'updatedAt',to_char(object_row.updated_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
-   'properties',properties_json,'retained',retained_json,'ownership',jsonb_build_object('state','rootless'));
+  after_record:=truss.runtime_object_history(to_jsonb(object_row),object_identity);
   journal_row.seq:=nextval('truss.journal_seq');journal_row.at:=clock_timestamp();journal_row.xid:=writer;
   journal_row.entity_kind:='o';journal_row.entity_id:=object_row.id;journal_row.entity_type:=object_row.type_id;
   journal_row.ver:=1;journal_row.op:='create';journal_row.prop_id:=NULL;journal_row.old_value:=NULL;journal_row.rev:=captured_revision;
   event:=jsonb_build_object('interfaceVersion','truss-history-event/0.2.0-proposal','sourceEpoch',installation.source_epoch::text,
-   'historyProfile','truss-native-scalar-create/0.2','xid',writer::text,'seq',journal_row.seq::text,'identity',object_identity,
+   'historyProfile',selected_history,'xid',writer::text,'seq',journal_row.seq::text,'identity',object_identity,
    'eventVersion','1','eventCatalogRevision',captured_revision::text,'operation','create','after',after_record,
    'origin',jsonb_build_object('asserted',input->'assertedOrigin','databaseRole',session_user::text));
   event_digest:=encode(sha256(convert_to(jsonb_build_array(event)::text,'UTF8')),'hex');
@@ -559,7 +593,7 @@ BEGIN
   IF actual_journal IS DISTINCT FROM expected_journal THEN RAISE EXCEPTION 'exact complete journal append required' USING ERRCODE='55000'; END IF;
   members:=members||jsonb_build_array(jsonb_build_object('object',to_jsonb(object_row),'keys',member_keys,'journal',expected_journal));
   outcome:=jsonb_build_object('operation','create_object','outcome','created','identity',object_identity,'version','1',
-   'events',jsonb_build_array(jsonb_build_object('sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-scalar-create/0.2',
+   'events',jsonb_build_array(jsonb_build_object('sourceEpoch',installation.source_epoch::text,'historyProfile',selected_history,
     'xid',writer::text,'seq',journal_row.seq::text)));
   IF operation ? 'alias' THEN outcome:=outcome||jsonb_build_object('alias',operation->>'alias');
    aliases:=aliases||jsonb_build_array(jsonb_build_object('alias',operation->>'alias','identity',object_identity)); END IF;

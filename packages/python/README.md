@@ -1,5 +1,20 @@
 # Truss Python toolkit
 
+**Unreleased development checkpoint:** SDK `0.0.36.dev0` installs native
+`0.69-candidate`. Public groups now create owned objects/edges, explicitly
+reparent complete subtrees and cascade deletes; identity/key/page/edge reads,
+traversal and retained history preserve ownership. Basic PostgreSQL18.6 workflows
+cover commit, rollback, dry-run and original receipt replay. The published
+release remains v0.0.35, described below.
+
+Development compiled queries select backend `0.4.38` / target `0.5` with the
+explicit logical query ABI. The currently pinned Weft `0.4.34` wheel does not
+provide that backend: stock compiled queries are unavailable until matching
+wheels are integrated. A real Rust CLI plus the public Python coordinator has
+passed the owned descendant query workflow; this is source integration evidence,
+not matching-wheel qualification. Owned imports and catalog value rebinding/
+key backfill remain refused. This checkpoint is not a release tag.
+
 The Python reference assembly provides catalog registration, object and edge
 mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned

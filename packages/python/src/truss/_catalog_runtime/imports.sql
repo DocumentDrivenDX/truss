@@ -80,11 +80,14 @@ BEGIN
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
   'typeId',metadata->'type'->>'typeId','keyNumber',metadata->>'keyNumber','definitionPin',metadata->>'keyDefinitionPin','encoding','umf-key-tuple-v1')::text,'UTF8');
+ LOCK TABLE truss.object IN SHARE ROW EXCLUSIVE MODE NOWAIT;
+ LOCK TABLE truss.edge IN SHARE ROW EXCLUSIVE MODE NOWAIT;
  transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');SELECT * INTO STRICT observed FROM truss.lock_string_key_bucket(namespace,transport);
  IF cardinality(observed.member_ids)>1 THEN RAISE EXCEPTION 'unique live primary identity required' USING ERRCODE='55000';END IF;
  IF cardinality(observed.member_ids)=1 THEN
   SELECT * INTO STRICT member FROM truss.object_key_bucket WHERE storage_row_id=observed.member_ids[1];
   SELECT * INTO STRICT object_row FROM truss.object WHERE id=member.object_id AND type_id=selected.type_id FOR UPDATE NOWAIT;
+  IF object_row.root_id IS NOT NULL OR object_row.root_type IS NOT NULL THEN RAISE EXCEPTION 'owned object import requires an explicit supported ownership import profile' USING ERRCODE='0A000';END IF;
   result:=jsonb_build_object('state','skipped','reason','live_identity','identity',jsonb_build_object('id',object_row.id::text,'typeId',selected.type_id::text,'definitionPin',metadata->'type'->>'definitionPin','owner',metadata->'type'->'owner'));
  ELSIF cardinality(observed.reservation_ids)>0 THEN result:=jsonb_build_object('state','skipped','reason','reserved_identity');
  ELSE result:=jsonb_build_object('state','eligible','documentId',selected.document_id,'moduleId',selected.module,'recordId',selected.element,'definitionPin',metadata->'type'->>'definitionPin','primaryFields',fields);END IF;
@@ -149,6 +152,26 @@ BEGIN
   IF operation->>'operation'<>'create_edge' OR operation->>'relationshipDefinitionPin' IS DISTINCT FROM record->'identity'->>'relationshipDefinitionPin'
    OR operation->'source' IS DISTINCT FROM jsonb_build_object('state','stored','identity',record->'identity'->'source') OR operation->'target' IS DISTINCT FROM jsonb_build_object('state','stored','identity',record->'identity'->'target')
    OR operation->'values' IS DISTINCT FROM value->'values' OR operation->'orderKey' IS DISTINCT FROM value->'orderKey' THEN RAISE EXCEPTION 'original edge payload creation required' USING ERRCODE='22023';END IF;
+ END IF;
+ -- The granted source-registration facade enforces the same selected import
+ -- subset itself; calling the Python identity preflight is not authority.
+ IF kind='o' THEN
+  IF operation->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb OR NOT EXISTS(
+   SELECT 1 FROM truss.object o WHERE o.id=(result->'identity'->>'id')::bigint AND o.type_id=(result->'identity'->>'typeId')::int
+    AND o.root_id IS NULL AND o.root_type IS NULL) THEN
+   RAISE EXCEPTION 'original rootless object source profile required' USING ERRCODE='0A000';END IF;
+ ELSE
+  IF NOT EXISTS(SELECT 1 FROM truss.edge e JOIN truss.rel_def r ON r.rel_type_id=e.rel_type_id
+   JOIN truss.object source_object ON source_object.id=e.source_id AND source_object.type_id=e.source_type
+   JOIN truss.object target_object ON target_object.id=e.target_id AND target_object.type_id=e.target_type
+   WHERE e.id=(result->'identity'->>'id')::bigint AND e.rel_type_id=(result->'identity'->>'typeId')::int
+    AND r.lifecycle='independent' AND source_object.root_id IS NULL AND source_object.root_type IS NULL
+    AND target_object.root_id IS NULL AND target_object.root_type IS NULL)
+   OR NOT EXISTS(SELECT 1 FROM truss.runtime_edge_transition t WHERE t.attempt_id=selected_attempt AND t.operation_index=0
+    AND t.edge_id=(result->'identity'->>'id')::bigint AND t.rel_type_id=(result->'identity'->>'typeId')::int
+    AND t.before_edge IS NULL AND t.endpoint_ownership->'after'->'source'->'ownership'='{"state":"rootless"}'::jsonb
+    AND t.endpoint_ownership->'after'->'target'->'ownership'='{"state":"rootless"}'::jsonb) THEN
+   RAISE EXCEPTION 'original rootless independent edge source profile required' USING ERRCODE='0A000';END IF;
  END IF;
  IF value ? 'source' THEN
   IF (value->'source')-ARRAY['kind','entries']<>'{}'::jsonb OR value->'source'->>'kind' IS DISTINCT FROM 'map' OR jsonb_typeof(value->'source'->'entries') IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'exact source map required' USING ERRCODE='22023';END IF;
@@ -215,6 +238,12 @@ BEGIN
  PERFORM truss.runtime_module_writer(relation.document_id,relation.module);source_definition:=truss.runtime_condition_type(identity->'source');target_definition:=truss.runtime_condition_type(identity->'target');
  IF NOT truss.runtime_can_read(source_definition.document_id,source_definition.module) OR NOT truss.runtime_can_read(target_definition.document_id,target_definition.module) THEN RAISE EXCEPTION 'edge endpoint readers required' USING ERRCODE='42501';END IF;
  IF NOT EXISTS(SELECT 1 FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id AND source_type=source_definition.type_id AND target_type=target_definition.type_id) THEN RAISE EXCEPTION 'admitted edge endpoint pair required' USING ERRCODE='22023';END IF;
+ LOCK TABLE truss.object IN SHARE ROW EXCLUSIVE MODE NOWAIT;
+ LOCK TABLE truss.edge IN SHARE ROW EXCLUSIVE MODE NOWAIT;
+ IF relation.lifecycle IS DISTINCT FROM 'independent' OR EXISTS(SELECT 1 FROM truss.object o WHERE
+  (o.id=(identity->'source'->>'id')::bigint AND o.type_id=source_definition.type_id OR o.id=(identity->'target'->>'id')::bigint AND o.type_id=target_definition.type_id)
+  AND (o.root_id IS NOT NULL OR o.root_type IS NOT NULL)) THEN
+  RAISE EXCEPTION 'rootless independent edge import profile required' USING ERRCODE='0A000';END IF;
  PERFORM 1 FROM truss.object WHERE id=(identity->'source'->>'id')::bigint AND type_id=source_definition.type_id FOR UPDATE NOWAIT;
  PERFORM 1 FROM truss.object WHERE id=(identity->'target'->>'id')::bigint AND type_id=target_definition.type_id FOR UPDATE NOWAIT;
  key:=truss.runtime_edge_business_key(relation.rel_type_id,identity->'source',identity->'target');PERFORM truss.runtime_lock_edge_business_key(key);
@@ -261,8 +290,21 @@ REVOKE ALL ON FUNCTION truss.import_identity_key_selection(bytea,text,text) FROM
 
 CREATE FUNCTION truss.import_report_record_authority(original_identity bytea,kind text,expected_release text,expected_digest text) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE identity jsonb;relation truss.rel_def%ROWTYPE;source_definition truss.type_def%ROWTYPE;target_definition truss.type_def%ROWTYPE;
+DECLARE envelope jsonb;outcome_identity jsonb;object_row truss.object;edge_row truss.edge;endpoint record;identity jsonb;relation truss.rel_def%ROWTYPE;source_definition truss.type_def%ROWTYPE;target_definition truss.type_def%ROWTYPE;
 BEGIN
+ IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 2097152
+  OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
+  RAISE EXCEPTION 'bounded original report selection and outcome required' USING ERRCODE='22023';END IF;
+ envelope:=convert_from(original_identity,'UTF8')::jsonb;
+ IF envelope-ARRAY['originalIdentity','outcomeIdentity']<>'{}'::jsonb OR NOT envelope ?& ARRAY['originalIdentity','outcomeIdentity']
+  OR jsonb_typeof(envelope->'originalIdentity') IS DISTINCT FROM 'object'
+  OR jsonb_typeof(envelope->'outcomeIdentity') NOT IN ('object','null') THEN
+  RAISE EXCEPTION 'exact original report outcome envelope required' USING ERRCODE='22023';END IF;
+ outcome_identity:=nullif(envelope->'outcomeIdentity','null'::jsonb);
+ IF outcome_identity IS NOT NULL AND (outcome_identity-ARRAY['id','typeId','definitionPin','owner']<>'{}'::jsonb
+  OR jsonb_typeof(outcome_identity->'id') IS DISTINCT FROM 'string' OR outcome_identity->>'id' !~ '^[1-9][0-9]{0,18}$') THEN
+  RAISE EXCEPTION 'retained typed report outcome required' USING ERRCODE='22023';END IF;
+ original_identity:=convert_to((envelope->'originalIdentity')::text,'UTF8');
  IF kind='object' THEN
   IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 1048576 OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique report identity required' USING ERRCODE='22023';END IF;
   identity:=convert_from(original_identity,'UTF8')::jsonb;
@@ -271,6 +313,12 @@ BEGIN
   SELECT t.* INTO source_definition FROM truss.type_def t WHERE t.type_id=(identity->'type'->>'typeId')::int AND t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL;
   IF NOT FOUND THEN RAISE EXCEPTION 'known report type required' USING ERRCODE='22023';END IF;
   IF identity->'type' IS DISTINCT FROM convert_from(truss.import_key_selection(source_definition.document_id,source_definition.module,source_definition.element,expected_release,expected_digest),'UTF8')::jsonb->'type' THEN RAISE EXCEPTION 'original report type identity required' USING ERRCODE='22023';END IF;
+  IF outcome_identity IS NOT NULL THEN
+   IF outcome_identity-'id' IS DISTINCT FROM identity->'type' THEN RAISE EXCEPTION 'original object report outcome type required' USING ERRCODE='22023';END IF;
+   SELECT * INTO object_row FROM truss.object WHERE id=(outcome_identity->>'id')::bigint AND type_id=source_definition.type_id;
+   IF FOUND AND (object_row.root_id IS NOT NULL OR object_row.root_type IS NOT NULL) THEN
+    RAISE EXCEPTION 'rootless object import report profile required' USING ERRCODE='0A000';END IF;
+  END IF;
   RETURN;
  END IF;
  IF kind<>'edge' THEN RAISE EXCEPTION 'selected report record required' USING ERRCODE='22023';END IF;
@@ -278,6 +326,21 @@ BEGIN
  relation:=truss.runtime_operation_relationship(jsonb_build_object('operation','create_edge','relationshipDefinitionPin',identity->>'relationshipDefinitionPin'),'[]',0);
  PERFORM truss.runtime_module_writer(relation.document_id,relation.module);
  source_definition:=truss.runtime_condition_type(identity->'source');target_definition:=truss.runtime_condition_type(identity->'target');
+ IF relation.lifecycle IS DISTINCT FROM 'independent' THEN RAISE EXCEPTION 'independent import report profile required' USING ERRCODE='0A000';END IF;
+ IF outcome_identity IS NOT NULL THEN
+  IF outcome_identity->>'typeId' IS DISTINCT FROM relation.rel_type_id::text
+   OR outcome_identity->>'definitionPin' IS DISTINCT FROM identity->>'relationshipDefinitionPin'
+   OR outcome_identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module) THEN
+   RAISE EXCEPTION 'original edge report outcome type required' USING ERRCODE='22023';END IF;
+  SELECT * INTO edge_row FROM truss.edge WHERE id=(outcome_identity->>'id')::bigint AND rel_type_id=relation.rel_type_id;
+  IF FOUND THEN
+   FOR endpoint IN SELECT o.*,t.document_id,t.module FROM truss.object o JOIN truss.type_def t ON t.type_id=o.type_id
+    WHERE (o.id=edge_row.source_id AND o.type_id=edge_row.source_type OR o.id=edge_row.target_id AND o.type_id=edge_row.target_type) LOOP
+    IF NOT truss.runtime_can_read(endpoint.document_id,endpoint.module) THEN RAISE EXCEPTION 'current retained report endpoint reader required' USING ERRCODE='42501';END IF;
+    IF endpoint.root_id IS NOT NULL OR endpoint.root_type IS NOT NULL THEN RAISE EXCEPTION 'rootless endpoint import report profile required' USING ERRCODE='0A000';END IF;
+   END LOOP;
+  END IF;
+ END IF;
  IF NOT truss.runtime_can_read(source_definition.document_id,source_definition.module) OR NOT truss.runtime_can_read(target_definition.document_id,target_definition.module) THEN RAISE EXCEPTION 'current report endpoint readers required' USING ERRCODE='42501';END IF;
 END;
 $$;

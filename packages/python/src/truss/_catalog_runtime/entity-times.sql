@@ -3,7 +3,7 @@
 CREATE FUNCTION truss.query_object_times(binding jsonb,selected_type int,selected_id bigint)
 RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY DEFINER
 SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' AS $$
-DECLARE current_object truss.object%ROWTYPE;
+DECLARE current_object truss.object%ROWTYPE;root_identity jsonb;
 BEGIN
  -- Establish original creation/current-version attribution and exact current image
  -- in this statement snapshot, including the caller's pending writes.
@@ -15,7 +15,10 @@ BEGIN
   OR current_object.updated_at<'0001-01-01 00:00:00+00'::timestamptz
   OR current_object.updated_at>='10000-01-01 00:00:00+00'::timestamptz
  THEN RAISE EXCEPTION 'finite supported object timestamps required' USING ERRCODE='0A000';END IF;
+ SELECT * INTO STRICT current_object FROM truss.object WHERE id=selected_id AND type_id=selected_type;
+ root_identity:=truss.query_object_root(binding,current_object);
  PERFORM truss.query_scope(binding);
+ IF root_identity IS NOT NULL AND NOT truss.runtime_can_read(root_identity->'owner'->>'documentId',root_identity->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current metadata aggregate root reader required' USING ERRCODE='42501';END IF;
  RETURN jsonb_build_object(
   '_created_at',to_char(current_object.created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
   '_updated_at',to_char(current_object.updated_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'));

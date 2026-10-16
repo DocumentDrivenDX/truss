@@ -4,7 +4,7 @@ CREATE FUNCTION truss.traverse_objects(start_identity jsonb,hops jsonb,maximum_o
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE installation record;start_type truss.type_def;relation truss.rel_def;hop jsonb;relations int[]:=ARRAY[]::int[];directions text[]:=ARRAY[]::text[];
  captured_revision int;scope record;scope_types int[];types jsonb:='{}';properties_by_type jsonb:='{}';pins jsonb:='{}';properties truss.prop_def[];
- selected_type truss.type_def;observation record;frozen_object truss.object;objects jsonb:='[]';rendered bytea;result bytea;index int:=0;
+ selected_type truss.type_def;observation record;frozen_object truss.object;frozen_root truss.object;root_definition truss.type_def;root_identity jsonb;root_owners jsonb:='{}';root_owner jsonb;objects jsonb:='[]';rendered bytea;result bytea;index int:=0;
 BEGIN
  PERFORM truss.runtime_person(false);
  IF maximum_objects IS NULL OR maximum_objects NOT BETWEEN 1 AND 1000 OR maximum_states IS NULL OR maximum_states NOT BETWEEN 1 AND 10000
@@ -27,7 +27,7 @@ BEGIN
   IF hop->'relationship'->>'definitionPin' IS DISTINCT FROM truss.runtime_relationship_pin(relation.rel_type_id)
   OR hop->'relationship'->>'authoredIdentity' IS DISTINCT FROM relation.rel_id
   OR hop->'relationship'->'owner' IS DISTINCT FROM jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module) THEN RAISE EXCEPTION 'current relationship pin required' USING ERRCODE='22023';END IF;
-  IF NOT relation.directed OR relation.assoc_type_id IS NOT NULL OR relation.composition THEN RAISE EXCEPTION 'independent directed traversal required' USING ERRCODE='0A000';END IF;
+  IF relation.lifecycle NOT IN ('independent','owned') OR NOT relation.directed OR relation.assoc_type_id IS NOT NULL OR relation.composition THEN RAISE EXCEPTION 'directed traversal required' USING ERRCODE='0A000';END IF;
   IF NOT truss.runtime_can_read(relation.document_id,relation.module) THEN RETURN NULL;END IF;
   relations:=array_append(relations,relation.rel_type_id);directions:=array_append(directions,hop->>'direction');
   FOR scope IN SELECT source_type AS type_id FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id UNION SELECT target_type FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id LOOP scope_types:=array_append(scope_types,scope.type_id);END LOOP;
@@ -59,26 +59,46 @@ BEGIN
    JOIN truss.object n ON n.type_id=next.type_id AND n.id=next.id
    WHERE p.depth<array_length(relations,1) AND NOT p.cycle
   ), bounded AS MATERIALIZED (SELECT * FROM expansion LIMIT maximum_states+1),
-  summary AS (SELECT count(*) AS states FROM bounded),terminals AS (SELECT DISTINCT type_id,id FROM bounded WHERE depth=array_length(relations,1) AND NOT cycle)
-  SELECT summary.states,o AS object,EXISTS(SELECT 1 FROM truss.row_home_state r WHERE r.object_id=o.id AND r.object_type_id=o.type_id) AS row_home
-  FROM summary LEFT JOIN terminals t ON summary.states<=maximum_states LEFT JOIN truss.object o ON o.type_id=t.type_id AND o.id=t.id
-  ORDER BY t.type_id,t.id
+  summary AS (SELECT count(*) AS states FROM bounded),nodes AS (
+   SELECT type_id,id,bool_or(depth=array_length(relations,1) AND NOT cycle) AS terminal FROM bounded GROUP BY type_id,id)
+  SELECT summary.states,n.terminal,o AS object,ro AS root,rt AS root_definition,
+   EXISTS(SELECT 1 FROM truss.row_home_state r WHERE r.object_id=o.id AND r.object_type_id=o.type_id) AS row_home
+  FROM summary LEFT JOIN nodes n ON true LEFT JOIN truss.object o ON o.type_id=n.type_id AND o.id=n.id
+  LEFT JOIN truss.object ro ON ro.type_id=o.root_type AND ro.id=o.root_id
+  LEFT JOIN truss.type_def rt ON rt.type_id=ro.type_id AND rt.retired_rev IS NULL
+  ORDER BY n.type_id,n.id
  LOOP
-  IF observation.states>maximum_states THEN result:=convert_to('{"outcome":"limited","reason":"path_states"}','UTF8');EXIT;END IF;
+  IF observation.states>maximum_states THEN result:=convert_to('{"outcome":"limited","reason":"path_states"}','UTF8');END IF;
   IF observation.states=0 THEN result:=convert_to('{"outcome":"not_found"}','UTF8');EXIT;END IF;
   frozen_object:=observation.object;
-  IF frozen_object.id IS NULL THEN CONTINUE;END IF;
+  IF frozen_object.id IS NULL THEN RAISE EXCEPTION 'captured traversal object required' USING ERRCODE='55000';END IF;
+  IF frozen_object.rev>captured_revision THEN RAISE EXCEPTION 'traversal object catalog changed' USING ERRCODE='55P03';END IF;
+  frozen_root:=observation.root;root_definition:=observation.root_definition;root_identity:=NULL;
+  IF frozen_object.root_id IS NOT NULL OR frozen_object.root_type IS NOT NULL THEN
+   IF frozen_object.root_id IS NULL OR frozen_object.root_type IS NULL OR frozen_root.id IS NULL OR root_definition.type_id IS NULL
+    OR frozen_root.root_id IS NOT NULL OR frozen_root.root_type IS NOT NULL
+    OR frozen_root.id=frozen_object.id AND frozen_root.type_id=frozen_object.type_id
+    OR root_definition.kind<>'record' OR root_definition.provisional THEN RAISE EXCEPTION 'captured traversal aggregate root required' USING ERRCODE='55000';END IF;
+   IF frozen_root.rev>captured_revision OR root_definition.since_rev>captured_revision THEN RAISE EXCEPTION 'traversal root catalog changed' USING ERRCODE='55P03';END IF;
+   IF NOT truss.runtime_can_read(root_definition.document_id,root_definition.module) THEN RETURN NULL;END IF;
+   root_owner:=jsonb_build_object('documentId',root_definition.document_id,'moduleId',root_definition.module);
+   root_owners:=root_owners||jsonb_build_object(root_owner::text,root_owner);
+   IF octet_length(root_owners::text)>16777216 THEN RAISE EXCEPTION 'bounded traversal authority context required' USING ERRCODE='54000';END IF;
+   root_identity:=jsonb_build_object('id',frozen_root.id::text,'typeId',frozen_root.type_id::text,
+    'definitionPin',(SELECT d.definition_pin FROM truss.runtime_definition('type',frozen_root.type_id) d),'owner',root_owner);
+  END IF;
+  IF NOT observation.terminal OR result IS NOT NULL THEN CONTINUE;END IF;
   index:=index+1;
-  IF index>maximum_objects THEN result:=convert_to('{"outcome":"limited","reason":"result_limit"}','UTF8');EXIT;END IF;
+  IF index>maximum_objects THEN result:=convert_to('{"outcome":"limited","reason":"result_limit"}','UTF8');CONTINUE;END IF;
   selected_type:=jsonb_populate_record(NULL::truss.type_def,types->frozen_object.type_id::text);
   SELECT coalesce(array_agg(p ORDER BY p.prop_id),ARRAY[]::truss.prop_def[]) INTO properties FROM jsonb_populate_recordset(NULL::truss.prop_def,properties_by_type->frozen_object.type_id::text) p;
   BEGIN
-  rendered:=truss.render_scalar_object(frozen_object,selected_type,properties,observation.row_home,pins->>frozen_object.type_id::text,captured_revision,maximum_bytes,expected_release,expected_digest);
+  rendered:=truss.render_logical_object(frozen_object,selected_type,properties,observation.row_home,pins->>frozen_object.type_id::text,captured_revision,maximum_bytes,expected_release,expected_digest,root_identity);
   EXCEPTION WHEN SQLSTATE '54000' THEN result:=convert_to('{"outcome":"limited","reason":"retained_bytes"}','UTF8');
   END;
-  IF result IS NOT NULL THEN EXIT;END IF;
+  IF result IS NOT NULL THEN CONTINUE;END IF;
   objects:=objects||jsonb_build_array(convert_from(rendered,'UTF8')::jsonb);
-  IF octet_length(objects::text)>maximum_bytes THEN result:=convert_to('{"outcome":"limited","reason":"retained_bytes"}','UTF8');EXIT;END IF;
+  IF octet_length(objects::text)>maximum_bytes THEN result:=convert_to('{"outcome":"limited","reason":"retained_bytes"}','UTF8');END IF;
  END LOOP;
  END IF;
  FOR selected_type IN SELECT * FROM truss.type_def WHERE type_id=ANY(scope_types) LOOP
@@ -86,6 +106,9 @@ BEGIN
   FOR scope IN SELECT DISTINCT declaration_module FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL LOOP IF NOT truss.runtime_can_read(selected_type.document_id,scope.declaration_module) THEN RETURN NULL;END IF;END LOOP;
  END LOOP;
  FOR relation IN SELECT * FROM truss.rel_def WHERE rel_type_id=ANY(relations) LOOP IF NOT truss.runtime_can_read(relation.document_id,relation.module) THEN RETURN NULL;END IF;END LOOP;
+ FOR root_owner IN SELECT value FROM jsonb_each(root_owners) LOOP
+  IF NOT truss.runtime_can_read(root_owner->>'documentId',root_owner->>'moduleId') THEN RETURN NULL;END IF;
+ END LOOP;
  IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM captured_revision THEN RAISE EXCEPTION 'catalog changed during traversal' USING ERRCODE='55P03';END IF;
  IF result IS NULL THEN result:=convert_to(jsonb_build_object('outcome','complete','catalogRevision',captured_revision::text,'objects',objects)::text,'UTF8');END IF;
  IF octet_length(result)>maximum_bytes THEN RETURN convert_to('{"outcome":"limited","reason":"retained_bytes"}','UTF8');END IF;

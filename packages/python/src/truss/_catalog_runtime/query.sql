@@ -54,16 +54,24 @@ $$;
 REVOKE ALL ON FUNCTION truss.query_numeric_value(text,text) FROM PUBLIC;
 
 -- Fixed, independently authorized query sources; no arbitrary SQL gateway.
+-- Hash of the exact packaged query-abi.json descriptor bytes, independent of
+-- unrelated runtime implementation edits. Actual execution still pins runtime.
+CREATE FUNCTION truss.query_abi() RETURNS jsonb
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT '{"identity":"truss-postgresql-logical-query","version":"1.0","sha256":"9fce2c91eff11ae2d8e6c0e3759b425efb1457e2c9675dc4383fc28430909806"}'::jsonb; $$;
+REVOKE ALL ON FUNCTION truss.query_abi() FROM PUBLIC;
+
 CREATE FUNCTION truss.query_scope(binding jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_document jsonb;selected_record jsonb;selected_field jsonb;source truss.schema_doc%ROWTYPE;owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;module jsonb;selected_relation jsonb;relation truss.rel_def%ROWTYPE;selected_key jsonb;key_definition truss.key_def%ROWTYPE;
 BEGIN
  PERFORM truss.runtime_person(false);
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.4'
+ IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.5'
+ OR binding->'queryAbi' IS DISTINCT FROM truss.query_abi()
+ OR binding-ARRAY['interfaceVersion','queryAbi','schema','installationId','releaseId','releaseSha256','catalogRevision','documents','records','relationships','maximumScanRows','maximumResultRows','maximumBytes']<>'{}'::jsonb
  OR binding->>'schema' IS DISTINCT FROM 'truss' OR binding->>'installationId' IS DISTINCT FROM installation.installation_id::text
  OR binding->>'releaseId' IS DISTINCT FROM installation.release_id OR binding->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.68-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+ OR installation.release_id<>'truss-catalog-runtime/0.69-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
  OR binding->>'maximumResultRows' IS NULL OR (binding->>'maximumResultRows')::int NOT BETWEEN 1 AND 10000 OR binding->>'maximumScanRows' IS NULL OR binding->>'maximumBytes' IS NULL OR (binding->>'maximumScanRows')::int NOT BETWEEN 1 AND 10000 OR (binding->>'maximumBytes')::int NOT BETWEEN 1 AND 16777216
  OR octet_length(binding::text)>4194304 OR jsonb_typeof(binding->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'documents') NOT BETWEEN 1 AND 32
  OR jsonb_typeof(binding->'relationships') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'relationships')>1024
@@ -102,7 +110,7 @@ BEGIN
  FOR selected_relation IN SELECT value FROM jsonb_array_elements(binding->'relationships') LOOP
   SELECT * INTO relation FROM truss.rel_def r WHERE r.rel_type_id=(selected_relation->>'relationshipTypeId')::int AND r.retired_rev IS NULL;
   IF NOT FOUND OR relation.document_id IS DISTINCT FROM selected_relation->'identity'->>'documentId' OR relation.module IS DISTINCT FROM selected_relation->'identity'->>'module'
-   OR relation.rel_id IS DISTINCT FROM selected_relation->'identity'->>'relationship' OR relation.lifecycle<>'independent' OR NOT relation.directed OR relation.composition OR relation.assoc_type_id IS NOT NULL
+   OR relation.rel_id IS DISTINCT FROM selected_relation->'identity'->>'relationship' OR relation.lifecycle NOT IN ('independent','owned') OR NOT relation.directed OR relation.composition OR relation.assoc_type_id IS NOT NULL
    OR NOT truss.runtime_can_read(relation.document_id,relation.module)
    OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'documents') d WHERE d.value->>'documentId'=relation.document_id AND d.value->>'revision'=selected_relation->'identity'->>'revision')
    OR (SELECT count(*) FROM truss.rel_endpoint e WHERE e.rel_type_id=relation.rel_type_id)<>1
@@ -139,10 +147,10 @@ BEGIN
     FROM truss.type_def t WHERE t.document_id=selected_document_id AND t.retired_rev IS NULL AND NOT t.provisional AND t.kind='record'),'[]');
   relationships:=relationships||coalesce((SELECT jsonb_agg(jsonb_build_object('identity',jsonb_build_object('documentId',r.document_id,'revision',archived->>'documentRevision','module',r.module,'relationship',r.rel_id),
    'relationshipTypeId',r.rel_type_id::text,'sourceTypeId',e.source_type::text,'targetTypeId',e.target_type::text) ORDER BY r.rel_type_id)
-   FROM truss.rel_def r JOIN truss.rel_endpoint e ON e.rel_type_id=r.rel_type_id WHERE r.document_id=selected_document_id AND r.retired_rev IS NULL AND r.lifecycle='independent' AND r.directed AND NOT r.composition AND r.assoc_type_id IS NULL
+   FROM truss.rel_def r JOIN truss.rel_endpoint e ON e.rel_type_id=r.rel_type_id WHERE r.document_id=selected_document_id AND r.retired_rev IS NULL AND r.lifecycle IN ('independent','owned') AND r.directed AND NOT r.composition AND r.assoc_type_id IS NULL
    AND (SELECT count(*) FROM truss.rel_endpoint ep WHERE ep.rel_type_id=r.rel_type_id)=1),'[]');
  END LOOP;
- binding:=jsonb_build_object('interfaceVersion','truss-runtime-binding/0.4','schema','truss','installationId',installation.installation_id::text,'releaseId',installation.release_id,'releaseSha256',installation.release_sha256,'catalogRevision',captured_revision,
+ binding:=jsonb_build_object('interfaceVersion','truss-runtime-binding/0.5','queryAbi',truss.query_abi(),'schema','truss','installationId',installation.installation_id::text,'releaseId',installation.release_id,'releaseSha256',installation.release_sha256,'catalogRevision',captured_revision,
  'documents',pins,'records',records,'relationships',relationships,'maximumScanRows',maximum_scan_rows,'maximumResultRows',maximum_result_rows,'maximumBytes',maximum_bytes);
  PERFORM truss.query_scope(binding);
  result:=convert_to(jsonb_build_object('binding',binding,'bindingJson',binding::text,'modules',modules,'actorOid',(SELECT oid::text FROM pg_roles WHERE rolname=session_user))::text,'UTF8');
@@ -152,9 +160,37 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.query_binding(jsonb,int,int,int,text,text) FROM PUBLIC;
 
+-- Called inside STABLE query sources: root facts share the caller statement
+-- snapshot. Current role checks at return reuse this captured owner identity.
+CREATE FUNCTION truss.query_object_root(binding jsonb,object_row truss.object) RETURNS jsonb
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE root_row truss.object;root_type truss.type_def;pin record;captured_revision int:=(binding->>'catalogRevision')::int;
+BEGIN
+ IF object_row.ver<=0 OR object_row.rev>captured_revision THEN RAISE EXCEPTION 'current query object required' USING ERRCODE='55000';END IF;
+ IF object_row.root_id IS NULL AND object_row.root_type IS NULL THEN RETURN NULL;END IF;
+ IF object_row.root_id IS NULL OR object_row.root_type IS NULL OR object_row.root_id<=0
+  OR object_row.root_id=object_row.id AND object_row.root_type=object_row.type_id THEN
+  RAISE EXCEPTION 'complete query aggregate root required' USING ERRCODE='55000';END IF;
+ SELECT * INTO STRICT root_row FROM truss.object WHERE id=object_row.root_id AND type_id=object_row.root_type;
+ SELECT * INTO STRICT root_type FROM truss.type_def WHERE type_id=root_row.type_id AND retired_rev IS NULL AND NOT provisional AND kind='record';
+ IF root_row.root_id IS NOT NULL OR root_row.root_type IS NOT NULL OR root_row.ver<=0 THEN
+  RAISE EXCEPTION 'rootless query aggregate root required' USING ERRCODE='55000';END IF;
+ IF root_row.rev>captured_revision OR root_type.since_rev>captured_revision THEN RAISE EXCEPTION 'catalog changed during query root observation' USING ERRCODE='55P03';END IF;
+ IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'documents') d JOIN truss.schema_doc archive
+  ON archive.doc_id=d.value->>'documentId' AND archive.doc_revision=d.value->>'revision' AND archive.content_sha256=d.value->>'sha256'
+  WHERE archive.doc_id=root_type.document_id AND archive.rev<=captured_revision
+   AND EXISTS(SELECT 1 FROM jsonb_array_elements(archive.document::jsonb->'modules') m WHERE m.value->>'id'=root_type.module)) THEN RAISE EXCEPTION 'aggregate root document must be selected for query' USING ERRCODE='0A000';END IF;
+ IF NOT truss.runtime_can_read(root_type.document_id,root_type.module) THEN RAISE EXCEPTION 'current query aggregate root reader required' USING ERRCODE='42501';END IF;
+ SELECT * INTO STRICT pin FROM truss.runtime_definition('type',root_row.type_id,NULL,captured_revision);
+ RETURN jsonb_build_object('id',root_row.id::text,'typeId',root_row.type_id::text,'definitionPin',pin.definition_pin,
+  'owner',jsonb_build_object('documentId',root_type.document_id,'moduleId',root_type.module));
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.query_object_root(jsonb,truss.object) FROM PUBLIC;
+
 CREATE FUNCTION truss.query_objects(binding jsonb,selected_type int) RETURNS TABLE(id bigint,props jsonb)
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;property truss.prop_def%ROWTYPE;cell jsonb;row_count int:=0;byte_count bigint:=0;
+DECLARE owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;property truss.prop_def%ROWTYPE;cell jsonb;row_count int:=0;byte_count bigint:=0;root_identity jsonb;roots jsonb:='{}';root_entry jsonb;
 BEGIN
  PERFORM truss.query_scope(binding);
  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE (r.value->>'typeId')::int=selected_type) THEN RAISE EXCEPTION 'selected query record required' USING ERRCODE='22023';END IF;
@@ -165,7 +201,10 @@ BEGIN
  FOR object_row IN SELECT * FROM truss.object o WHERE o.type_id=selected_type ORDER BY o.id LIMIT (binding->>'maximumScanRows')::int+1 LOOP
   row_count:=row_count+1;byte_count:=byte_count+octet_length(object_row.props::text);
   IF row_count>(binding->>'maximumScanRows')::int OR byte_count>(binding->>'maximumBytes')::int THEN RAISE EXCEPTION 'bounded query source required' USING ERRCODE='54000';END IF;
-  IF object_row.root_id IS NOT NULL OR object_row.ver<=0 OR object_row.rev> (binding->>'catalogRevision')::int
+  root_identity:=truss.query_object_root(binding,object_row);
+  IF root_identity IS NOT NULL THEN roots:=roots||jsonb_build_object((root_identity->>'typeId')||':'||(root_identity->>'id'),root_identity);END IF;
+  IF byte_count+(CASE WHEN roots='{}'::jsonb THEN 0 ELSE octet_length(roots::text) END)>(binding->>'maximumBytes')::int THEN RAISE EXCEPTION 'bounded query root witnesses required' USING ERRCODE='54000';END IF;
+  IF object_row.ver<=0 OR object_row.rev> (binding->>'catalogRevision')::int
    OR EXISTS(SELECT 1 FROM truss.row_home_state s WHERE s.object_id=object_row.id AND s.object_type_id=object_row.type_id)
    OR EXISTS(SELECT 1 FROM jsonb_object_keys(object_row.props) k WHERE NOT EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.prop_id::text=k)) THEN RAISE EXCEPTION 'complete scalar source required' USING ERRCODE='0A000';END IF;
   FOR property IN SELECT * FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL LOOP
@@ -176,6 +215,10 @@ BEGIN
   END LOOP;
   id:=object_row.id;props:=object_row.props;RETURN NEXT;
  END LOOP;
+ FOR root_entry IN SELECT value FROM jsonb_each(roots) LOOP
+  IF NOT truss.runtime_can_read(root_entry->'owner'->>'documentId',root_entry->'owner'->>'moduleId') THEN
+   RAISE EXCEPTION 'current buffered query aggregate root reader required' USING ERRCODE='42501';END IF;
+ END LOOP;
  -- PL/pgSQL buffers this complete validated source before caller predicates run.
  PERFORM truss.query_scope(binding);
 END;
@@ -185,7 +228,7 @@ REVOKE ALL ON FUNCTION truss.query_objects(jsonb,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.query_edges(binding jsonb,selected_relationship int) RETURNS TABLE(id bigint,source_id bigint,target_id bigint)
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE relation truss.rel_def%ROWTYPE;edge_row truss.edge%ROWTYPE;source_object truss.object%ROWTYPE;target_object truss.object%ROWTYPE;row_count int:=0;byte_count bigint:=0;
+DECLARE relation truss.rel_def%ROWTYPE;edge_row truss.edge%ROWTYPE;source_object truss.object%ROWTYPE;target_object truss.object%ROWTYPE;row_count int:=0;byte_count bigint:=0;root_identity jsonb;roots jsonb:='{}';root_entry jsonb;
 BEGIN
  PERFORM truss.query_scope(binding);
  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'relationships') r WHERE (r.value->>'relationshipTypeId')::int=selected_relationship) THEN RAISE EXCEPTION 'selected query relationship required' USING ERRCODE='22023';END IF;
@@ -197,10 +240,19 @@ BEGIN
   IF NOT FOUND THEN RAISE EXCEPTION 'query source endpoint missing' USING ERRCODE='55000';END IF;
   SELECT * INTO target_object FROM truss.object o WHERE o.id=edge_row.target_id AND o.type_id=edge_row.target_type;
   IF NOT FOUND OR edge_row.ver<=0 OR edge_row.rev>(binding->>'catalogRevision')::int OR source_object.ver<=0 OR target_object.ver<=0
-   OR source_object.rev>(binding->>'catalogRevision')::int OR target_object.rev>(binding->>'catalogRevision')::int OR source_object.root_id IS NOT NULL OR target_object.root_id IS NOT NULL
+   OR source_object.rev>(binding->>'catalogRevision')::int OR target_object.rev>(binding->>'catalogRevision')::int
    OR NOT EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=selected_relationship AND e.source_type=edge_row.source_type AND e.target_type=edge_row.target_type) THEN
    RAISE EXCEPTION 'complete independent query endpoints required' USING ERRCODE='55000';END IF;
+  FOR root_identity IN SELECT value FROM jsonb_array_elements(jsonb_build_array(
+   truss.query_object_root(binding,source_object),truss.query_object_root(binding,target_object))) WHERE value<>'null'::jsonb LOOP
+   roots:=roots||jsonb_build_object((root_identity->>'typeId')||':'||(root_identity->>'id'),root_identity);
+  END LOOP;
+  IF byte_count+(CASE WHEN roots='{}'::jsonb THEN 0 ELSE octet_length(roots::text) END)>(binding->>'maximumBytes')::int THEN RAISE EXCEPTION 'bounded query root witnesses required' USING ERRCODE='54000';END IF;
   id:=edge_row.id;source_id:=edge_row.source_id;target_id:=edge_row.target_id;RETURN NEXT;
+ END LOOP;
+ FOR root_entry IN SELECT value FROM jsonb_each(roots) LOOP
+  IF NOT truss.runtime_can_read(root_entry->'owner'->>'documentId',root_entry->'owner'->>'moduleId') THEN
+   RAISE EXCEPTION 'current buffered query aggregate root reader required' USING ERRCODE='42501';END IF;
  END LOOP;
  -- Buffer the complete validated edge bag before correlation and key predicates.
  PERFORM truss.query_scope(binding);

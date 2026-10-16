@@ -25,7 +25,7 @@ immediate parent. ADR-002 D5 stores identity-bearing composed Records as objects
 connected by owned-lifecycle edges; identity-free Records remain structured
 property values, a separate unfinished feature.
 
-Current providers refuse owned objects, ownership changes and owned edges.
+Published SDK35/native68 providers refuse owned objects, ownership changes and owned edges.
 `ScalarObject.ownership` now reports the rootless selection guaranteed by its
 current read profile. Native65 adds multi-object transition storage. Neither
 change enables owned execution; accepting the Python carrier alone does not close
@@ -170,6 +170,32 @@ Astra Ultra approved keeping this proof private. Public events keep the existing
 event0.2/wrapper0.2 shape, selecting an explicit owned history profile; they do
 not embed the complete private inventory or new fields. History and query
 attribution must interpret original roots from retained evidence after deletion.
-The public adopter target is `test_owned_objects_native.py`: its UMF0.8 catalog
-accepts, and its first owned create currently refuses as unavailable/profile.
+At that source-only checkpoint, the public adopter target
+`test_owned_objects_native.py` accepted its UMF0.8 catalog but refused its first
+owned create as unavailable/profile.
 The table and workflow are implementation inputs, not installed owned support.
+
+## Native69 development integration — 2026-10-15
+
+The development assembly now executes the ordinary public owned workflow:
+create two roots, a child/grandchild and owned edges; read by identity/key/page;
+explicitly retarget and reparent; dry-run/rollback; reject an independent-edge
+cascade; explicitly unlink, cascade and replay original committed receipts.
+Historical descendant versions retain their original roots after deletion.
+Relationship reads/pages and two-hop/reverse traversal preserve the same root
+semantics. Traversal freezes every bounded reached node and root in one data
+observation, then renders terminals without resolving live roots again.
+
+Basic owned and independent traversal workflows pass on PostgreSQL18.6, as do
+independent edge read-only/pagination and populated native68 upgrade/key-byte
+preservation. Astra Ultra reviewed the plans and implementation iterations.
+The explicit logical query ABI has a reviewed Weft backend patch and a real Rust
+CLI/public Python/native descendant-query workflow; matching published wheels
+are still required before a release. Stock development query dependencies do
+not yet provide that new backend. Native69 includes 194 installed routines.
+
+This is an unreleased SDK0.0.36.dev0 integration checkpoint. Complete owned
+imports, owned retained-value rebinding/key backfill, cyclic value definitions,
+record-valued properties, general row homes, history offload and actual managed
+service qualification remain in the full goal. Unsupported owned imports and
+catalog transformations refuse rather than substituting rootless semantics.

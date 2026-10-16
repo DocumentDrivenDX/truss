@@ -66,6 +66,11 @@ BEGIN
  result:=convert_to(jsonb_build_object('profile','truss-python-object-page/0.1','catalogRevision',captured_revision,'objects',objects,'continuation',continuation)::text,'UTF8');
  IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'complete page byte limit exceeded' USING ERRCODE='54000';END IF;
  IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RAISE EXCEPTION 'current buffered page interpretation reader required' USING ERRCODE='42501';END IF;
+ FOR object_value IN SELECT value FROM jsonb_array_elements(objects) LOOP
+  IF object_value->>'profile'='truss-python-logical-object/0.1' AND NOT truss.runtime_can_read(
+   object_value->'root'->'owner'->>'documentId',object_value->'root'->'owner'->>'moduleId') THEN
+   RAISE EXCEPTION 'current buffered aggregate root reader required' USING ERRCODE='42501';END IF;
+ END LOOP;
  RETURN result;
 END;
 $$;

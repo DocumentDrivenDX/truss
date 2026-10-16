@@ -106,6 +106,8 @@ BEGIN
  END LOOP;
  PERFORM truss.runtime_person(false);
  IF NOT truss.runtime_object_values_readable(member.type_id) THEN RETURN NULL;END IF;
+ IF convert_from(result,'UTF8')::jsonb->>'profile'='truss-python-logical-object/0.1' AND NOT truss.runtime_can_read(
+  convert_from(result,'UTF8')::jsonb->'root'->'owner'->>'documentId',convert_from(result,'UTF8')::jsonb->'root'->'owner'->>'moduleId') THEN RETURN NULL;END IF;
  RETURN result;
 END;
 $$;

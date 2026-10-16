@@ -1,0 +1,88 @@
+{
+  "status": "unreleased development checkpoint",
+  "sdk": "0.0.36.dev0",
+  "runtime": "truss-catalog-runtime/0.69-candidate",
+  "runtimeManifestSha256": "098e8abe2758df376219a5f2b7abc465cc3a0a0c0ba30e3d2d2d1d9ffac4d3f0",
+  "postgresql": "18.6",
+  "pgserver-pg18": "18.6.1",
+  "psycopg": "3.3.6",
+  "installedRoutineCount": 194,
+  "reviewer": "Astra Ultra /root/astra_plan_review",
+  "review": "Plans and completed scoped implementation approved; development checkpoint only, no matching-wheel claim.",
+  "basicRuns": [
+    {
+      "cases": [
+        "owned create/read/key/page/edge/page/traversal/reparent/dry-run/cascade/history/replay",
+        "independent traversal/diamond/cycle/directions/limits/read-only"
+      ],
+      "passed": 2,
+      "seconds": 15.259
+    },
+    {
+      "cases": [
+        "owned edge reads/pages before and after reparent",
+        "independent edge read-only/cursor workflow"
+      ],
+      "passed": 2,
+      "seconds": 15.976
+    },
+    {
+      "cases": [
+        "populated native68 upgrade preserves original key bytes and supports reads/update"
+      ],
+      "passed": 1,
+      "seconds": 5.965
+    },
+    {
+      "cases": [
+        "native68 upgrade",
+        "original routine source inventory"
+      ],
+      "passed": 2,
+      "seconds": 11.476
+    },
+    {
+      "cases": [
+        "real Rust CLI plus public Python query coordinator and native owned descendant attribution"
+      ],
+      "passed": 1,
+      "seconds": 10.281,
+      "qualification": "source bridge, not published matching wheels"
+    },
+    {
+      "cases": [
+        "public owned workflow using clean development wheel"
+      ],
+      "passed": 1,
+      "seconds": 9.467
+    },
+    {
+      "cases": [
+        "final generated runtime owned workflow after trailing-newline normalization"
+      ],
+      "passed": 1,
+      "seconds": 8.688
+    }
+  ],
+  "developmentWheel": {
+    "sha256": "78a710deebfcd3eb7035168119066d47afba3023dc4c96fb760d1ad390309c9a",
+    "sourceIdenticalPackageEntries": 472,
+    "cleanSourceBuild": true,
+    "runtimeManifestSha256": "7439e75e5e171f543c23ccb1dfacc2f5e41b85f2a2d42c5bdffc911bc80ed7d6",
+    "scope": "Clean build before generated trailing-newline normalization; wheel workflow evidence does not claim identity with the subsequently normalized manifest."
+  },
+  "weftPatch": {
+    "base": "7426bb7328d56112f704f581ab7128b211f51a20",
+    "sha256": "32f9a9b7a34fb7cf65433cab46403e1fa89a02e3f5c403572c6540ed24f5e6e5",
+    "backend": "0.4.38",
+    "target": "truss-runtime-pg18.6/0.5",
+    "queryAbiSha256": "9fce2c91eff11ae2d8e6c0e3759b425efb1457e2c9675dc4383fc28430909806",
+    "review": "Astra Ultra approved owner handoff; matching wheels pending"
+  },
+  "remaining": [
+    "matching published Weft wheels and release workflow",
+    "owned imports",
+    "owned catalog rebinding/key backfill",
+    "broader value/managed-service goal scope"
+  ]
+}

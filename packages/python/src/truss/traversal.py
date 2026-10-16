@@ -2,7 +2,7 @@
 from dataclasses import dataclass,field
 from typing import Literal
 from .catalog_view import CatalogDefinitionReference
-from .object_read import ScalarObject
+from .object_read import ScalarObject,LogicalObject
 
 @dataclass(frozen=True,slots=True,kw_only=True)
 class TraversalHop:
@@ -11,7 +11,7 @@ class TraversalHop:
 
 @dataclass(frozen=True,slots=True,kw_only=True)
 class TraversalComplete:
-    objects: tuple[ScalarObject,...]
+    objects: tuple[ScalarObject | LogicalObject,...]
     catalog_revision: int
     outcome: Literal['complete']=field(default='complete',init=False)
     consistency: Literal['live']=field(default='live',init=False)

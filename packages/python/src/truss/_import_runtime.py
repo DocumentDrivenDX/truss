@@ -105,7 +105,7 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
         for outcome in outcomes:
             if type(outcome) not in (ImportCreated,ImportSkipped):continue
             record=input.records[int(outcome.input_index)]
-            cursor.execute('SELECT truss.import_report_record_authority(%s,%s,%s,%s)',(_bytes(_wire(record.identity)),record.kind,manifest['releaseId'],digest),prepare=False);cursor.fetchone()
+            cursor.execute('SELECT truss.import_report_record_authority(%s,%s,%s,%s)',(_bytes({'originalIdentity':_wire(record.identity),'outcomeIdentity':None if outcome.identity is ABSENT else _wire(outcome.identity)}),record.kind,manifest['releaseId'],digest),prepare=False);cursor.fetchone()
         if _engine is not None:original_scope()
         return True
     def interrupted(error):

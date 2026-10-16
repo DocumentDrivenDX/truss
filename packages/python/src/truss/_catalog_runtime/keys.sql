@@ -88,7 +88,7 @@ DECLARE object_row truss.object%ROWTYPE; key_row truss.key_def%ROWTYPE;
  component record;cell jsonb;actual_values text[]:=ARRAY[]::text[];counted int:=0;cells jsonb:='[]';key_facets jsonb:='[]';
 BEGIN
  SELECT * INTO object_row FROM truss.object WHERE id=selected_object AND type_id=selected_type;
- IF NOT FOUND OR object_row.root_id IS NOT NULL THEN RETURN false; END IF;
+ IF NOT FOUND THEN RETURN false; END IF;
  IF NOT EXISTS(SELECT 1 FROM truss.type_def WHERE type_id=selected_type
    AND kind='record' AND NOT provisional AND retired_rev IS NULL) THEN RETURN false; END IF;
  SELECT * INTO key_row FROM truss.key_def WHERE type_id=selected_type AND key_num=selected_key AND retired_rev IS NULL;

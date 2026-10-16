@@ -53,6 +53,7 @@ BEGIN
    WHERE d.rev=definition.definition_rev AND d.ord=definition.definition_doc_ord AND d.doc_id=definition.definition_document_id;
   IF archive.content_sha256 IS DISTINCT FROM encode(sha256(convert_to(archive.document,'UTF8')),'hex') THEN
    RAISE EXCEPTION 'original planned document bytes required' USING ERRCODE='55000';END IF;
+  IF EXISTS(SELECT 1 FROM truss.object o WHERE o.type_id=owner.type_id AND (o.root_id IS NOT NULL OR o.root_type IS NOT NULL)) THEN RAISE EXCEPTION 'owned catalog key backfill requires a supported ownership profile' USING ERRCODE='0A000';END IF;
   FOR object_row IN SELECT o.* FROM truss.object o WHERE o.type_id=owner.type_id ORDER BY o.id FOR UPDATE LOOP
    candidate_count:=candidate_count+1;values_cells:='[]';
    IF candidate_count>10000 THEN RAISE EXCEPTION 'bounded key backfill inventory required' USING ERRCODE='54000';END IF;
