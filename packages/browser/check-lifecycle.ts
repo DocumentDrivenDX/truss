@@ -139,6 +139,18 @@ try{
   const failedState=await call(a,{command:'reviewJob',job:failedJob});if(failedState.state?.status!=='stopped'||failedState.state?.committedBatches!==0)throw Error(JSON.stringify(failedState));
   const removed=await call(a,{command:'batchFault',id:secondId,remove:true});if(removed.outcome!=='fault_removed')throw Error(JSON.stringify(removed));
   await call(a,{command:'action'});
+  const effectJob=await newJob("UPDATE products SET name='EffectFault' WHERE name='Bulk'",'first-effect-failure');
+  const effectClaim=await call(a,{command:'claim',input:{job:effectJob,control:{requestKey:'first-effect-claim',attempt:'1'}}});if(effectClaim.status!=='claimed')throw Error(JSON.stringify(effectClaim));
+  const firstId=finalObjects.find((o:any)=>o.fields.some((f:any)=>f.field==='product-id'&&f.value==='bar')).id;
+  if((await call(a,{command:'batchFault',id:secondId,corruptId:firstId})).outcome!=='fault_installed')throw Error('Effect fault installation failed');
+  await call(a,{command:'action'});
+  const effectInput={job:effectJob,batch:0,fence:effectClaim.fence};
+  const effectFailure=await call(a,{command:'executeBatch',input:effectInput});
+  if(effectFailure.status!=='rejected'||effectFailure.code!=='EFFECT_VERIFICATION'||effectFailure.item!==0)throw Error(JSON.stringify(effectFailure));
+  if(JSON.stringify(await call(a,{command:'readObjects'}))!==JSON.stringify(finalObjects))throw Error('First effect failure leaked changes');
+  if(JSON.stringify(await call(a,{command:'recoverBatch',input:effectInput}))!==JSON.stringify(effectFailure))throw Error('First effect failure recovery changed');
+  if((await call(a,{command:'batchFault',id:secondId,remove:true})).outcome!=='fault_removed')throw Error('Effect fault removal failed');
+  await call(a,{command:'action'});
   const staleJob=await newJob("UPDATE products SET name='WouldRollback' WHERE name='Bulk'",'stale');
   const interventionJob=await newJob("UPDATE products SET name='Changed' WHERE id='baz'",'intervention',1);
   const interventionClaim=await call(a,{command:'claim',input:{job:interventionJob,control:{requestKey:'intervention-claim',attempt:'1'}}});if(interventionClaim.status!=='claimed')throw Error(JSON.stringify(interventionClaim));
@@ -222,7 +234,7 @@ try{
     if(JSON.stringify(await call(a,{command:'readObjects'}))!==JSON.stringify(afterHot))throw Error('Custody recovery redispatched business effects');
     await call(a,{command:'close'});custodyControls.push({mode,indeterminate:true,fenced:true,restoredOriginalOutcome:true,noRedispatch:true});
   }
-  const receipt={normalization:{compactStorage,legacyOriginalOutcome:true,custodyControls},warmCache:{boundary:cacheBoundary,warm,stale:hot,invalidGrant:hotForged.code,closedOwner:hotClosed.outcome,noEffects:true},cancellation:{cancelled,cancelReplay,cancelClaim,cancelExecution,cancelRecovered},scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
+  const receipt={effectOrder:{firstEffectFailure:effectFailure,noEffects:true,recoveryEqual:true},normalization:{compactStorage,legacyOriginalOutcome:true,custodyControls},warmCache:{boundary:cacheBoundary,warm,stale:hot,invalidGrant:hotForged.code,closedOwner:hotClosed.outcome,noEffects:true},cancellation:{cancelled,cancelReplay,cancelClaim,cancelExecution,cancelRecovered},scope:'Actual worker catalog/action/read-grant, original Weft materialization and UMF manifest, keyed seal/replay/reopen recovery; public atomic load/replay/readback',assetPrefix:'/example/truss/',chromium:browser.version(),bundle:{manifestSha256:packaged.manifestSha256,providerSha256:packaged.providerSha256},first,forged,second,takeover,reopened,
     feed:{pages:feedPages,events:feedEvents.length,foreignCursor:foreignCursor.code,emptyAfterReopen:emptyFeed},
     staleGuard:{result:stale,recoveredByteEqual:true,firstItemUnchanged:true},
     noOp:{results:noOpResults,unchanged:true},

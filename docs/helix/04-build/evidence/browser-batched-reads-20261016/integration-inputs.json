@@ -1,0 +1,31 @@
+{
+  "baseBrowserCommit": "2a8bd1fee8ee8d644e6d47fff37145ff161170bb",
+  "files": {
+    "packages/browser/batch.ts": {
+      "beforeSha256": "7eee4daf15ebb815b063dd0306edc18bed5167821c1a39b241e5449483551c24",
+      "sha256": "db437f33ce72f28000c11a84b6aaab597cec6b6cd36b9748283091091c485c77"
+    },
+    "packages/browser/test-worker.ts": {
+      "beforeSha256": "7912d2c67d15576a7d9c39589413cafee04bad3091679a819c0bf39bcd25925b",
+      "sha256": "02b619d6d56a5cb8dfae31d6d9d7d2ecf62d3b6b9cd258165dcfc4e7f867e03f"
+    },
+    "packages/browser/check-lifecycle.ts": {
+      "beforeSha256": "aa8e6e1ba3b757dafa8004b7ffb2b786cc46d902a32996f023d379eb24631db1",
+      "sha256": "8086415e6c0e84166dc4695aac300971875893a5052822e3f8748b46226b5a08"
+    }
+  },
+  "bundle": {
+    "path": "/private/tmp/truss-browser-batched-reads-r2-bundle-20261016",
+    "manifestSha256": "f240b5a463555ef35dcb8fd7621501eea7167790389ddef88c0dc9fa93f7018e",
+    "providerSha256": "78c8e06b993680bd567a7c7f04b47f15d3372b3e343bb6e5157d6bdb19a0ee23",
+    "allSourceHashesMatched": 81,
+    "allAssetBytesAndHashesMatched": 372,
+    "changedSourceInputs": [
+      "packages/browser/batch.ts"
+    ],
+    "changedAssets": [
+      "store.js"
+    ]
+  },
+  "scope": "Corrected r2 only. Immediate per-item effect verification preserved. No native SQL, authority, portable batch-size or publication change."
+}

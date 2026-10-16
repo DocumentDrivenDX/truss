@@ -1,0 +1,51 @@
+{
+  "status": "INTEGRATION_CLEAR_EXACT_R2_SOURCE_AND_CANONICAL_BUILD_PERFORMANCE_UNQUALIFIED",
+  "reviewer": "Astra Ultra",
+  "scope": "Three browser files and bounded browser-batched-reads evidence directory; separate native point-lookup files excluded.",
+  "base_commit": "70a051f997134b405b9cd7684baa8fa99bcd56be",
+  "findings": [],
+  "adopted_files": {
+    "packages/browser/batch.ts": {
+      "beforeSha256": "7eee4daf15ebb815b063dd0306edc18bed5167821c1a39b241e5449483551c24",
+      "sha256": "db437f33ce72f28000c11a84b6aaab597cec6b6cd36b9748283091091c485c77"
+    },
+    "packages/browser/test-worker.ts": {
+      "beforeSha256": "7912d2c67d15576a7d9c39589413cafee04bad3091679a819c0bf39bcd25925b",
+      "sha256": "02b619d6d56a5cb8dfae31d6d9d7d2ecf62d3b6b9cd258165dcfc4e7f867e03f"
+    },
+    "packages/browser/check-lifecycle.ts": {
+      "beforeSha256": "aa8e6e1ba3b757dafa8004b7ffb2b786cc46d902a32996f023d379eb24631db1",
+      "sha256": "8086415e6c0e84166dc4695aac300971875893a5052822e3f8748b46226b5a08"
+    }
+  },
+  "upstream_review_sha256": "f08c2ed794a4486063fb8a78ddcf5feb47c176fd1d6a5e044819a483ad8c2ee7",
+  "evidence_sha256": {
+    "docs/helix/04-build/evidence/browser-batched-reads-20261016/README.md": "eaa3781bb8e4b959059ad32e3634ea1debf97ea5623c0cf6a58da05e3477a367",
+    "docs/helix/04-build/evidence/browser-batched-reads-20261016/astra-review.json": "f08c2ed794a4486063fb8a78ddcf5feb47c176fd1d6a5e044819a483ad8c2ee7",
+    "docs/helix/04-build/evidence/browser-batched-reads-20261016/bulk1024.json.gz": "5897ea9498f9b9f3d43e0d94521d89ed9bbd635c9fe3033ffd3b952e6940396f",
+    "docs/helix/04-build/evidence/browser-batched-reads-20261016/integrated-build.json": "125cb5fcb89ecd01da4c4995467056ad31599af74807568f7067b9b04b373e6d",
+    "docs/helix/04-build/evidence/browser-batched-reads-20261016/integration-inputs.json": "93abeb1c5eb9d18940eba10a324c3a721929cdefbd9f89699757fa392dcfd080",
+    "docs/helix/04-build/evidence/browser-batched-reads-20261016/lifecycle.json.gz": "d1dc3f7a76bc31baa2283cef7d9f3621a35b4eec63f50e2e72115ea2fe9b5e3f",
+    "docs/helix/04-build/evidence/browser-batched-reads-20261016/upgrade.json.gz": "177d7f6a2166c47d4bb53adc5dbbd005c96aaf93ad781685554283147d605ff5"
+  },
+  "verified": [
+    "All three integration files equal reviewed r2 staging bytes and hashes; original before hashes match baseBrowserCommit.",
+    "All five reviewed source/checker hashes match current main; only batch.ts is a production/build input change.",
+    "All81 canonical input hashes match current main and staging bytes; all372 emitted assets verified, with identical manifest/provider to reviewed r2 reports.",
+    "All three gzip runtime reports decompress to exact original bytes and recorded review hashes.",
+    "README preserves original per-item verification order, actual EFFECT_VERIFICATION item0/noeffects/exactrecovery evidence,11-batch1024 scope and unqualified5299ms/295ms timings.",
+    "Rejected r1 is identified as superseded; no arbitrary crash, atomic1024, native-release or causal speedup claim."
+  ],
+  "canonical_build": {
+    "directory": "/private/tmp/truss-browser-main-batched-r2-assets-20261016",
+    "manifestSha256": "f240b5a463555ef35dcb8fd7621501eea7167790389ddef88c0dc9fa93f7018e",
+    "providerSha256": "78c8e06b993680bd567a7c7f04b47f15d3372b3e343bb6e5157d6bdb19a0ee23"
+  },
+  "reviewer_execution": "Read-only integration/evidence/hash review; no browser/native execution.",
+  "prior_source_review": "/private/tmp/truss-main-integration-20261010/docs/helix/04-build/evidence/browser-batched-reads-20261016/astra-review.json",
+  "excluded_files": [
+    "packages/postgresql/owned-groups/execute.sql",
+    "packages/python/src/truss/_catalog_runtime/owned.sql",
+    "packages/python/src/truss/_catalog_runtime/manifest.json"
+  ]
+}

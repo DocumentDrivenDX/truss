@@ -1,0 +1,159 @@
+{
+  "review": "Astra final limited adoption review, batched browser admission reads r2",
+  "reviewedAt": "2026-10-16T12:26:17.438395+00:00",
+  "verdict": "SOURCE_CLEAR_R2_PARENT_RUNTIME_REPORTS_INSPECTED",
+  "candidate": "/private/tmp/truss-browser-batched-reads-20261016",
+  "baseline": "/private/tmp/truss-browser-main-interned-assets-20261016",
+  "reviewerExecutedBrowserOrNative": false,
+  "sourceHashes": {
+    "packages/browser/batch.ts": "db437f33ce72f28000c11a84b6aaab597cec6b6cd36b9748283091091c485c77",
+    "packages/browser/test-worker.ts": "02b619d6d56a5cb8dfae31d6d9d7d2ecf62d3b6b9cd258165dcfc4e7f867e03f",
+    "packages/browser/check-lifecycle.ts": "8086415e6c0e84166dc4695aac300971875893a5052822e3f8748b46226b5a08",
+    "packages/browser/check-bulk1024.ts": "aaeda6e3d5fe7b1b9a58fe5b7481a3644cbad4677e2e8dbdef9ccf438fcd4282",
+    "packages/browser/check-seal-upgrade.ts": "8f908fa5d323ba7ac8c70e5debecec2c568ba14da4998e1acfe026fa4d7865dd"
+  },
+  "bundle": {
+    "path": "/private/tmp/truss-browser-batched-reads-r2-bundle-20261016",
+    "manifestSha256": "f240b5a463555ef35dcb8fd7621501eea7167790389ddef88c0dc9fa93f7018e",
+    "providerSha256": "78c8e06b993680bd567a7c7f04b47f15d3372b3e343bb6e5157d6bdb19a0ee23",
+    "allSourceHashesMatched": 81,
+    "allAssetBytesAndHashesMatched": 372,
+    "changedSourceInputs": [
+      "packages/browser/batch.ts"
+    ],
+    "changedAssets": [
+      "store.js"
+    ]
+  },
+  "reports": {
+    "lifecycle": {
+      "path": "/private/tmp/truss-browser-batched-reads-r2-lifecycle-20261016.json",
+      "sha256": "2c7330cf38f767680d4a7f04705c762d68c652c98271c1920ed59dcc3982288f",
+      "logSha256": "006453cd4e77889d78768645d7110a53dc083163f4848f7e111385ff97399803",
+      "providerMatches": true
+    },
+    "bulk1024": {
+      "path": "/private/tmp/truss-browser-batched-reads-r2-bulk1024-20261016.json",
+      "sha256": "9419eb31e311aae20f46170d9248d0f96dfb284fa53c1042be937abb0e06be86",
+      "logSha256": "4616c50741d64177ae5e5a178aafcab7c512e476f44a68ca7b6f1a7f110f16a3",
+      "providerMatches": true
+    },
+    "upgrade": {
+      "path": "/private/tmp/truss-browser-batched-reads-r2-upgrade-20261016.json",
+      "sha256": "d5410346dae8556db0a7e96d3ea0f0b8184c1ba7ad860c2581b9c8edd7c55d57",
+      "logSha256": "4ddde7a6a28afe4a4e37e6f47a6efec1c68ca7b13f0e7c2b7fa65a4073f0a5d8",
+      "providerMatches": true
+    }
+  },
+  "independentEvidenceChecks": {
+    "allReportJsonPresentExactlyInCorrespondingConsoleLog": true,
+    "embeddedUtf8ArtifactHashesMatched": 24,
+    "sourceAndAssetsInspectedIndependently": true
+  },
+  "runtimeCoverage": {
+    "effectOrder": {
+      "firstEffectFailure": {
+        "status": "rejected",
+        "job": {
+          "namespace": "d36700da-6710-49e7-9115-4a4ba229e775",
+          "id": "c8fe583c-8768-4622-a95d-d1d6122da1c8"
+        },
+        "batch": 0,
+        "code": "EFFECT_VERIFICATION",
+        "item": 0
+      },
+      "noEffects": true,
+      "recoveryEqual": true
+    },
+    "lifecycle": [
+      "Original materialize/seal/submit/claim/batch outcomes, no-op, atomic rollback, stale guards, warm-cache current-grant/refusal, cancellation, journal/feed, old job/carrier and malformed custody controls remain in actual checker.",
+      "New actual first-item corrupt effect versus later SQL failure returns rejected/EFFECT_VERIFICATION/item0, unchanged public rows, exact recovered outcome."
+    ],
+    "bulk": {
+      "loadedRows": 1024,
+      "changedUpdates": 1025,
+      "jobs": [
+        {
+          "sql": "UPDATE products SET name='Bulk' WHERE name='Sample'",
+          "count": 1024,
+          "batches": 11,
+          "elapsedMs": 5299.340208,
+          "phaseMs": {
+            "materialize": 1156.9858329999997,
+            "seal": 55.40633400000024,
+            "submit": 47.299041999999645
+          },
+          "committedBatchMs": [
+            598.2957500000002,
+            604.1458330000005,
+            220.78408399999898,
+            226.15295800000058,
+            221.40433400000074,
+            222.1987079999999,
+            229.30904200000077,
+            223.07724999999846,
+            225.1265829999993,
+            226.71141700000044,
+            138.31445899999926
+          ],
+          "firstBatchRecoveryEqual": true,
+          "reopenedRecovery": true,
+          "planSha256": "033188dd8c5f50d95b45dee2b94ef0254617b13bfc2818e83084b1d75e7a7438",
+          "manifestSha256": "ca265cc9d59c89c4e4a362cf20186a5280877abc940ca737734dcfffe5ad9dad"
+        },
+        {
+          "sql": "UPDATE products SET name='Foo' WHERE id='bar'",
+          "count": 1,
+          "batches": 1,
+          "elapsedMs": 295.0824590000011,
+          "phaseMs": {
+            "materialize": 79.86116700000093,
+            "seal": 30.802084000000832,
+            "submit": 25.019791999999143
+          },
+          "committedBatchMs": [
+            97.47641599999952
+          ],
+          "firstBatchRecoveryEqual": true,
+          "reopenedRecovery": false,
+          "planSha256": "79793b88a0b66626b82d48509e3a5213edc63d48af0ea4e2b590406d44024bc0",
+          "manifestSha256": "00d41ca02a16f2723aaaae9bdae237780c792b966cf39aec0d239731e90a1284"
+        }
+      ],
+      "allReopenedPublicValuesVerified": true,
+      "externalRequests": [],
+      "serviceWrites": 0
+    },
+    "upgrade": {
+      "passed": true,
+      "actualOldProvider": {
+        "directory": "/private/tmp/truss-browser-canonical-weft-site-bundle-20261016",
+        "manifestSha256": "d932ee3943770bcf123f614fd059633c7591a5ef66077c65bb4c80935c28e0ba",
+        "storeSha256": "7e4da46f14dfbb19b1268286dbf4c0124ac00e90c6c2dc601d49f5a808a80a31",
+        "assetsVerified": 372
+      },
+      "newProvider": {
+        "directory": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-browser-check-wY4ccC/bundle",
+        "manifestSha256": "f240b5a463555ef35dcb8fd7621501eea7167790389ddef88c0dc9fa93f7018e",
+        "providerSha256": "78c8e06b993680bd567a7c7f04b47f15d3372b3e343bb6e5157d6bdb19a0ee23"
+      },
+      "oldSealRecoveryByteEqual": true,
+      "oldSubmitClaimBatchRecoveryByteEqual": true,
+      "oldFrozenRemainingBatchExecuted": true,
+      "newCompactPointExecuted": true,
+      "reopenedPublicValuesVerified": true,
+      "crossFormatIntentBothDirections": true,
+      "crossFormatScope": "Test-only compact transport fixture derived from actual old-provider sealed bytes; not fresh authority issuance",
+      "externalRequests": []
+    }
+  },
+  "resolvedFinding": "The r1 batch-end effect check was rejected. r2 retains the original immediate per-item effect/journal/verification tail byte-for-byte; only object/key admission reads are batched.",
+  "limitations": [
+    "Parent executed runtime suites; reviewer independently inspected code, reports, logs and source/asset correspondence, not browser execution.",
+    "Superseded r1 results/provider are excluded from this r2 qualification.",
+    "Observed 5299.340208ms bulk and 295.082459ms point remain performance FAILED/unqualified; no paired/statistical speedup claim.",
+    "1024 UPDATE is eleven atomic batches, not one atomic-1024 operation.",
+    "Lifecycle crashRecovery is false; no arbitrary-process-crash, full native CONTRACT-904, publication or deployment claim.",
+    "Canonical adoption and website integration are subsequent work."
+  ]
+}

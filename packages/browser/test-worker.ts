@@ -221,6 +221,10 @@ self.onmessage=event=>{
           const db=new PGlite('idb://'+info.namespace,{relaxedDurability:false});
           try{
             if(event.data.remove)await db.exec('DROP TRIGGER test_batch_fault ON truss.object; DROP FUNCTION truss.test_batch_fault()');
+            else if(event.data.corruptId){
+              const corrupt=event.data.corruptId;if(typeof corrupt!=='string'||!/^[1-9][0-9]{0,18}$/.test(corrupt))throw Error('Exact corrupt identity required');
+              await db.exec(`CREATE FUNCTION truss.test_batch_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF OLD.id=${corrupt}::bigint THEN NEW.props=NEW.props||'{"testUnexpected":{"kind":"string","text":"fault"}}'::jsonb; END IF; IF OLD.id=${id}::bigint THEN RAISE EXCEPTION 'test later-item update failure'; END IF; RETURN NEW; END $$; CREATE TRIGGER test_batch_fault BEFORE UPDATE ON truss.object FOR EACH ROW EXECUTE FUNCTION truss.test_batch_fault()`);
+            }
             else if(event.data.laterId){
               const later=event.data.laterId;if(typeof later!=='string'||!/^[1-9][0-9]{0,18}$/.test(later))throw Error('Exact later identity required');
               await db.exec(`CREATE FUNCTION truss.test_batch_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF OLD.id=${id}::bigint THEN UPDATE truss.object SET ver=ver+1 WHERE id=${later}::bigint; END IF; RETURN NEW; END $$; CREATE TRIGGER test_batch_fault BEFORE UPDATE ON truss.object FOR EACH ROW EXECUTE FUNCTION truss.test_batch_fault()`);

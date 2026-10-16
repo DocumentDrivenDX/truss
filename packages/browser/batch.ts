@@ -50,27 +50,42 @@ async function applyPreparedBatch(tx:BatchTx,info:StoreInfo,prepared:PreparedBat
  const partition=manifest.batches[batch];if(!partition||partition.ordinal!==batch)throw new SealCustodyUnavailable('Original frozen partition required');
  const namespace=JSON.stringify({profile:'truss-browser-key-namespace/0.1',storeId:info.storeId,incarnation:info.incarnation,document:catalog!.document.sourceSha256,typeId:metadata.type.typeId,keyId:metadata.key.keyId,keyNumber:metadata.key.keyNumber});
  const planned:any[]=[],ids=new Set<string>();
+ const frozenItems=manifest.items.slice(partition.start,partition.start+partition.count);
+ const frozenIds=new Set<string>();
+ for(const item of frozenItems){
+  if(!positive(item.guard.identity)||!positive(item.guard.version)||item.guard.store!==info.storeId||item.guard.epoch!==info.incarnation||frozenIds.has(item.guard.identity))throw new BatchRefusal('conflict','PAP_GUARD',item.ordinal);
+  frozenIds.add(item.guard.identity);
+ }
+ const lockedRows=(await tx.query<any>(`SELECT id::text,ver::text AS version,props,retained,root_id::text,root_type::text,rev::text,
+  to_char(created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
+  to_char(updated_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "updatedAt"
+  FROM truss.object WHERE id=ANY($1::bigint[]) AND type_id=$2::int ORDER BY truss.object.id FOR UPDATE`,[[...frozenIds],metadata.type.typeId])).rows;
+ const rowsById=new Map(lockedRows.map(row=>[row.id,row]));
+ const wantedKeys=frozenItems.map((item:any)=>({id:item.guard.identity,keyHex:hex('umf-key-tuple-v1:hex:'+keyReceipts[item.ordinal].bytesHex)}));
+ const keyRows=(await tx.query<any>(`SELECT k.object_id::text AS "objectId",convert_from(k.original_context_bytes,'UTF8') AS context,g.generation::text,
+  EXISTS(SELECT 1 FROM truss.object_key_reservation_bucket r WHERE r.namespace_sha256=k.namespace_sha256 AND r.key_sha256=k.key_sha256 AND r.namespace_bytes=k.namespace_bytes AND r.key_bytes=k.key_bytes AND r.original_reservation_bytes=k.original_context_bytes) AS reserved
+  FROM jsonb_to_recordset($1::jsonb) AS wanted(id text,"keyHex" text)
+  JOIN truss.object_key_bucket k ON k.object_id=wanted.id::bigint
+  JOIN truss.key_bucket_guard g USING(namespace_sha256,key_sha256)
+  WHERE k.type_id=$2::int AND k.key_num=$3::smallint
+   AND k.namespace_sha256=sha256(decode($4,'hex')) AND k.namespace_bytes=decode($4,'hex')
+   AND k.key_sha256=sha256(decode(wanted."keyHex",'hex')) AND k.key_bytes=decode(wanted."keyHex",'hex')`,[JSON.stringify(wantedKeys),metadata.type.typeId,metadata.key.keyNumber,hex(namespace)])).rows;
+ const keysById=new Map<string,any[]>();
+ for(const key of keyRows){const bucket=keysById.get(key.objectId)??[];bucket.push(key);keysById.set(key.objectId,bucket);}
+
  // Finish every item's input/frame/key/version check before any business effect.
- for(const item of manifest.items.slice(partition.start,partition.start+partition.count)){
+ for(const item of frozenItems){
   const ordinal=item.ordinal;
   const inputs=identities.admitInputs(item.inputs),receipt=keyTuples.verify(keyReceipts[ordinal]);
   if(!positive(item.guard.identity)||!positive(item.guard.version)||item.guard.store!==info.storeId||item.guard.epoch!==info.incarnation||ids.has(item.guard.identity))throw new BatchRefusal('conflict','PAP_GUARD',ordinal);ids.add(item.guard.identity);
   for(const frame of [...action.reads,...action.writes])if(identities.select(frame.id,inputs).tupleHex!==receipt.bytesHex)throw new BatchRefusal('rejected','ACTION_FRAME',ordinal);
-  const rows=(await tx.query<any>(`SELECT id::text,ver::text AS version,props,retained,root_id::text,root_type::text,rev::text,
-   to_char(created_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "createdAt",
-   to_char(updated_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS "updatedAt"
-   FROM truss.object WHERE id=$1::bigint AND type_id=$2::int FOR UPDATE`,[item.guard.identity,metadata.type.typeId])).rows;
+  const found=rowsById.get(item.guard.identity),rows=found?[found]:[];
   if(rows.length!==1||rows[0].version!==item.guard.version)throw new BatchRefusal('conflict','PAP_GUARD',ordinal);
   const row=rows[0];if(row.root_id!==null||row.root_type!==null||row.retained!==null||Object.keys(row.props).length!==metadata.members.length)throw new BatchRefusal('rejected','UNSUPPORTED_OBJECT_PROFILE',ordinal);
   for(const member of metadata.members){const cell=row.props[member.propertyId];if(!cell||Object.keys(cell).sort().join(',')!=='kind,text'||cell.kind!=='string'||typeof cell.text!=='string')throw new BatchRefusal('rejected','INVALID_STORED_VALUE',ordinal);}
   const actual=keyTuples.encode(preparation.target,[{string:row.props[metadata.key.propertyIds[0]].text}]);
   if(actual.bytesHex!==receipt.bytesHex)throw new BatchRefusal('conflict','PAP_REBOUND',ordinal);
-  const keyHex=hex('umf-key-tuple-v1:hex:'+actual.bytesHex),ns=hex(namespace);
-  const keys=(await tx.query<{context:string;generation:string;reserved:boolean}>(`SELECT convert_from(k.original_context_bytes,'UTF8') AS context,g.generation::text,
-   EXISTS(SELECT 1 FROM truss.object_key_reservation_bucket r WHERE r.namespace_sha256=k.namespace_sha256 AND r.key_sha256=k.key_sha256 AND r.namespace_bytes=k.namespace_bytes AND r.key_bytes=k.key_bytes AND r.original_reservation_bytes=k.original_context_bytes) AS reserved
-   FROM truss.object_key_bucket k JOIN truss.key_bucket_guard g USING(namespace_sha256,key_sha256)
-   WHERE k.type_id=$1::int AND k.key_num=$2::smallint AND k.object_id=$3::bigint
-    AND k.namespace_sha256=sha256(decode($4,'hex')) AND k.key_sha256=sha256(decode($5,'hex')) AND k.namespace_bytes=decode($4,'hex') AND k.key_bytes=decode($5,'hex')`,[metadata.type.typeId,metadata.key.keyNumber,row.id,ns,keyHex])).rows;
+  const keys=keysById.get(row.id)??[];
   if(keys.length!==1||!keys[0]!.reserved||BigInt(keys[0]!.generation)<1n)throw new BatchRefusal('conflict','PAP_REBOUND',ordinal);
   const custody=JSON.parse(keys[0]!.context),originalKey=keyTuples.verify(JSON.parse(custody.ownerReceiptUtf8));
   if(custody.object.id!==row.id||custody.object.typeId!==metadata.type.typeId||custody.namespaceUtf8!==namespace||originalKey.bytesHex!==actual.bytesHex)throw new SealCustodyUnavailable('Original key custody required');
