@@ -1,9 +1,0 @@
-{
-  "scope": "Actual same-context bridge over previously captured native fixture source; no live native custody/admission",
-  "nativeBinarySha256": "7e6384ddada0f67a45839a222ffb059e04a5de00f6a9281ad811eefacdeffa42",
-  "associations": 6,
-  "coreRelationships": 5,
-  "sameOriginalParent": true,
-  "nativeAdmission": false,
-  "acceptancePromotion": false
-}

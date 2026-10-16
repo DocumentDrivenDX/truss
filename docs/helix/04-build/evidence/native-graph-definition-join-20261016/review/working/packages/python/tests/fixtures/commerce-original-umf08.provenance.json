@@ -1,7 +1,0 @@
-{
-  "sourceRepository": "DocumentDrivenDX/ashlar",
-  "sourceCommit": "689cb4eef1b07eb582f59e08ff81c0d08771b72a",
-  "sourcePath": "examples/domain-packs/commerce/upstream/ontology.json",
-  "sha256": "51d87c554df36846e41378cfaafc81277fcab61f6c891a6c64f34dba8fd9ac2a",
-  "scope": "Exact unchanged source; one supplier/product/relationship workflow, no all-pack qualification"
-}
