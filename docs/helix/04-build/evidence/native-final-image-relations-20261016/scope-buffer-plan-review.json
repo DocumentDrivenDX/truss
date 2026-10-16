@@ -1,0 +1,26 @@
+{
+  "reviewer": "Astra Ultra",
+  "worktree": "/private/tmp/truss-main-integration-20261010",
+  "base_commit": "984d6a65569adb084c6868fcfd8f5674c5a23ea3",
+  "findings": [],
+  "constraints": [
+    "Preserve original metadata/definition lookups, loop sorting and node_order appends.",
+    "Buffer the exact existing one-entry JSONB object per iteration; this preserves keys, values, JSON nulls and immediate SQL NULL-key refusal.",
+    "Coalesce empty aggregation to an empty JSONB object; order duplicate-key aggregation by captured iteration ordinality to preserve last-wins semantics.",
+    "Keep full operation preparation, final graph/forest/multiplicity checks, authority checks, limits and deadlines unchanged."
+  ],
+  "source_references": [
+    "packages/postgresql/owned-groups/execute.sql:60",
+    "packages/postgresql/owned-groups/execute.sql:87",
+    "packages/postgresql/owned-groups/execute.sql:103"
+  ],
+  "performance_qualification": "None. This removes repeated growing-map concatenation at one source hotspot; the original1000-node/1000-edge workload remains unqualified until an actual complete pass.",
+  "reviewer_native_runs": 0,
+  "status": "PLAN_CLEAR",
+  "rationale": [
+    "Neither initial node loop nor initial edge loop reads its accumulated map; the boundary loop reads neither. Materialization can occur immediately after each producer loop.",
+    "Node keys remain stored:+entry.key; edge keys remain derived relationship type/id. The two keys are not interchangeable.",
+    "Invocation-local arrays contain state only; there is no persistent state, actor cache, public API or helper change."
+  ],
+  "verification_plan": "Existing meaningful owned/edge workflows, then the unchanged original1000-node/1000-edge matrix after the coordinated CPU window. No unit-pass performance claim."
+}

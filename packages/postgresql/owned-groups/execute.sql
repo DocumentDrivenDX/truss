@@ -67,6 +67,7 @@ DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='
  unset_name text;authored jsonb;retained jsonb;order_key jsonb;selected_source_type int;selected_target_type int;plan jsonb;outgoing bigint;incoming bigint;
  retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;current_actor oid;resolved_creates jsonb:='{}';
  rootless_creates boolean;created_states jsonb[]:='{}';
+ scope_node_states jsonb[]:='{}';scope_edge_states jsonb[]:='{}';
 BEGIN
  current_actor:=truss.runtime_person(false);
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 1024
@@ -89,9 +90,13 @@ BEGIN
   identity:=jsonb_build_object('id',image->>'id','typeId',image->>'type_id','definitionPin',pin.definition_pin,
    'owner',jsonb_build_object('documentId',pin.document_id,'moduleId',pin.module_id));
   root_ref:=CASE WHEN image->'root_id'='null'::jsonb THEN NULL ELSE 'stored:'||(image->>'root_type')||':'||(image->>'root_id') END;
-  nodes:=nodes||jsonb_build_object(selected,jsonb_build_object('identity',identity,'image',image-ARRAY['root_id','root_type','updated_at'],
-   'root',root_ref,'deleted',false));node_order:=array_append(node_order,selected);
+  scope_node_states:=array_append(scope_node_states,jsonb_build_object(selected,jsonb_build_object('identity',identity,'image',image-ARRAY['root_id','root_type','updated_at'],
+   'root',root_ref,'deleted',false)));node_order:=array_append(node_order,selected);
  END LOOP;
+ -- No initial member reads these maps while they are built. Materialize once
+ -- instead of copying every previously captured member on each append.
+ SELECT coalesce(jsonb_object_agg(member.key,member.value ORDER BY n.ordinal),'{}'::jsonb) INTO nodes
+  FROM unnest(scope_node_states) WITH ORDINALITY n(state,ordinal) CROSS JOIN LATERAL jsonb_each(n.state) member;
  FOR entry IN SELECT key,value FROM jsonb_each(scope->'boundary') ORDER BY key COLLATE "C" LOOP
   boundary_order:=array_append(boundary_order,'stored:'||entry.key);
  END LOOP;
@@ -100,11 +105,13 @@ BEGIN
   identity:=jsonb_build_object('id',image->>'id','typeId',image->>'rel_type_id','definitionPin',truss.runtime_relationship_pin(relation.rel_type_id),
    'owner',jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module));
   selected:='stored:'||(image->>'rel_type_id')||':'||(image->>'id');
-  edges:=edges||jsonb_build_object(selected,jsonb_build_object('identity',identity,'image',image-ARRAY['source_id','source_type','target_id','target_type','order_key','updated_at'],
+  scope_edge_states:=array_append(scope_edge_states,jsonb_build_object(selected,jsonb_build_object('identity',identity,'image',image-ARRAY['source_id','source_type','target_id','target_type','order_key','updated_at'],
    'source','stored:'||(image->>'source_type')||':'||(image->>'source_id'),
    'target','stored:'||(image->>'target_type')||':'||(image->>'target_id'),'lifecycle',relation.lifecycle,'deleted',false,
-   'orderKey',CASE WHEN image->'order_key'='null'::jsonb THEN '{"state":"null"}'::jsonb ELSE jsonb_build_object('state','text','text',image->>'order_key') END));
+   'orderKey',CASE WHEN image->'order_key'='null'::jsonb THEN '{"state":"null"}'::jsonb ELSE jsonb_build_object('state','text','text',image->>'order_key') END)));
  END LOOP;
+ SELECT coalesce(jsonb_object_agg(member.key,member.value ORDER BY e.ordinal),'{}'::jsonb) INTO edges
+  FROM unnest(scope_edge_states) WITH ORDINALITY e(state,ordinal) CROSS JOIN LATERAL jsonb_each(e.state) member;
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
   before_nodes:=nodes;before_edges:=edges;changed_nodes:=ARRAY[]::text[];changed_edges:=ARRAY[]::text[];
   IF operation ? 'alias' AND (jsonb_typeof(operation->'alias') IS DISTINCT FROM 'string'

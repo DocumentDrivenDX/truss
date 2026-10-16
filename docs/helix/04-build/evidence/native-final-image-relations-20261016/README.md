@@ -1,0 +1,7 @@
+# Native final image comparison
+
+Final settlement resolves each original member identity once and compares expected images with actual PostgreSQL rows in relational queries. Existing create-result custody, reader/writer checks, transitions, complete typed incident inventory and forest validation remain. Initial-scope maps are built once from the same ordered, immediately validated member entries. No public API, deadline, workload or instrumentation change.
+
+Astra cleared both plans and completed sources. Eight basic public native workflows pass. Buffering alone still timed out on the original1,000-edge apply; the final relational implementation completes the entire unchanged small matrix. Its actual1,000 objects and1,000 edges commit,1,000 ID and100 key reads pass,200 single updates commit, and five genuinely changed1,000-update groups commit with reopened readback.
+
+Observed local timings: object apply7.456s + COMMIT4.864s; edge apply8.612s + COMMIT4.335s; ID read median3.810ms/p95=4.319ms; key read median5.595ms; single update including COMMIT median20.021ms/p95=23.827ms. Changed1,000-update groups have median apply9.988s + COMMIT4.004s, end-to-end14.020s. This remains close to the statement limit. The report explicitly says performance qualification is not evaluated: no claim covers1,024-operation release gates, other schemas or platforms. Limits remain10s statements/30s operations; durable PostgreSQL settings stay enabled.

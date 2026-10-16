@@ -1,0 +1,27 @@
+{
+  "baseMain": "2a8bd1fee8ee8d644e6d47fff37145ff161170bb",
+  "sourceHashes": {
+    "packages/postgresql/owned-groups/execute.sql": "c7b93df5c7397d5f88cf69324fafd201797d64b74ef7d8ee26adcf8a647ad974",
+    "packages/postgresql/owned-groups/finalize.sql": "2fd317c7199fd4ca37cd75bf1fc8c758993cad49e55ab241911eec00159164d2",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "0553923dccb1636070f8bd14d7f64d8d37eafadddd1dcaf36c7d813398dcbf8e",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "1d4f02b4de6e7981e728bc72bdf9591945ce8be2d287e51b4205c7b7764ff452"
+  },
+  "benchmarkScript": "/private/tmp/truss-edge1000-profile-pure-chain-20261016.py",
+  "benchmarkScriptSha256": "202983af0f2fa35f70c2bf6538411577be1e36aae906383d2038dea85915ad29",
+  "commandArguments": [
+    "--matrix-case",
+    "small",
+    "--bulk-size",
+    "1024",
+    "--expected-group-limit",
+    "1024",
+    "--read-samples",
+    "1000",
+    "--write-samples",
+    "200"
+  ],
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "profilingEnabled": false,
+  "scope": "One original1000-node/1000-edge workload; no1024-operation or all-schema performance qualification"
+}

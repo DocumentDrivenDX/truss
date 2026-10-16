@@ -1,0 +1,41 @@
+{
+  "status": "PLAN_CLEAR_WITH_SOURCE_REVIEW_REQUIRED",
+  "reviewer": "Astra Ultra",
+  "scope": "Replace only final physical image/incident inventory comparison after check_final early return with materialized invocation-local identity relations and set-based comparisons.",
+  "base_commit": "2a8bd1fee8ee8d644e6d47fff37145ff161170bb",
+  "inspected_source_sha256": {
+    "packages/postgresql/owned-groups/finalize.sql": "4dabb627c4ee97ae9e1515f521a46a4b6063bd876fd6f279fe02b01d5b2e3eee",
+    "packages/postgresql/owned-groups/execute.sql": "c7b93df5c7397d5f88cf69324fafd201797d64b74ef7d8ee26adcf8a647ad974"
+  },
+  "findings": [],
+  "feasibility": [
+    "runtime_owned_identity reads selected after/before member plus catalogRevision for boundary lookup; its ordinary selected-member path does not require full plan.",
+    "Create-reference validation independently reads sealed result and original creation_index operation plan. Keeping that helper unchanged preserves original creation-source custody.",
+    "Final object/edge image helpers contain deterministic JSONB image reconstruction with no independent module authorization; current group authority/transition/forest checks can remain byte unchanged."
+  ],
+  "recommended_atomic_scope": [
+    "After existing check_final=false return, materialize final members with original reference, exact state and ordinality. Resolve each final identity once with existing private helper, checked final index/attempt, and one-member projection taken only from checked last_plan plus catalogRevision.",
+    "Aggregate identity dictionaries once, keyed by exact original reference, or retain equivalent materialized relations. Do not repeatedly concatenate a growing dictionary.",
+    "Resolve referenced roots/endpoints once; missing dictionary entries must use existing identity helper semantics, including exact after-before precedence and first-plan boundary witness/current catalogRevision. Omit absent keys rather than manufacture JSON null keys.",
+    "Build expected object and edge images using exact existing helper expressions, including numeric ID/type casts, root SQL-null handling, retained unknown image keys and orderKey text behavior.",
+    "LEFT JOIN fresh actual object/edge rows on BOTH typed identity columns; compare complete to_jsonb(row)-timestamps with IS DISTINCT FROM. Preserve SQL NULL for missing actual rows and deleted expected images.",
+    "Check complete incident-edge inventory against ALL afterNodes including deleted nodes, with exact typed live planned edge membership (deleted=false). Preserve parallel-edge IDs; do not widen coverage to unrelated boundary-only nodes.",
+    "Keep all authority, original source, transition, history, result, count, alias and final forest checks in their original phase. Commit check_final=false must not gain this work or lose any checks."
+  ],
+  "pitfalls": [
+    "Resolve own identity even for deleted members; existing outer loops do so before image helpers return SQL NULL.",
+    "Resolve root/endpoints only on image-producing paths; a NULL root needs no identity lookup, while a malformed missing live-edge endpoint must not be silently skipped.",
+    "Do not replace separate creation_index plan proof with the current final projection.",
+    "A one-member projection is bounded by that member payload, not literally constant byte size. Do not claim all remaining full-plan reads disappear.",
+    "Preserve image-before-incident diagnostic priority within each captured node and node-phase before edge-phase when choosing relational violations; materialization must not silently turn missing reference errors into NULL matches.",
+    "Do not collapse distinct original references or full row values through generic DISTINCT/EXCEPT. Only typed edge membership intentionally has set semantics.",
+    "Projection must remain private to final after-phase usage; generic before-image identity resolution still prefers after state and cannot be reused blindly."
+  ],
+  "verification_plan": "Review completed exact source, then existing meaningful owned/edge/writer-revocation/parallel-inventory controls and unchanged original1000-node/1000-edge matrix. No new framework, deadline or workload relaxation. Successful basic controls do not establish performance.",
+  "parent_reported_prior_evidence": {
+    "initial_scope_buffer": "8 basic native tests PASS28.274s; original matrix81781 still FAIL57014,1000-node apply7533ms+commit5007ms and1000-edge apply10026ms with no edge commit.",
+    "interpretation": "No demonstrated practical performance success; this plan targets the observed final image/identity path."
+  },
+  "reviewer_native_runs": 0,
+  "independent_child_review": "Read-only identity/projection/delete/NULL analysis agrees."
+}

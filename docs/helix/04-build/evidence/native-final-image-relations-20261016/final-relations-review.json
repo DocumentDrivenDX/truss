@@ -1,0 +1,44 @@
+{
+  "status": "SOURCE_CLEAR_PARENT_BASIC_AND_ORIGINAL_SMALL_MATRIX_PASS_PERFORMANCE_UNQUALIFIED",
+  "reviewer": "Astra Ultra",
+  "scope": "Final-after-only relational physical comparison; existing initial-scope buffering retained as separately reviewed pending change.",
+  "base_commit": "2a8bd1fee8ee8d644e6d47fff37145ff161170bb",
+  "findings": [],
+  "file_sha256": {
+    "packages/postgresql/owned-groups/finalize.sql": "2fd317c7199fd4ca37cd75bf1fc8c758993cad49e55ab241911eec00159164d2",
+    "packages/postgresql/owned-groups/execute.sql": "c7b93df5c7397d5f88cf69324fafd201797d64b74ef7d8ee26adcf8a647ad974",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "0553923dccb1636070f8bd14d7f64d8d37eafadddd1dcaf36c7d813398dcbf8e",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "1d4f02b4de6e7981e728bc72bdf9591945ce8be2d287e51b4205c7b7764ff452"
+  },
+  "verified": [
+    "All executable code from BEGIN through check_final early return is byte-identical to HEAD; final forest/root tail is byte-identical.",
+    "Identity/object-image/edge-image helper definitions are unchanged, including genuine sealed-create result and independent creation_index operation proof.",
+    "Each final node/edge own identity is resolved once from exact selected after-member projection plus original catalogRevision and checked attempt, including deleted members. Dictionaries use original reference keys and ordered aggregate.",
+    "Root/endpoint dictionary misses retain full checked-plan helper fallback, preserving before-state and boundary resolution; deleted images do not resolve unused root/endpoints.",
+    "Expected image reconstruction matches original helpers field-for-field, retaining unknown image keys, numeric ID/type casts, root SQL-null and orderKey text behavior.",
+    "LEFT JOIN whole-row JSONB plus IS DISTINCT FROM preserves missing-live and present-deleted refusal, and deleted-absent success.",
+    "Incident check covers every final node including deleted and exact typed live edge membership; parallel identities remain distinct.",
+    "Node violation selection retains captured ordinality and physical-image-before-incident priority; edge comparison runs after successful node checks.",
+    "Generated owned.sql/hash checks pass; no function/signature/grant, schema, capacity or deadline change."
+  ],
+  "limits": [
+    "Eager materialized identity/root resolution may reorder exceptions when multiple captured states are corrupted; source/admission checks remain unchanged and no arbitrary-corruption diagnostic-order equivalence is claimed.",
+    "The incident EXISTS remains correlated per final node inside the relational query; no single physical edge scan or workload performance improvement is asserted.",
+    "Missing-dictionary boundary fallback can still read the full plan; independent original-create plan checks remain."
+  ],
+  "reviewer_checks": [
+    "Exact diff and helper equivalence review",
+    "Independent read-only child review agrees",
+    "build-owned-runtime.py --check PASS",
+    "git diff --check PASS"
+  ],
+  "plan_review": "/private/tmp/truss-main-final-image-relations-plan-astra-20261016.json",
+  "reviewer_native_runs": 0,
+  "completion_review": "/private/tmp/truss-main-final-image-relations-completed-astra-20261016.json",
+  "parent_reported_completion": {
+    "basic_tests": "8 PASS32.179s",
+    "matrix_session": "57220",
+    "matrix": "Original1000-node/1000-edge full matrix PASS with cleanup,1000ID/100key reads,200committedsingleupdates and5changed1000-updategroups/reopenedreadback.",
+    "performanceQualification": "not_evaluated"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "status": "COMPLETED_ITERATION_CLEAR_FUNCTIONAL_MATRIX_PASS_PERFORMANCE_NOT_QUALIFIED",
+  "reviewer": "Astra Ultra",
+  "scope": "Exactly four pending runtime files plus bounded native-final-image-relations evidence directory.",
+  "base_commit": "2a8bd1fee8ee8d644e6d47fff37145ff161170bb",
+  "findings": [],
+  "source_hashes": {
+    "packages/postgresql/owned-groups/execute.sql": "c7b93df5c7397d5f88cf69324fafd201797d64b74ef7d8ee26adcf8a647ad974",
+    "packages/postgresql/owned-groups/finalize.sql": "2fd317c7199fd4ca37cd75bf1fc8c758993cad49e55ab241911eec00159164d2",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "0553923dccb1636070f8bd14d7f64d8d37eafadddd1dcaf36c7d813398dcbf8e",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "1d4f02b4de6e7981e728bc72bdf9591945ce8be2d287e51b4205c7b7764ff452"
+  },
+  "evidence_hashes": {
+    "docs/helix/04-build/evidence/native-final-image-relations-20261016/README.md": "6f8f2712de562016451a0205773e878980028d5369692bacc584b394f4a28bd3",
+    "docs/helix/04-build/evidence/native-final-image-relations-20261016/basic-native.log": "34609c3feeff64966c03b75614957e7d02af1d4e321d198509950d7383a01aab",
+    "docs/helix/04-build/evidence/native-final-image-relations-20261016/final-relations-matrix.json": "ada363d523c551d957da7fdfa2cb7bd18d734afd8cb237737382ea58078c8066",
+    "docs/helix/04-build/evidence/native-final-image-relations-20261016/final-relations-matrix.log": "a264bdff80b2c68f4c0eefae1c1f6398525dfe798a1d6bc1cb90308ef3e2163c",
+    "docs/helix/04-build/evidence/native-final-image-relations-20261016/final-relations-plan-review.json": "7871d19ab02da3b9a9b5d7e7dd4d66d0ee308c8f01cd8d7e0d89ce801661cc39",
+    "docs/helix/04-build/evidence/native-final-image-relations-20261016/final-relations-review.json": "451ba324197b6800bab7eb24283a4b1d2602a953c6a5c2b889df756790bb6eac",
+    "docs/helix/04-build/evidence/native-final-image-relations-20261016/scope-buffer-matrix-failed.json": "a5a74fef2f252638a93381cab0fa3f4d521d7817e23abeeeeb376c82dea562d7",
+    "docs/helix/04-build/evidence/native-final-image-relations-20261016/scope-buffer-plan-review.json": "778d5575bcb1436e7f462d8269c52f42c8ab296bac5fb58ec598c49e47809e5a",
+    "docs/helix/04-build/evidence/native-final-image-relations-20261016/scope-buffer-review.json": "379dd2d5174c1aa653725928478215ce7d1daa611aebb8342ebc4542fdb88471",
+    "docs/helix/04-build/evidence/native-final-image-relations-20261016/source-pins.json": "ba701c4e5cc28717ec9e86a1126c632663d67c360fbc0121370b87def9bcead2"
+  },
+  "verified": [
+    "All four runtime hashes equal the reviewed source candidate and retained source-pins inventory; final source is unchanged from source clearance.",
+    "Pinned benchmark script hash matches actual runner. Console summary equals the corresponding complete JSON report fields.",
+    "Every reported sample has status ok, including server cleanup; counts and README rounding agree with actual report.",
+    "Actual runner requires every bulk result to be changed, commits each group and reopens to verify all selected values; unchanged rows are checked for smaller groups.",
+    "Eight basic native tests pass in retained log32.179s. Initial-scope-buffer-only timeout is retained as failed evidence.",
+    "README distinguishes local small-schema functional completion from unevaluated performance,1024 release gates and other schemas/platforms.",
+    "Tracked sourceCommit is base2a8bd1fe with sourceWorkingTreeDirty=true; exact runtime content is qualified by source hashes, not falsely attributed to the unmodified base commit."
+  ],
+  "parent_executed_result": {
+    "matrix_session": "57220",
+    "matrix_passed": true,
+    "elapsed_seconds": 133.5843607080169,
+    "basic_tests": 8,
+    "basic_seconds": 32.179,
+    "nodes": 1000,
+    "edges": 1000,
+    "id_reads": 1000,
+    "key_reads": 100,
+    "committed_single_updates": 200,
+    "changed_1000_update_groups": 5,
+    "reopened_values_verified": true,
+    "observed_atomic_sizes": [
+      1,
+      100,
+      1000
+    ],
+    "metrics": {
+      "bulk_create": {
+        "attempts": 1,
+        "p50Ms": 7455.749292
+      },
+      "bulk_create_commit": {
+        "attempts": 1,
+        "p50Ms": 4864.324958
+      },
+      "bulk_edges": {
+        "attempts": 1,
+        "p50Ms": 8612.39375
+      },
+      "bulk_edges_commit": {
+        "attempts": 1,
+        "p50Ms": 4334.944333
+      },
+      "read_by_id": {
+        "attempts": 1000,
+        "p50Ms": 3.8102295,
+        "p95Ms": 4.319416
+      },
+      "read_by_key": {
+        "attempts": 100,
+        "p50Ms": 5.5952915,
+        "p95Ms": 5.9925
+      },
+      "single_update_including_commit": {
+        "attempts": 200,
+        "p50Ms": 20.021271,
+        "p95Ms": 23.826708
+      },
+      "bulk_update_1000": {
+        "attempts": 5,
+        "p50Ms": 9987.786084
+      },
+      "bulk_update_commit_1000": {
+        "attempts": 5,
+        "p50Ms": 4004.457083
+      },
+      "bulk_update_end_to_end_1000": {
+        "attempts": 5,
+        "p50Ms": 14019.667042
+      }
+    }
+  },
+  "qualification": {
+    "performance": "not_evaluated",
+    "machine": "macOS-27.0.1-arm64-arm-64bit",
+    "postgresql": "18.6",
+    "schema": "small generated scalar case only",
+    "statement_timeout_ms": 10000,
+    "operation_timeout_ms": 30000,
+    "durability": {
+      "fsync": "on",
+      "full_page_writes": "on",
+      "server_version": "18.6",
+      "shared_buffers": "16384",
+      "synchronous_commit": "on"
+    },
+    "remaining": "No1024-operation release, all-schema or cross-platform qualification. Changed1000-update apply median remains near statement deadline; no statistical or causal speedup claim."
+  },
+  "reviewer_execution": "Read-only source/evidence/hash review; no native or performance execution.",
+  "commit_readiness": "Clear for exact four-file runtime increment and bounded evidence; installed/release gates remain independent."
+}

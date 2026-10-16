@@ -1,0 +1,253 @@
+{
+  "runtimeManifestSha256": "75ff3c267ac26afcd39b14687347f0db24ca9e390263c2b1bc572e6124a4745b",
+  "sourceCommit": "2a8bd1fee8ee8d644e6d47fff37145ff161170bb",
+  "sourceWorkingTreeDirty": true,
+  "machine": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.17",
+  "trussSource": "/private/tmp/truss-main-integration-20261010",
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "expectedAtomicGroupLimit": 1024,
+  "warmupReads": 20,
+  "seconds": 27.152112292009406,
+  "passed": false,
+  "functionalPassed": false,
+  "performanceQualification": "not_evaluated",
+  "capacityScope": {
+    "targetAtomicOperations": 1024,
+    "configuredExpectedAtomicOperations": 1024,
+    "attemptedAtomicGroupSizes": [
+      1000
+    ],
+    "committedAtomicGroupSizes": [
+      1000
+    ],
+    "qualification": "Only observed attempts and commits; configured limits do not establish actual maximum capacity."
+  },
+  "cases": [
+    {
+      "sample": "small",
+      "status": "failed",
+      "workload": {
+        "id": "small",
+        "types": 1,
+        "fieldsPerType": 4,
+        "shape": "scalar",
+        "nodes": 1000,
+        "edges": 1000,
+        "indexedPropertiesPerType": 1,
+        "distribution": "uniform",
+        "tier": "smoke"
+      },
+      "schemaBytes": 1224,
+      "records": 1,
+      "elements": 5,
+      "actions": 0,
+      "databaseSettings": {
+        "fsync": "on",
+        "full_page_writes": "on",
+        "server_version": "18.6",
+        "shared_buffers": "16384",
+        "synchronous_commit": "on"
+      },
+      "bulkCreateIncludingCommitMs": 12539.90575,
+      "bulkCreateRowsPerSecondIncludingCommit": 79.7454159493982
+    }
+  ],
+  "summary": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 3100.000083,
+      "failedElapsedMs": [],
+      "p50Ms": 3100.000083,
+      "minMs": 3100.000083,
+      "maxMs": 3100.000083
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 253.365042,
+      "failedElapsedMs": [],
+      "p50Ms": 253.365042,
+      "minMs": 253.365042,
+      "maxMs": 253.365042
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 7532.92875,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 132.7504922969038,
+      "p50Ms": 7532.92875,
+      "minMs": 7532.92875,
+      "maxMs": 7532.92875
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 5006.887917,
+      "failedElapsedMs": [],
+      "p50Ms": 5006.887917,
+      "minMs": 5006.887917,
+      "maxMs": 5006.887917
+    },
+    {
+      "case": "small",
+      "operation": "bulk_edges",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 1,
+      "totalElapsedMs": 10026.216167,
+      "failedElapsedMs": [
+        10026.216167
+      ]
+    },
+    {
+      "case": "small",
+      "operation": "install",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 492.02325,
+      "failedElapsedMs": [],
+      "p50Ms": 492.02325,
+      "minMs": 492.02325,
+      "maxMs": 492.02325
+    },
+    {
+      "case": "small",
+      "operation": "prepare",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 225.023583,
+      "failedElapsedMs": [],
+      "p50Ms": 225.023583,
+      "minMs": 225.023583,
+      "maxMs": 225.023583
+    },
+    {
+      "case": "small",
+      "operation": "register",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 128.418708,
+      "failedElapsedMs": [],
+      "p50Ms": 128.418708,
+      "minMs": 128.418708,
+      "maxMs": 128.418708
+    },
+    {
+      "case": "small",
+      "operation": "registrar_catalog_view",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 12.387291,
+      "failedElapsedMs": [],
+      "p50Ms": 12.387291,
+      "minMs": 12.387291,
+      "maxMs": 12.387291
+    },
+    {
+      "case": "small",
+      "operation": "registration_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 5.088041,
+      "failedElapsedMs": [],
+      "p50Ms": 5.088041,
+      "minMs": 5.088041,
+      "maxMs": 5.088041
+    }
+  ],
+  "samples": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "rows": 1,
+      "ms": 3100.000083,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "install",
+      "rows": 1,
+      "ms": 492.02325,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "prepare",
+      "rows": 1,
+      "ms": 225.023583,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "register",
+      "rows": 1,
+      "ms": 128.418708,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "registrar_catalog_view",
+      "rows": 1,
+      "ms": 12.387291,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "registration_commit",
+      "rows": 1,
+      "ms": 5.088041,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create",
+      "rows": 1000,
+      "ms": 7532.92875,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create_commit",
+      "rows": 1000,
+      "ms": 5006.887917,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "bulk_edges",
+      "rows": 1000,
+      "ms": 10026.216167,
+      "status": "failed",
+      "error": "Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error'); native diagnostic: canceling statement due to statement timeout\nCONTEXT:  PL/pgSQL function truss.runtime_owned_identity(uuid,integer,text,text,jsonb,truss.runtime_object_attempt) line 10 at IF\nPL/pgSQL function truss.runtime_owned_edge_image(uuid,integer,text,text,jsonb,truss.runtime_object_attempt) line 8 at assignment\nPL/pgSQL function truss.runtime_owned_group_validate(uuid,boolean) line 176 at IF\nSQL statement \"SELECT truss.runtime_owned_group_validate(attempt.id,true)\"\nPL/pgSQL function truss.object_group_finish(uuid) line 68 at PERFORM\nPL/pgSQL function truss.apply_group(bytea,bytea,bytea,text,text) line 15 at assignment"
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "rows": 1,
+      "ms": 253.365042,
+      "status": "ok"
+    }
+  ],
+  "scope": "Actual public workflows on isolated local PostgreSQL. Connection reopen, not server restart. Cold server/install separate. Only the selected generated cases; indexes are unique business-key properties."
+}

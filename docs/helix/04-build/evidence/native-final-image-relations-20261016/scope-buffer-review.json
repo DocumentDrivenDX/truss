@@ -1,0 +1,51 @@
+{
+  "reviewer": "Astra Ultra",
+  "worktree": "/private/tmp/truss-main-integration-20261010",
+  "base_commit": "984d6a65569adb084c6868fcfd8f5674c5a23ea3",
+  "findings": [],
+  "constraints": [
+    "Preserve original metadata/definition lookups, loop sorting and node_order appends.",
+    "Buffer the exact existing one-entry JSONB object per iteration; this preserves keys, values, JSON nulls and immediate SQL NULL-key refusal.",
+    "Coalesce empty aggregation to an empty JSONB object; order duplicate-key aggregation by captured iteration ordinality to preserve last-wins semantics.",
+    "Keep full operation preparation, final graph/forest/multiplicity checks, authority checks, limits and deadlines unchanged."
+  ],
+  "source_references": [
+    "packages/postgresql/owned-groups/execute.sql:60",
+    "packages/postgresql/owned-groups/execute.sql:87",
+    "packages/postgresql/owned-groups/execute.sql:103"
+  ],
+  "performance_qualification": "None. This removes repeated growing-map concatenation at one source hotspot; the original1000-node/1000-edge workload remains unqualified until an actual complete pass.",
+  "reviewer_native_runs": 0,
+  "status": "SOURCE_CLEAR_PARENT_BASIC_NATIVE_PASS_PERFORMANCE_UNQUALIFIED",
+  "file_sha256": {
+    "packages/postgresql/owned-groups/execute.sql": "c7b93df5c7397d5f88cf69324fafd201797d64b74ef7d8ee26adcf8a647ad974",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "930af73b1cc3c1ec51ac01ec9e9872c4903348c7076932a7abd5cec9b900e179",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "75ff3c267ac26afcd39b14687347f0db24ca9e390263c2b1bc572e6124a4745b"
+  },
+  "completed_source": [
+    "Final source buffers each original one-entry jsonb_build_object in jsonb[] and flattens through WITH ORDINALITY plus jsonb_each.",
+    "Both jsonb_object_agg calls order by iteration ordinality and coalesce to the original empty object. Loop sorting, original lookups and node_order remain unchanged.",
+    "Diff changes only the two initial map accumulations and their local declarations/materializations; operation loop and final validation bodies remain unchanged.",
+    "No routine/signature/grant, table, capacity or deadline changes.219-routine inventory remains structurally unchanged."
+  ],
+  "reviewer_checks": [
+    "Exact three-file diff reviewed against current HEAD",
+    "build-owned-runtime.py --check passed; generated source and all manifest-covered hashes agree",
+    "git diff --check passed",
+    "Independent child read-only dependency/error-order review agrees"
+  ],
+  "parent_reported_native": {
+    "session": "67704",
+    "result": "8 basic native tests PASS",
+    "elapsed_seconds": 28.274,
+    "scope": "Existing meaningful owned/edge controls; no unchanged1000-edge matrix success claimed."
+  },
+  "performance_followup": {
+    "session": "81781",
+    "result": "FAIL unchanged original matrix with edge57014 before commit",
+    "node_apply_ms": 7533,
+    "node_commit_ms": 5007,
+    "edge_apply_ms": 10026,
+    "source_adoption": "Parent retains uncommitted; no improvement claim."
+  }
+}
