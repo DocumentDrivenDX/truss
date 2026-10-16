@@ -1,0 +1,44 @@
+{
+  "scope": "Read-only expression diagnostic on one genuinely admitted original1024-operation carrier, rolled back without effects/finish/commit. Materialized decoded payload models selected_input; aggregate EXPLAIN plans do not establish PLpgSQL cached-plan or whole workflow costs. No product changes or admission/census removal.",
+  "sourceCommit": "e6bcb39b0375a224a91ac9045b7cdcd65146d79c",
+  "statementTimeoutMs": 10000,
+  "inputBytes": 288319,
+  "inputSha256": "de5f45c29cd6cdadeb82ffdd79a7dbbbededff30917c2a5b8f05cb0a6e6e0425",
+  "documentBytes": 4247,
+  "documentsSha256": "7d94366217fcdedcb06fc3e3fa724e580ecee26e07da7b90c012f9bd8869f5fd",
+  "runtimeManifestSha256": "c9221e8b0fe5a90de7f056ced84fde460c36f0d3faceff7a2348ed01c0586f20",
+  "originalCarrierMatched": true,
+  "derivedBytesEquality": {
+    "operations": 1024,
+    "allIdentical": true,
+    "totalLeafBytes": 930816
+  },
+  "result": "All1024derivedbytesidentical; three alternating expression samples each captured",
+  "callerRollback": "completed",
+  "fixtureCleanup": "completed",
+  "executionMs": {
+    "derive_each": [
+      5.297,
+      5.45,
+      5.748
+    ],
+    "documents_jsonb_decode": [
+      6.929,
+      7.276,
+      7.064
+    ],
+    "documents_unique_json": [
+      6.456,
+      6.669,
+      6.665
+    ],
+    "precomputed_base_control": [
+      4.627,
+      4.639,
+      4.729
+    ]
+  },
+  "interpretation": "Do not implement carrier-base cache or document-parse abstraction: aggregate expression costs are milliseconds, not seconds. Not PLpgSQL/capacity/net optimization qualification.",
+  "overlap": "SDK owner reported brief Rust33009 overlap, no nativeDB; not isolated timing or causal speedup evidence.",
+  "astraReview": "Evidence scope clear: actual aggregate expression placement/1024 rows, once-parsed parent, control-only once-built base; all1024 exactbytes/nonNULL verified; rollback/cleanup and timings agree. No capacity approval."
+}
