@@ -128,7 +128,9 @@ class RealWorkflows(PublicCatalogRuntimeTests):
         name='p1' if workload else fields[record+'.name'].get('name',record+'.name')
         def apply(operations):
             context=ok(assembly.group_context_in_transaction(tx))
-            result=ok(assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun')))
+            outcome=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+            if not isinstance(outcome,Ok):raise AssertionError(repr(outcome)+'; native-test diagnostic: '+str(host._custody.last_attempt.error))
+            result=outcome.value
             if not isinstance(result,GroupSuccess):raise AssertionError(repr(result)+'; native-test diagnostic: '+str(host._custody.last_attempt.error))
             return result
         def rebind():
@@ -150,6 +152,13 @@ class RealWorkflows(PublicCatalogRuntimeTests):
             if last<count:rebind()
         case['bulkCreateIncludingCommitMs']=(time.perf_counter_ns()-start)/1e6
         case['bulkCreateRowsPerSecondIncludingCommit']=count/(case['bulkCreateIncludingCommitMs']/1000)
+        if args.profile_native_functions:
+            retained=self.admin.execute('''SELECT count(*),coalesce(sum(pg_column_size(plan)),0),
+                coalesce(sum(octet_length(plan::text)),0),coalesce(max(octet_length(plan::text)),0),
+                coalesce(sum((SELECT count(*) FROM jsonb_object_keys(plan->'beforeNodes'))),0),
+                coalesce(sum((SELECT count(*) FROM jsonb_object_keys(plan->'afterNodes'))),0)
+                FROM truss.runtime_owned_operation''').fetchone()
+            case['retainedPlanningAfterLoad']=dict(zip(('plans','storedDatumBytes','logicalJsonBytes','maximumLogicalPlanBytes','beforeNodeReferences','afterNodeReferences'),map(int,retained)))
         if len(identities)!=count:raise AssertionError('Wrong created count')
         # SQL is used only for independent verification, never to seed data.
         if self.admin.execute('SELECT count(*) FROM truss.object').fetchone()[0]!=count:raise AssertionError('Wrong persisted object count')
