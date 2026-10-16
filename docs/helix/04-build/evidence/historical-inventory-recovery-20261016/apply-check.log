@@ -1,0 +1,16 @@
+error: patch failed: packages/postgresql/native/catalog-new-inventory.sql:2
+error: packages/postgresql/native/catalog-new-inventory.sql: patch does not apply
+error: patch failed: packages/postgresql/src/acceptance-json.ts:14
+error: packages/postgresql/src/acceptance-json.ts: patch does not apply
+error: patch failed: packages/umf-bun/src/catalog-assertion-observations.ts:1
+error: packages/umf-bun/src/catalog-assertion-observations.ts: patch does not apply
+error: patch failed: packages/umf-bun/src/catalog-core-assertion-identities.ts:6
+error: packages/umf-bun/src/catalog-core-assertion-identities.ts: patch does not apply
+error: patch failed: packages/umf-bun/src/catalog-observation-coverage.ts:7
+error: packages/umf-bun/src/catalog-observation-coverage.ts: patch does not apply
+error: patch failed: packages/umf-bun/src/catalog-report-correspondence.ts:1
+error: packages/umf-bun/src/catalog-report-correspondence.ts: patch does not apply
+error: patch failed: packages/umf-bun/src/catalog-report-preparation.ts:1
+error: packages/umf-bun/src/catalog-report-preparation.ts: patch does not apply
+error: patch failed: packages/umf-bun/src/index.ts:1
+error: packages/umf-bun/src/index.ts: patch does not apply

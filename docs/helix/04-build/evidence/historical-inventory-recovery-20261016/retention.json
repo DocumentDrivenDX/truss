@@ -1,0 +1,61 @@
+{
+  "files": {
+    "source-manifest.json": {
+      "sha256": "8b43d2667412af7021a96b7646fe97b6a6b69e446fdd018dd71d5d8cd559d652",
+      "bytes": 293252
+    },
+    "audit.json": {
+      "sha256": "f30b5736097396895563ad3efc0b2c61ffda5875225f29c511bfb7efe27205b6",
+      "bytes": 5196
+    },
+    "apply-check.log": {
+      "sha256": "b4bd8f6cafef09eb82f6287e7344c966e961586c65be56a86ecc4e2de9d2f3b5",
+      "bytes": 1211
+    },
+    "retention-review.zip": {
+      "sha256": "1f4fc9568d66c0cc90562e62fc3482ea02aa02d79c15179ac29d6684848f5068",
+      "bytes": 2970632
+    },
+    "historical-umf-inventory-composition-browser.json": {
+      "sha256": "91966f6c30e034398e67705e524f23cfb26fe95cc0ded58a3b01fc3a8fb69955",
+      "bytes": 94330
+    },
+    "historical-umf-inventory-composition.json": {
+      "sha256": "ea488b6ba7661d4968bbcba17bec3b5756f0ac9424a126eca383bcf716d058e1",
+      "bytes": 168630
+    },
+    "README.md": {
+      "sha256": "2ea68940e4a8b5e793297f0b92f3d2bf8fd4c51383ddd8a487944c3d49180c82",
+      "bytes": 3819
+    },
+    "historical-umf-dataset-browser.json": {
+      "sha256": "c0c16e1ed06d96737fcd421d744e2a9b760009af788eb13b024bc2c766999574",
+      "bytes": 1417
+    },
+    "retention-review.manifest.json": {
+      "sha256": "37d582bc4df14402fb237d54b32202e147ced0c5d7c234d92d9fd35ace4f5e9a",
+      "bytes": 3283
+    },
+    "record-rebuild-manifest.json": {
+      "sha256": "bab1260225588835df4c70867318626d01caf005137ffb2edfc8dd57ce2c1bd0",
+      "bytes": 878
+    },
+    "historical-component.patch": {
+      "sha256": "c39b4b8f28c7607a639f0ea30af41e0e10958cd21a2c5a80c56fbbe0b5d97833",
+      "bytes": 49861
+    },
+    "historical-current-source.tar.gz": {
+      "sha256": "73c58d677eeada9673d2519e686f944097a1465e910c3bce1afcff9846e2e8a9",
+      "bytes": 2930638
+    },
+    "retention-review.json": {
+      "sha256": "987bbe9b3999b0c80ec178deeff064cef0c9a71c22f7c845b453c80d1fbba1c9",
+      "bytes": 4036
+    }
+  },
+  "sourceFiles": 1006,
+  "primaryUntouched": true,
+  "runtimeIntegrated": false,
+  "acceptancePromoted": false,
+  "independentReview": "retention-only; no findings"
+}

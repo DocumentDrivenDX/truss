@@ -1,0 +1,55 @@
+{
+  "status": "no-findings-within-retention-scope",
+  "findings": [],
+  "startedAt": "2026-10-16T20:50:00Z",
+  "completedAt": "2026-10-16T20:51:58.513355+00:00",
+  "packet": "/private/tmp/truss-historical-inventory-recovery-packet-20261016",
+  "retentionSha256": "2aaf97914434efbc19d298af24750418c03bf142f4cc863af40ea77af795de39",
+  "scope": "Hash/byte preservation and recovery qualification only; not review/adoption of the 1006 source implementations or a current implementation qualification.",
+  "independentChecks": {
+    "retainedFiles": 10,
+    "regularArchiveMembers": 1006,
+    "archiveBytes": 51464888,
+    "manifestCoverage": "Exact one-to-one member/path correspondence; no duplicate names, traversal paths, links, missing or extra files; every SHA256 and byte count matches.",
+    "historicalRelativePins": 1002,
+    "matchingHistoricalPins": 984,
+    "driftedHistoricalPins": 18,
+    "allHistoricalRelativePathsPreserved": true,
+    "currentPrimaryEndpointMismatches": 0,
+    "selectedSourcePins": 38,
+    "originalReceiptsByteIdentical": 3,
+    "browserRelativePins": 6,
+    "browserDrift": [
+      "packages/umf-bun/src/index.ts"
+    ],
+    "datasetRelativePinsMatching": 4,
+    "missingAbsoluteProducerArtifacts": 4,
+    "inspectionManifestSourcePins": 769,
+    "independentlyReproducedGitApplyConflicts": 8,
+    "recordRebuildBundleDiffersFromOriginal": true
+  },
+  "conclusions": [
+    "No source bytes are lost within the declared current snapshot. It is correctly distinguished from the old passing snapshot: the 18 historical-relative mismatches and separate browser index mismatch remain explicit.",
+    "All three historical component/browser receipts are byte-identical to the original primary evidence files. Their supplied/synthetic/finite parity scope is retained; none qualifies current implementation, full native populations, support, admission or acceptance.",
+    "Independent git apply --check against the exact main base reproduced the same eight failed paths. No patch was applied. The recovery preserves the old diff without replacing current runtime files.",
+    "Record rebuild b16e643f is explicitly a mismatch against historical81e99f; missing producer files and the inspection working-snapshot identity remain open recovery obligations. No semantic-equivalence claim substitutes for missing bytes.",
+    "README and retention flags explicitly exclude runtime integration, registration, public activation, native authority/security and case promotion. Required future reconciliation and qualification are appropriately stated."
+  ],
+  "commands": [
+    "python -B audit.py (archive/receipt/source endpoint checks)",
+    "git show 6adf71dc6d32c36d58f59aacfc9c7bb4201c00f7:<each of10patch paths> into reviewer temporary tree; git apply --check <retained patch> (expected refusal)",
+    "Byte comparisons of all three retained receipts against /Users/erik/Projects/truss/docs/helix/04-build/evidence originals"
+  ],
+  "incompleteScope": [
+    "No source semantic audit, producer rebuild, dependency closure reconstruction, browser/native execution or current component test replay.",
+    "The claim that selected later inspection commits mismatch all historical pins was not independently reconstructed; the retained working-snapshot identity and769-pin manifest were checked.",
+    "Endpoint byte equality confirms correspondence at the review observation, not uninterrupted custody, historical absence of edits or ABA exclusion."
+  ],
+  "attemptNotes": "An optional file-location search encountered an inaccessible unrelated temporary path and a process-list request was sandbox denied. Search finished; exact originals were subsequently located under the known primary evidence directory. Neither affected the successful archive audit or modified files.",
+  "nativeExecution": false,
+  "sourceEdits": false,
+  "runtimeAdoption": false,
+  "casePromotion": 0,
+  "workingTreeOutsideResult": "/private/tmp/truss-historical-inventory-recovery-work-20261016",
+  "artifactManifest": "manifest.json"
+}

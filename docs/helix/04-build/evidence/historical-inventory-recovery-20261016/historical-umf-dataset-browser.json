@@ -1,0 +1,26 @@
+{
+  "status": "component-checks-passed",
+  "validationOperation": "validateCoreDatasetValues",
+  "verificationOperation": "verifyCoreDatasetValues",
+  "scope": "Three original supplied-dataset browser parity and verifier recomputation cases; no native population/support/enforcement admission",
+  "browser": "153.0.8010.12",
+  "servedBundleSha256": "702ce5109480b097a7915d13b7c48aa8da5720cda3e6250b07014024b737f5c0",
+  "checks": {
+    "parity": 3,
+    "recomputed": 3
+  },
+  "externalRequests": [],
+  "sourceDigests": {
+    "scripts/check-umf-dataset-browser.ts": "ea31de408e941e764e82c2dd397e61a4e805dd2428575b373a6386e0f49eccc9",
+    "scripts/build-umf-runtime.ts": "9e4bbb8e89c367ca991e8f5510318e8b4ff38221ea7bb756b8f475fe4bf99832",
+    "packages/umf-bun/src/index.ts": "10472e4276c3f1d00a6e6860215a712ba45c74a4dbd45d6eddb90213b66e8342",
+    "tests/catalog-dataset-fixture.ts": "aad3453cb0f97608c5bafe42dcb37f7c394c1d6a808ef0a0532cec165e29d0f3",
+    "/private/tmp/truss-umf-runtime-dJoB15/producer.js": "702ce5109480b097a7915d13b7c48aa8da5720cda3e6250b07014024b737f5c0",
+    "/private/tmp/truss-umf-runtime-dJoB15/producer-manifest.json": "61fa37c35ab3724630f8655713bc30d7c5f78e0e939b80020417502aa9e0da4d"
+  },
+  "sourcesUnchanged": true,
+  "producer": {
+    "sourceRevision": "c7c95e1c4ea5b72541f47fa0350ca467ff02f395",
+    "bundleSha256": "702ce5109480b097a7915d13b7c48aa8da5720cda3e6250b07014024b737f5c0"
+  }
+}

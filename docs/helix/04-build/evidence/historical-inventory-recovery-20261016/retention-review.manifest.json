@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "path": "audit.json",
+      "sha256": "eb0a6d68567f3f715e2208725e15a69151dd38feb86834038c4915f836ce998f",
+      "bytes": 2842
+    },
+    {
+      "path": "audit.log",
+      "sha256": "eb0a6d68567f3f715e2208725e15a69151dd38feb86834038c4915f836ce998f",
+      "bytes": 2842
+    },
+    {
+      "path": "audit.py",
+      "sha256": "509686c44d92fb2779043ade0c30e6b41193043bbeea3931f143c08671ee707f",
+      "bytes": 3507
+    },
+    {
+      "path": "independent-apply-check.json",
+      "sha256": "1f65a4c4295bc02a901416f70839bc8a505350a38f080536b67aea6c1a6353b1",
+      "bytes": 647
+    },
+    {
+      "path": "independent-apply-check.log",
+      "sha256": "b4bd8f6cafef09eb82f6287e7344c966e961586c65be56a86ecc4e2de9d2f3b5",
+      "bytes": 1211
+    },
+    {
+      "path": "original-receipts.json",
+      "sha256": "cb2b26c9975c4426756ea752cbef27027b104df8bb73526aac63db3125a115cc",
+      "bytes": 850
+    },
+    {
+      "path": "package.py",
+      "sha256": "72f4c701490b40a9911ed77bddb4bd4d604d5a259b8e023c04ab74f90322e40c",
+      "bytes": 4711
+    },
+    {
+      "path": "review.json",
+      "sha256": "987bbe9b3999b0c80ec178deeff064cef0c9a71c22f7c845b453c80d1fbba1c9",
+      "bytes": 4036
+    },
+    {
+      "path": "reviewed-inputs/README.md",
+      "sha256": "17c869e5d2f0ae789309df9408d7406f7e28fabeeffeb7f33eff5d1faa35a117",
+      "bytes": 3512
+    },
+    {
+      "path": "reviewed-inputs/apply-check.log",
+      "sha256": "b4bd8f6cafef09eb82f6287e7344c966e961586c65be56a86ecc4e2de9d2f3b5",
+      "bytes": 1211
+    },
+    {
+      "path": "reviewed-inputs/audit.json",
+      "sha256": "f30b5736097396895563ad3efc0b2c61ffda5875225f29c511bfb7efe27205b6",
+      "bytes": 5196
+    },
+    {
+      "path": "reviewed-inputs/historical-component.patch",
+      "sha256": "c39b4b8f28c7607a639f0ea30af41e0e10958cd21a2c5a80c56fbbe0b5d97833",
+      "bytes": 49861
+    },
+    {
+      "path": "reviewed-inputs/historical-current-source.tar.gz",
+      "sha256": "73c58d677eeada9673d2519e686f944097a1465e910c3bce1afcff9846e2e8a9",
+      "bytes": 2930638
+    },
+    {
+      "path": "reviewed-inputs/historical-umf-dataset-browser.json",
+      "sha256": "c0c16e1ed06d96737fcd421d744e2a9b760009af788eb13b024bc2c766999574",
+      "bytes": 1417
+    },
+    {
+      "path": "reviewed-inputs/historical-umf-inventory-composition-browser.json",
+      "sha256": "91966f6c30e034398e67705e524f23cfb26fe95cc0ded58a3b01fc3a8fb69955",
+      "bytes": 94330
+    },
+    {
+      "path": "reviewed-inputs/historical-umf-inventory-composition.json",
+      "sha256": "ea488b6ba7661d4968bbcba17bec3b5756f0ac9424a126eca383bcf716d058e1",
+      "bytes": 168630
+    },
+    {
+      "path": "reviewed-inputs/record-rebuild-manifest.json",
+      "sha256": "bab1260225588835df4c70867318626d01caf005137ffb2edfc8dd57ce2c1bd0",
+      "bytes": 878
+    },
+    {
+      "path": "reviewed-inputs/retention.json",
+      "sha256": "2aaf97914434efbc19d298af24750418c03bf142f4cc863af40ea77af795de39",
+      "bytes": 1615
+    },
+    {
+      "path": "reviewed-inputs/source-manifest.json",
+      "sha256": "8b43d2667412af7021a96b7646fe97b6a6b69e446fdd018dd71d5d8cd559d652",
+      "bytes": 293252
+    }
+  ],
+  "artifactCount": 19,
+  "totalBytes": 3571186,
+  "excludes": [
+    "manifest.json (self)"
+  ]
+}
