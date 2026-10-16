@@ -6,7 +6,7 @@ import json
 from .contracts import ProfilePin, QualifiedOwner, ExactArtifact
 from .catalog_view import (CatalogDefinitionReference, CatalogDocumentProvenance,
     CatalogDefinitionEntry, CatalogView)
-from ._catalog_definition_source import extract_definition
+from ._catalog_definition_source import extract_definitions
 from ._owner_evidence_json import decode_owner_evidence_json
 
 _EXTRACTION_RULE=b'UTF-8 JSON value slice at RFC6901 pointer; exclude surrounding whitespace; preserve original tokens; v1'
@@ -45,7 +45,7 @@ def encoded(value):
 
 def build_catalog_view(basis,layout_profile):
     if not basis['revision'].isascii() or not basis['revision'].isdigit() or not 1<=int(basis['revision'])<=2147483647:raise ValueError('Retained accepted revision required')
-    archives={};occurrences={}
+    archives={};occurrences={};fragments={}
     for document in basis['documents']:
         original=document['document'].encode('utf-8')
         if sha256(original).hexdigest()!=document['content_sha256']:raise ValueError('Original archive digest required')
@@ -54,15 +54,23 @@ def build_catalog_view(basis,layout_profile):
         archive_key=(document['rev'],document['ord'],document['doc_id'])
         if archive_key in archives:raise ValueError('Unique accepted archive required')
         archives[archive_key]=(document,original)
+        pointers=[]
         for mi,module in enumerate(parsed['modules']):
             for ei,element in enumerate(module['elements']):
                 address=(archive_key,(document['doc_id'],module['id'],element['id']))
                 if address in occurrences:raise ValueError('Unique source definition required')
-                occurrences[address]=(element,f'/modules/{mi}/elements/{ei}')
+                pointer=f'/modules/{mi}/elements/{ei}'
+                occurrences[address]=(element,pointer)
+                pointers.append(pointer)
+                if element.get('kind')=='record':
+                    pointers.extend(pointer+f'/keys/{ki}' for ki,_ in enumerate(element.get('keys',[])))
             for ri,rel in enumerate(module.get('relationships',[])):
                 address=(archive_key,(document['doc_id'],module['id'],'relationship',rel['id']))
                 if address in occurrences:raise ValueError('Unique source relationship required')
-                occurrences[address]=(rel,f'/modules/{mi}/relationships/{ri}')
+                pointer=f'/modules/{mi}/relationships/{ri}'
+                occurrences[address]=(rel,pointer)
+                pointers.append(pointer)
+        fragments[archive_key]=extract_definitions(original,pointers)
     entries=[];references={};sources={};native={}
     def archive_key(row):
         return (row['definition_rev'],row['definition_doc_ord'],row['definition_document_id'])
@@ -71,7 +79,7 @@ def build_catalog_view(basis,layout_profile):
         doc,original=archives[archive_key(row)]
         if row['definition_document_id']!=address[0] or row['definition_doc_ord']!=doc['ord'] or row['definition_rev']!=doc['rev']:
             raise ValueError('Accepted native source provenance required')
-        fragment=extract_definition(original,pointer)
+        fragment=fragments[archive_key(row)][pointer]
         digest=sha256(fragment).hexdigest()
         pin=sha256(encoded([doc['rev'],doc['ord'],doc['content_sha256'],pointer,wire(EXTRACTION_PROFILE),digest])).hexdigest()
         reference=CatalogDefinitionReference(kind=kind,definition_pin=pin,

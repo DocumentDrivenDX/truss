@@ -56,3 +56,58 @@ def extract_definition(original: bytes,pointer: str) -> bytes:
         start=selected
     _,end=decoder.raw_decode(text,start)
     return text[start:end].encode('utf-8')
+
+
+def extract_definitions(original: bytes, pointers) -> dict[str, bytes]:
+    """Locate requested exact slices in one walk of a strictly validated archive."""
+    decode_owner_evidence_json(original)
+    requested={}
+    prefixes={()}
+    for pointer in pointers:
+        if type(pointer) is not str or (pointer and not pointer.startswith('/')):
+            raise ValueError('An explicit JSON pointer is required')
+        tokens=[]
+        for encoded in pointer.split('/')[1:] if pointer else ():
+            index=0
+            while index<len(encoded):
+                if encoded[index]=='~':
+                    if index+1==len(encoded) or encoded[index+1] not in '01':
+                        raise ValueError('Invalid JSON pointer escape')
+                    index+=1
+                index+=1
+            tokens.append(encoded.replace('~1','/').replace('~0','~'))
+        path=tuple(tokens)
+        requested.setdefault(path,[]).append(pointer)
+        prefixes.update(path[:i] for i in range(len(path)+1))
+    text=original.decode('utf-8')
+    decoder=json.JSONDecoder(parse_float=Decimal)
+    result={}
+    def skip(index):
+        while index<len(text) and text[index] in ' \r\n\t':index+=1
+        return index
+    def visit(start,path):
+        if path not in prefixes or text[start] not in '{[':
+            _,end=decoder.raw_decode(text,start)
+        else:
+            cursor=skip(start+1)
+            closing='}' if text[start]=='{' else ']'
+            ordinal=0
+            while text[cursor]!=closing:
+                if closing=='}':
+                    token,cursor=decoder.raw_decode(text,cursor)
+                    cursor=skip(cursor)
+                    if text[cursor]!=':':raise ValueError('Invalid archived object')
+                    cursor=skip(cursor+1)
+                else:token=str(ordinal)
+                cursor=skip(visit(cursor,path+(token,)))
+                ordinal+=1
+                if text[cursor]==closing:break
+                cursor=skip(cursor+1)
+            end=cursor+1
+        for pointer in requested.get(path,()):
+            result[pointer]=text[start:end].encode('utf-8')
+        return end
+    visit(skip(0),())
+    if len(result)!=len(set(pointer for values in requested.values() for pointer in values)):
+        raise ValueError('Definition pointer does not resolve')
+    return result

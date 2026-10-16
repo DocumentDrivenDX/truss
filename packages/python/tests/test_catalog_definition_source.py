@@ -1,5 +1,5 @@
 import unittest
-from truss._catalog_definition_source import extract_definition
+from truss._catalog_definition_source import extract_definition,extract_definitions
 
 
 class CatalogDefinitionSourceTests(unittest.TestCase):
@@ -20,6 +20,27 @@ class CatalogDefinitionSourceTests(unittest.TestCase):
     def test_invalid_or_duplicate_archive_refuses(self):
         for source in (b'{"a":1,"a":2}',b'{"a":NaN}',b'{"a":1} trailing'):
             with self.assertRaises(ValueError):extract_definition(source,'/a')
+
+    def test_batch_exact_overlapping_unicode_and_escaped_slices(self):
+        record='{"id":"R", "kind":"record", "keys":[{"id":"k", "unknown":{"雪":"✓"}}], "extensions":{"raw":1.2300e+2}}'.encode()
+        field=br'{"id":"F", "kind":"field", "text":"escaped \\\" quote"}'
+        original=(b' { "modules" : [ {"id":"m", "elements":['+record+b','+field+
+                  b'], "relationships":[]}], "a/b":{"~key":["'+ '✓'.encode()+b'",null,true,-0.00]} } ')
+        expected={'':original.strip(),'/modules/0/elements/0':record,
+                  '/modules/0/elements/0/keys/0':'{"id":"k", "unknown":{"雪":"✓"}}'.encode(),
+                  '/modules/0/elements/1':field,'/a~1b/~0key/0':'"✓"'.encode(),
+                  '/a~1b/~0key/3':b'-0.00'}
+        self.assertEqual(extract_definitions(original,tuple(expected)),expected)
+
+    def test_batch_duplicate_requests_and_empty_collections(self):
+        self.assertEqual(extract_definitions(b'{"a": []}',('/a','/a')),{'/a':b'[]'})
+        self.assertEqual(extract_definitions(b'{}',()),{})
+
+    def test_batch_invalid_archive_and_pointer_refuse(self):
+        for original,pointers in ((b'{"a":1,"a":2}',('/a',)),(b'{"a":[0]}',('/a/00',)),
+                                  (b'{"a":0}',('/b',)),(b'{"a":0}',('/a~2',))):
+            with self.subTest(original=original,pointers=pointers):
+                with self.assertRaises(ValueError):extract_definitions(original,pointers)
 
 
 if __name__=='__main__':unittest.main()
