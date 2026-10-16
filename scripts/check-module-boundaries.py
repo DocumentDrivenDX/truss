@@ -2,7 +2,9 @@
 """Enforce the current Python source map; does not execute inspected source.
 
 TypeScript, native SQL, reflection and runtime object visibility require separate
-checks/review. A pass is explicitly Python-only, not architecture qualification.
+checks/review. Cycle checks cover lexically eager imports, not runtime call
+analysis: top-level calls or decorators can execute deferred function imports.
+A pass is explicitly Python-only, not architecture qualification.
 """
 import argparse
 import ast
@@ -13,6 +15,18 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    # Current-policy query composition: explicit orchestration and installer edges.
+    '_current_query_computation': {'contextlib','hashlib','importlib.resources','json','shutil','subprocess','time','truss._current_query_pipe'},
+    '_current_query_evaluation': {'hashlib','json','time','truss._current_query_computation','truss._current_query_pipe','truss._owner_evidence_json','weft.weft'},
+    '_current_query_facts': {'base64','dataclasses','json','truss._current_query_originals','truss._current_query_pipe','truss._current_query_sources','truss._owner_evidence_json','truss._security_catalog_subject_installation','truss._umf_key_tuples'},
+    '_current_query_originals': {'dataclasses','hashlib','json','pathlib','re','truss._current_query_computation','truss._owner_evidence_json','truss._umf_key_tuples','weft.weft'},
+    '_current_query_pipe': {'decimal','json','os','pathlib','selectors','struct','subprocess','threading','time'},
+    '_current_query_protection': {'json','psycopg','re','truss._current_query_sources','truss._current_query_subjects','truss._installation_privileges','truss.catalog_runtime','truss.current_query','truss.execution','truss.psycopg_host'},
+    '_current_query_runtime': {'subprocess','truss._current_query_evaluation','truss._current_query_facts','truss._current_query_pipe','truss._current_query_protection','truss._current_query_sources','truss._current_query_stage','truss._current_query_subjects','truss._installation_privileges','truss._owner_evidence_json','truss._security_catalog_subject_installation','truss.catalog_runtime','truss.execution','truss.psycopg_host','truss.query'},
+    '_current_query_sources': {'dataclasses','hashlib','importlib.resources','json','struct','truss._current_query_originals','truss._current_query_pipe','truss._installation_privileges','truss._security_catalog_assessment','truss._security_catalog_subject_installation','truss._security_graph_source','truss.catalog_runtime','truss.execution','truss.psycopg_host'},
+    '_current_query_stage': {'hashlib','json','psycopg','psycopg.rows','re','truss._current_query_evaluation','truss._owner_evidence_json','truss.catalog_runtime','truss.query','uuid'},
+    '_current_query_subjects': {'dataclasses','hashlib','json','psycopg','truss._current_query_pipe','truss._current_query_protection','truss._current_query_sources','truss._installation_privileges','truss._security_catalog_subject_installation','truss._umf_key_tuples','truss.catalog_runtime','truss.current_query','truss.execution','truss.psycopg_host'},
+    'current_query': {'dataclasses','truss._current_query_originals','truss._current_query_protection','truss._current_query_sources','truss._current_query_subjects','truss.execution','truss.psycopg_host'},
     '_preparation_bridge_inventory': {'importlib.resources','truss._security_source_epoch_installation'},
     '_preparation_compiler_replay': {'dataclasses','hashlib','json','os','pathlib','subprocess','sys','truss._preparation_program','truss.weft'},
     '_preparation_selection': {'dataclasses','psycopg','psycopg.rows','psycopg.types.string','truss._preparation_compiler_replay','truss._preparation_program','uuid'},
@@ -23,22 +37,22 @@ ALLOWED = {
     '_action_role_installation': {'hashlib','importlib.resources','json','truss._action_store','dataclasses','psycopg','truss.bulk_action_gateway','truss._action_identity_codec','truss.psycopg_host','truss.execution','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation'},
     'bulk_action_gateway': {'dataclasses','hashlib','inspect','threading','truss.weft','truss._bulk_set_values','truss._action_identity_codec'},
     '_bulk_set_values': {'decimal','re'},
-    '_action_store': {'dataclasses','hashlib','importlib.resources','json','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._preparation_source_epoch','truss._action_identity_codec','truss._security_catalog_subject_installation'},
+    '_action_store': {'dataclasses','hashlib','importlib.resources','json','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._preparation_source_epoch','truss._action_identity_codec','truss._security_catalog_subject_installation','truss._current_query_protection'},
     '_preparation_program': {'dataclasses','hashlib','json','re','importlib.resources','psycopg','truss.weft','truss._action_store','truss._preparation_source_epoch','truss.psycopg_host','truss.execution'},
     '_preparation_data_claim': {'dataclasses','uuid','truss._engine_preparation','truss._security_catalog_subject_installation','truss.catalog_runtime','truss.execution','truss.psycopg_host'},
     '_action_identity_codec': {'json'},
-    '_action_subject_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.psycopg_host','truss.execution','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation'},
+    '_action_subject_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.psycopg_host','truss.execution','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._current_query_protection'},
     '_scram_preparation_login': {'dataclasses','psycopg'},
     'catalog_preparation': {'hashlib','importlib.resources','json','truss.preparation','truss._catalog_source_reference','truss._catalog_support','truss._catalog_report_semantics'},
     'catalog_report_sources': {'base64','dataclasses','decimal','hashlib','json'},
     '_catalog_source_reference': set(),
-    '_security_preparation_authority': {'dataclasses','hashlib','importlib.resources','uuid','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation'},
-    '_security_catalog_read_cut_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation'},
+    '_security_preparation_authority': {'dataclasses','hashlib','importlib.resources','uuid','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._current_query_protection'},
+    '_security_catalog_read_cut_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._current_query_protection'},
     '_security_catalog_subject_helpers': {'json'},
-    '_security_catalog_subject_installation': {'dataclasses','hashlib','importlib.resources','json','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_source_installation','truss._security_catalog_assessment','truss._security_catalog_subject_helpers'},
-    '_security_graph_subject_installation': {'truss._security_relationship_source','dataclasses','hashlib','importlib.resources','json','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._security_catalog_assessment','truss._security_graph_source','truss._owner_evidence_json'},
-    '_security_graph_epoch_read': {'truss._security_guarded_source','dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._security_graph_source','truss._security_catalog_assessment','truss._psycopg_epoch_cut','truss._owner_evidence_json'},
-    '_security_relationship_epoch_read': {'truss._security_guarded_source','dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._security_relationship_source','truss._security_catalog_assessment','truss._psycopg_epoch_cut','truss._owner_evidence_json'},
+    '_security_catalog_subject_installation': {'dataclasses','hashlib','importlib.resources','json','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_source_installation','truss._security_catalog_assessment','truss._security_catalog_subject_helpers','truss._current_query_protection'},
+    '_security_graph_subject_installation': {'truss._security_relationship_source','dataclasses','hashlib','importlib.resources','json','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._security_catalog_assessment','truss._security_graph_source','truss._owner_evidence_json','truss._current_query_protection'},
+    '_security_graph_epoch_read': {'truss._security_guarded_source','dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._security_graph_source','truss._security_catalog_assessment','truss._psycopg_epoch_cut','truss._owner_evidence_json','truss._current_query_protection'},
+    '_security_relationship_epoch_read': {'truss._security_guarded_source','dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_subject_installation','truss._security_relationship_source','truss._security_catalog_assessment','truss._psycopg_epoch_cut','truss._owner_evidence_json','truss._current_query_protection'},
     '_security_relational_source': {'truss._security_guarded_source','truss._owner_evidence_json'},
     '_security_relationship_source': {'dataclasses','hashlib','truss._owner_evidence_json','truss._security_guarded_source'},
     '_security_guarded_source': {'dataclasses','hashlib','truss._owner_evidence_json'},
@@ -51,12 +65,12 @@ ALLOWED = {
     '_query_runtime': {'base64','datetime','truss.contracts','hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
     '_umf_keys_release': set(),
     '_umf_keys08_release': set(),
-    '_umf_key_tuples': {'base64','truss.contracts','decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._umf_keys_release','truss._umf_keys08_release'},
+    '_umf_key_tuples': {'base64','truss.contracts','decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._umf_keys_release','truss._umf_keys08_release','subprocess','time'},
     '_catalog_definition_source': {'json','decimal','truss._owner_evidence_json'},
     '_group_runtime': {'truss._receipt_position','typing','dataclasses','hashlib','base64','json','truss.contracts','truss.execution','truss.groups','truss.preparation','truss._umf_key_tuples'},
     '_preparation_seal_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._preparation_source_epoch'},
     '_preparation_source_epoch': {'dataclasses','hashlib','importlib.resources','json','re','truss.catalog_runtime','truss.execution','truss.psycopg_host','truss._installation_privileges','truss._security_catalog_assessment','truss._security_source_epoch_installation','truss._psycopg_epoch_cut'},
-    '_preparation_catalog_cut': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_assessment','truss._security_catalog_subject_installation'},
+    '_preparation_catalog_cut': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_assessment','truss._security_catalog_subject_installation','truss._current_query_protection'},
     '_engine_preparation': {'truss._scram_preparation_login','dataclasses','threading','inspect','psycopg','psycopg.rows','psycopg.types.string','truss.psycopg_host','truss._security_catalog_subject_installation','truss.engine_import','truss.execution'},
     'engine_import': {'__future__','typing','hashlib','truss.execution','truss.imports','truss.preparation','truss.catalog_runtime','truss._import_runtime','truss._group_runtime','truss.psycopg_host','psycopg'},
     '_import_runtime': {'contextlib','base64','json','hashlib','uuid','truss.contracts','truss.execution','truss.imports','truss.groups','truss._group_runtime','truss._acceptance_json','truss._umf_key_tuples','truss.psycopg_host','truss.preparation','truss._catalog_report_semantics'},
@@ -74,7 +88,7 @@ ALLOWED = {
     'catalog_view': {'dataclasses','typing','truss.contracts'},
     '_catalog_view_build': {'base64','dataclasses','hashlib','json','truss.contracts','truss.catalog_view','truss._catalog_definition_source','truss._owner_evidence_json'},
     'reader_catalog': {'dataclasses','typing'},
-    'catalog_runtime': {'truss._ownership_migration','truss.catalog_preparation','truss._catalog_source_reference','truss.traversal','decimal','truss.query','truss._query_runtime','truss.import_source','truss.history','truss.catalog_results','truss.capabilities','truss.feed','truss._import_runtime','truss.imports','truss.import_runtime','truss.receipt_visibility','truss._receipt_position','truss.edge_read','truss._umf_key_tuples','base64','truss.reader_catalog','typing','truss.groups','truss._group_runtime','truss.object_read','truss.catalog_view','truss.contracts','truss._catalog_view_build','__future__','dataclasses','hashlib','importlib.resources','json','re','uuid','threading','functools','psycopg','psycopg.types.string','psycopg.types.bool','psycopg.types.numeric','truss.assembly_contracts','truss.execution','truss.psycopg_host','truss.preparation','truss._catalog_support','truss._catalog_report_semantics','truss._installation_privileges','truss._acceptance_json','truss._owner_evidence_json'},
+    'catalog_runtime': {'truss._ownership_migration','truss.catalog_preparation','truss._catalog_source_reference','truss.traversal','decimal','truss.query','truss._query_runtime','truss.import_source','truss.history','truss.catalog_results','truss.capabilities','truss.feed','truss._import_runtime','truss.imports','truss.import_runtime','truss.receipt_visibility','truss._receipt_position','truss.edge_read','truss._umf_key_tuples','base64','truss.reader_catalog','typing','truss.groups','truss._group_runtime','truss.object_read','truss.catalog_view','truss.contracts','truss._catalog_view_build','__future__','dataclasses','hashlib','importlib.resources','json','re','uuid','threading','functools','psycopg','psycopg.types.string','psycopg.types.bool','psycopg.types.numeric','truss.assembly_contracts','truss.execution','truss.psycopg_host','truss.preparation','truss._catalog_support','truss._catalog_report_semantics','truss._installation_privileges','truss._acceptance_json','truss._owner_evidence_json','truss._current_query_protection','truss._current_query_runtime','truss.current_query'},
     '_ownership_migration': {'psycopg'},
     '_installation_privileges': {'dataclasses','psycopg','truss.execution','truss.psycopg_host'},
     '_runtime_profile': {'json', 'importlib.resources'},
@@ -131,7 +145,7 @@ ALLOWED = {
     '_operation_arbitration': {'dataclasses', 'threading', 'truss._host_execution', 'uuid'},
     'execution': {'dataclasses', 'typing'},
     '_installation_archive': {'dataclasses', 'hashlib'},
-    '__init__': {'truss.catalog_preparation','truss.catalog_report_sources','truss.engine_import','truss.traversal','truss.query','truss.import_source','truss.history','truss.capabilities','truss.feed','truss.import_runtime','truss.receipt_visibility','truss.edge_read','truss.reader_catalog','truss._group_runtime','truss.object_read','truss.catalog_view','truss.catalog_runtime','truss.psycopg_host','truss._borrowed_host','truss.installation', 'truss.host', 'truss.assembly', 'truss.assembly_contracts', 'truss.local_runtime', 'truss.execution', 'truss.preparation'},
+    '__init__': {'truss.catalog_preparation','truss.catalog_report_sources','truss.engine_import','truss.traversal','truss.query','truss.import_source','truss.history','truss.capabilities','truss.feed','truss.import_runtime','truss.receipt_visibility','truss.edge_read','truss.reader_catalog','truss._group_runtime','truss.object_read','truss.catalog_view','truss.catalog_runtime','truss.psycopg_host','truss._borrowed_host','truss.installation', 'truss.host', 'truss.assembly', 'truss.assembly_contracts', 'truss.local_runtime', 'truss.execution', 'truss.preparation','truss.current_query'},
     'installation': {'dataclasses','typing','truss.host','truss.execution','truss.psycopg_host'},
     'host': {'typing', 'truss.execution', 'truss._host_call_recovery', 'dataclasses', 'truss._native_bootstrap', 'truss._host_execution', 'truss._native_transactions', 'truss._native_arbitration', 'truss._host_control_custody', 'truss._host_session'},
     'assembly': {'truss.catalog_runtime','__future__', 'typing', 'dataclasses', 'threading', 'truss.contracts', 'truss.assembly_contracts', 'truss.execution', 'truss.psycopg_host', 'truss.installation'},
@@ -214,6 +228,16 @@ def inspect_sources(source: Path):
         except (SyntaxError, UnicodeError) as error:
             errors.append(f'{path.name}: parse failure {error}')
             continue
+        # Function bodies are lexically deferred; class bodies inherit their
+        # surrounding scope. Import permissions still apply at every scope.
+        deferred_imports = {
+            id(child)
+            for function in ast.walk(tree)
+            if isinstance(function, (ast.FunctionDef, ast.AsyncFunctionDef))
+            for statement in function.body
+            for child in ast.walk(statement)
+            if isinstance(child, (ast.Import, ast.ImportFrom))
+        }
         # Resolve aliases for direct import mechanisms; computed/reflection
         # indirection remains a semantic review obligation, not a static proof.
         dynamic_names = {'__import__', 'eval', 'exec'}
@@ -251,7 +275,8 @@ def inspect_sources(source: Path):
                     and isinstance(function.value, ast.Name) and function.value.id in module_aliases):
                     errors.append(f'{path.name}:{node.lineno}: dynamic source/import execution requires review')
             for target in targets:
-                edges.append({'source': name, 'target': target, 'line': node.lineno})
+                edges.append({'source': name, 'target': target, 'line': node.lineno,
+                              'deferred': id(node) in deferred_imports})
                 if target not in ALLOWED[name]:
                     errors.append(f'{path.name}:{node.lineno}: forbidden import {target}')
                 if target.startswith('truss.') and target[6:] not in modules:
@@ -260,7 +285,7 @@ def inspect_sources(source: Path):
     for edge in edges:
         target = edge['target']
         local = '__init__' if target == 'truss' else target[6:] if target.startswith('truss.') else None
-        if local in graph:
+        if local in graph and not edge['deferred']:
             graph[edge['source']].add(local)
     visited, active = set(), []
     def visit(name):

@@ -1,0 +1,87 @@
+{
+  "scope": "Python-only import map and lexically eager cycle checks; excludes runtime call-graph proof",
+  "passed": true,
+  "sourceEdges": 1392,
+  "checkerSha256": "eb4f27e1e4a4080eb12adcc8f6ad856ad1e89e37378bbbb74d912779dde4e531",
+  "controlCount": 18,
+  "controls": [
+    {
+      "case": "allowed-nested-import",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "forbidden-driver",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "private-custody-access",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "absolute-private-access",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "escape-package",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "dynamic-import",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "import-cycle",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "allowed-deferred-facade-cycle",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "eager-facade-cycle",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "unmapped-source",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "wildcard",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "allowed-private-image-dependency",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "row-image-forbidden-driver",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "capture-forbidden-driver",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "root-private-capture-export",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "root-private-image-export",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "cli-private-touch-access",
+      "expectedOutcomeObserved": true
+    },
+    {
+      "case": "row-image-reverse-cycle",
+      "expectedOutcomeObserved": true
+    }
+  ],
+  "protectedQueryRegression": {
+    "originalWeft": "0.4.34",
+    "passed": 1,
+    "seconds": 12.629
+  },
+  "review": "Astra Ultra scoped completed review; stated conditions passed"
+}

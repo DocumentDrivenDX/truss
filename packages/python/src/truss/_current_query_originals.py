@@ -2,7 +2,6 @@
 from dataclasses import dataclass
 from hashlib import sha256
 import re
-from importlib import import_module
 from pathlib import Path
 from ._current_query_computation import verify_current_query_owner_assets
 from ._owner_evidence_json import decode_owner_evidence_json, same_owner_evidence
@@ -63,7 +62,7 @@ _CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_ARM,_ABI2_WEFT_033_LINUX_X64,
 
 def _actual_consumer():
     try:
-        native=import_module('weft.weft')
+        import weft.weft as native
         digest=sha256(Path(native.__file__).read_bytes()).hexdigest()
         cohorts=[c for c in _CONSUMER_COHORTS if c['weftModuleSha256']==digest]
         if (len(cohorts)!=1 or not callable(native.CurrentQueryPreparation.native_request_json)

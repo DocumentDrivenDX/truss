@@ -1,6 +1,5 @@
 """Original CQP -> original UMF computation inside the held native operation."""
 from hashlib import sha256
-from importlib import import_module
 import json
 from time import monotonic
 from ._current_query_computation import open_current_query_computation
@@ -46,7 +45,7 @@ def evaluate_current_query(cursor,captured,subject,*,sql,parameters,document_ids
     raw=wire({'interfaceVersion':'weft-application-lineage/0.2-candidate','modules':modules,
               'sql':sql,'parameters':typed,'opaqueSources':opaque})
     if len(raw)>4194304:raise CurrentQueryLimit('Bounded original current-query request required')
-    native=import_module('weft.weft')
+    import weft.weft as native
     cursor._deadline.check()
     parent=native.prepare_application_lineage(raw.decode())
     current=parent.prepare_current_query()
