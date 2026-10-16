@@ -4,6 +4,7 @@ CREATE TABLE truss.runtime_object_attempt (
  input_bytes bytea NOT NULL,documents_bytes bytea NOT NULL,request_bytes bytea NOT NULL,
  context jsonb NOT NULL,next_index int NOT NULL DEFAULT 0,results jsonb NOT NULL DEFAULT '[]',aliases jsonb NOT NULL DEFAULT '[]',
  complete boolean NOT NULL DEFAULT false,receipt_id bigint,expected_receipt jsonb,position_bytes bytea,
+ result_count int GENERATED ALWAYS AS (pg_catalog.jsonb_array_length(results)) STORED,
  CHECK(octet_length(input_bytes) BETWEEN 1 AND 1048576),CHECK(octet_length(documents_bytes) BETWEEN 1 AND 4194304),
  CHECK(octet_length(request_bytes) BETWEEN 1 AND 65536),CHECK(next_index BETWEEN 0 AND 1024));
 CREATE INDEX runtime_object_attempt_writer ON truss.runtime_object_attempt(writer_xid);
@@ -745,7 +746,7 @@ BEGIN
    CASE WHEN a.actor_oid IS NOT DISTINCT FROM current_actor
     AND a.writer_xid IS NOT DISTINCT FROM pg_current_xact_id()
     AND t.operation_index>=0 AND t.operation_index<a.next_index
-    THEN jsonb_array_length(a.results) END AS original_result_count
+    THEN a.result_count END AS original_result_count
   FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
   WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id()
    AND a.context->'mutationProfile'=truss.runtime_owned_profile()

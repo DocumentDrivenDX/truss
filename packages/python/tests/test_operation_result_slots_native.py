@@ -23,10 +23,13 @@ class OperationResultSlotTests(base.PublicCreateGroupTests):
         expected = _wire(result.value.response.semantic)
         self.assertEqual([r['outcome'] for r in expected['results']], ['created', 'changed', 'unchanged'])
         host.detach(); connection.commit()
-        retained, slots = self.admin.execute("""SELECT a.results,
+        retained, count, slots = self.admin.execute("""SELECT a.results,a.result_count,
           (SELECT jsonb_agg(p.result ORDER BY p.operation_index) FROM truss.runtime_owned_operation p WHERE p.attempt_id=a.id)
           FROM truss.runtime_object_attempt a WHERE a.complete""").fetchone()
         self.assertEqual(retained, expected['results']); self.assertEqual(slots, retained)
+        self.assertEqual(count, 3)
+        with self.assertRaises(psycopg.errors.GeneratedAlways):
+            self.admin.execute('UPDATE truss.runtime_object_attempt SET result_count=0')
         with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
             self.admin.execute('UPDATE truss.runtime_owned_operation SET result=result')
         with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):

@@ -27,6 +27,8 @@ class OwnedTransitionUpgradeTests(unittest.TestCase):
                     from truss.catalog_runtime import _release
                     self.assertEqual(upgraded.value.release_id,_release()[0]['releaseId'])
                     self.assertEqual(upgraded.value.outcome,'upgraded');host.detach();admin.commit()
+                    self.assertEqual(admin.execute("SELECT attgenerated FROM pg_attribute WHERE attrelid='truss.runtime_object_attempt'::regclass AND attname='result_count'").fetchone(),('s',))
+                    self.assertEqual(admin.execute('SELECT count(*) FROM truss.runtime_object_attempt WHERE result_count IS DISTINCT FROM jsonb_array_length(results)').fetchone(),(0,))
                     private_names=['runtime_can_read_qualified','runtime_module_writer_qualified','runtime_object_values_readable_qualified','runtime_owned_object_transition_validate_qualified','runtime_owned_history_record_in_metadata','runtime_owned_group_step_in_input','apply_create_group_qualified']
                     private_rows=admin.execute("SELECT p.proname,has_function_privilege('consumer',p.oid,'EXECUTE'),p.proowner=i.owner_oid FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace CROSS JOIN truss.catalog_runtime_installation i WHERE n.nspname='truss' AND p.proname=ANY(%s) ORDER BY p.proname",(private_names,)).fetchall()
                     self.assertEqual(private_rows,[(name,False,True) for name in sorted(private_names)])

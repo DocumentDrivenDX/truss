@@ -265,3 +265,20 @@ published-predecessor upgrade, and the complete actual1,024-create/update/commit
 replay/readback and final-operation-fault tests. Installed Linux/macOS wheels
 must pass their original deadlines before release. This is an implementation
 candidate until those checks and the completed Astra review pass.
+
+## Stored result count — 2026-10-16
+
+Keep the single protected native group call and private partial helpers. Astra
+Ultra clears a narrower optimization: PostgreSQL stores the generated integer
+`jsonb_array_length(results)` on each attempt. Row settlement reads that exact
+derived count through its existing actor/writer/ordinal guard, avoiding repeated
+loading of a completed results array. Local finish-time array checks stay intact;
+the in-memory attempt has not yet persisted its final results at that point.
+
+Append the column consistently in fresh and upgraded storage. Under the existing
+exclusive upgrade cut, require the predecessor column absent and verify the
+stored expression, integer type, private column ACL and populated counts. Adding
+a STORED generated column physically backfills rows but preserves original
+source, result and receipt values. Basic slot/replay and populated published35
+upgrade tests cover the derived count and refusal of direct assignment; retain
+the complete capacity/final-fault workflows and installed-runner deadlines.

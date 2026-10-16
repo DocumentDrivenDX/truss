@@ -728,8 +728,9 @@ class CatalogReferenceAssembly:
             else:
                 upgrade_creation_transition_storage(cursor,bundled.joinpath('creation-transition-upgrade.sql').read_text(),owner_oid)
             # Published predecessors retain the original 128-operation attempt
-            # CHECK. Change that constraint under the same exclusive upgrade cut;
-            # no retained attempt, result, transition or receipt is rewritten.
+            # CHECK. Change it under the same exclusive upgrade cut. The stored
+            # generated count physically backfills attempt rows; original source,
+            # result, transition and receipt values remain unchanged.
             cursor.execute('LOCK TABLE truss.runtime_object_attempt IN ACCESS EXCLUSIVE MODE NOWAIT',prepare=False)
             cursor.execute("SELECT relowner FROM pg_class WHERE oid='truss.runtime_object_attempt'::regclass",prepare=False)
             if cursor.fetchone()!=(owner_oid,):raise ValueError('Original attempt storage owner required')
@@ -740,6 +741,18 @@ class CatalogReferenceAssembly:
             cursor.execute("SELECT contype,convalidated,pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid='truss.runtime_object_attempt'::regclass AND conname='runtime_object_attempt_next_index_check'",prepare=False)
             if cursor.fetchall()!=[('c',True,'CHECK (((next_index >= 0) AND (next_index <= 1024)))')]:
                 raise ValueError('Upgraded attempt operation bound required')
+            cursor.execute("SELECT 1 FROM pg_attribute WHERE attrelid='truss.runtime_object_attempt'::regclass AND attname='result_count' AND NOT attisdropped",prepare=False)
+            if cursor.fetchone() is not None:raise ValueError('Original attempt result count must be absent')
+            cursor.execute("SELECT format_type(atttypid,atttypmod),attnotnull FROM pg_attribute WHERE attrelid='truss.runtime_object_attempt'::regclass AND attname='results' AND NOT attisdropped",prepare=False)
+            if cursor.fetchall()!=[('jsonb',True)]:raise ValueError('Original nonnull JSONB results required')
+            cursor.execute("SELECT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE jsonb_typeof(results) IS DISTINCT FROM 'array')",prepare=False)
+            if cursor.fetchone()!=(False,):raise ValueError('Original array results required')
+            cursor.execute('ALTER TABLE truss.runtime_object_attempt ADD COLUMN result_count int GENERATED ALWAYS AS (pg_catalog.jsonb_array_length(results)) STORED',prepare=False)
+            cursor.execute("SELECT format_type(a.atttypid,a.atttypmod),a.attgenerated,a.attidentity,a.attnotnull,pg_get_expr(d.adbin,d.adrelid),a.attacl FROM pg_attribute a JOIN pg_attrdef d ON d.adrelid=a.attrelid AND d.adnum=a.attnum WHERE a.attrelid='truss.runtime_object_attempt'::regclass AND a.attname='result_count' AND NOT a.attisdropped",prepare=False)
+            if cursor.fetchall()!=[('integer','s','',False,'jsonb_array_length(results)',None)]:
+                raise ValueError('Exact stored attempt result count required')
+            cursor.execute('SELECT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE result_count IS DISTINCT FROM pg_catalog.jsonb_array_length(results))',prepare=False)
+            if cursor.fetchone()!=(False,):raise ValueError('Original attempt result counts required')
             cursor.execute("SELECT to_regclass('truss.runtime_owned_operation')",prepare=False)
             if cursor.fetchone()[0] is not None:raise ValueError('New owned operation storage must be absent')
             cursor.execute(bundled.joinpath('owned.sql').read_text().split('CREATE FUNCTION',1)[0],prepare=False)
