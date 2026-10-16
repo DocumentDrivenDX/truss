@@ -1,0 +1,65 @@
+{
+  "scope": "Original security owner component handoff verified read-only; no composed native bulk qualification",
+  "sourceCommit": "758087a85b6c4031f1a039bdc28753177608e065",
+  "receipt": {
+    "profile": "truss-preparation-authority-exclusion/0.1-candidate",
+    "securityReady": false,
+    "versions": {
+      "postgresql": "18.6",
+      "psycopg": "3.3.6"
+    },
+    "native": {
+      "command": "python -m unittest test_security_preparation_authority_native -v",
+      "passed": 1,
+      "seconds": 7.213,
+      "attempts": [
+        "native-r1.log",
+        "native-r2.log",
+        "native-r3.log",
+        "native-r4.log"
+      ]
+    },
+    "sourceDigests": {
+      "packages/python/src/truss/_security_preparation_authority.py": "1c31e5337c0c98edba013d6087ee12de7e074caceaea5916dc0841afa929b1ce",
+      "packages/python/src/truss/_security_bootstrap/preparation-authority-lock.sql": "8105c84fa96b7afbfd9cedb01a6aef0fdecaaf1dec5d53b80804e0f0f2095481",
+      "packages/python/tests/test_security_preparation_authority_native.py": "35b15a835d06725489f279480fdee6d91cceae39007c60867088f17c2e84fb89",
+      "scripts/check-module-boundaries.py": "2b017e40d8f94f9b6504e45a3470c936d024bf2c9eba09a8e9d5c5c19209d3ec",
+      "docs/helix/02-design/contracts/CONTRACT-005-module-isolation.md": "fbe7804384c81030382da159b49914e37bb303800626f6ee51ed9e58d6b2a3ce"
+    },
+    "boundaries": {
+      "imports": 1107,
+      "status": "passed"
+    },
+    "observations": [
+      "stale RR membership true after revoked; fresh RC false",
+      "GRANT blocked by native held membership cut",
+      "ALTER ROLE blocked by native held role cut",
+      "module_access UPDATE blocked by native held policy cut",
+      "foreign challenge refused",
+      "changed application challenge refused",
+      "ended native data transaction refused",
+      "disconnected original data session refused",
+      "original ordinary RR facade refused",
+      "RR authority lock issuer refused",
+      "unrelated data person lacks EXECUTE"
+    ],
+    "notProven": [
+      "full source/helper/ACL/DDL closure",
+      "complete owner union",
+      "ontology or field-action admission",
+      "protected preparation lease or seal",
+      "seal commit exclusion lifetime",
+      "bulk acceptance"
+    ]
+  },
+  "sourceHashesVerified": true,
+  "composedLeaseQualified": false,
+  "sealQualified": false,
+  "remaining": [
+    "current initiating-human/complete owner-union authority",
+    "exact source/helper/ACL/DDL closure and freshness",
+    "protected selection/staging and cut issuance",
+    "authority lifetime through original protected seal commit",
+    "complete native bulk/control recovery"
+  ]
+}

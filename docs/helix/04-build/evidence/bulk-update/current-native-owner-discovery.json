@@ -1,0 +1,23 @@
+{
+  "scope": "Read-only current native owner API discovery; no runtime adoption or native execution",
+  "sourceSha256": {
+    "/private/tmp/truss-main-integration-20261010/packages/python/src/truss/catalog_runtime.py": "99b0e791200d0b00f138c317a57082c0039465424a669b62e2875be5c8228256",
+    "/private/tmp/truss-main-integration-20261010/packages/python/src/truss/_group_runtime.py": "4f3ba9a606a5f31fa257b772d70655e6e873889573f4d529ca8aac48514c1b0f",
+    "/private/tmp/truss-main-integration-20261010/packages/python/src/truss/groups.py": "14045be086799f9b330c4484fe7a8740b6cc12878697ac105d10949f0873890a",
+    "/private/tmp/truss-main-integration-20261010/packages/python/src/truss/_catalog_runtime/runtime.sql": "b1a2830f6e02a5dbf3c3ce460047b995feb439f128bc64a25f0ce9deae54b507",
+    "/private/tmp/truss-main-integration-20261010/packages/python/src/truss/_catalog_runtime/manifest.json": "b07e4ff64dcc6af8870883b398dea16f586b998531e7551429542565c6f54362"
+  },
+  "currentRuntime": "truss-catalog-runtime/0.63-candidate",
+  "postgresql": "18.6",
+  "layout": "1.0",
+  "findings": [
+    "Current native catalog/group/update APIs exist beyond this checkout historical handoff",
+    "Ordinary-person native authorization requires READ COMMITTED; reviewed bulk fixed-cut requires REPEATABLE READ",
+    "Group application delegates durability to outer caller transaction; bulk requires engine-owned lifetime/adoption",
+    "Group runtime regenerates original Key tuples through testable owner encoding/Bun path; bounded Python action gateway no-sidecar/Key adoption is not established",
+    "Native group currently acquires its own request route locks; bulk preheld full request-lock composition is not established"
+  ],
+  "crossChatMessageSent": false,
+  "authorizationPending": true,
+  "nativeQualified": false
+}

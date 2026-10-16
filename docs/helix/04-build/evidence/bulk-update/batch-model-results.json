@@ -1,0 +1,290 @@
+{
+  "scope": "Bounded design state model; no native adapter or temporal fairness qualification",
+  "targets": [
+    2,
+    10,
+    11
+  ],
+  "batches": [
+    [
+      0,
+      1
+    ],
+    [
+      2
+    ]
+  ],
+  "workers": 2,
+  "claimFenceBound": 2,
+  "initialChangeMasks": 8,
+  "passed": true,
+  "model": {
+    "safe": true,
+    "states": 604852,
+    "edges": 4520858,
+    "events": {
+      "request_cancel": 210186,
+      "restore_fence": 302426,
+      "claim_0": 3472,
+      "claim_1": 3472,
+      "external_edit_0": 283976,
+      "external_rebind_0": 283976,
+      "external_edit_1": 283976,
+      "external_rebind_1": 283976,
+      "external_edit_2": 295480,
+      "external_rebind_2": 295480,
+      "outsider_denied": 604852,
+      "persist_cancel": 145312,
+      "expire_lease": 299440,
+      "open_original_native": 4896,
+      "register_marker_pending": 29376,
+      "marker_committed_ack": 29376,
+      "marker_committed_ack_loss": 29376,
+      "marker_aborted_ack": 29376,
+      "marker_aborted_ack_loss": 29376,
+      "confirm_admission_guard_lock": 456,
+      "recover_registration_commit": 29376,
+      "registration_lookup_unavailable": 58752,
+      "not_found_unresolved": 240688,
+      "close_unadmitted_native_abort": 29376,
+      "recover_registration_noncommit": 29376,
+      "expired_claim_native_noncommit": 4896,
+      "guard_conflict_commit_ack": 4440,
+      "guard_conflict_commit_ack_loss": 4440,
+      "crash_unresolved_running": 2848,
+      "write_0": 2048,
+      "write_1": 2048,
+      "rollback_ack": 5696,
+      "rollback_ack_loss": 5696,
+      "cancel_original_noncommit": 9792,
+      "cancel_terminal_observation": 98346,
+      "lookup_unavailable": 217232,
+      "reconcile_original_noncommit_stop": 205632,
+      "reconcile_original_guard_conflict": 17760,
+      "conflict_lookup_unavailable": 17760,
+      "commit_ack": 1824,
+      "commit_ack_loss": 1824,
+      "crash_after_rollback_before_stop": 58752,
+      "publish_original_result": 11600,
+      "reconcile_original_commit": 11600,
+      "write_2": 800
+    },
+    "witnesses": {
+      "unresolved_original_running": [
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "crash_unresolved_running"
+      ],
+      "lost_ack_recovery": [
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "write_0",
+        "write_1",
+        "commit_ack_loss",
+        "reconcile_original_commit"
+      ],
+      "rollback_before_stop": [
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "write_0",
+        "rollback_ack",
+        "crash_after_rollback_before_stop",
+        "reconcile_original_noncommit_stop"
+      ],
+      "cancel_preserves_prefix": [
+        "request_cancel",
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "write_0",
+        "write_1",
+        "commit_ack",
+        "persist_cancel"
+      ],
+      "two_batch_commit": [
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "write_0",
+        "write_1",
+        "commit_ack",
+        "publish_original_result",
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "write_2",
+        "commit_ack",
+        "publish_original_result"
+      ]
+    }
+  },
+  "negativeControls": {
+    "broken_fence": {
+      "safe": false,
+      "states": 48868,
+      "violations": [
+        "no_stale_fence_write"
+      ],
+      "trace": [
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "expire_lease",
+        "unsafe_takeover",
+        "write_0"
+      ]
+    },
+    "broken_recovery": {
+      "safe": false,
+      "states": 84389,
+      "violations": [
+        "no_retry_admitted_original_batch"
+      ],
+      "trace": [
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "expire_lease",
+        "unsafe_retry_admitted",
+        "claim_0",
+        "open_original_native"
+      ]
+    },
+    "partial_commit": {
+      "safe": false,
+      "states": 26042,
+      "violations": [
+        "exact_noop_or_changed_effect",
+        "native_commit_complete_result"
+      ],
+      "trace": [
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "write_0",
+        "unsafe_partial_commit"
+      ]
+    },
+    "broken_guard": {
+      "safe": false,
+      "states": 26129,
+      "violations": [
+        "frozen_target_identity"
+      ],
+      "trace": [
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "external_edit_0",
+        "write_0"
+      ]
+    },
+    "broken_admission": {
+      "safe": false,
+      "states": 12583,
+      "violations": [
+        "live_claim_at_job_lock"
+      ],
+      "trace": [
+        "claim_0",
+        "open_original_native",
+        "expire_lease",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock"
+      ]
+    },
+    "broken_cancel": {
+      "safe": false,
+      "states": 1760,
+      "violations": [
+        "no_dispatch_beyond_terminal_cutoff",
+        "cancelled_requires_original_settlement"
+      ],
+      "trace": [
+        "request_cancel",
+        "persist_cancel",
+        "claim_0",
+        "open_original_native"
+      ]
+    },
+    "broken_terminal": {
+      "safe": false,
+      "states": 49301,
+      "violations": [
+        "no_dispatch_beyond_terminal_cutoff",
+        "no_retry_admitted_original_batch"
+      ],
+      "trace": [
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_aborted_ack",
+        "close_unadmitted_native_abort",
+        "unsafe_restart_stopped",
+        "claim_0",
+        "open_original_native"
+      ]
+    },
+    "premature_cancel": {
+      "safe": false,
+      "states": 1811,
+      "violations": [
+        "cancelled_requires_original_settlement"
+      ],
+      "trace": [
+        "request_cancel",
+        "claim_0",
+        "open_original_native",
+        "persist_cancel"
+      ]
+    },
+    "missing_lookup_reclaim": {
+      "safe": false,
+      "states": 26038,
+      "violations": [
+        "no_invented_noncommit"
+      ],
+      "trace": [
+        "claim_0",
+        "open_original_native",
+        "register_marker_pending",
+        "marker_committed_ack",
+        "confirm_admission_guard_lock",
+        "crash_unresolved_running",
+        "unsafe_missing_means_noncommit"
+      ]
+    }
+  },
+  "sourceSha256": "3610bd0e4f04b829ac35c73e48cfd67ec907c10617dc2662ecac597fb62d2c4f",
+  "livenessPremises": [
+    "fair scheduling",
+    "eventual original native termination",
+    "available current-authorized original lookup"
+  ],
+  "livenessVerified": false,
+  "nativeQualified": false
+}

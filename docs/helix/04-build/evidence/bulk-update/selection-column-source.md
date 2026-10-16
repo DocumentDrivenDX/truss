@@ -1,0 +1,7 @@
+# Bulk selection column source — 2026-10-13
+
+The retained mutation-read-columns fixture decodes the exact original object CreateStmt from source-epoch0.16 proposal UMF native PostgreSQL AST, retaining its original model/SQL hashes and source column nodes. It identifies physical object.id/object.ver as pg_catalog.int8. The Weft original-admission native selection witness consumes these original inventory bytes and checks custody against its captured original binding.
+
+This is a trusted-host fixture declaration, not an installed/admitted native profile or independent identity/version guarantee. Immutable/nonreused identities, monotonically advancing whole-row versions, protected original authority/current policy, coherent read cut, accepted source installation and qualified action gateway remain Truss responsibilities under CONTRACT-013. No caller artifact issues a guard or seal. Original synthetic selection evidence in Weft now has thirty PostgreSQL17.11 cases with explicit AND/OR masking preflight controls; it performs no protected business changes.
+
+Next integration must adopt original Weft lowering through the Rust Python bridge, original UMF action preparation/semantics through the bounded gateway, and the existing authenticated protected engine assembly. Missing seven semantic native bodies and full installation/admission closure cannot be bypassed by invoking ordinary SQL or relabelling synthetic rows as an accepted catalog. The user-authorized live compiler/Truss goal remains active.

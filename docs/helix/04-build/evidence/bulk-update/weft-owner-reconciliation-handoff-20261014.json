@@ -1,0 +1,223 @@
+{
+  "scope": "Exact parent-owned mutation source snapshot for owner reconciliation; no whole-dirty-checkout adoption",
+  "sourceRoot": "/Users/erik/Projects/weft",
+  "sourceBranch": "codex/b007-conformance",
+  "sourceBaseCommit": "94b2de5e303fe53f0c9432458119b6fe1eef187c",
+  "snapshotRoot": "/private/tmp/umf-weft-mutation-owner-handoff-20261014",
+  "snapshots": [
+    {
+      "path": "crates/weft-core/src/mutation.rs",
+      "sha256": "6a7bfb173deda707415a0f8817917e66ef10a1f61cd8d1b56c7c67265d8d9447"
+    },
+    {
+      "path": "crates/weft-core/src/mutation_backend.rs",
+      "sha256": "d63399e11062490a931eeae047c9f9e82909b37285aa6f546101fcf0f5d6e30b"
+    },
+    {
+      "path": "crates/weft-core/src/mutation_selection.rs",
+      "sha256": "0c3c21eae74c2659eb82281387fd203eebcb0b8548b623e66d0093361a05db7f"
+    },
+    {
+      "path": "crates/weft-core/src/mutation_syntax.rs",
+      "sha256": "b7eb34226cb90a52c99727c63a69846404620aac1c32f142567762fca9c93921"
+    },
+    {
+      "path": "crates/weft-postgresql/src/mutation.rs",
+      "sha256": "4320b1115c47b4f80cbed115d5ec5018fade30d5b2f0725fd296b24bf0231e8b"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-008-compile-bulk-update.md",
+      "sha256": "512b60ce0576ba638c7c24d5af5b5328a879193d91cd8deab103ca5b733f0d48"
+    },
+    {
+      "path": "docs/helix/01-frame/user-stories/US-009-portable-mutation-embedding.md",
+      "sha256": "26c2a633e763a3efb2cec79a4f1709d0d672ec1c555df3ccc738a7c40f6c40a8"
+    },
+    {
+      "path": "docs/helix/02-design/contracts/CONTRACT-006-mutation-action-plans.md",
+      "sha256": "edbb663a5ab86119d933c3fb4f770a457da5adbe9177673eb5231668b55fc793"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-008-compile-bulk-update.md",
+      "sha256": "6fb65472ac24940bdb8e3d365d19f20e11ac39015d2dd9fc0c6c731ca8aa5cd6"
+    },
+    {
+      "path": "docs/helix/02-design/technical-designs/TD-009-portable-mutation-embedding.md",
+      "sha256": "9168a8d40978f68d12a427840bf89e38a7b05f7064a9b265d04d3239b78108bf"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-008-compile-bulk-update.md",
+      "sha256": "3c4b8e87582b5acc7b3979070f25cb38e22685f3b369dae5897650d7deb3302a"
+    },
+    {
+      "path": "docs/helix/03-test/test-plans/STP-009-portable-mutation-embedding.md",
+      "sha256": "9c114ff2879aff2247d35fdbbaa54fbbb12bdda0fc831e72ba31c8c110161d53"
+    },
+    {
+      "path": "spec/upstream/actions-plan/core.schema.json",
+      "sha256": "79e72f2ebef434c7d1e09d372c74d330b24109bb8af9778745a8d41275acee6e"
+    },
+    {
+      "path": "spec/upstream/actions-plan/owner-pins.json",
+      "sha256": "b055c61c900e52b43397628353e52233d51804dd17077fc3dbb7ecd1640019fa"
+    },
+    {
+      "path": "spec/upstream/actions-plan/plan-model.schema.json",
+      "sha256": "b99226c6188624ec240fb1db96a5fcdfcb15c6fe2b8f2c60276e13f7003b9998"
+    },
+    {
+      "path": "spec/upstream/actions-plan/plan.schema.json",
+      "sha256": "6ab8bf676e60724792cf2ac41c7c3cd1c143a5c3173e9b63b334672e92547089"
+    },
+    {
+      "path": "tests/mutation/browser-check.ts",
+      "sha256": "9e5a5fd58deaef4b21fd9303e9983c4060396b40c80faba402afb1e4ec55b330"
+    },
+    {
+      "path": "tests/mutation/compiler.rs",
+      "sha256": "98a54106d08fe4da38509c1138e777340c1c08ceabb6de23854e83f7166a7e5c"
+    },
+    {
+      "path": "tests/mutation/embedding.rs",
+      "sha256": "e1577cfcce5c7357297c238d68053c35165e32ede8021f7c86ea942d992ae362"
+    },
+    {
+      "path": "tests/mutation/fixtures/golden.json",
+      "sha256": "31ac6e0d21e5227708553346154fa7694c8d72b894ed441c21329e5c0e29c4b0"
+    },
+    {
+      "path": "tests/mutation/fixtures/multi-registry.json",
+      "sha256": "02c45192e45cc9e091c4c0dc7e837eefac60ae2971193de929b16a0795dac8d8"
+    },
+    {
+      "path": "tests/mutation/fixtures/multi-request.json",
+      "sha256": "3b089b5433ed1c9dcff9e59f03430e78dcea0d89ccbea0e3f6966accd698c0f3"
+    },
+    {
+      "path": "tests/mutation/fixtures/postgres-model.json",
+      "sha256": "bf30a825218d9316124d0dfaa11efa112bdcefdf2e10d5d0893557066e7b8fde"
+    },
+    {
+      "path": "tests/mutation/fixtures/postgres-original-input.json",
+      "sha256": "03470e45d0612233d43bb9cafeb5a54fd724dc7752a80b1973719553192808ea"
+    },
+    {
+      "path": "tests/mutation/fixtures/postgres-owner-plan.json",
+      "sha256": "67bbdc29334090c5ebcb20ab177abc418f8b0acb47a5b33f1a3758ee393ae62b"
+    },
+    {
+      "path": "tests/mutation/fixtures/registry.json",
+      "sha256": "47e8c972a5731db29280cb96c13e98d76219acb368ff3b1baae82dd0ae8a9794"
+    },
+    {
+      "path": "tests/mutation/fixtures/request.json",
+      "sha256": "e03bd24075a880bd8b5c89ecf50894514553b822933f2d15fc3edbcd8f7e5eed"
+    },
+    {
+      "path": "tests/mutation/fixtures/selection-binary.json",
+      "sha256": "10b68c48f23567fda77b18c9bdbe58e84048609c1f87b638f5148f4dcf05e4a8"
+    },
+    {
+      "path": "tests/mutation/fixtures/selection-decimal.json",
+      "sha256": "3a248044263559c96600ed1779ca37900375c36d9b0dbe737adcd61d3fc4ad82"
+    },
+    {
+      "path": "tests/mutation/fixtures/selection-key64.json",
+      "sha256": "ff60c42c2efe361d9a88930a67d109d07103ff9529be32724e8a1c1d371844ef"
+    },
+    {
+      "path": "tests/mutation/fixtures/selection-key65.json",
+      "sha256": "021f2603411351ba8c1921bde721db6f2b9bda79d99bf32511f02e35d41035bd"
+    },
+    {
+      "path": "tests/mutation/fixtures/selection-other.json",
+      "sha256": "a1455bf2078ff766bb6bc699a97230a4cfb029495d7c26700a45d56c725d6be9"
+    },
+    {
+      "path": "tests/mutation/lowering.rs",
+      "sha256": "bf0a14a8ca2e8afff411976b3310673b3344b8d395540cf0f152663a6c186b47"
+    },
+    {
+      "path": "tests/mutation/postgresql-native.py",
+      "sha256": "c27f1efb7ba7986d76e799864084e75991c45b9ec79293f8997b46af55167daa"
+    },
+    {
+      "path": "tests/mutation/python-check.py",
+      "sha256": "ccc7ecd027ea2bec85555f540f099e7f612fca60bdadec843bf60310a4f1a0c9"
+    }
+  ],
+  "mixedIntegrationReferences": [
+    {
+      "path": "crates/weft-core/src/lib.rs",
+      "sha256": "7ab50da53a3413d11722bf5d4795a6197e04403fb2463329680cce24b5f42bbe",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "crates/weft-core/src/model.rs",
+      "sha256": "c64e2d60ddf3d42228f346a4aede536e29320368d7344e5678eefcab9220eee5",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "crates/weft-core/src/json.rs",
+      "sha256": "f29336c58ced205722e32f2ba18f535cf8e46c1638fc61bf40d9860a435d7e75",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "crates/weft-core/Cargo.toml",
+      "sha256": "5846a1b05c78c98f2559604173ac63fc3bd33a6d32f402e41e8e8da0afb6b645",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "crates/weft-python/src/lib.rs",
+      "sha256": "91de82d7ecf91cf530c46d7b7d895dc75c87c585b76f4777488aa918fbd4fc65",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "crates/weft-wasm/src/lib.rs",
+      "sha256": "ebc859c3eb61bffa0bb21edf8c1a011b6cb3eb95316907e5fc2802f473b23cc3",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "crates/weft-runtime/src/lib.rs",
+      "sha256": "132c19a1352f3f9044ed5c59143710701d95f8340759bd8b9a4ccfc34969db40",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "crates/weft-postgresql/src/lib.rs",
+      "sha256": "810ab6549e580ebfcfee54edb3b39e24fbd5406fcdbf8252dcf7e659eaf525a4",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "crates/weft-postgresql/src/original_backend.rs",
+      "sha256": "ef214c0c70b44bd957ee5ea51be91fec8d3cbafd5a21de46f46ce272f02bfd41",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "crates/weft-postgresql/src/record_definition.rs",
+      "sha256": "a49db2071b3cac501881a539c9c94341b0e387d842b7ef5bf83d660a5ae9ad13",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "crates/weft-postgresql/src/conformance_original.rs",
+      "sha256": "7af2e446e130f7d1e924eaed50fed22702c4824590036bb26dc1a1d074ed89ef",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    },
+    {
+      "path": "packages/weft-browser/src/index.ts",
+      "sha256": "149c280c629fc553a79c116165f06f757e666a8bf4e3f4587e00e9d3604fb159",
+      "rule": "Inspect mutation-specific integration only; preserve other owner changes, do not overwrite wholesale"
+    }
+  ],
+  "currentTrussWeftSource": "/private/tmp/weft-truss-pg18-20261012",
+  "currentTrussWeftInspectedCommit": "a4c3f9a018ecb2e1db92320d8b78cd309610ea8f",
+  "reconciliationOwner": "Weft Impl via native-owner coordination",
+  "parentContinuesWeftEdits": false,
+  "nativeCurrentSelectionQualified": false,
+  "legacySelectionScope": "PostgreSQL17.11/sourceepoch0.16 original fixture only; never relabel current18.6/tagged binding",
+  "required": [
+    "current original accepted products binding/core0.8 source",
+    "current runtime Mapping/scalar/complete-population preflight adapter",
+    "original Python renderer registration/lowering bridge",
+    "source-correspondent Rust/Python/Chromium and current native qualification"
+  ]
+}

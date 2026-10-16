@@ -1,0 +1,30 @@
+{
+  "scope": "Bounded design state model; no native adapter or temporal fairness qualification",
+  "targets": [
+    2,
+    10,
+    11
+  ],
+  "batches": [
+    [
+      0,
+      1
+    ],
+    [
+      2
+    ]
+  ],
+  "workers": 2,
+  "claimFenceBound": 2,
+  "initialChangeMasks": 8,
+  "passed": true,
+  "sourceSha256": "3610bd0e4f04b829ac35c73e48cfd67ec907c10617dc2662ecac597fb62d2c4f",
+  "livenessPremises": [
+    "fair scheduling",
+    "eventual original native termination",
+    "available current-authorized original lookup"
+  ],
+  "livenessVerified": false,
+  "nativeQualified": false
+}
+{"states": 604852, "edges": 4520858, "controls": {"broken_fence": ["no_stale_fence_write"], "broken_recovery": ["no_retry_admitted_original_batch"], "partial_commit": ["exact_noop_or_changed_effect", "native_commit_complete_result"], "broken_guard": ["frozen_target_identity"], "broken_admission": ["live_claim_at_job_lock"], "broken_cancel": ["no_dispatch_beyond_terminal_cutoff", "cancelled_requires_original_settlement"], "broken_terminal": ["no_dispatch_beyond_terminal_cutoff", "no_retry_admitted_original_batch"], "premature_cancel": ["cancelled_requires_original_settlement"], "missing_lookup_reclaim": ["no_invented_noncommit"]}}

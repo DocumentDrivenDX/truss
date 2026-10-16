@@ -1,0 +1,46 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 102 and seed -8795330233437143626 with 1 worker on 18 cores with 736MB heap and 64MB offheap memory [pid: 15718] (Mac OS X 27.0.1 aarch64, Eclipse Adoptium 17.0.20.1 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-tlc-partial_commit-yvbizhf3/BulkUpdate.tla
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Integers.tla
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Sequences.tla
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/TLC.tla
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/Naturals.tla
+Parsing file /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/FiniteSets.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module BulkUpdate
+Starting... (2026-10-13 23:51:07)
+Computing initial states...
+Computed 2 initial states...
+Computed 4 initial states...
+Finished computing initial states: 8 distinct states generated at 2026-10-13 23:51:07.
+Error: Invariant CompleteReceipts is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+s = [phase |-> "idle", cancel_fenced |-> FALSE, stopped |-> FALSE, restored |-> FALSE, rollback_after_write |-> FALSE, crashed_after_rollback |-> FALSE, changes |-> <<FALSE, FALSE, FALSE>>, outcomes |-> <<0, 0, 0>>, results |-> <<"", "", "">>, published_results |-> <<"", "", "">>, current_ids |-> <<2, 10, 11>>, versions |-> <<1, 1, 1>>, owner |-> -1, fence |-> 0, expired |-> FALSE, attempt_owner |-> -1, attempt_fence |-> 0, batch |-> 0, staged |-> <<0, 0, 0>>, effects |-> <<0, 0, 0>>, receipts |-> <<FALSE, FALSE>>, prefix |-> 0, observed |-> 0, cancel_requested |-> FALSE, terminal_cutoff |-> 2, cancel_status |-> "", recovering |-> FALSE, attempts |-> <<0, 0>>, late_dispatch |-> FALSE, native_actual |-> "none", native_observed |-> "none", marker_actual |-> "none", marker_observed |-> "none", expired_admission |-> FALSE, stale_write |-> FALSE, identity_changed |-> FALSE]
+
+State 2: <Claim line 57, col 2 to line 59, col 78 of module BulkUpdate>
+s = [phase |-> "idle", cancel_fenced |-> FALSE, stopped |-> FALSE, restored |-> FALSE, rollback_after_write |-> FALSE, crashed_after_rollback |-> FALSE, changes |-> <<FALSE, FALSE, FALSE>>, outcomes |-> <<0, 0, 0>>, results |-> <<"", "", "">>, published_results |-> <<"", "", "">>, current_ids |-> <<2, 10, 11>>, versions |-> <<1, 1, 1>>, owner |-> 0, fence |-> 1, expired |-> FALSE, attempt_owner |-> -1, attempt_fence |-> 0, batch |-> 0, staged |-> <<0, 0, 0>>, effects |-> <<0, 0, 0>>, receipts |-> <<FALSE, FALSE>>, prefix |-> 0, observed |-> 0, cancel_requested |-> FALSE, terminal_cutoff |-> 2, cancel_status |-> "", recovering |-> FALSE, attempts |-> <<0, 0>>, late_dispatch |-> FALSE, native_actual |-> "none", native_observed |-> "none", marker_actual |-> "none", marker_observed |-> "none", expired_admission |-> FALSE, stale_write |-> FALSE, identity_changed |-> FALSE]
+
+State 3: <Register line 61, col 2 to line 65, col 37 of module BulkUpdate>
+s = [phase |-> "native_open", cancel_fenced |-> FALSE, stopped |-> FALSE, restored |-> FALSE, rollback_after_write |-> FALSE, crashed_after_rollback |-> FALSE, changes |-> <<FALSE, FALSE, FALSE>>, outcomes |-> <<0, 0, 0>>, results |-> <<"", "", "">>, published_results |-> <<"", "", "">>, current_ids |-> <<2, 10, 11>>, versions |-> <<1, 1, 1>>, owner |-> 0, fence |-> 1, expired |-> FALSE, attempt_owner |-> 0, attempt_fence |-> 1, batch |-> 0, staged |-> <<0, 0, 0>>, effects |-> <<0, 0, 0>>, receipts |-> <<FALSE, FALSE>>, prefix |-> 0, observed |-> 0, cancel_requested |-> FALSE, terminal_cutoff |-> 2, cancel_status |-> "", recovering |-> FALSE, attempts |-> <<1, 0>>, late_dispatch |-> FALSE, native_actual |-> "open", native_observed |-> "open", marker_actual |-> "none", marker_observed |-> "none", expired_admission |-> FALSE, stale_write |-> FALSE, identity_changed |-> FALSE]
+
+State 4: <MarkerPending line 80, col 2 to line 81, col 106 of module BulkUpdate>
+s = [phase |-> "marker_pending", cancel_fenced |-> FALSE, stopped |-> FALSE, restored |-> FALSE, rollback_after_write |-> FALSE, crashed_after_rollback |-> FALSE, changes |-> <<FALSE, FALSE, FALSE>>, outcomes |-> <<0, 0, 0>>, results |-> <<"", "", "">>, published_results |-> <<"", "", "">>, current_ids |-> <<2, 10, 11>>, versions |-> <<1, 1, 1>>, owner |-> 0, fence |-> 1, expired |-> FALSE, attempt_owner |-> 0, attempt_fence |-> 1, batch |-> 0, staged |-> <<0, 0, 0>>, effects |-> <<0, 0, 0>>, receipts |-> <<FALSE, FALSE>>, prefix |-> 0, observed |-> 0, cancel_requested |-> FALSE, terminal_cutoff |-> 2, cancel_status |-> "", recovering |-> FALSE, attempts |-> <<1, 0>>, late_dispatch |-> FALSE, native_actual |-> "open", native_observed |-> "open", marker_actual |-> "pending", marker_observed |-> "unknown", expired_admission |-> FALSE, stale_write |-> FALSE, identity_changed |-> FALSE]
+
+State 5: <MarkerCommit line 83, col 2 to line 86, col 129 of module BulkUpdate>
+s = [phase |-> "registered", cancel_fenced |-> FALSE, stopped |-> FALSE, restored |-> FALSE, rollback_after_write |-> FALSE, crashed_after_rollback |-> FALSE, changes |-> <<FALSE, FALSE, FALSE>>, outcomes |-> <<0, 0, 0>>, results |-> <<"", "", "">>, published_results |-> <<"", "", "">>, current_ids |-> <<2, 10, 11>>, versions |-> <<1, 1, 1>>, owner |-> 0, fence |-> 1, expired |-> FALSE, attempt_owner |-> 0, attempt_fence |-> 1, batch |-> 0, staged |-> <<0, 0, 0>>, effects |-> <<0, 0, 0>>, receipts |-> <<FALSE, FALSE>>, prefix |-> 0, observed |-> 0, cancel_requested |-> FALSE, terminal_cutoff |-> 2, cancel_status |-> "", recovering |-> FALSE, attempts |-> <<1, 0>>, late_dispatch |-> FALSE, native_actual |-> "open", native_observed |-> "open", marker_actual |-> "committed", marker_observed |-> "committed", expired_admission |-> FALSE, stale_write |-> FALSE, identity_changed |-> FALSE]
+
+State 6: <Admit line 69, col 2 to line 70, col 87 of module BulkUpdate>
+s = [phase |-> "admitted", cancel_fenced |-> FALSE, stopped |-> FALSE, restored |-> FALSE, rollback_after_write |-> FALSE, crashed_after_rollback |-> FALSE, changes |-> <<FALSE, FALSE, FALSE>>, outcomes |-> <<0, 0, 0>>, results |-> <<"", "", "">>, published_results |-> <<"", "", "">>, current_ids |-> <<2, 10, 11>>, versions |-> <<1, 1, 1>>, owner |-> 0, fence |-> 1, expired |-> FALSE, attempt_owner |-> 0, attempt_fence |-> 1, batch |-> 0, staged |-> <<0, 0, 0>>, effects |-> <<0, 0, 0>>, receipts |-> <<FALSE, FALSE>>, prefix |-> 0, observed |-> 0, cancel_requested |-> FALSE, terminal_cutoff |-> 2, cancel_status |-> "", recovering |-> FALSE, attempts |-> <<1, 0>>, late_dispatch |-> FALSE, native_actual |-> "open", native_observed |-> "open", marker_actual |-> "committed", marker_observed |-> "committed", expired_admission |-> FALSE, stale_write |-> FALSE, identity_changed |-> FALSE]
+
+State 7: <Commit line 120, col 2 to line 127, col 48 of module BulkUpdate>
+s = [phase |-> "commit_unknown", cancel_fenced |-> FALSE, stopped |-> FALSE, restored |-> FALSE, rollback_after_write |-> FALSE, crashed_after_rollback |-> FALSE, changes |-> <<FALSE, FALSE, FALSE>>, outcomes |-> <<0, 0, 0>>, results |-> <<"", "", "">>, published_results |-> <<"", "", "">>, current_ids |-> <<2, 10, 11>>, versions |-> <<1, 1, 1>>, owner |-> 0, fence |-> 1, expired |-> FALSE, attempt_owner |-> 0, attempt_fence |-> 1, batch |-> 0, staged |-> <<0, 0, 0>>, effects |-> <<0, 0, 0>>, receipts |-> <<TRUE, FALSE>>, prefix |-> 1, observed |-> 0, cancel_requested |-> FALSE, terminal_cutoff |-> 2, cancel_status |-> "", recovering |-> TRUE, attempts |-> <<1, 0>>, late_dispatch |-> FALSE, native_actual |-> "committed", native_observed |-> "unknown", marker_actual |-> "committed", marker_observed |-> "committed", expired_admission |-> FALSE, stale_write |-> FALSE, identity_changed |-> FALSE]
+
+41236 states generated, 12693 distinct states found, 7203 states left on queue.
+The depth of the complete state graph search is 7.
+The average outdegree of the complete state graph is 2 (minimum is 0, the maximum 10 and the 95th percentile is 8).
+Finished in 00s at (2026-10-13 23:51:08)

@@ -1,0 +1,13 @@
+{
+  "scope": "Independent stock native SCRAM feasibility; no human/role/permit/selection/seal qualification",
+  "sourceSha256": "2a8a946c966c832dcbdba2b5dd7656b1c4c7c6b7f3759d5b505f7e56ee11d331",
+  "nativePrincipalKindQualified": false,
+  "failedAttempts": "r1 incorrectly required connect SQLSTATE; r2 used unsupported ConnectionInfo.used_password; corrected supported PGconn.used_password in r3",
+  "files": {
+    "passed-r3.log": "d4930018ddbb514f1c0cef4cc19c291a430d88440891cee25767d2fbbfe32a3e",
+    "probe.py": "2a8a946c966c832dcbdba2b5dd7656b1c4c7c6b7f3759d5b505f7e56ee11d331",
+    "failed-r2.log": "c4d2d4fed452d0cda2f36294c29d42605d339a89f6ed394497c1cadaa9e0379f",
+    "failed-r1.log": "69b8edbdf9c6ba93d8e28dfb31a3770d86c4a588025223b82413ce13c05c3a89",
+    "receipt.json": "0a041c37f3cb7e439d340857a5ef123632e33cc3979dc5b45b71585435292bcb"
+  }
+}

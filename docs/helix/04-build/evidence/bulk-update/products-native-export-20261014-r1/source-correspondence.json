@@ -1,0 +1,19 @@
+{
+  "scope": "Actual ordinary-person RC catalog/public mutation/readback and native binding export. No action, RR selection, bulk seal or security qualification.",
+  "filesVerified": {
+    "original-demo-model.json": "ae5195095c14de847f97148418980683a7a2e3dcfd85a65bf3d2733fb6048795",
+    "accepted-document.json": "b7f8ad91d22eeae35d9c7a966090d9120a2f436c84e29a6ba56d5979a6b712b5",
+    "original-prepared-acceptance.json": "82de724c3eef3a2ed934c5bf483a85b06ea2bbdf3ea76fd958050123a162a6d1",
+    "native-query-bundle.json": "297dc43b5370793490607e35ee972d775f8488b5cfa28e2806fec7b2cf7de11f",
+    "native-binding.json": "4c43e118d589c21d89db9ce09246bfdd55519a36cbb1374dae39ca550a4fc0a5",
+    "native-runtime-manifest.json": "aada6da87a2ff1cf522f846d463ce1ae3d883bb88d435de6f9c8ca2d2263daa6"
+  },
+  "runnerSha256": "47576fa950831ad5b853dfe19513de197679d784a0054820394f5d9220ac5baa",
+  "python": "3.11.17",
+  "psycopg": "3.3.6",
+  "pgserver-pg18": "18.6.1",
+  "originalOutput": "/private/tmp/truss-products-native-export-20261014-r1",
+  "nativeRRQualified": false,
+  "bulkSealQualified": false,
+  "liveDemoExecuted": false
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "Private original owner-artifact registration custody; no native gateway execution or Python semantic adoption",
+  "passed": true,
+  "tests": 7,
+  "pythonRuntime": "Selected Python3.11 pg17 qualification environment",
+  "ownerWitness": "Original UMF prepareActionPlanModel called only by test helper, not runtime sidecar",
+  "moduleBoundariesPassed": true,
+  "sourceSha256": {
+    "packages/python/src/truss/bulk_action_gateway.py": "b98d694234e39d9379703d8792c8579ab2fee039a2352676d1870403021d505b",
+    "packages/python/tests/test_bulk_action_gateway.py": "9922066d6e183e5ffeae72f575064d24ffed214c9e5ac036fadeef1beaefcb59",
+    "packages/python/tests/owner_action_preparation.ts": "489eb6c2345c51979c70d3fb86f29e4d612f96d04b42066e77b1f6bfea244a0f",
+    "scripts/check-module-boundaries.py": "9e73e2a12612b318ef0760ecc1937315f81f29abb53374aa827f3752d76d940c"
+  },
+  "upstreamFixtureSha256": "d924376765a48ab5bf2ce750998914e45cfb9644db7b6794c674a256043d314c",
+  "nativeQualified": false,
+  "testSeconds": 14.452
+}

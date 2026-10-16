@@ -1,0 +1,52 @@
+{
+  "scope": "Reviewed pure registration/owner-preparation/value source handoff; no native role, Subject or effects qualification",
+  "sourceRoot": "/Users/erik/Projects/truss",
+  "snapshotRoot": "/private/tmp/truss-bounded-action-gateway-handoff-20261014",
+  "files": [
+    {
+      "path": "packages/python/src/truss/bulk_action_gateway.py",
+      "sha256": "9f369f88178e3506895ad118092c74405962d2d184177c34971f12394b582d9f"
+    },
+    {
+      "path": "packages/python/src/truss/_bulk_set_values.py",
+      "sha256": "9f3b9f38ced33cda378698081e0530c23c6b04e0d373d121f9e4d78f4148d95c"
+    },
+    {
+      "path": "packages/python/tests/test_bulk_action_gateway.py",
+      "sha256": "10b2a7b15e4236200992dba0a267ebeffbca6107d6e5c0057e23418a632f1177"
+    },
+    {
+      "path": "packages/python/tests/test_bulk_set_values.py",
+      "sha256": "02fed8e3b1e83b75c102db87e2296190968142d50880d4f1ba15a166200c38a2"
+    },
+    {
+      "path": "packages/python/tests/owner_action_preparation.ts",
+      "sha256": "489eb6c2345c51979c70d3fb86f29e4d612f96d04b42066e77b1f6bfea244a0f"
+    },
+    {
+      "path": "packages/python/tests/owner_set_values.ts",
+      "sha256": "cbb88d45c99ba7f42fe6e6c0877d62a82f9727082af56d091bc1f596458ab539"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/bulk-update/set-values-results.json",
+      "sha256": "992a613cffe59cea6509ab0adc3685cd226ce803324d246e66c4342168bf9005"
+    },
+    {
+      "path": "docs/helix/04-build/evidence/bulk-update/set-values.md",
+      "sha256": "dbbc856a2a9c8a5ed5b6dc3fe922225ac13be8db6c4f0709d89ad4e6c569247f"
+    }
+  ],
+  "registryApi": "ActionRegistration(prepare_owner).register(modelArtifactBytes,actionPinBytes,preparationArtifactBytes) -> original opaque ticket; original(ticket) -> immutable RegisteredAction(model,action_pin,preparation)",
+  "membershipAuthority": false,
+  "nativeQualified": false,
+  "integrationOwner": "shared security/US049 owner",
+  "parentContinuesGatewayEdits": false,
+  "integrationDependencies": [
+    "truss.weft._decode / CompileRefusal matching original bounds/exact JSON/Decimal parser",
+    "Original synchronous qualified UMF preparation producer",
+    "existing module-boundary allowlist integration, preserve unrelated imports"
+  ],
+  "decoderSourceSha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
+  "review": "Astra verified4value/7registration tests, original preparation oracle and balanced numeric conversion; exact hashes in retained set-values-results.json",
+  "namespaceOwnerSemantics": "original UMF reference canonical family JSON pair [module,action], store scoped; revision separately retained; emit from original registered ticket source only"
+}

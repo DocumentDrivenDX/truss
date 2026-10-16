@@ -1,0 +1,23 @@
+{
+  "scope": "Model evidence provenance controls; no native effects",
+  "passed": true,
+  "cases": [
+    {
+      "id": "source",
+      "refusedBeforeJava": true,
+      "sameStateCount": true
+    },
+    {
+      "id": "passed",
+      "refusedBeforeJava": true,
+      "sameStateCount": true
+    },
+    {
+      "id": "safe",
+      "refusedBeforeJava": true,
+      "sameStateCount": true
+    }
+  ],
+  "runnerSha256": "70b42dbac9e8b9871e6fbccbbfec02062f3d19b38fe449d51c05d583f7af6723",
+  "sourceSha256": "1f8286f3f81b87779ba77cfb848a9f214d931c979eedb54945c6732cddef3091"
+}

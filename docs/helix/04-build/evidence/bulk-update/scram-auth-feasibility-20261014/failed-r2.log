@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/probe-truss-scram-auth-20261014.py", line 38, in <module>
+    assert caller.info.used_password
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ConnectionInfo' object has no attribute 'used_password'

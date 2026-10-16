@@ -1,0 +1,15 @@
+{
+  "scope": "Bounded design state model, no native qualification",
+  "sourceSha256": {
+    "docs/helix/02-design/experiments/bulk-actions/check_model.py": "3610bd0e4f04b829ac35c73e48cfd67ec907c10617dc2662ecac597fb62d2c4f",
+    "docs/helix/02-design/experiments/bulk-actions/check_tlc.py": "70b42dbac9e8b9871e6fbccbbfec02062f3d19b38fe449d51c05d583f7af6723",
+    "docs/helix/02-design/experiments/bulk-actions/check_receipt_controls.py": "1f8286f3f81b87779ba77cfb848a9f214d931c979eedb54945c6732cddef3091",
+    "docs/helix/02-design/experiments/bulk-actions/BulkUpdate.tla": "90e148bef7fe14a735c66d3925ace3eb0c582d44fb674c414d7d7914b2b1ea9f",
+    "docs/helix/02-design/experiments/bulk-actions/BulkUpdate.cfg": "6e4539e7705555fe289c500e63ca7a9b784de6cf698e560376253187b4210210",
+    "docs/helix/02-design/experiments/bulk-actions/README.md": "c9e62b185c38e3a1116b3b058e0caaab55b0ffd8f8947a7cd38405ed7ea333de"
+  },
+  "pythonStates": 604852,
+  "tlcStates": 604852,
+  "livenessVerified": false,
+  "nativeQualified": false
+}

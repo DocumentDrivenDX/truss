@@ -110,5 +110,6 @@ No current Truss action gateway or delegated issuer is implied. Protected admiss
 
 ## Registration custody component (2026-10-13)
 
-Historical, currently unverified claim (the linked evidence is absent from main):
+Historical claim: original component evidence is now retained unchanged in main;
+it was not rerun against current runtime and establishes no current completion:
 [Original owner-artifact registration](../../04-build/evidence/bulk-update/gateway-registration.md) now retains exact model/action/preparation bytes behind opaque instance-owned tickets, with original UMF API witness and seven Python3.11 tests. This is inert custody only; full qualified owner/Python semantic adoption, native authorization/delegation/attempt/gateway execution remain open. No US-049 criterion is marked complete.

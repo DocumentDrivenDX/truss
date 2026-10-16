@@ -1,0 +1,151 @@
+{
+  "scope": "New HELIX contract/story/design/test allocation and local reference structure only",
+  "status": "passed",
+  "stories": 8,
+  "criteria": 48,
+  "contracts": 5,
+  "runtimeExecuted": false,
+  "nativeQualified": false,
+  "results": [
+    {
+      "project": "umf",
+      "stories": 2,
+      "criteria": 12,
+      "contracts": 3,
+      "sources": [
+        {
+          "path": "01-frame/user-stories/US-902-portable-action-plans.md",
+          "sha256": "82e7cf20ca24c00836013911640f75732045b2b2b0c86b4fa3f42a135b91b170"
+        },
+        {
+          "path": "02-design/technical-designs/TD-902-portable-action-plans.md",
+          "sha256": "77fba94fe56d44751074b8cf2ab4ef445a84d561d6d6acd68190a6fbd4007348"
+        },
+        {
+          "path": "03-test/test-plans/STP-902-portable-action-plans.md",
+          "sha256": "f39b9152d0bc752533cd2538558447ea2e19e92946557cfb5bb8bb38ff2916b8"
+        },
+        {
+          "path": "01-frame/user-stories/US-903-frozen-action-manifests.md",
+          "sha256": "c5daf90d76dc9e3a6c8ecd9be6492b9cb88b56450d33b6043e98523ec6c24935"
+        },
+        {
+          "path": "02-design/technical-designs/TD-903-frozen-action-manifests.md",
+          "sha256": "c820e8d50ac61f79e77dce4d61ce6b2982adbade97dd6fa62bec787a3d23ebf8"
+        },
+        {
+          "path": "03-test/test-plans/STP-903-frozen-action-manifests.md",
+          "sha256": "e302a14ea32b365bc72dc2b140c919f62a25d5ad373184dd8b45dbaf19d0d11b"
+        },
+        {
+          "path": "02-design/contracts/CONTRACT-902-portable-action-plan.md",
+          "sha256": "4cc007173f608662ad5ddba1c735c259041c2b148c38c86c8d254ad8185c53a6"
+        },
+        {
+          "path": "02-design/contracts/CONTRACT-903-frozen-action-manifest.md",
+          "sha256": "fa697b537bc248518c2d6ab71a416189baef63b052bb157188dc89ab089fe086"
+        },
+        {
+          "path": "02-design/contracts/CONTRACT-904-bulk-action-coordination.md",
+          "sha256": "422a588c4cf2c3bdbc8969884a776e5711d8d60a8746cf408bd2b51a3f892795"
+        }
+      ]
+    },
+    {
+      "project": "weft",
+      "stories": 2,
+      "criteria": 11,
+      "contracts": 1,
+      "sources": [
+        {
+          "path": "01-frame/user-stories/US-008-compile-bulk-update.md",
+          "sha256": "512b60ce0576ba638c7c24d5af5b5328a879193d91cd8deab103ca5b733f0d48"
+        },
+        {
+          "path": "02-design/technical-designs/TD-008-compile-bulk-update.md",
+          "sha256": "6fb65472ac24940bdb8e3d365d19f20e11ac39015d2dd9fc0c6c731ca8aa5cd6"
+        },
+        {
+          "path": "03-test/test-plans/STP-008-compile-bulk-update.md",
+          "sha256": "3c4b8e87582b5acc7b3979070f25cb38e22685f3b369dae5897650d7deb3302a"
+        },
+        {
+          "path": "01-frame/user-stories/US-009-portable-mutation-embedding.md",
+          "sha256": "26c2a633e763a3efb2cec79a4f1709d0d672ec1c555df3ccc738a7c40f6c40a8"
+        },
+        {
+          "path": "02-design/technical-designs/TD-009-portable-mutation-embedding.md",
+          "sha256": "9168a8d40978f68d12a427840bf89e38a7b05f7064a9b265d04d3239b78108bf"
+        },
+        {
+          "path": "03-test/test-plans/STP-009-portable-mutation-embedding.md",
+          "sha256": "9c114ff2879aff2247d35fdbbaa54fbbb12bdda0fc831e72ba31c8c110161d53"
+        },
+        {
+          "path": "02-design/contracts/CONTRACT-006-mutation-action-plans.md",
+          "sha256": "edbb663a5ab86119d933c3fb4f770a457da5adbe9177673eb5231668b55fc793"
+        }
+      ]
+    },
+    {
+      "project": "truss",
+      "stories": 4,
+      "criteria": 25,
+      "contracts": 1,
+      "sources": [
+        {
+          "path": "01-frame/user-stories/US-046-materialize-frozen-update.md",
+          "sha256": "82124d1007cd5f1682e608a0d4ac7e241838a242c387bb6d2608bdc5c0dba8b3"
+        },
+        {
+          "path": "02-design/technical-designs/TD-046-materialize-frozen-update.md",
+          "sha256": "60985deec2efad60750d46b75650367b1d790e91a9f35941baf5e462479c7be6"
+        },
+        {
+          "path": "03-test/test-plans/STP-046-materialize-frozen-update.md",
+          "sha256": "b5cdac1e99a3ebd5b14187c95f6a87d6ff8cc382af1704dcdccb297d64d71013"
+        },
+        {
+          "path": "01-frame/user-stories/US-047-execute-atomic-update-batches.md",
+          "sha256": "1e19f383fb1116dba898d05b98a5480161b01077028c5eac3dadbc088d519bb7"
+        },
+        {
+          "path": "02-design/technical-designs/TD-047-execute-atomic-update-batches.md",
+          "sha256": "ee43b298f8d701e496bab358cb9a628423b7d3a8ec734426be15d7d32d160acc"
+        },
+        {
+          "path": "03-test/test-plans/STP-047-execute-atomic-update-batches.md",
+          "sha256": "7afa6d88fd8987d690e965735d2094482cdaa00a70218774be5a82c7ffea43b8"
+        },
+        {
+          "path": "01-frame/user-stories/US-048-recover-queued-update.md",
+          "sha256": "a9659597f456a437cf92534034896e53476ded5c08d793da2c52ce7dd6371ae3"
+        },
+        {
+          "path": "02-design/technical-designs/TD-048-recover-queued-update.md",
+          "sha256": "49cf9c5089995a1571b7351cbaeb8ed97f52efc691ff392ba2a26fca8f80580e"
+        },
+        {
+          "path": "03-test/test-plans/STP-048-recover-queued-update.md",
+          "sha256": "ee2fb42fe6155eaf2af47be4e1e57ea999a11c6a54c15928a272de5ca3842fd9"
+        },
+        {
+          "path": "01-frame/user-stories/US-049-bounded-action-gateway.md",
+          "sha256": "994a8fe85fa329b235b90cb01ba5086233366220b735e1080d4f79773c9475bc"
+        },
+        {
+          "path": "02-design/technical-designs/TD-049-bounded-action-gateway.md",
+          "sha256": "ec156a5021172ee6173898675f64cc7bb7110f2e96eef5a03d1a3579ee59b7f1"
+        },
+        {
+          "path": "03-test/test-plans/STP-049-bounded-action-gateway.md",
+          "sha256": "2c615411c5298a34e3c051d7756d03c7edcf087e20b54c7016509c7d4c29ad47"
+        },
+        {
+          "path": "02-design/contracts/CONTRACT-013-bulk-action-execution.md",
+          "sha256": "5ee0d547a2c472e85ef0f1a0d537c3be6b914a6cceb5c864e0d862c919179e5e"
+        }
+      ]
+    }
+  ]
+}

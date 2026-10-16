@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/private/tmp/probe-truss-scram-auth-20261014.py", line 28, in <module>
+    unexpected=psycopg.connect(**dict(params,user='auth_probe_login',password='wrong'),connect_timeout=2)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-psycopg-baseline-env/lib/python3.11/site-packages/psycopg/connection.py", line 126, in connect
+    raise last_ex.with_traceback(None)
+psycopg.OperationalError: connection failed: connection to server on socket "/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-auth-proof-mubfewsd/data/.s.PGSQL.5432" failed: FATAL:  password authentication failed for user "auth_probe_login"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/probe-truss-scram-auth-20261014.py", line 30, in <module>
+    assert e.sqlstate=='28P01'
+           ^^^^^^^^^^^^^^^^^^^
+AssertionError

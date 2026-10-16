@@ -119,5 +119,6 @@ Incomplete upstream/native admission must block dependent execution without bloc
 
 ## Bounded model implementation (2026-10-13)
 
-Historical, currently unverified claim (the linked evidence is absent from main):
+Historical claim: original component evidence is now retained unchanged in main;
+it was not rerun against current runtime and establishes no current completion:
 The [executable model and native correspondence](../experiments/bulk-actions/README.md) now implement the finite three-target/two-batch/two-worker design, with actual/observed native custody, nine negative controls, useful success/recovery/rollback-crash traces and no-op/result vectors. Python and independent TLC have matching604852 reachable states; final receipts retain source/tool digests. This is bounded design safety, not liveness or native qualification. AC7 and dependent native stories remain open until actual adapter/native correspondence is exercised.
