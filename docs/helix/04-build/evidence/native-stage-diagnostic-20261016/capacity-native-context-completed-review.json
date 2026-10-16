@@ -1,0 +1,29 @@
+{
+  "review": "Astra Ultra completed capacity assertion native-context messages",
+  "status": "SOURCE_AND_STATIC_VALIDATION_CLEAR",
+  "reviewedAt": "2026-10-16T16:37:27.012413+00:00",
+  "blockingFindings": [],
+  "baseCommit": "d6d38daf042e9c1975dd9c1aa79a382735cf4b99",
+  "worktree": "/private/tmp/truss-main-integration-20261010",
+  "sourceSha256": {
+    "packages/python/tests/test_group_capacity_native.py": "98c5a3c1d9351cdf9c7c585a708900df5abc7a0cfee58fddd8d9491c46f685c6"
+  },
+  "planReceipt": "/private/tmp/truss-capacity-native-context-plan-astra-20261016.json",
+  "findings": [
+    "Exactly the created and updated first Ok assertion messages append the existing space-plus-original-native-error expression. Every other byte in the test is baseline-identical.",
+    "Both Ok and following GroupSuccess assertions, capacities, timeouts, commits/replay/readback, fault controls and failure acceptance remain unchanged. No production source changed.",
+    "The added message exposes retained psycopg exception context on failure without database operations or production instrumentation. A timeout context identifies cancellation location and is not a stage-cost measurement."
+  ],
+  "reviewerChecks": {
+    "singleExpectedTestFileOnly": "PASS",
+    "exactTwoMessageReplacements": "PASS",
+    "pythonAstParse": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "nativeTests": "Not run and not required for this failure-message-only edit.",
+  "ciScope": "Parent reports existing38932972849 still runs old source; no cancellation or new CI run is part of this review.",
+  "limitations": [
+    "No product edits or agent spawns by reviewer.",
+    "No runtime fix, performance improvement or release qualification is claimed."
+  ]
+}
