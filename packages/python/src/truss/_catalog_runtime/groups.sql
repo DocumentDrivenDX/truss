@@ -392,10 +392,11 @@ DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;
  results jsonb:='[]';aliases jsonb:='[]';members jsonb:='[]';member_keys jsonb;
  membership truss.object_key_bucket%ROWTYPE;reservation truss.object_key_reservation_bucket%ROWTYPE;
  semantic jsonb;semantic_bytes bytea;new_generation bigint;
- captured_revision int;outcome jsonb;native_state text;outer_attempt record;
+ captured_revision int;outcome jsonb;outer_attempt record;
  owned_plan jsonb;owned_state jsonb;root_reference text;root_identity jsonb;root_object truss.object%ROWTYPE;selected_history text;
 BEGIN
- -- Private create execution: request admission and replay belong to the outer group.
+ -- Private create execution: request admission, replay and rollback belong to
+ -- the outer group. Keep its one public exception boundary around all operations.
  IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576
   OR original_documents IS NULL OR octet_length(original_documents) NOT BETWEEN 1 AND 4194304 THEN
   RAISE EXCEPTION 'bounded original create source required' USING ERRCODE='54000';END IF;
@@ -723,17 +724,6 @@ BEGIN
  IF root_identity IS NOT NULL AND NOT truss.runtime_can_read_qualified(root_identity->'owner'->>'documentId',root_identity->'owner'->>'moduleId',qualified_actor) THEN
   RAISE EXCEPTION 'current create root reader required' USING ERRCODE='42501';END IF;
  RETURN convert_to(jsonb_build_object('outcome','success','disposition','applied','durability','pending','semantic',semantic)::text,'UTF8');
-EXCEPTION
- WHEN insufficient_privilege OR query_canceled OR serialization_failure OR deadlock_detected THEN RAISE;
- WHEN OTHERS THEN
-  GET STACKED DIAGNOSTICS native_state=RETURNED_SQLSTATE;
-  IF native_state IN ('0A000','54000','55P03') THEN
-   outcome:=jsonb_build_object('outcome','unavailable','reason',CASE native_state WHEN '0A000' THEN 'profile' WHEN '54000' THEN 'resource' ELSE 'observation' END);
-  ELSE
-   outcome:=jsonb_build_object('outcome','failed','code',CASE WHEN native_state='P1001' THEN 'request_conflict' ELSE 'group_failed' END,
-    'operationIndex',greatest(least(current_index,jsonb_array_length(input->'operations')-1),0)::text,'nativeState',native_state);
-  END IF;
-  RETURN convert_to(outcome::text,'UTF8');
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.apply_create_group_qualified(bytea,bytea,bytea,bytea,text,text,oid,uuid,bytea,jsonb) FROM PUBLIC;
