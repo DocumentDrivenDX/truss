@@ -15,11 +15,13 @@ BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.39',
            'targetProfile': 'truss-runtime-pg18.6/0.5', 'interfaceVersion': 'weft-backend/0.2.6'}
 
 
-def compiler(*, engine_catalog=False):
+def compiler(*, engine_catalog=False, engine_pages=False):
     try:
         import weft
-        if weft.__version__ != '0.4.36' and not (weft.__version__ in ('0.4.39-dev.0','0.4.40-dev.0') and callable(getattr(weft, 'check_engine_read_json', None))):
+        if weft.__version__ != '0.4.36' and not (weft.__version__ in ('0.4.39-dev.0','0.4.40-dev.0','0.4.40') and callable(getattr(weft, 'check_engine_read_json', None))):
             return None
+        if engine_catalog and not callable(getattr(weft,'check_engine_read_json',None)):return None
+        if engine_pages and not callable(getattr(weft,'check_engine_page_json',None)):return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):
         return None
@@ -191,7 +193,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                 return Ok(QueryRefused(code='invalid_query'))
     if type(capture_catalog) is not bool or engine_program is not None and (type(engine_program) is not str or len(engine_program.encode("utf8")) > 4194304) or capture_catalog and (page_size is not None or read_profile is not None) or engine_program is not None and read_profile is not None:
         return Ok(QueryRefused(code="invalid_query"))
-    compile_query = compiler(engine_catalog=capture_catalog or engine_program is not None)
+    compile_query = compiler(engine_catalog=engine_program is not None,engine_pages=page_size is not None and engine_program is not None)
     if compile_query is None:
         return Ok(QueryUnavailable(reason='compiler'))
     if page_size is not None:
