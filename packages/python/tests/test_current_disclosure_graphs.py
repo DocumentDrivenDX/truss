@@ -1,5 +1,5 @@
 """Physical mapping controls; supplied catalog/cursor fixtures are not native evidence."""
-import copy,hashlib,json,unittest
+import copy,hashlib,itertools,json,unittest
 from types import SimpleNamespace
 from truss._current_disclosure_facts import _graph_recipes,_capture_graphs
 
@@ -39,6 +39,48 @@ class GraphCaptureTests(unittest.TestCase):
         self.assertEqual(projected[0]['endpoints'],[{'role':'worker','key':[{'string':'Alice'}]},{'role':'project','key':[{'string':'A'}]}]);self.assertEqual(projected[2]['endpoints'][1]['key'],[{'string':'B'}]);self.assertEqual(retained,tuple(rows))
         self.assertEqual(json.loads(covered),[{'relationship':relationship,'complete':True,'roles':['worker','project'],'fields':[]}])
         self.assertTrue(any(q.startswith('LOCK TABLE ONLY truss.edge IN SHARE MODE NOWAIT') for q,_ in cursor.queries));self.assertTrue(all('WHERE rel_type_id=ANY' in q for q,_ in cursor.queries if 'FROM ONLY truss.edge' in q))
+    def test_projection_preserves_typed_composite_keys_and_occurrences_under_permutation(self):
+        sources,records,facts,private=fixture()
+        initial=json.loads(sources.initialize_bytes)
+        core=initial['sources']['closure']['documents'][0]['document']
+        second=copy.deepcopy(core['modules'][0]['relationships'][0]);second['id']='Reviews'
+        core['modules'][0]['relationships'].append(second)
+        association=copy.deepcopy(initial['sources']['ontology']['associations'][0])
+        association['relationship']['relationshipId']='Reviews'
+        initial['sources']['ontology']['associations'].append(association)
+        encoded=json.dumps(core,separators=(',',':'))
+        accepted=json.loads(sources.accepted_request_bytes)
+        accepted['modules'][0]['documentJson']=encoded
+        accepted['modules'][0]['pin']['sha256']=hashlib.sha256(encoded.encode()).hexdigest()
+        sources.accepted_request_bytes=json.dumps(accepted).encode()
+        sources.initialize_bytes=json.dumps(initial).encode()
+        assessment=json.loads(sources.accepted_assessment_bytes)
+        native=copy.deepcopy(assessment['inventory']['relationships'][0]);native.update(rel_id='Reviews',rel_type_id=32)
+        assessment['inventory']['relationships'].append(native)
+        assessment['inventory']['endpoints'].append({'rel_type_id':32,'source_type':11,'target_type':12})
+        sources.accepted_assessment_bytes=json.dumps(assessment).encode()
+        # Equal tuples across distinct Record types must retain their typed roles.
+        composite=[{'integerToken':'9007199254740993'},{'decimalToken':'1.00'},
+                   {'binaryHex':'00ff'},{'boolean':False},{'string':'a\u0000b'}]
+        facts[0]['key']=copy.deepcopy(composite);facts[1]['key']=copy.deepcopy(composite)
+        rows=[('90','31','1','1','11','2','12'),('91','31','2','1','11','2','12'),
+              ('92','32','1','1','11','3','12')]
+        expected={edge: {'relationship':dict(relationship,relationshipId=rel),
+                         'witness':{'kind':'opaque-existential','id':edge},
+                         'endpoints':[{'role':'worker','key':composite},
+                                      {'role':'project','key':key}]}
+                  for edge,rel,key in [('90','WorksOn',composite),('91','WorksOn',composite),
+                                       ('92','Reviews',facts[2]['key'])]}
+        for permutation in itertools.permutations(range(len(facts))):
+            ordered_facts=[facts[i] for i in permutation];ordered_private=[private[i] for i in permutation]
+            for ordered_rows in itertools.permutations(rows):
+                with self.subTest(facts=permutation,edges=[r[0] for r in ordered_rows]):
+                    raw,covered,retained=_capture_graphs(Cursor(ordered_rows),sources,records,ordered_facts,ordered_private)
+                    result=json.loads(raw)
+                    self.assertEqual(result,[expected[r[0]] for r in ordered_rows])
+                    self.assertEqual(retained,ordered_rows)
+                    self.assertEqual(len(json.loads(covered)),2)
+
     def test_empty_population_keeps_complete_graph_coverage(self):
         raw,covered,rows=_capture_graphs(Cursor(),*fixture());self.assertEqual(raw,b'[]');self.assertEqual(rows,());self.assertTrue(json.loads(covered)[0]['complete'])
     def test_no_graph_selection_performs_no_edge_query(self):
