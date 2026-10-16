@@ -330,3 +330,15 @@ transition validator remain unchanged. Astra Ultra clears the exact two-filter
 change; six basic edge/owned/authority workflows pass (22.411s). The unchanged
 1,000-node/1,000-edge matrix still refuses with57014 during edge application
 (26.245s total), so this is not performance qualification or release clearance.
+
+Final incident-edge validation now resolves the live final edge identities once
+per validation invocation, then checks the same actual per-object incident edges
+against exact `(typeId,id)` membership. Parallel edge IDs remain distinct;
+deleted edges are excluded. Actual object/edge images, complete effect inventory,
+forest validation and fresh authorization remain checked. Astra Ultra clears the
+source. Seven existing edge/owned/authority/parallel workflows pass; a focused
+unplanned parallel-edge injection refuses with the original inventory error and
+preserves prior caller work with zero durable edges after caller COMMIT (4.645s).
+An initial ambiguous SQL projection and a max1 test fixture were corrected.
+The unchanged1,000-edge matrix still times out during apply (10,026ms; create
+7,310ms plus4,845ms COMMIT). No edge commit was reached or performance gate closed.

@@ -7,7 +7,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;plan jsonb;last
  operation jsonb;result jsonb;entry record;owner record;transition_id bigint;identity jsonb;actual jsonb;
  reference text;mode text;expected_objects int;expected_edges int;events jsonb;deleted jsonb;aliases jsonb:='[]';
  primary_before jsonb;primary_after jsonb;expected_outcome text;expected_version text;
- node_order text[];projection jsonb;local_owned jsonb;root_reference text;index int;current_actor oid;
+ node_order text[];projection jsonb;local_owned jsonb;root_reference text;index int;current_actor oid;live_edges jsonb;
  history_dictionary jsonb:='{}';historical_basis jsonb;historical_revision int;history_group record;history_basis jsonb;
  history_property truss.prop_def%ROWTYPE;history_pin record;history_pins jsonb;history_order jsonb;history_key text;history_type_pin text;sealed record;
 BEGIN
@@ -157,6 +157,13 @@ BEGIN
   IF NOT truss.runtime_object_values_readable_qualified(entry.type_id,current_actor) THEN RAISE EXCEPTION 'current complete object value readers required' USING ERRCODE='42501';END IF;
  END LOOP;
  IF NOT check_final THEN RETURN;END IF;
+ -- Resolve final live edge identities once for this validation invocation.
+ -- Every actual incident edge still needs the same exact typed membership.
+ WITH resolved AS MATERIALIZED (
+  SELECT truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,p.key,'edge',last_plan,attempt) identity
+  FROM jsonb_each(last_plan->'afterEdges') p WHERE p.value->'deleted'='false'::jsonb)
+ SELECT coalesce(jsonb_object_agg(jsonb_build_array(resolved.identity->>'typeId',resolved.identity->>'id')::text,true),'{}'::jsonb)
+  INTO live_edges FROM resolved;
  FOR entry IN SELECT key,value FROM jsonb_each(last_plan->'afterNodes') LOOP
   identity:=truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,entry.key,'object',last_plan,attempt);
   SELECT to_jsonb(o)-ARRAY['created_at','updated_at'] INTO actual FROM truss.object o WHERE o.id=(identity->>'id')::bigint AND o.type_id=(identity->>'typeId')::int;
@@ -164,9 +171,7 @@ BEGIN
    RAISE EXCEPTION 'actual final owned object required' USING ERRCODE='55000';END IF;
   IF EXISTS(SELECT 1 FROM truss.edge e WHERE (e.source_id=(identity->>'id')::bigint AND e.source_type=(identity->>'typeId')::int
     OR e.target_id=(identity->>'id')::bigint AND e.target_type=(identity->>'typeId')::int)
-   AND NOT EXISTS(SELECT 1 FROM jsonb_each(last_plan->'afterEdges') p WHERE p.value->'deleted'='false'::jsonb
-    AND truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,p.key,'edge',last_plan,attempt)->>'id'=e.id::text
-    AND truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,p.key,'edge',last_plan,attempt)->>'typeId'=e.rel_type_id::text)) THEN
+   AND NOT (live_edges ? jsonb_build_array(e.rel_type_id::text,e.id::text)::text)) THEN
    RAISE EXCEPTION 'complete final incident edge inventory required' USING ERRCODE='55000';END IF;
  END LOOP;
  FOR entry IN SELECT key,value FROM jsonb_each(last_plan->'afterEdges') LOOP
