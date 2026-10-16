@@ -315,7 +315,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_prepare(jsonb,jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_owned_capture(selected_attempt uuid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;observed jsonb;locked jsonb;
- inventory jsonb;entry jsonb;owner record;selected_type int;relation truss.rel_def%ROWTYPE;endpoint_owner record;retained_bytes bigint:=0;current_actor oid;
+ inventory jsonb;entry jsonb;expected_operation jsonb;actual_operation jsonb;owner record;selected_type int;relation truss.rel_def%ROWTYPE;endpoint_owner record;retained_bytes bigint:=0;current_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
@@ -380,8 +380,17 @@ BEGIN
    entry:=entry||jsonb_build_object('initialScope',inventory->'initialScope');END IF;
   retained_bytes:=retained_bytes+octet_length(convert_to(entry::text,'UTF8'));
   IF retained_bytes>16777216 THEN RAISE EXCEPTION 'bounded retained whole group inventory required' USING ERRCODE='54000';END IF;
+  expected_operation:=jsonb_build_object('attempt_id',attempt.id,'operation_index',(entry->>'operationIndex')::int,
+   'writer_xid',attempt.writer_xid::text,'plan',entry);
   INSERT INTO truss.runtime_owned_operation(attempt_id,operation_index,writer_xid,plan)
-  VALUES(attempt.id,(entry->>'operationIndex')::int,attempt.writer_xid,entry);
+  VALUES(attempt.id,(entry->>'operationIndex')::int,attempt.writer_xid,entry)
+  RETURNING to_jsonb(runtime_owned_operation) INTO actual_operation;
+  IF NOT FOUND OR actual_operation IS DISTINCT FROM expected_operation THEN
+   RAISE EXCEPTION 'exact prepared operation insert required' USING ERRCODE='55000';END IF;
+  SELECT to_jsonb(o) INTO STRICT actual_operation FROM truss.runtime_owned_operation o
+   WHERE o.attempt_id=attempt.id AND o.operation_index=(entry->>'operationIndex')::int;
+  IF actual_operation IS DISTINCT FROM expected_operation THEN
+   RAISE EXCEPTION 'exact stored prepared operation required' USING ERRCODE='55000';END IF;
  END LOOP;
 END;
 $$;
@@ -391,20 +400,19 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_capture(uuid) FROM PUBLIC;
 -- matching never attributes a descendant transition to an unrelated operation.
 CREATE FUNCTION truss.runtime_owned_plan(selected_attempt uuid,selected_index int) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;original truss.runtime_owned_operation%ROWTYPE;input jsonb;
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;original truss.runtime_owned_operation%ROWTYPE;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  SELECT * INTO STRICT original FROM truss.runtime_owned_operation
   WHERE attempt_id=selected_attempt AND operation_index=selected_index;
- input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
- IF selected_index NOT BETWEEN 0 AND jsonb_array_length(input->'operations')-1
+ -- Both source bytes and prepared operations are immutable after capture.
+ -- Full source correspondence is checked once at each group settlement.
+ IF selected_index<0
   OR original.writer_xid IS DISTINCT FROM attempt.writer_xid
   OR original.plan->>'profile' IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
   OR original.plan->'operationIndex' IS DISTINCT FROM to_jsonb(selected_index)
-  OR original.plan->'operation' IS DISTINCT FROM input->'operations'->selected_index
-  OR original.plan->'mutationProfile' IS DISTINCT FROM input->'mutationProfile'
-  OR input->'mutationProfile' IS DISTINCT FROM attempt.context->'mutationProfile'
-  OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
+  OR original.plan->'mutationProfile' IS DISTINCT FROM attempt.context->'mutationProfile'
+  OR attempt.context->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
   RAISE EXCEPTION 'original owned operation correspondence required' USING ERRCODE='55000';END IF;
  RETURN original.plan;
 END;
@@ -444,7 +452,7 @@ BEGIN
   IF creation_index>selected_index OR creation_index>=attempt.next_index THEN
    RAISE EXCEPTION 'prior original create progress required' USING ERRCODE='55000';END IF;
   result:=attempt.results->creation_index;
-  operation:=convert_from(attempt.input_bytes,'UTF8')::jsonb->'operations'->creation_index;
+  operation:=truss.runtime_owned_plan(selected_attempt,creation_index)->'operation';
   IF result->>'operation' IS DISTINCT FROM 'create_'||entity_kind
    OR operation->>'operation' IS DISTINCT FROM result->>'operation'
    OR result->>'outcome' IS DISTINCT FROM 'created'

@@ -678,7 +678,7 @@ BEGIN
   JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
   WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id()
    AND t.before_object IS NULL
-   AND convert_from(a.input_bytes,'UTF8')::jsonb->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() LOOP
+   AND a.context->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() LOOP
   PERFORM truss.runtime_create_transition_validate(creation_transition);
  END LOOP;
  -- Immutable transition semantics are checked at final group settlement and
@@ -688,7 +688,7 @@ BEGIN
    a.next_index AS original_next,a.results AS original_results
   FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
   WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id()
-   AND convert_from(a.input_bytes,'UTF8')::jsonb->'mutationProfile'=truss.runtime_owned_profile()
+   AND a.context->'mutationProfile'=truss.runtime_owned_profile()
  LOOP
   IF owned_transition.original_actor IS DISTINCT FROM current_actor
    OR owned_transition.original_writer IS DISTINCT FROM pg_current_xact_id()

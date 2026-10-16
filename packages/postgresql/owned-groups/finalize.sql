@@ -19,7 +19,11 @@ BEGIN
   OR (SELECT count(*) FROM truss.runtime_owned_operation WHERE attempt_id=selected_attempt)<>attempt.next_index THEN
   RAISE EXCEPTION 'complete original owned group required' USING ERRCODE='55000';END IF;
  FOR index IN 0..attempt.next_index-1 LOOP
-  plan:=truss.runtime_owned_plan(selected_attempt,index);operation:=plan->'operation';mode:=operation->>'operation';result:=attempt.results->index;
+  plan:=truss.runtime_owned_plan(selected_attempt,index);operation:=plan->'operation';
+  IF operation IS DISTINCT FROM input->'operations'->index
+   OR plan->'mutationProfile' IS DISTINCT FROM input->'mutationProfile' THEN
+   RAISE EXCEPTION 'original owned operation source correspondence required' USING ERRCODE='55000';END IF;
+  mode:=operation->>'operation';result:=attempt.results->index;
   IF index=0 THEN initial_scope:=plan->'initialScope';END IF;
   expected_objects:=0;expected_edges:=0;
   FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterNodes') n WHERE n.value IS DISTINCT FROM plan->'beforeNodes'->n.key
