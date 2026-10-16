@@ -1,0 +1,52 @@
+{
+  "review": "Native-source descriptor R2 capacity-profile correction",
+  "status": "passed",
+  "remainingFindings": [],
+  "packet": {
+    "path": "review.zip",
+    "sha256": "be5e2bdda9853565d6fe3f766265508d2788ea894ee2209d240984828c3c1f66",
+    "bytes": 18641
+  },
+  "originalReview": {
+    "path": "/private/tmp/truss-native-source-descriptor-astra-20261016/review.json",
+    "sha256": "8ceb673fb0228c33dd9400dfc5401e591ffc502d1fd7fb6828beca65dd8d8d62",
+    "bytes": 7051,
+    "finding": "NSB-DOC-01",
+    "preservedUnchanged": true
+  },
+  "resolvedFindings": [
+    {
+      "id": "NSB-DOC-01",
+      "resolution": "CONTRACT-013 explicitly declares modules1..256 and strict JSON number-token512, object/array4096, root-depth0/max128 and node1,000,000 limits, applied to every original and each nested documentJson scan. Test plan adds paired capacity controls. Existing implementation limits are unchanged."
+    }
+  ],
+  "sourceCorrespondence": {
+    "descriptorSha256": "092b3580c2ba4c185238e2d5def47d6ca3b8488897e2124e9fb0a86e71239589",
+    "decoderSha256": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55",
+    "result": "Descriptor and design byte-identical to R1; decoder byte-identical to exact R1 baseline helper; all original test methods retained with no AST change."
+  },
+  "validation": {
+    "command": "/private/tmp/truss-practical-performance-env/bin/python -B review-controls.py",
+    "result": "15 authored tests and39 independent checks passed",
+    "logs": [
+      "tests.log",
+      "review-controls.log"
+    ],
+    "receipt": "review-controls.json",
+    "independentControls": "Exact packet pins, production/design byte correspondence, original test retention, full signed/fraction/exponent numeric-token boundaries, and independently counted exactly1,000,000/1,000,001-node originals with matching recomputed source hashes.",
+    "nodeBoundary": {
+      "accepted": 1000000,
+      "refused": 1000001,
+      "acceptedBytes": 2999764,
+      "refusedBytes": 2999767,
+      "depth": 3
+    },
+    "qualification": "The added authored node test straddles the limit (998,661/1,002,562 nodes); the reviewer separately exercised exact boundary and first failure. No product source change required."
+  },
+  "governanceReview": "docs-review/report.json",
+  "scope": "Additive capacity-contract correction only. Pure supplied-data structural correspondence remains incomplete, authority:false, securityReady:false and nativeAdmission:required. No native capture/SQL, UMF semantic or Field/Key/edge/codec mapping, current source/caller authority, registration or guarded-release qualification. No original132/shared158 case promotion. R1 review and finding remain immutable; this separate addendum records closure.",
+  "artifactManifest": {
+    "path": "manifest.json",
+    "format": "relative path -> {sha256, bytes}; every retained file except top-level manifest"
+  }
+}

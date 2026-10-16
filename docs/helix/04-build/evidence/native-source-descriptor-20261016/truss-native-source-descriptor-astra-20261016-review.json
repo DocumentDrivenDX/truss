@@ -1,0 +1,112 @@
+{
+  "review": "Truss native-source descriptor structural spike R1",
+  "status": "one-narrow-documentation-finding",
+  "baseline": "430b77b96373e05d20e513cbd048980d9e8031f1",
+  "packet": {
+    "path": "review.zip",
+    "sha256": "2294c85b90fefa9563db79c695bc4e4c8f37d7d03bbaf85c79f4307b42c0a2b2",
+    "bytes": 20550
+  },
+  "source": {
+    "path": "frozen/packages/python/src/truss/_native_source_descriptor.py",
+    "sha256": "092b3580c2ba4c185238e2d5def47d6ca3b8488897e2124e9fb0a86e71239589",
+    "bytes": 7039
+  },
+  "findings": [
+    {
+      "id": "NSB-DOC-01",
+      "priority": 2,
+      "title": "Freeze the complete structural capacity profile in CONTRACT-013",
+      "path": "docs/helix/02-design/contracts/CONTRACT-013-native-source-binding.md",
+      "lines": [
+        41,
+        44
+      ],
+      "relatedLines": [
+        72,
+        79
+      ],
+      "body": "The normative surface specifies byte limits and selected native array limits, but does not state the accepted-request modules1..256 limit or the shared strict decoder capacities applied to all four objects and each nested documentJson. The implementation therefore refuses otherwise-valid, matching-hash unknown source content well below the documented byte ceiling for unstated reasons. This is a normative capacity-profile gap, not an authority or semantic-admission bug.",
+      "implementationEvidence": [
+        {
+          "path": "packages/python/src/truss/_native_source_descriptor.py",
+          "lines": [
+            71,
+            80,
+            91
+          ],
+          "behavior": "Uses the shared decoder for all originals and nested model JSON; modules must contain1..256 entries."
+        },
+        {
+          "path": "packages/python/src/truss/_owner_evidence_json.py",
+          "base": "430b77b96373e05d20e513cbd048980d9e8031f1",
+          "lines": [
+            22,
+            24,
+            42,
+            55
+          ],
+          "behavior": "512-character complete number token; maximum4096 object members or array elements; maximum depth128 with root depth0; maximum1,000,000 visited nodes counting object keys and values."
+        }
+      ],
+      "observedControls": [
+        "4096 unknown object members accepted at48079bytes;4097 refused at48091bytes: Owner evidence object capacity exceeded.",
+        "512-character positive integer token accepted at548bytes;513 refused at549bytes: Owner evidence number token capacity exceeded.",
+        "256 modules accepted at49737request/34449assessmentbytes;257 refused at49932request/34583assessmentbytes: Complete original model pins required."
+      ],
+      "requestedChange": "List these bounds normatively, specify that numeric-token length includes sign/fraction/exponent characters, describe node/depth counting and separate nested documentJson scans, and require paired capacity-boundary controls under NSB-T13. Keep the implementation limits and explicit incomplete/data-only scope unchanged."
+    }
+  ],
+  "remainingFindings": [
+    "NSB-DOC-01"
+  ],
+  "conclusion": "No additional functional or false-authority defect found in this supplied-data structural envelope. Complete the normative capacity-profile declaration before treating CONTRACT-013 as the frozen structural contract. Keep current guards; no broader binding/native admission follows.",
+  "validation": [
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B independent-controls.py",
+      "result": "10 authored tests and 402 independent checks passed",
+      "receipts": [
+        "supplied-tests.log",
+        "independent-controls.json",
+        "independent-controls.log"
+      ]
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B nested-repair-controls.py",
+      "result": "6 exact reconstructed prechange/current comparisons passed; old source accepts matching-hash malformed or mismatched nested documents, current source refuses",
+      "receipts": [
+        "nested-repair-controls.json",
+        "nested-repair-controls.log"
+      ]
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B docs-review/boundary-doc-controls.py",
+      "result": "6 paired pure boundary controls confirm the undeclared object, numeric-token and module capacities",
+      "receipts": [
+        "docs-review/boundary-doc-controls.json",
+        "docs-review/report.json"
+      ]
+    }
+  ],
+  "independentCoverage": [
+    "All nine packet manifest entries verified; exact baseline shared decoder captured from Git and pinned. Tests load only these frozen private modules in an isolated namespace, not an installed-package/public API cohort.",
+    "Closed inventory/nested shapes; every numeric native locator field with canonical uint32/uint64 endpoints, zero policy and invalid coercions; integer attnum/typmod ranges; exact Boolean/generated/identity flags; UTF-8 63-byte names, NUL/surrogates and case-distinct names.",
+    "Relation/name and column/attnum uniqueness; 256/257 relations and 4096/4097 columns; matching-hash nested JSON duplicates, malformed text, nonfinite numbers and id/umf mismatch; raw source preservation and four exact hash/size references.",
+    "Exact 4,000,000-byte original release accepted and 4,000,001 refused after dependent pins are recomputed. Large exact integers/decimals remain raw; parser numeric-token limits include signs.",
+    "Every successful independent case retains complete/authority/securityReady false and nativeAdmission required. Issued object is frozen and retains original immutable source bytes."
+  ],
+  "scope": [
+    "Data-only structural correspondence of supplied originals. No native observation, semantic UMF validation, Field/Record/Key/edge/codec mapping, source continuity, registration, authenticated caller/current authority, SQL execution or guarded-release proof.",
+    "Metadata OIDs, names, type/flag labels and equal copied identities do not establish actual native catalog states, identity continuity, comparator semantics or authority.",
+    "The new design/test plan correctly retain future native binding/witness requirements. All original Truss132/shared158 allocations remain unchanged; no case promoted.",
+    "External Python runtime and standard library are non-hermetic. This review pins exact selected source bytes; it does not claim continuously held files or ABA exclusion."
+  ],
+  "retainedHistory": [
+    "Original supplied reconstructed pre-nested-scan source, diagnostic script, failure/repair receipt and R1 ZIP remain unchanged. Reviewer old/new replay is separately labeled reconstruction, not historical execution.",
+    "Reviewer first numerical-boundary expectation used 512 digits plus a minus sign, a 513-character token. That harness failure and source are retained as independent-controls-first.*; corrected total512-character input passes without product edits."
+  ],
+  "artifactManifest": {
+    "path": "manifest.json",
+    "format": "relative path -> {sha256, bytes}; all retained files except this top-level manifest"
+  }
+}

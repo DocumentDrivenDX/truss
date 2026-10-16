@@ -1,0 +1,86 @@
+{
+  "truss-descriptor-import-map-controls-20261016.json": {
+    "sha256": "6029eccca22c88305744eba8fe78a27b545ea611ec438466d23f2158d7c76c5a",
+    "bytes": 400
+  },
+  "truss-native-source-descriptor-r2-astra-20261016-review.json": {
+    "sha256": "3f4cc6a00cdbd28e3e35c30935f5f2bc49c2a5689f76836356ce34dd7955f567",
+    "bytes": 2901
+  },
+  "truss-native-descriptor-integration-unit-20261016.log": {
+    "sha256": "25df620d4d340721045abb822fbd6f1fd7a166fc2948f944a8740c366d819249",
+    "bytes": 2750
+  },
+  "truss-native-descriptor-installed-tests-r2-20261016.log": {
+    "sha256": "125cc4e3afe75c735d9783deabfb5bc3f96ede5686760c7aa8f4d28298dd2d14",
+    "bytes": 2750
+  },
+  "truss-native-source-descriptor-spike-r1-20261016.zip": {
+    "sha256": "2294c85b90fefa9563db79c695bc4e4c8f37d7d03bbaf85c79f4307b42c0a2b2",
+    "bytes": 20550
+  },
+  "truss-native-source-descriptor-astra-20261016.zip": {
+    "sha256": "ed051314c6aeb034cbf3afaae415844d117e20e58dfe009c1ab64fe80978fda3",
+    "bytes": 76207
+  },
+  "truss-native-source-descriptor-astra-20261016-review.json": {
+    "sha256": "8ceb673fb0228c33dd9400dfc5401e591ffc502d1fd7fb6828beca65dd8d8d62",
+    "bytes": 7051
+  },
+  "truss-native-source-descriptor-astra-20261016-manifest.json": {
+    "sha256": "a8aa874787c26620f1745d418c34bbd5b59f478a32aa1492784c40f54eb8f6c4",
+    "bytes": 4798
+  },
+  "truss-native-descriptor-wheel-verification-r2-20261016.log": {
+    "sha256": "347c5f524b82bb69eeb73b63c0b398dc043531b3e6cf962b1e6db02bc63e9cbe",
+    "bytes": 134
+  },
+  "truss-native-descriptor-installed-tests-20261016.log": {
+    "sha256": "8595ea3f032247067236a3a8ae6b62e5ef7de84ec6c5b2f9dd952233ae969e98",
+    "bytes": 1047
+  },
+  "truss-native-descriptor-integration-boundaries-20261016.log": {
+    "sha256": "260288b545a24195ce833f103d300cd95cdb04de2aa836d78698c22a9223977a",
+    "bytes": 84
+  },
+  "truss-native-descriptor-wheel-verification-r2-20261016.json": {
+    "sha256": "a9e6d52c7665089aa0f8d38e61635a5046f13939c3fae3ffcda2a7dc7b3a3ec0",
+    "bytes": 59617
+  },
+  "truss-native-descriptor-wheel-build-20261016.log": {
+    "sha256": "985153f91737e5bd9d96e35d378cf186352ac56e8323db83daa856ea62f5d731",
+    "bytes": 994
+  },
+  "README.md": {
+    "sha256": "dfc1a9885ce508c4a4f861526fc12663e2b0aa3735fe97df971360daf0b4590e",
+    "bytes": 1144
+  },
+  "truss-native-source-descriptor-r2-astra-20261016-manifest.json": {
+    "sha256": "cf8bec60d373f30aafc71296309347a90d9e324a35a6cb340cfcb5d05e941105",
+    "bytes": 2780
+  },
+  "truss-native-source-descriptor-r2-capacity-20261016.zip": {
+    "sha256": "be5e2bdda9853565d6fe3f766265508d2788ea894ee2209d240984828c3c1f66",
+    "bytes": 18641
+  },
+  "truss_toolkit-0.0.37.dev0-py3-none-any.whl": {
+    "sha256": "bb43f1f918a7c4e071f300b25b83ec80b91601c1ee99faa424d0129531f681a4",
+    "bytes": 2695238
+  },
+  "truss-native-source-descriptor-r2-astra-20261016.zip": {
+    "sha256": "95614491bfa586a6aabf65c33720d28c8e6ad85daa9ac651893017d3e865520c",
+    "bytes": 51184
+  },
+  "truss-descriptor-import-map-controls-20261016.py": {
+    "sha256": "41e4110077ac16ba3273f017b376815ee251226357c617540d762e250686e270",
+    "bytes": 1958
+  },
+  "truss-disclosure-main-wheel-verify-20261016.py": {
+    "sha256": "d1d476f6eed6211aa6978cb1a400d8e847f9aff52c2d9e9451dcb4d9439ebeae",
+    "bytes": 3165
+  },
+  "truss-native-descriptor-wheel-verification-20261016.log": {
+    "sha256": "09b2b7d6995707d50afcd0827a3819b26a341f2c7f1403fe841a6364266dbe93",
+    "bytes": 557
+  }
+}

@@ -1,0 +1,5 @@
+# Native source descriptor component evidence
+
+Pure supplied-source descriptor0.1; no native binding, authority, admission or acceptance promotion. R1 review retains NSB-DOC-01; separately reviewed R2 declares exact parser/module capacities and resolves it without changing descriptor code. Both full reviewer archives are hash/size checked. Fifteen source and installed tests pass. Boundary checker passes1477 imports; root independently checked its five explicit added permissions. Fresh wheel has499 exact source members (count verified from the receipt), original15 owner assets and unchanged query dependency. Earlier hardcoded0.0.36 wheel-path failures are retained separately from corrected0.0.37 verification. Native observer0.2 is deliberately unsupported here. Field/Key/edge correspondence, native admission and final release remain open.
+
+Wheel checks used baseline59cacc9364b0e814736ae143ff6fca072d31ccd5 plus this descriptor. Main integration preserves subsequent ce92ca6f runtime changes; this retained wheel is not claimed to represent those later SQL assets. Descriptor and shared decoder sources are unchanged by that rebase.

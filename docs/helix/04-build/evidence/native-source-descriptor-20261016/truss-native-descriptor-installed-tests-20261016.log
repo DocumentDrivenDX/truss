@@ -1,0 +1,19 @@
+test_native_source_descriptor (unittest.loader._FailedTest.test_native_source_descriptor) ... ERROR
+
+======================================================================
+ERROR: test_native_source_descriptor (unittest.loader._FailedTest.test_native_source_descriptor)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_native_source_descriptor
+Traceback (most recent call last):
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/unittest/loader.py", line 162, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_source_descriptor.py", line 4, in <module>
+    from truss._native_source_descriptor import prepare_native_source_descriptor
+ModuleNotFoundError: No module named 'truss'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

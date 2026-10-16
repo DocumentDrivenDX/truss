@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "imports": 1477,
+  "onlyNewEntry": true,
+  "checkerAlgorithmUnchanged": true,
+  "permissionRemovalControls": [
+    "dataclasses",
+    "hashlib",
+    "json",
+    "re",
+    "truss._owner_evidence_json"
+  ],
+  "checkerSha256": "9a5457958b8c5fe857e583afc158f577b187f41016b81f0125a4bab76c87a513",
+  "scope": "Root explicit import-map checks, not native/runtime qualification."
+}

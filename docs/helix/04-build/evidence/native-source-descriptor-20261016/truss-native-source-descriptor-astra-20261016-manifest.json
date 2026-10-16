@@ -1,0 +1,130 @@
+{
+  "baseline/.helix.yml": {
+    "sha256": "50c803bf828578d2d717246db0d75d16acb6c294867cce533e1073009cae010a",
+    "bytes": 43
+  },
+  "baseline/AGENTS.md": {
+    "sha256": "e14c16024663721845beacf7bf2955b6ad70964cf870cc8a3c82feb22d1d3429",
+    "bytes": 8811
+  },
+  "baseline/packages/python/src/truss/_owner_evidence_json.py": {
+    "sha256": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55",
+    "bytes": 3271
+  },
+  "baseline-pins.json": {
+    "sha256": "7f2b6581d4cdcb64359f72c6c1247b398cf44cfa457b003ba22e8b58c4d7c90f",
+    "bytes": 503
+  },
+  "docs-review/baseline-owner-evidence-json.py": {
+    "sha256": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55",
+    "bytes": 3271
+  },
+  "docs-review/boundary-doc-controls.json": {
+    "sha256": "7a5af6bfdc9cadb39882f186410f0cab4aab8b006402510cc940930045459a7b",
+    "bytes": 1540
+  },
+  "docs-review/boundary-doc-controls.py": {
+    "sha256": "c86b5c6737554d64e8349962bbe331ac6c8e11704dc2d0bcbb415ed964a6c395",
+    "bytes": 3320
+  },
+  "docs-review/report.json": {
+    "sha256": "0ec06bd4854fadb24f60b7b233a537207b959f08e64ae5e53a8dfa6175bc13bb",
+    "bytes": 6329
+  },
+  "docs-review/sha256.json": {
+    "sha256": "3b101d868589a81e0dc098a26e5fa8395628ea6d2ba996f2d325894d7f40fab2",
+    "bytes": 480
+  },
+  "docs-review/write-report.py": {
+    "sha256": "1ad7c2472053e614a3d694e3837262410a42f5fe5b0073d2b851021c46266446",
+    "bytes": 4769
+  },
+  "finalize-review.py": {
+    "sha256": "84574dcf67e1ee94b9666c500bc0acaaef4a665d608dd12f331d1f163d38373f",
+    "bytes": 4956
+  },
+  "frozen/docs/helix/02-design/contracts/CONTRACT-013-native-source-binding.md": {
+    "sha256": "cc6dab145e64f0ccbdc5003c12b6b75fc4104673fda2b181f344b62d4f997de8",
+    "bytes": 5839
+  },
+  "frozen/docs/helix/02-design/technical-designs/native-source-binding.md": {
+    "sha256": "ee1e40e2270218004b026c76bc56cd668eb87638a80d2f95299c3f609ab52e86",
+    "bytes": 9998
+  },
+  "frozen/docs/helix/03-test/native-source-binding-test-plan.md": {
+    "sha256": "069d324cbc496b0b1187e5400582d19ec8e3172778a11e1087bdcea6b17c99e3",
+    "bytes": 5467
+  },
+  "frozen/evidence/native-source-descriptor-nested-repair-20261016.json": {
+    "sha256": "2652f942cd4883a1eaf25ceb8f68a412e2e2604df15411de19541f555cbc68a2",
+    "bytes": 627
+  },
+  "frozen/evidence/native-source-descriptor-pre-nested-scan-20261016.py": {
+    "sha256": "456c81a0d6b6f7ffc1d336c495a0ad487e804d42a816b84230786c1dbba85fb9",
+    "bytes": 6755
+  },
+  "frozen/evidence/replay-native-descriptor-nested-prechange-20261016.py": {
+    "sha256": "30ec22ad93ffd5888207328d9a7caa8dde7a2979049484434e4747df9febd455",
+    "bytes": 2611
+  },
+  "frozen/evidence/truss-native-source-descriptor-spike-20261016.log": {
+    "sha256": "edd33875b455f872e77f90a0253d786fd43bfd2c9e6ddcb367c3f17471c680af",
+    "bytes": 1861
+  },
+  "frozen/manifest.json": {
+    "sha256": "7376bd68b9dddbfd203e4ba8aecbfab1c14c494d4b31526d6512d0e607449f58",
+    "bytes": 2148
+  },
+  "frozen/packages/python/src/truss/_native_source_descriptor.py": {
+    "sha256": "092b3580c2ba4c185238e2d5def47d6ca3b8488897e2124e9fb0a86e71239589",
+    "bytes": 7039
+  },
+  "frozen/packages/python/tests/test_native_source_descriptor.py": {
+    "sha256": "72738a073eea185a064cd299b1502e6076bac7c21cf20570af766e2787939123",
+    "bytes": 7013
+  },
+  "independent-controls-first.log": {
+    "sha256": "cc22fdb70ee711a2e6261ac089db7a227d3e374a00f9bfa50bb35457b471cd1b",
+    "bytes": 3744
+  },
+  "independent-controls-first.py": {
+    "sha256": "dd6a35185d094a82e73e71f996da94ad3d97e4228f9804a54579fdba7744f1f2",
+    "bytes": 7921
+  },
+  "independent-controls.json": {
+    "sha256": "e465f1add56750c25634c13a0e31129636d48b420174c1743e9be601ea807b49",
+    "bytes": 43652
+  },
+  "independent-controls.log": {
+    "sha256": "df6633ef6fdb79338e9891e78a493bc54452770448091ccca8d896f163011850",
+    "bytes": 57
+  },
+  "independent-controls.py": {
+    "sha256": "5adf4dfdd2121a0aec231faf6e1457cd15afa96b0eb8042770de20bb44cc9d5b",
+    "bytes": 7921
+  },
+  "nested-repair-controls.json": {
+    "sha256": "0dab7e753f5098f5b1347fdfae808194b64887770f0281d3e2c23255d81a8c44",
+    "bytes": 2105
+  },
+  "nested-repair-controls.log": {
+    "sha256": "95abb4eb3c99e3781f66184623f6d13d751b8a19b0001ce5162be9ed8473f828",
+    "bytes": 46
+  },
+  "nested-repair-controls.py": {
+    "sha256": "fd257d3ed4dc21f0aebd1feff78685dc2b3fd1a65c1c4cacb547a9871d519f2c",
+    "bytes": 2619
+  },
+  "review.json": {
+    "sha256": "8ceb673fb0228c33dd9400dfc5401e591ffc502d1fd7fb6828beca65dd8d8d62",
+    "bytes": 7051
+  },
+  "review.zip": {
+    "sha256": "2294c85b90fefa9563db79c695bc4e4c8f37d7d03bbaf85c79f4307b42c0a2b2",
+    "bytes": 20550
+  },
+  "supplied-tests.log": {
+    "sha256": "07047f7ca61857deb8767f7a32f45107943c3514d84f59d508e640350f34973c",
+    "bytes": 1781
+  }
+}

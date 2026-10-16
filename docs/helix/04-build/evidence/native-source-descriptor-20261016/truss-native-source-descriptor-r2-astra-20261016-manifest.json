@@ -1,0 +1,78 @@
+{
+  "docs-review/docs.patch": {
+    "sha256": "d6ae793e2911a901363945355f8b196a8ebc792b338a4d26b7c000d6a25caa88",
+    "bytes": 2043
+  },
+  "docs-review/report.json": {
+    "sha256": "57704c69a0285a578124bbce1da898a372ab08f818273790ec918348cd373b0c",
+    "bytes": 4036
+  },
+  "docs-review/review.py": {
+    "sha256": "977973e175447ce0784b9f9c5192d732f35881957fcc5efdf2e5e2959371c869",
+    "bytes": 4733
+  },
+  "docs-review/sha256.json": {
+    "sha256": "d63cafd8eb14e8a2c9c50e383908445b28a1c1813e9a2b413aa2511e3228cce4",
+    "bytes": 255
+  },
+  "finalize-review.py": {
+    "sha256": "a6c1155ca00674fa2be91ce0e4810783e0ecb086dd4ed96e725071fbc23348f6",
+    "bytes": 3290
+  },
+  "frozen/docs/helix/02-design/contracts/CONTRACT-013-native-source-binding.md": {
+    "sha256": "987ae72568aea836fb8a58180b7467dcc9544b6b586f5c85b78300b98af28927",
+    "bytes": 6463
+  },
+  "frozen/docs/helix/02-design/technical-designs/native-source-binding.md": {
+    "sha256": "ee1e40e2270218004b026c76bc56cd668eb87638a80d2f95299c3f609ab52e86",
+    "bytes": 9998
+  },
+  "frozen/docs/helix/03-test/native-source-binding-test-plan.md": {
+    "sha256": "d677dd04b11dc6fbfd101fc658ca96642b0ca4d4942f761db3d33489125cc6c1",
+    "bytes": 6056
+  },
+  "frozen/evidence/capacity-tests.log": {
+    "sha256": "5571f6ac3de5b1219af5a9d7dc4237933c2f88f3c94bd6a642c766ca3afa48bc",
+    "bytes": 2750
+  },
+  "frozen/manifest.json": {
+    "sha256": "4223a00d7757d60181b283c3d13640586c55e39a1dc5628123fc7710c10feda7",
+    "bytes": 1749
+  },
+  "frozen/packages/python/src/truss/_native_source_descriptor.py": {
+    "sha256": "092b3580c2ba4c185238e2d5def47d6ca3b8488897e2124e9fb0a86e71239589",
+    "bytes": 7039
+  },
+  "frozen/packages/python/src/truss/_owner_evidence_json.py": {
+    "sha256": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55",
+    "bytes": 3271
+  },
+  "frozen/packages/python/tests/test_native_source_descriptor.py": {
+    "sha256": "20bace6df2804ba3df76a9c3f3ed4fafe2866d1a216aadc8bb7c61f1a72c4bd1",
+    "bytes": 9787
+  },
+  "review-controls.json": {
+    "sha256": "5854b21257f451035e3c7827e4ca520e2efab5ff25025d8ae7c825413dc09216",
+    "bytes": 4509
+  },
+  "review-controls.log": {
+    "sha256": "f9852319a40b55b45ca9e678917c08997c46ef0bb3011d8031de22d21adc71b7",
+    "bytes": 380
+  },
+  "review-controls.py": {
+    "sha256": "e93b31e68ba33e3c3f5e7022c9fc89a917008e0b8e853a7468b45a7723261584",
+    "bytes": 4112
+  },
+  "review.json": {
+    "sha256": "3f4cc6a00cdbd28e3e35c30935f5f2bc49c2a5689f76836356ce34dd7955f567",
+    "bytes": 2901
+  },
+  "review.zip": {
+    "sha256": "be5e2bdda9853565d6fe3f766265508d2788ea894ee2209d240984828c3c1f66",
+    "bytes": 18641
+  },
+  "tests.log": {
+    "sha256": "d30e6bc822ae2c65dd1addf23473b00b47374f6c86f87c42b89189de63109bd1",
+    "bytes": 2495
+  }
+}

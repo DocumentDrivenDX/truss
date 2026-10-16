@@ -8091,3 +8091,10 @@ case is promoted and no release qualification follows from this prototype.
 The consumer README custody correction EVIDENCE-CONSUMER-README-001 restores the
 exact original owner README covered by its unchanged manifest; root integration
 notes now live separately. No runtime or native evidence is rewritten.
+
+
+### Native source descriptor0.1 component — 2026-10-16
+
+CONTRACT-013 and the linked design/test plan define strict supplied-source metadata only. The unexported descriptor retains four exact original byte sources, enforces bounded strict scans including nested original documents, and refuses unknown inventory/assessment versions. Completion, authority and security readiness remain false; native admission is required. The separate R2 review resolves the retained R1 capacity-documentation finding. Fifteen source and installed tests pass; the fresh0.0.37 wheel verifies499 source members and original owner assets. Boundary checks pass1477 imports with five explicitly tested permissions. [Retained evidence](evidence/native-source-descriptor-20261016/README.md) preserves both reviews, original packets and initial wheel-path failures.
+
+This is a prerequisite only: no native registration, actual Field/ordered-Key/edge mapping, Subject continuity or guarded release is established. Observer0.2 is intentionally rejected by descriptor0.1. Shared scope remains158 cases/34 criteria,45 implemented/113 missing; no acceptance promotion.
