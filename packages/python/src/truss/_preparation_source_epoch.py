@@ -63,7 +63,7 @@ def _runtime_recipe(sources):
                 volatility='i' if 'IMMUTABLE' in attributes else 's' if 'STABLE' in attributes else 'v',
                 parallel='s' if 'PARALLEL SAFE' in attributes else 'r' if 'PARALLEL RESTRICTED' in attributes else 'u',
                 settings=settings or None, body=body[2:-2] if body.startswith('$$') else body[1:-1].replace("''", "'")))
-    if len(result) != 222 or len({r['name'] for r in result}) != 222:
+    if len(result) != 223 or len({r['name'] for r in result}) != 223:
         raise ValueError('Complete original runtime routine recipe required')
     return result
 

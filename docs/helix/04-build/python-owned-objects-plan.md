@@ -429,3 +429,31 @@ upgrades and invokes the new facades without module-access reconfiguration.
 Astra Ultra cleared the two corrected inventory/upgrade-permission blockers.
 See [the compact evidence](evidence/atomic-owned-import-20261016/README.md).
 Hosted1024-operation performance remains a separate release blocker.
+
+## Invocation-local replay preparation — 2026-10-16
+
+The complete original1024-operation workload passes with stock PostgreSQL
+function statistics enabled only in its disposable fixture. The retained owner
+function accounts for7523.839ms self-time across1024 replay operations, repeatedly
+decoding identical input/receipt and rebuilding the original catalog basis.
+These diagnostic observations overlap another functional campaign and are not
+isolated performance qualification.
+
+Reuse the invocation's already-validated decoded input/results. A private helper
+checks structural identity and STRICT current owner before interpreting the
+original executed revision, then lazily reconstructs its historical basis at the
+first object operation. Return that basis for later operations in this invocation.
+Edge-only replay adds no revision/basis dependency. Every operation still checks
+current property/item readers and module writers; final edge authorization stays
+fresh. No persistent authority cache, public API or transaction boundary changes.
+
+Astra cleared the plan with those refusal-order constraints. Its source review
+required retaining the original historical-reader compatibility wrapper unchanged;
+that wrapper is now byte-for-byte identical. The223-routine recipe and private
+upgrade custody include the new helper. Basic controls pass committed replay,
+property-reader revocation, writer revocation and original-revision replay after
+catalog evolution. The full unchanged1024 workflow passes30.804s, compared with38.962s in the
+baseline diagnostic. The private replay frame self-time is23.943ms/1024calls;
+the old repeated decoder consumed7523.839ms. These are diagnostic comparisons,
+not isolated performance qualification. Published SDK37 upgrade checks pass.
+See [retained logs and source pins](evidence/replay-decoded-frame-20261016/README.md).

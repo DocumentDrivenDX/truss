@@ -1,0 +1,7 @@
+{
+  "packages/python/src/truss/_catalog_runtime/operations.sql": "2aa1c9e2489a1aba5aec14342138d556b7e64d80743418a432daca759fac6f5c",
+  "packages/python/src/truss/_catalog_runtime/manifest.json": "ac2691897cf5f91b48f592bde81485eb2390fd933e257a53e1986ea381968e15",
+  "packages/python/src/truss/catalog_runtime.py": "9322ba672d7b2cdc36063938d10f85e29d59a18033d0a667b0a8b58994f49fce",
+  "packages/python/src/truss/_preparation_source_epoch.py": "e02b47362c15333b7d9635a8f30ec20a72b02e50ac16bab1e38bce7d023679e9",
+  "packages/python/tests/test_replay_frame_native.py": "bb74fcd8da188370af53ea3bbed397f0b4bbc43e73dd79167337e134f8ba5088"
+}
