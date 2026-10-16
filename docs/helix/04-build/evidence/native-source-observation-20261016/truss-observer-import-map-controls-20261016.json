@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "imports": 1485,
+  "onlyNewEntry": true,
+  "checkerAlgorithmUnchanged": true,
+  "permissionRemovalControls": [
+    "dataclasses",
+    "hashlib",
+    "importlib.resources",
+    "json",
+    "truss._owner_evidence_json",
+    "truss._security_catalog_assessment",
+    "truss._security_catalog_subject_installation",
+    "truss.catalog_runtime"
+  ],
+  "checkerSha256": "316a445a25e5e26ca12718493200d08d7c576064510965ef39e0817fd96f05ed",
+  "scope": "Root explicit import-map checks, not native/runtime qualification."
+}

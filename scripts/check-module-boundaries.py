@@ -15,6 +15,8 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    # Reviewed stock-cursor metadata observer; no authority admission.
+    '_native_source_observation': {'dataclasses','hashlib','importlib.resources','json','truss._owner_evidence_json','truss._security_catalog_assessment','truss._security_catalog_subject_installation','truss.catalog_runtime'},
     # Native source descriptor data only; no native observation or permission.
     '_native_source_descriptor': {'dataclasses','hashlib','json','re','truss._owner_evidence_json'},
     # Reviewed disclosure consumer: explicit held computation and transport edges.

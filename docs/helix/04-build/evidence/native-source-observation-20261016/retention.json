@@ -1,0 +1,82 @@
+{
+  "truss-native-observer-wheel-check-20261016.py": {
+    "sha256": "c4124db0d63d306fd2232aed5e142d59de0c13fe6a9a91a58d5e9dd5612d4de2",
+    "bytes": 1471
+  },
+  "truss-native-observer-wheel-build-20261016.log": {
+    "sha256": "2f3f7eac0c672b8c0c371133d22e396a251b5c5b5035e713cb8fdefd93b6a7c4",
+    "bytes": 994
+  },
+  "truss-native-source-observation-astra-20261016.zip": {
+    "sha256": "5aebcb3327d6bd957b4fdbf1d422553685bc206f583364f18c28cb0247043107",
+    "bytes": 5512360
+  },
+  "truss-native-source-observation-r2-astra-20261016-manifest.json": {
+    "sha256": "07e31d12319a7440a5c9d009d43e24f8e4d358261cc1ad7d50053e16ea211591",
+    "bytes": 7706
+  },
+  "truss-observer-import-map-controls-20261016.json": {
+    "sha256": "dc62c610520f56a95727fc8ee0b587f7db39ffc6c92d0f9271aa322295b6b01c",
+    "bytes": 540
+  },
+  "truss-native-source-observation-review-r2-20261016.zip": {
+    "sha256": "46e6f063d4314ae59d46804a239eaa8654a383996596ec66ab514751e0e8b9e0",
+    "bytes": 4403228
+  },
+  "truss-native-source-observation-r2-astra-20261016-review.json": {
+    "sha256": "6b6543805a8160dfc8bd6058ad233fa608f1e3a53410a9f1247e14094b3f6e16",
+    "bytes": 6896
+  },
+  "truss-native-descriptor-postrebase-20261016.json": {
+    "sha256": "cf2ec7a5e7225f54e473d6e73dd1778d04693e74e9f06b8a43a8355831f63a70",
+    "bytes": 557
+  },
+  "README.md": {
+    "sha256": "a478981691673899cf5f764b9cb335e3a65e51b9b89b28a3e17a60a38f0fc12f",
+    "bytes": 2118
+  },
+  "truss-observer-import-map-controls-20261016.py": {
+    "sha256": "a708681deef16895393104f5331cfbd3ea6e10aa9a3593f6c94fae35b59dceb1",
+    "bytes": 2087
+  },
+  "truss-native-source-observation-review-r1-20261016.zip": {
+    "sha256": "8cd2885c3cf5f90a82046ed45c8f4a27c16bb4004a374c54f194a5621f74939b",
+    "bytes": 2724250
+  },
+  "truss-native-observer-installed-unit-20261016.log": {
+    "sha256": "e19a86747084065fc6026e9e5463e2291a2e56061843e8a27e0424f4fed284be",
+    "bytes": 105
+  },
+  "truss_toolkit-0.0.37.dev0-py3-none-any.whl": {
+    "sha256": "8cbc057dc7ebb03da03b04027660ab11baffc0fb42a60caa8ced518d18ac70be",
+    "bytes": 2699433
+  },
+  "truss-native-source-observation-astra-20261016-manifest.json": {
+    "sha256": "3f81eb9633043c63b663ff35b5737ce53fd9db83474cd61b505c0cd9dec458e8",
+    "bytes": 7871
+  },
+  "truss-native-source-observation-integration-unit-20261016.log": {
+    "sha256": "bd8b6e98c3fde35b63ab6d268fdd3a11412f774f5efed5e707ad2bef28c91f16",
+    "bytes": 105
+  },
+  "truss-native-source-observation-integration-boundaries-20261016.log": {
+    "sha256": "6a09d83979455a0356f9d4b797d1675eb10549a20e81d02cfb4c15bf16c8f7ea",
+    "bytes": 84
+  },
+  "truss-native-source-observation-astra-20261016-review.json": {
+    "sha256": "e53dc6a5d72b0a560d6e686bb881e6c103c1d36e2828f9837d65985e9f1c2ef2",
+    "bytes": 9584
+  },
+  "truss-native-observer-wheel-check-20261016.json": {
+    "sha256": "5289a023d55a4d9490e55cc55bdca7013b4e2613cdd4aab6450a29865f8b1614",
+    "bytes": 58471
+  },
+  "truss-native-source-observation-r2-astra-20261016.zip": {
+    "sha256": "f575cc434e85b0e05b7ae836fef5885341cd34a3ceafa65b1225d3172dab48d1",
+    "bytes": 8873832
+  },
+  "postrebase-source-tests.log": {
+    "sha256": "69bbcd9fdeb06c7f5fb4e6e79004dae52782fc70351f577d89add209c0286b50",
+    "bytes": 137
+  }
+}

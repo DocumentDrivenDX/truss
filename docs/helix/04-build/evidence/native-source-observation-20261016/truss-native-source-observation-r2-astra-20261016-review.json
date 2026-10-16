@@ -1,0 +1,108 @@
+{
+  "review": "Native source observation R2 repair addendum, supplied nativeR4 cohort",
+  "status": "passed-with-qualified-component-scope",
+  "remainingFindings": [],
+  "packet": {
+    "path": "review.zip",
+    "sha256": "46e6f063d4314ae59d46804a239eaa8654a383996596ec66ab514751e0e8b9e0",
+    "bytes": 4403228
+  },
+  "source": {
+    "path": "frozen/owner/packages/python/src/truss/_native_source_observation.py",
+    "sha256": "c260315436a6ed420d6a38a594d1becfb65f7ee9993416be806846719469f3df",
+    "bytes": 12378
+  },
+  "priorReview": {
+    "path": "/private/tmp/truss-native-source-observation-astra-20261016/review.json",
+    "sha256": "e53dc6a5d72b0a560d6e686bb881e6c103c1d36e2828f9837d65985e9f1c2ef2",
+    "bytes": 9584,
+    "preservedUnchanged": true
+  },
+  "resolvedFindings": [
+    {
+      "id": "NSO-SOURCE-01",
+      "resolution": "Exact release bytes now pass _bounded strict scanning before _release. Both original matching-hash duplicate-key and oversized manifests refuse before the legacy verifier; isolated removal of the new scan restores the old defect.",
+      "evidence": "repair-controls.json"
+    },
+    {
+      "id": "NSO-SOURCE-02",
+      "resolution": "Column expression now explicitly carries none/default/generated kind and source. Generated-without-pg_attrdef and orphaned expression rows refuse; actual retained native columns distinguish11defaults,2stored generated expressions and19none.",
+      "evidence": "repair-controls.json"
+    },
+    {
+      "id": "NSO-EVIDENCE-01",
+      "resolution": "Fresh1349-input archive includes previously omitted test_preparation and its import-time capacity fixture. Runner checks imported project Python paths against captured inputs. Independent fresh import/default test discovery loads70project modules, all pinned, and4native tests skip without setup.",
+      "evidence": "import-closure-controls.json"
+    },
+    {
+      "id": "NSO-EVIDENCE-02",
+      "resolution": "Fresh native assertions independently author nullability, identity, generated state and expression kind/source for all32columns. Captured baseline passes and128individual field mutants plus aggregate erasure/mislabel controls fail actual extracted assertion code.",
+      "evidence": "docs-review/report.json"
+    }
+  ],
+  "validation": [
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B pure-controls.py",
+      "result": "7authored unit tests and41independent simulated-cursor checks passed",
+      "receipts": [
+        "unit-tests.log",
+        "pure-controls.json"
+      ]
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B repair-controls.py",
+      "result": "14repair checks passed, including2effective source mutants and original release counterexamples",
+      "receipt": "repair-controls.json"
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B native-evidence-audit.py",
+      "result": "2749source/archive/native-artifact checks passed;1349captured pins and24packet manifest entries verified",
+      "receipt": "native-evidence-audit.json"
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B import-closure-controls.py",
+      "result": "70loaded project modules correspond; exact import-time configuration fixture accounted for;4native tests skipped before setup",
+      "receipt": "import-closure-controls.json"
+    },
+    {
+      "result": "158focused custody/native-assertion controls passed; noSQL",
+      "receipt": "docs-review/report.json"
+    }
+  ],
+  "testedSourceEpoch": {
+    "originalSpikeBaseline": "59360445555a523cf78295a5ba97ef72a7128812",
+    "authoritativeSource": "frozen/native-r4/source-inputs.zip and source-before.json",
+    "runtimeRelease": "truss-catalog-runtime/0.71-candidate",
+    "qualification": "1345base-prefixed entries include6differences from59360445:runtime operations.sql/owned.sql/manifest and added descriptor/helper test/final-edge test. Exact paths/blob identities are retained in baseline-correspondence.json. Clean59360445 is not the tested R4cohort; no current-main native claim.",
+    "sourceArchive": {
+      "sha256": "5181f9db85f88015a1e28c6704e708820395215f0177e97fb799b08666c27b10",
+      "bytes": 4610692
+    },
+    "sourcePins": {
+      "sha256": "a5135d1f9b991a2fd06776c295a41b00d4c065cdb5be6ffe0f4e58f6f88a3c52",
+      "bytes": 252085
+    }
+  },
+  "suppliedNativeEvidence": {
+    "reviewerRanSQL": false,
+    "result": "4supplied original-host tests passed8.156s onPG18.6/psycopg3.3.6/libpq180006/pgserver18.6.1 with native0.71overlay. Three homes,32columns,52constraints,six external lock refusals, wrong-source/RLS refusal and changed/restored native data are retained.",
+    "cleanup": "Supplied runner confirms owned root removed and postmaster stopped. Reviewer confirms recorded root absent now, not historical PID or independent native cleanup execution.",
+    "scope": "Source-role/model/release/metadata correspondence audited. Current expression flags/assertions evaluated against retained observations; no independent re-observation of database state."
+  },
+  "scopeLimits": [
+    "Data-only selected native observation remains incomplete and authority/securityReady=false with nativeAdmission required. No native binding, Field/Key/edge/codec mapping, authenticated caller/current generation continuity, registration, guarded release or backend promotion.",
+    "The selected source inventory and loaded-path guard do not prove continuously held/ABA-safe files, executable-bytecode equivalence, arbitrary dynamic/unloaded dependencies or hermetic external runtimes.",
+    "Pure full-observer controls explicitly stub the legacy accepted-catalog verifier; actual shared parser, TEXT/source-cut helpers and release-asset verifier run. Native verifier behavior is supplied campaign evidence.",
+    "Source/routine/role/schema/ACL closure, same-transaction changes and final host release remain open. Four binding-original surfaces retain4MB logical bounds; separate legacy diagnostic retains original16MiB limit. No peak-memory/CPU proof.",
+    "Original132/shared158 requirements remain unchanged:45implemented/113missing; no case promotion."
+  ],
+  "retainedAttempts": [
+    "R1 findings, original source and earlier native callback/precondition mistakes remain immutable and are not retroactively credited.",
+    "Reviewer first adapted audit used stale native-r3 path; first source/log retained and corrected to frozen native-r4.",
+    "Reviewer first import-fixture assertion omitted the captured test module\u2019s explicit CONFIG projection; first source/log retained, then expected projection corrected. No product edits."
+  ],
+  "artifactManifest": {
+    "path": "manifest.json",
+    "format": "relative path -> {sha256,bytes}; excludes itself and expanded source/ (recoverable from retained source-inputs.zip)"
+  }
+}

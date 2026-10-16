@@ -1,0 +1,11 @@
+{
+  "mainCommit": "31ce4449010051832398e50130582acd9999c7e9",
+  "descriptorUnitTests": 15,
+  "boundaryImportChecks": 1477,
+  "result": "passed",
+  "scope": "Post-rebase source checks only; historical wheel remains baseline59cacc plus descriptor. No native or acceptance claim.",
+  "sourcePins": {
+    "packages/python/src/truss/_native_source_descriptor.py": "092b3580c2ba4c185238e2d5def47d6ca3b8488897e2124e9fb0a86e71239589",
+    "packages/python/src/truss/_owner_evidence_json.py": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55"
+  }
+}

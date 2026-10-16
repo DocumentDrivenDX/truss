@@ -1,0 +1,136 @@
+{
+  "review": "Native source observation0.2 candidate R1 packet, supplied nativeR3 campaign",
+  "status": "corrections-requested",
+  "baseline": "59360445555a523cf78295a5ba97ef72a7128812",
+  "packet": {
+    "path": "review.zip",
+    "sha256": "8cd2885c3cf5f90a82046ed45c8f4a27c16bb4004a374c54f194a5621f74939b",
+    "bytes": 2724250
+  },
+  "source": {
+    "path": "frozen/owner/packages/python/src/truss/_native_source_observation.py",
+    "sha256": "433c70b445b32a58d185bc946a23c7fc5efaf3bfce1d30ce4bcb55a8a9d20efe",
+    "bytes": 12082
+  },
+  "findings": [
+    {
+      "id": "NSO-SOURCE-01",
+      "priority": 2,
+      "title": "Apply the declared strict JSON and byte bound to retained release bytes",
+      "path": "owner/packages/python/src/truss/_native_source_observation.py",
+      "lines": [
+        103,
+        104
+      ],
+      "body": "runtime_release is read and hash-matched but never passed through _bounded or the strict JSON scanner. With exact packaged assets, the actual unchanged _release verifier and observer return both a matching-hash duplicate-key manifest and a4,008,655-byte manifest. The declared scanner rejects both. The source-bound native fixture manifest is valid and only8,636bytes; this is a demonstrated broader contract/bounds hole, not a claim that the supplied native run used malformed data.",
+      "requestedChange": "Strict-scan and bound exact release bytes before treating them as a retained original/output; retain positive and matching-hash duplicate/oversize refusal controls.",
+      "evidence": "release-capacity-probe.json"
+    },
+    {
+      "id": "NSO-SOURCE-02",
+      "priority": 2,
+      "title": "Distinguish generated expressions from ordinary defaults",
+      "path": "owner/packages/python/src/truss/_native_source_observation.py",
+      "lines": [
+        130,
+        134
+      ],
+      "body": "Every pg_attrdef expression is labeled defaultExpression, including the retained key-bucket generated column with generated=s. The flag and raw text preserve information, but the field name incorrectly describes a generated expression as an ordinary default. Root independently identified this same issue before integration.",
+      "requestedChange": "Use an explicit none/default/generated expression discriminator and consistency checks without parsing or executing SQL; independently compare actual expressions and flags in the next native test cohort.",
+      "evidence": "native-evidence-audit.json"
+    },
+    {
+      "id": "NSO-EVIDENCE-01",
+      "priority": 2,
+      "title": "Include the imported test/configuration fixture in the source snapshot",
+      "path": "owner/run-native-tests-r3.py",
+      "lines": [
+        7,
+        8
+      ],
+      "body": "The runner pins only three base test modules, but captured test_catalog_relational_support.py:12 imports test_preparation; baseline test_preparation.py:13-14 reads acceptance-input-capacity-v0.1.fixture.json at import time. Both dependencies are absent from source-before.json and source-inputs.zip, so their loaded bytes receive neither capture nor endpoint drift checking. The505selected entries and their archive do match exactly; the gap is incomplete loaded test/fixture closure, not evidence that those505endpoint claims are false.",
+      "requestedChange": "Add the imported test module and import-time fixture to the native source input inventory, retain their original bytes and before/after pins in a fresh source-bound campaign. Preserve the current R3 observations as selected-endpoint evidence."
+    },
+    {
+      "id": "NSO-EVIDENCE-02",
+      "priority": 2,
+      "title": "Independently compare the captured native default expressions",
+      "path": "owner/packages/python/tests/test_native_source_observation_native.py",
+      "lines": [
+        37,
+        40
+      ],
+      "body": "The design requires independent default correspondence (native-source-observation.md:92-93), but the native test column query/assertion compares only attnum, name, typeOid, typmod and collationOid. None of the13non-null captured defaultExpression values is independently checked. Replacing all13withnull leaves every compared relation/column/constraint tuple unchanged. Thus the four-test receipt does not establish the stated default observation obligation, although its selected comparisons may all be valid.",
+      "requestedChange": "Extend the independent native column census to compare default presence and deparsed expression text, with a mutant/wrong-default control; retain actual native evidence separately from the supplied-row tests."
+    }
+  ],
+  "remainingFindings": [
+    "NSO-SOURCE-01",
+    "NSO-SOURCE-02",
+    "NSO-EVIDENCE-01",
+    "NSO-EVIDENCE-02"
+  ],
+  "validation": [
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B pure-controls.py",
+      "result": "6 supplied unit tests and41 independently authored simulated-cursor checks passed",
+      "receipts": [
+        "unit-tests.log",
+        "pure-controls.json",
+        "pure-controls.log"
+      ]
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B source-mutation-controls.py",
+      "result": "5 effective separate source mutations caught: RLS-home guard, column census, constraint census, aggregate output-byte cap, fractional reserialization",
+      "receipts": [
+        "source-mutation-controls.json",
+        "source-mutation-controls.log"
+      ],
+      "scope": "Full legacy catalog verifier explicitly stubbed; other frozen helper code runs. No SQL."
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B release-capacity-probe.py",
+      "result": "2 matching-hash release defects reproduced with actual release asset verifier and simulated native rows",
+      "receipts": [
+        "release-capacity-probe.json",
+        "release-capacity-probe.log"
+      ]
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B native-evidence-audit.py",
+      "result": "1062 source/artifact checks passed;25manifest files,505selected input pins,501captured baseline files match Git; exact source-role/model/release/metadata correspondence",
+      "receipts": [
+        "native-evidence-audit.json",
+        "native-evidence-audit.log"
+      ]
+    },
+    {
+      "result": "24 focused static custody/assertion checks passed and document findings retained",
+      "receipt": "docs-review/report.json"
+    }
+  ],
+  "positiveAssessment": [
+    "New helper is unexported; captured original assessor, public consumer and existing assets match the stated baseline. New0.2 metadata does not migrate the frozen0.1 descriptor.",
+    "Fixed table/ordering names, parameterized native identifiers, exact stock TEXT fields, complete source SHARE cuts and selected permanent no-RLS/noninherited owner homes are explicit. Column/constraint counts and expression text budgets precede detail queries; final inventory/assessment bounds apply.",
+    "New assessment retains independently strict-scanned native JSONB row fragments without float conversion. Original authored request and runtime manifest bytes are distinct. Legacy verifier output is preserved diagnostically, not called exact fractional data.",
+    "Report source hashes and sizes match all four retained artifacts and remain complete/authority/securityReady=false with nativeAdmission required. Source/codec mapping and current authority remain open."
+  ],
+  "suppliedNativeEvidence": {
+    "reviewerRanSQL": false,
+    "audited": "Four supplied original-host native tests,7.265s,PG18.6/psycopg3.3.6/libpq180006/pgserver18.6.1. Three selected homes,32columns,52constraints,six external lock refusals,wrong-source/RLS refusals,changed/restored column data. All retained report pins correspond.",
+    "custodyLimit": "505selected pins agree, but do not include complete loaded test/fixture closure; missing exact baseline files retained only as diagnostic supplements, not retroactive original campaign observations.",
+    "cleanup": "Supplied campaign verifies owned root removal and postmaster stop after test cleanup. Reviewer independently observes recorded root absent now, but does not probe a historical PID or claim an independent cleanup campaign.",
+    "representationLimit": "Pure fractional round-trip counterexample is not evidence that a currently admitted native facet reaches the legacy path. Native default/generated/flag assertions are incomplete in this R1 epoch."
+  },
+  "scopeLimits": [
+    "No native authority witness, authenticated caller/source/generation continuity, Field/Key/edge/codec admission, registration, protected release or backend case promotion.",
+    "SHARE locks last to caller settlement; schema/routine/role/ACL changes, same-transaction changes and ABA remain explicit host obligations. Observer failure restoration belongs to the original host containment mechanism.",
+    "Byte/tree limits are logical output/retained bounds, not peak driver/process allocation or CPU proofs. External dependencies are non-hermetic and endpoint source pins are not continuously held custody.",
+    "Original132/shared158 requirements remain unchanged, including45implemented/113missing. R1 evidence and initial callback/test failures are preserved; proposed R2 repairs receive no retrospective credit."
+  ],
+  "artifactManifest": {
+    "path": "manifest.json",
+    "format": "relative path -> {sha256, bytes}; excludes expanded source/ reconstruction, which is recoverable from retained native-r3/source-inputs.zip, and the top-level manifest itself"
+  }
+}
