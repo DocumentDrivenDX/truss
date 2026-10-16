@@ -12,6 +12,7 @@ CREATE TABLE truss.runtime_catalog_key_backfill (
   AND jsonb_typeof(effects)='array' AND jsonb_array_length(effects)>0)
 );
 CREATE INDEX runtime_catalog_key_backfill_owner ON truss.runtime_catalog_key_backfill(object_id,type_id,transition_id DESC);
+CREATE INDEX runtime_catalog_key_backfill_writer ON truss.runtime_catalog_key_backfill(writer_xid);
 CREATE TRIGGER runtime_catalog_key_backfill_immutable BEFORE UPDATE OR DELETE OR TRUNCATE ON truss.runtime_catalog_key_backfill
  FOR EACH STATEMENT EXECUTE FUNCTION truss.catalog_immutable();
 REVOKE ALL ON TABLE truss.runtime_catalog_key_backfill FROM PUBLIC;

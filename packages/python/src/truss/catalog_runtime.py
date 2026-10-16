@@ -37,7 +37,7 @@ from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
 from .contracts import TypedIdentity
 from .object_read import ScalarObject, LogicalObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
-from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCapabilityAvailable
+from ._group_runtime import GroupRuntimeContext, CatalogRevisionProbe, PreparedGroup, NativeGroupCapability, GroupCapabilityAvailable
 from .contracts import CapabilitySelection, TypedIdentity, ProfilePin
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult, OrderKey
 from decimal import Decimal
@@ -563,7 +563,7 @@ class CatalogReferenceAssembly:
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=197:raise ValueError('Exact additive runtime routine inventory required')
+        if len(replacements)!=199:raise ValueError('Exact additive runtime routine inventory required')
         signatures=[]
         for statement in replacements:
             header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
@@ -575,7 +575,7 @@ class CatalogReferenceAssembly:
                 if parameter is None:raise ValueError('Owned additive routine argument profile required')
                 types.append(parameter.group(1))
             signature=name+'('+','.join(types)+')'
-            if not name.startswith('truss.runtime_owned_') and name not in ('truss.runtime_definition_in_basis','truss.apply_group','truss.runtime_graph_validate_object','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.runtime_create_transition_validate','truss.umf_key_uleb128','truss.umf_key_coefficient','truss.encode_umf_scalar_key_tuple','truss.umf_key_field_values_valid','truss.derive_catalog_key_tuple','truss.runtime_endpoint_ownership','truss.catalog_scalar_violations_with_sources','truss.catalog_item_meaning','truss.valid_item_chain','truss.runtime_item_chain_readable','truss.catalog_accept_with_keys','truss.catalog_accept_preview','truss.catalog_key_backfill_candidates','truss.catalog_key_backfill_verify','truss.catalog_key_backfill_violations','truss.catalog_key_backfill_apply','truss.catalog_key_backfill_transition_reader','truss.catalog_key_backfill_report_reader','truss.catalog_rebind_profile','truss.catalog_rebind_transition_reader','truss.catalog_rebind_definition','truss.catalog_rebind_history','truss.catalog_rebind_objects','truss.catalog_rebind_violations','truss.catalog_rebind_report_reader','truss.catalog_rebind_history_group','truss.runtime_capture_feed_configuration','truss.catalog_check_source_correspondence','truss.runtime_object_values_readable','truss.valid_property_definition','truss.valid_flat_cell','truss.canonical_flat_cell','truss.valid_property_value','truss.logical_flat_cell','truss.catalog_item_definition','truss.render_scalar_object','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.traverse_objects','truss.umf_key_values','truss.verify_umf_scalar_key_tuple','truss.valid_scalar_property','truss.runtime_current_installation','truss.query_binding','truss.query_scope','truss.query_objects','truss.query_numeric_value','truss.query_timestamp_instant_key','truss.query_edges','truss.query_page_objects','truss.feed_reached','truss.query_object_attribution','truss.query_complete_related_keys','truss.query_object_times','truss.query_object_load_id','truss.feed_ack_receipt_binding','truss.acknowledge_feed_with_receipt','truss.reconcile_feed_ack'):signatures.append(signature)
+            if not name.startswith('truss.runtime_owned_') and name not in ('truss.catalog_revision','truss.prepare_group','truss.runtime_definition_in_basis','truss.apply_group','truss.runtime_graph_validate_object','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.runtime_create_transition_validate','truss.umf_key_uleb128','truss.umf_key_coefficient','truss.encode_umf_scalar_key_tuple','truss.umf_key_field_values_valid','truss.derive_catalog_key_tuple','truss.runtime_endpoint_ownership','truss.catalog_scalar_violations_with_sources','truss.catalog_item_meaning','truss.valid_item_chain','truss.runtime_item_chain_readable','truss.catalog_accept_with_keys','truss.catalog_accept_preview','truss.catalog_key_backfill_candidates','truss.catalog_key_backfill_verify','truss.catalog_key_backfill_violations','truss.catalog_key_backfill_apply','truss.catalog_key_backfill_transition_reader','truss.catalog_key_backfill_report_reader','truss.catalog_rebind_profile','truss.catalog_rebind_transition_reader','truss.catalog_rebind_definition','truss.catalog_rebind_history','truss.catalog_rebind_objects','truss.catalog_rebind_violations','truss.catalog_rebind_report_reader','truss.catalog_rebind_history_group','truss.runtime_capture_feed_configuration','truss.catalog_check_source_correspondence','truss.runtime_object_values_readable','truss.valid_property_definition','truss.valid_flat_cell','truss.canonical_flat_cell','truss.valid_property_value','truss.logical_flat_cell','truss.catalog_item_definition','truss.render_scalar_object','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.traverse_objects','truss.umf_key_values','truss.verify_umf_scalar_key_tuple','truss.valid_scalar_property','truss.runtime_current_installation','truss.query_binding','truss.query_scope','truss.query_objects','truss.query_numeric_value','truss.query_timestamp_instant_key','truss.query_edges','truss.query_page_objects','truss.feed_reached','truss.query_object_attribution','truss.query_complete_related_keys','truss.query_object_times','truss.query_object_load_id','truss.feed_ack_receipt_binding','truss.acknowledge_feed_with_receipt','truss.reconcile_feed_ack'):signatures.append(signature)
         def upgrade(cursor,observed):
             _pin_cursor(cursor)
             cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False);original_path=cursor.fetchone()[0]
@@ -741,7 +741,7 @@ class CatalogReferenceAssembly:
             for statement in replacements:
                 header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
                 name,arguments=header.groups()
-                if name.startswith('truss.runtime_owned_') or name in ('truss.runtime_definition_in_basis','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.runtime_graph_validate_object','truss.apply_group'):
+                if name.startswith('truss.runtime_owned_') or name in ('truss.catalog_revision','truss.prepare_group','truss.runtime_definition_in_basis','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.runtime_graph_validate_object','truss.apply_group'):
                     types=[re.match(r'\s*\w+\s+([\w.]+(?:\[\])?)',part).group(1) for part in (arguments.split(',') if arguments.strip() else ())]
                     signature=name+'('+','.join(types)+')'
                     private_signatures.append(signature)
@@ -824,7 +824,7 @@ class CatalogReferenceAssembly:
             cursor.execute('REVOKE ALL ON FUNCTION truss.catalog_check_source_correspondence(bytea,bytea,bytea) FROM PUBLIC',prepare=False)
             cursor.execute(sql.SQL('ALTER FUNCTION truss.runtime_current_installation() OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
             cursor.execute('REVOKE ALL ON FUNCTION truss.runtime_current_installation() FROM PUBLIC',prepare=False)
-            for signature in ('query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)'):
+            for signature in ('catalog_revision(text,text,text)','prepare_group(bytea,bytea,text,text)','query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)'):
                 cursor.execute(sql.SQL('ALTER FUNCTION truss.{} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
                 cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION truss.{} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
                 cursor.execute('SELECT reader_role,writer_role FROM truss.module_access',prepare=False)
@@ -1083,6 +1083,8 @@ class CatalogReferenceAssembly:
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_context(text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_type_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_relationship_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.catalog_revision(text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.prepare_group(bytea,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
             _close_partial_group_grants(cursor)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
@@ -1397,6 +1399,21 @@ class CatalogReferenceAssembly:
         from ._group_runtime import group_context
         manifest,digest,_=_release()
         return group_context(self._host,transaction,manifest,digest,_pin_cursor)
+
+    @_active_operation
+    def catalog_revision_in_transaction(self,transaction: TransactionHandle,*,document_id: str | None=None) -> Outcome[CatalogRevisionProbe]:
+        """Read the current catalog revision without locking it. Optional document revision is the cache key for one accepted document."""
+        from ._group_runtime import catalog_revision
+        manifest,digest,_=_release()
+        return catalog_revision(self._host,transaction,manifest,digest,_pin_cursor,document_id)
+
+    @_active_operation
+    def prepare_group_in_transaction(self,transaction: TransactionHandle,*,records: tuple[tuple[str,str,str],...],
+                                     relationships: tuple[tuple[str,str,str],...]=()) -> Outcome[PreparedGroup]:
+        """One call for revision, group scope and the named type and relationship references."""
+        from ._group_runtime import prepare_group
+        manifest,digest,_=_release()
+        return prepare_group(self._host,transaction,manifest,digest,_pin_cursor,records,relationships)
 
     @_active_operation
     def apply_in_transaction(self,transaction: TransactionHandle,input: GroupSemanticInput,request: GroupRequestSelection,*,

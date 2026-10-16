@@ -270,6 +270,7 @@ class GroupSemanticResult(_Carrier):
 @dataclass(frozen=True, slots=True, kw_only=True)
 class AppliedPending(_Carrier):
     semantic: GroupSemanticResult
+    receipt_token: str | Absent = ABSENT
     disposition: Literal['applied'] = field(default='applied', init=False)
     durability: Literal['pending'] = field(default='pending', init=False)
 
@@ -295,6 +296,7 @@ class CommittedReceiptReplayEvidence(_Carrier):
 class SameTransactionReplay(_Carrier):
     semantic: GroupSemanticResult
     replay: SameTransactionReplayEvidence
+    receipt_token: str | Absent = ABSENT
     disposition: Literal['replayed'] = field(default='replayed', init=False)
     durability: Literal['pending'] = field(default='pending', init=False)
 
