@@ -1,0 +1,37 @@
+{
+  "review": "Astra Ultra row-validator four-query EXPLAIN diagnostic plan",
+  "date": "2026-10-16",
+  "status": "PLAN_CLEAR_WITH_EXACT_FIXTURE_PERMISSION_AND_SCOPE_CONSTRAINTS",
+  "blocking_findings": [],
+  "baseline": "d79db3843f4fb3136296b0e0cd4630cbd0e7aba0",
+  "source": {
+    "path": "/private/tmp/truss-main-integration-20261010/packages/python/src/truss/_catalog_runtime/operations.sql",
+    "sha256": "f8363af5fdcee68b39d4b17fea11a6f4b85012a2be23a118d95df14834a29b5b",
+    "reviewed_function_fragment_sha256": "707a582c6f2afde99bbac076d63e0440531807a0a1c9f1e87b049df5902c404e",
+    "queries": [
+      "legacy-create SELECT lines734-738",
+      "owned-transition SELECT lines743-752",
+      "latest transition UNION SELECT lines783-786",
+      "journal UNION SELECT line799"
+    ]
+  },
+  "approved_design": "Disposable real public100-create group setup repeated10 times in one consumer transaction; inspect four original read-only validator SELECTs for first/middle/last actual object using prepared, deliberately forced-generic EXPLAIN ANALYZE BUFFERS FORMAT JSON. No production changes, alternate synthetic seeding, indexes, statistics updates, trigger suppression or deadline relaxation. Roll back setup and clean fixture.",
+  "required_details": [
+    "All public setup calls run with original native checks and limits before any extra data-read grant. If any setup call fails, retain exact original outcome/context and stop without synthetic seed, smaller retry or altered deadline.",
+    "The four tables are runtime_object_transition, runtime_object_attempt, runtime_catalog_rebind_transition and runtime_catalog_key_backfill. The first two queries also require EXECUTE on private runtime_owned_profile(): grant only that exact immutable constant-returning function to this fixture consumer after setup. Do not grant validator, mutation or broad function permissions; do not substitute a literal for the original function call.",
+    "Use the same consumer connection and open original transaction so pg_current_xact_id() and uncommitted transition visibility match setup. No COMMIT, SET ROLE, impersonation or copied transition data. Admin only supplies fixture grants/metadata; rollback and fixture teardown remove all data/grants.",
+    "Keep exact FROM/JOIN/WHERE/projection/CASE/UNION/ORDER/LIMIT expressions, including pg_current_xact_id(). Remove only PL/pgSQL loop/INTO syntax and replace local selected_id/selected_type/current_actor references with bigint/int/oid prepared parameters. Retain source slices and final parameterized SQL separately with hashes.",
+    "Mirror validator search_path=pg_catalog,pg_temp, row_security=off, TimeZone=UTC and bytea_output=hex, and record effective settings/roles/transaction identity, index definitions, relation statistics and execution order. Preserve10s statement limits. The30s host bound applies to each public setup operation; do not claim it bounds the entire ten-operation transaction or raw diagnostic statements unless actually enforced there.",
+    "Use actual returned public identities for first/middle/last and actual current actor OID. Report per-table/per-query actual rows, rows removed, loop counts, buffers and planning/execution outputs; do not presume empty legacy/rebind/backfill branches are missing evidence.",
+    "Queries are read-only apart from pg_current_xact_id() observation/allocation, already assigned by real creates. No deferred constraint flush is needed or authorized; rollback deliberately leaves no COMMIT qualification."
+  ],
+  "interpretation_limits": [
+    "Ten100-operation attempts yield1000same-XID object transitions but ten attempt rows and100-result receipts, not the one1024-attempt shape. This is targeted diagnostic setup only, never capacity or performance qualification.",
+    "force_generic_plan is a controlled planner choice, not evidence that production PL/pgSQL selected a generic plan. No ANALYZE-table or synthetic statistics; retain fresh/unanalysed statistics honestly.",
+    "EXPLAIN ANALYZE adds profiling overhead and sees cache effects from ordered setup/probes. Its query time excludes PL/pgSQL record assignment/materialization and subsequent row/key/history/authority checks; it cannot alone attribute the full row-validator self time or a CREATE/UPDATE difference.",
+    "Explicit consumer SELECT/constant-function grants reproduce these SQL data accesses only; they do not qualify ordinary consumer authorization. No public API use after grants is claimed as authority evidence.",
+    "If any diagnostic statement fails, preserve its complete error/partial artifacts and cleanup result, without claiming plans that were not obtained."
+  ],
+  "next_step": "Author exact extracted-query harness for source comparison before execution; run only in the coordinated released native slot. No new production instrumentation or broadened diagnostic framework.",
+  "reviewer_actions": "Read-only source and ACL/configuration inspection, then receipt write. No product edits, builds, native runs or agents."
+}

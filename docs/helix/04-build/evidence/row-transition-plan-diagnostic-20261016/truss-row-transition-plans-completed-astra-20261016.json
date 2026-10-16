@@ -1,0 +1,163 @@
+{
+  "review": "Astra Ultra completed four-query row-transition planner diagnostic",
+  "date": "2026-10-16",
+  "status": "CLEAR_FOR_BOUNDED_EVIDENCE_RETENTION_NO_RUNTIME_REWRITE_JUSTIFIED",
+  "blocking_findings": [],
+  "baseline": "d79db3843f4fb3136296b0e0cd4630cbd0e7aba0",
+  "source_correspondence": {
+    "operations_sha256": "f8363af5fdcee68b39d4b17fea11a6f4b85012a2be23a118d95df14834a29b5b",
+    "finding": "Reviewer reconstructed each original SELECT from runtime_owned_row_validate_qualified, removed only loop/INTO framing and parameterized exact local identifiers. All four resulting query strings equal executed report strings byte-for-byte. PREPARE bigint/int/oid and pg_current_xact_id() are preserved.",
+    "query_sha256": {
+      "legacy_create": "1e4f4cdf2c7a460cfaf32ed7a27ef6553f6ffddb3b6a98c3e7d54aeec0701471",
+      "owned": "dbb9e9d00ae1d67a8c995a3635da2bcbebd9fc35a490c8d95f895761c39e9674",
+      "latest": "11067837d5f9159c5827cab5c8e35495acd9cf43bd50ead05a4450beaaabdb06",
+      "journal": "22f1d700de178c36b9484bec8adad958bf393422a21452645999e67944e82228"
+    }
+  },
+  "setup": {
+    "parent_session": 95979,
+    "terminal": "exit0;1PASS10.216s",
+    "public_groups": 10,
+    "operations_per_group": 100,
+    "same_xid_transitions": 1000,
+    "writer_xid": "765",
+    "sum_apply_seconds": 5.128402708796784,
+    "timing_scope": "Sum of ten timed apply_in_transaction calls; excludes surrounding group-context lookup/Python fixture work. Not one1000/1024-operation statement or COMMIT qualification.",
+    "statistics": [
+      [
+        "runtime_object_attempt",
+        0,
+        -1.0,
+        1196032
+      ],
+      [
+        "runtime_object_transition",
+        0,
+        -1.0,
+        2048000
+      ]
+    ]
+  },
+  "results": {
+    "queries": {
+      "legacy_create": [
+        {
+          "recordIndex": 0,
+          "planningMs": 0.352,
+          "executionMs": 0.073,
+          "queryOutputRows": 0.0,
+          "wholeQuerySharedHitBlocks": 21
+        },
+        {
+          "recordIndex": 499,
+          "planningMs": 0.004,
+          "executionMs": 0.068,
+          "queryOutputRows": 0.0,
+          "wholeQuerySharedHitBlocks": 21
+        },
+        {
+          "recordIndex": 999,
+          "planningMs": 0.008,
+          "executionMs": 0.076,
+          "queryOutputRows": 0.0,
+          "wholeQuerySharedHitBlocks": 21
+        }
+      ],
+      "owned": [
+        {
+          "recordIndex": 0,
+          "planningMs": 0.103,
+          "executionMs": 0.073,
+          "queryOutputRows": 1.0,
+          "wholeQuerySharedHitBlocks": 21
+        },
+        {
+          "recordIndex": 499,
+          "planningMs": 0.008,
+          "executionMs": 0.082,
+          "queryOutputRows": 1.0,
+          "wholeQuerySharedHitBlocks": 21
+        },
+        {
+          "recordIndex": 999,
+          "planningMs": 0.01,
+          "executionMs": 0.091,
+          "queryOutputRows": 1.0,
+          "wholeQuerySharedHitBlocks": 21
+        }
+      ],
+      "latest": [
+        {
+          "recordIndex": 0,
+          "planningMs": 0.207,
+          "executionMs": 0.02,
+          "queryOutputRows": 1.0,
+          "wholeQuerySharedHitBlocks": 7
+        },
+        {
+          "recordIndex": 499,
+          "planningMs": 0.007,
+          "executionMs": 0.025,
+          "queryOutputRows": 1.0,
+          "wholeQuerySharedHitBlocks": 7
+        },
+        {
+          "recordIndex": 999,
+          "planningMs": 0.01,
+          "executionMs": 0.036,
+          "queryOutputRows": 1.0,
+          "wholeQuerySharedHitBlocks": 7
+        }
+      ],
+      "journal": [
+        {
+          "recordIndex": 0,
+          "planningMs": 0.091,
+          "executionMs": 0.028,
+          "queryOutputRows": 1.0,
+          "wholeQuerySharedHitBlocks": 8
+        },
+        {
+          "recordIndex": 499,
+          "planningMs": 0.005,
+          "executionMs": 0.026,
+          "queryOutputRows": 1.0,
+          "wholeQuerySharedHitBlocks": 8
+        },
+        {
+          "recordIndex": 999,
+          "planningMs": 0.006,
+          "executionMs": 0.035,
+          "queryOutputRows": 1.0,
+          "wholeQuerySharedHitBlocks": 8
+        }
+      ]
+    },
+    "all_transition_owner_scans": "Each of12 probes: runtime_object_transition_owner, actualRows1,actualLoops1,rowsRemovedByFilter0,sharedHits3,sharedReads0.",
+    "execution_ms_range": [
+      0.02,
+      0.091
+    ],
+    "important_distinction": "Owner-index3hits/one row are scan-level figures. Whole-query hits are21 legacy/owned,7 latest,8 journal. Legacy output0 reflects one attempt excluded by owned-profile predicate; remaining query outputs1. First-query planning can exceed execution and is retained separately."
+  },
+  "controls_and_cleanup": [
+    "Public setup completes before fixture-only SELECT grants on four tables and EXECUTE on exact immutable runtime_owned_profile(). No validator/write grants or synthetic source seed.",
+    "Diagnostic keeps same consumer transaction, native XID and actual public identities; explicit validator GUCs and force_generic_plan set locally. No indexes/statistics changes or disabled/deferred-trigger flush.",
+    "Source fixture retains10s statements/30s per public operation. After host detach, raw diagnostic statements retain the connection10s statement bound; no30s whole-diagnostic-operation claim.",
+    "Caller rollback recorded completed. Base tearDown removes consumer connections/schema/roles; terminal unittest OK also includes class-level owned-server cleanup without reported errors."
+  ],
+  "limitations": [
+    "Forced generic plan selection is deliberate, not a measurement of actual production PL/pgSQL cached-plan choice or CI behavior.",
+    "Ten100-operation attempts and fresh unanalysed relation statistics do not reproduce one1024-attempt shape or retained production history.",
+    "EXPLAIN adds profiling/cache effects and excludes PL/pgSQL record assignment, authority checks and remaining validation loops. No whole-validator hotspot attribution or CREATE/UPDATE speed inference.",
+    "Effective GUCs are established by executed SET statements, not separately SHOW-recorded; only target transition/attempt statistics and transition index definitions are recorded. Installed function prosrc/module provenance was not separately retained. These constrain attribution but do not invalidate the captured exact-query plans.",
+    "No speed, release, complete workload or capacity qualification, and no query/index rewrite is supported by these results."
+  ],
+  "evidence_sha256": {
+    "/private/tmp/truss-row-transition-plans-20261016.py": "9d7d78c67ed73a9161cfc895d1776b6e12954236bbe648c6eec2280f3e5ce7a6",
+    "/private/tmp/truss-row-transition-plans-report-20261016.json": "f0390e5fa7c5a4a557f56c70719815e79b062e39a23e95dd9c3a61b1ab0477bc",
+    "/private/tmp/truss-row-transition-plans-20261016.log": "29d61c3085bccddad097b564ce02b399ae01810fbbdcc6af9cdcc27f0ce75d67",
+    "/private/tmp/truss-row-validator-plan-diagnostic-astra-20261016.json": "89f1e5891e8d41c06360767e6f9348f6e47ea0441f8737b4eeabf6e643990eab"
+  },
+  "reviewer_actions": "Read-only script/source/raw JSON/log comparison and receipt write. No product edits, native/build/test execution or agents."
+}
