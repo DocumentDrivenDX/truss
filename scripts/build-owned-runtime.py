@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assemble owner sources for the native69 owned graph runtime."""
+"""Assemble owner sources for the native71 owned graph runtime."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -14,8 +14,8 @@ def main():
     target = root / 'packages/python/src/truss/_catalog_runtime'
     owner = root / 'packages/postgresql/owned-groups'
     manifest = json.loads((target / 'manifest.json').read_bytes())
-    if manifest['releaseId'] != 'truss-catalog-runtime/0.69-candidate':
-        raise ValueError('Select the original native69 runtime manifest')
+    if manifest['releaseId'] != 'truss-catalog-runtime/0.71-candidate':
+        raise ValueError('Select the original native71 runtime manifest')
     parts = [(owner / 'operation-storage.generated.sql').read_text() + ';\n', '''CREATE TRIGGER runtime_owned_operation_immutable AFTER UPDATE ON truss.runtime_owned_operation FOR EACH ROW
 WHEN (OLD.result IS NOT NULL OR NEW.result IS NULL OR
  ROW(OLD.attempt_id,OLD.operation_index,OLD.writer_xid,OLD.plan) IS DISTINCT FROM

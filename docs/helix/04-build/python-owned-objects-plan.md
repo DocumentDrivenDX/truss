@@ -194,7 +194,7 @@ CLI/public Python/native descendant-query workflow; matching published wheels
 are still required before a release. Stock development query dependencies do
 not yet provide that new backend. Native69 includes 198 installed routines.
 
-This is an unreleased SDK0.0.36.dev0 integration checkpoint. Complete owned
+This is an unreleased SDK0.0.37.dev0 integration checkpoint. Complete owned
 imports, owned retained-value rebinding/key backfill, cyclic value definitions,
 record-valued properties, general row homes, history offload and actual managed
 service qualification remain in the full goal. Unsupported owned imports and
@@ -317,3 +317,8 @@ transition settlement now recheck the relationship module writer, so queued
 events remain effective after that early flush. Two last-write actor controls
 cover transition insertion and unfinished attempt progress updates. These checks
 join the basic release workflow; they do not establish a performance pass.
+
+The released-scope edge-writer hotfix uses SDK0.0.36/native70. The owned development
+tranche advances to SDK0.0.37.dev0/native71, preserving the exact native68 and
+native70 predecessor identities and supporting the populated68→70→71 chain.
+Historical native69 evidence remains attached to its original source.
