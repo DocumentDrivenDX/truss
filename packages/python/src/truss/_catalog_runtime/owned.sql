@@ -1167,12 +1167,12 @@ BEGIN
   OR (mode='delete_object' AND desired->'deleted' IS DISTINCT FROM 'true'::jsonb)
   OR (reference IS DISTINCT FROM plan->>'primary' AND prior IS NOT DISTINCT FROM desired) THEN
   RAISE EXCEPTION 'original primary or affected descendant required' USING ERRCODE='55000';END IF;
- identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object');
+ identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object',plan,attempt);
  PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',current_actor);
  IF NOT truss.runtime_object_values_readable_qualified((identity->>'typeId')::int,current_actor) THEN RAISE EXCEPTION 'current original property/item readers required' USING ERRCODE='42501';END IF;
  SELECT * INTO STRICT object_row FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=(identity->>'typeId')::int FOR UPDATE NOWAIT;
  old_image:=to_jsonb(object_row);
- IF old_image-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,selected_index,reference,'before') THEN
+ IF old_image-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,selected_index,reference,'before',plan,attempt) THEN
   RAISE EXCEPTION 'original complete object prestate required' USING ERRCODE='55000';END IF;
  IF prior IS NOT DISTINCT FROM desired THEN
   RETURN jsonb_build_object('outcome','unchanged','operation','update_object','identity',identity,'version',object_row.ver::text,'events','[]'::jsonb);
@@ -1182,7 +1182,7 @@ BEGIN
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  before_record:=truss.runtime_object_history(old_image,identity);
  IF mode='update_object' THEN
-  expected_image:=truss.runtime_owned_object_image(selected_attempt,selected_index,reference,'after');
+  expected_image:=truss.runtime_owned_object_image(selected_attempt,selected_index,reference,'after',plan,attempt);
   IF expected_image->>'ver' IS DISTINCT FROM version::text THEN RAISE EXCEPTION 'one original version advance required' USING ERRCODE='55000';END IF;
   IF object_row.props IS DISTINCT FROM expected_image->'props' THEN
    PERFORM truss.runtime_object_update_keys(object_row.id,object_row.type_id,expected_image->'props',convert_to('[]','UTF8'),selected_attempt,selected_index);

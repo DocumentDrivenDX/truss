@@ -1,0 +1,27 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "PLAN_AND_COMPLETED_SOURCE_CLEAR_NATIVE_PENDING",
+  "scope": "Three existing identity/image calls in runtime_owned_object_effect reuse current invocation checkedplan/attempt",
+  "baseCommit": "318d3edaddf3900d2e198d95d2590228f0a9a059",
+  "sourceHashes": {
+    "packages/postgresql/owned-groups/execute.sql": "32c61792b7370b4c87abd7edb48180e11242637ca2f83779bcb996553b704793",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "150a5461f58e52462970d6b848fb48f2bcf74264a9b59ab3632469b015ff5c78",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "6cd8c7727a6b9c992cc4f5828ec739f11f31ce649022fe4666912e80c123d898"
+  },
+  "findings": [],
+  "planAssessment": "Small safe context-propagation cleanup; removes repeated private lookup work without adding state or weakening authority, source or realization proof. No expected material speedup claim.",
+  "checks": [
+    "Effect reads selectedattempt itself, checks currentwriterXID, actor, incomplete/currentordinal and selected plan before any changed call.",
+    "No progress or canonical object write occurs between these local checks and the three identity/before/after-image calls; contexts remain valid for this invocation.",
+    "runtime_owned_identity still verifies stored typed reference, boundary witness, priorcreate ordinal, sealed original result/writer and independent creation-index plan.",
+    "runtime_owned_object_image still enforces phase/missing/deleted semantics, resolves genuine identities/root and constructs exact images; only existing optional context parameters supplied.",
+    "All objectFORUPDATE, expectedversion, keymaintenance, original history/transition/journal, opening live writer/value-read checks and fresh postwriteactor+writer/value checks unchanged.",
+    "No signature/default/publicgrant/storage/newhelper/API/capacity/deadline changes;219routine inventory and1024bounds retained.",
+    "Generated owned.sql repeats exactly the authored3-call change; manifest changes only owned.sql hash; build-owned-runtime.py --check and git diff --check passed."
+  ],
+  "suggestedValidation": "Existing owned/edge/slot/upgrade workflows plus actual1024create/changedupdate/replay/latefault functional controls; interpret any later matrix/profile independently.",
+  "limits": [
+    "Reviewer ran source/generation/hash checks only; no native DB tests.",
+    "Current stock diagnostic remains a separate instrumented run on previous source; it cannot qualify this3-call change or productionperformance."
+  ]
+}
