@@ -103,10 +103,13 @@ def _require_original_preparation(prepared):
         raise ValueError('Original unchanged UMF preparation required')
 
 class PreparationRejected(ValueError):
-    def __init__(self,reason: str,*,diagnostics: tuple[bytes, ...]=()) -> None:
+    def __init__(self,reason: str,*,diagnostics: tuple[bytes, ...]=(),
+                 produced_bytes: int | None=None,limit_bytes: int | None=None) -> None:
         super().__init__('Truss preparation refused: '+reason)
         self.reason=reason
         self.diagnostics=diagnostics
+        self.produced_bytes=produced_bytes
+        self.limit_bytes=limit_bytes
 
 def _reject(reason):raise PreparationRejected(reason)
 def _text(value):
@@ -184,7 +187,7 @@ def prepare_core08_acceptance(documents: tuple[CatalogDocument, ...],configurati
     """Separate current original0.8 owner pipeline; no native acceptance authority."""
     return _prepare_acceptance(documents,configuration,bun_executable=bun_executable,current=True)
 
-def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes,*,bun_executable: str='bun',current:bool=False) -> PreparedAcceptance:
+def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes,*,bun_executable: str='bun',current:bool=False,registration:bool=False) -> PreparedAcceptance:
     """Prepare original native JSON UMF documents under explicit acceptance choices.
 
     configuration is the numeric-free AcceptanceInput JSON object without its
@@ -211,7 +214,7 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
         carriers.append({'documentId':document.document_id,'documentRevision':document.document_revision,
                          'artifact':{'identity':identity,'bytesBase64':base64.b64encode(document.content).decode('ascii'),
                                      'sha256':sha256(document.content).hexdigest()}})
-    request=_json({'configurationHex':configuration.hex(),'documents':carriers})
+    request=_json({'configurationHex':configuration.hex(),'documents':carriers,**({'registration':True} if registration else {})})
     if len(request)>MAX_INPUT:_reject('resource')
     root,manifest=(_release_core08() if current else _release())
     release_digest=CORE08_MANIFEST_SHA256 if current else MANIFEST_SHA256
@@ -257,6 +260,16 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
                 or pin['sha256'] != manifest['owner']['bundleSha256']
                 or result['provenance']['schemaSha256'] != manifest['files']['acceptance-input-v0.1.schema.json' if current else 'docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json']):
             _reject('producer_unavailable')
+        report_evidence=result['reportEvidence']
+        ingress=report_evidence.get('ingress') if type(report_evidence) is dict else None
+        if type(ingress) is dict and ingress.get('state')=='unavailable':
+            reason=ingress.get('reason')
+            if reason in ('report_evidence_resource','report_evidence_unavailable'):
+                # The legacy producer drops the complete bundle before transport.
+                # It does not report its original size; never fabricate that value.
+                raise PreparationRejected('evidence_too_large' if reason=='report_evidence_resource' else 'evidence_unavailable',
+                    diagnostics=(_json(report_evidence),),
+                    limit_bytes=MAX_OUTPUT if reason=='report_evidence_resource' else None)
         return _retain_original(PreparedAcceptance(original,evidence,_json(result['declarations']),_json(result['archiveDocuments']),
             PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],release_digest,manifest['runtimeVersion']),_json(result['reportEvidence'])))
     except (KeyError,ValueError,TypeError) as error:

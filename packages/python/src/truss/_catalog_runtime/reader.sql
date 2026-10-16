@@ -136,3 +136,26 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.accepted_document(text,int,text,text) FROM PUBLIC;
+
+CREATE FUNCTION truss.catalog_revision(expected_release text,expected_digest text,selected_document text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE installation truss.catalog_runtime_installation%ROWTYPE;revision int;archive truss.schema_doc%ROWTYPE;module jsonb;
+BEGIN
+ PERFORM truss.runtime_person(false);
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
+ IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN
+  RAISE EXCEPTION 'selected runtime required' USING ERRCODE='0A000';END IF;
+ -- No share lock: this is a cache key, not admission of a write.
+ SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
+ IF revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000';END IF;
+ IF selected_document IS NULL THEN RETURN convert_to(jsonb_build_object('catalogRevision',revision::text)::text,'UTF8');END IF;
+ IF octet_length(selected_document) NOT BETWEEN 1 AND 4096 THEN RAISE EXCEPTION 'bounded document selection required' USING ERRCODE='22023';END IF;
+ SELECT * INTO archive FROM truss.schema_doc WHERE rev<=revision AND doc_id=selected_document ORDER BY rev DESC LIMIT 1;
+ IF NOT FOUND OR jsonb_array_length(archive.document::jsonb->'modules')=0 THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;
+ FOR module IN SELECT value FROM jsonb_array_elements(archive.document::jsonb->'modules') LOOP
+  IF NOT truss.runtime_can_read(selected_document,module->>'id') THEN RAISE EXCEPTION 'authorized document required' USING ERRCODE='42501';END IF;
+ END LOOP;
+ RETURN convert_to(jsonb_build_object('catalogRevision',revision::text,'documentId',selected_document,'documentRevision',archive.doc_revision,'sourceCatalogRevision',archive.rev::text)::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_revision(text,text,text) FROM PUBLIC;

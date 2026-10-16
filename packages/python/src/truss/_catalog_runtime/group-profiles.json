@@ -166,10 +166,10 @@
       "name": "creationTransitionProfile",
       "pin": {
         "identity": "truss-unified-create-transition",
-        "version": "0.1",
-        "sha256": "765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"
+        "version": "0.2",
+        "sha256": "073782e2517f2a7e26c8d6479c6266ececf68963681ccfb6a380e9cd16f2e11b"
       },
-      "definition": "truss-unified-create-transition/0.1;native issued immutable attempt context;one atomic outer create progress and original inner creation group;SQL NULL before only for proven version1 creation;original creation journal is sole custodian;empty transition journal;exact original input documents actor writer result image keys reservations and generation correspondence;every inner group and outer create linked exactly once;legacy absent storage pin retains original history;unknown pin refuses"
+      "definition": "Atomic create transition v2: outer group owns original input and result; transition retains actual object, keys and create journal; persistent key reservations remain; no per-create group or member copies."
     }
   ],
   "retainedProfiles": [
@@ -226,6 +226,15 @@
         "sha256": "097050463d22e40cbc3e0a6800eed7a97bb7f1dc6125748355e64a353d0df4ac"
       },
       "definition": "truss-scalar-string-values/0.4;required/absent-allowed scalar string/integer/decimal/boolean/timestamp/binary;shared BooleanValue and TextValue;JSON numeric token text preserved without float or bounded numeric conversion;RFC3339 Gregorian date seconds00..59 original offsets and arbitrary fractions preserved including unknown -00:00;canonical padded base64 including empty;absence omitted;unknown exact scalar/null retained;asserted origin exact scalar string/null map;no lossy numeric conversion;one-level UMF array/map properties with explicit required singular scalar item Field and known facets;exact string map keys unique and C-sorted before storage/equality;sequence order/duplicates preserved;container absence/null/empty distinct;bounded exact retained scalar containers;no descendant item evolution or owned records;item declaration module interpretation requires current read authority;native64 additionally admits acyclic required-item nested array/map chains with exact scalar leaves;all descendant meanings and module readers required;depth32 and4096 value nodes;unique map keys C-sorted at every level;array order and duplicate values retained;record/composed ownership and descendant evolution remain unsupported"
+    },
+    {
+      "name": "creationTransitionProfile",
+      "pin": {
+        "identity": "truss-unified-create-transition",
+        "version": "0.1",
+        "sha256": "765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"
+      },
+      "definition": "truss-unified-create-transition/0.1;native issued immutable attempt context;one atomic outer create progress and original inner creation group;SQL NULL before only for proven version1 creation;original creation journal is sole custodian;empty transition journal;exact original input documents actor writer result image keys reservations and generation correspondence;every inner group and outer create linked exactly once;legacy absent storage pin retains original history;unknown pin refuses"
     }
   ]
 }

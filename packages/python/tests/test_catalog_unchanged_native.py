@@ -8,6 +8,29 @@ class CatalogUnchangedTests(catalog_tests.PublicCatalogRuntimeTests):
     for _name in tuple(n for n in dir(catalog_tests.PublicCatalogRuntimeTests) if n.startswith('test_')):
         locals()[_name]=None
 
+    def test_registration_retry_preserves_legacy_report_after_preparation_change(self):
+        from truss.preparation import prepare_acceptance
+        from truss._catalog_report_semantics import canonical_numeric_free
+        self.install();connection,host,assembly,tx=self.consumer()
+        ordinary=self.prepared(assembly)
+        choices={key:value for key,value in ordinary.input().items() if key not in ('interfaceVersion','documents')}
+        legacy=prepare_acceptance(tuple(prepared_documents(ordinary)),canonical_numeric_free(choices),
+            bun_executable='/opt/homebrew/bin/bun')
+        self.assertEqual(legacy.input_bytes,ordinary.input_bytes)
+        original=assembly.accept_in_transaction(tx,legacy,request_key='original')
+        self.assertIsInstance(original,Ok,repr(original))
+        host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
+        replay=assembly.accept_in_transaction(tx,ordinary,request_key='original')
+        self.assertIsInstance(replay,Ok,repr(replay))
+        self.assertTrue(replay.value.replayed)
+        self.assertEqual(replay.value.report_bytes,original.value.report_bytes)
+        unchanged=assembly.accept_in_transaction(tx,ordinary,request_key='new-key')
+        self.assertIsInstance(unchanged,Ok,repr(unchanged))
+        self.assertIsInstance(unchanged.value,CatalogUnchanged)
+        self.assertEqual(unchanged.value.registration_id,original.value.registration_id)
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(1,))
+
     def test_pending_committed_retry_and_original_report_are_distinct(self):
         self.install();connection,host,assembly,tx=self.consumer();prepared=self.prepared(assembly)
         original=assembly.accept_in_transaction(tx,prepared,request_key='original',origin_bytes=b'{"x-action":"register"}')

@@ -8,7 +8,7 @@ from .execution import Ok,Error,ExecutionFailure
 from .imports import (ImportInput,ObjectImportRecord,EdgeImportRecord,ImportReported,ImportInvalid,ImportExecutionFailed,
     ImportReport,ImportCounts,ImportCreated,ImportSkipped,ImportRejected,ImportAttemptUnknown,PendingBatch,RolledBackBatch,TransactionUnresolvedBatch)
 from .groups import (CreateObject,CreateEdge,AuthoredValue,RootlessOwnership,StoredObjectReference,NullOrderKey,TextOrderKey,
-    RequestNone,GroupSuccess)
+    RequestNone,GroupSuccess,GroupFailed,GroupUnavailable,UnauthorizedPerson,InvalidGroupInput,GroupOperationFailure)
 from ._group_runtime import GroupRuntimeContext,_wire,_bytes,_artifact,_identity,apply_group
 from ._acceptance_json import decode_acceptance_json
 from .psycopg_host import _HostOperationReservation
@@ -16,7 +16,25 @@ from .preparation import CatalogDocument
 from ._catalog_report_semantics import canonical_numeric_free
 
 class _RecordRefused(Exception):
-    pass
+    def __init__(self,message,*,native_state=None):
+        super().__init__(message)
+        self.sqlstate=native_state
+
+
+def _group_refusal_state(result):
+    """Reuse the import's existing SQLSTATE classification for typed group results."""
+    if isinstance(result,GroupUnavailable):
+        return {'profile':'0A000','resource':'54000','observation':'55P03'}.get(result.reason)
+    if isinstance(result,GroupFailed):
+        if isinstance(result.failure,UnauthorizedPerson):return '42501'
+        if isinstance(result.failure,InvalidGroupInput):return '22023'
+        if isinstance(result.failure,GroupOperationFailure):
+            try:
+                value=json.loads(base64.b64decode(result.failure.inner_error.bytes_base64,validate=True))
+                state=value.get('nativeState')
+                if state in ('22023','23505','42501','0A000','P1004','P1005'):return state
+            except (ValueError,TypeError,AttributeError):pass
+    return None
 
 
 _DIAGNOSTIC=ProfilePin(identity='truss-import-input-diagnostic',version='0.1',sha256=sha256(b'Closed import invalid-input code; no native diagnostic disclosure;v1').hexdigest())
@@ -176,7 +194,9 @@ def run_import(host,transaction,input,documents,manifest,digest,pin_cursor,*,bun
                     capture=[];submitted[0]=True
                     applied=apply_group(host,transaction,group_context.input((operation,),origin),RequestNone(),documents,manifest,digest,pin_cursor,
                         bun_executable=bun_executable,_cursor=cursor,_attempt_capture=capture)
-                    if not isinstance(applied,Ok) or not isinstance(applied.value,GroupSuccess):known[0]='unsupported_profile';raise _RecordRefused('Import group refused')
+                    if not isinstance(applied,Ok):raise _RecordRefused('Import execution failed')
+                    if not isinstance(applied.value,GroupSuccess):
+                        raise _RecordRefused('Import group refused',native_state=_group_refusal_state(applied.value))
                     created=applied.value.response.semantic.results[0]
                     cursor.execute('SELECT truss.import_record_source(%s::uuid,%s,%s)',(capture[0],_bytes(_wire(record)),input.load_id),prepare=False);cursor.fetchone()
                     return ImportCreated(input_index=str(index),batch_id=batch_id,identity=created.identity,version=created.version)

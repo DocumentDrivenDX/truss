@@ -39,9 +39,9 @@ BEGIN
     ,count(*) FILTER (WHERE field->'declaration'->>'cardinality'='one' AND property_id IS NOT NULL AND o.props ? property_id::text
      AND o.props->property_id::text<>'{"kind":"null"}'::jsonb
      AND truss.valid_scalar_cell(o.props->property_id::text,field->'declaration'->>'scalarType',true) IS TRUE
-     AND ((field->'declaration'->>'scalarType'='integer' AND field->'declaration'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (field->'declaration'->>'scalarType'='decimal' AND field->'declaration'->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)))
+     AND ((field->'declaration'->>'scalarType'='integer' AND field->'declaration'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (field->'declaration'->>'scalarType'='decimal' AND field->'declaration'->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb)))
      AND truss.valid_scalar_property(o.props->property_id::text,field->'declaration'->>'scalarType',true,field->'declaration'->'facets') IS NOT TRUE)
-    ,count(*) FILTER (WHERE (property_id IS NULL OR EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.prop_id=property_id AND p.name IS DISTINCT FROM field->'declaration'->>'name')) AND o.retained ? (field->'declaration'->>'name'))
+    ,count(*) FILTER (WHERE (property_id IS NULL OR EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.prop_id=property_id AND p.name IS DISTINCT FROM coalesce(field->'declaration'->>'name',field->'declaration'->>'id'))) AND o.retained ? (coalesce(field->'declaration'->>'name',field->'declaration'->>'id')))
     INTO missing_count,family_count,facet_count,retained_count FROM truss.object o WHERE o.type_id=selected_type;
    IF missing_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.required','affectedObjectCount',missing_count::text));END IF;
    IF family_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.scalar_type','affectedObjectCount',family_count::text));END IF;

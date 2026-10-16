@@ -14,6 +14,7 @@ CREATE TABLE truss.catalog_registration_request (
  type_offset int NOT NULL CHECK(type_offset>=0),property_offset int NOT NULL CHECK(property_offset>=0),relationship_offset int NOT NULL CHECK(relationship_offset>=0),
  UNIQUE(installation_id,actor_oid,request_key),CHECK(revision>=1),
  CHECK(octet_length(request_key) BETWEEN 1 AND 1024),CHECK(octet_length(report_sha256)=32));
+CREATE INDEX catalog_registration_request_writer ON truss.catalog_registration_request(writer_xid);
 
 -- A new request for exactly the current accepted input observes the original
 -- registration; it does not create another revision, report or source archive.
@@ -137,7 +138,7 @@ DECLARE report jsonb; source jsonb; basis jsonb;rebind_profile text;profile_coun
 BEGIN
  basis:=coalesce(planned_basis,truss.catalog_all_expected_records(request.revision));
  source:=convert_from(request.source_bytes,'UTF8')::jsonb;
- report:=jsonb_build_object('interfaceVersion',CASE WHEN (convert_from(request.input_bytes,'UTF8')::jsonb)->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.14.0","sha256":"1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"}'::jsonb) AND source->>'sourceFormat'='truss-catalog-source-reference/0.1' THEN 'truss-catalog-registration-report/0.2' ELSE 'truss-catalog-registration-report/0.1' END,
+ report:=jsonb_build_object('interfaceVersion',CASE WHEN source->>'sourceFormat'='truss-registration-summary/1.0' THEN 'truss-catalog-registration-report/0.5' WHEN (convert_from(request.input_bytes,'UTF8')::jsonb)->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.14.0","sha256":"1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"}'::jsonb) AND source->>'sourceFormat'='truss-catalog-source-reference/0.1' THEN 'truss-catalog-registration-report/0.2' ELSE 'truss-catalog-registration-report/0.1' END,
   'registrationId',request.registration_id::text,'installationId',request.installation_id::text,
   'revision',request.revision::text,'actor',request.actor_name,'actorOid',request.actor_oid::text,
   'writerXid',request.writer_xid::text,'requestKey',request.request_key,
@@ -161,19 +162,19 @@ BEGIN
     FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p
     JOIN jsonb_populate_recordset(NULL::truss.type_def,basis->'type_def') t ON t.type_id=p.type_id
     WHERE p.since_rev<=request.revision AND ((p.scalar_type='integer' AND p.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb)
-      OR (p.scalar_type='decimal' AND p.facets IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb))))));
+      OR (p.scalar_type='decimal' AND p.facets IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb))))));
  END IF;
  IF EXISTS(SELECT 1 FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id) THEN
   SELECT min(truss.catalog_rebind_profile(t.journal)),count(DISTINCT truss.catalog_rebind_profile(t.journal)) INTO rebind_profile,profile_count FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id;
   IF profile_count<>1 THEN RAISE EXCEPTION 'one original registration rebind profile required' USING ERRCODE='55000';END IF;
-  report:=report||jsonb_build_object('interfaceVersion','truss-catalog-registration-report/0.3','rebindProfile',rebind_profile,
+  report:=report||jsonb_build_object('interfaceVersion',CASE WHEN source->>'sourceFormat'='truss-registration-summary/1.0' THEN 'truss-catalog-registration-report/0.5' ELSE 'truss-catalog-registration-report/0.3' END,'rebindProfile',rebind_profile,
    'rebinds',(SELECT jsonb_agg(jsonb_build_object('objectId',t.object_id::text,'typeId',t.type_id::text,
     'beforeVersion',t.before_object->>'ver','afterVersion',t.after_object->>'ver','effects',t.effects,
     'events',(SELECT jsonb_agg(j.value->'new_value' ORDER BY j.ordinality) FROM jsonb_array_elements(t.journal) WITH ORDINALITY j)) ORDER BY t.type_id,t.object_id)
     FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id));
  END IF;
  IF EXISTS(SELECT 1 FROM truss.runtime_catalog_key_backfill t WHERE t.registration_id=request.registration_id) THEN
-  report:=report||jsonb_build_object('interfaceVersion','truss-catalog-registration-report/0.4','keyBackfillProfile',CASE WHEN EXISTS(
+  report:=report||jsonb_build_object('interfaceVersion',CASE WHEN source->>'sourceFormat'='truss-registration-summary/1.0' THEN 'truss-catalog-registration-report/0.5' ELSE 'truss-catalog-registration-report/0.4' END,'keyBackfillProfile',CASE WHEN EXISTS(
     SELECT 1 FROM truss.runtime_catalog_key_backfill b CROSS JOIN LATERAL jsonb_array_elements(b.effects) e
     JOIN jsonb_populate_recordset(NULL::truss.key_def,basis->'key_def') k ON k.type_id=b.type_id AND k.key_num=(e.value->>'keyNumber')::smallint
     JOIN jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p ON p.type_id=k.type_id AND p.prop_id=ANY(k.prop_ids)
@@ -328,13 +329,13 @@ BEGIN
          AND e.value->>'cardinality'='one'
          AND e.value->>'scalarType' IN ('string','integer','decimal','boolean','timestamp','binary')
          AND e.value->>'nullability' IN ('required','absent-allowed')
-         AND jsonb_typeof(e.value->'name')='string' AND e.value->>'name'<>''
+         AND (NOT e.value ? 'name' OR (jsonb_typeof(e.value->'name')='string' AND e.value->>'name'<>''))
          AND NOT e.value ? 'itemType'
          AND NOT EXISTS(SELECT 1 FROM jsonb_object_keys(e.value) k WHERE k NOT IN
           ('id','kind','name','scalarType','nullability','cardinality','extensions','facets','allowedValues','default','title','description','aliases','examples'))
          AND (coalesce(e.value->'facets','{}'::jsonb)='{}'::jsonb
           OR e.value->>'scalarType'='integer' AND e.value->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
-          OR e.value->>'scalarType'='decimal' AND e.value->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb))
+          OR e.value->>'scalarType'='decimal' AND e.value->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb))
         )))<>expected_fields THEN
    RAISE EXCEPTION 'complete original declaration set required' USING ERRCODE='22023'; END IF;
   IF input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb) AND EXISTS(SELECT 1 FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e WHERE e.value->>'kind'='field' AND e.value->'facets'='{"precision":18,"scale":2}'::jsonb) THEN RAISE EXCEPTION 'scale2 requires its original selected support policy' USING ERRCODE='0A000';END IF;
@@ -365,7 +366,7 @@ BEGIN
       '{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.12.0","sha256":"f2c2495fdfab81d555194e5a3dfafe1c7cf58e17035fe5b03698e2808d3b027f"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.13.0","sha256":"d660fab21eabe2d52ef0609cafcea6112f506786e359424235714718f6c769a7"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.14.0","sha256":"1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb ,'{"identity":"truss-fresh-catalog-support","version":"0.15.0","sha256":"a69a3035fcc0927730977ad05a1f60b0d10ec765413ab7c57d763f14d409c455"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"}'::jsonb)
       AND NOT (coalesce(source_field->'facets','{}'::jsonb)='{}'::jsonb
        OR source_field->>'scalarType'='integer' AND source_field->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
-       OR source_field->>'scalarType'='decimal' AND source_field->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS TRUE)
+       OR source_field->>'scalarType'='decimal' AND source_field->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb)) IS TRUE)
      OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(source_record->'members') m WHERE m.value=field->'reference') THEN
      RAISE EXCEPTION 'selected original Field declaration required' USING ERRCODE='0A000'; END IF;
     IF source_field->>'cardinality' IN ('array','map') THEN
@@ -448,7 +449,7 @@ BEGIN
  SELECT * INTO existing FROM truss.catalog_registration_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept_with_keys.request_key;
  IF FOUND THEN
   IF existing.input_bytes IS DISTINCT FROM input_bytes OR existing.document_bytes IS DISTINCT FROM documents_bytes
-   OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes OR existing.source_bytes IS DISTINCT FROM source_bytes OR existing.origin_bytes IS DISTINCT FROM origin_bytes THEN
+   OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes OR existing.origin_bytes IS DISTINCT FROM origin_bytes THEN
    RAISE EXCEPTION 'request key reused with different registration input' USING ERRCODE='P1001'; END IF;
   PERFORM truss.catalog_actor();
   PERFORM truss.catalog_rebind_report_reader(existing.registration_id);
@@ -463,7 +464,7 @@ BEGIN
  IF FOUND THEN
   SELECT * INTO STRICT existing FROM truss.catalog_registration_request r WHERE r.registration_id=alias_request.registration_id;
   IF existing.input_bytes IS DISTINCT FROM input_bytes OR existing.document_bytes IS DISTINCT FROM documents_bytes
-   OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes OR existing.source_bytes IS DISTINCT FROM source_bytes
+   OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes
    OR alias_request.origin_bytes IS DISTINCT FROM origin_bytes THEN
    RAISE EXCEPTION 'request key reused with different registration input' USING ERRCODE='P1001'; END IF;
   PERFORM truss.catalog_actor();
@@ -475,7 +476,42 @@ BEGIN
   PERFORM truss.catalog_rebind_report_reader(existing.registration_id);
   RETURN;
  END IF;
- -- Retention verifies original bytes and unselected meaning, not owner execution.
+ -- Ordinary registration keeps one validation summary per original document.
+ -- Semantic source/declaration checks and atomic publication remain native.
+ IF (convert_from(source_bytes,'UTF8')::jsonb)->>'sourceFormat'='truss-registration-summary/1.0' THEN
+  DECLARE
+   summary jsonb:=convert_from(source_bytes,'UTF8')::jsonb;
+   original_input jsonb:=convert_from(input_bytes,'UTF8')::jsonb;
+   original_docs jsonb:=convert_from(documents_bytes,'UTF8')::jsonb;
+   doc jsonb; validation jsonb; selected_doc jsonb; doc_index int:=0;
+  BEGIN
+   IF (SELECT count(*) FROM jsonb_object_keys(summary))<>3
+    OR jsonb_typeof(summary->'umf') IS DISTINCT FROM 'array'
+    OR jsonb_typeof(summary->'documentValidations') IS DISTINCT FROM 'array'
+    OR jsonb_array_length(summary->'documentValidations')<>jsonb_array_length(original_docs)
+    OR original_input->'binding' IS DISTINCT FROM '{"state":"absent"}'::jsonb
+    OR original_input->'transforms' IS DISTINCT FROM '[]'::jsonb THEN
+    RAISE EXCEPTION 'original native registration summary required' USING ERRCODE='22023';END IF;
+   FOR doc IN SELECT value FROM jsonb_array_elements(original_docs) LOOP
+    validation:=summary->'documentValidations'->doc_index;
+    selected_doc:=original_input->'documents'->doc_index;
+    IF (SELECT count(*) FROM jsonb_object_keys(validation))<>4
+     OR validation->>'documentId' IS DISTINCT FROM doc->>'documentId'
+     OR validation->>'contentSha256' IS DISTINCT FROM selected_doc->'artifact'->>'sha256'
+     OR selected_doc->'ingress' IS DISTINCT FROM '{"kind":"native"}'::jsonb
+     OR validation->'sourceValidation' IS DISTINCT FROM doc->'validation'->'sourceValidation'
+     OR validation->'sourceValidation'->'valid' IS DISTINCT FROM 'true'::jsonb
+     OR validation->'targetValidation'->'valid' IS DISTINCT FROM 'true'::jsonb
+     OR jsonb_typeof(validation->'sourceValidation'->'complete') IS DISTINCT FROM 'boolean'
+     OR jsonb_typeof(validation->'targetValidation'->'complete') IS DISTINCT FROM 'boolean'
+     OR jsonb_typeof(validation->'sourceValidation'->'diagnostics') IS DISTINCT FROM 'array'
+     OR jsonb_typeof(validation->'targetValidation'->'diagnostics') IS DISTINCT FROM 'array' THEN
+     RAISE EXCEPTION 'original document validation summary required' USING ERRCODE='22023';END IF;
+    doc_index:=doc_index+1;
+   END LOOP;
+  END;
+ ELSE
+ -- Retained legacy reports preserve their original representation.
  DECLARE
   metadata_source jsonb:=convert_from(source_bytes,'UTF8')::jsonb;
   original_input jsonb:=convert_from(input_bytes,'UTF8')::jsonb;
@@ -619,9 +655,10 @@ BEGIN
   IF jsonb_array_length(seen)<>jsonb_array_length(expected_extensions) THEN
    RAISE EXCEPTION 'complete retained extension occurrence bijection required' USING ERRCODE='22023'; END IF;
  END;
+ END IF;
 
  SELECT r.* INTO existing FROM truss.catalog_registration_request r
-  WHERE r.input_bytes=catalog_accept_with_keys.input_bytes AND r.document_bytes=catalog_accept_with_keys.documents_bytes AND r.declaration_bytes=catalog_accept_with_keys.declarations_bytes AND r.source_bytes=catalog_accept_with_keys.source_bytes
+  WHERE r.input_bytes=catalog_accept_with_keys.input_bytes AND r.document_bytes=catalog_accept_with_keys.documents_bytes AND r.declaration_bytes=catalog_accept_with_keys.declarations_bytes
   AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(catalog_accept_with_keys.documents_bytes,'UTF8')::jsonb) d
    WHERE NOT EXISTS(SELECT 1 FROM truss.schema_doc current_doc WHERE current_doc.doc_id=d.value->>'documentId'
     AND current_doc.rev=(SELECT max(latest.rev) FROM truss.schema_doc latest WHERE latest.doc_id=current_doc.doc_id)

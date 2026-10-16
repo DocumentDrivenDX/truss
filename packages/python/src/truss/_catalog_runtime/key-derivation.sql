@@ -64,9 +64,9 @@ BEGIN
    WHEN 'boolean' THEN tag:=1;payload:=decode(CASE WHEN (cell->>'value')::boolean THEN '01' ELSE '00' END,'hex');
    WHEN 'integer' THEN tag:=2;payload:=convert_to(truss.umf_key_coefficient(cell->>'text',0),'UTF8');
    WHEN 'decimal' THEN
-    IF facet NOT IN ('{"precision":18,"scale":2}'::jsonb,'{"precision":18,"scale":4}'::jsonb) THEN
+    IF facet NOT IN ('{"precision":18,"scale":2}'::jsonb,'{"precision":18,"scale":4}'::jsonb,'{"precision":12,"scale":2}'::jsonb) THEN
      RAISE EXCEPTION 'selected native decimal key domain required' USING ERRCODE='0A000';END IF;
-    tag:=3;payload:=truss.umf_key_uleb128((facet->>'scale')::bigint)||convert_to(truss.umf_key_coefficient(cell->>'text',(facet->>'scale')::int,18),'UTF8');
+    tag:=3;payload:=truss.umf_key_uleb128((facet->>'scale')::bigint)||convert_to(truss.umf_key_coefficient(cell->>'text',(facet->>'scale')::int,(facet->>'precision')::int),'UTF8');
   END CASE;
   IF octet_length(result)::bigint+octet_length(payload)+8>1048576 THEN RAISE EXCEPTION 'key tuple budget exceeded' USING ERRCODE='54000';END IF;
   result:=result||set_byte(decode('00','hex'),0,tag)||truss.umf_key_uleb128(octet_length(payload))||payload;

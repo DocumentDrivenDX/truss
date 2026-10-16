@@ -116,12 +116,17 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         selected=self.admin.execute('SELECT truss.runtime_group_profiles()').fetchone()[0]
         for definition in definitions:
             self.assertEqual(hashlib.sha256(definition['definition'].encode()).hexdigest(),definition['pin']['sha256'])
-            self.assertEqual(selected[definition['name']],definition['pin'])
+        declared={definition['name']:definition['pin'] for definition in definitions}
+        self.assertEqual(selected,{name:declared[name] for name in selected})
+        self.assertEqual(set(selected),{'creationTransitionProfile','mutationProfile','valueProfile','canonicalizationProfile',
+                                        'requestFingerprintProfile','adapterProfile','positionProfile','policyProfile'})
     def test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint(self):
         def require_target(source):source['modules'][0]['relationships'][0]['targetMultiplicity']['min']=1
         connection,host,assembly,tx=self.ready(require_target)
         input,request=self.input(assembly,tx)
-        self.assertIsInstance(self.apply(assembly,tx,input,request),GroupUnavailable)
+        failed=self.apply(assembly,tx,input,request)
+        self.assertIsInstance(failed,GroupFailed)
+        self.assertEqual(json.loads(base64.b64decode(failed.failure.inner_error.bytes_base64))['nativeState'],'P1005')
         target,_=self.input(assembly,tx,(self.create(record='B'),))
         self.assertIsInstance(self.apply(assembly,tx,target,RequestNone()),GroupSuccess)
         host.detach();connection.commit()
@@ -132,7 +137,8 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE');self.admin.execute('REVOKE group_writer FROM consumer')
         connection,host,assembly,tx=self.consumer()
         refused=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
-        self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+        self.assertIsInstance(refused,Ok);self.assertIsInstance(refused.value,GroupFailed)
+        self.assertEqual(refused.value.failure.code,'unauthorized_person')
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(1,))
     def test_raw_facade_rejects_missing_values_and_duplicate_json(self):
         connection,host,assembly,tx=self.ready();input,request=self.input(assembly,tx)
@@ -149,8 +155,8 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
             if mutation=='duplicate-json':raw=raw.replace(b'"interfaceVersion":"truss-group-input/0.1.0"',b'"interfaceVersion":"wrong","interfaceVersion":"truss-group-input/0.1.0"')
             connection.execute('SAVEPOINT malformed')
             try:
-                returned=connection.execute('SELECT truss.apply_create_group(%s,%s,%s,%s,%s,%s)',
-                    (raw,documents,b'[]',b'{"state":"none"}',manifest['releaseId'],digest)).fetchone()[0]
+                returned=connection.execute('SELECT truss.apply_group(%s,%s,%s,%s,%s)',
+                    (raw,documents,b'{"state":"none"}',manifest['releaseId'],digest)).fetchone()[0]
                 self.assertEqual(json.loads(bytes(returned))['outcome'],'failed')
             finally:connection.execute('ROLLBACK TO SAVEPOINT malformed');connection.execute('RELEASE SAVEPOINT malformed')
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
@@ -161,7 +167,9 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         self.addCleanup(self.admin.execute,'DROP FUNCTION public.suppress_create_fact()')
         for table in ('journal','request_receipt'):
             self.admin.execute(psycopg.sql.SQL('CREATE TRIGGER suppress_fact BEFORE INSERT ON truss.{} FOR EACH ROW EXECUTE FUNCTION public.suppress_create_fact()').format(psycopg.sql.Identifier(table)))
-            failed=self.apply(assembly,tx,input,request);self.assertIsInstance(failed,GroupFailed)
+            failed=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+            self.assertIsInstance(failed,Error);self.assertEqual(failed.error.sql_state,'55000')
+            self.assertEqual(host._custody.last_attempt.phase,'contained')
             self.assertEqual(connection.execute('TABLE prior').fetchall(),[('kept',)])
             for name in ('object','journal','object_key_bucket','object_key_reservation_bucket','request_receipt','runtime_create_group'):
                 self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(name))).fetchone(),(0,))
@@ -172,24 +180,35 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         self.admin.execute("CREATE FUNCTION public.rewrite_create_group() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.semantic_bytes:=convert_to('{\"results\":[]}', 'UTF8');RETURN NEW;END $$")
         self.addCleanup(self.admin.execute,'DROP FUNCTION public.rewrite_create_group()')
         self.admin.execute('CREATE TRIGGER rewrite_group BEFORE INSERT ON truss.runtime_create_group FOR EACH ROW EXECUTE FUNCTION public.rewrite_create_group()')
-        self.assertIsInstance(self.apply(assembly,tx,input,request),GroupFailed)
+        failed=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        self.assertIsInstance(failed,Error);self.assertEqual(failed.error.sql_state,'55000')
+        self.assertEqual(host._custody.last_attempt.phase,'contained')
         self.admin.execute('DROP TRIGGER rewrite_group ON truss.runtime_create_group')
         self.admin.execute("""CREATE FUNCTION public.duplicate_create_event() RETURNS trigger LANGUAGE plpgsql AS $$
          BEGIN IF pg_trigger_depth()=1 THEN INSERT INTO truss.journal SELECT (jsonb_populate_record(NULL::truss.journal,to_jsonb(NEW)||jsonb_build_object('seq',nextval('truss.journal_seq'),'ver',2))).*;END IF;RETURN NULL;END $$""")
         self.addCleanup(self.admin.execute,'DROP FUNCTION public.duplicate_create_event()')
         self.admin.execute('CREATE TRIGGER duplicate_event AFTER INSERT ON truss.journal FOR EACH ROW EXECUTE FUNCTION public.duplicate_create_event()')
-        self.assertIsInstance(self.apply(assembly,tx,input,request),GroupFailed)
+        failed=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        self.assertIsInstance(failed,Error);self.assertEqual(failed.error.sql_state,'55000')
+        self.assertEqual(host._custody.last_attempt.phase,'contained')
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
         self.admin.execute('DROP TRIGGER duplicate_event ON truss.journal')
     def test_deferred_corruption_aborts_outer_commit(self):
         connection,host,assembly,tx=self.ready();input,request=self.input(assembly,tx)
         result=self.apply(assembly,tx,input,request);self.assertIsInstance(result,GroupSuccess)
         identity=int(result.response.semantic.results[0].identity.id)
-        self.admin.execute('GRANT UPDATE(ver),SELECT(id) ON truss.object TO consumer')
-        connection.execute('UPDATE truss.object SET ver=2 WHERE id=%s',(identity,))
+        # Inject corruption without granting raw table access: raw privileges
+        # independently refuse the person before the final object check runs.
+        self.admin.execute("""CREATE FUNCTION public.corrupt_created_object(selected_id bigint) RETURNS void
+         LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
+          BEGIN UPDATE truss.object SET ver=2 WHERE id=selected_id; END
+         $$""")
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.corrupt_created_object(bigint)')
+        connection.execute('SELECT public.corrupt_created_object(%s)',(identity,))
         host.detach()
-        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):connection.commit()
-        connection.rollback();self.admin.execute('REVOKE UPDATE(ver),SELECT(id) ON truss.object FROM consumer')
+        with self.assertRaisesRegex(psycopg.errors.ObjectNotInPrerequisiteState,'exact final object/key state required'):
+            connection.commit()
+        connection.rollback()
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
 
     def test_noinherit_set_role_raw_privilege_is_refused_after_reset(self):
@@ -241,7 +260,8 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         connection.execute("CREATE TEMP TABLE prior_work(value text);INSERT INTO prior_work VALUES('kept')")
         self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE');self.admin.execute('REVOKE group_writer FROM consumer')
         refused=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
-        self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+        self.assertIsInstance(refused,Ok);self.assertIsInstance(refused.value,GroupFailed)
+        self.assertEqual(refused.value.failure.code,'unauthorized_person')
         self.assertEqual(connection.execute('TABLE prior_work').fetchall(),[('kept',)])
         for table in ('object','runtime_create_group','request_receipt','journal'):
             self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(table))).fetchone(),(0,))

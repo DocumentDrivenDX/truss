@@ -19,11 +19,15 @@ class CatalogDiagnosticTests(base.NumericFacetTests):
         source=a.accepted_document_in_transaction(t,document_id='adoc').value;self.assertIsInstance(source,AcceptedDocument);self.assertEqual(source.content,original);self.assertEqual(source.sha256,hashlib.sha256(original).hexdigest())
         self.admin.execute('GRANT '+self.installation.registrar_role+' TO consumer WITH SET FALSE')
         report=a.report_in_transaction(t).value.original_bytes;decoded=json.loads(report)['source']
-        self.assertEqual({d['completeness'] for d in decoded['documentInterpretations']},{'partial'})
-        diagnostics=[json.loads(base64.b64decode(d['diagnostic']['bytesBase64'])) for d in decoded['diagnostics']]
+        self.assertEqual(decoded['sourceFormat'],'truss-registration-summary/1.0')
+        validations=decoded['documentValidations']
+        self.assertTrue(all(d['sourceValidation']['valid'] for d in validations))
+        self.assertTrue(any(not d['sourceValidation']['complete'] for d in validations))
+        diagnostics=[diagnostic for d in validations for diagnostic in d['sourceValidation']['diagnostics']]
+        self.assertTrue(any(d['code']=='UNKNOWN_EXTENSION' for d in diagnostics))
         prepared=a.prepare_catalog(self.documents,source_version=self.source_version,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
-        self.assertEqual(decoded['diagnostics'],json.loads(prepared.report_evidence_bytes)['validation']['diagnostics']);self.assertTrue(any(d['diagnostic']['code']=='UNKNOWN_EXTENSION' for d in diagnostics))
-        self.assertEqual(len(decoded['extensions']),2)
+        self.assertEqual(validations,json.loads(prepared.report_evidence_bytes)['documents'])
+        self.assertEqual(json.loads(source.content)['extensions'],json.loads(original)['extensions'])
         created=self.apply(a,t,*self.input(a,t,(CreateObject(type_definition_pin=self.types[('adoc','A')].definition_pin,values=self.values(),ownership=RootlessOwnership()),)))
         self.assertIsInstance(created,GroupSuccess);h.detach();c.commit();c,h,a,t=self.consumer()
         value=a.get_object_in_transaction(t,document_id='adoc',module_id='m',record_id='A',object_id=int(created.response.semantic.results[0].identity.id)).value.object

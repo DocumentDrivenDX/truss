@@ -38,7 +38,7 @@ class CatalogRebindTests(base.PublicCreateGroupTests):
         self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))
         self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
         report=json.loads(accepted.value.report_bytes)
-        self.assertEqual(report['interfaceVersion'],'truss-catalog-registration-report/0.3')
+        self.assertEqual(report['interfaceVersion'],'truss-catalog-registration-report/0.5')
         self.assertEqual(len(report['rebinds']),1);self.assertEqual(len(report['rebinds'][0]['effects']),3);self.assertEqual(len(report['rebinds'][0]['events']),4)
         self.assertTrue(all(e['component']=='event' and type(e['bytesBase64']) is str for e in report['rebinds'][0]['events']))
         self.assertEqual(report['rebinds'][0]['beforeVersion'],'1');self.assertEqual(report['rebinds'][0]['afterVersion'],'2')
@@ -63,7 +63,7 @@ class CatalogRebindTests(base.PublicCreateGroupTests):
         self.assertEqual(retry.value.report_bytes,accepted.value.report_bytes)
         self.assertEqual(a.report_in_transaction(t,accepted.value.revision).value.original_bytes,accepted.value.report_bytes)
         # Historical reports retain their original bytes/format.
-        self.assertNotEqual(json.loads(a.report_in_transaction(t,1).value.original_bytes)['interfaceVersion'],'truss-catalog-registration-report/0.3')
+        self.assertNotIn('rebinds',json.loads(a.report_in_transaction(t,1).value.original_bytes))
         h.detach();c.commit()
         self.assertEqual(self.admin.execute('SELECT ver FROM truss.object WHERE id=%s',(int(identity.id),)).fetchone(),(2,))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_catalog_rebind_transition').fetchone(),(1,))

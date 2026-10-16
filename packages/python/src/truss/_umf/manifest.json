@@ -23,7 +23,7 @@
     "owner/producer-manifest.json": "89115bff6644db7f2fe7b292458994a94dc78ff0c4c3f608d7b1fe3eeb810bc8",
     "runtime/package.json": "9a0a1f4e40bbd5082cbcc0f6b6b515368f2dc8dc60341affdc8c50571819bd49",
     "runtime/node_modules/ajv/dist/2020.js": "57cad03e867e41b0bf4a68c13e24b2628312c6dc82a3ca16780a6864130ad40d",
-    "packages/umf-bun/src/bridge.js": "fec28c7539a3a2307cc01e6b0830b56fdd4a908c3076caae3b3c9fc1375c8efe",
+    "packages/umf-bun/src/bridge.js": "4e1fafb0bd23f60f1e2cea37cf97b605fc47a572bdf1811c431e5ca449c6108c",
     "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
   },
   "owner": {
@@ -53,20 +53,20 @@
   },
   "sources": {
     "scripts/build-python-umf-preparation.ts": "d1e023a3d74c2ef8e058a2e94d0e01cbcf0b7340359f9bae8c77bfdaba7b776f",
-    "scripts/build-umf-runtime.ts": "8df22e5c42fc229e702f0ef71502536ffaab6498ff44e2e51044b2505ab8cd0a",
-    "packages/umf-bun/src/python-preparation.ts": "fb02b3403e17451904524fbe04c4c17cb85e0a5d7a0d5a3e8252be8c4bb8fef6",
-    "packages/umf-bun/src/catalog-assertion-observations.ts": "384973d41b3f225ccfa7012457a03e530ad4bfc13a54f626aba84326fd3e599f",
-    "packages/umf-bun/src/catalog-observation-coverage.ts": "10c9336d9736ac6ec04e54bf559d2b64fa4ec50a1588deedcac0fcb5d1eeabf8",
-    "packages/umf-bun/src/catalog-core-assertion-identities.ts": "a75ec788006ef1c25297308a744274351d624d0702e263781b6820765297a399",
-    "packages/umf-bun/src/catalog-input.ts": "d6cf0700168d2c5146bf7a59954bea853e6f906adc233f4ef51dca4fbf490694",
+    "scripts/build-umf-runtime.ts": "b2cff5aef7c3f7b3aad041bdf34eba205a1719f373348b5d3f522b3b16130aca",
+    "packages/umf-bun/src/python-preparation.ts": "2944cbe6c7c7b26c373390a4091e7f6ea7d9e895b1e328ac34eaf315449d72ee",
+    "packages/umf-bun/src/catalog-assertion-observations.ts": "653ec4bb3b14e7dddc92daba7d1ba48e9fb544edafafd2f02220785b74d696f2",
+    "packages/umf-bun/src/catalog-observation-coverage.ts": "bbc6b8d6ecc05e2739bb4120c0e05a4f62dbe0a1424ba19fea2616c561175eb6",
+    "packages/umf-bun/src/catalog-core-assertion-identities.ts": "8e26b39365daedde304410f6e591e6b5430a9c5251792ffb404b5799fd885f10",
+    "packages/umf-bun/src/catalog-input.ts": "88aba935e29117b436ed7386a06dace33183e739392fce7b2fa256c3022bb418",
     "packages/umf-bun/src/catalog-declarations.ts": "e1150ec89cd4924a02df0245af7ac1dafc5b1cff687a681587c1527f3ef8ffb9",
     "packages/umf-bun/src/catalog-transition-correspondence.ts": "b28c148fa44b55b4b0ef7cd2e07289f81ee725a8cf59424d2a03d060e185247c",
     "packages/umf-bun/src/catalog-validation-evidence.ts": "81c5b01219ba17119313bca94f8fe516b64343ac1e9afea555e669f70da5a708",
     "packages/umf-bun/src/catalog-extension-artifacts.ts": "8cbdaf76dc4d618d3fd2fc76a3ce7556daf4c843a6102c040b1a1223ca8c4f93",
     "packages/umf-bun/src/catalog-extension-inventory.ts": "f42fa6157fcd8d5ac3a83d9374b39abb295837426d4c44622de579aad9ad3c84",
     "packages/umf-bun/src/catalog-ingress-report-basis.ts": "3d1650163c390a9ea58de1996b017aeae66b048fe72a6d37413d4d7fcd91e50e",
-    "packages/umf-bun/src/index.ts": "62dc01d1dd8e5c08dbd15d9e7aad9ad9ccfea6d42c8d4e82a21e375c15d853e5",
-    "packages/umf-bun/src/acceptance-input.ts": "0106ab6161abb634f670ecd25d845247aa4fd4c7c02bcfdf8582f4c11523f98c",
-    "packages/postgresql/src/acceptance-json.ts": "ef934c8d2ccdd53c604f917c5a16ed27e99d6a24cc5deca809861c117f16bdc4"
+    "packages/umf-bun/src/index.ts": "b65d8e130d5e0fb42245e3e956fc421b4ad7c4107ca0d9a6c8192262ee70c5bb",
+    "packages/umf-bun/src/acceptance-input.ts": "3eb282b2334f770df3659f13940e89f5581b1aea4ea0586f25882d7bb68c2e68",
+    "packages/postgresql/src/acceptance-json.ts": "0560f1c1ca9e1c27a224a1512795d84503409d40e9940c915f8490fdb8c5a5f5"
   }
 }

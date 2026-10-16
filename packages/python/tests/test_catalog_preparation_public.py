@@ -12,4 +12,26 @@ class CatalogPreparationPublicTests(unittest.TestCase):
             prepared=prepare_catalog((document,),source_version='0.8.0',bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.assertIsInstance(prepared,PreparedAcceptance)
         self.assertEqual(prepared.documents[0].document.content,raw)
-        self.assertEqual(json.loads(prepared.report_evidence_bytes)['ownerObservations']['sourceFormat'],'truss-catalog-source-reference/0.1')
+        summary=json.loads(prepared.report_evidence_bytes)
+        self.assertEqual(summary['interfaceVersion'],'truss-registration-preparation/1.0')
+        self.assertEqual(set(summary),{'interfaceVersion','documents'})
+        self.assertTrue(summary['documents'][0]['sourceValidation']['valid'])
+        self.assertEqual(summary['documents'][0]['contentSha256'],hashlib.sha256(raw).hexdigest())
+
+    def test_large_original_document_does_not_generate_inspection_transcripts(self):
+        from test_preparation import document
+        from truss._catalog_support import evaluate_catalog_support
+        from truss._catalog_report_semantics import compose_original_catalog_report_semantics
+        source=json.loads(document('large').content)
+        source['vocabularies']={'vendor':{'version':'1.0.0'}}
+        source['extensions']={'vendor':{'text':'x'*500000}}
+        raw=json.dumps(source).encode()
+        prepared=prepare_catalog((CatalogDocument('large','r1',raw),),
+            bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        self.assertEqual(prepared.documents[0].document.content,raw)
+        self.assertLess(len(prepared.report_evidence_bytes),4096)
+        support=evaluate_catalog_support(prepared)
+        self.assertEqual(support['closedSourceInventory']['state'],'supported')
+        semantic=compose_original_catalog_report_semantics(prepared,support)
+        self.assertEqual(semantic['sourceFormat'],'truss-registration-summary/1.0')
+        self.assertNotIn('assertionEntries',semantic)

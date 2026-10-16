@@ -24,6 +24,55 @@ _IDENTITY_SQL = """SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,
  FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text
  AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text
  LIMIT 2"""
+# Same six facts, one row, so a single-statement call can carry its own admission
+# check. Evaluated after the payload so a write's assigned xid is visible.
+_ADMISSION_TAIL = """(SELECT pg_catalog.pg_backend_pid()::pg_catalog.text),
+ (SELECT l.virtualtransaction::pg_catalog.text FROM pg_catalog.pg_locks l
+   WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text
+   AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted
+   AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text LIMIT 2),
+ (SELECT pg_catalog.current_setting('transaction_isolation')::pg_catalog.text),
+ (SELECT pg_catalog.current_setting('transaction_read_only')::pg_catalog.text),
+ (SELECT pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text),
+ (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)"""
+
+
+def _parse_identity_row(row):
+    import re
+    if len(row) != 6:
+        raise ValueError('One original native identity row required')
+    pid, vxid, isolation, readonly, xid, timeout = row
+    if (any(type(v) is not str or len(v.encode('utf8')) > 128
+            for v in (pid, vxid, isolation, readonly, timeout))
+            or re.fullmatch(r'[1-9][0-9]{0,9}', pid) is None
+            or re.fullmatch(r'[0-9]{1,10}/[0-9]{1,20}', vxid) is None
+            or isolation not in ('read committed', 'repeatable read', 'serializable')
+            or readonly not in ('on', 'off')
+            or re.fullmatch(r'[0-9]{1,10}', timeout) is None
+            or (xid is not None and (type(xid) is not str or re.fullmatch(r'[0-9]{1,20}', xid) is None))):
+        raise ValueError('Exact native identity/profile required')
+    return (pid, vxid, isolation.replace(' ', '_'),
+            'read_only' if readonly == 'on' else 'read_write'), xid, timeout
+
+
+def _fusable(query, kwargs):
+    """A single SELECT/WITH can sit in a subquery and carry the admission tail."""
+    if type(query) is not str or kwargs.get('binary'):
+        return False
+    text = query.lstrip()
+    if not (text[:6].upper().startswith('SELECT') or text[:4].upper() == 'WITH'):
+        return False
+    if ';' in text:
+        return False
+    upper = text.upper()
+    if (' INTO ' in upper or ' FOR UPDATE' in upper or ' FOR SHARE' in upper
+            or ' FOR NO KEY' in upper or ' FOR KEY SHARE' in upper):
+        return False
+    return True
+
+
+def _fuse_admission(query):
+    return 'SELECT payload.*, ' + _ADMISSION_TAIL + ' FROM (' + query + ') payload'
 
 
 @dataclass(frozen=True)
@@ -141,6 +190,103 @@ class _GuardedCursor:
         return self._cursor.execute(*args, **kwargs)
 
 
+class _AdmissionCursor:
+    """Carry admission on the first fusable statement. Other statements stay unchanged.
+
+    The savepoint is already open. A mismatched admission raises before the
+    callback sees a row, and the attempt rolls that savepoint back. statement_timeout
+    is changed only when the admitted session value differs, and only around the
+    statements the callback actually submits.
+    """
+    def __init__(self, inner, host, custody, baseline, restore_to):
+        self._inner = inner
+        self._host = host
+        self._custody = custody
+        self._baseline = baseline
+        self._restore_to = restore_to
+        self._desired = host._timeout
+        self._rows = None
+        self._pos = 0
+        self._desc = None
+        self.executions = 0
+        self.checked = False
+        self.did_set = False
+        self.admission = None
+        self._timeout_applied = False
+
+    def __getattr__(self, name):
+        return getattr(self._inner, name)
+
+    def _ensure_timeout(self):
+        if self._timeout_applied or self._restore_to is None:
+            return
+        self._timeout_applied = True
+        if int(self._restore_to) == self._desired:
+            return
+        self._inner.execute("SET LOCAL statement_timeout = '" + str(self._desired) + "ms'", prepare=False)
+        self.did_set = True
+
+    def _remember(self, observation):
+        self.admission = self._host._apply_admission(observation, self._custody, self._baseline)
+        self.checked = True
+
+    def execute(self, query, *args, **kwargs):
+        self.executions += 1
+        self._rows = None
+        self._desc = None
+        self._pos = 0
+        if not self.checked and _fusable(query, kwargs):
+            self._ensure_timeout()
+            self._inner.execute(_fuse_admission(query), *args, **kwargs)
+            description = self._inner.description
+            rows = self._inner.fetchall()
+            if description is None or len(description) < 6 or any(item.type_code != 25 for item in description[-6:]):
+                raise ValueError('Native text identity descriptors required')
+            self._desc = description[:-6]
+            if not rows:
+                self._remember(self._host._read_identity(self._inner))
+                self._rows = []
+                return self
+            if any(len(row) < 6 for row in rows):
+                raise ValueError('One original native identity row required')
+            self._remember(_parse_identity_row(rows[0][-6:]))
+            self._rows = [row[:-6] for row in rows]
+            return self
+        self._ensure_timeout()
+        return self._inner.execute(query, *args, **kwargs)
+
+    @property
+    def description(self):
+        if self._rows is not None:
+            return self._desc
+        return self._inner.description
+
+    def fetchone(self):
+        if self._rows is None:
+            return self._inner.fetchone()
+        if self._pos >= len(self._rows):
+            return None
+        row = self._rows[self._pos]
+        self._pos += 1
+        return row
+
+    def fetchmany(self, size=None):
+        if self._rows is None:
+            return self._inner.fetchmany(size) if size is not None else self._inner.fetchmany()
+        if size is None:
+            size = getattr(self._inner, 'arraysize', 1) or 1
+        chunk = self._rows[self._pos:self._pos + size]
+        self._pos += len(chunk)
+        return chunk
+
+    def fetchall(self):
+        if self._rows is None:
+            return self._inner.fetchall()
+        chunk = self._rows[self._pos:]
+        self._pos = len(self._rows)
+        return chunk
+
+
 def _failure(code, message, sql_state=None, retry_scope='none'):
     return Error(ExecutionFailure(code, message, sql_state=sql_state, retry_scope=retry_scope))
 
@@ -193,6 +339,9 @@ class PsycopgHost:
         self._issuer = object()
         self._transactions = {}
         self._closed = False
+        self._admitted = None
+        self._admission_satisfied = None
+        self._attempt_seen = None
         with _registry_lock:
             custody = _registry.setdefault(connection, _ConnectionCustody(Lock()))
             if custody.quarantined or (custody.attached is not None and custody.attached() is not None):
@@ -229,26 +378,42 @@ class PsycopgHost:
         cursor.adapters.register_loader(25, TextLoader)
         return cursor
 
-    def _observe(self, cursor):
-        import re
+    def _read_identity(self, cursor):
         cursor.execute(_IDENTITY_SQL, prepare=False, binary=False)
         rows = cursor.fetchmany(2)
         if len(rows) != 1 or len(rows[0]) != 6 or cursor.description is None:
             raise ValueError('One original native identity row required')
         if len(cursor.description) != 6 or any(d.type_code != 25 for d in cursor.description):
             raise ValueError('Native text identity descriptors required')
-        pid, vxid, isolation, readonly, xid, timeout = rows[0]
-        if (any(type(v) is not str or len(v.encode('utf8')) > 128
-                for v in (pid, vxid, isolation, readonly, timeout))
-                or re.fullmatch(r'[1-9][0-9]{0,9}', pid) is None
-                or re.fullmatch(r'[0-9]{1,10}/[0-9]{1,20}', vxid) is None
-                or isolation not in ('read committed', 'repeatable read', 'serializable')
-                or readonly not in ('on', 'off')
-                or re.fullmatch(r'[0-9]{1,10}', timeout) is None
-                or (xid is not None and (type(xid) is not str or re.fullmatch(r'[0-9]{1,20}', xid) is None))):
-            raise ValueError('Exact native identity/profile required')
-        return (pid, vxid, isolation.replace(' ', '_'),
-                'read_only' if readonly == 'on' else 'read_write'), xid, timeout
+        return _parse_identity_row(rows[0])
+
+    def _observe(self, cursor):
+        # Admission may precede later callback SQL. Observe the actual final
+        # transaction and settings before validating and restoring the host.
+        return self._read_identity(cursor)
+
+    def _apply_admission(self, observation, custody, baseline):
+        identity, _xid, timeout = observation
+        if not 1 <= int(timeout) <= 60000:
+            raise ValueError('Host statement_timeout must be 1..60000 milliseconds')
+        if baseline is not None and identity != baseline:
+            # The statement entered a transaction this handle did not adopt.
+            # Cleanup compares against this row: savepoint rollback restores
+            # that transaction, not the adopted generation.
+            self._attempt_seen = observation
+            if custody is not None:
+                custody.usable = False
+            raise ValueError('Original caller transaction changed during operation')
+        if custody is not None:
+            self._match(custody, observation)
+        self._admitted = observation
+        return observation
+
+    def _live_backend_pid(self):
+        try:
+            return str(self.connection.info.backend_pid)
+        except Exception:
+            return None
 
     def _match(self, custody, observation):
         identity, xid, _ = observation
@@ -289,6 +454,7 @@ class PsycopgHost:
         attempt = None
         established = False
         before = None
+        work = None
         primary = None
         name = None
         result = None
@@ -305,6 +471,7 @@ class PsycopgHost:
             if status != pq.TransactionStatus.INTRANS:
                 if status == pq.TransactionStatus.IDLE:
                     for item in self._transactions.values(): item.usable = False
+                    self._admitted = None
                 elif status in (pq.TransactionStatus.UNKNOWN, pq.TransactionStatus.ACTIVE):
                     self._custody.quarantined = True
                 return _failure('invalid_transaction', 'Already active caller transaction required')
@@ -352,10 +519,15 @@ class PsycopgHost:
                         cursor.adapters.register_dumper(kind, dumper)
                 deadline.check()
                 semantic_preflight = False
+                self._admission_satisfied = None
+                self._attempt_seen = None
+                # Hosts may change session settings between completed calls. Read
+                # the current generation and timeout before setting the call budget;
+                # a cached timeout cannot establish either execution or restoration.
                 cursor.execute(sql.SQL('SAVEPOINT {}').format(name), prepare=False)
                 established = True
                 attempt.phase = 'savepoint'
-                before = self._observe(cursor)
+                before = self._apply_admission(self._observe(cursor), custody, None)
                 deadline.check()
                 if not 1 <= int(before[2]) <= 60000:
                     raise ValueError('Host statement_timeout must be 1..60000 milliseconds')
@@ -363,10 +535,9 @@ class PsycopgHost:
                     raise ValueError('Whole caller transaction must be retried')
                 if self._custody.retry_identity is not None:
                     self._custody.retry_identity = None
-                if custody is not None: self._match(custody, before)
-                cursor.execute("SET LOCAL statement_timeout = '" + str(self._timeout) + "ms'", prepare=False)
                 deadline.check()
                 attempt.phase = 'executing'
+                work = _AdmissionCursor(cursor, self, custody, before[0], before[2])
                 if parameter_producer is not None:
                     parameters = parameter_producer(attempt.ordinal_reservation.result.ordinal)
                     if (type(parameters) is not tuple or not 1 <= len(parameters) <= 64
@@ -377,10 +548,14 @@ class PsycopgHost:
                         raise ValueError('Semantic parameter capacity exceeded')
                     attempt.dispatch_parameters = parameters
                     deadline.check()
-                    result = callback(cursor, before, attempt.ordinal_reservation.result.ordinal, parameters)
+                    result = callback(work, before, attempt.ordinal_reservation.result.ordinal, parameters)
                 else:
-                    result = (callback(cursor, before, attempt.ordinal_reservation.result.ordinal)
-                              if semantic else callback(cursor, before))
+                    result = (callback(work, before, attempt.ordinal_reservation.result.ordinal)
+                              if semantic else callback(work, before))
+                if work.checked and work.admission is not None:
+                    self._admission_satisfied = work.admission
+                elif work.executions == 0:
+                    self._admission_satisfied = before
                 attempt.result = result
                 attempt.phase = 'command_returned'
                 deadline.check()
@@ -388,11 +563,11 @@ class PsycopgHost:
                 if before[0] != after[0]:
                     raise ValueError('Original caller transaction changed during operation')
                 if custody is not None: self._match(custody, after)
-                cursor.execute("SET LOCAL statement_timeout = '" + before[2] + "ms'", prepare=False)
-                final = self._observe(cursor)
-                if final[0] != before[0] or final[2] != before[2]:
-                    raise ValueError('Original transaction or timeout restoration unavailable')
-                if custody is not None: self._match(custody, final)
+                if work.did_set or after[2] != before[2]:
+                    deadline.check()
+                    cursor.execute("SET LOCAL statement_timeout = '" + before[2] + "ms'", prepare=False)
+                    if self._admitted is not None:
+                        self._admitted = (self._admitted[0], self._admitted[1], before[2])
                 deadline.check()
                 cursor.execute(sql.SQL('RELEASE SAVEPOINT {}').format(name), prepare=False)
                 if cursor.statusmessage != 'RELEASE':
@@ -413,6 +588,10 @@ class PsycopgHost:
             except BaseException as error:
                 primary = error
                 attempt.error = error
+                # Savepoint rollback undoes SET LOCAL. Keep the admitted timeout
+                # aligned with the caller's value when containment succeeds.
+                if before is not None and self._admitted is not None and self._admitted[2] != before[2]:
+                    self._admitted = (self._admitted[0], self._admitted[1], before[2])
                 if not self._stop_deadline(deadline, attempt):
                     self._custody.quarantined = True
                 if (not self._custody.quarantined and established and cursor is not None
@@ -424,7 +603,15 @@ class PsycopgHost:
                         cursor.execute(sql.SQL('ROLLBACK TO SAVEPOINT {}').format(name), prepare=False)
                         attempt.phase = 'rolled_back'
                         restored = self._observe(cursor)
-                        if before is not None and (restored[0] != before[0] or restored[2] != before[2]):
+                        # A fused check can be the first observation of a replacement
+                        # transaction. Rollback returns that transaction to the timeout
+                        # it had before this attempt's SET LOCAL, which the fused row
+                        # (taken after the SET) did not record.
+                        seen = self._attempt_seen
+                        anchor = seen if seen is not None else before
+                        skip_timeout = seen is not None and work is not None and work.did_set
+                        if anchor is not None and (restored[0] != anchor[0]
+                                or (not skip_timeout and restored[2] != anchor[2])):
                             raise ValueError('Original containment correspondence unavailable')
                         if custody is not None and custody.usable: self._match(custody, restored)
                         cleanup.check()

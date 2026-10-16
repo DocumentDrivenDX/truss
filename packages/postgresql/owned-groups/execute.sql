@@ -497,8 +497,6 @@ BEGIN
    WHERE id=(endpoint_identity->>'id')::bigint AND type_id=(endpoint_identity->>'typeId')::int;
   IF endpoint_image-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,selected_index,endpoint_reference,'before') THEN
    RAISE EXCEPTION 'original endpoint prestate required' USING ERRCODE='55000';END IF;
-  IF EXISTS(SELECT 1 FROM truss.row_home_state WHERE object_id=(endpoint_identity->>'id')::bigint AND object_type_id=(endpoint_identity->>'typeId')::int) THEN
-   RAISE EXCEPTION 'JSON-home endpoint required' USING ERRCODE='0A000';END IF;
  END LOOP;
  PERFORM truss.runtime_lock_edge_business_key(truss.runtime_edge_business_key(relation.rel_type_id,source_identity,target_identity));
  IF old_source IS NOT NULL THEN PERFORM truss.runtime_lock_edge_business_key(truss.runtime_edge_business_key(relation.rel_type_id,old_source,old_target));END IF;
@@ -654,8 +652,6 @@ BEGIN
  old_image:=to_jsonb(object_row);
  IF old_image-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,selected_index,reference,'before') THEN
   RAISE EXCEPTION 'original complete object prestate required' USING ERRCODE='55000';END IF;
- IF EXISTS(SELECT 1 FROM truss.row_home_state WHERE object_id=object_row.id AND object_type_id=object_row.type_id) THEN
-  RAISE EXCEPTION 'JSON-home object required' USING ERRCODE='0A000';END IF;
  IF prior IS NOT DISTINCT FROM desired THEN
   RETURN jsonb_build_object('outcome','unchanged','operation','update_object','identity',identity,'version',object_row.ver::text,'events','[]'::jsonb);
  END IF;

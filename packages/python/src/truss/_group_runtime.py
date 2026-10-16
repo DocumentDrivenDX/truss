@@ -3,8 +3,9 @@ from dataclasses import dataclass, fields, is_dataclass
 from hashlib import sha256
 import base64
 import json
-from .contracts import SequenceValue,ABSENT, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, MapEntry, TextValue, NullValue, BooleanValue
-from .execution import Ok, Error, Outcome
+from .contracts import SequenceValue,ABSENT, Absent, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, MapEntry, TextValue, NullValue, BooleanValue
+from .execution import Ok, Error, ExecutionFailure, Outcome
+from .catalog_view import CatalogDefinitionReference
 from .groups import (GroupSemanticInput, GroupSemanticResult, GroupOperation, CurrentCatalog, CreateObject, CreateEdge, UpdateObject, UpdateEdge, Delete, StoredObjectReference, AliasObjectReference, RootlessOwnership, OwnedOwnership,
     RequestNone, RequestPresent, RequestIdentity, GroupSuccess, GroupFailed, GroupUnavailable,
     InvalidGroupInput, RequestConflict, GroupOperationFailure, AppliedPending, SameTransactionReplay,
@@ -34,6 +35,22 @@ class GroupRuntimeContext:
 
     def request(self,request_id: str) -> RequestPresent:
         return RequestPresent(identity=RequestIdentity(authorized_scope_identity=self.authorized_scope_identity,request_id=request_id))
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class CatalogRevisionProbe:
+    catalog_revision: str
+    document_id: str | Absent = ABSENT
+    document_revision: str | Absent = ABSENT
+    source_catalog_revision: str | Absent = ABSENT
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class PreparedGroup:
+    catalog_revision: str
+    context: GroupRuntimeContext
+    types: tuple[CatalogDefinitionReference | None, ...]
+    relationships: tuple[CatalogDefinitionReference | None, ...]
 
 
 def _wire(value):
@@ -97,13 +114,16 @@ def _result(raw: bytes):
         if value['code']=='request_conflict':return GroupFailed(failure=RequestConflict(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
         return GroupFailed(failure=GroupOperationFailure(operation_index=value['operationIndex'],error_profile=_DIAGNOSTIC,inner_error=evidence))
     semantic=_semantic(value['semantic'])
-    if value['disposition']=='applied':return GroupSuccess(response=AppliedPending(semantic=semantic))
+    token=value.get('receiptToken')
+    if token is not None:decode_receipt_position(token)
+    else:token=ABSENT
+    if value['disposition']=='applied':return GroupSuccess(response=AppliedPending(semantic=semantic,receipt_token=token))
     observation=base64.b64decode(value['observationBase64'],validate=True)
     if sha256(observation).hexdigest()!=value['observationSha256']:raise ValueError('Original native replay observation required')
     evidence=_artifact(observation)
     if value['durability']=='pending':
         return GroupSuccess(response=SameTransactionReplay(semantic=semantic,
-            replay=SameTransactionReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence)))
+            replay=SameTransactionReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence),receipt_token=token))
     if value['durability']=='committed':
         token=value.get('receiptToken',ABSENT)
         if token is not ABSENT:decode_receipt_position(token)
@@ -117,9 +137,62 @@ def group_context(host,transaction,manifest,digest,pin_cursor):
         pin_cursor(cursor)
         cursor.execute('SELECT truss.group_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
         value=json.loads(bytes(cursor.fetchone()[0]))
-        return GroupRuntimeContext(layout_profile=ProfilePin(**value['layoutProfile']),mutation_profile=ProfilePin(**value['mutationProfile']),
-            value_profile=ProfilePin(**value['valueProfile']),request_fingerprint_profile=ProfilePin(**value['requestFingerprintProfile']),authorized_scope_identity=value['authorizedScopeIdentity'],
-            source_epoch=value['sourceEpoch'],history_profile=value['historyProfile'])
+        return _runtime_context(value)
+    return host._run_operation(transaction,observe)
+
+
+def _bounded_name(value):
+    try:
+        return type(value) is str and 1<=len(value.encode('utf-8'))<=4096 and '\0' not in value
+    except UnicodeEncodeError:
+        return False
+
+
+def _named(entries):
+    return type(entries) is tuple and len(entries)<=128 and all(type(entry) is tuple and len(entry)==3 and all(_bounded_name(part) for part in entry) for entry in entries)
+
+
+def _runtime_context(value):
+    return GroupRuntimeContext(layout_profile=ProfilePin(**value['layoutProfile']),mutation_profile=ProfilePin(**value['mutationProfile']),
+        value_profile=ProfilePin(**value['valueProfile']),request_fingerprint_profile=ProfilePin(**value['requestFingerprintProfile']),authorized_scope_identity=value['authorizedScopeIdentity'],
+        source_epoch=value['sourceEpoch'],history_profile=value['historyProfile'])
+
+
+def _definition(value):
+    if value is None:return None
+    owner=QualifiedOwner(document_id=value['owner']['documentId'],module_id=value['owner']['moduleId'])
+    if value['kind']=='type':
+        return CatalogDefinitionReference(kind='type',definition_pin=value['definitionPin'],type_id=value['typeId'],authored_identity=value['authoredIdentity'],owner=owner)
+    if value['kind']=='relationship':
+        return CatalogDefinitionReference(kind='relationship',definition_pin=value['definitionPin'],relationship_id=value['relationshipId'],authored_identity=value['authoredIdentity'],owner=owner)
+    raise ValueError('Selected type or relationship reference required')
+
+
+def catalog_revision(host,transaction,manifest,digest,pin_cursor,document_id):
+    if document_id is not None and not _bounded_name(document_id):
+        return Error(ExecutionFailure('execution_obligation','Bounded document selection required',catalog_code='invalid_input'))
+    def observe(cursor,observed):
+        pin_cursor(cursor)
+        cursor.execute('SELECT truss.catalog_revision(%s,%s,%s)',(manifest['releaseId'],digest,document_id),prepare=False)
+        value=json.loads(bytes(cursor.fetchone()[0]))
+        return CatalogRevisionProbe(catalog_revision=value['catalogRevision'],
+            document_id=value['documentId'] if 'documentId' in value else ABSENT,
+            document_revision=value['documentRevision'] if 'documentRevision' in value else ABSENT,
+            source_catalog_revision=value['sourceCatalogRevision'] if 'sourceCatalogRevision' in value else ABSENT)
+    return host._run_operation(transaction,observe)
+
+
+def prepare_group(host,transaction,manifest,digest,pin_cursor,records,relationships):
+    if not _named(records) or not _named(relationships):
+        return Error(ExecutionFailure('execution_obligation','Bounded named record set required',catalog_code='invalid_input'))
+    original_records=json.dumps([{'documentId':document,'moduleId':module,'recordId':record} for document,module,record in records],separators=(',',':')).encode()
+    original_relationships=json.dumps([{'documentId':document,'moduleId':module,'relationshipId':relationship} for document,module,relationship in relationships],separators=(',',':')).encode()
+    def observe(cursor,observed):
+        pin_cursor(cursor)
+        cursor.execute('SELECT truss.prepare_group(%s,%s,%s,%s)',(original_records,original_relationships,manifest['releaseId'],digest),prepare=False)
+        value=json.loads(bytes(cursor.fetchone()[0]))
+        return PreparedGroup(catalog_revision=value['catalogRevision'],context=_runtime_context(value['context']),
+            types=tuple(_definition(entry) for entry in value['types']),relationships=tuple(_definition(entry) for entry in value['relationships']))
     return host._run_operation(transaction,observe)
 
 
@@ -167,37 +240,18 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"transport"}'))))
     if len(original_input)>1048576 or len(original_request)>65536 or len(original_documents)>4194304:
         return Ok(GroupUnavailable(reason='resource'))
-    operation_index=[0]
     def apply(cursor,observed):
         pin_cursor(cursor)
-        if request.state=='present':
-            cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s,%s,true)',
-                (original_input,original_documents,original_request,manifest['releaseId'],digest,b'[]'),prepare=False)
-            probe=json.loads(bytes(cursor.fetchone()[0]))
-            if probe['outcome']!='miss':return _result(_bytes(probe))
-        cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s)',
+        cursor.execute('SELECT truss.apply_group(%s,%s,%s,%s,%s)',
             (original_input,original_documents,original_request,manifest['releaseId'],digest),prepare=False)
-        begin=json.loads(bytes(cursor.fetchone()[0]))
-        if begin['outcome']!='execute':return _result(_bytes(begin))
-        attempt_id=begin['attemptId']
-        if _attempt_capture is not None:_attempt_capture.append(attempt_id)
-        for index,operation in enumerate(input.operations):
-            operation_index[0]=index
-            cursor.execute("SELECT truss.object_group_step(%s::uuid,%s,convert_to('[]','UTF8'))",(attempt_id,index),prepare=False)
-            cursor.fetchone()
-        cursor.execute('SELECT truss.object_group_finish(%s::uuid)',(attempt_id,),prepare=False)
-        return _result(bytes(cursor.fetchone()[0]))
+        raw=bytes(cursor.fetchone()[0])
+        if _attempt_capture is not None:
+            value=json.loads(raw)
+            if value.get('disposition')=='applied' and value.get('outcome')=='success':
+                _attempt_capture.append(value['attemptId'])
+        return _result(raw)
     if _cursor is not None:return Ok(apply(_cursor,None))
-    result=host._run_operation(transaction,apply)
-    if isinstance(result,Error) and result.error.code=='execution_obligation':
-        state=result.error.sql_state
-        if state=='42501':return Ok(GroupFailed(failure=UnauthorizedPerson()))
-        reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(state)
-        if reason:return Ok(GroupUnavailable(reason=reason))
-        if state in ('22023','23505','P1001','P1003','P1004','P1005'):
-            code={'P1001':'request_conflict','P1003':'expected_version','P1004':'not_found','P1005':'dependencies','23505':'key_conflict','22023':'invalid_input'}[state]
-            return Ok(_result(_bytes({'outcome':'failed','code':code,'operationIndex':str(operation_index[0]),'nativeState':state})))
-    return result
+    return host._run_operation(transaction,apply)
 
 # A real selected provider; native readiness and authority are checked per call.
 from typing import Callable, Literal, overload

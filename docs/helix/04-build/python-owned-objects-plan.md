@@ -192,7 +192,7 @@ preservation. Astra Ultra reviewed the plans and implementation iterations.
 The explicit logical query ABI has a reviewed Weft backend patch and a real Rust
 CLI/public Python/native descendant-query workflow; matching published wheels
 are still required before a release. Stock development query dependencies do
-not yet provide that new backend. Native69 includes 193 installed routines.
+not yet provide that new backend. Native69 includes 198 installed routines.
 
 This is an unreleased SDK0.0.36.dev0 integration checkpoint. Complete owned
 imports, owned retained-value rebinding/key backfill, cyclic value definitions,

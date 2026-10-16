@@ -62,7 +62,16 @@ def evaluate_catalog_support(prepared):
         or any(d.observation()['source']['umf']!=('0.8.0' if current else '0.7.0') for d in prepared.documents)):
         raise ValueError('Unselected catalog support source')
     evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
-    observations,coverage,core=require_catalog_owner_evidence(prepared,evidence)
+    ordinary=evidence.get('interfaceVersion')=='truss-registration-preparation/1.0'
+    if ordinary:
+        expected=[{'documentId':d.document.document_id,
+            'contentSha256':sha256(d.document.content).hexdigest(),
+            'sourceValidation':d.observation()['sourceValidation'],
+            'targetValidation':d.observation()['targetValidation']} for d in prepared.documents]
+        if evidence!={'interfaceVersion':'truss-registration-preparation/1.0','documents':expected}:
+            raise ValueError('Original registration validation results required')
+    else:
+        observations,coverage,core=require_catalog_owner_evidence(prepared,evidence)
     source_elements={}
     staged=set()
     unresolved=[]
@@ -75,17 +84,45 @@ def evaluate_catalog_support(prepared):
         for record in document['records']:
             if record['membership']!='declared':
                 raise ValueError('Selected Record requires explicit original membership')
+            property_names=set()
             for field in record['fields']:
                 identity=(record['documentId'],field['fieldModule'],field['fieldId'])
                 source=source_elements.get(identity)
                 if source!=field['declaration']:
                     raise ValueError('Original staged Field source correspondence required')
-                for name in ('name','kind','nullability','cardinality'):
+                for name in ('kind','nullability','cardinality'):
                     if type(source.get(name)) is not str or not 1<=len(source[name].encode('utf8'))<=4096:
                         raise ValueError('Selected Field requires explicit authored metadata')
+                # A Truss property binding is distinct from the optional UMF name.
+                # Preserve the declaration and bind unnamed fields by stable ID.
+                property_name=source['name'] if 'name' in source else source['id']
+                if (type(property_name) is not str or not 1<=len(property_name.encode('utf8'))<=4096
+                        or '\0' in property_name):
+                    raise ValueError('Valid Truss property name or field ID required')
+                if property_name in property_names:
+                    raise ValueError('Duplicate Truss property binding name')
+                property_names.add(property_name)
                 staged.add(identity)
                 if 'scalarType' not in source:
                     unresolved.append({'documentId':identity[0],'moduleId':identity[1],'elementId':identity[2],'duty':'value_family_unresolved'})
+    if ordinary:
+        inventory=_closed_source_inventory(prepared,None,None,relational=relational,scalars=scalars,
+            named=named,inverse=inverse,metadata=metadata,current=current,faceted=faceted,
+            containers=containers,decimal2=decimal2,
+            recursive=selected in (RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE),
+            standalone_scalars=selected==DECLARATIVE08_PROFILE,ordinary=True)
+        # Ordinary reports describe the actual native catalog capability. The
+        # retained AcceptanceInput selector is not a claim that an older
+        # experimental subset describes this release's complete storage API.
+        profiles=json.loads(files('truss').joinpath('_catalog_runtime/capability-profiles.json').read_bytes())
+        capability=next(entry for entry in profiles['profiles'] if entry['name']=='catalog')
+        definition=capability['definition'].encode('utf8')
+        if sha256(definition).hexdigest()!=capability['pin']['sha256']:
+            raise ValueError('Original native catalog capability definition required')
+        return {'state':'evaluated','profile':dict(selected),'registrationSummary':evidence,
+            'supportedSubset':{'identity':capability['pin']['identity']+'/'+capability['pin']['version'],
+                'bytesBase64':base64.b64encode(definition).decode('ascii'),
+                'sha256':capability['pin']['sha256']},'closedSourceInventory':inventory}
     required=[]
     retained=[]
     for observed in observations['observations']:
@@ -128,7 +165,7 @@ def evaluate_catalog_support(prepared):
     return decision
 
 
-def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False,inverse=False,metadata=False,current=False,faceted=False,containers=False,decimal2=False,recursive=False,standalone_scalars=False):
+def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False,inverse=False,metadata=False,current=False,faceted=False,containers=False,decimal2=False,recursive=False,standalone_scalars=False,ordinary=False):
     """Complete source occurrence inventory for explicit scalar string Records.
 
     Profile 0.2 additionally covers known authored Keys and Relationships.
@@ -137,7 +174,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
     Broader preparation remains intact and explicitly outside this branch.
     """
     unavailable={'state':'unavailable','reason':'outside_closed_scalar_record_subset'}
-    if metadata: verified_retained_metadata(prepared)
+    if metadata and not ordinary: verified_retained_metadata(prepared)
     expected={}
     kinds={}
     authored={}
@@ -192,7 +229,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                         expected[(document.document.document_id,pointer+f'/members/{index}')]='core.members.member'
                 else:
                     container=containers and element.get('cardinality') in ('array','map')
-                    if (element.get('nullability') not in ('required','absent-allowed') or type(element.get('name')) is not str or not element['name']):return unavailable
+                    if (element.get('nullability') not in ('required','absent-allowed') or ('name' in element and (type(element['name']) is not str or not element['name']))):return unavailable
                     if container:
                         ref=element.get('itemType')
                         if ('scalarType' in element or element.get('facets',{})!={} or type(ref) is not dict or set(ref)!={'module','element'}):return unavailable
@@ -218,6 +255,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                         facet=element['facets'];family=element.get('scalarType')
                         signed=(family=='integer' and facet=={'integerWidth':{'bits':64,'signed':True}} and type(facet['integerWidth']['bits']) is int and type(facet['integerWidth']['signed']) is bool)
                         decimal=(family=='decimal' and facet in (({'precision':18,'scale':4},{'precision':18,'scale':2}) if decimal2 else ({'precision':18,'scale':4},)) and type(facet['precision']) is int and type(facet['scale']) is int)
+                        if ordinary and family=='decimal' and facet=={'precision':12,'scale':2}:decimal=True
                         if facet!={} and not (signed or decimal):return unavailable
                     if (current or faceted) and 'facets' in element:
                         operations.append('facets');declaration_values[(document.document.document_id,'facets',module['id'],element['id'])]=element['facets']
@@ -231,7 +269,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                 if type(values) is not list:return unavailable
                 declaration_values[(document.document.document_id,'relationships',module['id'],None)]=values
                 for ri,relation in enumerate(values):
-                    if (type(relation) is not dict or set(relation)-({'id','name','source','target','sourceMultiplicity','targetMultiplicity','targetLifecycle','directed'}|({'inverse'} if inverse else set()))
+                    if (type(relation) is not dict or set(relation)-({'id','name','source','target','sourceMultiplicity','targetMultiplicity','targetLifecycle','directed'}|({'inverse'} if inverse else set())|({'extensions'} if ordinary else set()))
                         or not {'id','name','source','target','sourceMultiplicity','targetMultiplicity','targetLifecycle','directed'}<=set(relation)
                         or type(relation['id']) is not str or type(relation['name']) is not str
                         or type(relation['directed']) is not bool
@@ -249,6 +287,10 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                     expected[address]='core.relationships';authored[address]=relation['id']
         if not (owned | item_refs) <= fields or not (fields - (owned | item_refs)) <= (singular_scalars if standalone_scalars else set()):
             return unavailable
+    if ordinary:
+        # Storage support is decided from the validated original definitions.
+        # This is not an exhaustive inspection/enforcement evidence inventory.
+        return {'state':'supported','scope':'validated_original_storage_definitions'}
     classifications=[]
     for observed in observations['observations']:
         operation=observed['operation'];identity=observed['identity']

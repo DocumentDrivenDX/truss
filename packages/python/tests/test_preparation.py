@@ -41,6 +41,30 @@ class PreparationTests(unittest.TestCase):
         self.assertEqual(len(result.input()['documents']),2)
         self.assertNotIn('acceptedIds',result.input())
 
+    def test_unavailable_registration_report_is_rejected_during_preparation(self):
+        original = _capture
+        for reason, code, limit in (
+            ('report_evidence_resource', 'evidence_too_large', 16777216),
+            ('report_evidence_unavailable', 'evidence_unavailable', None),
+        ):
+            def unavailable(command, **kwargs):
+                completed = original(command, **kwargs)
+                if command[-1].endswith('bridge.js'):
+                    reply = json.loads(completed.stdout)
+                    reply['reportEvidence'] = {
+                        'scope': 'original_owner_report_preparation_only',
+                        'ingress': {'state': 'unavailable', 'reason': reason},
+                    }
+                    return subprocess.CompletedProcess(command, completed.returncode,
+                        json.dumps(reply).encode(), completed.stderr)
+                return completed
+            with self.subTest(reason=reason), patch('truss.preparation._capture', unavailable):
+                with self.assertRaises(PreparationRejected) as raised:
+                    prepare((document('ordinary'),))
+                self.assertEqual(raised.exception.reason, code)
+                self.assertEqual(raised.exception.limit_bytes, limit)
+                self.assertIsNone(raised.exception.produced_bytes)
+
     def test_complete_owner_observations_retain_separate_pins_and_sources(self):
         from truss._catalog_owner_evidence import require_catalog_owner_evidence
         result=prepare((document('first'),document('second')))

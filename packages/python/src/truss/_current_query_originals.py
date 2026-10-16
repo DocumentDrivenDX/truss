@@ -56,8 +56,21 @@ _ABI2_WEFT_034_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
     'weftWheelSha256':'bfc70a4d1f9146c3630ebb177be5a4f52231fd81b276233b3e0aa1a2c5e73246',
     'weftModuleSha256':'6de57d7dfcd604fbdbd78534fcb5bca16c59a9fb71ccae58df0e08a67457e22c',
 }
+# Published matching query-ABI release; retain the original UMF child and ABI2.
+# Native policy integration remains a release gate for these exact artifacts.
+_ABI2_WEFT_035_PUBLIC_ARM={**_ABI2_CONSUMER,
+    'weftRevision':'ff3695af5ece9d386b3dcbf266cf23d632997733',
+    'weftWheelSha256':'7b8e37c34cf157bf399bda7b430b4891d7a0b37d87db16979ade0355e0b0d79d',
+    'weftModuleSha256':'b3467b40a3b80a33b71f7400cdf513cb064c82bf64cd91c239afa41cbb204e4f',
+}
+_ABI2_WEFT_035_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
+    'weftRevision':'ff3695af5ece9d386b3dcbf266cf23d632997733',
+    'weftWheelSha256':'a14259260331f29b0725caa1912cedb02db4dde5ab4a96632d474a06e683d744',
+    'weftModuleSha256':'8b4149a8cc407622e6b645bbb891f5e344767fbd527418724f8d7e742d3c2ab9',
+}
 _CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_ARM,_ABI2_WEFT_033_LINUX_X64,
-                  _ABI2_WEFT_034_ARM,_ABI2_WEFT_034_PUBLIC_ARM,_ABI2_WEFT_034_PUBLIC_LINUX_X64)
+                  _ABI2_WEFT_034_ARM,_ABI2_WEFT_034_PUBLIC_ARM,_ABI2_WEFT_034_PUBLIC_LINUX_X64,
+                  _ABI2_WEFT_035_PUBLIC_ARM,_ABI2_WEFT_035_PUBLIC_LINUX_X64)
 
 
 def _actual_consumer():

@@ -72,8 +72,8 @@ __all__ += ["CatalogViewRequest", "CatalogViewLimits", "CurrentCatalogSelection"
 from .object_read import ScalarObject, LogicalObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 __all__ += ["ScalarObject", "LogicalObject", "ObjectFound", "ObjectNotFound", "ObjectReadInvalid", "ObjectReadUnavailable", "ObjectPage", "ObjectPageCursor"]
 
-from ._group_runtime import GroupRuntimeContext
-__all__ += ["GroupRuntimeContext"]
+from ._group_runtime import GroupRuntimeContext, CatalogRevisionProbe, PreparedGroup
+__all__ += ["GroupRuntimeContext", "CatalogRevisionProbe", "PreparedGroup"]
 
 from ._group_runtime import NativeGroupCapability, GroupCapabilityAvailable
 __all__ += ["NativeGroupCapability", "GroupCapabilityAvailable"]

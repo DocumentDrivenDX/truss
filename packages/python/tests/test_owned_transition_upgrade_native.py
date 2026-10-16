@@ -18,7 +18,7 @@ class OwnedTransitionUpgradeTests(unittest.TestCase):
                 with psycopg.connect(runtime.info.connection_uri,autocommit=True,options='-c statement_timeout=10000') as admin:
                     objects=admin.execute('SELECT to_jsonb(t)::text FROM truss.runtime_object_transition t ORDER BY transition_id').fetchall()
                     edges=admin.execute('SELECT to_jsonb(t)::text FROM truss.runtime_edge_transition t ORDER BY transition_id').fetchall()
-                    self.assertEqual(len(objects),1);self.assertEqual(len(edges),1)
+                    self.assertEqual(len(objects),1 if os.environ.get('TRUSS_OWNED_UPGRADE_SOURCE_RELEASE','truss-catalog-runtime/0.64-candidate')=='truss-catalog-runtime/0.64-candidate' else 3);self.assertEqual(len(edges),1)
                     admin.execute('BEGIN');host=adopt_psycopg_host(admin,statement_timeout_ms=10000,operation_timeout_ms=30000)
                     assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value;tx=host.adopt_transaction().value
                     upgraded=assembly.upgrade_in_transaction(tx)

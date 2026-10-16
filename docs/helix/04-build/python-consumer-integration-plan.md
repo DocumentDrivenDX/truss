@@ -31,6 +31,19 @@ ddx:
 
 The consumer needs host-supplied PostgreSQL transactions, accepted UMF registration, catalog inspection, exact reads, grouped writes, imports, receipt visibility and status. The public Python catalog runtime now provides transaction adoption, installation/status, fresh registration, idempotent registration retry, reports, accepted catalog views and administrative module permission configuration. The selected runtime now has module-authorized exact scalar object and independent directed edge groups, object/key/page reads, relationship reads and atomic caller preconditions. Broader reads and writes remain incomplete; draft interfaces and private native components do not count as those operations.
 
+## Current simplification tranche
+
+Keep the public `GroupSemanticInput` and caller-owned transaction API. Replace
+ordinary callers' native begin/step/finish permissions with one protected atomic
+apply entry point and private helpers. Then use transient ordered state and shared
+CRUD directly, removing duplicated execution plans and per-create leaf groups as
+their history consumers are redirected. Retain actual history, keys, preconditions,
+authorization and original retry receipts; keep old records readable. No new cache,
+custody protocol or evidence framework is needed. The first slice must pass basic
+create/update, failure rollback, history, replay and reopen tests before further
+removal. The real1024-create workflow remains the capacity check with unchanged
+limits and deadlines, not a larger constant or a higher timeout.
+
 ## Callable native assembly providers
 
 The installed runtime assembly now selects concrete catalog, direct-read, group,

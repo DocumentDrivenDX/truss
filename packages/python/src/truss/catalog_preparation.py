@@ -2,7 +2,7 @@
 from hashlib import sha256
 from importlib.resources import files
 import json
-from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, prepare_core08_acceptance
+from .preparation import CatalogDocument, PreparedAcceptance, _prepare_acceptance
 from ._catalog_source_reference import REFERENCE08_PROFILE,RECURSIVE08_PROFILE,DECLARATIVE08_PROFILE
 from ._catalog_support import DECIMAL207_PROFILE,RECURSIVE07_PROFILE
 from ._catalog_report_semantics import canonical_numeric_free
@@ -27,7 +27,8 @@ def prepare_catalog(documents: tuple[CatalogDocument, ...], *, source_version: s
     """Prepare original UMF0.7/0.8 without a connection or host transaction.
 
     Native acceptance and compatibility with installed data remain transaction
-    operations. Preparation does not establish installation authority.
+    operations. Preparation retains document validation results, without
+    per-operation inspection transcripts. It does not establish installation authority.
     """
-    producer=prepare_core08_acceptance if source_version=='0.8.0' else prepare_acceptance
-    return producer(documents,canonical_numeric_free(_configuration(source_version)),bun_executable=bun_executable)
+    return _prepare_acceptance(documents,canonical_numeric_free(_configuration(source_version)),
+        bun_executable=bun_executable,current=source_version=='0.8.0',registration=True)

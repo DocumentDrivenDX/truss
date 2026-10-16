@@ -1,5 +1,6 @@
 """Basic adopter workflows for the public object mutation interface."""
 import os
+import psycopg
 from truss import Ok,ObjectFound,ObjectNotFound
 from truss.contracts import MapValue,TextValue
 from truss.groups import (UpdateObject,Delete,StoredObjectReference,AliasObjectReference,AuthoredValue,
@@ -21,6 +22,60 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
     def read(self,assembly,tx,identity):
         result=assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id))
         self.assertIsInstance(result,Ok);return result.value
+
+    def test_unnamed_fields_register_create_update_and_reopen(self):
+        def unnamed(source):
+            for module in source['modules']:
+                for field in module['elements']:
+                    if field['kind']=='field':
+                        field.pop('name',None)
+        connection,host,assembly,tx=self.ready(unnamed,document_ids=('adoc',))
+        created,_,_=self.run_group(assembly,tx,(self.create(),),'unnamed-create')
+        self.assertIsInstance(created,GroupSuccess,repr(created))
+        identity=created.response.semantic.results[0].identity
+        host.detach();connection.commit()
+        connection,host,assembly,tx=self.consumer()
+        self.assertEqual(dict(self.read(assembly,tx,identity).object.values)['A-label'],'one')
+        update=UpdateObject(target=StoredObjectReference(identity=identity),
+            set=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='updated')),),unset=())
+        changed,_,_=self.run_group(assembly,tx,(update,),'unnamed-update')
+        self.assertIsInstance(changed,GroupSuccess,repr(changed))
+        host.detach();connection.commit()
+        connection,host,assembly,tx=self.consumer()
+        self.assertEqual(dict(self.read(assembly,tx,identity).object.values)['A-label'],'updated')
+        host.detach();connection.rollback()
+
+    def test_global_journal_check_ignores_caller_flags_and_prior_constraint_flush(self):
+        connection,host,assembly,tx=self.ready()
+        # Administrative fault injection adds a fact for an unrelated entity.
+        # Per-object validation still passes; whole-transaction closure must fail.
+        self.admin.execute("""CREATE FUNCTION public.inject_unrelated_journal() RETURNS void
+         LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
+          INSERT INTO truss.journal
+          SELECT (jsonb_populate_record(NULL::truss.journal,to_jsonb(j)||
+           jsonb_build_object('seq',nextval('truss.journal_seq'),'entity_id',j.entity_id+1000000))).*
+          FROM truss.journal j WHERE j.xid=pg_current_xact_id() LIMIT 1
+         $$""")
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.inject_unrelated_journal()')
+        for mode in ('caller_flags','constraint_flush'):
+            with self.subTest(mode=mode):
+                if mode=='caller_flags':
+                    connection.execute("SET LOCAL truss.object_commit_checked='1'")
+                    connection.execute("SET LOCAL truss.create_journal_checked='1'")
+                first,_,_=self.run_group(assembly,tx,(self.create(),))
+                self.assertIsInstance(first,GroupSuccess)
+                if mode=='constraint_flush':
+                    connection.execute('SET CONSTRAINTS ALL IMMEDIATE')
+                    connection.execute('SET CONSTRAINTS ALL DEFERRED')
+                    second,_,_=self.run_group(assembly,tx,(self.create(label='two',value='other'),))
+                    self.assertIsInstance(second,GroupSuccess)
+                connection.execute('SELECT public.inject_unrelated_journal()')
+                host.detach()
+                with self.assertRaisesRegex(psycopg.errors.ObjectNotInPrerequisiteState,'complete .*journal required'):
+                    connection.commit()
+                connection.rollback()
+                self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
+                connection,host,assembly,tx=self.consumer()
 
     def test_create_update_read_dryrun_delete_and_durable_retry(self):
         connection,host,assembly,tx=self.ready()

@@ -20,7 +20,7 @@ try{
  const bytes=new Uint8Array(await Bun.stdin.arrayBuffer());
  if(bytes.length>1048576)throw Error('resource');
  const request=decodeAcceptanceJson(bytes) as any;
- if(Object.keys(request).sort().join(',')!=='configurationHex,documents'||typeof request.configurationHex!=='string'
+ if(!['configurationHex,documents','configurationHex,documents,registration'].includes(Object.keys(request).sort().join(','))||(Object.hasOwn(request,'registration')&&request.registration!==true)||typeof request.configurationHex!=='string'
    ||!/^(?:[0-9a-f]{2})+$/.test(request.configurationHex)||!Array.isArray(request.documents)||request.documents.length<1||request.documents.length>512)throw Error('invalid_input');
  const configuration=decodeAcceptanceJson(Buffer.from(request.configurationHex,'hex')) as any;
  if(!configuration||typeof configuration!=='object'||Array.isArray(configuration)
@@ -56,7 +56,15 @@ try{
  }else{
   const prepared=preparation.prepare(original);
   let reportEvidence:unknown;
-  try {
+  if(request.registration===true){
+    // Ordinary registration consumes the already executed document validator.
+    // Per-operation inspection transcripts have no consumer in this path.
+    reportEvidence={interfaceVersion:'truss-registration-preparation/1.0',
+      documents:prepared.documents.map((document,index)=>({documentId:document.documentId,
+        contentSha256:prepared.original.documents[index]!.sha256,
+        sourceValidation:document.interpretation.sourceValidation,
+        targetValidation:document.interpretation.targetValidation}))};
+  }else try {
     const [declarations,fields,scalars,members,links]=await Promise.all([
       loadUmfDeclarationProducer(root+'/owners/declarations'),loadUmfFieldAssertionProducer(root+'/owners/assertion-fields'),
       loadUmfScalarTypeProducer(root+'/owners/scalar-types'),loadUmfRecordMembersProducer(root+'/owners/record-members'),
