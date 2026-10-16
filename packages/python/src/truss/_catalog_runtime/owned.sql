@@ -466,8 +466,9 @@ DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='
  selected_type truss.type_def%ROWTYPE;relation truss.rel_def%ROWTYPE;pin record;identity jsonb;revision int;
  index int:=0;before_count int;descendants text[];descendant text;projection jsonb;deleted jsonb;local_owned jsonb;local_independent jsonb;
  unset_name text;authored jsonb;retained jsonb;order_key jsonb;selected_source_type int;selected_target_type int;plan jsonb;outgoing bigint;incoming bigint;
- retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;
+ retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;current_actor oid;resolved_creates jsonb:='{}';
 BEGIN
+ current_actor:=truss.runtime_person(false);
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128
   OR jsonb_typeof(scope->'nodes') IS DISTINCT FROM 'object' OR jsonb_typeof(scope->'edges') IS DISTINCT FROM 'object'
   OR octet_length(convert_to(scope::text,'UTF8'))>4194304 THEN
@@ -497,15 +498,24 @@ BEGIN
    'target','stored:'||(image->>'target_type')||':'||(image->>'target_id'),'lifecycle',relation.lifecycle,'deleted',false,
    'orderKey',CASE WHEN image->'order_key'='null'::jsonb THEN '{"state":"null"}'::jsonb ELSE jsonb_build_object('state','text','text',image->>'order_key') END));
  END LOOP;
- -- Record every operation's graph writes; sparse plans need only those entries
- -- and their identity witnesses, rather than another complete graph walk.
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
   before_nodes:=nodes;before_edges:=edges;changed_nodes:=ARRAY[]::text[];changed_edges:=ARRAY[]::text[];
   IF operation ? 'alias' AND (jsonb_typeof(operation->'alias') IS DISTINCT FROM 'string'
    OR octet_length(operation->>'alias') NOT BETWEEN 1 AND 1024 OR aliases ? (operation->>'alias')) THEN
    RAISE EXCEPTION 'unique bounded original alias required' USING ERRCODE='22023';END IF;
   IF operation->>'operation' IN ('create_object','update_object','delete_object') THEN
-   selected_type:=truss.runtime_operation_type(operation,input->'operations',index);
+   IF operation->>'operation'='create_object' AND resolved_creates ? (operation->>'typeDefinitionPin') THEN
+    selected_type:=jsonb_populate_record(NULL::truss.type_def,resolved_creates->(operation->>'typeDefinitionPin'));
+    IF NOT truss.runtime_object_values_readable_qualified(selected_type.type_id,current_actor) THEN
+     RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+   ELSE
+    -- Only alias resolution reads earlier operations; stored/create targets do not.
+    selected_type:=truss.runtime_owned_operation_type_qualified(operation,
+     CASE WHEN operation->'target'->>'state'='alias' THEN input->'operations' END,index,current_actor);
+    IF operation->>'operation'='create_object' THEN
+     resolved_creates:=resolved_creates||jsonb_build_object(operation->>'typeDefinitionPin',to_jsonb(selected_type));
+    END IF;
+   END IF;
    IF operation->>'operation'='create_object' THEN
     IF operation-ARRAY['operation','typeDefinitionPin','values','ownership','alias']<>'{}'::jsonb
      OR jsonb_typeof(operation->'ownership') IS DISTINCT FROM 'object' THEN
@@ -576,6 +586,13 @@ BEGIN
     END IF;
     changed_nodes:=array_append(changed_nodes,selected);
     nodes:=nodes||jsonb_build_object(selected,state);
+    IF operation->>'operation'='update_object' AND NOT (operation ? 'ownershipChange') THEN
+     IF state IS DISTINCT FROM before_nodes->selected THEN
+      IF (state->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'object version exhausted' USING ERRCODE='54000';END IF;
+      state:=jsonb_set(state,'{image,ver}',to_jsonb((state->'image'->>'ver')::bigint+1));
+      nodes:=jsonb_set(nodes,ARRAY[selected],jsonb_set(state,'{image,rev}',to_jsonb(revision)));
+     END IF;
+    ELSIF operation->>'operation'<>'create_object' THEN
     FOR entry IN SELECT reference key,nodes->reference value FROM (SELECT DISTINCT unnest(changed_nodes) reference) touched LOOP
      IF before_nodes ? entry.key AND entry.value IS DISTINCT FROM before_nodes->entry.key THEN
       IF (entry.value->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'object version exhausted' USING ERRCODE='54000';END IF;
@@ -583,6 +600,7 @@ BEGIN
       nodes:=jsonb_set(nodes,ARRAY[entry.key],jsonb_set(state,'{image,rev}',to_jsonb(revision)));
      END IF;
     END LOOP;
+    END IF;
    END IF;
   ELSIF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN
    relation:=truss.runtime_operation_relationship(operation,input->'operations',index);
@@ -652,6 +670,16 @@ BEGIN
   IF index=jsonb_array_length(input->'operations')-1 THEN
    plan:=jsonb_build_object('beforeNodes',before_nodes,'afterNodes',nodes,
     'beforeEdges',before_edges,'afterEdges',edges);
+  ELSIF operation->>'operation'='create_object'
+   OR (operation->>'operation'='update_object' AND NOT (operation ? 'ownershipChange')) THEN
+   -- These operations change one object only. Use point lookups for its root
+   -- witnesses instead of rescanning the complete growing working graph.
+   SELECT array_agg(DISTINCT reference) INTO retained_nodes FROM unnest(ARRAY[
+    selected,before_nodes->selected->>'root',nodes->selected->>'root']) r(reference) WHERE reference IS NOT NULL;
+   plan:=jsonb_build_object(
+    'beforeNodes',(SELECT coalesce(jsonb_object_agg(r.reference,before_nodes->r.reference),'{}'::jsonb) FROM unnest(retained_nodes) r(reference) WHERE before_nodes ? r.reference),
+    'afterNodes',(SELECT coalesce(jsonb_object_agg(r.reference,nodes->r.reference),'{}'::jsonb) FROM unnest(retained_nodes) r(reference) WHERE nodes ? r.reference),
+    'beforeEdges','{}'::jsonb,'afterEdges','{}'::jsonb);
   ELSE
    SELECT coalesce(array_agg(reference),'{}'::text[]) INTO retained_edges FROM (
     SELECT reference FROM unnest(changed_edges) e(reference)
