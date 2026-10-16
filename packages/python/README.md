@@ -7,13 +7,14 @@ traversal and retained history preserve ownership. Basic PostgreSQL18.6 workflow
 cover commit, rollback, dry-run and original receipt replay. The published
 release remains v0.0.35, described below.
 
-Development compiled queries select backend `0.4.38` / target `0.5` with the
-explicit logical query ABI. The currently pinned Weft `0.4.34` wheel does not
-provide that backend: stock compiled queries are unavailable until matching
-wheels are integrated. A real Rust CLI plus the public Python coordinator has
-passed the owned descendant query workflow; this is source integration evidence,
-not matching-wheel qualification. Owned imports and catalog value rebinding/
-key backfill remain refused. This checkpoint is not a release tag.
+Development compiled queries use published `weft-sql==0.4.36`, backend
+`0.4.39` / binding `0.5`, and the explicit logical query ABI. Basic native
+workflows exercise the default public compiler with owned descendants, the
+original Northwind Product model, decimal(12,2), and stable UMF IDs for unnamed
+records and fields. These checks do not qualify the broader protected engine.
+Owned imports and catalog value rebinding/key backfill remain refused. Date
+and other generic-decimal SQL query domains remain unfinished. Practical
+performance still blocks release; this checkpoint is not a release tag.
 
 The public-only owned example runs installation, registration, owned creation,
 explicit subtree reparenting, caller rollback, read-only key/edge/traversal reads,
@@ -25,8 +26,8 @@ python packages/python/examples/owned_objects_workflow.py /tmp/truss-owned-demo 
 ```
 
 It uses the adjacent `notes-owned.umf.json` with an explicit UMF0.8 preparation
-profile. The directory must be new or empty. Compiled queries are covered
-separately once the matching wheel is published.
+profile. The directory must be new or empty. Compiled queries have separate
+native workflows using the matching published Weft wheel.
 
 The Python reference assembly provides catalog registration, object and edge
 mutations, business-key reads, Weft queries, imports, retained history, receipt

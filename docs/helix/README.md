@@ -1,10 +1,15 @@
 # truss project documentation
 
-Proposed SDK 0.0.32 / native 0.67 derives ordinary keys directly in PostgreSQL
-from admitted UMF 0.7/0.8 catalogs. Stored tuple and namespace bytes remain
-unchanged; client encoders and per-key source receipts are removed. Registration
-still uses broader UMF Bun preparation. Weft is optional for queries. See the
-[performance plan and evidence](04-build/key-encoding-performance.md).
+The current development checkpoint is Python SDK `0.0.36.dev0` / native
+`0.69-candidate`; the published release remains v0.0.35. Public owned-graph
+workflows cover creation, explicit subtree reparenting, cascade deletion,
+read-only reads, history and receipt replay. Ordinary compiled queries use
+published Weft0.4.36 / backend0.4.39. Canonical dates and exact decimal facets
+are supported by catalog acceptance, writes and reads; their broader SQL query
+domains remain unfinished. Practical performance still blocks the next release,
+and the 1,024-operation change remains an isolated candidate. See the
+[unreleased tranche notes](04-build/releases/v0.0.36.md) and
+[current Python interface](../../packages/python/README.md) for exact scope.
 
 ## First-release scope — owner direction, 2026-10-13
 
