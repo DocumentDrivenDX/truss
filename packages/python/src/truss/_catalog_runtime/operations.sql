@@ -484,7 +484,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_object_update_keys(bigint,int,jsonb,bytea,uuid,int) FROM PUBLIC;
 
-CREATE FUNCTION truss.object_group_step(attempt_id uuid,operation_index int,original_keys bytea) RETURNS bytea
+CREATE FUNCTION truss.runtime_owned_group_step_in_input(attempt_id uuid,operation_index int,original_keys bytea,original_input bytea,parsed_input jsonb) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;operation jsonb;metadata jsonb;raw jsonb;result jsonb;identity jsonb;
  old_image jsonb;new_image jsonb;object_row truss.object%ROWTYPE;keys jsonb;entry jsonb;property truss.prop_def%ROWTYPE;pin record;
@@ -494,7 +494,8 @@ BEGIN
  current_actor:=truss.runtime_person(false);
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id;
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor OR attempt.complete OR attempt.next_index IS DISTINCT FROM operation_index THEN RAISE EXCEPTION 'current ordered object attempt required' USING ERRCODE='55000';END IF;
- input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=jsonb_extract_path(input,'operations',operation_index::text);
+ IF attempt.input_bytes IS DISTINCT FROM original_input THEN RAISE EXCEPTION 'original step input required' USING ERRCODE='55000';END IF;
+ input:=parsed_input;operation:=jsonb_extract_path(input,'operations',operation_index::text);
  IF input->'mutationProfile'=truss.runtime_owned_profile() AND operation->>'operation'<>'create_object' THEN
   RETURN truss.runtime_owned_step(attempt_id,operation_index,input,attempt.input_bytes,current_actor);
  END IF;
@@ -572,6 +573,18 @@ BEGIN
  UPDATE truss.runtime_object_attempt SET next_index=next_index+1,results=results||jsonb_build_array(result) WHERE id=attempt_id;
  PERFORM truss.runtime_module_writer(metadata->>'documentId',metadata->>'moduleId');
  RETURN convert_to(result::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_group_step_in_input(uuid,int,bytea,bytea,jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.object_group_step(attempt_id uuid,operation_index int,original_keys bytea) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;current_actor oid;
+BEGIN
+ current_actor:=truss.runtime_person(false);
+ SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id;
+ IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor OR attempt.complete OR attempt.next_index IS DISTINCT FROM operation_index THEN RAISE EXCEPTION 'current ordered object attempt required' USING ERRCODE='55000';END IF;
+ RETURN truss.runtime_owned_group_step_in_input(attempt_id,operation_index,original_keys,attempt.input_bytes,convert_from(attempt.input_bytes,'UTF8')::jsonb);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.object_group_step(uuid,int,bytea) FROM PUBLIC;
@@ -1613,15 +1626,16 @@ REVOKE ALL ON FUNCTION truss.reached(bytea,int,text,text) FROM PUBLIC;
 CREATE FUNCTION truss.apply_group(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE opened jsonb;attempt_id uuid;operation_index int:=0;operation_count int;result jsonb;
- native_state text;failure_code text;unavailable_reason text;
+ native_state text;failure_code text;unavailable_reason text;parsed_input jsonb;
 BEGIN
  opened:=convert_from(truss.object_group_begin(original_input,original_documents,original_request,expected_release,expected_digest),'UTF8')::jsonb;
  IF opened->>'outcome'<>'execute' THEN RETURN convert_to(opened::text,'UTF8');END IF;
  attempt_id:=(opened->>'attemptId')::uuid;
- operation_count:=jsonb_array_length(convert_from(original_input,'UTF8')::jsonb->'operations');
+ parsed_input:=convert_from(original_input,'UTF8')::jsonb;
+ operation_count:=jsonb_array_length(parsed_input->'operations');
  FOR step_index IN 0..operation_count-1 LOOP
   operation_index:=step_index;
-  PERFORM truss.object_group_step(attempt_id,operation_index,convert_to('[]','UTF8'));
+  PERFORM truss.runtime_owned_group_step_in_input(attempt_id,operation_index,convert_to('[]','UTF8'),original_input,parsed_input);
  END LOOP;
  operation_index:=operation_count-1;
  result:=convert_from(truss.object_group_finish(attempt_id),'UTF8')::jsonb;
