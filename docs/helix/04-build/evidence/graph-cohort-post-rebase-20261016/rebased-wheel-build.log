@@ -1,0 +1,10 @@
+WARNING: The directory '/Users/erik/Library/Caches/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing ./.
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: truss-toolkit
+  Building wheel for truss-toolkit (pyproject.toml): started
+  Building wheel for truss-toolkit (pyproject.toml): finished with status 'done'
+  Created wheel for truss-toolkit: filename=truss_toolkit-0.0.38.dev0-py3-none-any.whl size=2709172 sha256=8013d722a1aa73e0f27a4790946e65c0157a89bb280eaf382bf50849e01e4a84
+  Stored in directory: /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/pip-ephem-wheel-cache-q54_px3c/wheels/9d/a5/c2/cd5014be20940cace1e3e1d5b49011c86a7edd9083458ef1ad
+Successfully built truss-toolkit
