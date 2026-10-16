@@ -394,12 +394,14 @@ class CatalogReferenceAssembly:
 
     @_active_operation
     def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
-                                  limit: int=100,cursor: QueryPageCursor | None=None,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryPage | QueryRefused | QueryUnavailable]:
+                                  limit: int=100,cursor: QueryPageCursor | None=None,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
+                                  engine_program: str | None=None,maximum_rows: int | None=None) -> Outcome[QueryPage | QueryRefused | QueryUnavailable]:
         from ._query_runtime import run_query
         manifest,digest,_=_release()
+        if maximum_rows is not None and engine_program is None:return Ok(QueryRefused("invalid_query"))
         return run_query(self._host,transaction,sql=sql,document_ids=document_ids,parameters={} if parameters is None else parameters,
-            maximum_rows=limit+1 if type(limit) is int else 0,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,
-            manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=None,page_size=limit,page_cursor=cursor)
+            maximum_rows=(limit+1 if type(limit) is int else 0) if maximum_rows is None else maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,
+            manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=None,page_size=limit,page_cursor=cursor,engine_program=engine_program)
 
     def mutations(self,selection: CapabilitySelection[Literal['mutation']]) -> CapabilityUnavailable:
         with self._lock:return CapabilityUnavailable(reason='disposed' if self._disposed else 'selection')

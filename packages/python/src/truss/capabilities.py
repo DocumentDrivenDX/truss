@@ -171,8 +171,9 @@ class NativeHistoryCapability(_NativeCapability[Literal['history']]):
 class NativeCompiledExecutionCapability(_NativeCapability[Literal['weft_execution']]):
     """Compile with Weft and execute authorized logical reads on the host transaction."""
     def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
-                                  limit: int=100,cursor: QueryPageCursor | None=None,maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[QueryPage | QueryRefused | QueryUnavailable]:
-        return self._assembly.query_page_in_transaction(transaction,sql=sql,document_ids=document_ids,parameters=parameters,limit=limit,cursor=cursor,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)
+                                  limit: int=100,cursor: QueryPageCursor | None=None,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
+                                  engine_program: str | None=None,maximum_rows: int | None=None) -> Outcome[QueryPage | QueryRefused | QueryUnavailable]:
+        return self._assembly.query_page_in_transaction(transaction,sql=sql,document_ids=document_ids,parameters=parameters,limit=limit,cursor=cursor,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,engine_program=engine_program,maximum_rows=maximum_rows)
 
     def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
                              maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,

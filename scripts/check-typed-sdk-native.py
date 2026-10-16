@@ -110,6 +110,42 @@ try:
    from native_sales import queries
    assert queries.selected(target,status='draft')==[Order(id='bar',status='draft')]
    checks.append('real CLI catalog/check and generated typed query through original Truss path')
+   # Seed more instances through the same public group path, not storage SQL.
+   with transaction(person)as(a,t):
+    ref=success(a.get_type_reference_in_transaction(t,document_id=doc['id'],module_id='sales',record_id='order'))
+    context=success(a.group_context_in_transaction(t))
+    creates=tuple(CreateObject(type_definition_pin=ref.definition_pin,values=(AuthoredValue(name='id',value=TextValue(kind='string',text=key)),AuthoredValue(name='status',value=TextValue(kind='string',text='draft'))),ownership=RootlessOwnership())for key in ('baz','foo'))
+    expect(success(a.apply_in_transaction(t,context.input(creates,MapValue(entries=())),context.request('typed-sdk-page-seed'),documents=documents,bun_executable='/opt/homebrew/bin/bun')),GroupSuccess)
+   with transaction(person,read_only=True)as(a,t):
+    page_sources=expect(success(a.query_catalog_sources_in_transaction(t,sql=request['sql'].removesuffix(' LIMIT 10'),document_ids=(doc['id'],),parameters={'status':'draft'})),QueryCatalogSources)
+   page_request=json.loads(page_sources.request_json)
+   page_entry=EngineRead.build(weft,page_request,parameters=Parameters,result=Order,method='truss-runtime',page_size=1)
+   (out/'original-engine-page-request.json').write_text(page_sources.request_json)
+   (out/'engine-page-catalog.json').write_text(page_entry.artifact_json)
+   first=target.page(page_entry,Parameters(status='draft'));assert [r.id for r in first.items]==['bar'] and first.next_after is not None
+   second=target.page(page_entry,Parameters(status='draft'),after=first.next_after);assert [r.id for r in second.items]==['baz'] and second.next_after is not None
+   third=target.page(page_entry,Parameters(status='draft'),after=second.next_after);assert [r.id for r in third.items]==['foo'] and third.next_after is None
+   from umf_access.pages import StaleContinuation
+   try:target.page(page_entry,Parameters(status='other'),after=first.next_after)
+   except StaleContinuation:pass
+   else:raise AssertionError('foreign parameter continuation accepted')
+   try:target.page(page_entry,Parameters(status='draft'),after=replace(first.next_after,values=('foo',)))
+   except TrussReadRefused:pass
+   else:raise AssertionError('typed Key diverged from original native cursor')
+   checks.extend(['native owner pages retain complete authored Key without gaps','page continuation rejects parameter drift and typed/native Key disagreement'])
+   with (args.generated/'truss_declarations.py').open('a')as declarations:
+    declarations.write('from native_sales.keys import OrderKey\n@query\ndef selected_page(status:Param[str],after:Param[OrderKey|None]):return Order.objects.filter(Order.c.status==status).page(size=1,after=after)\n')
+   config['targets'][0]['engineRequests']['selected_page:0']=page_request
+   (args.generated/'truss-config.json').write_text(json.dumps(config))
+   for extra in ([],['--check']):
+    compiled=subprocess.run([sys.executable,'-B','-m','umf_access.build.catalog','catalog','--root',str(args.generated),'--config',str(args.generated/'truss-config.json'),*extra],capture_output=True,text=True)
+    assert compiled.returncode==0,compiled.stdout+compiled.stderr
+   import importlib
+   importlib.invalidate_caches();queries=importlib.reload(queries)
+   generated_first=queries.selected_page(target,status='draft',after=None)
+   generated_second=queries.selected_page(target,status='draft',after=generated_first.next_after)
+   assert [r.id for r in generated_first.items]==['bar'] and [r.id for r in generated_second.items]==['baz']
+   checks.append('real CLI page catalog/check and generated typed continuation retain native bytes')
    admin.execute('REVOKE sdk_reader,sdk_writer FROM sdk_person')
    try:target.read(entry,Parameters(status='draft'))
    except TrussReadRefused:checks.append('native authorization revocation refuses SDK read')

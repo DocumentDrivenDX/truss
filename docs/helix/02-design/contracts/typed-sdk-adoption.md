@@ -76,9 +76,19 @@ The supplied `operation(timeout)` must own its adopted transaction and configure
 native statement and operation deadlines no greater than the requested budget.
 The target checks the whole elapsed budget before dispatch and release. The host
 settles and releases the transaction; the target never borrows a foreign handle.
-Eager verification uses the same complete native read path. Page/stream engine
-programs and protected current-query source envelopes require separately compiled
-owner profiles; this implementation refuses them instead of guessing cursors.
+Eager verification uses the same complete native read/page path. Candidate pages
+retain the complete original `weft.engine-page/0.1` artifact, exact page bound,
+hidden authored Key outputs and owner cursor. Native execution recompiles and
+compares the original program against the complete current binding and page
+metadata before data SQL. Optional typed cursor values must match the owner's
+original lexical cursor under its own Key codecs. `QueryPage.next_sort_values`
+retains those native decoded values; the SDK never reconstructs a native cursor.
+
+The subset is a single nonaggregated source with native authored primary-Key
+ordering, size1..999, and supported non-temporal Key carriers. Native compiler
+refusals remain original outcomes. Streams and protected current-query source
+envelopes still require separately admitted profiles: the current catalog's RC
+requirement does not establish the SDK snapshot stream contract.
 
 ## Validation
 
@@ -89,3 +99,9 @@ DTOs. Bound-injection, valid-but-different original SQL and removal of every
 native read-capable module role are refusal controls. Native source/instance
 identities are observed from actual public acceptance, never fixture IDs.
 Temporal qualification remains HELD.
+
+
+[Original page evidence](../../04-build/evidence/typed-sdk-native-20261016/pages/README.md)
+records the exact two-interpreter installed cohort and retained wrong-driver
+refusal. The combined compiler is unpublished; native default/ABI recapture and
+complete protected action/manifest bulk qualification remain open.

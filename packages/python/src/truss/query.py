@@ -51,6 +51,7 @@ class QueryUnavailable:
 @dataclass(frozen=True, slots=True)
 class QueryPageCursor:
     original_bytes: bytes
+    sort_values: tuple[QueryValue, ...] | None = None
 
 @dataclass(frozen=True, slots=True)
 class QueryPage:
@@ -59,6 +60,7 @@ class QueryPage:
     catalog_revision: int
     next_cursor: QueryPageCursor | None
     as_of: QueryReadPosition | None = None
+    next_sort_values: tuple[QueryValue, ...] | None = None
     outcome: Literal['page'] = field(default='page', init=False)
 
 @dataclass(frozen=True, slots=True)
