@@ -1,0 +1,14 @@
+{
+  "sourceCommit": "920b20244af2d935cdbd805d594c9f6e43d7cbc0",
+  "wheel": "truss_toolkit-0.0.38.dev0-py3-none-any.whl",
+  "sha256": "e0564c3b0764c656f9a1ab03681056f259984ac4a564a1fd2f96571e7b43a492",
+  "runtimeRelease": "truss-catalog-runtime/0.71-candidate",
+  "routines": 223,
+  "publicMethods": {
+    "owned_import_context_in_transaction": "(self, transaction: 'TransactionHandle') -> 'Outcome[OwnedImportRuntimeContext]'",
+    "owned_object_import_record_in_transaction": "(self, transaction: 'TransactionHandle', *, document_id: 'str', module_id: 'str', record_id: 'str', values: 'tuple[AuthoredValue, ...]', root: 'ObjectKeySelection | None' = None, source: 'MapValue | None' = None) -> 'Outcome[OwnedObjectImportRecord]'",
+    "owned_edge_import_record_in_transaction": "(self, transaction: 'TransactionHandle', *, document_id: 'str', module_id: 'str', relationship_id: 'str', source_endpoint: 'ObjectKeySelection', target_endpoint: 'ObjectKeySelection', values: 'tuple[AuthoredValue, ...]', order_key: 'OrderKey', source: 'MapValue | None' = None) -> 'Outcome[OwnedEdgeImportRecord]'",
+    "import_in_transaction": "(self, transaction: 'TransactionHandle', input: 'ImportInput | OwnedImportInput') -> \"ImportExecutionResult[Literal['host_adopted']]\""
+  },
+  "scope": "Wheel import and checksum-verified packaged runtime recipe only; no native or release qualification"
+}

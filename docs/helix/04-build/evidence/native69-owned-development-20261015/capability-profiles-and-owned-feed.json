@@ -1,0 +1,79 @@
+{
+  "scope": "versioned owned capability declarations and basic committed owned-event feed/ACK progress; not independent whole-page or downstream-durability verification",
+  "runtimeManifestSha256": "01b308c5fc264a0cd22deb38ab0a9885c9c88397354b99ddd4e6415f4b1700ab",
+  "capabilityProfilesSha256": "231b09ef2f7264287dbe42bcd422efa35f7c313b4d5a76fc3417fe82593e8a35",
+  "profiles": {
+    "catalog": {
+      "capability": {
+        "identity": "truss-native-catalog-capability",
+        "version": "0.11",
+        "sha256": "14906a9dfe2d14f9127443b4607728a87190eb5839a6208f1ff41e723b878046"
+      },
+      "policy": {
+        "identity": "truss-native-catalog-policy",
+        "version": "0.2",
+        "sha256": "7fef95e16df8fe2fbc73a50a6fcb131d33ff4eee4bcb6b18ad86baacd15d212a"
+      }
+    },
+    "direct_read": {
+      "capability": {
+        "identity": "truss-native-direct-read-capability",
+        "version": "0.7",
+        "sha256": "9b580c7fd5ae93c98ca5fd32c9aebd6a1da74999e063535bc041d18773d74b3e"
+      },
+      "policy": {
+        "identity": "truss-native-direct-read-policy",
+        "version": "0.3",
+        "sha256": "a49ea69f8afababec42e48c13ac5845c20f6a1dd0e36f8ae1a295d01b9ce2f7c"
+      }
+    },
+    "history": {
+      "capability": {
+        "identity": "truss-native-retained-history-capability",
+        "version": "0.3",
+        "sha256": "2a01715c0079a62380085b698baa1ee6d5799f1751d5285f9278f092acaac1bb"
+      },
+      "policy": {
+        "identity": "truss-native-retained-history-policy",
+        "version": "0.2",
+        "sha256": "ed2220afa971801743c3a5125cb32ee721347495544a874bcae92cb5aeade397"
+      }
+    },
+    "weft_execution": {
+      "capability": {
+        "identity": "truss-native-weft-runtime-query",
+        "version": "0.6",
+        "sha256": "ad4aaf57cfbc2a4c0d3b6a46438ddae38e33503333e0ed556f2c052f92591ff7"
+      },
+      "policy": {
+        "identity": "truss-native-weft-runtime-query-policy",
+        "version": "0.2",
+        "sha256": "70c6824d6089a2b2bc3e3471755027e88fce7e63478f2b6d17c107b227e876d9"
+      }
+    }
+  },
+  "previousEntriesRetainedUnchanged": true,
+  "allDefinitionPolicyHashesVerified": true,
+  "queryAbiUnchangedSha256": "9fce2c91eff11ae2d8e6c0e3759b425efb1457e2c9675dc4383fc28430909806",
+  "basicWorkflow": {
+    "test": "OwnedObjectTests.test_subtree_reparent_dryrun_cascade_history_and_original_retry",
+    "passed": 1,
+    "seconds": 9.531,
+    "grandchildFeedChanges": [
+      [
+        "create",
+        1
+      ],
+      [
+        "metadata",
+        2
+      ],
+      [
+        "delete",
+        3
+      ]
+    ],
+    "acknowledgements": "committed after each original delivered page"
+  },
+  "review": "Astra Ultra completed source review; existing basic run passed"
+}

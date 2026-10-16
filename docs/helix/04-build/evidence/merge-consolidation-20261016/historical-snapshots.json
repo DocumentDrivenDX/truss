@@ -1,0 +1,7 @@
+{
+  "scope": "Previously untracked dated observations preserved unchanged; original runs/source epochs were not revalidated during this consolidation. No current browser, native or release qualification is inferred.",
+  "sha256": {
+    "docs/helix/04-build/evidence/design-audit/schema-browser-parallel-edge-20261013.json": "43d73f2a166dd7775b61a7fb500dfb85a8e127d669b87dde425ca5c0c04f5208",
+    "docs/helix/04-build/evidence/native69-owned-development-20261015/capability-profiles-and-owned-feed.json": "89542a2b8a54a59ac928a28eb891bf6a62f97e6efefd68ab24a4b47fe8ea5842"
+  }
+}
