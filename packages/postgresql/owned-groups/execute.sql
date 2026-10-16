@@ -72,6 +72,7 @@ DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='
  rootless_creates boolean;created_states jsonb[]:='{}';
  value_updates boolean;updated_states jsonb[]:='{}';updated_references text[]:='{}';
  scope_node_states jsonb[]:='{}';scope_edge_states jsonb[]:='{}';
+ scope_node_type int;scope_edge_type int;scope_edge_pin text;
 BEGIN
  current_actor:=truss.runtime_person(false);
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 1024
@@ -104,7 +105,12 @@ BEGIN
   RAISE EXCEPTION 'current admitted group catalog required' USING ERRCODE='55P03';END IF;
  FOR entry IN SELECT key,value FROM jsonb_each(scope->'nodes') ORDER BY (value->>'type_id')::int,(value->>'id')::bigint LOOP
   selected:='stored:'||entry.key;image:=entry.value;
-  SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(image->>'type_id')::int);
+  -- Ordered initial rows share immutable catalog meaning; permissions and
+  -- per-object state are still checked on their original paths.
+  IF scope_node_type IS NULL OR scope_node_type IS DISTINCT FROM (image->>'type_id')::int THEN
+   SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(image->>'type_id')::int);
+   scope_node_type:=(image->>'type_id')::int;
+  END IF;
   identity:=jsonb_build_object('id',image->>'id','typeId',image->>'type_id','definitionPin',pin.definition_pin,
    'owner',jsonb_build_object('documentId',pin.document_id,'moduleId',pin.module_id));
   root_ref:=CASE WHEN image->'root_id'='null'::jsonb THEN NULL ELSE 'stored:'||(image->>'root_type')||':'||(image->>'root_id') END;
@@ -119,8 +125,13 @@ BEGIN
   boundary_order:=array_append(boundary_order,'stored:'||entry.key);
  END LOOP;
  FOR entry IN SELECT key,value FROM jsonb_each(scope->'edges') ORDER BY (value->>'rel_type_id')::int,(value->>'id')::bigint LOOP
-  image:=entry.value;SELECT * INTO STRICT relation FROM truss.rel_def WHERE rel_type_id=(image->>'rel_type_id')::int;
-  identity:=jsonb_build_object('id',image->>'id','typeId',image->>'rel_type_id','definitionPin',truss.runtime_relationship_pin(relation.rel_type_id),
+  image:=entry.value;
+  IF scope_edge_type IS NULL OR scope_edge_type IS DISTINCT FROM (image->>'rel_type_id')::int THEN
+   SELECT * INTO STRICT relation FROM truss.rel_def WHERE rel_type_id=(image->>'rel_type_id')::int;
+   scope_edge_pin:=truss.runtime_relationship_pin(relation.rel_type_id);
+   scope_edge_type:=relation.rel_type_id;
+  END IF;
+  identity:=jsonb_build_object('id',image->>'id','typeId',image->>'rel_type_id','definitionPin',scope_edge_pin,
    'owner',jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module));
   selected:='stored:'||(image->>'rel_type_id')||':'||(image->>'id');
   scope_edge_states:=array_append(scope_edge_states,jsonb_build_object(selected,jsonb_build_object('identity',identity,'image',image-ARRAY['source_id','source_type','target_id','target_type','order_key','updated_at'],

@@ -648,3 +648,19 @@ An Astra-cleared candidate removed a redundant inner full-input byte comparison
 while preserving its sole caller's exact comparison. The same UPDATE diagnostic
 measured5,655.6ms and showed no improvement; the candidate was discarded and
 source restored. No new runtime mechanism or relaxed check was retained.
+
+### Initial-scope definition reuse — 2026-10-16
+
+Preparation's existing type-sorted object/edge loops now resolve immutable
+metadata once per consecutive type. Separate first-lookup guards preserve NULL
+refusals; operation resolution and live authority checks are unchanged. This
+avoids rescanning original schema text for every object of the same type.
+Owner `execute.sql` and packaged `owned.sql` agree; generator `--check` passes.
+
+The same original1,024 changed-UPDATE diagnostic passed and reduced definition
+resolutions from17,413 to16,390 (1,023 fewer). Its single local apply observation
+was5,353.5ms versus5,443.2ms previously; this is not an isolated speedup or hosted
+qualification. Ten existing PostgreSQL18 cases passed in51.796s: original
+capacity/commit/replay/readback, preparation correspondence and mandatory-edge
+refusal, plan-rewrite refusal, mixed owned graphs and ordered batch updates.
+Astra Ultra cleared the plan and final owner/generated source.
