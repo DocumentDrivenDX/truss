@@ -469,3 +469,11 @@ isolate that guard. The initial run exposed an installation syntax error in the
 CASE upper-bound expression; the parenthesized correction was regenerated and
 all four checks rerun successfully. Astra Ultra clears corrected source and
 basic tests. The previous 128-operation results above remain historical.
+
+Installed-wheel CI run38879576731 subsequently fails both macOS ARM64 and Linux
+x64 at the original statement deadline (`57014`) during 1,024-create execution.
+The late-fault test also times out before reaching its final trigger. The local
+functional pass above remains valid for that host, but capacity within the
+existing deadlines is not qualified on the release runners. Keep the complete
+workload and deadlines while improving the creation path; no release pass follows
+from the larger admitted bound.

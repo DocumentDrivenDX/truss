@@ -199,3 +199,38 @@ imports, owned retained-value rebinding/key backfill, cyclic value definitions,
 record-valued properties, general row homes, history offload and actual managed
 service qualification remain in the full goal. Unsupported owned imports and
 catalog transformations refuse rather than substituting rootless semantics.
+
+## Owned import implementation boundary — 2026-10-16
+
+Current imports cannot create a complete owned aggregate: they execute one
+record per group, require stored endpoint IDs, and retain source evidence at
+operation index zero with one source row per attempt. An owned child and its
+ownership edge must instead validate together in one final forest. Removing
+only the rootless checks would expose an unusable or incorrect interface.
+
+The next tranche will add an explicit atomic owned-import selection while
+preserving the released scalar import profile and its per-record behavior.
+Use primary-key references for batch object endpoints and roots, resolving
+already-live identities before decoding replacement payloads. Translate only
+eligible creations to the existing group operations and private earlier-object
+aliases; do not add a second graph executor. Original input indices, source
+payloads, load ID and authenticated actor remain attached to their original
+records. Existing identities still skip without applying replacement values.
+The new selection must explicitly define dependent-record failure semantics;
+it cannot silently change existing import batching or skip precedence.
+
+Native source registration must identify the actual group operation rather than
+assuming a single creation at index zero. Its storage and deferred checks must
+preserve the exact original record and resulting typed identity for every
+created object/edge. Any changed physical storage comes from UMF and includes a
+published-predecessor upgrade. Ordinary module, endpoint and root disclosure
+checks remain required for reports and source lookup. Existing rootless source
+rows and their original receipts must remain readable.
+
+Astra Ultra is reviewing the minimal public batch/reference shape before source
+implementation. The basic completion gate is one public owned aggregate import,
+caller commit and fresh object/edge/source readback; repeated import with invalid
+replacement payloads must skip and preserve originals. One failed dependent
+record must leave no partial aggregate. The adopted host alone settles its
+transaction; engine-owned execution settles only complete atomic batches.
+This tranche remains unfinished and is not a release claim.
