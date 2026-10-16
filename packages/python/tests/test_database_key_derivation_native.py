@@ -102,8 +102,11 @@ class DatabaseKeyDerivationTests(typed.TypedKeyTests):
         self.install()
         invalid=[([{'kind':'integer','text':'01'}],[{}]),([{'kind':'null'}],[{}]),
                  ([{'kind':'decimal','text':'1.201'}],[{'precision':18,'scale':2}]),
-                 ([{'kind':'decimal','text':'1.2'}],[{'precision':5,'scale':2}])]
+                 ([{'kind':'decimal','text':'1.2'}],[{'precision':2,'scale':3}])]
         for cells,facets in invalid:
             with self.assertRaises(psycopg.Error):
                 self.admin.execute('SELECT truss.encode_umf_scalar_key_tuple(%s::jsonb,%s::jsonb)',(json.dumps(cells),json.dumps(facets)))
+        encoded=self.admin.execute('SELECT truss.encode_umf_scalar_key_tuple(%s::jsonb,%s::jsonb)',
+            (json.dumps([{'kind':'decimal','text':'1.2'}]),json.dumps([{'precision':5,'scale':2}]))).fetchone()[0]
+        self.assertTrue(bytes(encoded))
         self.assertFalse(self.admin.execute("SELECT has_function_privilege('consumer','truss.encode_umf_scalar_key_tuple(jsonb,jsonb)','EXECUTE')").fetchone()[0])
