@@ -77,6 +77,19 @@ try:
     else:
      assert host.detach();person.commit()
    target=TrussTarget(operation,binding_sha256=request['target']['bindingSha256'],platform=(('postgresql','18.6'),),default_timeout=timedelta(seconds=10),catalog_entries=(entry,))
+   shared={'binding_sha256':request['target']['bindingSha256'],'platform':(('postgresql','18.6'),),'default_timeout':timedelta(seconds=10)}
+   captured_target=TrussTarget(operation,**shared,catalog_sources=captured,catalog_entries=(entry,))
+   assert captured_target.identity()==target.identity()
+   assert target.identity().backend_version==request['target']['backendVersion']
+   assert captured_target.read(entry,Parameters(status='draft'))==[Order(id='bar',status='draft')]
+   try:TrussTarget(operation,**shared)
+   except ValueError:pass
+   else:raise AssertionError('target identity guessed without original sources')
+   changed_target=json.loads(captured.request_json);changed_target['target']['backendVersion']='unselected-version'
+   try:TrussTarget(operation,**shared,catalog_sources=QueryCatalogSources(json.dumps(changed_target)),catalog_entries=(entry,))
+   except ValueError:pass
+   else:raise AssertionError('mixed original captured targets accepted')
+   checks.append('identity derives from original complete native targets; absent or mixed sources refuse')
    assert target.read(entry,Parameters(status='draft'))==[Order(id='bar',status='draft')]
    assert target.read(entry,Parameters(status="draft' OR true --"))==[]
    target.verify();checks.extend(['original engine catalog roundtrip','typed native read','bound injection remains data','eager verify uses native read path'])

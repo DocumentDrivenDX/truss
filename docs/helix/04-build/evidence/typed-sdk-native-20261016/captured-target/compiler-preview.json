@@ -1,0 +1,16 @@
+{
+  "status": "pass",
+  "checks": [
+    "actual declared-feature standard wheel exports original engine comparison APIs with exact installed bytes",
+    "original non-temporal engine source compiles and rechecks through backend041, protocol027 and actual ABI1.1 binding",
+    "current SQL drift cannot reuse original engine program",
+    "underlying existing date-projection compilation is retained while typed SDK selection explicitly refuses",
+    "underlying existing date-parameter compilation is retained while typed SDK selection explicitly refuses",
+    "historical backend039 original non-temporal catalog remains compilable without rewriting its pins"
+  ],
+  "wheelSha256": "4723b618416b1bb88fdd1df87ef01d43b584f1e602d1f0bc985f8d949975268a",
+  "version": "0.4.40.dev0",
+  "nativeVersion": "0.4.40-dev.0",
+  "sourceState": "uncommitted combined preview of frozen35546f5 and SDKfe2f2a0; not published release qualification",
+  "temporal": "HELD"
+}
