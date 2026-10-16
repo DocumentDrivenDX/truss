@@ -1,0 +1,8 @@
+{
+  "packages/python/src/truss/_owned_import_runtime.py": "1c8fec8eff0ed09ecb07ba77293bf031bd577669c40f6ce93170f90133c4b74f",
+  "packages/python/src/truss/_catalog_runtime/imports.sql": "439c6a894fe0a8c03061ac1348297a3ad9ca8e66d617b154a7b41e6fba1cc687",
+  "packages/python/src/truss/_catalog_runtime/history.sql": "5216e694ed19bb8745549ce0976619c237b6ec741da711aa2c54e9007694121c",
+  "packages/python/src/truss/catalog_runtime.py": "391921b9a6b9c40f9400ebbb0d9169918ca70d8293ff8e54777358807121b2de",
+  "packages/python/src/truss/engine_import.py": "6a40af7dfe482a97e1d463b6d064eb049db0492d3e4397d66014c5adcd829d39",
+  "packages/python/tests/test_owned_import_native.py": "67bf8f98f4f0baee2c0e43465584fec86fbf4cc733296747d09b532539f20a21"
+}

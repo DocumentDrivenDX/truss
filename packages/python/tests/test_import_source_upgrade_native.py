@@ -46,11 +46,12 @@ class ImportSourceUpgradeTests(unittest.TestCase):
                         found=assembly.lookup_import_source_in_transaction(tx,entity=HistoryEntity(kind='object',document_id='adoc',module_id='m',definition_id='A',id=int(identity.id)))
                         self.assertIsInstance(found,Ok,repr(found));self.assertIsInstance(found.value,ImportSourceFound)
                         self.assertEqual(found.value.load_id,'original-load')
-                    record=assembly.object_import_record_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',
+                    record=assembly.owned_object_import_record_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',
                         values=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='post-upgrade')),
                                 AuthoredValue(name='A-value',value=TextValue(kind='string',text='post-upgrade'))))
                     self.assertIsInstance(record,Ok,repr(record))
-                    created=assembly.import_in_transaction(tx,context.input((record.value,),load_id='new-load',asserted_origin=MapValue(entries=())),documents=documents)
+                    owned_context=assembly.owned_import_context_in_transaction(tx).value
+                    created=assembly.import_in_transaction(tx,owned_context.input((record.value,),load_id='new-load',asserted_origin=MapValue(entries=())),documents=documents)
                     self.assertIsInstance(created,ImportReported,repr(created))
                     self.assertIsInstance(created.report.outcomes[0],ImportCreated)
                     host.detach();connection.commit()
