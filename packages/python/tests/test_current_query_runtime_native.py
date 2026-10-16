@@ -184,6 +184,9 @@ class CurrentQueryRuntimeNativeTests(full.CurrentQueryFullSourcesNativeTests):
         calls=[('SELECT * FROM truss.query_objects(%s::jsonb,%s)',(binding,int(resource['typeId']))),
                ('SELECT * FROM truss.query_edges(%s::jsonb,%s)',(binding,1)),
                ('SELECT * FROM truss.query_page_objects(%s::jsonb,%s,%s)',(binding,int(resource['typeId']),'pk')),
+               ('SELECT * FROM truss.query_export_objects(%s::jsonb,%s)',(binding,int(resource['typeId']))),
+               ('SELECT * FROM truss.query_export_edges(%s::jsonb,%s)',(binding,1)),
+               ('SELECT * FROM truss.query_export_page_objects(%s::jsonb,%s,%s)',(binding,int(resource['typeId']),'pk')),
                ('SELECT truss.get_object(%s,%s,%s,%s::bigint,%s,%s,%s)',('domain','m','Resource',3,1048576,manifest['releaseId'],digest)),
                ('SELECT truss.read_history(%s::jsonb,%s,%s::bigint,%s,%s,%s,%s)',('{}',b'',1,100,1048576,manifest['releaseId'],digest)),
                ('SELECT truss.read_feed(%s,%s,%s,%s,%s)',('probe',100,1048576,manifest['releaseId'],digest))]
@@ -217,5 +220,27 @@ class CurrentQueryRuntimeNativeTests(full.CurrentQueryFullSourcesNativeTests):
         self.assertIsInstance(blocked,Error)
         self.assertIn('protection migration',str(self.host._custody.last_attempt.error))
         self.assertEqual(self.admin.execute("SELECT to_regprocedure('truss.acquire_registered_role_catalog_cut()')").fetchone(),(None,))
+        blocked=admin_assembly.upgrade_in_transaction(self.tx)
+        self.assertIsInstance(blocked,Error)
+        self.assertIn('protection migration',str(self.host._custody.last_attempt.error))
         self.host.detach();self.admin.rollback()
         self.assertEqual(c.execute("SELECT has_function_privilege('truss.query_objects(jsonb,integer)','EXECUTE')").fetchone(),(False,))
+        from truss._current_query_sources import capture_current_query_sources_with_cursor
+        from truss._current_query_protection import verify_current_query_protection
+        from truss.catalog_runtime import _pin_cursor
+        with self.admin.transaction():
+            with self.admin.cursor() as cursor:
+                _pin_cursor(cursor)
+                sources=capture_current_query_sources_with_cursor(cursor)
+                verify_current_query_protection(cursor,sources,self.current_subject_registration)
+            for signature in ('query_export_objects(jsonb,int)','query_export_edges(jsonb,int)',
+                              'query_export_page_objects(jsonb,int,text)'):
+                statement=psycopg.sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO subject_reader').format(psycopg.sql.SQL(signature))
+                self.admin.execute(statement)
+                try:
+                    with self.admin.cursor() as cursor:
+                        _pin_cursor(cursor)
+                        with self.assertRaisesRegex(ValueError,'closed ordinary routine grants'):
+                            verify_current_query_protection(cursor,sources,self.current_subject_registration)
+                finally:
+                    self.admin.execute(psycopg.sql.SQL('REVOKE EXECUTE ON FUNCTION truss.{} FROM subject_reader').format(psycopg.sql.SQL(signature)))

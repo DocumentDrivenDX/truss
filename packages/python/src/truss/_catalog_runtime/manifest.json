@@ -95,7 +95,8 @@
     "upgrade-source-068.json": "3588cf030cb46c7d12368557e351bd767c10b4dd2e1644f7f100cec54602a2fc",
     "query-abi.json": "9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f",
     "upgrade-source-070.json": "0d292c3681986b3664ff3af9927039d10cf20ef029511e33ccd7d76c566041e3",
-    "import-source-upgrade.sql": "045902fb02938754cf7996c4ff7b089c40fdad117beefbd99e23b596a8a59369"
+    "import-source-upgrade.sql": "045902fb02938754cf7996c4ff7b089c40fdad117beefbd99e23b596a8a59369",
+    "query-export.sql": "4615d49c5c7dc2f7e84894cbf04a4b730f396e5bc8ef3504cae4557952a10ac7"
   },
   "version": "0.71"
 }
