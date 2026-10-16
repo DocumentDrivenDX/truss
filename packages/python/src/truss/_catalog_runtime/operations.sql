@@ -501,8 +501,8 @@ BEGIN
  END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
  IF operation->>'operation'='create_object' THEN
-  raw:=convert_from(truss.apply_create_group_qualified(convert_to(jsonb_set(input-'preconditions','{operations}',jsonb_build_array(operation))::text,'UTF8'),attempt.documents_bytes,
-   original_keys,convert_to('{"state":"none"}','UTF8'),installation.release_id,installation.release_sha256,current_actor),'UTF8')::jsonb;
+  raw:=convert_from(truss.apply_create_group_qualified(convert_to(((input-ARRAY['preconditions','operations'])||jsonb_build_object('operations',jsonb_build_array(operation)))::text,'UTF8'),attempt.documents_bytes,
+   original_keys,convert_to('{"state":"none"}','UTF8'),installation.release_id,installation.release_sha256,current_actor,attempt_id,original_input,input),'UTF8')::jsonb;
   IF raw->>'outcome'<>'success' THEN
    native_state:=coalesce(raw->>'nativeState',CASE raw->>'reason' WHEN 'resource' THEN '54000' WHEN 'observation' THEN '55P03' ELSE '0A000' END);
    RAISE EXCEPTION 'create operation refused' USING ERRCODE=native_state;

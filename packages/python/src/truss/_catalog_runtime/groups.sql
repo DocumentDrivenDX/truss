@@ -375,7 +375,7 @@ CREATE CONSTRAINT TRIGGER runtime_created_group_commit AFTER INSERT ON truss.run
 ALTER TABLE truss.object ENABLE ALWAYS TRIGGER runtime_created_object_commit;
 ALTER TABLE truss.runtime_create_group ENABLE ALWAYS TRIGGER runtime_created_group_commit;
 
-CREATE FUNCTION truss.apply_create_group_qualified(original_input bytea,original_documents bytea,original_keys bytea,original_request bytea,expected_release text,expected_digest text,qualified_actor oid) RETURNS bytea
+CREATE FUNCTION truss.apply_create_group_qualified(original_input bytea,original_documents bytea,original_keys bytea,original_request bytea,expected_release text,expected_digest text,qualified_actor oid,selected_attempt uuid DEFAULT NULL,selected_original bytea DEFAULT NULL,selected_input jsonb DEFAULT NULL) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 <<creation_leaf>>
 DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;installation truss.catalog_runtime_installation%ROWTYPE;
@@ -432,9 +432,14 @@ BEGIN
  WHERE a.writer_xid=writer AND a.actor_oid=creation_leaf.actor_oid AND NOT a.complete
   AND a.context->'creationTransitionProfile'=creation_leaf.context->'creationTransitionProfile'
   AND a.documents_bytes=original_documents AND jsonb_array_length(a.results)=a.next_index
-  AND convert_to(jsonb_set(convert_from(a.input_bytes,'UTF8')::jsonb-'preconditions',
+  AND ((selected_attempt IS NULL AND
+   convert_to(jsonb_set(convert_from(a.input_bytes,'UTF8')::jsonb-'preconditions',
       '{operations}',jsonb_build_array(convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index))::text,'UTF8')=original_input
-  AND convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index->>'operation'='create_object'
+   AND convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index->>'operation'='create_object')
+   OR (selected_attempt IS NOT NULL AND a.id=selected_attempt AND a.input_bytes=selected_original
+    AND jsonb_extract_path(selected_input,'operations',a.next_index::text)->>'operation'='create_object'
+    AND convert_to(((selected_input-ARRAY['preconditions','operations'])||jsonb_build_object('operations',
+      jsonb_build_array(jsonb_extract_path(selected_input,'operations',a.next_index::text))))::text,'UTF8')=original_input))
   AND request='{"state":"none"}'::jsonb
  FOR UPDATE NOWAIT;
  LOCK TABLE truss.object IN SHARE ROW EXCLUSIVE MODE NOWAIT;
@@ -693,7 +698,7 @@ EXCEPTION
   RETURN convert_to(outcome::text,'UTF8');
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.apply_create_group_qualified(bytea,bytea,bytea,bytea,text,text,oid) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.apply_create_group_qualified(bytea,bytea,bytea,bytea,text,text,oid,uuid,bytea,jsonb) FROM PUBLIC;
 
 CREATE FUNCTION truss.apply_create_group(original_input bytea,original_documents bytea,original_keys bytea,original_request bytea,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
