@@ -1,0 +1,52 @@
+{
+  "review": "Astra Ultra definition-source projection plan and completed source",
+  "status": "PLAN_AND_SOURCE_CLEAR_FOCUSED_NATIVE_PASS_MATRIX_PENDING",
+  "baseline": "06c247018cc1a927d80ad8409de6b13a3b5d6ad2",
+  "scope": [
+    "packages/python/src/truss/_catalog_runtime/groups.sql",
+    "packages/python/src/truss/_catalog_runtime/manifest.json"
+  ],
+  "sha256": {
+    "packages/python/src/truss/_catalog_runtime/groups.sql": "56fd59f35b5cf188676892924e9e54a82f0775c4822cae1e9a32e1b80247f318",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "0c3d6196da73159197fb17b5c3942a4d4cd8e97612bfeda332f3e23ebe690d73"
+  },
+  "candidateSha256": "0550913bea758d437a464f948a685c5ddece9c77c3100007ae7cdfa00c23c409",
+  "findings": [],
+  "recommendedSingleChange": "Use five typed local scalars for definition_source_kind, definition_rev, definition_doc_ord, definition_document_id and key_id instead of serializing complete type/property/key rows into local JSONB.",
+  "concreteAvoidedCost": "Removes to_jsonb(native_type), to_jsonb(p) and to_jsonb(k) from this path, eliminating serialization of unused fields such as lineage bytes/hash, property facets/items and key arrays, plus unnecessary JSON text extraction/integer reparsing. Type branch uses existing native_type fields directly, without an extra SPI statement.",
+  "verified": [
+    "Every old definition JSONB read refers only to the five retained fields. The real source columns are text/int/int/text/text, so typed locals preserve their values and NULL behavior; source kind/revision checks and archive predicates retain their original position.",
+    "Initial current/historical native_type SELECT INTO STRICT, branch order, current-row predicates, basis requirements, and historical jsonb_populate_recordset calls are unchanged. Historical typed conversion therefore remains before subsequent source checks.",
+    "Property and key branches retain SELECT INTO STRICT and their original FROM/WHERE conditions. No row filtering, deduplication, lookup elision or snapshot/query merge was introduced.",
+    "JSONB coordinate lookup, only untranslatable_character/numeric_value_out_of_range fallback, original JSON fragment extraction, pointer construction, original-fragment hash and complete definition pin calculation are unchanged. Key lookup compares the same original text ID.",
+    "Returned document/module/element identity, function signature/attributes, grants, routine inventory, schema, all authorization/deferred validation checks, limits and deadlines remain unchanged. No cache or added interface.",
+    "Applied function body equals the separately supplied scalar candidate exactly. Only groups.sql and its manifest hash changed; row-projection and adjacent row/key SELECT-merge candidates were not bundled.",
+    "Reviewer build-owned-runtime.py --check and git diff --check both pass; manifest contains exact groups.sql digest."
+  ],
+  "profileContext": {
+    "rowValidatorCalls": 3000,
+    "rowValidatorSelfMs": 2743.68,
+    "definitionCalls": 32002,
+    "definitionSelfMs": 1062.996,
+    "caveat": "Retained stock create interval also includes registration/catalog. These counters motivate the inspection but do not isolate serialization cost or establish an improvement."
+  },
+  "nativeEvidence": {
+    "status": "Parent-run focused native PASS4; unchanged original graph matrix pending",
+    "parentSession": 2325,
+    "tests": 4,
+    "seconds": 48.957,
+    "coverage": [
+      "Basic create/replay",
+      "Genuine type references",
+      "Real 1024 create/commit, changed update/commit, replay and full readback",
+      "Late operation-index 1023 fault containment"
+    ],
+    "log": "/private/tmp/truss-definition-projection-native-20261016.log",
+    "logSha256": "5b8c69b916ea0097e9e7382fb265015127802e2bbd9e96f2e1f36786167bd2ad",
+    "matrixSession": 85554,
+    "qualification": "No causal speedup or release-runner capacity claim. Reviewer ran no native tests."
+  },
+  "adoptionBoundary": "This is source correctness clearance, not a performance success claim. Retain unchanged workload/deadline checks and evidence of benefit before adopting a performance-only increment; basic success alone does not establish runner capacity or material speedup.",
+  "supersession": "This single definition projection supersedes the earlier row-projection plan for the current iteration. The adjacent row/key SELECT merge is not reviewed for adoption and is excluded.",
+  "reviewExecution": "Read-only source/DDL/retained-stat inspection and generation/hash checks. No production edits, spawned agents, native database execution or instrumentation expansion."
+}
