@@ -1,0 +1,14 @@
+{
+  "baseCommit": "c4886b695969c00eb658e0bc826f72999e8fe586",
+  "files": {
+    "packages/python/src/truss/_catalog_runtime/groups.sql": "0046d34b70a9bd92794b2bcebc445f5071b4a37137fdae8dc15b16c4c63487ae",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "5d7e69c504314172ef3458a452ad7cb44dcefad51a0c359c69c59be1a5ecc318",
+    "packages/python/src/truss/_catalog_runtime/operations.sql": "1eb56475561ea022ddcd571edc0f2af32fdf1b51a3a256dba1d77da9d9cb67d8",
+    "packages/python/src/truss/_preparation_source_epoch.py": "7e10264ad5b04a5e50fd94d7d69c290842d2e275022dd840ba7fb1c2fecd1b55",
+    "packages/python/src/truss/catalog_runtime.py": "84566ea845809e0f504c8922e975526f6aea56ae91fcd50cbe40d77641d26ead",
+    "packages/python/tests/test_owned_transition_upgrade_native.py": "fd35e78361061c134fd1cc2164efa46c07a4fc81adfd59bf7cc1c31e431ca135"
+  },
+  "basicLogSha256": "8d4e7dc669445cd430ef12bb9603da831cd392641019ef4e8120cb931acda9af",
+  "capacityLogSha256": "4ccc73b038059dc7a9d6bc35cd16c281845f79b5a82fca0ddadaa2ea4a5fc085",
+  "upgradeLogSha256": "34d1e6ab5a13c701f20b230f0c04dab43f4668407aa86e4e089aaf328cbfc3e7"
+}
