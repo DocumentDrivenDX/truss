@@ -832,9 +832,11 @@ CREATE TRIGGER runtime_object_attempt_guard BEFORE UPDATE OR DELETE ON truss.run
 
 CREATE FUNCTION truss.runtime_object_commit_check() RETURNS trigger
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;actual jsonb;expected jsonb;endpoint record;selected_edge bigint;selected_relation int;
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;actual jsonb;expected jsonb;endpoint record;selected_edge bigint;selected_relation int;current_actor oid;
 BEGIN
  IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL;END IF;
+ IF TG_TABLE_NAME IN ('object','runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill') THEN
+  current_actor:=truss.runtime_person(false);END IF;
  IF TG_TABLE_NAME='runtime_object_attempt' THEN
   SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=NEW.id;
   IF NOT attempt.complete OR attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false)
@@ -847,8 +849,8 @@ BEGIN
    IF attempt.position_bytes IS DISTINCT FROM truss.runtime_receipt_position(attempt.context,attempt.receipt_id,attempt.writer_xid) THEN RAISE EXCEPTION 'exact original receipt position required' USING ERRCODE='55000';END IF;
   END IF;
  ELSIF TG_TABLE_NAME='object' THEN
-  IF TG_OP='DELETE' THEN PERFORM truss.runtime_object_validate(OLD.id,OLD.type_id);ELSE PERFORM truss.runtime_object_validate(NEW.id,NEW.type_id);END IF;
- ELSIF TG_TABLE_NAME IN ('runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill') THEN PERFORM truss.runtime_object_validate(NEW.object_id,NEW.type_id);
+  IF TG_OP='DELETE' THEN PERFORM truss.runtime_owned_row_validate_qualified(OLD.id,OLD.type_id,current_actor);ELSE PERFORM truss.runtime_owned_row_validate_qualified(NEW.id,NEW.type_id,current_actor);END IF;
+ ELSIF TG_TABLE_NAME IN ('runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill') THEN PERFORM truss.runtime_owned_row_validate_qualified(NEW.object_id,NEW.type_id,current_actor);
  ELSIF TG_TABLE_NAME='edge' THEN
   IF TG_OP='DELETE' THEN PERFORM truss.runtime_edge_validate(OLD.id,OLD.rel_type_id);ELSE PERFORM truss.runtime_edge_validate(NEW.id,NEW.rel_type_id);END IF;
  ELSIF TG_TABLE_NAME='runtime_edge_transition' THEN PERFORM truss.runtime_edge_validate(NEW.edge_id,NEW.rel_type_id);
@@ -859,10 +861,10 @@ BEGIN
  IF TG_TABLE_NAME='runtime_object_attempt' THEN
   PERFORM truss.runtime_graph_validate(false);
  ELSIF TG_TABLE_NAME='object' THEN
-  IF TG_OP='DELETE' THEN PERFORM truss.runtime_graph_validate_object(OLD.id,OLD.type_id,false);
-  ELSE PERFORM truss.runtime_graph_validate_object(NEW.id,NEW.type_id,false);END IF;
+  IF TG_OP='DELETE' THEN PERFORM truss.runtime_graph_validate_object_qualified(OLD.id,OLD.type_id,false,current_actor);
+  ELSE PERFORM truss.runtime_graph_validate_object_qualified(NEW.id,NEW.type_id,false,current_actor);END IF;
  ELSIF TG_TABLE_NAME IN ('runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill') THEN
-  PERFORM truss.runtime_graph_validate_object(NEW.object_id,NEW.type_id,false);
+  PERFORM truss.runtime_graph_validate_object_qualified(NEW.object_id,NEW.type_id,false,current_actor);
  ELSE
   -- Include old and new endpoints of every transition for this edge in this
   -- transaction, including retargets and deletion. Final-edge endpoints alone
