@@ -681,12 +681,13 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_prepare(jsonb,jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_owned_capture(selected_attempt uuid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;observed jsonb;locked jsonb;
- inventory jsonb;entry jsonb;owner record;selected_type int;relation truss.rel_def%ROWTYPE;endpoint_owner record;retained_bytes bigint:=0;
+ inventory jsonb;entry jsonb;owner record;selected_type int;relation truss.rel_def%ROWTYPE;endpoint_owner record;retained_bytes bigint:=0;current_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+ current_actor:=truss.runtime_person(false);
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id()
-  OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false) OR attempt.complete
+  OR attempt.actor_oid IS DISTINCT FROM current_actor OR attempt.complete
   OR attempt.next_index<>0 OR attempt.results<>'[]'::jsonb OR attempt.aliases<>'[]'::jsonb
   OR attempt.context->'mutationProfile' IS DISTINCT FROM input->'mutationProfile'
   OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
@@ -699,12 +700,12 @@ BEGIN
   SELECT value->>'document_id' document_id,value->>'module' module_id FROM jsonb_each(observed->'types')
   UNION ALL SELECT value->>'document_id',value->>'module' FROM jsonb_each(observed->'relationships')
  ) owners) distinct_owners ORDER BY document_id COLLATE "C",module_id COLLATE "C" LOOP
-  PERFORM truss.runtime_module_writer(owner.document_id,owner.module_id);
+  PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module_id,current_actor);
  END LOOP;
  FOR owner IN SELECT document_id,module_id FROM (SELECT DISTINCT value->'definition'->>'document_id' document_id,
   value->'definition'->>'module' module_id FROM jsonb_each(observed->'boundary')) distinct_owners
   ORDER BY document_id COLLATE "C",module_id COLLATE "C" LOOP
-  IF NOT truss.runtime_can_read(owner.document_id,owner.module_id) THEN
+  IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
    RAISE EXCEPTION 'current outside endpoint reader required' USING ERRCODE='42501';END IF;
  END LOOP;
  -- Implicit descendant values and zero-edge multiplicity checks require the
@@ -715,16 +716,16 @@ BEGIN
    FROM jsonb_array_elements(input->'operations') WITH ORDINALITY o(value,ordinal)
    WHERE value->>'operation' IN ('create_object','update_object','delete_object')
  ) affected_types ORDER BY type_id LOOP
-  IF truss.runtime_object_values_readable(selected_type) IS NOT TRUE THEN
+  IF truss.runtime_object_values_readable_qualified(selected_type,current_actor) IS NOT TRUE THEN
    RAISE EXCEPTION 'complete affected property and item readers required' USING ERRCODE='42501';END IF;
   FOR relation IN SELECT r.* FROM truss.rel_def r WHERE r.retired_rev IS NULL AND EXISTS(
    SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=r.rel_type_id AND selected_type IN(e.source_type,e.target_type))
    ORDER BY r.rel_type_id LOOP
-   IF NOT truss.runtime_can_read(relation.document_id,relation.module) THEN
+   IF NOT truss.runtime_can_read_qualified(relation.document_id,relation.module,current_actor) THEN
     RAISE EXCEPTION 'counted relationship reader required' USING ERRCODE='42501';END IF;
    FOR endpoint_owner IN SELECT DISTINCT t.document_id,t.module FROM truss.rel_endpoint e
     JOIN truss.type_def t ON t.type_id IN(e.source_type,e.target_type) WHERE e.rel_type_id=relation.rel_type_id LOOP
-    IF NOT truss.runtime_can_read(endpoint_owner.document_id,endpoint_owner.module) THEN
+    IF NOT truss.runtime_can_read_qualified(endpoint_owner.document_id,endpoint_owner.module,current_actor) THEN
      RAISE EXCEPTION 'counted relationship endpoint reader required' USING ERRCODE='42501';END IF;
    END LOOP;
   END LOOP;
