@@ -1,0 +1,34 @@
+{
+  "scope": "Local PostgreSQL18.6 basic workflows; unpublished development cohort",
+  "weftVersion": "0.4.40",
+  "weftSource": "685691d3f7e2b9cd98285c74a56a6707a7b01cfd",
+  "weftArmWheelSha256": "24d5514c779bd43fceafb6f89268f4fb4dc6a28b1332370fcaefd9f4c20b63cc",
+  "queryAbiVersion": "1.1",
+  "queryAbiSha256": "9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f",
+  "basicDateNumericNorthwindStableId": {
+    "tests": 6,
+    "seconds": 27.1,
+    "status": "passed"
+  },
+  "ownedDescendantQuery": "passed",
+  "currentPolicy": {
+    "tests": 4,
+    "seconds": 23.629,
+    "status": "passed"
+  },
+  "typedSdkOriginalChecks": 14,
+  "earlierAttempts": [
+    "Date fixture ORDER BY used nonexistent label; corrected to authored A-label",
+    "Current-policy initially refused unselected native module; added exact published module hashes",
+    "SDK script CLI config hardcoded backend039; now derives original captured backend version",
+    "Generic native23 upgrade harness was incompatible with native68 predecessor before seeding; exact release native68 upgrade modules passed instead"
+  ],
+  "performanceQualification": false,
+  "typedEngineDateSupport": false,
+  "releasePublished": false,
+  "publishedNative68Upgrade": {
+    "tests": 3,
+    "seconds": 14.784,
+    "status": "passed"
+  }
+}

@@ -20,13 +20,15 @@ failure at operation 1,024. Upgrading published v0.0.35 widens the retained
 attempt constraint without rewriting receipts or historical data. Other
 byte/value limits and ordinary deadlines still apply.
 
-Development compiled queries use published `weft-sql==0.4.36`, backend
-`0.4.39` / binding `0.5`, and the explicit logical query ABI. Basic native
+Development compiled queries use published `weft-sql==0.4.40`, backend
+`0.4.41` / binding `0.5`, and the explicit logical query ABI. Basic native
 workflows exercise the default public compiler with owned descendants, the
 original Northwind Product model, decimal(12,2), and stable UMF IDs for unnamed
 records and fields. These checks do not qualify the broader protected engine.
-Development adds explicit atomic owned imports, alternate-key backfill and retained-value rebinding for existing owned objects. Date
-and other generic-decimal SQL query domains remain unfinished. Practical
+Development adds explicit atomic owned imports, alternate-key backfill and retained-value rebinding for existing owned objects. Ordinary Date queries preserve canonical Gregorian `YYYY-MM-DD` tokens for years
+0001–9999, including exact equality, optional values and query pages. Date ordering,
+Date business keys, typed-engine Date outputs/parameters and other generic-decimal
+SQL query domains remain unfinished. Practical
 performance still blocks release; this checkpoint is not a release tag.
 
 The public-only owned example runs installation, registration, owned creation,
@@ -559,8 +561,9 @@ Published rootless JSON-home objects and independent directed relationships
 support strings and exact scalar properties: integer, decimal, boolean,
 timestamp and binary. Acyclic nested arrays/maps use required item Fields and
 exact scalar leaves. The development checkpoint adds owned objects and composed
-graphs, plus direct date and generic-decimal values; their broader SQL query
-support remains unfinished. Record-valued cells and cyclic value definitions
+graphs, plus direct date and generic-decimal values. Ordinary Date queries support
+projection and equality with literals, fields and `TextValue(kind="date", text="2000-02-29")`
+parameters, preserving absent and null. Broader generic-decimal SQL queries remain unfinished. Record-valued cells and cyclic value definitions
 remain unsupported. Exact numeric/time carriers preserve text semantics; do not
 route them through floating point or lossy date conversions. Retained history
 can reconstruct stored images after updates/deletion; archival/offload and
@@ -587,8 +590,8 @@ arbitrary fractional digits within the1MiB token limit, using literals, another
 timestamp field, or `TextValue(kind="timestamp", text="2024-01-01T00:00:00.123456789Z")`.
 Original timestamp text remains recoverable; `-00:00` retains unknown local-offset
 knowledge while identifying a known instant. Binary/timestamp ordering, grouping
-and temporal keys remain unsupported. The selected compile/IR/backend interfaces
-are `0.2.6`, with the unchanged SQL dialect `0.2.0`; released SDK22 remains0.2.5.
+and temporal keys remain unsupported. The development compile/IR/backend interfaces
+are `0.2.7`, with the unchanged SQL dialect `0.2.0`; released SDK22 remains0.2.5.
 Successful native `QueryRows` and `QueryPage` results carry `as_of: QueryReadPosition`. Its opaque `value` identifies a conservative committed lower bound captured immediately before the data query; `at` is the database capture time as a timezone-aware UTC `datetime`. The following READ COMMITTED statement can include newer commits. `caller_xid_assigned` reports only whether the caller already had a transaction ID; it does not prove writes or commitment. Constructors retain an optional default for compatibility, while this provider fills the position on every successful result, including empty rows.
 
 Read-position values use their own namespace and are not receipt tokens. Do not pass them to `reached`, infer ordering from their strings or timestamps, or treat them as exact snapshots. An adapter may publish this position only with the stated lower-bound semantics. Current authority/context checks must pass before the result and position are returned.

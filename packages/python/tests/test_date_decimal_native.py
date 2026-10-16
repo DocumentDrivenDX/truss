@@ -68,3 +68,49 @@ class LargeScaleDecimalTests(DateDecimalTests):
         self.assertIsInstance(key,Ok,repr(key));self.assertIsInstance(key.value,ObjectFound,repr(key.value))
         self.assertEqual(key.value.object.identity.id,identity.id)
         h.detach();c.rollback()
+
+
+class DateQueryTests(DateDecimalTests):
+    test_public_values_keys_import_commit_reopen = None
+
+    def fields(self, source):
+        super().fields(source)
+        module = source['modules'][0]
+        next(e for e in module['elements'] if e['id'] == 'amount')['facets'] = {'precision':18,'scale':4}
+        next(e for e in module['elements'] if e['id'] == 'day')['nullability'] = 'absent-allowed'
+
+    def test_public_date_queries_and_pages(self):
+        from truss import QueryRows, QueryPage
+        from truss.contracts import NullValue
+        from truss.query import QueryAbsent, QueryRefused
+        c,h,a,t = self.ready(self.fields)
+        operations = tuple(CreateObject(type_definition_pin=self.types[('adoc','A')].definition_pin,
+            values=self.date_values(label=label,amount=amount)[:-1]+extra,ownership=RootlessOwnership())
+            for label,amount,extra in (
+                ('dated','1.0',(AuthoredValue(name='day',value=TextValue(kind='date',text='2000-02-29')),)),
+                ('absent','2.0',()),
+                ('null','3.0',(AuthoredValue(name='day',value=NullValue()),))))
+        semantic,request = self.input(a,t,operations)
+        self.assertIsInstance(self.apply(a,t,semantic,request),GroupSuccess)
+        h.detach();c.commit();c,h,a,t = self.consumer()
+        for sql,parameters in (
+            ('SELECT a.day FROM A a WHERE a.day=\'2000-02-29\'',{}),
+            ('SELECT a.day FROM A a WHERE a.day=:day',{'day':TextValue(kind='date',text='2000-02-29')}),
+            ('SELECT a.day FROM A a INNER JOIN A b ON a.day=b.day',{})):
+            rows = a.query_in_transaction(t,sql=sql,document_ids=('adoc',),parameters=parameters)
+            self.assertIsInstance(rows,Ok,repr(rows));self.assertIsInstance(rows.value,QueryRows,repr(rows.value))
+            self.assertEqual(rows.value.rows,((TextValue(kind='date',text='2000-02-29'),),))
+        rows = a.query_in_transaction(t,sql='SELECT a.day FROM A a ORDER BY a."A-label"',document_ids=('adoc',))
+        self.assertIsInstance(rows.value,QueryRows,repr(rows))
+        self.assertEqual(rows.value.rows,((QueryAbsent(),),(TextValue(kind='date',text='2000-02-29'),),(None,)))
+        page = a.query_page_in_transaction(t,sql='SELECT a.day FROM A a',document_ids=('adoc',),limit=1)
+        self.assertIsInstance(page,Ok,repr(page));self.assertIsInstance(page.value,QueryPage,repr(page.value))
+        all_rows = list(page.value.rows)
+        while page.value.next_cursor is not None:
+            page = a.query_page_in_transaction(t,sql='SELECT a.day FROM A a',document_ids=('adoc',),limit=1,cursor=page.value.next_cursor)
+            self.assertIsInstance(page.value,QueryPage,repr(page));all_rows.extend(page.value.rows)
+        self.assertCountEqual(all_rows,rows.value.rows)
+        for token in ('1900-02-29','0000-01-01','2024-2-01'):
+            refused=a.query_in_transaction(t,sql='SELECT a.day FROM A a WHERE a.day=:day',document_ids=('adoc',),parameters={'day':TextValue(kind='date',text=token)})
+            self.assertIsInstance(refused.value,QueryRefused,repr(refused))
+        h.detach();c.rollback()

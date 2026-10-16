@@ -622,3 +622,14 @@ immutable result slots and final edge/future-slot controls. No deadline, source
 census, guard, layout or routine inventory changes. The alternative ordered-slot
 mechanism was not implemented:100 complete1,024-slot counts took only19.069ms.
 Hosted Linux/macOS release validation remains required after this correction.
+
+### Hosted release validation on 0ca19c23
+
+[Run 38974408702](https://github.com/DocumentDrivenDX/truss/actions/runs/38974408702)
+failed the unchanged original 1,024-operation workflow on both platforms. Linux
+reached CREATE finalization and timed out in qualified row validation; macOS
+completed CREATE and timed out during UPDATE finalization. Both returned SQLSTATE
+57014 under the existing deadline. The other 17 tests in this step passed on each
+platform. [Original failed-step logs](results/2026-10-16-release38974408702-failed.log)
+retain the precise stacks. No tag was created; publication was skipped. Removing
+the redundant CREATE leaf exception boundary does not establish release readiness.

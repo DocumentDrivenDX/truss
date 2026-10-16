@@ -2741,3 +2741,22 @@ reconstructed start cannot issue this evidence. Administrative DDL between
 observations, direct counter tampering and concurrent administrator attacks are
 outside this component qualification; ordinary-person protected installation
 and dependency exclusion remain separate unfinished gates.
+
+## Ordinary Date query integration — 2026-10-16
+
+The development cohort selects published Weft0.4.40/source685691d3, runtime
+backend0.4.41, compile/IR/backend0.2.7 and the exact owner logical query ABI1.1.
+Canonical Gregorian dates (years0001–9999) remain exact TextValue tokens.
+Ordinary projections, equality by literal/parameter/field, optional absence/null
+and pages now use the public assembly. Complete native source validation remains
+in place. Prior ABI bindings require recapture; they are not rewritten.
+
+[Basic local checks](evidence/date-query-20261016/checks.json) cover Date, existing
+numeric/Northwind/stable-ID and owned queries, current-policy regression and the
+original14 typed-SDK checks. The SDK CLI fixture derives its backend version from
+the actual captured target. Current-policy module pins use the exact published
+ARM/Linux artifacts. Typed-engine Date parameters/results, Date ordering/keys,
+other generic-decimal SQL domains and managed platforms are not enabled.
+Astra Ultra cleared the plan and runtime source; this is not performance or
+release qualification. Hosted release38974408702 still fails the original batch
+deadline on both platforms; publication remains blocked.

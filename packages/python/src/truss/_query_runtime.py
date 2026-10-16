@@ -2,7 +2,7 @@
 from decimal import Decimal
 import re
 import base64
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from hashlib import sha256
 import json
 from types import MappingProxyType
@@ -11,20 +11,27 @@ from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition, QueryCatalogSources
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.39',
-           'targetProfile': 'truss-runtime-pg18.6/0.5', 'interfaceVersion': 'weft-backend/0.2.6'}
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.41',
+           'targetProfile': 'truss-runtime-pg18.6/0.5', 'interfaceVersion': 'weft-backend/0.2.7'}
 
 
 def compiler(*, engine_catalog=False, engine_pages=False):
     try:
         import weft
-        if weft.__version__ != '0.4.36' and not (weft.__version__ in ('0.4.39-dev.0','0.4.40-dev.0','0.4.40') and callable(getattr(weft, 'check_engine_read_json', None))):
+        if weft.__version__ != '0.4.40':
             return None
         if engine_catalog and not callable(getattr(weft,'check_engine_read_json',None)):return None
         if engine_pages and not callable(getattr(weft,'check_engine_page_json',None)):return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):
         return None
+
+
+def _date_token(value):
+    if type(value) is not str or not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', value):
+        raise ValueError('Canonical Gregorian date required')
+    date.fromisoformat(value)
+    return value
 
 
 def _decode_scalar(value, family):
@@ -84,8 +91,10 @@ def _decode_value(value, descriptor_id, descriptors):
         return _decode_scalar(value, descriptor['type']['family'])
     if descriptor['kind'] == 'exactScalar':
         kind = descriptor['scalarType']
-        if kind not in ('timestamp', 'binary') or type(value) is not str:
-            raise ValueError('Exact timestamp/binary token required')
+        if kind not in ('timestamp', 'binary', 'date') or type(value) is not str:
+            raise ValueError('Exact timestamp/binary/date token required')
+        if kind == 'date':
+            _date_token(value)
         return TextValue(kind=kind, text=value)
     if descriptor['kind'] == 'sequence':
         if type(value) is not list:raise ValueError('Complete logical sequence required')
@@ -206,9 +215,10 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
     exact_values={}
     for name,value in parameters.items():
         if type(value) is TextValue:
-            if value.kind not in ('binary','timestamp') or type(value.text) is not str or len(value.text) > 1048576:
+            if value.kind not in ('binary','timestamp','date') or type(value.text) is not str or len(value.text) > 1048576:
                 return Ok(QueryRefused(code='invalid_query'))
             try:
+                if value.kind == 'date': _date_token(value.text)
                 decoded = base64.b64decode(value.text, validate=True) if value.kind=='binary' else None
                 if decoded is not None and base64.b64encode(decoded).decode('ascii') != value.text:
                     return Ok(QueryRefused(code='invalid_query'))
@@ -237,7 +247,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         if binding != bundle['binding'] or binding['releaseId'] != manifest['releaseId'] or binding['releaseSha256'] != digest:
             raise ValueError('Exact installed query binding required')
         binding_sha = sha256(binding_json.encode('utf8')).hexdigest()
-        request = {'interfaceVersion': 'weft-compile/0.2.6', 'dialect': 'weft-sql/0.2.0', 'sql': sql,
+        request = {'interfaceVersion': 'weft-compile/0.2.7', 'dialect': 'weft-sql/0.2.0', 'sql': sql,
                    'timestampComparisonProfile':'umf-rfc3339-exact-instant/1.0.0', 'modules': bundle['modules'], 'parameters': values, 'exactParameters': exact_values, 'options': {'allowCandidate': True},
                    'target': {'backendId': BACKEND['backendId'], 'backendVersion': BACKEND['backendVersion'],
                               'targetProfile': BACKEND['targetProfile'], 'bindingJson': binding_json, 'bindingSha256': binding_sha}}
@@ -263,7 +273,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             diagnostics = tuple(QueryDiagnostic(code=d['code'], message=d['message']) for d in artifact.get('diagnostics', ()))
             unsupported = any(d.code in ('WFT-CAPABILITY', 'WFT-TYPE', 'WFT-PROFILE') for d in diagnostics)
             return QueryRefused(code='unsupported_query' if unsupported else 'invalid_query', diagnostics=diagnostics)
-        if artifact['interfaceVersion'] != request['interfaceVersion'] or artifact['dialect'] != request['dialect'] or artifact['logicalPlan']['irVersion'] != 'weft-ir/0.2.6':
+        if artifact['interfaceVersion'] != request['interfaceVersion'] or artifact['dialect'] != request['dialect'] or artifact['logicalPlan']['irVersion'] != 'weft-ir/0.2.7':
             raise ValueError('Exact selected compile/dialect/IR versions required')
         if artifact['backend'] != BACKEND or artifact['bindingSha256'] != binding_sha or artifact['modelPins'] != [m['pin'] for m in bundle['modules']]:
             raise ValueError('Original compiled binding/model/backend required')
@@ -301,6 +311,9 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                 token=slot['value']
                 if len(token)>1048576 or base64.b64encode(base64.b64decode(token,validate=True)).decode('ascii')!=token:
                     raise ValueError('Canonical binary parameter slot required')
+                continue
+            if logical_type == {'kind':'exactScalar','scalarType':'date'}:
+                _date_token(slot['value'])
                 continue
             if logical_type == {'kind':'exactScalar','scalarType':'timestamp'}:
                 cursor.execute('SELECT truss.query_timestamp_instant_key(%s,%s)',(slot['value'],'umf-rfc3339-exact-instant/1.0.0'),prepare=False)

@@ -15,7 +15,7 @@ truss-local-postgres = "truss.cli:main"
 [project.optional-dependencies]
 typed-sdk = ["umf_access==0.1.0.dev0", "weft-sql==0.4.39.dev0"]
 native = ["psycopg[binary]==3.3.6"]
-query = ["weft-sql==0.4.36"]
+query = ["weft-sql==0.4.40"]
 experimental-pg8000 = ["pg8000==1.31.5"]
 local = ["pgserver-pg18==18.6.1", "fasteners==0.20", "platformdirs==4.12.4", "psutil==7.2.2"]
 

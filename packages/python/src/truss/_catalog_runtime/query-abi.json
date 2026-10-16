@@ -1,7 +1,7 @@
 {
   "interfaceVersion": "truss-query-abi-descriptor/0.1",
   "identity": "truss-postgresql-logical-query",
-  "version": "1.0",
+  "version": "1.1",
   "postgresVersion": "180006",
   "bindingInterfaceVersion": "truss-runtime-binding/0.5",
   "schema": "truss",
@@ -81,11 +81,12 @@
   "sourceValues": {
     "identity": "native positive signed64 object or edge id; record/relationship type id qualifies identity",
     "properties": "JSON object keyed by native property id text; missing key is absent; explicit null cell is present null",
-    "scalarCells": "UMF exact string, boolean, integer, decimal, timestamp and binary cells under admitted catalog facets; no precision-losing casts",
+    "scalarCells": "UMF exact string, boolean, integer, decimal, timestamp and binary cells under admitted catalog facets; no precision-losing casts; canonical date cells under the explicit Truss Gregorian subset",
     "containers": "admitted flat and recursive scalar array/map cells retain order, map keys and absent/null distinctions",
     "numeric": "integer/decimal source text is validated before PostgreSQL numeric input; admitted signed64 and decimal(18,4)/(18,2) facets retain exact meaning",
     "timestampComparison": "umf-rfc3339-exact-instant/1.0.0; original token retained; instant key is [wholeSecondsText,fractionDigitsWithoutTrailingZeroes]",
-    "binary": "canonical base64 text; byte equality uses decoded bytes"
+    "binary": "canonical base64 text; byte equality uses decoded bytes",
+    "date": "canonical Gregorian YYYY-MM-DD, years0001..9999; original tokens; C-collated equality; absent/null remain SQL UNKNOWN"
   },
   "graph": {
     "relationships": "directed independent or owned, one admitted endpoint type pair, no association object or composition; every distinct edge id counts, including parallel edges",

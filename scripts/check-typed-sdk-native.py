@@ -104,7 +104,7 @@ try:
     assert refused.outcome=='refused' and refused.code=='stale_context'
    checks.append('different valid compiler SQL refuses original correspondence')
    (args.generated/'truss_declarations.py').write_text('from umf_access import query,Param\nfrom native_sales.models import Order\n@query\ndef selected(status:Param[str]):return Order.objects.filter(Order.c.status==status).limit(10).all()\n')
-   config={'package':'native_sales','modules':['truss_declarations'],'targets':[{'id':'owned','kind':'truss','backendId':'truss.postgresql.runtime','backendVersion':'0.4.39','targetProfile':'truss-runtime-pg18.6/0.5','binding':packet['binding'],'engineCompiler':'truss-runtime','engineRequests':{'selected:0':request},'platform':[{'name':'postgresql','versions':['18.6']}]}]}
+   config={'package':'native_sales','modules':['truss_declarations'],'targets':[{'id':'owned','kind':'truss','backendId':'truss.postgresql.runtime','backendVersion':request['target']['backendVersion'],'targetProfile':'truss-runtime-pg18.6/0.5','binding':packet['binding'],'engineCompiler':'truss-runtime','engineRequests':{'selected:0':request},'platform':[{'name':'postgresql','versions':['18.6']}]}]}
    (args.generated/'truss-config.json').write_text(json.dumps(config))
    for extra in ([],['--check']):
     command=[sys.executable,'-B','-m','umf_access.build.catalog','catalog','--root',str(args.generated),'--config',str(args.generated/'truss-config.json'),*extra]
