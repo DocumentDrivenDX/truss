@@ -208,9 +208,11 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE selected truss.type_def;dependency record;
 BEGIN
  SELECT * INTO selected FROM truss.type_def WHERE type_id=selected_type AND kind='record' AND retired_rev IS NULL;
- IF NOT FOUND OR NOT truss.runtime_can_read(selected.document_id,selected.module) THEN RETURN false;END IF;
+ IF NOT FOUND THEN RETURN false;END IF;
  IF EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.cardinality IN ('array','map') AND truss.valid_item_chain(p.item) IS NOT TRUE) THEN RETURN false;END IF;
  FOR dependency IN
+  SELECT selected.document_id AS document_id,selected.module AS module
+  UNION
   SELECT p.definition_document_id AS document_id,p.declaration_module AS module FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL
   UNION
   SELECT node.value->>'documentId',node.value->'reference'->>'module' FROM truss.prop_def p CROSS JOIN LATERAL jsonb_array_elements(jsonb_build_array(p.item)||coalesce(p.item->'descendants','[]'::jsonb)) node WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.cardinality IN ('array','map')
