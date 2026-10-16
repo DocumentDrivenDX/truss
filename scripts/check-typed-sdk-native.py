@@ -57,6 +57,10 @@ try:
     assert len(applied.response.semantic.results)==1
    checks.append('instance created through public atomic group API')
    with transaction(person,read_only=True)as(a,t):
+    ordinary=success(a.query_in_transaction(t,sql='SELECT "r"."id" AS "id", "r"."status" AS "status" FROM "sales"."order" AS "r" WHERE "r"."status" = :status LIMIT 10',document_ids=(doc['id'],),parameters={'status':'draft'}))
+    assert ordinary.outcome=='rows'and ordinary.columns==('id','status')and ordinary.rows==(('bar','draft'),)
+   checks.append('original public query remains usable with the explicitly selected SDK compiler cohort')
+   with transaction(person,read_only=True)as(a,t):
     captured=expect(success(a.query_catalog_sources_in_transaction(t,sql='SELECT "r"."id" AS "id", "r"."status" AS "status" FROM "sales"."order" AS "r" WHERE "r"."status" = :status LIMIT 10',document_ids=(doc['id'],),parameters={'status':'draft'})),QueryCatalogSources)
    request=json.loads(captured.request_json);entry=EngineRead.build(weft,request,parameters=Parameters,result=Order,method='truss-runtime')
    (out/'original-engine-request.json').write_text(captured.request_json)
