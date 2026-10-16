@@ -1,0 +1,10 @@
+test_create_commit_read_and_original_durable_replay (test_group_create_native.PublicCreateGroupTests.test_create_commit_read_and_original_durable_replay) ... ok
+test_future_result_slot_refuses_before_next_edge_effect (test_final_edge_inventory_native.FinalEdgeInventoryTests.test_future_result_slot_refuses_before_next_edge_effect) ... ok
+test_unplanned_parallel_incident_edge_refuses_and_rolls_back (test_final_edge_inventory_native.FinalEdgeInventoryTests.test_unplanned_parallel_incident_edge_refuses_and_rolls_back) ... ok
+test_1025_refuses_in_host_and_native_without_durable_effects (test_group_capacity_native.GroupCapacityTests.test_1025_refuses_in_host_and_native_without_durable_effects) ... ok
+test_preserve_transitions_and_receipt_then_continue (test_owned_transition_upgrade_native.OwnedTransitionUpgradeTests.test_preserve_transitions_and_receipt_then_continue) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 39.881s
+
+OK

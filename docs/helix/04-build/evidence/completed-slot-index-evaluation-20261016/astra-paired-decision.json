@@ -1,0 +1,62 @@
+{
+  "review": "Astra Ultra completed paired index decision",
+  "date": "2026-10-16",
+  "verdict": "REJECT_INDEX_ADOPTION_RETAIN_REVERTED_BASELINE_AND_EVIDENCE",
+  "blockingFindings": [],
+  "rawPins": {
+    "/private/tmp/truss-completed-index-full-small-20261016.json": "0dd4fc7e77f462f89ccbc10266097a9118ec48471c294c110b9862398795b5b8",
+    "/private/tmp/truss-completed-index-baseline-full-small-20261016.json": "d39d2194bdd0a330e006ee023ddfb28120cb8343e8c839a5521ef041880b5bbc",
+    "/private/tmp/truss-completed-index-full-small-20261016.log": "28ae6d283732bd59b056da43ca4861e7bc132fe3abd7d613ab348106f2bbcdc9",
+    "/private/tmp/truss-completed-index-baseline-full-small-20261016.log": "76ce3f42ccc1363e7e8e6259669e66973ad7f4740214d72b1a3cf5385141811e",
+    "/private/tmp/truss-completed-result-index-candidate-20261016.patch": "ac335fdd334d45930e2e9aa407ceef0c765d4015724a694f4460978041462298",
+    "/private/tmp/truss-completed-result-index-candidate-source-20261016.json": "c6f4a92a4ad435c123f8a7899200f96a1bd67c0d52730b901747471fe74a960a"
+  },
+  "decision": "The pair does not show meaningful overall benefit sufficient to justify the additional persistent index and write/HOT costs. Leave the exact eight-file candidate reverted; retain its source and diagnostic evidence.",
+  "observedMilliseconds": [
+    {
+      "measure": "create_inclusive",
+      "candidate": 12303.260584,
+      "baseline": 11714.061791,
+      "candidateElapsedPercentChange": 5.02984194135534
+    },
+    {
+      "measure": "edge_load_inclusive",
+      "candidate": 13096.24925,
+      "baseline": 12929.752667,
+      "candidateElapsedPercentChange": 1.2877012212688443
+    },
+    {
+      "measure": "changed100_end_to_end_median",
+      "candidate": 614.330458,
+      "baseline": 592.692208,
+      "candidateElapsedPercentChange": 3.6508409774808293
+    },
+    {
+      "measure": "changed1000_end_to_end_median",
+      "candidate": 12678.655917,
+      "baseline": 12715.566417,
+      "candidateElapsedPercentChange": -0.29027806382775356
+    }
+  ],
+  "functionalScope": "Both runs pass the same small workload:1000 nodes/edges,1000 ID reads,100 key reads,200 committed singles, five changed-group repeats each at1/100/1000, reopened readback and cleanup. Both reports retain performanceQualification=not_evaluated and unchanged10000ms/30000ms limits.",
+  "sourceState": {
+    "head": "3d3c2afeff81eb8109b3ba81cd9bdd5a076e1423",
+    "baselineManifest": "c9221e8b0fe5a90de7f056ced84fde460c36f0d3faceff7a2348ed01c0586f20",
+    "candidateManifest": "b450d16edcb183fb29a4a7ee916f5278c04c9d6125564ad7121075754e479c28",
+    "baselineReportSourceWorkingTreeDirty": true,
+    "trackedWorkingTreeAndIndexClean": true,
+    "allEightCandidatePathsByteEqualHEAD": true,
+    "explanation": "The benchmark dirty flag uses git status --porcelain, including untracked paths. Current status contains only unrelated untracked caches/build/evidence paths; no staged or unstaged tracked changes remain. The baseline manifest and all eight restored paths match HEAD."
+  },
+  "limits": [
+    "These are sequential independent fixtures, not randomized replicated trials; do not claim a causal regression or prove the index is universally useless.",
+    "The approximately0.29% lower changed1000 median is within broad overlapping repeat ranges; create-inclusive, edge-inclusive and changed100 medians are worse in this pair. No material net benefit is demonstrated.",
+    "Inclusive creation/edge load timings include their documented surrounding work; edge-inclusive is not merely the sum of timed apply and commit.",
+    "Candidate actual1024 previously failed with57014 before commit; the full-small pass does not replace that gate. Keep the1024 and release-performance blocker open.",
+    "No new diagnostic variants or blind retries are recommended for this index candidate."
+  ],
+  "reviewerActions": [
+    "Read both complete reports/logs, reconciled repeated-group sample medians and workload/settings/index inventories, and verified restored tracked source bytes.",
+    "No product edits, native execution, builds or agents."
+  ]
+}
