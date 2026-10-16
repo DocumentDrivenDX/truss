@@ -189,7 +189,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                     return Ok(QueryRefused(code='invalid_query'))
             except (ValueError, UnicodeError):
                 return Ok(QueryRefused(code='invalid_query'))
-    if type(capture_catalog) is not bool or engine_program is not None and (type(engine_program) is not str or len(engine_program.encode("utf8")) > 4194304) or (capture_catalog or engine_program is not None) and (page_size is not None or read_profile is not None):
+    if type(capture_catalog) is not bool or engine_program is not None and (type(engine_program) is not str or len(engine_program.encode("utf8")) > 4194304) or capture_catalog and (page_size is not None or read_profile is not None) or engine_program is not None and read_profile is not None:
         return Ok(QueryRefused(code="invalid_query"))
     compile_query = compiler(engine_catalog=capture_catalog or engine_program is not None)
     if compile_query is None:
@@ -265,10 +265,19 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             raise ValueError('Exact selected compile/dialect/IR versions required')
         if artifact['backend'] != BACKEND or artifact['bindingSha256'] != binding_sha or artifact['modelPins'] != [m['pin'] for m in bundle['modules']]:
             raise ValueError('Original compiled binding/model/backend required')
+        if page_size is not None and page_cursor is not None and page_cursor.sort_values is not None:
+            types = _relationship_key_types(artifact['logicalPlan']['pageKey']['types'],maximum=1024)
+            if type(page_cursor.sort_values) is not tuple or len(types)!=len(page_cursor.sort_values):
+                return QueryRefused(code='invalid_query')
+            try:
+                if [_page_key_token(value,t) for value,t in zip(page_cursor.sort_values,types,strict=True)] != page_state['after']:
+                    return QueryRefused(code='stale_context')
+            except (ValueError,UnicodeError):return QueryRefused(code='invalid_query')
         if engine_program is not None:
             import weft
-            checked = json.loads(weft.check_engine_read_json(engine_program, json.dumps(request, ensure_ascii=False)))
-            if checked.get('status') != 'compiled' or checked.get('compiler') != 'truss-runtime' or checked.get('artifact') != artifact:
+            checked = json.loads(weft.check_engine_read_json(engine_program, json.dumps(request, ensure_ascii=False)) if page_size is None else weft.check_engine_page_json(engine_program, json.dumps(request, ensure_ascii=False), json.dumps(None if page_state is None else page_state["after"])))
+            if (checked.get("status") != "compiled" or checked.get("compiler") != "truss-runtime" or checked.get("artifact") != artifact
+                or page_size is not None and (checked.get("pageSize") != page_size or checked.get("page") != page_metadata)):
                 cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
                 return QueryRefused(code='stale_context')
         if capture_catalog:
@@ -356,7 +365,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                 token = json.dumps({'profile':'truss-query-page/0.2','context':context,'after':lexical_keys[len(retained)-1]},ensure_ascii=False,separators=(',',':')).encode('utf8')
                 if len(token)>65536:return QueryRefused(code='limits')
                 next_cursor = QueryPageCursor(original_bytes=token)
-            return QueryPage(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=binding['catalogRevision'],next_cursor=next_cursor,as_of=position)
+            return QueryPage(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=binding['catalogRevision'],next_cursor=next_cursor,as_of=position,next_sort_values=None if next_cursor is None else tuple(retained[-1][index] for index in keys))
         if isinstance(result, QueryRows):
             return QueryRows(columns=result.columns, rows=result.rows, catalog_revision=binding['catalogRevision'],as_of=position)
         return result

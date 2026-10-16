@@ -14,11 +14,11 @@ from pydantic import BaseModel
 from umf_access.adoption import TargetIdentity
 from umf_access.engine_catalog import EngineRead
 from umf_access.reviewed import CatalogRead
-from umf_access.pages import ReadPage, ReadContinuation
+from umf_access.pages import ReadPage, ReadContinuation, StaleContinuation
 from umf_access.codec_support import revalidate_model
 from umf_access.postgres_read import TimedOut
 from .execution import Ok
-from .query import QueryRows, QueryAbsent, QueryCatalogSources
+from .query import QueryRows, QueryAbsent, QueryCatalogSources, QueryPage, QueryPageCursor
 from umf_access.native_program import program_json, canonical_json
 P=TypeVar('P',bound=BaseModel);R=TypeVar('R',bound=BaseModel)
 
@@ -77,6 +77,7 @@ class TrussTarget:
     def read(self,entry:CatalogRead[P,R],parameters:P,*,timeout:timedelta|None=None)->list[R]:
         if not isinstance(entry,EngineRead):raise ValueError('Truss requires an original engine catalog')
         program=entry.artifact();request=program['request'];target=request['target']
+        if program['version']!='weft.engine-read/0.1':raise ValueError('original read catalog required')
         if program['compiler']!='truss-runtime' or target!=program_json(self.native_target_json):
             raise ValueError('Truss original backend or binding differs')
         values=revalidate_model(entry.parameters,parameters)
@@ -109,9 +110,46 @@ class TrussTarget:
             for name,p in request['parameters'].items():
                 family,value=p['family'],p['value']
                 sample[name]={'string':lambda:value,'integer':lambda:int(value),'decimal':lambda:Decimal(value),'boolean':lambda:value=='true'}[family]()
-            self.read(entry,entry.parameters.model_validate(sample))
+            if entry.artifact()["version"]=="weft.engine-page/0.1":self.page(entry,entry.parameters.model_validate(sample))
+            else:self.read(entry,entry.parameters.model_validate(sample))
     def page(self,entry:CatalogRead[P,R],parameters:P,*,after:ReadContinuation|None=None,timeout:timedelta|None=None)->ReadPage[R]:
-        raise ValueError('WEFT_BLOCKED: engine catalog page program required')
+        if not isinstance(entry,EngineRead):raise ValueError('original engine page catalog required')
+        program=entry.artifact();request=program['request'];target=request['target']
+        if program['version']!='weft.engine-page/0.1' or program['compiler']!='truss-runtime' or target!=program_json(self.native_target_json):
+            raise ValueError('original Truss page backend or binding differs')
+        values=revalidate_model(entry.parameters,parameters)
+        identity=hashlib.sha256(canonical_json([self.identity().digest(),entry.artifact_json,entry.context_json,
+            [(name,type(value).__name__,str(value)) for name,value in values.model_dump(mode='python').items()]]).encode()).hexdigest()
+        cursor=None
+        if after is not None:
+            if type(after)is not ReadContinuation or after.identity_digest!=identity or after.owner_cursor is None:
+                raise StaleContinuation('original native cursor and complete page context required')
+            cursor=QueryPageCursor(after.owner_cursor,after.values)
+        budget=self._budget(timeout);deadline=monotonic()+budget.total_seconds()
+        binding=program_json(target['bindingJson'])
+        documents=tuple(dict.fromkeys(m['pin']['documentId'] for m in request['modules']))
+        with self.operation(budget) as (assembly,transaction):
+            if monotonic()>=deadline:raise TimedOut('deadline expired before page dispatch')
+            outcome=assembly.query_page_in_transaction(transaction,sql=request['sql'],document_ids=documents,
+                parameters=values.model_dump(mode='python'),limit=program['pageSize'],cursor=cursor,
+                maximum_rows=binding['maximumResultRows'],maximum_scan_rows=binding['maximumScanRows'],
+                maximum_bytes=binding['maximumBytes'],engine_program=entry.originals())
+            if not isinstance(outcome,Ok) or not isinstance(outcome.value,QueryPage):raise TrussReadRefused(outcome)
+            native=outcome.value
+            if native.columns!=tuple(entry.result.model_fields):raise ValueError('Truss complete ordered page output signature differs')
+            rows=[]
+            for row in native.rows:
+                if len(row)!=len(native.columns) or any(isinstance(value,QueryAbsent) for value in row):
+                    raise ValueError('ADOPTION_MISMATCH: selected page column absent or row shape differs')
+                rows.append(entry.result.model_validate(dict(zip(native.columns,row,strict=True))))
+            next_after=None
+            if native.next_cursor is not None:
+                if native.next_sort_values is None:raise ValueError('original typed native continuation keys required')
+                next_after=ReadContinuation(native.next_sort_values,identity,native.next_cursor.original_bytes)
+            result=ReadPage(tuple(rows),next_after)
+            if monotonic()>=deadline:raise TimedOut('deadline expired before page release')
+        if monotonic()>=deadline:raise TimedOut('deadline expired during page release')
+        return result
     def stream(self,entry:CatalogRead[P,R],parameters:P,*,max_rows:int,timeout:timedelta|None=None)->Generator[R,None,None]:
         raise ValueError('WEFT_BLOCKED: engine catalog bounded stream program required')
         yield  # retains the synchronous generator ABI without executing a read
