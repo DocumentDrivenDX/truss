@@ -37,7 +37,7 @@ class CreateLeafClosureTests(base.PublicCreateGroupTests):
         original,request=self.input(assembly,tx)
         connection.execute("CREATE TEMP TABLE prior(value text);INSERT INTO prior VALUES('kept')")
         self.admin.execute("""CREATE FUNCTION public.rewrite_create_progress() RETURNS trigger LANGUAGE plpgsql AS $$
-          BEGIN IF NEW.next_index=1 THEN NEW.results:='[]'::jsonb;END IF;RETURN NEW;END $$""")
+          BEGIN IF NEW.next_index=1 THEN NEW.results:='[{"tampered":true}]'::jsonb;END IF;RETURN NEW;END $$""")
         self.addCleanup(self.admin.execute,'DROP FUNCTION public.rewrite_create_progress()')
         self.admin.execute('CREATE TRIGGER rewrite_progress BEFORE UPDATE ON truss.runtime_object_attempt FOR EACH ROW EXECUTE FUNCTION public.rewrite_create_progress()')
         result=assembly.apply_in_transaction(tx,original,request,documents=self.documents)

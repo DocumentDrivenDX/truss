@@ -386,7 +386,7 @@ DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;
  route record;observed record;planned_row jsonb;actual_row jsonb;object_row truss.object%ROWTYPE;
  object_identity jsonb;properties_json jsonb;retained_json jsonb;after_record jsonb;event jsonb;event_bytes bytea;origin_bytes bytea;
  journal_row truss.journal%ROWTYPE;expected_journal jsonb;actual_journal jsonb;event_digest text;
- expected_transition jsonb;actual_transition jsonb;actual_progress record;physical_journal jsonb;
+ expected_transition jsonb;actual_transition jsonb;actual_progress record;physical_journal jsonb;stored_result jsonb;
  results jsonb:='[]';aliases jsonb:='[]';members jsonb:='[]';member_keys jsonb;
  membership truss.object_key_bucket%ROWTYPE;reservation truss.object_key_reservation_bucket%ROWTYPE;
  semantic jsonb;semantic_bytes bytea;new_generation bigint;
@@ -431,7 +431,11 @@ BEGIN
  SELECT a.* INTO STRICT outer_attempt FROM truss.runtime_object_attempt a
  WHERE a.writer_xid=writer AND a.actor_oid=creation_leaf.actor_oid AND NOT a.complete
   AND a.context->'creationTransitionProfile'=creation_leaf.context->'creationTransitionProfile'
-  AND a.documents_bytes=original_documents AND jsonb_array_length(a.results)=a.next_index
+  AND a.documents_bytes=original_documents
+  AND CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN
+   a.results='[]'::jsonb AND a.aliases='[]'::jsonb AND
+   (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=a.id AND p.result IS NOT NULL)=a.next_index
+   ELSE jsonb_array_length(a.results)=a.next_index END
   AND ((selected_attempt IS NULL AND
    convert_to(jsonb_set(convert_from(a.input_bytes,'UTF8')::jsonb-'preconditions',
       '{operations}',jsonb_build_array(convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index))::text,'UTF8')=original_input
@@ -638,12 +642,26 @@ BEGIN
  RETURNING to_jsonb(runtime_object_transition)-'transition_id' INTO actual_transition;
  IF actual_transition IS DISTINCT FROM expected_transition THEN
   RAISE EXCEPTION 'exact atomic create transition insert required' USING ERRCODE='55000';END IF;
+ IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
+  UPDATE truss.runtime_owned_operation p SET result=semantic->'results'->0
+   WHERE p.attempt_id=outer_attempt.id AND p.operation_index=outer_attempt.next_index
+    AND p.writer_xid=writer AND p.plan->'operation'=input->'operations'->0 AND p.result IS NULL;
+  IF NOT FOUND THEN RAISE EXCEPTION 'one original create result slot required' USING ERRCODE='55000';END IF;
+  SELECT p.result INTO STRICT stored_result FROM truss.runtime_owned_operation p
+   WHERE p.attempt_id=outer_attempt.id AND p.operation_index=outer_attempt.next_index;
+  IF stored_result IS DISTINCT FROM semantic->'results'->0 THEN
+   RAISE EXCEPTION 'exact sealed create result required' USING ERRCODE='55000';END IF;
+  UPDATE truss.runtime_object_attempt a SET next_index=a.next_index+1
+   WHERE a.id=outer_attempt.id AND a.next_index=outer_attempt.next_index AND NOT a.complete
+    AND a.actor_oid=creation_leaf.actor_oid AND a.writer_xid=writer AND a.results='[]'::jsonb AND a.aliases='[]'::jsonb;
+ ELSE
  UPDATE truss.runtime_object_attempt a SET next_index=a.next_index+1,
   results=a.results||jsonb_build_array(results_of_create.value),aliases=a.aliases||(semantic->'aliases')
  FROM (SELECT semantic->'results'->0 AS value) results_of_create
  WHERE a.id=outer_attempt.id AND a.next_index=outer_attempt.next_index AND NOT a.complete;
  -- Read the stored row once below; an UPDATE RETURNING image here would be
  -- immediately overwritten and repeatedly copy the growing complete result.
+ END IF;
  IF NOT FOUND THEN RAISE EXCEPTION 'one atomic outer create progress required' USING ERRCODE='55000';END IF;
  SELECT a.actor_oid,a.writer_xid,a.next_index,a.results,a.aliases,a.complete INTO actual_progress
  FROM truss.runtime_object_attempt a WHERE a.id=outer_attempt.id;
@@ -654,8 +672,10 @@ BEGIN
  IF ROW(actual_progress.actor_oid,actual_progress.writer_xid,actual_progress.next_index,
   actual_progress.results,actual_progress.aliases,actual_progress.complete) IS DISTINCT FROM
   ROW(outer_attempt.actor_oid,outer_attempt.writer_xid,outer_attempt.next_index+1,
-   outer_attempt.results||jsonb_build_array(semantic->'results'->0),
-   outer_attempt.aliases||(semantic->'aliases'),false) THEN
+   CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN '[]'::jsonb
+    ELSE outer_attempt.results||jsonb_build_array(semantic->'results'->0) END,
+   CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN '[]'::jsonb
+    ELSE outer_attempt.aliases||(semantic->'aliases') END,false) THEN
   RAISE EXCEPTION 'exact atomic outer create progress required' USING ERRCODE='55000';END IF;
  SELECT coalesce(jsonb_agg(j.row ORDER BY j.seq),'[]'::jsonb) INTO physical_journal FROM
   (SELECT to_jsonb(j) AS row,j.seq FROM truss.journal j WHERE j.entity_kind='o'

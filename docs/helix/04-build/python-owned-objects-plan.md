@@ -234,3 +234,34 @@ replacement payloads must skip and preserve originals. One failed dependent
 record must leave no partial aggregate. The adopted host alone settles its
 transaction; engine-owned execution settles only complete atomic batches.
 This tranche remains unfinished and is not a release claim.
+
+## Ordered result storage — 2026-10-16
+
+The 1,024-operation workflow passes locally but still exceeds the unchanged
+statement deadline in installed-wheel CI. Built-in PostgreSQL statistics identify
+creation and settlement costs; the attempt's growing result array is rewritten
+on every operation. Astra Ultra reviewed replacing that pending representation
+with a nullable write-once result in each existing owned-operation row.
+
+Keep the original plan, attempt, ordinal and writer immutable. Capture expects
+an empty result slot. Both the create leaf and the general owned executor seal
+and reread their exact result, then advance and reread scalar progress under the
+original actor/writer/ordinal/incomplete guards. Pending attempts retain empty
+arrays; prior-create and pre-finish transition readers consume sealed slots.
+No-op and cascade operations each retain one original primary result.
+
+Finish requires every original ordinal and result, assembles the full ordered
+results and aliases once, and stores them together with completion. Finish and
+mandatory commit independently compare those arrays with the sealed slots.
+Existing receipt, replay, history, import and attribution carriers stay intact;
+legacy profiles keep their original execution representation. The fifth column
+and its nullable core projection come through the UMF owner SQL exporter. The
+published native68 upgrade installs that new table and its guards; unpublished
+native69 snapshots receive no compatibility adapter.
+
+The implementation gate is the existing public owned/alias/no-op/cascade/replay
+workflows, a rewritten-result refusal preserving prior caller work, populated
+published-predecessor upgrade, and the complete actual1,024-create/update/commit/
+replay/readback and final-operation-fault tests. Installed Linux/macOS wheels
+must pass their original deadlines before release. This is an implementation
+candidate until those checks and the completed Astra review pass.

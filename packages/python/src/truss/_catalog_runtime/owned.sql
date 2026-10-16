@@ -1,6 +1,10 @@
-CREATE TABLE truss.runtime_owned_operation (attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL CHECK (operation_index BETWEEN 0 AND 1023), writer_xid xid8 NOT NULL, plan jsonb NOT NULL, PRIMARY KEY (attempt_id, operation_index), CHECK (jsonb_typeof(plan) = 'object'), CHECK (octet_length(convert_to(plan::text, 'UTF8')) BETWEEN 1 AND 16777216));
+CREATE TABLE truss.runtime_owned_operation (attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL CHECK (operation_index BETWEEN 0 AND 1023), writer_xid xid8 NOT NULL, plan jsonb NOT NULL, result jsonb, PRIMARY KEY (attempt_id, operation_index), CHECK (jsonb_typeof(plan) = 'object'), CHECK (octet_length(convert_to(plan::text, 'UTF8')) BETWEEN 1 AND 16777216), CHECK (result IS NULL OR (jsonb_typeof(result) = 'object' AND octet_length(convert_to(result::text, 'UTF8')) BETWEEN 1 AND 16777216)));
 
-CREATE TRIGGER runtime_owned_operation_immutable BEFORE UPDATE OR DELETE ON truss.runtime_owned_operation FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
+CREATE TRIGGER runtime_owned_operation_immutable AFTER UPDATE ON truss.runtime_owned_operation FOR EACH ROW
+WHEN (OLD.result IS NOT NULL OR NEW.result IS NULL OR
+ ROW(OLD.attempt_id,OLD.operation_index,OLD.writer_xid,OLD.plan) IS DISTINCT FROM
+ ROW(NEW.attempt_id,NEW.operation_index,NEW.writer_xid,NEW.plan)) EXECUTE FUNCTION truss.catalog_immutable();
+CREATE TRIGGER runtime_owned_operation_no_delete BEFORE DELETE ON truss.runtime_owned_operation FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 CREATE TRIGGER runtime_owned_operation_no_truncate BEFORE TRUNCATE ON truss.runtime_owned_operation FOR EACH STATEMENT EXECUTE FUNCTION truss.catalog_immutable();
 REVOKE ALL ON TABLE truss.runtime_owned_operation FROM PUBLIC;
 
@@ -842,7 +846,7 @@ BEGIN
   retained_bytes:=retained_bytes+octet_length(convert_to(entry::text,'UTF8'));
   IF retained_bytes>16777216 THEN RAISE EXCEPTION 'bounded retained whole group inventory required' USING ERRCODE='54000';END IF;
   expected_operation:=jsonb_build_object('attempt_id',attempt.id,'operation_index',(entry->>'operationIndex')::int,
-   'writer_xid',attempt.writer_xid::text,'plan',entry);
+   'writer_xid',attempt.writer_xid::text,'plan',entry,'result',NULL);
   INSERT INTO truss.runtime_owned_operation(attempt_id,operation_index,writer_xid,plan)
   VALUES(attempt.id,(entry->>'operationIndex')::int,attempt.writer_xid,entry)
   RETURNING to_jsonb(runtime_owned_operation) INTO actual_operation;
@@ -912,7 +916,9 @@ BEGIN
   ELSE SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;END IF;
   IF creation_index>selected_index OR creation_index>=attempt.next_index THEN
    RAISE EXCEPTION 'prior original create progress required' USING ERRCODE='55000';END IF;
-  result:=attempt.results->creation_index;
+  SELECT p.result INTO STRICT result FROM truss.runtime_owned_operation p
+   WHERE p.attempt_id=selected_attempt AND p.operation_index=creation_index AND p.writer_xid=attempt.writer_xid;
+  IF result IS NULL THEN RAISE EXCEPTION 'sealed original create result required' USING ERRCODE='55000';END IF;
   operation:=truss.runtime_owned_plan(selected_attempt,creation_index)->'operation';
   IF result->>'operation' IS DISTINCT FROM 'create_'||entity_kind
    OR operation->>'operation' IS DISTINCT FROM result->>'operation'
@@ -1057,7 +1063,7 @@ BEGIN
  SELECT * INTO STRICT transition FROM truss.runtime_edge_transition WHERE transition_id=selected_transition;
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
  IF attempt.writer_xid IS DISTINCT FROM transition.writer_xid OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
-  OR jsonb_array_length(attempt.results)<>attempt.next_index
+  OR (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.result IS NOT NULL)<>attempt.next_index
   OR (authorize_read AND NOT attempt.complete)
   OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false))) THEN
   RAISE EXCEPTION 'original completed edge operation progress required' USING ERRCODE='55000';END IF;
@@ -1232,13 +1238,16 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_object_effect(uuid,int,text,jsonb,oid
 
 CREATE FUNCTION truss.runtime_owned_step(selected_attempt uuid,selected_index int,prepared_input jsonb DEFAULT NULL,prepared_original bytea DEFAULT NULL,qualified_actor oid DEFAULT NULL) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
+<<owned_step_body>>
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;plan jsonb;mode text;entry record;prior jsonb;effect_mode text;
- metadata jsonb;effect jsonb;primary_result jsonb;events jsonb:='[]';deleted jsonb:='[]';result jsonb;selected_transition bigint;current_actor oid;
+ metadata jsonb;effect jsonb;primary_result jsonb;events jsonb:='[]';deleted jsonb:='[]';result jsonb;selected_transition bigint;current_actor oid;stored_result jsonb;progress record;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
  current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor
-  OR attempt.complete OR attempt.next_index IS DISTINCT FROM selected_index THEN
+  OR attempt.complete OR attempt.next_index IS DISTINCT FROM selected_index
+  OR attempt.results<>'[]'::jsonb OR attempt.aliases<>'[]'::jsonb
+  OR (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND p.result IS NOT NULL)<>selected_index THEN
   RAISE EXCEPTION 'current ordered owned operation required' USING ERRCODE='55000';END IF;
  IF prepared_input IS NOT NULL AND attempt.input_bytes IS DISTINCT FROM prepared_original THEN
   RAISE EXCEPTION 'original owned step input required' USING ERRCODE='55000';END IF;
@@ -1270,9 +1279,22 @@ BEGIN
  result:=jsonb_set(primary_result,'{events}',events);
  IF mode IN ('delete_object','delete_edge') THEN result:=jsonb_set(result,'{deleted}',deleted);END IF;
  IF octet_length(convert_to(result::text,'UTF8'))>16777216 THEN RAISE EXCEPTION 'bounded complete original result required' USING ERRCODE='54000';END IF;
- UPDATE truss.runtime_object_attempt SET next_index=next_index+1,results=results||jsonb_build_array(result),
-  aliases=aliases||CASE WHEN mode='create_edge' AND (plan->'operation') ? 'alias' THEN
-   jsonb_build_array(jsonb_build_object('alias',plan->'operation'->>'alias','identity',result->'identity')) ELSE '[]'::jsonb END WHERE id=selected_attempt;
+ UPDATE truss.runtime_owned_operation p SET result=owned_step_body.result
+  WHERE p.attempt_id=selected_attempt AND p.operation_index=selected_index
+   AND p.writer_xid=attempt.writer_xid AND p.plan=owned_step_body.plan AND p.result IS NULL;
+ IF NOT FOUND THEN RAISE EXCEPTION 'one original owned result slot required' USING ERRCODE='55000';END IF;
+ SELECT p.result INTO STRICT stored_result FROM truss.runtime_owned_operation p
+  WHERE p.attempt_id=selected_attempt AND p.operation_index=selected_index;
+ IF stored_result IS DISTINCT FROM result THEN RAISE EXCEPTION 'exact sealed owned result required' USING ERRCODE='55000';END IF;
+ UPDATE truss.runtime_object_attempt a SET next_index=a.next_index+1
+  WHERE a.id=selected_attempt AND a.writer_xid=attempt.writer_xid AND a.actor_oid=current_actor
+   AND NOT a.complete AND a.next_index=selected_index AND a.results='[]'::jsonb AND a.aliases='[]'::jsonb;
+ IF NOT FOUND THEN RAISE EXCEPTION 'one ordered owned progress advance required' USING ERRCODE='55000';END IF;
+ SELECT a.actor_oid,a.writer_xid,a.next_index,a.results,a.aliases,a.complete INTO STRICT progress
+  FROM truss.runtime_object_attempt a WHERE a.id=selected_attempt;
+ IF ROW(progress.actor_oid,progress.writer_xid,progress.next_index,progress.results,progress.aliases,progress.complete)
+  IS DISTINCT FROM ROW(current_actor,attempt.writer_xid,selected_index+1,'[]'::jsonb,'[]'::jsonb,false) THEN
+  RAISE EXCEPTION 'exact stored owned progress required' USING ERRCODE='55000';END IF;
  -- New edge IDs are now backed by their genuine original parent result.
  FOR selected_transition IN SELECT transition_id FROM truss.runtime_edge_transition WHERE attempt_id=selected_attempt AND operation_index=selected_index LOOP
   PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,false);
@@ -1410,7 +1432,7 @@ BEGIN
  IF prepared_input IS NOT NULL AND (source_bytes IS NULL OR source_bytes IS DISTINCT FROM attempt.input_bytes) THEN
   RAISE EXCEPTION 'original checked transition input required' USING ERRCODE='55000';END IF;
  IF attempt.writer_xid IS DISTINCT FROM transition.writer_xid OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
-  OR jsonb_array_length(attempt.results)<>attempt.next_index OR (authorize_read AND NOT attempt.complete)
+  OR (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.result IS NOT NULL)<>attempt.next_index OR (authorize_read AND NOT attempt.complete)
   OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM qualified_actor)) THEN
   RAISE EXCEPTION 'original completed object operation progress required' USING ERRCODE='55000';END IF;
  plan:=truss.runtime_owned_plan(attempt.id,transition.operation_index);
@@ -1533,7 +1555,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;plan jsonb;last
  primary_before jsonb;primary_after jsonb;expected_outcome text;expected_version text;
  node_order text[];projection jsonb;local_owned jsonb;root_reference text;index int;current_actor oid;
  history_dictionary jsonb:='{}';historical_basis jsonb;historical_revision int;history_group record;history_basis jsonb;
- history_property truss.prop_def%ROWTYPE;history_pin record;history_pins jsonb;history_order jsonb;history_key text;history_type_pin text;
+ history_property truss.prop_def%ROWTYPE;history_pin record;history_pins jsonb;history_order jsonb;history_key text;history_type_pin text;sealed record;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
@@ -1544,6 +1566,18 @@ BEGIN
   OR attempt.next_index<>jsonb_array_length(input->'operations') OR jsonb_array_length(attempt.results)<>attempt.next_index
   OR (SELECT count(*) FROM truss.runtime_owned_operation WHERE attempt_id=selected_attempt)<>attempt.next_index THEN
   RAISE EXCEPTION 'complete original owned group required' USING ERRCODE='55000';END IF;
+ -- Both finish and mandatory commit close the retained arrays against every
+ -- immutable result slot, including no-ops and aggregate cascade results.
+ SELECT coalesce(jsonb_agg(p.result ORDER BY p.operation_index),'[]'::jsonb) results,
+  coalesce(jsonb_agg(jsonb_build_object('alias',p.plan->'operation'->>'alias','identity',p.result->'identity') ORDER BY p.operation_index)
+   FILTER(WHERE (p.plan->'operation') ? 'alias'),'[]'::jsonb) aliases,
+  array_agg(p.operation_index ORDER BY p.operation_index) ordinals,
+  count(*) FILTER(WHERE p.result IS NULL) missing,bool_and(p.writer_xid=attempt.writer_xid) writer_matches
+ INTO sealed FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt;
+ IF sealed.missing<>0 OR sealed.writer_matches IS DISTINCT FROM true
+  OR sealed.ordinals IS DISTINCT FROM ARRAY(SELECT generate_series(0,attempt.next_index-1))
+  OR sealed.results IS DISTINCT FROM attempt.results OR sealed.aliases IS DISTINCT FROM attempt.aliases THEN
+  RAISE EXCEPTION 'exact complete retained owned result slots required' USING ERRCODE='55000';END IF;
  -- Compile only source metadata for changed, existing object images. Each
  -- independent settlement invocation resolves its own historical source cut.
  FOR history_group IN

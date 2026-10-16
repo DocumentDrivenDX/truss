@@ -486,6 +486,7 @@ REVOKE ALL ON FUNCTION truss.runtime_object_update_keys(bigint,int,jsonb,bytea,u
 
 CREATE FUNCTION truss.runtime_owned_group_step_in_input(attempt_id uuid,operation_index int,original_keys bytea,original_input bytea,parsed_input jsonb) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+<<ordered_group_step>>
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;operation jsonb;metadata jsonb;raw jsonb;result jsonb;identity jsonb;
  old_image jsonb;new_image jsonb;object_row truss.object%ROWTYPE;keys jsonb;entry jsonb;property truss.prop_def%ROWTYPE;pin record;
  events jsonb:='[]';event_refs jsonb:='[]';journals jsonb:='[]';event jsonb;journal truss.journal%ROWTYPE;event_digest text;native_state text;
@@ -510,7 +511,10 @@ BEGIN
   result:=raw->'semantic'->'results'->0;
   -- The create leaf owns insertion AND one-shot outer progress advancement.
   IF NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt a WHERE a.id=attempt_id
-   AND a.next_index=operation_index+1 AND a.results->operation_index=result) THEN
+   AND a.next_index=operation_index+1 AND CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN
+    a.results='[]'::jsonb AND a.aliases='[]'::jsonb AND EXISTS(
+     SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=a.id AND p.operation_index=runtime_owned_group_step_in_input.operation_index AND p.result=ordered_group_step.result)
+    ELSE a.results->operation_index=result END) THEN
    RAISE EXCEPTION 'original atomic create progress required' USING ERRCODE='55000';END IF;
   RETURN convert_to(result::text,'UTF8');
  END IF;
@@ -815,11 +819,25 @@ REVOKE ALL ON FUNCTION truss.runtime_object_validate(bigint,int) FROM PUBLIC;
 CREATE FUNCTION truss.object_group_finish(attempt_id uuid) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;request jsonb;semantic jsonb;bytes bytea;receipt_bytes bytea;receipt truss.request_receipt%ROWTYPE;
- ns bytea;rk bytea;operation jsonb;selected record;index int:=0;owner record;current_actor oid;
+ ns bytea;rk bytea;operation jsonb;selected record;index int:=0;owner record;current_actor oid;sealed record;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id FOR UPDATE NOWAIT;
  IF attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false) OR attempt.complete THEN RAISE EXCEPTION 'current unfinished group required' USING ERRCODE='55000';END IF;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;request:=convert_from(attempt.request_bytes,'UTF8')::jsonb;
+ IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
+  IF attempt.results<>'[]'::jsonb OR attempt.aliases<>'[]'::jsonb THEN
+   RAISE EXCEPTION 'unassembled original owned attempt required' USING ERRCODE='55000';END IF;
+  SELECT coalesce(jsonb_agg(p.result ORDER BY p.operation_index),'[]'::jsonb) results,
+   coalesce(jsonb_agg(jsonb_build_object('alias',p.plan->'operation'->>'alias','identity',p.result->'identity') ORDER BY p.operation_index)
+    FILTER(WHERE (p.plan->'operation') ? 'alias'),'[]'::jsonb) aliases,
+   array_agg(p.operation_index ORDER BY p.operation_index) ordinals,
+   count(*) FILTER(WHERE p.result IS NULL) missing,bool_and(p.writer_xid=attempt.writer_xid) writer_matches
+  INTO sealed FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id;
+  IF sealed.missing<>0 OR sealed.writer_matches IS DISTINCT FROM true
+   OR sealed.ordinals IS DISTINCT FROM ARRAY(SELECT generate_series(0,attempt.next_index-1)) THEN
+   RAISE EXCEPTION 'complete ordered sealed owned results required' USING ERRCODE='55000';END IF;
+  attempt.results:=sealed.results;attempt.aliases:=sealed.aliases;
+ END IF;
  IF attempt.next_index<>jsonb_array_length(input->'operations') OR jsonb_array_length(attempt.results)<>attempt.next_index THEN RAISE EXCEPTION 'complete ordered results required' USING ERRCODE='55000';END IF;
  IF attempt.context ? 'creationTransitionProfile' THEN
   IF attempt.context->'creationTransitionProfile' IS DISTINCT FROM '{"identity":"truss-unified-create-transition","version":"0.1","sha256":"765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"}'::jsonb AND attempt.context->'creationTransitionProfile' IS DISTINCT FROM '{"identity":"truss-unified-create-transition","version":"0.2","sha256":"073782e2517f2a7e26c8d6479c6266ececf68963681ccfb6a380e9cd16f2e11b"}'::jsonb THEN
@@ -858,7 +876,7 @@ BEGIN
    RAISE EXCEPTION 'exact original request receipt required' USING ERRCODE='55000';END IF;
   UPDATE truss.request_receipt_route_guard SET generation=generation+1 WHERE namespace_sha256=sha256(ns) AND request_sha256=sha256(rk);
  END IF;
- UPDATE truss.runtime_object_attempt SET complete=true,receipt_id=receipt.storage_row_id,expected_receipt=CASE WHEN receipt.storage_row_id IS NOT NULL THEN to_jsonb(receipt) END,
+ UPDATE truss.runtime_object_attempt SET results=attempt.results,aliases=attempt.aliases,complete=true,receipt_id=receipt.storage_row_id,expected_receipt=CASE WHEN receipt.storage_row_id IS NOT NULL THEN to_jsonb(receipt) END,
   position_bytes=CASE WHEN receipt.storage_row_id IS NOT NULL THEN truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,attempt.writer_xid) END WHERE id=attempt_id;
  current_actor:=truss.runtime_person(false);
  IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='42501';END IF;

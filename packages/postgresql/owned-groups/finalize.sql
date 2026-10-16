@@ -9,7 +9,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;plan jsonb;last
  primary_before jsonb;primary_after jsonb;expected_outcome text;expected_version text;
  node_order text[];projection jsonb;local_owned jsonb;root_reference text;index int;current_actor oid;
  history_dictionary jsonb:='{}';historical_basis jsonb;historical_revision int;history_group record;history_basis jsonb;
- history_property truss.prop_def%ROWTYPE;history_pin record;history_pins jsonb;history_order jsonb;history_key text;history_type_pin text;
+ history_property truss.prop_def%ROWTYPE;history_pin record;history_pins jsonb;history_order jsonb;history_key text;history_type_pin text;sealed record;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
@@ -20,6 +20,18 @@ BEGIN
   OR attempt.next_index<>jsonb_array_length(input->'operations') OR jsonb_array_length(attempt.results)<>attempt.next_index
   OR (SELECT count(*) FROM truss.runtime_owned_operation WHERE attempt_id=selected_attempt)<>attempt.next_index THEN
   RAISE EXCEPTION 'complete original owned group required' USING ERRCODE='55000';END IF;
+ -- Both finish and mandatory commit close the retained arrays against every
+ -- immutable result slot, including no-ops and aggregate cascade results.
+ SELECT coalesce(jsonb_agg(p.result ORDER BY p.operation_index),'[]'::jsonb) results,
+  coalesce(jsonb_agg(jsonb_build_object('alias',p.plan->'operation'->>'alias','identity',p.result->'identity') ORDER BY p.operation_index)
+   FILTER(WHERE (p.plan->'operation') ? 'alias'),'[]'::jsonb) aliases,
+  array_agg(p.operation_index ORDER BY p.operation_index) ordinals,
+  count(*) FILTER(WHERE p.result IS NULL) missing,bool_and(p.writer_xid=attempt.writer_xid) writer_matches
+ INTO sealed FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt;
+ IF sealed.missing<>0 OR sealed.writer_matches IS DISTINCT FROM true
+  OR sealed.ordinals IS DISTINCT FROM ARRAY(SELECT generate_series(0,attempt.next_index-1))
+  OR sealed.results IS DISTINCT FROM attempt.results OR sealed.aliases IS DISTINCT FROM attempt.aliases THEN
+  RAISE EXCEPTION 'exact complete retained owned result slots required' USING ERRCODE='55000';END IF;
  -- Compile only source metadata for changed, existing object images. Each
  -- independent settlement invocation resolves its own historical source cut.
  FOR history_group IN

@@ -522,3 +522,24 @@ The original actor/writer/ordinal guards still control evaluation, and every
 current authority, root, row, key, journal and group check remains. Five existing
 local custody/full-capacity/final-fault workflows pass (51.685s); Astra Ultra
 clears the source. Runner qualification and measured benefit remain pending.
+
+### Write-once operation results
+
+Modern owned execution now stores each original operation's complete result once
+in its existing operation row. Pending attempts advance only scalar progress;
+finish assembles and retains ordered results/aliases together with completion.
+Both finish and mandatory commit compare the full arrays with every sealed
+ordinal, including no-op and cascade results. The UMF owner exporter generates
+the nullable fifth column. An AFTER UPDATE guard preserves source/plan fields
+through all BEFORE triggers and refuses any later result replacement. Legacy
+execution and published receipt/history/import carriers retain their formats.
+
+Ten basic native workflows pass in33.344s: created/changed/no-op results and
+replay, result/late-plan tamper containment, existing creation custody controls,
+owned graphs/queries/cascades/history, populated published35 upgrade, and import
+provenance/retry. The unchanged complete1,024-create/update/commit/replay/readback
+and final-operation-fault tests pass separately in40.659s. Astra Ultra clears the
+corrected source. Initial qualification failed on PL/pgSQL local-variable names;
+explicit block labels corrected it before both successful runs. Local suite
+elapsed times do not prove speedup; installed-wheel deadline qualification remains
+open. No deadline extension or no-op workload substitution is used.
