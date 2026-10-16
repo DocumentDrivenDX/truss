@@ -14,6 +14,7 @@ CREATE TABLE truss.catalog_registration_request (
  type_offset int NOT NULL CHECK(type_offset>=0),property_offset int NOT NULL CHECK(property_offset>=0),relationship_offset int NOT NULL CHECK(relationship_offset>=0),
  UNIQUE(installation_id,actor_oid,request_key),CHECK(revision>=1),
  CHECK(octet_length(request_key) BETWEEN 1 AND 1024),CHECK(octet_length(report_sha256)=32));
+CREATE INDEX catalog_registration_request_writer ON truss.catalog_registration_request(writer_xid);
 
 -- A new request for exactly the current accepted input observes the original
 -- registration; it does not create another revision, report or source archive.
