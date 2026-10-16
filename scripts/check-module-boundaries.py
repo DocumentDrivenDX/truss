@@ -28,6 +28,7 @@ ALLOWED = {
     # Current-policy query composition: explicit orchestration and installer edges.
     '_current_query_computation': {'contextlib','hashlib','importlib.resources','json','shutil','subprocess','time','truss._current_query_pipe'},
     '_current_query_evaluation': {'hashlib','json','time','truss._current_query_computation','truss._current_query_pipe','truss._owner_evidence_json','weft.weft'},
+    '_current_disclosure_facts': {'base64','dataclasses','json','truss._current_query_originals','truss._current_query_pipe','truss._current_query_sources','truss._owner_evidence_json','truss._security_catalog_subject_installation','truss._umf_key_tuples'},
     '_current_query_facts': {'base64','dataclasses','json','truss._current_query_originals','truss._current_query_pipe','truss._current_query_sources','truss._owner_evidence_json','truss._security_catalog_subject_installation','truss._umf_key_tuples'},
     '_current_query_originals': {'dataclasses','hashlib','json','pathlib','re','truss._current_query_computation','truss._owner_evidence_json','truss._umf_key_tuples','weft.weft'},
     '_current_query_pipe': {'decimal','json','os','pathlib','selectors','struct','subprocess','threading','time'},

@@ -1,0 +1,116 @@
+{
+  "review": "Truss unexported current-disclosure graph capture R3, parallel R5 and portable harness R6",
+  "reviewer": "Independent retained Astra Ultra reviewer",
+  "status": "passed-with-explicit-component-scope",
+  "remainingFindings": [],
+  "baseline": "9e328d9105905204731e761fa974d909c81cf19c",
+  "pins": {
+    "review.zip": {
+      "sha256": "22cb9a815103bedecf84891d5b11237bb9c334ccded6f2059e20d965bc7f0000",
+      "bytes": 3725744
+    },
+    "parallel-addendum-r5.zip": {
+      "sha256": "d817445eef3c00aa63aec61acccc059741114472c69bd876eeebec21cc56860e",
+      "bytes": 39711
+    },
+    "portable-addendum-r6.zip": {
+      "sha256": "03be938750f46a809e08cd972f610cb4704ec19046b4fddd295c9070f8404dd6",
+      "bytes": 47991
+    },
+    "frozen/packages/python/src/truss/_current_disclosure_facts.py": {
+      "sha256": "b4a85320574bc2a3481ca53eeed53acbb6bcb7eea34f7424befef273513a5550",
+      "bytes": 23650
+    },
+    "frozen/packages/python/tests/test_current_disclosure_graphs.py": {
+      "sha256": "301837d5009e6fff5c3432202df8ba7a75ec05d8b185a93d861ba4dd4b7a3afa",
+      "bytes": 9255
+    },
+    "portable-r6/packages/python/tests/test_current_disclosure_graphs_native.py": {
+      "sha256": "6a857b7cf60b956f65e0d4599ba845f7a3f2e80a5497a0f0bef67936787606b7",
+      "bytes": 12903
+    },
+    "portable-r6/packages/python/tests/fixtures/current-disclosure/native-graph-capture.json": {
+      "sha256": "5e667a4a49c656ab7021641bf98d5a6bd5fb903d13e4e3fb4acbdb93ac123459",
+      "bytes": 370296
+    },
+    "boundary-before.py": {
+      "sha256": "232e77722c05d8ece5b5ee1b931d1b1a15e01d19b661097df74c753a7e905068",
+      "bytes": 39152
+    },
+    "boundary-after.py": {
+      "sha256": "e358d4c2182755e74770fbb3b4205054292f675781112698bdc8f4d6077a1dee",
+      "bytes": 39410
+    },
+    "integration-README.md": {
+      "sha256": "1c2789e7ec87df6266aa861315f857795f66a47146e0e2b232e3dd328a5b7ffd",
+      "bytes": 2765
+    },
+    "old-current-native-disclosure-child.mjs": {
+      "sha256": "d333226d9186136704d3f84a9c9dbfc44796efebab563dbc732d60337d2e03eb",
+      "bytes": 1065165
+    },
+    "frozen/umf-owner-bundle/current-native-disclosure-child.mjs": {
+      "sha256": "548b7ff64dabf3bc796afe99ecca265f5bcf242202e367ba7125e62c64f0a735",
+      "bytes": 1065468
+    }
+  },
+  "conclusion": "No actionable defect found in the reviewed graph collector, R6 opt-in test harness, or minimal import-map addition. Exact existing production Python sources and public consumer entrypoints remain unchanged. This is not activation or backend acceptance.",
+  "independentlyExecuted": [
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B run-pure-tests.py",
+      "result": "8 tests passed",
+      "receipt": "pure-tests.json",
+      "log": "pure-tests.log"
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B adversarial-controls.py",
+      "result": "87 checks passed; five separately compiled source mutations each change original refusal into acceptance",
+      "receipt": "adversarial-controls.json",
+      "log": "adversarial-controls.log"
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B audit-native-inputs.py",
+      "result": "1316 checks passed; all 853 baseline archive files match Git blobs; 15 actual new held-child replays reproduce complete retained decisions/inspection results; four old-bundle observations retained",
+      "receipt": "native-input-audit.json",
+      "log": "native-input-audit-r2.log"
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B portable-boundary-controls.py",
+      "result": "213 checks passed; four disabled environment combinations skip both native cases; incorrect/missing bundle refuses before native setup; correct bundle reaches a stub before DB setup; Python3.12 checker passes 1472 import edges",
+      "receipt": "portable-boundary-controls.json",
+      "log": "portable-boundary-controls.log"
+    }
+  ],
+  "sourceAssessment": [
+    "Original object/key capture and complete typed private-key correspondence are preserved. New graph recipes require exact admitted document correspondence, directed binary core relationships, opaque-existential witnesses, exact native metadata and one typed endpoint alternative per role.",
+    "Graph capture requires ordinary permanent owner-matched no-RLS/no-inheritance storage, SHARE NOWAIT lock, complete count/census correspondence, empty edge properties, distinct positive canonical native witness IDs, exact held endpoint membership, count/byte/deadline bounds and complete empty coverage.",
+    "Parallel occurrences retain distinct witness IDs even with equal typed endpoints. Tested exact combined 10000 population boundary and rejection above it; every native integer column challenged with malformed values.",
+    "Only the new _current_disclosure_facts import-map entry is added, equal to the existing fact collector nine explicit dependencies; checker logic and all existing permissions are unchanged.",
+    "R6 removes prototype hardcoded fixture/owner paths, requires explicit opt-in and exact supplied UMF child hash, and skips by default."
+  ],
+  "suppliedNativeEvidence": {
+    "independentlyExecutedDatabase": false,
+    "epochs": "R3 base, R5 base/parallel, R6 base/parallel retained distinctly; R6 supplied two tests pass in 18.045s.",
+    "audited": "Native locator/key/full-source correspondence, 14 objects with 12 or 13 edges, exact typed graph incidence, complete facts/coverage/cuts, all held frame hashes and resulting Alice RA/Bob RB/Outsider empty decisions. Supplied tests exercise public creation, external writer exclusion at seven stages per population, edge RLS refusal, empty coverage, same-transaction recapture and savepoint rollback.",
+    "oldBundle": "Actual retained 14/12 base Alice and Outsider cuts render; both 14/13 parallel cuts refuse. These explicit observations do not relabel old evidence.",
+    "qualification": "The accepted-source assessor is actual, but its provider is deliberately substituted; generation is supplied. SQL/locking/savepoint outcomes were audited from supplied evidence and test source, not independently rerun."
+  },
+  "scopeLimits": [
+    "No registered source/caller authority, current generation continuity, admitted native binding, final closing release guards, production activation or new acceptance claim.",
+    "The collector is an unused private helper. Existing public consumer and original 206951/d333 assets remain unchanged. This graph prototype uses directed opaque binary edges and supported JSON scalar facts; non-JSON homes, Record-backed witnesses/attributes, rooted groups, context and full operator/domain scope remain open.",
+    "SHARE cuts are transaction-scoped; same-transaction mutations, trigger/routine/role closure and release remain host composition obligations.",
+    "External Python/Bun/dependencies are not hermetic. Hashes establish supplied bytes and endpoint correspondence, not continuously held files or ABA exclusion.",
+    "Fresh 497-member wheel/installed-unit claims in the copied integration README are owner-supplied and were not independently rerun in this review.",
+    "Shared 158 cases and 34 criteria remain 45 implemented and 113 missing; no case promotion."
+  ],
+  "retainedAttempts": [
+    "Original R1/R2/R3 native harness sources/failures and later R5/R6 epochs are preserved in the original archives.",
+    "Reviewer initial ZIP-member-count assumption corrected: 44 manifest-covered files plus manifest.json.",
+    "Reviewer first audit script syntax error occurred before execution; retained audit-native-inputs-first.py and native-input-audit.log.",
+    "Reviewer first R6 guard import lacked a transitive test fixture absent from selected base snapshot. Exact baseline Git fixture was recovered under supplemental-base/ and pinned in supplemental-base.json; first log retained. No product code change."
+  ],
+  "artifactManifest": {
+    "path": "manifest.json",
+    "format": "Relative file path -> {sha256, bytes}; excludes itself and reconstruction source/ (recoverable from base-inputs.zip + frozen overlay + supplemental fixture)."
+  }
+}

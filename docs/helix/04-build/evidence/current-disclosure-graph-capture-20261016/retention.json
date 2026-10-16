@@ -1,0 +1,74 @@
+{
+  "reviewFiles": 139,
+  "reviewedCollectorSha256": "b4a85320574bc2a3481ca53eeed53acbb6bcb7eea34f7424befef273513a5550",
+  "files": {
+    "truss-graph-capture-integration-unit-20261016.log": {
+      "sha256": "ec5768e67566688a936f60dd35717c929e8284fce97913c4ab378a4d6cd40196",
+      "bytes": 2019
+    },
+    "truss_toolkit-0.0.36.dev0-py3-none-any.whl": {
+      "sha256": "bc44a7d51358fbed359d5d40ecafc607834984621dbc50883df42bab44c326da",
+      "bytes": 2688451
+    },
+    "truss-graph-capture-installed-unit-20261016.log": {
+      "sha256": "1d6b5424e0ba58dd1e05f19203b326f2643d83da9180c42f5694f4eb7ff7c85d",
+      "bytes": 1452
+    },
+    "source-review-r3.zip": {
+      "sha256": "22cb9a815103bedecf84891d5b11237bb9c334ccded6f2059e20d965bc7f0000",
+      "bytes": 3725744
+    },
+    "review-artifacts.zip": {
+      "sha256": "10e7c85924eaf662a29df35c30c1e176bb8af5d9bc5557ff070c56848ec44949",
+      "bytes": 7915128
+    },
+    "integration-inputs.zip": {
+      "sha256": "27a6e9113c7e4dd77a0d6793e839fe88db77c8142a50dcbee78eca85eb2cec6a",
+      "bytes": 3552198
+    },
+    "parallel-addendum-r5.zip": {
+      "sha256": "d817445eef3c00aa63aec61acccc059741114472c69bd876eeebec21cc56860e",
+      "bytes": 39711
+    },
+    "README.md": {
+      "sha256": "9d4a7f3783c8ae68f65e39def38f5e8eb86f1ee3752c8767f848130f9aa4b4aa",
+      "bytes": 3225
+    },
+    "truss-graph-capture-wheel-verification-20261016.log": {
+      "sha256": "b8365b4ab03e611a868bea4bcaeb4159d6a7b7a8443d63573479387967b4795a",
+      "bytes": 134
+    },
+    "portable-addendum-r6.zip": {
+      "sha256": "03be938750f46a809e08cd972f610cb4704ec19046b4fddd295c9070f8404dd6",
+      "bytes": 47991
+    },
+    "manifest.json": {
+      "sha256": "9838439297a7377229df16db507006105ad58a9ea2e7dafa81e8d3f883b136bb",
+      "bytes": 21734
+    },
+    "wheel-verification.json": {
+      "sha256": "75db82bce47f0e78588a914f57fe46e8e40d5934fba48654bfe6f956f900f6a5",
+      "bytes": 59385
+    },
+    "review.json": {
+      "sha256": "49e73f5130a057ca60a546db7308466beed6f1904cd23e7410850c74d836ea54",
+      "bytes": 8213
+    },
+    "truss-graph-capture-owned-runtime-20261016.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "truss-graph-capture-wheel-build-20261016.log": {
+      "sha256": "905fdd37ef3aebef86501a663cec5d3689a21a9b168b8c775cee858b98609e9e",
+      "bytes": 994
+    },
+    "verify-wheel.py": {
+      "sha256": "d1d476f6eed6211aa6978cb1a400d8e847f9aff52c2d9e9451dcb4d9439ebeae",
+      "bytes": 3165
+    },
+    "truss-graph-capture-integration-boundaries-20261016.log": {
+      "sha256": "0eb0119118b93fda353a3e0fd5c5b8205ab615b14e9615f70b6ed4c53380271b",
+      "bytes": 84
+    }
+  }
+}

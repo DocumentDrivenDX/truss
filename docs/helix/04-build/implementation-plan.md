@@ -8058,3 +8058,32 @@ consumer rebases cleanly without package conflicts. Fresh six native SCRAM tests
 cache-lock sandbox refusal ran zero tests; the authorized retry passes. Both
 attempts and exact updated source/wheel evidence are retained. Original portable
 27-test receipts remain qualified to430b77; no fresh portable replay is implied.
+
+## Native graph fact capture prerequisite — 2026-10-16
+
+The new unexported `_current_disclosure_facts` collector preserves original
+qualified Fields/Keys, native full bucket correspondence, typed directed endpoints
+and individual opaque graph occurrences. Its [retained evidence](evidence/current-disclosure-graph-capture-20261016/README.md)
+includes public ontology mutations on PostgreSQL18.6/Truss9e328d91:14objects with
+12edges and a second committed parallel-edge population with13edges. Six original
+held UMF548 producer/whole-inspector operations return AliceRA/BobRB/Outsiderempty.
+Native held-lock exclusion, RLS-home refusal, empty coverage and changed recapture
+controls pass. The portable opted-in campaign passes2tests/18.045s; eight mapping
+unit tests also pass from the fresh497-member wheel. Python import boundaries
+pass1472 checks with one exact new module entry; owned SQL runtime is unchanged.
+
+This is a physical prerequisite for shared US-056-AC2/AC9/AC10, not a B01/B02/B11/
+B12 acceptance receipt. The test deliberately substitutes the accepted-source
+provider after running the original native assessor. Registered native binding,
+authenticated Subject/current-generation continuity and guarded final release
+remain unproved; no authority can be reconstructed from the retained data. The
+existing callable consumer, registration and206951/d333 computation remain
+unchanged. Graph integration must use explicitly reviewed asset/profile selection
+and actual native binding, then compose this capture into the original host's
+caller/source/protection and closing guards. It must not activate by a module
+hash match or substitute supplied generation metadata for native authority.
+
+Record-backed witnesses, row-home realization, rooted populations, context and
+all broader required operators/domains remain open. Historical132 cases and the
+shared158-case/34-criterion scope are preserved,45implemented/113missing. No new
+case is promoted and no release qualification follows from this prototype.
