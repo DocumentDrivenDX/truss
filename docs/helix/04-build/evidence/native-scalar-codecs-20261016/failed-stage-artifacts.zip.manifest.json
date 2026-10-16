@@ -1,0 +1,50 @@
+{
+  "native-graph-capture-base-result.json": {
+    "sha256": "d63cad8c2b6b102a8749fbd9f39cdfae569597a459b8a73c8a5ecb0bd07c11ff",
+    "bytes": 12558
+  },
+  "native-inputs-base/Alice-cut.json": {
+    "sha256": "56b694aabb2f80ccaeee0c7df61227cb21d073fd89dfc911022021ebf7c04696",
+    "bytes": 10774
+  },
+  "native-inputs-base/Bob-cut.json": {
+    "sha256": "34297bc902d84ad962e7bf51ab58c293b26f7d791c6030b45a682fbce96a12f2",
+    "bytes": 10772
+  },
+  "native-inputs-base/Outsider-cut.json": {
+    "sha256": "5d222cb226348807f32b509c05649d2eb38fe3c8012c081fba84ce722ea5d386",
+    "bytes": 10777
+  },
+  "native-inputs-base/accepted-request.json": {
+    "sha256": "cf2cc18998b919b39fb22fb999acd84f0f35d99385d0ea5d4da66ee29c8fdf7c",
+    "bytes": 12627
+  },
+  "native-inputs-base/assessment.json": {
+    "sha256": "d564041e47ffac4e72711fae416ea5f3bf6a0644ba0ab030b6eb418242726e4f",
+    "bytes": 15138
+  },
+  "native-inputs-base/coverage.json": {
+    "sha256": "4aed620978579fab426d70645b1c092898fce33935d8d12b41f23d9dc7b4147f",
+    "bytes": 1375
+  },
+  "native-inputs-base/facts.json": {
+    "sha256": "1562817438453e884e83c1a328961093be824179a65d7ff67f232c2a3f899d2d",
+    "bytes": 5177
+  },
+  "native-inputs-base/graph-coverage.json": {
+    "sha256": "a8d9cd442c9ba07808ff3361d5e72d1dbbb60490b8951e84b7fd7119a70c7e0b",
+    "bytes": 729
+  },
+  "native-inputs-base/graphs.json": {
+    "sha256": "921583d352b657d3c37891386c4e473bf4a9c08d7fc59d4efe496f8d6a4e6ab6",
+    "bytes": 2889
+  },
+  "native-inputs-base/initialize.json": {
+    "sha256": "6882f9478eadc39ee449bf5980a82d64db96830c13cbc1bb2062eefd814cc4da",
+    "bytes": 14755
+  },
+  "native-inputs-base/native-locators.json": {
+    "sha256": "d5afee340fc1b08f8d80fe8fc1ebc846ab4fa0ec4f180975b1512f41a48777ea",
+    "bytes": 160490
+  }
+}

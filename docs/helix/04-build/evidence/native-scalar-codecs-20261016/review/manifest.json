@@ -1,0 +1,113 @@
+{
+  "files": {
+    "check.log": {
+      "sha256": "4d2d0540d2a2f6327e9f974f7523006a20b796821ec78c949c006954525cc46e",
+      "bytes": 1132
+    },
+    "check.py": {
+      "sha256": "fe23b83b29b7de8ddb76072c40c74cfa012c45c865799e3fb49a8e071506d7c4",
+      "bytes": 4148
+    },
+    "checks.json": {
+      "sha256": "73ef2b6090719eec9d5cbc7b708d2465c225e44d57a9c72c58481033fea40d86",
+      "bytes": 1380
+    },
+    "packet/change.diff": {
+      "sha256": "613d32aff001fb15123bfb41c29e16e579fd848895e370da3055efdcfc56b210",
+      "bytes": 3257
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/README.md": {
+      "sha256": "b4344e4bffc21b8e06fbc0f7a1b3d3bddd88b939f63dc0bb47b212c9fcaf5c10",
+      "bytes": 4729
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/failed-NUL-stage-expectation.log": {
+      "sha256": "d04e03ab06d1fa154f543d75a530e3989754590bc20e87be898f1e29a97fdde8",
+      "bytes": 1810
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/failed-stage-artifacts.zip": {
+      "sha256": "6a8800c2c232c9587b07af8941df38619a370718411acd26566f6827c7077def",
+      "bytes": 16513
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/failed-stage-artifacts.zip.manifest.json": {
+      "sha256": "10f4823cb93bcefb4d1d51731e140e7ddbcccfc282dccdaae14bb8a8da5e0d26",
+      "bytes": 1780
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/final-cleanup.json": {
+      "sha256": "4cf4aa358fb67a2b34dfd6a24177dd69bf3cae8418dc8e76525024cfb1bf7ce7",
+      "bytes": 292
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/final-native-artifacts.zip": {
+      "sha256": "2096403f529ddc7275584134623550df913ffd2d570e45c7702640e6bb5e66e4",
+      "bytes": 19588
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/final-native-artifacts.zip.manifest.json": {
+      "sha256": "748d605b61aad2ba34d558f7209de9487888e804894a65b30495efe518d8bd82",
+      "bytes": 2070
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/final-native.log": {
+      "sha256": "77647673a79c5ea014c97eebc4c8d8c5321802e1a9a0fca19175343c5a03ca2d",
+      "bytes": 282
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/initial-cleanup.json": {
+      "sha256": "4e7973fb600c27b602093353403f280d2b614e755e6aac4cae299170b8b5620f",
+      "bytes": 162
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/initial-single-key-artifacts.zip": {
+      "sha256": "05c7495d688fad583c3a2d498e73353ef7333f0be0d35f028bd701ec423a11d9",
+      "bytes": 18271
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/initial-single-key-artifacts.zip.manifest.json": {
+      "sha256": "f14d6f1c7e1279105306063504c08703e2eb979b0bbc9d084a17d75c30bf841b",
+      "bytes": 1919
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/initial-single-key-pass.log": {
+      "sha256": "29352c485e9b9f67cca31df9b541ac91e7e3346e63b065ea486817138bda466a",
+      "bytes": 282
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/overlap-window.json": {
+      "sha256": "687ad80b97381ee97b9e7410fcb14bf54262fe72143615daecbedf8095afcff4",
+      "bytes": 324
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/pure-regression.log": {
+      "sha256": "9ac482d94bc6496117d8eca0d2591776dde62d62b42d4f3000869d57f2b3037a",
+      "bytes": 2432
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/retention.json": {
+      "sha256": "5315415947f730d06e2ed6ede75cb13c41fe7302744e5a437d1b16cda29b4faf",
+      "bytes": 1909
+    },
+    "packet/docs/helix/04-build/evidence/native-scalar-codecs-20261016/source-correspondence.json": {
+      "sha256": "b43bd5008bea095a5a667a2c267682ed7f6d338806b8d721c494e7d321122f47",
+      "bytes": 1422
+    },
+    "packet/manifest.json": {
+      "sha256": "e1094082d619a7e708ebe554651d384bd8706fc8c47a01945ff81b3010d3e20d",
+      "bytes": 2898
+    },
+    "packet/packages/python/tests/test_current_disclosure_codecs_native.py": {
+      "sha256": "fa6063405cead3fc04bd9bc586fe2fb3178c8fd694b66d0be4fb7aa5ea1670a4",
+      "bytes": 11555
+    },
+    "packet/packages/python/tests/test_current_disclosure_graphs_native.py": {
+      "sha256": "13c4318e8a3b483744715b1cc5bfae49aba003cca5cdef8a2b300c67fda07e9c",
+      "bytes": 15831
+    },
+    "review.json": {
+      "sha256": "de5d9478d3f0c594b29e0ca68e32d7e70a0a166122b52899300c8427259808a6",
+      "bytes": 7127
+    },
+    "review.txt": {
+      "sha256": "67b7a1c298b13e3720898680580403446fadbf0cebe4b4630a423cdc064e006c",
+      "bytes": 437
+    },
+    "source-endpoint-audit.json": {
+      "sha256": "ae29605582d3d19e15956d71e90042a6e317337ba469501ceb869aa895b0ad3e",
+      "bytes": 1327
+    }
+  },
+  "artifactCount": 26,
+  "totalBytes": 122877,
+  "excludes": [
+    "manifest.json"
+  ]
+}

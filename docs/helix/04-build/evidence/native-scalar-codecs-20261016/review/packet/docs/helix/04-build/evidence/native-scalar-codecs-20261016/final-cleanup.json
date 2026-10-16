@@ -1,0 +1,8 @@
+{
+  "scope": "post-test fixture-prefix process/birth-time qualified directory scan; older roots unchanged",
+  "logOpenedUTC": "2026-10-16T19:50:06.282436+00:00",
+  "lastLogWriteUTC": "2026-10-16T19:50:49.772143+00:00",
+  "liveFixturePostgres": [],
+  "newFixtureRoots": [],
+  "passed": true
+}

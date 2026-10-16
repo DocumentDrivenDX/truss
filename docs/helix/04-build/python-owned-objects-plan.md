@@ -234,7 +234,8 @@ caller commit and fresh object/edge/source readback; repeated import with invali
 replacement payloads must skip and preserve originals. One failed dependent
 record must leave no partial aggregate. The adopted host alone settles its
 transaction; engine-owned execution settles only complete atomic batches.
-This tranche remains unfinished and is not a release claim.
+The implementation checkpoint below records completion of these basic gates;
+this remains unreleased.
 
 The new selection uses distinct owned-import input/object/edge carriers and a
 closed profile/context. Ownership has one authoritative location. Dependencies
@@ -261,6 +262,22 @@ commit checks bind the indexed operation/result/transition, typed identity,
 original primary key, ownership/endpoints, exact payload and load ID. Private
 aliases alone do not establish correspondence. Keep legacy one-operation checks;
 do not require historical legacy attempts to have owned-operation storage rows.
+
+### Source storage implementation increment
+
+The native71 candidate now generates import source storage and its predecessor
+migration through UMF's SQL exporter. Core columns and the attempt FK remain
+visible in its companion model; native UUID/xid8/JSONB meaning stays explicit.
+Sources are unique by entity and by `(group_attempt_id, operation_index)`.
+Existing rows and the unchanged per-record provider retain index zero. The
+migration is checksum-verified before execution.
+
+Basic PostgreSQL18.6 checks pass original imports and a real published SDK37
+upgrade, including rollback, commit, source preservation, retry and new import.
+Astra cleared the corrected source slice. This completes the storage precursor;
+the subsequent atomic provider checkpoint adds execution and native indexed
+source attachment. The release workflow also runs the migration test against its
+already downloaded published SDK35 predecessor.
 
 ## Ordered result storage — 2026-10-16
 
@@ -395,3 +412,20 @@ pass (29.953s), but the unchanged diagnostic1,000-edge workload still hits57014
 before edge COMMIT (28.101s total). Completed plan lookups fall from77,141 to
 29,861; this does not establish a latency improvement. Final member identity/
 image work and repeated initial-node map construction remain profiling targets.
+
+## Atomic import provider checkpoint — 2026-10-16
+
+The explicit owned input/context and typed capability builders now compose one
+existing protected group with indexed original-source attachments inside one
+host operation/savepoint. Engine-owned execution commits that entire batch;
+legacy input retains per-record semantics. No second graph executor was added.
+
+Basic PostgreSQL18.6 tests cover root/child/owned-edge creation, caller commit,
+fresh object/edge/source readback, identity-first retry with invalid replacement
+payloads, dependent refusal and a failure during the second source attachment
+that rolls back all created rows while retaining prior caller work. Engine-owned
+execution commits three records as one batch. A real published SDK37 installation
+upgrades and invokes the new facades without module-access reconfiguration.
+Astra Ultra cleared the two corrected inventory/upgrade-permission blockers.
+See [the compact evidence](evidence/atomic-owned-import-20261016/README.md).
+Hosted1024-operation performance remains a separate release blocker.

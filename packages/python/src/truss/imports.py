@@ -43,6 +43,40 @@ class ImportInput(_Carrier):
     interface_version: Literal['truss-import-input/0.1.0'] = field(default='truss-import-input/0.1.0', init=False)
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class OwnedObjectImportRecord(_Carrier):
+    identity: ObjectKeySelection
+    payload: ExactArtifact
+    payload_profile: ProfilePin
+    kind: Literal['object'] = field(default='object', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class OwnedEdgeImportIdentity(_Carrier):
+    relationship_definition_pin: str
+    source: ObjectKeySelection
+    target: ObjectKeySelection
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class OwnedEdgeImportRecord(_Carrier):
+    identity: OwnedEdgeImportIdentity
+    payload: ExactArtifact
+    payload_profile: ProfilePin
+    kind: Literal['edge'] = field(default='edge', init=False)
+
+OwnedImportRecordInput: TypeAlias = OwnedObjectImportRecord | OwnedEdgeImportRecord
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class OwnedImportInput(_Carrier):
+    """One atomic ordered import; key references name live or earlier objects."""
+    layout_profile: ProfilePin
+    import_profile: ProfilePin
+    value_profile: ProfilePin
+    catalog: ImportCatalogPin
+    load_id: str
+    asserted_origin: ExactValue
+    records: tuple[OwnedImportRecordInput, ...]
+    interface_version: Literal['truss-owned-import-input/0.1.0'] = field(default='truss-owned-import-input/0.1.0', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class ImportCreated(_Carrier):
     input_index: str
     batch_id: str

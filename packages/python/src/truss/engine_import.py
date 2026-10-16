@@ -2,8 +2,9 @@
 from __future__ import annotations
 from typing import Literal
 from hashlib import sha256
+from dataclasses import replace
 from .execution import Error,ExecutionFailure
-from .imports import (ImportInput,ImportExecutionResult,ImportExecutionFailed,CommittedBatch,RolledBackBatch,
+from .imports import (ImportInput,OwnedImportInput,ImportReported,ImportCounts,ImportExecutionResult,ImportExecutionFailed,CommittedBatch,RolledBackBatch,
     CommitUnknownBatch,TransactionUnresolvedBatch)
 from .preparation import CatalogDocument
 
@@ -123,10 +124,11 @@ class _EngineImportSession:
             finally:self.connection=None
 
 
-def run_import_batches(input: ImportInput,*,connection_info: str,documents: tuple[CatalogDocument,...],bun_executable: str='bun',
+def run_import_batches(input: ImportInput | OwnedImportInput,*,connection_info: str,documents: tuple[CatalogDocument,...],bun_executable: str='bun',
         statement_timeout_ms: int=2000,operation_timeout_ms: int=5000) -> ImportExecutionResult[Literal['engine_owned']]:
-    """Own a fresh psycopg connection and one-record READ COMMITTED batches.
+    """Own a fresh psycopg connection and READ COMMITTED import batches.
 
+    Legacy input uses one-record batches; owned input uses one atomic group.
     Input and document carriers are the same as caller-owned imports. All
     objects precede edges across the full input. Repetition creates or skips
     under current identity policy; it does not recover the original report.
@@ -142,8 +144,28 @@ def run_import_batches(input: ImportInput,*,connection_info: str,documents: tupl
     result=None
     try:
         manifest,digest,_=_release();host,transaction=session.begin()
-        result=run_import(host,transaction,input,documents,manifest,digest,_pin_cursor,
-            bun_executable=bun_executable,_engine=session)
+        if type(input) is OwnedImportInput:
+            from ._owned_import_runtime import run_owned_import
+            result=run_owned_import(host,transaction,input,documents,manifest,digest,_pin_cursor,bun_executable=bun_executable)
+            if isinstance(result,ImportReported):
+                report=result.report;settlement_error=None;batches=()
+                disposition='pending'
+                if report.batches:
+                    batch=report.batches[0]
+                    settled,settlement_error=session.settle(batch,commit=batch.disposition=='pending')
+                    batches=(settled,);disposition=settled.disposition
+                created=report.counts.created_pending
+                counts=replace(report.counts,created_pending='0',
+                    created_committed=created if disposition=='committed' else '0',
+                    created_rolled_back=created if disposition=='rolled_back' else '0',
+                    created_commit_unknown=created if disposition=='commit_unknown' else '0',
+                    created_transaction_unresolved=created if disposition=='transaction_unresolved' else '0')
+                report=replace(report,execution='engine_owned',batches=batches,counts=counts,
+                    status='interrupted' if settlement_error is not None else 'processed')
+                result=ImportReported(report=report) if settlement_error is None else ImportExecutionFailed(error=settlement_error,report=report)
+        else:
+            result=run_import(host,transaction,input,documents,manifest,digest,_pin_cursor,
+                bun_executable=bun_executable,_engine=session)
     except Exception:
         result=ImportExecutionFailed(error=ExecutionFailure('transaction_unusable','Engine import connection or control unavailable'),report=None)
     finally:

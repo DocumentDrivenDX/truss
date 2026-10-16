@@ -1,0 +1,127 @@
+{
+  "files": {
+    "check.log": {
+      "sha256": "725016917af26fa9c5339c504aa7b7b0aab415001f37f36e791155535d8d3574",
+      "bytes": 450
+    },
+    "check.py": {
+      "sha256": "2e957c8f8610f266012cd6a9a1517f8b8ccef116e26339ca785c9087736a1696",
+      "bytes": 3661
+    },
+    "checks.json": {
+      "sha256": "e4ab4ba0040d75b51bc1c0dedaf47ac06a28045baa02dbdf10d8509c2ac0e7fd",
+      "bytes": 486
+    },
+    "ordered-key-controls.json": {
+      "sha256": "a763a7128497ab9f577f431732406c285e739819c824b83f43a2c1a2c6cc70d6",
+      "bytes": 280
+    },
+    "ordered-key-controls.log": {
+      "sha256": "cd8795ed41133db53d7ebbc4ea09c43ff80be48ad61ff97651bbcc579b03509e",
+      "bytes": 52
+    },
+    "ordered-key-controls.py": {
+      "sha256": "472570b477ffeea99c4634713fcca9f309219c6ed00f25e1058e3377f2de052e",
+      "bytes": 1349
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/README.md": {
+      "sha256": "a503d164b0a53f004d59489b01ee7f05184e0e0418b0e498415cb350f720bb1a",
+      "bytes": 3640
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/accepted-assessment.json": {
+      "sha256": "7133673786360e024e858e79bca17bc3fdab1b913347a47158e986095e4fb72c",
+      "bytes": 13800
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/accepted-request.json": {
+      "sha256": "e748f0e0e534145beaff34985147ab1dec990823584151338a1d331a26dd9ccc",
+      "bytes": 10209
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/controls.json": {
+      "sha256": "c10d8b263ab3be896f29a1f9ce9210d4705290a93fa4f131f0300e889580d2a9",
+      "bytes": 334
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/graph-report.json": {
+      "sha256": "7092ce2b7792dacfec67863261e47ef44ad7e777694edf209c37760bc7d85599",
+      "bytes": 6198
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/graph-requirements.json": {
+      "sha256": "f040fee8835ba7d360be2476d808085507757d06da3228ce0fb3683a649215cf",
+      "bytes": 40622
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/historical-unit-carrier-mismatch.log": {
+      "sha256": "c0320f05ebd573be325cbfdffb81261d6b7de51995d1589bccbaa2c9aa6cf27d",
+      "bytes": 11853
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/model-report.json": {
+      "sha256": "dc9a67b839283b89c7bbec6014e60aaa3543637a103a96af2549158828c144e4",
+      "bytes": 4547
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/model-requirements.json": {
+      "sha256": "5167efce92280fa3f12a8601b22993370df13b015889a0ba2ebc3fb99a5c9530",
+      "bytes": 32338
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/native-inventory.json": {
+      "sha256": "52aee8621410719ac050088978739c1607b0b222ba80414f1c1ac9b2728559f8",
+      "bytes": 17928
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/native.log": {
+      "sha256": "c6862a28cddf7638de0ba38e73b9bf156415534c451b483ca3980b1ff937b5fe",
+      "bytes": 294
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/postflight.json": {
+      "sha256": "3586fd04565e67e5572153995753dabdd9ed6f5da220f933f219cf8e03bb8d40",
+      "bytes": 915
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/preflight.json": {
+      "sha256": "ad619d62203d1055c17c134b930b5d17b1da5f42d08e3b5445b80c578bf82def",
+      "bytes": 1153
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/retention.json": {
+      "sha256": "f2216c4314e7896aa9aa01bda9f0df40ce9df347c9e24f0a90c65348db6c8505",
+      "bytes": 1910
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/runtime-release.json": {
+      "sha256": "3d80629903633da1d899d8ecd61c65b939f2809263ab71b365d589513c9a83d9",
+      "bytes": 8737
+    },
+    "packet/docs/helix/04-build/evidence/native-graph-definition-join-20261016/unit.log": {
+      "sha256": "df12edc0e349887cf971fa4124c7b6629f50c192debbd904d5b766366904c272",
+      "bytes": 4824
+    },
+    "packet/manifest.json": {
+      "sha256": "9f3c3fd05e6fea278be93b2b68a5766938aa6f2f6ec405f98066ea620dcc4740",
+      "bytes": 2944
+    },
+    "packet/packages/python/src/truss/_native_graph_correspondence.py": {
+      "sha256": "cbabba30e0f1c504ab3fe2be91bc5b127f61d202ef70706108aa370a5b000422",
+      "bytes": 9530
+    },
+    "packet/packages/python/tests/test_native_graph_correspondence.py": {
+      "sha256": "c5e41f10f2ae76bbaa381037252e8ac50eae5479a4ff09dc04b319b7a0840a8d",
+      "bytes": 8609
+    },
+    "packet/packages/python/tests/test_native_graph_correspondence_native.py": {
+      "sha256": "c5ab0c9b0604fc3d695f36a18ec023ffa551ad69a96915f98a2de16200964056",
+      "bytes": 5342
+    },
+    "pure-tests.log": {
+      "sha256": "48da0e8ca63c3af859d571ea2c385ad566bf438d57c8598b4cf1a8440697b3d9",
+      "bytes": 4824
+    },
+    "review.json": {
+      "sha256": "d0bace56cba0c40bf75c0f04cd7bd74f572e655f6003ff689f9c2c1f0f7abbb0",
+      "bytes": 5445
+    },
+    "review.txt": {
+      "sha256": "8f55eca27ecd72d19d45fdab75842a1369d554490c88894446660b943b07ccf8",
+      "bytes": 452
+    }
+  },
+  "artifactCount": 29,
+  "totalBytes": 202726,
+  "excludes": [
+    "manifest.json",
+    "working/",
+    "__pycache__/"
+  ]
+}

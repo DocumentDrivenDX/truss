@@ -1,0 +1,25 @@
+{
+  "decision": "Do not add a metadata cache/helper based on this measurement; small component relative to hosted timeout.",
+  "scope": "Fixture-only component timings, real original source and consumer actor; no canonical object effects, native execution capacity or release claim",
+  "samples": [
+    {
+      "iterations": 256,
+      "contextMs": 3.588,
+      "metadataMs": 123.019
+    },
+    {
+      "iterations": 256,
+      "contextMs": 3.172,
+      "metadataMs": 65.085
+    },
+    {
+      "iterations": 256,
+      "contextMs": 3.171,
+      "metadataMs": 64.294
+    }
+  ],
+  "test": "1PASS4.047s; fixture cleanup completed",
+  "harnessSha256": "cb8db13de2746763d6982d3c9f07331c7a9ceb012be9194f2e9db1cc0de30c7d",
+  "sourceCommit": "2278e3ed",
+  "productSourceChanged": false
+}

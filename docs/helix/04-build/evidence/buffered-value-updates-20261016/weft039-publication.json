@@ -1,0 +1,21 @@
+{
+  "release": "https://github.com/DocumentDrivenDX/weft/releases/tag/v0.4.39",
+  "ciRun": 38949536781,
+  "releaseRun": 38957382299,
+  "commit": "98b079b24d3933df3eaed7adbf28878b13fd3bcd",
+  "allFivePlatforms": "success",
+  "macosArm64WheelSha256": "69c140179f1dc93a4b446b837570d0d75e3d9dc5c8d340dc3a0e737261fa0cca",
+  "trussDateBackend": {
+    "backendVersion": "0.4.41",
+    "targetProfile": "truss-runtime-pg18.6/0.5",
+    "bindingProfile": "truss-runtime-binding/0.5",
+    "queryAbi": {
+      "identity": "truss-postgresql-logical-query",
+      "version": "1.1",
+      "sha256": "9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f"
+    },
+    "nativeAdmission": false
+  },
+  "trussDefaultAdopted": false,
+  "next": "SDK owner combined040 release before Truss default adoption"
+}

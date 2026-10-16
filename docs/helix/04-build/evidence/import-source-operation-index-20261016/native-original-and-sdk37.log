@@ -1,0 +1,8 @@
+test_create_skip_invalid_replacement_reject_source_commit_and_retry (test_import_runtime_native.ImportRuntimeTests.test_create_skip_invalid_replacement_reject_source_commit_and_retry) ... ok
+test_objects_before_edges_rollback_and_deleted_edge_reservation (test_import_runtime_native.ImportRuntimeTests.test_objects_before_edges_rollback_and_deleted_edge_reservation) ... ok
+test_populated_sources_preserved_through_rollback_upgrade_and_retry (test_import_source_upgrade_native.ImportSourceUpgradeTests.test_populated_sources_preserved_through_rollback_upgrade_and_retry) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 17.226s
+
+OK

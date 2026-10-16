@@ -1,0 +1,95 @@
+{
+  "review": "Weft actual-context GraphRequirements Core/runtime/Python bridge",
+  "status": "complete within bounded scope",
+  "verdict": "qualified no findings",
+  "findings": [],
+  "startedAt": "2026-10-16T20:00:54Z",
+  "completedAt": "2026-10-16T20:04:37.139656+00:00",
+  "deadline": "2026-10-16T20:05:54Z",
+  "commit": "b34a823911fb127e2bf4914fac6ca4415bb4adb1",
+  "inputDirectory": "/private/tmp/weft-graph-bridge-frozen-review-20261016",
+  "reviewPinsSha256": "b0fed12ee1d9bc8d4e14bb3ca3d5e73a8011a4a5bc94f8034d0a9c43480edf65",
+  "diffSha256": "2b6eb6e32784c7742bfe5a3d5226326bb3df631d14b0a576f3d30f3e4e6333bf",
+  "answers": [
+    {
+      "question": 1,
+      "conclusion": "Core derives ModelRequirements from the same borrowed context and resolves original Record/Relationship references with distinct nominal namespaces. Authored target Keys are mandatory and resolved through authored_key_fields; source selected Keys come from ontology/entity selection. Full identities and ordered components survive. Enumerated associations/declarations and every matching ordinal preserve duplicates, including unselected authored branches. Requested member Fields and their descriptor identities remain distinct. Unknown metadata and exact original request bytes remain data; native/whole-source semantics are explicitly unresolved."
+    },
+    {
+      "question": 2,
+      "conclusion": "Runtime graph_requirements_json uses private with_context over its retained immutable original Arc, reconstructs only a scoped Core borrow and checks the stored context report before deriving. Python checks its actual retained parent before calling that method. No supplied report parameter, report importer, new constructor, replacement-parent preparation or public callback is introduced. Graph-specific cfg gates and dependency features preserve default/model-only separation. Independent actual-extension replay confirms parent retention, wrong receivers, extra arguments, copy/pickle/frozen-parent refusals and no coercion callbacks."
+    },
+    {
+      "question": 3,
+      "conclusion": "The final b34 output-retention epoch is separately pinned and has 378 Core, 5 runtime, 38 Graph Python and 56 existing-model controls in supplied logs. Its output-charge mutant is killed by the direct pre-retention test. Earlier detail/Key mutants and earlier wheels remain historical evidence. Exact-byte encoder limits, count boundaries, large ModelQ ownership, payload-retention checks and unselected 256-component target-Key controls correspond to the inspected tests. Limits are expressly encoded-payload accounting, not peak process memory or native capacity. No native admission or acceptance promotion is claimed."
+    }
+  ],
+  "independentChecks": {
+    "passed": true,
+    "commit": "b34a823911fb127e2bf4914fac6ca4415bb4adb1",
+    "reviewPins": 5,
+    "gitCorrespondenceFiles": 18,
+    "finalRetentionMembers": 19,
+    "retainedSelectedInputs": 84,
+    "independentActualNativeExtensionControls": 38,
+    "wheelSha256": "25947eaea9cd42db79a2671664e7829af10d79a802a82cf92f5ddc0b2675e5c8",
+    "featureGraphExplicitAndDefaultUnchanged": true,
+    "scope": "Actual supplied Python extension replay plus static source/evidence checks; no Rust build, SQL, or native admission"
+  },
+  "additionalActualExtensionControls": {
+    "count": 12,
+    "result": "all passed",
+    "evidence": "adversarial.json",
+    "positiveCases": [
+      "same-spelling distinct Record/Relationship nominal namespaces and duplicate declaration ordinals",
+      "duplicate selected associations retained",
+      "source key annotation does not invent selected/default Key",
+      "unselected authored composite target preserves explicit component order"
+    ],
+    "negativeCases": [
+      "missing target Key",
+      "null target Key",
+      "unknown target Key",
+      "wrong nominal namespace",
+      "duplicate endpoint side",
+      "selected Key mismatch",
+      "unmatched target",
+      "opaque witness substituted for association Record"
+    ]
+  },
+  "commands": [
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B check.py",
+      "exitCode": 0,
+      "log": "check.log",
+      "result": "5 packet pins, 18 selected Git-correspondence files and 19 final-retention members verified; 38 actual supplied-extension controls passed."
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B adversarial.py",
+      "exitCode": 0,
+      "log": "adversarial.log",
+      "result": "12 additional actual supplied-extension controls passed."
+    }
+  ],
+  "artifactEpoch": {
+    "finalWheelSha256": "25947eaea9cd42db79a2671664e7829af10d79a802a82cf92f5ddc0b2675e5c8",
+    "finalNativeModuleSha256": "7e6384ddada0f67a45839a222ffb059e04a5de00f6a9281ad811eefacdeffa42",
+    "historicalWheelSha256": "0ccdbf7e9c07f0a183357b912f959a0d1fa75c29fbfb646bf7d2c9fe087f1cfd",
+    "qualification": "Historical retention source hashes are not asserted equal to final b34; current source and final output-retention evidence are checked separately."
+  },
+  "incompleteScope": [
+    "No fresh Rust build, lifetime compile-fail replay, full Core campaign or source mutant campaign; these were inspected as supplied evidence.",
+    "No independently rebuilt wheel or hermetic/reproducible-build proof.",
+    "Old/default Python absence logs are retained historical assets; current feature wiring and supplied fresh Rust feature clients were inspected, not independently rebuilt.",
+    "No SQL/native graph population/source/current-authority/guarded-release admission; all 132 Weft and shared 158 obligations remain unchanged."
+  ],
+  "retention": {
+    "manifest": "manifest.json",
+    "shape": "files maps relative path to {sha256,bytes}; excludes root manifest and extracted installed/ tree whose exact wheel is retained",
+    "excluded": [
+      "manifest.json",
+      "installed/",
+      "__pycache__/"
+    ]
+  }
+}

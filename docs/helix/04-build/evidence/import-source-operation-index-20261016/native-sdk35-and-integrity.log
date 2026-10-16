@@ -1,0 +1,7 @@
+test_changed_migration_bytes_are_refused_before_execution (test_import_source_upgrade_native.ImportSourceMigrationIntegrityTests.test_changed_migration_bytes_are_refused_before_execution) ... ok
+test_populated_sources_preserved_through_rollback_upgrade_and_retry (test_import_source_upgrade_native.ImportSourceUpgradeTests.test_populated_sources_preserved_through_rollback_upgrade_and_retry) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 13.437s
+
+OK

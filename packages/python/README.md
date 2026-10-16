@@ -25,7 +25,7 @@ Development compiled queries use published `weft-sql==0.4.36`, backend
 workflows exercise the default public compiler with owned descendants, the
 original Northwind Product model, decimal(12,2), and stable UMF IDs for unnamed
 records and fields. These checks do not qualify the broader protected engine.
-Owned imports and catalog value rebinding/key backfill remain refused. Date
+Development adds explicit atomic owned imports; catalog value rebinding/key backfill remains refused. Date
 and other generic-decimal SQL query domains remain unfinished. Practical
 performance still blocks release; this checkpoint is not a release tag.
 
@@ -535,6 +535,23 @@ relationship pin and exactly the supplied endpoint identities. Optional `source`
 carries immutable import provenance, as it does for object records. Construction
 does not establish live endpoints or authorize a write: `import_in_transaction`
 validates current endpoint types, access, reservations and payload semantics.
+
+The development atomic profile uses `owned_import_context_in_transaction`,
+`owned_object_import_record_in_transaction` and
+`owned_edge_import_record_in_transaction`. Build rootless roots first, then
+children with `root=root_record.identity`, then edges whose endpoints are those
+primary-key selections. Pass the records to `context.input(...)` and the existing
+`import_in_transaction` method. One group and all original source attachments
+share one savepoint. A dependent failure rolls back every new record; existing
+identities skip before replacement payload decoding. References must identify
+live objects or earlier eligible records; forward references refuse.
+
+Caller-owned execution leaves settlement to the host. `run_import_batches` also
+accepts this explicit owned input and commits the entire aggregate as one batch;
+legacy inputs retain one-record batches. Original record indices, source bytes
+and load IDs remain available through `lookup_import_source_in_transaction`.
+This is an unreleased development feature with basic PostgreSQL18.6 workflow
+coverage, not a managed-database or performance qualification.
 
 ## Values, reads and query limits
 

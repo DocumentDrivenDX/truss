@@ -1,0 +1,125 @@
+test_complete_five_graphs_and_record_members_have_native_definition_ids (test_native_graph_correspondence.GraphCorrespondenceTests.test_complete_five_graphs_and_record_members_have_native_definition_ids) ... ERROR
+test_cross_context_hash_source_pin_or_authority_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_cross_context_hash_source_pin_or_authority_refuse) ... ERROR
+test_edge_column_drift_and_shared_deadline_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_edge_column_drift_and_shared_deadline_refuse) ... ERROR
+test_graph_namespace_revision_witness_duplicate_and_occurrence_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_graph_namespace_revision_witness_duplicate_and_occurrence_refuse) ... ERROR
+test_member_foreign_property_and_key_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_member_foreign_property_and_key_refuse) ... ERROR
+test_native_endpoint_alternatives_and_types_are_exact (test_native_graph_correspondence.GraphCorrespondenceTests.test_native_endpoint_alternatives_and_types_are_exact) ... ERROR
+test_native_nominal_identity_census_and_realization_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_native_nominal_identity_census_and_realization_refuse) ... ERROR
+test_original_key_full_identity_and_order_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_original_key_full_identity_and_order_refuse) ... ERROR
+test_actual_factory_retains_original_context_parent_and_native_observation (test_native_graph_correspondence.IssuedGraphFactoryTests.test_actual_factory_retains_original_context_parent_and_native_observation) ... ERROR
+test_imported_data_and_equal_parent_replacement_cannot_supply_factory (test_native_graph_correspondence.IssuedGraphFactoryTests.test_imported_data_and_equal_parent_replacement_cannot_supply_factory) ... ERROR
+
+======================================================================
+ERROR: test_complete_five_graphs_and_record_members_have_native_definition_ids (test_native_graph_correspondence.GraphCorrespondenceTests.test_complete_five_graphs_and_record_members_have_native_definition_ids)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_graph_correspondence.py", line 19, in setUp
+    report=model_join(observation,self.model_requirements,self.graph['preparationSha256'],lambda:None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/_native_model_correspondence.py", line 55, in _join
+    raise ValueError('Exact accepted original model sources required')
+ValueError: Exact accepted original model sources required
+
+======================================================================
+ERROR: test_cross_context_hash_source_pin_or_authority_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_cross_context_hash_source_pin_or_authority_refuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_graph_correspondence.py", line 19, in setUp
+    report=model_join(observation,self.model_requirements,self.graph['preparationSha256'],lambda:None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/_native_model_correspondence.py", line 55, in _join
+    raise ValueError('Exact accepted original model sources required')
+ValueError: Exact accepted original model sources required
+
+======================================================================
+ERROR: test_edge_column_drift_and_shared_deadline_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_edge_column_drift_and_shared_deadline_refuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_graph_correspondence.py", line 19, in setUp
+    report=model_join(observation,self.model_requirements,self.graph['preparationSha256'],lambda:None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/_native_model_correspondence.py", line 55, in _join
+    raise ValueError('Exact accepted original model sources required')
+ValueError: Exact accepted original model sources required
+
+======================================================================
+ERROR: test_graph_namespace_revision_witness_duplicate_and_occurrence_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_graph_namespace_revision_witness_duplicate_and_occurrence_refuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_graph_correspondence.py", line 19, in setUp
+    report=model_join(observation,self.model_requirements,self.graph['preparationSha256'],lambda:None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/_native_model_correspondence.py", line 55, in _join
+    raise ValueError('Exact accepted original model sources required')
+ValueError: Exact accepted original model sources required
+
+======================================================================
+ERROR: test_member_foreign_property_and_key_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_member_foreign_property_and_key_refuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_graph_correspondence.py", line 19, in setUp
+    report=model_join(observation,self.model_requirements,self.graph['preparationSha256'],lambda:None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/_native_model_correspondence.py", line 55, in _join
+    raise ValueError('Exact accepted original model sources required')
+ValueError: Exact accepted original model sources required
+
+======================================================================
+ERROR: test_native_endpoint_alternatives_and_types_are_exact (test_native_graph_correspondence.GraphCorrespondenceTests.test_native_endpoint_alternatives_and_types_are_exact)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_graph_correspondence.py", line 19, in setUp
+    report=model_join(observation,self.model_requirements,self.graph['preparationSha256'],lambda:None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/_native_model_correspondence.py", line 55, in _join
+    raise ValueError('Exact accepted original model sources required')
+ValueError: Exact accepted original model sources required
+
+======================================================================
+ERROR: test_native_nominal_identity_census_and_realization_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_native_nominal_identity_census_and_realization_refuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_graph_correspondence.py", line 19, in setUp
+    report=model_join(observation,self.model_requirements,self.graph['preparationSha256'],lambda:None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/_native_model_correspondence.py", line 55, in _join
+    raise ValueError('Exact accepted original model sources required')
+ValueError: Exact accepted original model sources required
+
+======================================================================
+ERROR: test_original_key_full_identity_and_order_refuse (test_native_graph_correspondence.GraphCorrespondenceTests.test_original_key_full_identity_and_order_refuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_graph_correspondence.py", line 19, in setUp
+    report=model_join(observation,self.model_requirements,self.graph['preparationSha256'],lambda:None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/_native_model_correspondence.py", line 55, in _join
+    raise ValueError('Exact accepted original model sources required')
+ValueError: Exact accepted original model sources required
+
+======================================================================
+ERROR: test_actual_factory_retains_original_context_parent_and_native_observation (test_native_graph_correspondence.IssuedGraphFactoryTests.test_actual_factory_retains_original_context_parent_and_native_observation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_graph_correspondence.py", line 19, in setUp
+    report=model_join(observation,self.model_requirements,self.graph['preparationSha256'],lambda:None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/_native_model_correspondence.py", line 55, in _join
+    raise ValueError('Exact accepted original model sources required')
+ValueError: Exact accepted original model sources required
+
+======================================================================
+ERROR: test_imported_data_and_equal_parent_replacement_cannot_supply_factory (test_native_graph_correspondence.IssuedGraphFactoryTests.test_imported_data_and_equal_parent_replacement_cannot_supply_factory)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_native_graph_correspondence.py", line 19, in setUp
+    report=model_join(observation,self.model_requirements,self.graph['preparationSha256'],lambda:None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/_native_model_correspondence.py", line 55, in _join
+    raise ValueError('Exact accepted original model sources required')
+ValueError: Exact accepted original model sources required
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.144s
+
+FAILED (errors=10)

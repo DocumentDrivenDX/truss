@@ -246,12 +246,14 @@ BEGIN
  ELSE
   IF ledger.writer_xid>=frontier THEN RAISE EXCEPTION 'committed provenance unavailable' USING ERRCODE='P1010';END IF;
   SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=ledger.group_attempt_id;
-  identity:=attempt.results->0->'identity';
-  IF NOT attempt.complete OR attempt.next_index<>1 OR attempt.writer_xid IS DISTINCT FROM ledger.writer_xid
-   OR attempt.results->0->>'outcome' IS DISTINCT FROM 'created' OR identity->>'id' IS DISTINCT FROM entity->>'id'
+  identity:=attempt.results->ledger.operation_index->'identity';
+  IF NOT attempt.complete OR ledger.operation_index<0 OR ledger.operation_index>=attempt.next_index
+   OR (convert_from(ledger.original_record,'UTF8')::jsonb->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'ownedImportPayloadProfile' AND attempt.next_index<>1)
+   OR attempt.writer_xid IS DISTINCT FROM ledger.writer_xid
+   OR attempt.results->ledger.operation_index->>'outcome' IS DISTINCT FROM 'created' OR identity->>'id' IS DISTINCT FROM entity->>'id'
    OR identity->>'typeId' IS DISTINCT FROM entity->>'typeId'
    OR identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',entity->>'documentId','moduleId',entity->>'moduleId')
-   OR (convert_from(attempt.input_bytes,'UTF8')::jsonb)->'operations'->0->>'operation' IS DISTINCT FROM
+   OR (convert_from(attempt.input_bytes,'UTF8')::jsonb)->'operations'->ledger.operation_index->>'operation' IS DISTINCT FROM
       (CASE kind WHEN 'o' THEN 'create_object' ELSE 'create_edge' END) THEN
    RAISE EXCEPTION 'original qualified import creation required' USING ERRCODE='55000';END IF;
   IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RAISE EXCEPTION 'original creation dependency reader required' USING ERRCODE='42501';END IF;

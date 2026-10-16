@@ -4,7 +4,8 @@ The current development checkpoint is Python SDK `0.0.38.dev0` / native
 `0.71-candidate`; the latest published release is [v0.0.37](04-build/releases/v0.0.37.md)
 (native `0.70-candidate`, Weft `0.4.38` / backend `0.4.40`). Development owned-graph
 workflows cover creation, explicit subtree reparenting, cascade deletion,
-read-only reads, history and receipt replay. Development compiled queries use
+read-only reads, history, receipt replay and explicit atomic owned imports with
+indexed original provenance. Development compiled queries use
 published Weft0.4.36 / backend0.4.39. Canonical dates and exact decimal facets
 are supported by catalog acceptance, writes and reads; their broader SQL query
 domains remain unfinished. Practical performance still blocks the next release,

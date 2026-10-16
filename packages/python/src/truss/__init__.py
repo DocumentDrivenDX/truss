@@ -87,8 +87,8 @@ __all__ += ["ScalarEdge","EdgeFound","EdgeNotFound","EdgePage","EdgePageCursor"]
 from .receipt_visibility import ReceiptIncluded,ReceiptVisibilityUnavailable
 __all__ += ["ReceiptIncluded","ReceiptVisibilityUnavailable"]
 
-from .import_runtime import ImportRuntimeContext
-__all__ += ["ImportRuntimeContext"]
+from .import_runtime import ImportRuntimeContext,OwnedImportRuntimeContext
+__all__ += ["ImportRuntimeContext","OwnedImportRuntimeContext"]
 
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 __all__ += ["ImportSourceFound","ImportSourceAbsent","ImportSourceUnavailable"]

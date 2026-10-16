@@ -29,10 +29,10 @@ from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedP
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
-from .imports import ImportInput,ImportExecutionResult,ObjectImportRecord,EdgeImportRecord
-from .import_runtime import ImportRuntimeContext
+from .imports import ImportInput,OwnedImportInput,OwnedObjectImportRecord,OwnedEdgeImportRecord,OwnedEdgeImportIdentity,ImportExecutionResult,ObjectImportRecord,EdgeImportRecord
+from .import_runtime import ImportRuntimeContext,OwnedImportRuntimeContext
 from .groups import AuthoredValue
-from .contracts import MapValue, TextValue, BooleanValue
+from .contracts import MapValue, TextValue, BooleanValue, ObjectKeySelection
 from .receipt_visibility import ReceiptIncluded,ReceiptVisibilityUnavailable
 from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
@@ -161,7 +161,7 @@ def _release():
     for entry in json.loads(public_profiles)['profiles']+json.loads(public_profiles).get('retainedProfiles',[]):
         if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original public capability definition required')
         if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
-    for name in ('query-abi.json','preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json','upgrade-source-025.json','upgrade-source-026.json','upgrade-source-027.json','upgrade-source-028.json','upgrade-source-029.json','upgrade-source-030.json','upgrade-source-031.json','upgrade-source-032.json','upgrade-source-033.json','upgrade-source-034.json','upgrade-source-035.json','upgrade-source-036.json','upgrade-source-037.json','upgrade-source-038.json','upgrade-source-039.json','upgrade-source-040.json','upgrade-source-041.json','upgrade-source-042.json','upgrade-source-043.json','upgrade-source-044.json','upgrade-source-045.json','upgrade-source-046.json','upgrade-source-047.json','upgrade-source-048.json','upgrade-source-049.json','upgrade-source-050.json','upgrade-source-051.json','upgrade-source-052.json','upgrade-source-053.json','upgrade-source-054.json','upgrade-source-055.json','upgrade-source-056.json','upgrade-source-057.json','upgrade-source-058.json','upgrade-source-059.json','upgrade-source-060.json','upgrade-source-061.json','upgrade-source-062.json','upgrade-source-063.json','upgrade-source-064.json','upgrade-source-065.json','upgrade-source-066.json','upgrade-source-067.json','upgrade-source-068.json','upgrade-source-070.json','owned-transition-upgrade.sql','creation-transition-upgrade.sql'):
+    for name in ('query-abi.json','preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json','upgrade-source-025.json','upgrade-source-026.json','upgrade-source-027.json','upgrade-source-028.json','upgrade-source-029.json','upgrade-source-030.json','upgrade-source-031.json','upgrade-source-032.json','upgrade-source-033.json','upgrade-source-034.json','upgrade-source-035.json','upgrade-source-036.json','upgrade-source-037.json','upgrade-source-038.json','upgrade-source-039.json','upgrade-source-040.json','upgrade-source-041.json','upgrade-source-042.json','upgrade-source-043.json','upgrade-source-044.json','upgrade-source-045.json','upgrade-source-046.json','upgrade-source-047.json','upgrade-source-048.json','upgrade-source-049.json','upgrade-source-050.json','upgrade-source-051.json','upgrade-source-052.json','upgrade-source-053.json','upgrade-source-054.json','upgrade-source-055.json','upgrade-source-056.json','upgrade-source-057.json','upgrade-source-058.json','upgrade-source-059.json','upgrade-source-060.json','upgrade-source-061.json','upgrade-source-062.json','upgrade-source-063.json','upgrade-source-064.json','upgrade-source-065.json','upgrade-source-066.json','upgrade-source-067.json','upgrade-source-068.json','upgrade-source-070.json','owned-transition-upgrade.sql','creation-transition-upgrade.sql','import-source-upgrade.sql'):
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original migration/preparation baseline required')
     return manifest,sha256(original).hexdigest(),tuple(sources)
 
@@ -597,7 +597,7 @@ class CatalogReferenceAssembly:
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=220:raise ValueError('Exact additive runtime routine inventory required')
+        if len(replacements)!=222:raise ValueError('Exact additive runtime routine inventory required')
         signatures=[]
         for statement in replacements:
             header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
@@ -793,6 +793,16 @@ class CatalogReferenceAssembly:
             cursor.execute(sql.SQL('ALTER TABLE truss.runtime_owned_operation OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
             cursor.execute('REVOKE ALL ON TABLE truss.runtime_owned_operation FROM PUBLIC',prepare=False)
             cursor.execute('REVOKE ALL ON TYPE truss.runtime_owned_operation FROM PUBLIC',prepare=False)
+            # Published source rows belong to the one-operation legacy import.
+            # Add its index-zero interpretation without changing original bytes.
+            cursor.execute('LOCK TABLE truss.runtime_import_source IN ACCESS EXCLUSIVE MODE NOWAIT',prepare=False)
+            cursor.execute("SELECT 1 FROM pg_attribute WHERE attrelid='truss.runtime_import_source'::regclass AND attname='operation_index' AND NOT attisdropped",prepare=False)
+            if cursor.fetchone() is not None:raise ValueError('Original import operation index must be absent')
+            cursor.execute("SELECT contype,convalidated,pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid='truss.runtime_import_source'::regclass AND conname='runtime_import_source_group_attempt_id_key'",prepare=False)
+            if cursor.fetchall()!=[('u',True,'UNIQUE (group_attempt_id)')]:raise ValueError('Original one-source-per-attempt constraint required')
+            cursor.execute(bundled.joinpath('import-source-upgrade.sql').read_text(),prepare=False)
+            cursor.execute('SELECT EXISTS(SELECT 1 FROM truss.runtime_import_source WHERE operation_index IS DISTINCT FROM 0)',prepare=False)
+            if cursor.fetchone()!=(False,):raise ValueError('Preserved legacy source operation zero required')
             for statement in replacements:
                 cursor.execute(statement.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION',1),prepare=False)
             cursor.execute('CREATE CONSTRAINT TRIGGER runtime_owned_journal_insert_commit AFTER INSERT ON truss.journal DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_journal_insert_check()',prepare=False)
@@ -886,7 +896,7 @@ class CatalogReferenceAssembly:
             cursor.execute('REVOKE ALL ON FUNCTION truss.catalog_check_source_correspondence(bytea,bytea,bytea) FROM PUBLIC',prepare=False)
             cursor.execute(sql.SQL('ALTER FUNCTION truss.runtime_current_installation() OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
             cursor.execute('REVOKE ALL ON FUNCTION truss.runtime_current_installation() FROM PUBLIC',prepare=False)
-            for signature in ('catalog_revision(text,text,text)','prepare_group(bytea,bytea,text,text)','query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)'):
+            for signature in ('runtime_owned_import_reference(bytea,text,text)','runtime_owned_import_record_source(uuid,int,bytea,text)','catalog_revision(text,text,text)','prepare_group(bytea,bytea,text,text)','query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)'):
                 cursor.execute(sql.SQL('ALTER FUNCTION truss.{} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
                 cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION truss.{} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
                 cursor.execute('SELECT reader_role,writer_role FROM truss.module_access',prepare=False)
@@ -1131,7 +1141,7 @@ class CatalogReferenceAssembly:
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(role)),prepare=False)
-                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.traverse_objects(jsonb,jsonb,int,int,int,text,text),truss.get_object(text,text,text,bigint,int,text,text),truss.get_edge(text,text,text,bigint,int,text,text),truss.reached(bytea,int,text,text),truss.feed_reached(text,bytea,int,text,text),truss.import_context(text,text),truss.import_key_selection(text,text,text,text,text),truss.import_identity_key_selection(bytea,text,text),truss.import_object_identity(bytea,bytea,bytea,text,text),truss.import_edge_identity(bytea,text,text),truss.import_record_source(uuid,bytea,text),truss.import_report_record_authority(bytea,text,text,text),truss.page_edges(text,text,text,jsonb,text,int,int,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.traverse_objects(jsonb,jsonb,int,int,int,text,text),truss.get_object(text,text,text,bigint,int,text,text),truss.get_edge(text,text,text,bigint,int,text,text),truss.reached(bytea,int,text,text),truss.feed_reached(text,bytea,int,text,text),truss.import_context(text,text),truss.import_key_selection(text,text,text,text,text),truss.import_identity_key_selection(bytea,text,text),truss.import_object_identity(bytea,bytea,bytea,text,text),truss.import_edge_identity(bytea,text,text),truss.import_record_source(uuid,bytea,text),truss.runtime_owned_import_reference(bytea,text,text),truss.runtime_owned_import_record_source(uuid,int,bytea,text),truss.import_report_record_authority(bytea,text,text,text),truss.page_edges(text,text,text,jsonb,text,int,int,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
@@ -1258,18 +1268,21 @@ class CatalogReferenceAssembly:
             if reason:return Ok(ObjectReadUnavailable(reason=reason))
         return result
 
-    def import_in_transaction(self,transaction: TransactionHandle,input: ImportInput,*,documents: tuple[CatalogDocument,...],bun_executable: str='bun') -> ImportExecutionResult[Literal['host_adopted']]:
+    def import_in_transaction(self,transaction: TransactionHandle,input: ImportInput | OwnedImportInput,*,documents: tuple[CatalogDocument,...],bun_executable: str='bun') -> ImportExecutionResult[Literal['host_adopted']]:
         """Import with indexed per-record outcomes; accepted effects remain caller-owned pending."""
         from ._import_runtime import run_import
         from .imports import ImportExecutionFailed
         with self._lock:
             if self._disposed:return ImportExecutionFailed(error=ExecutionFailure('execution_obligation','Assembly disposed'),report=None)
             manifest,digest,_=_release()
+            if type(input) is OwnedImportInput:
+                from ._owned_import_runtime import run_owned_import
+                return run_owned_import(self._host,transaction,input,documents,manifest,digest,_pin_cursor,bun_executable=bun_executable)
             return run_import(self._host,transaction,input,documents,manifest,digest,_pin_cursor,bun_executable=bun_executable)
 
     @_active_operation
     def import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[ImportRuntimeContext]:
-        from .import_runtime import ImportRuntimeContext
+        from .import_runtime import ImportRuntimeContext,OwnedImportRuntimeContext
         from .imports import ImportCatalogPin
         from .contracts import ProfilePin
         manifest,digest,_=_release()
@@ -1281,6 +1294,42 @@ class CatalogReferenceAssembly:
                 value_profile=ProfilePin(**value['valueProfile']),payload_profile=ProfilePin(**value['importPayloadProfile']),
                 catalog=ImportCatalogPin(revision=value['catalog']['revision'],model_bundle_sha256=value['catalog']['modelBundleSha256']))
         return self._host._run_operation(transaction,observe)
+
+    @_active_operation
+    def owned_import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[OwnedImportRuntimeContext]:
+        from .imports import ImportCatalogPin
+        from .contracts import ProfilePin
+        manifest,digest,_=_release()
+        def observe(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            value=json.loads(bytes(cursor.fetchone()[0]))
+            return OwnedImportRuntimeContext(layout_profile=ProfilePin(**value['layoutProfile']),
+                import_profile=ProfilePin(**value['ownedImportProfile']),value_profile=ProfilePin(**value['valueProfile']),
+                payload_profile=ProfilePin(**value['ownedImportPayloadProfile']),
+                catalog=ImportCatalogPin(revision=value['catalog']['revision'],model_bundle_sha256=value['catalog']['modelBundleSha256']))
+        return self._host._run_operation(transaction,observe)
+
+    @_active_operation
+    def owned_object_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,
+            values: tuple[AuthoredValue,...],root: ObjectKeySelection | None=None,source: MapValue | None=None) -> Outcome[OwnedObjectImportRecord]:
+        original=self.object_import_record_in_transaction(transaction,document_id=document_id,module_id=module_id,record_id=record_id,values=values,source=source)
+        if isinstance(original,Error):return original
+        selected=self.owned_import_context_in_transaction(transaction)
+        if isinstance(selected,Error):return selected
+        return Ok(OwnedObjectImportRecord(identity=original.value.identity,
+            payload=selected.value.object_payload(values,root=root,source=source),payload_profile=selected.value.payload_profile))
+
+    @_active_operation
+    def owned_edge_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
+            source_endpoint: ObjectKeySelection,target_endpoint: ObjectKeySelection,values: tuple[AuthoredValue,...],order_key: OrderKey,source: MapValue | None=None) -> Outcome[OwnedEdgeImportRecord]:
+        selected=self.owned_import_context_in_transaction(transaction)
+        if isinstance(selected,Error):return selected
+        reference=self.get_relationship_reference_in_transaction(transaction,document_id=document_id,module_id=module_id,relationship_id=relationship_id)
+        if isinstance(reference,Error):return reference
+        if reference.value is None:return Error(ExecutionFailure('execution_obligation','Accepted relationship reference required'))
+        return Ok(OwnedEdgeImportRecord(identity=OwnedEdgeImportIdentity(relationship_definition_pin=reference.value.definition_pin,
+            source=source_endpoint,target=target_endpoint),payload=selected.value.edge_payload(values,order_key,source=source),payload_profile=selected.value.payload_profile))
 
     @_active_operation
     def edge_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
@@ -1315,7 +1364,7 @@ class CatalogReferenceAssembly:
         """Construct import identity from actual accepted primary-key definitions."""
         from .contracts import ObjectKeySelection,ObjectKeyComponent,ReadTypeReference,QualifiedOwner,ProfilePin,TextValue
         from .imports import ObjectImportRecord,ImportCatalogPin
-        from .import_runtime import ImportRuntimeContext
+        from .import_runtime import ImportRuntimeContext,OwnedImportRuntimeContext
         manifest,digest,_=_release()
         def observe(cursor,observed):
             _pin_cursor(cursor)

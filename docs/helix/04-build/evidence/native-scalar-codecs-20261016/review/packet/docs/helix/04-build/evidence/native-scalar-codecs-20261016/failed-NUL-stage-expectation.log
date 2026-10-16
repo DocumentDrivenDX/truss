@@ -1,0 +1,17 @@
+test_public_exact_scalar_capture_and_original_disclosure (test_current_disclosure_codecs_native.NativeScalarCodecTests.test_public_exact_scalar_capture_and_original_disclosure) ... FAIL
+
+======================================================================
+FAIL: test_public_exact_scalar_capture_and_original_disclosure (test_current_disclosure_codecs_native.NativeScalarCodecTests.test_public_exact_scalar_capture_and_original_disclosure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_current_disclosure_codecs_native.py", line 75, in test_public_exact_scalar_capture_and_original_disclosure
+    negative=self._negative_controls(out,corpus)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_current_disclosure_codecs_native.py", line 128, in _negative_controls
+    self.assertIsInstance(response,Error)
+AssertionError: Ok(value=GroupFailed(failure=InvalidGroupInput(diagnostic_profile=ProfilePin(identity='truss-native-create-diagnostic', version='0.1', sha256='27c241fa37e64bbabb5c24f257690f98f2dcb1c3b8d8b3c273254ba31a6499e2'), diagnostic=ExactArtifact(identity='17ca5a184d4d6bef8e497663a814106ccfca730c7edac0cc5b332952034005c0', bytes_base64='eyJjb2RlIjogImludmFsaWRfaW5wdXQiLCAib3V0Y29tZSI6ICJmYWlsZWQiLCAibmF0aXZlU3RhdGUiOiAiMjIwMjMiLCAib3BlcmF0aW9uSW5kZXgiOiAiMCJ9', sha256='17ca5a184d4d6bef8e497663a814106ccfca730c7edac0cc5b332952034005c0'), code='invalid'), outcome='failed'), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+----------------------------------------------------------------------
+Ran 1 test in 46.603s
+
+FAILED (failures=1)

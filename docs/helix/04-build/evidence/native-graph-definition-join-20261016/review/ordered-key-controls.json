@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "controls": [
+    "exact ordered synthetic composite accepted",
+    "reversed components refused",
+    "foreign revision refused",
+    "wrong authored Key refused"
+  ],
+  "scope": "Pure supplied metadata comparison only; no native composite-Key campaign."
+}

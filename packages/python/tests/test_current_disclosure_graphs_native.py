@@ -3,13 +3,13 @@
 No registration/native binding/authenticated protected release admission. The
 source-provider substitution is explicit and does not stand in for those gates.
 """
-import copy,json,hashlib,struct,time,os,unittest
+import base64,copy,json,hashlib,struct,time,os,unittest
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 import psycopg
 from truss import Ok
-from truss.contracts import MapValue,TextValue,BooleanValue
+from truss.contracts import MapValue,TextValue,BooleanValue,NullValue
 from truss.groups import CreateObject,CreateEdge,RootlessOwnership,AuthoredValue,AliasObjectReference,StoredObjectReference,NullOrderKey,GroupSuccess
 from truss._current_disclosure_facts import capture_current_disclosure_facts_with_cursor,verify_current_disclosure_capture_with_cursor
 from truss._current_query_pipe import CurrentQueryPipe
@@ -20,6 +20,15 @@ PACKETS=json.loads((Path(__file__).parent/'fixtures/current-disclosure/native-gr
 BUNDLE_SHA256='548b7ff64dabf3bc796afe99ecca265f5bcf242202e367ba7125e62c64f0a735'
 _ENABLED=os.environ.get('TRUSS_GRAPH_CAPTURE_NATIVE_QUALIFICATION')=='1' and bool(os.environ.get('TRUSS_GRAPH_CAPTURE_UMF_CHILD'))
 wire=lambda x:json.dumps(x,separators=(',',':'),ensure_ascii=True).encode()
+
+def native_literal(value):
+    """Fixture transport to public carriers; no domain or permission evaluator."""
+    if value is None:return NullValue()
+    if set(value)=={'boolean'}:return BooleanValue(value=value['boolean'])
+    for member,kind in [('string','string'),('integerToken','integer'),('decimalToken','decimal')]:
+        if set(value)=={member}:return TextValue(kind=kind,text=value[member])
+    if set(value)=={'binaryHex'}:return TextValue(kind='binary',text=base64.b64encode(bytes.fromhex(value['binaryHex'])).decode())
+    raise ValueError('Unsupported fixture literal')
 
 class Deadline:
     def __init__(self):self.end=time.monotonic()+90
@@ -50,7 +59,7 @@ class NativeGraphCaptureTests(base.PublicCreateGroupTests):
             name=fact['type']['elementId'];alias='n'+str(i);aliases[(name,json.dumps(fact['key'],sort_keys=True))]=alias
             values=[]
             for cell in fact['fields']:
-                value=cell['value'];literal=BooleanValue(value=value['boolean']) if 'boolean' in value else TextValue(kind='integer' if 'integerToken' in value else 'string',text=value.get('integerToken',value.get('string')))
+                literal=native_literal(cell['value'])
                 values.append(AuthoredValue(name=field_names[cell['field']['elementId']],value=literal))
             operations.append(CreateObject(type_definition_pin=self.types[('adoc',name)].definition_pin,values=tuple(values),ownership=RootlessOwnership(),alias=alias))
         declarations={r['id']:r for r in document['modules'][0]['relationships']};refs={name:a.get_relationship_reference_in_transaction(t,document_id='adoc',module_id='m',relationship_id=name).value for name in declarations}

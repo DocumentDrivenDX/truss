@@ -1,0 +1,8 @@
+{
+  "logOpenedUTC": "2026-10-16T19:45:32.387769+00:00",
+  "firstRetainedCaptureUTC": "2026-10-16T19:45:39.330810+00:00",
+  "lastLogWriteUTC": "2026-10-16T19:46:19.410880+00:00",
+  "intervalMeaning": "conservative command log envelope, not exact query start/end",
+  "remainingStartupWindowRoots": [],
+  "otherNewRoots": []
+}

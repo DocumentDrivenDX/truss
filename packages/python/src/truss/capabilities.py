@@ -16,8 +16,9 @@ from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogInvalid, Cat
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
 from .object_read import ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from .edge_read import EdgeFound, EdgeNotFound, EdgePage, EdgePageCursor
-from .imports import ImportInput, ObjectImportRecord, EdgeImportRecord, ImportExecutionResult
-from .import_runtime import ImportRuntimeContext
+from .imports import ImportInput, OwnedImportInput, ObjectImportRecord, EdgeImportRecord, OwnedObjectImportRecord, OwnedEdgeImportRecord, ImportExecutionResult
+from .import_runtime import ImportRuntimeContext,OwnedImportRuntimeContext
+from .contracts import ObjectKeySelection
 from .groups import AuthoredValue, OrderKey
 from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedPage, FeedAcknowledged, FeedUnavailable
 from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
@@ -119,6 +120,20 @@ class NativeImportCapability(_NativeCapability[Literal['import']]):
     def import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[ImportRuntimeContext]:
         return self._assembly.import_context_in_transaction(transaction)
 
+    def owned_import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[OwnedImportRuntimeContext]:
+        return self._assembly.owned_import_context_in_transaction(transaction)
+
+    def owned_object_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,
+            values: tuple[AuthoredValue,...],root: ObjectKeySelection | None=None,source: MapValue | None=None) -> Outcome[OwnedObjectImportRecord]:
+        return self._assembly.owned_object_import_record_in_transaction(transaction,document_id=document_id,module_id=module_id,
+            record_id=record_id,values=values,root=root,source=source)
+
+    def owned_edge_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
+            source_endpoint: ObjectKeySelection,target_endpoint: ObjectKeySelection,values: tuple[AuthoredValue,...],
+            order_key: OrderKey,source: MapValue | None=None) -> Outcome[OwnedEdgeImportRecord]:
+        return self._assembly.owned_edge_import_record_in_transaction(transaction,document_id=document_id,module_id=module_id,
+            relationship_id=relationship_id,source_endpoint=source_endpoint,target_endpoint=target_endpoint,values=values,order_key=order_key,source=source)
+
     def edge_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
                                          source_endpoint: TypedIdentity,target_endpoint: TypedIdentity,values: tuple[AuthoredValue,...],
                                          order_key: OrderKey,source: MapValue | None=None) -> Outcome[EdgeImportRecord]:
@@ -130,7 +145,7 @@ class NativeImportCapability(_NativeCapability[Literal['import']]):
                                             values: tuple[AuthoredValue,...],source: MapValue | None=None) -> Outcome[ObjectImportRecord]:
         return self._assembly.object_import_record_in_transaction(transaction,document_id=document_id,module_id=module_id,record_id=record_id,values=values,source=source)
 
-    def import_in_transaction(self,transaction: TransactionHandle,input: ImportInput) -> ImportExecutionResult[Literal['host_adopted']]:
+    def import_in_transaction(self,transaction: TransactionHandle,input: ImportInput | OwnedImportInput) -> ImportExecutionResult[Literal['host_adopted']]:
         return self._assembly.import_in_transaction(transaction,input,documents=self._documents,bun_executable=self._bun_executable)
 
 

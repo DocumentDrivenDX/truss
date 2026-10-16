@@ -1,0 +1,93 @@
+{
+  "review": "Truss actual-context native graph-definition correspondence",
+  "status": "complete within bounded scope",
+  "verdict": "qualified no findings",
+  "findings": [],
+  "startedAt": "2026-10-16T20:11:13Z",
+  "completedAt": "2026-10-16T20:13:38.893669+00:00",
+  "deadline": "2026-10-16T20:15:13Z",
+  "inputDirectory": "/private/tmp/truss-native-graph-definition-review-20261016",
+  "inputManifestSha256": "9f3c3fd05e6fea278be93b2b68a5766938aa6f2f6ec405f98066ea620dcc4740",
+  "sourceSha256": "cbabba30e0f1c504ab3fe2be91bc5b127f61d202ef70706108aa370a5b000422",
+  "base": "586e1dec20332b18411c5fd7a28ecd743d9ee570",
+  "answers": [
+    {
+      "question": 1,
+      "conclusion": "Factory requires the exact native CurrentPresencePreparation class and actual graph method. It obtains the original parent, invokes existing native Model capture on that same current object, derives Graph requirements through its native descriptor, checks exact source/preparation/model/pin correspondence, and checks current/parent object identity again before returning. Its carrier retains the actual Model/current/parent and observation. No caller-supplied requirements, callback or re-prepared parent is introduced. The constructible returned dataclass remains data, not a witness."
+    },
+    {
+      "question": 2,
+      "conclusion": "The supported realization joins full nominal identities and revisions, original selected Key owner/id/ordered Field identities, Record-member property mappings, and exact typed native relationship alternatives. It requires a single authored source/target, distinct roles/sides, matching target Key, directed opaque witness, and matching multiplicity/lifecycle/composition/inverse/columns. Unsupported branches, witnesses or duplicate selections refuse. It performs correspondence checks rather than policy evaluation, codec equivalence, population enumeration or branch/default traversal selection."
+    },
+    {
+      "question": 3,
+      "conclusion": "Claims are appropriately finite. Supplied native test uses an actual issued context and fresh native 0.2 assessment; historical 0.1 is relabeled only in synthetic unit setup and identified as such. Column-drift refusal and caller-work restoration are explicitly asserted. Endpoint source/cleanup observations do not prove continuous authority, whole-source semantic admission, graph populations or guarded release. No acceptance promotion is claimed."
+    }
+  ],
+  "independentChecks": {
+    "passed": true,
+    "frozenFilesVerified": 19,
+    "selectedPrePostSourcePinsVerified": 6,
+    "base": "586e1dec20332b18411c5fd7a28ecd743d9ee570",
+    "pureTests": {
+      "discovered": 24,
+      "skipped": 3,
+      "passed": 21
+    },
+    "suppliedNativeModelAndGraphReportsReproducedByteExact": true,
+    "actualAssessmentVersion": "truss.accepted-catalog-assessment/0.2-candidate",
+    "nativeModuleSha256": "7e6384ddada0f67a45839a222ffb059e04a5de00f6a9281ad811eefacdeffa42",
+    "SQLExecuted": false
+  },
+  "orderedKeyControls": {
+    "passed": true,
+    "controls": [
+      "exact ordered synthetic composite accepted",
+      "reversed components refused",
+      "foreign revision refused",
+      "wrong authored Key refused"
+    ],
+    "scope": "Pure supplied metadata comparison only; no native composite-Key campaign."
+  },
+  "commands": [
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B check.py",
+      "exitCode": 0,
+      "logs": [
+        "check.log",
+        "pure-tests.log"
+      ],
+      "result": "24 discovered: 21 pass and 3 existing opt-in skips, 0.609s. Includes two actual final-Weft factory tests with mocked native observation. Both supplied native reports reconstructed byte-exact; 19 input hashes and 6 pre/post source pins verified."
+    },
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B ordered-key-controls.py",
+      "exitCode": 0,
+      "log": "ordered-key-controls.log",
+      "result": "Exact synthetic composite accepted; reversed components, foreign revision and wrong Key refused."
+    }
+  ],
+  "suppliedNativeEvidence": {
+    "tests": 1,
+    "seconds": 12.368,
+    "coreRelationships": 5,
+    "recordAssociations": 1,
+    "assessmentVersion": "truss.accepted-catalog-assessment/0.2-candidate",
+    "inspection": "Source, artifacts, native IDs/typed endpoint/physical-column golden assertions and refusal/restoration controls inspected. No independent SQL executed.",
+    "cleanup": "Supplied postflight reports no new fixture roots and fixture cleanup; not an independent live process audit."
+  },
+  "incompleteScope": [
+    "No native SQL replay, build, broad campaign, nested delegation or owner edits.",
+    "No fresh native composite-Key qualification: extra ordered-Key controls are supplied-data tests, while full ordered native Key correspondence also delegates to the existing Model join.",
+    "Only selected source endpoint hashes inspected; no full imported-source, hermetic or ABA proof.",
+    "No whole-model codecs/domains, graph occurrence census, native source registration, caller/current authority or guarded release; all required acceptance cases remain open."
+  ],
+  "retention": {
+    "manifest": "manifest.json",
+    "shape": "files maps relative path to {sha256,bytes}; excludes root manifest and reconstructible working/ Git baseline overlay",
+    "excluded": [
+      "manifest.json",
+      "working/",
+      "__pycache__/"
+    ]
+  }
+}

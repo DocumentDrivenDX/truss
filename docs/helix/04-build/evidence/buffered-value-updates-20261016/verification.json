@@ -1,5 +1,5 @@
 {
-  "status": "functional increment; hosted installed-wheel qualification remains pending",
+  "status": "functional local increment; hosted installed-wheel qualification fails at original1024 creation",
   "sourceBaseBeforeTests": "477e9466df5f2fd3f8d93895822a99fff69ac8b4",
   "integratedSecurityBase": "d58898687906fe681ef91f4a150811b4a518aa14",
   "versions": {
@@ -36,7 +36,8 @@
     "astra-review.txt": "00354d1057e70b13336c335349b94e9478f896f079f268d8fbda75adc9fbc976",
     "inventory-older-revision.log": "194bac309c5c53bde4e57012a1a3fb45324637c3db019c023f6194a0bc65c9d5",
     "inventory.json": "6b587cf3096050f0e85dda7a697b2e3a0bec5e4c3f57a88e627f49ccf57b9beb",
-    "inventory-initial-cleanup-error.log": "6097a2dd6c9a4bb4180f91e7c43527ae1223ea4c8fa1fbd31eb0df566afeb7ff"
+    "inventory-initial-cleanup-error.log": "6097a2dd6c9a4bb4180f91e7c43527ae1223ea4c8fa1fbd31eb0df566afeb7ff",
+    "hosted-installed-wheel-failures.log": "9d28737c54d7dcb1b194375a07c5060c2dd567baa6be09299a3f672b89a99994"
   },
   "overlappingSecurityJob": {
     "handle": "55265",
@@ -45,5 +46,14 @@
     "failure": "test expected SQL22P05 but public NUL returned GroupFailed/InvalidGroupInput22023; no product relaxation",
     "source": "security owner message,2026-10-16"
   },
-  "releaseAssessmentCorrection": "Earlier root chat summaries incorrectly treated5x as a mandatory release gate. Governing test plan says it is a triage signal. Preserve observed latency and timing overlap; qualify release against actual functional, deadline and installed-wheel checks."
+  "releaseAssessmentCorrection": "Earlier root chat summaries incorrectly treated5x as a mandatory release gate. Governing test plan says it is a triage signal. Preserve observed latency and timing overlap; qualify release against actual functional, deadline and installed-wheel checks.",
+  "hostedInstalledWheel": {
+    "run": "https://github.com/DocumentDrivenDX/truss/actions/runs/38957633475",
+    "sourceCommit": "afd334f1bb1d1f68d6b1c0c2374db88e56c29efc",
+    "conclusion": "failure",
+    "macosArm64": "17of18 tests pass; original1024create cancels57014 in finishing row validation",
+    "linuxX64": "16of18 tests pass; original1024create and final-operation fault case cancel57014 before required completion/fault",
+    "deadlinesChanged": false,
+    "publication": "skipped"
+  }
 }

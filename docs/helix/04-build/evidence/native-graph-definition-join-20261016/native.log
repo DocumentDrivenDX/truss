@@ -1,0 +1,6 @@
+test_issued_graph_context_maps_actual_catalog_and_edge_columns (test_native_graph_correspondence_native.NativeGraphJoinTests.test_issued_graph_context_maps_actual_catalog_and_edge_columns) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 12.368s
+
+OK
