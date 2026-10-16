@@ -1,0 +1,17 @@
+{
+  "release": "https://github.com/DocumentDrivenDX/weft/releases/tag/v0.4.38",
+  "published": true,
+  "sourceCommit": "e2eba1ba323e6e9c08400fd0daf22bb456857d43",
+  "cohorts": {
+    "arm": {
+      "wheel": "weft_sql-0.4.38-cp39-abi3-macosx_11_0_arm64.whl",
+      "wheelSha256": "f30a8e8207eb7a159966b66ea3ebce90efcc57414311b1a4be7d14eac954c852",
+      "moduleSha256": "8e7aa047a9b205ca8afe3a3fcf4d5f7da950b8f9ef56cda41c60b17ccd03a671"
+    },
+    "linux": {
+      "wheel": "weft_sql-0.4.38-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "wheelSha256": "6d9ef828dffb2363ff1501980f2c4aade449a8f0ff0ce5714dae57035295f55e",
+      "moduleSha256": "6a037c5c15efa3e7df58ac157a1bfe9e56fb35d1aed68850d17255439fbc730e"
+    }
+  }
+}

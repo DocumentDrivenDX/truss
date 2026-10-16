@@ -1,13 +1,14 @@
 # Truss Python toolkit
 
-**Unreleased development checkpoint:** SDK `0.0.37.dev0` installs native
+**Unreleased development checkpoint:** SDK `0.0.38.dev0` installs native
 `0.71-candidate`. Public groups now create owned objects/edges, explicitly
 reparent complete subtrees and cascade deletes; identity/key/page/edge reads,
 traversal and retained history preserve ownership. Basic PostgreSQL18.6 workflows
 cover commit, rollback, dry-run and original receipt replay. The
 published release remains v0.0.35, described below. The v0.0.36 tag did not
 publish: its release gate found the missing Weft runtime70 compatibility pin.
-A matching compiler and replacement hotfix release are in progress.
+Matching Weft `0.4.38` / backend `0.4.40` is published; the replacement
+SDK `0.0.37` hotfix still awaits its release gates.
 
 Modern owned groups admit up to 1,024 operations per atomic group; legacy
 rootless groups retain their 128-operation limit. Basic native tests cover

@@ -1,0 +1,18 @@
+{
+  "status": "PLAN_CLEAR_COMPLETED_INTEGRATION_REVIEW_REQUIRED",
+  "reviewer": "Astra Ultra",
+  "findings": [],
+  "scope": "Integrate stableSDK037 packaging lineage into owned main while retaining native71/runtime/security/browser and current compiler behavior.",
+  "constraints": [
+    "Main SDK becomes0.0.38.dev0; native71and all its currentSQL/source remain unchanged. StableSDK037 continues exactnative70manifest and164-routine/128 scope.",
+    "Keep main querydependency/compilerWeft036/backend039/buildera14640f2bb288e58de0c9846fb10162e3e4030fc and main release current-query source selection. Do not take stable038/backend040 selection over current main.",
+    "Add exact published038 ABI2 cohorts as a union retaining every old035/036 and other existing whole selection. Shared ABI2 base pins match stable; no implicit migration.",
+    "Move active ownedv37development release note to38 and update active links/titles; add exact stablev37note while preserving historicalfailed36/69 evidence.",
+    "Change all intermediate native70 predecessor download/install wheel names/tag from failedSDK36 to actualSDK37; keep wheelSHAverification and exact0d292native70manifest gate.",
+    "Retain existing68\u219271and68\u219270\u219271populatedupgrade tests, intentional7partialgrant closures and native/private219routine inventory.",
+    "Review completed merge diff before commit/tag; keep newer concurrent browser/security/performance work. Main intermediate37 workflow requires stableSDK37publishedassets when executed."
+  ],
+  "source_reference": "/private/tmp/truss-sdk037-weft038-final-astra-20261016.json",
+  "inspected_main_commit": "64b8f813ca82f240e8030bf2970955939f80b725",
+  "reviewer_native_runs": 0
+}

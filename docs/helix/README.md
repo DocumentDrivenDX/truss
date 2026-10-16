@@ -1,14 +1,15 @@
 # truss project documentation
 
-The current development checkpoint is Python SDK `0.0.36.dev0` / native
-`0.69-candidate`; the published release remains v0.0.35. Public owned-graph
+The current development checkpoint is Python SDK `0.0.38.dev0` / native
+`0.71-candidate`; the published release remains v0.0.35. Public owned-graph
 workflows cover creation, explicit subtree reparenting, cascade deletion,
 read-only reads, history and receipt replay. Ordinary compiled queries use
 published Weft0.4.36 / backend0.4.39. Canonical dates and exact decimal facets
 are supported by catalog acceptance, writes and reads; their broader SQL query
 domains remain unfinished. Practical performance still blocks the next release,
-and the 1,024-operation change remains an isolated candidate. See the
-[unreleased tranche notes](04-build/releases/v0.0.36.md) and
+and the integrated 1,024-operation path remains unqualified on the release
+runners. See the
+[unreleased tranche notes](04-build/releases/v0.0.38.md) and
 [current Python interface](../../packages/python/README.md) for exact scope.
 
 ## First-release scope — owner direction, 2026-10-13

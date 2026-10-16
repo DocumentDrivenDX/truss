@@ -174,18 +174,18 @@ jobs:
           assert hashlib.sha256((root/name).read_bytes()).hexdigest()==expected[name]
           PYCODE
           python -m pip install --no-deps --target "$RUNNER_TEMP/truss-hotfix-package" "$RUNNER_TEMP/truss-hotfix-source/truss_toolkit-0.0.35-py3-none-any.whl"
-          gh release download v0.0.36 --repo DocumentDrivenDX/truss --pattern truss_toolkit-0.0.36-py3-none-any.whl --pattern SHA256SUMS --dir "$RUNNER_TEMP/truss-070-source"
+          gh release download v0.0.37 --repo DocumentDrivenDX/truss --pattern truss_toolkit-0.0.37-py3-none-any.whl --pattern SHA256SUMS --dir "$RUNNER_TEMP/truss-070-source"
           python - <<'PYCODE'
           import os,pathlib,hashlib,zipfile
           root=pathlib.Path(os.environ['RUNNER_TEMP'])/'truss-070-source'
-          name='truss_toolkit-0.0.36-py3-none-any.whl'
+          name='truss_toolkit-0.0.37-py3-none-any.whl'
           expected=dict((line.split()[1],line.split()[0]) for line in (root/'SHA256SUMS').read_text().splitlines())
           assert hashlib.sha256((root/name).read_bytes()).hexdigest()==expected[name]
           with zipfile.ZipFile(root/name) as wheel:
               original=wheel.read('truss/_catalog_runtime/manifest.json')
           assert original==pathlib.Path('packages/python/src/truss/_catalog_runtime/upgrade-source-070.json').read_bytes()
           PYCODE
-          python -m pip install --no-deps --target "$RUNNER_TEMP/truss-070-package" "$RUNNER_TEMP/truss-070-source/truss_toolkit-0.0.36-py3-none-any.whl"
+          python -m pip install --no-deps --target "$RUNNER_TEMP/truss-070-package" "$RUNNER_TEMP/truss-070-source/truss_toolkit-0.0.37-py3-none-any.whl"
           PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests TRUSS_EDGE_HOTFIX_SOURCE_PACKAGE="$RUNNER_TEMP/truss-hotfix-package" TRUSS_EDGE_HOTFIX_INTERMEDIATE_PACKAGE="$RUNNER_TEMP/truss-070-package" python -m unittest test_edge_writer_hotfix_native
       - name: Run both installed exact timestamp workflows
         run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_timestamp_query_native

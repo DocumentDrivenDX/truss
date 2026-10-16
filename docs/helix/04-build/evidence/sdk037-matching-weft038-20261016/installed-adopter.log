@@ -1,0 +1,11 @@
+{
+  "catalog": "accepted",
+  "mutation": "committed",
+  "replay": "committed",
+  "receipt": "included",
+  "query": "relationship",
+  "dry_run": "rolled_back",
+  "import": "created",
+  "feed_transactions": 3,
+  "ack": "committed"
+}

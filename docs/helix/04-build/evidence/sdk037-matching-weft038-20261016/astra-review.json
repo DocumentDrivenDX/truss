@@ -1,0 +1,74 @@
+{
+  "status": "SOURCE_CLEAR_INSTALLED_LOCAL_EVIDENCE_PASS_FINAL_TRUSS_RELEASE_GATES_PENDING",
+  "reviewer": "Astra Ultra",
+  "worktree": "/private/tmp/truss-edge-writer-hotfix36-20261016",
+  "base_commit": "3cf8c4568a1759413fec37f7097bf85925c36a1c",
+  "findings": [],
+  "resolved_finding": "README now describes both-platform installed public workflows as required release gates before publication, rather than already completed Truss038-wheel qualification.",
+  "source_sha256": {
+    ".github/workflows/release.yml": "e25abca53c84f4a9a8b5c44b5a3a6547bf8c0ee808246474e9d67b84adc8183f",
+    "packages/python/README.md": "0c0cc5e823b2eb6015a73a2ae0f73fd30c8977a6840b0feab500b8a7f918586f",
+    "packages/python/pyproject.toml": "0e71d4104b5b908947a5ef09cf2f7b9c7b8252c4285959f904a8b622071b90cc",
+    "packages/python/src/truss/_current_query_originals.py": "e245249056dc3f5ab7043bbe2118b9b92fe20d99739f8c157e6585269b44216a",
+    "packages/python/src/truss/_query_runtime.py": "e3f2ad329cc020f76b79727b251ac90635332232a9e6aba1e27936ef51bc53a1",
+    "scripts/build-weft-runtime-python.py": "532f89ee74d08cf5905bed68fd844d9c09c446b533ec8e57510c5b1d05367cb1",
+    "docs/helix/04-build/releases/v0.0.37.md": "a3408355f28176264fe31ea7acbf4444f94100900194b18a8582b230f8bedb58"
+  },
+  "verified": [
+    "SDK037/querydependencyWeft038/compiler038/backend040 and build/release source e2eba1ba323e6e9c08400fd0daf22bb456857d43 agree.",
+    "The two added ARM/Linuxx64 ABI2 cohorts match freshly downloaded published wheel SHA256SUMS, embedded native module hashes and release-pin smoke module/shim hashes. Old cohort constants and validation functions are unchanged.",
+    "Five distinct published native70 report entries select exacte2 source/version038/5checks with nativeAdmission=false/securityReady=false; no extra platform is enrolled in TrussABI2.",
+    "Current native70 catalog has no diff from failedSDK036tag3cf8c456. Manifest0d292... and every covered source hash verified.",
+    "Actual built SDK037wheel contains470 truss source/assets members byte-equal to candidate and exactnative70manifest.",
+    "Standard builder features now follow frozen Weftpyproject and release build invocation; locally rebuilt wheels are not implicitly admitted as published cohorts.",
+    "README/release note preserve failedSDK036, published35/native68 upgrade scope,128-operation bound, native70 action-selection exclusion and separate owned1024development."
+  ],
+  "native_manifest_sha256": "0d292c3681986b3664ff3af9927039d10cf20ef029511e33ccd7d76c566041e3",
+  "published_weft_evidence": {
+    "verified_pins_sha256": "44f36412818299fd7d7edf71b51f6fdab66312cc1f17c2a4a99ee697f094d60d",
+    "pins": {
+      "release": "https://github.com/DocumentDrivenDX/weft/releases/tag/v0.4.38",
+      "published": true,
+      "sourceCommit": "e2eba1ba323e6e9c08400fd0daf22bb456857d43",
+      "cohorts": {
+        "arm": {
+          "wheel": "weft_sql-0.4.38-cp39-abi3-macosx_11_0_arm64.whl",
+          "wheelSha256": "f30a8e8207eb7a159966b66ea3ebce90efcc57414311b1a4be7d14eac954c852",
+          "moduleSha256": "8e7aa047a9b205ca8afe3a3fcf4d5f7da950b8f9ef56cda41c60b17ccd03a671"
+        },
+        "linux": {
+          "wheel": "weft_sql-0.4.38-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+          "wheelSha256": "6d9ef828dffb2363ff1501980f2c4aade449a8f0ff0ce5714dae57035295f55e",
+          "moduleSha256": "6a037c5c15efa3e7df58ac157a1bfe9e56fb35d1aed68850d17255439fbc730e"
+        }
+      }
+    },
+    "release_pins_sha256": "d53eb52d97ac60ae57710b9cf7be529efefb1f00a57e7e920b1914c36e7c8fa5",
+    "wheel_checksum_file_sha256": "53f2a9a534ae2ce37783bb99e7b5c0c38bc7beb4c0e9f061494972d31d9d8401",
+    "publication": "Parent reports actual Weft038 publication2026-10-16T12:29:40Z after all5platform gates; reviewer inspected downloaded public artifacts/metadata, not live network."
+  },
+  "sdk_wheel": {
+    "path": "/private/tmp/truss-sdk037-published-weft038-dist-20261016/truss_toolkit-0.0.37-py3-none-any.whl",
+    "sha256": "e5269177129438437061026b4cc404b8207bcf5355d42d2775ebb4ae4a035825",
+    "source_members_verified": 470
+  },
+  "parent_executed_tests": {
+    "adopter_session": "89911 PASS",
+    "policy_writer_upgrade_session": "13091 PASS6/42.293s",
+    "numeric_session": "88292 PASS2/13.472s",
+    "scope": "Actual installed SDK and public Weft wheel; parent reports no compiler overrides/source imports.",
+    "log_sha256": {
+      "/private/tmp/truss-sdk037-installed-adopter-20261016.log": "1f6ffdf4abc20c4e010707bb66e67870082a11f7e2132d2804aeee3323a62e3b",
+      "/private/tmp/truss-sdk037-installed-policy-hotfix-20261016.log": "8da49c495d3bfc9acd8455f148d1b821dff9a366db91787baa72e83d072058d9",
+      "/private/tmp/truss-sdk037-installed-numeric-20261016.log": "5eca630fb2f76fce075e33e4e0f26186e197c0e9902e5de1b698ad381721b9e5"
+    }
+  },
+  "reviewer_checks": [
+    "Static exact source/AST/diff review",
+    "Native manifest and package-wheel source hash checks",
+    "Independent cohort source/publishedwheel/module/shim check",
+    "git diff --check PASS"
+  ],
+  "release_boundary": "Clear to freeze stable source and enter normal tag-triggered release gates. TrussSDK037 publication still requires its existing installedLinux/macOS native/policy/query gates; Weft publication alone is not Truss release qualification.",
+  "reviewer_native_runs": 0
+}
