@@ -1,0 +1,205 @@
+{
+  "profile": "pap-allocation/1",
+  "state": "planned",
+  "stories": [
+    {
+      "story": "US-046",
+      "testPrefix": "bulk-update-materialize-frozen-update",
+      "criteria": [
+        {
+          "id": "US-046-AC1",
+          "plannedTest": "coherent_cut",
+          "assertion": "Given a qualified actor/read context and original compiled plan, when materialized, then Key, canonical identity, whole-row version and complete matching set come from one original native snapshot and the exact admitted Weft selection program.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-046-AC2",
+          "plannedTest": "freeze_after_selection",
+          "assertion": "Given rows changed/inserted after sealing, when work is reviewed, then original target count/order/values/pins stay unchanged and new matches are absent; review reserves no execution rights.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-046-AC3",
+          "plannedTest": "sealing_integrity",
+          "assertion": "Given edited client manifest bytes with recomputed hashes, missing original seal/issuer/initiating human, wrong store/epoch, duplicate targets, noncanonical [1,2] partition, ambiguous Keys or missing issued guards, when sealing/submission is attempted, then no runnable job is admitted without exact retained authorized seal custody.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-046-AC4",
+          "plannedTest": "bounded_complete_work",
+          "assertion": "Given empty, exact-limit, overflow and timeout selections, when materialized, then empty work seals explicitly, supported complete boundaries succeed and incomplete/exhausted work cannot be sealed or silently truncated.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-046-AC5",
+          "plannedTest": "authorized_review",
+          "assertion": "Given current read/review permission loss or hidden rows, when materialization/review is requested, then selection stays within the explicit authorized view and protected source/manifest data is withheld without permission.",
+          "state": "planned",
+          "layer": "Native integration"
+        }
+      ]
+    },
+    {
+      "story": "US-047",
+      "testPrefix": "bulk-update-execute-atomic-update-batches",
+      "criteria": [
+        {
+          "id": "US-047-AC1",
+          "plannedTest": "atomic_effects",
+          "assertion": "Given an authorized original batch, when executed, then all required UMF set effects/verification, complete item outcomes, graph/journal and batch prefix receipt share one confirmed outer commit.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-047-AC2",
+          "plannedTest": "identity_and_version",
+          "assertion": "Given a target edit, deletion, Key rebinding or restored epoch, when executing, then original identity/version/correspondence checks under held locks prevent redirect/lost update and all batch effects roll back.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-047-AC3",
+          "plannedTest": "stop_with_prefix",
+          "assertion": "Given batch0 committed and batch1 conflicted/rejected, when the job settles, then the complete earlier prefix stays committed, batch1 has no business effect and no later batch is admitted.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-047-AC4",
+          "plannedTest": "current_authority",
+          "assertion": "Given concurrent revocation/catalog retirement or an attempted out-of-frame/raw write, when executing, then original current-authority/invariant boundaries refuse before unauthorized effects and no privileged fixture path substitutes for the public gateway.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-047-AC5",
+          "plannedTest": "no_op_receipt",
+          "assertion": "Given unchanged assignments or retained equal intent, when executed/replayed, then exact no-op and complete original result vectors persist without fabricated changes/version increments or repeat effects.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-047-AC6",
+          "plannedTest": "capacity_and_failure",
+          "assertion": "Given result reservation exhaustion or runtime/invariant failure, when execution fails, then complete rollback/stop or uncertainty is preserved without partial item outcomes, truncated receipts or lost original recovery custody.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-047-AC7",
+          "plannedTest": "namespace_token_collision",
+          "assertion": "Given two registered job namespaces with the same job ID/action/principal and batch/item ordinals, when both execute/reconcile, then namespace-inclusive reserved item tokens remain distinct and cannot replay, conflict with or disclose the other job.",
+          "state": "planned",
+          "layer": "Native integration"
+        }
+      ]
+    },
+    {
+      "story": "US-048",
+      "testPrefix": "bulk-update-recover-queued-update",
+      "criteria": [
+        {
+          "id": "US-048-AC1",
+          "plannedTest": "original_recovery",
+          "assertion": "Given a crash/lost acknowledgement after original business or seal/submit/claim/cancel/reconcile control commit, when the worker recovers its original issued attempt, then full original atomic result is returned unchanged without repeated graph/control mutation; confirmed control noncommit has ControlFailure and unknown disposition retains ControlUnknown.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-048-AC2",
+          "plannedTest": "fence_two_workers",
+          "assertion": "Given competing/unauthorized workers and expired/stale claims, when claim/execute/reconcile races, then full refusal unions preserve the valid job, durable effect admission prevents blind takeover and no expired lease/not-found alone authorizes reexecution.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-048-AC3",
+          "plannedTest": "cancel_linearization",
+          "assertion": "Given cancel before dispatch or racing native execution, when control settles, then future admission is fenced, previously committed effects remain and an unresolved original transaction is reported reconciling rather than cancelled/rolled back.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-048-AC4",
+          "plannedTest": "retention_and_authority",
+          "assertion": "Given unequal submit intent, retirement, expiry, restore, revoked original human/delegation or denied outsider lookup, when original admission/review/reconcile runs, then valid original-subject loss stops future work while unauthorized outsiders cannot stop a valid job or disclose protected outcomes; no automatic new namespace/token/manifest is created.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-048-AC5",
+          "plannedTest": "joint_update_proof",
+          "assertion": "Given unchanged SQL and registered UMF action, when the packed Rust-Python compiler and public Truss host run selection, queue, batches and restart/conflict controls, then independent native graph/receipt/journal observations agree with the frozen manifest and all original dependency/runtime versions are retained.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-048-AC6",
+          "plannedTest": "diagnostic_privacy",
+          "assertion": "Given traced/untraced runs and diagnostic sink failure, when job attempts are captured through the existing real receiver, then trusted job/attempt correlation works, protected inputs are excluded before sinks and exporter outage cannot change commit/fence/recovery meaning.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-048-AC7",
+          "plannedTest": "formal_batch_model",
+          "assertion": "Given two workers and three targets in two batches with batch0 containing two targets, when the bounded original-admission/commit/fence/cancel/recovery model is checked, then atomic-batch and nonduplication properties have useful success/recovery witnesses and broken-fence/partial-commit controls fail; model transitions are mapped to native tests without claiming native proof.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-048-AC8",
+          "plannedTest": "rollback_stop_crash",
+          "assertion": "Given an admitted original batch that rolls back from an invariant failure and crashes before durable stopped persistence, when reconciliation observes confirmed original noncommit but no terminal disposition, then it stops as PAP_ABORT_DISPOSITION_UNKNOWN without retry; unavailable original termination evidence stays reconciling.",
+          "state": "planned",
+          "layer": "Native integration"
+        }
+      ]
+    },
+    {
+      "story": "US-049",
+      "testPrefix": "bulk-update-bounded-action-gateway",
+      "criteria": [
+        {
+          "id": "US-049-AC1",
+          "plannedTest": "gateway_registration",
+          "assertion": "Given original UMF model/action/preparation and native source pins, when the bounded Python set-action gateway registers, then registry/current declaration/Field/Key/frame/role/effect inspection uses owner semantics and unsupported inputs/handlers/unknown obligations refuse without claiming a standalone general tx executor.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-049-AC2",
+          "plannedTest": "delegated_human",
+          "assertion": "Given an authenticated initiator, trusted job-scoped delegation and separately authenticated worker, when gateway admission/commit runs, then person-required uses the original human with current membership/delegation checks; client-retained actor text and unauthorized workers cannot issue delegation or stop a valid job.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-049-AC3",
+          "plannedTest": "outer_transaction_gateway",
+          "assertion": "Given a prepared atomic batch with all item replay locks preheld, when each internal action executes, then exact required set effects/attempted frame access/constraint/verification and original tx results compose under one outer transaction with no per-item commit/retry or independently callable reserved tokens.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-049-AC4",
+          "plannedTest": "native_attempt_custody",
+          "assertion": "Given the opened original effect/control transaction and connection incarnation, when independent original attempt registration precedes job/business locks and dispatch, then actual installation/epoch/driver/xid custody, admission marker and immutable control result persistence are confirmed; lost registration/result acknowledgement or absent original termination cannot authorize dispatch, reclaim or invented rollback.",
+          "state": "planned",
+          "layer": "Native integration"
+        },
+        {
+          "id": "US-049-AC5",
+          "plannedTest": "gateway_native_conformance",
+          "assertion": "Given independent ordinary-role PostgreSQL witnesses and owner-authored conformance fixtures, when the Python gateway is qualified, then exact value admission, authority/retirement/replay/no-op/rollback/outcome behavior agrees with the owner contract and cannot be replaced by the TypeScript reference consumer or privileged fixture writers.",
+          "state": "planned",
+          "layer": "Native integration"
+        }
+      ]
+    }
+  ]
+}

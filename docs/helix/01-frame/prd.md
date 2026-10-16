@@ -329,3 +329,34 @@ The current Python runtime and installation profile are documented in
 - The enforcement report is verified for every assertion in the corpus, with no assertion unclassified.
 - Performance campaigns and proposed latency targets are deferred until a concrete adopter workload requires them; any advertised performance claim must have measurements on its named profile.
 - At least one consumer outside the maintainers runs it.
+
+## Portable action plans and frozen-manifest UPDATE — owner direction, 2026-10-13
+
+The owner selects SQL compilation to portable action plans, built against the existing `umf.actions` extension. The first implementation slice is a queued bulk UPDATE over one logical Record type with literal or typed parameter assignments and a frozen work manifest. This is a new governed slice; existing read/compiler or transactional-action evidence does not qualify it.
+
+UMF owns action declarations and reusable plan/manifest semantics; Weft owns SQL meaning, model resolution and compilation; Truss owns qualified mutation execution; the host owns durable queue storage, scheduling and workers. Ashlar may consume committed Truss changes through its existing publication path. A future Ashlar or other action executor requires separate capability and native qualification; multi-backend atomicity is excluded.
+
+- PAP-TRS-01: Execute the first frozen-manifest UPDATE through qualified `umf.actions` invocations over Truss's protected mutation path. Do not implement a competing SQL parser, UMF resolver or action semantic authority.
+- PAP-TRS-02: Materialize selected keys, target versions and exact proposed values under one qualified coherent read basis; seal the complete bounded manifest before work becomes runnable. Incomplete selection must not appear as complete reviewed work.
+- PAP-TRS-03: Execute bounded atomic batches with explicit partial-job outcomes, current authorization and version/conflict checks. Stale, deleted or key-rebound targets cannot redirect a retained invocation to a different entity.
+- PAP-TRS-04: Persist complete batch replay outcomes atomically with graph effects and journal/outbox facts where selected. Original identity lookup/reconciliation must survive worker restart and ambiguous commit acknowledgement; no fresh-token retry may duplicate uncertain work.
+- PAP-TRS-05: Host cancellation stops future batch admission; it does not undo committed work or assert rollback for an in-flight unknown outcome. Manifest review/results require their own read authorization.
+
+## Bulk UPDATE contract and story allocation — 2026-10-13
+
+Contracted first slice: `umf.actions.plan/1`, `umf.actions.manifest/1`, `umf.actions.bulk/1`, built against core0.8.0/actions0.1.0 and the existing tx/1 invocation. The first executable subset is required one-valued boolean/integer/string Fields; null/nullable, decimal and other scalar mutation domains are explicit refusals for this proof, not losses of preserved UMF meaning.
+
+| Story | Owned output | Design/test allocation |
+| --- | --- | --- |
+| [US-046](user-stories/US-046-materialize-frozen-update.md) | 5 planned criteria: bulk-update-materialize-frozen-update | [TD-046](../02-design/technical-designs/TD-046-materialize-frozen-update.md) / [STP-046](../03-test/test-plans/STP-046-materialize-frozen-update.md) |
+| [US-047](user-stories/US-047-execute-atomic-update-batches.md) | 7 planned criteria: bulk-update-execute-atomic-update-batches | [TD-047](../02-design/technical-designs/TD-047-execute-atomic-update-batches.md) / [STP-047](../03-test/test-plans/STP-047-execute-atomic-update-batches.md) |
+| [US-048](user-stories/US-048-recover-queued-update.md) | 8 planned criteria: bulk-update-recover-queued-update | [TD-048](../02-design/technical-designs/TD-048-recover-queued-update.md) / [STP-048](../03-test/test-plans/STP-048-recover-queued-update.md) |
+| [US-049](user-stories/US-049-bounded-action-gateway.md) | 5 planned criteria: bounded-action-gateway prerequisite | [TD-049](../02-design/technical-designs/TD-049-bounded-action-gateway.md) / [STP-049](../03-test/test-plans/STP-049-bounded-action-gateway.md) |
+
+The [machine-readable bulk allocation](../03-test/bulk-update-story-allocation.json) is a separate new-slice inventory; planned rows are not passed coverage. Every story/criterion has one primary test allocation and retains its original canonical citation.
+
+These consolidated bulk drafts preserve earlier planning. Current owner amendments
+exclude custom instrumentation and mandatory formal/receiver qualification from
+release gates; see the explicit scope amendment in CONTRACT-013. Historical
+component claims without retained evidence remain unverified. Existing implemented
+gateway/authority components must be reused rather than replaced.

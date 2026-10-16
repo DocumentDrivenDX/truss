@@ -16,8 +16,8 @@ stories = sorted((root / 'docs/helix/01-frame/user-stories').glob('US-*.md'))
 errors, sources, criteria, allocations = [], [], [], []
 allowed_layers = {'Native integration', 'Contract', 'Native concurrency',
                   'Native performance integration', 'Performance integration', 'Contract review'}
-if len(stories) != 45:
-    errors.append('expected all 45 stories')
+if len(stories) != 49:
+    errors.append('expected all 49 stories (45 baseline plus 4 bulk UPDATE drafts)')
 for story in stories:
     number = story.name.split('-', 2)[1]
     design = list((root / 'docs/helix/02-design/technical-designs').glob('TD-' + number + '-*.md'))
@@ -51,8 +51,8 @@ for story in stories:
             else:
                 allocations.append({'criterion': identity, 'scenario': cells[1],
                                     'expected': cells[2], 'layer': cells[4], 'testInputs': cells[5]})
-if len(criteria) != 167:
-    errors.append('expected all 167 criteria')
+if len(criteria) != 192:
+    errors.append('expected all 192 criteria (167 baseline plus 25 bulk UPDATE draft criteria)')
 receipt = {'scope': 'Declared story/design/test reference structure only; no semantic adequacy, implementation or native verdict',
            'stories': len(stories), 'criteria': len(criteria), 'errors': errors, 'sources': sources,
            'allocations': allocations,
