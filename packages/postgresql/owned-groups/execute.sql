@@ -919,7 +919,7 @@ BEGIN
   IF original_mode IS DISTINCT FROM 'create_object' OR reference IS DISTINCT FROM plan->>'primary'
    OR transition.after_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(attempt.id,transition.operation_index,reference,'after') THEN
    RAISE EXCEPTION 'original object creation required' USING ERRCODE='55000';END IF;
-  IF NOT authorize_read THEN PERFORM truss.runtime_create_transition_validate(selected_transition);END IF;
+  IF NOT authorize_read THEN PERFORM truss.runtime_create_transition_validate_qualified(selected_transition,qualified_actor);END IF;
   RETURN;
  END IF;
  IF original_mode NOT IN ('update_object','delete_object') OR prior IS NULL OR desired IS NULL

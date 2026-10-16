@@ -188,15 +188,23 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.valid_property_definition(truss.prop_def) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_item_chain_readable(item jsonb) RETURNS boolean
+CREATE FUNCTION truss.runtime_item_chain_readable_qualified(item jsonb,qualified_actor oid) RETURNS boolean
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE node jsonb;
 BEGIN
  IF truss.valid_item_chain(item) IS NOT TRUE THEN RETURN false;END IF;
  FOR node IN SELECT value FROM jsonb_array_elements(jsonb_build_array(item)||coalesce(item->'descendants','[]'::jsonb)) LOOP
-  IF truss.runtime_can_read(node->>'documentId',node->'reference'->>'module') IS NOT TRUE THEN RETURN false;END IF;
+  IF truss.runtime_can_read_qualified(node->>'documentId',node->'reference'->>'module',qualified_actor) IS NOT TRUE THEN RETURN false;END IF;
  END LOOP;
  RETURN true;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_item_chain_readable_qualified(jsonb,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_item_chain_readable(item jsonb) RETURNS boolean
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN truss.runtime_item_chain_readable_qualified(item,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_item_chain_readable(jsonb) FROM PUBLIC;

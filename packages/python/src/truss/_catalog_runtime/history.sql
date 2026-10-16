@@ -29,7 +29,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_history_entity(jsonb,text,text) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_history_property(selected_type int,property_id int,revision int,definition_pin text) RETURNS void
+CREATE FUNCTION truss.runtime_history_property_qualified(selected_type int,property_id int,revision int,definition_pin text,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE basis jsonb;property truss.prop_def%ROWTYPE;pin record;
 BEGIN
@@ -42,13 +42,21 @@ BEGIN
  SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=selected_type AND p.prop_id=property_id;
  SELECT * INTO STRICT pin FROM truss.runtime_definition_in_basis('property',selected_type,property_id,revision,basis);
  IF pin.definition_pin IS DISTINCT FROM definition_pin THEN RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
- IF NOT truss.runtime_can_read(property.definition_document_id,property.declaration_module) THEN RAISE EXCEPTION 'current historical property reader required' USING ERRCODE='42501';END IF;
- IF property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN RAISE EXCEPTION 'current historical item reader required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_can_read_qualified(property.definition_document_id,property.declaration_module,qualified_actor) THEN RAISE EXCEPTION 'current historical property reader required' USING ERRCODE='42501';END IF;
+ IF property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable_qualified(property.item,qualified_actor) IS NOT TRUE THEN RAISE EXCEPTION 'current historical item reader required' USING ERRCODE='42501';END IF;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_history_property_qualified(int,int,int,text,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_history_property(selected_type int,property_id int,revision int,definition_pin text) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ PERFORM truss.runtime_history_property_qualified(selected_type,property_id,revision,definition_pin,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_history_property(int,int,int,text) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_history_image(image jsonb,entity jsonb,expected_version bigint) RETURNS void
+CREATE FUNCTION truss.runtime_history_image_qualified(image jsonb,entity jsonb,expected_version bigint,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE revision int;pin text;member jsonb;endpoint jsonb;endpoint_pin record;
 BEGIN
@@ -61,22 +69,30 @@ BEGIN
  ELSE pin:=truss.runtime_relationship_pin((entity->>'typeId')::int,revision);END IF;
  IF image->'identity'->>'definitionPin' IS DISTINCT FROM pin THEN RAISE EXCEPTION 'original image interpretation required' USING ERRCODE='55000';END IF;
  FOR member IN SELECT value FROM jsonb_array_elements(image->'properties') LOOP
-  PERFORM truss.runtime_history_property((entity->>'typeId')::int,(member->>'propertyId')::int,revision,member->>'definitionPin');
+  PERFORM truss.runtime_history_property_qualified((entity->>'typeId')::int,(member->>'propertyId')::int,revision,member->>'definitionPin',qualified_actor);
  END LOOP;
- IF entity->>'kind'='object' THEN PERFORM truss.runtime_history_ownership(image);END IF;
+ IF entity->>'kind'='object' THEN PERFORM truss.runtime_history_ownership_qualified(image,qualified_actor);END IF;
  IF entity->>'kind'='edge' THEN
   FOR endpoint IN SELECT value FROM jsonb_array_elements(jsonb_build_array(image->'source',image->'target')) LOOP
    SELECT * INTO STRICT endpoint_pin FROM truss.runtime_definition('type',(endpoint->>'typeId')::int,NULL,revision);
    IF endpoint->>'definitionPin' IS DISTINCT FROM endpoint_pin.definition_pin OR endpoint->'owner' IS DISTINCT FROM jsonb_build_object('documentId',endpoint_pin.document_id,'moduleId',endpoint_pin.module_id) THEN
     RAISE EXCEPTION 'original endpoint interpretation required' USING ERRCODE='55000';END IF;
-   IF NOT truss.runtime_can_read(endpoint_pin.document_id,endpoint_pin.module_id) THEN RAISE EXCEPTION 'current historical endpoint reader required' USING ERRCODE='42501';END IF;
+   IF NOT truss.runtime_can_read_qualified(endpoint_pin.document_id,endpoint_pin.module_id,qualified_actor) THEN RAISE EXCEPTION 'current historical endpoint reader required' USING ERRCODE='42501';END IF;
   END LOOP;
  END IF;
 END;
 $$;
+REVOKE ALL ON FUNCTION truss.runtime_history_image_qualified(jsonb,jsonb,bigint,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_history_image(image jsonb,entity jsonb,expected_version bigint) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ PERFORM truss.runtime_history_image_qualified(image,entity,expected_version,truss.runtime_person(false));
+END;
+$$;
 REVOKE ALL ON FUNCTION truss.runtime_history_image(jsonb,jsonb,bigint) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_history_group(entity jsonb,writer xid8,version bigint,maximum_events int,maximum_bytes int) RETURNS jsonb
+CREATE FUNCTION truss.runtime_history_group_qualified(entity jsonb,writer xid8,version bigint,maximum_events int,maximum_bytes int,qualified_actor oid) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE physical truss.journal%ROWTYPE;original bytea;event jsonb;items jsonb:='[]';semantic jsonb:='[]';group_pin jsonb;
  count_events int:=0;size int:=0;expected_pin text;selected_transition bigint;
@@ -106,7 +122,7 @@ BEGIN
    SELECT t.transition_id INTO STRICT selected_transition FROM truss.runtime_object_transition t
     CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.object_id=physical.entity_id
      AND t.type_id=physical.entity_type AND t.writer_xid=physical.xid AND j.value=to_jsonb(physical);
-   PERFORM truss.runtime_owned_object_transition_validate(selected_transition,true);
+   PERFORM truss.runtime_owned_object_transition_validate_qualified(selected_transition,true,qualified_actor);
   END IF;
   IF event->>'historyProfile'='truss-native-owned-edge-mutation/0.1' THEN
    SELECT t.transition_id INTO STRICT selected_transition FROM truss.runtime_edge_transition t
@@ -119,15 +135,15 @@ BEGIN
   ELSE expected_pin:=truss.runtime_relationship_pin(physical.entity_type,physical.rev);END IF;
   IF event->'identity'->>'definitionPin' IS DISTINCT FROM expected_pin THEN RAISE EXCEPTION 'original event interpretation required' USING ERRCODE='55000';END IF;
   IF event->>'operation'='property' THEN
-   PERFORM truss.runtime_history_property(physical.entity_type,physical.prop_id,physical.rev,event->>'definitionPin');
+   PERFORM truss.runtime_history_property_qualified(physical.entity_type,physical.prop_id,physical.rev,event->>'definitionPin',qualified_actor);
   ELSIF event->>'operation'='rebind' THEN
    IF (event->>'historyProfile' IN ('truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4')) IS NOT TRUE THEN RAISE EXCEPTION 'original catalog rebind profile required' USING ERRCODE='55000';END IF;
-   PERFORM truss.runtime_history_property(physical.entity_type,physical.prop_id,physical.rev,event->>'afterDefinitionPin');
+   PERFORM truss.runtime_history_property_qualified(physical.entity_type,physical.prop_id,physical.rev,event->>'afterDefinitionPin',qualified_actor);
    PERFORM truss.catalog_rebind_history_group(entity,writer,version);
-  ELSIF event->>'operation'='create' THEN PERFORM truss.runtime_history_image(event->'after',entity,version);
+  ELSIF event->>'operation'='create' THEN PERFORM truss.runtime_history_image_qualified(event->'after',entity,version,qualified_actor);
   ELSIF event->>'operation'='metadata' THEN
-   PERFORM truss.runtime_history_image(event->'before',entity,version-1);PERFORM truss.runtime_history_image(event->'after',entity,version);
-  ELSIF event->>'operation'='delete' THEN PERFORM truss.runtime_history_image(event->'before',entity,version-1);
+   PERFORM truss.runtime_history_image_qualified(event->'before',entity,version-1,qualified_actor);PERFORM truss.runtime_history_image_qualified(event->'after',entity,version,qualified_actor);
+  ELSIF event->>'operation'='delete' THEN PERFORM truss.runtime_history_image_qualified(event->'before',entity,version-1,qualified_actor);
   ELSE RAISE EXCEPTION 'supported retained event required' USING ERRCODE='0A000';END IF;
   IF group_pin IS NULL THEN group_pin:=event->'mutationGroup';
   ELSIF group_pin IS DISTINCT FROM event->'mutationGroup' THEN RAISE EXCEPTION 'one complete mutation group required' USING ERRCODE='55000';END IF;
@@ -139,6 +155,14 @@ BEGIN
  IF group_pin IS DISTINCT FROM jsonb_build_object('profile','truss-history-group/0.1.0','eventCount',count_events::text,'orderedEventDigest',encode(sha256(convert_to(semantic::text,'UTF8')),'hex')) THEN
   RAISE EXCEPTION 'complete original history group digest required' USING ERRCODE='55000';END IF;
  RETURN items;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_history_group_qualified(jsonb,xid8,bigint,int,int,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_history_group(entity jsonb,writer xid8,version bigint,maximum_events int,maximum_bytes int) RETURNS jsonb
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN truss.runtime_history_group_qualified(entity,writer,version,maximum_events,maximum_bytes,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_history_group(jsonb,xid8,bigint,int,int) FROM PUBLIC;

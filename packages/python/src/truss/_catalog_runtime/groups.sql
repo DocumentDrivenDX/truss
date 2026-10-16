@@ -134,11 +134,11 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_module_writer(text,text) FROM PUBLIC;
 
-CREATE FUNCTION truss.group_context(expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.group_context_qualified(expected_release text,expected_digest text,qualified_actor oid) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE person oid;installation truss.catalog_runtime_installation%ROWTYPE;revision int;
 BEGIN
- person:=truss.runtime_person(false);
+ person:=qualified_actor;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN
   RAISE EXCEPTION 'selected installed group runtime required' USING ERRCODE='0A000'; END IF;
@@ -150,16 +150,24 @@ BEGIN
    CASE WHEN truss.runtime_group_profiles()->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END))::text,'UTF8');
 END;
 $$;
+REVOKE ALL ON FUNCTION truss.group_context_qualified(text,text,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.group_context(expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ RETURN truss.group_context_qualified(expected_release,expected_digest,truss.runtime_person(false));
+END;
+$$;
 REVOKE ALL ON FUNCTION truss.group_context(text,text) FROM PUBLIC;
 
 -- Resolve only requested, currently writable definitions. Original whole documents
 -- are caller-supplied, independently compared in full to the retained archive.
-CREATE FUNCTION truss.group_create_metadata(original_input bytea,original_documents bytea,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.group_create_metadata_qualified(original_input bytea,original_documents bytea,expected_release text,expected_digest text,qualified_actor oid) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE input jsonb;documents jsonb;operation jsonb;context jsonb;selected_type truss.type_def%ROWTYPE;
  source_pin record;archive truss.schema_doc%ROWTYPE;metadata jsonb:='[]';counted int:=0;source_text text;
 BEGIN
- context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;
+ context:=convert_from(truss.group_context_qualified(expected_release,expected_digest,qualified_actor),'UTF8')::jsonb;
  IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576
  OR original_documents IS NULL OR octet_length(original_documents) NOT BETWEEN 1 AND 4194304 THEN
   RAISE EXCEPTION 'bounded group source required' USING ERRCODE='54000'; END IF;
@@ -181,8 +189,8 @@ BEGIN
    RAISE EXCEPTION 'explicit selected create ownership required' USING ERRCODE='0A000'; END IF;
   SELECT t.* INTO STRICT selected_type FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p
    WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND p.definition_pin=operation->>'typeDefinitionPin';
-  PERFORM truss.runtime_module_writer(selected_type.document_id,selected_type.module);
-  IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+  PERFORM truss.runtime_module_writer_qualified(selected_type.document_id,selected_type.module,qualified_actor);
+  IF NOT truss.runtime_object_values_readable_qualified(selected_type.type_id,qualified_actor) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
   SELECT * INTO STRICT archive FROM truss.schema_doc d WHERE d.doc_id=selected_type.document_id ORDER BY d.rev DESC LIMIT 1;
   SELECT d.value->>'sourceText' INTO STRICT source_text FROM jsonb_array_elements(documents) d
    WHERE d.value->>'documentId'=archive.doc_id;
@@ -197,6 +205,14 @@ BEGIN
     FROM truss.key_def k WHERE k.type_id=selected_type.type_id AND k.retired_rev IS NULL)));
  END LOOP;
  RETURN convert_to(metadata::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.group_create_metadata_qualified(bytea,bytea,text,text,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.group_create_metadata(original_input bytea,original_documents bytea,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ RETURN truss.group_create_metadata_qualified(original_input,original_documents,expected_release,expected_digest,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.group_create_metadata(bytea,bytea,text,text) FROM PUBLIC;
@@ -359,7 +375,7 @@ CREATE CONSTRAINT TRIGGER runtime_created_group_commit AFTER INSERT ON truss.run
 ALTER TABLE truss.object ENABLE ALWAYS TRIGGER runtime_created_object_commit;
 ALTER TABLE truss.runtime_create_group ENABLE ALWAYS TRIGGER runtime_created_group_commit;
 
-CREATE FUNCTION truss.apply_create_group(original_input bytea,original_documents bytea,original_keys bytea,original_request bytea,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.apply_create_group_qualified(original_input bytea,original_documents bytea,original_keys bytea,original_request bytea,expected_release text,expected_digest text,qualified_actor oid) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 <<creation_leaf>>
 DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;installation truss.catalog_runtime_installation%ROWTYPE;
@@ -370,6 +386,7 @@ DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;
  route record;observed record;planned_row jsonb;actual_row jsonb;object_row truss.object%ROWTYPE;
  object_identity jsonb;properties_json jsonb;retained_json jsonb;after_record jsonb;event jsonb;event_bytes bytea;origin_bytes bytea;
  journal_row truss.journal%ROWTYPE;expected_journal jsonb;actual_journal jsonb;event_digest text;
+ expected_transition jsonb;actual_transition jsonb;actual_progress jsonb;physical_journal jsonb;
  results jsonb:='[]';aliases jsonb:='[]';members jsonb:='[]';member_keys jsonb;
  membership truss.object_key_bucket%ROWTYPE;reservation truss.object_key_reservation_bucket%ROWTYPE;
  semantic jsonb;semantic_bytes bytea;new_generation bigint;
@@ -383,8 +400,8 @@ BEGIN
  IF (convert_from(original_input,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE
   OR (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN
   RAISE EXCEPTION 'unique original create source required' USING ERRCODE='22023';END IF;
- context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;
- actor_oid:=truss.runtime_person(false);writer:=pg_current_xact_id();
+ context:=convert_from(truss.group_context_qualified(expected_release,expected_digest,qualified_actor),'UTF8')::jsonb;
+ actor_oid:=qualified_actor;writer:=pg_current_xact_id();
  SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF original_keys IS NULL OR octet_length(original_keys) NOT BETWEEN 1 AND 8388608
@@ -407,7 +424,7 @@ BEGIN
   RAISE EXCEPTION 'exact unique scalar asserted origin required' USING ERRCODE='22023'; END IF;
  IF request IS DISTINCT FROM '{"state":"none"}'::jsonb THEN
   RAISE EXCEPTION 'outer group owns request identity and replay' USING ERRCODE='22023';END IF;
- metadata:=convert_from(truss.group_create_metadata(original_input,original_documents,expected_release,expected_digest),'UTF8')::jsonb;
+ metadata:=convert_from(truss.group_create_metadata_qualified(original_input,original_documents,expected_release,expected_digest,qualified_actor),'UTF8')::jsonb;
  selected_history:=CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END;
  -- New writes belong to one native-issued outer operation.
  -- The leaf advances progress atomically.
@@ -458,7 +475,7 @@ BEGIN
   IF EXISTS(SELECT 1 FROM truss.rel_endpoint e JOIN truss.rel_def r USING(rel_type_id)
    WHERE r.retired_rev IS NULL AND ((e.source_type=selected_type.type_id AND r.target_min>0)
     OR (e.target_type=selected_type.type_id AND r.source_min>0))) AND NOT EXISTS(
-    SELECT 1 FROM truss.runtime_object_attempt a WHERE a.writer_xid=writer AND a.actor_oid=truss.runtime_person(false) AND NOT a.complete
+    SELECT 1 FROM truss.runtime_object_attempt a WHERE a.writer_xid=writer AND a.actor_oid=qualified_actor AND NOT a.complete
     AND convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index=operation
     AND a.documents_bytes=original_documents) THEN
    RAISE EXCEPTION 'mandatory relationship unsupported by create-only profile' USING ERRCODE='0A000'; END IF;
@@ -601,21 +618,67 @@ BEGIN
  semantic_bytes:=convert_to(semantic::text,'UTF8');
  IF octet_length(semantic_bytes)>16777216 THEN RAISE EXCEPTION 'bounded group result required' USING ERRCODE='54000'; END IF;
  IF jsonb_array_length(members)<>1 THEN RAISE EXCEPTION 'one original inner create member required' USING ERRCODE='55000';END IF;
+ expected_transition:=jsonb_build_object('attempt_id',outer_attempt.id,'operation_index',outer_attempt.next_index,
+  'writer_xid',writer::text,'object_id',(members->0->'object'->>'id')::bigint,
+  'type_id',(members->0->'object'->>'type_id')::int,'before_object',NULL,'after_object',members->0->'object',
+  'after_keys',(SELECT coalesce(jsonb_agg(k.value->'membership' ORDER BY (k.value->'membership'->>'key_num')::int),'[]'::jsonb)
+   FROM jsonb_array_elements(members->0->'keys') k),'journal',jsonb_build_array(members->0->'journal'));
  INSERT INTO truss.runtime_object_transition(attempt_id,operation_index,writer_xid,object_id,type_id,before_object,after_object,after_keys,journal)
- VALUES(outer_attempt.id,outer_attempt.next_index,writer,(members->0->'object'->>'id')::bigint,
-  (members->0->'object'->>'type_id')::int,NULL,members->0->'object',
-  (SELECT coalesce(jsonb_agg(k.value->'membership' ORDER BY (k.value->'membership'->>'key_num')::int),'[]'::jsonb)
-   FROM jsonb_array_elements(members->0->'keys') k),jsonb_build_array(members->0->'journal'));
+ SELECT r.attempt_id,r.operation_index,r.writer_xid,r.object_id,r.type_id,r.before_object,r.after_object,r.after_keys,r.journal
+ FROM jsonb_populate_record(NULL::truss.runtime_object_transition,expected_transition) r
+ RETURNING to_jsonb(runtime_object_transition)-'transition_id' INTO actual_transition;
+ IF actual_transition IS DISTINCT FROM expected_transition THEN
+  RAISE EXCEPTION 'exact atomic create transition insert required' USING ERRCODE='55000';END IF;
  UPDATE truss.runtime_object_attempt a SET next_index=a.next_index+1,
   results=a.results||jsonb_build_array(results_of_create.value),aliases=a.aliases||(semantic->'aliases')
  FROM (SELECT semantic->'results'->0 AS value) results_of_create
- WHERE a.id=outer_attempt.id AND a.next_index=outer_attempt.next_index AND NOT a.complete;
+ WHERE a.id=outer_attempt.id AND a.next_index=outer_attempt.next_index AND NOT a.complete
+ RETURNING jsonb_build_object('actor_oid',a.actor_oid,'writer_xid',a.writer_xid::text,
+  'next_index',a.next_index,'results',a.results,'aliases',a.aliases,'complete',a.complete) INTO actual_progress;
  IF NOT FOUND THEN RAISE EXCEPTION 'one atomic outer create progress required' USING ERRCODE='55000';END IF;
- PERFORM truss.runtime_create_transition_validate((SELECT transition_id FROM truss.runtime_object_transition WHERE attempt_id=outer_attempt.id AND operation_index=outer_attempt.next_index AND before_object IS NULL));
- FOR operation_meta IN SELECT value FROM jsonb_array_elements(metadata) LOOP
-  PERFORM truss.runtime_module_writer(operation_meta->>'documentId',operation_meta->>'moduleId');
-  IF NOT truss.runtime_object_values_readable((operation_meta->>'typeId')::int) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+ SELECT jsonb_build_object('actor_oid',a.actor_oid,'writer_xid',a.writer_xid::text,
+  'next_index',a.next_index,'results',a.results,'aliases',a.aliases,'complete',a.complete) INTO actual_progress
+ FROM truss.runtime_object_attempt a WHERE a.id=outer_attempt.id;
+ SELECT to_jsonb(t)-'transition_id' INTO STRICT actual_transition FROM truss.runtime_object_transition t
+ WHERE t.attempt_id=outer_attempt.id AND t.operation_index=outer_attempt.next_index;
+ IF actual_transition IS DISTINCT FROM expected_transition THEN
+  RAISE EXCEPTION 'exact stored atomic create transition required' USING ERRCODE='55000';END IF;
+ IF actual_progress IS DISTINCT FROM jsonb_build_object('actor_oid',outer_attempt.actor_oid,
+  'writer_xid',outer_attempt.writer_xid::text,'next_index',outer_attempt.next_index+1,
+  'results',outer_attempt.results||jsonb_build_array(semantic->'results'->0),
+  'aliases',outer_attempt.aliases||(semantic->'aliases'),'complete',false) THEN
+  RAISE EXCEPTION 'exact atomic outer create progress required' USING ERRCODE='55000';END IF;
+ SELECT coalesce(jsonb_agg(j.row ORDER BY j.seq),'[]'::jsonb) INTO physical_journal FROM
+  (SELECT to_jsonb(j) AS row,j.seq FROM truss.journal j WHERE j.entity_kind='o'
+   AND j.entity_id=object_row.id AND j.entity_type=object_row.type_id AND j.xid=writer AND j.ver=1
+   ORDER BY j.seq LIMIT 2) j;
+ IF jsonb_array_length(physical_journal)>1 THEN
+  RAISE EXCEPTION 'whole history group exceeds event limit' USING ERRCODE='54000';END IF;
+ IF physical_journal IS DISTINCT FROM jsonb_build_array(expected_journal) THEN
+  RAISE EXCEPTION 'exact physical atomic create journal required' USING ERRCODE='55000';END IF;
+ FOR key_plan IN SELECT value FROM jsonb_array_elements(member_keys) LOOP
+  SELECT coalesce(jsonb_agg(r.row),'[]'::jsonb) INTO actual_row FROM
+   (SELECT to_jsonb(r) AS row FROM truss.object_key_reservation_bucket r
+    WHERE r.namespace_sha256=decode(substring(key_plan->'membership'->>'namespace_sha256' FROM 3),'hex')
+     AND r.key_sha256=decode(substring(key_plan->'membership'->>'key_sha256' FROM 3),'hex')
+     AND r.namespace_bytes=decode(substring(key_plan->'membership'->>'namespace_bytes' FROM 3),'hex')
+     AND r.key_bytes=decode(substring(key_plan->'membership'->>'key_bytes' FROM 3),'hex') LIMIT 2) r;
+  IF actual_row IS DISTINCT FROM jsonb_build_array(key_plan->'reservation') THEN
+   RAISE EXCEPTION 'exact retained create key reservation required' USING ERRCODE='55000';END IF;
  END LOOP;
+ -- The owned leaf has checked exact native object, key, reservation, journal
+ -- and transition writes. Full semantic reconstruction remains at group finish
+ -- and mandatory attempt settlement; legacy creation retains its leaf check.
+ IF input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
+  PERFORM truss.runtime_create_transition_validate_qualified((SELECT transition_id FROM truss.runtime_object_transition WHERE attempt_id=outer_attempt.id AND operation_index=outer_attempt.next_index AND before_object IS NULL),qualified_actor);
+ END IF;
+ FOR operation_meta IN SELECT value FROM jsonb_array_elements(metadata) LOOP
+  IF truss.runtime_module_writer_qualified(operation_meta->>'documentId',operation_meta->>'moduleId',qualified_actor) IS DISTINCT FROM outer_attempt.actor_oid THEN
+   RAISE EXCEPTION 'original current create actor required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_object_values_readable_qualified((operation_meta->>'typeId')::int,qualified_actor) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+ END LOOP;
+ IF root_identity IS NOT NULL AND NOT truss.runtime_can_read_qualified(root_identity->'owner'->>'documentId',root_identity->'owner'->>'moduleId',qualified_actor) THEN
+  RAISE EXCEPTION 'current create root reader required' USING ERRCODE='42501';END IF;
  RETURN convert_to(jsonb_build_object('outcome','success','disposition','applied','durability','pending','semantic',semantic)::text,'UTF8');
 EXCEPTION
  WHEN insufficient_privilege OR query_canceled OR serialization_failure OR deadlock_detected THEN RAISE;
@@ -628,6 +691,14 @@ EXCEPTION
     'operationIndex',greatest(least(current_index,jsonb_array_length(input->'operations')-1),0)::text,'nativeState',native_state);
   END IF;
   RETURN convert_to(outcome::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.apply_create_group_qualified(bytea,bytea,bytea,bytea,text,text,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.apply_create_group(original_input bytea,original_documents bytea,original_keys bytea,original_request bytea,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ RETURN truss.apply_create_group_qualified(original_input,original_documents,original_keys,original_request,expected_release,expected_digest,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.apply_create_group(bytea,bytea,bytea,bytea,text,text) FROM PUBLIC;

@@ -22,7 +22,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_object_ownership_at(jsonb) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_history_ownership(image jsonb) RETURNS void
+CREATE FUNCTION truss.runtime_history_ownership_qualified(image jsonb,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE ownership jsonb:=image->'ownership';root jsonb;pin record;revision int;
 BEGIN
@@ -43,8 +43,16 @@ BEGIN
  IF root->>'definitionPin' IS DISTINCT FROM pin.definition_pin
   OR root->'owner' IS DISTINCT FROM jsonb_build_object('documentId',pin.document_id,'moduleId',pin.module_id) THEN
   RAISE EXCEPTION 'original aggregate root interpretation required' USING ERRCODE='55000';END IF;
- IF NOT truss.runtime_can_read(pin.document_id,pin.module_id) THEN
+ IF NOT truss.runtime_can_read_qualified(pin.document_id,pin.module_id,qualified_actor) THEN
   RAISE EXCEPTION 'current historical root reader required' USING ERRCODE='42501';END IF;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_history_ownership_qualified(jsonb,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_history_ownership(image jsonb) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ PERFORM truss.runtime_history_ownership_qualified(image,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_history_ownership(jsonb) FROM PUBLIC;
