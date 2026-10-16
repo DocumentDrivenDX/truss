@@ -864,7 +864,7 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE installation truss.catalog_runtime_installation%ROWTYPE;candidate jsonb;definition truss.key_def%ROWTYPE;
  component int;cells jsonb;before_cells jsonb;tuple_bytes bytea;namespace bytea;transport bytea;pin record;
  routes jsonb:='[]';lock_routes jsonb:='[]';entry jsonb;route record;observed record;member truss.object_key_bucket%ROWTYPE;
- seen jsonb:='{}';route_key text;reference text;unchanged boolean;
+ reference text;unchanged boolean;
  namespaces jsonb:='{}';namespace_key text;namespace_hex text;
  route_items jsonb[]:='{}';lock_route_items jsonb[]:='{}';route_bytes bigint:=2;lock_route_bytes bigint:=2;
 BEGIN
@@ -934,9 +934,17 @@ BEGIN
   ORDER BY route_namespace,route_transport LOOP
   PERFORM truss.lock_string_key_bucket(route.route_namespace,route.route_transport);
  END LOOP;
- FOR entry IN SELECT value FROM jsonb_array_elements(routes) LOOP
+ -- The preceding route for exactly these bytes is the original seen-map value.
+ -- Compute it once in route order instead of rebuilding an expanding JSON map.
+ FOR route IN SELECT r.value entry,
+  lag(r.value->>'reference') OVER route_history previous_reference,
+  lag(r.ordinality) OVER route_history previous_ordinal
+  FROM jsonb_array_elements(routes) WITH ORDINALITY r(value,ordinality)
+  WINDOW route_history AS (PARTITION BY (r.value->>'namespace') COLLATE "C",(r.value->>'transport') COLLATE "C" ORDER BY r.ordinality)
+  ORDER BY r.ordinality LOOP
+  entry:=route.entry;
   namespace:=decode(entry->>'namespace','hex');transport:=decode(entry->>'transport','hex');
-  route_key:=(entry->>'namespace')||':'||(entry->>'transport');reference:=entry->>'reference';
+  reference:=entry->>'reference';
   SELECT * INTO STRICT observed FROM truss.lock_string_key_bucket(namespace,transport);
   IF entry->>'phase'='initial' THEN
    IF cardinality(observed.member_ids)<>1 THEN RAISE EXCEPTION 'one original live key member required' USING ERRCODE='55000';END IF;
@@ -945,13 +953,11 @@ BEGIN
     OR member.key_num IS DISTINCT FROM (entry->>'keyNumber')::smallint
     OR NOT truss.verify_object_string_key(member.object_id,member.type_id,member.key_num,decode(entry->>'tuple','hex')) THEN
     RAISE EXCEPTION 'original key membership and values required' USING ERRCODE='55000';END IF;
-   seen:=seen||jsonb_build_object(route_key,reference);
   ELSIF entry->'unchanged'='true'::jsonb THEN
-   IF seen->>route_key IS DISTINCT FROM reference THEN RAISE EXCEPTION 'original unchanged key owner required' USING ERRCODE='55000';END IF;
+   IF route.previous_reference IS DISTINCT FROM reference THEN RAISE EXCEPTION 'original unchanged key owner required' USING ERRCODE='55000';END IF;
   ELSE
-   IF seen ? route_key OR cardinality(observed.member_ids)>0 OR cardinality(observed.reservation_ids)>0 THEN
+   IF route.previous_ordinal IS NOT NULL OR cardinality(observed.member_ids)>0 OR cardinality(observed.reservation_ids)>0 THEN
     RAISE EXCEPTION 'key already allocated or reserved' USING ERRCODE='23505';END IF;
-   seen:=seen||jsonb_build_object(route_key,reference);
   END IF;
  END LOOP;
 END;

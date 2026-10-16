@@ -494,7 +494,7 @@ BEGIN
  current_actor:=truss.runtime_person(false);
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id;
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor OR attempt.complete OR attempt.next_index IS DISTINCT FROM operation_index THEN RAISE EXCEPTION 'current ordered object attempt required' USING ERRCODE='55000';END IF;
- input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->operation_index;
+ input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=jsonb_extract_path(input,'operations',operation_index::text);
  IF input->'mutationProfile'=truss.runtime_owned_profile() AND operation->>'operation'<>'create_object' THEN
   RETURN truss.runtime_owned_step(attempt_id,operation_index,input,attempt.input_bytes,current_actor);
  END IF;

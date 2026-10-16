@@ -71,7 +71,7 @@ BEGIN
  END LOOP;
  FOR index IN 0..attempt.next_index-1 LOOP
   plan:=truss.runtime_owned_plan(selected_attempt,index);operation:=plan->'operation';
-  IF operation IS DISTINCT FROM input->'operations'->index
+  IF operation IS DISTINCT FROM jsonb_extract_path(input,'operations',index::text)
    OR plan->'mutationProfile' IS DISTINCT FROM input->'mutationProfile' THEN
    RAISE EXCEPTION 'original owned operation source correspondence required' USING ERRCODE='55000';END IF;
   mode:=operation->>'operation';result:=attempt.results->index;
