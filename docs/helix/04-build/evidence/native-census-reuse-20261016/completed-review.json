@@ -1,0 +1,57 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "CORRECTNESS_INCREMENT_SOURCE_AND_EVIDENCE_CLEAR_MATRIX_FAILED_NO_PERFORMANCE_QUALIFICATION",
+  "baseCommit": "82360b5364b1d3d9e038c56b0883601f0693a2fa",
+  "scope": "Unchanged3-file census reuse increment plus bounded native-census-reuse evidence",
+  "sourceReview": "/private/tmp/truss-main-census-reuse-astra-20261016.json",
+  "sourceHashes": {
+    "packages/postgresql/owned-groups/execute.sql": "ed7acc8b5320ce228a06c03d5efa9ecfe5c08b084e2c95af3df31edd70470e85",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "88e5a2e8e0b314b20aa089daa46054e3650f244ef7bf4eb73a90a0bd89ed0c99",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "84f0d50b6dfff45005dbddf898b37e0d8131a9d8230d2d1c203e8e689510ebeb"
+  },
+  "findings": [],
+  "evidenceChecks": [
+    "README accurately distinguishes basic/capacity functional passes from original matrix timeout.",
+    "Gzip JSON and log decompress byte-identically to original parent report/log; capacity/basic logs exact copies.",
+    "Matrix runtime manifest matches reviewed source; dirty working-tree provenance retained.",
+    "10,000ms statement and30,000ms operation limits unchanged; matrix1000node and1000edge groups committed, first1000update committed and second1000update timed out in final object/incident CTE.",
+    "Original matrix report retains passed=false,functionalPassed=false,performanceQualification=not_evaluated; no speedup or release-runner claim."
+  ],
+  "parentReportedNative": {
+    "basic": {
+      "tests": 8,
+      "result": "PASS",
+      "seconds": 29.189
+    },
+    "capacity": {
+      "session": 25855,
+      "tests": 2,
+      "result": "PASS",
+      "seconds": 39.01,
+      "scope": "Actual1024create/commit,changedupdate/commit,replay/readback andindex1023rollback with caller work preserved"
+    },
+    "matrix": {
+      "session": 4610,
+      "result": "FAIL",
+      "sqlState": "57014",
+      "seconds": 72.74002887494862,
+      "stage": "Second1000changed-object update, final object/incident-edge validation",
+      "cleanup": "completed per retained summary"
+    }
+  },
+  "evidenceHashes": {
+    "docs/helix/04-build/evidence/native-census-reuse-20261016/README.md": "862aa12ab5597c96be153bf9060110640976505bdcbdc34948be0c659cddace1",
+    "docs/helix/04-build/evidence/native-census-reuse-20261016/basic-native.log": "2ee13078e10528b9c2f42c6b76a451142477059a6085ac18712b9f7227fb629d",
+    "docs/helix/04-build/evidence/native-census-reuse-20261016/capacity-native.log": "b5afcb92761fd4688baeb8d8b30f5e62d084d222bd91ab75d26cc6b730491140",
+    "docs/helix/04-build/evidence/native-census-reuse-20261016/integration-review.json": "810a27a5c7b25565e1103f1ee7b6bd861287dd6c2c5cd71a62158451750c2930",
+    "docs/helix/04-build/evidence/native-census-reuse-20261016/matrix-failed.json.gz": "d4f6b46c0401c93bf76fd186e8a6ba414a8fd80f9ffdabd8b18e41bdc7c00b46",
+    "docs/helix/04-build/evidence/native-census-reuse-20261016/matrix-failed.log.gz": "3db76eccab61cb66fe8f94ed2f38ad211d389044b01c2e2a67f45647549424a4",
+    "docs/helix/04-build/evidence/native-census-reuse-20261016/proposal-review.json": "ccdaba174b3834b9c364bd38434f217279f1173733cd03305a8747aef51c9404",
+    "docs/helix/04-build/evidence/native-census-reuse-20261016/source-pins.json": "012a554f02f89474e3688ba0fe752a60be114516e7b54552ca3bb4287318b477"
+  },
+  "limits": [
+    "All native execution is parent-run; reviewer read source and evidence only.",
+    "Correctness-only commit clearance; full original workload and release-runner performance remain unqualified.",
+    "Parent plans a docs/tests-only fast-forward; preserve the exact3 reviewed runtime hashes during that integration."
+  ]
+}

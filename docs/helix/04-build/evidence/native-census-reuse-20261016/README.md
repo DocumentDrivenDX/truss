@@ -1,0 +1,5 @@
+# Reuse the checked immutable operation-slot census
+
+The private group-settlement caller already validates the complete immutable slot census before validating each object transition. This change reuses that result only when the existing checked attempt, original input and compiled history are supplied with settlement mode. Standalone and history validation keep their independent count. No API, authority, deadline or capacity changes.
+
+Astra reviewed the proposal and generated integration. Eight basic PostgreSQL workflows pass. Two real 1,024-operation tests pass: creation and commit, changed updates and commit, original replay and ordered readback; a failure at operation 1,024 rolls back all group effects while preserving caller work. These use the unchanged ordinary limits. The original graph matrix failed with SQLSTATE 57014 during a changed 1,000-object update in final object/incident-edge validation. Its actual 1,000-node and 1,000-edge creates completed; this does not qualify the full workload. The failure is retained verbatim. No performance improvement or release-runner qualification is claimed.

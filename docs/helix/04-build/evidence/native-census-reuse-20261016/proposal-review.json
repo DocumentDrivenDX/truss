@@ -1,0 +1,78 @@
+{
+  "review": "Astra source-only review of duplicate completed-slot census reuse",
+  "reviewedAt": "2026-10-16T12:50:04.461017+00:00",
+  "verdict": "SOURCE_CLEAR_EXPLICIT_IF_PROPOSAL",
+  "baselineCommit": "ad0b37b1e73a2b5786f8e31b1e9d7912ac1ca773",
+  "candidateSource": "/private/tmp/truss-census-reuse-proposal-20261016/execute.sql",
+  "candidateSourceSha256": "ed7acc8b5320ce228a06c03d5efa9ecfe5c08b084e2c95af3df31edd70470e85",
+  "patchSha256": "c4f8340142c8e51bdc211fcfaeb5a8169ec86dfe0301d3562811bf7f157df8d2",
+  "supersededProposal": "Initial SQL AND variant 112809b4 is superseded; no runtime qualification transferred.",
+  "auditedBaselineSourceHashes": {
+    "packages/postgresql/owned-groups/execute.sql": "71982ac16fdb3e4477392ae215b7a3d58a7605d5fefac2e0ff3d4bf965a94db8",
+    "packages/postgresql/owned-groups/finalize.sql": "2fd317c7199fd4ca37cd75bf1fc8c758993cad49e55ab241911eec00159164d2",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "e6ae59829a79a3fd64890d823205f8308d663a12181464a5600e5beafe542d08",
+    "packages/python/src/truss/_catalog_runtime/operations.sql": "f8363af5fdcee68b39d4b17fea11a6f4b85012a2be23a118d95df14834a29b5b",
+    "packages/python/src/truss/_catalog_runtime/history.sql": "935db9df6324f317b2de3510a4d7b3d033ec117926c8dedfe8989e72898a27db",
+    "packages/python/src/truss/catalog_runtime.py": "b2b6613a6db3197d7d2876e4e36122c3a7008fa4fb2d99d4233d5c79534fe1d5"
+  },
+  "checks": [
+    {
+      "point": "Only trusted complete context skips the census",
+      "locations": [
+        "candidate execute.sql:1033",
+        "packages/postgresql/owned-groups/finalize.sql:97"
+      ],
+      "result": "Only actual group_validate caller supplies authorize_read=false, matching prepared attempt, parsed input/source bytes and nonnull compiled_history. No new public argument or bypass is introduced."
+    },
+    {
+      "point": "Independent group closure precedes per-object calls",
+      "locations": [
+        "packages/postgresql/owned-groups/finalize.sql:17",
+        "packages/postgresql/owned-groups/finalize.sql:25",
+        "packages/postgresql/owned-groups/finalize.sql:31"
+      ],
+      "result": "Checks total slot count, no NULL result, exact ordinals, writer identity and exact results/aliases correspondence before dictionary compilation and transition loop."
+    },
+    {
+      "point": "Sealed slot state cannot change through admitted validator paths",
+      "locations": [
+        "packages/python/src/truss/_catalog_runtime/owned.sql:3",
+        "packages/python/src/truss/_catalog_runtime/operations.sql:895"
+      ],
+      "result": "Slot result permits only original NULL-to-result transition; subsequent update/delete/truncate refuses. Attempt complete/input/context custody retained. No intervening validator callback writes slots."
+    },
+    {
+      "point": "Default callers retain census",
+      "locations": [
+        "packages/postgresql/owned-groups/execute.sql:1138",
+        "packages/python/src/truss/_catalog_runtime/history.sql:125"
+      ],
+      "result": "Standalone wrapper and history pass defaults; original count SELECT remains. History also always retains census through authorize_read=true."
+    },
+    {
+      "point": "Authority and immutable source custody unchanged",
+      "locations": [
+        "candidate execute.sql:1022",
+        "candidate execute.sql:1028",
+        "candidate execute.sql:1038",
+        "packages/python/src/truss/catalog_runtime.py:788"
+      ],
+      "result": "Exact transition/attempt ID, source-byte, writer/current-XID/actor, plan/image/history/receipt checks remain. Function remains private SECURITY INVOKER; PUBLIC revoke and owner-only installation/upgrade checks unchanged."
+    },
+    {
+      "point": "Evaluation cost boundary",
+      "locations": [
+        "candidate execute.sql:1033"
+      ],
+      "result": "Explicit PL/pgSQL IF selects assignment or SELECT count. The trusted branch does not issue the census query; no dependency on SQL AND/OR or InitPlan evaluation order."
+    }
+  ],
+  "postgresEvaluationReference": "https://www.postgresql.org/docs/18/sql-expressions.html#SYNTAX-EXPRESS-EVAL",
+  "openFindings": [],
+  "limitations": [
+    "Source-only review; no native/browser/build/performance execution by reviewer.",
+    "Candidate is authored execute.sql proposal; generated runtime and manifest must be rebuilt and checked before installation.",
+    "Runtime correctness and actual latency/capacity benefit remain unqualified.",
+    "No canonical checkout was changed by reviewer."
+  ]
+}

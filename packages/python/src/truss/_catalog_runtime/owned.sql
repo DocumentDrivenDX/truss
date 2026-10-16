@@ -1431,7 +1431,7 @@ DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime
  plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;previous_image jsonb;
  original_mode text;expected_version bigint;matches int:=0;has_previous boolean;property truss.prop_def;pin record;
  expected_events jsonb:='[]';expected_event jsonb;journal jsonb;event jsonb;ordinal int:=0;
- before_record jsonb;after_record jsonb;semantic_events jsonb:='[]';group_pin jsonb;input jsonb;history_key text;history_metadata jsonb;
+ before_record jsonb;after_record jsonb;semantic_events jsonb:='[]';group_pin jsonb;input jsonb;history_key text;history_metadata jsonb;completed_slots bigint;
 BEGIN
  IF authorize_read IS NULL THEN RAISE EXCEPTION 'explicit object validation mode required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT transition FROM truss.runtime_object_transition WHERE transition_id=selected_transition;
@@ -1441,8 +1441,16 @@ BEGIN
   ELSE SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;END IF;
  IF prepared_input IS NOT NULL AND (source_bytes IS NULL OR source_bytes IS DISTINCT FROM attempt.input_bytes) THEN
   RAISE EXCEPTION 'original checked transition input required' USING ERRCODE='55000';END IF;
+ -- Only the existing private settlement call supplies all checked context.
+ -- Its complete immutable slot census is already closed by group_validate;
+ -- standalone and history validation retain their independent census.
+ IF NOT authorize_read AND prepared_attempt.id IS NOT NULL AND prepared_input IS NOT NULL AND compiled_history IS NOT NULL THEN
+  completed_slots:=attempt.next_index;
+ ELSE
+  SELECT count(*) INTO completed_slots FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.result IS NOT NULL;
+ END IF;
  IF attempt.writer_xid IS DISTINCT FROM transition.writer_xid OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
-  OR (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.result IS NOT NULL)<>attempt.next_index OR (authorize_read AND NOT attempt.complete)
+  OR completed_slots<>attempt.next_index OR (authorize_read AND NOT attempt.complete)
   OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM qualified_actor)) THEN
   RAISE EXCEPTION 'original completed object operation progress required' USING ERRCODE='55000';END IF;
  plan:=truss.runtime_owned_plan(attempt.id,transition.operation_index);

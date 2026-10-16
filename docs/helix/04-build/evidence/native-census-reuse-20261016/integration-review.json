@@ -1,0 +1,40 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "SOURCE_CLEAR_BASIC_NATIVE_PARENT_PASS_PERFORMANCE_PENDING",
+  "scope": "Completed main census-reuse integration, correctness only",
+  "repository": "/private/tmp/truss-main-integration-20261010",
+  "baseCommit": "82360b5364b1d3d9e038c56b0883601f0693a2fa",
+  "sourceHashes": {
+    "packages/postgresql/owned-groups/execute.sql": "ed7acc8b5320ce228a06c03d5efa9ecfe5c08b084e2c95af3df31edd70470e85",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "88e5a2e8e0b314b20aa089daa46054e3650f244ef7bf4eb73a90a0bd89ed0c99",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "84f0d50b6dfff45005dbddf898b37e0d8131a9d8230d2d1c203e8e689510ebeb"
+  },
+  "proposal": {
+    "sourceSha256": "ed7acc8b5320ce228a06c03d5efa9ecfe5c08b084e2c95af3df31edd70470e85",
+    "patchSha256": "c4f8340142c8e51bdc211fcfaeb5a8169ec86dfe0301d3562811bf7f157df8d2",
+    "sourceReview": "/private/tmp/truss-census-reuse-astra-20261016.json",
+    "byteIdenticalAuthoredSource": true
+  },
+  "findings": [],
+  "checks": [
+    "Only authored execute.sql, generated owned.sql and its manifest hash changed.",
+    "Read-only build-owned-runtime.py --check and git diff --check passed.",
+    "Trusted branch requires authorize_read=false plus prepared attempt/input/compiled history; existing attempt ID and exact source-byte custody checks precede it.",
+    "The sole full-context caller is group_validate, whose independent total count, nonnull result, ordinal, writer and exact results/aliases checks precede per-object transition calls at both finish and mandatory commit.",
+    "Standalone wrapper and history callers retain an independent count query. All actor/writer/current transaction, plan/image/history/journal checks and ACL/signatures remain unchanged.",
+    "Explicit PL/pgSQL branch avoids issuing the duplicate query without depending on SQL boolean expression evaluation order. Existing219 routine and1024 group bounds unchanged."
+  ],
+  "parentReportedNative": {
+    "session": "basic8",
+    "result": "PASS",
+    "tests": 8,
+    "seconds": 29.189,
+    "log": "/private/tmp/truss-census-reuse-basic-20261016.log",
+    "logSha256": "2ee13078e10528b9c2f42c6b76a451142477059a6085ac18712b9f7227fb629d",
+    "reviewerReadTerminalLog": true
+  },
+  "limits": [
+    "Reviewer performed static review and generation consistency check only; no native DB or performance execution.",
+    "Original workload matrix remains pending the owner CPU window. No performance, release runner or latency qualification is asserted."
+  ]
+}
