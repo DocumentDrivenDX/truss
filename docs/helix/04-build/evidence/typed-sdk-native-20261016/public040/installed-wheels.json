@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "wheels": [
+    {
+      "package": "weft",
+      "wheel": "/private/tmp/sdk-weft-published040/weft_sql-0.4.40-cp39-abi3-macosx_11_0_arm64.whl",
+      "sha256": "24d5514c779bd43fceafb6f89268f4fb4dc6a28b1332370fcaefd9f4c20b63cc",
+      "verifiedFiles": 2
+    },
+    {
+      "package": "truss",
+      "wheel": "/private/tmp/sdk-truss-public040-main2695-wheels/truss_toolkit-0.0.38.dev0-py3-none-any.whl",
+      "sha256": "2ebe2a7424aaeedfa6570f2ba534a1925421eebece25d04e9d7a5664a8a24fbb",
+      "verifiedFiles": 506
+    },
+    {
+      "package": "umf_access",
+      "wheel": "/private/tmp/sdk-ashlar-pages-final-umf-wheels/umf_access-0.1.0.dev0-py3-none-any.whl",
+      "sha256": "4d9fe2646da111e52e0f0e1a2142e1c3d83fdb7471ff62d1fd636ef6c47baced",
+      "verifiedFiles": 33
+    }
+  ],
+  "temporalSdk": "HELD"
+}
