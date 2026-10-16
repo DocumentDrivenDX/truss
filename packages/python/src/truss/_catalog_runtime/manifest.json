@@ -28,7 +28,7 @@
     "imports.sql": "c5f6704928c2b9373d39c15290ac9cb655d7f6502b018c778a15bd1c929e5941",
     "feed.sql": "4d1a3bd8938faec8dbb9654388f59e21abe7dbd4584131d251b1c1daed906e5a",
     "capability-profiles.json": "2a7e915d701c9c286a084c17598b8f166f59774e7ac2baeac7f34b72a2e3f0bf",
-    "history.sql": "086270d9940466486437fa68731379aeaaa18c59505f8976c551fbd56a0ce643",
+    "history.sql": "29f8da124694da01b2b49b6dc35bc9e7c1e1389b0e5e338666fb0996c499dbf7",
     "migrations.sql": "5637e5290a441c27202844a3c0c90ba9cc1d68c6c266a4f44b61bc2dd39c8b94",
     "preparation-baseline.json": "fecfedd6793948b915553c67710b3f4374014df5d89d9e140d591d31776d6c9e",
     "upgrade-source-023.json": "8cb52bb9cbf7b67eb11c9b965463465c32811fb7809c51df914cea97c0e40312",

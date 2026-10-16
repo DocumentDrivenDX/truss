@@ -33,7 +33,12 @@ CREATE FUNCTION truss.runtime_history_property(selected_type int,property_id int
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE basis jsonb;property truss.prop_def%ROWTYPE;pin record;
 BEGIN
- basis:=truss.catalog_all_expected_records(revision);
+ SELECT CASE WHEN revision=(SELECT rev FROM truss.schema_head WHERE id=1)
+  AND NOT EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>revision)
+ THEN jsonb_build_object(
+  'type_def',(SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]'::jsonb) FROM truss.type_def t WHERE t.type_id=selected_type),
+  'prop_def',(SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]'::jsonb) FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=property_id)) END INTO basis;
+ IF basis IS NULL THEN basis:=truss.catalog_all_expected_records(revision);END IF;
  SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=selected_type AND p.prop_id=property_id;
  SELECT * INTO STRICT pin FROM truss.runtime_definition_in_basis('property',selected_type,property_id,revision,basis);
  IF pin.definition_pin IS DISTINCT FROM definition_pin THEN RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
