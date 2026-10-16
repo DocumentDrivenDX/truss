@@ -1,0 +1,7 @@
+{
+  "scope": "Fixture-prefix postgres scan and newly created fixture directory scan; older roots left untouched",
+  "attemptStartedUnix": 1792178527.9275026,
+  "liveFixturePostgres": [],
+  "newFixtureRoots": [],
+  "passed": true
+}

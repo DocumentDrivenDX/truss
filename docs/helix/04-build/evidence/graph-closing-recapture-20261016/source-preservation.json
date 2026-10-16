@@ -1,0 +1,7 @@
+{
+  "baseline": "dadbce957437d60c86e3d9ad637dfdc738454239",
+  "originalSourceSha256": "7540068d324ebf89fdfa51d05ccf4bd09652d9a8b9462f951a92254338b7283b",
+  "currentSourceSha256": "a798c96dbc39386fd62ab9003451bd873a30d4a921e1e354dccce5cd1b389ab0",
+  "allOriginalSourceBytesUnchanged": true,
+  "scope": "Closing helper appended only; no existing capture, bounds, source, codec or query-activation behavior changes. No whole-program or authority proof."
+}

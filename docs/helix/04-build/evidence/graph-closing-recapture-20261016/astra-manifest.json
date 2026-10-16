@@ -1,0 +1,95 @@
+{
+  "files": {
+    "baseline-facts.py": {
+      "sha256": "7540068d324ebf89fdfa51d05ccf4bd09652d9a8b9462f951a92254338b7283b",
+      "bytes": 23942
+    },
+    "check.log": {
+      "sha256": "1652feb6408c4310b5f94493b488453485879e9c7f43468fbaf376967020cc56",
+      "bytes": 348
+    },
+    "check.py": {
+      "sha256": "033f2159219f4f453f8c29e80532c8da5fa048c92b91ca182ea1334d92cf6c7d",
+      "bytes": 5234
+    },
+    "checks.json": {
+      "sha256": "008a7db05bf01d408abc152fb9cfc0df6061284c4a8da30026fced931251afa5",
+      "bytes": 372
+    },
+    "native-audit.json": {
+      "sha256": "6d6d0a5a970cabf18f1bf739f981c6feca847c8143d68934426b2ad0aa8bf496",
+      "bytes": 1784
+    },
+    "packet/change.diff": {
+      "sha256": "eceae2cbf769c79dae9f157b28aea9aed3980e11a955556182cae71386f93668",
+      "bytes": 7544
+    },
+    "packet/docs/helix/04-build/evidence/graph-closing-recapture-20261016/README.md": {
+      "sha256": "f850b07eda37ac6fea6cb63c13b8d581854afb7d68a9c14bd172e1153b773ca3",
+      "bytes": 3354
+    },
+    "packet/docs/helix/04-build/evidence/graph-closing-recapture-20261016/cleanup.json": {
+      "sha256": "ba25ea2923dc90095953395dac9d0191323fe6ec479b6b709ac6506f411ec904",
+      "bytes": 231
+    },
+    "packet/docs/helix/04-build/evidence/graph-closing-recapture-20261016/native-inputs-and-results.zip": {
+      "sha256": "e63e5ac57be236dfa654b3a601b2a057d527aac26e7240d9d5dab92f02ee7505",
+      "bytes": 28325
+    },
+    "packet/docs/helix/04-build/evidence/graph-closing-recapture-20261016/native-manifest.json": {
+      "sha256": "15308b377f0ae5bae9da55f4b4ffb66e0043051958d382551404f73775265e51",
+      "bytes": 3597
+    },
+    "packet/docs/helix/04-build/evidence/graph-closing-recapture-20261016/native.log": {
+      "sha256": "6f3ff1f69841bf39b4f555527647964bf61682db9ecc7b26eb811db016700b87",
+      "bytes": 487
+    },
+    "packet/docs/helix/04-build/evidence/graph-closing-recapture-20261016/retention.json": {
+      "sha256": "56ef70164a8b4a0e4055dfe667e1595d2d6c30a1de0c86bfd62c08a300d2aa82",
+      "bytes": 1194
+    },
+    "packet/docs/helix/04-build/evidence/graph-closing-recapture-20261016/source-preservation.json": {
+      "sha256": "bd54b36b250a2f5894d5f3a61718318e94081b91149468c4617abc5d02107594",
+      "bytes": 453
+    },
+    "packet/docs/helix/04-build/evidence/graph-closing-recapture-20261016/unit.log": {
+      "sha256": "d9ce03b199fd8b7afc82a4f942279b96601225953cc82cb0d80e8294c648ef34",
+      "bytes": 2432
+    },
+    "packet/manifest.json": {
+      "sha256": "b187f5728bdce7d9d87535b5c74f65f1d69d4b728a83b6bca909c811f437eee9",
+      "bytes": 1704
+    },
+    "packet/packages/python/src/truss/_current_disclosure_facts.py": {
+      "sha256": "a798c96dbc39386fd62ab9003451bd873a30d4a921e1e354dccce5cd1b389ab0",
+      "bytes": 24848
+    },
+    "packet/packages/python/tests/test_current_disclosure_capture_closing.py": {
+      "sha256": "778a924a357ecfe40b9c29ba089a59f374e709f68b6bb592e44acc22338d5b2b",
+      "bytes": 3223
+    },
+    "packet/packages/python/tests/test_current_disclosure_graphs_native.py": {
+      "sha256": "353cbfd64588db904fab9a33516d2f1815b6a6910cd643388d2d568b734ad4ef",
+      "bytes": 15398
+    },
+    "pure-tests.log": {
+      "sha256": "a534b18d419116b2169e280455d7c5c4cecf3e9cab8a53911894e911066c2e89",
+      "bytes": 2432
+    },
+    "review.json": {
+      "sha256": "143f402c1a3704d3a4141e7a948d59f92463a8afe05eb8f3c8001f926d0338a3",
+      "bytes": 4303
+    },
+    "review.txt": {
+      "sha256": "f17a2efa1cbfc2bc90bbdacaa99aa3ef47c9c921636e59200459414c719a0ead",
+      "bytes": 389
+    }
+  },
+  "artifactCount": 21,
+  "totalBytes": 131594,
+  "excludes": [
+    "manifest.json",
+    "working/",
+    "__pycache__/"
+  ]
+}

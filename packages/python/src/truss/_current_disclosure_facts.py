@@ -317,3 +317,20 @@ def _capture_graphs(cursor,sources,records,facts,private):
         graphs.append(encoded_row)
     encoded=b'['+b','.join(graphs)+b']'
     return encoded,covered,tuple(rows)
+
+
+def verify_current_disclosure_capture_with_cursor(cursor, captured, *, bun_executable='bun'):
+    """Reobserve a private capture at closing; data comparison, never a permit.
+
+    Original host/source/authority custody and release guards remain required.
+    Held table cuts exclude external writers; this check also detects this
+    transaction's own changed rows, versions, Key custody or graph occurrences.
+    A later mutation is outside this endpoint check. No result is released here.
+    """
+    if type(captured) is not CurrentDisclosureFactCapture:
+        raise ValueError('Original complete disclosure capture profile required')
+    cursor._deadline.check()
+    current=capture_current_disclosure_facts_with_cursor(cursor,bun_executable=bun_executable)
+    cursor._deadline.check()
+    if current!=captured:
+        raise ValueError('Complete native disclosure capture changed before closing')
