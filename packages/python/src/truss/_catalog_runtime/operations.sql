@@ -832,7 +832,7 @@ CREATE TRIGGER runtime_object_attempt_guard BEFORE UPDATE OR DELETE ON truss.run
 
 CREATE FUNCTION truss.runtime_object_commit_check() RETURNS trigger
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;actual jsonb;expected jsonb;endpoint record;selected_edge bigint;selected_relation int;current_actor oid;
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;actual jsonb;expected jsonb;endpoint record;selected_edge bigint;selected_relation int;journal_kind text;journal_id bigint;journal_type int;current_actor oid;
 BEGIN
  IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL;END IF;
  IF TG_TABLE_NAME IN ('object','runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill') THEN
@@ -882,6 +882,36 @@ BEGIN
    PERFORM truss.runtime_graph_validate_object(endpoint.id,endpoint.type_id,false);
   END LOOP;
  END IF;
+ -- Ordinary entity events compare the complete journal for their typed owner.
+ -- Mandatory attempt, catalog and legacy settlement keep transaction closure.
+ IF TG_TABLE_NAME='object' THEN
+  journal_kind:='o';
+  IF TG_OP='DELETE' THEN journal_id:=OLD.id;journal_type:=OLD.type_id;
+  ELSE journal_id:=NEW.id;journal_type:=NEW.type_id;END IF;
+ ELSIF TG_TABLE_NAME='runtime_object_transition' THEN
+  journal_kind:='o';journal_id:=NEW.object_id;journal_type:=NEW.type_id;
+ ELSIF TG_TABLE_NAME='edge' THEN
+  journal_kind:='e';
+  IF TG_OP='DELETE' THEN journal_id:=OLD.id;journal_type:=OLD.rel_type_id;
+  ELSE journal_id:=NEW.id;journal_type:=NEW.rel_type_id;END IF;
+ ELSIF TG_TABLE_NAME='runtime_edge_transition' THEN
+  journal_kind:='e';journal_id:=NEW.edge_id;journal_type:=NEW.rel_type_id;
+ END IF;
+ IF journal_kind IS NOT NULL THEN
+  SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb) INTO actual
+  FROM truss.journal j WHERE j.xid=pg_current_xact_id() AND j.entity_kind=journal_kind
+   AND j.entity_id=journal_id AND j.entity_type=journal_type;
+  SELECT coalesce(jsonb_agg(value ORDER BY (value->>'at')::timestamptz,(value->>'seq')::bigint),'[]'::jsonb) INTO expected FROM (
+   SELECT g.expected_members->m.operation_index->'journal' value
+   FROM truss.runtime_create_member m JOIN truss.runtime_create_group g USING(group_id)
+   WHERE journal_kind='o' AND m.object_id=journal_id AND m.type_id=journal_type AND g.writer_xid=pg_current_xact_id()
+   UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
+   WHERE journal_kind='o' AND t.object_id=journal_id AND t.type_id=journal_type AND t.writer_xid=pg_current_xact_id()
+   UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
+   WHERE journal_kind='o' AND t.object_id=journal_id AND t.type_id=journal_type AND t.writer_xid=pg_current_xact_id()
+   UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
+   WHERE journal_kind='e' AND t.edge_id=journal_id AND t.rel_type_id=journal_type AND t.writer_xid=pg_current_xact_id()) e;
+ ELSE
  -- Journal closure includes object and edge transitions.
  SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb) INTO actual FROM truss.journal j WHERE j.xid=pg_current_xact_id();
  SELECT coalesce(jsonb_agg(value ORDER BY (value->>'at')::timestamptz,(value->>'seq')::bigint),'[]'::jsonb) INTO expected FROM (
@@ -889,6 +919,7 @@ BEGIN
   UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
   UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
   UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()) e;
+ END IF;
  IF actual IS DISTINCT FROM expected THEN RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
  RETURN NULL;
 END;
@@ -1574,3 +1605,37 @@ EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE 'P1001' OR SQLST
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text) FROM PUBLIC;
+
+-- Each physical journal insert queues its own check, including after earlier
+-- attempt/row constraints have already fired. No validation state is cached.
+CREATE FUNCTION truss.runtime_owned_journal_insert_check() RETURNS trigger
+LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+DECLARE actual jsonb;claims bigint;matching bigint;
+BEGIN
+ IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL;END IF;
+ IF NEW.xid IS DISTINCT FROM pg_current_xact_id() OR NEW.entity_kind NOT IN ('o','e') THEN
+  RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
+ SELECT to_jsonb(j) INTO STRICT actual FROM truss.journal j WHERE j.at=NEW.at AND j.seq=NEW.seq;
+ WITH expected(value) AS (
+  SELECT g.expected_members->m.operation_index->'journal'
+  FROM truss.runtime_create_member m JOIN truss.runtime_create_group g USING(group_id)
+  WHERE NEW.entity_kind='o' AND m.object_id=NEW.entity_id AND m.type_id=NEW.entity_type AND g.writer_xid=pg_current_xact_id()
+  UNION ALL
+  SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
+  WHERE NEW.entity_kind='o' AND t.object_id=NEW.entity_id AND t.type_id=NEW.entity_type AND t.writer_xid=pg_current_xact_id()
+  UNION ALL
+  SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
+  WHERE NEW.entity_kind='o' AND t.object_id=NEW.entity_id AND t.type_id=NEW.entity_type AND t.writer_xid=pg_current_xact_id()
+  UNION ALL
+  SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
+  WHERE NEW.entity_kind='e' AND t.edge_id=NEW.entity_id AND t.rel_type_id=NEW.entity_type AND t.writer_xid=pg_current_xact_id()
+ )
+ SELECT count(*),count(*) FILTER(WHERE value=actual) INTO claims,matching FROM expected
+ WHERE (value->>'at')::timestamptz=NEW.at AND (value->>'seq')::bigint=NEW.seq;
+ IF claims<>1 OR matching<>1 THEN RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
+ RETURN NULL;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_journal_insert_check() FROM PUBLIC;
+CREATE CONSTRAINT TRIGGER runtime_owned_journal_insert_commit AFTER INSERT ON truss.journal DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_journal_insert_check();
+ALTER TABLE truss.journal ENABLE ALWAYS TRIGGER runtime_owned_journal_insert_commit;

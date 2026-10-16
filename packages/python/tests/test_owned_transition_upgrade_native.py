@@ -30,6 +30,8 @@ class OwnedTransitionUpgradeTests(unittest.TestCase):
                     private_names=['runtime_can_read_qualified','runtime_module_writer_qualified','runtime_object_values_readable_qualified','runtime_owned_object_transition_validate_qualified']
                     private_rows=admin.execute("SELECT p.proname,has_function_privilege('consumer',p.oid,'EXECUTE'),p.proowner=i.owner_oid FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace CROSS JOIN truss.catalog_runtime_installation i WHERE n.nspname='truss' AND p.proname=ANY(%s) ORDER BY p.proname",(private_names,)).fetchall()
                     self.assertEqual(private_rows,[(name,False,True) for name in sorted(private_names)])
+                    journal_guard=admin.execute("SELECT c.relname,t.tgenabled,t.tgdeferrable,t.tginitdeferred,t.tgfoid='truss.runtime_owned_journal_insert_check()'::regprocedure,has_function_privilege('consumer',t.tgfoid,'EXECUTE'),p.proowner=i.owner_oid FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid JOIN pg_proc p ON p.oid=t.tgfoid CROSS JOIN truss.catalog_runtime_installation i WHERE t.tgname='runtime_owned_journal_insert_commit' ORDER BY c.relname").fetchall()
+                    self.assertEqual(journal_guard,[(name,'A',True,True,True,False,True) for name in ('journal','journal_runtime_horizon')])
                     self.assertEqual(admin.execute('SELECT to_jsonb(t)::text FROM truss.runtime_object_transition t ORDER BY transition_id').fetchall(),objects)
                     if upgraded.value.previous_release_id=='truss-catalog-runtime/0.64-candidate':
                         self.assertEqual(admin.execute("SELECT (to_jsonb(t)-'endpoint_ownership')::text FROM truss.runtime_edge_transition t ORDER BY transition_id").fetchall(),edges)

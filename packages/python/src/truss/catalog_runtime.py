@@ -563,7 +563,7 @@ class CatalogReferenceAssembly:
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=216:raise ValueError('Exact additive runtime routine inventory required')
+        if len(replacements)!=217:raise ValueError('Exact additive runtime routine inventory required')
         signatures=[]
         for statement in replacements:
             header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
@@ -735,6 +735,8 @@ class CatalogReferenceAssembly:
             cursor.execute('REVOKE ALL ON TYPE truss.runtime_owned_operation FROM PUBLIC',prepare=False)
             for statement in replacements:
                 cursor.execute(statement.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION',1),prepare=False)
+            cursor.execute('CREATE CONSTRAINT TRIGGER runtime_owned_journal_insert_commit AFTER INSERT ON truss.journal DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_journal_insert_check()',prepare=False)
+            cursor.execute('ALTER TABLE truss.journal ENABLE ALWAYS TRIGGER runtime_owned_journal_insert_commit',prepare=False)
             private_signatures=[]
             # New helpers have no predecessor OID or grants. Set their owner
             # explicitly; CREATE OR REPLACE preserves every original facade ACL.
