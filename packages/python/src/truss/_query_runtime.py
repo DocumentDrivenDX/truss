@@ -18,7 +18,7 @@ BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.38',
 def compiler():
     try:
         import weft
-        if weft.__version__ != '0.4.34':
+        if weft.__version__ != '0.4.35':
             return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):
@@ -47,7 +47,7 @@ def _relationship_key_types(types,maximum=128):
     for t in types:
         if t.get('nullable') is not False or set(t)!= {'family','facets','nullable'}:raise ValueError('Required key types required')
         family,facets=t['family'],t['facets']
-        valid=(family in ('string','boolean') and facets=={} or family=='integer' and facets in ({},{'integerWidth':{'bits':64,'signed':True}}) or family=='decimal' and facets in ({'precision':18,'scale':4},{'precision':18,'scale':2}))
+        valid=(family in ('string','boolean') and facets=={} or family=='integer' and facets in ({},{'integerWidth':{'bits':64,'signed':True}}) or family=='decimal' and facets in ({'precision':18,'scale':4},{'precision':18,'scale':2},{'precision':12,'scale':2}))
         if not valid:raise ValueError('Supported exact relationship key required')
     return types
 

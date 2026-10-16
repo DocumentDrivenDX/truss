@@ -102,6 +102,31 @@ class PendingModuleAccessConfiguration:
     status: str = 'pending_commit'
 
 
+_PARTIAL_GROUP_FUNCTIONS = (
+    'group_create_metadata(bytea,bytea,text,text)',
+    'apply_create_group(bytea,bytea,bytea,bytea,text,text)',
+    'object_group_begin(bytea,bytea,bytea,text,text,bytea,boolean)',
+    'group_condition_key_metadata(bytea,bytea,text,text)',
+    'object_group_metadata(uuid,int)', 'object_group_step(uuid,int,bytea)',
+    'object_group_finish(uuid)',
+)
+
+
+def _close_partial_group_grants(cursor):
+    """Installer-only closure of the obsolete partial SQL write surface."""
+    from psycopg import sql
+    for signature in _PARTIAL_GROUP_FUNCTIONS:
+        cursor.execute("""SELECT a.grantee,r.rolname FROM pg_catalog.pg_proc p
+            CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a
+            LEFT JOIN pg_catalog.pg_roles r ON r.oid=a.grantee
+            WHERE p.oid=pg_catalog.to_regprocedure(%s) AND a.privilege_type='EXECUTE'
+              AND a.grantee<>p.proowner""",('truss.'+signature,),prepare=False)
+        for grantee,role_name in cursor.fetchall():
+            if grantee!=0 and role_name is None:raise ValueError('Existing partial function grantee required')
+            role=sql.SQL('PUBLIC') if grantee==0 else sql.Identifier(role_name)
+            cursor.execute(sql.SQL('REVOKE EXECUTE ON FUNCTION truss.{} FROM {} CASCADE').format(sql.SQL(signature),role),prepare=False)
+
+
 def _pin_cursor(cursor):
     from psycopg.types.string import (TextLoader, ByteaLoader, StrDumperUnknown,
         StrBinaryDumper, BytesDumper, BytesBinaryDumper)
@@ -213,7 +238,8 @@ def _catalog_failure(result, local_code=None):
               '0A000':'unsupported_profile','25006':'unsupported_profile','54000':'resource',
               '55P03':'observation','42P01':'installation','42883':'installation','3F000':'installation'}.get(failure.sql_state)
     if local_code is not None and failure.code=='invalid_transaction' and failure.sql_state is None:
-        code=local_code
+        code,message=local_code if type(local_code) is tuple else (local_code,'Unsupported installed catalog release')
+        return Error(replace(failure,code='execution_obligation',message=message,catalog_code=code))
     return result if code is None else Error(replace(failure,catalog_code=code))
 
 
@@ -387,14 +413,14 @@ class CatalogReferenceAssembly:
             identity=cursor.fetchone()[0]
             for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_preview(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
-            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss runtime 0.56 candidate: catalog, scalar graph, provenance, history, feed and additive upgrades'",prepare=False)
+            cursor.execute("COMMENT ON SCHEMA truss IS 'Truss installed runtime: exact active release and layout from truss.runtime_current_installation()'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
         return self._host._run_operation(transaction,install)
     @_active_operation
     def upgrade_in_transaction(self,transaction: TransactionHandle) -> Outcome[PendingRuntimeUpgrade]:
-        """Upgrade retained .23 through .52 to .53/layout1.0; caller settles it.
+        """Upgrade a supported original predecessor to the packaged runtime; caller settles it.
 
         Requires a direct trusted installation administrator and quiescence.
         Native NOWAIT fencing refuses active consumers without internal retries.
@@ -537,7 +563,7 @@ class CatalogReferenceAssembly:
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=194:raise ValueError('Exact additive runtime routine inventory required')
+        if len(replacements)!=197:raise ValueError('Exact additive runtime routine inventory required')
         signatures=[]
         for statement in replacements:
             header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
@@ -549,7 +575,7 @@ class CatalogReferenceAssembly:
                 if parameter is None:raise ValueError('Owned additive routine argument profile required')
                 types.append(parameter.group(1))
             signature=name+'('+','.join(types)+')'
-            if not name.startswith('truss.runtime_owned_') and name not in ('truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.runtime_create_transition_validate','truss.umf_key_uleb128','truss.umf_key_coefficient','truss.encode_umf_scalar_key_tuple','truss.umf_key_field_values_valid','truss.derive_catalog_key_tuple','truss.runtime_endpoint_ownership','truss.catalog_scalar_violations_with_sources','truss.catalog_item_meaning','truss.valid_item_chain','truss.runtime_item_chain_readable','truss.catalog_accept_with_keys','truss.catalog_accept_preview','truss.catalog_key_backfill_candidates','truss.catalog_key_backfill_verify','truss.catalog_key_backfill_violations','truss.catalog_key_backfill_apply','truss.catalog_key_backfill_transition_reader','truss.catalog_key_backfill_report_reader','truss.catalog_rebind_profile','truss.catalog_rebind_transition_reader','truss.catalog_rebind_definition','truss.catalog_rebind_history','truss.catalog_rebind_objects','truss.catalog_rebind_violations','truss.catalog_rebind_report_reader','truss.catalog_rebind_history_group','truss.runtime_capture_feed_configuration','truss.catalog_check_source_correspondence','truss.runtime_object_values_readable','truss.valid_property_definition','truss.valid_flat_cell','truss.canonical_flat_cell','truss.valid_property_value','truss.logical_flat_cell','truss.catalog_item_definition','truss.render_scalar_object','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.traverse_objects','truss.umf_key_values','truss.verify_umf_scalar_key_tuple','truss.valid_scalar_property','truss.runtime_current_installation','truss.query_binding','truss.query_scope','truss.query_objects','truss.query_numeric_value','truss.query_timestamp_instant_key','truss.query_edges','truss.query_page_objects','truss.feed_reached','truss.query_object_attribution','truss.query_complete_related_keys','truss.query_object_times','truss.query_object_load_id','truss.feed_ack_receipt_binding','truss.acknowledge_feed_with_receipt','truss.reconcile_feed_ack'):signatures.append(signature)
+            if not name.startswith('truss.runtime_owned_') and name not in ('truss.runtime_definition_in_basis','truss.apply_group','truss.runtime_graph_validate_object','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.runtime_create_transition_validate','truss.umf_key_uleb128','truss.umf_key_coefficient','truss.encode_umf_scalar_key_tuple','truss.umf_key_field_values_valid','truss.derive_catalog_key_tuple','truss.runtime_endpoint_ownership','truss.catalog_scalar_violations_with_sources','truss.catalog_item_meaning','truss.valid_item_chain','truss.runtime_item_chain_readable','truss.catalog_accept_with_keys','truss.catalog_accept_preview','truss.catalog_key_backfill_candidates','truss.catalog_key_backfill_verify','truss.catalog_key_backfill_violations','truss.catalog_key_backfill_apply','truss.catalog_key_backfill_transition_reader','truss.catalog_key_backfill_report_reader','truss.catalog_rebind_profile','truss.catalog_rebind_transition_reader','truss.catalog_rebind_definition','truss.catalog_rebind_history','truss.catalog_rebind_objects','truss.catalog_rebind_violations','truss.catalog_rebind_report_reader','truss.catalog_rebind_history_group','truss.runtime_capture_feed_configuration','truss.catalog_check_source_correspondence','truss.runtime_object_values_readable','truss.valid_property_definition','truss.valid_flat_cell','truss.canonical_flat_cell','truss.valid_property_value','truss.logical_flat_cell','truss.catalog_item_definition','truss.render_scalar_object','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.traverse_objects','truss.umf_key_values','truss.verify_umf_scalar_key_tuple','truss.valid_scalar_property','truss.runtime_current_installation','truss.query_binding','truss.query_scope','truss.query_objects','truss.query_numeric_value','truss.query_timestamp_instant_key','truss.query_edges','truss.query_page_objects','truss.feed_reached','truss.query_object_attribution','truss.query_complete_related_keys','truss.query_object_times','truss.query_object_load_id','truss.feed_ack_receipt_binding','truss.acknowledge_feed_with_receipt','truss.reconcile_feed_ack'):signatures.append(signature)
         def upgrade(cursor,observed):
             _pin_cursor(cursor)
             cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False);original_path=cursor.fetchone()[0]
@@ -715,7 +741,7 @@ class CatalogReferenceAssembly:
             for statement in replacements:
                 header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
                 name,arguments=header.groups()
-                if name.startswith('truss.runtime_owned_') or name in ('truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi'):
+                if name.startswith('truss.runtime_owned_') or name in ('truss.runtime_definition_in_basis','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.runtime_graph_validate_object','truss.apply_group'):
                     types=[re.match(r'\s*\w+\s+([\w.]+(?:\[\])?)',part).group(1) for part in (arguments.split(',') if arguments.strip() else ())]
                     signature=name+'('+','.join(types)+')'
                     private_signatures.append(signature)
@@ -824,6 +850,12 @@ class CatalogReferenceAssembly:
                 ) objects CROSS JOIN LATERAL aclexplode(coalesce(acl,acldefault(kind,owner))) a
                 WHERE objects.owner<>%s OR a.grantee<>%s)""",(owner_oid,owner_oid),prepare=False)
             if cursor.fetchone()[0]:raise ValueError('Private owned migration objects required')
+            # Preserve predecessor checks above, then intentionally close its
+            # partial-write grants and enable the complete public operation.
+            _close_partial_group_grants(cursor)
+            cursor.execute('SELECT DISTINCT writer_role FROM truss.module_access',prepare=False)
+            for writer_role, in cursor.fetchall():
+                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(writer_role)),prepare=False)
             cursor.execute('INSERT INTO truss.runtime_release(previous_release_id,previous_release_sha256,release_id,release_sha256,manifest_bytes,actor_oid) VALUES(%s,%s,%s,%s,%s,(SELECT oid FROM pg_roles WHERE rolname=session_user))',
                 (active_release,active_digest,manifest['releaseId'],digest,bundled.joinpath('manifest.json').read_bytes()),prepare=False)
             cursor.execute("SELECT set_config('search_path',%s,true)",(original_path,),prepare=False)
@@ -855,7 +887,7 @@ class CatalogReferenceAssembly:
         local_failure=[None]
         cache_current=[True]
         def reject(code,message):
-            local_failure[0]=code
+            local_failure[0]=(code,message)
             raise ValueError(message)
         def require_original():
             try:_require_original_preparation(prepared)
@@ -875,10 +907,19 @@ class CatalogReferenceAssembly:
             try:origin=decode_acceptance_json(origin_bytes)
             except (ValueError,UnicodeError):reject('invalid_input','Original asserted origin object required')
             if type(origin) is not dict:reject('invalid_input','Original asserted origin object required')
-            support=evaluate_catalog_support(prepared)
-            semantic=compose_original_catalog_report_semantics(prepared,support)
+            try:
+                support=evaluate_catalog_support(prepared)
+                semantic=compose_original_catalog_report_semantics(prepared,support)
+            except ValueError as error:
+                reject('invalid_input',str(error))
             if semantic['state']!='source_fields_ready':reject('unsupported_profile','Complete original source inventory required')
             from ._owner_evidence_json import decode_owner_evidence_json
+            if semantic.get('sourceFormat')=='truss-registration-summary/1.0':
+                require_original()
+                source={key:semantic[key] for key in ('sourceFormat','umf','documentValidations')}
+                return (prepared.input_bytes,prepared.archive_documents_bytes,prepared.declarations_bytes,
+                    json.dumps(source,ensure_ascii=True,separators=(',',':'),allow_nan=False).encode('utf8'),
+                    origin_bytes,request_key)
             evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
             source={'umf':semantic['umf'],'diagnostics':evidence['validation']['diagnostics'],
                 'documentInterpretations':evidence['validation']['documentInterpretations'],
@@ -1042,8 +1083,8 @@ class CatalogReferenceAssembly:
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_context(text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_type_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_relationship_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
-                for signature in ('group_create_metadata(bytea,bytea,text,text)','apply_create_group(bytea,bytea,bytea,bytea,text,text)','object_group_begin(bytea,bytea,bytea,text,text,bytea,boolean)','group_condition_key_metadata(bytea,bytea,text,text)','object_group_metadata(uuid,int)','object_group_step(uuid,int,bytea)','object_group_finish(uuid)'):
-                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(grant.writer_role)),prepare=False)
+                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
+            _close_partial_group_grants(cursor)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingModuleAccessConfiguration(grants)

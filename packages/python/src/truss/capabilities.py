@@ -73,7 +73,7 @@ class NativeCatalogCapability(_NativeCapability[Literal['catalog']]):
 
 @dataclass(frozen=True,slots=True,kw_only=True)
 class NativeDirectReadCapability(_NativeCapability[Literal['direct_read']]):
-    """Logical scalar object/key/page and independent relationship reads."""
+    """Logical object/key/page, traversal and directed relationship reads."""
     def lookup_import_source_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,
                                             maximum_bytes: int=1048576) -> Outcome[ImportSourceFound | ImportSourceAbsent | ImportSourceUnavailable]:
         return self._assembly.lookup_import_source_in_transaction(transaction,entity=entity,maximum_bytes=maximum_bytes)

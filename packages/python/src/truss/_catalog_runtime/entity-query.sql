@@ -12,7 +12,7 @@ DECLARE object_row truss.object%ROWTYPE;owner truss.type_def%ROWTYPE;
  creation truss.runtime_create_group%ROWTYPE;member jsonb;journals jsonb;expected_actor text;after_image jsonb;
  source_row truss.record_source%ROWTYPE;source_ledger truss.runtime_import_source%ROWTYPE;
  import_record jsonb;import_payload bytea;payload_value jsonb;expected_source jsonb;source_entry jsonb;
- root_identity jsonb;historical_image jsonb;historical_ownership jsonb;owned_mutation boolean;creation_attempt uuid;operation jsonb;result jsonb;event_group jsonb;semantic_events jsonb;event_refs jsonb;epoch text;
+ root_identity jsonb;historical_image jsonb;historical_ownership jsonb;owned_mutation boolean;atomic_creation boolean;creation_attempt uuid;operation jsonb;result jsonb;event_group jsonb;semantic_events jsonb;event_refs jsonb;epoch text;
 BEGIN
  PERFORM truss.query_scope(binding);
  SELECT source_epoch::text INTO STRICT epoch FROM truss.catalog_runtime_installation;
@@ -22,8 +22,30 @@ BEGIN
  SELECT * INTO STRICT object_row FROM truss.object WHERE id=selected_id AND type_id=selected_type;
  root_identity:=truss.query_object_root(binding,object_row);
  FOR selected_version IN SELECT DISTINCT v FROM unnest(ARRAY[1::bigint,object_row.ver::bigint]) v LOOP
-  expected_actor:=NULL;registration.registration_id:=NULL;result:=NULL;owned_mutation:=false;
+  expected_actor:=NULL;registration.registration_id:=NULL;result:=NULL;owned_mutation:=false;atomic_creation:=false;
   IF selected_version=1 THEN
+   SELECT a.* INTO STRICT attempt FROM truss.runtime_object_attempt a WHERE a.complete
+    AND EXISTS(SELECT 1 FROM jsonb_array_elements(a.results) r
+     WHERE r.value->>'operation'='create_object' AND r.value->'identity'->>'id'=selected_id::text
+      AND r.value->'identity'->>'typeId'=selected_type::text);
+   IF attempt.context->'creationTransitionProfile'='{"identity":"truss-unified-create-transition","version":"0.2","sha256":"073782e2517f2a7e26c8d6479c6266ececf68963681ccfb6a380e9cd16f2e11b"}'::jsonb THEN
+    SELECT t.* INTO STRICT transition FROM truss.runtime_object_transition t
+     WHERE t.attempt_id=attempt.id AND t.object_id=selected_id AND t.type_id=selected_type AND t.before_object IS NULL;
+    operation:=convert_from(attempt.input_bytes,'UTF8')::jsonb->'operations'->transition.operation_index;
+    result:=attempt.results->transition.operation_index;
+    IF transition.writer_xid IS DISTINCT FROM attempt.writer_xid OR attempt.next_index<=transition.operation_index
+     OR jsonb_array_length(attempt.results)<>attempt.next_index OR jsonb_array_length(transition.journal)<>1
+     OR operation->>'operation' IS DISTINCT FROM 'create_object' OR result->>'operation' IS DISTINCT FROM 'create_object'
+     OR result->>'outcome' IS DISTINCT FROM 'created' OR result->>'version' IS DISTINCT FROM '1'
+     OR result->'identity'->>'id' IS DISTINCT FROM selected_id::text OR result->'identity'->>'typeId' IS DISTINCT FROM selected_type::text
+     OR result->'identity'->>'definitionPin' IS DISTINCT FROM operation->>'typeDefinitionPin'
+     OR transition.after_object->>'id' IS DISTINCT FROM selected_id::text
+     OR transition.after_object->>'type_id' IS DISTINCT FROM selected_type::text
+     OR transition.after_object->>'ver' IS DISTINCT FROM '1' THEN
+     RAISE EXCEPTION 'completed atomic creation attribution required' USING ERRCODE='55000';END IF;
+    creation_attempt:=attempt.id;journals:=transition.journal;after_image:=transition.after_object;atomic_creation:=true;
+   ELSIF attempt.context->'creationTransitionProfile' IS NULL OR attempt.context->'creationTransitionProfile'=
+    '{"identity":"truss-unified-create-transition","version":"0.1","sha256":"765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"}'::jsonb THEN
    SELECT g.* INTO STRICT creation FROM truss.runtime_create_group g
     CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) m
     WHERE m.value->'object'->>'id'=selected_id::text AND m.value->'object'->>'type_id'=selected_type::text;
@@ -36,6 +58,7 @@ BEGIN
        AND r.value->'identity'->>'typeId'=selected_type::text);
    creation_attempt:=attempt.id;
    journals:=jsonb_build_array(member->'journal');after_image:=member->'object';expected_actor:=creation.actor_name;
+   ELSE RAISE EXCEPTION 'known original creation attribution profile required' USING ERRCODE='55000';END IF;
    writer:=attempt.writer_xid;asserted:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'assertedOrigin';history_profile:=CASE WHEN (convert_from(attempt.input_bytes,'UTF8')::jsonb)->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END;
   ELSE
    SELECT * INTO rebound FROM truss.runtime_catalog_rebind_transition t WHERE t.object_id=selected_id AND t.type_id=selected_type AND (t.after_object->>'ver')::bigint=selected_version;
@@ -121,7 +144,7 @@ BEGIN
    THEN RAISE EXCEPTION 'original creation attribution required' USING ERRCODE='55000';END IF;
   END LOOP;
   IF event_group IS DISTINCT FROM jsonb_build_object('profile','truss-history-group/0.1.0','eventCount',events::text,'orderedEventDigest',encode(sha256(convert_to(semantic_events::text,'UTF8')),'hex'))
-   OR selected_version>1 AND registration.registration_id IS NULL AND NOT owned_mutation AND result->'events' IS DISTINCT FROM event_refs
+   OR (atomic_creation OR selected_version>1 AND registration.registration_id IS NULL AND NOT owned_mutation) AND result->'events' IS DISTINCT FROM event_refs
   THEN RAISE EXCEPTION 'complete original attribution event group required' USING ERRCODE='55000';END IF;
   IF events=0 THEN RAISE EXCEPTION 'missing attribution events' USING ERRCODE='55000';END IF;
   IF selected_version=1 THEN created_actor:=actor;END IF;

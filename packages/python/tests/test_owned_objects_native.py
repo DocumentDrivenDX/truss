@@ -7,7 +7,8 @@ import json
 import os
 from dataclasses import replace
 
-from truss import (Ok, ObjectFound, ObjectNotFound, QueryRows, HistoryEntity, EdgeFound, EdgePage, TraversalHop, TraversalComplete,
+from truss import (Ok, ObjectFound, ObjectNotFound, QueryRows, HistoryEntity, EdgeFound, EdgePage, TraversalHop, TraversalComplete, FeedPage, FeedAcknowledged,
+                   adopt_psycopg_host, create_reference_assembly, CatalogRuntimeConfiguration,
                    HistoricalRecord, HistoricalDeleted)
 from truss.groups import (OwnedOwnership, StoredObjectReference, AliasObjectReference,
                           CreateEdge, UpdateEdge, UpdateObject, EndpointChange,
@@ -49,6 +50,20 @@ class OwnedObjectTests(receipt_tests.ReceiptVisibilityTests):
 
     def workflow(self, *, include_query):
         connection, host, assembly, tx = self.ready(self.owned_model, document_ids=('adoc',))
+        host.detach()
+        connection.rollback()
+        self.admin.execute('BEGIN')
+        admin_host = adopt_psycopg_host(self.admin)
+        self.addCleanup(admin_host.detach)
+        admin_assembly = create_reference_assembly(CatalogRuntimeConfiguration(), admin_host).value
+        admin_tx = admin_host.adopt_transaction().value
+        enrolled = admin_assembly.register_feed_consumer_in_transaction(admin_tx,
+            consumer_id='owned-adapter', reader_role='group_reader')
+        self.assertIsInstance(enrolled, Ok, repr(enrolled))
+        admin_host.detach()
+        self.admin.commit()
+        self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE')
+        connection, host, assembly, tx = self.consumer()
         relation = assembly.get_relationship_reference_in_transaction(
             tx, document_id='adoc', module_id='m', relationship_id='children').value
         independent = assembly.get_relationship_reference_in_transaction(
@@ -215,3 +230,25 @@ class OwnedObjectTests(receipt_tests.ReceiptVisibilityTests):
         self.assertEqual(json.loads(removed.value.before)['ownership']['root']['id'], second.id)
         host.detach()
         connection.rollback()
+        delivered = []
+        for _ in range(16):
+            connection, host, assembly, tx = self.readonly()
+            page = assembly.read_feed_in_transaction(tx, consumer_id='owned-adapter')
+            self.assertIsInstance(page, Ok, repr(page))
+            self.assertIsInstance(page.value, FeedPage, repr(page.value))
+            delivered.extend(json.loads(page.value.content)['changes'])
+            host.detach()
+            connection.rollback()
+            connection, host, assembly, tx = self.consumer()
+            acknowledged = assembly.acknowledge_feed_in_transaction(tx, page.value)
+            self.assertIsInstance(acknowledged, Ok, repr(acknowledged))
+            self.assertIsInstance(acknowledged.value, FeedAcknowledged, repr(acknowledged.value))
+            host.detach()
+            connection.commit()
+            if page.value.outcome == 'empty_interval':
+                break
+        else:
+            self.fail('Owned workflow feed did not reach its empty interval')
+        self.assertEqual([(change['op'], int(change['ver'])) for change in delivered
+                          if change['entity_kind'] == 'o' and str(change['entity_id']) == grandchild.id],
+                         [('create', 1), ('metadata', 2), ('delete', 3)])

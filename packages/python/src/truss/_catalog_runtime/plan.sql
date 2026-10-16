@@ -87,7 +87,7 @@ BEGIN
     IF ((old->>'cardinality'='one' AND row->>'cardinality'='one' AND old->>'scalar_type' IN ('string','integer','decimal','boolean','timestamp','binary') AND row->>'scalar_type'=old->>'scalar_type') OR (old->>'cardinality' IN ('array','map') AND row->>'cardinality'=old->>'cardinality' AND truss.valid_property_definition(jsonb_populate_record(NULL::truss.prop_def,candidate)) IS TRUE)) IS DISTINCT FROM TRUE THEN
      RAISE EXCEPTION 'required tightening requires a supported retained scalar or flat container' USING ERRCODE='0A000';END IF;
     FOREACH facet_map IN ARRAY ARRAY[coalesce(old->'_originalField'->'facets','{}'::jsonb),coalesce(row->'_originalField'->'facets','{}'::jsonb)] LOOP
-     IF NOT ((facet_map='{}'::jsonb OR old->>'scalar_type'='integer' AND facet_map='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR old->>'scalar_type'='decimal' AND facet_map IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS TRUE) THEN
+     IF NOT ((facet_map='{}'::jsonb OR old->>'scalar_type'='integer' AND facet_map='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR old->>'scalar_type'='decimal' AND facet_map IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb)) IS TRUE) THEN
       RAISE EXCEPTION 'required tightening needs known scalar facets' USING ERRCODE='0A000';END IF;
     END LOOP;
    END IF;
@@ -96,10 +96,10 @@ BEGIN
    IF coalesce(old->'_originalField'->'facets','{}'::jsonb) IS DISTINCT FROM coalesce(row->'_originalField'->'facets','{}'::jsonb) THEN
     IF NOT ((coalesce(old->'_originalField'->'facets','{}'::jsonb)='{}'::jsonb
       OR old->>'scalar_type'='integer' AND old->'_originalField'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
-      OR old->>'scalar_type'='decimal' AND old->'_originalField'->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS TRUE)
+      OR old->>'scalar_type'='decimal' AND old->'_originalField'->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb)) IS TRUE)
     OR NOT ((coalesce(row->'_originalField'->'facets','{}'::jsonb)='{}'::jsonb
       OR row->>'scalar_type'='integer' AND row->'_originalField'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
-      OR row->>'scalar_type'='decimal' AND row->'_originalField'->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb)) IS TRUE) THEN
+      OR row->>'scalar_type'='decimal' AND row->'_originalField'->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb)) IS TRUE) THEN
      RAISE EXCEPTION 'known native scalar facet transition required' USING ERRCODE='0A000';END IF;
    END IF;
    IF ((old->'_originalField')-ARRAY['nullability','facets']) IS DISTINCT FROM ((row->'_originalField')-ARRAY['nullability','facets'])
@@ -248,7 +248,7 @@ BEGIN
    (t.value->'source'->>'elementId') COLLATE "C",(f.value->>'fieldModule') COLLATE "C",(f.value->'declaration'->>'id') COLLATE "C" LOOP
   assigned:=assigned+1; ownerid:=(field.owner->>'typeId')::int; docord:=(field.owner->>'docOrd')::int;
   planned_row:=jsonb_build_object('prop_id',assigned,'type_id',ownerid,'element',field.source->'declaration'->>'id',
-   'declaration_module',field.source->>'fieldModule','name',field.source->'declaration'->>'name',
+   'declaration_module',field.source->>'fieldModule','name',coalesce(field.source->'declaration'->>'name',field.source->'declaration'->>'id'),
    'scalar_type',field.source->'declaration'->>'scalarType','nullability',field.source->'declaration'->>'nullability',
    'cardinality',field.source->'declaration'->>'cardinality','facets',field.source->'declaration'->'facets',
    'item',CASE WHEN field.source->'declaration'->>'cardinality' IN ('array','map') THEN truss.catalog_item_definition((documents->docord)->>'originalText',field.owner->'source'->>'documentId',selected_revision,docord,field.source->'declaration'->'itemType') ELSE field.source->'declaration'->'itemType' END,'home','json','since_rev',selected_revision,'doc_ord',docord,

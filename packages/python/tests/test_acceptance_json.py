@@ -28,14 +28,14 @@ class AcceptanceJsonTests(unittest.TestCase):
             decode_acceptance_json(original)
         self.assertEqual(raised.exception.reason, 'resource')
 
-    def test_depth_members_bytes_work_and_node_limits(self):
+    def test_depth_members_bytes_and_node_limits(self):
         decode_acceptance_json(b'[' * 129 + b']' * 129)
         self.refuse_resource(b'[' * 130 + b']' * 130)
         self.assertEqual(len(decode_acceptance_json(b'[' + b','.join([b'null'] * 4096) + b']')), 4096)
         self.refuse_resource(b'[' + b','.join([b'null'] * 4097) + b']')
         self.refuse_resource(bytes(1048577))
         keys = [json.dumps('key-' + str(i).zfill(5)) + ':null' for i in range(1000)]
-        self.refuse_resource(('{' + ','.join(keys) + '}').encode())
+        self.assertEqual(len(decode_acceptance_json(('{' + ','.join(keys) + '}').encode())),1000)
         def nodes(last):
             return ('[' + ','.join('[' + ','.join(['null'] * (last if i == 24 else 3999)) + ']' for i in range(25)) + ']').encode()
         self.assertEqual(len(decode_acceptance_json(nodes(3998))), 25)

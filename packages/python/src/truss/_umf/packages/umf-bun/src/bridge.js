@@ -73,18 +73,10 @@ function scanJson(original, sourceNumbers, capture) {
   }
   if (capture)
     capture.bytes = bytes;
-  let index = 0, nodes = 0, work = bytes.length;
+  let index = 0, nodes = 0;
   const stack = [];
   let root;
-  const charge = (n) => {
-    if (!Number.isSafeInteger(n) || n < 0 || work > MAX_WORK - n)
-      refuse("resource");
-    work += n;
-  };
-  const take = () => {
-    charge(1);
-    return bytes[index++];
-  };
+  const take = () => bytes[index++];
   const whitespace = () => {
     while (index < bytes.length && [32, 9, 10, 13].includes(bytes[index]))
       take();
@@ -133,7 +125,6 @@ function scanJson(original, sourceNumbers, capture) {
     }
     if (!closed)
       refuse("grammar");
-    charge(2 * (index - start));
     let text;
     try {
       text = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(bytes.subarray(start, index));
@@ -177,7 +168,6 @@ function scanJson(original, sourceNumbers, capture) {
     if (capture && parent) {
       const prefix = capture.occurrences[parent.occurrence].pointer;
       pointer = prefix + "/" + (parent.kind === "array" ? String(parent.value.length) : parent.key.replace(/~/g, "~0").replace(/\//g, "~1"));
-      charge(2 * pointer.length);
     }
     const record = (kind) => {
       if (!capture)
@@ -200,7 +190,7 @@ function scanJson(original, sourceNumbers, capture) {
       const item = c === 123 ? Object.create(null) : [];
       const occurrence = record(c === 123 ? "object" : "array");
       attach(item);
-      stack.push(c === 123 ? { kind: "object", value: item, state: "first", key: "", keys: [], occurrence } : { kind: "array", value: item, state: "first", occurrence });
+      stack.push(c === 123 ? { kind: "object", value: item, state: "first", key: "", keys: new Set, occurrence } : { kind: "array", value: item, state: "first", occurrence });
       return;
     }
     for (const [token, result] of [["null", null], ["true", true], ["false", false]]) {
@@ -272,15 +262,12 @@ function scanJson(original, sourceNumbers, capture) {
       } else if (frame.state === "first" || frame.state === "key") {
         if (c !== 34)
           refuse("grammar");
-        if (frame.keys.length >= MAX_MEMBERS)
+        if (frame.keys.size >= MAX_MEMBERS)
           refuse("resource");
         const key = string();
-        for (const previous of frame.keys) {
-          charge(2 * (previous.length + key.length));
-          if (previous === key)
-            refuse("duplicate_member");
-        }
-        frame.keys.push(key);
+        if (frame.keys.has(key))
+          refuse("duplicate_member");
+        frame.keys.add(key);
         frame.key = key;
         frame.state = "colon";
       } else if (frame.state === "colon") {
@@ -303,7 +290,7 @@ function scanJson(original, sourceNumbers, capture) {
     refuse("grammar");
   return root;
 }
-var AcceptanceJsonError, MAX_DEPTH = 128, MAX_NODES = 1e5, MAX_MEMBERS = 4096, MAX_WORK = 2000000, originalIndexes;
+var AcceptanceJsonError, MAX_DEPTH = 128, MAX_NODES = 1e5, MAX_MEMBERS = 4096, originalIndexes;
 var init_acceptance_json = __esm(() => {
   init_original_byte_custody();
   AcceptanceJsonError = class AcceptanceJsonError extends Error {
@@ -320,8 +307,8 @@ var init_acceptance_json = __esm(() => {
 import { createRequire } from "module";
 import { readFile } from "fs/promises";
 import { createHash } from "crypto";
-async function createAcceptanceInputInspector(dependenciesPackage) {
-  const schemaBytes = await readFile(new URL("../../../docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json", import.meta.url));
+async function createAcceptanceInputInspector(dependenciesPackage, schemaUrl = new URL("../../../docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json", import.meta.url)) {
+  const schemaBytes = await readFile(schemaUrl);
   if (digest(schemaBytes) !== SCHEMA_SHA)
     throw Error("Original acceptance schema pin mismatch");
   const require2 = createRequire(dependenciesPackage);
@@ -520,6 +507,42 @@ async function loadUmfReferenceLinksProducer(directory) {
     inspectReferenceLinks: captured.inspectCoreReferenceLinks
   }), "reference-links");
 }
+var UMF_CORE08_CATALOG_SOURCE = "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e";
+async function loadCore08CatalogOwners(directory) {
+  const revision = UMF_CORE08_CATALOG_SOURCE;
+  const { hash, captured } = await loadPinnedFunctions(directory, revision, "core08-catalog", [
+    "readDocument",
+    "validateDocument",
+    "inspectCoreSchemaProperties",
+    "inspectCoreKeys",
+    "inspectCoreRelationships",
+    "inspectCoreElementKind",
+    "inspectCoreNullability",
+    "inspectCoreCardinality",
+    "inspectCoreFacets",
+    "inspectCoreScalarType",
+    "inspectCoreRecordMembers",
+    "inspectCoreReferenceLinks"
+  ]);
+  const pin = { sourceRevision: revision, bundleSha256: hash };
+  const record = Object.freeze({ ...pin, inspect(originalText) {
+    if (typeof originalText !== "string" || Buffer.byteLength(originalText) > 1048576)
+      throw Error("Original document bound");
+    const source = captured.readDocument(originalText, "json");
+    if (source.umf !== "0.8.0")
+      throw Error("Unsupported original UMF version");
+    const sourceValidation = captured.validateDocument(source);
+    return { originalText, source, sourceValidation, transition: null, targetValidation: sourceValidation, target: source };
+  } });
+  return Object.freeze({
+    record,
+    declarations: registerAssertionOwner(Object.freeze({ ...pin, inspectSchemaProperties: captured.inspectCoreSchemaProperties, inspectKeys: captured.inspectCoreKeys, inspectRelationships: captured.inspectCoreRelationships }), "declarations"),
+    fields: registerAssertionOwner(Object.freeze({ ...pin, inspectKind: captured.inspectCoreElementKind, inspectNullability: captured.inspectCoreNullability, inspectCardinality: captured.inspectCoreCardinality, inspectFacets: captured.inspectCoreFacets }), "assertion-fields"),
+    scalars: registerAssertionOwner(Object.freeze({ ...pin, inspectScalarType: captured.inspectCoreScalarType }), "scalar-types"),
+    members: registerAssertionOwner(Object.freeze({ ...pin, inspectRecordMembers: captured.inspectCoreRecordMembers }), "record-members"),
+    links: registerAssertionOwner(Object.freeze({ ...pin, inspectReferenceLinks: captured.inspectCoreReferenceLinks }), "reference-links")
+  });
+}
 
 // packages/umf-bun/src/catalog-declarations.ts
 function object(value) {
@@ -602,8 +625,11 @@ function requireOriginalCatalogPreparation(prepared) {
 async function createCatalogInputPreparation(directory, dependenciesPackage, profiles) {
   if (profiles !== undefined)
     requireOriginalAcceptanceProfileResolver(profiles);
-  const inspector = await createAcceptanceInputInspector(dependenciesPackage);
-  const owner = await loadUmfProducer(directory);
+  return createPreparation(directory, dependenciesPackage, profiles, false);
+}
+async function createPreparation(directory, dependenciesPackage, profiles, current, schemaUrl) {
+  const inspector = await createAcceptanceInputInspector(dependenciesPackage, schemaUrl);
+  const owner = current ? (await loadCore08CatalogOwners(directory)).record : await loadUmfProducer(directory);
   const umfProfile = Object.freeze({ identity: "umf-record-interpretation", version: owner.sourceRevision, sha256: owner.bundleSha256 });
   const equal = (a, b) => a.identity === b.identity && a.version === b.version && a.sha256 === b.sha256;
   return Object.freeze({ umfProfile, prepare(original) {
@@ -650,6 +676,49 @@ async function createCatalogInputPreparation(directory, dependenciesPackage, pro
   } });
 }
 
+// packages/umf-bun/src/catalog-source-reference.ts
+var SOURCE_REFERENCE_FORMAT = "truss-catalog-source-reference/0.1";
+var SUPPORT = { identity: "truss-fresh-catalog-support", version: "0.14.0", sha256: "1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56" };
+var RECURSIVE_SUPPORT = { identity: "truss-fresh-catalog-support", version: "0.16.0", sha256: "f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315" };
+var DECLARATIVE_SUPPORT = { identity: "truss-fresh-catalog-support", version: "0.17.0", sha256: "76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0" };
+function compactCatalogSources(prepared) {
+  const pin = prepared.original.input.supportProfile;
+  return [SUPPORT, RECURSIVE_SUPPORT, DECLARATIVE_SUPPORT].some((selected) => pin.identity === selected.identity && pin.version === selected.version && pin.sha256 === selected.sha256);
+}
+function catalogSourceReference(prepared, index, basis) {
+  const document = prepared.documents[index];
+  if (!document)
+    throw Error("Same-request source document required");
+  return Object.freeze({ interfaceVersion: SOURCE_REFERENCE_FORMAT, documentId: document.documentId, contentSha256: prepared.original.documents[index].sha256, documentRevision: prepared.original.input.documents[index].documentRevision, basis });
+}
+function compactCatalogObservation(prepared, index, basis, observation) {
+  if (!compactCatalogSources(prepared))
+    return observation;
+  const document = prepared.documents[index];
+  const expected = basis === "original" ? document.interpretation.source : document.interpretation.target;
+  if (!observation || JSON.stringify(observation.source) !== JSON.stringify(expected))
+    throw Error("Captured original owner source correspondence required");
+  return { ...observation, source: catalogSourceReference(prepared, index, basis) };
+}
+function resolveCatalogObservation(prepared, observed) {
+  const result = observed.result;
+  if (!compactCatalogSources(prepared) || result.state !== "observed")
+    return result.observation;
+  const index = prepared.documents.findIndex((d) => d.documentId === observed.documentId);
+  const reference = catalogSourceReference(prepared, index, observed.basis);
+  if (JSON.stringify(result.observation.source) !== JSON.stringify(reference))
+    throw Error("Exact same-request source reference required");
+  const document = prepared.documents[index];
+  return { ...result.observation, source: observed.basis === "original" ? document.interpretation.source : document.interpretation.target };
+}
+function catalogSourceArtifact(prepared, index) {
+  const artifact = prepared.original.input.documents[index].artifact;
+  return compactCatalogSources(prepared) ? Object.freeze({ identity: artifact.identity, sha256: artifact.sha256, reference: catalogSourceReference(prepared, index, "original") }) : artifact;
+}
+function catalogObservationIdentity(prepared, index, ordinal) {
+  return (compactCatalogSources(prepared) ? "truss.owner-declaration-observation-references/0.1/" : "truss.owner-declaration-observation/") + index + "/" + ordinal;
+}
+
 // packages/umf-bun/src/catalog-assertion-observations.ts
 import { createHash as createHash2 } from "crypto";
 var originalCollections = new WeakMap;
@@ -687,11 +756,11 @@ function collectCatalogAssertionObservations(prepared, owner, fields, scalars, m
     const document = prepared.documents[documentIndex];
     let result;
     try {
-      result = { state: "observed", observation: run() };
+      result = { state: "observed", observation: compactCatalogObservation(prepared, documentIndex, basis, run()) };
     } catch (error) {
       result = { state: "unavailable", name: error instanceof Error ? error.name : null, code: typeof error?.code === "string" ? error.code : null, path: typeof error?.path === "string" ? error.path : null, message: error instanceof Error ? error.message : String(error) };
     }
-    const bytes = Buffer.from(JSON.stringify({ profile: observationProfile, documentId: document.documentId, contentSha256: prepared.original.documents[documentIndex].sha256, basis, operation, identity, result }), "utf8");
+    const bytes = Buffer.from(JSON.stringify({ ...compactCatalogSources(prepared) ? { sourceFormat: SOURCE_REFERENCE_FORMAT } : {}, profile: observationProfile, documentId: document.documentId, contentSha256: prepared.original.documents[documentIndex].sha256, basis, operation, identity, result }), "utf8");
     retainedBytes += bytes.length;
     if (retainedBytes > 4194304)
       throw Error("Declaration observation component output capacity exceeded");
@@ -701,7 +770,7 @@ function collectCatalogAssertionObservations(prepared, owner, fields, scalars, m
       operation,
       identity,
       result,
-      evidence: Object.freeze({ identity: "truss.owner-declaration-observation/" + documentIndex + "/" + (calls - 1), bytesBase64: bytes.toString("base64"), sha256: createHash2("sha256").update(bytes).digest("hex") })
+      evidence: Object.freeze({ identity: catalogObservationIdentity(prepared, documentIndex, calls - 1), bytesBase64: bytes.toString("base64"), sha256: createHash2("sha256").update(bytes).digest("hex") })
     }));
   }
   for (let index = 0;index < prepared.documents.length; index++) {
@@ -747,7 +816,7 @@ function collectCatalogAssertionObservations(prepared, owner, fields, scalars, m
     }
   }
   freeze(observations);
-  const collection = Object.freeze({ profile, fieldProfile, scalarProfile, membersProfile, referenceLinksProfile, observations: Object.freeze(observations), scope: "original_owner_assertion_observations_only" });
+  const collection = Object.freeze({ ...compactCatalogSources(prepared) ? { sourceFormat: SOURCE_REFERENCE_FORMAT } : {}, profile, fieldProfile, scalarProfile, membersProfile, referenceLinksProfile, observations: Object.freeze(observations), scope: "original_owner_assertion_observations_only" });
   originalCollections.set(collection, prepared);
   return collection;
 }
@@ -756,16 +825,22 @@ function collectCatalogAssertionObservations(prepared, owner, fields, scalars, m
 import { createHash as createHash3 } from "crypto";
 function assessCatalogObservationCoverage(prepared, collection) {
   requireOriginalCatalogObservationCollection(prepared, collection);
+  const current = prepared.umfProfile.version === UMF_CORE08_CATALOG_SOURCE && prepared.documents.every((d) => d.umfVersion === "0.8.0");
+  if (current) {
+    for (const profile of [collection.profile, collection.fieldProfile, collection.scalarProfile, collection.membersProfile, collection.referenceLinksProfile])
+      if (!profile || profile.version !== UMF_CORE08_CATALOG_SOURCE || profile.sha256 !== prepared.umfProfile.sha256)
+        throw Error("Original current observation bundle required");
+  }
   if (!collection.fieldProfile)
     throw Error("Complete Field observation bundle required");
   for (const [profile, identity] of [[collection.profile, "umf-declaration-inspection"], [collection.fieldProfile, "umf-field-assertion-inspection"]])
     if (profile.identity !== identity || profile.version !== prepared.umfProfile.version || !/^[0-9a-f]{64}$/.test(profile.sha256))
       throw Error("Original observation profile correspondence required");
-  if (collection.scalarProfile && (collection.scalarProfile.identity !== "umf-scalar-type-inspection" || collection.scalarProfile.version !== UMF_SCALAR_TYPE_SOURCE || !/^[0-9a-f]{64}$/.test(collection.scalarProfile.sha256)))
+  if (collection.scalarProfile && (collection.scalarProfile.identity !== "umf-scalar-type-inspection" || collection.scalarProfile.version !== (current ? UMF_CORE08_CATALOG_SOURCE : UMF_SCALAR_TYPE_SOURCE) || !/^[0-9a-f]{64}$/.test(collection.scalarProfile.sha256)))
     throw Error("Original scalar observation profile correspondence required");
-  if (collection.membersProfile && (collection.membersProfile.identity !== "umf-record-members-inspection" || collection.membersProfile.version !== UMF_RECORD_MEMBERS_SOURCE || !/^[0-9a-f]{64}$/.test(collection.membersProfile.sha256)))
+  if (collection.membersProfile && (collection.membersProfile.identity !== "umf-record-members-inspection" || collection.membersProfile.version !== (current ? UMF_CORE08_CATALOG_SOURCE : UMF_RECORD_MEMBERS_SOURCE) || !/^[0-9a-f]{64}$/.test(collection.membersProfile.sha256)))
     throw Error("Original membership observation profile correspondence required");
-  if (collection.referenceLinksProfile && (collection.referenceLinksProfile.identity !== "umf-reference-links-inspection" || collection.referenceLinksProfile.version !== UMF_REFERENCE_LINKS_SOURCE || !/^[0-9a-f]{64}$/.test(collection.referenceLinksProfile.sha256)))
+  if (collection.referenceLinksProfile && (collection.referenceLinksProfile.identity !== "umf-reference-links-inspection" || collection.referenceLinksProfile.version !== (current ? UMF_CORE08_CATALOG_SOURCE : UMF_REFERENCE_LINKS_SOURCE) || !/^[0-9a-f]{64}$/.test(collection.referenceLinksProfile.sha256)))
     throw Error("Original reference-link observation profile correspondence required");
   const expected = [];
   const add = (documentIndex, operation, identity, basis, field = false) => {
@@ -805,12 +880,12 @@ function assessCatalogObservationCoverage(prepared, collection) {
     const result = observed.result;
     if (!result || !["observed", "unavailable"].includes(result.state))
       throw Error("Explicit observation availability required");
-    const original = JSON.stringify({ profile: requirement.operation === "referenceLinks" ? collection.referenceLinksProfile : requirement.operation === "members" ? collection.membersProfile : requirement.operation === "scalarType" ? collection.scalarProfile : requirement.field ? collection.fieldProfile : collection.profile, documentId: document.documentId, contentSha256: prepared.original.documents[requirement.documentIndex].sha256, basis: requirement.basis, operation: requirement.operation, identity: requirement.identity, result: observed.result });
+    const original = JSON.stringify({ ...compactCatalogSources(prepared) ? { sourceFormat: SOURCE_REFERENCE_FORMAT } : {}, profile: requirement.operation === "referenceLinks" ? collection.referenceLinksProfile : requirement.operation === "members" ? collection.membersProfile : requirement.operation === "scalarType" ? collection.scalarProfile : requirement.field ? collection.fieldProfile : collection.profile, documentId: document.documentId, contentSha256: prepared.original.documents[requirement.documentIndex].sha256, basis: requirement.basis, operation: requirement.operation, identity: requirement.identity, result: observed.result });
     const bytes = Buffer.from(original, "utf8");
     bytesRetained += bytes.length;
     if (bytesRetained > 4194304)
       throw Error("Observation coverage evidence capacity exceeded");
-    if (observed.evidence.bytesBase64 !== bytes.toString("base64") || observed.evidence.sha256 !== createHash3("sha256").update(bytes).digest("hex") || observed.evidence.identity !== "truss.owner-declaration-observation/" + requirement.documentIndex + "/" + index)
+    if (observed.evidence.bytesBase64 !== bytes.toString("base64") || observed.evidence.sha256 !== createHash3("sha256").update(bytes).digest("hex") || observed.evidence.identity !== catalogObservationIdentity(prepared, requirement.documentIndex, index))
       throw Error("Original observation evidence correspondence required");
     if (result.state === "unavailable") {
       if (!(result.code === null || typeof result.code === "string") || !(result.path === null || typeof result.path === "string"))
@@ -838,8 +913,10 @@ function sameOriginalMeaning(a, b) {
 function collectCatalogCoreAssertionIdentities(prepared, collection) {
   requireOriginalCatalogPreparation(prepared);
   requireOriginalCatalogObservationCollection(prepared, collection);
+  const current = prepared.documents.every((d) => d.umfVersion === "0.8.0");
+  const identityVersion = compactCatalogSources(prepared) ? "0.8.0" : current ? "0.7.0" : "0.6.0";
   const manifestBytes = Buffer.from(JSON.stringify({
-    interfaceVersion: "truss-core-assertion-source-identity/0.6.0",
+    interfaceVersion: "truss-core-assertion-source-identity/" + identityVersion,
     producers: { fields: collection.fieldProfile, scalar: collection.scalarProfile, members: collection.membersProfile, referenceLinks: collection.referenceLinksProfile, declarations: collection.profile },
     operations: ["kind", "nullability", "cardinality", "facets", "scalarType", "members", "referenceLinks", "keys", "relationships", "schema_properties"],
     basis: "original",
@@ -851,8 +928,8 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
     missing: "retained absence observation; no assertion invented",
     enforcement: "none/unqualified"
   }));
-  const manifest = Object.freeze({ identity: "truss.core-assertion-source-identity/0.6.0", bytesBase64: manifestBytes.toString("base64"), sha256: createHash4("sha256").update(manifestBytes).digest("hex") });
-  const profile = Object.freeze({ identity: "truss-core-assertion-source-identity", version: "0.6.0", sha256: manifest.sha256 });
+  const manifest = Object.freeze({ identity: "truss.core-assertion-source-identity/" + identityVersion, bytesBase64: manifestBytes.toString("base64"), sha256: createHash4("sha256").update(manifestBytes).digest("hex") });
+  const profile = Object.freeze({ identity: "truss-core-assertion-source-identity", version: identityVersion, sha256: manifest.sha256 });
   const referenceLinks = [], referenceLinkDeclarations = [];
   const entries = [];
   const declarationMeanings = [];
@@ -871,7 +948,7 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
       deferred.push(observed);
       continue;
     }
-    const original = result.observation, meaning = original.meaning;
+    const original = resolveCatalogObservation(prepared, observed), meaning = original.meaning;
     if (observed.operation === "schema_properties") {
       const di = prepared.documents.findIndex((d) => d.documentId === observed.documentId), document = prepared.documents[di], identity = observed.identity;
       if (!document || JSON.stringify(original.source) !== JSON.stringify(document.interpretation.source) || typeof original.path !== "string" || original.source.umf !== "0.8.0")
@@ -879,7 +956,7 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
       const properties = original.properties;
       if (properties === null || typeof properties !== "object" || Array.isArray(properties))
         throw Error("Original owner property map required");
-      const selected = Object.keys(properties).filter((k) => ["allowedValues", "default", "facets"].includes(k));
+      const selected = Object.keys(properties).filter((k) => (current ? ["allowedValues", "default"] : ["allowedValues", "default", "facets"]).includes(k));
       if (Object.keys(properties).length === 0)
         absent.push(observed);
       if (Object.keys(properties).some((k) => !selected.includes(k)))
@@ -887,7 +964,7 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
       const owner = identity.scope === "document" ? Object.freeze({ scope: "document", documentId: document.documentId }) : Object.freeze({ documentId: document.documentId, moduleId: identity.module });
       if (identity.scope !== "document" && typeof identity.module !== "string")
         throw Error("Original schema-property owner required");
-      const source = prepared.original.input.documents[di].artifact;
+      const source = catalogSourceArtifact(prepared, di);
       for (const key of selected) {
         const pointer = original.path + "/" + key;
         let node = original.source;
@@ -909,7 +986,7 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
     }
     if (observed.operation === "referenceLinks") {
       const di = prepared.documents.findIndex((d) => d.documentId === observed.documentId), document = prepared.documents[di], requested = observed.identity;
-      if (!document || document.umfVersion !== "0.7.0" || !collection.referenceLinksProfile)
+      if (!document || !["0.7.0", "0.8.0"].includes(document.umfVersion) || !collection.referenceLinksProfile)
         throw Error("Original referenceLinks owner context correspondence required");
       const source = document.interpretation.source, mi = source.modules.findIndex((m) => m.id === requested.module), ei = mi < 0 ? -1 : source.modules[mi].elements.findIndex((e) => e.id === requested.element);
       if (mi < 0 || ei < 0)
@@ -922,13 +999,13 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
         const target = source.modules[ti].elements[te], at = path + "/" + index;
         return { index, path: at, reference, target: { identity: { module: reference.module, element: reference.element }, path: "/modules/" + ti + "/elements/" + te, ...Object.hasOwn(target, "kind") ? { kind: target.kind } : {} }, uninterpretedPaths: document.interpretation.sourceValidation.diagnostics.filter((d) => d.severity === "warning" && d.code === "UNKNOWN_CORE_FIELD" && (d.path === at || d.path.startsWith(at + "/"))).map((d) => d.path), typeAssertion: "unverified" };
       }) };
-      if (!sameOriginalMeaning(original, { operation: "inspect-core-reference-links", version: "0.1.0", source, identity: requested, path, meaning: expected, provenance: "unverified" }))
+      if (!sameOriginalMeaning(original, { operation: "inspect-core-reference-links", version: document.umfVersion === "0.8.0" ? "0.2.0" : "0.1.0", source, identity: requested, path, meaning: expected, provenance: "unverified" }))
         throw Error("Original referenceLinks full result correspondence required");
       if (expected.state === "missing") {
         absent.push(observed);
         continue;
       }
-      const common = { documentId: document.documentId, owner: Object.freeze({ moduleId: requested.module, elementId: requested.element }), source: prepared.original.input.documents[di].artifact, ownerProfile: collection.referenceLinksProfile, ownerEvidence: observed.evidence, typeAssertion: "unverified", meaningCorrespondence: true, interpretationQualified: false, scope: "original_direct_core_reference_links_only" };
+      const common = { documentId: document.documentId, owner: Object.freeze({ moduleId: requested.module, elementId: requested.element }), source: catalogSourceArtifact(prepared, di), ownerProfile: collection.referenceLinksProfile, ownerEvidence: observed.evidence, typeAssertion: "unverified", meaningCorrespondence: true, interpretationQualified: false, scope: "original_direct_core_reference_links_only" };
       referenceLinkDeclarations.push(Object.freeze({ ...common, sourcePointer: path, originalMeaning: meaning }));
       for (const link of meaning.links)
         referenceLinks.push(Object.freeze({ ...common, sourcePointer: link.path, originalMeaning: link }));
@@ -936,7 +1013,7 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
     }
     if (observed.operation === "members") {
       const di = prepared.documents.findIndex((d) => d.documentId === observed.documentId), document = prepared.documents[di], requested = observed.identity;
-      if (!document || document.umfVersion !== "0.7.0" || !collection.membersProfile)
+      if (!document || !["0.7.0", "0.8.0"].includes(document.umfVersion) || !collection.membersProfile)
         throw Error("Original members owner context correspondence required");
       const source = document.interpretation.source, mi = source.modules.findIndex((m) => m.id === requested.module), ei = mi < 0 ? -1 : source.modules[mi].elements.findIndex((e) => e.id === requested.element);
       if (mi < 0 || ei < 0)
@@ -944,7 +1021,7 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
       const element = source.modules[mi].elements[ei], path = "/modules/" + mi + "/elements/" + ei + "/members";
       const uninterpretedPaths = Object.freeze(document.interpretation.sourceValidation.diagnostics.filter((d) => d.severity === "warning" && d.code === "UNKNOWN_KEY_QUALIFIER" && (d.path === path || d.path.startsWith(path + "/"))).map((d) => d.path));
       const expected = element.kind !== "record" ? { state: "inapplicable" } : !Object.hasOwn(element, "members") ? { state: "missing" } : { state: uninterpretedPaths.length ? "partial" : "known", members: element.members, uninterpretedPaths };
-      if (!sameOriginalMeaning(original, { operation: "inspect-core-record-members", version: "0.1.0", source, identity: requested, path, meaning: expected, provenance: "unverified" }))
+      if (!sameOriginalMeaning(original, { operation: "inspect-core-record-members", version: document.umfVersion === "0.8.0" ? "0.2.0" : "0.1.0", source, identity: requested, path, meaning: expected, provenance: "unverified" }))
         throw Error("Original members full result correspondence required");
       if (expected.state === "missing") {
         absent.push(observed);
@@ -954,7 +1031,7 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
         deferred.push(observed);
         continue;
       }
-      const artifact = prepared.original.input.documents[di].artifact, owner = Object.freeze({ documentId: document.documentId, moduleId: requested.module });
+      const artifact = catalogSourceArtifact(prepared, di), owner = Object.freeze({ documentId: document.documentId, moduleId: requested.module });
       const addMemberEntry = (pointer, ruleName, originalMeaning) => {
         const uniqueness = JSON.stringify([artifact.sha256, owner, pointer]);
         if (identities.has(uniqueness))
@@ -970,7 +1047,7 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
     }
     if (observed.operation === "scalarType") {
       const document = prepared.documents.find((d) => d.documentId === observed.documentId), requested = observed.identity;
-      if (!document || document.umfVersion !== "0.7.0" || !collection.scalarProfile)
+      if (!document || !["0.7.0", "0.8.0"].includes(document.umfVersion) || !collection.scalarProfile)
         throw Error("Original scalarType owner context correspondence required");
       const source = document.interpretation.source, mi = source.modules.findIndex((m) => m.id === requested.module), ei = mi < 0 ? -1 : source.modules[mi].elements.findIndex((e) => e.id === requested.element);
       if (mi < 0 || ei < 0)
@@ -978,14 +1055,14 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
       const element = source.modules[mi].elements[ei], present = Object.hasOwn(element, "scalarType"), value = element.scalarType;
       const known = ["boolean", "integer", "decimal", "float", "string", "binary", "date", "time", "timestamp"];
       const expected = element.kind !== "field" ? { state: "inapplicable", ...present ? { authoredScalarType: value } : {} } : !present ? { state: "missing" } : known.includes(value) ? { state: "known", scalarType: value } : { state: "unknown", value };
-      if (!sameOriginalMeaning(original, { operation: "inspect-core-scalar-type", version: "0.1.0", source, identity: requested, path: "/modules/" + mi + "/elements/" + ei + "/scalarType", meaning: expected, provenance: "unverified" }))
+      if (!sameOriginalMeaning(original, { operation: "inspect-core-scalar-type", version: document.umfVersion === "0.8.0" ? "0.2.0" : "0.1.0", source, identity: requested, path: "/modules/" + mi + "/elements/" + ei + "/scalarType", meaning: expected, provenance: "unverified" }))
         throw Error("Original scalarType full result correspondence required");
     }
     if (["kind", "nullability", "cardinality", "facets"].includes(observed.operation)) {
       const document = prepared.documents.find((d) => d.documentId === observed.documentId), requested = observed.identity;
-      if (document?.umfVersion === "0.7.0") {
+      if (document && ["0.7.0", "0.8.0"].includes(document.umfVersion)) {
         const family = observed.operation;
-        const versions = { kind: "6.0.0", nullability: "5.0.0", cardinality: "4.0.0", facets: "3.0.0" };
+        const versions = document.umfVersion === "0.8.0" ? { kind: "7.0.0", nullability: "6.0.0", cardinality: "5.0.0", facets: "4.0.0" } : { kind: "6.0.0", nullability: "5.0.0", cardinality: "4.0.0", facets: "3.0.0" };
         const known = { kind: ["field", "record", "group"], nullability: ["required", "absent-allowed", "unspecified"], cardinality: ["one", "array", "map", "unspecified"], facets: [] };
         const source = document.interpretation.source, mi = source.modules.findIndex((m) => m.id === requested.module);
         const ei = mi < 0 ? -1 : source.modules[mi].elements.findIndex((e) => e.id === requested.element);
@@ -996,15 +1073,25 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
         if (family === "facets" && present) {
           const facets = value, interpreted = {};
           if (facets.length && ["unicode-scalar", "byte"].includes(facets.length.unit))
-            interpreted.length = { max: facets.length.max, unit: facets.length.unit };
+            interpreted.length = { ...facets.length.max !== undefined ? { max: facets.length.max } : {}, ...document.umfVersion === "0.8.0" && facets.length.min !== undefined ? { min: facets.length.min } : {}, unit: facets.length.unit };
           if (facets.integerWidth)
             interpreted.integerWidth = { bits: facets.integerWidth.bits, signed: facets.integerWidth.signed };
           if (facets.precision !== undefined) {
             interpreted.precision = facets.precision;
             interpreted.scale = facets.scale;
           }
+          if (document.umfVersion === "0.8.0") {
+            for (const group of ["collectionSize", "range"])
+              if (facets[group]) {
+                const selected = {};
+                for (const key of group === "range" ? ["min", "max", "minInclusive", "maxInclusive"] : ["min", "max"])
+                  if (Object.hasOwn(facets[group], key))
+                    selected[key] = facets[group][key];
+                interpreted[group] = selected;
+              }
+          }
           const path = "/modules/" + mi + "/elements/" + ei + "/facets";
-          const uninterpretedPaths = document.interpretation.sourceValidation.diagnostics.filter((d) => d.severity === "warning" && ["UNKNOWN_FACET", "UNKNOWN_FACET_UNIT"].includes(d.code) && (d.path === path || d.path.startsWith(path + "/"))).map((d) => d.path);
+          const uninterpretedPaths = document.interpretation.sourceValidation.diagnostics.filter((d) => d.severity === "warning" && (document.umfVersion === "0.8.0" || ["UNKNOWN_FACET", "UNKNOWN_FACET_UNIT"].includes(d.code)) && (d.path === path || d.path.startsWith(path + "/"))).map((d) => d.path);
           expected = { state: uninterpretedPaths.length ? "partial" : "known", facets, interpreted, uninterpretedPaths };
         }
         if (!sameOriginalMeaning(meaning, expected))
@@ -1045,7 +1132,7 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
     }
     if (!present)
       throw Error("Original asserted source node absent");
-    const source = prepared.original.input.documents[di].artifact, owner = Object.freeze({ documentId: document.documentId, moduleId: identity.module });
+    const source = catalogSourceArtifact(prepared, di), owner = Object.freeze({ documentId: document.documentId, moduleId: identity.module });
     const declaration = observed.operation === "keys" || observed.operation === "relationships";
     const originalNodes = declaration ? node : [node], ownerNodes = declaration ? meaning[observed.operation] : [node];
     if (!Array.isArray(originalNodes) || !Array.isArray(ownerNodes) || originalNodes.length !== ownerNodes.length)
@@ -1076,7 +1163,7 @@ function collectCatalogCoreAssertionIdentities(prepared, collection) {
         ownerEvidence: observed.evidence
       });
       entries.push(entry);
-      if (["kind", "nullability", "cardinality", "facets", "scalarType"].includes(observed.operation) && original.source.umf === "0.7.0")
+      if (["kind", "nullability", "cardinality", "facets", "scalarType"].includes(observed.operation) && ["0.7.0", "0.8.0"].includes(original.source.umf))
         fieldMeanings.push(Object.freeze({
           assertion: entry,
           ownerProfile: observed.operation === "scalarType" ? collection.scalarProfile : collection.fieldProfile,
@@ -1240,7 +1327,7 @@ try {
   if (bytes.length > 1048576)
     throw Error("resource");
   const request = decodeAcceptanceJson(bytes);
-  if (Object.keys(request).sort().join(",") !== "configurationHex,documents" || typeof request.configurationHex !== "string" || !/^(?:[0-9a-f]{2})+$/.test(request.configurationHex) || !Array.isArray(request.documents) || request.documents.length < 1 || request.documents.length > 512)
+  if (!["configurationHex,documents", "configurationHex,documents,registration"].includes(Object.keys(request).sort().join(",")) || Object.hasOwn(request, "registration") && request.registration !== true || typeof request.configurationHex !== "string" || !/^(?:[0-9a-f]{2})+$/.test(request.configurationHex) || !Array.isArray(request.documents) || request.documents.length < 1 || request.documents.length > 512)
     throw Error("invalid_input");
   const configuration = decodeAcceptanceJson(Buffer.from(request.configurationHex, "hex"));
   if (!configuration || typeof configuration !== "object" || Array.isArray(configuration) || Object.hasOwn(configuration, "documents") || Object.hasOwn(configuration, "interfaceVersion"))
@@ -1280,27 +1367,38 @@ try {
   } else {
     const prepared = preparation.prepare(original);
     let reportEvidence;
-    try {
-      const [declarations, fields, scalars, members, links] = await Promise.all([
-        loadUmfDeclarationProducer(root + "/owners/declarations"),
-        loadUmfFieldAssertionProducer(root + "/owners/assertion-fields"),
-        loadUmfScalarTypeProducer(root + "/owners/scalar-types"),
-        loadUmfRecordMembersProducer(root + "/owners/record-members"),
-        loadUmfReferenceLinksProducer(root + "/owners/reference-links")
-      ]);
-      const observations = collectCatalogAssertionObservations(prepared, declarations, fields, scalars, members, links);
+    if (request.registration === true) {
       reportEvidence = {
-        ownerObservations: observations,
-        observationCoverage: assessCatalogObservationCoverage(prepared, observations),
-        coreAssertionIdentities: collectCatalogCoreAssertionIdentities(prepared, observations),
-        validation: collectCatalogValidationEvidence(prepared),
-        retainedExtensions: collectCatalogExtensionArtifacts(prepared),
-        ingress: prepared.original.input.binding.state === "absent" && !prepared.original.input.transforms.length ? { state: "available", basis: collectCatalogIngressReportBasis(prepared) } : { state: "unavailable", reason: "registered_binding_or_transform_report_producer_required" },
-        scope: "original_owner_report_preparation_only"
+        interfaceVersion: "truss-registration-preparation/1.0",
+        documents: prepared.documents.map((document, index) => ({
+          documentId: document.documentId,
+          contentSha256: prepared.original.documents[index].sha256,
+          sourceValidation: document.interpretation.sourceValidation,
+          targetValidation: document.interpretation.targetValidation
+        }))
       };
-    } catch {
-      reportEvidence = { scope: "original_owner_report_preparation_only", ingress: { state: "unavailable", reason: "report_evidence_unavailable" } };
-    }
+    } else
+      try {
+        const [declarations, fields, scalars, members, links] = await Promise.all([
+          loadUmfDeclarationProducer(root + "/owners/declarations"),
+          loadUmfFieldAssertionProducer(root + "/owners/assertion-fields"),
+          loadUmfScalarTypeProducer(root + "/owners/scalar-types"),
+          loadUmfRecordMembersProducer(root + "/owners/record-members"),
+          loadUmfReferenceLinksProducer(root + "/owners/reference-links")
+        ]);
+        const observations = collectCatalogAssertionObservations(prepared, declarations, fields, scalars, members, links);
+        reportEvidence = {
+          ownerObservations: observations,
+          observationCoverage: assessCatalogObservationCoverage(prepared, observations),
+          coreAssertionIdentities: collectCatalogCoreAssertionIdentities(prepared, observations),
+          validation: collectCatalogValidationEvidence(prepared),
+          retainedExtensions: collectCatalogExtensionArtifacts(prepared),
+          ingress: prepared.original.input.binding.state === "absent" && !prepared.original.input.transforms.length ? { state: "available", basis: collectCatalogIngressReportBasis(prepared) } : { state: "unavailable", reason: "registered_binding_or_transform_report_producer_required" },
+          scope: "original_owner_report_preparation_only"
+        };
+      } catch {
+        reportEvidence = { scope: "original_owner_report_preparation_only", ingress: { state: "unavailable", reason: "report_evidence_unavailable" } };
+      }
     const response = {
       status: "prepared",
       inputHex: prepared.original.originalUtf8Hex,

@@ -149,8 +149,8 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
             if mutation=='duplicate-json':raw=raw.replace(b'"interfaceVersion":"truss-group-input/0.1.0"',b'"interfaceVersion":"wrong","interfaceVersion":"truss-group-input/0.1.0"')
             connection.execute('SAVEPOINT malformed')
             try:
-                returned=connection.execute('SELECT truss.apply_create_group(%s,%s,%s,%s,%s,%s)',
-                    (raw,documents,b'[]',b'{"state":"none"}',manifest['releaseId'],digest)).fetchone()[0]
+                returned=connection.execute('SELECT truss.apply_group(%s,%s,%s,%s,%s)',
+                    (raw,documents,b'{"state":"none"}',manifest['releaseId'],digest)).fetchone()[0]
                 self.assertEqual(json.loads(bytes(returned))['outcome'],'failed')
             finally:connection.execute('ROLLBACK TO SAVEPOINT malformed');connection.execute('RELEASE SAVEPOINT malformed')
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))

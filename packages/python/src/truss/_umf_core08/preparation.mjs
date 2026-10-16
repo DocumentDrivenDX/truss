@@ -73,18 +73,10 @@ function scanJson(original, sourceNumbers, capture) {
   }
   if (capture)
     capture.bytes = bytes;
-  let index = 0, nodes = 0, work = bytes.length;
+  let index = 0, nodes = 0;
   const stack = [];
   let root;
-  const charge = (n) => {
-    if (!Number.isSafeInteger(n) || n < 0 || work > MAX_WORK - n)
-      refuse("resource");
-    work += n;
-  };
-  const take = () => {
-    charge(1);
-    return bytes[index++];
-  };
+  const take = () => bytes[index++];
   const whitespace = () => {
     while (index < bytes.length && [32, 9, 10, 13].includes(bytes[index]))
       take();
@@ -133,7 +125,6 @@ function scanJson(original, sourceNumbers, capture) {
     }
     if (!closed)
       refuse("grammar");
-    charge(2 * (index - start));
     let text;
     try {
       text = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(bytes.subarray(start, index));
@@ -177,7 +168,6 @@ function scanJson(original, sourceNumbers, capture) {
     if (capture && parent) {
       const prefix = capture.occurrences[parent.occurrence].pointer;
       pointer = prefix + "/" + (parent.kind === "array" ? String(parent.value.length) : parent.key.replace(/~/g, "~0").replace(/\//g, "~1"));
-      charge(2 * pointer.length);
     }
     const record = (kind) => {
       if (!capture)
@@ -200,7 +190,7 @@ function scanJson(original, sourceNumbers, capture) {
       const item = c === 123 ? Object.create(null) : [];
       const occurrence = record(c === 123 ? "object" : "array");
       attach(item);
-      stack.push(c === 123 ? { kind: "object", value: item, state: "first", key: "", keys: [], occurrence } : { kind: "array", value: item, state: "first", occurrence });
+      stack.push(c === 123 ? { kind: "object", value: item, state: "first", key: "", keys: new Set, occurrence } : { kind: "array", value: item, state: "first", occurrence });
       return;
     }
     for (const [token, result] of [["null", null], ["true", true], ["false", false]]) {
@@ -272,15 +262,12 @@ function scanJson(original, sourceNumbers, capture) {
       } else if (frame.state === "first" || frame.state === "key") {
         if (c !== 34)
           refuse("grammar");
-        if (frame.keys.length >= MAX_MEMBERS)
+        if (frame.keys.size >= MAX_MEMBERS)
           refuse("resource");
         const key = string();
-        for (const previous of frame.keys) {
-          charge(2 * (previous.length + key.length));
-          if (previous === key)
-            refuse("duplicate_member");
-        }
-        frame.keys.push(key);
+        if (frame.keys.has(key))
+          refuse("duplicate_member");
+        frame.keys.add(key);
         frame.key = key;
         frame.state = "colon";
       } else if (frame.state === "colon") {
@@ -303,7 +290,7 @@ function scanJson(original, sourceNumbers, capture) {
     refuse("grammar");
   return root;
 }
-var AcceptanceJsonError, MAX_DEPTH = 128, MAX_NODES = 1e5, MAX_MEMBERS = 4096, MAX_WORK = 2000000, originalIndexes;
+var AcceptanceJsonError, MAX_DEPTH = 128, MAX_NODES = 1e5, MAX_MEMBERS = 4096, originalIndexes;
 var init_acceptance_json = __esm(() => {
   init_original_byte_custody();
   AcceptanceJsonError = class AcceptanceJsonError extends Error {
@@ -1291,7 +1278,7 @@ try {
   if (bytes.length > 1048576)
     throw Error("resource");
   const request = decodeAcceptanceJson(bytes);
-  if (Object.keys(request).sort().join(",") !== "configurationHex,documents" || typeof request.configurationHex !== "string" || !/^(?:[0-9a-f]{2})+$/.test(request.configurationHex) || !Array.isArray(request.documents) || request.documents.length < 1 || request.documents.length > 512)
+  if (!["configurationHex,documents", "configurationHex,documents,registration"].includes(Object.keys(request).sort().join(",")) || Object.hasOwn(request, "registration") && request.registration !== true || typeof request.configurationHex !== "string" || !/^(?:[0-9a-f]{2})+$/.test(request.configurationHex) || !Array.isArray(request.documents) || request.documents.length < 1 || request.documents.length > 512)
     throw Error("invalid_input");
   const configuration = decodeAcceptanceJson(Buffer.from(request.configurationHex, "hex"));
   if (!configuration || typeof configuration !== "object" || Array.isArray(configuration) || Object.hasOwn(configuration, "documents") || Object.hasOwn(configuration, "interfaceVersion"))
@@ -1332,21 +1319,32 @@ try {
   } else {
     const prepared = preparation.prepare(original);
     let reportEvidence;
-    try {
-      const { declarations, fields, scalars, members, links } = current;
-      const observations = collectCatalogAssertionObservations(prepared, declarations, fields, scalars, members, links);
+    if (request.registration === true) {
       reportEvidence = {
-        ownerObservations: observations,
-        observationCoverage: assessCatalogObservationCoverage(prepared, observations),
-        coreAssertionIdentities: collectCatalogCoreAssertionIdentities(prepared, observations),
-        validation: collectCatalogValidationEvidence(prepared),
-        retainedExtensions: collectCatalogExtensionArtifacts(prepared),
-        ingress: prepared.original.input.binding.state === "absent" && !prepared.original.input.transforms.length ? { state: "available", basis: collectCatalogIngressReportBasis(prepared) } : { state: "unavailable", reason: "registered_binding_or_transform_report_producer_required" },
-        scope: "original_owner_report_preparation_only"
+        interfaceVersion: "truss-registration-preparation/1.0",
+        documents: prepared.documents.map((document, index) => ({
+          documentId: document.documentId,
+          contentSha256: prepared.original.documents[index].sha256,
+          sourceValidation: document.interpretation.sourceValidation,
+          targetValidation: document.interpretation.targetValidation
+        }))
       };
-    } catch {
-      reportEvidence = { scope: "original_owner_report_preparation_only", ingress: { state: "unavailable", reason: "report_evidence_unavailable" } };
-    }
+    } else
+      try {
+        const { declarations, fields, scalars, members, links } = current;
+        const observations = collectCatalogAssertionObservations(prepared, declarations, fields, scalars, members, links);
+        reportEvidence = {
+          ownerObservations: observations,
+          observationCoverage: assessCatalogObservationCoverage(prepared, observations),
+          coreAssertionIdentities: collectCatalogCoreAssertionIdentities(prepared, observations),
+          validation: collectCatalogValidationEvidence(prepared),
+          retainedExtensions: collectCatalogExtensionArtifacts(prepared),
+          ingress: prepared.original.input.binding.state === "absent" && !prepared.original.input.transforms.length ? { state: "available", basis: collectCatalogIngressReportBasis(prepared) } : { state: "unavailable", reason: "registered_binding_or_transform_report_producer_required" },
+          scope: "original_owner_report_preparation_only"
+        };
+      } catch {
+        reportEvidence = { scope: "original_owner_report_preparation_only", ingress: { state: "unavailable", reason: "report_evidence_unavailable" } };
+      }
     const response = {
       status: "prepared",
       inputHex: prepared.original.originalUtf8Hex,

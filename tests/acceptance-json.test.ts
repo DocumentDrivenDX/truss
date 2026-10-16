@@ -20,11 +20,10 @@ test('selected depth and container limits refuse before an over-limit output',()
  expect((decode('['+Array(4096).fill('null').join(',')+']') as unknown[]).length).toBe(4096);
  expect(()=>decode('['+Array(4097).fill('null').join(',')+']')).toThrow(AcceptanceJsonError);
 });
-test('raw byte and cumulative duplicate-name work are conjunctive ceilings',()=>{
+test('raw byte ceiling and ordinary object member decoding',()=>{
  const large=new Uint8Array(1048577);expect(()=>decodeAcceptanceJson(large)).toThrow(AcceptanceJsonError);
  const keys=Array.from({length:1000},(_,i)=>JSON.stringify('key-'+i.toString().padStart(5,'0'))+':null');
- let failure:unknown;try{decodeAcceptanceJson(new TextEncoder().encode('{'+keys.join(',')+'}'))}catch(e){failure=e}
- expect(failure).toBeInstanceOf(AcceptanceJsonError);expect((failure as AcceptanceJsonError).reason).toBe('resource');
+ expect(Object.keys(decodeAcceptanceJson(new TextEncoder().encode('{'+keys.join(',')+'}')) as object).length).toBe(1000);
 });
 test('exact node ceiling counts containers and every scalar occurrence',()=>{
  const make=(last:number)=>'['+Array.from({length:25},(_,i)=>'['+Array(i===24?last:3999).fill('null').join(',')+']').join(',')+']';

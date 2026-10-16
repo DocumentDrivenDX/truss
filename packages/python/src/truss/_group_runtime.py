@@ -167,37 +167,18 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"transport"}'))))
     if len(original_input)>1048576 or len(original_request)>65536 or len(original_documents)>4194304:
         return Ok(GroupUnavailable(reason='resource'))
-    operation_index=[0]
     def apply(cursor,observed):
         pin_cursor(cursor)
-        if request.state=='present':
-            cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s,%s,true)',
-                (original_input,original_documents,original_request,manifest['releaseId'],digest,b'[]'),prepare=False)
-            probe=json.loads(bytes(cursor.fetchone()[0]))
-            if probe['outcome']!='miss':return _result(_bytes(probe))
-        cursor.execute('SELECT truss.object_group_begin(%s,%s,%s,%s,%s)',
+        cursor.execute('SELECT truss.apply_group(%s,%s,%s,%s,%s)',
             (original_input,original_documents,original_request,manifest['releaseId'],digest),prepare=False)
-        begin=json.loads(bytes(cursor.fetchone()[0]))
-        if begin['outcome']!='execute':return _result(_bytes(begin))
-        attempt_id=begin['attemptId']
-        if _attempt_capture is not None:_attempt_capture.append(attempt_id)
-        for index,operation in enumerate(input.operations):
-            operation_index[0]=index
-            cursor.execute("SELECT truss.object_group_step(%s::uuid,%s,convert_to('[]','UTF8'))",(attempt_id,index),prepare=False)
-            cursor.fetchone()
-        cursor.execute('SELECT truss.object_group_finish(%s::uuid)',(attempt_id,),prepare=False)
-        return _result(bytes(cursor.fetchone()[0]))
+        raw=bytes(cursor.fetchone()[0])
+        if _attempt_capture is not None:
+            value=json.loads(raw)
+            if value.get('disposition')=='applied' and value.get('outcome')=='success':
+                _attempt_capture.append(value['attemptId'])
+        return _result(raw)
     if _cursor is not None:return Ok(apply(_cursor,None))
-    result=host._run_operation(transaction,apply)
-    if isinstance(result,Error) and result.error.code=='execution_obligation':
-        state=result.error.sql_state
-        if state=='42501':return Ok(GroupFailed(failure=UnauthorizedPerson()))
-        reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(state)
-        if reason:return Ok(GroupUnavailable(reason=reason))
-        if state in ('22023','23505','P1001','P1003','P1004','P1005'):
-            code={'P1001':'request_conflict','P1003':'expected_version','P1004':'not_found','P1005':'dependencies','23505':'key_conflict','22023':'invalid_input'}[state]
-            return Ok(_result(_bytes({'outcome':'failed','code':code,'operationIndex':str(operation_index[0]),'nativeState':state})))
-    return result
+    return host._run_operation(transaction,apply)
 
 # A real selected provider; native readiness and authority are checked per call.
 from typing import Callable, Literal, overload

@@ -36,6 +36,15 @@ The owner selected the separate immutable complete acceptance-report home. Creat
 
 Defines how a set of UMF documents becomes an accepted catalog revision: the order documents are imported in, how catalog rows are derived, how ids stay stable, what happens to an entity type that a relationship names but no document defines, and the report every acceptance produces. Any implementation that accepts a revision does so the same way, so the resulting tables are the same.
 
+## Public Python summary candidate — 2026-10-15
+
+The unreleased [registration summary supplement](catalog-registration-summary-v0.1.md)
+specifies the smaller public preparation and report0.5 interface. It removes
+per-operation inspection transcripts from ordinary registration while preserving
+original source, UMF validation, native storage checks, atomic effects and
+original-report retry. Native workflow validation and Astra review remain
+pending. Historical report profiles retain their original format and bytes.
+
 ## Selected reference property retirement and reactivation
 
 Apply the owner-selected same-qualified-identity rule and the [reactivation persistence procedure](catalog-reactivation-persistence.proposal.md). Retirement preserves committed catalog identity and original value/presence/source custody under the original registered home and definition; it is not deletion, implicit movement to unknown name-keyed storage or allocation of a replacement Field. A retirement-only catalog transition records complete lifecycle history and report effects without inventing a property-value change. Separately required transforms remain explicit full plans.

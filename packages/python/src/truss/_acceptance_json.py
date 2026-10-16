@@ -1,6 +1,6 @@
 """Private numeric-free wire decoder; not operation or native admission.
 
-Matches the TypeScript acceptance decoder's logical resource accounting.
+Uses byte, tree-depth, member-count and node-count limits.
 Only individual already-scanned string tokens use the standard JSON decoder.
 """
 import json
@@ -13,28 +13,21 @@ class AcceptanceJsonError(ValueError):
 
 
 def decode_acceptance_json(original: bytes):
-    """Original 1-MiB acceptance grammar/work profile; unchanged limits."""
-    return _decode_numeric_free(original, 1_048_576, 2_000_000)
+    """Strict numeric-free acceptance JSON with a 1-MiB byte limit."""
+    return _decode_numeric_free(original, 1_048_576)
 
 
 def decode_row_operation_json(original: bytes):
-    """Private proposed 8-MiB custody syntax profile; not body/native admission.
-
-    Shares strict Unicode, duplicate-member and numeric-free grammar. The fixed
-    40-million logical work bound permits the full byte ceiling, including token
-    decoding charges. Existing node/depth/array limits remain unchanged. Actual
-    allocator/decoder/hash workspace and original resource-account custody are
-    separate qualification obligations. The caller retains original bytes.
-    """
-    return _decode_numeric_free(original, 8_388_608, 40_000_000)
+    """Numeric-free row operation JSON with an 8-MiB byte limit."""
+    return _decode_numeric_free(original, 8_388_608)
 
 
-def _decode_numeric_free(original: bytes, maximum_bytes: int, maximum_work: int):
+def _decode_numeric_free(original: bytes, maximum_bytes: int):
     if type(original) is not bytes:
         raise AcceptanceJsonError("grammar")
     if len(original) > maximum_bytes:
         raise AcceptanceJsonError("resource")
-    index, nodes, work = 0, 0, len(original)
+    index, nodes = 0, 0
     stack = []
     missing = object()
     root = missing
@@ -42,18 +35,11 @@ def _decode_numeric_free(original: bytes, maximum_bytes: int, maximum_work: int)
     def refuse(reason):
         raise AcceptanceJsonError(reason)
 
-    def charge(amount):
-        nonlocal work
-        if work > maximum_work - amount:
-            refuse("resource")
-        work += amount
-
     def peek():
         return original[index] if index < len(original) else None
 
     def take():
         nonlocal index
-        charge(1)
         result = peek()
         index += 1
         return result
@@ -98,7 +84,6 @@ def _decode_numeric_free(original: bytes, maximum_bytes: int, maximum_work: int)
                     refuse("grammar")
         if not closed:
             refuse("grammar")
-        charge(2 * (index - start))
         try:
             text = original[start:index].decode("utf-8", errors="strict")
         except UnicodeError:
@@ -139,7 +124,7 @@ def _decode_numeric_free(original: bytes, maximum_bytes: int, maximum_work: int)
             item = {} if char == 123 else []
             attach(item)
             stack.append(dict(kind="object" if char == 123 else "array",
-                              value=item, state="first", key="", keys=[]))
+                              value=item, state="first", key="", keys=set()))
             return
         for token, result in ((b"null", None), (b"true", True), (b"false", False)):
             if char == token[0]:
@@ -151,9 +136,6 @@ def _decode_numeric_free(original: bytes, maximum_bytes: int, maximum_work: int)
         if char == 45 or char is not None and 48 <= char <= 57:
             refuse("numeric_node")
         refuse("grammar")
-
-    def utf16_length(text):
-        return len(text.encode("utf-16-le")) // 2
 
     value()
     while stack:
@@ -183,11 +165,9 @@ def _decode_numeric_free(original: bytes, maximum_bytes: int, maximum_work: int)
             if len(frame["keys"]) >= 4096:
                 refuse("resource")
             key = string()
-            for previous in frame["keys"]:
-                charge(2 * (utf16_length(previous) + utf16_length(key)))
-                if previous == key:
-                    refuse("duplicate_member")
-            frame["keys"].append(key)
+            if key in frame["keys"]:
+                refuse("duplicate_member")
+            frame["keys"].add(key)
             frame["key"], frame["state"] = key, "colon"
         elif state == "colon":
             if take() != 58:

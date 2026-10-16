@@ -15,6 +15,26 @@ def selected(value=None):
     return prepare((CatalogDocument('support','r1',json.dumps(source).encode()),),config)
 
 class CatalogSupportTests(unittest.TestCase):
+    def test_optional_field_name_preserves_unnamed_source(self):
+        source=json.loads(native_document('support').content)
+        field=source['modules'][0]['elements'][1]
+        del field['name']
+        prepared=selected(source)
+        result=evaluate_catalog_support(prepared)['closedSourceInventory']
+        self.assertEqual(result['state'],'inventoried')
+        self.assertNotIn('name',json.loads(prepared.declarations_bytes)[0]['records'][0]['fields'][0]['declaration'])
+        self.assertEqual(prepared.documents[0].observation()['source'],source)
+
+    def test_unnamed_id_cannot_collide_with_authored_property_name(self):
+        source=json.loads(native_document('support').content)
+        module=source['modules'][0]
+        field=module['elements'][1]
+        del field['name']
+        module['elements'].append({**field,'id':'other','name':field['id']})
+        module['elements'][0]['members'].append({'module':module['id'],'element':'other'})
+        with self.assertRaisesRegex(ValueError,'Duplicate Truss property binding name'):
+            evaluate_catalog_support(selected(source))
+
     def test_closed_source_inventory_covers_original_occurrences(self):
         result=evaluate_catalog_support(selected())['closedSourceInventory']
         self.assertEqual(result['state'],'inventoried')
@@ -98,7 +118,7 @@ class CatalogSupportTests(unittest.TestCase):
     def test_missing_required_metadata_refuses_before_sql(self):
         class NoCalls:
             def run(self,*args,**kwargs):raise AssertionError('No SQL permitted')
-        for target,field in ((0,'members'),(1,'name'),(1,'nullability'),(1,'cardinality')):
+        for target,field in ((0,'members'),(1,'nullability'),(1,'cardinality')):
             value=json.loads(native_document('support').content)
             del value['modules'][0]['elements'][target][field]
             original=selected(value)

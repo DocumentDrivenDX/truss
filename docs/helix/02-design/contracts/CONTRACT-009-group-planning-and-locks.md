@@ -36,6 +36,14 @@ Make ordered groups with aliases, key changes and owned deletion implementable w
 
 CONTRACT-004 owns operation meanings and error kinds. CONTRACT-007 owns execution scope/savepoints. This contract governs planning, final-state validation and lock acquisition. It does not promise that arbitrary host SQL, third-party triggers or a caller's earlier lock acquisitions can never deadlock.
 
+The ordinary Python/PostgreSQL implementation uses one protected native call for
+an entire group. Begin, per-operation and finish helpers are private implementation
+functions, not a caller protocol. The executor may hold ordered affected state in
+local memory; this contract does not require persisted execution graphs or nested
+per-create groups. Durable journal/history facts, key reservations and requested
+retry receipts remain required. Replacing internal execution records must preserve
+reads of previously written history and receipts.
+
 ## Normative Surface
 
 [Draft group facade](bindings/truss-group-capability-v0.1.d.ts) exposes inert exact-profile selection and applyInTransaction with explicit request none/present. Newly applied effects report pending even inside an outer engine transaction; only the outer executor's confirmed commit can produce an engine committed response. An admitted committed replay may report its original committed durability, while same-transaction replay stays pending. Native/transaction failures wrap the application result in CONTRACT-007 Outcome. group_failed carries canonical zero-based index plus exact profiled inner error; malformed envelopes/empty groups have invalid diagnostics without a fabricated operation index. Every application failure requires confirmed operation-local rollback and no surviving effects. Unknown cleanup remains an execution failure. Unavailable receipt/profile/observation cannot authorize reapplication or overwrite retained evidence. Request-none uses no receipt storage/namespace and does not depend on request replay readiness; ordinary group planning/invariants still apply. Existing handles recheck assembly admission, transaction identity/mode, current authority and complete pins on every call.

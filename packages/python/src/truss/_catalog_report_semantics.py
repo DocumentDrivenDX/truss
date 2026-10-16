@@ -59,6 +59,17 @@ def compose_original_catalog_report_semantics(prepared,support):
     _require_original_preparation(prepared)
     if support!=evaluate_catalog_support(prepared):raise ValueError('Original evaluated report support required')
     inventory=support.get('closedSourceInventory',{})
+    if 'registrationSummary' in support:
+        if inventory.get('state')!='supported':
+            return {'state':'unavailable','reason':'unsupported_storage_definition'}
+        memberships=[]
+        for document in prepared.input()['documents']:
+            membership={'version':next(d.observation()['source']['umf'] for d in prepared.documents
+                if d.document.document_id==document['documentId']),
+                'interpretationProfile':document['umfProfile'],'supportedSubset':support['supportedSubset']}
+            if membership not in memberships:memberships.append(membership)
+        return {'state':'source_fields_ready','sourceFormat':'truss-registration-summary/1.0',
+            'umf':memberships,'documentValidations':support['registrationSummary']['documents']}
     if inventory.get('state')!='inventoried':
         return {'state':'unavailable','reason':'complete_closed_source_inventory_required'}
     compact=support['profile'] in (REFERENCE08_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE)

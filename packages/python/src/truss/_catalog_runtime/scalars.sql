@@ -54,7 +54,7 @@ DECLARE token text;limit_text text;mantissa text;exponent_token text;coefficient
 BEGIN
  IF truss.valid_scalar_cell(cell,family,allow_null) IS NOT TRUE THEN RETURN false;END IF;
  IF facets IS NULL OR facets='{}'::jsonb THEN RETURN true;END IF;
- IF family='decimal' AND facets IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb) THEN
+ IF family='decimal' AND facets IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb) THEN
   IF cell='{"kind":"null"}'::jsonb THEN RETURN allow_null;END IF;
   token:=cell->>'text';mantissa:=split_part(lower(token),'e',1);
   fraction_length:=length(split_part(mantissa,'.',2));
@@ -71,7 +71,7 @@ BEGIN
   trailing_zero_count:=length(coefficient)-length(rtrim(coefficient,'0'));
   -- Exact fixed-scale coefficient: no numeric typmod, casts or rounding.
   IF shift<0 AND -shift>trailing_zero_count THEN RETURN false;END IF;
-  RETURN length(coefficient)+shift<=18;
+  RETURN length(coefficient)+shift<=(facets->>'precision')::int;
  END IF;
  IF family IS DISTINCT FROM 'integer' OR facets IS DISTINCT FROM '{"integerWidth":{"bits":64,"signed":true}}'::jsonb THEN RETURN false;END IF;
  IF cell='{"kind":"null"}'::jsonb THEN RETURN allow_null;END IF;
