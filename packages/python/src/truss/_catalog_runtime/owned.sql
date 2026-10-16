@@ -465,6 +465,7 @@ DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb:='[]
  selected_type truss.type_def%ROWTYPE;relation truss.rel_def%ROWTYPE;pin record;identity jsonb;revision int;
  index int:=0;before_count int;descendants text[];descendant text;projection jsonb;deleted jsonb;local_owned jsonb;local_independent jsonb;
  unset_name text;authored jsonb;retained jsonb;order_key jsonb;selected_source_type int;selected_target_type int;plan jsonb;outgoing bigint;incoming bigint;
+ retained_nodes text[];retained_edges text[];plans_bytes bigint:=2;
 BEGIN
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128
   OR jsonb_typeof(scope->'nodes') IS DISTINCT FROM 'object' OR jsonb_typeof(scope->'edges') IS DISTINCT FROM 'object'
@@ -638,10 +639,43 @@ BEGIN
    END IF;
   ELSE RAISE EXCEPTION 'supported original graph operation required' USING ERRCODE='0A000';END IF;
   IF operation ? 'alias' THEN aliases:=aliases||jsonb_build_object(operation->>'alias',selected);END IF;
-  plan:=jsonb_build_object('profile','truss-owned-operation-plan/0.1','operationIndex',index,'operation',operation,
-   'primary',selected,'beforeNodes',before_nodes,'afterNodes',nodes,'beforeEdges',before_edges,'afterEdges',edges);
+  -- Keep one working graph for ordered simulation. Persist only this step's
+  -- changed members and identity witnesses; final settlement keeps one full frame.
+  IF index=jsonb_array_length(input->'operations')-1 THEN
+   plan:=jsonb_build_object('beforeNodes',before_nodes,'afterNodes',nodes,
+    'beforeEdges',before_edges,'afterEdges',edges);
+  ELSE
+   SELECT coalesce(array_agg(reference),'{}'::text[]) INTO retained_edges FROM (
+    SELECT key reference FROM jsonb_each(before_edges)
+     WHERE value IS DISTINCT FROM edges->key
+    UNION SELECT key FROM jsonb_each(edges) WHERE value IS DISTINCT FROM before_edges->key
+    UNION SELECT selected WHERE operation->>'operation' IN ('create_edge','update_edge','delete_edge')
+   ) changed;
+   SELECT coalesce(array_agg(reference),'{}'::text[]) INTO retained_nodes FROM (
+    SELECT key reference FROM jsonb_each(before_nodes) WHERE value IS DISTINCT FROM nodes->key
+    UNION SELECT key FROM jsonb_each(nodes) WHERE value IS DISTINCT FROM before_nodes->key
+    UNION SELECT selected WHERE operation->>'operation' IN ('create_object','update_object','delete_object')
+    UNION SELECT value->>'source' FROM jsonb_each(before_edges) WHERE key=ANY(retained_edges)
+    UNION SELECT value->>'target' FROM jsonb_each(before_edges) WHERE key=ANY(retained_edges)
+    UNION SELECT value->>'source' FROM jsonb_each(edges) WHERE key=ANY(retained_edges)
+    UNION SELECT value->>'target' FROM jsonb_each(edges) WHERE key=ANY(retained_edges)
+   ) changed WHERE reference IS NOT NULL;
+   SELECT coalesce(array_agg(reference),'{}'::text[]) INTO retained_nodes FROM (
+    SELECT unnest(retained_nodes) reference
+    UNION SELECT value->>'root' FROM jsonb_each(before_nodes) WHERE key=ANY(retained_nodes)
+    UNION SELECT value->>'root' FROM jsonb_each(nodes) WHERE key=ANY(retained_nodes)
+   ) witnesses WHERE reference IS NOT NULL;
+   plan:=jsonb_build_object(
+    'beforeNodes',(SELECT coalesce(jsonb_object_agg(key,value),'{}'::jsonb) FROM jsonb_each(before_nodes) WHERE key=ANY(retained_nodes)),
+    'afterNodes',(SELECT coalesce(jsonb_object_agg(key,value),'{}'::jsonb) FROM jsonb_each(nodes) WHERE key=ANY(retained_nodes)),
+    'beforeEdges',(SELECT coalesce(jsonb_object_agg(key,value),'{}'::jsonb) FROM jsonb_each(before_edges) WHERE key=ANY(retained_edges)),
+    'afterEdges',(SELECT coalesce(jsonb_object_agg(key,value),'{}'::jsonb) FROM jsonb_each(edges) WHERE key=ANY(retained_edges)));
+  END IF;
+  plan:=plan||jsonb_build_object('profile','truss-owned-operation-plan/0.2',
+   'operationIndex',index,'operation',operation,'primary',selected);
+  plans_bytes:=plans_bytes+octet_length(convert_to(plan::text,'UTF8'))+CASE WHEN index=0 THEN 0 ELSE 2 END;
+  IF plans_bytes>16777216 THEN RAISE EXCEPTION 'bounded whole group execution inventory required' USING ERRCODE='54000';END IF;
   plans:=plans||jsonb_build_array(plan);
-  IF octet_length(convert_to(plans::text,'UTF8'))>16777216 THEN RAISE EXCEPTION 'bounded whole group execution inventory required' USING ERRCODE='54000';END IF;
   index:=index+1;
  END LOOP;
  SELECT coalesce(array_agg(reference ORDER BY ordinal),'{}'::text[]) INTO node_order FROM unnest(node_order) WITH ORDINALITY n(reference,ordinal) WHERE nodes->reference->'deleted'='false'::jsonb;
@@ -765,7 +799,7 @@ BEGIN
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
  IF selected_index NOT BETWEEN 0 AND jsonb_array_length(input->'operations')-1
   OR original.writer_xid IS DISTINCT FROM attempt.writer_xid
-  OR original.plan->>'profile' IS DISTINCT FROM 'truss-owned-operation-plan/0.1'
+  OR original.plan->>'profile' IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
   OR original.plan->'operationIndex' IS DISTINCT FROM to_jsonb(selected_index)
   OR original.plan->'operation' IS DISTINCT FROM input->'operations'->selected_index
   OR original.plan->'mutationProfile' IS DISTINCT FROM input->'mutationProfile'
