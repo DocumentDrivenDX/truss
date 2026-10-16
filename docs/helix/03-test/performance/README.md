@@ -592,3 +592,15 @@ products; tracked source matched that commit. Bulk100 speedup3.93x remains a
 triage signal, not a separate release gate. The provisional latency targets are
 not achieved: ID-read p95 is6.30ms and committed single-update p95 is37.97ms.
 Full Linux/macOS release validation run38970215099 is still pending.
+
+
+The subsequent full [release validation38970215099](https://github.com/DocumentDrivenDX/truss/actions/runs/38970215099)
+failed on both Linux x64 and macOS ARM64 at the original1,024-create statement
+deadline (57014). The [original failure log](results/2026-10-16-release38970215099-failed.log)
+locates macOS cancellation in final row validation and Linux cancellation in
+final graph validation/current-reader checks. Each runner passes the other17
+owned-workflow tests, including final-operation fault rollback. Publication was
+skipped; no tag was created. This contradicts hosted readiness, not the narrower
+local1,000-node/edge result above. A local diagnostic narrowing row-authority
+projection showed no benefit (row-validation self1077ms versus1070ms); the
+candidate was discarded, leaving all tracked runtime sources unchanged.
