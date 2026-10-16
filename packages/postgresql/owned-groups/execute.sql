@@ -39,7 +39,10 @@ CREATE FUNCTION truss.runtime_owned_local_edges(edges jsonb,node_order text[],bo
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE entry record;source_node int;target_node int;result jsonb:='[]';ordinal int:=0;
 BEGIN
- FOR entry IN SELECT key,value FROM jsonb_each(edges) ORDER BY key COLLATE "C" LOOP
+ FOR entry IN SELECT key,value,
+  count(*) FILTER (WHERE value->'deleted'='false'::jsonb) OVER (
+   ORDER BY key COLLATE "C" ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) preceding_live
+  FROM jsonb_each(edges) ORDER BY key COLLATE "C" LOOP
   IF entry.value->'deleted'='true'::jsonb THEN CONTINUE;END IF;
   IF (entry.value->>'lifecycle'='owned') IS DISTINCT FROM owned THEN CONTINUE;END IF;
   source_node:=array_position(node_order,entry.value->>'source')-1;
@@ -49,7 +52,7 @@ BEGIN
   IF source_node IS NULL OR target_node IS NULL OR owned AND (source_node>=cardinality(node_order) OR target_node>=cardinality(node_order)) THEN
    RAISE EXCEPTION 'complete typed endpoint scope required' USING ERRCODE='55000';END IF;
   -- Ordinals count all live edges so the two lifecycle arrays stay disjoint.
-  SELECT count(*) INTO ordinal FROM jsonb_each(edges) e WHERE e.value->'deleted'='false'::jsonb AND e.key COLLATE "C"<entry.key COLLATE "C";
+  ordinal:=entry.preceding_live;
   result:=result||jsonb_build_array(jsonb_build_object('edge',ordinal,'source',source_node,'target',target_node));
  END LOOP;
  RETURN result;
@@ -200,7 +203,10 @@ BEGIN
     END IF;
     changed_nodes:=array_append(changed_nodes,selected);
     IF rootless_creates THEN created_states:=array_append(created_states,state);
-    ELSE nodes:=nodes||jsonb_build_object(selected,state);END IF;
+    -- Ordinary updates install their final versioned member below; no-op
+    -- updates already have that exact state in the working graph.
+    ELSIF operation->>'operation'<>'update_object' OR operation ? 'ownershipChange' THEN
+     nodes:=nodes||jsonb_build_object(selected,state);END IF;
     IF operation->>'operation'='update_object' AND NOT (operation ? 'ownershipChange') THEN
      IF state IS DISTINCT FROM before_nodes->selected THEN
       IF (state->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'object version exhausted' USING ERRCODE='54000';END IF;
@@ -646,7 +652,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_endpoint_at(uuid,int,text,text,jsonb,truss.runtime_object_attempt) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_edge_transition_validate(selected_transition bigint,authorize_read boolean,qualified_actor oid DEFAULT NULL) RETURNS void
+CREATE FUNCTION truss.runtime_owned_edge_transition_validate_qualified(selected_transition bigint,authorize_read boolean,qualified_actor oid,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_edge_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;expected_context jsonb;
@@ -655,10 +661,18 @@ DECLARE transition truss.runtime_edge_transition%ROWTYPE;attempt truss.runtime_o
 BEGIN
  IF authorize_read IS NULL THEN RAISE EXCEPTION 'explicit validation authority mode required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT transition FROM truss.runtime_edge_transition WHERE transition_id=selected_transition;
- SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
+ IF prepared_attempt.id IS NOT NULL THEN
+  IF prepared_attempt.id IS DISTINCT FROM transition.attempt_id THEN RAISE EXCEPTION 'original checked attempt required' USING ERRCODE='55000';END IF;
+  attempt:=prepared_attempt;
+ ELSE SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;END IF;
+ IF prepared_input IS NOT NULL AND (source_bytes IS NULL OR source_bytes IS DISTINCT FROM attempt.input_bytes) THEN
+  RAISE EXCEPTION 'original checked transition input required' USING ERRCODE='55000';END IF;
+ -- Only group settlement supplies the original attempt and input after its
+ -- complete immutable result-slot census. Per-step and history calls recount.
  current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
  IF attempt.writer_xid IS DISTINCT FROM transition.writer_xid OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
-  OR (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.result IS NOT NULL)<>attempt.next_index
+  OR (CASE WHEN NOT authorize_read AND prepared_attempt.id IS NOT NULL AND prepared_input IS NOT NULL
+   THEN attempt.next_index ELSE (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.result IS NOT NULL) END)<>attempt.next_index
   OR (authorize_read AND NOT attempt.complete)
   OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor)) THEN
   RAISE EXCEPTION 'original completed edge operation progress required' USING ERRCODE='55000';END IF;
@@ -726,6 +740,13 @@ BEGIN
  END IF;
 END;
 $$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_edge_transition_validate_qualified(bigint,boolean,oid,jsonb,bytea,truss.runtime_object_attempt) FROM PUBLIC;
+CREATE FUNCTION truss.runtime_owned_edge_transition_validate(selected_transition bigint,authorize_read boolean,qualified_actor oid DEFAULT NULL) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ PERFORM truss.runtime_owned_edge_transition_validate_qualified(selected_transition,authorize_read,qualified_actor);
+END;
+$$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_edge_transition_validate(bigint,boolean,oid) FROM PUBLIC;
 
 
@@ -753,12 +774,12 @@ BEGIN
   OR (mode='delete_object' AND desired->'deleted' IS DISTINCT FROM 'true'::jsonb)
   OR (reference IS DISTINCT FROM plan->>'primary' AND prior IS NOT DISTINCT FROM desired) THEN
   RAISE EXCEPTION 'original primary or affected descendant required' USING ERRCODE='55000';END IF;
- identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object');
+ identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object',plan,attempt);
  PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',current_actor);
  IF NOT truss.runtime_object_values_readable_qualified((identity->>'typeId')::int,current_actor) THEN RAISE EXCEPTION 'current original property/item readers required' USING ERRCODE='42501';END IF;
  SELECT * INTO STRICT object_row FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=(identity->>'typeId')::int FOR UPDATE NOWAIT;
  old_image:=to_jsonb(object_row);
- IF old_image-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,selected_index,reference,'before') THEN
+ IF old_image-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,selected_index,reference,'before',plan,attempt) THEN
   RAISE EXCEPTION 'original complete object prestate required' USING ERRCODE='55000';END IF;
  IF prior IS NOT DISTINCT FROM desired THEN
   RETURN jsonb_build_object('outcome','unchanged','operation','update_object','identity',identity,'version',object_row.ver::text,'events','[]'::jsonb);
@@ -768,7 +789,7 @@ BEGIN
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  before_record:=truss.runtime_object_history(old_image,identity);
  IF mode='update_object' THEN
-  expected_image:=truss.runtime_owned_object_image(selected_attempt,selected_index,reference,'after');
+  expected_image:=truss.runtime_owned_object_image(selected_attempt,selected_index,reference,'after',plan,attempt);
   IF expected_image->>'ver' IS DISTINCT FROM version::text THEN RAISE EXCEPTION 'one original version advance required' USING ERRCODE='55000';END IF;
   IF object_row.props IS DISTINCT FROM expected_image->'props' THEN
    PERFORM truss.runtime_object_update_keys(object_row.id,object_row.type_id,expected_image->'props',convert_to('[]','UTF8'),selected_attempt,selected_index);

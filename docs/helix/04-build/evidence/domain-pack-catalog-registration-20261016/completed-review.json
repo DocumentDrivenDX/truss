@@ -1,0 +1,34 @@
+{
+  "review": "Astra Ultra completed domain-pack regression iteration",
+  "status": "COMPLETED_SOURCE_AND_BOUNDED_EVIDENCE_CLEAR",
+  "sourceReview": "/private/tmp/truss-domain-pack-regression-integration-astra-20261016.json",
+  "sourceReviewSha256": "5950e6282cc84799b6d4f3fb20d24c9b882bf2242126608826ac7023b9a16868",
+  "scope": "Retained 21-document fixture, public catalog regression class, installed-wheel CI step and domain-pack-catalog-registration-20261016 evidence only. Transition-count SQL increment is separate.",
+  "findings": [],
+  "verified": [
+    "All source-pins entries match current reviewed test, fixture and workflow bytes. No source change since source clearance.",
+    "Retained original probe and owner core-validation reports are byte-identical to their reviewed temporary originals. Both cover exactly the same 21 pack/path pairs as the pinned fixture.",
+    "Core owner validation is valid=true, complete=true, no diagnostics for all 21; native probe records all 21 accepted_committed_replayed, zero errors/failures and cleanupPassed=true.",
+    "Retained regression-native.log contains exactly 21 successful DomainPackCatalogTests and terminal OK: 43.321s. Existing unittest class cleanup is part of this successful run.",
+    "README correctly separates 21 original UMF 0.8 documents from 256 excluded TableSpec entries, limits coverage to catalog preparation/acceptance/commit/replay, and leaves all-valid-UMF/value/query/development-CI capacity claims open.",
+    "CI configuration runs the retained class through installed package imports. This local result does not claim that new CI step has already passed on both release platforms.",
+    "Reviewer ran read-only source/hash/report correspondence and git diff --check only; no native database run."
+  ],
+  "parentReportedExecution": {
+    "session": 86478,
+    "tests": 21,
+    "result": "PASS",
+    "elapsedSeconds": 43.321,
+    "scope": "Retained portable public catalog regression module. Timing is evidence identification, not performance qualification."
+  },
+  "evidenceSha256": {
+    "README.md": "ed29c9cbed17f46c46b4c1beaa63f98a5f689acd82c4cbaa137c400e6393db4d",
+    "original-probe-report.json": "66c4d5737342e17abc7e5a2986b0790330856726d62c0f60d9c742f8667354a5",
+    "owner-core-validation.json": "d5ef3c8265bbc521de199e40376622cb57257fc35f92e0f5ce5dd28fbcf6e42e",
+    "plan-review.json": "0e8725a84cf80817cc9625bd3cfe03d5aa14271e46963d6fc6fde0752d0f8fba",
+    "regression-native.log": "d0870a42a26a0a4ef2b04b79dc2da54cbfb78415b19ddc3b5b7f0e73cdb370c1",
+    "source-pins.json": "aa09d66a84dc7d45af9098bd0ed44df14c514574ec9f770b6a5a47f651355841",
+    "source-review.json": "5950e6282cc84799b6d4f3fb20d24c9b882bf2242126608826ac7023b9a16868"
+  },
+  "qualification": "Clear to retain and commit this bounded correctness corpus/test/CI/evidence separately. No runtime API or semantic change, universal schema support, performance improvement or release-runner capacity qualification."
+}

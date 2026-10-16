@@ -1,0 +1,58 @@
+{
+  "review": "Astra Ultra completed transition-count aggregation experiment",
+  "status": "SOURCE_CORRECTNESS_CLEAR_ADOPTION_NOT_RECOMMENDED",
+  "recommendation": "Revert only the three candidate runtime files to their exact baseline and retain the diagnostic/candidate evidence separately. Do not land this performance-only change as a correctness improvement.",
+  "findings": [],
+  "reasoning": [
+    "The reviewed source remains semantically sound: fresh per-invocation physical transition counts, exact attempt predicate, bigint/missing-zero semantics and unchanged validation/error positions. No new source correctness blocker was found.",
+    "The candidate has no independent functional correction or public behavior improvement. Its purpose is performance, and the completed evidence demonstrates no benefit.",
+    "Basic eight workflows passed, but the unchanged original matrix failed at 1000 edge operations and the 1024 positive capacity test failed during initial CREATE. The late-index fault test passed. Those results do not establish successful completion of the targeted workloads.",
+    "Uncontrolled host contention and lack of a matched baseline prevent attributing the timeouts to this patch. A regression is not established, but absence of proven regression is insufficient evidence to adopt an otherwise unnecessary performance change.",
+    "Retaining failed evidence and reverting this small candidate is a clean stopping point; no additional native execution or deadline/workload change is requested by this review."
+  ],
+  "bundle": "/private/tmp/truss-transition-counts-completed-evidence-20261016.json.gz",
+  "bundleSha256": "4a13865043a3ffb37420ef9aa74aa31d7ba376a9339accf9a66804dc93c848d4",
+  "uncompressedSha256": "6e1054904b67d3d02175a7dceceddcbb13c154285ed0dc291ad8a6d2c0238980",
+  "sourcePins": {
+    "packages/postgresql/owned-groups/finalize.sql": "4048ae81e1ff76474efee7f8f0a48c2a6d7f290cc17b41174fcfe79f21517fc1",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "39f1d5dfc2ac711ed85eeaafd57c8f7d5aa5bc1ff6b6dac58909314d6134aa65",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "b9a04a9f6f813b73833950d37a6b1b7cc26f08dc3f63e3aa5177330744ff6fb5"
+  },
+  "custody": "All six embedded raw/source-review files match their external originals byte-for-byte. Bundle source pins equal the earlier source-clear receipt.",
+  "parentReportedResults": {
+    "basic": {
+      "session": 91687,
+      "tests": 8,
+      "result": "PASS",
+      "seconds": 61.102,
+      "overlap": "Concurrent Weft compilation; no timing attribution."
+    },
+    "matrix": {
+      "session": 34354,
+      "result": "FAIL SQLSTATE 57014",
+      "completed": "1000 nodes applied and committed.",
+      "failed": "1000-edge apply at runtime_owned_plan called from final group validation; no edge commit or later update workload completion.",
+      "createApplyMs": 9911.315334,
+      "createCommitMs": 6903.899541,
+      "failedEdgeApplyMs": 10104.618125,
+      "cleanup": "PASS",
+      "performanceQualification": "not_evaluated"
+    },
+    "capacity": {
+      "session": 61045,
+      "tests": 2,
+      "seconds": 26.585,
+      "positive1024": "FAIL SQLSTATE 57014 at initial create assertion, test line 33; update/replay/readback not reached.",
+      "faultAt1023": "PASS"
+    }
+  },
+  "sourceReview": "/private/tmp/truss-main-group-transition-counts-astra-20261016.json",
+  "planReview": "/private/tmp/truss-group-transition-counts-plan-astra-20261016.json",
+  "scopeExclusions": [
+    "Separate committed domain-pack regression corpus and CI step.",
+    "Earlier committed object-effect context reuse.",
+    "Disposable settlement diagnostic overlay and evidence."
+  ],
+  "qualification": "No demonstrated speedup, capacity fix, clean-host comparison, full workload success or release qualification. This recommendation does not assert the patch caused a regression.",
+  "reviewExecution": "Read-only completed evidence/source-pin inspection. No product source edits or native test launch."
+}

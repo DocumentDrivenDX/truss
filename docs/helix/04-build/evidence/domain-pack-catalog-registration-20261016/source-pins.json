@@ -1,0 +1,5 @@
+{
+  "packages/python/tests/test_domain_pack_catalog_native.py": "eabda2304fe671733135450817946158e0822a4f26fcf961e614ec9b68242fa9",
+  "packages/python/tests/fixtures/umf-domain-packs/originals.json.gz": "3a46be2a0c22d82ed97c2cba351ff7c36e4eeec2eca5ef3d01a725f1cbec693b",
+  ".github/workflows/release.yml": "e129545502e6beb2391ac5ffd52d20badbcd933c094058b2a0461bb7b436eaf2"
+}

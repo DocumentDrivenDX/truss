@@ -1,0 +1,246 @@
+{
+  "umfSourceCommit": "cbb6fb8718aad59fd2061b62d12976387570db2f",
+  "schemaFormats": {
+    "tablespec": 256,
+    "umf": 21
+  },
+  "scope": "Exactly the21 format=umf entries from committed domain packs; original bytes, public preparation/native catalog acceptance, commit and replay only. TableSpec entries excluded; no mutation/query/all-UMF claim.",
+  "tests": 21,
+  "passed": true,
+  "cleanupPassed": true,
+  "documents": [
+    {
+      "pack": "archaeology",
+      "path": "spec/domain-packs/archaeology/ontology.json",
+      "sourceSha256": "dc0e075208922c928c6144d3efcc23235735f01aeb70bcf66f96080f1301ca5a",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:archaeology",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "0605ac16-fb31-4670-95b5-71f6bafd704b",
+      "reportSha256": "91e918dfeaf80d0d93a20dde02f77ded95e38e98296aefbc0f0c0c26a00544f6"
+    },
+    {
+      "pack": "commerce",
+      "path": "spec/domain-packs/commerce/ontology.json",
+      "sourceSha256": "51d87c554df36846e41378cfaafc81277fcab61f6c891a6c64f34dba8fd9ac2a",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:commerce",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "c1f08aa5-5628-4813-a469-d4349aaa280b",
+      "reportSha256": "075c5c78e09a39829d396cb8719460646d87bc0941186180968561e688016e7b"
+    },
+    {
+      "pack": "construction",
+      "path": "spec/domain-packs/construction/ontology.json",
+      "sourceSha256": "c41f515e2a6aaf5b6197caa5c7d67ce51d2937a520279339bf364696b8529359",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:construction",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "1979cae1-4f0a-4dd8-abe0-da771f35fff6",
+      "reportSha256": "54f1bf73ba787abe779b9011e141ab4461416ede99a85fafc445ac0be29a15c7"
+    },
+    {
+      "pack": "cybersecurity",
+      "path": "spec/domain-packs/cybersecurity/ontology.json",
+      "sourceSha256": "dc9dacef8f3159023177cabea26ba1000d8f2ba27a7ee7504526758daf2f0864",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:cybersecurity",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "c6b81059-7f23-47ab-9769-5176ccf49bd6",
+      "reportSha256": "0eba4a89f59518067c2778d6916a2f5ec59d085653cff931c337e00d2e526980"
+    },
+    {
+      "pack": "ecology",
+      "path": "spec/domain-packs/ecology/ontology.json",
+      "sourceSha256": "299e6f3e96bbfb149e593484e1ded655378aa9adf272cdc1ffc9d8706d3244ee",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:ecology",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "fba66965-30b9-4af1-a2df-e3e20e56a496",
+      "reportSha256": "c17a6e17519452f5586509ca4a361bcd4be7813720b745fd89a1adca931eb1e0"
+    },
+    {
+      "pack": "education",
+      "path": "spec/domain-packs/education/ontology.json",
+      "sourceSha256": "2a46659aedc36957038d7f17380b92394fa1803ea447ab4f73c2a1a0df3c44c2",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:education",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "42fd59d6-9529-4375-9973-a452ac80f0d5",
+      "reportSha256": "c9ec41e64af41c5b92bfae00f56ebc2a441f236136e11f947ac6839960beb520"
+    },
+    {
+      "pack": "energy",
+      "path": "spec/domain-packs/energy/ontology.json",
+      "sourceSha256": "6695d52e527bbde2682aaa9c1bddfc1314193e114f765e450a169c7113feeff6",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:energy",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "2452e837-033f-4301-a2e9-d8010098337f",
+      "reportSha256": "cd837c5427fec33a533a0789096cc6bc39022449222cb3b8bc8bd9fa549cf50d"
+    },
+    {
+      "pack": "hr",
+      "path": "spec/domain-packs/hr/ontology.json",
+      "sourceSha256": "02b64614da2f5e933f8bd16bb85564ebda23118327340c6dc8b188cb2107c7b9",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:hr",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "cae83f3a-d10c-4aff-af4f-29369d10c3c4",
+      "reportSha256": "2618b6c5dbb38fb79455c5f6d718c74ac1ce57b939e33b3c5ce88317d16ef88f"
+    },
+    {
+      "pack": "legal",
+      "path": "spec/domain-packs/legal/ontology.json",
+      "sourceSha256": "507688cdfb7b9048645abcf39d133cce64c10311a778d275b832fa9a2faa1069",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:legal",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "75b15b78-a260-4387-89d9-f95290f6ee8e",
+      "reportSha256": "37d2b51b2466a0204d381b00bf1a822195057e0bde9dfc612f10ff0b2b806d50"
+    },
+    {
+      "pack": "manufacturing",
+      "path": "spec/domain-packs/manufacturing/ontology.json",
+      "sourceSha256": "563409c10c5ec1f169b2f1e1f0631e1091e8806486ffedfebfea0da11d1917e2",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:manufacturing",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "be41bd59-b673-481a-9a9b-56c3b4b3525f",
+      "reportSha256": "b2a10649b6981213736a9b6dafddf3bd76516b781f785c7992c7a797827604c8"
+    },
+    {
+      "pack": "martech",
+      "path": "spec/domain-packs/martech/ontology.json",
+      "sourceSha256": "0c5f0ebb781f7cf60ceb9887ab8a86c15f9b2cc8c52abc3cfda9c634093c7b1b",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:martech",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "142b4a3f-299f-49e5-a1d2-0ec50211c5a6",
+      "reportSha256": "54a6530074ac0b0d944170ee6d4bca9d6fac3c0c8112574338782a16d9457720"
+    },
+    {
+      "pack": "medical-carrier",
+      "path": "spec/domain-packs/medical-carrier/ontology.json",
+      "sourceSha256": "90a912d2eaf251c401cef10a1431d0c734298743fb19e1b5ff7e8fb889934458",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:medical-carrier",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "929ac87a-f0ff-450d-bec9-cdb9a7cb50c3",
+      "reportSha256": "88a59d9341ce679cfe280363c7ced0d360971ceec1ae76baacd62c82459232b2"
+    },
+    {
+      "pack": "medical-epidemiology",
+      "path": "spec/domain-packs/medical-epidemiology/ontology.json",
+      "sourceSha256": "c6538ed54f408ec81482c2e7e1c9ded3edd9e75d10e292c36bf4b2c8085baca0",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:medical-epidemiology",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "5a498c76-ca49-468b-a918-7f4f871a0ef1",
+      "reportSha256": "d119c917a32bc3ba5ce9420d23a965ad14a5f47d841fc5bcfb59ce8a743c0c7f"
+    },
+    {
+      "pack": "medical-imaging",
+      "path": "spec/domain-packs/medical-imaging/ontology.json",
+      "sourceSha256": "2d1c2628f9872ef6d52528b3ed1b9c93ed85cf708500f94ed8ea697dd8e09f20",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:medical-imaging",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "4b278b11-1fcd-46d7-a391-a1ab802fcce7",
+      "reportSha256": "0485f0959432d79e9195c1da56c10ad774bc61adb12a36447dc1f28676dec669"
+    },
+    {
+      "pack": "medical-terminology",
+      "path": "spec/domain-packs/medical-terminology/ontology.json",
+      "sourceSha256": "e4ff8e3a6d00ce03c9266cbe362411e26c2e06897f25c6d77c357530b1777c31",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:medical-terminology",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "d023c8e7-2df1-4aa3-af91-bf2735a34dd3",
+      "reportSha256": "756e79add5c1305881f5d1da49781b24619fcf81fea879e99a9dfe1b55a6a059"
+    },
+    {
+      "pack": "medical",
+      "path": "spec/domain-packs/medical/ontology.json",
+      "sourceSha256": "fc9938f152e129e041096219be4d7bef70aa35e16f56745411af232ee9cab1c8",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:medical",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "3f47e5c4-8e37-492b-80f9-81e8b2682376",
+      "reportSha256": "3404d7fbcec30d67ad236c9215338f401b3e3ecacc05787d962d847d628ef452"
+    },
+    {
+      "pack": "payments",
+      "path": "spec/domain-packs/payments/ontology.json",
+      "sourceSha256": "f598a9ad230dcb930cd7c8856929e1e6d3f919dac6f736676257e467a8b119da",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:payments",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "949426e8-2b05-4460-b9ac-87c8bccf9658",
+      "reportSha256": "bdc99cd009c9ed83be01c961eac14637f4e4f5e855a9d84fefce316d7b47e86c"
+    },
+    {
+      "pack": "public-company-intelligence",
+      "path": "spec/domain-packs/public-company-intelligence/ontology.json",
+      "sourceSha256": "db9c5df1a7cc33dbe693860f2b3c5f5f0490cebd98394c16fd83d1acee590c48",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:public-company-intelligence",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "68a085ea-a8d1-449a-99d5-98693471e936",
+      "reportSha256": "13f00121aeebdb5356d23d0a54663195ef841a2cfdb8ce487e8b8c9fca8fdd40"
+    },
+    {
+      "pack": "real-estate",
+      "path": "spec/domain-packs/real-estate/ontology.json",
+      "sourceSha256": "a6a5f3c09709e584abe24def1c47c07786b49068f94169af8311e2e24c065320",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:real-estate",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "1ec679f7-1c8d-4082-b794-c5d7d1cacca2",
+      "reportSha256": "0d082f6987fbcf2570ee5311959be09bf75eb72b8301c8fde340299ccc46c58f"
+    },
+    {
+      "pack": "supply-chain",
+      "path": "spec/domain-packs/supply-chain/ontology.json",
+      "sourceSha256": "53ae68617d313548bf6c4b3c507c5fc33632c2e8527f88c310927652f635fe9a",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:supply-chain",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "91a06b6c-3301-4854-805c-a17a1ddfa768",
+      "reportSha256": "490215c25676dea69bf9591da6be0aac35ed98a479c9853987e969fa101d5d73"
+    },
+    {
+      "pack": "transit",
+      "path": "spec/domain-packs/transit/ontology.json",
+      "sourceSha256": "27e980821c69e9fb4ff91199ac26e2a16ca3cc739e49202a5c1e84cd467b8687",
+      "sourceVersion": "0.8.0",
+      "documentId": "urn:umf:domain:transit",
+      "outcome": "accepted_committed_replayed",
+      "revision": 1,
+      "registrationId": "98e6c4aa-4e06-49df-b6ce-707860727747",
+      "reportSha256": "1809eac06025ecc92b4305b3ab36cd31ba68d5f3472caf8d98c6f5da0b3b1fdc"
+    }
+  ],
+  "unittestErrors": [],
+  "unittestFailures": []
+}

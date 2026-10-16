@@ -102,7 +102,7 @@ BEGIN
    identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'edge',plan,attempt);
    SELECT t.transition_id INTO STRICT transition_id FROM truss.runtime_edge_transition t WHERE t.attempt_id=selected_attempt
     AND t.operation_index=index AND t.edge_id=(identity->>'id')::bigint AND t.rel_type_id=(identity->>'typeId')::int;
-   PERFORM truss.runtime_owned_edge_transition_validate(transition_id,false,current_actor);expected_edges:=expected_edges+1;
+   PERFORM truss.runtime_owned_edge_transition_validate_qualified(transition_id,false,current_actor,input,attempt.input_bytes,attempt);expected_edges:=expected_edges+1;
   END LOOP;
   IF expected_objects<>(SELECT count(*) FROM truss.runtime_object_transition WHERE attempt_id=selected_attempt AND operation_index=index)
    OR expected_edges<>(SELECT count(*) FROM truss.runtime_edge_transition WHERE attempt_id=selected_attempt AND operation_index=index) THEN

@@ -1,0 +1,44 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "COMPLETED_SOURCE_AND_LOCAL_NATIVE_EVIDENCE_CLEAR_NO_PERFORMANCE_QUALIFICATION",
+  "scope": "Exact3call object-effect context reuse +bounded evidence; separate stock diagnostic evidence reviewed independently",
+  "baseCommit": "318d3edaddf3900d2e198d95d2590228f0a9a059",
+  "sourceReview": "/private/tmp/truss-main-object-effect-context-astra-20261016.json",
+  "stockDiagnosticReview": "/private/tmp/truss-stock-step-profile-completed-astra-20261016.json",
+  "sourceHashes": {
+    "packages/postgresql/owned-groups/execute.sql": "32c61792b7370b4c87abd7edb48180e11242637ca2f83779bcb996553b704793",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "150a5461f58e52462970d6b848fb48f2bcf74264a9b59ab3632469b015ff5c78",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "6cd8c7727a6b9c992cc4f5828ec739f11f31ce649022fe4666912e80c123d898"
+  },
+  "findings": [],
+  "checks": [
+    "Exact3 reviewed source hashes remain unchanged; retained source-review and basic/capacity logs match parent originals byte-for-byte.",
+    "README accurately reports localbasic8 and actual1024capacity2 passes while retaining independent CI timeout as unresolved.",
+    "No helper signature/default/publicgrant/authority/source/identity/effect/deadline or capacity change; opening and freshclosing checks retained per prior source review."
+  ],
+  "parentReportedNative": {
+    "basic": {
+      "tests": 8,
+      "result": "PASS",
+      "seconds": 30.104
+    },
+    "capacity": {
+      "session": 93732,
+      "tests": 2,
+      "result": "PASS",
+      "seconds": 38.239,
+      "scope": "Actual1024create/commit,changedupdate/commit,replay/fullreadback and latefault rollback preservingcallerwork"
+    }
+  },
+  "evidenceHashes": {
+    "docs/helix/04-build/evidence/native-object-effect-context-20261016/README.md": "70b1b3918d6197969a4ab09d022a1dc741c72ebaf13c3a1b1ab4a32537ffea8c",
+    "docs/helix/04-build/evidence/native-object-effect-context-20261016/basic-native.log": "3f4c3ecafd23e85aa1a3d4ce4e824307fb2a4abd441c10f78fb0392fce932a15",
+    "docs/helix/04-build/evidence/native-object-effect-context-20261016/capacity-native.log": "922298c61f0eb0c0bff3c2de5da3a0ad7a79be2879203b0c53366d60a8cb2fa5",
+    "docs/helix/04-build/evidence/native-object-effect-context-20261016/source-pins.json": "76d8891cde2268bb02f7eb02a2b68c05d1bec3635d4f2a37bca8afe2131a2a5a",
+    "docs/helix/04-build/evidence/native-object-effect-context-20261016/source-review.json": "99cb685100823b28583ebeee77ab9482a483d6afa69925ff1b071fbb36ef6961"
+  },
+  "limits": [
+    "Reviewer source/evidence checks only; nativeexecution is parent-run.",
+    "No materialperformance improvement, wholematrixor release-runner qualification claimed; existingCI1024timeout remains open."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "review": "Astra Ultra implemented local-edge ordinal window",
+  "status": "SOURCE_CLEAR",
+  "blockingFindings": [],
+  "reviewedAt": "2026-10-16T16:25:10.328160+00:00",
+  "worktree": "/private/tmp/truss-main-integration-20261010",
+  "baseCommit": "b43f44165c523c0a3584bdd471e4e8005953f9d5",
+  "sourceSha256": {
+    "packages/postgresql/owned-groups/execute.sql": "8bac2bc947f34876cf396dd82236dbda0bcdc827829278f1a57c3707d61a8184",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "e17666cef059b08d6f9231a7612b5cdb4da3a6197adda82faa26e2ceb2d444c1",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "67dc376cf5ae6bebdc9bd928d57859d3e07a242b5b194e1002b1be2b620e346a"
+  },
+  "planReceipt": "/private/tmp/truss-local-edge-ordinal-window-plan-astra-20261016.json",
+  "findings": [
+    "The FOR query uses the entire unfiltered jsonb_each(edges) stream. The exact deleted=false FILTER and C-ordered ROWS frame ending one PRECEDING count precisely the original keys strictly less than the current key. JSONB object keys are unique and nonnull; the empty preceding frame counts zero.",
+    "No lifecycle partition or deleted-row prefilter was introduced. Existing deleted=true and lifecycle skips remain inside the loop, preserving shared ordinals across both lifecycles and existing behavior for missing, JSON-null or non-boolean deletion flags.",
+    "Explicit C output ordering remains. Endpoint resolution and 55000 checks are unchanged and precede ordinal assignment. The bigint count is assigned to the existing int local at the old count-assignment location; no eager int conversion changes endpoint-error order.",
+    "Replacing SELECT INTO with assignment no longer updates the function-local FOUND at that point, but this helper contains no FOUND read. Neither its return expression nor caller-visible state depends on that local flag.",
+    "Author and generated files each equal baseline plus exactly the reviewed two replacements. Manifest changes only the matching owned.sql digest. Signatures, volatility/security/search_path, grants, 220-routine inventory, capacity/deadlines and all other graph checks are unchanged."
+  ],
+  "reviewerChecks": {
+    "exactAuthorAndGeneratedTwoReplacementCorrespondence": "PASS",
+    "manifestOnlyCorrectOwnedHash": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "nativeEvidence": {
+    "status": "PENDING",
+    "scope": "Parent plans existing owned/edge workflows, unchanged full matrix and capacity; no native tests run by reviewer."
+  },
+  "limitations": [
+    "The source eliminates a whole-map prefix SELECT for each retained edge. This is not a measured speedup or complete graph complexity claim.",
+    "Baseline CI 38930740494 both-platform CREATE failures remain open and are not evidence of a candidate fix.",
+    "No edits, native tests or agent spawns by reviewer."
+  ]
+}

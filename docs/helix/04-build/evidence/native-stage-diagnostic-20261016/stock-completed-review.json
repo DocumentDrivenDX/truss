@@ -1,0 +1,24 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "STOCK_DIAGNOSTIC_EVIDENCE_CLEAR_ONE_COMPLETED_DELTA_LATER_TIMEOUT",
+  "sourceCommit": "318d3edaddf3900d2e198d95d2590228f0a9a059",
+  "runtimeManifestSha256": "31870f9b5c2f5c755b69579e0ebdf3bdea80fadb6a89706d073ed8181c776b94",
+  "findings": [],
+  "checks": [
+    "All10 bundled entries equal exact parent original runner/log/pins/settings/counters/snapshots/report/source-review bytes.",
+    "Runner matches reviewed774518e2; three actual consumers report track_functions=pl with distinct PID and session_user=current_user=consumer.",
+    "All62 full-signature delta entries independently recomputed from before-1000-0/after-1000-0 match calls/total/self arithmetic.",
+    "Exactly one completed1000apply+commit interval; nextbefore-1000-1 has no after snapshot and later57014 remains failure.",
+    "Report records two1000attempts, onefailure, onecommit and successful cleanup; cumulative registration/create versus post-create intervals accurately labelled.",
+    "README self times and counts match exact delta and do not sum inclusive parent/child times; report is stockFunctionDiagnostic=true,passed=false,performanceQualification=not_evaluated."
+  ],
+  "evidenceHashes": {
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/README.md": "99ab5c20919fd22bbf81f40f3cfc7344da358c92195b8ab5d1c9ab87214def29",
+    "docs/helix/04-build/evidence/native-stage-diagnostic-20261016/stock-function-diagnostic.json.gz": "7e16c780fd00cdc665340f1b39188fb285f89718ef38a737b83fab0683d06fc5"
+  },
+  "limits": [
+    "This run precedes the object-effect context patch; no speedup or runtime qualification transfers to that change.",
+    "Native75005 parent-run; reviewer independently checked saved arithmetic/bytes only.",
+    "Auxiliary reviewer hit usage limit; primary Astra reviewer completed all pending checks without substituting a model."
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "review": "Astra Ultra completed-source review",
+  "status": "SOURCE_CLEAR",
+  "blockingFindings": [],
+  "reviewedAt": "2026-10-16T16:14:53.576110+00:00",
+  "worktree": "/private/tmp/truss-main-integration-20261010",
+  "baseCommit": "44f4a4f90ab3ad75437b046828f145f7e7e2401c",
+  "scope": "Eight-file edge settlement checked-context increment; no product edits or native tests run by reviewer.",
+  "planReceipt": "/private/tmp/truss-edge-settlement-context-plan-astra-20261016.json",
+  "sourceSha256": {
+    "packages/postgresql/owned-groups/execute.sql": "069bd1c1c0304df14e73e7e64b4c9e8d5123cfa4deb639fe9d63a1ba6362c898",
+    "packages/postgresql/owned-groups/finalize.sql": "837e0218500070a9bf2c32f8d01cbaded9d7f939cb3b3d391633200e41977af2",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "218160971d105bf722045df42cca3431b5a5ef61137e58d93b166a3772aee7a7",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "74048b9fdc27739d283f09ba0da43219fd13083fb8e5522f8f5a03813164ef58",
+    "packages/python/src/truss/_preparation_source_epoch.py": "9fb7825242af6b343930f6c53ad83eefd57bc040273412bbc796cc7c636e1749",
+    "packages/python/src/truss/catalog_runtime.py": "5e9755464d3c463d9bd8c9e2610b37d5acc1b5e0c210013bee2d3732b8f85392",
+    "packages/python/tests/test_final_edge_inventory_native.py": "f99e370380403407e4716d925d58a2623e35c01a3eff7de34d7572e49de43624",
+    "packages/python/tests/test_owned_transition_upgrade_native.py": "62602edb2337f0ef649c775bc80b0e922fcc3a8452806ce2cb6156228a054ec7"
+  },
+  "findings": [
+    "The sole full-context caller is runtime_owned_group_validate. It reads and parses the original attempt, checks actor/current writer and complete progress, then checks all immutable result slots for complete ordinals, nonnull results, writer and exact retained result/alias correspondence before entering the operation loop. Each current operation is compared with the parsed original source before its qualified edge call.",
+    "The qualified helper binds prepared_attempt.id to the transition attempt and binds nonnull prepared input to exact nonnull original source bytes. Its count bypass additionally requires authorize_read=false and the supplied attempt/input bundle. The parsed JSON correspondence depends on the inspected private native callsite; this is not a public admission token or a boolean-only bypass.",
+    "The original three-argument invoker wrapper retains its nullable actor/defaults and passes no prepared context. Step, edge validation/authorization and history paths therefore retain the independent sealed-slot count. The CASE count occupies the original OR position and actor fallback remains after transition/attempt lookup, preserving the original default-path guard order.",
+    "Plan refetch and all existing original member, image, prestate chain, endpoint, event, actor/writer and read-authorization checks remain. Fresh group invocations perform their own census; no authority or proof is persisted between invocations.",
+    "The new function is SECURITY INVOKER with pinned search_path and exact six-argument PUBLIC revoke. Existing runtime_owned_ predecessor exclusion and private owner/revoke classification cover it. Both recipe guards now require 220; the extracted actual release/recipe verifies exactly 220 unique routines. The populated upgrade test adds owner and denied-consumer-EXECUTE assertions for the helper.",
+    "The future-slot control injects an otherwise legal future result assignment after first progress and places a P9999 sentinel before the second physical edge. It requires the original per-step progress 55000, preserved caller work, successful outer commit and zero durable edge/transition effects. This exercises the boundary the settlement shortcut must not bypass."
+  ],
+  "reviewerChecks": {
+    "generatedOwnedRuntimeCheck": "PASS",
+    "gitDiffCheck": "PASS",
+    "changedPythonAstParse": "PASS",
+    "authorFragmentsMatchGeneratedOwnedSql": "PASS",
+    "releaseManifestHashVerification": "PASS",
+    "pureRuntimeRecipeCount": 220
+  },
+  "parentRunEvidence": {
+    "basic15516": {
+      "outcome": "PASS",
+      "tests": 5,
+      "seconds": 22.688,
+      "scope": "Future-slot early refusal, unplanned incident edge, link/retarget/unlink/replay, post-flush writer revocation, owned subtree/history/retry"
+    },
+    "upgradeCapacity51148": {
+      "suiteOutcome": "ERROR",
+      "tests": 3,
+      "seconds": 55.141,
+      "capacityPositive": "PASS",
+      "lateIndex1023Fault": "PASS",
+      "upgrade": "Pre-seeding harness error: two colon-separated source roots supplied where one root was required; not product upgrade evidence."
+    },
+    "correctedUpgrade90133": {
+      "outcome": "PASS",
+      "tests": 1,
+      "seconds": 19.875,
+      "scope": "Published SDK35/native68 populated upgrade, retained transitions/receipts, continued 129 creates and new helper private ACL"
+    },
+    "logsSha256": {
+      "/private/tmp/truss-edge-settlement-context-basic-20261016.log": "d770f60722473f1593670ff848643f623c0f7b1768e13f29bca167e1b8b7fbed",
+      "/private/tmp/truss-edge-settlement-context-upgrade-capacity-20261016.log": "6606aa8bcdc1a529428bfecad1806d5106ee93dd26d1da2ae13432b7a7ddfb17",
+      "/private/tmp/truss-edge-settlement-context-upgrade-r2-20261016.log": "a8abd010b78bee94a53664ffc878daceae472a68d89b2c7951a9cf6d9d6ec8b2"
+    },
+    "originalFullMatrix": "Parent run 9566 pending at source-review completion."
+  },
+  "limitations": [
+    "Source/functional correctness clearance only. No measured speedup, complete-matrix result, runner qualification or release-blocker closure is asserted.",
+    "No adapters for unsupported unpublished native69 snapshots are added. Existing supported predecessor custody is unchanged."
+  ]
+}

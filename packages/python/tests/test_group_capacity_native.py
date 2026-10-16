@@ -30,7 +30,7 @@ class GroupCapacityTests(base.PublicCreateGroupTests):
         context=assembly.group_context_in_transaction(tx).value
         original=context.input(self.operations(1024),MapValue(entries=()))
         created=assembly.apply_in_transaction(tx,original,context.request('capacity-create'),documents=self.documents)
-        self.assertIsInstance(created,Ok,repr(created));self.assertIsInstance(created.value,GroupSuccess,repr(created))
+        self.assertIsInstance(created,Ok,repr(created)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(created.value,GroupSuccess,repr(created))
         results=created.value.response.semantic.results
         self.assertEqual(len(results),1024);self.assertTrue(all(r.outcome=='created' for r in results))
         identities=tuple(r.identity for r in results)
@@ -45,7 +45,7 @@ class GroupCapacityTests(base.PublicCreateGroupTests):
             unset=(),expected_version='1') for i,identity in enumerate(identities))
         update=context.input(changes,MapValue(entries=()));request=context.request('capacity-update')
         updated=assembly.apply_in_transaction(tx,update,request,documents=self.documents)
-        self.assertIsInstance(updated,Ok,repr(updated));self.assertIsInstance(updated.value,GroupSuccess,repr(updated))
+        self.assertIsInstance(updated,Ok,repr(updated)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(updated.value,GroupSuccess,repr(updated))
         self.assertEqual(len(updated.value.response.semantic.results),1024)
         self.assertTrue(all(r.outcome=='changed' for r in updated.value.response.semantic.results))
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()

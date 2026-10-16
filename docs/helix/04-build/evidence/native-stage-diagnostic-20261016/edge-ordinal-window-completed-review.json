@@ -1,0 +1,72 @@
+{
+  "review": "Astra Ultra completed local-edge ordinal-window iteration",
+  "status": "SOURCE_AND_BOUNDED_EVIDENCE_CLEAR",
+  "reviewedAt": "2026-10-16T16:29:26.993236+00:00",
+  "blockingFindings": [],
+  "recommendation": "Suitable to land as the reviewed equivalent prefix-count simplification with failed matrix and baseline CI evidence retained. No speedup, full-matrix pass or release qualification is established.",
+  "rationale": "The source replaces repeated full-map prefix scans with one equivalent ordered-window calculation, preserving the private helper output and checks without new mutable state or authority assumptions. Existing edge/owned/fault and full 1024 functional controls passed. The single matrix run failed during edge validation and cannot establish a causal benefit or regression.",
+  "sourceReview": {
+    "path": "/private/tmp/truss-edge-ordinal-window-source-astra-20261016.json",
+    "sha256": "fdd407aa87ba8a33b76d7c5b22f83cb806a2fdf3142d1c8bd0eabc145447e8fe",
+    "baseCommit": "b43f44165c523c0a3584bdd471e4e8005953f9d5",
+    "sourceSha256": {
+      "packages/postgresql/owned-groups/execute.sql": "8bac2bc947f34876cf396dd82236dbda0bcdc827829278f1a57c3707d61a8184",
+      "packages/python/src/truss/_catalog_runtime/manifest.json": "e17666cef059b08d6f9231a7612b5cdb4da3a6197adda82faa26e2ceb2d444c1",
+      "packages/python/src/truss/_catalog_runtime/owned.sql": "67dc376cf5ae6bebdc9bd928d57859d3e07a242b5b194e1002b1be2b620e346a"
+    },
+    "unchangedSinceSourceReview": true
+  },
+  "evidenceSha256": {
+    "/private/tmp/truss-edge-ordinal-window-basic-capacity-20261016.log": "40c2faa7c6585552b65378b953c4068f821751d1ad3377afd07b27dc39f39314",
+    "/private/tmp/truss-edge-ordinal-window-matrix-report-20261016.json": "463eb7f755b4e640bbf5769f825f89c61abd0782ddf1ad7f5e37eeb64a194cfe",
+    "/private/tmp/truss-edge-ordinal-window-matrix-20261016.log": "0d5d1d95fed911403822775c2471698b2fc7daa27e5c4365d1ad3d9af9759993",
+    "/private/tmp/truss-main038-ci-linux-38930740494.log": "41561bdebc33ae6450bd0ecbbf952544f6b74e3ba29613836bf2a449c56add1a",
+    "/private/tmp/truss-main038-ci-macos-38930740494.log": "95df98f747d9973e65d3b2c92329106eec5ebdea4782d328af028166cc4be4de"
+  },
+  "reviewerChecks": {
+    "threeSourcePinsAndTrackedScope": "PASS",
+    "matrixManifestAndBaseMatchCandidate": "PASS",
+    "emittedLogSummaryFieldsMatchRawReport": "PASS"
+  },
+  "parentRunEvidence": {
+    "basicCapacity86074": {
+      "outcome": "PASS",
+      "tests": 6,
+      "seconds": 60.675,
+      "scope": "Owned subtree/reparent/dry-run/cascade/history/retry; edge link/retarget/unlink/replay; mandatory multiplicity and atomic failure; future-slot refusal before next edge effect; actual 1024 create and changed-update commits/replay/full readback; final-index1023 rollback."
+    },
+    "originalMatrix3243": {
+      "outcome": "FAIL",
+      "sqlState": "57014",
+      "functionalPassed": false,
+      "performanceQualification": "not_evaluated",
+      "statementTimeoutMs": 10000,
+      "operationTimeoutMs": 30000,
+      "committedNodes": 1000,
+      "nodeApplyMs": 8518.452833,
+      "nodeCommitMs": 6574.864666,
+      "attemptedEdges": 1000,
+      "failedEdgeApplyMs": 10041.231208,
+      "edgeCommitObserved": false,
+      "laterReadsAndUpdatesReached": false,
+      "cancellationContext": "runtime_owned_identity line10, via qualified edge-transition validation and runtime_owned_group_validate line101 at group finish. This is a cancellation location, not measured causal attribution.",
+      "cleanup": "PASS",
+      "cleanupMs": 451.888167,
+      "sourceCommit": "b43f44165c523c0a3584bdd471e4e8005953f9d5",
+      "sourceWorkingTreeDirty": true
+    },
+    "separateBaselineCi38930740494": {
+      "sourceCommit": "0bdbc6d3",
+      "candidateRun": false,
+      "linux": "Initial real1024 CREATE test failed at line33 with57014; 21 domain-pack tests passed in42.427s.",
+      "macos": "Initial real1024 CREATE test failed at line33 with57014; 21 domain-pack tests passed in55.314s.",
+      "scope": "Retained baseline logs independently inspected; these are neither ordinal candidate qualification nor universal schema support evidence."
+    }
+  },
+  "limitations": [
+    "Reviewer launched no native tests and made no product edits or agent spawns.",
+    "The matrix reached no edge commit or subsequent ID/key reads, singles or changed-update groups. Do not label the workload passed.",
+    "No workload/deadline/assertion relaxation; development full-matrix and platform-runner blockers remain open.",
+    "The next proposed typed CREATE INSERT simplification is separate and not reviewed by this completed receipt."
+  ]
+}

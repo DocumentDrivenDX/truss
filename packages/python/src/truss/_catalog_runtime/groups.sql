@@ -5,7 +5,7 @@ ALTER TABLE truss.catalog_runtime_installation ADD COLUMN source_epoch uuid NOT 
 CREATE FUNCTION truss.runtime_definition_in_basis(selected_kind text,selected_type int,selected_number int,historical_revision int,basis jsonb)
 RETURNS TABLE(definition_pin text,original_fragment bytea,original_pointer text,document_id text,module_id text,element_id text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE definition jsonb; archive truss.schema_doc%ROWTYPE; native_type truss.type_def%ROWTYPE;
+DECLARE source_kind text;source_revision int;source_ordinal int;source_document text;source_key text; archive truss.schema_doc%ROWTYPE; native_type truss.type_def%ROWTYPE;
  source_module text;source_element text;module_json json;document_lookup jsonb;module_lookup jsonb;element_lookup jsonb;module_index int;element_json json;element_index int;
  key_json json;key_index int;fragment json;pointer text;pin_input text;
 BEGIN
@@ -16,25 +16,27 @@ BEGIN
   SELECT * INTO STRICT native_type FROM jsonb_populate_recordset(NULL::truss.type_def,basis->'type_def') t WHERE t.type_id=selected_type;
  END IF;
  IF selected_kind='type' THEN
-  definition:=to_jsonb(native_type);source_module:=native_type.module;source_element:=native_type.element;
+  source_kind:=native_type.definition_source_kind;source_revision:=native_type.definition_rev;
+  source_ordinal:=native_type.definition_doc_ord;source_document:=native_type.definition_document_id;
+  source_module:=native_type.module;source_element:=native_type.element;
  ELSIF selected_kind='property' THEN
   IF historical_revision IS NULL THEN
-   SELECT to_jsonb(p),p.declaration_module,p.element INTO STRICT definition,source_module,source_element FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=selected_number AND p.retired_rev IS NULL;
+   SELECT p.definition_source_kind,p.definition_rev,p.definition_doc_ord,p.definition_document_id,p.declaration_module,p.element INTO STRICT source_kind,source_revision,source_ordinal,source_document,source_module,source_element FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=selected_number AND p.retired_rev IS NULL;
   ELSE
-   SELECT to_jsonb(p),p.declaration_module,p.element INTO STRICT definition,source_module,source_element FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=selected_type AND p.prop_id=selected_number;
+   SELECT p.definition_source_kind,p.definition_rev,p.definition_doc_ord,p.definition_document_id,p.declaration_module,p.element INTO STRICT source_kind,source_revision,source_ordinal,source_document,source_module,source_element FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=selected_type AND p.prop_id=selected_number;
   END IF;
  ELSIF selected_kind='key' THEN
   IF historical_revision IS NULL THEN
-   SELECT to_jsonb(k) INTO STRICT definition FROM truss.key_def k WHERE k.type_id=selected_type AND k.key_num=selected_number AND k.retired_rev IS NULL;
+   SELECT k.definition_source_kind,k.definition_rev,k.definition_doc_ord,k.definition_document_id,k.key_id INTO STRICT source_kind,source_revision,source_ordinal,source_document,source_key FROM truss.key_def k WHERE k.type_id=selected_type AND k.key_num=selected_number AND k.retired_rev IS NULL;
   ELSE
-   SELECT to_jsonb(k) INTO STRICT definition FROM jsonb_populate_recordset(NULL::truss.key_def,basis->'key_def') k WHERE k.type_id=selected_type AND k.key_num=selected_number;
+   SELECT k.definition_source_kind,k.definition_rev,k.definition_doc_ord,k.definition_document_id,k.key_id INTO STRICT source_kind,source_revision,source_ordinal,source_document,source_key FROM jsonb_populate_recordset(NULL::truss.key_def,basis->'key_def') k WHERE k.type_id=selected_type AND k.key_num=selected_number;
   END IF;
   source_module:=native_type.module;source_element:=native_type.element;
  ELSE RAISE EXCEPTION 'supported definition kind required' USING ERRCODE='22023'; END IF;
- IF definition->>'definition_source_kind'<>'accepted_document' OR (definition->>'definition_rev')::int<1 THEN
+ IF source_kind<>'accepted_document' OR source_revision<1 THEN
   RAISE EXCEPTION 'original accepted definition source required' USING ERRCODE='0A000'; END IF;
- SELECT * INTO STRICT archive FROM truss.schema_doc d WHERE d.rev=(definition->>'definition_rev')::int AND d.ord=(definition->>'definition_doc_ord')::int
-  AND d.doc_id=definition->>'definition_document_id';
+ SELECT * INTO STRICT archive FROM truss.schema_doc d WHERE d.rev=source_revision AND d.ord=source_ordinal
+  AND d.doc_id=source_document;
  -- Binary JSON is used only to locate coordinates, never for source bytes.
  BEGIN
   document_lookup:=archive.document::jsonb;
@@ -58,10 +60,10 @@ BEGIN
  IF selected_kind='key' THEN
   IF document_lookup IS NULL THEN
    SELECT k.value,k.ordinality::int-1 INTO STRICT key_json,key_index
-    FROM json_array_elements(element_json->'keys') WITH ORDINALITY k WHERE k.value->>'id'=definition->>'key_id';
+    FROM json_array_elements(element_json->'keys') WITH ORDINALITY k WHERE k.value->>'id'=source_key;
   ELSE
    SELECT k.ordinality::int-1 INTO STRICT key_index
-    FROM jsonb_array_elements(element_lookup->'keys') WITH ORDINALITY k WHERE k.value->>'id'=definition->>'key_id';
+    FROM jsonb_array_elements(element_lookup->'keys') WITH ORDINALITY k WHERE k.value->>'id'=source_key;
    key_json:=json_extract_path(element_json,'keys',key_index::text);
   END IF;
   fragment:=key_json;pointer:=pointer||'/keys/'||key_index;
@@ -566,7 +568,7 @@ BEGIN
    RAISE EXCEPTION 'original planned create values required' USING ERRCODE='55000';END IF;
   object_row.created_at:=clock_timestamp();object_row.updated_at:=object_row.created_at;
   planned_row:=to_jsonb(object_row);
-  INSERT INTO truss.object SELECT (jsonb_populate_record(NULL::truss.object,planned_row)).* RETURNING to_jsonb(object) INTO actual_row;
+  INSERT INTO truss.object SELECT (object_row).* RETURNING to_jsonb(object) INTO actual_row;
   IF actual_row IS DISTINCT FROM planned_row THEN RAISE EXCEPTION 'exact object insert required' USING ERRCODE='55000'; END IF;
   member_keys:='[]';
   FOR key_plan IN SELECT k.value FROM jsonb_array_elements(planned_keys) k WHERE k.value->>'operationIndex'=current_index::text
@@ -616,7 +618,7 @@ BEGIN
   event_bytes:=convert_to(event::text,'UTF8');origin_bytes:=convert_to((event->'origin')::text,'UTF8');
   journal_row.new_value:=truss.runtime_exact_wrapper('event',event_bytes);journal_row.origin:=truss.runtime_exact_wrapper('origin',origin_bytes);
   expected_journal:=to_jsonb(journal_row);
-  INSERT INTO truss.journal SELECT (jsonb_populate_record(NULL::truss.journal,expected_journal)).* RETURNING to_jsonb(journal) INTO actual_journal;
+  INSERT INTO truss.journal SELECT (journal_row).* RETURNING to_jsonb(journal) INTO actual_journal;
   IF actual_journal IS DISTINCT FROM expected_journal THEN RAISE EXCEPTION 'exact complete journal append required' USING ERRCODE='55000'; END IF;
   members:=members||jsonb_build_array(jsonb_build_object('object',to_jsonb(object_row),'keys',member_keys,'journal',expected_journal));
   outcome:=jsonb_build_object('operation','create_object','outcome','created','identity',object_identity,'version','1',

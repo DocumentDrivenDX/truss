@@ -1,0 +1,61 @@
+{
+  "review": "Astra Ultra completed typed definition-source projection",
+  "status": "SOURCE_AND_FUNCTIONAL_CLEANUP_CLEAR_PERFORMANCE_UNQUALIFIED",
+  "recommendation": "Land only the reviewed groups.sql and manifest change as a narrow typed-field simplification, retain both successful focused evidence and the failed original-matrix evidence, and keep the development performance/release blocker open.",
+  "sourceReview": "/private/tmp/truss-definition-projection-source-astra-20261016.json",
+  "sourcePins": {
+    "packages/python/src/truss/_catalog_runtime/groups.sql": "56fd59f35b5cf188676892924e9e54a82f0775c4822cae1e9a32e1b80247f318",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "0c3d6196da73159197fb17b5c3942a4d4cd8e97612bfeda332f3e23ebe690d73"
+  },
+  "baseline": "06c247018cc1a927d80ad8409de6b13a3b5d6ad2",
+  "findings": [],
+  "adoptionRationale": [
+    "The implementation removes a redundant intermediate representation: complete native definition rows were serialized into JSONB only to extract five already-typed source fields. Direct scalars make that data dependency explicit and avoid serializing unrelated native fields.",
+    "It adds no database statement, derived map, cache, earlier snapshot, authority assumption or validation bypass. Native/current and historical typed row selection, original fragment bytes and definition pin recipe retain the reviewed semantics.",
+    "Focused native tests passed, including actual full 1024 create/commit, changed update/commit, original replay and full readback, plus last-index fault containment. This supplies successful targeted functional evidence that was missing for the rejected count-map candidate.",
+    "This is a source-maintenance rationale, not demonstrated end-to-end performance improvement or a newly fixed functional bug. The earlier conservative performance-adoption gate is not satisfied as a speed claim; that qualification remains open.",
+    "No source evidence identifies this patch as the cause of the graph timeout, but the run also does not establish that it is unrelated. Do not make either causal assertion."
+  ],
+  "verified": [
+    "Current groups.sql/manifest hashes exactly match the source-clear receipt. Only those two tracked files differ; git diff --check passes.",
+    "Retained native log records exactly four successful named tests, terminal OK and 48.957 seconds.",
+    "Matrix runtime manifest hash equals reviewed candidate manifest; sourceCommit 06c247018cc1a927d80ad8409de6b13a3b5d6ad2 plus sourceWorkingTreeDirty=true correctly identifies the candidate.",
+    "Original matrix retained 10000ms statement and 30000ms operation limits, no diagnostic overlay. It completed and committed 1000 creates, then failed during 1000-edge application; no edge commit or later read/update workload is inferred.",
+    "Cleanup is recorded successful. Report passed=false, functionalPassed=false, performanceQualification=not_evaluated are retained unchanged."
+  ],
+  "parentReportedExecution": {
+    "focused": {
+      "session": 2325,
+      "result": "PASS",
+      "tests": 4,
+      "seconds": 48.957,
+      "coverage": [
+        "Public create/commit/read/durable replay",
+        "Genuine type/reference profile definitions",
+        "Full 1024 create and changed-update commits, replay and full ordered public readback",
+        "Operation-index1023 fault rolls back whole group while retaining caller work"
+      ]
+    },
+    "matrix": {
+      "session": 85554,
+      "result": "FAIL SQLSTATE57014",
+      "createdNodes": 1000,
+      "createApplyMs": 8215.606333,
+      "createCommitMs": 5454.26775,
+      "failedEdgeOperations": 1000,
+      "failedEdgeApplyMs": 10043.931875,
+      "cancelContext": "runtime_owned_group_validate(uuid,boolean), function line95, FOR over SELECT rows",
+      "edgeCommitObserved": false,
+      "laterReadUpdateWorkloadsCompleted": false,
+      "cleanupMs": 474.920875,
+      "cleanup": "PASS"
+    }
+  },
+  "evidenceSha256": {
+    "/private/tmp/truss-definition-projection-native-20261016.log": "5b8c69b916ea0097e9e7382fb265015127802e2bbd9e96f2e1f36786167bd2ad",
+    "/private/tmp/truss-definition-projection-matrix-report-20261016.json": "d2c473ec66962de0b6fdc8a7422c631896eb50d4476d472fcd5b2894ba51594f",
+    "/private/tmp/truss-definition-projection-matrix-20261016.log": "355fe6c39f415f939dfafd37c715c9724493628b981c13310938200054f1c9c5"
+  },
+  "qualification": "No measured or causal speedup, clean-host comparison, full-graph completion, release-runner capacity or release qualification. The full matrix and development release requirements remain incomplete.",
+  "reviewExecution": "Read-only source-pin/report/log review and diff check; no product edits or native tests."
+}
