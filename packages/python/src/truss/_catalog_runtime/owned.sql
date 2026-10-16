@@ -1238,6 +1238,7 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;candidate jsonb;
  component int;cells jsonb;before_cells jsonb;tuple_bytes bytea;namespace bytea;transport bytea;pin record;
  routes jsonb:='[]';lock_routes jsonb:='[]';entry jsonb;route record;observed record;member truss.object_key_bucket%ROWTYPE;
  seen jsonb:='{}';route_key text;reference text;unchanged boolean;
+ namespaces jsonb:='{}';namespace_key text;namespace_hex text;
  route_items jsonb[]:='{}';lock_route_items jsonb[]:='{}';route_bytes bigint:=2;lock_route_bytes bigint:=2;
 BEGIN
  IF inventory->>'profile' IS DISTINCT FROM 'truss-owned-group-plan/0.1'
@@ -1260,10 +1261,18 @@ BEGIN
     before_cells:=before_cells||jsonb_build_array(candidate->'before'->'props'->component::text);
    END LOOP;
    tuple_bytes:=truss.derive_catalog_key_tuple(definition.type_id,definition.key_num,cells);
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('key',definition.type_id,definition.key_num);
-   namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
-    'sourceEpoch',installation.source_epoch::text,'typeId',definition.type_id::text,'keyNumber',definition.key_num::text,
-    'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
+   -- Source metadata is constant under the admitted catalog-head lock. Reuse
+   -- only the namespace bytes within this preflight invocation; every tuple,
+   -- bucket, membership and reservation check below still runs for every row.
+   namespace_key:=definition.type_id::text||':'||definition.key_num::text;
+   namespace_hex:=namespaces->>namespace_key;
+   IF namespace_hex IS NULL THEN
+    SELECT * INTO STRICT pin FROM truss.runtime_definition('key',definition.type_id,definition.key_num);
+    namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
+     'sourceEpoch',installation.source_epoch::text,'typeId',definition.type_id::text,'keyNumber',definition.key_num::text,
+     'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
+    namespaces:=namespaces||jsonb_build_object(namespace_key,encode(namespace,'hex'));
+   ELSE namespace:=decode(namespace_hex,'hex');END IF;
    transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');
    entry:=jsonb_build_object('phase',candidate->>'phase','reference',candidate->>'reference',
     'objectId',candidate->'image'->>'id','typeId',definition.type_id,'keyNumber',definition.key_num,
