@@ -627,8 +627,14 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SE
 DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;creation_transition bigint;owned_transition record;owner record;root_type int;
 BEGIN
  current_actor:=truss.runtime_person(false);
- FOR creation_transition IN SELECT transition_id FROM truss.runtime_object_transition
-  WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id() AND before_object IS NULL LOOP
+ -- Owned creation semantics settle with the complete group and mandatory
+ -- attempt trigger. Keep the legacy creation path; current owned authority and
+ -- actual row/key closure are independently checked below on every row event.
+ FOR creation_transition IN SELECT t.transition_id FROM truss.runtime_object_transition t
+  JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
+  WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id()
+   AND t.before_object IS NULL
+   AND convert_from(a.input_bytes,'UTF8')::jsonb->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() LOOP
   PERFORM truss.runtime_create_transition_validate(creation_transition);
  END LOOP;
  -- Immutable transition semantics are checked at final group settlement and

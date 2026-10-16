@@ -168,3 +168,17 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
         with self.assertRaises(psycopg.errors.InsufficientPrivilege):
             connection.execute("SELECT truss.runtime_can_read_qualified('adoc','m',(SELECT oid FROM pg_roles WHERE rolname='consumer'))")
         connection.rollback()
+
+    def test_create_writer_revoked_after_attempt_constraint_flush_aborts(self):
+        connection,host,assembly,tx=self.ready()
+        original,_=self.input(assembly,tx)
+        self.assertIsInstance(self.apply(assembly,tx,original,RequestNone()),GroupSuccess)
+        connection.execute('SET CONSTRAINTS truss.runtime_object_attempt_commit IMMEDIATE')
+        self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE')
+        self.admin.execute('REVOKE group_writer FROM consumer')
+        host.detach()
+        with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+            connection.commit()
+        connection.rollback()
+        for table in ('object','object_key_bucket','request_receipt','journal','runtime_object_attempt'):
+            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.'+table).fetchone(),(0,),table)
