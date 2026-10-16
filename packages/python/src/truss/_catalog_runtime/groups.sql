@@ -6,7 +6,7 @@ CREATE FUNCTION truss.runtime_definition_in_basis(selected_kind text,selected_ty
 RETURNS TABLE(definition_pin text,original_fragment bytea,original_pointer text,document_id text,module_id text,element_id text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE definition jsonb; archive truss.schema_doc%ROWTYPE; native_type truss.type_def%ROWTYPE;
- source_module text;source_element text;module_json json;module_index int;element_json json;element_index int;
+ source_module text;source_element text;module_json json;document_lookup jsonb;module_lookup jsonb;element_lookup jsonb;module_index int;element_json json;element_index int;
  key_json json;key_index int;fragment json;pointer text;pin_input text;
 BEGIN
  IF historical_revision IS NULL THEN
@@ -35,14 +35,35 @@ BEGIN
   RAISE EXCEPTION 'original accepted definition source required' USING ERRCODE='0A000'; END IF;
  SELECT * INTO STRICT archive FROM truss.schema_doc d WHERE d.rev=(definition->>'definition_rev')::int AND d.ord=(definition->>'definition_doc_ord')::int
   AND d.doc_id=definition->>'definition_document_id';
- SELECT m.value,m.ordinality::int-1 INTO STRICT module_json,module_index
-  FROM json_array_elements(archive.document::json->'modules') WITH ORDINALITY m WHERE m.value->>'id'=source_module;
- SELECT e.value,e.ordinality::int-1 INTO STRICT element_json,element_index
-  FROM json_array_elements(module_json->'elements') WITH ORDINALITY e WHERE e.value->>'id'=source_element;
+ -- Binary JSON is used only to locate coordinates, never for source bytes.
+ BEGIN
+  document_lookup:=archive.document::jsonb;
+ EXCEPTION WHEN untranslatable_character OR numeric_value_out_of_range THEN
+  -- Unknown JSON content may be valid source but outside JSONB's value domain.
+  document_lookup:=NULL;
+ END;
+ IF document_lookup IS NULL THEN
+  SELECT m.value,m.ordinality::int-1 INTO STRICT module_json,module_index
+   FROM json_array_elements(archive.document::json->'modules') WITH ORDINALITY m WHERE m.value->>'id'=source_module;
+  SELECT e.value,e.ordinality::int-1 INTO STRICT element_json,element_index
+   FROM json_array_elements(module_json->'elements') WITH ORDINALITY e WHERE e.value->>'id'=source_element;
+ ELSE
+ SELECT m.value,m.ordinality::int-1 INTO STRICT module_lookup,module_index
+  FROM jsonb_array_elements(document_lookup->'modules') WITH ORDINALITY m WHERE m.value->>'id'=source_module;
+ SELECT e.value,e.ordinality::int-1 INTO STRICT element_lookup,element_index
+  FROM jsonb_array_elements(module_lookup->'elements') WITH ORDINALITY e WHERE e.value->>'id'=source_element;
+ element_json:=json_extract_path(archive.document::json,'modules',module_index::text,'elements',element_index::text);
+ END IF;
  fragment:=element_json;pointer:='/modules/'||module_index||'/elements/'||element_index;
  IF selected_kind='key' THEN
-  SELECT k.value,k.ordinality::int-1 INTO STRICT key_json,key_index
-   FROM json_array_elements(element_json->'keys') WITH ORDINALITY k WHERE k.value->>'id'=definition->>'key_id';
+  IF document_lookup IS NULL THEN
+   SELECT k.value,k.ordinality::int-1 INTO STRICT key_json,key_index
+    FROM json_array_elements(element_json->'keys') WITH ORDINALITY k WHERE k.value->>'id'=definition->>'key_id';
+  ELSE
+   SELECT k.ordinality::int-1 INTO STRICT key_index
+    FROM jsonb_array_elements(element_lookup->'keys') WITH ORDINALITY k WHERE k.value->>'id'=definition->>'key_id';
+   key_json:=json_extract_path(element_json,'keys',key_index::text);
+  END IF;
   fragment:=key_json;pointer:=pointer||'/keys/'||key_index;
  END IF;
  original_fragment:=convert_to(fragment::text,'UTF8');original_pointer:=pointer;
