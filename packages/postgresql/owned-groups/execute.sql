@@ -661,7 +661,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_edge_transition_validate(bigint,boole
 
 -- Apply one object member of an original operation. The outer step alone emits
 -- its public result and advances progress; descendants are never child groups.
-CREATE FUNCTION truss.runtime_owned_object_effect(selected_attempt uuid,selected_index int,reference text) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_object_effect(selected_attempt uuid,selected_index int,reference text,prepared_input jsonb DEFAULT NULL,qualified_actor oid DEFAULT NULL) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;plan jsonb;input jsonb;prior jsonb;desired jsonb;identity jsonb;
  object_row truss.object%ROWTYPE;old_image jsonb;new_image jsonb;expected_image jsonb;before_record jsonb;after_record jsonb;
@@ -672,11 +672,11 @@ BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() THEN
   RAISE EXCEPTION 'current original object effect required' USING ERRCODE='55000';END IF;
- current_actor:=truss.runtime_person(false);
+ current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
  IF attempt.actor_oid IS DISTINCT FROM current_actor
   OR attempt.complete OR attempt.next_index IS DISTINCT FROM selected_index THEN
   RAISE EXCEPTION 'current original object effect required' USING ERRCODE='55000';END IF;
- plan:=truss.runtime_owned_plan(selected_attempt,selected_index);input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+ plan:=truss.runtime_owned_plan(selected_attempt,selected_index);input:=coalesce(prepared_input,convert_from(attempt.input_bytes,'UTF8')::jsonb);
  prior:=plan->'beforeNodes'->reference;desired:=plan->'afterNodes'->reference;mode:=plan->'operation'->>'operation';
  IF mode NOT IN ('update_object','delete_object') OR prior IS NULL OR desired IS NULL OR prior->'deleted'='true'::jsonb
   OR (mode='update_object' AND desired->'deleted'='true'::jsonb)
@@ -758,18 +758,21 @@ BEGIN
   'deleted',jsonb_build_array(jsonb_build_object('identity',identity,'deletionVersion',version::text)),'events',event_refs);
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_object_effect(uuid,int,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_object_effect(uuid,int,text,jsonb,oid) FROM PUBLIC;
 
 
-CREATE FUNCTION truss.runtime_owned_step(selected_attempt uuid,selected_index int) RETURNS bytea
+CREATE FUNCTION truss.runtime_owned_step(selected_attempt uuid,selected_index int,prepared_input jsonb DEFAULT NULL,prepared_original bytea DEFAULT NULL,qualified_actor oid DEFAULT NULL) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;plan jsonb;mode text;entry record;prior jsonb;effect_mode text;
- metadata jsonb;effect jsonb;primary_result jsonb;events jsonb:='[]';deleted jsonb:='[]';result jsonb;selected_transition bigint;
+ metadata jsonb;effect jsonb;primary_result jsonb;events jsonb:='[]';deleted jsonb:='[]';result jsonb;selected_transition bigint;current_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
- IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false)
+ current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
+ IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor
   OR attempt.complete OR attempt.next_index IS DISTINCT FROM selected_index THEN
   RAISE EXCEPTION 'current ordered owned operation required' USING ERRCODE='55000';END IF;
+ IF prepared_input IS NOT NULL AND attempt.input_bytes IS DISTINCT FROM prepared_original THEN
+  RAISE EXCEPTION 'original owned step input required' USING ERRCODE='55000';END IF;
  plan:=truss.runtime_owned_plan(selected_attempt,selected_index);mode:=plan->'operation'->>'operation';
  IF mode NOT IN ('create_edge','update_edge','delete_edge','update_object','delete_object') THEN
   RAISE EXCEPTION 'selected original owned operation required' USING ERRCODE='55000';END IF;
@@ -790,7 +793,7 @@ BEGIN
   (plan->'beforeNodes') ? n.key AND (n.value IS DISTINCT FROM plan->'beforeNodes'->n.key OR n.key=plan->>'primary' AND mode='update_object')
   ORDER BY CASE WHEN plan->'beforeNodes'->n.key->'root'='null'::jsonb THEN 1 ELSE 0 END,key COLLATE "C" LOOP
   IF plan->'beforeNodes'->entry.key->'deleted'='true'::jsonb THEN CONTINUE;END IF;
-  effect:=truss.runtime_owned_object_effect(selected_attempt,selected_index,entry.key);
+  effect:=truss.runtime_owned_object_effect(selected_attempt,selected_index,entry.key,prepared_input,current_actor);
   events:=events||(effect->'events');deleted:=deleted||coalesce(effect->'deleted','[]'::jsonb);
   IF entry.key=plan->>'primary' THEN primary_result:=effect;END IF;
  END LOOP;
@@ -808,7 +811,7 @@ BEGIN
  RETURN convert_to(result::text,'UTF8');
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_step(uuid,int) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_step(uuid,int,jsonb,bytea,oid) FROM PUBLIC;
 
 
 -- Lock the complete initial/planned key union before allocating an identity or
