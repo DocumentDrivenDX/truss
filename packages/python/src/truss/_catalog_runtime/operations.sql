@@ -599,7 +599,10 @@ BEGIN
   FOR key_expected IN SELECT value FROM jsonb_array_elements(transition.after_keys) LOOP
    SELECT convert_from(r.original_reservation_bytes,'UTF8')::jsonb INTO STRICT actual
     FROM truss.object_key_reservation_bucket r
-    WHERE r.namespace_bytes=decode(substring(key_expected->>'namespace_bytes' FROM 3),'hex')
+    -- Generated hashes route the lookup; original bytes establish equality.
+    WHERE r.namespace_sha256=decode(substring(key_expected->>'namespace_sha256' FROM 3),'hex')
+     AND r.key_sha256=decode(substring(key_expected->>'key_sha256' FROM 3),'hex')
+     AND r.namespace_bytes=decode(substring(key_expected->>'namespace_bytes' FROM 3),'hex')
      AND r.key_bytes=decode(substring(key_expected->>'key_bytes' FROM 3),'hex');
    IF actual->>'objectId' IS DISTINCT FROM transition.object_id::text OR actual->>'typeId' IS DISTINCT FROM transition.type_id::text
     OR actual->>'keyNumber' IS DISTINCT FROM key_expected->>'key_num'
