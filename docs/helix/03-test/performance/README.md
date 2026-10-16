@@ -553,3 +553,23 @@ for 3,022.87 ms self time over 3,072 calls; creation-leaf self time is 1,928.43 
 over 1,024 calls. These shared-host instrumented observations do not establish a
 causal improvement or release-runner qualification. The original statement and
 whole-operation deadlines and the complete positive/final-fault workloads remain.
+
+### Actual edge-phase profile
+
+Main 430b77b9 still times out on the complete 1,000-edge group after committing
+1,000 objects. A disposable diagnostic repeats that workload with the original
+10-second statement and 30-second operation limits, flushing function statistics
+and resetting them between the object and edge phases. Its completed edge-phase
+calls include 19,966 actor qualifications (2,188.43 ms self time), 1,000 edge
+effects (1,852.56 ms self time), 1,000 owned steps (1,141.35 ms self time), and
+one graph preparation (1,138.67 ms self time). The cancelled statement stops in
+finish-time endpoint authorization. Repeated identity and plan reads remain, but
+the measured actor checks and effect/preparation work warrant priority over
+additional image-helper micro-optimizations.
+
+The [phase profile](results/main-small-edge-phase-20261016.json.gz) retains the
+failed full workload and completed function counters. Cancelled active callers
+may be absent from those counters; inlined SQL is not separately attributed.
+Unrelated untracked files make the harness dirty flag true; tracked runtime and
+harness sources match the named main commit throughout the run. No causal speedup
+or release qualification follows, and no instrumentation is installed in Truss.
