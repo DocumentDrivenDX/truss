@@ -18,6 +18,7 @@ from threading import RLock
 from functools import wraps
 from typing import Literal, overload, TypeVar, Mapping
 from .current_query import CurrentQueryExecutor
+from .current_disclosure import CurrentDisclosureExecutor,CurrentDisclosureRows
 from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport)
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
     NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability, NativeCompiledExecutionCapability)
@@ -362,6 +363,18 @@ class CatalogReferenceAssembly:
         return run_current_query(self._host,transaction,executor,sql=sql,document_ids=document_ids,
             parameters=values,maximum_rows=maximum_rows,
             maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)
+
+    @_active_operation
+    def query_current_disclosure_in_transaction(self,transaction: TransactionHandle,*,executor: CurrentDisclosureExecutor,sql: str,
+                                     document_ids: tuple[str,...],maximum_rows: int=1000,
+                                     maximum_scan_rows: int=10000,maximum_bytes: int=1048576) -> Outcome[CurrentDisclosureRows | QueryRefused]:
+        """Explicit tagged V2 result path with a dedicated private executor."""
+        from .current_disclosure import CurrentDisclosureExecutor
+        from ._current_query_runtime import run_current_disclosure
+        if type(executor) is not CurrentDisclosureExecutor:
+            return Ok(QueryRefused('invalid_query'))
+        return run_current_disclosure(self._host,transaction,executor,sql=sql,document_ids=document_ids,
+            parameters={},maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)
 
     @_active_operation
     def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,

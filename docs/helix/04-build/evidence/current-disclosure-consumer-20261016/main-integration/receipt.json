@@ -1,0 +1,123 @@
+{
+  "status": "passed-scoped-main-integration",
+  "base": "430b77b96373e05d20e513cbd048980d9e8031f1",
+  "integrationBase": "79a27c4aebb2732f257f3bdd68f37f83c62df79e",
+  "sourceTests": 27,
+  "nativeScramTests": 6,
+  "wheelMembers": 496,
+  "newOwnerAssets": 15,
+  "scope": "Selected direct-projection candidate component; source native tests and exact installed-wheel correspondence. Native-binding fixture is unadmitted. No graph/current-authority/release/full-backend qualification. Old206951/d333 cohort unchanged. Endpoint checks are not held-file or ABA proof.",
+  "files": {
+    "rebased-truss-disclosure-main-rebased-native-20261016.log": {
+      "sha256": "8105230e32be590a06bc961dabd894e538c45ae7b8349954fc22027959144343",
+      "bytes": 3095
+    },
+    "truss_toolkit-0.0.36.dev0-py3-none-any.whl": {
+      "sha256": "c422a0ca15c94aabe13aa2fc5870ab9c81b08dcc8f2f54256731f9f35da8cc36",
+      "bytes": 2681446
+    },
+    "rebased-truss-disclosure-main-rebased-boundaries-20261016.log": {
+      "sha256": "3f3f493b0ec2cefa8c805d5d575485aad768610f03ab688cc4c89292f02f6d13",
+      "bytes": 84
+    },
+    "truss-disclosure-main-runtime-check-20261016.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "rebased-truss-disclosure-main-rebased-runtime-20261016.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "truss-disclosure-main-integration-native-20261016.log": {
+      "sha256": "ff1a56d63e4347840e6434f5b9b4590009ab7dbf1eebbee4244c31240d738ff7",
+      "bytes": 1085
+    },
+    "truss-disclosure-main-wheel-verification-20261016.log": {
+      "sha256": "312e7a02c1a98913e14a44540aaf6cb2d0529dc5d4a6fe005b781d99380d36ae",
+      "bytes": 134
+    },
+    "truss-disclosure-main-wheel-verification-20261016.json": {
+      "sha256": "7c8e692649f38cccddc8f98e4960b28bed3cd8815f72fdf69f0085863c00fa1a",
+      "bytes": 59275
+    },
+    "boundary-review.zip": {
+      "sha256": "09b929d2939423f99024d5b9a7dc283da058d71e9400c6fa7480b6699f403297",
+      "bytes": 722359
+    },
+    "rebased-truss-disclosure-main-rebased-wheel-verification-20261016.json": {
+      "sha256": "7b41a5cc63a3d4f2bd5c9e43b5fd54abe45c55522d39fec3ef4a615ab19867dd",
+      "bytes": 59275
+    },
+    "source-inputs.zip": {
+      "sha256": "57f1c48afe3772c372bd924d0811032bde9927907a1b3995fefa8632a1c0e483",
+      "bytes": 3551607
+    },
+    "truss-disclosure-main-integration-portable-20261016.log": {
+      "sha256": "8b087dace0b4bb79ddcdacf80865ad9df22df4692d1c59aed7d3d7c083aaca24",
+      "bytes": 127
+    },
+    "rebased-truss-disclosure-main-rebased-wheel-verification-20261016.log": {
+      "sha256": "228d1ac60c3369c4e050912bdc7e92a6804a1a258d1a3bfb47159c54876afc94",
+      "bytes": 134
+    },
+    "rebased-source-inputs.zip": {
+      "sha256": "fae596ca6d01275bd20d34237b429f614f3eac125a1e014de61bdd7a8d2efb02",
+      "bytes": 3566016
+    },
+    "boundary-review.json": {
+      "sha256": "99431554d022aa228515769c22c198e6cc9b4b0428ad93b68c19098b2ac75130",
+      "bytes": 2295
+    },
+    "truss-disclosure-main-wheel-verify-20261016.py": {
+      "sha256": "d1d476f6eed6211aa6978cb1a400d8e847f9aff52c2d9e9451dcb4d9439ebeae",
+      "bytes": 3165
+    },
+    "truss-disclosure-main-installed-portable-20261016.log": {
+      "sha256": "4bc4dd394a80e3e01d02bcc9a77e1d8faf8e3a0ca9b8e4e389650fbe3475f408",
+      "bytes": 127
+    },
+    "boundary-manifest.json": {
+      "sha256": "20a74b7675932bb2fac7c7e9f587e0be004f61f1b6ed9c67db91df9cf463b1e3",
+      "bytes": 2928
+    },
+    "rebased-truss_toolkit-0.0.36.dev0-py3-none-any.whl": {
+      "sha256": "8d490bdcc33d4736ae42141ed5d6b1405e545e28a3805ce51c66a25231717069",
+      "bytes": 2681744
+    },
+    "rebased-truss-disclosure-main-rebased-wheel-build-20261016.log": {
+      "sha256": "2901788780729b19d44997591228d4175d0ef01f3de51bb2f30ffd9e88ff3565",
+      "bytes": 994
+    },
+    "truss-disclosure-main-boundaries-20261016.log": {
+      "sha256": "af31a69b4a81aa43535e26cfeaf28adf314ee5fd11c2d698632dd60b1005269f",
+      "bytes": 1452
+    },
+    "boundaries-final.log": {
+      "sha256": "3f3f493b0ec2cefa8c805d5d575485aad768610f03ab688cc4c89292f02f6d13",
+      "bytes": 84
+    },
+    "truss-disclosure-main-wheel-build-20261016.log": {
+      "sha256": "285ea64b9765c1f1342b08d99c94d0ebce4ee6e22c496b5e8c9c6192c77daff2",
+      "bytes": 994
+    },
+    "rebased-truss-disclosure-main-rebased-native-r2-20261016.log": {
+      "sha256": "8ed84ae31dd90572bfed1ccdba5ad87e4dac5a604ee79d7104570fbc7efa77c7",
+      "bytes": 1085
+    }
+  },
+  "boundaryChecks": {
+    "imports": 1463,
+    "existingControls": 18,
+    "focusedMutations": 12,
+    "permissionRemovalControls": 64
+  },
+  "installedWheelTests": 27,
+  "rebasedMain": "47b24b337099f67d62e53a856a43e1a201cc353e",
+  "rebasedChecks": {
+    "nativeScramTests": 6,
+    "wheelMembers": 496,
+    "ownedRuntime": "passed",
+    "boundaries": 1463,
+    "initialNativeAttempt": "sandbox cache lock refusal, zero tests; authorized retry passed"
+  }
+}

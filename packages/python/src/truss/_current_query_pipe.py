@@ -99,6 +99,9 @@ class CurrentQueryPipe:
             result.extend(chunk)
         return bytes(result)
 
+    def _request_capacity(self, request):
+        return 4 * 1024 * 1024
+
     def exchange(self, request, *, source_receipt):
         """Return one complete original response; failures permanently close child."""
         if not self._lock.acquire(blocking=False):
@@ -106,7 +109,7 @@ class CurrentQueryPipe:
         try:
             if self._closed:
                 raise CurrentQueryPipeError('Original computation child is closed')
-            if type(request) is not bytes or not 1 <= len(request) <= 4 * 1024 * 1024:
+            if type(request) is not bytes or not 1 <= len(request) <= self._request_capacity(request):
                 raise CurrentQueryPipeError('Bounded original computation request required')
             if (type(source_receipt) is not str or len(source_receipt) != 64
                     or any(c not in '0123456789abcdef' for c in source_receipt)):

@@ -126,3 +126,8 @@ from .current_query import (CurrentQueryExecutor, CurrentQueryOriginals, Current
     register_current_query_subjects_in_transaction, activate_current_query_protection_in_transaction)
 __all__ += ['CurrentQueryExecutor','CurrentQueryOriginals','CurrentQueryProtection','CurrentQuerySubjectRegistration',
     'prepare_current_query_originals','register_current_query_sources_in_transaction','register_current_query_subjects_in_transaction','activate_current_query_protection_in_transaction']
+
+from .current_disclosure import (CurrentDisclosureExecutor,CurrentDisclosureRows,CurrentDisclosureOriginals,
+    prepare_current_disclosure_originals,register_current_disclosure_sources_in_transaction)
+__all__ += ['CurrentDisclosureExecutor','CurrentDisclosureRows','CurrentDisclosureOriginals',
+    'prepare_current_disclosure_originals','register_current_disclosure_sources_in_transaction']

@@ -1,0 +1,11 @@
+test_native_all_denied_disclosure (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_all_denied_disclosure) ... ok
+test_native_changed_source_before_closing_guard_refuses_public_data (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_changed_source_before_closing_guard_refuses_public_data) ... ok
+test_native_empty_disclosure (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_empty_disclosure) ... ok
+test_native_masked_disclosure (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_masked_disclosure) ... ok
+test_native_post_transport_whole_batch_refusal_never_releases (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_native_post_transport_whole_batch_refusal_never_releases) ... ok
+test_scram_credential_control (test_current_disclosure_scram_native.CurrentDisclosureScramNativeTests.test_scram_credential_control) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 25.369s
+
+OK

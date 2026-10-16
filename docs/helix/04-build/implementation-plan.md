@@ -8027,3 +8027,34 @@ The aligned-budget native composition replay r3 passes1/79.661s, with actual thr
 ## Guarded direct-projection publication — 2026-10-14
 
 [Guarded dispatcher evidence](evidence/security-guarded-dispatch-20261014/README.md) now includes source preflight before SQL, distinct query/result contracts on one native source epoch, and actual exact inspected query-cell publication under registered Subject/peer/role/source/fact/epoch cuts. Native r6 passes1/67.996s on runtime0.62 with Resource identity-only and identity/withheld-salary batches and corrupt-withheld-cell refusal/no release. This is a selected diagnostic candidate path, not public native admission; broader parameters, query operators, result domains and complete authority/lifecycle closure plus all132 original acceptance cases remain required.
+
+## Current disclosure consumer main integration — 2026-10-16
+
+The [retained consumer evidence](evidence/current-disclosure-consumer-20261016/README.md)
+now includes isolated root integration against430b77, followed by a clean
+fast-forward of performance-only documentation to79a27c. All43 reviewed r5
+package members apply exactly with no overlapping baseline drift. Source and
+fresh installed-wheel component campaigns each pass27 tests; six stock
+PostgreSQL18.6 SCRAM tests pass, including masked/empty/all-denied publication,
+post-transport whole-batch refusal and changed-source closing refusal. All496
+wheel source members and15 owner assets match, with legacy cohort rejection
+and unchanged published Weft0.4.36 query dependency. The original native69
+owned SQL runtime source check passes. Exact root inputs, wheel and logs are
+retained under the same evidence folder's main-integration directory.
+
+This remains the separately versioned direct-projection candidate using
+UMF206951/d333 and explicit local Weftb8c34/a944. Newer UMF semantic optimization
+does not implicitly repin this cohort. Native binding fixtures remain
+unadmitted; complete source/caller/current-authority/release qualification,
+actual graph capture and broader operators remain open. The historical132-case
+allocation is preserved; the shared expanded goal requires158 cases across34
+criteria, with45 implemented and113 missing. No acceptance promotion or release
+qualification is inferred from these component/native checks.
+
+A concurrent47b24b native-runtime update safely refused the initial push. The
+consumer rebases cleanly without package conflicts. Fresh six native SCRAM tests,
+496-member rebuilt-wheel correspondence, owned-runtime source verification and
+1463 Python import boundaries pass against that updated runtime. Initial local
+cache-lock sandbox refusal ran zero tests; the authorized retry passes. Both
+attempts and exact updated source/wheel evidence are retained. Original portable
+27-test receipts remain qualified to430b77; no fresh portable replay is implied.

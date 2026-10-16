@@ -1,0 +1,42 @@
+{
+  "README.md": {
+    "sha256": "98c7903b6e9ddd62cffcf7c19c93414c8a62088a7b8deaf695c036ef701f4660",
+    "bytes": 6135
+  },
+  "capture-native-evidence.py": {
+    "sha256": "810e1a8ed6b9128003a26f58a23d9c752f1d70fdc27cc3c41d4f9e82983df3c5",
+    "bytes": 3850
+  },
+  "component-tests.log.gz": {
+    "sha256": "c21536546fd2307c5da09f728d01036b3db74af52047839cf1a8fd465839ad52",
+    "bytes": 1247
+  },
+  "earlier-auth-evidence.zip": {
+    "sha256": "86c22c6252f2097973b1113f3889fe153bdb6e87e454032334914b4c6fe7403d",
+    "bytes": 21081
+  },
+  "native-inputs.zip": {
+    "sha256": "467802c8d8e6da9f8e623f4184b3089af37d6e6649e3580cbc940fec9b7eaea5",
+    "bytes": 2785989
+  },
+  "native-receipt.json": {
+    "sha256": "8fb492c74b6d9db0053c6fb2dbc14fb0a8d1cc4a3c1a0ab1a7b9e8d4b30b524a",
+    "bytes": 88578
+  },
+  "native-tests.log.gz": {
+    "sha256": "988cb9eedce5452476606be8782e0a9fc52bfc9a1054cd37a3d42ebb9ff7c3c2",
+    "bytes": 264
+  },
+  "review-addendum.zip": {
+    "sha256": "cf36cc704da98dd4ee8a40d5e07beb9bfd9ad82d12bb5ae1a4332454d0d96066",
+    "bytes": 741364
+  },
+  "review-base.zip": {
+    "sha256": "4c0d708110cddb723dd7031faf1279f02e0237efe360ffc581a41343eb3c37f0",
+    "bytes": 18487518
+  },
+  "source-r5.zip": {
+    "sha256": "3664ef8bd6a5b0142c1774c6a1bf361f43fdc43f6cfb7b8e0b0d71b3f724ee86",
+    "bytes": 355742
+  }
+}

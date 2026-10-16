@@ -1,0 +1,90 @@
+{
+  "apply-explicit-map.py": {
+    "sha256": "1aaec2e111c9a000fa2b0287b1b5c699331ed0177cd63b315b0c77953cf11ecc",
+    "bytes": 4388
+  },
+  "baseline-python312.json": {
+    "sha256": "13faa1c31c27496072162a52904399c2a68821119dbd1fda193d0c4be306f94d",
+    "bytes": 137400
+  },
+  "boundary-map.patch": {
+    "sha256": "d0956acff21a5783329d792b966f7af6b18071b283d8b1ba0079bdf8ec4219e7",
+    "bytes": 10308
+  },
+  "checker-after.py": {
+    "sha256": "232e77722c05d8ece5b5ee1b931d1b1a15e01d19b661097df74c753a7e905068",
+    "bytes": 39152
+  },
+  "checker-before.py": {
+    "sha256": "9e2e441aafd3a48a353ad94d370a7089a21a73cf7064a69011335947c1568170",
+    "bytes": 37311
+  },
+  "checker-result.json": {
+    "sha256": "b8532c963ff41fbab7710d447a869c41f84ac3b843c3b3ab23384ecc0911f551",
+    "bytes": 142188
+  },
+  "diff-check.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "existing-controls-source.py": {
+    "sha256": "d329f8c1a57171ecada8a28e9daab4229c2f04312209a19f48e8b1bc34dd714e",
+    "bytes": 4771
+  },
+  "existing-controls.json": {
+    "sha256": "b5808895a3e34c07e618fd2a0e80bf7fb699eea2ea14883a5a2a4c7e882e5226",
+    "bytes": 27291
+  },
+  "existing-controls.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "finalize.py": {
+    "sha256": "7a897526e308c4332a66a4f0eb7638e5ef2e7286af193f5456f5a07b686b5ab1",
+    "bytes": 5294
+  },
+  "focused-controls-first.py": {
+    "sha256": "ba80e749eb0abda190ba11a7285c29a512de6f366870f8489a4bf6d078d20864",
+    "bytes": 4113
+  },
+  "focused-controls-r2.log": {
+    "sha256": "cb894b5842515bef6d8eba67ada3e4127f865033c8abb0d387b809783082bc3f",
+    "bytes": 54
+  },
+  "focused-controls.json": {
+    "sha256": "d00617c0966fcf117defe65fc88dcbc85accc1aa66d69ac6e826f92a0988c3c8",
+    "bytes": 2951594
+  },
+  "focused-controls.log": {
+    "sha256": "68484c680c350024040df057dd1a5b8dc936243872fc6052d358cf345e8d1478",
+    "bytes": 248
+  },
+  "focused-controls.py": {
+    "sha256": "5e78fb498259b4367e61deee90b494bf61296cbc400f55a91469ff0d94d3a3d0",
+    "bytes": 4114
+  },
+  "map-delta.json": {
+    "sha256": "2c608b10f4bc44993c13f22a6d73ac14212d934319fe68adace22dd1bc2adcb1",
+    "bytes": 2561
+  },
+  "original-python39-failure.log": {
+    "sha256": "af31a69b4a81aa43535e26cfeaf28adf314ee5fd11c2d698632dd60b1005269f",
+    "bytes": 1452
+  },
+  "python-source-inputs.zip": {
+    "sha256": "84a417ce03fdd3c8945e352c0cd362ecc969baeeb1e89b7e0e59b64a69c406c3",
+    "bytes": 530143
+  },
+  "review.json": {
+    "sha256": "99431554d022aa228515769c22c198e6cc9b4b0428ad93b68c19098b2ac75130",
+    "bytes": 2295
+  },
+  "source-before.json": {
+    "sha256": "20d9f047811c9c71c70a609f0fe4993234f6dc6c33820ac9ca153c6e2ed2a4a3",
+    "bytes": 31732
+  },
+  "source-custody.json": {
+    "sha256": "142767fa6d7f815f1a1d0b440429316c7baa3a3152c91f27e3a7f9f133e46174",
+    "bytes": 472
+  }
+}

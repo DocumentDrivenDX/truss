@@ -200,6 +200,57 @@ Caller scan limits count read-admitted source occurrences, and caller byte limit
 count public scalar carriers. Private fact capture and contributor metadata have
 separate fixed limits; denied facts do not consume a caller-selected budget.
 
+### Unreleased opt-in tagged current disclosures
+
+The separate `query_current_disclosure_in_transaction` candidate returns
+`CurrentDisclosureRows`, preserving UMF V2 original, absent, withheld and
+transformed cells in UTF-8 `batch_json`. `columns` contains SQL output aliases;
+`field_indexes` maps those output positions to the batch's unique field columns,
+including repeated projections. It does not convert these cells to `QueryRows`.
+
+This candidate requires the exact local presence-enabled Weft wheel and UMF
+held-inspector cohort in the [consumer evidence](../../docs/helix/04-build/evidence/current-disclosure-consumer-20261016/README.md).
+The `query` extra remains Weft0.4.36; installing that extra does not enable this
+candidate. The selected compiler currently supports direct field projections.
+Further SQL coverage belongs to Weft and requires corresponding qualified
+adapter integration, rather than a permanent Truss language allowlist.
+
+For a fresh trusted installation, explicitly enroll
+`prepare_current_disclosure_originals(opaque_sources_bytes)` using
+`register_current_disclosure_sources_in_transaction(...,
+disclosure_originals=...)`. Its source profile is distinct from ABI2, with a
+`presence-designation` source and a version0.4 application-lineage request.
+Existing registrations do not migrate implicitly. Both source installers reject
+the other profile's originals; the ordinary current-query API rejects a
+`CurrentDisclosureExecutor`, and the disclosure API rejects a
+`CurrentQueryExecutor`.
+
+After the same committed Subject enrollment and protection bootstrap described
+above, use a dedicated fresh private transaction and
+`CurrentDisclosureExecutor(worker, worker_tx, subject_registration)`, then call:
+
+```python
+result = assembly.query_current_disclosure_in_transaction(
+    tx, executor=disclosure_executor,
+    sql="SELECT r.salary FROM Resource r", document_ids=("domain",),
+)
+```
+
+The original compiler parent stays held through native staging, exact transport
+checking, inspection by the same live UMF producer, and closing caller/source
+checks. The host settles both outer transactions. Caller byte limits include
+public alias/index metadata and the V2 batch; private captures have separate
+bounds. The transport's16MiB inspection capacity does not establish a16MiB
+composed application payload: the owner decoder and compiler transport have
+additional explicit bounds, documented with the evidence.
+
+Six local PostgreSQL18.6 SCRAM native tests cover masked, denied and empty
+results, whole-batch tampering after the native checker, source drift before
+release, credential rejection and cleanup. The reference native binding remains
+unadmitted. Native core-edge capture, non-JSON property homes, Record-backed
+edges, managed backends and the remaining original132 security cases stay open;
+these tests do not activate the complete security profile.
+
 Use a fresh Python3.11+ environment on the declared Linuxx86_64/macOSarm64
 PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 

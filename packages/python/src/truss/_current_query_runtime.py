@@ -3,7 +3,9 @@ import subprocess
 from .execution import Ok, Error, ExecutionFailure
 from .query import QueryRefused
 from .psycopg_host import _HostPairReservation
-from ._current_query_sources import capture_current_query_sources_with_cursor
+from ._current_query_sources import capture_current_query_sources_with_cursor, _QUERY_PROFILE, _DISCLOSURE_PROFILE
+from ._current_disclosure_originals import CurrentDisclosureOriginals
+from ._current_query_originals import CurrentQueryOriginals
 from ._current_query_facts import capture_current_query_facts_with_cursor
 from ._current_query_subjects import observe_current_query_subject_in_transaction, _verify_helper
 from ._current_query_evaluation import evaluate_current_query, CurrentQueryLimit
@@ -24,7 +26,7 @@ class _QueryRefusal(ValueError):
     pass
 
 
-def run_current_query(host,transaction,executor,*,sql,document_ids,parameters,maximum_rows,maximum_scan_rows,maximum_bytes):
+def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,parameters,maximum_rows,maximum_scan_rows,maximum_bytes,disclosure):
     try:
         valid=(type(sql) is str and 1<=len(sql.encode())<=1048576 and '\0' not in sql
             and type(document_ids) is tuple and 1<=len(document_ids)<=32
@@ -58,7 +60,8 @@ def run_current_query(host,transaction,executor,*,sql,document_ids,parameters,ma
                     raise ValueError('Dedicated fresh private executor transaction required')
                 installation_administrator_with_cursor(cursor)
                 sources=capture_current_query_sources_with_cursor(cursor)
-                if sources.query_originals is None:raise ValueError('Complete registered current-query source profile required')
+                expected_profile,expected_originals=(_DISCLOSURE_PROFILE,CurrentDisclosureOriginals) if disclosure else (_QUERY_PROFILE,CurrentQueryOriginals)
+                if sources.source_profile!=expected_profile or type(sources.query_originals) is not expected_originals:raise ValueError('Exact registered current query source profile required')
                 cursor.execute('LOCK TABLE ONLY truss.module_access IN SHARE MODE NOWAIT',prepare=False)
                 cursor.execute('LOCK TABLE pg_catalog.pg_authid,pg_catalog.pg_auth_members IN SHARE MODE NOWAIT',prepare=False)
                 cursor.execute('LOCK TABLE ONLY truss.catalog_subject_map,truss.object,truss.object_key_bucket IN SHARE MODE NOWAIT',prepare=False)
@@ -114,9 +117,15 @@ def run_current_query(host,transaction,executor,*,sql,document_ids,parameters,ma
                 if (len(matching)!=1 or bytes.fromhex(decode_owner_evidence_json(matching[0][3])['bytesHex'])!=subject.tuple_bytes):
                     raise ValueError('Original Subject object/version/Key fact correspondence required')
                 try:
-                    evaluated=evaluate_current_query(cursor,captured,subject,sql=sql,parameters=parameters,document_ids=document_ids,bun_executable=executor.bun_executable)
-                    candidate=stage_and_execute(cursor,captured,evaluated,maximum_rows=maximum_rows,
-                                                maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)
+                    if disclosure:
+                        from ._current_disclosure_evaluation import evaluate_and_stage_current_disclosure
+                        candidate=evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=sql,parameters=parameters,
+                            document_ids=document_ids,bun_executable=executor.bun_executable,
+                            maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)
+                    else:
+                        evaluated=evaluate_current_query(cursor,captured,subject,sql=sql,parameters=parameters,document_ids=document_ids,bun_executable=executor.bun_executable)
+                        candidate=stage_and_execute(cursor,captured,evaluated,maximum_rows=maximum_rows,
+                                                    maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes)
                 except CurrentQueryLimit:
                     raise
                 except (CurrentQueryPipeError,subprocess.TimeoutExpired) as error:
@@ -133,7 +142,8 @@ def run_current_query(host,transaction,executor,*,sql,document_ids,parameters,ma
                 cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(prior[0][0],),prepare=False)
                 if cursor.fetchmany(2)!=prior:raise ValueError('Original private executor search path restoration required')
                 cursor._deadline.check()
-                return candidate
+                if disclosure:candidate.require_original_parent()
+                return (candidate,sources.accepted_revision) if disclosure else candidate
             outcome=executor.host._run_operation(executor.transaction,execute)
             if isinstance(outcome,Error) and outcome.error.code=='transaction_unusable':return outcome
             if inner_failure:return inner_failure[0]
@@ -157,6 +167,30 @@ def run_current_query(host,transaction,executor,*,sql,document_ids,parameters,ma
                 if any(h._closed or h._custody.quarantined or h._custody.pending is not None
                        or h.connection.closed or h.connection.broken for h in pair.hosts):
                     return Error(ExecutionFailure('transaction_unusable','Original query host completion unavailable'))
+            if disclosure and isinstance(outcome,Ok):
+                held,revision=outcome.value
+                held.require_original_parent()
+                from .current_disclosure import CurrentDisclosureRows
+                from ._current_query_evaluation import wire
+                staged=held.staged
+                metadata=wire({'columns':staged.names,'fieldIndexes':staged.field_indexes,'catalogRevision':int(revision),'outcome':'disclosure'})
+                # Bound the whole public representation, including alias metadata.
+                if len(metadata)+len(staged.reconstructed_batch)+len(b',"batch":')>maximum_bytes:
+                    return Ok(QueryRefused('limits'))
+                try:pair.deadline.check()
+                except TimeoutError:
+                    return Error(ExecutionFailure('transaction_unusable','Original disclosure deadline expired before handoff'))
+                return Ok(CurrentDisclosureRows(staged.names,staged.field_indexes,staged.reconstructed_batch,int(revision)))
             return outcome
     except ValueError:
         return Ok(QueryRefused('stale_context'))
+
+
+def run_current_query(host,transaction,executor,*,sql,document_ids,parameters,maximum_rows,maximum_scan_rows,maximum_bytes):
+    return _run_guarded_current_query(host,transaction,executor,sql=sql,document_ids=document_ids,parameters=parameters,
+        maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,disclosure=False)
+
+
+def run_current_disclosure(host,transaction,executor,*,sql,document_ids,parameters,maximum_rows,maximum_scan_rows,maximum_bytes):
+    return _run_guarded_current_query(host,transaction,executor,sql=sql,document_ids=document_ids,parameters=parameters,
+        maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,disclosure=True)

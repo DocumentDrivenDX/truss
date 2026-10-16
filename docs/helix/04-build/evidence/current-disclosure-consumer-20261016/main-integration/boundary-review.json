@@ -1,0 +1,51 @@
+{
+  "status": "implemented-and-verified",
+  "reviewer": "Astra Ultra retained independent reviewer",
+  "scope": "Explicit Python lexical import map for the previously reviewed disclosure consumer; no runtime semantic or native admission change.",
+  "file": "/private/tmp/truss-disclosure-main-integration-20261016/scripts/check-module-boundaries.py",
+  "checkerSha256": "232e77722c05d8ece5b5ee1b931d1b1a15e01d19b661097df74c753a7e905068",
+  "change": "Eight explicit new module entries match57 actual imports. Seven concrete edges are added across __init__, catalog_runtime, _current_query_runtime and _current_query_sources. All other permissions and checker logic are unchanged.",
+  "findings": [],
+  "checks": {
+    "python": "3.12.14",
+    "actualImports": 1463,
+    "existingMutationControls": 18,
+    "focusedDisclosureSourceMutationControls": 12,
+    "eachAddedPermissionRemovalRefuses": 64,
+    "pythonSourceFilesUnchanged": 195,
+    "diffCheck": "passed"
+  },
+  "commands": [
+    [
+      "/private/tmp/weft-toolchain/venv/bin/python",
+      "scripts/check-module-boundaries.py",
+      "--json"
+    ],
+    [
+      "/private/tmp/weft-toolchain/venv/bin/python",
+      "scripts/check-module-boundaries-controls.py"
+    ],
+    [
+      "/private/tmp/weft-toolchain/venv/bin/python",
+      "/private/tmp/truss-disclosure-import-boundaries-astra-20261016/focused-controls.py"
+    ]
+  ],
+  "retainedFailures": [
+    "Original Python3.9 run includes unsupported Python syntax errors and map failures. Python3.12 baseline reproduces only the16 map diagnostics.",
+    "First reviewer focused-control script had an else-token typo before execution; exact source/log retained. Corrected controls all pass."
+  ],
+  "limits": [
+    "Static Python-only check; TypeScript/native SQL, indirect reflection, runtime object custody, authenticated caller/source/current cut and guarded release are not established.",
+    "No package source or production runtime changed. Only scripts/check-module-boundaries.py was edited in the integration checkout."
+  ],
+  "evidence": [
+    "map-delta.json",
+    "baseline-python312.json",
+    "checker-result.json",
+    "existing-controls.json",
+    "focused-controls.json",
+    "source-custody.json",
+    "boundary-map.patch"
+  ],
+  "artifactManifest": "manifest.json"
+}

@@ -18,9 +18,11 @@ from .catalog_runtime import _pin_cursor, _release
 from .execution import Error, ExecutionFailure
 from .psycopg_host import PsycopgHost
 from ._current_query_originals import CurrentQueryOriginals, check_query_originals
+from ._current_disclosure_originals import CurrentDisclosureOriginals, check_disclosure_originals
 
 _PROFILE = 'truss-current-query-sources/0.1-candidate'
 _QUERY_PROFILE = 'truss-current-query-sources/0.2-candidate'
+_DISCLOSURE_PROFILE = 'truss-current-disclosure-sources/0.1-candidate'
 _NAMES = ('current-query:accepted-assessment', 'current-query:accepted-request',
           'current-query:initialize', 'current-query:release')
 _EXTRA_NAMES = ('current-query:consumer', 'current-query:opaque-sources')
@@ -44,7 +46,7 @@ class CurrentQuerySourceCapture:
     accepted_assessment_bytes: bytes
     source_profile: str
     inventory_digest: str
-    query_originals: CurrentQueryOriginals | None
+    query_originals: CurrentQueryOriginals | CurrentDisclosureOriginals | None
 
 
 def _initialize(raw):
@@ -104,10 +106,10 @@ def _capture_current_query_sources(cursor):
     identity, manifest, digest, release = _runtime(cursor)
     markers = _text_rows(cursor, "SELECT marker_interface_version::pg_catalog.text,installation_id::pg_catalog.text,layout_version::pg_catalog.text,pg_catalog.encode(bundle_sha256,'hex'),inventory_profile::pg_catalog.text,pg_catalog.encode(inventory_sha256,'hex'),database_identity::pg_catalog.text,schema_name::pg_catalog.text FROM ONLY truss.installation_marker WHERE singleton_id OPERATOR(pg_catalog.=) 1", limit=1)
     if (len(markers) != 1 or markers[0][:4] != ('truss-bootstrap-marker/0.1.0', identity, manifest['releaseId'], digest)
-            or markers[0][4] not in (_PROFILE,_QUERY_PROFILE) or markers[0][6:] != (_target(cursor), 'truss')):
+            or markers[0][4] not in (_PROFILE,_QUERY_PROFILE,_DISCLOSURE_PROFILE) or markers[0][6:] != (_target(cursor), 'truss')):
         raise ValueError('Original current-query source marker required')
     profile=markers[0][4]
-    names=tuple(sorted(_NAMES+(_EXTRA_NAMES if profile==_QUERY_PROFILE else ())))
+    names=tuple(sorted(_NAMES+(_EXTRA_NAMES if profile in (_QUERY_PROFILE,_DISCLOSURE_PROFILE) else ())))
     # Bound the complete physical census before retrieving bytea payloads.
     cursor.execute('SELECT count(*),coalesce(sum(octet_length(artifact_bytes)),0)::bigint FROM ONLY truss.installation_archive', prepare=False)
     if cursor.description is None or tuple(d.type_code for d in cursor.description) != (20,20):
@@ -136,6 +138,9 @@ def _capture_current_query_sources(cursor):
     if profile==_QUERY_PROFILE:
         query_originals=check_query_originals(CurrentQueryOriginals(
             originals['current-query:opaque-sources'],originals['current-query:consumer']),initialize,request)
+    elif profile==_DISCLOSURE_PROFILE:
+        query_originals=check_disclosure_originals(CurrentDisclosureOriginals(
+            originals['current-query:opaque-sources'],originals['current-query:consumer']),initialize,request)
     if capture_accepted_catalog(cursor, request, existing_source_cut=True) != assessment:
         raise ValueError('Current-query accepted catalog changed; re-registration required')
     # Revision is read natively, never taken from a caller's assessment field.
@@ -162,7 +167,7 @@ def capture_current_query_sources_with_cursor(cursor):
     return captured
 
 
-def register_current_query_sources_in_transaction(host, transaction, *, initialize_bytes, accepted_request_bytes, query_originals=None):
+def _register_sources(host, transaction, *, initialize_bytes, accepted_request_bytes, query_originals=None, disclosure_originals=None):
     """Fresh installer-only original-byte retention; caller owns commit/rollback."""
     if type(host) is not PsycopgHost:
         return Error(ExecutionFailure('execution_obligation', 'Original current-query installation host required'))
@@ -170,8 +175,12 @@ def register_current_query_sources_in_transaction(host, transaction, *, initiali
         _initialize(initialize_bytes)
         if type(accepted_request_bytes) is not bytes or not 1 <= len(accepted_request_bytes) <= 4_000_000:
             raise ValueError('Bounded original accepted source request required')
+        if query_originals is not None and disclosure_originals is not None:
+            raise ValueError('Distinct source registrations cannot be combined')
         if query_originals is not None:
             check_query_originals(query_originals,initialize_bytes,accepted_request_bytes)
+        if disclosure_originals is not None:
+            check_disclosure_originals(disclosure_originals,initialize_bytes,accepted_request_bytes)
     except (ValueError, TypeError, KeyError, UnicodeError):
         return Error(ExecutionFailure('execution_obligation', 'Original bounded current-query source inputs required'))
     def install(cursor, observed):
@@ -205,6 +214,10 @@ def register_current_query_sources_in_transaction(host, transaction, *, initiali
             profile=_QUERY_PROFILE
             archives+=(('input','current-query:consumer',query_originals.consumer_bytes),
                        ('input','current-query:opaque-sources',query_originals.opaque_sources_bytes))
+        elif disclosure_originals is not None:
+            profile=_DISCLOSURE_PROFILE
+            archives+=(('input','current-query:consumer',disclosure_originals.consumer_bytes),
+                       ('input','current-query:opaque-sources',disclosure_originals.opaque_sources_bytes))
         inventory_digest = _inventory_digest(archives)
         cursor.execute("SELECT pg_catalog.clock_timestamp()::pg_catalog.text", prepare=False)
         clock = cursor.fetchone()[0]
@@ -217,3 +230,17 @@ def register_current_query_sources_in_transaction(host, transaction, *, initiali
             raise ValueError('Original registration search path restoration required')
         return CurrentQuerySourceRegistration(identity, captured.source_receipt, captured.accepted_revision)
     return host._run_operation(transaction, install)
+
+
+def register_current_query_sources_in_transaction(host,transaction,*,initialize_bytes,accepted_request_bytes,query_originals=None):
+    """Existing profiles stay explicit; new disclosure originals are refused."""
+    return _register_sources(host,transaction,initialize_bytes=initialize_bytes,
+        accepted_request_bytes=accepted_request_bytes,query_originals=query_originals)
+
+
+def register_current_disclosure_sources_in_transaction(host,transaction,*,initialize_bytes,accepted_request_bytes,disclosure_originals):
+    """Distinct reviewed presence cohort; no implicit migration from ABI2."""
+    if type(disclosure_originals) is not CurrentDisclosureOriginals:
+        return Error(ExecutionFailure('execution_obligation','Distinct original disclosure sources required'))
+    return _register_sources(host,transaction,initialize_bytes=initialize_bytes,
+        accepted_request_bytes=accepted_request_bytes,disclosure_originals=disclosure_originals)
