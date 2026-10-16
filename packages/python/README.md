@@ -63,21 +63,21 @@ retains original effects/events and requires current data-reader authority.
 The Python distribution version is distinct from native runtime/layout versions;
 future distributed changes receive a new package version.
 
-## Current feature scope
+## Published feature scope
 
-SDK31/native66 is published with matching Weft31/backend36. It supports required
-scalar-field/key backfill and acyclic nested array/map properties with required
-item Fields and exact scalar leaves, including writes, reads, history, imports,
-Weft queries and retained-cell rebinding. The
+Published SDK0.0.35 supports required scalar-field/key backfill and acyclic
+nested array/map properties with required item Fields and exact scalar leaves,
+including writes, reads, history, imports, Weft queries and retained-cell
+rebinding. The
 [rebind addendum](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.4.md)
 and [key-backfill contract](../../docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md)
-define those scopes. Cyclic definitions, descendant evolution and record/composed
-ownership remain unfinished. The failed SDK28 tag published no wheel; SDK29
-corrects its duplicate-map-key refusal mapping.
+define those scopes. Cyclic definitions, descendant evolution and record-valued
+properties remain unfinished.
 
+Ownership support is available in the unreleased development checkpoint above.
 The [owned-object implementation plan](../../docs/helix/04-build/python-owned-objects-plan.md)
-covers ownership inputs, complete cascades, historical/replay authority and
-matching queries. Its UMF storage candidates are not callable ownership support.
+records its implementation scope and remaining work. Published SDK0.0.35 retains
+the rootless profile; development native69 adds owned reads and mutations.
 
 ## Storage and compiler pairing
 
@@ -87,8 +87,9 @@ no stored property is allocated until a Field is a Record member. The supplied
 `CatalogDocument.document_revision` is preserved independently of its content
 SHA256. Unknown selected shapes and standalone containers refuse.
 
-Direct object, key and page results expose `object.ownership.state` as
-`rootless` for the currently supported read profile. Owned reads remain unfinished.
+Published direct object, key and page results expose `object.ownership.state` as
+`rootless`. The development checkpoint also returns `owned` with its typed root reference;
+it does not reinterpret owned objects as rootless.
 
 The exact consumer model passes public accept/apply/readback and native binding
 export. Populated native65 upgrades preserve transitions and receipt replay.
@@ -468,15 +469,19 @@ validates current endpoint types, access, reservations and payload semantics.
 
 ## Values, reads and query limits
 
-Rootless JSON-home objects and independent directed relationships support
-strings and exact scalar properties: integer, decimal, boolean, timestamp and
-binary. Exact numeric/time carriers preserve text semantics; do not route them
-through floating point or lossy date conversions. Structured values, ownership
-and composed graphs remain unsupported. Retained history can reconstruct stored
-scalar images after updates/deletion; archival/offload and cleanup are unfinished.
+Published rootless JSON-home objects and independent directed relationships
+support strings and exact scalar properties: integer, decimal, boolean,
+timestamp and binary. Acyclic nested arrays/maps use required item Fields and
+exact scalar leaves. The development checkpoint adds owned objects and composed
+graphs, plus direct date and generic-decimal values; their broader SQL query
+support remains unfinished. Record-valued cells and cyclic value definitions
+remain unsupported. Exact numeric/time carriers preserve text semantics; do not
+route them through floating point or lossy date conversions. Retained history
+can reconstruct stored images after updates/deletion; archival/offload and
+cleanup are unfinished.
 
-Business-key lookup supports authored required string/integer/decimal18,4/boolean/binary
-keys. Query pages currently require authored required-string keys. Direct object/edge pages have explicit live continuations. Query results
+Business-key lookup supports authored required string, integer, supported fixed-decimal,
+boolean and binary keys. Query pages support the typed-key subset described below. Direct object/edge pages have explicit live continuations. Query results
 preserve absence versus null versus empty strings. Supported Weft queries include
 string/boolean/integer/decimal projection, filters, property joins, counts,
 ordering/limits, `alias.*`, and forward/inverse `HAS_RELATED`/`RELATED_KEYS` for
