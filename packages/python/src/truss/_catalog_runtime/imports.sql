@@ -98,9 +98,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.import_object_identity(bytea,bytea,bytea,text,text) FROM PUBLIC;
 
-CREATE TABLE truss.runtime_import_source (
- entity_kind char(1) NOT NULL,entity_id bigint NOT NULL,group_attempt_id uuid NOT NULL UNIQUE REFERENCES truss.runtime_object_attempt(id),
- writer_xid xid8 NOT NULL,original_record bytea NOT NULL,expected_source jsonb NOT NULL,PRIMARY KEY(entity_kind,entity_id));
+CREATE TABLE truss.runtime_import_source (entity_kind char(1) NOT NULL, entity_id bigint NOT NULL, group_attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), writer_xid xid8 NOT NULL, original_record bytea NOT NULL, expected_source jsonb NOT NULL, operation_index int NOT NULL DEFAULT 0 CHECK (operation_index BETWEEN 0 AND 1023), PRIMARY KEY (entity_kind, entity_id), CONSTRAINT runtime_import_source_attempt_operation UNIQUE (group_attempt_id, operation_index));
 CREATE TRIGGER runtime_import_source_immutable BEFORE UPDATE OR DELETE ON truss.runtime_import_source FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 CREATE TRIGGER runtime_record_source_immutable BEFORE UPDATE OR DELETE ON truss.record_source FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 
@@ -184,7 +182,8 @@ BEGIN
  INSERT INTO truss.record_source(entity_kind,entity_id,load_id,source) VALUES(kind,(result->'identity'->>'id')::bigint,load_id,source_value) RETURNING * INTO source_row;
  IF source_row.entity_kind IS DISTINCT FROM kind OR source_row.entity_id IS DISTINCT FROM (result->'identity'->>'id')::bigint
   OR source_row.load_id IS DISTINCT FROM load_id OR source_row.source IS DISTINCT FROM source_value THEN RAISE EXCEPTION 'payload-derived import provenance required' USING ERRCODE='55000';END IF;
- INSERT INTO truss.runtime_import_source VALUES(kind,source_row.entity_id,selected_attempt,attempt.writer_xid,original_record,to_jsonb(source_row));
+ INSERT INTO truss.runtime_import_source(entity_kind,entity_id,group_attempt_id,writer_xid,original_record,expected_source)
+ VALUES(kind,source_row.entity_id,selected_attempt,attempt.writer_xid,original_record,to_jsonb(source_row));
  PERFORM truss.runtime_module_writer(result->'identity'->'owner'->>'documentId',result->'identity'->'owner'->>'moduleId');
  RETURN convert_to(to_jsonb(source_row)::text,'UTF8');
 END;
@@ -199,7 +198,7 @@ BEGIN
  SELECT * INTO STRICT ledger FROM truss.runtime_import_source WHERE entity_kind=NEW.entity_kind AND entity_id=NEW.entity_id;
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=ledger.group_attempt_id;
  IF ledger.writer_xid<>pg_current_xact_id() OR attempt.writer_xid<>ledger.writer_xid OR attempt.actor_oid<>truss.runtime_person(false) OR NOT attempt.complete
-  OR attempt.next_index<>1 OR attempt.results->0->>'outcome'<>'created' OR attempt.results->0->'identity'->>'id'<>ledger.entity_id::text THEN RAISE EXCEPTION 'original pending import creation required' USING ERRCODE='55000';END IF;
+  OR ledger.operation_index<>0 OR attempt.next_index<>1 OR attempt.results->0->>'outcome'<>'created' OR attempt.results->0->'identity'->>'id'<>ledger.entity_id::text THEN RAISE EXCEPTION 'original pending import creation required' USING ERRCODE='55000';END IF;
  SELECT to_jsonb(s) INTO actual FROM truss.record_source s WHERE entity_kind=ledger.entity_kind AND entity_id=ledger.entity_id;
  IF actual IS DISTINCT FROM ledger.expected_source THEN RAISE EXCEPTION 'immutable exact original import source required' USING ERRCODE='55000';END IF;
  RETURN NULL;

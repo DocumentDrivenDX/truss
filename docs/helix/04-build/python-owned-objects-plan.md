@@ -262,6 +262,22 @@ original primary key, ownership/endpoints, exact payload and load ID. Private
 aliases alone do not establish correspondence. Keep legacy one-operation checks;
 do not require historical legacy attempts to have owned-operation storage rows.
 
+### Source storage implementation increment
+
+The native71 candidate now generates import source storage and its predecessor
+migration through UMF's SQL exporter. Core columns and the attempt FK remain
+visible in its companion model; native UUID/xid8/JSONB meaning stays explicit.
+Sources are unique by entity and by `(group_attempt_id, operation_index)`.
+Existing rows and the unchanged per-record provider retain index zero. The
+migration is checksum-verified before execution.
+
+Basic PostgreSQL18.6 checks pass original imports and a real published SDK37
+upgrade, including rollback, commit, source preservation, retry and new import.
+Astra cleared the corrected source slice. This completes the storage precursor;
+new atomic owned-import carriers, execution and native indexed source attachment
+remain unfinished. The release workflow also runs the migration test against its
+already downloaded published SDK35 predecessor.
+
 ## Ordered result storage — 2026-10-16
 
 The 1,024-operation workflow passes locally but still exceeds the unchanged

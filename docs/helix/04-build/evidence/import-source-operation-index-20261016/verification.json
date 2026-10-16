@@ -1,0 +1,56 @@
+{
+  "scope": "Operation-indexed source storage precursor; current public import provider remains one-record rootless. Atomic owned imports not implemented.",
+  "umfExport": {
+    "coreValid": true,
+    "coreComplete": false,
+    "reason": "Native UUID/xid8/JSONB meanings retained in explicit native extension; no portable full-core meaning claim",
+    "columns": 7,
+    "foreignKeys": 1,
+    "existingSourceOperationIndex": 0
+  },
+  "versions": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6",
+    "python": "3.11.17",
+    "bun": "1.4.2"
+  },
+  "predecessors": [
+    {
+      "sdk": "0.0.37",
+      "runtime": "0.70-candidate",
+      "wheelSha256": "ded271a4e4a42331759ab65e1e04623c777a0c72d90bf2a06fe814fa873836b5",
+      "verification": "Downloaded published wheel, SHA256SUMS matched; extracted original package for subprocess seed"
+    },
+    {
+      "sdk": "0.0.35",
+      "runtime": "0.68-candidate",
+      "manifestSha256": "3588cf030cb46c7d12368557e351bd767c10b4dd2e1644f7f100cec54602a2fc",
+      "verification": "Retained published predecessor used by existing release workflow"
+    }
+  ],
+  "checks": [
+    "Original public object/edge import workflows pass",
+    "Populated source rows survive upgrade rollback and commit",
+    "Retry skips existing identities and preserves original load/source",
+    "New post-upgrade public import commits at operation index zero",
+    "Changed migration bytes refuse before execution",
+    "Module boundary checker passes1512imports",
+    "Generated runtime --check and diffcheck pass"
+  ],
+  "review": "Astra Ultra source clear after correcting missing migration file verification; focused integrity test directly covers blocker. No full owned-import claim.",
+  "sourceSha256": {
+    "scripts/build-import-source-storage.ts": "6ac59278488b338776de6427a2d0c67d65bd2d47a20033eb5f798e4fe954b89e",
+    "packages/python/src/truss/_catalog_runtime/imports.sql": "d8ef0816f679c8c2904c9b2b4f0757ae94e3e141b72bd2d94c3ce344454f13ec",
+    "packages/python/src/truss/_catalog_runtime/import-source-upgrade.sql": "045902fb02938754cf7996c4ff7b089c40fdad117beefbd99e23b596a8a59369",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "3d80629903633da1d899d8ecd61c65b939f2809263ab71b365d589513c9a83d9",
+    "packages/python/src/truss/catalog_runtime.py": "fb5c9ea7cd311c70c354d953272e194024b76d6d7a73b35dafd32a749173237f",
+    "packages/python/tests/_seed_import_source_upgrade.py": "26378a5c446735aee6df78cd3ebc47371d4fb2fbd72a7eb36dd0ed3831427c50",
+    "packages/python/tests/test_import_source_upgrade_native.py": "3ddf2af3f00c500c3b065deecee2de85428e9a46775b266e6d2f33e4142a7bc5",
+    ".github/workflows/release.yml": "676d01c85abd42f0de544ea82ad266b9ddbeeaab86d9f9aa33dff4c2efa9cb15"
+  },
+  "receipts": {
+    "native-original-and-sdk37.log": "c43a29548a4870902a979acd9d12fe5597e754b76170d344b7ad29fbb59fde3e",
+    "native-sdk37-new-import.log": "e792f60aab279c53e9316e82d370993c5459f059cf4b06eb654854b026a134d0",
+    "native-sdk35-and-integrity.log": "808778226971ec7f767e35100782b11717e1ff5af711fdb793ebf6e14dc97059"
+  }
+}

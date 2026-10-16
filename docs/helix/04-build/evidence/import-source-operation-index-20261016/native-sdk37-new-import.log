@@ -1,0 +1,6 @@
+test_populated_sources_preserved_through_rollback_upgrade_and_retry (test_import_source_upgrade_native.ImportSourceUpgradeTests.test_populated_sources_preserved_through_rollback_upgrade_and_retry) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 7.280s
+
+OK
