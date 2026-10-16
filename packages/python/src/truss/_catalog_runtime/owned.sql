@@ -959,7 +959,7 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE plan jsonb;state jsonb;identity jsonb;source_identity jsonb;target_identity jsonb;
 BEGIN
  IF phase IS NULL OR phase NOT IN ('before','after') THEN RAISE EXCEPTION 'explicit edge image phase required' USING ERRCODE='55000';END IF;
- plan:=coalesce(prepared_plan,truss.runtime_owned_plan(selected_attempt,selected_index));state:=plan->(phase||'Edges')->reference;
+ plan:=coalesce(prepared_plan,truss.runtime_owned_plan(selected_attempt,selected_index));state:=jsonb_extract_path(plan,phase||'Edges',reference);
  IF state IS NULL OR state->'deleted'='true'::jsonb THEN RETURN NULL;END IF;
  identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'edge',plan,prepared_attempt);
  source_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,state->>'source','object',plan,prepared_attempt);
@@ -990,23 +990,23 @@ BEGIN
  IF relation.lifecycle NOT IN ('independent','owned') OR NOT relation.directed OR relation.composition OR relation.assoc_type_id IS NOT NULL THEN
   RAISE EXCEPTION 'selected owned or independent relationship required' USING ERRCODE='0A000';END IF;
  IF prior IS NOT NULL THEN
-  identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'edge');
+  identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'edge',plan,attempt);
   SELECT to_jsonb(e) INTO STRICT physical FROM truss.edge e WHERE id=(identity->>'id')::bigint AND rel_type_id=relation.rel_type_id;
-  IF physical-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_edge_image(selected_attempt,selected_index,reference,'before') THEN
+  IF physical-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_edge_image(selected_attempt,selected_index,reference,'before',plan,attempt) THEN
    RAISE EXCEPTION 'original edge prestate required' USING ERRCODE='55000';END IF;
-  old_source:=truss.runtime_owned_identity(selected_attempt,selected_index,prior->>'source','object');
-  old_target:=truss.runtime_owned_identity(selected_attempt,selected_index,prior->>'target','object');
+  old_source:=truss.runtime_owned_identity(selected_attempt,selected_index,prior->>'source','object',plan,attempt);
+  old_target:=truss.runtime_owned_identity(selected_attempt,selected_index,prior->>'target','object',plan,attempt);
  END IF;
- source_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,desired->>'source','object');
- target_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,desired->>'target','object');
+ source_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,desired->>'source','object',plan,attempt);
+ target_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,desired->>'target','object',plan,attempt);
  FOR endpoint_reference IN SELECT DISTINCT value#>>'{}' FROM jsonb_array_elements(jsonb_build_array(
   desired->'source',desired->'target',prior->'source',prior->'target')) WHERE value<>'null'::jsonb LOOP
-  endpoint_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,endpoint_reference,'object');
+  endpoint_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,endpoint_reference,'object',plan,attempt);
   IF NOT truss.runtime_can_read_qualified(endpoint_identity->'owner'->>'documentId',endpoint_identity->'owner'->>'moduleId',current_actor) THEN
    RAISE EXCEPTION 'original endpoint reader required' USING ERRCODE='42501';END IF;
   SELECT to_jsonb(o) INTO STRICT endpoint_image FROM truss.object o
    WHERE id=(endpoint_identity->>'id')::bigint AND type_id=(endpoint_identity->>'typeId')::int;
-  IF endpoint_image-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,selected_index,endpoint_reference,'before') THEN
+  IF endpoint_image-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,selected_index,endpoint_reference,'before',plan,attempt) THEN
    RAISE EXCEPTION 'original endpoint prestate required' USING ERRCODE='55000';END IF;
  END LOOP;
  PERFORM truss.runtime_lock_edge_business_key(truss.runtime_edge_business_key(relation.rel_type_id,source_identity,target_identity));
@@ -1036,22 +1036,22 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_edge_effect_selection(uuid,int,jsonb,
 
 
 -- Original operation-time endpoint roots; no live endpoint/root lookup.
-CREATE FUNCTION truss.runtime_owned_endpoint_at(selected_attempt uuid,selected_index int,reference text,phase text) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_endpoint_at(selected_attempt uuid,selected_index int,reference text,phase text,prepared_plan jsonb DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE plan jsonb;state jsonb;identity jsonb;ownership jsonb;root_identity jsonb;
 BEGIN
  IF phase IS NULL OR phase NOT IN ('before','after') THEN RAISE EXCEPTION 'explicit endpoint phase required' USING ERRCODE='55000';END IF;
- plan:=truss.runtime_owned_plan(selected_attempt,selected_index);state:=plan->(phase||'Nodes')->reference;
+ plan:=coalesce(prepared_plan,truss.runtime_owned_plan(selected_attempt,selected_index));state:=jsonb_extract_path(plan,phase||'Nodes',reference);
  IF state IS NULL OR state->'deleted'='true'::jsonb THEN RAISE EXCEPTION 'original live endpoint context required' USING ERRCODE='55000';END IF;
- identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object');ownership:='{"state":"rootless"}'::jsonb;
+ identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object',plan,prepared_attempt);ownership:='{"state":"rootless"}'::jsonb;
  IF state->>'root' IS NOT NULL THEN
-  root_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,state->>'root','object');
+  root_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,state->>'root','object',plan,prepared_attempt);
   ownership:=jsonb_build_object('state','owned','root',root_identity);
  END IF;
  RETURN jsonb_build_object('identity',identity,'ownership',ownership);
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_endpoint_at(uuid,int,text,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_endpoint_at(uuid,int,text,text,jsonb,truss.runtime_object_attempt) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_owned_edge_transition_validate(selected_transition bigint,authorize_read boolean,qualified_actor oid DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
@@ -1082,8 +1082,8 @@ BEGIN
  IF prior->'deleted'='true'::jsonb
   OR (original_mode='delete_object' AND expected_mode<>'delete_edge')
   OR (original_mode<>'delete_object' AND (original_mode IS DISTINCT FROM expected_mode OR reference IS DISTINCT FROM plan->>'primary'))
-  OR transition.before_edge-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_edge_image(attempt.id,transition.operation_index,reference,'before')
-  OR transition.after_edge-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_edge_image(attempt.id,transition.operation_index,reference,'after') THEN
+  OR transition.before_edge-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_edge_image(attempt.id,transition.operation_index,reference,'before',plan,attempt)
+  OR transition.after_edge-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_edge_image(attempt.id,transition.operation_index,reference,'after',plan,attempt) THEN
   RAISE EXCEPTION 'original edge plan and transition images required' USING ERRCODE='55000';END IF;
  -- Exact physical prestate chains back to the original captured scope, including
  -- timestamps, rather than being reconstructed from the semantic projection.
@@ -1097,12 +1097,12 @@ BEGIN
  END IF;
  IF transition.before_edge IS DISTINCT FROM previous_image THEN RAISE EXCEPTION 'original physical edge prestate chain required' USING ERRCODE='55000';END IF;
  IF prior IS NOT NULL THEN
-  before_context:=jsonb_build_object('source',truss.runtime_owned_endpoint_at(attempt.id,transition.operation_index,prior->>'source','before'),
-   'target',truss.runtime_owned_endpoint_at(attempt.id,transition.operation_index,prior->>'target','before'));
+  before_context:=jsonb_build_object('source',truss.runtime_owned_endpoint_at(attempt.id,transition.operation_index,prior->>'source','before',plan,attempt),
+   'target',truss.runtime_owned_endpoint_at(attempt.id,transition.operation_index,prior->>'target','before',plan,attempt));
  END IF;
  IF desired->'deleted'='false'::jsonb THEN
-  after_context:=jsonb_build_object('source',truss.runtime_owned_endpoint_at(attempt.id,transition.operation_index,desired->>'source','after'),
-   'target',truss.runtime_owned_endpoint_at(attempt.id,transition.operation_index,desired->>'target','after'));
+  after_context:=jsonb_build_object('source',truss.runtime_owned_endpoint_at(attempt.id,transition.operation_index,desired->>'source','after',plan,attempt),
+   'target',truss.runtime_owned_endpoint_at(attempt.id,transition.operation_index,desired->>'target','after',plan,attempt));
  END IF;
  expected_context:=jsonb_build_object('profile','truss-edge-endpoint-ownership/0.1','captureCatalogRevision',plan->>'catalogRevision',
   'before',before_context,'after',after_context);

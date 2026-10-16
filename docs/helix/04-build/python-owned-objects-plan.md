@@ -358,3 +358,13 @@ were published and the tag is retained. A narrow new compiler backend will admit
 exact native70; the replacement SDK37 release will retain native70's original
 manifest. The owned tranche will then advance to SDK38/native71. Latest published
 installation instructions continue to select SDK35 until that replacement ships.
+
+The complete identified pure edge-helper chain now carries the already checked
+plan/attempt through metadata, image and endpoint identity resolution; phase
+selection uses direct JSONB path extraction. Live readers/writers, physical rows,
+original creation-index source lookups and all closing guards remain unchanged.
+Astra Ultra clears the generated219-routine implementation. Eight basic tests
+pass (29.953s), but the unchanged diagnostic1,000-edge workload still hits57014
+before edge COMMIT (28.101s total). Completed plan lookups fall from77,141 to
+29,861; this does not establish a latency improvement. Final member identity/
+image work and repeated initial-node map construction remain profiling targets.
