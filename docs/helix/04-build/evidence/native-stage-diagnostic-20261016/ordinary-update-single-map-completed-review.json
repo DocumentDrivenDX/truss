@@ -1,0 +1,73 @@
+{
+  "review": "Astra Ultra completed ordinary-update single-map iteration",
+  "status": "SOURCE_AND_BOUNDED_EVIDENCE_CLEAR",
+  "reviewedAt": "2026-10-16T16:23:23.386409+00:00",
+  "blockingFindings": [],
+  "recommendation": "Suitable to land as the reviewed redundant-assignment simplification with the failed matrix retained. No benchmark benefit or development release qualification is established.",
+  "rationale": "The exact conditional removes a redundant local intermediate map write, leaving the final state and checks unchanged and adding no cached proof or interface. Focused changed/no-op/alias/owned and real 1024 positive/fault workflows passed. The full matrix failed in an unchanged create-edge/forest path before exercising the optimized update path; it is therefore neither a performance demonstration for this change nor proof of a change-caused regression.",
+  "sourceReview": {
+    "path": "/private/tmp/truss-update-single-map-source-astra-20261016.json",
+    "sha256": "a7cf5d1e86f44ab4c84b337cf1c37e61d3fa1b24c70b5d090f03e7ed42362adc",
+    "baseCommit": "0bdbc6d3805b084c9ea74a5347752dd3a53084e0",
+    "sourceSha256": {
+      "packages/postgresql/owned-groups/execute.sql": "ffabafbc89f56406fa13e9af42005ca35af00124f2b6e128be13ced9f5733e5f",
+      "packages/python/src/truss/_catalog_runtime/manifest.json": "2dd535141a9bd09f91fe00a4be4d5c49537be0ff6616dc0313c99619e65e8a18",
+      "packages/python/src/truss/_catalog_runtime/owned.sql": "fbafe6fe7119eff9561396a82b947365c775e2140abbca84fe24c68345bdd26e"
+    },
+    "currentSourceUnchanged": true
+  },
+  "evidenceSha256": {
+    "/private/tmp/truss-update-single-map-basic-capacity-20261016.log": "f023e1d9700fcec95b93b913719d029783e35fb4f4d35d0fc339298a3817a1a4",
+    "/private/tmp/truss-update-single-map-matrix-report-20261016.json": "074ed642e4a5c863c839ee9ade6fa4f0f4ab839835e69bbabf88fd43c1a53235",
+    "/private/tmp/truss-update-single-map-matrix-20261016.log": "e24482e3381289fbf9434a885563698d023ccc8410789e73c82f4c2fc128bb5d"
+  },
+  "reviewerChecks": {
+    "allThreeSourcePinsMatchSourceReceipt": "PASS",
+    "exactTrackedChangeScope": "PASS",
+    "matrixManifestMatchesCandidate": "PASS",
+    "allEmittedLogSummaryFieldsEqualOriginalReport": "PASS"
+  },
+  "parentRunEvidence": {
+    "basicCapacity43916": {
+      "outcome": "PASS",
+      "tests": 5,
+      "seconds": 61.359,
+      "scope": "Create/update/read/no-op/dry-run/delete/durable retry; mixed aliases and failed-batch atomicity; owned subtree/reparent/cascade/history/retry; real 1024 creates and changed updates with commits/replay/readback; late index1023 fault rollback."
+    },
+    "originalMatrix5290": {
+      "outcome": "FAIL",
+      "sqlState": "57014",
+      "functionalPassed": false,
+      "performanceQualification": "not_evaluated",
+      "statementTimeoutMs": 10000,
+      "operationTimeoutMs": 30000,
+      "nodesCreatedAndCommitted": 1000,
+      "nodeApplyMs": 8947.381791,
+      "nodeCommitMs": 5902.227,
+      "edgeAttemptCount": 1000,
+      "edgeApplyFailedMs": 10057.581417,
+      "edgeCommitObserved": false,
+      "updateWorkloadReached": false,
+      "cancellationContext": "owned_forest_projection line35, called by runtime_owned_group_validate line212 during finish; this identifies the cancellation location, not a causal cost attribution.",
+      "cleanup": "PASS",
+      "cleanupMs": 1465.62725,
+      "sourceCommit": "0bdbc6d3805b084c9ea74a5347752dd3a53084e0",
+      "sourceWorkingTreeDirty": true
+    },
+    "separateBaselineCi": {
+      "source": "parent report only; not independently re-read as part of this increment",
+      "run": 38930740494,
+      "commit": "0bdbc6d3",
+      "linux": "FAIL initial 1024 CREATE line33",
+      "mac": "Still running at completed-review request",
+      "scope": "Baseline CI predates this update-only change and is not a candidate CI result."
+    }
+  },
+  "limitations": [
+    "No native tests, product edits or agents by reviewer.",
+    "The original matrix did not reach ID/key reads, single updates or any changed-update benchmark groups. No update benchmark benefit can be inferred.",
+    "The ordinary update conditional does not alter create_object or create_edge semantics; this increment is not presented as a CI CREATE-timeout fix.",
+    "Full matrix and platform-runner performance/release blockers remain open. No deadlines, workload or assertion changes are included.",
+    "The separately approved edge-ordinal window plan remains unimplemented and outside this receipt."
+  ]
+}

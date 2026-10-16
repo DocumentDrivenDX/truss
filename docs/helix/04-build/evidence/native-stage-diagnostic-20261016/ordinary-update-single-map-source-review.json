@@ -1,0 +1,36 @@
+{
+  "review": "Astra Ultra implemented ordinary-update single-map write",
+  "status": "SOURCE_CLEAR",
+  "blockingFindings": [],
+  "reviewedAt": "2026-10-16T16:20:24.716811+00:00",
+  "worktree": "/private/tmp/truss-main-integration-20261010",
+  "baseCommit": "0bdbc6d3805b084c9ea74a5347752dd3a53084e0",
+  "sourceSha256": {
+    "packages/postgresql/owned-groups/execute.sql": "ffabafbc89f56406fa13e9af42005ca35af00124f2b6e128be13ced9f5733e5f",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "2dd535141a9bd09f91fe00a4be4d5c49537be0ff6616dc0313c99619e65e8a18",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "fbafe6fe7119eff9561396a82b947365c775e2140abbca84fe24c68345bdd26e"
+  },
+  "planReceipt": "/private/tmp/truss-prepare-single-write-plan-astra-20261016.json",
+  "findings": [
+    "The applied ELSIF retains the preliminary merge for every reachable create or operation with an ownershipChange key. It excludes exactly the approved update_object/no-key path. Mode is already known nonnull in this closed object branch.",
+    "The selected member is already present and no ownership traversal occurs in the excluded path. A changed state receives the identical existing version check, local version bump and final full-member replacement. A no-op leaves the graph unchanged, equal to the former equal-state merge.",
+    "All subsequent local-state use, changed_nodes tracking, sparse and full plans, aliases, expected-version checks, graph authority and final forest/multiplicity remain byte-unchanged. Creates, rootless buffering, explicit ownership changes and cascades keep their original paths.",
+    "Author execute.sql and generated owned.sql are each exactly baseline plus the same one replacement. Manifest changes only the owned.sql digest and matches its actual bytes. No routine declarations, grants, schema, limits, native71 identity or 220-routine inventory change."
+  ],
+  "reviewerChecks": {
+    "exactSingleReplacementInAuthorAndGenerated": "PASS",
+    "manifestOnlyExpectedHashChange": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "nativeEvidence": {
+    "source": "parent",
+    "session": 43916,
+    "status": "PENDING at receipt",
+    "log": "/private/tmp/truss-update-single-map-basic-capacity-20261016.log"
+  },
+  "limitations": [
+    "No native tests, product source edits or agent spawns by reviewer.",
+    "Correctness-only source clearance; no measured speedup, full-matrix pass, CI runner qualification or release-blocker closure.",
+    "The separate local-edge ordinal proposal is not included in this receipt."
+  ]
+}

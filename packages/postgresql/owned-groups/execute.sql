@@ -200,7 +200,10 @@ BEGIN
     END IF;
     changed_nodes:=array_append(changed_nodes,selected);
     IF rootless_creates THEN created_states:=array_append(created_states,state);
-    ELSE nodes:=nodes||jsonb_build_object(selected,state);END IF;
+    -- Ordinary updates install their final versioned member below; no-op
+    -- updates already have that exact state in the working graph.
+    ELSIF operation->>'operation'<>'update_object' OR operation ? 'ownershipChange' THEN
+     nodes:=nodes||jsonb_build_object(selected,state);END IF;
     IF operation->>'operation'='update_object' AND NOT (operation ? 'ownershipChange') THEN
      IF state IS DISTINCT FROM before_nodes->selected THEN
       IF (state->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'object version exhausted' USING ERRCODE='54000';END IF;
