@@ -1,0 +1,16 @@
+{
+  "sourceEndpointsMatch": true,
+  "sources": {
+    "packages/python/src/truss/_current_disclosure_context_capture.py": "8852640d73fcfe527246174eeaec518ba8a93928acc046932528d5af10b81e9a",
+    "packages/python/src/truss/_current_disclosure_evaluation.py": "a32be39ef28eff3f02751923f3a5349a40ea30cf76f3d9f407525d4e05f7d187",
+    "packages/python/src/truss/_current_disclosure_originals.py": "ca5c10372964b5c42ccafa01ad91ecbad7d3c39b12922769d37de5b7ca4016cd",
+    "packages/python/src/truss/_native_graph_correspondence.py": "cbabba30e0f1c504ab3fe2be91bc5b127f61d202ef70706108aa370a5b000422",
+    "packages/python/src/truss/_native_model_correspondence.py": "25245cb52727eb9014a09322ec763dcd838d2729272e5dbe9d0c3f37c95a2618",
+    "packages/python/tests/test_current_disclosure_context_native.py": "27829a677fa2eb736fdc83587212fdc1c3148d8edf6b49184b6450271a8ad27c",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "3d80629903633da1d899d8ecd61c65b939f2809263ab71b365d589513c9a83d9"
+  },
+  "newFixtureRoots": [],
+  "fixturePostgresProcesses": [],
+  "terminalHandle": 87317,
+  "exitCode": 0
+}

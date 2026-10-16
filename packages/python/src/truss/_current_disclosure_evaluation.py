@@ -30,19 +30,19 @@ class _HeldDisclosureEvaluation:
 
 def evaluate_and_stage_current_disclosure(cursor,captured,subject,*,sql,parameters,document_ids,
         bun_executable,maximum_rows,maximum_scan_rows,maximum_bytes):
+    from ._current_disclosure_context_capture import ContextDisclosureCapture,_inputs
     sources=captured.sources
-    if sources.source_profile!=_DISCLOSURE_PROFILE or type(sources.query_originals) is not CurrentDisclosureOriginals:
-        raise ValueError('Distinct registered original disclosure source profile required')
-    request=decode_owner_evidence_json(sources.accepted_request_bytes)
-    if set(document_ids)!={m['pin']['documentId'] for m in request['modules']} or parameters:
-        raise ValueError('Complete original direct-projection model closure required')
-    opaque=decode_owner_evidence_json(sources.query_originals.opaque_sources_bytes)
-    original={r['role']:decode_owner_evidence_json(r['utf8'].encode()) for r in opaque}
-    modules=[dict(m,selectedModuleIds=[x['id'] for x in decode_owner_evidence_json(m['documentJson'].encode())['modules']]) for m in request['modules']]
-    raw=wire({'interfaceVersion':'weft-application-lineage/0.4-candidate','modules':modules,'sql':sql,'parameters':{},'opaqueSources':opaque})
-    if len(raw)>4_000_000:raise CurrentQueryLimit('Bounded original presence request required')
+    raw,modules,opaque,original=_inputs(sources,sql,parameters,document_ids)
     import weft.weft as native
-    cursor._deadline.check();parent=native.prepare_application_lineage(raw.decode());current=parent.prepare_current_presence()
+    cursor._deadline.check()
+    if type(captured) is ContextDisclosureCapture:
+        current=captured.definitions.model.current;parent=captured.definitions.model.parent
+        if (type(current) is not native.CurrentPresencePreparation
+                or native.CurrentPresencePreparation.source_preparation(current) is not parent
+                or decode_owner_evidence_json(captured.definitions.requirements)['sourceRequestJson']!=raw.decode()):
+            raise ValueError('Original captured compiler context required')
+    else:
+        parent=native.prepare_application_lineage(raw.decode());current=parent.prepare_current_presence()
     preparation_raw=native.CurrentPresencePreparation.json(current).encode();preparation=decode_owner_evidence_json(preparation_raw)
     packet=decode_owner_evidence_json(native.CurrentPresencePreparation.native_request_json(current).encode())
     owner=original['owner'];profile_row=next(r for r in opaque if r['role']=='presence-designation')

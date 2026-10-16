@@ -26,7 +26,9 @@ _CONSUMER_COHORTS=({
     'weftModuleSha256':'a94439b3949c6db574ded8d95d9b81b23e128b0cbb7570edff65228d3737c402',
     'childProtocol':'umf.security.private-disclosure-child/0.2-candidate',
     'resultAbi':'weft.postgresql.current-presence.sql/0.1-candidate',
-},)
+},
+# Separately qualified GraphRequirements candidate; no default dependency repin.
+{'profile': 'truss-current-disclosure-consumer/0.1-candidate', 'umfRevision': '11b412e4a783fef8075aeb4109a286650a0bda28', 'umfBundleSha256': '548b7ff64dabf3bc796afe99ecca265f5bcf242202e367ba7125e62c64f0a735', 'umfManifestSha256': '45154e0f3bd5973ddc4d6fb40fdebf27afb51fdc018d2f055ba580c9c07437d2', 'bunVersion': '1.4.2', 'weftRevision': 'b34a823911fb127e2bf4914fac6ca4415bb4adb1', 'weftWheelSha256': '25947eaea9cd42db79a2671664e7829af10d79a802a82cf92f5ddc0b2675e5c8', 'weftModuleSha256': '7e6384ddada0f67a45839a222ffb059e04a5de00f6a9281ad811eefacdeffa42', 'childProtocol': 'umf.security.private-disclosure-child/0.2-candidate', 'resultAbi': 'weft.postgresql.current-presence.sql/0.1-candidate'},)
 
 
 def _actual_disclosure_consumer():

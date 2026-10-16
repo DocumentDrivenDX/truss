@@ -1,0 +1,35 @@
+{
+  "status": "finding-resolved",
+  "resolvedFindings": [
+    "CONTEXT-COVERAGE-001"
+  ],
+  "remainingFindings": [],
+  "startedAt": "2026-10-16T20:30:43Z",
+  "completedAt": "2026-10-16T20:31:41.503811+00:00",
+  "reviewedPacket": "/private/tmp/truss-context-coverage-fix-review-20261016",
+  "pins": {
+    "context-before.py": "f3a35cc7fec6a3b981233ccaa3dcd8fa879bfca9004b77b26d0ccf79608af0bb",
+    "context-after.py": "8852640d73fcfe527246174eeaec518ba8a93928acc046932528d5af10b81e9a",
+    "tests-after.py": "81e2e843b3b420b76aae7e2f71845d87b6f011af1fd361b33e16b4a1cc72e357",
+    "unit.log": "c886de6f6e15c728928d741b0010f26eca72aeca75411c6bc59646f864bceb52"
+  },
+  "conclusion": "The repair compares unique complete Record/Field identity membership without imposing field order. Exact full-identity validation, complete:true, closed row shape and duplicate rejection remain enforced. Missing/foreign members still mismatch. Authored Key order, typed endpoint order, graph comparison, population census, source inputs and retained-context lifecycle are unchanged.",
+  "independentChecks": {
+    "focusedTests": 8,
+    "focusedSeconds": 0.104,
+    "additionalPureControls": 15,
+    "packetHashes": 4,
+    "astCorrespondence": "Every existing function/class is identical except the coverage comparison expression in _join_population. _inputs is unchanged. Added helper and one _identity import comprise the remaining source delta.",
+    "command": "PYTHONPATH=<copied work src>:<tests>:/private/tmp/truss-graph-requirements-final-weft-installed-20261016 TRUSS_GRAPH_JOIN_WEFT_QUALIFICATION=1 /private/tmp/truss-practical-performance-env/bin/python -B -m unittest test_current_disclosure_context_capture -v; then python -B audit.py"
+  },
+  "priorFindingPreserved": "/private/tmp/truss-context-composition-review-result-20261016/review.json",
+  "scopeLimits": [
+    "Focused source/pure/actual-extension review only. No SQL, native campaign, build, broad suite or new authority/acceptance conclusion.",
+    "Affected native rerun is separately owned and was neither awaited nor inspected; its eventual result is not credited here."
+  ],
+  "sourceEdits": false,
+  "nativeExecution": false,
+  "casePromotion": 0,
+  "manifest": "manifest.json",
+  "workingTreeOutsideEvidence": "/private/tmp/truss-context-coverage-fix-review-work-20261016"
+}

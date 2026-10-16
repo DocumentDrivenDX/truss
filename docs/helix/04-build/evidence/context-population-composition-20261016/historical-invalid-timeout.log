@@ -1,0 +1,20 @@
+test_registered_full_population_same_context_and_original_inspector (test_current_disclosure_context_native.ContextDisclosureNativeTests.test_registered_full_population_same_context_and_original_inspector) ... ERROR
+
+======================================================================
+ERROR: test_registered_full_population_same_context_and_original_inspector (test_current_disclosure_context_native.ContextDisclosureNativeTests.test_registered_full_population_same_context_and_original_inspector)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/tests/test_current_disclosure_context_native.py", line 36, in test_registered_full_population_same_context_and_original_inspector
+    self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,operation_timeout_ms=90000);self.tx=self.host.adopt_transaction().value
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/psycopg_host.py", line 742, in adopt_psycopg_host
+    return PsycopgHost(connection, profile=profile, statement_timeout_ms=statement_timeout_ms, operation_timeout_ms=operation_timeout_ms)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-disclosure-main-integration-20261016/packages/python/src/truss/psycopg_host.py", line 334, in __init__
+    raise ValueError('Operation timeout must be 1..60000 milliseconds')
+ValueError: Operation timeout must be 1..60000 milliseconds
+
+----------------------------------------------------------------------
+Ran 1 test in 26.565s
+
+FAILED (errors=1)
