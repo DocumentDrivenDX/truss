@@ -22,3 +22,14 @@ unsupported ordering, joins and Key carriers. Snapshot streams still refuse;
 Truss's current native catalog requires RC. Protected current-policy actions and
 manifest bulk need their original admission/receipt prerequisites. No temporal,
 complete SDK or release/default qualification is promoted.
+
+## Final input bounds
+
+The final page API bounds native/Python request and original-program bytes to
+4MiB and continuation JSON to1MiB before parsing, matching the portable input
+boundary. The bounded-inputs packet retains Rust7, all four actual installed
+Python oversized-input refusals, Chromium32 and the focused installed native14
+replay with verified server cleanup. Its exact compiler wheel/source pins are
+separate from the earlier complete two-interpreter regression cohort. Original
+reports and compiler patches remain unchanged. Publication and all previously
+listed unqualified gates remain held.
