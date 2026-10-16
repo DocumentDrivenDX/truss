@@ -723,3 +723,20 @@ Seven existing PostgreSQL 18 tests passed in 42.857 seconds: original
 1,024-operation create/update/commit/replay/readback and capacity refusals,
 owned graphs, immutable plan capture and journal-row guards. Runtime generator
 `--check` verifies the packaged source hashes.
+
+### Discarded unused-array argument trial
+
+Astra Ultra cleared a one-call trial passing an empty operations array only for
+CREATE's finishing owner lookup, whose helper does not read that argument. The
+original 1,024-CREATE diagnostic passed on both committed baseline and candidate.
+Whole apply measured 4,443.4 ms versus 4,336.2 ms; finish measured 1,500.8 ms versus
+1,465.0 ms. A single comparison does not establish a material improvement. The
+candidate was discarded and both runtime files restored exactly to main. No
+new helper, cache, relaxed check or deadline change was retained.
+
+[The subsequent installed-wheel run 38978591272](https://github.com/DocumentDrivenDX/truss/actions/runs/38978591272)
+on main 5bd7569c also failed original 1,024-CREATE at the unchanged SQL deadline
+on both platforms. Linux stopped in final row custody validation; macOS stopped
+in creation-history property definition resolution. Both passed the other 17
+owned-graph-step cases. The checked-attempt reuse has not resolved the release
+blocker; no tag or publication followed.
