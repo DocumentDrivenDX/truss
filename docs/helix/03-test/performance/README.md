@@ -746,3 +746,39 @@ whole apply 4,278.0 ms and finish 1,448.4 ms against the same committed-runtime
 baseline above. That single observation does not establish a material gain;
 the trial was discarded, with runtime and manifest restored exactly. Further
 release attempts await a substantive change rather than another micro-optimization.
+
+### Creation history uses the existing settlement metadata
+
+Settlement now includes created objects' original live after-images in its
+existing per-revision/type history metadata, including objects deleted by later
+operations. Creation verification uses the existing metadata renderer; standalone
+validation keeps its generic fallback. The private unpublished qualified helper
+adds an optional argument; the published wrapper and 223-routine inventory remain
+unchanged. Source pins are rebuilt independently at each finish/commit, while
+authority, ownership, journal, identity and complete-effect checks remain live.
+
+The original 1,024-CREATE diagnostic passes. Definition resolutions decrease
+from 20,484 to 17,415 and generic history renders from 2,048 to 1,024. One local
+apply observation was 4,084.4 ms versus the recent identical-runtime baseline
+4,443.4 ms; finish was 1,337.1 ms versus 1,500.8 ms. This establishes reduced
+repeated work, not isolated timing improvement or hosted release qualification.
+The first installation attempt exposed a missing CASE-expression grouping; it
+was corrected before the successful native run.
+Twelve existing/basic PostgreSQL 18 cases pass in 57.912 seconds: original
+capacity/commit/replay/readback, ordered batches, owned graphs, immutable capture,
+published native68 upgrade routes and a same-group create/delete followed by
+committed historical reconstruction. Astra Ultra cleared the plan and final
+source; generator `--check` verifies owner assembly and all runtime hashes.
+
+### Full functional release steps pass; original capacity remains open
+
+[Run 38980177061](https://github.com/DocumentDrivenDX/truss/actions/runs/38980177061)
+on main 8d4f341c passed packaging and every preceding installed functional,
+query, catalog-evolution and predecessor-upgrade step on Linux and macOS. The
+final unchanged capacity suite passed its two refusal/rollback cases but timed
+out original 1,024-CREATE on both platforms. Linux stopped in final physical-row
+attempt custody; macOS stopped in creation-transition validation's prepared
+attempt check. Publication was skipped; no tag followed. This does not establish
+hosted coverage of native export sources added later in 21346602. Their two
+source cases are now selected by the existing installed owned-graph release step;
+protection and populated-upgrade assertions remain in their existing selectors.

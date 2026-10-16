@@ -23,6 +23,10 @@ class DatabaseKeyUpgradeTests(unittest.TestCase):
                     self.assertIsInstance(upgraded,Ok,repr(upgraded)+' '+str(h._custody.last_attempt.error))
                     self.assertEqual(upgraded.value.release_id,_release()[0]['releaseId'])
                     h.detach();admin.commit()
+                    self.assertEqual(admin.execute("""SELECT count(*) FROM pg_proc WHERE pronamespace='truss'::regnamespace
+                        AND proname IN ('query_export_objects','query_export_edges','query_export_page_objects')
+                        AND proowner=(SELECT owner_oid FROM truss.catalog_runtime_installation)
+                        AND has_function_privilege('consumer',oid,'EXECUTE')""").fetchone(), (3,))
                     self.assertEqual(admin.execute('SELECT storage_row_id,namespace_bytes,key_bytes,original_context_bytes FROM truss.object_key_bucket ORDER BY storage_row_id').fetchall(),keys)
                     self.assertEqual(admin.execute('SELECT storage_row_id,namespace_bytes,key_bytes,original_reservation_bytes FROM truss.object_key_reservation_bucket ORDER BY storage_row_id').fetchall(),reservations)
                     for _,_,_,raw in keys:

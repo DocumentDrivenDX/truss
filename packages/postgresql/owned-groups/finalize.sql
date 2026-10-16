@@ -32,7 +32,7 @@ BEGIN
   OR sealed.ordinals IS DISTINCT FROM ARRAY(SELECT generate_series(0,attempt.next_index-1))
   OR sealed.results IS DISTINCT FROM attempt.results OR sealed.aliases IS DISTINCT FROM attempt.aliases THEN
   RAISE EXCEPTION 'exact complete retained owned result slots required' USING ERRCODE='55000';END IF;
- -- Compile only source metadata for changed, existing object images. Each
+ -- Compile source metadata for created and changed object images. Each
  -- independent settlement invocation resolves its own historical source cut.
  FOR history_group IN
   WITH frames AS MATERIALIZED (
@@ -41,8 +41,8 @@ BEGIN
   changes AS MATERIALIZED (
    SELECT f.before_nodes->n.key before_state,n.value after_state
    FROM frames f CROSS JOIN LATERAL jsonb_each(f.after_nodes) n
-   WHERE f.before_nodes->n.key IS NOT NULL AND f.before_nodes->n.key->'deleted'='false'::jsonb
-    AND n.value IS DISTINCT FROM f.before_nodes->n.key),
+   WHERE f.before_nodes->n.key IS NULL OR (f.before_nodes->n.key->'deleted'='false'::jsonb
+    AND n.value IS DISTINCT FROM f.before_nodes->n.key)),
   images AS MATERIALIZED (
    SELECT member.state->'image' image FROM changes c
    CROSS JOIN LATERAL (VALUES(c.before_state),(c.after_state)) member(state)

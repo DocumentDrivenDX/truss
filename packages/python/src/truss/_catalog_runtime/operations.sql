@@ -629,7 +629,7 @@ REVOKE ALL ON FUNCTION truss.object_group_step(uuid,int,bytea) FROM PUBLIC;
 
 -- Legacy0.1 creation evidence remains in the inner group. Atomic0.2 retains
 -- its actual journal in the transition; both formats preserve original history.
-CREATE FUNCTION truss.runtime_create_transition_validate_qualified(selected_transition bigint,qualified_actor oid,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS void
+CREATE FUNCTION truss.runtime_create_transition_validate_qualified(selected_transition bigint,qualified_actor oid,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL,compiled_metadata jsonb DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  member truss.runtime_create_member%ROWTYPE;creation truss.runtime_create_group%ROWTYPE;
@@ -666,7 +666,9 @@ BEGIN
     truss.runtime_owned_object_image(attempt.id,transition.operation_index,'create:'||transition.operation_index::text,'after',NULL,attempt)
    OR event->>'operation' IS DISTINCT FROM 'create' OR event->'identity' IS DISTINCT FROM identity
    OR event->'origin' IS DISTINCT FROM original_origin
-   OR event->'after' IS DISTINCT FROM truss.runtime_object_history(transition.after_object,identity)
+   OR event->'after' IS DISTINCT FROM (CASE WHEN compiled_metadata IS NULL
+    THEN truss.runtime_object_history(transition.after_object,identity)
+    ELSE truss.runtime_owned_history_record_in_metadata(transition.after_object,identity,compiled_metadata) END)
    OR entry->>'entity_kind' IS DISTINCT FROM 'o' OR entry->>'entity_id' IS DISTINCT FROM transition.object_id::text
    OR entry->>'entity_type' IS DISTINCT FROM transition.type_id::text OR entry->>'xid' IS DISTINCT FROM attempt.writer_xid::text
    OR entry->>'ver' IS DISTINCT FROM '1' OR entry->>'op' IS DISTINCT FROM 'create'
@@ -746,7 +748,7 @@ BEGIN
  END LOOP;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_create_transition_validate_qualified(bigint,oid,jsonb,bytea,truss.runtime_object_attempt) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_create_transition_validate_qualified(bigint,oid,jsonb,bytea,truss.runtime_object_attempt,jsonb) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_create_transition_validate(selected_transition bigint) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
