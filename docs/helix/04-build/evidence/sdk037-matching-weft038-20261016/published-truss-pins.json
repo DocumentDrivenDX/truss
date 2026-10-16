@@ -1,0 +1,54 @@
+{
+  "tag": "v0.0.37",
+  "commit": "6eff835f0eb17ef9bc13462675b8706647e266de",
+  "distribution": "truss-toolkit",
+  "version": "0.0.37",
+  "runtime": "truss-catalog-runtime/0.70-candidate",
+  "runtimeManifestSha256": "0d292c3681986b3664ff3af9927039d10cf20ef029511e33ccd7d76c566041e3",
+  "layout": {
+    "identity": "truss-layout",
+    "version": "1.0",
+    "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+  },
+  "weftRelease": "v0.4.38",
+  "weftBackend": "0.4.40",
+  "pgserver": "pgserver-pg18==18.6.1",
+  "pgserverRelease": "pg18.6-pgv0.8.6-r2",
+  "psycopg": "3.3.6",
+  "bun": "1.4.2",
+  "nativePlatforms": [
+    "linux-x86_64",
+    "macos-arm64"
+  ],
+  "timestampComparisonProfile": "umf-rfc3339-exact-instant/1.0.0",
+  "umfExactInstantCommit": "cbb6fb87",
+  "umf08CatalogSupport": {
+    "identity": "truss-fresh-catalog-support",
+    "version": "0.17.0",
+    "sha256": "76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"
+  },
+  "umf08CatalogReportInterface": "truss-catalog-registration-report/0.2",
+  "catalogSourceReferenceFormat": "truss-catalog-source-reference/0.1",
+  "catalogRebindReportInterface": "truss-catalog-registration-report/0.3",
+  "catalogRebindProfile": "truss-native-catalog-rebind/0.4",
+  "catalogRebindSupportedProfiles": [
+    "truss-native-catalog-rebind/0.1",
+    "truss-native-catalog-rebind/0.2",
+    "truss-native-catalog-rebind/0.3",
+    "truss-native-catalog-rebind/0.4"
+  ],
+  "catalogKeyBackfillReportInterface": "truss-catalog-registration-report/0.4",
+  "catalogKeyBackfillProfile": "truss-catalog-key-backfill/0.2",
+  "catalogKeyBackfillSupportedProfiles": [
+    "truss-catalog-key-backfill/0.1",
+    "truss-catalog-key-backfill/0.2"
+  ],
+  "currentQueryProfile": "truss-current-query-protection/0.1-candidate",
+  "currentQueryResultAbi": "weft.postgresql.current-values/0.2-candidate",
+  "currentQueryMode": "explicitly-activated-read-only",
+  "currentQueryPlatforms": [
+    "linux-x86_64",
+    "macos-arm64"
+  ],
+  "currentQueryWeftSource": "e2eba1ba323e6e9c08400fd0daf22bb456857d43"
+}

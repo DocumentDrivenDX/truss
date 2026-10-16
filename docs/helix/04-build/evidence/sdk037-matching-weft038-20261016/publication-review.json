@@ -1,0 +1,42 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "PUBLICATION_STATUS_SOURCE_AND_EVIDENCE_CLEAR",
+  "baseCommit": "e4153b38013ac7966957cb736d847765dd0316be",
+  "scope": "Three documentation updates plus three publication evidence files; no runtime edits",
+  "findings": [],
+  "publication": {
+    "workflow": 38903406269,
+    "status": "completed",
+    "conclusion": "success",
+    "tag": "v0.0.37",
+    "commit": "6eff835f0eb17ef9bc13462675b8706647e266de",
+    "publishedAt": "2026-10-16T13:05:02Z",
+    "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.37",
+    "nativePlatforms": [
+      "linux-x86_64",
+      "macos-arm64"
+    ]
+  },
+  "checks": [
+    "Published release-pins.json SHA256 matches downloaded SHA256SUMS.",
+    "Tag/version37, commit6eff835f, native70 manifest0d292c, Weft038/backend040/sourcee2eba1b and Linuxx64/macARM platform tuple agree across publication metadata and pins.",
+    "Native70 manifest digest equals exact stable6eff835f Git manifest.",
+    "Current README distinguishes publishedSDK37 from unreleasedmainSDK38/native71/defaultWeft036/backend039; owned1024 development and its performance limits remain unreleased.",
+    "RetainedSDK35 context explicitly historical; obsolete upcoming/unpublishednative70 paragraph corrected; failedSDK36 tag remains unpublished.",
+    "HELIX overview explicitly labels owned and compiled behavior as development, avoiding attribution to the newly published hotfix.",
+    "Only three tracked Markdown files changed; git diff --check passed; runtime/compiler/dependency files untouched."
+  ],
+  "sourceHashes": {
+    "packages/python/README.md": "804bfbcde67edddd7f6eeec66cd643e1968e996e89cfb284ae3137c87dd5ef4c",
+    "docs/helix/README.md": "cdefe7c67bf82c7a73848a9792ed8984546b5c7abcb390ce349cf6485317d70c",
+    "docs/helix/04-build/releases/v0.0.37.md": "8a74eefec910b951f34754406c722e2e3db197d98a0c01268f3c6deee7be7b28",
+    "docs/helix/04-build/evidence/sdk037-matching-weft038-20261016/publication.json": "1a178f2992b87bd6c6f276f3719b8526d36627d5c9c6e69843f69e6cfdb56c42",
+    "docs/helix/04-build/evidence/sdk037-matching-weft038-20261016/published-truss-pins.json": "a425cfc50585e14d042c7d90fcd2fa052cf2e2e0b240b751c7d625bd031b353a",
+    "docs/helix/04-build/evidence/sdk037-matching-weft038-20261016/published-truss-SHA256SUMS": "96470d3fd07a2b539b4477fe8d3fcdc50a8f8c58f95032ad8ea38913655c9896"
+  },
+  "evidenceLimits": [
+    "Publication time and both platform/publisher success are parent-retrieved evidence, not reviewer-executed CI.",
+    "Reviewer performed local source/pin/checksum consistency checks; no native/browser/test execution or new performance claim.",
+    "Main development workflow38905362987 remains independent and pending; publication ofSDK37 does not qualifymain38."
+  ]
+}

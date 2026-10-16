@@ -5,10 +5,12 @@
 reparent complete subtrees and cascade deletes; identity/key/page/edge reads,
 traversal and retained history preserve ownership. Basic PostgreSQL18.6 workflows
 cover commit, rollback, dry-run and original receipt replay. The
-published release remains v0.0.35, described below. The v0.0.36 tag did not
-publish: its release gate found the missing Weft runtime70 compatibility pin.
-Matching Weft `0.4.38` / backend `0.4.40` is published; the replacement
-SDK `0.0.37` hotfix still awaits its release gates.
+latest published release is [v0.0.37](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.37),
+using native `0.70-candidate` with Weft `0.4.38` / backend `0.4.40`.
+Its Linux x86_64 and macOS ARM release gates passed, including the populated
+v0.0.35 upgrade. The v0.0.36 tag remains an unpublished failed attempt.
+The earlier v0.0.35 feature scope is described below; owned-graph development
+remains unreleased.
 
 Modern owned groups admit up to 1,024 operations per atomic group; legacy
 rootless groups retain their 128-operation limit. Basic native tests cover
@@ -51,7 +53,7 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.35`,
+Historical v0.0.35 scope: Python distribution `truss-toolkit==0.0.35`,
 native runtime `0.68-candidate`, layout `1.0`
 candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.37`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
@@ -60,12 +62,12 @@ server versions are not qualified. The broader protected engine remains
 unfinished; this runtime enforces its installed ordinary-person/module boundaries
 and includes the explicitly activated policy-query profile described below.
 
-This release is [v0.0.35](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.35).
+This earlier release is [v0.0.35](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.35).
 
-The upcoming native70 hotfix addresses deferred edge writer authorization after
-an early attempt-constraint flush. Its transactional upgrade from published
-v0.0.35/native68 preserves rows and receipts. It remains unpublished until the
-matching compiler passes the release workflows.
+Published [v0.0.37](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.37)
+addresses deferred edge writer authorization after an early attempt-constraint
+flush. Its transactional upgrade from v0.0.35/native68 preserves rows and
+receipts; both platform release workflows passed with matching Weft v0.4.38.
 
 Creation now joins the common object transition ledger while retaining its sole
 original journal and receipt evidence. Populated native67 installations can

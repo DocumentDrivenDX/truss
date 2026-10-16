@@ -1,0 +1,13 @@
+{
+  "workflow": 38903406269,
+  "status": "completed",
+  "conclusion": "success",
+  "tag": "v0.0.37",
+  "commit": "6eff835f0eb17ef9bc13462675b8706647e266de",
+  "publishedAt": "2026-10-16T13:05:02Z",
+  "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.37",
+  "nativePlatforms": [
+    "linux-x86_64",
+    "macos-arm64"
+  ]
+}
