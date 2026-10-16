@@ -1277,7 +1277,7 @@ BEGIN
  PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module,current_actor);
  FOR selected_transition IN SELECT t.transition_id FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
   WHERE t.edge_id=selected_id AND t.rel_type_id=selected_type AND t.writer_xid=pg_current_xact_id()
-   AND (convert_from(a.input_bytes,'UTF8')::jsonb)->'mutationProfile'=truss.runtime_owned_profile() LOOP
+   AND a.context->'mutationProfile'=truss.runtime_owned_profile() LOOP
   PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,false,current_actor);
  END LOOP;
  SELECT to_jsonb(e) INTO actual FROM truss.edge e WHERE id=selected_id AND rel_type_id=selected_type;
@@ -1383,7 +1383,7 @@ BEGIN
  SELECT complete INTO STRICT completed FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  current_actor:=truss.runtime_person(false);
  FOR selected_transition IN SELECT t.transition_id FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
-  WHERE a.id=selected_attempt AND (convert_from(a.input_bytes,'UTF8')::jsonb)->'mutationProfile'=truss.runtime_owned_profile() LOOP
+  WHERE a.id=selected_attempt AND a.context->'mutationProfile'=truss.runtime_owned_profile() LOOP
   PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,completed,current_actor);
  END LOOP;
  FOR context,revision IN SELECT i.value,t.endpoint_ownership->>'captureCatalogRevision' FROM truss.runtime_edge_transition t

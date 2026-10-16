@@ -322,3 +322,11 @@ The released-scope edge-writer hotfix uses SDK0.0.36/native70. The owned develop
 tranche advances to SDK0.0.37.dev0/native71, preserving the exact native68 and
 native70 predecessor identities and supporting the populated68→70→71 chain.
 Historical native69 evidence remains attached to its original source.
+
+The native71 edge settlement filters now read the admitted immutable attempt
+context instead of reparsing the complete original group just to select its
+mutation profile. Original source bytes, fresh actor/writer checks and every
+transition validator remain unchanged. Astra Ultra clears the exact two-filter
+change; six basic edge/owned/authority workflows pass (22.411s). The unchanged
+1,000-node/1,000-edge matrix still refuses with57014 during edge application
+(26.245s total), so this is not performance qualification or release clearance.
