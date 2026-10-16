@@ -1,0 +1,11 @@
+{
+  "positiveRecords": 5,
+  "positiveFields": 12,
+  "positiveSingleComponentKeys": 5,
+  "renamedNativeColumnRefused": true,
+  "callerPriorWorkRetained": true,
+  "restoredMetadataEquals": true,
+  "changedOriginalSourceRefused": true,
+  "authority": false,
+  "nativeAdmission": "required"
+}

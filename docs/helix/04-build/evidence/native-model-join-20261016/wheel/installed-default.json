@@ -1,0 +1,11 @@
+{
+  "loadedPackage": "/private/tmp/truss-native-model-join-package-owner-20261016/installed/truss/__init__.py",
+  "joinModule": "/private/tmp/truss-native-model-join-package-owner-20261016/installed/truss/_native_model_correspondence.py",
+  "decoderModule": "/private/tmp/truss-native-model-join-package-owner-20261016/installed/truss/_owner_evidence_json.py",
+  "defaultTests": 14,
+  "passed": 11,
+  "skipped": 3,
+  "weftImportAttempts": [],
+  "noRootExport": true,
+  "nativeAuthority": false
+}

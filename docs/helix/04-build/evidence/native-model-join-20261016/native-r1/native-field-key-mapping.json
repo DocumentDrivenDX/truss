@@ -1,0 +1,59 @@
+{
+  "Staff": {
+    "typeId": 5,
+    "properties": {
+      "staffId": 12
+    },
+    "keyNum": 1,
+    "orderedKeyFields": [
+      "staffId"
+    ]
+  },
+  "Project": {
+    "typeId": 3,
+    "properties": {
+      "projectId": 8
+    },
+    "keyNum": 1,
+    "orderedKeyFields": [
+      "projectId"
+    ]
+  },
+  "Resource": {
+    "typeId": 4,
+    "properties": {
+      "resourceId": 9,
+      "salary": 10,
+      "token": 11
+    },
+    "keyNum": 1,
+    "orderedKeyFields": [
+      "resourceId"
+    ]
+  },
+  "Ownership": {
+    "typeId": 2,
+    "properties": {
+      "ownerId": 5,
+      "ownerProject": 6,
+      "ownerResource": 7
+    },
+    "keyNum": 1,
+    "orderedKeyFields": [
+      "ownerId"
+    ]
+  },
+  "Assignment": {
+    "typeId": 1,
+    "properties": {
+      "active": 1,
+      "assignmentId": 2,
+      "assignmentProject": 3,
+      "assignmentStaff": 4
+    },
+    "keyNum": 1,
+    "orderedKeyFields": [
+      "assignmentId"
+    ]
+  }
+}

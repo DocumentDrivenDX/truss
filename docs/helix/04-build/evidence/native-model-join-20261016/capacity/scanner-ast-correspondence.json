@@ -1,0 +1,8 @@
+{
+  "sharedScannerAstExactExceptNamedByteBudget": true,
+  "defaultEntryPointByteCap": 8388608,
+  "issuedRequirementsEntryPointByteCap": 16000000,
+  "oldSourceSha256": "b5854a03b8454d37957e78cc53b35df889ea37acd2fc175b3c2d26da0cc1da55",
+  "candidateSourceSha256": "7552329c1143f71cc5a620032841256fd9d17400cb0ced6f5079875f04467670",
+  "scope": "Mechanical scanner body preservation; not all runtime behavior or native authority proof."
+}

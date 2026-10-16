@@ -8,7 +8,16 @@ from decimal import Decimal, DecimalException, InvalidOperation, localcontext
 
 
 def decode_owner_evidence_json(original):
-    if type(original) is not bytes or not 1 <= len(original) <= 8_388_608:
+    return _decode_evidence_json(original, 8_388_608)
+
+
+def decode_issued_model_requirements_json(original):
+    """Exact issued-requirements scan; other owner surfaces retain 8 MiB."""
+    return _decode_evidence_json(original, 16_000_000)
+
+
+def _decode_evidence_json(original, max_bytes):
+    if type(original) is not bytes or not 1 <= len(original) <= max_bytes:
         raise ValueError('Bounded original owner evidence required')
 
     def pairs(items):

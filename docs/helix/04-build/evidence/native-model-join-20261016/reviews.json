@@ -1,0 +1,122 @@
+{
+  "truss-native-model-join-astra-r1": {
+    "manifest": {
+      "sha256": "6ee456214b3a36844e718c8f703b723af8e7f2a2da7d757ce77803323d21ae96",
+      "bytes": 7313
+    },
+    "review": {
+      "sha256": "d38f4e2a5b4aa5bc9b8c09fe3ca46686d0e162552e6bbd2cd5c4980e203b045e",
+      "bytes": 6540
+    },
+    "artifacts": 49,
+    "archive": {
+      "sha256": "ced1a03f0af6a5fe07f6f1da81e6cf6a778bb10e028721870f9f00e4f3eda77b",
+      "bytes": 105596
+    }
+  },
+  "truss-native-model-join-astra-r2": {
+    "manifest": {
+      "sha256": "884e38fb205fab7dac944abeef8700c4a0efee0e541a75b68cafe9c15ad54e74",
+      "bytes": 4863
+    },
+    "review": {
+      "sha256": "099b37c2abbd59dc38c5447bc0b879918ca6d59dca54c02b741a3af01f246138",
+      "bytes": 2663
+    },
+    "artifacts": 33,
+    "archive": {
+      "sha256": "b59797e72fbfedd913e98cb4fb2e199960b8af2edcaa9dfe75c548c8886e2d64",
+      "bytes": 46487
+    }
+  },
+  "truss-native-model-join-native-astra-r1": {
+    "manifest": {
+      "sha256": "3b191ea49e7a43409218c7ff493c3c118d02a62e8334cc99c3fb5fb87784e078",
+      "bytes": 4846
+    },
+    "review": {
+      "sha256": "a28e87a1de3698f6e13b421b971eee0080687ba39b45e1896e6d33d21c42e005",
+      "bytes": 4897
+    },
+    "artifacts": 35,
+    "archive": {
+      "sha256": "51ba7d19c5d53b0e77a345d92a2188293421d8ddad63d7619aff7cb6d43b4528",
+      "bytes": 11234245
+    }
+  },
+  "truss-native-model-join-native-astra-r2": {
+    "manifest": {
+      "sha256": "1dcfbe4cf91e2cd701e02cc5f6e33c485f9b19fa2b6980fcc1679e5a030fac05",
+      "bytes": 2633
+    },
+    "review": {
+      "sha256": "67d6d63e4923dcf92d552670c82e5576c0746b279331a7f85a43d279096d81cb",
+      "bytes": 2171
+    },
+    "artifacts": 20,
+    "archive": {
+      "sha256": "4628bc53ca3f496bb41fbd0819b18555555aeefdc78137a0f6276ecdb7c0e3f1",
+      "bytes": 25499
+    }
+  },
+  "truss-native-model-join-astra-r3": {
+    "manifest": {
+      "sha256": "edd625a853d11c3c82687556a9eba8a73b0eca8312459876b163eccf009d57c7",
+      "bytes": 8682
+    },
+    "review": {
+      "sha256": "182f33b59828e50da38bb17a61103dfaee99981f22d59b85680638b38043784a",
+      "bytes": 3435
+    },
+    "artifacts": 54,
+    "archive": {
+      "sha256": "32def340deec51b8f11a88680791a506c4d3aaac519a7e083dfa82cd5ef0c7fd",
+      "bytes": 13824158
+    }
+  },
+  "truss-native-model-join-boundary-astra": {
+    "manifest": {
+      "sha256": "5d89d164d5f4d286ca6a1d01bd883c81ddefc495dbd368cb5e6bd7bb8f60f724",
+      "bytes": 3910
+    },
+    "review": {
+      "sha256": "48db45fa6b16a32c1784e3e4901633df0c9387e9f883dae07bfe5f5fc802339e",
+      "bytes": 2200
+    },
+    "artifacts": 29,
+    "archive": {
+      "sha256": "b0f9656fbfd6711c1ec413410eae88cea65df93545ef88798465f2740e836d73",
+      "bytes": 148755
+    }
+  },
+  "truss-native-model-join-native-astra-r3": {
+    "manifest": {
+      "sha256": "6481c786657c4cff86a1448ec3298302ca9ed186b4eb0aa3f2762efece8debd7",
+      "bytes": 5411
+    },
+    "review": {
+      "sha256": "fa402fec6bb648e650f972287154cfba29148574e7f9d18df83bcae50ff646ee",
+      "bytes": 4226
+    },
+    "artifacts": 38,
+    "archive": {
+      "sha256": "d2bededbb90c56e8b4ca2b755916273468fac06125312705786b3e77c9011e8c",
+      "bytes": 17324796
+    }
+  },
+  "truss-native-model-join-final-astra": {
+    "manifest": {
+      "sha256": "e04560424f9d1026fdd252016157f311b0981b07afa9aa9995e21c9b9c4a2d61",
+      "bytes": 9584
+    },
+    "review": {
+      "sha256": "424942a9ed8b135479f50388c851c874dae3e2223ed07c1224f503f1a65b56a0",
+      "bytes": 4571
+    },
+    "artifacts": 63,
+    "archive": {
+      "sha256": "9701db114511e759d4436953615fc52c67946c1a3f5ed7bbedaad5cc4d9ef093",
+      "bytes": 16659609
+    }
+  }
+}

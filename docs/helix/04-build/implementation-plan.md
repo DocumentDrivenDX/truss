@@ -8124,3 +8124,32 @@ Weft e072/9f1 wheel remains isolated; default consumers, registrations, dependen
 and runtime assets are unchanged. Native codec/graph/Subject/current continuity
 and guarded release remain required. The separate native-model join is not yet
 merged. Shared158cases/34criteria stays45implemented/113missing; no promotion.
+
+
+### Actual issued-model/native correspondence component — 2026-10-16
+
+The unexported join consumes the actual typed compiler presence context and its
+original parent, captures original native sources through the stock host, and
+maps complete qualified Records/Fields/selected ordered Keys to JSON properties
+and physical object columns. The separate named16,000,000-byte requirements scan
+preserves all old8,388,608-byte owner-evidence guards. The actual scalar-only
+9,833,820-byte compiler report demonstrates this capacity need without unknown
+facets or imported-report issuance. No policy/domain/Key interpreter is added.
+
+[Retained evidence](evidence/native-model-join-20261016/README.md) preserves eight
+complete reviews/321 artifacts, initial failed probes and two separately repaired
+regression findings. Source/installed suites pass42 tests; fresh0.0.38.dev0 wheel
+65ad3a72 matches501 members at its captured cf8+candidate epoch, with unchanged
+version/dependencies. Native R4 passes1/6.272s with1872 pins, complete type-exact
+five-Record/twelve-Field/five-single-Key goldens, actual column/source refusal,
+caller prior-work preservation and confirmed owned cleanup. It imports the
+reviewed runtime-stage; later main assets need separate qualification. A read-only
+retention verifier checks every archive member without replaying SQL or tests.
+
+This is incomplete constructible inspection data, never a native witness. No
+existing consumer, registration, public export, dependency or default cohort is
+repinned. Composite native codecs, graph/context/other-home correspondence,
+authenticated source/Subject/current continuity and guarded release remain
+required. NSB-T01/T04/T05/T06/T09/T13/T14 prerequisites advance only; all original
+Truss132/shared158 cases/34criteria remain required,45implemented/113missing.
+No acceptance case is promoted.

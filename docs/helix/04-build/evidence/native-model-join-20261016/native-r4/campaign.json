@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "tests": 1,
+  "sourcePins": 1872,
+  "sourceEndpointsMatch": true,
+  "importedProjectPythonClosureCaptured": true,
+  "selectedTestFixturesCaptured": true,
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "psycopg": "3.3.6",
+  "libpq": 180006,
+  "pgserver": "18.6.1",
+  "cleanup": {
+    "root": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-public-catalog-a6f48l5p",
+    "rootRemoved": true,
+    "postmasterPid": 61639,
+    "postmasterStopped": true
+  },
+  "scope": "Actual typed compiler/native source join with separately named requirements decoder, original host and exact fixture model; independent full Record/Field/ordered-Key/native slots plus column/source refusal and caller work only; source endpoint hashes are not held-file/ABA proof. Actual candidate issued requirements included, but no native binding/current authority/release or backend acceptance."
+}

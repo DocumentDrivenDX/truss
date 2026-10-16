@@ -13,6 +13,8 @@ ddx:
       kind: informed_by
     - id: CONTRACT-012
       kind: informed_by
+    - id: truss.native-model-correspondence.design
+      kind: informed_by
 ---
 
 # Native source binding test plan
@@ -67,3 +69,29 @@ The inherited capacity profile is explicit in CONTRACT-013:1..256 modules,
 shape and the first failing shape independently, with matching recomputed hashes
 so capacity failures cannot be confused with stale-source correspondence.
 No capacity control establishes native allocation/CPU or authority guarantees.
+
+
+## Issued model/native join component qualification
+
+The actual-context candidate advances NSB-T01/T04/T05/T06/T09/T13/T14 component
+prerequisites only. Independently expected complete qualified Record/Field/Key
+identities, ordered native IDs, JSON keys and physical slots must survive; extra
+native members, missing issued non-Key members, duplicate records and changed
+source/column definitions must refuse. The stock host must preserve caller work
+on refusal and owned fixture cleanup must be independently confirmed. Full
+namespace/codec/graph/native continuity and guarded release remain required.
+
+A separate issued-requirements decoder admits at most16,000,000 bytes while all
+existing owner-evidence entry points retain8,388,608. Retain the actual large
+compiler-context request/report proving this distinction, exact-limit and first
+failing byte controls, and unchanged duplicate/number/Unicode/depth/container/
+node checks. A pure capacity pass does not qualify the large report against an
+actual native model, prove peak memory, or complete NSB-T13.
+
+The model join returns immutable inspection data retaining the actual context
+and parent. Supplied bytes, its publicly constructible data class, matching
+hashes and restored physical metadata must never issue a current native witness.
+The native component test has a dedicated TRUSS_NATIVE_MODEL_JOIN_QUALIFICATION
+opt-in and TRUSS_NATIVE_MODEL_JOIN_EVIDENCE directory; the older paired test's
+flag must not activate it. Default discovery with optional Weft unavailable must
+skip before native setup. No existing ABI/default/cohort/dependency is repinned.

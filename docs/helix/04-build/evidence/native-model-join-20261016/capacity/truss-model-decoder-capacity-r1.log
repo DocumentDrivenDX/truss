@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/private/tmp/truss-native-model-join-r3-owner-20261016/check-capacity.py", line 6, in <module>
+    start=time.monotonic();parent=weft.prepare_application_lineage(raw.decode());current=parent.prepare_current_presence();q=current.model_requirements_json().encode();assert current.source_preparation is parent
+                                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

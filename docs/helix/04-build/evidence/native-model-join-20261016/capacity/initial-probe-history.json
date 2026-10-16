@@ -1,0 +1,18 @@
+{
+  "kind": "Retrospective summary of original tool-return failures, not original stderr files",
+  "attempts": [
+    {
+      "source": "capacity-scalar-probe-initial-pin-failure.py",
+      "refusal": "WFT-PIN: Owning document digest mismatch"
+    },
+    {
+      "source": "capacity-scalar-probe-profile-pin-failure.py",
+      "refusal": "WFT-CURRENT-PRESENCE-CONTEXT: Source-bound presence preparation refused"
+    },
+    {
+      "source": "capacity-scalar-probe-r1.py",
+      "refusal": "WFT-SECURITY-ONTOLOGY: Security ontology closure refused"
+    }
+  ],
+  "qualification": "Unknown facet probe is not a valid supported-domain capacity counterexample. Later actual long-revision scalar-only issued report supplies the capacity evidence."
+}

@@ -1,0 +1,20 @@
+{
+  "wheel": "/private/tmp/truss-native-model-join-package-owner-20261016/wheel/truss_toolkit-0.0.38.dev0-py3-none-any.whl",
+  "wheelSha256": "65ad3a725bacc5f27204998aa8ae943497da82ff19d1bfeb405490a5ddb1144f",
+  "version": "0.0.38.dev0",
+  "sourcePackageMembers": 501,
+  "allSourceWheelInstalledBytesExact": true,
+  "packagingInputUnchanged": true,
+  "requirements": [
+    "jsonschema==4.26.0",
+    "referencing==0.37.0",
+    "psycopg[binary]==3.3.6; extra == \"native\"",
+    "weft-sql==0.4.36; extra == \"query\"",
+    "pg8000==1.31.5; extra == \"experimental-pg8000\"",
+    "pgserver-pg18==18.6.1; extra == \"local\"",
+    "fasteners==0.20; extra == \"local\"",
+    "platformdirs==4.12.4; extra == \"local\"",
+    "psutil==7.2.2; extra == \"local\""
+  ],
+  "scope": "Fresh local pure-Python package candidate; no publication, default compiler/cohort activation or new native authority claim."
+}
