@@ -92,6 +92,31 @@ jobs:
         run: python -m unittest test_current_query_runtime_native -v
       - name: Run the public-only policy query reference example
         run: python packages/python/examples/current_query_workflow.py "$RUNNER_TEMP/truss-policy-example" --bun bun
+      - name: Run installed owned graph and descendant query workflows
+        env:
+          TRUSS_BUN_EXECUTABLE: bun
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_owned_objects_native.OwnedObjectTests
+      - name: Upgrade the published native68 predecessor
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TRUSS_BUN_EXECUTABLE: bun
+          PYTHONPATH: packages/python/tests
+        run: |
+          gh release download v0.0.35 --repo DocumentDrivenDX/truss --pattern truss_toolkit-0.0.35-py3-none-any.whl --pattern SHA256SUMS --dir "$RUNNER_TEMP/truss-068-source"
+          python - <<'PYCODE'
+          import os,pathlib,hashlib,json,zipfile
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'truss-068-source'
+          name='truss_toolkit-0.0.35-py3-none-any.whl'
+          expected=dict((line.split()[1],line.split()[0]) for line in (root/'SHA256SUMS').read_text().splitlines())
+          assert hashlib.sha256((root/name).read_bytes()).hexdigest()==expected[name]
+          with zipfile.ZipFile(root/name) as wheel:
+              manifest=wheel.read('truss/_catalog_runtime/manifest.json')
+          assert hashlib.sha256(manifest).hexdigest()=='3588cf030cb46c7d12368557e351bd767c10b4dd2e1644f7f100cec54602a2fc'
+          assert json.loads(manifest)['releaseId']=='truss-catalog-runtime/0.68-candidate'
+          PYCODE
+          python -m pip install --no-deps --target "$RUNNER_TEMP/truss-068-package" "$RUNNER_TEMP/truss-068-source/truss_toolkit-0.0.35-py3-none-any.whl"
+          TRUSS_DB_KEY_PREDECESSOR="$RUNNER_TEMP/truss-068-package" python -m unittest test_database_key_upgrade_native
       - name: Run both installed numeric facet workflows
         env:
           TRUSS_BUN_EXECUTABLE: bun
@@ -267,6 +292,11 @@ jobs:
           (root/'catalog-key-backfill-report-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md').read_bytes())
           pins.update(catalogKeyBackfillReportInterface='truss-catalog-registration-report/0.4',catalogKeyBackfillProfile='truss-catalog-key-backfill/0.2',catalogKeyBackfillSupportedProfiles=['truss-catalog-key-backfill/0.1','truss-catalog-key-backfill/0.2'])
           pins.update(currentQueryProfile='truss-current-query-protection/0.1-candidate',currentQueryResultAbi='weft.postgresql.current-values/0.2-candidate',currentQueryMode='explicitly-activated-read-only',currentQueryPlatforms=['linux-x86_64','macos-arm64'],currentQueryWeftSource='86273dd3c2b4c2b99c8d0268c9dff8537e6ce20e')
+          group_profiles=json.loads(pathlib.Path('packages/python/src/truss/_catalog_runtime/group-profiles.json').read_bytes())['profiles']
+          query_abi_bytes=pathlib.Path('packages/python/src/truss/_catalog_runtime/query-abi.json').read_bytes()
+          query_abi=json.loads(query_abi_bytes)
+          (root/'logical-query-abi.json').write_bytes(query_abi_bytes)
+          pins.update(mutationProfile=next(p['pin'] for p in group_profiles if p['name']=='mutationProfile'),valueProfile=next(p['pin'] for p in group_profiles if p['name']=='valueProfile'),objectReadProfiles=['truss-python-scalar-object/0.4','truss-python-logical-object/0.1'],logicalQueryAbi={'identity':query_abi['identity'],'version':query_abi['version'],'sha256':hashlib.sha256(query_abi_bytes).hexdigest()})
           (root/'release-pins.json').write_text(json.dumps(pins,indent=2)+'\n')
           assets=sorted(root.iterdir())
           (root/'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name+'\n' for p in assets))

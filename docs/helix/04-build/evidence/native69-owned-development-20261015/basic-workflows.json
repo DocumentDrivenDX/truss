@@ -62,6 +62,14 @@
       ],
       "passed": 1,
       "seconds": 8.688
+    },
+    {
+      "cases": [
+        "exact checksum-verified published SDK35 wheel seeds native68, then upgrades to native69"
+      ],
+      "passed": 1,
+      "seconds": 6.451,
+      "predecessorWheelSha256": "7fb3ac4c2e407f7811ced8b69e9b243323d1812ffe7b3a94d6d8ce8be80d6559"
     }
   ],
   "developmentWheel": {
