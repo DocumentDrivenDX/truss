@@ -425,14 +425,14 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_plan(uuid,int) FROM PUBLIC;
 
 -- Actual identities come only from the admitted stored state or the genuine
 -- original create result. Local create ordinals never stand in for native IDs.
-CREATE FUNCTION truss.runtime_owned_identity(selected_attempt uuid,selected_index int,reference text,entity_kind text) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_identity(selected_attempt uuid,selected_index int,reference text,entity_kind text,prepared_plan jsonb DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE plan jsonb;state jsonb;identity jsonb;attempt truss.runtime_object_attempt%ROWTYPE;
  creation_index int;result jsonb;operation jsonb;witness jsonb;pin record;
 BEGIN
  IF entity_kind NOT IN ('object','edge') OR entity_kind IS NULL OR reference IS NULL THEN
   RAISE EXCEPTION 'explicit original entity reference required' USING ERRCODE='55000';END IF;
- plan:=truss.runtime_owned_plan(selected_attempt,selected_index);
+ plan:=coalesce(prepared_plan,truss.runtime_owned_plan(selected_attempt,selected_index));
  state:=coalesce(plan->(CASE entity_kind WHEN 'object' THEN 'afterNodes' ELSE 'afterEdges' END)->reference,
   plan->(CASE entity_kind WHEN 'object' THEN 'beforeNodes' ELSE 'beforeEdges' END)->reference);
  IF state IS NULL AND entity_kind='object' AND reference LIKE 'stored:%' THEN
@@ -451,7 +451,10 @@ BEGIN
    RAISE EXCEPTION 'original stored identity correspondence required' USING ERRCODE='55000';END IF;
  ELSIF reference ~ '^create:(0|[1-9][0-9]{0,2})$' THEN
   creation_index:=substring(reference FROM 8)::int;
-  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
+  IF prepared_attempt.id IS NOT NULL THEN
+   IF prepared_attempt.id IS DISTINCT FROM selected_attempt THEN RAISE EXCEPTION 'original checked attempt required' USING ERRCODE='55000';END IF;
+   attempt:=prepared_attempt;
+  ELSE SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;END IF;
   IF creation_index>selected_index OR creation_index>=attempt.next_index THEN
    RAISE EXCEPTION 'prior original create progress required' USING ERRCODE='55000';END IF;
   result:=attempt.results->creation_index;
@@ -469,25 +472,25 @@ BEGIN
  RETURN identity;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_identity(uuid,int,text,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_identity(uuid,int,text,text,jsonb,truss.runtime_object_attempt) FROM PUBLIC;
 
 -- Compare semantic simulation with realized transitions. Physical timestamps
 -- remain in the original member/transition; this is not their replacement.
-CREATE FUNCTION truss.runtime_owned_object_image(selected_attempt uuid,selected_index int,reference text,phase text) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_object_image(selected_attempt uuid,selected_index int,reference text,phase text,prepared_plan jsonb DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE plan jsonb;state jsonb;identity jsonb;root_identity jsonb;root_reference text;
 BEGIN
  IF phase IS NULL OR phase NOT IN ('before','after') THEN RAISE EXCEPTION 'explicit image phase required' USING ERRCODE='55000';END IF;
- plan:=truss.runtime_owned_plan(selected_attempt,selected_index);state:=plan->(phase||'Nodes')->reference;
+ plan:=coalesce(prepared_plan,truss.runtime_owned_plan(selected_attempt,selected_index));state:=plan->(phase||'Nodes')->reference;
  IF state IS NULL OR state->'deleted'='true'::jsonb THEN RETURN NULL;END IF;
- identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object');
+ identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object',plan,prepared_attempt);
  root_reference:=state->>'root';
- IF root_reference IS NOT NULL THEN root_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,root_reference,'object');END IF;
+ IF root_reference IS NOT NULL THEN root_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,root_reference,'object',plan,prepared_attempt);END IF;
  RETURN ((state->'image')-ARRAY['created_at','updated_at'])||jsonb_build_object('id',(identity->>'id')::bigint,
   'root_id',(root_identity->>'id')::bigint,'root_type',(root_identity->>'typeId')::int);
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_object_image(uuid,int,text,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_object_image(uuid,int,text,text,jsonb,truss.runtime_object_attempt) FROM PUBLIC;
 
 
 CREATE FUNCTION truss.runtime_owned_edge_image(selected_attempt uuid,selected_index int,reference text,phase text) RETURNS jsonb
@@ -920,7 +923,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_key_preflight(jsonb) FROM PUBLIC;
 
 -- Check each changed object against its original operation, including descendants.
 -- Physical before-images chain to the captured scope or an earlier original step.
-CREATE FUNCTION truss.runtime_owned_object_transition_validate_qualified(selected_transition bigint,authorize_read boolean,qualified_actor oid) RETURNS void
+CREATE FUNCTION truss.runtime_owned_object_transition_validate_qualified(selected_transition bigint,authorize_read boolean,qualified_actor oid,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;previous_image jsonb;scope jsonb;
@@ -930,32 +933,38 @@ DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime
 BEGIN
  IF authorize_read IS NULL THEN RAISE EXCEPTION 'explicit object validation mode required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT transition FROM truss.runtime_object_transition WHERE transition_id=selected_transition;
- SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
+ IF prepared_attempt.id IS NOT NULL THEN
+   IF prepared_attempt.id IS DISTINCT FROM transition.attempt_id THEN RAISE EXCEPTION 'original checked attempt required' USING ERRCODE='55000';END IF;
+   attempt:=prepared_attempt;
+  ELSE SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;END IF;
+ IF prepared_input IS NOT NULL AND (source_bytes IS NULL OR source_bytes IS DISTINCT FROM attempt.input_bytes) THEN
+  RAISE EXCEPTION 'original checked transition input required' USING ERRCODE='55000';END IF;
  IF attempt.writer_xid IS DISTINCT FROM transition.writer_xid OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
   OR jsonb_array_length(attempt.results)<>attempt.next_index OR (authorize_read AND NOT attempt.complete)
   OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM qualified_actor)) THEN
   RAISE EXCEPTION 'original completed object operation progress required' USING ERRCODE='55000';END IF;
- plan:=truss.runtime_owned_plan(attempt.id,transition.operation_index);input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+ plan:=truss.runtime_owned_plan(attempt.id,transition.operation_index);
  FOR candidate IN SELECT key FROM jsonb_each(plan->'afterNodes') LOOP
-  identity:=truss.runtime_owned_identity(attempt.id,transition.operation_index,candidate,'object');
+  identity:=truss.runtime_owned_identity(attempt.id,transition.operation_index,candidate,'object',plan,attempt);
   IF identity->>'id'=transition.object_id::text AND identity->>'typeId'=transition.type_id::text THEN reference:=candidate;matches:=matches+1;END IF;
  END LOOP;
  IF matches<>1 THEN RAISE EXCEPTION 'one original object plan member required' USING ERRCODE='55000';END IF;
- identity:=truss.runtime_owned_identity(attempt.id,transition.operation_index,reference,'object');
+ identity:=truss.runtime_owned_identity(attempt.id,transition.operation_index,reference,'object',plan,attempt);
  prior:=plan->'beforeNodes'->reference;desired:=plan->'afterNodes'->reference;original_mode:=plan->'operation'->>'operation';
  IF transition.before_object IS NULL THEN
   IF original_mode IS DISTINCT FROM 'create_object' OR reference IS DISTINCT FROM plan->>'primary'
-   OR transition.after_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(attempt.id,transition.operation_index,reference,'after') THEN
+   OR transition.after_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(attempt.id,transition.operation_index,reference,'after',plan,attempt) THEN
    RAISE EXCEPTION 'original object creation required' USING ERRCODE='55000';END IF;
-  IF NOT authorize_read THEN PERFORM truss.runtime_create_transition_validate_qualified(selected_transition,qualified_actor);END IF;
+  IF NOT authorize_read THEN PERFORM truss.runtime_create_transition_validate_qualified(selected_transition,qualified_actor,prepared_input,source_bytes,attempt);END IF;
   RETURN;
  END IF;
+ input:=coalesce(prepared_input,convert_from(attempt.input_bytes,'UTF8')::jsonb);
  IF original_mode NOT IN ('update_object','delete_object') OR prior IS NULL OR desired IS NULL
   OR prior->'deleted'='true'::jsonb OR prior IS NOT DISTINCT FROM desired
   OR (original_mode='update_object' AND desired->'deleted' IS DISTINCT FROM 'false'::jsonb)
   OR (original_mode='delete_object' AND desired->'deleted' IS DISTINCT FROM 'true'::jsonb)
-  OR transition.before_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(attempt.id,transition.operation_index,reference,'before')
-  OR transition.after_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(attempt.id,transition.operation_index,reference,'after') THEN
+  OR transition.before_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(attempt.id,transition.operation_index,reference,'before',plan,attempt)
+  OR transition.after_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(attempt.id,transition.operation_index,reference,'after',plan,attempt) THEN
   RAISE EXCEPTION 'original changed object plan and images required' USING ERRCODE='55000';END IF;
  SELECT after_object INTO previous_image FROM truss.runtime_object_transition WHERE attempt_id=attempt.id
   AND object_id=transition.object_id AND type_id=transition.type_id AND operation_index<transition.operation_index ORDER BY operation_index DESC LIMIT 1;
@@ -1021,7 +1030,7 @@ BEGIN
  END IF;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_object_transition_validate_qualified(bigint,boolean,oid) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_object_transition_validate_qualified(bigint,boolean,oid,jsonb,bytea,truss.runtime_object_attempt) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_owned_object_transition_validate(selected_transition bigint,authorize_read boolean) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

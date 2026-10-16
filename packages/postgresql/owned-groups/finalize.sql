@@ -28,15 +28,15 @@ BEGIN
   expected_objects:=0;expected_edges:=0;
   FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterNodes') n WHERE n.value IS DISTINCT FROM plan->'beforeNodes'->n.key
    AND (plan->'beforeNodes'->n.key IS NULL OR plan->'beforeNodes'->n.key->'deleted'='false'::jsonb) LOOP
-   identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'object');
+   identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'object',plan,attempt);
    SELECT t.transition_id INTO STRICT transition_id FROM truss.runtime_object_transition t WHERE t.attempt_id=selected_attempt
     AND t.operation_index=index AND t.object_id=(identity->>'id')::bigint AND t.type_id=(identity->>'typeId')::int;
-   PERFORM truss.runtime_owned_object_transition_validate_qualified(transition_id,false,current_actor);expected_objects:=expected_objects+1;
+   PERFORM truss.runtime_owned_object_transition_validate_qualified(transition_id,false,current_actor,input,attempt.input_bytes,attempt);expected_objects:=expected_objects+1;
   END LOOP;
   FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterEdges') e WHERE
    (e.value IS DISTINCT FROM plan->'beforeEdges'->e.key OR e.key=plan->>'primary' AND mode='update_edge')
    AND (plan->'beforeEdges'->e.key IS NULL OR plan->'beforeEdges'->e.key->'deleted'='false'::jsonb) LOOP
-   identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'edge');
+   identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'edge',plan,attempt);
    SELECT t.transition_id INTO STRICT transition_id FROM truss.runtime_edge_transition t WHERE t.attempt_id=selected_attempt
     AND t.operation_index=index AND t.edge_id=(identity->>'id')::bigint AND t.rel_type_id=(identity->>'typeId')::int;
    PERFORM truss.runtime_owned_edge_transition_validate(transition_id,false);expected_edges:=expected_edges+1;
@@ -44,7 +44,7 @@ BEGIN
   IF expected_objects<>(SELECT count(*) FROM truss.runtime_object_transition WHERE attempt_id=selected_attempt AND operation_index=index)
    OR expected_edges<>(SELECT count(*) FROM truss.runtime_edge_transition WHERE attempt_id=selected_attempt AND operation_index=index) THEN
    RAISE EXCEPTION 'complete original effect inventory required' USING ERRCODE='55000';END IF;
-  identity:=truss.runtime_owned_identity(selected_attempt,index,plan->>'primary',CASE WHEN mode LIKE '%object' THEN 'object' ELSE 'edge' END);
+  identity:=truss.runtime_owned_identity(selected_attempt,index,plan->>'primary',CASE WHEN mode LIKE '%object' THEN 'object' ELSE 'edge' END,plan,attempt);
   IF result->'identity' IS DISTINCT FROM identity OR result->>'operation' IS DISTINCT FROM mode THEN
    RAISE EXCEPTION 'original primary result identity required' USING ERRCODE='55000';END IF;
   primary_before:=plan->(CASE WHEN mode LIKE '%object' THEN 'beforeNodes' ELSE 'beforeEdges' END)->(plan->>'primary');
@@ -57,10 +57,10 @@ BEGIN
    RAISE EXCEPTION 'original primary outcome and version required' USING ERRCODE='55000';END IF;
   IF mode LIKE 'delete_%' THEN
    SELECT coalesce(jsonb_agg(v ORDER BY v::text COLLATE "C"),'[]'::jsonb) INTO deleted FROM (
-    SELECT jsonb_build_object('identity',truss.runtime_owned_identity(selected_attempt,index,p.key,'object'),
+    SELECT jsonb_build_object('identity',truss.runtime_owned_identity(selected_attempt,index,p.key,'object',plan,attempt),
      'deletionVersion',((p.value->'image'->>'ver')::bigint+1)::text) v
     FROM jsonb_each(plan->'beforeNodes') p WHERE p.value->'deleted'='false'::jsonb AND plan->'afterNodes'->p.key->'deleted'='true'::jsonb
-    UNION ALL SELECT jsonb_build_object('identity',truss.runtime_owned_identity(selected_attempt,index,p.key,'edge'),
+    UNION ALL SELECT jsonb_build_object('identity',truss.runtime_owned_identity(selected_attempt,index,p.key,'edge',plan,attempt),
      'deletionVersion',((p.value->'image'->>'ver')::bigint+1)::text)
     FROM jsonb_each(plan->'beforeEdges') p WHERE p.value->'deleted'='false'::jsonb AND plan->'afterEdges'->p.key->'deleted'='true'::jsonb) members;
    IF deleted IS DISTINCT FROM (SELECT jsonb_agg(value ORDER BY value::text COLLATE "C") FROM jsonb_array_elements(result->'deleted')) THEN
@@ -95,19 +95,19 @@ BEGIN
  END LOOP;
  IF NOT check_final THEN RETURN;END IF;
  FOR entry IN SELECT key,value FROM jsonb_each(last_plan->'afterNodes') LOOP
-  identity:=truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,entry.key,'object');
+  identity:=truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,entry.key,'object',last_plan,attempt);
   SELECT to_jsonb(o)-ARRAY['created_at','updated_at'] INTO actual FROM truss.object o WHERE o.id=(identity->>'id')::bigint AND o.type_id=(identity->>'typeId')::int;
-  IF actual IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,attempt.next_index-1,entry.key,'after') THEN
+  IF actual IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,attempt.next_index-1,entry.key,'after',last_plan,attempt) THEN
    RAISE EXCEPTION 'actual final owned object required' USING ERRCODE='55000';END IF;
   IF EXISTS(SELECT 1 FROM truss.edge e WHERE (e.source_id=(identity->>'id')::bigint AND e.source_type=(identity->>'typeId')::int
     OR e.target_id=(identity->>'id')::bigint AND e.target_type=(identity->>'typeId')::int)
    AND NOT EXISTS(SELECT 1 FROM jsonb_each(last_plan->'afterEdges') p WHERE p.value->'deleted'='false'::jsonb
-    AND truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,p.key,'edge')->>'id'=e.id::text
-    AND truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,p.key,'edge')->>'typeId'=e.rel_type_id::text)) THEN
+    AND truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,p.key,'edge',last_plan,attempt)->>'id'=e.id::text
+    AND truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,p.key,'edge',last_plan,attempt)->>'typeId'=e.rel_type_id::text)) THEN
    RAISE EXCEPTION 'complete final incident edge inventory required' USING ERRCODE='55000';END IF;
  END LOOP;
  FOR entry IN SELECT key,value FROM jsonb_each(last_plan->'afterEdges') LOOP
-  identity:=truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,entry.key,'edge');
+  identity:=truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,entry.key,'edge',last_plan,attempt);
   SELECT to_jsonb(e)-ARRAY['created_at','updated_at'] INTO actual FROM truss.edge e WHERE e.id=(identity->>'id')::bigint AND e.rel_type_id=(identity->>'typeId')::int;
   IF actual IS DISTINCT FROM truss.runtime_owned_edge_image(selected_attempt,attempt.next_index-1,entry.key,'after') THEN
    RAISE EXCEPTION 'actual final owned edge required' USING ERRCODE='55000';END IF;

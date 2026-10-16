@@ -547,7 +547,7 @@ REVOKE ALL ON FUNCTION truss.object_group_step(uuid,int,bytea) FROM PUBLIC;
 
 -- Legacy0.1 creation evidence remains in the inner group. Atomic0.2 retains
 -- its actual journal in the transition; both formats preserve original history.
-CREATE FUNCTION truss.runtime_create_transition_validate_qualified(selected_transition bigint,qualified_actor oid) RETURNS void
+CREATE FUNCTION truss.runtime_create_transition_validate_qualified(selected_transition bigint,qualified_actor oid,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  member truss.runtime_create_member%ROWTYPE;creation truss.runtime_create_group%ROWTYPE;
@@ -555,7 +555,12 @@ DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime
  actual jsonb;generation bigint;entry jsonb;event jsonb;identity jsonb;original_origin jsonb;
 BEGIN
  SELECT * INTO STRICT transition FROM truss.runtime_object_transition WHERE transition_id=selected_transition;
- SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
+ IF prepared_attempt.id IS NOT NULL THEN
+   IF prepared_attempt.id IS DISTINCT FROM transition.attempt_id THEN RAISE EXCEPTION 'original checked attempt required' USING ERRCODE='55000';END IF;
+   attempt:=prepared_attempt;
+  ELSE SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;END IF;
+ IF prepared_input IS NOT NULL AND (source_bytes IS NULL OR source_bytes IS DISTINCT FROM attempt.input_bytes) THEN
+  RAISE EXCEPTION 'original checked creation input required' USING ERRCODE='55000';END IF;
  IF attempt.context->'creationTransitionProfile'='{"identity":"truss-unified-create-transition","version":"0.2","sha256":"073782e2517f2a7e26c8d6479c6266ececf68963681ccfb6a380e9cd16f2e11b"}'::jsonb THEN
   IF transition.before_object IS NOT NULL OR transition.after_object IS NULL
    OR transition.writer_xid IS DISTINCT FROM attempt.writer_xid OR attempt.writer_xid IS DISTINCT FROM pg_current_xact_id()
@@ -563,7 +568,7 @@ BEGIN
    OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
    OR jsonb_array_length(attempt.results)<>attempt.next_index OR jsonb_array_length(transition.journal)<>1 THEN
    RAISE EXCEPTION 'current atomic create transition required' USING ERRCODE='55000';END IF;
-  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->transition.operation_index;
+  input:=coalesce(prepared_input,convert_from(attempt.input_bytes,'UTF8')::jsonb);operation:=input->'operations'->transition.operation_index;
   result:=attempt.results->transition.operation_index;identity:=result->'identity';entry:=transition.journal->0;
   event:=convert_from(decode(entry->'new_value'->>'bytesBase64','base64'),'UTF8')::jsonb;
   original_origin:=jsonb_build_object('asserted',input->'assertedOrigin','databaseRole',session_user::text);
@@ -656,7 +661,7 @@ BEGIN
  END LOOP;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_create_transition_validate_qualified(bigint,oid) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_create_transition_validate_qualified(bigint,oid,jsonb,bytea,truss.runtime_object_attempt) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_create_transition_validate(selected_transition bigint) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
