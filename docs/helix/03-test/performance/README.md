@@ -664,3 +664,16 @@ qualification. Ten existing PostgreSQL18 cases passed in51.796s: original
 capacity/commit/replay/readback, preparation correspondence and mandatory-edge
 refusal, plan-rewrite refusal, mixed owned graphs and ordered batch updates.
 Astra Ultra cleared the plan and final owner/generated source.
+
+### Original thousand-node/edge workflow on main1a12
+
+[The original small workload](results/2026-10-16-main1a12-small.json) passed on
+main1a12f40c with1,000 objects,1,000 edges,1,000IDreads,100keyreads,200committed
+changed updates and fresh-connection value/count/key/endpoint checks. Five
+observations each exercised atomic1/100/1,000 changed-update groups. It used the
+unchanged10sSQL/30soperation limits, fsync/full-page-writes and synchronous commit.
+Total elapsed107.774s; CREATE plus commit5,349.6ms; edge load plus commit7,103.4ms;
+median1,000-update plus commit11,643.6ms. This is functional evidence with local
+timings, not hosted performance qualification or proof of provisional latency
+targets. The exact committed runtime manifest matches the result. Its dirty-tree
+flag reflects untracked build/cache files; tracked source matched main1a12.
