@@ -1,0 +1,11 @@
+{
+  "reviewer": "Existing Astra Ultra reviewer",
+  "verdict": "Evidence scope clear",
+  "scope": "Frozen diagnostic harness/report/log only; no capacity, speedup or acceptance approval",
+  "findings": [
+    "Original workload and deadlines retained; track_functions all verified on both consumers; original cleanup in finally.",
+    "Report/log agree:57014 failure16.034s, cleanupcomplete.",
+    "Completed selftimes match create3.560s,rowvalidator1.498s,history0.132s; cancelledsettlementzero counters cannot establish wholephasecost.",
+    "Refused run records runtime_unavailable only; executable/version cause separately observed, not captured in refusal."
+  ]
+}
