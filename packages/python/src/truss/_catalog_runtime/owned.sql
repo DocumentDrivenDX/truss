@@ -902,7 +902,7 @@ BEGIN
  state:=coalesce(jsonb_extract_path(plan,CASE entity_kind WHEN 'object' THEN 'afterNodes' ELSE 'afterEdges' END,reference),
   jsonb_extract_path(plan,CASE entity_kind WHEN 'object' THEN 'beforeNodes' ELSE 'beforeEdges' END,reference));
  IF state IS NULL AND entity_kind='object' AND reference LIKE 'stored:%' THEN
-  SELECT p.plan->'initialScope'->'boundary'->substring(reference FROM 8) INTO witness
+  SELECT jsonb_extract_path(p.plan,'initialScope','boundary',substring(reference FROM 8)) INTO witness
    FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND p.operation_index=0;
   IF witness IS NOT NULL THEN
    SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(witness->'object'->>'type_id')::int,NULL,(plan->>'catalogRevision')::int);
@@ -1064,7 +1064,7 @@ CREATE FUNCTION truss.runtime_owned_edge_transition_validate(selected_transition
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_edge_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;expected_context jsonb;
- before_context jsonb;after_context jsonb;context jsonb;scope jsonb;previous_image jsonb;has_previous boolean;
+ before_context jsonb;after_context jsonb;context jsonb;previous_image jsonb;has_previous boolean;
  expected_mode text;original_mode text;expected_version bigint;journal jsonb;event jsonb;matches int:=0;current_actor oid;
 BEGIN
  IF authorize_read IS NULL THEN RAISE EXCEPTION 'explicit validation authority mode required' USING ERRCODE='55000';END IF;
@@ -1099,8 +1099,8 @@ BEGIN
    AND operation_index<transition.operation_index ORDER BY operation_index DESC LIMIT 1;
  has_previous:=FOUND;
  IF NOT has_previous THEN
-  SELECT p.plan->'initialScope' INTO STRICT scope FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.operation_index=0;
-  previous_image:=scope->'edges'->transition.edge_id::text;
+  SELECT jsonb_extract_path(p.plan,'initialScope','edges',transition.edge_id::text) INTO STRICT previous_image
+   FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.operation_index=0;
  END IF;
  IF transition.before_edge IS DISTINCT FROM previous_image THEN RAISE EXCEPTION 'original physical edge prestate chain required' USING ERRCODE='55000';END IF;
  IF prior IS NOT NULL THEN
@@ -1428,7 +1428,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_key_preflight(jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_owned_object_transition_validate_qualified(selected_transition bigint,authorize_read boolean,qualified_actor oid,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL,compiled_history jsonb DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
- plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;previous_image jsonb;scope jsonb;
+ plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;previous_image jsonb;
  original_mode text;expected_version bigint;matches int:=0;has_previous boolean;property truss.prop_def;pin record;
  expected_events jsonb:='[]';expected_event jsonb;journal jsonb;event jsonb;ordinal int:=0;
  before_record jsonb;after_record jsonb;semantic_events jsonb:='[]';group_pin jsonb;input jsonb;history_key text;history_metadata jsonb;
@@ -1472,8 +1472,8 @@ BEGIN
   AND object_id=transition.object_id AND type_id=transition.type_id AND operation_index<transition.operation_index ORDER BY operation_index DESC LIMIT 1;
  has_previous:=FOUND;
  IF NOT has_previous THEN
-  SELECT p.plan->'initialScope' INTO STRICT scope FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.operation_index=0;
-  previous_image:=scope->'nodes'->(transition.type_id::text||':'||transition.object_id::text);
+  SELECT jsonb_extract_path(p.plan,'initialScope','nodes',transition.type_id::text||':'||transition.object_id::text) INTO STRICT previous_image
+   FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.operation_index=0;
  END IF;
  IF transition.before_object IS DISTINCT FROM previous_image THEN RAISE EXCEPTION 'original physical object prestate chain required' USING ERRCODE='55000';END IF;
  expected_version:=(transition.before_object->>'ver')::bigint+1;

@@ -1,0 +1,51 @@
+{
+  "status": "COMPLETED_ITERATION_CLEAR_FUNCTIONAL_MATRIX_PASS_PERFORMANCE_UNQUALIFIED",
+  "reviewer": "Astra Ultra",
+  "findings": [],
+  "scope": "Exact three native point-lookup source/generated/manifest files plus bounded native-prestate-point-lookups evidence.",
+  "source_hashes": {
+    "packages/postgresql/owned-groups/execute.sql": "71982ac16fdb3e4477392ae215b7a3d58a7605d5fefac2e0ff3d4bf965a94db8",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "e6ae59829a79a3fd64890d823205f8308d663a12181464a5600e5beafe542d08",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "bbb734a97884dd0518708395292146f7516eee55fca1db0aa2b341d63d51e5d6"
+  },
+  "evidence_sha256": {
+    "docs/helix/04-build/evidence/native-prestate-point-lookups-20261016/README.md": "0ff4870de005763441b02b72588d0e19900952279817e515d921c1f1985aa719",
+    "docs/helix/04-build/evidence/native-prestate-point-lookups-20261016/basic-native.log": "3aeb540e381c969070a158fb50cdbedbb96f5f6e9ac4ef746f6a39712bdb9301",
+    "docs/helix/04-build/evidence/native-prestate-point-lookups-20261016/matrix.json.gz": "f6fa08f8c7f587b3e5b183fd0ed1f52aeb757c9955d810728c9fdee8740d60fa",
+    "docs/helix/04-build/evidence/native-prestate-point-lookups-20261016/plan-review.json": "7e6e9e49a517fd2e59074e20e658cdc574855d5ede21c556d321b645cd684a9e",
+    "docs/helix/04-build/evidence/native-prestate-point-lookups-20261016/prior-diagnostic-failed.json.gz": "c1f3dd647b4b8f843a5195487c92e2678d729f8ac9a06dccc52c5053f0e827f0",
+    "docs/helix/04-build/evidence/native-prestate-point-lookups-20261016/prior-stock-function-stats.json.gz": "dc3cc704495c29a379a03fc5214110a9bf09cd4990488b271a7c75bd44ec4194",
+    "docs/helix/04-build/evidence/native-prestate-point-lookups-20261016/source-pins.json": "45619ff6800ade20662ed979fb69b6468cd0f17884b41539c5b875219f52b2b3",
+    "docs/helix/04-build/evidence/native-prestate-point-lookups-20261016/source-review.json": "34faa6a3250929eb5ac77f66d628cb38bede2a0f729aa0d06e6fc44029faabf2"
+  },
+  "verified": [
+    "Current source hashes equal reviewed candidate and retained source-pins; manifest matches actual full report.",
+    "Retained basic log confirms8PASS27.423s. Actual matrix report passed with all samples including cleanup ok.",
+    "Full original small workload retained:1000committed nodes/edges,1000ID/100key reads,200committedsingles,5changed1000updategroups and reopened values.",
+    "README medians agree with report and explicitly deny causal speedup/headroom and1024 release qualification.",
+    "Prior profiled deadline failure retained separately; completed-call counters are not substituted for successful unprofiled evidence.",
+    "Report records base70a051f9+dirty worktree and exact runtime manifest; it does not falsely attribute pending source to clean base."
+  ],
+  "parent_executed_evidence": {
+    "matrix_session": "95538",
+    "basic_tests": 8,
+    "basic_seconds": 27.423,
+    "functional_passed": true,
+    "performance_qualification": "not_evaluated",
+    "observed_sizes": [
+      1,
+      100,
+      1000
+    ],
+    "1000_update_medians_ms": {
+      "bulk_update_1000": 9882.495667,
+      "bulk_update_commit_1000": 3892.056459,
+      "bulk_update_end_to_end_1000": 13844.139791
+    },
+    "machine": "macOS-27.0.1-arm64-arm-64bit",
+    "statement_timeout_ms": 10000,
+    "operation_timeout_ms": 30000
+  },
+  "reviewer_execution": "Static evidence/hash review only; no native execution.",
+  "commit_readiness": "Clear exact source and bounded evidence; scaling and release gates remain open."
+}

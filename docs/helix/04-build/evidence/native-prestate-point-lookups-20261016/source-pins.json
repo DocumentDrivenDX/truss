@@ -1,0 +1,14 @@
+{
+  "baseNativeCommit": "70a051f9",
+  "sourceHashes": {
+    "packages/postgresql/owned-groups/execute.sql": "71982ac16fdb3e4477392ae215b7a3d58a7605d5fefac2e0ff3d4bf965a94db8",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "e6ae59829a79a3fd64890d823205f8308d663a12181464a5600e5beafe542d08",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "bbb734a97884dd0518708395292146f7516eee55fca1db0aa2b341d63d51e5d6"
+  },
+  "workload": "Original small matrix:1000nodes/1000edges,1000ID+100key reads,200 committed singles,five changed update groups per1/100/1000 sizes",
+  "limits": {
+    "statementMs": 10000,
+    "operationMs": 30000
+  },
+  "performanceQualification": "not_evaluated"
+}

@@ -1,0 +1,39 @@
+{
+  "status": "SOURCE_CLEAR_PARENT_BASIC_AND_ORIGINAL_MATRIX_PASS_EVIDENCE_REVIEW_PENDING",
+  "reviewer": "Astra Ultra",
+  "base_commit": "70a051f997134b405b9cd7684baa8fa99bcd56be",
+  "scope": "Exact three prestate/boundary point extractions with two unused scope locals removed; generated owned source and manifest only.",
+  "findings": [],
+  "source_hashes": {
+    "packages/postgresql/owned-groups/execute.sql": "71982ac16fdb3e4477392ae215b7a3d58a7605d5fefac2e0ff3d4bf965a94db8",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "e6ae59829a79a3fd64890d823205f8308d663a12181464a5600e5beafe542d08",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "bbb734a97884dd0518708395292146f7516eee55fca1db0aa2b341d63d51e5d6"
+  },
+  "verified": [
+    "Boundary extraction uses exact original substring key and remains nonSTRICT.",
+    "Physical edge capture uses exact edge_id text key; object capture uses exact type_id:id key. Both use unchanged first-operation row predicates and INTO STRICT previous_image.",
+    "Previous-transition query/order/LIMIT and immediate has_previous:=FOUND are unchanged. Missing capture member remains SQL NULL; full physical image including timestamps still receives unchanged IS DISTINCT FROM comparison.",
+    "Only two now-unused scope declarations removed; all other custody/source/authority checks and helper bodies remain unchanged.",
+    "No routine/signature/grant, storage, capacity or deadline changes."
+  ],
+  "reviewer_checks": [
+    "Exact14-line owner diff reviewed against70a051f9",
+    "build-owned-runtime.py --check PASS",
+    "git diff --check PASS"
+  ],
+  "qualification": [
+    "Equivalent for admitted immutable captured object maps; no arbitrary corrupted array-shape equivalence claim.",
+    "Results presently parent-reported; bounded source/report evidence review remains pending."
+  ],
+  "plan_review": "/private/tmp/truss-main-prestate-point-lookup-plan-astra-20261016.json",
+  "reviewer_native_runs": 0,
+  "parent_reported_results": {
+    "basic": "8 PASS27.423s",
+    "matrix_session": "95538",
+    "matrix": "Unchanged whole original matrix PASS with5repeat changed1000updates and full reopened readback.",
+    "update1000_median_apply_ms": 9882.5,
+    "update1000_median_commit_ms": 3892.1,
+    "update1000_median_end_to_end_ms": 13844.1,
+    "qualification": "Modest local observation; no causal improvement, statement headroom or performance/release qualification."
+  }
+}

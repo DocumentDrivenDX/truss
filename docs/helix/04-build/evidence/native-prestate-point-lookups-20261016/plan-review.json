@@ -1,0 +1,24 @@
+{
+  "status": "PLAN_CLEAR",
+  "reviewer": "Astra Ultra",
+  "base_commit": "70a051f997134b405b9cd7684baa8fa99bcd56be",
+  "source_sha256": "c7b93df5c7397d5f88cf69324fafd201797d64b74ef7d8ee26adcf8a647ad974",
+  "scope": "Three exact point extractions from original first-operation captured scope; remove only now-unused scope locals in the two transition validators.",
+  "findings": [],
+  "verified": [
+    "Both transition validators use scope only as a temporary whole-initialScope value before selecting one physical image.",
+    "Direct extraction uses original object key type_id:id and original edge key edge_id; these capture key conventions must not be unified or changed.",
+    "Keep identical attempt_id/operation_index=0 row predicates and INTO STRICT for physical prestate fallbacks. STRICT checks row count, not non-NULL selected value, so missing JSON member still yields the original SQL NULL comparison.",
+    "Boundary identity extraction remains nonSTRICT and preserves exact substring(reference FROM8) key.",
+    "Admitted captured nodes/edges/boundary are object maps; direct jsonb_extract_path preserves leaf JSON null vs missing-path SQL NULL and complete physical image content.",
+    "Previous-transition query/order/LIMIT, immediate FOUND capture and unchanged IS DISTINCT FROM physical correspondence remain.",
+    "No creation-index custody, original source, authority, signatures, grants, limits or deadlines change."
+  ],
+  "verification_plan": "Completed source review, existing8 meaningful native controls and unchanged original matrix. Preserve unprofiled57220 pass separately from profiled26432 late timeout; no causal or full-performance claim from profile counters.",
+  "parent_reported_diagnostic": {
+    "session": "26432",
+    "result": "Profiled full matrix failed late1000-update57014 in final forest; prior unprofiled57220 entire matrix passed.",
+    "stock_pgstats": "Completed calls show group_validate5506ms,prepare5068ms,person4636ms,edge_transition2239ms,object_transition1803ms self totals; active cancelled calls may be absent."
+  },
+  "reviewer_native_runs": 0
+}
