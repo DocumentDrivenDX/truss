@@ -492,3 +492,16 @@ temporary JSON objects. It retains full result/alias equality and the same
 post-trigger reread and check order. Astra Ultra clears the source; the same
 five local native workflows pass (51.733 seconds). This is another allocation
 reduction, not a measured latency improvement or release-runner clearance.
+
+A buffered preparation path now handles only empty existing graph scopes whose
+operations are all exact rootless object creations. It accumulates states and
+assembles the complete node map once; every other graph shape uses the original
+path. The validation loop, ordered operation plans, final forest/multiplicity
+checks and byte limits remain. Basic native tests compare complete inventories
+against the retained general branch for singleton and mixed-type batches, reject
+missing mandatory relationships without durable effects, and run the existing
+owned subtree/reparent/cascade/history/retry workflow (three passes,12.591s).
+The unchanged full1,024-create/update/commit/replay/readback and final-operation
+fault checks also pass locally (two passes,41.764s). Astra Ultra clears source
+and tests. These elapsed suite times do not establish a causal speedup. Earlier
+installed-runner failures remain open pending the new exact wheel check.

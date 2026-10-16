@@ -476,12 +476,20 @@ DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='
  index int:=0;before_count int;descendants text[];descendant text;projection jsonb;deleted jsonb;local_owned jsonb;local_independent jsonb;
  unset_name text;authored jsonb;retained jsonb;order_key jsonb;selected_source_type int;selected_target_type int;plan jsonb;outgoing bigint;incoming bigint;
  retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;current_actor oid;resolved_creates jsonb:='{}';
+ rootless_creates boolean;created_states jsonb[]:='{}';
 BEGIN
  current_actor:=truss.runtime_person(false);
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 1024
   OR jsonb_typeof(scope->'nodes') IS DISTINCT FROM 'object' OR jsonb_typeof(scope->'edges') IS DISTINCT FROM 'object'
   OR octet_length(convert_to(scope::text,'UTF8'))>4194304 THEN
   RAISE EXCEPTION 'complete bounded original group scope required' USING ERRCODE='54000';END IF;
+ -- Buffer independent new roots; no operation in this closed shape reads an
+ -- earlier node. Keep the same ordered plans and complete final graph checks.
+ rootless_creates:=coalesce(scope->'nodes'='{}'::jsonb AND scope->'edges'='{}'::jsonb
+  AND scope->'boundary'='{}'::jsonb AND NOT EXISTS(
+   SELECT 1 FROM jsonb_array_elements(input->'operations') o
+   WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
+    OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb),false);
  revision:=(scope->>'catalogRevision')::int;
  IF revision IS NULL OR revision<1 OR revision IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1) THEN
   RAISE EXCEPTION 'current admitted group catalog required' USING ERRCODE='55P03';END IF;
@@ -594,7 +602,8 @@ BEGIN
      END IF;
     END IF;
     changed_nodes:=array_append(changed_nodes,selected);
-    nodes:=nodes||jsonb_build_object(selected,state);
+    IF rootless_creates THEN created_states:=array_append(created_states,state);
+    ELSE nodes:=nodes||jsonb_build_object(selected,state);END IF;
     IF operation->>'operation'='update_object' AND NOT (operation ? 'ownershipChange') THEN
      IF state IS DISTINCT FROM before_nodes->selected THEN
       IF (state->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'object version exhausted' USING ERRCODE='54000';END IF;
@@ -676,9 +685,17 @@ BEGIN
   IF operation ? 'alias' THEN aliases:=aliases||jsonb_build_object(operation->>'alias',selected);END IF;
   -- Keep one working graph for ordered simulation. Persist only this step's
   -- changed members and identity witnesses; final settlement keeps one full frame.
+  IF rootless_creates AND index=jsonb_array_length(input->'operations')-1 THEN
+   SELECT jsonb_object_agg(node_order[n.ordinal::int],n.state) INTO nodes
+    FROM unnest(created_states) WITH ORDINALITY n(state,ordinal);
+   before_nodes:=nodes-selected;
+  END IF;
   IF index=jsonb_array_length(input->'operations')-1 THEN
    plan:=jsonb_build_object('beforeNodes',before_nodes,'afterNodes',nodes,
     'beforeEdges',before_edges,'afterEdges',edges);
+  ELSIF rootless_creates THEN
+   plan:=jsonb_build_object('beforeNodes','{}'::jsonb,'afterNodes',jsonb_build_object(selected,state),
+    'beforeEdges','{}'::jsonb,'afterEdges','{}'::jsonb);
   ELSIF operation->>'operation'='create_object'
    OR (operation->>'operation'='update_object' AND NOT (operation ? 'ownershipChange')) THEN
    -- These operations change one object only. Use point lookups for its root
