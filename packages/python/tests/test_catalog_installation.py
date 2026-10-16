@@ -25,7 +25,7 @@ class CatalogInstallationInputTests(unittest.TestCase):
             def run(self,sql):
                 if not sql.startswith('SELECT pg_catalog.jsonb_build_object('):raise AssertionError('No transaction SQL permitted')
                 return [[json.dumps({'version':'160015'})]]
-        with self.assertRaisesRegex(ValueError,'PostgreSQL17'):
+        with self.assertRaisesRegex(ValueError,'PostgreSQL18.6'):
             construct_provisional_catalog_layout(Port())
 
     def test_caller_runtime_transaction_not_adopted(self):
@@ -48,17 +48,17 @@ class CatalogInstallationNativeTests(NativeBoundaryFixture,unittest.TestCase):
         value=construct_provisional_catalog_layout(self.connection)
         observed=json.loads(value.namespace_observation)
         tables=[r for r in observed['relations'] if r['relkind'] in ('r','p')]
-        self.assertEqual(len(tables),48)
+        self.assertEqual(len(tables),28)
         table_oids={r['oid'] for r in tables}
         columns=[a for a in observed['columns'] if a['attrelid'] in table_oids and a['attnum']>0 and not a['attisdropped']]
-        self.assertEqual(len(columns),454)
-        self.assertEqual(value.statement_count,'112')
+        self.assertEqual(len(columns),229)
+        self.assertEqual(value.statement_count,'75')
         self.assertEqual(len(observed['routines']),2)
         self.assertTrue(value.rollback_confirmed)
         self.assertFalse(value.installation_ready)
         definitions=json.loads(value.definition_observation)
-        self.assertEqual({k:len(v) for k,v in definitions.items()},{'expressions':63,'constraints':298,'indexes':86})
-        self.assertEqual(sum(c['kind']=='p' for c in definitions['constraints']),48)
+        self.assertEqual({k:len(v) for k,v in definitions.items()},{'expressions':37,'constraints':323,'indexes':52})
+        self.assertEqual(sum(c['kind']=='p' for c in definitions['constraints']),28)
         self.assertTrue(value.original_definition_baseline)
         self.assertEqual(self.connection.run("SELECT to_regnamespace('truss')::text"),[[None]])
 
@@ -285,7 +285,7 @@ class CatalogInstallationNativeTests(NativeBoundaryFixture,unittest.TestCase):
         self.assertIs(refused.exception.original_connection,port)
         self.assertTrue(refused.exception.original_attempt['rollback_submitted'])
         self.assertFalse(refused.exception.original_attempt['rollback_reply_observed'])
-        self.assertEqual(len(refused.exception.original_attempt['submitted_statements']),112)
+        self.assertEqual(len(refused.exception.original_attempt['submitted_statements']),75)
         self.assertIs(refused.exception.cleanup_failure,loss)
         self.assertFalse(refused.exception.rollback_confirmed)
         self.assertEqual(commands.count('BEGIN'),1)

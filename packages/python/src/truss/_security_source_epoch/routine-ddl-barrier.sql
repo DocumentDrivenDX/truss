@@ -13,8 +13,8 @@ BEGIN
  END IF;
  -- Retained native admissions outlive individual calls in this transaction.
  -- Refuse before writer modes/marker locking and before any selected DDL effect.
- IF EXISTS(SELECT 1 FROM truss.row_home_operation o
-  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned()) THEN
+ IF EXISTS(SELECT 1 FROM truss.runtime_object_attempt o
+  WHERE o.writer_xid=pg_current_xact_id_if_assigned()) THEN
   RAISE EXCEPTION 'routine DDL cannot follow an original operation' USING ERRCODE='55000';
  END IF;
  IF EXISTS(SELECT 1 FROM pg_catalog.pg_locks l

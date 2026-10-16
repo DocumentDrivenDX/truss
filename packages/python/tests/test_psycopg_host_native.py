@@ -75,7 +75,7 @@ class PsycopgHostNativeTests(unittest.TestCase):
             return cursor.fetchone()[0]
         return self.host._run_operation(transaction, execute)
 
-    def test_matching_timeout_uses_one_probe_per_call_without_timeout_resets(self):
+    def test_matching_timeout_checks_admission_and_final_state_without_timeout_resets(self):
         self.host._timeout = 3000
         original = self.host._cursor
         queries = []
@@ -87,14 +87,14 @@ class PsycopgHostNativeTests(unittest.TestCase):
                 return self.cursor.execute(query, *args, **kwargs)
         self.host._cursor = lambda: Counting(original())
         transaction = self.begin()
-        self.assertEqual(len(queries), 3)
+        self.assertEqual(len(queries), 4)
         import truss.psycopg_host as psycopg_host
-        self.assertEqual(sum(query == psycopg_host._IDENTITY_SQL for query in queries), 1)
+        self.assertEqual(sum(query == psycopg_host._IDENTITY_SQL for query in queries), 2)
         self.assertFalse(any(isinstance(query, str) and query.startswith('SET LOCAL statement_timeout') for query in queries))
         queries.clear()
         self.assertEqual(self.scalar(transaction, 'SELECT 1::text'), Ok('1'))
-        self.assertEqual(len(queries), 4)
-        self.assertEqual(sum(query == psycopg_host._IDENTITY_SQL for query in queries), 1)
+        self.assertEqual(len(queries), 5)
+        self.assertEqual(sum(query == psycopg_host._IDENTITY_SQL for query in queries), 2)
         self.assertFalse(any(isinstance(query, str) and query.startswith('SET LOCAL statement_timeout') for query in queries))
         self.assertEqual(self.connection.execute('SHOW statement_timeout').fetchone(), ('3s',))
 
