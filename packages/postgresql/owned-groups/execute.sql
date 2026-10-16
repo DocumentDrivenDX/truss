@@ -59,7 +59,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_local_edges(jsonb,text[],text[],boole
 
 CREATE FUNCTION truss.runtime_owned_prepare(input jsonb,scope jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb:='[]';
+DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='{}';
  node_order text[]:='{}';boundary_order text[]:='{}';entry record;selected text;source_ref text;target_ref text;root_ref text;
  operation jsonb;before_nodes jsonb;before_edges jsonb;state jsonb;prior jsonb;image jsonb;values_image jsonb;ownership jsonb;
  selected_type truss.type_def%ROWTYPE;relation truss.rel_def%ROWTYPE;pin record;identity jsonb;revision int;
@@ -275,7 +275,7 @@ BEGIN
    'operationIndex',index,'operation',operation,'primary',selected);
   plans_bytes:=plans_bytes+octet_length(convert_to(plan::text,'UTF8'))+CASE WHEN index=0 THEN 0 ELSE 2 END;
   IF plans_bytes>16777216 THEN RAISE EXCEPTION 'bounded whole group execution inventory required' USING ERRCODE='54000';END IF;
-  plans:=plans||jsonb_build_array(plan);
+  plans:=array_append(plans,plan);
   index:=index+1;
  END LOOP;
  SELECT coalesce(array_agg(reference ORDER BY ordinal),'{}'::text[]) INTO node_order FROM unnest(node_order) WITH ORDINALITY n(reference,ordinal) WHERE nodes->reference->'deleted'='false'::jsonb;
@@ -302,7 +302,7 @@ BEGIN
   END LOOP;
  END LOOP;
  plan:=jsonb_build_object('profile','truss-owned-group-plan/0.1','catalogRevision',revision,
-  'initialScope',scope,'operations',plans,'aliases',aliases);
+  'initialScope',scope,'operations',to_jsonb(plans),'aliases',aliases);
  IF octet_length(convert_to(plan::text,'UTF8'))>16777216 THEN RAISE EXCEPTION 'bounded complete group execution inventory required' USING ERRCODE='54000';END IF;
  RETURN plan;
 END;
@@ -820,6 +820,7 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;candidate jsonb;
  component int;cells jsonb;before_cells jsonb;tuple_bytes bytea;namespace bytea;transport bytea;pin record;
  routes jsonb:='[]';lock_routes jsonb:='[]';entry jsonb;route record;observed record;member truss.object_key_bucket%ROWTYPE;
  seen jsonb:='{}';route_key text;reference text;unchanged boolean;
+ route_items jsonb[]:='{}';lock_route_items jsonb[]:='{}';route_bytes bigint:=2;lock_route_bytes bigint:=2;
 BEGIN
  IF inventory->>'profile' IS DISTINCT FROM 'truss-owned-group-plan/0.1'
   OR (inventory->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
@@ -846,22 +847,35 @@ BEGIN
     'sourceEpoch',installation.source_epoch::text,'typeId',definition.type_id::text,'keyNumber',definition.key_num::text,
     'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
    transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');
-   routes:=routes||jsonb_build_array(jsonb_build_object('phase',candidate->>'phase','reference',candidate->>'reference',
+   entry:=jsonb_build_object('phase',candidate->>'phase','reference',candidate->>'reference',
     'objectId',candidate->'image'->>'id','typeId',definition.type_id,'keyNumber',definition.key_num,
     'namespace',encode(namespace,'hex'),'transport',encode(transport,'hex'),'tuple',encode(tuple_bytes,'hex'),
-    'unchanged',CASE WHEN candidate->'before' IS NOT NULL AND candidate->'before'<>'null'::jsonb THEN truss.derive_catalog_key_tuple(definition.type_id,definition.key_num,before_cells)=tuple_bytes ELSE false END));
-   IF jsonb_array_length(routes)>4096 OR octet_length(convert_to(routes::text,'UTF8'))>8388608 THEN
+    'unchanged',CASE WHEN candidate->'before' IS NOT NULL AND candidate->'before'<>'null'::jsonb THEN truss.derive_catalog_key_tuple(definition.type_id,definition.key_num,before_cells)=tuple_bytes ELSE false END);
+   route_bytes:=route_bytes+octet_length(convert_to(entry::text,'UTF8'))+CASE WHEN cardinality(route_items)=0 THEN 0 ELSE 2 END;
+   route_items:=array_append(route_items,entry);
+   IF cardinality(route_items)>4096 OR route_bytes>8388608 THEN
     RAISE EXCEPTION 'bounded whole-group key footprint required' USING ERRCODE='54000';END IF;
   END LOOP;
  END LOOP;
  -- Retired definitions may still have original live memberships. Deletion
  -- touches these bytes too; include them without reinterpreting retired keys.
- FOR member IN SELECT k.* FROM truss.object_key_bucket k JOIN jsonb_each(inventory->'initialScope'->'nodes') n
-  ON k.object_id=(n.value->>'id')::bigint AND k.type_id=(n.value->>'type_id')::int LOOP
-  lock_routes:=lock_routes||jsonb_build_array(jsonb_build_object('namespace',encode(member.namespace_bytes,'hex'),'transport',encode(member.key_bytes,'hex')));
-  IF jsonb_array_length(lock_routes)+jsonb_array_length(routes)>4096 OR octet_length(convert_to(lock_routes::text,'UTF8'))+octet_length(convert_to(routes::text,'UTF8'))>8388608 THEN
+ FOR member IN
+  WITH planned_routes AS MATERIALIZED (
+   SELECT DISTINCT decode(r.value->>'namespace','hex') AS namespace_bytes,
+    decode(r.value->>'transport','hex') AS key_bytes FROM unnest(route_items) r(value))
+  SELECT k.* FROM truss.object_key_bucket k JOIN jsonb_each(inventory->'initialScope'->'nodes') n
+   ON k.object_id=(n.value->>'id')::bigint AND k.type_id=(n.value->>'type_id')::int
+  LEFT JOIN planned_routes p ON p.namespace_bytes=k.namespace_bytes AND p.key_bytes=k.key_bytes
+  WHERE p.namespace_bytes IS NULL LOOP
+  entry:=jsonb_build_object('namespace',encode(member.namespace_bytes,'hex'),'transport',encode(member.key_bytes,'hex'));
+  lock_route_bytes:=lock_route_bytes+octet_length(convert_to(entry::text,'UTF8'))+CASE WHEN cardinality(lock_route_items)=0 THEN 0 ELSE 2 END;
+  lock_route_items:=array_append(lock_route_items,entry);
+  IF cardinality(lock_route_items)+cardinality(route_items)>4096 OR lock_route_bytes+route_bytes>8388608 THEN
    RAISE EXCEPTION 'bounded whole-group key footprint required' USING ERRCODE='54000';END IF;
  END LOOP;
+ IF cardinality(lock_route_items)+cardinality(route_items)>4096 OR lock_route_bytes+route_bytes>8388608 THEN
+  RAISE EXCEPTION 'bounded whole-group key footprint required' USING ERRCODE='54000';END IF;
+ routes:=to_jsonb(route_items);lock_routes:=to_jsonb(lock_route_items);
  FOR route IN SELECT DISTINCT decode(value->>'namespace','hex') route_namespace,decode(value->>'transport','hex') route_transport FROM jsonb_array_elements(routes||lock_routes)
   ORDER BY route_namespace,route_transport LOOP
   PERFORM truss.lock_string_key_bucket(route.route_namespace,route.route_transport);

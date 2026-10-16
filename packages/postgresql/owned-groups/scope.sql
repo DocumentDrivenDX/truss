@@ -133,7 +133,7 @@ REVOKE ALL ON FUNCTION truss.owned_graph_scope(jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_owned_input_scope(input jsonb) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE operation jsonb;object_references jsonb;reference jsonb;identity jsonb;
- seeds jsonb:='[]';seed jsonb;stored_edge truss.edge%ROWTYPE;reference_type truss.type_def%ROWTYPE;
+ seeds jsonb:='[]';seed jsonb;stored_edge truss.edge%ROWTYPE;reference_type truss.type_def%ROWTYPE;current_actor oid;
 BEGIN
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
   OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128 THEN
@@ -170,7 +170,8 @@ BEGIN
     IF reference-ARRAY['state','identity']<>'{}'::jsonb THEN
      RAISE EXCEPTION 'closed caller object reference required' USING ERRCODE='22023';END IF;
     identity:=reference->'identity';reference_type:=truss.runtime_condition_type(identity);
-    IF NOT truss.runtime_can_read(reference_type.document_id,reference_type.module) THEN
+    IF current_actor IS NULL THEN current_actor:=truss.runtime_person(false);END IF;
+    IF NOT truss.runtime_can_read_qualified(reference_type.document_id,reference_type.module,current_actor) THEN
      RAISE EXCEPTION 'selected object reference reader required' USING ERRCODE='42501';END IF;
     IF NOT EXISTS(
      SELECT 1 FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=reference_type.type_id) THEN
