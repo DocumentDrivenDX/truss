@@ -91,7 +91,7 @@
     "upgrade-source-066.json": "99ae7218e0e3e68e0a3682e43949089185d967eb21bbf31deb0b8f8f6fc2de9a",
     "upgrade-source-067.json": "8c553480e1bcb95ccaebb9aa04150a0253217838c8df6ad09acd5ecece2402ee",
     "creation-transition-upgrade.sql": "8395a5eee550e9c2d202fa3a29e768bd07f1b58e227eaabe2d3218b948eb9c39",
-    "owned.sql": "8b68d4bb79134a27e43bf8c5c8acf4741c9484dc16e5a45f745173109290021e",
+    "owned.sql": "8bfa79d1ad75d1374bf303c8353cb845c4f5f6400aab17eefe0e87569af19b1e",
     "upgrade-source-068.json": "3588cf030cb46c7d12368557e351bd767c10b4dd2e1644f7f100cec54602a2fc",
     "query-abi.json": "9fce2c91eff11ae2d8e6c0e3759b425efb1457e2c9675dc4383fc28430909806"
   },

@@ -1067,10 +1067,13 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;plan jsonb;input jsonb;prio
  object_row truss.object%ROWTYPE;old_image jsonb;new_image jsonb;expected_image jsonb;before_record jsonb;after_record jsonb;
  installation truss.catalog_runtime_installation%ROWTYPE;property truss.prop_def%ROWTYPE;pin record;
  events jsonb:='[]';event_refs jsonb:='[]';journals jsonb:='[]';event jsonb;entry jsonb;journal truss.journal%ROWTYPE;
- keys jsonb;version bigint;revision int;event_digest text;ordinal int;mode text;result jsonb;actual_deleted jsonb;
+ keys jsonb;version bigint;revision int;event_digest text;ordinal int;mode text;result jsonb;actual_deleted jsonb;current_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
- IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false)
+ IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() THEN
+  RAISE EXCEPTION 'current original object effect required' USING ERRCODE='55000';END IF;
+ current_actor:=truss.runtime_person(false);
+ IF attempt.actor_oid IS DISTINCT FROM current_actor
   OR attempt.complete OR attempt.next_index IS DISTINCT FROM selected_index THEN
   RAISE EXCEPTION 'current original object effect required' USING ERRCODE='55000';END IF;
  plan:=truss.runtime_owned_plan(selected_attempt,selected_index);input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
@@ -1081,8 +1084,8 @@ BEGIN
   OR (reference IS DISTINCT FROM plan->>'primary' AND prior IS NOT DISTINCT FROM desired) THEN
   RAISE EXCEPTION 'original primary or affected descendant required' USING ERRCODE='55000';END IF;
  identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object');
- PERFORM truss.runtime_module_writer(identity->'owner'->>'documentId',identity->'owner'->>'moduleId');
- IF NOT truss.runtime_object_values_readable((identity->>'typeId')::int) THEN RAISE EXCEPTION 'current original property/item readers required' USING ERRCODE='42501';END IF;
+ PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',current_actor);
+ IF NOT truss.runtime_object_values_readable_qualified((identity->>'typeId')::int,current_actor) THEN RAISE EXCEPTION 'current original property/item readers required' USING ERRCODE='42501';END IF;
  SELECT * INTO STRICT object_row FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=(identity->>'typeId')::int FOR UPDATE NOWAIT;
  old_image:=to_jsonb(object_row);
  IF old_image-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(selected_attempt,selected_index,reference,'before') THEN
@@ -1147,8 +1150,9 @@ BEGIN
  SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]'::jsonb) INTO keys FROM truss.object_key_bucket k WHERE k.object_id=object_row.id AND k.type_id=object_row.type_id;
  INSERT INTO truss.runtime_object_transition(attempt_id,operation_index,writer_xid,object_id,type_id,before_object,after_object,after_keys,journal)
  VALUES(selected_attempt,selected_index,attempt.writer_xid,object_row.id,object_row.type_id,old_image,new_image,keys,journals);
- PERFORM truss.runtime_module_writer(identity->'owner'->>'documentId',identity->'owner'->>'moduleId');
- IF NOT truss.runtime_object_values_readable((identity->>'typeId')::int) THEN RAISE EXCEPTION 'current final property/item readers required' USING ERRCODE='42501';END IF;
+ current_actor:=truss.runtime_person(false);
+ PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',current_actor);
+ IF NOT truss.runtime_object_values_readable_qualified((identity->>'typeId')::int,current_actor) THEN RAISE EXCEPTION 'current final property/item readers required' USING ERRCODE='42501';END IF;
  IF mode='update_object' THEN RETURN jsonb_build_object('outcome','changed','operation','update_object','identity',identity,'version',version::text,'events',event_refs);END IF;
  RETURN jsonb_build_object('outcome','deleted','operation','delete_object','identity',identity,'deletionVersion',version::text,
   'deleted',jsonb_build_array(jsonb_build_object('identity',identity,'deletionVersion',version::text)),'events',event_refs);
