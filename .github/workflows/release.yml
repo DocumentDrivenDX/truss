@@ -126,7 +126,7 @@ jobs:
         env:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_object_mutations_native.ObjectMutationTests.test_unnamed_fields_register_create_update_and_reopen test_catalog_unchanged_native test_graph_commit_practical_native test_atomic_group_surface_native test_import_rejection_practical_native
+        run: python -m unittest test_object_mutations_native.ObjectMutationTests.test_unnamed_fields_register_create_update_and_reopen test_catalog_unchanged_native.CatalogUnchangedTests test_graph_commit_practical_native.GraphCommitPracticalTests test_atomic_group_surface_native.AtomicGroupSurfaceTests test_import_rejection_practical_native.ImportRejectionPracticalTests
       - name: Run basic current scalar and consumer workflows
         env:
           TRUSS_BUN_EXECUTABLE: bun

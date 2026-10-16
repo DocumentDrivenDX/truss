@@ -1,5 +1,6 @@
 """Exact-input unchanged registration, durable requests and caller settlement."""
 import json
+import os
 import psycopg
 from truss import Ok,Error,CatalogUnchanged,CatalogDocument
 import test_catalog_runtime_native as catalog_tests
@@ -15,7 +16,7 @@ class CatalogUnchangedTests(catalog_tests.PublicCatalogRuntimeTests):
         ordinary=self.prepared(assembly)
         choices={key:value for key,value in ordinary.input().items() if key not in ('interfaceVersion','documents')}
         legacy=prepare_acceptance(tuple(prepared_documents(ordinary)),canonical_numeric_free(choices),
-            bun_executable='/opt/homebrew/bin/bun')
+            bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.assertEqual(legacy.input_bytes,ordinary.input_bytes)
         original=assembly.accept_in_transaction(tx,legacy,request_key='original')
         self.assertIsInstance(original,Ok,repr(original))
@@ -58,7 +59,7 @@ class CatalogUnchangedTests(catalog_tests.PublicCatalogRuntimeTests):
         conflict=assembly.accept_in_transaction(tx,prepared,request_key='check',origin_bytes=b'{}')
         self.assertIsInstance(conflict,Error);self.assertEqual(conflict.error.catalog_code,'request_conflict')
         changed_documents=tuple(CatalogDocument(d.document_id,d.document_revision,d.content+b' ') for d in prepared_documents(prepared))
-        changed=assembly.prepare_catalog(changed_documents,bun_executable='/opt/homebrew/bin/bun')
+        changed=assembly.prepare_catalog(changed_documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         conflict=assembly.accept_in_transaction(tx,changed,request_key='check',origin_bytes=origin)
         self.assertIsInstance(conflict,Error);self.assertEqual(conflict.error.catalog_code,'request_conflict')
         self.assertEqual(connection.execute('TABLE unchanged_prior').fetchall(),[('kept',)])

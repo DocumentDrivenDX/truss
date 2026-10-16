@@ -1,5 +1,6 @@
 """Public catalog workflow on PostgreSQL: no private staging or fabricated IDs."""
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -62,7 +63,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         source=relational_document();docs=[]
         for identity in ('zdoc','adoc'):
             source['id']=identity;docs.append(CatalogDocument(identity,'r1',json.dumps(source).encode()))
-        return assembly.prepare_catalog(tuple(docs),bun_executable='/opt/homebrew/bin/bun')
+        return assembly.prepare_catalog(tuple(docs),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
     def test_disposal_refuses_operations_without_settling_host_transaction(self):
         from truss import AssemblyDisposed
         self.admin.execute("CREATE TEMP TABLE prior_work(value text);INSERT INTO prior_work VALUES('kept')")
@@ -111,7 +112,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.install();connection,host,assembly,tx=self.consumer()
         source=relational_document();source['id']='optional'
         source.pop('extensions',None)
-        prepared=assembly.prepare_catalog((CatalogDocument('optional','r1',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+        prepared=assembly.prepare_catalog((CatalogDocument('optional','r1',json.dumps(source).encode()),),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         result=assembly.accept_in_transaction(tx,prepared,request_key='optional-root')
         if isinstance(result,Error):self.fail(repr(result.error))
         host.detach();connection.commit()
@@ -122,7 +123,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         source=relational_document();source['id']='malformed'
         extra=copy.deepcopy(source['modules'][0]['relationships'][0]);extra['id']='A-B-second';extra['name']='A-B-second'
         source['modules'][0]['relationships'].append(extra)
-        prepared=assembly.prepare_catalog((CatalogDocument('malformed','r1',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+        prepared=assembly.prepare_catalog((CatalogDocument('malformed','r1',json.dumps(source).encode()),),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         original=json.loads(prepared.declarations_bytes)
         for mutation in ('duplicate-record','duplicate-relationship','field-swap','missing-records','missing-relationships'):
             declarations=copy.deepcopy(original)
@@ -237,7 +238,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         multi=copy.deepcopy(prototype);multi['id']='multi';multi['name']='multi'
         multi['target']=[{'module':'m','element':'A','key':'a-primary'},{'module':'m','element':'B','key':'a-primary'}]
         module['relationships']=[self_relation,multi]
-        prepared=assembly.prepare_catalog((CatalogDocument('cross-module','r1',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+        prepared=assembly.prepare_catalog((CatalogDocument('cross-module','r1',json.dumps(source).encode()),),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         accepted=assembly.accept_in_transaction(tx,prepared,request_key='cross-module')
         if isinstance(accepted,Error):self.fail(repr(accepted.error))
         result=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request())
@@ -629,7 +630,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
             source=relational_document();docs=[]
             for identity in ('zdoc','adoc'):
                 source['id']=identity;docs.append(CatalogDocument(identity,'r1',json.dumps(source).encode()))
-            prepared=assembly.prepare_catalog(tuple(docs),bun_executable='/opt/homebrew/bin/bun')
+            prepared=assembly.prepare_catalog(tuple(docs),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
             registered=assembly.accept_in_transaction(tx,prepared,request_key='stable-request',origin_bytes=b'{"x-action":"register"}')
             if isinstance(registered,Error):self.fail(repr(registered.error)+' '+str(host._custody.last_attempt.error))
             self.assertEqual(registered.value.status,'pending_commit');self.assertFalse(registered.value.replayed)
@@ -657,7 +658,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
                 target={'document':source,'module':module,'record':module['elements'][0],
                     'field':next(e for e in module['elements'] if e['kind']=='field')}[scope]
                 target['extensions']={'security-next':payload}
-                prepared=assembly.prepare_catalog((CatalogDocument('policy','r1',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
+                prepared=assembly.prepare_catalog((CatalogDocument('policy','r1',json.dumps(source).encode()),),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
                 self.assertEqual(prepared.documents[0].observation()['source'],source)
                 result=assembly.accept_in_transaction(tx,prepared,request_key='unsupported-'+scope)
                 self.assertIsInstance(result,Error)
