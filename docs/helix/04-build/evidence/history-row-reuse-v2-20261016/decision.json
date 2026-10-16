@@ -1,0 +1,9 @@
+{
+  "decision": "Reject v2; preserve baseline",
+  "result": "Original1024create failed57014 during final settlement; no commit/update/replay/readback or later upgrade/history test reached",
+  "durationSeconds": 14.76,
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "sourceReview": "Astra source clear for frozen6filepatch; no runtime or performance approval",
+  "scope": "No smaller workload, raiseddeadline, blindrerun or cause inference from timeout stack"
+}
