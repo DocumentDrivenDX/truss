@@ -8030,8 +8030,8 @@ The aligned-budget native composition replay r3 passes1/79.661s, with actual thr
 
 ## Current disclosure consumer main integration — 2026-10-16
 
-The [retained consumer evidence](evidence/current-disclosure-consumer-20261016/README.md)
-now includes isolated root integration against430b77, followed by a clean
+The [original consumer evidence](evidence/current-disclosure-consumer-20261016/README.md)
+and [root integration witness](evidence/current-disclosure-consumer-20261016/main-integration/README.md) include isolated root integration against430b77, followed by a clean
 fast-forward of performance-only documentation to79a27c. All43 reviewed r5
 package members apply exactly with no overlapping baseline drift. Source and
 fresh installed-wheel component campaigns each pass27 tests; six stock
@@ -8087,3 +8087,7 @@ Record-backed witnesses, row-home realization, rooted populations, context and
 all broader required operators/domains remain open. Historical132 cases and the
 shared158-case/34-criterion scope are preserved,45implemented/113missing. No new
 case is promoted and no release qualification follows from this prototype.
+
+The consumer README custody correction EVIDENCE-CONSUMER-README-001 restores the
+exact original owner README covered by its unchanged manifest; root integration
+notes now live separately. No runtime or native evidence is rewritten.

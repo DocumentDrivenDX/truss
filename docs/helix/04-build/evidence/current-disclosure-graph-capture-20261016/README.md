@@ -47,3 +47,7 @@ source mutations,1316 custody/native-input checks,15 actual new held-child
 replays/four old-bundle controls and213 portable/import-map controls pass. The
 reviewer audited supplied native evidence and did not run an independent SQL
 campaign. All139 manifest artifacts were hash/size checked and retained.
+
+`manifest.json` indexes the immutable reviewer files inside `review-artifacts.zip`.
+`retention.json` indexes the delivered files beside this README. They describe
+different containers; archived reviewer paths are not root-level source paths.

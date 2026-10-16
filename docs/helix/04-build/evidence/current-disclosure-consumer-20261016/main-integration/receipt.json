@@ -48,9 +48,17 @@
       "sha256": "7b41a5cc63a3d4f2bd5c9e43b5fd54abe45c55522d39fec3ef4a615ab19867dd",
       "bytes": 59275
     },
+    "README.md": {
+      "sha256": "9d4061fc31bc47582b862992cc4df79de533b69bb2face7e562e849586b0499b",
+      "bytes": 994
+    },
     "source-inputs.zip": {
       "sha256": "57f1c48afe3772c372bd924d0811032bde9927907a1b3995fefa8632a1c0e483",
       "bytes": 3551607
+    },
+    "readme-custody-correction.json": {
+      "sha256": "70ed212f8a2535e89b85456665e338d2e6ded1c21b8ef09da7d63d6b8c18eea0",
+      "bytes": 660
     },
     "truss-disclosure-main-integration-portable-20261016.log": {
       "sha256": "8b087dace0b4bb79ddcdacf80865ad9df22df4692d1c59aed7d3d7c083aaca24",

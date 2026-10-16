@@ -1,0 +1,8 @@
+{
+  "id": "EVIDENCE-CONSUMER-README-001",
+  "status": "corrected",
+  "issue": "Root appended integration notes to the original owner README, breaking the original flat manifest README hash at9e328d91.",
+  "correction": "Restore exact frozen owner README bytes and retain added integration notes separately under main-integration/README.md. Owner manifest and all native source artifacts remain unchanged. No test rerun or acceptance promotion is implied.",
+  "priorAnnotatedReadmeSha256": "c540ec31588c31c9d21e2853af331bda28566887590c3f58a2bf8c0b6b0891da",
+  "originalRestoredReadmeSha256": "98c7903b6e9ddd62cffcf7c19c93414c8a62088a7b8deaf695c036ef701f4660"
+}
