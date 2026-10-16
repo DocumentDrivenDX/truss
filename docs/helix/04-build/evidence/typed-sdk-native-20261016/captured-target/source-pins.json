@@ -1,0 +1,12 @@
+{
+  "status": "pass",
+  "temporal": "HELD",
+  "scope": "11 actual native controls using captured complete targets and the local combined standard-wheel preview; native default039/ABI1.0 unchanged. Published next-wheel/ABI1.1 integration remains separate.",
+  "sources": {
+    "packages/python/src/truss/access.py": "a0f4b93400160d9ffff0be215e70929b94bc05f6b27bd8e534ff0407ee369517",
+    "packages/python/src/truss/_query_runtime.py": "3ff05206c2d9fd15f38b62b193a172834b6f9dfcb1db8a30cbb083c56fcc440a",
+    "scripts/check-module-boundaries.py": "c0bd8f48383469fa4ad4d1eff3d93e30b04323eb6207d14cf9e593fb56a9d482",
+    "scripts/check-typed-sdk-native.py": "9504966eaaa54f03d9f73f2e5f71e19ebc3f3129f9820a195795ac820c7490ed"
+  },
+  "trussWheelSha256": "6b8e1b2ce9ab2655d877f3c53133058037886dbb09e9b2555a972dc81fc22127"
+}

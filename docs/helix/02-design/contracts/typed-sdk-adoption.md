@@ -48,6 +48,22 @@ API in the exact tested development Weft cohorts. Evidence must identify the
 whole wheel/module/source hash; a development version alone is not a broad
 qualification claim.
 
+## Candidate constructor identity
+
+The constructor requires an original `QueryCatalogSources` capture through
+`catalog_sources`, or original `EngineRead` values in `catalog_entries`. Supplying
+both requires one identical complete target. Each original binding text must
+match its SHA-256 and the configured binding. Construction without either source,
+with mixed targets or inconsistent binding bytes refuses before native dispatch.
+This is a deliberate candidate constructor change; no backend version is guessed.
+
+Identity/backend/profile come from the complete retained original target. Every
+read compares its whole target before native dispatch. This metadata grants no
+authority: native `query_binding`, `query_scope`, original compiler/current-artifact
+correspondence and final transaction settlement remain authoritative. A native
+ABI/profile update needs a fresh capture and newly compiled catalog; old programs
+are never relabeled. Typed Date and other temporal selections remain HELD.
+
 ## Typed release and host responsibilities
 
 The target revalidates strict generated parameters, submits original SQL through

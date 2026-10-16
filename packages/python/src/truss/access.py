@@ -9,7 +9,7 @@ from contextlib import AbstractContextManager
 from datetime import timedelta
 from time import monotonic
 from typing import Any, TypeVar
-import json
+import hashlib,json
 from pydantic import BaseModel
 from umf_access.adoption import TargetIdentity
 from umf_access.engine_catalog import EngineRead
@@ -18,7 +18,8 @@ from umf_access.pages import ReadPage, ReadContinuation
 from umf_access.codec_support import revalidate_model
 from umf_access.postgres_read import TimedOut
 from .execution import Ok
-from .query import QueryRows, QueryAbsent
+from .query import QueryRows, QueryAbsent, QueryCatalogSources
+from umf_access.native_program import program_json, canonical_json
 P=TypeVar('P',bound=BaseModel);R=TypeVar('R',bound=BaseModel)
 
 class TrussReadRefused(ValueError):
@@ -35,12 +36,35 @@ class TrussTarget:
     """
     def __init__(self, operation: Callable[[timedelta],AbstractContextManager[tuple[Any,Any]]], *,
                  binding_sha256: str, platform: tuple[tuple[str,str],...],
-                 default_timeout: timedelta, catalog_entries: tuple[EngineRead[Any,Any],...]=()):
+                 default_timeout: timedelta, catalog_entries: tuple[EngineRead[Any,Any],...]=(),
+                 catalog_sources: QueryCatalogSources | None=None):
         if len(binding_sha256)!=64 or any(c not in '0123456789abcdef' for c in binding_sha256):
             raise ValueError('original native binding SHA-256 required')
         if not platform or not callable(operation):raise ValueError('host operation and native platform pins required')
         self.operation,self.binding_sha256,self.platform=operation,binding_sha256,platform
         self.default_timeout,self.catalog_entries=default_timeout,catalog_entries
+        targets=[]
+        if catalog_sources is not None:
+            if type(catalog_sources)is not QueryCatalogSources or type(catalog_sources.request_json)is not str or len(catalog_sources.request_json.encode())>4_194_304:
+                raise ValueError('bounded original native catalog sources required')
+            captured=program_json(catalog_sources.request_json)
+            if type(captured)is not dict:raise ValueError('original native request object required')
+            targets.append(captured.get('target'))
+        for entry in catalog_entries:
+            if not isinstance(entry,EngineRead) or entry.artifact()['compiler']!='truss-runtime':
+                raise ValueError('original Truss engine catalog required')
+            targets.append(entry.artifact()['request']['target'])
+        if not targets:raise ValueError('original native catalog sources or engine entries required')
+        for target in targets:
+            if (type(target)is not dict or target.get('backendId')!='truss.postgresql.runtime'
+                or any(type(target.get(name))is not str or not target[name] or len(target[name])>256 for name in ('backendVersion','targetProfile'))
+                or type(target.get('bindingJson'))is not str or target.get('bindingSha256')!=binding_sha256
+                or hashlib.sha256(target['bindingJson'].encode()).hexdigest()!=binding_sha256):
+                raise ValueError('complete original native target and binding required')
+        if any(target!=targets[0] for target in targets[1:]):raise ValueError('native catalog targets differ')
+        # Inert complete metadata, never a native admission or current-policy permit.
+        self.native_target_json=canonical_json(targets[0])
+        self.catalog_sources=catalog_sources
         self._budget(None)
     def _budget(self, timeout: timedelta | None)->timedelta:
         value=self.default_timeout if timeout is None else timeout
@@ -48,11 +72,12 @@ class TrussTarget:
             raise TimedOut('positive bounded engine deadline required')
         return value
     def identity(self)->TargetIdentity:
-        return TargetIdentity('truss','truss.postgresql.runtime','0.4.39','truss-runtime-pg18.6/0.5',self.binding_sha256,self.platform)
+        target=program_json(self.native_target_json)
+        return TargetIdentity('truss',target['backendId'],target['backendVersion'],target['targetProfile'],self.binding_sha256,self.platform)
     def read(self,entry:CatalogRead[P,R],parameters:P,*,timeout:timedelta|None=None)->list[R]:
         if not isinstance(entry,EngineRead):raise ValueError('Truss requires an original engine catalog')
         program=entry.artifact();request=program['request'];target=request['target']
-        if program['compiler']!='truss-runtime' or target['bindingSha256']!=self.binding_sha256 or any(target[k]!=v for k,v in (('backendId','truss.postgresql.runtime'),('backendVersion','0.4.39'),('targetProfile','truss-runtime-pg18.6/0.5'))):
+        if program['compiler']!='truss-runtime' or target!=program_json(self.native_target_json):
             raise ValueError('Truss original backend or binding differs')
         values=revalidate_model(entry.parameters,parameters)
         budget=self._budget(timeout);deadline=monotonic()+budget.total_seconds()
