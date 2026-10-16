@@ -97,7 +97,7 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SE
 DECLARE physical truss.journal%ROWTYPE;original bytea;event jsonb;items jsonb:='[]';semantic jsonb:='[]';group_pin jsonb;
  count_events int:=0;size int:=0;expected_pin text;selected_transition bigint;
 BEGIN
- FOR physical IN SELECT * FROM truss.journal j WHERE j.entity_kind=CASE entity->>'kind' WHEN 'object' THEN 'o' ELSE 'e' END
+ FOR physical IN SELECT * FROM truss.journal j WHERE j.entity_kind=(CASE entity->>'kind' WHEN 'object' THEN 'o' ELSE 'e' END)::char(1)
   AND j.entity_id=(entity->>'id')::bigint AND j.entity_type=(entity->>'typeId')::int AND j.xid=writer AND j.ver=version ORDER BY j.seq LIMIT maximum_events+1 LOOP
   count_events:=count_events+1;
   IF count_events>maximum_events THEN RAISE EXCEPTION 'whole history group exceeds event limit' USING ERRCODE='54000';END IF;
@@ -185,7 +185,7 @@ BEGIN
   OR cursor->>'afterXid' !~ '^(0|[1-9][0-9]{0,19})$' OR cursor->>'afterSeq' !~ '^(0|[1-9][0-9]{0,18})$' THEN RAISE EXCEPTION 'current scoped history cursor required' USING ERRCODE='22023';END IF;
   after_xid:=(cursor->>'afterXid')::xid8;after_seq:=(cursor->>'afterSeq')::bigint;
  END IF;
- SELECT * INTO first_event FROM truss.journal j WHERE j.entity_kind=CASE entity->>'kind' WHEN 'object' THEN 'o' ELSE 'e' END
+ SELECT * INTO first_event FROM truss.journal j WHERE j.entity_kind=(CASE entity->>'kind' WHEN 'object' THEN 'o' ELSE 'e' END)::char(1)
   AND j.entity_id=(entity->>'id')::bigint AND j.entity_type=(entity->>'typeId')::int AND j.xid<frontier
   AND (selected_version IS NOT NULL AND j.ver=selected_version OR selected_version IS NULL AND (j.xid,j.seq)>(after_xid,after_seq)) ORDER BY j.xid,j.seq LIMIT 1;
  IF NOT FOUND THEN

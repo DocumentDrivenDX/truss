@@ -604,3 +604,21 @@ skipped; no tag was created. This contradicts hosted readiness, not the narrower
 local1,000-node/edge result above. A local diagnostic narrowing row-authority
 projection showed no benefit (row-validation self1077ms versus1070ms); the
 candidate was discarded, leaving all tracked runtime sources unchanged.
+
+
+## Journal entity lookup correction — 2026-10-16
+
+The history predicates now cast their CASE result to the indexed column's
+`char(1)` type. Both branches remain the exact same `o`/`e` values; sequence
+ordering, limits, validation and authorization remain unchanged. The
+[original 1,024-create diagnostic](results/2026-10-16-journal-entity-kind.json)
+records journal heap fetches falling from1,051,648 to4,096. History validation
+self time falls from228.6ms to52.0ms; whole CREATE SQL from8,044ms to7,179ms.
+This is one sequential local comparison, not an isolated timing qualification.
+
+Ten original PostgreSQL18.6 tests pass in53.256s: full1,024 create/update/commit/
+replay/readback,1,025 refusal, final-operation rollback, owned history/reparenting,
+immutable result slots and final edge/future-slot controls. No deadline, source
+census, guard, layout or routine inventory changes. The alternative ordered-slot
+mechanism was not implemented:100 complete1,024-slot counts took only19.069ms.
+Hosted Linux/macOS release validation remains required after this correction.
