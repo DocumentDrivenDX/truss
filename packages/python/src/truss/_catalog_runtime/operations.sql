@@ -1139,7 +1139,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_edge_validate(bigint,int) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_graph_validate_object(selected_id bigint,selected_type int,refresh_markers boolean) RETURNS void
+CREATE FUNCTION truss.runtime_graph_validate_object_qualified(selected_id bigint,selected_type int,refresh_markers boolean,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE phase int;relation truss.rel_def%ROWTYPE;owner record;outgoing bigint;incoming bigint;expected jsonb;actual jsonb;
 BEGIN
@@ -1156,7 +1156,7 @@ BEGIN
       AND EXISTS(SELECT 1 FROM truss.rel_endpoint selected WHERE selected.rel_type_id=r.rel_type_id AND (selected.source_type=selected_type OR selected.target_type=selected_type))
     ) dependencies
    LOOP
-    IF NOT truss.runtime_can_read(owner.document_id,owner.module_id) THEN RAISE EXCEPTION 'complete relationship and endpoint count reader required' USING ERRCODE='42501';END IF;
+    IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,qualified_actor) THEN RAISE EXCEPTION 'complete relationship and endpoint count reader required' USING ERRCODE='42501';END IF;
    END LOOP;
    IF phase=1 THEN
   FOR relation IN SELECT r.* FROM truss.rel_def r WHERE r.retired_rev IS NULL
@@ -1186,12 +1186,21 @@ BEGIN
   END LOOP;
 END;
 $$;
+REVOKE ALL ON FUNCTION truss.runtime_graph_validate_object_qualified(bigint,int,boolean,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_graph_validate_object(selected_id bigint,selected_type int,refresh_markers boolean) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ PERFORM truss.runtime_graph_validate_object_qualified(selected_id,selected_type,refresh_markers,truss.runtime_person(false));
+END;
+$$;
 REVOKE ALL ON FUNCTION truss.runtime_graph_validate_object(bigint,int,boolean) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_graph_validate(refresh_markers boolean) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE affected record;
+DECLARE affected record;current_actor oid;
 BEGIN
+ current_actor:=truss.runtime_person(false);
  FOR affected IN
   SELECT DISTINCT object_id,type_id FROM (
    SELECT m.object_id,m.type_id FROM truss.runtime_create_member m JOIN truss.runtime_create_group g USING(group_id) WHERE g.writer_xid=pg_current_xact_id()
@@ -1206,7 +1215,7 @@ BEGIN
    UNION ALL SELECT (i.value->>'id')::bigint,(i.value->>'typeId')::int FROM truss.runtime_edge_transition t
     CROSS JOIN LATERAL jsonb_array_elements(jsonb_build_array(t.old_source,t.old_target,t.source_identity,t.target_identity)) i
     WHERE t.writer_xid=pg_current_xact_id() AND i.value<>'null'::jsonb) o ORDER BY object_id,type_id LOOP
-  PERFORM truss.runtime_graph_validate_object(affected.object_id,affected.type_id,refresh_markers);
+  PERFORM truss.runtime_graph_validate_object_qualified(affected.object_id,affected.type_id,refresh_markers,current_actor);
  END LOOP;
 END;
 $$;
