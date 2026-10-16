@@ -801,19 +801,16 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_capture(uuid) FROM PUBLIC;
 -- matching never attributes a descendant transition to an unrelated operation.
 CREATE FUNCTION truss.runtime_owned_plan(selected_attempt uuid,selected_index int) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;original truss.runtime_owned_operation%ROWTYPE;
+DECLARE original record;
 BEGIN
- SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
- SELECT * INTO STRICT original FROM truss.runtime_owned_operation
+ SELECT plan INTO STRICT original FROM truss.runtime_owned_operation
   WHERE attempt_id=selected_attempt AND operation_index=selected_index;
  -- Both source bytes and prepared operations are immutable after capture.
  -- Full source correspondence is checked once at each group settlement.
  IF selected_index<0
-  OR original.writer_xid IS DISTINCT FROM attempt.writer_xid
   OR original.plan->>'profile' IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
   OR original.plan->'operationIndex' IS DISTINCT FROM to_jsonb(selected_index)
-  OR original.plan->'mutationProfile' IS DISTINCT FROM attempt.context->'mutationProfile'
-  OR attempt.context->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
+  OR original.plan->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
   RAISE EXCEPTION 'original owned operation correspondence required' USING ERRCODE='55000';END IF;
  RETURN original.plan;
 END;
