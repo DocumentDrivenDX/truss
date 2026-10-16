@@ -1,0 +1,55 @@
+{
+  "status": "passed-scoped-integration-review",
+  "remainingFindings": [],
+  "reviewedLocalHead": "2a8bd1fee8ee8d644e6d47fff37145ff161170bb",
+  "test": {
+    "path": "inputs/test_native_model_correspondence_qualification.py",
+    "sha256": "07183c90aeb6abe52e11a1b410313d5d8feb12660e0c77f2ea4771719d24eb09",
+    "bytes": 7532
+  },
+  "validation": [
+    {
+      "command": "python3.12 audit.py",
+      "result": "All18 retained evidence entries match.3 complete review archives contain118 manifest-listed artifacts plus their3 manifests, byte-identical to original review directories; historical failures and repair epochs remain intact.",
+      "receipt": "audit.json"
+    },
+    {
+      "result": "Native R4 source archive has1360 exact pins; all1348 captured baseline files match immutable2a8 Git objects. Integrated qualification source is byte-identical to reviewed paired R3 and captured R4 source. Five wheel entries match captured e072 wheel/native9f1.",
+      "receipt": "audit.json"
+    },
+    {
+      "result": "Supplied campaign/log report1 passing test/5.915s; source runner requires endpoint equality, imported project source closure, owned root removal and actual PID39445 stop. Four observation source-role hashes, original request/report, runtime release and independently authored mapping correspond. No reviewer native execution.",
+      "receipt": "inputs/evidence/campaign.json"
+    },
+    {
+      "command": "python3.11 -B golden-controls.py",
+      "result": "Exact repaired assertion block matches actual R4 data and retained mapping; all19 identity/census/Key mutants refuse.",
+      "receipt": "golden-controls.json"
+    },
+    {
+      "command": "python3.11 -B blocked-weft-import.py",
+      "result": "Default-discovery fresh process skips1 qualification case; no external Weft import attempt and no native setup call.",
+      "receipt": "blocked-weft-import.json"
+    },
+    {
+      "result": "Local diff contains only new opt-in qualification test, retained evidence and append-only implementation checkpoint; no runtime, dependency or SQL changes.",
+      "receipt": "audit.json"
+    },
+    {
+      "result": "Final README adds only explicit later-main/native-asset nonqualification; updated retention matches all18 final entries. Earlier input epoch remains retained separately.",
+      "receipt": "final-supplement/audit.json"
+    }
+  ],
+  "scope": [
+    "Integration/retention audit and supplied native R4 evidence assessment only. No SQL replay, product native-model join activation or new native authority.",
+    "R4 qualifies exact captured2a8/native0.71 assets with reviewed historical opt-in e072 wheel,5 Records/12 Fields/5 single-component Keys. It does not qualify later main assets, current default dependency, composite native Keys, codecs, graph, caller/current-cut/continuous custody or guarded release.",
+    "All original132/shared158 cases/34criteria remain required;45implemented/113missing unchanged and no case promoted.",
+    "The three original review epochs remain unchanged: R1 findings, R2 import repair and R3 assertion repair/native-pending disposition are preserved. Final R4 is separate later exact-source evidence, not a rewrite of those reports.",
+    "No source-provider substitution appears in the captured qualification test. Existing observer and actual compiler preparation are used inside original host callback; returned data grants no native permission.",
+    "External runtimes/cache closure remains non-hermetic; endpoints are not continuously held-file/ABA proof. Any test/docs rebase beyond reviewed local2a8 needs its own narrow delta check; this report does not preapprove future changes."
+  ],
+  "artifactManifest": {
+    "path": "manifest.json",
+    "format": "relative path -> {sha256,bytes}; excludes itself; inputs retain original submitted epoch and final-supplement retains README qualification delta"
+  }
+}

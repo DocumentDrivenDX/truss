@@ -1,0 +1,68 @@
+{
+  "component": "original-host-issued-model-native-correspondence-qualification",
+  "source": {
+    "sha256": "07183c90aeb6abe52e11a1b410313d5d8feb12660e0c77f2ea4771719d24eb09",
+    "bytes": 7532
+  },
+  "nativeBaseline": "2a8bd1fee8ee8d644e6d47fff37145ff161170bb",
+  "weftWheelSha256": "e072db75724608d652f3368ab1375907c3fbf2cd1e321a0d7a04bbdad4d92778",
+  "weftNativeSha256": "9f1c7bc60f070734f2e935ba53e82a0bd22002e9e738c34f65623ca8bac978dd",
+  "reviews": {
+    "1": {
+      "manifest": {
+        "sha256": "dd53348fddc0e05dc8d5dfdbef02847a496297d45c7b2150108eba7abf4c3276",
+        "bytes": 6479
+      },
+      "artifacts": 45,
+      "archive": {
+        "sha256": "cca0b3275460d8f4e0c382d4374ba8bdc5fc422a10e401ecc3b8e05f3ec614f8",
+        "bytes": 44823393
+      }
+    },
+    "2": {
+      "manifest": {
+        "sha256": "cb0a45cc734fcf3b29c9560ded5468c15c004c3abd9a95057b258ffdda0f36dc",
+        "bytes": 6589
+      },
+      "artifacts": 46,
+      "archive": {
+        "sha256": "641a4fc2e97c6defed2c874cc52dac97b793e588d1803613b217cb4da6f01587",
+        "bytes": 22457611
+      }
+    },
+    "3": {
+      "manifest": {
+        "sha256": "e3162bd9eac6475cedafdf59f49571777508acbd88e16d0a4258dc187a37dea6",
+        "bytes": 3937
+      },
+      "artifacts": 27,
+      "archive": {
+        "sha256": "1e33a3c9e7277f8be525d8263e695a39739b987697bb6e239d1a5d14fc3a7ae0",
+        "bytes": 53551
+      }
+    }
+  },
+  "native": {
+    "status": "passed",
+    "tests": 1,
+    "sourcePins": 1360,
+    "sourceEndpointsMatch": true,
+    "importedProjectPythonClosureCaptured": true,
+    "selectedTestFixturesCaptured": true,
+    "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+    "psycopg": "3.3.6",
+    "libpq": 180006,
+    "pgserver": "18.6.1",
+    "cleanup": {
+      "root": "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-public-catalog-n4efk0b2",
+      "rootRemoved": true,
+      "postmasterPid": 39445,
+      "postmasterStopped": true
+    },
+    "scope": "Actual original host acceptance of exact Weft fixture model and native Record/Field/ordered-Key identity correspondence only; source endpoint hashes are not held-file/ABA proof. Actual candidate issued requirements included, but no native binding/current authority/release or backend acceptance."
+  },
+  "complete": false,
+  "authority": false,
+  "securityReady": false,
+  "acceptanceCasesPromoted": 0
+}

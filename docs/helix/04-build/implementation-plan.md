@@ -8107,3 +8107,20 @@ The unexported stock-cursor observer uses the original host and accepted-source 
 [Retained evidence](evidence/native-source-observation-20261016/README.md) preserves four R1 findings and their independently verified R2 repairs, failed initial callback controls, seven pure/installed passes,1485 import checks and500 exact wheel source members. Actual native R4 passes4tests/8.156s on the captured PostgreSQL18.6/native0.71 overlay, with1349 pins and verified owned cleanup. Original59360445 is only the spike baseline; six differing base paths are explicit. Astra independently checks evidence and mutations, without SQL replay. Current main runtime is not thereby natively qualified.
 
 All outputs remain data, with complete/authority/securityReady=false and native admission required. Actual borrowed model requirements, Field/ordered-Key/edge/codec mapping, authenticated continuity and guarded release remain open; shared158/34 scope stays45implemented/113missing with no promoted acceptance case.
+
+
+### Original prepared-model/native correspondence qualification — 2026-10-16
+
+The [retained qualification](evidence/native-model-correspondence-20261016/README.md)
+uses actual original catalog acceptance and issued borrowed compiler requirements
+inside the stock host operation, without source-provider substitution. The exact
+R3-reviewed test passes one native R4 case/5.915s with1360 source pins and verified
+owned cleanup. Independent expectations cover five Records/twelve Fields/five
+single-component Keys; full qualified identities and native census prevent dict
+collapse. All three full review archives retain initial failures and repairs.
+
+This advances NSB-T01/T05/T06 prerequisites only. The historical explicit opt-in
+Weft e072/9f1 wheel remains isolated; default consumers, registrations, dependencies
+and runtime assets are unchanged. Native codec/graph/Subject/current continuity
+and guarded release remain required. The separate native-model join is not yet
+merged. Shared158cases/34criteria stays45implemented/113missing; no promotion.

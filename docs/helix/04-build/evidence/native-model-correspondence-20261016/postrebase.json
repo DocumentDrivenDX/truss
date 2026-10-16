@@ -1,0 +1,7 @@
+{
+  "parent": "82360b5364b1d3d9e038c56b0883601f0693a2fa",
+  "runtimeAndDependencyDelta": [],
+  "defaultTests": "one explicit opt-in skip",
+  "moduleBoundaries": "Python module boundaries passed (1485 imports); TypeScript/native gates remain open",
+  "nativeQualification": "historical captured2a8R4only; no later-main native claim"
+}
