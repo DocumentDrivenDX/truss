@@ -499,6 +499,12 @@ BEGIN
    OR truss.valid_flat_cell(v.value->'value') IS NOT TRUE)
    OR jsonb_array_length(operation->'values')<>(SELECT count(DISTINCT v.value->>'name') FROM jsonb_array_elements(operation->'values') v) THEN
    RAISE EXCEPTION 'unique exact scalar authored values required' USING ERRCODE='22023'; END IF;
+  IF owned_state IS NOT NULL THEN
+   -- Native capture already validated and canonicalized this immutable image.
+   -- Retain source/actor/key checks and final settlement; do not replan values.
+   props:=owned_state->'image'->'props';
+   retained:=coalesce(nullif(owned_state->'image'->'retained','null'::jsonb),'{}'::jsonb);
+  ELSE
   props:='{}';retained:='{}';
   FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL ORDER BY prop_id LOOP
    IF truss.valid_property_definition(property) IS NOT TRUE THEN
@@ -515,6 +521,7 @@ BEGIN
   SELECT coalesce(jsonb_object_agg(v.value->>'name',truss.canonical_flat_cell(v.value->'value')),'{}'::jsonb) INTO retained
    FROM jsonb_array_elements(operation->'values') v WHERE NOT EXISTS(SELECT 1 FROM truss.prop_def p
     WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL AND p.name=v.value->>'name');
+  END IF;
   planned:=planned||jsonb_build_array(jsonb_build_object('typeId',selected_type.type_id,'props',props,'retained',retained));
   FOR key_definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type.type_id AND retired_rev IS NULL ORDER BY key_num LOOP
    values_text:=ARRAY[]::text[];values_cells:='[]';key_facets:='[]';

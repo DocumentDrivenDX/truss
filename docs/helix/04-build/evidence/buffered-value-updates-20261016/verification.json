@@ -1,0 +1,41 @@
+{
+  "status": "functional increment; performance release gate remains open",
+  "sourceBaseBeforeTests": "477e9466df5f2fd3f8d93895822a99fff69ac8b4",
+  "integratedSecurityBase": "d58898687906fe681ef91f4a150811b4a518aa14",
+  "versions": {
+    "postgresql": "18.6",
+    "psycopg": "3.3.6",
+    "python": "3.11.17",
+    "bun": "1.4.2",
+    "weft": "0.4.36"
+  },
+  "checks": {
+    "basicTests": 2,
+    "original1024Workflow": "pass",
+    "completeInventoryComparisons": 4,
+    "full1000Node1000EdgeMatrix": "functional pass; 5 changed1000 updates+commits",
+    "sqlDeadlineMs": 10000,
+    "operationDeadlineMs": 30000
+  },
+  "limits": [
+    "Bulk100 versus committed singles is 3.541255x, below5x target.",
+    "Potential security test overlap: timings are provisional, not isolated comparative qualification.",
+    "Full release runners remain unqualified.",
+    "Preflight oracle uses a fixture-only owner wrapper, not a production API or fresh admission at adapted catalog revision.",
+    "Earlier diagnostic cleanup failed; failed log retained."
+  ],
+  "sha256": {
+    "inventory-oracle.py": "faab6eefd8c8c0f7aba203a5a36e833c18e4736c144414ec7f021a7002d0a48e",
+    "baseline-execute.sql.gz": "5d45e2c8ae32427dce72b96f7b6deecdd21c741f02112142b64cc7d0e6c2f4c9",
+    "capacity1024.log": "9f05d039cc13ad2b9f28eb009a62e8b433bde9340c9ce952f20052aca2f72325",
+    "full-small.log": "7abfc0ddb6a0ad2517d27cbc46e344a51be330bb92f9b0f8a47b32f75cba2154",
+    "tested-source.json": "158e482caf83629f008c3634ffe6ec96d21c932a1e3260feaade7a0c7c544e64",
+    "inventory-corrected.log": "1f54ab439ab3bc92771968a5d3c3cc2b82d0f55864212606eb92006245d0f0ac",
+    "basic.log": "d5aceef7a23ffb07c5b741f3aa161de1c6f6402e9d9bc23bfa3fe3490fd64b2d",
+    "full-small.json": "9eac25b17c0d1fc81b7a35f4a54d65ff55ce8494fc31b3955fbeee9b5d014681",
+    "astra-review.txt": "00354d1057e70b13336c335349b94e9478f896f079f268d8fbda75adc9fbc976",
+    "inventory-older-revision.log": "194bac309c5c53bde4e57012a1a3fb45324637c3db019c023f6194a0bc65c9d5",
+    "inventory.json": "6b587cf3096050f0e85dda7a697b2e3a0bec5e4c3f57a88e627f49ccf57b9beb",
+    "inventory-initial-cleanup-error.log": "6097a2dd6c9a4bb4180f91e7c43527ae1223ea4c8fa1fbd31eb0df566afeb7ff"
+  }
+}

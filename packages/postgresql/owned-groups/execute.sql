@@ -70,6 +70,7 @@ DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='
  unset_name text;authored jsonb;retained jsonb;order_key jsonb;selected_source_type int;selected_target_type int;plan jsonb;outgoing bigint;incoming bigint;
  retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;current_actor oid;resolved_creates jsonb:='{}';
  rootless_creates boolean;created_states jsonb[]:='{}';
+ value_updates boolean;updated_states jsonb[]:='{}';updated_references text[]:='{}';
  scope_node_states jsonb[]:='{}';scope_edge_states jsonb[]:='{}';
 BEGIN
  current_actor:=truss.runtime_person(false);
@@ -84,6 +85,20 @@ BEGIN
    SELECT 1 FROM jsonb_array_elements(input->'operations') o
    WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
     OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb),false);
+ -- Distinct stored rootless targets cannot observe one another's value edits.
+ -- Keep ordinary validation in order; malformed shapes use the general path.
+ value_updates:=NOT EXISTS(
+  SELECT 1 FROM jsonb_array_elements(input->'operations') o
+  WHERE o.value->>'operation' IS DISTINCT FROM 'update_object'
+   OR o.value ? 'ownershipChange'
+   OR o.value->'target'->>'state' IS DISTINCT FROM 'stored'
+   OR jsonb_typeof(o.value->'target'->'identity'->'typeId') IS DISTINCT FROM 'string'
+   OR jsonb_typeof(o.value->'target'->'identity'->'id') IS DISTINCT FROM 'string')
+  AND NOT EXISTS(SELECT 1 FROM jsonb_each(scope->'nodes') n
+   WHERE n.value->'root_id' IS DISTINCT FROM 'null'::jsonb
+    OR n.value->'root_type' IS DISTINCT FROM 'null'::jsonb)
+  AND (SELECT count(*)=count(DISTINCT 'stored:'||(o.value->'target'->'identity'->>'typeId')||':'||(o.value->'target'->'identity'->>'id'))
+   FROM jsonb_array_elements(input->'operations') o);
  revision:=(scope->>'catalogRevision')::int;
  IF revision IS NULL OR revision<1 OR revision IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1) THEN
   RAISE EXCEPTION 'current admitted group catalog required' USING ERRCODE='55P03';END IF;
@@ -211,7 +226,12 @@ BEGIN
      IF state IS DISTINCT FROM before_nodes->selected THEN
       IF (state->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'object version exhausted' USING ERRCODE='54000';END IF;
       state:=jsonb_set(state,'{image,ver}',to_jsonb((state->'image'->>'ver')::bigint+1));
-      nodes:=jsonb_set(nodes,ARRAY[selected],jsonb_set(state,'{image,rev}',to_jsonb(revision)));
+      IF value_updates THEN state:=jsonb_set(state,'{image,rev}',to_jsonb(revision));
+      ELSE nodes:=jsonb_set(nodes,ARRAY[selected],jsonb_set(state,'{image,rev}',to_jsonb(revision)));END IF;
+     END IF;
+     IF value_updates THEN
+      updated_references:=array_append(updated_references,selected);
+      updated_states:=array_append(updated_states,state);
      END IF;
     ELSIF operation->>'operation'<>'create_object' THEN
     FOR entry IN SELECT reference key,nodes->reference value FROM (SELECT DISTINCT unnest(changed_nodes) reference) touched LOOP
@@ -292,10 +312,18 @@ BEGIN
    SELECT jsonb_object_agg(node_order[n.ordinal::int],n.state) INTO nodes
     FROM unnest(created_states) WITH ORDINALITY n(state,ordinal);
    before_nodes:=nodes-selected;
+  ELSIF value_updates AND index=jsonb_array_length(input->'operations')-1 THEN
+   SELECT nodes||coalesce(jsonb_object_agg(updated_references[n.ordinal::int],n.state)
+     FILTER (WHERE n.ordinal<cardinality(updated_states)),'{}'::jsonb),
+    nodes||jsonb_object_agg(updated_references[n.ordinal::int],n.state)
+    INTO before_nodes,nodes FROM unnest(updated_states) WITH ORDINALITY n(state,ordinal);
   END IF;
   IF index=jsonb_array_length(input->'operations')-1 THEN
    plan:=jsonb_build_object('beforeNodes',before_nodes,'afterNodes',nodes,
     'beforeEdges',before_edges,'afterEdges',edges);
+  ELSIF value_updates THEN
+   plan:=jsonb_build_object('beforeNodes',jsonb_build_object(selected,before_nodes->selected),
+    'afterNodes',jsonb_build_object(selected,state),'beforeEdges','{}'::jsonb,'afterEdges','{}'::jsonb);
   ELSIF rootless_creates THEN
    plan:=jsonb_build_object('beforeNodes','{}'::jsonb,'afterNodes',jsonb_build_object(selected,state),
     'beforeEdges','{}'::jsonb,'afterEdges','{}'::jsonb);

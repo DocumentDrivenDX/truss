@@ -1,0 +1,3 @@
+Astra Ultra source review: SOURCE CLEAR for execute.sql SHA dddd8fb9d3c72dbbc9528b86f83487b68bd618925688869b17e2c7020ffa0ebb. Conservative non-throwing eligibility; duplicate/owned/mixed fallback; version/revision/no-op/MAX behavior retained; sparse and full before/after frames preserved.
+
+Completed functional review: clear, no new source blocker. Frozen patch and generated SQL/manifest match. Basic2PASS9.160s; original1024PASS37.450s; complete JSONB inventory equality across four cases including older stored revisions. Initial oracle cleanup ERROR retained; corrected runs pass, final1PASS4.839s. Oracle is fixture-level equivalence, not fresh public admission at substituted scope revision. Full-matrix performance acceptance was pending and not reviewed.
