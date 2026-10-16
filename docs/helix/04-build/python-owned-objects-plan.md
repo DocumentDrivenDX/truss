@@ -227,13 +227,40 @@ published-predecessor upgrade. Ordinary module, endpoint and root disclosure
 checks remain required for reports and source lookup. Existing rootless source
 rows and their original receipts must remain readable.
 
-Astra Ultra is reviewing the minimal public batch/reference shape before source
-implementation. The basic completion gate is one public owned aggregate import,
+Astra Ultra cleared the minimal separate atomic selection on2026-10-16, subject
+to the implementation constraints below. This is plan review, not an available
+provider or runtime qualification. The basic completion gate is one public owned aggregate import,
 caller commit and fresh object/edge/source readback; repeated import with invalid
 replacement payloads must skip and preserve originals. One failed dependent
 record must leave no partial aggregate. The adopted host alone settles its
 transaction; engine-owned execution settles only complete atomic batches.
 This tranche remains unfinished and is not a release claim.
+
+The new selection uses distinct owned-import input/object/edge carriers and a
+closed profile/context. Ownership has one authoritative location. Dependencies
+resolve to existing live objects or earlier eligible object records; forward
+references and reserved-identity references refuse explicitly. Unlike legacy
+object-before-edge processing, this opt-in atomic profile preserves original
+record order. Endpoint-only ambiguous parallel edges continue to refuse.
+
+Identity resolution precedes replacement payload decoding. A repeated identity
+within the batch skips only if the earlier new creation succeeds. If the atomic
+batch rolls back, it cannot report that provisional identity as live. Existing
+live/reserved skips remain skips; every eligible creation is rejected on a known
+atomic failure. All-skipped input returns without invoking an empty group.
+Transaction/commit uncertainty retains the existing unknown dispositions.
+
+One host operation/savepoint encloses identity resolution, the existing group
+executor and all source registrations. A source-registration failure rolls back
+the creations too. Bound original records and report bytes as well as generated
+operations. The host remains the sole transaction owner in adopted execution.
+
+Native provenance storage uses unique `(group_attempt_id, operation_index)` plus
+existing entity uniqueness. Existing rows migrate to index zero. Source and
+commit checks bind the indexed operation/result/transition, typed identity,
+original primary key, ownership/endpoints, exact payload and load ID. Private
+aliases alone do not establish correspondence. Keep legacy one-operation checks;
+do not require historical legacy attempts to have owned-operation storage rows.
 
 ## Ordered result storage — 2026-10-16
 
