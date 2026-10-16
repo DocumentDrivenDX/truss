@@ -13,14 +13,14 @@
     {
       "role": "owner_export",
       "path": "docs/helix/04-build/evidence/source-epoch-layout-0.16.owner-export.sql",
-      "byteLength": 59119,
-      "sha256": "dd46a1f5d38efebb96c1123b78c47cd018d223cdb2192976cedb8f3eebb4d85f"
+      "byteLength": 28632,
+      "sha256": "860175adb95e6d5b91db9b50ce9c5bfdff2ff4e7403ff7046ecc90a3721bc35e"
     },
     {
       "role": "owner_generation_evidence",
       "path": "docs/helix/04-build/evidence/design-audit/source-epoch-layout-source.json",
-      "byteLength": 4253,
-      "sha256": "7984638c4c24dba3993cfcfa870def0b0178b4666e16619111a02a7d91e82db8"
+      "byteLength": 2965,
+      "sha256": "6264c2b31d5796dfa6fe74051b28c39636d5209284da617360bad7ec535a0b22"
     },
     {
       "role": "issued_admission",
@@ -121,7 +121,7 @@
   ],
   "archive": {
     "path": "sources.zip",
-    "byteLength": 83897,
-    "sha256": "2d4fabab96dc9cef7e5971d42bcae9332c442f039a19ac2da6ca5a134b9e56f1"
+    "byteLength": 79597,
+    "sha256": "fe6dc14c661e4b0803062b8f76ebc811cbca75a70c37fc6cb7c021e035c24c2a"
   }
 }

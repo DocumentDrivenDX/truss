@@ -12,7 +12,7 @@ from .execution import Ok, Error, Outcome, ExecutionFailure, TransactionHandle
 from .psycopg_host import PsycopgHost
 
 _RELATIONS=('schema_head','schema_rev','schema_doc','catalog_acceptance_report',
-            'installation_admission','row_home_operation')
+            'installation_marker','object')
 _QUERY="""SELECT
  EXISTS(SELECT 1 FROM pg_catalog.pg_namespace WHERE nspname OPERATOR(pg_catalog.=) 'truss')::pg_catalog.text,
 """+',\n'.join(

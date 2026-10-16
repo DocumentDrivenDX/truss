@@ -52,8 +52,8 @@ class Correspondence:
 class InventoryRefusal(ValueError):
     pass
 
-HOMES = ('schema_head', 'row_home_operation', 'source_epoch_current',
-         'source_epoch_registry', 'installation_admission', 'operation_configuration')
+HOMES = ('schema_head', 'runtime_object_attempt', 'source_epoch_current',
+         'source_epoch_registry', 'installation_marker', 'operation_configuration')
 UNRESOLVED = ('protected_cut_and_freshness', 'original_producer_and_ingress_accounting',
               'static_string_bodied_and_dynamic_dependencies', 'external_wrappers',
               'shared_dependencies_and_set_role_paths', 'triggers_defaults_rls',
