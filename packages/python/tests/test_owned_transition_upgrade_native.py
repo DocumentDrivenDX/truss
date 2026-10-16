@@ -27,6 +27,9 @@ class OwnedTransitionUpgradeTests(unittest.TestCase):
                     from truss.catalog_runtime import _release
                     self.assertEqual(upgraded.value.release_id,_release()[0]['releaseId'])
                     self.assertEqual(upgraded.value.outcome,'upgraded');host.detach();admin.commit()
+                    private_names=['runtime_can_read_qualified','runtime_module_writer_qualified','runtime_object_values_readable_qualified','runtime_owned_object_transition_validate_qualified']
+                    private_rows=admin.execute("SELECT p.proname,has_function_privilege('consumer',p.oid,'EXECUTE'),p.proowner=i.owner_oid FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace CROSS JOIN truss.catalog_runtime_installation i WHERE n.nspname='truss' AND p.proname=ANY(%s) ORDER BY p.proname",(private_names,)).fetchall()
+                    self.assertEqual(private_rows,[(name,False,True) for name in sorted(private_names)])
                     self.assertEqual(admin.execute('SELECT to_jsonb(t)::text FROM truss.runtime_object_transition t ORDER BY transition_id').fetchall(),objects)
                     if upgraded.value.previous_release_id=='truss-catalog-runtime/0.64-candidate':
                         self.assertEqual(admin.execute("SELECT (to_jsonb(t)-'endpoint_ownership')::text FROM truss.runtime_edge_transition t ORDER BY transition_id").fetchall(),edges)

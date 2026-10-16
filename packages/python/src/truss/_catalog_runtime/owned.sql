@@ -1253,7 +1253,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_key_preflight(jsonb) FROM PUBLIC;
 
 -- Check each changed object against its original operation, including descendants.
 -- Physical before-images chain to the captured scope or an earlier original step.
-CREATE FUNCTION truss.runtime_owned_object_transition_validate(selected_transition bigint,authorize_read boolean) RETURNS void
+CREATE FUNCTION truss.runtime_owned_object_transition_validate_qualified(selected_transition bigint,authorize_read boolean,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;previous_image jsonb;scope jsonb;
@@ -1266,7 +1266,7 @@ BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
  IF attempt.writer_xid IS DISTINCT FROM transition.writer_xid OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
   OR jsonb_array_length(attempt.results)<>attempt.next_index OR (authorize_read AND NOT attempt.complete)
-  OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false))) THEN
+  OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM qualified_actor)) THEN
   RAISE EXCEPTION 'original completed object operation progress required' USING ERRCODE='55000';END IF;
  plan:=truss.runtime_owned_plan(attempt.id,transition.operation_index);input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
  FOR candidate IN SELECT key FROM jsonb_each(plan->'afterNodes') LOOP
@@ -1347,11 +1347,19 @@ BEGIN
   PERFORM truss.runtime_history_ownership(before_record);
   IF after_record IS NOT NULL THEN PERFORM truss.runtime_history_ownership(after_record);END IF;
  ELSE
-  PERFORM truss.runtime_module_writer(identity->'owner'->>'documentId',identity->'owner'->>'moduleId');
-  IF NOT truss.runtime_object_values_readable(transition.type_id) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
+  PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',qualified_actor);
+  IF NOT truss.runtime_object_values_readable_qualified(transition.type_id,qualified_actor) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
   PERFORM truss.runtime_history_ownership(before_record);
   IF after_record IS NOT NULL THEN PERFORM truss.runtime_history_ownership(after_record);END IF;
  END IF;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_object_transition_validate_qualified(bigint,boolean,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_owned_object_transition_validate(selected_transition bigint,authorize_read boolean) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ PERFORM truss.runtime_owned_object_transition_validate_qualified(selected_transition,authorize_read,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_object_transition_validate(bigint,boolean) FROM PUBLIC;
@@ -1365,12 +1373,13 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;plan jsonb;last
  operation jsonb;result jsonb;entry record;owner record;transition_id bigint;identity jsonb;actual jsonb;
  reference text;mode text;expected_objects int;expected_edges int;events jsonb;deleted jsonb;aliases jsonb:='[]';
  primary_before jsonb;primary_after jsonb;expected_outcome text;expected_version text;
- node_order text[];projection jsonb;local_owned jsonb;root_reference text;index int;
+ node_order text[];projection jsonb;local_owned jsonb;root_reference text;index int;current_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+ current_actor:=truss.runtime_person(false);
  IF check_final IS NULL OR attempt.writer_xid IS DISTINCT FROM pg_current_xact_id()
-  OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false)
+  OR attempt.actor_oid IS DISTINCT FROM current_actor
   OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
   OR attempt.next_index<>jsonb_array_length(input->'operations') OR jsonb_array_length(attempt.results)<>attempt.next_index
   OR (SELECT count(*) FROM truss.runtime_owned_operation WHERE attempt_id=selected_attempt)<>attempt.next_index THEN
@@ -1384,7 +1393,7 @@ BEGIN
    identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'object');
    SELECT t.transition_id INTO STRICT transition_id FROM truss.runtime_object_transition t WHERE t.attempt_id=selected_attempt
     AND t.operation_index=index AND t.object_id=(identity->>'id')::bigint AND t.type_id=(identity->>'typeId')::int;
-   PERFORM truss.runtime_owned_object_transition_validate(transition_id,false);expected_objects:=expected_objects+1;
+   PERFORM truss.runtime_owned_object_transition_validate_qualified(transition_id,false,current_actor);expected_objects:=expected_objects+1;
   END LOOP;
   FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterEdges') e WHERE
    (e.value IS DISTINCT FROM plan->'beforeEdges'->e.key OR e.key=plan->>'primary' AND mode='update_edge')
@@ -1419,7 +1428,7 @@ BEGIN
    IF deleted IS DISTINCT FROM (SELECT jsonb_agg(value ORDER BY value::text COLLATE "C") FROM jsonb_array_elements(result->'deleted')) THEN
     RAISE EXCEPTION 'complete original deleted identity inventory required' USING ERRCODE='55000';END IF;
   END IF;
-  PERFORM truss.runtime_module_writer(identity->'owner'->>'documentId',identity->'owner'->>'moduleId');
+  PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',current_actor);
   IF mode<>'create_object' THEN
    SELECT coalesce(jsonb_agg(jsonb_build_object('sourceEpoch',event->>'sourceEpoch','historyProfile',event->>'historyProfile',
     'xid',event->>'xid','seq',event->>'seq') ORDER BY (event->>'seq')::bigint),'[]'::jsonb) INTO events FROM (
@@ -1437,14 +1446,14 @@ BEGIN
  -- when the original operation was unchanged or the affected member was deleted.
  FOR owner IN SELECT DISTINCT value->>'document_id' document_id,value->>'module' module_id FROM (
   SELECT value FROM jsonb_each(initial_scope->'types') UNION ALL SELECT value FROM jsonb_each(initial_scope->'relationships')) owners LOOP
-  PERFORM truss.runtime_module_writer(owner.document_id,owner.module_id);
+  PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module_id,current_actor);
  END LOOP;
  FOR entry IN SELECT value FROM jsonb_each(initial_scope->'boundary') LOOP
-  IF NOT truss.runtime_can_read(entry.value->'definition'->>'document_id',entry.value->'definition'->>'module') THEN
+  IF NOT truss.runtime_can_read_qualified(entry.value->'definition'->>'document_id',entry.value->'definition'->>'module',current_actor) THEN
    RAISE EXCEPTION 'current original boundary reader required' USING ERRCODE='42501';END IF;
  END LOOP;
  FOR entry IN SELECT DISTINCT (value->'identity'->>'typeId')::int type_id FROM jsonb_each(last_plan->'afterNodes') LOOP
-  IF NOT truss.runtime_object_values_readable(entry.type_id) THEN RAISE EXCEPTION 'current complete object value readers required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_object_values_readable_qualified(entry.type_id,current_actor) THEN RAISE EXCEPTION 'current complete object value readers required' USING ERRCODE='42501';END IF;
  END LOOP;
  IF NOT check_final THEN RETURN;END IF;
  FOR entry IN SELECT key,value FROM jsonb_each(last_plan->'afterNodes') LOOP

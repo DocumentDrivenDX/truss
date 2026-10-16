@@ -203,7 +203,9 @@ REVOKE ALL ON FUNCTION truss.runtime_item_chain_readable(jsonb) FROM PUBLIC;
 
 -- Interpretation requires current definition-module read authority. Object
 -- effects still require the owning record module's writer, checked by callers.
-CREATE FUNCTION truss.runtime_object_values_readable(selected_type int) RETURNS boolean
+-- Private actor is issued by the current native invocation, never retained
+-- or accepted from a public caller. Module policy/membership checks stay live.
+CREATE FUNCTION truss.runtime_object_values_readable_qualified(selected_type int,qualified_actor oid) RETURNS boolean
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE selected truss.type_def;dependency record;
 BEGIN
@@ -217,9 +219,17 @@ BEGIN
   UNION
   SELECT node.value->>'documentId',node.value->'reference'->>'module' FROM truss.prop_def p CROSS JOIN LATERAL jsonb_array_elements(jsonb_build_array(p.item)||coalesce(p.item->'descendants','[]'::jsonb)) node WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.cardinality IN ('array','map')
  LOOP
-  IF truss.runtime_can_read(dependency.document_id,dependency.module) IS NOT TRUE THEN RETURN false;END IF;
+  IF truss.runtime_can_read_qualified(dependency.document_id,dependency.module,qualified_actor) IS NOT TRUE THEN RETURN false;END IF;
  END LOOP;
  RETURN true;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_object_values_readable_qualified(int,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_object_values_readable(selected_type int) RETURNS boolean
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN truss.runtime_object_values_readable_qualified(selected_type,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_object_values_readable(int) FROM PUBLIC;

@@ -78,17 +78,27 @@ CREATE FUNCTION truss.runtime_group_profiles() RETURNS jsonb LANGUAGE sql IMMUTA
 'policyProfile',jsonb_build_object('identity','truss-qualified-module-writer','version','0.2','sha256','f0f41d6dfa0cc38f1340fd1516679ff985824f9cb79034923330b16c2fb3ec4f')); $$;
 REVOKE ALL ON FUNCTION truss.runtime_group_profiles() FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_module_writer(selected_document text,selected_module text) RETURNS oid
+-- Private actor is issued by the current native invocation, never retained
+-- or accepted from a public caller. Module policy/membership checks stay live.
+CREATE FUNCTION truss.runtime_module_writer_qualified(selected_document text,selected_module text,qualified_actor oid) RETURNS oid
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE person oid;policy truss.module_access%ROWTYPE;
 BEGIN
- person:=truss.runtime_person(false);
+ person:=qualified_actor;
  SELECT * INTO policy FROM truss.module_access WHERE document_id=selected_document AND module=selected_module FOR SHARE NOWAIT;
  IF NOT FOUND OR NOT EXISTS(WITH RECURSIVE memberships(role_oid) AS (
   SELECT person UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)
   SELECT 1 FROM pg_roles r JOIN memberships m ON m.role_oid=r.oid WHERE r.rolname::text=policy.writer_role) THEN
   RAISE EXCEPTION 'current qualified module writer required' USING ERRCODE='42501'; END IF;
  RETURN person;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_module_writer_qualified(text,text,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_module_writer(selected_document text,selected_module text) RETURNS oid
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN truss.runtime_module_writer_qualified(selected_document,selected_module,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_module_writer(text,text) FROM PUBLIC;

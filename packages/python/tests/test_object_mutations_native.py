@@ -158,3 +158,13 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
             connection.commit()
         connection.rollback()
         self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o WHERE id=%s AND type_id=%s',(int(identity.id),int(identity.type_id))).fetchone(),original)
+
+    def test_checked_actor_helpers_are_owner_only(self):
+        connection,host,assembly,tx=self.ready()
+        names=['runtime_can_read_qualified','runtime_module_writer_qualified','runtime_object_values_readable_qualified','runtime_owned_object_transition_validate_qualified']
+        rows=self.admin.execute("SELECT p.proname,has_function_privilege('consumer',p.oid,'EXECUTE'),p.proowner=i.owner_oid FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace CROSS JOIN truss.catalog_runtime_installation i WHERE n.nspname='truss' AND p.proname=ANY(%s) ORDER BY p.proname",(names,)).fetchall()
+        self.assertEqual(rows,[(name,False,True) for name in sorted(names)])
+        host.detach()
+        with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+            connection.execute("SELECT truss.runtime_can_read_qualified('adoc','m',(SELECT oid FROM pg_roles WHERE rolname='consumer'))")
+        connection.rollback()

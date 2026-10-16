@@ -853,7 +853,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_key_preflight(jsonb) FROM PUBLIC;
 
 -- Check each changed object against its original operation, including descendants.
 -- Physical before-images chain to the captured scope or an earlier original step.
-CREATE FUNCTION truss.runtime_owned_object_transition_validate(selected_transition bigint,authorize_read boolean) RETURNS void
+CREATE FUNCTION truss.runtime_owned_object_transition_validate_qualified(selected_transition bigint,authorize_read boolean,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;previous_image jsonb;scope jsonb;
@@ -866,7 +866,7 @@ BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
  IF attempt.writer_xid IS DISTINCT FROM transition.writer_xid OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
   OR jsonb_array_length(attempt.results)<>attempt.next_index OR (authorize_read AND NOT attempt.complete)
-  OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false))) THEN
+  OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM qualified_actor)) THEN
   RAISE EXCEPTION 'original completed object operation progress required' USING ERRCODE='55000';END IF;
  plan:=truss.runtime_owned_plan(attempt.id,transition.operation_index);input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
  FOR candidate IN SELECT key FROM jsonb_each(plan->'afterNodes') LOOP
@@ -947,11 +947,19 @@ BEGIN
   PERFORM truss.runtime_history_ownership(before_record);
   IF after_record IS NOT NULL THEN PERFORM truss.runtime_history_ownership(after_record);END IF;
  ELSE
-  PERFORM truss.runtime_module_writer(identity->'owner'->>'documentId',identity->'owner'->>'moduleId');
-  IF NOT truss.runtime_object_values_readable(transition.type_id) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
+  PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',qualified_actor);
+  IF NOT truss.runtime_object_values_readable_qualified(transition.type_id,qualified_actor) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
   PERFORM truss.runtime_history_ownership(before_record);
   IF after_record IS NOT NULL THEN PERFORM truss.runtime_history_ownership(after_record);END IF;
  END IF;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_object_transition_validate_qualified(bigint,boolean,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_owned_object_transition_validate(selected_transition bigint,authorize_read boolean) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ PERFORM truss.runtime_owned_object_transition_validate_qualified(selected_transition,authorize_read,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_object_transition_validate(bigint,boolean) FROM PUBLIC;

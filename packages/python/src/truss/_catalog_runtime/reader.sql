@@ -1,18 +1,28 @@
 -- Person-scoped catalog metadata; no complete unauthorized source crosses the facade.
-CREATE FUNCTION truss.runtime_can_read(document_id text,module_id text) RETURNS boolean
+-- Private actor is issued by the current native invocation, never retained
+-- or accepted from a public caller. Module policy/membership checks stay live.
+CREATE FUNCTION truss.runtime_can_read_qualified(document_id text,module_id text,qualified_actor oid) RETURNS boolean
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE person oid;policy truss.module_access%ROWTYPE;
 BEGIN
- person:=truss.runtime_person(false);
+ person:=qualified_actor;
  IF current_setting('transaction_read_only')='on' THEN
- SELECT * INTO policy FROM truss.module_access p WHERE p.document_id=runtime_can_read.document_id AND p.module=module_id;
+ SELECT * INTO policy FROM truss.module_access p WHERE p.document_id=runtime_can_read_qualified.document_id AND p.module=module_id;
  ELSE
- SELECT * INTO policy FROM truss.module_access p WHERE p.document_id=runtime_can_read.document_id AND p.module=module_id FOR SHARE NOWAIT;
+ SELECT * INTO policy FROM truss.module_access p WHERE p.document_id=runtime_can_read_qualified.document_id AND p.module=module_id FOR SHARE NOWAIT;
  END IF;
  IF NOT FOUND THEN RETURN false; END IF;
  RETURN EXISTS(WITH RECURSIVE memberships(role_oid) AS (
   SELECT person UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)
   SELECT 1 FROM pg_roles r JOIN memberships m ON m.role_oid=r.oid WHERE r.rolname::text IN(policy.reader_role,policy.writer_role));
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_can_read_qualified(text,text,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_can_read(document_id text,module_id text) RETURNS boolean
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN truss.runtime_can_read_qualified(document_id,module_id,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_can_read(text,text) FROM PUBLIC;

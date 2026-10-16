@@ -646,13 +646,13 @@ BEGIN
    OR jsonb_array_length(owned_transition.original_results)<>owned_transition.original_next THEN
    RAISE EXCEPTION 'original object operation progress and actor required' USING ERRCODE='55000';END IF;
   SELECT t.document_id,t.module INTO STRICT owner FROM truss.type_def t WHERE t.type_id=selected_type;
-  PERFORM truss.runtime_module_writer(owner.document_id,owner.module);
-  IF NOT truss.runtime_object_values_readable(selected_type) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
+  PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module,current_actor);
+  IF NOT truss.runtime_object_values_readable_qualified(selected_type,current_actor) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
   FOR root_type IN SELECT DISTINCT (image->>'root_type')::int
    FROM jsonb_array_elements(jsonb_build_array(owned_transition.before_object,owned_transition.after_object)) images(image)
    WHERE image->>'root_type' IS NOT NULL LOOP
    SELECT t.document_id,t.module INTO STRICT owner FROM truss.type_def t WHERE t.type_id=root_type;
-   IF NOT truss.runtime_can_read(owner.document_id,owner.module) THEN RAISE EXCEPTION 'current historical root reader required' USING ERRCODE='42501';END IF;
+   IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module,current_actor) THEN RAISE EXCEPTION 'current historical root reader required' USING ERRCODE='42501';END IF;
   END LOOP;
  END LOOP;
  -- Later ordinary mutations cannot suppress original registration dependencies.
