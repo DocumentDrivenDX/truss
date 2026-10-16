@@ -240,8 +240,9 @@ BEGIN
  IF input->'layoutProfile' IS DISTINCT FROM context->'layoutProfile' OR input->'mutationProfile' IS DISTINCT FROM context->'mutationProfile' OR input->'valueProfile' IS DISTINCT FROM context->'valueProfile' THEN RAISE EXCEPTION 'current group profile required on receipt miss' USING ERRCODE='0A000';END IF;
  IF replay_only THEN RETURN convert_to('{"outcome":"miss"}','UTF8');END IF;
  -- Authorize the full original owner inventory without requiring live targets.
+ person:=truss.runtime_person(false);
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
-  SELECT * INTO STRICT selected FROM truss.runtime_operation_owner(operation,input->'operations',index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);
+  SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input->'operations',index,person);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,person);
   SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
   SELECT d.value->>'sourceText' INTO STRICT source_text FROM jsonb_array_elements(documents) d WHERE d.value->>'documentId'=archive.doc_id;
   IF convert_to(source_text,'UTF8') IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'exact original source required' USING ERRCODE='22023';END IF;
