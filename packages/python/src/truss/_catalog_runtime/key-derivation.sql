@@ -16,7 +16,7 @@ REVOKE ALL ON FUNCTION truss.umf_key_uleb128(bigint) FROM PUBLIC;
 
 CREATE FUNCTION truss.umf_key_coefficient(token text,scale int,precision_limit int DEFAULT NULL) RETURNS text
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE mantissa text;digits text;exponent_token text;exponent_value int:=0;shift int;negative boolean;
+DECLARE mantissa text;digits text;exponent_token text;exponent_value bigint:=0;shift bigint;negative boolean;
 BEGIN
  IF token IS NULL OR octet_length(token)>1048576 OR token !~ '^-?(0|[1-9][0-9]*)([.][0-9]+)?([eE][+-]?[0-9]+)?$'
   OR scale IS NULL OR scale<0 THEN RAISE EXCEPTION 'exact bounded numeric key required' USING ERRCODE='22023';END IF;
@@ -26,18 +26,18 @@ BEGIN
  exponent_token:=split_part(lower(token),'e',2);
  IF exponent_token<>'' THEN
   exponent_token:=ltrim(ltrim(exponent_token,'+-'),'0');
-  IF length(exponent_token)>7 THEN RAISE EXCEPTION 'numeric key expansion outside domain' USING ERRCODE='22023';END IF;
-  exponent_value:=CASE WHEN exponent_token='' THEN 0 ELSE exponent_token::int END;
+  IF length(exponent_token)>18 THEN RAISE EXCEPTION 'numeric key expansion outside domain' USING ERRCODE='22023';END IF;
+  exponent_value:=CASE WHEN exponent_token='' THEN 0 ELSE exponent_token::bigint END;
   IF split_part(lower(token),'e',2) LIKE '-%' THEN exponent_value:=-exponent_value;END IF;
  END IF;
- shift:=scale-length(split_part(mantissa,'.',2))+exponent_value;
+ shift:=scale::bigint-length(split_part(mantissa,'.',2))+exponent_value;
  IF shift<0 THEN
   IF -shift>length(digits)-length(rtrim(digits,'0')) THEN RAISE EXCEPTION 'numeric key would require rounding' USING ERRCODE='22023';END IF;
-  digits:=left(digits,length(digits)+shift);
+  digits:=left(digits,(length(digits)+shift)::int);
  ELSE
   IF length(digits)::bigint+shift>least(coalesce(precision_limit,1048576),1048576) THEN
    RAISE EXCEPTION 'numeric key expansion exceeds bound' USING ERRCODE='22023';END IF;
-  digits:=digits||repeat('0',shift);
+  digits:=digits||repeat('0',shift::int);
  END IF;
  IF precision_limit IS NOT NULL AND length(digits)>precision_limit THEN RAISE EXCEPTION 'numeric key exceeds precision' USING ERRCODE='22023';END IF;
  RETURN CASE WHEN negative THEN '-' ELSE '' END||digits;
@@ -64,9 +64,9 @@ BEGIN
    WHEN 'boolean' THEN tag:=1;payload:=decode(CASE WHEN (cell->>'value')::boolean THEN '01' ELSE '00' END,'hex');
    WHEN 'integer' THEN tag:=2;payload:=convert_to(truss.umf_key_coefficient(cell->>'text',0),'UTF8');
    WHEN 'decimal' THEN
-    IF facet NOT IN ('{"precision":18,"scale":2}'::jsonb,'{"precision":18,"scale":4}'::jsonb,'{"precision":12,"scale":2}'::jsonb) THEN
+    IF truss.valid_decimal_facets(facet) IS NOT TRUE THEN
      RAISE EXCEPTION 'selected native decimal key domain required' USING ERRCODE='0A000';END IF;
-    tag:=3;payload:=truss.umf_key_uleb128((facet->>'scale')::bigint)||convert_to(truss.umf_key_coefficient(cell->>'text',(facet->>'scale')::int,(facet->>'precision')::int),'UTF8');
+    tag:=3;payload:=truss.umf_key_uleb128((facet->>'scale')::numeric::bigint)||convert_to(truss.umf_key_coefficient(cell->>'text',(facet->>'scale')::numeric::int,(facet->>'precision')::numeric::int),'UTF8');
   END CASE;
   IF octet_length(result)::bigint+octet_length(payload)+8>1048576 THEN RAISE EXCEPTION 'key tuple budget exceeded' USING ERRCODE='54000';END IF;
   result:=result||set_byte(decode('00','hex'),0,tag)||truss.umf_key_uleb128(octet_length(payload))||payload;

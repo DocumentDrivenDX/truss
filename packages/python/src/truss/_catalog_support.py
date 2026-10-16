@@ -1,4 +1,4 @@
-from ._catalog_source_reference import REFERENCE08_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE,compact_catalog_sources,catalog_source_artifact,resolve_catalog_observation
+from ._catalog_source_reference import REFERENCE08_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE,compact_catalog_sources,catalog_source_artifact,resolve_catalog_observation
 """Selected catalog metadata policy; incomplete support, never acceptance."""
 import base64
 from hashlib import sha256
@@ -43,18 +43,18 @@ def evaluate_catalog_support(prepared):
     _require_original_preparation(prepared)
     choices=prepared.input()
     selected=choices['supportProfile']
-    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE):
+    if selected not in (PROFILE,RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE):
         return {'state':'unavailable','reason':'unregistered_support_policy'}
-    decimal2=selected in (DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE)
-    containers=selected in (CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE)
-    current=selected in (CORE08_PROFILE,FACET08_PROFILE,CONTAINER08_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE)
-    faceted=selected in (FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE)
-    metadata=selected in (RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE)
-    inverse=selected in (NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE)
-    named=selected in (NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE)
-    scalars=selected in (SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE)
-    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE)
-    policy=files('truss').joinpath('_profiles/fresh-catalog-support-declarative08.json' if selected==DECLARATIVE08_PROFILE else '_profiles/fresh-catalog-support-recursive07.json' if selected==RECURSIVE07_PROFILE else '_profiles/fresh-catalog-support-recursive08.json' if selected==RECURSIVE08_PROFILE else '_profiles/fresh-catalog-support-references08.json' if selected==REFERENCE08_PROFILE else '_profiles/fresh-catalog-support-decimal208.json' if selected==DECIMAL208_PROFILE else '_profiles/fresh-catalog-support-decimal207.json' if selected==DECIMAL207_PROFILE else '_profiles/fresh-catalog-support-containers08.json' if selected==CONTAINER08_PROFILE else '_profiles/fresh-catalog-support-containers07.json' if selected==CONTAINER07_PROFILE else '_profiles/fresh-catalog-support-numeric08.json' if selected==FACET08_PROFILE else '_profiles/fresh-catalog-support-numeric07.json' if selected==FACET07_PROFILE else '_profiles/fresh-catalog-support-core08.json' if current else '_profiles/fresh-catalog-support-retained-metadata.json' if metadata else '_profiles/fresh-catalog-support-named-relationships.json' if inverse else '_profiles/fresh-catalog-support-named-scalars.json' if named else '_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
+    decimal2=selected in (DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE)
+    containers=selected in (CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE)
+    current=selected in (CORE08_PROFILE,FACET08_PROFILE,CONTAINER08_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE)
+    faceted=selected in (FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE)
+    metadata=selected in (RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE)
+    inverse=selected in (NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE)
+    named=selected in (NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE)
+    scalars=selected in (SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE)
+    relational=selected in (RELATIONAL_PROFILE,SCALAR_PROFILE,NAMED_SCALAR_PROFILE,NAMED_RELATIONSHIP_PROFILE,RETAINED_METADATA_PROFILE,CORE08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,DECIMAL207_PROFILE,DECIMAL208_PROFILE,REFERENCE08_PROFILE,RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE)
+    policy=files('truss').joinpath('_profiles/fresh-catalog-support-date08.json' if selected==DATE08_PROFILE else '_profiles/fresh-catalog-support-declarative08.json' if selected in (DECLARATIVE08_PROFILE,DATE08_PROFILE) else '_profiles/fresh-catalog-support-recursive07.json' if selected==RECURSIVE07_PROFILE else '_profiles/fresh-catalog-support-recursive08.json' if selected==RECURSIVE08_PROFILE else '_profiles/fresh-catalog-support-references08.json' if selected==REFERENCE08_PROFILE else '_profiles/fresh-catalog-support-decimal208.json' if selected==DECIMAL208_PROFILE else '_profiles/fresh-catalog-support-decimal207.json' if selected==DECIMAL207_PROFILE else '_profiles/fresh-catalog-support-containers08.json' if selected==CONTAINER08_PROFILE else '_profiles/fresh-catalog-support-containers07.json' if selected==CONTAINER07_PROFILE else '_profiles/fresh-catalog-support-numeric08.json' if selected==FACET08_PROFILE else '_profiles/fresh-catalog-support-numeric07.json' if selected==FACET07_PROFILE else '_profiles/fresh-catalog-support-core08.json' if current else '_profiles/fresh-catalog-support-retained-metadata.json' if metadata else '_profiles/fresh-catalog-support-named-relationships.json' if inverse else '_profiles/fresh-catalog-support-named-scalars.json' if named else '_profiles/fresh-catalog-support-scalars.json' if scalars else '_profiles/fresh-catalog-support-relational.json' if relational else '_profiles/fresh-catalog-support.json').read_bytes()
     if not 1<=len(policy)<=4096 or sha256(policy).hexdigest()!=selected['sha256']:
         raise ValueError('Original selected catalog support policy required')
     if (choices['binding']!={'state':'absent'} or choices['transforms']
@@ -109,8 +109,8 @@ def evaluate_catalog_support(prepared):
         inventory=_closed_source_inventory(prepared,None,None,relational=relational,scalars=scalars,
             named=named,inverse=inverse,metadata=metadata,current=current,faceted=faceted,
             containers=containers,decimal2=decimal2,
-            recursive=selected in (RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE),
-            standalone_scalars=selected==DECLARATIVE08_PROFILE,ordinary=True)
+            recursive=selected in (RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE),
+            standalone_scalars=selected in (DECLARATIVE08_PROFILE,DATE08_PROFILE),dates=selected==DATE08_PROFILE,ordinary=True)
         # Ordinary reports describe the actual native catalog capability. The
         # retained AcceptanceInput selector is not a claim that an older
         # experimental subset describes this release's complete storage API.
@@ -158,14 +158,14 @@ def evaluate_catalog_support(prepared):
             'observationCoverage':coverage,'assertionInventoryComplete':False,
             'enforcementQualified':False,'supportSemanticsQualified':False,
             'acceptedReportQualified':False,
-            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars,named=named,inverse=inverse,metadata=metadata,current=current,faceted=faceted,containers=containers,decimal2=decimal2,recursive=selected in (RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,RECURSIVE08_PROFILE),standalone_scalars=selected==DECLARATIVE08_PROFILE)}
+            'closedSourceInventory':_closed_source_inventory(prepared,observations,core,relational=relational,scalars=scalars,named=named,inverse=inverse,metadata=metadata,current=current,faceted=faceted,containers=containers,decimal2=decimal2,recursive=selected in (RECURSIVE07_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE),standalone_scalars=selected in (DECLARATIVE08_PROFILE,DATE08_PROFILE),dates=selected==DATE08_PROFILE)}
 
     if len(json.dumps(decision,ensure_ascii=True,separators=(',',':')).encode('utf8'))>4194304:
         raise ValueError('Selected catalog support decision capacity exceeded')
     return decision
 
 
-def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False,inverse=False,metadata=False,current=False,faceted=False,containers=False,decimal2=False,recursive=False,standalone_scalars=False,ordinary=False):
+def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False,inverse=False,metadata=False,current=False,faceted=False,containers=False,decimal2=False,recursive=False,standalone_scalars=False,ordinary=False,dates=False):
     """Complete source occurrence inventory for explicit scalar string Records.
 
     Profile 0.2 additionally covers known authored Keys and Relationships.
@@ -242,11 +242,11 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                             target=next((f for m in source['modules'] if m['id']==ref['module'] for f in m['elements'] if f['id']==ref['element']),None)
                             if target is None or target.get('kind')!='field' or target.get('nullability')!='required':return unavailable
                             if target.get('cardinality')=='one':
-                                if target.get('scalarType') not in ('string','integer','decimal','boolean','timestamp','binary') or 'itemType' in target:return unavailable
+                                if target.get('scalarType') not in (('string','integer','decimal','boolean','timestamp','binary')+(('date',) if dates else ())) or 'itemType' in target:return unavailable
                                 break
                             if not recursive or target.get('cardinality') not in ('array','map') or 'scalarType' in target or target.get('facets',{})!={}:return unavailable
                             ref=target.get('itemType')
-                    elif element.get('scalarType') not in (('string','integer','decimal','boolean','timestamp','binary') if scalars else ('string',)) or element.get('cardinality')!='one' or 'itemType' in element:return unavailable
+                    elif element.get('scalarType') not in ((('string','integer','decimal','boolean','timestamp','binary')+(('date',) if dates else ())) if scalars else ('string',)) or element.get('cardinality')!='one' or 'itemType' in element:return unavailable
                     fields.add((module['id'],element['id']))
                     if not container:singular_scalars.add((module['id'],element['id']))
                     operations.extend(('nullability','cardinality'))
@@ -256,6 +256,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                         signed=(family=='integer' and facet=={'integerWidth':{'bits':64,'signed':True}} and type(facet['integerWidth']['bits']) is int and type(facet['integerWidth']['signed']) is bool)
                         decimal=(family=='decimal' and facet in (({'precision':18,'scale':4},{'precision':18,'scale':2}) if decimal2 else ({'precision':18,'scale':4},)) and type(facet['precision']) is int and type(facet['scale']) is int)
                         if ordinary and family=='decimal' and facet=={'precision':12,'scale':2}:decimal=True
+                        if dates and family=='decimal' and type(facet) is dict and set(facet)=={'precision','scale'} and type(facet['precision']) is int and type(facet['scale']) is int and 1<=facet['precision']<=2147483647 and 0<=facet['scale']<=facet['precision']:decimal=True
                         if facet!={} and not (signed or decimal):return unavailable
                     if (current or faceted) and 'facets' in element:
                         operations.append('facets');declaration_values[(document.document.document_id,'facets',module['id'],element['id'])]=element['facets']

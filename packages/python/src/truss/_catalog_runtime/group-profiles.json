@@ -13,10 +13,10 @@
       "name": "valueProfile",
       "pin": {
         "identity": "truss-scalar-string-values",
-        "version": "0.5",
-        "sha256": "e41946ccc3b5aad4219ccd1c6886a6162951e0c96aa849c830ea7fd6d867fc39"
+        "version": "0.6",
+        "sha256": "ca49b4e13a55be8e23d44d4b00ef07332b6249d4f5ae16e5b82c8881061e22ce"
       },
-      "definition": "truss-scalar-string-values/0.5;required/absent-allowed scalar string/integer/decimal/boolean/timestamp/binary;shared BooleanValue and TextValue;JSON numeric token text preserved without float or bounded numeric conversion;RFC3339 Gregorian date seconds00..59 original offsets and arbitrary fractions preserved including unknown -00:00;canonical padded base64 including empty;absence omitted;unknown exact scalar/null retained;asserted origin exact scalar string/null map;no lossy numeric conversion;one-level UMF array/map properties with explicit required singular scalar item Field and known facets;exact string map keys unique and C-sorted before storage/equality;sequence order/duplicates preserved;container absence/null/empty distinct;bounded exact retained scalar containers;no descendant item evolution or record-valued property cells;item declaration module interpretation requires current read authority;native64 additionally admits acyclic required-item nested array/map chains with exact scalar leaves;all descendant meanings and module readers required;depth32 and4096 value nodes;unique map keys C-sorted at every level;array order and duplicate values retained;record-valued property cells and descendant evolution remain unsupported; aggregate object ownership follows the selected mutation profile"
+      "definition": "truss-scalar-string-values/0.5;required/absent-allowed scalar string/integer/decimal/boolean/timestamp/binary;shared BooleanValue and TextValue;JSON numeric token text preserved without float or bounded numeric conversion;RFC3339 Gregorian date seconds00..59 original offsets and arbitrary fractions preserved including unknown -00:00;canonical padded base64 including empty;absence omitted;unknown exact scalar/null retained;asserted origin exact scalar string/null map;no lossy numeric conversion;one-level UMF array/map properties with explicit required singular scalar item Field and known facets;exact string map keys unique and C-sorted before storage/equality;sequence order/duplicates preserved;container absence/null/empty distinct;bounded exact retained scalar containers;no descendant item evolution or record-valued property cells;item declaration module interpretation requires current read authority;native64 additionally admits acyclic required-item nested array/map chains with exact scalar leaves;all descendant meanings and module readers required;depth32 and4096 value nodes;unique map keys C-sorted at every level;array order and duplicate values retained;record-valued property cells and descendant evolution remain unsupported; aggregate object ownership follows the selected mutation profile; v0.6 adds exact Gregorian date cells with canonical YYYY-MM-DD, years0001..9999, no timezone or timestamp conversion"
     },
     {
       "name": "canonicalizationProfile",
@@ -235,6 +235,15 @@
         "sha256": "765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"
       },
       "definition": "truss-unified-create-transition/0.1;native issued immutable attempt context;one atomic outer create progress and original inner creation group;SQL NULL before only for proven version1 creation;original creation journal is sole custodian;empty transition journal;exact original input documents actor writer result image keys reservations and generation correspondence;every inner group and outer create linked exactly once;legacy absent storage pin retains original history;unknown pin refuses"
+    },
+    {
+      "name": "valueProfile",
+      "pin": {
+        "identity": "truss-scalar-string-values",
+        "version": "0.5",
+        "sha256": "e41946ccc3b5aad4219ccd1c6886a6162951e0c96aa849c830ea7fd6d867fc39"
+      },
+      "definition": "truss-scalar-string-values/0.5;required/absent-allowed scalar string/integer/decimal/boolean/timestamp/binary;shared BooleanValue and TextValue;JSON numeric token text preserved without float or bounded numeric conversion;RFC3339 Gregorian date seconds00..59 original offsets and arbitrary fractions preserved including unknown -00:00;canonical padded base64 including empty;absence omitted;unknown exact scalar/null retained;asserted origin exact scalar string/null map;no lossy numeric conversion;one-level UMF array/map properties with explicit required singular scalar item Field and known facets;exact string map keys unique and C-sorted before storage/equality;sequence order/duplicates preserved;container absence/null/empty distinct;bounded exact retained scalar containers;no descendant item evolution or record-valued property cells;item declaration module interpretation requires current read authority;native64 additionally admits acyclic required-item nested array/map chains with exact scalar leaves;all descendant meanings and module readers required;depth32 and4096 value nodes;unique map keys C-sorted at every level;array order and duplicate values retained;record-valued property cells and descendant evolution remain unsupported; aggregate object ownership follows the selected mutation profile"
     }
   ]
 }

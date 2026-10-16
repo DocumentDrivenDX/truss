@@ -78,8 +78,8 @@ BEGIN
    OR declaration->>'kind' IS DISTINCT FROM 'field' OR declaration->>'nullability' IS DISTINCT FROM 'required' THEN RETURN false;END IF;
   seen:=seen||jsonb_build_array(node->'reference');
   IF index_node=jsonb_array_length(nodes)-1 THEN
-   IF declaration->>'cardinality' IS DISTINCT FROM 'one' OR family IS NULL OR family NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR declaration ? 'itemType'
-    OR NOT ((coalesce(facets,'{}')='{}'::jsonb OR family='integer' AND facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR family='decimal' AND facets IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb)) IS TRUE) THEN RETURN false;END IF;
+   IF declaration->>'cardinality' IS DISTINCT FROM 'one' OR family IS NULL OR family NOT IN ('string','integer','decimal','boolean','timestamp','binary','date') OR declaration ? 'itemType'
+    OR NOT ((coalesce(facets,'{}')='{}'::jsonb OR family='integer' AND facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR family='decimal' AND truss.valid_decimal_facets(facets)) IS TRUE) THEN RETURN false;END IF;
   ELSE
    IF (declaration->>'cardinality' IN ('array','map')) IS NOT TRUE OR declaration ? 'scalarType' OR coalesce(facets,'{}')<>'{}'::jsonb
     OR declaration->'itemType' IS DISTINCT FROM nodes->(index_node+1)->'reference' THEN RETURN false;END IF;
@@ -94,7 +94,7 @@ CREATE FUNCTION truss.valid_property_value(cell jsonb,property truss.prop_def) R
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE nodes jsonb;node jsonb;member jsonb;entry jsonb;declaration jsonb;pending jsonb:='[]';index_node int;
 BEGIN
- IF property.cardinality='one' THEN RETURN property.home='json' AND coalesce(property.scalar_type,'') IN ('string','integer','decimal','boolean','timestamp','binary') AND property.nullability IN ('required','absent-allowed') AND property.item IS NULL AND truss.valid_scalar_property(cell,property.scalar_type,property.nullability='absent-allowed',property.facets);END IF;
+ IF property.cardinality='one' THEN RETURN property.home='json' AND coalesce(property.scalar_type,'') IN ('string','integer','decimal','boolean','timestamp','binary','date') AND property.nullability IN ('required','absent-allowed') AND property.item IS NULL AND truss.valid_scalar_property(cell,property.scalar_type,property.nullability='absent-allowed',property.facets);END IF;
  IF property.cardinality NOT IN ('array','map') OR property.scalar_type IS NOT NULL OR property.home IS DISTINCT FROM 'json'
   OR property.nullability NOT IN ('required','absent-allowed') OR coalesce(property.facets,'{}')<>'{}'::jsonb OR truss.valid_item_chain(property.item) IS NOT TRUE THEN RETURN false;END IF;
  IF cell='{"kind":"null"}'::jsonb THEN RETURN property.nullability='absent-allowed';END IF;
@@ -150,8 +150,8 @@ BEGIN
   IF declaration->>'kind' IS DISTINCT FROM 'field' OR declaration->>'nullability' IS DISTINCT FROM 'required' THEN
    RAISE EXCEPTION 'required original item Field required' USING ERRCODE='0A000';END IF;
   IF declaration->>'cardinality'='one' THEN
-   IF coalesce(declaration->>'scalarType','') NOT IN ('string','integer','decimal','boolean','timestamp','binary') OR declaration ? 'itemType'
-    OR NOT ((coalesce(declaration->'facets','{}'::jsonb)='{}'::jsonb OR declaration->>'scalarType'='integer' AND declaration->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR declaration->>'scalarType'='decimal' AND declaration->'facets' IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb)) IS TRUE) THEN
+   IF coalesce(declaration->>'scalarType','') NOT IN ('string','integer','decimal','boolean','timestamp','binary','date') OR declaration ? 'itemType'
+    OR NOT ((coalesce(declaration->'facets','{}'::jsonb)='{}'::jsonb OR declaration->>'scalarType'='integer' AND declaration->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR declaration->>'scalarType'='decimal' AND truss.valid_decimal_facets(declaration->'facets')) IS TRUE) THEN
     RAISE EXCEPTION 'required exact scalar leaf Field required' USING ERRCODE='0A000';END IF;
   ELSIF declaration->>'cardinality' IN ('array','map') THEN
    IF declaration ? 'scalarType' OR coalesce(declaration->'facets','{}'::jsonb)<>'{}'::jsonb OR NOT declaration ? 'itemType' THEN
@@ -182,7 +182,7 @@ DECLARE example jsonb;
 BEGIN
  IF property.cardinality IN ('array','map') THEN example:=CASE property.cardinality WHEN 'array' THEN '{"kind":"sequence","items":[]}'::jsonb ELSE '{"kind":"map","entries":[]}'::jsonb END;
  ELSIF property.scalar_type='boolean' THEN example:='{"kind":"boolean","value":false}'::jsonb;
- ELSE example:=jsonb_build_object('kind',property.scalar_type,'text',CASE property.scalar_type WHEN 'integer' THEN '0' WHEN 'decimal' THEN '0' WHEN 'timestamp' THEN '2000-01-01T00:00:00Z' ELSE '' END);END IF;
+ ELSE example:=jsonb_build_object('kind',property.scalar_type,'text',CASE property.scalar_type WHEN 'integer' THEN '0' WHEN 'decimal' THEN '0' WHEN 'date' THEN '2000-01-01' WHEN 'timestamp' THEN '2000-01-01T00:00:00Z' ELSE '' END);END IF;
  RETURN truss.valid_property_value(example,property) IS TRUE;
 END;
 $$;

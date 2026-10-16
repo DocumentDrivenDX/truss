@@ -256,7 +256,7 @@ BEGIN
    JOIN truss.prop_def p ON p.type_id=k.type_id AND p.prop_id=i.prop_id WHERE k.type_id=selected.type_id AND k.retired_rev IS NULL LOOP
    IF property.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR property.scalar_type IS NULL
     OR property.nullability IS DISTINCT FROM 'required' OR property.cardinality IS DISTINCT FROM 'one' OR property.home IS DISTINCT FROM 'json'
-    OR property.retired_rev IS NOT NULL OR (property.scalar_type='decimal' AND (property.facets IN ('{"precision":18,"scale":4}'::jsonb,'{"precision":18,"scale":2}'::jsonb,'{"precision":12,"scale":2}'::jsonb)) IS DISTINCT FROM TRUE) THEN
+    OR property.retired_rev IS NOT NULL OR (property.scalar_type='decimal' AND (truss.valid_decimal_facets(property.facets)) IS DISTINCT FROM TRUE) THEN
     RAISE EXCEPTION 'supported required scalar key property required' USING ERRCODE='0A000';END IF;
    IF (SELECT count(*) FROM jsonb_array_elements(operation->'values') v WHERE v.value->>'name'=property.name)<>1 THEN RAISE EXCEPTION 'complete unique key values required' USING ERRCODE='22023';END IF;
    SELECT v.value->'value' INTO entry FROM jsonb_array_elements(operation->'values') v WHERE v.value->>'name'=property.name;

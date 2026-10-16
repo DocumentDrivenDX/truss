@@ -81,7 +81,7 @@ class BooleanValue(_Carrier):
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class TextValue(_Carrier):
-    kind: Literal['string', 'integer', 'decimal', 'binary', 'timestamp']
+    kind: Literal['string', 'integer', 'decimal', 'binary', 'timestamp', 'date']
     text: str
 
 @dataclass(frozen=True, slots=True, kw_only=True)
