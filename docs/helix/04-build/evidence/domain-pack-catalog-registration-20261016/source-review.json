@@ -1,0 +1,42 @@
+{
+  "review": "Astra Ultra retained domain-pack regression corpus and CI integration",
+  "status": "SOURCE_CLEAR_RETAINED_MODULE_NATIVE_PENDING",
+  "baseline": "78564527b09a8eef9e9ba4d12aefb60c0ac626d6",
+  "scope": [
+    ".github/workflows/release.yml",
+    "packages/python/tests/test_domain_pack_catalog_native.py",
+    "packages/python/tests/fixtures/umf-domain-packs/originals.json.gz",
+    "packages/python/tests/fixtures/umf-domain-packs/README.md"
+  ],
+  "sha256": {
+    ".github/workflows/release.yml": "e129545502e6beb2391ac5ffd52d20badbcd933c094058b2a0461bb7b436eaf2",
+    "packages/python/tests/test_domain_pack_catalog_native.py": "eabda2304fe671733135450817946158e0822a4f26fcf961e614ec9b68242fa9",
+    "packages/python/tests/fixtures/umf-domain-packs/originals.json.gz": "3a46be2a0c22d82ed97c2cba351ff7c36e4eeec2eca5ef3d01a725f1cbec693b",
+    "packages/python/tests/fixtures/umf-domain-packs/README.md": "cfbaaa23f7f57b8ed1122b72c16c6b6cf363065d821bb3c59f2a61365e51a415"
+  },
+  "findings": [],
+  "verified": [
+    "Independently enumerated all 28 pack.json manifests from pinned UMF commit cbb6fb8718aad59fd2061b62d12976387570db2f: 256 declared TableSpec entries and 21 declared UMF entries. The fixture has exactly the latter 21 unique pack/path pairs, with no omissions or extras.",
+    "Every fixture sourceText UTF-8 byte sequence equals git show of its original ontology.json; every source SHA-256 matches. All 21 original umf fields equal 0.8.0; sourceRepository/sourceCommit match provenance. No datasets, format conversion, name filling or source normalization.",
+    "Portable retained test inherits the existing fresh installation/ordinary registrar consumer and cleanup fixture. It passes original raw bytes and authored document ID into public prepare_catalog, accepts through the public facade, commits, then checks same-key replay and byte-identical report in a new transaction. Both commits must succeed.",
+    "Base test methods are disabled on the subclass, and importing the base module by alias avoids accidental base-class test discovery. The CI command selects only DomainPackCatalogTests.",
+    "CI runs after exact Truss wheel installation and the existing installed-import check, with PYTHONPATH limited to packages/python/tests and pinned Bun available. The fixture is found relative to __file__; no absolute local paths, Git/network checkout requirement or source-package override at runtime.",
+    "README correctly limits evidence to these catalog preparation/acceptance/commit/retry cases and excludes mutation/query/universal-schema claims.",
+    "Reviewer verified Python AST, exact fixture bytes and existing build-owned-runtime --check / git diff --check; no native run."
+  ],
+  "parentReportedEvidence": {
+    "originalTemporaryProbe": {
+      "session": 71285,
+      "tests": 21,
+      "outcome": "PASS; all accepted_committed_replayed; cleanupPassed=true",
+      "scope": "Approved original temporary public API probe on baseline, not an execution of the newly retained module."
+    },
+    "separateTransitionCountBasicSuite": {
+      "session": 91687,
+      "tests": 8,
+      "outcome": "PASS 61.102s",
+      "caveat": "Concurrent CPU work; correctness evidence only, no timing claim."
+    }
+  },
+  "qualification": "Source/fixture/CI correspondence clear. Newly retained module execution remains pending unless separately reported. No performance, runner capacity or all-valid-UMF support qualification."
+}

@@ -1,0 +1,51 @@
+{
+  "review": "Astra Ultra plan and temporary harness review",
+  "status": "PLAN_AND_HARNESS_SOURCE_CLEAR_NATIVE_PENDING",
+  "scope": "Original committed 21 format=umf domain-pack documents: public preparation 0.8.0, fresh native catalog acceptance, commit and replay only.",
+  "umfSourceCommit": "cbb6fb8718aad59fd2061b62d12976387570db2f",
+  "verifiedInventory": {
+    "packs": 28,
+    "schemaEntries": 277,
+    "formats": {
+      "tablespec": 256,
+      "umf": 21
+    },
+    "umfVersions": {
+      "0.8.0": 21
+    }
+  },
+  "trussHeadAtReview": "78564527b09a8eef9e9ba4d12aefb60c0ac626d6",
+  "harness": {
+    "path": "/private/tmp/truss-domain-pack-registration-20261016.py",
+    "sha256": "89dfb84136be751b0d0f3840742b788a511c7c2cba0aded797fd50923c1df7ab"
+  },
+  "findings": [],
+  "verified": [
+    "Declared schema format, not directory naming, selects the corpus. Original git-show source bytes and authored document IDs enter CatalogDocument unchanged; source SHA is an explicit external document revision.",
+    "Fixture installs independently for every test and grants only its ordinary registrar consumer role. The existing 10-second statement / 30-second operation limits remain.",
+    "Successful registration is committed, then replayed in a separate transaction with byte-identical report required. Refusal and preparation errors fail the test; overall unittest success remains false.",
+    "No external data/generator retrieval, schema conversion, name filling, source rewriting, private native admission or authority bypass.",
+    "Read UMF FEAT-009 and CONTRACT-052: structural schema validity, consumer acceptance, generated data and native mutation/query behavior remain separate claims.",
+    "Current amended temporary harness parses successfully; preparation refusals remain test failures, not accepted schema cases. No native execution by reviewer."
+  ],
+  "parentReportedEvidence": {
+    "ownerCoreValidation": "21 original documents valid=true and complete=true through public UMF readDocument/validateDocument on Bun 1.4.2; this does not establish Truss acceptance.",
+    "nativeProbe": {
+      "session": 71285,
+      "tests": 21,
+      "passed": true,
+      "cleanupPassed": true,
+      "outcomes": {
+        "accepted_committed_replayed": 21
+      },
+      "report": "/private/tmp/truss-domain-pack-registration-report-20261016.json",
+      "sha256": "66c4d5737342e17abc7e5a2986b0790330856726d62c0f60d9c742f8667354a5"
+    }
+  },
+  "execution": "Reviewer ran no native database or producer validation. Parent-run 21-document native probe completed; report inspected separately from transition-count increment.",
+  "qualification": "No all-valid-UMF, all-277-schema, mutation, query, capacity, performance or release support claim.",
+  "resolvedFindings": [
+    "Corpus pinned to exact reviewed commit cbb6fb8718aad59fd2061b62d12976387570db2f.",
+    "Preparation diagnostics are preserved byte-exact as base64 alongside reason, original exception class/message and SQLSTATE. Install/consumer/accept/commit/replay stages and full unittest failures/errors are retained."
+  ]
+}

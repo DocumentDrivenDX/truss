@@ -1,0 +1,154 @@
+{
+  "sourceCommit": "cbb6fb87",
+  "runtime": "1.4.2",
+  "scope": "Public UMF readDocument/validateDocument on exact original committed domain-pack ontology bytes in Bun; no Truss acceptance or writability claim.",
+  "documents": [
+    {
+      "pack": "commerce",
+      "path": "spec/domain-packs/commerce/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "payments",
+      "path": "spec/domain-packs/payments/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "archaeology",
+      "path": "spec/domain-packs/archaeology/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "cybersecurity",
+      "path": "spec/domain-packs/cybersecurity/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "energy",
+      "path": "spec/domain-packs/energy/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "medical-carrier",
+      "path": "spec/domain-packs/medical-carrier/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "education",
+      "path": "spec/domain-packs/education/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "real-estate",
+      "path": "spec/domain-packs/real-estate/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "medical-terminology",
+      "path": "spec/domain-packs/medical-terminology/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "transit",
+      "path": "spec/domain-packs/transit/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "manufacturing",
+      "path": "spec/domain-packs/manufacturing/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "medical",
+      "path": "spec/domain-packs/medical/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "hr",
+      "path": "spec/domain-packs/hr/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "construction",
+      "path": "spec/domain-packs/construction/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "medical-epidemiology",
+      "path": "spec/domain-packs/medical-epidemiology/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "ecology",
+      "path": "spec/domain-packs/ecology/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "supply-chain",
+      "path": "spec/domain-packs/supply-chain/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "public-company-intelligence",
+      "path": "spec/domain-packs/public-company-intelligence/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "legal",
+      "path": "spec/domain-packs/legal/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "martech",
+      "path": "spec/domain-packs/martech/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    },
+    {
+      "pack": "medical-imaging",
+      "path": "spec/domain-packs/medical-imaging/ontology.json",
+      "valid": true,
+      "complete": true,
+      "diagnostics": []
+    }
+  ]
+}

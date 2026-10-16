@@ -1,0 +1,26 @@
+test_00_archaeology (test_domain_pack_catalog_native.DomainPackCatalogTests.test_00_archaeology) ... ok
+test_01_commerce (test_domain_pack_catalog_native.DomainPackCatalogTests.test_01_commerce) ... ok
+test_02_construction (test_domain_pack_catalog_native.DomainPackCatalogTests.test_02_construction) ... ok
+test_03_cybersecurity (test_domain_pack_catalog_native.DomainPackCatalogTests.test_03_cybersecurity) ... ok
+test_04_ecology (test_domain_pack_catalog_native.DomainPackCatalogTests.test_04_ecology) ... ok
+test_05_education (test_domain_pack_catalog_native.DomainPackCatalogTests.test_05_education) ... ok
+test_06_energy (test_domain_pack_catalog_native.DomainPackCatalogTests.test_06_energy) ... ok
+test_07_hr (test_domain_pack_catalog_native.DomainPackCatalogTests.test_07_hr) ... ok
+test_08_legal (test_domain_pack_catalog_native.DomainPackCatalogTests.test_08_legal) ... ok
+test_09_manufacturing (test_domain_pack_catalog_native.DomainPackCatalogTests.test_09_manufacturing) ... ok
+test_10_martech (test_domain_pack_catalog_native.DomainPackCatalogTests.test_10_martech) ... ok
+test_11_medical (test_domain_pack_catalog_native.DomainPackCatalogTests.test_11_medical) ... ok
+test_12_medical_carrier (test_domain_pack_catalog_native.DomainPackCatalogTests.test_12_medical_carrier) ... ok
+test_13_medical_epidemiology (test_domain_pack_catalog_native.DomainPackCatalogTests.test_13_medical_epidemiology) ... ok
+test_14_medical_imaging (test_domain_pack_catalog_native.DomainPackCatalogTests.test_14_medical_imaging) ... ok
+test_15_medical_terminology (test_domain_pack_catalog_native.DomainPackCatalogTests.test_15_medical_terminology) ... ok
+test_16_payments (test_domain_pack_catalog_native.DomainPackCatalogTests.test_16_payments) ... ok
+test_17_public_company_intelligence (test_domain_pack_catalog_native.DomainPackCatalogTests.test_17_public_company_intelligence) ... ok
+test_18_real_estate (test_domain_pack_catalog_native.DomainPackCatalogTests.test_18_real_estate) ... ok
+test_19_supply_chain (test_domain_pack_catalog_native.DomainPackCatalogTests.test_19_supply_chain) ... ok
+test_20_transit (test_domain_pack_catalog_native.DomainPackCatalogTests.test_20_transit) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 43.321s
+
+OK
