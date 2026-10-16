@@ -1,0 +1,70 @@
+{
+  "review": "Astra Ultra completed disposable settlement-loop diagnostic",
+  "status": "BOUNDED_DIAGNOSTIC_EVIDENCE_CLEAR",
+  "sourceReview": "/private/tmp/truss-settlement-split-astra-20261016.json",
+  "bundle": "/private/tmp/truss-settlement-split-retention-20261016/evidence.json.gz",
+  "bundleSha256": "6a161c98dd2651f47114af0958087577d7b0bac0b6248d290cc4ce8e6b671d41",
+  "uncompressedSha256": "3891be53ba1f3e3fdd7f59791730608dd1cb835b607e5962a9ffd39cdb3ad22c",
+  "findings": [],
+  "sourceCustody": [
+    "All 12 retained files with raw-run counterparts are byte-identical; embedded overlay-source-review.json matches its original receipt. overlap.txt is an explicitly parent-reported execution note.",
+    "All diagnostic source pins match. Original and overlay hashes are cbadf2d23241cfc6e04f65df14ce2d02888b8036829eec0a70c7311a6292279d and 12a5a236de3046eccc5cf4ad1e3a11b3ff507cda64244cce2e422373a0ae87ba.",
+    "Independently removing only timing declarations/statements/log emission and restoring the split original PERFORM/counter lines reproduces original.sql exactly.",
+    "Retained installed function bodies match original and overlay bodies; before/after OID, owner, ACL, config, volatility, definer flag, argument and return metadata are equal. Runner asserts exactly the selected existing routine body changed.",
+    "Product working-source pins match the subsequently committed 78564527 source, including the earlier three-call object-effect context change. SourceCommit 318d3eda plus sourceWorkingTreeDirty=true and explicit working hashes correctly distinguish that source from clean 318d3eda. Pending transition-count aggregation is absent."
+  ],
+  "analysisVerification": {
+    "summariesRecomputed": 427,
+    "summaryCounts": {
+      "operations1000_final": 4,
+      "operations1000_commit": 3,
+      "operations1_final": 205,
+      "operations1_commit": 205,
+      "operations100_final": 5,
+      "operations100_commit": 5
+    },
+    "largeRows": 7,
+    "parser": "Every marker parsed; retained analysis values and residual arithmetic independently reproduce from raw postgres.log.",
+    "meaning": "Object/edge times are inclusive elapsed validator calls. Result/event time also includes primary identity/outcome/version/deletion/live writer/alias work. Residual includes plan/member/identity/transition lookup/counts and instrumentation overhead; not isolated plan CPU. Initial census/history and later authority/final graph checks are excluded.",
+    "incomplete": "A summary proves only operation-loop completion, never whole-function/group/commit success. Failed-loop calls have no summary; missing phases are not zero."
+  },
+  "observedRun": {
+    "parentSession": 55046,
+    "result": "FAIL SQLSTATE 57014; no performance qualification",
+    "statementTimeoutMs": 10000,
+    "operationTimeoutMs": 30000,
+    "completed": "1000-node create and 1000-edge create committed; one 1000-operation changed group committed.",
+    "failure": "Second 1000-operation changed group completed its measured loop, then timed out at final forest/root correspondence IF (overlay function-body line 230); no commit summary for that attempt.",
+    "cleanup": {
+      "status": "ok",
+      "elapsedMs": 267.741791
+    },
+    "report": {
+      "passed": false,
+      "functionalPassed": false,
+      "performanceQualification": "not_evaluated"
+    },
+    "overlap": "Parent reports concurrent Weft Rust compilation handle 97816; do not attribute timings causally."
+  },
+  "limits": [
+    "Empty stock-function-stats.json supplies no function-counter evidence. Its inherited edge-phase label is not used for attribution; the measured evidence is the explicit settlement LOG summaries.",
+    "No speedup, original-workload completion, maximum-capacity, clean-host or release-runner qualification. This instrumented failed run is useful only to locate bounded elapsed work."
+  ],
+  "reviewExecution": "Read-only source/hash/log/parser verification. No product edits, PostgreSQL execution or test launch.",
+  "entrySha256": {
+    "runner.py": "e2e07cc50a64f9a9a4dd0bc4003ea074b928738cc55630f4f0ce807974b044ff",
+    "validate-overlay.sql": "12a5a236de3046eccc5cf4ad1e3a11b3ff507cda64244cce2e422373a0ae87ba",
+    "report.json": "e06597b9abb9808d3a061e477cc344c39e23fe854eb01234a9f6fd02de2ce4a6",
+    "runner.log": "a7b34b78ea88b9c33af7db72209321babe88ab20f569ba19f65595908df364df",
+    "metadata.json": "eb2e9d540ff813d2d6c0927ccdb844e0e7877a16703e215150bb91846b7f0c10",
+    "stock-function-stats.json": "e9ada6998af9ea658656e85abf0b95b61e04814df0be4f4447d665f4ba2db188",
+    "validate-original.sql": "cbadf2d23241cfc6e04f65df14ce2d02888b8036829eec0a70c7311a6292279d",
+    "postgres.log": "437c791cb048cce3c5cda31965725dee6c4d92c4041f364f687089ea9461b869",
+    "installed-definitions.json": "dd3f8ba21cffbfd2cd54923b88011713c311bacef3a15dca29bee05155718a35",
+    "analysis.json": "7cab483b2d09dd691ea6b26dda6f8c749c40941de787d1bac87775bf462dc80b",
+    "pins.json": "708b1ee3ebecec6add1d41a6f7d9d5f7f08968984f6a4a464166fc0858c0d1bc",
+    "analyze.py": "51a6d4fd1511d1f86b2ec726a161e721ca5ad6e81cf1275787385f3b2c8d007c",
+    "overlay-source-review.json": "d73d3d67fe2af7b5822290b52d0734550188e05614675ddaea4d6ec8230d42f4",
+    "overlap.txt": "12b268aef4cc73fdcc6e7ea367f2eab33d217b561eb0518e03622ab3216052b7"
+  }
+}
