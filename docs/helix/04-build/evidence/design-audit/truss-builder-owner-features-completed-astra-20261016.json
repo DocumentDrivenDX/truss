@@ -1,0 +1,27 @@
+{
+  "review": "Astra Ultra completed current036 builder owner-feature alignment",
+  "date": "2026-10-16",
+  "status": "SOURCE_CLEAR_FOR_COMMIT",
+  "baseline": "4d7aa544ef2fc34f6ee3ace41b9947a726a2359b",
+  "blocking_findings": [],
+  "source": {
+    "path": "/private/tmp/truss-main-integration-20261010/scripts/build-weft-runtime-python.py",
+    "sha256": "e7eae16f3e3e21bc43352d6afcd8d47e8e06163513d200bd596a18f259099a57",
+    "baseline_sha256": "56e4a46f2c213256a8fc90eea65b5d23e98e6d44e46d5b5feba3562f55a5728b",
+    "scope": "One tracked file;3 insertions/2 deletions. Exact source equals baseline plus the three approved edits."
+  },
+  "findings": [
+    "The exact archived pyproject is read once after extraction and pinned maturin verification. Its declared four-feature list drives the existing --features option; its project version drives existing isolated wheel/import verification.",
+    "REVISION remains a14640f2bb288e58de0c9846fb10162e3e4030fc, published Weft0.4.36. No Truss default dependency, backend, runtime, capability or cohort changes.",
+    "Archive validation, locked build, release/dev/offline choices, interpreter, output checks and isolated import/API checks remain unchanged.",
+    "Parent reports Python3.11 compile() PASS; reviewer AST parsing and exact textual-delta check PASS. No mirror tests, native run or rebuild needed for this bounded static change."
+  ],
+  "validation_limits": [
+    "No wheel rebuilt: parent found an available maturin binary but no matching importlib.metadata distribution in available environments. No build/import or published-byte identity claim.",
+    "Existing unrelated untracked caches/build/evidence files are outside reviewed commit.",
+    "No039 adoption or broader runtime/security support qualification."
+  ],
+  "plan_review": "/private/tmp/truss-builder-owner-features-plan-astra-20261016.json",
+  "plan_review_sha256": "4115681bcdc5a67a2a811421bffa79fa77a0d7dd033aa203836aec417856feb4",
+  "reviewer_actions": "Read-only git diff/source/AST verification and receipt write; no product edits, builds, native jobs or agents."
+}
