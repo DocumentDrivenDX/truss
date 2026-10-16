@@ -1,7 +1,7 @@
 {
   "profile": "umf.security.private-disclosure-child/0.2-candidate",
   "bun": "1.4.2",
-  "bundleSha256": "d333226d9186136704d3f84a9c9dbfc44796efebab563dbc732d60337d2e03eb",
+  "bundleSha256": "548b7ff64dabf3bc796afe99ecca265f5bcf242202e367ba7125e62c64f0a735",
   "sourcePins": {
     "node_modules/ajv/dist/2020.js": "908e9670b478b2ba126802a221b7e47006f50cf467e2c5dd7935d3dbef10a20a",
     "node_modules/ajv/dist/compile/codegen/code.js": "1287153722f1fc3c5342647de7ae1d7b6fb68bdb3378a0776a937d273fc97e0d",
@@ -216,7 +216,7 @@
     "src/extensions/security/association-expression.ts": "9fdb371beaf6e41674e7ae7e77a6f5f6ba8c49009811a606e99d033652d36e81",
     "src/extensions/security/association-witness.ts": "7ed4e679c6406b5d7337d3d974778109c1b744395889f53c232a8f4998282fcb",
     "src/extensions/security/catalog-program-candidate.ts": "e8c2db84126e5ebf4dcf5bd33efe80c8a2235e7ab192d17105cda64ab8facc6d",
-    "src/extensions/security/catalog-runtime-candidate.ts": "ba171ea423b9205f2e8c7d35addef22f311b2076503cbd4b559e2abaa46c9b78",
+    "src/extensions/security/catalog-runtime-candidate.ts": "83fe06abf2690c3806700049fb66b5e93d8a16f6f45025aeffd6adbde89673ad",
     "src/extensions/security/catalog-storage-candidate.ts": "4002872f2ce14b46a9320bfd388081df09c1d3efe7eea49b26ba8c8d3ce6b181",
     "src/extensions/security/core-extension-closure-candidate.ts": "849a5f7e5465f089b4e16c78ba1b569fd9441b447c0aee7f65a3275541842e35",
     "src/extensions/security/core-source-candidate.ts": "e5429bde4b0fa155de6d1dc7fcd14e9b531f7b584eddad8fa63711746faf81e8",

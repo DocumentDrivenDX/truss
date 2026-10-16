@@ -1,0 +1,20 @@
+{
+  "scope": "source endpoints and retained evidence only; no native admission",
+  "files": {
+    "packages/python/src/truss/_current_disclosure_evaluation.py": "dbc5d85470a84d3f51ba96044a85e3f70d78249cbb61fa3418dae616f3a9971b",
+    "packages/python/src/truss/_current_disclosure_wire.py": "c1f16fe7c0efa36163cabe1d9c9d731ba56cbd3e8239c1a7ead49ed678514aa9",
+    "packages/python/tests/test_current_disclosure_compiler_integration.py": "4252ac73fa3437df59f63b46b521fa80d456bab4f4d5868c234ed471d7e1a2f1",
+    "packages/python/tests/test_current_disclosure_graph_transport.py": "404857a75fe6accdd3f3cdfd938ee88c617a1d85b58904c8b48390e9484cd1a6",
+    "packages/python/tests/test_current_disclosure_wire.py": "5ded735f4e38ef628c2f72ebeca5cd2efe58c1df58fa1d12a1800dbb080376f5"
+  },
+  "evidence": {
+    "README.md": "e526b245ccc76b698e583d24e60bc574dafff9cf291d3f42432fb4340a14982c",
+    "astra-manifest.json": "9e5313cff3c95eb6a600593e822e9fda7808956fa09b52e83b04ba12652f3339",
+    "astra-review.json": "f7f854135e12f6f0759b8e943957c1850e9ee84d6d1e232ef3aa5b692131893e",
+    "astra-review.zip": "40b6318aa0390f031e890367b479ab88f10081bd74563d3c5f716c664800c5bd",
+    "compiler-replay.log": "b7bf3da7e567fc7596958b09bbdf45a2ee36341fe61ea18607e03ebaf8ed329c",
+    "probe.json": "d1981c46e8be3e7cd06f0920e408aa607a63c67854d8b52e691a74c65e420685",
+    "probe.py": "0c8a5b7e0f1f4e81d50b5828816c9a5eab1d6197c820a26ddff958da0318ca9a",
+    "tests.log": "c7fa6bc5a73a52b50ce52189f7a92f28600cecf1b3b36988c94722386bbd829a"
+  }
+}

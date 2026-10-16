@@ -10,7 +10,7 @@ from ._current_disclosure_originals import CurrentDisclosureOriginals
 from ._current_disclosure_computation import open_current_disclosure_computation
 from ._current_disclosure_session import evaluate_stage_inspect
 from ._current_disclosure_stage import stage_current_disclosure
-from ._current_disclosure_wire import disclosure_initializer,VERSION
+from ._current_disclosure_wire import disclosure_initializer,disclosure_fact_cut,VERSION
 from ._current_query_sources import _DISCLOSURE_PROFILE
 from ._current_query_evaluation import CurrentQueryLimit,wire
 from ._owner_evidence_json import decode_owner_evidence_json,same_owner_evidence
@@ -72,8 +72,9 @@ def evaluate_and_stage_current_disclosure(cursor,captured,subject,*,sql,paramete
         'policy':{'id':registered['policy']['id'],'revision':registered['policy']['revision']},'ontology':registered['policy']['ontology'],
         'protection':{'id':registered['catalog']['id'],'revision':registered['catalog']['revision']},'domains':registered['closure']['pins'],
         'owner':{'id':owner['id'],'revision':owner['revision']},'subject':{'type':registered['ontology']['subject'],'key':[{'string':subject.key}]},
-        'graphs':[],'graphCoverage':[],'context':[],'valueProfiles':[],'maxFacts':10000,'maxSteps':1000000}
-    cut_raw=wire(cut)[:-1]+b',"facts":'+captured.facts_bytes+b',"coverage":'+captured.coverage_bytes+b'}'
+        'context':[],'valueProfiles':[],'maxFacts':10000,'maxSteps':1000000}
+    cut_raw=disclosure_fact_cut(cut,facts=captured.facts_bytes,coverage=captured.coverage_bytes,
+        graphs=captured.graphs_bytes,graph_coverage=captured.graph_coverage_bytes)
     evaluation=wire({'version':VERSION,'kind':'evaluate-disclosure','requestId':'evaluate','sourceReceipt':receipt})[:-1]+b',"cut":'+cut_raw+b'}'
     if len(evaluation)>4194304:raise CurrentQueryLimit('Bounded complete original native facts required')
     cursor._deadline.check()

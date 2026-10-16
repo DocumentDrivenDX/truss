@@ -52,3 +52,50 @@ class OwnedGroupBatchTests(base.PublicCreateGroupTests):
             self.assertEqual(dict(found.value.object.values)['A-value'], 'after')
             self.assertEqual(found.value.object.version, 2)
         host.detach(); connection.commit()
+
+    def test_unique_updates_keep_trailing_noop_and_duplicate_order(self):
+        connection, host, assembly, tx = self.ready(document_ids=('adoc',))
+        context = assembly.group_context_in_transaction(tx).value
+        original = context.input(tuple(self.create(label=f'buffer-{i}', value='before', alias=ABSENT)
+                                       for i in range(3)), MapValue(entries=()))
+        created = assembly.apply_in_transaction(tx, original, context.request('buffer-create'),
+                                                documents=self.documents)
+        self.assertIsInstance(created, Ok, repr(created))
+        identities = tuple(r.identity for r in created.value.response.semantic.results)
+        host.detach(); connection.commit()
+
+        def update(identity, value, version):
+            return UpdateObject(target=StoredObjectReference(identity=identity),
+                                set=(AuthoredValue(name='A-value', value=TextValue(kind='string', text=value)),),
+                                unset=(), expected_version=version)
+
+        connection, host, assembly, tx = self.consumer()
+        context = assembly.group_context_in_transaction(tx).value
+        operations = tuple(update(identity, 'after' if i < 2 else 'before', '1')
+                           for i, identity in enumerate(identities))
+        result = assembly.apply_in_transaction(tx, context.input(operations, MapValue(entries=())),
+                                               context.request('buffer-update'), documents=self.documents)
+        self.assertIsInstance(result, Ok, repr(result))
+        self.assertIsInstance(result.value, GroupSuccess)
+        self.assertEqual(tuple(r.version for r in result.value.response.semantic.results), ('2', '2', '1'))
+        host.detach(); connection.commit()
+
+        connection, host, assembly, tx = self.consumer()
+        context = assembly.group_context_in_transaction(tx).value
+        operations = (update(identities[0], 'again', '2'), update(identities[0], 'final', '3'))
+        result = assembly.apply_in_transaction(tx, context.input(operations, MapValue(entries=())),
+                                               context.request('duplicate-update'), documents=self.documents)
+        self.assertIsInstance(result, Ok, repr(result))
+        self.assertIsInstance(result.value, GroupSuccess)
+        self.assertEqual(tuple(r.version for r in result.value.response.semantic.results), ('3', '4'))
+        host.detach(); connection.commit()
+
+        connection, host, assembly, tx = self.consumer()
+        for identity, value, version in zip(identities, ('final', 'after', 'before'), (4, 2, 1)):
+            found = assembly.get_object_in_transaction(tx, document_id='adoc', module_id='m',
+                                                       record_id='A', object_id=int(identity.id))
+            self.assertIsInstance(found, Ok, repr(found))
+            self.assertIsInstance(found.value, ObjectFound)
+            self.assertEqual(dict(found.value.object.values)['A-value'], value)
+            self.assertEqual(found.value.object.version, version)
+        host.detach(); connection.commit()

@@ -1,0 +1,992 @@
+test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) ... 
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='allowed:string') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='allowed:null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='allowed:absent') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='allowed:withheld') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='allowed:transformed-null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='revoked:string') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='revoked:null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='revoked:absent') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='revoked:withheld') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='revoked:transformed-null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-subject:string') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-subject:null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-subject:absent') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-subject:withheld') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-subject:transformed-null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-staff:string') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-staff:null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-staff:absent') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-staff:withheld') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-staff:transformed-null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-project:string') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-project:null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-project:absent') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-project:withheld') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-project:transformed-null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-ownership-project:string') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-ownership-project:null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-ownership-project:absent') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-ownership-project:withheld') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-ownership-project:transformed-null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-ownership:string') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-ownership:null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-ownership:absent') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-ownership:withheld') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-ownership:transformed-null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-assignment:string') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-assignment:null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-assignment:absent') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-assignment:withheld') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-assignment:transformed-null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='incomplete-coverage:withheld') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='stale-generation:string') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='stale-generation:null') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='stale-generation:absent') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='stale-generation:withheld') ... ERROR
+  test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='stale-generation:transformed-null') ... ERROR
+test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) ... FAIL
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='allowed:string')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='allowed:null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='allowed:absent')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='allowed:withheld')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='allowed:transformed-null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='revoked:string')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='revoked:null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='revoked:absent')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='revoked:withheld')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='revoked:transformed-null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-subject:string')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-subject:null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-subject:absent')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-subject:withheld')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-subject:transformed-null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-staff:string')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-staff:null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-staff:absent')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-staff:withheld')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-staff:transformed-null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-project:string')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-project:null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-project:absent')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-project:withheld')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-assignment-project:transformed-null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-ownership-project:string')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-ownership-project:null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-ownership-project:absent')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-ownership-project:withheld')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='foreign-ownership-project:transformed-null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-ownership:string')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-ownership:null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-ownership:absent')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-ownership:withheld')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-ownership:transformed-null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-assignment:string')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-assignment:null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-assignment:absent')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-assignment:withheld')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='no-assignment:transformed-null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='incomplete-coverage:withheld')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='stale-generation:string')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='stale-generation:null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='stale-generation:absent')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='stale-generation:withheld')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+ERROR: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker) (case='stale-generation:transformed-null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 48, in test_actual_held_evaluation_compiler_and_checker
+    result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
+           ^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 46, in invoke
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_evaluation.py", line 86, in evaluate_and_stage_current_disclosure
+    with open_current_disclosure_computation(bun_executable=bun_executable,timeout_seconds=min(60,cursor._deadline.end-monotonic())) as child:
+  File "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/lib/python3.11/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/src/truss/_current_disclosure_computation.py", line 37, in open_current_disclosure_computation
+    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Original Bun1.4.2 runtime required
+
+======================================================================
+FAIL: test_actual_held_evaluation_compiler_and_checker (test_current_disclosure_compiler_integration.DisclosureCompilerIntegrationTests.test_actual_held_evaluation_compiler_and_checker)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-graph-cohort-qualification-20261016/tests/test_current_disclosure_compiler_integration.py", line 52, in test_actual_held_evaluation_compiler_and_checker
+    self.assertEqual((passed,refused,fresh_generation),(46,20,6))
+AssertionError: Tuples differ: (0, 20, 6) != (46, 20, 6)
+
+First differing element 0:
+0
+46
+
+- (0, 20, 6)
+?  ^
+
++ (46, 20, 6)
+?  ^^
+
+
+----------------------------------------------------------------------
+Ran 1 test in 3.990s
+
+FAILED (failures=1, errors=46)

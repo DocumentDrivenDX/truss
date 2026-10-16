@@ -1,0 +1,32 @@
+{
+  "scope": "Fixture-only SECURITY DEFINER comparator under installed owner, called by consumer; original committed input and captured initial scope; no production wrapper or admission claim",
+  "baselineSourceSha256": "8bac2bc947f34876cf396dd82236dbda0bcdc827829278f1a57c3707d61a8184",
+  "cases": [
+    {
+      "operations": 2,
+      "equal": true,
+      "inputSha256": "e3490e27ecf12d8e35a2a6ba4d01bd9fbee332b90bf807a681ce11a79f233ffc",
+      "inventorySha256": "9bfa4917ef48ac45f5a2dc1ef5cec3f46cdc704c63ab08f7105dc2ff4912d6a0"
+    },
+    {
+      "operations": 3,
+      "equal": true,
+      "inputSha256": "8fb2dcf6ae843c613854b1252dbb1a97a2995302219b884ae998621c6429b6c1",
+      "inventorySha256": "b14ad209723fefda8550547b41367b4d1356e1de498a9ecb2886cf467c891fa9"
+    },
+    {
+      "operations": 2,
+      "equal": true,
+      "case": "captured original scope with current catalog head and genuinely older stored images",
+      "catalogRevision": 2,
+      "inventorySha256": "5fef41232b3e76025bc23d0d7eb7d7bc9ba63225dd38156d3ed311b29d396db9"
+    },
+    {
+      "operations": 3,
+      "equal": true,
+      "case": "captured original scope with current catalog head and genuinely older stored images",
+      "catalogRevision": 2,
+      "inventorySha256": "71d6e2584cec4d028e3f4aadb4ce22ed32fb44fcc8652c9cb75fbc14e78675f0"
+    }
+  ]
+}

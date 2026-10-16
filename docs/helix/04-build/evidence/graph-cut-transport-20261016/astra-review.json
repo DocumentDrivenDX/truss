@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "independent-review/1",
+  "verdict": "no-findings-within-requested-scope",
+  "completedAtUTC": "2026-10-16T19:03:47.729359+00:00",
+  "deadlineUTC": "2026-10-16T19:06:16Z",
+  "base": "7c65ee10a51e65de5b7729dc35a0f360c3618b35",
+  "frozenDiffSha256": "d71fdae59c7bfe593bac7dd0161676a280945f1b935f13b8f8a398c3f66abad0",
+  "questions": [
+    {
+      "question": 1,
+      "answer": "Yes. Evaluator passes the four captured byte attributes directly to the new helper. Strict array validation precedes concatenation of the original bytes, without parsing/re-encoding their numbers or strings. Metadata collisions refuse; graphCoverage complete:false is preserved, and no completeness/authority field is inferred. Existing trusted metadata and 4194304-byte evaluation guard are unchanged.",
+      "locations": [
+        "packages/python/src/truss/_current_disclosure_evaluation.py:75",
+        "packages/python/src/truss/_current_disclosure_wire.py:84-94"
+      ]
+    },
+    {
+      "question": 2,
+      "answer": "The qualifications are accurate. Independent focused packaged replay gives 12 expected rendered resources and three parallel refusals, with cleanup after every child. The tests retain ideal parallel behavior as three explicit expected failures, not accepted backend results. Six supplied probe observations have exact recomputed requests and consistent statuses/resources/cleanup; two recorded current-source pins match Git11b412e4. Current-source results are not substituted for the unchanged packaged206951/d333 cohort or Weft pins. No case promotion is claimed.",
+      "locations": [
+        "packages/python/tests/test_current_disclosure_graph_transport.py:29-43",
+        "docs/helix/04-build/evidence/graph-cut-transport-20261016/README.md:10-36"
+      ]
+    }
+  ],
+  "independentEvidence": {
+    "frozenFilesVerified": 11,
+    "packagedSemanticReplay": {
+      "successes": 12,
+      "openParallelRefusals": 3,
+      "cleanupComplete": 15,
+      "authorityAndCompleteRemainFalse": true
+    },
+    "focusedStrictWireTest": 1,
+    "exactRawFourPopulationConcatenation": true,
+    "existingWireModuleASTUnchanged": true,
+    "retainedProbeObservationsChecked": 6,
+    "SQLExecuted": false
+  },
+  "commands": [
+    "/private/tmp/truss-practical-performance-env/bin/python -B check.py"
+  ],
+  "findings": [],
+  "limits": [
+    "Only the specified two-source/three-test transport diff and its evidence were reviewed. No broad/native campaign or heavy build ran.",
+    "Current-source six-observation evidence is supplied; reviewer checked request/result correspondence and recorded Git pins, without rerunning that separate source cohort.",
+    "Probe source hashes/status are recorded after execution; they are limited post-run correspondence and do not prove a held source closure, before/after stability or ABA exclusion.",
+    "ExpectedFailure may classify arbitrary failures, so it is not independently a semantic receipt; the focused replay here records the actual three packaged refusals.",
+    "No authenticated Subject/source/current-cut custody, native admission, whole compiler/driver integration, guarded release, acceptance or performance qualification."
+  ],
+  "retention": "Exact frozen packet and all reviewer outputs retained; working/ is a recoverable Git baseline+frozen overlay and excluded from manifest."
+}

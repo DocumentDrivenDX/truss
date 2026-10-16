@@ -116,7 +116,7 @@
       "format": "esm"
     },
     "src/extensions/security/catalog-runtime-candidate.ts": {
-      "bytes": 44014,
+      "bytes": 44478,
       "imports": [
         {
           "path": "src/model/json.ts",
@@ -322,22 +322,6 @@
       ],
       "format": "esm"
     },
-    "src/extensions/security/protection/literals.ts": {
-      "bytes": 2854,
-      "imports": [
-        {
-          "path": "src/model/schema-literals.ts",
-          "kind": "import-statement",
-          "original": "../../../model/schema-literals"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../../../model/types"
-        }
-      ],
-      "format": "esm"
-    },
     "src/model/types.ts": {
       "bytes": 2854,
       "imports": [],
@@ -440,33 +424,6 @@
       ],
       "format": "esm"
     },
-    "src/model/bit128.ts": {
-      "bytes": 6026,
-      "imports": [
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "./types"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/model/uuid.ts": {
-      "bytes": 2084,
-      "imports": [
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "./types"
-        },
-        {
-          "path": "src/model/bit128.ts",
-          "kind": "import-statement",
-          "original": "./bit128"
-        }
-      ],
-      "format": "esm"
-    },
     "src/model/internal/json-byte-budget.ts": {
       "bytes": 1364,
       "imports": [
@@ -474,6 +431,22 @@
           "path": "src/model/types.ts",
           "kind": "import-statement",
           "original": "../types"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/extensions/security/protection/source.ts": {
+      "bytes": 489,
+      "imports": [
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../../../model/json"
+        },
+        {
+          "path": "src/model/serialization.ts",
+          "kind": "import-statement",
+          "original": "../../../model/serialization"
         }
       ],
       "format": "esm"
@@ -509,18 +482,18 @@
       "imports": [],
       "format": "esm"
     },
-    "src/extensions/security/protection/source.ts": {
-      "bytes": 489,
+    "src/extensions/security/protection/literals.ts": {
+      "bytes": 2854,
       "imports": [
         {
-          "path": "src/model/json.ts",
+          "path": "src/model/schema-literals.ts",
           "kind": "import-statement",
-          "original": "../../../model/json"
+          "original": "../../../model/schema-literals"
         },
         {
-          "path": "src/model/serialization.ts",
+          "path": "src/model/types.ts",
           "kind": "import-statement",
-          "original": "../../../model/serialization"
+          "original": "../../../model/types"
         }
       ],
       "format": "esm"
@@ -744,6 +717,33 @@
           "path": "src/extensions/security/protection/parameters.ts",
           "kind": "import-statement",
           "original": "./parameters"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/model/bit128.ts": {
+      "bytes": 6026,
+      "imports": [
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "./types"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/model/uuid.ts": {
+      "bytes": 2084,
+      "imports": [
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "./types"
+        },
+        {
+          "path": "src/model/bit128.ts",
+          "kind": "import-statement",
+          "original": "./bit128"
         }
       ],
       "format": "esm"
@@ -1151,259 +1151,6 @@
       "imports": [],
       "format": "cjs"
     },
-    "src/extensions/security/protection/domains.ts": {
-      "bytes": 6224,
-      "imports": [
-        {
-          "path": "src/extensions/security/protection/core-fields.ts",
-          "kind": "import-statement",
-          "original": "./core-fields"
-        },
-        {
-          "path": "spec/extensions/security-protection/domain-resolution.schema.json",
-          "kind": "import-statement",
-          "original": "../../../../spec/extensions/security-protection/domain-resolution.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../../../model/json"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../../../model/types"
-        },
-        {
-          "path": "src/validation/document.ts",
-          "kind": "import-statement",
-          "original": "../../../validation/document"
-        },
-        {
-          "path": "src/validation/schema.ts",
-          "kind": "import-statement",
-          "original": "../../../validation/schema"
-        },
-        {
-          "path": "src/extensions/security/protection/references.ts",
-          "kind": "import-statement",
-          "original": "./references"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/extensions/security/protection/core-fields.ts": {
-      "bytes": 1190,
-      "imports": [],
-      "format": "esm"
-    },
-    "src/extensions/security/action-purposes.ts": {
-      "bytes": 2771,
-      "imports": [
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../../model/json"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../../model/types"
-        },
-        {
-          "path": "src/extensions/security/ontology-checks-candidate.ts",
-          "kind": "import-statement",
-          "original": "./ontology-checks-candidate"
-        },
-        {
-          "path": "src/extensions/security/action-purpose-declarations.ts",
-          "kind": "import-statement",
-          "original": "./action-purpose-declarations"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/extensions/security/core-source-candidate.ts": {
-      "bytes": 1358,
-      "imports": [
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../../model/json"
-        },
-        {
-          "path": "src/validation/document.ts",
-          "kind": "import-statement",
-          "original": "../../validation/document"
-        },
-        {
-          "path": "src/extensions/security/core-extension-closure-candidate.ts",
-          "kind": "import-statement",
-          "original": "./core-extension-closure-candidate"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/extensions/security/action-purpose-declarations.ts": {
-      "bytes": 1775,
-      "imports": [
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../../model/types"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/validation/schema.ts": {
-      "bytes": 2609,
-      "imports": [
-        {
-          "path": "src/validation/internal-schema.ts",
-          "kind": "import-statement",
-          "original": "./internal-schema"
-        },
-        {
-          "path": "spec/core/relationship-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/relationship-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "spec/core/key-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/key-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "node_modules/ajv/dist/2020.js",
-          "kind": "import-statement",
-          "original": "ajv/dist/2020"
-        },
-        {
-          "path": "spec/core/schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "spec/core/field-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/field-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "spec/core/nullability-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/nullability-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "spec/core/cardinality-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/cardinality-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "spec/core/facet-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/facet-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "spec/core/extension-package.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/extension-package.schema.json",
-          "with": {
-            "type": "json"
-          }
-        }
-      ],
-      "format": "esm"
-    },
-    "spec/extensions/security-v0.2/ontology.schema.json": {
-      "bytes": 9703,
-      "imports": [],
-      "format": "json"
-    },
-    "src/extensions/security/association-candidate.ts": {
-      "bytes": 9319,
-      "imports": [
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../../model/json"
-        },
-        {
-          "path": "src/extensions/security/core-source-candidate.ts",
-          "kind": "import-statement",
-          "original": "./core-source-candidate"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/extensions/security/association-checks.ts": {
-      "bytes": 7277,
-      "imports": [
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../../model/json"
-        },
-        {
-          "path": "src/validation/document.ts",
-          "kind": "import-statement",
-          "original": "../../validation/document"
-        },
-        {
-          "path": "src/extensions/security/core-source-candidate.ts",
-          "kind": "import-statement",
-          "original": "./core-source-candidate"
-        },
-        {
-          "path": "src/extensions/security/association-candidate.ts",
-          "kind": "import-statement",
-          "original": "./association-candidate"
-        },
-        {
-          "path": "src/extensions/security/relationship-candidate.ts",
-          "kind": "import-statement",
-          "original": "./relationship-candidate"
-        }
-      ],
-      "format": "esm"
-    },
-    "spec/extensions/security/schema.json": {
-      "bytes": 16725,
-      "imports": [],
-      "format": "json"
-    },
-    "spec/extensions/security-v0.2/package.json": {
-      "bytes": 23575,
-      "imports": []
-    },
-    "spec/core/schema-properties-document.schema.json": {
-      "bytes": 26793,
-      "imports": [],
-      "format": "json"
-    },
     "src/model/key-tuple.ts": {
       "bytes": 13368,
       "imports": [
@@ -1503,6 +1250,259 @@
       "imports": [],
       "format": "esm"
     },
+    "src/extensions/security/protection/domains.ts": {
+      "bytes": 6224,
+      "imports": [
+        {
+          "path": "src/extensions/security/protection/core-fields.ts",
+          "kind": "import-statement",
+          "original": "./core-fields"
+        },
+        {
+          "path": "spec/extensions/security-protection/domain-resolution.schema.json",
+          "kind": "import-statement",
+          "original": "../../../../spec/extensions/security-protection/domain-resolution.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../../../model/json"
+        },
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../../../model/types"
+        },
+        {
+          "path": "src/validation/document.ts",
+          "kind": "import-statement",
+          "original": "../../../validation/document"
+        },
+        {
+          "path": "src/validation/schema.ts",
+          "kind": "import-statement",
+          "original": "../../../validation/schema"
+        },
+        {
+          "path": "src/extensions/security/protection/references.ts",
+          "kind": "import-statement",
+          "original": "./references"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/extensions/security/protection/core-fields.ts": {
+      "bytes": 1190,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/extensions/security/action-purposes.ts": {
+      "bytes": 2771,
+      "imports": [
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../../model/json"
+        },
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../../model/types"
+        },
+        {
+          "path": "src/extensions/security/ontology-checks-candidate.ts",
+          "kind": "import-statement",
+          "original": "./ontology-checks-candidate"
+        },
+        {
+          "path": "src/extensions/security/action-purpose-declarations.ts",
+          "kind": "import-statement",
+          "original": "./action-purpose-declarations"
+        }
+      ],
+      "format": "esm"
+    },
+    "spec/extensions/security/schema.json": {
+      "bytes": 16725,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/extensions/security-v0.2/package.json": {
+      "bytes": 23575,
+      "imports": []
+    },
+    "src/validation/schema.ts": {
+      "bytes": 2609,
+      "imports": [
+        {
+          "path": "src/validation/internal-schema.ts",
+          "kind": "import-statement",
+          "original": "./internal-schema"
+        },
+        {
+          "path": "spec/core/relationship-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/relationship-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/core/key-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/key-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "node_modules/ajv/dist/2020.js",
+          "kind": "import-statement",
+          "original": "ajv/dist/2020"
+        },
+        {
+          "path": "spec/core/schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/core/field-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/field-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/core/nullability-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/nullability-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/core/cardinality-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/cardinality-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/core/facet-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/facet-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/core/extension-package.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/extension-package.schema.json",
+          "with": {
+            "type": "json"
+          }
+        }
+      ],
+      "format": "esm"
+    },
+    "spec/core/schema-properties-document.schema.json": {
+      "bytes": 26793,
+      "imports": [],
+      "format": "json"
+    },
+    "src/extensions/security/core-source-candidate.ts": {
+      "bytes": 1358,
+      "imports": [
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../../model/json"
+        },
+        {
+          "path": "src/validation/document.ts",
+          "kind": "import-statement",
+          "original": "../../validation/document"
+        },
+        {
+          "path": "src/extensions/security/core-extension-closure-candidate.ts",
+          "kind": "import-statement",
+          "original": "./core-extension-closure-candidate"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/extensions/security/action-purpose-declarations.ts": {
+      "bytes": 1775,
+      "imports": [
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../../model/types"
+        }
+      ],
+      "format": "esm"
+    },
+    "spec/extensions/security-v0.2/ontology.schema.json": {
+      "bytes": 9703,
+      "imports": [],
+      "format": "json"
+    },
+    "src/extensions/security/association-checks.ts": {
+      "bytes": 7277,
+      "imports": [
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../../model/json"
+        },
+        {
+          "path": "src/validation/document.ts",
+          "kind": "import-statement",
+          "original": "../../validation/document"
+        },
+        {
+          "path": "src/extensions/security/core-source-candidate.ts",
+          "kind": "import-statement",
+          "original": "./core-source-candidate"
+        },
+        {
+          "path": "src/extensions/security/association-candidate.ts",
+          "kind": "import-statement",
+          "original": "./association-candidate"
+        },
+        {
+          "path": "src/extensions/security/relationship-candidate.ts",
+          "kind": "import-statement",
+          "original": "./relationship-candidate"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/extensions/security/association-candidate.ts": {
+      "bytes": 9319,
+      "imports": [
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../../model/json"
+        },
+        {
+          "path": "src/extensions/security/core-source-candidate.ts",
+          "kind": "import-statement",
+          "original": "./core-source-candidate"
+        }
+      ],
+      "format": "esm"
+    },
     "src/extensions/security/association-witness.ts": {
       "bytes": 4037,
       "imports": [
@@ -1523,54 +1523,6 @@
         }
       ],
       "format": "esm"
-    },
-    "node_modules/yaml/dist/doc/anchors.js": {
-      "bytes": 2386,
-      "imports": [
-        {
-          "path": "node_modules/yaml/dist/nodes/identity.js",
-          "kind": "require-call",
-          "original": "../nodes/identity.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/visit.js",
-          "kind": "require-call",
-          "original": "../visit.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/yaml/dist/nodes/toJS.js": {
-      "bytes": 1292,
-      "imports": [
-        {
-          "path": "node_modules/yaml/dist/nodes/identity.js",
-          "kind": "require-call",
-          "original": "./identity.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/yaml/dist/nodes/Node.js": {
-      "bytes": 1382,
-      "imports": [
-        {
-          "path": "node_modules/yaml/dist/doc/applyReviver.js",
-          "kind": "require-call",
-          "original": "../doc/applyReviver.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/nodes/identity.js",
-          "kind": "require-call",
-          "original": "./identity.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/nodes/toJS.js",
-          "kind": "require-call",
-          "original": "./toJS.js"
-        }
-      ],
-      "format": "cjs"
     },
     "node_modules/yaml/dist/nodes/addPairToJSMap.js": {
       "bytes": 2338,
@@ -1603,6 +1555,64 @@
       ],
       "format": "cjs"
     },
+    "node_modules/yaml/dist/doc/createNode.js": {
+      "bytes": 3138,
+      "imports": [
+        {
+          "path": "node_modules/yaml/dist/nodes/Alias.js",
+          "kind": "require-call",
+          "original": "../nodes/Alias.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/nodes/identity.js",
+          "kind": "require-call",
+          "original": "../nodes/identity.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/nodes/Scalar.js",
+          "kind": "require-call",
+          "original": "../nodes/Scalar.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/yaml/dist/stringify/stringifyPair.js": {
+      "bytes": 5470,
+      "imports": [
+        {
+          "path": "node_modules/yaml/dist/nodes/identity.js",
+          "kind": "require-call",
+          "original": "../nodes/identity.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/nodes/Scalar.js",
+          "kind": "require-call",
+          "original": "../nodes/Scalar.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/stringify/stringify.js",
+          "kind": "require-call",
+          "original": "./stringify.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/stringify/stringifyComment.js",
+          "kind": "require-call",
+          "original": "./stringifyComment.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/yaml/dist/log.js": {
+      "bytes": 459,
+      "imports": [
+        {
+          "path": "process",
+          "kind": "require-call",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
     "node_modules/yaml/dist/stringify/stringifyCollection.js": {
       "bytes": 5718,
       "imports": [
@@ -1620,6 +1630,17 @@
           "path": "node_modules/yaml/dist/stringify/stringifyComment.js",
           "kind": "require-call",
           "original": "./stringifyComment.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/yaml/dist/nodes/toJS.js": {
+      "bytes": 1292,
+      "imports": [
+        {
+          "path": "node_modules/yaml/dist/nodes/identity.js",
+          "kind": "require-call",
+          "original": "./identity.js"
         }
       ],
       "format": "cjs"
@@ -1645,9 +1666,41 @@
       ],
       "format": "cjs"
     },
-    "node_modules/yaml/dist/compose/resolve-end.js": {
-      "bytes": 1264,
-      "imports": [],
+    "node_modules/yaml/dist/nodes/Node.js": {
+      "bytes": 1382,
+      "imports": [
+        {
+          "path": "node_modules/yaml/dist/doc/applyReviver.js",
+          "kind": "require-call",
+          "original": "../doc/applyReviver.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/nodes/identity.js",
+          "kind": "require-call",
+          "original": "./identity.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/nodes/toJS.js",
+          "kind": "require-call",
+          "original": "./toJS.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/yaml/dist/doc/anchors.js": {
+      "bytes": 2386,
+      "imports": [
+        {
+          "path": "node_modules/yaml/dist/nodes/identity.js",
+          "kind": "require-call",
+          "original": "../nodes/identity.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/visit.js",
+          "kind": "require-call",
+          "original": "../visit.js"
+        }
+      ],
       "format": "cjs"
     },
     "node_modules/yaml/dist/doc/directives.js": {
@@ -1666,49 +1719,28 @@
       ],
       "format": "cjs"
     },
-    "node_modules/yaml/dist/compose/compose-doc.js": {
-      "bytes": 1615,
-      "imports": [
-        {
-          "path": "node_modules/yaml/dist/doc/Document.js",
-          "kind": "require-call",
-          "original": "../doc/Document.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/compose-node.js",
-          "kind": "require-call",
-          "original": "./compose-node.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/resolve-end.js",
-          "kind": "require-call",
-          "original": "./resolve-end.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/resolve-props.js",
-          "kind": "require-call",
-          "original": "./resolve-props.js"
-        }
-      ],
+    "node_modules/yaml/dist/doc/applyReviver.js": {
+      "bytes": 1950,
+      "imports": [],
       "format": "cjs"
     },
-    "node_modules/yaml/dist/doc/createNode.js": {
-      "bytes": 3138,
+    "node_modules/yaml/dist/stringify/stringifyDocument.js": {
+      "bytes": 3104,
       "imports": [
-        {
-          "path": "node_modules/yaml/dist/nodes/Alias.js",
-          "kind": "require-call",
-          "original": "../nodes/Alias.js"
-        },
         {
           "path": "node_modules/yaml/dist/nodes/identity.js",
           "kind": "require-call",
           "original": "../nodes/identity.js"
         },
         {
-          "path": "node_modules/yaml/dist/nodes/Scalar.js",
+          "path": "node_modules/yaml/dist/stringify/stringify.js",
           "kind": "require-call",
-          "original": "../nodes/Scalar.js"
+          "original": "./stringify.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/stringify/stringifyComment.js",
+          "kind": "require-call",
+          "original": "./stringifyComment.js"
         }
       ],
       "format": "cjs"
@@ -1747,99 +1779,6 @@
     "node_modules/yaml/dist/parse/cst-visit.js": {
       "bytes": 3986,
       "imports": [],
-      "format": "cjs"
-    },
-    "src/extensions/security/protection/references.ts": {
-      "bytes": 2492,
-      "imports": [
-        {
-          "path": "src/extensions/security/policy-representation-v2.ts",
-          "kind": "import-statement",
-          "original": "../policy-representation-v2"
-        },
-        {
-          "path": "src/extensions/security/protection/catalog.ts",
-          "kind": "import-statement",
-          "original": "./catalog"
-        }
-      ],
-      "format": "esm"
-    },
-    "spec/extensions/security-protection/domain-resolution.schema.json": {
-      "bytes": 1141,
-      "imports": [],
-      "format": "json"
-    },
-    "src/validation/document.ts": {
-      "bytes": 7636,
-      "imports": [
-        {
-          "path": "src/validation/schema-properties.ts",
-          "kind": "import-statement",
-          "original": "./schema-properties"
-        },
-        {
-          "path": "src/validation/relationships.ts",
-          "kind": "import-statement",
-          "original": "./relationships"
-        },
-        {
-          "path": "src/validation/keys.ts",
-          "kind": "import-statement",
-          "original": "./keys"
-        },
-        {
-          "path": "src/validation/schema.ts",
-          "kind": "import-statement",
-          "original": "./schema"
-        },
-        {
-          "path": "src/validation/facets.ts",
-          "kind": "import-statement",
-          "original": "./facets"
-        },
-        {
-          "path": "src/registry/registry.ts",
-          "kind": "import-statement",
-          "original": "../registry/registry"
-        },
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../model/json"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../model/types"
-        }
-      ],
-      "format": "esm"
-    },
-    "node_modules/yaml/dist/stringify/stringifyPair.js": {
-      "bytes": 5470,
-      "imports": [
-        {
-          "path": "node_modules/yaml/dist/nodes/identity.js",
-          "kind": "require-call",
-          "original": "../nodes/identity.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/nodes/Scalar.js",
-          "kind": "require-call",
-          "original": "../nodes/Scalar.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/stringify/stringify.js",
-          "kind": "require-call",
-          "original": "./stringify.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/stringify/stringifyComment.js",
-          "kind": "require-call",
-          "original": "./stringifyComment.js"
-        }
-      ],
       "format": "cjs"
     },
     "node_modules/yaml/dist/schema/common/map.js": {
@@ -1971,42 +1910,123 @@
       ],
       "format": "cjs"
     },
-    "node_modules/yaml/dist/log.js": {
-      "bytes": 459,
+    "src/extensions/security/protection/references.ts": {
+      "bytes": 2492,
       "imports": [
         {
-          "path": "process",
-          "kind": "require-call",
-          "external": true
+          "path": "src/extensions/security/policy-representation-v2.ts",
+          "kind": "import-statement",
+          "original": "../policy-representation-v2"
+        },
+        {
+          "path": "src/extensions/security/protection/catalog.ts",
+          "kind": "import-statement",
+          "original": "./catalog"
         }
       ],
-      "format": "cjs"
+      "format": "esm"
     },
-    "node_modules/yaml/dist/doc/applyReviver.js": {
-      "bytes": 1950,
+    "spec/extensions/security-protection/domain-resolution.schema.json": {
+      "bytes": 1141,
+      "imports": [],
+      "format": "json"
+    },
+    "src/validation/document.ts": {
+      "bytes": 7636,
+      "imports": [
+        {
+          "path": "src/validation/schema-properties.ts",
+          "kind": "import-statement",
+          "original": "./schema-properties"
+        },
+        {
+          "path": "src/validation/relationships.ts",
+          "kind": "import-statement",
+          "original": "./relationships"
+        },
+        {
+          "path": "src/validation/keys.ts",
+          "kind": "import-statement",
+          "original": "./keys"
+        },
+        {
+          "path": "src/validation/schema.ts",
+          "kind": "import-statement",
+          "original": "./schema"
+        },
+        {
+          "path": "src/validation/facets.ts",
+          "kind": "import-statement",
+          "original": "./facets"
+        },
+        {
+          "path": "src/registry/registry.ts",
+          "kind": "import-statement",
+          "original": "../registry/registry"
+        },
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../model/json"
+        },
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../model/types"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/yaml/dist/compose/resolve-end.js": {
+      "bytes": 1264,
       "imports": [],
       "format": "cjs"
     },
-    "node_modules/yaml/dist/stringify/stringifyDocument.js": {
-      "bytes": 3104,
+    "node_modules/yaml/dist/compose/compose-doc.js": {
+      "bytes": 1615,
       "imports": [
         {
-          "path": "node_modules/yaml/dist/nodes/identity.js",
+          "path": "node_modules/yaml/dist/doc/Document.js",
           "kind": "require-call",
-          "original": "../nodes/identity.js"
+          "original": "../doc/Document.js"
         },
         {
-          "path": "node_modules/yaml/dist/stringify/stringify.js",
+          "path": "node_modules/yaml/dist/compose/compose-node.js",
           "kind": "require-call",
-          "original": "./stringify.js"
+          "original": "./compose-node.js"
         },
         {
-          "path": "node_modules/yaml/dist/stringify/stringifyComment.js",
+          "path": "node_modules/yaml/dist/compose/resolve-end.js",
           "kind": "require-call",
-          "original": "./stringifyComment.js"
+          "original": "./resolve-end.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/compose/resolve-props.js",
+          "kind": "require-call",
+          "original": "./resolve-props.js"
         }
       ],
       "format": "cjs"
+    },
+    "spec/core/key-tuple-operation-v3.schema.json": {
+      "bytes": 3296,
+      "imports": [],
+      "format": "json"
+    },
+    "src/validation/internal-schema.ts": {
+      "bytes": 411,
+      "imports": [],
+      "format": "esm"
+    },
+    "spec/core/key-tuple-operation-v4.schema.json": {
+      "bytes": 4158,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/core/bit128-document.schema.json": {
+      "bytes": 27671,
+      "imports": [],
+      "format": "json"
     },
     "spec/core/nullability-document.schema.json": {
       "bytes": 5069,
@@ -2068,11 +2088,6 @@
         }
       ],
       "format": "cjs"
-    },
-    "src/validation/internal-schema.ts": {
-      "bytes": 411,
-      "imports": [],
-      "format": "esm"
     },
     "spec/core/key-document.schema.json": {
       "bytes": 16409,
@@ -2141,22 +2156,6 @@
       ],
       "format": "esm"
     },
-    "node_modules/yaml/dist/schema/yaml-1.1/merge.js": {
-      "bytes": 2616,
-      "imports": [
-        {
-          "path": "node_modules/yaml/dist/nodes/identity.js",
-          "kind": "require-call",
-          "original": "../../nodes/identity.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/nodes/Scalar.js",
-          "kind": "require-call",
-          "original": "../../nodes/Scalar.js"
-        }
-      ],
-      "format": "cjs"
-    },
     "node_modules/yaml/dist/stringify/stringify.js": {
       "bytes": 4534,
       "imports": [
@@ -2183,92 +2182,42 @@
       ],
       "format": "cjs"
     },
-    "spec/core/key-tuple-operation-v3.schema.json": {
-      "bytes": 3296,
-      "imports": [],
-      "format": "json"
-    },
-    "spec/core/key-tuple-operation-v4.schema.json": {
-      "bytes": 4158,
-      "imports": [],
-      "format": "json"
-    },
-    "spec/core/bit128-document.schema.json": {
-      "bytes": 27671,
-      "imports": [],
-      "format": "json"
-    },
-    "node_modules/yaml/dist/compose/resolve-props.js": {
-      "bytes": 5579,
+    "node_modules/yaml/dist/stringify/stringifyComment.js": {
+      "bytes": 801,
       "imports": [],
       "format": "cjs"
     },
-    "node_modules/yaml/dist/compose/compose-node.js": {
-      "bytes": 4269,
+    "node_modules/yaml/dist/schema/yaml-1.1/merge.js": {
+      "bytes": 2616,
       "imports": [
-        {
-          "path": "node_modules/yaml/dist/nodes/Alias.js",
-          "kind": "require-call",
-          "original": "../nodes/Alias.js"
-        },
         {
           "path": "node_modules/yaml/dist/nodes/identity.js",
           "kind": "require-call",
-          "original": "../nodes/identity.js"
+          "original": "../../nodes/identity.js"
         },
         {
-          "path": "node_modules/yaml/dist/compose/compose-collection.js",
+          "path": "node_modules/yaml/dist/nodes/Scalar.js",
           "kind": "require-call",
-          "original": "./compose-collection.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/compose-scalar.js",
-          "kind": "require-call",
-          "original": "./compose-scalar.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/resolve-end.js",
-          "kind": "require-call",
-          "original": "./resolve-end.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/util-empty-scalar-position.js",
-          "kind": "require-call",
-          "original": "./util-empty-scalar-position.js"
+          "original": "../../nodes/Scalar.js"
         }
       ],
       "format": "cjs"
     },
-    "src/extensions/security/protection/catalog.ts": {
-      "bytes": 6436,
+    "node_modules/yaml/dist/stringify/stringifyString.js": {
+      "bytes": 13345,
       "imports": [
         {
-          "path": "spec/extensions/security-protection/package.json",
-          "kind": "import-statement",
-          "original": "../../../../spec/extensions/security-protection/package.json"
+          "path": "node_modules/yaml/dist/nodes/Scalar.js",
+          "kind": "require-call",
+          "original": "../nodes/Scalar.js"
         },
         {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../../../model/json"
-        },
-        {
-          "path": "src/model/schema-literals.ts",
-          "kind": "import-statement",
-          "original": "../../../model/schema-literals"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../../../model/types"
-        },
-        {
-          "path": "src/validation/schema.ts",
-          "kind": "import-statement",
-          "original": "../../../validation/schema"
+          "path": "node_modules/yaml/dist/stringify/foldFlowLines.js",
+          "kind": "require-call",
+          "original": "./foldFlowLines.js"
         }
       ],
-      "format": "esm"
+      "format": "cjs"
     },
     "node_modules/yaml/dist/compose/resolve-flow-scalar.js": {
       "bytes": 7417,
@@ -2296,220 +2245,6 @@
         }
       ],
       "format": "cjs"
-    },
-    "node_modules/yaml/dist/stringify/stringifyString.js": {
-      "bytes": 13345,
-      "imports": [
-        {
-          "path": "node_modules/yaml/dist/nodes/Scalar.js",
-          "kind": "require-call",
-          "original": "../nodes/Scalar.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/stringify/foldFlowLines.js",
-          "kind": "require-call",
-          "original": "./foldFlowLines.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/yaml/dist/stringify/stringifyComment.js": {
-      "bytes": 801,
-      "imports": [],
-      "format": "cjs"
-    },
-    "src/validation/facets.ts": {
-      "bytes": 2187,
-      "imports": [
-        {
-          "path": "spec/core/facet-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/facet-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "src/validation/schema.ts",
-          "kind": "import-statement",
-          "original": "./schema"
-        },
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../model/json"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../model/types"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/registry/registry.ts": {
-      "bytes": 1761,
-      "imports": [
-        {
-          "path": "src/validation/schema.ts",
-          "kind": "import-statement",
-          "original": "../validation/schema"
-        },
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../model/json"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../model/types"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/validation/keys.ts": {
-      "bytes": 5518,
-      "imports": [
-        {
-          "path": "src/validation/internal-schema.ts",
-          "kind": "import-statement",
-          "original": "./internal-schema"
-        },
-        {
-          "path": "spec/core/key-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/key-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "src/validation/schema.ts",
-          "kind": "import-statement",
-          "original": "./schema"
-        },
-        {
-          "path": "src/validation/document.ts",
-          "kind": "import-statement",
-          "original": "./document"
-        },
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../model/json"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../model/types"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/validation/schema-properties.ts": {
-      "bytes": 8837,
-      "imports": [
-        {
-          "path": "spec/core/bit128-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/bit128-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "src/validation/internal-schema.ts",
-          "kind": "import-statement",
-          "original": "./internal-schema"
-        },
-        {
-          "path": "spec/core/schema-properties-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/schema-properties-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "src/validation/schema.ts",
-          "kind": "import-statement",
-          "original": "./schema"
-        },
-        {
-          "path": "src/validation/document.ts",
-          "kind": "import-statement",
-          "original": "./document"
-        },
-        {
-          "path": "src/registry/registry.ts",
-          "kind": "import-statement",
-          "original": "../registry/registry"
-        },
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../model/json"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../model/types"
-        },
-        {
-          "path": "src/model/schema-literals.ts",
-          "kind": "import-statement",
-          "original": "../model/schema-literals"
-        },
-        {
-          "path": "spec/core/schema-properties-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/schema-properties-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        }
-      ],
-      "format": "esm"
-    },
-    "src/validation/relationships.ts": {
-      "bytes": 6188,
-      "imports": [
-        {
-          "path": "src/validation/internal-schema.ts",
-          "kind": "import-statement",
-          "original": "./internal-schema"
-        },
-        {
-          "path": "spec/core/relationship-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../spec/core/relationship-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "src/validation/schema.ts",
-          "kind": "import-statement",
-          "original": "./schema"
-        },
-        {
-          "path": "src/validation/keys.ts",
-          "kind": "import-statement",
-          "original": "./keys"
-        },
-        {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../model/json"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../model/types"
-        }
-      ],
-      "format": "esm"
     },
     "node_modules/yaml/dist/schema/yaml-1.1/omap.js": {
       "bytes": 2581,
@@ -2802,6 +2537,271 @@
         }
       ],
       "format": "cjs"
+    },
+    "src/extensions/security/protection/catalog.ts": {
+      "bytes": 6436,
+      "imports": [
+        {
+          "path": "spec/extensions/security-protection/package.json",
+          "kind": "import-statement",
+          "original": "../../../../spec/extensions/security-protection/package.json"
+        },
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../../../model/json"
+        },
+        {
+          "path": "src/model/schema-literals.ts",
+          "kind": "import-statement",
+          "original": "../../../model/schema-literals"
+        },
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../../../model/types"
+        },
+        {
+          "path": "src/validation/schema.ts",
+          "kind": "import-statement",
+          "original": "../../../validation/schema"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/yaml/dist/compose/resolve-props.js": {
+      "bytes": 5579,
+      "imports": [],
+      "format": "cjs"
+    },
+    "node_modules/yaml/dist/compose/compose-node.js": {
+      "bytes": 4269,
+      "imports": [
+        {
+          "path": "node_modules/yaml/dist/nodes/Alias.js",
+          "kind": "require-call",
+          "original": "../nodes/Alias.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/nodes/identity.js",
+          "kind": "require-call",
+          "original": "../nodes/identity.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/compose/compose-collection.js",
+          "kind": "require-call",
+          "original": "./compose-collection.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/compose/compose-scalar.js",
+          "kind": "require-call",
+          "original": "./compose-scalar.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/compose/resolve-end.js",
+          "kind": "require-call",
+          "original": "./resolve-end.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/compose/util-empty-scalar-position.js",
+          "kind": "require-call",
+          "original": "./util-empty-scalar-position.js"
+        }
+      ],
+      "format": "cjs"
+    },
+    "src/validation/facets.ts": {
+      "bytes": 2187,
+      "imports": [
+        {
+          "path": "spec/core/facet-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/facet-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "src/validation/schema.ts",
+          "kind": "import-statement",
+          "original": "./schema"
+        },
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../model/json"
+        },
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../model/types"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/registry/registry.ts": {
+      "bytes": 1761,
+      "imports": [
+        {
+          "path": "src/validation/schema.ts",
+          "kind": "import-statement",
+          "original": "../validation/schema"
+        },
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../model/json"
+        },
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../model/types"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/validation/keys.ts": {
+      "bytes": 5518,
+      "imports": [
+        {
+          "path": "src/validation/internal-schema.ts",
+          "kind": "import-statement",
+          "original": "./internal-schema"
+        },
+        {
+          "path": "spec/core/key-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/key-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "src/validation/schema.ts",
+          "kind": "import-statement",
+          "original": "./schema"
+        },
+        {
+          "path": "src/validation/document.ts",
+          "kind": "import-statement",
+          "original": "./document"
+        },
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../model/json"
+        },
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../model/types"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/validation/schema-properties.ts": {
+      "bytes": 8837,
+      "imports": [
+        {
+          "path": "spec/core/bit128-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/bit128-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "src/validation/internal-schema.ts",
+          "kind": "import-statement",
+          "original": "./internal-schema"
+        },
+        {
+          "path": "spec/core/schema-properties-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/schema-properties-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "src/validation/schema.ts",
+          "kind": "import-statement",
+          "original": "./schema"
+        },
+        {
+          "path": "src/validation/document.ts",
+          "kind": "import-statement",
+          "original": "./document"
+        },
+        {
+          "path": "src/registry/registry.ts",
+          "kind": "import-statement",
+          "original": "../registry/registry"
+        },
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../model/json"
+        },
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../model/types"
+        },
+        {
+          "path": "src/model/schema-literals.ts",
+          "kind": "import-statement",
+          "original": "../model/schema-literals"
+        },
+        {
+          "path": "spec/core/schema-properties-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/schema-properties-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        }
+      ],
+      "format": "esm"
+    },
+    "src/validation/relationships.ts": {
+      "bytes": 6188,
+      "imports": [
+        {
+          "path": "src/validation/internal-schema.ts",
+          "kind": "import-statement",
+          "original": "./internal-schema"
+        },
+        {
+          "path": "spec/core/relationship-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../spec/core/relationship-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "src/validation/schema.ts",
+          "kind": "import-statement",
+          "original": "./schema"
+        },
+        {
+          "path": "src/validation/keys.ts",
+          "kind": "import-statement",
+          "original": "./keys"
+        },
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../model/json"
+        },
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../model/types"
+        }
+      ],
+      "format": "esm"
     },
     "src/extensions/actions/index.ts": {
       "bytes": 12680,
@@ -3203,6 +3203,15 @@
       ],
       "format": "cjs"
     },
+    "node_modules/yaml/dist/stringify/foldFlowLines.js": {
+      "bytes": 4885,
+      "imports": [],
+      "format": "cjs"
+    },
+    "spec/extensions/security-protection/package.json": {
+      "bytes": 20188,
+      "imports": []
+    },
     "node_modules/yaml/dist/compose/compose-collection.js": {
       "bytes": 3613,
       "imports": [
@@ -3274,15 +3283,6 @@
       "bytes": 850,
       "imports": [],
       "format": "cjs"
-    },
-    "node_modules/yaml/dist/stringify/foldFlowLines.js": {
-      "bytes": 4885,
-      "imports": [],
-      "format": "cjs"
-    },
-    "spec/extensions/security-protection/package.json": {
-      "bytes": 20188,
-      "imports": []
     },
     "node_modules/yaml/dist/schema/yaml-1.1/int.js": {
       "bytes": 2232,
@@ -3596,201 +3596,108 @@
       ],
       "format": "esm"
     },
-    "node_modules/ajv/dist/compile/resolve.js": {
-      "bytes": 5006,
+    "node_modules/yaml/dist/compose/resolve-block-map.js": {
+      "bytes": 5071,
       "imports": [
         {
-          "path": "node_modules/ajv/dist/compile/util.js",
+          "path": "node_modules/yaml/dist/nodes/Pair.js",
           "kind": "require-call",
-          "original": "./util"
+          "original": "../nodes/Pair.js"
         },
         {
-          "path": "node_modules/fast-deep-equal/index.js",
+          "path": "node_modules/yaml/dist/nodes/YAMLMap.js",
           "kind": "require-call",
-          "original": "fast-deep-equal"
+          "original": "../nodes/YAMLMap.js"
         },
         {
-          "path": "node_modules/json-schema-traverse/index.js",
+          "path": "node_modules/yaml/dist/compose/resolve-props.js",
           "kind": "require-call",
-          "original": "json-schema-traverse"
+          "original": "./resolve-props.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/compose/util-contains-newline.js",
+          "kind": "require-call",
+          "original": "./util-contains-newline.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/compose/util-flow-indent-check.js",
+          "kind": "require-call",
+          "original": "./util-flow-indent-check.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/compose/util-map-includes.js",
+          "kind": "require-call",
+          "original": "./util-map-includes.js"
         }
       ],
       "format": "cjs"
     },
-    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/unevaluated.json": {
-      "bytes": 472,
-      "imports": [],
-      "format": "json"
-    },
-    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/core.json": {
-      "bytes": 1344,
-      "imports": [],
-      "format": "json"
-    },
-    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/meta-data.json": {
-      "bytes": 758,
-      "imports": [],
-      "format": "json"
-    },
-    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/validation.json": {
-      "bytes": 2264,
-      "imports": [],
-      "format": "json"
-    },
-    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/format-annotation.json": {
-      "bytes": 420,
-      "imports": [],
-      "format": "json"
-    },
-    "node_modules/ajv/dist/refs/json-schema-2020-12/schema.json": {
-      "bytes": 2166,
-      "imports": [],
-      "format": "json"
-    },
-    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/content.json": {
-      "bytes": 479,
-      "imports": [],
-      "format": "json"
-    },
-    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/applicator.json": {
-      "bytes": 1441,
-      "imports": [],
-      "format": "json"
-    },
-    "src/extensions/actions/framed-json.ts": {
-      "bytes": 1840,
+    "node_modules/yaml/dist/compose/resolve-block-seq.js": {
+      "bytes": 1812,
       "imports": [
         {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../../model/json"
+          "path": "node_modules/yaml/dist/nodes/YAMLSeq.js",
+          "kind": "require-call",
+          "original": "../nodes/YAMLSeq.js"
         },
         {
-          "path": "src/extensions/actions/plan-artifacts.ts",
-          "kind": "import-statement",
-          "original": "./plan-artifacts"
+          "path": "node_modules/yaml/dist/compose/resolve-props.js",
+          "kind": "require-call",
+          "original": "./resolve-props.js"
+        },
+        {
+          "path": "node_modules/yaml/dist/compose/util-flow-indent-check.js",
+          "kind": "require-call",
+          "original": "./util-flow-indent-check.js"
         }
       ],
-      "format": "esm"
+      "format": "cjs"
     },
-    "src/extensions/actions/plan-structure.ts": {
-      "bytes": 4240,
+    "node_modules/yaml/dist/compose/resolve-flow-collection.js": {
+      "bytes": 8927,
       "imports": [
         {
-          "path": "src/model/json.ts",
-          "kind": "import-statement",
-          "original": "../../model/json"
+          "path": "node_modules/yaml/dist/nodes/identity.js",
+          "kind": "require-call",
+          "original": "../nodes/identity.js"
         },
         {
-          "path": "spec/extensions/actions/bulk.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/extensions/actions/bulk.schema.json",
-          "with": {
-            "type": "json"
-          }
+          "path": "node_modules/yaml/dist/nodes/Pair.js",
+          "kind": "require-call",
+          "original": "../nodes/Pair.js"
         },
         {
-          "path": "spec/extensions/actions/tx-results.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/extensions/actions/tx-results.schema.json",
-          "with": {
-            "type": "json"
-          }
+          "path": "node_modules/yaml/dist/nodes/YAMLMap.js",
+          "kind": "require-call",
+          "original": "../nodes/YAMLMap.js"
         },
         {
-          "path": "spec/extensions/actions/manifest.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/extensions/actions/manifest.schema.json",
-          "with": {
-            "type": "json"
-          }
+          "path": "node_modules/yaml/dist/nodes/YAMLSeq.js",
+          "kind": "require-call",
+          "original": "../nodes/YAMLSeq.js"
         },
         {
-          "path": "spec/extensions/actions/manifest-inspection.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/extensions/actions/manifest-inspection.schema.json",
-          "with": {
-            "type": "json"
-          }
+          "path": "node_modules/yaml/dist/compose/resolve-end.js",
+          "kind": "require-call",
+          "original": "./resolve-end.js"
         },
         {
-          "path": "spec/extensions/actions/plan.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/extensions/actions/plan.schema.json",
-          "with": {
-            "type": "json"
-          }
+          "path": "node_modules/yaml/dist/compose/resolve-props.js",
+          "kind": "require-call",
+          "original": "./resolve-props.js"
         },
         {
-          "path": "spec/extensions/actions/plan-model.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/extensions/actions/plan-model.schema.json",
-          "with": {
-            "type": "json"
-          }
+          "path": "node_modules/yaml/dist/compose/util-contains-newline.js",
+          "kind": "require-call",
+          "original": "./util-contains-newline.js"
         },
         {
-          "path": "spec/extensions/actions/plan-capabilities.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/extensions/actions/plan-capabilities.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "spec/extensions/actions/plan-inspection.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/extensions/actions/plan-inspection.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "spec/extensions/actions/plan-assessment.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/extensions/actions/plan-assessment.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "spec/core/schema-properties-document.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/core/schema-properties-document.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "spec/extensions/actions/executor-profile.schema.json",
-          "kind": "import-statement",
-          "original": "../../../spec/extensions/actions/executor-profile.schema.json",
-          "with": {
-            "type": "json"
-          }
-        },
-        {
-          "path": "src/validation/schema.ts",
-          "kind": "import-statement",
-          "original": "../../validation/schema"
-        },
-        {
-          "path": "src/extensions/actions/plan-artifacts.ts",
-          "kind": "import-statement",
-          "original": "./plan-artifacts"
-        },
-        {
-          "path": "src/validation/internal-schema.ts",
-          "kind": "import-statement",
-          "original": "../../validation/internal-schema"
-        },
-        {
-          "path": "src/extensions/actions/plan-identity.ts",
-          "kind": "import-statement",
-          "original": "./plan-identity"
+          "path": "node_modules/yaml/dist/compose/util-map-includes.js",
+          "kind": "require-call",
+          "original": "./util-map-includes.js"
         }
       ],
-      "format": "esm"
+      "format": "cjs"
     },
     "node_modules/ajv/dist/vocabularies/core/index.js": {
       "bytes": 357,
@@ -4029,6 +3936,157 @@
       ],
       "format": "cjs"
     },
+    "src/extensions/actions/plan-structure.ts": {
+      "bytes": 4240,
+      "imports": [
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../../model/json"
+        },
+        {
+          "path": "spec/extensions/actions/bulk.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/extensions/actions/bulk.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/extensions/actions/tx-results.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/extensions/actions/tx-results.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/extensions/actions/manifest.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/extensions/actions/manifest.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/extensions/actions/manifest-inspection.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/extensions/actions/manifest-inspection.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/extensions/actions/plan.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/extensions/actions/plan.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/extensions/actions/plan-model.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/extensions/actions/plan-model.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/extensions/actions/plan-capabilities.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/extensions/actions/plan-capabilities.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/extensions/actions/plan-inspection.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/extensions/actions/plan-inspection.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/extensions/actions/plan-assessment.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/extensions/actions/plan-assessment.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/core/schema-properties-document.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/core/schema-properties-document.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "spec/extensions/actions/executor-profile.schema.json",
+          "kind": "import-statement",
+          "original": "../../../spec/extensions/actions/executor-profile.schema.json",
+          "with": {
+            "type": "json"
+          }
+        },
+        {
+          "path": "src/validation/schema.ts",
+          "kind": "import-statement",
+          "original": "../../validation/schema"
+        },
+        {
+          "path": "src/extensions/actions/plan-artifacts.ts",
+          "kind": "import-statement",
+          "original": "./plan-artifacts"
+        },
+        {
+          "path": "src/validation/internal-schema.ts",
+          "kind": "import-statement",
+          "original": "../../validation/internal-schema"
+        },
+        {
+          "path": "src/extensions/actions/plan-identity.ts",
+          "kind": "import-statement",
+          "original": "./plan-identity"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/extensions/actions/known-model.ts": {
+      "bytes": 2449,
+      "imports": [
+        {
+          "path": "src/validation/document.ts",
+          "kind": "import-statement",
+          "original": "../../validation/document"
+        },
+        {
+          "path": "src/model/types.ts",
+          "kind": "import-statement",
+          "original": "../../model/types"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/extensions/actions/framed-json.ts": {
+      "bytes": 1840,
+      "imports": [
+        {
+          "path": "src/model/json.ts",
+          "kind": "import-statement",
+          "original": "../../model/json"
+        },
+        {
+          "path": "src/extensions/actions/plan-artifacts.ts",
+          "kind": "import-statement",
+          "original": "./plan-artifacts"
+        }
+      ],
+      "format": "esm"
+    },
     "node_modules/ajv/dist/compile/util.js": {
       "bytes": 7103,
       "imports": [
@@ -4138,149 +4196,66 @@
       "imports": [],
       "format": "cjs"
     },
-    "spec/extensions/actions/schema.json": {
-      "bytes": 10931,
+    "node_modules/ajv/dist/compile/resolve.js": {
+      "bytes": 5006,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/util.js",
+          "kind": "require-call",
+          "original": "./util"
+        },
+        {
+          "path": "node_modules/fast-deep-equal/index.js",
+          "kind": "require-call",
+          "original": "fast-deep-equal"
+        },
+        {
+          "path": "node_modules/json-schema-traverse/index.js",
+          "kind": "require-call",
+          "original": "json-schema-traverse"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/unevaluated.json": {
+      "bytes": 472,
       "imports": [],
       "format": "json"
     },
-    "spec/extensions/actions/package.json": {
-      "bytes": 11490,
-      "imports": []
-    },
-    "src/extensions/actions/known-model.ts": {
-      "bytes": 2449,
-      "imports": [
-        {
-          "path": "src/validation/document.ts",
-          "kind": "import-statement",
-          "original": "../../validation/document"
-        },
-        {
-          "path": "src/model/types.ts",
-          "kind": "import-statement",
-          "original": "../../model/types"
-        }
-      ],
-      "format": "esm"
-    },
-    "node_modules/yaml/dist/compose/resolve-block-map.js": {
-      "bytes": 5071,
-      "imports": [
-        {
-          "path": "node_modules/yaml/dist/nodes/Pair.js",
-          "kind": "require-call",
-          "original": "../nodes/Pair.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/nodes/YAMLMap.js",
-          "kind": "require-call",
-          "original": "../nodes/YAMLMap.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/resolve-props.js",
-          "kind": "require-call",
-          "original": "./resolve-props.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/util-contains-newline.js",
-          "kind": "require-call",
-          "original": "./util-contains-newline.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/util-flow-indent-check.js",
-          "kind": "require-call",
-          "original": "./util-flow-indent-check.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/util-map-includes.js",
-          "kind": "require-call",
-          "original": "./util-map-includes.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/yaml/dist/compose/resolve-block-seq.js": {
-      "bytes": 1812,
-      "imports": [
-        {
-          "path": "node_modules/yaml/dist/nodes/YAMLSeq.js",
-          "kind": "require-call",
-          "original": "../nodes/YAMLSeq.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/resolve-props.js",
-          "kind": "require-call",
-          "original": "./resolve-props.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/util-flow-indent-check.js",
-          "kind": "require-call",
-          "original": "./util-flow-indent-check.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/yaml/dist/compose/resolve-flow-collection.js": {
-      "bytes": 8927,
-      "imports": [
-        {
-          "path": "node_modules/yaml/dist/nodes/identity.js",
-          "kind": "require-call",
-          "original": "../nodes/identity.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/nodes/Pair.js",
-          "kind": "require-call",
-          "original": "../nodes/Pair.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/nodes/YAMLMap.js",
-          "kind": "require-call",
-          "original": "../nodes/YAMLMap.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/nodes/YAMLSeq.js",
-          "kind": "require-call",
-          "original": "../nodes/YAMLSeq.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/resolve-end.js",
-          "kind": "require-call",
-          "original": "./resolve-end.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/resolve-props.js",
-          "kind": "require-call",
-          "original": "./resolve-props.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/util-contains-newline.js",
-          "kind": "require-call",
-          "original": "./util-contains-newline.js"
-        },
-        {
-          "path": "node_modules/yaml/dist/compose/util-map-includes.js",
-          "kind": "require-call",
-          "original": "./util-map-includes.js"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/compile/codegen/code.js": {
-      "bytes": 4676,
+    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/core.json": {
+      "bytes": 1344,
       "imports": [],
-      "format": "cjs"
+      "format": "json"
     },
-    "node_modules/ajv/dist/compile/codegen/scope.js": {
-      "bytes": 5198,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/code.js",
-          "kind": "require-call",
-          "original": "./code"
-        }
-      ],
-      "format": "cjs"
+    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/meta-data.json": {
+      "bytes": 758,
+      "imports": [],
+      "format": "json"
+    },
+    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/validation.json": {
+      "bytes": 2264,
+      "imports": [],
+      "format": "json"
+    },
+    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/format-annotation.json": {
+      "bytes": 420,
+      "imports": [],
+      "format": "json"
+    },
+    "node_modules/ajv/dist/refs/json-schema-2020-12/schema.json": {
+      "bytes": 2166,
+      "imports": [],
+      "format": "json"
+    },
+    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/content.json": {
+      "bytes": 479,
+      "imports": [],
+      "format": "json"
+    },
+    "node_modules/ajv/dist/refs/json-schema-2020-12/meta/applicator.json": {
+      "bytes": 1441,
+      "imports": [],
+      "format": "json"
     },
     "src/extensions/actions/plan-identity.ts": {
       "bytes": 309,
@@ -4328,15 +4303,14 @@
       ],
       "format": "esm"
     },
-    "node_modules/json-schema-traverse/index.js": {
-      "bytes": 2428,
+    "spec/extensions/actions/schema.json": {
+      "bytes": 10931,
       "imports": [],
-      "format": "cjs"
+      "format": "json"
     },
-    "node_modules/fast-deep-equal/index.js": {
-      "bytes": 1177,
-      "imports": [],
-      "format": "cjs"
+    "spec/extensions/actions/package.json": {
+      "bytes": 11490,
+      "imports": []
     },
     "src/extensions/actions/expression.ts": {
       "bytes": 14213,
@@ -4389,55 +4363,32 @@
       "imports": [],
       "format": "esm"
     },
-    "spec/extensions/actions/plan-capabilities.schema.json": {
-      "bytes": 7832,
-      "imports": [],
-      "format": "json"
+    "node_modules/yaml/dist/compose/util-map-includes.js": {
+      "bytes": 471,
+      "imports": [
+        {
+          "path": "node_modules/yaml/dist/nodes/identity.js",
+          "kind": "require-call",
+          "original": "../nodes/identity.js"
+        }
+      ],
+      "format": "cjs"
     },
-    "spec/extensions/actions/bulk.schema.json": {
-      "bytes": 21105,
-      "imports": [],
-      "format": "json"
+    "node_modules/yaml/dist/compose/util-flow-indent-check.js": {
+      "bytes": 547,
+      "imports": [
+        {
+          "path": "node_modules/yaml/dist/compose/util-contains-newline.js",
+          "kind": "require-call",
+          "original": "./util-contains-newline.js"
+        }
+      ],
+      "format": "cjs"
     },
-    "spec/extensions/actions/plan.schema.json": {
-      "bytes": 7328,
+    "node_modules/yaml/dist/compose/util-contains-newline.js": {
+      "bytes": 1081,
       "imports": [],
-      "format": "json"
-    },
-    "spec/extensions/actions/plan-inspection.schema.json": {
-      "bytes": 726,
-      "imports": [],
-      "format": "json"
-    },
-    "spec/extensions/actions/plan-model.schema.json": {
-      "bytes": 2657,
-      "imports": [],
-      "format": "json"
-    },
-    "spec/extensions/actions/tx-results.schema.json": {
-      "bytes": 13280,
-      "imports": [],
-      "format": "json"
-    },
-    "spec/extensions/actions/manifest.schema.json": {
-      "bytes": 8787,
-      "imports": [],
-      "format": "json"
-    },
-    "spec/extensions/actions/executor-profile.schema.json": {
-      "bytes": 1640,
-      "imports": [],
-      "format": "json"
-    },
-    "spec/extensions/actions/manifest-inspection.schema.json": {
-      "bytes": 924,
-      "imports": [],
-      "format": "json"
-    },
-    "spec/extensions/actions/plan-assessment.schema.json": {
-      "bytes": 1309,
-      "imports": [],
-      "format": "json"
+      "format": "cjs"
     },
     "node_modules/ajv/dist/compile/validate/keyword.js": {
       "bytes": 5695,
@@ -4555,6 +4506,22 @@
       "imports": [],
       "format": "cjs"
     },
+    "node_modules/ajv/dist/compile/codegen/code.js": {
+      "bytes": 4676,
+      "imports": [],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/compile/codegen/scope.js": {
+      "bytes": 5198,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/code.js",
+          "kind": "require-call",
+          "original": "./code"
+        }
+      ],
+      "format": "cjs"
+    },
     "node_modules/ajv/dist/vocabularies/core/id.js": {
       "bytes": 267,
       "imports": [],
@@ -4625,245 +4592,6 @@
           "path": "node_modules/ajv/dist/compile/util.js",
           "kind": "require-call",
           "original": "../../compile/util"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/fast-uri/index.js": {
-      "bytes": 22264,
-      "imports": [
-        {
-          "path": "node_modules/fast-uri/lib/utils.js",
-          "kind": "require-call",
-          "original": "./lib/utils"
-        },
-        {
-          "path": "node_modules/fast-uri/lib/schemes.js",
-          "kind": "require-call",
-          "original": "./lib/schemes"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/validation/limitItems.js": {
-      "bytes": 852,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/validation/multipleOf.js": {
-      "bytes": 1023,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/validation/pattern.js": {
-      "bytes": 1323,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/vocabularies/code.js",
-          "kind": "require-call",
-          "original": "../code"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/util.js",
-          "kind": "require-call",
-          "original": "../../compile/util"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/validation/uniqueItems.js": {
-      "bytes": 3037,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/validate/dataType.js",
-          "kind": "require-call",
-          "original": "../../compile/validate/dataType"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/util.js",
-          "kind": "require-call",
-          "original": "../../compile/util"
-        },
-        {
-          "path": "node_modules/ajv/dist/runtime/equal.js",
-          "kind": "require-call",
-          "original": "../../runtime/equal"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/validation/enum.js": {
-      "bytes": 1901,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/util.js",
-          "kind": "require-call",
-          "original": "../../compile/util"
-        },
-        {
-          "path": "node_modules/ajv/dist/runtime/equal.js",
-          "kind": "require-call",
-          "original": "../../runtime/equal"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/validation/const.js": {
-      "bytes": 852,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/util.js",
-          "kind": "require-call",
-          "original": "../../compile/util"
-        },
-        {
-          "path": "node_modules/ajv/dist/runtime/equal.js",
-          "kind": "require-call",
-          "original": "../../runtime/equal"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/validation/required.js": {
-      "bytes": 3188,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/vocabularies/code.js",
-          "kind": "require-call",
-          "original": "../code"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/util.js",
-          "kind": "require-call",
-          "original": "../../compile/util"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/validation/limitLength.js": {
-      "bytes": 1130,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/util.js",
-          "kind": "require-call",
-          "original": "../../compile/util"
-        },
-        {
-          "path": "node_modules/ajv/dist/runtime/ucs2length.js",
-          "kind": "require-call",
-          "original": "../../runtime/ucs2length"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/validation/limitProperties.js": {
-      "bytes": 896,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/validation/limitNumber.js": {
-      "bytes": 1036,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/format/format.js": {
-      "bytes": 4317,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedItems.js": {
-      "bytes": 1588,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/util.js",
-          "kind": "require-call",
-          "original": "../../compile/util"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedProperties.js": {
-      "bytes": 2608,
-      "imports": [
-        {
-          "path": "node_modules/ajv/dist/compile/codegen/index.js",
-          "kind": "require-call",
-          "original": "../../compile/codegen"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/util.js",
-          "kind": "require-call",
-          "original": "../../compile/util"
-        },
-        {
-          "path": "node_modules/ajv/dist/compile/names.js",
-          "kind": "require-call",
-          "original": "../../compile/names"
         }
       ],
       "format": "cjs"
@@ -4941,6 +4669,56 @@
         }
       ],
       "format": "cjs"
+    },
+    "spec/extensions/actions/plan-capabilities.schema.json": {
+      "bytes": 7832,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/extensions/actions/bulk.schema.json": {
+      "bytes": 21105,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/extensions/actions/plan.schema.json": {
+      "bytes": 7328,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/extensions/actions/plan-inspection.schema.json": {
+      "bytes": 726,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/extensions/actions/plan-model.schema.json": {
+      "bytes": 2657,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/extensions/actions/tx-results.schema.json": {
+      "bytes": 13280,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/extensions/actions/manifest.schema.json": {
+      "bytes": 8787,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/extensions/actions/executor-profile.schema.json": {
+      "bytes": 1640,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/extensions/actions/manifest-inspection.schema.json": {
+      "bytes": 924,
+      "imports": [],
+      "format": "json"
+    },
+    "spec/extensions/actions/plan-assessment.schema.json": {
+      "bytes": 1309,
+      "imports": [],
+      "format": "json"
     },
     "node_modules/ajv/dist/vocabularies/applicator/items2020.js": {
       "bytes": 1037,
@@ -5223,30 +5001,252 @@
       ],
       "format": "cjs"
     },
-    "node_modules/yaml/dist/compose/util-map-includes.js": {
-      "bytes": 471,
+    "node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedItems.js": {
+      "bytes": 1588,
       "imports": [
         {
-          "path": "node_modules/yaml/dist/nodes/identity.js",
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
           "kind": "require-call",
-          "original": "../nodes/identity.js"
+          "original": "../../compile/codegen"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/util.js",
+          "kind": "require-call",
+          "original": "../../compile/util"
         }
       ],
       "format": "cjs"
     },
-    "node_modules/yaml/dist/compose/util-flow-indent-check.js": {
-      "bytes": 547,
+    "node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedProperties.js": {
+      "bytes": 2608,
       "imports": [
         {
-          "path": "node_modules/yaml/dist/compose/util-contains-newline.js",
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
           "kind": "require-call",
-          "original": "./util-contains-newline.js"
+          "original": "../../compile/codegen"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/util.js",
+          "kind": "require-call",
+          "original": "../../compile/util"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/names.js",
+          "kind": "require-call",
+          "original": "../../compile/names"
         }
       ],
       "format": "cjs"
     },
-    "node_modules/yaml/dist/compose/util-contains-newline.js": {
-      "bytes": 1081,
+    "node_modules/fast-uri/index.js": {
+      "bytes": 22264,
+      "imports": [
+        {
+          "path": "node_modules/fast-uri/lib/utils.js",
+          "kind": "require-call",
+          "original": "./lib/utils"
+        },
+        {
+          "path": "node_modules/fast-uri/lib/schemes.js",
+          "kind": "require-call",
+          "original": "./lib/schemes"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/validation/limitItems.js": {
+      "bytes": 852,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/validation/multipleOf.js": {
+      "bytes": 1023,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/validation/pattern.js": {
+      "bytes": 1323,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/vocabularies/code.js",
+          "kind": "require-call",
+          "original": "../code"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/util.js",
+          "kind": "require-call",
+          "original": "../../compile/util"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/validation/uniqueItems.js": {
+      "bytes": 3037,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/validate/dataType.js",
+          "kind": "require-call",
+          "original": "../../compile/validate/dataType"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/util.js",
+          "kind": "require-call",
+          "original": "../../compile/util"
+        },
+        {
+          "path": "node_modules/ajv/dist/runtime/equal.js",
+          "kind": "require-call",
+          "original": "../../runtime/equal"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/validation/enum.js": {
+      "bytes": 1901,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/util.js",
+          "kind": "require-call",
+          "original": "../../compile/util"
+        },
+        {
+          "path": "node_modules/ajv/dist/runtime/equal.js",
+          "kind": "require-call",
+          "original": "../../runtime/equal"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/validation/const.js": {
+      "bytes": 852,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/util.js",
+          "kind": "require-call",
+          "original": "../../compile/util"
+        },
+        {
+          "path": "node_modules/ajv/dist/runtime/equal.js",
+          "kind": "require-call",
+          "original": "../../runtime/equal"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/validation/required.js": {
+      "bytes": 3188,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/vocabularies/code.js",
+          "kind": "require-call",
+          "original": "../code"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/util.js",
+          "kind": "require-call",
+          "original": "../../compile/util"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/validation/limitLength.js": {
+      "bytes": 1130,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        },
+        {
+          "path": "node_modules/ajv/dist/compile/util.js",
+          "kind": "require-call",
+          "original": "../../compile/util"
+        },
+        {
+          "path": "node_modules/ajv/dist/runtime/ucs2length.js",
+          "kind": "require-call",
+          "original": "../../runtime/ucs2length"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/validation/limitProperties.js": {
+      "bytes": 896,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/validation/limitNumber.js": {
+      "bytes": 1036,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/vocabularies/format/format.js": {
+      "bytes": 4317,
+      "imports": [
+        {
+          "path": "node_modules/ajv/dist/compile/codegen/index.js",
+          "kind": "require-call",
+          "original": "../../compile/codegen"
+        }
+      ],
+      "format": "cjs"
+    },
+    "node_modules/json-schema-traverse/index.js": {
+      "bytes": 2428,
+      "imports": [],
+      "format": "cjs"
+    },
+    "node_modules/fast-deep-equal/index.js": {
+      "bytes": 1177,
       "imports": [],
       "format": "cjs"
     },
@@ -5276,6 +5276,22 @@
       ],
       "format": "cjs"
     },
+    "node_modules/ajv/dist/runtime/ucs2length.js": {
+      "bytes": 808,
+      "imports": [],
+      "format": "cjs"
+    },
+    "node_modules/ajv/dist/runtime/equal.js": {
+      "bytes": 286,
+      "imports": [
+        {
+          "path": "node_modules/fast-deep-equal/index.js",
+          "kind": "require-call",
+          "original": "fast-deep-equal"
+        }
+      ],
+      "format": "cjs"
+    },
     "node_modules/fast-uri/lib/schemes.js": {
       "bytes": 7367,
       "imports": [
@@ -5291,27 +5307,11 @@
       "bytes": 20835,
       "imports": [],
       "format": "cjs"
-    },
-    "node_modules/ajv/dist/runtime/equal.js": {
-      "bytes": 286,
-      "imports": [
-        {
-          "path": "node_modules/fast-deep-equal/index.js",
-          "kind": "require-call",
-          "original": "fast-deep-equal"
-        }
-      ],
-      "format": "cjs"
-    },
-    "node_modules/ajv/dist/runtime/ucs2length.js": {
-      "bytes": 808,
-      "imports": [],
-      "format": "cjs"
     }
   },
   "outputs": {
     "./current-native-disclosure-child-main.js": {
-      "bytes": 1065165,
+      "bytes": 1065468,
       "inputs": {
         "node_modules/yaml/dist/nodes/identity.js": {
           "bytesInOutput": 1832
@@ -6052,7 +6052,7 @@
           "bytesInOutput": 2917
         },
         "src/extensions/security/catalog-runtime-candidate.ts": {
-          "bytesInOutput": 39145
+          "bytesInOutput": 39448
         },
         "src/extensions/security/protection/source.ts": {
           "bytesInOutput": 0

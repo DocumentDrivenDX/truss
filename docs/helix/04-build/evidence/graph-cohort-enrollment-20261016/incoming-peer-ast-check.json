@@ -1,0 +1,39 @@
+{
+  "scope": "Incoming peer page-only declarations separated from unchanged selected source AST; not a whole-program call-graph/refinement proof",
+  "incomingMain": "e6bcb39b0375a224a91ac9045b7cdcd65146d79c",
+  "checks": [
+    {
+      "path": "packages/python/src/truss/catalog_runtime.py",
+      "excludedNodes": [
+        "query_page_in_transaction"
+      ],
+      "otherAstIdentical": true
+    },
+    {
+      "path": "packages/python/src/truss/query.py",
+      "excludedNodes": [
+        "QueryPage",
+        "QueryPageCursor"
+      ],
+      "otherAstIdentical": true
+    },
+    {
+      "path": "packages/python/src/truss/capabilities.py",
+      "excludedNodes": [
+        "query_page_in_transaction"
+      ],
+      "otherAstIdentical": true
+    },
+    {
+      "path": "packages/python/src/truss/capability_contracts.py",
+      "excludedNodes": [
+        "query_page_in_transaction"
+      ],
+      "otherAstIdentical": true
+    }
+  ],
+  "notUsedInDisclosure": [
+    "packages/python/src/truss/_query_runtime.py",
+    "packages/python/src/truss/access.py"
+  ]
+}

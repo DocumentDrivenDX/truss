@@ -1,0 +1,21 @@
+{
+  "base": "dadbce957437d60c86e3d9ad637dfdc738454239",
+  "scope": "source/evidence endpoints only",
+  "sourceFiles": {
+    "packages/python/src/truss/_current_disclosure_facts.py": "a798c96dbc39386fd62ab9003451bd873a30d4a921e1e354dccce5cd1b389ab0",
+    "packages/python/tests/test_current_disclosure_capture_closing.py": "778a924a357ecfe40b9c29ba089a59f374e709f68b6bb592e44acc22338d5b2b",
+    "packages/python/tests/test_current_disclosure_graphs_native.py": "353cbfd64588db904fab9a33516d2f1815b6a6910cd643388d2d568b734ad4ef"
+  },
+  "files": {
+    "astra-review.zip": "af503a975eda89dfe16e37f69cd33dc4656ff3ea7fa0504f12b0babcc7f64621",
+    "astra-review.json": "143f402c1a3704d3a4141e7a948d59f92463a8afe05eb8f3c8001f926d0338a3",
+    "native-inputs-and-results.zip": "e63e5ac57be236dfa654b3a601b2a057d527aac26e7240d9d5dab92f02ee7505",
+    "README.md": "56a4d86bbabbce6ffa57b0e19f28b73fc8d6d9014c8fab0c7a0987f14d7a2646",
+    "cleanup.json": "ba25ea2923dc90095953395dac9d0191323fe6ec479b6b709ac6506f411ec904",
+    "native.log": "6f3ff1f69841bf39b4f555527647964bf61682db9ecc7b26eb811db016700b87",
+    "source-preservation.json": "bd54b36b250a2f5894d5f3a61718318e94081b91149468c4617abc5d02107594",
+    "unit.log": "d9ce03b199fd8b7afc82a4f942279b96601225953cc82cb0d80e8294c648ef34",
+    "native-manifest.json": "15308b377f0ae5bae9da55f4b4ffb66e0043051958d382551404f73775265e51",
+    "astra-manifest.json": "2c392a11d75ec8b5f7f44d1e71a05206b5daf681738783da657ff2dd3bb22604"
+  }
+}

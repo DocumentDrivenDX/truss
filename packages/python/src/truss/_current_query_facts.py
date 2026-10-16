@@ -24,6 +24,17 @@ class CurrentQueryFactCapture:
     # Private actual row identity/version and original owner Key receipt.
     rows: tuple[tuple[str,str,str,bytes,bytes,bytes], ...]
 
+    # This collector rejects every non-record-members association in _recipes.
+    # Its explicit empty graph populations are a profile guarantee, not a
+    # fallback for missing/incomplete core-relationship capture.
+    @property
+    def graphs_bytes(self):
+        return b'[]'
+
+    @property
+    def graph_coverage_bytes(self):
+        return b'[]'
+
 
 def _identity(ref):
     if type(ref) is not dict or set(ref) != {'documentId','moduleId','elementId'} or any(type(v) is not str or not v for v in ref.values()):

@@ -82,6 +82,37 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         observation=json.loads(base64.b64decode(replay.response.replay.evidence.bytes_base64))
         self.assertNotEqual(observation['observingXid'],observation['originalWriterXid'])
         self.assertEqual(observation['basis'],'committed_receipt')
+    def test_create_preserves_absence_null_and_empty_retained_storage(self):
+        from truss.contracts import NullValue
+        def source(document):
+            module=document['modules'][0]
+            next(e for e in module['elements'] if e['id']=='A')['members'].append({'module':'m','element':'A-note'})
+            module['elements'].append({'id':'A-note','name':'note','kind':'field','scalarType':'string',
+                'nullability':'absent-allowed','cardinality':'one','extensions':{}})
+        connection,host,assembly,tx=self.ready(source,document_ids=('adoc',))
+        absent=self.create(label='absent',alias='absent')
+        null=self.create(label='null',alias='null')
+        null=replace(null,values=null.values+(AuthoredValue(name='note',value=NullValue()),
+            AuthoredValue(name='future',value=NullValue())))
+        empty=self.create(label='empty',alias='empty')
+        empty=replace(empty,values=empty.values+(AuthoredValue(name='note',value=TextValue(kind='string',text='')),))
+        applied=self.apply(assembly,tx,*self.input(assembly,tx,(absent,null,empty)))
+        self.assertIsInstance(applied,GroupSuccess)
+        identities=tuple(r.identity for r in applied.response.semantic.results)
+        host.detach();connection.commit()
+        physical=self.admin.execute('SELECT retained IS NULL,retained FROM truss.object ORDER BY id').fetchall()
+        self.assertEqual(physical,[(True,None),(False,{'future':{'kind':'null'}}),(True,None)])
+        connection,host,assembly,tx=self.consumer()
+        objects=[]
+        for identity in identities:
+            found=assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id))
+            self.assertIsInstance(found.value,ObjectFound)
+            objects.append(found.value.object)
+        self.assertNotIn('note',dict(objects[0].values))
+        self.assertIsNone(dict(objects[1].values)['note'])
+        self.assertEqual(dict(objects[1].retained),{'future':None})
+        self.assertEqual(dict(objects[2].values)['note'],'')
+
     def test_group_failure_and_rollback_preserve_caller_work(self):
         connection,host,assembly,tx=self.ready()
         connection.execute("CREATE TEMP TABLE prior(value text);INSERT INTO prior VALUES('kept')")

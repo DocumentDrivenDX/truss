@@ -39,15 +39,15 @@ class DisclosureCompilerIntegrationTests(unittest.TestCase):
    initial=wire({'kind':'initialize','requestId':'registered','sources':{**{k:source[k] for k in ('policy','catalog','closure','ontology')},'associationBindings':[],'extensionSelection':{}}})
    sources=types.SimpleNamespace(source_profile=_DISCLOSURE_PROFILE,query_originals=prepare_current_disclosure_originals(wire(case['request']['opaqueSources'])),accepted_request_bytes=wire({'modules':case['request']['modules']}),initialize_bytes=initial,source_receipt=_initialize(initial))
    check_disclosure_originals(sources.query_originals,initial,sources.accepted_request_bytes)
-   captured=types.SimpleNamespace(sources=sources,facts_bytes=wire(packet['cut']['facts']),coverage_bytes=wire(packet['cut']['coverage']))
+   captured=types.SimpleNamespace(sources=sources,facts_bytes=wire(packet['cut']['facts']),coverage_bytes=wire(packet['cut']['coverage']),graphs_bytes=wire(packet['cut']['graphs']),graph_coverage_bytes=wire(packet['cut']['graphCoverage']))
    subject=types.SimpleNamespace(key=packet['cut']['subject']['key'][0]['string'])
    cursor=Cursor('good');cursor._deadline.end=time.monotonic()+60
    with self.subTest(case=case['id']),patch.object(staging,'RawCursor',Raw),patch.object(staging,'_text_rows',return_value=[('pg_temp_7',)]):
-    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable='/opt/homebrew/bin/bun',maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
+    def invoke():return evaluation.evaluate_and_stage_current_disclosure(cursor,captured,subject,sql=case['request']['sql'],parameters={},document_ids=tuple(m['pin']['documentId'] for m in case['request']['modules']),bun_executable=os.environ.get('TRUSS_DISCLOSURE_BUN','/opt/homebrew/bin/bun'),maximum_rows=4096,maximum_scan_rows=4096,maximum_bytes=8_000_000)
     if expected['status']=='rendered':
      result=invoke();result.require_original_parent();self.assertEqual(json.loads(result.staged.reconstructed_batch),expected['batch']);self.assertTrue(cursor.dropped);passed+=1
     else:
-     with self.assertRaises(ValueError):invoke()
+     with self.assertRaisesRegex(ValueError,'Actual held rendered disclosure required'):invoke()
      self.assertFalse(cursor.dropped);refused+=1
   self.assertEqual((passed,refused,fresh_generation),(46,20,6))
 

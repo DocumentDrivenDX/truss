@@ -1,0 +1,78 @@
+{
+  "check.log": {
+    "sha256": "56d917e217e72a9b83409d803d0c8ac88b26fe2302b66be852917b7ceaa82129",
+    "bytes": 1067
+  },
+  "check.py": {
+    "sha256": "3494e0ed711d8c584b6b89d15d0387dc632304f05a63f3b82cc9712f73ac317e",
+    "bytes": 7132
+  },
+  "checks.json": {
+    "sha256": "6c2b5172933df5b5999775a89088afc9018b3e919b3dfd5ebd522bfe98d22ccb",
+    "bytes": 1279
+  },
+  "finalize.py": {
+    "sha256": "f9c4f1077891ea1d3647c5a90d4c4f4c8c95d14ce9ed489e17a46ae1eaf557e7",
+    "bytes": 4574
+  },
+  "packaged-15.json": {
+    "sha256": "9e1d01e634062076b0fc65fc91a15605977510b173553a0f418b282aa8bb17b4",
+    "bytes": 60221
+  },
+  "packet/change.diff": {
+    "sha256": "d71fdae59c7bfe593bac7dd0161676a280945f1b935f13b8f8a398c3f66abad0",
+    "bytes": 7937
+  },
+  "packet/docs/helix/04-build/evidence/graph-cut-transport-20261016/README.md": {
+    "sha256": "184e79bc5ce4657efdb271ef24261e0ca394bbc32d6c2a202f6023aaa983c1eb",
+    "bytes": 2346
+  },
+  "packet/docs/helix/04-build/evidence/graph-cut-transport-20261016/probe.json": {
+    "sha256": "d1981c46e8be3e7cd06f0920e408aa607a63c67854d8b52e691a74c65e420685",
+    "bytes": 20555
+  },
+  "packet/docs/helix/04-build/evidence/graph-cut-transport-20261016/probe.py": {
+    "sha256": "0c8a5b7e0f1f4e81d50b5828816c9a5eab1d6197c820a26ddff958da0318ca9a",
+    "bytes": 3157
+  },
+  "packet/docs/helix/04-build/evidence/graph-cut-transport-20261016/retention.json": {
+    "sha256": "f643135ded4f524ee6a77c80b68c7821a5c7ecc59a94f48c2149ddc9c012e2d0",
+    "bytes": 1137
+  },
+  "packet/docs/helix/04-build/evidence/graph-cut-transport-20261016/tests.log": {
+    "sha256": "c7fa6bc5a73a52b50ce52189f7a92f28600cecf1b3b36988c94722386bbd829a",
+    "bytes": 3814
+  },
+  "packet/manifest.json": {
+    "sha256": "199141fa5030332caabea16aa22d8cb6b0e2117fd437282350b4ab510fff0ea9",
+    "bytes": 1559
+  },
+  "packet/packages/python/src/truss/_current_disclosure_evaluation.py": {
+    "sha256": "dbc5d85470a84d3f51ba96044a85e3f70d78249cbb61fa3418dae616f3a9971b",
+    "bytes": 6768
+  },
+  "packet/packages/python/src/truss/_current_disclosure_wire.py": {
+    "sha256": "c1f16fe7c0efa36163cabe1d9c9d731ba56cbd3e8239c1a7ead49ed678514aa9",
+    "bytes": 4881
+  },
+  "packet/packages/python/tests/test_current_disclosure_compiler_integration.py": {
+    "sha256": "4252ac73fa3437df59f63b46b521fa80d456bab4f4d5868c234ed471d7e1a2f1",
+    "bytes": 4342
+  },
+  "packet/packages/python/tests/test_current_disclosure_graph_transport.py": {
+    "sha256": "404857a75fe6accdd3f3cdfd938ee88c617a1d85b58904c8b48390e9484cd1a6",
+    "bytes": 2864
+  },
+  "packet/packages/python/tests/test_current_disclosure_wire.py": {
+    "sha256": "5ded735f4e38ef628c2f72ebeca5cd2efe58c1df58fa1d12a1800dbb080376f5",
+    "bytes": 5471
+  },
+  "review.json": {
+    "sha256": "f7f854135e12f6f0759b8e943957c1850e9ee84d6d1e232ef3aa5b692131893e",
+    "bytes": 3358
+  },
+  "wire-test.log": {
+    "sha256": "0e9207e58e761c05445fb18a70a194a8d2d71eae9e717d42714dc80ca9fa7e81",
+    "bytes": 282
+  }
+}

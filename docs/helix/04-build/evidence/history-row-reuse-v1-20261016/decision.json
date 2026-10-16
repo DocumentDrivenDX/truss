@@ -1,0 +1,29 @@
+{
+  "decision": "Do not adopt v1; preserve baseline",
+  "candidate": {
+    "basic": "2PASS9.949s",
+    "capacity1024": "PASS38.568s, complete create/commit+changedupdate/commit+replay+orderedreadback",
+    "publishedV37Upgrade": "PASS10.386s, privatehelperownership/ACL and continuedwrites",
+    "full1000NodeEdgeMatrix": "FAIL57014 during edgeapply after successful create+commit14.592s"
+  },
+  "pairedBaseline": {
+    "capacity1024": "FAIL57014 in finalsettlement16.025s",
+    "full1000NodeEdgeMatrix": "FAIL57014 duringcreate"
+  },
+  "limits": {
+    "statementTimeoutMs": 10000,
+    "operationTimeoutMs": 30000
+  },
+  "interpretation": "Neither completes all required workloads. Do not attribute edge timeout causally to candidate or infer broad speedup from capacity pass. V1 adds a leaf call to all original definition lookups; v2 will preserve their original body.",
+  "evidenceSha256": {
+    "basic.log": "8d4e7dc669445cd430ef12bb9603da831cd392641019ef4e8120cb931acda9af",
+    "baseline-capacity.log": "dca62e1013553b2924bb8c8bd4e6799283c2bdc16ef95d7102790d489ed83dd1",
+    "source.json": "e57f24c7de5df3dbaaf9345b2242d09490dc355fe545a428086ec1aff6ddb10d",
+    "upgrade.log": "34d1e6ab5a13c701f20b230f0c04dab43f4668407aa86e4e089aaf328cbfc3e7",
+    "rejected-candidate.patch.gz": "4fb2a7f2c8ba702c90219bbb7fa4d19a8efce315a863e3bde06c5d5358668d04",
+    "full-small.json.gz": "516403073b622aacfdfc723537b7a1d986d13db8c104a1fe1203866cfb85ca94",
+    "astra-source-review.json": "f600335a0e90c3e1c98a518bf7b7bb9ee34c6d92d60fe63dea070051714736da",
+    "capacity.log": "4ccc73b038059dc7a9d6bc35cd16c281845f79b5a82fca0ddadaa2ea4a5fc085",
+    "baseline-full-small.json.gz": "ebb0f7e1cc4ca8d8d9bf3d7b68b441e396d2a311c20628021573c14daa666dd2"
+  }
+}

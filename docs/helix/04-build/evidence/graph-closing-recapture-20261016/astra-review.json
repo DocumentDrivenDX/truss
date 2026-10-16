@@ -1,0 +1,86 @@
+{
+  "review": "Complete native graph capture closing recapture \u2014 bounded review",
+  "status": "complete",
+  "verdict": "no findings within the requested component scope",
+  "findings": [],
+  "startedAt": "2026-10-16T19:25:48Z",
+  "completedAt": "2026-10-16T19:27:28.679525+00:00",
+  "deadline": "2026-10-16T19:29:48Z",
+  "baseline": "dadbce957437d60c86e3d9ad637dfdc738454239",
+  "inputDirectory": "/private/tmp/truss-graph-closing-review-20261016",
+  "inputManifestSha256": "b187f5728bdce7d9d87535b5c74f65f1d69d4b728a83b6bca909c811f437eee9",
+  "diffSha256": "eceae2cbf769c79dae9f157b28aea9aed3980e11a955556182cae71386f93668",
+  "sourceSha256": "a798c96dbc39386fd62ab9003451bd873a30d4a921e1e354dccce5cd1b389ab0",
+  "answers": [
+    {
+      "question": 1,
+      "conclusion": "The helper accepts only the exact complete-capture class, checks the existing deadline before and after a fresh call to the original capture function, and compares the full dataclass. This includes original source capture, fact/coverage bytes, original Key receipts/namespaces/tuples, graph/coverage bytes and complete native row/edge locators. Errors and expiry propagate; no partial success or data release occurs. Original collector bytes are preserved exactly, so source, completeness and resource guards are unchanged."
+    },
+    {
+      "question": 2,
+      "conclusion": "Qualifications are accurate: supplied native experiments explicitly replace the source provider, retain the unchanged diagnostic 90-second cursor, and prove only observed endpoint correspondence under the stated fixture. Documentation excludes source registration, native graph activation, authenticated authority, continuous custody/current release and acceptance-case promotion. Restored same-transaction state and later mutations remain outside an equality endpoint theorem."
+    }
+  ],
+  "independentChecks": {
+    "passed": true,
+    "frozenFiles": 12,
+    "baseline": "dadbce957437d60c86e3d9ad637dfdc738454239",
+    "priorSourceBytesExactPrefix": true,
+    "onlyOneAppendedFunction": true,
+    "diagnostic90sCursorUnchanged": true,
+    "pureTestsPassed": 13,
+    "nestedSourceAndPrivateRowMutationsRefused": 22,
+    "nativeArchiveMembersVerified": 24,
+    "nativeCases": 2,
+    "reviewerSQL": false
+  },
+  "commands": [
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B check.py",
+      "exitCode": 0,
+      "logs": [
+        "check.log",
+        "pure-tests.log"
+      ],
+      "result": "13 pure tests passed in 0.057s; 22 additional nested-source/private-row mutations refused; 12 frozen files and 24 native archive members verified."
+    }
+  ],
+  "suppliedNativeEvidence": {
+    "tests": 2,
+    "seconds": 53.7,
+    "countsPerCase": [
+      {
+        "case": "base",
+        "objects": 14,
+        "edges": 12,
+        "closingSuccesses": 9,
+        "comparisonMutationRefusals": 5,
+        "externalWriterCheckStages": 7
+      },
+      {
+        "case": "parallel",
+        "objects": 14,
+        "edges": 13,
+        "closingSuccesses": 9,
+        "comparisonMutationRefusals": 5,
+        "externalWriterCheckStages": 7
+      }
+    ],
+    "inspection": "Counts checked against retained results, cuts and locators; each mutation test requires the exact closing-comparison refusal message. Each writer-check stage covers object, Key bucket and edge homes. Actual source assessor is retained; source wrapper substitution remains explicit.",
+    "cleanup": "Supplied fixture-prefix process scan and newly-created-directory check pass; older roots left untouched. No independent live process scan or SQL replay.",
+    "limits": "Selected source/evidence endpoint custody only, not hermetic execution or a full imported-source/native authority audit."
+  },
+  "scope": [
+    "No reviewer SQL, builds, broad suite, nested delegation, owner edit or future-work wait.",
+    "No native graph query activation, registration/caller/current-cut authority or guarded-release theorem.",
+    "All 158 cases and 34 criteria remain required; no promotion."
+  ],
+  "retention": {
+    "manifest": "manifest.json",
+    "shape": "files maps relative path to {sha256,bytes}; manifest excludes itself",
+    "excluded": [
+      "working/ (reconstructible Git baseline plus frozen overlay)",
+      "__pycache__/"
+    ]
+  }
+}

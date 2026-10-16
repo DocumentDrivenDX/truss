@@ -1,0 +1,6 @@
+test_1024_real_creates_updates_replay_and_ordered_public_readback (test_group_capacity_native.GroupCapacityTests.test_1024_real_creates_updates_replay_and_ordered_public_readback) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 37.450s
+
+OK

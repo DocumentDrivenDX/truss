@@ -7,7 +7,7 @@ from time import monotonic
 from ._current_disclosure_pipe import CurrentDisclosurePipe
 
 # Owner-reviewed packaged cohort must be installed before this profile can run.
-_ASSET_MANIFEST_SHA256='a7b50c7af02768098fe91f22535a7b1b2450ebde8f0374bad53a6ab7ca380d04'
+_ASSET_MANIFEST_SHA256='ca31a592ca8af8e208729445cd2987d80e8f5797a679b6258f6f9bd3aec86f9e'
 
 
 def verify_current_disclosure_owner_assets():

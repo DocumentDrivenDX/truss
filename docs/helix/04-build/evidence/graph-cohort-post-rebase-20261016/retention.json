@@ -1,0 +1,10 @@
+{
+  "scope": "retained merged package artifacts only",
+  "files": {
+    "truss_toolkit-0.0.38.dev0-py3-none-any.whl": "8013d722a1aa73e0f27a4790946e65c0157a89bb280eaf382bf50849e01e4a84",
+    "rebased-installed-wheel-tests.log": "8009ef339d51580c708e23f3f26c09738d8a3515e08fb3813e68cc13986d1daf",
+    "README.md": "d46272a4185c5efdb24ce36fe5bd885810e157b018aa4e628038db041cb24f7a",
+    "rebased-wheel-build.log": "238a27dfac628b4402a4452908c3970bb6af3f84b44c709895eca18ce39c1a6a",
+    "rebased-wheel-payload.json": "f0b1480aa657720bfd4583bfd88a71966138ecca83093170d0d36a71a54adfca"
+  }
+}

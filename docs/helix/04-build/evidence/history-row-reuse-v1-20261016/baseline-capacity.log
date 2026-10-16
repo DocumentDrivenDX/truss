@@ -1,0 +1,35 @@
+F
+======================================================================
+FAIL: test_1024_real_creates_updates_replay_and_ordered_public_readback (test_group_capacity_native.GroupCapacityTests.test_1024_real_creates_updates_replay_and_ordered_public_readback)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-main-integration-20261010/packages/python/tests/test_group_capacity_native.py", line 33, in test_1024_real_creates_updates_replay_and_ordered_public_readback
+    self.assertIsInstance(created,Ok,repr(created)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(created.value,GroupSuccess,repr(created))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error') canceling statement due to statement timeout
+CONTEXT:  SQL statement "SELECT CASE WHEN revision=(SELECT rev FROM truss.schema_head WHERE id=1)
+  AND NOT EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>revision)
+ THEN jsonb_build_object(
+  'type_def',(SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]'::jsonb) FROM truss.type_def t WHERE t.type_id=selected_type),
+  'prop_def',(SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]'::jsonb) FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=property_id)) END"
+PL/pgSQL function truss.runtime_history_property_qualified(integer,integer,integer,text,oid) line 4 at SQL statement
+SQL statement "SELECT truss.runtime_history_property_qualified((entity->>'typeId')::int,(member->>'propertyId')::int,revision,member->>'definitionPin',qualified_actor)"
+PL/pgSQL function truss.runtime_history_image_qualified(jsonb,jsonb,bigint,oid) line 13 at PERFORM
+SQL statement "SELECT truss.runtime_history_image_qualified(event->'after',entity,version,qualified_actor)"
+PL/pgSQL function truss.runtime_history_group_qualified(jsonb,xid8,bigint,integer,integer,oid) line 48 at PERFORM
+SQL statement "SELECT truss.runtime_history_group_qualified(jsonb_build_object('kind','object','id',identity->>'id','typeId',identity->>'typeId',
+   'documentId',identity->'owner'->>'documentId','moduleId',identity->'owner'->>'moduleId',
+   'sourceEpoch',attempt.context->>'sourceEpoch'),attempt.writer_xid,1,1,16777216,qualified_actor)"
+PL/pgSQL function truss.runtime_create_transition_validate_qualified(bigint,oid,jsonb,bytea,truss.runtime_object_attempt) line 46 at PERFORM
+SQL statement "SELECT truss.runtime_create_transition_validate_qualified(selected_transition,qualified_actor,prepared_input,source_bytes,attempt)"
+PL/pgSQL function truss.runtime_owned_object_transition_validate_qualified(bigint,boolean,oid,jsonb,bytea,truss.runtime_object_attempt,jsonb) line 40 at PERFORM
+SQL statement "SELECT truss.runtime_owned_object_transition_validate_qualified(transition_id,false,current_actor,input,attempt.input_bytes,attempt,history_dictionary)"
+PL/pgSQL function truss.runtime_owned_group_validate(uuid,boolean) line 93 at PERFORM
+SQL statement "SELECT truss.runtime_owned_group_validate(attempt.id,true)"
+PL/pgSQL function truss.object_group_finish(uuid) line 68 at PERFORM
+PL/pgSQL function truss.apply_group(bytea,bytea,bytea,text,text) line 15 at assignment
+
+----------------------------------------------------------------------
+Ran 1 test in 16.025s
+
+FAILED (failures=1)

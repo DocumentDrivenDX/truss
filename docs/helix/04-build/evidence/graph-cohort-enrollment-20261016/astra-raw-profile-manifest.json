@@ -1,0 +1,75 @@
+{
+  "files": {
+    "baseline-current-query-facts.py": {
+      "sha256": "95f60525bc3e2236e731a6b7669487c3c40d725fd345b4e0eb65612c57bc5844",
+      "bytes": 13516
+    },
+    "check.log": {
+      "sha256": "52bb9a6cace422d18edb5c66b73109e364c81db3579762f40650ed6769fc89c4",
+      "bytes": 728
+    },
+    "check.py": {
+      "sha256": "717520bbeb5b445091cd5ec92ceb01d8f3ff39ddbfa2ed854a1402d9203c47f0",
+      "bytes": 4421
+    },
+    "checks.json": {
+      "sha256": "41ec1bdaf8b7409562fcbca24fedd3bb1050822e7d4df22fe40dfb78c52313a0",
+      "bytes": 778
+    },
+    "packet/cohort-mutations-and-raw-profile-r2.log": {
+      "sha256": "8d77a8c10374f92efe607e73b595d213fd63c254de21329fbee0e534eadf3a6f",
+      "bytes": 519
+    },
+    "packet/cohort-mutations-and-raw-profile.log": {
+      "sha256": "c1e92594ae9c906d6910350bb54d2fc6d550e3c25ed5f594b3653ccdf361488f",
+      "bytes": 1389
+    },
+    "packet/manifest.json": {
+      "sha256": "33224a3ec12ac11dae449deacca1692146ca3e45079740b87a2b2290ea046eed",
+      "bytes": 790
+    },
+    "packet/native-cleanup.json": {
+      "sha256": "20175055a4ce70fbccde8a027cc1d39a5bb873cf5348bc6cdd8c08eec6a27bc6",
+      "bytes": 844
+    },
+    "packet/native-cohort-raw-profile-repair.log": {
+      "sha256": "122254179d9c8538d53ce12d7bed90ba0786f28ad407cf4fb07b27041467dc87",
+      "bytes": 1105
+    },
+    "packet/native-cohort-replay-authorized.log": {
+      "sha256": "a131095391db1fee4c5b9780a48c64d4c837f7f783b3559ae71518fd5edb0ec6",
+      "bytes": 6464
+    },
+    "packet/packages/python/src/truss/_current_query_facts.py": {
+      "sha256": "c56f435da709a51352e4661a6a0124d276765d39ed319551800ef721169564c4",
+      "bytes": 13870
+    },
+    "packet/packages/python/tests/test_current_disclosure_cohort.py": {
+      "sha256": "9ef35d3085f18766b9ae8140809a2d4859a794fdbc689501cd3213f90acc3248",
+      "bytes": 2077
+    },
+    "pure-tests.log": {
+      "sha256": "da577037cb8c5c647379422a750cc826b4306e25f77bf5efbcb6bedfa9c90ce5",
+      "bytes": 304
+    },
+    "review.json": {
+      "sha256": "f023be39a6b6288c5e5ab5062f44e3bf2cfc5f7f20021d04b680e9787cf36507",
+      "bytes": 3623
+    },
+    "review.txt": {
+      "sha256": "a2bcd24e03bc3612e80dc891f1dad8e009df2ea0a9706ff5d5058409611e0613",
+      "bytes": 333
+    },
+    "test-delta-audit.json": {
+      "sha256": "193c95829cb6169287f2594b83d74a6037c19203e05b62a11e44210eca7abb02",
+      "bytes": 349
+    }
+  },
+  "artifactCount": 16,
+  "totalBytes": 51110,
+  "excludes": [
+    "manifest.json",
+    "working/",
+    "__pycache__/"
+  ]
+}

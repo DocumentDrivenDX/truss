@@ -1,0 +1,19 @@
+test_original_update_inventories (__main__.Equivalence.test_original_update_inventories) ... ERROR
+test_batch_updates_preserve_keys_and_committed_values (test_owned_group_batch_native.OwnedGroupBatchTests.test_batch_updates_preserve_keys_and_committed_values) ... ok
+test_unique_updates_keep_trailing_noop_and_duplicate_order (test_owned_group_batch_native.OwnedGroupBatchTests.test_unique_updates_keep_trailing_noop_and_duplicate_order) ... ok
+
+======================================================================
+ERROR: test_original_update_inventories (__main__.Equivalence.test_original_update_inventories)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-main-integration-20261010/packages/python/tests/test_catalog_runtime_native.py", line 42, in tearDown
+    self.admin.execute('DROP ROLE consumer')
+  File "/private/tmp/truss-practical-performance-env/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.DependentObjectsStillExist: role "consumer" cannot be dropped because some objects depend on it
+DETAIL:  privileges for function buffer_compare(jsonb,jsonb)
+
+----------------------------------------------------------------------
+Ran 3 tests in 12.943s
+
+FAILED (errors=1)

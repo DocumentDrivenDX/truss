@@ -11,7 +11,7 @@ import psycopg
 from truss import Ok
 from truss.contracts import MapValue,TextValue,BooleanValue
 from truss.groups import CreateObject,CreateEdge,RootlessOwnership,AuthoredValue,AliasObjectReference,StoredObjectReference,NullOrderKey,GroupSuccess
-from truss._current_disclosure_facts import capture_current_disclosure_facts_with_cursor
+from truss._current_disclosure_facts import capture_current_disclosure_facts_with_cursor,verify_current_disclosure_capture_with_cursor
 from truss._current_query_pipe import CurrentQueryPipe
 from truss._security_catalog_assessment import capture_accepted_catalog
 import test_group_create_native as base
@@ -97,6 +97,33 @@ class NativeGraphCaptureTests(base.PublicCreateGroupTests):
                         with writer.transaction():writer.execute('LOCK TABLE ONLY truss.'+name+' IN ROW EXCLUSIVE MODE NOWAIT')
             lock_observations.append(stage)
         require_external_exclusion('captured')
+        closing_observations=[]
+        def require_closing(stage):
+            with patch('truss._current_disclosure_facts.capture_current_query_sources_with_cursor',return_value=supplied):
+                verify_current_disclosure_capture_with_cursor(cursor,captured,bun_executable=os.environ['TRUSS_BUN_EXECUTABLE'])
+            closing_observations.append(stage)
+        require_closing('original-capture')
+        assignment_rows=[r for r in captured.graph_rows if r[1]==refs['StaffAssignment'].relationship_id]
+        self.assertGreaterEqual(len(assignment_rows),2)
+        native_inventory=json.loads(assessment)['inventory']
+        active=next(p for p in native_inventory['properties'] if p['element']=='active' and p['retired_rev'] is None)
+        assignment=next(r for r in captured.rows if r[1]==str(active['type_id']))
+        mutations=[
+            ('edge-deletion','DELETE FROM truss.edge WHERE id=%s',(captured.graph_rows[0][0],)),
+            ('edge-version','UPDATE truss.edge SET ver=ver+1 WHERE id=%s',(captured.graph_rows[0][0],)),
+            ('typed-endpoint','UPDATE truss.edge SET target_id=%s WHERE id=%s',(assignment_rows[1][5],assignment_rows[0][0])),
+            ('object-version','UPDATE truss.object SET ver=ver+1 WHERE id=%s',(captured.rows[0][0],)),
+            ('non-key-value',"UPDATE truss.object SET props=pg_catalog.jsonb_set(props,ARRAY[%s,'value'],pg_catalog.to_jsonb(NOT ((props->%s->>'value')::boolean))) WHERE id=%s",(str(active['prop_id']),str(active['prop_id']),assignment[0])),
+        ]
+        for label,statement,parameters in mutations:
+            self.admin.execute('SAVEPOINT closing_population_control')
+            self.admin.execute(statement,parameters)
+            with patch('truss._current_disclosure_facts.capture_current_query_sources_with_cursor',return_value=supplied):
+                with self.subTest(closing=label),self.assertRaisesRegex(ValueError,'changed before closing'):
+                    verify_current_disclosure_capture_with_cursor(cursor,captured,bun_executable=os.environ['TRUSS_BUN_EXECUTABLE'])
+            self.admin.execute('ROLLBACK TO SAVEPOINT closing_population_control')
+            self.admin.execute('RELEASE SAVEPOINT closing_population_control')
+            require_closing(label+':restored')
         # Native home refusal and complete empty graph coverage are separate
         # diagnostic savepoint controls; no altered bytes leave this experiment.
         self.admin.execute('SAVEPOINT graph_home_control')
@@ -124,6 +151,7 @@ class NativeGraphCaptureTests(base.PublicCreateGroupTests):
                 require_external_exclusion(staff+':inspection')
                 inspected=json.loads(child.exchange(wire({'version':initial['version'],'kind':'inspect-native-disclosure','requestId':'inspect','sourceReceipt':receipt,'batch':decision['batch']}),source_receipt=receipt));self.assertEqual(inspected['kind'],'native-disclosure-inspected')
             self.assertTrue(child._cleanup_complete)
+            require_closing(staff+':after-original-inspection')
             observations.append({'subject':staff,'expected':expected,'decision':decision,'inspection':inspected})
-        (output/('native-graph-capture-'+case+'-result.json')).write_bytes(wire({'scope':'Actual public population, native fact/key/graph projection and original held UMF semantics; substituted source wrapper is diagnostic, no source admission/current authority/guarded release or case promotion.','bundleSha256':BUNDLE_SHA256,'case':case,'serverVersion':self.admin.info.server_version,'serverBuild':self.admin.execute('SELECT version()').fetchone()[0],'facts':len(captured.rows),'graphs':len(captured.graph_rows),'heldFactLockChecks':lock_observations,'nativeControls':['edge-RLS-refusal','complete-empty-coverage','own-mutation-changes-recapture','savepoint-restoration'],'sourceAssessmentSha256':hashlib.sha256(assessment).hexdigest(),'observations':observations}))
+        (output/('native-graph-capture-'+case+'-result.json')).write_bytes(wire({'scope':'Actual public population, native fact/key/graph projection and original held UMF semantics; substituted source wrapper is diagnostic, no source admission/current authority/guarded release or case promotion.','bundleSha256':BUNDLE_SHA256,'case':case,'serverVersion':self.admin.info.server_version,'serverBuild':self.admin.execute('SELECT version()').fetchone()[0],'facts':len(captured.rows),'graphs':len(captured.graph_rows),'heldFactLockChecks':lock_observations,'closingCaptureChecks':closing_observations,'closingMutationRefusals':[m[0] for m in mutations],'nativeControls':['edge-RLS-refusal','complete-empty-coverage','own-mutation-changes-recapture','savepoint-restoration'],'sourceAssessmentSha256':hashlib.sha256(assessment).hexdigest(),'observations':observations}))
         self.admin.rollback()
