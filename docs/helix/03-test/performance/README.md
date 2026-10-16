@@ -740,3 +740,9 @@ on both platforms. Linux stopped in final row custody validation; macOS stopped
 in creation-history property definition resolution. Both passed the other 17
 owned-graph-step cases. The checked-attempt reuse has not resolved the release
 blocker; no tag or publication followed.
+
+A subsequent two-read direct-path extraction trial also passed original CREATE:
+whole apply 4,278.0 ms and finish 1,448.4 ms against the same committed-runtime
+baseline above. That single observation does not establish a material gain;
+the trial was discarded, with runtime and manifest restored exactly. Further
+release attempts await a substantive change rather than another micro-optimization.
