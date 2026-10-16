@@ -662,6 +662,11 @@ BEGIN
   INSERT INTO truss.request_receipt(namespace_identity_utf8,request_id_utf8,original_writer_xid,original_writer_context_bytes,lifecycle_generation,payload_state,original_receipt_bytes)
   VALUES(ns,rk,attempt.writer_xid,convert_to(jsonb_build_object('profile','truss-object-group-writer/0.1','attemptId',attempt_id::text,
    'xid',attempt.writer_xid::text,'actorOid',attempt.actor_oid::text,'actor',session_user::text)::text,'UTF8'),0,'complete',receipt_bytes) RETURNING * INTO receipt;
+  IF NOT FOUND OR receipt.storage_row_id IS NULL
+   OR receipt.namespace_identity_utf8 IS DISTINCT FROM ns OR receipt.request_id_utf8 IS DISTINCT FROM rk
+   OR receipt.original_writer_xid IS DISTINCT FROM attempt.writer_xid OR receipt.payload_state IS DISTINCT FROM 'complete'
+   OR receipt.original_receipt_bytes IS DISTINCT FROM receipt_bytes THEN
+   RAISE EXCEPTION 'exact original request receipt required' USING ERRCODE='55000';END IF;
   UPDATE truss.request_receipt_route_guard SET generation=generation+1 WHERE namespace_sha256=sha256(ns) AND request_sha256=sha256(rk);
  END IF;
  UPDATE truss.runtime_object_attempt SET complete=true,receipt_id=receipt.storage_row_id,expected_receipt=CASE WHEN receipt.storage_row_id IS NOT NULL THEN to_jsonb(receipt) END,
@@ -711,18 +716,16 @@ BEGIN
   IF TG_OP='DELETE' THEN PERFORM truss.runtime_edge_validate(OLD.id,OLD.rel_type_id);ELSE PERFORM truss.runtime_edge_validate(NEW.id,NEW.rel_type_id);END IF;
  ELSIF TG_TABLE_NAME='runtime_edge_transition' THEN PERFORM truss.runtime_edge_validate(NEW.edge_id,NEW.rel_type_id);
  ELSE RAISE EXCEPTION 'registered mutation commit event required' USING ERRCODE='55000';END IF;
- -- Deferred row triggers all see the finished transaction, so the global check runs once.
- IF current_setting('truss.object_commit_checked',true) IS DISTINCT FROM '1' THEN
-  PERFORM set_config('truss.object_commit_checked','1',true);
-  PERFORM truss.runtime_graph_validate(false);
-  SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb) INTO actual FROM truss.journal j WHERE j.xid=pg_current_xact_id();
-  SELECT coalesce(jsonb_agg(value ORDER BY (value->>'at')::timestamptz,(value->>'seq')::bigint),'[]'::jsonb) INTO expected FROM (
-   SELECT e.value->'journal' value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e WHERE g.writer_xid=pg_current_xact_id()
-   UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
-   UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
-   UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()) e;
-  IF actual IS DISTINCT FROM expected THEN RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
- END IF;
+ -- Caller-controlled settings cannot authorize skipping integrity checks.
+ PERFORM truss.runtime_graph_validate(false);
+ -- Journal closure includes object and edge transitions.
+ SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb) INTO actual FROM truss.journal j WHERE j.xid=pg_current_xact_id();
+ SELECT coalesce(jsonb_agg(value ORDER BY (value->>'at')::timestamptz,(value->>'seq')::bigint),'[]'::jsonb) INTO expected FROM (
+  SELECT e.value->'journal' value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e WHERE g.writer_xid=pg_current_xact_id()
+  UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
+  UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
+  UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()) e;
+ IF actual IS DISTINCT FROM expected THEN RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
  RETURN NULL;
 END;
 $$;

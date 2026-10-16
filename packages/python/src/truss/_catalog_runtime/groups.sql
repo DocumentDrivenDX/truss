@@ -264,17 +264,15 @@ BEGIN
   IF actual_receipt IS DISTINCT FROM group_row.expected_receipt THEN
    RAISE EXCEPTION 'exact durable group receipt required' USING ERRCODE='55000'; END IF;
  END IF;
- IF current_setting('truss.create_journal_checked',true) IS DISTINCT FROM '1' THEN
-  PERFORM set_config('truss.create_journal_checked','1',true);
-  IF (SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb)
-      FROM truss.journal j WHERE j.xid=group_row.writer_xid)
-  IS DISTINCT FROM (SELECT coalesce(jsonb_agg(e.value ORDER BY (e.value->>'at')::timestamptz,(e.value->>'seq')::bigint),'[]'::jsonb) FROM (
-      SELECT e.value->'journal' AS value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e(value) WHERE g.writer_xid=group_row.writer_xid
-      UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
-      UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
-      UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid) e) THEN
-   RAISE EXCEPTION 'complete transaction create journal required' USING ERRCODE='55000'; END IF;
- END IF;
+ -- Caller-controlled settings cannot authorize skipping integrity checks.
+ IF (SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb)
+     FROM truss.journal j WHERE j.xid=group_row.writer_xid)
+ IS DISTINCT FROM (SELECT coalesce(jsonb_agg(e.value ORDER BY (e.value->>'at')::timestamptz,(e.value->>'seq')::bigint),'[]'::jsonb) FROM (
+     SELECT e.value->'journal' AS value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e(value) WHERE g.writer_xid=group_row.writer_xid
+     UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
+     UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
+     UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid) e) THEN
+  RAISE EXCEPTION 'complete transaction create journal required' USING ERRCODE='55000'; END IF;
  FOR member IN SELECT * FROM truss.runtime_create_member WHERE group_id=selected_group ORDER BY operation_index LOOP
   entry:=semantic->'results'->member.operation_index;
   IF (entry->'identity'->>'id')::bigint<>member.object_id OR (entry->'identity'->>'typeId')::int<>member.type_id THEN

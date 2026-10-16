@@ -75,7 +75,7 @@ class PsycopgHostNativeTests(unittest.TestCase):
             return cursor.fetchone()[0]
         return self.host._run_operation(transaction, execute)
 
-    def test_matching_timeout_uses_one_admission_probe_then_three_statements(self):
+    def test_matching_timeout_uses_one_probe_per_call_without_timeout_resets(self):
         self.host._timeout = 3000
         original = self.host._cursor
         queries = []
@@ -93,10 +93,24 @@ class PsycopgHostNativeTests(unittest.TestCase):
         self.assertFalse(any(isinstance(query, str) and query.startswith('SET LOCAL statement_timeout') for query in queries))
         queries.clear()
         self.assertEqual(self.scalar(transaction, 'SELECT 1::text'), Ok('1'))
-        self.assertEqual(len(queries), 3)
-        self.assertFalse(any(query == psycopg_host._IDENTITY_SQL for query in queries))
+        self.assertEqual(len(queries), 4)
+        self.assertEqual(sum(query == psycopg_host._IDENTITY_SQL for query in queries), 1)
         self.assertFalse(any(isinstance(query, str) and query.startswith('SET LOCAL statement_timeout') for query in queries))
         self.assertEqual(self.connection.execute('SHOW statement_timeout').fetchone(), ('3s',))
+
+    def test_host_timeout_change_between_calls_uses_budget_and_restores_current_value(self):
+        self.host._timeout = 3000
+        transaction = self.begin()
+        for milliseconds in (7000, 100, 0):
+            self.connection.execute(f'SET LOCAL statement_timeout={milliseconds}')
+            if milliseconds == 0:
+                # An unbounded host timeout is outside the admitted profile.
+                self.assertIsInstance(self.scalar(transaction, 'SELECT 1::text'), Error)
+                self.assertEqual(self.connection.execute('SHOW statement_timeout').fetchone(), ('0',))
+                continue
+            self.assertEqual(self.scalar(transaction, "SELECT current_setting('statement_timeout')"), Ok('3s'))
+            expected = '7s' if milliseconds == 7000 else '100ms'
+            self.assertEqual(self.connection.execute('SHOW statement_timeout').fetchone(), (expected,))
 
     def test_idle_refusal_does_not_begin(self):
         self.assertEqual(self.connection.info.transaction_status, pq.TransactionStatus.IDLE)

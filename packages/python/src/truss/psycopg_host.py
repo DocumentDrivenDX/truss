@@ -526,22 +526,13 @@ class PsycopgHost:
                 semantic_preflight = False
                 self._admission_satisfied = None
                 self._attempt_seen = None
-                live_pid = self._live_backend_pid()
-                if self._admitted is not None and (live_pid is None or self._admitted[0][0] != live_pid):
-                    self._admitted = None
-                # Adoption, a replaced backend, or a handle whose generation we have
-                # not admitted yet still reads pg_locks. A later call on that same
-                # generation rechecks inside its first statement.
-                need_probe = not (custody is not None and self._admitted is not None
-                                  and self._admitted[0] == custody.identity)
+                # Hosts may change session settings between completed calls. Read
+                # the current generation and timeout before setting the call budget;
+                # a cached timeout cannot establish either execution or restoration.
                 cursor.execute(sql.SQL('SAVEPOINT {}').format(name), prepare=False)
                 established = True
                 attempt.phase = 'savepoint'
-                if need_probe:
-                    before = self._apply_admission(self._observe(cursor), custody, None)
-                else:
-                    before = self._admitted
-                    if custody is not None: self._match(custody, before)
+                before = self._apply_admission(self._observe(cursor), custody, None)
                 deadline.check()
                 if not 1 <= int(before[2]) <= 60000:
                     raise ValueError('Host statement_timeout must be 1..60000 milliseconds')
