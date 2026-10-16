@@ -101,7 +101,7 @@ jobs:
         env:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_owned_objects_native.OwnedObjectTests test_owned_group_batch_native.OwnedGroupBatchTests test_journal_row_guard_native.JournalRowGuardTests test_prepared_plan_capture_native.PreparedPlanCaptureTests test_rootless_preparation_native.RootlessPreparationTests test_operation_result_slots_native.OperationResultSlotTests test_edge_authority_native.EdgeAuthorityTests test_final_edge_inventory_native.FinalEdgeInventoryTests
+        run: python -m unittest test_owned_objects_native.OwnedObjectTests test_owned_group_batch_native.OwnedGroupBatchTests test_journal_row_guard_native.JournalRowGuardTests test_prepared_plan_capture_native.PreparedPlanCaptureTests test_query_export_sources_native.QueryExportSourceTests test_rootless_preparation_native.RootlessPreparationTests test_operation_result_slots_native.OperationResultSlotTests test_edge_authority_native.EdgeAuthorityTests test_final_edge_inventory_native.FinalEdgeInventoryTests
       - name: Upgrade the published native68 predecessor
         env:
           GH_TOKEN: ${{ github.token }}

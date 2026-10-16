@@ -769,3 +769,16 @@ capacity/commit/replay/readback, ordered batches, owned graphs, immutable captur
 published native68 upgrade routes and a same-group create/delete followed by
 committed historical reconstruction. Astra Ultra cleared the plan and final
 source; generator `--check` verifies owner assembly and all runtime hashes.
+
+### Full functional release steps pass; original capacity remains open
+
+[Run 38980177061](https://github.com/DocumentDrivenDX/truss/actions/runs/38980177061)
+on main 8d4f341c passed packaging and every preceding installed functional,
+query, catalog-evolution and predecessor-upgrade step on Linux and macOS. The
+final unchanged capacity suite passed its two refusal/rollback cases but timed
+out original 1,024-CREATE on both platforms. Linux stopped in final physical-row
+attempt custody; macOS stopped in creation-transition validation's prepared
+attempt check. Publication was skipped; no tag followed. This does not establish
+hosted coverage of native export sources added later in 21346602. Their two
+source cases are now selected by the existing installed owned-graph release step;
+protection and populated-upgrade assertions remain in their existing selectors.
