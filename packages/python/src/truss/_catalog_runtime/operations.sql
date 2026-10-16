@@ -29,8 +29,18 @@ BEGIN
    pin:=creation->>'typeDefinitionPin';
   ELSE RAISE EXCEPTION 'stored or prior alias target required' USING ERRCODE='22023';END IF;
  ELSE RAISE EXCEPTION 'selected object operation required' USING ERRCODE='0A000';END IF;
- SELECT t.* INTO STRICT selected FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p
-  WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND p.definition_pin=pin;
+ -- Stored targets already carry their exact native type coordinate. Resolve
+ -- that candidate before deriving pins for unrelated catalog records.
+ IF identity IS NOT NULL THEN
+  SELECT t.* INTO selected FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p
+   WHERE t.type_id::text=identity->>'typeId' AND t.kind='record' AND NOT t.provisional
+    AND t.retired_rev IS NULL AND p.definition_pin=pin;
+ END IF;
+ IF selected.type_id IS NULL THEN
+  -- Preserve original CREATE/alias lookup and stored-identity refusal precedence.
+  SELECT t.* INTO STRICT selected FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p
+   WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND p.definition_pin=pin;
+ END IF;
  IF identity IS NOT NULL AND (identity->>'typeId' IS DISTINCT FROM selected.type_id::text
   OR identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module)
   OR identity-ARRAY['id','typeId','definitionPin','owner']<>'{}'::jsonb
