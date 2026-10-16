@@ -543,3 +543,13 @@ corrected source. Initial qualification failed on PL/pgSQL local-variable names;
 explicit block labels corrected it before both successful runs. Local suite
 elapsed times do not prove speedup; installed-wheel deadline qualification remains
 open. No deadline extension or no-op workload substitution is used.
+
+Installed-wheel run 38884918533 on main 4b596d8f still fails both Linux and macOS
+with 57014 during the complete 1,024-create call; the final-operation fault test
+also expires before reaching its injected P9999. Packaging passes. A disposable
+local built-in-statistics run of that same commit completes all 1,024 requested
+creates in 7,847.54 ms and caller COMMIT in 4,803.29 ms. Row validation accounts
+for 3,022.87 ms self time over 3,072 calls; creation-leaf self time is 1,928.43 ms
+over 1,024 calls. These shared-host instrumented observations do not establish a
+causal improvement or release-runner qualification. The original statement and
+whole-operation deadlines and the complete positive/final-fault workloads remain.
