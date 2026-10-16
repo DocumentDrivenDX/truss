@@ -15,15 +15,20 @@ for name,receipt in reviews.items():
   pins=json.loads(z.read('manifest.json'));assert len(pins)==receipt['artifacts']
   for path,pin in pins.items():assert meta(z.read(path))==pin,(name,path)
   artifacts+=len(pins)
+status=json.loads((root/'postrebase-review-status.json').read_text());assert status['reviewFinalized'] is False
+with zipfile.ZipFile(root/'postrebase-astra-unfinished.zip') as z:
+ partial=json.loads(z.read('root-generated-partial-manifest.json'));assert len(partial)==status['partialArtifacts']
+ for name,pin in partial.items():assert meta(z.read(name))==pin,('unfinished-review',name)
 native_pins=0
-for epoch in ('r1','r3','r4'):
+for epoch in ('r1','r3','r4','postrebase'):
  p=root/('native-'+epoch);pins=json.loads((p/'source-before.json').read_text())
  with zipfile.ZipFile(p/'source-inputs.zip') as z:
   for name,pin in pins.items():assert meta(z.read(name))==pin,(epoch,name)
  native_pins+=len(pins)
-p=root/'wheel';receipt=json.loads((p/'wheel-correspondence.json').read_text());wheel=next(p.glob('*.whl'));assert meta(wheel.read_bytes())['sha256']==receipt['wheelSha256']
-source=json.loads((p/'source-before.json').read_text());expected={n.removeprefix('src/') for n in source if n.startswith('src/truss/')}
-with zipfile.ZipFile(wheel) as z:
- assert {n for n in z.namelist() if n.startswith('truss/') and not n.endswith('/')}==expected
- for name in expected:assert meta(z.read(name))==source['src/'+name],name
+for wheel_epoch in ('wheel','wheel-postrebase'):
+ p=root/wheel_epoch;receipt=json.loads((p/'wheel-correspondence.json').read_text());wheel=next(p.glob('*.whl'));assert meta(wheel.read_bytes())['sha256']==receipt['wheelSha256']
+ source=json.loads((p/'source-before.json').read_text());expected={n.removeprefix('src/') for n in source if n.startswith('src/truss/')}
+ with zipfile.ZipFile(wheel) as z:
+  assert {n for n in z.namelist() if n.startswith('truss/') and not n.endswith('/')}==expected
+  for name in expected:assert meta(z.read(name))==source['src/'+name],name
 print(json.dumps({'passed':True,'retainedFiles':len(manifest),'completeReviewerArtifacts':artifacts,'nativeSourcePins':native_pins,'wheelMembers':len(expected),'scope':'Stored-byte audit only; not fresh tests, native execution, authority or acceptance promotion.'}))

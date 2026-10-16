@@ -1,0 +1,16 @@
+{
+  "reviewFinalized": false,
+  "terminalReason": "Astra agent account usage limit before final review.json/manifest.json were produced",
+  "completedPartialOutputs": {
+    "audit": true,
+    "sourcePins": 1371,
+    "independentReportChecks": 17,
+    "installedTests": 42
+  },
+  "partialArtifacts": 1421,
+  "archive": {
+    "sha256": "88c5eecbd8ef408a352d31fd86fe3a1dfd08ea6594be73f6395f982528343d85",
+    "bytes": 8356384
+  },
+  "qualification": "Partial reviewer work retained verbatim with root-generated artifact manifest. Not a completed independent Astra review or SQL replay. Root independently verifies source/native/archive/wheel/Git correspondence; all production changes already have completed Astra reviews."
+}

@@ -1,0 +1,14 @@
+{
+  "capturedSourceCommit": "b077dd3eea44b8ffbf76b8b386112a76903686da",
+  "parent": "318d3edaddf3900d2e198d95d2590228f0a9a059",
+  "inheritedNativeAssetsPreserved": true,
+  "newNativeCampaign": "native-postrebase/campaign.json",
+  "newWheel": "wheel-postrebase/wheel-correspondence.json",
+  "selectedInstalledTests": 42,
+  "defaultInstalledPass": 11,
+  "defaultInstalledSkip": 3,
+  "boundaryImports": 1491,
+  "authority": false,
+  "acceptanceCasesPromoted": 0,
+  "qualification": "Source/wheel/native component only at captured parent318d+reviewed source delta. Broader development-main capacity CI failure remains open; no complete engine/release/security claim."
+}

@@ -8153,3 +8153,20 @@ authenticated source/Subject/current continuity and guarded release remain
 required. NSB-T01/T04/T05/T06/T09/T13/T14 prerequisites advance only; all original
 Truss132/shared158 cases/34criteria remain required,45implemented/113missing.
 No acceptance case is promoted.
+
+
+Postrebase qualification preserves parent318d3eda's native SQL and dependency
+bytes. The actual base-package join passes1native/4.437s with1371pins and verified
+PID72013/root cleanup; fresh wheel06e1cd53 matches501 members,42installed tests
+pass, default11pass/3skip and1491imports pass. Historical cf8/stage receipts are
+not repinned. This component does not close the broader development-main capacity
+CI failure or establish native authority, release qualification or a new case pass.
+
+
+The additional postrebase Astra task completed source/report/wheel/test subchecks
+but hit account usage limits before final review/manifest issuance. Its unfinished
+outputs are retained with an explicitly root-generated partial manifest, not a
+completed review claim. Root independently verifies all1371 captured inputs,
+1359 base files against Git/current bytes, both reviewed production files and
+501 wheel members. No production implementation changed after the completed
+reviews; the final receipts/checkpoint wrapper is separately byte-audited.

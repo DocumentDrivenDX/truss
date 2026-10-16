@@ -1,0 +1,2010 @@
+{
+  "pyproject.toml": {
+    "sha256": "97d3f81fb96eb3d9c51a379ebea8c977ef0f738c6d552e236ffef4ceacf1d67f",
+    "bytes": 1982
+  },
+  "src/truss/_security_catalog_source_installation.py": {
+    "sha256": "721702c4ba00c979e84080fd69a4cbf9c9f1c592c59e2d9557cc766695198952",
+    "bytes": 10537
+  },
+  "src/truss/_security_relationship_source.py": {
+    "sha256": "533cedea20a12bc7bb4814cc9fb3db881e3e106f7a62eed3b0e7a25ff18fc723",
+    "bytes": 5028
+  },
+  "src/truss/_native_model_correspondence.py": {
+    "sha256": "25245cb52727eb9014a09322ec763dcd838d2729272e5dbe9d0c3f37c95a2618",
+    "bytes": 10319
+  },
+  "src/truss/_native_string_request.py": {
+    "sha256": "07029039d9ecae0739491ac70f00cbc7ee455be673480d1b23e30c0f4923e2c1",
+    "bytes": 2922
+  },
+  "src/truss/_operation_ordinal.py": {
+    "sha256": "8437efb0b6fd6581b745e3bcf80c0e310cd79ba584ed9daf27ce6db94da233e6",
+    "bytes": 6131
+  },
+  "src/truss/_current_disclosure_pipe.py": {
+    "sha256": "02525c9ebb7eb288619ac5a2db8493c0ac601aa9a77d3b2fca42284d520aaec7",
+    "bytes": 1032
+  },
+  "src/truss/_native_source_census.py": {
+    "sha256": "24c125f443a05d8166ca5d895d861f9c08c8c9030cc3c70c78d16a389a43fd53",
+    "bytes": 9706
+  },
+  "src/truss/_security_guarded_source.py": {
+    "sha256": "d527bdce188fdb8849fe4dd2b88bc897abff049030f5762c99c60ee23589b01f",
+    "bytes": 3293
+  },
+  "src/truss/_host_contracts.py": {
+    "sha256": "a120a9a7465aeb0936cd81be52ec7f7d49e59befe0de9002f82e1a9221ed6c94",
+    "bytes": 435
+  },
+  "src/truss/_scram_preparation_login.py": {
+    "sha256": "57f8088e3976d302f9e7f221cebb0853bf788d681e195c8e29d0774f746c0c77",
+    "bytes": 3203
+  },
+  "src/truss/catalog_runtime.py": {
+    "sha256": "b2b6613a6db3197d7d2876e4e36122c3a7008fa4fb2d99d4233d5c79534fe1d5",
+    "bytes": 191250
+  },
+  "src/truss/_operation_arbitration.py": {
+    "sha256": "a7ff26d17feccb15885ae18a0ba7a0178cbb1e86de3a15de055cd51159a021bc",
+    "bytes": 15366
+  },
+  "src/truss/_host_call_recovery.py": {
+    "sha256": "90e844ef2d3e061186fe96707b01ea1ff8067b06f59420fdcf68e7a05d36b4fd",
+    "bytes": 7176
+  },
+  "src/truss/_current_disclosure_evaluation.py": {
+    "sha256": "ccca0c6b7ff0873fd25f532ab65fca640b028ee6da87664f45700986d40a2a59",
+    "bytes": 6705
+  },
+  "src/truss/_current_query_subjects.py": {
+    "sha256": "05ede4253384d963e6785c4a319b81b59ff8c7c2134bba69b8d614ecca1f0365",
+    "bytes": 18266
+  },
+  "src/truss/_query_runtime.py": {
+    "sha256": "4c9a1f4f680728e99266ae099aadf9e31b09c467b757cb373001447ada40b248",
+    "bytes": 25852
+  },
+  "src/truss/_security_mapping.py": {
+    "sha256": "8a9af51af8daa5aabb43e3025bbdb254f813e9aa3cdad9dc0007aa6933d53795",
+    "bytes": 12599
+  },
+  "src/truss/_startup_custody.py": {
+    "sha256": "5cb7426701c8f1b831d1dc4dff635935dab3284a9672cae49d49f36b9f0b5061",
+    "bytes": 9260
+  },
+  "src/truss/_row_operation_custody.py": {
+    "sha256": "1783d3bccfae06526f3be9149622e7f4ae9afd0cd833a7905e7a8b27300a0445",
+    "bytes": 4986
+  },
+  "src/truss/_security_data_writer.py": {
+    "sha256": "007b21091cc79823eeb215284f5dc00a18dcb3dcee836f82e85df1c0e7ad35a6",
+    "bytes": 8362
+  },
+  "src/truss/weft.py": {
+    "sha256": "331af0ce6b2f974f7d8ba69c1da90825dfa92c7e57a06cec5aed90a3ec4cd3be",
+    "bytes": 9258
+  },
+  "src/truss/_native_bootstrap.py": {
+    "sha256": "2d8167009e179816473c7c5fb384888ca1164043d31c8e6d7733974973e03711",
+    "bytes": 8509
+  },
+  "src/truss/execution.py": {
+    "sha256": "6a9dc024bb0c31fcb5bbd2d07ce11c6795d9ae8afc8356a3ae7bf0ef42834c54",
+    "bytes": 3505
+  },
+  "src/truss/_receipt_position.py": {
+    "sha256": "e7c42049947c4bda44c0ac9e62e23b73143c6129f07f9ee889ef186364f19eba",
+    "bytes": 3394
+  },
+  "src/truss/_security_graph_source.py": {
+    "sha256": "835f80343e55fab4039bb65bb50d108bef79f518f3bc9234ecee8bdb84641234",
+    "bytes": 5735
+  },
+  "src/truss/_current_query_stage.py": {
+    "sha256": "781416cbcd80b8875fb77ac847822e2614acd69b17a8c629211b5a5f7b5e9f22",
+    "bytes": 24365
+  },
+  "src/truss/_native_fresh_epoch_capture.py": {
+    "sha256": "b9d3db706d87435c65759c10f0c7ca012e562241eb038a8c70b77fbd4cd29653",
+    "bytes": 10932
+  },
+  "src/truss/_action_authority_observation.py": {
+    "sha256": "ca1201e59dcd9be272a69cc9354d4f6ca7e0fc8d4b557dea8e1c0397423ac471",
+    "bytes": 6925
+  },
+  "src/truss/_security_publication_registration.py": {
+    "sha256": "0d4440e56e6bae31cfa7b24ba901d554c2296522a9d504526ae082bb5ea62f02",
+    "bytes": 5128
+  },
+  "src/truss/_security_home_installation.py": {
+    "sha256": "a2119d47a23e0833bfc91aed2bf86211578102b3083c59a0699bae4d3c4787fa",
+    "bytes": 7320
+  },
+  "src/truss/query.py": {
+    "sha256": "c757742657a876a67c9698541e77e16116080396a20855b477663edf7eaf344e",
+    "bytes": 2240
+  },
+  "src/truss/current_query.py": {
+    "sha256": "174e860eea2b41a8c0d9cf37479b56f1c61e116da108f1caa3a148f93180cce9",
+    "bytes": 3023
+  },
+  "src/truss/_current_query_runtime.py": {
+    "sha256": "bfaf4d084079fc7cfded350bf7c5372faa89ad47a2dd4e88e8a2c6f41f93e345",
+    "bytes": 15524
+  },
+  "src/truss/edge_read.py": {
+    "sha256": "cf43c3bb4338752667e591a51ff202f997fbfc3d84eb53e4935a714a978a98f1",
+    "bytes": 1198
+  },
+  "src/truss/_umf_keys08_release.py": {
+    "sha256": "f58231062f722639dd9f21f4e74cef718489d8eab426c9cc422d10835a6fd75e",
+    "bytes": 155
+  },
+  "src/truss/_security_relational_source.py": {
+    "sha256": "72ac031c18d0e24f13f154f539e65e42cfb1b52df347264049c0ac7f02acf611",
+    "bytes": 1277
+  },
+  "src/truss/_security_authority_change.py": {
+    "sha256": "51d037dbc875b452e8dbdb6bfebd3ec08ed34d942e1f5691301931d6022b1cb8",
+    "bytes": 5831
+  },
+  "src/truss/_installation_statement_release.py": {
+    "sha256": "298d4ddd0435177d63af5d6216aa8e4c29c1237fd549e1c56180efd6e40c5f68",
+    "bytes": 260
+  },
+  "src/truss/_installation_metadata.py": {
+    "sha256": "6fe95ecfd11907ef9b4bd61d7eeec59af22d7238808d5ab26ce6ad02a22e8be6",
+    "bytes": 11359
+  },
+  "src/truss/_native_cancellation.py": {
+    "sha256": "2bc533da73c0e8727945df2a539d4494636c5028492597b2dd3ee4c9161835d3",
+    "bytes": 10048
+  },
+  "src/truss/_native_transactions.py": {
+    "sha256": "ae5d9a851bb047ee0ec2cf608264b008ded275b16e06dc054e5caf65b885d570",
+    "bytes": 27518
+  },
+  "src/truss/host.py": {
+    "sha256": "783ad597b055bf29efffa9c7faec79a999db22a8fea6c70e580feb99af4dfa5a",
+    "bytes": 6254
+  },
+  "src/truss/_catalog_owner_evidence.py": {
+    "sha256": "2faf70282b62c4a998193a04afeac08a0d80a071ae6d0c80e0a0996450d9fb62",
+    "bytes": 6516
+  },
+  "src/truss/traversal.py": {
+    "sha256": "b2284d9507b2ab79cbb6a9c00d6af2d4d9bc3868523e61de2843b5c1b09d7f53",
+    "bytes": 1088
+  },
+  "src/truss/_current_query_computation.py": {
+    "sha256": "df9c6dac5dac6a51bd46772c1b1335162c3fb4a466996c04311b73ba1c098daa",
+    "bytes": 2126
+  },
+  "src/truss/_security_graph_subject_installation.py": {
+    "sha256": "af97889706f118ed32b37a83a431d4693ee73ca560af3060f6756bc590f64589",
+    "bytes": 22690
+  },
+  "src/truss/object_read.py": {
+    "sha256": "c3e235b4357dc273ded2e19f273f4b65a098d9f3a91ae53f62a71f51f326b498",
+    "bytes": 3817
+  },
+  "src/truss/_native_catalog_capture.py": {
+    "sha256": "a5ca9ba5df34441b609a64f5c666a30b6fd394cc0f9158052371ba22a5d2fb11",
+    "bytes": 6657
+  },
+  "src/truss/_catalog_installation.py": {
+    "sha256": "8ab52855a3e7bbf358f09b1984f7f9b3ba43f492ebdea0c4ef4cbc371a31ae5b",
+    "bytes": 21123
+  },
+  "src/truss/installation.py": {
+    "sha256": "113cc73c35e8f52db19a341ee4fcdfd5710f682a9398a647f2b6f4f4f922f754",
+    "bytes": 4321
+  },
+  "src/truss/catalog_results.py": {
+    "sha256": "fe560f87c932a263af2a9c47caacab87f424417431b58a2297659c9d29ee3b14",
+    "bytes": 1848
+  },
+  "src/truss/_operation_admission.py": {
+    "sha256": "f96462208c14230670370d0b12f9b5d38ef1c20861175bcab8777c2c687dbb30",
+    "bytes": 4067
+  },
+  "src/truss/local_runtime.py": {
+    "sha256": "271049ba5356477f472a57b4e424a8e2bbf01e5d1d995e563ce200a3bae42ac1",
+    "bytes": 6085
+  },
+  "src/truss/_catalog_support.py": {
+    "sha256": "c7305152b0552cd5bb4ae29873eb8aa8a49b64fbd69c1b5bad1eda07fb4f95bb",
+    "bytes": 36247
+  },
+  "src/truss/_report_schema.py": {
+    "sha256": "47b8803a730d120160af85e438a5a47e7b1c47d71f4040d4db7492a3b4e49075",
+    "bytes": 1423
+  },
+  "src/truss/_installation_definition_release.py": {
+    "sha256": "6b7a9e956451c97c4392f22a30d18215e017a7d526eca4d901aba89d9227c40d",
+    "bytes": 259
+  },
+  "src/truss/_adoption_cancellation.py": {
+    "sha256": "3fbce34b38844251e2b7a4a52bfa21086786f3a04d4f1bf3d132f45f3457088c",
+    "bytes": 1306
+  },
+  "src/truss/_owner_evidence_json.py": {
+    "sha256": "7552329c1143f71cc5a620032841256fd9d17400cb0ced6f5079875f04467670",
+    "bytes": 3562
+  },
+  "src/truss/_native_pg8000.py": {
+    "sha256": "4b936f14c16f2ee0b817f1b1457e542a112056523899efe61c72698a4f43c5d6",
+    "bytes": 24197
+  },
+  "src/truss/_native_operation.py": {
+    "sha256": "ef9490cc580e6681bfd285fb75dcfd6f67331254ac9b457fabc78483844450d6",
+    "bytes": 26329
+  },
+  "src/truss/_directory_resources.py": {
+    "sha256": "1c3bff1ec23e9d241b710188223539adfdf896a31601c6ce5d46f46d2bc0ab48",
+    "bytes": 2747
+  },
+  "src/truss/_security_graph_epoch_read.py": {
+    "sha256": "436f241859b1876b5b9ed6927ea63687c9c1f6823937c470b560c8c1a5d98345",
+    "bytes": 16766
+  },
+  "src/truss/_catalog_view_build.py": {
+    "sha256": "55a5d714aba1dd93eb95e41256a7952315ea99204f6f2f42b5d4312256ee1dd1",
+    "bytes": 10789
+  },
+  "src/truss/_action_role_installation.py": {
+    "sha256": "7d4ec93222fc58c81280d02830c2bff62a48474cd499bb86785228c38bb6d9e8",
+    "bytes": 11117
+  },
+  "src/truss/_native_operation_ordinals.py": {
+    "sha256": "f6bab5346a52f10fc18bc717a2b6fb6fb2b0f5c695a55324570859885069073d",
+    "bytes": 21750
+  },
+  "src/truss/_installation_resources.py": {
+    "sha256": "c0a6cd34a82b5ce06c6d4806433c3cb4cb195fd5a95f3cab56d5e1e3f12abd1d",
+    "bytes": 7578
+  },
+  "src/truss/engine_import.py": {
+    "sha256": "b537380d15254d2374a8397fabfee32aede62fd3e2609cda8ee599e87edf3b72",
+    "bytes": 10077
+  },
+  "src/truss/_current_query_evaluation.py": {
+    "sha256": "955fe5eb75d0f12a6ff6c3e57e25d963f38f1edeecda0ea28be470ae34a964d9",
+    "bytes": 8147
+  },
+  "src/truss/capability_contracts.py": {
+    "sha256": "01188959fbad570157d95b2e6a926a8aec270cc0fb64631701c781a680dc9f39",
+    "bytes": 9319
+  },
+  "src/truss/receipt_visibility.py": {
+    "sha256": "77e29ae770c85a9d37a53a94947b38144883e41ef5b7e107bfabe705d1c6ef5f",
+    "bytes": 969
+  },
+  "src/truss/_borrowed_host.py": {
+    "sha256": "45e5de0609a73d0d4a2a88c48754095ca22a6453826333eb93a573b8a88c0ab9",
+    "bytes": 9664
+  },
+  "src/truss/__init__.py": {
+    "sha256": "9ea921a73a0fdede86c3bccaad42c547514d950074fe8e3f5225923bf1f7d376",
+    "bytes": 8828
+  },
+  "src/truss/_security_catalog_assessment.py": {
+    "sha256": "252bcdb5443bd6db0051b2a3b7755cbf2e3f89add3745d73c19136ec9343b30f",
+    "bytes": 8365
+  },
+  "src/truss/_security_catalog_subject_installation.py": {
+    "sha256": "d71beb0bc4323ea51bdadad7d1ab5ce08f67ebf26434c3e7b6eec913db8b0444",
+    "bytes": 23110
+  },
+  "src/truss/_preparation_sources_release.py": {
+    "sha256": "87d68963f9931cdd73d0eda1a2a1f9d54bb69925b9c0fadce673fc3ee5d8231a",
+    "bytes": 153
+  },
+  "src/truss/_current_disclosure_facts.py": {
+    "sha256": "b4a85320574bc2a3481ca53eeed53acbb6bcb7eea34f7424befef273513a5550",
+    "bytes": 23650
+  },
+  "src/truss/_current_disclosure_session.py": {
+    "sha256": "9be63de347b6cdd2e89bc767bb8c5ebae4e52fec709aeb356af763ddd16eeebe",
+    "bytes": 3756
+  },
+  "src/truss/_current_disclosure_wire.py": {
+    "sha256": "bcf748ea8cbdb2aacdb6f9416700b3b055f4937f4ba9c67b45e1f5aa8d8bd63c",
+    "bytes": 4028
+  },
+  "src/truss/_bulk_set_values.py": {
+    "sha256": "9f3b9f38ced33cda378698081e0530c23c6b04e0d373d121f9e4d78f4148d95c",
+    "bytes": 5414
+  },
+  "src/truss/feed.py": {
+    "sha256": "7790a6e6d60bb40be7c1658c5a3662f2f8f7dfff96c6607c65f92355b8c9746c",
+    "bytes": 2360
+  },
+  "src/truss/_security_catalog_read_cut_installation.py": {
+    "sha256": "d040e078e782f3dc53b641c5f9ec8892b8231b0382ad1438a0c7d879c04bc159",
+    "bytes": 9526
+  },
+  "src/truss/_security_fact_coverage.py": {
+    "sha256": "50bfd13be6b2ce0f82cc1e0d0ceffd2bc192020b2d4f5a96eaa27b72f2f34385",
+    "bytes": 5260
+  },
+  "src/truss/_native_admission_capture.py": {
+    "sha256": "7b7604c3c2e1e61655c29b155ed489adc6ecc0d5cf76f6dd8afb015dc5473e5f",
+    "bytes": 7413
+  },
+  "src/truss/_catalog_report_semantics.py": {
+    "sha256": "74b0c5883b4006886a870a0c1fe0a3480cade46ed077ec1c0e70d7af1a765652",
+    "bytes": 7437
+  },
+  "src/truss/_psycopg_dependency_fact_cut.py": {
+    "sha256": "23c3171a3dcf19518cc09e32e51bf343e3c3a6f70e3aed335d63da344663b59c",
+    "bytes": 15727
+  },
+  "src/truss/_row_operation_context.py": {
+    "sha256": "aeaa86163233a597c554f977d3c82badcbf8290a336e47b5e1ff8c64c66794ca",
+    "bytes": 3743
+  },
+  "src/truss/_acceptance_json.py": {
+    "sha256": "91595c9a941f73dc11068797bb0e24a94ab45e0f5e9908a151d2dd4ffc8d6a18",
+    "bytes": 5807
+  },
+  "src/truss/_preparation_catalog_cut.py": {
+    "sha256": "38005401c253f93cc3bc801574eb7a9b79f9ad94da08dc773bbeb8cae2d027dd",
+    "bytes": 10031
+  },
+  "src/truss/groups.py": {
+    "sha256": "096ede304dfb532fc7adf6f5fde3fc3d711771d9d7c2a37eac82978eb955bbe2",
+    "bytes": 17874
+  },
+  "src/truss/current_disclosure.py": {
+    "sha256": "987521cc0de2ef9942b8ea3f124e4ab23ef10ff72b3eb7e3bc021a8e960ec06e",
+    "bytes": 2050
+  },
+  "src/truss/_current_query_pipe.py": {
+    "sha256": "2a40be15e14cc524332d72f6f41b038be3fc4d7f3d1ba94394e7649a8cfd05a0",
+    "bytes": 8897
+  },
+  "src/truss/_row_registry_correspondence.py": {
+    "sha256": "f0229b5032aa1801dba1cf85ddf0d6be84a087baf1f51c9482475a5b1e6c2282",
+    "bytes": 7929
+  },
+  "src/truss/_native_ingress_deadline.py": {
+    "sha256": "fe29cffb4040ee57ff2e107e3b008e1d56b97c6f561261d5be289d3b1d133651",
+    "bytes": 3817
+  },
+  "src/truss/_catalog_source_reference.py": {
+    "sha256": "66efae0a35024994b75613d52881859baf2001148a26d4d06ce99fc500a33a8e",
+    "bytes": 2528
+  },
+  "src/truss/_row_image_capture.py": {
+    "sha256": "377bb631b3dd939436dc89c50b6ca4f188a99e5352e8a18d8f6a30037f593125",
+    "bytes": 2514
+  },
+  "src/truss/imports.py": {
+    "sha256": "740123b78b28129a3c476ee23a7b0d7f47236711f147c00368c649aa4ea3aaa1",
+    "bytes": 14293
+  },
+  "src/truss/_security_publication_settlement.py": {
+    "sha256": "4dfd1ebf553bce839eeafeab12ad257ef2d7e3b6d0124c234b573976b49eded6",
+    "bytes": 5032
+  },
+  "src/truss/_native_admission_request.py": {
+    "sha256": "77282e24877e1f93a0afb04fa88840c8766195969ddc6986f615fd04c7645f27",
+    "bytes": 5479
+  },
+  "src/truss/catalog_report_sources.py": {
+    "sha256": "8d4e2bd080551799f05d5555d4b504bcf5ba95b9e4161e239f150a57967b2f36",
+    "bytes": 4452
+  },
+  "src/truss/_security_relationship_epoch_read.py": {
+    "sha256": "8d71ddf5425453b326e8f3e2877168b02f53f066b9b7f4f49a897919be4a8148",
+    "bytes": 16835
+  },
+  "src/truss/_construction_recovery.py": {
+    "sha256": "647a977b46527aebc20eb31e6515f6903c24ea16ca001f39e62ac0c864d892b9",
+    "bytes": 9534
+  },
+  "src/truss/_security_source_epoch_installation.py": {
+    "sha256": "42a39605bf2bbb62bada55ffe9d7ef76a8c7b5b4c6e333b088c10afea4017e20",
+    "bytes": 10556
+  },
+  "src/truss/import_runtime.py": {
+    "sha256": "ab2b9021cfc41a42ddd45f5f5508b3a81546559a407cb6dfd1bbfc3880cf039f",
+    "bytes": 1610
+  },
+  "src/truss/_security_catalog_subject_helpers.py": {
+    "sha256": "5927f9f08838dfc583b5e9986a596a56f20999997dc73d1e9949ad2e8104db1d",
+    "bytes": 5048
+  },
+  "src/truss/_preparation_selection.py": {
+    "sha256": "afe00a79ab295a677ed2a7144f7008f0b963e368acb78b287d1afa55f8a2495f",
+    "bytes": 8177
+  },
+  "src/truss/_native_result_custody.py": {
+    "sha256": "2727ec8a7d44ab15b64c925b0dbd2b4e115a77704483de394f3ac52a8cb69190",
+    "bytes": 19862
+  },
+  "src/truss/_current_query_originals.py": {
+    "sha256": "9a7b78ed87d5cccf5b7ad611cc1709947343372f28630f0ca7b3fb7b9cb059bf",
+    "bytes": 14366
+  },
+  "src/truss/_catalog_report.py": {
+    "sha256": "802d04a4b8eed2da03e8ff957009ccfd5a3ce68792e98f5655dfebf8bb258dd3",
+    "bytes": 13062
+  },
+  "src/truss/catalog_view.py": {
+    "sha256": "83177df450c654e555f8395ed19ec07aa86d2369d04e86c2d7f7d95b207676b5",
+    "bytes": 5160
+  },
+  "src/truss/_security_preparation_authority.py": {
+    "sha256": "c7a4f8105398370544f4d2e34c2c8d5a523aa3004b3745cb4198868f0f9ac4c3",
+    "bytes": 17991
+  },
+  "src/truss/_native_source_descriptor.py": {
+    "sha256": "092b3580c2ba4c185238e2d5def47d6ca3b8488897e2124e9fb0a86e71239589",
+    "bytes": 7039
+  },
+  "src/truss/_security_catalog_mapping.py": {
+    "sha256": "0a9740e62910b4684a1d50131e7291c2cd23cc908df586e68a91d7b9a705a57f",
+    "bytes": 6698
+  },
+  "src/truss/_row_image.py": {
+    "sha256": "0c793edbd8c45e440511ffbd2ac7e344c47be80f85ee28bf0164ce6e1f073df9",
+    "bytes": 4200
+  },
+  "src/truss/_host_execution.py": {
+    "sha256": "211dcc53cea6ceb295511c3ce0b36e62a19fb6aa2977ce44eae401331a800fbb",
+    "bytes": 15622
+  },
+  "src/truss/_catalog_staging.py": {
+    "sha256": "720f8bb35214832e2ce40ffd7999f08f883ea5476ed70e18beff3197dd917ee0",
+    "bytes": 9421
+  },
+  "src/truss/_native_arbitration.py": {
+    "sha256": "5a777dad86a32ad7c1504609eff4111bce6f849027c64a9bd0edce7cee89192b",
+    "bytes": 29659
+  },
+  "src/truss/cli.py": {
+    "sha256": "5a77fed5640bc154b58d8b4430d12521bdcdecef4f8ca4770ce4cd81224d8c76",
+    "bytes": 6122
+  },
+  "src/truss/_row_event_attribution.py": {
+    "sha256": "5ef265df339899cde5fba9e3f229d0709671f29ecb15ebf54bbeced7e8b9181b",
+    "bytes": 5855
+  },
+  "src/truss/_security_catalog_source_binding.py": {
+    "sha256": "37242aef34ca7cca2fce361f7489fb460063a522ec2898ba6b670eecab78de1b",
+    "bytes": 5773
+  },
+  "src/truss/_runtime_profile.py": {
+    "sha256": "14b9fba7359c84e6d84d4b20e13dceebd364accc7d9fb17865f20c520b9b7450",
+    "bytes": 505
+  },
+  "src/truss/_umf_keys_release.py": {
+    "sha256": "f5810287041362626b0341a56aa9121a9cc801e9bf6513c9a3ed1293ab9f5129",
+    "bytes": 155
+  },
+  "src/truss/capabilities.py": {
+    "sha256": "23d7c4887b2820f8091a81192aaeff0f508af272faf09681fbdb3d81870c4709",
+    "bytes": 15581
+  },
+  "src/truss/assembly.py": {
+    "sha256": "85d8ded7f3a61041d75852ba11959a80029dd2d00c42e9b86ef1d56b9b03ccb2",
+    "bytes": 15086
+  },
+  "src/truss/_security_catalog_source_epoch.py": {
+    "sha256": "4f4c170ff0b3ae42448ab2fcca23fcffdfd8f9491ffa201e218189d227c7f501",
+    "bytes": 10723
+  },
+  "src/truss/_installation_archive.py": {
+    "sha256": "d1674fb5f8537873e3b41ce46618fd3aac1c73db7c8b34a90fe741cba6918f72",
+    "bytes": 3420
+  },
+  "src/truss/_group_runtime.py": {
+    "sha256": "a4f90dffc2a932bcd37d21621d29d6264d3e1b08470c5ab4f86ff803e35eb7d8",
+    "bytes": 19277
+  },
+  "src/truss/bulk_action_gateway.py": {
+    "sha256": "10f35fca05c1a37709d32e8868de5f09512e8de00773affb66ba81c3a4edaef8",
+    "bytes": 10110
+  },
+  "src/truss/_report_schema_pins.py": {
+    "sha256": "937669a940936ab8da9b5024b6ef35985b05f76aeb279a5aba3e4cd02df3b557",
+    "bytes": 1253
+  },
+  "src/truss/_catalog_lifecycle.py": {
+    "sha256": "54972c2abdf487c603dcedb4fbb65454d4489916e66fd30a1f24404d1c5cec70",
+    "bytes": 5968
+  },
+  "src/truss/_native_deadline.py": {
+    "sha256": "818b01a238d1722e81efff792b6abdbc037d67485e77d3bf9c8fa16226ecab56",
+    "bytes": 2155
+  },
+  "src/truss/_action_identity_codec.py": {
+    "sha256": "919d5975859d8938e6bf85bcca98602d9f30215c52ee9f7f300466e249ceb725",
+    "bytes": 1467
+  },
+  "src/truss/_action_store.py": {
+    "sha256": "bd4404e034b5a64aa04438fef33d254541460145ddfe7e1b1c5a2d1c4dcb8972",
+    "bytes": 28710
+  },
+  "src/truss/numeric.py": {
+    "sha256": "4833d54fda887fa70171511761d28ea75a0dc22aa89a50c3eae2a88f2b972d18",
+    "bytes": 2347
+  },
+  "src/truss/_preparation_seal_installation.py": {
+    "sha256": "ac88709dad16ac6df0b2d9c851adc9c6a544db5eee9ec16383572f76423a7322",
+    "bytes": 11770
+  },
+  "src/truss/_current_disclosure_stage.py": {
+    "sha256": "7cb031a34e84630212cd76034d140b94d4759f96770bdcc250b429c984f61109",
+    "bytes": 12946
+  },
+  "src/truss/_import_runtime.py": {
+    "sha256": "13ef7039e6a2fb54a58166853f0f697c96774a367b1523cfe2bd62dd9c073f2c",
+    "bytes": 22919
+  },
+  "src/truss/_operation_registry.py": {
+    "sha256": "7e74c34c9b0a874af8e7c0c743357aff2c848cc4c8ae3ed2404542ce18ec667d",
+    "bytes": 3421
+  },
+  "src/truss/_native_driver_profile.py": {
+    "sha256": "942791295372ac96c4f7cf4753f2c3598084de9c136870a66bdd8239ddcb4266",
+    "bytes": 8527
+  },
+  "src/truss/contracts.py": {
+    "sha256": "229ed90ee416930ff05cef7720e898b6fd6cc4c62e30f9359da655dedfc6deb1",
+    "bytes": 6578
+  },
+  "src/truss/_catalog_definition_source.py": {
+    "sha256": "96f0e5e22f9f4db21ee9cf34677dc59eaa85f244570eb9101a3b46aceb4bee78",
+    "bytes": 4818
+  },
+  "src/truss/_current_disclosure_originals.py": {
+    "sha256": "414dbc3224beb63cef60a836e749e62e829c3ef13e441e17c7547c5c0c64e030",
+    "bytes": 7528
+  },
+  "src/truss/_installation_privileges.py": {
+    "sha256": "66997715ee32c0523bdd8472bf509ff5bc3bd710a7af8dfb541099fce4112c4b",
+    "bytes": 15332
+  },
+  "src/truss/_core08_catalog_source.py": {
+    "sha256": "986288156ea27216549401993e55ebc51646f38ea487bb6b2385daf781148a2e",
+    "bytes": 4092
+  },
+  "src/truss/_engine_preparation.py": {
+    "sha256": "4fecd8c34bf7f534769e046a37585f57e2b596f8d9f1dd05ee20c22964e0911c",
+    "bytes": 13375
+  },
+  "src/truss/py.typed": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "src/truss/_installed_admission_inventory.py": {
+    "sha256": "4d132500b4ade5ce4cf7def042d280b96811ef3999a3dea6da1fafe90d40ee25",
+    "bytes": 25865
+  },
+  "src/truss/_native_catalog_request.py": {
+    "sha256": "93c87c2605764504e6e160a3180616a219e5e9bbc947f63bcb9c553a7bfd0c82",
+    "bytes": 6829
+  },
+  "src/truss/_row_group_custody.py": {
+    "sha256": "b39f7f4e17243d846fc60b3fff02807d168a93c23adf793a8be4fcd2abf3dcdd",
+    "bytes": 2336
+  },
+  "src/truss/reader_catalog.py": {
+    "sha256": "c3050450bd422aa9c3124fd9bb75c105b5e0ac011d7352e241d605f8ba4a57ff",
+    "bytes": 1185
+  },
+  "src/truss/_umf_key_tuples.py": {
+    "sha256": "192edc8428b2532308bdce5c0b79d60792ec1bc9449fece480ec645d1606c95b",
+    "bytes": 12125
+  },
+  "src/truss/_row_touch_registry.py": {
+    "sha256": "332c37d656bbf825ab119422714330277d9988eef280fc6f72fff26e2d5e778b",
+    "bytes": 3672
+  },
+  "src/truss/_host_control_custody.py": {
+    "sha256": "b54753d0698b74ef1e4f983306d23dde5fb4d09ea8068304f3926cbcf194135c",
+    "bytes": 13501
+  },
+  "src/truss/_psycopg_census_cut.py": {
+    "sha256": "c5493132e5cd7182988b053eb8622693292a6c9d092546f7a546551bc3ab846e",
+    "bytes": 1695
+  },
+  "src/truss/psycopg_host.py": {
+    "sha256": "2d2ed4268ff9e592dd4bc900cfdca1f2ac922dd6120065beae209ebcb6c0742c",
+    "bytes": 37955
+  },
+  "src/truss/_canonical_wire_tree.py": {
+    "sha256": "755bd1c50a506861c76b9332edb086bbb101a8f33e80b6b585df56a3d7a01b79",
+    "bytes": 2932
+  },
+  "src/truss/import_source.py": {
+    "sha256": "f8db3a5ecb8256109b99946765c9cfda462bc9201fc532df4ae944e8f67a04c6",
+    "bytes": 743
+  },
+  "src/truss/_catalog_candidate.py": {
+    "sha256": "d5d3443a6c6e609fe694b077a5a196816c75d93d057cebc0cdb1a298bf220cb4",
+    "bytes": 5362
+  },
+  "src/truss/migration_planning.py": {
+    "sha256": "1523a466555ab7b4075f501edd0570f9465c67a67558d2733b5c06984571c3a6",
+    "bytes": 7509
+  },
+  "src/truss/_bounded_receive.py": {
+    "sha256": "83a45e6b49b48f551cd46e9970850a8effa5492a49a0076cd878a3314a0f4ab1",
+    "bytes": 2895
+  },
+  "src/truss/_psycopg_graph_scope.py": {
+    "sha256": "da7ad8288c2c6654323eaeb85c1d3730e14b13700eec6f16d49d41088aa96165",
+    "bytes": 5460
+  },
+  "src/truss/_preparation_sources.py": {
+    "sha256": "ce0d73918481c387ce32194988d6b201c5cbf010559f97bb2f845d0f510cbf70",
+    "bytes": 14946
+  },
+  "src/truss/_psycopg_fact_cut.py": {
+    "sha256": "2d82e3550463394dfe6dd1ebb3c31e7d83c8d34fdbc8723baf45b99503b0a537",
+    "bytes": 9453
+  },
+  "src/truss/_native_catalog_report_sources.py": {
+    "sha256": "766e8b4be0c4419bcc4fc14342b14c567aec2f1b44f52b7c5cc6f6dd630ffa63",
+    "bytes": 6848
+  },
+  "src/truss/_preparation_data_claim.py": {
+    "sha256": "b5c0f9d200b44aadd6b3d4e4b5dbb0f379c0c637b5e6efeb7de6be7b47582e0e",
+    "bytes": 4599
+  },
+  "src/truss/_security_association_binding.py": {
+    "sha256": "2652e851820216205bb526ad8921109ddbbd8153fbea1338d7822d13ae400044",
+    "bytes": 14094
+  },
+  "src/truss/_current_query_sources.py": {
+    "sha256": "b51243ac5348909b4d0157ffe19f8593933919f04b4a98e5ee52d62e9d23fdda",
+    "bytes": 17163
+  },
+  "src/truss/timestamp.py": {
+    "sha256": "b08dbf2a9c48754282f05429a58b66515c75a815f6e1282d3c485248f762120c",
+    "bytes": 1713
+  },
+  "src/truss/_catalog_report_assembly.py": {
+    "sha256": "ddf8c5f3f76b3dcc089c66c0ad4a3f54c312a37cba7729f4bc7bb31ca6403de4",
+    "bytes": 14200
+  },
+  "src/truss/_current_query_protection.py": {
+    "sha256": "60ea36623f2030b42107ad1285e3c321c727443556c55ec3251be87a5e485eb8",
+    "bytes": 16454
+  },
+  "src/truss/_native_catalog_metadata.py": {
+    "sha256": "feac15bbcf24f65821cfc750aca248cadc8d5b93ce3887f5f148eaf7fc4b1551",
+    "bytes": 14882
+  },
+  "src/truss/_psycopg_source_census.py": {
+    "sha256": "04d07815477b940c0324d707044babcd03f72fe71f52dafe1ba924772db90c55",
+    "bytes": 3952
+  },
+  "src/truss/_host_session.py": {
+    "sha256": "18754ffd000aec5202c49545fc508fd6775d47ca163503b56c3b95bcfebeff2f",
+    "bytes": 18290
+  },
+  "src/truss/_native_epoch_acquisitions.py": {
+    "sha256": "8b10b499dac31fcea225186e7d74f2124e3ef5f371d81f2a60c9a645d77094b2",
+    "bytes": 6214
+  },
+  "src/truss/_psycopg_epoch_cut.py": {
+    "sha256": "592768644000c29dc52187d8e9d9e7f6b6f738c4ee9b7a22ac3a186fdd4244e5",
+    "bytes": 19929
+  },
+  "src/truss/_core08_catalog_release.py": {
+    "sha256": "fbd919f36d59a4d31ba3d9c1157ce6bb43860bf248e9cb662f9f91891ebd2ba7",
+    "bytes": 163
+  },
+  "src/truss/_row_image_scalar_shape.py": {
+    "sha256": "1e639bfed2680ce589d8af65fe255b4498a61246384fb593e3313d673fbdccdc",
+    "bytes": 1376
+  },
+  "src/truss/_row_operation_address.py": {
+    "sha256": "51af38dbda5c94f8a3ca8c92af3abef1f9919d1d44f6ae1c872c609b747eaf08",
+    "bytes": 4224
+  },
+  "src/truss/_native_source_observation.py": {
+    "sha256": "c260315436a6ed420d6a38a594d1becfb65f7ee9993416be806846719469f3df",
+    "bytes": 12378
+  },
+  "src/truss/_psycopg_subject_observation.py": {
+    "sha256": "3d1f0e07541d30f2db5160ce24b31468b05e686fbcefdc12e8817b3425343fa8",
+    "bytes": 9078
+  },
+  "src/truss/_catalog_completion.py": {
+    "sha256": "7e29ee848e838514965a15e923c6e2d535d35c8a05c0a67e0407a5ab33dc48fd",
+    "bytes": 5264
+  },
+  "src/truss/_preparation_program.py": {
+    "sha256": "67940179468c4176925663f971e88bf1e1b7953f20156f72250b874698eabd36",
+    "bytes": 11501
+  },
+  "src/truss/_preparation_compiler_replay.py": {
+    "sha256": "7770c92c4e48c5ef33a5cd43bb7e22f1446e79599f47da21b5ea6dbf4626579f",
+    "bytes": 4931
+  },
+  "src/truss/_ownership_migration.py": {
+    "sha256": "f64955968ab6679693a949c9a23d03fa95bad0d4f0cce73ca82ca7ff964190d9",
+    "bytes": 10100
+  },
+  "src/truss/_action_subject_installation.py": {
+    "sha256": "d782304a3b752f57b76eb067bb631eafcb9985aa08b61e67ab5ecf9e0aab76eb",
+    "bytes": 10081
+  },
+  "src/truss/_umf_release.py": {
+    "sha256": "e473ba37c1baaf0204f7e496847595f446e1645fb0c940e07177551186af7593",
+    "bytes": 167
+  },
+  "src/truss/preparation.py": {
+    "sha256": "60254445026c51548fdf320b7121fd4ff1e98b2ab157bc1d10d7384ebfc9eb6d",
+    "bytes": 15922
+  },
+  "src/truss/_preparation_bridge_inventory.py": {
+    "sha256": "89536c31777d0332f1b440b99ce548493ff93778756b94b0bb39d0f35dd4f1b0",
+    "bytes": 741
+  },
+  "src/truss/_current_query_facts.py": {
+    "sha256": "95f60525bc3e2236e731a6b7669487c3c40d725fd345b4e0eb65612c57bc5844",
+    "bytes": 13516
+  },
+  "src/truss/_current_disclosure_computation.py": {
+    "sha256": "68cb9e9ef13aa0fbb30a9d994a938cf9e03270bcb207eec4060c1777b3d6adfd",
+    "bytes": 2457
+  },
+  "src/truss/_native_attachment.py": {
+    "sha256": "e7af13436aec1d96e84449d1dc2fedb698ff38961eab5ff743296241c2dc6d24",
+    "bytes": 3048
+  },
+  "src/truss/_native_outbound.py": {
+    "sha256": "b69363c90aca9dff02149f1718c166c94350482b668e448f1243eb21a60dbec0",
+    "bytes": 7617
+  },
+  "src/truss/_row_image_tree.py": {
+    "sha256": "8ff76ee2a95ec60db0bdfecded4e1f35bc302d711be0f71f14d42178cabb5386",
+    "bytes": 3926
+  },
+  "src/truss/catalog_preparation.py": {
+    "sha256": "c762f98bd574273899205ed25a819180390118904174fafe8c70638c79e7a557",
+    "bytes": 2419
+  },
+  "src/truss/_preparation_source_epoch.py": {
+    "sha256": "8cad5c34cd7c4bbacbf6540a49b358a4c35846a7d866d232c5f0fcc5ca6d2005",
+    "bytes": 19725
+  },
+  "src/truss/_catalog_index_declarations.py": {
+    "sha256": "68d4620754f5c0e9651c162a3dde0c9ca21f87b2cc791df333a05ff9d08bb03a",
+    "bytes": 4384
+  },
+  "src/truss/assembly_contracts.py": {
+    "sha256": "a1a92ef2989337d2fa7b2e7b487c80c183df58dc6978c2a5b94d0f061afe633f",
+    "bytes": 2160
+  },
+  "src/truss/_security_data_writer_binding.py": {
+    "sha256": "74e6925d9623ebaccfd3bf9b2d4b988a27c91c9ebe9835bbe0cae8c7990eb735",
+    "bytes": 5826
+  },
+  "src/truss/history.py": {
+    "sha256": "f30b3143d10fac3c01c14c2972c57dbd9456d3cb2da1d8d2d645cfe8a7439a66",
+    "bytes": 1490
+  },
+  "src/truss/_native_adoption.py": {
+    "sha256": "f7e714beeaede3e09888d226dedd1df5aa18090ed62981138675571016b1de0b",
+    "bytes": 16503
+  },
+  "src/truss/_query_execution.py": {
+    "sha256": "682f9dd9bbbdc6d7eadeccffb6b275c9c856b8305c29da354db41041f3a1ce93",
+    "bytes": 10609
+  },
+  "src/truss/_installation/definitions.sql": {
+    "sha256": "a549afb4ecdba65f4d42362bae91cbabfc5d2f97e931c8cf7825210f006967d4",
+    "bytes": 4487
+  },
+  "src/truss/_installation/manifest.json": {
+    "sha256": "8f8a196e0f7a38cbafd489da79deb69b7309f3a2e87df0a69ed21a1b3e77fdcc",
+    "bytes": 4741
+  },
+  "src/truss/_installation/definitions.json": {
+    "sha256": "57c1ce65143a99bebd0ab2933ea729b1cfaca41712d871db7300cba90058a115",
+    "bytes": 203120
+  },
+  "src/truss/_installation/sources.zip": {
+    "sha256": "fe6dc14c661e4b0803062b8f76ebc811cbca75a70c37fc6cb7c021e035c24c2a",
+    "bytes": 79597
+  },
+  "src/truss/_installation/statements.json": {
+    "sha256": "c27fbd0a84a63af81d523279f4898e3c9c5443d83c980df460c9189db7c2e8af",
+    "bytes": 165035
+  },
+  "src/truss/_inventory_sql/routine-acl.sql": {
+    "sha256": "7af67d9bc4e1a6873814197926d7f92cf69bbb299c83f0145731fcb6bebdbe7e",
+    "bytes": 921
+  },
+  "src/truss/_inventory_sql/namespace-acl.sql": {
+    "sha256": "b28027fe1b0c15780c3000988d5396dc83acfa5d8228fe5488a7bd5ec5d5af17",
+    "bytes": 876
+  },
+  "src/truss/_inventory_sql/relation-acl.sql": {
+    "sha256": "10ae36d576209b954b218908d2a9c4f4a4344803b18457eaa5bb42c12415c8eb",
+    "bytes": 1099
+  },
+  "src/truss/_inventory_sql/column-acl.sql": {
+    "sha256": "f328a40200427d5e5b67179233e9d77b77c6ed4478608d1f5e269122976090fd",
+    "bytes": 716
+  },
+  "src/truss/_inventory_sql/manifest.json": {
+    "sha256": "3544d094ff90df4b6966414cfd203db607ae347dd2a4923dc72c92758188f890",
+    "bytes": 1080
+  },
+  "src/truss/_inventory_sql/dependency.sql": {
+    "sha256": "b6d3b3eb4fe10d817a57c0e2d1ab723fc630233b4d15985bc5e6aaa366a3ba74",
+    "bytes": 905
+  },
+  "src/truss/_security_source_epoch/read-fence.sql": {
+    "sha256": "09337b0a46db9f8d928eaa2169e68ee06843ce9092b0bb9f7c4d41fa9ec2295e",
+    "bytes": 1795
+  },
+  "src/truss/_security_source_epoch/immutability.sql": {
+    "sha256": "8e819d0b11a4497913a66a1046725577ca31acfe11b1c10820eb6f633ea4a955",
+    "bytes": 1320
+  },
+  "src/truss/_security_source_epoch/alter-routine-ddl-barrier.sql": {
+    "sha256": "c3fc4f3228d49cc67ff93009f70f0e08eb627a0dd7cbc3a43fb7db4feeb35720",
+    "bytes": 384
+  },
+  "src/truss/_security_source_epoch/schema-ddl-barrier.sql": {
+    "sha256": "0ad98a723bdfe5f0fc7c9648cf4b1845a512afba7f4069d9d0e7cc46ae07a4d6",
+    "bytes": 498
+  },
+  "src/truss/_security_source_epoch/fresh-lock.sql": {
+    "sha256": "b9d48c570237cac5b69b959270b363862ec5f87d33ac5145cdd9d847e9640ebc",
+    "bytes": 2174
+  },
+  "src/truss/_security_source_epoch/table-ddl-barrier.sql": {
+    "sha256": "9fdcd6823aafb1106597e1f9e003994df96748686b54b68b34adbea2ed198de4",
+    "bytes": 637
+  },
+  "src/truss/_security_source_epoch/manifest.json": {
+    "sha256": "57e8523c0e2fd835b55051af10dae8a9be0f75325748b965e9a11131fcb6c114",
+    "bytes": 1153
+  },
+  "src/truss/_security_source_epoch/lock.sql": {
+    "sha256": "e811a3656a45e941d588ca21b97ab524b789948d08585288e44b158b060d73cc",
+    "bytes": 2251
+  },
+  "src/truss/_security_source_epoch/database-ddl-barrier.sql": {
+    "sha256": "4593c5d5b2caec37077a9d9b0f1631ffc8bbea9a045a3e17e8c66ac677ba7da3",
+    "bytes": 597
+  },
+  "src/truss/_security_source_epoch/issue.sql": {
+    "sha256": "c5d8c453dc780d8547ca362ccef2e868845d2fb778d2ffbbcf0770afe0f6a55c",
+    "bytes": 4524
+  },
+  "src/truss/_security_source_epoch/fenced-fresh-lock.sql": {
+    "sha256": "914ff58ea165f6d2c78a3bcb670e89194fa4fe71798d02ed5adf277980d952b0",
+    "bytes": 1743
+  },
+  "src/truss/_security_source_epoch/routine-ddl-barrier.sql": {
+    "sha256": "8a2eff86274380724037f1ba6dbd270b8870a64f9b7da823d349317b198cc81b",
+    "bytes": 2526
+  },
+  "src/truss/_preparation_sources/producer.js": {
+    "sha256": "5e09c3834f0ebd67da28654c029b9a9647025b4562334c3f9a52eed62e523406",
+    "bytes": 937062
+  },
+  "src/truss/_preparation_sources/manifest.json": {
+    "sha256": "968267dd04f8ee05e439ec9d94580813b73f3eca50d8762d6999f9ed8441f7ab",
+    "bytes": 1158
+  },
+  "src/truss/_preparation_sources/licenses/require-from-string.txt": {
+    "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
+    "bytes": 1128
+  },
+  "src/truss/_preparation_sources/licenses/ajv.txt": {
+    "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "bytes": 1090
+  },
+  "src/truss/_preparation_sources/licenses/fast-uri.txt": {
+    "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "bytes": 1813
+  },
+  "src/truss/_preparation_sources/licenses/fast-deep-equal.txt": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_preparation_sources/licenses/yaml.txt": {
+    "sha256": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "bytes": 738
+  },
+  "src/truss/_preparation_sources/licenses/json-schema-traverse.txt": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_source_census/pg18.sql": {
+    "sha256": "494a647e449032e21ebc5e2eb9903619b9385bf99cbde72c63923da44ee23465",
+    "bytes": 16242
+  },
+  "src/truss/_umf/manifest.json": {
+    "sha256": "40e98f883c1725645f11fa6aba191c0dd9615dae5ac24b1da249739e52a85da5",
+    "bytes": 5426
+  },
+  "src/truss/_umf/owner/producer.js": {
+    "sha256": "db1d813cafd6f48cb20549ea7e847aca754b53c21bbc624ff88aa963d917c90b",
+    "bytes": 612986
+  },
+  "src/truss/_umf/owner/producer-manifest.json": {
+    "sha256": "89115bff6644db7f2fe7b292458994a94dc78ff0c4c3f608d7b1fe3eeb810bc8",
+    "bytes": 878
+  },
+  "src/truss/_umf/licenses/require-from-string.txt": {
+    "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
+    "bytes": 1128
+  },
+  "src/truss/_umf/licenses/ajv.txt": {
+    "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "bytes": 1090
+  },
+  "src/truss/_umf/licenses/fast-uri.txt": {
+    "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "bytes": 1813
+  },
+  "src/truss/_umf/licenses/fast-deep-equal.txt": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_umf/licenses/yaml.txt": {
+    "sha256": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "bytes": 738
+  },
+  "src/truss/_umf/licenses/json-schema-traverse.txt": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_umf/runtime/package.json": {
+    "sha256": "9a0a1f4e40bbd5082cbcc0f6b6b515368f2dc8dc60341affdc8c50571819bd49",
+    "bytes": 70
+  },
+  "src/truss/_umf/runtime/node_modules/ajv/dist/2020.js": {
+    "sha256": "57cad03e867e41b0bf4a68c13e24b2628312c6dc82a3ca16780a6864130ad40d",
+    "bytes": 261871
+  },
+  "src/truss/_umf/docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json": {
+    "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+    "bytes": 6208
+  },
+  "src/truss/_umf/packages/umf-bun/src/bridge.js": {
+    "sha256": "4e1fafb0bd23f60f1e2cea37cf97b605fc47a572bdf1811c431e5ca449c6108c",
+    "bytes": 80521
+  },
+  "src/truss/_umf/owners/assertion-fields/producer.js": {
+    "sha256": "99ce66f606891ab0436240890922e204ce11e354f5601c5f2ede1c3ef6506398",
+    "bytes": 510919
+  },
+  "src/truss/_umf/owners/assertion-fields/producer-manifest.json": {
+    "sha256": "bb628d522ab0811f73c39401cfe3019244fbb1bcbf541d4a86e91ab720654075",
+    "bytes": 811
+  },
+  "src/truss/_umf/owners/declarations/producer.js": {
+    "sha256": "42d857965d8f01f545e52fabcd6156a8fed3d4e039526b11b6425bff59736d61",
+    "bytes": 458553
+  },
+  "src/truss/_umf/owners/declarations/producer-manifest.json": {
+    "sha256": "bf135d2c1557c6855519bca76cead5ae21dbe546173abbedd640d9d776e6afc2",
+    "bytes": 782
+  },
+  "src/truss/_umf/owners/scalar-types/producer.js": {
+    "sha256": "de1ab8d140c5daab20c94cbe1e986e9ab93bf690935b72863b36c9267bb7f3f6",
+    "bytes": 403951
+  },
+  "src/truss/_umf/owners/scalar-types/producer-manifest.json": {
+    "sha256": "d375d1dc762e6da198edbeb4128bf0006ad57d202daab4fad5c77ba8a1c1a346",
+    "bytes": 721
+  },
+  "src/truss/_umf/owners/reference-links/producer.js": {
+    "sha256": "8d9a5da5bdf9196ec19e09f4037044ccaa741ee8e8b603453d2c515db892b88e",
+    "bytes": 405502
+  },
+  "src/truss/_umf/owners/reference-links/producer-manifest.json": {
+    "sha256": "234a60fb0abae54a2c7b0ef4117f57c57f3734e77da348b5dc05de947119619d",
+    "bytes": 728
+  },
+  "src/truss/_umf/owners/record-members/producer.js": {
+    "sha256": "b7d6474a743366347cbd858e65b68974fb0503e8f3023533d18db8e83259faee",
+    "bytes": 403984
+  },
+  "src/truss/_umf/owners/record-members/producer-manifest.json": {
+    "sha256": "9ffba23939061e096a94bcb37109479c7689e8b5ecbe8c6cd3baf1dfba2456c9",
+    "bytes": 726
+  },
+  "src/truss/_current_query_owner/current-query-child.mjs": {
+    "sha256": "36e2c63fb0d942c9b94141f1753bcd9b56aad9e32dec5aa1a9ee27aabc674248",
+    "bytes": 1053569
+  },
+  "src/truss/_current_query_owner/umf-package.json": {
+    "sha256": "e82680c3e3eacd083bf2555b1605a60ff4cd65dc59288256ad0bc1e8f811afc1",
+    "bytes": 3958
+  },
+  "src/truss/_current_query_owner/manifest.json": {
+    "sha256": "98eed644128b6f77d087293360e062fc06cce941dcb686e09c35632a5560f03d",
+    "bytes": 31892
+  },
+  "src/truss/_current_query_owner/metafile.json": {
+    "sha256": "9ba60a5af5309f56501b8c988bbe93a15de6baf619960ab84ef68c4a07467930",
+    "bytes": 181892
+  },
+  "src/truss/_current_query_owner/consumer-manifest.json": {
+    "sha256": "39bd15f5c2f65679b0474860563d8304f4c8bb3d167dbd63d019f50c33274dbe",
+    "bytes": 1635
+  },
+  "src/truss/_current_query_owner/notices/json-schema-traverse/LICENSE": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_current_query_owner/notices/json-schema-traverse/package.json": {
+    "sha256": "156fb24af02845c190701360d06dfda35ef04282e34a734289ea9535ad9819ae",
+    "bytes": 1004
+  },
+  "src/truss/_current_query_owner/notices/fast-uri/LICENSE": {
+    "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "bytes": 1813
+  },
+  "src/truss/_current_query_owner/notices/fast-uri/package.json": {
+    "sha256": "30cad05aad3d3596513706451dbfc7e0422f9c1d00f2903ecc34580327d54bc7",
+    "bytes": 1983
+  },
+  "src/truss/_current_query_owner/notices/yaml/LICENSE": {
+    "sha256": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "bytes": 738
+  },
+  "src/truss/_current_query_owner/notices/yaml/package.json": {
+    "sha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c",
+    "bytes": 3254
+  },
+  "src/truss/_current_query_owner/notices/ajv/LICENSE": {
+    "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "bytes": 1090
+  },
+  "src/truss/_current_query_owner/notices/ajv/package.json": {
+    "sha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989",
+    "bytes": 4405
+  },
+  "src/truss/_current_query_owner/notices/fast-deep-equal/LICENSE": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_current_query_owner/notices/fast-deep-equal/package.json": {
+    "sha256": "a5c63940db0260739be9e2ac67f3aac268df4db5770420ee4e34e493152f97d2",
+    "bytes": 1496
+  },
+  "src/truss/_umf_keys/producer.js": {
+    "sha256": "f005ab0edc21852dae7d3cd9f42e29faec0ddaf465573db8a364f133e0601300",
+    "bytes": 607281
+  },
+  "src/truss/_umf_keys/producer-manifest.json": {
+    "sha256": "1dc05f559f369de468ddec84ffdf99f99e229e1ec1474f5868d4062934d6254c",
+    "bytes": 792
+  },
+  "src/truss/_umf_keys/manifest.json": {
+    "sha256": "4e90f95322267ed1e7297a3eb2850f47ff86cdbba107c6859ea70a93b88b6537",
+    "bytes": 1850
+  },
+  "src/truss/_umf_keys/bridge.mjs": {
+    "sha256": "b83d4e5cda8d76201759d3eaf85afe3ba91133fe0baa1d9c4b63ce5a7de3f133",
+    "bytes": 1539
+  },
+  "src/truss/_umf_keys/licenses/require-from-string.txt": {
+    "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
+    "bytes": 1128
+  },
+  "src/truss/_umf_keys/licenses/ajv.txt": {
+    "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "bytes": 1090
+  },
+  "src/truss/_umf_keys/licenses/fast-uri.txt": {
+    "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "bytes": 1813
+  },
+  "src/truss/_umf_keys/licenses/fast-deep-equal.txt": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_umf_keys/licenses/yaml.txt": {
+    "sha256": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "bytes": 738
+  },
+  "src/truss/_umf_keys/licenses/json-schema-traverse.txt": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_profiles/catalog-custody-prerequisite-registration-candidate.json": {
+    "sha256": "bf260c6c411be0f61903c45b581e73e7871a676808a8f324f29b481439de32d2",
+    "bytes": 2814
+  },
+  "src/truss/_profiles/catalog-finalizing-custody-registration-candidate.json": {
+    "sha256": "0706da4b4387b49834d095f2fbdc3dfb3ba4bb4e3ac22e7c0afdb64c7429e73b",
+    "bytes": 15649
+  },
+  "src/truss/_profiles/absent-binding-index-declarations.json": {
+    "sha256": "332591930fb0f8a370b24e9607ef1f126f1e53ada88cdfed193c848078b31d8d",
+    "bytes": 1007
+  },
+  "src/truss/_profiles/local-postgres-runtime.json": {
+    "sha256": "9cbe351f9357213b2918fed12380f57daf93551be41c611138b5b94916146bae",
+    "bytes": 288
+  },
+  "src/truss/_profiles/catalog-enforcement-projection.json": {
+    "sha256": "678e52ea00fa984b19162441a33b33ab3d822b58f8ae2c69195dc1d5d658c4b1",
+    "bytes": 427
+  },
+  "src/truss/_profiles/assembly-inspection-construction-diagnostic.json": {
+    "sha256": "b8c53a93d67ec97a9895d3c4d862f1118758204ab06b1e625f8a0793c74c45d1",
+    "bytes": 654
+  },
+  "src/truss/_profiles/catalog-custody-registration-candidate.json": {
+    "sha256": "8561e275de278b019e7c20628ec98630d77d2011d2967556f614f09e1647793f",
+    "bytes": 12431
+  },
+  "src/truss/_profiles/fresh-catalog-support-numeric07.json": {
+    "sha256": "9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620",
+    "bytes": 3532
+  },
+  "src/truss/_profiles/catalog-report-assembly.json": {
+    "sha256": "ef0a39be769d74037a54f62a138fec47bb3a4fbe46e5e96c2891f70e18227ff5",
+    "bytes": 651
+  },
+  "src/truss/_profiles/catalog-revision-wide-registration-candidate.json": {
+    "sha256": "709a7ff1f3009bf88a02b510fcd32dc783087af14e6142f4366565694b11058e",
+    "bytes": 3220
+  },
+  "src/truss/_profiles/catalog-finalizing-custody-prerequisite-registration-candidate.json": {
+    "sha256": "5939823612bff7115d2f247161f9f06f5ed95443ee5960df95e443953337b040",
+    "bytes": 2817
+  },
+  "src/truss/_profiles/fresh-catalog-support-declarative08.json": {
+    "sha256": "76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0",
+    "bytes": 3424
+  },
+  "src/truss/_profiles/installation-metadata-construction.json": {
+    "sha256": "4220b0f9f0ee565dc898ba8e54d4b5488c9f5bf1686371145ef2f46c9cde9df3",
+    "bytes": 4979
+  },
+  "src/truss/_profiles/catalog-prerequisite-registration-candidate.json": {
+    "sha256": "293bce5ba248e558319eba57ecfe3b5f683d6d89b58033003e33b6aad38cde73",
+    "bytes": 2530
+  },
+  "src/truss/_profiles/catalog-report-configuration.json": {
+    "sha256": "441bff53c4cbc08ff9975f083d896b95a80ae6921d3a0bee244f3eb3502e99b9",
+    "bytes": 868
+  },
+  "src/truss/_profiles/fresh-catalog-support-references08.json": {
+    "sha256": "1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56",
+    "bytes": 3255
+  },
+  "src/truss/_profiles/catalog-report-release.json": {
+    "sha256": "2d4ab361c53fba2ecbe10a57c181aef3887edd2751ff37796e5d03d6514996e4",
+    "bytes": 6759
+  },
+  "src/truss/_profiles/catalog-revision-custody-candidate.json": {
+    "sha256": "877af3261207edb90ebdd824845978c2a6221915f74380e00177c53629d039a3",
+    "bytes": 2471
+  },
+  "src/truss/_profiles/catalog-report-procedure-candidate.json": {
+    "sha256": "8db9e6848188b94e4c4bd67636a0fd334a507b738bf649c9fb48a1c61fafe38c",
+    "bytes": 1156
+  },
+  "src/truss/_profiles/catalog-report-composition-candidate.json": {
+    "sha256": "3f5f83a5b827451bdf29a018eca85b0bdac3811a37ec8efcbadafc1a79fd10fe",
+    "bytes": 2348
+  },
+  "src/truss/_profiles/fresh-catalog-support-decimal207.json": {
+    "sha256": "f2c2495fdfab81d555194e5a3dfafe1c7cf58e17035fe5b03698e2808d3b027f",
+    "bytes": 2929
+  },
+  "src/truss/_profiles/assembly-construction-diagnostic.json": {
+    "sha256": "2e42e685d6e18169d31cd34abc2d43b720f088c39b74182d5f02944d06e56b94",
+    "bytes": 916
+  },
+  "src/truss/_profiles/fresh-catalog-support-recursive07.json": {
+    "sha256": "a69a3035fcc0927730977ad05a1f60b0d10ec765413ab7c57d763f14d409c455",
+    "bytes": 2930
+  },
+  "src/truss/_profiles/catalog-revision-registration-candidate.json": {
+    "sha256": "a32febdea06ee57405d856038ede3b503430a4f823226e0dfa65b072fae2f725",
+    "bytes": 2987
+  },
+  "src/truss/_profiles/fresh-catalog-support-containers08.json": {
+    "sha256": "d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c",
+    "bytes": 4085
+  },
+  "src/truss/_profiles/catalog-revision-custody-registration-capture-candidate.json": {
+    "sha256": "16fbd9767b97488ccc428f02dc5a8629890c2029d990245e34226a367a2cf06f",
+    "bytes": 2447
+  },
+  "src/truss/_profiles/fresh-catalog-support-named-scalars.json": {
+    "sha256": "82934e8b77e9c2fabf1095a119429842a5a38dd90e47ea8cf85867cb27b1952d",
+    "bytes": 3140
+  },
+  "src/truss/_profiles/fresh-catalog-support-relational.json": {
+    "sha256": "bc7aa15a3c2ab55368a3eb7fc2c4c18c8a316cc8ac7c783930c38a2ba825f557",
+    "bytes": 2915
+  },
+  "src/truss/_profiles/catalog-report-semantic-inputs.json": {
+    "sha256": "be634f1d1bdf8f096333e25d15597d2b81af4ace87c9216a8abf304797df2080",
+    "bytes": 1010
+  },
+  "src/truss/_profiles/assembly-inspection.json": {
+    "sha256": "5df8b93c35dc11d710744b89b5a1aafd11a8c5aa957c514458db5ad5bb8c3b8d",
+    "bytes": 372
+  },
+  "src/truss/_profiles/catalog-revision-composition-candidate.json": {
+    "sha256": "6e22d1e2393935f8d15fcade4ca5ac22a6f81b3a0ff47836d24741068d215e57",
+    "bytes": 1476
+  },
+  "src/truss/_profiles/fresh-catalog-support-decimal208.json": {
+    "sha256": "d660fab21eabe2d52ef0609cafcea6112f506786e359424235714718f6c769a7",
+    "bytes": 3161
+  },
+  "src/truss/_profiles/catalog-prerequisite-custody-registration-candidate.json": {
+    "sha256": "d981f6a17e54873c781eeece986dbc93a47a7a2ce3460e38d710f13ea0edcaa8",
+    "bytes": 12426
+  },
+  "src/truss/_profiles/fresh-catalog-support-recursive08.json": {
+    "sha256": "f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315",
+    "bytes": 3256
+  },
+  "src/truss/_profiles/catalog-report-wide-composition-candidate.json": {
+    "sha256": "d77cf6b399774166da481f0f0e7850271243e8911175b2bb225f9a628d418aba",
+    "bytes": 2569
+  },
+  "src/truss/_profiles/fresh-catalog-support-containers07.json": {
+    "sha256": "28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d",
+    "bytes": 3777
+  },
+  "src/truss/_profiles/fresh-catalog-support-date08.json": {
+    "sha256": "5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838",
+    "bytes": 3597
+  },
+  "src/truss/_profiles/fresh-catalog-support-core08.json": {
+    "sha256": "a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f",
+    "bytes": 3655
+  },
+  "src/truss/_profiles/catalog-revision-wide-report-composition-candidate.json": {
+    "sha256": "9269939c2151779c919826ef30beccfea51269f06da1d6241e8f6bb6d80e6253",
+    "bytes": 1630
+  },
+  "src/truss/_profiles/catalog-report-capture-composition-candidate.json": {
+    "sha256": "dbed90210223b331dd02764eb911723f674f45731f40ad64b4317d45856d7dcd",
+    "bytes": 1047
+  },
+  "src/truss/_profiles/catalog-report-semantic-inputs-references.json": {
+    "sha256": "c2289ef0a8aeafebca555a85bb101a39ca59840ada5814430153508116b7a67d",
+    "bytes": 1146
+  },
+  "src/truss/_profiles/catalog-feed-finalization-candidate.json": {
+    "sha256": "a1437880c0c839e933d786fe98f9994fc1d795bcefbaf80ae8055ff127e2b2f1",
+    "bytes": 18739
+  },
+  "src/truss/_profiles/fresh-catalog-support-named-relationships.json": {
+    "sha256": "8358f0e885a88231bcad1bd6952efcbcfec8ba970c983a5e63e5ea4873757213",
+    "bytes": 3175
+  },
+  "src/truss/_profiles/catalog-only-business-guards-candidate.json": {
+    "sha256": "3d828946566250384c25ff944a16ccb409ba86d97aed5676601881ed4f20fdbb",
+    "bytes": 723
+  },
+  "src/truss/_profiles/fresh-catalog-support-scalars.json": {
+    "sha256": "aec460c192bd831ed713f9bc8e42f2c31a99adfdf1cfcf4edecff8cd8f047b9f",
+    "bytes": 3126
+  },
+  "src/truss/_profiles/catalog-report-custody-composition-candidate.json": {
+    "sha256": "eb581afaf2dfaf2d25c2b8d27a0c3b65be843a4cae028a3b9f822a526944892b",
+    "bytes": 2649
+  },
+  "src/truss/_profiles/catalog-prerequisite-custody-capture-candidate.json": {
+    "sha256": "b582d6d36b9498551d082a52de89493ca0b32f19413a15f23833c67b5cc4bbe1",
+    "bytes": 2370
+  },
+  "src/truss/_profiles/fresh-catalog-support-numeric08.json": {
+    "sha256": "12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9",
+    "bytes": 3848
+  },
+  "src/truss/_profiles/fresh-catalog-support.json": {
+    "sha256": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd",
+    "bytes": 2027
+  },
+  "src/truss/_profiles/fresh-catalog-support-retained-metadata.json": {
+    "sha256": "c188429e07667bd1ba6a13da5d89f9c584e517163b948e9ec4cf02810b420369",
+    "bytes": 3323
+  },
+  "src/truss/_profiles/fresh-catalog-lifecycle.json": {
+    "sha256": "b477ea156c92210be27b118e1ecbda90dc459795dcecea7b010252fd44cffada",
+    "bytes": 561
+  },
+  "src/truss/_current_disclosure_owner/umf-package.json": {
+    "sha256": "5f74e6af9e94b546a71ca88fe87a5f6bb02cb906902ca902d53ec697bb4b12a1",
+    "bytes": 4220
+  },
+  "src/truss/_current_disclosure_owner/manifest.json": {
+    "sha256": "4e50675be3a39433ea99ecae646938cec1f1a7cda931ab5f98b49cb26ada4951",
+    "bytes": 32386
+  },
+  "src/truss/_current_disclosure_owner/metafile.json": {
+    "sha256": "0db1d5aeccada6794b67b477f32f9888a143d09b1ac04fa441b23c470bc93a76",
+    "bytes": 182652
+  },
+  "src/truss/_current_disclosure_owner/current-native-disclosure-child.mjs": {
+    "sha256": "d333226d9186136704d3f84a9c9dbfc44796efebab563dbc732d60337d2e03eb",
+    "bytes": 1065165
+  },
+  "src/truss/_current_disclosure_owner/consumer-manifest.json": {
+    "sha256": "a7b50c7af02768098fe91f22535a7b1b2450ebde8f0374bad53a6ab7ca380d04",
+    "bytes": 1671
+  },
+  "src/truss/_current_disclosure_owner/notices/json-schema-traverse/LICENSE": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_current_disclosure_owner/notices/json-schema-traverse/package.json": {
+    "sha256": "156fb24af02845c190701360d06dfda35ef04282e34a734289ea9535ad9819ae",
+    "bytes": 1004
+  },
+  "src/truss/_current_disclosure_owner/notices/fast-uri/LICENSE": {
+    "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "bytes": 1813
+  },
+  "src/truss/_current_disclosure_owner/notices/fast-uri/package.json": {
+    "sha256": "30cad05aad3d3596513706451dbfc7e0422f9c1d00f2903ecc34580327d54bc7",
+    "bytes": 1983
+  },
+  "src/truss/_current_disclosure_owner/notices/yaml/LICENSE": {
+    "sha256": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "bytes": 738
+  },
+  "src/truss/_current_disclosure_owner/notices/yaml/package.json": {
+    "sha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c",
+    "bytes": 3254
+  },
+  "src/truss/_current_disclosure_owner/notices/ajv/LICENSE": {
+    "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "bytes": 1090
+  },
+  "src/truss/_current_disclosure_owner/notices/ajv/package.json": {
+    "sha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989",
+    "bytes": 4405
+  },
+  "src/truss/_current_disclosure_owner/notices/fast-deep-equal/LICENSE": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_current_disclosure_owner/notices/fast-deep-equal/package.json": {
+    "sha256": "a5c63940db0260739be9e2ac67f3aac268df4db5770420ee4e34e493152f97d2",
+    "bytes": 1496
+  },
+  "src/truss/_report_schemas/history-event-v0.1.schema.json": {
+    "sha256": "e42f9b48642528cabbb646ccb758eb12b7f030029b712cf5d6f5174cbd90bfa6",
+    "bytes": 17292
+  },
+  "src/truss/_report_schemas/history-event-v0.2.proposal.schema.json": {
+    "sha256": "714923be0f86bd3508a097cabfee63a180e03b19651ebbfa38844bb3e637b425",
+    "bytes": 7628
+  },
+  "src/truss/_report_schemas/acceptance-rejection-v0.1.schema.json": {
+    "sha256": "98262b8d99fe0f87f752140a418a4e4f8751c4d28986457302586fee622258cf",
+    "bytes": 3336
+  },
+  "src/truss/_report_schemas/enforcement-report-v0.1.schema.json": {
+    "sha256": "7af9c786a297583d6eb5489d85f33fb0a04b2c1d0b6551e6d107528cc15c4137",
+    "bytes": 9371
+  },
+  "src/truss/_report_schemas/direct-cursor-v0.1.schema.json": {
+    "sha256": "bff79ad2e5ccc1047b43bdbe6eeb51b597f098c881313fd980de01c1685b4942",
+    "bytes": 7284
+  },
+  "src/truss/_report_schemas/exact-value-v0.1.schema.json": {
+    "sha256": "0c804796bfbf68339c299f0c55d24db58fcfcc929bffe2d5ffaf4a2f27e24880",
+    "bytes": 5917
+  },
+  "src/truss/_report_schemas/acceptance-report-v0.3.proposal.schema.json": {
+    "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf",
+    "bytes": 6593
+  },
+  "src/truss/_report_schemas/history-retain-payload-v0.1.proposal.schema.json": {
+    "sha256": "fc08e07a4b09636ac234737be9bb2cf3a9a3c26120baad612176574c17659605",
+    "bytes": 2184
+  },
+  "src/truss/_report_schemas/acceptance-input-v0.1.schema.json": {
+    "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+    "bytes": 6208
+  },
+  "src/truss/_report_schemas/acceptance-report-v0.1.schema.json": {
+    "sha256": "ccdc9976de3c158fae0a14d6cc41685d5f5a289d67daeb86b5e998b4a611e902",
+    "bytes": 10672
+  },
+  "src/truss/_report_schemas/history-record-v0.1.schema.json": {
+    "sha256": "c35c1258028cc4c8c95dcd16b561caed4f2a347c086f72ebfc7bfc4f2dfcf2fe",
+    "bytes": 7661
+  },
+  "src/truss/_umf_core08/producer.js": {
+    "sha256": "88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3",
+    "bytes": 827379
+  },
+  "src/truss/_umf_core08/producer-manifest.json": {
+    "sha256": "3123647a3443894052b670de8444e6ba0197abd83f647819faaad01fcaaedc81",
+    "bytes": 1037
+  },
+  "src/truss/_umf_core08/preparation.mjs": {
+    "sha256": "3f3c29f66ae043cbb1ff8c6b38240143ebca1be26c21d46405d55a5b0cd95161",
+    "bytes": 77699
+  },
+  "src/truss/_umf_core08/manifest.json": {
+    "sha256": "5956f81c43fce5431324f715717a7e7818ee5fcd95ba3f01e2e3e9de743d5d34",
+    "bytes": 2446
+  },
+  "src/truss/_umf_core08/acceptance-input-v0.1.schema.json": {
+    "sha256": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+    "bytes": 6208
+  },
+  "src/truss/_umf_core08/receiver.mjs": {
+    "sha256": "08d0ca7d3122374505287a016c66c47b864c0feb17a45d5c2c9687afb8994443",
+    "bytes": 2938
+  },
+  "src/truss/_umf_core08/licenses/require-from-string.txt": {
+    "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
+    "bytes": 1128
+  },
+  "src/truss/_umf_core08/licenses/ajv.txt": {
+    "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "bytes": 1090
+  },
+  "src/truss/_umf_core08/licenses/fast-uri.txt": {
+    "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "bytes": 1813
+  },
+  "src/truss/_umf_core08/licenses/fast-deep-equal.txt": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_umf_core08/licenses/yaml.txt": {
+    "sha256": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "bytes": 738
+  },
+  "src/truss/_umf_core08/licenses/json-schema-traverse.txt": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_umf_keys08/producer.js": {
+    "sha256": "a6499fcebc2eb14a006512c4963a4568843443eff35d5b07f6d007debe553651",
+    "bytes": 611721
+  },
+  "src/truss/_umf_keys08/producer-manifest.json": {
+    "sha256": "f674dd05d79d42c22838c145db87897c3e7f19d95669a1f342a9811b236f8c31",
+    "bytes": 800
+  },
+  "src/truss/_umf_keys08/manifest.json": {
+    "sha256": "3ce2df6a1abf84eef7d9a9f0586b09638939a06df9a261242d49cf58e772fad8",
+    "bytes": 1858
+  },
+  "src/truss/_umf_keys08/bridge.mjs": {
+    "sha256": "b8c03245f39a9bef3469fc43da5fe081f8feecd97877a53dbbe65cbcbeab5627",
+    "bytes": 1940
+  },
+  "src/truss/_umf_keys08/licenses/require-from-string.txt": {
+    "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
+    "bytes": 1128
+  },
+  "src/truss/_umf_keys08/licenses/ajv.txt": {
+    "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "bytes": 1090
+  },
+  "src/truss/_umf_keys08/licenses/fast-uri.txt": {
+    "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "bytes": 1813
+  },
+  "src/truss/_umf_keys08/licenses/fast-deep-equal.txt": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_umf_keys08/licenses/yaml.txt": {
+    "sha256": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "bytes": 738
+  },
+  "src/truss/_umf_keys08/licenses/json-schema-traverse.txt": {
+    "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "bytes": 1074
+  },
+  "src/truss/_security_bootstrap/preparation-literal-permit.sql": {
+    "sha256": "ae6fb0af722d2f1d189c073597238d1026813b54bbc9c4ea786ea37cfb060706",
+    "bytes": 7792
+  },
+  "src/truss/_security_bootstrap/preparation-authority-lock.sql": {
+    "sha256": "8105c84fa96b7afbfd9cedb01a6aef0fdecaaf1dec5d53b80804e0f0f2095481",
+    "bytes": 1141
+  },
+  "src/truss/_security_bootstrap/preparation-advisory-exclusion.sql": {
+    "sha256": "5981a13fa594d40317ee2958bcb8aeaca73778ec82f8c363095464983ed84b7e",
+    "bytes": 2354
+  },
+  "src/truss/_security_bootstrap/graph-subject.sql": {
+    "sha256": "0520931a9060692a99282b18d98b6f9becff7c00e735562a2ed7d1b69e83c0b8",
+    "bytes": 4276
+  },
+  "src/truss/_security_bootstrap/action-store-storage.sql": {
+    "sha256": "3b699c0d800da79207f48230a7fef8f1b3252efd0d531ecd7a0a05be5bf199d8",
+    "bytes": 2826
+  },
+  "src/truss/_security_bootstrap/registered-role-catalog-cut.sql": {
+    "sha256": "91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb",
+    "bytes": 512
+  },
+  "src/truss/_security_bootstrap/action-store-issuer.sql": {
+    "sha256": "7181f92898912785300bb4984f41a275287e982c67ca3fde1da90fd5735d520b",
+    "bytes": 12377
+  },
+  "src/truss/_security_bootstrap/graph-epoch-read-cut.sql": {
+    "sha256": "dd3ed9553c33a0a72274f24caf9f37ed5af1162832aaa25a4cc70929d3203d26",
+    "bytes": 588
+  },
+  "src/truss/_security_bootstrap/claims.sql": {
+    "sha256": "09515ed389247cea307ca04fc4ef45f90213a7881cd489758e5a1f854ce8e323",
+    "bytes": 719
+  },
+  "src/truss/_security_bootstrap/preparation-program-storage.sql": {
+    "sha256": "28947337a81df0bc05d27e102a206be4e74278bb708f3bf33bbca352a992ec99",
+    "bytes": 1807
+  },
+  "src/truss/_security_bootstrap/preparation-program-sources-storage.sql": {
+    "sha256": "177fc590f1bea4b967d0a0f21e7a492a70d2600f544e1407549c3ad4f94a4ad5",
+    "bytes": 930
+  },
+  "src/truss/_security_bootstrap/preparation-peer-xid.sql": {
+    "sha256": "2006fa1bafe2ff009faa5300e8d64db97b9722f637c799b04c4e80f454a4e561",
+    "bytes": 2118
+  },
+  "src/truss/_security_bootstrap/settle.sql": {
+    "sha256": "3671425cba05dd5baf1d604f5a775d67fcdefaa1ce7d8e5e67e57d282118fd78",
+    "bytes": 682
+  },
+  "src/truss/_security_bootstrap/preparation-attempt-anchor-storage.sql": {
+    "sha256": "5d8b6dad7c147a5eedf67aa144038efe66f4e7a5524010a957ee7eefec45c416",
+    "bytes": 2161
+  },
+  "src/truss/_security_bootstrap/preparation-program-binding.sql": {
+    "sha256": "033eb25d24e292d15608dfdf75ea012ec1ad0b82e0ce874ee2431ca9f44874bb",
+    "bytes": 1889
+  },
+  "src/truss/_security_bootstrap/preparation-data-authority-lock.sql": {
+    "sha256": "e8bd655e40ecd6bbbaa4b83d4e6660577bfca12dfb4353ea189948545260ba4b",
+    "bytes": 1494
+  },
+  "src/truss/_security_bootstrap/preparation-permit-mint.sql": {
+    "sha256": "3f730e626b95bec11868ec06d92ffca562132406006f9beebfedab898a9245c9",
+    "bytes": 2912
+  },
+  "src/truss/_security_bootstrap/preparation-catalog-cut.sql": {
+    "sha256": "4d10ae19b0c6771db3bef105bb99095497a437ee3e1d5d813e6bfe36aecab677",
+    "bytes": 3361
+  },
+  "src/truss/_security_bootstrap/capacity-lock.sql": {
+    "sha256": "6c7d76e24b8f4cb83815c4ab25e94f069c147acae136eb16c4ce87307862e349",
+    "bytes": 379
+  },
+  "src/truss/_security_bootstrap/capacity.sql": {
+    "sha256": "1ce1e6680dc681134423120e005df9161232e61fe1495495da177b82dbf69474",
+    "bytes": 740
+  },
+  "src/truss/_security_bootstrap/preparation-seal-storage.sql": {
+    "sha256": "235f2ce982eeda53eaee09f7608a388f96a815cde5354f4ce6db9bb3091422fe",
+    "bytes": 2049
+  },
+  "src/truss/_security_bootstrap/preparation-permit-binding-check.sql": {
+    "sha256": "d845a18bb1041c9a83734318deb9af8eb6ae491dfa643ba84d6af86ea182a696",
+    "bytes": 2631
+  },
+  "src/truss/_security_bootstrap/catalog-subject.sql": {
+    "sha256": "2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8",
+    "bytes": 2670
+  },
+  "src/truss/_security_bootstrap/preparation-literal-selection.sql": {
+    "sha256": "41b4b9e58d6a083760ce4d5e11f35be1acff636563968627514e7f49f9c7f8bd",
+    "bytes": 13678
+  },
+  "src/truss/_security_bootstrap/action-mapping-cut.sql": {
+    "sha256": "fd1a0724ac93a977643b059f618d0a111b7e3320536d413c2dc8b6fefac8ba68",
+    "bytes": 1463
+  },
+  "src/truss/_security_bootstrap/advance.sql": {
+    "sha256": "d1772dd74faf7a52fd3a86fb7dec0889223a5c2e970c396d9a6f78bdb64c18a6",
+    "bytes": 1438
+  },
+  "src/truss/_security_bootstrap/action-role-registry-storage.sql": {
+    "sha256": "e4b8502c3ca7f6515f9b0491e4d2fc8ff9bbca18c96b4b66e6b86bf5ceaa6bb2",
+    "bytes": 2892
+  },
+  "src/truss/_security_bootstrap/register.sql": {
+    "sha256": "55ad786b5b4e43a8b477dc1749fee3f92b94f7a48867c1c83b1b5e41c040fa73",
+    "bytes": 1485
+  },
+  "src/truss/_security_bootstrap/preparation-attempt-anchor.sql": {
+    "sha256": "a79512e4e8ead804f2843ca29ea2aa324010845d8e4a5fb829d2a5119483265b",
+    "bytes": 7923
+  },
+  "src/truss/_security_bootstrap/preparation-bridge-inventory.sql": {
+    "sha256": "1b0a45fa10a296280a9576968f15b16c9a898ab4409ca4c2e49c225399d76ba0",
+    "bytes": 13179
+  },
+  "src/truss/_security_bootstrap/catalog-read-table-cut.sql": {
+    "sha256": "9d28c88fd82ec7a08750701e28847f2d5b95b673c1c04a5dcc4aec13355f1842",
+    "bytes": 723
+  },
+  "src/truss/_security_bootstrap/preparation-literal-authority.sql": {
+    "sha256": "7b89f483a8f551b154a905d2c7a1fc627c745d371a8c32dc67975cf09857729b",
+    "bytes": 14639
+  },
+  "src/truss/_security_bootstrap/action-subject-cut.sql": {
+    "sha256": "5b070599774386b6c995b46e6d4154534e951acde27a5ae22604ff10cc7ded1d",
+    "bytes": 1141
+  },
+  "src/truss/_security_bootstrap/guard.sql": {
+    "sha256": "0e1d881a2eccbcaf3d34ab8c4729a1aa21361c8c64b4ac142d706ee1da1312cf",
+    "bytes": 722
+  },
+  "src/truss/_catalog_runtime/upgrade-source-059.json": {
+    "sha256": "1f5f67f9e138c08a1b13f49c4a8080f51ce79e5d7f6593f7382fec0a0cf13373",
+    "bytes": 6574
+  },
+  "src/truss/_catalog_runtime/layout.sql": {
+    "sha256": "1ffa72c51518e809c773e7f9207c1de1598f331c15de61e02dda0abe0fc475e0",
+    "bytes": 28609
+  },
+  "src/truss/_catalog_runtime/upgrade-source-034.json": {
+    "sha256": "120f704e29652f2b10ea4d1e40cf4d5893056bfe4277f125a010880b167f9d81",
+    "bytes": 3737
+  },
+  "src/truss/_catalog_runtime/history.sql": {
+    "sha256": "935db9df6324f317b2de3510a4d7b3d033ec117926c8dedfe8989e72898a27db",
+    "bytes": 24647
+  },
+  "src/truss/_catalog_runtime/upgrade-source-063.json": {
+    "sha256": "ef8766e6b9bab4da2546486bc1778799a1ba708967e39efbfa080460c1cb7d51",
+    "bytes": 7374
+  },
+  "src/truss/_catalog_runtime/upgrade-source-055.json": {
+    "sha256": "6e8f6d4b15d835ffff19e6023e88f7b16096096ebafce38d9a5efd5dcf505340",
+    "bytes": 6178
+  },
+  "src/truss/_catalog_runtime/containers.sql": {
+    "sha256": "b5286c08a728e0d0eecf83e72b41a561cc20364624ad913ac1e77567bc3cc3c4",
+    "bytes": 18014
+  },
+  "src/truss/_catalog_runtime/upgrade-source-043.json": {
+    "sha256": "714b67b1455def530baa6fd7ee035df7856155e9655c2eaca6f00f024e0855e3",
+    "bytes": 4991
+  },
+  "src/truss/_catalog_runtime/upgrade-source-038.json": {
+    "sha256": "9f31b6d5663e15ed2c5bb2af069dda8bc6adf2d002177a520987db54deed2ac8",
+    "bytes": 4317
+  },
+  "src/truss/_catalog_runtime/read.sql": {
+    "sha256": "a6fcbf925a23681c7df50ca2c42856768cc29a58127e6c48956525d6f72540f0",
+    "bytes": 12335
+  },
+  "src/truss/_catalog_runtime/ownership.sql": {
+    "sha256": "f6fdc4d330fecf429a9457aa7ebe083a6f0394da69d2bf2e06d310ed9989c3d5",
+    "bytes": 3155
+  },
+  "src/truss/_catalog_runtime/upgrade-source-039.json": {
+    "sha256": "422468c8d0ad5ffed605d20221b13dc848d7fa4b40f850a0bd5201b7f634b029",
+    "bytes": 4416
+  },
+  "src/truss/_catalog_runtime/upgrade-source-042.json": {
+    "sha256": "0af4092bed931affbd076f323ee0cc3c51cf255b6be0e20473f1bf51469dfb24",
+    "bytes": 4802
+  },
+  "src/truss/_catalog_runtime/operations.sql": {
+    "sha256": "f8363af5fdcee68b39d4b17fea11a6f4b85012a2be23a118d95df14834a29b5b",
+    "bytes": 164859
+  },
+  "src/truss/_catalog_runtime/entity-load.sql": {
+    "sha256": "0759170651b2be643c9f6631d0f7a81218f53a5f3b0ada841b60425b131f3aa1",
+    "bytes": 1471
+  },
+  "src/truss/_catalog_runtime/view.sql": {
+    "sha256": "58dd0882c1b93204fd31804d383b16a25c63d5d395bf422ba7fcbbb11fb617a7",
+    "bytes": 3947
+  },
+  "src/truss/_catalog_runtime/entity-times.sql": {
+    "sha256": "823cbe44b6c1f8ffad32e1b882e1a0e18498cb2b61cf351439074859e201dfea",
+    "bytes": 2006
+  },
+  "src/truss/_catalog_runtime/upgrade-source-054.json": {
+    "sha256": "52c6cd8ccbe171599518f667e7044cd0267b908ef35c75d04e2decb2f156d676",
+    "bytes": 6079
+  },
+  "src/truss/_catalog_runtime/upgrade-source-023.json": {
+    "sha256": "8cb52bb9cbf7b67eb11c9b965463465c32811fb7809c51df914cea97c0e40312",
+    "bytes": 2188
+  },
+  "src/truss/_catalog_runtime/upgrade-source-062.json": {
+    "sha256": "ed0f53e66db6907fed2659a5f5086c44ad8eb8a2e1dc93fbc07a19185bcc9066",
+    "bytes": 7275
+  },
+  "src/truss/_catalog_runtime/upgrade-source-035.json": {
+    "sha256": "b8356093debd2715a0b7332d1e73683137409ae542d9990dab35d55fd21f2869",
+    "bytes": 3927
+  },
+  "src/truss/_catalog_runtime/upgrade-source-058.json": {
+    "sha256": "5eaac785787830c02bfed3758360e148fce3434480fbfee01c9e66ca671808a3",
+    "bytes": 6475
+  },
+  "src/truss/_catalog_runtime/upgrade-source-053.json": {
+    "sha256": "6a4c12bc481e7c181bf99c2947f79496e291abee55389ee2344e6183582d5c2f",
+    "bytes": 5980
+  },
+  "src/truss/_catalog_runtime/lineage.sql": {
+    "sha256": "f972491c61f2aedbe612165eb2ed3a6cd1e2d2a9456a6d45f2542d7c62e69fbc",
+    "bytes": 1803
+  },
+  "src/truss/_catalog_runtime/upgrade-source-045.json": {
+    "sha256": "740d6f4ee51229ce1d29406cf82afbd4f498687d59b300bf480c4511eea6ca0a",
+    "bytes": 5189
+  },
+  "src/truss/_catalog_runtime/query.sql": {
+    "sha256": "4b2e7cded8f2fee754d49c97929c490ef29a17a4e49b2bcd126562cda85c77cc",
+    "bytes": 29744
+  },
+  "src/truss/_catalog_runtime/upgrade-source-028.json": {
+    "sha256": "4fe4b26a7e8fb3fb85e01d2c86e2461ba99c704a5df80986e1083a4ddeb804d3",
+    "bytes": 2959
+  },
+  "src/truss/_catalog_runtime/owned-transition-upgrade.sql": {
+    "sha256": "0768cf0536354368985746a29f71fed45bbe1f921c23bea31cf562c2e7caa2ad",
+    "bytes": 395
+  },
+  "src/truss/_catalog_runtime/upgrade-source-049.json": {
+    "sha256": "82dda2a38d46b322d6658030a2119bf5bfa59a11f201aee6a345c1f64f0574ab",
+    "bytes": 5585
+  },
+  "src/truss/_catalog_runtime/upgrade-source-032.json": {
+    "sha256": "71623d5caf06515c52f4cfdf6f9a27d9bbb707a7a19f5f417b0339ce17259144",
+    "bytes": 3355
+  },
+  "src/truss/_catalog_runtime/upgrade-source-065.json": {
+    "sha256": "aada6da87a2ff1cf522f846d463ce1ae3d883bb88d435de6f9c8ca2d2263daa6",
+    "bytes": 7765
+  },
+  "src/truss/_catalog_runtime/query-abi.json": {
+    "sha256": "9fce2c91eff11ae2d8e6c0e3759b425efb1457e2c9675dc4383fc28430909806",
+    "bytes": 5069
+  },
+  "src/truss/_catalog_runtime/upgrade-source-024.json": {
+    "sha256": "4cef6896f9ef9b98dbfb72a3c63af909f50adffa9fac150ebe1b0972cb63b856",
+    "bytes": 2478
+  },
+  "src/truss/_catalog_runtime/groups.sql": {
+    "sha256": "afb9eeb8bfc07da53ef46f9f0db17318d6335be89d9246f8ab0fb4ee1dbe8556",
+    "bytes": 69529
+  },
+  "src/truss/_catalog_runtime/upgrade-source-025.json": {
+    "sha256": "dbb2cd96137d9d6215ddfe4271ba10b77a9327f6950191b662a43b91e6e67fc5",
+    "bytes": 2577
+  },
+  "src/truss/_catalog_runtime/entity-query.sql": {
+    "sha256": "418a781919b8cbc9ee2f37d940e6675f71be07f8929de1b47d670367d58299e7",
+    "bytes": 19986
+  },
+  "src/truss/_catalog_runtime/upgrade-source-064.json": {
+    "sha256": "2faa603b5229bb0d9d843597a46452e3b1e52bb2e664e69d859138450b23ffce",
+    "bytes": 7473
+  },
+  "src/truss/_catalog_runtime/upgrade-source-033.json": {
+    "sha256": "f78c471903e7bb24c6afae1183a829682b27f9ae18076e5add41d9ad466ab1ec",
+    "bytes": 3546
+  },
+  "src/truss/_catalog_runtime/plan.sql": {
+    "sha256": "9e3f78c998956777e46c0d5b62f95cac857612fc665beda8291aa3a37f430340",
+    "bytes": 30074
+  },
+  "src/truss/_catalog_runtime/upgrade-source-048.json": {
+    "sha256": "4d08f416a3f1285c4ffafdfeab237689985be6254da32974f24264de9e329824",
+    "bytes": 5486
+  },
+  "src/truss/_catalog_runtime/catalog-rebind-storage.sql": {
+    "sha256": "8f641e1e386e3049ba690c391e63af577ebc25611fb97982029aeaede352bfe6",
+    "bytes": 1246
+  },
+  "src/truss/_catalog_runtime/key-read.sql": {
+    "sha256": "cad19d6e9a925ae994692569605bb64365fb50bcb96c1019f575db174165a728",
+    "bytes": 12248
+  },
+  "src/truss/_catalog_runtime/scalars.sql": {
+    "sha256": "55ace27fc74aea7bd1765094ecae3d00fc083c7a8deef0072be49e0a909d5849",
+    "bytes": 6348
+  },
+  "src/truss/_catalog_runtime/upgrade-source-029.json": {
+    "sha256": "9dc81b9dc420805b384a2f0dcdc17858da6452ebb6e06dc1e473cc7ceaa4bc17",
+    "bytes": 3058
+  },
+  "src/truss/_catalog_runtime/upgrade-source-068.json": {
+    "sha256": "3588cf030cb46c7d12368557e351bd767c10b4dd2e1644f7f100cec54602a2fc",
+    "bytes": 8263
+  },
+  "src/truss/_catalog_runtime/capability-profiles.json": {
+    "sha256": "2a7e915d701c9c286a084c17598b8f166f59774e7ac2baeac7f34b72a2e3f0bf",
+    "bytes": 53526
+  },
+  "src/truss/_catalog_runtime/upgrade-source-044.json": {
+    "sha256": "07e6ce1f9985d3ea918f00451dff8d0ec08736bebd7e0b39081f0d1398c87443",
+    "bytes": 5090
+  },
+  "src/truss/_catalog_runtime/pages.sql": {
+    "sha256": "1e8c19eeee0573c12a6c7649bd2f7a1c7badd2a5b297d193740795ae0ef26abf",
+    "bytes": 8097
+  },
+  "src/truss/_catalog_runtime/group-profiles.json": {
+    "sha256": "9a19eeafd78ae13a8baa884a58e22b1ec0f67c89899d9e66c826e595af7e160a",
+    "bytes": 26929
+  },
+  "src/truss/_catalog_runtime/upgrade-source-052.json": {
+    "sha256": "607b1b866706f029ff79f18cd151df24a88a1400116c48aaaaa1f07164f45a21",
+    "bytes": 5881
+  },
+  "src/truss/_catalog_runtime/barrier.sql": {
+    "sha256": "83f2ecfad3c55bbbb58ace444b61bb4349dd6edc5154f7100514a2804944af77",
+    "bytes": 175
+  },
+  "src/truss/_catalog_runtime/runtime.sql": {
+    "sha256": "f1078e880d411ed4bf68aa952dbf654e41b66541b1f9fa16c09d0ff1edc4bc34",
+    "bytes": 83647
+  },
+  "src/truss/_catalog_runtime/upgrade-source-047.json": {
+    "sha256": "0eba4722a9fb1438966c60bc32a099ea37c71b1ea5262fb78dcb95450edb83d8",
+    "bytes": 5387
+  },
+  "src/truss/_catalog_runtime/feed-receipts.sql": {
+    "sha256": "293ca76352f9bf6498204a9ee6cb891ddb5c5519514b9341cdf146ed8bf63c3d",
+    "bytes": 8820
+  },
+  "src/truss/_catalog_runtime/feed.sql": {
+    "sha256": "4d1a3bd8938faec8dbb9654388f59e21abe7dbd4584131d251b1c1daed906e5a",
+    "bytes": 24712
+  },
+  "src/truss/_catalog_runtime/upgrade-source-051.json": {
+    "sha256": "a3443f2ec97eddd76d0cd9a09692b2189161c9c1e222915a89d731c3a1a4fce1",
+    "bytes": 5783
+  },
+  "src/truss/_catalog_runtime/upgrade-source-026.json": {
+    "sha256": "145fd167a0746c7845b1439822cd588359bea678dbfa7b77e4b20c24f8da9e81",
+    "bytes": 2761
+  },
+  "src/truss/_catalog_runtime/upgrade-source-067.json": {
+    "sha256": "8c553480e1bcb95ccaebb9aa04150a0253217838c8df6ad09acd5ecece2402ee",
+    "bytes": 8057
+  },
+  "src/truss/_catalog_runtime/evolution.sql": {
+    "sha256": "23a81f72823e8c49c87747e2d8bba02ae253225466acd4a836a1eb9314561775",
+    "bytes": 12499
+  },
+  "src/truss/_catalog_runtime/upgrade-source-030.json": {
+    "sha256": "17d8b142ee41408c9243682dd551c3e889ac962880cac983d3f73746fa168fad",
+    "bytes": 3157
+  },
+  "src/truss/_catalog_runtime/owned.sql": {
+    "sha256": "fa108ffe7b2f53ead1ecfd147dde19c80d1d3769e0cb32a5a1f4ef588a96e1fa",
+    "bytes": 153825
+  },
+  "src/truss/_catalog_runtime/catalog-key-backfill.sql": {
+    "sha256": "bc04fab0e8340770cd569554d5557029f880752e275b9768dcd456958c6191b4",
+    "bytes": 22048
+  },
+  "src/truss/_catalog_runtime/upgrade-source-031.json": {
+    "sha256": "c597f15730f41f65411a8125ba218b35e797555f33ec7259f15b4b036b15fb2d",
+    "bytes": 3256
+  },
+  "src/truss/_catalog_runtime/keys.sql": {
+    "sha256": "e7d36682a6c0bbdb687f038963a886ab7c06c3c88cf50b7f6d02657bcfa722f7",
+    "bytes": 10662
+  },
+  "src/truss/_catalog_runtime/upgrade-source-066.json": {
+    "sha256": "99ae7218e0e3e68e0a3682e43949089185d967eb21bbf31deb0b8f8f6fc2de9a",
+    "bytes": 7864
+  },
+  "src/truss/_catalog_runtime/upgrade-source-070.json": {
+    "sha256": "0d292c3681986b3664ff3af9927039d10cf20ef029511e33ccd7d76c566041e3",
+    "bytes": 8362
+  },
+  "src/truss/_catalog_runtime/preconditions.sql": {
+    "sha256": "433dfc82430e509f6cd23b156a3510215f34d834bcad0f74f7e131c30f0895c9",
+    "bytes": 22907
+  },
+  "src/truss/_catalog_runtime/upgrade-source-027.json": {
+    "sha256": "29d6963f879016c823f14cd7ae1152c3572bef9d1e4253df660de9d9c452484d",
+    "bytes": 2860
+  },
+  "src/truss/_catalog_runtime/upgrade-source-050.json": {
+    "sha256": "d66f4e0dcf387bb60fcb97c20c6aca3b93fb2a41cb88126ac45efdeca8647a37",
+    "bytes": 5684
+  },
+  "src/truss/_catalog_runtime/manifest.json": {
+    "sha256": "31870f9b5c2f5c755b69579e0ebdf3bdea80fadb6a89706d073ed8181c776b94",
+    "bytes": 8636
+  },
+  "src/truss/_catalog_runtime/upgrade-source-046.json": {
+    "sha256": "899422a4ec840f83e7631728d92ff8f4bffa8e06c853e4c0016c3956a819f601",
+    "bytes": 5288
+  },
+  "src/truss/_catalog_runtime/creation-transition-upgrade.sql": {
+    "sha256": "8395a5eee550e9c2d202fa3a29e768bd07f1b58e227eaabe2d3218b948eb9c39",
+    "bytes": 84
+  },
+  "src/truss/_catalog_runtime/upgrade-source-061.json": {
+    "sha256": "364b2a908fd5bc53e4ccaa81ada2633e696cce441fc5df152a8698c597f5ec01",
+    "bytes": 6968
+  },
+  "src/truss/_catalog_runtime/upgrade-source-036.json": {
+    "sha256": "4dd0e3b43bfe04541c5bbd63bc04eb8be698f2f82c722b2d9069dedb4adde3b8",
+    "bytes": 4026
+  },
+  "src/truss/_catalog_runtime/migrations.sql": {
+    "sha256": "c11215df9fb71f692d47870073b6b392aae38a2eae95bf4dd51bd40899043aa5",
+    "bytes": 2006
+  },
+  "src/truss/_catalog_runtime/imports.sql": {
+    "sha256": "c5f6704928c2b9373d39c15290ac9cb655d7f6502b018c778a15bd1c929e5941",
+    "bytes": 41761
+  },
+  "src/truss/_catalog_runtime/key-derivation.sql": {
+    "sha256": "c2e94e412faffb507847134cb8fcf4362c0db2ac271b410d19b03130d78b4188",
+    "bytes": 11288
+  },
+  "src/truss/_catalog_runtime/preparation-baseline.json": {
+    "sha256": "fecfedd6793948b915553c67710b3f4374014df5d89d9e140d591d31776d6c9e",
+    "bytes": 1078
+  },
+  "src/truss/_catalog_runtime/upgrade-source-041.json": {
+    "sha256": "2a24f1b1a9755557c16a74108fa5e578ca8285b6490b04e74b5a1d1e2f52cdfa",
+    "bytes": 4703
+  },
+  "src/truss/_catalog_runtime/upgrade-source-057.json": {
+    "sha256": "60363e594f3e830f510c5893f4b146acd949206ed647ff12471246cd09c97c39",
+    "bytes": 6376
+  },
+  "src/truss/_catalog_runtime/upgrade-source-056.json": {
+    "sha256": "533502bf3662beb7afd93157485b72aa0e363f8a1972d9170ddfc9c530b3fca2",
+    "bytes": 6277
+  },
+  "src/truss/_catalog_runtime/upgrade-source-040.json": {
+    "sha256": "c843d159004c04711feb3fac9dcfed0d37a734c27ce483d7bab616d7253917d7",
+    "bytes": 4515
+  },
+  "src/truss/_catalog_runtime/traversal.sql": {
+    "sha256": "236796ce6c993b7858a5c93889e9d462f1b6b8f3318abdbbe2073eba0c5d6e71",
+    "bytes": 11872
+  },
+  "src/truss/_catalog_runtime/catalog-key-backfill-storage.sql": {
+    "sha256": "7455007d8b2054cf0a223c5307e760f32046037f0411e1509e8ab481c753744d",
+    "bytes": 1614
+  },
+  "src/truss/_catalog_runtime/catalog-rebind.sql": {
+    "sha256": "8faabbfd8c039fa6991db4d17770f845a73c68ad443cdd5587a261e6bcc19b98",
+    "bytes": 29919
+  },
+  "src/truss/_catalog_runtime/upgrade-source-037.json": {
+    "sha256": "a8310e6af8bed761332eff7f6fb6670862397b761821e5f4d219341874f7486c",
+    "bytes": 4125
+  },
+  "src/truss/_catalog_runtime/upgrade-source-060.json": {
+    "sha256": "bd553857a7087d81d9e03eefed658f1ba99dd446ff097b004c5eae0fb0ca9239",
+    "bytes": 6869
+  },
+  "src/truss/_catalog_runtime/reader.sql": {
+    "sha256": "03750118c93a939fd4cc2f46239354b8ee9395b6571bd5a4ad08a27f12e27b69",
+    "bytes": 16259
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "captureCommit": "b077dd3eea44b8ffbf76b8b386112a76903686da",
+  "parent": "318d3edaddf3900d2e198d95d2590228f0a9a059",
+  "nativePins": 1371,
+  "allBaseSourceGitAndCurrentExact": 1359,
+  "reviewedProductionSourceUnchanged": true,
+  "inheritedNativeAssetsExactParent": true,
+  "wheelSourceGitAndCurrentExact": 501,
+  "SQLExecuted": false,
+  "scope": "Root source/byte correspondence; not a completed postrebase Astra review, fresh native replay or acceptance promotion."
+}

@@ -1,0 +1,20 @@
+test_actual_factory_retains_same_parent_and_originals (test_native_model_correspondence.IssuedModelCorrespondenceTests.test_actual_factory_retains_same_parent_and_originals) ... skipped 'requires explicitly selected original opt-in Weft candidate'
+test_equal_data_contexts_keep_distinct_actual_parent_identity (test_native_model_correspondence.IssuedModelCorrespondenceTests.test_equal_data_contexts_keep_distinct_actual_parent_identity) ... skipped 'requires explicitly selected original opt-in Weft candidate'
+test_report_import_wrong_receiver_cannot_supply_current (test_native_model_correspondence.IssuedModelCorrespondenceTests.test_report_import_wrong_receiver_cannot_supply_current) ... skipped 'requires explicitly selected original opt-in Weft candidate'
+test_changed_or_unsupported_physical_column_refuses (test_native_model_correspondence.NativeModelCorrespondenceTests.test_changed_or_unsupported_physical_column_refuses) ... ok
+test_complete_field_and_key_identity_refuse_foreign_components (test_native_model_correspondence.NativeModelCorrespondenceTests.test_complete_field_and_key_identity_refuse_foreign_components) ... ok
+test_complete_member_census_rejects_extra_native_and_missing_issued_non_key (test_native_model_correspondence.NativeModelCorrespondenceTests.test_complete_member_census_rejects_extra_native_and_missing_issued_non_key) ... ok
+test_complete_qualified_records_fields_keys_and_data_flags (test_native_model_correspondence.NativeModelCorrespondenceTests.test_complete_qualified_records_fields_keys_and_data_flags) ... ok
+test_composite_order_is_not_set_order_in_supplied_metadata (test_native_model_correspondence.NativeModelCorrespondenceTests.test_composite_order_is_not_set_order_in_supplied_metadata) ... ok
+test_deadline_and_requirements_capacity_refuse (test_native_model_correspondence.NativeModelCorrespondenceTests.test_deadline_and_requirements_capacity_refuse) ... ok
+test_distinct_decoder_byte_profiles_and_shared_strictness (test_native_model_correspondence.NativeModelCorrespondenceTests.test_distinct_decoder_byte_profiles_and_shared_strictness) ... ok
+test_duplicate_record_native_identity_and_properties_refuse (test_native_model_correspondence.NativeModelCorrespondenceTests.test_duplicate_record_native_identity_and_properties_refuse) ... ok
+test_native_id_and_key_census_are_exact (test_native_model_correspondence.NativeModelCorrespondenceTests.test_native_id_and_key_census_are_exact) ... ok
+test_native_row_home_family_and_availability_refuse_even_no_object_rows (test_native_model_correspondence.NativeModelCorrespondenceTests.test_native_row_home_family_and_availability_refuse_even_no_object_rows) ... ok
+test_wrong_original_source_and_preparation_hash_refuse (test_native_model_correspondence.NativeModelCorrespondenceTests.test_wrong_original_source_and_preparation_hash_refuse) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.140s
+
+OK (skipped=3)
+{"loadedPackage": "/private/tmp/truss-native-model-join-postrebase-package-owner-20261016/installed/truss/__init__.py", "joinModule": "/private/tmp/truss-native-model-join-postrebase-package-owner-20261016/installed/truss/_native_model_correspondence.py", "decoderModule": "/private/tmp/truss-native-model-join-postrebase-package-owner-20261016/installed/truss/_owner_evidence_json.py", "defaultTests": 14, "passed": 11, "skipped": 3, "weftImportAttempts": [], "noRootExport": true, "nativeAuthority": false}

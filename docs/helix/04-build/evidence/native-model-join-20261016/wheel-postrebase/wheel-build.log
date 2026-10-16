@@ -1,0 +1,9 @@
+Processing /private/tmp/truss-native-model-join-postrebase-package-owner-20261016/source
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: truss-toolkit
+  Building wheel for truss-toolkit (pyproject.toml): started
+  Building wheel for truss-toolkit (pyproject.toml): finished with status 'done'
+  Created wheel for truss-toolkit: filename=truss_toolkit-0.0.38.dev0-py3-none-any.whl size=2704087 sha256=06e1cd53b46eda6f651ee60be29660a806413caa4854dd729860128705fcb7af
+  Stored in directory: /private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/pip-ephem-wheel-cache-4q2yn8ov/wheels/bb/75/d5/18f5aea4a5405d70ac734dc582cd990d9ba30efa135e1b4472
+Successfully built truss-toolkit

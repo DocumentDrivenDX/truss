@@ -118,5 +118,20 @@
       "sha256": "9701db114511e759d4436953615fc52c67946c1a3f5ed7bbedaad5cc4d9ef093",
       "bytes": 16659609
     }
+  },
+  "truss-native-model-join-retention-astra": {
+    "manifest": {
+      "sha256": "5bf1ecad4a1a8b2c93b7e223a057b448e25ba037830d5acbd3fbe0fb8c04fe77",
+      "bytes": 1811
+    },
+    "review": {
+      "sha256": "a3ce70ceafcb7b1432f43f69d5acedb165f09aa10cdd575d53a6796c06689b0a",
+      "bytes": 2809
+    },
+    "artifacts": 14,
+    "archive": {
+      "sha256": "312ced153883fd1ced227491e4e8fd3a3d149faed641b7e0782119cf8de46bc6",
+      "bytes": 22667
+    }
   }
 }

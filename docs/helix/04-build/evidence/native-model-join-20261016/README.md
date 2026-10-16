@@ -69,3 +69,31 @@ NSB-T01/T04/T05/T06/T09/T13/T14 prerequisites only. All original Truss132/shared
 cases and34criteria remain required;45implemented/113missing is unchanged.
 No acceptance case is promoted. All broader native homes/Record-backed graph,
 operators/domains and authenticated whole-path closing guards remain required.
+
+
+## Rebased main qualification
+
+The separately retained postrebase campaign imports the actual base package,
+not the older runtime-stage. Captured source b077dd3e is the reviewed component
+on parent318d3eda, preserving all inherited SQL/runtime/version/dependency bytes.
+Its exact dedicated-flag native test passes1/4.437s with1371pins and actual
+PID72013 stopped/root removed. Fresh wheel06e1cd53 matches501 source/wheel/
+pip-installed members;42 selected installed tests pass, default11pass/3skip with
+Weft unavailable, and1491 import checks pass. Older R1/R3/R4/wheel65ad receipts
+keep their historical source qualifications. These functional checks do not
+close the broader development-main capacity CI failure or qualify release.
+
+The separate14-artifact retention/checkpoint audit verifies the eight component
+review archives/321 original artifacts and the original81-file wrapper, without
+SQL. Its full archive is retained. The read-only audit now additionally checks
+the new postrebase native source ZIP and wheel; no original receipt is repinned.
+
+
+The postrebase Astra task ended with an account usage-limit error before its final
+review and manifest were produced. Its completed partial source/report/wheel/
+42-test checks are retained verbatim in postrebase-astra-unfinished.zip with a
+clearly root-generated partial manifest. They are not presented as a completed
+Astra review. Root independently confirms all1371 captured inputs,1359 base files
+against the captured Git commit/current sources, both reviewed production files,
+501 wheel members and unchanged inherited assets. All production changes already
+have completed independent reviews; the new wrappers are byte-audited separately.
