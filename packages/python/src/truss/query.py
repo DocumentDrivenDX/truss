@@ -60,3 +60,11 @@ class QueryPage:
     next_cursor: QueryPageCursor | None
     as_of: QueryReadPosition | None = None
     outcome: Literal['page'] = field(default='page', init=False)
+
+@dataclass(frozen=True, slots=True)
+class QueryCatalogSources:
+    """Original admitted compiler inputs for an inert build-time catalog.
+
+    These bytes grant no authority; every execution reacquires native context.
+    """
+    request_json: str

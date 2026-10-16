@@ -1,0 +1,10 @@
+{
+  "sha256": {
+    "packages/python/src/truss/access.py": "e49e9be5ecc71d5c9332a89c157ac2498b838a0f9f6a60d3741a04520eef5c0e",
+    "packages/python/src/truss/_query_runtime.py": "f4b6f0fe1a6862831b9e8ab5ff7a6c176378e1b95a04b12d750b326b1700ec55",
+    "packages/python/src/truss/catalog_runtime.py": "c71c663885a16a5728fd31452f5f35777911a49c943b7a0c9f51a3821d523fac",
+    "scripts/check-typed-sdk-native.py": "12c9199c31d6c52c4f178fd4f372729054ef2ed8f926d93118a881bbc472f2f6"
+  },
+  "temporal": "HELD",
+  "scope": "actual installed original ordinary module ACL schema, instance, query and typed catalog path; protected current-policy/actions remain separate"
+}

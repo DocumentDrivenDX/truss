@@ -9,16 +9,16 @@ from types import MappingProxyType
 from typing import Mapping
 from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
-from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition
+from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition, QueryCatalogSources
 
 BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.39',
            'targetProfile': 'truss-runtime-pg18.6/0.5', 'interfaceVersion': 'weft-backend/0.2.6'}
 
 
-def compiler():
+def compiler(*, engine_catalog=False):
     try:
         import weft
-        if weft.__version__ != '0.4.36':
+        if weft.__version__ != '0.4.36' and not (weft.__version__ == '0.4.39-dev.0' and callable(getattr(weft, 'check_engine_read_json', None))):
             return None
         return weft.compile_truss_runtime_json
     except (ImportError, AttributeError):
@@ -161,7 +161,7 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
 
 
 def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
-              maximum_scan_rows, maximum_bytes, manifest, digest, pin_cursor, read_profile, page_size=None, page_cursor=None):
+              maximum_scan_rows, maximum_bytes, manifest, digest, pin_cursor, read_profile, page_size=None, page_cursor=None, engine_program=None, capture_catalog=False):
     try:
         valid = type(sql) is str and 1 <= len(sql.encode('utf8')) <= 1048576 and '\0' not in sql
         valid = valid and type(document_ids) is tuple and 1 <= len(document_ids) <= 32 and len(set(document_ids)) == len(document_ids)
@@ -189,7 +189,9 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                     return Ok(QueryRefused(code='invalid_query'))
             except (ValueError, UnicodeError):
                 return Ok(QueryRefused(code='invalid_query'))
-    compile_query = compiler()
+    if type(capture_catalog) is not bool or engine_program is not None and (type(engine_program) is not str or len(engine_program.encode("utf8")) > 4194304) or (capture_catalog or engine_program is not None) and (page_size is not None or read_profile is not None):
+        return Ok(QueryRefused(code="invalid_query"))
+    compile_query = compiler(engine_catalog=capture_catalog or engine_program is not None)
     if compile_query is None:
         return Ok(QueryUnavailable(reason='compiler'))
     if page_size is not None:
@@ -263,6 +265,15 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             raise ValueError('Exact selected compile/dialect/IR versions required')
         if artifact['backend'] != BACKEND or artifact['bindingSha256'] != binding_sha or artifact['modelPins'] != [m['pin'] for m in bundle['modules']]:
             raise ValueError('Original compiled binding/model/backend required')
+        if engine_program is not None:
+            import weft
+            checked = json.loads(weft.check_engine_read_json(engine_program, json.dumps(request, ensure_ascii=False)))
+            if checked.get('status') != 'compiled' or checked.get('compiler') != 'truss-runtime' or checked.get('artifact') != artifact:
+                cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
+                return QueryRefused(code='stale_context')
+        if capture_catalog:
+            cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
+            return QueryCatalogSources(request_json=json.dumps(request, ensure_ascii=False, separators=(',', ':')))
         if not artifact['obligations'] or any(o['id'] != 'truss.runtime.context/0.1' or o['owner'] != 'host' for o in artifact['obligations']):
             raise ValueError('Every compiled obligation must have an installed handler')
         slots = artifact['parameters']
