@@ -1,0 +1,1536 @@
+{
+  "runtimeManifestSha256": "3a0902f64f7ee83037cf56d3184e551d54e615c7640ce24769d71d3e42420d83",
+  "sourceCommit": null,
+  "sourceWorkingTreeDirty": null,
+  "machine": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.17",
+  "trussSource": "/private/tmp/truss-preflight-actor-qualified-20261016",
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "expectedAtomicGroupLimit": 128,
+  "warmupReads": 20,
+  "seconds": 7.549301207996905,
+  "passed": true,
+  "functionalPassed": true,
+  "performanceQualification": "not_evaluated",
+  "capacityScope": {
+    "targetAtomicOperations": 1024,
+    "configuredExpectedAtomicOperations": 128,
+    "attemptedAtomicGroupSizes": [
+      1
+    ],
+    "committedAtomicGroupSizes": [
+      1
+    ],
+    "qualification": "Only observed attempts and commits; configured limits do not establish actual maximum capacity."
+  },
+  "cases": [
+    {
+      "sample": "catalog",
+      "status": "passed",
+      "schemaBytes": 87445,
+      "records": 6,
+      "elements": 37,
+      "actions": 30,
+      "databaseSettings": {
+        "fsync": "on",
+        "full_page_writes": "on",
+        "server_version": "18.6",
+        "shared_buffers": "16384",
+        "synchronous_commit": "on"
+      },
+      "bulkCreateIncludingCommitMs": 502.876875,
+      "bulkCreateRowsPerSecondIncludingCommit": 1.9885583324944103,
+      "lastCommittedUpdateNativeFunctions": [
+        {
+          "function": "truss.runtime_person(boolean)",
+          "calls": 33,
+          "totalMs": 49.99500000000012,
+          "selfMs": 49.644000000000005
+        },
+        {
+          "function": "truss.runtime_definition_in_basis(text,integer,integer,integer,jsonb)",
+          "calls": 51,
+          "totalMs": 30.893,
+          "selfMs": 30.893
+        },
+        {
+          "function": "truss.catalog_expected_records(bytea,bytea,bytea,timestamp with time zone,timestamp with time zone,integer,integer,integer,integer)",
+          "calls": 2,
+          "totalMs": 8.448000000000008,
+          "selfMs": 8.174000000000007
+        },
+        {
+          "function": "truss.catalog_revision_plan(jsonb,jsonb)",
+          "calls": 2,
+          "totalMs": 5.7809999999999775,
+          "selfMs": 5.7809999999999775
+        },
+        {
+          "function": "truss.derive_catalog_key_tuple(integer,smallint,jsonb,jsonb)",
+          "calls": 4,
+          "totalMs": 1.876999999999999,
+          "selfMs": 1.7929999999999993
+        },
+        {
+          "function": "truss.runtime_graph_validate_object(bigint,integer,boolean)",
+          "calls": 4,
+          "totalMs": 13.613,
+          "selfMs": 1.1290000000000004
+        },
+        {
+          "function": "truss.object_group_begin(bytea,bytea,bytea,text,text,bytea,boolean)",
+          "calls": 1,
+          "totalMs": 32.32900000000001,
+          "selfMs": 1.1229999999999993
+        },
+        {
+          "function": "truss.catalog_all_expected_records(integer)",
+          "calls": 2,
+          "totalMs": 15.281999999999982,
+          "selfMs": 1.0229999999999961
+        },
+        {
+          "function": "truss.runtime_object_history(jsonb,jsonb)",
+          "calls": 6,
+          "totalMs": 11.765,
+          "selfMs": 0.7519999999999998
+        },
+        {
+          "function": "truss.runtime_owned_object_effect(uuid,integer,text)",
+          "calls": 1,
+          "totalMs": 14.432000000000002,
+          "selfMs": 0.7469999999999999
+        },
+        {
+          "function": "truss.runtime_owned_group_validate(uuid,boolean)",
+          "calls": 2,
+          "totalMs": 29.652999999999963,
+          "selfMs": 0.6420000000000003
+        },
+        {
+          "function": "truss.runtime_owned_plan(uuid,integer)",
+          "calls": 30,
+          "totalMs": 0.613,
+          "selfMs": 0.613
+        },
+        {
+          "function": "truss.runtime_can_read_qualified(text,text,oid)",
+          "calls": 32,
+          "totalMs": 0.5510000000000002,
+          "selfMs": 0.5510000000000002
+        },
+        {
+          "function": "truss.runtime_owned_object_transition_validate_qualified(bigint,boolean,oid)",
+          "calls": 2,
+          "totalMs": 25.63500000000002,
+          "selfMs": 0.5459999999999994
+        },
+        {
+          "function": "truss.runtime_object_validate(bigint,integer)",
+          "calls": 3,
+          "totalMs": 5.371000000000009,
+          "selfMs": 0.5289999999999999
+        },
+        {
+          "function": "truss.runtime_current_installation()",
+          "calls": 43,
+          "totalMs": 0.45700000000000074,
+          "selfMs": 0.45700000000000074
+        },
+        {
+          "function": "truss.runtime_owned_capture(uuid)",
+          "calls": 1,
+          "totalMs": 21.187000000000012,
+          "selfMs": 0.45500000000000007
+        },
+        {
+          "function": "truss.runtime_object_commit_check()",
+          "calls": 3,
+          "totalMs": 30.789000000000016,
+          "selfMs": 0.40400000000000036
+        },
+        {
+          "function": "truss.runtime_object_values_readable_qualified(integer,oid)",
+          "calls": 14,
+          "totalMs": 0.5839999999999996,
+          "selfMs": 0.3329999999999984
+        },
+        {
+          "function": "truss.runtime_object_attempt_guard()",
+          "calls": 2,
+          "totalMs": 0.32400000000000007,
+          "selfMs": 0.32400000000000007
+        },
+        {
+          "function": "truss.owned_object_values(integer,jsonb,jsonb,jsonb)",
+          "calls": 1,
+          "totalMs": 0.38200000000000056,
+          "selfMs": 0.3149999999999995
+        },
+        {
+          "function": "truss.object_group_finish(uuid)",
+          "calls": 1,
+          "totalMs": 28.63299999999998,
+          "selfMs": 0.28900000000000015
+        },
+        {
+          "function": "truss.runtime_module_writer_qualified(text,text,oid)",
+          "calls": 14,
+          "totalMs": 0.2789999999999999,
+          "selfMs": 0.2789999999999999
+        },
+        {
+          "function": "truss.runtime_owned_prepare(jsonb,jsonb)",
+          "calls": 1,
+          "totalMs": 6.329999999999998,
+          "selfMs": 0.274
+        },
+        {
+          "function": "truss.runtime_owned_key_preflight(jsonb)",
+          "calls": 1,
+          "totalMs": 3.0400000000000027,
+          "selfMs": 0.2709999999999999
+        },
+        {
+          "function": "truss.runtime_lineage_quote(text)",
+          "calls": 90,
+          "totalMs": 0.2240000000000002,
+          "selfMs": 0.2240000000000002
+        },
+        {
+          "function": "truss.runtime_owned_step(uuid,integer)",
+          "calls": 1,
+          "totalMs": 16.34700000000001,
+          "selfMs": 0.21599999999999997
+        },
+        {
+          "function": "truss.runtime_object_update_keys(bigint,integer,jsonb,bytea,uuid,integer)",
+          "calls": 1,
+          "totalMs": 1.37,
+          "selfMs": 0.20300000000000007
+        },
+        {
+          "function": "truss.owned_graph_scope(jsonb)",
+          "calls": 2,
+          "totalMs": 0.18999999999999995,
+          "selfMs": 0.1559999999999997
+        },
+        {
+          "function": "truss.lock_string_key_bucket(bytea,bytea)",
+          "calls": 5,
+          "totalMs": 0.13600000000000012,
+          "selfMs": 0.13600000000000012
+        },
+        {
+          "function": "truss.runtime_definition(text,integer,integer,integer)",
+          "calls": 33,
+          "totalMs": 35.31,
+          "selfMs": 0.13000000000000012
+        },
+        {
+          "function": "truss.verify_object_string_key(bigint,integer,smallint,bytea)",
+          "calls": 4,
+          "totalMs": 0.2030000000000003,
+          "selfMs": 0.12399999999999989
+        },
+        {
+          "function": "truss.runtime_edge_authorize(uuid)",
+          "calls": 1,
+          "totalMs": 0.118,
+          "selfMs": 0.118
+        },
+        {
+          "function": "truss.runtime_operation_type(jsonb,jsonb,integer)",
+          "calls": 4,
+          "totalMs": 20.567000000000007,
+          "selfMs": 0.08899999999999952
+        },
+        {
+          "function": "truss.runtime_graph_validate(boolean)",
+          "calls": 2,
+          "totalMs": 6.939,
+          "selfMs": 0.08799999999999919
+        },
+        {
+          "function": "truss.runtime_capture_feed_configuration()",
+          "calls": 2,
+          "totalMs": 0.0940000000000003,
+          "selfMs": 0.07500000000000018
+        },
+        {
+          "function": "truss.valid_scalar_cell(jsonb,text,boolean)",
+          "calls": 22,
+          "totalMs": 0.07499999999999996,
+          "selfMs": 0.07499999999999996
+        },
+        {
+          "function": "truss.runtime_owned_identity(uuid,integer,text,text)",
+          "calls": 17,
+          "totalMs": 0.3889999999999998,
+          "selfMs": 0.07100000000000006
+        },
+        {
+          "function": "truss.owned_forest_projection(integer,jsonb)",
+          "calls": 4,
+          "totalMs": 0.06799999999999995,
+          "selfMs": 0.06799999999999995
+        },
+        {
+          "function": "truss.runtime_owned_input_scope(jsonb)",
+          "calls": 2,
+          "totalMs": 4.545000000000002,
+          "selfMs": 0.05799999999999994
+        },
+        {
+          "function": "truss.runtime_owned_object_image(uuid,integer,text,text)",
+          "calls": 7,
+          "totalMs": 0.32099999999999973,
+          "selfMs": 0.05499999999999999
+        },
+        {
+          "function": "truss.encode_umf_scalar_key_tuple(jsonb,jsonb)",
+          "calls": 8,
+          "totalMs": 0.09899999999999998,
+          "selfMs": 0.05400000000000005
+        },
+        {
+          "function": "truss.group_context(text,text)",
+          "calls": 2,
+          "totalMs": 3.1850000000000023,
+          "selfMs": 0.04899999999999993
+        },
+        {
+          "function": "truss.runtime_lineage_bytes(text,text,text,text)",
+          "calls": 30,
+          "totalMs": 0.2729999999999997,
+          "selfMs": 0.04800000000000004
+        },
+        {
+          "function": "truss.apply_group(bytea,bytea,bytea,text,text)",
+          "calls": 1,
+          "totalMs": 77.38,
+          "selfMs": 0.043999999999999984
+        },
+        {
+          "function": "truss.runtime_evaluate_preconditions(jsonb,bytea)",
+          "calls": 1,
+          "totalMs": 0.06700000000000006,
+          "selfMs": 0.04099999999999998
+        },
+        {
+          "function": "truss.runtime_condition_type(jsonb)",
+          "calls": 2,
+          "totalMs": 1.2890000000000006,
+          "selfMs": 0.03399999999999992
+        },
+        {
+          "function": "truss.umf_key_field_values_valid(jsonb,jsonb,text)",
+          "calls": 4,
+          "totalMs": 0.02699999999999997,
+          "selfMs": 0.02699999999999997
+        },
+        {
+          "function": "truss.object_group_step(uuid,integer,bytea)",
+          "calls": 1,
+          "totalMs": 16.37299999999999,
+          "selfMs": 0.026000000000000023
+        },
+        {
+          "function": "truss.valid_scalar_property(jsonb,text,boolean,jsonb)",
+          "calls": 20,
+          "totalMs": 0.08499999999999974,
+          "selfMs": 0.02200000000000002
+        },
+        {
+          "function": "truss.runtime_can_read(text,text)",
+          "calls": 10,
+          "totalMs": 15.489999999999952,
+          "selfMs": 0.020999999999999963
+        },
+        {
+          "function": "truss.umf_key_uleb128(bigint)",
+          "calls": 16,
+          "totalMs": 0.016000000000000014,
+          "selfMs": 0.016000000000000014
+        },
+        {
+          "function": "truss.runtime_object_ownership_at(jsonb)",
+          "calls": 6,
+          "totalMs": 0.016000000000000014,
+          "selfMs": 0.016000000000000014
+        },
+        {
+          "function": "truss.runtime_condition_inventory(jsonb)",
+          "calls": 2,
+          "totalMs": 0.01599999999999996,
+          "selfMs": 0.01599999999999996
+        },
+        {
+          "function": "truss.valid_flat_cell(jsonb)",
+          "calls": 2,
+          "totalMs": 0.024999999999999967,
+          "selfMs": 0.01200000000000001
+        },
+        {
+          "function": "truss.runtime_owned_local_edges(jsonb,text[],text[],boolean)",
+          "calls": 2,
+          "totalMs": 0.010999999999999996,
+          "selfMs": 0.010999999999999996
+        },
+        {
+          "function": "truss.runtime_operation_owner(jsonb,jsonb,integer)",
+          "calls": 2,
+          "totalMs": 10.370999999999995,
+          "selfMs": 0.010999999999999982
+        },
+        {
+          "function": "truss.runtime_object_values_readable(integer)",
+          "calls": 6,
+          "totalMs": 9.209000000000003,
+          "selfMs": 0.010000000000000009
+        },
+        {
+          "function": "truss.runtime_module_writer(text,text)",
+          "calls": 4,
+          "totalMs": 6.186999999999998,
+          "selfMs": 0.008999999999999994
+        },
+        {
+          "function": "truss.runtime_owned_reference(jsonb,jsonb,jsonb)",
+          "calls": 1,
+          "totalMs": 0.00899999999999998,
+          "selfMs": 0.00899999999999998
+        },
+        {
+          "function": "truss.valid_property_value(jsonb,truss.prop_def)",
+          "calls": 7,
+          "totalMs": 0.028999999999999915,
+          "selfMs": 0.008999999999999952
+        },
+        {
+          "function": "truss.valid_property_definition(truss.prop_def)",
+          "calls": 5,
+          "totalMs": 0.03200000000000003,
+          "selfMs": 0.007999999999999952
+        },
+        {
+          "function": "truss.verify_umf_scalar_key_tuple(bytea,jsonb,jsonb)",
+          "calls": 4,
+          "totalMs": 0.04899999999999993,
+          "selfMs": 0.006000000000000005
+        },
+        {
+          "function": "truss.runtime_history_ownership(jsonb)",
+          "calls": 4,
+          "totalMs": 0.0050000000000000044,
+          "selfMs": 0.0050000000000000044
+        },
+        {
+          "function": "truss.canonical_flat_cell(jsonb)",
+          "calls": 1,
+          "totalMs": 0.008000000000000007,
+          "selfMs": 0.0020000000000000018
+        }
+      ],
+      "nativeFunctionProfile": [
+        {
+          "function": "truss.runtime_person(boolean)",
+          "calls": 715,
+          "totalMs": 1100.2,
+          "selfMs": 1091.435
+        },
+        {
+          "function": "truss.runtime_definition_in_basis(text,integer,integer,integer,jsonb)",
+          "calls": 414,
+          "totalMs": 256.574,
+          "selfMs": 256.574
+        },
+        {
+          "function": "truss.catalog_expected_records(bytea,bytea,bytea,timestamp with time zone,timestamp with time zone,integer,integer,integer,integer)",
+          "calls": 51,
+          "totalMs": 209.519,
+          "selfMs": 202.864
+        },
+        {
+          "function": "truss.catalog_revision_plan(jsonb,jsonb)",
+          "calls": 51,
+          "totalMs": 149.754,
+          "selfMs": 149.754
+        },
+        {
+          "function": "truss.catalog_all_expected_records(integer)",
+          "calls": 51,
+          "totalMs": 385.137,
+          "selfMs": 34.491
+        },
+        {
+          "function": "truss.derive_catalog_key_tuple(integer,smallint,jsonb,jsonb)",
+          "calls": 42,
+          "totalMs": 22.454,
+          "selfMs": 21.072
+        },
+        {
+          "function": "truss.runtime_object_values_readable_qualified(integer,oid)",
+          "calls": 246,
+          "totalMs": 23.02,
+          "selfMs": 15.636
+        },
+        {
+          "function": "truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)",
+          "calls": 1,
+          "totalMs": 76.175,
+          "selfMs": 15.621
+        },
+        {
+          "function": "truss.runtime_can_read_qualified(text,text,oid)",
+          "calls": 482,
+          "totalMs": 12.719,
+          "selfMs": 12.719
+        },
+        {
+          "function": "truss.runtime_current_installation()",
+          "calls": 927,
+          "totalMs": 11.208,
+          "selfMs": 11.208
+        },
+        {
+          "function": "truss.runtime_graph_validate(boolean)",
+          "calls": 14,
+          "totalMs": 53.68,
+          "selfMs": 10.658
+        },
+        {
+          "function": "truss.key_read_selection(text,text,text,text,bytea,text,text)",
+          "calls": 20,
+          "totalMs": 259.725,
+          "selfMs": 9.266
+        },
+        {
+          "function": "truss.runtime_graph_validate_object(bigint,integer,boolean)",
+          "calls": 23,
+          "totalMs": 79.291,
+          "selfMs": 8.98
+        },
+        {
+          "function": "truss.runtime_owned_capture(uuid)",
+          "calls": 6,
+          "totalMs": 142.645,
+          "selfMs": 8.867
+        },
+        {
+          "function": "truss.object_group_begin(bytea,bytea,bytea,text,text,bytea,boolean)",
+          "calls": 6,
+          "totalMs": 231.291,
+          "selfMs": 8.732
+        },
+        {
+          "function": "truss.catalog_check_records(jsonb)",
+          "calls": 4,
+          "totalMs": 8.713,
+          "selfMs": 8.713
+        },
+        {
+          "function": "truss.runtime_object_history(jsonb,jsonb)",
+          "calls": 37,
+          "totalMs": 75.869,
+          "selfMs": 8.11
+        },
+        {
+          "function": "truss.get_object(text,text,text,bigint,integer,text,text)",
+          "calls": 62,
+          "totalMs": 430.039,
+          "selfMs": 7.323
+        },
+        {
+          "function": "truss.catalog_check_source_correspondence(bytea,bytea,bytea)",
+          "calls": 2,
+          "totalMs": 7.172,
+          "selfMs": 7.172
+        },
+        {
+          "function": "truss.owned_object_values(integer,jsonb,jsonb,jsonb)",
+          "calls": 6,
+          "totalMs": 7.474,
+          "selfMs": 6.659
+        },
+        {
+          "function": "truss.apply_create_group(bytea,bytea,bytea,bytea,text,text)",
+          "calls": 1,
+          "totalMs": 99.867,
+          "selfMs": 6.135
+        },
+        {
+          "function": "truss.runtime_operation_type(jsonb,jsonb,integer)",
+          "calls": 24,
+          "totalMs": 143.781,
+          "selfMs": 6.079
+        },
+        {
+          "function": "truss.runtime_owned_object_effect(uuid,integer,text)",
+          "calls": 5,
+          "totalMs": 76.727,
+          "selfMs": 5.906
+        },
+        {
+          "function": "truss.catalog_make_report(truss.catalog_registration_request,jsonb)",
+          "calls": 3,
+          "totalMs": 21.248,
+          "selfMs": 5.749
+        },
+        {
+          "function": "truss.runtime_lineage_quote(text)",
+          "calls": 2295,
+          "totalMs": 5.517,
+          "selfMs": 5.517
+        },
+        {
+          "function": "truss.runtime_owned_group_validate(uuid,boolean)",
+          "calls": 12,
+          "totalMs": 263.525,
+          "selfMs": 5.407
+        },
+        {
+          "function": "truss.runtime_object_validate(bigint,integer)",
+          "calls": 18,
+          "totalMs": 196.936,
+          "selfMs": 5.074
+        },
+        {
+          "function": "truss.runtime_capture_feed_configuration()",
+          "calls": 13,
+          "totalMs": 5.006,
+          "selfMs": 4.817
+        },
+        {
+          "function": "truss.lookup_string_key(text,text,text,text,bytea,bytea,bytea,integer,text,text)",
+          "calls": 20,
+          "totalMs": 555.897,
+          "selfMs": 4.786
+        },
+        {
+          "function": "truss.runtime_owned_object_transition_validate_qualified(bigint,boolean,oid)",
+          "calls": 12,
+          "totalMs": 237.538,
+          "selfMs": 4.02
+        },
+        {
+          "function": "truss.runtime_owned_plan(uuid,integer)",
+          "calls": 182,
+          "totalMs": 3.761,
+          "selfMs": 3.761
+        },
+        {
+          "function": "truss.runtime_object_commit_check()",
+          "calls": 17,
+          "totalMs": 274.016,
+          "selfMs": 3.41
+        },
+        {
+          "function": "truss.runtime_owned_key_preflight(jsonb)",
+          "calls": 6,
+          "totalMs": 20.702,
+          "selfMs": 2.947
+        },
+        {
+          "function": "truss.catalog_view_basis(integer,integer,integer)",
+          "calls": 1,
+          "totalMs": 26.242,
+          "selfMs": 2.812
+        },
+        {
+          "function": "truss.runtime_module_writer_qualified(text,text,oid)",
+          "calls": 79,
+          "totalMs": 2.749,
+          "selfMs": 2.749
+        },
+        {
+          "function": "truss.render_scalar_object(truss.object,truss.type_def,truss.prop_def[],boolean,text,integer,integer,text,text)",
+          "calls": 62,
+          "totalMs": 5.005,
+          "selfMs": 2.749
+        },
+        {
+          "function": "truss.runtime_owned_prepare(jsonb,jsonb)",
+          "calls": 6,
+          "totalMs": 44.643,
+          "selfMs": 2.72
+        },
+        {
+          "function": "truss.object_group_finish(uuid)",
+          "calls": 6,
+          "totalMs": 283.686,
+          "selfMs": 2.553
+        },
+        {
+          "function": "truss.lock_string_key_bucket(bytea,bytea)",
+          "calls": 28,
+          "totalMs": 2.545,
+          "selfMs": 2.545
+        },
+        {
+          "function": "truss.owned_graph_scope(jsonb)",
+          "calls": 12,
+          "totalMs": 2.628,
+          "selfMs": 2.3
+        },
+        {
+          "function": "truss.runtime_create_transition_validate(bigint)",
+          "calls": 6,
+          "totalMs": 338.929,
+          "selfMs": 2.165
+        },
+        {
+          "function": "truss.valid_scalar_cell(jsonb,text,boolean)",
+          "calls": 781,
+          "totalMs": 1.974,
+          "selfMs": 1.974
+        },
+        {
+          "function": "truss.runtime_object_attempt_guard()",
+          "calls": 12,
+          "totalMs": 1.941,
+          "selfMs": 1.941
+        },
+        {
+          "function": "truss.verify_object_string_key(bigint,integer,smallint,bytea)",
+          "calls": 44,
+          "totalMs": 2.579,
+          "selfMs": 1.803
+        },
+        {
+          "function": "truss.runtime_definition(text,integer,integer,integer)",
+          "calls": 303,
+          "totalMs": 455.842,
+          "selfMs": 1.711
+        },
+        {
+          "function": "truss.runtime_history_group(jsonb,xid8,bigint,integer,integer)",
+          "calls": 6,
+          "totalMs": 314.89,
+          "selfMs": 1.411
+        },
+        {
+          "function": "truss.runtime_owned_step(uuid,integer)",
+          "calls": 5,
+          "totalMs": 86.691,
+          "selfMs": 1.407
+        },
+        {
+          "function": "truss.runtime_object_update_keys(bigint,integer,jsonb,bytea,uuid,integer)",
+          "calls": 5,
+          "totalMs": 7.14,
+          "selfMs": 1.343
+        },
+        {
+          "function": "truss.runtime_lineage_bytes(text,text,text,text)",
+          "calls": 765,
+          "totalMs": 6.653,
+          "selfMs": 1.133
+        },
+        {
+          "function": "truss.runtime_owned_identity(uuid,integer,text,text)",
+          "calls": 103,
+          "totalMs": 2.929,
+          "selfMs": 1.044
+        },
+        {
+          "function": "truss.catalog_key_backfill_candidates(jsonb,integer)",
+          "calls": 3,
+          "totalMs": 10.06,
+          "selfMs": 0.991
+        },
+        {
+          "function": "truss.catalog_require_sources(bytea,bytea,bytea)",
+          "calls": 1,
+          "totalMs": 5.563,
+          "selfMs": 0.965
+        },
+        {
+          "function": "truss.runtime_history_property(integer,integer,integer,text)",
+          "calls": 12,
+          "totalMs": 204.406,
+          "selfMs": 0.964
+        },
+        {
+          "function": "truss.catalog_rebind_objects(truss.catalog_registration_request,jsonb)",
+          "calls": 1,
+          "totalMs": 2.319,
+          "selfMs": 0.959
+        },
+        {
+          "function": "truss.catalog_validate_completion()",
+          "calls": 1,
+          "totalMs": 21.575,
+          "selfMs": 0.937
+        },
+        {
+          "function": "truss.encode_umf_scalar_key_tuple(jsonb,jsonb)",
+          "calls": 106,
+          "totalMs": 1.636,
+          "selfMs": 0.877
+        },
+        {
+          "function": "truss.runtime_owned_input_scope(jsonb)",
+          "calls": 12,
+          "totalMs": 25.888,
+          "selfMs": 0.838
+        },
+        {
+          "function": "truss.group_context(text,text)",
+          "calls": 14,
+          "totalMs": 25.379,
+          "selfMs": 0.817
+        },
+        {
+          "function": "truss.group_create_metadata(bytea,bytea,text,text)",
+          "calls": 1,
+          "totalMs": 8.905,
+          "selfMs": 0.747
+        },
+        {
+          "function": "truss.runtime_edge_authorize(uuid)",
+          "calls": 6,
+          "totalMs": 0.732,
+          "selfMs": 0.732
+        },
+        {
+          "function": "truss.catalog_rebind_report_reader(uuid,jsonb)",
+          "calls": 2,
+          "totalMs": 1.457,
+          "selfMs": 0.73
+        },
+        {
+          "function": "truss.catalog_key_backfill_report_reader(uuid,jsonb)",
+          "calls": 2,
+          "totalMs": 0.726,
+          "selfMs": 0.726
+        },
+        {
+          "function": "truss.catalog_rebind_violations(jsonb,integer)",
+          "calls": 1,
+          "totalMs": 0.707,
+          "selfMs": 0.707
+        },
+        {
+          "function": "truss.runtime_feed_capture_reservation()",
+          "calls": 1,
+          "totalMs": 3.438,
+          "selfMs": 0.623
+        },
+        {
+          "function": "truss.runtime_condition_type(jsonb)",
+          "calls": 10,
+          "totalMs": 7.126,
+          "selfMs": 0.584
+        },
+        {
+          "function": "truss.owned_forest_projection(integer,jsonb)",
+          "calls": 24,
+          "totalMs": 0.581,
+          "selfMs": 0.581
+        },
+        {
+          "function": "truss.object_group_step(uuid,integer,bytea)",
+          "calls": 6,
+          "totalMs": 187.117,
+          "selfMs": 0.547
+        },
+        {
+          "function": "truss.valid_scalar_property(jsonb,text,boolean,jsonb)",
+          "calls": 639,
+          "totalMs": 2.03,
+          "selfMs": 0.497
+        },
+        {
+          "function": "truss.apply_group(bytea,bytea,bytea,text,text)",
+          "calls": 6,
+          "totalMs": 702.594,
+          "selfMs": 0.494
+        },
+        {
+          "function": "truss.umf_key_field_values_valid(jsonb,jsonb,text)",
+          "calls": 42,
+          "totalMs": 0.475,
+          "selfMs": 0.475
+        },
+        {
+          "function": "truss.valid_property_definition(truss.prop_def)",
+          "calls": 345,
+          "totalMs": 1.838,
+          "selfMs": 0.473
+        },
+        {
+          "function": "truss.valid_property_value(jsonb,truss.prop_def)",
+          "calls": 483,
+          "totalMs": 1.716,
+          "selfMs": 0.469
+        },
+        {
+          "function": "truss.runtime_history_image(jsonb,jsonb,bigint)",
+          "calls": 6,
+          "totalMs": 253.692,
+          "selfMs": 0.466
+        },
+        {
+          "function": "truss.runtime_owned_object_image(uuid,integer,text,text)",
+          "calls": 44,
+          "totalMs": 2.658,
+          "selfMs": 0.421
+        },
+        {
+          "function": "truss.runtime_evaluate_preconditions(jsonb,bytea)",
+          "calls": 6,
+          "totalMs": 0.78,
+          "selfMs": 0.415
+        },
+        {
+          "function": "truss.runtime_can_read(text,text)",
+          "calls": 188,
+          "totalMs": 292.061,
+          "selfMs": 0.356
+        },
+        {
+          "function": "truss.runtime_object_values_readable(integer)",
+          "calls": 200,
+          "totalMs": 322.305,
+          "selfMs": 0.321
+        },
+        {
+          "function": "truss.catalog_key_backfill_apply(truss.catalog_registration_request,jsonb)",
+          "calls": 1,
+          "totalMs": 2.932,
+          "selfMs": 0.297
+        },
+        {
+          "function": "truss.runtime_condition_inventory(jsonb)",
+          "calls": 12,
+          "totalMs": 0.294,
+          "selfMs": 0.294
+        },
+        {
+          "function": "truss.umf_key_uleb128(bigint)",
+          "calls": 212,
+          "totalMs": 0.271,
+          "selfMs": 0.271
+        },
+        {
+          "function": "truss.runtime_operation_owner(jsonb,jsonb,integer)",
+          "calls": 12,
+          "totalMs": 81.279,
+          "selfMs": 0.204
+        },
+        {
+          "function": "truss.valid_flat_cell(jsonb)",
+          "calls": 18,
+          "totalMs": 0.365,
+          "selfMs": 0.191
+        },
+        {
+          "function": "truss.runtime_create_commit_check()",
+          "calls": 1,
+          "totalMs": 56.934,
+          "selfMs": 0.189
+        },
+        {
+          "function": "truss.runtime_object_ownership_at(jsonb)",
+          "calls": 37,
+          "totalMs": 0.159,
+          "selfMs": 0.159
+        },
+        {
+          "function": "truss.render_logical_object(truss.object,truss.type_def,truss.prop_def[],boolean,text,integer,integer,text,text,jsonb)",
+          "calls": 62,
+          "totalMs": 5.161,
+          "selfMs": 0.156
+        },
+        {
+          "function": "truss.logical_scalar_cell(jsonb)",
+          "calls": 124,
+          "totalMs": 0.42,
+          "selfMs": 0.151
+        },
+        {
+          "function": "truss.runtime_owned_reference(jsonb,jsonb,jsonb)",
+          "calls": 5,
+          "totalMs": 0.148,
+          "selfMs": 0.148
+        },
+        {
+          "function": "truss.runtime_owned_local_edges(jsonb,text[],text[],boolean)",
+          "calls": 12,
+          "totalMs": 0.127,
+          "selfMs": 0.127
+        },
+        {
+          "function": "truss.verify_umf_scalar_key_tuple(bytea,jsonb,jsonb)",
+          "calls": 64,
+          "totalMs": 0.841,
+          "selfMs": 0.11
+        },
+        {
+          "function": "truss.logical_flat_cell(jsonb)",
+          "calls": 124,
+          "totalMs": 0.525,
+          "selfMs": 0.104
+        },
+        {
+          "function": "truss.runtime_module_writer(text,text)",
+          "calls": 24,
+          "totalMs": 38.096,
+          "selfMs": 0.087
+        },
+        {
+          "function": "truss.runtime_history_ownership(jsonb)",
+          "calls": 26,
+          "totalMs": 0.077,
+          "selfMs": 0.077
+        },
+        {
+          "function": "truss.catalog_key_backfill_verify(jsonb,integer,bytea)",
+          "calls": 1,
+          "totalMs": 6.356,
+          "selfMs": 0.071
+        },
+        {
+          "function": "truss.canonical_flat_cell(jsonb)",
+          "calls": 9,
+          "totalMs": 0.082,
+          "selfMs": 0.038
+        }
+      ],
+      "loaded": 1,
+      "readSamples": 20,
+      "committedUpdates": 5,
+      "reopenedValuesVerified": true
+    }
+  ],
+  "summary": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 3382.537417,
+      "failedElapsedMs": [],
+      "p50Ms": 3382.537417,
+      "minMs": 3382.537417,
+      "maxMs": 3382.537417
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 344.808541,
+      "failedElapsedMs": [],
+      "p50Ms": 344.808541,
+      "minMs": 344.808541,
+      "maxMs": 344.808541
+    },
+    {
+      "case": "catalog",
+      "operation": "bulk_create",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 316.906459,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 3.1555052653565516,
+      "p50Ms": 316.906459,
+      "minMs": 316.906459,
+      "maxMs": 316.906459
+    },
+    {
+      "case": "catalog",
+      "operation": "bulk_create_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 185.947792,
+      "failedElapsedMs": [],
+      "p50Ms": 185.947792,
+      "minMs": 185.947792,
+      "maxMs": 185.947792
+    },
+    {
+      "case": "catalog",
+      "operation": "install",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 291.131333,
+      "failedElapsedMs": [],
+      "p50Ms": 291.131333,
+      "minMs": 291.131333,
+      "maxMs": 291.131333
+    },
+    {
+      "case": "catalog",
+      "operation": "prepare",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 703.526458,
+      "failedElapsedMs": [],
+      "p50Ms": 703.526458,
+      "minMs": 703.526458,
+      "maxMs": 703.526458
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "attempts": 20,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 216.84999900000003,
+      "failedElapsedMs": [],
+      "p50Ms": 10.6059795,
+      "minMs": 9.785083,
+      "maxMs": 18.440041
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "attempts": 20,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 655.3764150000001,
+      "failedElapsedMs": [],
+      "p50Ms": 32.010625000000005,
+      "minMs": 30.699916,
+      "maxMs": 36.248541
+    },
+    {
+      "case": "catalog",
+      "operation": "register",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 133.107583,
+      "failedElapsedMs": [],
+      "p50Ms": 133.107583,
+      "minMs": 133.107583,
+      "maxMs": 133.107583
+    },
+    {
+      "case": "catalog",
+      "operation": "registrar_catalog_view",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 159.551875,
+      "failedElapsedMs": [],
+      "p50Ms": 159.551875,
+      "minMs": 159.551875,
+      "maxMs": 159.551875
+    },
+    {
+      "case": "catalog",
+      "operation": "registration_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 23.866084,
+      "failedElapsedMs": [],
+      "p50Ms": 23.866084,
+      "minMs": 23.866084,
+      "maxMs": 23.866084
+    },
+    {
+      "case": "catalog",
+      "operation": "single_update_including_commit",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 625.737043,
+      "failedElapsedMs": [],
+      "p50Ms": 121.554,
+      "minMs": 120.588459,
+      "maxMs": 138.227959
+    }
+  ],
+  "samples": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "rows": 1,
+      "ms": 3382.537417,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "install",
+      "rows": 1,
+      "ms": 291.131333,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "prepare",
+      "rows": 1,
+      "ms": 703.526458,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "register",
+      "rows": 1,
+      "ms": 133.107583,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "registrar_catalog_view",
+      "rows": 1,
+      "ms": 159.551875,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "registration_commit",
+      "rows": 1,
+      "ms": 23.866084,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "bulk_create",
+      "rows": 1,
+      "ms": 316.906459,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "bulk_create_commit",
+      "rows": 1,
+      "ms": 185.947792,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.730958,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.519417,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 11.113792,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.642625,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.206959,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 9.995958,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 9.967125,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 9.861083,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 9.799208,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 9.875584,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 9.785083,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.081458,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.986459,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.569334,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.845541,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 18.440041,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 11.126041,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.708208,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.6735,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 10.921625,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 33.159333,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 31.988917,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 32.032333,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 30.8635,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 30.908917,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 31.634167,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 31.716416,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 31.438542,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 30.699916,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 31.003833,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 32.054125,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 31.166208,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 31.441959,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 32.96475,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 34.588667,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 33.822,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 35.800791,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 35.7095,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 36.248541,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 36.134,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "single_update_including_commit",
+      "rows": 1,
+      "ms": 138.227959,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "single_update_including_commit",
+      "rows": 1,
+      "ms": 124.305375,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "single_update_including_commit",
+      "rows": 1,
+      "ms": 121.06125,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "single_update_including_commit",
+      "rows": 1,
+      "ms": 120.588459,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "single_update_including_commit",
+      "rows": 1,
+      "ms": 121.554,
+      "status": "ok"
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "rows": 1,
+      "ms": 344.808541,
+      "status": "ok"
+    }
+  ],
+  "scope": "Actual public workflows on isolated local PostgreSQL. Connection reopen, not server restart. Cold server/install separate. Real-sample results only; no synthetic stress result implied."
+}

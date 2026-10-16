@@ -392,3 +392,32 @@ The reviewed settlement change `0891551b` is now integrated and pushed as
 `cefa8044`, including matching authoritative owner sources and persistent private
 helper/upgrade checks. Its diagnostic measurements do not establish nominal
 performance or successful1024-operation execution.
+
+### Preparation and cumulative-plan diagnostic (2026-10-16)
+
+The bounded caller-qualification change is integrated as `2bf54c59`. It retains
+fresh qualification at preparation, effect, settlement and commit boundaries,
+and current module policy and membership checks. The one-record diagnostic
+reports 33 full caller qualifications per committed UPDATE, versus 43 before
+this change. Its median of 121.55 ms across five samples overlapped another correctness run;
+it does not establish a quiet comparison, percentile or nominal performance.
+See the [preparation diagnostic](results/preflight-actor-qualified-20261016.json).
+
+The same runtime then committed 16 records from the unmodified Catalog
+schema (87,445 bytes) in 7,260.20 ms: 4,145.34 ms applying and 3,114.82 ms
+committing, about 2.20 rows/s.
+The retained 16 operation plans contain 120 before-node references and 136
+after-node references: 256 total, or 16 squared. They occupy 122,297 logical JSON
+bytes and 20,249 stored datum bytes; the largest logical plan is 14,151 bytes.
+These measurements were read outside the timed load on PostgreSQL 18.6 with
+fsync, full-page writes and synchronous commit enabled. The raw report's runtime
+manifest matches the integrated native sources. Functional success is distinct
+from performance qualification, which remains `not_evaluated` in this bounded
+report. No 1,024-operation result is implied.
+
+This confirms cumulative snapshot retention as an actual scaling problem.
+The next change must address both its producer work and the consumers that
+validate or reconstruct state from those snapshots, preserving exact transition
+history, replay, current authorization and final graph checks. It must not
+substitute a higher operation cap or a cache for that work. Raw measurements:
+[16-record diagnostic](results/preflight-bulk16-planning-20261016.json).
