@@ -1,0 +1,18 @@
+{
+  "scope": "public Python source example on unreleased native69; no compiler or matching-wheel qualification",
+  "postgresql": "18.6",
+  "runtimeManifestSha256": "37288348f5ada0f05466894ff0c7c2e3e692852f1bfa32ddceeeba433dde201c",
+  "command": "python packages/python/examples/owned_objects_workflow.py NEW_DIRECTORY --bun bun",
+  "sourceSha256": {
+    "packages/python/examples/owned_objects_workflow.py": "9f18d9ebada07ce41ab527d8c69b58ed63204828d0977825601607cd4ab16dea",
+    "packages/python/examples/notes-owned.umf.json": "b2c18abb21f3e0fc3fde14df0cdfdab8a5634441bfa00344a9285061ecae3e59",
+    "packages/python/examples/adopter_workflow.py": "a1ae877db3a5c8a996a20a8e20ef934aed93447acb7ff845a6971767bd5d4b56"
+  },
+  "observedOutput": {
+    "created_objects": 4,
+    "reparented_objects": 2,
+    "cascade_deleted": 5,
+    "original_receipt_replayed_after_delete": true
+  },
+  "review": "Astra Ultra completed source review; explicit UMF0.8 preparation and document-qualified HistoryEntity fixes applied; final basic run passed"
+}

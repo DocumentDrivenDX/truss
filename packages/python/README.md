@@ -15,6 +15,19 @@ passed the owned descendant query workflow; this is source integration evidence,
 not matching-wheel qualification. Owned imports and catalog value rebinding/
 key backfill remain refused. This checkpoint is not a release tag.
 
+The public-only owned example runs installation, registration, owned creation,
+explicit subtree reparenting, caller rollback, read-only key/edge/traversal reads,
+cascade deletion, retained history and committed receipt replay. With the
+current development package and local PG18/Bun dependencies installed:
+
+```sh
+python packages/python/examples/owned_objects_workflow.py /tmp/truss-owned-demo --bun bun
+```
+
+It uses the adjacent `notes-owned.umf.json` with an explicit UMF0.8 preparation
+profile. The directory must be new or empty. Compiled queries are covered
+separately once the matching wheel is published.
+
 The Python reference assembly provides catalog registration, object and edge
 mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned

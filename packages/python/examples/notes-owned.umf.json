@@ -1,0 +1,79 @@
+{
+  "umf": "0.8.0",
+  "id": "notes",
+  "vocabularies": {},
+  "extensions": {},
+  "modules": [
+    {
+      "id": "notes",
+      "namespace": "notes",
+      "extensions": {},
+      "elements": [
+        {
+          "id": "Note",
+          "name": "Note",
+          "kind": "record",
+          "members": [
+            {
+              "module": "notes",
+              "element": "title"
+            }
+          ],
+          "keys": [
+            {
+              "id": "title-key",
+              "name": "title",
+              "primary": true,
+              "fields": [
+                {
+                  "module": "notes",
+                  "element": "title"
+                }
+              ]
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "title",
+          "name": "title",
+          "kind": "field",
+          "scalarType": "string",
+          "nullability": "required",
+          "cardinality": "one",
+          "extensions": {}
+        }
+      ],
+      "relationships": [
+        {
+          "id": "children",
+          "name": "children",
+          "inverse": "parent",
+          "source": [
+            {
+              "module": "notes",
+              "element": "Note"
+            }
+          ],
+          "target": [
+            {
+              "module": "notes",
+              "element": "Note",
+              "key": "title-key"
+            }
+          ],
+          "sourceMultiplicity": {
+            "min": 0,
+            "max": 1
+          },
+          "targetMultiplicity": {
+            "min": 0,
+            "max": 4
+          },
+          "targetLifecycle": "owned",
+          "directed": true
+        }
+      ]
+    }
+  ]
+}

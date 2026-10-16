@@ -43,15 +43,23 @@ def transaction(connection, *, read_only=False, commit=True):
         assembly = success(create_reference_assembly(CatalogRuntimeConfiguration(), host))
         yield assembly, tx
     except BaseException:
-        host.detach()
-        connection.rollback()
+        if host.detach():
+            try:
+                connection.rollback()
+            except BaseException:
+                connection.close()
+        else:
+            connection.close()
         raise
     else:
-        host.detach()
-        if commit:
-            connection.commit()
-        else:
-            connection.rollback()
+        if not host.detach():
+            connection.close()
+            raise RuntimeError('Truss host release unavailable; owned connection closed')
+        try:
+            connection.commit() if commit else connection.rollback()
+        except BaseException:
+            connection.close()
+            raise
 
 
 def sync_directory(directory):
