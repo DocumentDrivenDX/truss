@@ -1,5 +1,5 @@
 {
-  "status": "functional increment; performance release gate remains open",
+  "status": "functional increment; hosted installed-wheel qualification remains pending",
   "sourceBaseBeforeTests": "477e9466df5f2fd3f8d93895822a99fff69ac8b4",
   "integratedSecurityBase": "d58898687906fe681ef91f4a150811b4a518aa14",
   "versions": {
@@ -18,7 +18,7 @@
     "operationDeadlineMs": 30000
   },
   "limits": [
-    "Bulk100 versus committed singles is 3.541255x, below5x target.",
+    "Bulk100 versus committed singles is 3.541255x. Below5x is an investigation signal, explicitly not a contractual limit or independent release gate (performance/README.md, Napkin math).",
     "Confirmed security codec job overlap: conservative command-log envelope 2026-10-16T19:45:32.387769Z to19:46:19.410880Z; first native capture19:45:39.330810Z. These are not exact query times. Full matrix timings are not isolated comparative qualification.",
     "Full release runners remain unqualified.",
     "Preflight oracle uses a fixture-only owner wrapper, not a production API or fresh admission at adapted catalog revision.",
@@ -44,5 +44,6 @@
     "cleanup": "owner reports class teardown complete and no fixture roots",
     "failure": "test expected SQL22P05 but public NUL returned GroupFailed/InvalidGroupInput22023; no product relaxation",
     "source": "security owner message,2026-10-16"
-  }
+  },
+  "releaseAssessmentCorrection": "Earlier root chat summaries incorrectly treated5x as a mandatory release gate. Governing test plan says it is a triage signal. Preserve observed latency and timing overlap; qualify release against actual functional, deadline and installed-wheel checks."
 }
