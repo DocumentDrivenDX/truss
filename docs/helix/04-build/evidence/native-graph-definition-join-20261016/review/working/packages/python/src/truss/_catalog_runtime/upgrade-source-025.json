@@ -1,0 +1,38 @@
+{
+  "interfaceVersion": "truss-catalog-runtime-release/0.1",
+  "releaseId": "truss-catalog-runtime/0.25-candidate",
+  "postgresVersion": "180006",
+  "layoutProfile": {
+    "identity": "truss-layout",
+    "version": "0.16",
+    "sha256": "261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368"
+  },
+  "files": {
+    "layout.sql": "421a9bb88bcc1293f4fcbb66d2b443ccd08ccfc7845c79e5d3ee21b5494666a7",
+    "lineage.sql": "f972491c61f2aedbe612165eb2ed3a6cd1e2d2a9456a6d45f2542d7c62e69fbc",
+    "plan.sql": "230e5e92612aef36d79a8cc7bb937ecfee554ed243d00def7e789e2788e03827",
+    "runtime.sql": "6f1e5e98edbcb9ff95f609a77d8e0f421e72765b7110170b354c7d1e85b42b2e",
+    "barrier.sql": "eed4f044a241db7d70dd9cf222a3313bedd484273c18d0e7063b614ad5bab93b",
+    "view.sql": "2f4a3ad7854575c209326f99441dfbcde74d26897422e24a9477630e678ace46",
+    "read.sql": "805f84ee07ee46298f5eeac62706e2303da3f993cfe9e81509edf90678c9a881",
+    "keys.sql": "d74dc2e4048331bafd6f1f68f7fd931818fb52beb720b51f5cfd8950b0f7a869",
+    "groups.sql": "7aab7f57d53d741a05b6ed53d3d2c48ec50afbc78deed85ee721a3ac8b110f4d",
+    "group-profiles.json": "d9944cdff274f9b001dc78837f221c0a42f248869d1898ab2033e857a9c041fd",
+    "reader.sql": "839e7c4ec2241e734b653c5828d6884cb3cdd2710e223a28213f13cda53c1bd9",
+    "key-read.sql": "b5cb86f56bc4ed8432980001b18650bca2b12ef242d9015d494914e11066346f",
+    "scalars.sql": "5bf626a72bd82e265528d20cb893e9b3bb55762e90f393befacdab39e3f2ed19",
+    "pages.sql": "9346e34b78114bd504f115910bb36ccf6a22d311d1950362a87acd2bb26df622",
+    "evolution.sql": "873545ab363403195334e928c4d378c4a895ec425778337ccfc6a4dc491b0350",
+    "operations.sql": "653cf8008b838b5c2dc4f45df057907dce9fbbfe4cbf951e22e7c759f887ef47",
+    "preconditions.sql": "9b65d5cb846e2d59099de2bb08ae62992552a227637045a1a5aeb14857a78c35",
+    "imports.sql": "69bf66b6b8f54d771acb15a8d0db328efff6618b85ce8ca1b57db2397876bac0",
+    "feed.sql": "e09ba377e3e540f914ea9d9e27880d1b03cdfc2acc737f1e9559fde5c3b42c34",
+    "capability-profiles.json": "a93988c57484f218000343b48ece8983d16c2debbd4c81d3ecb173fd8a589765",
+    "history.sql": "c4c8aff696242bb3e8c0efabc0360506d86314c7b17c35b2ac456f3c57a1e368",
+    "migrations.sql": "8c88b4ea5e1fbd37988b2c603a18afe28b54eb2f3a5d2d35e6c8e6302ce28976",
+    "preparation-baseline.json": "fecfedd6793948b915553c67710b3f4374014df5d89d9e140d591d31776d6c9e",
+    "upgrade-source-023.json": "8cb52bb9cbf7b67eb11c9b965463465c32811fb7809c51df914cea97c0e40312",
+    "upgrade-source-024.json": "4cef6896f9ef9b98dbfb72a3c63af909f50adffa9fac150ebe1b0972cb63b856"
+  },
+  "version": "0.25"
+}

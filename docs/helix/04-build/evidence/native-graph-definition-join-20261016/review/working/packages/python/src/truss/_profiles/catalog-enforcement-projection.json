@@ -1,0 +1,11 @@
+{
+  "identity": "truss-catalog-enforcement-projection",
+  "version": "0.1.0",
+  "targetInterfaceVersion": "truss-enforcement-report/0.1.0",
+  "sourceSelection": "original_complete_closed_scalar_string_record_assertions",
+  "enforcement": "none",
+  "reason": "unqualified",
+  "scope": "complete_original_source_occurrences",
+  "layoutSource": "required_original_admitted_layout",
+  "nativeOrEngineEnforcementAuthority": false
+}

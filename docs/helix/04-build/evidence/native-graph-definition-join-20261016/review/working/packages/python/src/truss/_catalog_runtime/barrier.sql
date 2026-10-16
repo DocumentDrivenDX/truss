@@ -1,0 +1,3 @@
+-- The row-home commit barrier left with truss.row_home_operation.
+-- Epoch issue and routine DDL now refuse a transaction that already wrote
+-- truss.runtime_object_attempt.

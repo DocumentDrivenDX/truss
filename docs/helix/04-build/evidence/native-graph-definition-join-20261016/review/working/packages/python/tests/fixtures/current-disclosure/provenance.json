@@ -1,0 +1,9 @@
+{
+  "scope": "Exact upstream logical fixtures; simulated DB tests are not native execution or authority evidence.",
+  "umfRevision": "206951ff20d766874b9af7d29fdf8027c3bab499",
+  "weftRevision": "b8c34c84f3c8cae8e07680e4960942d685f9bb63",
+  "files": {
+    "actual-atomic-transport.json": "f19439e8da44419aa2c08252a8155aa2efc2dc807cbb1b90e0cace7297660a53",
+    "native-disclosure-child-vectors.json": "212596e89fa764f69c1ed089de0c3e5bc243f4305dde9dee3dcde3d81be03eb0"
+  }
+}

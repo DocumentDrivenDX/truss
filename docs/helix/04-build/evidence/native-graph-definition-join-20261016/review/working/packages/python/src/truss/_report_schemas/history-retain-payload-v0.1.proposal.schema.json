@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:proposal:history-retain-payload:0.1.0",
+  "title": "Proposed standalone retained-addition payload only",
+  "description": "Unadopted payload, not a complete event or migration. Context references require exact registered original evidence. Duplicate names and actual absent prestate need semantic admission.",
+  "type": "object",
+  "properties": {
+    "interfaceVersion": {
+      "const": "truss-history-retain-payload/0.1.0"
+    },
+    "operation": {
+      "const": "retain"
+    },
+    "retainedChanges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "retainedName": {
+            "type": "string"
+          },
+          "before": {
+            "type": "object",
+            "properties": {
+              "present": {
+                "const": false
+              }
+            },
+            "required": [
+              "present"
+            ],
+            "additionalProperties": false
+          },
+          "after": {
+            "type": "object",
+            "properties": {
+              "present": {
+                "const": true
+              },
+              "value": {
+                "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+              }
+            },
+            "required": [
+              "present",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          "beforeDefinitionContext": {
+            "type": "string",
+            "minLength": 1
+          },
+          "afterDefinitionContext": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sourceContext": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "retainedName",
+          "before",
+          "after",
+          "beforeDefinitionContext",
+          "afterDefinitionContext",
+          "sourceContext"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "interfaceVersion",
+    "operation",
+    "retainedChanges"
+  ],
+  "additionalProperties": false
+}

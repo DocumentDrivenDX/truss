@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:direct-cursor:0.1.0",
+  "title": "Draft structured direct continuation",
+  "description": "Closed shape only. Canonical identity grammar, exact selection/context, authority, snapshot liveness, profile support and resource bounds require independent semantic admission. Not an authenticated external cursor.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-direct-cursor/0.1.0"
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "selection": {
+          "$ref": "#/$defs/objects"
+        },
+        "after": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "context",
+        "selection",
+        "after"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-direct-cursor/0.1.0"
+        },
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "selection": {
+          "$ref": "#/$defs/edges"
+        },
+        "after": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "orderKey": {
+              "$ref": "#/$defs/orderKey"
+            }
+          },
+          "required": [
+            "id",
+            "orderKey"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "context",
+        "selection",
+        "after"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "profilePin": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "identity",
+        "version",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "owner": {
+      "type": "object",
+      "properties": {
+        "documentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "moduleId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "documentId",
+        "moduleId"
+      ],
+      "additionalProperties": false
+    },
+    "type": {
+      "type": "object",
+      "properties": {
+        "typeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "definitionPin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "$ref": "#/$defs/owner"
+        }
+      },
+      "required": [
+        "typeId",
+        "definitionPin",
+        "owner"
+      ],
+      "additionalProperties": false
+    },
+    "relationship": {
+      "type": "object",
+      "properties": {
+        "relationshipId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "definitionPin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "$ref": "#/$defs/owner"
+        }
+      },
+      "required": [
+        "relationshipId",
+        "definitionPin",
+        "owner"
+      ],
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "typeId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "definitionPin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "$ref": "#/$defs/owner"
+        }
+      },
+      "required": [
+        "id",
+        "typeId",
+        "definitionPin",
+        "owner"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "catalogRevision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "layoutProfile": {
+          "$ref": "#/$defs/profilePin"
+        },
+        "readProfile": {
+          "$ref": "#/$defs/profilePin"
+        },
+        "authorizedScopeIdentity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consistency": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "live"
+                }
+              },
+              "required": [
+                "kind"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "const": "held_snapshot"
+                },
+                "snapshotIdentity": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "kind",
+                "snapshotIdentity"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "catalogRevision",
+        "layoutProfile",
+        "readProfile",
+        "authorizedScopeIdentity",
+        "consistency"
+      ],
+      "additionalProperties": false
+    },
+    "objects": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "const": "objects"
+        },
+        "type": {
+          "$ref": "#/$defs/type"
+        }
+      },
+      "required": [
+        "operation",
+        "type"
+      ],
+      "additionalProperties": false
+    },
+    "edges": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "const": "edges"
+        },
+        "object": {
+          "$ref": "#/$defs/identity"
+        },
+        "direction": {
+          "enum": [
+            "outgoing",
+            "incoming",
+            "both"
+          ]
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relationship"
+          }
+        }
+      },
+      "required": [
+        "operation",
+        "object",
+        "direction",
+        "relationships"
+      ],
+      "additionalProperties": false
+    },
+    "orderKey": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "null"
+            }
+          },
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "text"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "state",
+            "text"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

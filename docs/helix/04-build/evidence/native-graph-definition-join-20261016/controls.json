@@ -1,0 +1,11 @@
+{
+  "scope": "Actual graph definition correspondence, no graph populations or release",
+  "coreRelationships": 5,
+  "recordAssociations": 1,
+  "nativeEdgeColumnDriftRefused": true,
+  "originalCallerWorkPreserved": true,
+  "restoredReportMatches": true,
+  "sameOriginalParent": true,
+  "authority": false,
+  "nativeAdmission": false
+}

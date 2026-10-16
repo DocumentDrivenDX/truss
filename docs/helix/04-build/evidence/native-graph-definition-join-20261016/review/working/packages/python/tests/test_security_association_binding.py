@@ -1,0 +1,216 @@
+"""Original-source mapping checks; no owner semantics/native authority claim."""
+from dataclasses import FrozenInstanceError
+from hashlib import sha256
+import json
+from pathlib import Path
+import unittest
+from truss._security_association_binding import prepare_association_binding, AssociationBindingError
+
+ROOT=Path(__file__).parent/'fixtures'
+CORE=(ROOT/'security-association-core.json').read_bytes()
+ONTOLOGY=(ROOT/'security-association-ontology.json').read_bytes()
+def wire(value):return json.dumps(value,separators=(',',':')).encode()
+def inputs(core=CORE,ontology=ONTOLOGY):
+ c,o=json.loads(core),json.loads(ontology);elements={(c['id'],m['id'],e['id']):e for m in c['modules'] for e in m['elements']};entities={tuple(e['type'].values()):e for e in o['entities']}
+ mappings=[]
+ for association in o['associations']:
+  roles=[]
+  for endpoint in association['endpoints']:
+   ref=endpoint['target'];owner=elements[tuple(ref.values())];key_id=entities[tuple(ref.values())]['keyId'];key=next(k for k in owner['keys'] if k['id']==key_id)
+   roles.append({'role':endpoint['role'],'associationFields':endpoint['fields'],'target':ref,'targetKeyId':key_id,'targetFields':[{'documentId':ref['documentId'],'moduleId':f['module'],'elementId':f['element']} for f in key['fields']]})
+  mappings.append({'association':association['type'],'instanceKeyId':association['keyId'],'sourceRole':roles[0]['role'],'targetRole':roles[1]['role'],'roles':roles,'storage':{'sourceMin':'0','sourceMax':'*','targetMin':'0','targetMax':'*','directed':True,'lifecycle':'independent','composition':False,'inverse':None}})
+ return {'profile':'truss-binary-association-candidate/0.1.0','coreSha256':sha256(core).hexdigest(),'ontologySha256':sha256(ontology).hexdigest(),'modelRevision':o['documents'][0]['revision'],'ontologyRevision':o['revision'],'mappings':mappings}
+class BindingTests(unittest.TestCase):
+ def run_binding(self,binding=None,core=CORE,ontology=ONTOLOGY):return prepare_association_binding(core,ontology,wire(inputs(core,ontology) if binding is None else binding))
+ def refuse(self,change,reason):
+  binding=inputs();change(binding)
+  with self.assertRaisesRegex(AssociationBindingError,reason):self.run_binding(binding)
+ def test_original_complete_two_association_basis(self):
+  result=self.run_binding();self.assertEqual(result.core_bytes,CORE);self.assertEqual(result.ontology_bytes,ONTOLOGY);self.assertEqual([a.association[2] for a in result.associations],['Ownership','Assignment']);self.assertEqual(len(result.associations[1].all_member_fields),3);self.assertEqual(result.scope,'original_source_correspondence_only')
+ def test_exact_mapping_fragments_preserve_authored_format(self):
+  binding=inputs();fragments=[json.dumps(m,indent=3,ensure_ascii=False).encode() for m in binding.pop('mappings')]
+  prefix=wire(binding)[:-1];original=prefix+b', "mappings" : [ \n'+b', \n'.join(fragments)+b' ] }\n'
+  result=prepare_association_binding(CORE,ONTOLOGY,original)
+  self.assertEqual(result.binding_bytes,original)
+  self.assertEqual(tuple(a.definition_bytes for a in result.associations),tuple(fragments))
+  self.assertEqual(tuple(a.source_pointer for a in result.associations),('/mappings/0','/mappings/1'))
+  self.assertEqual(result.extraction_profile,'truss-original-association-json-candidate/0.1.0')
+ def test_escaped_mapping_member_and_values_preserve_bytes(self):
+  binding=inputs();binding['mappings'].reverse();original=wire(binding).replace(b'"mappings"',b'"mapp\\u0069ngs"').replace(b'Assignment',b'Ass\\u0069gnment')
+  result=prepare_association_binding(CORE,ONTOLOGY,original)
+  self.assertEqual(result.associations[0].association[2],'Assignment')
+  self.assertIn(b'Ass\\u0069gnment',result.associations[0].definition_bytes)
+  self.assertEqual(json.loads(result.associations[0].definition_bytes),binding['mappings'][0])
+  self.assertEqual(result.associations[0].source_pointer,'/mappings/0')
+ def test_mapping_last_or_first_member_has_identical_extraction(self):
+  binding=inputs();first={'mappings':binding['mappings'],**{k:v for k,v in binding.items() if k!='mappings'}}
+  a=self.run_binding(binding);b=self.run_binding(first)
+  self.assertEqual(tuple(x.definition_bytes for x in a.associations),tuple(x.definition_bytes for x in b.associations))
+ def test_string_delimiters_do_not_change_mapping_boundaries(self):
+  ontology=json.loads(ONTOLOGY);role='}], "mappings": [{}] \\ 雪'
+  for association in ontology['associations']:association['endpoints'][0]['role']=role
+  original_ontology=wire(ontology);binding=inputs(CORE,original_ontology)
+  result=prepare_association_binding(CORE,original_ontology,wire(binding))
+  self.assertEqual(tuple(json.loads(a.definition_bytes) for a in result.associations),tuple(binding['mappings']))
+ def test_escaped_duplicate_mapping_member_refuses_before_extraction(self):
+  original=wire(inputs()).replace(b'"mappings":',b'"mapp\\u0069ngs":[],"mappings":',1)
+  with self.assertRaisesRegex(AssociationBindingError,'duplicate_member'):prepare_association_binding(CORE,ONTOLOGY,original)
+ def test_mapping_bytes_cannot_be_mutated(self):
+  result=self.run_binding()
+  with self.assertRaises(FrozenInstanceError):result.associations[0].definition_bytes=b'{}'
+ def test_multibyte_original_slice_preserves_utf8(self):
+  core=json.loads(CORE);ontology=json.loads(ONTOLOGY)
+  for association in ontology['associations']:
+   association['endpoints'][0]['role']='é雪'
+  original_ontology=wire(ontology);binding=inputs(CORE,original_ontology)
+  original=json.dumps(binding,ensure_ascii=False,indent=2).encode()
+  result=prepare_association_binding(CORE,original_ontology,original)
+  self.assertIn('é雪'.encode(),result.associations[0].definition_bytes)
+  self.assertEqual(json.loads(result.associations[0].definition_bytes),binding['mappings'][0])
+ def test_explicit_storage_choices_survive_preparation(self):
+  result=self.run_binding();storage=result.associations[1].storage
+  self.assertEqual((storage.source_min,storage.source_max,storage.target_min,storage.target_max),('0','*','0','*'))
+  self.assertIs(storage.directed,True);self.assertEqual(storage.lifecycle,'independent');self.assertIs(storage.composition,False);self.assertIsNone(storage.inverse)
+  self.assertEqual(storage.source_pointer,'/mappings/1/storage')
+ def test_storage_pointer_tracks_original_mapping_order(self):
+  binding=inputs();binding['mappings'].reverse();result=self.run_binding(binding)
+  self.assertEqual(result.associations[0].association[2],'Assignment');self.assertEqual(result.associations[0].storage.source_pointer,'/mappings/0/storage')
+  self.assertEqual(result.binding_bytes,wire(binding))
+ def test_storage_basis_is_immutable(self):
+  result=self.run_binding()
+  with self.assertRaises(FrozenInstanceError):result.associations[0].storage.lifecycle='cascade'
+ def test_no_storage_choices_are_inferred_from_missing_carrier(self):
+  self.refuse(lambda b:b['mappings'][0].pop('storage'),'closed_binding')
+ def test_both_explicit_orientations_preserve_roles(self):
+  binding=inputs()
+  for mapping in binding['mappings']:mapping['sourceRole'],mapping['targetRole']=mapping['targetRole'],mapping['sourceRole']
+  result=self.run_binding(binding);self.assertEqual(result.associations[1].source_role,'project');self.assertEqual(result.associations[1].roles[0].role,'staff')
+ def test_output_has_no_mutable_mapping_containers(self):
+  result=self.run_binding()
+  with self.assertRaises(FrozenInstanceError):result.associations[0].source_role='changed'
+  self.assertIsInstance(result.associations,tuple);self.assertIsInstance(result.associations[0].instance_key_fields,tuple)
+ def test_changed_core_digest(self):self.refuse(lambda b:b.update(coreSha256='0'*64),'source_digest')
+ def test_changed_ontology_digest(self):self.refuse(lambda b:b.update(ontologySha256='0'*64),'source_digest')
+ def test_changed_model_revision(self):self.refuse(lambda b:b.update(modelRevision='stale'),'model_revision')
+ def test_changed_ontology_revision(self):self.refuse(lambda b:b.update(ontologyRevision='stale'),'ontology_revision')
+ def test_omitted_association(self):self.refuse(lambda b:b['mappings'].pop(),'association_coverage')
+ def test_duplicate_association(self):self.refuse(lambda b:b['mappings'].append(b['mappings'][0]),'association_coverage')
+ def test_extra_mapping(self):self.refuse(lambda b:b['mappings'][0]['association'].update(elementId='Staff'),'association_coverage')
+ def test_role_alias(self):self.refuse(lambda b:b['mappings'][1].update(sourceRole='project'),'role_orientation')
+ def test_omitted_role(self):self.refuse(lambda b:b['mappings'][0]['roles'].pop(),'role_coverage')
+ def test_duplicate_role(self):self.refuse(lambda b:b['mappings'][0]['roles'].append(b['mappings'][0]['roles'][0]),'role_coverage')
+ def test_substituted_endpoint_field(self):self.refuse(lambda b:b['mappings'][1]['roles'][0]['associationFields'][0].update(elementId='active'),'endpoint_fields')
+ def test_substituted_target(self):self.refuse(lambda b:b['mappings'][1]['roles'][0]['target'].update(elementId='Project'),'endpoint_target')
+ def test_substituted_target_key(self):self.refuse(lambda b:b['mappings'][1]['roles'][0].update(targetKeyId='other'),'target_key')
+ def test_substituted_target_field(self):self.refuse(lambda b:b['mappings'][1]['roles'][0]['targetFields'][0].update(elementId='projectId'),'ordered_target_key')
+ def test_changed_instance_key_selection(self):self.refuse(lambda b:b['mappings'][1].update(instanceKeyId='other'),'instance_key')
+ def test_restrictive_storage(self):self.refuse(lambda b:b['mappings'][1]['storage'].update(targetMax='1'),'storage_subset')
+ def test_no_default_storage(self):self.refuse(lambda b:b['mappings'][1]['storage'].pop('lifecycle'),'closed_binding')
+ def test_no_numeric_boolean_alias(self):self.refuse(lambda b:b['mappings'][1]['storage'].update(directed=1),'storage_subset')
+ def test_unknown_binding_members(self):self.refuse(lambda b:b.update(authority=True),'closed_binding')
+ def test_duplicate_wire_member(self):
+  original=wire(inputs()).replace(b'"profile":',b'"profile":"ignored","profile":',1)
+  with self.assertRaisesRegex(AssociationBindingError,'duplicate_member'):prepare_association_binding(CORE,ONTOLOGY,original)
+ def test_exact_bytes_required(self):
+  with self.assertRaisesRegex(AssociationBindingError,'original_bytes'):prepare_association_binding(bytearray(CORE),ONTOLOGY,wire(inputs()))
+ def test_unknown_core_content_is_archived_without_interpretation(self):
+  core=json.loads(CORE);core.setdefault('extensions',{})['unknown']={'fraction':0.125,'opaque':'keep'};original=wire(core);result=self.run_binding(core=original);self.assertEqual(result.core_bytes,original)
+ def test_attribute_dependent_key_cannot_be_collapsed_to_one_edge(self):
+  core=json.loads(CORE);association=next(e for e in core['modules'][0]['elements'] if e['id']=='Assignment');association['keys'][0]['fields'].append({'module':'m','element':'active'});original=wire(core)
+  with self.assertRaisesRegex(AssociationBindingError,'parallel_instance_storage_loss'):self.run_binding(core=original)
+ def test_separate_instance_identity_cannot_be_collapsed_to_one_edge(self):
+  core=json.loads(CORE);module=core['modules'][0];association=next(e for e in module['elements'] if e['id']=='Assignment');association['members'].append({'module':'m','element':'instanceId'});association['keys'][0]['fields']=[{'module':'m','element':'instanceId'}];module['elements'].append({'id':'instanceId','name':'instanceId','kind':'field','scalarType':'string','nullability':'required','cardinality':'one','extensions':{}});original=wire(core)
+  with self.assertRaisesRegex(AssociationBindingError,'parallel_instance_storage_loss'):self.run_binding(core=original)
+ def composite(self):
+  core=json.loads(CORE);ontology=json.loads(ONTOLOGY);module=core['modules'][0]
+  for owner_id,field_id in [('Staff','staffPartition'),('Assignment','assignmentPartition')]:
+   owner=next(e for e in module['elements'] if e['id']==owner_id);owner['members'].append({'module':'m','element':field_id});owner['keys'][0]['fields'].insert(0,{'module':'m','element':field_id});module['elements'].append({'id':field_id,'name':field_id,'kind':'field','scalarType':'string','nullability':'required','cardinality':'one','extensions':{}})
+  staff=next(e for e in ontology['entities'] if e['type']['elementId']=='Staff');staff['fields'].append({'ref':{'documentId':'domain','moduleId':'m','elementId':'staffPartition'},'protection':'unprotected'})
+  assignment=next(a for a in ontology['associations'] if a['type']['elementId']=='Assignment');assignment['fields'].append({'ref':{'documentId':'domain','moduleId':'m','elementId':'assignmentPartition'},'protection':'unprotected'});assignment['endpoints'][0]['fields'].insert(0,{'documentId':'domain','moduleId':'m','elementId':'assignmentPartition'})
+  return wire(core),wire(ontology)
+ def test_composite_target_and_association_order_positive(self):
+  core,ontology=self.composite();basis=self.run_binding(core=core,ontology=ontology);role=basis.associations[1].roles[0];self.assertEqual([f[2] for f in role.target_fields],['staffPartition','staffId']);self.assertEqual([f[2] for f in role.association_fields],['assignmentPartition','assignmentStaff'])
+ def test_composite_target_order_refuses(self):
+  core,ontology=self.composite();binding=inputs(core,ontology);binding['mappings'][1]['roles'][0]['targetFields'].reverse()
+  with self.assertRaisesRegex(AssociationBindingError,'ordered_target_key'):self.run_binding(binding,core,ontology)
+ def test_composite_association_order_refuses(self):
+  core,ontology=self.composite();binding=inputs(core,ontology);binding['mappings'][1]['roles'][0]['associationFields'].reverse()
+  with self.assertRaisesRegex(AssociationBindingError,'endpoint_fields'):self.run_binding(binding,core,ontology)
+ def test_authored_unique_subset_of_endpoints_positive(self):
+  core=json.loads(CORE);association=next(e for e in core['modules'][0]['elements'] if e['id']=='Assignment');association['keys'][0]['fields']=association['keys'][0]['fields'][:1];result=self.run_binding(core=wire(core));self.assertEqual(len(result.associations[1].instance_key_fields),1)
+ def test_third_authored_role_is_unsupported(self):
+  ontology=json.loads(ONTOLOGY);endpoint=dict(ontology['associations'][1]['endpoints'][0]);endpoint['role']='extra';ontology['associations'][1]['endpoints'].append(endpoint);original=wire(ontology)
+  with self.assertRaisesRegex(AssociationBindingError,'binary_profile'):self.run_binding(ontology=original)
+ def test_nonstring_endpoint_profile_is_unsupported(self):
+  core=json.loads(CORE);next(e for e in core['modules'][0]['elements'] if e['id']=='staffId')['scalarType']='integer';original=wire(core)
+  with self.assertRaisesRegex(AssociationBindingError,'endpoint_string_subset'):self.run_binding(core=original)
+ def test_duplicate_original_element_refuses(self):
+  core=json.loads(CORE);core['modules'][0]['elements'].append(core['modules'][0]['elements'][0]);original=wire(core)
+  with self.assertRaisesRegex(AssociationBindingError,'duplicate_element'):self.run_binding(core=original)
+ def test_excessive_source_depth_refuses(self):
+  core=json.loads(CORE);value='end'
+  for _ in range(34):value=[value]
+  core.setdefault('extensions',{})['unknown']=value;original=wire(core)
+  with self.assertRaisesRegex(AssociationBindingError,'source_resource'):self.run_binding(core=original)
+ def test_lone_escaped_surrogate_refuses(self):
+  original=CORE.replace(b'"id":"domain"',b'"id":"\\ud800"',1)
+  self.assertNotEqual(original,CORE)
+  with self.assertRaisesRegex(AssociationBindingError,'source_unicode'):prepare_association_binding(original,ONTOLOGY,wire(inputs()))
+ def test_oversized_source_refuses(self):
+  with self.assertRaisesRegex(AssociationBindingError,'original_bytes'):prepare_association_binding(b' '*1048577,ONTOLOGY,wire(inputs()))
+ def test_malformed_source_shapes_refuse(self):
+  core=json.loads(CORE);core['modules']=[True];original=wire(core)
+  binding=inputs();binding['coreSha256']=sha256(original).hexdigest()
+  with self.assertRaisesRegex(AssociationBindingError,'source_shape'):self.run_binding(binding,original,ONTOLOGY)
+ def test_unknown_extreme_number_tokens_are_retained_exactly(self):
+  for number in ['1e999999999999999999999','1e-999999999999999999999','9'*5000]:
+   core=json.loads(CORE);core.setdefault('extensions',{})['unknown']='TOKEN';original=wire(core).replace(b'"TOKEN"',number.encode());binding=inputs();binding['coreSha256']=sha256(original).hexdigest();basis=self.run_binding(binding,original,ONTOLOGY);self.assertEqual(basis.core_bytes,original)
+
+class ArchivedBindingTests(unittest.TestCase):
+ def binding(self, ontology=ONTOLOGY):
+  import base64
+  value=inputs(CORE,ontology);value['profile']='truss-binary-association-candidate/0.2.0'
+  value['ontologyArtifact']={'identity':'original-ontology','bytesBase64':base64.b64encode(ontology).decode('ascii'),'sha256':sha256(ontology).hexdigest()}
+  return value
+ def run_archived(self,value):
+  from truss._security_association_binding import prepare_archived_association_binding
+  return prepare_archived_association_binding(CORE,wire(value))
+ def test_exact_original_dependency_recovery(self):
+  original=b' \n'+ONTOLOGY+b'\t\n';value=self.binding(original);result=self.run_archived(value)
+  self.assertEqual(result.ontology_bytes,original);self.assertEqual(result.binding_bytes,wire(value))
+  self.assertEqual(tuple(json.loads(a.definition_bytes) for a in result.associations),tuple(value['mappings']))
+ def test_legacy_requires_external_original(self):
+  with self.assertRaisesRegex(AssociationBindingError,'archived_binding_profile'):self.run_archived(inputs())
+ def test_missing_artifact_refuses(self):
+  value=self.binding();del value['ontologyArtifact']
+  with self.assertRaisesRegex(AssociationBindingError,'closed_binding'):self.run_archived(value)
+ def test_unknown_artifact_member_refuses(self):
+  value=self.binding();value['ontologyArtifact']['invented']=True
+  with self.assertRaisesRegex(AssociationBindingError,'closed_binding'):self.run_archived(value)
+ def test_digest_corruption_refuses(self):
+  value=self.binding();value['ontologyArtifact']['sha256']='0'*64
+  with self.assertRaisesRegex(AssociationBindingError,'ontology_artifact_digest'):self.run_archived(value)
+ def test_invalid_base64_refuses(self):
+  for encoded in ('@@','雪','e30=\n','e31='):
+   value=self.binding();value['ontologyArtifact']['bytesBase64']=encoded
+   with self.subTest(encoded=encoded),self.assertRaisesRegex(AssociationBindingError,'ontology_artifact_base64'):self.run_archived(value)
+ def test_empty_or_oversized_encoded_source_refuses(self):
+  for encoded in ('','A'*1398105):
+   value=self.binding();value['ontologyArtifact']['bytesBase64']=encoded
+   with self.subTest(size=len(encoded)),self.assertRaises(AssociationBindingError):self.run_archived(value)
+ def test_identity_refuses(self):
+  value=self.binding();value['ontologyArtifact']['identity']=''
+  with self.assertRaisesRegex(AssociationBindingError,'source_identity'):self.run_archived(value)
+ def test_external_ontology_substitution_refuses(self):
+  with self.assertRaisesRegex(AssociationBindingError,'ontology_original_mismatch'):prepare_association_binding(CORE,b' '+ONTOLOGY,wire(self.binding()))
+ def test_original_source_digest_still_required(self):
+  value=self.binding();value['ontologySha256']='0'*64
+  with self.assertRaisesRegex(AssociationBindingError,'source_digest'):self.run_archived(value)
+ def test_original_revision_still_required(self):
+  value=self.binding();value['ontologyRevision']='wrong'
+  with self.assertRaisesRegex(AssociationBindingError,'ontology_revision'):self.run_archived(value)
+ def test_complete_mapping_validation_still_required(self):
+  value=self.binding();value['mappings'].pop()
+  with self.assertRaisesRegex(AssociationBindingError,'association_coverage'):self.run_archived(value)
+
+if __name__=='__main__':unittest.main()

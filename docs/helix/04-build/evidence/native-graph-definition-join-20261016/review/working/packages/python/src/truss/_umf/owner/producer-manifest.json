@@ -1,0 +1,25 @@
+{
+  "revision": "c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3",
+  "producerMode": "record",
+  "buildDependencies": {
+    "yaml": {
+      "version": "2.9.1",
+      "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+    },
+    "ajv": {
+      "version": "8.20.0",
+      "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+    }
+  },
+  "archiveSha256": "aa3ff171f8adbdbb6a0ad729dbcb2825dd2299b98e6d90a4e8e1e84835247838",
+  "bundleSha256": "db1d813cafd6f48cb20549ea7e847aca754b53c21bbc624ff88aa963d917c90b",
+  "operations": [
+    "readDocument",
+    "validateDocument",
+    "validateCoreRecordValues",
+    "upgradeSchemaPropertiesEnvelope",
+    "verifySchemaPropertiesUpgrade",
+    "rollbackSchemaPropertiesEnvelope"
+  ],
+  "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+}

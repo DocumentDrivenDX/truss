@@ -1,0 +1,73 @@
+{
+  "identity": "truss-fresh-catalog-support",
+  "version": "0.1.0",
+  "scope": "original_0.7_native_catalog_metadata_preflight_only",
+  "sourceVersions": [
+    "0.7.0"
+  ],
+  "binding": "absent",
+  "transforms": "none",
+  "records": "explicit_owner_known_members_required",
+  "stagedFields": "authored_name_kind_nullability_cardinality_required_no_defaults",
+  "optionalScalar": "absent_retained_unresolved_present_owner_known",
+  "optionalFacetsKeysRelationships": "absent_preserved_present_owner_known_no_uninterpreted_paths",
+  "unselected": [
+    "groups",
+    "generic_reference_links",
+    "opaque_extensions",
+    "reversible_target_schema_properties"
+  ],
+  "diagnostics": "retain_original_without_remapping",
+  "enforcement": "none_unqualified",
+  "completeSupportQualified": false,
+  "acceptedReportQualified": false,
+  "maxDecisionBytes": 4194304,
+  "closedSourceInventory": {
+    "scope": "original_0.7_explicit_scalar_string_records",
+    "documentKeys": [
+      "umf",
+      "id",
+      "modules",
+      "vocabularies",
+      "extensions"
+    ],
+    "moduleKeys": [
+      "id",
+      "namespace",
+      "elements",
+      "extensions"
+    ],
+    "recordKeys": [
+      "id",
+      "kind",
+      "members",
+      "extensions"
+    ],
+    "fieldKeys": [
+      "id",
+      "kind",
+      "name",
+      "scalarType",
+      "nullability",
+      "cardinality",
+      "extensions"
+    ],
+    "memberKeys": [
+      "module",
+      "element"
+    ],
+    "scalarType": "string",
+    "nullability": [
+      "required",
+      "absent-allowed"
+    ],
+    "cardinality": "one",
+    "extensionsAndVocabularies": "exhaustively_absent_or_empty",
+    "ownership": "all_fields_in_explicit_record_memberships",
+    "assertions": "original_kind_members_member_occurrences_nullability_cardinality_scalarType_bijection",
+    "annotations": "id_namespace_name_are_not_constraint_assertions",
+    "enforcement": "none_unqualified",
+    "outOfSubset": "retained_metadata_only_inventory_unavailable",
+    "acceptedReportQualified": false
+  }
+}

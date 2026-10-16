@@ -1,0 +1,313 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:truss:draft:history-record:0.1.0",
+  "title": "Proposed complete historical record carrier",
+  "description": "Shape only. Native ownership/definition resolution, identity domains, timestamps, uniqueness, limits and history continuity require semantic validation. Does not qualify legacy rows.",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-history-record/0.1.0"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "recordVersion": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "catalogRevision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "properties": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": {
+            "type": "object",
+            "properties": {
+              "propertyId": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)$",
+                "maxLength": 20
+              },
+              "definitionPin": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+              }
+            },
+            "required": [
+              "propertyId",
+              "definitionPin",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "retained": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "kind": {
+          "const": "object"
+        },
+        "ownership": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "rootless"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "owned"
+                },
+                "root": {
+                  "$ref": "#/$defs/identity"
+                }
+              },
+              "required": [
+                "state",
+                "root"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "identity",
+        "recordVersion",
+        "catalogRevision",
+        "createdAt",
+        "updatedAt",
+        "properties",
+        "retained",
+        "kind",
+        "ownership"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "interfaceVersion": {
+          "const": "truss-history-record/0.1.0"
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "recordVersion": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "catalogRevision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "updatedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "properties": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": {
+            "type": "object",
+            "properties": {
+              "propertyId": {
+                "type": "string",
+                "pattern": "^(0|-?[1-9][0-9]*)$",
+                "maxLength": 20
+              },
+              "definitionPin": {
+                "type": "string",
+                "minLength": 1
+              },
+              "value": {
+                "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+              }
+            },
+            "required": [
+              "propertyId",
+              "definitionPin",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "retained": {
+          "type": "array",
+          "maxItems": 10000,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "$ref": "urn:truss:draft:exact-value:0.1.0#/$defs/value"
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "kind": {
+          "const": "edge"
+        },
+        "source": {
+          "$ref": "#/$defs/identity"
+        },
+        "target": {
+          "$ref": "#/$defs/identity"
+        },
+        "orderKey": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "null"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "const": "text"
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state",
+                "text"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "interfaceVersion",
+        "identity",
+        "recordVersion",
+        "catalogRevision",
+        "createdAt",
+        "updatedAt",
+        "properties",
+        "retained",
+        "kind",
+        "source",
+        "target",
+        "orderKey"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "owner": {
+      "type": "object",
+      "properties": {
+        "documentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "moduleId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "documentId",
+        "moduleId"
+      ],
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "typeId": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "maxLength": 20
+        },
+        "definitionPin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "$ref": "#/$defs/owner"
+        }
+      },
+      "required": [
+        "id",
+        "typeId",
+        "definitionPin",
+        "owner"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

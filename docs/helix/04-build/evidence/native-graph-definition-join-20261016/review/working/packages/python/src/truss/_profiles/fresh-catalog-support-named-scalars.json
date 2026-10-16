@@ -1,0 +1,124 @@
+{
+  "identity": "truss-fresh-catalog-support",
+  "version": "0.4.0",
+  "scope": "original_0.7_native_catalog_metadata_preflight_only",
+  "sourceVersions": [
+    "0.7.0"
+  ],
+  "binding": "absent",
+  "transforms": "none",
+  "records": "explicit_owner_known_members_required",
+  "stagedFields": "authored_name_kind_nullability_cardinality_required_no_defaults",
+  "optionalScalar": "absent_retained_unresolved_present_owner_known",
+  "optionalFacetsKeysRelationships": "absent_preserved_present_owner_known_no_uninterpreted_paths",
+  "unselected": [
+    "groups",
+    "generic_reference_links",
+    "opaque_extensions",
+    "reversible_target_schema_properties"
+  ],
+  "diagnostics": "retain_original_without_remapping",
+  "enforcement": "none_unqualified",
+  "completeSupportQualified": false,
+  "acceptedReportQualified": false,
+  "maxDecisionBytes": 4194304,
+  "closedSourceInventory": {
+    "scope": "original_0.7_explicit_exact_scalar_records_string_keys_relationships",
+    "documentKeys": [
+      "umf",
+      "id",
+      "modules",
+      "vocabularies",
+      "extensions"
+    ],
+    "moduleKeys": [
+      "id",
+      "namespace",
+      "elements",
+      "extensions",
+      "relationships"
+    ],
+    "recordKeys": [
+      "id",
+      "kind",
+      "name",
+      "members",
+      "extensions",
+      "keys"
+    ],
+    "fieldKeys": [
+      "id",
+      "kind",
+      "name",
+      "scalarType",
+      "nullability",
+      "cardinality",
+      "extensions"
+    ],
+    "memberKeys": [
+      "module",
+      "element"
+    ],
+    "scalarType": [
+      "string",
+      "integer",
+      "decimal",
+      "boolean",
+      "timestamp",
+      "binary"
+    ],
+    "nullability": [
+      "required",
+      "absent-allowed"
+    ],
+    "cardinality": "one",
+    "extensionsAndVocabularies": "exhaustively_absent_or_empty",
+    "ownership": "all_fields_in_explicit_record_memberships",
+    "assertions": "original_scalar_record_occurrences_and_authored_key_relationship_occurrence_bijection",
+    "annotations": "id_namespace_name_are_not_constraint_assertions",
+    "enforcement": "none_unqualified",
+    "outOfSubset": "retained_metadata_only_inventory_unavailable",
+    "acceptedReportQualified": false,
+    "keyKeys": [
+      "id",
+      "name",
+      "fields",
+      "primary"
+    ],
+    "relationshipKeys": [
+      "id",
+      "name",
+      "source",
+      "target",
+      "sourceMultiplicity",
+      "targetMultiplicity",
+      "targetLifecycle",
+      "directed"
+    ],
+    "multiplicity": "exact_int32_nonnegative_bounds_or_star_max",
+    "targetLifecycle": [
+      "owned",
+      "independent",
+      "unspecified"
+    ],
+    "keyFieldReferenceKeys": [
+      "module",
+      "element"
+    ],
+    "sourceEndpointKeys": [
+      "module",
+      "element"
+    ],
+    "targetEndpointKeys": [
+      "module",
+      "element",
+      "key"
+    ],
+    "multiplicityKeys": [
+      "min",
+      "max"
+    ],
+    "declarationPresence": "absent_is_missing_relationships_empty_is_known_empty_keys_empty_refused_by_umf_no_invented_assertions",
+    "keyExecution": "catalog metadata inventoried; mutation and lookup require string tuple components"
+  }
+}

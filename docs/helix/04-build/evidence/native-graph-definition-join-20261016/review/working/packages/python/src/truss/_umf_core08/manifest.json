@@ -1,0 +1,49 @@
+{
+  "interfaceVersion": "truss-core08-catalog-producer/0.2.0",
+  "runtimeVersion": "1.4.2",
+  "owner": {
+    "revision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+    "producerMode": "core08-catalog",
+    "buildDependencies": {
+      "yaml": {
+        "version": "2.9.1",
+        "packageSha256": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c"
+      },
+      "ajv": {
+        "version": "8.20.0",
+        "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+      }
+    },
+    "archiveSha256": "d25f545ca0988b66b42aad32c1942f8d5fd04174a2f31f2d3b887c097c1ddad4",
+    "bundleSha256": "88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3",
+    "operations": [
+      "readDocument",
+      "validateDocument",
+      "inspectCoreSchemaProperties",
+      "inspectCoreKeys",
+      "inspectCoreRelationships",
+      "inspectCoreElementKind",
+      "inspectCoreNullability",
+      "inspectCoreCardinality",
+      "inspectCoreFacets",
+      "inspectCoreRecordMembers",
+      "inspectCoreScalarType",
+      "inspectCoreReferenceLinks"
+    ],
+    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  },
+  "files": {
+    "acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
+    "licenses/ajv.txt": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+    "licenses/fast-deep-equal.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "licenses/fast-uri.txt": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+    "licenses/json-schema-traverse.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+    "licenses/require-from-string.txt": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
+    "licenses/yaml.txt": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+    "preparation.mjs": "3f3c29f66ae043cbb1ff8c6b38240143ebca1be26c21d46405d55a5b0cd95161",
+    "producer-manifest.json": "3123647a3443894052b670de8444e6ba0197abd83f647819faaad01fcaaedc81",
+    "producer.js": "88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3",
+    "receiver.mjs": "08d0ca7d3122374505287a016c66c47b864c0feb17a45d5c2c9687afb8994443"
+  },
+  "scope": "Original core0.8 observation source only. No native ingress, report acceptance, migration, issuer authentication or protected execution."
+}
