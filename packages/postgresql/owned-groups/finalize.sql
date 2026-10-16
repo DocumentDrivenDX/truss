@@ -186,8 +186,10 @@ BEGIN
     ((n.state->'image')-ARRAY['created_at','updated_at'])||jsonb_build_object('id',(n.identity->>'id')::bigint,
      'root_id',(n.root_identity->>'id')::bigint,'root_type',(n.root_identity->>'typeId')::int) END THEN 'object'
    WHEN EXISTS(SELECT 1 FROM truss.edge e WHERE
-    (e.source_id=(n.identity->>'id')::bigint AND e.source_type=(n.identity->>'typeId')::int
-     OR e.target_id=(n.identity->>'id')::bigint AND e.target_type=(n.identity->>'typeId')::int)
+    e.source_id=(n.identity->>'id')::bigint AND e.source_type=(n.identity->>'typeId')::int
+    AND NOT (live_edges ? jsonb_build_array(e.rel_type_id::text,e.id::text)::text))
+   OR EXISTS(SELECT 1 FROM truss.edge e WHERE
+    e.target_id=(n.identity->>'id')::bigint AND e.target_type=(n.identity->>'typeId')::int
     AND NOT (live_edges ? jsonb_build_array(e.rel_type_id::text,e.id::text)::text)) THEN 'incident' END problem
   FROM members n LEFT JOIN truss.object o ON o.id=(n.identity->>'id')::bigint AND o.type_id=(n.identity->>'typeId')::int)
  SELECT problem INTO final_problem FROM problems WHERE problem IS NOT NULL ORDER BY ordinal LIMIT 1;

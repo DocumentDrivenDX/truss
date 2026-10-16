@@ -1,0 +1,29 @@
+{
+  "review": "Astra source-only review of typed incident-edge EXISTS distribution",
+  "reviewedAt": "2026-10-16T12:59:31.536311+00:00",
+  "verdict": "SOURCE_CLEAR_INCIDENT_PREDICATE_SPLIT",
+  "baselineCommit": "60982ef72c3caf6d0063ba87e2e80534c83553e5",
+  "candidate": "/private/tmp/truss-incident-split-proposal-20261016/finalize.sql",
+  "sourceSha256": "cbadf2d23241cfc6e04f65df14ce2d02888b8036829eec0a70c7311a6292279d",
+  "patchSha256": "ac9c48afc8610a0d7cdf29721cba9cb517cd2f2537eca69b9e1bdd719581022a",
+  "baselineFileSha256": "2fd317c7199fd4ca37cd75bf1fc8c758993cad49e55ab241911eec00159164d2",
+  "baselineFileMatchesExactGitObject": true,
+  "checks": [
+    "Only old EXISTS((typed-source OR typed-target) AND missing-live-edge) changes to EXISTS(typed-source AND missing-live-edge) OR EXISTS(typed-target AND missing-live-edge).",
+    "Both endpoint branches retain exact object identity AND type identity, and the identical live_edges membership expression keyed by relationship type plus edge ID.",
+    "Object-image CASE branch remains first; problems are still selected in original node ordinal order.",
+    "Deleted members remain in the same members projection and incident inventory.",
+    "Self edges may satisfy both branches without changing an existential Boolean; distinct parallel edge identities remain independently checked.",
+    "Both subqueries observe the same SQL statement snapshot; no new writes, callbacks, authority checks, signatures or storage exist in the changed predicates."
+  ],
+  "independentPureCheck": {
+    "sqlThreeValuedDistributivityCases": 27,
+    "notPostgresqlExecution": true
+  },
+  "openFindings": [],
+  "limitations": [
+    "No native execution, EXPLAIN or performance measurement by reviewer.",
+    "Index adoption and latency benefit are not established by equivalent syntax.",
+    "Authoritative source/generated runtime/manifest must be composed and rebuilt before native qualification."
+  ]
+}

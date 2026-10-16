@@ -1,0 +1,35 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "SOURCE_CLEAR_BASIC_NATIVE_PARENT_PASS_MATRIX_PENDING",
+  "scope": "Completed incident predicate split integration only",
+  "repository": "/private/tmp/truss-main-integration-20261010",
+  "baseCommit": "60982ef72c3caf6d0063ba87e2e80534c83553e5",
+  "sourceReview": "/private/tmp/truss-incident-split-astra-20261016.json",
+  "sourceHashes": {
+    "packages/postgresql/owned-groups/finalize.sql": "cbadf2d23241cfc6e04f65df14ce2d02888b8036829eec0a70c7311a6292279d",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "fa108ffe7b2f53ead1ecfd147dde19c80d1d3769e0cb32a5a1f4ef588a96e1fa",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "31870f9b5c2f5c755b69579e0ebdf3bdea80fadb6a89706d073ed8181c776b94"
+  },
+  "findings": [],
+  "checks": [
+    "Authored finalize.sql is byte-identical to reviewed cbadf2d proposal.",
+    "Generated owned.sql has the same exact predicate change; read-only build-owned-runtime.py --check and git diff --check passed; manifest changes only owned.sql hash.",
+    "EXISTS((typedSource OR typedTarget) AND absentLiveIdentity) is distributed into the disjunction of two corresponding EXISTS predicates in the same SQL statement.",
+    "Both branches retain exact endpoint ID/type and exact relationship-type/edge-ID membership; self loops and parallel edges retain existential semantics.",
+    "Object-image-before-incident refusal priority, original ordinal order and deleted-node inventory unchanged.",
+    "Earlier complete settlement, all actor/authority/source checks, remaining physical-edge/forest checks, signatures/grants/219routine inventory and1024capacity unchanged."
+  ],
+  "parentReportedNative": {
+    "session": 59837,
+    "tests": 8,
+    "result": "PASS",
+    "seconds": 29.229,
+    "log": "/private/tmp/truss-incident-split-basic-20261016.log",
+    "logSha256": "c5793398ee7bf062478da11ad9838e99d3dcc74f0572d814e76f6fe90b5211ec",
+    "reviewerReadTerminalLog": true
+  },
+  "limits": [
+    "No native, EXPLAIN or benchmark execution by reviewer.",
+    "Original matrix pending; index adoption, speedup, release-runner and full workload qualification not established."
+  ]
+}

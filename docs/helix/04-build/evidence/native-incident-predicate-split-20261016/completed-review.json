@@ -1,0 +1,63 @@
+{
+  "reviewer": "Astra Ultra",
+  "status": "COMPLETED_SOURCE_AND_EVIDENCE_CLEAR_LOCAL_MATRIX_PASS_PERFORMANCE_NOT_QUALIFIED",
+  "sourceReview": "/private/tmp/truss-main-incident-split-astra-20261016.json",
+  "baseCommit": "60982ef72c3caf6d0063ba87e2e80534c83553e5",
+  "sourceHashes": {
+    "packages/postgresql/owned-groups/finalize.sql": "cbadf2d23241cfc6e04f65df14ce2d02888b8036829eec0a70c7311a6292279d",
+    "packages/python/src/truss/_catalog_runtime/owned.sql": "fa108ffe7b2f53ead1ecfd147dde19c80d1d3769e0cb32a5a1f4ef588a96e1fa",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "31870f9b5c2f5c755b69579e0ebdf3bdea80fadb6a89706d073ed8181c776b94"
+  },
+  "findings": [],
+  "evidenceChecks": [
+    "Original compressed JSON/log decompress byte-identically to parent source files; proposal/integration review and basic log are exact copies.",
+    "All3 source hashes remain exactly reviewed; report runtime manifest matches. Dirty-source provenance retained.",
+    "README workload counts and medians agree with original report; all5 changed1000update apply/commit samples pass, reopened values verified, cleanup passed.",
+    "Actual attempted/committed atomic group sizes are1/100/1000; configured1024 is not asserted as this matrix measured size.",
+    "Unchanged10000ms statement/30000ms operation limits; no causal speedup, reliable deadline headroom or release-runner qualification claim."
+  ],
+  "parentReportedNative": {
+    "basic": {
+      "session": 59837,
+      "tests": 8,
+      "result": "PASS",
+      "seconds": 29.229
+    },
+    "matrix": {
+      "session": 26219,
+      "result": "PASS",
+      "reportSeconds": 131.80520900001284,
+      "workloadCounts": {
+        "bulk_create": 1,
+        "bulk_create_commit": 1,
+        "bulk_edges": 1,
+        "bulk_edges_commit": 1,
+        "read_by_id": 1000,
+        "read_by_key": 100,
+        "single_update_including_commit": 200,
+        "bulk_update_1000": 5,
+        "bulk_update_commit_1000": 5,
+        "bulk_update_end_to_end_1000": 5,
+        "server_cleanup": 1
+      },
+      "update1000ApplyMedianMs": 9816.562542,
+      "update1000ApplyMaxMs": 9922.302792,
+      "update1000CommitMedianMs": 3828.218375,
+      "update1000EndToEndMedianMs": 13751.151333,
+      "performanceQualification": "not_evaluated"
+    }
+  },
+  "evidenceHashes": {
+    "docs/helix/04-build/evidence/native-incident-predicate-split-20261016/README.md": "df03a0431286c6583a3679ebd29e2d16b7201a0f0b3f9af01712b5fbc36d3860",
+    "docs/helix/04-build/evidence/native-incident-predicate-split-20261016/basic-native.log": "c5793398ee7bf062478da11ad9838e99d3dcc74f0572d814e76f6fe90b5211ec",
+    "docs/helix/04-build/evidence/native-incident-predicate-split-20261016/integration-review.json": "69228b687ba618d646f8247907fe438f9ef4ecf12cf48595e8dcad39fca6bd1a",
+    "docs/helix/04-build/evidence/native-incident-predicate-split-20261016/matrix.json.gz": "6912b48cf4b628053da4a2416dd87f8a5d24c647dd70df9de767afe45a037538",
+    "docs/helix/04-build/evidence/native-incident-predicate-split-20261016/matrix.log.gz": "2328e25586ecd6651c056be271e538f18b9cf8c7c1f32136156c6111174b59d8",
+    "docs/helix/04-build/evidence/native-incident-predicate-split-20261016/proposal-review.json": "bd78ef22cd5341a66a50011c15b1ddfb236fa4dee29d6860b33acadc101eac96",
+    "docs/helix/04-build/evidence/native-incident-predicate-split-20261016/source-pins.json": "8c7120c5a2d046c29fd3de435dd0c355dc02b9b2ac8e1bd407cdbf133d369af6"
+  },
+  "limits": [
+    "Reviewer ran static source/evidence checks only; native runs are parent-executed.",
+    "This is a local full-workload functional pass with near10s statement time; no all-schema/platform/1024 or release performance qualification."
+  ]
+}

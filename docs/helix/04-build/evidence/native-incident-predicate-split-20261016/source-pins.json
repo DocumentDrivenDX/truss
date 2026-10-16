@@ -1,0 +1,5 @@
+{
+  "packages/postgresql/owned-groups/finalize.sql": "cbadf2d23241cfc6e04f65df14ce2d02888b8036829eec0a70c7311a6292279d",
+  "packages/python/src/truss/_catalog_runtime/owned.sql": "fa108ffe7b2f53ead1ecfd147dde19c80d1d3769e0cb32a5a1f4ef588a96e1fa",
+  "packages/python/src/truss/_catalog_runtime/manifest.json": "31870f9b5c2f5c755b69579e0ebdf3bdea80fadb6a89706d073ed8181c776b94"
+}
