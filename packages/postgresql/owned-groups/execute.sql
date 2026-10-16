@@ -433,8 +433,8 @@ BEGIN
  IF entity_kind NOT IN ('object','edge') OR entity_kind IS NULL OR reference IS NULL THEN
   RAISE EXCEPTION 'explicit original entity reference required' USING ERRCODE='55000';END IF;
  plan:=coalesce(prepared_plan,truss.runtime_owned_plan(selected_attempt,selected_index));
- state:=coalesce(plan->(CASE entity_kind WHEN 'object' THEN 'afterNodes' ELSE 'afterEdges' END)->reference,
-  plan->(CASE entity_kind WHEN 'object' THEN 'beforeNodes' ELSE 'beforeEdges' END)->reference);
+ state:=coalesce(jsonb_extract_path(plan,CASE entity_kind WHEN 'object' THEN 'afterNodes' ELSE 'afterEdges' END,reference),
+  jsonb_extract_path(plan,CASE entity_kind WHEN 'object' THEN 'beforeNodes' ELSE 'beforeEdges' END,reference));
  IF state IS NULL AND entity_kind='object' AND reference LIKE 'stored:%' THEN
   SELECT p.plan->'initialScope'->'boundary'->substring(reference FROM 8) INTO witness
    FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND p.operation_index=0;
@@ -481,7 +481,7 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE plan jsonb;state jsonb;identity jsonb;root_identity jsonb;root_reference text;
 BEGIN
  IF phase IS NULL OR phase NOT IN ('before','after') THEN RAISE EXCEPTION 'explicit image phase required' USING ERRCODE='55000';END IF;
- plan:=coalesce(prepared_plan,truss.runtime_owned_plan(selected_attempt,selected_index));state:=plan->(phase||'Nodes')->reference;
+ plan:=coalesce(prepared_plan,truss.runtime_owned_plan(selected_attempt,selected_index));state:=jsonb_extract_path(plan,phase||'Nodes',reference);
  IF state IS NULL OR state->'deleted'='true'::jsonb THEN RETURN NULL;END IF;
  identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'object',plan,prepared_attempt);
  root_reference:=state->>'root';

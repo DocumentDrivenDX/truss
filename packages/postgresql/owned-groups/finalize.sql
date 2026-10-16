@@ -26,16 +26,16 @@ BEGIN
   mode:=operation->>'operation';result:=attempt.results->index;
   IF index=0 THEN initial_scope:=plan->'initialScope';END IF;
   expected_objects:=0;expected_edges:=0;
-  FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterNodes') n WHERE n.value IS DISTINCT FROM plan->'beforeNodes'->n.key
-   AND (plan->'beforeNodes'->n.key IS NULL OR plan->'beforeNodes'->n.key->'deleted'='false'::jsonb) LOOP
+  FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterNodes') n WHERE n.value IS DISTINCT FROM jsonb_extract_path(plan,'beforeNodes',n.key)
+   AND (jsonb_extract_path(plan,'beforeNodes',n.key) IS NULL OR jsonb_extract_path(plan,'beforeNodes',n.key)->'deleted'='false'::jsonb) LOOP
    identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'object',plan,attempt);
    SELECT t.transition_id INTO STRICT transition_id FROM truss.runtime_object_transition t WHERE t.attempt_id=selected_attempt
     AND t.operation_index=index AND t.object_id=(identity->>'id')::bigint AND t.type_id=(identity->>'typeId')::int;
    PERFORM truss.runtime_owned_object_transition_validate_qualified(transition_id,false,current_actor,input,attempt.input_bytes,attempt);expected_objects:=expected_objects+1;
   END LOOP;
   FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterEdges') e WHERE
-   (e.value IS DISTINCT FROM plan->'beforeEdges'->e.key OR e.key=plan->>'primary' AND mode='update_edge')
-   AND (plan->'beforeEdges'->e.key IS NULL OR plan->'beforeEdges'->e.key->'deleted'='false'::jsonb) LOOP
+   (e.value IS DISTINCT FROM jsonb_extract_path(plan,'beforeEdges',e.key) OR e.key=plan->>'primary' AND mode='update_edge')
+   AND (jsonb_extract_path(plan,'beforeEdges',e.key) IS NULL OR jsonb_extract_path(plan,'beforeEdges',e.key)->'deleted'='false'::jsonb) LOOP
    identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'edge',plan,attempt);
    SELECT t.transition_id INTO STRICT transition_id FROM truss.runtime_edge_transition t WHERE t.attempt_id=selected_attempt
     AND t.operation_index=index AND t.edge_id=(identity->>'id')::bigint AND t.rel_type_id=(identity->>'typeId')::int;
@@ -47,8 +47,8 @@ BEGIN
   identity:=truss.runtime_owned_identity(selected_attempt,index,plan->>'primary',CASE WHEN mode LIKE '%object' THEN 'object' ELSE 'edge' END,plan,attempt);
   IF result->'identity' IS DISTINCT FROM identity OR result->>'operation' IS DISTINCT FROM mode THEN
    RAISE EXCEPTION 'original primary result identity required' USING ERRCODE='55000';END IF;
-  primary_before:=plan->(CASE WHEN mode LIKE '%object' THEN 'beforeNodes' ELSE 'beforeEdges' END)->(plan->>'primary');
-  primary_after:=plan->(CASE WHEN mode LIKE '%object' THEN 'afterNodes' ELSE 'afterEdges' END)->(plan->>'primary');
+  primary_before:=jsonb_extract_path(plan,CASE WHEN mode LIKE '%object' THEN 'beforeNodes' ELSE 'beforeEdges' END,plan->>'primary');
+  primary_after:=jsonb_extract_path(plan,CASE WHEN mode LIKE '%object' THEN 'afterNodes' ELSE 'afterEdges' END,plan->>'primary');
   expected_outcome:=CASE WHEN mode LIKE 'create_%' THEN 'created' WHEN mode LIKE 'delete_%' THEN 'deleted'
    WHEN primary_before IS NOT DISTINCT FROM primary_after THEN 'unchanged' ELSE 'changed' END;
   expected_version:=CASE WHEN mode LIKE 'delete_%' THEN ((primary_before->'image'->>'ver')::bigint+1)::text ELSE primary_after->'image'->>'ver' END;
@@ -59,7 +59,7 @@ BEGIN
    SELECT coalesce(jsonb_agg(v ORDER BY v::text COLLATE "C"),'[]'::jsonb) INTO deleted FROM (
     SELECT jsonb_build_object('identity',truss.runtime_owned_identity(selected_attempt,index,p.key,'object',plan,attempt),
      'deletionVersion',((p.value->'image'->>'ver')::bigint+1)::text) v
-    FROM jsonb_each(plan->'beforeNodes') p WHERE p.value->'deleted'='false'::jsonb AND plan->'afterNodes'->p.key->'deleted'='true'::jsonb
+    FROM jsonb_each(plan->'beforeNodes') p WHERE p.value->'deleted'='false'::jsonb AND jsonb_extract_path(plan,'afterNodes',p.key)->'deleted'='true'::jsonb
     UNION ALL SELECT jsonb_build_object('identity',truss.runtime_owned_identity(selected_attempt,index,p.key,'edge',plan,attempt),
      'deletionVersion',((p.value->'image'->>'ver')::bigint+1)::text)
     FROM jsonb_each(plan->'beforeEdges') p WHERE p.value->'deleted'='false'::jsonb AND plan->'afterEdges'->p.key->'deleted'='true'::jsonb) members;
@@ -118,7 +118,7 @@ BEGIN
  FOR entry IN SELECT value FROM jsonb_array_elements(projection) LOOP
   reference:=node_order[(entry.value->>'node')::int+1];
   root_reference:=CASE WHEN entry.value->'root'='null'::jsonb THEN NULL ELSE node_order[(entry.value->>'root')::int+1] END;
-  IF last_plan->'afterNodes'->reference->'root' IS DISTINCT FROM coalesce(to_jsonb(root_reference),'null'::jsonb) THEN
+  IF jsonb_extract_path(last_plan,'afterNodes',reference,'root') IS DISTINCT FROM coalesce(to_jsonb(root_reference),'null'::jsonb) THEN
    RAISE EXCEPTION 'actual final forest and explicit root correspondence required' USING ERRCODE='55000';END IF;
  END LOOP;
 END;
