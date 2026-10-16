@@ -1,0 +1,133 @@
+{
+  "review": "Native scalar and ordered composite Key finite correspondence \u2014 bounded review",
+  "status": "complete",
+  "verdict": "two evidence precision findings; no observed product codec defect",
+  "findings": [
+    {
+      "id": "SCALAR-EVIDENCE-001",
+      "priority": 2,
+      "title": "Distinguish native-only RO values from public V2 coverage",
+      "file": "docs/helix/04-build/evidence/native-scalar-codecs-20261016/README.md",
+      "line": 28,
+      "evidence": "Only RO contains codecOptional={string:\"\"}, but retained public batches contain RA for Alice, RB for Bob, and no rows for Outsider. Independent strict inspection finds only original/null and absent optional V2 cells. RO minimum signed64, fractional decimal, cafe00babe and empty Unicode are likewise captured but not rendered. README lines 18\u201329 currently group all these as captured and originally rendered and explicitly claim present-empty optional text in public tagged cells.",
+      "impact": "Overstates finite renderer coverage; no product codec defect observed.",
+      "recommendation": "Qualify RO-only values as native fact/Key capture evidence and public optional cells as null/absent, or add a separately retained eligible rendering case before claiming public empty-text coverage."
+    },
+    {
+      "id": "SCALAR-EVIDENCE-002",
+      "priority": 2,
+      "title": "Assert the corrupted token before claiming exact negative-token capture",
+      "file": "packages/python/tests/test_current_disclosure_codecs_native.py",
+      "line": 105,
+      "evidence": "The semantic branch obtains captured.facts_bytes, places them into the cut and asserts the child refusal and empty resources/decisions/batch. It never locates RO and checks its affected Field against the injected exact token, and the negative receipts retain only refusal results. Thus a capture mutation to a different invalid token could satisfy the same assertions. README lines 37\u201339 claim these inputs are captured as exact tokens.",
+      "impact": "The tests establish successful capture followed by original UMF refusal, but not direct exact-token correspondence for those four corrupt inputs.",
+      "recommendation": "Before dispatch, assert exactly one complete RO identity/Key and the affected complete Field identity has the exact integerToken/decimalToken injected; retain that observation. Alternatively narrow the current claim to capture followed by semantic refusal. No SQL rerun was performed for this review."
+    }
+  ],
+  "startedAt": "2026-10-16T19:56:25Z",
+  "completedAt": "2026-10-16T19:58:56.400271+00:00",
+  "deadline": "2026-10-16T20:00:25Z",
+  "inputDirectory": "/private/tmp/truss-native-scalar-codecs-review-20261016",
+  "base": "a82384a1e2d72b22d1889419631604a359a16590",
+  "inputManifestSha256": "e1094082d619a7e708ebe554651d384bd8706fc8c47a01945ff81b3010d3e20d",
+  "diffSha256": "613d32aff001fb15123bfb41c29e16e579fd848895e370da3055efdcfc56b210",
+  "answers": [
+    {
+      "question": 1,
+      "conclusion": "Retained positive scalar tokens/types and ordered composite Keys match the independently authored VALUES under stricter recursive type equality. Signed64 extremes, decimal spelling including negative zero/trailing zeros, exact binary bytes and Unicode normalization distinctions are preserved in captured data. Public renderer coverage is the RA/RB subset, as detailed in finding 001. No Python float conversion is used."
+    },
+    {
+      "question": 2,
+      "conclusion": "Four controls reach successful capture then original-child refused result with no resources, decisions or batch; exact corrupted-token preservation is not directly asserted (finding 002). Three controls assert the native-cell capture exception stage. NUL precisely asserts structured GroupFailed, invalid code, native 22023 operation 0, and committed canonical object rows unchanged. This deliberately does not prove every journal/effect invariant. Savepoint restoration compares complete captures after each of the seven direct corruption controls."
+    },
+    {
+      "question": 3,
+      "conclusion": "General limitations are accurate: finite supplied-source-wrapper component, no complete codec equivalence, no native graph activation/admission, no caller/current authority or guarded-release proof, no backend-case promotion. Historical single-Key success, wrong NUL-stage assertion and overlapping timing window are retained and qualified. The two local coverage claims above need correction."
+    }
+  ],
+  "independentChecks": {
+    "passed": true,
+    "frozenFilesVerified": 19,
+    "archiveMembersVerified": {
+      "initial-single-key": 13,
+      "failed-stage": 12,
+      "final-native": 14
+    },
+    "capturedResourceKeys": [
+      "RA",
+      "RB",
+      "RO"
+    ],
+    "renderedResourceKeys": [
+      "RA",
+      "RB"
+    ],
+    "renderedOptionalCells": [
+      {
+        "disposition": "original",
+        "value": null
+      },
+      {
+        "disposition": "absent"
+      }
+    ],
+    "nativeOnlyROValues": {
+      "salary": {
+        "integerToken": "-9223372036854775808"
+      },
+      "codecDecimal": {
+        "decimalToken": "1.0001"
+      },
+      "codecBytes": {
+        "binaryHex": "cafe00babe"
+      },
+      "codecUnicode": {
+        "string": ""
+      },
+      "codecFlag": {
+        "boolean": true
+      },
+      "codecOptional": {
+        "string": ""
+      }
+    },
+    "strictTypeAndTokenPositiveComparison": true,
+    "orderedCompositeKeysExact": true,
+    "negativeStages": [
+      "original-UMF-global-domain-refusal",
+      "original-UMF-global-domain-refusal",
+      "original-UMF-global-domain-refusal",
+      "original-UMF-global-domain-refusal",
+      "native-cell-capture-refusal",
+      "native-cell-capture-refusal",
+      "native-cell-capture-refusal",
+      "native-create-input-refusal"
+    ],
+    "SQLExecuted": false,
+    "finding": "README says present-empty optional String occurs in public tagged V2 cells, but only denied RO has it and no retained public row renders RO."
+  },
+  "sourceEndpointAudit": "source-endpoint-audit.json",
+  "commands": [
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B check.py",
+      "exitCode": 0,
+      "log": "check.log",
+      "scope": "Static/source and archived JSON comparison only; no test campaign or SQL execution."
+    }
+  ],
+  "suppliedEvidence": {
+    "finalNative": "1 test passed in 43.155s, inspected only",
+    "pureRegression": "13 tests supplied, not rerun",
+    "artifactArchives": "13 initial + 12 failed-stage + 14 final members independently hash/size verified",
+    "sourcePins": "8 selected endpoints match exact base/frozen snapshots; Bun binary hash matches. No retrospective held-file/ABA or hermetic proof."
+  },
+  "scope": [
+    "Only the two test snapshots, diff and retained evidence inspected.",
+    "No SQL, builds, nested agents, owner edits or waits.",
+    "Full backend/semantic obligations remain open; no acceptance promotion."
+  ],
+  "retention": {
+    "manifest": "manifest.json",
+    "shape": "files maps relative path to {sha256,bytes}; manifest excludes itself"
+  }
+}
