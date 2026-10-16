@@ -1,0 +1,27 @@
+{
+  "scope": "Basic public existing-field alternate-key backfill for owned objects; no retained-value rebinding or hosted release qualification",
+  "postgresVersion": "18.6",
+  "sourceSha256": "ece04fb7c9482310e458f89d6219063b7d73a4301abf63bd873b1ce4d2ca5d2d",
+  "ownedTests": {
+    "passed": 4,
+    "seconds": 12.05,
+    "log": "owned-native.log"
+  },
+  "rootlessTests": {
+    "passed": 4,
+    "seconds": 13.323,
+    "umfVersions": [
+      "0.7.0",
+      "0.8.0"
+    ],
+    "log": "rootless-native.log"
+  },
+  "checks": [
+    "public registration, commit and reopen key lookup",
+    "complete object images, roots, versions and journal preserved",
+    "original report/idempotent retry",
+    "typed duplicate refusal and original keys preserved",
+    "root-reader refusal before acceptance, report/retry and deferred commit"
+  ],
+  "hostedReleaseQualified": false
+}

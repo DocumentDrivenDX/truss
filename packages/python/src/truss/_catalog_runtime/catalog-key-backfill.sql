@@ -54,9 +54,11 @@ BEGIN
    WHERE d.rev=definition.definition_rev AND d.ord=definition.definition_doc_ord AND d.doc_id=definition.definition_document_id;
   IF archive.content_sha256 IS DISTINCT FROM encode(sha256(convert_to(archive.document,'UTF8')),'hex') THEN
    RAISE EXCEPTION 'original planned document bytes required' USING ERRCODE='55000';END IF;
-  IF EXISTS(SELECT 1 FROM truss.object o WHERE o.type_id=owner.type_id AND (o.root_id IS NOT NULL OR o.root_type IS NOT NULL)) THEN RAISE EXCEPTION 'owned catalog key backfill requires a supported ownership profile' USING ERRCODE='0A000';END IF;
   FOR object_row IN SELECT o.* FROM truss.object o WHERE o.type_id=owner.type_id ORDER BY o.id FOR UPDATE LOOP
    candidate_count:=candidate_count+1;values_cells:='[]';
+   PERFORM truss.runtime_history_ownership(jsonb_build_object(
+    'identity',jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text),
+    'catalogRevision',object_row.rev,'ownership',truss.runtime_object_ownership_at(to_jsonb(object_row))));
    IF candidate_count>10000 THEN RAISE EXCEPTION 'bounded key backfill inventory required' USING ERRCODE='54000';END IF;
    FOREACH component IN ARRAY definition.prop_ids LOOP
     SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p WHERE p.prop_id=component AND p.type_id=owner.type_id;
@@ -85,6 +87,11 @@ BEGIN
   PERFORM truss.runtime_module_writer(owner.document_id,owner.module);
   IF truss.runtime_object_values_readable(owner.type_id) IS NOT TRUE THEN
    RAISE EXCEPTION 'current key backfill disclosure reader required' USING ERRCODE='42501';END IF;
+  FOR object_row IN SELECT o.* FROM truss.object o WHERE o.type_id=owner.type_id AND o.root_id IS NOT NULL LOOP
+   PERFORM truss.runtime_history_ownership(jsonb_build_object(
+    'identity',jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text),
+    'catalogRevision',object_row.rev,'ownership',truss.runtime_object_ownership_at(to_jsonb(object_row))));
+  END LOOP;
  END LOOP;
  FOR property IN SELECT p.* FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p
   WHERE EXISTS(SELECT 1 FROM jsonb_populate_recordset(NULL::truss.key_def,planned_basis->'key_def') k
@@ -231,6 +238,10 @@ BEGIN
  SELECT * INTO STRICT owner FROM jsonb_populate_recordset(NULL::truss.type_def,basis->'type_def') t WHERE t.type_id=transition.type_id;
  IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE THEN
   RAISE EXCEPTION 'current original backfill owner reader required' USING ERRCODE='42501';END IF;
+ PERFORM truss.runtime_history_ownership(jsonb_build_object(
+  'identity',jsonb_build_object('id',transition.object_image->>'id','typeId',transition.object_image->>'type_id'),
+  'catalogRevision',transition.object_image->'rev',
+  'ownership',truss.runtime_object_ownership_at(transition.object_image)));
  FOR effect IN SELECT value FROM jsonb_array_elements(transition.effects) LOOP
   SELECT * INTO STRICT definition FROM jsonb_populate_recordset(NULL::truss.key_def,basis->'key_def') k
    WHERE k.type_id=transition.type_id AND k.key_num=(effect->>'keyNumber')::smallint AND k.key_id=effect->>'keyId';

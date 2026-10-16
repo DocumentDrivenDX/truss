@@ -78,7 +78,7 @@
     "catalog-rebind-storage.sql": "8f641e1e386e3049ba690c391e63af577ebc25611fb97982029aeaede352bfe6",
     "upgrade-source-059.json": "1f5f67f9e138c08a1b13f49c4a8080f51ce79e5d7f6593f7382fec0a0cf13373",
     "upgrade-source-060.json": "bd553857a7087d81d9e03eefed658f1ba99dd446ff097b004c5eae0fb0ca9239",
-    "catalog-key-backfill.sql": "bc04fab0e8340770cd569554d5557029f880752e275b9768dcd456958c6191b4",
+    "catalog-key-backfill.sql": "ece04fb7c9482310e458f89d6219063b7d73a4301abf63bd873b1ce4d2ca5d2d",
     "catalog-key-backfill-storage.sql": "7455007d8b2054cf0a223c5307e760f32046037f0411e1509e8ab481c753744d",
     "upgrade-source-061.json": "364b2a908fd5bc53e4ccaa81ada2633e696cce441fc5df152a8698c597f5ec01",
     "upgrade-source-062.json": "ed0f53e66db6907fed2659a5f5086c44ad8eb8a2e1dc93fbc07a19185bcc9066",

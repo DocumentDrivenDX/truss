@@ -8170,3 +8170,17 @@ completed review claim. Root independently verifies all1371 captured inputs,
 1359 base files against Git/current bytes, both reviewed production files and
 501 wheel members. No production implementation changed after the completed
 reviews; the final receipts/checkpoint wrapper is separately byte-audited.
+
+
+### Existing owned-object alternate-key evolution — 2026-10-16
+
+The ordinary public catalog API now backfills new alternate keys over existing
+owned scalar fields. Original physical revisions interpret aggregate-root identity;
+current root-reader authority is checked during candidate disclosure, original
+report/retry and deferred commit. Exact objects, ownership, versions and history
+remain unchanged; existing key and final graph checks remain. Four basic owned
+PostgreSQL18.6 workflows pass, plus four existing UMF0.7/0.8 rootless workflows.
+[Original logs and source pin](evidence/owned-key-backfill-20261016/result.json)
+retain both runs. The existing release workflow includes these eight cases.
+Owned retained-value rebinding remains unfinished; hosted release validation
+and managed-service qualification are not established by these local tests.

@@ -56,3 +56,112 @@ class CatalogKeyBackfillTests(base.CatalogRebindTests):
 
 class CatalogKeyBackfill08Tests(CatalogKeyBackfillTests):
     source_version='0.8.0'
+
+
+class OwnedCatalogKeyBackfillTests(CatalogKeyBackfillTests):
+    """Existing owned children gain keys without changing their data or roots."""
+    for _name in tuple(n for n in dir(CatalogKeyBackfillTests) if n.startswith('test_')):
+        locals()[_name]=None
+    source_version='0.8.0'
+
+    def fields(self,source):
+        super().fields(source)
+        module=source['modules'][0]
+        roots=[e for e in module['elements'] if e['id']=='B' or e['id'].startswith('B-')]
+        module['elements']=[e for e in module['elements'] if e not in roots]
+        record=next(e for e in roots if e['kind']=='record')
+        for reference in record['members']+[f for k in record['keys'] for f in k['fields']]:
+            reference['module']='roots'
+        module['relationships'][0]['target'][0]['module']='roots'
+        module['relationships'].append({'id':'children','name':'children',
+            'source':[{'module':'roots','element':'B'}],
+            'target':[{'module':'m','element':'A','key':'a-primary'}],
+            'sourceMultiplicity':{'min':0,'max':1},'targetMultiplicity':{'min':0,'max':4},
+            'targetLifecycle':'owned','directed':True})
+        source['modules'].append({'id':'roots','namespace':'roots','elements':roots,'relationships':[],'extensions':{}})
+
+    def seed_owned(self,values=('first','second')):
+        import psycopg
+        from truss import ModuleAccessGrant,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
+        from truss.groups import OwnedOwnership,AliasObjectReference,CreateEdge,NullOrderKey
+        c,h,a,t=self.ready(self.fields,document_ids=('adoc',));h.detach();c.rollback()
+        for role in ('roots_reader','roots_writer'):
+            self.admin.execute('CREATE ROLE '+role+' NOLOGIN')
+            self.addCleanup(self.admin.execute,'DROP ROLE '+role)
+        self.admin.execute('BEGIN');host=adopt_psycopg_host(self.admin);tx=host.adopt_transaction().value
+        assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value
+        self.assertIsInstance(assembly.configure_module_access_in_transaction(tx,
+            (ModuleAccessGrant('adoc','roots','roots_reader','roots_writer'),)),Ok)
+        host.detach();self.admin.commit()
+        self.admin.execute('GRANT roots_reader,roots_writer TO consumer WITH SET FALSE')
+        c,h,a,t=self.consumer();relation=a.get_relationship_reference_in_transaction(t,
+            document_id='adoc',module_id='m',relationship_id='children').value
+        operations=[self.create('root','root',alias='root',record='B')]
+        for index,value in enumerate(values):
+            alias='child'+str(index)
+            operations.extend((replace(self.create(str(index),value,alias=alias),
+                ownership=OwnedOwnership(root=AliasObjectReference(alias='root'))),
+                CreateEdge(relationship_definition_pin=relation.definition_pin,
+                    source=AliasObjectReference(alias='root'),target=AliasObjectReference(alias=alias),
+                    values=(),order_key=NullOrderKey())))
+        context=a.group_context_in_transaction(t).value
+        created=a.apply_in_transaction(t,context.input(tuple(operations),MapValue(entries=())),context.request('owned-before-key'),documents=self.documents)
+        self.assertIsInstance(created,Ok,repr(created)+' '+str(h._custody.last_attempt.error))
+        self.assertIsInstance(created.value,GroupSuccess,repr(created))
+        identities=tuple(r.identity for r in created.value.response.semantic.results)
+        h.detach();c.commit()
+        self.admin.execute('REVOKE roots_writer FROM consumer')
+        self.admin.execute('GRANT '+self.installation.registrar_role+' TO consumer WITH SET FALSE')
+        self.original_images=self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall()
+        self.original_keys=self.admin.execute('SELECT to_jsonb(k) FROM truss.object_key_bucket k ORDER BY storage_row_id').fetchall()
+        self.original_journal=self.admin.execute('SELECT count(*) FROM truss.journal').fetchone()
+        return identities[0],identities[1]
+
+    def assert_preserved(self,*,keys=False):
+        self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall(),self.original_images)
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(),self.original_journal)
+        if keys:self.assertEqual(self.admin.execute('SELECT to_jsonb(k) FROM truss.object_key_bucket k ORDER BY storage_row_id').fetchall(),self.original_keys)
+
+    def test_owned_backfill_commit_reopen_and_reader_scoped_retry(self):
+        from truss import Error
+        from truss.groups import OwnedOwnership,StoredObjectReference
+        root,child=self.seed_owned();c,h,a,t=self.consumer();accepted=self.register(a,t)
+        self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))
+        self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
+        original=accepted.value.report_bytes;revision=accepted.value.revision
+        self.assertEqual(len(json.loads(original)['keyBackfills']),2)
+        h.detach();c.commit();self.assert_preserved()
+        c,h,a,t=self.consumer()
+        found=a.lookup_key_in_transaction(t,document_id='adoc',module_id='m',record_id='A',key_id='a-backfill',values=('first',))
+        self.assertIsInstance(found,Ok,repr(found));self.assertIsInstance(found.value,ObjectFound,repr(found))
+        self.assertEqual(found.value.object.id,int(child.id));self.assertEqual(found.value.object.version,1)
+        self.assertEqual(found.value.object.ownership,OwnedOwnership(root=StoredObjectReference(identity=root)))
+        retry=self.register(a,t);self.assertIsInstance(retry,Ok,repr(retry))
+        self.assertTrue(retry.value.replayed);self.assertEqual(retry.value.report_bytes,original)
+        h.detach();c.commit();self.admin.execute('REVOKE roots_reader FROM consumer')
+        c,h,a,t=self.consumer();report=a.report_in_transaction(t,revision)
+        self.assertIsInstance(report,Error,repr(report));self.assertEqual(report.error.sql_state,'42501')
+        h.detach();c.rollback();c,h,a,t=self.consumer();retry=self.register(a,t)
+        self.assertIsInstance(retry,Error,repr(retry));self.assertEqual(retry.error.sql_state,'42501')
+        h.detach();c.rollback()
+
+    def test_missing_root_reader_refuses_before_acceptance(self):
+        from truss import Error
+        self.seed_owned();self.admin.execute('REVOKE roots_reader FROM consumer')
+        c,h,a,t=self.consumer();accepted=self.register(a,t)
+        self.assertIsInstance(accepted,Error,repr(accepted));self.assertEqual(accepted.error.sql_state,'42501')
+        h.detach();c.rollback();self.assert_preserved(keys=True)
+
+    def test_root_reader_revoked_before_commit_aborts_backfill(self):
+        import psycopg
+        self.seed_owned();c,h,a,t=self.consumer();accepted=self.register(a,t)
+        self.assertIsInstance(accepted,Ok,repr(accepted));self.assertIsInstance(accepted.value,CatalogRegistration)
+        self.admin.execute('REVOKE roots_reader FROM consumer');h.detach()
+        with self.assertRaises(psycopg.errors.InsufficientPrivilege):c.commit()
+        c.rollback();self.assert_preserved(keys=True)
+
+    def test_duplicate_owned_candidates_preserve_images_and_keys(self):
+        self.seed_owned(('same','same'));c,h,a,t=self.consumer();accepted=self.register(a,t)
+        self.assertIsInstance(accepted,Ok,repr(accepted));self.assertIsInstance(accepted.value,CatalogAcceptanceRefused,repr(accepted))
+        self.assertEqual([(v.rule,v.affected_object_count) for v in accepted.value.violations],[('key.duplicate',2)])
+        h.detach();c.commit();self.assert_preserved(keys=True)

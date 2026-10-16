@@ -1,0 +1,9 @@
+test_duplicate_candidates_refuse_without_catalog_effects (test_catalog_key_backfill_native.CatalogKeyBackfillTests.test_duplicate_candidates_refuse_without_catalog_effects) ... ok
+test_register_existing_objects_lookup_and_query (test_catalog_key_backfill_native.CatalogKeyBackfillTests.test_register_existing_objects_lookup_and_query) ... ok
+test_duplicate_candidates_refuse_without_catalog_effects (test_catalog_key_backfill_native.CatalogKeyBackfill08Tests.test_duplicate_candidates_refuse_without_catalog_effects) ... ok
+test_register_existing_objects_lookup_and_query (test_catalog_key_backfill_native.CatalogKeyBackfill08Tests.test_register_existing_objects_lookup_and_query) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 13.323s
+
+OK

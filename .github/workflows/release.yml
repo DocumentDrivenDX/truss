@@ -123,6 +123,11 @@ jobs:
           python -m pip install --no-deps --target "$RUNNER_TEMP/truss-068-package" "$RUNNER_TEMP/truss-068-source/truss_toolkit-0.0.35-py3-none-any.whl"
           TRUSS_DB_KEY_PREDECESSOR="$RUNNER_TEMP/truss-068-package" python -m unittest test_database_key_upgrade_native
           TRUSS_IMPORT_SOURCE_PREDECESSOR="$RUNNER_TEMP/truss-068-package" python -m unittest test_import_source_upgrade_native
+      - name: Run installed catalog alternate-key backfill workflows
+        env:
+          TRUSS_BUN_EXECUTABLE: bun
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_catalog_key_backfill_native -v
       - name: Run installed numeric facet workflows
         env:
           TRUSS_BUN_EXECUTABLE: bun

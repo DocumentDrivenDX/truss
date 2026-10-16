@@ -25,7 +25,7 @@ Development compiled queries use published `weft-sql==0.4.36`, backend
 workflows exercise the default public compiler with owned descendants, the
 original Northwind Product model, decimal(12,2), and stable UMF IDs for unnamed
 records and fields. These checks do not qualify the broader protected engine.
-Development adds explicit atomic owned imports; catalog value rebinding/key backfill remains refused. Date
+Development adds explicit atomic owned imports and alternate-key backfill for existing owned objects; owned retained-value rebinding remains refused. Date
 and other generic-decimal SQL query domains remain unfinished. Practical
 performance still blocks release; this checkpoint is not a release tag.
 

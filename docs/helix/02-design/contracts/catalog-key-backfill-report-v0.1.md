@@ -43,3 +43,19 @@ final key memberships and uses `truss-native-catalog-rebind/0.3` and
 basis select these profiles; later catalog changes cannot rewrite earlier reports.
 Existing optional fields tightened to required do not qualify for this extension.
 Changes to existing or primary keys remain unsupported.
+
+
+## Native71 development: existing owned objects
+
+Adding an alternate key over existing supported required scalar fields also
+applies to owned objects. Each original physical object revision interprets
+its retained aggregate-root identity; the new key revision does not reinterpret
+an older object's ownership. Candidate collection and closing disclosure require
+current root-module read authority, in addition to existing owner/property
+authority. Report reads, original-request replay and deferred commit retain
+that root-reader requirement, including after later object mutations.
+
+Key-only backfill preserves the complete object image, ownership, versions and
+mutation history; existing key/reservation and final graph checks remain.
+Duplicate-key refusal leaves original objects and keys unchanged. This extension
+does not enable retained-value rebinding on owned objects or change report shapes.

@@ -1,0 +1,9 @@
+test_duplicate_owned_candidates_preserve_images_and_keys (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_duplicate_owned_candidates_preserve_images_and_keys) ... ok
+test_missing_root_reader_refuses_before_acceptance (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_missing_root_reader_refuses_before_acceptance) ... ok
+test_owned_backfill_commit_reopen_and_reader_scoped_retry (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_owned_backfill_commit_reopen_and_reader_scoped_retry) ... ok
+test_root_reader_revoked_before_commit_aborts_backfill (test_catalog_key_backfill_native.OwnedCatalogKeyBackfillTests.test_root_reader_revoked_before_commit_aborts_backfill) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 12.050s
+
+OK
