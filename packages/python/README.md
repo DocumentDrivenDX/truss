@@ -11,8 +11,8 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.35`,
-native runtime `0.68-candidate`, layout `1.0`
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.36`,
+native runtime `0.70-candidate`, layout `1.0`
 candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.37`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
@@ -20,7 +20,11 @@ server versions are not qualified. The broader protected engine remains
 unfinished; this runtime enforces its installed ordinary-person/module boundaries
 and includes the explicitly activated policy-query profile described below.
 
-This release is [v0.0.35](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.35).
+This release is [v0.0.36](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.36).
+
+It fixes deferred edge writer authorization after an early attempt-constraint
+flush. Upgrade the exact published v0.0.35/native68 installation through
+`upgrade_in_transaction`; existing rows and receipts are retained.
 
 Creation now joins the common object transition ledger while retaining its sole
 original journal and receipt evidence. Populated native67 installations can
@@ -167,10 +171,10 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.35 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.36 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.34 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.35'
+  'truss-toolkit[local,native,query]==0.0.36'
 ```
 
 Bun1.4.2 is still required for UMF preparation. SDK 0.0.35 /
@@ -188,10 +192,10 @@ PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.35 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.36 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.35 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.36 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
 ```

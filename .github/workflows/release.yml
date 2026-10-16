@@ -125,6 +125,21 @@ jobs:
           PYCODE
           python -m pip install --no-deps --target "$RUNNER_TEMP/truss-063-package" "$RUNNER_TEMP/truss-063-source/truss_toolkit-0.0.27-py3-none-any.whl"
           PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests TRUSS_RECURSIVE_UPGRADE_SOURCE_PACKAGE="$RUNNER_TEMP/truss-063-package" python -m unittest test_recursive_upgrade_native
+      - name: Verify published35 edge writer hotfix upgrade
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TRUSS_BUN_EXECUTABLE: bun
+        run: |
+          gh release download v0.0.35 --repo DocumentDrivenDX/truss --pattern truss_toolkit-0.0.35-py3-none-any.whl --pattern SHA256SUMS --dir "$RUNNER_TEMP/truss-hotfix-source"
+          python - <<'PYCODE'
+          import os,pathlib,hashlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'truss-hotfix-source'
+          name='truss_toolkit-0.0.35-py3-none-any.whl'
+          expected=dict((line.split()[1],line.split()[0]) for line in (root/'SHA256SUMS').read_text().splitlines())
+          assert hashlib.sha256((root/name).read_bytes()).hexdigest()==expected[name]
+          PYCODE
+          python -m pip install --no-deps --target "$RUNNER_TEMP/truss-hotfix-package" "$RUNNER_TEMP/truss-hotfix-source/truss_toolkit-0.0.35-py3-none-any.whl"
+          PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests TRUSS_EDGE_HOTFIX_SOURCE_PACKAGE="$RUNNER_TEMP/truss-hotfix-package" python -m unittest test_edge_writer_hotfix_native
       - name: Run both installed exact timestamp workflows
         run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_timestamp_query_native
       - name: Run both installed binary equality workflows

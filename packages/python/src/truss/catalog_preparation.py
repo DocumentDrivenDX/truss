@@ -18,7 +18,7 @@ def _configuration(source_version, manifest=None):
     configuration=json.loads(raw)
     configuration['layoutProfile']=manifest['layoutProfile']
     configuration['supportProfile']=dict((RECURSIVE08_PROFILE if source_version=='0.8.0' else RECURSIVE07_PROFILE) if manifest['releaseId'] in ('truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate') else (REFERENCE08_PROFILE if source_version=='0.8.0' else DECIMAL207_PROFILE))
-    if manifest['releaseId'] in ('truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate'):
+    if manifest['releaseId'] in ('truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate'):
         configuration['supportProfile']=dict(DECLARATIVE08_PROFILE if source_version=='0.8.0' else RECURSIVE07_PROFILE)
     return configuration
 

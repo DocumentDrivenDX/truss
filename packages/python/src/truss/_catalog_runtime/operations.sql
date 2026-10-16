@@ -936,11 +936,13 @@ REVOKE ALL ON FUNCTION truss.runtime_edge_step(uuid,int,jsonb) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_edge_validate(selected_id bigint,selected_type int) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE latest truss.runtime_edge_transition%ROWTYPE;actual jsonb;entry jsonb;
+DECLARE latest truss.runtime_edge_transition%ROWTYPE;actual jsonb;entry jsonb;owner record;
 BEGIN
  SELECT * INTO latest FROM truss.runtime_edge_transition WHERE edge_id=selected_id AND rel_type_id=selected_type AND writer_xid=pg_current_xact_id() ORDER BY transition_id DESC LIMIT 1;
  IF NOT FOUND OR NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE id=latest.attempt_id AND writer_xid=latest.writer_xid AND actor_oid=truss.runtime_person(false)) THEN
   RAISE EXCEPTION 'registered current edge mutation required' USING ERRCODE='55000';END IF;
+ SELECT document_id,module INTO STRICT owner FROM truss.rel_def WHERE rel_type_id=selected_type;
+ PERFORM truss.runtime_module_writer(owner.document_id,owner.module);
  SELECT to_jsonb(e) INTO actual FROM truss.edge e WHERE id=selected_id AND rel_type_id=selected_type;
  IF actual IS DISTINCT FROM latest.after_edge THEN RAISE EXCEPTION 'exact final edge required' USING ERRCODE='55000';END IF;
  FOR entry IN SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.edge_id=selected_id AND t.rel_type_id=selected_type AND t.writer_xid=pg_current_xact_id() LOOP
