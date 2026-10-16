@@ -157,7 +157,8 @@ class OwnedObjectTests(receipt_tests.ReceiptVisibilityTests):
         self.assertEqual(self.found(assembly, tx, grandchild).version, 1)
         move = (retarget, UpdateObject(target=stored(child), set=(), unset=(),
                                       expected_version='1',
-                                      ownership_change=OwnedOwnership(root=stored(second))))
+                                      ownership_change=OwnedOwnership(root=stored(second))),
+                UpdateObject(target=stored(first), set=(), unset=()))
         dryrun, _, _ = self.run_group(assembly, tx, move, 'move-subtree')
         self.assertIsInstance(dryrun, GroupSuccess, repr(dryrun))
         self.assertEqual(self.found(assembly, tx, grandchild).ownership,
@@ -188,6 +189,7 @@ class OwnedObjectTests(receipt_tests.ReceiptVisibilityTests):
         independent_edge = linked.response.semantic.results[0].identity
         unchanged, _, _ = self.run_group(assembly, tx, (
             UpdateObject(target=stored(grandchild), set=(), unset=(), expected_version='2'),
+            UpdateObject(target=stored(first), set=(), unset=()),
         ), 'owned-noop-with-independent-boundary')
         self.assertIsInstance(unchanged, GroupSuccess, repr(unchanged))
         self.assertEqual(unchanged.response.semantic.results[0].outcome, 'unchanged')
@@ -197,6 +199,7 @@ class OwnedObjectTests(receipt_tests.ReceiptVisibilityTests):
         self.assertEqual(self.found(assembly, tx, grandchild).version, 2)
         deleted, delete_input, delete_request = self.run_group(assembly, tx, (
             Delete(operation='delete_edge', target=stored(independent_edge)), deletion,
+            UpdateObject(target=stored(first), set=(), unset=()),
         ), 'delete-subtree')
         self.assertIsInstance(deleted, GroupSuccess, repr(deleted))
         self.assertEqual({entry.identity for entry in deleted.response.semantic.results[1].deleted},

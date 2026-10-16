@@ -466,7 +466,7 @@ DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='
  selected_type truss.type_def%ROWTYPE;relation truss.rel_def%ROWTYPE;pin record;identity jsonb;revision int;
  index int:=0;before_count int;descendants text[];descendant text;projection jsonb;deleted jsonb;local_owned jsonb;local_independent jsonb;
  unset_name text;authored jsonb;retained jsonb;order_key jsonb;selected_source_type int;selected_target_type int;plan jsonb;outgoing bigint;incoming bigint;
- retained_nodes text[];retained_edges text[];plans_bytes bigint:=2;
+ retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;
 BEGIN
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128
   OR jsonb_typeof(scope->'nodes') IS DISTINCT FROM 'object' OR jsonb_typeof(scope->'edges') IS DISTINCT FROM 'object'
@@ -497,8 +497,10 @@ BEGIN
    'target','stored:'||(image->>'target_type')||':'||(image->>'target_id'),'lifecycle',relation.lifecycle,'deleted',false,
    'orderKey',CASE WHEN image->'order_key'='null'::jsonb THEN '{"state":"null"}'::jsonb ELSE jsonb_build_object('state','text','text',image->>'order_key') END));
  END LOOP;
+ -- Record every operation's graph writes; sparse plans need only those entries
+ -- and their identity witnesses, rather than another complete graph walk.
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
-  before_nodes:=nodes;before_edges:=edges;
+  before_nodes:=nodes;before_edges:=edges;changed_nodes:=ARRAY[]::text[];changed_edges:=ARRAY[]::text[];
   IF operation ? 'alias' AND (jsonb_typeof(operation->'alias') IS DISTINCT FROM 'string'
    OR octet_length(operation->>'alias') NOT BETWEEN 1 AND 1024 OR aliases ? (operation->>'alias')) THEN
    RAISE EXCEPTION 'unique bounded original alias required' USING ERRCODE='22023';END IF;
@@ -533,11 +535,13 @@ BEGIN
     FOR entry IN SELECT value FROM jsonb_array_elements(deleted->'deletedNodes') LOOP
      descendant:=node_order[(entry.value#>>'{}')::int+1];
      IF (nodes->descendant->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'object version exhausted' USING ERRCODE='54000';END IF;
+     changed_nodes:=array_append(changed_nodes,descendant);
      nodes:=jsonb_set(nodes,ARRAY[descendant,'deleted'],'true'::jsonb);
     END LOOP;
     FOR entry IN SELECT key,value FROM jsonb_each(edges) WHERE value->'deleted'='false'::jsonb LOOP
      IF nodes->(entry.value->>'source')->'deleted'='true'::jsonb OR nodes->(entry.value->>'target')->'deleted'='true'::jsonb THEN
       IF (entry.value->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'edge version exhausted' USING ERRCODE='54000';END IF;
+      changed_edges:=array_append(changed_edges,entry.key);
       edges:=jsonb_set(edges,ARRAY[entry.key,'deleted'],'true'::jsonb);
      END IF;
     END LOOP;
@@ -566,12 +570,13 @@ BEGIN
       IF root_ref=ANY(descendants) THEN RAISE EXCEPTION 'aggregate root outside moved subtree required' USING ERRCODE='22023';END IF;
       FOR descendant IN SELECT unnest(descendants) LOOP
        IF descendant=selected THEN state:=jsonb_set(state,'{root}',coalesce(to_jsonb(root_ref),'null'::jsonb));
-       ELSE nodes:=jsonb_set(nodes,ARRAY[descendant,'root'],coalesce(to_jsonb(coalesce(root_ref,selected)),'null'::jsonb));END IF;
+       ELSE changed_nodes:=array_append(changed_nodes,descendant);nodes:=jsonb_set(nodes,ARRAY[descendant,'root'],coalesce(to_jsonb(coalesce(root_ref,selected)),'null'::jsonb));END IF;
       END LOOP;
      END IF;
     END IF;
+    changed_nodes:=array_append(changed_nodes,selected);
     nodes:=nodes||jsonb_build_object(selected,state);
-    FOR entry IN SELECT key,value FROM jsonb_each(nodes) LOOP
+    FOR entry IN SELECT reference key,nodes->reference value FROM (SELECT DISTINCT unnest(changed_nodes) reference) touched LOOP
      IF before_nodes ? entry.key AND entry.value IS DISTINCT FROM before_nodes->entry.key THEN
       IF (entry.value->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'object version exhausted' USING ERRCODE='54000';END IF;
       state:=jsonb_set(entry.value,'{image,ver}',to_jsonb((entry.value->'image'->>'ver')::bigint+1));
@@ -603,6 +608,7 @@ BEGIN
     IF operation->>'operation'='delete_edge' THEN
      IF operation-ARRAY['operation','target','expectedVersion']<>'{}'::jsonb THEN RAISE EXCEPTION 'closed edge delete required' USING ERRCODE='22023';END IF;
      IF (state->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'edge version exhausted' USING ERRCODE='54000';END IF;
+     changed_edges:=array_append(changed_edges,selected);
      edges:=jsonb_set(edges,ARRAY[selected,'deleted'],'true'::jsonb);
     ELSE
      IF operation-ARRAY['operation','target','set','unset','expectedVersion','endpointChange','orderKeyChange']<>'{}'::jsonb
@@ -636,6 +642,7 @@ BEGIN
      IF (state->'image'->>'ver')::bigint=9223372036854775807 THEN RAISE EXCEPTION 'edge version exhausted' USING ERRCODE='54000';END IF;
      state:=jsonb_set(state,'{image,ver}',to_jsonb((state->'image'->>'ver')::bigint+1));state:=jsonb_set(state,'{image,rev}',to_jsonb(revision));
     END IF;
+    changed_edges:=array_append(changed_edges,selected);
     edges:=edges||jsonb_build_object(selected,state);
    END IF;
   ELSE RAISE EXCEPTION 'supported original graph operation required' USING ERRCODE='0A000';END IF;
@@ -647,30 +654,29 @@ BEGIN
     'beforeEdges',before_edges,'afterEdges',edges);
   ELSE
    SELECT coalesce(array_agg(reference),'{}'::text[]) INTO retained_edges FROM (
-    SELECT key reference FROM jsonb_each(before_edges)
-     WHERE value IS DISTINCT FROM edges->key
-    UNION SELECT key FROM jsonb_each(edges) WHERE value IS DISTINCT FROM before_edges->key
+    SELECT reference FROM unnest(changed_edges) e(reference)
+     WHERE before_edges->reference IS DISTINCT FROM edges->reference
     UNION SELECT selected WHERE operation->>'operation' IN ('create_edge','update_edge','delete_edge')
    ) changed;
    SELECT coalesce(array_agg(reference),'{}'::text[]) INTO retained_nodes FROM (
-    SELECT key reference FROM jsonb_each(before_nodes) WHERE value IS DISTINCT FROM nodes->key
-    UNION SELECT key FROM jsonb_each(nodes) WHERE value IS DISTINCT FROM before_nodes->key
+    SELECT reference FROM unnest(changed_nodes) n(reference)
+     WHERE before_nodes->reference IS DISTINCT FROM nodes->reference
     UNION SELECT selected WHERE operation->>'operation' IN ('create_object','update_object','delete_object')
-    UNION SELECT value->>'source' FROM jsonb_each(before_edges) WHERE key=ANY(retained_edges)
-    UNION SELECT value->>'target' FROM jsonb_each(before_edges) WHERE key=ANY(retained_edges)
-    UNION SELECT value->>'source' FROM jsonb_each(edges) WHERE key=ANY(retained_edges)
-    UNION SELECT value->>'target' FROM jsonb_each(edges) WHERE key=ANY(retained_edges)
+    UNION SELECT before_edges->reference->>'source' FROM unnest(retained_edges) e(reference)
+    UNION SELECT before_edges->reference->>'target' FROM unnest(retained_edges) e(reference)
+    UNION SELECT edges->reference->>'source' FROM unnest(retained_edges) e(reference)
+    UNION SELECT edges->reference->>'target' FROM unnest(retained_edges) e(reference)
    ) changed WHERE reference IS NOT NULL;
    SELECT coalesce(array_agg(reference),'{}'::text[]) INTO retained_nodes FROM (
     SELECT unnest(retained_nodes) reference
-    UNION SELECT value->>'root' FROM jsonb_each(before_nodes) WHERE key=ANY(retained_nodes)
-    UNION SELECT value->>'root' FROM jsonb_each(nodes) WHERE key=ANY(retained_nodes)
+    UNION SELECT before_nodes->reference->>'root' FROM unnest(retained_nodes) n(reference)
+    UNION SELECT nodes->reference->>'root' FROM unnest(retained_nodes) n(reference)
    ) witnesses WHERE reference IS NOT NULL;
    plan:=jsonb_build_object(
-    'beforeNodes',(SELECT coalesce(jsonb_object_agg(key,value),'{}'::jsonb) FROM jsonb_each(before_nodes) WHERE key=ANY(retained_nodes)),
-    'afterNodes',(SELECT coalesce(jsonb_object_agg(key,value),'{}'::jsonb) FROM jsonb_each(nodes) WHERE key=ANY(retained_nodes)),
-    'beforeEdges',(SELECT coalesce(jsonb_object_agg(key,value),'{}'::jsonb) FROM jsonb_each(before_edges) WHERE key=ANY(retained_edges)),
-    'afterEdges',(SELECT coalesce(jsonb_object_agg(key,value),'{}'::jsonb) FROM jsonb_each(edges) WHERE key=ANY(retained_edges)));
+    'beforeNodes',(SELECT coalesce(jsonb_object_agg(reference,before_nodes->reference),'{}'::jsonb) FROM unnest(retained_nodes) r(reference) WHERE before_nodes ? reference),
+    'afterNodes',(SELECT coalesce(jsonb_object_agg(reference,nodes->reference),'{}'::jsonb) FROM unnest(retained_nodes) r(reference) WHERE nodes ? reference),
+    'beforeEdges',(SELECT coalesce(jsonb_object_agg(reference,before_edges->reference),'{}'::jsonb) FROM unnest(retained_edges) r(reference) WHERE before_edges ? reference),
+    'afterEdges',(SELECT coalesce(jsonb_object_agg(reference,edges->reference),'{}'::jsonb) FROM unnest(retained_edges) r(reference) WHERE edges ? reference));
   END IF;
   plan:=plan||jsonb_build_object('profile','truss-owned-operation-plan/0.2',
    'operationIndex',index,'operation',operation,'primary',selected);
