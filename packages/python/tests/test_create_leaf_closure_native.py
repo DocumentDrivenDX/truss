@@ -46,3 +46,18 @@ class CreateLeafClosureTests(base.PublicCreateGroupTests):
         host.detach();connection.commit()
         for table in ('object','journal','runtime_object_transition','runtime_object_attempt'):
             self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(table))).fetchone(),(0,))
+
+    def test_original_input_cannot_change_during_progress(self):
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        original,request=self.input(assembly,tx)
+        connection.execute("CREATE TEMP TABLE prior(value text);INSERT INTO prior VALUES('kept')")
+        self.admin.execute("""CREATE FUNCTION public.rewrite_original_input() RETURNS trigger LANGUAGE plpgsql AS $$
+          BEGIN NEW.input_bytes:=NEW.input_bytes||decode('20','hex');RETURN NEW;END $$""")
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.rewrite_original_input()')
+        self.admin.execute('CREATE TRIGGER a_rewrite_original BEFORE UPDATE ON truss.runtime_object_attempt FOR EACH ROW EXECUTE FUNCTION public.rewrite_original_input()')
+        result=assembly.apply_in_transaction(tx,original,request,documents=self.documents)
+        self.assertIsInstance(result,Error,repr(result));self.assertEqual(result.error.sql_state,'55000')
+        self.assertEqual(connection.execute('TABLE prior').fetchall(),[('kept',)])
+        host.detach();connection.commit()
+        for table in ('object','journal','runtime_object_transition','runtime_object_attempt'):
+            self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(table))).fetchone(),(0,))

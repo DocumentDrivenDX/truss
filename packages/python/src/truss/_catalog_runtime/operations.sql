@@ -788,8 +788,9 @@ CREATE FUNCTION truss.runtime_object_attempt_guard() RETURNS trigger
 LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
  IF TG_OP='DELETE' OR OLD.complete THEN RAISE EXCEPTION 'settled attempt immutable' USING ERRCODE='55000';END IF;
- IF (to_jsonb(OLD)-ARRAY['next_index','results','aliases','complete','receipt_id','expected_receipt','position_bytes']) IS DISTINCT FROM
-  (to_jsonb(NEW)-ARRAY['next_index','results','aliases','complete','receipt_id','expected_receipt','position_bytes']) THEN RAISE EXCEPTION 'original attempt immutable' USING ERRCODE='55000';END IF;
+ IF ROW(OLD.id,OLD.writer_xid,OLD.actor_oid,OLD.input_bytes,OLD.documents_bytes,OLD.request_bytes,OLD.context)
+  IS DISTINCT FROM ROW(NEW.id,NEW.writer_xid,NEW.actor_oid,NEW.input_bytes,NEW.documents_bytes,NEW.request_bytes,NEW.context)
+ THEN RAISE EXCEPTION 'original attempt immutable' USING ERRCODE='55000';END IF;
  RETURN NEW;
 END;
 $$;
