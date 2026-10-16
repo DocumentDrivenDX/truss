@@ -61,7 +61,17 @@ RETURNS TABLE(definition_pin text,original_fragment bytea,original_pointer text,
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE basis jsonb;
 BEGIN
- IF historical_revision IS NOT NULL THEN basis:=truss.catalog_all_expected_records(historical_revision); END IF;
+ IF historical_revision IS NOT NULL THEN
+  -- The accepted head already contains these exact definition coordinates.
+  -- Older revisions still reconstruct their original accepted catalog.
+  SELECT CASE WHEN historical_revision=(SELECT rev FROM truss.schema_head WHERE id=1)
+   AND NOT EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>historical_revision)
+  THEN jsonb_build_object(
+   'type_def',(SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]'::jsonb) FROM truss.type_def t WHERE t.type_id=selected_type),
+   'prop_def',(SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]'::jsonb) FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=selected_number),
+   'key_def',(SELECT coalesce(jsonb_agg(to_jsonb(k)),'[]'::jsonb) FROM truss.key_def k WHERE k.type_id=selected_type AND k.key_num=selected_number)) END INTO basis;
+  IF basis IS NULL THEN basis:=truss.catalog_all_expected_records(historical_revision);END IF;
+ END IF;
  RETURN QUERY SELECT * FROM truss.runtime_definition_in_basis(selected_kind,selected_type,selected_number,historical_revision,basis);
 END;
 $$;
