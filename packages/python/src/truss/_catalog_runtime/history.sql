@@ -35,7 +35,7 @@ DECLARE basis jsonb;property truss.prop_def%ROWTYPE;pin record;
 BEGIN
  basis:=truss.catalog_all_expected_records(revision);
  SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=selected_type AND p.prop_id=property_id;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('property',selected_type,property_id,revision);
+ SELECT * INTO STRICT pin FROM truss.runtime_definition_in_basis('property',selected_type,property_id,revision,basis);
  IF pin.definition_pin IS DISTINCT FROM definition_pin THEN RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
  IF NOT truss.runtime_can_read(property.definition_document_id,property.declaration_module) THEN RAISE EXCEPTION 'current historical property reader required' USING ERRCODE='42501';END IF;
  IF property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN RAISE EXCEPTION 'current historical item reader required' USING ERRCODE='42501';END IF;
