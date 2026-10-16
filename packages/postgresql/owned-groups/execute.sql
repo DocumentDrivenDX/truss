@@ -923,13 +923,13 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_key_preflight(jsonb) FROM PUBLIC;
 
 -- Check each changed object against its original operation, including descendants.
 -- Physical before-images chain to the captured scope or an earlier original step.
-CREATE FUNCTION truss.runtime_owned_object_transition_validate_qualified(selected_transition bigint,authorize_read boolean,qualified_actor oid,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS void
+CREATE FUNCTION truss.runtime_owned_object_transition_validate_qualified(selected_transition bigint,authorize_read boolean,qualified_actor oid,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL,compiled_history jsonb DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;previous_image jsonb;scope jsonb;
  original_mode text;expected_version bigint;matches int:=0;has_previous boolean;property truss.prop_def;pin record;
  expected_events jsonb:='[]';expected_event jsonb;journal jsonb;event jsonb;ordinal int:=0;
- before_record jsonb;after_record jsonb;semantic_events jsonb:='[]';group_pin jsonb;input jsonb;
+ before_record jsonb;after_record jsonb;semantic_events jsonb:='[]';group_pin jsonb;input jsonb;history_key text;history_metadata jsonb;
 BEGIN
  IF authorize_read IS NULL THEN RAISE EXCEPTION 'explicit object validation mode required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT transition FROM truss.runtime_object_transition WHERE transition_id=selected_transition;
@@ -975,12 +975,24 @@ BEGIN
  END IF;
  IF transition.before_object IS DISTINCT FROM previous_image THEN RAISE EXCEPTION 'original physical object prestate chain required' USING ERRCODE='55000';END IF;
  expected_version:=(transition.before_object->>'ver')::bigint+1;
- before_record:=truss.runtime_object_history(transition.before_object,identity);
+ IF compiled_history IS NULL THEN before_record:=truss.runtime_object_history(transition.before_object,identity);
+ ELSE
+  history_key:=jsonb_build_array((transition.before_object->>'rev')::int,(transition.before_object->>'type_id')::int)::text;
+  history_metadata:=compiled_history->history_key;
+  IF history_metadata IS NULL THEN RAISE EXCEPTION 'complete compiled history census required' USING ERRCODE='55000';END IF;
+  before_record:=truss.runtime_owned_history_record_in_metadata(transition.before_object,identity,history_metadata);
+ END IF;
  IF transition.after_object IS NOT NULL THEN
   IF transition.after_object->>'ver' IS DISTINCT FROM expected_version::text
    OR transition.after_object->'created_at' IS DISTINCT FROM transition.before_object->'created_at' THEN
    RAISE EXCEPTION 'one object version advance and original creation time required' USING ERRCODE='55000';END IF;
-  after_record:=truss.runtime_object_history(transition.after_object,identity);
+  IF compiled_history IS NULL THEN after_record:=truss.runtime_object_history(transition.after_object,identity);
+ ELSE
+  history_key:=jsonb_build_array((transition.after_object->>'rev')::int,(transition.after_object->>'type_id')::int)::text;
+  history_metadata:=compiled_history->history_key;
+  IF history_metadata IS NULL THEN RAISE EXCEPTION 'complete compiled history census required' USING ERRCODE='55000';END IF;
+  after_record:=truss.runtime_owned_history_record_in_metadata(transition.after_object,identity,history_metadata);
+ END IF;
   FOR property IN SELECT * FROM truss.prop_def WHERE type_id=transition.type_id AND since_rev<=(plan->>'catalogRevision')::int
    AND (retired_rev IS NULL OR retired_rev>(plan->>'catalogRevision')::int) ORDER BY prop_id LOOP
    IF transition.before_object->'props'->property.prop_id::text IS DISTINCT FROM transition.after_object->'props'->property.prop_id::text THEN
@@ -1030,7 +1042,7 @@ BEGIN
  END IF;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_object_transition_validate_qualified(bigint,boolean,oid,jsonb,bytea,truss.runtime_object_attempt) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_object_transition_validate_qualified(bigint,boolean,oid,jsonb,bytea,truss.runtime_object_attempt,jsonb) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_owned_object_transition_validate(selected_transition bigint,authorize_read boolean) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
