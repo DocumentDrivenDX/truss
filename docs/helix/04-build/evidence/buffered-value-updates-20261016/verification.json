@@ -19,7 +19,7 @@
   },
   "limits": [
     "Bulk100 versus committed singles is 3.541255x, below5x target.",
-    "Potential security test overlap: timings are provisional, not isolated comparative qualification.",
+    "Confirmed security codec job overlap: conservative command-log envelope 2026-10-16T19:45:32.387769Z to19:46:19.410880Z; first native capture19:45:39.330810Z. These are not exact query times. Full matrix timings are not isolated comparative qualification.",
     "Full release runners remain unqualified.",
     "Preflight oracle uses a fixture-only owner wrapper, not a production API or fresh admission at adapted catalog revision.",
     "Earlier diagnostic cleanup failed; failed log retained."
@@ -37,5 +37,12 @@
     "inventory-older-revision.log": "194bac309c5c53bde4e57012a1a3fb45324637c3db019c023f6194a0bc65c9d5",
     "inventory.json": "6b587cf3096050f0e85dda7a697b2e3a0bec5e4c3f57a88e627f49ccf57b9beb",
     "inventory-initial-cleanup-error.log": "6097a2dd6c9a4bb4180f91e7c43527ae1223ea4c8fa1fbd31eb0df566afeb7ff"
+  },
+  "overlappingSecurityJob": {
+    "handle": "55265",
+    "terminalExitCode": 1,
+    "cleanup": "owner reports class teardown complete and no fixture roots",
+    "failure": "test expected SQL22P05 but public NUL returned GroupFailed/InvalidGroupInput22023; no product relaxation",
+    "source": "security owner message,2026-10-16"
   }
 }
