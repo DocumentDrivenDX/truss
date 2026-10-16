@@ -39,7 +39,7 @@ class DisclosureCompilerIntegrationTests(unittest.TestCase):
    initial=wire({'kind':'initialize','requestId':'registered','sources':{**{k:source[k] for k in ('policy','catalog','closure','ontology')},'associationBindings':[],'extensionSelection':{}}})
    sources=types.SimpleNamespace(source_profile=_DISCLOSURE_PROFILE,query_originals=prepare_current_disclosure_originals(wire(case['request']['opaqueSources'])),accepted_request_bytes=wire({'modules':case['request']['modules']}),initialize_bytes=initial,source_receipt=_initialize(initial))
    check_disclosure_originals(sources.query_originals,initial,sources.accepted_request_bytes)
-   captured=types.SimpleNamespace(sources=sources,facts_bytes=wire(packet['cut']['facts']),coverage_bytes=wire(packet['cut']['coverage']))
+   captured=types.SimpleNamespace(sources=sources,facts_bytes=wire(packet['cut']['facts']),coverage_bytes=wire(packet['cut']['coverage']),graphs_bytes=wire(packet['cut']['graphs']),graph_coverage_bytes=wire(packet['cut']['graphCoverage']))
    subject=types.SimpleNamespace(key=packet['cut']['subject']['key'][0]['string'])
    cursor=Cursor('good');cursor._deadline.end=time.monotonic()+60
    with self.subTest(case=case['id']),patch.object(staging,'RawCursor',Raw),patch.object(staging,'_text_rows',return_value=[('pg_temp_7',)]):

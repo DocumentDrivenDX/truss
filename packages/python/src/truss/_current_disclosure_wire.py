@@ -79,3 +79,16 @@ def array_members(raw):
         index=skip(index+1)
     if len(members)!=len(value):raise ValueError('Exact original source array census required')
     return members
+
+
+def disclosure_fact_cut(metadata, *, facts, coverage, graphs, graph_coverage):
+    """Transport all captured populations unchanged; never infer completeness."""
+    populations={'facts':facts,'coverage':coverage,'graphs':graphs,'graphCoverage':graph_coverage}
+    if type(metadata) is not dict or set(metadata)&set(populations):
+        raise ValueError('Distinct original cut metadata required')
+    for raw in populations.values():
+        if type(raw) is not bytes or type(decode_owner_evidence_json(raw)) is not list:
+            raise ValueError('Complete original captured population arrays required')
+    prefix=json.dumps(metadata,ensure_ascii=True,separators=(',',':'),allow_nan=False).encode()
+    return prefix[:-1]+(b',' if metadata else b'')+b','.join(
+        json.dumps(name).encode()+b':'+raw for name,raw in populations.items())+b'}'

@@ -2,7 +2,7 @@
 import unittest,json,struct,sys
 from hashlib import sha256
 from decimal import Decimal
-from truss._current_disclosure_wire import object_members,disclosure_initializer,frame_digest
+from truss._current_disclosure_wire import object_members,disclosure_initializer,frame_digest,disclosure_fact_cut
 from truss._current_disclosure_pipe import CurrentDisclosurePipe,VERSION
 from truss._current_query_pipe import CurrentQueryPipe,CurrentQueryPipeError
 
@@ -24,6 +24,21 @@ class CurrentDisclosureWireTests(unittest.TestCase):
   outer=object_members(raw);sources=object_members(outer['sources']);self.assertEqual(sources['policy'],policy);self.assertNotIn('extensionSelection',sources);self.assertEqual(outer['owner'].strip(),owner.strip())
   decoded=json.loads(raw,parse_float=Decimal);self.assertEqual(decoded['sources']['policy']['unknown']['n'].as_tuple(),Decimal('1.2300e-999999').as_tuple());self.assertEqual(decoded['sources']['policy']['unknown']['big'],9007199254740993)
   self.assertIn(b'"escaped":"\\u0061"',sources['policy']);self.assertEqual(decoded['version'],VERSION)
+ def test_all_captured_populations_preserve_exact_tokens_without_defaults(self):
+  populations={'facts':b' [ {"n":9007199254740993} ] ', 'coverage':b'[]',
+   'graphs':b'[{"unknown":1.2300e-999999,"escaped":"\\u0061"}]',
+   'graphCoverage':b'[{"complete":true,"roles":["source","target"]}]'}
+  def invoke(values=populations,metadata={'generation':'current'}):
+   return disclosure_fact_cut(metadata,facts=values['facts'],coverage=values['coverage'],
+    graphs=values['graphs'],graph_coverage=values['graphCoverage'])
+  result=object_members(invoke())
+  for name,raw in populations.items():self.assertEqual(result[name],raw.strip())
+  self.assertEqual(set(result),{'generation',*populations})
+  self.assertEqual(set(object_members(invoke(metadata={}))),set(populations))
+  for name in populations:
+   for bad in (None,b'{}',b'null',b'[{"x":1,"x":2}]',b'[NaN]'):
+    with self.subTest(name=name,bad=bad),self.assertRaises(ValueError):invoke({**populations,name:bad})
+   with self.subTest(overwrite=name),self.assertRaises(ValueError):invoke(metadata={name:[]})
  def test_unknown_and_bad_original_structures_refuse_without_repair(self):
   for raw in [b'{"a":1,"a":2}',b'[]',b'{"a":NaN}',b'{"a":"\\ud800"}',b'{"a":'+b'1'*513+b'}']:
    with self.assertRaises(ValueError):object_members(raw)

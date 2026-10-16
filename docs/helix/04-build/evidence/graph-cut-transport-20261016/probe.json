@@ -1,0 +1,670 @@
+{
+  "scope": "supplied-cut component only; no SQL, native admission, whole compiler/driver integration, or case promotion",
+  "fixtureSha256": "5e667a4a49c656ab7021641bf98d5a6bd5fb903d13e4e3fb4acbdb93ac123459",
+  "sourceRevision": "11b412e4a783fef8075aeb4109a286650a0bda28",
+  "sourceTrackedStatus": "",
+  "sourceEntrySha256": "9040c2dda0c1a36be9f54aefa42c7f26085b01988719d64d7dcbf08b901b566d",
+  "sourceRuntimeSha256": "83fe06abf2690c3806700049fb66b5e93d8a16f6f45025aeffd6adbde89673ad",
+  "packagedConsumerManifest": {
+    "profile": "truss-current-disclosure-owner/0.1-candidate",
+    "umfRevision": "206951ff20d766874b9af7d29fdf8027c3bab499",
+    "scope": "Exact reviewed private UMF0.2 child; no native admission or protected release authority.",
+    "files": {
+      "current-native-disclosure-child.mjs": "d333226d9186136704d3f84a9c9dbfc44796efebab563dbc732d60337d2e03eb",
+      "manifest.json": "4e50675be3a39433ea99ecae646938cec1f1a7cda931ab5f98b49cb26ada4951",
+      "metafile.json": "0db1d5aeccada6794b67b477f32f9888a143d09b1ac04fa441b23c470bc93a76",
+      "notices/ajv/LICENSE": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
+      "notices/ajv/package.json": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989",
+      "notices/fast-deep-equal/LICENSE": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+      "notices/fast-deep-equal/package.json": "a5c63940db0260739be9e2ac67f3aac268df4db5770420ee4e34e493152f97d2",
+      "notices/fast-uri/LICENSE": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
+      "notices/fast-uri/package.json": "30cad05aad3d3596513706451dbfc7e0422f9c1d00f2903ecc34580327d54bc7",
+      "notices/json-schema-traverse/LICENSE": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
+      "notices/json-schema-traverse/package.json": "156fb24af02845c190701360d06dfda35ef04282e34a734289ea9535ad9819ae",
+      "notices/yaml/LICENSE": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
+      "notices/yaml/package.json": "1c6441703d8204a23ded0d37ddf57c3b69d821dc392f20852d1f605bb9b8861c",
+      "umf-package.json": "5f74e6af9e94b546a71ca88fe87a5f6bb02cb906902ca902d53ec697bb4b12a1"
+    }
+  },
+  "observations": [
+    {
+      "cohort": "packaged-missing-graphs-control",
+      "packet": "base:Alice",
+      "requestSha256": "383364a2ad3f12d577c5d340ef27f381c2e419aa570560d9fc68793589d932ca",
+      "response": {
+        "version": "umf.security.private-disclosure-child/0.2-candidate",
+        "kind": "disclosure-evaluated",
+        "requestId": "evaluate",
+        "sourceReceipt": "38f9e31cf30f862c363ed3f7353f2370d45a4e425a53692f1d79fb02bfc7932b",
+        "result": {
+          "version": "umf.security.logical-disclosure-batch/0.1-candidate",
+          "status": "refused",
+          "complete": false,
+          "authority": false,
+          "sources": null,
+          "decisions": [],
+          "resources": [],
+          "batch": null
+        }
+      },
+      "cleanupComplete": true
+    },
+    {
+      "cohort": "packaged-missing-graphs-control",
+      "packet": "base:Bob",
+      "requestSha256": "8bc5978c10aebedb1e9f8fbe6dd39955590261d09ffb6b1881eb8f4ba6e67443",
+      "response": {
+        "version": "umf.security.private-disclosure-child/0.2-candidate",
+        "kind": "disclosure-evaluated",
+        "requestId": "evaluate",
+        "sourceReceipt": "38f9e31cf30f862c363ed3f7353f2370d45a4e425a53692f1d79fb02bfc7932b",
+        "result": {
+          "version": "umf.security.logical-disclosure-batch/0.1-candidate",
+          "status": "refused",
+          "complete": false,
+          "authority": false,
+          "sources": null,
+          "decisions": [],
+          "resources": [],
+          "batch": null
+        }
+      },
+      "cleanupComplete": true
+    },
+    {
+      "cohort": "packaged-missing-graphs-control",
+      "packet": "base:Outsider",
+      "requestSha256": "fd1719179abecab807ea36b8a171bede73049e895140ab52be7738e29cfb47b6",
+      "response": {
+        "version": "umf.security.private-disclosure-child/0.2-candidate",
+        "kind": "disclosure-evaluated",
+        "requestId": "evaluate",
+        "sourceReceipt": "38f9e31cf30f862c363ed3f7353f2370d45a4e425a53692f1d79fb02bfc7932b",
+        "result": {
+          "version": "umf.security.logical-disclosure-batch/0.1-candidate",
+          "status": "refused",
+          "complete": false,
+          "authority": false,
+          "sources": null,
+          "decisions": [],
+          "resources": [],
+          "batch": null
+        }
+      },
+      "cleanupComplete": true
+    },
+    {
+      "cohort": "current-source-parallel",
+      "packet": "parallel:Alice",
+      "requestSha256": "bec097664c8aadce77d086bfdaa9c48416108f06af9d3505c56cdea0debd3808",
+      "response": {
+        "version": "umf.security.private-disclosure-child/0.2-candidate",
+        "kind": "disclosure-evaluated",
+        "requestId": "evaluate",
+        "sourceReceipt": "38f9e31cf30f862c363ed3f7353f2370d45a4e425a53692f1d79fb02bfc7932b",
+        "result": {
+          "version": "umf.security.logical-disclosure-batch/0.1-candidate",
+          "status": "rendered",
+          "complete": false,
+          "authority": false,
+          "sources": {
+            "policy": {
+              "id": "native-graph-membership",
+              "revision": "1"
+            },
+            "ontology": {
+              "documentId": "adoc",
+              "revision": "1"
+            },
+            "protection": {
+              "id": "graph-catalog",
+              "revision": "1"
+            },
+            "domains": [
+              {
+                "documentId": "adoc",
+                "revision": "1"
+              }
+            ],
+            "owner": {
+              "id": "graph-owner",
+              "revision": "1"
+            },
+            "generation": "supplied-graph-cut",
+            "readAction": "read"
+          },
+          "decisions": [
+            {
+              "resource": {
+                "type": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "Resource"
+                },
+                "key": [
+                  {
+                    "string": "RA"
+                  }
+                ]
+              },
+              "decision": "permit",
+              "rules": [
+                {
+                  "ruleIndex": 0,
+                  "truth": "T"
+                }
+              ],
+              "dispositions": [
+                {
+                  "field": {
+                    "documentId": "adoc",
+                    "moduleId": "m",
+                    "elementId": "resourceId"
+                  },
+                  "disposition": {
+                    "kind": "original"
+                  },
+                  "sourceOccurrences": [
+                    {
+                      "ruleIndex": 0,
+                      "disclosureIndex": null
+                    }
+                  ],
+                  "selectedOccurrence": null
+                },
+                {
+                  "field": {
+                    "documentId": "adoc",
+                    "moduleId": "m",
+                    "elementId": "salary"
+                  },
+                  "disposition": {
+                    "kind": "original"
+                  },
+                  "sourceOccurrences": [
+                    {
+                      "ruleIndex": 0,
+                      "disclosureIndex": null
+                    }
+                  ],
+                  "selectedOccurrence": null
+                }
+              ]
+            },
+            {
+              "resource": {
+                "type": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "Resource"
+                },
+                "key": [
+                  {
+                    "string": "RB"
+                  }
+                ]
+              },
+              "decision": "deny",
+              "rules": [
+                {
+                  "ruleIndex": 0,
+                  "truth": "F"
+                }
+              ],
+              "dispositions": []
+            },
+            {
+              "resource": {
+                "type": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "Resource"
+                },
+                "key": [
+                  {
+                    "string": "RO"
+                  }
+                ]
+              },
+              "decision": "deny",
+              "rules": [
+                {
+                  "ruleIndex": 0,
+                  "truth": "F"
+                }
+              ],
+              "dispositions": []
+            }
+          ],
+          "resources": [
+            {
+              "type": {
+                "documentId": "adoc",
+                "moduleId": "m",
+                "elementId": "Resource"
+              },
+              "key": [
+                {
+                  "string": "RA"
+                }
+              ]
+            }
+          ],
+          "batch": {
+            "version": "umf.security.disclosure/0.2.0",
+            "policy": {
+              "id": "native-graph-membership",
+              "revision": "1"
+            },
+            "protection": {
+              "id": "graph-catalog",
+              "revision": "1"
+            },
+            "domains": [
+              {
+                "documentId": "adoc",
+                "revision": "1"
+              }
+            ],
+            "columns": [
+              {
+                "field": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "resourceId"
+                },
+                "storageEffect": "canonical"
+              },
+              {
+                "field": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "storageEffect": "canonical"
+              }
+            ],
+            "rows": [
+              [
+                {
+                  "disposition": "original",
+                  "value": {
+                    "string": "RA"
+                  }
+                },
+                {
+                  "disposition": "original",
+                  "value": {
+                    "integerToken": "100"
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      },
+      "cleanupComplete": true
+    },
+    {
+      "cohort": "current-source-parallel",
+      "packet": "parallel:Bob",
+      "requestSha256": "fc66459b596ccf37974a79ab92bdc35939097b16b49f8e484f9489e7854a6ed6",
+      "response": {
+        "version": "umf.security.private-disclosure-child/0.2-candidate",
+        "kind": "disclosure-evaluated",
+        "requestId": "evaluate",
+        "sourceReceipt": "38f9e31cf30f862c363ed3f7353f2370d45a4e425a53692f1d79fb02bfc7932b",
+        "result": {
+          "version": "umf.security.logical-disclosure-batch/0.1-candidate",
+          "status": "rendered",
+          "complete": false,
+          "authority": false,
+          "sources": {
+            "policy": {
+              "id": "native-graph-membership",
+              "revision": "1"
+            },
+            "ontology": {
+              "documentId": "adoc",
+              "revision": "1"
+            },
+            "protection": {
+              "id": "graph-catalog",
+              "revision": "1"
+            },
+            "domains": [
+              {
+                "documentId": "adoc",
+                "revision": "1"
+              }
+            ],
+            "owner": {
+              "id": "graph-owner",
+              "revision": "1"
+            },
+            "generation": "supplied-graph-cut",
+            "readAction": "read"
+          },
+          "decisions": [
+            {
+              "resource": {
+                "type": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "Resource"
+                },
+                "key": [
+                  {
+                    "string": "RA"
+                  }
+                ]
+              },
+              "decision": "deny",
+              "rules": [
+                {
+                  "ruleIndex": 0,
+                  "truth": "F"
+                }
+              ],
+              "dispositions": []
+            },
+            {
+              "resource": {
+                "type": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "Resource"
+                },
+                "key": [
+                  {
+                    "string": "RB"
+                  }
+                ]
+              },
+              "decision": "permit",
+              "rules": [
+                {
+                  "ruleIndex": 0,
+                  "truth": "T"
+                }
+              ],
+              "dispositions": [
+                {
+                  "field": {
+                    "documentId": "adoc",
+                    "moduleId": "m",
+                    "elementId": "resourceId"
+                  },
+                  "disposition": {
+                    "kind": "original"
+                  },
+                  "sourceOccurrences": [
+                    {
+                      "ruleIndex": 0,
+                      "disclosureIndex": null
+                    }
+                  ],
+                  "selectedOccurrence": null
+                },
+                {
+                  "field": {
+                    "documentId": "adoc",
+                    "moduleId": "m",
+                    "elementId": "salary"
+                  },
+                  "disposition": {
+                    "kind": "original"
+                  },
+                  "sourceOccurrences": [
+                    {
+                      "ruleIndex": 0,
+                      "disclosureIndex": null
+                    }
+                  ],
+                  "selectedOccurrence": null
+                }
+              ]
+            },
+            {
+              "resource": {
+                "type": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "Resource"
+                },
+                "key": [
+                  {
+                    "string": "RO"
+                  }
+                ]
+              },
+              "decision": "deny",
+              "rules": [
+                {
+                  "ruleIndex": 0,
+                  "truth": "F"
+                }
+              ],
+              "dispositions": []
+            }
+          ],
+          "resources": [
+            {
+              "type": {
+                "documentId": "adoc",
+                "moduleId": "m",
+                "elementId": "Resource"
+              },
+              "key": [
+                {
+                  "string": "RB"
+                }
+              ]
+            }
+          ],
+          "batch": {
+            "version": "umf.security.disclosure/0.2.0",
+            "policy": {
+              "id": "native-graph-membership",
+              "revision": "1"
+            },
+            "protection": {
+              "id": "graph-catalog",
+              "revision": "1"
+            },
+            "domains": [
+              {
+                "documentId": "adoc",
+                "revision": "1"
+              }
+            ],
+            "columns": [
+              {
+                "field": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "resourceId"
+                },
+                "storageEffect": "canonical"
+              },
+              {
+                "field": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "storageEffect": "canonical"
+              }
+            ],
+            "rows": [
+              [
+                {
+                  "disposition": "original",
+                  "value": {
+                    "string": "RB"
+                  }
+                },
+                {
+                  "disposition": "original",
+                  "value": {
+                    "integerToken": "200"
+                  }
+                }
+              ]
+            ]
+          }
+        }
+      },
+      "cleanupComplete": true
+    },
+    {
+      "cohort": "current-source-parallel",
+      "packet": "parallel:Outsider",
+      "requestSha256": "fcfe942990a2546a625f638e0d4f32ffac9f740e47990076c80e37cbf5b7667e",
+      "response": {
+        "version": "umf.security.private-disclosure-child/0.2-candidate",
+        "kind": "disclosure-evaluated",
+        "requestId": "evaluate",
+        "sourceReceipt": "38f9e31cf30f862c363ed3f7353f2370d45a4e425a53692f1d79fb02bfc7932b",
+        "result": {
+          "version": "umf.security.logical-disclosure-batch/0.1-candidate",
+          "status": "rendered",
+          "complete": false,
+          "authority": false,
+          "sources": {
+            "policy": {
+              "id": "native-graph-membership",
+              "revision": "1"
+            },
+            "ontology": {
+              "documentId": "adoc",
+              "revision": "1"
+            },
+            "protection": {
+              "id": "graph-catalog",
+              "revision": "1"
+            },
+            "domains": [
+              {
+                "documentId": "adoc",
+                "revision": "1"
+              }
+            ],
+            "owner": {
+              "id": "graph-owner",
+              "revision": "1"
+            },
+            "generation": "supplied-graph-cut",
+            "readAction": "read"
+          },
+          "decisions": [
+            {
+              "resource": {
+                "type": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "Resource"
+                },
+                "key": [
+                  {
+                    "string": "RA"
+                  }
+                ]
+              },
+              "decision": "deny",
+              "rules": [
+                {
+                  "ruleIndex": 0,
+                  "truth": "F"
+                }
+              ],
+              "dispositions": []
+            },
+            {
+              "resource": {
+                "type": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "Resource"
+                },
+                "key": [
+                  {
+                    "string": "RB"
+                  }
+                ]
+              },
+              "decision": "deny",
+              "rules": [
+                {
+                  "ruleIndex": 0,
+                  "truth": "F"
+                }
+              ],
+              "dispositions": []
+            },
+            {
+              "resource": {
+                "type": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "Resource"
+                },
+                "key": [
+                  {
+                    "string": "RO"
+                  }
+                ]
+              },
+              "decision": "deny",
+              "rules": [
+                {
+                  "ruleIndex": 0,
+                  "truth": "F"
+                }
+              ],
+              "dispositions": []
+            }
+          ],
+          "resources": [],
+          "batch": {
+            "version": "umf.security.disclosure/0.2.0",
+            "policy": {
+              "id": "native-graph-membership",
+              "revision": "1"
+            },
+            "protection": {
+              "id": "graph-catalog",
+              "revision": "1"
+            },
+            "domains": [
+              {
+                "documentId": "adoc",
+                "revision": "1"
+              }
+            ],
+            "columns": [
+              {
+                "field": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "resourceId"
+                },
+                "storageEffect": "canonical"
+              },
+              {
+                "field": {
+                  "documentId": "adoc",
+                  "moduleId": "m",
+                  "elementId": "salary"
+                },
+                "storageEffect": "canonical"
+              }
+            ],
+            "rows": []
+          }
+        }
+      },
+      "cleanupComplete": true
+    }
+  ]
+}
