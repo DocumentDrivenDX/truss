@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "sourceDelta": "Only target-list binding and required-Key refusal added; all other source AST unchanged",
+  "beforeSha256": "b4a85320574bc2a3481ca53eeed53acbb6bcb7eea34f7424befef273513a5550",
+  "afterSha256": "7540068d324ebf89fdfa51d05ccf4bd09652d9a8b9462f951a92254338b7283b",
+  "qualification": "Syntactic preservation proof, not full semantic/native security verification."
+}

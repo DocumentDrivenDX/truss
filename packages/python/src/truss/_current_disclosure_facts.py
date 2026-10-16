@@ -229,6 +229,10 @@ def _graph_recipes(sources, records):
         declaration=declarations[0]
         if declaration.get('directed') is not True or 'associationRecord' in declaration:
             raise ValueError('Original directed opaque graph declaration required')
+        targets=declaration.get('target')
+        if (type(targets) is not list or len(targets)!=1 or type(targets[0]) is not dict
+                or type(targets[0].get('key')) is not str or not targets[0]['key']):
+            raise ValueError('Explicit original graph target Key required')
         native=[r for r in inventory['relationships'] if (r['document_id'],r['module'],r['rel_id'])==identity and r['retired_rev'] is None]
         if len(native)!=1:raise ValueError('Exact active native graph definition required')
         native=native[0];number=native['rel_type_id']

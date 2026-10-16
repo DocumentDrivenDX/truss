@@ -58,6 +58,28 @@ class GraphCaptureTests(unittest.TestCase):
             with self.subTest(label=label):
                 sources,records,_,_=fixture();initial=json.loads(sources.initialize_bytes);mutate(initial['sources']['ontology']['associations'][0]);sources.initialize_bytes=json.dumps(initial).encode()
                 with self.assertRaises(ValueError):_graph_recipes(sources,records)
+    def test_explicit_authored_target_key_required_before_empty_coverage(self):
+        for value in ('missing',None,'',False,0):
+            sources,records,facts,private=fixture()
+            initial=json.loads(sources.initialize_bytes)
+            core=initial['sources']['closure']['documents'][0]['document']
+            target=core['modules'][0]['relationships'][0]['target'][0]
+            if value=='missing':target.pop('key')
+            else:target['key']=value
+            encoded=json.dumps(core,separators=(',',':'))
+            accepted=json.loads(sources.accepted_request_bytes)
+            accepted['modules'][0]['documentJson']=encoded
+            accepted['modules'][0]['pin']['sha256']=hashlib.sha256(encoded.encode()).hexdigest()
+            sources.accepted_request_bytes=json.dumps(accepted).encode()
+            sources.initialize_bytes=json.dumps(initial).encode()
+            assessment=json.loads(sources.accepted_assessment_bytes)
+            assessment['inventory']['relationships'][0]['target_key']=None if value=='missing' else value
+            sources.accepted_assessment_bytes=json.dumps(assessment).encode()
+            cursor=Cursor()
+            with self.subTest(value=value),self.assertRaises(ValueError):
+                _capture_graphs(cursor,sources,records,facts,private)
+            self.assertEqual(cursor.queries,[])
+
     def test_native_population_and_census_faults_refuse(self):
         good=('90','31','1','1','11','2','12')
         for label,rows in [('missing-endpoint',[good[:5]+('8','12')]),('wrong-endpoint-type',[good[:4]+('12',)+good[5:]]),('duplicate-edge',[good,good]),('foreign-relation',[(good[0],'32',*good[2:])]),('invalid-id',[('00',*good[1:])]),('overflow-id',[(str(2**63),*good[1:])])]:

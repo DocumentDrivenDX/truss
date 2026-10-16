@@ -1,0 +1,38 @@
+{
+  "astra-review.zip": {
+    "sha256": "07b89595b04332dc0a1aa89c0cb00caab1e5726ef4c38cd15c2401115bdec6d7",
+    "bytes": 36557
+  },
+  "astra-review.json": {
+    "sha256": "6181037b5ce2c80983c5aa8190b9b7325a34525eadddb3ee7f853619c07010fe",
+    "bytes": 2963
+  },
+  "README.md": {
+    "sha256": "302384f78d866b3dd698a6488d31c2a236c19ed3ba2bb36f731aa6cf6f33610b",
+    "bytes": 1817
+  },
+  "verify-guard-preservation.py": {
+    "sha256": "e5281a9bcf0823635d2b4fdd10c1b44b36d837d092ef77cb554188bd8dd1bde7",
+    "bytes": 1206
+  },
+  "before.log": {
+    "sha256": "5f13aba5bdc14144f51d3c7578779e808e1f1ec4b45c0374fb812f113537030c",
+    "bytes": 2274
+  },
+  "frozen-review.zip": {
+    "sha256": "f5ef483f1a6b600b0273c031dcfeb24dacf342dec9231a341320fb197bbfdfbe",
+    "bytes": 26799
+  },
+  "astra-manifest.json": {
+    "sha256": "6d1bee90b28b9e3a245ec5014fc6c72a3581d8ee92a6ac90346ea5a14f5f0ac9",
+    "bytes": 2420
+  },
+  "guard-preservation.json": {
+    "sha256": "f83e3edc8b0fd5caa101e6c3530576240b0c7086fded1e826be537657141649b",
+    "bytes": 400
+  },
+  "after.log": {
+    "sha256": "5d1107d81847046675ba6c46bc5c12ab849af9d05a0cccb46fa272d833e8b8a3",
+    "bytes": 1640
+  }
+}
