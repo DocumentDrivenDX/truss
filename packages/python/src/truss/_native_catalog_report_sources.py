@@ -59,13 +59,8 @@ def compose_captured_catalog_sources(encoded, result, original_context=None):
         raise ValueError('Original pre-effect and final source cuts required')
     scope=decode_acceptance_json(start['empty_scope'].encode('utf8'))
     expected=['object','edge','edge_limit','key_tombstone','record_source',
-        'feed_consumer','journal','row_home_journal_stage','row_home_state','row_home_node',
-        'row_home_scalar','row_home_touch','row_home_capacity','key_bucket_guard',
-        'object_key_bucket','object_key_reservation_bucket','feed_tx','feed_member',
-        'feed_prerequisite','feed_configuration_prerequisite','complete_feed_consumer',
-        'complete_feed_administration_receipt','complete_feed_seed_attempt',
-        'complete_feed_seed_artifact','key_lifecycle_history','key_migration_receipt',
-        'request_receipt_route_guard','request_receipt','request_receipt_protection','schema_change']
+        'journal','key_bucket_guard','object_key_bucket','object_key_reservation_bucket',
+        'request_receipt_route_guard','request_receipt','schema_change']
     if encoded.original_configuration is None:
         if scope!=expected and scope!=expected+['source_epoch_registry','source_epoch_current']:
             raise ValueError('Selected complete empty graph scope required')

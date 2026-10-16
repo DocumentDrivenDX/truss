@@ -112,7 +112,7 @@ BEGIN
  SELECT coalesce(array_agg(p ORDER BY p.prop_id),ARRAY[]::truss.prop_def[]) INTO properties FROM truss.prop_def p WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL;
  SELECT d.definition_pin INTO STRICT definition_pin FROM truss.runtime_definition('type',selected_type.type_id) d;
  SELECT o AS object,ro AS root_object,rt AS root_definition,
- EXISTS(SELECT 1 FROM truss.row_home_state r WHERE r.object_id=o.id AND r.object_type_id=o.type_id) AS row_home
+ false AS row_home
  INTO frozen FROM truss.object o
  LEFT JOIN truss.object ro ON ro.id=o.root_id AND ro.type_id=o.root_type
  LEFT JOIN truss.type_def rt ON rt.type_id=ro.type_id AND rt.retired_rev IS NULL AND NOT rt.provisional AND rt.kind='record'

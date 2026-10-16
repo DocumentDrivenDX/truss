@@ -270,7 +270,7 @@ BEGIN
  ELSE SELECT value->'identity' INTO STRICT identity FROM jsonb_array_elements(attempt.aliases) WHERE value->>'alias'=operation->'target'->>'alias';END IF;
  SELECT * INTO prior FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=selected.type_id FOR UPDATE NOWAIT;
  IF NOT FOUND THEN RAISE EXCEPTION 'target absent' USING ERRCODE='P1004';END IF;
- IF prior.root_id IS NOT NULL OR EXISTS(SELECT 1 FROM truss.row_home_state WHERE object_id=prior.id AND object_type_id=prior.type_id) THEN RAISE EXCEPTION 'rootless scalar object required' USING ERRCODE='0A000';END IF;
+ IF prior.root_id IS NOT NULL THEN RAISE EXCEPTION 'rootless scalar object required' USING ERRCODE='0A000';END IF;
  IF operation ? 'expectedVersion' AND (jsonb_typeof(operation->'expectedVersion') IS DISTINCT FROM 'string' OR operation->>'expectedVersion' IS DISTINCT FROM prior.ver::text) THEN
   RAISE EXCEPTION 'expected version failed' USING ERRCODE='P1003';END IF;
  IF operation->>'operation'='delete_object' THEN
@@ -839,7 +839,7 @@ BEGIN
  selected:=truss.runtime_condition_type(identity);IF NOT truss.runtime_can_read(selected.document_id,selected.module) THEN RAISE EXCEPTION 'endpoint reader required' USING ERRCODE='42501';END IF;
  SELECT * INTO object_row FROM truss.object WHERE id=(identity->>'id')::bigint AND type_id=selected.type_id FOR UPDATE NOWAIT;
  IF NOT FOUND THEN RAISE EXCEPTION 'endpoint absent' USING ERRCODE='P1004';END IF;
- IF object_row.root_id IS NOT NULL OR EXISTS(SELECT 1 FROM truss.row_home_state WHERE object_id=object_row.id AND object_type_id=object_row.type_id) THEN
+ IF object_row.root_id IS NOT NULL THEN
   RAISE EXCEPTION 'rootless endpoint required' USING ERRCODE='0A000';END IF;
  RETURN identity;
 END;

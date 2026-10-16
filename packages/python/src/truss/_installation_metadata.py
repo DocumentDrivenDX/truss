@@ -5,7 +5,7 @@ import json
 import uuid
 from ._installation_archive import COLUMNS,compare_archive_rows
 
-PROFILE_SHA256='da5160434020a1b0066c8d411a230c3a528984c5134382506e7835015f0c3ffe'
+PROFILE_SHA256='4220b0f9f0ee565dc898ba8e54d4b5488c9f5bf1686371145ef2f46c9cde9df3'
 
 def _json(value):return json.dumps(value,ensure_ascii=False,separators=(',',':'),sort_keys=True).encode()
 def _bytes(value):return "pg_catalog.decode('"+value.hex()+"','hex')"
@@ -56,8 +56,8 @@ def execute_metadata(connection,original,definition_observed,attempt):
         ('input','candidate:construction-input',input_bytes)]
     if any(not raw or len(raw)>1048576 for _,_,raw in artifacts) or sum(len(raw) for _,_,raw in artifacts)>3145728-4096:
         raise ValueError('Complete candidate metadata artifact bound required')
-    empty=_observe(connection,"SELECT pg_catalog.jsonb_build_array((SELECT count(*)::text FROM truss.installation_marker),(SELECT count(*)::text FROM truss.installation_archive),(SELECT count(*)::text FROM truss.source_epoch_registry),(SELECT count(*)::text FROM truss.source_epoch_current),(SELECT count(*)::text FROM truss.row_home_operation))::text")
-    if json.loads(empty)!=['0']*5:raise ValueError('Fresh metadata and operation scope required')
+    empty=_observe(connection,"SELECT pg_catalog.jsonb_build_array((SELECT count(*)::text FROM truss.installation_marker),(SELECT count(*)::text FROM truss.installation_archive),(SELECT count(*)::text FROM truss.source_epoch_registry),(SELECT count(*)::text FROM truss.source_epoch_current))::text")
+    if json.loads(empty)!=['0']*4:raise ValueError('Fresh metadata and operation scope required')
     captured=_observe(connection,"""WITH native_original AS MATERIALIZED (
  SELECT pg_catalog.gen_random_uuid()::text AS identity,pg_catalog.clock_timestamp() AS at)
  SELECT pg_catalog.jsonb_build_object('installationId',o.identity,

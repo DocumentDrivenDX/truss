@@ -31,8 +31,8 @@ BEGIN
  END IF;
  -- Retained operation rows cover completed calls as well as unfinished ones:
  -- their enclosing transaction must not change source incarnation afterwards.
- IF EXISTS(SELECT 1 FROM truss.row_home_operation o
-  WHERE o.original_writer_xid=pg_current_xact_id_if_assigned()) THEN
+ IF EXISTS(SELECT 1 FROM truss.runtime_object_attempt o
+  WHERE o.writer_xid=pg_current_xact_id_if_assigned()) THEN
   RAISE EXCEPTION 'source epoch cannot transition behind an original writer' USING ERRCODE='55000';
  END IF;
  -- Acquire both write modes before marker/pointer row locks. Otherwise a

@@ -64,8 +64,7 @@ def _report_counts(native):
 def _physical_snapshot(connection):
     # Preserve native canonical text as bytes; Python never parses native numbers.
     tables=('schema_head','schema_rev','schema_doc','type_def','prop_def','key_def',
-            'key_lifecycle_history','rel_def','rel_endpoint','relationship_lineage',
-            'catalog_acceptance_report','row_home_operation')
+            'rel_def','rel_endpoint','relationship_lineage','catalog_acceptance_report')
     arguments=[]
     for name in tables:
         arguments.append("'"+name+"',(SELECT pg_catalog.coalesce(pg_catalog.jsonb_agg(pg_catalog.to_jsonb(r) ORDER BY pg_catalog.to_jsonb(r)::pg_catalog.text COLLATE pg_catalog.\"C\"),'[]'::pg_catalog.jsonb) FROM truss."+name+' r)')

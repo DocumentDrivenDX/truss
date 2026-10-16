@@ -14,7 +14,7 @@ from .catalog_runtime import _release,_pin_cursor
 from ._installation_privileges import installation_administrator_with_cursor
 from ._psycopg_epoch_cut import _DDLBarrierComparison
 
-_MANIFEST_SHA256='56b6f870104e6f79ebb7e9e860740a3002514641195a3fff3e65e51a3775b2a1'
+_MANIFEST_SHA256='57e8523c0e2fd835b55051af10dae8a9be0f75325748b965e9a11131fcb6c114'
 _FUNCTIONS=(
  ('immutability.sql','runtime_immutable_source_epoch','','2279','false'),
  ('lock.sql','runtime_lock_source_epoch','25 25 25','2249','true'),

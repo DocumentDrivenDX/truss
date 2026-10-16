@@ -62,7 +62,7 @@ BEGIN
   summary AS (SELECT count(*) AS states FROM bounded),nodes AS (
    SELECT type_id,id,bool_or(depth=array_length(relations,1) AND NOT cycle) AS terminal FROM bounded GROUP BY type_id,id)
   SELECT summary.states,n.terminal,o AS object,ro AS root,rt AS root_definition,
-   EXISTS(SELECT 1 FROM truss.row_home_state r WHERE r.object_id=o.id AND r.object_type_id=o.type_id) AS row_home
+   false AS row_home
   FROM summary LEFT JOIN nodes n ON true LEFT JOIN truss.object o ON o.type_id=n.type_id AND o.id=n.id
   LEFT JOIN truss.object ro ON ro.type_id=o.root_type AND ro.id=o.root_id
   LEFT JOIN truss.type_def rt ON rt.type_id=ro.type_id AND rt.retired_rev IS NULL

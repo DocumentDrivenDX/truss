@@ -205,7 +205,6 @@ BEGIN
   IF root_identity IS NOT NULL THEN roots:=roots||jsonb_build_object((root_identity->>'typeId')||':'||(root_identity->>'id'),root_identity);END IF;
   IF byte_count+(CASE WHEN roots='{}'::jsonb THEN 0 ELSE octet_length(roots::text) END)>(binding->>'maximumBytes')::int THEN RAISE EXCEPTION 'bounded query root witnesses required' USING ERRCODE='54000';END IF;
   IF object_row.ver<=0 OR object_row.rev> (binding->>'catalogRevision')::int
-   OR EXISTS(SELECT 1 FROM truss.row_home_state s WHERE s.object_id=object_row.id AND s.object_type_id=object_row.type_id)
    OR EXISTS(SELECT 1 FROM jsonb_object_keys(object_row.props) k WHERE NOT EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.prop_id::text=k)) THEN RAISE EXCEPTION 'complete scalar source required' USING ERRCODE='0A000';END IF;
   FOR property IN SELECT * FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL LOOP
    cell:=object_row.props->property.prop_id::text;
