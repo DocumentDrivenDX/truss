@@ -1,0 +1,6 @@
+{
+  "runner": "scripts/check-typed-sdk-native.py",
+  "sha256": "456197510325340ae44afa1559084feb00d0e01fb65184996991750e668c0aa2",
+  "change": "explicit pinned Bun executable and pre-server version refusal; no global executable or native guard change",
+  "temporal": "HELD"
+}
