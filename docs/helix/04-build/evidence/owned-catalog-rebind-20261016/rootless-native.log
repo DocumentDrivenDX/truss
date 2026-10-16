@@ -1,0 +1,8 @@
+test_create_and_register_in_one_host_transaction (test_catalog_rebind_native.CatalogRebindTests.test_create_and_register_in_one_host_transaction) ... ok
+test_invalid_candidate_refuses_without_changing_data (test_catalog_rebind_native.CatalogRebindTests.test_invalid_candidate_refuses_without_changing_data) ... ok
+test_register_rebind_read_report_history_and_retry (test_catalog_rebind_native.CatalogRebindTests.test_register_rebind_read_report_history_and_retry) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 7.910s
+
+OK

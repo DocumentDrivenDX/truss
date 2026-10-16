@@ -72,7 +72,7 @@ REVOKE ALL ON FUNCTION truss.catalog_rebind_definition(text,int,int,jsonb) FROM 
 
 CREATE FUNCTION truss.catalog_rebind_history(object_image jsonb,identity jsonb,planned_basis jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
-DECLARE properties jsonb:='[]';retained jsonb;property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;
+DECLARE properties jsonb:='[]';retained jsonb;ownership jsonb:='{"state":"rootless"}';property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;
 BEGIN
  basis:=planned_basis;
  SELECT * INTO STRICT pin FROM truss.catalog_rebind_definition('type',(object_image->>'type_id')::int,NULL,planned_basis);
@@ -84,11 +84,19 @@ BEGIN
   END IF;
  END LOOP;
  SELECT coalesce(jsonb_agg(jsonb_build_object('name',key,'value',value) ORDER BY key COLLATE "C"),'[]'::jsonb) INTO retained FROM jsonb_each(coalesce(nullif(object_image->'retained','null'::jsonb),'{}'));
+ IF (object_image->>'root_id' IS NULL) IS DISTINCT FROM (object_image->>'root_type' IS NULL) THEN
+  RAISE EXCEPTION 'complete rebound root pair required' USING ERRCODE='55000';END IF;
+ IF object_image->>'root_id' IS NOT NULL THEN
+  SELECT * INTO STRICT pin FROM truss.catalog_rebind_definition('type',(object_image->>'root_type')::int,NULL,planned_basis);
+  ownership:=jsonb_build_object('state','owned','root',jsonb_build_object(
+   'id',object_image->>'root_id','typeId',object_image->>'root_type','definitionPin',pin.definition_pin,
+   'owner',jsonb_build_object('documentId',pin.document_id,'moduleId',pin.module_id)));
+ END IF;
  RETURN jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','object','identity',identity,
   'recordVersion',object_image->>'ver','catalogRevision',object_image->>'rev',
   'createdAt',to_char((object_image->>'created_at')::timestamptz AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
   'updatedAt',to_char((object_image->>'updated_at')::timestamptz AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
-  'properties',properties,'retained',retained,'ownership',jsonb_build_object('state','rootless'));
+  'properties',properties,'retained',retained,'ownership',ownership);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_rebind_history(jsonb,jsonb,jsonb) FROM PUBLIC;
@@ -116,6 +124,9 @@ BEGIN
   SELECT * INTO STRICT owner FROM truss.type_def WHERE type_id=object_row.type_id;
   PERFORM truss.runtime_module_writer(owner.document_id,owner.module);
   IF truss.runtime_object_values_readable(object_row.type_id) IS NOT TRUE THEN RAISE EXCEPTION 'current rebind interpretation reader required' USING ERRCODE='42501';END IF;
+  PERFORM truss.runtime_history_ownership(jsonb_build_object(
+   'identity',jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text),
+   'catalogRevision',object_row.rev,'ownership',truss.runtime_object_ownership_at(to_jsonb(object_row))));
   original:=to_jsonb(object_row);effects:='[]';events:='[]';journals:='[]';property_count:=0;
   SELECT definition_pin INTO STRICT pin FROM truss.catalog_rebind_definition('type',object_row.type_id,NULL,planned_basis);
   identity:=jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text,
@@ -183,7 +194,7 @@ REVOKE ALL ON FUNCTION truss.catalog_rebind_objects(truss.catalog_registration_r
 -- Check retained candidates against the actual native planned property definition.
 CREATE FUNCTION truss.catalog_rebind_violations(planned_basis jsonb,revision int) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE property truss.prop_def%ROWTYPE;owner truss.type_def%ROWTYPE;affected bigint;missing bigint;violations jsonb:='[]';
+DECLARE property truss.prop_def%ROWTYPE;owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;affected bigint;missing bigint;violations jsonb:='[]';
 BEGIN
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p WHERE p.since_rev=revision LOOP
   SELECT * INTO STRICT owner FROM jsonb_populate_recordset(NULL::truss.type_def,planned_basis->'type_def') t WHERE t.type_id=property.type_id;
@@ -193,8 +204,13 @@ BEGIN
    OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
    RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
   IF truss.valid_property_definition(property) IS NOT TRUE THEN RAISE EXCEPTION 'supported planned rebind property required' USING ERRCODE='0A000';END IF;
-  IF EXISTS(SELECT 1 FROM truss.object o WHERE o.type_id=property.type_id AND (o.root_id IS NOT NULL OR o.root_type IS NOT NULL) AND o.retained ? property.name) THEN
-   RAISE EXCEPTION 'owned retained-value catalog rebind requires a supported ownership profile' USING ERRCODE='0A000';END IF;
+  FOR object_row IN SELECT o.* FROM truss.object o WHERE o.type_id=property.type_id
+   AND (o.root_id IS NOT NULL OR o.root_type IS NOT NULL)
+   AND (property.nullability='required' OR coalesce(o.retained ? property.name,false)) LOOP
+  PERFORM truss.runtime_history_ownership(jsonb_build_object(
+   'identity',jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text),
+   'catalogRevision',object_row.rev,'ownership',truss.runtime_object_ownership_at(to_jsonb(object_row))));
+  END LOOP;
   SELECT count(*) INTO missing FROM truss.object o WHERE o.type_id=property.type_id AND property.nullability='required'
    AND (coalesce(o.retained ? property.name,false) IS NOT TRUE OR o.retained->property.name='{"kind":"null"}'::jsonb);
   IF missing>0 THEN
@@ -226,6 +242,13 @@ BEGIN
    OR truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
    OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
    RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
+  FOR object_row IN SELECT o.* FROM truss.object o WHERE o.type_id=property.type_id
+   AND (o.root_id IS NOT NULL OR o.root_type IS NOT NULL)
+   AND (property.nullability='required' OR coalesce(o.retained ? property.name,false)) LOOP
+  PERFORM truss.runtime_history_ownership(jsonb_build_object(
+   'identity',jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text),
+   'catalogRevision',object_row.rev,'ownership',truss.runtime_object_ownership_at(to_jsonb(object_row))));
+  END LOOP;
  END LOOP;
  IF violations='[]'::jsonb THEN RETURN NULL;END IF;
  RETURN convert_to(violations::text,'UTF8');
@@ -237,11 +260,16 @@ REVOKE ALL ON FUNCTION truss.catalog_rebind_violations(jsonb,int) FROM PUBLIC;
 -- Original definitions survive object deletion and later catalog evolution.
 CREATE FUNCTION truss.catalog_rebind_transition_reader(transition truss.runtime_catalog_rebind_transition,planned_basis jsonb DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;basis jsonb;property_id text;
+DECLARE owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;basis jsonb;property_id text;image jsonb;
 BEGIN
   basis:=coalesce(planned_basis,truss.catalog_all_expected_records(transition.revision));
   SELECT * INTO STRICT owner FROM jsonb_populate_recordset(NULL::truss.type_def,basis->'type_def') t WHERE t.type_id=transition.type_id;
   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE THEN RAISE EXCEPTION 'current original rebind owner reader required' USING ERRCODE='42501';END IF;
+  FOR image IN SELECT value FROM jsonb_array_elements(jsonb_build_array(transition.before_object,transition.after_object)) LOOP
+   PERFORM truss.runtime_history_ownership(jsonb_build_object(
+    'identity',jsonb_build_object('id',image->>'id','typeId',image->>'type_id'),
+    'catalogRevision',image->'rev','ownership',truss.runtime_object_ownership_at(image)));
+  END LOOP;
   FOR property_id IN SELECT jsonb_object_keys(transition.before_object->'props') LOOP
    PERFORM truss.runtime_history_property(transition.type_id,property_id::int,(transition.before_object->>'rev')::int,
     (SELECT definition_pin FROM truss.runtime_definition('property',transition.type_id,property_id::int,(transition.before_object->>'rev')::int)));

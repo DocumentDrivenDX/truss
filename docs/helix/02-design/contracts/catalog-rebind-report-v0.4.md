@@ -23,3 +23,24 @@ scalar key component with its alternate key, or profile0.2 for the prior flat
 subset. Stored profile0.1 through0.4 reports retain their original bytes and
 profile-specific meaning; the historical v0.2 document is not a current scope
 claim. Key-backfill details remain in catalog-key-backfill-report-v0.1.md.
+
+
+## Native71 development: owned-object rebinding
+
+The ownership limitation above describes native64. Native71 development admits
+retained-value rebinding on existing owned objects through the same public
+registration call. Root IDs/types and edges remain unchanged; every affected
+object advances once with the existing rebind and metadata journal events.
+The before image interprets ownership at its original physical revision. The
+after image resolves its root definition pin and owner through the planned
+catalog basis for the new revision. Rootless history rendering is unchanged.
+
+Candidate collection and closing diagnostic disclosure require root-module read
+authority for every owned object contributing to a value or missing-required
+count. Current root readers are also required before effects, for original
+report/retry and at deferred commit, using each retained image's own revision.
+Complete image, key/reservation, history digest and final graph checks remain.
+New required scalar rebinding may compose with an alternate key under the
+existing native63 rules. No new public carrier or report shape is introduced.
+Record-valued cells, cyclic definitions and descendant meaning changes remain
+unsupported. Managed-service and performance qualification are separate.

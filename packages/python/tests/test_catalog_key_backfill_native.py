@@ -165,3 +165,101 @@ class OwnedCatalogKeyBackfillTests(CatalogKeyBackfillTests):
         self.assertIsInstance(accepted,Ok,repr(accepted));self.assertIsInstance(accepted.value,CatalogAcceptanceRefused,repr(accepted))
         self.assertEqual([(v.rule,v.affected_object_count) for v in accepted.value.violations],[('key.duplicate',2)])
         h.detach();c.commit();self.assert_preserved(keys=True)
+
+
+class OwnedCatalogRebindTests(OwnedCatalogKeyBackfillTests):
+    """Public retained-value evolution preserves original aggregate history."""
+    for _name in tuple(n for n in dir(OwnedCatalogKeyBackfillTests) if n.startswith('test_')):
+        locals()[_name]=None
+
+    def create(self,*args,**kwargs):
+        operation=super().create(*args,**kwargs)
+        if kwargs.get('record','A')=='A' and getattr(self,'include_note',True):
+            value=getattr(self,'note_value',TextValue(kind='string',text='owned note'))
+            if getattr(self,'unique_notes',False):value=TextValue(kind='string',text='owned '+next(v.value.text for v in operation.values if v.name=='A-value'))
+            operation=replace(operation,values=operation.values+(AuthoredValue(name='giftNote',value=value),))
+        return operation
+
+    def register(self,assembly,tx):
+        original=next(d for d in self.documents if d.document_id=='adoc')
+        document=base.CatalogRebindTests.revised(self,original)
+        source=json.loads(document.content)
+        if getattr(self,'required_note',False):
+            next(e for e in source['modules'][0]['elements'] if e['id']=='giftNote')['nullability']='required'
+        if getattr(self,'note_key',False):
+            next(e for e in source['modules'][0]['elements'] if e['id']=='A')['keys'].append(
+                {'id':'note-key','name':'note-key','fields':[{'module':'m','element':'giftNote'}],'primary':False})
+        if getattr(self,'rename_root',False):
+            next(e for e in source['modules'][1]['elements'] if e['id']=='B')['name']='Root'
+        document=CatalogDocument('adoc','r2',json.dumps(source).encode())
+        prepared=assembly.prepare_catalog((document,),source_version=self.source_version,
+            bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        return assembly.accept_in_transaction(tx,prepared,request_key='rebind-owned-note')
+
+    test_missing_root_reader_refuses_before_acceptance=OwnedCatalogKeyBackfillTests.test_missing_root_reader_refuses_before_acceptance
+    test_root_reader_revoked_before_commit_aborts_rebind=OwnedCatalogKeyBackfillTests.test_root_reader_revoked_before_commit_aborts_backfill
+
+    def test_owned_rebind_commit_history_original_roots_and_retry(self):
+        from truss import Error
+        root,child=self.seed_owned();self.rename_root=True
+        self.admin.execute('GRANT roots_writer TO consumer WITH SET FALSE')
+        c,h,a,t=self.consumer();accepted=self.register(a,t)
+        self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))
+        self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
+        report=accepted.value.report_bytes;revision=accepted.value.revision
+        self.assertEqual(len(json.loads(report)['rebinds']),2)
+        new_root=a.get_type_reference_in_transaction(t,document_id='adoc',module_id='roots',record_id='B').value
+        self.assertNotEqual(new_root.definition_pin,root.definition_pin)
+        retry=self.register(a,t);self.assertIsInstance(retry,Ok,repr(retry))
+        self.assertTrue(retry.value.replayed);self.assertEqual(retry.value.report_bytes,report)
+        h.detach();c.commit();c,h,a,t=self.consumer()
+        current=a.get_object_in_transaction(t,document_id='adoc',module_id='m',record_id='A',object_id=int(child.id))
+        self.assertIsInstance(current.value,ObjectFound,repr(current))
+        self.assertEqual(current.value.object.version,2);self.assertEqual(dict(current.value.object.values)['giftNote'],'owned note')
+        self.assertNotIn('giftNote',dict(current.value.object.retained))
+        entity=HistoryEntity(kind='object',document_id='adoc',module_id='m',definition_id='A',id=int(child.id))
+        for version,expected_pin,expected_revision in ((1,root.definition_pin,'1'),(2,new_root.definition_pin,str(revision))):
+            historical=a.reconstruct_in_transaction(t,entity=entity,version=version)
+            self.assertIsInstance(historical.value,HistoricalRecord,repr(historical)+' '+str(h._custody.last_attempt.error))
+            record=json.loads(historical.value.record)
+            self.assertEqual(record['catalogRevision'],expected_revision)
+            self.assertEqual(record['ownership']['root'],{'id':root.id,'typeId':root.type_id,
+                'definitionPin':expected_pin,'owner':{'documentId':'adoc','moduleId':'roots'}})
+        self.assertEqual(self.admin.execute('SELECT root_id,root_type,ver FROM truss.object WHERE id=%s',(int(child.id),)).fetchone(),(int(root.id),int(root.type_id),2))
+        self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o WHERE id=%s',(int(root.id),)).fetchone(),self.original_images[0])
+        h.detach();c.rollback();self.admin.execute('REVOKE roots_writer,roots_reader FROM consumer')
+        c,h,a,t=self.consumer();denied=a.report_in_transaction(t,revision)
+        self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'42501')
+        h.detach();c.rollback();c,h,a,t=self.consumer();denied=self.register(a,t)
+        self.assertIsInstance(denied,Error,repr(denied));self.assertEqual(denied.error.sql_state,'42501')
+        h.detach();c.rollback()
+
+    def test_invalid_owned_retained_value_refuses_without_effects(self):
+        from truss.contracts import BooleanValue
+        self.note_value=BooleanValue(value=True);self.seed_owned()
+        c,h,a,t=self.consumer();accepted=self.register(a,t)
+        self.assertIsInstance(accepted,Ok,repr(accepted));self.assertIsInstance(accepted.value,CatalogAcceptanceRefused,repr(accepted))
+        self.assertEqual([(v.rule,v.affected_object_count) for v in accepted.value.violations],[('property.rebind_value',2)])
+        h.detach();c.commit();self.assert_preserved(keys=True)
+
+    def test_missing_required_count_requires_root_reader(self):
+        from truss import Error
+        self.include_note=False;self.required_note=True;self.seed_owned()
+        self.admin.execute('REVOKE roots_reader FROM consumer')
+        c,h,a,t=self.consumer();accepted=self.register(a,t)
+        self.assertIsInstance(accepted,Error,repr(accepted));self.assertEqual(accepted.error.sql_state,'42501')
+        h.detach();c.rollback();self.assert_preserved(keys=True)
+
+    def test_owned_required_rebind_and_alternate_key_commit_together(self):
+        self.unique_notes=True;self.required_note=True;self.note_key=True
+        root,child=self.seed_owned();c,h,a,t=self.consumer();accepted=self.register(a,t)
+        self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))
+        self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
+        report=json.loads(accepted.value.report_bytes)
+        self.assertEqual((len(report['rebinds']),len(report['keyBackfills'])),(2,2))
+        h.detach();c.commit();c,h,a,t=self.consumer()
+        found=a.lookup_key_in_transaction(t,document_id='adoc',module_id='m',record_id='A',key_id='note-key',values=('owned first',))
+        self.assertIsInstance(found.value,ObjectFound,repr(found))
+        self.assertEqual((found.value.object.id,found.value.object.version),(int(child.id),2))
+        self.assertEqual(found.value.object.ownership.root.identity,root)
+        h.detach();c.rollback()

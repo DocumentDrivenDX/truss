@@ -1,0 +1,34 @@
+{
+  "scope": "Basic public owned retained-value rebinding and atomic required-field/alternate-key composition",
+  "postgresVersion": "18.6",
+  "runtimeSourceSha256": "d5225dfdaa26542adabf956df6015f4a6fcf62ccb0033c22295b4aea3d7f8a17",
+  "runs": [
+    {
+      "log": "owned-native.log",
+      "passed": 5,
+      "seconds": 16.544
+    },
+    {
+      "log": "owned-required-key-native.log",
+      "passed": 1,
+      "seconds": 5.713
+    },
+    {
+      "log": "rootless-native.log",
+      "passed": 3,
+      "seconds": 7.91
+    }
+  ],
+  "checks": [
+    "commit/reopen property read and version2",
+    "original before/after ownership with distinct revision-specific root pins",
+    "unchanged aggregate-root object and child root IDs/types",
+    "original report and idempotent retry",
+    "invalid retained value refuses without effects",
+    "root-reader refusal before candidate counts, reports/retries and deferred commit",
+    "missing required values do not disclose unreadable owned counts",
+    "new required scalar field and alternate-key effects commit together"
+  ],
+  "hostedReleaseQualified": false,
+  "managedServiceQualified": false
+}

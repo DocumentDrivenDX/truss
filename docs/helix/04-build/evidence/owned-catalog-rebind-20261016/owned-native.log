@@ -1,0 +1,10 @@
+test_invalid_owned_retained_value_refuses_without_effects (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_invalid_owned_retained_value_refuses_without_effects) ... ok
+test_missing_required_count_requires_root_reader (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_missing_required_count_requires_root_reader) ... ok
+test_missing_root_reader_refuses_before_acceptance (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_missing_root_reader_refuses_before_acceptance) ... ok
+test_owned_rebind_commit_history_original_roots_and_retry (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_owned_rebind_commit_history_original_roots_and_retry) ... ok
+test_root_reader_revoked_before_commit_aborts_rebind (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_root_reader_revoked_before_commit_aborts_rebind) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 16.544s
+
+OK

@@ -8184,3 +8184,18 @@ PostgreSQL18.6 workflows pass, plus four existing UMF0.7/0.8 rootless workflows.
 retain both runs. The existing release workflow includes these eight cases.
 Owned retained-value rebinding remains unfinished; hosted release validation
 and managed-service qualification are not established by these local tests.
+
+
+### Owned retained-value catalog rebinding — 2026-10-16
+
+The ordinary catalog registration API now binds existing retained values on owned
+objects. Each affected child advances once; root identities and edges are
+unchanged. Rebinding a child does not itself modify its aggregate root, which
+may independently rebind in the same registration. Before/after history retains its respective catalog revision and root
+definition pin. Current root readers protect candidate/required-value counts,
+original reports/retries and deferred commit. Existing field/key rebinding may
+compose atomically. [Original native logs and source pin](evidence/owned-catalog-rebind-20261016/result.json)
+record six owned workflows and three rootless regressions on PostgreSQL18.6.
+The existing installed-wheel release step loads the new cases. No new planner,
+public carrier, layout or runtime routine was introduced. Hosted batch performance
+and managed-service qualification remain separate unfinished work.

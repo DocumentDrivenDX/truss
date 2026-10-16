@@ -1,0 +1,6 @@
+test_owned_required_rebind_and_alternate_key_commit_together (test_catalog_key_backfill_native.OwnedCatalogRebindTests.test_owned_required_rebind_and_alternate_key_commit_together) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 5.713s
+
+OK
