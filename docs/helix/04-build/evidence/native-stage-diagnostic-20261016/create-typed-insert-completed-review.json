@@ -1,0 +1,50 @@
+{
+  "review": "Astra Ultra completed typed CREATE INSERT iteration",
+  "status": "SOURCE_AND_BOUNDED_FUNCTIONAL_EVIDENCE_CLEAR",
+  "reviewedAt": "2026-10-16T16:33:19.643981+00:00",
+  "blockingFindings": [],
+  "recommendation": "Land the exact two-expression redundant-conversion removal with the retained native log and source receipt. Treat it as a source simplification with local functional validation, not a demonstrated speedup or CI-timeout repair.",
+  "rationale": "The already-typed object and journal values are inserted directly while all expected-image/RETURNING, source, trigger and deferred closure checks remain. No new state, interface or proof bypass is introduced. The targeted real1024 path and corruption/atomicity controls passed on the exact reviewed source. No additional graph-matrix rerun is needed to substantiate this limited source/functional conclusion; existing graph and platform failures remain unresolved.",
+  "sourceReview": {
+    "path": "/private/tmp/truss-create-typed-insert-source-astra-20261016.json",
+    "sha256": "8603231e9adfd22f9fd395aa6a4c7e51efa5e7879ded8cc07574cba1646cd16b",
+    "baseCommit": "ffcb81b4ea11c43d7bb19a23bf20b551a3fb2588",
+    "sourceSha256": {
+      "packages/python/src/truss/_catalog_runtime/groups.sql": "6ac24f17fc72f4d8968193142a98fb6222e1439a005c0a9157276b72562548f4",
+      "packages/python/src/truss/_catalog_runtime/manifest.json": "c9221e8b0fe5a90de7f056ced84fde460c36f0d3faceff7a2348ed01c0586f20"
+    },
+    "exactTwoFileSourceUnchanged": true
+  },
+  "parentRunEvidence": {
+    "session": 77928,
+    "outcome": "PASS",
+    "tests": 6,
+    "seconds": 53.731,
+    "log": "/private/tmp/truss-create-typed-insert-native-20261016.log",
+    "logSha256": "83b7c8419df80a151313dbd0a94cf4ebe86f1d9bf89e548a7ae9a1c80788c0ea",
+    "scopes": [
+      "Public create/commit/read/original durable replay.",
+      "Late native journal and receipt failures remain atomic.",
+      "Deferred corruption refuses outer COMMIT.",
+      "UMF08 numeric accepted catalog/create/update/import/read/query workflow.",
+      "Actual1024 creates and COMMIT, changed updates and COMMIT, original replay and ordered full public readback.",
+      "Effect fault at index1023 rolls back the entire group and retains caller work."
+    ]
+  },
+  "reviewerChecks": {
+    "exactTrackedTwoFileScopeAndSourceHashes": "PASS",
+    "terminalSixTestLog": "PASS"
+  },
+  "qualification": {
+    "speedup": "NOT_ESTABLISHED",
+    "installedWheelCi": "PENDING new reviewed commit run",
+    "fullGraphMatrix": "NOT_RERUN for this two-expression increment; prior retained failure remains open",
+    "releasePerformanceBlocker": "OPEN"
+  },
+  "limitations": [
+    "Reviewer ran no native tests, edited no product source and spawned no agents.",
+    "The local six-test result does not qualify platform runners or prove the CREATE deadline is fixed.",
+    "Expected-image to_jsonb construction remains; only reconstruction through jsonb_populate_record and its field input conversions was removed.",
+    "No deadlines, capacities, workloads, assertions or independent validation checks were relaxed."
+  ]
+}

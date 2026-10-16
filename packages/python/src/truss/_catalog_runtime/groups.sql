@@ -568,7 +568,7 @@ BEGIN
    RAISE EXCEPTION 'original planned create values required' USING ERRCODE='55000';END IF;
   object_row.created_at:=clock_timestamp();object_row.updated_at:=object_row.created_at;
   planned_row:=to_jsonb(object_row);
-  INSERT INTO truss.object SELECT (jsonb_populate_record(NULL::truss.object,planned_row)).* RETURNING to_jsonb(object) INTO actual_row;
+  INSERT INTO truss.object SELECT (object_row).* RETURNING to_jsonb(object) INTO actual_row;
   IF actual_row IS DISTINCT FROM planned_row THEN RAISE EXCEPTION 'exact object insert required' USING ERRCODE='55000'; END IF;
   member_keys:='[]';
   FOR key_plan IN SELECT k.value FROM jsonb_array_elements(planned_keys) k WHERE k.value->>'operationIndex'=current_index::text
@@ -618,7 +618,7 @@ BEGIN
   event_bytes:=convert_to(event::text,'UTF8');origin_bytes:=convert_to((event->'origin')::text,'UTF8');
   journal_row.new_value:=truss.runtime_exact_wrapper('event',event_bytes);journal_row.origin:=truss.runtime_exact_wrapper('origin',origin_bytes);
   expected_journal:=to_jsonb(journal_row);
-  INSERT INTO truss.journal SELECT (jsonb_populate_record(NULL::truss.journal,expected_journal)).* RETURNING to_jsonb(journal) INTO actual_journal;
+  INSERT INTO truss.journal SELECT (journal_row).* RETURNING to_jsonb(journal) INTO actual_journal;
   IF actual_journal IS DISTINCT FROM expected_journal THEN RAISE EXCEPTION 'exact complete journal append required' USING ERRCODE='55000'; END IF;
   members:=members||jsonb_build_array(jsonb_build_object('object',to_jsonb(object_row),'keys',member_keys,'journal',expected_journal));
   outcome:=jsonb_build_object('operation','create_object','outcome','created','identity',object_identity,'version','1',
