@@ -57,8 +57,21 @@ _ABI2_WEFT_034_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
     'weftWheelSha256':'bfc70a4d1f9146c3630ebb177be5a4f52231fd81b276233b3e0aa1a2c5e73246',
     'weftModuleSha256':'6de57d7dfcd604fbdbd78534fcb5bca16c59a9fb71ccae58df0e08a67457e22c',
 }
+# Published standard-feature Weft038 wheels, admitted only for the existing
+# ABI2 flow. Existing whole selections never migrate implicitly.
+_ABI2_WEFT_038_PUBLIC_ARM={**_ABI2_CONSUMER,
+    'weftRevision':'e2eba1ba323e6e9c08400fd0daf22bb456857d43',
+    'weftWheelSha256':'f30a8e8207eb7a159966b66ea3ebce90efcc57414311b1a4be7d14eac954c852',
+    'weftModuleSha256':'8e7aa047a9b205ca8afe3a3fcf4d5f7da950b8f9ef56cda41c60b17ccd03a671',
+}
+_ABI2_WEFT_038_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
+    'weftRevision':'e2eba1ba323e6e9c08400fd0daf22bb456857d43',
+    'weftWheelSha256':'6d9ef828dffb2363ff1501980f2c4aade449a8f0ff0ce5714dae57035295f55e',
+    'weftModuleSha256':'6a037c5c15efa3e7df58ac157a1bfe9e56fb35d1aed68850d17255439fbc730e',
+}
 _CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_ARM,_ABI2_WEFT_033_LINUX_X64,
-                  _ABI2_WEFT_034_ARM,_ABI2_WEFT_034_PUBLIC_ARM,_ABI2_WEFT_034_PUBLIC_LINUX_X64)
+                  _ABI2_WEFT_034_ARM,_ABI2_WEFT_034_PUBLIC_ARM,_ABI2_WEFT_034_PUBLIC_LINUX_X64,
+                  _ABI2_WEFT_038_PUBLIC_ARM,_ABI2_WEFT_038_PUBLIC_LINUX_X64)
 
 
 def _actual_consumer():

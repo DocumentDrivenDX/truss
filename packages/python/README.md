@@ -11,16 +11,20 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.36`,
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.37`,
 native runtime `0.70-candidate`, layout `1.0`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.37`. The tested local
+candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.40`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
 psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
 server versions are not qualified. The broader protected engine remains
 unfinished; this runtime enforces its installed ordinary-person/module boundaries
 and includes the explicitly activated policy-query profile described below.
 
-This release is [v0.0.36](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.36).
+This release is [v0.0.37](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.37).
+
+The failed v0.0.36 tag remains unpublished: its older compiler refused native70.
+This replacement selects matching Weft0.4.38/backend0.4.40 and keeps the exact
+native70 SQL and manifest.
 
 It fixes deferred edge writer authorization after an early attempt-constraint
 flush. Upgrade the exact published v0.0.35/native68 installation through
@@ -67,9 +71,10 @@ Direct object, key and page results expose `object.ownership.state` as
 
 The exact consumer model passes public accept/apply/readback and native binding
 export. Populated native65 upgrades preserve transitions and receipt replay.
-SDK0.0.35 selects Weft0.4.34 for native68 queries and original
-mutation-selection registration/lowering, preserving native65. See the
-[SDK35 release evidence](../../docs/helix/04-build/releases/v0.0.35.md).
+SDK0.0.37 selects Weft0.4.38/backend0.4.40 for native70 queries. Earlier
+native65/native68 compiler contracts remain available; native70 action-selection
+registration/lowering is not admitted. See the
+[SDK37 release evidence](../../docs/helix/04-build/releases/v0.0.37.md).
 This compiler support does not enable a protected bulk-action executor.
 
 ## Install the release
@@ -151,9 +156,9 @@ Unknown modules refuse. Reopening a registration under another known wheel still
 requires an explicit migration; the factory never upgrades retained pins.
 
 This first local PostgreSQL18.6 profile uses exact original candidate Weft ABI2
-and UMF child pins. The published Weft0.4.34 macOS ARM and Linux x64 wheels
-are selected explicitly and checked in installed public workflows on both
-platforms. Other platforms and newer result ABIs remain outside this profile.
+and UMF child pins. The matching Weft0.4.38 macOS ARM and Linux x64 wheels
+are selected explicitly. The release workflow checks the selected wheels in
+installed public workflows on both platforms before publication. Other platforms and newer result ABIs remain outside this profile.
 It currently requires rootless, present String or explicit signed64 query
 domains. Empty or all-read-denied populations return empty rows when genuine
 compiled operator routes establish one unambiguous original projection domain;
@@ -171,17 +176,17 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.36 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.34 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.37 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.38 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.36'
+  'truss-toolkit[local,native,query]==0.0.37'
 ```
 
-Bun1.4.2 is still required for UMF preparation. SDK 0.0.35 /
-native 0.68 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
+Bun1.4.2 is still required for UMF preparation. SDK 0.0.37 /
+native 0.70 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
 catalogs. Create/update, imports, preconditions, backfills and lookups require no
 client encoder or per-key receipt. Existing stored key and namespace bytes are
-preserved. Weft remains optional through `query` (version 0.4.34); it is not a
+preserved. Weft remains optional through `query` (version 0.4.38); it is not a
 key-encoding dependency. The separate protected security observation retains its
 original producer boundary.
 The older released installation example above retains its historical dependency
@@ -192,10 +197,10 @@ PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.36 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.37 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.36 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.37 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
 ```

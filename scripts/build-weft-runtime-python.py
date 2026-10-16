@@ -11,7 +11,7 @@ import tarfile
 import tempfile
 import tomllib
 
-REVISION = '86273dd3c2b4c2b99c8d0268c9dff8537e6ce20e'
+REVISION = 'e2eba1ba323e6e9c08400fd0daf22bb456857d43'
 
 
 def check_wheel(wheel: Path, expected_version: str):
@@ -63,7 +63,7 @@ def main():
         raise RuntimeError('Install maturin==1.9.6 in the caller Python environment')
     maturin = Path(sysconfig.get_path('scripts')) / ('maturin.exe' if os.name == 'nt' else 'maturin')
     command = [str(maturin), 'build', '--manifest-path', 'crates/weft-python/Cargo.toml',
-               '--locked', '--features', 'truss-postgresql-pg18,current-postgresql-scalar-candidate',
+               '--locked',
                '--interpreter', sys.executable, '--out', str(output / 'wheels')]
     if args.profile == 'release':
         command.append('--release')
