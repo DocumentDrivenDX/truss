@@ -16,6 +16,10 @@
       "sha256": "e748f0e0e534145beaff34985147ab1dec990823584151338a1d331a26dd9ccc",
       "bytes": 10209
     },
+    "bounded-bridge-review.zip": {
+      "sha256": "3f8bb01f69718d30a4e87cdd372993170d8674d66f9da1c6871ec1a22e9270eb",
+      "bytes": 10414005
+    },
     "README.md": {
       "sha256": "faacf7518e254c229ac6873eb372557669d968e4aa6ea28481706d7ba5c032a7",
       "bytes": 2146
@@ -40,6 +44,10 @@
       "sha256": "44add632e5bd2071c767ab23c44cb8eae95067913fcc94167dc8e28e4ca2d51d",
       "bytes": 4153
     },
+    "bounded-bridge-review.json": {
+      "sha256": "af10c71049736edba004a6fea8f0d5128690acfa787c24b47779135b078c5aa1",
+      "bytes": 5929
+    },
     "receipt.json": {
       "sha256": "cffa05c5b6243af44021014e259a3ec056502400c4d0b0f09224a5ef79d642e6",
       "bytes": 354
@@ -49,5 +57,13 @@
   "wheelSha256": "25947eaea9cd42db79a2671664e7829af10d79a802a82cf92f5ddc0b2675e5c8",
   "SQLExecuted": false,
   "nativeAdmission": false,
-  "casePromotion": 0
+  "casePromotion": 0,
+  "review": {
+    "status": "qualified no findings",
+    "verifiedArtifacts": 93,
+    "suppliedControlsReplayed": 38,
+    "independentControls": 12,
+    "RustCampaignsRerun": false,
+    "SQLExecuted": false
+  }
 }
