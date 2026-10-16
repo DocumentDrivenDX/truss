@@ -94,3 +94,12 @@ including native imports/history/release sources. Rebase preserves those changes
 this campaign does not qualify their behavior or imply a combined installed
 release. The selected context/graph implementation files remain source-exact.
 Separate import qualification belongs to its original owner/evidence.
+
+After rebasing the disjoint atomic-import increment, all five reviewed/tested
+implementation/test source files remain byte-exact and all eight focused tests
+pass. The Python3.11 module-boundary checker initially exposed missing explicit
+map entries for the two new private modules and the evaluator edge. The follow-up
+adds only their reviewed imports, with no wildcard or directory exception. It
+passes1548import edges; TypeScript/native/reflection/runtime-visibility gates
+remain outside this Python-only check. No runtime source changes accompany the
+map correction.

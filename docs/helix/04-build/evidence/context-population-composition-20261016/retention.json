@@ -4,12 +4,15 @@
     "packages/python/src/truss/_current_disclosure_evaluation.py": "a32be39ef28eff3f02751923f3a5349a40ea30cf76f3d9f407525d4e05f7d187",
     "packages/python/src/truss/_current_disclosure_originals.py": "ca5c10372964b5c42ccafa01ad91ecbad7d3c39b12922769d37de5b7ca4016cd",
     "packages/python/tests/test_current_disclosure_context_capture.py": "81e2e843b3b420b76aae7e2f71845d87b6f011af1fd361b33e16b4a1cc72e357",
-    "packages/python/tests/test_current_disclosure_context_native.py": "27829a677fa2eb736fdc83587212fdc1c3148d8edf6b49184b6450271a8ad27c"
+    "packages/python/tests/test_current_disclosure_context_native.py": "27829a677fa2eb736fdc83587212fdc1c3148d8edf6b49184b6450271a8ad27c",
+    "scripts/check-module-boundaries.py": "a7d83e1fa2ca0fae4e7c20325660014e9ced1893b24ab9c91ff3a9a9a8b29bd9"
   },
   "files": {
     "pre-fix-native-artifacts.zip": "65769d807b4e091216081eafba98dd3ddba0d932d5bfbf6afc54420ab7fe43fe",
     "coverage-fix-preflight.json": "0be59356a88123ee26aa8ecfdd46495ade0f8d9beb005e7b9265ecc4adf50ae9",
     "final-preflight.json": "a1bb4d9663de509f22f2651296bdd578bd464a31f4430f7dbc42a8078562a9ed",
+    "post-rebase-unit.log": "71a870f32a99f6252719a3b149be0d84bc0ac519dc3f456fd4c93ed2a59c9313",
+    "python-module-boundaries.json": "b8d3c7d3ebacf2095c9a1decbe4698393cdb4ab61dc3099e3e9aa38abba77bd5",
     "old-consumer-66.log": "2076387ca6b3218b331ef195208df7e6e99981ab595b5671ac1757466672b30e",
     "postflight.json": "14b8d6ab2449570f5fe3d22e575f14a4bd698aa4ed356fad0e7982875bfcc2ed",
     "coverage-fix-review.zip": "66653d1dd4c8895ec168a9d4f7f2047f51765e97004fe0a3820c0c7efea664d5",
@@ -20,7 +23,7 @@
     "source-wire-regression.log": "f0322424352523233b6446e2d41bfdd2c891ae405b393f7128254f2b5e596edd",
     "coverage-fix-native.log": "f42be14e9b8f5d2b1e20aeb6750406763c02bb4754e11bf33969a55c2759efae",
     "coverage-fix-review.json": "7425feacdcb271882a53073cf62c69643332391de5e47f6a652eb08d82d9cd6e",
-    "README.md": "631a4293cac1e7308f01ec4541ec895a9b10a5ff44aaf2ebdcda8be0685edbe7",
+    "README.md": "9e3cbf59b3a885fed73a6d9623dd97693cb2d295a6bf905339a4679900f40d69",
     "final-postflight.json": "e8f801843d3baac0eac4a5fffd9a352b8c8754cafbeab391e28a4ee508246a8f",
     "native.log": "171f857fa883c1eeae571bfc25d3fa1c11c23395f817851144dadd3e05f12774",
     "initial-review.zip": "37e9513a470165a651c7d95724a479fb794f53f98bfc1baa7f4ee33c053d4cc9",
