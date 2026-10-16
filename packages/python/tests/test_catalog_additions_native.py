@@ -6,7 +6,7 @@ from dataclasses import replace
 import psycopg
 from truss import (Ok,Error,CatalogDocument,CatalogUnchanged,ModuleAccessGrant,ObjectFound,ObjectReadUnavailable,
     create_reference_assembly,CatalogRuntimeConfiguration,adopt_psycopg_host)
-from truss.groups import GroupSuccess,AppliedPending,CommittedReceiptReplay,GroupUnavailable
+from truss.groups import GroupSuccess,AppliedPending,CommittedReceiptReplay,GroupUnavailable,GroupFailed
 from truss.contracts import ProfilePin
 from truss.catalog_view import CatalogViewUnavailable
 import test_group_create_native as group_tests
@@ -64,7 +64,11 @@ class CatalogAdditionTests(group_tests.PublicCreateGroupTests):
         self.assertIsInstance(replay.response,CommittedReceiptReplay);self.assertEqual(replay.response.semantic,original_group.response.semantic)
         new_input,new_request=self.input(assembly,tx,operations=(self.create(document='bdoc',label='new',alias='new'),))
         stale_input=replace(new_input,mutation_profile=ProfilePin(identity='truss-rootless-string-create',version='0.1',sha256='f77c86906a35d8ca16bb00b7b068eaa023d224b3792353365089e8d718f92b71'))
-        stale=assembly.apply_in_transaction(tx,stale_input,new_request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        conflict=assembly.apply_in_transaction(tx,stale_input,new_request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
+        self.assertIsInstance(conflict,Ok);self.assertIsInstance(conflict.value,GroupFailed)
+        self.assertEqual(conflict.value.failure.code,'request_conflict')
+        fresh_request=assembly.group_context_in_transaction(tx).value.request('stale-bdoc-profile')
+        stale=assembly.apply_in_transaction(tx,stale_input,fresh_request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
         self.assertIsInstance(stale.value,GroupUnavailable);self.assertEqual(stale.value.reason,'profile')
         new_request=assembly.group_context_in_transaction(tx).value.request('new-bdoc-object')
         created=self.apply(assembly,tx,new_input,new_request)
