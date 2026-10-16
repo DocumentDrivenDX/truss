@@ -453,7 +453,10 @@ CREATE FUNCTION truss.runtime_owned_local_edges(edges jsonb,node_order text[],bo
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE entry record;source_node int;target_node int;result jsonb:='[]';ordinal int:=0;
 BEGIN
- FOR entry IN SELECT key,value FROM jsonb_each(edges) ORDER BY key COLLATE "C" LOOP
+ FOR entry IN SELECT key,value,
+  count(*) FILTER (WHERE value->'deleted'='false'::jsonb) OVER (
+   ORDER BY key COLLATE "C" ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) preceding_live
+  FROM jsonb_each(edges) ORDER BY key COLLATE "C" LOOP
   IF entry.value->'deleted'='true'::jsonb THEN CONTINUE;END IF;
   IF (entry.value->>'lifecycle'='owned') IS DISTINCT FROM owned THEN CONTINUE;END IF;
   source_node:=array_position(node_order,entry.value->>'source')-1;
@@ -463,7 +466,7 @@ BEGIN
   IF source_node IS NULL OR target_node IS NULL OR owned AND (source_node>=cardinality(node_order) OR target_node>=cardinality(node_order)) THEN
    RAISE EXCEPTION 'complete typed endpoint scope required' USING ERRCODE='55000';END IF;
   -- Ordinals count all live edges so the two lifecycle arrays stay disjoint.
-  SELECT count(*) INTO ordinal FROM jsonb_each(edges) e WHERE e.value->'deleted'='false'::jsonb AND e.key COLLATE "C"<entry.key COLLATE "C";
+  ordinal:=entry.preceding_live;
   result:=result||jsonb_build_array(jsonb_build_object('edge',ordinal,'source',source_node,'target',target_node));
  END LOOP;
  RETURN result;
