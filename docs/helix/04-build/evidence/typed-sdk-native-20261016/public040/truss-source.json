@@ -1,0 +1,7 @@
+{
+  "repository": "DocumentDrivenDX/truss",
+  "commit": "2695a512affbe9a1b3c172f5483c721527192dc2",
+  "extraction": "exact tracked package from git archive, no prior build products",
+  "qualification": "pending actual published040wheel; no Date/default change",
+  "temporalSdk": "HELD"
+}
