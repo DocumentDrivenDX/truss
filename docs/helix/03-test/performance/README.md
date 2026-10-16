@@ -155,10 +155,9 @@ loading, with value/count checks after reopening connections. Traversal, delete,
 optional lookup-index creation and WAL/memory instrumentation remain additional
 work; no result for those operations is implied by the current driver.
 
-The existing implementation caps atomic groups at 128 operations. The human-selected
-target is now 1,024. The runner expects 1,024 by default and will fail real calls
-against an engine that still refuses this capacity; this configuration does not
-qualify support. Use `--expected-group-limit 128` only to reproduce the old baseline.
+Modern owned groups now admit 1,024 operations; legacy rootless groups retain
+128. The runner expects 1,024 by default. Use `--expected-group-limit 128` only
+to reproduce the old baseline. Configuration alone does not qualify execution.
 Measure 1/100/1,000/1,024 atomic updates where enough nodes exist; record 10,000 as
 outside the configured capacity. A multi-transaction 10,000-row load is a separate
 throughput workload, never one atomic group. Verify 1,025 receives a typed refusal
@@ -449,3 +448,24 @@ build/evidence files; tracked runtime sources were clean at the recorded commit.
 The [existing runner's complete report](results/main-real-schemas-20261016.json.gz)
 retains individual samples, source/runtime identity and settings without adding a
 runtime observation protocol.
+
+### Main atomic capacity increment (2026-10-16)
+
+The basic native capacity suite passes real 1,024-object creation, a second
+one-object group in the same caller transaction, caller COMMIT, 1,024 changed
+updates and COMMIT, original update receipt replay, and complete ordered public
+ID/value/version readback with selected alternate-key reads. The second test
+injects an error at operation index 1,023, preserves earlier caller work and
+verifies zero durable group effects after the caller commits. Both pass together
+in 42.676 seconds on PostgreSQL 18.6 with unchanged 10-second statement and
+30-second operation deadlines. These are functional checks, not per-operation
+latency measurements or qualification of every schema/action.
+
+A separate two-test run passes published v0.0.35 upgrade followed by 129 real
+creates, and modern 1,025/legacy 129 host/native refusal checks (13.254 seconds).
+Source review independently verifies the retained legacy size guard; its native
+refusal also encounters the unsupported legacy profile and therefore does not
+isolate that guard. The initial run exposed an installation syntax error in the
+CASE upper-bound expression; the parenthesized correction was regenerated and
+all four checks rerun successfully. Astra Ultra clears corrected source and
+basic tests. The previous 128-operation results above remain historical.

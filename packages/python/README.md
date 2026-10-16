@@ -7,6 +7,14 @@ traversal and retained history preserve ownership. Basic PostgreSQL18.6 workflow
 cover commit, rollback, dry-run and original receipt replay. The published
 release remains v0.0.35, described below.
 
+Modern owned groups admit up to 1,024 operations per atomic group; legacy
+rootless groups retain their 128-operation limit. Basic native tests cover
+1,024 real creates, committed changed updates, original receipt replay and
+complete ordered public readback, plus refusal at 1,025 and rollback on a
+failure at operation 1,024. Upgrading published v0.0.35 widens the retained
+attempt constraint without rewriting receipts or historical data. Other
+byte/value limits and ordinary deadlines still apply.
+
 Development compiled queries use published `weft-sql==0.4.36`, backend
 `0.4.39` / binding `0.5`, and the explicit logical query ABI. Basic native
 workflows exercise the default public compiler with owned descendants, the

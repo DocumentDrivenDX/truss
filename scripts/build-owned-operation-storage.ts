@@ -10,7 +10,7 @@ const sourceModel = directory + 'truss-owned-operation-storage-0.1.proposal.umf.
 const native = await importPostgresqlSql(`
 CREATE TABLE truss.runtime_owned_operation (
  attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt(id),
- operation_index int NOT NULL CHECK(operation_index BETWEEN 0 AND 127),
+ operation_index int NOT NULL CHECK(operation_index BETWEEN 0 AND 1023),
  writer_xid xid8 NOT NULL,
  plan jsonb NOT NULL,
  PRIMARY KEY(attempt_id,operation_index),

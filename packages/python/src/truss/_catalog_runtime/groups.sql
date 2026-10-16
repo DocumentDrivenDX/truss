@@ -462,8 +462,12 @@ BEGIN
     RAISE EXCEPTION 'original live rootless aggregate root state required' USING ERRCODE='55000';END IF;
   END IF;
  END IF;
+ -- Modern creates are bounded by their admitted immutable outer attempt.
+ -- Retain the published legacy transaction ceiling on its original profile.
+ IF input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
  IF (SELECT count(*) FROM (SELECT 1 FROM truss.runtime_object_transition WHERE writer_xid=writer AND before_object IS NULL LIMIT 129) g)>=128 THEN
   RAISE EXCEPTION 'bounded groups per transaction required' USING ERRCODE='54000'; END IF;
+ END IF;
  IF jsonb_typeof(key_inputs) IS DISTINCT FROM 'array' OR jsonb_array_length(key_inputs)>512 THEN
   RAISE EXCEPTION 'bounded original key inventory required' USING ERRCODE='54000'; END IF;
  IF (SELECT value FROM truss.setting WHERE key='key_reuse') IS DISTINCT FROM '"forbid"'::jsonb

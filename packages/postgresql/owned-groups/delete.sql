@@ -6,7 +6,7 @@ LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp A
 DECLARE entry jsonb;deleted int[];prior_count int;edge_number int;
  source_node int;target_node int;seen_edges int[]:='{}';deleted_edges jsonb;
 BEGIN
- IF node_count IS NULL OR node_count NOT BETWEEN 0 AND 128 THEN
+ IF node_count IS NULL OR node_count NOT BETWEEN 0 AND 1024 THEN
   RAISE EXCEPTION 'bounded local node count required' USING ERRCODE='54000';END IF;
  IF delete_node IS NULL OR delete_node<0 OR delete_node>=node_count THEN
   RAISE EXCEPTION 'existing local delete node required' USING ERRCODE='22023';END IF;

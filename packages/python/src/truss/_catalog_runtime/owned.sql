@@ -1,4 +1,4 @@
-CREATE TABLE truss.runtime_owned_operation (attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL CHECK (operation_index BETWEEN 0 AND 127), writer_xid xid8 NOT NULL, plan jsonb NOT NULL, PRIMARY KEY (attempt_id, operation_index), CHECK (jsonb_typeof(plan) = 'object'), CHECK (octet_length(convert_to(plan::text, 'UTF8')) BETWEEN 1 AND 16777216));
+CREATE TABLE truss.runtime_owned_operation (attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL CHECK (operation_index BETWEEN 0 AND 1023), writer_xid xid8 NOT NULL, plan jsonb NOT NULL, PRIMARY KEY (attempt_id, operation_index), CHECK (jsonb_typeof(plan) = 'object'), CHECK (octet_length(convert_to(plan::text, 'UTF8')) BETWEEN 1 AND 16777216));
 
 CREATE TRIGGER runtime_owned_operation_immutable BEFORE UPDATE OR DELETE ON truss.runtime_owned_operation FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 CREATE TRIGGER runtime_owned_operation_no_truncate BEFORE TRUNCATE ON truss.runtime_owned_operation FOR EACH STATEMENT EXECUTE FUNCTION truss.catalog_immutable();
@@ -82,7 +82,7 @@ LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp A
 DECLARE parents int[];seen_edges boolean[];entry jsonb;edge_number int;source_node int;target_node int;
  node_number int;ancestor int;path int[];incoming jsonb;result_json jsonb:='[]';
 BEGIN
- IF node_count IS NULL OR node_count NOT BETWEEN 0 AND 128 THEN
+ IF node_count IS NULL OR node_count NOT BETWEEN 0 AND 1024 THEN
   RAISE EXCEPTION 'bounded local node count required' USING ERRCODE='54000';END IF;
  IF jsonb_typeof(owned_edges) IS DISTINCT FROM 'array' THEN
   RAISE EXCEPTION 'explicit local owned edges required' USING ERRCODE='22023';END IF;
@@ -145,7 +145,7 @@ DECLARE node_keys text[]:='{}';edge_keys text[]:='{}';boundary_keys text[]:='{}'
  result_json jsonb;used_bytes bigint:=0;head int;
 BEGIN
  IF jsonb_typeof(seeds) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'explicit typed scope seeds required' USING ERRCODE='22023';END IF;
- IF jsonb_array_length(seeds) NOT BETWEEN 0 AND 128 OR octet_length(convert_to(seeds::text,'UTF8'))>1048576 THEN
+ IF jsonb_array_length(seeds) NOT BETWEEN 0 AND 1024 OR octet_length(convert_to(seeds::text,'UTF8'))>1048576 THEN
   RAISE EXCEPTION 'bounded scope seeds required' USING ERRCODE='54000';END IF;
  FOR entry IN SELECT value FROM jsonb_array_elements(seeds) LOOP
   IF jsonb_typeof(entry) IS DISTINCT FROM 'object' THEN RAISE EXCEPTION 'typed scope seed required' USING ERRCODE='22023';END IF;
@@ -188,7 +188,7 @@ BEGIN
     FOREACH side IN ARRAY ARRAY['source','target'] LOOP
      other_key:=(observed.edge_image->>(side||'_type'))||':'||(observed.edge_image->>(side||'_id'));
      IF NOT other_key=ANY(node_keys) THEN
-      IF cardinality(node_keys)=128 THEN RAISE EXCEPTION 'bounded complete ownership component required' USING ERRCODE='54000';END IF;
+      IF cardinality(node_keys)=1024 THEN RAISE EXCEPTION 'bounded complete ownership component required' USING ERRCODE='54000';END IF;
       node_keys:=array_append(node_keys,other_key);
      END IF;
     END LOOP;
@@ -274,7 +274,7 @@ DECLARE operation jsonb;object_references jsonb;reference jsonb;identity jsonb;
  seeds jsonb;seed_items jsonb[]:='{}';seed jsonb;stored_edge truss.edge%ROWTYPE;reference_type truss.type_def%ROWTYPE;current_actor oid;
 BEGIN
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
-  OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128 THEN
+  OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'bounded original operations required' USING ERRCODE='22023';END IF;
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
   object_references:='[]';
@@ -338,7 +338,7 @@ LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp A
 DECLARE entry jsonb;deleted int[];prior_count int;edge_number int;
  source_node int;target_node int;seen_edges int[]:='{}';deleted_edges jsonb;
 BEGIN
- IF node_count IS NULL OR node_count NOT BETWEEN 0 AND 128 THEN
+ IF node_count IS NULL OR node_count NOT BETWEEN 0 AND 1024 THEN
   RAISE EXCEPTION 'bounded local node count required' USING ERRCODE='54000';END IF;
  IF delete_node IS NULL OR delete_node<0 OR delete_node>=node_count THEN
   RAISE EXCEPTION 'existing local delete node required' USING ERRCODE='22023';END IF;
@@ -478,7 +478,7 @@ DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='
  retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;current_actor oid;resolved_creates jsonb:='{}';
 BEGIN
  current_actor:=truss.runtime_person(false);
- IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128
+ IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 1024
   OR jsonb_typeof(scope->'nodes') IS DISTINCT FROM 'object' OR jsonb_typeof(scope->'edges') IS DISTINCT FROM 'object'
   OR octet_length(convert_to(scope::text,'UTF8'))>4194304 THEN
   RAISE EXCEPTION 'complete bounded original group scope required' USING ERRCODE='54000';END IF;
@@ -529,7 +529,7 @@ BEGIN
     IF operation-ARRAY['operation','typeDefinitionPin','values','ownership','alias']<>'{}'::jsonb
      OR jsonb_typeof(operation->'ownership') IS DISTINCT FROM 'object' THEN
      RAISE EXCEPTION 'closed original object create required' USING ERRCODE='22023';END IF;
-    IF cardinality(node_order)>=128 THEN RAISE EXCEPTION 'bounded complete group objects required' USING ERRCODE='54000';END IF;
+    IF cardinality(node_order)>=1024 THEN RAISE EXCEPTION 'bounded complete group objects required' USING ERRCODE='54000';END IF;
     selected:='create:'||index;node_order:=array_append(node_order,selected);
     values_image:=truss.owned_object_values(selected_type.type_id,operation,NULL,NULL);
     state:=jsonb_build_object('identity',jsonb_build_object('id',NULL,'typeId',selected_type.type_id::text,
@@ -887,7 +887,7 @@ BEGIN
  IF reference LIKE 'stored:%' THEN
   IF reference IS DISTINCT FROM 'stored:'||(identity->>'typeId')||':'||(identity->>'id') THEN
    RAISE EXCEPTION 'original stored identity correspondence required' USING ERRCODE='55000';END IF;
- ELSIF reference ~ '^create:(0|[1-9][0-9]{0,2})$' THEN
+ ELSIF reference ~ '^create:(0|[1-9][0-9]{0,2}|10[01][0-9]|102[0-3])$' THEN
   creation_index:=substring(reference FROM 8)::int;
   IF prepared_attempt.id IS NOT NULL THEN
    IF prepared_attempt.id IS DISTINCT FROM selected_attempt THEN RAISE EXCEPTION 'original checked attempt required' USING ERRCODE='55000';END IF;

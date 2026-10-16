@@ -68,7 +68,7 @@ DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='
  retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;current_actor oid;resolved_creates jsonb:='{}';
 BEGIN
  current_actor:=truss.runtime_person(false);
- IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128
+ IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 1024
   OR jsonb_typeof(scope->'nodes') IS DISTINCT FROM 'object' OR jsonb_typeof(scope->'edges') IS DISTINCT FROM 'object'
   OR octet_length(convert_to(scope::text,'UTF8'))>4194304 THEN
   RAISE EXCEPTION 'complete bounded original group scope required' USING ERRCODE='54000';END IF;
@@ -119,7 +119,7 @@ BEGIN
     IF operation-ARRAY['operation','typeDefinitionPin','values','ownership','alias']<>'{}'::jsonb
      OR jsonb_typeof(operation->'ownership') IS DISTINCT FROM 'object' THEN
      RAISE EXCEPTION 'closed original object create required' USING ERRCODE='22023';END IF;
-    IF cardinality(node_order)>=128 THEN RAISE EXCEPTION 'bounded complete group objects required' USING ERRCODE='54000';END IF;
+    IF cardinality(node_order)>=1024 THEN RAISE EXCEPTION 'bounded complete group objects required' USING ERRCODE='54000';END IF;
     selected:='create:'||index;node_order:=array_append(node_order,selected);
     values_image:=truss.owned_object_values(selected_type.type_id,operation,NULL,NULL);
     state:=jsonb_build_object('identity',jsonb_build_object('id',NULL,'typeId',selected_type.type_id::text,
@@ -477,7 +477,7 @@ BEGIN
  IF reference LIKE 'stored:%' THEN
   IF reference IS DISTINCT FROM 'stored:'||(identity->>'typeId')||':'||(identity->>'id') THEN
    RAISE EXCEPTION 'original stored identity correspondence required' USING ERRCODE='55000';END IF;
- ELSIF reference ~ '^create:(0|[1-9][0-9]{0,2})$' THEN
+ ELSIF reference ~ '^create:(0|[1-9][0-9]{0,2}|10[01][0-9]|102[0-3])$' THEN
   creation_index:=substring(reference FROM 8)::int;
   IF prepared_attempt.id IS NOT NULL THEN
    IF prepared_attempt.id IS DISTINCT FROM selected_attempt THEN RAISE EXCEPTION 'original checked attempt required' USING ERRCODE='55000';END IF;

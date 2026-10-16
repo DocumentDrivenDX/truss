@@ -67,6 +67,17 @@ class OwnedTransitionUpgradeTests(unittest.TestCase):
                     self.assertIsInstance(continued,Ok,repr(continued)+str(host._custody.last_attempt.error))
                     self.assertIsInstance(continued.value,GroupSuccess,repr(continued))
                     self.assertEqual([r.outcome for r in continued.value.response.semantic.results],['created','deleted'])
+                    capacity=tuple(CreateObject(type_definition_pin=found.value.object.identity.definition_pin,
+                        values=(AuthoredValue(name='A-label',value=TextValue(kind='string',text=f'upgrade-capacity-{i}')),
+                                AuthoredValue(name='A-value',value=TextValue(kind='string',text='upgraded'))),
+                        ownership=RootlessOwnership()) for i in range(129))
+                    expanded=assembly.apply_in_transaction(tx,context.input(capacity,MapValue(entries=())),
+                        context.request('post-upgrade-129'),documents=documents,
+                        bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+                    self.assertIsInstance(expanded,Ok,repr(expanded)+str(host._custody.last_attempt.error))
+                    self.assertIsInstance(expanded.value,GroupSuccess,repr(expanded))
+                    self.assertEqual(len(expanded.value.response.semantic.results),129)
+                    self.assertTrue(all(r.outcome=='created' for r in expanded.value.response.semantic.results))
                     host.detach();connection.commit()
                 with psycopg.connect(runtime.info.connection_uri,autocommit=True) as admin:
                     contexts=admin.execute('SELECT endpoint_ownership::text FROM truss.runtime_edge_transition WHERE endpoint_ownership IS NOT NULL ORDER BY transition_id').fetchall()

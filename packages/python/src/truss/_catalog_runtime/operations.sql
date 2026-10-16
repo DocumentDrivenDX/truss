@@ -5,7 +5,7 @@ CREATE TABLE truss.runtime_object_attempt (
  context jsonb NOT NULL,next_index int NOT NULL DEFAULT 0,results jsonb NOT NULL DEFAULT '[]',aliases jsonb NOT NULL DEFAULT '[]',
  complete boolean NOT NULL DEFAULT false,receipt_id bigint,expected_receipt jsonb,position_bytes bytea,
  CHECK(octet_length(input_bytes) BETWEEN 1 AND 1048576),CHECK(octet_length(documents_bytes) BETWEEN 1 AND 4194304),
- CHECK(octet_length(request_bytes) BETWEEN 1 AND 65536),CHECK(next_index BETWEEN 0 AND 128));
+ CHECK(octet_length(request_bytes) BETWEEN 1 AND 65536),CHECK(next_index BETWEEN 0 AND 1024));
 CREATE INDEX runtime_object_attempt_writer ON truss.runtime_object_attempt(writer_xid);
 CREATE UNIQUE INDEX runtime_object_attempt_receipt ON truss.runtime_object_attempt(receipt_id) WHERE receipt_id IS NOT NULL;
 CREATE SEQUENCE truss.runtime_object_transition_seq;
@@ -183,7 +183,7 @@ BEGIN
  IF input-ARRAY['interfaceVersion','layoutProfile','mutationProfile','valueProfile','catalog','operations','assertedOrigin','preconditions']<>'{}'::jsonb
  OR input->>'interfaceVersion' IS DISTINCT FROM 'truss-group-input/0.1.0' OR input->'catalog' IS DISTINCT FROM '{"selection":"current"}'::jsonb
  OR jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
- OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128 OR jsonb_typeof(documents) IS DISTINCT FROM 'array'
+ OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND (CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN 1024 ELSE 128 END) OR jsonb_typeof(documents) IS DISTINCT FROM 'array'
  OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512 THEN RAISE EXCEPTION 'selected bounded object group required' USING ERRCODE='0A000';END IF;
  IF input->'assertedOrigin'->>'kind' IS DISTINCT FROM 'map' OR (input->'assertedOrigin')-ARRAY['kind','entries']<>'{}'::jsonb
  OR jsonb_typeof(input->'assertedOrigin'->'entries') IS DISTINCT FROM 'array'

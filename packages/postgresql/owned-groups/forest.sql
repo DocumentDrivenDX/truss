@@ -7,7 +7,7 @@ LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp A
 DECLARE parents int[];seen_edges boolean[];entry jsonb;edge_number int;source_node int;target_node int;
  node_number int;ancestor int;path int[];incoming jsonb;result_json jsonb:='[]';
 BEGIN
- IF node_count IS NULL OR node_count NOT BETWEEN 0 AND 128 THEN
+ IF node_count IS NULL OR node_count NOT BETWEEN 0 AND 1024 THEN
   RAISE EXCEPTION 'bounded local node count required' USING ERRCODE='54000';END IF;
  IF jsonb_typeof(owned_edges) IS DISTINCT FROM 'array' THEN
   RAISE EXCEPTION 'explicit local owned edges required' USING ERRCODE='22023';END IF;

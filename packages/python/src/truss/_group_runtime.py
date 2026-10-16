@@ -206,7 +206,7 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     if (type(input.catalog) is not CurrentCatalog or type(input.asserted_origin) is not MapValue
         or any(not (type(op) is CreateObject and ownership(op.ownership) or type(op) is UpdateObject and (op.ownership_change is ABSENT or selected_owned and ownership(op.ownership_change)) and type(op.target) in (StoredObjectReference,AliasObjectReference) or type(op) in (CreateEdge,UpdateEdge) or type(op) is Delete and op.operation in ('delete_object','delete_edge') and type(op.target) in (StoredObjectReference,AliasObjectReference)) for op in input.operations)):
         return Ok(GroupUnavailable(reason='profile'))
-    if not 1<=len(input.operations)<=128 or any(len(op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())>1024 for op in input.operations):
+    if not 1<=len(input.operations)<=(1024 if selected_owned else 128) or any(len(op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())>1024 for op in input.operations):
         return Ok(GroupUnavailable(reason='resource'))
     def scalar(value):return type(value) in (NullValue,TextValue,BooleanValue)
     def container(value):

@@ -727,6 +727,19 @@ class CatalogReferenceAssembly:
                 if cursor.fetchone()!=('jsonb',False,False):raise ValueError('Original native68 creation transition shape required')
             else:
                 upgrade_creation_transition_storage(cursor,bundled.joinpath('creation-transition-upgrade.sql').read_text(),owner_oid)
+            # Published predecessors retain the original 128-operation attempt
+            # CHECK. Change that constraint under the same exclusive upgrade cut;
+            # no retained attempt, result, transition or receipt is rewritten.
+            cursor.execute('LOCK TABLE truss.runtime_object_attempt IN ACCESS EXCLUSIVE MODE NOWAIT',prepare=False)
+            cursor.execute("SELECT relowner FROM pg_class WHERE oid='truss.runtime_object_attempt'::regclass",prepare=False)
+            if cursor.fetchone()!=(owner_oid,):raise ValueError('Original attempt storage owner required')
+            cursor.execute("SELECT contype,convalidated,pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid='truss.runtime_object_attempt'::regclass AND conname='runtime_object_attempt_next_index_check'",prepare=False)
+            if cursor.fetchall()!=[('c',True,'CHECK (((next_index >= 0) AND (next_index <= 128)))')]:
+                raise ValueError('Original attempt operation bound required')
+            cursor.execute('ALTER TABLE truss.runtime_object_attempt DROP CONSTRAINT runtime_object_attempt_next_index_check, ADD CONSTRAINT runtime_object_attempt_next_index_check CHECK(next_index BETWEEN 0 AND 1024)',prepare=False)
+            cursor.execute("SELECT contype,convalidated,pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid='truss.runtime_object_attempt'::regclass AND conname='runtime_object_attempt_next_index_check'",prepare=False)
+            if cursor.fetchall()!=[('c',True,'CHECK (((next_index >= 0) AND (next_index <= 1024)))')]:
+                raise ValueError('Upgraded attempt operation bound required')
             cursor.execute("SELECT to_regclass('truss.runtime_owned_operation')",prepare=False)
             if cursor.fetchone()[0] is not None:raise ValueError('New owned operation storage must be absent')
             cursor.execute(bundled.joinpath('owned.sql').read_text().split('CREATE FUNCTION',1)[0],prepare=False)

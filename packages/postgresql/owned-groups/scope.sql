@@ -11,7 +11,7 @@ DECLARE node_keys text[]:='{}';edge_keys text[]:='{}';boundary_keys text[]:='{}'
  result_json jsonb;used_bytes bigint:=0;head int;
 BEGIN
  IF jsonb_typeof(seeds) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'explicit typed scope seeds required' USING ERRCODE='22023';END IF;
- IF jsonb_array_length(seeds) NOT BETWEEN 0 AND 128 OR octet_length(convert_to(seeds::text,'UTF8'))>1048576 THEN
+ IF jsonb_array_length(seeds) NOT BETWEEN 0 AND 1024 OR octet_length(convert_to(seeds::text,'UTF8'))>1048576 THEN
   RAISE EXCEPTION 'bounded scope seeds required' USING ERRCODE='54000';END IF;
  FOR entry IN SELECT value FROM jsonb_array_elements(seeds) LOOP
   IF jsonb_typeof(entry) IS DISTINCT FROM 'object' THEN RAISE EXCEPTION 'typed scope seed required' USING ERRCODE='22023';END IF;
@@ -54,7 +54,7 @@ BEGIN
     FOREACH side IN ARRAY ARRAY['source','target'] LOOP
      other_key:=(observed.edge_image->>(side||'_type'))||':'||(observed.edge_image->>(side||'_id'));
      IF NOT other_key=ANY(node_keys) THEN
-      IF cardinality(node_keys)=128 THEN RAISE EXCEPTION 'bounded complete ownership component required' USING ERRCODE='54000';END IF;
+      IF cardinality(node_keys)=1024 THEN RAISE EXCEPTION 'bounded complete ownership component required' USING ERRCODE='54000';END IF;
       node_keys:=array_append(node_keys,other_key);
      END IF;
     END LOOP;
@@ -140,7 +140,7 @@ DECLARE operation jsonb;object_references jsonb;reference jsonb;identity jsonb;
  seeds jsonb;seed_items jsonb[]:='{}';seed jsonb;stored_edge truss.edge%ROWTYPE;reference_type truss.type_def%ROWTYPE;current_actor oid;
 BEGIN
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
-  OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 128 THEN
+  OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'bounded original operations required' USING ERRCODE='22023';END IF;
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
   object_references:='[]';
