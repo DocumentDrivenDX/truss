@@ -34,11 +34,13 @@ class OptionalBinaryTests(base.BinaryQueryTests):
         from unittest.mock import patch
         from truss import _query_runtime
         old_backend=dict(_query_runtime.BACKEND,backendVersion='0.4.24')
-        # Current IR0.2.6 cannot be sent to this retained IR0.2.5 backend.
+        # Relabelling only the backend version forges a current-binding tuple.
+        # This checks binding admission, not retained0.4.24/IR0.2.5 compatibility;
+        # that separate oracle needs its original valid retained binding.
         with patch.object(_query_runtime,'BACKEND',old_backend):
             refused=query.query_in_transaction(t,sql=sql,document_ids=('adoc',),parameters={'blob':TextValue(kind='binary',text='AP8=')})
         self.assertIsInstance(refused.value,QueryRefused,repr(refused))
-        self.assertTrue(any(d.code=='WFT-BACKEND-VERSION' for d in refused.value.diagnostics),repr(refused))
+        self.assertTrue(any(d.code=='WFT-BINDING' for d in refused.value.diagnostics),repr(refused))
         h.detach();c.commit();c.execute('BEGIN READ ONLY;SET LOCAL statement_timeout=10000');h=adopt_psycopg_host(c);t=h.adopt_transaction(access_mode='read_only').value;query=create_reference_assembly(CatalogRuntimeConfiguration(),h).value.compiled_execution(a.compiled_selection).capability
         result=query.query_in_transaction(t,sql=sql,document_ids=('adoc',),parameters={'blob':TextValue(kind='binary',text='AP8=')});self.assertIsInstance(result.value,QueryRows,repr(result));self.assertEqual(result.value.rows,(('present',),));h.detach();c.rollback()
 
