@@ -1,0 +1,99 @@
+{
+  "origin": "http://127.0.0.1:4189",
+  "observedAt": "2026-10-16T04:43:41.848Z",
+  "browser": "153.0.8010.12",
+  "sql": "UPDATE products SET name = 'Foo' WHERE id = 'bar'",
+  "timings": {
+    "pageAndInitialCompileMs": 94.76708299999996,
+    "compileMs": 35.28708299999994,
+    "openMs": 3340.6939169999996,
+    "registerAndLoadMs": 323.89487499999996,
+    "freezeMs": 191.07329200000004,
+    "sealMs": 98.88654200000019,
+    "submitMs": 132.94450000000052,
+    "claimMs": 166.72116600000027,
+    "executeAndReadbackMs": 266.70016600000054,
+    "reviewMs": 82.13195799999994
+  },
+  "rpcs": [
+    {
+      "command": "open",
+      "ms": 3283,
+      "error": null
+    },
+    {
+      "command": "register",
+      "ms": 263.7000000476837,
+      "error": null
+    },
+    {
+      "command": "preview",
+      "ms": 147.10000002384186,
+      "error": null
+    },
+    {
+      "command": "seal",
+      "ms": 43.89999997615814,
+      "error": null
+    },
+    {
+      "command": "submit",
+      "ms": 36.60000002384186,
+      "error": null
+    },
+    {
+      "command": "review",
+      "ms": 29.899999976158142,
+      "error": null
+    },
+    {
+      "command": "review",
+      "ms": 30.600000023841858,
+      "error": null
+    },
+    {
+      "command": "claim",
+      "ms": 38.5,
+      "error": null
+    },
+    {
+      "command": "review",
+      "ms": 33.700000047683716,
+      "error": null
+    },
+    {
+      "command": "review",
+      "ms": 29.299999952316284,
+      "error": null
+    },
+    {
+      "command": "execute",
+      "ms": 130,
+      "error": null
+    },
+    {
+      "command": "review",
+      "ms": 28,
+      "error": null
+    },
+    {
+      "command": "rows",
+      "ms": 20.799999952316284,
+      "error": null
+    },
+    {
+      "command": "review",
+      "ms": 30.399999976158142,
+      "error": null
+    }
+  ],
+  "sampleCount": 1,
+  "diagnosticOnly": true,
+  "passed": true,
+  "externalRequests": [],
+  "writeRequests": [],
+  "pageErrors": [],
+  "qualification": "Existing frozen4180f76 browser provider; passive Worker timing; local static page; second run overlapped owner native correctness tests. No p95 or release readiness established.",
+  "changedRows": 1,
+  "unchangedRows": 3
+}

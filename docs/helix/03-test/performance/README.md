@@ -1,0 +1,394 @@
+---
+ddx:
+  id: truss-practical-performance-matrix
+  type: test-plan
+  activity: test
+  status: draft
+  owner: Erik LaBianca
+  updated: 2026-10-16
+  links:
+    - id: truss.prd
+      kind: informed_by
+    - id: TP-001
+      kind: informed_by
+---
+
+# Practical functionality and performance
+
+First run the unmodified pizza, northwind and catalog examples through public
+registration, data loading, reads, updates and database reopen. Verify actual
+returned and persisted values. A failure stops that workflow and is a product
+failure, not a performance result. Do not replace the examples with smaller
+fixtures, add missing optional names, or remove their actions to get a pass.
+
+Use `workloads.json` for a small set of contrasting workloads. It varies type
+count, field count/complexity, node count, edge density/skew and indexed
+properties. The current scalar generator uses strings. Mixed adds integers,
+booleans and exact decimals; wide workloads also include absent properties.
+Nominal and index-heavy keep all potential key fields required. Mixed-nested adds a
+map → array → decimal property. Keys are independent single-property unique
+business keys. Explicit nulls, bounded strings and composite keys are not yet
+represented. Equal field counts do not imply equal complexity.
+
+| Point | Types | Properties/type | Shape | Nodes | Edges | Key properties/type |
+| --- | ---: | ---: | --- | ---: | ---: | ---: |
+| Small | 1 | 4 | Strings | 1,000 | 1,000 | 1 |
+| Nominal | 10 | 12 | Mixed | 10,000 | 20,000 | 2 |
+| Type-heavy | 100 | 12 | Mixed | 10,000 | 20,000 | 2 |
+| Many-types capacity | 1,000 | 12 | Mixed | 10,000 | 20,000 | 2 |
+| Wide | 10 | 128 | Mixed | 10,000 | 20,000 | 2 |
+| Nested | 10 | 12 | Map/array/decimal | 10,000 | 20,000 | 2 |
+| Dense | 10 | 12 | Mixed | 10,000 | 500,000 | 2 |
+| Index-heavy | 10 | 12 | Mixed | 10,000 | 20,000 | 8 |
+| Skewed | 10 | 12 | Mixed | 10,000 | 20,000, concentrated | 2 |
+| Large | 10 | 12 | Mixed | 1,000,000 | 2,000,000 | 2 |
+
+All points are planned until an actual result is recorded. Type-heavy tests a
+runnable increase in catalog size; many-types additionally exposes the current
+input-size capacity bound. Keep the nominal dataset identical when changing one
+axis. Skew concentrates 95% of edge sources on 1% of nodes.
+
+Start with smoke, then standard; run million-node and thousand-type cases
+explicitly as extended runs. Generate deterministic data. Load every measured
+case through public APIs and commit it. Never populate private tables to hide
+loading overhead. Report unsupported data shapes, rejected declared indexes,
+capacity limits, setup time and setup failures rather than skipping them.
+
+An indexed property counts only when the database actually maintains a usable
+index for it. Record declared versus installed indexes, index size and readiness.
+A key's uniqueness index is distinct from an optional lookup index. An index
+that is merely declared or pending does not count. Compare identical datasets
+before/after indexes, including the cost of index creation and maintenance.
+
+Measure these operations on each runnable workload:
+
+- Cold process/database start, schema preparation and committed registration,
+  separately. Include schema bytes and peak temporary preparation bytes.
+- Warm point reads by ID and business key; bounded type pages; indexed and
+  unindexed predicate queries; one-, two- and three-hop traversals. Verify results
+  against known generated identities and values before timing repeated calls.
+- Committed single-record create/update/delete, including journal and key/index
+  maintenance. Separate changed updates from no-ops. Do not call replay a write.
+- Bulk load/update at 1, 100, 1,000 and 10,000 records per request where supported.
+  Include serialization, validation, execution, journal maintenance and commit.
+  Confirm row counts and values after reopen. Report both latency and rows/s.
+- Edge creation/removal and indexed-property updates, so edge guards and index
+  write amplification appear in the results. Compare skewed and uniform graphs.
+
+Use a quiet local PostgreSQL socket and record machine, runtime, library version,
+connection mode, durability settings and initial database size. Separate one-time
+setup from warm work, but do not subtract it from an end-to-end number. Run the
+same useful operations against a straightforward PostgreSQL baseline on the same
+machine with equivalent keys, indexes, journal and durability; a bare unjournaled
+INSERT is not an equivalent write. Keep preparation/Bun calls and SQL round trips
+visible. Do not silently warm away a subprocess launched on every operation.
+
+Retain one ordinary CSV/JSON result file and a short comparison table, not full
+inspection transcripts. Include requested/attempted/completed/failed operation
+counts, sample count, p50/p95/p99, max, rows/s, input/result bytes, peak memory,
+database/index/WAL growth and round trips where measurable. Use monotonic wall
+time around the public call and caller commit; show database statement/commit
+time separately. Never drop timeouts or failures from the result. No p95 claim
+from five bulk repeats: report all five and their median/range instead.
+
+## Napkin math
+
+Fit a simple cost budget from measurements rather than assuming every operation
+is cheap:
+
+`batch time ≈ fixed request cost + rows × row work + changed properties × journal work + changed keys/indexes × index work + changed edges × edge work + commit`
+
+Read time should mostly follow index depth, rows returned and bytes decoded.
+Increasing unrelated types must not trigger a full-catalog walk per point read.
+Unchanged schema validation/compilation should be paid at registration, rather
+than repeated for each record. Compare batches of 100 and 1,000 with individually
+committed writes; genuine bulk work should amortize fixed costs. Compare predicted
+and observed values and investigate a 2× nominal regression or a bulk speedup
+below 5× as initial triage signals, not achieved guarantees or contractual limits.
+
+The PRD's proposed p95 budgets (1 ms point read, 3 ms single write and 20 ms type
+enumeration) remain provisional. Report full public-call-plus-commit measurements
+against them without relabeling SQL-only microbenchmarks as application latency.
+The million-node/thousand-type PRD scale is a measured target only after that
+specific workload actually runs. Replace provisional budgets with explicit
+measured and owner-agreed budgets as results arrive.
+
+## Run the real-sample baseline
+
+```sh
+python scripts/benchmark-public-workflows.py \
+  --truss-root /path/to/truss \
+  --examples-root /path/to/hohfeld/examples \
+  --output /tmp/truss-public-performance.json
+```
+
+Use the normal native-test dependencies and the selected PostgreSQL package.
+The runner creates and cleans up its own isolated local database. Existing native
+fixture helpers perform installation/role setup only; all measured business work
+uses public assembly calls. Its default is 100 created records per example,
+1,000 warm ID reads and 200 committed updates, followed by fresh-connection value
+checks. The initial data slice uses Country in pizza, Category in northwind and
+UseCase in catalog. It registers the complete unmodified schema but does not yet
+replay all Hohfeld seed actions or exercise every application type. The generated
+matrix creates data across all of its declared record types. Single update timing includes BEGIN/adoption, the public update and COMMIT.
+An initial read obtains its version; subsequent writes use the returned version.
+No extra application read is inserted into every timed write. Database-enforced
+validation, key maintenance and journal work remain inside the timed operation.
+Run a selected synthetic case with `--matrix-case small` or `--matrix-case nominal`
+instead of `--examples-root`. The executable matrix currently uses unique business
+keys to vary actually maintained indexed properties; it does not pretend those
+are optional nonunique lookup indexes. It creates the requested types, fields,
+nodes and edges through public APIs, verifies values/counts, and measures bulk
+updates at the selected sizes. Synthetic execution remains pending the real
+registration repair; declaring the matrix does not establish a performance result.
+
+Initial run against the current development source, before simplification:
+PostgreSQL installation succeeded for all three samples; preparation refused
+pizza in 2.47 seconds, northwind in 2.37 seconds and catalog in 2.06 seconds.
+All three workflows failed, so bulk/read/update throughput remains unmeasured.
+These are single observations, not p95 results. The raw result is a temporary
+benchmark output, not required registration metadata.
+
+The current executable driver measures registration, catalog views, committed
+bulk creation, ID/key reads, committed single updates, bulk updates and edge
+loading, with value/count checks after reopening connections. Traversal, delete,
+optional lookup-index creation and WAL/memory instrumentation remain additional
+work; no result for those operations is implied by the current driver.
+
+The existing implementation caps atomic groups at 128 operations. The human-selected
+target is now 1,024. The runner expects 1,024 by default and will fail real calls
+against an engine that still refuses this capacity; this configuration does not
+qualify support. Use `--expected-group-limit 128` only to reproduce the old baseline.
+Measure 1/100/1,000/1,024 atomic updates where enough nodes exist; record 10,000 as
+outside the configured capacity. A multi-transaction 10,000-row load is a separate
+throughput workload, never one atomic group. Verify 1,025 receives a typed refusal
+in the engine boundary test. Other byte/value limits still apply.
+The thousand-type schema exceeds the current 1 MiB preparation bound; report that
+capacity refusal. All host adoptions use 10 s statement / 30 s operation budgets.
+The runner performs the configured 20 warmup ID reads after value verification;
+bulk sizes and repeats come from the matrix configuration.
+
+## First real workflow measurements
+
+The [raw native baseline](results/2026-10-15-native-baseline.json) ran on the local
+development source after the registration summary repair. This is an initial
+diagnostic run on a shared development machine, not a quiet-machine release budget.
+All three complete schemas registered and loaded 100 objects. Pizza and catalog
+completed 200 committed updates and connection-reopen checks. Northwind failed
+on update 84 with `GroupUnavailable(reason='observation')`; 83 succeeded.
+
+| Sample | 100-row create + commit | Commit alone | ID-read p95, 1,000 calls | Single update + commit p50 / p95 |
+| --- | ---: | ---: | ---: | ---: |
+| Pizza | 70.51 s | 50.72 s | 208.53 ms | 434.26 / 693.97 ms |
+| Northwind | 66.75 s | 46.08 s | 133.41 ms | 728.97 ms / insufficient successful samples |
+| Catalog | 184.47 s | 161.27 s | 92.96 ms | 897.78 / 1,451.76 ms |
+
+These results fail the provisional nominal latency expectations by large margins.
+Fix and profile ordinary request/commit work before spending hours on large stress
+points. No synthetic matrix pass or 1,024-operation support is established here.
+
+The first [small matrix execution](results/2026-10-15-small-before-fix.json)
+also failed: one type with four string properties loaded 1,000 objects in
+767.39 seconds across ten committed groups. Group execution consumed 191.89 s;
+commit consumed 575.48 s. The first 100-edge group was cancelled with SQLSTATE
+57014 after 22.88 s. No point-read, single-update or bulk-update result was
+obtained for this matrix point. This is a failed practical baseline, not a
+qualified throughput claim.
+
+The isolated [graph-check comparison](results/2026-10-15-catalog-graph-fix.json)
+passed the same catalog 100-object / 1,000-ID-read / 200-committed-update workflow.
+Commit fell from 161.27 s to 12.06 s; complete load fell from 184.47 s to 40.91 s.
+Single-update p95 remained 976.97 ms. This is a meaningful improvement and still
+a failed nominal performance result. The shared machine was quieter in this run;
+do not attribute unrelated point-read latency differences to the graph change.
+
+Actual 1,024-create boundary attempts on isolated reviewed candidates still failed
+under the unchanged 10-second statement / 30-second operation budgets. After
+fixing a native SQL CASE syntax error, repeated CREATE type resolution timed out
+in capture. Distinct-type resolution moved the timeout into whole-graph planner
+work. The focused CREATE delta/counter fast path moved it into another per-operation
+owner/type/reader authorization loop in `object_group_begin`. The last test ran
+28.44 s and returned cancellation SQLSTATE 57014; it did not reach a successful
+1,024-row commit. The 1,025 admission refusal worked. No capacity pass is claimed.
+Further local optimization patches are paused for a short review of which
+duplicate planning and validation layers should be removed from ordinary writes.
+
+## Simplify the ordinary write path
+
+Astra's source review traced a structural cause: ordinary writer roles can call
+separate native begin/metadata/step/finish functions. Persisted graph plans,
+completion witnesses and nested create groups then try to prove that the client
+finished this protocol. CONTRACT-009 requires complete affected sets, lock
+revalidation and ordered final-state semantics; it does not require this protocol
+or durable per-operation graph snapshots.
+
+The next implementation slice is one protected native atomic batch entry and
+private helpers, with transient ordered state, one actor/dependency admission
+pass, ordinary key/graph checks, actual journal/results and optional request
+receipt. Keep current authorization at the operation/commit boundary. Remove
+duplicate execution-proof writes as their consumers are redirected. Preserve
+existing history and replay: current history readers use transition validators
+and creation leaf-group data, so those consumers must move before new duplicate
+records stop. Current accepted definitions should not be reconstructed from
+entire original documents on every property read.
+
+This records the proposal at that point in the investigation, not a performance
+qualification. The atomic public entry was subsequently integrated; unused
+context/resolver-wrapper and transient-planning prototypes were shelved. Current
+work targets measured costs in the actual public apply and commit path.
+
+### Bounded diagnostic after create-storage removal (2026-10-16)
+
+The full unmodified Catalog schema registered and a one-record public workflow
+passed on runtime manifest `fe8f4bde7ed2ff4bcbfb5829621fa9d84fdde1380fb220549158a37823e05da2`.
+One create including commit took 1,538.92 ms. Five single updates including commit
+had median 452.15 ms (range 440.28–473.37 ms); this sample does not establish p95.
+Twenty ID reads had median 18.11 ms; twenty key reads had median 50.14 ms.
+Native profiling was enabled, so this is a diagnostic run on the shared machine,
+not a release benchmark or a comparison with different-sized prior workloads.
+
+Across the complete workflow, `runtime_person` ran 1,074 times and consumed
+2,199.42 ms self time. Historical catalog reconstruction still ran 120 times.
+The remaining work is shared per-operation authorization/metadata context and
+transient planning, followed by the requested 1,024-operation and stress runs.
+The observed costs remain a performance violation. Raw measurements:
+[diagnostic result](results/2026-10-16-direct-storage-small-profile.json).
+
+### Isolated actor-scan experiment (2026-10-16)
+
+Moving the reachable-role ACL scan to the final authorization predicate and
+removing its duplicate actor scan passed source review and three existing native
+privilege-path controls. On the same small Catalog workload, candidate update
+median was 496.61 ms versus 560.87 ms in an immediately following original-code
+control (five updates each). Create including commit was 1,116.79 versus
+1,457.85 ms. Shared-machine timings varied; this does not establish nominal
+performance or p95. The experiment remains isolated and is not integrated.
+A concurrent upstream statement-overhead change takes precedence for merge
+verification. Raw candidate and control JSON are retained in `results/`.
+
+### Corrected statement-overhead merge diagnostic (2026-10-16)
+
+The same small Catalog workflow passed on runtime `a9806ff6f8e6bb04e27a06769871fd9a1465f0fb1c6b3bf6e7f4d5b02409d905`,
+with a real final host observation retained after callback execution. One create
+including commit took 992.85 ms. Five updates had median 427.65 ms, range
+420.69–438.32 ms; this does not establish p95. Twenty ID reads had median
+25.05 ms and twenty key reads 48.69 ms. Native profiling was enabled on the
+shared development machine. Actor qualification still consumed 2,216.90 ms self
+time across 1,060 reported calls. These costs remain a performance violation.
+No 1,024-operation support or nominal budget pass is established by this run.
+Raw data: [merged host diagnostic](results/2026-10-16-merged-host-small-profile.json).
+
+### One-update attribution and current history basis (2026-10-16)
+
+The profiling runner now flushes consumer counters before and after the last
+committed update, outside its timing, and records `lastCommittedUpdateNativeFunctions`.
+The original implementation performed 102 actor qualifications, 17 catalog
+reconstructions and 12 history renders for that one update.
+
+The isolated reviewed patch `387194d1` uses accepted native rows only when
+head/schema revision and selected rows share one published SQL snapshot; older
+or partially published revisions retain reconstruction. It adds no cache or
+helper. Rebind, same-transaction registration and history workflows passed.
+An old-catalog refusal classification mismatch also reproduces on the unmodified
+baseline; it remains a separate open issue.
+
+Final candidate manifest `7f20fdd663b50d92fa58ddaaa1a9210190b0995d745ab42fee79f77dc0f4dd99`
+reduced reconstructions from 17 to 5 per update. Five update timings had median
+309.58 ms (range 303.65–315.84 ms). These shared-machine diagnostic timings do
+not establish p95 or nominal readiness. Actor qualification remained 102 calls
+and approximately 192.62 ms self time for the last update. Performance and
+1,024-operation acceptance remain open. Raw baseline and candidate profiles
+are retained under `results/2026-10-16-*-profile.json`.
+
+### Final settlement diagnostic (2026-10-16)
+
+Reviewed candidate `e1b90c8c` retains current row authorization and moves full
+immutable transition validation to final settlement and mandatory commit.
+The selective constraint-flush then writer-revocation workflow passes: final
+commit refuses and the original row remains. One committed UPDATE now performs
+75 actor qualifications, two catalog reconstructions, two transition semantic
+validations and six history renders. Actor qualification alone consumes
+163.48 ms self time. Five updates have median 252.19 ms, range
+239.76–254.75 ms; create including commit takes 680.03 ms. These diagnostic
+measurements remain a major performance violation, establish no p95, and do not
+qualify the required 1,024-operation path. Manifest:
+`5d5bdd6dca8cb242c3206a96d959eb661abe61367ee98588efc2bb8939698959`.
+Raw data: [final settlement diagnostic](results/semantic-settlement-single-update-20261016.json).
+
+### Composed main and browser diagnostics (2026-10-16)
+
+Composed native source `6a05a254` plus reviewed final-settlement changes,
+manifest `83b1912f03d8fcad814c7e5ea388601f3b109bd771e9e5f8bbb48b64d54a6736`,
+passes the real small Catalog workflow. Five committed updates have median
+218.07 ms (215.30–231.34 ms); a create including commit takes 743.08 ms.
+One update still qualifies the caller 75 times (122.92 ms self). This is not
+a nominal performance pass. [Native result](results/main-composed-semantic-20261016.json).
+
+The separate existing frozen browser provider also passes the real static-page
+Foo/bar UPDATE with three unchanged rows. Passive worker RPC timing separates
+execution (130 ms) from job review (28 ms) and row readback (20.8 ms); the full
+page execute action takes 266.7 ms. Cold store opening takes 3.34 s. This is one
+local diagnostic sample and overlaps owner native correctness work; it establishes
+no percentile, causal improvement or public deployment. No external requests or
+write HTTP requests occurred. [Browser diagnostic](results/browser-update-rpc-diagnostic-20261016.json).
+
+### Distinct value-owner checks diagnostic (2026-10-16)
+
+Candidate `18e66fb4` unions the record owner with all property and nested-item
+module owners within each value-reader invocation. One committed update performs
+61 caller qualifications versus 75 before this change; every distinct owner
+and the separate settlement/commit invocations remain. Actor self time is
+112.29 ms in this run. Five update timings range from 209.91 to 437.22 ms
+(median 255.29 ms), so the variable shared-machine result does not establish
+an end-to-end latency improvement. Performance remains failing.
+[Raw diagnostic](results/value-owner-dedup-20261016.json).
+
+The distinct-owner candidate also passes the existing public cross-module read
+refusal, nested create/commit/read/history/query/import/reopen, and selective
+constraint-flush/writer-revocation workflows. The first nested run stopped at
+`QueryUnavailable(compiler)` because the test environment lacked Weft; rerunning
+with the candidate's required published Weft 0.4.35 target passes. No query
+assertion or model bytes were changed.
+
+### Isolated settlement actor candidate (2026-10-16)
+
+Candidate `0891551b` freshly qualifies each group/row settlement invocation and
+passes that local actor through private permission/value/transition helpers.
+Module policy locks and membership checks remain at their existing points.
+No actor is retained in data, a caller flag or a cross-invocation cache.
+Four focused native workflows pass, including denied direct helper execution,
+cross-module reader denial, nested values and later writer revocation after an
+earlier attempt-constraint flush. Astra source review is clear for this bounded candidate; integration remains
+pending. The populated published 0.0.35/native68 upgrade also
+passes, preserving original objects, edges and receipt replay before new
+create/delete/update; all four new helpers remain owner-only after upgrade.
+
+Adjacent shared-machine runs on the same public Catalog workflow show candidate
+median 135.94 ms (134.11–143.68) versus current-main control 161.42 ms
+(158.96–166.10), five updates each. Caller qualifications drop from 61 to 43;
+actor self time is 62.63 versus 88.51 ms on the last committed update. Creates
+including commit are 628.47 versus 619.40 ms. This is a diagnostic comparison,
+not p95 or nominal readiness; performance and 1,024 operations remain failing
+or unqualified. [Candidate](results/settlement-actor-qualified-20261016.json),
+[control](results/settlement-actor-control-20261016.json).
+
+### Harness accounting corrections (2026-10-16)
+
+Failed atomic bulk updates now retain the whole BEGIN/apply/commit elapsed time
+as well as phase failures. A final partial edge batch contributes public endpoint
+readback samples. Nominal and index-heavy cases keep the same potential indexed
+fields required and populated; only their key declarations differ. Outside
+timing, each generated record type reports declared keys, objects and maintained
+key rows, and mismatches fail the workflow. These are unique business keys,
+not separately installed optional lookup indexes.
+
+Machine reports now state `functionalPassed` (`passed` remains its compatibility
+alias), `performanceQualification: not_evaluated`, and configured versus actually
+attempted/committed atomic group sizes. A successful workflow establishes neither
+the latency budget nor a maximum supported batch size. Older retained raw results
+keep their original report format and measurement/generator scope.
+
+The reviewed settlement change `0891551b` is now integrated and pushed as
+`cefa8044`, including matching authoritative owner sources and persistent private
+helper/upgrade checks. Its diagnostic measurements do not establish nominal
+performance or successful1024-operation execution.
