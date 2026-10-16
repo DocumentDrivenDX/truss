@@ -1,13 +1,39 @@
 """Basic public multi-object create/update/commit/read workflow."""
-from truss import Ok, ObjectFound
+from truss import Ok, ObjectFound, HistoryEntity, HistoricalRecord, HistoricalDeleted
 from truss.contracts import ABSENT, MapValue, TextValue
-from truss.groups import AuthoredValue, GroupSuccess, StoredObjectReference, UpdateObject
+from truss.groups import AuthoredValue, GroupSuccess, StoredObjectReference, UpdateObject, AliasObjectReference, Delete
 import test_group_create_native as base
 
 
 class OwnedGroupBatchTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[_name] = None
+
+    def test_creation_history_survives_delete_in_the_same_group(self):
+        connection, host, assembly, tx = self.ready(document_ids=('adoc',))
+        context = assembly.group_context_in_transaction(tx).value
+        operations = (self.create(label='short-lived', value='original', alias='created'),
+                      Delete(operation='delete_object',
+                             target=AliasObjectReference(alias='created'), expected_version='1'))
+        result = assembly.apply_in_transaction(tx, context.input(operations, MapValue(entries=())),
+                                               context.request('create-and-delete'), documents=self.documents)
+        self.assertIsInstance(result, Ok, repr(result))
+        self.assertIsInstance(result.value, GroupSuccess, repr(result))
+        created, deleted = result.value.response.semantic.results
+        self.assertEqual((created.outcome, deleted.outcome), ('created', 'deleted'))
+        host.detach(); connection.commit()
+
+        connection, host, assembly, tx = self.consumer()
+        entity = HistoryEntity(kind='object', document_id='adoc', module_id='m',
+                               definition_id='A', id=int(created.identity.id))
+        original = assembly.reconstruct_in_transaction(tx, entity=entity, version=1)
+        removed = assembly.reconstruct_in_transaction(tx, entity=entity, version=2)
+        self.assertIsInstance(original, Ok, repr(original))
+        self.assertIsInstance(original.value, HistoricalRecord, repr(original))
+        self.assertIsInstance(removed, Ok, repr(removed))
+        self.assertIsInstance(removed.value, HistoricalDeleted, repr(removed))
+        self.assertEqual(original.value.record, removed.value.before)
+        host.detach(); connection.rollback()
 
     def test_batch_updates_preserve_keys_and_committed_values(self):
         connection, host, assembly, tx = self.ready(document_ids=('adoc',))

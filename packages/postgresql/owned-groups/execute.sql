@@ -1111,7 +1111,14 @@ BEGIN
   IF original_mode IS DISTINCT FROM 'create_object' OR reference IS DISTINCT FROM plan->>'primary'
    OR transition.after_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(attempt.id,transition.operation_index,reference,'after',plan,attempt) THEN
    RAISE EXCEPTION 'original object creation required' USING ERRCODE='55000';END IF;
-  IF NOT authorize_read THEN PERFORM truss.runtime_create_transition_validate_qualified(selected_transition,qualified_actor,prepared_input,source_bytes,attempt);END IF;
+  IF NOT authorize_read THEN
+   IF compiled_history IS NOT NULL THEN
+    history_key:=jsonb_build_array((transition.after_object->>'rev')::int,(transition.after_object->>'type_id')::int)::text;
+    history_metadata:=compiled_history->history_key;
+    IF history_metadata IS NULL THEN RAISE EXCEPTION 'complete compiled creation history required' USING ERRCODE='55000';END IF;
+   END IF;
+   PERFORM truss.runtime_create_transition_validate_qualified(selected_transition,qualified_actor,prepared_input,source_bytes,attempt,history_metadata);
+  END IF;
   RETURN;
  END IF;
  input:=coalesce(prepared_input,convert_from(attempt.input_bytes,'UTF8')::jsonb);

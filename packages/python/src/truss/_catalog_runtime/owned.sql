@@ -1525,7 +1525,14 @@ BEGIN
   IF original_mode IS DISTINCT FROM 'create_object' OR reference IS DISTINCT FROM plan->>'primary'
    OR transition.after_object-ARRAY['created_at','updated_at'] IS DISTINCT FROM truss.runtime_owned_object_image(attempt.id,transition.operation_index,reference,'after',plan,attempt) THEN
    RAISE EXCEPTION 'original object creation required' USING ERRCODE='55000';END IF;
-  IF NOT authorize_read THEN PERFORM truss.runtime_create_transition_validate_qualified(selected_transition,qualified_actor,prepared_input,source_bytes,attempt);END IF;
+  IF NOT authorize_read THEN
+   IF compiled_history IS NOT NULL THEN
+    history_key:=jsonb_build_array((transition.after_object->>'rev')::int,(transition.after_object->>'type_id')::int)::text;
+    history_metadata:=compiled_history->history_key;
+    IF history_metadata IS NULL THEN RAISE EXCEPTION 'complete compiled creation history required' USING ERRCODE='55000';END IF;
+   END IF;
+   PERFORM truss.runtime_create_transition_validate_qualified(selected_transition,qualified_actor,prepared_input,source_bytes,attempt,history_metadata);
+  END IF;
   RETURN;
  END IF;
  input:=coalesce(prepared_input,convert_from(attempt.input_bytes,'UTF8')::jsonb);
@@ -1656,7 +1663,7 @@ BEGIN
   OR sealed.ordinals IS DISTINCT FROM ARRAY(SELECT generate_series(0,attempt.next_index-1))
   OR sealed.results IS DISTINCT FROM attempt.results OR sealed.aliases IS DISTINCT FROM attempt.aliases THEN
   RAISE EXCEPTION 'exact complete retained owned result slots required' USING ERRCODE='55000';END IF;
- -- Compile only source metadata for changed, existing object images. Each
+ -- Compile source metadata for created and changed object images. Each
  -- independent settlement invocation resolves its own historical source cut.
  FOR history_group IN
   WITH frames AS MATERIALIZED (
@@ -1665,8 +1672,8 @@ BEGIN
   changes AS MATERIALIZED (
    SELECT f.before_nodes->n.key before_state,n.value after_state
    FROM frames f CROSS JOIN LATERAL jsonb_each(f.after_nodes) n
-   WHERE f.before_nodes->n.key IS NOT NULL AND f.before_nodes->n.key->'deleted'='false'::jsonb
-    AND n.value IS DISTINCT FROM f.before_nodes->n.key),
+   WHERE f.before_nodes->n.key IS NULL OR (f.before_nodes->n.key->'deleted'='false'::jsonb
+    AND n.value IS DISTINCT FROM f.before_nodes->n.key)),
   images AS MATERIALIZED (
    SELECT member.state->'image' image FROM changes c
    CROSS JOIN LATERAL (VALUES(c.before_state),(c.after_state)) member(state)
