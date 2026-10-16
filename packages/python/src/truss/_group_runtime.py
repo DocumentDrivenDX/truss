@@ -251,7 +251,14 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
                 _attempt_capture.append(value['attemptId'])
         return _result(raw)
     if _cursor is not None:return Ok(apply(_cursor,None))
-    return host._run_operation(transaction,apply)
+    result=host._run_operation(transaction,apply)
+    # Revocation can remove EXECUTE before the native facade can return its
+    # typed refusal. Only translate a permission failure the host contained;
+    # unresolved transaction/connection failures retain their execution outcome.
+    if (isinstance(result,Error) and result.error.code=='execution_obligation'
+            and result.error.sql_state=='42501'):
+        return Ok(GroupFailed(failure=UnauthorizedPerson()))
+    return result
 
 # A real selected provider; native readiness and authority are checked per call.
 from typing import Callable, Literal, overload
