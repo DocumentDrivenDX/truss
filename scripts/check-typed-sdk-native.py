@@ -22,12 +22,15 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'packages/python/examp
 from adopter_workflow import transaction,success,expect
 class Parameters(StrictModel):status:str
 
-parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--model-request',type=Path,required=True);parser.add_argument('--generated',type=Path,required=True);parser.add_argument('--pg-bin',type=Path,default=Path('/opt/homebrew/opt/postgresql@18/bin'));args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--model-request',type=Path,required=True);parser.add_argument('--generated',type=Path,required=True);parser.add_argument('--bun-executable',type=Path,default=Path('/opt/homebrew/Cellar/bun/1.4.2/bin/bun'));parser.add_argument('--pg-bin',type=Path,default=Path('/opt/homebrew/opt/postgresql@18/bin'));args=parser.parse_args()
 root=Path(__file__).resolve().parents[1];out=args.output.absolute();out.mkdir(parents=True,exist_ok=False);pg=out/'postgres';sock=out/'socket';sock.mkdir();started=False;checks=[]
 def run(*command):
  result=subprocess.run(list(map(str,command)),text=True,capture_output=True,check=True)
  with (out/'native-lifecycle.log').open('a')as log:log.write(result.stdout+result.stderr)
 try:
+ bun_version=subprocess.run([str(args.bun_executable),'--version'],capture_output=True,text=True,check=True).stdout.strip()
+ assert bun_version=='1.4.2','exact Bun1.4.2 native producer required'
+ (out/'toolchain.json').write_text(json.dumps({'bunPath':str(args.bun_executable),'bunVersion':bun_version,'python':sys.version.split()[0],'psycopg':psycopg.__version__},indent=2)+'\n')
  run(args.pg_bin/'initdb','-D',pg,'-A','trust','-U','sdk_test','--no-sync')
  run(args.pg_bin/'pg_ctl','-D',pg,'-l',out/'postgres.log','-o',f"-F -k {sock} -c listen_addresses='' -p 55495",'-w','start');started=True
  dsn=f'host={sock} port=55495 dbname=postgres user=sdk_test'
@@ -42,8 +45,8 @@ try:
   params=psycopg.conninfo.conninfo_to_dict(dsn);params['user']='sdk_person'
   with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000')as person:
    with transaction(person)as(a,t):
-    prepared=a.prepare_catalog(documents,source_version='0.8.0',bun_executable='/opt/homebrew/bin/bun')
-    accepted=success(a.accept_in_transaction(t,prepared,request_key='typed-sdk-original',bun_executable='/opt/homebrew/bin/bun'))
+    prepared=a.prepare_catalog(documents,source_version='0.8.0',bun_executable=str(args.bun_executable))
+    accepted=success(a.accept_in_transaction(t,prepared,request_key='typed-sdk-original',bun_executable=str(args.bun_executable)))
     assert hasattr(accepted,'registration_id')
    with transaction(admin)as(a,t):success(a.configure_module_access_in_transaction(t,(ModuleAccessGrant(doc['id'],'sales','sdk_reader','sdk_writer'),)))
    admin.execute('GRANT sdk_reader,sdk_writer TO sdk_person WITH SET FALSE')
@@ -53,7 +56,7 @@ try:
     ref=success(a.get_type_reference_in_transaction(t,document_id=doc['id'],module_id='sales',record_id='order'))
     context=success(a.group_context_in_transaction(t))
     operation=CreateObject(type_definition_pin=ref.definition_pin,values=(AuthoredValue(name='id',value=TextValue(kind='string',text='bar')),AuthoredValue(name='status',value=TextValue(kind='string',text='draft'))),ownership=RootlessOwnership())
-    applied=expect(success(a.apply_in_transaction(t,context.input((operation,),MapValue(entries=())),context.request('typed-sdk-seed'),documents=documents,bun_executable='/opt/homebrew/bin/bun')),GroupSuccess)
+    applied=expect(success(a.apply_in_transaction(t,context.input((operation,),MapValue(entries=())),context.request('typed-sdk-seed'),documents=documents,bun_executable=str(args.bun_executable))),GroupSuccess)
     assert len(applied.response.semantic.results)==1
    checks.append('instance created through public atomic group API')
    with transaction(person,read_only=True)as(a,t):
@@ -115,7 +118,7 @@ try:
     ref=success(a.get_type_reference_in_transaction(t,document_id=doc['id'],module_id='sales',record_id='order'))
     context=success(a.group_context_in_transaction(t))
     creates=tuple(CreateObject(type_definition_pin=ref.definition_pin,values=(AuthoredValue(name='id',value=TextValue(kind='string',text=key)),AuthoredValue(name='status',value=TextValue(kind='string',text='draft'))),ownership=RootlessOwnership())for key in ('baz','foo'))
-    expect(success(a.apply_in_transaction(t,context.input(creates,MapValue(entries=())),context.request('typed-sdk-page-seed'),documents=documents,bun_executable='/opt/homebrew/bin/bun')),GroupSuccess)
+    expect(success(a.apply_in_transaction(t,context.input(creates,MapValue(entries=())),context.request('typed-sdk-page-seed'),documents=documents,bun_executable=str(args.bun_executable))),GroupSuccess)
    with transaction(person,read_only=True)as(a,t):
     page_sources=expect(success(a.query_catalog_sources_in_transaction(t,sql=request['sql'].removesuffix(' LIMIT 10'),document_ids=(doc['id'],),parameters={'status':'draft'})),QueryCatalogSources)
    page_request=json.loads(page_sources.request_json)

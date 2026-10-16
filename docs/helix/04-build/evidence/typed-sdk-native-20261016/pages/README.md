@@ -33,3 +33,12 @@ replay with verified server cleanup. Its exact compiler wheel/source pins are
 separate from the earlier complete two-interpreter regression cohort. Original
 reports and compiler patches remain unchanged. Publication and all previously
 listed unqualified gates remain held.
+
+## Explicit Bun executable
+
+Homebrew's global Bun symlink moved to1.4.3 after the earlier cohorts. The native
+runner now accepts an explicit `--bun-executable`, defaults to the installed
+Cellar1.4.2 path and checks the exact version before starting its owned server.
+A fresh native14 replay passes using1.4.2, retaining toolchain/path and cleanup
+evidence. Product guards and the global executable are unchanged. This does not
+qualify Bun1.4.3.
