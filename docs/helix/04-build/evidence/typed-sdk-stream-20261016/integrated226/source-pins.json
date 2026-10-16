@@ -1,0 +1,23 @@
+{
+  "trussSource": "e3e4807d9583bb207bdba8662cebd78332c896e7",
+  "mergedNativeSource": "21346602",
+  "weftSource": "f6c446f21e87d5ac0852671bb3145b4a5707c72c",
+  "files": {
+    "packages/python/src/truss/query_stream.py": "614a7ccf243daec1fc29865a416b00051b06fc3d749d14bc65451aaec3659764",
+    "packages/python/src/truss/_query_stream_runtime.py": "fbc4cb83a8ffcbec7c897db63de130ee9aae124f927f1d7e58370aeb6a675094",
+    "packages/python/src/truss/access.py": "6bc338edcc095e99f7e8d794cdd312098e39ea9c445f2772f00da96ae0e78aed",
+    "packages/python/src/truss/catalog_runtime.py": "a33d5e75241bd8fee6f92be2ec1a013f6e399e1bd77c3fee2f70a0f85cbd0baf",
+    "packages/python/src/truss/psycopg_host.py": "a5bfbd5c5881f84b41288f9e6ac1ff13403adddb2f450f16d9f89dd0e64bc952",
+    "packages/python/src/truss/_query_runtime.py": "8ea6d33484bca67b0fd97e52d4eab91b906ccd1932aaf99946c8fdcbc0eb9370",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "009168f6ada81e97dc494fc6f5f6e823593b3b38053c4697cd52f0ef1e9fbba2",
+    "packages/python/src/truss/_catalog_runtime/query.sql": "4ef3565932967794b2644e4734ad3d2bfc33b46b43e9aaaf7201b3d364128c66",
+    "packages/python/src/truss/_catalog_runtime/query-abi.json": "9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f",
+    "scripts/check-typed-sdk-native.py": "78c1da39ec68b93e0185296a84fe04bd7432ef0cae377f2eb3b7885af6880e9b",
+    "scripts/typed_sdk_stream_checks.py": "2419271e4b436a0e1e1a03d81fc595464f3d4d7f69801676943fa5ed77f0f217"
+  },
+  "nativeRoutines": 226,
+  "python": "3.11.17",
+  "nativeChecks": 25,
+  "sourcePathOverride": false,
+  "temporal": "HELD"
+}

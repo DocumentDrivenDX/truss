@@ -40,3 +40,17 @@ fetch share one absolute deadline; cleanup has a fresh bounded budget, followed
 by a check of the original final-page deadline. Both native servers stopped.
 `source-pins.json` identifies the exact implementation and candidate compiler
 wheel; the narrower earlier test assertion is recorded explicitly.
+
+## Fresh226-routine installed integration
+
+`integrated226/` records25 passing controls after a normal merge of original
+native-source commit21346602 into the completed SDK source (mergee3e4807d).
+A clean git-archived Truss wheel and final metadata-corrected Weft candidate
+were installed;511 package payload files match the exact archives. The native
+run uses installed Truss with no source PYTHONPATH override and captures its
+actual new binding/catalog IDs. It repeats public schema/instance/generated
+2,500-row streams, independent writer, native revocation, exact post-cleanup
+deadline, native lock/DTO/disconnect and lifecycle controls. Its owned PostgreSQL
+server stopped. The extra3 native export functions remain unused by bounded042;
+this packet does not qualify scalable-source compiler adoption. The final
+compiler source and wheel hashes are distinct from the earlier native cohorts.
