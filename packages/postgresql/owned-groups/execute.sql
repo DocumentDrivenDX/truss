@@ -655,7 +655,7 @@ BEGIN
   RAISE EXCEPTION 'original completed edge operation progress required' USING ERRCODE='55000';END IF;
  plan:=truss.runtime_owned_plan(attempt.id,transition.operation_index);
  FOR candidate IN SELECT key FROM jsonb_each(plan->'afterEdges') LOOP
-  identity:=truss.runtime_owned_identity(attempt.id,transition.operation_index,candidate,'edge');
+  identity:=truss.runtime_owned_identity(attempt.id,transition.operation_index,candidate,'edge',plan,attempt);
   IF identity->>'id'=transition.edge_id::text AND identity->>'typeId'=transition.rel_type_id::text THEN
    reference:=candidate;matches:=matches+1;END IF;
  END LOOP;
@@ -693,8 +693,8 @@ BEGIN
  IF transition.endpoint_ownership IS DISTINCT FROM expected_context
   OR nullif(transition.old_source,'null'::jsonb) IS DISTINCT FROM before_context->'source'->'identity'
   OR nullif(transition.old_target,'null'::jsonb) IS DISTINCT FROM before_context->'target'->'identity'
-  OR transition.source_identity IS DISTINCT FROM truss.runtime_owned_identity(attempt.id,transition.operation_index,desired->>'source','object')
-  OR transition.target_identity IS DISTINCT FROM truss.runtime_owned_identity(attempt.id,transition.operation_index,desired->>'target','object') THEN
+  OR transition.source_identity IS DISTINCT FROM truss.runtime_owned_identity(attempt.id,transition.operation_index,desired->>'source','object',plan,attempt)
+  OR transition.target_identity IS DISTINCT FROM truss.runtime_owned_identity(attempt.id,transition.operation_index,desired->>'target','object',plan,attempt) THEN
   RAISE EXCEPTION 'original endpoint and aggregate root context required' USING ERRCODE='55000';END IF;
  IF transition.before_edge IS NOT DISTINCT FROM transition.after_edge THEN
   IF transition.journal<>'[]'::jsonb THEN RAISE EXCEPTION 'unchanged edge has no journal' USING ERRCODE='55000';END IF;
@@ -705,7 +705,7 @@ BEGIN
   IF event->>'historyProfile' IS DISTINCT FROM 'truss-native-owned-edge-mutation/0.1'
    OR event->>'operation' IS DISTINCT FROM (CASE expected_mode WHEN 'create_edge' THEN 'create' WHEN 'delete_edge' THEN 'delete' ELSE 'metadata' END)
    OR event->>'eventVersion' IS DISTINCT FROM expected_version::text
-   OR event->'identity' IS DISTINCT FROM truss.runtime_owned_identity(attempt.id,transition.operation_index,reference,'edge') THEN
+   OR event->'identity' IS DISTINCT FROM truss.runtime_owned_identity(attempt.id,transition.operation_index,reference,'edge',plan,attempt) THEN
    RAISE EXCEPTION 'original owned edge event required' USING ERRCODE='55000';END IF;
  END IF;
  IF authorize_read THEN

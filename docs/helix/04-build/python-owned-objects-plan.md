@@ -282,3 +282,13 @@ a STORED generated column physically backfills rows but preserves original
 source, result and receipt values. Basic slot/replay and populated published35
 upgrade tests cover the derived count and refusal of direct assignment; retain
 the complete capacity/final-fault workflows and installed-runner deadlines.
+
+## Edge validation identity reuse — 2026-10-16
+
+The basic 1,000-edge public workflow still has a recorded finish-time statement
+timeout. Astra Ultra clears a narrow first change: its edge transition validator
+passes the plan and attempt it has already checked to the existing identity
+helper at four direct call sites. Exact slot, writer, create ordinal, operation
+and typed-identity checks remain in that helper. Image/endpoint helpers, current
+authority, full settlement and deadlines remain unchanged. This removes repeated
+reads within one invocation; it does not establish that the stress case passes.
