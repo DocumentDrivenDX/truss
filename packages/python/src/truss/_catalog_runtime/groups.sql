@@ -442,7 +442,12 @@ BEGIN
    convert_to(jsonb_set(convert_from(a.input_bytes,'UTF8')::jsonb-'preconditions',
       '{operations}',jsonb_build_array(convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index))::text,'UTF8')=original_input
    AND convert_from(a.input_bytes,'UTF8')::jsonb->'operations'->a.next_index->>'operation'='create_object')
-   OR (selected_attempt IS NOT NULL AND a.id=selected_attempt AND a.input_bytes=selected_original
+   -- The sole selected-path caller, runtime_owned_group_step_in_input,
+   -- checked this attempt's exact input bytes immediately before invocation.
+   -- Its intervening registered calls are read-only; retain all leaf scope,
+   -- progress and original-operation reconstruction checks without detoasting
+   -- the same complete batch a second time. NULL selectors keep the old path.
+   OR (selected_attempt IS NOT NULL AND a.id=selected_attempt AND selected_original IS NOT NULL
     AND jsonb_extract_path(selected_input,'operations',a.next_index::text)->>'operation'='create_object'
     AND convert_to(((selected_input-ARRAY['preconditions','operations'])||jsonb_build_object('operations',
       jsonb_build_array(jsonb_extract_path(selected_input,'operations',a.next_index::text))))::text,'UTF8')=original_input))
