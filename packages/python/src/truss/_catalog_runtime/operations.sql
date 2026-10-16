@@ -337,7 +337,12 @@ CREATE FUNCTION truss.runtime_object_history(object_image jsonb,identity jsonb) 
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
 DECLARE properties jsonb:='[]';retained jsonb;property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;
 BEGIN
- basis:=truss.catalog_all_expected_records(written_revision);
+ SELECT CASE WHEN written_revision=(SELECT rev FROM truss.schema_head WHERE id=1)
+  AND NOT EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>written_revision)
+ THEN jsonb_build_object(
+   'type_def',(SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]'::jsonb) FROM truss.type_def t WHERE t.type_id=(object_image->>'type_id')::int),
+   'prop_def',(SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]'::jsonb) FROM truss.prop_def p WHERE p.type_id=(object_image->>'type_id')::int)) END INTO basis;
+ IF basis IS NULL THEN basis:=truss.catalog_all_expected_records(written_revision);END IF;
  SELECT * INTO STRICT pin FROM truss.runtime_definition_in_basis('type',(object_image->>'type_id')::int,NULL,written_revision,basis);
  identity:=jsonb_set(identity,'{definitionPin}',to_jsonb(pin.definition_pin));
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(object_image->>'type_id')::int ORDER BY prop_id LOOP
