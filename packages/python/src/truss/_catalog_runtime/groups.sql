@@ -386,7 +386,7 @@ DECLARE input jsonb;request jsonb;key_inputs jsonb;metadata jsonb;context jsonb;
  route record;observed record;planned_row jsonb;actual_row jsonb;object_row truss.object%ROWTYPE;
  object_identity jsonb;properties_json jsonb;retained_json jsonb;after_record jsonb;event jsonb;event_bytes bytea;origin_bytes bytea;
  journal_row truss.journal%ROWTYPE;expected_journal jsonb;actual_journal jsonb;event_digest text;
- expected_transition jsonb;actual_transition jsonb;actual_progress jsonb;physical_journal jsonb;
+ expected_transition jsonb;actual_transition jsonb;actual_progress record;physical_journal jsonb;
  results jsonb:='[]';aliases jsonb:='[]';members jsonb:='[]';member_keys jsonb;
  membership truss.object_key_bucket%ROWTYPE;reservation truss.object_key_reservation_bucket%ROWTYPE;
  semantic jsonb;semantic_bytes bytea;new_generation bigint;
@@ -645,17 +645,17 @@ BEGIN
  -- Read the stored row once below; an UPDATE RETURNING image here would be
  -- immediately overwritten and repeatedly copy the growing complete result.
  IF NOT FOUND THEN RAISE EXCEPTION 'one atomic outer create progress required' USING ERRCODE='55000';END IF;
- SELECT jsonb_build_object('actor_oid',a.actor_oid,'writer_xid',a.writer_xid::text,
-  'next_index',a.next_index,'results',a.results,'aliases',a.aliases,'complete',a.complete) INTO actual_progress
+ SELECT a.actor_oid,a.writer_xid,a.next_index,a.results,a.aliases,a.complete INTO actual_progress
  FROM truss.runtime_object_attempt a WHERE a.id=outer_attempt.id;
  SELECT to_jsonb(t)-'transition_id' INTO STRICT actual_transition FROM truss.runtime_object_transition t
  WHERE t.attempt_id=outer_attempt.id AND t.operation_index=outer_attempt.next_index;
  IF actual_transition IS DISTINCT FROM expected_transition THEN
   RAISE EXCEPTION 'exact stored atomic create transition required' USING ERRCODE='55000';END IF;
- IF actual_progress IS DISTINCT FROM jsonb_build_object('actor_oid',outer_attempt.actor_oid,
-  'writer_xid',outer_attempt.writer_xid::text,'next_index',outer_attempt.next_index+1,
-  'results',outer_attempt.results||jsonb_build_array(semantic->'results'->0),
-  'aliases',outer_attempt.aliases||(semantic->'aliases'),'complete',false) THEN
+ IF ROW(actual_progress.actor_oid,actual_progress.writer_xid,actual_progress.next_index,
+  actual_progress.results,actual_progress.aliases,actual_progress.complete) IS DISTINCT FROM
+  ROW(outer_attempt.actor_oid,outer_attempt.writer_xid,outer_attempt.next_index+1,
+   outer_attempt.results||jsonb_build_array(semantic->'results'->0),
+   outer_attempt.aliases||(semantic->'aliases'),false) THEN
   RAISE EXCEPTION 'exact atomic outer create progress required' USING ERRCODE='55000';END IF;
  SELECT coalesce(jsonb_agg(j.row ORDER BY j.seq),'[]'::jsonb) INTO physical_journal FROM
   (SELECT to_jsonb(j) AS row,j.seq FROM truss.journal j WHERE j.entity_kind='o'

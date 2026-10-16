@@ -485,3 +485,10 @@ in place. Three existing creation-custody/progress controls and the full local
 1,024-operation positive/final-fault workflows pass together (five tests,
 49.921 seconds). Suite elapsed time is not a causal performance comparison;
 installed-runner deadline qualification still requires its own successful run.
+
+The following scoped change compares the stored six progress fields directly
+as native SQL row values, instead of packing actual and expected progress into
+temporary JSON objects. It retains full result/alias equality and the same
+post-trigger reread and check order. Astra Ultra clears the source; the same
+five local native workflows pass (51.733 seconds). This is another allocation
+reduction, not a measured latency improvement or release-runner clearance.
