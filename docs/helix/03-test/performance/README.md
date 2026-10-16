@@ -633,3 +633,18 @@ completed CREATE and timed out during UPDATE finalization. Both returned SQLSTAT
 platform. [Original failed-step logs](results/2026-10-16-release38974408702-failed.log)
 retain the precise stacks. No tag was created; publication was skipped. Removing
 the redundant CREATE leaf exception boundary does not establish release readiness.
+
+### Original CREATE and UPDATE component costs on main23c5
+
+[Stock function counters](results/2026-10-16-main23c5-function-costs.json)
+record separate original1,024-CREATE and changed-UPDATE statements, each followed
+by rollback and cleanup. CREATE apply_group measured4,536.7ms; UPDATE5,443.2ms
+after committed original creates and the original following group. UPDATE
+finalization measured1,308.7ms and original definition resolution593.1ms over
+17,413 calls. These are local diagnostic observations, not hosted or isolated
+performance qualification, and omit full commit/replay/readback acceptance.
+
+An Astra-cleared candidate removed a redundant inner full-input byte comparison
+while preserving its sole caller's exact comparison. The same UPDATE diagnostic
+measured5,655.6ms and showed no improvement; the candidate was discarded and
+source restored. No new runtime mechanism or relaxed check was retained.
