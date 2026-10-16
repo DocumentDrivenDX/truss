@@ -15,7 +15,7 @@ CREATE INDEX runtime_object_transition_writer ON truss.runtime_object_transition
 CREATE TRIGGER runtime_object_transition_immutable BEFORE UPDATE OR DELETE ON truss.runtime_object_transition
  FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 
-CREATE FUNCTION truss.runtime_operation_type(operation jsonb,operations jsonb,operation_index int) RETURNS truss.type_def
+CREATE FUNCTION truss.runtime_owned_operation_type_qualified(operation jsonb,operations jsonb,operation_index int,qualified_actor oid) RETURNS truss.type_def
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE pin text;identity jsonb;creation jsonb;selected truss.type_def%ROWTYPE;
 BEGIN
@@ -47,8 +47,16 @@ BEGIN
   OR jsonb_typeof(identity->'id') IS DISTINCT FROM 'string' OR identity->>'id' !~ '^[1-9][0-9]{0,18}$'
   OR length(identity->>'id')=19 AND (identity->>'id') COLLATE "C">'9223372036854775807') THEN
   RAISE EXCEPTION 'qualified exact object identity required' USING ERRCODE='22023';END IF;
- IF NOT truss.runtime_object_values_readable(selected.type_id) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
+ IF NOT truss.runtime_object_values_readable_qualified(selected.type_id,qualified_actor) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
  RETURN selected;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_operation_type_qualified(jsonb,jsonb,int,oid) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_operation_type(operation jsonb,operations jsonb,operation_index int) RETURNS truss.type_def
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN truss.runtime_owned_operation_type_qualified(operation,operations,operation_index,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_operation_type(jsonb,jsonb,int) FROM PUBLIC;
@@ -87,6 +95,21 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_operation_relationship(jsonb,jsonb,int) FROM PUBLIC;
 
+CREATE FUNCTION truss.runtime_owned_operation_owner_qualified(operation jsonb,operations jsonb,operation_index int,qualified_actor oid)
+RETURNS TABLE(document_id text,module text,definition_rev int,definition_doc_ord int,definition_document_id text)
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE object_type truss.type_def%ROWTYPE;relationship truss.rel_def%ROWTYPE;
+BEGIN
+ IF operation->>'operation' IN ('create_object','update_object','delete_object') THEN
+  object_type:=truss.runtime_owned_operation_type_qualified(operation,operations,operation_index,qualified_actor);
+  RETURN QUERY SELECT object_type.document_id,object_type.module,object_type.definition_rev,object_type.definition_doc_ord,object_type.definition_document_id;
+ ELSE
+  relationship:=truss.runtime_operation_relationship(operation,operations,operation_index);
+  RETURN QUERY SELECT relationship.document_id,relationship.module,relationship.definition_rev,relationship.definition_doc_ord,relationship.definition_document_id;
+ END IF;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_operation_owner_qualified(jsonb,jsonb,int,oid) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_operation_owner(operation jsonb,operations jsonb,operation_index int)
 RETURNS TABLE(document_id text,module text,definition_rev int,definition_doc_ord int,definition_document_id text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
@@ -642,11 +665,11 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_create_transition_validate(bigint) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_object_validate(selected_id bigint,selected_type int) RETURNS void
+CREATE FUNCTION truss.runtime_owned_row_validate_qualified(selected_id bigint,selected_type int,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;creation_transition bigint;owned_transition record;owner record;root_type int;
 BEGIN
- current_actor:=truss.runtime_person(false);
+ current_actor:=qualified_actor;
  -- Owned creation semantics settle with the complete group and mandatory
  -- attempt trigger. Keep the legacy creation path; current owned authority and
  -- actual row/key closure are independently checked below on every row event.
@@ -723,12 +746,19 @@ BEGIN
  END IF;
 END;
 $$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_row_validate_qualified(bigint,int,oid) FROM PUBLIC;
+CREATE FUNCTION truss.runtime_object_validate(selected_id bigint,selected_type int) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ PERFORM truss.runtime_owned_row_validate_qualified(selected_id,selected_type,truss.runtime_person(false));
+END;
+$$;
 REVOKE ALL ON FUNCTION truss.runtime_object_validate(bigint,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.object_group_finish(attempt_id uuid) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;request jsonb;semantic jsonb;bytes bytea;receipt_bytes bytea;receipt truss.request_receipt%ROWTYPE;
- ns bytea;rk bytea;operation jsonb;selected record;index int:=0;owner record;
+ ns bytea;rk bytea;operation jsonb;selected record;index int:=0;owner record;current_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id FOR UPDATE NOWAIT;
  IF attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false) OR attempt.complete THEN RAISE EXCEPTION 'current unfinished group required' USING ERRCODE='55000';END IF;
@@ -773,9 +803,11 @@ BEGIN
  END IF;
  UPDATE truss.runtime_object_attempt SET complete=true,receipt_id=receipt.storage_row_id,expected_receipt=CASE WHEN receipt.storage_row_id IS NOT NULL THEN to_jsonb(receipt) END,
   position_bytes=CASE WHEN receipt.storage_row_id IS NOT NULL THEN truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,attempt.writer_xid) END WHERE id=attempt_id;
- FOR owner IN SELECT DISTINCT object_id,type_id FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=object_group_finish.attempt_id LOOP PERFORM truss.runtime_object_validate(owner.object_id,owner.type_id);END LOOP;
+ current_actor:=truss.runtime_person(false);
+ IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='42501';END IF;
+ FOR owner IN SELECT DISTINCT object_id,type_id FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=object_group_finish.attempt_id LOOP PERFORM truss.runtime_owned_row_validate_qualified(owner.object_id,owner.type_id,current_actor);END LOOP;
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
-  SELECT * INTO STRICT selected FROM truss.runtime_operation_owner(operation,input->'operations',index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);index:=index+1;
+  SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input->'operations',index,current_actor);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,current_actor);index:=index+1;
  END LOOP;
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN PERFORM truss.runtime_owned_group_validate(attempt.id,true);END IF;
  RETURN convert_to(jsonb_build_object('outcome','success','disposition','applied','durability','pending','semantic',semantic,
