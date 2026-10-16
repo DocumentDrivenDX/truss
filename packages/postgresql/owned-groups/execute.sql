@@ -540,23 +540,23 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_object_image(uuid,int,text,text,jsonb,truss.runtime_object_attempt) FROM PUBLIC;
 
 
-CREATE FUNCTION truss.runtime_owned_edge_image(selected_attempt uuid,selected_index int,reference text,phase text) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_edge_image(selected_attempt uuid,selected_index int,reference text,phase text,prepared_plan jsonb DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE plan jsonb;state jsonb;identity jsonb;source_identity jsonb;target_identity jsonb;
 BEGIN
  IF phase IS NULL OR phase NOT IN ('before','after') THEN RAISE EXCEPTION 'explicit edge image phase required' USING ERRCODE='55000';END IF;
- plan:=truss.runtime_owned_plan(selected_attempt,selected_index);state:=plan->(phase||'Edges')->reference;
+ plan:=coalesce(prepared_plan,truss.runtime_owned_plan(selected_attempt,selected_index));state:=plan->(phase||'Edges')->reference;
  IF state IS NULL OR state->'deleted'='true'::jsonb THEN RETURN NULL;END IF;
- identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'edge');
- source_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,state->>'source','object');
- target_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,state->>'target','object');
+ identity:=truss.runtime_owned_identity(selected_attempt,selected_index,reference,'edge',plan,prepared_attempt);
+ source_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,state->>'source','object',plan,prepared_attempt);
+ target_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,state->>'target','object',plan,prepared_attempt);
  RETURN ((state->'image')-ARRAY['created_at','updated_at'])||jsonb_build_object('id',(identity->>'id')::bigint,
   'source_id',(source_identity->>'id')::bigint,'source_type',(source_identity->>'typeId')::int,
   'target_id',(target_identity->>'id')::bigint,'target_type',(target_identity->>'typeId')::int,
   'order_key',state->'orderKey'->>'text');
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_edge_image(uuid,int,text,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_edge_image(uuid,int,text,text,jsonb,truss.runtime_object_attempt) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_owned_edge_metadata(selected_attempt uuid,selected_index int,reference text,qualified_actor oid DEFAULT NULL) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

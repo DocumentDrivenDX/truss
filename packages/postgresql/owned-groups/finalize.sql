@@ -177,7 +177,7 @@ BEGIN
  FOR entry IN SELECT key,value FROM jsonb_each(last_plan->'afterEdges') LOOP
   identity:=truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,entry.key,'edge',last_plan,attempt);
   SELECT to_jsonb(e)-ARRAY['created_at','updated_at'] INTO actual FROM truss.edge e WHERE e.id=(identity->>'id')::bigint AND e.rel_type_id=(identity->>'typeId')::int;
-  IF actual IS DISTINCT FROM truss.runtime_owned_edge_image(selected_attempt,attempt.next_index-1,entry.key,'after') THEN
+  IF actual IS DISTINCT FROM truss.runtime_owned_edge_image(selected_attempt,attempt.next_index-1,entry.key,'after',last_plan,attempt) THEN
    RAISE EXCEPTION 'actual final owned edge required' USING ERRCODE='55000';END IF;
  END LOOP;
  SELECT coalesce(array_agg(key ORDER BY key COLLATE "C"),'{}'::text[]) INTO node_order FROM jsonb_each(last_plan->'afterNodes') WHERE value->'deleted'='false'::jsonb;

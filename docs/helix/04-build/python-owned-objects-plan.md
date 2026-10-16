@@ -342,3 +342,19 @@ preserves prior caller work with zero durable edges after caller COMMIT (4.645s)
 An initial ambiguous SQL projection and a max1 test fixture were corrected.
 The unchanged1,000-edge matrix still times out during apply (10,026ms; create
 7,310ms plus4,845ms COMMIT). No edge commit was reached or performance gate closed.
+
+The edge-image helper now mirrors object-image context reuse: it accepts optional
+checked plan/attempt values and passes its selected local plan into identity
+resolution. Final actual-edge validation supplies its already checked final plan
+and attempt. Four-argument callers retain lazy defaults, phase/deletion handling,
+identity proofs and actual image comparison; no endpoint helper changed. Astra
+Ultra clears the four runtime-source files, and all eight basic graph/authority/
+parallel/inventory tests pass (29.103s). The original1,000-edge matrix still
+refuses during apply with57014 (26.350s total); performance remains open.
+
+SDK36's release run38891797388 failed both installed adopter workflows because
+published Weft0.4.34/backend0.4.37 admits exact native68, not native70. No assets
+were published and the tag is retained. A narrow new compiler backend will admit
+exact native70; the replacement SDK37 release will retain native70's original
+manifest. The owned tranche will then advance to SDK38/native71. Latest published
+installation instructions continue to select SDK35 until that replacement ships.
