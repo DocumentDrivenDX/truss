@@ -37,7 +37,7 @@ from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
 from .contracts import TypedIdentity
 from .object_read import ScalarObject, LogicalObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
-from ._group_runtime import GroupRuntimeContext, NativeGroupCapability, GroupCapabilityAvailable
+from ._group_runtime import GroupRuntimeContext, CatalogRevisionProbe, PreparedGroup, NativeGroupCapability, GroupCapabilityAvailable
 from .contracts import CapabilitySelection, TypedIdentity, ProfilePin
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult, OrderKey
 from decimal import Decimal
@@ -537,7 +537,7 @@ class CatalogReferenceAssembly:
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=194:raise ValueError('Exact additive runtime routine inventory required')
+        if len(replacements)!=196:raise ValueError('Exact additive runtime routine inventory required')
         signatures=[]
         for statement in replacements:
             header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
@@ -1042,6 +1042,8 @@ class CatalogReferenceAssembly:
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_context(text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_type_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.group_relationship_reference(text,text,text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.catalog_revision(text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.prepare_group(bytea,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                 for signature in ('group_create_metadata(bytea,bytea,text,text)','apply_create_group(bytea,bytea,bytea,bytea,text,text)','object_group_begin(bytea,bytea,bytea,text,text,bytea,boolean)','group_condition_key_metadata(bytea,bytea,text,text)','object_group_metadata(uuid,int)','object_group_step(uuid,int,bytea)','object_group_finish(uuid)'):
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(grant.writer_role)),prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
@@ -1356,6 +1358,21 @@ class CatalogReferenceAssembly:
         from ._group_runtime import group_context
         manifest,digest,_=_release()
         return group_context(self._host,transaction,manifest,digest,_pin_cursor)
+
+    @_active_operation
+    def catalog_revision_in_transaction(self,transaction: TransactionHandle,*,document_id: str | None=None) -> Outcome[CatalogRevisionProbe]:
+        """Read the current catalog revision without locking it. Optional document revision is the cache key for one accepted document."""
+        from ._group_runtime import catalog_revision
+        manifest,digest,_=_release()
+        return catalog_revision(self._host,transaction,manifest,digest,_pin_cursor,document_id)
+
+    @_active_operation
+    def prepare_group_in_transaction(self,transaction: TransactionHandle,*,records: tuple[tuple[str,str,str],...],
+                                     relationships: tuple[tuple[str,str,str],...]=()) -> Outcome[PreparedGroup]:
+        """One call for revision, group scope and the named type and relationship references."""
+        from ._group_runtime import prepare_group
+        manifest,digest,_=_release()
+        return prepare_group(self._host,transaction,manifest,digest,_pin_cursor,records,relationships)
 
     @_active_operation
     def apply_in_transaction(self,transaction: TransactionHandle,input: GroupSemanticInput,request: GroupRequestSelection,*,

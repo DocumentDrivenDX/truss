@@ -75,6 +75,29 @@ class PsycopgHostNativeTests(unittest.TestCase):
             return cursor.fetchone()[0]
         return self.host._run_operation(transaction, execute)
 
+    def test_matching_timeout_uses_one_admission_probe_then_three_statements(self):
+        self.host._timeout = 3000
+        original = self.host._cursor
+        queries = []
+        class Counting:
+            def __init__(self, cursor): self.cursor = cursor
+            def __getattr__(self, name): return getattr(self.cursor, name)
+            def execute(self, query, *args, **kwargs):
+                queries.append(query)
+                return self.cursor.execute(query, *args, **kwargs)
+        self.host._cursor = lambda: Counting(original())
+        transaction = self.begin()
+        self.assertEqual(len(queries), 3)
+        import truss.psycopg_host as psycopg_host
+        self.assertEqual(sum(query == psycopg_host._IDENTITY_SQL for query in queries), 1)
+        self.assertFalse(any(isinstance(query, str) and query.startswith('SET LOCAL statement_timeout') for query in queries))
+        queries.clear()
+        self.assertEqual(self.scalar(transaction, 'SELECT 1::text'), Ok('1'))
+        self.assertEqual(len(queries), 3)
+        self.assertFalse(any(query == psycopg_host._IDENTITY_SQL for query in queries))
+        self.assertFalse(any(isinstance(query, str) and query.startswith('SET LOCAL statement_timeout') for query in queries))
+        self.assertEqual(self.connection.execute('SHOW statement_timeout').fetchone(), ('3s',))
+
     def test_idle_refusal_does_not_begin(self):
         self.assertEqual(self.connection.info.transaction_status, pq.TransactionStatus.IDLE)
         self.assertIsInstance(self.host.adopt_transaction(), Error)

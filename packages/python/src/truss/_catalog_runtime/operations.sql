@@ -11,6 +11,7 @@ CREATE UNIQUE INDEX runtime_object_attempt_receipt ON truss.runtime_object_attem
 CREATE SEQUENCE truss.runtime_object_transition_seq;
 CREATE TABLE truss.runtime_object_transition (transition_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_object_transition_seq'), attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL, writer_xid xid8 NOT NULL, object_id bigint NOT NULL, type_id int NOT NULL, before_object jsonb, after_object jsonb, after_keys jsonb NOT NULL, journal jsonb NOT NULL, UNIQUE (attempt_id, operation_index, object_id, type_id));
 CREATE INDEX runtime_object_transition_owner ON truss.runtime_object_transition(object_id,type_id,transition_id DESC);
+CREATE INDEX runtime_object_transition_writer ON truss.runtime_object_transition(writer_xid);
 CREATE TRIGGER runtime_object_transition_immutable BEFORE UPDATE OR DELETE ON truss.runtime_object_transition
  FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 
@@ -180,7 +181,6 @@ BEGIN
    IF raw->>'profile' IS DISTINCT FROM 'truss-object-group-receipt/0.1' THEN RAISE EXCEPTION 'selected receipt required' USING ERRCODE='0A000';END IF;
    IF decode(raw->>'inputBase64','base64') IS DISTINCT FROM original_input THEN RAISE EXCEPTION 'request input changed' USING ERRCODE='P1001';END IF;
    SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=(raw->>'attemptId')::uuid;
-   SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=(raw->>'attemptId')::uuid;
    IF NOT attempt.complete OR attempt.receipt_id IS DISTINCT FROM receipt.storage_row_id OR attempt.writer_xid IS DISTINCT FROM receipt.original_writer_xid
     OR to_jsonb(receipt) IS DISTINCT FROM attempt.expected_receipt OR attempt.input_bytes IS DISTINCT FROM original_input
     OR attempt.position_bytes IS DISTINCT FROM truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,receipt.original_writer_xid)
@@ -195,12 +195,8 @@ BEGIN
     'receiptGeneration',receipt.lifecycle_generation::text,'receiptSha256',encode(sha256(receipt.original_receipt_bytes),'hex'),
     'actorOid',person::text,'actor',session_user::text,'scopeIdentity',context->>'authorizedScopeIdentity',
     'releaseId',expected_release,'releaseSha256',expected_digest,'basis',CASE WHEN writer=receipt.original_writer_xid THEN 'same_transaction' ELSE 'committed_receipt' END)::text,'UTF8');
-   index:=0;FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
-    SELECT * INTO STRICT selected FROM truss.runtime_retained_operation_owner(attempt.id,index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);index:=index+1;
-   END LOOP;
-   PERFORM truss.runtime_edge_authorize((raw->>'attemptId')::uuid);
    RETURN convert_to(jsonb_build_object('outcome','success','disposition','replayed','durability',CASE WHEN writer=receipt.original_writer_xid THEN 'pending' ELSE 'committed' END,
-    'semantic',raw->'semantic','receiptToken',CASE WHEN writer<>receipt.original_writer_xid THEN truss.runtime_receipt_token(attempt.position_bytes) END,'observationBase64',replace(encode(observation,'base64'),chr(10),''),'observationSha256',encode(sha256(observation),'hex'))::text,'UTF8');
+    'semantic',raw->'semantic','receiptToken',truss.runtime_receipt_token(attempt.position_bytes),'observationBase64',replace(encode(observation,'base64'),chr(10),''),'observationSha256',encode(sha256(observation),'hex'))::text,'UTF8');
   END IF;
  END IF;
  IF input->'layoutProfile' IS DISTINCT FROM context->'layoutProfile' OR input->'mutationProfile' IS DISTINCT FROM context->'mutationProfile' OR input->'valueProfile' IS DISTINCT FROM context->'valueProfile' THEN RAISE EXCEPTION 'current group profile required on receipt miss' USING ERRCODE='0A000';END IF;
@@ -674,7 +670,8 @@ BEGIN
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
   SELECT * INTO STRICT selected FROM truss.runtime_operation_owner(operation,input->'operations',index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);index:=index+1;
  END LOOP;
- RETURN convert_to(jsonb_build_object('outcome','success','disposition','applied','durability','pending','semantic',semantic)::text,'UTF8');
+ RETURN convert_to(jsonb_build_object('outcome','success','disposition','applied','durability','pending','semantic',semantic,
+  'receiptToken',CASE WHEN receipt.storage_row_id IS NOT NULL THEN truss.runtime_receipt_token(truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,attempt.writer_xid)) END)::text,'UTF8');
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.object_group_finish(uuid) FROM PUBLIC;
@@ -714,15 +711,18 @@ BEGIN
   IF TG_OP='DELETE' THEN PERFORM truss.runtime_edge_validate(OLD.id,OLD.rel_type_id);ELSE PERFORM truss.runtime_edge_validate(NEW.id,NEW.rel_type_id);END IF;
  ELSIF TG_TABLE_NAME='runtime_edge_transition' THEN PERFORM truss.runtime_edge_validate(NEW.edge_id,NEW.rel_type_id);
  ELSE RAISE EXCEPTION 'registered mutation commit event required' USING ERRCODE='55000';END IF;
- PERFORM truss.runtime_graph_validate(false);
- -- Journal closure includes object and edge transitions.
- SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb) INTO actual FROM truss.journal j WHERE j.xid=pg_current_xact_id();
- SELECT coalesce(jsonb_agg(value ORDER BY (value->>'at')::timestamptz,(value->>'seq')::bigint),'[]'::jsonb) INTO expected FROM (
-  SELECT e.value->'journal' value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e WHERE g.writer_xid=pg_current_xact_id()
-  UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
-  UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
-  UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()) e;
- IF actual IS DISTINCT FROM expected THEN RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
+ -- Deferred row triggers all see the finished transaction, so the global check runs once.
+ IF current_setting('truss.object_commit_checked',true) IS DISTINCT FROM '1' THEN
+  PERFORM set_config('truss.object_commit_checked','1',true);
+  PERFORM truss.runtime_graph_validate(false);
+  SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb) INTO actual FROM truss.journal j WHERE j.xid=pg_current_xact_id();
+  SELECT coalesce(jsonb_agg(value ORDER BY (value->>'at')::timestamptz,(value->>'seq')::bigint),'[]'::jsonb) INTO expected FROM (
+   SELECT e.value->'journal' value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e WHERE g.writer_xid=pg_current_xact_id()
+   UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
+   UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
+   UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()) e;
+  IF actual IS DISTINCT FROM expected THEN RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
+ END IF;
  RETURN NULL;
 END;
 $$;
@@ -846,6 +846,7 @@ REVOKE ALL ON FUNCTION truss.runtime_edge_metadata(uuid,int) FROM PUBLIC;
 CREATE SEQUENCE truss.runtime_edge_transition_seq;
 CREATE TABLE truss.runtime_edge_transition (transition_id bigint PRIMARY KEY DEFAULT nextval('truss.runtime_edge_transition_seq'), attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL, writer_xid xid8 NOT NULL, edge_id bigint NOT NULL, rel_type_id int NOT NULL, before_edge jsonb, after_edge jsonb, journal jsonb NOT NULL, old_source jsonb, old_target jsonb, source_identity jsonb NOT NULL, target_identity jsonb NOT NULL, UNIQUE (attempt_id, operation_index, edge_id, rel_type_id), endpoint_ownership jsonb);
 CREATE INDEX runtime_edge_transition_owner ON truss.runtime_edge_transition(edge_id,rel_type_id,transition_id DESC);
+CREATE INDEX runtime_edge_transition_writer ON truss.runtime_edge_transition(writer_xid);
 CREATE TRIGGER runtime_edge_transition_immutable BEFORE UPDATE OR DELETE ON truss.runtime_edge_transition
  FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 
@@ -1308,7 +1309,10 @@ BEGIN
   OR locator->'positionProfile' IS DISTINCT FROM truss.runtime_group_profiles()->'positionProfile' THEN RETURN convert_to('{"outcome":"unavailable","reason":"epoch_profile"}','UTF8');END IF;
  -- Admit original retained scope before any receipt-derived disclosure.
  SELECT * INTO attempt FROM truss.runtime_object_attempt WHERE receipt_id=(locator->>'receiptStorageRowId')::bigint;
- IF NOT FOUND OR attempt.position_bytes IS DISTINCT FROM original_position THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
+ -- A well-formed token whose rows are not in this snapshot is not yet included.
+ -- Rollback leaves it that way; the caller supplies its own wait bound.
+ IF NOT FOUND THEN RETURN convert_to('{"outcome":"unavailable","reason":"not_yet"}','UTF8');END IF;
+ IF attempt.position_bytes IS DISTINCT FROM original_position THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
  IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
  -- Receipt and snapshot come from one original native statement.
  SELECT to_jsonb(r),pg_visible_in_snapshot(r.original_writer_xid,pg_current_snapshot()) INTO actual,included FROM truss.request_receipt r WHERE storage_row_id=attempt.receipt_id;
@@ -1330,7 +1334,7 @@ BEGIN
  SELECT to_jsonb(r) INTO actual FROM truss.request_receipt r WHERE storage_row_id=receipt.storage_row_id;
  IF actual IS DISTINCT FROM attempt.expected_receipt THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
  IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
- IF included IS NOT TRUE THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
+ IF included IS NOT TRUE THEN RETURN convert_to('{"outcome":"unavailable","reason":"not_yet"}','UTF8');END IF;
  RETURN convert_to(jsonb_build_object('outcome','available','included',included,'comparisonProfile',attempt.context->'positionProfile')::text,'UTF8');
 END;
 $$;

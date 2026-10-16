@@ -264,14 +264,17 @@ BEGIN
   IF actual_receipt IS DISTINCT FROM group_row.expected_receipt THEN
    RAISE EXCEPTION 'exact durable group receipt required' USING ERRCODE='55000'; END IF;
  END IF;
- IF (SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb)
-     FROM truss.journal j WHERE j.xid=group_row.writer_xid)
- IS DISTINCT FROM (SELECT coalesce(jsonb_agg(e.value ORDER BY (e.value->>'at')::timestamptz,(e.value->>'seq')::bigint),'[]'::jsonb) FROM (
-     SELECT e.value->'journal' AS value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e(value) WHERE g.writer_xid=group_row.writer_xid
-     UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
-     UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
-     UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid) e) THEN
-  RAISE EXCEPTION 'complete transaction create journal required' USING ERRCODE='55000'; END IF;
+ IF current_setting('truss.create_journal_checked',true) IS DISTINCT FROM '1' THEN
+  PERFORM set_config('truss.create_journal_checked','1',true);
+  IF (SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb)
+      FROM truss.journal j WHERE j.xid=group_row.writer_xid)
+  IS DISTINCT FROM (SELECT coalesce(jsonb_agg(e.value ORDER BY (e.value->>'at')::timestamptz,(e.value->>'seq')::bigint),'[]'::jsonb) FROM (
+      SELECT e.value->'journal' AS value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e(value) WHERE g.writer_xid=group_row.writer_xid
+      UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
+      UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid
+      UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=group_row.writer_xid) e) THEN
+   RAISE EXCEPTION 'complete transaction create journal required' USING ERRCODE='55000'; END IF;
+ END IF;
  FOR member IN SELECT * FROM truss.runtime_create_member WHERE group_id=selected_group ORDER BY operation_index LOOP
   entry:=semantic->'results'->member.operation_index;
   IF (entry->'identity'->>'id')::bigint<>member.object_id OR (entry->'identity'->>'typeId')::int<>member.type_id THEN
@@ -696,3 +699,41 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.group_type_reference(text,text,text,text,text) FROM PUBLIC;
+
+CREATE FUNCTION truss.prepare_group(original_records bytea,original_relationships bytea,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+DECLARE context jsonb;records jsonb;relationships jsonb;entry jsonb;reference bytea;types jsonb:='[]';rels jsonb:='[]';revision int;
+BEGIN
+ IF original_records IS NULL OR octet_length(original_records) NOT BETWEEN 2 AND 65536
+  OR original_relationships IS NULL OR octet_length(original_relationships) NOT BETWEEN 2 AND 65536 THEN
+  RAISE EXCEPTION 'bounded group preparation required' USING ERRCODE='54000';END IF;
+ IF (convert_from(original_records,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE
+  OR (convert_from(original_relationships,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN
+  RAISE EXCEPTION 'unique original JSON members required' USING ERRCODE='22023';END IF;
+ records:=convert_from(original_records,'UTF8')::jsonb;relationships:=convert_from(original_relationships,'UTF8')::jsonb;
+ IF jsonb_array_length(records) NOT BETWEEN 0 AND 128 OR jsonb_array_length(relationships) NOT BETWEEN 0 AND 128 THEN
+  RAISE EXCEPTION 'bounded named record set required' USING ERRCODE='54000';END IF;
+ context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;
+ SELECT rev INTO STRICT revision FROM truss.schema_head WHERE id=1;
+ FOR entry IN SELECT value FROM jsonb_array_elements(records) LOOP
+  IF jsonb_typeof(entry) IS DISTINCT FROM 'object' OR entry-ARRAY['documentId','moduleId','recordId']<>'{}'::jsonb
+   OR jsonb_typeof(entry->'documentId') IS DISTINCT FROM 'string' OR jsonb_typeof(entry->'moduleId') IS DISTINCT FROM 'string'
+   OR jsonb_typeof(entry->'recordId') IS DISTINCT FROM 'string' THEN
+   RAISE EXCEPTION 'qualified record name required' USING ERRCODE='22023';END IF;
+  reference:=truss.group_type_reference(entry->>'documentId',entry->>'moduleId',entry->>'recordId',expected_release,expected_digest);
+  types:=types||jsonb_build_array(CASE WHEN reference IS NULL THEN 'null'::jsonb ELSE convert_from(reference,'UTF8')::jsonb END);
+ END LOOP;
+ FOR entry IN SELECT value FROM jsonb_array_elements(relationships) LOOP
+  IF jsonb_typeof(entry) IS DISTINCT FROM 'object' OR entry-ARRAY['documentId','moduleId','relationshipId']<>'{}'::jsonb
+   OR jsonb_typeof(entry->'documentId') IS DISTINCT FROM 'string' OR jsonb_typeof(entry->'moduleId') IS DISTINCT FROM 'string'
+   OR jsonb_typeof(entry->'relationshipId') IS DISTINCT FROM 'string' THEN
+   RAISE EXCEPTION 'qualified relationship name required' USING ERRCODE='22023';END IF;
+  reference:=truss.group_relationship_reference(entry->>'documentId',entry->>'moduleId',entry->>'relationshipId',expected_release,expected_digest);
+  rels:=rels||jsonb_build_array(CASE WHEN reference IS NULL THEN 'null'::jsonb ELSE convert_from(reference,'UTF8')::jsonb END);
+ END LOOP;
+ IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM revision THEN
+  RAISE EXCEPTION 'catalog changed during group preparation' USING ERRCODE='55P03';END IF;
+ RETURN convert_to(jsonb_build_object('catalogRevision',revision::text,'context',context,'types',types,'relationships',rels)::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.prepare_group(bytea,bytea,text,text) FROM PUBLIC;

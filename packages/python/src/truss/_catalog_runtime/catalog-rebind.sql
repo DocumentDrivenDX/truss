@@ -10,6 +10,7 @@ CREATE TABLE truss.runtime_catalog_rebind_transition (
  CHECK(jsonb_typeof(journal)='array' AND jsonb_array_length(journal)>1),
  CHECK(jsonb_typeof(effects)='array' AND jsonb_array_length(effects)>0));
 CREATE INDEX runtime_catalog_rebind_owner ON truss.runtime_catalog_rebind_transition(object_id,type_id,transition_id DESC);
+CREATE INDEX runtime_catalog_rebind_writer ON truss.runtime_catalog_rebind_transition(writer_xid);
 CREATE TRIGGER runtime_catalog_rebind_immutable BEFORE UPDATE OR DELETE OR TRUNCATE ON truss.runtime_catalog_rebind_transition
  FOR EACH STATEMENT EXECUTE FUNCTION truss.catalog_immutable();
 REVOKE ALL ON TABLE truss.runtime_catalog_rebind_transition FROM PUBLIC;
