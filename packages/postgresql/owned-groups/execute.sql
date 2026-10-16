@@ -558,20 +558,21 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_edge_image(uuid,int,text,text) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_edge_metadata(selected_attempt uuid,selected_index int,reference text) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_edge_metadata(selected_attempt uuid,selected_index int,reference text,qualified_actor oid DEFAULT NULL) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;plan jsonb;prior jsonb;desired jsonb;identity jsonb;physical jsonb;
  source_identity jsonb;target_identity jsonb;old_source jsonb;old_target jsonb;endpoint_identity jsonb;
- endpoint_reference text;endpoint_image jsonb;relation truss.rel_def%ROWTYPE;
+ endpoint_reference text;endpoint_image jsonb;relation truss.rel_def%ROWTYPE;current_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
- IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false)
+ current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
+ IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor
   OR attempt.complete OR attempt.next_index IS DISTINCT FROM selected_index THEN
   RAISE EXCEPTION 'current original owned effect required' USING ERRCODE='55000';END IF;
  plan:=truss.runtime_owned_plan(selected_attempt,selected_index);prior:=plan->'beforeEdges'->reference;desired:=plan->'afterEdges'->reference;
  IF desired IS NULL OR prior->'deleted'='true'::jsonb THEN RAISE EXCEPTION 'original live edge effect required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT relation FROM truss.rel_def WHERE rel_type_id=(desired->'identity'->>'typeId')::int AND retired_rev IS NULL;
- PERFORM truss.runtime_module_writer(relation.document_id,relation.module);
+ PERFORM truss.runtime_module_writer_qualified(relation.document_id,relation.module,current_actor);
  IF relation.lifecycle NOT IN ('independent','owned') OR NOT relation.directed OR relation.composition OR relation.assoc_type_id IS NOT NULL THEN
   RAISE EXCEPTION 'selected owned or independent relationship required' USING ERRCODE='0A000';END IF;
  IF prior IS NOT NULL THEN
@@ -587,7 +588,7 @@ BEGIN
  FOR endpoint_reference IN SELECT DISTINCT value#>>'{}' FROM jsonb_array_elements(jsonb_build_array(
   desired->'source',desired->'target',prior->'source',prior->'target')) WHERE value<>'null'::jsonb LOOP
   endpoint_identity:=truss.runtime_owned_identity(selected_attempt,selected_index,endpoint_reference,'object');
-  IF NOT truss.runtime_can_read(endpoint_identity->'owner'->>'documentId',endpoint_identity->'owner'->>'moduleId') THEN
+  IF NOT truss.runtime_can_read_qualified(endpoint_identity->'owner'->>'documentId',endpoint_identity->'owner'->>'moduleId',current_actor) THEN
    RAISE EXCEPTION 'original endpoint reader required' USING ERRCODE='42501';END IF;
   SELECT to_jsonb(o) INTO STRICT endpoint_image FROM truss.object o
    WHERE id=(endpoint_identity->>'id')::bigint AND type_id=(endpoint_identity->>'typeId')::int;
@@ -601,9 +602,9 @@ BEGIN
   'retained',coalesce(nullif(desired->'image'->'retained','null'::jsonb),'{}'::jsonb),'orderKey',desired->'orderKey','keys','[]'::jsonb,'values','[]'::jsonb);
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_edge_metadata(uuid,int,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_edge_metadata(uuid,int,text,oid) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_edge_effect_selection(selected_attempt uuid,selected_index int,metadata jsonb,effect_operation text) RETURNS void
+CREATE FUNCTION truss.runtime_owned_edge_effect_selection(selected_attempt uuid,selected_index int,metadata jsonb,effect_operation text,qualified_actor oid DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE plan jsonb;reference text:=metadata->>'ownedReference';prior jsonb;desired jsonb;derived_operation text;original_operation text;
 BEGIN
@@ -613,11 +614,11 @@ BEGIN
  IF desired IS NULL OR prior->'deleted'='true'::jsonb OR effect_operation IS DISTINCT FROM derived_operation
   OR (original_operation='delete_object' AND (derived_operation<>'delete_edge' OR prior IS NULL))
   OR (original_operation<>'delete_object' AND (original_operation IS DISTINCT FROM derived_operation OR reference IS DISTINCT FROM plan->>'primary'))
-  OR metadata IS DISTINCT FROM truss.runtime_owned_edge_metadata(selected_attempt,selected_index,reference) THEN
+  OR metadata IS DISTINCT FROM truss.runtime_owned_edge_metadata(selected_attempt,selected_index,reference,qualified_actor) THEN
   RAISE EXCEPTION 'original planned edge effect required' USING ERRCODE='55000';END IF;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_edge_effect_selection(uuid,int,jsonb,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_edge_effect_selection(uuid,int,jsonb,text,oid) FROM PUBLIC;
 
 
 -- Original operation-time endpoint roots; no live endpoint/root lookup.
@@ -638,20 +639,21 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_endpoint_at(uuid,int,text,text) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_edge_transition_validate(selected_transition bigint,authorize_read boolean) RETURNS void
+CREATE FUNCTION truss.runtime_owned_edge_transition_validate(selected_transition bigint,authorize_read boolean,qualified_actor oid DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_edge_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;expected_context jsonb;
  before_context jsonb;after_context jsonb;context jsonb;scope jsonb;previous_image jsonb;has_previous boolean;
- expected_mode text;original_mode text;expected_version bigint;journal jsonb;event jsonb;matches int:=0;
+ expected_mode text;original_mode text;expected_version bigint;journal jsonb;event jsonb;matches int:=0;current_actor oid;
 BEGIN
  IF authorize_read IS NULL THEN RAISE EXCEPTION 'explicit validation authority mode required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT transition FROM truss.runtime_edge_transition WHERE transition_id=selected_transition;
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
+ current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
  IF attempt.writer_xid IS DISTINCT FROM transition.writer_xid OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
   OR (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.result IS NOT NULL)<>attempt.next_index
   OR (authorize_read AND NOT attempt.complete)
-  OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false))) THEN
+  OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor)) THEN
   RAISE EXCEPTION 'original completed edge operation progress required' USING ERRCODE='55000';END IF;
  plan:=truss.runtime_owned_plan(attempt.id,transition.operation_index);
  FOR candidate IN SELECT key FROM jsonb_each(plan->'afterEdges') LOOP
@@ -710,14 +712,14 @@ BEGIN
  END IF;
  IF authorize_read THEN
   FOR context IN SELECT value FROM jsonb_array_elements(jsonb_build_array(before_context->'source',before_context->'target',after_context->'source',after_context->'target')) WHERE value<>'null'::jsonb LOOP
-   IF NOT truss.runtime_can_read(context->'identity'->'owner'->>'documentId',context->'identity'->'owner'->>'moduleId') THEN
+   IF NOT truss.runtime_can_read_qualified(context->'identity'->'owner'->>'documentId',context->'identity'->'owner'->>'moduleId',current_actor) THEN
     RAISE EXCEPTION 'current original endpoint reader required' USING ERRCODE='42501';END IF;
-   PERFORM truss.runtime_history_ownership(jsonb_build_object('identity',context->'identity','catalogRevision',plan->>'catalogRevision','ownership',context->'ownership'));
+   PERFORM truss.runtime_history_ownership_qualified(jsonb_build_object('identity',context->'identity','catalogRevision',plan->>'catalogRevision','ownership',context->'ownership'),current_actor);
   END LOOP;
  END IF;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_edge_transition_validate(bigint,boolean) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_edge_transition_validate(bigint,boolean,oid) FROM PUBLIC;
 
 
 -- Apply one object member of an original operation. The outer step alone emits
@@ -826,7 +828,7 @@ CREATE FUNCTION truss.runtime_owned_step(selected_attempt uuid,selected_index in
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 <<owned_step_body>>
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;plan jsonb;mode text;entry record;prior jsonb;effect_mode text;
- metadata jsonb;effect jsonb;primary_result jsonb;events jsonb:='[]';deleted jsonb:='[]';result jsonb;selected_transition bigint;current_actor oid;stored_result jsonb;progress record;
+ metadata jsonb;effect jsonb;primary_result jsonb;events jsonb:='[]';deleted jsonb:='[]';result jsonb;selected_transition bigint;current_actor oid;stored_result jsonb;progress record;closing_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
  current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
@@ -847,8 +849,8 @@ BEGIN
   prior:=plan->'beforeEdges'->entry.key;
   IF prior->'deleted'='true'::jsonb THEN CONTINUE;END IF;
   effect_mode:=CASE WHEN prior IS NULL THEN 'create_edge' WHEN entry.value->'deleted'='true'::jsonb THEN 'delete_edge' ELSE 'update_edge' END;
-  metadata:=truss.runtime_owned_edge_metadata(selected_attempt,selected_index,entry.key);
-  effect:=convert_from(truss.runtime_edge_effect(selected_attempt,selected_index,metadata,effect_mode,false),'UTF8')::jsonb;
+  metadata:=truss.runtime_owned_edge_metadata(selected_attempt,selected_index,entry.key,current_actor);
+  effect:=convert_from(truss.runtime_edge_effect(selected_attempt,selected_index,metadata,effect_mode,false,current_actor,prepared_input,prepared_original),'UTF8')::jsonb;
   events:=events||(effect->'events');deleted:=deleted||coalesce(effect->'deleted','[]'::jsonb);
   IF entry.key=plan->>'primary' THEN primary_result:=effect;END IF;
  END LOOP;
@@ -883,7 +885,8 @@ BEGIN
   RAISE EXCEPTION 'exact stored owned progress required' USING ERRCODE='55000';END IF;
  -- New edge IDs are now backed by their genuine original parent result.
  FOR selected_transition IN SELECT transition_id FROM truss.runtime_edge_transition WHERE attempt_id=selected_attempt AND operation_index=selected_index LOOP
-  PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,false);
+  IF closing_actor IS NULL THEN closing_actor:=truss.runtime_person(false);END IF;
+  PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,false,closing_actor);
  END LOOP;
  RETURN convert_to(result::text,'UTF8');
 END;

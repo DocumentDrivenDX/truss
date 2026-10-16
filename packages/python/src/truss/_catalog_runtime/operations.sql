@@ -1144,22 +1144,25 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_edge_history(jsonb,jsonb,jsonb,jsonb,int) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_edge_effect(attempt_id uuid,operation_index int,metadata jsonb,effect_operation text,advance boolean) RETURNS bytea
+CREATE FUNCTION truss.runtime_edge_effect(attempt_id uuid,operation_index int,metadata jsonb,effect_operation text,advance boolean,qualified_actor oid DEFAULT NULL,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;operation jsonb;input jsonb;row_image truss.edge%ROWTYPE;
  identity jsonb;before_image jsonb;after_image jsonb;before_record jsonb;after_record jsonb;result jsonb;event jsonb;
- installation truss.catalog_runtime_installation%ROWTYPE;journal truss.journal%ROWTYPE;event_refs jsonb;revision int;version bigint;entry jsonb;ownership_context jsonb;selected_history text;
+ installation truss.catalog_runtime_installation%ROWTYPE;journal truss.journal%ROWTYPE;event_refs jsonb;revision int;version bigint;entry jsonb;ownership_context jsonb;selected_history text;current_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id;
- IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM truss.runtime_person(false)
+ current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
+ IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor
   OR attempt.complete OR attempt.next_index IS DISTINCT FROM operation_index THEN
   RAISE EXCEPTION 'current original edge effect progress required' USING ERRCODE='55000';END IF;
- input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->operation_index;
+ IF prepared_input IS NOT NULL AND (source_bytes IS NULL OR source_bytes IS DISTINCT FROM attempt.input_bytes) THEN
+  RAISE EXCEPTION 'original checked edge input required' USING ERRCODE='55000';END IF;
+ input:=coalesce(prepared_input,convert_from(attempt.input_bytes,'UTF8')::jsonb);operation:=input->'operations'->operation_index;
  IF effect_operation IS NULL OR effect_operation NOT IN ('create_edge','update_edge','delete_edge') OR advance IS NULL THEN
   RAISE EXCEPTION 'explicit native edge effect required' USING ERRCODE='55000';END IF;
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
   IF advance THEN RAISE EXCEPTION 'owned parent alone advances original progress' USING ERRCODE='55000';END IF;
-  PERFORM truss.runtime_owned_edge_effect_selection(attempt_id,operation_index,metadata,effect_operation);
+  PERFORM truss.runtime_owned_edge_effect_selection(attempt_id,operation_index,metadata,effect_operation,current_actor);
  ELSE
   IF NOT advance OR effect_operation IS DISTINCT FROM operation->>'operation' OR metadata ? 'ownedReference' THEN
    RAISE EXCEPTION 'original independent edge operation required' USING ERRCODE='55000';END IF;
@@ -1232,9 +1235,11 @@ BEGIN
   ELSE result:=jsonb_build_object('outcome','deleted','operation','delete_edge','identity',identity,'deletionVersion',version::text,
    'deleted',jsonb_build_array(jsonb_build_object('identity',identity,'deletionVersion',version::text)),'events',event_refs);END IF;
  END IF;
- PERFORM truss.runtime_module_writer(metadata->>'documentId',metadata->>'moduleId');
+ -- Requalify after all trigger-capable edge/journal/transition writes.
+ current_actor:=truss.runtime_person(false);
+ PERFORM truss.runtime_module_writer_qualified(metadata->>'documentId',metadata->>'moduleId',current_actor);
  FOR entry IN SELECT value FROM jsonb_array_elements(jsonb_build_array(metadata->'oldSource',metadata->'oldTarget',metadata->'source',metadata->'target')) WHERE value<>'null'::jsonb LOOP
-  IF NOT truss.runtime_can_read(entry->'owner'->>'documentId',entry->'owner'->>'moduleId') THEN RAISE EXCEPTION 'endpoint reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read_qualified(entry->'owner'->>'documentId',entry->'owner'->>'moduleId',current_actor) THEN RAISE EXCEPTION 'endpoint reader required' USING ERRCODE='42501';END IF;
  END LOOP;
  IF advance THEN
  UPDATE truss.runtime_object_attempt SET next_index=next_index+1,results=results||jsonb_build_array(result),
@@ -1243,7 +1248,7 @@ BEGIN
  RETURN convert_to(result::text,'UTF8');
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_edge_effect(uuid,int,jsonb,text,boolean) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_edge_effect(uuid,int,jsonb,text,boolean,oid,jsonb,bytea) FROM PUBLIC;
 
 -- Historical three-argument edge path retains its original one-step progress.
 CREATE FUNCTION truss.runtime_edge_step(attempt_id uuid,operation_index int,metadata jsonb) RETURNS bytea
@@ -1260,15 +1265,20 @@ REVOKE ALL ON FUNCTION truss.runtime_edge_step(uuid,int,jsonb) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_edge_validate(selected_id bigint,selected_type int) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE latest truss.runtime_edge_transition%ROWTYPE;actual jsonb;entry jsonb;selected_transition bigint;
+DECLARE latest truss.runtime_edge_transition%ROWTYPE;actual jsonb;entry jsonb;selected_transition bigint;current_actor oid;owner record;
 BEGIN
  SELECT * INTO latest FROM truss.runtime_edge_transition WHERE edge_id=selected_id AND rel_type_id=selected_type AND writer_xid=pg_current_xact_id() ORDER BY transition_id DESC LIMIT 1;
- IF NOT FOUND OR NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE id=latest.attempt_id AND writer_xid=latest.writer_xid AND actor_oid=truss.runtime_person(false)) THEN
+ IF NOT FOUND THEN RAISE EXCEPTION 'registered current edge mutation required' USING ERRCODE='55000';END IF;
+ current_actor:=truss.runtime_person(false);
+ IF NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE id=latest.attempt_id AND writer_xid=latest.writer_xid AND actor_oid=current_actor) THEN
   RAISE EXCEPTION 'registered current edge mutation required' USING ERRCODE='55000';END IF;
+ -- Row/transition events remain queued after an early attempt-constraint flush.
+ SELECT document_id,module INTO STRICT owner FROM truss.rel_def WHERE rel_type_id=selected_type;
+ PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module,current_actor);
  FOR selected_transition IN SELECT t.transition_id FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
   WHERE t.edge_id=selected_id AND t.rel_type_id=selected_type AND t.writer_xid=pg_current_xact_id()
    AND (convert_from(a.input_bytes,'UTF8')::jsonb)->'mutationProfile'=truss.runtime_owned_profile() LOOP
-  PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,false);
+  PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,false,current_actor);
  END LOOP;
  SELECT to_jsonb(e) INTO actual FROM truss.edge e WHERE id=selected_id AND rel_type_id=selected_type;
  IF actual IS DISTINCT FROM latest.after_edge THEN RAISE EXCEPTION 'exact final edge required' USING ERRCODE='55000';END IF;
@@ -1368,25 +1378,26 @@ ALTER TABLE truss.runtime_edge_transition ENABLE ALWAYS TRIGGER runtime_edge_tra
 
 CREATE FUNCTION truss.runtime_edge_authorize(selected_attempt uuid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE entry jsonb;selected_transition bigint;completed boolean;context jsonb;revision text;
+DECLARE entry jsonb;selected_transition bigint;completed boolean;context jsonb;revision text;current_actor oid;
 BEGIN
  SELECT complete INTO STRICT completed FROM truss.runtime_object_attempt WHERE id=selected_attempt;
+ current_actor:=truss.runtime_person(false);
  FOR selected_transition IN SELECT t.transition_id FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
   WHERE a.id=selected_attempt AND (convert_from(a.input_bytes,'UTF8')::jsonb)->'mutationProfile'=truss.runtime_owned_profile() LOOP
-  PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,completed);
+  PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,completed,current_actor);
  END LOOP;
  FOR context,revision IN SELECT i.value,t.endpoint_ownership->>'captureCatalogRevision' FROM truss.runtime_edge_transition t
   CROSS JOIN LATERAL jsonb_array_elements(jsonb_build_array(t.endpoint_ownership->'before'->'source',t.endpoint_ownership->'before'->'target',
    t.endpoint_ownership->'after'->'source',t.endpoint_ownership->'after'->'target')) i
   WHERE t.attempt_id=selected_attempt AND i.value<>'null'::jsonb LOOP
-  IF NOT truss.runtime_can_read(context->'identity'->'owner'->>'documentId',context->'identity'->'owner'->>'moduleId') THEN
+  IF NOT truss.runtime_can_read_qualified(context->'identity'->'owner'->>'documentId',context->'identity'->'owner'->>'moduleId',current_actor) THEN
    RAISE EXCEPTION 'original endpoint context reader required' USING ERRCODE='42501';END IF;
-  PERFORM truss.runtime_history_ownership(jsonb_build_object('identity',context->'identity','catalogRevision',revision,'ownership',context->'ownership'));
+  PERFORM truss.runtime_history_ownership_qualified(jsonb_build_object('identity',context->'identity','catalogRevision',revision,'ownership',context->'ownership'),current_actor);
  END LOOP;
  FOR entry IN SELECT DISTINCT i.value FROM truss.runtime_edge_transition t
   CROSS JOIN LATERAL jsonb_array_elements(jsonb_build_array(t.old_source,t.old_target,t.source_identity,t.target_identity)) i
   WHERE t.attempt_id=selected_attempt AND i.value<>'null'::jsonb LOOP
-  IF NOT truss.runtime_can_read(entry->'owner'->>'documentId',entry->'owner'->>'moduleId') THEN RAISE EXCEPTION 'original endpoint reader required' USING ERRCODE='42501';END IF;
+  IF NOT truss.runtime_can_read_qualified(entry->'owner'->>'documentId',entry->'owner'->>'moduleId',current_actor) THEN RAISE EXCEPTION 'original endpoint reader required' USING ERRCODE='42501';END IF;
  END LOOP;
 END;
 $$;

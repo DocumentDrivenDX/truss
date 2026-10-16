@@ -292,3 +292,28 @@ helper at four direct call sites. Exact slot, writer, create ordinal, operation
 and typed-identity checks remain in that helper. Image/endpoint helpers, current
 authority, full settlement and deadlines remain unchanged. This removes repeated
 reads within one invocation; it does not establish that the stress case passes.
+
+## Edge invocation context — 2026-10-16
+
+The isolated full edge-phase profile prioritizes repeated actor qualification
+and effect work. Astra Ultra clears private optional arguments that carry the
+already checked actor and parsed original input through one owned step's read
+helpers. Every module-policy lock, membership and endpoint-reader check remains
+at its existing point. The edge effect checks the original input bytes before
+using prepared JSON and keeps its default parse for other callers.
+
+Fresh actor qualification remains after the edge/journal/transition writes and
+after result-slot/progress writes before closing edge validation. Authorization,
+final group settlement and mandatory commit each qualify their own invocation;
+no actor or permission result is cached across calls. Published step/authorize
+signatures stay intact; new private optional arguments retain default call paths
+and the 219-routine inventory. Basic owned/edge/refusal/upgrade workflows and the
+complete 1,000-edge and 1,024-operation gates remain required.
+
+The focused authority control also reproduced a pre-existing edge-only gap on
+main 79a27c4a: after flushing the attempt constraint and revoking the writer while
+retaining reader access, COMMIT succeeded with one durable edge. Edge row and
+transition settlement now recheck the relationship module writer, so queued
+events remain effective after that early flush. Two last-write actor controls
+cover transition insertion and unfinished attempt progress updates. These checks
+join the basic release workflow; they do not establish a performance pass.
