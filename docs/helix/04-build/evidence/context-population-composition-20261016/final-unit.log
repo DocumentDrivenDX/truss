@@ -1,0 +1,13 @@
+test_sql_substitution_refuses_without_repreparing_parent_or_child (test_current_disclosure_context_capture.ActualContextTests.test_sql_substitution_refuses_without_repreparing_parent_or_child) ... ok
+test_changed_logical_endpoint_key_witness_role_or_relationship_refuse (test_current_disclosure_context_capture.PopulationTests.test_changed_logical_endpoint_key_witness_role_or_relationship_refuse) ... ok
+test_complete_fourteen_objects_twelve_edges_and_parallel_occurrence (test_current_disclosure_context_capture.PopulationTests.test_complete_fourteen_objects_twelve_edges_and_parallel_occurrence) ... ok
+test_coverage_field_order_is_not_key_component_order (test_current_disclosure_context_capture.PopulationTests.test_coverage_field_order_is_not_key_component_order) ... ok
+test_missing_coverage_duplicate_coverage_and_wrong_complete_flag_refuse (test_current_disclosure_context_capture.PopulationTests.test_missing_coverage_duplicate_coverage_and_wrong_complete_flag_refuse) ... ok
+test_native_and_logical_occurrence_census_and_identity_refuse (test_current_disclosure_context_capture.PopulationTests.test_native_and_logical_occurrence_census_and_identity_refuse) ... ok
+test_query_input_model_closure_parameters_and_profile_refuse (test_current_disclosure_context_capture.PopulationTests.test_query_input_model_closure_parameters_and_profile_refuse) ... ok
+test_wrong_closing_profile_refuses_before_cursor_inspection (test_current_disclosure_context_capture.PopulationTests.test_wrong_closing_profile_refuses_before_cursor_inspection) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.128s
+
+OK

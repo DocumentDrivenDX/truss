@@ -128,6 +128,33 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_operation_owner(jsonb,jsonb,int) FROM PUBLIC;
 
 -- Original completed results retain operation ownership across definition updates.
+-- Invocation-local decoded replay frame; no retained authority or public input.
+CREATE FUNCTION truss.runtime_owned_retained_operation_frame(operation jsonb,result jsonb,original_revision text,original_basis jsonb,qualified_actor oid)
+RETURNS TABLE(document_id text,module text,historical_basis jsonb)
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE identity jsonb;owner_document text;owner_module text;revision int;basis jsonb:=original_basis;property truss.prop_def%ROWTYPE;
+BEGIN
+ identity:=result->'identity';
+ IF result->>'operation' IS DISTINCT FROM operation->>'operation' OR jsonb_typeof(identity->'typeId') IS DISTINCT FROM 'string'
+  THEN RAISE EXCEPTION 'retained operation identity required' USING ERRCODE='55000';END IF;
+ IF operation->>'operation' IN ('create_object','update_object','delete_object') THEN
+  SELECT t.document_id,t.module INTO STRICT owner_document,owner_module FROM truss.type_def t WHERE t.type_id=(identity->>'typeId')::int AND t.kind='record';
+  revision:=original_revision::int;
+  IF revision IS NULL OR revision<1 THEN RAISE EXCEPTION 'positive original executed revision required' USING ERRCODE='55000';END IF;
+  IF basis IS NULL THEN basis:=truss.catalog_all_expected_records(revision);END IF;
+  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(identity->>'typeId')::int AND p.retired_rev IS NULL LOOP
+   IF NOT truss.runtime_can_read_qualified(property.definition_document_id,property.declaration_module,qualified_actor) OR (property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable_qualified(property.item,qualified_actor) IS NOT TRUE) THEN RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='42501';END IF;
+  END LOOP;
+ ELSIF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN
+  SELECT r.document_id,r.module INTO STRICT owner_document,owner_module FROM truss.rel_def r WHERE r.rel_type_id=(identity->>'typeId')::int;
+ ELSE RAISE EXCEPTION 'retained operation category required' USING ERRCODE='55000';END IF;
+ IF identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',owner_document,'moduleId',owner_module) THEN
+  RAISE EXCEPTION 'retained owner correspondence required' USING ERRCODE='55000';END IF;
+ RETURN QUERY SELECT owner_document,owner_module,basis;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_retained_operation_frame(jsonb,jsonb,text,jsonb,oid) FROM PUBLIC;
+
 CREATE FUNCTION truss.runtime_retained_operation_owner(selected_attempt uuid,operation_index int)
 RETURNS TABLE(document_id text,module text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
@@ -170,7 +197,7 @@ CREATE FUNCTION truss.object_group_begin(original_input bytea,original_documents
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE input jsonb;documents jsonb;request jsonb;context jsonb;selected record;archive truss.schema_doc%ROWTYPE;
  operation jsonb;source_text text;person oid;writer xid8;ns bytea;rk bytea;route bigint;prior_generation bigint;receipt truss.request_receipt%ROWTYPE;
- raw jsonb;observation bytea;attempt truss.runtime_object_attempt%ROWTYPE;index int:=0;failure_detail text;
+ raw jsonb;observation bytea;attempt truss.runtime_object_attempt%ROWTYPE;index int:=0;failure_detail text;retained_basis jsonb;retained_count int;
 BEGIN
  IF replay_only IS NULL THEN RAISE EXCEPTION 'explicit replay probe required' USING ERRCODE='22023';END IF;
  context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;person:=truss.runtime_person(false);writer:=pg_current_xact_id();
@@ -225,8 +252,14 @@ BEGIN
     OR attempt.position_bytes IS DISTINCT FROM truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,receipt.original_writer_xid)
     OR raw->'semantic' IS DISTINCT FROM jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision',raw->'semantic'->>'executedCatalogRevision',
      'layoutProfile',input->'layoutProfile','mutationProfile',input->'mutationProfile','results',attempt.results,'aliases',attempt.aliases) THEN RAISE EXCEPTION 'original receipt position correspondence required' USING ERRCODE='55000';END IF;
+   retained_count:=jsonb_array_length(attempt.results);
    index:=0;FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
-    SELECT * INTO STRICT selected FROM truss.runtime_retained_operation_owner(attempt.id,index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);index:=index+1;
+    IF NOT attempt.complete OR index<0 OR index>=attempt.next_index OR retained_count<>attempt.next_index THEN
+     RAISE EXCEPTION 'complete retained operation required' USING ERRCODE='55000';END IF;
+    SELECT * INTO STRICT selected FROM truss.runtime_owned_retained_operation_frame(operation,attempt.results->index,
+     raw->'semantic'->>'executedCatalogRevision',retained_basis,person);
+    retained_basis:=selected.historical_basis;
+    PERFORM truss.runtime_module_writer(selected.document_id,selected.module);index:=index+1;
    END LOOP;
    PERFORM truss.runtime_edge_authorize((raw->>'attemptId')::uuid);
    observation:=convert_to(jsonb_build_object('profile','truss-native-create-replay-observation/0.1','sourceEpoch',context->>'sourceEpoch',

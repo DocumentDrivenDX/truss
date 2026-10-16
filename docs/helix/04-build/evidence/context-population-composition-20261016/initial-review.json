@@ -1,0 +1,68 @@
+{
+  "status": "findings",
+  "findings": [
+    {
+      "id": "CONTEXT-COVERAGE-001",
+      "priority": "P2",
+      "file": "packages/python/src/truss/_current_disclosure_context_capture.py",
+      "line": 37,
+      "title": "Compare coverage membership without imposing Record member order",
+      "description": "Coverage fields are collected in ontology entity.fields order (_current_disclosure_facts.py:94,183), but _join_population constructs expected fields in issued Record order and compares arrays exactly. A permutation with identical complete full Field identities therefore refuses. This adds an unintended restriction on valid ontology field ordering; authored selected Key order remains separately ordered and must stay unchanged.",
+      "evidence": "coverage-permutation.log independently confirms refusal for identical complete field membership with reversed order.",
+      "requestedChange": "Compare coverage fields as exact unique full-identity sets with count/duplicate checks; retain typed flags and all authored Key/endpoint ordering checks. Add a valid ontology field permutation regression."
+    }
+  ],
+  "startedAt": "2026-10-16T20:24:37Z",
+  "completedAt": "2026-10-16T20:29:17.221619+00:00",
+  "base": "d47fb4c8faf26651f4b3f82266c5cc9040bba632",
+  "packet": "/private/tmp/truss-context-composition-review-20261016",
+  "packetManifestSha256": "54e4e386a6f860bdd8f7a77245999f24dddc3eac93ff871f09a53b27c984a6ae",
+  "scope": [
+    "same actual compiler parent/current through native definition/population capture, stage and inspector, and closing",
+    "complete selected coverage, typed object/edge incidence and distinct parallel occurrences",
+    "second exact opt-in cohort, preserved existing path, and scoped evidence claims"
+  ],
+  "conclusions": [
+    "Capture issues one actual parent/current. Native Graph/Model factories retain it; evaluator verifies exact current type, actual parent identity and original sourceRequestJson before reuse; closing uses that same current and compares reports plus complete original capture.",
+    "Population and incidence checks preserve distinct occurrences, but Record coverage comparison imposes unintended field ordering; see CONTEXT-COVERAGE-001. This is a compatibility refusal, not an authority bypass.",
+    "Only a second complete explicit binary cohort is added. The old cohort and all other originals-module AST are identical. Evaluator checks after context issuance remain unchanged; the old uncomposed issuance path remains.",
+    "Supplied native evidence distinguishes prior diagnostic source-wrapper setup from the new committed registered-source phase without substitution. Actual new composition covers 14 objects/12 edges; parallel occurrence coverage here is a pure control, not a new 13-edge native composition campaign.",
+    "Registration/source archival and endpoint closing do not establish binding admission, authenticated Subject/current authority, ABA exclusion, full codec equivalence or guarded release. README explicitly preserves those exclusions and all 158 case allocations."
+  ],
+  "independentValidation": {
+    "focusedUnitTests": 7,
+    "unitSeconds": 0.109,
+    "actualExtensionUsed": true,
+    "packetFileHashes": 15,
+    "nativeArchiveMemberHashesAndSizes": 24,
+    "selectedSourcePins": 7,
+    "additionalChecks": [
+      "retained actual native population replay through pure join",
+      "duplicate object identity refusal",
+      "duplicate edge occurrence refusal",
+      "old cohort/full remaining originals AST equality"
+    ],
+    "unitCommand": "PYTHONPATH=<reconstructed base+overlay src>:<tests>:/private/tmp/truss-graph-requirements-final-weft-installed-20261016 TRUSS_GRAPH_JOIN_WEFT_QUALIFICATION=1 /private/tmp/truss-practical-performance-env/bin/python -B -m unittest test_current_disclosure_context_capture -v",
+    "auditCommand": "PYTHONPATH=<reconstructed src>:<final Weft install> /private/tmp/truss-practical-performance-env/bin/python -B audit.py"
+  },
+  "suppliedEvidence": {
+    "nativeTests": 1,
+    "nativeSeconds": 31.259,
+    "nativeReplayedByReviewer": false,
+    "newCompilerCohortVectors": 66,
+    "newCohortLogSeconds": 31.85,
+    "oldCohortSupplementalLogSeconds": 33.719,
+    "cohortVectorsReplayedByReviewer": false,
+    "originalInvalid90SecondSetupRetained": true
+  },
+  "reviewerAttemptHistory": "audit-first.py/log retain an incorrect reviewer expected V2 cell spelling (state/integer). Corrected to the actual public disposition/integerToken shape; audit.py passes. This was a reviewer harness error, not a source finding.",
+  "incompleteScope": [
+    "No independent SQL or native campaign, heavy build, or repeat of either 66-vector campaign. Supplied native cleanup/source endpoint receipts were checked as retained evidence, not independently observed process state.",
+    "No general theorem of complete physical mapping, all model/Key shapes, concurrency/ABA, authority, guarded release or backend acceptance. Latest live README/retention additions and later 17-test run were not part of the frozen review."
+  ],
+  "sourceEdits": false,
+  "nativeExecution": false,
+  "casePromotion": 0,
+  "artifactManifest": "manifest.json",
+  "workingTreeOutsideEvidence": "/private/tmp/truss-context-composition-review-work-20261016"
+}

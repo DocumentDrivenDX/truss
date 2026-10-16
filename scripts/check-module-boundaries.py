@@ -18,13 +18,17 @@ ALLOWED = {
     "access": {"hashlib","umf_access.native_program","__future__","collections.abc","contextlib","datetime","time","typing","json","decimal","pydantic","umf_access.adoption","umf_access.engine_catalog","umf_access.reviewed","umf_access.pages","umf_access.codec_support","umf_access.postgres_read","truss.execution","truss.query"},
     # Original-context/native correspondence data only; no witness admission.
     '_native_model_correspondence': {'dataclasses','hashlib','json','truss._native_source_observation','truss._owner_evidence_json','weft'},
+    # Reviewed same-context association definition data; no permit or issuer.
+    '_native_graph_correspondence': {'dataclasses','hashlib','json','truss._native_model_correspondence','truss._owner_evidence_json','weft'},
+    # Reviewed complete population composition; original context stays held.
+    '_current_disclosure_context_capture': {'dataclasses','json','truss._current_query_sources','truss._current_disclosure_originals','truss._current_disclosure_facts','truss._native_graph_correspondence','truss._current_query_evaluation','truss._owner_evidence_json','weft.weft'},
     # Reviewed stock-cursor metadata observer; no authority admission.
     '_native_source_observation': {'dataclasses','hashlib','importlib.resources','json','truss._owner_evidence_json','truss._security_catalog_assessment','truss._security_catalog_subject_installation','truss.catalog_runtime'},
     # Native source descriptor data only; no native observation or permission.
     '_native_source_descriptor': {'dataclasses','hashlib','json','re','truss._owner_evidence_json'},
     # Reviewed disclosure consumer: explicit held computation and transport edges.
     '_current_disclosure_computation': {'contextlib','hashlib','importlib.resources','json','shutil','subprocess','time','truss._current_disclosure_pipe'},
-    '_current_disclosure_evaluation': {'dataclasses','hashlib','time','truss._current_disclosure_computation','truss._current_disclosure_originals','truss._current_disclosure_session','truss._current_disclosure_stage','truss._current_disclosure_wire','truss._current_query_evaluation','truss._current_query_sources','truss._owner_evidence_json','weft.weft'},
+    '_current_disclosure_evaluation': {'truss._current_disclosure_context_capture','dataclasses','hashlib','time','truss._current_disclosure_computation','truss._current_disclosure_originals','truss._current_disclosure_session','truss._current_disclosure_stage','truss._current_disclosure_wire','truss._current_query_evaluation','truss._current_query_sources','truss._owner_evidence_json','weft.weft'},
     '_current_disclosure_originals': {'dataclasses','hashlib','json','pathlib','truss._current_disclosure_computation','truss._current_query_originals','truss._owner_evidence_json','weft.weft'},
     '_current_disclosure_pipe': {'truss._current_query_pipe'},
     '_current_disclosure_session': {'truss._current_disclosure_pipe','truss._current_disclosure_wire','truss._current_query_evaluation','truss._owner_evidence_json'},

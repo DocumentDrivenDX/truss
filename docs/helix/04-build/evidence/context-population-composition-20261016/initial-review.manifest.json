@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "path": "audit-first.log",
+      "sha256": "9dea1dda55fe684a163ebf34d504c04a2ba05b2c298e997a7dcf7cdf00300cc8",
+      "bytes": 364
+    },
+    {
+      "path": "audit-first.py",
+      "sha256": "e58f0b7ca925fc6adfb04743d0482a42e8848604a659185e80528aa8c4ada859",
+      "bytes": 3347
+    },
+    {
+      "path": "audit.json",
+      "sha256": "c8c515670c0e52a8e4bd6efafd961299d9cb70438d380c0f420bcc240cce2c02",
+      "bytes": 3107
+    },
+    {
+      "path": "audit.log",
+      "sha256": "c8c515670c0e52a8e4bd6efafd961299d9cb70438d380c0f420bcc240cce2c02",
+      "bytes": 3107
+    },
+    {
+      "path": "audit.py",
+      "sha256": "b33a05bd6b36e1a265beb590cb8ee4b35b9cc8255d906b1484a9f095c2e77ddd",
+      "bytes": 3358
+    },
+    {
+      "path": "coverage-permutation.log",
+      "sha256": "fabe0d747d1fb91da48b6a97a329e31dd210506ddaacd753939fee9c3a1c8f40",
+      "bytes": 130
+    },
+    {
+      "path": "evaluation-before.py",
+      "sha256": "dbc5d85470a84d3f51ba96044a85e3f70d78249cbb61fa3418dae616f3a9971b",
+      "bytes": 6768
+    },
+    {
+      "path": "finalize.py",
+      "sha256": "a013a2b676e9b24422fe1ff07129c0df6b88aee94d35d1f1fbcb87a9521ee88d",
+      "bytes": 5941
+    },
+    {
+      "path": "originals-before.py",
+      "sha256": "fb8d2b5487a07bbd71936d6ad9cebd4bae8578ba10b7eb7e8018451f7d662117",
+      "bytes": 7528
+    },
+    {
+      "path": "review.json",
+      "sha256": "600bd7fce4d36bbb751330dc2d10d1e6b2797e576f9d00e3188d1967d187970f",
+      "bytes": 5276
+    },
+    {
+      "path": "reviewed-inputs/docs/helix/04-build/evidence/context-population-composition-20261016/README.md",
+      "sha256": "f70974b8d63350b68774490268eca3bbbff85acabd14d809743175c44363cf84",
+      "bytes": 4206
+    },
+    {
+      "path": "reviewed-inputs/docs/helix/04-build/evidence/context-population-composition-20261016/historical-invalid-timeout.log",
+      "sha256": "1d4412538d58aec01e3a3be19450f4ef6a601842d855b139b932fd39f0fc67dc",
+      "bytes": 1852
+    },
+    {
+      "path": "reviewed-inputs/docs/helix/04-build/evidence/context-population-composition-20261016/native-artifacts.manifest.json",
+      "sha256": "47679b8edda747b5eea495577365d979824c7d2bf0782d36ad171d79f869a410",
+      "bytes": 3430
+    },
+    {
+      "path": "reviewed-inputs/docs/helix/04-build/evidence/context-population-composition-20261016/native-artifacts.zip",
+      "sha256": "65769d807b4e091216081eafba98dd3ddba0d932d5bfbf6afc54420ab7fe43fe",
+      "bytes": 26820
+    },
+    {
+      "path": "reviewed-inputs/docs/helix/04-build/evidence/context-population-composition-20261016/native.log",
+      "sha256": "171f857fa883c1eeae571bfc25d3fa1c11c23395f817851144dadd3e05f12774",
+      "bytes": 311
+    },
+    {
+      "path": "reviewed-inputs/docs/helix/04-build/evidence/context-population-composition-20261016/new-consumer-66.log",
+      "sha256": "cf4c07a68883cc2d9da970b795d48fef58fa4770ff9aa14c0c7748c30bb3e82f",
+      "bytes": 285
+    },
+    {
+      "path": "reviewed-inputs/docs/helix/04-build/evidence/context-population-composition-20261016/postflight.json",
+      "sha256": "14b8d6ab2449570f5fe3d22e575f14a4bd698aa4ed356fad0e7982875bfcc2ed",
+      "bytes": 1206
+    },
+    {
+      "path": "reviewed-inputs/docs/helix/04-build/evidence/context-population-composition-20261016/preflight.json",
+      "sha256": "4619a0e5a0e5b383367bbbe74dc4ed2f4b581b06bc4ec1e29e6f309c3ed1db78",
+      "bytes": 1310
+    },
+    {
+      "path": "reviewed-inputs/docs/helix/04-build/evidence/context-population-composition-20261016/retention.json",
+      "sha256": "f589ebe3a48c6218a532c47ddf3b17dbccca629342f29a2fc708e8b5e359a022",
+      "bytes": 1620
+    },
+    {
+      "path": "reviewed-inputs/docs/helix/04-build/evidence/context-population-composition-20261016/unit.log",
+      "sha256": "170b719e5354c583e48b729f09e94036399d5f59f727f63a9c967a4a0f7adc25",
+      "bytes": 1474
+    },
+    {
+      "path": "reviewed-inputs/manifest.json",
+      "sha256": "54e4e386a6f860bdd8f7a77245999f24dddc3eac93ff871f09a53b27c984a6ae",
+      "bytes": 2280
+    },
+    {
+      "path": "reviewed-inputs/packages/python/src/truss/_current_disclosure_context_capture.py",
+      "sha256": "f3a35cc7fec6a3b981233ccaa3dcd8fa879bfca9004b77b26d0ccf79608af0bb",
+      "bytes": 7807
+    },
+    {
+      "path": "reviewed-inputs/packages/python/src/truss/_current_disclosure_evaluation.py",
+      "sha256": "a32be39ef28eff3f02751923f3a5349a40ea30cf76f3d9f407525d4e05f7d187",
+      "bytes": 6421
+    },
+    {
+      "path": "reviewed-inputs/packages/python/src/truss/_current_disclosure_originals.py",
+      "sha256": "ca5c10372964b5c42ccafa01ad91ecbad7d3c39b12922769d37de5b7ca4016cd",
+      "bytes": 8305
+    },
+    {
+      "path": "reviewed-inputs/packages/python/tests/test_current_disclosure_context_capture.py",
+      "sha256": "8f089f0c69b2a3f18472574adf85d674b999c6f12ed77d114b70edf3436564b4",
+      "bytes": 6140
+    },
+    {
+      "path": "reviewed-inputs/packages/python/tests/test_current_disclosure_context_native.py",
+      "sha256": "bd44f11bbbdcba8d109f55d8bd17d52861f42c1643465ed054a2f4bcd9b9a4da",
+      "bytes": 6497
+    },
+    {
+      "path": "selected-source-correspondence.json",
+      "sha256": "6cdafad90275e110b1dbdfe3ca95321de4add342552d0aed1d70c649dfd74028",
+      "bytes": 935
+    },
+    {
+      "path": "supplemental-old-consumer-66.log",
+      "sha256": "2076387ca6b3218b331ef195208df7e6e99981ab595b5671ac1757466672b30e",
+      "bytes": 285
+    },
+    {
+      "path": "unit-replay.log",
+      "sha256": "a195101c6148193b43394a7fc242986b235b3661265626fea6f35ee8db086566",
+      "bytes": 1474
+    }
+  ],
+  "artifactCount": 29,
+  "totalBytes": 121584,
+  "excludes": [
+    "manifest.json (self)"
+  ]
+}
