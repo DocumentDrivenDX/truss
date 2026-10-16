@@ -10,6 +10,24 @@ from ._owner_evidence_json import decode_owner_evidence_json
 from .query import QueryRows
 
 
+def _verify_current_rows(native,current,binding_bytes,artifact_bytes,scans,result,*,source_request_sha256,designation_sha256):
+    frame={'version':'weft.current-query.refinement-input/0.1-candidate',
+           'sourceRequestSha256':source_request_sha256,
+           'designationSha256':designation_sha256,
+           'materializationBindingSha256':sha256(binding_bytes).hexdigest(),
+           'compiledArtifactSha256':sha256(artifact_bytes).hexdigest(),
+           'scans':scans,'resultRows':result}
+    frame_bytes=wire(frame)
+    report=decode_owner_evidence_json(native.CurrentQueryPreparation.check_postgresql_current_rows_candidate_json(
+        current,binding_bytes.decode(),frame_bytes.decode()).encode())
+    expected_report={key:frame[key] for key in ('sourceRequestSha256','designationSha256',
+                     'materializationBindingSha256','compiledArtifactSha256')}
+    expected_report.update(version='weft.current-query.refinement-result/0.1-candidate',matched=True,
+                           authority=False,securityReady=False,nativeAdmission='required',
+                           refinementInputSha256=sha256(frame_bytes).hexdigest())
+    if json.dumps(report,sort_keys=True,separators=(',',':'))!=json.dumps(expected_report,sort_keys=True,separators=(',',':')):raise ValueError('Original held query refinement correspondence required')
+
+
 def _domain(modules,field):
     found=[]
     for module in modules:
@@ -65,7 +83,7 @@ def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_row
     native,current,packet,designation,evaluated,owner,modules=evaluation
     facts=json.loads(captured.facts_bytes)
     outcomes={op['id']:op['outcome'] for op in evaluated['batch']['operations']}
-    tables=[];scans=[];bindings=[];stage_maps={};total=0;private_bytes=0;admitted_count=0
+    tables=[];scans=[];bindings=[];stage_maps={};refinement_scans=[];total=0;private_bytes=0;admitted_count=0
     for scan in packet['scans']:
         scan_id=scan['scan'];population=[f for f in facts if f['type']==scan['type']]
         rules=outcomes[scan_id+'-rules'];cells=outcomes[scan_id+'-cells']
@@ -190,11 +208,16 @@ def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_row
             values=values_by_row[index];stage_maps[scan_id][key]=values
             cursor.execute(sql.SQL('INSERT INTO {}.{} VALUES ({})').format(sql.Identifier(schema),sql.Identifier(name),sql.SQL(',').join(sql.Placeholder() for _ in range(2+len(columns)))),
                            (True,key,*(values[c] for c,_ in columns)),prepare=False)
+        refinement_scans.append({'scan':scan_id,'expectedRowCount':str(len(eligible)),'rows':[
+            {'key':key,'cells':{column:{'family':family,'value':str(values[column])}
+             for column,family in columns}} for key,values in stage_maps[scan_id].items()]})
         scans.append({'scan':scan_id,'target':scan['record'],'relation':{'schema':schema,'table':name,'eligibleColumn':'eligible','rowKeyColumn':'private_key'}})
     binding={'version':'weft.postgresql.current-values/0.2-candidate','sourceRequestSha256':packet['sourceRequestSha256'],
              'designationSha256':packet['designationSha256'],'sourceBindingSha256':packet['binding']['sha256'],'scans':scans,'values':bindings}
     cursor._deadline.check()
-    compiled=decode_owner_evidence_json(native.CurrentQueryPreparation.lower_postgresql_current_rows_candidate_json(current,wire(binding).decode()).encode())
+    binding_bytes=wire(binding)
+    artifact_bytes=native.CurrentQueryPreparation.lower_postgresql_current_rows_candidate_json(current,binding_bytes.decode()).encode()
+    compiled=decode_owner_evidence_json(artifact_bytes)
     cursor._deadline.check()
     if (compiled['securityReady'] is not False or compiled['authority'] is not False or compiled['nativeAdmission']!='required'
             or compiled['sourceRequestSha256']!=packet['sourceRequestSha256']
@@ -241,6 +264,13 @@ def stage_and_execute(cursor,captured,evaluation,*,maximum_rows,maximum_scan_row
         result=raw.fetchmany(maximum_rows+1)
         cursor._deadline.check()
         if len(result)>maximum_rows:raise CurrentQueryLimit('Complete guarded query row limit exceeded')
+        # Complete eligible captures precede application filtering and LIMIT.
+        # The actual compiler checker derives expected relational results; native
+        # contributors never supply their own expected input population.
+        cursor._deadline.check()
+        _verify_current_rows(native,current,binding_bytes,artifact_bytes,refinement_scans,result,
+                             source_request_sha256=packet['sourceRequestSha256'],designation_sha256=packet['designationSha256'])
+        cursor._deadline.check()
         for row in result:
             if len(row)!=width+1 or any(type(v) is not str for v in row):raise ValueError('Exact nonnull native query carriers required')
             # The caller's public budget must not depend on private contributor
