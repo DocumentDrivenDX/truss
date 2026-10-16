@@ -737,7 +737,11 @@ BEGIN
  -- attempt commit. Row settlement independently rechecks current authority.
  FOR owned_transition IN
   SELECT t.*,a.actor_oid AS original_actor,a.writer_xid AS original_writer,
-   a.next_index AS original_next,a.results AS original_results
+   a.next_index AS original_next,
+   CASE WHEN a.actor_oid IS NOT DISTINCT FROM current_actor
+    AND a.writer_xid IS NOT DISTINCT FROM pg_current_xact_id()
+    AND t.operation_index>=0 AND t.operation_index<a.next_index
+    THEN jsonb_array_length(a.results) END AS original_result_count
   FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
   WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id()
    AND a.context->'mutationProfile'=truss.runtime_owned_profile()
@@ -745,7 +749,7 @@ BEGIN
   IF owned_transition.original_actor IS DISTINCT FROM current_actor
    OR owned_transition.original_writer IS DISTINCT FROM pg_current_xact_id()
    OR owned_transition.operation_index<0 OR owned_transition.operation_index>=owned_transition.original_next
-   OR jsonb_array_length(owned_transition.original_results)<>owned_transition.original_next THEN
+   OR owned_transition.original_result_count<>owned_transition.original_next THEN
    RAISE EXCEPTION 'original object operation progress and actor required' USING ERRCODE='55000';END IF;
   SELECT t.document_id,t.module INTO STRICT owner FROM truss.type_def t WHERE t.type_id=selected_type;
   PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module,current_actor);

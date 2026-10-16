@@ -505,3 +505,20 @@ The unchanged full1,024-create/update/commit/replay/readback and final-operation
 fault checks also pass locally (two passes,41.764s). Astra Ultra clears source
 and tests. These elapsed suite times do not establish a causal speedup. Earlier
 installed-runner failures remain open pending the new exact wheel check.
+
+Transient built-in PostgreSQL function statistics on main7ac63209 identify
+row settlement as a remaining cost: 1,024 real requested creates take9,328.10ms
+in application and5,064.01ms in caller COMMIT on the local host. The row validator
+runs3,072 times with3,161.57ms self time; the creation leaf runs1,024 times with
+2,960.13ms self time. These instrumented shared-host observations exclude
+individual attribution of inlined SQL and are not a causal comparison. The
+statistics are confined to a disposable fixture; no runtime instrumentation is
+installed. CI38881630345 still fails the complete creation deadline on both
+release platforms.
+
+The row validator now projects the result-array count it actually consumes,
+instead of transferring the complete growing result array into its loop record.
+The original actor/writer/ordinal guards still control evaluation, and every
+current authority, root, row, key, journal and group check remains. Five existing
+local custody/full-capacity/final-fault workflows pass (51.685s); Astra Ultra
+clears the source. Runner qualification and measured benefit remain pending.
