@@ -136,3 +136,25 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
         self.assertEqual(dict(self.read(assembly,tx,identity).object.values)['A-label'],'kept')
         self.assertEqual(self.read(assembly,tx,identity).object.version,1)
         host.detach();connection.commit()
+
+    def test_writer_revoked_after_attempt_constraint_flush_still_aborts(self):
+        connection,host,assembly,tx=self.ready()
+        created_input,_=self.input(assembly,tx)
+        created=self.apply(assembly,tx,created_input,RequestNone())
+        self.assertIsInstance(created,GroupSuccess)
+        identity=created.response.semantic.results[0].identity
+        host.detach();connection.commit()
+        original=self.admin.execute('SELECT to_jsonb(o) FROM truss.object o WHERE id=%s AND type_id=%s',(int(identity.id),int(identity.type_id))).fetchone()
+        connection,host,assembly,tx=self.consumer()
+        change=UpdateObject(target=StoredObjectReference(identity=identity),
+            set=(AuthoredValue(name='A-value',value=TextValue(kind='string',text='pending-change')),),unset=())
+        changed_input,_=self.input(assembly,tx,(change,),action='update')
+        self.assertIsInstance(self.apply(assembly,tx,changed_input,RequestNone()),GroupSuccess)
+        connection.execute('SET CONSTRAINTS truss.runtime_object_attempt_commit IMMEDIATE')
+        self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE')
+        self.admin.execute('REVOKE group_writer FROM consumer')
+        host.detach()
+        with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+            connection.commit()
+        connection.rollback()
+        self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o WHERE id=%s AND type_id=%s',(int(identity.id),int(identity.type_id))).fetchone(),original)

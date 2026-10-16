@@ -624,17 +624,36 @@ REVOKE ALL ON FUNCTION truss.runtime_create_transition_validate(bigint) FROM PUB
 
 CREATE FUNCTION truss.runtime_object_validate(selected_id bigint,selected_type int) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;creation_transition bigint;
+DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;creation_transition bigint;owned_transition record;owner record;root_type int;
 BEGIN
  current_actor:=truss.runtime_person(false);
  FOR creation_transition IN SELECT transition_id FROM truss.runtime_object_transition
   WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id() AND before_object IS NULL LOOP
   PERFORM truss.runtime_create_transition_validate(creation_transition);
  END LOOP;
- FOR creation_transition IN SELECT t.transition_id FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
+ -- Immutable transition semantics are checked at final group settlement and
+ -- attempt commit. Row settlement independently rechecks current authority.
+ FOR owned_transition IN
+  SELECT t.*,a.actor_oid AS original_actor,a.writer_xid AS original_writer,
+   a.next_index AS original_next,a.results AS original_results
+  FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
   WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id()
-   AND convert_from(a.input_bytes,'UTF8')::jsonb->'mutationProfile'=truss.runtime_owned_profile() LOOP
-  PERFORM truss.runtime_owned_object_transition_validate(creation_transition,false);
+   AND convert_from(a.input_bytes,'UTF8')::jsonb->'mutationProfile'=truss.runtime_owned_profile()
+ LOOP
+  IF owned_transition.original_actor IS DISTINCT FROM current_actor
+   OR owned_transition.original_writer IS DISTINCT FROM pg_current_xact_id()
+   OR owned_transition.operation_index<0 OR owned_transition.operation_index>=owned_transition.original_next
+   OR jsonb_array_length(owned_transition.original_results)<>owned_transition.original_next THEN
+   RAISE EXCEPTION 'original object operation progress and actor required' USING ERRCODE='55000';END IF;
+  SELECT t.document_id,t.module INTO STRICT owner FROM truss.type_def t WHERE t.type_id=selected_type;
+  PERFORM truss.runtime_module_writer(owner.document_id,owner.module);
+  IF NOT truss.runtime_object_values_readable(selected_type) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
+  FOR root_type IN SELECT DISTINCT (image->>'root_type')::int
+   FROM jsonb_array_elements(jsonb_build_array(owned_transition.before_object,owned_transition.after_object)) images(image)
+   WHERE image->>'root_type' IS NOT NULL LOOP
+   SELECT t.document_id,t.module INTO STRICT owner FROM truss.type_def t WHERE t.type_id=root_type;
+   IF NOT truss.runtime_can_read(owner.document_id,owner.module) THEN RAISE EXCEPTION 'current historical root reader required' USING ERRCODE='42501';END IF;
+  END LOOP;
  END LOOP;
  -- Later ordinary mutations cannot suppress original registration dependencies.
  FOR rebind IN SELECT * FROM truss.runtime_catalog_rebind_transition t WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.writer_xid=pg_current_xact_id() LOOP
@@ -689,7 +708,6 @@ BEGIN
  IF attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false) OR attempt.complete THEN RAISE EXCEPTION 'current unfinished group required' USING ERRCODE='55000';END IF;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;request:=convert_from(attempt.request_bytes,'UTF8')::jsonb;
  IF attempt.next_index<>jsonb_array_length(input->'operations') OR jsonb_array_length(attempt.results)<>attempt.next_index THEN RAISE EXCEPTION 'complete ordered results required' USING ERRCODE='55000';END IF;
- IF input->'mutationProfile'=truss.runtime_owned_profile() THEN PERFORM truss.runtime_owned_group_validate(attempt.id,true);END IF;
  IF attempt.context ? 'creationTransitionProfile' THEN
   IF attempt.context->'creationTransitionProfile' IS DISTINCT FROM '{"identity":"truss-unified-create-transition","version":"0.1","sha256":"765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"}'::jsonb AND attempt.context->'creationTransitionProfile' IS DISTINCT FROM '{"identity":"truss-unified-create-transition","version":"0.2","sha256":"073782e2517f2a7e26c8d6479c6266ececf68963681ccfb6a380e9cd16f2e11b"}'::jsonb THEN
    RAISE EXCEPTION 'known original creation storage profile required' USING ERRCODE='55000';END IF;
@@ -733,6 +751,7 @@ BEGIN
  FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
   SELECT * INTO STRICT selected FROM truss.runtime_operation_owner(operation,input->'operations',index);PERFORM truss.runtime_module_writer(selected.document_id,selected.module);index:=index+1;
  END LOOP;
+ IF input->'mutationProfile'=truss.runtime_owned_profile() THEN PERFORM truss.runtime_owned_group_validate(attempt.id,true);END IF;
  RETURN convert_to(jsonb_build_object('outcome','success','disposition','applied','durability','pending','semantic',semantic,
   'receiptToken',CASE WHEN receipt.storage_row_id IS NOT NULL THEN truss.runtime_receipt_token(truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,attempt.writer_xid)) END)::text,'UTF8');
 END;

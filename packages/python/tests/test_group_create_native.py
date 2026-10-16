@@ -263,10 +263,12 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         self.assertIsInstance(refused,Ok);self.assertIsInstance(refused.value,GroupFailed)
         self.assertEqual(refused.value.failure.code,'unauthorized_person')
         self.assertEqual(connection.execute('TABLE prior_work').fetchall(),[('kept',)])
-        for table in ('object','runtime_create_group','request_receipt','journal'):
+        host.detach();connection.commit()
+        for table in ('object','runtime_object_attempt','runtime_object_transition','request_receipt','journal'):
             self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(table))).fetchone(),(0,))
         self.admin.execute('GRANT group_writer TO consumer WITH SET FALSE')
+        connection,host,assembly,tx=self.consumer()
         self.assertIsInstance(self.apply(assembly,tx,input,request),GroupSuccess)
         host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(1,))
-        self.assertEqual(self.admin.execute("SELECT actor_name,actor_oid=(SELECT oid FROM pg_roles WHERE rolname='consumer') FROM truss.runtime_create_group").fetchall(),[('consumer',True)])
+        self.assertEqual(self.admin.execute("SELECT convert_from(decode(t.journal->0->'new_value'->>'bytesBase64','base64'),'UTF8')::jsonb#>>'{origin,databaseRole}',a.actor_oid=(SELECT oid FROM pg_roles WHERE rolname='consumer') FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id WHERE t.before_object IS NULL").fetchall(),[('consumer',True)])
