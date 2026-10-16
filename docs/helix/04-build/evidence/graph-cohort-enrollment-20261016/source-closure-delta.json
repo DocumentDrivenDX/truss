@@ -1,0 +1,15 @@
+{
+  "oldSourceCount": 257,
+  "newSourceCount": 257,
+  "added": [],
+  "removed": [],
+  "changed": {
+    "src/extensions/security/catalog-runtime-candidate.ts": {
+      "before": "ba171ea423b9205f2e8c7d35addef22f311b2076503cbd4b559e2abaa46c9b78",
+      "after": "83fe06abf2690c3806700049fb66b5e93d8a16f6f45025aeffd6adbde89673ad"
+    }
+  },
+  "bun": "1.4.2",
+  "oldBundle": "d333226d9186136704d3f84a9c9dbfc44796efebab563dbc732d60337d2e03eb",
+  "newBundle": "548b7ff64dabf3bc796afe99ecca265f5bcf242202e367ba7125e62c64f0a735"
+}

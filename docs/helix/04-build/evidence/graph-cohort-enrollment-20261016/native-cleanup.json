@@ -1,0 +1,17 @@
+{
+  "scope": "Post-test fixture-prefix process scan and root birth times relative to first attempt; older unrelated roots retained untouched",
+  "liveFixturePostgres": [],
+  "remainingFixtureRoots": [
+    "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-public-catalog-itdxcq3a",
+    "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-public-catalog-5errh_y7",
+    "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-public-catalog-wrnuev93"
+  ],
+  "passed": true,
+  "attemptStartedUnix": 1792177726.9547262,
+  "newFixtureRoots": [],
+  "preexistingFixtureRoots": [
+    "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-public-catalog-itdxcq3a",
+    "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-public-catalog-5errh_y7",
+    "/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-public-catalog-wrnuev93"
+  ]
+}

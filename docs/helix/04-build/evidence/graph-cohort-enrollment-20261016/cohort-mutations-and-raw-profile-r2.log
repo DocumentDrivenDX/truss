@@ -1,0 +1,7 @@
+test_enrolled_assets_verify_and_each_source_stage_mutation_refuses (test_current_disclosure_cohort.DisclosureCohortTests.test_enrolled_assets_verify_and_each_source_stage_mutation_refuses) ... ok
+test_raw_capture_has_explicit_empty_graph_profile_and_refuses_core_relationships (test_current_disclosure_cohort.RawCaptureProfileTests.test_raw_capture_has_explicit_empty_graph_profile_and_refuses_core_relationships) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 2.161s
+
+OK

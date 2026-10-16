@@ -30934,22 +30934,37 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       }
       case "not":
         return securityNot(evaluate(expr.arg, resource, vars));
-      case "and":
-        return securityAnd(expr.args.map((x) => evaluate(x, resource, vars)));
-      case "or":
-        return securityOr(expr.args.map((x) => evaluate(x, resource, vars)));
+      case "and": {
+        let truth = "T";
+        for (const arg of expr.args) {
+          truth = securityAnd([truth, evaluate(arg, resource, vars)]);
+          if (truth === "F")
+            return "F";
+        }
+        return truth;
+      }
+      case "or": {
+        let truth = "F";
+        for (const arg of expr.args) {
+          truth = securityOr([truth, evaluate(arg, resource, vars)]);
+          if (truth === "T")
+            return "T";
+        }
+        return truth;
+      }
       case "exists": {
         const checks = associations[expr.association];
-        let found = false, unknown = false;
+        let unknown = false;
         for (const row of sourceRows(checks)) {
           step();
           const nested = new Map(vars);
           nested.set(expr.occurrence, { checks, row });
-          const t = evaluate(expr.where, resource, nested);
-          found ||= t === "T";
-          unknown ||= t === "U";
+          const truth = evaluate(expr.where, resource, nested);
+          if (truth === "T")
+            return "T";
+          unknown ||= truth === "U";
         }
-        return found ? "T" : unknown ? "U" : "F";
+        return unknown ? "U" : "F";
       }
       default:
         return fail14("Unknown compiled operation");

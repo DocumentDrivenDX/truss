@@ -19,7 +19,7 @@ class GraphTransportTests(unittest.TestCase):
   initial=wire(corpus['initialize']);receipt=frame_digest(initial)
   request=wire({'version':VERSION,'kind':'evaluate-disclosure','requestId':'evaluate',
                 'sourceReceipt':receipt})[:-1]+b',"cut":'+raw+b'}'
-  with open_current_disclosure_computation(bun_executable='/opt/homebrew/bin/bun',timeout_seconds=20) as child:
+  with open_current_disclosure_computation(bun_executable=os.environ.get('TRUSS_DISCLOSURE_BUN','/opt/homebrew/bin/bun'),timeout_seconds=20) as child:
    self.assertEqual(json.loads(child.exchange(initial,source_receipt=receipt))['kind'],'initialized')
    result=json.loads(child.exchange(request,source_receipt=receipt))
    self.assertEqual(result['kind'],'disclosure-evaluated')
@@ -32,16 +32,11 @@ class GraphTransportTests(unittest.TestCase):
    if not packet['id'].startswith('parallel:'):
     with self.subTest(packet=packet['id']):self._check_packet(packet)
 
- # Required ideal behavior remains failing on the pinned 206951/d333 cohort.
- # Current UMF source passes these; upgrading packaged assets is a separate gate.
- @unittest.expectedFailure
- def test_parallel_alice_required_behavior_pending_cohort_upgrade(self):
+ def test_parallel_alice_preserves_required_behavior(self):
   self._check_packet(json.loads(fixture.read_bytes())['packets'][3])
- @unittest.expectedFailure
- def test_parallel_bob_required_behavior_pending_cohort_upgrade(self):
+ def test_parallel_bob_preserves_required_behavior(self):
   self._check_packet(json.loads(fixture.read_bytes())['packets'][4])
- @unittest.expectedFailure
- def test_parallel_outsider_required_behavior_pending_cohort_upgrade(self):
+ def test_parallel_outsider_preserves_required_behavior(self):
   self._check_packet(json.loads(fixture.read_bytes())['packets'][5])
 
 if __name__=='__main__':unittest.main()

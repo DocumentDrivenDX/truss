@@ -1,0 +1,89 @@
+{
+  "review": "Truss graph cohort enrollment \u2014 bounded independent review",
+  "status": "complete",
+  "verdict": "no findings within the three requested enrollment questions",
+  "findings": [],
+  "startedAt": "2026-10-16T19:09:41Z",
+  "completedAt": "2026-10-16T19:13:44.677728+00:00",
+  "deadline": "2026-10-16T19:14:41Z",
+  "base": "1972e596cc07263518c9a63cf0ccffee34b1d541",
+  "inputDirectory": "/private/tmp/truss-graph-cohort-enrollment-review-20261016",
+  "changeDiffSha256": "06ece7beb9e3f6f384d9d47c638ee08b86e5c075598f48c1ffc91d9b02663143",
+  "inputManifestSha256": "053a25f75106f2cc73fc10381e99e37e9f467354816aa50e01d7747f4a8d97ae",
+  "answers": [
+    {
+      "question": 1,
+      "conclusion": "Coherent enrollment coordinates. The exact new bundle, manifest, metafile and consumer manifest match the retained built artifact. Only UMF revision/bundle/manifest cohort coordinates change; Weft revision, wheel/module identity, Bun 1.4.2 guard, protocol, limits and other consumer behavior remain unchanged."
+    },
+    {
+      "question": 2,
+      "conclusion": "All 257 captured source paths and bytes verified. Exactly catalog-runtime-candidate.ts changes, matching the prior independently reviewed optimization. Bytes outside the pure truth evaluator are unchanged, including full preflight, limits, authority and rule/disclosure folds."
+    },
+    {
+      "question": 3,
+      "conclusion": "Exactly three parallel-case expectedFailure decorators are removed, with method names updated and desired assertion bodies preserved. The 66-case test strengthens refusals to the actual held-rendered-disclosure stage. Retained component evidence is qualified as supplied logical populations/simulated driver; no acceptance promotion."
+    }
+  ],
+  "independentChecks": {
+    "passed": true,
+    "base": "1972e596cc07263518c9a63cf0ccffee34b1d541",
+    "frozenFilesVerified": 23,
+    "sourcePins": 257,
+    "sameSourcePaths": true,
+    "changedSources": [
+      "src/extensions/security/catalog-runtime-candidate.ts"
+    ],
+    "allCapturedSourceBytesVerified": true,
+    "unchangedRuntimeOutsidePureTruthEvaluator": true,
+    "priorReviewedOptimizationExact": true,
+    "cohortCoordinateChanges": [
+      "umfRevision",
+      "umfBundleSha256",
+      "umfManifestSha256"
+    ],
+    "WeftBunProtocolLimitsAndAuthorityCodeUnchanged": true,
+    "threeExpectedFailureMarkersRemovedOnlyDesiredBodiesUnchanged": true,
+    "refusalAssertionsStrengthened": true,
+    "independentAssetMutationCases": 4,
+    "assetRestoreChecks": 4,
+    "selectedBun142BinaryHashAndVersionVerified": true,
+    "SQLExecuted": false,
+    "all66NotRerun": true
+  },
+  "commands": [
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B check.py",
+      "exitCode": 0,
+      "log": "check.log"
+    },
+    {
+      "command": "asset cohort unittest invoked by check.py against reconstructed baseline plus exact overlay",
+      "result": "1 test passed; four artifact mutations refused and four restorations passed",
+      "log": "asset-controls.log"
+    }
+  ],
+  "suppliedEvidenceInspected": {
+    "focusedTests": 27,
+    "original66Replay": "passed; inspected, not rerun",
+    "strengthened66Replay": "passed; inspected, not rerun",
+    "earlierBun143GuardFailure": "retained and correctly excluded from success; exact Cellar Bun 1.4.2 hash and version independently checked"
+  },
+  "nativeQualification": {
+    "SQLExecutedByReviewer": false,
+    "nativeAcceptanceGranted": false,
+    "separateParentReport": "After packet capture, parent reported six native tests: one pass and five failures because the pre-existing raw CurrentQueryFactCapture lacks graphs_bytes. This is a separate integration defect outside this enrollment-only diff; proposed repair and rerun were not inspected or credited. Frozen pending-native qualification is not a native pass claim."
+  },
+  "limits": [
+    "No full 66-case replay, heavy build, native campaign, nested delegation or future-work wait.",
+    "Source custody is selected captured byte/hash correspondence, not hermetic build, held-file or ABA proof.",
+    "No source/current-cut/caller authority, guarded release, broad backend acceptance or required-case promotion."
+  ],
+  "retention": {
+    "manifest": "manifest.json",
+    "shape": "files maps relative path to {sha256, bytes}; root manifest excludes itself",
+    "excluded": [
+      "working/ (reconstructible baseline plus overlay execution tree)",
+      "__pycache__/"
+    ]
+  }
+}

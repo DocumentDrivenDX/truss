@@ -1,0 +1,7 @@
+{
+  "wheel": "/private/tmp/truss-graph-cohort-wheel-20261016/truss_toolkit-0.0.38.dev0-py3-none-any.whl",
+  "sha256": "8d48e91c93a7edbc937b37efb657b1a89a3b4840cc1e47a661e374bf3b4ca06c",
+  "exactSourceMembers": 502,
+  "extracted": "/private/tmp/truss-graph-cohort-wheel-installed-20261016",
+  "scope": "package payload byte equality, not dependency or native behavior"
+}

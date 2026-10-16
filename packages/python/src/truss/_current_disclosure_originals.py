@@ -17,9 +17,9 @@ class CurrentDisclosureOriginals:
 # Whole selections stay fixed; no ABI2 or unrecognized-module fallback.
 _CONSUMER_COHORTS=({
     'profile':'truss-current-disclosure-consumer/0.1-candidate',
-    'umfRevision':'206951ff20d766874b9af7d29fdf8027c3bab499',
-    'umfBundleSha256':'d333226d9186136704d3f84a9c9dbfc44796efebab563dbc732d60337d2e03eb',
-    'umfManifestSha256':'4e50675be3a39433ea99ecae646938cec1f1a7cda931ab5f98b49cb26ada4951',
+    'umfRevision':'11b412e4a783fef8075aeb4109a286650a0bda28',
+    'umfBundleSha256':'548b7ff64dabf3bc796afe99ecca265f5bcf242202e367ba7125e62c64f0a735',
+    'umfManifestSha256':'45154e0f3bd5973ddc4d6fb40fdebf27afb51fdc018d2f055ba580c9c07437d2',
     'bunVersion':'1.4.2',
     'weftRevision':'b8c34c84f3c8cae8e07680e4960942d685f9bb63',
     'weftWheelSha256':'2b5806d53cb50b95b56f0dda0dee8ea79e6f1d72b839f5ec74304943fe3022ad',

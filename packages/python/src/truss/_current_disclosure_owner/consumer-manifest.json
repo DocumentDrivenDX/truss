@@ -1,11 +1,11 @@
 {
   "profile": "truss-current-disclosure-owner/0.1-candidate",
-  "umfRevision": "206951ff20d766874b9af7d29fdf8027c3bab499",
+  "umfRevision": "11b412e4a783fef8075aeb4109a286650a0bda28",
   "scope": "Exact reviewed private UMF0.2 child; no native admission or protected release authority.",
   "files": {
-    "current-native-disclosure-child.mjs": "d333226d9186136704d3f84a9c9dbfc44796efebab563dbc732d60337d2e03eb",
-    "manifest.json": "4e50675be3a39433ea99ecae646938cec1f1a7cda931ab5f98b49cb26ada4951",
-    "metafile.json": "0db1d5aeccada6794b67b477f32f9888a143d09b1ac04fa441b23c470bc93a76",
+    "current-native-disclosure-child.mjs": "548b7ff64dabf3bc796afe99ecca265f5bcf242202e367ba7125e62c64f0a735",
+    "manifest.json": "45154e0f3bd5973ddc4d6fb40fdebf27afb51fdc018d2f055ba580c9c07437d2",
+    "metafile.json": "a14cfd2b06f09d03a20b45de6c6303c1235ee59dd10e2de90123097210a0c372",
     "notices/ajv/LICENSE": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
     "notices/ajv/package.json": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989",
     "notices/fast-deep-equal/LICENSE": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",

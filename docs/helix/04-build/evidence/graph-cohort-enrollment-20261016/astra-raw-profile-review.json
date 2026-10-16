@@ -1,0 +1,63 @@
+{
+  "review": "Truss raw-capture profile integration repair R2",
+  "status": "complete",
+  "verdict": "no findings; focused repair restores explicit raw-only empty graph profile",
+  "findings": [],
+  "startedAt": "2026-10-16T19:14:08Z",
+  "completedAt": "2026-10-16T19:15:40.779417+00:00",
+  "deadline": "2026-10-16T19:17:08Z",
+  "inputDirectory": "/private/tmp/truss-raw-capture-profile-repair-review-r2-20261016",
+  "inputManifestSha256": "33224a3ec12ac11dae449deacca1692146ca3e45079740b87a2b2290ea046eed",
+  "sourceSha256": "c56f435da709a51352e4661a6a0124d276765d39ed319551800ef721169564c4",
+  "baseline": "1972e596cc07263518c9a63cf0ccffee34b1d541",
+  "conclusion": "The added read-only graphs_bytes and graph_coverage_bytes properties both return literal empty arrays. They describe the existing raw-only collector profile; they do not replace or normalize supplied graph data. The factory still calls the unchanged _recipes, which rejects every non-record-members association before graph/object population work. No authority, guard, token, census, limit or raw collector behavior otherwise changes. Constructing the private data carrier is not a native witness.",
+  "independentEvidence": {
+    "passed": true,
+    "base": "1972e596cc07263518c9a63cf0ccffee34b1d541",
+    "frozenFilesVerified": 7,
+    "onlyTwoReadonlyEmptyProperties": true,
+    "allOtherSourceASTExact": true,
+    "pureRegressionTests": 1,
+    "additionalControls": [
+      "association core-relationship refused",
+      "association unknown refused",
+      "association None refused",
+      "original fact/coverage bytes retained, including false completeness",
+      "graphs_bytes read-only",
+      "graph_coverage_bytes read-only"
+    ],
+    "suppliedNative": "initial 1 pass / 5 failures; repaired 6 pass, 34.986s; no reviewer native execution",
+    "cleanupScope": "supplied prefix process scan and root birth-time comparison; no new fixture roots/live fixture PostgreSQL; three older roots retained",
+    "SQLExecuted": false
+  },
+  "commands": [
+    {
+      "command": "/private/tmp/truss-practical-performance-env/bin/python -B check.py",
+      "exitCode": 0,
+      "logs": [
+        "check.log",
+        "pure-tests.log"
+      ],
+      "result": "1 exact new regression test passed; 6 additional controls passed; all 7 frozen input hashes and source AST correspondence verified"
+    }
+  ],
+  "suppliedNativeEvidence": {
+    "historical": "6 tests: 1 pass, 5 failures, 25.530s; retained unchanged",
+    "repair": "6 tests passed in 34.986s, including closing-source and post-transport whole-batch refusal tests",
+    "qualification": "Inspected supplied logs only, not independently executed SQL or a complete native-source custody audit. Cleanup is supplied prefix process scan plus root birth-time comparison: no live fixture PostgreSQL or new fixture roots, three older unrelated roots retained.",
+    "initialPureTestFailure": "Retained KeyError context setup failure; R2 supplies ontology.context and actually reaches the expected relationship guard."
+  },
+  "scope": [
+    "Only this raw-profile repair, not native graph activation/admission or whole-goal acceptance.",
+    "No SQL, broad suites, builds, nested agents or owner edits.",
+    "Earlier cohort enrollment review remains unchanged; this separate result closes the concrete missing-properties regression within its stated scope."
+  ],
+  "retention": {
+    "manifest": "manifest.json",
+    "shape": "files maps relative path to {sha256,bytes}; root manifest excludes itself",
+    "excluded": [
+      "working/ (reconstructed execution tree)",
+      "__pycache__/"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "beforeSha256": "95f60525bc3e2236e731a6b7669487c3c40d725fd345b4e0eb65612c57bc5844",
+  "afterSha256": "c56f435da709a51352e4661a6a0124d276765d39ed319551800ef721169564c4",
+  "scope": "After removing only the two readonly empty-population properties, entire source AST equals base. The existing core-relationship refusal and all native capture behavior are unchanged. Not a whole-program/native theorem."
+}

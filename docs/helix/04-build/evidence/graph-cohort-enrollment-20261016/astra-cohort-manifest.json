@@ -1,0 +1,135 @@
+{
+  "files": {
+    "asset-controls.log": {
+      "sha256": "0856e8b7c47534868e2f7263e7e7a18f6a6104ee20cbdd03a1cf940e8a1d00da",
+      "bytes": 275
+    },
+    "check.log": {
+      "sha256": "46a796f4c311f9e66a2af199eafc3ea968013f6288f15470cf29275b00cd8ea5",
+      "bytes": 754
+    },
+    "check.py": {
+      "sha256": "ece8ad82927353a67c5d88f3ebdf209818985d2703e6b1fc19f1cab02c3fcb35",
+      "bytes": 8411
+    },
+    "checks.json": {
+      "sha256": "5b1d2ba76589c5ad4f8658fefcbd9ff5c46b91c2554b713c12a2a64ba7d746da",
+      "bytes": 816
+    },
+    "packet/change.diff": {
+      "sha256": "06ece7beb9e3f6f384d9d47c638ee08b86e5c075598f48c1ffc91d9b02663143",
+      "bytes": 134351
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/README.md": {
+      "sha256": "4649ba2a98142689449866dc6943230a70cfe7e91cce2f3d62e7010f30de25c2",
+      "bytes": 2838
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/built-child-and-sources.zip": {
+      "sha256": "98450efb3a378697171902b5890ea36693af8322ff4fee77a945d3eef6200535",
+      "bytes": 600014
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/cohort-mutations.log": {
+      "sha256": "a3908d549c11cbc34de71c5983dccc6f6142e50a435036e087832ad3ce362b50",
+      "bytes": 293
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/compiler-refusal-stage-replay.log": {
+      "sha256": "15a18951b187f3eebe88e6ed29db87fde975f2cfc881a785e44208d389d661a2",
+      "bytes": 285
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/compiler-replay-bun142.log": {
+      "sha256": "fdbb58d6e0eba3e9bbfcbec872b8270aa4371b798505aaf50b6b6dd716600e5c",
+      "bytes": 285
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/component-tests.log": {
+      "sha256": "9393a6151157bed9349ca6dbb7ac6e01c92aaade2fbe53deb9ea2739bc85ea12",
+      "bytes": 4999
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/failed-bun143-runtime-check.log": {
+      "sha256": "ebaa9efb7fe71110e744ec7ef1c774390794b71415905305451cde527a82281a",
+      "bytes": 123938
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/new-runtime.ts": {
+      "sha256": "83fe06abf2690c3806700049fb66b5e93d8a16f6f45025aeffd6adbde89673ad",
+      "bytes": 44478
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/old-consumer-manifest.json": {
+      "sha256": "a7b50c7af02768098fe91f22535a7b1b2450ebde8f0374bad53a6ab7ca380d04",
+      "bytes": 1671
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/old-manifest.json": {
+      "sha256": "4e50675be3a39433ea99ecae646938cec1f1a7cda931ab5f98b49cb26ada4951",
+      "bytes": 32386
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/old-runtime.ts": {
+      "sha256": "ba171ea423b9205f2e8c7d35addef22f311b2076503cbd4b559e2abaa46c9b78",
+      "bytes": 44014
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/runtime.json": {
+      "sha256": "309b74a85cade379418ee6bce894cd3a5f4e981e0989b233e82b0ac8eafd3e4a",
+      "bytes": 242
+    },
+    "packet/docs/helix/04-build/evidence/graph-cohort-enrollment-20261016/source-closure-delta.json": {
+      "sha256": "7cbb0931584d955e19094b092922716f6b4230eddd992788357cb037cce515e7",
+      "bytes": 523
+    },
+    "packet/manifest.json": {
+      "sha256": "053a25f75106f2cc73fc10381e99e37e9f467354816aa50e01d7747f4a8d97ae",
+      "bytes": 3509
+    },
+    "packet/packages/python/src/truss/_current_disclosure_computation.py": {
+      "sha256": "8c34714da2fae1eebe047aa85d35c92194ea43ee7295a31a717b82cf1f5a08e0",
+      "bytes": 2457
+    },
+    "packet/packages/python/src/truss/_current_disclosure_originals.py": {
+      "sha256": "fb8d2b5487a07bbd71936d6ad9cebd4bae8578ba10b7eb7e8018451f7d662117",
+      "bytes": 7528
+    },
+    "packet/packages/python/src/truss/_current_disclosure_owner/consumer-manifest.json": {
+      "sha256": "ca31a592ca8af8e208729445cd2987d80e8f5797a679b6258f6f9bd3aec86f9e",
+      "bytes": 1671
+    },
+    "packet/packages/python/src/truss/_current_disclosure_owner/current-native-disclosure-child.mjs": {
+      "sha256": "548b7ff64dabf3bc796afe99ecca265f5bcf242202e367ba7125e62c64f0a735",
+      "bytes": 1065468
+    },
+    "packet/packages/python/src/truss/_current_disclosure_owner/manifest.json": {
+      "sha256": "45154e0f3bd5973ddc4d6fb40fdebf27afb51fdc018d2f055ba580c9c07437d2",
+      "bytes": 32386
+    },
+    "packet/packages/python/src/truss/_current_disclosure_owner/metafile.json": {
+      "sha256": "a14cfd2b06f09d03a20b45de6c6303c1235ee59dd10e2de90123097210a0c372",
+      "bytes": 182652
+    },
+    "packet/packages/python/tests/test_current_disclosure_cohort.py": {
+      "sha256": "132ce64cbd8167802828b697b73af1122ac9baa6cae1adfa0b195826c5212a42",
+      "bytes": 1278
+    },
+    "packet/packages/python/tests/test_current_disclosure_compiler_integration.py": {
+      "sha256": "08e5e10e9188c4c012c79089e92641fb5ece5b22e8a04a49f9182d659f11de73",
+      "bytes": 4429
+    },
+    "packet/packages/python/tests/test_current_disclosure_graph_transport.py": {
+      "sha256": "2fe92a54c5d191263488f9181d4d67c57bb36039bcad37e87d99e505863c2b7d",
+      "bytes": 2624
+    },
+    "prior-reviewed-optimization-pin.json": {
+      "sha256": "74304d34ddfb9171f8d064ee3ffb328dd48f4836c866672d60616768dea8c8b0",
+      "bytes": 262
+    },
+    "review.json": {
+      "sha256": "14d9901dea7b4a18fb5fe2eef0481fbaa5edaec17d9299a18d82501ab070080e",
+      "bytes": 4488
+    },
+    "review.txt": {
+      "sha256": "65022607fa2f0f42d5ddf0ead43cca1c6a76fd6c6436bb2d61f772cab1f3647d",
+      "bytes": 521
+    }
+  },
+  "artifactCount": 31,
+  "totalBytes": 2309846,
+  "excludes": [
+    "manifest.json",
+    "working/",
+    "__pycache__/"
+  ]
+}
