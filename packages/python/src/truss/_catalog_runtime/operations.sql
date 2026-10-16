@@ -1095,16 +1095,26 @@ REVOKE ALL ON FUNCTION truss.runtime_edge_validate(bigint,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_graph_validate_object(selected_id bigint,selected_type int,refresh_markers boolean) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE relation truss.rel_def%ROWTYPE;owner record;outgoing bigint;incoming bigint;expected jsonb;actual jsonb;
+DECLARE phase int;relation truss.rel_def%ROWTYPE;owner record;outgoing bigint;incoming bigint;expected jsonb;actual jsonb;
 BEGIN
   PERFORM 1 FROM truss.object WHERE id=selected_id AND type_id=selected_type FOR UPDATE NOWAIT;
   IF NOT FOUND THEN RETURN;END IF;
+  FOR phase IN 1..2 LOOP
+   FOR owner IN
+    SELECT DISTINCT document_id,module_id FROM (
+     SELECT r.document_id,r.module AS module_id FROM truss.rel_def r WHERE r.retired_rev IS NULL
+      AND EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=r.rel_type_id AND (e.source_type=selected_type OR e.target_type=selected_type))
+     UNION ALL
+     SELECT t.document_id,t.module FROM truss.rel_def r JOIN truss.rel_endpoint e ON e.rel_type_id=r.rel_type_id
+      JOIN truss.type_def t ON t.type_id IN(e.source_type,e.target_type) WHERE r.retired_rev IS NULL
+      AND EXISTS(SELECT 1 FROM truss.rel_endpoint selected WHERE selected.rel_type_id=r.rel_type_id AND (selected.source_type=selected_type OR selected.target_type=selected_type))
+    ) dependencies
+   LOOP
+    IF NOT truss.runtime_can_read(owner.document_id,owner.module_id) THEN RAISE EXCEPTION 'complete relationship and endpoint count reader required' USING ERRCODE='42501';END IF;
+   END LOOP;
+   IF phase=1 THEN
   FOR relation IN SELECT r.* FROM truss.rel_def r WHERE r.retired_rev IS NULL
    AND EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=r.rel_type_id AND (e.source_type=selected_type OR e.target_type=selected_type)) ORDER BY rel_type_id LOOP
-   IF NOT truss.runtime_can_read(relation.document_id,relation.module) THEN RAISE EXCEPTION 'relationship count reader required' USING ERRCODE='42501';END IF;
-   FOR owner IN SELECT DISTINCT t.document_id,t.module FROM truss.rel_endpoint e JOIN truss.type_def t ON t.type_id IN(e.source_type,e.target_type) WHERE e.rel_type_id=relation.rel_type_id LOOP
-    IF NOT truss.runtime_can_read(owner.document_id,owner.module) THEN RAISE EXCEPTION 'complete endpoint count reader required' USING ERRCODE='42501';END IF;
-   END LOOP;
    outgoing:=NULL;incoming:=NULL;
    IF EXISTS(SELECT 1 FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id AND source_type=selected_type) THEN
     SELECT count(*) INTO outgoing FROM truss.edge WHERE rel_type_id=relation.rel_type_id AND source_id=selected_id AND source_type=selected_type;
@@ -1125,6 +1135,8 @@ BEGIN
    END IF;
    SELECT coalesce(jsonb_agg(to_jsonb(m) ORDER BY m.side),'[]'::jsonb) INTO actual FROM truss.edge_limit m WHERE m.rel_type_id=relation.rel_type_id AND m.endpoint_id=selected_id;
    IF actual IS DISTINCT FROM expected THEN RAISE EXCEPTION 'exact final multiplicity markers required' USING ERRCODE='55000';END IF;
+  END LOOP;
+   END IF;
   END LOOP;
 END;
 $$;
