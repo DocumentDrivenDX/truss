@@ -1,0 +1,102 @@
+{
+  "review": "Astra Ultra completed edge settlement context iteration and retained evidence",
+  "status": "SOURCE_AND_BOUNDED_EVIDENCE_CLEAR",
+  "reviewedAt": "2026-10-16T16:16:22.170419+00:00",
+  "recommendation": "Suitable to land as a bounded development source simplification with the failed full-matrix evidence retained. It is not a performance fix qualification or release-blocker closure.",
+  "rationale": "The increment reuses a complete, already mandatory census and checked attempt within one read-only settlement invocation, while retaining all standalone/per-step checks and private source binding. Focused boundary, original workflow, full 1024 functional and populated upgrade controls pass. No new caching state or deferred-check suppression is introduced. The avoided repeated attempt reads and sealed-slot counts are concrete source changes, but their latency benefit is not established by these runs.",
+  "blockingFindings": [],
+  "sourceReview": {
+    "path": "/private/tmp/truss-edge-settlement-context-source-astra-20261016.json",
+    "sha256": "10cf4d42b6376b185ccb6788cf2756036b59e49d5b6a37a53834678df85ffded",
+    "baseCommit": "44f4a4f90ab3ad75437b046828f145f7e7e2401c",
+    "sourceSha256": {
+      "packages/postgresql/owned-groups/execute.sql": "069bd1c1c0304df14e73e7e64b4c9e8d5123cfa4deb639fe9d63a1ba6362c898",
+      "packages/postgresql/owned-groups/finalize.sql": "837e0218500070a9bf2c32f8d01cbaded9d7f939cb3b3d391633200e41977af2",
+      "packages/python/src/truss/_catalog_runtime/manifest.json": "218160971d105bf722045df42cca3431b5a5ef61137e58d93b166a3772aee7a7",
+      "packages/python/src/truss/_catalog_runtime/owned.sql": "74048b9fdc27739d283f09ba0da43219fd13083fb8e5522f8f5a03813164ef58",
+      "packages/python/src/truss/_preparation_source_epoch.py": "9fb7825242af6b343930f6c53ad83eefd57bc040273412bbc796cc7c636e1749",
+      "packages/python/src/truss/catalog_runtime.py": "5e9755464d3c463d9bd8c9e2610b37d5acc1b5e0c210013bee2d3732b8f85392",
+      "packages/python/tests/test_final_edge_inventory_native.py": "f99e370380403407e4716d925d58a2623e35c01a3eff7de34d7572e49de43624",
+      "packages/python/tests/test_owned_transition_upgrade_native.py": "62602edb2337f0ef649c775bc80b0e922fcc3a8452806ce2cb6156228a054ec7"
+    },
+    "uniqueRoutineCount": 220
+  },
+  "evidenceCustody": {
+    "bundle": "/private/tmp/truss-edge-settlement-context-evidence-20261016.json.gz",
+    "gzipSha256": "76f52e2fc6a3da9b4ff7e032c0fc6620fec3c006a6f0ff3d3514212e7ebebc4a",
+    "jsonSha256": "6c24f1ba9b5fe21a92b45cc2ecc41bd4d3a68739c4706d28c3891ddbb3c151d4",
+    "retainedFilesAllByteExact": true,
+    "allEightSourcePinsMatchReviewedCurrentSource": true,
+    "rawFileSha256": {
+      "/private/tmp/truss-edge-settlement-context-plan-astra-20261016.json": "5ff9a6d6f5f6a76ffae293fbd7f341da008ec595e3919b7f6ed7892af8be7eb8",
+      "/private/tmp/truss-edge-settlement-context-basic-20261016.log": "d770f60722473f1593670ff848643f623c0f7b1768e13f29bca167e1b8b7fbed",
+      "/private/tmp/truss-edge-settlement-context-upgrade-capacity-20261016.log": "6606aa8bcdc1a529428bfecad1806d5106ee93dd26d1da2ae13432b7a7ddfb17",
+      "/private/tmp/truss-edge-settlement-context-upgrade-r2-20261016.log": "a8abd010b78bee94a53664ffc878daceae472a68d89b2c7951a9cf6d9d6ec8b2",
+      "/private/tmp/truss-edge-settlement-context-matrix-report-20261016.json": "1140f6c185f51097a6520ff151d3314be38e17e4a809adbd30c3a64e1f02d229",
+      "/private/tmp/truss-edge-settlement-context-matrix-20261016.log": "de6908ebe487bf6edc4bfb3e52ff67de08d805558bd45496ebed0073f4b6b715"
+    }
+  },
+  "receiptMetadataCorrection": {
+    "scope": "The original plan receipt is preserved unchanged in the bundle. Its baseline commit is correct, but baselineSha256 execute.sql/finalize.sql entries contain candidate hashes. This completed receipt supersedes those two baseline hash labels only. The source receipt explicitly pins the inspected candidate correctly.",
+    "actualBaselineCommit": "44f4a4f90ab3ad75437b046828f145f7e7e2401c",
+    "actualBaselineSha256": {
+      "packages/postgresql/owned-groups/execute.sql": "32c61792b7370b4c87abd7edb48180e11242637ca2f83779bcb996553b704793",
+      "packages/postgresql/owned-groups/finalize.sql": "cbadf2d23241cfc6e04f65df14ce2d02888b8036829eec0a70c7311a6292279d"
+    }
+  },
+  "parentRunEvidence": {
+    "basic15516": {
+      "outcome": "PASS",
+      "tests": 5,
+      "seconds": 22.688,
+      "scope": "Future-slot early refusal, unplanned incident edge, link/retarget/unlink/replay, post-flush writer revocation, owned subtree/history/retry"
+    },
+    "upgradeCapacity51148": {
+      "suiteOutcome": "ERROR",
+      "tests": 3,
+      "seconds": 55.141,
+      "capacityPositive": "PASS",
+      "lateIndex1023Fault": "PASS",
+      "upgrade": "Pre-seeding harness error: two colon-separated source roots supplied where one root was required; not product upgrade evidence."
+    },
+    "correctedUpgrade90133": {
+      "outcome": "PASS",
+      "tests": 1,
+      "seconds": 19.875,
+      "scope": "Published SDK35/native68 populated upgrade, retained transitions/receipts, continued 129 creates and new helper private ACL"
+    },
+    "logsSha256": {
+      "/private/tmp/truss-edge-settlement-context-basic-20261016.log": "d770f60722473f1593670ff848643f623c0f7b1768e13f29bca167e1b8b7fbed",
+      "/private/tmp/truss-edge-settlement-context-upgrade-capacity-20261016.log": "6606aa8bcdc1a529428bfecad1806d5106ee93dd26d1da2ae13432b7a7ddfb17",
+      "/private/tmp/truss-edge-settlement-context-upgrade-r2-20261016.log": "a8abd010b78bee94a53664ffc878daceae472a68d89b2c7951a9cf6d9d6ec8b2"
+    },
+    "originalFullMatrix": {
+      "session": 9566,
+      "outcome": "FAIL",
+      "sqlState": "57014",
+      "functionalPassed": false,
+      "performanceQualification": "not_evaluated",
+      "statementTimeoutMs": 10000,
+      "operationTimeoutMs": 30000,
+      "workload": "Original small schema: 1000 nodes, 1000 association edges, 1000 ID reads, 100 key reads, 200 committed single updates and five planned changed-update repetitions at sizes 1/100/1000.",
+      "observed": "1000 nodes and 1000 edges committed; all reads and single updates completed; five size-1 and five size-100 changed groups committed. The first size-1000 changed update timed out before its commit. Subsequent repetitions and their readback were not reached.",
+      "bulkCreateApplyMs": 9034.535666,
+      "bulkCreateCommitMs": 6076.671417,
+      "bulkEdgesApplyMs": 9375.165916,
+      "bulkEdgesCommitMs": 4611.922417,
+      "failed1000UpdateApplyMs": 10055.399,
+      "cancellationContext": "runtime_owned_group_validate line 169, final live-edge typed-identity aggregation; cancellation location is not a causal cost attribution.",
+      "cleanup": "PASS",
+      "cleanupMs": 381.206583,
+      "sourceWorkingTreeDirty": true,
+      "sourceCommit": "44f4a4f90ab3ad75437b046828f145f7e7e2401c",
+      "runtimeManifestSha256": "218160971d105bf722045df42cca3431b5a5ef61137e58d93b166a3772aee7a7"
+    }
+  },
+  "limitations": [
+    "No native tests were run by the reviewer; retained parent-run logs and reports were inspected.",
+    "The initial upgrade-capacity suite exited with one pre-seeding harness error; its two capacity tests passed. The corrected standalone upgrade passed. The failed original log remains retained.",
+    "No speedup, isolation, 1000-update complete-matrix pass, platform-runner qualification, maximum-general-schema support or release qualification follows. The development release performance blocker remains open.",
+    "The matrix result does not establish either a regression caused by this increment or a causal improvement over another run. No deadlines, workload or assertions were relaxed."
+  ]
+}

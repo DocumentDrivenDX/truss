@@ -1060,7 +1060,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_endpoint_at(uuid,int,text,text,jsonb,truss.runtime_object_attempt) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_edge_transition_validate(selected_transition bigint,authorize_read boolean,qualified_actor oid DEFAULT NULL) RETURNS void
+CREATE FUNCTION truss.runtime_owned_edge_transition_validate_qualified(selected_transition bigint,authorize_read boolean,qualified_actor oid,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_edge_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;expected_context jsonb;
@@ -1069,10 +1069,18 @@ DECLARE transition truss.runtime_edge_transition%ROWTYPE;attempt truss.runtime_o
 BEGIN
  IF authorize_read IS NULL THEN RAISE EXCEPTION 'explicit validation authority mode required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT transition FROM truss.runtime_edge_transition WHERE transition_id=selected_transition;
- SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
+ IF prepared_attempt.id IS NOT NULL THEN
+  IF prepared_attempt.id IS DISTINCT FROM transition.attempt_id THEN RAISE EXCEPTION 'original checked attempt required' USING ERRCODE='55000';END IF;
+  attempt:=prepared_attempt;
+ ELSE SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;END IF;
+ IF prepared_input IS NOT NULL AND (source_bytes IS NULL OR source_bytes IS DISTINCT FROM attempt.input_bytes) THEN
+  RAISE EXCEPTION 'original checked transition input required' USING ERRCODE='55000';END IF;
+ -- Only group settlement supplies the original attempt and input after its
+ -- complete immutable result-slot census. Per-step and history calls recount.
  current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
  IF attempt.writer_xid IS DISTINCT FROM transition.writer_xid OR transition.operation_index<0 OR transition.operation_index>=attempt.next_index
-  OR (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.result IS NOT NULL)<>attempt.next_index
+  OR (CASE WHEN NOT authorize_read AND prepared_attempt.id IS NOT NULL AND prepared_input IS NOT NULL
+   THEN attempt.next_index ELSE (SELECT count(*) FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.result IS NOT NULL) END)<>attempt.next_index
   OR (authorize_read AND NOT attempt.complete)
   OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor)) THEN
   RAISE EXCEPTION 'original completed edge operation progress required' USING ERRCODE='55000';END IF;
@@ -1138,6 +1146,13 @@ BEGIN
    PERFORM truss.runtime_history_ownership_qualified(jsonb_build_object('identity',context->'identity','catalogRevision',plan->>'catalogRevision','ownership',context->'ownership'),current_actor);
   END LOOP;
  END IF;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_edge_transition_validate_qualified(bigint,boolean,oid,jsonb,bytea,truss.runtime_object_attempt) FROM PUBLIC;
+CREATE FUNCTION truss.runtime_owned_edge_transition_validate(selected_transition bigint,authorize_read boolean,qualified_actor oid DEFAULT NULL) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ PERFORM truss.runtime_owned_edge_transition_validate_qualified(selected_transition,authorize_read,qualified_actor);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_edge_transition_validate(bigint,boolean,oid) FROM PUBLIC;
@@ -1666,7 +1681,7 @@ BEGIN
    identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'edge',plan,attempt);
    SELECT t.transition_id INTO STRICT transition_id FROM truss.runtime_edge_transition t WHERE t.attempt_id=selected_attempt
     AND t.operation_index=index AND t.edge_id=(identity->>'id')::bigint AND t.rel_type_id=(identity->>'typeId')::int;
-   PERFORM truss.runtime_owned_edge_transition_validate(transition_id,false,current_actor);expected_edges:=expected_edges+1;
+   PERFORM truss.runtime_owned_edge_transition_validate_qualified(transition_id,false,current_actor,input,attempt.input_bytes,attempt);expected_edges:=expected_edges+1;
   END LOOP;
   IF expected_objects<>(SELECT count(*) FROM truss.runtime_object_transition WHERE attempt_id=selected_attempt AND operation_index=index)
    OR expected_edges<>(SELECT count(*) FROM truss.runtime_edge_transition WHERE attempt_id=selected_attempt AND operation_index=index) THEN

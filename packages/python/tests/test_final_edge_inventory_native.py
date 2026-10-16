@@ -40,3 +40,37 @@ class FinalEdgeInventoryTests(edge_tests.EdgeMutationTests):
         host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(0,))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_edge_transition').fetchone(),(0,))
+
+    def test_future_result_slot_refuses_before_next_edge_effect(self):
+        connection,host,assembly,tx,a,b,pin=self.initialized()
+        connection.execute("CREATE TEMP TABLE prior_slot_work(value text);INSERT INTO prior_slot_work VALUES('kept')")
+        self.admin.execute("""CREATE FUNCTION public.preseal_future_edge_slot() RETURNS trigger
+            LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$ BEGIN
+            UPDATE truss.runtime_owned_operation SET result='{}'::jsonb
+             WHERE attempt_id=NEW.id AND operation_index=1 AND result IS NULL;
+            RETURN NEW;END $$""")
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.preseal_future_edge_slot()')
+        self.admin.execute("""CREATE FUNCTION public.reject_second_edge_effect() RETURNS trigger
+            LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$ BEGIN
+            IF EXISTS(SELECT 1 FROM truss.edge) THEN
+             RAISE EXCEPTION 'later edge effect reached' USING ERRCODE='P9999';END IF;
+            RETURN NEW;END $$""")
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.reject_second_edge_effect()')
+        self.admin.execute("""CREATE TRIGGER preseal_future_edge_slot AFTER UPDATE ON truss.runtime_object_attempt
+            FOR EACH ROW WHEN (OLD.next_index=0 AND NEW.next_index=1)
+            EXECUTE FUNCTION public.preseal_future_edge_slot()""")
+        self.admin.execute('CREATE TRIGGER reject_second_edge_effect BEFORE INSERT ON truss.edge FOR EACH ROW EXECUTE FUNCTION public.reject_second_edge_effect()')
+        try:
+            context=assembly.group_context_in_transaction(tx).value
+            operations=tuple(self.link(pin,StoredObjectReference(identity=a),StoredObjectReference(identity=b),alias=f'edge{i}') for i in range(2))
+            result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),context.request('future-edge-slot'),documents=self.documents)
+            self.assertIsInstance(result,Error,repr(result))
+            self.assertEqual(result.error.sql_state,'55000',repr(result))
+            self.assertIn('original completed edge operation progress required',str(host._custody.last_attempt.error))
+            self.assertEqual(connection.execute('TABLE prior_slot_work').fetchall(),[('kept',)])
+        finally:
+            self.admin.execute('DROP TRIGGER preseal_future_edge_slot ON truss.runtime_object_attempt')
+            self.admin.execute('DROP TRIGGER reject_second_edge_effect ON truss.edge')
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(0,))
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_edge_transition').fetchone(),(0,))
