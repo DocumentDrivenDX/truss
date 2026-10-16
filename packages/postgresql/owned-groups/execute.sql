@@ -1005,8 +1005,8 @@ BEGIN
  ELSE
   PERFORM truss.runtime_module_writer_qualified(identity->'owner'->>'documentId',identity->'owner'->>'moduleId',qualified_actor);
   IF NOT truss.runtime_object_values_readable_qualified(transition.type_id,qualified_actor) THEN RAISE EXCEPTION 'current original property readers required' USING ERRCODE='42501';END IF;
-  PERFORM truss.runtime_history_ownership(before_record);
-  IF after_record IS NOT NULL THEN PERFORM truss.runtime_history_ownership(after_record);END IF;
+  PERFORM truss.runtime_history_ownership_qualified(before_record,qualified_actor);
+  IF after_record IS NOT NULL THEN PERFORM truss.runtime_history_ownership_qualified(after_record,qualified_actor);END IF;
  END IF;
 END;
 $$;
