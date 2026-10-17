@@ -78,3 +78,74 @@ composed wheel includes the later independently tested main SQL assets. The adde
 supported-configuration refusal assertion is test-only. Maintenance instructions
 above are an operational procedure; no automatic migration or whole B-008 native
 acceptance is claimed. These local checks do not qualify Linux or Databricks.
+
+
+## Proposed next predicate bridge — source finding, not implementation authority
+
+Draft for review; implementation and native campaigns remain held while the owned
+release gate is unresolved. Publication/cohort qualification takes priority over
+new operators after that gate: the current Graph evidence is only the exact local
+0.4.39/7e6384 cohort. Portable published support needs a matching immutable public
+compiler wheel, full original cohort/source validation and a basic actual Graph
+rerun; adding a binary hash alone cannot qualify it. This does not qualify `truss.B08`/`US-056-AC6` or change
+its filter/sort/group/join/aggregate acceptance matrix or60-second case timeout.
+
+**Consumer SQL:** `SELECT r.salary FROM Resource r WHERE r.salary = 100`.
+The fixture's disclosed salary is a constant integer0; canonical values remain
+Alice's readable RA100 and Bob's readable RB200. Predicate use is source-bound to
+`query-original-salary-predicate`, distinct from primary `read`, with the existing
+UMF `original-authorized` action purpose. No SQL/request action override exists.
+
+- Original-authorized predicate: Alice with permission on RA returns disclosed0;
+  Bob without permission on his readable RB refuses before SQL, even though
+  `200 = 100` would return nothing. Projection does not reveal canonical salary.
+- Disclosed predicate: evaluate disclosed0 against100, returning empty.
+- Prohibited predicate: refuse before SQL even with no readable rows. Missing or
+  changed action/binding and incomplete original-action dependencies also refuse.
+- Outsider with no row-read-eligible resources may return empty after genuine UMF
+  target/mode/action-binding/dependency preflight. Empty is not a target-wide grant.
+
+**Closed first subset:** one scan, one required/present signed64 scalar projection,
+constant integer mask preserving that family, and one exact signed64 literal
+comparison using `=`. Parameterization, absence/null, other domains, additional
+predicates/expressions, ordering, grouping, joins, aggregates/count, paging and
+limits remain explicitly unsupported for this candidate; no adapter fallback.
+
+**Action population:** preserve the complete native Graph/fact cut and complete
+owner action report. Require genuine per-resource action permission for every
+row-read-eligible resource supplying an original operand, determined BEFORE SQL
+predicate evaluation or optimization. Do not narrow by WHERE output, require grants
+on unrelated read-denied rows, invent a synthetic resource, or infer a query-global
+permit from action names or an empty report. Genuinely prohibited modes and missing
+dependencies are target-preflight obligations independent of this population.
+
+**Reuse and boundary:** reuse current-query per-use designations, genuine UMF route
+inspection/action evaluation and scalar ABI2 staging/reconstruction for this
+required-field subset. Extend the compiler's actual owning current-query context
+to issue Model/GraphRequirements from that SAME parent/current; do not reprepare
+0.4 presence from JSON, import issued reports, or implement policy in Python.
+Truss must capture/evaluate/close on that original context under the existing native
+Graph authority profile and held source/caller/role cuts. Existing tagged projection
+and scalar cohorts stay unchanged. New capability, source/consumer registration,
+schemas/wires and native exports require explicit versioned qualification; old
+registrations must reject them. Exact new wire/type identifiers and the selected
+UMF owner entrypoint's empty-preflight refinement remain contract decisions before
+implementation, not assumptions supplied by this note.
+
+**Focused verification before integration:** same-parent compiler/bridge custody;
+old-cohort rejection; Alice disclosed0; Bob pre-SQL action denial despite an empty
+predicate result; disclosed-mode empty; prohibited-mode refusal with empty readable
+population; changed/unrelated binding and missing action dependencies refusing
+before native SQL; unchanged projection/scalar regressions. No whole-case promotion.
+
+Pinned sources: Weft [0.4 presence refusal](https://github.com/DocumentDrivenDX/weft/blob/b34a823911fb127e2bf4914fac6ca4415bb4adb1/crates/weft-core/src/application_lineage.rs#L201)
+and [existing per-use designation](https://github.com/DocumentDrivenDX/weft/blob/b34a823911fb127e2bf4914fac6ca4415bb4adb1/crates/weft-core/src/current_query_designation.rs#L103);
+Truss [action report construction](https://github.com/DocumentDrivenDX/truss/blob/5ed7c4a1b476dfd782209ea118f0168a16c980af/packages/python/src/truss/_current_query_evaluation.py#L108)
+and [eligible-row action checks](https://github.com/DocumentDrivenDX/truss/blob/5ed7c4a1b476dfd782209ea118f0168a16c980af/packages/python/src/truss/_current_query_stage.py#L135);
+UMF [empty target preflight](https://github.com/DocumentDrivenDX/umf/blob/3f1a694af04943b02448ba27b1c5d281201d1482/src/extensions/security/evaluate.ts#L160),
+[per-resource collection result](https://github.com/DocumentDrivenDX/umf/blob/3f1a694af04943b02448ba27b1c5d281201d1482/src/extensions/security/evaluate.ts#L248)
+and [governing source-ordering limit](https://github.com/DocumentDrivenDX/umf/blob/3f1a694af04943b02448ba27b1c5d281201d1482/docs/helix/02-design/contracts/CONTRACT-063-security-enforcement.md#L311).
+Public UMF evaluator semantics are not automatically evidence that the pinned
+private candidate producer implements the same request preflight: verify that
+refinement when selecting the new cohort. No new policy framework/global grant is
+proposed, and no privileged-administration or Databricks qualification is added.
