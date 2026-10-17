@@ -1,0 +1,8 @@
+{
+  "wheel": "/private/tmp/weft-b008-subject-cut-post-rebase-wheels-20261016/truss_toolkit-0.0.38.dev0-py3-none-any.whl",
+  "wheelSha256": "05c8a811a17b84899edf60bc4fa8c0aef9751da67bf2adf40b390666ccc7e665",
+  "pythonMembers": 205,
+  "baseline": "c9d5693f70aa361c73025922997b32e9a6ea589d",
+  "forestRuntimeAssetsExact": true,
+  "installedRoot": "/private/tmp/weft-b008-subject-cut-post-rebase-installed-20261016"
+}

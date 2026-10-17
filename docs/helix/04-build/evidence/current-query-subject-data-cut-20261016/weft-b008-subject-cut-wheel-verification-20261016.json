@@ -1,0 +1,8 @@
+{
+  "wheel": "/private/tmp/weft-b008-subject-cut-wheels-20261016/truss_toolkit-0.0.38.dev0-py3-none-any.whl",
+  "wheelSha256": "eae03e2c3fe26737892d70eb0de9af4a45a93f97c667b89790395c6ce34c2660",
+  "sourceExactPythonMembers": 205,
+  "installedRoot": "/private/tmp/weft-b008-subject-cut-installed-20261016",
+  "tests": "native window pending",
+  "nativeAdmission": false
+}
