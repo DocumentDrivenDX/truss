@@ -945,3 +945,48 @@ Example after original qualification:
 `gh workflow run release.yml --ref main -f stress_case=nominal`.
 Only one selected case is dispatched per run. Workflow/schema/static controls
 are not a stress pass; none is claimed before actual execution.
+
+### Assemble the ownership projection once
+
+The [map-reuse run 38993545762](https://github.com/DocumentDrivenDX/truss/actions/runs/38993545762)
+on b9f6eaf2 passed the preceding installed functional checks on both platforms,
+but both original 1,024-CREATE groups reached the unchanged SQL deadline. Linux
+cancelled in final row custody validation; macOS cancelled in the final forest
+projection. The overflow and final-operation rollback controls passed. The full
+public workload and publication were skipped; this is not hosted qualification.
+
+A disposable input-storage experiment was rejected. Both original capacity
+workflows completed locally, but uncompressed EXTERNAL storage increased CREATE
+apply from 5,419 to 6,852 ms and added about 623 KB of table storage. Logical
+input lengths and stored/retrieved hashes matched across the two modes. This
+single instrumented comparison does not establish an isolated speedup; no
+production storage or authority change was retained.
+
+The forest projection now retains its existing edge validation and per-node
+cycle/root walk, then groups incoming edges once and assembles the complete
+ordered result with one aggregate. This removes growing JSONB concatenation
+and a full incoming-edge scan for each node. Parallel incoming edges retain
+numeric ID order, and rootless nodes retain null parent/root values. The final
+byte bound, authority checks, public interfaces and deadlines are unchanged.
+Deep-chain traversal is unchanged. No new helper, table or cache was added.
+
+Against baseline 2299de37, a disposable PostgreSQL 18.6 comparison returned exact
+old/new JSONB values or identical SQLSTATE/message for 12 empty, rootless, chain,
+branching, parallel-edge and refusal cases, including 1,024-node rootless/star
+inputs. Client-call observations were 72.354/9.904 ms for the rootless case and
+169.546/4.985 ms for the star, before/after; they include result decoding and are
+component observations, not end-to-end qualification. Original capacity, overflow,
+late-fault rollback and owned reparent/cascade/history/query workflows, plus one
+basic projection regression case, pass: six cases in 41.278 seconds. PostgreSQL
+cleanup completed. The wheel's 509 payload files match source; SHA-256:
+`65acd50e215c1fbfaa4c5e2507aeffc326407e4c6cdc693cdfb4c162d3dc58e4`.
+
+The candidate's full original installed-wheel `small` workload still **fails**:
+1,000 CREATEs committed, then the 1,000-edge apply cancelled with `57014` during
+final validation. Reads and changed updates were not reached; cleanup completed.
+The [original report](results/forest-output-small-20261016.json) and
+[run log](results/forest-output-small-20261016.log) retain this failed attempt.
+No end-to-end improvement, non-regression or release qualification is established.
+Astra Ultra cleared the component plan/source, differential evidence and bounded
+increment with this failure explicitly recorded. Both hosted original workloads
+remain prerequisites for stress and tagging; no unchanged hosted rerun follows.

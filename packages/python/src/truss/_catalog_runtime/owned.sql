@@ -84,7 +84,7 @@ REVOKE ALL ON FUNCTION truss.owned_object_values(int,jsonb,jsonb,jsonb) FROM PUB
 CREATE FUNCTION truss.owned_forest_projection(node_count int,owned_edges jsonb) RETURNS jsonb
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE parents int[];seen_edges boolean[];entry jsonb;edge_number int;source_node int;target_node int;
- node_number int;ancestor int;path int[];incoming jsonb;result_json jsonb:='[]';
+ node_number int;ancestor int;path int[];roots int[];result_json jsonb;
 BEGIN
  IF node_count IS NULL OR node_count NOT BETWEEN 0 AND 1024 THEN
   RAISE EXCEPTION 'bounded local node count required' USING ERRCODE='54000';END IF;
@@ -92,7 +92,7 @@ BEGIN
   RAISE EXCEPTION 'explicit local owned edges required' USING ERRCODE='22023';END IF;
  IF octet_length(convert_to(owned_edges::text,'UTF8'))>1048576 OR jsonb_array_length(owned_edges)>1024 THEN
   RAISE EXCEPTION 'bounded local owned edges required' USING ERRCODE='54000';END IF;
- parents:=array_fill(-1,ARRAY[node_count]);seen_edges:=array_fill(false,ARRAY[1024]);
+ parents:=array_fill(-1,ARRAY[node_count]);roots:=array_fill(-1,ARRAY[node_count]);seen_edges:=array_fill(false,ARRAY[1024]);
  FOR entry IN SELECT value FROM jsonb_array_elements(owned_edges) LOOP
   IF jsonb_typeof(entry) IS DISTINCT FROM 'object' THEN
    RAISE EXCEPTION 'exact local edge required' USING ERRCODE='22023';END IF;
@@ -123,12 +123,18 @@ BEGIN
    EXIT WHEN parents[ancestor+1]=-1;
    ancestor:=parents[ancestor+1];
   END LOOP;
-  SELECT coalesce(jsonb_agg((value->>'edge')::int ORDER BY (value->>'edge')::int),'[]'::jsonb)
-   INTO incoming FROM jsonb_array_elements(owned_edges) WHERE (value->>'target')::int=node_number;
-  result_json:=result_json||jsonb_build_array(jsonb_build_object('node',node_number,
-   'parent',nullif(parents[node_number+1],-1),'root',CASE WHEN ancestor=node_number THEN NULL ELSE ancestor END,
-   'incomingEdges',incoming));
+  roots[node_number+1]:=CASE WHEN ancestor=node_number THEN -1 ELSE ancestor END;
  END LOOP;
+ -- Assemble once after the unchanged validation and root walk. Repeated JSONB
+ -- concatenation and one full edge scan per node made this projection quadratic.
+ SELECT coalesce(jsonb_agg(jsonb_build_object('node',n.node,
+  'parent',nullif(parents[n.node+1],-1),'root',nullif(roots[n.node+1],-1),
+  'incomingEdges',coalesce(incoming.edges,'[]'::jsonb)) ORDER BY n.node),'[]'::jsonb)
+ INTO result_json FROM generate_series(0,node_count-1) n(node)
+ LEFT JOIN (SELECT (value->>'target')::int target,
+  jsonb_agg((value->>'edge')::int ORDER BY (value->>'edge')::int) edges
+  FROM jsonb_array_elements(owned_edges) GROUP BY (value->>'target')::int) incoming
+ ON incoming.target=n.node;
  IF octet_length(convert_to(result_json::text,'UTF8'))>4194304 THEN
   RAISE EXCEPTION 'bounded complete forest result required' USING ERRCODE='54000';END IF;
  RETURN result_json;

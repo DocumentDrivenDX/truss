@@ -5,6 +5,7 @@ All graph rows are created through the public API.
 """
 import json
 import os
+import psycopg
 from dataclasses import replace
 
 from truss import (Ok, ObjectFound, ObjectNotFound, QueryRows, HistoryEntity, EdgeFound, EdgePage, TraversalHop, TraversalComplete, FeedPage, FeedAcknowledged,
@@ -20,6 +21,29 @@ import test_receipt_visibility_native as receipt_tests
 class OwnedObjectTests(receipt_tests.ReceiptVisibilityTests):
     for _name in tuple(n for n in dir(receipt_tests.ReceiptVisibilityTests) if n.startswith('test_')):
         locals()[_name] = None
+
+    def test_forest_projection_preserves_roots_and_parallel_incoming_edges(self):
+        self.install()
+        def project(count,edges):
+            return self.admin.execute('SELECT truss.owned_forest_projection(%s,%s::jsonb)',
+                                      (count,json.dumps(edges))).fetchone()[0]
+        self.assertEqual(project(0,[]),[])
+        self.assertEqual(project(2,[]),[
+            dict(node=0,parent=None,root=None,incomingEdges=[]),
+            dict(node=1,parent=None,root=None,incomingEdges=[])])
+        edges=[dict(edge=9,source=1,target=2),dict(edge=4,source=0,target=1),
+               dict(edge=3,source=0,target=1)]
+        self.assertEqual(project(4,edges),[
+            dict(node=0,parent=None,root=None,incomingEdges=[]),
+            dict(node=1,parent=0,root=0,incomingEdges=[3,4]),
+            dict(node=2,parent=1,root=0,incomingEdges=[9]),
+            dict(node=3,parent=None,root=None,incomingEdges=[])])
+        for invalid in (edges+[dict(edge=10,source=2,target=0)],
+                        edges+[dict(edge=3,source=0,target=3)],
+                        edges+[dict(edge=10,source=3,target=1)]):
+            with self.assertRaises(psycopg.Error) as refused:
+                project(4,invalid)
+            self.assertEqual(refused.exception.sqlstate,'22023')
 
     @staticmethod
     def owned_model(source):

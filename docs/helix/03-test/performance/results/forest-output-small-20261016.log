@@ -1,0 +1,226 @@
+test_small (__main__.RealWorkflows.test_small) ... small: install 388.90 ms (1 rows)
+small: prepare 312.28 ms (1 rows)
+small: register 82.45 ms (1 rows)
+small: registrar_catalog_view 21.66 ms (1 rows)
+small: bulk_create 5943.78 ms (1000 rows)
+FAIL
+Traceback (most recent call last):
+  File "/private/tmp/truss-main-integration-20261010/scripts/benchmark-public-workflows.py", line 317, in test
+    def test(self,sample=sample):self.workflow(sample)
+                                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-main-integration-20261010/scripts/benchmark-public-workflows.py", line 187, in workflow
+    size=len(batch);edge_result=timed(sample,'bulk_edges',lambda:apply(tuple(batch)),size)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-main-integration-20261010/scripts/benchmark-public-workflows.py", line 70, in timed
+    result=call()
+           ^^^^^^
+  File "/private/tmp/truss-main-integration-20261010/scripts/benchmark-public-workflows.py", line 187, in <lambda>
+    size=len(batch);edge_result=timed(sample,'bulk_edges',lambda:apply(tuple(batch)),size)
+                                                                 ^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-main-integration-20261010/scripts/benchmark-public-workflows.py", line 144, in apply
+    if not isinstance(outcome,Ok):raise AssertionError(repr(outcome)+'; native-test diagnostic: '+str(host._custody.last_attempt.error))
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error'); native-test diagnostic: canceling statement due to statement timeout
+CONTEXT:  PL/pgSQL function truss.runtime_owned_group_validate(uuid,boolean) line 216 at IF
+SQL statement "SELECT truss.runtime_owned_group_validate(attempt.id,true)"
+PL/pgSQL function truss.object_group_finish(uuid) line 68 at PERFORM
+PL/pgSQL function truss.apply_group(bytea,bytea,bytea,text,text) line 15 at assignment
+
+
+======================================================================
+FAIL: test_small (__main__.RealWorkflows.test_small)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/truss-main-integration-20261010/scripts/benchmark-public-workflows.py", line 317, in test
+    def test(self,sample=sample):self.workflow(sample)
+                                 ^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-main-integration-20261010/scripts/benchmark-public-workflows.py", line 187, in workflow
+    size=len(batch);edge_result=timed(sample,'bulk_edges',lambda:apply(tuple(batch)),size)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-main-integration-20261010/scripts/benchmark-public-workflows.py", line 70, in timed
+    result=call()
+           ^^^^^^
+  File "/private/tmp/truss-main-integration-20261010/scripts/benchmark-public-workflows.py", line 187, in <lambda>
+    size=len(batch);edge_result=timed(sample,'bulk_edges',lambda:apply(tuple(batch)),size)
+                                                                 ^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-main-integration-20261010/scripts/benchmark-public-workflows.py", line 144, in apply
+    if not isinstance(outcome,Ok):raise AssertionError(repr(outcome)+'; native-test diagnostic: '+str(host._custody.last_attempt.error))
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error'); native-test diagnostic: canceling statement due to statement timeout
+CONTEXT:  PL/pgSQL function truss.runtime_owned_group_validate(uuid,boolean) line 216 at IF
+SQL statement "SELECT truss.runtime_owned_group_validate(attempt.id,true)"
+PL/pgSQL function truss.object_group_finish(uuid) line 68 at PERFORM
+PL/pgSQL function truss.apply_group(bytea,bytea,bytea,text,text) line 15 at assignment
+
+----------------------------------------------------------------------
+Ran 1 test in 23.587s
+
+FAILED (failures=1)
+{
+  "passed": false,
+  "functionalPassed": false,
+  "performanceQualification": "not_evaluated",
+  "capacityScope": {
+    "targetAtomicOperations": 1024,
+    "configuredExpectedAtomicOperations": 1024,
+    "attemptedAtomicGroupSizes": [
+      1000
+    ],
+    "committedAtomicGroupSizes": [
+      1000
+    ],
+    "qualification": "Only observed attempts and commits; configured limits do not establish actual maximum capacity."
+  },
+  "cases": [
+    {
+      "sample": "small",
+      "status": "failed",
+      "workload": {
+        "id": "small",
+        "types": 1,
+        "fieldsPerType": 4,
+        "shape": "scalar",
+        "nodes": 1000,
+        "edges": 1000,
+        "indexedPropertiesPerType": 1,
+        "distribution": "uniform",
+        "tier": "smoke"
+      },
+      "schemaBytes": 1224,
+      "records": 1,
+      "elements": 5,
+      "actions": 0,
+      "databaseSettings": {
+        "fsync": "on",
+        "full_page_writes": "on",
+        "server_version": "18.6",
+        "shared_buffers": "16384",
+        "synchronous_commit": "on"
+      },
+      "bulkCreateIncludingCommitMs": 9183.169042,
+      "bulkCreateRowsPerSecondIncludingCommit": 108.89487010708564
+    }
+  ],
+  "summary": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 2146.239667,
+      "failedElapsedMs": [],
+      "p50Ms": 2146.239667,
+      "minMs": 2146.239667,
+      "maxMs": 2146.239667
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1045.334333,
+      "failedElapsedMs": [],
+      "p50Ms": 1045.334333,
+      "minMs": 1045.334333,
+      "maxMs": 1045.334333
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 5943.775667,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 168.24322720523026,
+      "p50Ms": 5943.775667,
+      "minMs": 5943.775667,
+      "maxMs": 5943.775667
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 3239.284541,
+      "failedElapsedMs": [],
+      "p50Ms": 3239.284541,
+      "minMs": 3239.284541,
+      "maxMs": 3239.284541
+    },
+    {
+      "case": "small",
+      "operation": "bulk_edges",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 1,
+      "totalElapsedMs": 10045.132875,
+      "failedElapsedMs": [
+        10045.132875
+      ]
+    },
+    {
+      "case": "small",
+      "operation": "install",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 388.90475,
+      "failedElapsedMs": [],
+      "p50Ms": 388.90475,
+      "minMs": 388.90475,
+      "maxMs": 388.90475
+    },
+    {
+      "case": "small",
+      "operation": "prepare",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 312.27675,
+      "failedElapsedMs": [],
+      "p50Ms": 312.27675,
+      "minMs": 312.27675,
+      "maxMs": 312.27675
+    },
+    {
+      "case": "small",
+      "operation": "register",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 82.449625,
+      "failedElapsedMs": [],
+      "p50Ms": 82.449625,
+      "minMs": 82.449625,
+      "maxMs": 82.449625
+    },
+    {
+      "case": "small",
+      "operation": "registrar_catalog_view",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 21.656375,
+      "failedElapsedMs": [],
+      "p50Ms": 21.656375,
+      "minMs": 21.656375,
+      "maxMs": 21.656375
+    },
+    {
+      "case": "small",
+      "operation": "registration_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 7.671791,
+      "failedElapsedMs": [],
+      "p50Ms": 7.671791,
+      "minMs": 7.671791,
+      "maxMs": 7.671791
+    }
+  ]
+}
