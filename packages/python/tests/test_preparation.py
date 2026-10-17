@@ -179,10 +179,9 @@ print(coverage['observationsRequired'])
     def test_missing_configuration_refuses(self):
         with self.assertRaises(PreparationRejected):prepare((document('first'),),{})
 
-    def test_missing_runtime_is_explicit(self):
-        with self.assertRaises(PreparationRejected) as raised:
-            prepare_acceptance((document('first'),),json.dumps(CONFIG).encode(),bun_executable='/missing/truss-bun')
-        self.assertEqual(raised.exception.reason,'runtime_unavailable')
+    def test_external_runtime_is_unnecessary(self):
+        result=prepare_acceptance((document('first'),),json.dumps(CONFIG).encode(),bun_executable='/missing/truss-bun')
+        self.assertEqual(result.documents[0].document.content,document('first').content)
 
     def test_corrupted_bridge_outputs_refuse(self):
         original=_capture

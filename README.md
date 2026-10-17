@@ -14,6 +14,9 @@ Cyclic schema definitions, record-valued properties, composition/owned objects,
 history offload and managed-service qualification remain unfinished. Design and evidence live in
 [`docs/helix/`](docs/helix/README.md).
 
+Python deployments require no Bun or Node. The Python package consumes the
+pinned `mini-racer==0.14.1` embedded V8 engine for the original UMF producers.
+
 ## Relationship to other DocumentDrivenDX projects
 
 - **UMF** describes schemas; truss executes against them. truss depends on UMF

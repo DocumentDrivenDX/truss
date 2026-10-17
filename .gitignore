@@ -12,3 +12,10 @@ node_modules/
 # Python-generated caches
 __pycache__/
 *.py[cod]
+
+# Python package build output
+packages/python/build/
+packages/python/src/*.egg-info/
+
+# Also ignore an explicitly linked development dependency directory.
+node_modules

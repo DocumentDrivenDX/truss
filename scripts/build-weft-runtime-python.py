@@ -11,7 +11,7 @@ import tarfile
 import tempfile
 import tomllib
 
-REVISION = 'e2eba1ba323e6e9c08400fd0daf22bb456857d43'
+REVISION = '4289fa35cd6f75ea7e25975154d1b3d4dd3e707e'
 
 
 def check_wheel(wheel: Path, expected_version: str):
@@ -62,8 +62,9 @@ def main():
     if version('maturin') != '1.9.6':
         raise RuntimeError('Install maturin==1.9.6 in the caller Python environment')
     maturin = Path(sysconfig.get_path('scripts')) / ('maturin.exe' if os.name == 'nt' else 'maturin')
+    project = tomllib.loads((output / 'crates/weft-python/pyproject.toml').read_text())
     command = [str(maturin), 'build', '--manifest-path', 'crates/weft-python/Cargo.toml',
-               '--locked',
+               '--locked', '--features', ','.join(project['tool']['maturin']['features']),
                '--interpreter', sys.executable, '--out', str(output / 'wheels')]
     if args.profile == 'release':
         command.append('--release')
@@ -73,7 +74,7 @@ def main():
     wheels = list((output / 'wheels').glob('*.whl'))
     if len(wheels) != 1:
         raise RuntimeError('Expected one Weft Python wheel')
-    expected_version = tomllib.loads((output / 'crates/weft-python/pyproject.toml').read_text())['project']['version']
+    expected_version = project['project']['version']
     check_wheel(wheels[0], expected_version)
     print(f'Weft source: {REVISION}\nProfile: {args.profile}\nWheel: {wheels[0]}\nNative import and public API availability: passed')
 

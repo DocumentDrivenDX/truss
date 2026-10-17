@@ -5,7 +5,6 @@ from hashlib import sha256
 from importlib.resources import files
 import json
 import base64
-import shutil
 import subprocess
 from time import monotonic
 from .contracts import TextValue, BooleanValue
@@ -94,8 +93,6 @@ def encode_key_tuples(original_document: bytes,requests: tuple[KeyTupleRequest,.
     manifest=json.loads(manifest_bytes)
     for name,digest in manifest['files'].items():
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=digest:raise ValueError('Original key producer assets required')
-    executable=shutil.which(bun_executable)
-    if executable is None:raise ValueError('Selected Bun runtime unavailable')
     def timeout(maximum):
         if deadline is None:return maximum
         deadline.check()
@@ -105,9 +102,7 @@ def encode_key_tuples(original_document: bytes,requests: tuple[KeyTupleRequest,.
         except subprocess.TimeoutExpired:
             if deadline is not None:deadline.check()
             raise
-    version=capture([executable,'--version'],limit=256,maximum=5)
-    if version.returncode or version.stdout.strip().decode()!=manifest['runtimeVersion']:raise ValueError('Selected Bun runtime required')
-    result=capture([executable,str(root.joinpath('bridge.mjs'))],input_bytes=payload,limit=8388608,maximum=10)
+    result=capture(['embedded-v8',str(root.joinpath('bridge.mjs'))],input_bytes=payload,limit=8388608,maximum=10)
     if result.returncode:raise ValueError('Original key producer unavailable')
     response=decode_owner_evidence_json(result.stdout)
     if type(response) is not dict or set(response)!= {'status','receiptTexts'} or response['status']!='encoded' or type(response['receiptTexts']) is not list or len(response['receiptTexts'])!=len(requests):
@@ -158,11 +153,7 @@ def encode_literal_key_tuple(original_document:bytes,identity:tuple[str,str,str]
     manifest=json.loads(manifest_bytes)
     for name,digest in manifest['files'].items():
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=digest:raise ValueError('Original key producer assets required')
-    executable=shutil.which(bun_executable)
-    if executable is None:raise ValueError('Selected Bun runtime unavailable')
-    version=_capture([executable,'--version'],limit=256,timeout=5)
-    if version.returncode or version.stdout.strip().decode()!=manifest['runtimeVersion']:raise ValueError('Selected Bun runtime required')
-    result=_capture([executable,str(root.joinpath('bridge.mjs'))],input_bytes=payload,limit=8388608,timeout=10)
+    result=_capture(['embedded-v8',str(root.joinpath('bridge.mjs'))],input_bytes=payload,limit=8388608,timeout=10)
     if result.returncode:raise ValueError('Original key producer unavailable')
     response=decode_owner_evidence_json(result.stdout)
     if (type(response) is not dict or set(response)!={'status','receiptTexts'} or response['status']!='encoded'

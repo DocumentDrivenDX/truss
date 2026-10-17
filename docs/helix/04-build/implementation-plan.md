@@ -8027,3 +8027,20 @@ The aligned-budget native composition replay r3 passes1/79.661s, with actual thr
 ## Guarded direct-projection publication — 2026-10-14
 
 [Guarded dispatcher evidence](evidence/security-guarded-dispatch-20261014/README.md) now includes source preflight before SQL, distinct query/result contracts on one native source epoch, and actual exact inspected query-cell publication under registered Subject/peer/role/source/fact/epoch cuts. Native r6 passes1/67.996s on runtime0.62 with Resource identity-only and identity/withheld-salary batches and corrupt-withheld-cell refusal/no release. This is a selected diagnostic candidate path, not public native admission; broader parameters, query operators, result domains and complete authority/lifecycle closure plus all132 original acceptance cases remain required.
+
+## Bun-free stable release — 2026-10-17
+
+The immediate embedder update retains the published native0.70 capability and
+SQL payloads from Truss0.0.37. It replaces external Bun execution with the
+owner-approved embedded V8 delivery profile and adopts checksum-verified Weft
+0.4.41 while retaining backend0.4.40 / target0.4. The original stable release
+workflow remains mandatory on Linux x64 and macOS ARM64. No owned-graph
+capability is introduced in this release. Current-main owned-graph capacity and
+1,000-edge workload failures remain separate unreleased work; they are neither
+qualified nor removed by this branch.
+
+Preserve original UMF source assets, full receipts, unknown content, exact keys,
+held-session framing, shared deadlines, cleanup and stable refusal carriers.
+The new consumer cohort names its engine and delivery-manifest digest. Earlier
+protected registrations require explicit re-enrollment after compiler/runtime
+changes. The native UMF replacement remains the selected subsequent work.

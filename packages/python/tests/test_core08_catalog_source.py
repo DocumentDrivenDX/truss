@@ -49,7 +49,7 @@ class Core08CatalogSourceTests(unittest.TestCase):
  def test_capture_timeout_refuses_without_partial_artifact(self):
   with patch('truss._core08_catalog_source._capture',side_effect=subprocess.TimeoutExpired(['bun','--version'],5)):
    with self.assertRaises(CompileRefusal) as refusal:prepare()
-  self.assertEqual(refusal.exception.code,'core08_runtime')
+  self.assertEqual(refusal.exception.code,'core08_producer')
 
  def test_invalid_identity_utf8_refuses_before_runtime_capture(self):
   with patch('truss._core08_catalog_source._capture') as capture:

@@ -3,7 +3,6 @@ from dataclasses import dataclass,field
 from hashlib import sha256
 from importlib.resources import files
 import json
-import shutil
 import subprocess
 from ._core08_catalog_release import MANIFEST_SHA256
 from .preparation import _capture,PreparationRejected
@@ -31,17 +30,9 @@ def prepare_core08_catalog_source(original_document:bytes,*,document_id:str,docu
     manifest=json.loads(raw)
     for path,digest in manifest['files'].items():
         if sha256(root.joinpath(path).read_bytes()).hexdigest()!=digest:raise CompileRefusal('core08_producer','Original producer asset required')
-    executable=shutil.which(bun_executable)
-    if executable is None:raise CompileRefusal('core08_runtime','Qualified Bun runtime required')
-    try:runtime=_capture([executable,'--version'],limit=4096,timeout=5)
-    except (OSError,subprocess.TimeoutExpired,PreparationRejected) as error:
-        raise CompileRefusal('core08_runtime','Qualified runtime capture unavailable') from error
-    try:runtime_version=runtime.stdout.decode('ascii').strip()
-    except UnicodeError as error:raise CompileRefusal('core08_runtime','Qualified runtime version unavailable') from error
-    if runtime.returncode or runtime_version!=manifest['runtimeVersion']:raise CompileRefusal('core08_runtime','Qualified Bun runtime required')
     request=json.dumps({'documentId':document_id,'documentRevision':document_revision,'documentJson':original_document.decode('utf8')},ensure_ascii=False,separators=(',',':')).encode('utf8')
     if len(request)>8_000_000:raise CompileRefusal('core08_input','Original producer transport capacity exceeded')
-    try:response=_capture([executable,str(root.joinpath('receiver.mjs'))],input_bytes=request,limit=16_000_000,timeout=30)
+    try:response=_capture(['embedded-v8',str(root.joinpath('receiver.mjs'))],input_bytes=request,limit=16_000_000,timeout=30)
     except (OSError,subprocess.TimeoutExpired,PreparationRejected) as error:
         raise CompileRefusal('core08_producer','Original bounded producer capture unavailable') from error
     if response.returncode:raise CompileRefusal('core08_producer','Original completed owner response required')

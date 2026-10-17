@@ -1,5 +1,12 @@
 # Truss Python toolkit
 
+Python deployment uses embedded V8 (`mini-racer==0.14.1` / V8 14.4.258.23).
+Bun and Node are not required in the application image. Existing protected-query
+registrations require explicit source re-enrollment when their exact compiler
+and runtime selection changes. This release retains native0.70 functionality;
+owned-graph features remain unreleased on main.
+
+
 The Python reference assembly provides catalog registration, object and edge
 mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
@@ -11,7 +18,7 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-This is an experimental implementation: Python distribution `truss-toolkit==0.0.37`,
+This is an experimental implementation: Python distribution `truss-toolkit==0.0.38`,
 native runtime `0.70-candidate`, layout `1.0`
 candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.40`. The tested local
 stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
@@ -20,10 +27,10 @@ server versions are not qualified. The broader protected engine remains
 unfinished; this runtime enforces its installed ordinary-person/module boundaries
 and includes the explicitly activated policy-query profile described below.
 
-This release is [v0.0.37](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.37).
+This release is [v0.0.38](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.38).
 
 The failed v0.0.36 tag remains unpublished: its older compiler refused native70.
-This replacement selects matching Weft0.4.38/backend0.4.40 and keeps the exact
+This replacement selects matching Weft0.4.41/backend0.4.40 and keeps the exact
 native70 SQL and manifest.
 
 It fixes deferred edge writer authorization after an early attempt-constraint
@@ -71,10 +78,10 @@ Direct object, key and page results expose `object.ownership.state` as
 
 The exact consumer model passes public accept/apply/readback and native binding
 export. Populated native65 upgrades preserve transitions and receipt replay.
-SDK0.0.37 selects Weft0.4.38/backend0.4.40 for native70 queries. Earlier
+SDK0.0.38 selects Weft0.4.41/backend0.4.40 for native70 queries. Earlier
 native65/native68 compiler contracts remain available; native70 action-selection
 registration/lowering is not admitted. See the
-[SDK37 release evidence](../../docs/helix/04-build/releases/v0.0.37.md).
+[SDK38 release evidence](../../docs/helix/04-build/releases/v0.0.38.md).
 This compiler support does not enable a protected bulk-action executor.
 
 ## Install the release
@@ -89,10 +96,10 @@ through the public API and queries an exact signed64 salary while returning its
 masked String value. A complete public-API reference example includes installation,
 ordinary-person catalog/data writes, Subject/source enrollment, activation,
 transaction adoption and the masked query. From a source checkout with the
-matching wheels and Bun installed:
+matching wheels installed:
 
 ```sh
-python packages/python/examples/current_query_workflow.py /tmp/truss-policy-example --bun bun
+python packages/python/examples/current_query_workflow.py /tmp/truss-policy-example
 ```
 
 It prints `{"columns": ["salary"], "rows": [["[private]"]]}`. The adjacent model,
@@ -156,7 +163,7 @@ Unknown modules refuse. Reopening a registration under another known wheel still
 requires an explicit migration; the factory never upgrades retained pins.
 
 This first local PostgreSQL18.6 profile uses exact original candidate Weft ABI2
-and UMF child pins. The matching Weft0.4.38 macOS ARM and Linux x64 wheels
+and UMF child pins. The matching Weft0.4.41 macOS ARM and Linux x64 wheels
 are selected explicitly. The release workflow checks the selected wheels in
 installed public workflows on both platforms before publication. Other platforms and newer result ABIs remain outside this profile.
 It currently requires rootless, present String or explicit signed64 query
@@ -176,17 +183,19 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.37 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.38 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.38 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.41 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.37'
+  'truss-toolkit[local,native,query]==0.0.38'
 ```
 
-Bun1.4.2 is still required for UMF preparation. SDK 0.0.37 /
+Bun and Node are not deployment requirements. The wheel pins
+`mini-racer==0.14.1` and executes the preserved UMF producers in embedded V8.
+Original producer manifests retain their historical build-time Bun pins. SDK 0.0.38 /
 native 0.70 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
 catalogs. Create/update, imports, preconditions, backfills and lookups require no
 client encoder or per-key receipt. Existing stored key and namespace bytes are
-preserved. Weft remains optional through `query` (version 0.4.38); it is not a
+preserved. Weft remains optional through `query` (version 0.4.41); it is not a
 key-encoding dependency. The separate protected security observation retains its
 original producer boundary.
 The older released installation example above retains its historical dependency
@@ -197,12 +206,12 @@ PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.37 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.38 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.37 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.38 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
-python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
+python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
 
 The [example](examples/adopter_workflow.py) installs the runtime, registers the
@@ -353,14 +362,15 @@ broader draft protocol does not imply that every declared profile is implemented
 
 Catalog, groups, imports, direct reads, history and feed also have typed
 capability selectors. Imports/groups accept exact original `CatalogDocument`
-inputs and the Bun executable where required by their selected provider.
+inputs. The legacy `bun_executable` keyword remains accepted for source
+compatibility and does not select or launch an executable.
 Separate broad `mutations` and physical-optimization families remain unavailable.
 
 ## Catalog meaning and evolution
 
 A `CatalogDocument(document_id, document_revision, content)` carries exact
 original UTF-8 document bytes. Preparation runs the bundled UMF owner producer
-through Bun; registration still requires Bun in the app image. Ordinary key
+inside embedded V8; registration requires no external JavaScript runtime. Ordinary key
 operations derive keys in PostgreSQL, while catalog admission uses the broader
 UMF producer.
 Native accepted IDs and definition pins come from the catalog, not fixtures.
