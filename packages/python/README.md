@@ -48,8 +48,9 @@ The Python reference assembly provides catalog registration, object and edge
 mutations, business-key reads, Weft queries, imports, retained history, receipt
 recovery, committed feeds and acknowledgements. It embeds into a caller-owned
 synchronous psycopg connection. The caller begins and settles assembly transactions. The separate
-`run_import_batches` function owns a fresh connection and commits one record
-per batch; objects precede edges across the complete input. It performs no
+`run_import_batches` function owns a fresh connection. Legacy inputs commit one
+record per batch; explicit owned inputs commit the entire aggregate as one batch.
+Objects precede edges across the complete input. It performs no
 automatic retries. Results distinguish confirmed commits, rollbacks and unknown
 commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
@@ -522,10 +523,11 @@ and failed-precondition carriers. Known catalog execution refusals expose
 Imports return `ImportReported` or `ImportExecutionFailed` directly, rather than
 the general outer `Ok`/`Error` wrapper. Host-owned imports return per-item created/skipped/rejected outcomes and batch
 dispositions. Retain the load ID, authenticated actor and immutable source
-provenance. Rejected items do not imply that other items in a caller-committed
-batch failed. `run_import_batches` supplies separate engine-owned one-record
-transactions on a fresh connection, preserving prior confirmed commits when
-a later batch fails. It returns unknown commit outcomes explicitly.
+provenance. For legacy imports, rejected items do not imply that other items in a
+caller-committed batch failed. For legacy inputs, `run_import_batches` supplies separate
+engine-owned one-record transactions on a fresh connection, preserving prior
+confirmed commits when a later batch fails. Explicit owned inputs use one atomic
+aggregate transaction. The runner returns unknown commit outcomes explicitly.
 
 Build relationship import records through the same selected import provider:
 
