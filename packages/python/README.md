@@ -1,16 +1,17 @@
+# Truss Python toolkit
+
 Current main builds `0.0.39.dev0` / native0.71. The separate stable0.0.38
 Bun-free release retains native0.70; owned-graph capabilities described below
 remain unreleased because their original hosted capacity gates have not passed.
 
-# Truss Python toolkit
 
-**Unreleased development checkpoint:** SDK `0.0.38.dev0` installs native
+**Unreleased development checkpoint:** SDK `0.0.39.dev0` installs native
 `0.71-candidate`. Public groups now create owned objects/edges, explicitly
 reparent complete subtrees and cascade deletes; identity/key/page/edge reads,
 traversal and retained history preserve ownership. Basic PostgreSQL18.6 workflows
 cover commit, rollback, dry-run and original receipt replay. The
 latest published release is [v0.0.38](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.38),
-using native `0.70-candidate` with Weft `0.4.38` / backend `0.4.40`.
+using native `0.70-candidate` with Weft `0.4.41` / backend `0.4.40`.
 Its Linux x86_64 and macOS ARM release gates passed, including the populated
 v0.0.35 upgrade. The v0.0.36 tag remains an unpublished failed attempt.
 The earlier v0.0.35 feature scope is described below; owned-graph development
@@ -71,10 +72,10 @@ and includes the explicitly activated policy-query profile described below.
 
 This earlier release is [v0.0.35](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.35).
 
-Published [v0.0.38](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.38)
+Published [v0.0.37](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.37)
 addresses deferred edge writer authorization after an early attempt-constraint
 flush. Its transactional upgrade from v0.0.35/native68 preserves rows and
-receipts; both platform release workflows passed with matching Weft v0.4.41.
+receipts; both platform release workflows passed with matching Weft v0.4.38.
 
 Creation now joins the common object transition ledger while retaining its sole
 original journal and receipt evidence. Populated native67 installations can
@@ -294,7 +295,7 @@ python -m pip install --only-binary=:all: \
 Python deployment requires no Bun, Node, or external JavaScript process. The
 wheel uses `mini-racer==0.14.1` to execute the preserved UMF producer inside V8.
 Original producer manifests retain their build-time Bun pins; these are provenance,
-not deployment requirements. SDK 0.0.38 / native 0.71 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
+not deployment requirements. SDK 0.0.38 / native 0.70 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
 catalogs. Create/update, imports, preconditions, backfills and lookups require no
 client encoder or per-key receipt. Existing stored key and namespace bytes are
 preserved. Weft remains optional through `query` (version 0.4.41); it is not a
