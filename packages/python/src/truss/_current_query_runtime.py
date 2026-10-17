@@ -14,6 +14,7 @@ from ._current_query_protection import verify_current_query_protection
 from ._current_query_pipe import CurrentQueryPipeError
 from ._owner_evidence_json import decode_owner_evidence_json
 from ._security_catalog_subject_installation import _text_rows
+from ._security_catalog_assessment import SOURCE_TABLES
 from ._installation_privileges import installation_administrator_with_cursor
 from .catalog_runtime import _pin_cursor, _release
 
@@ -24,6 +25,35 @@ class _InnerFailure(Exception):
 
 class _QueryRefusal(ValueError):
     pass
+
+
+class _GraphAuthorityRefusal(ValueError):
+    pass
+
+
+_GRAPH_CONSUMER_MODULE = '7e6384ddada0f67a45839a222ffb059e04a5de00f6a9281ad811eefacdeffa42'
+
+
+def _verify_graph_caller_cut(cursor,identity):
+    """Observe cuts on this original caller transaction; acquire none, issue no permit."""
+    actual=_text_rows(cursor,"SELECT pg_catalog.pg_backend_pid()::text,l.virtualtransaction::text FROM pg_catalog.pg_locks l WHERE l.pid=pg_catalog.pg_backend_pid() AND l.locktype='virtualxid' AND l.mode='ExclusiveLock' AND l.granted",limit=1)
+    if actual!=[identity]:
+        raise ValueError('Original same-backend caller transaction cut required')
+    homes=tuple((*SOURCE_TABLES,'source_epoch_current','source_epoch_registry',
+        'installation_marker','installation_archive','catalog_subject_map','module_access',
+        'object','object_key_bucket','edge'))
+    rows=_text_rows(cursor,"""SELECT c.relname::text,c.relkind::text,c.relpersistence::text,
+      c.relrowsecurity::text,c.relforcerowsecurity::text,
+      EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhrelid=c.oid OR i.inhparent=c.oid)::text,
+      EXISTS(SELECT 1 FROM pg_catalog.pg_locks l WHERE l.pid=pg_catalog.pg_backend_pid()
+        AND l.virtualtransaction=%s AND l.locktype='relation' AND l.granted
+        AND l.database=(SELECT oid FROM pg_catalog.pg_database WHERE datname=pg_catalog.current_database())
+        AND l.relation=c.oid AND l.mode='ShareLock')::text
+      FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+      WHERE n.nspname='truss' AND c.relname=ANY(%s::text[]) ORDER BY c.relname""",
+      (identity[1],list(homes)),limit=len(homes))
+    if rows!=[(name,'r','p','false','false','false','true') for name in sorted(homes)]:
+        raise ValueError('Original complete ordinary caller Graph source/data cut required')
 
 
 def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,parameters,maximum_rows,maximum_scan_rows,maximum_bytes,disclosure):
@@ -62,6 +92,7 @@ def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,para
                 sources=capture_current_query_sources_with_cursor(cursor)
                 expected_profile,expected_originals=(_DISCLOSURE_PROFILE,CurrentDisclosureOriginals) if disclosure else (_QUERY_PROFILE,CurrentQueryOriginals)
                 if sources.source_profile!=expected_profile or type(sources.query_originals) is not expected_originals:raise ValueError('Exact registered current query source profile required')
+                graph_candidate=(disclosure and decode_owner_evidence_json(sources.query_originals.consumer_bytes)['weftModuleSha256']==_GRAPH_CONSUMER_MODULE)
                 cursor.execute('LOCK TABLE ONLY truss.module_access IN SHARE MODE NOWAIT',prepare=False)
                 cursor.execute('LOCK TABLE pg_catalog.pg_authid,pg_catalog.pg_auth_members IN SHARE MODE NOWAIT',prepare=False)
                 cursor.execute('LOCK TABLE ONLY truss.catalog_subject_map,truss.object,truss.object_key_bucket IN SHARE MODE NOWAIT',prepare=False)
@@ -83,6 +114,7 @@ def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,para
                     _verify_helper(caller_cursor,executor.subject_registration)
                     subject_rows=_text_rows(caller_cursor,'SELECT * FROM truss.current_query_subject_current()',limit=1)
                     if len(subject_rows)!=1:raise ValueError('Current ordinary Subject required')
+                    if graph_candidate:_verify_graph_caller_cut(caller_cursor,caller_observed[0][:2])
                     raw=caller_cursor.execute('SELECT truss.reader_catalog(%s,%s,%s,%s)',(65536,16777216,manifest['releaseId'],digest),prepare=False).fetchone()
                     if raw is None or type(raw[0]) is not bytes:raise ValueError('Original caller-readable catalog required')
                     view=decode_owner_evidence_json(raw[0])
@@ -107,6 +139,10 @@ def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,para
                     return _text_rows(cursor,"SELECT a.datid::text,a.usesysid::text,l.virtualtransaction::text FROM pg_catalog.pg_stat_activity a JOIN pg_catalog.pg_locks l ON l.pid=a.pid AND l.locktype='virtualxid' AND l.mode='ExclusiveLock' AND l.granted WHERE a.pid=%s::int AND a.datid=(SELECT oid FROM pg_catalog.pg_database WHERE datname=pg_catalog.current_database()) AND a.xact_start IS NOT NULL AND a.state IN ('active','idle in transaction')",(before[1][0],),1)
                 expected_peer=[(subject.database_oid,subject.role_oid,before[1][1])]
                 if peer()!=expected_peer:raise ValueError('Actual same-database ordinary caller transaction required')
+                if graph_candidate:
+                    # Source/data cuts alone do not qualify every authority dependency.
+                    # Refuse this cohort before any fact/Graph collector or staging.
+                    raise _GraphAuthorityRefusal('Qualified native Graph current-authority profile required')
                 captured=capture_current_query_facts_with_cursor(cursor,bun_executable=executor.bun_executable)
                 if captured.sources!=sources:raise ValueError('Original held source inventory changed')
                 facts=decode_owner_evidence_json(captured.facts_bytes)
@@ -147,6 +183,9 @@ def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,para
             outcome=executor.host._run_operation(executor.transaction,execute)
             if isinstance(outcome,Error) and outcome.error.code=='transaction_unusable':return outcome
             if inner_failure:return inner_failure[0]
+            if (isinstance(outcome,Error) and outcome.error.code=='invalid_transaction'
+                    and isinstance(executor.host._custody.last_attempt.error,_GraphAuthorityRefusal)):
+                return Ok(QueryRefused('execution_obligation'))
             if (isinstance(outcome,Error) and outcome.error.code=='invalid_transaction'
                     and isinstance(executor.host._custody.last_attempt.error,CurrentQueryLimit)):
                 return Ok(QueryRefused('limits'))

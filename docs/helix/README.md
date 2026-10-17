@@ -6,7 +6,7 @@ The current development checkpoint is Python SDK `0.0.38.dev0` / native
 workflows cover creation, explicit subtree reparenting, cascade deletion,
 read-only reads, history, receipt replay and explicit atomic owned imports with
 indexed original provenance. Development compiled queries use
-published Weft0.4.36 / backend0.4.39. Canonical dates and exact decimal facets
+published Weft0.4.40 / backend0.4.41. Canonical dates and exact decimal facets
 are supported by catalog acceptance, writes and reads; their broader SQL query
 domains remain unfinished. Practical performance still blocks the next release,
 and the integrated 1,024-operation path remains unqualified on the release

@@ -222,7 +222,7 @@ including repeated projections. It does not convert these cells to `QueryRows`.
 
 This candidate requires the exact local presence-enabled Weft wheel and UMF
 held-inspector cohort in the [consumer evidence](../../docs/helix/04-build/evidence/current-disclosure-consumer-20261016/README.md).
-The `query` extra remains Weft0.4.36; installing that extra does not enable this
+The `query` extra remains Weft0.4.40; installing that extra does not enable this
 candidate. The selected compiler currently supports direct field projections.
 Further SQL coverage belongs to Weft and requires corresponding qualified
 adapter integration, rather than a permanent Truss language allowlist.

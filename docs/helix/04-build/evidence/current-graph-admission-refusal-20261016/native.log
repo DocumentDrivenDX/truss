@@ -1,0 +1,8 @@
+test_complete_caller_cut_reaches_authority_refusal_without_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_complete_caller_cut_reaches_authority_refusal_without_collection) ... ok
+test_matching_partial_helper_registration_refuses_before_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_matching_partial_helper_registration_refuses_before_collection) ... ok
+test_settled_caller_refuses_without_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_settled_caller_refuses_without_collection) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 11.076s
+
+OK

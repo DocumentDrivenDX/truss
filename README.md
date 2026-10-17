@@ -10,8 +10,10 @@ preconditions, idempotent receipts, host-owned imports, history, committed feeds
 and Weft-compiled scalar and relationship queries. The local baseline is DocumentDrivenDX
 `pgserver-pg18==18.6.1` (PostgreSQL18.6) with psycopg3.3.6. Start with the [runnable adopter workflow](packages/python/examples/adopter_workflow.py).
 
-Cyclic schema definitions, record-valued properties, composition/owned objects,
-history offload and managed-service qualification remain unfinished. Design and evidence live in
+Owned objects and composition are implemented in the unreleased development
+tranche; hosted release qualification is pending. Cyclic schema definitions,
+record-valued properties, history offload and managed-service qualification remain
+unfinished. Design and evidence live in
 [`docs/helix/`](docs/helix/README.md).
 
 ## Relationship to other DocumentDrivenDX projects
