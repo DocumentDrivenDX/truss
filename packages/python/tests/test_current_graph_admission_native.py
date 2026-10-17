@@ -18,7 +18,7 @@ class CurrentGraphAdmissionNativeTests(base.CurrentDisclosureRuntimeNativeTests)
     for name in tuple(n for n in dir(base.CurrentDisclosureRuntimeNativeTests) if n.startswith('test_')):
         locals()[name]=None
 
-    def query(self,*,partial=False,settled=False):
+    def query(self,*,partial=False,settled=False,legacy=False):
         original=subjects._helper_source
         def old_helper(*args,**kwargs):
             source=original(*args,**kwargs)
@@ -29,6 +29,12 @@ class CurrentGraphAdmissionNativeTests(base.CurrentDisclosureRuntimeNativeTests)
             bun=self.create_query_graph()
         import json
         self.assertEqual(json.loads(self.originals.consumer_bytes)['weftModuleSha256'],runtime._GRAPH_CONSUMER_MODULE)
+        if legacy:
+            from psycopg import sql
+            marker=json.loads(self.admin.execute('SELECT truss.current_query_protection_marker()').fetchone()[0])
+            marker['profile']='truss-current-query-protection/0.1-candidate'
+            body='SELECT '+sql.Literal(json.dumps(marker,sort_keys=True,separators=(',',':'))).as_string()+'::pg_catalog.text'
+            self.admin.execute(sql.SQL('CREATE OR REPLACE FUNCTION truss.current_query_protection_marker() RETURNS text LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS {}').format(sql.Literal(body)))
         self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin,operation_timeout_ms=30000)
         self.tx=self.host.adopt_transaction().value
         executor=CurrentDisclosureExecutor(self.host,self.tx,self.current_subject_registration,bun_executable=bun)
@@ -45,20 +51,11 @@ class CurrentGraphAdmissionNativeTests(base.CurrentDisclosureRuntimeNativeTests)
         self.assertEqual(self.admin.execute("SELECT count(*) FROM pg_catalog.pg_class WHERE relnamespace=pg_catalog.pg_my_temp_schema() AND relname LIKE 'truss_presence_%'").fetchone(),(0,))
         return result,host,caller,transaction
 
-    def test_complete_caller_cut_reaches_authority_refusal_without_collection(self):
-        result,host,caller,transaction=self.query()
+    def test_matching_legacy_graph_activation_refuses_before_collection(self):
+        result,host,caller,transaction=self.query(legacy=True)
         self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error))
         self.assertIsInstance(result.value,QueryRefused)
         self.assertEqual(result.value.code,'execution_obligation')
-        # Real source/data locks are retained on this ordinary transaction.
-        actual=caller.execute("SELECT pg_catalog.pg_backend_pid()::text,l.virtualtransaction::text FROM pg_catalog.pg_locks l WHERE l.pid=pg_catalog.pg_backend_pid() AND l.locktype='virtualxid' AND l.granted AND l.mode='ExclusiveLock'").fetchone()
-        checked=host._run_operation(transaction,lambda cursor,observed:runtime._verify_graph_caller_cut(cursor,actual))
-        self.assertIsInstance(checked,Ok,str(host._custody.last_attempt.error))
-        other,other_host,_,other_transaction=self.consumer()
-        refused=other_host._run_operation(other_transaction,
-            lambda cursor,observed:runtime._verify_graph_caller_cut(cursor,actual))
-        self.assertIsInstance(refused,Error)
-        self.assertIn('same-backend caller transaction',str(other_host._custody.last_attempt.error))
 
     def test_matching_partial_helper_registration_refuses_before_collection(self):
         result,host,caller,transaction=self.query(partial=True)

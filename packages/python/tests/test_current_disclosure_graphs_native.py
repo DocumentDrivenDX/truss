@@ -46,7 +46,7 @@ class NativeGraphCaptureTests(base.PublicCreateGroupTests):
     for name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):locals()[name]=None
     def test_actual_public_graph_capture_and_original_held_semantics(self):self._run_population(False)
     def test_actual_public_parallel_graph_and_original_held_semantics(self):self._run_population(True)
-    def _run_population(self,parallel):
+    def _create_public_population(self,parallel):
         bundle=Path(os.environ['TRUSS_GRAPH_CAPTURE_UMF_CHILD'])
         self.assertEqual(hashlib.sha256(bundle.read_bytes()).hexdigest(),BUNDLE_SHA256)
         output=Path(os.environ.get('TRUSS_GRAPH_CAPTURE_EVIDENCE',str(self.root/'evidence')));output.mkdir(parents=True,exist_ok=True)
@@ -83,6 +83,10 @@ class NativeGraphCaptureTests(base.PublicCreateGroupTests):
         # The semantic closure must retain exact accepted revision and document.
         initial['sources']['closure']={'pins':[{'documentId':'adoc','revision':original_document.document_revision}],'documents':[{'revision':original_document.document_revision,'document':json.loads(raw)}]}
         initial['sources']['ontology']['documents']=[{'documentId':'adoc','revision':original_document.document_revision}]
+        return initial,request,case,output,refs,identities,expected_incidence,bundle
+
+    def _run_population(self,parallel):
+        initial,request,case,output,refs,identities,expected_incidence,bundle=self._create_public_population(parallel)
         self.admin.execute('BEGIN')
         from truss._security_catalog_assessment import SOURCE_TABLES
         self.admin.execute('LOCK TABLE '+','.join('ONLY truss.'+name for name in SOURCE_TABLES)+' IN SHARE MODE NOWAIT')

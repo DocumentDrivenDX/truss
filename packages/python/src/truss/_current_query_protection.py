@@ -11,10 +11,18 @@ from .psycopg_host import PsycopgHost
 from ._installation_privileges import installation_administrator_with_cursor
 from ._current_query_sources import capture_current_query_sources_with_cursor
 from ._current_query_subjects import _verify_helper
+from ._current_disclosure_originals import is_graph_disclosure_originals
 from .catalog_runtime import _pin_cursor
 from .current_query import CurrentQueryProtection
 
 _MARKER='truss.current_query_protection_marker()'
+_GRAPH_PROFILE='truss-current-graph-protection/0.1-candidate'
+_SCALAR_PROFILE='truss-current-query-protection/0.1-candidate'
+
+
+class GraphAuthorityProfileRequired(ValueError):
+    pass
+
 _METADATA=('truss.reader_catalog(integer,integer,text,text)',
            'truss.accepted_document(text,integer,text,text)')
 _SUBJECT='truss.current_query_subject_current()'
@@ -40,9 +48,14 @@ def require_unprotected_configuration(cursor,*,allow_uninstalled=False):
         raise ValueError('Protected query installation requires an explicit protection migration')
 
 
-def _body(sources,administrator):
-    return 'SELECT '+sql.Literal(json.dumps({'profile':'truss-current-query-protection/0.1-candidate',
+def _profile_body(sources,administrator,profile):
+    return 'SELECT '+sql.Literal(json.dumps({'profile':profile,
         'installation':sources.installation_id,'inventory':sources.inventory_digest,'trustedAdministratorOid':administrator},sort_keys=True,separators=(',',':'))).as_string()+'::pg_catalog.text'
+
+
+def _body(sources,administrator):
+    profile=_GRAPH_PROFILE if is_graph_disclosure_originals(sources.query_originals) else _SCALAR_PROFILE
+    return _profile_body(sources,administrator,profile)
 
 
 def _marker_administrator(body,sources):
@@ -50,6 +63,10 @@ def _marker_administrator(body,sources):
     match=re.fullmatch(r"SELECT '([^']+)'::pg_catalog.text",body)
     if match is None:raise ValueError('Exact activation marker source required')
     administrator=json.loads(match[1]).get('trustedAdministratorOid')
+    if (type(administrator) is int and 0<administrator<2**32
+            and is_graph_disclosure_originals(sources.query_originals)
+            and body==_profile_body(sources,administrator,_SCALAR_PROFILE)):
+        raise GraphAuthorityProfileRequired('Explicit quiesced Graph protection activation required')
     if type(administrator) is not int or not 0<administrator<2**32 or body!=_body(sources,administrator):
         raise ValueError('Original activating administrator identity required')
     return administrator
