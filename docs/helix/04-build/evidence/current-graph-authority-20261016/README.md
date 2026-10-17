@@ -149,3 +149,88 @@ Public UMF evaluator semantics are not automatically evidence that the pinned
 private candidate producer implements the same request preflight: verify that
 refinement when selecting the new cohort. No new policy framework/global grant is
 proposed, and no privileged-administration or Databricks qualification is added.
+
+
+## Proposed immutable combined compiler release — bounded plan
+
+Draft for Astra plan review BEFORE any build/publication/registration change or
+native campaign. Priority follows the owned release gate; predicate operators stay
+held. SDK has reserved Weft0.4.42. Its existing release owner `/root/weft_release_041`
+owns build/publication through SDK/Truss relay; this chat does not take over the
+publisher or message that agent. Freeze all compiler-source inputs, including any
+reviewed SDK fixes, before tagging v0.4.42; no reuse/replacement of v0.4.41 assets. This plan does not itself
+authorize a publication or qualify native support.
+
+**Verified gap:** public0.4.41 source `4289fa35` and release-pins list the six ordinary
+features below but no presence/Graph features. Verified ARM wheel SHA256
+`863e6487b513610d25581d8307bf5cea5df6928bc704171ec256f00c68b155dc`, native module
+`2879b4f997c61ae1f122ae1502adffc1f2964ab8a1e34422e86d33f7210d7848`, lacks actual
+CurrentPresencePreparation and presence SQL lower/check exports. Relevant Graph
+source is unchanged from b34a823; source availability is not a compiled API claim.
+Audit used metadata/import inspection only, no compiler execution/database test.
+
+Planned file scope: Weft `crates/weft-python/{Cargo.toml,pyproject.toml}`,
+`Cargo.lock`, `.github/workflows/release.yml` and release notes/pins; reuse
+`tests/current-query-presence/python-{model,graph}-requirements-bridge.py` and the
+existing ordinary/SDK smoke. Truss `_current_query_originals.py`,
+`_current_disclosure_originals.py`, focused cohort tests, the existing native
+workflow step and candidate-branch dependency pins/constraints/docs. New semantic
+core/backend/adapter SQL or wire-schema changes are not expected; a discovered
+compatibility break stops this plan for review rather than expanding its scope.
+
+1. **Compiler source/release gate:** retain all0.4.41 features: raw-postgresql-reads,
+   ashlar-databricks-qualified, truss-postgresql-pg18,
+   current-postgresql-scalar-candidate, current-databricks-scalar-candidate and
+   current-query-refinement-candidate. Add current-presence-graph-requirements-candidate
+   with its model/presence/application-lineage prerequisites. No operator semantics,
+   SQL dialect, UMF producer or default execution authority changes. Review the exact
+   0.4.42 Cargo/PEP440 version and complete feature diff, build through the existing release matrix, preserve existing
+   ordinary/SDK checks and reuse actual presence/model/Graph descriptor and
+   same-parent/export checks. Keep old feature-absent/cohort-rejection assertions
+   as negative controls; the combined release has an explicitly different export
+   expectation, not a rewritten legacy assertion. Record immutable source, full feature closure, wheel
+   and module digests per target; publish new artifacts only after that gate. Compiler
+   candidate APIs still confer no native admission. Do not rebuild/relabel artifacts
+   later as if their hashes were the tested bytes.
+2. **Truss source registration gate:** on a qualification branch, register each
+   exact tested target's full scalar ABI2 cohort (UMF579675/36e2 producer) and full
+   Graph/disclosure cohort (UMF11b412/548b producer) against the SAME compiler module.
+   Preserve their separate protocol/ABI/source identities and verify all actual
+   exports/assets; adding a module hash alone is insufficient. Replace the single
+   Graph-cohort index classifier with a closed explicitly registered Graph cohort
+   set; unknown/mixed tuples refuse, legacy a944 presence remains distinct. One
+   Graph/disclosure row per native module avoids ambiguous same-hash selections.
+   Existing source archives, Subject helper and activation bound to another cohort
+   must reject the changed compiler. First portable qualification uses fresh original
+   registrations/explicit trusted activation; no automatic archive/Subject migration,
+   facade regrant, copied context import or two-version installation workaround.
+3. **Fresh basic native gate:** install the immutable combined wheel once. Run the
+   existing actual ordinary/SDK smoke, scalar masked-predicate control, record-witness
+   projection fixture through fresh qualified registration, and the six public Graph
+   cases (SCRAM Alice/Bob/outsider, parallel occurrence, configuration refusal,
+   legacy marker/partial helper/settled caller, role-lock lifetime). Check complete
+   originals/model/Graph/context/caller/cuts/closing/result correspondence and matching
+   native runtime/backend—not just API existence. No default compiler pin on main
+   changes here; failure blocks enrollment/promotion rather than introducing fallback.
+4. **Hosted/promotion gate:** a candidate branch may pin the combined release for
+   validation, while main retains0.4.40. Use the existing installed-wheel native jobs
+   on Linux x86_64 and macOS ARM64, enabling actual Graph cases plus ordinary/scalar/
+   record-witness projection controls with that ONE installed module. No skipped
+   Graph tests or local-wheel receipts count as hosted qualification. Preserve current
+   required ordinary/release gates and deadlines. After fresh local and hosted results
+   and completed review, merge the exact cohort/pin/CI documentation increment and
+   push main. Failed gates leave main's pin and support claims unchanged.
+
+The publisher owns compiler artifacts; Truss owns cohort enrollment, protected
+activation and its runtime. SDK coordination stays through the authorized Truss
+owner. No new package/profile for COUNT, policy evaluator, issuer/token, Databricks
+workspace run or operator campaign is included. Windows/Linux ARM64/macOS x86_64
+compiler packaging may be published by the existing matrix but receives no Truss
+Graph native support claim without corresponding native evidence. Admin-quiescence
+and fresh-registration limits remain explicit; no truss.B08 or full B-008 promotion.
+
+Read-only audit files: `/private/tmp/weft-b008-public041-audit-20261016/audit.json`,
+verified release-pins/SHA256SUMS and exact published ARM wheel. Before implementation,
+freeze the final0.4.42 source commit before the tag; record selected immutable
+target wheel/module digests and the fresh Truss runtime parent before enrollment.
+Those not-yet-built identities are intentionally not guessed in this proposal.
