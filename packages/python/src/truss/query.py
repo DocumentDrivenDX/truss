@@ -39,7 +39,7 @@ class QueryDiagnostic:
 
 @dataclass(frozen=True, slots=True)
 class QueryRefused:
-    code: Literal['unauthorized', 'invalid_query', 'unsupported_query', 'limits', 'stale_context', 'native_domain']
+    code: Literal['unauthorized', 'invalid_query', 'unsupported_query', 'limits', 'stale_context', 'native_domain', 'execution_obligation']
     diagnostics: tuple[QueryDiagnostic, ...] = ()
     outcome: Literal['refused'] = field(default='refused', init=False)
 

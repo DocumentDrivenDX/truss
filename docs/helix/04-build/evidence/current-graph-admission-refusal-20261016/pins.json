@@ -1,0 +1,23 @@
+{
+  "main": "dc948aebacb555aa8c9ba2280640958bdcab2b8d",
+  "wheel": "/private/tmp/weft-b008-graph-admission-main-wheels-20261016/truss_toolkit-0.0.38.dev0-py3-none-any.whl",
+  "sha256": "82e11e5a5e16827a9b24d12514969b91ae10fc4a2747c4b671b6bd2dd8ebcea5",
+  "exactSourcePythonMembers": 205,
+  "mainRuntimeAssetsExact": true,
+  "installed": "/private/tmp/weft-b008-graph-admission-main-installed-20261016",
+  "graphWheelSha256": "25947eaea9cd42db79a2671664e7829af10d79a802a82cf92f5ddc0b2675e5c8",
+  "graphModuleSha256": "7e6384ddada0f67a45839a222ffb059e04a5de00f6a9281ad811eefacdeffa42",
+  "python": "3.11.17",
+  "pgserver": "18.6.1",
+  "postgresql": "18.6",
+  "psycopg": "3.3.6",
+  "bun": "1.4.2",
+  "nativeCases": 3,
+  "nativePassed": 3,
+  "nativeSeconds": 11.076,
+  "portableApiPassed": 2,
+  "moduleBoundaryImports": 1581,
+  "publicGraphAuthorization": false,
+  "casePromotion": 0,
+  "completedUltraReview": "pending"
+}
