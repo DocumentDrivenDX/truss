@@ -130,6 +130,43 @@ class BulkEdgeSqlTests(edge_base.EdgeMutationTests):
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(10,))
 
 
+    def test_buffered_scope_equals_retained_observer_with_thousand_edges(self):
+        connection,host,assembly,tx,a,b,pin=self.initialized()
+        context=assembly.group_context_in_transaction(tx).value
+        operations=tuple(self.link(pin,StoredObjectReference(identity=a),StoredObjectReference(identity=b),alias=f'scope-{i}') for i in range(1000))
+        result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
+        edge=result.value.response.semantic.results[0].identity
+        host.detach();connection.commit()
+        definition=self.admin.execute("SELECT pg_get_functiondef('truss.owned_graph_scope(jsonb)'::regprocedure)").fetchone()[0]
+        append='edge_images:=array_append(edge_images,observed.edge_image);'
+        assembly_sql=" SELECT coalesce(jsonb_object_agg(c.edge_key,c.image),'{}'::jsonb) INTO edges\n FROM unnest(edge_keys,edge_images) AS c(edge_key,image);"
+        self.assertEqual(definition.count(append),1);self.assertEqual(definition.count(assembly_sql),1)
+        reference=definition.replace('truss.owned_graph_scope(', 'public.reference_graph_scope(',1)
+        reference=reference.replace(append,'edges:=edges||jsonb_build_object(edge_key,observed.edge_image);').replace(assembly_sql,'')
+        self.admin.execute(reference)
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.reference_graph_scope(jsonb)')
+        self.admin.execute("""CREATE FUNCTION public.compare_scope_buffers() RETURNS trigger LANGUAGE plpgsql AS $$
+            DECLARE seeds jsonb;BEGIN
+              IF NEW.operation_index=0 THEN
+                SELECT jsonb_agg(jsonb_build_object('typeId',split_part(n.node_key,':',1),'id',split_part(n.node_key,':',2)) ORDER BY n.ordinal)
+                INTO seeds FROM jsonb_array_elements_text(NEW.plan->'initialScope'->'nodeOrder') WITH ORDINALITY n(node_key,ordinal);
+                IF truss.owned_graph_scope(seeds) IS DISTINCT FROM public.reference_graph_scope(seeds) THEN
+                  RAISE EXCEPTION 'buffered and retained scope observers differ' USING ERRCODE='P9998';END IF;
+              END IF;RETURN NEW;END $$""")
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.compare_scope_buffers() CASCADE')
+        self.admin.execute('CREATE TRIGGER compare_scope_buffers BEFORE INSERT ON truss.runtime_owned_operation FOR EACH ROW EXECUTE FUNCTION public.compare_scope_buffers()')
+        connection,host,assembly,tx=self.consumer()
+        from truss.groups import UpdateEdge,AuthoredValue
+        from truss.contracts import TextValue
+        context=assembly.group_context_in_transaction(tx).value
+        operation=UpdateEdge(target=StoredObjectReference(identity=edge),set=(AuthoredValue(name='note',value=TextValue(kind='string',text='buffered')),),unset=(),expected_version='1')
+        updated=assembly.apply_in_transaction(tx,context.input((operation,),MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(updated,Ok,repr(updated)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(updated.value,GroupSuccess)
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(1000,))
+
+
 from truss import Error
 from truss.contracts import TextValue
 from truss.groups import UpdateObject,AuthoredValue
@@ -223,3 +260,32 @@ class BulkUpdateSqlTests(base.PublicCreateGroupTests):
         host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall(),before)
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(),journal_count)
+
+    def test_relational_update_closure_agrees_with_retained_general_validator(self):
+        connection,host,assembly,tx,identities=self.initialized_updates(9)
+        definition=self.admin.execute("SELECT pg_get_functiondef('truss.runtime_owned_group_validate(uuid,boolean)'::regprocedure)").fetchone()[0]
+        self.assertEqual(definition.count('independent_updates:=NOT EXISTS('),1)
+        reference=definition.replace('truss.runtime_owned_group_validate(', 'public.reference_update_group_validate(',1)
+        reference=reference.replace('independent_updates:=NOT EXISTS(', 'independent_updates:=false AND NOT EXISTS(',1)
+        self.admin.execute(reference)
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.reference_update_group_validate(uuid,boolean)')
+        self.admin.execute('''CREATE FUNCTION public.compare_update_closure() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
+            PERFORM public.reference_update_group_validate(NEW.id,true);RETURN NEW;END;$$''')
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.compare_update_closure() CASCADE')
+        self.admin.execute('''CREATE TRIGGER compare_update_closure AFTER UPDATE ON truss.runtime_object_attempt
+            FOR EACH ROW WHEN (NEW.complete AND NOT OLD.complete) EXECUTE FUNCTION public.compare_update_closure()''')
+        # Independent key-changing updates, a trailing no-op set, then another
+        # group in the same transaction qualify both finish and later settlement.
+        operations=self.updates(identities)
+        noops=self.updates(identities,unchanged=True)
+        context=assembly.group_context_in_transaction(tx).value
+        first=assembly.apply_in_transaction(tx,context.input(operations[:4]+noops[4:],MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(first,Ok,repr(first)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(first.value,GroupSuccess)
+        self.assertEqual([r.outcome for r in first.value.response.semantic.results],['changed']*4+['unchanged']*5)
+        from dataclasses import replace
+        next_operations=tuple(replace(operation,expected_version='2' if i<4 else '1') for i,operation in enumerate(operations))
+        second=assembly.apply_in_transaction(tx,context.input(next_operations,MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(second,Ok,repr(second)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(second.value,GroupSuccess)
+        self.assertEqual([r.outcome for r in second.value.response.semantic.results],['unchanged']*4+['changed']*5)
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object WHERE ver=2').fetchone(),(9,))

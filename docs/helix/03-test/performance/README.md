@@ -15,6 +15,28 @@ ddx:
 
 # Practical functionality and performance
 
+## 2026-10-17: relational update closure and buffered graph scope
+
+Distinct stored rootless updates under the captured current catalog now close
+plans, native transitions, public results and physical journals as SQL relations.
+Expected event meaning and ordered digests are reconstructed independently from
+original source metadata and transition images. Full final-graph checks and
+independent row/journal/commit guards remain. Historical catalog heads and other
+operation shapes retain the general validator. Source/type compilation shares
+only exact bindings within each read-only phase; original per-reference scope
+and planner admission still runs.
+
+Graph observation buffers incident edge images and assembles its map once,
+preserving discovery order, bytes, bounds and both required observations.
+The [66 native checks and incremental diagnostics](results/2026-10-17-relational-update-closure-qualification.json)
+include comparisons with the retained general update validator and retained
+graph observer, a stored 1,000-edge graph, key-changing updates, no-ops, later
+groups in one transaction, late rollback and all preceding integrity checks.
+The previous hosted run passed both capacity gates and the complete macOS
+workload; Linux still timed out in general update closure. The unchanged scale
+gates now run earlier in CI, followed by every existing regression gate.
+Native71 remains unreleased; full final hosted qualification is still required.
+
 ## 2026-10-17: set-based stored-object updates
 
 Distinct stored-object updates without ownership changes now use one object

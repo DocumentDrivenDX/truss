@@ -113,6 +113,76 @@ jobs:
           assert not pathlib.Path(truss.__file__).resolve().is_relative_to(pathlib.Path('packages/python/src').resolve())
           PYTHON
           python packages/python/examples/adopter_workflow.py "$RUNNER_TEMP/truss-release-demo" --bun /missing/bun
+      - name: Run installed original atomic capacity workflows
+        env:
+          PYTHONPATH: packages/python/tests
+          TRUSS_BUN_EXECUTABLE: bun
+          TRUSS_CAPACITY_FUNCTION_STATS: ${{ inputs.capacity_statistics && format('{0}/capacity-function-statistics', runner.temp) || '' }}
+        run: python -m unittest test_group_capacity_native.GroupCapacityTests test_bulk_create_sql_native
+
+      - name: Run installed original public workload
+        id: public_workflows
+        if: github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none')
+        env:
+          PYTHONPATH: packages/python/tests
+          TRUSS_BUN_EXECUTABLE: bun
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/public-workflows"
+          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --matrix-case small --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-workflows/report.json" 2>&1 | tee "$RUNNER_TEMP/public-workflows/run.log"
+
+      - name: Record original public workload status
+        if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
+        env:
+          REPORT_DIRECTORY: ${{ runner.temp }}/public-workflows
+          WORKLOAD_OUTCOME: ${{ steps.public_workflows.outcome }}
+        run: |
+          python - <<'PYTHON'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['REPORT_DIRECTORY']);root.mkdir(parents=True,exist_ok=True)
+          report=root/'report.json'
+          status={'source':os.environ['GITHUB_SHA'],'outcome':os.environ['WORKLOAD_OUTCOME'],
+              'reportPresent':report.is_file(),'scope':'Original small public workload; SQL 10s / operation 30s; no stress qualification'}
+          if report.is_file():
+              result=json.loads(report.read_bytes())
+              status.update(functionalPassed=result['functionalPassed'],runtimePackage=result['runtimePackage'])
+          (root/'status.json').write_text(json.dumps(status,indent=2)+'\n')
+          PYTHON
+      - name: Retain original public workload report and log
+        if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-public-workflow-${{ matrix.os }}
+          path: ${{ runner.temp }}/public-workflows/*
+          if-no-files-found: error
+
+      - name: Record capacity statistics collection status
+        if: always() && inputs.capacity_statistics
+        env:
+          STATISTICS_DIRECTORY: ${{ runner.temp }}/capacity-function-statistics
+        run: |
+          python - <<'PYTHON'
+          import json,os,pathlib,platform
+          root=pathlib.Path(os.environ['STATISTICS_DIRECTORY']);root.mkdir(parents=True,exist_ok=True)
+          records=[]
+          for path in sorted(root.glob('*.json')):
+              if path.name=='collection-status.json':continue
+              record=json.loads(path.read_bytes())
+              records.append({'file':path.name,'phase':record.get('phase','cumulative-after-close'),'status':record['status'],'reason':record.get('reason')})
+          expected={'create','following','update','replay','late-fault'}
+          status={'source':os.environ['GITHUB_SHA'],'platform':platform.system().lower()+'-'+platform.machine(),
+              'scope':'Instrumented phase observations, not clean timing qualification; cancelled calls and later COMMIT work may be absent',
+              'records':records,'missingPhases':sorted(expected-{r['phase'] for r in records})}
+          (root/'collection-status.json').write_text(json.dumps(status,indent=2)+'\n')
+          PYTHON
+      - name: Retain capacity function statistics
+        if: always() && inputs.capacity_statistics
+        uses: actions/upload-artifact@v4
+        with:
+          name: capacity-function-statistics-${{ matrix.os }}
+          path: ${{ runner.temp }}/capacity-function-statistics/*.json
+          if-no-files-found: error
+
       - name: Run installed current-policy query and activation workflows
         env:
           TRUSS_BUN_EXECUTABLE: bun
@@ -330,76 +400,6 @@ jobs:
           PYTHONPATH: packages/python/tests
           TRUSS_BUN_EXECUTABLE: bun
         run: python -m unittest test_relationship_names_native
-
-      - name: Run installed original atomic capacity workflows
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-          TRUSS_CAPACITY_FUNCTION_STATS: ${{ inputs.capacity_statistics && format('{0}/capacity-function-statistics', runner.temp) || '' }}
-        run: python -m unittest test_group_capacity_native.GroupCapacityTests test_bulk_create_sql_native
-
-      - name: Run installed original public workload
-        id: public_workflows
-        if: github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none')
-        env:
-          PYTHONPATH: packages/python/tests
-          TRUSS_BUN_EXECUTABLE: bun
-        shell: bash
-        run: |
-          mkdir -p "$RUNNER_TEMP/public-workflows"
-          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --matrix-case small --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-workflows/report.json" 2>&1 | tee "$RUNNER_TEMP/public-workflows/run.log"
-
-      - name: Record original public workload status
-        if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
-        env:
-          REPORT_DIRECTORY: ${{ runner.temp }}/public-workflows
-          WORKLOAD_OUTCOME: ${{ steps.public_workflows.outcome }}
-        run: |
-          python - <<'PYTHON'
-          import json,os,pathlib
-          root=pathlib.Path(os.environ['REPORT_DIRECTORY']);root.mkdir(parents=True,exist_ok=True)
-          report=root/'report.json'
-          status={'source':os.environ['GITHUB_SHA'],'outcome':os.environ['WORKLOAD_OUTCOME'],
-              'reportPresent':report.is_file(),'scope':'Original small public workload; SQL 10s / operation 30s; no stress qualification'}
-          if report.is_file():
-              result=json.loads(report.read_bytes())
-              status.update(functionalPassed=result['functionalPassed'],runtimePackage=result['runtimePackage'])
-          (root/'status.json').write_text(json.dumps(status,indent=2)+'\n')
-          PYTHON
-      - name: Retain original public workload report and log
-        if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
-        uses: actions/upload-artifact@v4
-        with:
-          name: original-public-workflow-${{ matrix.os }}
-          path: ${{ runner.temp }}/public-workflows/*
-          if-no-files-found: error
-
-      - name: Record capacity statistics collection status
-        if: always() && inputs.capacity_statistics
-        env:
-          STATISTICS_DIRECTORY: ${{ runner.temp }}/capacity-function-statistics
-        run: |
-          python - <<'PYTHON'
-          import json,os,pathlib,platform
-          root=pathlib.Path(os.environ['STATISTICS_DIRECTORY']);root.mkdir(parents=True,exist_ok=True)
-          records=[]
-          for path in sorted(root.glob('*.json')):
-              if path.name=='collection-status.json':continue
-              record=json.loads(path.read_bytes())
-              records.append({'file':path.name,'phase':record.get('phase','cumulative-after-close'),'status':record['status'],'reason':record.get('reason')})
-          expected={'create','following','update','replay','late-fault'}
-          status={'source':os.environ['GITHUB_SHA'],'platform':platform.system().lower()+'-'+platform.machine(),
-              'scope':'Instrumented phase observations, not clean timing qualification; cancelled calls and later COMMIT work may be absent',
-              'records':records,'missingPhases':sorted(expected-{r['phase'] for r in records})}
-          (root/'collection-status.json').write_text(json.dumps(status,indent=2)+'\n')
-          PYTHON
-      - name: Retain capacity function statistics
-        if: always() && inputs.capacity_statistics
-        uses: actions/upload-artifact@v4
-        with:
-          name: capacity-function-statistics-${{ matrix.os }}
-          path: ${{ runner.temp }}/capacity-function-statistics/*.json
-          if-no-files-found: error
 
   stress:
     needs:

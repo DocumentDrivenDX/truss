@@ -4,7 +4,7 @@
 CREATE FUNCTION truss.owned_graph_scope(seeds jsonb) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE node_keys text[]:='{}';edge_keys text[]:='{}';boundary_keys text[]:='{}';owned_edge_order text[]:='{}';
- nodes jsonb:='{}';node_images jsonb[]:='{}';edges jsonb:='{}';boundary jsonb:='{}';types jsonb:='{}';relations jsonb:='{}';
+ nodes jsonb:='{}';node_images jsonb[]:='{}';edges jsonb:='{}';edge_images jsonb[]:='{}';boundary jsonb:='{}';types jsonb:='{}';relations jsonb:='{}';
  entry jsonb;image jsonb;relation_image jsonb;witness jsonb;definition jsonb;
  node_key text;other_key text;edge_key text;root_key text;selected_type int;selected_id bigint;
  selected_node int:=1;observed record;side text;projection jsonb;local_edges jsonb:='[]';local_index int:=0;
@@ -48,7 +48,7 @@ BEGIN
     RAISE EXCEPTION 'selected parent to target ownership required' USING ERRCODE='0A000';END IF;
    used_bytes:=used_bytes+octet_length(convert_to(observed.edge_image::text,'UTF8'))+octet_length(convert_to(relation_image::text,'UTF8'));
    IF used_bytes>4194304 THEN RAISE EXCEPTION 'bounded complete graph image required' USING ERRCODE='54000';END IF;
-   edge_keys:=array_append(edge_keys,edge_key);edges:=edges||jsonb_build_object(edge_key,observed.edge_image);
+   edge_keys:=array_append(edge_keys,edge_key);edge_images:=array_append(edge_images,observed.edge_image);
    relations:=relations||jsonb_build_object(relation_image->>'rel_type_id',relation_image);
    IF relation_image->>'lifecycle'='owned' THEN
     FOREACH side IN ARRAY ARRAY['source','target'] LOOP
@@ -66,6 +66,10 @@ BEGIN
  -- map once; it is only consumed after complete component discovery.
  SELECT coalesce(jsonb_object_agg(c.node_key,c.image),'{}'::jsonb) INTO nodes
  FROM unnest(node_keys,node_images) AS c(node_key,image);
+ -- Traversal only reads edge membership above. Materialize original edge
+ -- images once instead of recopying the complete growing JSONB map per edge.
+ SELECT coalesce(jsonb_object_agg(c.edge_key,c.image),'{}'::jsonb) INTO edges
+ FROM unnest(edge_keys,edge_images) AS c(edge_key,image);
  -- Outside independent endpoints are witnesses, not traversed components.
  FOREACH edge_key IN ARRAY edge_keys LOOP
   image:=edges->edge_key;relation_image:=relations->(image->>'rel_type_id');

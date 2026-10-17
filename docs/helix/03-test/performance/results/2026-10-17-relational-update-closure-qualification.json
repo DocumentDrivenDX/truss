@@ -1,0 +1,30 @@
+{
+  "nativeRuntime": "truss-catalog-runtime/0.71-candidate",
+  "releaseStatus": "unreleased main; no publication",
+  "qualifiedRuntimeManifestSha256": "5e3733ceee19d2eb39f20a5871bc16873424e7ce8ec3df02a3870e56aa49950a",
+  "nativeTests": {
+    "passed": 66,
+    "log": "2026-10-17-relational-update-closure-native-tests.log",
+    "sha256": "86ca04bef0d0eac35b16c6e624ed6566d66bd5d9d3ef1ade5c26d79edd22ab46"
+  },
+  "independentComparisons": [
+    "Relational finish closure agrees with retained general validator for key-changing and no-op operations across multiple groups in one caller transaction.",
+    "Buffered graph scope equals retained growing-map observer on a stored 1000-edge graph."
+  ],
+  "scope": "Relational closure: distinct stored rootless targets without ownershipChange, under the current captured catalog head. Other operations and historical heads retain general closure. Full final graph checks and independent row/journal/commit checks remain. Source/type compilation is shared only within read-only phases; original per-reference scope/planner admission remains.",
+  "unchangedLimits": {
+    "sqlMilliseconds": 10000,
+    "operationMilliseconds": 30000,
+    "originalPublicObjects": 1000,
+    "originalPublicEdges": 1000,
+    "publicReadSamples": 1000,
+    "publicWriteSamples": 200
+  },
+  "workflow": "Original capacity and full-public-workload block moved earlier; all existing step lines retained unchanged. Remaining regression gates still required.",
+  "previousHostedRun": {
+    "run": 39078243309,
+    "macos": "all native and complete public-workload gates passed",
+    "linux": "capacity passed; full 1000-update group timed out in general closure"
+  },
+  "localMeasurements": "The three incremental diagnostic snapshots preserve exact runtime manifest hashes. They are shortened single-run diagnostics, not p95 or hosted qualification. Final source-admission deduplication followed the after-scope-buffer snapshot and is covered by the 66 native checks."
+}

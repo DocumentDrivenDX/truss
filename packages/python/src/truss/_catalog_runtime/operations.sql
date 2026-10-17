@@ -284,14 +284,19 @@ BEGIN
   SELECT * FROM (
    SELECT value operation,(ordinal-1)::int operation_index
    FROM jsonb_array_elements(input_operations) WITH ORDINALITY o(value,ordinal)
-   WHERE value->>'operation' IS NULL OR value->>'operation' NOT IN ('create_object','create_edge')
+   WHERE (value->>'operation' IS NULL OR value->>'operation' NOT IN ('create_object','create_edge'))
+    AND NOT (coalesce(value->>'operation'='update_object' AND value->'target'->>'state'='stored',false)
+     AND NOT (value ? 'ownershipChange'))
    UNION ALL
    SELECT creates.operation,creates.operation_index FROM (
-    SELECT DISTINCT ON (value->>'operation',value->>'typeDefinitionPin',value->>'relationshipDefinitionPin')
+    SELECT DISTINCT ON (value->>'operation',value->>'typeDefinitionPin',value->>'relationshipDefinitionPin',
+     CASE WHEN value->>'operation'='update_object' THEN (value->'target'->'identity')-'id' END)
      value operation,(ordinal-1)::int operation_index
     FROM jsonb_array_elements(input_operations) WITH ORDINALITY o(value,ordinal)
     WHERE value->>'operation' IN ('create_object','create_edge')
-    ORDER BY value->>'operation',value->>'typeDefinitionPin',value->>'relationshipDefinitionPin',ordinal) creates
+     OR value->>'operation'='update_object' AND value->'target'->>'state'='stored' AND NOT (value ? 'ownershipChange')
+    ORDER BY value->>'operation',value->>'typeDefinitionPin',value->>'relationshipDefinitionPin',
+     CASE WHEN value->>'operation'='update_object' THEN (value->'target'->'identity')-'id' END,ordinal) creates
   ) original_owners ORDER BY operation_index
  LOOP
   operation:=admission.operation;index:=admission.operation_index;

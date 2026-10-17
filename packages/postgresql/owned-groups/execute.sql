@@ -483,9 +483,9 @@ BEGIN
  -- same original readers as explicit operations, before graph exclusion.
  FOR selected_type IN SELECT type_id FROM (
   SELECT DISTINCT (value->>'type_id')::int type_id FROM jsonb_each(observed->'types')
-  UNION SELECT (truss.runtime_owned_operation_type_qualified(value,input_operations,(ordinal-1)::int,current_actor)).type_id
-   FROM jsonb_array_elements(input_operations) WITH ORDINALITY o(value,ordinal)
-   WHERE value->>'operation' IN ('update_object','delete_object')
+  -- Stored update/delete targets are already in observed.types; alias targets
+  -- come from the CREATE pins below. Original reference admission remains in
+  -- input_scope and the ordered planner, so this type-set pass adds no new type.
   -- This is a type set, not operation admission. Resolve each exact CREATE pin
   -- once using its first original operation; all per-operation admission,
   -- execution and settlement checks remain on their original paths.

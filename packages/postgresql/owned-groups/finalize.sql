@@ -11,6 +11,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;plan jsonb;last
  node_order text[];projection jsonb;local_owned jsonb;root_reference text;index int;current_actor oid;live_edges jsonb;final_nodes jsonb;final_edges jsonb;final_problem text;
  history_dictionary jsonb:='{}';historical_basis jsonb;historical_revision int;history_group record;history_basis jsonb;
  history_property truss.prop_def%ROWTYPE;history_pin record;history_pins jsonb;history_order jsonb;history_key text;history_type_pin text;sealed record;
+ independent_updates boolean;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
@@ -94,6 +95,20 @@ BEGIN
   PERFORM truss.runtime_owned_create_batch_validate(attempt,input,history_dictionary,check_final,current_actor);
   RETURN;
  END IF;
+ independent_updates:=NOT EXISTS(SELECT 1 FROM jsonb_array_elements(operations) o
+  WHERE o.value->>'operation' IS DISTINCT FROM 'update_object' OR o.value->'target'->>'state' IS DISTINCT FROM 'stored' OR o.value ? 'ownershipChange')
+  AND (SELECT count(DISTINCT p.plan->>'primary') FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt)=attempt.next_index
+  AND EXISTS(SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND p.operation_index=0
+   AND (p.plan->>'catalogRevision')::int=(SELECT rev FROM truss.schema_head WHERE id=1)
+   AND NOT EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>(p.plan->>'catalogRevision')::int))
+  AND NOT EXISTS(SELECT 1 FROM truss.runtime_owned_operation p CROSS JOIN LATERAL jsonb_each(p.plan->'initialScope'->'nodes') n
+   WHERE p.attempt_id=selected_attempt AND p.operation_index=0 AND
+    (n.value->'root_id' IS DISTINCT FROM 'null'::jsonb OR n.value->'root_type' IS DISTINCT FROM 'null'::jsonb));
+ IF independent_updates THEN
+  PERFORM truss.runtime_owned_update_batch_validate(attempt,input,history_dictionary,current_actor);
+  SELECT p.plan->'initialScope' INTO STRICT initial_scope FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND p.operation_index=0;
+  SELECT p.plan INTO STRICT last_plan FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND p.operation_index=attempt.next_index-1;
+ ELSE
  FOR index IN 0..attempt.next_index-1 LOOP
   plan:=truss.runtime_owned_plan(selected_attempt,index);operation:=plan->'operation';
   IF operation IS DISTINCT FROM jsonb_extract_path(operations,index::text)
@@ -158,6 +173,7 @@ BEGIN
   last_plan:=plan;
  END LOOP;
  IF aliases IS DISTINCT FROM attempt.aliases THEN RAISE EXCEPTION 'original create aliases required' USING ERRCODE='55000';END IF;
+ END IF;
  -- Recheck all discovered component writers and outside endpoint readers even
  -- when the original operation was unchanged or the affected member was deleted.
  FOR owner IN SELECT DISTINCT value->>'document_id' document_id,value->>'module' module_id FROM (
