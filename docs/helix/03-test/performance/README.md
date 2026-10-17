@@ -1202,3 +1202,25 @@ replay and ordered reads; 1,025 refusal; and operation-1,024 late-fault rollback
 SQL and operation limits remain 10s and 30s. Cleanup completed. This records
 local correctness, not an isolated speedup or a resolved Linux timeout. Both
 hosted original-workload gates still need to pass before a release tag.
+
+### Current hosted CREATE blocker and bounded diagnostic
+
+[Run 39005153026](https://github.com/DocumentDrivenDX/truss/actions/runs/39005153026)
+tested exact main `a5f41d79264ab8d75d01fff2eca37f614d979b5b`. Both platforms
+passed the preceding functional checks but failed CREATE 1,024 with `57014`
+at the unchanged 10s SQL deadline. Linux cancelled in final owner/type source
+resolution; macOS cancelled later in owned-group transition validation. Both
+full-small workloads, stress and publishing were skipped. No tag was created.
+The local projection result did not establish a hosted performance fix.
+
+One unchanged original capacity diagnostic passes locally in 41.883s with the
+existing stock PostgreSQL counters enabled. Its [CREATE observation](results/create-capacity-functions-20261017.json.gz)
+records 5,444ms in `apply_group`: the creation leaf totals 2,571ms across 1,024
+calls, with 1,350ms self time; source-definition resolution totals 709ms across
+17,415 calls. The cancellation-site identity helper totals only 155ms across
+8,191 calls. The entire creation metadata helper totals 255ms, so bypassing its
+fresh authority/source checks is not justified by these measurements. Captured
+owned values are already reused. The next diagnostic must locate the leaf's
+own SQL/CPU cost before another admission-path change. These observations cover
+completed calls through apply return, exclude later commit work, and do not
+qualify clean timing or isolate the benefit of either preceding projection.
