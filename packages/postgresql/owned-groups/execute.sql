@@ -1110,7 +1110,7 @@ CREATE FUNCTION truss.runtime_owned_object_transition_validate_qualified(selecte
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;previous_image jsonb;
- original_mode text;expected_version bigint;matches int:=0;has_previous boolean;property truss.prop_def;pin record;
+ original_mode text;expected_version bigint;matches int:=0;has_previous boolean;property truss.prop_def;pin record;expected_property_pin text;
  expected_events jsonb:='[]';expected_event jsonb;journal jsonb;event jsonb;ordinal int:=0;
  before_record jsonb;after_record jsonb;semantic_events jsonb:='[]';group_pin jsonb;input jsonb;history_key text;history_metadata jsonb;completed_slots bigint;
 BEGIN
@@ -1194,8 +1194,18 @@ BEGIN
   FOR property IN SELECT * FROM truss.prop_def WHERE type_id=transition.type_id AND since_rev<=(plan->>'catalogRevision')::int
    AND (retired_rev IS NULL OR retired_rev>(plan->>'catalogRevision')::int) ORDER BY prop_id LOOP
    IF transition.before_object->'props'->property.prop_id::text IS DISTINCT FROM transition.after_object->'props'->property.prop_id::text THEN
-    SELECT * INTO STRICT pin FROM truss.runtime_definition('property',transition.type_id,property.prop_id,(plan->>'catalogRevision')::int);
-    expected_events:=expected_events||jsonb_build_array(jsonb_build_object('operation','property','propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,
+    -- The settlement dictionary was independently resolved for this invocation.
+    -- Reuse only its exact type/revision/property pin; absent entries (including
+    -- removals across revisions) retain the original STRICT reconstruction.
+    IF compiled_history IS NOT NULL AND history_metadata->>'typeId'=transition.type_id::text
+     AND history_metadata->>'revision'=plan->>'catalogRevision'
+     AND jsonb_typeof(history_metadata->'propertyPins'->property.prop_id::text)='string' THEN
+     expected_property_pin:=history_metadata->'propertyPins'->>property.prop_id::text;
+    ELSE
+     SELECT * INTO STRICT pin FROM truss.runtime_definition('property',transition.type_id,property.prop_id,(plan->>'catalogRevision')::int);
+     expected_property_pin:=pin.definition_pin;
+    END IF;
+    expected_events:=expected_events||jsonb_build_array(jsonb_build_object('operation','property','propertyId',property.prop_id::text,'definitionPin',expected_property_pin,
      'before',CASE WHEN transition.before_object->'props' ? property.prop_id::text THEN jsonb_build_object('present',true,'value',transition.before_object->'props'->property.prop_id::text) ELSE '{"present":false}'::jsonb END,
      'after',CASE WHEN transition.after_object->'props' ? property.prop_id::text THEN jsonb_build_object('present',true,'value',transition.after_object->'props'->property.prop_id::text) ELSE '{"present":false}'::jsonb END));
    END IF;

@@ -90,3 +90,47 @@ class FieldNameEvolutionTests(base.PublicCreateGroupTests):
 
 class FieldNameEvolution08Tests(FieldNameEvolutionTests):
     source_version='0.8.0'
+
+    def test_unset_after_name_change_preserves_historical_property_pin(self):
+        """An old image's removed field need not occur in new-revision metadata."""
+        from dataclasses import replace
+        c,h,a,t=self.ready(self.fields)
+        operation=self.create('remove-note')
+        operation=replace(operation,values=operation.values+(
+            AuthoredValue(name='extra',value=TextValue(kind='string',text='old-note')),))
+        context=a.group_context_in_transaction(t).value
+        created=self.apply(a,t,context.input((operation,),MapValue(entries=())),context.request('create-note'))
+        self.assertIsInstance(created,GroupSuccess)
+        identity=created.response.semantic.results[0].identity
+        h.detach();c.commit()
+        self.admin.execute('GRANT '+self.installation.registrar_role+' TO consumer WITH SET FALSE')
+        c,h,a,t=self.consumer()
+        source=json.loads(next(d.content for d in self.documents if d.document_id=='adoc'))
+        next(e for e in source['modules'][0]['elements'] if e['id']=='A-extra')['name']='note'
+        document=CatalogDocument('adoc','r2',json.dumps(source).encode())
+        prepared=a.prepare_catalog((document,),source_version=self.source_version,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        accepted=a.accept_in_transaction(t,prepared,request_key='rename-note')
+        self.assertIsInstance(accepted,Ok,repr(accepted));self.assertIsInstance(accepted.value,CatalogRegistration)
+        h.detach();c.commit()
+        self.documents=tuple(document if d.document_id=='adoc' else d for d in self.documents)
+        c,h,a,t=self.consumer()
+        found=a.get_object_in_transaction(t,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id)).value
+        context=a.group_context_in_transaction(t).value
+        changed=self.apply(a,t,context.input((UpdateObject(target=StoredObjectReference(identity=found.object.identity),set=(),unset=('note',)),),MapValue(entries=())),context.request('remove-note'))
+        self.assertIsInstance(changed,GroupSuccess);h.detach();c.commit()
+        c,h,a,t=self.consumer()
+        entity=HistoryEntity(kind='object',document_id='adoc',module_id='m',definition_id='A',id=int(identity.id))
+        before=a.reconstruct_in_transaction(t,entity=entity,version=1).value
+        after=a.reconstruct_in_transaction(t,entity=entity,version=2).value
+        self.assertIsInstance(before,HistoricalRecord);self.assertIsInstance(after,HistoricalRecord)
+        before_properties=json.loads(before.record)['properties'];after_properties=json.loads(after.record)['properties']
+        self.assertIn({'kind':'string','text':'old-note'},[p['value'] for p in before_properties])
+        self.assertNotIn({'kind':'string','text':'old-note'},[p['value'] for p in after_properties])
+        first=a.page_history_in_transaction(t,entity=entity).value
+        changed_history=a.page_history_in_transaction(t,entity=entity,cursor=first.continuation).value
+        removal=next(json.loads(e.content) for e in changed_history.events if json.loads(e.content)['operation']=='property')
+        expected_pin=self.admin.execute("SELECT definition_pin FROM truss.runtime_definition('property',%s,%s,%s)",
+            (int(identity.type_id),int(removal['propertyId']),int(removal['eventCatalogRevision']))).fetchone()[0]
+        self.assertEqual(removal['definitionPin'],expected_pin)
+        self.assertEqual(removal['after'],{'present':False})
+        h.detach();c.rollback()
