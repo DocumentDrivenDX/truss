@@ -1,0 +1,50 @@
+{
+  "scope": "Exact hosted qualification outcomes for the two committed actor-reuse increments; no performance fix or release qualification claimed",
+  "runs": [
+    {
+      "run": 39029269697,
+      "commit": "018c2eac3d9cb863d76ebd30cb06f8db282e69fe",
+      "conclusion": "failure",
+      "ubuntu": "1024 CREATE apply SQLSTATE57014; subsequent full-small skipped",
+      "macos": "Capacity3PASS; full-small failed bulk_update_1000 apply at10097.994084ms after earlier workload phases passed",
+      "macosRuntimeManifestSha256": "392efcf6c77363062313e4dcf190c12dae2c4b19723d72e3b40b911e6b0a492d",
+      "macosSourceWorkingTreeDirtyAsEmitted": true
+    },
+    {
+      "run": 39029844558,
+      "commit": "b8efdcf9070a501995edc67fcc5bde77ea14caa5",
+      "conclusion": "failure",
+      "ubuntu": "1024 CREATE apply SQLSTATE57014; subsequent full-small skipped",
+      "macos": "1024 CREATE apply SQLSTATE57014; subsequent full-small skipped"
+    }
+  ],
+  "limits": {
+    "sqlSeconds": 10,
+    "operationSeconds": 30,
+    "statisticsEnabled": false,
+    "compiler": "published Weft0.4.40"
+  },
+  "interpretation": "Cancellation locations are retained in raw logs, not treated as hotspot attribution. Local passing results do not establish hosted acceptance. No stress/tag/publish occurred. Original workloads, assertions, limits and guards remain unchanged.",
+  "artifacts": [
+    {
+      "file": "018-status.json.gz",
+      "uncompressedSha256": "f8593da2273e69566566c61d82135582ca4b5afaa673325203f8bd1bfed2a33b"
+    },
+    {
+      "file": "018-failures.log.gz",
+      "uncompressedSha256": "f25f5715111b2cb307b5a9fcd569f89714221e824cba0afd1a036ed233d0411d"
+    },
+    {
+      "file": "018-macos-full-small.json.gz",
+      "uncompressedSha256": "d7acbee46cbcebd22e01f2350eb3573072222185023fa6837f3604d339ab1ae3"
+    },
+    {
+      "file": "b8-status.json.gz",
+      "uncompressedSha256": "bb642ac478420aebc1bafc4f5e543673f63b683fe473f3e3a4a466d9d7e34271"
+    },
+    {
+      "file": "b8-failures.log.gz",
+      "uncompressedSha256": "6c110bc18495e35d8caa4556114a64877a7c4b695b94f6bbe2f79b23846957e4"
+    }
+  ]
+}
