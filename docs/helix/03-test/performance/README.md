@@ -810,3 +810,30 @@ apart from capture calls and preserve the original workflow after removing its
 optional diagnostics. Astra Ultra cleared the plan and source. Instrumented
 runs provide functional evidence, not clean timing qualification. Remove this
 temporary diagnostic plumbing after the release-runner bottleneck is resolved.
+
+### Avoid deriving identical preflight key cells twice
+
+[Diagnostic run 38990946071](https://github.com/DocumentDrivenDX/truss/actions/runs/38990946071)
+on 4661b290 passed every installed functional, query, evolution and upgrade step
+on Linux and macOS, including native export-source checks. Original capacity
+still failed: Linux cancelled CREATE during final row settlement; macOS completed
+CREATE and its following commit, then cancelled UPDATE during final settlement.
+Both platforms passed the original overflow and late-fault rollback controls.
+The partial counters show the immutable attempt guard is about one percent of
+completed work; removing that guard is not justified.
+
+Preflight now reuses its already-derived tuple when an existing before-image has
+exactly equal key cells. Unequal cells retain the original derivation, including
+canonical equivalence and invalid-value behavior. Live membership, namespace,
+reservation, locking, mutation and final validation are unchanged. A broader
+non-key-update shortcut was rejected because it could miss membership changes
+after preflight.
+
+Six original capacity and ordered-batch cases pass locally in 33.483 seconds.
+The original capacity case plus real-key-change/dry-run/retry workflow pass in
+28.163 seconds with optional collection enabled. UPDATE tuple-derivation calls
+fall from 8,192 to 7,168 for the same 1,024-operation workload. This is reduced
+repeated work, not an isolated timing improvement or a hosted release pass.
+Astra Ultra cleared the bounded plan, source and exact-token precision behavior.
+Owner SQL/hash and module-boundary checks pass. The hosted capacity blocker
+remains open; neither deadlines nor workloads changed.

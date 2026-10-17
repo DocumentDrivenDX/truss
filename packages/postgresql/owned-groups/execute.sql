@@ -1009,7 +1009,13 @@ BEGIN
    entry:=jsonb_build_object('phase',candidate->>'phase','reference',candidate->>'reference',
     'objectId',candidate->'image'->>'id','typeId',definition.type_id,'keyNumber',definition.key_num,
     'namespace',encode(namespace,'hex'),'transport',encode(transport,'hex'),'tuple',encode(tuple_bytes,'hex'),
-    'unchanged',CASE WHEN candidate->'before' IS NOT NULL AND candidate->'before'<>'null'::jsonb THEN truss.derive_catalog_key_tuple(definition.type_id,definition.key_num,before_cells)=tuple_bytes ELSE false END);
+    -- Identical cells have already passed this exact derivation above.
+    -- Keep the original before-image condition and derive unequal cells so
+    -- canonical equivalence and invalid prior values retain their behavior.
+    'unchanged',CASE WHEN candidate->'before' IS NOT NULL AND candidate->'before'<>'null'::jsonb
+     THEN CASE WHEN before_cells=cells THEN true
+      ELSE truss.derive_catalog_key_tuple(definition.type_id,definition.key_num,before_cells)=tuple_bytes END
+     ELSE false END);
    route_bytes:=route_bytes+octet_length(convert_to(entry::text,'UTF8'))+CASE WHEN cardinality(route_items)=0 THEN 0 ELSE 2 END;
    route_items:=array_append(route_items,entry);
    IF cardinality(route_items)>4096 OR route_bytes>8388608 THEN
