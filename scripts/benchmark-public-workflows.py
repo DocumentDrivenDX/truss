@@ -6,6 +6,8 @@ Business operations use the public Truss API. No private table writes or mocks.
 """
 import argparse
 import hashlib
+import importlib.metadata
+import importlib.resources
 import json
 import math
 import os
@@ -19,6 +21,7 @@ import unittest
 
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--truss-root',type=Path,required=True)
+parser.add_argument('--installed-package',action='store_true',help='Exercise the installed wheel; refuse imports from the checkout source')
 parser.add_argument('--examples-root',type=Path)
 parser.add_argument('--matrix-case',nargs='+',help='Run selected workloads.json cases instead of real samples')
 parser.add_argument('--samples',nargs='+',default=['pizza','northwind','catalog'])
@@ -39,7 +42,16 @@ selected_workloads=workloads()
 matrix_settings=json.loads((Path(__file__).resolve().parents[1]/'docs/helix/03-test/performance/workloads.json').read_text())
 selected_cases=args.matrix_case or args.samples
 root=args.truss_root.resolve()
-sys.path[:0]=[str(root/'packages/python/src'),str(root/'packages/python/tests')]
+sys.path[:0]=([str(root/'packages/python/src')] if not args.installed_package else [])+[str(root/'packages/python/tests')]
+import truss
+package_path=Path(truss.__file__).resolve()
+if args.installed_package and package_path.is_relative_to(root/'packages/python/src'):
+    parser.error('--installed-package resolved Truss from the checkout source')
+runtime_resource=importlib.resources.files('truss').joinpath('_catalog_runtime/manifest.json')
+runtime_manifest=runtime_resource.read_bytes()
+runtime_package={'mode':'installed' if args.installed_package else 'checkout','path':str(package_path),
+    'version':importlib.metadata.version('truss-toolkit') if args.installed_package else None,
+    'manifestPath':str(runtime_resource)}
 from truss import (Ok,ModuleAccessGrant,CatalogDocument,CatalogRuntimeConfiguration,
                    adopt_psycopg_host,create_reference_assembly,ObjectFound,EdgeFound)
 from truss.catalog_results import CatalogRegistration,CatalogUnchanged
@@ -351,7 +363,6 @@ for case in results:
 git_head=subprocess.run(['git','rev-parse','HEAD'],cwd=root,capture_output=True,text=True)
 source_commit=git_head.stdout.strip() if git_head.returncode==0 else None
 source_dirty=bool(subprocess.run(['git','status','--porcelain'],cwd=root,capture_output=True,text=True,check=True).stdout) if source_commit else None
-runtime_manifest=(root/'packages/python/src/truss/_catalog_runtime/manifest.json').read_bytes()
 atomic_attempts=[m for m in measurements if m['operation'] in ('bulk_create','bulk_edges','single_update_including_commit')
     or m['operation'].startswith('bulk_update_') and not m['operation'].startswith(('bulk_update_commit_','bulk_update_end_to_end_'))]
 atomic_commits=[m for m in measurements if m['status']=='ok' and (m['operation'] in ('bulk_create_commit','bulk_edges_commit','single_update_including_commit') or m['operation'].startswith('bulk_update_commit_'))]
@@ -360,7 +371,7 @@ capacity_scope={'targetAtomicOperations':matrix_settings['targetAtomicGroupLimit
     'attemptedAtomicGroupSizes':sorted({m['rows'] for m in atomic_attempts}),
     'committedAtomicGroupSizes':sorted({m['rows'] for m in atomic_commits}),
     'qualification':'Only observed attempts and commits; configured limits do not establish actual maximum capacity.'}
-report={'runtimeManifestSha256':hashlib.sha256(runtime_manifest).hexdigest(),'sourceCommit':source_commit,'sourceWorkingTreeDirty':source_dirty,'machine':platform.platform(),'python':platform.python_version(),'trussSource':str(root),
+report={'runtimePackage':runtime_package,'runtimeManifestSha256':hashlib.sha256(runtime_manifest).hexdigest(),'sourceCommit':source_commit,'sourceWorkingTreeDirty':source_dirty,'machine':platform.platform(),'python':platform.python_version(),'trussSource':str(root),
         'statementTimeoutMs':10000,'operationTimeoutMs':30000,'expectedAtomicGroupLimit':args.expected_group_limit,'warmupReads':matrix_settings['warmupOperations'],
         'seconds':time.perf_counter()-start,'passed':result.wasSuccessful(),'functionalPassed':result.wasSuccessful(),
         'performanceQualification':'not_evaluated','capacityScope':capacity_scope,

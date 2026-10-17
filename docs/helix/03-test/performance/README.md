@@ -837,3 +837,26 @@ repeated work, not an isolated timing improvement or a hosted release pass.
 Astra Ultra cleared the bounded plan, source and exact-token precision behavior.
 Owner SQL/hash and module-boundary checks pass. The hosted capacity blocker
 remains open; neither deadlines nor workloads changed.
+
+### Exercise the original public workload against release wheels
+
+Release tags now select the existing `small` public workload on both Linux and
+macOS, after original capacity passes. Manual validation selects it with
+`gh workflow run release.yml --ref main -f public_workflows=true`.
+The unchanged driver loads 1,000 nodes and 1,000 edges, performs 1,000 sampled
+reads and 200 committed writes, and retains all original batch sizes/repetitions,
+including five changed 1,000-object UPDATE groups with commit and readback.
+Failure blocks the existing native job and publication. The 25-minute job budget,
+10-second SQL and 30-second operation limits remain unchanged. Stress work waits
+for original workflows to pass on both platforms.
+
+The new `--installed-package` mode omits checkout library imports and refuses a
+resolved checkout package. Reports hash the imported package's actual runtime
+manifest and record its path/version separately from the harness commit.
+Always-retained status/log/report artifacts distinguish skipped or missing runs.
+Astra Ultra cleared the plan and source. Static AST comparison confirms every
+existing workload function/class is unchanged; workflow comparison preserves all
+prior steps and publication dependencies. A built current wheel passes import,
+manifest and version checks, while checkout injection refuses before database
+startup. Collection scripts handle both present and missing reports. Actual
+hosted workload completion remains pending; these checks are not a workload pass.
