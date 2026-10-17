@@ -1331,9 +1331,13 @@ BEGIN
  FOR selected_transition,transition_attempt_id IN SELECT t.transition_id,t.attempt_id FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
   WHERE t.edge_id=selected_id AND t.rel_type_id=selected_type AND t.writer_xid=pg_current_xact_id()
    AND a.context->'mutationProfile'=truss.runtime_owned_profile() LOOP
-  IF prepared_attempt.id IS NOT NULL AND transition_attempt_id=prepared_attempt.id THEN
-   PERFORM truss.runtime_owned_edge_transition_validate_qualified(selected_transition,false,current_actor,prepared_input,source_bytes,prepared_attempt);
-  ELSE
+  -- The sole non-NULL caller is object_group_finish, after its complete
+  -- runtime_edge_authorize pass following marker refresh. That pass already
+  -- reconstructed every current-attempt transition, including ordinal bounds.
+  -- This loop has no writes. Keep fresh person/module and physical checks here;
+  -- standalone calls and other attempts still reconstruct their transitions.
+  -- Mandatory owned-group finish and commit reconstruction remain independent.
+  IF prepared_attempt.id IS NULL OR transition_attempt_id IS DISTINCT FROM prepared_attempt.id THEN
    PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,false,current_actor);
   END IF;
  END LOOP;
