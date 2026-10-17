@@ -860,3 +860,23 @@ prior steps and publication dependencies. A built current wheel passes import,
 manifest and version checks, while checkout injection refuses before database
 startup. Collection scripts handle both present and missing reports. Actual
 hosted workload completion remains pending; these checks are not a workload pass.
+
+### Original installed workload still blocks release
+
+On local PostgreSQL 18.6 with the current wheel, the unchanged `small` workflow
+created and committed 1,000 objects (5,579 ms apply), then refused the 1,000-edge
+group with 57014 during final edge-transition validation at the original 10s SQL
+limit. The report correctly records functional failure, not a partial pass.
+A source/wheel inventory check found no wheel payloads absent from source.
+
+A bounded instrumented repeat completed the edge apply in 9,597 ms and completed
+three changed 1,000-object UPDATE groups with commit/readback; the fourth UPDATE
+cancelled during final graph settlement. The full run failed in 112.640 seconds.
+Its retained completed-call counters show 1,652 ms self time in 1,000 owned steps,
+688 ms in row validation, 685 ms in object effects and 658 ms in 19,007 definition
+resolutions. Cancelled calls and later COMMIT work may be absent. The temporary,
+Astra-reviewed failure observer left the original workload/assertions/cleanup
+unchanged and is not committed or installed. These are diagnostic observations,
+not clean timing qualification. A proposed creation-identity lookup microchange
+was discarded: it did not address the measured changed-UPDATE blocker. No stress
+qualification or release tag follows these failures.
