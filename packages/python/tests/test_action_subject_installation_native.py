@@ -3,6 +3,10 @@ import psycopg
 import test_group_create_native as base
 from truss import Ok, Error, adopt_psycopg_host
 from truss._action_subject_installation import bootstrap_action_subjects_in_transaction
+from truss._security_catalog_subject_installation import (bootstrap_owned_action_role_cut_in_transaction,
+    bootstrap_role_catalog_cut_issuer_in_transaction,verify_owned_action_role_cut_with_cursor,
+    verify_role_catalog_cut_issuer_with_cursor)
+from psycopg import sql
 
 
 class ActionSubjectInstallationNativeTests(base.PublicCreateGroupTests):
@@ -68,3 +72,53 @@ class ActionSubjectInstallationNativeTests(base.PublicCreateGroupTests):
         with self.assertRaises(psycopg.errors.SerializationFailure):
             data.execute('SELECT truss.acquire_action_subject_cut()')
         data.execute('ROLLBACK')
+
+    def test_owned_action_role_cut_is_private_and_lives_until_outer_commit(self):
+        data,old_host,assembly,old_tx=self.ready(document_ids=('adoc',))
+        old_host.detach();data.commit()
+        self.admin.execute('BEGIN')
+        host=adopt_psycopg_host(self.admin);tx=host.adopt_transaction().value
+        preparation=bootstrap_role_catalog_cut_issuer_in_transaction(host,tx,executor_role='consumer')
+        self.assertIsInstance(preparation,Ok,repr(preparation))
+        result=bootstrap_owned_action_role_cut_in_transaction(host,tx)
+        self.assertIsInstance(result,Ok,repr(result))
+        self.assertFalse(result.value.security_ready)
+        owner=result.value.caller_oid;issuer=result.value.owner_oid
+        with self.admin.cursor() as cursor:
+            verify_role_catalog_cut_issuer_with_cursor(cursor,owner_oid=preparation.value.owner_oid,caller_oid=preparation.value.caller_oid)
+        host.detach();self.admin.commit()
+        with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+            data.execute('SELECT truss.acquire_owned_action_role_catalog_cut()')
+        owner_name=self.admin.execute('SELECT rolname FROM pg_catalog.pg_roles WHERE oid=%s',(owner,)).fetchone()[0]
+        # Test-only composing entry point: proves owner-only native calling and
+        # lock lifetime, not Subject admission or an action execution capability.
+        self.admin.execute("""CREATE FUNCTION public.test_owned_action_cut() RETURNS void
+            LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS
+            'BEGIN PERFORM truss.acquire_owned_action_role_catalog_cut();END;'""")
+        self.addCleanup(self.admin.execute,'DROP FUNCTION IF EXISTS public.test_owned_action_cut()')
+        self.admin.execute(sql.SQL('ALTER FUNCTION public.test_owned_action_cut() OWNER TO {}').format(sql.Identifier(owner_name)))
+        self.admin.execute('REVOKE ALL ON FUNCTION public.test_owned_action_cut() FROM PUBLIC')
+        self.admin.execute('GRANT EXECUTE ON FUNCTION public.test_owned_action_cut() TO consumer')
+        data.execute('BEGIN ISOLATION LEVEL READ COMMITTED')
+        data.execute('SELECT public.test_owned_action_cut()')
+        held=self.admin.execute("""SELECT relation::regclass::text FROM pg_catalog.pg_locks
+            WHERE pid=%s AND mode='ShareLock' AND granted
+            AND relation IN ('pg_catalog.pg_authid'::regclass,'pg_catalog.pg_auth_members'::regclass)
+            ORDER BY relation::regclass::text""",(data.info.backend_pid,)).fetchall()
+        self.assertEqual(held,[('pg_auth_members',),('pg_authid',)])
+        self.admin.execute("SET lock_timeout='150ms'")
+        try:
+            with self.assertRaises(psycopg.errors.LockNotAvailable):
+                self.admin.execute('ALTER ROLE consumer CONNECTION LIMIT -1')
+        finally:self.admin.execute("SET lock_timeout='0'")
+        data.execute('COMMIT')
+        self.admin.execute('ALTER ROLE consumer CONNECTION LIMIT -1')
+        with self.admin.cursor() as cursor:
+            verify_owned_action_role_cut_with_cursor(cursor,issuer_owner_oid=issuer,action_owner_oid=owner)
+        self.admin.execute('GRANT EXECUTE ON FUNCTION truss.acquire_owned_action_role_catalog_cut() TO consumer')
+        try:
+            with self.admin.cursor() as cursor:
+                with self.assertRaises(ValueError):
+                    verify_owned_action_role_cut_with_cursor(cursor,issuer_owner_oid=issuer,action_owner_oid=owner)
+        finally:self.admin.execute('REVOKE ALL ON FUNCTION truss.acquire_owned_action_role_catalog_cut() FROM consumer')
+        self.admin.execute('DROP FUNCTION public.test_owned_action_cut()')

@@ -220,3 +220,70 @@ def bootstrap_role_catalog_cut_issuer_in_transaction(host,transaction,*,executor
   cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(prior[0][0],),prepare=False)
   return PendingRoleCatalogCutIssuer(target[0][0],owner_oid,caller_oid,source_sha)
  return host._run_operation(transaction,install)
+
+
+def verify_owned_action_role_cut_with_cursor(cursor,*,issuer_owner_oid,action_owner_oid):
+ """Exact private action dependency; trusted DDL quiescence remains required."""
+ if any(type(oid) is not int or not 1<=oid<=4294967295 for oid in (issuer_owner_oid,action_owner_oid)) or issuer_owner_oid==action_owner_oid:
+  raise ValueError('Distinct original action cut owners required')
+ source=files('truss').joinpath('_security_bootstrap','owned-action-role-catalog-cut.sql').read_bytes()
+ if sha256(source).hexdigest()!='9c4019763e9c4a741d678e7cbeb6c3c570cdf71f8b5ee1058061fe7531b4c4a4':
+  raise ValueError('Original owned action role cut source required')
+ body=source.decode().split('AS $$',1)[1].split('$$;',1)[0]
+ rows=_text_rows(cursor,"""SELECT p.proowner::text,l.lanname::text,p.prokind::text,p.pronargs::text,
+  p.proargtypes::text,p.prorettype::text,p.proretset::text,p.proisstrict::text,p.prosecdef::text,
+  p.provolatile::text,p.proparallel::text,p.proleakproof::text,p.prosupport::oid::text,
+  pg_catalog.to_jsonb(p.proconfig)::text,p.prosrc,(p.prosqlbody IS NULL)::text,
+  (p.proargnames IS NULL)::text,p.pronargdefaults::text,(p.proargdefaults IS NULL)::text
+  FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid=p.pronamespace
+  JOIN pg_catalog.pg_language l ON l.oid=p.prolang
+  WHERE n.nspname='truss' AND p.proname='acquire_owned_action_role_catalog_cut'""",limit=1)
+ if rows!=[(str(issuer_owner_oid),'plpgsql','f','0','','2278','false','false','true','v','u','false','0',
+    '["search_path=pg_catalog, pg_temp"]',body,'true','true','0','true')]:
+  raise ValueError('Exact owned action role cut definition required')
+ if _text_rows(cursor,'SELECT rolsuper::text FROM pg_catalog.pg_roles WHERE oid=%s::oid',(issuer_owner_oid,),1)!=[('true',)]:
+  raise ValueError('Privileged original action cut owner required')
+ owner=_text_rows(cursor,"""SELECT r.rolcanlogin::text,r.rolsuper::text,r.rolcreaterole::text,
+  r.rolcreatedb::text,r.rolreplication::text,r.rolbypassrls::text,r.rolinherit::text,
+  pg_catalog.pg_has_role(r.oid,%s::oid,'MEMBER')::text
+  FROM pg_catalog.pg_roles r JOIN truss.catalog_runtime_installation i ON i.owner_oid=r.oid AND i.singleton
+  JOIN pg_catalog.pg_namespace n ON n.nspname='truss' AND n.nspowner=r.oid WHERE r.oid=%s::oid""",
+  (issuer_owner_oid,action_owner_oid),1)
+ if owner!=[('false',)*8]:raise ValueError('Excluded original NOLOGIN action owner required')
+ grants=_text_rows(cursor,"""SELECT a.grantee::text,a.grantor::text,a.privilege_type::text,a.is_grantable::text
+  FROM pg_catalog.pg_proc p CROSS JOIN LATERAL pg_catalog.aclexplode(coalesce(p.proacl,pg_catalog.acldefault('f',p.proowner))) a
+  WHERE p.oid='truss.acquire_owned_action_role_catalog_cut()'::regprocedure ORDER BY a.grantee""",limit=2)
+ expected=sorted([(str(oid),str(issuer_owner_oid),'EXECUTE','false') for oid in (issuer_owner_oid,action_owner_oid)],key=lambda row:int(row[0]))
+ if grants!=expected:raise ValueError('Owner-only owned action role cut ACL required')
+
+
+def bootstrap_owned_action_role_cut_in_transaction(host,transaction):
+ """Quiescent action dependency install; no human permission or action provider."""
+ if type(host) is not PsycopgHost:return Error(ExecutionFailure('execution_obligation','Original action cut host required'))
+ source=files('truss').joinpath('_security_bootstrap','owned-action-role-catalog-cut.sql').read_bytes()
+ source_sha=sha256(source).hexdigest()
+ if source_sha!='9c4019763e9c4a741d678e7cbeb6c3c570cdf71f8b5ee1058061fe7531b4c4a4':
+  return Error(ExecutionFailure('execution_obligation','Original action cut source required'))
+ def install(cursor,observed):
+  _pin_cursor(cursor)
+  prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')",limit=1)
+  cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog,pg_temp',true)",prepare=False);cursor.fetchone()
+  from ._current_query_protection import require_unprotected_configuration
+  require_unprotected_configuration(cursor)
+  if _text_rows(cursor,"SELECT pg_catalog.current_setting('server_version_num'),pg_catalog.current_setting('transaction_isolation'),pg_catalog.current_setting('transaction_read_only')",limit=1)!=[('180006','read committed','off')]:
+   raise ValueError('Supported original action cut installation transaction required')
+  target=_text_rows(cursor,'SELECT installation_id::text,owner_oid::text FROM truss.catalog_runtime_installation WHERE singleton FOR SHARE NOWAIT',limit=1)
+  if len(target)!=1 or not installation_administrator_with_cursor(cursor,int(target[0][1]))[2]:
+   raise ValueError('Direct original action cut installation administrator required')
+  issuer=_text_rows(cursor,'SELECT oid::text FROM pg_catalog.pg_roles WHERE rolname=current_user AND rolsuper',limit=1)
+  if len(issuer)!=1:raise ValueError('Privileged original action cut installer required')
+  if _text_rows(cursor,"SELECT oid::text FROM pg_catalog.pg_proc WHERE pronamespace='truss'::regnamespace AND proname='acquire_owned_action_role_catalog_cut'",limit=1):
+   raise ValueError('Existing owned action role cut requires explicit migration')
+  action_owner=int(target[0][1]);issuer_owner=int(issuer[0][0])
+  owner_name=_text_rows(cursor,'SELECT rolname::text FROM pg_catalog.pg_roles WHERE oid=%s::oid',(action_owner,),1)
+  cursor.execute(source.decode(),prepare=False)
+  cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.acquire_owned_action_role_catalog_cut() TO {}').format(sql.Identifier(owner_name[0][0])),prepare=False)
+  verify_owned_action_role_cut_with_cursor(cursor,issuer_owner_oid=issuer_owner,action_owner_oid=action_owner)
+  cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(prior[0][0],),prepare=False);cursor.fetchone()
+  return PendingRoleCatalogCutIssuer(target[0][0],issuer_owner,action_owner,source_sha)
+ return host._run_operation(transaction,install)

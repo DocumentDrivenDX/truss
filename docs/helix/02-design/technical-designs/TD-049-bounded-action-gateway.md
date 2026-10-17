@@ -148,3 +148,22 @@ closed set-effect/frame enforcement, durable complete tx/1 outcomes and the SDK
 ReplayingActionExecutor. The private session must not be presented as any of
 those capabilities. Frozen-manifest control and delegation follow that complete
 single-action workflow.
+
+
+### Owner-only native role cut
+
+The fixed `acquire_owned_action_role_catalog_cut()` dependency has a separately
+named superuser-owned body and EXECUTE granted only to the excluded NOLOGIN
+Truss owner. The original LOGIN-only preparation issuer remains unchanged.
+The private installer checks original source, signature, owner flags, settings
+and exact ACL. The action boundary must take its mapping cuts before calling
+this helper, check the original authenticated Subject afterward, and retain all
+cuts through owned completion. It must verify this helper as part of its full
+source dependency closure under the stated administrator-quiescence premise.
+This component alone supplies neither action admission nor an executor.
+
+The installed-wheel [native dependency check](../../04-build/evidence/action-owned-role-cut-20261017/receipt.json)
+passes alongside the original Subject workflow on PostgreSQL 18.6. It checks
+coexistence with the original preparation issuer, direct-human refusal, owner
+composition, role-lock lifetime through outer COMMIT and leaked-grant refusal.
+The composing test routine is a fixture, not the protected action provider.

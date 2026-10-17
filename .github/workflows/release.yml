@@ -303,7 +303,7 @@ jobs:
         env:
           PYTHONPATH: packages/python/tests
           TRUSS_BUN_EXECUTABLE: bun
-        run: python -m unittest test_replay_frame_native test_owned_import_native test_engine_import_native test_engine_action_session_native test_catalog_diagnostics_native
+        run: python -m unittest test_replay_frame_native test_owned_import_native test_engine_import_native test_engine_action_session_native test_action_subject_installation_native test_catalog_diagnostics_native
 
       - name: Run installed parallel-edge workflow
         env:

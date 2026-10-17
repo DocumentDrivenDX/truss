@@ -1,0 +1,30 @@
+{
+  "scope": "private owner-only action role-lock dependency; no action admission or executor",
+  "wheelSha256": "8fed728b62a49de91ece81b6a3da3571a42e7ca9569d130e50831d6698ac2a69",
+  "sourceExactPayloads": 511,
+  "runtime": {
+    "postgresql": "18.6",
+    "pgserver-pg18": "18.6.1",
+    "psycopg": "3.3.6",
+    "python": "3.11.17",
+    "bun": "1.4.2",
+    "weft": "0.4.40"
+  },
+  "native": {
+    "command": "python -m unittest test_action_subject_installation_native",
+    "tests": 2,
+    "seconds": 7.671,
+    "exitCode": 0,
+    "fixtureCleanup": "complete"
+  },
+  "boundaries": {
+    "imports": 1597,
+    "passed": true
+  },
+  "sources": {
+    "packages/python/src/truss/_security_bootstrap/owned-action-role-catalog-cut.sql": "9c4019763e9c4a741d678e7cbeb6c3c570cdf71f8b5ee1058061fe7531b4c4a4",
+    "packages/python/src/truss/_security_catalog_subject_installation.py": "11fb80c176562fefd74059b312cd25e486b7fae98d0d8a6d698b8fc68c7f535d",
+    "packages/python/tests/test_action_subject_installation_native.py": "add206da7578f561d662e67550dd00cc5f3f0e2722298808f500c92f70fe38b1"
+  },
+  "limits": "Original 10s SQL and 30s operation maxima unchanged. No performance or public action-provider claim."
+}
