@@ -276,31 +276,30 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.35 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.34 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.37 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.38 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.35'
+  'truss-toolkit[local,native,query]==0.0.37'
 ```
 
-Bun1.4.2 is still required for UMF preparation. SDK 0.0.35 /
-native 0.68 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
+Bun1.4.2 is still required for UMF preparation. SDK 0.0.37 /
+native 0.70 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
 catalogs. Create/update, imports, preconditions, backfills and lookups require no
 client encoder or per-key receipt. Existing stored key and namespace bytes are
-preserved. Weft remains optional through `query` (version 0.4.34); it is not a
+preserved. Weft remains optional through `query` (version 0.4.38); it is not a
 key-encoding dependency. The separate protected security observation retains its
 original producer boundary.
-The older released installation example above retains its historical dependency
-requirements. Each release
-publishes package checksums and source/runtime/backend pins. The Truss release
+The installation command selects published SDK0.0.37 and its matching Weft0.4.38.
+Each release publishes package checksums and source/runtime/backend pins. The Truss release
 workflow exercises the exact uploaded wheel with its exactly paired published Weft wheels and verified
 PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.35 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.37 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.35 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.37 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
 ```
