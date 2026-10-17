@@ -400,8 +400,12 @@ BEGIN
  IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576
   OR original_documents IS NULL OR octet_length(original_documents) NOT BETWEEN 1 AND 4194304 THEN
   RAISE EXCEPTION 'bounded original create source required' USING ERRCODE='54000';END IF;
+ -- The selected caller supplies the immutable begin-admitted documents.
+ -- Exact byte correspondence is still required by the leaf's attempt lookup
+ -- before effects. Standalone calls retain their own unique-array admission.
  IF (convert_from(original_input,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE
-  OR (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN
+  OR (selected_attempt IS NULL AND
+   (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE) THEN
   RAISE EXCEPTION 'unique original create source required' USING ERRCODE='22023';END IF;
  context:=convert_from(truss.group_context_qualified(expected_release,expected_digest,qualified_actor),'UTF8')::jsonb;
  actor_oid:=qualified_actor;writer:=pg_current_xact_id();

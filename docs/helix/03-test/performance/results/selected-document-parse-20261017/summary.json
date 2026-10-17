@@ -1,0 +1,50 @@
+{
+  "baseCommit": "2e262b1c77db558d9c5bebcf25964e7ff1395c71",
+  "wheelSha256": "ed658425f53e0efc6560c5d41356247a8b7fc321078d55136d3c729a5ec79402",
+  "sourceExactPayloadsBeforeAndAfter": 511,
+  "runtimeManifestSha256": "c40730cfbfdc20e9a4f145d0ac80becfb9444dea75e8d623addb55a15dfdd95d",
+  "fullSmall": {
+    "passed": true,
+    "seconds": 109.652,
+    "objects": 1000,
+    "edges": 1000,
+    "reads": 1000,
+    "writes": 200,
+    "changedBulkSize": 1000,
+    "changedBulkRounds": 5,
+    "sqlDeadlineSeconds": 10,
+    "operationDeadlineSeconds": 30
+  },
+  "scope": "Local clean installed wheel correctness only; no isolated speedup or hosted release qualification",
+  "native": {
+    "tests": 5,
+    "seconds": 31.283,
+    "passed": true
+  },
+  "hostedDiagnostic": {
+    "run": "https://github.com/DocumentDrivenDX/truss/actions/runs/39034792253",
+    "source": "c1d76baac83797f48931b2f8f8b78db5394772eb",
+    "result": "failed",
+    "linux": "CREATE apply settlement timeout",
+    "macos": "UPDATE apply settlement timeout after successful CREATE",
+    "scope": "Stock completed-function diagnostics; nested total times overlap; incomplete calls excluded; not clean timing or qualification"
+  },
+  "uncompressedSha256": {
+    "native.log.gz": "4bbbd1162796e611cbdff892335d90ac4200401029cc28d63809bf49cfac866f",
+    "full-small.log.gz": "26ee36c9363af72090467f1cc3d6044ecb1acb748f7616c4167ec39aaa5d76d7",
+    "full-small.json.gz": "ed678858321582fc8e86cba629de8f6867227dc83d0f5ed77240bea56c838da5",
+    "hosted-diagnostic-failed.log.gz": "dca81918bfd9aa4f59fde26fb729ed7123d4510cf843f5150bd0144310c0ab11",
+    "linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-create.json.gz": "ef0c1e318c7659ab8d72292e34e3b0677035e3c64db0ada7d36cb6245eee09e6",
+    "linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-cumulative-after-close.json.gz": "9fc0a862a68a92ccf08734df688438308dde17d66e5aedbfc279bcd0f2778536",
+    "linux-x86_64-test_1025_refuses_in_host_and_native_without_durable_effects-cumulative-after-close.json.gz": "03a13aa37abdc1569e42bdcb2167ccad1384a5193756592f3df40fe582be9201",
+    "linux-x86_64-test_effect_fault_at_index_1023_rolls_back_the_entire_group-cumulative-after-close.json.gz": "5f5aaf2f6ce52d7c8687ff50b0e28384733b0ee17cbde4504b945ab0a076b86e",
+    "linux-x86_64-test_effect_fault_at_index_1023_rolls_back_the_entire_group-late-fault.json.gz": "e989333f50d6fba5beee1d07acc4819496a99cba4bf922576f3b4d026a9c59de",
+    "darwin-arm64-test_1024_real_creates_updates_replay_and_ordered_public_readback-create.json.gz": "37de3b21484f4ec743c0cb65b766342715904e2c793192feb294bf13dae4f7e3",
+    "darwin-arm64-test_1024_real_creates_updates_replay_and_ordered_public_readback-cumulative-after-close.json.gz": "bec38521fad54fa6a146a57e9cf9e4d261f54f5366a8a914a630278617cdf521",
+    "darwin-arm64-test_1024_real_creates_updates_replay_and_ordered_public_readback-following.json.gz": "defa66fafb56f09480d5151bb28a07ce0ab54d9079e1e671069055f96c63f1bb",
+    "darwin-arm64-test_1024_real_creates_updates_replay_and_ordered_public_readback-update.json.gz": "05672c04de2aa1a75346dfd56a1edf6835264fa6f98064c36d2c9c27a1ab9257",
+    "darwin-arm64-test_1025_refuses_in_host_and_native_without_durable_effects-cumulative-after-close.json.gz": "d1b1925d5239088f82a609c07bf82e63e0b3c807cd9b30312402148839f00937",
+    "darwin-arm64-test_effect_fault_at_index_1023_rolls_back_the_entire_group-cumulative-after-close.json.gz": "ae308a2e88bf295f28460492ce3b92498f85e3a6296fe30f3936292fad91fb0a",
+    "darwin-arm64-test_effect_fault_at_index_1023_rolls_back_the_entire_group-late-fault.json.gz": "6dbd86a6e3fec9a8d299a7b9c0b36930f94af36246b4b7542cd9787ba6a50c24"
+  }
+}
