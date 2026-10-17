@@ -12,6 +12,11 @@ on:
         description: Run the original installed 1000-node/1000-edge public workload on both platforms
         type: boolean
         default: false
+      stress_case:
+        description: Run one exact stress case on both platforms after both original workloads pass
+        type: choice
+        default: none
+        options: [none, nominal, type-heavy, wide, complex, dense-edges, index-heavy, skewed, node-heavy]
 permissions:
   contents: read
 concurrency:
@@ -321,7 +326,7 @@ jobs:
 
       - name: Run installed original public workload
         id: public_workflows
-        if: github.ref_type == 'tag' || inputs.public_workflows
+        if: github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none')
         env:
           PYTHONPATH: packages/python/tests
           TRUSS_BUN_EXECUTABLE: bun
@@ -331,7 +336,7 @@ jobs:
           python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --matrix-case small --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-workflows/report.json" 2>&1 | tee "$RUNNER_TEMP/public-workflows/run.log"
 
       - name: Record original public workload status
-        if: always() && (github.ref_type == 'tag' || inputs.public_workflows)
+        if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
         env:
           REPORT_DIRECTORY: ${{ runner.temp }}/public-workflows
           WORKLOAD_OUTCOME: ${{ steps.public_workflows.outcome }}
@@ -348,7 +353,7 @@ jobs:
           (root/'status.json').write_text(json.dumps(status,indent=2)+'\n')
           PYTHON
       - name: Retain original public workload report and log
-        if: always() && (github.ref_type == 'tag' || inputs.public_workflows)
+        if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
         uses: actions/upload-artifact@v4
         with:
           name: original-public-workflow-${{ matrix.os }}
@@ -382,6 +387,87 @@ jobs:
           path: ${{ runner.temp }}/capacity-function-statistics/*.json
           if-no-files-found: error
 
+  stress:
+    needs:
+      - "package"
+      - "native"
+    if: "github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'"
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - "ubuntu-24.04"
+          - "macos-14"
+    runs-on: "${{ matrix.os }}"
+    timeout-minutes: 180
+    steps:
+      - uses: "actions/checkout@v6"
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.11"
+      - uses: "oven-sh/setup-bun@v2"
+        with:
+          bun-version: "1.4.2"
+      - uses: "actions/download-artifact@v4"
+        with:
+          name: "python-package"
+          path: "dist"
+      - name: "Install exact released compiler and verify its checksum"
+        run: |
+          python - <<'PYTHON'
+          import hashlib,pathlib,subprocess,sys,tomllib,urllib.request
+          requirement=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['optional-dependencies']['query'][0]
+          assert requirement.startswith('weft-sql==')
+          version=requirement.removeprefix('weft-sql==')
+          assert version and all(part.isdecimal() for part in version.split('.'))
+          subprocess.run([sys.executable,'-m','pip','download','--only-binary=:all:','--no-deps','--no-index','--find-links',f'https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v{version}','--dest','/tmp/weft-wheels',requirement],check=True)
+          root=pathlib.Path('/tmp/weft-wheels');wheels=list(root.glob('*.whl'));assert len(wheels)==1
+          text=urllib.request.urlopen(f'https://github.com/DocumentDrivenDX/weft/releases/download/v{version}/SHA256SUMS',timeout=30).read().decode()
+          entries={line.split()[1]:line.split()[0] for line in text.splitlines()}
+          assert hashlib.sha256(wheels[0].read_bytes()).hexdigest()==entries[wheels[0].name]
+          PYTHON
+          python -m pip install --no-deps /tmp/weft-wheels/*.whl
+      - name: "Install checksum-verified PG18 and this exact Truss wheel"
+        run: "python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel \"$(find dist -name 'truss_toolkit-*.whl' -print -quit)\""
+      - name: "Run selected installed public stress workload"
+        id: "stress"
+        env:
+          PYTHONPATH: "packages/python/tests"
+          TRUSS_BUN_EXECUTABLE: "bun"
+          STRESS_CASE: "${{ inputs.stress_case }}"
+        shell: "bash"
+        run: |
+          mkdir -p "$RUNNER_TEMP/public-stress"
+          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --matrix-case "$STRESS_CASE" --bulk-size 100 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-stress/report.json" 2>&1 | tee "$RUNNER_TEMP/public-stress/run.log"
+      - name: "Record selected stress workload status"
+        if: "always()"
+        env:
+          REPORT_DIRECTORY: "${{ runner.temp }}/public-stress"
+          WORKLOAD_OUTCOME: "${{ steps.stress.outcome }}"
+          STRESS_CASE: "${{ inputs.stress_case }}"
+        run: |
+          python - <<'PYTHON'
+          import json,os,pathlib
+          root=pathlib.Path(os.environ['REPORT_DIRECTORY']);root.mkdir(parents=True,exist_ok=True)
+          report=root/'report.json'
+          status={'source':os.environ['GITHUB_SHA'],'case':os.environ['STRESS_CASE'],'outcome':os.environ['WORKLOAD_OUTCOME'],
+              'reportPresent':report.is_file(),'loadBatchSize':100,'statementTimeoutMs':10000,'operationTimeoutMs':30000,
+              'scope':'Selected exact declared stress case; timeout or missing report is incomplete evidence'}
+          if report.is_file():
+              result=json.loads(report.read_bytes())
+              status.update(functionalPassed=result['functionalPassed'],runtimePackage=result['runtimePackage'])
+          (root/'status.json').write_text(json.dumps(status,indent=2)+'\n')
+          PYTHON
+      - name: "Retain selected stress workload report and log"
+        if: "always()"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "public-stress-${{ inputs.stress_case }}-${{ matrix.os }}"
+          path: "${{ runner.temp }}/public-stress/*"
+          if-no-files-found: "error"
   publish:
     if: github.ref_type == 'tag'
     needs: [package, native]

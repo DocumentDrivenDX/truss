@@ -912,3 +912,36 @@ final validation; macOS cancelled the 1,024-UPDATE capacity group during final
 validation and skipped the public workload. Publication was skipped. The new
 map-reuse increment still requires both hosted original workloads before stress
 qualification or tagging.
+
+### Selected stress comparisons after both original workloads
+
+The release workflow's manual `stress_case` choice defaults to `none`. Selecting
+one case forces the full original `small` workload in both native platform legs;
+the stress job needs both legs to succeed before it can start. Tags or absent
+inputs do not select stress. The stress job uses the same built wheel and exact
+checksum-verified compiler/PG18 installation, separately on Linux and macOS.
+
+The declared comparison tranche is `nominal`, `type-heavy`, `wide`, `complex`,
+`node-heavy`, `dense-edges`, `index-heavy` and `skewed`. All existing cases retain
+their exact sizes. The new `node-heavy` point has 20,000 nodes and 40,000 edges,
+with nominal's 10 types, 12 mixed fields, two indexed properties per type and
+uniform distribution; it changes node count at fixed average degree. The
+extended `large` point remains 1,000,000 nodes/2,000,000 edges and is not silently
+substituted by this new point. The 1,000-type extended case is also unchanged.
+
+All selected stress comparisons load with the existing driver's batch size 100;
+wide 128-field objects can exceed the ordinary input-byte limit in a 1,000-create
+group. This explicit load profile does not reduce original capacity acceptance:
+the original 1,024-operation/full-small gates still run, and the stress driver's
+five repetitions at each supported update size through 1,024 remain unchanged.
+Its 10,000-operation point stays explicitly unsupported. Each run retains the
+exact case, installed asset identity, actual object/edge counts, physical indexes
+and maintained business-key inventory. SQL 10s/operation 30s limits are unchanged.
+A 180-minute stress-job ceiling is not a completion promise; timeout or a missing
+report is incomplete evidence. Report/log/status artifacts are retained when
+collection can run, with platform/case-specific names.
+
+Example after original qualification:
+`gh workflow run release.yml --ref main -f stress_case=nominal`.
+Only one selected case is dispatched per run. Workflow/schema/static controls
+are not a stress pass; none is claimed before actual execution.

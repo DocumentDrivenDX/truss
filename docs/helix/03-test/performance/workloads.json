@@ -124,6 +124,19 @@
       "changedDimension": "edge distribution"
     },
     {
+      "id": "node-heavy",
+      "types": 10,
+      "fieldsPerType": 12,
+      "shape": "mixed",
+      "nodes": 20000,
+      "edges": 40000,
+      "indexedPropertiesPerType": 2,
+      "distribution": "uniform",
+      "tier": "standard",
+      "compareTo": "nominal",
+      "changedDimension": "node count at fixed average degree"
+    },
+    {
       "id": "large",
       "types": 10,
       "fieldsPerType": 12,
