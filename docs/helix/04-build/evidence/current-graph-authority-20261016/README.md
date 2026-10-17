@@ -234,3 +234,16 @@ verified release-pins/SHA256SUMS and exact published ARM wheel. Before implement
 freeze the final0.4.42 source commit before the tag; record selected immutable
 target wheel/module digests and the fresh Truss runtime parent before enrollment.
 Those not-yet-built identities are intentionally not guessed in this proposal.
+
+**Base freeze — 2026-10-17:** start from Weft main
+`0d61e9927e45ef78abc2689ecb1ec25dd97a3309`, retaining the merged raw PostgreSQL
+`STARTS_WITH` implementation and tests from `cea164716b5271d4ef2cfb879042d593ca7fb036`.
+Against public0.4.41, that base also carries development versions and qualification
+receipts; Graph/presence requirements and Python FFI sources are unchanged. The
+no-new-operator constraint above applies to the additional0.4.42 change from this
+base: stable versions, the Graph feature and mandatory existing-wheel export
+checks. Dirty primary checkouts and unmerged AVG/SUM/distinct/terms/UC/managed work
+are excluded. Freeze the final reviewed source before tagging; use the existing
+`promote_run_id` path to publish the same five validated artifacts, then derive
+Truss cohorts from their actual published bytes. Final0.4.42 identities remain
+unset until that source and those artifacts exist; qualification holds remain.
