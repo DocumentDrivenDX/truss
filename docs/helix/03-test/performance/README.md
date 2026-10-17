@@ -1224,3 +1224,23 @@ owned values are already reused. The next diagnostic must locate the leaf's
 own SQL/CPU cost before another admission-path change. These observations cover
 completed calls through apply return, exclude later commit work, and do not
 qualify clean timing or isolate the benefit of either preceding projection.
+
+
+A final disposable stock `pg_stat_statements` diagnostic enabled nested tracking
+only for the post-registration consumer connection. The unchanged CREATE test
+failed with `57014` at its original 10s deadline after 756 completed steps;
+182 [normalized statement aggregates](results/create-capacity-statements-20261017.json.gz)
+were captured before the original assertion. No later update, commit, replay or
+readback ran. The test finished in 17.070s and cluster cleanup completed.
+
+This is diagnostic evidence, not a workload pass or clean performance result.
+Tracking materially changed costs: capture/preflight recorded 3,584/1,668ms,
+versus 754/249ms in the preceding function-counter observation. Nested totals
+overlap, failed statements are omitted, and normalized entries can combine
+calls from different functions. The completed leaf attempt selection recorded
+131ms across 757 calls; journal insertion recorded 273ms across 756 calls.
+These observations do not establish a dominant scan or justify weakening the
+completed-slot census, exact source checks or authority checks. No further
+profiler revisions are planned; the next runtime candidate needs a concrete
+source equivalence and clean measurement. No production instrumentation was
+added. Raw observation SHA256 is `a48c84a1077274cfa83824bb00c09a9279552c3c7d855dfcd0a05363e8b17cae`.
