@@ -1258,7 +1258,7 @@ BEGIN
   ELSE
    after_image:=to_jsonb(row_image);after_record:=truss.runtime_edge_history(after_image,identity,metadata->'source',metadata->'target');
    IF before_image IS NULL THEN
-    INSERT INTO truss.edge SELECT (jsonb_populate_record(NULL::truss.edge,after_image)).*;
+    INSERT INTO truss.edge SELECT (row_image).*;
     event:=jsonb_build_object('operation','create','after',after_record);
    ELSE
     UPDATE truss.edge SET source_id=row_image.source_id,source_type=row_image.source_type,target_id=row_image.target_id,target_type=row_image.target_type,
@@ -1276,7 +1276,7 @@ BEGIN
   journal.entity_type:=row_image.rel_type_id;journal.ver:=version;journal.op:=event->>'operation';journal.prop_id:=NULL;journal.old_value:=NULL;
   journal.new_value:=truss.runtime_exact_wrapper('event',convert_to(event::text,'UTF8'));journal.rev:=revision;
   journal.origin:=truss.runtime_exact_wrapper('origin',convert_to((event->'origin')::text,'UTF8'));
-  INSERT INTO truss.journal SELECT (jsonb_populate_record(NULL::truss.journal,to_jsonb(journal))).*;
+  INSERT INTO truss.journal SELECT (journal).*;
   ownership_context:=jsonb_set(ownership_context,'{after}',CASE WHEN effect_operation='delete_edge' THEN 'null'::jsonb ELSE jsonb_build_object('source',truss.runtime_endpoint_ownership(metadata->'source',revision),'target',truss.runtime_endpoint_ownership(metadata->'target',revision)) END);
   INSERT INTO truss.runtime_edge_transition(attempt_id,operation_index,writer_xid,edge_id,rel_type_id,before_edge,after_edge,journal,old_source,old_target,source_identity,target_identity,endpoint_ownership)
    VALUES(attempt_id,operation_index,attempt.writer_xid,row_image.id,row_image.rel_type_id,before_image,after_image,jsonb_build_array(to_jsonb(journal)),
