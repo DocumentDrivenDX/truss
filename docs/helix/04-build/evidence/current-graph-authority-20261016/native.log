@@ -1,0 +1,11 @@
+test_scram_alice_parallel_occurrences_do_not_duplicate_authorized_object (test_current_graph_authority_native.CurrentGraphAuthorityNativeTests.test_scram_alice_parallel_occurrences_do_not_duplicate_authorized_object) ... ok
+test_scram_bob_has_only_own_project_resource (test_current_graph_authority_native.CurrentGraphAuthorityNativeTests.test_scram_bob_has_only_own_project_resource) ... ok
+test_scram_outsider_has_no_resource (test_current_graph_authority_native.CurrentGraphAuthorityNativeTests.test_scram_outsider_has_no_resource) ... ok
+test_matching_legacy_graph_activation_refuses_before_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_matching_legacy_graph_activation_refuses_before_collection) ... ok
+test_matching_partial_helper_registration_refuses_before_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_matching_partial_helper_registration_refuses_before_collection) ... ok
+test_settled_caller_refuses_without_collection (test_current_graph_admission_native.CurrentGraphAdmissionNativeTests.test_settled_caller_refuses_without_collection) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 44.194s
+
+OK

@@ -118,3 +118,13 @@ def prepare_current_disclosure_originals(opaque_sources_bytes):
     if type(opaque_sources_bytes) is not bytes or not 1<=len(opaque_sources_bytes)<=4194304:
         raise ValueError('Bounded immutable original disclosure sources required')
     return CurrentDisclosureOriginals(opaque_sources_bytes,json.dumps(_actual_disclosure_consumer(),separators=(',',':')).encode())
+
+
+def is_graph_disclosure_originals(originals):
+    """Select a complete already-validated registered cohort, never a hash alone."""
+    if type(originals) is not CurrentDisclosureOriginals:
+        return False
+    consumer=decode_owner_evidence_json(originals.consumer_bytes)
+    if same_owner_evidence(consumer,_CONSUMER_COHORTS[1]):return True
+    if same_owner_evidence(consumer,_CONSUMER_COHORTS[0]):return False
+    raise ValueError('Exact registered disclosure consumer cohort required')

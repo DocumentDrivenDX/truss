@@ -4,13 +4,13 @@ from .execution import Ok, Error, ExecutionFailure
 from .query import QueryRefused
 from .psycopg_host import _HostPairReservation
 from ._current_query_sources import capture_current_query_sources_with_cursor, _QUERY_PROFILE, _DISCLOSURE_PROFILE
-from ._current_disclosure_originals import CurrentDisclosureOriginals
+from ._current_disclosure_originals import CurrentDisclosureOriginals,is_graph_disclosure_originals
 from ._current_query_originals import CurrentQueryOriginals
 from ._current_query_facts import capture_current_query_facts_with_cursor
 from ._current_query_subjects import observe_current_query_subject_in_transaction, _verify_helper
 from ._current_query_evaluation import evaluate_current_query, CurrentQueryLimit
 from ._current_query_stage import stage_and_execute
-from ._current_query_protection import verify_current_query_protection
+from ._current_query_protection import verify_current_query_protection,GraphAuthorityProfileRequired
 from ._current_query_pipe import CurrentQueryPipeError
 from ._owner_evidence_json import decode_owner_evidence_json
 from ._security_catalog_subject_installation import _text_rows
@@ -24,10 +24,6 @@ class _InnerFailure(Exception):
 
 
 class _QueryRefusal(ValueError):
-    pass
-
-
-class _GraphAuthorityRefusal(ValueError):
     pass
 
 
@@ -92,7 +88,7 @@ def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,para
                 sources=capture_current_query_sources_with_cursor(cursor)
                 expected_profile,expected_originals=(_DISCLOSURE_PROFILE,CurrentDisclosureOriginals) if disclosure else (_QUERY_PROFILE,CurrentQueryOriginals)
                 if sources.source_profile!=expected_profile or type(sources.query_originals) is not expected_originals:raise ValueError('Exact registered current query source profile required')
-                graph_candidate=(disclosure and decode_owner_evidence_json(sources.query_originals.consumer_bytes)['weftModuleSha256']==_GRAPH_CONSUMER_MODULE)
+                graph_candidate=disclosure and is_graph_disclosure_originals(sources.query_originals)
                 cursor.execute('LOCK TABLE ONLY truss.module_access IN SHARE MODE NOWAIT',prepare=False)
                 cursor.execute('LOCK TABLE pg_catalog.pg_authid,pg_catalog.pg_auth_members IN SHARE MODE NOWAIT',prepare=False)
                 cursor.execute('LOCK TABLE ONLY truss.catalog_subject_map,truss.object,truss.object_key_bucket IN SHARE MODE NOWAIT',prepare=False)
@@ -140,16 +136,18 @@ def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,para
                 expected_peer=[(subject.database_oid,subject.role_oid,before[1][1])]
                 if peer()!=expected_peer:raise ValueError('Actual same-database ordinary caller transaction required')
                 if graph_candidate:
-                    # Source/data cuts alone do not qualify every authority dependency.
-                    # Refuse this cohort before any fact/Graph collector or staging.
-                    raise _GraphAuthorityRefusal('Qualified native Graph current-authority profile required')
-                captured=capture_current_query_facts_with_cursor(cursor,bun_executable=executor.bun_executable)
+                    from ._current_disclosure_context_capture import capture_context_disclosure_with_cursor
+                    captured=capture_context_disclosure_with_cursor(cursor,sql=sql,parameters=parameters,
+                        document_ids=document_ids,bun_executable=executor.bun_executable)
+                else:
+                    captured=capture_current_query_facts_with_cursor(cursor,bun_executable=executor.bun_executable)
                 if captured.sources!=sources:raise ValueError('Original held source inventory changed')
                 facts=decode_owner_evidence_json(captured.facts_bytes)
                 initial=decode_owner_evidence_json(sources.initialize_bytes)['sources']
                 subject_facts=[f for f in facts if f['type']==initial['ontology']['subject'] and f['key']==[{'string':subject.key}]]
                 if len(subject_facts)!=1:raise ValueError('Actual observed Subject must occur in complete native facts')
-                matching=[r for r in captured.rows if r[:3]==(subject.object_id,subject.type_id,subject.object_version)]
+                captured_rows=captured.facts.rows if graph_candidate else captured.rows
+                matching=[r for r in captured_rows if r[:3]==(subject.object_id,subject.type_id,subject.object_version)]
                 if (len(matching)!=1 or bytes.fromhex(decode_owner_evidence_json(matching[0][3])['bytesHex'])!=subject.tuple_bytes):
                     raise ValueError('Original Subject object/version/Key fact correspondence required')
                 try:
@@ -172,6 +170,9 @@ def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,para
                 cursor._deadline.check()
                 if require(host._run_operation(transaction,caller_check))!=before or peer()!=expected_peer:
                     raise ValueError('Original caller/Subject/access changed before release')
+                if graph_candidate:
+                    from ._current_disclosure_context_capture import verify_context_disclosure_with_cursor
+                    verify_context_disclosure_with_cursor(cursor,captured,bun_executable=executor.bun_executable)
                 if capture_current_query_sources_with_cursor(cursor)!=sources:
                     raise ValueError('Original query source changed before release')
                 verify_current_query_protection(cursor,sources,executor.subject_registration)
@@ -184,7 +185,7 @@ def _run_guarded_current_query(host,transaction,executor,*,sql,document_ids,para
             if isinstance(outcome,Error) and outcome.error.code=='transaction_unusable':return outcome
             if inner_failure:return inner_failure[0]
             if (isinstance(outcome,Error) and outcome.error.code=='invalid_transaction'
-                    and isinstance(executor.host._custody.last_attempt.error,_GraphAuthorityRefusal)):
+                    and isinstance(executor.host._custody.last_attempt.error,GraphAuthorityProfileRequired)):
                 return Ok(QueryRefused('execution_obligation'))
             if (isinstance(outcome,Error) and outcome.error.code=='invalid_transaction'
                     and isinstance(executor.host._custody.last_attempt.error,CurrentQueryLimit)):
