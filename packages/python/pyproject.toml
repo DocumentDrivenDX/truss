@@ -13,7 +13,6 @@ dependencies = ["jsonschema==4.26.0", "referencing==0.37.0"]
 truss-local-postgres = "truss.cli:main"
 
 [project.optional-dependencies]
-typed-sdk = ["umf_access==0.1.0.dev0", "weft-sql==0.4.40"]
 native = ["psycopg[binary]==3.3.6"]
 query = ["weft-sql==0.4.40"]
 experimental-pg8000 = ["pg8000==1.31.5"]

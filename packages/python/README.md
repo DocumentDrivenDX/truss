@@ -118,6 +118,13 @@ mutation-selection registration/lowering, preserving native65. See the
 [SDK35 release evidence](../../docs/helix/04-build/releases/v0.0.35.md).
 This compiler support does not enable a protected bulk-action executor.
 
+The `truss.access` typed-SDK integration remains experimental and requires a
+matching locally supplied UMF SDK cohort. Its 14 native controls used published
+Weft 0.4.40 with a pinned local UMF wheel; they do not establish published UMF
+dependency availability. The development `typed-sdk` extra is deferred until a
+matching immutable public UMF artifact and fresh consumer-install workflow pass.
+The ordinary query, native and local-runtime extras are unchanged.
+
 ## Install the release
 
 SDK0.0.35 includes the experimental **current-policy query interface**:
