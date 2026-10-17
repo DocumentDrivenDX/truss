@@ -905,9 +905,14 @@ BEGIN
    AND (SELECT count(*) FROM truss.runtime_owned_operation p
     WHERE p.attempt_id=a.id AND p.result IS NOT NULL)=a.next_index) THEN
   RAISE EXCEPTION 'original unfinished owned settlement progress required' USING ERRCODE='55000';END IF;
+ -- Marker refresh and authorization above may execute write triggers. Issue
+ -- identity only after them, for this read-only final-edge validation phase.
+ -- Each edge still resolves live module policy/membership independently.
+ current_actor:=truss.runtime_person(false);
+ IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='42501';END IF;
  FOR owner IN SELECT DISTINCT edge_id,rel_type_id FROM truss.runtime_edge_transition WHERE runtime_edge_transition.attempt_id=object_group_finish.attempt_id LOOP
   IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
-   PERFORM truss.runtime_owned_edge_validate_in_input(owner.edge_id,owner.rel_type_id,input,attempt.input_bytes,attempt);
+   PERFORM truss.runtime_owned_edge_validate_in_input_qualified(owner.edge_id,owner.rel_type_id,input,attempt.input_bytes,attempt,current_actor);
   ELSE PERFORM truss.runtime_edge_validate(owner.edge_id,owner.rel_type_id);END IF;
  END LOOP;
  semantic:=jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision',(SELECT rev::text FROM truss.schema_head WHERE id=1),
@@ -1317,13 +1322,13 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_edge_step(uuid,int,jsonb) FROM PUBLIC;
 
 
-CREATE FUNCTION truss.runtime_owned_edge_validate_in_input(selected_id bigint,selected_type int,prepared_input jsonb,source_bytes bytea,prepared_attempt truss.runtime_object_attempt) RETURNS void
+CREATE FUNCTION truss.runtime_owned_edge_validate_in_input_qualified(selected_id bigint,selected_type int,prepared_input jsonb,source_bytes bytea,prepared_attempt truss.runtime_object_attempt,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE latest truss.runtime_edge_transition%ROWTYPE;actual jsonb;entry jsonb;selected_transition bigint;transition_attempt_id uuid;current_actor oid;owner record;
 BEGIN
  SELECT * INTO latest FROM truss.runtime_edge_transition WHERE edge_id=selected_id AND rel_type_id=selected_type AND writer_xid=pg_current_xact_id() ORDER BY transition_id DESC LIMIT 1;
  IF NOT FOUND THEN RAISE EXCEPTION 'registered current edge mutation required' USING ERRCODE='55000';END IF;
- current_actor:=truss.runtime_person(false);
+ current_actor:=qualified_actor;
  IF NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE id=latest.attempt_id AND writer_xid=latest.writer_xid AND actor_oid=current_actor) THEN
   RAISE EXCEPTION 'registered current edge mutation required' USING ERRCODE='55000';END IF;
  -- Row/transition events remain queued after an early attempt-constraint flush.
@@ -1335,7 +1340,7 @@ BEGIN
   -- The sole non-NULL caller is object_group_finish, after its complete
   -- runtime_edge_authorize pass following marker refresh. That pass already
   -- reconstructed every current-attempt transition, including ordinal bounds.
-  -- This loop has no writes. Keep fresh person/module and physical checks here;
+  -- This loop has no writes. Keep current module and physical checks here;
   -- standalone calls and other attempts still reconstruct their transitions.
   -- Mandatory owned-group finish and commit reconstruction remain independent.
   IF prepared_attempt.id IS NULL OR transition_attempt_id IS DISTINCT FROM prepared_attempt.id THEN
@@ -1348,6 +1353,15 @@ BEGIN
   SELECT to_jsonb(j) INTO actual FROM truss.journal j WHERE j.at=(entry->>'at')::timestamptz AND j.seq=(entry->>'seq')::bigint;
   IF actual IS DISTINCT FROM entry THEN RAISE EXCEPTION 'exact edge journal required' USING ERRCODE='55000';END IF;
  END LOOP;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_edge_validate_in_input_qualified(bigint,int,jsonb,bytea,truss.runtime_object_attempt,oid) FROM PUBLIC;
+
+-- Standalone and deferred settlement always issue a fresh native actor.
+CREATE FUNCTION truss.runtime_owned_edge_validate_in_input(selected_id bigint,selected_type int,prepared_input jsonb,source_bytes bytea,prepared_attempt truss.runtime_object_attempt) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ PERFORM truss.runtime_owned_edge_validate_in_input_qualified(selected_id,selected_type,prepared_input,source_bytes,prepared_attempt,truss.runtime_person(false));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_edge_validate_in_input(bigint,int,jsonb,bytea,truss.runtime_object_attempt) FROM PUBLIC;

@@ -1,0 +1,117 @@
+{
+  "scope": "Eliminate repeated global actor checks within one read-only finish-edge validation phase; no hosted timeout fix or isolated speedup established",
+  "baseCommit": "50b76208514cc868d765279fd0bd61f06c339c25",
+  "runtimeWheelSha256": "019304df86f22be730adb265623e81738b5cde7d794fec0a4ba6997024941619",
+  "sourceExactWheelPayloads": 511,
+  "runtimeManifestSha256": "392efcf6c77363062313e4dcf190c12dae2c4b19723d72e3b40b911e6b0a492d",
+  "runtime": {
+    "postgresql": "18.6",
+    "pgserver-pg18": "18.6.1",
+    "python": "3.11.17",
+    "psycopg": "3.3.6",
+    "bun": "1.4.2",
+    "weft": "published0.4.40"
+  },
+  "sqlTimeoutSeconds": 10,
+  "operationTimeoutSeconds": 30,
+  "statisticsEnabled": false,
+  "nativeCorrectness": {
+    "tests": 7,
+    "seconds": 40.457,
+    "passed": true,
+    "cases": "EdgeAuthorityTests2; EdgeMutationTests2; GroupCapacityTests3 unchanged original1024create/changedupdate/commit/replay/read,1025refusal and finaloperation rollback"
+  },
+  "originalFullSmall": {
+    "passed": true,
+    "seconds": 112.57382441684604,
+    "scope": "Original1000objects+1000edges,1000read samples,200committedwrites and five changed1000updates/commits/readback; no script/assertion/deadline changes"
+  },
+  "loadOnlyComparison": {
+    "baseline": {
+      "createApplyMs": 4949.852583,
+      "createCommitMs": 2588.574666,
+      "edgeApplyMs": 5978.480958,
+      "edgeCommitMs": 3751.690541
+    },
+    "candidate": {
+      "createApplyMs": 4670.297792,
+      "createCommitMs": 2484.311458,
+      "edgeApplyMs": 5576.367375,
+      "edgeCommitMs": 3757.2155
+    },
+    "interpretation": "Single-run local observations, not causal speedup evidence. CREATE also improved; edge commit was unchanged. Grouping changes retained history; scaling is not isolated algorithmic complexity. Diagnostic stops after persisted edge count and sampled public endpoint checks; later phases not run."
+  },
+  "authority": "Fresh actor after marker refresh and edge authorization; each edge retains live module membership/policy, attempt/row/journal correspondence. Post-write fresh actor and every operation module check plus standalone/deferred fresh actor wrappers and independent commit closure remain. No actor reuse across writes, top-level calls or commit events.",
+  "hostedAcceptance": "pending; prior exact32726579 hosted failures remain unresolved; no stress or tag",
+  "artifacts": [
+    {
+      "file": "scaling-source.json.gz",
+      "uncompressedSha256": "cb5ad5e23e094d7f82ef71736c54b0c6ffc97abc4712bfbe4807a7e94d40b2e8"
+    },
+    {
+      "file": "scaling-summary.json.gz",
+      "uncompressedSha256": "d0c42a6ed62cfa235ecf2424cc01534bc3c81a7a807f65d4655d34c621b08686"
+    },
+    {
+      "file": "diagnostic-harness.py.gz",
+      "uncompressedSha256": "d5450e9704a3f7f6aa49c8eb679b478ff728a537ba8921c72294c3362acb36af"
+    },
+    {
+      "file": "diagnostic-wrapper.py.gz",
+      "uncompressedSha256": "6ea939a1697115178cd7f904e6371db463ef01757c50235c59839a606d29aa32"
+    },
+    {
+      "file": "candidate-native.log.gz",
+      "uncompressedSha256": "913091fa01d179ec65c2c202d4121630bcf7a214852d275154f5d368201be729"
+    },
+    {
+      "file": "candidate-load1000.json.gz",
+      "uncompressedSha256": "e382e76b1622768c43d47e493542e371b35b3903453b5f25299a02ba3723c834"
+    },
+    {
+      "file": "candidate-load1000.log.gz",
+      "uncompressedSha256": "aab204b073294e2033dbfa311df56e53a1f767ca49f7d91d000b3abb33b4b634"
+    },
+    {
+      "file": "baseline-128.json.gz",
+      "uncompressedSha256": "51124992ce16be4006d5fed56c227ff182606cebbe3cd4c6a866a7435d8dac07"
+    },
+    {
+      "file": "baseline-128.log.gz",
+      "uncompressedSha256": "4ee77133e3af0aad41e1f4a62405057f81fcf18a942b5df1b7a47e2ff7626125"
+    },
+    {
+      "file": "baseline-256.json.gz",
+      "uncompressedSha256": "3831b884388c46e1b1ed39e46d70d0efc8c86644902931b1fcd028dc86ccca40"
+    },
+    {
+      "file": "baseline-256.log.gz",
+      "uncompressedSha256": "de346dee5d65a54ec8aa1caea7d63153bcddb9940f822339ccab852bb45a8073"
+    },
+    {
+      "file": "baseline-512.json.gz",
+      "uncompressedSha256": "cd696ce15bf21bc0a7a76a40dd2bb168389bbfd0c970ac3382077ce11daa89b9"
+    },
+    {
+      "file": "baseline-512.log.gz",
+      "uncompressedSha256": "ba57e9d5341facc6cdb7c10779221f17517a0fe5a3a268eb070998eb20b41633"
+    },
+    {
+      "file": "baseline-1000.json.gz",
+      "uncompressedSha256": "e45dbc96e9cc1429b3bc807bb7df7771c28aaa757271f2c845daa96c457eb962"
+    },
+    {
+      "file": "baseline-1000.log.gz",
+      "uncompressedSha256": "0a9e65f2357321b8e5524fe4268b9aa5bc2aef965010306e507b7651f8e0df6e"
+    },
+    {
+      "file": "full-small.json.gz",
+      "uncompressedSha256": "8a94702b73be64418b388e154604604080e1fb35d61797f1c8203907840c1d42"
+    },
+    {
+      "file": "full-small.log.gz",
+      "uncompressedSha256": "7c76b75ceb06268232460015f14286805c6239b74b8e326c8bc8f8366dcdf476"
+    }
+  ],
+  "sourceExactWheelPayloadsAfterTests": 511
+}
