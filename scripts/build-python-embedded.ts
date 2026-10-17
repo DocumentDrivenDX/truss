@@ -37,7 +37,11 @@ async function walk(dir:string){for(const item of (await readdir(join(root,dir),
 }}
 for(const cohort of cohorts)await walk(cohort);
 const output=join(root,'_embedded_js');
-await writeFile(join(output,'modules.json.gz'),gzipSync(JSON.stringify({modules,sources}),{level:9}));
+const compressed=gzipSync(JSON.stringify({modules,sources}),{level:9});
+// Gzip's OS header is metadata: canonicalize macOS(19)/Unix(3) to unknown(255).
+// Payload bytes and the CRC remain untouched.
+compressed[9]=255;
+await writeFile(join(output,'modules.json.gz'),compressed);
 await writeFile(join(output,'sources.json'),JSON.stringify(hashes,null,2)+'\n');
 const built=await Bun.build({entrypoints:[join(import.meta.dir,'embedded-polyfills.ts')],target:'browser',format:'iife',minify:false});
 if(!built.success)throw new AggregateError(built.logs);

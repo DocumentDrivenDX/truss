@@ -87,7 +87,13 @@ class OwnerVM:
         return remaining
 
     def eval(self, source):
-        return self.vm.eval(source, timeout_sec=self.remaining())
+        from py_mini_racer import JSEvalException
+        try:
+            return self.vm.eval(source, timeout_sec=self.remaining())
+        except TimeoutError:
+            raise
+        except JSEvalException as error:
+            raise ValueError('Embedded owner execution refused') from error
 
     def promise(self, source):
         try:
@@ -168,9 +174,11 @@ class EmbeddedOwnerPipe:
                 raise CurrentQueryPipeError('Original computation response correlation changed')
             self._owner.remaining()
             return response
-        except BaseException:
+        except BaseException as error:
             self.close()
-            raise
+            if isinstance(error,(CurrentQueryPipeError,KeyboardInterrupt,SystemExit)):
+                raise
+            raise CurrentQueryPipeError('Original embedded computation unavailable') from error
         finally:
             self._lock.release()
 

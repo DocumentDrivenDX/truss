@@ -51,6 +51,13 @@ class EmbeddedOwnerTests(unittest.TestCase):
                 with self.assertRaises(CurrentQueryPipeError):
                     owner.exchange(initial,source_receipt=receipt)
 
+    def test_owner_refusal_is_a_fenced_transport_error(self):
+        with open_current_disclosure_computation(timeout_seconds=5) as owner:
+            with self.assertRaises(CurrentQueryPipeError):
+                owner.exchange(wire({'version':'umf.security.private-disclosure-child/0.2-candidate',
+                    'kind':'initialize','requestId':'invalid','sources':{}}),source_receipt='a'*64)
+            self.assertTrue(owner._cleanup_complete)
+
     def test_isolate_deadline_interrupts_nonterminating_code(self):
         start=time.monotonic()
         with OwnerVM('_umf_keys08/bridge.mjs',input_bytes=b'{}',timeout=1) as owner:
