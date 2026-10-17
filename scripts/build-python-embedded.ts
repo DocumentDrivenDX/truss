@@ -7,7 +7,7 @@ import {createHash} from 'node:crypto';
 const root=join(import.meta.dir,'../packages/python/src/truss');
 const cohorts=['_umf','_umf_core08','_umf_keys','_umf_keys08','_current_query_owner','_current_disclosure_owner','_preparation_sources'];
 const modules:Record<string,string>={}, sources:Record<string,string>={}, hashes:Record<string,string>={};
-async function walk(dir:string){for(const item of await readdir(join(root,dir),{withFileTypes:true})){
+async function walk(dir:string){for(const item of (await readdir(join(root,dir),{withFileTypes:true})).sort((a,b)=>a.name<b.name?-1:a.name>b.name?1:0)){
  const path=dir+'/'+item.name;if(item.isDirectory()){await walk(path);continue;}
  if(!/\.(m?js|json)$/.test(path))continue;
  const raw=await readFile(join(root,path));sources[path]=raw.toString('base64');hashes[path]=createHash('sha256').update(raw).digest('hex');
