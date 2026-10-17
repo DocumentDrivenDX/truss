@@ -215,3 +215,11 @@ metadata; genuine compiler-issued stage-two/native integration remains
 unfinished. Compiler versions, IR admission and the ordinary published Weft
 0.4.40 default are unchanged. This increment establishes no end-to-end
 navigation, publication or release qualification claim.
+
+### Genuine RelatedKeys workflow — 2026-10-17
+
+The optional development cohort now has a [passing public native workflow](../../04-build/evidence/typed-sdk-related-20261017/verification.json), using the [exact pinned wheels and generator](../../04-build/evidence/typed-sdk-related-20261017/cohort.json). It accepts the original Core 0.8 schema, creates objects and parallel edges through public APIs with caller commits, captures original native requests, runs genuine SDK CLI generation/check, and calls generated reads, pages and streams. Results retain actual generated CustomerKey classes, parallel occurrences, truncation and empty bags. The workflow also checks cursor cleanup, ordinary qualified SQL and refusal of a different valid original program.
+
+This is macOS arm64/Python 3.14.8/psycopg 3.3.6/PostgreSQL 18.6/Bun 1.4.2 evidence. UMF's shared stream mapping fix is included in the pinned SDK; no Truss output shim is used. The compiler gate requires the actual Truss read/page compile and original-program check APIs for `0.4.42-dev.0`. Published Weft 0.4.40 remains the ordinary default; backend 0.4.41 and ordinary IR 0.2.7 checks remain exact. New navigation IR, ordered-page profiles, Graph, temporal, protected actions and publication remain outside this result.
+
+`scripts/check-typed-sdk-related-native.py` uses the original [schema fixture](../../../../packages/python/examples/typed_sdk_related_schema.json). Supply `--generated` from the pinned UMF generator with package `native_sales`, records `sales.order` and `sales.customer`, and projection `{name: "OrderIdentity", record: {module: "sales", element: "order"}, fields: [{module: "sales", element: "id"}]}`. Pass the same schema as `--model`, a fresh `--output`, the pgserver PostgreSQL 18.6 `--pg-bin`, and exact Bun 1.4.2 `--bun-executable`. The harness obtains SQL through the SDK's original capture/render API before native capture; it does not repair bindings or captured SQL.
