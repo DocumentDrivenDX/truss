@@ -6,7 +6,13 @@ BEGIN
  IF historical_revision IS NULL THEN
   SELECT * INTO STRICT relation FROM truss.rel_def WHERE rel_type_id=selected_relationship AND retired_rev IS NULL;
  ELSE
-  SELECT * INTO STRICT relation FROM jsonb_populate_recordset(NULL::truss.rel_def,truss.catalog_all_expected_records(historical_revision)->'rel_def') r WHERE r.rel_type_id=selected_relationship;
+  SELECT r.* INTO relation FROM truss.rel_def r
+   WHERE r.rel_type_id=selected_relationship
+    AND historical_revision=(SELECT rev FROM truss.schema_head WHERE id=1)
+    AND NOT EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>historical_revision);
+  IF NOT FOUND THEN
+   SELECT * INTO STRICT relation FROM jsonb_populate_recordset(NULL::truss.rel_def,truss.catalog_all_expected_records(historical_revision)->'rel_def') r WHERE r.rel_type_id=selected_relationship;
+  END IF;
  END IF;
  SELECT * INTO STRICT archive FROM truss.schema_doc WHERE rev=relation.definition_rev AND ord=relation.definition_doc_ord AND doc_id=relation.definition_document_id;
  SELECT value,ordinality::int-1 INTO STRICT module_json,mi FROM json_array_elements(archive.document::json->'modules') WITH ORDINALITY m WHERE value->>'id'=relation.module;
