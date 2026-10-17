@@ -1784,6 +1784,12 @@ BEGIN
    ON r.rel_type_id=(p.plan->'afterEdges'->(p.plan->>'primary')->'identity'->>'typeId')::int
   WHERE p.attempt_id=(opened->>'attemptId')::uuid AND r.lifecycle<>'independent') THEN
   PERFORM truss.runtime_owned_edge_create_batch(attempt_id);
+ ELSIF parsed_input->'mutationProfile'=truss.runtime_owned_profile() AND NOT EXISTS(
+  SELECT 1 FROM jsonb_array_elements(parsed_input->'operations') o
+  WHERE o.value->>'operation' IS DISTINCT FROM 'update_object'
+   OR o.value->'target'->>'state' IS DISTINCT FROM 'stored' OR o.value ? 'ownershipChange')
+  AND (SELECT count(DISTINCT plan->>'primary') FROM truss.runtime_owned_operation p WHERE p.attempt_id=(opened->>'attemptId')::uuid)=operation_count THEN
+  PERFORM truss.runtime_owned_update_batch(attempt_id);
  ELSE
  FOR step_index IN 0..operation_count-1 LOOP
   operation_index:=step_index;

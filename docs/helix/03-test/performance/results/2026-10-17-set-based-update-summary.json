@@ -1,0 +1,49 @@
+{
+  "scope": "Single serial macOS ARM64/Python3.11/PostgreSQL18.6 comparison; original small model, 1000 objects and edges, one 1000-update repetition, one warmup/read/single-write sample and full readback. Original hosted full workload is still required.",
+  "beforePackageCommit": "29061c466c0f06e2369e1d18767189ef9a951955",
+  "nativeRuntime": "truss-catalog-runtime/0.71-candidate",
+  "newRuntimeManifestSha256": "c413953fc816890129bc54c4231b1b40c9bcf5a248a754657edc8ca1db0b566c",
+  "functionalPassed": {
+    "before": true,
+    "after": true
+  },
+  "externalJavaScriptForbidden": true,
+  "comparison": {
+    "bulk_update_1000": {
+      "before": 5468.20025,
+      "after": 4482.722333,
+      "speedup": 1.2198391610707868
+    },
+    "bulk_update_commit_1000": {
+      "before": 2444.765458,
+      "after": 2471.237375,
+      "speedup": 0.9892879910008644
+    },
+    "bulk_update_end_to_end_1000": {
+      "before": 7913.729666,
+      "after": 6954.670542,
+      "speedup": 1.1379014459719032
+    }
+  },
+  "nativeTests": {
+    "passed": 64,
+    "log": "2026-10-17-set-based-update-native-tests.log",
+    "sha256": "38a78badf5e9695bebf3f3e227c7389ca6c21fd7d9493bef813bae30b3b6c09c"
+  },
+  "statementCounts": {
+    "changedObjects": 1000,
+    "objectUpdateStatements": 1,
+    "journalInsertStatements": 1,
+    "journalRows": 2000,
+    "transitionInsertStatements": 1,
+    "updatedKeyMembershipInsertStatements": 1,
+    "newMemberships": 1000,
+    "totalReservationsAfterUpdate": 3000
+  },
+  "scopeRestrictions": "Distinct stored-object targets without ownershipChange use batch execution, including key changes after complete ordered preflight. Duplicate targets, aliases, mixed groups and ownership changes keep ordered execution. Original row, journal and finish/commit validators remain; no deadline or storage DDL changes.",
+  "previousHostedFailures": {
+    "run": 39076406987,
+    "macos": "1000 creates and edges passed; subsequent 1000-update group timed out at final edge identity resolution",
+    "linux": "1024 creates passed; subsequent 1024-update group timed out during ordered per-object execution"
+  }
+}

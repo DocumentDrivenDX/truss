@@ -15,6 +15,27 @@ ddx:
 
 # Practical functionality and performance
 
+## 2026-10-17: set-based stored-object updates
+
+Distinct stored-object updates without ownership changes now use one object
+UPDATE and batched key, journal and transition writes. The complete ordered
+key preflight remains, including forbid-reuse simulation and original bucket
+locks. Unchanged memberships keep their original bytes and old reservations
+survive. Duplicate targets, aliases, mixed groups and ownership changes keep
+ordered execution. Final stored identities use the same exact reference check
+as the identity helper directly in SQL; genuine creates retain its sealed-slot checks.
+
+The [serial local comparison and native qualification](results/2026-10-17-set-based-update-summary.json)
+measured a 1,000-update call at 5,468 → 4,483 ms; commit was 2,445 → 2,471 ms.
+This is one shortened diagnostic repetition on the original 1,000-object/edge
+model, with complete readback and external JavaScript launches forbidden.
+All 64 affected native tests passed, including key-changing batch statement
+counts, old reservation retention, no-op preservation, late rollback, replay,
+corrupt slots/journals, authority revocation and protected activation. The
+original full hosted Linux/macOS gates remain required; their preceding run
+passed creates but exposed the update bottlenecks recorded in the comparison.
+Native71 remains unreleased and both deadlines remain unchanged.
+
 ## 2026-10-17: set-based independent creates
 
 Independent rootless object creates and independent stored-endpoint edge creates

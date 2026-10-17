@@ -176,13 +176,15 @@ BEGIN
  -- checked state; genuine create identities still check the original result and
  -- creation-index plan independently inside runtime_owned_identity.
  WITH resolved AS MATERIALIZED (
-  SELECT n.reference,n.ordinal,truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,n.reference,'object',
-   jsonb_build_object('catalogRevision',last_plan->'catalogRevision','afterNodes',jsonb_build_object(n.reference,n.state)),attempt) identity
+  SELECT n.reference,n.ordinal,CASE WHEN n.reference='stored:'||(n.state->'identity'->>'typeId')||':'||(n.state->'identity'->>'id')
+   THEN n.state->'identity' ELSE truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,n.reference,'object',
+   jsonb_build_object('catalogRevision',last_plan->'catalogRevision','afterNodes',jsonb_build_object(n.reference,n.state)),attempt) END identity
   FROM jsonb_each(last_plan->'afterNodes') WITH ORDINALITY n(reference,state,ordinal))
  SELECT coalesce(jsonb_object_agg(resolved.reference,resolved.identity ORDER BY resolved.ordinal),'{}'::jsonb) INTO final_nodes FROM resolved;
  WITH resolved AS MATERIALIZED (
-  SELECT e.reference,e.ordinal,truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,e.reference,'edge',
-   jsonb_build_object('catalogRevision',last_plan->'catalogRevision','afterEdges',jsonb_build_object(e.reference,e.state)),attempt) identity
+  SELECT e.reference,e.ordinal,CASE WHEN e.reference='stored:'||(e.state->'identity'->>'typeId')||':'||(e.state->'identity'->>'id')
+   THEN e.state->'identity' ELSE truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,e.reference,'edge',
+   jsonb_build_object('catalogRevision',last_plan->'catalogRevision','afterEdges',jsonb_build_object(e.reference,e.state)),attempt) END identity
   FROM jsonb_each(last_plan->'afterEdges') WITH ORDINALITY e(reference,state,ordinal))
  SELECT coalesce(jsonb_object_agg(resolved.reference,resolved.identity ORDER BY resolved.ordinal),'{}'::jsonb) INTO final_edges FROM resolved;
  SELECT coalesce(jsonb_object_agg(jsonb_build_array(e.value->>'typeId',e.value->>'id')::text,true),'{}'::jsonb)

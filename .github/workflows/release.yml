@@ -386,7 +386,7 @@ jobs:
           for path in sorted(root.glob('*.json')):
               if path.name=='collection-status.json':continue
               record=json.loads(path.read_bytes())
-              records.append({'file':path.name,'phase':record['phase'],'status':record['status'],'reason':record.get('reason')})
+              records.append({'file':path.name,'phase':record.get('phase','cumulative-after-close'),'status':record['status'],'reason':record.get('reason')})
           expected={'create','following','update','replay','late-fault'}
           status={'source':os.environ['GITHUB_SHA'],'platform':platform.system().lower()+'-'+platform.machine(),
               'scope':'Instrumented phase observations, not clean timing qualification; cancelled calls and later COMMIT work may be absent',
