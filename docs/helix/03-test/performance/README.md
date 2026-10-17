@@ -1061,3 +1061,35 @@ apply was 5,969 ms; edge apply 8,609 ms; five UPDATE applies had median 7,106 ms
 and maximum 8,054 ms. All 1,000 business-key rows were maintained; cleanup
 completed. This is a bounded correctness increment, not an isolated speedup
 or hosted qualification. Both hosted original workloads remain release gates.
+
+
+### Reuse the primary reference and exact edge member
+
+Gate [38998774190](https://github.com/DocumentDrivenDX/truss/actions/runs/38998774190)
+on b76a983c passed the complete Linux native gate, including original capacity
+and full small workload. macOS passed capacity (three tests, 41.110s) but its
+1,000-edge apply cancelled with `57014` inside `runtime_owned_step`; later small
+reads/updates were not reached. Stress and publishing stayed skipped.
+
+The next bounded change extracts the immutable primary reference once per owned
+step. Edge identity discovery passes the exact selected member in a narrow plan,
+following existing final validation, while retaining the full plan for subsequent
+image/context checks. Every candidate is still resolved and counted; original
+creation-result proofs, current authority, history and result-slot census remain
+unchanged. No helper, signature, table or deadline changed. Astra Ultra cleared
+the plan and source; primary-reference inverse substitution is exact.
+
+Seven capacity/overflow/late-fault, owned and parallel-edge controls pass in
+109.971s. The [compressed original small report](results/edge-member-projection-small-20261017.json.gz)
+passes in 165.132s with counters off, unchanged 10s SQL/30s operation limits,
+1,000 nodes/edges/reads, 200 committed writes and all five changed 1,000-object
+UPDATE groups with commits and persisted readbacks. CREATE apply was 6,819ms,
+edge apply 8,247ms; five UPDATE applies had median 6,662ms and maximum 6,821ms.
+All 1,000 business-key rows were maintained; cleanup completed. These observations
+do not establish an isolated speedup or hosted qualification.
+
+The installed wheel has 509 source-matching payloads and SHA256
+`36d61bb9362d1cb22f462eb31bab812d351c6f7374c5b3351d0f70e8d144fb3a`.
+The report records dirty candidate source parent 4202cbed; its raw SHA256 is
+`916c6772651f4f887b46403b566afd12046f62ef4ccceb9535e6c9e76a2fdd3f`.
+Both hosted original workloads remain release prerequisites.

@@ -709,7 +709,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_endpoint_at(uuid,int,text,text,jsonb,
 CREATE FUNCTION truss.runtime_owned_edge_transition_validate_qualified(selected_transition bigint,authorize_read boolean,qualified_actor oid,prepared_input jsonb DEFAULT NULL,source_bytes bytea DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE transition truss.runtime_edge_transition%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
- plan jsonb;reference text;candidate text;identity jsonb;prior jsonb;desired jsonb;expected_context jsonb;
+ plan jsonb;reference text;candidate text;candidate_state jsonb;catalog_revision jsonb;identity jsonb;prior jsonb;desired jsonb;expected_context jsonb;
  before_context jsonb;after_context jsonb;context jsonb;previous_image jsonb;has_previous boolean;
  expected_mode text;original_mode text;expected_version bigint;journal jsonb;event jsonb;matches int:=0;current_actor oid;
 BEGIN
@@ -731,8 +731,10 @@ BEGIN
   OR (NOT authorize_read AND (attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor)) THEN
   RAISE EXCEPTION 'original completed edge operation progress required' USING ERRCODE='55000';END IF;
  plan:=truss.runtime_owned_plan(attempt.id,transition.operation_index);
- FOR candidate IN SELECT key FROM jsonb_each(plan->'afterEdges') LOOP
-  identity:=truss.runtime_owned_identity(attempt.id,transition.operation_index,candidate,'edge',plan,attempt);
+ catalog_revision:=plan->'catalogRevision';
+ FOR candidate,candidate_state IN SELECT key,value FROM jsonb_each(plan->'afterEdges') LOOP
+  identity:=truss.runtime_owned_identity(attempt.id,transition.operation_index,candidate,'edge',
+   jsonb_build_object('catalogRevision',catalog_revision,'afterEdges',jsonb_build_object(candidate,candidate_state)),attempt);
   IF identity->>'id'=transition.edge_id::text AND identity->>'typeId'=transition.rel_type_id::text THEN
    reference:=candidate;matches:=matches+1;END IF;
  END LOOP;
@@ -910,7 +912,7 @@ CREATE FUNCTION truss.runtime_owned_step(selected_attempt uuid,selected_index in
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 <<owned_step_body>>
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;plan jsonb;before_edges jsonb;before_nodes jsonb;mode text;entry record;prior jsonb;effect_mode text;
- metadata jsonb;effect jsonb;primary_result jsonb;events jsonb:='[]';deleted jsonb:='[]';result jsonb;selected_transition bigint;current_actor oid;stored_result jsonb;progress record;closing_actor oid;
+ primary_reference text;metadata jsonb;effect jsonb;primary_result jsonb;events jsonb:='[]';deleted jsonb:='[]';result jsonb;selected_transition bigint;current_actor oid;stored_result jsonb;progress record;closing_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
  current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
@@ -921,7 +923,7 @@ BEGIN
   RAISE EXCEPTION 'current ordered owned operation required' USING ERRCODE='55000';END IF;
  IF prepared_input IS NOT NULL AND attempt.input_bytes IS DISTINCT FROM prepared_original THEN
   RAISE EXCEPTION 'original owned step input required' USING ERRCODE='55000';END IF;
- plan:=truss.runtime_owned_plan(selected_attempt,selected_index);mode:=plan->'operation'->>'operation';
+ plan:=truss.runtime_owned_plan(selected_attempt,selected_index);mode:=plan->'operation'->>'operation';primary_reference:=plan->>'primary';
  IF mode NOT IN ('create_edge','update_edge','delete_edge','update_object','delete_object') THEN
   RAISE EXCEPTION 'selected original owned operation required' USING ERRCODE='55000';END IF;
  -- Cascade edges precede every endpoint deletion. No child effect advances the
@@ -930,24 +932,24 @@ BEGIN
  -- complete graph even when only one member changes.
  before_edges:=plan->'beforeEdges';
  FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterEdges') e WHERE e.value IS DISTINCT FROM before_edges->e.key
-  OR e.key=plan->>'primary' AND mode='update_edge' ORDER BY key COLLATE "C" LOOP
+  OR e.key=primary_reference AND mode='update_edge' ORDER BY key COLLATE "C" LOOP
   prior:=before_edges->entry.key;
   IF prior->'deleted'='true'::jsonb THEN CONTINUE;END IF;
   effect_mode:=CASE WHEN prior IS NULL THEN 'create_edge' WHEN entry.value->'deleted'='true'::jsonb THEN 'delete_edge' ELSE 'update_edge' END;
   metadata:=truss.runtime_owned_edge_metadata(selected_attempt,selected_index,entry.key,current_actor);
   effect:=convert_from(truss.runtime_edge_effect(selected_attempt,selected_index,metadata,effect_mode,false,current_actor,prepared_input,prepared_original),'UTF8')::jsonb;
   events:=events||(effect->'events');deleted:=deleted||coalesce(effect->'deleted','[]'::jsonb);
-  IF entry.key=plan->>'primary' THEN primary_result:=effect;END IF;
+  IF entry.key=primary_reference THEN primary_result:=effect;END IF;
  END LOOP;
  -- Aggregate-root FKs are immediate: remove nonroots before their root.
  before_nodes:=plan->'beforeNodes';
  FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterNodes') n WHERE
-  before_nodes ? n.key AND (n.value IS DISTINCT FROM before_nodes->n.key OR n.key=plan->>'primary' AND mode='update_object')
+  before_nodes ? n.key AND (n.value IS DISTINCT FROM before_nodes->n.key OR n.key=primary_reference AND mode='update_object')
   ORDER BY CASE WHEN before_nodes->n.key->'root'='null'::jsonb THEN 1 ELSE 0 END,key COLLATE "C" LOOP
   IF before_nodes->entry.key->'deleted'='true'::jsonb THEN CONTINUE;END IF;
   effect:=truss.runtime_owned_object_effect(selected_attempt,selected_index,entry.key,prepared_input,current_actor);
   events:=events||(effect->'events');deleted:=deleted||coalesce(effect->'deleted','[]'::jsonb);
-  IF entry.key=plan->>'primary' THEN primary_result:=effect;END IF;
+  IF entry.key=primary_reference THEN primary_result:=effect;END IF;
  END LOOP;
  IF primary_result IS NULL OR primary_result->>'operation' IS DISTINCT FROM mode THEN RAISE EXCEPTION 'one original primary result required' USING ERRCODE='55000';END IF;
  result:=jsonb_set(primary_result,'{events}',events);
