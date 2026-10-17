@@ -12,6 +12,7 @@ from psycopg import sql
 from ._current_query_sources import capture_current_query_sources_with_cursor
 from ._current_query_pipe import _envelope
 from ._security_catalog_subject_installation import _text_rows
+from ._security_catalog_assessment import SOURCE_TABLES
 from ._installation_privileges import installation_administrator_with_cursor
 from ._umf_key_tuples import KeyTupleRequest, encode_string_key_tuples
 from .catalog_runtime import _pin_cursor
@@ -79,10 +80,10 @@ BEGIN
   RAISE EXCEPTION 'original ordinary RC/RW Subject session required' USING ERRCODE='55000'; END IF;
  LOCK TABLE ONLY truss.source_epoch_current,truss.source_epoch_registry IN SHARE MODE NOWAIT;
  LOCK TABLE ONLY truss.installation_marker IN SHARE MODE NOWAIT;
- LOCK TABLE ONLY truss.catalog_runtime_installation,truss.schema_head,truss.type_def,truss.prop_def,truss.key_def IN SHARE MODE NOWAIT;
+ LOCK TABLE ONLY {catalog_homes} IN SHARE MODE NOWAIT;
  LOCK TABLE ONLY truss.installation_archive IN SHARE MODE NOWAIT;
  LOCK TABLE ONLY truss.catalog_subject_map IN SHARE MODE NOWAIT;
- LOCK TABLE ONLY truss.object IN SHARE MODE NOWAIT;
+ LOCK TABLE ONLY truss.module_access,truss.object,truss.object_key_bucket,truss.edge IN SHARE MODE NOWAIT;
  PERFORM truss.runtime_person(false);
  RETURN QUERY SELECT
  (SELECT d.oid::text FROM pg_catalog.pg_database d WHERE d.datname=pg_catalog.current_database()),
@@ -116,6 +117,7 @@ END;
 ''').format(receipt=sql.Literal(captured.source_receipt),installation=sql.Literal(captured.installation_id),
             revision=sql.Literal(captured.accepted_revision),inventory=sql.Literal(captured.inventory_digest),source_profile=sql.Literal(captured.source_profile),
             type_id=sql.Literal(type_id),property_id=sql.Literal(property_id),property_text=sql.Literal(str(property_id)),
+            catalog_homes=sql.SQL(',').join(sql.Identifier('truss',name) for name in SOURCE_TABLES),
             document_id=sql.Literal(subject['documentId']),module_id=sql.Literal(subject['moduleId']),record_id=sql.Literal(subject['elementId']),
             field_document=sql.Literal(field['definition_document_id']),field_module=sql.Literal(field['declaration_module']),field_id=sql.Literal(field['element']),key_id=sql.Literal(key_id),document_sha=sql.Literal(sha256(document).hexdigest()))
     return body.as_string(cursor)

@@ -1,0 +1,34 @@
+{
+  "checkedAtUtc": "2026-10-17T02:36:49.879594+00:00",
+  "profiles": {
+    "aidev-cus": {
+      "authenticated": true,
+      "principalId": "3755468182769617"
+    },
+    "scope-test": {
+      "authenticated": true,
+      "principalId": "3755468182769617"
+    }
+  },
+  "distinctAuthenticatedCallers": false,
+  "warehouses": [
+    {
+      "id": "2439e1f2e37ac563",
+      "name": "data-gateway",
+      "state": "RUNNING",
+      "eligibleForThisTest": false,
+      "reason": "shared warehouse excluded"
+    },
+    {
+      "id": "d4b8eb5b4d6e34b8",
+      "name": "umf-typed-sdk-qualification-20261016",
+      "state": "STOPPED",
+      "eligibleForThisTest": "awaiting approved reuse"
+    }
+  ],
+  "approvedCatalog": "client_dev",
+  "SQLExecuted": false,
+  "resourcesCreated": [],
+  "resourcesToClean": [],
+  "nextDependency": "approved distinct caller connection and dedicated warehouse reuse"
+}
