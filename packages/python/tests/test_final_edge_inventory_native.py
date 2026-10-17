@@ -1,7 +1,7 @@
 """Final edge membership still refuses an actual edge absent from the plan."""
-from truss import Error
-from truss.contracts import MapValue
-from truss.groups import StoredObjectReference
+from truss import Error,EdgeFound
+from truss.contracts import MapValue,TextValue
+from truss.groups import StoredObjectReference,UpdateEdge,AuthoredValue,GroupSuccess
 import test_edge_mutations_native as edge_tests
 
 
@@ -15,6 +15,29 @@ class FinalEdgeInventoryTests(edge_tests.EdgeMutationTests):
             relation['sourceMultiplicity']['max']=2
             relation['targetMultiplicity']['max']=2
         return super().ready(allow_parallel)
+
+    def test_two_edge_attempts_in_one_transaction_commit_and_read_back(self):
+        connection,host,assembly,tx,a,b,pin=self.initialized()
+        first,_,_=self.run_group(assembly,tx,
+            (self.link(pin,StoredObjectReference(identity=a),StoredObjectReference(identity=b)),),'first-edge')
+        self.assertIsInstance(first,GroupSuccess)
+        edge=first.response.semantic.results[0].identity
+        second,_,_=self.run_group(assembly,tx,(UpdateEdge(
+            target=StoredObjectReference(identity=edge),
+            set=(AuthoredValue(name='note',value=TextValue(kind='string',text='changed')),),
+            unset=(),expected_version='1'),),'second-edge')
+        self.assertIsInstance(second,GroupSuccess)
+        self.assertEqual(second.response.semantic.results[0].version,'2')
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute(
+            'SELECT count(*) FROM truss.runtime_edge_transition WHERE edge_id=%s',
+            (int(edge.id),)).fetchone(),(2,))
+        connection,host,assembly,tx=self.consumer()
+        found=assembly.get_edge_in_transaction(tx,document_id='adoc',module_id='m',
+            relationship_id='A-B',edge_id=int(edge.id)).value
+        self.assertIsInstance(found,EdgeFound)
+        self.assertEqual(dict(found.edge.retained),{'note':'changed'})
+        host.detach();connection.rollback()
 
     def test_unplanned_parallel_incident_edge_refuses_and_rolls_back(self):
         connection,host,assembly,tx,a,b,pin=self.initialized()

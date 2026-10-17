@@ -894,7 +894,21 @@ BEGIN
   RAISE EXCEPTION 'historical attempts have no synthetic creation transitions' USING ERRCODE='55000';END IF;
  PERFORM truss.runtime_graph_validate(true);
  PERFORM truss.runtime_edge_authorize(attempt_id);
- FOR owner IN SELECT DISTINCT edge_id,rel_type_id FROM truss.runtime_edge_transition WHERE runtime_edge_transition.attempt_id=object_group_finish.attempt_id LOOP PERFORM truss.runtime_edge_validate(owner.edge_id,owner.rel_type_id);END LOOP;
+ -- Marker refresh above can fire triggers. Recheck mutable progress before
+ -- reusing the already closed immutable owned result-slot census.
+ IF input->'mutationProfile'=truss.runtime_owned_profile() AND NOT EXISTS(
+  SELECT 1 FROM truss.runtime_object_attempt a WHERE a.id=attempt.id
+   AND a.actor_oid=attempt.actor_oid AND a.writer_xid=attempt.writer_xid
+   AND a.next_index=attempt.next_index AND NOT a.complete
+   AND a.results='[]'::jsonb AND a.aliases='[]'::jsonb
+   AND (SELECT count(*) FROM truss.runtime_owned_operation p
+    WHERE p.attempt_id=a.id AND p.result IS NOT NULL)=a.next_index) THEN
+  RAISE EXCEPTION 'original unfinished owned settlement progress required' USING ERRCODE='55000';END IF;
+ FOR owner IN SELECT DISTINCT edge_id,rel_type_id FROM truss.runtime_edge_transition WHERE runtime_edge_transition.attempt_id=object_group_finish.attempt_id LOOP
+  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
+   PERFORM truss.runtime_owned_edge_validate_in_input(owner.edge_id,owner.rel_type_id,input,attempt.input_bytes,attempt);
+  ELSE PERFORM truss.runtime_edge_validate(owner.edge_id,owner.rel_type_id);END IF;
+ END LOOP;
  semantic:=jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision',(SELECT rev::text FROM truss.schema_head WHERE id=1),
   'layoutProfile',input->'layoutProfile','mutationProfile',input->'mutationProfile','results',attempt.results,'aliases',attempt.aliases);
  bytes:=convert_to(semantic::text,'UTF8');IF octet_length(bytes)>16777216 THEN RAISE EXCEPTION 'bounded complete results required' USING ERRCODE='54000';END IF;
@@ -1302,9 +1316,9 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_edge_step(uuid,int,jsonb) FROM PUBLIC;
 
 
-CREATE FUNCTION truss.runtime_edge_validate(selected_id bigint,selected_type int) RETURNS void
+CREATE FUNCTION truss.runtime_owned_edge_validate_in_input(selected_id bigint,selected_type int,prepared_input jsonb,source_bytes bytea,prepared_attempt truss.runtime_object_attempt) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE latest truss.runtime_edge_transition%ROWTYPE;actual jsonb;entry jsonb;selected_transition bigint;current_actor oid;owner record;
+DECLARE latest truss.runtime_edge_transition%ROWTYPE;actual jsonb;entry jsonb;selected_transition bigint;transition_attempt_id uuid;current_actor oid;owner record;
 BEGIN
  SELECT * INTO latest FROM truss.runtime_edge_transition WHERE edge_id=selected_id AND rel_type_id=selected_type AND writer_xid=pg_current_xact_id() ORDER BY transition_id DESC LIMIT 1;
  IF NOT FOUND THEN RAISE EXCEPTION 'registered current edge mutation required' USING ERRCODE='55000';END IF;
@@ -1314,10 +1328,14 @@ BEGIN
  -- Row/transition events remain queued after an early attempt-constraint flush.
  SELECT document_id,module INTO STRICT owner FROM truss.rel_def WHERE rel_type_id=selected_type;
  PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module,current_actor);
- FOR selected_transition IN SELECT t.transition_id FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
+ FOR selected_transition,transition_attempt_id IN SELECT t.transition_id,t.attempt_id FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
   WHERE t.edge_id=selected_id AND t.rel_type_id=selected_type AND t.writer_xid=pg_current_xact_id()
    AND a.context->'mutationProfile'=truss.runtime_owned_profile() LOOP
-  PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,false,current_actor);
+  IF prepared_attempt.id IS NOT NULL AND transition_attempt_id=prepared_attempt.id THEN
+   PERFORM truss.runtime_owned_edge_transition_validate_qualified(selected_transition,false,current_actor,prepared_input,source_bytes,prepared_attempt);
+  ELSE
+   PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,false,current_actor);
+  END IF;
  END LOOP;
  SELECT to_jsonb(e) INTO actual FROM truss.edge e WHERE id=selected_id AND rel_type_id=selected_type;
  IF actual IS DISTINCT FROM latest.after_edge THEN RAISE EXCEPTION 'exact final edge required' USING ERRCODE='55000';END IF;
@@ -1325,6 +1343,14 @@ BEGIN
   SELECT to_jsonb(j) INTO actual FROM truss.journal j WHERE j.at=(entry->>'at')::timestamptz AND j.seq=(entry->>'seq')::bigint;
   IF actual IS DISTINCT FROM entry THEN RAISE EXCEPTION 'exact edge journal required' USING ERRCODE='55000';END IF;
  END LOOP;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_edge_validate_in_input(bigint,int,jsonb,bytea,truss.runtime_object_attempt) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_edge_validate(selected_id bigint,selected_type int) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ PERFORM truss.runtime_owned_edge_validate_in_input(selected_id,selected_type,NULL,NULL,NULL);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_edge_validate(bigint,int) FROM PUBLIC;

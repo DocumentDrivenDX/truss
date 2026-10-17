@@ -1145,3 +1145,39 @@ manifest SHA256 is `7c74f01d54684f76dd68b5da537f2a2dc71a08812db00ae05b859aaaf4e8
 The report records dirty candidate source parent 7e941507; raw report SHA256 is
 `85072405d3d7be798c66686f045071b656f73b990d00daf3952a2bab5db58749`.
 Both hosted original workloads remain release prerequisites.
+
+### Reuse closed edge settlement context within the current attempt
+
+[Hosted run 39002622579](https://github.com/DocumentDrivenDX/truss/actions/runs/39002622579)
+failed both original-workload jobs. Linux timed out during CREATE 1,024 at the
+final operation-owner/type-reader check; full small was not reached. macOS
+passed original capacity, then timed out during 1,000-edge finalization. These
+are separate blockers; the edge change below does not qualify Linux CREATE.
+
+Edge finalization now passes the already checked current-attempt input and
+closed result-slot context to the existing qualified transition validator.
+This avoids repeated attempt loads and full result-slot counts for each edge.
+A fresh progress and completed-slot count follows trigger-capable marker writes.
+Each edge retains its fresh actor and module-writer check, physical edge and
+journal correspondence checks. Earlier attempts in the same transaction use
+the existing standalone validation path. The old private entry point and its
+attributes remain; the new helper is owner-only. Routine inventories are 227.
+The single protected call and 10s SQL/30s operation limits remain unchanged.
+
+Four focused final-wheel controls pass in 69.638s: same-transaction edge groups
+with commit/readback, future-slot and unplanned-edge refusals, and populated
+upgrade from the checksum-verified published v0.0.37 wheel. The final wheel has
+509 source-matching payloads, SHA256
+`99f169aea5347676fdbb55994c4a282970f12ae5f9b232a3e9ed69a41142a8ce`;
+manifest SHA256 is `cdf56b3682c32c270253adc3ace51d3ef851d6d1847dfc6dc7b2d1193aa703df`.
+
+The [final full original small report](results/edge-context-small-20261017.json.gz)
+passes in 177.460s with counters off: 1,000 nodes, 1,000 edges, 1,000 reads,
+200 committed writes and all five changed 1,000-object UPDATE groups with
+commits and persisted readbacks. CREATE apply was 5,872ms, edge apply 7,375ms,
+and the five UPDATE applies ranged from 6,347ms to 6,822ms. Cleanup completed.
+Raw report SHA256 is
+`bca3ba1a333b66a01d7255ae34b34ecb329b2d8449947766e299d4cca2d32037`;
+it records dirty candidate source parent 2675a77a. Astra Ultra cleared the source
+and its freshness guard. This is local functionality evidence, not an isolated
+speedup or hosted qualification; both hosted original workloads remain required.
