@@ -1,0 +1,19 @@
+{
+  "trussBase": "2299de372653a34fddfc2628e263026aa7ae2902",
+  "files": {
+    "packages/python/src/truss/_current_query_subjects.py": {
+      "sha256": "533466484e0c11fb77b78b49ff5e0d5520cb24923cfaea0eb21ce83699adf8ca",
+      "bytes": 18397
+    },
+    "scripts/check-module-boundaries.py": {
+      "sha256": "f0c15adb4b6282e3fbff330cc1d7c349d07ffa395b8ddbb3808b356426d7a3ce",
+      "bytes": 41969
+    },
+    "packages/python/tests/test_current_query_subject_cut_native.py": {
+      "sha256": "79438b074896455d6ead1302cdc189f120dd514c42eae6df0cf4f18215517a4e",
+      "bytes": 5595
+    }
+  },
+  "nativeExecution": "not yet run",
+  "scope": "ordinary Subject-held accepted-source/data cut only; no graph activation or role/DDL current-authority qualification"
+}

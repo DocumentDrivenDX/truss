@@ -1,0 +1,119 @@
+{
+  "baseline": "2299de372653a34fddfc2628e263026aa7ae2902",
+  "source": {
+    "packages/python/src/truss/_current_query_subjects.py": {
+      "sha256": "533466484e0c11fb77b78b49ff5e0d5520cb24923cfaea0eb21ce83699adf8ca",
+      "bytes": 18397
+    },
+    "scripts/check-module-boundaries.py": {
+      "sha256": "f0c15adb4b6282e3fbff330cc1d7c349d07ffa395b8ddbb3808b356426d7a3ce",
+      "bytes": 41969
+    },
+    "packages/python/tests/test_current_query_subject_cut_native.py": {
+      "sha256": "79438b074896455d6ead1302cdc189f120dd514c42eae6df0cf4f18215517a4e",
+      "bytes": 5595
+    }
+  },
+  "evidence": {
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-boundaries-20261016.log.gz": {
+      "sha256": "435c2305b95dfe7dd00fae8d7f47ff5ce15b1fd68e7cb9be6ff0708942abd96b",
+      "bytes": 100
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-native-20261016.json": {
+      "sha256": "54c69a6ef22b64490a606b6f47f59f6756e39423e2eabeb431e9a6580adec90d",
+      "bytes": 1687
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-native-20261016.log.gz": {
+      "sha256": "ad81f28d26e423893502b565e2b847117ed72ef308d48b898aaf0b38d54ac43f",
+      "bytes": 162
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/truss_toolkit-0.0.38.dev0-py3-none-any.whl": {
+      "sha256": "eae03e2c3fe26737892d70eb0de9af4a45a93f97c667b89790395c6ce34c2660",
+      "bytes": 2735065
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-wheel-verification-20261016.json": {
+      "sha256": "8d24fa1599a33a914658a0d464171ad69b33288020aea604c97842248e7af0be",
+      "bytes": 371
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-post-rebase-wheel-20261016.json": {
+      "sha256": "d9c4a0b07ec8b1e0ab7a6e832b9c0c6a926936a54f97514df108c78e3421cd2e",
+      "bytes": 414
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-post-rebase-native-20261016.log.gz": {
+      "sha256": "956c900535c6317ed1d3d001251e57b963a1cd9a09c8ebd062f2977abdb3869d",
+      "bytes": 162
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/bun142-dependency-receipt.json": {
+      "sha256": "0b9710a2c16127a38ae1354745f4ddb21de1192058c79b77abbc806e21e74962",
+      "bytes": 299
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/README.md": {
+      "sha256": "465efe424e0bb33355d6b16c725e9be2dd271cc13e93a3e2c288e5e3868a00f9",
+      "bytes": 3032
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-wheel-build-r2-20261016.log.gz": {
+      "sha256": "f5525fea6d30dc7bbfeb15244fcf6be35090279e382b9ebfd4c15334407b1da7",
+      "bytes": 11519
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-post-rebase-build-20261016.log.gz": {
+      "sha256": "c307dd741118680e15db525c9e6c8fc5afbb8b914860273026e0b499db84f0c4",
+      "bytes": 11532
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/source-review.json": {
+      "sha256": "cfd1a0d68fb6a1d8d997b05219026e01d5409be590d28da0ef76c29ba464a017",
+      "bytes": 1403
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-boundary-controls-20261016.log.gz": {
+      "sha256": "4422128bc74051f292b78d258414d002c210ec2d66bd27d2e65884147fa4d069",
+      "bytes": 10758
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-rebase-20261016.json": {
+      "sha256": "a9b8a29a233ab92735efd389c8077dd908e21f578863cfa5c3e3ad2202563b36",
+      "bytes": 1437
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-post-rebase-native-20261016.json": {
+      "sha256": "54c69a6ef22b64490a606b6f47f59f6756e39423e2eabeb431e9a6580adec90d",
+      "bytes": 1687
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-databricks-readiness-20261016.json": {
+      "sha256": "a19e2082905e0599cf821c30e51ede8fa0ae0c55d55584e94615d35f3b18ba16",
+      "bytes": 892
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-subject-cut-wheel-build-20261016.log.gz": {
+      "sha256": "df5de9f5910192fee911f9f44da0539d756528e2c8a879cfdcc997d2a03751fd",
+      "bytes": 532
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/weft-b008-native-enforcement-baseline-20261016.json": {
+      "sha256": "bdd349a6a3f855279090382e2a054d54e1d6082fc3ec5ea76d0da5da593bba9a",
+      "bytes": 114
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/changes.diff.gz": {
+      "sha256": "091895ee4648233101eba94ab996c489e50c9669aa1796512b3e3748566e3681",
+      "bytes": 3064
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/pins.json": {
+      "sha256": "3563bbdd0a4a9b830724509421820c9cfc5cb3830977dce61410cd56379abe9b",
+      "bytes": 759
+    },
+    "docs/helix/04-build/evidence/current-query-subject-data-cut-20261016/post-rebase/truss_toolkit-0.0.38.dev0-py3-none-any.whl": {
+      "sha256": "05c8a811a17b84899edf60bc4fa8c0aef9751da67bf2adf40b390666ccc7e665",
+      "bytes": 2735213
+    }
+  },
+  "nativeTest": {
+    "exitCode": 0,
+    "tests": 1,
+    "seconds": 9.766,
+    "standardFixtureCleanup": "completed with test/class result OK"
+  },
+  "nativeGraphActivation": false,
+  "casePromotion": 0,
+  "integrationBaseline": "c9d5693f70aa361c73025922997b32e9a6ea589d",
+  "postRebaseNativeTest": {
+    "exitCode": 0,
+    "tests": 1,
+    "seconds": 5.208,
+    "standardFixtureCleanup": "completed with test/class result OK"
+  },
+  "completedIterationAstraReview": "pending"
+}

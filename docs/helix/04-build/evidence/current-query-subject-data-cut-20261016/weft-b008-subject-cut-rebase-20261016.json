@@ -1,0 +1,35 @@
+{
+  "baseline": "c9d5693f70aa361c73025922997b32e9a6ea589d",
+  "securityCandidate": "8dbd1d85bf271677fb6d5575d614841e2dd48d85",
+  "incomingFilesPreserved": {
+    "docs/helix/03-test/performance/README.md": {
+      "sha256": "a86069af7fdb165fa92e6ba3e687616ab7d901067467e386eba505f1ae346c0b",
+      "bytes": 62953
+    },
+    "docs/helix/03-test/performance/results/forest-output-small-20261016.json": {
+      "sha256": "a3d2de4a4210f604ba8f6f0b40b94f0263dbdd6363f3c355599f5bde38ae1670",
+      "bytes": 7010
+    },
+    "docs/helix/03-test/performance/results/forest-output-small-20261016.log": {
+      "sha256": "2656388da39c9993d2bf2db7c1f53e762fc5d31adac4c62a766e3e22e64c1c43",
+      "bytes": 8578
+    },
+    "packages/postgresql/owned-groups/forest.sql": {
+      "sha256": "b8e5bbb0e970661e3154e8af5aeaa5fafb49c2133fef930f97a93f865cdc0c23",
+      "bytes": 4068
+    },
+    "packages/python/src/truss/_catalog_runtime/manifest.json": {
+      "sha256": "85328dbb67737e8cae9267f767a96733c5fe53586d7612df190de26c706a3ef8",
+      "bytes": 8829
+    },
+    "packages/python/src/truss/_catalog_runtime/owned.sql": {
+      "sha256": "cfdc5cd229315b09669c7e7e295495b82bc87de1732e73c30230912a57b66c2a",
+      "bytes": 159289
+    },
+    "packages/python/tests/test_owned_objects_native.py": {
+      "sha256": "946298ead75f88404aa92b143375f04e6f39714a3967d9ebf474c22bb0fd73bf",
+      "bytes": 17093
+    }
+  },
+  "activeOwnerCheckoutModified": false
+}
