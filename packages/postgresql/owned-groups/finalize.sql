@@ -76,6 +76,9 @@ BEGIN
     history_order:=history_order||jsonb_build_array(history_property.prop_id::text);
     SELECT * INTO STRICT history_pin FROM truss.runtime_definition_in_basis('property',history_property.type_id,history_property.prop_id,history_group.revision,history_basis);
     history_pins:=history_pins||jsonb_build_object(history_property.prop_id::text,history_pin.definition_pin);
+    IF NOT truss.runtime_can_read_qualified(history_property.definition_document_id,history_property.declaration_module,current_actor)
+     OR history_property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable_qualified(history_property.item,current_actor) IS NOT TRUE THEN
+     RAISE EXCEPTION 'current historical property and item readers required' USING ERRCODE='42501';END IF;
    END IF;
   END LOOP;
   history_key:=jsonb_build_array(history_group.revision,history_group.type_id)::text;
@@ -83,6 +86,14 @@ BEGIN
    'typeId',history_group.type_id::text,'revision',history_group.revision::text,'typePin',history_type_pin,
    'propertyOrder',history_order,'propertyPins',history_pins));
  END LOOP;
+ -- The closed independent-create shape has a set-based reconstruction.
+ -- Mixed/owned operations keep the general ordered graph validator.
+ IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(operations) o
+  WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
+   OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb) THEN
+  PERFORM truss.runtime_owned_create_batch_validate(attempt,input,history_dictionary,check_final,current_actor);
+  RETURN;
+ END IF;
  FOR index IN 0..attempt.next_index-1 LOOP
   plan:=truss.runtime_owned_plan(selected_attempt,index);operation:=plan->'operation';
   IF operation IS DISTINCT FROM jsonb_extract_path(operations,index::text)

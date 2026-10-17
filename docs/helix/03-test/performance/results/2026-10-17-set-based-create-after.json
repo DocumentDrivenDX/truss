@@ -1,0 +1,293 @@
+{
+  "runtimePackage": {
+    "mode": "checkout",
+    "path": "/Users/erik/Projects/truss/packages/python/src/truss/__init__.py",
+    "version": null,
+    "manifestPath": "/Users/erik/Projects/truss/packages/python/src/truss/_catalog_runtime/manifest.json"
+  },
+  "runtimeManifestSha256": "1b92787d55d44b6eb7546694e09e785209f6ffc39229834077d4f1e0f0d918d5",
+  "sourceCommit": "ccbc3d6a900ac53e931c2d01e284061add537a0f",
+  "sourceWorkingTreeDirty": true,
+  "machine": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.17",
+  "trussSource": "/Users/erik/Projects/truss",
+  "externalJavaScriptForbidden": true,
+  "externalProcessExecutables": [
+    "file",
+    "git",
+    "initdb",
+    "pg_ctl",
+    "psql",
+    "uname"
+  ],
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "expectedAtomicGroupLimit": 1024,
+  "warmupReads": 20,
+  "seconds": 22.647999582997727,
+  "passed": true,
+  "functionalPassed": true,
+  "performanceQualification": "not_evaluated",
+  "capacityScope": {
+    "targetAtomicOperations": 1024,
+    "configuredExpectedAtomicOperations": 1024,
+    "attemptedAtomicGroupSizes": [
+      1000
+    ],
+    "committedAtomicGroupSizes": [
+      1000
+    ],
+    "qualification": "Only observed attempts and commits; configured limits do not establish actual maximum capacity."
+  },
+  "cases": [
+    {
+      "sample": "small",
+      "status": "passed",
+      "workload": {
+        "id": "small",
+        "types": 1,
+        "fieldsPerType": 4,
+        "shape": "scalar",
+        "nodes": 1000,
+        "edges": 1000,
+        "indexedPropertiesPerType": 1,
+        "distribution": "uniform",
+        "tier": "smoke"
+      },
+      "schemaBytes": 1224,
+      "records": 1,
+      "elements": 5,
+      "actions": 0,
+      "databaseSettings": {
+        "fsync": "on",
+        "full_page_writes": "on",
+        "server_version": "18.6",
+        "shared_buffers": "16384",
+        "synchronous_commit": "on"
+      },
+      "bulkCreateIncludingCommitMs": 3264.799167,
+      "bulkCreateRowsPerSecondIncludingCommit": 306.29755425933064,
+      "createdEdges": 1000,
+      "edgeLoadIncludingCommitMs": 6552.354917,
+      "edgeRowsPerSecondIncludingCommit": 152.6168854812051,
+      "loaded": 1000,
+      "scope": "Committed object/edge load and persisted row/endpoint verification"
+    }
+  ],
+  "summary": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 5797.001083,
+      "failedElapsedMs": [],
+      "p50Ms": 5797.001083,
+      "minMs": 5797.001083,
+      "maxMs": 5797.001083
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 3589.4705,
+      "failedElapsedMs": [],
+      "p50Ms": 3589.4705,
+      "minMs": 3589.4705,
+      "maxMs": 3589.4705
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 2133.002667,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 468.8226674401996,
+      "p50Ms": 2133.002667,
+      "minMs": 2133.002667,
+      "maxMs": 2133.002667
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1131.730417,
+      "failedElapsedMs": [],
+      "p50Ms": 1131.730417,
+      "minMs": 1131.730417,
+      "maxMs": 1131.730417
+    },
+    {
+      "case": "small",
+      "operation": "bulk_edges",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 3604.884208,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 277.40142048967584,
+      "p50Ms": 3604.884208,
+      "minMs": 3604.884208,
+      "maxMs": 3604.884208
+    },
+    {
+      "case": "small",
+      "operation": "bulk_edges_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 2663.088625,
+      "failedElapsedMs": [],
+      "p50Ms": 2663.088625,
+      "minMs": 2663.088625,
+      "maxMs": 2663.088625
+    },
+    {
+      "case": "small",
+      "operation": "install",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1596.700958,
+      "failedElapsedMs": [],
+      "p50Ms": 1596.700958,
+      "minMs": 1596.700958,
+      "maxMs": 1596.700958
+    },
+    {
+      "case": "small",
+      "operation": "prepare",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 972.41275,
+      "failedElapsedMs": [],
+      "p50Ms": 972.41275,
+      "minMs": 972.41275,
+      "maxMs": 972.41275
+    },
+    {
+      "case": "small",
+      "operation": "register",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 137.16375,
+      "failedElapsedMs": [],
+      "p50Ms": 137.16375,
+      "minMs": 137.16375,
+      "maxMs": 137.16375
+    },
+    {
+      "case": "small",
+      "operation": "registrar_catalog_view",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 132.517666,
+      "failedElapsedMs": [],
+      "p50Ms": 132.517666,
+      "minMs": 132.517666,
+      "maxMs": 132.517666
+    },
+    {
+      "case": "small",
+      "operation": "registration_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 8.131458,
+      "failedElapsedMs": [],
+      "p50Ms": 8.131458,
+      "minMs": 8.131458,
+      "maxMs": 8.131458
+    }
+  ],
+  "samples": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "rows": 1,
+      "ms": 5797.001083,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "install",
+      "rows": 1,
+      "ms": 1596.700958,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "prepare",
+      "rows": 1,
+      "ms": 972.41275,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "register",
+      "rows": 1,
+      "ms": 137.16375,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "registrar_catalog_view",
+      "rows": 1,
+      "ms": 132.517666,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "registration_commit",
+      "rows": 1,
+      "ms": 8.131458,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create",
+      "rows": 1000,
+      "ms": 2133.002667,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "bulk_create_commit",
+      "rows": 1000,
+      "ms": 1131.730417,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "bulk_edges",
+      "rows": 1000,
+      "ms": 3604.884208,
+      "status": "ok"
+    },
+    {
+      "case": "small",
+      "operation": "bulk_edges_commit",
+      "rows": 1000,
+      "ms": 2663.088625,
+      "status": "ok"
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "rows": 1,
+      "ms": 3589.4705,
+      "status": "ok"
+    }
+  ],
+  "scope": "Actual public workflows on isolated local PostgreSQL. Connection reopen, not server restart. Cold server/install separate. Only the selected generated cases; indexes are unique business-key properties."
+}

@@ -1,0 +1,546 @@
+{
+  "runtimePackage": {
+    "mode": "checkout",
+    "path": "/Users/erik/Projects/truss/packages/python/src/truss/__init__.py",
+    "version": null,
+    "manifestPath": "/Users/erik/Projects/truss/packages/python/src/truss/_catalog_runtime/manifest.json"
+  },
+  "runtimeManifestSha256": "1b92787d55d44b6eb7546694e09e785209f6ffc39229834077d4f1e0f0d918d5",
+  "sourceCommit": "ccbc3d6a900ac53e931c2d01e284061add537a0f",
+  "sourceWorkingTreeDirty": true,
+  "machine": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.17",
+  "trussSource": "/Users/erik/Projects/truss",
+  "externalJavaScriptForbidden": true,
+  "externalProcessExecutables": [
+    "file",
+    "git",
+    "initdb",
+    "pg_ctl",
+    "psql",
+    "uname"
+  ],
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "expectedAtomicGroupLimit": 1024,
+  "warmupReads": 20,
+  "seconds": 40.11721995900007,
+  "passed": true,
+  "functionalPassed": true,
+  "performanceQualification": "not_evaluated",
+  "capacityScope": {
+    "targetAtomicOperations": 1024,
+    "configuredExpectedAtomicOperations": 1024,
+    "attemptedAtomicGroupSizes": [
+      1000
+    ],
+    "committedAtomicGroupSizes": [
+      1000
+    ],
+    "qualification": "Only observed attempts and commits; configured limits do not establish actual maximum capacity."
+  },
+  "cases": [
+    {
+      "sample": "pizza",
+      "status": "passed",
+      "schemaBytes": 36811,
+      "records": 4,
+      "elements": 17,
+      "actions": 15,
+      "databaseSettings": {
+        "fsync": "on",
+        "full_page_writes": "on",
+        "server_version": "18.6",
+        "shared_buffers": "16384",
+        "synchronous_commit": "on"
+      },
+      "bulkCreateIncludingCommitMs": 4172.84375,
+      "bulkCreateRowsPerSecondIncludingCommit": 239.6447266926781,
+      "loaded": 1000,
+      "scope": "Committed object/edge load and persisted row/endpoint verification"
+    },
+    {
+      "sample": "northwind",
+      "status": "passed",
+      "schemaBytes": 73565,
+      "records": 7,
+      "elements": 35,
+      "actions": 26,
+      "databaseSettings": {
+        "fsync": "on",
+        "full_page_writes": "on",
+        "server_version": "18.6",
+        "shared_buffers": "16384",
+        "synchronous_commit": "on"
+      },
+      "bulkCreateIncludingCommitMs": 6367.028458,
+      "bulkCreateRowsPerSecondIncludingCommit": 157.05913780603993,
+      "loaded": 1000,
+      "scope": "Committed object/edge load and persisted row/endpoint verification"
+    },
+    {
+      "sample": "catalog",
+      "status": "passed",
+      "schemaBytes": 87445,
+      "records": 6,
+      "elements": 37,
+      "actions": 30,
+      "databaseSettings": {
+        "fsync": "on",
+        "full_page_writes": "on",
+        "server_version": "18.6",
+        "shared_buffers": "16384",
+        "synchronous_commit": "on"
+      },
+      "bulkCreateIncludingCommitMs": 6470.603084,
+      "bulkCreateRowsPerSecondIncludingCommit": 154.5450998953593,
+      "loaded": 1000,
+      "scope": "Committed object/edge load and persisted row/endpoint verification"
+    }
+  ],
+  "summary": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 7728.336042,
+      "failedElapsedMs": [],
+      "p50Ms": 7728.336042,
+      "minMs": 7728.336042,
+      "maxMs": 7728.336042
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 6687.045375,
+      "failedElapsedMs": [],
+      "p50Ms": 6687.045375,
+      "minMs": 6687.045375,
+      "maxMs": 6687.045375
+    },
+    {
+      "case": "pizza",
+      "operation": "bulk_create",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 3038.154125,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 329.14722520866184,
+      "p50Ms": 3038.154125,
+      "minMs": 3038.154125,
+      "maxMs": 3038.154125
+    },
+    {
+      "case": "pizza",
+      "operation": "bulk_create_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1134.603875,
+      "failedElapsedMs": [],
+      "p50Ms": 1134.603875,
+      "minMs": 1134.603875,
+      "maxMs": 1134.603875
+    },
+    {
+      "case": "pizza",
+      "operation": "install",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1579.350667,
+      "failedElapsedMs": [],
+      "p50Ms": 1579.350667,
+      "minMs": 1579.350667,
+      "maxMs": 1579.350667
+    },
+    {
+      "case": "pizza",
+      "operation": "prepare",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 639.206583,
+      "failedElapsedMs": [],
+      "p50Ms": 639.206583,
+      "minMs": 639.206583,
+      "maxMs": 639.206583
+    },
+    {
+      "case": "pizza",
+      "operation": "register",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 202.307375,
+      "failedElapsedMs": [],
+      "p50Ms": 202.307375,
+      "minMs": 202.307375,
+      "maxMs": 202.307375
+    },
+    {
+      "case": "pizza",
+      "operation": "registrar_catalog_view",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 26.203166,
+      "failedElapsedMs": [],
+      "p50Ms": 26.203166,
+      "minMs": 26.203166,
+      "maxMs": 26.203166
+    },
+    {
+      "case": "pizza",
+      "operation": "registration_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 20.746791,
+      "failedElapsedMs": [],
+      "p50Ms": 20.746791,
+      "minMs": 20.746791,
+      "maxMs": 20.746791
+    },
+    {
+      "case": "northwind",
+      "operation": "bulk_create",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 5261.777375,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 190.04984983805022,
+      "p50Ms": 5261.777375,
+      "minMs": 5261.777375,
+      "maxMs": 5261.777375
+    },
+    {
+      "case": "northwind",
+      "operation": "bulk_create_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1105.158417,
+      "failedElapsedMs": [],
+      "p50Ms": 1105.158417,
+      "minMs": 1105.158417,
+      "maxMs": 1105.158417
+    },
+    {
+      "case": "northwind",
+      "operation": "install",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1426.806292,
+      "failedElapsedMs": [],
+      "p50Ms": 1426.806292,
+      "minMs": 1426.806292,
+      "maxMs": 1426.806292
+    },
+    {
+      "case": "northwind",
+      "operation": "prepare",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 639.070459,
+      "failedElapsedMs": [],
+      "p50Ms": 639.070459,
+      "minMs": 639.070459,
+      "maxMs": 639.070459
+    },
+    {
+      "case": "northwind",
+      "operation": "register",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 279.633375,
+      "failedElapsedMs": [],
+      "p50Ms": 279.633375,
+      "minMs": 279.633375,
+      "maxMs": 279.633375
+    },
+    {
+      "case": "northwind",
+      "operation": "registrar_catalog_view",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 39.182375,
+      "failedElapsedMs": [],
+      "p50Ms": 39.182375,
+      "minMs": 39.182375,
+      "maxMs": 39.182375
+    },
+    {
+      "case": "northwind",
+      "operation": "registration_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 25.618208,
+      "failedElapsedMs": [],
+      "p50Ms": 25.618208,
+      "minMs": 25.618208,
+      "maxMs": 25.618208
+    },
+    {
+      "case": "catalog",
+      "operation": "bulk_create",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 5205.103125,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 192.1191522982554,
+      "p50Ms": 5205.103125,
+      "minMs": 5205.103125,
+      "maxMs": 5205.103125
+    },
+    {
+      "case": "catalog",
+      "operation": "bulk_create_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1265.379583,
+      "failedElapsedMs": [],
+      "p50Ms": 1265.379583,
+      "minMs": 1265.379583,
+      "maxMs": 1265.379583
+    },
+    {
+      "case": "catalog",
+      "operation": "install",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1488.48675,
+      "failedElapsedMs": [],
+      "p50Ms": 1488.48675,
+      "minMs": 1488.48675,
+      "maxMs": 1488.48675
+    },
+    {
+      "case": "catalog",
+      "operation": "prepare",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 685.202542,
+      "failedElapsedMs": [],
+      "p50Ms": 685.202542,
+      "minMs": 685.202542,
+      "maxMs": 685.202542
+    },
+    {
+      "case": "catalog",
+      "operation": "register",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 397.203791,
+      "failedElapsedMs": [],
+      "p50Ms": 397.203791,
+      "minMs": 397.203791,
+      "maxMs": 397.203791
+    },
+    {
+      "case": "catalog",
+      "operation": "registrar_catalog_view",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 45.89875,
+      "failedElapsedMs": [],
+      "p50Ms": 45.89875,
+      "minMs": 45.89875,
+      "maxMs": 45.89875
+    },
+    {
+      "case": "catalog",
+      "operation": "registration_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 25.705916,
+      "failedElapsedMs": [],
+      "p50Ms": 25.705916,
+      "minMs": 25.705916,
+      "maxMs": 25.705916
+    }
+  ],
+  "samples": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "rows": 1,
+      "ms": 7728.336042,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "install",
+      "rows": 1,
+      "ms": 1579.350667,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "prepare",
+      "rows": 1,
+      "ms": 639.206583,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "register",
+      "rows": 1,
+      "ms": 202.307375,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "registrar_catalog_view",
+      "rows": 1,
+      "ms": 26.203166,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "registration_commit",
+      "rows": 1,
+      "ms": 20.746791,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "bulk_create",
+      "rows": 1000,
+      "ms": 3038.154125,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "bulk_create_commit",
+      "rows": 1000,
+      "ms": 1134.603875,
+      "status": "ok"
+    },
+    {
+      "case": "northwind",
+      "operation": "install",
+      "rows": 1,
+      "ms": 1426.806292,
+      "status": "ok"
+    },
+    {
+      "case": "northwind",
+      "operation": "prepare",
+      "rows": 1,
+      "ms": 639.070459,
+      "status": "ok"
+    },
+    {
+      "case": "northwind",
+      "operation": "register",
+      "rows": 1,
+      "ms": 279.633375,
+      "status": "ok"
+    },
+    {
+      "case": "northwind",
+      "operation": "registrar_catalog_view",
+      "rows": 1,
+      "ms": 39.182375,
+      "status": "ok"
+    },
+    {
+      "case": "northwind",
+      "operation": "registration_commit",
+      "rows": 1,
+      "ms": 25.618208,
+      "status": "ok"
+    },
+    {
+      "case": "northwind",
+      "operation": "bulk_create",
+      "rows": 1000,
+      "ms": 5261.777375,
+      "status": "ok"
+    },
+    {
+      "case": "northwind",
+      "operation": "bulk_create_commit",
+      "rows": 1000,
+      "ms": 1105.158417,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "install",
+      "rows": 1,
+      "ms": 1488.48675,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "prepare",
+      "rows": 1,
+      "ms": 685.202542,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "register",
+      "rows": 1,
+      "ms": 397.203791,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "registrar_catalog_view",
+      "rows": 1,
+      "ms": 45.89875,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "registration_commit",
+      "rows": 1,
+      "ms": 25.705916,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "bulk_create",
+      "rows": 1000,
+      "ms": 5205.103125,
+      "status": "ok"
+    },
+    {
+      "case": "catalog",
+      "operation": "bulk_create_commit",
+      "rows": 1000,
+      "ms": 1265.379583,
+      "status": "ok"
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "rows": 1,
+      "ms": 6687.045375,
+      "status": "ok"
+    }
+  ],
+  "scope": "Actual public workflows on isolated local PostgreSQL. Connection reopen, not server restart. Cold server/install separate. Real-sample results only; no synthetic stress result implied."
+}

@@ -15,6 +15,27 @@ ddx:
 
 # Practical functionality and performance
 
+## 2026-10-17: set-based independent creates
+
+Independent rootless object creates and independent stored-endpoint edge creates
+now use one INSERT per physical home. Plans insert as a set; pure edge planning
+buffers new states instead of repeatedly copying/counting a growing JSONB map.
+Definition/source admission is shared per exact CREATE pin within its read-only
+phase. Mixed and ownership-changing groups retain ordered execution.
+
+The [serial local comparison](results/2026-10-17-set-based-create-summary.json)
+measured 1,000 objects at 5,375 → 2,133 ms plus commit 2,477 → 1,132 ms;
+1,000 edges at 5,685 → 3,605 ms plus commit 3,196 → 2,663 ms.
+These are single macOS ARM64 observations on PostgreSQL18.6/Python3.11,
+not hosted-runner or broader workload qualification. Both deadlines remain unchanged.
+The [native checks and statement budgets](results/2026-10-17-set-based-create-qualification.json)
+cover capacity, replay, revocation, corrupt plans/results/journals and late rollback.
+The [original three example schemas](results/2026-10-17-set-based-create-real-samples.json)
+each registered and committed 1,000 representative objects with external JavaScript
+launches forbidden. Main's existing compact registration was used; this does not
+claim that published v0.0.38 contains that path or changes host guard counts.
+
+
 First run the unmodified pizza, northwind and catalog examples through public
 registration, data loading, reads, updates and database reopen. Verify actual
 returned and persisted values. A failure stops that workflow and is a product

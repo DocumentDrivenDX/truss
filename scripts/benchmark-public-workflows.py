@@ -30,9 +30,21 @@ parser.add_argument('--expected-group-limit',type=int,default=1024,help='Expecte
 parser.add_argument('--read-samples',type=int,default=1000)
 parser.add_argument('--write-samples',type=int,default=200)
 parser.add_argument('--profile-native-functions',action='store_true',help='Diagnostic run: enable PostgreSQL PL function timing for benchmark consumer')
+parser.add_argument('--load-only',action='store_true',help='Measure and verify object/edge loading, omitting the later read/update matrix')
+parser.add_argument('--forbid-external-javascript',action='store_true',help='Fail if any code attempts to launch Bun, Node, or NodeJS')
 parser.add_argument('--profile-read',type=Path,help='Optional separate cProfile of one warm public ID read, outside timed samples')
 parser.add_argument('--output',type=Path,default=Path('truss-public-performance.json'))
 args=parser.parse_args()
+external_processes=[]
+if args.forbid_external_javascript:
+    def process_audit(event,values):
+        if event!='subprocess.Popen':return
+        executable,arguments=values[:2]
+        name=Path(os.fsdecode(executable)).name.lower()
+        if name in ('bun','node','nodejs'):
+            raise AssertionError('External JavaScript process attempted: '+str(arguments))
+        external_processes.append(name)
+    sys.addaudithook(process_audit)
 if min(args.bulk_size,args.read_samples,args.write_samples)<1:parser.error('sample sizes must be positive')
 if args.expected_group_limit<1:parser.error('--expected-group-limit must be positive')
 if args.bulk_size>args.expected_group_limit:parser.error('--bulk-size exceeds the configured expected group limit')
@@ -200,6 +212,15 @@ class RealWorkflows(PublicCatalogRuntimeTests):
             case['createdEdges']=created_edges
             case['edgeLoadIncludingCommitMs']=(time.perf_counter_ns()-edge_start)/1e6
             case['edgeRowsPerSecondIncludingCommit']=created_edges/(case['edgeLoadIncludingCommitMs']/1000)
+        if args.load_only:
+            if args.profile_native_functions:
+                connection.execute('SELECT pg_stat_force_next_flush()')
+                self.admin.execute('SELECT pg_stat_clear_snapshot()')
+                columns=('function','calls','totalMs','selfMs')
+                case['nativeFunctionProfile']=[dict(zip(columns,row)) for row in self.admin.execute("SELECT funcid::regprocedure::text,calls,total_time,self_time FROM pg_stat_user_functions WHERE schemaname='truss' ORDER BY self_time DESC").fetchall()]
+            host.detach();connection.rollback()
+            case.update(status='passed',loaded=count,scope='Committed object/edge load and persisted row/endpoint verification')
+            return
         def read(identity):
             result=ok(assembly.get_object_in_transaction(tx,document_id=document_id,module_id=module_id,record_id=type_to_record[identity.type_id] if workload else record,object_id=int(identity.id)))
             if not isinstance(result,ObjectFound):raise AssertionError('Committed object not found')
@@ -372,6 +393,7 @@ capacity_scope={'targetAtomicOperations':matrix_settings['targetAtomicGroupLimit
     'committedAtomicGroupSizes':sorted({m['rows'] for m in atomic_commits}),
     'qualification':'Only observed attempts and commits; configured limits do not establish actual maximum capacity.'}
 report={'runtimePackage':runtime_package,'runtimeManifestSha256':hashlib.sha256(runtime_manifest).hexdigest(),'sourceCommit':source_commit,'sourceWorkingTreeDirty':source_dirty,'machine':platform.platform(),'python':platform.python_version(),'trussSource':str(root),
+        'externalJavaScriptForbidden':args.forbid_external_javascript,'externalProcessExecutables':sorted(set(external_processes)),
         'statementTimeoutMs':10000,'operationTimeoutMs':30000,'expectedAtomicGroupLimit':args.expected_group_limit,'warmupReads':matrix_settings['warmupOperations'],
         'seconds':time.perf_counter()-start,'passed':result.wasSuccessful(),'functionalPassed':result.wasSuccessful(),
         'performanceQualification':'not_evaluated','capacityScope':capacity_scope,

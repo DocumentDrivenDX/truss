@@ -71,6 +71,7 @@ DECLARE input_operations jsonb;
  unset_name text;authored jsonb;retained jsonb;order_key jsonb;selected_source_type int;selected_target_type int;plan jsonb;outgoing bigint;incoming bigint;
  retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;current_actor oid;resolved_creates jsonb:='{}';
  rootless_creates boolean;created_states jsonb[]:='{}';
+ edge_creates boolean;created_edge_states jsonb[]:='{}';initial_edge_count int;
  value_updates boolean;updated_states jsonb[]:='{}';updated_references text[]:='{}';
  scope_node_states jsonb[]:='{}';scope_edge_states jsonb[]:='{}';
  scope_node_type int;scope_edge_type int;scope_edge_pin text;outgoing_counts jsonb;incoming_counts jsonb;
@@ -88,6 +89,10 @@ BEGIN
    SELECT 1 FROM jsonb_array_elements(input_operations) o
    WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
     OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb),false);
+ -- Pure edge creates cannot read an earlier newly-created edge. Buffer them
+ -- and build the complete final map once, avoiding growing JSONB copies/counts.
+ edge_creates:=NOT EXISTS(SELECT 1 FROM jsonb_array_elements(input_operations) o
+  WHERE o.value->>'operation' IS DISTINCT FROM 'create_edge');
  -- Distinct stored rootless targets cannot observe one another's value edits.
  -- Keep ordinary validation in order; malformed shapes use the general path.
  value_updates:=NOT EXISTS(
@@ -143,6 +148,7 @@ BEGIN
  END LOOP;
  SELECT coalesce(jsonb_object_agg(member.key,member.value ORDER BY e.ordinal),'{}'::jsonb) INTO edges
   FROM unnest(scope_edge_states) WITH ORDINALITY e(state,ordinal) CROSS JOIN LATERAL jsonb_each(e.state) member;
+ SELECT count(*) INTO initial_edge_count FROM jsonb_each(edges);
  FOR operation IN SELECT value FROM jsonb_array_elements(input_operations) LOOP
   before_nodes:=nodes;before_edges:=edges;changed_nodes:=ARRAY[]::text[];changed_edges:=ARRAY[]::text[];
   IF operation ? 'alias' AND (jsonb_typeof(operation->'alias') IS DISTINCT FROM 'string'
@@ -262,7 +268,7 @@ BEGIN
     RAISE EXCEPTION 'supported directed relationship required' USING ERRCODE='0A000';END IF;
    IF operation->>'operation'='create_edge' THEN
     IF operation-ARRAY['operation','relationshipDefinitionPin','source','target','values','orderKey','alias']<>'{}'::jsonb THEN RAISE EXCEPTION 'closed edge create required' USING ERRCODE='22023';END IF;
-    IF (SELECT count(*) FROM jsonb_each(edges))>=1024 THEN RAISE EXCEPTION 'bounded complete group edges required' USING ERRCODE='54000';END IF;
+    IF (CASE WHEN edge_creates THEN initial_edge_count+index ELSE (SELECT count(*) FROM jsonb_each(edges)) END)>=1024 THEN RAISE EXCEPTION 'bounded complete group edges required' USING ERRCODE='54000';END IF;
     selected:='create:'||index;source_ref:=truss.runtime_owned_reference(operation->'source',aliases,nodes);
     target_ref:=truss.runtime_owned_reference(operation->'target',aliases,nodes);retained:='{}';authored:=operation->'values';order_key:=operation->'orderKey';
     state:=jsonb_build_object('identity',jsonb_build_object('id',NULL,'typeId',relation.rel_type_id::text,
@@ -315,7 +321,8 @@ BEGIN
      state:=jsonb_set(state,'{image,ver}',to_jsonb((state->'image'->>'ver')::bigint+1));state:=jsonb_set(state,'{image,rev}',to_jsonb(revision));
     END IF;
     changed_edges:=array_append(changed_edges,selected);
-    edges:=edges||jsonb_build_object(selected,state);
+    IF edge_creates THEN created_edge_states:=array_append(created_edge_states,state);
+    ELSE edges:=edges||jsonb_build_object(selected,state);END IF;
    END IF;
   ELSE RAISE EXCEPTION 'supported original graph operation required' USING ERRCODE='0A000';END IF;
   IF operation ? 'alias' THEN aliases:=aliases||jsonb_build_object(operation->>'alias',selected);END IF;
@@ -331,6 +338,11 @@ BEGIN
     nodes||jsonb_object_agg(updated_references[n.ordinal::int],n.state)
     INTO before_nodes,nodes FROM unnest(updated_states) WITH ORDINALITY n(state,ordinal);
   END IF;
+  IF edge_creates AND index=jsonb_array_length(input_operations)-1 THEN
+   SELECT edges||jsonb_object_agg('create:'||(e.ordinal-1)::text,e.state) INTO edges
+    FROM unnest(created_edge_states) WITH ORDINALITY e(state,ordinal);
+   before_edges:=edges-selected;
+  END IF;
   IF index=jsonb_array_length(input_operations)-1 THEN
    plan:=jsonb_build_object('beforeNodes',before_nodes,'afterNodes',nodes,
     'beforeEdges',before_edges,'afterEdges',edges);
@@ -340,6 +352,13 @@ BEGIN
   ELSIF rootless_creates THEN
    plan:=jsonb_build_object('beforeNodes','{}'::jsonb,'afterNodes',jsonb_build_object(selected,state),
     'beforeEdges','{}'::jsonb,'afterEdges','{}'::jsonb);
+  ELSIF edge_creates THEN
+   SELECT array_agg(DISTINCT reference) INTO retained_nodes FROM unnest(ARRAY[
+    source_ref,target_ref,nodes->source_ref->>'root',nodes->target_ref->>'root']) r(reference) WHERE reference IS NOT NULL;
+   SELECT coalesce(jsonb_object_agg(r.reference,nodes->r.reference),'{}'::jsonb) INTO before_nodes
+    FROM unnest(retained_nodes) r(reference) WHERE nodes ? r.reference;
+   plan:=jsonb_build_object('beforeNodes',before_nodes,'afterNodes',before_nodes,
+    'beforeEdges','{}'::jsonb,'afterEdges',jsonb_build_object(selected,state));
   ELSIF operation->>'operation'='create_object'
    OR (operation->>'operation'='update_object' AND NOT (operation ? 'ownershipChange')) THEN
    -- These operations change one object only. Use point lookups for its root
@@ -499,25 +518,28 @@ BEGIN
   RAISE EXCEPTION 'graph changed before write exclusion' USING ERRCODE='55P03';END IF;
  inventory:=truss.runtime_owned_prepare(input,locked);
  PERFORM truss.runtime_owned_key_preflight(inventory);
- FOR entry IN SELECT value FROM jsonb_array_elements(inventory->'operations') LOOP
-  entry:=entry||jsonb_build_object('actorName',session_user::text,'mutationProfile',input->'mutationProfile',
-   'catalogRevision',inventory->'catalogRevision');
-  IF entry->>'operationIndex'='0' THEN
-   entry:=entry||jsonb_build_object('initialScope',inventory->'initialScope');END IF;
-  retained_bytes:=retained_bytes+octet_length(convert_to(entry::text,'UTF8'));
-  IF retained_bytes>16777216 THEN RAISE EXCEPTION 'bounded retained whole group inventory required' USING ERRCODE='54000';END IF;
-  expected_operation:=jsonb_build_object('attempt_id',attempt.id,'operation_index',(entry->>'operationIndex')::int,
-   'writer_xid',attempt.writer_xid::text,'plan',entry,'result',NULL);
+ -- Retain all immutable plans with one INSERT, preserving exact row images.
+ WITH plans AS (
+  SELECT value||jsonb_build_object('actorName',session_user::text,'mutationProfile',input->'mutationProfile',
+   'catalogRevision',inventory->'catalogRevision')||CASE WHEN value->>'operationIndex'='0'
+    THEN jsonb_build_object('initialScope',inventory->'initialScope') ELSE '{}'::jsonb END plan
+  FROM jsonb_array_elements(inventory->'operations'))
+ SELECT sum(octet_length(convert_to(plan::text,'UTF8'))),
+  jsonb_agg(jsonb_build_object('attempt_id',attempt.id,'operation_index',(plan->>'operationIndex')::int,
+   'writer_xid',attempt.writer_xid::text,'plan',plan,'result',NULL) ORDER BY (plan->>'operationIndex')::int)
+ INTO retained_bytes,expected_operation FROM plans;
+ IF retained_bytes>16777216 THEN RAISE EXCEPTION 'bounded retained whole group inventory required' USING ERRCODE='54000';END IF;
+ WITH inserted AS (
   INSERT INTO truss.runtime_owned_operation(attempt_id,operation_index,writer_xid,plan)
-  VALUES(attempt.id,(entry->>'operationIndex')::int,attempt.writer_xid,entry)
-  RETURNING to_jsonb(runtime_owned_operation) INTO actual_operation;
-  IF NOT FOUND OR actual_operation IS DISTINCT FROM expected_operation THEN
-   RAISE EXCEPTION 'exact prepared operation insert required' USING ERRCODE='55000';END IF;
-  SELECT to_jsonb(o) INTO STRICT actual_operation FROM truss.runtime_owned_operation o
-   WHERE o.attempt_id=attempt.id AND o.operation_index=(entry->>'operationIndex')::int;
-  IF actual_operation IS DISTINCT FROM expected_operation THEN
-   RAISE EXCEPTION 'exact stored prepared operation required' USING ERRCODE='55000';END IF;
- END LOOP;
+  SELECT r.attempt_id,r.operation_index,r.writer_xid,r.plan
+  FROM jsonb_populate_recordset(NULL::truss.runtime_owned_operation,expected_operation) r RETURNING *)
+ SELECT jsonb_agg(to_jsonb(inserted) ORDER BY operation_index) INTO actual_operation FROM inserted;
+ IF actual_operation IS DISTINCT FROM expected_operation THEN
+  RAISE EXCEPTION 'exact prepared operation insert required' USING ERRCODE='55000';END IF;
+ SELECT jsonb_agg(to_jsonb(o) ORDER BY operation_index) INTO actual_operation
+ FROM truss.runtime_owned_operation o WHERE o.attempt_id=attempt.id;
+ IF actual_operation IS DISTINCT FROM expected_operation THEN
+  RAISE EXCEPTION 'exact stored prepared operation required' USING ERRCODE='55000';END IF;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_capture(uuid) FROM PUBLIC;

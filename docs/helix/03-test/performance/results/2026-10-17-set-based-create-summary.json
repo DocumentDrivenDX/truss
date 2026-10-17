@@ -1,0 +1,28 @@
+{
+  "beforeCommit": "ccbc3d6a900ac53e931c2d01e284061add537a0f",
+  "afterWorkingTree": true,
+  "rowsPerGroup": 1000,
+  "sameEnvironment": true,
+  "execution": "sequential fresh clusters; no Truss regression suites running",
+  "milliseconds": {
+    "before": {
+      "bulk_create": 5375.379,
+      "bulk_create_commit": 2476.707625,
+      "bulk_edges": 5684.601375,
+      "bulk_edges_commit": 3196.475083
+    },
+    "after": {
+      "bulk_create": 2133.002667,
+      "bulk_create_commit": 1131.730417,
+      "bulk_edges": 3604.884208,
+      "bulk_edges_commit": 2663.088625
+    }
+  },
+  "speedup": {
+    "bulk_create": 2.5200995212820327,
+    "bulk_create_commit": 2.188425430470691,
+    "bulk_edges": 1.5769164963425644,
+    "bulk_edges_commit": 1.2002886621920064
+  },
+  "scope": "One local macOS ARM64 comparison. Hosted release runners remain required."
+}

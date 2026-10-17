@@ -25,7 +25,7 @@ CREATE TRIGGER runtime_owned_operation_no_truncate BEFORE TRUNCATE ON truss.runt
 REVOKE ALL ON TABLE truss.runtime_owned_operation FROM PUBLIC;
 ''']
     parts.extend((owner / name).read_text() for name in (
-        'values.sql', 'forest.sql', 'scope.sql', 'delete.sql', 'execute.sql', 'finalize.sql'))
+        'values.sql', 'forest.sql', 'scope.sql', 'delete.sql', 'execute.sql', 'bulk-create.sql', 'bulk-edge.sql', 'finalize.sql'))
     parts.append((owner / 'history.sql').read_text().split('CREATE OR REPLACE FUNCTION', 1)[0])
     assembled = ('\n'.join(parts).rstrip() + '\n').encode('utf8')
     if arguments.check:

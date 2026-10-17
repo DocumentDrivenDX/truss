@@ -1,0 +1,71 @@
+{
+  "nativeRuntime": "truss-catalog-runtime/0.71-candidate",
+  "releaseStatus": "unreleased main; v0.0.38 remains native70",
+  "python": "3.11.17",
+  "postgresql": "18.6",
+  "embeddedEngine": "mini-racer==0.14.1",
+  "sourceModelRepositoryCommit": "509275917364a2437dcca85a4992e40039fd3e46",
+  "sourceModels": {
+    "pizza": {
+      "path": "examples/pizza/pizza.umf.json",
+      "sha256": "506cb11e7b9dc77e97da18e4efe15690bd5adb769dc490b44803ee6704c8d546",
+      "bytes": 36811
+    },
+    "northwind": {
+      "path": "examples/northwind/northwind.umf.json",
+      "sha256": "e3063579431155a2b8d75398a0defc8ad1f9c1d3bc7f000f822ae30ada552983",
+      "bytes": 73565
+    },
+    "catalog": {
+      "path": "examples/catalog/catalog.umf.json",
+      "sha256": "832628eff28a9dbade77c3c4ed6966fecffe78893621c157e1b73fa47d8f5f10",
+      "bytes": 87445
+    }
+  },
+  "nativeChecks": [
+    {
+      "log": "2026-10-17-truss-bulk-frozen-native-tests.log",
+      "passed": 37,
+      "sha256": "f28c691ea09939f3f658aa1383954cf3694cee2421c36ee0c3367c5c2c80669c"
+    },
+    {
+      "log": "2026-10-17-truss-bulk-invariant-tests.log",
+      "passed": 7,
+      "sha256": "7f9d5eebe1741c490eb29176a628b74813e1720eff54055e51f62fcabfed01be"
+    },
+    {
+      "log": "2026-10-17-truss-bulk-edge-planner-test.log",
+      "passed": 1,
+      "sha256": "cbfb3d25fd9343e8654dcbe5a785c44a90ea765520d1541b28801fc8c693e878"
+    }
+  ],
+  "statementBudgets": {
+    "objects": {
+      "objects": 1000,
+      "insertStatementsPerPhysicalHome": 1,
+      "homes": [
+        "object",
+        "object_key_bucket",
+        "object_key_reservation_bucket",
+        "journal",
+        "runtime_object_transition",
+        "runtime_owned_operation"
+      ]
+    },
+    "edges": {
+      "edges": 1000,
+      "insertStatementsPerPhysicalHome": 1,
+      "homes": [
+        "edge",
+        "journal",
+        "runtime_edge_transition",
+        "runtime_owned_operation"
+      ]
+    }
+  },
+  "limitsUnchanged": {
+    "statementTimeoutMs": 10000,
+    "operationTimeoutMs": 30000
+  },
+  "scope": "Independent rootless creates and independent CREATE edges with stored endpoints use set-based writes. Mixed, alias-dependent and ownership-changing groups retain ordered execution. Native row/journal/commit checks remain. Host guard statement count and stable-release report caps are not claimed fixed."
+}

@@ -1,0 +1,6 @@
+test_buffered_edge_plans_equal_the_retained_general_planner (test_bulk_create_sql_native.BulkEdgeSqlTests.test_buffered_edge_plans_equal_the_retained_general_planner) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 12.995s
+
+OK

@@ -197,7 +197,7 @@ CREATE FUNCTION truss.object_group_begin(original_input bytea,original_documents
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE input_operations jsonb;
  input jsonb;documents jsonb;request jsonb;context jsonb;selected record;archive truss.schema_doc%ROWTYPE;
- operation jsonb;source_text text;person oid;writer xid8;ns bytea;rk bytea;route bigint;prior_generation bigint;receipt truss.request_receipt%ROWTYPE;
+ operation jsonb;admission record;source_text text;person oid;writer xid8;ns bytea;rk bytea;route bigint;prior_generation bigint;receipt truss.request_receipt%ROWTYPE;
  raw jsonb;observation bytea;attempt truss.runtime_object_attempt%ROWTYPE;index int:=0;failure_detail text;retained_basis jsonb;retained_count int;
 BEGIN
  IF replay_only IS NULL THEN RAISE EXCEPTION 'explicit replay probe required' USING ERRCODE='22023';END IF;
@@ -277,7 +277,24 @@ BEGIN
  IF replay_only THEN RETURN convert_to('{"outcome":"miss"}','UTF8');END IF;
  -- Authorize the full original owner inventory without requiring live targets.
  person:=truss.runtime_person(false);
- FOR operation IN SELECT value FROM jsonb_array_elements(input_operations) LOOP
+ -- CREATE source/owner meaning is constant for each exact definition pin
+ -- during this read-only admission phase. Retain every original ordinal for
+ -- alias-dependent operations; value/shape admission still checks every row.
+ FOR admission IN
+  SELECT * FROM (
+   SELECT value operation,(ordinal-1)::int operation_index
+   FROM jsonb_array_elements(input_operations) WITH ORDINALITY o(value,ordinal)
+   WHERE value->>'operation' IS NULL OR value->>'operation' NOT IN ('create_object','create_edge')
+   UNION ALL
+   SELECT creates.operation,creates.operation_index FROM (
+    SELECT DISTINCT ON (value->>'operation',value->>'typeDefinitionPin',value->>'relationshipDefinitionPin')
+     value operation,(ordinal-1)::int operation_index
+    FROM jsonb_array_elements(input_operations) WITH ORDINALITY o(value,ordinal)
+    WHERE value->>'operation' IN ('create_object','create_edge')
+    ORDER BY value->>'operation',value->>'typeDefinitionPin',value->>'relationshipDefinitionPin',ordinal) creates
+  ) original_owners ORDER BY operation_index
+ LOOP
+  operation:=admission.operation;index:=admission.operation_index;
   SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input_operations,index,person);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,person);
   SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
   SELECT d.value->>'sourceText' INTO STRICT source_text FROM jsonb_array_elements(documents) d WHERE d.value->>'documentId'=archive.doc_id;
@@ -1753,10 +1770,26 @@ BEGIN
  attempt_id:=(opened->>'attemptId')::uuid;
  parsed_input:=convert_from(original_input,'UTF8')::jsonb;
  operation_count:=jsonb_array_length(parsed_input->'operations');
+ IF parsed_input->'mutationProfile'=truss.runtime_owned_profile() AND NOT EXISTS(
+  SELECT 1 FROM jsonb_array_elements(parsed_input->'operations') o
+  WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
+   OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb) THEN
+  PERFORM truss.runtime_owned_create_batch(attempt_id);
+ ELSIF parsed_input->'mutationProfile'=truss.runtime_owned_profile() AND NOT EXISTS(
+  SELECT 1 FROM jsonb_array_elements(parsed_input->'operations') o
+  WHERE o.value->>'operation' IS DISTINCT FROM 'create_edge'
+   OR o.value->'source'->>'state' IS DISTINCT FROM 'stored'
+   OR o.value->'target'->>'state' IS DISTINCT FROM 'stored') AND NOT EXISTS(
+  SELECT 1 FROM truss.runtime_owned_operation p JOIN truss.rel_def r
+   ON r.rel_type_id=(p.plan->'afterEdges'->(p.plan->>'primary')->'identity'->>'typeId')::int
+  WHERE p.attempt_id=(opened->>'attemptId')::uuid AND r.lifecycle<>'independent') THEN
+  PERFORM truss.runtime_owned_edge_create_batch(attempt_id);
+ ELSE
  FOR step_index IN 0..operation_count-1 LOOP
   operation_index:=step_index;
   PERFORM truss.runtime_owned_group_step_in_input(attempt_id,operation_index,convert_to('[]','UTF8'),original_input,parsed_input);
  END LOOP;
+ END IF;
  operation_index:=operation_count-1;
  result:=convert_from(truss.object_group_finish(attempt_id),'UTF8')::jsonb;
  -- Internal import provenance attaches to the same completed attempt. This field

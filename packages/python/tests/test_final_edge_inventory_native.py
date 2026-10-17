@@ -1,7 +1,7 @@
 """Final edge membership still refuses an actual edge absent from the plan."""
 from truss import Error,EdgeFound
 from truss.contracts import MapValue,TextValue
-from truss.groups import StoredObjectReference,UpdateEdge,AuthoredValue,GroupSuccess
+from truss.groups import StoredObjectReference,AliasObjectReference,UpdateEdge,AuthoredValue,GroupSuccess
 import test_edge_mutations_native as edge_tests
 
 
@@ -70,7 +70,7 @@ class FinalEdgeInventoryTests(edge_tests.EdgeMutationTests):
         self.admin.execute("""CREATE FUNCTION public.preseal_future_edge_slot() RETURNS trigger
             LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$ BEGIN
             UPDATE truss.runtime_owned_operation SET result='{}'::jsonb
-             WHERE attempt_id=NEW.id AND operation_index=1 AND result IS NULL;
+             WHERE attempt_id=NEW.id AND operation_index=2 AND result IS NULL;
             RETURN NEW;END $$""")
         self.addCleanup(self.admin.execute,'DROP FUNCTION public.preseal_future_edge_slot()')
         self.admin.execute("""CREATE FUNCTION public.reject_second_edge_effect() RETURNS trigger
@@ -80,12 +80,15 @@ class FinalEdgeInventoryTests(edge_tests.EdgeMutationTests):
             RETURN NEW;END $$""")
         self.addCleanup(self.admin.execute,'DROP FUNCTION public.reject_second_edge_effect()')
         self.admin.execute("""CREATE TRIGGER preseal_future_edge_slot AFTER UPDATE ON truss.runtime_object_attempt
-            FOR EACH ROW WHEN (OLD.next_index=0 AND NEW.next_index=1)
+            FOR EACH ROW WHEN (OLD.next_index=1 AND NEW.next_index=2)
             EXECUTE FUNCTION public.preseal_future_edge_slot()""")
         self.admin.execute('CREATE TRIGGER reject_second_edge_effect BEFORE INSERT ON truss.edge FOR EACH ROW EXECUTE FUNCTION public.reject_second_edge_effect()')
         try:
             context=assembly.group_context_in_transaction(tx).value
-            operations=tuple(self.link(pin,StoredObjectReference(identity=a),StoredObjectReference(identity=b),alias=f'edge{i}') for i in range(2))
+            # A dependent create followed by alias edges requires the ordered
+            # executor. Independent stored-endpoint edges now seal as one batch.
+            operations=(self.create(label='ordered-source',alias='source'),
+                *(self.link(pin,AliasObjectReference(alias='source'),StoredObjectReference(identity=b),alias=f'edge{i}') for i in range(2)))
             result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),context.request('future-edge-slot'),documents=self.documents)
             self.assertIsInstance(result,Error,repr(result))
             self.assertEqual(result.error.sql_state,'55000',repr(result))
@@ -97,3 +100,31 @@ class FinalEdgeInventoryTests(edge_tests.EdgeMutationTests):
         host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(0,))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_edge_transition').fetchone(),(0,))
+
+    def test_presealed_batch_slot_refuses_before_any_edge_insert(self):
+        connection,host,assembly,tx,a,b,pin=self.initialized()
+        self.admin.execute("""CREATE FUNCTION public.preseal_captured_edge_slot() RETURNS trigger
+            LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$ BEGIN
+            UPDATE truss.runtime_owned_operation SET result='{}'::jsonb
+             WHERE attempt_id=NEW.attempt_id AND operation_index=1 AND result IS NULL;
+            RETURN NEW;END $$""")
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.preseal_captured_edge_slot()')
+        self.admin.execute("""CREATE TRIGGER preseal_captured_edge_slot AFTER INSERT ON truss.runtime_owned_operation
+            FOR EACH ROW WHEN (NEW.operation_index=1) EXECUTE FUNCTION public.preseal_captured_edge_slot()""")
+        self.admin.execute("""CREATE FUNCTION public.reject_any_batch_edge() RETURNS trigger
+            LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$ BEGIN
+            RAISE EXCEPTION 'batch edge effect reached' USING ERRCODE='P9999';END $$""")
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.reject_any_batch_edge()')
+        self.admin.execute('CREATE TRIGGER reject_any_batch_edge BEFORE INSERT ON truss.edge FOR EACH ROW EXECUTE FUNCTION public.reject_any_batch_edge()')
+        try:
+            context=assembly.group_context_in_transaction(tx).value
+            operations=tuple(self.link(pin,StoredObjectReference(identity=a),StoredObjectReference(identity=b),alias=f'edge{i}') for i in range(2))
+            result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),context.request('presealed-edge-batch'),documents=self.documents)
+            self.assertIsInstance(result,Error,repr(result))
+            self.assertEqual(result.error.sql_state,'55000',repr(result))
+            self.assertIn('exact stored prepared operation required',str(host._custody.last_attempt.error))
+        finally:
+            self.admin.execute('DROP TRIGGER preseal_captured_edge_slot ON truss.runtime_owned_operation')
+            self.admin.execute('DROP TRIGGER reject_any_batch_edge ON truss.edge')
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(0,))
