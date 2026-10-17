@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/private/tmp/truss-main-integration-20261010/scripts/check-typed-sdk-native.py", line 112, in <module>
+    assert compiled.returncode==0,compiled.stdout+compiled.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {"reason":"CATALOG_STALE: query lacks generated source","status":"refused"}
+

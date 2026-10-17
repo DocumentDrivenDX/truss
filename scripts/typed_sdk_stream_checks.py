@@ -4,7 +4,7 @@ from datetime import timedelta
 import json
 import psycopg
 from truss.access import TrussTarget
-from truss.query_stream import owned_stream_operation
+from truss.query_stream import owned_stream_operation,QueryStreamRefused
 
 
 def check_streams(*,admin,person,target,page_entry,Parameters,checks,out):
@@ -21,10 +21,27 @@ def check_streams(*,admin,person,target,page_entry,Parameters,checks,out):
     streamed=TrussTarget(target.operation,binding_sha256=target.binding_sha256,platform=target.platform,
         default_timeout=timedelta(seconds=10),catalog_entries=(page_entry,),stream_operation=operation)
     values=Parameters(status='draft')
-    assert [row.id for row in streamed.stream(page_entry,values,max_rows=2)]==['bar','baz']
+    bounded=[]
+    try:
+        for row in streamed.stream(page_entry,values,max_rows=2):bounded.append(row.id)
+    except QueryStreamRefused as error:
+        assert error.original.code=='limits'
+        assert [d.code for d in error.original.diagnostics]==['stream_row_limit']
+    else:raise AssertionError('unproved stream exhaustion reported as completion')
+    assert bounded==['bar','baz']
     assert person.info.transaction_status==psycopg.pq.TransactionStatus.IDLE and not leased
     assert person.execute('SELECT count(*) FROM pg_catalog.pg_cursors').fetchone()==(0,)
-    checks.append('owned RC cursor stream bound releases portal and native transaction')
+    checks.append('owned RC cursor bound emits exact2-row prefix then limits/stream_row_limit after native cleanup')
+    from umf_access.engine_catalog import EngineRead
+    import weft
+    short_entry=EngineRead.build(weft,page_entry.artifact()['request'],parameters=page_entry.parameters,
+        result=page_entry.result,method='truss-runtime',page_size=4)
+    short_target=TrussTarget(target.operation,binding_sha256=target.binding_sha256,platform=target.platform,
+        default_timeout=timedelta(seconds=10),catalog_entries=(short_entry,),stream_operation=operation)
+    assert [row.id for row in short_target.stream(short_entry,values,max_rows=4)]==['bar','baz','foo']
+    assert not leased and person.info.transaction_status==psycopg.pq.TransactionStatus.IDLE
+    assert person.execute('SELECT count(*) FROM pg_catalog.pg_cursors').fetchone()==(0,)
+    checks.append('short final-bound native FETCH proves exhaustion and completes normally after cleanup')
     stream=streamed.stream(page_entry,values,max_rows=10**50)
     assert next(stream).id=='bar' and leased
     # Independent writer adds a matching object by public API in the broader
@@ -110,11 +127,16 @@ def check_large_streams(*,admin,person,target,Parameters,checks,out,documents,do
     assert first.id=='k0000' and leased
     with psycopg.connect(person.info.dsn,autocommit=True,options='-c statement_timeout=10000') as writer:
         seed(writer,['k1750z'])
-    rows=[first,*stream]
+    rows=[first]
+    try:rows.extend(stream)
+    except QueryStreamRefused as error:
+        assert error.original.code=='limits'
+        assert [d.code for d in error.original.diagnostics]==['stream_row_limit']
+    else:raise AssertionError('bounded export silently completed')
     assert [r.id for r in rows]==[f'k{i:04}' for i in range(2200)]
     assert [f['returned'] for f in fetches]==[999,999,202] and all(f['requested']<=999 for f in fetches)
     assert not leased and person.info.transaction_status==psycopg.pq.TransactionStatus.IDLE
-    checks.append('generated stream yields exact2200of2500 in authored Key order; independent public writer after first page excluded')
+    checks.append('generated stream yields exact2200of2500 then limits/stream_row_limit; authored Key order and independent writer exclusion preserved')
     all_rows=list(queries.selected_export_stream(streamed,status='export',after=None,max_rows=10**50))
     assert len(all_rows)==2501 and [r.id for r in all_rows]==sorted([f'k{i:04}' for i in range(2500)]+['k1750z'])
     checks.append('new native stream observes committed writer; huge bound does not truncate finite source')

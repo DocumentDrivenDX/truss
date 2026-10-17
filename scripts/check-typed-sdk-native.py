@@ -22,7 +22,8 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'packages/python/examp
 from adopter_workflow import transaction,success,expect
 class Parameters(StrictModel):status:str
 
-parser=argparse.ArgumentParser();parser.add_argument("--streams",action="store_true");parser.add_argument('--output',type=Path,required=True);parser.add_argument('--model-request',type=Path,required=True);parser.add_argument('--generated',type=Path,required=True);parser.add_argument('--bun-executable',type=Path,default=Path('/opt/homebrew/Cellar/bun/1.4.2/bin/bun'));parser.add_argument('--pg-bin',type=Path,default=Path('/opt/homebrew/opt/postgresql@18/bin'));args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument("--streams",action="store_true");parser.add_argument("--streams-basic",action="store_true");parser.add_argument('--output',type=Path,required=True);parser.add_argument('--model-request',type=Path,required=True);parser.add_argument('--generated',type=Path,required=True);parser.add_argument('--bun-executable',type=Path,default=Path('/opt/homebrew/Cellar/bun/1.4.2/bin/bun'));parser.add_argument('--pg-bin',type=Path,default=Path('/opt/homebrew/opt/postgresql@18/bin'));args=parser.parse_args()
+basic_only=args.streams_basic and not args.streams
 root=Path(__file__).resolve().parents[1];out=args.output.absolute();out.mkdir(parents=True,exist_ok=False);pg=out/'postgres';sock=out/'socket';sock.mkdir();started=False;checks=[]
 def run(*command):
  result=subprocess.run(list(map(str,command)),text=True,capture_output=True,check=True)
@@ -103,16 +104,17 @@ try:
     refused=success(a.query_in_transaction(t,sql=request['sql'],document_ids=(doc['id'],),parameters={'status':'draft'},engine_program=json.dumps(changed)))
     assert refused.outcome=='refused' and refused.code=='stale_context'
    checks.append('different valid compiler SQL refuses original correspondence')
-   (args.generated/'truss_declarations.py').write_text('from umf_access import query,Param\nfrom native_sales.models import Order\n@query\ndef selected(status:Param[str]):return Order.objects.filter(Order.c.status==status).limit(10).all()\n')
-   config={'package':'native_sales','modules':['truss_declarations'],'targets':[{'id':'owned','kind':'truss','backendId':'truss.postgresql.runtime','backendVersion':request['target']['backendVersion'],'targetProfile':'truss-runtime-pg18.6/0.5','binding':packet['binding'],'engineCompiler':'truss-runtime','engineRequests':{'selected:0':request},'platform':[{'name':'postgresql','versions':['18.6']}]}]}
-   (args.generated/'truss-config.json').write_text(json.dumps(config))
-   for extra in ([],['--check']):
-    command=[sys.executable,'-B','-m','umf_access.build.catalog','catalog','--root',str(args.generated),'--config',str(args.generated/'truss-config.json'),*extra]
-    compiled=subprocess.run(command,capture_output=True,text=True)
-    assert compiled.returncode==0,compiled.stdout+compiled.stderr
-   from native_sales import queries
-   assert queries.selected(target,status='draft')==[Order(id='bar',status='draft')]
-   checks.append('real CLI catalog/check and generated typed query through original Truss path')
+   if not basic_only:
+    (args.generated/'truss_declarations.py').write_text('from umf_access import query,Param\nfrom native_sales.models import Order\n@query\ndef selected(status:Param[str]):return Order.objects.filter(Order.c.status==status).limit(10).all()\n')
+    config={'package':'native_sales','modules':['truss_declarations'],'targets':[{'id':'owned','kind':'truss','backendId':'truss.postgresql.runtime','backendVersion':request['target']['backendVersion'],'targetProfile':'truss-runtime-pg18.6/0.5','binding':packet['binding'],'engineCompiler':'truss-runtime','engineRequests':{'selected:0':request},'platform':[{'name':'postgresql','versions':['18.6']}]}]}
+    (args.generated/'truss-config.json').write_text(json.dumps(config))
+    for extra in ([],['--check']):
+     command=[sys.executable,'-B','-m','umf_access.build.catalog','catalog','--root',str(args.generated),'--config',str(args.generated/'truss-config.json'),*extra]
+     compiled=subprocess.run(command,capture_output=True,text=True)
+     assert compiled.returncode==0,compiled.stdout+compiled.stderr
+    from native_sales import queries
+    assert queries.selected(target,status='draft')==[Order(id='bar',status='draft')]
+    checks.append('real CLI catalog/check and generated typed query through original Truss path')
    # Seed more instances through the same public group path, not storage SQL.
    with transaction(person)as(a,t):
     ref=success(a.get_type_reference_in_transaction(t,document_id=doc['id'],module_id='sales',record_id='order'))
@@ -136,22 +138,24 @@ try:
    except TrussReadRefused:pass
    else:raise AssertionError('typed Key diverged from original native cursor')
    checks.extend(['native owner pages retain complete authored Key without gaps','page continuation rejects parameter drift and typed/native Key disagreement'])
-   with (args.generated/'truss_declarations.py').open('a')as declarations:
-    declarations.write('from native_sales.keys import OrderKey\n@query\ndef selected_page(status:Param[str],after:Param[OrderKey|None]):return Order.objects.filter(Order.c.status==status).page(size=1,after=after)\n')
-   config['targets'][0]['engineRequests']['selected_page:0']=page_request
-   (args.generated/'truss-config.json').write_text(json.dumps(config))
-   for extra in ([],['--check']):
-    compiled=subprocess.run([sys.executable,'-B','-m','umf_access.build.catalog','catalog','--root',str(args.generated),'--config',str(args.generated/'truss-config.json'),*extra],capture_output=True,text=True)
-    assert compiled.returncode==0,compiled.stdout+compiled.stderr
-   import importlib
-   importlib.invalidate_caches();queries=importlib.reload(queries)
-   generated_first=queries.selected_page(target,status='draft',after=None)
-   generated_second=queries.selected_page(target,status='draft',after=generated_first.next_after)
-   assert [r.id for r in generated_first.items]==['bar'] and [r.id for r in generated_second.items]==['baz']
-   checks.append('real CLI page catalog/check and generated typed continuation retain native bytes')
-   if args.streams:
+   if not basic_only:
+    with (args.generated/'truss_declarations.py').open('a')as declarations:
+     declarations.write('from native_sales.keys import OrderKey\n@query\ndef selected_page(status:Param[str],after:Param[OrderKey|None]):return Order.objects.filter(Order.c.status==status).page(size=1,after=after)\n')
+    config['targets'][0]['engineRequests']['selected_page:0']=page_request
+    (args.generated/'truss-config.json').write_text(json.dumps(config))
+    for extra in ([],['--check']):
+     compiled=subprocess.run([sys.executable,'-B','-m','umf_access.build.catalog','catalog','--root',str(args.generated),'--config',str(args.generated/'truss-config.json'),*extra],capture_output=True,text=True)
+     assert compiled.returncode==0,compiled.stdout+compiled.stderr
+    import importlib
+    importlib.invalidate_caches();queries=importlib.reload(queries)
+    generated_first=queries.selected_page(target,status='draft',after=None)
+    generated_second=queries.selected_page(target,status='draft',after=generated_first.next_after)
+    assert [r.id for r in generated_first.items]==['bar'] and [r.id for r in generated_second.items]==['baz']
+    checks.append('real CLI page catalog/check and generated typed continuation retain native bytes')
+   if args.streams or args.streams_basic:
     from typed_sdk_stream_checks import check_streams,check_large_streams
     check_streams(admin=admin,person=person,target=target,page_entry=page_entry,Parameters=Parameters,checks=checks,out=out)
+   if args.streams:
     check_large_streams(admin=admin,person=person,target=target,Parameters=Parameters,checks=checks,out=out,documents=documents,document_id=doc["id"],generated=args.generated,bun_executable=args.bun_executable)
    admin.execute('REVOKE sdk_reader,sdk_writer FROM sdk_person')
    try:target.read(entry,Parameters(status='draft'))
@@ -159,5 +163,5 @@ try:
    else:raise AssertionError('native unauthorized read escaped')
 finally:
  if started:run(args.pg_bin/'pg_ctl','-D',pg,'-m','fast','-w','stop')
- (out/'verification.json').write_text(json.dumps({'checks':checks,'ownedServerStopped':not(pg/'postmaster.pid').exists(),'temporal':'HELD','scope':'Truss RC module ACL schema, instance and typed read; no protected current-policy/action qualification'},indent=2)+'\n')
+ (out/'verification.json').write_text(json.dumps({'generatedCatalogCoverage':not basic_only,'streamCoverage':'full' if args.streams else 'basic' if args.streams_basic else 'none','checks':checks,'ownedServerStopped':not(pg/'postmaster.pid').exists(),'temporal':'HELD','scope':'Truss RC module ACL schema, instance and typed read; no protected current-policy/action qualification'},indent=2)+'\n')
 print(json.dumps({'status':'pass','checks':len(checks),'output':str(out)}))

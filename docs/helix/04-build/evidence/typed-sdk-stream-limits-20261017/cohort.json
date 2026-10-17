@@ -1,0 +1,9 @@
+{
+  "python": "3.11.17",
+  "truss": "0.0.38.dev0",
+  "umfAccess": "0.1.0.dev0",
+  "weft": "0.4.41.dev0",
+  "scope": "retained explicit local cursor cohort; no public dependency qualification",
+  "umfAccessInitSha256": "91eac77cf0a09336491913ceff6d01d75fc46d4ef26655cf2cb275552796b33c",
+  "weftInitSha256": "cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d"
+}

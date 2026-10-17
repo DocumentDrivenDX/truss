@@ -154,7 +154,7 @@ def fetch_stream(assembly,transaction,handle,*,count,validate,operation_deadline
             result=_decode_rows(combined_raw,artifact,count+(0 if final_bound else 1),json.loads(state.request['target']['bindingJson'])['maximumBytes'])
             if not isinstance(result,QueryRows):raise QueryStreamRefused(result)
             combined=result.rows
-            exhausted=not final_bound and len(combined)<=count
+            exhausted=len(combined)<count+(0 if final_bound else 1)
             retained=combined[:count]
             pending=combined_raw[count:]
             if len(pending)>1:raise ValueError('Only one original lookahead row may be retained')

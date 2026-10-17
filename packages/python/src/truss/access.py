@@ -18,7 +18,7 @@ from umf_access.pages import ReadPage, ReadContinuation, StaleContinuation
 from umf_access.codec_support import revalidate_model
 from umf_access.postgres_read import TimedOut
 from .execution import Ok
-from .query import QueryRows, QueryAbsent, QueryCatalogSources, QueryPage, QueryPageCursor
+from .query import QueryRows, QueryAbsent, QueryCatalogSources, QueryPage, QueryPageCursor, QueryRefused, QueryDiagnostic
 from umf_access.native_program import program_json, canonical_json
 P=TypeVar('P',bound=BaseModel);R=TypeVar('R',bound=BaseModel)
 
@@ -175,7 +175,7 @@ class TrussTarget:
                     raise ValueError('ADOPTION_MISMATCH: selected stream column absent or row shape differs')
                 result.append(entry.result.model_validate(dict(zip(native.columns,row,strict=True))))
             return result
-        final=();first_deadline=monotonic()+budget.total_seconds()
+        final=();limit_reached=False;first_deadline=monotonic()+budget.total_seconds()
         with self.stream_operation(budget) as (assembly,transaction):
             handle=assembly.query_stream_open_in_transaction(transaction,engine_program=entry.originals(),parameters=values.model_dump(mode='python'),operation_deadline=first_deadline)
             remaining=max_rows
@@ -187,6 +187,7 @@ class TrussTarget:
                     remaining-=len(batch.items)
                     if batch.exhausted or remaining==0:
                         final=batch.items
+                        limit_reached=not batch.exhausted
                         break
                     yield from batch.items
                     # Do not retain a delivered page while fetching the next one.
@@ -197,3 +198,8 @@ class TrussTarget:
         # normal completion becomes observable. Earlier pages remain a prefix.
         if monotonic()>=deadline:raise TimedOut('stream final page deadline expired during cleanup')
         yield from final
+        if limit_reached:
+            from .query_stream import QueryStreamRefused
+            raise QueryStreamRefused(QueryRefused(
+                'limits', (QueryDiagnostic('stream_row_limit',
+                    'Stream row bound reached; source exhaustion was not proved'),)))

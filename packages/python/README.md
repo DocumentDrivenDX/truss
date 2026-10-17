@@ -124,6 +124,11 @@ matching locally supplied UMF SDK cohort. Its 14 native controls used published
 Weft 0.4.40 with a pinned local UMF wheel; they do not establish published UMF
 dependency availability. The development `typed-sdk` extra is deferred until a
 matching immutable public UMF artifact and fresh consumer-install workflow pass.
+A typed cursor stream that reaches `max_rows` without proving exhaustion yields
+its bounded prefix, then raises `QueryStreamRefused` containing `QueryRefused`
+with code `limits` and diagnostic `stream_row_limit`. Portal close and owned
+transaction cleanup precede the final page and refusal. A short final fetch
+proves exhaustion and completes normally; an exact boundary remains unproved.
 The ordinary query, native and local-runtime extras are unchanged.
 
 ## Install the release

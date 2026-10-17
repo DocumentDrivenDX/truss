@@ -1,0 +1,17 @@
+{
+  "sourceParent": "0e71e70d",
+  "sourceState": "reviewed working-tree candidate",
+  "wheelSha256": "3a40f90718546b69c4f766c42f800f667aaea6570a276c0d6876dbfcfe552da4",
+  "sourceMatchingWheelFiles": 509,
+  "offlineAdapterTests": 5,
+  "nativeBasicChecks": 16,
+  "generatedCatalogCoverage": false,
+  "largeStreamCampaignRun": false,
+  "sourceFiles": {
+    "packages/python/src/truss/access.py": "bfc52af058375d5aad0ae10184ad7d3eab0ad7641bc08daa511a57215f5b6374",
+    "packages/python/src/truss/_query_stream_runtime.py": "4a3de795e84f50e188356d3a8936234d83a26d7b7be7d9e79d4136a9779cc33a",
+    "scripts/typed_sdk_stream_checks.py": "8e7390b5eca5320a2acf56365e0d1c92a439d60099f8f2ebae865198b54bdc9e",
+    "scripts/check-typed-sdk-native.py": "904005ef9c86045f9d3597656e731fd52c845f49e57aa20d8d42bcc24d3e4599",
+    "scripts/test_typed_sdk_stream_limits.py": "2114dbc5ef1da71ab0f1181a7ba464301e5286e2c98e7b146857ce27adace74d"
+  }
+}
