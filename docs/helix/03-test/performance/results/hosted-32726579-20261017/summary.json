@@ -1,0 +1,46 @@
+{
+  "sourceCommit": "327265795f6560d0223a94098da0aa3b158b7adb",
+  "workflow": "https://github.com/DocumentDrivenDX/truss/actions/runs/39026812039",
+  "conclusion": "failure",
+  "wheelSha256": "87e62184ceafd2099c6bf36d3191b426a16258dc8c264a4ab35b5715dc6df824",
+  "runtimeManifestSha256": "54776cefd1a655530d0af4e78301573bfa0dadde66babee062ed4e0320b46a28",
+  "compiler": "published Weft 0.4.40",
+  "sqlTimeoutSeconds": 10,
+  "operationTimeoutSeconds": 30,
+  "statisticsEnabled": false,
+  "linux": {
+    "capacity": "failed: CREATE apply cancelled, SQLSTATE57014",
+    "cancellationContext": "runtime_owned_object_transition_validate_qualified transition_id lookup during owned group finish",
+    "capacityControls": "1025 refusal and final-operation rollback passed",
+    "fullSmall": "skipped after capacity failure"
+  },
+  "macos": {
+    "capacity": "all 3 original capacity tests passed",
+    "fullSmall": "failed:1000-edge group apply cancelled, SQLSTATE57014",
+    "cancellationContext": "runtime_person(false) via runtime_owned_edge_validate_in_input during group finish",
+    "completed": "1000 objects committed; edge group not committed; later reads/updates not reached"
+  },
+  "interpretation": "Cancellation context identifies where a statement was interrupted, not its dominant cost. Local passes and diagnostic modified-runtime timings do not resolve these hosted failures. No deadline, workload, guard or assertion changes; no stress or publication attempted. Report working-tree-dirty flag is retained as emitted; installed wheel and runtime manifest are pinned separately.",
+  "artifacts": [
+    {
+      "file": "workflow.json.gz",
+      "uncompressedSha256": "76ec8e781d86ab0309832edfd68bc71ecc5201e9a3273bf13410718cac3adab6"
+    },
+    {
+      "file": "failures.log.gz",
+      "uncompressedSha256": "43188bf9fcead8caf7c08e72208902a469c05b0ced4bf1962f2b5784e542e44d"
+    },
+    {
+      "file": "macos-report.json.gz",
+      "uncompressedSha256": "86806332af5956f47b8ff3bec41f06d411034724ff32aca90fc2a192d846a692"
+    },
+    {
+      "file": "macos-status.json.gz",
+      "uncompressedSha256": "cf2ca85a5d29059e05e0e360710b2c8c47578452926d6adf8734d068f66d762f"
+    },
+    {
+      "file": "linux-status.json.gz",
+      "uncompressedSha256": "08ce00f5beabafb3e4b17bde38b933ede01cbea00dccec4e6e081759f9bdc299"
+    }
+  ]
+}
