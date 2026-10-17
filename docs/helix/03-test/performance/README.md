@@ -1093,3 +1093,22 @@ The installed wheel has 509 source-matching payloads and SHA256
 The report records dirty candidate source parent 4202cbed; its raw SHA256 is
 `916c6772651f4f887b46403b566afd12046f62ef4ccceb9535e6c9e76a2fdd3f`.
 Both hosted original workloads remain release prerequisites.
+
+
+### Hosted capacity failure and preserved atomic call boundary
+
+Run [39000427135](https://github.com/DocumentDrivenDX/truss/actions/runs/39000427135)
+on fa28145c failed the unchanged capacity gate on both hosts. macOS cancelled
+changed UPDATE at object transition validation; Linux cancelled CREATE at the
+module-writer check in finalization. Both returned `57014`. The full small
+workload, stress and publishing were skipped. Cancellation locations do not
+isolate a regression or justify removing authority checks.
+
+A two-call execution/finalization split was considered and is not adopted.
+Astra Ultra identified that CONTRACT-009 requires one protected ordinary group
+call with private continuation helpers. Incomplete-attempt commit rejection alone
+would not preserve that boundary; two separate SQL calls would also introduce two
+10s statement budgets instead of the current group-spanning one. Keep the current
+single-call contract, 10s SQL/30s operation limits and original workloads. The next
+performance change must preserve that boundary and be supported by measurement;
+no authorization check is removed on the basis of a cancellation stack alone.
