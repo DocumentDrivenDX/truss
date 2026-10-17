@@ -5,7 +5,7 @@ ddx:
   activity: test
   status: draft
   owner: Erik LaBianca
-  updated: 2026-10-16
+  updated: 2026-10-17
   links:
     - id: truss.prd
       kind: informed_by
@@ -1112,3 +1112,36 @@ would not preserve that boundary; two separate SQL calls would also introduce tw
 single-call contract, 10s SQL/30s operation limits and original workloads. The next
 performance change must preserve that boundary and be supported by measurement;
 no authorization check is removed on the basis of a cancellation stack alone.
+
+
+### Project only the creation attempt fields used by the leaf
+
+An unchanged original capacity diagnostic on the prior wheel passed in 43.414s
+with stock PostgreSQL function counters. CREATE showed 2,060ms self time in
+1,024 `apply_create_group_qualified` calls; module-writer checks accounted for
+149ms across 6,144 calls (177ms across 7,170 UPDATE calls). These instrumented
+observations do not qualify clean timing or justify removing authority checks.
+
+The creation leaf now selects the six attempt fields it actually uses: ID,
+next index, actor, writer transaction, results and aliases. It no longer copies
+unused input, document and context fields into its local record. Every query
+predicate, `INTO STRICT`, row lock and downstream check remains unchanged.
+Astra Ultra cleared the corrected six-field plan and source; the complete
+function field inventory matches that projection. No call boundary, helper,
+signature, grant or deadline changed.
+
+Five original capacity/overflow/late-fault and basic create/replay/caller-work
+controls pass in 96.801s. The [full original small report](results/attempt-projection-small-20261017.json.gz)
+passes in 169.770s with counters off, unchanged 10s SQL/30s operation limits,
+1,000 nodes/edges/reads, 200 committed writes and all five changed 1,000-object
+UPDATE groups, commits and persisted readbacks. CREATE apply was 6,116ms and edge
+apply 7,856ms; the five UPDATE applies ranged from 6,444ms to 7,378ms. All 1,000
+business-key rows were maintained and cleanup completed. This establishes local
+functionality, not an isolated speedup or hosted release qualification.
+
+The wheel has 509 source-matching payloads and SHA256
+`0817060ef088ce22024f5e0580a9fa39a2fd0bde568ff6d4316206e8ae72feea`;
+manifest SHA256 is `7c74f01d54684f76dd68b5da537f2a2dc71a08812db00ae05b859aaaf4e8084a`.
+The report records dirty candidate source parent 7e941507; raw report SHA256 is
+`85072405d3d7be798c66686f045071b656f73b990d00daf3952a2bab5db58749`.
+Both hosted original workloads remain release prerequisites.

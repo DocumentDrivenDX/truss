@@ -431,7 +431,7 @@ BEGIN
  selected_history:=CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END;
  -- New writes belong to one native-issued outer operation.
  -- The leaf advances progress atomically.
- SELECT a.* INTO STRICT outer_attempt FROM truss.runtime_object_attempt a
+ SELECT a.id,a.next_index,a.actor_oid,a.writer_xid,a.results,a.aliases INTO STRICT outer_attempt FROM truss.runtime_object_attempt a
  WHERE a.writer_xid=writer AND a.actor_oid=creation_leaf.actor_oid AND NOT a.complete
   AND a.context->'creationTransitionProfile'=creation_leaf.context->'creationTransitionProfile'
   AND a.documents_bytes=original_documents
