@@ -15,7 +15,7 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
-    "access": {"truss.query_stream","hashlib","umf_access.native_program","__future__","collections.abc","contextlib","datetime","time","typing","json","decimal","pydantic","umf_access.adoption","umf_access.engine_catalog","umf_access.reviewed","umf_access.pages","umf_access.codec_support","umf_access.postgres_read","truss.execution","truss.query"},
+    "access": {"umf_access.dsl","umf_access.related_keys","truss.query_stream","hashlib","umf_access.native_program","__future__","collections.abc","contextlib","datetime","time","typing","json","decimal","pydantic","umf_access.adoption","umf_access.engine_catalog","umf_access.reviewed","umf_access.pages","umf_access.codec_support","umf_access.postgres_read","truss.execution","truss.query"},
     # Original-context/native correspondence data only; no witness admission.
     '_native_model_correspondence': {'dataclasses','hashlib','json','truss._native_source_observation','truss._owner_evidence_json','weft'},
     # Reviewed same-context association definition data; no permit or issuer.
