@@ -167,3 +167,80 @@ passes alongside the original Subject workflow on PostgreSQL 18.6. It checks
 coexistence with the original preparation issuer, direct-human refusal, owner
 composition, role-lock lifetime through outer COMMIT and leaked-grant refusal.
 The composing test routine is a fixture, not the protected action provider.
+
+
+### Next implementation: protected single-set invocation
+
+Implement one native SD boundary for invoke, keyed lookup and preview, with a
+Python `ReplayingActionExecutor` adapter using the owned SCRAM session. This is
+planned work, not an enabled capability. Start with the original committed UMF
+`bulk-update-owner-fixture` model (main source `b40e9a13`, model SHA-256
+`6fdf2d51e6bd2f167f43dbb32a6ce07ecc504e81fbe969de8e93c5fe5b924594`)
+and its owner-prepared one-entity, one-field set action. The implementation must
+handle that closed shape generically; the fixture is evidence, not an allowlist.
+
+- Register an engine-issued immutable revision bound to complete original model,
+  action and preparation bytes and the exact accepted catalog. Validate every
+  relevant obligation: one EntityInput Key, one required Boolean/String/Integer
+  value, one input-Key write frame, one set effect, no rules/handlers/outputs or
+  additional read/write/relationship obligations. Refuse unknown meaning.
+- Install independent family discovery membership explicitly. It is not inferred
+  from action roles. Native Subject, revision, discovery and role bindings remain
+  private. No table per action or job is introduced.
+- Within the owned RC transaction, acquire source/store/mapping cuts, then the
+  owner-only native role cut. Authenticate genuine SCRAM `SESSION_USER`, resolve
+  its current enrolled human Subject, and check current ACTION roles and
+  ordinary module permissions. Keyed invoke/replay and lookup additionally
+  require discovery membership; unkeyed invoke and preview do not. Retain cuts
+  through actual completion.
+- Serialize the complete store/principal/family/key namespace before lookup.
+  Hashes only route; full bytes establish identity. Authorize discovery before
+  reading tokens and authorize the retained original revision before disclosure.
+  Preserve original revision/expiry/payload precedence and mathematical typed
+  equality without requiring a replayed entity to still exist.
+- Fresh execution resolves the declared Key inside the native invariant boundary.
+  The first profile may conservatively exclude other business writers with
+  NOWAIT relation locks. Check existence and expected version in declared order;
+  missing-entity rejection and version conflict are durable terminal outcomes.
+  Fresh existing targets must be rootless; refuse owned targets before effects.
+  Retained replay does not recheck the target's current existence or ownership.
+  Preview executes no effects and persists no outcome or reservation.
+- Reuse the original group executor for the set effect. Force its deferred native
+  constraints before finalization; verify exact selected object/field changes,
+  no edge or additional object transitions, complete recipe verification and
+  no-op correspondence. Store complete tx/1 result, original typed intent and
+  terminal audit atomically with effects. Denial, unsupported input, ambiguous
+  resolution and known failed execution create no terminal business outcome.
+- Convert the original native outcome into SDK carriers only after actual owned
+  COMMIT acknowledgement. Preserve original request/result bytes and keyed
+  recovery. Unknown acknowledgement stays indeterminate; no automatic retry.
+
+Result binding is explicit. `store-opaque` versions identify the qualified
+primary canonical-state cut, not an object version or ordered counter. Changed
+actions bind their version to their actual native commit; a no-op retains the
+pre-effect canonical cut and allocates no business-change version or event.
+The read-at-least receipt identifies the exact retained terminal commit in the
+registered store/epoch and is backed by its original native writer XID and full
+outcome. It is not a relabeled group receipt. The qualified projection is the
+primary canonical Truss tables: a fresh primary RC read reports visible only
+when native MVCC includes that original committed writer and therefore all
+canonical effects committed with it. An in-flight writer is pending; an unknown,
+foreign, fenced or unsupported receipt/projection refuses. No asynchronous
+projection or maximum-observed-ID shortcut is included. Keep original keyed
+outcomes for the entire namespace lifetime, with no visibility expiry, purge or
+key reuse in this first profile. Original replay returns the same retained
+version, verification and receipt, including no-op outcomes.
+
+The supported initial administration boundary is explicit: installation and
+registration start with no pending administrator/DDL transactions; administrators
+make no DDL, grants or configuration changes during service. Maintenance stops
+admission, drains owned transactions, requalifies exact native dependencies and
+then reopens. This is an environment premise, not proof of concurrent privileged
+DDL exclusion. Existing store-incarnation fencing remains in force; no restart,
+restore or namespace-reset guarantee is added by this plan.
+
+The first completion check is a genuine generated-SDK invoke, owned commit,
+public readback and keyed replay, plus changed-payload refusal, independent
+replay-discovery denial, current-role revocation and rollback containment. Keep
+basic tests and original 10-second SQL / 30-second operation maxima. Manifest
+control and delegated batches follow this complete direct workflow.
