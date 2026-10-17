@@ -1,6 +1,6 @@
 # Quiescent-administrator Graph profile — 2026-10-16
 
-Bounded local native checks pass; completed independent review and main integration pending.
+Bounded local native checks pass. Astra Ultra cleared the completed increment for main integration.
 
 `truss-current-graph-protection/0.1-candidate` is selected by the existing trusted
 activation API from the complete verified original registered Graph consumer
