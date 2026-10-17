@@ -195,7 +195,8 @@ REVOKE ALL ON FUNCTION truss.runtime_retained_operation_owner(uuid,int) FROM PUB
 
 CREATE FUNCTION truss.object_group_begin(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text,original_condition_keys bytea DEFAULT convert_to('[]','UTF8'),replay_only boolean DEFAULT false) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE input jsonb;documents jsonb;request jsonb;context jsonb;selected record;archive truss.schema_doc%ROWTYPE;
+DECLARE input_operations jsonb;
+ input jsonb;documents jsonb;request jsonb;context jsonb;selected record;archive truss.schema_doc%ROWTYPE;
  operation jsonb;source_text text;person oid;writer xid8;ns bytea;rk bytea;route bigint;prior_generation bigint;receipt truss.request_receipt%ROWTYPE;
  raw jsonb;observation bytea;attempt truss.runtime_object_attempt%ROWTYPE;index int:=0;failure_detail text;retained_basis jsonb;retained_count int;
 BEGIN
@@ -207,11 +208,12 @@ BEGIN
  OR (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE
  OR (convert_from(original_request,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'unique original JSON members required' USING ERRCODE='22023';END IF;
  input:=convert_from(original_input,'UTF8')::jsonb;documents:=convert_from(original_documents,'UTF8')::jsonb;request:=convert_from(original_request,'UTF8')::jsonb;
+ input_operations:=input->'operations';
  IF replay_only AND request->>'state' IS DISTINCT FROM 'present' THEN RAISE EXCEPTION 'request-present replay probe required' USING ERRCODE='22023';END IF;
  IF input-ARRAY['interfaceVersion','layoutProfile','mutationProfile','valueProfile','catalog','operations','assertedOrigin','preconditions']<>'{}'::jsonb
  OR input->>'interfaceVersion' IS DISTINCT FROM 'truss-group-input/0.1.0' OR input->'catalog' IS DISTINCT FROM '{"selection":"current"}'::jsonb
- OR jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
- OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND (CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN 1024 ELSE 128 END) OR jsonb_typeof(documents) IS DISTINCT FROM 'array'
+ OR jsonb_typeof(input_operations) IS DISTINCT FROM 'array'
+ OR jsonb_array_length(input_operations) NOT BETWEEN 1 AND (CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN 1024 ELSE 128 END) OR jsonb_typeof(documents) IS DISTINCT FROM 'array'
  OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512 THEN RAISE EXCEPTION 'selected bounded object group required' USING ERRCODE='0A000';END IF;
  IF input->'assertedOrigin'->>'kind' IS DISTINCT FROM 'map' OR (input->'assertedOrigin')-ARRAY['kind','entries']<>'{}'::jsonb
  OR jsonb_typeof(input->'assertedOrigin'->'entries') IS DISTINCT FROM 'array'
@@ -220,8 +222,8 @@ BEGIN
  AND jsonb_typeof(e.value->'value'->'text')='string' AND (e.value->'value')-ARRAY['kind','text']='{}'::jsonb)) IS NOT TRUE)
  OR (SELECT count(*) FROM jsonb_array_elements(input->'assertedOrigin'->'entries'))<>(SELECT count(DISTINCT e.value->>'key') FROM jsonb_array_elements(input->'assertedOrigin'->'entries') e)
  THEN RAISE EXCEPTION 'closed scalar asserted origin required' USING ERRCODE='22023';END IF;
- IF (SELECT count(*) FROM jsonb_array_elements(input->'operations') o WHERE o.value ? 'alias')
- <>(SELECT count(DISTINCT o.value->>'alias') FROM jsonb_array_elements(input->'operations') o WHERE o.value ? 'alias') THEN RAISE EXCEPTION 'unique aliases required' USING ERRCODE='22023';END IF;
+ IF (SELECT count(*) FROM jsonb_array_elements(input_operations) o WHERE o.value ? 'alias')
+ <>(SELECT count(DISTINCT o.value->>'alias') FROM jsonb_array_elements(input_operations) o WHERE o.value ? 'alias') THEN RAISE EXCEPTION 'unique aliases required' USING ERRCODE='22023';END IF;
  IF request<>'{"state":"none"}'::jsonb THEN
   IF request->>'state' IS DISTINCT FROM 'present' OR request-ARRAY['state','identity']<>'{}'::jsonb
    OR request->'identity'->>'inputProfile' IS DISTINCT FROM 'truss-group-input/0.1.0'
@@ -253,7 +255,7 @@ BEGIN
     OR raw->'semantic' IS DISTINCT FROM jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision',raw->'semantic'->>'executedCatalogRevision',
      'layoutProfile',input->'layoutProfile','mutationProfile',input->'mutationProfile','results',attempt.results,'aliases',attempt.aliases) THEN RAISE EXCEPTION 'original receipt position correspondence required' USING ERRCODE='55000';END IF;
    retained_count:=jsonb_array_length(attempt.results);
-   index:=0;FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
+   index:=0;FOR operation IN SELECT value FROM jsonb_array_elements(input_operations) LOOP
     IF NOT attempt.complete OR index<0 OR index>=attempt.next_index OR retained_count<>attempt.next_index THEN
      RAISE EXCEPTION 'complete retained operation required' USING ERRCODE='55000';END IF;
     SELECT * INTO STRICT selected FROM truss.runtime_owned_retained_operation_frame(operation,attempt.results->index,
@@ -275,8 +277,8 @@ BEGIN
  IF replay_only THEN RETURN convert_to('{"outcome":"miss"}','UTF8');END IF;
  -- Authorize the full original owner inventory without requiring live targets.
  person:=truss.runtime_person(false);
- FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
-  SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input->'operations',index,person);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,person);
+ FOR operation IN SELECT value FROM jsonb_array_elements(input_operations) LOOP
+  SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input_operations,index,person);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,person);
   SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
   SELECT d.value->>'sourceText' INTO STRICT source_text FROM jsonb_array_elements(documents) d WHERE d.value->>'documentId'=archive.doc_id;
   IF convert_to(source_text,'UTF8') IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'exact original source required' USING ERRCODE='22023';END IF;
@@ -854,12 +856,14 @@ REVOKE ALL ON FUNCTION truss.runtime_object_validate(bigint,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.object_group_finish(attempt_id uuid) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;request jsonb;semantic jsonb;bytes bytea;receipt_bytes bytea;receipt truss.request_receipt%ROWTYPE;
+DECLARE input_operations jsonb;
+ attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;request jsonb;semantic jsonb;bytes bytea;receipt_bytes bytea;receipt truss.request_receipt%ROWTYPE;
  ns bytea;rk bytea;operation jsonb;selected record;index int:=0;owner record;current_actor oid;sealed record;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id FOR UPDATE NOWAIT;
  IF attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false) OR attempt.complete THEN RAISE EXCEPTION 'current unfinished group required' USING ERRCODE='55000';END IF;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;request:=convert_from(attempt.request_bytes,'UTF8')::jsonb;
+ input_operations:=input->'operations';
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
   IF attempt.results<>'[]'::jsonb OR attempt.aliases<>'[]'::jsonb THEN
    RAISE EXCEPTION 'unassembled original owned attempt required' USING ERRCODE='55000';END IF;
@@ -874,12 +878,12 @@ BEGIN
    RAISE EXCEPTION 'complete ordered sealed owned results required' USING ERRCODE='55000';END IF;
   attempt.results:=sealed.results;attempt.aliases:=sealed.aliases;
  END IF;
- IF attempt.next_index<>jsonb_array_length(input->'operations') OR jsonb_array_length(attempt.results)<>attempt.next_index THEN RAISE EXCEPTION 'complete ordered results required' USING ERRCODE='55000';END IF;
+ IF attempt.next_index<>jsonb_array_length(input_operations) OR jsonb_array_length(attempt.results)<>attempt.next_index THEN RAISE EXCEPTION 'complete ordered results required' USING ERRCODE='55000';END IF;
  IF attempt.context ? 'creationTransitionProfile' THEN
   IF attempt.context->'creationTransitionProfile' IS DISTINCT FROM '{"identity":"truss-unified-create-transition","version":"0.1","sha256":"765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"}'::jsonb AND attempt.context->'creationTransitionProfile' IS DISTINCT FROM '{"identity":"truss-unified-create-transition","version":"0.2","sha256":"073782e2517f2a7e26c8d6479c6266ececf68963681ccfb6a380e9cd16f2e11b"}'::jsonb THEN
    RAISE EXCEPTION 'known original creation storage profile required' USING ERRCODE='55000';END IF;
   FOR index IN 0..attempt.next_index-1 LOOP
-   IF input->'operations'->index->>'operation'='create_object' AND
+   IF input_operations->index->>'operation'='create_object' AND
     (SELECT count(*) FROM truss.runtime_object_transition t WHERE t.attempt_id=attempt.id
       AND t.operation_index=index AND t.before_object IS NULL
       AND t.object_id::text=attempt.results->index->'identity'->>'id'
@@ -917,8 +921,8 @@ BEGIN
  current_actor:=truss.runtime_person(false);
  IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='42501';END IF;
  FOR owner IN SELECT DISTINCT object_id,type_id FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=object_group_finish.attempt_id LOOP PERFORM truss.runtime_owned_row_validate_qualified(owner.object_id,owner.type_id,current_actor);END LOOP;
- FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
-  SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input->'operations',index,current_actor);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,current_actor);index:=index+1;
+ FOR operation IN SELECT value FROM jsonb_array_elements(input_operations) LOOP
+  SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input_operations,index,current_actor);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,current_actor);index:=index+1;
  END LOOP;
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN PERFORM truss.runtime_owned_group_validate(attempt.id,true);END IF;
  RETURN convert_to(jsonb_build_object('outcome','success','disposition','applied','durability','pending','semantic',semantic,

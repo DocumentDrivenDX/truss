@@ -62,7 +62,8 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_local_edges(jsonb,text[],text[],boole
 
 CREATE FUNCTION truss.runtime_owned_prepare(input jsonb,scope jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='{}';
+DECLARE input_operations jsonb;
+ nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='{}';
  node_order text[]:='{}';boundary_order text[]:='{}';entry record;selected text;source_ref text;target_ref text;root_ref text;
  operation jsonb;before_nodes jsonb;before_edges jsonb;state jsonb;prior jsonb;image jsonb;values_image jsonb;ownership jsonb;
  selected_type truss.type_def%ROWTYPE;relation truss.rel_def%ROWTYPE;pin record;identity jsonb;revision int;
@@ -72,10 +73,11 @@ DECLARE nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='
  rootless_creates boolean;created_states jsonb[]:='{}';
  value_updates boolean;updated_states jsonb[]:='{}';updated_references text[]:='{}';
  scope_node_states jsonb[]:='{}';scope_edge_states jsonb[]:='{}';
- scope_node_type int;scope_edge_type int;scope_edge_pin text;
+ scope_node_type int;scope_edge_type int;scope_edge_pin text;outgoing_counts jsonb;incoming_counts jsonb;
 BEGIN
  current_actor:=truss.runtime_person(false);
- IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array' OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 1024
+ input_operations:=input->'operations';
+ IF jsonb_typeof(input_operations) IS DISTINCT FROM 'array' OR jsonb_array_length(input_operations) NOT BETWEEN 1 AND 1024
   OR jsonb_typeof(scope->'nodes') IS DISTINCT FROM 'object' OR jsonb_typeof(scope->'edges') IS DISTINCT FROM 'object'
   OR octet_length(convert_to(scope::text,'UTF8'))>4194304 THEN
   RAISE EXCEPTION 'complete bounded original group scope required' USING ERRCODE='54000';END IF;
@@ -83,13 +85,13 @@ BEGIN
  -- earlier node. Keep the same ordered plans and complete final graph checks.
  rootless_creates:=coalesce(scope->'nodes'='{}'::jsonb AND scope->'edges'='{}'::jsonb
   AND scope->'boundary'='{}'::jsonb AND NOT EXISTS(
-   SELECT 1 FROM jsonb_array_elements(input->'operations') o
+   SELECT 1 FROM jsonb_array_elements(input_operations) o
    WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
     OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb),false);
  -- Distinct stored rootless targets cannot observe one another's value edits.
  -- Keep ordinary validation in order; malformed shapes use the general path.
  value_updates:=NOT EXISTS(
-  SELECT 1 FROM jsonb_array_elements(input->'operations') o
+  SELECT 1 FROM jsonb_array_elements(input_operations) o
   WHERE o.value->>'operation' IS DISTINCT FROM 'update_object'
    OR o.value ? 'ownershipChange'
    OR o.value->'target'->>'state' IS DISTINCT FROM 'stored'
@@ -99,7 +101,7 @@ BEGIN
    WHERE n.value->'root_id' IS DISTINCT FROM 'null'::jsonb
     OR n.value->'root_type' IS DISTINCT FROM 'null'::jsonb)
   AND (SELECT count(*)=count(DISTINCT 'stored:'||(o.value->'target'->'identity'->>'typeId')||':'||(o.value->'target'->'identity'->>'id'))
-   FROM jsonb_array_elements(input->'operations') o);
+   FROM jsonb_array_elements(input_operations) o);
  revision:=(scope->>'catalogRevision')::int;
  IF revision IS NULL OR revision<1 OR revision IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1) THEN
   RAISE EXCEPTION 'current admitted group catalog required' USING ERRCODE='55P03';END IF;
@@ -141,7 +143,7 @@ BEGIN
  END LOOP;
  SELECT coalesce(jsonb_object_agg(member.key,member.value ORDER BY e.ordinal),'{}'::jsonb) INTO edges
   FROM unnest(scope_edge_states) WITH ORDINALITY e(state,ordinal) CROSS JOIN LATERAL jsonb_each(e.state) member;
- FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
+ FOR operation IN SELECT value FROM jsonb_array_elements(input_operations) LOOP
   before_nodes:=nodes;before_edges:=edges;changed_nodes:=ARRAY[]::text[];changed_edges:=ARRAY[]::text[];
   IF operation ? 'alias' AND (jsonb_typeof(operation->'alias') IS DISTINCT FROM 'string'
    OR octet_length(operation->>'alias') NOT BETWEEN 1 AND 1024 OR aliases ? (operation->>'alias')) THEN
@@ -154,7 +156,7 @@ BEGIN
    ELSE
     -- Only alias resolution reads earlier operations; stored/create targets do not.
     selected_type:=truss.runtime_owned_operation_type_qualified(operation,
-     CASE WHEN operation->'target'->>'state'='alias' THEN input->'operations' END,index,current_actor);
+     CASE WHEN operation->'target'->>'state'='alias' THEN input_operations END,index,current_actor);
     IF operation->>'operation'='create_object' THEN
      resolved_creates:=resolved_creates||jsonb_build_object(operation->>'typeDefinitionPin',to_jsonb(selected_type));
     END IF;
@@ -255,7 +257,7 @@ BEGIN
     END IF;
    END IF;
   ELSIF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN
-   relation:=truss.runtime_operation_relationship(operation,input->'operations',index);
+   relation:=truss.runtime_operation_relationship(operation,input_operations,index);
    IF relation.lifecycle NOT IN ('owned','independent') OR NOT relation.directed OR relation.composition OR relation.assoc_type_id IS NOT NULL THEN
     RAISE EXCEPTION 'supported directed relationship required' USING ERRCODE='0A000';END IF;
    IF operation->>'operation'='create_edge' THEN
@@ -319,17 +321,17 @@ BEGIN
   IF operation ? 'alias' THEN aliases:=aliases||jsonb_build_object(operation->>'alias',selected);END IF;
   -- Keep one working graph for ordered simulation. Persist only this step's
   -- changed members and identity witnesses; final settlement keeps one full frame.
-  IF rootless_creates AND index=jsonb_array_length(input->'operations')-1 THEN
+  IF rootless_creates AND index=jsonb_array_length(input_operations)-1 THEN
    SELECT jsonb_object_agg(node_order[n.ordinal::int],n.state) INTO nodes
     FROM unnest(created_states) WITH ORDINALITY n(state,ordinal);
    before_nodes:=nodes-selected;
-  ELSIF value_updates AND index=jsonb_array_length(input->'operations')-1 THEN
+  ELSIF value_updates AND index=jsonb_array_length(input_operations)-1 THEN
    SELECT nodes||coalesce(jsonb_object_agg(updated_references[n.ordinal::int],n.state)
      FILTER (WHERE n.ordinal<cardinality(updated_states)),'{}'::jsonb),
     nodes||jsonb_object_agg(updated_references[n.ordinal::int],n.state)
     INTO before_nodes,nodes FROM unnest(updated_states) WITH ORDINALITY n(state,ordinal);
   END IF;
-  IF index=jsonb_array_length(input->'operations')-1 THEN
+  IF index=jsonb_array_length(input_operations)-1 THEN
    plan:=jsonb_build_object('beforeNodes',before_nodes,'afterNodes',nodes,
     'beforeEdges',before_edges,'afterEdges',edges);
   ELSIF value_updates THEN
@@ -388,18 +390,29 @@ BEGIN
   selected:=node_order[(entry.value->>'node')::int+1];root_ref:=CASE WHEN entry.value->'root'='null'::jsonb THEN NULL ELSE node_order[(entry.value->>'root')::int+1] END;
   IF nodes->selected->'root' IS DISTINCT FROM coalesce(to_jsonb(root_ref),'null'::jsonb) THEN RAISE EXCEPTION 'final ownership graph requires explicit root change' USING ERRCODE='22023';END IF;
  END LOOP;
+ -- The final simulated edges are immutable here. Count each live edge once
+ -- per direction rather than scanning the full map for every node/relation.
+ WITH counts AS (
+  SELECT e.value->'identity'->>'typeId' relation_id,endpoint.direction,endpoint.reference,count(*) amount
+  FROM jsonb_each(edges) e CROSS JOIN LATERAL
+   (VALUES ('outgoing',e.value->>'source'),('incoming',e.value->>'target')) endpoint(direction,reference)
+  WHERE e.value->'deleted'='false'::jsonb
+  GROUP BY e.value->'identity'->>'typeId',endpoint.direction,endpoint.reference)
+ SELECT coalesce(jsonb_object_agg(jsonb_build_array(relation_id,reference)::text,amount)
+   FILTER(WHERE direction='outgoing'),'{}'::jsonb),
+  coalesce(jsonb_object_agg(jsonb_build_array(relation_id,reference)::text,amount)
+   FILTER(WHERE direction='incoming'),'{}'::jsonb)
+ INTO outgoing_counts,incoming_counts FROM counts;
  FOREACH selected IN ARRAY node_order LOOP
   selected_source_type:=(nodes->selected->'identity'->>'typeId')::int;
   FOR relation IN SELECT r.* FROM truss.rel_def r WHERE r.retired_rev IS NULL AND EXISTS(
    SELECT 1 FROM truss.rel_endpoint ep WHERE ep.rel_type_id=r.rel_type_id AND selected_source_type IN(ep.source_type,ep.target_type)) LOOP
    IF EXISTS(SELECT 1 FROM truss.rel_endpoint ep WHERE ep.rel_type_id=relation.rel_type_id AND ep.source_type=selected_source_type) THEN
-    SELECT count(*) INTO outgoing FROM jsonb_each(edges) e WHERE e.value->'deleted'='false'::jsonb
-     AND e.value->'identity'->>'typeId'=relation.rel_type_id::text AND e.value->>'source'=selected;
+    outgoing:=coalesce((outgoing_counts->>jsonb_build_array(relation.rel_type_id::text,selected)::text)::bigint,0);
     IF outgoing<relation.target_min OR relation.target_max IS NOT NULL AND outgoing>relation.target_max THEN RAISE EXCEPTION 'final outgoing multiplicity failed' USING ERRCODE='P1005';END IF;
    END IF;
    IF EXISTS(SELECT 1 FROM truss.rel_endpoint ep WHERE ep.rel_type_id=relation.rel_type_id AND ep.target_type=selected_source_type) THEN
-    SELECT count(*) INTO incoming FROM jsonb_each(edges) e WHERE e.value->'deleted'='false'::jsonb
-     AND e.value->'identity'->>'typeId'=relation.rel_type_id::text AND e.value->>'target'=selected;
+    incoming:=coalesce((incoming_counts->>jsonb_build_array(relation.rel_type_id::text,selected)::text)::bigint,0);
     IF incoming<relation.source_min OR relation.source_max IS NOT NULL AND incoming>relation.source_max THEN RAISE EXCEPTION 'final incoming multiplicity failed' USING ERRCODE='P1005';END IF;
    END IF;
   END LOOP;
@@ -417,11 +430,13 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_prepare(jsonb,jsonb) FROM PUBLIC;
 -- Admission is before predicate/key/row locks. No canonical graph rows change.
 CREATE FUNCTION truss.runtime_owned_capture(selected_attempt uuid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;observed jsonb;locked jsonb;
+DECLARE input_operations jsonb;
+ attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;observed jsonb;locked jsonb;
  inventory jsonb;entry jsonb;expected_operation jsonb;actual_operation jsonb;owner record;selected_type int;relation truss.rel_def%ROWTYPE;endpoint_owner record;retained_bytes bigint:=0;current_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+ input_operations:=input->'operations';
  current_actor:=truss.runtime_person(false);
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id()
   OR attempt.actor_oid IS DISTINCT FROM current_actor OR attempt.complete
@@ -449,8 +464,8 @@ BEGIN
  -- same original readers as explicit operations, before graph exclusion.
  FOR selected_type IN SELECT type_id FROM (
   SELECT DISTINCT (value->>'type_id')::int type_id FROM jsonb_each(observed->'types')
-  UNION SELECT (truss.runtime_owned_operation_type_qualified(value,input->'operations',(ordinal-1)::int,current_actor)).type_id
-   FROM jsonb_array_elements(input->'operations') WITH ORDINALITY o(value,ordinal)
+  UNION SELECT (truss.runtime_owned_operation_type_qualified(value,input_operations,(ordinal-1)::int,current_actor)).type_id
+   FROM jsonb_array_elements(input_operations) WITH ORDINALITY o(value,ordinal)
    WHERE value->>'operation' IN ('create_object','update_object','delete_object')
  ) affected_types ORDER BY type_id LOOP
   IF truss.runtime_object_values_readable_qualified(selected_type,current_actor) IS NOT TRUE THEN

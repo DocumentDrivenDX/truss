@@ -990,3 +990,45 @@ No end-to-end improvement, non-regression or release qualification is establishe
 Astra Ultra cleared the component plan/source, differential evidence and bounded
 increment with this failure explicitly recorded. Both hosted original workloads
 remain prerequisites for stress and tagging; no unchanged hosted rerun follows.
+
+### Reuse immutable operation arrays and count simulated edges once
+
+Group admission, owned preparation/capture and finish now extract the unchanged
+operations array once per invocation. Previously their loops repeatedly copied
+the complete array while resolving each operation or checking its length. Inverse
+substitution reproduced all four original bodies before the following count
+change; guards, helper calls, validation order and null/non-array behavior remain
+unchanged.
+
+After the existing final forest/root checks, owned preparation now counts the
+immutable simulated live edges once by relationship and endpoint. The existing
+node/relation traversal still checks outgoing before incoming multiplicity with
+the same rules and `P1005` refusals. Parallel edges each contribute one count;
+missing entries mean zero. Keys retain the original text type IDs and references.
+This removes a full edge scan for every node/relation without caching current
+authority or adding a table, helper, protocol or deadline exception.
+
+Astra Ultra cleared both plans and the combined source. Original capacity,
+overflow/final-fault rollback, owned subtree/history/query, batch and parallel-edge
+workflows pass: ten tests in 68.452 seconds. The composed Subject-cut regression
+also passes in 7.945 seconds with fixture cleanup. The exact installed wheel has
+509 source-matching payloads and SHA-256
+`367e1034e2f02a8cf95d459fd25573b13fa2d4db848d426e2372d199ad18d1e8`.
+These basic controls do not establish full workload or hosted qualification.
+
+The full original installed-wheel `small` workload now passes locally in 124.576
+seconds with counters off and unchanged 10s SQL/30s operation limits: 1,000 nodes,
+1,000 edges, 1,000 sampled reads, 200 committed single writes and all five changed
+1,000-object UPDATE groups with commit and persisted readback. CREATE apply was
+5,090 ms (7,411 ms including commit); edge apply was 8,690 ms (13,264 ms including
+commit). Five UPDATE applies were 6,975–8,577 ms, median 7,028 ms; all five commits
+and readbacks passed. The database maintained all 1,000 declared business-key
+rows and retained the actual physical index inventory. Cleanup completed.
+
+The [original report](results/operation-counts-small-20261016.json) records the
+actual installed package, manifest and dirty candidate on source parent d2f88c38.
+This is one functional run, not an isolated speedup, broader scale result or
+hosted qualification. Both hosted original workloads must still pass before
+stress or tagging.
+Astra Ultra cleared the completed iteration, retained result and source-matching
+wheel for commit and the subsequent hosted original-workload run.
