@@ -778,7 +778,8 @@ BEGIN
  -- Immutable transition semantics are checked at final group settlement and
  -- attempt commit. Row settlement independently rechecks current authority.
  FOR owned_transition IN
-  SELECT t.*,a.actor_oid AS original_actor,a.writer_xid AS original_writer,
+  SELECT t.operation_index,t.before_object,t.after_object,
+   a.actor_oid AS original_actor,a.writer_xid AS original_writer,
    a.next_index AS original_next,
    CASE WHEN a.actor_oid IS NOT DISTINCT FROM current_actor
     AND a.writer_xid IS NOT DISTINCT FROM pg_current_xact_id()
