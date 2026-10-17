@@ -880,3 +880,35 @@ unchanged and is not committed or installed. These are diagnostic observations,
 not clean timing qualification. A proposed creation-identity lookup microchange
 was discarded: it did not address the measured changed-UPDATE blocker. No stress
 qualification or release tag follows these failures.
+
+### Reuse each step's immutable before-map
+
+`runtime_owned_step` now extracts `beforeEdges` and `beforeNodes` once into local
+JSONB variables. The last slot can carry the full graph; repeated extraction
+inside its existing loops copied the large map while selecting actual effects.
+Filters, ordering, null/deleted semantics, effects, authority, progress and final
+settlement remain unchanged. No helper, schema, cache protocol or public API was
+added. An inverse substitution check reproduces the original function exactly.
+
+The full original installed-wheel `small` workload passes locally in 126.123
+seconds with counters off: 1,000 nodes, 1,000 edges, 1,000 sampled reads, 200
+committed single writes and all five changed 1,000-object UPDATE groups with
+commit and persisted readback. CREATE apply was 5,114 ms (7,607 ms including
+commit); edge apply was 8,660 ms (13,714 ms including commit). Five UPDATE applies
+were 7,610–8,238 ms, median 7,905 ms; all commits and readbacks succeeded. This
+is one functional run under unchanged 10s SQL/30s operation limits, not an
+isolated speedup or hosted qualification. The report correctly identifies a dirty
+candidate checkout and the actual installed manifest. Wheel SHA-256:
+`6d47537a9d192f57b04ca32bb6b990d5f2f2733d0758b9171b8a5904d525f614`.
+All 509 packaged payloads match source. Original capacity/overflow/late-fault and
+owned reparent/cascade/history/retry/query controls also pass: five cases in
+34.116 seconds. Owner/hash, module-boundary and whitespace checks pass. Astra
+Ultra cleared the plan, source and completed small-workload evidence.
+
+The preceding [baseline run 38992684003](https://github.com/DocumentDrivenDX/truss/actions/runs/38992684003)
+on 8cbe8fb3 passed all preceding installed functional steps on both platforms.
+Linux passed original capacity but cancelled the 1,000-edge public group during
+final validation; macOS cancelled the 1,024-UPDATE capacity group during final
+validation and skipped the public workload. Publication was skipped. The new
+map-reuse increment still requires both hosted original workloads before stress
+qualification or tagging.

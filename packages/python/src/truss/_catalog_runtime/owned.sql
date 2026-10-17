@@ -1308,7 +1308,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_object_effect(uuid,int,text,jsonb,oid
 CREATE FUNCTION truss.runtime_owned_step(selected_attempt uuid,selected_index int,prepared_input jsonb DEFAULT NULL,prepared_original bytea DEFAULT NULL,qualified_actor oid DEFAULT NULL) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 <<owned_step_body>>
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;plan jsonb;mode text;entry record;prior jsonb;effect_mode text;
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;plan jsonb;before_edges jsonb;before_nodes jsonb;mode text;entry record;prior jsonb;effect_mode text;
  metadata jsonb;effect jsonb;primary_result jsonb;events jsonb:='[]';deleted jsonb:='[]';result jsonb;selected_transition bigint;current_actor oid;stored_result jsonb;progress record;closing_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
@@ -1325,9 +1325,12 @@ BEGIN
   RAISE EXCEPTION 'selected original owned operation required' USING ERRCODE='55000';END IF;
  -- Cascade edges precede every endpoint deletion. No child effect advances the
  -- original attempt or adds a synthetic operation/result to its input.
- FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterEdges') e WHERE e.value IS DISTINCT FROM plan->'beforeEdges'->e.key
+ -- Extract each immutable before-map once; the final slot can contain the
+ -- complete graph even when only one member changes.
+ before_edges:=plan->'beforeEdges';
+ FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterEdges') e WHERE e.value IS DISTINCT FROM before_edges->e.key
   OR e.key=plan->>'primary' AND mode='update_edge' ORDER BY key COLLATE "C" LOOP
-  prior:=plan->'beforeEdges'->entry.key;
+  prior:=before_edges->entry.key;
   IF prior->'deleted'='true'::jsonb THEN CONTINUE;END IF;
   effect_mode:=CASE WHEN prior IS NULL THEN 'create_edge' WHEN entry.value->'deleted'='true'::jsonb THEN 'delete_edge' ELSE 'update_edge' END;
   metadata:=truss.runtime_owned_edge_metadata(selected_attempt,selected_index,entry.key,current_actor);
@@ -1336,10 +1339,11 @@ BEGIN
   IF entry.key=plan->>'primary' THEN primary_result:=effect;END IF;
  END LOOP;
  -- Aggregate-root FKs are immediate: remove nonroots before their root.
+ before_nodes:=plan->'beforeNodes';
  FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterNodes') n WHERE
-  (plan->'beforeNodes') ? n.key AND (n.value IS DISTINCT FROM plan->'beforeNodes'->n.key OR n.key=plan->>'primary' AND mode='update_object')
-  ORDER BY CASE WHEN plan->'beforeNodes'->n.key->'root'='null'::jsonb THEN 1 ELSE 0 END,key COLLATE "C" LOOP
-  IF plan->'beforeNodes'->entry.key->'deleted'='true'::jsonb THEN CONTINUE;END IF;
+  before_nodes ? n.key AND (n.value IS DISTINCT FROM before_nodes->n.key OR n.key=plan->>'primary' AND mode='update_object')
+  ORDER BY CASE WHEN before_nodes->n.key->'root'='null'::jsonb THEN 1 ELSE 0 END,key COLLATE "C" LOOP
+  IF before_nodes->entry.key->'deleted'='true'::jsonb THEN CONTINUE;END IF;
   effect:=truss.runtime_owned_object_effect(selected_attempt,selected_index,entry.key,prepared_input,current_actor);
   events:=events||(effect->'events');deleted:=deleted||coalesce(effect->'deleted','[]'::jsonb);
   IF entry.key=plan->>'primary' THEN primary_result:=effect;END IF;
