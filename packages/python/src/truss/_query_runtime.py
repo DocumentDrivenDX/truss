@@ -292,7 +292,11 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         if engine_program is not None:
             import weft
             checked = json.loads(weft.check_engine_read_json(engine_program, json.dumps(request, ensure_ascii=False)) if page_size is None else weft.check_engine_page_json(engine_program, json.dumps(request, ensure_ascii=False), json.dumps(None if page_state is None else page_state["after"])))
-            if (checked.get("status") != "compiled" or checked.get("compiler") != "truss-runtime" or checked.get("artifact") != artifact
+            profile_pair=(checked.get('compiler'),checked.get('version'))
+            profile_kind='read' if page_size is None else 'page'
+            if (checked.get("status") != "compiled" or profile_pair not in (
+                    ('truss-runtime','weft.engine-'+profile_kind+'/0.1'),
+                    ('truss-runtime-binary','weft.engine-'+profile_kind+'/0.2')) or checked.get("artifact") != artifact
                 or page_size is not None and (checked.get("pageSize") != page_size or checked.get("page") != page_metadata)):
                 cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
                 return QueryRefused(code='stale_context')

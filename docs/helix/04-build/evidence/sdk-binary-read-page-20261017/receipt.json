@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "scope": "Bounded private candidate binary SDK read/page source integration; not a published release, clean-wheel qualification, generated query CLI route, stream or protected action/manifest provider qualification",
+  "base": "c9144df5af1a2d95505ccc782ebb20623af1d86f",
+  "sdk": {
+    "source": "09ad297",
+    "wheelSha256": "151219add4aa5079fe8e73b2276824dd58f1cc70a3a8f827742f61a592f4391a"
+  },
+  "weft": {
+    "source": "28bd2dd9",
+    "wheelSha256": "174929f1cd9ef429f70371015ff1198c7cdf9629f3e899fdc7d3314943037796"
+  },
+  "tests": {
+    "binaryUnitPython311": 4,
+    "binaryUnitPython314": 4,
+    "generatedRelatedKeyPython311": 3,
+    "streamLimitPython311": 5,
+    "nativePython311": {
+      "tests": 1,
+      "seconds": 7.824
+    }
+  },
+  "sourceSha256": {
+    "packages/python/src/truss/access.py": "ff4bf9c926a787297bb0685700e1154d7b84c3bbb15241bd085bd96b89c37ef3",
+    "packages/python/src/truss/_query_runtime.py": "95a5fc76e86228ab2c8f9809e60ca23c10d2f1a6ea452694de7e48d13c4ffbea",
+    "scripts/test_typed_sdk_binary.py": "f48bd3c73443383596a71fcb96a62a016ea40380135bfdba67db3290ee6dc8b8"
+  },
+  "rawUncompressedSha256": {
+    "runner.py": "36636bdeb62557d8906de5dc088dcb92d9b95d6bd49b22ddf287d58600bffc5d",
+    "native.log": "de752def9acb34b1c4eb9378d9c1bd44a15fefae9d3f37531ba35708615c0e0e",
+    "initial-dependency-failure.log": "47b6ef20ff41a781f54e14a450f1a73cc536bb2bf31c2f4ef4ebec9f6aba1d64",
+    "initial-sandbox-failure.log": "6fb791d918c1bd8ff7dd0b6dd19bea1e677acc1ba9507653c6330aba842085fe",
+    "native-request.json": "3f1ec53e202138d3cdde426039aa305b683a9239d5a30be613363863decc8e63",
+    "page-program.json": "99375d8b5eb076a53739f0a84309179c36d8b5dc7fe8746ad9647421771ae9e2",
+    "read-program.json": "862028cfceb7d09407aaeed58f37c66379356e89c2d89c09ca1fa47d310cf159",
+    "original-model.json": "66a6d1de95c95580190a2005deb0d2a72fa4e9262f64c1fe8fe1d6ddc78fcfe5",
+    "receipt.json": "90ce8d9469b9713ea517604907a20906ee8401bca7e5bcbec005506a5523c97b"
+  },
+  "cleanup": "Fixture cleanup completed; isolated PostgreSQL stopped and temporary schema/roles removed; local native lease returned",
+  "limitations": [
+    "Binary stream stays explicitly refused pending original compiler export fix",
+    "Final SDK/compiler source cohort qualification remains pending",
+    "Default published compiler pin unchanged"
+  ]
+}

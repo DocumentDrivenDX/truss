@@ -10,7 +10,8 @@ from datetime import timedelta
 from decimal import Decimal
 from time import monotonic
 from typing import Any, TypeVar
-import hashlib,json
+import hashlib,json,base64
+from .contracts import TextValue
 from pydantic import BaseModel
 from umf_access.adoption import TargetIdentity
 from umf_access.engine_catalog import EngineRead
@@ -27,6 +28,25 @@ class TrussReadRefused(ValueError):
     def __init__(self, original: object):
         self.original=original
         super().__init__('Truss refused the original typed read; inspect original outcome')
+
+
+def _binary_sdk_value(value):
+    """Exact native binary output conversion; profile activation is separate."""
+    if (type(value) is not TextValue or value.kind!='binary' or type(value.text) is not str
+            or len(value.text)>1048576 or not value.text.isascii()):
+        raise ValueError('Bounded exact native binary carrier required')
+    try:decoded=base64.b64decode(value.text,validate=True)
+    except (ValueError,UnicodeError):raise ValueError('Canonical native Base64 required') from None
+    if base64.b64encode(decoded).decode('ascii')!=value.text:
+        raise ValueError('Canonical native Base64 required')
+    return decoded
+
+
+def _read_profile(program, kind):
+    """Closed owner compiler/version pairs; binary streams remain separate."""
+    return (program.get('compiler'),program.get('version')) in (
+        ('truss-runtime','weft.engine-'+kind+'/0.1'),
+        ('truss-runtime-binary','weft.engine-'+kind+'/0.2'))
 
 
 def _related_key_models(value, decoder, key_model):
@@ -60,6 +80,11 @@ def _typed_rows(entry, program, native):
     """Validate source correspondence even when the native result is empty."""
     if native.columns!=tuple(entry.result.model_fields):
         raise ValueError('Truss complete ordered output signature differs')
+    binary=program.get('compiler')=='truss-runtime-binary'
+    outputs=program.get('outputs',())
+    if binary and (not (_read_profile(program,'read') or _read_profile(program,'page'))
+        or tuple(output.get('name') for output in outputs)!=native.columns):
+        raise ValueError('Original complete Truss binary output signature required')
     related=None
     if getattr(entry.result,'UMF_RELATED_OUTPUT',None) is not None:
         from umf_access.related_keys import transport_spec
@@ -80,9 +105,22 @@ def _typed_rows(entry, program, native):
             raise ValueError('Original Truss related-Key representation or source differs')
     result=[]
     for row in native.rows:
-        if len(row)!=len(native.columns) or any(isinstance(value,QueryAbsent) for value in row):
+        if len(row)!=len(native.columns) or not binary and any(isinstance(value,QueryAbsent) for value in row):
             raise ValueError('ADOPTION_MISMATCH: selected column absent or row shape differs')
         values=dict(zip(native.columns,row,strict=True))
+        if binary:
+            from umf_access.types import MISSING
+            for output in outputs:
+                name=output['name'];value=values[name]
+                if isinstance(value,QueryAbsent):
+                    if output.get('missing') is not True:
+                        raise ValueError('ADOPTION_MISMATCH: required output absent')
+                    values[name]=MISSING
+                elif value is None:
+                    if output.get('nullable') is not True:
+                        raise ValueError('ADOPTION_MISMATCH: required output null')
+                elif output['carrier']=='binary':
+                    values[name]=_binary_sdk_value(value)
         for name,value in values.items():
             if isinstance(value,QueryRelatedKeys) and (related is None or name!=related[0]):
                 raise ValueError('Unexpected native related-Key output')
@@ -120,7 +158,7 @@ class TrussTarget:
             if type(captured)is not dict:raise ValueError('original native request object required')
             targets.append(captured.get('target'))
         for entry in catalog_entries:
-            if not isinstance(entry,EngineRead) or entry.artifact()['compiler']!='truss-runtime':
+            if not isinstance(entry,EngineRead) or not any(_read_profile(entry.artifact(),kind) for kind in ('read','page')):
                 raise ValueError('original Truss engine catalog required')
             targets.append(entry.artifact()['request']['target'])
         if not targets:raise ValueError('original native catalog sources or engine entries required')
@@ -146,8 +184,8 @@ class TrussTarget:
     def read(self,entry:CatalogRead[P,R],parameters:P,*,timeout:timedelta|None=None)->list[R]:
         if not isinstance(entry,EngineRead):raise ValueError('Truss requires an original engine catalog')
         program=entry.artifact();request=program['request'];target=request['target']
-        if program['version']!='weft.engine-read/0.1':raise ValueError('original read catalog required')
-        if program['compiler']!='truss-runtime' or target!=program_json(self.native_target_json):
+        if not _read_profile(program,'read'):raise ValueError('original read catalog required')
+        if target!=program_json(self.native_target_json):
             raise ValueError('Truss original backend or binding differs')
         values=revalidate_model(entry.parameters,parameters)
         budget=self._budget(timeout);deadline=monotonic()+budget.total_seconds()
@@ -174,12 +212,12 @@ class TrussTarget:
             for name,p in request['parameters'].items():
                 family,value=p['family'],p['value']
                 sample[name]={'string':lambda:value,'integer':lambda:int(value),'decimal':lambda:Decimal(value),'boolean':lambda:value=='true'}[family]()
-            if entry.artifact()["version"]=="weft.engine-page/0.1":self.page(entry,entry.parameters.model_validate(sample))
+            if _read_profile(entry.artifact(),'page'):self.page(entry,entry.parameters.model_validate(sample))
             else:self.read(entry,entry.parameters.model_validate(sample))
     def page(self,entry:CatalogRead[P,R],parameters:P,*,after:ReadContinuation|None=None,timeout:timedelta|None=None)->ReadPage[R]:
         if not isinstance(entry,EngineRead):raise ValueError('original engine page catalog required')
         program=entry.artifact();request=program['request'];target=request['target']
-        if program['version']!='weft.engine-page/0.1' or program['compiler']!='truss-runtime' or target!=program_json(self.native_target_json):
+        if not _read_profile(program,'page') or target!=program_json(self.native_target_json):
             raise ValueError('original Truss page backend or binding differs')
         values=revalidate_model(entry.parameters,parameters)
         identity=hashlib.sha256(canonical_json([self.identity().digest(),entry.artifact_json,entry.context_json,
