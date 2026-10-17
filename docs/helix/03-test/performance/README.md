@@ -1264,7 +1264,7 @@ original 1,024 creates/changed updates/commits/replay/ordered reads, 1,025 refus
 operation-1,024 fault rollback, mixed A/B/A create order/pins/committed values,
 and same-group create/delete retained history. Fixture cleanup completed.
 This is correctness evidence, not an isolated speedup: the full original small
-workload and both hosted original-workload gates remain pending for this change.
+workload subsequently passed locally, as recorded below; both hosted original-workload gates remain release blockers.
 The earlier diagnostic's 104.54ms affected-type aggregate was perturbed and does
 not establish the clean saving.
 
@@ -1273,3 +1273,14 @@ The candidate wheel has 509 source-matching payloads and SHA256
 manifest SHA256 is `f0fe32fac6389964c83fba0fbd7d4ea8170bd67437a166f8d77ce88c33a4fe7f`.
 The tested candidate was the working tree over main `2c546981`. Raw control-log
 SHA256 is `a0146e1aeb683b01cdaa9830f4f0f37f7ac0b0e8a0d6d778d0bf6130e007df55`.
+
+
+### Hosted 4070181b workload result
+
+[Run 39011067743](https://github.com/DocumentDrivenDX/truss/actions/runs/39011067743) tested exact main `4070181bb20769af37ddc4b29c87d2c462826723`, once, with capacity statistics off and the original workloads and 10s SQL/30s operation limits. Packaging and preceding functional workflows passed. Linux failed the original positive 1,024-CREATE capacity case with `57014` during final readable-value validation; overflow and final-operation rollback controls passed. Linux did not reach full-small. macOS passed the original capacity tests, then failed full-small while applying 1,000 edges with `57014` during final graph validation. Its 1,000-object create and commit completed; later reads, 200 writes and five changed 1,000-object update groups did not run. macOS workload server cleanup completed. Cancellation locations alone do not establish dominant costs.
+
+The campaign failed overall. Stress and publishing were skipped. Neither platform is qualified for release by this run, and no unchanged rerun is scheduled.
+
+The [terminal hosted failure log](results/hosted-39011067743-failed.log.gz) and [macOS full-small report](results/hosted-39011067743-macos-small.json.gz) retain these failures.
+
+The subsequent [unchanged local full-small run](results/create-scope-dedup-small-20261017.json.gz) passed in 97.337s on PostgreSQL 18.6 with the exact installed wheel above and counters off. It completed 1,000 nodes, 1,000 edges, 1,000 reads, 200 committed writes, and all five changed 1,000-object UPDATE groups with commits and readbacks. CREATE applied in 4,125ms; edges in 5,982ms; median 1,000-object UPDATE applied in 5,484ms and committed in 3,052ms. Server cleanup completed in 369ms. The report's dirty flag reflects only preexisting untracked build/cache/egg-info directories; tracked source was clean at 4070181b. This local pass does not supersede either hosted failure or establish an isolated speedup.
