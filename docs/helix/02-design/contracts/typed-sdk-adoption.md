@@ -194,3 +194,24 @@ NO HOLD cursors retain their data snapshot but continue FETCH after SELECT
 revocation; fresh native privilege inspection observes the revocation. Therefore
 that probe cannot establish Truss authority, current-policy safety or SDK stream
 qualification. Original admission before/after each page remains mandatory.
+
+### Related-Key result conversion — 2026-10-17
+
+The optional Python SDK adapter converts native `QueryRelatedKeys` to the
+original generated Key class under `truss-related-keys/0.1`. It checks the
+original output decoder, compiled representation and model pins before row
+iteration, including empty results. It retains equal ordered Key tuples as
+separate parallel-edge occurrences. Exact component types, the declared bound,
+owner field validators and the complete result DTO are checked before release.
+Read, page and stream share this conversion; native results and transaction
+settlement remain unchanged.
+
+Three basic adapter checks using genuine generated commerce Keys and five
+existing stream lifecycle checks pass against the SDK R14 wheel (SHA256
+`8197bac52d8b170f43a401e600d27f3fd8451685616bb3d1596c73fed89616d0`).
+Run `scripts/test_typed_sdk_related_keys.py` with that runtime and its generated
+commerce package on `PYTHONPATH`. These adapter checks construct synthetic
+metadata; genuine compiler-issued stage-two/native integration remains
+unfinished. Compiler versions, IR admission and the ordinary published Weft
+0.4.40 default are unchanged. This increment establishes no end-to-end
+navigation, publication or release qualification claim.

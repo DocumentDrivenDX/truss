@@ -7,6 +7,7 @@ from __future__ import annotations
 from collections.abc import Callable, Generator
 from contextlib import AbstractContextManager
 from datetime import timedelta
+from decimal import Decimal
 from time import monotonic
 from typing import Any, TypeVar
 import hashlib,json
@@ -18,7 +19,7 @@ from umf_access.pages import ReadPage, ReadContinuation, StaleContinuation
 from umf_access.codec_support import revalidate_model
 from umf_access.postgres_read import TimedOut
 from .execution import Ok
-from .query import QueryRows, QueryAbsent, QueryCatalogSources, QueryPage, QueryPageCursor, QueryRefused, QueryDiagnostic
+from .query import QueryRows, QueryAbsent, QueryRelatedKeys, QueryCatalogSources, QueryPage, QueryPageCursor, QueryRefused, QueryDiagnostic
 from umf_access.native_program import program_json, canonical_json
 P=TypeVar('P',bound=BaseModel);R=TypeVar('R',bound=BaseModel)
 
@@ -26,6 +27,71 @@ class TrussReadRefused(ValueError):
     def __init__(self, original: object):
         self.original=original
         super().__init__('Truss refused the original typed read; inspect original outcome')
+
+
+def _related_key_models(value, decoder, key_model):
+    """Map admitted native occurrences to their original generated Key class."""
+    from umf_access.codec_support import validate_graph
+    from umf_access.dsl import RelatedKeys
+    if (type(value) is not QueryRelatedKeys or type(value.items) is not tuple
+        or type(value.truncated) is not bool or len(value.items)>decoder['bound']
+        or value.truncated and len(value.items)!=decoder['bound']):
+        raise ValueError('Original bounded Truss related-Key carrier required')
+    types=decoder['representation']['key']['types']
+    fields=tuple(name for _,_,name in key_model.UMF_FIELDS)
+    items=[];previous=None
+    for row in value.items:
+        if type(row) is not tuple or len(row)!=len(types):
+            raise ValueError('Complete original Truss Key tuple required')
+        for component,logical_type in zip(row,types,strict=True):
+            carrier={'string':str,'integer':int,'boolean':bool,'decimal':Decimal}[logical_type['family']]
+            if type(component) is not carrier or carrier is Decimal and not component.is_finite():
+                raise ValueError('Exact original Truss Key component required')
+        if previous is not None and previous>row:
+            raise ValueError('Original Truss related-Key ordering differs')
+        previous=row
+        # Equal tuples are separate parallel-edge occurrences, not duplicates
+        # to discard. Generated validators retain the owner's field semantics.
+        items.append(validate_graph(key_model,dict(zip(fields,row,strict=True))))
+    return RelatedKeys(tuple(items),value.truncated)
+
+
+def _typed_rows(entry, program, native):
+    """Validate source correspondence even when the native result is empty."""
+    if native.columns!=tuple(entry.result.model_fields):
+        raise ValueError('Truss complete ordered output signature differs')
+    related=None
+    if getattr(entry.result,'UMF_RELATED_OUTPUT',None) is not None:
+        from umf_access.related_keys import transport_spec
+        related=transport_spec(entry.result)
+    declared=[output for output in program.get('outputs',()) if output.get('carrier')=='related-keys']
+    if related is None:
+        if declared:raise ValueError('Original generated related-Key metadata required')
+    else:
+        name,key_model,decoder,_=related
+        if (decoder['profile']!='truss-related-keys/0.1' or declared!=[
+            {'name':name,'carrier':'related-keys','nullable':False,'decoder':decoder}]):
+            raise ValueError('Original Truss related-Key compiler output differs')
+        artifact=program['artifact']
+        columns=[column for column in artifact['columns'] if column['outputName']==name]
+        if (len(columns)!=1 or columns[0]['representation']!=decoder['representation']
+            or columns[0]['position']!=native.columns.index(name)+1 or columns[0]['nullable'] is not False
+            or artifact['modelPins']!=decoder['modelPins']):
+            raise ValueError('Original Truss related-Key representation or source differs')
+    result=[]
+    for row in native.rows:
+        if len(row)!=len(native.columns) or any(isinstance(value,QueryAbsent) for value in row):
+            raise ValueError('ADOPTION_MISMATCH: selected column absent or row shape differs')
+        values=dict(zip(native.columns,row,strict=True))
+        for name,value in values.items():
+            if isinstance(value,QueryRelatedKeys) and (related is None or name!=related[0]):
+                raise ValueError('Unexpected native related-Key output')
+        if related is not None:
+            name,key_model,decoder,_=related
+            values[name]=_related_key_models(values[name],decoder,key_model)
+        result.append(entry.result.model_validate(values))
+    return result
+
 
 class TrussTarget:
     """RC module-access reads. Protected current-policy adoption is separate.
@@ -94,12 +160,7 @@ class TrussTarget:
                 maximum_scan_rows=binding['maximumScanRows'],maximum_bytes=binding['maximumBytes'],engine_program=entry.originals())
             if not isinstance(outcome,Ok) or not isinstance(outcome.value,QueryRows):raise TrussReadRefused(outcome)
             native=outcome.value
-            if native.columns!=tuple(entry.result.model_fields):raise ValueError('Truss complete ordered output signature differs')
-            result=[]
-            for row in native.rows:
-                if len(row)!=len(native.columns) or any(isinstance(v,QueryAbsent) for v in row):
-                    raise ValueError('ADOPTION_MISMATCH: selected column is absent or row shape differs')
-                result.append(entry.result.model_validate(dict(zip(native.columns,row,strict=True))))
+            result=_typed_rows(entry,program,native)
             if monotonic()>=deadline:raise TimedOut('deadline expired before engine release')
         if monotonic()>=deadline:raise TimedOut('deadline expired during engine release')
         return result
@@ -139,12 +200,7 @@ class TrussTarget:
                 maximum_bytes=binding['maximumBytes'],engine_program=entry.originals())
             if not isinstance(outcome,Ok) or not isinstance(outcome.value,QueryPage):raise TrussReadRefused(outcome)
             native=outcome.value
-            if native.columns!=tuple(entry.result.model_fields):raise ValueError('Truss complete ordered page output signature differs')
-            rows=[]
-            for row in native.rows:
-                if len(row)!=len(native.columns) or any(isinstance(value,QueryAbsent) for value in row):
-                    raise ValueError('ADOPTION_MISMATCH: selected page column absent or row shape differs')
-                rows.append(entry.result.model_validate(dict(zip(native.columns,row,strict=True))))
+            rows=_typed_rows(entry,program,native)
             next_after=None
             if native.next_cursor is not None:
                 if native.next_sort_values is None:raise ValueError('original typed native continuation keys required')
@@ -168,13 +224,7 @@ class TrussTarget:
             raise ValueError('Complete initial original Truss page program required')
         values=revalidate_model(entry.parameters,parameters);budget=self._budget(timeout)
         def validate(native):
-            if native.columns!=tuple(entry.result.model_fields):raise ValueError('Complete ordered stream DTO signature differs')
-            result=[]
-            for row in native.rows:
-                if len(row)!=len(native.columns) or any(isinstance(value,QueryAbsent) for value in row):
-                    raise ValueError('ADOPTION_MISMATCH: selected stream column absent or row shape differs')
-                result.append(entry.result.model_validate(dict(zip(native.columns,row,strict=True))))
-            return result
+            return _typed_rows(entry,program,native)
         final=();limit_reached=False;first_deadline=monotonic()+budget.total_seconds()
         with self.stream_operation(budget) as (assembly,transaction):
             handle=assembly.query_stream_open_in_transaction(transaction,engine_program=entry.originals(),parameters=values.model_dump(mode='python'),operation_deadline=first_deadline)
