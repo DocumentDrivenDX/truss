@@ -1,12 +1,8 @@
 """Original owner source compilation; private, never current authority."""
 from dataclasses import dataclass
 from hashlib import sha256
-from importlib.resources import as_file, files
+from importlib.resources import files
 import json
-from pathlib import Path
-import shutil
-import subprocess
-import tempfile
 from time import monotonic
 from ._preparation_compiler_replay import replay_preparation_program
 from ._preparation_program import OriginalPreparationProgram
@@ -53,15 +49,9 @@ def compile_preparation_sources(program, source_inputs, *, native_module_path, b
     for path, digest in manifest['files'].items():
         if sha256(root.joinpath(path).read_bytes()).hexdigest() != digest:
             raise ValueError('Original owner source compiler bytes required')
-    executable = shutil.which(bun_executable)
-    if executable is None:
-        raise ValueError('Bun source compiler runtime required')
-    with as_file(root.joinpath('producer.js')) as producer, tempfile.TemporaryDirectory(prefix='truss-preparation-sources-') as directory:
-        source = Path(directory)/'input.json';source.write_bytes(source_inputs);source.chmod(0o600)
-        try:
-            result = subprocess.run([executable, str(producer), str(source)], capture_output=True, timeout=30, check=True)
-        except (subprocess.SubprocessError, OSError) as error:
-            raise ValueError('Original owner source compiler refused') from error
+    from ._embedded import capture
+    result=capture(str(root.joinpath('producer.js')),args=('/truss/input.json',),extra={'input.json':source_inputs.hex()},limit=67108864,timeout=30)
+    if result.returncode:raise ValueError('Original owner source compiler refused')
     packet = _decode(result.stdout, 67108864, 'preparation_source_packet')[1]
     if (packet.get('protocol') != 'truss.preparation-source-obligations/0.1-candidate'
             or packet.get('authority') is not False or packet.get('complete') is not False
@@ -77,15 +67,6 @@ def compile_preparation_sources(program, source_inputs, *, native_module_path, b
     if len(identity) > 8192:
         raise ValueError('Bounded complete native identity correspondence required')
     return OriginalPreparationSources(result.stdout, identity)
-
-
-_SUBJECT_CODEC = r"""
-const {derivePreparationSubjectKey}=await import(Bun.argv[1]);
-const request=await Bun.stdin.json();
-console.log(JSON.stringify(request.bindings.map(native=>({native,
- sourcePins:{subjectMapping:request.subjectMapping.sha256,coreClosure:request.coreClosure.sha256},
- original:derivePreparationSubjectKey(request.subjectMapping,request.coreClosure,native.principalHex)}))));
-"""
 
 
 def _source_subject_witness(cursor, program_id, compiled, bun_executable):
@@ -125,19 +106,14 @@ def _source_subject_witness(cursor, program_id, compiled, bun_executable):
         for path,digest in manifest['files'].items():
             if sha256(root.joinpath(path).read_bytes()).hexdigest() != digest:
                 raise ValueError('Original Subject codec bytes required')
-        executable = shutil.which(bun_executable)
-        if executable is None: raise ValueError('Original Bun codec runtime required')
         request = json.dumps(dict(bindings=native,subjectMapping=original['subjectMapping'],coreClosure=original['coreClosure']),
                              ensure_ascii=True,separators=(',',':')).encode('utf8')
         cursor._deadline.check()
         timeout = min(30,cursor._deadline.end-monotonic())
         if timeout <= 0: raise TimeoutError('Original Subject codec deadline expired')
-        with as_file(root.joinpath('producer.js')) as producer:
-            try:
-                result = subprocess.run([executable,'-e',_SUBJECT_CODEC,str(producer)],input=request,
-                    capture_output=True,check=True,timeout=timeout)
-            except (subprocess.SubprocessError,OSError) as error:
-                raise ValueError('Original Subject codec refused') from error
+        from ._embedded import capture
+        result=capture(str(root.joinpath('subject-codec.mjs')),input_bytes=request,limit=67108864,timeout=timeout)
+        if result.returncode:raise ValueError('Original Subject codec refused')
         cursor._deadline.check()
         witnesses = _decode(result.stdout,67108864,'original_subject_codec')[1]
         if (type(witnesses) is not list or len(witnesses) != len(native)

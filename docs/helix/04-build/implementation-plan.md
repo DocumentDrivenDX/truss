@@ -8199,3 +8199,36 @@ record six owned workflows and three rootless regressions on PostgreSQL18.6.
 The existing installed-wheel release step loads the new cases. No new planner,
 public carrier, layout or runtime routine was introduced. Hosted batch performance
 and managed-service qualification remain separate unfinished work.
+
+
+## Bun-free Python embedder release — selected 2026-10-17
+
+The owner requests an up-to-date published Truss release for Python embedders
+without a Bun/Node deployment dependency, allowing an embedded Python JS engine.
+ADR-003 records the selected boundary. The six reached runtime modules cover
+catalog preparation, core0.8 source observation, key tuples, current query,
+current disclosure and preparation-source/subject production. Preserve original
+UMF owner bytes and compare complete responses against the existing producers.
+
+Implement a packaged, bounded embedded V8 module loader and explicit Python
+operation/session adapters. Qualify the original installed public workflows,
+key/preparation controls and held computation correlation/lifetime controls with
+Bun and Node unavailable. Build the actual wheel, verify both existing release
+platforms and publish only after the required release workflow succeeds. Keep
+native/security support within its measured version/subset. Existing compiler
+CI repair verification continues independently.
+
+The owner selected embedded V8 for the immediate release and a native UMF library
+as the subsequent replacement. Native UMF must own validation, catalog observations,
+exact key codecs, preparation and policy semantics. Truss and Weft consume that
+library; Weft retains SQL compilation ownership. Port qualification must compare
+complete original receipts, unknown-content retention, stateful one-use handles,
+refusals and deadline/cleanup behavior against the pinned TypeScript producers.
+The native replacement remains unimplemented.
+
+The embedded delivery candidate and initial parity observations are retained in
+[evidence/embedded-owner-20261017](evidence/embedded-owner-20261017/README.md).
+Original source producer versions remain historical pins. The new current-query
+consumer selection records the embedded delivery manifest and V8 revision, and
+retains exact released Weft wheel/native hashes independently for Linux x64 and
+macOS ARM64. Existing stored consumer selections are not silently rewritten.

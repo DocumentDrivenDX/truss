@@ -14,8 +14,13 @@
     "build:host": "bun scripts/build-pg-runtime.ts"
   },
   "devDependencies": {
-    "typescript": "7.0.2",
     "@documentdrivendx/truss-pg-runtime": "workspace:*",
-    "@documentdrivendx/truss-postgresql": "workspace:*"
+    "@documentdrivendx/truss-postgresql": "workspace:*",
+    "@noble/hashes": "2.4.0",
+    "@ungap/structured-clone": "1.4.0",
+    "buffer": "6.0.3",
+    "typescript": "7.0.2",
+    "typescript-compiler": "npm:typescript@5.9.3",
+    "whatwg-url": "17.3.0"
   }
 }

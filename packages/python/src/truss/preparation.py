@@ -1,6 +1,6 @@
 """Public original UMF preparation. No catalog acceptance or database effects.
 
-The bundled original JavaScript producer requires the release-pinned Bun runtime.
+The original JavaScript producer runs inside the packaged embedded V8 boundary.
 Returned bytes are the existing Truss AcceptanceInput wire, ready for subsequent
 catalog admission; caller-selected installation/policy profiles are not verified.
 """
@@ -153,7 +153,10 @@ def _release_for_prepared(prepared):
     _reject('producer_unavailable')
 
 def _capture(command,*,input_bytes=b'',limit,timeout,cwd=None):
-    """Bound combined pipe capture while draining both streams under one deadline."""
+    """Bounded owner capture; retained subprocess support is private tooling."""
+    if command[0]=='embedded-v8':
+        from ._embedded import capture
+        return capture(command[1],input_bytes=input_bytes,limit=limit,timeout=timeout)
     deadline=time.monotonic()+timeout
     with tempfile.TemporaryFile() as source:
         source.write(input_bytes);source.seek(0)
@@ -218,14 +221,10 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
     if len(request)>MAX_INPUT:_reject('resource')
     root,manifest=(_release_core08() if current else _release())
     release_digest=CORE08_MANIFEST_SHA256 if current else MANIFEST_SHA256
-    executable=shutil.which(bun_executable)
-    if executable is None:_reject('runtime_unavailable')
     try:
-        runtime=_capture([executable,'--version'],limit=4096,timeout=5)
-        if runtime.returncode or runtime.stdout.decode('ascii').strip()!=manifest['runtimeVersion']:_reject('runtime_unavailable')
-        completed=_capture([executable,str(root/'preparation.mjs' if current else root/'packages/umf-bun/src/bridge.js')],input_bytes=request,
+        completed=_capture(['embedded-v8',str(root/'preparation.mjs' if current else root/'packages/umf-bun/src/bridge.js')],input_bytes=request,
                            limit=MAX_OUTPUT,timeout=10,cwd=root)
-    except (OSError,subprocess.TimeoutExpired,UnicodeError):_reject('runtime_unavailable')
+    except (OSError,subprocess.TimeoutExpired,TimeoutError,UnicodeError):_reject('runtime_unavailable')
     if completed.returncode or len(completed.stdout)>MAX_OUTPUT:_reject('producer_unavailable')
     try:result=json.loads(completed.stdout)
     except (ValueError,UnicodeError):_reject('producer_unavailable')

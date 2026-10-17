@@ -19,6 +19,22 @@ ddx:
 
 # ADR-003: Other-language implementations conform to shared contracts and a corpus
 
+## Accepted owner amendment — Bun-free deployment, 2026-10-17
+
+Python embedders must install and execute Truss without Bun, Node or an external
+JavaScript process. The owner explicitly accepts an embedded Python JavaScript
+engine. Preserve the pinned original UMF producer implementation and its semantic
+ownership; the Python binding must not replace it with competing validators,
+key codecs, query/security evaluators or SQL generators.
+
+The selected delivery mechanism is an embedded V8 dependency with self-contained
+packaged owner modules. Bun may produce build artifacts and historical comparison
+outputs in development. It must not be looked up or invoked by deployed Python
+operations. The deployment decision is accepted; complete bridge compatibility,
+timeout/cleanup behavior and installed-wheel/native qualification remain to be
+measured before release. No broader security or native-support claim follows
+from changing the computation runtime.
+
 ## Accepted owner amendment — Python release scope, 2026-10-13
 
 The owner selected Python as the first-release public interface, deferring a

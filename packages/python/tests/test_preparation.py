@@ -148,25 +148,25 @@ print(coverage['observationsRequired'])
         self.assertEqual(archived['originalText'],raw.decode())
         self.assertEqual(result.documents[0].observation()['source']['extensions'],value['extensions'])
 
-    def test_report_capacity_does_not_reject_valid_preparation(self):
+    def test_unavailable_report_refuses_preparation(self):
         value=json.loads(document('ext').content)
         value['vocabularies']={f'vendor{i}':{'version':'99.0.0'} for i in range(70)}
         value['extensions']={f'vendor{i}':{'opaque':True} for i in range(70)}
         value['future_padding']='x'*60000
         raw=json.dumps(value).encode()
-        result=prepare((CatalogDocument('ext','r1',raw),))
-        self.assertEqual(result.documents[0].document.content,raw)
-        evidence=json.loads(result.report_evidence_bytes)
-        self.assertEqual(evidence['ingress']['state'],'unavailable')
+        with self.assertRaises(PreparationRejected) as raised:
+            prepare((CatalogDocument('ext','r1',raw),))
+        self.assertEqual(raised.exception.reason,'evidence_unavailable')
 
-    def test_combined_report_output_capacity_preserves_preparation(self):
+    def test_combined_report_output_capacity_refuses_preparation(self):
         value=json.loads(document('ext').content)
         value['vocabularies']={f'vendor{i}':{'version':'99.0.0'} for i in range(40)}
         value['extensions']={f'vendor{i}':{'opaque':True} for i in range(40)}
         value['future_padding']='x'*60000
         value.update({f'future_extra_{i}':True for i in range(20)})
-        result=prepare((CatalogDocument('ext','r1',json.dumps(value).encode()),))
-        self.assertEqual(json.loads(result.report_evidence_bytes)['ingress']['state'],'unavailable')
+        with self.assertRaises(PreparationRejected) as raised:
+            prepare((CatalogDocument('ext','r1',json.dumps(value).encode()),))
+        self.assertEqual(raised.exception.reason,'evidence_too_large')
 
     def test_duplicate_json_key_cannot_be_silently_overwritten(self):
         with self.assertRaises(PreparationRejected):
@@ -203,10 +203,9 @@ print(coverage['observationsRequired'])
     def test_missing_configuration_refuses(self):
         with self.assertRaises(PreparationRejected):prepare((document('first'),),{})
 
-    def test_missing_runtime_is_explicit(self):
-        with self.assertRaises(PreparationRejected) as raised:
-            prepare_acceptance((document('first'),),json.dumps(CONFIG).encode(),bun_executable='/missing/truss-bun')
-        self.assertEqual(raised.exception.reason,'runtime_unavailable')
+    def test_external_runtime_is_unnecessary(self):
+        result=prepare_acceptance((document('first'),),json.dumps(CONFIG).encode(),bun_executable='/missing/truss-bun')
+        self.assertEqual(result.documents[0].document.content,document('first').content)
 
     def test_corrupted_bridge_outputs_refuse(self):
         original=_capture

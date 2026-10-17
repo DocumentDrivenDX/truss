@@ -22,7 +22,7 @@ def compiler(*, engine_catalog=False, engine_pages=False):
             'compile_truss_runtime_json','compile_truss_runtime_page_json',
             'compile_engine_read_json','check_engine_read_json',
             'compile_engine_page_json','check_engine_page_json'))
-        if weft.__version__ != '0.4.40' and not related_candidate and not (weft.__version__ == '0.4.41-dev.0' and callable(getattr(weft,'compile_engine_export_json',None))):
+        if weft.__version__ != '0.4.41' and not related_candidate and not (weft.__version__ == '0.4.41-dev.0' and callable(getattr(weft,'compile_engine_export_json',None))):
             return None
         if engine_catalog and not callable(getattr(weft,'check_engine_read_json',None)):return None
         if engine_pages and not callable(getattr(weft,'check_engine_page_json',None)):return None

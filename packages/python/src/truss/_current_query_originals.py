@@ -4,6 +4,7 @@ from hashlib import sha256
 import re
 from pathlib import Path
 from ._current_query_computation import verify_current_query_owner_assets
+from ._embedded_release import MANIFEST_SHA256 as EMBEDDED_MANIFEST_SHA256
 from ._owner_evidence_json import decode_owner_evidence_json, same_owner_evidence
 from ._umf_key_tuples import _same_json_meaning
 
@@ -98,12 +99,30 @@ _ABI2_WEFT_040_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
     'weftWheelSha256':'328d4359c3a272679457cd0ae63ec3805bc219bfd32c8b0bfe81301f0e9158cb',
     'weftModuleSha256':'7257c6e26308093ab1e3d37a323cc63c20e9fdb89730146effd1b3d9cd9d45d3',
 }
+_ABI2_WEFT_041_PUBLIC_ARM={**_ABI2_CONSUMER,
+    'profile':'truss-current-query-consumer/0.2-candidate',
+    'weftRevision':'4289fa35cd6f75ea7e25975154d1b3d4dd3e707e',
+    'weftWheelSha256':'863e6487b513610d25581d8307bf5cea5df6928bc704171ec256f00c68b155dc',
+    'weftModuleSha256':'2879b4f997c61ae1f122ae1502adffc1f2964ab8a1e34422e86d33f7210d7848',
+}
+del _ABI2_WEFT_041_PUBLIC_ARM['bunVersion']
+_ABI2_WEFT_041_PUBLIC_ARM.update(embeddedRuntime='mini-racer==0.14.1',embeddedProfile='truss.embedded-v8/1',embeddedManifestSha256=EMBEDDED_MANIFEST_SHA256,embeddedV8Version='14.4.258.23')
+
+_ABI2_WEFT_041_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
+    'profile':'truss-current-query-consumer/0.2-candidate',
+    'weftRevision':'4289fa35cd6f75ea7e25975154d1b3d4dd3e707e',
+    'weftWheelSha256':'f7cb3612303db4a1d95ae66b3624ad678f3f80df0a1bc70b86d2909f6fdb9266',
+    'weftModuleSha256':'6af3c8946eefb9940f5e13a170e53af6841e3addb3d67f2210e31757cae8b4e1',
+}
+del _ABI2_WEFT_041_PUBLIC_LINUX_X64['bunVersion']
+_ABI2_WEFT_041_PUBLIC_LINUX_X64.update(embeddedRuntime='mini-racer==0.14.1',embeddedProfile='truss.embedded-v8/1',embeddedManifestSha256=EMBEDDED_MANIFEST_SHA256,embeddedV8Version='14.4.258.23')
+
 _CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_ARM,_ABI2_WEFT_033_LINUX_X64,
                   _ABI2_WEFT_034_ARM,_ABI2_WEFT_034_PUBLIC_ARM,_ABI2_WEFT_034_PUBLIC_LINUX_X64,
                   _ABI2_WEFT_035_PUBLIC_ARM,_ABI2_WEFT_035_PUBLIC_LINUX_X64,
                   _ABI2_WEFT_036_PUBLIC_ARM,_ABI2_WEFT_036_PUBLIC_LINUX_X64,
                   _ABI2_WEFT_038_PUBLIC_ARM,_ABI2_WEFT_038_PUBLIC_LINUX_X64,
-                  _ABI2_WEFT_040_PUBLIC_ARM,_ABI2_WEFT_040_PUBLIC_LINUX_X64)
+                  _ABI2_WEFT_040_PUBLIC_ARM,_ABI2_WEFT_040_PUBLIC_LINUX_X64,_ABI2_WEFT_041_PUBLIC_ARM,_ABI2_WEFT_041_PUBLIC_LINUX_X64)
 
 
 def _actual_consumer():
@@ -232,8 +251,10 @@ def check_query_originals(originals, initialize_bytes, accepted_request_bytes):
     consumer=decode_owner_evidence_json(originals.consumer_bytes)
     fields={'profile','umfRevision','umfBundleSha256','umfManifestSha256','bunVersion',
             'weftRevision','weftWheelSha256','weftModuleSha256','resultAbi'}
+    if type(consumer) is dict and consumer.get('profile')=='truss-current-query-consumer/0.2-candidate':
+        fields=(fields-{'bunVersion'})|{'embeddedRuntime','embeddedProfile','embeddedManifestSha256','embeddedV8Version'}
     if (type(consumer) is not dict or set(consumer)!=fields
-            or consumer['profile']!='truss-current-query-consumer/0.1-candidate'
+            or consumer['profile'] not in ('truss-current-query-consumer/0.1-candidate','truss-current-query-consumer/0.2-candidate')
             or any(type(v) is not str or not v for v in consumer.values())
             or any(re.fullmatch('[0-9a-f]{64}',consumer[k]) is None for k in fields if k.endswith('Sha256'))
             or any(re.fullmatch('[0-9a-f]{40}',consumer[k]) is None for k in ('umfRevision','weftRevision'))

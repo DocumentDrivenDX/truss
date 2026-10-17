@@ -20,10 +20,14 @@ jobs:
           python-version: '3.11'
           cache: pip
           cache-dependency-path: packages/python/pyproject.toml
-      - name: Build the pure Python Truss wheel
+      - name: Build the Truss wheel with embedded owner assets
         run: python -m pip wheel --no-deps packages/python --wheel-dir /tmp/truss-wheels
       - name: Install checksum-verified released PostgreSQL wheels
         run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find /tmp/truss-wheels -maxdepth 1 -name 'truss_toolkit-*.whl' -print -quit)"
+      - name: Verify installed owners without an external JavaScript runtime
+        env:
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_embedded_owner -v
       - name: Run owned completion controls
         env:
           PYTHONPATH: packages/python/tests

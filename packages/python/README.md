@@ -5,7 +5,7 @@
 reparent complete subtrees and cascade deletes; identity/key/page/edge reads,
 traversal and retained history preserve ownership. Basic PostgreSQL18.6 workflows
 cover commit, rollback, dry-run and original receipt replay. The
-latest published release is [v0.0.37](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.37),
+latest published release is [v0.0.38](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.38),
 using native `0.70-candidate` with Weft `0.4.38` / backend `0.4.40`.
 Its Linux x86_64 and macOS ARM release gates passed, including the populated
 v0.0.35 upgrade. The v0.0.36 tag remains an unpublished failed attempt.
@@ -34,10 +34,10 @@ performance still blocks release; this checkpoint is not a release tag.
 The public-only owned example runs installation, registration, owned creation,
 explicit subtree reparenting, caller rollback, read-only key/edge/traversal reads,
 cascade deletion, retained history and committed receipt replay. With the
-current development package and local PG18/Bun dependencies installed:
+current package and local PG18 dependencies installed:
 
 ```sh
-python packages/python/examples/owned_objects_workflow.py /tmp/truss-owned-demo --bun bun
+python packages/python/examples/owned_objects_workflow.py /tmp/truss-owned-demo
 ```
 
 It uses the adjacent `notes-owned.umf.json` with an explicit UMF0.8 preparation
@@ -67,10 +67,10 @@ and includes the explicitly activated policy-query profile described below.
 
 This earlier release is [v0.0.35](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.35).
 
-Published [v0.0.37](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.37)
+Published [v0.0.38](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.38)
 addresses deferred edge writer authorization after an early attempt-constraint
 flush. Its transactional upgrade from v0.0.35/native68 preserves rows and
-receipts; both platform release workflows passed with matching Weft v0.4.38.
+receipts; both platform release workflows passed with matching Weft v0.4.41.
 
 Creation now joins the common object transition ledger while retaining its sole
 original journal and receipt evidence. Populated native67 installations can
@@ -143,10 +143,10 @@ through the public API and queries an exact signed64 salary while returning its
 masked String value. A complete public-API reference example includes installation,
 ordinary-person catalog/data writes, Subject/source enrollment, activation,
 transaction adoption and the masked query. From a source checkout with the
-matching wheels and Bun installed:
+matching wheels installed:
 
 ```sh
-python packages/python/examples/current_query_workflow.py /tmp/truss-policy-example --bun bun
+python packages/python/examples/current_query_workflow.py /tmp/truss-policy-example
 ```
 
 It prints `{"columns": ["salary"], "rows": [["[private]"]]}`. The adjacent model,
@@ -281,32 +281,34 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.37 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.38 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.38 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.41 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.37'
+  'truss-toolkit[local,native,query]==0.0.38'
 ```
 
-Bun1.4.2 is still required for UMF preparation. SDK 0.0.37 /
-native 0.70 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
+Python deployment requires no Bun, Node, or external JavaScript process. The
+wheel uses `mini-racer==0.14.1` to execute the preserved UMF producer inside V8.
+Original producer manifests retain their build-time Bun pins; these are provenance,
+not deployment requirements. SDK 0.0.38 / native 0.71 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
 catalogs. Create/update, imports, preconditions, backfills and lookups require no
 client encoder or per-key receipt. Existing stored key and namespace bytes are
-preserved. Weft remains optional through `query` (version 0.4.38); it is not a
+preserved. Weft remains optional through `query` (version 0.4.41); it is not a
 key-encoding dependency. The separate protected security observation retains its
 original producer boundary.
-The installation command selects published SDK0.0.37 and its matching Weft0.4.38.
+The installation command selects SDK0.0.38 and its matching Weft0.4.41.
 Each release publishes package checksums and source/runtime/backend pins. The Truss release
 workflow exercises the exact uploaded wheel with its exactly paired published Weft wheels and verified
 PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.37 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.38 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.37 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.38 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
-python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo --bun bun
+python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
 
 The [example](examples/adopter_workflow.py) installs the runtime, registers the
@@ -457,14 +459,15 @@ broader draft protocol does not imply that every declared profile is implemented
 
 Catalog, groups, imports, direct reads, history and feed also have typed
 capability selectors. Imports/groups accept exact original `CatalogDocument`
-inputs and the Bun executable where required by their selected provider.
+inputs. The legacy `bun_executable` keyword is retained for source compatibility
+and does not select or launch an executable.
 Separate broad `mutations` and physical-optimization families remain unavailable.
 
 ## Catalog meaning and evolution
 
 A `CatalogDocument(document_id, document_revision, content)` carries exact
 original UTF-8 document bytes. Preparation runs the bundled UMF owner producer
-through Bun; registration still requires Bun in the app image. Ordinary key
+inside embedded V8; registration requires no external JavaScript runtime. Ordinary key
 operations derive keys in PostgreSQL, while catalog admission uses the broader
 UMF producer.
 Native accepted IDs and definition pins come from the catalog, not fixtures.

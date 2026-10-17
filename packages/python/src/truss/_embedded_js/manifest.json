@@ -1,0 +1,11 @@
+{
+  "profile": "truss.embedded-v8/1",
+  "engine": "mini-racer==0.14.1",
+  "files": {
+    "modules.json.gz": "e79833d2235dd1dce6513d7b481d84b83be8a8097070876ef04c2ce868400adf",
+    "sources.json": "a1b31e42c92553580fbc1df8b1f53762c8a980548d96a7f337bfdb44995fb16f",
+    "polyfills.js": "90e2ca9c27a0f9418abd10871346c8407bcf3160ad9fbfa7c67e1ba992a9e976",
+    "runtime.js": "2764f6b13fdf2a9c79c5c900dc94a0417514f91d907c4852dcd488c166d92c80",
+    "licenses.json": "15147a8869b3d901d1ae02463780b7e38a36eeb793958f8be22856a759ad3cc1"
+  }
+}

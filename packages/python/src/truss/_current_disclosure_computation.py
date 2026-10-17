@@ -1,8 +1,8 @@
 """Separate held disclosure assets; no fallback to the old query child."""
 from contextlib import contextmanager
 from hashlib import sha256
-from importlib.resources import as_file,files
-import json,shutil,subprocess
+from importlib.resources import files
+import json
 from time import monotonic
 from ._current_disclosure_pipe import CurrentDisclosurePipe
 
@@ -29,18 +29,11 @@ def verify_current_disclosure_owner_assets():
 @contextmanager
 def open_current_disclosure_computation(*,bun_executable='bun',timeout_seconds=5):
     end=monotonic()+timeout_seconds;root=verify_current_disclosure_owner_assets()
-    executable=shutil.which(bun_executable)
-    if executable is None:raise ValueError('Original Bun runtime required')
+    from ._embedded import EmbeddedOwnerPipe
     remaining=end-monotonic()
     if remaining<=0:raise TimeoutError('Original disclosure launch deadline expired')
-    version=subprocess.run((executable,'--version'),stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=min(5,remaining),check=True)
-    if version.stdout.strip()!=b'1.4.2':raise ValueError('Original Bun1.4.2 runtime required')
-    with as_file(root.joinpath('current-native-disclosure-child.mjs')) as script:
-        remaining=end-monotonic()
-        if remaining<=0:raise TimeoutError('Original disclosure launch deadline expired')
-        try:
-            with CurrentDisclosurePipe((executable,str(script)),timeout_seconds=remaining) as child:
-                yield child
-        finally:
-            # Closing endpoint correspondence; this is not held-file/ABA proof.
-            verify_current_disclosure_owner_assets()
+    try:
+        with EmbeddedOwnerPipe(str(root.joinpath('current-native-disclosure-child.mjs')),timeout_seconds=remaining,disclosure=True) as child:
+            yield child
+    finally:
+        verify_current_disclosure_owner_assets()
