@@ -1,0 +1,37 @@
+{
+  "profile": "repository-consolidation/1",
+  "date": "2026-10-17",
+  "scope": "Owner-authorized source consolidation and cleanup; no release, native acceptance refresh, or registry publication claim",
+  "testedParent": "b65ea0cd4078a67686e2502c1b1e074105ea127c",
+  "checks": [
+    {
+      "log": "truss-takeover-tests.log",
+      "sha256": "908a820c9edf0e0a6977047094a86fc8528e3ac3c463108215c244429ea76714",
+      "scope": "Python row-custody unit suite",
+      "passed": 46
+    }
+  ],
+  "recovery": {
+    "directory": "/Users/erik/Projects/consolidation-20261017-tgY2Hv",
+    "bundle": "truss-takeover-all-refs.bundle",
+    "dirtyArchive": "truss-takeover-source-dirty.tar.gz",
+    "dirtyArchiveSha256": "ad0b75694b675979929cbd71ccccea2ac7669d66a2d98894b97a4dc76c182cdd",
+    "sourceFilesVerified": 375
+  },
+  "remainingLocalBranches": [
+    "codex/b008-graph-admission-refusal a5a7f50fad8689de00b88389ee85b2bd8e4caaa4",
+    "codex/b008-quiesced-graph-profile 5624714556dca294bf0aca0e64cb52283c8d1efe",
+    "codex/b008-subject-data-cut 8dbd1d85bf271677fb6d5575d614841e2dd48d85",
+    "codex/consolidation-20261017 b65ea0cd4078a67686e2502c1b1e074105ea127c",
+    "codex/refresh-helix-specs a9cfb6912071b170fb4b57dc1b30b24b21cc24da",
+    "codex/typed-sdk-adoption 0c4cae138b6dd1b2d31ff54eb149993f2530f04f",
+    "main 607f5d3e8f69d6fc58324baa280754c08871496b",
+    "spec/change-feed-and-groups 6d87fce53d04b876ec8ca37fb5eab0a949f1d320",
+    "spec/import-idempotency 70f022bf4b302abe414f67d3a6e4d8be3469cf01",
+    "spec/storage-layout-and-contracts bd519ec5f141e2ae1b8f610261b4d44942e10920"
+  ],
+  "limitations": [
+    "Historical divergent branches and dirty-source candidates remain preserved for semantic reconciliation; they are not silently replaced by ancestry or patch equivalence.",
+    "Historical UMF semantic-type core0.9 collides with current UUID/128-bit core0.9; owner disposition pending."
+  ]
+}
