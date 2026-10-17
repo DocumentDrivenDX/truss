@@ -4,6 +4,7 @@
 CREATE FUNCTION truss.runtime_owned_group_validate(selected_attempt uuid,check_final boolean) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;plan jsonb;last_plan jsonb;initial_scope jsonb;
+ operations jsonb;before_nodes jsonb;after_nodes jsonb;before_edges jsonb;after_edges jsonb;
  operation jsonb;result jsonb;entry record;owner record;transition_id bigint;identity jsonb;actual jsonb;
  reference text;mode text;expected_objects int;expected_edges int;events jsonb;deleted jsonb;aliases jsonb:='[]';
  primary_before jsonb;primary_after jsonb;expected_outcome text;expected_version text;
@@ -13,11 +14,12 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;plan jsonb;last
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+ operations:=input->'operations';
  current_actor:=truss.runtime_person(false);
  IF check_final IS NULL OR attempt.writer_xid IS DISTINCT FROM pg_current_xact_id()
   OR attempt.actor_oid IS DISTINCT FROM current_actor
   OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
-  OR attempt.next_index<>jsonb_array_length(input->'operations') OR jsonb_array_length(attempt.results)<>attempt.next_index
+  OR attempt.next_index<>jsonb_array_length(operations) OR jsonb_array_length(attempt.results)<>attempt.next_index
   OR (SELECT count(*) FROM truss.runtime_owned_operation WHERE attempt_id=selected_attempt)<>attempt.next_index THEN
   RAISE EXCEPTION 'complete original owned group required' USING ERRCODE='55000';END IF;
  -- Both finish and mandatory commit close the retained arrays against every
@@ -83,22 +85,24 @@ BEGIN
  END LOOP;
  FOR index IN 0..attempt.next_index-1 LOOP
   plan:=truss.runtime_owned_plan(selected_attempt,index);operation:=plan->'operation';
-  IF operation IS DISTINCT FROM jsonb_extract_path(input,'operations',index::text)
+  IF operation IS DISTINCT FROM jsonb_extract_path(operations,index::text)
    OR plan->'mutationProfile' IS DISTINCT FROM input->'mutationProfile' THEN
    RAISE EXCEPTION 'original owned operation source correspondence required' USING ERRCODE='55000';END IF;
+  before_nodes:=plan->'beforeNodes';after_nodes:=plan->'afterNodes';
+  before_edges:=plan->'beforeEdges';after_edges:=plan->'afterEdges';
   mode:=operation->>'operation';result:=attempt.results->index;
   IF index=0 THEN initial_scope:=plan->'initialScope';END IF;
   expected_objects:=0;expected_edges:=0;
-  FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterNodes') n WHERE n.value IS DISTINCT FROM jsonb_extract_path(plan,'beforeNodes',n.key)
-   AND (jsonb_extract_path(plan,'beforeNodes',n.key) IS NULL OR jsonb_extract_path(plan,'beforeNodes',n.key)->'deleted'='false'::jsonb) LOOP
+  FOR entry IN SELECT key,value FROM jsonb_each(after_nodes) n WHERE n.value IS DISTINCT FROM jsonb_extract_path(before_nodes,n.key)
+   AND (jsonb_extract_path(before_nodes,n.key) IS NULL OR jsonb_extract_path(before_nodes,n.key)->'deleted'='false'::jsonb) LOOP
    identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'object',plan,attempt);
    SELECT t.transition_id INTO STRICT transition_id FROM truss.runtime_object_transition t WHERE t.attempt_id=selected_attempt
     AND t.operation_index=index AND t.object_id=(identity->>'id')::bigint AND t.type_id=(identity->>'typeId')::int;
    PERFORM truss.runtime_owned_object_transition_validate_qualified(transition_id,false,current_actor,input,attempt.input_bytes,attempt,history_dictionary);expected_objects:=expected_objects+1;
   END LOOP;
-  FOR entry IN SELECT key,value FROM jsonb_each(plan->'afterEdges') e WHERE
-   (e.value IS DISTINCT FROM jsonb_extract_path(plan,'beforeEdges',e.key) OR e.key=plan->>'primary' AND mode='update_edge')
-   AND (jsonb_extract_path(plan,'beforeEdges',e.key) IS NULL OR jsonb_extract_path(plan,'beforeEdges',e.key)->'deleted'='false'::jsonb) LOOP
+  FOR entry IN SELECT key,value FROM jsonb_each(after_edges) e WHERE
+   (e.value IS DISTINCT FROM jsonb_extract_path(before_edges,e.key) OR e.key=plan->>'primary' AND mode='update_edge')
+   AND (jsonb_extract_path(before_edges,e.key) IS NULL OR jsonb_extract_path(before_edges,e.key)->'deleted'='false'::jsonb) LOOP
    identity:=truss.runtime_owned_identity(selected_attempt,index,entry.key,'edge',plan,attempt);
    SELECT t.transition_id INTO STRICT transition_id FROM truss.runtime_edge_transition t WHERE t.attempt_id=selected_attempt
     AND t.operation_index=index AND t.edge_id=(identity->>'id')::bigint AND t.rel_type_id=(identity->>'typeId')::int;
@@ -122,10 +126,10 @@ BEGIN
    SELECT coalesce(jsonb_agg(v ORDER BY v::text COLLATE "C"),'[]'::jsonb) INTO deleted FROM (
     SELECT jsonb_build_object('identity',truss.runtime_owned_identity(selected_attempt,index,p.key,'object',plan,attempt),
      'deletionVersion',((p.value->'image'->>'ver')::bigint+1)::text) v
-    FROM jsonb_each(plan->'beforeNodes') p WHERE p.value->'deleted'='false'::jsonb AND jsonb_extract_path(plan,'afterNodes',p.key)->'deleted'='true'::jsonb
+    FROM jsonb_each(before_nodes) p WHERE p.value->'deleted'='false'::jsonb AND jsonb_extract_path(after_nodes,p.key)->'deleted'='true'::jsonb
     UNION ALL SELECT jsonb_build_object('identity',truss.runtime_owned_identity(selected_attempt,index,p.key,'edge',plan,attempt),
      'deletionVersion',((p.value->'image'->>'ver')::bigint+1)::text)
-    FROM jsonb_each(plan->'beforeEdges') p WHERE p.value->'deleted'='false'::jsonb AND plan->'afterEdges'->p.key->'deleted'='true'::jsonb) members;
+    FROM jsonb_each(before_edges) p WHERE p.value->'deleted'='false'::jsonb AND plan->'afterEdges'->p.key->'deleted'='true'::jsonb) members;
    IF deleted IS DISTINCT FROM (SELECT jsonb_agg(value ORDER BY value::text COLLATE "C") FROM jsonb_array_elements(result->'deleted')) THEN
     RAISE EXCEPTION 'complete original deleted identity inventory required' USING ERRCODE='55000';END IF;
   END IF;

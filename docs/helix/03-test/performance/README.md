@@ -1032,3 +1032,32 @@ hosted qualification. Both hosted original workloads must still pass before
 stress or tagging.
 Astra Ultra cleared the completed iteration, retained result and source-matching
 wheel for commit and the subsequent hosted original-workload run.
+
+
+### Reuse immutable graph maps during final validation
+
+Hosted gate [38996959566](https://github.com/DocumentDrivenDX/truss/actions/runs/38996959566)
+on dc948aeb failed the unchanged deadlines: Linux passed the original three
+capacity tests, then cancelled the 1,000-edge apply; macOS cancelled the
+1,024-CREATE final validation, so its small workload was not reached. Stress
+and publishing remained skipped. These failures are not superseded by local
+passes.
+
+Final validation now extracts each operation's immutable before/after node and
+edge maps once, and extracts the original input operations array once. The full
+plans, extraction semantics, validation predicates/order, result-slot census,
+history and fresh authority checks are unchanged. Exact inverse substitution
+reproduces the original owner source. Astra Ultra cleared the plan and source;
+the generated SQL and manifest agree.
+
+The installed candidate wheel has 509 source-matching payloads, SHA-256
+`750628e463afc5c7568fa75a8e6218fa23d7d12ace894e31d937ba8666876a3d`.
+Seven original capacity/overflow/late-fault, owned and parallel-edge tests pass
+in 59.199 seconds. The [full original small report](results/finalize-map-hoist-small-20261016.json)
+passes in 161.558 seconds, counters off, with the unchanged 10s SQL/30s operation
+limits: 1,000 nodes, 1,000 edges, 1,000 sampled reads, 200 committed writes and all
+five changed 1,000-object UPDATE groups, commits and persisted readbacks. CREATE
+apply was 5,969 ms; edge apply 8,609 ms; five UPDATE applies had median 7,106 ms
+and maximum 8,054 ms. All 1,000 business-key rows were maintained; cleanup
+completed. This is a bounded correctness increment, not an isolated speedup
+or hosted qualification. Both hosted original workloads remain release gates.
