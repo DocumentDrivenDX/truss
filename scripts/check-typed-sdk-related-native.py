@@ -6,6 +6,7 @@ import argparse, hashlib, json, math, subprocess, sys
 import psycopg
 from psycopg import sql
 import weft
+from typed_sdk_cohort import add_cohort_arguments,verify_cohort
 from truss import CatalogDocument, ModuleAccessGrant, adopt_psycopg_host, create_reference_assembly, CatalogRuntimeConfiguration
 from truss.access import TrussTarget
 from truss.contracts import MapValue, TextValue
@@ -17,13 +18,17 @@ from adopter_workflow import transaction, success, expect
 
 parser=argparse.ArgumentParser()
 for name in ('generated','model','output','pg-bin','bun-executable'):parser.add_argument('--'+name,type=Path,required=True)
+add_cohort_arguments(parser)
 args=parser.parse_args();out=args.output.absolute();out.mkdir(parents=True,exist_ok=False)
+cohort=verify_cohort(args)
+if cohort is not None:(out/'installed-cohort.json').write_text(json.dumps(cohort,indent=2)+'\n')
 original=args.model.read_bytes();digest=hashlib.sha256(original).hexdigest();doc=json.loads(original)
 sys.path.insert(0,str(args.generated.absolute()))
 from native_sales.models import Order
 from native_sales.keys import CustomerKey
 assert Order.UMF_SOURCE.document_sha256==digest
-assert weft.__version__=='0.4.42-dev.0'
+if cohort is None:assert weft.__version__=='0.4.42-dev.0'
+else:assert weft.__version__==cohort['packages']['weft']['moduleVersion']
 assert subprocess.check_output([str(args.bun_executable),'--version'],text=True).strip()=='1.4.2'
 documents=(CatalogDocument(doc['id'],digest,original,digest),);checks=[];started=False
 pg=out/'postgres';sock=out/'socket';sock.mkdir()

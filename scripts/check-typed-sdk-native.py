@@ -11,6 +11,7 @@ import argparse,hashlib,json,math,subprocess,sys,tempfile
 import psycopg
 from psycopg import sql
 import weft
+from typed_sdk_cohort import add_cohort_arguments,verify_cohort
 from truss import CatalogDocument,ModuleAccessGrant,Ok,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
 from truss.contracts import MapValue,TextValue
 from truss.groups import AuthoredValue,CreateObject,RootlessOwnership,GroupSuccess
@@ -22,12 +23,14 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'packages/python/examp
 from adopter_workflow import transaction,success,expect
 class Parameters(StrictModel):status:str
 
-parser=argparse.ArgumentParser();parser.add_argument("--streams",action="store_true");parser.add_argument("--streams-basic",action="store_true");parser.add_argument('--output',type=Path,required=True);parser.add_argument('--model-request',type=Path,required=True);parser.add_argument('--generated',type=Path,required=True);parser.add_argument('--bun-executable',type=Path,default=Path('/opt/homebrew/Cellar/bun/1.4.2/bin/bun'));parser.add_argument('--pg-bin',type=Path,default=Path('/opt/homebrew/opt/postgresql@18/bin'));args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument("--streams",action="store_true");parser.add_argument("--streams-basic",action="store_true");parser.add_argument('--output',type=Path,required=True);parser.add_argument('--model-request',type=Path,required=True);parser.add_argument('--generated',type=Path,required=True);parser.add_argument('--bun-executable',type=Path,default=Path('/opt/homebrew/Cellar/bun/1.4.2/bin/bun'));parser.add_argument('--pg-bin',type=Path,default=Path('/opt/homebrew/opt/postgresql@18/bin'));add_cohort_arguments(parser);args=parser.parse_args()
 basic_only=args.streams_basic and not args.streams
 root=Path(__file__).resolve().parents[1];out=args.output.absolute();out.mkdir(parents=True,exist_ok=False);pg=out/'postgres';sock=out/'socket';sock.mkdir();started=False;checks=[]
 def run(*command):
  result=subprocess.run(list(map(str,command)),text=True,capture_output=True,check=True)
  with (out/'native-lifecycle.log').open('a')as log:log.write(result.stdout+result.stderr)
+cohort=verify_cohort(args)
+if cohort is not None:(out/'installed-cohort.json').write_text(json.dumps(cohort,indent=2)+'\n')
 try:
  bun_version=subprocess.run([str(args.bun_executable),'--version'],capture_output=True,text=True,check=True).stdout.strip()
  assert bun_version=='1.4.2','exact Bun1.4.2 native producer required'
