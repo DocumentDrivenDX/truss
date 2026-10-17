@@ -243,7 +243,10 @@ receipts; Graph/presence requirements and Python FFI sources are unchanged. The
 no-new-operator constraint above applies to the additional0.4.42 change from this
 base: stable versions, the Graph feature and mandatory existing-wheel export
 checks. Dirty primary checkouts and unmerged AVG/SUM/distinct/terms/UC/managed work
-are excluded. Freeze the final reviewed source before tagging; use the existing
-`promote_run_id` path to publish the same five validated artifacts, then derive
-Truss cohorts from their actual published bytes. Final0.4.42 identities remain
-unset until that source and those artifacts exist; qualification holds remain.
+are excluded. Freeze the final reviewed source after local checks and source
+review, then tag it through the existing five-platform build, wheel checks and
+automatic publisher. Inspect the actual published assets before deriving Truss
+cohorts from their bytes. The existing `promote_run_id` verifier requires a tagged
+push run; pre-tag dispatch artifacts cannot be promoted through it. No additional
+promotion mechanism is needed. Final0.4.42 identities remain unset until that
+source and those artifacts exist; qualification holds remain.
