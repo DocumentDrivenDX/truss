@@ -969,7 +969,9 @@ LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_sec
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;actual jsonb;expected jsonb;endpoint record;selected_edge bigint;selected_relation int;journal_kind text;journal_id bigint;journal_type int;current_actor oid;
 BEGIN
  IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL;END IF;
- IF TG_TABLE_NAME IN ('object','runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill') THEN
+ -- One fresh actor per constraint-trigger event. Resource authorization stays
+ -- live below; this identity is never retained across events or commands.
+ IF TG_TABLE_NAME IN ('object','runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill','edge','runtime_edge_transition') THEN
   current_actor:=truss.runtime_person(false);END IF;
  IF TG_TABLE_NAME='runtime_object_attempt' THEN
   SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=NEW.id;
@@ -986,8 +988,8 @@ BEGIN
   IF TG_OP='DELETE' THEN PERFORM truss.runtime_owned_row_validate_qualified(OLD.id,OLD.type_id,current_actor);ELSE PERFORM truss.runtime_owned_row_validate_qualified(NEW.id,NEW.type_id,current_actor);END IF;
  ELSIF TG_TABLE_NAME IN ('runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill') THEN PERFORM truss.runtime_owned_row_validate_qualified(NEW.object_id,NEW.type_id,current_actor);
  ELSIF TG_TABLE_NAME='edge' THEN
-  IF TG_OP='DELETE' THEN PERFORM truss.runtime_edge_validate(OLD.id,OLD.rel_type_id);ELSE PERFORM truss.runtime_edge_validate(NEW.id,NEW.rel_type_id);END IF;
- ELSIF TG_TABLE_NAME='runtime_edge_transition' THEN PERFORM truss.runtime_edge_validate(NEW.edge_id,NEW.rel_type_id);
+  IF TG_OP='DELETE' THEN PERFORM truss.runtime_owned_edge_validate_in_input_qualified(OLD.id,OLD.rel_type_id,NULL,NULL,NULL,current_actor);ELSE PERFORM truss.runtime_owned_edge_validate_in_input_qualified(NEW.id,NEW.rel_type_id,NULL,NULL,NULL,current_actor);END IF;
+ ELSIF TG_TABLE_NAME='runtime_edge_transition' THEN PERFORM truss.runtime_owned_edge_validate_in_input_qualified(NEW.edge_id,NEW.rel_type_id,NULL,NULL,NULL,current_actor);
  ELSE RAISE EXCEPTION 'registered mutation commit event required' USING ERRCODE='55000';END IF;
  -- Attempt and catalog settlement still validate the complete affected graph.
  -- Row events recheck every endpoint they can change, avoiding a complete
@@ -1013,7 +1015,7 @@ BEGIN
     AND t.edge_id=selected_edge
     AND t.rel_type_id=selected_relation
   LOOP
-   PERFORM truss.runtime_graph_validate_object(endpoint.id,endpoint.type_id,false);
+   PERFORM truss.runtime_graph_validate_object_qualified(endpoint.id,endpoint.type_id,false,current_actor);
   END LOOP;
  END IF;
  -- Ordinary entity events compare the complete journal for their typed owner.

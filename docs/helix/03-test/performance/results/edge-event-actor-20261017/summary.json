@@ -1,0 +1,40 @@
+{
+  "baseCommit": "018c2eac3d9cb863d76ebd30cb06f8db282e69fe",
+  "scope": "One fresh actor per edge constraint-trigger event; no reuse across events or commands, no per-resource permission cache",
+  "wheelSha256": "4b7aca71240222cffced82d92e94560d082026a660a215604ce50abedb985735",
+  "sourceExactPayloadsBeforeAndAfter": 511,
+  "runtimeManifestSha256": "9d0ec9527e09a6cdfa89952c665da96c8b15f21513dc7b41d117e4f5fe87c57a",
+  "nativeControls": {
+    "tests": 7,
+    "seconds": 41.137,
+    "passed": true,
+    "scope": "Current writer revocation/unsafe actor, edge link/retarget/unlink/replay/multiplicity, original1024create+changedupdate+commit+replay+reads,1025refusal/finalfaultrollback"
+  },
+  "originalFullSmall": {
+    "passed": true,
+    "seconds": 109.31023175013252,
+    "scope": "Original1000objects/1000edges,1000reads,200committedwrites,five changed1000updates+commits+readback"
+  },
+  "limits": {
+    "sqlSeconds": 10,
+    "operationSeconds": 30,
+    "statisticsEnabled": false,
+    "compiler": "publishedWeft0.4.40"
+  },
+  "authority": "ActualSESSION_USER freshly issued for each edge/transition event. NULLpreparedcontext retains independent full transition validation; each edge writer and every endpoint reader membership remains live. Standalone wrappers, attempt settlement, endpoint selection/multiplicity, physical and journal closure unchanged.",
+  "interpretation": "Local correctness/workflow observations, no isolated speedup or hosted timeout fix established. Prior committed018c2eac hosted acceptance is independently running; no stress/tag.",
+  "artifacts": [
+    {
+      "file": "native.log.gz",
+      "uncompressedSha256": "8cde4ad335d6318677904ea7838b8f99cadbadc71d7419d027c2e7395f5ae1a3"
+    },
+    {
+      "file": "full-small.json.gz",
+      "uncompressedSha256": "9eb37bd600e2d43948446d300804fc7b397d5a96e126604e29b42bcb2a667bce"
+    },
+    {
+      "file": "full-small.log.gz",
+      "uncompressedSha256": "61a60ea9669458b4d75a32dfd37c68d288c2b9676f80d4cc69910de16e034e37"
+    }
+  ]
+}
