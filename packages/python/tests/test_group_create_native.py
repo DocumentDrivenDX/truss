@@ -82,6 +82,24 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         observation=json.loads(base64.b64decode(replay.response.replay.evidence.bytes_base64))
         self.assertNotEqual(observation['observingXid'],observation['originalWriterXid'])
         self.assertEqual(observation['basis'],'committed_receipt')
+    def test_repeated_create_pins_preserve_mixed_type_order_and_values(self):
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        operations=(self.create(label='first',record='A',alias='a1'),
+                    self.create(label='middle',record='B',alias='b1'),
+                    self.create(label='last',record='A',alias='a2'))
+        applied=self.apply(assembly,tx,*self.input(assembly,tx,operations))
+        self.assertIsInstance(applied,GroupSuccess)
+        results=applied.response.semantic.results
+        self.assertEqual(tuple(r.alias for r in results),('a1','b1','a2'))
+        self.assertEqual(tuple(r.identity.definition_pin for r in results),
+                         tuple(operation.type_definition_pin for operation in operations))
+        host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
+        for result,record,label in zip(results,('A','B','A'),('first','middle','last'),strict=True):
+            read=assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',
+                record_id=record,object_id=int(result.identity.id))
+            self.assertIsInstance(read,Ok);self.assertIsInstance(read.value,ObjectFound)
+            self.assertEqual(dict(read.value.object.values),{record+'-label':label,record+'-value':'value'})
+
     def test_create_preserves_absence_null_and_empty_retained_storage(self):
         from truss.contracts import NullValue
         def source(document):

@@ -466,7 +466,15 @@ BEGIN
   SELECT DISTINCT (value->>'type_id')::int type_id FROM jsonb_each(observed->'types')
   UNION SELECT (truss.runtime_owned_operation_type_qualified(value,input_operations,(ordinal-1)::int,current_actor)).type_id
    FROM jsonb_array_elements(input_operations) WITH ORDINALITY o(value,ordinal)
-   WHERE value->>'operation' IN ('create_object','update_object','delete_object')
+   WHERE value->>'operation' IN ('update_object','delete_object')
+  -- This is a type set, not operation admission. Resolve each exact CREATE pin
+  -- once using its first original operation; all per-operation admission,
+  -- execution and settlement checks remain on their original paths.
+  UNION SELECT (truss.runtime_owned_operation_type_qualified(value,input_operations,(ordinal-1)::int,current_actor)).type_id
+   FROM (SELECT DISTINCT ON ((value->>'typeDefinitionPin') COLLATE "C") value,ordinal
+    FROM jsonb_array_elements(input_operations) WITH ORDINALITY o(value,ordinal)
+    WHERE value->>'operation'='create_object'
+    ORDER BY (value->>'typeDefinitionPin') COLLATE "C",ordinal) creations
  ) affected_types ORDER BY type_id LOOP
   IF truss.runtime_object_values_readable_qualified(selected_type,current_actor) IS NOT TRUE THEN
    RAISE EXCEPTION 'complete affected property and item readers required' USING ERRCODE='42501';END IF;

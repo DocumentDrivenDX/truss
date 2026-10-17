@@ -1244,3 +1244,32 @@ completed-slot census, exact source checks or authority checks. No further
 profiler revisions are planned; the next runtime candidate needs a concrete
 source equivalence and clean measurement. No production instrumentation was
 added. Raw observation SHA256 is `a48c84a1077274cfa83824bb00c09a9279552c3c7d855dfcd0a05363e8b17cae`.
+
+
+### Resolve repeated CREATE pins once when collecting affected types
+
+Owned capture constructs an affected-type set before graph exclusion. It now
+selects the first complete original CREATE operation and ordinal for each exact
+definition pin, under `COLLATE "C"`, before calling the unchanged type resolver.
+A 1,024-operation batch using one CREATE pin therefore performs one resolution
+in this scope query instead of 1,024. Update/delete resolution, outer type order,
+property/relationship/endpoint reader checks, and per-operation admission,
+execution and settlement remain on their original paths. No helper, table,
+public signature, write order or deadline changed. Routine inventory remains 227.
+Astra Ultra cleared the plan and source; owner and generated SQL match.
+
+The [five installed-wheel controls](results/create-scope-dedup-controls-20261017.log.gz)
+pass in 37.623s with counters off and unchanged 10s SQL/30s operation limits:
+original 1,024 creates/changed updates/commits/replay/ordered reads, 1,025 refusal,
+operation-1,024 fault rollback, mixed A/B/A create order/pins/committed values,
+and same-group create/delete retained history. Fixture cleanup completed.
+This is correctness evidence, not an isolated speedup: the full original small
+workload and both hosted original-workload gates remain pending for this change.
+The earlier diagnostic's 104.54ms affected-type aggregate was perturbed and does
+not establish the clean saving.
+
+The candidate wheel has 509 source-matching payloads and SHA256
+`7fdee3ba01c1547fcb0f0157302c88c50b14b61741f5da9859680fc251ff392e`;
+manifest SHA256 is `f0fe32fac6389964c83fba0fbd7d4ea8170bd67437a166f8d77ce88c33a4fe7f`.
+The tested candidate was the working tree over main `2c546981`. Raw control-log
+SHA256 is `a0146e1aeb683b01cdaa9830f4f0f37f7ac0b0e8a0d6d778d0bf6130e007df55`.
