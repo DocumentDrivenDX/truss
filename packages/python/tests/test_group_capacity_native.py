@@ -1,6 +1,9 @@
 """Actual public atomic capacity; no deadline increases or no-op substitutes."""
 from dataclasses import replace
 import json
+import os
+from pathlib import Path
+import platform
 import psycopg
 from truss import Ok,Error,ObjectFound
 from truss.contracts import MapValue,TextValue,ABSENT,ProfilePin
@@ -12,6 +15,51 @@ import test_group_create_native as base
 class GroupCapacityTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[_name]=None
+
+    def setUp(self):
+        super().setUp()
+        self.statistics_directory=os.environ.get('TRUSS_CAPACITY_FUNCTION_STATS')
+        self.statistics_setup_error=None
+        if self.statistics_directory:
+            try:
+                with self.admin.transaction():
+                    self.admin.execute("ALTER ROLE consumer SET track_functions='all'")
+            except Exception as error:
+                self.statistics_setup_error=type(error).__name__
+
+    def capture_statistics(self,connection,host,phase):
+        """Optional completed-call observations; never qualify clean timing."""
+        if not self.statistics_directory:return
+        observation={'phase':phase,'test':self.id(),'source':os.environ.get('GITHUB_SHA','local'),
+            'platform':platform.system().lower()+'-'+platform.machine(),'status':'unavailable',
+            'columns':['schema','function','calls','totalMilliseconds','selfMilliseconds'],
+            'scope':'Current transaction through this apply return; incomplete calls and later COMMIT work are excluded'}
+        try:
+            custody=host._custody
+            if self.statistics_setup_error:
+                observation['reason']='tracking_setup_'+self.statistics_setup_error
+            elif connection.closed or connection.info.transaction_status!=psycopg.pq.TransactionStatus.INTRANS:
+                observation['reason']='connection_not_in_usable_transaction'
+            elif custody.quarantined or custody.pending is not None or custody.reservation is not None:
+                observation['reason']='connection_custody_unavailable'
+            else:
+                # Contain only a diagnostic query failure, preserving all original
+                # effects and the apply result. Never recover a failed host here.
+                with connection.transaction():
+                    observation['tracking']=connection.execute('SHOW track_functions').fetchone()[0]
+                    if observation['tracking']=='all':
+                        observation['functions']=connection.execute(
+                            "SELECT schemaname,funcname,calls,total_time,self_time FROM pg_stat_xact_user_functions WHERE schemaname='truss' ORDER BY self_time DESC,funcname").fetchall()
+                        observation['status']='captured'
+                    else:observation['reason']='tracking_not_enabled'
+        except Exception as error:
+            observation.update(reason='collection_'+type(error).__name__,sqlState=getattr(error,'sqlstate',None))
+        try:
+            directory=Path(self.statistics_directory);directory.mkdir(parents=True,exist_ok=True)
+            name=observation['platform']+'-'+self._testMethodName+'-'+phase+'.json'
+            (directory/name).write_text(json.dumps(observation,indent=2)+'\n')
+        except Exception as error:
+            print('Capacity function statistics unavailable:',type(error).__name__)
 
     def tearDown(self):
         self.admin.execute('DROP TRIGGER IF EXISTS capacity_late_fault ON truss.object')
@@ -30,6 +78,7 @@ class GroupCapacityTests(base.PublicCreateGroupTests):
         context=assembly.group_context_in_transaction(tx).value
         original=context.input(self.operations(1024),MapValue(entries=()))
         created=assembly.apply_in_transaction(tx,original,context.request('capacity-create'),documents=self.documents)
+        self.capture_statistics(connection,host,'create')
         self.assertIsInstance(created,Ok,repr(created)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(created.value,GroupSuccess,repr(created))
         results=created.value.response.semantic.results
         self.assertEqual(len(results),1024);self.assertTrue(all(r.outcome=='created' for r in results))
@@ -37,6 +86,7 @@ class GroupCapacityTests(base.PublicCreateGroupTests):
         # The bound belongs to each group, not all creates in the caller's transaction.
         later=context.input((self.create(label='later-group',value='extra',record='B',alias=ABSENT),),MapValue(entries=()))
         following=assembly.apply_in_transaction(tx,later,context.request('following-group'),documents=self.documents)
+        self.capture_statistics(connection,host,'following')
         self.assertIsInstance(following,Ok,repr(following));self.assertIsInstance(following.value,GroupSuccess,repr(following))
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
         context=assembly.group_context_in_transaction(tx).value
@@ -45,11 +95,13 @@ class GroupCapacityTests(base.PublicCreateGroupTests):
             unset=(),expected_version='1') for i,identity in enumerate(identities))
         update=context.input(changes,MapValue(entries=()));request=context.request('capacity-update')
         updated=assembly.apply_in_transaction(tx,update,request,documents=self.documents)
+        self.capture_statistics(connection,host,'update')
         self.assertIsInstance(updated,Ok,repr(updated)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(updated.value,GroupSuccess,repr(updated))
         self.assertEqual(len(updated.value.response.semantic.results),1024)
         self.assertTrue(all(r.outcome=='changed' for r in updated.value.response.semantic.results))
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
         replay=assembly.apply_in_transaction(tx,update,request,documents=self.documents)
+        self.capture_statistics(connection,host,'replay')
         self.assertIsInstance(replay,Ok,repr(replay));self.assertIsInstance(replay.value.response,CommittedReceiptReplay,repr(replay))
         self.assertEqual(replay.value.response.semantic,updated.value.response.semantic)
         objects=[];cursor=None
@@ -110,6 +162,7 @@ class GroupCapacityTests(base.PublicCreateGroupTests):
         operations=operations[:-1]+(self.create(label='capacity-late-1023',value='last',alias=ABSENT),)
         context=assembly.group_context_in_transaction(tx).value
         result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.capture_statistics(connection,host,'late-fault')
         self.assertIsInstance(result,Error,repr(result));self.assertEqual(result.error.sql_state,'P9999',repr(result))
         self.assertEqual(connection.execute('TABLE prior_work').fetchall(),[('kept',)])
         host.detach();connection.commit();self.assert_empty()

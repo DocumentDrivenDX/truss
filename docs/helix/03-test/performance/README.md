@@ -782,3 +782,31 @@ attempt check. Publication was skipped; no tag followed. This does not establish
 hosted coverage of native export sources added later in 21346602. Their two
 source cases are now selected by the existing installed owned-graph release step;
 protection and populated-upgrade assertions remain in their existing selectors.
+
+### Optional release-runner capacity diagnosis
+
+The existing release workflow has a default-off `capacity_statistics` manual
+input. It enables only PostgreSQL's built-in function counters on the capacity
+fixture's consumer role; no production runtime instrumentation is added. The
+original workloads, assertions, 10-second statements, 30-second operations and
+publication dependencies remain unchanged. Run a diagnostic validation with
+`gh workflow run release.yml --ref main -f capacity_statistics=true`.
+
+Observations use the same consumer connection immediately after each apply
+returns and before assertions or commit. They are cumulative within that
+transaction, exclude later deferred COMMIT work, and omit unfinished calls.
+A disposable PostgreSQL 18.6 cancellation/savepoint probe retained both completed
+child calls while the cancelled outer call had zero completed calls. These are
+partial cost observations, not complete cancellation timings. Unsafe connections
+are reported unavailable without changing host containment. Always-uploaded,
+platform-specific artifacts identify captured, unavailable and missing phases.
+
+On local PostgreSQL 18.6/psycopg 3.3.6/Bun 1.4.2, all three original capacity cases
+pass with collection enabled (30.417 seconds), producing five tracked phase
+observations including the final-operation rollback. The original full
+create/update/commit/replay/readback case also passes with collection disabled
+(23.498 seconds). Static comparisons preserve all six original fixture methods
+apart from capture calls and preserve the original workflow after removing its
+optional diagnostics. Astra Ultra cleared the plan and source. Instrumented
+runs provide functional evidence, not clean timing qualification. Remove this
+temporary diagnostic plumbing after the release-runner bottleneck is resolved.
