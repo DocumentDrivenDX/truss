@@ -1,3 +1,7 @@
+Current main builds `0.0.39.dev0` / native0.71. The separate stable0.0.38
+Bun-free release retains native0.70; owned-graph capabilities described below
+remain unreleased because their original hosted capacity gates have not passed.
+
 # Truss Python toolkit
 
 **Unreleased development checkpoint:** SDK `0.0.38.dev0` installs native

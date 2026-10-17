@@ -11,8 +11,9 @@ and Weft-compiled scalar and relationship queries. The local baseline is Documen
 `pgserver-pg18==18.6.1` (PostgreSQL18.6) with psycopg3.3.6. Python deployments
 use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Start with the [runnable adopter workflow](packages/python/examples/adopter_workflow.py).
 
-Owned objects and composition are implemented in the unreleased development
-tranche; hosted release qualification is pending. Cyclic schema definitions,
+The Bun-free stable update is version0.0.38 / native0.70. Owned objects and
+composition remain in the unreleased0.0.39 development tranche; their hosted
+capacity and 1,000-edge workload gates have not passed. Cyclic schema definitions,
 record-valued properties, history offload and managed-service qualification remain
 unfinished. Design and evidence live in
 [`docs/helix/`](docs/helix/README.md).

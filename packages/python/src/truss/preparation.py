@@ -156,7 +156,10 @@ def _capture(command,*,input_bytes=b'',limit,timeout,cwd=None):
     """Bounded owner capture; retained subprocess support is private tooling."""
     if command[0]=='embedded-v8':
         from ._embedded import capture
-        return capture(command[1],input_bytes=input_bytes,limit=limit,timeout=timeout)
+        try:
+            return capture(command[1],input_bytes=input_bytes,limit=limit,timeout=timeout)
+        except ValueError as error:
+            raise PreparationRejected('producer_unavailable') from error
     deadline=time.monotonic()+timeout
     with tempfile.TemporaryFile() as source:
         source.write(input_bytes);source.seek(0)
@@ -270,7 +273,7 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
                     diagnostics=(_json(report_evidence),),
                     limit_bytes=MAX_OUTPUT if reason=='report_evidence_resource' else None)
         return _retain_original(PreparedAcceptance(original,evidence,_json(result['declarations']),_json(result['archiveDocuments']),
-            PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],release_digest,manifest['runtimeVersion']),_json(result['reportEvidence'])))
+            PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],release_digest,'mini-racer==0.14.1/V8 14.4.258.23'),_json(result['reportEvidence'])))
     except (KeyError,ValueError,TypeError) as error:
         if isinstance(error,PreparationRejected):raise
         _reject('producer_unavailable')

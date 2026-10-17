@@ -23,6 +23,7 @@ class EmbeddedOwnerTests(unittest.TestCase):
         with patch.object(subprocess,'Popen',side_effect=AssertionError('No external owner process')):
             prepared=prepare((document('embedded'),))
             self.assertEqual(prepared.documents[0].document.content,document('embedded').content)
+            self.assertEqual(prepared.provenance.runtime_version,'mini-racer==0.14.1/V8 14.4.258.23')
             original=json.loads((FIXTURES/'security-mapping-request.json').read_bytes())['modules'][0]['documentJson'].encode()
             observed=prepare_core08_catalog_source(original,document_id='domain',document_revision='r1',bun_executable='/missing/bun')
             self.assertEqual(observed.original_document,original)
@@ -50,6 +51,13 @@ class EmbeddedOwnerTests(unittest.TestCase):
                 self.assertTrue(owner._cleanup_complete)
                 with self.assertRaises(CurrentQueryPipeError):
                     owner.exchange(initial,source_receipt=receipt)
+
+    def test_owner_engine_failure_preserves_public_preparation_refusal(self):
+        from truss import PreparationRejected
+        with patch('truss._embedded.capture',side_effect=ValueError('owner heap/output refused')):
+            with self.assertRaises(PreparationRejected) as raised:
+                prepare((document('embedded'),))
+            self.assertEqual(raised.exception.reason,'producer_unavailable')
 
     def test_owner_refusal_is_a_fenced_transport_error(self):
         with open_current_disclosure_computation(timeout_seconds=5) as owner:

@@ -8232,3 +8232,12 @@ Original source producer versions remain historical pins. The new current-query
 consumer selection records the embedded delivery manifest and V8 revision, and
 retains exact released Weft wheel/native hashes independently for Linux x64 and
 macOS ARM64. Existing stored consumer selections are not silently rewritten.
+
+The original current-main release qualification failed with the existing limits:
+Linux timed out during 1,024 CREATE final history validation; macOS passed the
+capacity controls but timed out during the original 1,000-edge final transition
+validation. Every preceding functional/upgrade gate and all embedded deployment
+controls passed. The immediate stable0.0.38 update retains native0.70 SQL from
+0.0.37 and the full original stable release workflow. Main advances to0.0.39.dev0
+for the owned-graph tranche; its failed gates remain open. The release branch
+will be reconciled by history after its stable update is qualified and published.

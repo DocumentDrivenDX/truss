@@ -115,8 +115,15 @@ class OwnerVM:
 
 
 def capture(entry, *, input_bytes=b'', limit, timeout, args=(), extra=None):
-    with OwnerVM(entry, input_bytes=input_bytes, args=args, extra=extra, timeout=timeout) as owner:
-        result = json.loads(owner.promise('__result()'))
+    try:
+        from py_mini_racer import JSPromiseError
+    except ImportError as error:
+        raise OSError('Qualified embedded engine unavailable') from error
+    try:
+        with OwnerVM(entry, input_bytes=input_bytes, args=args, extra=extra, timeout=timeout) as owner:
+            result = json.loads(owner.promise('__result()'))
+    except JSPromiseError as error:
+        raise ValueError('Embedded owner output refused') from error
     stdout, stderr = bytes.fromhex(result['stdout']), bytes.fromhex(result['stderr'])
     if len(stdout) > limit:
         raise ValueError('Original owner output capacity exceeded')
