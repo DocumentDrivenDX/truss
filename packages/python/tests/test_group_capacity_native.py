@@ -61,6 +61,41 @@ class GroupCapacityTests(base.PublicCreateGroupTests):
         except Exception as error:
             print('Capacity function statistics unavailable:',type(error).__name__)
 
+    def _after_consumer_cleanup(self,backend_pids):
+        if not self.statistics_directory:return
+        observation={'test':self.id(),'source':os.environ.get('GITHUB_SHA','local'),
+            'platform':platform.system().lower()+'-'+platform.machine(),'status':'unavailable',
+            'recordedBackendPids':backend_pids,
+            'columns':['schema','function','calls','totalMilliseconds','selfMilliseconds'],
+            'scope':'All tracked completed Truss calls across this fixture, including registration, reads and settlement. Untracked admin work and incomplete calls are excluded. Diagnostic overhead is not clean timing; nested totals overlap.'}
+        try:
+            if self.statistics_setup_error:
+                observation['reason']='tracking_setup_'+self.statistics_setup_error
+            else:
+                # Closing a client may precede backend exit/statistics flush.
+                # One fresh check records this race; it does not wait or recover
+                # a quarantined host to obtain diagnostic data.
+                self.admin.execute('SELECT pg_catalog.pg_stat_clear_snapshot()').fetchone()
+                pending=self.admin.execute("""SELECT pid FROM pg_catalog.pg_stat_activity
+                    WHERE pid=ANY(%s::int[]) OR (datname=pg_catalog.current_database()
+                        AND usename='consumer' AND backend_type='client backend') ORDER BY pid""",
+                    ([pid for pid in backend_pids if type(pid) is int and pid>0],)).fetchall()
+                observation['pendingBackendPids']=[row[0] for row in pending]
+                observation['functions']=self.admin.execute("""SELECT schemaname,funcname,calls,total_time,self_time
+                    FROM pg_catalog.pg_stat_user_functions WHERE schemaname='truss'
+                    ORDER BY self_time DESC,funcname""").fetchall()
+                observation['status']='partial' if pending or None in backend_pids else 'captured'
+                if pending:observation['reason']='backend_exit_or_flush_pending'
+                elif None in backend_pids:observation['reason']='backend_pid_unavailable'
+        except Exception as error:
+            observation.update(reason='collection_'+type(error).__name__,sqlState=getattr(error,'sqlstate',None))
+        try:
+            directory=Path(self.statistics_directory);directory.mkdir(parents=True,exist_ok=True)
+            name=observation['platform']+'-'+self._testMethodName+'-cumulative-after-close.json'
+            (directory/name).write_text(json.dumps(observation,indent=2)+'\n')
+        except Exception as error:
+            print('Capacity cumulative statistics unavailable:',type(error).__name__)
+
     def tearDown(self):
         self.admin.execute('DROP TRIGGER IF EXISTS capacity_late_fault ON truss.object')
         self.admin.execute('DROP FUNCTION IF EXISTS public.capacity_late_fault()')

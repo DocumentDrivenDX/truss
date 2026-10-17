@@ -33,10 +33,17 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         result=create_reference_assembly(CatalogRuntimeConfiguration(),self.host)
         self.assertIsInstance(result,Ok)
         self.assembly=result.value
+    def _after_consumer_cleanup(self,backend_pids):
+        pass
     def tearDown(self):
+        backend_pids=[]
         for connection,host in self.consumer_connections:
+            if not connection.closed:
+                try:backend_pids.append(connection.info.backend_pid)
+                except Exception:backend_pids.append(None)
             host.detach()
             if not connection.closed:connection.rollback();connection.close()
+        self._after_consumer_cleanup(tuple(backend_pids))
         self.host.detach();self.admin.rollback()
         self.admin.execute('DROP SCHEMA IF EXISTS truss CASCADE')
         self.admin.execute('DROP ROLE consumer')
