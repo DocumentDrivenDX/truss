@@ -120,3 +120,40 @@ Preserve CONTRACT-904 outcomes/codes. TRS-BULK-ADMISSION denotes missing protect
 ## Examples
 
 Materialize two customers in one admitted snapshot, seal original guards and batchSize1. Execute batch0 under the protected group path; a later edit to customer1 produces an original batch1 conflict and stopped job, preserving batch0. A key reassignment between selection and execution fails native identity comparison. Loss after batch0 outer commit must return its retained receipt rather than call update_object again.
+
+
+## First direct-action prerequisite: owned completion
+
+The proposed `truss.actions.owned-completion/0.1` profile uses one fresh,
+engine-owned psycopg connection authenticated as the original enrolled human
+through the existing local SCRAM adapter. It begins READ COMMITTED/read-write
+from IDLE and retains the original connection, backend PID and adopted transaction.
+It refuses a non-idle or substituted connection and never repairs, reopens or
+retries it. Caller-owned transaction adoption keeps its existing contract.
+This component alone authorizes no action and issues no tx/1 receipt.
+
+The invocation's absolute operation deadline includes settlement; COMMIT cannot
+start with a fresh full budget. Before settlement, original host custody must
+be usable, the connection must remain INTRANS rather than INERROR, and the
+original adopted host must detach without handing the connection to a caller.
+The session attempts completion once. Reuse the existing owned-import control
+path and supported psycopg command/status/error APIs. Native COMMIT acknowledgement
+and matching IDLE establish commit; an actual ROLLBACK acknowledgement or native
+commit error with confirmed rollback establishes rollback. A tag without its
+matching native state does not establish settlement.
+
+A definitive settlement survives later cursor/deadline cleanup failure. Retain
+that failure separately and quarantine/close the connection without reuse.
+Missing or contradictory acknowledgement remains unresolved. Closing a connection
+proves neither commit nor rollback; do not issue a competing rollback or retry
+an unresolved COMMIT. Original invocation identity/custody must remain available
+for the later protected reconciliation path. Stock PostgreSQL synchronous_commit
+and durability settings remain explicit native deployment assumptions; this
+component makes no crash/restore continuity claim.
+
+The protected action provider must still bind the complete accepted action,
+issued revision/store, authenticated Subject, current ACTION roles, independent
+replay-discovery policy, exact frames and actual effects to this same transaction.
+Only its finalized native outcome plus confirmed completion can become an SDK
+Committed result. The ordinary group receipt and this session's completion
+observation are not substitutes for an authoritative action outcome.

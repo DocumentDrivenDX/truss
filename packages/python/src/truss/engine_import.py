@@ -55,7 +55,8 @@ class _EngineImportSession:
         try:
             deadline.check();self.submitted=True;cursor=self.connection.execute(command,prepare=False)
             actual=cursor.statusmessage
-            if actual in ('COMMIT','ROLLBACK') and settlements is not None:
+            if (actual in ('COMMIT','ROLLBACK') and settlements is not None
+                    and self.connection.info.transaction_status==pq.TransactionStatus.IDLE):
                 # The acknowledgement is captured before result construction,
                 # cancellation joining or cursor cleanup can fail.
                 observed=settlements[actual];self.last_settlement=observed

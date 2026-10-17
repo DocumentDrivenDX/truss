@@ -24,6 +24,11 @@ jobs:
         run: python -m pip wheel --no-deps packages/python --wheel-dir /tmp/truss-wheels
       - name: Install checksum-verified released PostgreSQL wheels
         run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find /tmp/truss-wheels -maxdepth 1 -name 'truss_toolkit-*.whl' -print -quit)"
+      - name: Run owned completion controls
+        env:
+          PYTHONPATH: packages/python/tests
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest test_engine_action_session test_engine_preparation
       - name: Run focused installed runtime checks
         shell: bash
         run: |

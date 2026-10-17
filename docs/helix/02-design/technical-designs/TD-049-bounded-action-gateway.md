@@ -113,3 +113,38 @@ No current Truss action gateway or delegated issuer is implied. Protected admiss
 Historical claim: original component evidence is now retained unchanged in main;
 it was not rerun against current runtime and establishes no current completion:
 [Original owner-artifact registration](../../04-build/evidence/bulk-update/gateway-registration.md) now retains exact model/action/preparation bytes behind opaque instance-owned tickets, with original UMF API witness and seven Python3.11 tests. This is inert custody only; full qualified owner/Python semantic adoption, native authorization/delegation/attempt/gateway execution remain open. No US-049 criterion is marked complete.
+
+
+## First direct-action prerequisite — owned psycopg completion
+
+Apply CONTRACT-013's owned-completion profile in a small private
+`packages/python/src/truss/_engine_action_session.py` component. Reuse
+`engine_import._EngineImportSession.control` and the existing SCRAM connection
+adapter. Do not reuse the import session's begin/reopen/rollback-repair behavior
+or the preparation session's REPEATABLE READ authority/capture machinery.
+Keep native settlement and connection-health observations separate. Preserve
+known acknowledgement through cleanup failure; enforce the remaining absolute
+invocation deadline before settlement. No public capability is enabled by this
+component.
+
+Basic checks use the real public group path on the owned caller-authenticated
+connection: create/commit/read, explicit rollback and deferred commit rejection.
+Reuse existing preparation test patterns for unknown acknowledgement and known
+acknowledgement followed by cleanup failure. Refuse repeated begin/completion
+and non-idle/substituted connections. Run the existing Python module-boundary
+check with explicit imports for the new private component. No new tracing,
+accounting, formal model or performance campaign is required for this adapter.
+
+The [component evidence](../../04-build/evidence/action-owned-completion-20261017/receipt.json)
+records 17 unit controls and three native tests passing on PostgreSQL 18.6 /
+psycopg 3.3.6, using the exact source-matching wheel. The native workflow commits
+and reads a public mutation, rolls back another, and confirms deferred COMMIT
+rejection; two existing import workflows also pass. This is settlement evidence
+only and does not complete this story or enable a public action capability.
+
+The following integration remains unfinished: native action registration/revision
+issuance, independent replay discovery, protected Subject/ACTION-role admission,
+closed set-effect/frame enforcement, durable complete tx/1 outcomes and the SDK
+ReplayingActionExecutor. The private session must not be presented as any of
+those capabilities. Frozen-manifest control and delegation follow that complete
+single-action workflow.

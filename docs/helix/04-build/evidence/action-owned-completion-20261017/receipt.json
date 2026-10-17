@@ -1,0 +1,40 @@
+{
+  "scope": "Private owned SCRAM READ COMMITTED settlement component, not action authority, tx/1 receipt, SDK executor or bulk qualification",
+  "sourceBase": "b5ca2108",
+  "wheel": "truss_toolkit-0.0.38.dev0-py3-none-any.whl",
+  "wheelSha256": "be2c9dc0fc13dced4cc0698bf310e7728bf56f525550c119fc277ea5d4626545",
+  "sourceMatchingPayloads": 510,
+  "python": "3.11.17",
+  "postgresql": "18.6",
+  "pgserver-pg18": "18.6.1",
+  "psycopg": "3.3.6",
+  "bun": "1.4.2",
+  "sourceSha256": {
+    "packages/python/src/truss/_engine_action_session.py": "443b76ac883a66a6792f2f9f53a1e1c384a90bd87d2be4f9efe2508e7bbd39c9",
+    "packages/python/src/truss/engine_import.py": "596be2bce4b5e8fca3b39ed3aff7532a5bfa63f5fb033ca1a1f4bd82ddbd7e6b",
+    "packages/python/tests/test_engine_action_session.py": "5c7294785b0e0e08708ab85cbb840558030a690a69710ceff0097a0ee14b7cc7",
+    "packages/python/tests/test_engine_action_session_native.py": "3a6c25f66d3f2df68900f762b1e557e58ae70549554469be9b5f41d1076b12f9"
+  },
+  "checks": {
+    "unit": "17 passed",
+    "native": "3 passed in 13.414s",
+    "boundaries": "1596 imports passed",
+    "ownedFixturesStopped": true
+  },
+  "nativeScope": [
+    "Actual public GroupSuccess before each completion",
+    "SCRAM caller; same connection/PID and READ COMMITTED lifetime",
+    "Committed CREATE read from next owned transaction",
+    "Explicit rollback leaves canonical count unchanged",
+    "Deferred foreign-key COMMIT rejection confirms rollback of canonical mutation",
+    "Configured 2000ms SQL timeout retained after rollback; other phases 10000ms",
+    "Two existing owned-import regressions"
+  ],
+  "notClaimed": [
+    "Protected action admission or ACTION-role enforcement",
+    "Action revision/discovery or durable tx/1 outcome/reconciliation",
+    "SDK ReplayingActionExecutor or ManifestBulkPlan implementation",
+    "MacOS 1024 CREATE performance fix",
+    "Crash/restore continuity"
+  ]
+}
