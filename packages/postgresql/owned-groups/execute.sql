@@ -548,7 +548,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_plan(uuid,int) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_owned_identity(selected_attempt uuid,selected_index int,reference text,entity_kind text,prepared_plan jsonb DEFAULT NULL,prepared_attempt truss.runtime_object_attempt DEFAULT NULL) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE plan jsonb;state jsonb;identity jsonb;attempt truss.runtime_object_attempt%ROWTYPE;
- creation_index int;result jsonb;operation jsonb;witness jsonb;pin record;
+ creation_index int;result jsonb;creation_plan jsonb;operation jsonb;witness jsonb;pin record;
 BEGIN
  IF entity_kind NOT IN ('object','edge') OR entity_kind IS NULL OR reference IS NULL THEN
   RAISE EXCEPTION 'explicit original entity reference required' USING ERRCODE='55000';END IF;
@@ -577,10 +577,17 @@ BEGIN
   ELSE SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;END IF;
   IF creation_index>selected_index OR creation_index>=attempt.next_index THEN
    RAISE EXCEPTION 'prior original create progress required' USING ERRCODE='55000';END IF;
-  SELECT p.result INTO STRICT result FROM truss.runtime_owned_operation p
+  SELECT p.result,p.plan INTO STRICT result,creation_plan FROM truss.runtime_owned_operation p
    WHERE p.attempt_id=selected_attempt AND p.operation_index=creation_index AND p.writer_xid=attempt.writer_xid;
   IF result IS NULL THEN RAISE EXCEPTION 'sealed original create result required' USING ERRCODE='55000';END IF;
-  operation:=truss.runtime_owned_plan(selected_attempt,creation_index)->'operation';
+  -- The sealed result and immutable source plan are the same original slot.
+  -- Keep the standalone plan reader's checks after the result refusal.
+  IF creation_index<0
+   OR creation_plan->>'profile' IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
+   OR creation_plan->'operationIndex' IS DISTINCT FROM to_jsonb(creation_index)
+   OR creation_plan->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
+   RAISE EXCEPTION 'original owned operation correspondence required' USING ERRCODE='55000';END IF;
+  operation:=creation_plan->'operation';
   IF result->>'operation' IS DISTINCT FROM 'create_'||entity_kind
    OR operation->>'operation' IS DISTINCT FROM result->>'operation'
    OR result->>'outcome' IS DISTINCT FROM 'created'

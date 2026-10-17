@@ -1,0 +1,42 @@
+{
+  "baseCommit": "52d81cfa87e42cf6d1663dd4fe0cdfab74bdcaf8",
+  "wheelSha256": "ce7a40a8b6f74704520b90e27d8f79fbf7eced4dc1f0ae34069cfc323f9b62ce",
+  "sourceExactPayloadsBeforeAndAfter": 511,
+  "runtimeManifestSha256": "98b3aa4d553f8032f67deb1528688d581703929719939db1b9b18b024f811a9c",
+  "fullSmall": true,
+  "scope": "Read immutable CREATE result and source plan from one exact sealed slot; retain original validation order and guards",
+  "nativeControls": {
+    "passed": true,
+    "tests": 7,
+    "seconds": 41.665
+  },
+  "originalFullSmall": {
+    "passed": true,
+    "seconds": 110.6426995000802
+  },
+  "limits": {
+    "sqlSeconds": 10,
+    "operationSeconds": 30,
+    "statisticsEnabled": false,
+    "compiler": "published Weft0.4.40"
+  },
+  "interpretation": "One redundant indexed lookup/helper removed per CREATE identity resolution. These local functional observations do not establish isolated speedup or a hosted timeout fix. Initial runner omitted tracked test fixtures and failed before database startup; exact wheel unchanged for successful retry. No deadlines, assertions, guard obligations or workload changes.",
+  "artifacts": [
+    {
+      "file": "native.log.gz",
+      "uncompressedSha256": "8839d10654ce0ce70126a748e94d6cc1e0c2dace79f8b18b01ae5cefd651fe51"
+    },
+    {
+      "file": "native-retry.log.gz",
+      "uncompressedSha256": "7c50423f452ba90e94a8831db20c2b019a8aec44359e8739acb76777112ee376"
+    },
+    {
+      "file": "full-small.log.gz",
+      "uncompressedSha256": "400d65cb7a40c6991b5a7fead91e72a270fe62621cb463e9e696eff8cacfbf07"
+    },
+    {
+      "file": "full-small.json.gz",
+      "uncompressedSha256": "b03d2be123381520b5e4d494c38cd7fe62707cac0b062fcec7f72bdcf7fa7608"
+    }
+  ]
+}
