@@ -1,0 +1,110 @@
+{
+  "scope": "Local original public capacity workflow and diagnostic-only finish statement observations; no hosted release qualification or speedup claim",
+  "sourceCommit": "327265795f6560d0223a94098da0aa3b158b7adb",
+  "wheelSha256": "8fed728b62a49de91ece81b6a3da3571a42e7ca9569d130e50831d6698ac2a69",
+  "sourceExactPayloadsBeforeAndAfter": 511,
+  "runtime": {
+    "postgresql": "18.6",
+    "pgserver-pg18": "18.6.1",
+    "python": "3.11.17",
+    "psycopg": "3.3.6",
+    "bun": "1.4.2",
+    "weft": "0.4.40"
+  },
+  "workload": "Original test_1024_real_creates_updates_replay_and_ordered_public_readback; CREATE, changed UPDATE, outer commits, replay and ordered public reads; no assertion/deadline changes",
+  "sqlTimeoutSeconds": 10,
+  "operationTimeoutSeconds": 30,
+  "baseline": {
+    "tests": 1,
+    "seconds": 18.811,
+    "exitCode": 0,
+    "runtime": "unmodified, no profiler preload or source changes; counters off"
+  },
+  "diagnostic": {
+    "tests": 1,
+    "seconds": 20.779,
+    "exitCode": 0,
+    "normalizedStatements": 132,
+    "runtime": "diagnostically modified apply_group; tracking enabled only around finish; fixed SET grant only to excluded Truss owner",
+    "interpretation": "Whole-test elapsed times include different fixture setup. Nested execution totals overlap and cannot be summed or treated as clean/exclusive rankings; incomplete/cancelled executions may be absent, not zero cost. CREATE capture precedes later groups."
+  },
+  "selectedNestedObservations": [
+    {
+      "milliseconds": 1869.8167919999999,
+      "calls": 1,
+      "query": "SELECT truss.runtime_owned_group_validate(attempt.id,$27)"
+    },
+    {
+      "milliseconds": 1269.0391670000006,
+      "calls": 1024,
+      "query": "SELECT truss.runtime_owned_object_transition_validate_qualified(transition_id,$55,current_actor,input,attempt.input_bytes,attempt,history_dictionary)"
+    },
+    {
+      "milliseconds": 950.9601490000005,
+      "calls": 1024,
+      "query": "SELECT truss.runtime_create_transition_validate_qualified(selected_transition,qualified_actor,prepared_input,source_bytes,attempt,history_metadata)"
+    },
+    {
+      "milliseconds": 589.5405039999993,
+      "calls": 1024,
+      "query": "SELECT truss.runtime_history_group_qualified(jsonb_build_object($33,$34,$35,identity->>$36,$37,identity->>$38,\n   $39,identity->$40->>$41,$42,identity->$43->>$44,\n   $45,attempt.context->>$46),attempt.writer_xid,$47,$48,$49,qualified_actor)"
+    },
+    {
+      "milliseconds": 439.33957999999944,
+      "calls": 1024,
+      "query": "SELECT truss.runtime_owned_row_validate_qualified(owner.object_id,owner.type_id,current_actor)"
+    },
+    {
+      "milliseconds": 367.28619699999985,
+      "calls": 1024,
+      "query": "SELECT truss.runtime_history_image_qualified(event->$11,entity,version,qualified_actor)"
+    },
+    {
+      "milliseconds": 258.0352159999997,
+      "calls": 2048,
+      "query": "SELECT truss.runtime_history_property_qualified((entity->>$9)::int,(member->>$10)::int,revision,member->>$11,qualified_actor)"
+    },
+    {
+      "milliseconds": 191.1485,
+      "calls": 1,
+      "query": "SELECT truss.runtime_graph_validate($1)"
+    },
+    {
+      "milliseconds": 168.63104399999938,
+      "calls": 4096,
+      "query": "SELECT * FROM truss.runtime_definition_in_basis(selected_kind,selected_type,selected_number,historical_revision,basis)"
+    },
+    {
+      "milliseconds": 159.93151199999963,
+      "calls": 1024,
+      "query": "SELECT truss.runtime_graph_validate_object_qualified(affected.object_id,affected.type_id,refresh_markers,current_actor)"
+    },
+    {
+      "milliseconds": 136.06529199999974,
+      "calls": 1024,
+      "query": "SELECT *                      FROM truss.runtime_owned_operation_owner_qualified(operation,input_operations,index,current_actor)"
+    },
+    {
+      "milliseconds": 99.2893539999998,
+      "calls": 1024,
+      "query": "SELECT t.*                      FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p\n   WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND p.definition_pin=pin"
+    }
+  ],
+  "cleanup": "Both owned PostgreSQL fixtures stopped; native lease released",
+  "hostedComparison": {
+    "previousRun": 39020649971,
+    "currentRun": 39026812039,
+    "currentStatus": "dispatched, pending; separate counters-off original capacity/full-small, no stress or publishing"
+  },
+  "artifactsSha256": {
+    "run-baseline.py": "6dd47e0154e86130d96be9051fcb6453a9bab4e9eef90cc26d346cec702c0ec0",
+    "run-diagnostic.py": "3e75eef4848e4e6fc784d08cb8590c54579c56455fcc400587092f103fb48c36",
+    "baseline.log": "2d875dc09ac79d1df15cc56d7fca4ba2d5a9a244c4f295b8ebe7588b3b2ca269",
+    "baseline-result.json": "a978fb1e798b960d973ca9411d797a9808b6768cafdc2ea54da1ede54c5a7588",
+    "diagnostic.log": "f0026250954e869cee8dab3fe9b3d9d0380e3fa673cfb9a70b50ecb542567271",
+    "create-statements.json": "f686b63a350fd2426230a91215f80999723083ec6bb0ffa14b28d42abbef0a68",
+    "original-apply-group.sql": "a945fd7eee14f4659a88920adf627c0315a20d9f4f0606bdd620b23acde55d47",
+    "diagnostic-apply-group.sql": "7ca42fef4ee9224c413a5f416f1f7da0ba66aad37a40d55634f3373f0a773ce6",
+    "instrumentation.diff": "ce7e00f3805f1cacfecfb66ac7e86775e028e0946ce7993b69008052422fdc39"
+  }
+}
