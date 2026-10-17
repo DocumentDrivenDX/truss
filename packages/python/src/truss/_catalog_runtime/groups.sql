@@ -5,7 +5,7 @@ ALTER TABLE truss.catalog_runtime_installation ADD COLUMN source_epoch uuid NOT 
 CREATE FUNCTION truss.runtime_definition_in_basis(selected_kind text,selected_type int,selected_number int,historical_revision int,basis jsonb)
 RETURNS TABLE(definition_pin text,original_fragment bytea,original_pointer text,document_id text,module_id text,element_id text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE source_kind text;source_revision int;source_ordinal int;source_document text;source_key text; archive truss.schema_doc%ROWTYPE; native_type truss.type_def%ROWTYPE;
+DECLARE source_kind text;source_revision int;source_ordinal int;source_document text;source_key text; archive record; native_type truss.type_def%ROWTYPE;
  source_module text;source_element text;module_json json;document_lookup jsonb;module_lookup jsonb;element_lookup jsonb;module_index int;element_json json;element_index int;
  key_json json;key_index int;fragment json;pointer text;pin_input text;
 BEGIN
@@ -35,7 +35,7 @@ BEGIN
  ELSE RAISE EXCEPTION 'supported definition kind required' USING ERRCODE='22023'; END IF;
  IF source_kind<>'accepted_document' OR source_revision<1 THEN
   RAISE EXCEPTION 'original accepted definition source required' USING ERRCODE='0A000'; END IF;
- SELECT * INTO STRICT archive FROM truss.schema_doc d WHERE d.rev=source_revision AND d.ord=source_ordinal
+ SELECT d.document,d.rev,d.ord,d.content_sha256 INTO STRICT archive FROM truss.schema_doc d WHERE d.rev=source_revision AND d.ord=source_ordinal
   AND d.doc_id=source_document;
  -- Binary JSON is used only to locate coordinates, never for source bytes.
  BEGIN

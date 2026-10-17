@@ -1181,3 +1181,24 @@ Raw report SHA256 is
 it records dirty candidate source parent 2675a77a. Astra Ultra cleared the source
 and its freshness guard. This is local functionality evidence, not an isolated
 speedup or hosted qualification; both hosted original workloads remain required.
+
+### Project only archived definition fields used by pin resolution
+
+The retained Linux capacity observation recorded 11,268 completed
+`runtime_definition_in_basis` calls and 1,257ms self time. It does not record
+archived-column sizes or establish the cost of unused fields. The resolver now
+selects only its four used archive fields: original document text, revision,
+ordinal and content digest. The exact `INTO STRICT` predicates, original source
+parsing, fragment bytes and pin recipe remain unchanged; no helper, signature,
+authority check or deadline changed. Astra Ultra cleared the plan and source.
+
+The candidate wheel has 509 source-matching payloads and SHA256
+`437d43d74f030594046864073807b1a0de456ea691d5180dad2279397b3e6557`;
+manifest SHA256 is `eb60e3d38a799a9fe60191f108ac22ff2929bca66dd7073363dd9b8d40a37533`.
+
+The [three original capacity controls](results/definition-projection-capacity-20261017.log.gz)
+pass in 76.983s with counters off: 1,024 real creates, changed updates, commits,
+replay and ordered reads; 1,025 refusal; and operation-1,024 late-fault rollback.
+SQL and operation limits remain 10s and 30s. Cleanup completed. This records
+local correctness, not an isolated speedup or a resolved Linux timeout. Both
+hosted original-workload gates still need to pass before a release tag.
