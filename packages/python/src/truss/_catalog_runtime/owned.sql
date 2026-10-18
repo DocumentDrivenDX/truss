@@ -2793,6 +2793,12 @@ BEGIN
     OR p.result->'events'->0->>'seq' IS DISTINCT FROM t.journal->0->>'seq'
     OR p.result->'events'->0->>'xid' IS DISTINCT FROM attempt.writer_xid::text)) THEN
    RAISE EXCEPTION 'original edge batch source result and transition correspondence required' USING ERRCODE='55000';END IF;
+  -- Lean endpoint scopes do not carry a relationship inventory. Recheck each
+  -- actual relationship writer explicitly, including mandatory commit closure.
+  FOR owner IN SELECT DISTINCT r.document_id,r.module FROM truss.runtime_edge_transition t
+   JOIN truss.rel_def r ON r.rel_type_id=t.rel_type_id WHERE t.attempt_id=selected_attempt LOOP
+   PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module,current_actor);
+  END LOOP;
  ELSE
  FOR index IN 0..attempt.next_index-1 LOOP
   plan:=truss.runtime_owned_plan(selected_attempt,index);operation:=plan->'operation';
