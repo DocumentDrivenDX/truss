@@ -15,6 +15,37 @@ ddx:
 
 # Practical functionality and performance
 
+## 2026-10-17: reuse plans inside private point lookups
+
+[Run 39083626733](https://github.com/DocumentDrivenDX/truss/actions/runs/39083626733)
+again passed the original capacity controls but failed the analyzed 1,000-key
+update with forced custom plans on both platforms. Metadata reuse alone was
+insufficient. All 89 expanded local regressions passed, including original
+catalog key backfill, keyed rebind and typed-key workflows.
+
+Four repeatedly invoked private lookup functions now declare function-local
+`plan_cache_mode=force_generic_plan`: reader authorization, key bucket locking,
+final object row validation and final graph object validation. This amortizes
+planning for their repeated indexed lookups. It does not cache query results,
+authorization decisions, key observations or physical images. All queries still
+execute. PostgreSQL restores the caller policy on function exit; outer batch
+queries retain the caller setting and the analyzed-history test still exercises
+both caller modes. This is an explicit internal plan policy, not an assertion
+that each nested query uses the caller's forced mode. The original deadlines,
+checks and independent commit triggers remain unchanged.
+
+A serial instrumented disposable-fixture comparison reduced custom-mode apply
+from 4,912 to 3,674ms and commit from 5,068 to 3,006ms. Generic-mode apply remained
+approximately 2.7 seconds and commit 2.0 seconds. These are single local diagnostic
+observations, not hosted or p95 qualification. The [raw function counters](results/2026-10-17-reusable-point-plans-profile.json)
+retain this scope. Full hosted scale and integrity gates are still required.
+Twenty-one native scale/authority/rollback controls passed, followed separately
+by all ten collision-bucket controls in 13.160 seconds. The latter fixture
+previously reinstalled a predecessor helper and supplied pre-feed reservation
+bytes; it now uses the installed helper and current writer-XID fixture bytes.
+Those ten controls are added to the existing hosted typed-key gate. No native
+guard is disabled. Native71 remains unreleased.
+
 ## 2026-10-17: compile native key metadata once per phase
 
 [Hosted run 39082059330](https://github.com/DocumentDrivenDX/truss/actions/runs/39082059330)

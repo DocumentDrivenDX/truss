@@ -112,9 +112,11 @@ REVOKE ALL ON FUNCTION truss.verify_object_string_key(bigint,int,smallint,bytea)
 
 -- Private key-route exclusion and complete bounded conflict observation.
 -- The writer derives namespace/verified tuple transport before calling this.
+-- Reuse plans for repeated private point lookups; function-local settings
+-- restore the caller policy on return, including exceptional return.
 CREATE FUNCTION truss.lock_string_key_bucket(original_namespace bytea,canonical_key bytea)
 RETURNS TABLE(generation bigint,member_ids bigint[],reservation_ids bigint[])
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET plan_cache_mode='force_generic_plan' AS $$
 DECLARE namespace_route bytea;key_route bytea;guard_generation bigint;
  exclusion bigint;candidate_count bigint;candidate_bytes bigint;
  inserted_namespace bytea;inserted_key bytea;

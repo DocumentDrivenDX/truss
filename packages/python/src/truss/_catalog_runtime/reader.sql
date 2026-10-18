@@ -1,8 +1,10 @@
 -- Person-scoped catalog metadata; no complete unauthorized source crosses the facade.
 -- Private actor is issued by the current native invocation, never retained
 -- or accepted from a public caller. Module policy/membership checks stay live.
+-- Reuse plans for repeated private point lookups; function-local settings
+-- restore the caller policy on return, including exceptional return.
 CREATE FUNCTION truss.runtime_can_read_qualified(document_id text,module_id text,qualified_actor oid) RETURNS boolean
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET plan_cache_mode='force_generic_plan' AS $$
 DECLARE person oid;policy truss.module_access%ROWTYPE;
 BEGIN
  person:=qualified_actor;

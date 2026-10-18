@@ -312,7 +312,7 @@ jobs:
         env:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_typed_keys_native.TypedKeyTests.test_public_typed_composite_workflow test_typed_keys_native.TypedKey08Tests.test_public_typed_composite_workflow test_database_key_derivation_native.DatabaseKeyDerivationTests
+        run: python -m unittest test_typed_keys_native.TypedKeyTests.test_public_typed_composite_workflow test_typed_keys_native.TypedKey08Tests.test_public_typed_composite_workflow test_database_key_derivation_native.DatabaseKeyDerivationTests test_string_key_bucket_native.StringKeyBucketNativeTests
       - name: Upgrade native65 without rewriting stored keys
         env:
           TRUSS_BUN_EXECUTABLE: bun

@@ -782,8 +782,10 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_create_transition_validate(bigint) FROM PUBLIC;
 
+-- Reuse plans for repeated private point lookups; function-local settings
+-- restore the caller policy on return, including exceptional return.
 CREATE FUNCTION truss.runtime_owned_row_validate_qualified(selected_id bigint,selected_type int,qualified_actor oid) RETURNS void
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex SET plan_cache_mode='force_generic_plan' AS $$
 DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;creation_transition bigint;owned_transition record;owner record;root_type int;
 BEGIN
  current_actor:=qualified_actor;
@@ -1398,8 +1400,10 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_edge_validate(bigint,int) FROM PUBLIC;
 
+-- Reuse plans for repeated private point lookups; function-local settings
+-- restore the caller policy on return, including exceptional return.
 CREATE FUNCTION truss.runtime_graph_validate_object_qualified(selected_id bigint,selected_type int,refresh_markers boolean,qualified_actor oid) RETURNS void
-LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET plan_cache_mode='force_generic_plan' AS $$
 DECLARE phase int;relation truss.rel_def%ROWTYPE;owner record;outgoing bigint;incoming bigint;expected jsonb;actual jsonb;
 BEGIN
   PERFORM 1 FROM truss.object WHERE id=selected_id AND type_id=selected_type FOR UPDATE NOWAIT;

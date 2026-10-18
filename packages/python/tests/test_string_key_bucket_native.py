@@ -1,4 +1,3 @@
-from pathlib import Path
 import unittest
 import psycopg
 import test_catalog_runtime_native as catalog_tests
@@ -7,8 +6,7 @@ import test_catalog_runtime_native as catalog_tests
 class StringKeyBucketNativeTests(catalog_tests.PublicCatalogRuntimeTests):
     def setUp(self):
         super().setUp();self.install()
-        path=Path(__file__).resolve().parents[3]/'packages/postgresql/native/lock-string-key-bucket.sql'
-        self.admin.execute(path.read_text())
+        # Exercise the installed protected helper, not the predecessor fixture SQL.
         self.namespace=b'private-test-namespace'
         self.key=b'umf-key-tuple-v1:hex:554d464b3101040178'
 
@@ -20,7 +18,7 @@ class StringKeyBucketNativeTests(catalog_tests.PublicCatalogRuntimeTests):
         self.admin.execute('BEGIN')
         self.assertEqual(self.lock(),(0,[],[]))
         identity=self.admin.execute('''INSERT INTO truss.object_key_reservation_bucket(namespace_bytes,key_bytes,original_reservation_bytes)
-          VALUES(%s,%s,%s) RETURNING storage_row_id''',(self.namespace,self.key,b'private fixture reservation')).fetchone()[0]
+          VALUES(%s,%s,convert_to(jsonb_build_object('xid',pg_current_xact_id()::text,'fixture',%s)::text,'UTF8')) RETURNING storage_row_id''',(self.namespace,self.key,b'private fixture reservation')).fetchone()[0]
         self.assertEqual(self.lock(),(0,[],[identity]))
         self.admin.rollback()
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.key_bucket_guard').fetchone(),(0,))
@@ -34,7 +32,7 @@ class StringKeyBucketNativeTests(catalog_tests.PublicCatalogRuntimeTests):
             with self.assertRaises(psycopg.errors.LockNotAvailable):self.lock(contender)
             contender.rollback()
             identity=self.admin.execute('''INSERT INTO truss.object_key_reservation_bucket(namespace_bytes,key_bytes,original_reservation_bytes)
-              VALUES(%s,%s,%s) RETURNING storage_row_id''',(self.namespace,self.key,b'private fixture reservation')).fetchone()[0]
+              VALUES(%s,%s,convert_to(jsonb_build_object('xid',pg_current_xact_id()::text,'fixture',%s)::text,'UTF8')) RETURNING storage_row_id''',(self.namespace,self.key,b'private fixture reservation')).fetchone()[0]
             self.admin.commit()
             contender.execute('BEGIN')
             self.assertEqual(self.lock(contender),(0,[],[identity]))
@@ -64,7 +62,7 @@ class StringKeyBucketNativeTests(catalog_tests.PublicCatalogRuntimeTests):
             self.assertEqual(reader.execute('SELECT count(*) FROM truss.key_bucket_guard').fetchone(),(0,))
             self.admin.execute('BEGIN');self.lock()
             identity=self.admin.execute('''INSERT INTO truss.object_key_reservation_bucket(namespace_bytes,key_bytes,original_reservation_bytes)
-              VALUES(%s,%s,%s) RETURNING storage_row_id''',(self.namespace,self.key,b'fixture')).fetchone()[0]
+              VALUES(%s,%s,convert_to(jsonb_build_object('xid',pg_current_xact_id()::text,'fixture',%s)::text,'UTF8')) RETURNING storage_row_id''',(self.namespace,self.key,b'fixture')).fetchone()[0]
             self.admin.commit()
             self.assertEqual(self.lock(reader),(0,[],[identity]))
             self.assertEqual(reader.execute('SELECT pg_current_xact_id()::text').fetchone()[0],xid)
@@ -73,7 +71,7 @@ class StringKeyBucketNativeTests(catalog_tests.PublicCatalogRuntimeTests):
     def test_bucket_overflow_is_not_an_empty_observation(self):
         self.lock()
         self.admin.execute('''INSERT INTO truss.object_key_reservation_bucket(namespace_bytes,key_bytes,original_reservation_bytes)
-          SELECT %s,%s,%s FROM generate_series(1,10001)''',(self.namespace,self.key,b'private fixture reservation'))
+          SELECT %s,%s,convert_to(jsonb_build_object('xid',pg_current_xact_id()::text,'fixture',%s)::text,'UTF8') FROM generate_series(1,10001)''',(self.namespace,self.key,b'private fixture reservation'))
         self.admin.execute('BEGIN')
         with self.assertRaises(psycopg.errors.ProgramLimitExceeded):self.lock()
         self.admin.rollback()
@@ -109,7 +107,7 @@ class StringKeyBucketNativeTests(catalog_tests.PublicCatalogRuntimeTests):
         self.namespace=b'n'*65536;self.key=b'umf-key-tuple-v1:hex:'+b'00'*500000
         self.lock()
         self.admin.execute('''INSERT INTO truss.object_key_reservation_bucket(namespace_bytes,key_bytes,original_reservation_bytes)
-          SELECT %s,%s,%s FROM generate_series(1,16)''',(self.namespace,self.key,b'fixture'))
+          SELECT %s,%s,convert_to(jsonb_build_object('xid',pg_current_xact_id()::text,'fixture',%s)::text,'UTF8') FROM generate_series(1,16)''',(self.namespace,self.key,b'fixture'))
         self.admin.execute('BEGIN')
         with self.assertRaises(psycopg.errors.ProgramLimitExceeded):self.lock()
         self.admin.rollback()
@@ -117,7 +115,7 @@ class StringKeyBucketNativeTests(catalog_tests.PublicCatalogRuntimeTests):
     def test_rls_cannot_turn_hidden_reservation_into_empty_bucket(self):
         self.lock()
         self.admin.execute('''INSERT INTO truss.object_key_reservation_bucket(namespace_bytes,key_bytes,original_reservation_bytes)
-          VALUES(%s,%s,%s)''',(self.namespace,self.key,b'fixture'))
+          VALUES(%s,%s,convert_to(jsonb_build_object('xid',pg_current_xact_id()::text,'fixture',%s)::text,'UTF8'))''',(self.namespace,self.key,b'fixture'))
         self.admin.execute("""ALTER TABLE truss.object_key_reservation_bucket ENABLE ROW LEVEL SECURITY;
           CREATE POLICY fixture_hidden ON truss.object_key_reservation_bucket USING(false);
           GRANT SELECT ON truss.object_key_bucket,truss.object_key_reservation_bucket TO consumer;

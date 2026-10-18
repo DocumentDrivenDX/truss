@@ -1,0 +1,15 @@
+test_bucket_overflow_is_not_an_empty_observation (test_string_key_bucket_native.StringKeyBucketNativeTests.test_bucket_overflow_is_not_an_empty_observation) ... ok
+test_complete_candidate_byte_budget_refuses (test_string_key_bucket_native.StringKeyBucketNativeTests.test_complete_candidate_byte_budget_refuses) ... ok
+test_exact_reservation_facts_and_caller_rollback (test_string_key_bucket_native.StringKeyBucketNativeTests.test_exact_reservation_facts_and_caller_rollback) ... ok
+test_existing_native_guard_contention_refuses (test_string_key_bucket_native.StringKeyBucketNativeTests.test_existing_native_guard_contention_refuses) ... ok
+test_first_creator_contention_refuses_and_committed_facts_are_visible (test_string_key_bucket_native.StringKeyBucketNativeTests.test_first_creator_contention_refuses_and_committed_facts_are_visible) ... ok
+test_fixed_snapshot_refuses (test_string_key_bucket_native.StringKeyBucketNativeTests.test_fixed_snapshot_refuses) ... ok
+test_rewritten_guard_creation_refuses_without_resetting_existing_generation (test_string_key_bucket_native.StringKeyBucketNativeTests.test_rewritten_guard_creation_refuses_without_resetting_existing_generation) ... ok
+test_rls_cannot_turn_hidden_reservation_into_empty_bucket (test_string_key_bucket_native.StringKeyBucketNativeTests.test_rls_cannot_turn_hidden_reservation_into_empty_bucket) ... ok
+test_same_active_read_committed_transaction_observes_new_claim (test_string_key_bucket_native.StringKeyBucketNativeTests.test_same_active_read_committed_transaction_observes_new_claim) ... ok
+test_suppressed_guard_creation_and_private_execution_refuse (test_string_key_bucket_native.StringKeyBucketNativeTests.test_suppressed_guard_creation_and_private_execution_refuse) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 13.160s
+
+OK
