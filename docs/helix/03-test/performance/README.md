@@ -33,6 +33,12 @@ The exact million-node/two-million-edge run and complete unchanged hosted matrix
 remain required. SQL and operation deadlines remain 10s and 30s. These local
 passes are not a release or full qualification receipt.
 
+The [C65 compatibility record](results/2026-10-18-c65-compiler-compatibility.json)
+retains the same native SQL and enrolls exact hosted Weft 0.4.42 wheel identities
+for the existing protected-query flow. Five native permission/activation controls
+and the public policy example pass; the latter uses an explicitly missing Bun
+executable. This enrollment adds no new query ABI or protected capability.
+
 ## 2026-10-18: superseded C61 qualification
 
 The candidate's [local qualification record](results/2026-10-18-c61-local-qualification.json)

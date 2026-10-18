@@ -1,7 +1,7 @@
 """Public current-policy query reference workflow on a fresh local PG18 runtime.
 
 The adjacent original model/policy/designation is a reference fixture, not a
-universal security configuration. Use a qualified exact Weft cohort and Bun1.4.2.
+universal security configuration. Use a qualified exact Weft cohort and the bundled embedded runtime.
 The activated profile is read-only; bootstrap writes happen before activation.
 """
 import argparse

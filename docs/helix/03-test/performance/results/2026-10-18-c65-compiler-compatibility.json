@@ -1,0 +1,33 @@
+{
+  "wheelSha256": "f2939edc437e643ebef7c8ddfc342e2fe2f6d6fb114b52d5515b9eb1cbc5624a",
+  "payloads": 531,
+  "runtimeManifestSha256": "ce5e96ae3419ba09737326899e6e4735382d1a63befb7c130d5e58fc425ca67b",
+  "sourceMatched": true,
+  "status": "protected-query-controls-passed-full-hosted-qualification-pending",
+  "nativeSqlIdenticalTo": "2026-10-18-c64-local-qualification.json",
+  "weftReleaseSource": "e3c107cf14b0fc8f17423ebfbbcc686dda1237db",
+  "weftBuildRun": "https://github.com/DocumentDrivenDX/weft/actions/runs/39157446052",
+  "controls": {
+    "nativeProtectedQueryAndSubjectCut": {
+      "passed": 5,
+      "elapsedSeconds": 39.664
+    },
+    "publicPolicyExample": {
+      "passed": true,
+      "bunExecutable": "/missing/bun",
+      "columns": [
+        "salary"
+      ],
+      "rows": [
+        [
+          "[private]"
+        ]
+      ]
+    }
+  },
+  "limitations": [
+    "Compiler identities are exact hosted wheel artifacts; official release assets must match before final publication.",
+    "Complete hosted native workflows and unchanged 22-case/platform stress campaign remain required.",
+    "The exact million-node/two-million-edge workload is still running."
+  ]
+}
