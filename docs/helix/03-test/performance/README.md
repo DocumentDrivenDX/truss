@@ -15,6 +15,34 @@ ddx:
 
 # Practical functionality and performance
 
+## 2026-10-17: both complete hosted release jobs pass
+
+[Run 39084247653](https://github.com/DocumentDrivenDX/truss/actions/runs/39084247653)
+passed packaging and both complete native jobs on exact runtime source
+`47416d511926901c10954e8640e31a5dcbaeba98`. Both platforms passed original
+1,024-operation capacity, overflow and late rollback controls, the analyzed
+1,000-key custom/generic caller-mode regression, and the unchanged full small
+public workload. Every subsequent release regression also passed. SQL 10s and
+operation 30s budgets were unchanged. The separate clean local run passed all
+31 focused native controls in 101.145 seconds.
+
+The [qualification record](results/2026-10-17-final-hosted-qualification.json)
+retains exact wheel identity, measurements and limitations. Linux's 1,000 creates
+applied in 2.053 seconds and committed in 1.367 seconds; macOS's applied in 2.999
+seconds and committed in 2.777 seconds. Five changed 1,000-object update groups
+applied in 3.515–3.938 seconds on Linux and 6.475–7.798 seconds on macOS. Each
+platform also committed and read back every group. These are observations from
+one original workload campaign, not stress or p95 certification.
+
+The compressed full reports retain their checkout-dirty flags and explicitly
+unevaluated performance qualification. Independent verification matched all 90
+catalog wheel payloads including the manifest, host/activation code and
+embedded delivery manifest to the pushed source. The public workload recorded
+no external process executable; its external-JavaScript prohibition flag was off.
+The separate missing-Bun adopter and embedded-runtime controls cover deployment.
+Native71 and package 0.0.39.dev0 remain unreleased. Stable Bun-free 0.0.38 is
+unchanged; this campaign does not publish a new version.
+
 ## 2026-10-17: reuse plans inside private point lookups
 
 [Run 39083626733](https://github.com/DocumentDrivenDX/truss/actions/runs/39083626733)

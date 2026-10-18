@@ -1,0 +1,278 @@
+{
+  "sourceCommit": "47416d511926901c10954e8640e31a5dcbaeba98",
+  "workflowRun": 39084247653,
+  "url": "https://github.com/DocumentDrivenDX/truss/actions/runs/39084247653",
+  "conclusion": "success",
+  "nativeJobs": [
+    {
+      "name": "native (macos-14)",
+      "conclusion": "success"
+    },
+    {
+      "name": "native (ubuntu-24.04)",
+      "conclusion": "success"
+    }
+  ],
+  "localFocusedNativeTests": {
+    "passed": 31,
+    "seconds": 101.145
+  },
+  "wheel": {
+    "sourceCommit": "47416d511926901c10954e8640e31a5dcbaeba98",
+    "workflowRun": 39084247653,
+    "wheel": "truss_toolkit-0.0.39.dev0-py3-none-any.whl",
+    "sha256": "8339f6779ecffa1ebd9cda049eb763efa283faf2ce159547c6210b204045b0ff",
+    "runtime": "truss-catalog-runtime/0.71-candidate",
+    "catalogPayloadsIncludingManifestVerified": 90,
+    "allNativeAssetsMatchPushedSource": true,
+    "activationInventoryAndHostMatchSource": true,
+    "embeddedDeliveryManifestMatchesSource": true,
+    "status": "unreleased preflight artifact"
+  },
+  "platforms": {
+    "linux": {
+      "runtimePackage": {
+        "mode": "installed",
+        "path": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/truss/__init__.py",
+        "version": "0.0.39.dev0",
+        "manifestPath": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/truss/_catalog_runtime/manifest.json"
+      },
+      "functionalPassed": true,
+      "performanceQualification": "not_evaluated",
+      "statementTimeoutMs": 10000,
+      "operationTimeoutMs": 30000,
+      "sourceWorkingTreeDirty": true,
+      "externalJavaScriptForbidden": false,
+      "externalProcessExecutables": [],
+      "capacityScope": {
+        "targetAtomicOperations": 1024,
+        "configuredExpectedAtomicOperations": 1024,
+        "attemptedAtomicGroupSizes": [
+          1,
+          100,
+          1000
+        ],
+        "committedAtomicGroupSizes": [
+          1,
+          100,
+          1000
+        ],
+        "qualification": "Only observed attempts and commits; configured limits do not establish actual maximum capacity."
+      },
+      "seconds": 89.26011798300001,
+      "measurements": [
+        {
+          "case": "small",
+          "operation": "bulk_create",
+          "attempts": 1,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 2052.756142,
+          "failedElapsedMs": [],
+          "rowsPerSecond": 487.1499246986542,
+          "p50Ms": 2052.756142,
+          "minMs": 2052.756142,
+          "maxMs": 2052.756142
+        },
+        {
+          "case": "small",
+          "operation": "bulk_create_commit",
+          "attempts": 1,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 1367.183966,
+          "failedElapsedMs": [],
+          "p50Ms": 1367.183966,
+          "minMs": 1367.183966,
+          "maxMs": 1367.183966
+        },
+        {
+          "case": "small",
+          "operation": "bulk_edges",
+          "attempts": 1,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 3745.602202,
+          "failedElapsedMs": [],
+          "rowsPerSecond": 266.9797661551033,
+          "p50Ms": 3745.602202,
+          "minMs": 3745.602202,
+          "maxMs": 3745.602202
+        },
+        {
+          "case": "small",
+          "operation": "bulk_edges_commit",
+          "attempts": 1,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 3396.491823,
+          "failedElapsedMs": [],
+          "p50Ms": 3396.491823,
+          "minMs": 3396.491823,
+          "maxMs": 3396.491823
+        },
+        {
+          "case": "small",
+          "operation": "bulk_update_1000",
+          "attempts": 5,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 18542.146807,
+          "failedElapsedMs": [],
+          "rowsPerSecond": 269.6559385514307,
+          "p50Ms": 3631.871378,
+          "minMs": 3515.419182,
+          "maxMs": 3937.871038
+        },
+        {
+          "case": "small",
+          "operation": "bulk_update_commit_1000",
+          "attempts": 5,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 12814.938385000001,
+          "failedElapsedMs": [],
+          "p50Ms": 2344.979451,
+          "minMs": 2125.797642,
+          "maxMs": 3093.573359
+        },
+        {
+          "case": "small",
+          "operation": "bulk_update_end_to_end_1000",
+          "attempts": 5,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 31362.667097999998,
+          "failedElapsedMs": [],
+          "rowsPerSecond": 159.42521675137925,
+          "p50Ms": 5939.858909,
+          "minMs": 5682.36622,
+          "maxMs": 7032.689645
+        }
+      ]
+    },
+    "macos": {
+      "runtimePackage": {
+        "mode": "installed",
+        "path": "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/truss/__init__.py",
+        "version": "0.0.39.dev0",
+        "manifestPath": "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/truss/_catalog_runtime/manifest.json"
+      },
+      "functionalPassed": true,
+      "performanceQualification": "not_evaluated",
+      "statementTimeoutMs": 10000,
+      "operationTimeoutMs": 30000,
+      "sourceWorkingTreeDirty": true,
+      "externalJavaScriptForbidden": false,
+      "externalProcessExecutables": [],
+      "capacityScope": {
+        "targetAtomicOperations": 1024,
+        "configuredExpectedAtomicOperations": 1024,
+        "attemptedAtomicGroupSizes": [
+          1,
+          100,
+          1000
+        ],
+        "committedAtomicGroupSizes": [
+          1,
+          100,
+          1000
+        ],
+        "qualification": "Only observed attempts and commits; configured limits do not establish actual maximum capacity."
+      },
+      "seconds": 179.39676962500005,
+      "measurements": [
+        {
+          "case": "small",
+          "operation": "bulk_create",
+          "attempts": 1,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 2998.921,
+          "failedElapsedMs": [],
+          "rowsPerSecond": 333.4532653577737,
+          "p50Ms": 2998.921,
+          "minMs": 2998.921,
+          "maxMs": 2998.921
+        },
+        {
+          "case": "small",
+          "operation": "bulk_create_commit",
+          "attempts": 1,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 2777.450458,
+          "failedElapsedMs": [],
+          "p50Ms": 2777.450458,
+          "minMs": 2777.450458,
+          "maxMs": 2777.450458
+        },
+        {
+          "case": "small",
+          "operation": "bulk_edges",
+          "attempts": 1,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 7772.727542,
+          "failedElapsedMs": [],
+          "rowsPerSecond": 128.65496630320456,
+          "p50Ms": 7772.727542,
+          "minMs": 7772.727542,
+          "maxMs": 7772.727542
+        },
+        {
+          "case": "small",
+          "operation": "bulk_edges_commit",
+          "attempts": 1,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 7800.51125,
+          "failedElapsedMs": [],
+          "p50Ms": 7800.51125,
+          "minMs": 7800.51125,
+          "maxMs": 7800.51125
+        },
+        {
+          "case": "small",
+          "operation": "bulk_update_1000",
+          "attempts": 5,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 35485.580958,
+          "failedElapsedMs": [],
+          "rowsPerSecond": 140.90230073780944,
+          "p50Ms": 7120.428083,
+          "minMs": 6475.006625,
+          "maxMs": 7798.168917
+        },
+        {
+          "case": "small",
+          "operation": "bulk_update_commit_1000",
+          "attempts": 5,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 33520.536625,
+          "failedElapsedMs": [],
+          "p50Ms": 6477.335708,
+          "minMs": 6055.273542,
+          "maxMs": 8038.721
+        },
+        {
+          "case": "small",
+          "operation": "bulk_update_end_to_end_1000",
+          "attempts": 5,
+          "unsupportedCount": 0,
+          "failures": 0,
+          "totalElapsedMs": 69013.866167,
+          "failedElapsedMs": [],
+          "rowsPerSecond": 72.44920879959082,
+          "p50Ms": 13855.247167,
+          "minMs": 13213.873125,
+          "maxMs": 14515.312334
+        }
+      ]
+    }
+  },
+  "publication": "Unreleased native71 candidate; stable Bun-free 0.0.38 is unchanged.",
+  "scope": "Original capacity controls and small installed public workload, followed by all release regressions. No stress or p95 qualification."
+}
