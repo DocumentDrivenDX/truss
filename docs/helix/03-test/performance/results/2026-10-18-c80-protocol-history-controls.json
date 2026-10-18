@@ -1,0 +1,42 @@
+{
+  "candidate": "C80",
+  "sourceRuntimeCommit": "109d474a3df68fa8de2d29f87557b020c2d70486",
+  "wheelSha256": "cfb739c04e7b34fb087ef4a554de3d6860ceb209ebf7d4007bc2b8f0e3fd7a18",
+  "nativeManifestSha256": "32e5c7cb7d56d39e692d1f024cd5733f6b52c7281d4e1378d0b7e3bb564c8013",
+  "matchedRuntimePayloads": 528,
+  "runtimePayloadInventorySha256": "30f955aac3911d0dac087740e33c61961c9859acc1a76367161e02ca744f0c0a",
+  "tests": 10,
+  "passed": 10,
+  "unittestElapsedSeconds": 73.14607454100042,
+  "selectors": [
+    "KeyFootprintCapacityTests.test_eight_keys",
+    "CatalogRebindTests.test_create_and_register_in_one_host_transaction",
+    "CatalogRebind08Tests.test_create_and_register_in_one_host_transaction",
+    "BulkUpdateTransitionGuardTests.test_before_insert_journal_tamper_refuses_and_keeps_caller_work",
+    "BulkUpdateTransitionGuardTests.test_before_insert_after_object_tamper_refuses_at_finish_and_keeps_caller_work",
+    "BulkUpdateTransitionGuardTests.test_before_insert_after_keys_tamper_refuses_at_finish_and_keeps_caller_work",
+    "BulkUpdateTransitionGuardTests.test_before_insert_coordinated_retained_tamper_refuses_and_keeps_caller_work",
+    "BulkUpdateTransitionGuardTests.test_rewritten_result_slots_refuse_for_create_and_update_before_progress",
+    "OperationResultSlotTests.test_rewritten_slot_refuses_and_preserves_prior_caller_work",
+    "PreparedPlanCaptureTests.test_before_insert_suppression_refuses_before_object_effect"
+  ],
+  "qualification": "Additional proper-wheel local protocol/history/tamper coverage, executed after the earlier four CREATE controls and the real-schema benchmark. This supersedes only the earlier note that this optional runner had not yet run; final full native and 22-workflow hosted qualification remains pending. No runtime source changed.",
+  "artifacts": {
+    "2026-10-18-c80-protocol-history-controls.log.gz": {
+      "uncompressedSha256": "55b302d818633ac588c79ae06ea54cd473eb64c2ea22b41ea6c2cce55ebfb2a3",
+      "compressedSha256": "4e6745cfe79df1b5f99d3f879272b5b86e4776341928c1e159bba5d8e0e71d5f"
+    },
+    "2026-10-18-c80-protocol-history-controls.log.argv.gz": {
+      "uncompressedSha256": "50d7bfaaa2ef6935e61b7d0e1613d4545b2b8be4ca9c7fec2db98a84373f75c9",
+      "compressedSha256": "a01fb1f96fea07773a5ca0d79129b64f5fa4ad9cd5ec35df4ab9451be8fc48a7"
+    },
+    "2026-10-18-c80-protocol-history-control-receipt.json.gz": {
+      "uncompressedSha256": "9f7e70e0db8f12151caed64d5bf77b777fae3c77c36d6be9bbd460c25f0fbf31",
+      "compressedSha256": "7b7955ab6d17bc8188870c5eccfcb8f0a5b6481eb373c4d79b32ae3544c5a1ed"
+    },
+    "2026-10-18-c80-protocol-history-runner.py.gz": {
+      "uncompressedSha256": "0f89f99524414d18317539e913947785d19909deabb0815d789c027a4bb4c5c3",
+      "compressedSha256": "5c5eab1d914ae25b347e90ce5ef2fe3fd0946ed945558915e39ccc4e48f172e2"
+    }
+  }
+}

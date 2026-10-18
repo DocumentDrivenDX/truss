@@ -1,19 +1,26 @@
 # Truss Python toolkit
 
-[Truss v0.0.39](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.39)
-installs native `0.71-candidate` with published Weft `0.4.41` / backend `0.4.41`.
+The latest published package is
+[Truss v0.0.39](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.39),
+paired with native `0.71-candidate` and Weft `0.4.41` / backend `0.4.41`.
+The current `0.0.40` candidate targets native `0.72-candidate` and Weft
+`0.4.42`; its full release qualification is pending, so it is not a published
+or qualified release.
 Python deployment uses embedded V8 and requires no Bun, Node or external
-JavaScript process. The release includes owned graphs, explicit subtree
+JavaScript process. The v0.0.39 release includes owned graphs, explicit subtree
 reparenting, cascade deletion, atomic owned imports, owned-object catalog
 evolution, compact registration evidence and batched native writes.
 
-The tested source passed both complete Linux x86_64/macOS ARM64 native jobs,
+The v0.0.39 source passed both complete Linux x86_64/macOS ARM64 native jobs,
 including the original 1,024-operation capacity controls and full
 1,000-object/1,000-edge workload, with unchanged 10s SQL/30s operation limits.
-The tag workflow checks the final package before publishing.
+Those results qualify v0.0.39 only. The v0.0.40 candidate remains pending its
+complete 22-workflow qualification; no passing or publication claim is made here.
 [Performance evidence](../../docs/helix/03-test/performance/README.md)
-and [release/upgrade notes](../../docs/helix/04-build/releases/v0.0.39.md)
-record exact scope. Broader scale and p95 targets are not certified.
+and [published release/upgrade notes](../../docs/helix/04-build/releases/v0.0.39.md)
+record exact scope. Candidate behavior and bounds are listed in the
+[v0.0.40 candidate notes](../../docs/helix/04-build/releases/v0.0.40.md).
+Broader scale and p95 targets are not certified.
 
 Modern owned groups admit up to 1,024 operations per atomic group; legacy
 rootless groups retain their 128-operation limit. Basic native tests cover
@@ -23,12 +30,28 @@ failure at operation 1,024. Upgrading published v0.0.35 widens the retained
 attempt constraint without rewriting receipts or historical data. Other
 byte/value limits and ordinary deadlines still apply.
 
-Compiled queries use published `weft-sql==0.4.41`, backend
-`0.4.41` / binding `0.5`, and the explicit logical query ABI. Basic native
+The published v0.0.39 package uses `weft-sql==0.4.41`, backend
+`0.4.41` / binding `0.5`. The current source candidate pins
+`weft-sql==0.4.42`, backend `0.4.41` / binding `0.5`, and query ABI 1.1.
+ABI 1.1 buffers complete source sets before caller predicates and scans at most
+10,000 rows per selected Record or Relationship type; a small output limit does
+not bypass that source bound. Complete-entity relationships have a separate
+100-related-key limit. These remain candidate limits, not qualified support
+claims. Basic v0.0.39 native
 workflows exercise the default public compiler with owned descendants, the
 original Northwind Product model, decimal(12,2), and stable UMF IDs for unnamed
 records and fields. These checks do not qualify the broader protected engine.
-This release adds explicit atomic owned imports, alternate-key backfill and retained-value rebinding for existing owned objects. Ordinary Date queries preserve canonical Gregorian `YYYY-MM-DD` tokens for years
+
+The v0.0.40 candidate uses one source-only catalog preparation path; a mandatory
+inspector transcript is no longer required. Loaded views reuse immutable schema
+indexes in application memory for the exact source and catalog basis. Warm
+eligible writes reuse compiled record schemas without another schema query or
+legacy per-record value validation. Native admission still checks the current
+registration identity, source basis, revision and authority. The candidate
+remains subject to the pending full release qualification above.
+The v0.0.39 release adds explicit atomic owned imports, alternate-key backfill
+and retained-value rebinding for existing owned objects. Ordinary Date queries
+preserve canonical Gregorian `YYYY-MM-DD` tokens for years
 0001–9999, including exact equality, optional values and query pages. Date ordering,
 Date business keys, typed-engine Date outputs/parameters and other generic-decimal
 SQL query domains remain unfinished.
@@ -100,7 +123,8 @@ properties remain unfinished.
 Ownership support shipped in v0.0.39.
 The [owned-object implementation plan](../../docs/helix/04-build/python-owned-objects-plan.md)
 records its implementation scope and remaining work. Published SDK0.0.35 retains
-the rootless profile; development native71 adds owned reads and mutations.
+the rootless profile; published v0.0.39/native0.71 adds owned reads and
+mutations.
 
 ## Storage and compiler pairing
 
@@ -133,7 +157,12 @@ transaction cleanup precede the final page and refusal. A short final fetch
 proves exhaustion and completes normally; an exact boundary remains unproved.
 The ordinary query, native and local-runtime extras are unchanged.
 
-## Install the release
+## Install the latest published release
+
+The command below installs the latest published and qualified package,
+v0.0.39/native0.71 with its paired Weft0.4.41. The v0.0.40/native0.72 and
+Weft0.4.42 candidate is not yet published; do not infer candidate qualification
+from installing this older release.
 
 SDK0.0.35 includes the experimental **current-policy query interface**:
 `assembly.query_current_in_transaction(tx, executor=..., sql=...,
@@ -467,14 +496,16 @@ inputs. The legacy `bun_executable` keyword is retained for source compatibility
 and does not select or launch an executable.
 Separate broad `mutations` and physical-optimization families remain unavailable.
 
-Version0.0.40 adds `prepare_group_in_transaction(tx,
+The v0.0.40 candidate adds `prepare_group_in_transaction(tx,
 records=((document_id, module_id, record_id),), relationships=())`, returning the
 catalog revision, group context and requested references together. A host may
 cache this planning metadata for the same installation, source epoch, principal
 and catalog basis. `catalog_revision_in_transaction(tx, document_id=...)` provides
 a small revision probe. Build groups with the cached `prepared.context.input(...)`
 and the returned definition pins; the write still checks its current basis and
-authority. A stale write refuses rather than silently retrying a mutation.
+authority. A stale write refuses rather than silently retrying a mutation. This
+candidate API is pending the full release qualification and is not available in
+the latest published v0.0.39 package.
 
 ## Catalog meaning and evolution
 
@@ -649,7 +680,7 @@ before ACK. Read-only `reread_feed_in_transaction` recovers the exact retained
 page; checkpoints do not advance until the ACK transaction commits.
 
 `reached_in_transaction(tx, token)` checks source receipt visibility.
-For a request-bearing group, version0.0.40 returns the token in `AppliedPending`,
+For a request-bearing group, the v0.0.40 candidate returns the token in `AppliedPending`,
 before outer commit. An authorized observer sees `not_yet` until that commit;
 the original token becomes included after commit without replaying the request.
 A rolled-back token remains `not_yet`. The token alone does not establish a

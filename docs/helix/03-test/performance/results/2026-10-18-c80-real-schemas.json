@@ -1,0 +1,488 @@
+{
+  "qualification": "Passing original Pizza, Northwind and catalog public API workflows on installed proper C80 wheel, not a full synthetic stress matrix or browser UI qualification. Each real schema registers, creates 1,000 objects of its selected benchmark record type, lists 51 complete entities, performs 1,000 ID reads, 100 key reads and 200 committed updates and verifies reopen values. Separate native embedder-workflow tests cover every real record/relationship; no 1,000-edge-per-real-schema claim.",
+  "sourceCommit": "109d474a3df68fa8de2d29f87557b020c2d70486",
+  "wheelSha256": "cfb739c04e7b34fb087ef4a554de3d6860ceb209ebf7d4007bc2b8f0e3fd7a18",
+  "nativeManifestSha256": "32e5c7cb7d56d39e692d1f024cd5733f6b52c7281d4e1378d0b7e3bb564c8013",
+  "runtimePayloadInventorySha256": "30f955aac3911d0dac087740e33c61961c9859acc1a76367161e02ca744f0c0a",
+  "matchedRuntimePayloads": 528,
+  "elapsedSeconds": 101.10474350000732,
+  "passed": true,
+  "externalJavaScriptForbidden": true,
+  "externalProcessExecutables": [
+    "file",
+    "git",
+    "initdb",
+    "pg_ctl",
+    "psql",
+    "uname"
+  ],
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "applicationMemory": {
+    "processLifetimePeakRssBytes": 201064448,
+    "retainedSchemaCacheEstimatedBytes": 332056,
+    "retainedSchemaCacheEntries": 2,
+    "schemaCacheBudgetBytes": 134217728,
+    "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+  },
+  "observations": [
+    {
+      "case": "pizza",
+      "operation": "list_complete_entities",
+      "attempts": 1,
+      "p50Ms": 376.419041,
+      "sqlSubmissions": {
+        "total": 12,
+        "host": 12,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1,
+          "admission_observer": 3,
+          "public_function_payload": 3,
+          "other": 4,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "pizza",
+      "operation": "prepare",
+      "attempts": 1,
+      "p50Ms": 511.705958,
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "pizza",
+      "operation": "read_by_id",
+      "attempts": 1000,
+      "p50Ms": 6.1918334999999995,
+      "p95Ms": 14.859583,
+      "sqlSubmissions": {
+        "total": 3000,
+        "host": 3000,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1000,
+          "public_function_payload": 1000,
+          "savepoint_release": 1000
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "pizza",
+      "operation": "read_by_key",
+      "attempts": 100,
+      "p50Ms": 7.5277709999999995,
+      "p95Ms": 12.881792,
+      "sqlSubmissions": {
+        "total": 300,
+        "host": 300,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 100,
+          "public_function_payload": 100,
+          "savepoint_release": 100
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "pizza",
+      "operation": "register",
+      "attempts": 1,
+      "p50Ms": 115.765708,
+      "sqlSubmissions": {
+        "total": 3,
+        "host": 3,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1,
+          "public_function_payload": 1,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "pizza",
+      "operation": "single_update_including_commit",
+      "attempts": 200,
+      "p50Ms": 20.877521,
+      "p95Ms": 34.383959,
+      "sqlSubmissions": {
+        "total": 2000,
+        "host": 1800,
+        "driver": 200,
+        "executemanyCalls": 0,
+        "hostAdoptions": 200,
+        "groupContextAcquisitions": 200,
+        "bySqlClass": {
+          "other": 200,
+          "savepoint_open": 600,
+          "admission_observer": 200,
+          "savepoint_release": 600,
+          "public_function_payload": 200,
+          "prepared_payload": 200
+        },
+        "transactionActions": {
+          "commit": 200,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "northwind",
+      "operation": "list_complete_entities",
+      "attempts": 1,
+      "p50Ms": 291.23575,
+      "sqlSubmissions": {
+        "total": 12,
+        "host": 12,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1,
+          "admission_observer": 3,
+          "public_function_payload": 3,
+          "other": 4,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "northwind",
+      "operation": "prepare",
+      "attempts": 1,
+      "p50Ms": 367.880709,
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "northwind",
+      "operation": "read_by_id",
+      "attempts": 1000,
+      "p50Ms": 4.74575,
+      "p95Ms": 10.045875,
+      "sqlSubmissions": {
+        "total": 3000,
+        "host": 3000,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1000,
+          "public_function_payload": 1000,
+          "savepoint_release": 1000
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "northwind",
+      "operation": "read_by_key",
+      "attempts": 100,
+      "p50Ms": 6.836021000000001,
+      "p95Ms": 11.635458,
+      "sqlSubmissions": {
+        "total": 300,
+        "host": 300,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 100,
+          "public_function_payload": 100,
+          "savepoint_release": 100
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "northwind",
+      "operation": "register",
+      "attempts": 1,
+      "p50Ms": 182.728416,
+      "sqlSubmissions": {
+        "total": 3,
+        "host": 3,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1,
+          "public_function_payload": 1,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "northwind",
+      "operation": "single_update_including_commit",
+      "attempts": 200,
+      "p50Ms": 19.3448335,
+      "p95Ms": 21.322666,
+      "sqlSubmissions": {
+        "total": 2000,
+        "host": 1800,
+        "driver": 200,
+        "executemanyCalls": 0,
+        "hostAdoptions": 200,
+        "groupContextAcquisitions": 200,
+        "bySqlClass": {
+          "other": 200,
+          "savepoint_open": 600,
+          "admission_observer": 200,
+          "savepoint_release": 600,
+          "public_function_payload": 200,
+          "prepared_payload": 200
+        },
+        "transactionActions": {
+          "commit": 200,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "catalog",
+      "operation": "list_complete_entities",
+      "attempts": 1,
+      "p50Ms": 273.539458,
+      "sqlSubmissions": {
+        "total": 12,
+        "host": 12,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1,
+          "admission_observer": 3,
+          "public_function_payload": 3,
+          "other": 4,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "catalog",
+      "operation": "prepare",
+      "attempts": 1,
+      "p50Ms": 309.315333,
+      "sqlSubmissions": {
+        "total": 0,
+        "host": 0,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {},
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_id",
+      "attempts": 1000,
+      "p50Ms": 4.3121455,
+      "p95Ms": 7.529,
+      "sqlSubmissions": {
+        "total": 3000,
+        "host": 3000,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1000,
+          "public_function_payload": 1000,
+          "savepoint_release": 1000
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "catalog",
+      "operation": "read_by_key",
+      "attempts": 100,
+      "p50Ms": 6.2321665,
+      "p95Ms": 7.113,
+      "sqlSubmissions": {
+        "total": 300,
+        "host": 300,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 100,
+          "public_function_payload": 100,
+          "savepoint_release": 100
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "catalog",
+      "operation": "register",
+      "attempts": 1,
+      "p50Ms": 186.821792,
+      "sqlSubmissions": {
+        "total": 3,
+        "host": 3,
+        "driver": 0,
+        "executemanyCalls": 0,
+        "hostAdoptions": 0,
+        "groupContextAcquisitions": 0,
+        "bySqlClass": {
+          "savepoint_open": 1,
+          "public_function_payload": 1,
+          "savepoint_release": 1
+        },
+        "transactionActions": {
+          "commit": 0,
+          "rollback": 0
+        }
+      }
+    },
+    {
+      "case": "catalog",
+      "operation": "single_update_including_commit",
+      "attempts": 200,
+      "p50Ms": 18.370479,
+      "p95Ms": 24.103625,
+      "sqlSubmissions": {
+        "total": 2000,
+        "host": 1800,
+        "driver": 200,
+        "executemanyCalls": 0,
+        "hostAdoptions": 200,
+        "groupContextAcquisitions": 200,
+        "bySqlClass": {
+          "other": 200,
+          "savepoint_open": 600,
+          "admission_observer": 200,
+          "savepoint_release": 600,
+          "public_function_payload": 200,
+          "prepared_payload": 200
+        },
+        "transactionActions": {
+          "commit": 200,
+          "rollback": 0
+        }
+      }
+    }
+  ],
+  "artifacts": {
+    "2026-10-18-c80-real-schemas-report.json.gz": {
+      "uncompressedBytes": 2268813,
+      "uncompressedSha256": "390d00dd6cd495b3986e6ee0adb50327aed9c03602bb7b0e60a8e9d2650d3728",
+      "compressedSha256": "041e81c49c2a03f3181f5136df69e8656f9d7a309fae2a16a9a20c77aa125e8b"
+    },
+    "2026-10-18-c80-real-schemas-run.log.gz": {
+      "uncompressedBytes": 32217,
+      "uncompressedSha256": "badd1deb14d1caeefa22f51621c1e89b34bfd2463f01c91fa03e8b1a9d0f40a9",
+      "compressedSha256": "55e5c1f92b3813e7d4024a21b4c6f520c5b0431c9a2076f8b8bf1361ce2560d9"
+    },
+    "2026-10-18-c80-real-schemas-argv.json.gz": {
+      "uncompressedBytes": 603,
+      "uncompressedSha256": "7c09343e2310027ee9d12194e3868d5bebf44192711abe7d75cbe268a19284b9",
+      "compressedSha256": "ebb7cc1fafb0e686acd133231e083c91ddd82fc7131228e7cc0591701739c030"
+    },
+    "2026-10-18-c80-real-schemas-receipt.json.gz": {
+      "uncompressedBytes": 1016,
+      "uncompressedSha256": "90ac9b260ed1370a06ad130823d7da9f50db49fbdc416216fe8d016134db5a7e",
+      "compressedSha256": "91a58b292a9ac13855bc40d324a008e7c03cd6af702ea6ec6484f12bec5e4968"
+    },
+    "2026-10-18-c80-real-schemas-driver.py.gz": {
+      "uncompressedBytes": 1537,
+      "uncompressedSha256": "b33958e9fba6c01d8df4787ee94dcd78def8b053fa52d62a16772e53476f490f",
+      "compressedSha256": "22bad4ef669617543f627555e5a117448ea634f0ae248993a51983bbb336f97e"
+    },
+    "2026-10-18-c80-real-schemas-committed-parity.json.gz": {
+      "uncompressedBytes": 306,
+      "uncompressedSha256": "b8690eae7ef71f65ab88a83235c5afd0feaa693bed52566a4a1a561f553bd00c",
+      "compressedSha256": "64b82c528708cf0d6c2708506cfcec8cfaf32acfe4944a8b5ae00e220ca6a01e"
+    }
+  }
+}

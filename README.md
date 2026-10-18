@@ -11,13 +11,23 @@ and Weft-compiled scalar and relationship queries. The local baseline is Documen
 `pgserver-pg18==18.6.1` (PostgreSQL18.6) with psycopg3.3.6. Python deployments
 use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Start with the [runnable adopter workflow](packages/python/examples/adopter_workflow.py).
 
-[v0.0.39](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.39)
-includes owned graphs, compact registration evidence and batched SQL performance
-fixes. Its tested source passed complete Linux/macOS capacity and original
-1,000-object/1,000-edge workflows with unchanged deadlines. Cyclic schema definitions,
-record-valued properties, history offload and managed-service qualification remain
-unfinished. Design and evidence live in
-[`docs/helix/`](docs/helix/README.md).
+**Current candidate:** Truss `0.0.40` targets native `0.72-candidate` with Weft
+`0.4.42`. The full release qualification is pending; this candidate is not
+published or qualified. The latest published release remains
+[v0.0.39](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.39),
+which shipped owned graphs, compact registration evidence and batched SQL
+performance fixes. Its Linux/macOS capacity and original 1,000-object/1,000-edge
+evidence applies to that release only.
+
+The 0.0.40 candidate unifies catalog preparation around original source documents,
+reuses immutable schema indexes in application memory, and checks the current
+database basis and authority before prepared writes. Query ABI 1.1 buffers each
+selected record or relationship type's complete source set before caller
+predicates, up to 10,000 rows per type; complete-entity relationship data remains
+separately bounded to 100 related keys. Candidate behavior and qualification
+evidence are tracked in [`docs/helix/`](docs/helix/README.md). Cyclic schema
+definitions, record-valued properties, history offload and managed-service
+qualification remain unfinished.
 
 ## Relationship to other DocumentDrivenDX projects
 

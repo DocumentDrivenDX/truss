@@ -15,6 +15,31 @@ ddx:
 
 # Practical functionality and performance
 
+## 2026-10-18: C80 real schemas pass; full hosted matrix pending
+
+The [installed-wheel real-schema run](results/2026-10-18-c80-real-schemas.json)
+passes Pizza, Northwind and catalog in 101.105 seconds. Each original schema
+registers, creates 1,000 objects of its selected benchmark record type, lists
+51 complete entities, performs 1,000 ID reads and 100 key reads, commits 200
+individual updates and verifies values after reopening. These are public API
+workflows, not browser UI or synthetic stress qualification. Separate native
+embedder tests exercise every original record and relationship.
+
+Median committed-update times are 20.88/19.34/18.37ms for
+Pizza/Northwind/catalog; p95 is 34.38/21.32/24.10ms. Each fresh-transaction update
+makes ten frontend SQL submissions, including BEGIN, transaction adoption,
+context acquisition and apply; COMMIT is recorded separately. Fresh registration
+uses three submissions. Schema preparation takes 512/368/309ms and registration
+116/183/187ms. External Bun/Node processes are forbidden during the run. Python
+peak RSS is 201,064,448 bytes, including embedded libraries; the retained schema
+cache estimate is 332,056 bytes in two entries. These are distinct measures.
+
+All 528 runtime payloads match committed source
+`109d474a3df68fa8de2d29f87557b020c2d70486` independently. The full unchanged
+eleven-case/two-platform matrix and both native release suites are running in
+[39176421417](https://github.com/DocumentDrivenDX/truss/actions/runs/39176421417).
+No full matrix or publication success is claimed by this local receipt.
+
 ## Dense relationship source boundary
 
 Query ABI 1.1 admits complete source bags of at most 10,000 rows per record or
