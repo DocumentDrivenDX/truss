@@ -16,12 +16,15 @@ class RootlessPreparationTests(base.PublicCreateGroupTests):
         connection, host, assembly, tx = self.ready(document_ids=('adoc',))
         # Run the retained general branch as a test-only reference, under the
         # same original caller and catalog, before any canonical object effects.
-        definition = self.admin.execute("SELECT pg_get_functiondef('truss.runtime_owned_prepare(jsonb,jsonb)'::regprocedure)").fetchone()[0]
+        # The two-argument entrypoint delegates to the application-aware planner.
+        # Clone the implementation so this remains a differential behavior check
+        # after that delegation, rather than asserting the wrapper's source text.
+        definition = self.admin.execute("SELECT pg_get_functiondef('truss.runtime_owned_prepare_application(jsonb,jsonb,jsonb)'::regprocedure)").fetchone()[0]
         self.assertEqual(definition.count('rootless_creates:=coalesce('), 1)
-        reference = definition.replace('truss.runtime_owned_prepare(', 'public.reference_rootless_prepare(', 1)
+        reference = definition.replace('truss.runtime_owned_prepare_application(', 'public.reference_rootless_prepare(', 1)
         reference = reference.replace('rootless_creates:=coalesce(', 'rootless_creates:=false AND coalesce(', 1)
         self.admin.execute(reference)
-        self.addCleanup(self.admin.execute, 'DROP FUNCTION public.reference_rootless_prepare(jsonb,jsonb)')
+        self.addCleanup(self.admin.execute, 'DROP FUNCTION public.reference_rootless_prepare(jsonb,jsonb,jsonb)')
         self.admin.execute("""CREATE FUNCTION public.compare_rootless_plans() RETURNS trigger LANGUAGE plpgsql AS $$
         DECLARE original_input jsonb; scope jsonb;
         BEGIN
@@ -30,7 +33,7 @@ class RootlessPreparationTests(base.PublicCreateGroupTests):
               FROM truss.runtime_object_attempt WHERE id=NEW.attempt_id;
             scope:=NEW.plan->'initialScope';
             IF truss.runtime_owned_prepare(original_input,scope) IS DISTINCT FROM
-               public.reference_rootless_prepare(original_input,scope) THEN
+               public.reference_rootless_prepare(original_input,scope,NULL) THEN
               RAISE EXCEPTION 'buffered and general preparation differ' USING ERRCODE='P9998';
             END IF;
           END IF;
