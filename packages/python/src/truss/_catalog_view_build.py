@@ -149,4 +149,5 @@ def build_catalog_view(basis,layout_profile):
     evidence=sha256(encoded({key:basis[key] for key in ('installationId','releaseId','releaseSha256','revision','registrationId','reportSha256')})).hexdigest()
     view=CatalogView(catalog_revision=basis['revision'],layout_profile=layout_profile,view_profile=VIEW_PROFILE,
         consistency_evidence_sha256=evidence,definitions=tuple(definitions),inventory_sha256=inventory,extraction_profile=EXTRACTION_PROFILE)
-    return view
+    from ._schema_memory import attach
+    return attach(view, (sources[key] for key, *_ in entries))

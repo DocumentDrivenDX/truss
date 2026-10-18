@@ -16,7 +16,16 @@ LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE basis jsonb;type_basis jsonb;selected record;property record;pin record;
  property_order jsonb;property_pins jsonb;property_access jsonb;type_pin text;query_record jsonb;compiled_records jsonb[]:='{}';document_revision text;properties_by_type jsonb;keys_by_type jsonb;missing_pins boolean;value_readers jsonb;valid_properties boolean;document_row record;records jsonb;relations jsonb;readers jsonb;closed boolean;items_valid boolean;
 BEGIN
- basis:=truss.catalog_all_expected_records(NEW.rev);
+ -- The accepted head already contains the installed, validated native rows.
+ -- Historical initialization retains its original reconstruction; the current
+ -- revision does not parse and rebuild the complete catalog a second time.
+ IF NEW.rev=(SELECT rev FROM truss.schema_head WHERE id=1)
+  AND NOT EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>NEW.rev) THEN
+  basis:=jsonb_build_object(
+   'type_def',(SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]'::jsonb) FROM truss.type_def t),
+   'prop_def',(SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]'::jsonb) FROM truss.prop_def p),
+   'key_def',(SELECT coalesce(jsonb_agg(to_jsonb(k)),'[]'::jsonb) FROM truss.key_def k));
+ ELSE basis:=truss.catalog_all_expected_records(NEW.rev);END IF;
  SELECT coalesce(jsonb_object_agg(type_id::text,properties),'{}'::jsonb) INTO properties_by_type
  FROM (SELECT (p.value->>'type_id')::int type_id,jsonb_agg(p.value ORDER BY (p.value->>'prop_id')::int) properties
   FROM jsonb_array_elements(basis->'prop_def') p GROUP BY (p.value->>'type_id')::int) grouped;

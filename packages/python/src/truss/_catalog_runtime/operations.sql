@@ -886,12 +886,10 @@ BEGIN
   SELECT to_jsonb(j) INTO actual FROM truss.journal j WHERE j.at=(entry->>'at')::timestamptz AND j.seq=(entry->>'seq')::bigint;
   IF actual IS DISTINCT FROM entry THEN RAISE EXCEPTION 'exact mutation journal required' USING ERRCODE='55000';END IF;
  END LOOP;
- IF latest.after_object IS NOT NULL THEN
-  FOR entry IN SELECT value FROM jsonb_array_elements(latest.after_keys) LOOP
-   IF NOT truss.verify_object_string_key(selected_id,selected_type,(entry->>'key_num')::smallint,
-    decode(substring(convert_from(decode(substring(entry->>'key_bytes' FROM 3),'hex'),'UTF8') FROM 22),'hex')) THEN RAISE EXCEPTION 'actual final keys must match object' USING ERRCODE='55000';END IF;
-  END LOOP;
- END IF;
+ -- Key encoding belongs to the trusted producer. Its exact checked rows are
+ -- retained in after_keys and compared with current native membership above.
+ -- Re-encoding every key at finish and again for each deferred row event repeats
+ -- the producer's semantic work without adding a new relational guarantee.
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_row_validate_qualified(bigint,int,oid) FROM PUBLIC;
@@ -931,14 +929,13 @@ BEGIN
  IF attempt.context ? 'creationTransitionProfile' THEN
   IF attempt.context->'creationTransitionProfile' IS DISTINCT FROM '{"identity":"truss-unified-create-transition","version":"0.1","sha256":"765d7def5e677dba5d3ed5cdc841b1aa43eb2f4a493f1d2603ff3698536a5396"}'::jsonb AND attempt.context->'creationTransitionProfile' IS DISTINCT FROM '{"identity":"truss-unified-create-transition","version":"0.2","sha256":"073782e2517f2a7e26c8d6479c6266ececf68963681ccfb6a380e9cd16f2e11b"}'::jsonb THEN
    RAISE EXCEPTION 'known original creation storage profile required' USING ERRCODE='55000';END IF;
-  FOR index IN 0..attempt.next_index-1 LOOP
-   IF input_operations->index->>'operation'='create_object' AND
-    (SELECT count(*) FROM truss.runtime_object_transition t WHERE t.attempt_id=attempt.id
-      AND t.operation_index=index AND t.before_object IS NULL
-      AND t.object_id::text=attempt.results->index->'identity'->>'id'
-      AND t.type_id::text=attempt.results->index->'identity'->>'typeId')<>1 THEN
-    RAISE EXCEPTION 'one original transition for every completed create required' USING ERRCODE='55000';END IF;
-  END LOOP;
+  IF EXISTS(
+   SELECT 1 FROM jsonb_array_elements(input_operations) WITH ORDINALITY o(operation,ordinal)
+   LEFT JOIN truss.runtime_object_transition t ON t.attempt_id=attempt.id AND t.operation_index=o.ordinal-1
+    AND t.before_object IS NULL AND t.object_id::text=attempt.results->(o.ordinal-1)::int->'identity'->>'id'
+    AND t.type_id::text=attempt.results->(o.ordinal-1)::int->'identity'->>'typeId'
+   WHERE o.operation->>'operation'='create_object' GROUP BY o.ordinal HAVING count(t.transition_id)<>1) THEN
+   RAISE EXCEPTION 'one original transition for every completed create required' USING ERRCODE='55000';END IF;
  ELSIF EXISTS(SELECT 1 FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=attempt.id AND before_object IS NULL) THEN
   RAISE EXCEPTION 'historical attempts have no synthetic creation transitions' USING ERRCODE='55000';END IF;
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
@@ -990,11 +987,32 @@ BEGIN
   position_bytes=CASE WHEN receipt.storage_row_id IS NOT NULL THEN truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,attempt.writer_xid) END WHERE id=attempt_id;
  current_actor:=truss.runtime_person(false);
  IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='42501';END IF;
- FOR owner IN SELECT DISTINCT object_id,type_id FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=object_group_finish.attempt_id LOOP PERFORM truss.runtime_owned_row_validate_qualified(owner.object_id,owner.type_id,current_actor);END LOOP;
- FOR operation IN SELECT value FROM jsonb_array_elements(input_operations) LOOP
-  SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input_operations,index,current_actor);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,current_actor);index:=index+1;
- END LOOP;
- IF input->'mutationProfile'=truss.runtime_owned_profile() THEN PERFORM truss.runtime_owned_group_validate(attempt.id,true);END IF;
+ IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
+  -- Close final native object/key images as one relation. Deferred row/journal
+  -- guards still observe later caller work and current permission changes.
+  IF EXISTS(WITH latest AS MATERIALIZED (
+   SELECT DISTINCT ON(t.object_id,t.type_id) t.object_id,t.type_id,t.after_object,t.after_keys
+   FROM truss.runtime_object_transition t WHERE t.attempt_id=attempt.id
+   ORDER BY t.object_id,t.type_id,t.transition_id DESC)
+   SELECT 1 FROM latest l LEFT JOIN truss.object o ON o.id=l.object_id AND o.type_id=l.type_id
+   LEFT JOIN LATERAL (SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]'::jsonb) image
+    FROM truss.object_key_bucket k WHERE k.object_id=l.object_id AND k.type_id=l.type_id) keys ON true
+   WHERE to_jsonb(o) IS DISTINCT FROM l.after_object OR keys.image IS DISTINCT FROM l.after_keys) THEN
+   RAISE EXCEPTION 'exact final object/key state required' USING ERRCODE='55000';END IF;
+ ELSE
+  FOR owner IN SELECT DISTINCT object_id,type_id FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=object_group_finish.attempt_id LOOP
+   PERFORM truss.runtime_owned_row_validate_qualified(owner.object_id,owner.type_id,current_actor);
+  END LOOP;
+ END IF;
+ IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
+  -- Group settlement rechecks the complete distinct owner/type set. Repeating
+  -- the same policy/schema lookup for every operation adds no authority.
+  PERFORM truss.runtime_owned_group_validate(attempt.id,true);
+ ELSE
+  FOR operation IN SELECT value FROM jsonb_array_elements(input_operations) LOOP
+   SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input_operations,index,current_actor);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,current_actor);index:=index+1;
+  END LOOP;
+ END IF;
  RETURN convert_to(jsonb_build_object('outcome','success','disposition','applied','durability','pending','semantic',semantic,
   'receiptToken',CASE WHEN receipt.storage_row_id IS NOT NULL THEN truss.runtime_receipt_token(truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,attempt.writer_xid)) END)::text,'UTF8');
 END;

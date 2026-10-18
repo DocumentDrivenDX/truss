@@ -14,6 +14,31 @@ class SchemaCacheTests(base.PublicCreateGroupTests):
         def snapshot():
             return self.admin.execute('SELECT rev,type_id,metadata,value_readers,valid_properties,ctid::text FROM truss.runtime_type_schema ORDER BY rev,type_id').fetchall()
         original = snapshot()
+        # Catalog extraction remains a registrar operation. Load once under
+        # that authority; ordinary writes subsequently reuse the immutable data.
+        from psycopg import sql
+        self.admin.execute(sql.SQL('GRANT {} TO consumer WITH SET FALSE').format(sql.Identifier(self.installation.registrar_role)))
+        observed = a.catalog_view_in_transaction(t, a.catalog_view_request())
+        self.assertIsInstance(observed, base.Ok, repr(observed))
+        view = observed.value.view
+        from unittest.mock import patch
+        with patch('truss._catalog_view_build.decode_catalog_source_json', side_effect=AssertionError('Warm schema must not parse again')):
+            again = a.catalog_view_in_transaction(t, a.catalog_view_request()).value.view
+        self.admin.execute(sql.SQL('REVOKE {} FROM consumer').format(sql.Identifier(self.installation.registrar_role)))
+        self.assertIs(again, view)
+        self.assertIs(again.schema, view.schema)
+        self.assertEqual(len(view.schema.types_by_identity), len(self.types))
+        for (document, module, record), entry in view.schema.types_by_identity.items():
+            self.assertEqual(entry.reference, self.types[(document, record)])
+            properties = view.schema.properties_by_type[entry.reference.type_id]
+            self.assertEqual(len(properties), 2)
+            for property in properties.values():
+                declaration = view.schema.declarations_by_pin[property.reference.definition_pin]
+                self.assertEqual(declaration['kind'], 'field')
+                with self.assertRaises(TypeError):
+                    declaration['scalarType'] = 'wrong'
+        with self.assertRaises(TypeError):
+            view.schema.types_by_identity[('changed','m','A')] = None
         self.assertEqual(len(original), len(self.types))
         for revision, type_id, metadata, readers, valid, _ in original:
             self.assertNotIn('properties', metadata)
@@ -47,6 +72,9 @@ class SchemaCacheTests(base.PublicCreateGroupTests):
         h.detach(); c.rollback()
         self.admin.execute('REVOKE group_writer FROM consumer')
         c, h, a, t = self.consumer()
+        from truss.catalog_view import CatalogViewAvailable
+        observed = a.catalog_view_in_transaction(t, a.catalog_view_request())
+        self.assertFalse(isinstance(observed, base.Ok) and isinstance(observed.value, CatalogViewAvailable))
         with self.assertRaises(psycopg.errors.InsufficientPrivilege):
             with c.transaction():
                 c.execute('SELECT truss.query_scope(%s::jsonb)', (json.dumps(binding),))

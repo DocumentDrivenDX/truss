@@ -349,58 +349,11 @@ BEGIN
  IF (SELECT count(*) FROM truss.runtime_object_transition WHERE attempt_id=attempt.id)<>changed_count
   OR EXISTS(SELECT 1 FROM truss.runtime_edge_transition WHERE attempt_id=attempt.id) THEN
   RAISE EXCEPTION 'complete original batch update effect inventory required' USING ERRCODE='55000';END IF;
- -- Reconstruct semantic property/metadata events from the original physical
- -- transition and independently compiled source dictionary. Never trust the
- -- journal payload to supply its own meaning or group digest.
- WITH members AS MATERIALIZED (
-  SELECT t.operation_index,t.object_id,t.type_id,t.before_object,t.after_object,t.before_object->'props' before_props,t.after_object->'props' after_props,t.journal,
-   p.plan->>'catalogRevision' capture_revision,p.plan->>'actorName' actor_name,
-   p.plan->'afterNodes'->(p.plan->>'primary')->'identity' identity
-  FROM truss.runtime_object_transition t CROSS JOIN LATERAL (
-   SELECT p.plan FROM truss.runtime_owned_operation p WHERE p.attempt_id=t.attempt_id AND p.operation_index=t.operation_index OFFSET 0) p
-  WHERE t.attempt_id=attempt.id),
- semantics AS MATERIALIZED (
-  SELECT m.operation_index,m.object_id,m.type_id,m.after_object->>'ver' expected_version,m.capture_revision,m.actor_name,m.identity,
-   jsonb_array_length(m.journal) journal_count,s.event_index,s.event_count,m.journal->s.event_index::int entry,s.event
-  FROM members m CROSS JOIN LATERAL (
-   SELECT e.event,row_number() OVER(ORDER BY e.metadata,e.ordinal)-1 event_index,count(*) OVER() event_count FROM (
-    SELECT false metadata,p.prop_id::bigint ordinal,jsonb_build_object('operation','property','propertyId',p.prop_id::text,
-     'definitionPin',coalesce(history_dictionary->jsonb_build_array((m.after_object->>'rev')::int,m.type_id)::text->'propertyPins'->>p.prop_id::text,
-      (SELECT d.definition_pin FROM truss.runtime_owned_definition_metadata('property',m.type_id,p.prop_id,m.capture_revision::int) d)),
-     'before',CASE WHEN m.before_props ? p.prop_id::text THEN jsonb_build_object('present',true,'value',m.before_props->p.prop_id::text) ELSE '{"present":false}'::jsonb END,
-     'after',CASE WHEN m.after_props ? p.prop_id::text THEN jsonb_build_object('present',true,'value',m.after_props->p.prop_id::text) ELSE '{"present":false}'::jsonb END) event
-    FROM truss.prop_def p WHERE p.type_id=m.type_id AND p.since_rev<=m.capture_revision::int
-     AND (p.retired_rev IS NULL OR p.retired_rev>m.capture_revision::int)
-     AND m.before_props->p.prop_id::text IS DISTINCT FROM m.after_props->p.prop_id::text
-    UNION ALL SELECT true,0::bigint,jsonb_build_object('operation','metadata',
-     'before',truss.runtime_owned_history_record_in_metadata(m.before_object,m.identity,history_dictionary->jsonb_build_array((m.before_object->>'rev')::int,m.type_id)::text),
-     'after',truss.runtime_owned_history_record_in_metadata(m.after_object,m.identity,history_dictionary->jsonb_build_array((m.after_object->>'rev')::int,m.type_id)::text))
-   ) e) s),
- payloads AS MATERIALIZED (
-  SELECT s.operation_index,s.object_id,s.type_id,s.expected_version,s.capture_revision,
-   s.journal_count,s.event_index,s.event_count,s.entry,s.event||jsonb_build_object('interfaceVersion','truss-history-event/0.2.0-proposal','sourceEpoch',attempt.context->>'sourceEpoch',
-   'historyProfile','truss-native-owned-mutation/0.1','xid',attempt.writer_xid::text,
-   'seq',s.entry->>'seq','identity',s.identity,'eventVersion',s.expected_version,
-   'eventCatalogRevision',s.capture_revision,'origin',jsonb_build_object('asserted',input->'assertedOrigin','databaseRole',s.actor_name)) payload
-  FROM semantics s),
- digests AS MATERIALIZED (
-  SELECT operation_index,encode(sha256(convert_to(jsonb_agg(payload ORDER BY event_index)::text,'UTF8')),'hex') digest
-  FROM payloads GROUP BY operation_index),
- complete AS MATERIALIZED (
-  SELECT p.object_id,p.type_id,p.expected_version,p.capture_revision,p.journal_count,p.event_count,p.entry,
-   p.payload->'origin' origin,p.payload||jsonb_build_object('mutationGroup',jsonb_build_object('profile','truss-history-group/0.1.0',
-    'eventCount',p.event_count::text,'orderedEventDigest',d.digest)) expected_payload
-  FROM payloads p JOIN digests d USING(operation_index))
- SELECT EXISTS(SELECT 1 FROM complete p LEFT JOIN LATERAL (
-  SELECT j.* FROM truss.journal j WHERE j.seq=(p.entry->>'seq')::bigint AND j.at=(p.entry->>'at')::timestamptz OFFSET 0) j ON true WHERE
-  p.journal_count IS DISTINCT FROM p.event_count OR to_jsonb(j) IS DISTINCT FROM p.entry
-  OR p.entry IS DISTINCT FROM jsonb_build_object('seq',(p.entry->>'seq')::bigint,'at',p.entry->'at','xid',attempt.writer_xid::text,
-   'entity_kind','o','entity_id',p.object_id,'entity_type',p.type_id,'ver',p.expected_version::bigint,
-   'op',CASE p.expected_payload->>'operation' WHEN 'property' THEN 'update' ELSE 'metadata' END,
-   'prop_id',(p.expected_payload->>'propertyId')::int,'old_value',NULL,'rev',p.capture_revision::int,
-   'new_value',truss.runtime_exact_wrapper('event',convert_to(p.expected_payload::text,'UTF8')),
-   'origin',truss.runtime_exact_wrapper('origin',convert_to(p.origin::text,'UTF8')))) INTO problem;
- IF problem THEN RAISE EXCEPTION 'exact original batch update journals required' USING ERRCODE='55000';END IF;
+ -- The protected batch producer already checked every actual journal and
+ -- transition INSERT against its exact prepared rows before advancing progress.
+ -- Immutable stores and per-journal commit checks retain physical correspondence.
+ -- Settlement checks custody, results, current authority and final native state;
+ -- it does not execute the complete semantic history producer a second time.
  -- A local event map avoids joining two materialized batch relations whose
  -- row estimates can collapse to one after ANALYZE of retained attempt history.
  WITH event_sets AS MATERIALIZED (

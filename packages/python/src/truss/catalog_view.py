@@ -129,7 +129,7 @@ class CatalogDefinitionEntry(_Carrier):
     dependencies: tuple[CatalogDefinitionReference,...]
 
 
-@dataclass(frozen=True,slots=True,kw_only=True)
+@dataclass(frozen=True,slots=True,kw_only=True,weakref_slot=True)
 class CatalogView(_Carrier):
     catalog_revision: str
     layout_profile: ProfilePin
@@ -140,6 +140,15 @@ class CatalogView(_Carrier):
     extraction_profile: ProfilePin
     scope: CompleteCatalogScope = field(default_factory=CompleteCatalogScope)
     interface_version: Literal['truss-catalog-view/0.2.0'] = field(default='truss-catalog-view/0.2.0',init=False)
+
+    @property
+    def schema(self):
+        """Immutable in-memory native/qualified indexes and original declarations.
+
+        Schema metadata confers no write authority; current admission is separate.
+        """
+        from ._schema_memory import schema_index
+        return schema_index(self)
 
     @property
     def original_bytes(self):

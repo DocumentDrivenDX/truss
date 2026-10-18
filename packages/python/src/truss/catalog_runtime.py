@@ -1256,10 +1256,8 @@ class CatalogReferenceAssembly:
             cursor.execute('SELECT truss.catalog_view_basis(%s,%s,%s)',(selected,count,16777216),prepare=False)
             raw=cursor.fetchone()[0]
             if raw is None:return CatalogViewUnavailable(reason='context')
-            basis=json.loads(bytes(raw))
-            if basis['releaseId']!=manifest['releaseId'] or basis['releaseSha256']!=digest or basis['layoutProfile']!=manifest['layoutProfile']:
-                raise ValueError('Exact selected installed catalog release required')
-            view=build_catalog_view(basis,layout)
+            from ._schema_memory import cached_catalog_view
+            view=cached_catalog_view(bytes(raw),layout,expected_release=manifest['releaseId'],expected_digest=digest)
             if len(view.definitions)>count or len(view.original_bytes)>size:return CatalogViewUnavailable(reason='resource')
             return CatalogViewAvailable(view=view)
         result=self._host._run_operation(transaction,observe)
