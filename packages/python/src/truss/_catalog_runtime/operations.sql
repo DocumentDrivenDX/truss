@@ -33,19 +33,24 @@ BEGIN
  -- Stored targets already carry their exact native type coordinate. Resolve
  -- that candidate before deriving pins for unrelated catalog records.
  IF identity IS NOT NULL THEN
-  SELECT t.* INTO selected FROM truss.runtime_definition_source p JOIN truss.type_def t
+  WITH pinned AS MATERIALIZED (
+   SELECT rev,ord,doc_id,module_id,element_id FROM truss.runtime_definition_source
+   WHERE definition_pin=pin AND kind='element' AND key_id='')
+  SELECT t.* INTO selected FROM pinned p JOIN truss.type_def t
     ON t.definition_rev=p.rev AND t.definition_doc_ord=p.ord AND t.definition_document_id=p.doc_id
      AND t.module=p.module_id AND t.element=p.element_id
-   WHERE t.type_id::text=identity->>'typeId' AND p.definition_pin=pin AND p.kind='element' AND p.key_id=''
+   WHERE t.type_id::text=identity->>'typeId'
     AND t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL;
  END IF;
  IF selected.type_id IS NULL THEN
   -- Preserve original CREATE/alias lookup and stored-identity refusal precedence.
-  SELECT t.* INTO STRICT selected FROM truss.runtime_definition_source p JOIN truss.type_def t
+  WITH pinned AS MATERIALIZED (
+   SELECT rev,ord,doc_id,module_id,element_id FROM truss.runtime_definition_source
+   WHERE definition_pin=pin AND kind='element' AND key_id='')
+  SELECT t.* INTO STRICT selected FROM pinned p JOIN truss.type_def t
     ON t.definition_rev=p.rev AND t.definition_doc_ord=p.ord AND t.definition_document_id=p.doc_id
      AND t.module=p.module_id AND t.element=p.element_id
-   WHERE p.definition_pin=pin AND p.kind='element' AND p.key_id=''
-    AND t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL;
+   WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL;
  END IF;
  IF identity IS NOT NULL AND (identity->>'typeId' IS DISTINCT FROM selected.type_id::text
   OR identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module)

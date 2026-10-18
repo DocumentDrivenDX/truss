@@ -14,7 +14,7 @@ CREATE TRIGGER runtime_document_schema_no_truncate BEFORE TRUNCATE ON truss.runt
 CREATE FUNCTION truss.runtime_owned_index_type_schema() RETURNS trigger
 LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE basis jsonb;type_basis jsonb;selected record;property record;pin record;
- property_order jsonb;property_pins jsonb;property_access jsonb;type_pin text;query_record jsonb;compiled_records jsonb[]:='{}';document_revision text;properties_by_type jsonb;keys_by_type jsonb;missing_pins boolean;value_readers jsonb;valid_properties boolean;document_row record;records jsonb;relations jsonb;readers jsonb;closed boolean;items_valid boolean;
+ property_order jsonb;property_pins jsonb;property_access jsonb;type_pin text;query_record jsonb;compiled_records jsonb[]:='{}';document_revision text;properties_by_type jsonb;property_metadata_by_type jsonb;keys_by_type jsonb;missing_pins boolean;value_readers jsonb;valid_properties boolean;document_row record;records jsonb;relations jsonb;readers jsonb;closed boolean;items_valid boolean;
 BEGIN
  -- The accepted head already contains the installed, validated native rows.
  -- Historical initialization retains its original reconstruction; the current
@@ -29,6 +29,23 @@ BEGIN
  SELECT coalesce(jsonb_object_agg(type_id::text,properties),'{}'::jsonb) INTO properties_by_type
  FROM (SELECT (p.value->>'type_id')::int type_id,jsonb_agg(p.value ORDER BY (p.value->>'prop_id')::int) properties
   FROM jsonb_array_elements(basis->'prop_def') p GROUP BY (p.value->>'type_id')::int) grouped;
+ -- Resolve original source pins for every live property in one indexed join.
+ -- The former per-type loop repeated this join and recordset conversion for
+ -- every compiled record; the immutable metadata remains exactly equivalent.
+ SELECT coalesce(jsonb_object_agg(grouped.type_id::text,jsonb_build_object(
+   'propertyOrder',grouped.property_order,'propertyPins',grouped.property_pins,'missingPins',grouped.missing_pins)),'{}'::jsonb)
+ INTO property_metadata_by_type
+ FROM (
+  SELECT p.type_id,
+   coalesce(jsonb_agg(p.prop_id::text ORDER BY p.prop_id),'[]'::jsonb) property_order,
+   coalesce(jsonb_object_agg(p.prop_id::text,d.definition_pin),'{}'::jsonb) property_pins,
+   coalesce(bool_or(d.definition_pin IS NULL OR p.definition_source_kind<>'accepted_document'),false) missing_pins
+  FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p
+  LEFT JOIN truss.runtime_definition_source d ON d.rev=p.definition_rev AND d.ord=p.definition_doc_ord
+   AND d.doc_id=p.definition_document_id AND d.module_id=p.declaration_module AND d.element_id=p.element AND d.kind='element' AND d.key_id=''
+  WHERE p.since_rev<=NEW.rev AND (p.retired_rev IS NULL OR p.retired_rev>NEW.rev)
+  GROUP BY p.type_id
+ ) grouped;
  SELECT coalesce(jsonb_object_agg(type_id::text,keys),'{}'::jsonb) INTO keys_by_type
  FROM (SELECT (k.value->>'type_id')::int type_id,jsonb_agg(k.value ORDER BY (k.value->>'key_num')::int) keys
   FROM jsonb_array_elements(basis->'key_def') k GROUP BY (k.value->>'type_id')::int) grouped;
@@ -39,14 +56,9 @@ BEGIN
   SELECT d.definition_pin INTO STRICT type_pin FROM truss.runtime_definition_source d
    WHERE d.rev=selected.definition_rev AND d.ord=selected.definition_doc_ord AND d.doc_id=selected.definition_document_id
     AND d.module_id=selected.module AND d.element_id=selected.element AND d.kind='element' AND d.key_id='';
-  SELECT coalesce(jsonb_agg(p.prop_id::text ORDER BY p.prop_id),'[]'::jsonb),
-   coalesce(jsonb_object_agg(p.prop_id::text,d.definition_pin),'{}'::jsonb),
-   coalesce(bool_or(d.definition_pin IS NULL OR p.definition_source_kind<>'accepted_document'),false)
-   INTO property_order,property_pins,missing_pins
-   FROM jsonb_populate_recordset(NULL::truss.prop_def,type_basis->'prop_def') p
-   LEFT JOIN truss.runtime_definition_source d ON d.rev=p.definition_rev AND d.ord=p.definition_doc_ord
-    AND d.doc_id=p.definition_document_id AND d.module_id=p.declaration_module AND d.element_id=p.element AND d.kind='element' AND d.key_id=''
-   WHERE p.since_rev<=NEW.rev AND (p.retired_rev IS NULL OR p.retired_rev>NEW.rev);
+  property_order:=coalesce(property_metadata_by_type->selected.type_id::text->'propertyOrder','[]'::jsonb);
+  property_pins:=coalesce(property_metadata_by_type->selected.type_id::text->'propertyPins','{}'::jsonb);
+  missing_pins:=coalesce((property_metadata_by_type->selected.type_id::text->>'missingPins')::boolean,false);
   IF missing_pins THEN RAISE EXCEPTION 'complete original compiled schema pins required' USING ERRCODE='55000';END IF;
   SELECT doc_revision INTO STRICT document_revision FROM truss.schema_doc
    WHERE doc_id=selected.document_id AND rev<=NEW.rev ORDER BY rev DESC LIMIT 1;

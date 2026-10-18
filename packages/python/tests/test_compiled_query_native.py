@@ -8,6 +8,42 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
     for _name in tuple(n for n in dir(mutation_tests.ObjectMutationTests) if n.startswith('test_')):
         locals()[_name]=None
 
+    def test_wide_complete_entity_preserves_fields_with_explicit_byte_budget(self):
+        from dataclasses import replace
+        from truss.contracts import TextValue
+        from truss.groups import AuthoredValue
+        names=tuple('wide'+str(i) for i in range(126))
+        def wide(source):
+            module=source['modules'][0]
+            for record in module['elements']:
+                if record['kind']=='record':record['name']=record['id']
+                if record['id']=='A':record['members'] += [{'module':'m','element':name} for name in names]
+            module['elements'] += [dict(id=name,name=name,kind='field',scalarType='string',nullability='required',cardinality='one',extensions={}) for name in names]
+        c,h,a,t=self.ready(wide,document_ids=('adoc',))
+        for first in range(0,100,20):
+            operations=tuple(replace(self.create(label=f'wide-{i:03}',value=f'value-{i}',alias=f'row-{i}'),
+                values=self.create(label=f'wide-{i:03}',value=f'value-{i}').values+tuple(
+                    AuthoredValue(name=name,value=TextValue(kind='string',text=f'{name}/{i}/'+'x'*80)) for name in names))
+                for i in range(first,first+20))
+            created,_,_=self.run_group(a,t,operations)
+            self.assertIsInstance(created,GroupSuccess,repr(created)+' '+str(h._custody.last_attempt.error))
+            h.detach();c.commit();c,h,a,t=self.consumer()
+        sql='SELECT x.* FROM "A" x ORDER BY x."A-label" LIMIT 51'
+        default=a.query_in_transaction(t,sql=sql,document_ids=('adoc',),maximum_rows=100,read_profile='complete-entity')
+        self.assertIsInstance(default,Ok,repr(default));self.assertIsInstance(default.value,QueryRefused)
+        self.assertEqual(default.value.code,'limits')
+        selected=a.query_in_transaction(t,sql=sql,document_ids=('adoc',),maximum_rows=100,
+            maximum_bytes=16777216,read_profile='complete-entity')
+        self.assertIsInstance(selected,Ok,repr(selected)+' '+str(h._custody.last_attempt.error))
+        self.assertIsInstance(selected.value,QueryRows,repr(selected.value))
+        self.assertEqual(len(selected.value.rows),51)
+        self.assertTrue({'_version','_created_by','_updated_by'}.issubset(selected.value.columns))
+        self.assertTrue(set(names).issubset(selected.value.columns))
+        for i,row in enumerate(selected.value.rows):
+            values=dict(zip(selected.value.columns,row,strict=True))
+            self.assertEqual(values['A-label'],f'wide-{i:03}')
+            for name in names:self.assertEqual(values[name],f'{name}/{i}/'+'x'*80)
+
     def test_public_mutations_filter_count_complete_record_and_readonly_query(self):
         def name_records(source):
             for element in source['modules'][0]['elements']:

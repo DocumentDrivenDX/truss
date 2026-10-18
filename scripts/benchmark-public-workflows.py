@@ -255,14 +255,41 @@ class RealWorkflows(PublicCatalogRuntimeTests):
                 if actual!=expected:raise AssertionError('Stress workload values changed or disappeared')
         # Exercise the list route the embedding application actually uses, including
         # relationship columns supplied by complete-entity itself.
-        from truss.query import QueryRows
+        from truss.query import QueryRows,QueryRefused,QueryRelatedKeys
         quote=lambda value:'"'+value.replace('"','""')+'"'
         selected_record=next(e for e in module['elements'] if e['id']==record and e['kind']=='record')
         list_sql='SELECT x.* FROM '+quote(module.get('namespace',module_id))+'.'+quote(selected_record.get('name',record))+' x LIMIT 51'
+        query_bytes=16777216 if workload else 1048576
         def list_entities():
             listed=ok(assembly.query_in_transaction(tx,sql=list_sql,document_ids=(document_id,),
-                parameters=None,maximum_rows=100,read_profile='complete-entity'))
-            if not isinstance(listed,QueryRows):raise AssertionError('Complete entity list refused: '+repr(listed))
+                parameters=None,maximum_rows=100,maximum_bytes=query_bytes,read_profile='complete-entity'))
+            if isinstance(listed,QueryRefused) and listed.code=='limits' and workload:
+                # Complete-entity promises every relationship key and admits
+                # at most 100 per relationship. Prove the generated hot source
+                # exceeds that bound; the declared ID/key workload still runs.
+                counts={}
+                for edge_type,source_index,target_index in workload_edges(workload):
+                    if edge_type==0:counts[source_index]=counts.get(source_index,0)+1
+                maximum=max(counts.values(),default=0)
+                if maximum<=100:raise AssertionError('Unexpected complete entity limit refusal: '+repr(listed)+'; native-test diagnostic: '+str(host._custody.last_attempt.error))
+                source_index=min(index for index,degree in counts.items() if degree==maximum)
+                expected={('p0-'+str(target),) for edge_type,source,target in workload_edges(workload) if edge_type==0 and source==source_index}
+                # A bounded relationship read retains an explicit truncation
+                # flag; it never presents those 100 keys as a complete list.
+                bounded_sql='SELECT RELATED_KEYS(x.'+quote('R0.link')+',100) AS related FROM '+quote(module.get('namespace',module_id))+'.'+quote(selected_record.get('name',record))+' x WHERE x.'+quote('p0')+' = :key'
+                bounded=timed(sample,'read_hot_relationship_bounded',lambda:ok(assembly.query_in_transaction(tx,
+                    sql=bounded_sql,document_ids=(document_id,),parameters={'key':'p0-'+str(source_index)},maximum_rows=1,maximum_bytes=query_bytes)))
+                if not isinstance(bounded,QueryRows) or len(bounded.rows)!=1 or len(bounded.rows[0])!=1:
+                    raise AssertionError('Bounded hot relationship read refused: '+repr(bounded))
+                related=bounded.rows[0][0]
+                if not isinstance(related,QueryRelatedKeys) or not related.truncated or len(related.items)!=100 or len(set(related.items))!=100 or not set(related.items)<=expected:
+                    raise AssertionError('Hot relationship keys or explicit truncation changed')
+                case['listRead']={'status':'outside_published_relationship_cardinality_bound','sql':list_sql,
+                    'maximumBytes':query_bytes,'relationshipBound':100,'maximumOutgoingKeys':maximum,'observedRefusal':listed.code,
+                    'boundedRead':{'sourceIndex':source_index,'totalKeys':len(expected),'returnedKeys':len(related.items),'truncated':related.truncated},
+                    'scope':'Declared object/edge load, ID/key reads and writes run in full; complete-entity refuses excess relationship cardinality'}
+                return listed
+            if not isinstance(listed,QueryRows):raise AssertionError('Complete entity list refused: '+repr(listed)+'; native-test diagnostic: '+str(host._custody.last_attempt.error))
             expected_rows=min(51,sum(1 for identity in identities if identity.type_id==identities[0].type_id))
             if len(listed.rows)!=expected_rows:raise AssertionError('Complete entity list returned the wrong row count')
             return listed
@@ -271,8 +298,16 @@ class RealWorkflows(PublicCatalogRuntimeTests):
         # the million-node case has 100,000 per type and remains outside it.
         list_supported=not workload or math.ceil(count/workload['types'])<=10000
         if list_supported:
+            if workload:
+                default_list=timed(sample,'list_default_byte_budget_control',lambda:ok(assembly.query_in_transaction(tx,
+                    sql=list_sql,document_ids=(document_id,),parameters=None,maximum_rows=100,read_profile='complete-entity')))
+                if not isinstance(default_list,QueryRows) and not (isinstance(default_list,QueryRefused) and default_list.code=='limits'):
+                    raise AssertionError('Default query byte-budget control changed: '+repr(default_list))
+                case['defaultListByteBudgetControl']={'maximumBytes':1048576,
+                    'status':'within_default_budget' if isinstance(default_list,QueryRows) else 'limits',
+                    'scope':'Original default query budget retained; no partial rows released on limit refusal'}
             listing=timed(sample,'list_complete_entities',list_entities)
-            case['listRead']={'status':'passed','sql':list_sql,'rows':len(listing.rows),'columns':list(listing.columns)}
+            if isinstance(listing,QueryRows):case['listRead']={'status':'passed','sql':list_sql,'maximumBytes':query_bytes,'rows':len(listing.rows),'columns':list(listing.columns)}
         else:
             case['listRead']={'status':'outside_published_query_scan_bound','sql':list_sql,
                 'sourceRowsPerType':math.ceil(count/workload['types']),'maximumScanRows':10000,

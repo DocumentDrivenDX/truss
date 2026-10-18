@@ -2807,29 +2807,45 @@ BEGIN
   -- current authority and final physical images below; it does not execute the
   -- entire edge semantic/history program a second time for every operation.
   IF EXISTS(
-   SELECT 1 FROM truss.runtime_owned_operation p
-   LEFT JOIN truss.runtime_edge_transition t ON t.attempt_id=p.attempt_id AND t.operation_index=p.operation_index
-   WHERE p.attempt_id=selected_attempt AND (
-    p.plan->>'profile' IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
-    OR p.plan->'operationIndex' IS DISTINCT FROM to_jsonb(p.operation_index)
-    OR p.plan->'operation' IS DISTINCT FROM operations->p.operation_index
-    OR p.plan->'mutationProfile' IS DISTINCT FROM input->'mutationProfile'
-    OR p.plan->>'actorName' IS DISTINCT FROM session_user::text
-    OR p.plan->>'primary' IS DISTINCT FROM 'create:'||p.operation_index::text
-    OR t.transition_id IS NULL OR t.writer_xid IS DISTINCT FROM attempt.writer_xid
-    OR t.before_edge IS NOT NULL OR t.after_edge IS NULL
-    OR p.result->>'operation' IS DISTINCT FROM 'create_edge' OR p.result->>'outcome' IS DISTINCT FROM 'created'
-    OR p.result->>'version' IS DISTINCT FROM '1'
-    OR p.result->'identity'->>'id' IS DISTINCT FROM t.edge_id::text
-    OR p.result->'identity'->>'typeId' IS DISTINCT FROM t.rel_type_id::text
-    OR (p.result->'identity')-'id' IS DISTINCT FROM
-     (p.plan->'afterEdges'->(p.plan->>'primary')->'identity')-'id'
-    OR t.source_identity IS DISTINCT FROM p.plan->'operation'->'source'->'identity'
-    OR t.target_identity IS DISTINCT FROM p.plan->'operation'->'target'->'identity'
-    OR jsonb_array_length(t.journal) IS DISTINCT FROM 1
-    OR jsonb_array_length(p.result->'events') IS DISTINCT FROM 1
-    OR p.result->'events'->0->>'seq' IS DISTINCT FROM t.journal->0->>'seq'
-    OR p.result->'events'->0->>'xid' IS DISTINCT FROM attempt.writer_xid::text)) THEN
+   -- The final plan also contains the complete endpoint/edge frame. Extract
+   -- its small custody fields once; repeated JSON operators would repeatedly
+   -- detoast that same large immutable row during the source/result census.
+   WITH members AS MATERIALIZED (
+    SELECT p.operation_index,q.*,r.operation result_operation,r.outcome,r.version,r.identity,r.events,
+     t.transition_id,t.writer_xid,t.before_edge,t.after_edge IS NOT NULL has_after,
+     t.edge_id,t.rel_type_id,t.source_identity,t.target_identity,
+     jsonb_array_length(t.journal) journal_count,t.journal->0->>'seq' journal_seq
+    FROM truss.runtime_owned_operation p
+    LEFT JOIN truss.runtime_edge_transition t ON t.attempt_id=p.attempt_id AND t.operation_index=p.operation_index
+    CROSS JOIN LATERAL jsonb_to_record(p.plan) q(profile text,"operationIndex" jsonb,operation jsonb,
+     "mutationProfile" jsonb,"actorName" text,"primary" text,"afterEdges" jsonb)
+    CROSS JOIN LATERAL jsonb_to_record(p.result) r(operation text,outcome text,version text,identity jsonb,events jsonb)
+    WHERE p.attempt_id=selected_attempt),
+   census AS MATERIALIZED (
+    SELECT m.operation_index,m.profile,m."operationIndex",m.operation,m."mutationProfile",m."actorName",m."primary",
+     m."afterEdges"->m."primary"->'identity' planned_identity,m.result_operation,m.outcome,m.version,m.identity,m.events,
+     m.transition_id,m.writer_xid,m.before_edge,m.has_after,m.edge_id,m.rel_type_id,m.source_identity,m.target_identity,m.journal_count,m.journal_seq
+    FROM members m)
+   SELECT 1 FROM census c WHERE
+    c.profile IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
+    OR c."operationIndex" IS DISTINCT FROM to_jsonb(c.operation_index)
+    OR c.operation IS DISTINCT FROM operations->c.operation_index
+    OR c."mutationProfile" IS DISTINCT FROM input->'mutationProfile'
+    OR c."actorName" IS DISTINCT FROM session_user::text
+    OR c."primary" IS DISTINCT FROM 'create:'||c.operation_index::text
+    OR c.transition_id IS NULL OR c.writer_xid IS DISTINCT FROM attempt.writer_xid
+    OR c.before_edge IS NOT NULL OR NOT c.has_after
+    OR c.result_operation IS DISTINCT FROM 'create_edge' OR c.outcome IS DISTINCT FROM 'created'
+    OR c.version IS DISTINCT FROM '1'
+    OR c.identity->>'id' IS DISTINCT FROM c.edge_id::text
+    OR c.identity->>'typeId' IS DISTINCT FROM c.rel_type_id::text
+    OR c.identity-'id' IS DISTINCT FROM c.planned_identity-'id'
+    OR c.source_identity IS DISTINCT FROM c.operation->'source'->'identity'
+    OR c.target_identity IS DISTINCT FROM c.operation->'target'->'identity'
+    OR c.journal_count IS DISTINCT FROM 1
+    OR jsonb_array_length(c.events) IS DISTINCT FROM 1
+    OR c.events->0->>'seq' IS DISTINCT FROM c.journal_seq
+    OR c.events->0->>'xid' IS DISTINCT FROM attempt.writer_xid::text) THEN
    RAISE EXCEPTION 'original edge batch source result and transition correspondence required' USING ERRCODE='55000';END IF;
   -- Lean endpoint scopes do not carry a relationship inventory. Recheck each
   -- actual relationship writer explicitly, including mandatory commit closure.
