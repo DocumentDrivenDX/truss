@@ -13,7 +13,7 @@ on:
         type: boolean
         default: false
       stress_case:
-        description: Run one exact stress case on both platforms after both original workloads pass
+        description: Run exact stress cases on both platforms alongside native qualification
         type: choice
         default: none
         options: [none, all, small, nominal, type-heavy, many-types, wide, complex, dense-edges, index-heavy, skewed, node-heavy, large]
@@ -105,7 +105,7 @@ jobs:
       - name: Verify source-only preparation, real schemas, and capacity regressions
         env:
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_embedder_schemas_native test_stress_registration_native test_catalog_view_capacity_native test_condition_precedence_native test_import_chunk_closure_native test_key_footprint_capacity_native test_endpoint_capacity_native test_history_projection_native test_schema_cache_native test_embedder_workflows_native
+        run: python -m unittest test_embedder_schemas_native test_stress_registration_native test_catalog_view_capacity_native test_condition_precedence_native test_import_chunk_closure_native test_key_footprint_capacity_native test_endpoint_capacity_native test_history_projection_native test_schema_cache_native test_embedder_workflows_native test_bulk_update_transition_guard_native test_schema_memory_cache test_reader_catalog_native
       - name: Preserve populated published native71 data and installation authority
         env:
           GH_TOKEN: ${{ github.token }}
@@ -423,7 +423,6 @@ jobs:
   stress:
     needs:
       - "package"
-      - "native"
     if: "github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'"
     strategy:
       fail-fast: false
@@ -550,7 +549,7 @@ jobs:
           summary=pathlib.Path('docs/helix/02-design/contracts/catalog-registration-summary-v0.1.md')
           if summary.exists():
               (root/summary.name).write_bytes(summary.read_bytes())
-              pins.update(catalogRegistrationReportInterface='truss-catalog-registration-report/0.5',umf08CatalogReportInterface='truss-catalog-registration-report/0.5',catalogRebindReportInterface='truss-catalog-registration-report/0.5',catalogKeyBackfillReportInterface='truss-catalog-registration-report/0.5',catalogRegistrationSourceFormat='truss-registration-summary/1.0',catalogPreparationSummaryInterface='truss-registration-preparation/1.0')
+              pins.update(catalogRegistrationReportInterface='truss-catalog-registration-report/0.6',umf08CatalogReportInterface='truss-catalog-registration-report/0.6',catalogRebindReportInterface='truss-catalog-registration-report/0.6',catalogKeyBackfillReportInterface='truss-catalog-registration-report/0.6',catalogRegistrationSourceFormat='truss-registration-summary/2.0',catalogPreparationSummaryInterface='truss-registration-preparation/2.0')
           (root/'release-pins.json').write_text(json.dumps(pins,indent=2)+'\n')
           assets=sorted(root.iterdir())
           (root/'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name+'\n' for p in assets))

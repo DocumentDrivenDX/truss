@@ -128,8 +128,9 @@ requested. The unchanged1000-type case produces a12,456,454-byte complete view
 of16000 definitions, within the existing16MiB cap, and keeps one source string.
 The old0.1 wire schema remains available for historical consumers.
 
-Receipt0.6 stores only effect counts for rebinding and key backfill. Their
-complete history remains in its existing native homes. Authorized
+Receipt0.6 stores effect counts and the original `rebindProfile` /
+`keyBackfillProfile` identifiers when those effects occur. Their complete
+history remains in its existing native homes. Authorized
 `accepted_document_in_transaction` reads return `validation_bytes` for the
 original UMF validator diagnostics; those diagnostics are not copied into each
 receipt. Source-reference receipts cannot resolve their original bytes through

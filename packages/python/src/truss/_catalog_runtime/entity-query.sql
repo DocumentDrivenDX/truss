@@ -105,7 +105,7 @@ BEGIN
     OR result->>'outcome' IS DISTINCT FROM 'changed' OR result->>'version' IS DISTINCT FROM selected_version::text
     OR result->'identity'->>'id' IS DISTINCT FROM selected_id::text OR result->'identity'->>'typeId' IS DISTINCT FROM selected_type::text
    THEN RAISE EXCEPTION 'original changed attribution result required' USING ERRCODE='55000';END IF;
-   journals:=transition.journal;after_image:=transition.after_object;
+   journals:=truss.runtime_owned_journal_materialize(transition.journal);after_image:=transition.after_object;
    writer:=attempt.writer_xid;asserted:=input_header->'assertedOrigin';history_profile:=CASE WHEN owned_mutation THEN 'truss-native-owned-mutation/0.1' ELSE 'truss-native-scalar-mutation/0.1' END;
    END IF;
   END IF;

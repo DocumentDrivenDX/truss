@@ -1168,6 +1168,9 @@ DECLARE transition truss.runtime_object_transition%ROWTYPE;attempt truss.runtime
 BEGIN
  IF authorize_read IS NULL THEN RAISE EXCEPTION 'explicit object validation mode required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT transition FROM truss.runtime_object_transition WHERE transition_id=selected_transition;
+ -- Independent updates retain versioned journal references. Resolve the sole
+ -- physical payload owner before the unchanged semantic and wrapper checks.
+ transition.journal:=truss.runtime_owned_journal_materialize(transition.journal);
  IF prepared_attempt.id IS NOT NULL THEN
    IF prepared_attempt.id IS DISTINCT FROM transition.attempt_id THEN RAISE EXCEPTION 'original checked attempt required' USING ERRCODE='55000';END IF;
    attempt:=prepared_attempt;

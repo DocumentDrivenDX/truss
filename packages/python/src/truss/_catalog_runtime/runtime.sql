@@ -138,7 +138,7 @@ DECLARE report jsonb; source jsonb; basis jsonb;rebind_profile text;profile_coun
 BEGIN
  IF octet_length(request.document_bytes)=0 THEN
   source:=convert_from(request.source_bytes,'UTF8')::jsonb;
-  RETURN convert_to(jsonb_build_object('interfaceVersion','truss-catalog-registration-report/0.6',
+  report:=jsonb_build_object('interfaceVersion','truss-catalog-registration-report/0.6',
    'registrationId',request.registration_id::text,'installationId',request.installation_id::text,
    'revision',request.revision::text,'actor',request.actor_name,'actorOid',request.actor_oid::text,
    'writerXid',request.writer_xid::text,'requestKey',request.request_key,
@@ -147,7 +147,25 @@ BEGIN
    'source',source,'assertedOrigin',convert_from(request.origin_bytes,'UTF8')::jsonb,
    'effects',jsonb_build_object(
     'reboundObjects',(SELECT count(*) FROM truss.runtime_catalog_rebind_transition WHERE registration_id=request.registration_id),
-    'keyBackfills',(SELECT count(*) FROM truss.runtime_catalog_key_backfill WHERE registration_id=request.registration_id)))::text,'UTF8');
+    'keyBackfills',(SELECT count(*) FROM truss.runtime_catalog_key_backfill WHERE registration_id=request.registration_id)));
+  -- Compact receipts keep effect payloads in their native history homes, but
+  -- must still identify the original encoding used by those effects.
+  IF EXISTS(SELECT 1 FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id) THEN
+   SELECT min(truss.catalog_rebind_profile(t.journal)),count(DISTINCT truss.catalog_rebind_profile(t.journal))
+    INTO rebind_profile,profile_count FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id;
+   IF profile_count<>1 THEN RAISE EXCEPTION 'one original registration rebind profile required' USING ERRCODE='55000';END IF;
+   report:=report||jsonb_build_object('rebindProfile',rebind_profile);
+  END IF;
+  IF EXISTS(SELECT 1 FROM truss.runtime_catalog_key_backfill t WHERE t.registration_id=request.registration_id) THEN
+   basis:=coalesce(planned_basis,truss.catalog_all_expected_records(request.revision));
+   report:=report||jsonb_build_object('keyBackfillProfile',CASE WHEN EXISTS(
+    SELECT 1 FROM truss.runtime_catalog_key_backfill b CROSS JOIN LATERAL jsonb_array_elements(b.effects) e
+    JOIN jsonb_populate_recordset(NULL::truss.key_def,basis->'key_def') k ON k.type_id=b.type_id AND k.key_num=(e.value->>'keyNumber')::smallint
+    JOIN jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p ON p.type_id=k.type_id AND p.prop_id=ANY(k.prop_ids)
+    WHERE b.registration_id=request.registration_id AND p.since_rev=request.revision)
+    THEN 'truss-catalog-key-backfill/0.2' ELSE 'truss-catalog-key-backfill/0.1' END);
+  END IF;
+  RETURN convert_to(report::text,'UTF8');
  END IF;
  basis:=coalesce(planned_basis,truss.catalog_all_expected_records(request.revision));
  source:=convert_from(request.source_bytes,'UTF8')::jsonb;

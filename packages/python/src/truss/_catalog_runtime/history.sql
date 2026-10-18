@@ -121,7 +121,9 @@ BEGIN
   IF event->>'historyProfile'='truss-native-owned-mutation/0.1' THEN
    SELECT t.transition_id INTO STRICT selected_transition FROM truss.runtime_object_transition t
     CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.object_id=physical.entity_id
-     AND t.type_id=physical.entity_type AND t.writer_xid=physical.xid AND j.value=to_jsonb(physical);
+     AND t.type_id=physical.entity_type AND t.writer_xid=physical.xid
+     AND CASE WHEN j.value->>'referenceProfile'='truss-native-journal-reference/0.1'
+      THEN j.value=truss.runtime_owned_journal_reference(physical) ELSE j.value=to_jsonb(physical) END;
    PERFORM truss.runtime_owned_object_transition_validate_qualified(selected_transition,true,qualified_actor);
   END IF;
   IF event->>'historyProfile'='truss-native-owned-edge-mutation/0.1' THEN

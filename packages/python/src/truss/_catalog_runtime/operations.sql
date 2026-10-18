@@ -808,9 +808,52 @@ REVOKE ALL ON FUNCTION truss.runtime_create_transition_validate(bigint) FROM PUB
 
 -- Reuse plans for repeated private point lookups; function-local settings
 -- restore the caller policy on return, including exceptional return.
+-- Independent value-update transitions retain references to the one immutable
+-- physical journal payload. The producer verifies actual INSERT bytes before
+-- issuing these references; digest fields here do not authorize raw SQL writes.
+CREATE FUNCTION truss.runtime_owned_journal_reference(physical truss.journal) RETURNS jsonb
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
+ SELECT jsonb_build_object('referenceProfile','truss-native-journal-reference/0.1',
+  'seq',(physical).seq,'at',(physical).at,'xid',(physical).xid,
+  'entity_kind',(physical).entity_kind,'entity_id',(physical).entity_id,'entity_type',(physical).entity_type,
+  'ver',(physical).ver,'op',(physical).op,'prop_id',(physical).prop_id,'old_value',(physical).old_value,'rev',(physical).rev,
+  'eventSha256',(physical).new_value->'bytesSha256','originSha256',(physical).origin->'bytesSha256');
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_journal_reference(truss.journal) FROM PUBLIC;
+
+-- Only semantic history consumers materialize payloads. Native settlement
+-- compares compact references, while old full-row transition arrays stay valid.
+CREATE FUNCTION truss.runtime_owned_journal_materialize(entries jsonb) RETURNS jsonb
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
+DECLARE entry jsonb;physical truss.journal%ROWTYPE;resolved jsonb[]:='{}';
+BEGIN
+ IF jsonb_typeof(entries) IS DISTINCT FROM 'array' THEN
+  RAISE EXCEPTION 'original transition journal array required' USING ERRCODE='55000';END IF;
+ FOR entry IN SELECT value FROM jsonb_array_elements(entries) LOOP
+  IF entry ? 'referenceProfile' THEN
+   IF entry->>'referenceProfile' IS DISTINCT FROM 'truss-native-journal-reference/0.1'
+    OR jsonb_typeof(entry->'at') IS DISTINCT FROM 'string'
+    OR jsonb_typeof(entry->'seq') IS DISTINCT FROM 'number' THEN
+    RAISE EXCEPTION 'original typed journal reference required' USING ERRCODE='55000';END IF;
+   BEGIN
+    SELECT * INTO physical FROM truss.journal j WHERE j.at=(entry->>'at')::timestamptz AND j.seq=(entry->>'seq')::bigint;
+   EXCEPTION WHEN invalid_datetime_format OR datetime_field_overflow OR invalid_text_representation OR numeric_value_out_of_range THEN
+    RAISE EXCEPTION 'original typed journal reference required' USING ERRCODE='55000';
+   END;
+   IF NOT FOUND THEN RAISE EXCEPTION 'retained physical history unavailable' USING ERRCODE='P1010';END IF;
+   IF entry IS DISTINCT FROM truss.runtime_owned_journal_reference(physical) THEN
+    RAISE EXCEPTION 'exact original journal reference required' USING ERRCODE='55000';END IF;
+   resolved:=array_append(resolved,to_jsonb(physical));
+  ELSE resolved:=array_append(resolved,entry);END IF;
+ END LOOP;
+ RETURN to_jsonb(resolved);
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_journal_materialize(jsonb) FROM PUBLIC;
+
 CREATE FUNCTION truss.runtime_owned_row_validate_qualified(selected_id bigint,selected_type int,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex SET plan_cache_mode='force_generic_plan' AS $$
-DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;creation_transition bigint;owned_transition record;owner record;root_type int;
+DECLARE latest record;rebind record;actual jsonb;keys jsonb;entry jsonb;current_actor oid;creation_transition bigint;owned_transition record;owner record;root_type int;physical_journal truss.journal%ROWTYPE;
 BEGIN
  current_actor:=qualified_actor;
  -- Owned creation semantics settle with the complete group and mandatory
@@ -883,8 +926,11 @@ BEGIN
  SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]'::jsonb) INTO keys FROM truss.object_key_bucket k WHERE k.object_id=selected_id AND k.type_id=selected_type;
  IF actual IS DISTINCT FROM latest.after_object OR keys IS DISTINCT FROM latest.after_keys THEN RAISE EXCEPTION 'exact final object/key state required' USING ERRCODE='55000';END IF;
  FOR entry IN SELECT j.value FROM (SELECT journal FROM truss.runtime_object_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id() UNION ALL SELECT journal FROM truss.runtime_catalog_rebind_transition WHERE object_id=selected_id AND type_id=selected_type AND writer_xid=pg_current_xact_id()) t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j LOOP
-  SELECT to_jsonb(j) INTO actual FROM truss.journal j WHERE j.at=(entry->>'at')::timestamptz AND j.seq=(entry->>'seq')::bigint;
-  IF actual IS DISTINCT FROM entry THEN RAISE EXCEPTION 'exact mutation journal required' USING ERRCODE='55000';END IF;
+  SELECT * INTO physical_journal FROM truss.journal j WHERE j.at=(entry->>'at')::timestamptz AND j.seq=(entry->>'seq')::bigint;
+  IF NOT FOUND OR (CASE WHEN entry ? 'referenceProfile'
+   THEN entry IS DISTINCT FROM truss.runtime_owned_journal_reference(physical_journal)
+   ELSE entry IS DISTINCT FROM to_jsonb(physical_journal) END) THEN
+   RAISE EXCEPTION 'exact mutation journal required' USING ERRCODE='55000';END IF;
  END LOOP;
  -- Key encoding belongs to the trusted producer. Its exact checked rows are
  -- retained in after_keys and compared with current native membership above.
@@ -1034,7 +1080,7 @@ CREATE TRIGGER runtime_object_attempt_guard BEFORE UPDATE OR DELETE ON truss.run
 
 CREATE FUNCTION truss.runtime_object_commit_check() RETURNS trigger
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;actual jsonb;expected jsonb;endpoint record;selected_edge bigint;selected_relation int;journal_kind text;journal_id bigint;journal_type int;current_actor oid;
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;actual jsonb;expected jsonb;endpoint record;selected_edge bigint;selected_relation int;journal_kind text;journal_id bigint;journal_type int;current_actor oid;journal_problem boolean;expected_count bigint;distinct_expected bigint;actual_count bigint;
 BEGIN
  IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL;END IF;
  -- One fresh actor per constraint-trigger event. Resource authorization stays
@@ -1111,30 +1157,52 @@ BEGIN
  ELSIF TG_TABLE_NAME='runtime_edge_transition' THEN
   journal_kind:='e';journal_id:=NEW.edge_id;journal_type:=NEW.rel_type_id;
  END IF;
+ -- Match each claim to its indexed physical row without aggregating event
+ -- payloads. Keep entity and transaction statements separate so generic plans
+ -- retain the entity index instead of scanning the whole xid for every object.
  IF journal_kind IS NOT NULL THEN
-  SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb) INTO actual
-  FROM truss.journal j WHERE j.xid=pg_current_xact_id() AND j.entity_kind=journal_kind
-   AND j.entity_id=journal_id AND j.entity_type=journal_type;
-  SELECT coalesce(jsonb_agg(value ORDER BY (value->>'at')::timestamptz,(value->>'seq')::bigint),'[]'::jsonb) INTO expected FROM (
-   SELECT g.expected_members->m.operation_index->'journal' value
+  WITH expected(value) AS MATERIALIZED (
+   SELECT g.expected_members->m.operation_index->'journal'
    FROM truss.runtime_create_member m JOIN truss.runtime_create_group g USING(group_id)
-   WHERE journal_kind='o' AND m.object_id=journal_id AND m.type_id=journal_type AND g.writer_xid=pg_current_xact_id()
+   WHERE g.writer_xid=pg_current_xact_id() AND journal_kind='o' AND m.object_id=journal_id AND m.type_id=journal_type
    UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
-   WHERE journal_kind='o' AND t.object_id=journal_id AND t.type_id=journal_type AND t.writer_xid=pg_current_xact_id()
+   WHERE t.writer_xid=pg_current_xact_id() AND journal_kind='o' AND t.object_id=journal_id AND t.type_id=journal_type
    UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
-   WHERE journal_kind='o' AND t.object_id=journal_id AND t.type_id=journal_type AND t.writer_xid=pg_current_xact_id()
+   WHERE t.writer_xid=pg_current_xact_id() AND journal_kind='o' AND t.object_id=journal_id AND t.type_id=journal_type
    UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
-   WHERE journal_kind='e' AND t.edge_id=journal_id AND t.rel_type_id=journal_type AND t.writer_xid=pg_current_xact_id()) e;
+   WHERE t.writer_xid=pg_current_xact_id() AND journal_kind='e' AND t.edge_id=journal_id AND t.rel_type_id=journal_type)
+  SELECT count(*),count(DISTINCT ROW((e.value->>'at')::timestamptz,(e.value->>'seq')::bigint)),
+   coalesce(bool_or((p.physical).seq IS NULL OR CASE WHEN e.value ? 'referenceProfile'
+    THEN e.value IS DISTINCT FROM truss.runtime_owned_journal_reference(p.physical)
+    ELSE e.value IS DISTINCT FROM to_jsonb(p.physical) END),false)
+  INTO expected_count,distinct_expected,journal_problem
+  FROM expected e LEFT JOIN LATERAL (
+   SELECT j physical FROM truss.journal j WHERE j.at=(e.value->>'at')::timestamptz AND j.seq=(e.value->>'seq')::bigint
+    AND j.xid=pg_current_xact_id() AND j.entity_kind=journal_kind AND j.entity_id=journal_id AND j.entity_type=journal_type OFFSET 0) p ON true;
+  SELECT count(*) INTO actual_count FROM truss.journal j WHERE j.xid=pg_current_xact_id() AND j.entity_kind=journal_kind AND j.entity_id=journal_id AND j.entity_type=journal_type;
  ELSE
- -- Journal closure includes object and edge transitions.
- SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.at,j.seq),'[]'::jsonb) INTO actual FROM truss.journal j WHERE j.xid=pg_current_xact_id();
- SELECT coalesce(jsonb_agg(value ORDER BY (value->>'at')::timestamptz,(value->>'seq')::bigint),'[]'::jsonb) INTO expected FROM (
-  SELECT e.value->'journal' value FROM truss.runtime_create_group g CROSS JOIN LATERAL jsonb_array_elements(g.expected_members) e WHERE g.writer_xid=pg_current_xact_id()
-  UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
-  UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()
-  UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.writer_xid=pg_current_xact_id()) e;
+  WITH expected(value) AS MATERIALIZED (
+   SELECT g.expected_members->m.operation_index->'journal'
+   FROM truss.runtime_create_member m JOIN truss.runtime_create_group g USING(group_id)
+   WHERE g.writer_xid=pg_current_xact_id()
+   UNION ALL SELECT j.value FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
+   WHERE t.writer_xid=pg_current_xact_id()
+   UNION ALL SELECT j.value FROM truss.runtime_catalog_rebind_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
+   WHERE t.writer_xid=pg_current_xact_id()
+   UNION ALL SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
+   WHERE t.writer_xid=pg_current_xact_id())
+  SELECT count(*),count(DISTINCT ROW((e.value->>'at')::timestamptz,(e.value->>'seq')::bigint)),
+   coalesce(bool_or((p.physical).seq IS NULL OR CASE WHEN e.value ? 'referenceProfile'
+    THEN e.value IS DISTINCT FROM truss.runtime_owned_journal_reference(p.physical)
+    ELSE e.value IS DISTINCT FROM to_jsonb(p.physical) END),false)
+  INTO expected_count,distinct_expected,journal_problem
+  FROM expected e LEFT JOIN LATERAL (
+   SELECT j physical FROM truss.journal j WHERE j.at=(e.value->>'at')::timestamptz AND j.seq=(e.value->>'seq')::bigint
+    AND j.xid=pg_current_xact_id() OFFSET 0) p ON true;
+  SELECT count(*) INTO actual_count FROM truss.journal j WHERE j.xid=pg_current_xact_id();
  END IF;
- IF actual IS DISTINCT FROM expected THEN RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
+ IF journal_problem OR expected_count<>distinct_expected OR expected_count<>actual_count THEN
+  RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
  RETURN NULL;
 END;
 $$;
@@ -1913,12 +1981,12 @@ REVOKE ALL ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text) FROM PUBLI
 -- attempt/row constraints have already fired. No validation state is cached.
 CREATE FUNCTION truss.runtime_owned_journal_insert_check() RETURNS trigger
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE actual jsonb;claims bigint;matching bigint;
+DECLARE physical truss.journal%ROWTYPE;claims bigint;matching bigint;
 BEGIN
  IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL;END IF;
  IF NEW.xid IS DISTINCT FROM pg_current_xact_id() OR NEW.entity_kind NOT IN ('o','e') THEN
   RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
- SELECT to_jsonb(j) INTO STRICT actual FROM truss.journal j WHERE j.at=NEW.at AND j.seq=NEW.seq;
+ SELECT * INTO STRICT physical FROM truss.journal j WHERE j.at=NEW.at AND j.seq=NEW.seq;
  WITH expected(value) AS (
   SELECT g.expected_members->m.operation_index->'journal'
   FROM truss.runtime_create_member m JOIN truss.runtime_create_group g USING(group_id)
@@ -1933,7 +2001,8 @@ BEGIN
   SELECT j.value FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
   WHERE NEW.entity_kind='e' AND t.edge_id=NEW.entity_id AND t.rel_type_id=NEW.entity_type AND t.writer_xid=pg_current_xact_id()
  )
- SELECT count(*),count(*) FILTER(WHERE value=actual) INTO claims,matching FROM expected
+ SELECT count(*),count(*) FILTER(WHERE CASE WHEN value ? 'referenceProfile'
+  THEN value=truss.runtime_owned_journal_reference(physical) ELSE value=to_jsonb(physical) END) INTO claims,matching FROM expected
  WHERE (value->>'at')::timestamptz=NEW.at AND (value->>'seq')::bigint=NEW.seq;
  IF claims<>1 OR matching<>1 THEN RAISE EXCEPTION 'complete mutation journal required' USING ERRCODE='55000';END IF;
  RETURN NULL;

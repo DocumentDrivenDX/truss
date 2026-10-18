@@ -76,9 +76,12 @@ class ReaderCatalogTests(group_tests.PublicCreateGroupTests):
         self.assertEqual(len(catalog.modules[0]['keys']),2)
         self.assertNotIn('A-label',str(catalog.modules))
 
-    def test_dependency_revoked_before_its_module_visit_refuses_buffered_projection(self):
+    def test_dependency_revoked_after_host_admission_filters_retained_catalog_baseline(self):
+        """Concurrent revocation precedes the native query; no mid-SQL hook is claimed."""
         import concurrent.futures
-        import time
+        import threading
+        from unittest.mock import patch
+        import truss.catalog_runtime as runtime
         from truss import ModuleAccessGrant, adopt_psycopg_host, create_reference_assembly, CatalogRuntimeConfiguration
         def mixed(source):
             module=source['modules'][0]
@@ -100,35 +103,37 @@ class ReaderCatalogTests(group_tests.PublicCreateGroupTests):
         baseline=assembly.reader_catalog_in_transaction(tx).value
         self.assertEqual(len(baseline.modules[0]['properties']),4)
         connection.execute("CREATE TEMP TABLE reader_prior(value text);INSERT INTO reader_prior VALUES('kept')")
-        original=self.admin.execute("SELECT pg_get_functiondef('truss.runtime_can_read(text,text)'::regprocedure)").fetchone()[0]
-        self.admin.execute(original.replace('runtime_can_read','test_original_can_read'))
-        self.admin.execute('CREATE TABLE public.reader_test_gate(n int)');self.admin.execute('INSERT INTO public.reader_test_gate VALUES(0)')
-        self.addCleanup(self.admin.execute,'DROP TABLE public.reader_test_gate');self.addCleanup(self.admin.execute,'DROP FUNCTION IF EXISTS truss.test_original_can_read(text,text)')
-        self.admin.execute(psycopg.sql.SQL('GRANT SELECT,UPDATE ON public.reader_test_gate TO {}').format(psycopg.sql.Identifier(self.installation.owner_role)))
-        self.admin.execute("""CREATE OR REPLACE FUNCTION truss.runtime_can_read(document_id text,module_id text) RETURNS boolean
-         LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ DECLARE calls int;BEGIN
-          IF document_id='adoc' AND module_id='z' THEN
-           UPDATE public.reader_test_gate SET n=n+1 RETURNING n INTO calls;
-           IF calls=4 THEN PERFORM pg_advisory_lock(928371);PERFORM pg_advisory_unlock(928371);END IF;
-          END IF;
-          RETURN truss.test_original_can_read(document_id,module_id);
-         END $$""")
-        self.admin.execute('SELECT pg_advisory_lock(928371)')
-        try:
+        # Pause the actual public operation after host admission and immediately
+        # before its native SELECT. Replacing an installed authorization routine
+        # invalidates installation identity and cannot exercise its native loop.
+        # This boundary test covers a retained baseline and live permissions;
+        # revocation after an in-SQL projection has buffered fields is separate.
+        entered=threading.Event();release=threading.Event()
+        original_pin=runtime._pin_cursor
+        def admitted_query(cursor):
+            original_pin(cursor)
+            entered.set()
+            if not release.wait(timeout=5):
+                raise AssertionError('reader query gate was not released')
+        with patch('truss.catalog_runtime._pin_cursor',side_effect=admitted_query):
             with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
                 pending=executor.submit(assembly.reader_catalog_in_transaction,tx)
-                deadline=time.monotonic()+3
-                while time.monotonic()<deadline:
-                    blocked=self.admin.execute("SELECT EXISTS(SELECT 1 FROM pg_locks WHERE pid=%s AND locktype='advisory' AND NOT granted)",(connection.info.backend_pid,)).fetchone()[0]
-                    if blocked:break
-                    time.sleep(.01)
-                self.assertTrue(blocked,'reader did not reach the dependency-module gate')
-                self.admin.execute('REVOKE dependency_reader FROM consumer')
-                self.admin.execute('SELECT pg_advisory_unlock(928371)')
-                self.assertIsInstance(pending.result(timeout=5).value,CatalogRefused)
-                self.assertEqual(connection.execute('TABLE reader_prior').fetchall(),[('kept',)])
-        finally:
-            self.admin.execute('SELECT pg_advisory_unlock_all()');self.admin.execute(original)
+                try:
+                    self.assertTrue(entered.wait(timeout=3),'reader did not reach the admitted query boundary')
+                    self.assertFalse(pending.done())
+                    self.admin.execute('REVOKE dependency_reader FROM consumer')
+                finally:
+                    release.set()
+                observed=pending.result(timeout=5)
+        self.assertIsInstance(observed,Ok,repr(observed))
+        self.assertIsInstance(observed.value,ReaderCatalog,repr(observed))
+        self.assertEqual(len(observed.value.modules[0]['properties']),3)
+        self.assertEqual(len(observed.value.modules[0]['keys']),2)
+        self.assertNotIn('A-label',str(observed.value.modules))
+        self.assertNotIn('z',[module['moduleId'] for module in observed.value.modules])
+        self.assertEqual(len(baseline.modules[0]['properties']),4)
+        self.assertIsInstance(assembly.accepted_document_in_transaction(tx,document_id='adoc').value,CatalogRefused)
+        self.assertEqual(connection.execute('TABLE reader_prior').fetchall(),[('kept',)])
 
     def test_relationship_endpoint_metadata_requires_both_module_scopes(self):
         def mixed(source):
