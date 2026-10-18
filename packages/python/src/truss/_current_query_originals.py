@@ -117,16 +117,16 @@ _ABI2_WEFT_041_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
 del _ABI2_WEFT_041_PUBLIC_LINUX_X64['bunVersion']
 _ABI2_WEFT_041_PUBLIC_LINUX_X64.update(embeddedRuntime='mini-racer==0.14.1',embeddedProfile='truss.embedded-v8/1',embeddedManifestSha256=EMBEDDED_MANIFEST_SHA256,embeddedV8Version='14.4.258.23')
 
-# Exact hosted 0.4.42 maintenance wheels retain the existing ABI2 flow.
+# Exact published 0.4.42 maintenance wheels retain the existing ABI2 flow.
 # Adding these identities does not activate any additional compiler APIs.
 _ABI2_WEFT_042_PUBLIC_ARM={**_ABI2_WEFT_041_PUBLIC_ARM,
     'weftRevision':'e3c107cf14b0fc8f17423ebfbbcc686dda1237db',
-    'weftWheelSha256':'3eb9e478525bf083a4c30af58f070488c8a94f859a26b0210af25a9a83800a1c',
+    'weftWheelSha256':'5573e7b98f35e6a5d2fc476579237ae87d5802876795e0b3fe1fc4261f01ad04',
     'weftModuleSha256':'b07461765807c07f3dc140e2b997bcff56c4c75fdace06fcc289ef82657b944b',
 }
 _ABI2_WEFT_042_PUBLIC_LINUX_X64={**_ABI2_WEFT_041_PUBLIC_LINUX_X64,
     'weftRevision':'e3c107cf14b0fc8f17423ebfbbcc686dda1237db',
-    'weftWheelSha256':'57fda310310d4a3f523781d6f5fb8344be16ccc65aef59cd451c0c221a55df22',
+    'weftWheelSha256':'8c52e62f0d9643c3b874dd761e94a48db2771f4f6012a59e5b177766deffb76a',
     'weftModuleSha256':'f25910c391676d28599d63b4e293781d554a221f3edc28d18e64d913e9306dd6',
 }
 

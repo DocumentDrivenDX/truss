@@ -15,6 +15,7 @@ MAX_CACHE_BYTES = 128 * 1024 * 1024
 MAX_REVISIONS = 2
 _cache = OrderedDict()
 _indexes = {}
+_record_states = weakref.WeakKeyDictionary()
 _lock = RLock()
 _cache_bytes = 0
 
@@ -24,6 +25,55 @@ class SchemaIndex:
     types_by_identity: Mapping
     properties_by_type: Mapping
     declarations_by_pin: Mapping
+
+
+@dataclass(frozen=True, slots=True)
+class RecordSchemaSelection:
+    basis: Mapping
+    compiled: object
+    types_by_pin: Mapping
+    pins_by_type: Mapping
+
+
+def record_state(connection):
+    """Keep selection keys across facades without retaining their connection.
+
+    The state contains no schema or authority; the bounded revision cache owns
+    schema retention and native write admission owns current authorization.
+    """
+    with _lock:
+        return _record_states.setdefault(connection, {})
+
+
+def record_schemas(key, records=None, basis=None):
+    """Share the bounded revision cache with production record preparation.
+
+    A warm lookup has no native observation or authorization meaning. Admission
+    must check the retained installation/revision/source identity on every write.
+    """
+    global _cache_bytes
+    cache_key = ('records', key)
+    with _lock:
+        existing = _cache.get(cache_key)
+        if existing is not None:
+            _cache.move_to_end(cache_key)
+            return existing[0]
+        if records is None:
+            return None
+        from ._record_schema import compile_records
+        compiled = compile_records(records)
+        selection = RecordSchemaSelection(_freeze(basis), compiled,
+            MappingProxyType({r['definitionPin']: str(r['typeId']) for r in records}),
+            MappingProxyType({str(r['typeId']): r['definitionPin'] for r in records}))
+        size = _resident_size(selection)
+        if size > MAX_CACHE_BYTES:
+            return None
+        while _cache and (len(_cache) >= MAX_REVISIONS or _cache_bytes + size > MAX_CACHE_BYTES):
+            _, (_, removed) = _cache.popitem(last=False)
+            _cache_bytes -= removed
+        _cache[cache_key] = (selection, size)
+        _cache_bytes += size
+        return selection
 
 
 def _freeze(value):

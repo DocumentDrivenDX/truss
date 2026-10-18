@@ -196,7 +196,7 @@ def prepare_group(host,transaction,manifest,digest,pin_cursor,records,relationsh
     return host._run_operation(transaction,observe)
 
 
-def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cursor,*,bun_executable='bun',_cursor=None,_attempt_capture=None):
+def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cursor,*,bun_executable='bun',_cursor=None,_attempt_capture=None,_schema_state=None):
     if type(input) is not GroupSemanticInput or type(request) not in (RequestNone,RequestPresent):
         return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"shape"}'))))
     selected_owned = input.mutation_profile == ProfilePin(identity='truss-owned-scalar-graph',version='0.1',sha256='5f5badaa3b0beb01fef08d48883395eabc8499155d4c31f7ef802e63d49a6dde')
@@ -242,14 +242,25 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
         return Ok(GroupUnavailable(reason='resource'))
     def apply(cursor,observed):
         pin_cursor(cursor)
-        cursor.execute('SELECT truss.apply_group(%s,%s,%s,%s,%s)',
-            (original_input,original_documents,original_request,manifest['releaseId'],digest),prepare=False)
+        prepared=None
+        if selected_owned and _schema_state is not None:
+            from ._record_preparation import prepare_records
+            prepared=prepare_records(cursor,_schema_state,input,original_input,original_documents,manifest['releaseId'],digest)
+        if prepared is None:
+            cursor.execute('SELECT truss.apply_group(%s,%s,%s,%s,%s)',
+                (original_input,original_documents,original_request,manifest['releaseId'],digest),prepare=False)
+        else:
+            cursor.execute('SELECT truss.apply_group_prepared(%s,%s,%s,%s,%s,%s::jsonb)',
+                (original_input,original_documents,original_request,manifest['releaseId'],digest,_bytes(prepared).decode('utf8')),prepare=False)
         raw=bytes(cursor.fetchone()[0])
         if _attempt_capture is not None:
             value=json.loads(raw)
             if value.get('disposition')=='applied' and value.get('outcome')=='success':
                 _attempt_capture.append(value['attemptId'])
-        return _result(raw)
+        result=_result(raw)
+        if _schema_state is not None and type(result) is GroupUnavailable and result.reason=='observation':
+            _schema_state.clear()
+        return result
     if _cursor is not None:return Ok(apply(_cursor,None))
     result=host._run_operation(transaction,apply)
     # Revocation can remove EXECUTE before the native facade can return its

@@ -14,6 +14,7 @@ import math
 import os
 from pathlib import Path
 import platform
+import resource
 import statistics
 import subprocess
 import sys
@@ -252,6 +253,9 @@ class RealWorkflows(PublicCatalogRuntimeTests):
         self.admin.execute('GRANT perf_writer TO consumer WITH SET FALSE')
         self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(self.installation.registrar_role)))
         connection,host,assembly,tx=self.consumer()
+        # Keep cleanup for the current facade without retaining a detached host
+        # and its custody state for every batch in the million-object run.
+        self.addCleanup(lambda:host.detach())
         type_refs={d.reference.authored_identity:d.reference for d in view.definitions if d.reference.kind=='type' and d.reference.owner.document_id==document_id}
         type_to_record={ref.type_id:identity for identity,ref in type_refs.items()}
         type_ref=type_refs[record]
@@ -269,7 +273,7 @@ class RealWorkflows(PublicCatalogRuntimeTests):
         def rebind():
             nonlocal host,assembly,tx
             connection.execute('BEGIN')
-            host=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000);self.addCleanup(host.detach)
+            host=adopt_psycopg_host(connection,statement_timeout_ms=10000,operation_timeout_ms=30000)
             tx=ok(host.adopt_transaction())
             assembly=ok(create_reference_assembly(CatalogRuntimeConfiguration(),host))
         def creations(first,last):
@@ -576,6 +580,14 @@ capacity_scope={'targetAtomicOperations':matrix_settings['targetAtomicGroupLimit
     'attemptedAtomicGroupSizes':sorted({m['rows'] for m in atomic_attempts}),
     'committedAtomicGroupSizes':sorted({m['rows'] for m in atomic_commits}),
     'qualification':'Only observed attempts and commits; configured limits do not establish actual maximum capacity.'}
+from truss import _schema_memory
+application_memory={
+    'processLifetimePeakRssBytes':int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+        * (1 if sys.platform=='darwin' else 1024),
+    'retainedSchemaCacheEstimatedBytes':_schema_memory._cache_bytes,
+    'retainedSchemaCacheEntries':len(_schema_memory._cache),
+    'schemaCacheBudgetBytes':_schema_memory.MAX_CACHE_BYTES,
+    'scope':'Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling.'}
 report={'runtimePackage':runtime_package,'runtimeManifestSha256':hashlib.sha256(runtime_manifest).hexdigest(),'sourceCommit':source_commit,'sourceWorkingTreeDirty':source_dirty,'machine':platform.platform(),'python':platform.python_version(),'trussSource':str(root),
         'externalJavaScriptForbidden':args.forbid_external_javascript,'externalProcessExecutables':sorted(set(external_processes)),
         'statementTimeoutMs':10000,'operationTimeoutMs':30000,'expectedAtomicGroupLimit':args.expected_group_limit,'warmupReads':matrix_settings['warmupOperations'],
@@ -583,6 +595,7 @@ report={'runtimePackage':runtime_package,'runtimeManifestSha256':hashlib.sha256(
         'performanceQualification':performance_qualification,'performanceTriageSignals':performance_signals,
         'performanceBudgetStatus':'Latency budgets remain provisional; no prior-run nominal regression baseline supplied',
         'capacityScope':capacity_scope,
+        'applicationMemory':application_memory,
         'cases':results,'summary':summary,'samples':measurements,
         'scope':'Actual public workflows on isolated local PostgreSQL. Connection reopen, not server restart. Cold server/install separate. '+('Only the selected generated cases; indexes are unique business-key properties.' if args.matrix_case else 'Real-sample results only; no synthetic stress result implied.')}
 args.output.parent.mkdir(parents=True,exist_ok=True)

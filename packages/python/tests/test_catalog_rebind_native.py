@@ -131,5 +131,55 @@ class CatalogRebindTests(base.PublicCreateGroupTests):
         h.detach();c.commit()
         self.assertEqual(self.admin.execute('SELECT ver FROM truss.object WHERE id=%s',(int(identity.id),)).fetchone(),(3,))
 
+    def test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind(self):
+        c,h,a,t=self.ready(self.fields)
+        context=a.group_context_in_transaction(t).value
+        creations=tuple(replace(self.create(label=label,alias=label),
+            values=self.create(label=label,alias=label).values+(
+                AuthoredValue(name='giftWrap',value=BooleanValue(value=True)),))
+            for label in ('changed','noop'))
+        created=self.apply(a,t,context.input(creations,MapValue(entries=())),context.request('compact-seed'))
+        self.assertIsInstance(created,GroupSuccess)
+        identities=tuple(item.identity for item in created.response.semantic.results)
+        h.detach();c.commit()
+        self.admin.execute('GRANT '+self.installation.registrar_role+' TO consumer WITH SET FALSE')
+        value_id=str(self.admin.execute('SELECT prop_id FROM truss.prop_def WHERE type_id=%s AND name=%s',
+            (int(identities[0].type_id),'A-value')).fetchone()[0])
+        c,h,a,t=self.consumer();context=a.group_context_in_transaction(t).value
+        operations=tuple(UpdateObject(target=StoredObjectReference(identity=identity),
+            set=(AuthoredValue(name='A-value',value=TextValue(kind='string',text=value)),),unset=())
+            for identity,value in zip(identities,('updated','value'),strict=True))
+        updated=self.apply(a,t,context.input(operations,MapValue(entries=())),context.request('compact-before-rebind'))
+        self.assertIsInstance(updated,GroupSuccess)
+        self.assertEqual(tuple(item.outcome for item in updated.response.semantic.results),('changed','unchanged'))
+        document=self.revised(next(d for d in self.documents if d.document_id=='adoc'))
+        accepted=a.accept_in_transaction(t,a.prepare_catalog((document,),source_version=self.source_version),
+            request_key='compact-after-update-rebind')
+        self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))
+        self.assertIsInstance(accepted.value,CatalogRegistration)
+        # This commit forces the older compact plans through historical settlement.
+        h.detach();c.commit()
+        self.assertEqual(self.admin.execute("""SELECT count(*),bool_and(
+            NOT ((plan->'beforeNodes'->(plan->>'primary')->'image') ?| ARRAY['props','retained'])
+            AND NOT ((plan->'afterNodes'->(plan->>'primary')->'image') ?| ARRAY['props','retained']))
+            FROM truss.runtime_owned_operation WHERE plan->>'compactProfile'='truss-application-value-plan/0.1'""").fetchone(),(2,True))
+        c,h,a,t=self.consumer()
+        for index,identity in enumerate(identities):
+            read=a.get_object_in_transaction(t,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id))
+            self.assertIsInstance(read.value,ObjectFound,repr(read))
+            self.assertEqual(read.value.object.version,3 if index==0 else 2)
+            self.assertEqual(dict(read.value.object.values)['A-value'],'updated' if index==0 else 'value')
+            self.assertIs(dict(read.value.object.values)['giftWrap'],True)
+            for version in range(1,read.value.object.version+1):
+                history=a.reconstruct_in_transaction(t,entity=HistoryEntity(kind='object',document_id='adoc',module_id='m',definition_id='A',id=int(identity.id)),version=version)
+                self.assertIsInstance(history.value,HistoricalRecord,repr(history)+' '+str(h._custody.last_attempt.error))
+                image=json.loads(history.value.record)
+                self.assertEqual(image['recordVersion'],str(version))
+                values={entry['propertyId']:entry['value'] for entry in image['properties']}
+                self.assertEqual(values[value_id],{'kind':'string','text':'updated' if index==0 and version>=2 else 'value'})
+                self.assertEqual({entry['name'] for entry in image['retained']},
+                    {'giftWrap'} if version<read.value.object.version else set())
+        h.detach();c.commit()
+
 class CatalogRebind08Tests(CatalogRebindTests):
     source_version='0.8.0'

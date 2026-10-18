@@ -107,10 +107,18 @@ _PARTIAL_GROUP_FUNCTIONS = (
     'group_create_metadata(bytea,bytea,text,text)',
     'apply_create_group(bytea,bytea,bytea,bytea,text,text)',
     'object_group_begin(bytea,bytea,bytea,text,text,bytea,boolean)',
+    'object_group_begin_prepared(bytea,bytea,bytea,text,text,bytea,boolean,jsonb)',
     'group_condition_key_metadata(bytea,bytea,text,text)',
     'object_group_metadata(uuid,int)', 'object_group_step(uuid,int,bytea)',
     'object_group_finish(uuid)',
 )
+
+
+def _grant_application_writers(cursor):
+    from psycopg import sql
+    cursor.execute('SELECT DISTINCT writer_role FROM truss.module_access',prepare=False)
+    for (role,) in cursor.fetchall():
+        cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.writer_schema_basis(bytea,bytea,text,text),truss.apply_group_prepared(bytea,bytea,bytea,text,text,jsonb) TO {}').format(sql.Identifier(role)),prepare=False)
 
 
 def _close_partial_group_grants(cursor):
@@ -254,7 +262,8 @@ class CatalogReferenceAssembly:
             raise ValueError('Catalog configuration and adopted psycopg host required')
         if configuration.schema!='truss' or type(configuration.assembly_id) is not str or not 1<=len(configuration.assembly_id)<=256:
             raise ValueError('Supported catalog configuration required')
-        self.configuration=configuration;self._host=host;self._disposed=False;self._lock=RLock();self._group_documents=()
+        from ._schema_memory import record_state
+        self.configuration=configuration;self._host=host;self._disposed=False;self._lock=RLock();self._group_documents=();self._record_schema_state=record_state(host.connection)
     @overload
     def catalog(self) -> CatalogReferenceAssembly: ...
     @overload
@@ -615,7 +624,7 @@ class CatalogReferenceAssembly:
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=247:raise ValueError('Exact additive runtime routine inventory required')
+        if len(replacements)!=253:raise ValueError('Exact additive runtime routine inventory required')
         signatures=[]
         for statement in replacements:
             header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
@@ -627,7 +636,7 @@ class CatalogReferenceAssembly:
                 if parameter is None:raise ValueError('Owned additive routine argument profile required')
                 types.append(parameter.group(1))
             signature=name+'('+','.join(types)+')'
-            if not name.startswith('truss.runtime_owned_') and name not in ('truss.runtime_graph_validate_object_qualified','truss.runtime_item_chain_readable_qualified','truss.runtime_history_ownership_qualified','truss.runtime_history_property_qualified','truss.runtime_history_image_qualified','truss.runtime_history_group_qualified','truss.runtime_create_transition_validate_qualified','truss.group_context_qualified','truss.group_create_metadata_qualified','truss.apply_create_group_qualified','truss.runtime_can_read_qualified','truss.runtime_module_writer_qualified','truss.runtime_object_values_readable_qualified','truss.valid_decimal_facets','truss.catalog_revision','truss.prepare_group','truss.runtime_definition_in_basis','truss.apply_group','truss.runtime_graph_validate_object','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.runtime_create_transition_validate','truss.umf_key_uleb128','truss.umf_key_coefficient','truss.encode_umf_scalar_key_tuple','truss.umf_key_field_values_valid','truss.derive_catalog_key_tuple','truss.runtime_endpoint_ownership','truss.catalog_scalar_violations_with_sources','truss.catalog_item_meaning','truss.valid_item_chain','truss.runtime_item_chain_readable','truss.catalog_accept_with_keys','truss.catalog_accept_preview','truss.catalog_key_backfill_candidates','truss.catalog_key_backfill_verify','truss.catalog_key_backfill_violations','truss.catalog_key_backfill_apply','truss.catalog_key_backfill_transition_reader','truss.catalog_key_backfill_report_reader','truss.catalog_rebind_profile','truss.catalog_rebind_transition_reader','truss.catalog_rebind_definition','truss.catalog_rebind_history','truss.catalog_rebind_objects','truss.catalog_rebind_violations','truss.catalog_rebind_report_reader','truss.catalog_rebind_history_group','truss.runtime_capture_feed_configuration','truss.catalog_check_source_correspondence','truss.runtime_object_values_readable','truss.valid_property_definition','truss.valid_flat_cell','truss.canonical_flat_cell','truss.valid_property_value','truss.logical_flat_cell','truss.catalog_item_definition','truss.render_scalar_object','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.traverse_objects','truss.umf_key_values','truss.verify_umf_scalar_key_tuple','truss.valid_scalar_property','truss.runtime_current_installation','truss.query_binding','truss.query_scope','truss.query_objects','truss.query_numeric_value','truss.query_timestamp_instant_key','truss.query_edges','truss.query_page_objects','truss.query_export_objects','truss.query_export_edges','truss.query_export_page_objects','truss.feed_reached','truss.query_object_attribution','truss.query_complete_related_keys','truss.query_object_times','truss.query_object_load_id','truss.feed_ack_receipt_binding','truss.acknowledge_feed_with_receipt','truss.reconcile_feed_ack'):signatures.append(signature)
+            if not name.startswith('truss.runtime_owned_') and name not in ('truss.runtime_graph_validate_object_qualified','truss.runtime_item_chain_readable_qualified','truss.runtime_history_ownership_qualified','truss.runtime_history_property_qualified','truss.runtime_history_image_qualified','truss.runtime_history_group_qualified','truss.runtime_create_transition_validate_qualified','truss.group_context_qualified','truss.group_create_metadata_qualified','truss.apply_create_group_qualified','truss.runtime_can_read_qualified','truss.runtime_module_writer_qualified','truss.runtime_object_values_readable_qualified','truss.valid_decimal_facets','truss.catalog_revision','truss.prepare_group','truss.runtime_definition_in_basis','truss.writer_schema_basis','truss.apply_group_prepared','truss.object_group_begin_prepared','truss.apply_group','truss.runtime_graph_validate_object','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.runtime_create_transition_validate','truss.umf_key_uleb128','truss.umf_key_coefficient','truss.encode_umf_scalar_key_tuple','truss.umf_key_field_values_valid','truss.derive_catalog_key_tuple','truss.runtime_endpoint_ownership','truss.catalog_scalar_violations_with_sources','truss.catalog_item_meaning','truss.valid_item_chain','truss.runtime_item_chain_readable','truss.catalog_accept_with_keys','truss.catalog_accept_preview','truss.catalog_key_backfill_candidates','truss.catalog_key_backfill_verify','truss.catalog_key_backfill_violations','truss.catalog_key_backfill_apply','truss.catalog_key_backfill_transition_reader','truss.catalog_key_backfill_report_reader','truss.catalog_rebind_profile','truss.catalog_rebind_transition_reader','truss.catalog_rebind_definition','truss.catalog_rebind_history','truss.catalog_rebind_objects','truss.catalog_rebind_violations','truss.catalog_rebind_report_reader','truss.catalog_rebind_history_group','truss.runtime_capture_feed_configuration','truss.catalog_check_source_correspondence','truss.runtime_object_values_readable','truss.valid_property_definition','truss.valid_flat_cell','truss.canonical_flat_cell','truss.valid_property_value','truss.logical_flat_cell','truss.catalog_item_definition','truss.render_scalar_object','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.traverse_objects','truss.umf_key_values','truss.verify_umf_scalar_key_tuple','truss.valid_scalar_property','truss.runtime_current_installation','truss.query_binding','truss.query_scope','truss.query_objects','truss.query_numeric_value','truss.query_timestamp_instant_key','truss.query_edges','truss.query_page_objects','truss.query_export_objects','truss.query_export_edges','truss.query_export_page_objects','truss.feed_reached','truss.query_object_attribution','truss.query_complete_related_keys','truss.query_object_times','truss.query_object_load_id','truss.feed_ack_receipt_binding','truss.acknowledge_feed_with_receipt','truss.reconcile_feed_ack'):signatures.append(signature)
         def upgrade(cursor,observed):
             _pin_cursor(cursor)
             cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False);original_path=cursor.fetchone()[0]
@@ -712,6 +721,7 @@ class CatalogReferenceAssembly:
                     cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION {} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
                 cursor.execute("SELECT p.oid,p.proowner,p.proacl::text FROM pg_proc p WHERE p.oid=ANY(%s::oid[]) ORDER BY p.oid",(original_oids,),prepare=False)
                 if cursor.fetchall()!=original_routine_acl:raise ValueError('Published native71 routine ownership and ACLs must remain unchanged')
+                _grant_application_writers(cursor)
                 cursor.execute('INSERT INTO truss.runtime_release(previous_release_id,previous_release_sha256,release_id,release_sha256,manifest_bytes,actor_oid) VALUES(%s,%s,%s,%s,%s,(SELECT oid FROM pg_roles WHERE rolname=session_user))',(active_release,active_digest,manifest['releaseId'],digest,bundled.joinpath('manifest.json').read_bytes()),prepare=False)
                 cursor.execute("SELECT set_config('search_path',%s,true)",(original_path,),prepare=False)
                 if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
@@ -875,7 +885,7 @@ class CatalogReferenceAssembly:
             for statement in replacements:
                 header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
                 name,arguments=header.groups()
-                if name.startswith('truss.runtime_owned_') or name in ('truss.runtime_graph_validate_object_qualified','truss.runtime_item_chain_readable_qualified','truss.runtime_history_ownership_qualified','truss.runtime_history_property_qualified','truss.runtime_history_image_qualified','truss.runtime_history_group_qualified','truss.runtime_create_transition_validate_qualified','truss.group_context_qualified','truss.group_create_metadata_qualified','truss.apply_create_group_qualified','truss.runtime_can_read_qualified','truss.runtime_module_writer_qualified','truss.runtime_object_values_readable_qualified','truss.valid_decimal_facets','truss.catalog_revision','truss.prepare_group','truss.runtime_definition_in_basis','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.runtime_graph_validate_object','truss.apply_group'):
+                if name.startswith('truss.runtime_owned_') or name in ('truss.runtime_graph_validate_object_qualified','truss.runtime_item_chain_readable_qualified','truss.runtime_history_ownership_qualified','truss.runtime_history_property_qualified','truss.runtime_history_image_qualified','truss.runtime_history_group_qualified','truss.runtime_create_transition_validate_qualified','truss.group_context_qualified','truss.group_create_metadata_qualified','truss.apply_create_group_qualified','truss.runtime_can_read_qualified','truss.runtime_module_writer_qualified','truss.runtime_object_values_readable_qualified','truss.valid_decimal_facets','truss.catalog_revision','truss.prepare_group','truss.runtime_definition_in_basis','truss.writer_schema_basis','truss.apply_group_prepared','truss.object_group_begin_prepared','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.runtime_graph_validate_object','truss.apply_group'):
                     types=[re.match(r'\s*\w+\s+([\w.]+(?:\[\])?)',part).group(1) for part in (arguments.split(',') if arguments.strip() else ())]
                     signature=name+'('+','.join(types)+')'
                     private_signatures.append(signature)
@@ -988,6 +998,7 @@ class CatalogReferenceAssembly:
             if cursor.fetchone()[0]:raise ValueError('Private owned migration objects required')
             # Preserve predecessor checks above, then intentionally close its
             # partial-write grants and enable the complete public operation.
+            _grant_application_writers(cursor)
             _close_partial_group_grants(cursor)
             cursor.execute('SELECT DISTINCT writer_role FROM truss.module_access',prepare=False)
             for writer_role, in cursor.fetchall():
@@ -1222,6 +1233,7 @@ class CatalogReferenceAssembly:
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.catalog_revision(text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.prepare_group(bytea,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
+            _grant_application_writers(cursor)
             _close_partial_group_grants(cursor)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
@@ -1595,7 +1607,7 @@ class CatalogReferenceAssembly:
         from ._group_runtime import apply_group
         manifest,digest,_=_release()
         return apply_group(self._host,transaction,input,request,documents or self._group_documents,
-                           manifest,digest,_pin_cursor,bun_executable=bun_executable)
+                           manifest,digest,_pin_cursor,bun_executable=bun_executable,_schema_state=self._record_schema_state)
 
     @_active_operation
     def get_type_reference_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str) -> Outcome[CatalogDefinitionReference | None]:

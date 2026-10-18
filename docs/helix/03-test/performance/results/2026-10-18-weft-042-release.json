@@ -1,0 +1,86 @@
+{
+  "status": "published-assets-checksum-verified",
+  "release": "https://github.com/DocumentDrivenDX/weft/releases/tag/v0.4.42",
+  "workflow": "https://github.com/DocumentDrivenDX/weft/actions/runs/39158338501",
+  "sourceCommit": "e3c107cf14b0fc8f17423ebfbbcc686dda1237db",
+  "workflowCommit": "c9744eab3f49f79fa65e3b33623745358968d37f",
+  "wheels": [
+    {
+      "wheel": "weft_sql-0.4.42-cp39-abi3-macosx_10_12_x86_64.whl",
+      "sha256": "97bc371ed83eaf5961e20dcaf4ca006f29a52756379a9413b24c227d546854c3",
+      "nativeModuleSha256": "f528cdbb045c27a5b7e9a0ee9354770bde03dc91f25dd06a5e34926d2f6c1980"
+    },
+    {
+      "wheel": "weft_sql-0.4.42-cp39-abi3-macosx_11_0_arm64.whl",
+      "sha256": "5573e7b98f35e6a5d2fc476579237ae87d5802876795e0b3fe1fc4261f01ad04",
+      "nativeModuleSha256": "b07461765807c07f3dc140e2b997bcff56c4c75fdace06fcc289ef82657b944b"
+    },
+    {
+      "wheel": "weft_sql-0.4.42-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+      "sha256": "da3dcd14a5ada0af61f210b1a8f97434b8ba84201a32ecd03aeb6469ee056c63",
+      "nativeModuleSha256": "daea16eef63285900c7ec3ff26f9b5626105f46f54d9ee29123de89fe9eb8159"
+    },
+    {
+      "wheel": "weft_sql-0.4.42-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "sha256": "8c52e62f0d9643c3b874dd761e94a48db2771f4f6012a59e5b177766deffb76a",
+      "nativeModuleSha256": "f25910c391676d28599d63b4e293781d554a221f3edc28d18e64d913e9306dd6"
+    },
+    {
+      "wheel": "weft_sql-0.4.42-cp39-abi3-win_amd64.whl",
+      "sha256": "13de4d59ca38973fc86ae6e12ecf854cbd0865dbc01625e03f9f96f20566d604",
+      "nativeModuleSha256": "d36afad1b62176d3cc64cc1a4896d280e212e5b3019002ac35d1d5b25d882895"
+    }
+  ],
+  "catalogCapacityReceipts": [
+    {
+      "status": "passed",
+      "compiler": "0.4.42",
+      "records": 1000,
+      "fieldsPerRecord": 12,
+      "compileSeconds": 0.5473529590000226,
+      "controls": 5
+    },
+    {
+      "status": "passed",
+      "compiler": "0.4.42",
+      "records": 1000,
+      "fieldsPerRecord": 12,
+      "compileSeconds": 0.4647813129999463,
+      "controls": 5
+    },
+    {
+      "status": "passed",
+      "compiler": "0.4.42",
+      "records": 1000,
+      "fieldsPerRecord": 12,
+      "compileSeconds": 1.4517536500000006,
+      "controls": 5
+    },
+    {
+      "status": "passed",
+      "compiler": "0.4.42",
+      "records": 1000,
+      "fieldsPerRecord": 12,
+      "compileSeconds": 0.6879999999999882,
+      "controls": 5
+    },
+    {
+      "status": "passed",
+      "compiler": "0.4.42",
+      "records": 1000,
+      "fieldsPerRecord": 12,
+      "compileSeconds": 0.46337502599999425,
+      "controls": 5
+    }
+  ],
+  "localRustWorkspaceControls": {
+    "candidatePassed": 888,
+    "qualifiedPassed": 889,
+    "failed": 0
+  },
+  "limits": [
+    "Compiler-only capacity receipts do not grant native Truss admission.",
+    "Truss integration is qualified separately against the exact published wheels.",
+    "Timing samples are observations, not p95 guarantees."
+  ]
+}

@@ -37,6 +37,49 @@ The database remains the durable schema authority. A PostgreSQL cache may suppor
 
 This decision refines ADR-002/008 and implements PRD RES-05/06. It supersedes earlier assumptions that all semantic validation or key preparation must be database-owned. Native key encoding may remain when its measured cost and value support that choice. Stronger SQL-only or protected deployment guarantees must name their separate requirements, costs and qualification; they cannot silently become the ordinary embedding baseline.
 
+### Trusted prepared record writes
+
+The Python engine automatically selects an application-prepared path for closed
+rootless-create batches and distinct stored-object value-update batches. On a
+cold basis it loads the current authorized native Record/property/item metadata
+for the exact supplied documents, compiles immutable dictionaries and reuses
+those dictionaries across records and subsequent operations. Warm reuse performs
+no schema-fetch query. The shared application cache retains at most two entries
+within its 128MiB estimated-object budget; schema metadata is not an authorization
+decision.
+
+A cache selection binds installation identity, runtime release/digest, source
+epoch, catalog revision, exact document bytes and native registration identity.
+The registration UUID prevents reuse when a rolled-back revision is accepted
+again from the same source with different native IDs. Native admission checks
+this basis and current authority before effects. A stale basis refuses the call;
+it does not silently retry a mutation. The next explicit call can reload it.
+Declared conditions retain their existing precedence.
+
+The compiled-cache identity also includes the returned type/pin selection:
+writers with different module permissions can observe different subsets of one
+catalog revision. Connection state retains only source identity and a compact
+selection key, and survives facade and transaction replacement without retaining
+the connection itself. The bounded shared cache owns the compiled schema. A
+newly requested type missing from a warm selection triggers one metadata refresh
+before dispatch; every write still checks current native authorization.
+
+The engine validates exact supported scalar/container values, required fields
+and removals, then projects canonical property-ID cells and retained values.
+PostgreSQL applies those prepared deltas with bounded complete values, key,
+concurrency, permission, actual-effect and atomic journal checks. It does not
+repeat per-record property/domain interpretation on this path. Temporary mapped
+batch data is execution input, not a new retained transcript or history copy.
+
+The prepared SQL helper is a trusted embedding-engine boundary under ADR-008;
+it is not an attestation of an arbitrary caller's JSON or a defense against a
+malicious host using the same credentials. The existing full-validation SQL
+writer remains available. Mixed, owned and edge groups, unsupported preparation
+subsets and historical prior images retain their separately tested native paths.
+Invalid inputs fall back to that path so public refusal and failed-condition
+precedence remain unchanged. Qualification must establish both path agreement
+and actual cache reuse, not infer them from a catalog-view cache test.
+
 ## Database-owned key derivation — owner direction 2026-10-15
 
 The accepted catalog and actual native typed values are the key derivation

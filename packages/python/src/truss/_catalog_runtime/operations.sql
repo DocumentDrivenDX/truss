@@ -211,10 +211,10 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_retained_operation_owner(uuid,int) FROM PUBLIC;
 
-CREATE FUNCTION truss.object_group_begin(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text,original_condition_keys bytea DEFAULT convert_to('[]','UTF8'),replay_only boolean DEFAULT false) RETURNS bytea
+CREATE FUNCTION truss.object_group_begin_prepared(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text,original_condition_keys bytea,replay_only boolean,app_prepared jsonb) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE input_operations jsonb;
- input jsonb;documents jsonb;request jsonb;context jsonb;selected record;archive truss.schema_doc%ROWTYPE;
+ input jsonb;documents jsonb;request jsonb;context jsonb;selected record;archive truss.schema_doc%ROWTYPE;installation truss.catalog_runtime_installation%ROWTYPE;head_revision int;head_registration uuid;
  operation jsonb;admission record;source_text text;person oid;writer xid8;ns bytea;rk bytea;route bigint;prior_generation bigint;receipt truss.request_receipt%ROWTYPE;
  raw jsonb;observation bytea;attempt truss.runtime_object_attempt%ROWTYPE;index int:=0;failure_detail text;retained_basis jsonb;retained_count int;
 BEGIN
@@ -341,17 +341,41 @@ BEGIN
   LOCK TABLE truss.edge IN SHARE ROW EXCLUSIVE MODE NOWAIT;
  END IF;
  PERFORM truss.runtime_evaluate_preconditions(input,original_condition_keys);
+ -- Preserve precondition outcome precedence; a stale cache identity is checked
+ -- only after the native group has completed the same current admission steps.
+ IF app_prepared IS NOT NULL THEN
+  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
+  SELECT rev INTO STRICT head_revision FROM truss.schema_head WHERE id=1;
+  SELECT r.registration_id INTO STRICT head_registration FROM truss.catalog_registration_request r WHERE r.revision=head_revision;
+  IF app_prepared->>'profile' IS DISTINCT FROM 'truss-application-record-preparation/0.1'
+   OR app_prepared->'basis' IS DISTINCT FROM jsonb_build_object('installationId',installation.installation_id::text,
+    'releaseSha256',installation.release_sha256,'sourceEpoch',installation.source_epoch::text,
+    'catalogRevision',head_revision,'registrationId',head_registration::text,'documentsSha256',encode(sha256(original_documents),'hex'))
+   OR app_prepared->>'inputSha256' IS DISTINCT FROM encode(sha256(original_input),'hex')
+   OR jsonb_typeof(app_prepared->'schemas') IS DISTINCT FROM 'object'
+   OR jsonb_typeof(app_prepared->'operations') IS DISTINCT FROM 'array' THEN
+   RAISE EXCEPTION 'prepared application basis changed' USING ERRCODE='55P03';END IF;
+ END IF;
  INSERT INTO truss.runtime_object_attempt(writer_xid,actor_oid,input_bytes,documents_bytes,request_bytes,context)
  VALUES(writer,person,original_input,original_documents,original_request,
   context||jsonb_build_object('originalAssertedOrigin',input->'assertedOrigin')) RETURNING * INTO attempt;
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
-  PERFORM truss.runtime_owned_capture(attempt.id);
+  IF app_prepared IS NULL THEN PERFORM truss.runtime_owned_capture(attempt.id);
+  ELSE PERFORM truss.runtime_owned_capture_application(attempt.id,app_prepared);END IF;
  END IF;
  RETURN convert_to(jsonb_build_object('outcome','execute','attemptId',attempt.id::text)::text,'UTF8');
 EXCEPTION WHEN SQLSTATE 'P1006' THEN
  GET STACKED DIAGNOSTICS failure_detail=PG_EXCEPTION_DETAIL;
  -- The function subtransaction rolls back guard setup and all other effects.
  RETURN convert_to(failure_detail,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.object_group_begin_prepared(bytea,bytea,bytea,text,text,bytea,boolean,jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.object_group_begin(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text,original_condition_keys bytea DEFAULT convert_to('[]','UTF8'),replay_only boolean DEFAULT false) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ RETURN truss.object_group_begin_prepared(original_input,original_documents,original_request,expected_release,expected_digest,original_condition_keys,replay_only,NULL);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.object_group_begin(bytea,bytea,bytea,text,text,bytea,boolean) FROM PUBLIC;
@@ -1930,12 +1954,12 @@ REVOKE ALL ON FUNCTION truss.reached(bytea,int,text,text) FROM PUBLIC;
 -- The ordinary SQL write boundary accepts one entire group. Helpers are private;
 -- a caller cannot leave execution between begin/step/finish. The caller still
 -- owns the outer transaction and decides whether to commit or roll back.
-CREATE FUNCTION truss.apply_group(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.apply_group_prepared(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text,app_prepared jsonb) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE opened jsonb;attempt_id uuid;operation_index int:=0;operation_count int;result jsonb;
  native_state text;failure_code text;unavailable_reason text;parsed_input jsonb;
 BEGIN
- opened:=convert_from(truss.object_group_begin(original_input,original_documents,original_request,expected_release,expected_digest),'UTF8')::jsonb;
+ opened:=convert_from(truss.object_group_begin_prepared(original_input,original_documents,original_request,expected_release,expected_digest,convert_to('[]','UTF8'),false,app_prepared),'UTF8')::jsonb;
  IF opened->>'outcome'<>'execute' THEN RETURN convert_to(opened::text,'UTF8');END IF;
  attempt_id:=(opened->>'attemptId')::uuid;
  parsed_input:=convert_from(original_input,'UTF8')::jsonb;
@@ -1984,6 +2008,14 @@ EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE 'P1001' OR SQLST
   WHEN 'P1001' THEN 'request_conflict' WHEN 'P1003' THEN 'expected_version' WHEN 'P1004' THEN 'not_found'
   WHEN 'P1005' THEN 'dependencies' WHEN '42501' THEN 'unauthorized_person' END;
  RETURN convert_to(jsonb_build_object('outcome','failed','code',failure_code,'operationIndex',operation_index::text,'nativeState',native_state)::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.apply_group_prepared(bytea,bytea,bytea,text,text,jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.apply_group(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+BEGIN
+ RETURN truss.apply_group_prepared(original_input,original_documents,original_request,expected_release,expected_digest,NULL);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text) FROM PUBLIC;

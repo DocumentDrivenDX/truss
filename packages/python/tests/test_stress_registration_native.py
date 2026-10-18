@@ -50,6 +50,17 @@ class StressRegistrationTests(base.PublicCatalogRuntimeTests):
             preconditions=conditions),RequestNone(),documents=documents)
         self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error))
         self.assertIsInstance(result.value,GroupSuccess,repr(result))
+        # The original 1,000-type batch must use the production application
+        # schema, not merely expose an unrelated catalog-view index.
+        from truss import _schema_memory
+        selected=_schema_memory.record_schemas(assembly._record_schema_state['key'])
+        self.assertIsNotNone(selected)
+        self.assertEqual(len(selected.compiled._records),1000)
+        self.assertEqual(sum(len(record.properties_by_name) for record in selected.compiled._records.values()),12000)
+        print(json.dumps({'applicationSchema':{'recordTypes':1000,'properties':12000,
+            'estimatedResidentBytes':_schema_memory._resident_size(selected),
+            'sharedCacheRetainedBytes':_schema_memory._cache_bytes,
+            'retainedBudgetBytes':_schema_memory.MAX_CACHE_BYTES}}),flush=True)
         identities=tuple(item.identity for item in result.value.response.semantic.results)
         self.assertEqual(len(identities),100)
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()

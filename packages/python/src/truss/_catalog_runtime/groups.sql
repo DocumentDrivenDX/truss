@@ -795,3 +795,103 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.prepare_group(bytea,bytea,text,text) FROM PUBLIC;
+
+-- Cold, operation-scoped schema material for the Python immutable cache. This
+-- never exports unrelated documents or definitions and never decides an apply
+-- outcome: any unsupported or unauthorized case defers to the native path.
+CREATE FUNCTION truss.writer_schema_basis(original_input bytea,original_documents bytea,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+DECLARE input jsonb;documents jsonb;ops jsonb;operation jsonb;actor oid;installation truss.catalog_runtime_installation%ROWTYPE;
+ selected_revision int;registration uuid;required_types int[];records jsonb;declaration_count bigint;result_bytes bytea;
+BEGIN
+ IF original_input IS NULL OR octet_length(original_input) NOT BETWEEN 1 AND 1048576
+  OR original_documents IS NULL OR octet_length(original_documents) NOT BETWEEN 1 AND 4194304
+  OR (convert_from(original_input,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE
+  OR (convert_from(original_documents,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN RETURN NULL;END IF;
+ input:=convert_from(original_input,'UTF8')::jsonb;documents:=convert_from(original_documents,'UTF8')::jsonb;ops:=input->'operations';
+ IF input->>'interfaceVersion'<>'truss-group-input/0.1.0' OR input->'catalog'<>'{"selection":"current"}'::jsonb
+  OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
+  OR jsonb_typeof(ops)<>'array' OR jsonb_array_length(ops) NOT BETWEEN 1 AND 1024 THEN RETURN NULL;END IF;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
+ IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN RETURN NULL;END IF;
+ SELECT rev INTO STRICT selected_revision FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT;
+ SELECT reg.registration_id INTO STRICT registration FROM truss.catalog_registration_request reg WHERE reg.revision=selected_revision;
+ actor:=truss.runtime_person(false);
+ FOR operation IN SELECT value FROM jsonb_array_elements(ops) LOOP
+  IF operation->>'operation' IS NULL OR operation->>'operation' NOT IN ('create_object','update_object') OR operation ? 'ownershipChange' THEN RETURN NULL;END IF;
+  IF operation->>'operation'='create_object' AND (operation->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb
+   OR jsonb_typeof(operation->'typeDefinitionPin') IS DISTINCT FROM 'string') THEN RETURN NULL;END IF;
+  IF operation->>'operation'='update_object' AND (operation->'target'->>'state' IS NULL OR operation->'target'->>'state' NOT IN ('stored','alias')
+   OR operation->'target'->>'state'='stored' AND jsonb_typeof(operation->'target'->'identity') IS DISTINCT FROM 'object'
+   OR operation->'target'->>'state'='alias' AND jsonb_typeof(operation->'target'->'alias') IS DISTINCT FROM 'string') THEN RETURN NULL;END IF;
+ END LOOP;
+ -- Resolve one representative per exact type pin / stored type identity. The
+ -- native helper still owns identity rules, while duplicate operations avoid
+ -- repeating source-pin derivation during cold cache construction.
+ WITH indexed AS MATERIALIZED (
+  SELECT value operation,(ordinality-1)::int operation_index
+  FROM jsonb_array_elements(ops) WITH ORDINALITY o(value,ordinality)
+ ), keyed AS MATERIALIZED (
+  SELECT indexed.operation AS op_json,indexed.operation_index,
+   CASE WHEN indexed.operation->>'operation'='create_object' THEN indexed.operation->>'typeDefinitionPin'
+    WHEN indexed.operation->'target'->>'state'='stored' THEN indexed.operation->'target'->'identity'->>'definitionPin'
+    ELSE (SELECT c.operation->>'typeDefinitionPin' FROM indexed c
+     WHERE c.operation->>'operation'='create_object' AND c.operation->>'alias'=indexed.operation->'target'->>'alias'
+      AND c.operation_index<indexed.operation_index ORDER BY c.operation_index LIMIT 1) END definition_pin,
+   CASE WHEN indexed.operation->'target'->>'state'='stored' THEN indexed.operation->'target'->'identity'->>'typeId' END stored_type
+  FROM indexed
+ ), representatives AS MATERIALIZED (
+  SELECT DISTINCT ON(definition_pin,stored_type) op_json,operation_index
+  FROM keyed WHERE definition_pin IS NOT NULL ORDER BY definition_pin,stored_type,operation_index
+ )
+ SELECT coalesce(array_agg(DISTINCT q.type_id) FILTER(WHERE q.type_id IS NOT NULL),'{}'::int[]) INTO required_types
+ FROM (SELECT (truss.runtime_owned_operation_type_qualified(r.op_json,ops,r.operation_index,actor)).type_id AS type_id
+  FROM representatives r) q;
+ IF cardinality(required_types)=0 THEN RETURN NULL;END IF;
+ IF EXISTS(SELECT 1 FROM truss.type_def t JOIN unnest(required_types) r(type_id) USING(type_id)
+  WHERE NOT EXISTS(WITH RECURSIVE memberships(role_oid) AS (
+    SELECT actor UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)
+   SELECT 1 FROM truss.module_access ma JOIN pg_roles r ON r.rolname::text=ma.writer_role
+    JOIN memberships m ON m.role_oid=r.oid WHERE ma.document_id=t.document_id AND ma.module=t.module)) THEN RETURN NULL;END IF;
+ -- The supplied source set must be an exact current snapshot. This query is
+ -- set-based across documents, including documents unrelated to the selected
+ -- operations, so a cold application cache has one stable revision boundary.
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(documents) d
+  LEFT JOIN LATERAL (SELECT sd.document FROM truss.schema_doc sd WHERE sd.doc_id=d.value->>'documentId' ORDER BY sd.rev DESC LIMIT 1) a ON true
+  WHERE jsonb_typeof(d.value)<>'object' OR jsonb_typeof(d.value->'sourceText')<>'string'
+   OR a.document IS NULL OR convert_to(d.value->>'sourceText','UTF8') IS DISTINCT FROM convert_to(a.document,'UTF8')) THEN RETURN NULL;END IF;
+ WITH RECURSIVE memberships(role_oid) AS (
+  SELECT actor UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid
+ ), candidates AS MATERIALIZED (
+  SELECT t.type_id,t.document_id,t.module,compiled.metadata->>'typePin' definition_pin
+  FROM truss.type_def t JOIN truss.runtime_type_schema compiled ON compiled.rev=selected_revision AND compiled.type_id=t.type_id
+  WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL
+   AND EXISTS(SELECT 1 FROM jsonb_array_elements(documents) d WHERE d.value->>'documentId'=t.document_id)
+   AND truss.runtime_object_values_readable_qualified(t.type_id,actor)
+   AND EXISTS(SELECT 1 FROM truss.module_access ma JOIN pg_roles r ON r.rolname::text=ma.writer_role
+    JOIN memberships m ON m.role_oid=r.oid WHERE ma.document_id=t.document_id AND ma.module=t.module)
+ ), properties AS MATERIALIZED (
+  SELECT p.type_id,jsonb_agg(jsonb_build_object('name',p.name,'prop_id',p.prop_id,'home',p.home,
+   'cardinality',p.cardinality,'nullability',p.nullability,'scalar_type',p.scalar_type,
+   'facets',p.facets,'item',p.item) ORDER BY p.prop_id) rows
+  FROM truss.prop_def p JOIN candidates c USING(type_id) WHERE p.retired_rev IS NULL GROUP BY p.type_id
+ )
+ SELECT coalesce(jsonb_agg(jsonb_build_object('typeId',c.type_id::text,'definitionPin',c.definition_pin,
+  'properties',coalesce(p.rows,'[]'::jsonb)) ORDER BY c.type_id),'[]'::jsonb)
+ INTO records FROM candidates c LEFT JOIN properties p USING(type_id);
+ SELECT coalesce(sum(jsonb_array_length(r.value->'properties')),0) INTO declaration_count
+ FROM jsonb_array_elements(records) r;
+ IF declaration_count>65536 THEN RETURN NULL;END IF;
+ IF EXISTS(SELECT 1 FROM unnest(required_types) required(type_id)
+  WHERE NOT EXISTS(SELECT 1 FROM jsonb_array_elements(records) r WHERE r.value->>'typeId'=required.type_id::text)) THEN RETURN NULL;END IF;
+ IF (SELECT rev FROM truss.schema_head WHERE id=1) IS DISTINCT FROM selected_revision THEN RETURN NULL;END IF;
+ result_bytes:=convert_to(jsonb_build_object('basis',jsonb_build_object('installationId',installation.installation_id::text,
+  'releaseSha256',installation.release_sha256,'sourceEpoch',installation.source_epoch::text,'catalogRevision',selected_revision,'registrationId',registration::text,
+  'documentsSha256',encode(sha256(original_documents),'hex')),'records',records)::text,'UTF8');
+ IF octet_length(result_bytes)>16777216 THEN RETURN NULL;END IF;
+ RETURN result_bytes;
+EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '42501' OR SQLSTATE '0A000' OR SQLSTATE '54000' OR SQLSTATE '55P03' OR SQLSTATE 'P0002' THEN
+ RETURN NULL;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.writer_schema_basis(bytea,bytea,text,text) FROM PUBLIC;

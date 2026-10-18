@@ -35,6 +35,31 @@ Stock supported driver APIs may supply execution, descriptors, errors and comple
 
 **Profile scope:** every stronger pre-read/predecode, raw-frame forwarding, physical backing-capacity, per-copy lifetime or rollback-resistant native-account requirement below is a historical proposal, not selected or queued for this release, and cannot be used as a release qualification gate. Shared semantic custody, exactness, parameter/result validation, authorization and recovery requirements continue to apply, implemented using supported driver APIs and conservative controlled-work budgets. The historical [producer port](reference-driver-producer-port.proposal.md) is not selected implementation work or an executor dependency. Custom protocol/private-hook work requires the PRD's hard documented deficiency evidence and owner-approved ADR.
 
+## Trusted application preparation — ADR-008, 2026-10-18
+
+The selected Python engine MAY supply validated, canonical property-ID deltas
+through the internal application-prepared writer. It MUST use immutable indexed
+schema meaning bound to the current installation, runtime/source identity,
+catalog revision, registration identity and exact document basis. A warm write
+MUST NOT fetch or reconstruct that schema per record. Cache accounting includes
+compiled schema objects and retained copies; authorization MUST remain current.
+
+This route trusts the embedding engine's value-domain validation. Native code
+MUST check original input/basis correspondence, current authority and revision,
+value-size limits, keys, concurrency, atomic effects and required journal writes.
+It need not independently replay the engine's semantic validation. Temporary
+prepared batch data is not a mandatory retained transcript. The existing
+full-validation SQL writer retains its separately specified guarantees; support
+claims MUST identify which route enforces value semantics.
+
+Selection is automatic for the qualified record-batch subset. Unsupported or
+invalid preparation falls back to the original writer and its public outcomes.
+A stale prepared basis refuses without effects or an automatic mutation retry;
+failed-condition precedence, caller-owned settlement and original receipt
+identity remain unchanged. A malicious embedding process with the same database
+credentials is outside this selected boundary; no signature or server-issued
+semantic attestation is implied.
+
 ## Owner decisions — 2026-10-07
 
 Selected execution boundary: engine-owned callback transactions commit before returning committed results; adopted transactions remain caller-owned and return explicit pending results. Pending object/edge IDs are usable only within the same live transaction. Only confirmed outer commit authorizes durable external publication; savepoint release and successful Truss operations do not. Unknown commit requires original recovery/receipt observation. No commit-by-string-ID or live cross-network transaction protocol is selected.

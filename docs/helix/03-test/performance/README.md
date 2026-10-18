@@ -15,7 +15,27 @@ ddx:
 
 # Practical functionality and performance
 
-## 2026-10-18: C64 local controls pass; full qualification pending
+## 2026-10-18: current local candidate; hosted matrix pending
+
+The [C73 controls](results/2026-10-18-c73-local-controls.json) identify the exact
+installed wheel and native runtime. Production writes reuse one compiled schema
+across records, facades and transactions, with current native permissions checked
+on each call. Separate controls cover disjoint writer selections, newly granted
+modules, independent scalar/container parity and the genuine 1,000-type workflow.
+The 12,000-property application schema occupies an estimated 8,124,944 bytes;
+the shared retained cache totals 58,274,659 bytes within its 128MiB budget. These
+are object-graph estimates, distinct from measured process RSS.
+
+Independent updates retain one shared original snapshot and compact per-operation
+patches rather than duplicated value maps. Full before/after history and all four
+transition intent fingerprints remain. A local 1,024-object, 128-field update
+passes in 9,533ms plus 2,181ms commit, with 1,024 exact history witnesses and zero
+mismatches. Its SQL margin is narrow; this is not a hosted capacity claim or the
+full 10,000-node/20,000-edge wide workload. The unchanged eleven-case matrix must
+still pass on both platforms before publication, with 10s SQL/30s operation
+deadlines.
+
+## 2026-10-18: superseded C64 local controls
 
 The [C64 record](results/2026-10-18-c64-local-qualification.json) identifies the
 exact installed wheel and native manifest. Its 26 focused controls pass, including
@@ -29,9 +49,12 @@ The successor removes repeated finalization history reconstruction, initializes
 native catalog indexes in set-based stages and resolves condition definition pins
 before reading their sources. Weft 0.4.42 fixes the actual 1,000-type compiler
 request within the existing byte limits and indexes original element coordinates.
-The exact million-node/two-million-edge run and complete unchanged hosted matrix
-remain required. SQL and operation deadlines remain 10s and 30s. These local
-passes are not a release or full qualification receipt.
+Its scale diagnostic stopped at a completed batch boundary after 379,000 nodes
+and zero edges when this candidate was superseded. No failed operation was
+observed; the run did not complete the declared workload. The final production
+application-cache candidate must repeat the unchanged full hosted matrix. SQL
+and operation deadlines remain 10s and 30s. These local passes are not a release
+or full qualification receipt.
 
 The [C65 compatibility record](results/2026-10-18-c65-compiler-compatibility.json)
 retains the same native SQL and enrolls exact hosted Weft 0.4.42 wheel identities

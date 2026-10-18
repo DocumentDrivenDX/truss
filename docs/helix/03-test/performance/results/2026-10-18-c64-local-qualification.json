@@ -1,5 +1,5 @@
 {
-  "status": "local-controls-passed-full-hosted-and-million-node-qualification-pending",
+  "status": "superseded-local-controls-passed-not-release-qualified",
   "runtimeManifestSha256": "ce5e96ae3419ba09737326899e6e4735382d1a63befb7c130d5e58fc425ca67b",
   "localWheelSha256": "f039d9c9c133bae064d628ab2b1b98fc1620192e5f47905fbd87b1936e278466",
   "wheelSourceMatchedPayloadFiles": 531,
@@ -35,9 +35,18 @@
     }
   ],
   "qualificationLimits": [
-    "Full unchanged 11-case/two-platform stress matrix is still required.",
-    "Exact million-node/two-million-edge workload is running; no complete result is claimed.",
+    "Superseded by the production application-cache implementation; this candidate does not qualify the final write path.",
+    "The large workload stopped after 379,000 nodes and zero edges; it did not qualify the million-node/two-million-edge case.",
     "Local timings do not establish hosted or p95 qualification.",
-    "No Truss release has been published from this candidate."
-  ]
+    "No Truss release was published from this candidate."
+  ],
+  "largeWorkloadDiagnostic": {
+    "status": "cancelled-superseded",
+    "committedNodes": 379000,
+    "committedEdges": 0,
+    "completedCreateGroups": 379,
+    "processExitCode": 130,
+    "functionalFailureObserved": false,
+    "scope": "Stopped at a completed batch boundary before switching to the application-prepared candidate; not a full workload result."
+  }
 }

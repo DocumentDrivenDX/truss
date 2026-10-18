@@ -1,0 +1,118 @@
+{
+  "status": "local_focused_controls_passed; full_matrix_and_release_pending",
+  "candidate": "C73",
+  "distribution": "truss-toolkit==0.0.40",
+  "nativeRelease": "0.72-candidate",
+  "wheelSha256": "a59f0a3f31763c2b159ef62229c3d6a693db723b84430333de0226302d82f711",
+  "nativeSha256": "0f78918b3104d8e541a1861daa90e02423d8894c6599a255a476f4b234a9b046",
+  "sourceMatchingWheelPayloads": 533,
+  "compiler": "published weft-sql==0.4.42",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.17",
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "controls": [
+    "Disjoint module writers share a native basis without colliding compiled Record selections",
+    "A new module grant refreshes an existing connection once; later writes reuse its schema",
+    "Independent native scalar/container oracle parity, including generic resource boundaries",
+    "Known and retained canonical cells agree with native projection without mutating inputs",
+    "Genuine 1000-type/12000-property catalog, 100 conditional creates, relationships, public list and production cache"
+  ],
+  "applicationSchema": {
+    "recordTypes": 1000,
+    "properties": 12000,
+    "estimatedResidentBytes": 8124944,
+    "sharedCacheRetainedBytes": 58274659,
+    "retainedBudgetBytes": 134217728,
+    "scope": "Conservative retained Python object-graph estimates, not a process RSS ceiling."
+  },
+  "runs": {
+    "oracleAndThousandTypes": {
+      "seconds": 42.518,
+      "passedControls": 3,
+      "fixtureErrors": 2,
+      "scope": "The two new selection fixtures initially omitted required key.name; neither reached native writes. The independent oracles and genuine 1000-type workflow passed unchanged."
+    },
+    "correctedSelection": {
+      "seconds": 6.558,
+      "passedControls": 2,
+      "scope": "Required authored key names supplied; pending backend function statistics explicitly flushed while idle before each observed transaction. Exact warm-fetch and projection-count assertions retained."
+    }
+  },
+  "logs": {
+    "oracleAndThousandTypes": {
+      "path": "2026-10-18-c73-oracleAndThousandTypes.log.gz",
+      "uncompressedSha256": "61ae2521ad9ec42ff1d8badc3e2612e4943e591b4f7cc60be53275590edb220d"
+    },
+    "correctedSelection": {
+      "path": "2026-10-18-c73-correctedSelection.log.gz",
+      "uncompressedSha256": "5d774d870c915590c6fd814530eedafb5599c317d17a643b577f5aab9f2b4fd6"
+    },
+    "productionReuse": {
+      "path": "2026-10-18-c73-productionReuse.gz",
+      "uncompressedSha256": "df50fb1a7cc1c7c6ad66401ce80ad5d09f3583e3e66bfc13f2939811f9a8b793"
+    },
+    "wide1024Report": {
+      "path": "2026-10-18-c73-wide1024Report.gz",
+      "uncompressedSha256": "141cd01b0a7c7ea5c2fc269c1add7b953b55e51a6e3bf3e07c9200a72da8bca5"
+    },
+    "wide1024Parity": {
+      "path": "2026-10-18-c73-wide1024Parity.gz",
+      "uncompressedSha256": "619efd965931d26fa2268252c0ae5139aab4395b6cfd307871e5c68a74f6da19"
+    },
+    "historicalAndTamper": {
+      "path": "2026-10-18-c73-historical-and-tamper.log.gz",
+      "uncompressedSha256": "92774dcc47966275b32eecdb1800fb0771c0c9f7affbf4edbd3218d47fc1d687"
+    },
+    "eightKeys": {
+      "path": "2026-10-18-c73-eight-keys.log.gz",
+      "uncompressedSha256": "67218db340b0d875fdf26fd3ddf6d64a7567b931873da98235a01325bcfaef4b"
+    }
+  },
+  "qualification": "20 focused tests and diagnostics passed across the recorded scoped runs; no full-suite, hosted-platform or stress-population qualification is inferred.",
+  "productionReuse": {
+    "seconds": 8.415,
+    "schemaCompilations": 1,
+    "nativeSchemaFetches": 1,
+    "compactUpdatePlans": 16,
+    "nativeValueProjections": 49,
+    "legacyValueValidatorCallsThroughDeferredSettlement": 0,
+    "scope": "17 create projections and 16 update projections at capture and production; value projection is separate from semantic validation."
+  },
+  "wide1024Diagnostic": {
+    "nodes": 1024,
+    "edges": 0,
+    "types": 10,
+    "fieldsPerType": 128,
+    "updates": 1024,
+    "apiMs": 9533.324,
+    "commitMs": 2181.312,
+    "endToEndMs": 11716.129,
+    "metadataEvents": 1024,
+    "beforeMismatches": 0,
+    "afterMismatches": 0,
+    "pythonPeakRssBytes": 227196928,
+    "retainedSchemaCacheEstimatedBytes": 4997574,
+    "scope": "One isolated local capacity diagnostic with a narrow SQL deadline margin; not the declared 10000-node/20000-edge wide stress workload or either hosted platform."
+  },
+  "historicalAndTamper": {
+    "tests": 12,
+    "seconds": 33.804,
+    "status": "passed",
+    "scope": [
+      "Original create followed by same-transaction catalog acceptance in UMF0.7/0.8",
+      "Compact changed/no-op updates followed by same-transaction rebind, all historical versions, both cohorts",
+      "Valid native fallback after a compact update",
+      "Connection/transaction cache reuse",
+      "Forced general-validator oracle",
+      "Four original transition intent-tamper controls, including coordinated physical forgery",
+      "Exact result-slot rewrite refusal"
+    ]
+  },
+  "eightKeyCapacity": {
+    "tests": 1,
+    "seconds": 17.083,
+    "status": "passed",
+    "scope": "Existing unchanged eight-key capacity method; real1,024-operation updates with ordinary deadlines."
+  }
+}

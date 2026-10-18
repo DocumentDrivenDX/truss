@@ -40,9 +40,13 @@ BEGIN
  -- The supported apply_group route always uses the canonical batch producer
  -- for this closed shape. Its exact INSERT/slot comparisons bind immutable
  -- payloads already; current created values have no historical reader cut.
+ -- A later catalog acceptance in the same outer transaction needs the general
+ -- historical path when this earlier create is checked at commit.
  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(operations) o
   WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
-   OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb) THEN
+   OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb)
+  AND EXISTS(SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id AND p.operation_index=0
+   AND (p.plan->>'catalogRevision')::int=(SELECT rev FROM truss.schema_head WHERE id=1)) THEN
   PERFORM truss.runtime_owned_create_batch_validate(attempt,input,history_dictionary,check_final,current_actor);
   RETURN;
  END IF;
@@ -73,9 +77,12 @@ BEGIN
  -- Compile source metadata for created and changed object images. Each
  -- independent settlement invocation resolves its own historical source cut.
  FOR history_group IN
-  WITH frames AS MATERIALIZED (
-   SELECT o.plan->'beforeNodes' before_nodes,o.plan->'afterNodes' after_nodes
+  WITH source_plans AS MATERIALIZED (
+   SELECT CASE WHEN o.plan->>'compactProfile'='truss-application-value-plan/0.1'
+    THEN truss.runtime_owned_plan(o.attempt_id,o.operation_index) ELSE o.plan END plan
    FROM truss.runtime_owned_operation o WHERE o.attempt_id=selected_attempt),
+  frames AS MATERIALIZED (
+   SELECT s.plan->'beforeNodes' before_nodes,s.plan->'afterNodes' after_nodes FROM source_plans s),
   changes AS MATERIALIZED (
    SELECT f.before_nodes->n.key before_state,n.value after_state
    FROM frames f CROSS JOIN LATERAL jsonb_each(f.after_nodes) n
