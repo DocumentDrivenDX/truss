@@ -217,6 +217,7 @@ DECLARE input_operations jsonb;
  input jsonb;documents jsonb;request jsonb;context jsonb;selected record;archive truss.schema_doc%ROWTYPE;installation truss.catalog_runtime_installation%ROWTYPE;head_revision int;head_registration uuid;
  operation jsonb;admission record;source_text text;person oid;writer xid8;ns bytea;rk bytea;route bigint;prior_generation bigint;receipt truss.request_receipt%ROWTYPE;
  raw jsonb;observation bytea;attempt truss.runtime_object_attempt%ROWTYPE;index int:=0;failure_detail text;retained_basis jsonb;retained_count int;
+ verified_source_documents bytea[]:='{}';
 BEGIN
  IF replay_only IS NULL THEN RAISE EXCEPTION 'explicit replay probe required' USING ERRCODE='22023';END IF;
  context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;person:=truss.runtime_person(false);writer:=pg_current_xact_id();
@@ -319,9 +320,12 @@ BEGIN
  LOOP
   operation:=admission.operation;index:=admission.operation_index;
   SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input_operations,index,person);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,person);
-  SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
-  SELECT d.value->>'sourceText' INTO STRICT source_text FROM jsonb_array_elements(documents) d WHERE d.value->>'documentId'=archive.doc_id;
-  IF convert_to(source_text,'UTF8') IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'exact original source required' USING ERRCODE='22023';END IF;
+  IF NOT convert_to(selected.document_id,'UTF8')=ANY(verified_source_documents) THEN
+   SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
+   SELECT d.value->>'sourceText' INTO STRICT source_text FROM jsonb_array_elements(documents) d WHERE d.value->>'documentId'=archive.doc_id;
+   IF convert_to(source_text,'UTF8') IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'exact original source required' USING ERRCODE='22023';END IF;
+   verified_source_documents[cardinality(verified_source_documents)+1]:=convert_to(selected.document_id,'UTF8');
+  END IF;
   index:=index+1;
  END LOOP;
  -- Predicate owners can differ from all operation owners. Preserve exact
@@ -1567,20 +1571,23 @@ BEGIN
   IF NOT FOUND THEN RETURN;END IF;
   FOR phase IN 1..2 LOOP
    FOR owner IN
-    SELECT DISTINCT document_id,module_id FROM (
-     SELECT r.document_id,r.module AS module_id FROM truss.rel_def r WHERE r.retired_rev IS NULL
-      AND EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=r.rel_type_id AND (e.source_type=selected_type OR e.target_type=selected_type))
-     UNION ALL
-     SELECT t.document_id,t.module FROM truss.rel_def r JOIN truss.rel_endpoint e ON e.rel_type_id=r.rel_type_id
-      JOIN truss.type_def t ON t.type_id IN(e.source_type,e.target_type) WHERE r.retired_rev IS NULL
-      AND EXISTS(SELECT 1 FROM truss.rel_endpoint selected WHERE selected.rel_type_id=r.rel_type_id AND (selected.source_type=selected_type OR selected.target_type=selected_type))
-    ) dependencies
+    WITH selected_relations AS MATERIALIZED (
+     SELECT DISTINCT rel_type_id FROM truss.rel_endpoint WHERE source_type=selected_type OR target_type=selected_type),
+    active_relations AS MATERIALIZED (
+     SELECT r.rel_type_id,r.document_id,r.module FROM selected_relations s JOIN truss.rel_def r USING(rel_type_id)
+     WHERE r.retired_rev IS NULL),
+    dependencies AS (
+     SELECT document_id,module AS module_id FROM active_relations
+     UNION ALL SELECT t.document_id,t.module FROM active_relations r
+      JOIN truss.rel_endpoint e USING(rel_type_id) JOIN truss.type_def t ON t.type_id IN(e.source_type,e.target_type))
+    SELECT DISTINCT document_id,module_id FROM dependencies
    LOOP
     IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,qualified_actor) THEN RAISE EXCEPTION 'complete relationship and endpoint count reader required' USING ERRCODE='42501';END IF;
    END LOOP;
    IF phase=1 THEN
-  FOR relation IN SELECT r.* FROM truss.rel_def r WHERE r.retired_rev IS NULL
-   AND EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=r.rel_type_id AND (e.source_type=selected_type OR e.target_type=selected_type)) ORDER BY rel_type_id LOOP
+  FOR relation IN SELECT r.* FROM (
+   SELECT DISTINCT rel_type_id FROM truss.rel_endpoint WHERE source_type=selected_type OR target_type=selected_type
+  ) selected JOIN truss.rel_def r USING(rel_type_id) WHERE r.retired_rev IS NULL ORDER BY r.rel_type_id LOOP
    outgoing:=NULL;incoming:=NULL;
    IF EXISTS(SELECT 1 FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id AND source_type=selected_type) THEN
     SELECT count(*) INTO outgoing FROM truss.edge WHERE rel_type_id=relation.rel_type_id AND source_id=selected_id AND source_type=selected_type;

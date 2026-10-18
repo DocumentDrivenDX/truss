@@ -1,0 +1,45 @@
+{
+  "runId": 39167394688,
+  "sourceCommit": "d40e5570ed78136ed6e91060d22f4271303dd260",
+  "nativeManifestSha256": "b90ed3ad747eafd2bb07c39cc411fbcb6b08f57cef39e8611ccc8058572aa8c4",
+  "qualification": "Failed candidate. Snapshot captured while five stress jobs were active; no complete matrix qualification.",
+  "completedStress": {
+    "total": 17,
+    "passed": 13,
+    "failed": 4
+  },
+  "nativeFailures": {
+    "ubuntu-24.04": "Retained edge planner oracle cloned old wrapper rather than application-aware implementation.",
+    "macos-14": "Eight-key 1024-operation SQL timeout."
+  },
+  "artifacts": {
+    "2026-10-18-c75-hosted-snapshot.json.gz": {
+      "uncompressedSha256": "64b415b2d24b922ef8c69c0bf4f616a6116bddde69c41771acfb95cc2bf51dec",
+      "compressedSha256": "a8e905780859122fe262fb075121811158012ce324f9b0284a9e087d0d6b43fc"
+    },
+    "2026-10-18-c75-index-heavy-macos-14-failed-report.json.gz": {
+      "uncompressedSha256": "0edaddc1ce30c28a395241973f9d5183ad8c8e072aa0ed7afa579171b6e546e9",
+      "compressedSha256": "89348b5f4b60832cdcf41a196f7df5752f8f082f2c92d799c8b1f3a21d3d3706"
+    },
+    "2026-10-18-c75-index-heavy-ubuntu-24.04-failed-report.json.gz": {
+      "uncompressedSha256": "b81dbacae06b6329be1ee9af2fd795e9d2f803d5240befdabca0d6fbc708d979",
+      "compressedSha256": "2d873a0cfb4ae8ad7e0e5933ec243003df6a310a50ed6b641fbc9da3eaa65fba"
+    },
+    "2026-10-18-c75-many-types-macos-14-failed-report.json.gz": {
+      "uncompressedSha256": "ee48b32a8fe76417b1ae1dadfbb3780b775d9162498e864b2c5e2a8b7746bb34",
+      "compressedSha256": "4cfc2857b1dcf4479213cb006af88cb08c63cb1180968f2041fe1d68040e162f"
+    },
+    "2026-10-18-c75-wide-ubuntu-24.04-failed-report.json.gz": {
+      "uncompressedSha256": "8a14e69d891b84e739a4efd9817eee6cd8102dfc55b040b1cbb7f9f0db3dbaab",
+      "compressedSha256": "a2288f144d567ce072ebef7222559d0b95aa2da342424149a08d6fcb4a73ee89"
+    },
+    "2026-10-18-c75-native-ubuntu-failed.log.gz": {
+      "uncompressedSha256": "9a1a7fe1f8b97d31f39b0052819863ed59a0735908fd3fae2a7ec78120b01825",
+      "compressedSha256": "6c04288dcfe64b1c1b740fbf7cdeaefc4a629398aada4208c0b975dbd47a0a17"
+    },
+    "2026-10-18-c75-native-macos-failed.log.gz": {
+      "uncompressedSha256": "361d319bed66acb3c1a44aaaaba118b677e9e2b86f30c190f7271d7e13780b84",
+      "compressedSha256": "23d0676f8d4cece67e95cad7f6931a70eb8d96355aa0030b72997e346ebfeafe"
+    }
+  }
+}

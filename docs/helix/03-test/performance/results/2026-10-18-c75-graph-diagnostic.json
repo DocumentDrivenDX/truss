@@ -1,0 +1,33 @@
+{
+  "candidate": "C75",
+  "sourceCommit": "d40e5570ed78136ed6e91060d22f4271303dd260",
+  "nativeManifestSha256": "b90ed3ad747eafd2bb07c39cc411fbcb6b08f57cef39e8611ccc8058572aa8c4",
+  "qualification": "Failed candidate; diagnostic plan comparisons are not release qualification.",
+  "singleGroupCreate": {
+    "types": 1000,
+    "fieldsPerType": 12,
+    "objects": 1000,
+    "sqlDeadlineMs": 10000,
+    "sqlState": "57014",
+    "failureLayer": "apply_group_prepared \u2192 object_group_finish \u2192 runtime_owned_graph_validate_attempt \u2192 runtime_graph_validate_object_qualified",
+    "updatesAttempted": 0
+  },
+  "lookupComparison": {
+    "scope": "One selected object type among 1000 relationship definitions; standalone EXPLAIN ANALYZE diagnostics on the retained disposable fixture, not a patched wheel run.",
+    "originalAuthorizationLookupMs": 2.512,
+    "selectedEndpointAuthorizationLookupMs": 0.175,
+    "originalSharedBufferHits": 9046,
+    "selectedEndpointSharedBufferHits": 32,
+    "retainedSemantics": "Both authorization phases independently resolve current live relationships; endpoint reader permissions, object lock, multiplicity checks and marker equality remain required."
+  },
+  "artifacts": {
+    "2026-10-18-c75-manytypes-create-failure.json.gz": {
+      "uncompressedSha256": "8f1d008b61ffd1264ca2eabf5119472e79737aac990b4ce7374d94e29124d3f3",
+      "compressedSha256": "25a356f336edc98bd9e856decd5ae9c6a14165452ed4ed652b14b08087b824ba"
+    },
+    "2026-10-18-c75-manytypes-selected-relation-plan.json.gz": {
+      "uncompressedSha256": "c2554429f9241fa8d72f5251229c7c35e5cb16fc328531b5c7edd9a504012fd2",
+      "compressedSha256": "c4d7eab74e080f3d1a62c86df8f492434af8455652db18582a903960c7d461fd"
+    }
+  }
+}

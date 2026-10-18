@@ -73,5 +73,6 @@
     "retainedSchemaCacheEntries": 2,
     "schemaCacheBudgetBytes": 134217728,
     "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
-  }
+  },
+  "sqlMetricNotes": "Frontend execute totals, per-operation counts and separate commit counts are valid. Raw case-level cold-schema/prepared/legacy category labels also matched installer DDL in this benchmark revision and are not an invocation census. The original report is retained unchanged; later script-only classification excludes DDL and quoted signature literals."
 }

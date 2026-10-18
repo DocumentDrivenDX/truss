@@ -1,0 +1,124 @@
+{
+  "candidate": "C76",
+  "sourceCommit": "d40e5570ed78136ed6e91060d22f4271303dd260",
+  "sourceWorkingTreeDirty": true,
+  "wheelSha256": "e396d7a3a621f426a48d972cb42ab3e3ee88acc59b17362a674e09c6fa930a5f",
+  "runtimeManifestSha256": "4bccdd83be915e409062de9aef86415fd02b61deff7b8c2f1697c0ac0716ce97",
+  "runtimePayloadInventorySha256": "e74eac75ef3d75c8228dc068d2ceea102ace541a860e792c92c145dfab7149f2",
+  "runtimePayloadInventoryAlgorithm": "SHA256 of sorted UTF8 path + NUL + binary SHA256(raw content) for each truss/ wheel entry",
+  "matchedRuntimePayloads": 528,
+  "qualification": "Local diagnostic, not the unchanged hosted matrix qualification. Exact frozen wheel runtime; tracked source was dirty.",
+  "workload": {
+    "id": "index-heavy",
+    "types": 10,
+    "fieldsPerType": 12,
+    "shape": "mixed",
+    "nodes": 10000,
+    "edges": 20000,
+    "indexedPropertiesPerType": 8,
+    "distribution": "uniform",
+    "tier": "standard",
+    "compareTo": "nominal",
+    "changedDimension": "indexed property count"
+  },
+  "configurationDifferenceFromHostedMatrix": {
+    "loadBatchSize": 1000,
+    "hostedLoadBatchSize": 100,
+    "profileNativeFunctions": true
+  },
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "functionalPassed": true,
+  "capacityScope": {
+    "targetAtomicOperations": 1024,
+    "configuredExpectedAtomicOperations": 1024,
+    "attemptedAtomicGroupSizes": [
+      1,
+      100,
+      1000,
+      1024
+    ],
+    "committedAtomicGroupSizes": [
+      1,
+      100,
+      1000,
+      1024
+    ],
+    "qualification": "Only observed attempts and commits; configured limits do not establish actual maximum capacity."
+  },
+  "bulkUpdateResults": [
+    {
+      "case": "index-heavy",
+      "operation": "bulk_update_1000",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 21624.470333,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 231.21953615528585,
+      "p50Ms": 4306.007375,
+      "minMs": 4131.304583,
+      "maxMs": 4711.525375
+    },
+    {
+      "case": "index-heavy",
+      "operation": "bulk_update_1024",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 21749.930458,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 235.40305151259807,
+      "p50Ms": 4350.117833,
+      "minMs": 4246.825208,
+      "maxMs": 4444.358583
+    },
+    {
+      "case": "index-heavy",
+      "operation": "bulk_update_commit_1024",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 7740.625084,
+      "failedElapsedMs": [],
+      "p50Ms": 1417.398917,
+      "minMs": 1327.497875,
+      "maxMs": 2165.201
+    },
+    {
+      "case": "index-heavy",
+      "operation": "bulk_update_end_to_end_1024",
+      "attempts": 5,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 29505.030625000003,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 173.52973006785348,
+      "p50Ms": 5769.439833,
+      "minMs": 5657.966542,
+      "maxMs": 6412.992
+    }
+  ],
+  "performanceTriageSignals": [
+    {
+      "case": "index-heavy",
+      "signal": "bulk100_speedup",
+      "observed": 4.709506889185482,
+      "triageThreshold": 5
+    }
+  ],
+  "artifacts": {
+    "2026-10-18-c76-final-parity.json.gz": {
+      "uncompressedSha256": "82790b993dfbcb0235660336bd91ee281dc74ff721d20cee4c8b9abf99792ec4",
+      "compressedSha256": "6304145e4b3fd66a21cb60bd338e16df9e193785856c7d7759484ea37ac0a95e"
+    },
+    "2026-10-18-c76-index-heavy-profile.json.gz": {
+      "uncompressedSha256": "d45b7647ba85f71485689998916b96f0468b1bdff428b94454af1b213410d4ca",
+      "compressedSha256": "0f881ed150448bf46e32f81442f72212a7dd06dbbadb7b92e909ce280b916c2b"
+    },
+    "2026-10-18-c76-index-heavy-profile.jsonl.gz": {
+      "uncompressedSha256": "c12a09914be06016d42ea1b6c7e04c701965597b9034ec592538204a41515f86",
+      "compressedSha256": "551fa37b8c3b816da2c20dfcc82a3078f38436d9a4986ca6ca74dd9c6ed46172"
+    }
+  }
+}

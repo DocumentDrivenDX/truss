@@ -977,8 +977,10 @@ BEGIN
  INTO outgoing_counts,incoming_counts FROM counts;
  FOREACH selected IN ARRAY node_order LOOP
   selected_source_type:=(nodes->selected->'identity'->>'typeId')::int;
-  FOR relation IN SELECT r.* FROM truss.rel_def r WHERE r.retired_rev IS NULL AND EXISTS(
-   SELECT 1 FROM truss.rel_endpoint ep WHERE ep.rel_type_id=r.rel_type_id AND selected_source_type IN(ep.source_type,ep.target_type)) LOOP
+  FOR relation IN WITH selected_relations AS MATERIALIZED (
+   SELECT DISTINCT rel_type_id FROM truss.rel_endpoint WHERE source_type=selected_source_type OR target_type=selected_source_type)
+   SELECT r.* FROM selected_relations s JOIN truss.rel_def r USING(rel_type_id)
+   WHERE r.retired_rev IS NULL LOOP
    IF EXISTS(SELECT 1 FROM truss.rel_endpoint ep WHERE ep.rel_type_id=relation.rel_type_id AND ep.source_type=selected_source_type) THEN
     outgoing:=coalesce((outgoing_counts->>jsonb_build_array(relation.rel_type_id::text,selected)::text)::bigint,0);
     IF outgoing<relation.target_min OR relation.target_max IS NOT NULL AND outgoing>relation.target_max THEN RAISE EXCEPTION 'final outgoing multiplicity failed' USING ERRCODE='P1005';END IF;
@@ -1058,9 +1060,10 @@ BEGIN
  ) affected_types ORDER BY type_id LOOP
   IF truss.runtime_object_values_readable_qualified(selected_type,current_actor) IS NOT TRUE THEN
    RAISE EXCEPTION 'complete affected property and item readers required' USING ERRCODE='42501';END IF;
-  FOR relation IN SELECT r.* FROM truss.rel_def r WHERE r.retired_rev IS NULL AND EXISTS(
-   SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=r.rel_type_id AND selected_type IN(e.source_type,e.target_type))
-   ORDER BY r.rel_type_id LOOP
+  FOR relation IN WITH selected_relations AS MATERIALIZED (
+   SELECT DISTINCT rel_type_id FROM truss.rel_endpoint WHERE source_type=selected_type OR target_type=selected_type)
+   SELECT r.* FROM selected_relations s JOIN truss.rel_def r USING(rel_type_id)
+   WHERE r.retired_rev IS NULL ORDER BY r.rel_type_id LOOP
    IF NOT truss.runtime_can_read_qualified(relation.document_id,relation.module,current_actor) THEN
     RAISE EXCEPTION 'counted relationship reader required' USING ERRCODE='42501';END IF;
    FOR endpoint_owner IN SELECT DISTINCT t.document_id,t.module FROM truss.rel_endpoint e

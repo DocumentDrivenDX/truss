@@ -1,0 +1,55 @@
+{
+  "candidate": "C77",
+  "sourceCommit": "d40e5570ed78136ed6e91060d22f4271303dd260",
+  "sourceWorkingTreeDirty": true,
+  "wheelSha256": "9e0020b1d11fea42e43340f13a7d832361e73bd06d48fc5d647a6b0198254aa3",
+  "nativeManifestSha256": "08b082ab3836dbb5717360f875773190488d6b886971cd6e10b63b894a3a4ebe",
+  "matchedRuntimePayloads": 528,
+  "runtimePayloadInventorySha256": "c0a0e0d391f771e5e359cc35f0b54d1faf68723a1a7fab6cd8e6236cf317a70b",
+  "inventoryHashAlgorithm": "SHA256 of sorted UTF8 path + NUL + binary SHA256(raw content) for each truss/ wheel entry",
+  "controls": {
+    "tests": 11,
+    "passed": 11,
+    "elapsedSeconds": 135.227,
+    "coverage": [
+      "per-call source admission with A/B/A distinct-type owners, two documents, missing/duplicate/mismatched source and a later altered call",
+      "single atomic 1000-distinct-type CREATE, deferred checks, commit, exact values",
+      "1000-distinct-type UPDATE, all exact object values and corresponding history events",
+      "full edge plans versus retained general planner",
+      "feed carriers including generic extension writer and wrong-writer containment",
+      "complete feed delivery",
+      "asymmetric multiplicity minimum",
+      "eight-key 1024-operation batch"
+    ]
+  },
+  "qualification": "Focused local controls only. Full native and unchanged eleven-case/two-platform hosted qualification are still required.",
+  "artifacts": {
+    "2026-10-18-c77-controls.log.argv.gz": {
+      "uncompressedSha256": "96270506da0195a8d23721aff89bf19a451bedd63666ec55da11dda20f3c0764",
+      "compressedSha256": "62291c1bcffd330767a181f0f841211e64408340def583865d59818c48c519d7"
+    },
+    "2026-10-18-c77-controls.log.gz": {
+      "uncompressedSha256": "f31c27806b62eb920286503f927fc0b4a674b3d34440d59d271de617a0bc2f3a",
+      "compressedSha256": "694ba0f84721d941944e17d35f0245c132d4449c8d404d3f857da08a7d7568ab"
+    },
+    "2026-10-18-c77-final-parity.json.gz": {
+      "uncompressedSha256": "97f5fbc77b303caf4656e8f0e885c14618eaf764d6a091391f33b4eadddcd998",
+      "compressedSha256": "062a1b90174471f5919f572c2f55c79909008030b6afb482d6c09f77072f06db"
+    },
+    "2026-10-18-c77-protected-activation.log.argv.gz": {
+      "uncompressedSha256": "8c436871f07a317f7f7676576f4008b225ad9e73c898298b751591f81842ce71",
+      "compressedSha256": "6386f806fff22dccc203dd801de0e522dbd95b975017f4e4887eab440f0820e5"
+    },
+    "2026-10-18-c77-protected-activation.log.gz": {
+      "uncompressedSha256": "ba93edb6e6b817a7a3bb673a7b989a06e83a01fa46e2d9a01cba8cf25ed2c08b",
+      "compressedSha256": "13fdd546bc9cb39454d66f38e779cffc4ef59db4a06eaf6e0758af9d6cbe7af2"
+    }
+  },
+  "protectedActivation": {
+    "tests": 1,
+    "passed": 1,
+    "elapsedSeconds": 11.48,
+    "test": "test_current_query_runtime_native.CurrentQueryRuntimeNativeTests.test_protected_activation_closes_legacy_data_facades",
+    "scope": "Separate native execution on the same frozen C77 package and exact official Weft0.4.42."
+  }
+}

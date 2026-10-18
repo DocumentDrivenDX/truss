@@ -73,7 +73,13 @@ CREATE FUNCTION truss.runtime_capture_feed_configuration() RETURNS trigger
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE writer xid8;installation truss.catalog_runtime_installation%ROWTYPE;configuration jsonb;retained jsonb;
 BEGIN
- writer:=(to_jsonb(NEW)->>TG_ARGV[0])::xid8;
+ -- Installed carriers expose their writer directly. Do not serialize the full
+ -- journal event merely to extract its xid; extension carriers retain the
+ -- original named-field path.
+ IF TG_ARGV[0]='xid' THEN writer:=NEW.xid;
+ ELSIF TG_ARGV[0]='writer_xid' THEN writer:=NEW.writer_xid;
+ ELSE writer:=(to_jsonb(NEW)->>TG_ARGV[0])::xid8;
+ END IF;
  IF writer IS DISTINCT FROM pg_current_xact_id() THEN RAISE EXCEPTION 'current feed fact writer required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  configuration:=jsonb_build_object('releaseId',installation.release_id,'releaseSha256',installation.release_sha256,

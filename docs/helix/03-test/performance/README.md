@@ -15,6 +15,46 @@ ddx:
 
 # Practical functionality and performance
 
+## 2026-10-18: C77 focused controls; hosted qualification pending
+
+The [C77 controls](results/2026-10-18-c77-local-controls.json) pass twelve
+focused native regressions across two invocations, retaining the exact command and original test output.
+They cover a single 1,000-distinct-type create batch through deferred checks and
+commit, exact values and history for 1,000 updates, source-admission boundaries,
+the retained edge-planner oracle, feed delivery, the eight-key capacity case and
+protected-query activation with the selected compiler cohort.
+Original schema bytes are compared once per document within each admission call;
+the current owner and writer checks still run for every admitted operation.
+Relation lookup starts from the affected type's endpoints in both planning and
+native graph validation. This is local evidence, not a passing hosted matrix.
+
+The earlier [C76 index-heavy diagnostic](results/2026-10-18-c76-index-heavy-diagnostic.json)
+loads the full 10,000 objects and 20,000 edges, then commits all five repetitions
+of each 1/100/1,000/1,024 update size. Median 1,024-update apply time is 4,350ms,
+with a separate 1,327–2,165ms commit. It uses 1,000-row load batches instead of
+the declared hosted case's 100 and enables function profiling. Its bulk-100
+speedup of 4.710 is below the initial 5× triage threshold. Preserve those
+differences and that signal; this diagnostic does not replace hosted qualification.
+
+## 2026-10-18: C75 successor failures and graph diagnostic
+
+[C75 run 39167394688](https://github.com/DocumentDrivenDX/truss/actions/runs/39167394688)
+uses source `d40e5570ed78136ed6e91060d22f4271303dd260`. Its
+[immutable package comparison](results/2026-10-18-c75-hosted-package.json)
+checks all 528 runtime payloads, including the Python host. The macOS native
+job still times out on the eight-key, 1,024-operation batch. The Linux native
+job exposes a stale oracle test that clones the old two-argument planner wrapper
+instead of its application-aware implementation. Neither is a passing release gate.
+
+A separate [1,000-distinct-type diagnostic](results/2026-10-18-c75-graph-diagnostic.json)
+also times out while creating all 1,000 objects in one atomic group, before any
+update is attempted. Loading the fixture in ten groups and successfully updating
+1,000 objects does not establish this create capacity. The graph validator scans
+unrelated relationship definitions for each object. A selected-endpoint lookup
+reduces the standalone authorization query from 2.512ms/9,046 buffer hits to
+0.175ms/32 hits; the successor must still pass the complete create operation,
+deferred checks and caller commit under the original deadlines.
+
 ## 2026-10-18: C73 hosted failures; successor under test
 
 [Run 39164763845](https://github.com/DocumentDrivenDX/truss/actions/runs/39164763845)
@@ -22,7 +62,8 @@ tests source `7fcb4c5a9719c1a9a86468e1a2a05510cbf8c80b` against all eleven
 unchanged workloads on Linux x86_64 and macOS ARM64, alongside both complete
 native release jobs. The [failure snapshot](results/2026-10-18-c73-hosted-failures.json)
 records container-oracle, wide, many-type and eight-key/index-heavy SQL timeouts.
-Remaining hosted cases are still running. This candidate cannot be published.
+The run was cancelled after preserving its failures when its replacement was ready.
+This candidate cannot be published.
 Its replacement is under test with unchanged deadlines and workloads.
 
 The [C73 controls](results/2026-10-18-c73-local-controls.json) identify the exact

@@ -14,6 +14,7 @@ import math
 import os
 from pathlib import Path
 import platform
+import re
 import resource
 import statistics
 import subprocess
@@ -114,10 +115,16 @@ class SQLSubmissionCounter:
         # Inspect transient SQL only to increment a fixed label; retain neither
         # query text nor parameters in the counter or report.
         text=str(query).lower()
-        if 'writer_schema_basis' in text:return 'cold_schema_basis'
-        if 'apply_group_prepared' in text:return 'prepared_payload'
-        if 'apply_group(' in text:return 'legacy_payload'
-        if 'truss.' in text and text.lstrip().startswith(('select','with')):return 'public_function_payload'
+        is_function_invocation=text.lstrip().startswith(('select','with'))
+        if is_function_invocation:
+            # SQL may mention function names in a SELECT literal. Remove quoted
+            # strings before classifying so labels represent call sites only.
+            call_text=re.sub(r"'(?:''|[^'])*'", "''", text)
+            if re.search(r'\b(?:truss\s*\.\s*)?writer_schema_basis\s*\(',call_text):return 'cold_schema_basis'
+            if re.search(r'\b(?:truss\s*\.\s*)?apply_group_prepared\s*\(',call_text):return 'prepared_payload'
+            if re.search(r'\b(?:truss\s*\.\s*)?apply_group\s*\(',call_text):return 'legacy_payload'
+            if re.search(r'\btruss\s*\.\s*[a-z_][a-z0-9_]*\s*\(',call_text):return 'public_function_payload'
+        if re.match(r'\s*(?:create|grant|revoke|drop|alter|comment)\b',text):return 'other'
         if 'rollback to savepoint' in text:return 'savepoint_rollback'
         if 'release savepoint' in text:return 'savepoint_release'
         if 'savepoint' in text:return 'savepoint_open'
@@ -223,6 +230,17 @@ def self_test_sql_counter():
     fake_host_module=SimpleNamespace(PsycopgHost=FakeHost)
     fake_assembly_module=SimpleNamespace(CatalogReferenceAssembly=FakeAssembly)
     counter=SQLSubmissionCounter(True)
+    negative_sql={
+        'CREATE FUNCTION truss.writer_schema_basis(jsonb) RETURNS jsonb AS $body$ BEGIN RETURN NULL; END $body$ LANGUAGE plpgsql':'other',
+        'CREATE FUNCTION truss.observe() RETURNS xid8 AS $body$ BEGIN PERFORM pg_current_xact_id(); SAVEPOINT hidden; RETURN NULL; END $body$ LANGUAGE plpgsql':'other',
+        'GRANT EXECUTE ON FUNCTION truss.apply_group_prepared(jsonb) TO truss_writer':'other',
+        "SELECT 'truss.apply_group_prepared($1)' AS signature":"other",
+        "SELECT 'writer_schema_basis(jsonb)' AS catalog_name":"other",
+    }
+    for query,expected_class in negative_sql.items():
+        actual_class=counter._classification(query)
+        if actual_class!=expected_class:
+            raise AssertionError({'query':query,'expectedClass':expected_class,'actualClass':actual_class})
     install_sql_submission_counter(fake_psycopg,fake_host_module,counter,fake_assembly_module)
     with counter.scope('mock','case') as case_counts:
         with counter.scope('mock.apply','operation') as operation_counts:

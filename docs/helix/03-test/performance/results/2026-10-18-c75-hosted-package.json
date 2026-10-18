@@ -1,0 +1,11 @@
+{
+  "runId": 39167394688,
+  "sourceCommit": "d40e5570ed78136ed6e91060d22f4271303dd260",
+  "wheelSha256": "53a92510cb878ef355628e8e1ea3be553fb4adc6966da46251bea86791e504d1",
+  "nativeManifestSha256": "b90ed3ad747eafd2bb07c39cc411fbcb6b08f57cef39e8611ccc8058572aa8c4",
+  "matchedRuntimePayloads": 528,
+  "mismatches": [],
+  "runtimePayloadInventorySha256": "791ac7a0e802dc11091911cae5a9be6876cc97f56ed97949ce37c82d5613a9cb",
+  "inventoryHashAlgorithm": "SHA256 of sorted UTF8 path + NUL + SHA256(raw content) for each truss/ wheel entry",
+  "scope": "Compared to immutable git-archive source, not the current working tree. Wheel ZIP metadata is excluded from the runtime inventory digest."
+}

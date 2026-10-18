@@ -1,5 +1,7 @@
 """Basic public committed feed, caller settlement and ordinary-role ACK workflow."""
 import json
+import psycopg
+from psycopg import sql
 from truss import (Ok,FeedPage,FeedAcknowledged,FeedUnavailable,ModuleAccessGrant,
     adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration)
 from truss.groups import Delete,StoredObjectReference,GroupSuccess,CreateEdge,NullOrderKey
@@ -11,6 +13,31 @@ import test_receipt_visibility_native as receipt_tests
 class FeedRuntimeTests(receipt_tests.ReceiptVisibilityTests):
     for _name in tuple(n for n in dir(receipt_tests.ReceiptVisibilityTests) if n.startswith('test_')):
         locals()[_name]=None
+
+    def test_configuration_carriers_preserve_writer_identity_and_named_extensions(self):
+        connection,host,assembly,tx=self.ready()
+        host.detach();connection.rollback()
+        self.admin.execute('BEGIN')
+        self.addCleanup(self.admin.rollback)
+        writer=self.admin.execute('SELECT pg_current_xact_id()::text').fetchone()[0]
+        for field in ('xid','writer_xid','extension_writer'):
+            table='feed_carrier_'+field
+            self.admin.execute(sql.SQL('CREATE TEMP TABLE {} ({} xid8)').format(
+                sql.Identifier(table),sql.Identifier(field)))
+            self.admin.execute(sql.SQL('CREATE TRIGGER capture AFTER INSERT ON {} FOR EACH ROW '
+                'EXECUTE FUNCTION truss.runtime_capture_feed_configuration({})').format(
+                    sql.Identifier(table),sql.Literal(field)))
+            self.admin.execute(sql.SQL('INSERT INTO {} VALUES (%s::xid8)').format(sql.Identifier(table)),(writer,))
+            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_feed_transaction_configuration '
+                'WHERE writer_xid=%s::xid8',(writer,)).fetchone(),(1,))
+            self.admin.execute('SAVEPOINT wrong_writer')
+            with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
+                self.admin.execute(sql.SQL('INSERT INTO {} VALUES (%s::xid8)').format(sql.Identifier(table)),('1',))
+            self.admin.execute('ROLLBACK TO SAVEPOINT wrong_writer')
+            self.admin.execute('RELEASE SAVEPOINT wrong_writer')
+        self.assertEqual(self.admin.execute('SELECT configuration->>\'releaseId\' FROM '
+            'truss.runtime_feed_transaction_configuration WHERE writer_xid=%s::xid8',(writer,)).fetchone(),
+            (self.admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],))
 
     def enrolled(self):
         connection,host,assembly,tx=self.ready()

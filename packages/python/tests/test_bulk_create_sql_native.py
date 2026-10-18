@@ -98,12 +98,12 @@ class BulkEdgeSqlTests(edge_base.EdgeMutationTests):
 
     def test_buffered_edge_plans_equal_the_retained_general_planner(self):
         connection,host,assembly,tx,a,b,pin=self.initialized()
-        definition=self.admin.execute("SELECT pg_get_functiondef('truss.runtime_owned_prepare(jsonb,jsonb)'::regprocedure)").fetchone()[0]
+        definition=self.admin.execute("SELECT pg_get_functiondef('truss.runtime_owned_prepare_application(jsonb,jsonb,jsonb)'::regprocedure)").fetchone()[0]
         self.assertEqual(definition.count('edge_creates:=NOT EXISTS('),1)
-        reference=definition.replace('truss.runtime_owned_prepare(', 'public.reference_edge_prepare(',1)
+        reference=definition.replace('truss.runtime_owned_prepare_application(', 'public.reference_edge_prepare(',1)
         reference=reference.replace('edge_creates:=NOT EXISTS(', 'edge_creates:=false AND NOT EXISTS(',1)
         self.admin.execute(reference)
-        self.addCleanup(self.admin.execute,'DROP FUNCTION public.reference_edge_prepare(jsonb,jsonb)')
+        self.addCleanup(self.admin.execute,'DROP FUNCTION public.reference_edge_prepare(jsonb,jsonb,jsonb)')
         self.admin.execute("""CREATE FUNCTION public.compare_edge_plans() RETURNS trigger LANGUAGE plpgsql AS $$
             DECLARE original_input jsonb;scope jsonb;
             BEGIN
@@ -112,7 +112,7 @@ class BulkEdgeSqlTests(edge_base.EdgeMutationTests):
                   FROM truss.runtime_object_attempt WHERE id=NEW.attempt_id;
                 scope:=NEW.plan->'initialScope';
                 IF truss.runtime_owned_prepare(original_input,scope) IS DISTINCT FROM
-                   public.reference_edge_prepare(original_input,scope) THEN
+                   public.reference_edge_prepare(original_input,scope,NULL) THEN
                   RAISE EXCEPTION 'buffered and general edge preparation differ' USING ERRCODE='P9998';
                 END IF;
               END IF;
