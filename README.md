@@ -11,9 +11,10 @@ and Weft-compiled scalar and relationship queries. The local baseline is Documen
 `pgserver-pg18==18.6.1` (PostgreSQL18.6) with psycopg3.3.6. Python deployments
 use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Start with the [runnable adopter workflow](packages/python/examples/adopter_workflow.py).
 
-The Bun-free stable update is version0.0.38 / native0.70. Owned objects and
-composition remain in the unreleased0.0.39 development tranche; their hosted
-capacity and 1,000-edge workload gates have not passed. Cyclic schema definitions,
+[v0.0.39](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.39)
+includes owned graphs, compact registration evidence and batched SQL performance
+fixes. Its tested source passed complete Linux/macOS capacity and original
+1,000-object/1,000-edge workflows with unchanged deadlines. Cyclic schema definitions,
 record-valued properties, history offload and managed-service qualification remain
 unfinished. Design and evidence live in
 [`docs/helix/`](docs/helix/README.md).

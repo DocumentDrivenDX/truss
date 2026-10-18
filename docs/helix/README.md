@@ -1,18 +1,17 @@
 # truss project documentation
 
-The current development checkpoint is Python SDK `0.0.39.dev0` / native
-`0.71-candidate`; the latest published release is [v0.0.38](04-build/releases/v0.0.38.md)
-(native `0.70-candidate`, Weft `0.4.41` / backend `0.4.40`). Development owned-graph
-workflows cover creation, explicit subtree reparenting, cascade deletion,
-read-only reads, history, receipt replay and explicit atomic owned imports with
-indexed original provenance. Development compiled queries use
-published Weft0.4.41 / backend0.4.41. Canonical dates and exact decimal facets
-are supported by catalog acceptance, writes and reads; their broader SQL query
-domains remain unfinished. Practical performance still blocks the next release,
-and the integrated 1,024-operation path remains unqualified on the release
-runners. See the
-[unreleased tranche notes](04-build/releases/v0.0.39.md) and
-[current Python interface](../../packages/python/README.md) for exact scope.
+The current release is [Python SDK v0.0.39](04-build/releases/v0.0.39.md),
+native `0.71-candidate`, using published Weft `0.4.41` / backend `0.4.41`.
+Python deployment requires no Bun or Node. Owned graphs, atomic owned imports,
+owned-object catalog evolution, compact registration evidence and batched native
+writes are included. The tested source passed complete Linux/macOS release jobs,
+original 1,024-operation capacity controls and the full 1,000-object/1,000-edge
+workload with unchanged 10s SQL/30s operation limits; the tag workflow qualifies
+the final package before publication. See [performance evidence](03-test/performance/README.md)
+and the [current Python interface](../../packages/python/README.md) for scope.
+Broader stress/p95 targets, additional query domains and managed-service
+qualification remain unfinished. Earlier checkpoints below retain their
+historical scope.
 
 ## First-release scope — owner direction, 2026-10-13
 
@@ -32,7 +31,7 @@ UMF0.7/0.8 and Weft0.4.12. New feature tranches are released independently;
 see the package README and release notes for later exact pairings.
 The tested local tuple is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL18.6
 and psycopg3.3.6 binary/libpq18.6. The host supplies its authenticated connection
-and owns outer transactions; Bun1.4.2 remains required for UMF preparation.
+and owns outer transactions; the current release embeds V8 for UMF preparation.
 
 Available operations include installation/status and additive predecessor
 upgrades, accepted catalogs/reports/original source, compatible scalar evolution,

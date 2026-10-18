@@ -1,21 +1,19 @@
 # Truss Python toolkit
 
-Current main builds `0.0.39.dev0` / native0.71. The separate stable0.0.38
-Bun-free release retains native0.70; owned-graph capabilities described below
-remain unreleased because their original hosted capacity gates have not passed.
+[Truss v0.0.39](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.39)
+installs native `0.71-candidate` with published Weft `0.4.41` / backend `0.4.41`.
+Python deployment uses embedded V8 and requires no Bun, Node or external
+JavaScript process. The release includes owned graphs, explicit subtree
+reparenting, cascade deletion, atomic owned imports, owned-object catalog
+evolution, compact registration evidence and batched native writes.
 
-
-**Unreleased development checkpoint:** SDK `0.0.39.dev0` installs native
-`0.71-candidate`. Public groups now create owned objects/edges, explicitly
-reparent complete subtrees and cascade deletes; identity/key/page/edge reads,
-traversal and retained history preserve ownership. Basic PostgreSQL18.6 workflows
-cover commit, rollback, dry-run and original receipt replay. The
-latest published release is [v0.0.38](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.38),
-using native `0.70-candidate` with Weft `0.4.41` / backend `0.4.40`.
-Its Linux x86_64 and macOS ARM release gates passed, including the populated
-v0.0.35 upgrade. The v0.0.36 tag remains an unpublished failed attempt.
-The earlier v0.0.35 feature scope is described below; owned-graph development
-remains unreleased.
+The tested source passed both complete Linux x86_64/macOS ARM64 native jobs,
+including the original 1,024-operation capacity controls and full
+1,000-object/1,000-edge workload, with unchanged 10s SQL/30s operation limits.
+The tag workflow checks the final package before publishing.
+[Performance evidence](../../docs/helix/03-test/performance/README.md)
+and [release/upgrade notes](../../docs/helix/04-build/releases/v0.0.39.md)
+record exact scope. Broader scale and p95 targets are not certified.
 
 Modern owned groups admit up to 1,024 operations per atomic group; legacy
 rootless groups retain their 128-operation limit. Basic native tests cover
@@ -25,16 +23,15 @@ failure at operation 1,024. Upgrading published v0.0.35 widens the retained
 attempt constraint without rewriting receipts or historical data. Other
 byte/value limits and ordinary deadlines still apply.
 
-Development compiled queries use published `weft-sql==0.4.40`, backend
+Compiled queries use published `weft-sql==0.4.41`, backend
 `0.4.41` / binding `0.5`, and the explicit logical query ABI. Basic native
 workflows exercise the default public compiler with owned descendants, the
 original Northwind Product model, decimal(12,2), and stable UMF IDs for unnamed
 records and fields. These checks do not qualify the broader protected engine.
-Development adds explicit atomic owned imports, alternate-key backfill and retained-value rebinding for existing owned objects. Ordinary Date queries preserve canonical Gregorian `YYYY-MM-DD` tokens for years
+This release adds explicit atomic owned imports, alternate-key backfill and retained-value rebinding for existing owned objects. Ordinary Date queries preserve canonical Gregorian `YYYY-MM-DD` tokens for years
 0001–9999, including exact equality, optional values and query pages. Date ordering,
 Date business keys, typed-engine Date outputs/parameters and other generic-decimal
-SQL query domains remain unfinished. Practical
-performance still blocks release; this checkpoint is not a release tag.
+SQL query domains remain unfinished.
 
 The public-only owned example runs installation, registration, owned creation,
 explicit subtree reparenting, caller rollback, read-only key/edge/traversal reads,
@@ -79,8 +76,8 @@ receipts; both platform release workflows passed with matching Weft v0.4.38.
 
 Creation now joins the common object transition ledger while retaining its sole
 original journal and receipt evidence. Populated native67 installations can
-upgrade without rewriting original rows or committed receipts. Owned objects
-remain unfinished; the public rootless read profile is unchanged.
+upgrade without rewriting original rows or committed receipts. The earlier public rootless read profile remains supported alongside owned
+objects in v0.0.39.
 
 Registration-owned optional and required non-key rebinding is included in25; its
 [report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.2.md)
@@ -286,32 +283,32 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.38 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.39 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.41 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.38'
+  'truss-toolkit[local,native,query]==0.0.39'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
 wheel uses `mini-racer==0.14.1` to execute the preserved UMF producer inside V8.
 Original producer manifests retain their build-time Bun pins; these are provenance,
-not deployment requirements. SDK 0.0.38 / native 0.70 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
+not deployment requirements. SDK 0.0.39 / native 0.71 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
 catalogs. Create/update, imports, preconditions, backfills and lookups require no
 client encoder or per-key receipt. Existing stored key and namespace bytes are
 preserved. Weft remains optional through `query` (version 0.4.41); it is not a
 key-encoding dependency. The separate protected security observation retains its
 original producer boundary.
-The installation command selects SDK0.0.38 and its matching Weft0.4.41.
+The installation command selects SDK0.0.39 and its matching Weft0.4.41.
 Each release publishes package checksums and source/runtime/backend pins. The Truss release
 workflow exercises the exact uploaded wheel with its exactly paired published Weft wheels and verified
 PG18 dependency wheels on both declared native platforms.
 
 ## Run a real workflow
 
-Check out the v0.0.38 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.39 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.38 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.39 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
@@ -419,8 +416,9 @@ Existing-installation administration additionally needs inherited authority over
 the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
-`upgrade_in_transaction(tx)` supports the exact retained runtime candidates
-0.23 through 0.52 to the current runtime0.53. The trusted administrator must quiesce consumers and
+`upgrade_in_transaction(tx)` validates exact retained predecessor manifests before
+upgrading to native0.71. The release workflows include populated native68
+(SDK0.0.35) and native70 (SDK0.0.37/0.0.38 storage) upgrade routes. The trusted administrator must quiesce consumers and
 settle the upgrade transaction. Active consumers cause a nonblocking refusal;
 there is no retry loop. Supported upgrades preserve installation identity,
 catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
