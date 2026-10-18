@@ -1,0 +1,58 @@
+{
+  "schema": "truss-hosted-evidence-manifest/1.0",
+  "capturedAtUtc": "2026-10-18T23:08:51.393889+00:00",
+  "runId": 39167394688,
+  "runUrl": "https://github.com/DocumentDrivenDX/truss/actions/runs/39167394688",
+  "sourceCommit": "d40e5570ed78136ed6e91060d22f4271303dd260",
+  "runtimeManifestSha256": "b90ed3ad747eafd2bb07c39cc411fbcb6b08f57cef39e8611ccc8058572aa8c4",
+  "scope": "C75 completed hosted snapshot after dense-edges macOS failure; 19 stress reports, 13 pass and 6 fail. Earlier 17/18 report snapshots already retained separately and are not overwritten. Full C75 matrix remains incomplete; three stress jobs active at capture.",
+  "denseMacOSFailure": {
+    "jobId": 117793695665,
+    "platform": "macos-14",
+    "case": "dense-edges",
+    "types": 10,
+    "fieldsPerType": 12,
+    "nodes": 10000,
+    "edges": 500000,
+    "attemptedGroupSizes": [
+      100
+    ],
+    "committedGroupSizes": [
+      100
+    ],
+    "status": "failed",
+    "failure": "complete entity listing returned QueryRefused(code=limits); native diagnostic `bounded query edge source required`, query_edges(jsonb,integer) line 9; functionalPassed false"
+  },
+  "files": [
+    {
+      "label": "dense-macos-report",
+      "sourcePath": "/private/tmp/truss-39167394688-artifacts/dense-edges-macos-14/report.json",
+      "path": "/Users/erik/Projects/truss/docs/helix/03-test/performance/results/c75-dense-macos-report.json.gz",
+      "rawBytes": 5376094,
+      "rawSha256": "47d8cd5b8f3b50db3e0b7857ff2806b6698825caf75ef77ae93164b58f24c63b",
+      "gzipBytes": 99920,
+      "gzipSha256": "53d6b25a6e142e227bb1e89910794e11c69dfcbb23e053b45b12325fadb1e2ee",
+      "compression": "gzip mtime=0 level=9"
+    },
+    {
+      "label": "dense-macos-job-log",
+      "sourcePath": "/private/tmp/truss-c75-stress-dense-macos-exact.log",
+      "path": "/Users/erik/Projects/truss/docs/helix/03-test/performance/results/c75-dense-macos-job-log.log.gz",
+      "rawBytes": 511142,
+      "rawSha256": "baa97a118d9d37bc3e9acea0fd94ccae078fd4e8303eff1db4b6f106ba68c198",
+      "gzipBytes": 78581,
+      "gzipSha256": "da10d133022dc3238fde6bc18276c61b2efa2752b4b83f8e095f5c00832e6d70",
+      "compression": "gzip mtime=0 level=9"
+    },
+    {
+      "label": "19-report-hosted-snapshot",
+      "sourcePath": "/private/tmp/truss-c75-hosted-snapshot-receipt.json",
+      "path": "/Users/erik/Projects/truss/docs/helix/03-test/performance/results/c75-dense-19-report-snapshot.json.gz",
+      "rawBytes": 42807,
+      "rawSha256": "a663d1349490664d7885ee5ccbcc5bda5bebf3522287842e6065353a343727ee",
+      "gzipBytes": 7610,
+      "gzipSha256": "9ec7014fa3a4d24030d83cbe53546ed873167bbed979c0638b0093676f569781",
+      "compression": "gzip mtime=0 level=9"
+    }
+  ]
+}

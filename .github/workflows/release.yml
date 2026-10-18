@@ -109,7 +109,7 @@ jobs:
       - name: Verify source-only preparation, real schemas, and capacity regressions
         env:
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_embedder_schemas_native test_stress_registration_native test_catalog_view_capacity_native test_condition_precedence_native test_group_source_admission_native test_import_chunk_closure_native test_key_footprint_capacity_native test_endpoint_capacity_native test_history_projection_native test_schema_cache_native test_embedder_workflows_native test_bulk_update_transition_guard_native test_schema_memory_cache test_record_schema test_record_schema_oracle_native test_record_preparation_native test_record_schema_selection_native test_reader_catalog_native test_compiled_query_native.CompiledQueryTests.test_wide_complete_entity_preserves_fields_with_explicit_byte_budget
+        run: python -m unittest test_embedder_schemas_native test_stress_registration_native test_catalog_view_capacity_native test_condition_precedence_native test_group_source_admission_native test_create_metadata_cache_native test_import_chunk_closure_native test_key_footprint_capacity_native test_endpoint_capacity_native test_history_projection_native test_schema_cache_native test_embedder_workflows_native test_bulk_update_transition_guard_native test_schema_memory_cache test_record_schema test_record_schema_oracle_native test_record_preparation_native test_record_schema_selection_native test_reader_catalog_native test_compiled_query_native.CompiledQueryTests.test_wide_complete_entity_preserves_fields_with_explicit_byte_budget
       - name: Preserve populated published native71 data and installation authority
         env:
           GH_TOKEN: ${{ github.token }}

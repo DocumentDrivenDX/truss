@@ -1,0 +1,86 @@
+{
+  "candidate": "C80",
+  "sourceCommit": "a7df98bb8707e6520c20e71044762570dcbf2958",
+  "sourceWorkingTreeDirty": true,
+  "sourceScope": "CREATE assembles dictionary/codecs/namespaces once from indexed arrays and reuses exact five-key immutable current-head runtime_type_schema metadata; current writer/value-reader checks remain. UPDATE and host payloads unchanged from C79.",
+  "wheelSha256": "cfb739c04e7b34fb087ef4a554de3d6860ceb209ebf7d4007bc2b8f0e3fd7a18",
+  "nativeManifestSha256": "32e5c7cb7d56d39e692d1f024cd5733f6b52c7281d4e1378d0b7e3bb564c8013",
+  "matchedRuntimePayloads": 528,
+  "runtimePayloadInventorySha256": "30f955aac3911d0dac087740e33c61961c9859acc1a76367161e02ca744f0c0a",
+  "changedRuntimePayloadsFromC79": [
+    "truss/_catalog_runtime/manifest.json",
+    "truss/_catalog_runtime/owned.sql"
+  ],
+  "controls": {
+    "tests": 4,
+    "passed": 4,
+    "unittestElapsedSeconds": [
+      12.748,
+      46.466
+    ],
+    "coverage": [
+      "Exact five-key metadata matches manual source-pin interpretation at compatible revision2; unsupported field retirement refuses0A000 without changing accepted head/property state or preventing subsequent CREATE",
+      "Current cross-module field reader revocation refuses CREATE with zero objects while owner writer remains",
+      "1000 distinct-type CREATE in one atomic group including deferred settlement and commit",
+      "1000 distinct-type UPDATE atomic batch with exact object/journal values"
+    ]
+  },
+  "fixtureCorrection": "Initial test incorrectly expected unsupported field retirement to be accepted; retained failed probe is fixture-only evidence. Corrected test explicitly verifies the unchanged unsupported-profile contract. No runtime/deadline/workload change was made for this correction.",
+  "rejectedPrivateDiagnostics": {
+    "keyDmlMergeSeconds": [
+      5.283,
+      5.533,
+      4.959
+    ],
+    "journalDigestMapSeconds": [
+      7.487,
+      8.459,
+      7.342
+    ],
+    "journalFullJoinSeconds": [
+      5.521,
+      5.377,
+      5.673
+    ],
+    "interpretation": "Each baseline/prototype/baseline eight-key diagnostic passed assertions, but none showed a material paired gain. No private prototype is in canonical source or this wheel."
+  },
+  "qualification": "Focused local proper-wheel evidence only. Full final native/eleven-case two-platform qualification and original counted real-schema benchmark remain required. Prepared optional ten-selector runner was not executed.",
+  "artifacts": {
+    "2026-10-18-c80-create-cache-controls.log.gz": {
+      "uncompressedSha256": "7c45ca4a29d50e739d208a9e2d882e65573f134c78055a5e69b833fdb8b369e9",
+      "compressedSha256": "3168053999f1415ca3148769fa4eb70f34c240928d9d8967321d1e182721b6f2"
+    },
+    "2026-10-18-c80-thousand-type-controls.log.gz": {
+      "uncompressedSha256": "207423989b3d1d1036304c6fd59f5eaae6179c494e56241a1bdd1cf550bc9528",
+      "compressedSha256": "0eec94565f80ba563e3e0f7fb273c35f5c2d727d8652feb6cf3fcc702c3d570a"
+    },
+    "2026-10-18-c80-unsupported-retirement-probe.log.gz": {
+      "uncompressedSha256": "f3c5d192046b660508dba69315797feda23d86adc67e0959462f93c33e1c579e",
+      "compressedSha256": "ba14acb95cdca4bb614c476531c7419f9cebcd74708bfa022aadb68294e4cd41"
+    },
+    "2026-10-18-c80-control-receipt.json.gz": {
+      "uncompressedSha256": "cad513ca59fc2955a3a6c128a2a290782b63a181ae7fa8c7d4d134150732cc96",
+      "compressedSha256": "c2237778dc59e3a529d7e0f554380f6371d144b95376b0e1cfff0a9a4e893b79"
+    },
+    "2026-10-18-c80-package-parity.json.gz": {
+      "uncompressedSha256": "f7ce9a060d65dac365f679b9bf6401ba2fd07f35c531b9cb41b48450b81deb3b",
+      "compressedSha256": "6ebb698c0a4e0bdd74054297c38e02fe7aa1f07604cb2ae179f14470848be420"
+    },
+    "2026-10-18-c80-build.log.gz": {
+      "uncompressedSha256": "aacb2887a07dad161e28c4c24c159f7bb4e9037189471ac9c9395308cb64650a",
+      "compressedSha256": "7a90e0aed0ff062565384a3b670e26bbe35f104d27b40d5dfb8e6a2b5cc5e09e"
+    },
+    "2026-10-18-c80-rejected-keymerge.json.gz": {
+      "uncompressedSha256": "b979b6b8a76444f0e4b23f81f093ec825bfa21e08e92f67c732820e4c64c9fe6",
+      "compressedSha256": "7effcf62ec24c0152ce978894d00d17eda478b46cc34bd69ae85844f1d517628"
+    },
+    "2026-10-18-c80-rejected-digestmap.json.gz": {
+      "uncompressedSha256": "962fa877a9dac9584ab9e6bef65a23cda75a899d1fb584cc10907308ec01d01d",
+      "compressedSha256": "921f00ac43094b9065913f3da7db2e52b624d86266cb6c8871eafb8340c654ab"
+    },
+    "2026-10-18-c80-rejected-fulljoin.json.gz": {
+      "uncompressedSha256": "d29ecfdf3561f358ec319b5972b15b5b6e2cd7515950c927203ed062505ddb39",
+      "compressedSha256": "37696e78614e81cbc07f9fd70a159aef3131a5a792fdd4204d49baa809874873"
+    }
+  }
+}

@@ -545,6 +545,28 @@ class RealWorkflows(PublicCatalogRuntimeTests):
             listed=ok(assembly.query_in_transaction(tx,sql=list_sql,document_ids=(document_id,),
                 parameters=None,maximum_rows=100,maximum_bytes=query_bytes,read_profile='complete-entity'))
             if isinstance(listed,QueryRefused) and listed.code=='limits' and workload:
+                # ABI 1.1 buffers a complete relationship source before
+                # correlation. This is separate from the per-object key bound.
+                relationship_source_rows=sum(1 for edge_type,_,_ in workload_edges(workload) if edge_type==0)
+                if relationship_source_rows>10000:
+                    diagnostic=str(host._custody.last_attempt.error)
+                    if 'bounded query edge source required' not in diagnostic:
+                        raise AssertionError('Unexpected query refusal above edge source bound: '+repr(listed)+'; native-test diagnostic: '+diagnostic)
+                    scalar_sql='SELECT x.'+quote('p0')+' FROM '+quote(module.get('namespace',module_id))+'.'+quote(selected_record.get('name',record))+' x LIMIT 51'
+                    scalar=timed(sample,'list_scalar_entities',lambda:ok(assembly.query_in_transaction(tx,
+                        sql=scalar_sql,document_ids=(document_id,),parameters=None,maximum_rows=100,maximum_bytes=query_bytes)))
+                    expected={'p0-'+str(index) for index,identity in enumerate(identities) if identity.type_id==identities[0].type_id}
+                    if not isinstance(scalar,QueryRows) or len(scalar.rows)!=min(51,len(expected)) or any(len(row)!=1 for row in scalar.rows):
+                        raise AssertionError('Scalar list above relationship source bound refused or returned wrong shape: '+repr(scalar))
+                    actual={row[0] for row in scalar.rows}
+                    if len(actual)!=len(scalar.rows) or not actual<=expected:
+                        raise AssertionError('Scalar list above relationship source bound changed values')
+                    case['listRead']={'status':'outside_published_query_edge_scan_bound','sql':list_sql,
+                        'maximumBytes':query_bytes,'relationshipSourceRows':relationship_source_rows,'maximumScanRows':10000,
+                        'observedRefusal':listed.code,'nativeDiagnostic':diagnostic,
+                        'scalarList':{'sql':scalar_sql,'rows':len(scalar.rows),'exactValuesVerified':True},
+                        'scope':'Full declared object/edge load, ID/key reads and all write repetitions run unchanged; complete-entity relationship projection is outside ABI 1.1 source bounds'}
+                    return listed
                 # Complete-entity promises every relationship key and admits
                 # at most 100 per relationship. Prove the generated hot source
                 # exceeds that bound; the declared ID/key workload still runs.

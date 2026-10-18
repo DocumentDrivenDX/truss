@@ -15,6 +15,31 @@ ddx:
 
 # Practical functionality and performance
 
+## Dense relationship source boundary
+
+Query ABI 1.1 admits complete source bags of at most 10,000 rows per record or
+relationship type before caller predicates. The unchanged dense workload has
+500,000 edges across ten relationship types: 50,000 per relationship. Its
+complete-entity list therefore receives a whole-query resource refusal even
+though each object's 50 outgoing keys fit the separate 100-key bound. A list
+limit does not qualify a smaller source bag under this ABI.
+
+The driver records this exact source-bound negative, checks the native reason,
+and requires a successful 51-row scalar list with exact original values. It
+still loads and verifies all 10,000 objects and 500,000 edges, and runs every
+declared ID/key read, committed single write and five repetitions of each
+supported atomic update size. This does not qualify complete-entity dense
+lists. Selected-endpoint source pushdown needs a separately qualified compiler
+and provider ABI; raising the bound or returning partial relationship keys is
+not part of this change. The million-node object-source and skewed per-object
+relationship-cardinality boundary tests remain separate.
+
+The [isolated boundary control](results/2026-10-18-query-source-boundary-control.json)
+passes on the C79 installed wheel with 102 objects and 10,001 edges in one
+relationship, at most 99 outgoing keys per object. It verifies the source-bound
+refusal and the exact 51-row scalar list under the unchanged deadlines. This
+small boundary control is not the declared 500,000-edge stress qualification.
+
 ## 2026-10-18: C77 focused controls; hosted qualification pending
 
 The [C77 controls](results/2026-10-18-c77-local-controls.json) pass twelve

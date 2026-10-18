@@ -1,0 +1,64 @@
+{
+  "qualification": "Passing isolated query ABI1.1 source boundary control only; not a declared stress case or full matrix result. The declared dense500000-edge population, full read/write samples and all repetitions must still run separately.",
+  "runtimePackage": "/private/tmp/truss-c79-final-package",
+  "nativeManifestSha256": "b05a03ead95682f4d4966392e48610401c368e31ec492120d5a7a5207f5f6a59",
+  "runtimePayloadInventorySha256": "af0778e827c46805349dd2a1d4973ddac2359ddc919cc951d0f85832b5e4d3b6",
+  "sourceCommit": "a7df98bb8707e6520c20e71044762570dcbf2958",
+  "benchmarkSourceUncommitted": true,
+  "processExitCode": 0,
+  "elapsedSeconds": 69.71745450000162,
+  "nodes": 102,
+  "edges": 10001,
+  "relationshipTypes": 1,
+  "maximumOutgoingKeys": 99,
+  "listRead": {
+    "status": "outside_published_query_edge_scan_bound",
+    "sql": "SELECT x.* FROM \"m\".\"R0\" x LIMIT 51",
+    "maximumBytes": 16777216,
+    "relationshipSourceRows": 10001,
+    "maximumScanRows": 10000,
+    "observedRefusal": "limits",
+    "nativeDiagnostic": "bounded query edge source required\nCONTEXT:  PL/pgSQL function truss.query_edges(jsonb,integer) line 9 at RAISE",
+    "scalarList": {
+      "sql": "SELECT x.\"p0\" FROM \"m\".\"R0\" x LIMIT 51",
+      "rows": 51,
+      "exactValuesVerified": true
+    },
+    "scope": "Full declared object/edge load, ID/key reads and all write repetitions run unchanged; complete-entity relationship projection is outside ABI 1.1 source bounds"
+  },
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "externalJavaScriptForbidden": true,
+  "argv": [
+    "/private/tmp/truss-bunfree-venv/bin/python",
+    "/private/tmp/truss-query-source-boundary-control.py"
+  ],
+  "PYTHONPATH": "/private/tmp/weft-042-final-package:/private/tmp/truss-c79-final-package:/Users/erik/Projects/truss/packages/python/tests",
+  "artifacts": {
+    "2026-10-18-query-source-boundary-report.json.gz": {
+      "uncompressedBytes": 67007,
+      "uncompressedSha256": "63401d130e5ecce828bf291ce6a610ba6d66e9b635434ebf440842c6f4a804c8",
+      "compressedSha256": "772964dc4790ee45b617e93210ed8e41bbffb058555747d28d10a27435e4238f"
+    },
+    "2026-10-18-query-source-boundary-run.log.gz": {
+      "uncompressedBytes": 26641,
+      "uncompressedSha256": "d5d3b4791617672e8a850423bb6891d6b9aec87d9002806678b325013f2d217f",
+      "compressedSha256": "eaac9d9df0254a1ada3b1ccb494a547df79b9715d7be963ed5c0d801f5ba9c15"
+    },
+    "2026-10-18-query-source-boundary-config.json.gz": {
+      "uncompressedBytes": 523,
+      "uncompressedSha256": "25f0ce83a924dda4bed78376f273b4f95c5c8d9bdc614737aa0a168c9115c10a",
+      "compressedSha256": "0e8287a958cc9512d61e8e746ce3284392063a786b18d437de9e6e5797bd7b8e"
+    },
+    "2026-10-18-query-source-boundary-harness.py.gz": {
+      "uncompressedBytes": 1206,
+      "uncompressedSha256": "65ca9ea346a7bd2d4457554a5ff0d3bcdad485ad81d6892b866d23ea620702e9",
+      "compressedSha256": "f2bbb24b67e9008bf1100bc41e6abae7a03facb6631d3c8c8ac3d5bfea7eeabd"
+    },
+    "2026-10-18-query-source-boundary-benchmark.py.gz": {
+      "uncompressedBytes": 61086,
+      "uncompressedSha256": "f063eb77171761ead93b4736afb2d2babc317d02b71e79ac48226f83e7b02d30",
+      "compressedSha256": "1cca2e056beb6e29cb6646b4cd9fd0b02d2c1e68de170d82104bde044238ab1f"
+    }
+  }
+}

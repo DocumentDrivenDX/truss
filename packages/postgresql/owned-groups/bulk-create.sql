@@ -6,7 +6,10 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SE
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;installation truss.catalog_runtime_installation%ROWTYPE;
  input jsonb;objects jsonb;keys jsonb;journals jsonb;transitions jsonb;results jsonb;
  expected jsonb;actual jsonb;dictionary jsonb:='{}';namespaces jsonb:='{}';metadata jsonb;
- selected_type int;property record;definition record;pin record;type_pin text;property_pins jsonb;property_order jsonb;
+ dictionary_keys text[]:=ARRAY[]::text[];dictionary_values jsonb[]:=ARRAY[]::jsonb[];
+ codec_keys text[]:=ARRAY[]::text[];codec_values jsonb[]:=ARRAY[]::jsonb[];
+ namespace_keys text[]:=ARRAY[]::text[];namespace_values jsonb[]:=ARRAY[]::jsonb[];map_count int;
+ selected_type int;definition record;pin record;type_pin text;property_pins jsonb;property_order jsonb;head_revision int;
  group_id uuid:=gen_random_uuid();actor oid;counted int;total int;compiled_namespace bytea;route record;
  slot_results jsonb;slot_problem boolean;
  codecs jsonb:='{}';codec jsonb;codec_bytes bigint:=2;
@@ -33,6 +36,7 @@ BEGIN
  IF (SELECT value FROM truss.setting WHERE key='key_reuse') IS DISTINCT FROM '"forbid"'::jsonb
   OR (SELECT value FROM truss.setting WHERE key='journal_mode') IS DISTINCT FROM '"engine"'::jsonb THEN
   RAISE EXCEPTION 'selected engine key/history settings required' USING ERRCODE='0A000';END IF;
+ SELECT rev INTO STRICT head_revision FROM truss.schema_head WHERE id=1;
  -- Catalog interpretation is compiled once per type, not once per object.
  FOR selected_type IN SELECT DISTINCT (p.plan->'afterNodes'->(p.plan->>'primary')->'image'->>'type_id')::int
   FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt LOOP
@@ -41,27 +45,42 @@ BEGIN
   PERFORM truss.runtime_module_writer_qualified(pin.document_id,pin.module_id,actor);
   IF NOT truss.runtime_object_values_readable_qualified(selected_type,actor) THEN
    RAISE EXCEPTION 'current property and item readers required' USING ERRCODE='42501';END IF;
-  property_pins:='{}';property_order:='[]';
-  FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY prop_id LOOP
-   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',selected_type,property.prop_id);
-   property_pins:=property_pins||jsonb_build_object(property.prop_id::text,pin.definition_pin);
-   property_order:=property_order||to_jsonb(property.prop_id::text);
-  END LOOP;
-  dictionary:=dictionary||jsonb_build_object(selected_type::text,jsonb_build_object('typeId',selected_type::text,
-   'revision',(SELECT rev::text FROM truss.schema_head WHERE id=1),'typePin',type_pin,'propertyOrder',property_order,'propertyPins',property_pins));
+  SELECT s.metadata INTO STRICT metadata FROM truss.runtime_type_schema s
+   WHERE s.rev=head_revision AND s.type_id=selected_type;
+  IF metadata->>'typeId' IS DISTINCT FROM selected_type::text
+   OR metadata->>'revision' IS DISTINCT FROM head_revision::text
+   OR metadata->>'typePin' IS DISTINCT FROM type_pin THEN
+   RAISE EXCEPTION 'current compiled create schema required' USING ERRCODE='55000';END IF;
+  property_pins:=metadata->'propertyPins';property_order:=metadata->'propertyOrder';
+  map_count:=cardinality(dictionary_keys)+1;
+  dictionary_keys[map_count]:=selected_type::text;
+  dictionary_values[map_count]:=jsonb_build_object('typeId',selected_type::text,
+   'revision',head_revision::text,'typePin',type_pin,'propertyOrder',property_order,'propertyPins',property_pins);
   FOR definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY key_num LOOP
    SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected_type,definition.key_num);
    codec:=truss.runtime_owned_key_codec_metadata(selected_type,definition.key_num);
    IF codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32<=4194304 THEN
-    codecs:=codecs||jsonb_build_object(selected_type::text||':'||definition.key_num::text,codec);
+    map_count:=cardinality(codec_keys)+1;
+    codec_keys[map_count]:=selected_type::text||':'||definition.key_num::text;
+    codec_values[map_count]:=codec;
     codec_bytes:=codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32;
    END IF;
    compiled_namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
     'sourceEpoch',installation.source_epoch::text,'typeId',selected_type::text,'keyNumber',definition.key_num::text,
     'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
-   namespaces:=namespaces||jsonb_build_object(selected_type::text||':'||definition.key_num::text,encode(compiled_namespace,'hex'));
+   map_count:=cardinality(namespace_keys)+1;
+   namespace_keys[map_count]:=selected_type::text||':'||definition.key_num::text;
+   namespace_values[map_count]:=to_jsonb(encode(compiled_namespace,'hex'));
   END LOOP;
  END LOOP;
+ -- Assemble each wide lookup map once after its inputs have been collected.
+ -- Repeated jsonb concatenation recopies the growing map for every distinct type.
+ SELECT coalesce(jsonb_object_agg(k,v),'{}'::jsonb) INTO dictionary
+  FROM unnest(dictionary_keys,dictionary_values) AS entries(k,v);
+ SELECT coalesce(jsonb_object_agg(k,v),'{}'::jsonb) INTO codecs
+  FROM unnest(codec_keys,codec_values) AS entries(k,v);
+ SELECT coalesce(jsonb_object_agg(k,v),'{}'::jsonb) INTO namespaces
+  FROM unnest(namespace_keys,namespace_values) AS entries(k,v);
  WITH allocated AS MATERIALIZED (
   SELECT p.operation_index,p.plan->'operation' operation,
    p.plan->'afterNodes'->(p.plan->>'primary') state,nextval('truss.id_seq') id,clock_timestamp() created_at

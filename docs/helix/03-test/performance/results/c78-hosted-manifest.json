@@ -1,0 +1,95 @@
+{
+  "schema": "truss-hosted-evidence-manifest/1.0",
+  "capturedAtUtc": "2026-10-18T22:59:12.643259+00:00",
+  "runId": 39173778881,
+  "runUrl": "https://github.com/DocumentDrivenDX/truss/actions/runs/39173778881",
+  "sourceCommit": "a0517ef7f1d9a4f90179db988e099c371e3b8657",
+  "runtimeManifestSha256": "5dfdb80ec923972fbfdaed85adc7733e60482e0d565b4104d71a6e528d3a5e87",
+  "scope": "The 70-test initial native verification step failed on both platforms. The later native original atomic-capacity test step, which enables function-stat collection, was skipped; no full release qualification is evidenced.",
+  "testCounts": {
+    "ubuntu": {
+      "ran": 70,
+      "failed": 2
+    },
+    "macos": {
+      "ran": 70,
+      "failed": 3
+    }
+  },
+  "statisticsArtifacts": {
+    "ubuntu": {
+      "artifactId": 12152869319,
+      "records": 0,
+      "missingPhases": [
+        "create",
+        "following",
+        "late-fault",
+        "replay",
+        "update"
+      ]
+    },
+    "macos": {
+      "artifactId": 12153941349,
+      "records": 0,
+      "missingPhases": [
+        "create",
+        "following",
+        "late-fault",
+        "replay",
+        "update"
+      ]
+    }
+  },
+  "files": [
+    {
+      "name": "native-ubuntu-log",
+      "sourcePath": "/private/tmp/truss-c78-native-ubuntu-exact.log",
+      "retainedPath": "/Users/erik/Projects/truss/docs/helix/03-test/performance/results/c78-hosted-native-ubuntu.log.gz",
+      "rawBytes": 68550,
+      "rawSha256": "6188fa74bcffdaed54874b1d13c0918a2c2540b9ab7fb054d78c3517b2d396c6",
+      "compressedBytes": 15456,
+      "compressedSha256": "e338f340aa156ed05e1a1a94401639a68ca1c265df7a4ef55870acc15f275495",
+      "compression": "gzip mtime=0, level=9"
+    },
+    {
+      "name": "native-macos-log",
+      "sourcePath": "/private/tmp/truss-c78-native-macos-exact.log",
+      "retainedPath": "/Users/erik/Projects/truss/docs/helix/03-test/performance/results/c78-hosted-native-macos.log.gz",
+      "rawBytes": 78053,
+      "rawSha256": "0e5ed65a2dcfe40a55f0ea009062d2f0dff9068aa22927a094532f1260cb0ce8",
+      "compressedBytes": 16936,
+      "compressedSha256": "70e97d618d3527bc39840cf7c340bfd9d7fb8e661ba01a8a31b819cb5791c96e",
+      "compression": "gzip mtime=0, level=9"
+    },
+    {
+      "name": "failure-summary",
+      "sourcePath": "/private/tmp/truss-c78-native-failure-summary.json",
+      "retainedPath": "/Users/erik/Projects/truss/docs/helix/03-test/performance/results/c78-hosted-failure-summary.json.gz",
+      "rawBytes": 3050,
+      "rawSha256": "5971e84d4df7b173fda36701051b28ac7f7ff27f678b7f522c552a418fe9cec8",
+      "compressedBytes": 1084,
+      "compressedSha256": "3bb9d459d8169f0c38dd931c62131e0cd4cc4f399f4ba0cca54b9eea29079c46",
+      "compression": "gzip mtime=0, level=9"
+    },
+    {
+      "name": "capacity-stats-ubuntu-status",
+      "sourcePath": "/private/tmp/truss-c78-capacity-statistics-ubuntu/collection-status.json",
+      "retainedPath": "/Users/erik/Projects/truss/docs/helix/03-test/performance/results/c78-hosted-capacity-statistics-ubuntu-status.json.gz",
+      "rawBytes": 339,
+      "rawSha256": "81183dbe8601af197037b71ab440cdf691c092b293c5a708ca073d6098d2efee",
+      "compressedBytes": 255,
+      "compressedSha256": "eaf12f427708adf77f1a4758aa0bcdb027adf659f89411fe999df234d2eb04d0",
+      "compression": "gzip mtime=0, level=9"
+    },
+    {
+      "name": "capacity-stats-macos-status",
+      "sourcePath": "/private/tmp/truss-c78-capacity-statistics-macos/collection-status.json",
+      "retainedPath": "/Users/erik/Projects/truss/docs/helix/03-test/performance/results/c78-hosted-capacity-statistics-macos-status.json.gz",
+      "rawBytes": 339,
+      "rawSha256": "b759f83f99daa89b4b51156d56c1838942f34967265c462cf12a692f3f1413cc",
+      "compressedBytes": 254,
+      "compressedSha256": "9cb52b53750c3615b0013588ea38e627a03148fd4a3f83de18a0ed31c0b5fdf3",
+      "compression": "gzip mtime=0, level=9"
+    }
+  ]
+}
