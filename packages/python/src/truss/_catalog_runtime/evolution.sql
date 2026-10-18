@@ -118,3 +118,39 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_scalar_violations_with_sources(bytea,bytea) FROM PUBLIC;
+
+-- Classify rules the installed layout and write path actually enforce.
+-- database: a constraint rejects the write without the engine.
+-- engine: the write functions check it; plain SQL does not.
+-- none: the declaration is stored and nothing checks it.
+CREATE FUNCTION truss.catalog_enforcement(selected_revision int) RETURNS jsonb
+LANGUAGE sql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT coalesce(jsonb_agg(entry ORDER BY entry->>'rule', entry->>'documentId', entry->>'moduleId', entry->>'elementId', coalesce(entry->>'keyId',''), coalesce(entry->>'side','')), '[]'::jsonb)
+ FROM (
+  SELECT jsonb_build_object('rule','key.unique','enforcement','database','documentId',t.document_id,'moduleId',t.module,'elementId',t.element,'keyId',k.key_id,'evidence','key_bucket_guard primary key') AS entry
+  FROM truss.key_def k JOIN truss.type_def t ON t.type_id=k.type_id
+  WHERE k.since_rev<=selected_revision AND (k.retired_rev IS NULL OR k.retired_rev>selected_revision)
+  UNION ALL
+  SELECT jsonb_build_object('rule','relationship.endpoint_types','enforcement','database','documentId',r.document_id,'moduleId',r.module,'elementId',r.rel_id,'evidence','edge_endpoint_types_fk')
+  FROM truss.rel_def r
+  WHERE r.since_rev<=selected_revision AND (r.retired_rev IS NULL OR r.retired_rev>selected_revision)
+   AND EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=r.rel_type_id)
+  UNION ALL
+  SELECT jsonb_build_object('rule','relationship.multiplicity','enforcement','engine','documentId',r.document_id,'moduleId',r.module,'elementId',r.rel_id,'evidence','write path count; edge_limit is not a constraint on truss.edge')
+  FROM truss.rel_def r
+  WHERE r.since_rev<=selected_revision AND (r.retired_rev IS NULL OR r.retired_rev>selected_revision)
+   AND (r.source_min>0 OR r.target_min>0 OR r.source_max IS NOT NULL OR r.target_max IS NOT NULL)
+  UNION ALL
+  SELECT jsonb_build_object('rule','property.facets','enforcement','engine','documentId',t.document_id,'moduleId',p.declaration_module,'elementId',p.element,'evidence','runtime scalar validation, no table check')
+  FROM truss.prop_def p JOIN truss.type_def t ON t.type_id=p.type_id
+  WHERE p.since_rev<=selected_revision AND (p.retired_rev IS NULL OR p.retired_rev>selected_revision)
+   AND ((p.scalar_type='integer' AND p.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (p.scalar_type='decimal' AND truss.valid_decimal_facets(p.facets)))
+  UNION ALL
+  SELECT jsonb_build_object('rule','property.facets','enforcement','none','documentId',t.document_id,'moduleId',p.declaration_module,'elementId',p.element,'evidence','facet is stored and not checked')
+  FROM truss.prop_def p JOIN truss.type_def t ON t.type_id=p.type_id
+  WHERE p.since_rev<=selected_revision AND (p.retired_rev IS NULL OR p.retired_rev>selected_revision)
+   AND p.facets IS NOT NULL AND p.facets<>'{}'::jsonb
+   AND NOT ((p.scalar_type='integer' AND p.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (p.scalar_type='decimal' AND truss.valid_decimal_facets(p.facets)))
+ ) rules;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_enforcement(int) FROM PUBLIC;

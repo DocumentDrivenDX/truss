@@ -165,6 +165,7 @@ BEGIN
     WHERE b.registration_id=request.registration_id AND p.since_rev=request.revision)
     THEN 'truss-catalog-key-backfill/0.2' ELSE 'truss-catalog-key-backfill/0.1' END);
   END IF;
+  report:=report||jsonb_build_object('enforcement',truss.catalog_enforcement(request.revision));
   RETURN convert_to(report::text,'UTF8');
  END IF;
  basis:=coalesce(planned_basis,truss.catalog_all_expected_records(request.revision));
@@ -215,6 +216,7 @@ BEGIN
     'objectVersion',t.object_image->>'ver','effects',t.effects) ORDER BY t.type_id,t.object_id)
     FROM truss.runtime_catalog_key_backfill t WHERE t.registration_id=request.registration_id));
  END IF;
+ report:=report||jsonb_build_object('enforcement',truss.catalog_enforcement(request.revision));
  RETURN convert_to(report::text,'UTF8');
 END;
 $$;
