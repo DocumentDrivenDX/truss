@@ -80,7 +80,7 @@ BEGIN
  input_operations:=input->'operations';
  IF jsonb_typeof(input_operations) IS DISTINCT FROM 'array' OR jsonb_array_length(input_operations) NOT BETWEEN 1 AND 1024
   OR jsonb_typeof(scope->'nodes') IS DISTINCT FROM 'object' OR jsonb_typeof(scope->'edges') IS DISTINCT FROM 'object'
-  OR octet_length(convert_to(scope::text,'UTF8'))>4194304 THEN
+  OR octet_length(convert_to(scope::text,'UTF8'))>(CASE WHEN scope->'independentEndpointScope'='true'::jsonb THEN 16777216 ELSE 4194304 END) THEN
   RAISE EXCEPTION 'complete bounded original group scope required' USING ERRCODE='54000';END IF;
  -- Buffer independent new roots; no operation in this closed shape reads an
  -- earlier node. Keep the same ordered plans and complete final graph checks.
@@ -209,7 +209,7 @@ BEGIN
    ELSE
     IF operation->>'operation'='update_object' THEN
      IF operation-ARRAY['operation','target','set','unset','expectedVersion','ownershipChange']<>'{}'::jsonb THEN RAISE EXCEPTION 'closed object update required' USING ERRCODE='22023';END IF;
-     values_image:=truss.owned_object_values(selected_type.type_id,operation,state->'image'->'props',nullif(state->'image'->'retained','null'::jsonb));
+     values_image:=truss.runtime_owned_object_value_delta(selected_type.type_id,operation,state->'image'->'props',nullif(state->'image'->'retained','null'::jsonb),(state->'image'->>'id')::bigint);
      state:=jsonb_set(state,'{image,props}',values_image->'props');
      state:=jsonb_set(state,'{image,retained}',coalesce(nullif(values_image->'retained','{}'::jsonb),'null'::jsonb));
     END IF;
@@ -343,7 +343,7 @@ BEGIN
     FROM unnest(created_edge_states) WITH ORDINALITY e(state,ordinal);
    before_edges:=edges-selected;
   END IF;
-  IF index=jsonb_array_length(input_operations)-1 THEN
+  IF index=jsonb_array_length(input_operations)-1 AND NOT (value_updates AND scope->'independentEndpointScope'='true'::jsonb) THEN
    plan:=jsonb_build_object('beforeNodes',before_nodes,'afterNodes',nodes,
     'beforeEdges',before_edges,'afterEdges',edges);
   ELSIF value_updates THEN
@@ -398,7 +398,7 @@ BEGIN
   plan:=plan||jsonb_build_object('profile','truss-owned-operation-plan/0.2',
    'operationIndex',index,'operation',operation,'primary',selected);
   plans_bytes:=plans_bytes+octet_length(convert_to(plan::text,'UTF8'))+CASE WHEN index=0 THEN 0 ELSE 2 END;
-  IF plans_bytes>16777216 THEN RAISE EXCEPTION 'bounded whole group execution inventory required' USING ERRCODE='54000';END IF;
+  IF plans_bytes>33554432 THEN RAISE EXCEPTION 'bounded whole group execution inventory required' USING ERRCODE='54000';END IF;
   plans:=array_append(plans,plan);
   index:=index+1;
  END LOOP;
@@ -438,7 +438,7 @@ BEGIN
  END LOOP;
  plan:=jsonb_build_object('profile','truss-owned-group-plan/0.1','catalogRevision',revision,
   'initialScope',scope,'operations',to_jsonb(plans),'aliases',aliases);
- IF octet_length(convert_to(plan::text,'UTF8'))>16777216 THEN RAISE EXCEPTION 'bounded complete group execution inventory required' USING ERRCODE='54000';END IF;
+ IF octet_length(convert_to(plan::text,'UTF8'))>33554432 THEN RAISE EXCEPTION 'bounded complete group execution inventory required' USING ERRCODE='54000';END IF;
  RETURN plan;
 END;
 $$;
@@ -452,6 +452,7 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE input_operations jsonb;
  attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;observed jsonb;locked jsonb;
  inventory jsonb;entry jsonb;expected_operation jsonb;actual_operation jsonb;owner record;selected_type int;relation truss.rel_def%ROWTYPE;endpoint_owner record;retained_bytes bigint:=0;current_actor oid;
+ original_projection_problem boolean;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
@@ -532,18 +533,21 @@ BEGIN
   jsonb_agg(jsonb_build_object('attempt_id',attempt.id,'operation_index',(plan->>'operationIndex')::int,
    'writer_xid',attempt.writer_xid::text,'plan',plan,'result',NULL) ORDER BY (plan->>'operationIndex')::int)
  INTO retained_bytes,expected_operation FROM plans;
- IF retained_bytes>16777216 THEN RAISE EXCEPTION 'bounded retained whole group inventory required' USING ERRCODE='54000';END IF;
- WITH inserted AS (
+ IF retained_bytes>33554432 THEN RAISE EXCEPTION 'bounded retained whole group inventory required' USING ERRCODE='54000';END IF;
+ WITH expected_rows AS MATERIALIZED (
+  SELECT r.* FROM jsonb_populate_recordset(NULL::truss.runtime_owned_operation,expected_operation) r),
+ inserted AS (
   INSERT INTO truss.runtime_owned_operation(attempt_id,operation_index,writer_xid,plan)
-  SELECT r.attempt_id,r.operation_index,r.writer_xid,r.plan
-  FROM jsonb_populate_recordset(NULL::truss.runtime_owned_operation,expected_operation) r RETURNING *)
- SELECT jsonb_agg(to_jsonb(inserted) ORDER BY operation_index) INTO actual_operation FROM inserted;
- IF actual_operation IS DISTINCT FROM expected_operation THEN
-  RAISE EXCEPTION 'exact prepared operation insert required' USING ERRCODE='55000';END IF;
- SELECT jsonb_agg(to_jsonb(o) ORDER BY operation_index) INTO actual_operation
- FROM truss.runtime_owned_operation o WHERE o.attempt_id=attempt.id;
- IF actual_operation IS DISTINCT FROM expected_operation THEN
-  RAISE EXCEPTION 'exact stored prepared operation required' USING ERRCODE='55000';END IF;
+  SELECT r.attempt_id,r.operation_index,r.writer_xid,r.plan FROM expected_rows r RETURNING *)
+ SELECT coalesce(bool_or(i IS DISTINCT FROM e),false) INTO original_projection_problem
+ FROM expected_rows e FULL JOIN inserted i ON i.operation_index=e.operation_index;
+ IF original_projection_problem THEN RAISE EXCEPTION 'exact prepared operation insert required' USING ERRCODE='55000';END IF;
+ WITH expected_rows AS MATERIALIZED (
+  SELECT r.* FROM jsonb_populate_recordset(NULL::truss.runtime_owned_operation,expected_operation) r),
+ actual_rows AS MATERIALIZED (SELECT * FROM truss.runtime_owned_operation WHERE attempt_id=attempt.id)
+ SELECT coalesce(bool_or(i IS DISTINCT FROM e),false) INTO original_projection_problem
+ FROM expected_rows e FULL JOIN actual_rows i ON i.operation_index=e.operation_index;
+ IF original_projection_problem THEN RAISE EXCEPTION 'exact retained prepared operation inventory required' USING ERRCODE='55000';END IF;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_capture(uuid) FROM PUBLIC;
@@ -1198,7 +1202,9 @@ BEGIN
   END IF;
   RETURN;
  END IF;
- input:=coalesce(prepared_input,convert_from(attempt.input_bytes,'UTF8')::jsonb);
+ input:=CASE WHEN authorize_read AND attempt.context ? 'originalAssertedOrigin'
+  THEN jsonb_build_object('assertedOrigin',attempt.context->'originalAssertedOrigin')
+  ELSE coalesce(prepared_input,convert_from(attempt.input_bytes,'UTF8')::jsonb) END;
  IF original_mode NOT IN ('update_object','delete_object') OR prior IS NULL OR desired IS NULL
   OR prior->'deleted'='true'::jsonb OR prior IS NOT DISTINCT FROM desired
   OR (original_mode='update_object' AND desired->'deleted' IS DISTINCT FROM 'false'::jsonb)

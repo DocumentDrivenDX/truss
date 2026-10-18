@@ -147,6 +147,11 @@ class RealWorkflows(PublicCatalogRuntimeTests):
         registration=timed(sample,'register',register)
         view=timed(sample,'registrar_catalog_view',lambda:ok(assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request())).view)
         timed(sample,'registration_commit',lambda:(host.detach(),connection.commit()))
+        case['schemaStorage']=dict(zip(('sourceBytes','compiledTypeBytes','compiledDocumentBytes'),
+            self.admin.execute('''SELECT
+                (SELECT coalesce(sum(octet_length(document)),0) FROM truss.schema_doc),
+                (SELECT coalesce(sum(pg_column_size(metadata)+pg_column_size(value_readers)),0) FROM truss.runtime_type_schema),
+                (SELECT coalesce(sum(pg_column_size(metadata)),0) FROM truss.runtime_document_schema)''').fetchone()))
         # Configure ordinary public access. The consumer is never the private owner.
         for role in ('perf_reader','perf_writer'):
             self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))
@@ -248,6 +253,30 @@ class RealWorkflows(PublicCatalogRuntimeTests):
             if workload:
                 expected={value.name:(value.value.text if isinstance(value.value,TextValue) and value.value.kind=='string' else value.value.value if hasattr(value.value,'kind') and value.value.kind=='boolean' else value.value) for value in workload_values(workload,i)}
                 if actual!=expected:raise AssertionError('Stress workload values changed or disappeared')
+        # Exercise the list route the embedding application actually uses, including
+        # relationship columns supplied by complete-entity itself.
+        from truss.query import QueryRows
+        quote=lambda value:'"'+value.replace('"','""')+'"'
+        selected_record=next(e for e in module['elements'] if e['id']==record and e['kind']=='record')
+        list_sql='SELECT x.* FROM '+quote(module.get('namespace',module_id))+'.'+quote(selected_record.get('name',record))+' x LIMIT 51'
+        def list_entities():
+            listed=ok(assembly.query_in_transaction(tx,sql=list_sql,document_ids=(document_id,),
+                parameters=None,maximum_rows=100,read_profile='complete-entity'))
+            if not isinstance(listed,QueryRows):raise AssertionError('Complete entity list refused: '+repr(listed))
+            expected_rows=min(51,sum(1 for identity in identities if identity.type_id==identities[0].type_id))
+            if len(listed.rows)!=expected_rows:raise AssertionError('Complete entity list returned the wrong row count')
+            return listed
+        # Whole-entity list qualification is additional to the declared ID/key
+        # stress workload. The released query profile admits 10,000 source rows;
+        # the million-node case has 100,000 per type and remains outside it.
+        list_supported=not workload or math.ceil(count/workload['types'])<=10000
+        if list_supported:
+            listing=timed(sample,'list_complete_entities',list_entities)
+            case['listRead']={'status':'passed','sql':list_sql,'rows':len(listing.rows),'columns':list(listing.columns)}
+        else:
+            case['listRead']={'status':'outside_published_query_scan_bound','sql':list_sql,
+                'sourceRowsPerType':math.ceil(count/workload['types']),'maximumScanRows':10000,
+                'scope':'Declared million-node ID/key read and write stress workload still runs in full'}
         for i in range(matrix_settings['warmupOperations']):read(identities[i%len(identities)])
         if args.profile_read:
             import cProfile
@@ -397,6 +426,22 @@ for case in results:
             observed=statistics.median(thousand)
             case['napkinMath']['independent1000RowCheck']={'predictedMs':predicted,'observedMedianMs':observed,'observedToPredictedRatio':observed/predicted if predicted else None}
 
+# These are the matrix's declared triage signals, not invented latency guarantees.
+performance_signals=[]
+for case in results:
+    model=case.get('napkinMath',{})
+    speedup=model.get('bulk100SpeedupOverCommittedSingles')
+    if speedup is not None and speedup<matrix_settings['minimumBulkImprovementOverSingles']:
+        performance_signals.append({'case':case['sample'],'signal':'bulk100_speedup',
+            'observed':speedup,'triageThreshold':matrix_settings['minimumBulkImprovementOverSingles']})
+    check=model.get('independent1000RowCheck',{})
+    ratio=check.get('observedToPredictedRatio')
+    if ratio is not None and ratio>2:
+        performance_signals.append({'case':case['sample'],'signal':'nonlinear_1000_row_cost',
+            'observed':ratio,'triageThreshold':2})
+performance_qualification=('incomplete' if not result.wasSuccessful() or args.load_only else
+    'measured_with_triage_signals' if performance_signals else 'measured')
+
 git_head=subprocess.run(['git','rev-parse','HEAD'],cwd=root,capture_output=True,text=True)
 source_commit=git_head.stdout.strip() if git_head.returncode==0 else None
 source_dirty=bool(subprocess.run(['git','status','--porcelain'],cwd=root,capture_output=True,text=True,check=True).stdout) if source_commit else None
@@ -412,7 +457,9 @@ report={'runtimePackage':runtime_package,'runtimeManifestSha256':hashlib.sha256(
         'externalJavaScriptForbidden':args.forbid_external_javascript,'externalProcessExecutables':sorted(set(external_processes)),
         'statementTimeoutMs':10000,'operationTimeoutMs':30000,'expectedAtomicGroupLimit':args.expected_group_limit,'warmupReads':matrix_settings['warmupOperations'],
         'seconds':time.perf_counter()-start,'passed':result.wasSuccessful(),'functionalPassed':result.wasSuccessful(),
-        'performanceQualification':'not_evaluated','capacityScope':capacity_scope,
+        'performanceQualification':performance_qualification,'performanceTriageSignals':performance_signals,
+        'performanceBudgetStatus':'Latency budgets remain provisional; no prior-run nominal regression baseline supplied',
+        'capacityScope':capacity_scope,
         'cases':results,'summary':summary,'samples':measurements,
         'scope':'Actual public workflows on isolated local PostgreSQL. Connection reopen, not server restart. Cold server/install separate. '+('Only the selected generated cases; indexes are unique business-key properties.' if args.matrix_case else 'Real-sample results only; no synthetic stress result implied.')}
 args.output.parent.mkdir(parents=True,exist_ok=True)

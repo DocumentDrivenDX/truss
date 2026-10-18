@@ -62,9 +62,9 @@ REVOKE ALL ON FUNCTION truss.query_abi() FROM PUBLIC;
 
 CREATE FUNCTION truss.query_scope(binding jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_document jsonb;selected_record jsonb;selected_field jsonb;source truss.schema_doc%ROWTYPE;owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;module jsonb;selected_relation jsonb;relation truss.rel_def%ROWTYPE;selected_key jsonb;key_definition truss.key_def%ROWTYPE;
+DECLARE installation truss.catalog_runtime_installation%ROWTYPE;selected_document jsonb;selected_record jsonb;selected_field jsonb;source truss.schema_doc%ROWTYPE;owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;module jsonb;selected_relation jsonb;relation truss.rel_def%ROWTYPE;selected_key jsonb;key_definition truss.key_def%ROWTYPE;current_actor oid;compiled jsonb;
 BEGIN
- PERFORM truss.runtime_person(false);
+ current_actor:=truss.runtime_person(false);
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF jsonb_typeof(binding) IS DISTINCT FROM 'object' OR binding->>'interfaceVersion' IS DISTINCT FROM 'truss-runtime-binding/0.5'
  OR binding->'queryAbi' IS DISTINCT FROM truss.query_abi()
@@ -77,6 +77,18 @@ BEGIN
  OR jsonb_typeof(binding->'relationships') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'relationships')>1024
  OR jsonb_typeof(binding->'records') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'records') NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected query context required' USING ERRCODE='0A000';END IF;
+ IF jsonb_array_length(binding->'documents')=1 THEN
+  SELECT metadata INTO compiled FROM truss.runtime_document_schema
+   WHERE rev=(binding->>'catalogRevision')::int AND doc_id=binding->'documents'->0->>'documentId';
+  IF compiled->'pin'=binding->'documents'->0 AND compiled->'records'=binding->'records'
+   AND compiled->'relationships'=binding->'relationships' AND compiled->'closed'='true'::jsonb AND compiled->'itemsValid'='true'::jsonb THEN
+   FOR selected_document IN SELECT value FROM jsonb_array_elements(compiled->'readers') LOOP
+    IF NOT truss.runtime_can_read_qualified(selected_document->>'documentId',selected_document->>'moduleId',current_actor) THEN
+     RAISE EXCEPTION 'complete selected_document reader required' USING ERRCODE='42501';END IF;
+   END LOOP;
+   RETURN;
+  END IF;
+ END IF;
  FOR selected_document IN SELECT value FROM jsonb_array_elements(binding->'documents') LOOP
   SELECT * INTO source FROM truss.schema_doc d WHERE d.doc_id=selected_document->>'documentId' AND d.rev<= (binding->>'catalogRevision')::int ORDER BY d.rev DESC LIMIT 1;
   IF NOT FOUND OR source.doc_revision IS DISTINCT FROM selected_document->>'revision' OR source.content_sha256 IS DISTINCT FROM selected_document->>'sha256' THEN RAISE EXCEPTION 'original query source changed' USING ERRCODE='55P03';END IF;

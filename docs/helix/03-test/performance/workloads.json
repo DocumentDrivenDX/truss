@@ -163,7 +163,7 @@
   "warmupOperations": 20,
   "minimumBulkImprovementOverSingles": 5,
   "maximumNominalRegressionRatio": 2,
-  "status": "Executable driver supports selected synthetic cases; real registration is still being repaired. Synthetic cases have not yet been run; unsupported/over-limit cases fail explicitly.",
+  "status": "All eleven unchanged schemas have native registration checks. Full population/load/read/write runs remain separately qualified by exact runtime reports; schema registration alone is not a stress-matrix pass.",
   "indexKind": "unique-business-key properties for the initial executable matrix; optional nonunique lookup-index performance requires a supported installation API",
   "targetAtomicGroupLimit": 1024
 }

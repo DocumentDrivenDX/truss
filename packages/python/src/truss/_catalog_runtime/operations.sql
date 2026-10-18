@@ -33,9 +33,11 @@ BEGIN
  -- Stored targets already carry their exact native type coordinate. Resolve
  -- that candidate before deriving pins for unrelated catalog records.
  IF identity IS NOT NULL THEN
-  SELECT t.* INTO selected FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_owned_definition_metadata('type',t.type_id) p
-   WHERE t.type_id::text=identity->>'typeId' AND t.kind='record' AND NOT t.provisional
-    AND t.retired_rev IS NULL AND p.definition_pin=pin;
+  SELECT t.* INTO selected FROM truss.runtime_definition_source p JOIN truss.type_def t
+    ON t.definition_rev=p.rev AND t.definition_doc_ord=p.ord AND t.definition_document_id=p.doc_id
+     AND t.module=p.module_id AND t.element=p.element_id
+   WHERE t.type_id::text=identity->>'typeId' AND p.definition_pin=pin AND p.kind='element' AND p.key_id=''
+    AND t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL;
  END IF;
  IF selected.type_id IS NULL THEN
   -- Preserve original CREATE/alias lookup and stored-identity refusal precedence.
@@ -329,7 +331,8 @@ BEGIN
  END IF;
  PERFORM truss.runtime_evaluate_preconditions(input,original_condition_keys);
  INSERT INTO truss.runtime_object_attempt(writer_xid,actor_oid,input_bytes,documents_bytes,request_bytes,context)
- VALUES(writer,person,original_input,original_documents,original_request,context) RETURNING * INTO attempt;
+ VALUES(writer,person,original_input,original_documents,original_request,
+  context||jsonb_build_object('originalAssertedOrigin',input->'assertedOrigin')) RETURNING * INTO attempt;
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
   PERFORM truss.runtime_owned_capture(attempt.id);
  END IF;
@@ -440,8 +443,14 @@ REVOKE ALL ON FUNCTION truss.object_group_metadata(uuid,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_object_history(object_image jsonb,identity jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
-DECLARE properties jsonb:='[]';retained jsonb;property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;
+DECLARE properties jsonb:='[]';retained jsonb;property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;compiled jsonb;
 BEGIN
+ SELECT metadata-'propertyAccess' INTO compiled FROM truss.runtime_type_schema
+  WHERE rev=written_revision AND type_id=(object_image->>'type_id')::int;
+ IF FOUND AND NOT EXISTS(SELECT 1 FROM jsonb_object_keys(object_image->'props') n(name)
+  WHERE NOT ((compiled->'propertyPins') ? n.name)) THEN
+  RETURN truss.runtime_owned_history_record_in_metadata(object_image,identity,compiled);
+ END IF;
  SELECT CASE WHEN written_revision=(SELECT rev FROM truss.schema_head WHERE id=1)
   AND NOT EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>written_revision)
  THEN jsonb_build_object(
@@ -469,22 +478,23 @@ REVOKE ALL ON FUNCTION truss.runtime_object_history(jsonb,jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_owned_history_record_in_metadata(object_image jsonb,identity jsonb,metadata jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
 DECLARE properties jsonb:='[]';retained jsonb;missing_pin boolean;
+ object_properties jsonb:=object_image->'props';property_pins jsonb:=metadata->'propertyPins';
 BEGIN
  IF metadata->>'typeId' IS DISTINCT FROM object_image->>'type_id'
   OR metadata->>'revision' IS DISTINCT FROM object_image->>'rev'
   OR jsonb_typeof(metadata->'typePin') IS DISTINCT FROM 'string'
   OR jsonb_typeof(metadata->'propertyOrder') IS DISTINCT FROM 'array'
-  OR jsonb_typeof(metadata->'propertyPins') IS DISTINCT FROM 'object' THEN
+  OR jsonb_typeof(property_pins) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'original compiled history metadata required' USING ERRCODE='55000';END IF;
  identity:=jsonb_set(identity,'{definitionPin}',metadata->'typePin');
  SELECT coalesce(jsonb_agg(jsonb_build_object('propertyId',property_id,
-    'definitionPin',metadata->'propertyPins'->property_id,'value',object_image->'props'->property_id)
+    'definitionPin',property_pins->property_id,'value',object_properties->property_id)
     ORDER BY ordinality),'[]'::jsonb),
-  coalesce(bool_or(NOT ((metadata->'propertyPins') ? property_id)),false)
+  coalesce(bool_or(NOT ((property_pins) ? property_id)),false)
  INTO properties,missing_pin
  FROM (SELECT entry#>>'{}' property_id,ordinality
   FROM jsonb_array_elements(metadata->'propertyOrder') WITH ORDINALITY ordered(entry,ordinality)) selected
- WHERE object_image->'props' ? property_id;
+ WHERE object_properties ? property_id;
  IF missing_pin THEN
   RAISE EXCEPTION 'complete original history property pins required' USING ERRCODE='55000';END IF;
  SELECT coalesce(jsonb_agg(jsonb_build_object('name',key,'value',value) ORDER BY key COLLATE "C"),'[]'::jsonb) INTO retained FROM jsonb_each(coalesce(nullif(object_image->'retained','null'::jsonb),'{}'));

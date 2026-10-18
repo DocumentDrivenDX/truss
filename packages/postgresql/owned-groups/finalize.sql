@@ -16,6 +16,8 @@ BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
  operations:=input->'operations';
+ IF attempt.context ? 'originalAssertedOrigin' AND attempt.context->'originalAssertedOrigin' IS DISTINCT FROM input->'assertedOrigin' THEN
+  RAISE EXCEPTION 'original asserted origin projection required' USING ERRCODE='55000';END IF;
  current_actor:=truss.runtime_person(false);
  IF check_final IS NULL OR attempt.writer_xid IS DISTINCT FROM pg_current_xact_id()
   OR attempt.actor_oid IS DISTINCT FROM current_actor
@@ -56,36 +58,19 @@ BEGIN
   GROUP BY (image->>'rev')::int,(image->>'type_id')::int
   ORDER BY (image->>'rev')::int,(image->>'type_id')::int
  LOOP
-  SELECT CASE WHEN history_group.revision=(SELECT rev FROM truss.schema_head WHERE id=1)
-   AND NOT EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>history_group.revision)
-  THEN jsonb_build_object(
-   'type_def',(SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]'::jsonb) FROM truss.type_def t WHERE t.type_id=history_group.type_id),
-   'prop_def',(SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]'::jsonb) FROM truss.prop_def p WHERE p.type_id=history_group.type_id)) END INTO history_basis;
-  IF history_basis IS NULL THEN
-   IF historical_revision IS DISTINCT FROM history_group.revision THEN
-    historical_basis:=truss.catalog_all_expected_records(history_group.revision);
-    historical_revision:=history_group.revision;
-   END IF;
-   history_basis:=historical_basis;
-  END IF;
-  SELECT * INTO STRICT history_pin FROM truss.runtime_owned_definition_metadata_in_basis('type',history_group.type_id,NULL,history_group.revision,history_basis);
-  history_type_pin:=history_pin.definition_pin;
-  history_pins:='{}';history_order:='[]';
-  FOR history_property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,history_basis->'prop_def') p
-   WHERE p.type_id=history_group.type_id ORDER BY prop_id LOOP
-   IF history_property.prop_id::text=ANY(history_group.present_names) THEN
-    history_order:=history_order||jsonb_build_array(history_property.prop_id::text);
-    SELECT * INTO STRICT history_pin FROM truss.runtime_owned_definition_metadata_in_basis('property',history_property.type_id,history_property.prop_id,history_group.revision,history_basis);
-    history_pins:=history_pins||jsonb_build_object(history_property.prop_id::text,history_pin.definition_pin);
-    IF NOT truss.runtime_can_read_qualified(history_property.definition_document_id,history_property.declaration_module,current_actor)
-     OR history_property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable_qualified(history_property.item,current_actor) IS NOT TRUE THEN
-     RAISE EXCEPTION 'current historical property and item readers required' USING ERRCODE='42501';END IF;
-   END IF;
+  SELECT metadata INTO STRICT history_basis FROM truss.runtime_type_schema
+   WHERE rev=history_group.revision AND type_id=history_group.type_id;
+  IF EXISTS(SELECT 1 FROM jsonb_each(history_basis->'propertyAccess') p
+   WHERE p.key=ANY(history_group.present_names) AND p.value->'itemsValid' IS DISTINCT FROM 'true'::jsonb) THEN
+   RAISE EXCEPTION 'current historical property and item readers required' USING ERRCODE='42501';END IF;
+  FOR owner IN SELECT DISTINCT r.value->>'documentId' document_id,r.value->>'moduleId' module
+   FROM jsonb_each(history_basis->'propertyAccess') p
+   CROSS JOIN LATERAL jsonb_array_elements(p.value->'readers') r WHERE p.key=ANY(history_group.present_names) LOOP
+   IF truss.runtime_can_read_qualified(owner.document_id,owner.module,current_actor) IS NOT TRUE THEN
+    RAISE EXCEPTION 'current historical property and item readers required' USING ERRCODE='42501';END IF;
   END LOOP;
   history_key:=jsonb_build_array(history_group.revision,history_group.type_id)::text;
-  history_dictionary:=history_dictionary||jsonb_build_object(history_key,jsonb_build_object(
-   'typeId',history_group.type_id::text,'revision',history_group.revision::text,'typePin',history_type_pin,
-   'propertyOrder',history_order,'propertyPins',history_pins));
+  history_dictionary:=history_dictionary||jsonb_build_object(history_key,history_basis-ARRAY['propertyAccess']);
  END LOOP;
  -- The closed independent-create shape has a set-based reconstruction.
  -- Mixed/owned operations keep the general ordered graph validator.
@@ -108,6 +93,10 @@ BEGIN
   PERFORM truss.runtime_owned_update_batch_validate(attempt,input,history_dictionary,current_actor);
   SELECT p.plan->'initialScope' INTO STRICT initial_scope FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND p.operation_index=0;
   SELECT p.plan INTO STRICT last_plan FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND p.operation_index=attempt.next_index-1;
+  IF initial_scope->'independentEndpointScope'='true'::jsonb THEN
+   SELECT last_plan||jsonb_build_object('afterNodes',jsonb_object_agg(p.plan->>'primary',p.plan->'afterNodes'->(p.plan->>'primary')))
+    INTO last_plan FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt;
+  END IF;
  ELSE
  FOR index IN 0..attempt.next_index-1 LOOP
   plan:=truss.runtime_owned_plan(selected_attempt,index);operation:=plan->'operation';

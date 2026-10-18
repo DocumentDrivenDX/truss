@@ -215,8 +215,17 @@ REVOKE ALL ON FUNCTION truss.runtime_item_chain_readable(jsonb) FROM PUBLIC;
 -- or accepted from a public caller. Module policy/membership checks stay live.
 CREATE FUNCTION truss.runtime_object_values_readable_qualified(selected_type int,qualified_actor oid) RETURNS boolean
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE selected truss.type_def;dependency record;
+DECLARE selected truss.type_def;dependency record;compiled_readers jsonb;
 BEGIN
+ SELECT s.value_readers INTO compiled_readers FROM truss.runtime_type_schema s
+  JOIN truss.type_def t ON t.type_id=s.type_id WHERE s.rev=(SELECT rev FROM truss.schema_head WHERE id=1)
+   AND s.type_id=selected_type AND s.valid_properties AND t.kind='record' AND t.retired_rev IS NULL;
+ IF FOUND THEN
+  FOR dependency IN SELECT value->>'documentId' document_id,value->>'moduleId' module FROM jsonb_array_elements(compiled_readers) LOOP
+   IF truss.runtime_can_read_qualified(dependency.document_id,dependency.module,qualified_actor) IS NOT TRUE THEN RETURN false;END IF;
+  END LOOP;
+  RETURN true;
+ END IF;
  SELECT * INTO selected FROM truss.type_def WHERE type_id=selected_type AND kind='record' AND retired_rev IS NULL;
  IF NOT FOUND THEN RETURN false;END IF;
  IF EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.cardinality IN ('array','map') AND truss.valid_item_chain(p.item) IS NOT TRUE) THEN RETURN false;END IF;

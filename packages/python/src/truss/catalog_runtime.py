@@ -146,7 +146,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql','schema-cache.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         source=raw.decode('utf-8')
@@ -615,7 +615,7 @@ class CatalogReferenceAssembly:
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=243:raise ValueError('Exact additive runtime routine inventory required')
+        if len(replacements)!=245:raise ValueError('Exact additive runtime routine inventory required')
         signatures=[]
         for statement in replacements:
             header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
@@ -692,6 +692,9 @@ class CatalogReferenceAssembly:
                 cursor.execute("SELECT p.oid,p.proowner,p.proacl::text FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' ORDER BY p.oid",prepare=False)
                 original_routine_acl=cursor.fetchall()
                 cursor.execute(bundled.joinpath('definition-source.sql').read_text(),prepare=False)
+                cursor.execute(bundled.joinpath('schema-cache.sql').read_text(),prepare=False)
+                for cache_table in ('runtime_type_schema','runtime_document_schema'):
+                    cursor.execute(sql.SQL('ALTER TABLE truss.{} OWNER TO {}').format(sql.Identifier(cache_table),sql.Identifier(owner_role)),prepare=False)
                 cursor.execute(sql.SQL('ALTER TABLE truss.runtime_definition_source OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
                 cursor.execute('REVOKE ALL ON TYPE truss.runtime_definition_source FROM PUBLIC',prepare=False)
                 cursor.execute('CREATE TEMP TABLE truss_definition_backfill (LIKE truss.schema_doc INCLUDING ALL) ON COMMIT DROP',prepare=False)
@@ -699,6 +702,9 @@ class CatalogReferenceAssembly:
                 cursor.execute('INSERT INTO truss_definition_backfill SELECT * FROM truss.schema_doc',prepare=False)
                 for statement in replacements:
                     cursor.execute(statement.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION',1),prepare=False)
+                cursor.execute('CREATE TEMP TABLE truss_schema_backfill(rev integer) ON COMMIT DROP',prepare=False)
+                cursor.execute('CREATE TRIGGER truss_schema_backfill_capture AFTER INSERT ON truss_schema_backfill FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_index_type_schema()',prepare=False)
+                cursor.execute('INSERT INTO truss_schema_backfill SELECT rev FROM truss.schema_rev WHERE rev>0 ORDER BY rev',prepare=False)
                 original_oids=[row[0] for row in original_routine_acl]
                 cursor.execute("SELECT p.oid::regprocedure::text FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' AND NOT p.oid=ANY(%s::oid[])",(original_oids,),prepare=False)
                 for signature, in cursor.fetchall():
@@ -847,6 +853,9 @@ class CatalogReferenceAssembly:
                 cursor.execute('SELECT EXISTS(SELECT 1 FROM truss.runtime_import_source WHERE operation_index IS DISTINCT FROM 0)',prepare=False)
                 if cursor.fetchone()!=(False,):raise ValueError('Preserved legacy source operation zero required')
             cursor.execute(bundled.joinpath('definition-source.sql').read_text(),prepare=False)
+            cursor.execute(bundled.joinpath('schema-cache.sql').read_text(),prepare=False)
+            for cache_table in ('runtime_type_schema','runtime_document_schema'):
+                cursor.execute(sql.SQL('ALTER TABLE truss.{} OWNER TO {}').format(sql.Identifier(cache_table),sql.Identifier(owner_role)),prepare=False)
             cursor.execute(sql.SQL('ALTER TABLE truss.runtime_definition_source OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
             # Replay only source indexing, never acceptance or user effects.
             cursor.execute("CREATE TEMP TABLE truss_definition_backfill (LIKE truss.schema_doc INCLUDING ALL) ON COMMIT DROP",prepare=False)
@@ -854,6 +863,9 @@ class CatalogReferenceAssembly:
             cursor.execute("INSERT INTO truss_definition_backfill SELECT * FROM truss.schema_doc",prepare=False)
             for statement in replacements:
                 cursor.execute(statement.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION',1),prepare=False)
+            cursor.execute('CREATE TEMP TABLE truss_schema_backfill(rev integer) ON COMMIT DROP',prepare=False)
+            cursor.execute('CREATE TRIGGER truss_schema_backfill_capture AFTER INSERT ON truss_schema_backfill FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_index_type_schema()',prepare=False)
+            cursor.execute('INSERT INTO truss_schema_backfill SELECT rev FROM truss.schema_rev WHERE rev>0 ORDER BY rev',prepare=False)
             if active_release!='truss-catalog-runtime/0.71-candidate':
                 cursor.execute('CREATE CONSTRAINT TRIGGER runtime_owned_journal_insert_commit AFTER INSERT ON truss.journal DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_journal_insert_check()',prepare=False)
             cursor.execute('ALTER TABLE truss.journal ENABLE ALWAYS TRIGGER runtime_owned_journal_insert_commit',prepare=False)

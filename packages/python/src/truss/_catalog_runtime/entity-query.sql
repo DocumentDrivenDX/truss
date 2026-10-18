@@ -12,7 +12,7 @@ DECLARE object_row truss.object%ROWTYPE;owner truss.type_def%ROWTYPE;
  creation truss.runtime_create_group%ROWTYPE;member jsonb;journals jsonb;expected_actor text;after_image jsonb;
  source_row truss.record_source%ROWTYPE;source_ledger truss.runtime_import_source%ROWTYPE;
  import_record jsonb;import_payload bytea;payload_value jsonb;expected_source jsonb;source_entry jsonb;
- root_identity jsonb;historical_image jsonb;historical_ownership jsonb;owned_mutation boolean;atomic_creation boolean;creation_attempt uuid;operation jsonb;result jsonb;event_group jsonb;semantic_events jsonb;event_refs jsonb;epoch text;
+ root_identity jsonb;historical_image jsonb;historical_ownership jsonb;owned_mutation boolean;atomic_creation boolean;creation_attempt uuid;operation jsonb;result jsonb;input_header jsonb;event_group jsonb;semantic_events jsonb;event_refs jsonb;epoch text;
 BEGIN
  PERFORM truss.query_scope(binding);
  SELECT source_epoch::text INTO STRICT epoch FROM truss.catalog_runtime_installation;
@@ -24,17 +24,28 @@ BEGIN
  FOR selected_version IN SELECT DISTINCT v FROM unnest(ARRAY[1::bigint,object_row.ver::bigint]) v LOOP
   expected_actor:=NULL;registration.registration_id:=NULL;result:=NULL;owned_mutation:=false;atomic_creation:=false;
   IF selected_version=1 THEN
+   -- Modern creations have an indexed, immutable transition coordinate.
+   SELECT a.* INTO attempt FROM truss.runtime_object_transition t
+    JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
+    WHERE t.object_id=selected_id AND t.type_id=selected_type AND t.before_object IS NULL AND a.complete;
+   IF NOT FOUND THEN
    SELECT a.* INTO STRICT attempt FROM truss.runtime_object_attempt a WHERE a.complete
     AND EXISTS(SELECT 1 FROM jsonb_array_elements(a.results) r
      WHERE r.value->>'operation'='create_object' AND r.value->'identity'->>'id'=selected_id::text
       AND r.value->'identity'->>'typeId'=selected_type::text);
+   END IF;
    IF attempt.context->'creationTransitionProfile'='{"identity":"truss-unified-create-transition","version":"0.2","sha256":"073782e2517f2a7e26c8d6479c6266ececf68963681ccfb6a380e9cd16f2e11b"}'::jsonb THEN
     SELECT t.* INTO STRICT transition FROM truss.runtime_object_transition t
      WHERE t.attempt_id=attempt.id AND t.object_id=selected_id AND t.type_id=selected_type AND t.before_object IS NULL;
+    IF attempt.context->'mutationProfile'=truss.runtime_owned_profile() THEN
+     SELECT p.plan->'operation',p.result INTO STRICT operation,result FROM truss.runtime_owned_operation p
+      WHERE p.attempt_id=attempt.id AND p.operation_index=transition.operation_index AND p.writer_xid=attempt.writer_xid;
+    ELSE
     operation:=convert_from(attempt.input_bytes,'UTF8')::jsonb->'operations'->transition.operation_index;
     result:=attempt.results->transition.operation_index;
+    END IF;
     IF transition.writer_xid IS DISTINCT FROM attempt.writer_xid OR attempt.next_index<=transition.operation_index
-     OR jsonb_array_length(attempt.results)<>attempt.next_index OR jsonb_array_length(transition.journal)<>1
+     OR attempt.result_count<>attempt.next_index OR jsonb_array_length(transition.journal)<>1
      OR operation->>'operation' IS DISTINCT FROM 'create_object' OR result->>'operation' IS DISTINCT FROM 'create_object'
      OR result->>'outcome' IS DISTINCT FROM 'created' OR result->>'version' IS DISTINCT FROM '1'
      OR result->'identity'->>'id' IS DISTINCT FROM selected_id::text OR result->'identity'->>'typeId' IS DISTINCT FROM selected_type::text
@@ -59,7 +70,10 @@ BEGIN
    creation_attempt:=attempt.id;
    journals:=jsonb_build_array(member->'journal');after_image:=member->'object';expected_actor:=creation.actor_name;
    ELSE RAISE EXCEPTION 'known original creation attribution profile required' USING ERRCODE='55000';END IF;
-   writer:=attempt.writer_xid;asserted:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'assertedOrigin';history_profile:=CASE WHEN (convert_from(attempt.input_bytes,'UTF8')::jsonb)->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END;
+   input_header:=CASE WHEN attempt.context ? 'originalAssertedOrigin'
+    THEN jsonb_build_object('assertedOrigin',attempt.context->'originalAssertedOrigin','mutationProfile',attempt.context->'mutationProfile')
+    ELSE convert_from(attempt.input_bytes,'UTF8')::jsonb END;
+   writer:=attempt.writer_xid;asserted:=input_header->'assertedOrigin';history_profile:=CASE WHEN input_header->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END;
   ELSE
    SELECT * INTO rebound FROM truss.runtime_catalog_rebind_transition t WHERE t.object_id=selected_id AND t.type_id=selected_type AND (t.after_object->>'ver')::bigint=selected_version;
    IF FOUND THEN
@@ -74,9 +88,17 @@ BEGIN
    SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=transition.attempt_id;
    IF NOT attempt.complete OR attempt.writer_xid IS DISTINCT FROM transition.writer_xid
     OR attempt.next_index<=transition.operation_index THEN RAISE EXCEPTION 'complete original attribution attempt required' USING ERRCODE='55000';END IF;
-   operation:=convert_from(attempt.input_bytes,'UTF8')::jsonb->'operations'->transition.operation_index;
-   result:=attempt.results->transition.operation_index;
-   owned_mutation:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'mutationProfile'=truss.runtime_owned_profile();
+   input_header:=CASE WHEN attempt.context ? 'originalAssertedOrigin'
+    THEN jsonb_build_object('assertedOrigin',attempt.context->'originalAssertedOrigin','mutationProfile',attempt.context->'mutationProfile')
+    ELSE convert_from(attempt.input_bytes,'UTF8')::jsonb END;
+   owned_mutation:=input_header->'mutationProfile'=truss.runtime_owned_profile();
+   IF owned_mutation THEN
+    SELECT p.plan->'operation',p.result INTO STRICT operation,result FROM truss.runtime_owned_operation p
+     WHERE p.attempt_id=attempt.id AND p.operation_index=transition.operation_index AND p.writer_xid=attempt.writer_xid;
+   ELSE
+    operation:=input_header->'operations'->transition.operation_index;result:=attempt.results->transition.operation_index;
+    IF operation IS NULL THEN operation:=convert_from(attempt.input_bytes,'UTF8')::jsonb->'operations'->transition.operation_index;END IF;
+   END IF;
    IF owned_mutation THEN
     PERFORM truss.runtime_owned_object_transition_validate(transition.transition_id,true);
    ELSIF operation->>'operation' IS DISTINCT FROM 'update_object' OR result->>'operation' IS DISTINCT FROM 'update_object'
@@ -84,7 +106,7 @@ BEGIN
     OR result->'identity'->>'id' IS DISTINCT FROM selected_id::text OR result->'identity'->>'typeId' IS DISTINCT FROM selected_type::text
    THEN RAISE EXCEPTION 'original changed attribution result required' USING ERRCODE='55000';END IF;
    journals:=transition.journal;after_image:=transition.after_object;
-   writer:=attempt.writer_xid;asserted:=(convert_from(attempt.input_bytes,'UTF8')::jsonb)->'assertedOrigin';history_profile:=CASE WHEN owned_mutation THEN 'truss-native-owned-mutation/0.1' ELSE 'truss-native-scalar-mutation/0.1' END;
+   writer:=attempt.writer_xid;asserted:=input_header->'assertedOrigin';history_profile:=CASE WHEN owned_mutation THEN 'truss-native-owned-mutation/0.1' ELSE 'truss-native-scalar-mutation/0.1' END;
    END IF;
   END IF;
   IF selected_version=object_row.ver AND after_image IS DISTINCT FROM to_jsonb(object_row)
@@ -110,7 +132,7 @@ BEGIN
    events:=events+1;used_bytes:=used_bytes+octet_length(item::text);
    IF events>128 OR used_bytes>(binding->>'maximumBytes')::bigint THEN RAISE EXCEPTION 'bounded attribution evidence required' USING ERRCODE='54000';END IF;
    SELECT * INTO STRICT physical FROM truss.journal WHERE xid=(item->>'xid')::xid8 AND seq=(item->>'seq')::bigint;
-   IF to_jsonb(physical) IS DISTINCT FROM item OR physical.entity_kind<>'o' OR physical.entity_id<>selected_id
+   IF physical IS DISTINCT FROM jsonb_populate_record(NULL::truss.journal,item) OR physical.entity_kind<>'o' OR physical.entity_id<>selected_id
     OR physical.entity_type<>selected_type OR physical.ver<>selected_version OR physical.xid<>writer
    THEN RAISE EXCEPTION 'original attribution journal correspondence required' USING ERRCODE='55000';END IF;
    original:=decode(physical.new_value->>'bytesBase64','base64');

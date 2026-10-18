@@ -216,7 +216,7 @@ BEGIN
     ON o.id=(s.value->>'id')::bigint AND o.type_id=(s.value->>'typeId')::int
    JOIN truss.type_def t ON t.type_id=o.type_id;
   IF lean_count<>jsonb_array_length(seeds) OR lean_count>2048
-   OR octet_length(lean_nodes::text)+octet_length(lean_types::text)>4194304 THEN
+   OR octet_length(lean_nodes::text)+octet_length(lean_types::text)>16777216 THEN
    RAISE EXCEPTION 'bounded complete explicit rootless rows required' USING ERRCODE='54000';END IF;
   RETURN jsonb_build_object('catalogRevision',(SELECT rev FROM truss.schema_head WHERE id=1),
    'independentEndpointScope',true,'nodeOrder',lean_order,'ownedEdgeOrder','[]'::jsonb,'nodes',lean_nodes,'edges','{}'::jsonb,
