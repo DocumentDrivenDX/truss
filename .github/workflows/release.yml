@@ -20,7 +20,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: python-release-${{ github.ref }}
+  group: python-release-${{ github.ref }}-${{ inputs.stress_case || 'publish' }}
   cancel-in-progress: false
 jobs:
   package:
