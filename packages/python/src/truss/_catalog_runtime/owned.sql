@@ -2518,6 +2518,8 @@ BEGIN
    (SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]') FROM truss.object_key_bucket k
     WHERE k.object_id=(o.value->'after'->>'id')::bigint AND k.type_id=(o.value->'after'->>'type_id')::int) after_keys,
    j.rows journal FROM jsonb_array_elements(objects) o JOIN journal_sets j ON j.operation_index=(o.value->>'index')::int),
+ -- Bind the inserted transition to the exact planned images. The finish-chain
+ -- physical comparisons do not detect a trigger that rewrites both sides.
  fingerprints AS MATERIALIZED (
   SELECT attempt_id,operation_index,writer_xid,object_id,type_id,
    sha256(convert_to(before_object::text,'UTF8')) before_hash,

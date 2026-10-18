@@ -2,12 +2,77 @@
 import json,sys,time
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[3]/'scripts'))
-from performance_workloads import schema,workloads
-from truss import CatalogDocument,Ok
+from performance_workloads import schema,workloads,values
+from truss import (CatalogDocument,Ok,ModuleAccessGrant,adopt_psycopg_host,
+    create_reference_assembly,CatalogRuntimeConfiguration,ObjectFound,EdgeFound)
+from truss.contracts import MapValue
+from truss.groups import (CreateObject,RootlessOwnership,GroupSuccess,RequestNone,
+    CreateEdge,StoredObjectReference,NullOrderKey)
 from truss.catalog_results import CatalogRegistration
 import test_catalog_runtime_native as base
 class StressRegistrationTests(base.PublicCatalogRuntimeTests):
     for _name in tuple(n for n in dir(base.PublicCatalogRuntimeTests) if n.startswith('test_')):locals()[_name]=None
+
+    def test_thousand_type_catalog_first_distinct_type_create_batch(self):
+        # Registration alone missed repeated whole-document parsing during key
+        # admission. Exercise the first unchanged matrix batch after registration.
+        workload=workloads()['many-types']
+        source=schema(workload);document=source['id']
+        raw=json.dumps(source,separators=(',',':')).encode()
+        documents=(CatalogDocument(document,'matrix-v1',raw),)
+        self.install();connection,host,assembly,tx=self.consumer()
+        accepted=assembly.accept_in_transaction(tx,assembly.prepare_catalog(documents),request_key='many-types-create')
+        self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(host._custody.last_attempt.error))
+        view=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request()).value.view
+        references={entry.reference.authored_identity:entry.reference for entry in view.definitions if entry.reference.kind=='type'}
+        relationships={entry.reference.authored_identity:entry.reference for entry in view.definitions if entry.reference.kind=='relationship'}
+        host.detach();connection.commit()
+        import psycopg
+        for role in ('many_types_reader','many_types_writer'):
+            self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))
+            self.addCleanup(self.admin.execute,psycopg.sql.SQL('DROP ROLE {}').format(psycopg.sql.Identifier(role)))
+        self.admin.execute('BEGIN');admin_host=adopt_psycopg_host(self.admin)
+        admin_tx=admin_host.adopt_transaction().value
+        admin_assembly=create_reference_assembly(CatalogRuntimeConfiguration(),admin_host).value
+        self.assertIsInstance(admin_assembly.configure_module_access_in_transaction(admin_tx,
+            (ModuleAccessGrant(document,'m','many_types_reader','many_types_writer'),)),Ok)
+        admin_host.detach();self.admin.commit()
+        self.admin.execute('GRANT many_types_writer TO consumer WITH SET FALSE')
+        self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(self.installation.registrar_role)))
+        connection,host,assembly,tx=self.consumer()
+        operations=tuple(CreateObject(type_definition_pin=references['R'+str(i)].definition_pin,
+            values=values(workload,i),ownership=RootlessOwnership(),alias='row'+str(i)) for i in range(100))
+        context=assembly.group_context_in_transaction(tx).value
+        result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=documents)
+        self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error))
+        self.assertIsInstance(result.value,GroupSuccess,repr(result))
+        identities=tuple(item.identity for item in result.value.response.semantic.results)
+        self.assertEqual(len(identities),100)
+        host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
+        for i,identity in enumerate(identities):
+            opened=assembly.get_object_in_transaction(tx,document_id=document,module_id='m',record_id='R'+str(i),object_id=int(identity.id))
+            self.assertIsInstance(opened,Ok,repr(opened)+' '+str(host._custody.last_attempt.error))
+            self.assertIsInstance(opened.value,ObjectFound,repr(opened.value))
+            self.assertEqual(opened.value.object.identity,identity)
+            self.assertEqual(dict(opened.value.object.values)['p0'],'p0-'+str(i))
+        # The same cold source-coordinate join previously made relationship
+        # admission scan every source row once per unrelated relationship.
+        edges=tuple(CreateEdge(relationship_definition_pin=relationships['R'+str(i)+'.link'].definition_pin,
+            source=StoredObjectReference(identity=identity),target=StoredObjectReference(identity=identity),
+            values=(),order_key=NullOrderKey()) for i,identity in enumerate(identities))
+        context=assembly.group_context_in_transaction(tx).value
+        linked=assembly.apply_in_transaction(tx,context.input(edges,MapValue(entries=())),RequestNone(),documents=documents)
+        self.assertIsInstance(linked,Ok,repr(linked)+' '+str(host._custody.last_attempt.error))
+        self.assertIsInstance(linked.value,GroupSuccess,repr(linked))
+        edge_identities=tuple(item.identity for item in linked.value.response.semantic.results)
+        self.assertEqual(len(edge_identities),100)
+        host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
+        for i,identity in enumerate(edge_identities):
+            opened=assembly.get_edge_in_transaction(tx,document_id=document,module_id='m',relationship_id='R'+str(i)+'.link',edge_id=int(identity.id))
+            self.assertIsInstance(opened,Ok,repr(opened)+' '+str(host._custody.last_attempt.error))
+            self.assertIsInstance(opened.value,EdgeFound,repr(opened.value))
+            self.assertEqual(opened.value.edge.source,identities[i]);self.assertEqual(opened.value.edge.target,identities[i])
+        host.detach();connection.rollback()
 
 def registration_case(name,workload):
     def run(self):

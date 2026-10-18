@@ -34,6 +34,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Check large-workload runner capacity controls
+        env:
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_large_runner_capacity_helper
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: '1.4.3'
@@ -420,6 +424,29 @@ jobs:
           TRUSS_BUN_EXECUTABLE: bun
         run: python -m unittest test_relationship_names_native
 
+  large-capacity:
+    if: "github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'"
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-14]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Measure available large-workload storage
+        run: python scripts/prepare-large-stress-runner.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: large-runner-capacity-probe-${{ matrix.os }}
+          path: ${{ runner.temp }}/public-stress/runner-capacity.json
+          if-no-files-found: error
   stress:
     needs:
       - "package"
@@ -441,6 +468,16 @@ jobs:
       - uses: "actions/setup-python@v5"
         with:
           python-version: "3.11"
+      - name: "Prepare and verify storage for the exact large workload"
+        if: "matrix.case == 'large'"
+        run: "python scripts/prepare-large-stress-runner.py"
+      - name: "Retain large-workload disk capacity before loading"
+        if: "always() && matrix.case == 'large'"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "large-runner-capacity-${{ matrix.os }}"
+          path: "${{ runner.temp }}/public-stress/runner-capacity.json"
+          if-no-files-found: "warn"
       - uses: "actions/download-artifact@v4"
         with:
           name: "python-package"
@@ -487,6 +524,14 @@ jobs:
           status={'source':os.environ['GITHUB_SHA'],'case':os.environ['STRESS_CASE'],'outcome':os.environ['WORKLOAD_OUTCOME'],
               'reportPresent':report.is_file(),'loadBatchSize':1000 if os.environ['STRESS_CASE']=='large' else 100,'statementTimeoutMs':10000,'operationTimeoutMs':30000,
               'scope':'Selected exact declared stress case; timeout or missing report is incomplete evidence'}
+          capacity=root/'runner-capacity.json'
+          status['runnerCapacityPresent']=capacity.is_file()
+          if capacity.is_file():
+              capacity_result=json.loads(capacity.read_bytes())
+              status['runnerCapacity']=capacity_result
+              status['capacityRefusal']=capacity_result.get('status')!='ready'
+              if status['capacityRefusal'] and os.environ['STRESS_CASE']=='large':
+                  status['performanceQualification']='incomplete'
           if report.is_file():
               result=json.loads(report.read_bytes())
               status.update(functionalPassed=result['functionalPassed'],runtimePackage=result['runtimePackage'])

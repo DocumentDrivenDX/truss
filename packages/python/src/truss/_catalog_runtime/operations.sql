@@ -90,10 +90,16 @@ BEGIN
    pin:=creation->>'relationshipDefinitionPin';
   ELSE RAISE EXCEPTION 'stored or prior edge alias target required' USING ERRCODE='22023';END IF;
  ELSE RAISE EXCEPTION 'selected edge operation required' USING ERRCODE='22023';END IF;
- SELECT r.* INTO STRICT selected FROM truss.runtime_definition_source p JOIN truss.rel_def r
+ -- Resolve the exact pin before joining source coordinates. Without this
+ -- boundary a cold catalog plan can scan every relationship and repeatedly
+ -- probe all source rows from the same document for each candidate.
+ WITH pinned AS MATERIALIZED (
+  SELECT rev,ord,doc_id,module_id,element_id FROM truss.runtime_definition_source
+  WHERE definition_pin=pin AND kind='relationship' AND key_id='')
+ SELECT r.* INTO STRICT selected FROM pinned p JOIN truss.rel_def r
   ON r.definition_rev=p.rev AND r.definition_doc_ord=p.ord AND r.definition_document_id=p.doc_id
    AND r.module=p.module_id AND r.rel_id=p.element_id
-  WHERE p.definition_pin=pin AND p.kind='relationship' AND p.key_id='' AND r.retired_rev IS NULL;
+  WHERE r.retired_rev IS NULL;
  IF NOT FOUND THEN RAISE EXCEPTION 'accepted relationship pin required' USING ERRCODE='22023';END IF;
  IF identity IS NOT NULL AND (jsonb_typeof(identity->'typeId') IS DISTINCT FROM 'string'
   OR jsonb_typeof(identity->'definitionPin') IS DISTINCT FROM 'string'

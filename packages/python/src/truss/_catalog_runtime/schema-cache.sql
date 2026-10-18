@@ -15,6 +15,7 @@ CREATE FUNCTION truss.runtime_owned_index_type_schema() RETURNS trigger
 LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE basis jsonb;type_basis jsonb;selected record;property record;pin record;
  property_order jsonb;property_pins jsonb;property_access jsonb;type_pin text;query_record jsonb;compiled_records jsonb[]:='{}';document_revision text;properties_by_type jsonb;property_metadata_by_type jsonb;keys_by_type jsonb;missing_pins boolean;value_readers jsonb;valid_properties boolean;document_row record;records jsonb;relations jsonb;readers jsonb;closed boolean;items_valid boolean;
+ type_properties truss.prop_def[];key_codecs_by_type jsonb;
 BEGIN
  -- The accepted head already contains the installed, validated native rows.
  -- Historical initialization retains its original reconstruction; the current
@@ -49,10 +50,56 @@ BEGIN
  SELECT coalesce(jsonb_object_agg(type_id::text,keys),'{}'::jsonb) INTO keys_by_type
  FROM (SELECT (k.value->>'type_id')::int type_id,jsonb_agg(k.value ORDER BY (k.value->>'key_num')::int) keys
   FROM jsonb_array_elements(basis->'key_def') k GROUP BY (k.value->>'type_id')::int) grouped;
+ -- Decode each source document/typed basis once and join small original
+ -- element rows. Nested JSONB map extraction would repeatedly copy the whole
+ -- module when compiling a thousand records from one shared document.
+ WITH documents AS MATERIALIZED (
+  SELECT DISTINCT ON(doc_id) doc_id,umf_version,document::jsonb source
+  FROM truss.schema_doc WHERE rev<=NEW.rev ORDER BY doc_id,rev DESC),
+ elements AS MATERIALIZED (
+  SELECT d.doc_id,d.umf_version,m.value->>'id' module_id,e.value->>'id' element_id,e.value element
+  FROM documents d CROSS JOIN LATERAL jsonb_array_elements(d.source->'modules') m
+  CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e),
+ types AS MATERIALIZED (
+  SELECT * FROM jsonb_populate_recordset(NULL::truss.type_def,basis->'type_def') t
+  WHERE t.kind='record' AND NOT t.provisional AND (t.retired_rev IS NULL OR t.retired_rev>NEW.rev)),
+ properties AS MATERIALIZED (
+  SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def')),
+ keys AS MATERIALIZED (
+  SELECT * FROM jsonb_populate_recordset(NULL::truss.key_def,basis->'key_def') k
+  WHERE k.since_rev<=NEW.rev AND (k.retired_rev IS NULL OR k.retired_rev>NEW.rev)),
+ authored_keys AS MATERIALIZED (
+  SELECT k.type_id,k.key_num,k.prop_ids,t.document_id,r.umf_version,r.element record_source,q.value key_source
+  FROM keys k JOIN types t USING(type_id)
+  JOIN elements r ON r.doc_id=t.document_id AND r.module_id=t.module AND r.element_id=t.element
+  CROSS JOIN LATERAL jsonb_array_elements(CASE WHEN jsonb_typeof(r.element->'keys')='array' THEN r.element->'keys' ELSE '[]'::jsonb END) q
+  WHERE q.value->>'id'=k.key_id),
+ components AS (
+  SELECT k.type_id,k.key_num,k.umf_version,k.prop_ids,i.ordinal,f.element field_source,p.facets,
+   k.key_source-ARRAY['id','name','fields','primary']='{}'::jsonb
+    AND CASE WHEN jsonb_typeof(k.key_source->'fields')='array' THEN jsonb_array_length(k.key_source->'fields') END=cardinality(k.prop_ids)
+    AND k.key_source->'fields'->(i.ordinal::int-1)=jsonb_build_object('module',p.declaration_module,'element',p.element)
+    AND k.record_source->'members' @> jsonb_build_array(jsonb_build_object('module',p.declaration_module,'element',p.element))
+    AND f.element IS NOT NULL AND f.element->>'scalarType' IS NOT DISTINCT FROM p.scalar_type
+    AND coalesce(f.element->'facets','{}')=coalesce(p.facets,'{}') qualified
+  FROM authored_keys k CROSS JOIN LATERAL unnest(k.prop_ids) WITH ORDINALITY i(prop_id,ordinal)
+  JOIN properties p ON p.type_id=k.type_id AND p.prop_id=i.prop_id
+  LEFT JOIN elements f ON f.doc_id=k.document_id AND f.module_id=p.declaration_module AND f.element_id=p.element),
+ codecs AS (
+  SELECT type_id,key_num,jsonb_build_object('profile','truss-native-key-codec-metadata/0.1',
+   'typeId',type_id::text,'keyNumber',key_num::text,'fields',jsonb_agg(field_source ORDER BY ordinal),
+   'facets',jsonb_agg(coalesce(facets,'{}') ORDER BY ordinal),'umfVersion',umf_version) metadata
+  FROM components GROUP BY type_id,key_num,umf_version,prop_ids
+  -- Unsupported accepted forms keep their original lazy key-operation refusal.
+  HAVING bool_and(qualified IS TRUE) AND count(*)=cardinality(prop_ids)),
+ grouped AS (SELECT type_id,jsonb_object_agg(key_num::text,metadata) codecs FROM codecs GROUP BY type_id)
+ SELECT coalesce(jsonb_object_agg(type_id::text,codecs),'{}'::jsonb) INTO key_codecs_by_type FROM grouped;
  FOR selected IN SELECT * FROM jsonb_populate_recordset(NULL::truss.type_def,basis->'type_def') t
   WHERE t.kind='record' AND NOT t.provisional AND (t.retired_rev IS NULL OR t.retired_rev>NEW.rev) ORDER BY type_id LOOP
   type_basis:=jsonb_build_object('type_def',jsonb_build_array(to_jsonb(selected)),
    'prop_def',coalesce(properties_by_type->selected.type_id::text,'[]'::jsonb));
+  SELECT coalesce(array_agg(p),'{}'::truss.prop_def[]) INTO type_properties
+   FROM jsonb_populate_recordset(NULL::truss.prop_def,type_basis->'prop_def') p;
   SELECT d.definition_pin INTO STRICT type_pin FROM truss.runtime_definition_source d
    WHERE d.rev=selected.definition_rev AND d.ord=selected.definition_doc_ord AND d.doc_id=selected.definition_document_id
     AND d.module_id=selected.module AND d.element_id=selected.element AND d.kind='element' AND d.key_id='';
@@ -69,14 +116,14 @@ BEGIN
     FROM jsonb_populate_recordset(NULL::truss.key_def,coalesce(keys_by_type->selected.type_id::text,'[]'::jsonb)) k WHERE k.type_id=selected.type_id AND (k.retired_rev IS NULL OR k.retired_rev>NEW.rev)),
    'fields',(SELECT coalesce(jsonb_agg(jsonb_build_object('identity',jsonb_build_object('documentId',selected.document_id,
     'revision',document_revision,'module',p.declaration_module,'element',p.element),'propertyId',p.prop_id::text) ORDER BY p.prop_id),'[]'::jsonb)
-    FROM jsonb_populate_recordset(NULL::truss.prop_def,type_basis->'prop_def') p WHERE p.retired_rev IS NULL OR p.retired_rev>NEW.rev));
+    FROM unnest(type_properties) p WHERE p.retired_rev IS NULL OR p.retired_rev>NEW.rev));
   SELECT coalesce(jsonb_agg(jsonb_build_object('documentId',document_id,'moduleId',module_id) ORDER BY document_id,module_id),'[]'::jsonb) INTO value_readers FROM (
    SELECT selected.document_id document_id,selected.module module_id
-   UNION SELECT p.definition_document_id,p.declaration_module FROM jsonb_populate_recordset(NULL::truss.prop_def,type_basis->'prop_def') p WHERE p.retired_rev IS NULL OR p.retired_rev>NEW.rev
-   UNION SELECT n.value->>'documentId',n.value->'reference'->>'module' FROM jsonb_populate_recordset(NULL::truss.prop_def,type_basis->'prop_def') p
+   UNION SELECT p.definition_document_id,p.declaration_module FROM unnest(type_properties) p WHERE p.retired_rev IS NULL OR p.retired_rev>NEW.rev
+   UNION SELECT n.value->>'documentId',n.value->'reference'->>'module' FROM unnest(type_properties) p
     CROSS JOIN LATERAL jsonb_array_elements(jsonb_build_array(p.item)||coalesce(p.item->'descendants','[]'::jsonb)) n
     WHERE (p.retired_rev IS NULL OR p.retired_rev>NEW.rev) AND p.cardinality IN ('array','map')) dependencies;
-  SELECT coalesce(bool_and(truss.valid_property_definition(p)),true) INTO valid_properties FROM jsonb_populate_recordset(NULL::truss.prop_def,type_basis->'prop_def') p WHERE p.retired_rev IS NULL OR p.retired_rev>NEW.rev;
+  SELECT coalesce(bool_and(truss.valid_property_definition(p)),true) INTO valid_properties FROM unnest(type_properties) p WHERE p.retired_rev IS NULL OR p.retired_rev>NEW.rev;
   -- Retain only interpretation dependencies, rather than another complete
   -- copy of every native property definition inside the compiled schema.
   SELECT coalesce(jsonb_object_agg(p.prop_id::text,jsonb_build_object(
@@ -86,12 +133,12 @@ BEGIN
     UNION SELECT n.value->>'documentId',n.value->'reference'->>'module'
      FROM jsonb_array_elements(jsonb_build_array(p.item)||coalesce(p.item->'descendants','[]'::jsonb)) n
      WHERE p.cardinality IN ('array','map')) dependencies))),'{}'::jsonb) INTO property_access
-   FROM jsonb_populate_recordset(NULL::truss.prop_def,type_basis->'prop_def') p
+   FROM unnest(type_properties) p
    WHERE p.since_rev<=NEW.rev AND (p.retired_rev IS NULL OR p.retired_rev>NEW.rev);
   compiled_records:=array_append(compiled_records,query_record);
   INSERT INTO truss.runtime_type_schema VALUES(NEW.rev,selected.type_id,jsonb_build_object(
    'typeId',selected.type_id::text,'revision',NEW.rev::text,'typePin',type_pin,
-   'propertyOrder',property_order,'propertyPins',property_pins,'propertyAccess',property_access),value_readers,valid_properties);
+   'propertyOrder',property_order,'propertyPins',property_pins,'propertyAccess',property_access,'keyCodecs',coalesce(key_codecs_by_type->selected.type_id::text,'{}'::jsonb)),value_readers,valid_properties);
  END LOOP;
  IF NEW.rev=(SELECT rev FROM truss.schema_head WHERE id=1) THEN
  FOR document_row IN SELECT DISTINCT ON(doc_id) doc_id,doc_revision,content_sha256,document FROM truss.schema_doc WHERE rev<=NEW.rev ORDER BY doc_id,rev DESC LOOP

@@ -115,11 +115,24 @@ REVOKE ALL ON FUNCTION truss.umf_key_field_values_valid(jsonb,jsonb,text) FROM P
 CREATE FUNCTION truss.runtime_owned_key_codec_metadata(selected_type int,selected_key smallint,planned_basis jsonb DEFAULT NULL,checked_cells jsonb DEFAULT NULL,require_cells boolean DEFAULT false) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE definition truss.key_def%ROWTYPE;owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;archive truss.schema_doc%ROWTYPE;
- record_source jsonb;key_source jsonb;field_source jsonb;reference jsonb;facets jsonb:='[]';fields jsonb:='[]';component int;position int:=0;
+ record_source jsonb;key_source jsonb;field_source jsonb;reference jsonb;facets jsonb:='[]';fields jsonb:='[]';component int;position int:=0;compiled jsonb;
 BEGIN
  IF planned_basis IS NULL THEN
   SELECT * INTO STRICT owner FROM truss.type_def WHERE type_id=selected_type AND kind='record' AND NOT provisional AND retired_rev IS NULL;
   SELECT * INTO STRICT definition FROM truss.key_def WHERE type_id=selected_type AND key_num=selected_key AND retired_rev IS NULL;
+  -- Current immutable metadata was compiled once from the same original
+  -- latest-document key/Field objects. Native identity and current key checks
+  -- above remain live; old installations and planned catalogs use the original
+  -- source reconstruction below.
+  SELECT s.metadata->'keyCodecs'->selected_key::text INTO compiled FROM truss.runtime_type_schema s
+   WHERE s.rev=(SELECT rev FROM truss.schema_head WHERE id=1) AND s.type_id=selected_type
+    AND NOT EXISTS(SELECT 1 FROM truss.schema_rev newer WHERE newer.rev>s.rev);
+  IF compiled IS NOT NULL THEN
+   IF require_cells AND (jsonb_typeof(checked_cells) IS DISTINCT FROM 'array'
+    OR jsonb_array_length(checked_cells)<>cardinality(definition.prop_ids)) THEN
+    RAISE EXCEPTION 'qualified ordered key definition required' USING ERRCODE='22023';END IF;
+   RETURN compiled;
+  END IF;
   SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=owner.document_id ORDER BY rev DESC LIMIT 1;
  ELSE
   SELECT * INTO STRICT owner FROM jsonb_populate_recordset(NULL::truss.type_def,planned_basis->'type_def') t WHERE t.type_id=selected_type;
