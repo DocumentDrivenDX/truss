@@ -1,0 +1,118 @@
+{
+  "candidate": "C79 capture CTE materialization",
+  "baselineNativeManifestSha256": "08b082ab3836dbb5717360f875773190488d6b886971cd6e10b63b894a3a4ebe",
+  "sourceChange": "Only selected_plans and plans CTEs in runtime_owned_capture_application become MATERIALIZED. Every input/bound, exact INSERT RETURNING comparison and second physical inventory comparison remain unchanged.",
+  "diagnosticScope": {
+    "nodes": 10000,
+    "edges": 20000,
+    "types": 10,
+    "fieldsPerType": 128,
+    "updateOperations": 1024,
+    "changedProperty": "p1",
+    "database": "Same stopped preserved C77 database cloned once; identical target operations in each variant, rolled back after each apply. Earlier retained fixture history remains.",
+    "authority": "Registrar granted only for public reference acquisition, revoked before timing; ordinary writer/reader permissions apply during measured operations.",
+    "limits": "Unchanged10s SQL/30s operation deadlines.",
+    "instrumentation": "Clock NOTICE boundaries in copied capture function. Exact C77 prepare/begin/apply/producer restored before paired sequence; submitted function text hashes include diagnostic NOTICE instrumentation."
+  },
+  "variants": [
+    {
+      "name": "baseline-before",
+      "apiMilliseconds": 7800.064583003405,
+      "phaseMilliseconds": {
+        "initialAuthorityAndScope": 245.302,
+        "prepare": 744.538,
+        "keyPreflight": 632.717,
+        "planSerialization": 913.14,
+        "insertReturningProof": 191.249,
+        "retainedInventoryProof": 51.582
+      },
+      "resultCount": 1024,
+      "changedCount": 1024,
+      "submittedInstrumentedFunctionSha256": "e48453d2857be36a5d7b4a1e822d7a05094bce8f8f888c7b96c15a6e9d1ae2f3"
+    },
+    {
+      "name": "selected-materialized",
+      "apiMilliseconds": 6860.8685000072,
+      "phaseMilliseconds": {
+        "initialAuthorityAndScope": 257.406,
+        "prepare": 757.2529999999999,
+        "keyPreflight": 430.743,
+        "planSerialization": 350.93800000000005,
+        "insertReturningProof": 154.868,
+        "retainedInventoryProof": 56.272000000000006
+      },
+      "resultCount": 1024,
+      "changedCount": 1024,
+      "submittedInstrumentedFunctionSha256": "0088555d63e9edc0e7f400befc31774ff687fe79d65fe0035e405461e5ef055a"
+    },
+    {
+      "name": "plans-materialized",
+      "apiMilliseconds": 6939.018125005532,
+      "phaseMilliseconds": {
+        "initialAuthorityAndScope": 285.569,
+        "prepare": 798.519,
+        "keyPreflight": 476.73199999999997,
+        "planSerialization": 347.895,
+        "insertReturningProof": 123.5,
+        "retainedInventoryProof": 34.06
+      },
+      "resultCount": 1024,
+      "changedCount": 1024,
+      "submittedInstrumentedFunctionSha256": "97f99fc4dcb3c610d85f1ef25cc8c53985d9fcf87e148d7b0d43fcadb104f6ee"
+    },
+    {
+      "name": "both-materialized",
+      "apiMilliseconds": 6556.258707991219,
+      "phaseMilliseconds": {
+        "initialAuthorityAndScope": 280.221,
+        "prepare": 761.522,
+        "keyPreflight": 408.56,
+        "planSerialization": 260.549,
+        "insertReturningProof": 124.122,
+        "retainedInventoryProof": 39.626000000000005
+      },
+      "resultCount": 1024,
+      "changedCount": 1024,
+      "submittedInstrumentedFunctionSha256": "e606b82f3f66cbdc17cba0a815575415f8cd14fe2647f657bce48e63e2393dc7"
+    },
+    {
+      "name": "baseline-after",
+      "apiMilliseconds": 7577.284500002861,
+      "phaseMilliseconds": {
+        "initialAuthorityAndScope": 255.62600000000003,
+        "prepare": 765.1419999999999,
+        "keyPreflight": 620.2579999999999,
+        "planSerialization": 994.235,
+        "insertReturningProof": 172.026,
+        "retainedInventoryProof": 77.25500000000001
+      },
+      "resultCount": 1024,
+      "changedCount": 1024,
+      "submittedInstrumentedFunctionSha256": "e48453d2857be36a5d7b4a1e822d7a05094bce8f8f888c7b96c15a6e9d1ae2f3"
+    }
+  ],
+  "decision": "Adopt both MATERIALIZED keywords: plan serialization baseline0.913/0.994s versus0.261s with both; all variants returned1024changed results. Whole-call times are sequential local observations with cache/noise; no isolated hosted speedup guarantee.",
+  "qualification": "Diagnostic only, no commits, full workload repetitions or release qualification. Proper C79 package controls and unchanged hosted two-platform matrix remain required.",
+  "artifacts": {
+    "2026-10-18-c79-capture-ab-profile.json.gz": {
+      "uncompressedSha256": "b7f89a4b0377bd239685b42f19470ad27141c6188e51a177e70dc3d93fa2a7e3",
+      "compressedSha256": "1803a3fb0201085912c1a4ba80ac30d84272aa0af0482bd7197f8b5e1eebf68f"
+    },
+    "2026-10-18-c79-capture-ab-profile.log.gz": {
+      "uncompressedSha256": "857501525f485e4845fcd07ddcf89a00eed64e8a29e3bb073e37cae46b670c4f",
+      "compressedSha256": "d909234babaa902b362b33628d2706e7db47bd9068196977ec57a6fbe46d2c85"
+    },
+    "2026-10-18-c79-capture-ab-profile.py.gz": {
+      "uncompressedSha256": "08e268f6492b69ef390df9eadc83844d9abdf68cb36f50aa63d39e34368ca03e",
+      "compressedSha256": "578be7f6a214a63ba5ea372c210a7d0bfaae0b9a9209b08554ec6091f914f721"
+    },
+    "2026-10-18-c79-capture-phase-overlay.sql.gz": {
+      "uncompressedSha256": "e48453d2857be36a5d7b4a1e822d7a05094bce8f8f888c7b96c15a6e9d1ae2f3",
+      "compressedSha256": "1a81e2281bf43edccd822c1c359c7e6597a2d68fe03831f174ba4eb3eb5782a6"
+    },
+    "2026-10-18-c79-capture-baseline.sql.gz": {
+      "uncompressedSha256": "e5bc9ac18c49e7941d535a04932f4907b91580055b6a150a9e3c94a228b9e143",
+      "compressedSha256": "a8d76b480ade708b2879626b2f216cc6ff8e02627afd88371523cf43852eb97e"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "runId": 39167394688,
+  "sourceCommit": "d40e5570ed78136ed6e91060d22f4271303dd260",
+  "qualification": "Historical failed C75 snapshot: 18 stress reports completed, 13 passed, 5 failed; two native jobs also failed; large and dense-edges jobs on both platforms still active at capture. No full matrix qualification. Supplements the earlier 17-report snapshot without replacing it.",
+  "completedStress": {
+    "total": 18,
+    "passed": 13,
+    "failed": 5
+  },
+  "artifacts": {
+    "2026-10-18-c75-hosted-18-snapshot.json.gz": {
+      "uncompressedSha256": "03cb08600caa44e94cb0c388ffb62e231a92a201a9e0b01cffa70b6435a69e1d",
+      "compressedSha256": "e4b0f9409e7b955ef8f2a8990d7a7ee13122d0d322c40feae7294e4dc67f5c66"
+    },
+    "2026-10-18-c75-wide-macos-14-failed-report.json.gz": {
+      "uncompressedSha256": "a65959ae52f57d64141a7ceedd708303b05f4837652a6ea0af5bec1c39dfaf0c",
+      "compressedSha256": "882a0907d1399f082cac122a081c2b915c56128e2c75e4152d8def7536026626"
+    },
+    "2026-10-18-c75-wide-macos-14-failed.log.gz": {
+      "uncompressedSha256": "abd1f5a814b39f4ac1f885e2ab9c5d149d54aab31c53d31bf9db90c102b710bd",
+      "compressedSha256": "67abbf5bff0cbb07463548d8ed319aaad0073e05c2ef8a976df21ed7a6f29f9d"
+    }
+  }
+}

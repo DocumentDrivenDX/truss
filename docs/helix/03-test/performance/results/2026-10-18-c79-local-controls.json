@@ -1,0 +1,47 @@
+{
+  "candidate": "C79",
+  "sourceCommit": "a0517ef7f1d9a4f90179db988e099c371e3b8657",
+  "sourceWorkingTreeDirty": true,
+  "sourceScope": "Two canonical capture CTEs become MATERIALIZED, regenerated owned SQL/manifest, and a suppression regression; exact wheel payload parity retained. Qualified C78 host guard remains unchanged.",
+  "wheelSha256": "b625c6585bce50a53e8851d4cf7b50b70fe06eae9f7a5d076c5e4a7220f4ce3b",
+  "nativeManifestSha256": "b05a03ead95682f4d4966392e48610401c368e31ec492120d5a7a5207f5f6a59",
+  "matchedRuntimePayloads": 528,
+  "runtimePayloadInventorySha256": "af0778e827c46805349dd2a1d4973ddac2359ddc919cc951d0f85832b5e4d3b6",
+  "changedRuntimePayloadsFromC78Host": [
+    "truss/_catalog_runtime/manifest.json",
+    "truss/_catalog_runtime/owned.sql"
+  ],
+  "controls": {
+    "tests": 9,
+    "passed": 9,
+    "unittestElapsedSeconds": 151.912,
+    "runnerElapsedSeconds": 154.3257273749914,
+    "coverage": [
+      "BEFORE INSERT altered and suppressed captured plans refuse before effects with55000, ID sequence unchanged and caller temp work retained",
+      "created/changed/noop result slots, durable replay and immutable plan/result guards",
+      "independent updates versus retained general validator",
+      "compact updates followed by native fallback, committed effects and historical values",
+      "1024creates and1024updates with replay and ordered public readback",
+      "1024eight-key updates under original deadlines"
+    ]
+  },
+  "qualification": "Focused proper-wheel local evidence only. Full native and unchanged eleven-case/two-platform hosted qualification, final real-schema counted benchmark and publication remain required. No MERGE prototype or diagnostic NOTICE function is present in canonical sources.",
+  "artifacts": {
+    "2026-10-18-c79-controls.log.gz": {
+      "uncompressedSha256": "e0791333f6fac34ee043728aaa08d1bf5302f623a1de1c0d30109bd64bf4a007",
+      "compressedSha256": "ee7711bec900fabf27e928e27a429610e24d2e2ea5b3ed83ed7095efba213bc2"
+    },
+    "2026-10-18-c79-controls.log.argv.gz": {
+      "uncompressedSha256": "63ef497474a8b7d93552508e1906fb0fb2507585347bb46e8d1f873e8f129675",
+      "compressedSha256": "06ca260f36a1243c49768403928dd6ff014c791cdc3951e69d1608eb6fbce194"
+    },
+    "2026-10-18-c79-package-parity.json.gz": {
+      "uncompressedSha256": "6d53e7f85edbb2d97964354ee08fc496cb6a9a18d924e71bfedf31022a81d157",
+      "compressedSha256": "f9b2365e44a5a2f3e21f355235ca3054f717e30eb7c7f8966337839af6047f21"
+    },
+    "2026-10-18-c79-control-receipt.json.gz": {
+      "uncompressedSha256": "e0c7e5a47489aeaced685485ea135ab63226ba74344558dcb74e44096f67bd25",
+      "compressedSha256": "db61b593114fead159348f94a9b285d5c812c6eb5420fc92f2a785718b8e5cec"
+    }
+  }
+}

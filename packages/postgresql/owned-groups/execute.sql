@@ -581,7 +581,7 @@ BEGIN
     OR n.value->'rev' IS DISTINCT FROM inventory->'catalogRevision');
  application_operations:=application_prepared->'operations';
  -- Retain all immutable plans with one INSERT, preserving exact row images.
- WITH selected_plans AS (
+ WITH selected_plans AS MATERIALIZED (
   SELECT CASE WHEN compact_updates THEN v.value||jsonb_build_object(
    'compactProfile','truss-application-value-plan/0.1',
    'applicationPatch',application_operations->(v.value->>'operationIndex')::int,
@@ -592,7 +592,7 @@ BEGIN
    'afterNodes',(SELECT jsonb_object_agg(n.key,jsonb_set(n.value,'{image}',(n.value->'image')-ARRAY['props','retained'])) FROM jsonb_each(v.value->'afterNodes') n))
    ELSE v.value END value
   FROM jsonb_array_elements(inventory->'operations') v),
- plans AS (
+ plans AS MATERIALIZED (
   SELECT value||jsonb_build_object('actorName',session_user::text,'mutationProfile',input->'mutationProfile',
    'catalogRevision',inventory->'catalogRevision')||CASE WHEN value->>'operationIndex'='0'
     THEN jsonb_build_object('initialScope',inventory->'initialScope') ELSE '{}'::jsonb END plan
