@@ -1,0 +1,43 @@
+{
+  "status": "local-controls-passed-full-hosted-and-million-node-qualification-pending",
+  "runtimeManifestSha256": "ce5e96ae3419ba09737326899e6e4735382d1a63befb7c130d5e58fc425ca67b",
+  "localWheelSha256": "f039d9c9c133bae064d628ab2b1b98fc1620192e5f47905fbd87b1936e278466",
+  "wheelSourceMatchedPayloadFiles": 531,
+  "queryCompiler": {
+    "distribution": "weft-sql",
+    "version": "0.4.42",
+    "backendVersion": "0.4.41"
+  },
+  "sqlDeadlineMs": 10000,
+  "operationDeadlineMs": 30000,
+  "controls": [
+    {
+      "scope": "bulk statement counts, custom/generic plans, atomic late failure, no-op versions, retained general-path oracle, four transition tamper controls, exact create/update result-slot controls, eight-key 1024-operation groups and reader revocation",
+      "tests": 18,
+      "passed": 18,
+      "elapsedSeconds": 122.065
+    },
+    {
+      "scope": "1000-type conditional object/relationship writes and real complete-entity list, 16k definition view, Pizza/Northwind/catalog end-to-end, populated native71 upgrade, immutable schema reuse and fresh permissions",
+      "tests": 8,
+      "passed": 8,
+      "elapsedSeconds": 110.846
+    },
+    {
+      "scope": "1024-object 128-field diagnostic with original before/after history parity",
+      "operations": 1024,
+      "apiMs": 9463.3,
+      "commitMs": 2760.5,
+      "totalMs": 12225.9,
+      "beforeMismatches": 0,
+      "afterMismatches": 0,
+      "limitations": "Zero edges; this is not the full published wide workload."
+    }
+  ],
+  "qualificationLimits": [
+    "Full unchanged 11-case/two-platform stress matrix is still required.",
+    "Exact million-node/two-million-edge workload is running; no complete result is claimed.",
+    "Local timings do not establish hosted or p95 qualification.",
+    "No Truss release has been published from this candidate."
+  ]
+}

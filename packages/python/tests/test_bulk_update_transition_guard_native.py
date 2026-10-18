@@ -267,3 +267,50 @@ class BulkUpdateTransitionGuardTests(BulkUpdateSqlTests):
         self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall(), before_objects)
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(), before_journal_count)
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_object_transition').fetchone(), before_transition_count)
+
+    def test_rewritten_result_slots_refuse_for_create_and_update_before_progress(self):
+        connection, host, assembly, tx = self.ready(document_ids=('adoc',))
+        context = assembly.group_context_in_transaction(tx).value
+        created = assembly.apply_in_transaction(tx,
+            context.input((self.create(value='before'),), MapValue(entries=())),
+            RequestNone(), documents=self.documents)
+        self.assertIsInstance(created, Ok, repr(created))
+        identity = created.value.response.semantic.results[0].identity
+        host.detach(); connection.commit()
+        connection, host, assembly, tx = self.consumer()
+        connection.execute('CREATE TEMP TABLE result_slot_caller_work(value text)')
+        connection.execute("INSERT INTO result_slot_caller_work VALUES ('keep')")
+        snapshot_sql = '''SELECT (SELECT count(*) FROM truss.object),
+            (SELECT count(*) FROM truss.object_key_bucket),
+            (SELECT count(*) FROM truss.object_key_reservation_bucket),
+            (SELECT count(*) FROM truss.journal),
+            (SELECT count(*) FROM truss.runtime_object_transition),
+            (SELECT count(*) FROM truss.runtime_owned_operation),
+            (SELECT count(*) FROM truss.runtime_object_attempt)'''
+        before = self.admin.execute(snapshot_sql).fetchone()
+        self.admin.execute('''CREATE FUNCTION public.rewrite_first_result_slot() RETURNS trigger
+            LANGUAGE plpgsql AS $$ BEGIN
+              NEW.result:=jsonb_set(NEW.result,'{version}','"999"'::jsonb);
+              RETURN NEW;
+            END $$''')
+        self.addCleanup(self.admin.execute, 'DROP FUNCTION IF EXISTS public.rewrite_first_result_slot() CASCADE')
+        self.admin.execute('''CREATE TRIGGER rewrite_first_result_slot
+            BEFORE UPDATE ON truss.runtime_owned_operation FOR EACH ROW
+            WHEN (OLD.result IS NULL AND NEW.result IS NOT NULL)
+            EXECUTE FUNCTION public.rewrite_first_result_slot()''')
+        try:
+            for kind, operations in (
+                    ('create', (self.create(label='new', value='new', alias='new'),)),
+                    ('update', self.updates((identity,)))):
+                with self.subTest(kind=kind):
+                    context = assembly.group_context_in_transaction(tx).value
+                    refused = assembly.apply_in_transaction(tx,
+                        context.input(operations, MapValue(entries=())),
+                        RequestNone(), documents=self.documents)
+                    self.assertIsInstance(refused, Error, repr(refused))
+                    self.assertEqual(refused.error.sql_state, '55000')
+                    self.assertEqual(connection.execute('TABLE result_slot_caller_work').fetchall(), [('keep',)])
+                    self.assertEqual(self.admin.execute(snapshot_sql).fetchone(), before)
+        finally:
+            self.admin.execute('DROP TRIGGER rewrite_first_result_slot ON truss.runtime_owned_operation')
+        host.detach(); connection.rollback()

@@ -50,6 +50,29 @@ class SchemaCacheTests(base.PublicCreateGroupTests):
             self.assertEqual(set(metadata['propertyAccess']), set(metadata['propertyOrder']))
             self.assertTrue(all(access == {'itemsValid': True, 'readers': readers}
                                 for access in metadata['propertyAccess'].values()))
+            # Key compilation keeps the complete authored field meaning and
+            # ordered native facets, independently of the cached lookup path.
+            document_id, module_id = self.admin.execute(
+                'SELECT document_id,module FROM truss.type_def WHERE type_id=%s', (type_id,)).fetchone()
+            source_text, umf_version = self.admin.execute(
+                'SELECT document,umf_version FROM truss.schema_doc WHERE doc_id=%s AND rev<=%s ORDER BY rev DESC LIMIT 1',
+                (document_id, revision)).fetchone()
+            source = json.loads(source_text)
+            fields = {(module['id'], field['id']): field for module in source['modules']
+                      for field in module['elements']}
+            expected_codecs = {}
+            for number, property_ids in self.admin.execute(
+                    'SELECT key_num,prop_ids FROM truss.key_def WHERE type_id=%s AND retired_rev IS NULL ORDER BY key_num',
+                    (type_id,)).fetchall():
+                components = [self.admin.execute(
+                    'SELECT declaration_module,element,facets FROM truss.prop_def WHERE prop_id=%s',
+                    (property_id,)).fetchone() for property_id in property_ids]
+                expected_codecs[str(number)] = {
+                    'profile': 'truss-native-key-codec-metadata/0.1',
+                    'typeId': str(type_id), 'keyNumber': str(number),
+                    'fields': [fields[(module, element)] for module, element, _ in components],
+                    'facets': [facets or {} for _, _, facets in components], 'umfVersion': umf_version}
+            self.assertEqual(metadata['keyCodecs'], expected_codecs)
         operations = tuple(self.create(label='label-'+str(i), value='value-'+str(i), alias='item-'+str(i)) for i in range(32))
         result = self.apply(a, t, *self.input(a, t, operations))
         self.assertIsInstance(result, GroupSuccess)

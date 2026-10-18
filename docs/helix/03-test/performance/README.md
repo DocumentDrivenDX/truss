@@ -5,7 +5,7 @@ ddx:
   activity: test
   status: draft
   owner: Erik LaBianca
-  updated: 2026-10-17
+  updated: 2026-10-18
   links:
     - id: truss.prd
       kind: informed_by
@@ -14,6 +14,50 @@ ddx:
 ---
 
 # Practical functionality and performance
+
+## 2026-10-18: C64 local controls pass; full qualification pending
+
+The [C64 record](results/2026-10-18-c64-local-qualification.json) identifies the
+exact installed wheel and native manifest. Its 26 focused controls pass, including
+all three real schema workflows, a populated upgrade, conditional writes and a
+complete-entity list over the original 1,000-type catalog. The 1,024-object wide
+diagnostic also passes, with every before/after history record matching the
+retained reference helper. It has no edges and does not replace the full wide
+workload.
+
+The successor removes repeated finalization history reconstruction, initializes
+native catalog indexes in set-based stages and resolves condition definition pins
+before reading their sources. Weft 0.4.42 fixes the actual 1,000-type compiler
+request within the existing byte limits and indexes original element coordinates.
+The exact million-node/two-million-edge run and complete unchanged hosted matrix
+remain required. SQL and operation deadlines remain 10s and 30s. These local
+passes are not a release or full qualification receipt.
+
+## 2026-10-18: superseded C61 qualification
+
+The candidate's [local qualification record](results/2026-10-18-c61-local-qualification.json)
+identifies the exact runtime and wheel. All three original sample schemas pass
+registration, seed, list, open, modify, commit and reopen. A separate public
+benchmark performs 1,000 ID reads, 100 key reads and 200 committed single updates
+per sample with external JavaScript forbidden. Median committed updates were
+20.7–22.7ms; 51-row complete-entity lists took 290–367ms. These are local
+observations, not service-level guarantees.
+
+The added 1,000-type regression creates and reopens 100 distinct object types
+and 100 distinct relationship types. Indexed pin resolution avoids catalog-wide
+source scans. Eligible key codecs compile once per revision; decoded property
+definitions are reused during initialization. The unchanged eight-key,
+1,024-operation capacity, populated native71 upgrade, permission revocation,
+history and original-intent tamper controls pass locally.
+
+[Targeted hosted qualification](https://github.com/DocumentDrivenDX/truss/actions/runs/39153969605)
+failed. The [full 11-case/two-platform matrix](https://github.com/DocumentDrivenDX/truss/actions/runs/39154235495)
+exposed many-type compilation, wide-update and eight-key update failures. The
+local million-node workload stopped after 173,000 committed creates when the
+next 1,000-create group exceeded its SQL deadline. This candidate was not
+released. Its successor must repeat the complete matrix; these local passes
+are historical evidence, not a release receipt. SQL and operation deadlines
+remain 10s and 30s.
 
 ## 2026-10-17: both complete hosted release jobs pass
 

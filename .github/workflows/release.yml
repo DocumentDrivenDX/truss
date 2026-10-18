@@ -509,7 +509,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/public-stress"
           load_size=100
           if [ "$STRESS_CASE" = large ]; then load_size=1000; fi
-          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --forbid-external-javascript --matrix-case "$STRESS_CASE" --bulk-size "$load_size" --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-stress/report.json" 2>&1 | tee "$RUNNER_TEMP/public-stress/run.log"
+          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --forbid-external-javascript --capture-failure-diagnostics --matrix-case "$STRESS_CASE" --bulk-size "$load_size" --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-stress/report.json" 2>&1 | tee "$RUNNER_TEMP/public-stress/run.log"
       - name: "Record selected stress workload status"
         if: "always()"
         env:

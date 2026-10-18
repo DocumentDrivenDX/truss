@@ -1,0 +1,59 @@
+{
+  "status": "superseded-hosted-and-million-node-qualification-failed",
+  "runtimeSourceCommit": "81940ff251807934c2730535744e08b1d3df66a8",
+  "fullMatrixWorkflowCommit": "c932c54a8f90b7303f1032eadd835960d6611c8c",
+  "runtimeManifestSha256": "b0f338e8d404b53b91e852c2efca04d761c0ecf2b2715852ee0e5ab8c69cb919",
+  "cleanLocalWheelSha256": "a31020cb603009900cb9f43e3dca16e90fb26294f2c664ccef4b84381fcdbbe5",
+  "wheelSourceMatchedPayloadFiles": 531,
+  "machine": "macOS-27.0.1-arm64-arm-64bit",
+  "sqlDeadlineMs": 10000,
+  "operationDeadlineMs": 30000,
+  "controls": [
+    {
+      "scope": "all three real schema end-to-end workflows, populated native71 upgrade, schema reuse and permission revocation",
+      "tests": 6,
+      "passed": 6,
+      "elapsedSeconds": 23.532
+    },
+    {
+      "scope": "1000-type catalog; first 100 distinct object and relationship types with commit/reopen/readback; eight-key 1024 creates and updates; history and journal/after-image tamper controls",
+      "tests": 6,
+      "passed": 6,
+      "elapsedSeconds": 48.109
+    },
+    {
+      "scope": "coordinated retained-cell tamper; original intent fingerprint rejects matching forged physical and transition images while preserving caller work",
+      "tests": 1,
+      "passed": 1
+    },
+    {
+      "scope": "clean wheel embedded owners; every subprocess forbidden where asserted by the test",
+      "tests": 7,
+      "passed": 7,
+      "elapsedSeconds": 4.548
+    },
+    {
+      "scope": "hosted runner cleanup exact-path, environment, symlink and capacity-refusal controls",
+      "tests": 5,
+      "passed": 5,
+      "elapsedSeconds": 0.045
+    }
+  ],
+  "realSchemaBenchmark": {
+    "rawReport": "2026-10-18-c61-real-schemas.json.gz",
+    "functionalPassed": true,
+    "scope": "100 primary entities per sample, 1000 ID reads, 100 key reads, 200 committed single updates, complete-entity lists, commit/reopen; separate E2E controls cover every original record and relationship type",
+    "reportSourceCommit": "0816d8f569a125f691d558e5d7531192e023d79e",
+    "reportSourceWorkingTreeDirty": true,
+    "sourceIdentityExplanation": "Measured before commit; 531 clean-wheel payloads subsequently compared byte-for-byte with committed source. The initial local wheel also held an unused stale build archive absent from the selected asset manifest; the clean wheel omits it. Executed runtime files and manifest are identical.",
+    "externalJavaScript": "forbidden"
+  },
+  "targetedHostedRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/39153969605",
+  "fullHostedMatrixRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/39154235495",
+  "qualificationLimits": [
+    "Local controls passed; they did not establish full matrix qualification.",
+    "The targeted hosted run failed; the full hosted run exposed many-type compilation, wide-update and eight-key update failures. The superseding candidate addresses those paths and requires a new complete run.",
+    "The exact local million-node workload stopped after 173,000 committed creates when the next 1,000-create group exceeded the unchanged 10-second SQL deadline. It did not reach a million nodes or the edge phase.",
+    "No release was published from this candidate."
+  ]
+}

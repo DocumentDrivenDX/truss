@@ -37,6 +37,15 @@ BEGIN
   OR sealed.ordinals IS DISTINCT FROM ARRAY(SELECT generate_series(0,attempt.next_index-1))
   OR sealed.results IS DISTINCT FROM attempt.results OR sealed.aliases IS DISTINCT FROM attempt.aliases THEN
   RAISE EXCEPTION 'exact complete retained owned result slots required' USING ERRCODE='55000';END IF;
+ -- The supported apply_group route always uses the canonical batch producer
+ -- for this closed shape. Its exact INSERT/slot comparisons bind immutable
+ -- payloads already; current created values have no historical reader cut.
+ IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(operations) o
+  WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
+   OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb) THEN
+  PERFORM truss.runtime_owned_create_batch_validate(attempt,input,history_dictionary,check_final,current_actor);
+  RETURN;
+ END IF;
  -- Current independent updates already require every current property/item
  -- reader. Resolve their source dictionary by native type/revision, without
  -- expanding every unchanged property's name in every before/after image.
@@ -56,18 +65,11 @@ BEGIN
      WHERE p.attempt_id=selected_attempt AND p.operation_index=0)
     OR t.after_object->'rev' IS DISTINCT FROM (SELECT p.plan->'catalogRevision' FROM truss.runtime_owned_operation p
      WHERE p.attempt_id=selected_attempt AND p.operation_index=0)));
- IF current_update_history THEN
-  FOR history_group IN SELECT DISTINCT (t.after_object->>'rev')::int revision,t.type_id
-   FROM truss.runtime_object_transition t WHERE t.attempt_id=selected_attempt
-   ORDER BY revision,t.type_id LOOP
-   SELECT metadata INTO STRICT history_basis FROM truss.runtime_type_schema
-    WHERE rev=history_group.revision AND type_id=history_group.type_id;
-   IF truss.runtime_object_values_readable_qualified(history_group.type_id,current_actor) IS NOT TRUE THEN
-    RAISE EXCEPTION 'current historical property and item readers required' USING ERRCODE='42501';END IF;
-   history_key:=jsonb_build_array(history_group.revision,history_group.type_id)::text;
-   history_dictionary:=history_dictionary||jsonb_build_object(history_key,history_basis-ARRAY['propertyAccess']);
-  END LOOP;
- ELSE
+ -- Current independent updates require every current value reader in the
+ -- batch census below. Their producer already serialized history, so there is
+ -- no second current-revision history dictionary to build. Older image cuts
+ -- still require the precise historical dependency checks below.
+ IF current_update_history IS NOT TRUE THEN
  -- Compile source metadata for created and changed object images. Each
  -- independent settlement invocation resolves its own historical source cut.
  FOR history_group IN
@@ -103,14 +105,6 @@ BEGIN
   history_key:=jsonb_build_array(history_group.revision,history_group.type_id)::text;
   history_dictionary:=history_dictionary||jsonb_build_object(history_key,history_basis-ARRAY['propertyAccess']);
  END LOOP;
- END IF;
- -- The closed independent-create shape has a set-based reconstruction.
- -- Mixed/owned operations keep the general ordered graph validator.
- IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(operations) o
-  WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
-   OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb) THEN
-  PERFORM truss.runtime_owned_create_batch_validate(attempt,input,history_dictionary,check_final,current_actor);
-  RETURN;
  END IF;
  SELECT p.plan->'initialScope' INTO STRICT initial_scope FROM truss.runtime_owned_operation p
   WHERE p.attempt_id=selected_attempt AND p.operation_index=0;

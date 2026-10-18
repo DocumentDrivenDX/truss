@@ -70,7 +70,13 @@ BEGIN
   ELSIF condition->>'condition'='key_absent' THEN
    IF condition-ARRAY['condition','id','reason','typeDefinitionPin','keyId','values']<>'{}'::jsonb OR jsonb_typeof(condition->'values') IS DISTINCT FROM 'array'
     OR jsonb_array_length(condition->'values') NOT BETWEEN 1 AND 1024 THEN RAISE EXCEPTION 'closed key condition required' USING ERRCODE='22023';END IF;
-   SELECT t.* INTO selected FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_owned_definition_metadata('type',t.type_id) p WHERE p.definition_pin=condition->>'typeDefinitionPin';
+   WITH pinned AS MATERIALIZED (
+    SELECT rev,ord,doc_id,module_id,element_id FROM truss.runtime_definition_source
+    WHERE definition_pin=condition->>'typeDefinitionPin' AND kind='element' AND key_id='')
+   SELECT t.* INTO selected FROM pinned p JOIN truss.type_def t
+    ON t.definition_rev=p.rev AND t.definition_doc_ord=p.ord AND t.definition_document_id=p.doc_id
+     AND t.module=p.module_id AND t.element=p.element_id
+    WHERE NOT t.provisional AND t.retired_rev IS NULL;
    IF NOT FOUND THEN RAISE EXCEPTION 'known predicate type required' USING ERRCODE='22023';END IF;
    SELECT * INTO key_row FROM truss.key_def WHERE type_id=selected.type_id AND key_id=condition->>'keyId' AND retired_rev IS NULL;
    IF NOT FOUND THEN RAISE EXCEPTION 'known predicate key required' USING ERRCODE='22023';END IF;
@@ -83,7 +89,16 @@ BEGIN
    END LOOP;
    entry:=entry||jsonb_build_object('typeId',selected.type_id::text,'documentId',selected.document_id,'moduleId',selected.module,'recordId',selected.element,'keyId',key_row.key_id,'keyNumber',key_row.key_num::text,'values',condition->'values');
   ELSIF condition->>'condition' IN ('relationship_absent','relationship_count') THEN
-   SELECT * INTO relation FROM truss.rel_def WHERE retired_rev IS NULL AND truss.runtime_relationship_pin(rel_type_id)=condition->>'relationshipDefinitionPin';
+   -- Select the exact source pin before joining native coordinates. Evaluating
+   -- the pin function for every unrelated relationship made bounded condition
+   -- batches grow with the complete catalog instead of their selected pins.
+   WITH pinned AS MATERIALIZED (
+    SELECT rev,ord,doc_id,module_id,element_id FROM truss.runtime_definition_source
+    WHERE definition_pin=condition->>'relationshipDefinitionPin' AND kind='relationship' AND key_id='')
+   SELECT r.* INTO relation FROM pinned p JOIN truss.rel_def r
+    ON r.definition_rev=p.rev AND r.definition_doc_ord=p.ord AND r.definition_document_id=p.doc_id
+     AND r.module=p.module_id AND r.rel_id=p.element_id
+    WHERE r.retired_rev IS NULL;
    IF NOT FOUND THEN RAISE EXCEPTION 'known predicate relationship required' USING ERRCODE='22023';END IF;
    scopes:=jsonb_build_array(jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module));
    FOR owner IN SELECT DISTINCT t.document_id,t.module FROM truss.rel_endpoint e JOIN truss.type_def t ON t.type_id=e.source_type OR t.type_id=e.target_type WHERE e.rel_type_id=relation.rel_type_id LOOP

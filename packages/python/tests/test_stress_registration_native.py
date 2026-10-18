@@ -4,10 +4,10 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[3]/'scripts'))
 from performance_workloads import schema,workloads,values
 from truss import (CatalogDocument,Ok,ModuleAccessGrant,adopt_psycopg_host,
-    create_reference_assembly,CatalogRuntimeConfiguration,ObjectFound,EdgeFound)
-from truss.contracts import MapValue
+    create_reference_assembly,CatalogRuntimeConfiguration,ObjectFound,EdgeFound,QueryRows)
+from truss.contracts import MapValue,TextValue
 from truss.groups import (CreateObject,RootlessOwnership,GroupSuccess,RequestNone,
-    CreateEdge,StoredObjectReference,NullOrderKey)
+    CreateEdge,StoredObjectReference,NullOrderKey,KeyAbsent,RelationshipAbsent)
 from truss.catalog_results import CatalogRegistration
 import test_catalog_runtime_native as base
 class StressRegistrationTests(base.PublicCatalogRuntimeTests):
@@ -42,8 +42,12 @@ class StressRegistrationTests(base.PublicCatalogRuntimeTests):
         connection,host,assembly,tx=self.consumer()
         operations=tuple(CreateObject(type_definition_pin=references['R'+str(i)].definition_pin,
             values=values(workload,i),ownership=RootlessOwnership(),alias='row'+str(i)) for i in range(100))
+        conditions=tuple(KeyAbsent(id='fresh'+str(i),reason='new object key',
+            type_definition_pin=references['R'+str(i)].definition_pin,key_id='key0',
+            values=(TextValue(kind='string',text='p0-'+str(i)),)) for i in range(100))
         context=assembly.group_context_in_transaction(tx).value
-        result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=documents)
+        result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=()),
+            preconditions=conditions),RequestNone(),documents=documents)
         self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error))
         self.assertIsInstance(result.value,GroupSuccess,repr(result))
         identities=tuple(item.identity for item in result.value.response.semantic.results)
@@ -60,8 +64,12 @@ class StressRegistrationTests(base.PublicCatalogRuntimeTests):
         edges=tuple(CreateEdge(relationship_definition_pin=relationships['R'+str(i)+'.link'].definition_pin,
             source=StoredObjectReference(identity=identity),target=StoredObjectReference(identity=identity),
             values=(),order_key=NullOrderKey()) for i,identity in enumerate(identities))
+        unlinked=tuple(RelationshipAbsent(id='unlinked'+str(i),reason='new link',
+            relationship_definition_pin=relationships['R'+str(i)+'.link'].definition_pin,
+            source=identity,target=identity) for i,identity in enumerate(identities))
         context=assembly.group_context_in_transaction(tx).value
-        linked=assembly.apply_in_transaction(tx,context.input(edges,MapValue(entries=())),RequestNone(),documents=documents)
+        linked=assembly.apply_in_transaction(tx,context.input(edges,MapValue(entries=()),
+            preconditions=unlinked),RequestNone(),documents=documents)
         self.assertIsInstance(linked,Ok,repr(linked)+' '+str(host._custody.last_attempt.error))
         self.assertIsInstance(linked.value,GroupSuccess,repr(linked))
         edge_identities=tuple(item.identity for item in linked.value.response.semantic.results)
@@ -72,6 +80,14 @@ class StressRegistrationTests(base.PublicCatalogRuntimeTests):
             self.assertIsInstance(opened,Ok,repr(opened)+' '+str(host._custody.last_attempt.error))
             self.assertIsInstance(opened.value,EdgeFound,repr(opened.value))
             self.assertEqual(opened.value.edge.source,identities[i]);self.assertEqual(opened.value.edge.target,identities[i])
+        # Registration and writes alone missed the compiler's smaller binding
+        # JSON node limit for this original 1,000-record schema.
+        listed=assembly.query_in_transaction(tx,sql='SELECT x.* FROM "R0" x LIMIT 51',
+            document_ids=(document,),maximum_bytes=16777216,read_profile='complete-entity')
+        self.assertIsInstance(listed,Ok,repr(listed)+' '+str(host._custody.last_attempt.error))
+        self.assertIsInstance(listed.value,QueryRows,repr(listed.value))
+        self.assertEqual(len(listed.value.rows),1)
+        self.assertEqual(dict(zip(listed.value.columns,listed.value.rows[0],strict=True))['p0'],'p0-0')
         host.detach();connection.rollback()
 
 def registration_case(name,workload):

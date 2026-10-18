@@ -31,6 +31,8 @@ parser.add_argument('--expected-group-limit',type=int,default=1024,help='Expecte
 parser.add_argument('--read-samples',type=int,default=1000)
 parser.add_argument('--write-samples',type=int,default=200)
 parser.add_argument('--profile-native-functions',action='store_true',help='Diagnostic run: enable PostgreSQL PL function timing for benchmark consumer')
+parser.add_argument('--capture-failure-diagnostics',action='store_true',help='On a failed case, capture completed PostgreSQL function stats, exact Truss table row counts and database/relation sizes before teardown')
+parser.add_argument('--keep-failed-database',action='store_true',help='On a failed case, stop PostgreSQL but preserve its local PGDATA directory; no artifact upload')
 parser.add_argument('--load-only',action='store_true',help='Measure and verify object/edge loading, omitting the later read/update matrix')
 parser.add_argument('--forbid-external-javascript',action='store_true',help='Fail if any code attempts to launch Bun, Node, or NodeJS')
 parser.add_argument('--profile-read',type=Path,help='Optional separate cProfile of one warm public ID read, outside timed samples')
@@ -54,6 +56,8 @@ from performance_workloads import workloads, schema as workload_schema, values a
 selected_workloads=workloads()
 matrix_settings=json.loads((Path(__file__).resolve().parents[1]/'docs/helix/03-test/performance/workloads.json').read_text())
 selected_cases=args.matrix_case or args.samples
+if args.keep_failed_database and len(selected_cases)!=1:
+    parser.error('--keep-failed-database requires exactly one selected case')
 root=args.truss_root.resolve()
 sys.path[:0]=([str(root/'packages/python/src')] if not args.installed_package else [])+[str(root/'packages/python/tests')]
 import truss
@@ -111,10 +115,94 @@ class RealWorkflows(PublicCatalogRuntimeTests):
     @classmethod
     def setUpClass(cls):
         timed('runtime','cold_server_start',lambda:super(RealWorkflows,cls).setUpClass())
+        cls.preserve_failed_database=False
 
     @classmethod
     def cleanup(cls):
-        timed('runtime','server_cleanup',lambda:super(RealWorkflows,cls).cleanup())
+        def cleanup():
+            cls.runtime.__exit__(None,None,None)
+            if cls.preserve_failed_database:
+                print(f'Failed PostgreSQL data directory preserved locally at {cls.runtime.directory}',file=sys.stderr,flush=True)
+            else:
+                import shutil
+                shutil.rmtree(cls.root)
+        timed('runtime','server_cleanup',cleanup)
+
+    def tearDown(self):
+        outcome=getattr(self,'_outcome',None)
+        result=getattr(outcome,'result',None) if outcome else None
+        failed=bool(result and any(test is self for test,_ in (*result.errors,*result.failures)))
+        if failed:
+            if args.keep_failed_database:
+                type(self).preserve_failed_database=True
+            if args.capture_failure_diagnostics:
+                self.capture_failure_diagnostics()
+            if args.keep_failed_database:
+                for connection,host in getattr(self,'consumer_connections',()):
+                    host.detach()
+                    if not connection.closed:
+                        connection.rollback()
+                        connection.close()
+                if hasattr(self,'host'):
+                    self.host.detach()
+                if hasattr(self,'admin') and not self.admin.closed:
+                    self.admin.rollback()
+                return
+        super().tearDown()
+
+    def cleanup_workload_role(self,role):
+        if not type(self).preserve_failed_database:
+            self.admin.execute(psycopg.sql.SQL('DROP ROLE {}').format(psycopg.sql.Identifier(role)))
+
+    def capture_failure_diagnostics(self):
+        if not hasattr(self,'admin') or self.admin.closed:
+            return
+        diagnostic={'scope':'Captured after the failed case and before schema/server cleanup; completed function calls only'}
+        collection_errors=[]
+        function_flush_errors=[]
+        for connection,_host in getattr(self,'consumer_connections',()):
+            if connection.closed:
+                continue
+            try:
+                connection.rollback()
+                connection.execute('SELECT pg_stat_force_next_flush()')
+            except Exception as error:
+                function_flush_errors.append(f'{type(error).__name__}: {error}')
+        if function_flush_errors:
+            diagnostic['functionFlushErrors']=function_flush_errors
+        try:
+            self.admin.execute('SELECT pg_stat_clear_snapshot()')
+            functions=self.admin.execute('''SELECT funcid::regprocedure::text,calls,total_time,self_time
+                FROM pg_catalog.pg_stat_user_functions WHERE schemaname='truss' ORDER BY self_time DESC''').fetchall()
+            diagnostic['completedFunctionStats']=[dict(function=row[0],calls=int(row[1]),totalMs=float(row[2]),selfMs=float(row[3])) for row in functions]
+        except Exception as error:
+            collection_errors.append(f'completedFunctionStats: {type(error).__name__}: {error}')
+        try:
+            diagnostic['databaseBytes']=int(self.admin.execute('SELECT pg_database_size(current_database())').fetchone()[0])
+            relations=self.admin.execute('''SELECT c.oid,n.nspname,c.relname,pg_total_relation_size(c.oid)
+                FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+                WHERE n.nspname='truss' AND c.relkind IN ('r','p') ORDER BY c.relname''').fetchall()
+        except Exception as error:
+            collection_errors.append(f'databaseAndRelations: {type(error).__name__}: {error}')
+            relations=()
+        import psycopg
+        table_counts=[]
+        for oid,schema,name,relation_bytes in relations:
+            table={'table':schema+'.'+name,'totalBytes':int(relation_bytes)}
+            try:
+                rows=self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM {}.{}').format(
+                    psycopg.sql.Identifier(schema),psycopg.sql.Identifier(name))).fetchone()[0]
+                table['rows']=int(rows)
+            except Exception as error:
+                table['countError']=f'{type(error).__name__}: {error}'
+                collection_errors.append(f"{table['table']} row count: {type(error).__name__}: {error}")
+            table_counts.append(table)
+        diagnostic['tableCounts']=table_counts
+        diagnostic['trussRelationBytes']=sum(row['totalBytes'] for row in table_counts)
+        if collection_errors:
+            diagnostic['collectionErrors']=collection_errors
+        if results:
+            results[-1]['failureDiagnostics']=diagnostic
 
     def workflow(self,sample):
         case={'sample':sample,'status':'running'};results.append(case)
@@ -135,7 +223,7 @@ class RealWorkflows(PublicCatalogRuntimeTests):
         documents=(CatalogDocument(document_id,'performance-v1',raw),)
         timed(sample,'install',self.install)
         case['databaseSettings']=dict(self.admin.execute("SELECT name,setting FROM pg_catalog.pg_settings WHERE name IN ('server_version','fsync','synchronous_commit','full_page_writes','shared_buffers')").fetchall())
-        if args.profile_native_functions:self.admin.execute("ALTER ROLE consumer SET track_functions='pl'")
+        if args.profile_native_functions or args.capture_failure_diagnostics:self.admin.execute("ALTER ROLE consumer SET track_functions='pl'")
         connection,host,assembly,tx=self.consumer()
         prepared=timed(sample,'prepare',lambda:assembly.prepare_catalog(documents,source_version=source['umf'],bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun')))
         def register():
@@ -155,7 +243,7 @@ class RealWorkflows(PublicCatalogRuntimeTests):
         # Configure ordinary public access. The consumer is never the private owner.
         for role in ('perf_reader','perf_writer'):
             self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))
-            self.addCleanup(self.admin.execute,psycopg.sql.SQL('DROP ROLE {}').format(psycopg.sql.Identifier(role)))
+            self.addCleanup(self.cleanup_workload_role,role)
         self.admin.execute('BEGIN')
         self.host=adopt_psycopg_host(self.admin,statement_timeout_ms=10000,operation_timeout_ms=30000);self.tx=ok(self.host.adopt_transaction())
         self.assembly=ok(create_reference_assembly(CatalogRuntimeConfiguration(),self.host))

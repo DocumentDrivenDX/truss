@@ -175,13 +175,18 @@ BEGIN
   WHERE k.value->'changed'='true'::jsonb RETURNING *)
  SELECT coalesce(jsonb_agg(to_jsonb(inserted) ORDER BY storage_row_id),'[]') INTO actual FROM inserted;
  IF actual IS DISTINCT FROM expected THEN RAISE EXCEPTION 'exact batch updated key reservations required' USING ERRCODE='55000';END IF;
- UPDATE truss.key_bucket_guard g SET generation=g.generation+routes.advances FROM (
-  SELECT decode(entry->>'namespace_sha256','hex') namespace_sha256,decode(entry->>'key_sha256','hex') key_sha256,count(*) advances
-  FROM (SELECT jsonb_build_object('namespace_sha256',substring(value->'old'->>'namespace_sha256' FROM 3),
-   'key_sha256',substring(value->'old'->>'key_sha256' FROM 3)) entry FROM jsonb_array_elements(keys) WHERE value->'changed'='true'::jsonb
-   UNION ALL SELECT jsonb_build_object('namespace_sha256',substring(value->'membership'->>'namespace_sha256' FROM 3),
-   'key_sha256',substring(value->'membership'->>'key_sha256' FROM 3)) FROM jsonb_array_elements(keys) WHERE value->'changed'='true'::jsonb) all_routes
-  GROUP BY entry->>'namespace_sha256',entry->>'key_sha256') routes
+ WITH key_routes AS MATERIALIZED (
+  SELECT substring(value->'old'->>'namespace_sha256' FROM 3) old_namespace_hex,
+   substring(value->'old'->>'key_sha256' FROM 3) old_key_hex,
+   substring(value->'membership'->>'namespace_sha256' FROM 3) new_namespace_hex,
+   substring(value->'membership'->>'key_sha256' FROM 3) new_key_hex
+  FROM jsonb_array_elements(keys) WHERE value->'changed'='true'::jsonb),
+ routes AS MATERIALIZED (
+  SELECT decode(namespace_hex,'hex') namespace_sha256,decode(key_hex,'hex') key_sha256,count(*) advances
+  FROM (SELECT old_namespace_hex namespace_hex,old_key_hex key_hex FROM key_routes
+   UNION ALL SELECT new_namespace_hex,new_key_hex FROM key_routes) all_routes
+  GROUP BY namespace_hex,key_hex)
+ UPDATE truss.key_bucket_guard g SET generation=g.generation+routes.advances FROM routes
  WHERE g.namespace_sha256=routes.namespace_sha256 AND g.key_sha256=routes.key_sha256;
  SELECT coalesce(jsonb_agg(value->'after' ORDER BY (value->'after'->>'id')::bigint),'[]') INTO expected
  FROM jsonb_array_elements(objects) WHERE value->'changed'='true'::jsonb;
@@ -247,7 +252,8 @@ BEGIN
   IS DISTINCT FROM ROW(e.seq,e.at,e.xid,e.entity_kind,e.entity_id,e.entity_type,e.ver,e.op,e.prop_id,e.old_value,e.rev)
   OR ROW(i.new_value_hash,i.origin_hash) IS DISTINCT FROM ROW(e.new_value_hash,e.origin_hash)),false),
   coalesce(jsonb_agg(jsonb_build_object('index',e.operation_index,'seq',e.seq,'at',e.at) ORDER BY e.seq),'[]')
- INTO projection_problem,journal_refs FROM fingerprints e FULL JOIN inserted i ON i.seq=e.seq;
+ INTO projection_problem,journal_refs
+ FROM fingerprints e FULL JOIN inserted i ON i.seq=e.seq;
  IF projection_problem THEN RAISE EXCEPTION 'exact batch update journals required' USING ERRCODE='55000';END IF;
  -- The physical journal owns the canonical event and origin payloads. Object
  -- transitions retain compact, payload-free references with their exact digests.
@@ -298,8 +304,9 @@ BEGIN
   UPDATE truss.runtime_owned_operation p SET result=slot_results->p.operation_index::text
   WHERE p.attempt_id=selected_attempt AND p.result IS NULL AND slot_results ? p.operation_index::text
   RETURNING p.operation_index,p.result)
- SELECT count(*) INTO counted FROM updated;
- IF counted<>total THEN RAISE EXCEPTION 'complete sealed batch update slots required' USING ERRCODE='55000';END IF;
+ SELECT count(*),coalesce(bool_or(result IS DISTINCT FROM slot_results->operation_index::text),false)
+ INTO counted,projection_problem FROM updated;
+ IF counted<>total OR projection_problem THEN RAISE EXCEPTION 'complete exact batch update result slots required' USING ERRCODE='55000';END IF;
  UPDATE truss.runtime_object_attempt SET next_index=total WHERE id=selected_attempt AND next_index=0 AND NOT complete;
  IF NOT FOUND THEN RAISE EXCEPTION 'one batch update progress advance required' USING ERRCODE='55000';END IF;
 END;
@@ -311,7 +318,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_update_batch(uuid) FROM PUBLIC;
 -- remain in group_validate; row/journal constraint triggers remain independent.
 CREATE FUNCTION truss.runtime_owned_update_batch_validate(attempt truss.runtime_object_attempt,input jsonb,history_dictionary jsonb,actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE initial_scope jsonb;last_plan jsonb;scope_nodes jsonb;event_dictionary jsonb;owner record;problem boolean;changed_count int;
+DECLARE initial_scope jsonb;last_plan jsonb;scope_nodes jsonb;owner record;problem boolean;changed_count int;
  input_operations jsonb:=input->'operations';
 BEGIN
  SELECT plan->'initialScope' INTO STRICT initial_scope FROM truss.runtime_owned_operation WHERE attempt_id=attempt.id AND operation_index=0;
@@ -330,32 +337,39 @@ BEGIN
    OR n.value->'root_type' IS DISTINCT FROM 'null'::jsonb) THEN
   RAISE EXCEPTION 'independent original rootless update inventory required' USING ERRCODE='55000';END IF;
  FOR owner IN SELECT DISTINCT t.type_id,t.document_id,t.module FROM truss.type_def t JOIN
-  (SELECT DISTINCT (p.plan->'afterNodes'->(p.plan->>'primary')->'identity'->>'typeId')::int type_id
-   FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id) members USING(type_id) LOOP
+  (SELECT DISTINCT (q."afterNodes"->q."primary"->'identity'->>'typeId')::int type_id
+   FROM truss.runtime_owned_operation p
+   CROSS JOIN LATERAL jsonb_to_record(p.plan) q("primary" text,"afterNodes" jsonb)
+   WHERE p.attempt_id=attempt.id) members USING(type_id) LOOP
   PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module,actor);
   IF NOT truss.runtime_object_values_readable_qualified(owner.type_id,actor) THEN
    RAISE EXCEPTION 'current original update value readers required' USING ERRCODE='42501';END IF;
  END LOOP;
+ -- Expand each large immutable plan once per pass; retain only the checked
+ -- fields in the materialized census, rather than repeatedly deTOASTing it.
  WITH frames AS MATERIALIZED (
-  SELECT p.operation_index,p.plan,p.plan->'beforeNodes'->(p.plan->>'primary') prior,
-   p.plan->'afterNodes'->(p.plan->>'primary') desired
-  FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id),
+  SELECT p.operation_index,q.profile,q."operationIndex" plan_index,q."mutationProfile" mutation_profile,
+   q.operation,q."actorName" actor_name,q."primary" primary_node,
+   q."beforeNodes"->q."primary" prior,q."afterNodes"->q."primary" desired
+  FROM truss.runtime_owned_operation p
+  CROSS JOIN LATERAL jsonb_to_record(p.plan) q(profile text,"operationIndex" jsonb,"mutationProfile" jsonb,
+   operation jsonb,"actorName" text,"primary" text,"beforeNodes" jsonb,"afterNodes" jsonb)
+  WHERE p.attempt_id=attempt.id),
  members AS MATERIALIZED (
   SELECT f.*,f.desired->'identity' identity,
    (f.prior->'image'->>'ver')::bigint IS DISTINCT FROM (f.desired->'image'->>'ver')::bigint changed,
-   t.transition_id,t.writer_xid,t.object_id,t.type_id,
-   t.before_object,t.after_object
+   t.transition_id,t.writer_xid,t.object_id,t.type_id
   FROM frames f LEFT JOIN LATERAL (
    SELECT t.* FROM truss.runtime_object_transition t WHERE t.attempt_id=attempt.id AND t.operation_index=f.operation_index OFFSET 0) t ON true)
- SELECT EXISTS(SELECT 1 FROM members m WHERE
-  m.plan->>'profile' IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
-  OR m.plan->'operationIndex' IS DISTINCT FROM to_jsonb(m.operation_index)
-  OR m.plan->'mutationProfile' IS DISTINCT FROM input->'mutationProfile'
-  OR m.plan->'operation' IS DISTINCT FROM input_operations->m.operation_index
-  OR m.plan->>'actorName' IS DISTINCT FROM session_user::text
-  OR m.plan->>'primary' IS DISTINCT FROM 'stored:'||(m.identity->>'typeId')||':'||(m.identity->>'id')
+ SELECT coalesce(bool_or(
+  m.profile IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
+  OR m.plan_index IS DISTINCT FROM to_jsonb(m.operation_index)
+  OR m.mutation_profile IS DISTINCT FROM input->'mutationProfile'
+  OR m.operation IS DISTINCT FROM input_operations->m.operation_index
+  OR m.actor_name IS DISTINCT FROM session_user::text
+  OR m.primary_node IS DISTINCT FROM 'stored:'||(m.identity->>'typeId')||':'||(m.identity->>'id')
   OR m.operation_index<0 OR m.operation_index>=attempt.next_index
-  OR m.identity IS DISTINCT FROM m.plan->'operation'->'target'->'identity'
+  OR m.identity IS DISTINCT FROM m.operation->'target'->'identity'
   OR m.prior IS NULL OR m.desired IS NULL
   OR NOT (scope_nodes ? ((m.identity->>'typeId')||':'||(m.identity->>'id')))
   OR scope_nodes->((m.identity->>'typeId')||':'||(m.identity->>'id'))->>'id' IS DISTINCT FROM m.identity->>'id'
@@ -369,46 +383,19 @@ BEGIN
   OR m.prior->'root' IS DISTINCT FROM 'null'::jsonb OR m.prior->'deleted' IS DISTINCT FROM 'false'::jsonb
   OR CASE WHEN m.changed THEN m.transition_id IS NULL OR m.writer_xid IS DISTINCT FROM attempt.writer_xid
    OR m.object_id::text IS DISTINCT FROM m.identity->>'id' OR m.type_id::text IS DISTINCT FROM m.identity->>'typeId'
-   OR m.before_object IS NULL OR m.after_object IS NULL
-   OR m.before_object->>'id' IS DISTINCT FROM m.identity->>'id'
-   OR m.before_object->>'type_id' IS DISTINCT FROM m.identity->>'typeId'
-   OR (m.before_object->>'ver')::bigint IS DISTINCT FROM (m.prior->'image'->>'ver')::bigint
-   OR m.before_object->'root_id' IS DISTINCT FROM 'null'::jsonb OR m.before_object->'root_type' IS DISTINCT FROM 'null'::jsonb
-   OR m.after_object->>'id' IS DISTINCT FROM m.identity->>'id'
-   OR m.after_object->>'type_id' IS DISTINCT FROM m.identity->>'typeId'
-   OR (m.after_object->>'ver')::bigint IS DISTINCT FROM (m.desired->'image'->>'ver')::bigint
-   OR m.after_object->'root_id' IS DISTINCT FROM 'null'::jsonb OR m.after_object->'root_type' IS DISTINCT FROM 'null'::jsonb
-   OR m.after_object->'created_at' IS DISTINCT FROM m.before_object->'created_at'
-   OR (m.after_object->>'ver')::bigint IS DISTINCT FROM (m.before_object->>'ver')::bigint+1
-   ELSE m.transition_id IS NOT NULL END) INTO problem;
+   ELSE m.transition_id IS NOT NULL END),false),
+  count(DISTINCT m.operation_index) FILTER(WHERE m.changed)
+ INTO problem,changed_count FROM members m;
  IF problem THEN RAISE EXCEPTION 'original batch update plan and transition correspondence required' USING ERRCODE='55000';END IF;
- SELECT count(*) INTO changed_count FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id
-  AND (p.plan->'beforeNodes'->(p.plan->>'primary')->'image'->>'ver')::bigint
-   IS DISTINCT FROM (p.plan->'afterNodes'->(p.plan->>'primary')->'image'->>'ver')::bigint;
  IF (SELECT count(*) FROM truss.runtime_object_transition WHERE attempt_id=attempt.id)<>changed_count
   OR EXISTS(SELECT 1 FROM truss.runtime_edge_transition WHERE attempt_id=attempt.id) THEN
   RAISE EXCEPTION 'complete original batch update effect inventory required' USING ERRCODE='55000';END IF;
- -- The protected batch producer already checked every actual journal and
- -- transition INSERT against its exact prepared rows before advancing progress.
- -- Immutable stores and per-journal commit checks retain physical correspondence.
- -- Settlement checks custody, results, current authority and final native state;
- -- it does not execute the complete semantic history producer a second time.
- -- A local event map avoids joining two materialized batch relations whose
- -- row estimates can collapse to one after ANALYZE of retained attempt history.
- WITH event_sets AS MATERIALIZED (
-  SELECT t.operation_index,jsonb_agg(jsonb_build_object('sourceEpoch',attempt.context->>'sourceEpoch',
-   'historyProfile','truss-native-owned-mutation/0.1','xid',attempt.writer_xid::text,'seq',j.value->>'seq')
-    ORDER BY (j.value->>'seq')::bigint) events
-  FROM truss.runtime_object_transition t CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
-  WHERE t.attempt_id=attempt.id GROUP BY t.operation_index)
- SELECT coalesce(jsonb_object_agg(operation_index::text,events),'{}'::jsonb) INTO event_dictionary FROM event_sets;
- SELECT EXISTS(SELECT 1 FROM truss.runtime_owned_operation p
-  WHERE p.attempt_id=attempt.id AND p.result IS DISTINCT FROM jsonb_build_object('operation','update_object',
-   'outcome',CASE WHEN (p.plan->'beforeNodes'->(p.plan->>'primary')->'image'->>'ver')::bigint
-    IS DISTINCT FROM (p.plan->'afterNodes'->(p.plan->>'primary')->'image'->>'ver')::bigint THEN 'changed' ELSE 'unchanged' END,
-   'identity',p.plan->'afterNodes'->(p.plan->>'primary')->'identity',
-   'version',p.plan->'afterNodes'->(p.plan->>'primary')->'image'->>'ver','events',coalesce(event_dictionary->p.operation_index::text,'[]'::jsonb))) INTO problem;
- IF problem THEN RAISE EXCEPTION 'exact original batch update results required' USING ERRCODE='55000';END IF;
+ -- The producer checks canonical object/key/journal writes, all four exact
+ -- transition fingerprints and each returned result slot before progress.
+ -- Immutable transition/journal rows retain that original-intent binding.
+ -- Group finish still compares final physical object/key images, while common
+ -- settlement checks the complete ordered result/alias census and fresh roles.
+
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_update_batch_validate(truss.runtime_object_attempt,jsonb,jsonb,oid) FROM PUBLIC;
