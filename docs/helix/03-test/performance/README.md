@@ -39,6 +39,15 @@ for the existing protected-query flow. Five native permission/activation control
 and the public policy example pass; the latter uses an explicitly missing Bun
 executable. This enrollment adds no new query ABI or protected capability.
 
+The embedder's captured findings are covered by the
+[original-schema workflows](../../../../packages/python/tests/test_embedder_workflows_native.py)
+and [condition precedence regressions](../../../../packages/python/tests/test_condition_precedence_native.py).
+Whole-entity lists use `SELECT x.*`; repeating a relationship's existing output
+name remains a `WFT-OUTPUT-NAME` refusal. Original unnamed definitions retain
+stable-ID lookup rather than acquiring invented names. First writes, committed
+lists, open/modify/reopen and failed-condition precedence are exercised through
+the public toolkit. The C65 registration/precedence subset passes all six tests.
+
 ## 2026-10-18: superseded C61 qualification
 
 The candidate's [local qualification record](results/2026-10-18-c61-local-qualification.json)
