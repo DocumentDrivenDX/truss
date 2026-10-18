@@ -2,6 +2,11 @@
 // packages/umf-bun/src/python-preparation-core08.ts
 import { resolve as resolve2 } from "path";
 
+// packages/umf-bun/src/acceptance-input.ts
+import { createRequire } from "module";
+import { readFile } from "fs/promises";
+import { createHash } from "crypto";
+
 // packages/postgresql/src/original-byte-custody.ts
 var typed = Object.getPrototypeOf(Uint8Array.prototype);
 var brand = Object.getOwnPropertyDescriptor(typed, Symbol.toStringTag).get;
@@ -53,10 +58,10 @@ var MAX_DEPTH = 128;
 var MAX_NODES = 1e5;
 var MAX_MEMBERS = 4096;
 function decodeAcceptanceJson(original) {
-  return scanJson(original, false, undefined, 16777216);
+  return scanJson(original, false);
 }
-function preflightSourceJson(original) {
-  scanJson(original, true, undefined, 4194304, 1e6, 65536);
+function decodeCatalogPreparationJson(original) {
+  return scanJson(original, false, undefined, 16777216);
 }
 var originalIndexes = new WeakMap;
 function scanJson(original, sourceNumbers, capture, maximumBytes = 1048576, maximumNodes = MAX_NODES, maximumMembers = MAX_MEMBERS) {
@@ -73,7 +78,7 @@ function scanJson(original, sourceNumbers, capture, maximumBytes = 1048576, maxi
   }
   if (capture)
     capture.bytes = bytes;
-  let index = 0, nodes = 0;
+  let index = 0, nodes = 0, pointerUnits = 0;
   const stack = [];
   let root;
   const take = () => bytes[index++];
@@ -168,6 +173,9 @@ function scanJson(original, sourceNumbers, capture, maximumBytes = 1048576, maxi
     if (capture && parent) {
       const prefix = capture.occurrences[parent.occurrence].pointer;
       pointer = prefix + "/" + (parent.kind === "array" ? String(parent.value.length) : parent.key.replace(/~/g, "~0").replace(/\//g, "~1"));
+      pointerUnits += pointer.length;
+      if (pointerUnits > 1e6)
+        refuse("resource");
     }
     const record = (kind) => {
       if (!capture)
@@ -292,9 +300,6 @@ function scanJson(original, sourceNumbers, capture, maximumBytes = 1048576, maxi
 }
 
 // packages/umf-bun/src/acceptance-input.ts
-import { createRequire } from "module";
-import { readFile } from "fs/promises";
-import { createHash } from "crypto";
 var SCHEMA_SHA = "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd";
 var digest = (bytes) => createHash("sha256").update(bytes).digest("hex");
 
@@ -321,7 +326,7 @@ async function createAcceptanceInputInspector(dependenciesPackage, schemaUrl = n
         throw new AcceptanceInputInspectionError(error.reason === "resource" ? "resource" : "source_custody");
       throw error;
     }
-    const input = decodeAcceptanceJson(owned);
+    const input = decodeCatalogPreparationJson(owned);
     if (!validate(input))
       throw new AcceptanceInputInspectionError("schema");
     const wire = input;
@@ -366,32 +371,22 @@ async function createAcceptanceInputInspector(dependenciesPackage, schemaUrl = n
       }
     }
     freeze(wire);
-    return Object.freeze({ input: wire, documents: Object.freeze(documents), originalUtf8Hex: Buffer.from(owned).toString("hex"), schemaSha256: SCHEMA_SHA, scope: "wire_and_artifact_inspection_only" });
+    return Object.freeze({ input: wire, documents: Object.freeze(documents), get originalUtf8Hex() {
+      return Buffer.from(owned).toString("hex");
+    }, schemaSha256: SCHEMA_SHA, scope: "wire_and_artifact_inspection_only" });
   } });
 }
 
 // packages/umf-bun/src/index.ts
 import { resolve } from "path";
-
-// packages/umf-bun/src/catalog-transition-correspondence.ts
-function requireUnchangedCatalogTransition(originalSourceJson, source, transition, verified, rollback) {
-  const originalCandidates = [source, transition.source, verified.source, rollback.target];
-  if (originalCandidates.some((value) => JSON.stringify(value) !== originalSourceJson))
-    throw Error("Original transition source correspondence mismatch");
-  const target = JSON.stringify(verified.target);
-  if (target === undefined || JSON.stringify(transition.target) !== target || JSON.stringify(rollback.source) !== target)
-    throw Error("Original transition target correspondence mismatch");
-}
-
-// packages/umf-bun/src/index.ts
 var assertionOwners = new WeakMap;
 function registerAssertionOwner(owner, mode) {
   assertionOwners.set(owner, mode);
   return owner;
 }
 var UMF_RECORD_SOURCE = "aa944733fc45c090853ca051fd79c26bd3681307";
-async function loadUmfProducer(directory) {
-  const { hash, captured } = await loadPinnedFunctions(directory, UMF_RECORD_SOURCE, "record", ["withCatalogResourceProfile", "readDocument", "validateDocument", "validateCoreRecordValues", "upgradeSchemaPropertiesEnvelope", "verifySchemaPropertiesUpgrade", "rollbackSchemaPropertiesEnvelope"]);
+async function loadCatalogSourceOwner(directory) {
+  const { hash, captured } = await loadPinnedFunctions(directory, UMF_RECORD_SOURCE, "catalog-record", ["withCatalogResourceProfile", "readJsonValue", "validateDocument"]);
   return Object.freeze({
     sourceRevision: UMF_RECORD_SOURCE,
     bundleSha256: hash,
@@ -399,36 +394,12 @@ async function loadUmfProducer(directory) {
       return captured.withCatalogResourceProfile(() => {
         if (typeof originalText !== "string" || Buffer.byteLength(originalText) > 4194304)
           throw Error("Original document bound");
-        const source = captured.readDocument(originalText, "json");
+        const source = captured.readJsonValue(originalText, "json");
         const sourceValidation = captured.validateDocument(source);
-        if (!sourceValidation.valid)
-          return { originalText, source, sourceValidation, transition: null, targetValidation: null };
-        let transition = null, target = source;
-        if (source.umf === "0.7.0") {
-          const originalSourceJson = JSON.stringify(source);
-          transition = captured.upgradeSchemaPropertiesEnvelope(source);
-          const verified = captured.verifySchemaPropertiesUpgrade(transition);
-          const restored = captured.rollbackSchemaPropertiesEnvelope(transition, transition.target);
-          requireUnchangedCatalogTransition(originalSourceJson, source, transition, verified, restored);
-          target = transition.target;
-        } else if (source.umf !== "0.8.0")
+        if (sourceValidation.valid && !["0.7.0", "0.8.0"].includes(source.umf))
           throw Error("Unsupported original UMF version");
-        return { originalText, source, sourceValidation, transition, targetValidation: captured.validateDocument(target), target };
-      });
-    },
-    inspectCatalog(originalText) {
-      return captured.withCatalogResourceProfile(() => {
-        if (typeof originalText !== "string" || Buffer.byteLength(originalText) > 4194304)
-          throw Error("Original document bound");
-        const source = captured.readDocument(originalText, "json");
-        if (!["0.7.0", "0.8.0"].includes(source.umf))
-          throw Error("Unsupported original UMF version");
-        const sourceValidation = captured.validateDocument(source);
         return { originalText, source, sourceValidation, transition: null, targetValidation: sourceValidation, target: source };
       });
-    },
-    checkRecord(target, identity, values) {
-      return captured.validateCoreRecordValues(target, identity, values);
     }
   });
 }
@@ -592,7 +563,7 @@ async function createCore08CatalogInputPreparation(directory, dependenciesPackag
 }
 async function createPreparation(directory, dependenciesPackage, profiles, current, schemaUrl) {
   const inspector = await createAcceptanceInputInspector(dependenciesPackage, schemaUrl);
-  const owner = current ? (await loadCore08CatalogOwners(directory)).record : await loadUmfProducer(directory);
+  const owner = current ? (await loadCore08CatalogOwners(directory)).record : await loadCatalogSourceOwner(directory);
   const umfProfile = Object.freeze({ identity: "umf-record-interpretation", version: owner.sourceRevision, sha256: owner.bundleSha256 });
   const equal = (a, b) => a.identity === b.identity && a.version === b.version && a.sha256 === b.sha256;
   return Object.freeze({ umfProfile, prepare(original) {
@@ -606,7 +577,6 @@ async function createPreparation(directory, dependenciesPackage, profiles, curre
         throw Error("Unsupported original UMF profile");
       if (declaration.ingress.kind !== "native")
         throw Error("Original converted adapter registration unavailable");
-      preflightSourceJson(new TextEncoder().encode(source.originalText));
       let observation;
       try {
         observation = "inspectCatalog" in owner ? owner.inspectCatalog(source.originalText) : owner.inspect(source.originalText);
@@ -628,8 +598,10 @@ async function createPreparation(directory, dependenciesPackage, profiles, curre
     }
     const declarations = () => documents.map((document) => collectCatalogDeclarations(document.documentId, document.interpretation.source));
     const archiveDocuments = documents.map(({ interpretation, ...archive }) => Object.freeze(archive));
+    const frozen = new WeakSet;
     function freeze(value) {
-      if (value && typeof value === "object" && !Object.isFrozen(value)) {
+      if (value && typeof value === "object" && !frozen.has(value)) {
+        frozen.add(value);
         for (const child of Object.values(value))
           freeze(child);
         Object.freeze(value);
@@ -659,7 +631,7 @@ try {
   const bytes = new Uint8Array(await Bun.stdin.arrayBuffer());
   if (bytes.length > 16777216)
     throw Error("resource");
-  const request = decodeAcceptanceJson(bytes);
+  const request = decodeCatalogPreparationJson(bytes);
   if (!["configurationHex,documents", "configurationHex,documents,registration"].includes(Object.keys(request).sort().join(",")) || Object.hasOwn(request, "registration") && request.registration !== true || typeof request.configurationHex !== "string" || !/^(?:[0-9a-f]{2})+$/.test(request.configurationHex) || !Array.isArray(request.documents) || request.documents.length < 1 || request.documents.length > 512)
     throw Error("invalid_input");
   const configuration = decodeAcceptanceJson(Buffer.from(request.configurationHex, "hex"));
@@ -712,7 +684,7 @@ try {
     diagnostics = [{
       documentId: error.documentId,
       documentRevision: error.documentRevision,
-      ...error.observation ? { observation: error.observation } : { originalError: {
+      ...error.observation ? { validation: error.observation.sourceValidation } : { originalError: {
         message: message.slice(0, 8192),
         truncated: message.length > 8192,
         ...typeof cause?.code === "string" ? { code: cause.code.slice(0, 256) } : {},

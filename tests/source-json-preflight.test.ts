@@ -1,5 +1,5 @@
 import {test,expect} from 'bun:test';
-import {preflightSourceJson,decodeAcceptanceJson,AcceptanceJsonError} from '../packages/postgresql/src/acceptance-json';
+import {preflightSourceJson,decodeAcceptanceJson,decodeCatalogPreparationJson,AcceptanceJsonError} from '../packages/postgresql/src/acceptance-json';
 const bytes=(s:string)=>new TextEncoder().encode(s);
 test('source numerical lexemes remain opaque even beyond JavaScript precision and range',()=>{
  const original=bytes('{"integer":9007199254740993,"decimal":0.12345678901234567890123456789,"exponent":1e9999,"negative":-0}');
@@ -18,4 +18,10 @@ test('duplicate decoded names and malformed Unicode cannot reach the owner parse
 test('source preflight retains structural bounds for numeric-heavy documents',()=>{
  expect(()=>preflightSourceJson(bytes('['.repeat(129)+'0'+']'.repeat(129)))).toThrow('resource');
  expect(()=>preflightSourceJson(bytes('['+Array(4097).fill('0').join(',')+']'))).toThrow('resource');
+});
+test('catalog envelopes have an explicit larger budget without enlarging other decoders',()=>{
+ const source=bytes(JSON.stringify({source:'x'.repeat(1048576)}));
+ expect(()=>decodeAcceptanceJson(source)).toThrow('resource');
+ expect((decodeCatalogPreparationJson(source) as {source:string}).source.length).toBe(1048576);
+ expect(()=>decodeCatalogPreparationJson(new Uint8Array(16777217))).toThrow('resource');
 });

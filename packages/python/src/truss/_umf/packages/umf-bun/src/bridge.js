@@ -58,6 +58,9 @@ var MAX_DEPTH = 128;
 var MAX_NODES = 1e5;
 var MAX_MEMBERS = 4096;
 function decodeAcceptanceJson(original) {
+  return scanJson(original, false);
+}
+function decodeCatalogPreparationJson(original) {
   return scanJson(original, false, undefined, 16777216);
 }
 var originalIndexes = new WeakMap;
@@ -75,7 +78,7 @@ function scanJson(original, sourceNumbers, capture, maximumBytes = 1048576, maxi
   }
   if (capture)
     capture.bytes = bytes;
-  let index = 0, nodes = 0;
+  let index = 0, nodes = 0, pointerUnits = 0;
   const stack = [];
   let root;
   const take = () => bytes[index++];
@@ -170,6 +173,9 @@ function scanJson(original, sourceNumbers, capture, maximumBytes = 1048576, maxi
     if (capture && parent) {
       const prefix = capture.occurrences[parent.occurrence].pointer;
       pointer = prefix + "/" + (parent.kind === "array" ? String(parent.value.length) : parent.key.replace(/~/g, "~0").replace(/\//g, "~1"));
+      pointerUnits += pointer.length;
+      if (pointerUnits > 1e6)
+        refuse("resource");
     }
     const record = (kind) => {
       if (!capture)
@@ -320,7 +326,7 @@ async function createAcceptanceInputInspector(dependenciesPackage, schemaUrl = n
         throw new AcceptanceInputInspectionError(error.reason === "resource" ? "resource" : "source_custody");
       throw error;
     }
-    const input = decodeAcceptanceJson(owned);
+    const input = decodeCatalogPreparationJson(owned);
     if (!validate(input))
       throw new AcceptanceInputInspectionError("schema");
     const wire = input;
@@ -629,7 +635,7 @@ try {
   const bytes = new Uint8Array(await Bun.stdin.arrayBuffer());
   if (bytes.length > 16777216)
     throw Error("resource");
-  const request = decodeAcceptanceJson(bytes);
+  const request = decodeCatalogPreparationJson(bytes);
   if (!["configurationHex,documents", "configurationHex,documents,registration"].includes(Object.keys(request).sort().join(",")) || Object.hasOwn(request, "registration") && request.registration !== true || typeof request.configurationHex !== "string" || !/^(?:[0-9a-f]{2})+$/.test(request.configurationHex) || !Array.isArray(request.documents) || request.documents.length < 1 || request.documents.length > 512)
     throw Error("invalid_input");
   const configuration = decodeAcceptanceJson(Buffer.from(request.configurationHex, "hex"));

@@ -18,7 +18,7 @@
     "owner/producer-manifest.json": "9f4897b66b203c54cf104512b41cff7732eee3059ea1208412407b787866c927",
     "runtime/package.json": "9a0a1f4e40bbd5082cbcc0f6b6b515368f2dc8dc60341affdc8c50571819bd49",
     "runtime/node_modules/ajv/dist/2020.js": "57cad03e867e41b0bf4a68c13e24b2628312c6dc82a3ca16780a6864130ad40d",
-    "packages/umf-bun/src/bridge.js": "428a7c59b9b2d5d06e49dcab2438309d9f5a848ca79514334a454751c4d37383",
+    "packages/umf-bun/src/bridge.js": "ce90b886a4728c1cf88a0a7e75544c2652639a1e6417d2962306a6672c7a1eb5",
     "docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd"
   },
   "owner": {
@@ -46,7 +46,7 @@
   "sources": {
     "scripts/build-python-umf-preparation.ts": "fa8531eec031e65d9e94adb097f0526a7ef5b32075ebf9c538b313e289334752",
     "scripts/build-umf-runtime.ts": "5baa163d76a88d2c9f434a814a126027d88ae8227bbc41bc8456a36c0f8f9acd",
-    "packages/umf-bun/src/python-preparation.ts": "93855adbcd1c88541421d621b2460bc907a8ee38c83e66bef2d9a473f1ed5f9f",
+    "packages/umf-bun/src/python-preparation.ts": "18a462c9133c39b892e14808a9a07a0c2f526760b4b9fb37954032339999b572",
     "packages/umf-bun/src/catalog-assertion-observations.ts": "653ec4bb3b14e7dddc92daba7d1ba48e9fb544edafafd2f02220785b74d696f2",
     "packages/umf-bun/src/catalog-observation-coverage.ts": "bbc6b8d6ecc05e2739bb4120c0e05a4f62dbe0a1424ba19fea2616c561175eb6",
     "packages/umf-bun/src/catalog-core-assertion-identities.ts": "8e26b39365daedde304410f6e591e6b5430a9c5251792ffb404b5799fd885f10",
@@ -58,7 +58,7 @@
     "packages/umf-bun/src/catalog-extension-inventory.ts": "f42fa6157fcd8d5ac3a83d9374b39abb295837426d4c44622de579aad9ad3c84",
     "packages/umf-bun/src/catalog-ingress-report-basis.ts": "3d1650163c390a9ea58de1996b017aeae66b048fe72a6d37413d4d7fcd91e50e",
     "packages/umf-bun/src/index.ts": "d7b2b2a1e330715f706dc4ef57ca489c198e4f7fed0c82208c6b471f5ae63d5b",
-    "packages/umf-bun/src/acceptance-input.ts": "5c10a7d4a1a2484dce41e6af4a5d0d85aaa4ce978e64a35a82e07fb1797c328d",
-    "packages/postgresql/src/acceptance-json.ts": "816e0cb2665fd0d3dbe1a94cc0120bc681cc8deab4c58ca12807629d0738d29d"
+    "packages/umf-bun/src/acceptance-input.ts": "2e1ba8925316ead926f1b0a1ca9298b394d95a91f6bac265f399a8d45132be67",
+    "packages/postgresql/src/acceptance-json.ts": "a896a7d1a76c0fa78c7db6c0511839ffc7823baf3c61c960a74afb6986c60e63"
   }
 }

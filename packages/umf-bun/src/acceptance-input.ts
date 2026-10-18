@@ -3,7 +3,7 @@ import {createRequire} from 'node:module';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {copyOriginalByteCustody,OriginalByteCustodyError} from '../../postgresql/src/original-byte-custody';
-import {decodeAcceptanceJson} from '../../postgresql/src/acceptance-json';
+import {decodeCatalogPreparationJson} from '../../postgresql/src/acceptance-json';
 import type {AcceptanceInput,ExactArtifact} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';
 const SCHEMA_SHA='0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd';
 const digest=(bytes:Uint8Array)=>createHash('sha256').update(bytes).digest('hex');
@@ -18,7 +18,7 @@ export async function createAcceptanceInputInspector(dependenciesPackage:string,
  const validate=new Ajv({strict:true}).compile(JSON.parse(schemaBytes.toString('utf8')));
  return Object.freeze({schemaSha256:SCHEMA_SHA,inspect(original:Uint8Array){
   let owned:Uint8Array;try{owned=copyOriginalByteCustody(original,true,16777216)}catch(error){if(error instanceof OriginalByteCustodyError)throw new AcceptanceInputInspectionError(error.reason==='resource'?'resource':'source_custody');throw error}
-  const input=decodeAcceptanceJson(owned);if(!validate(input))throw new AcceptanceInputInspectionError('schema');
+  const input=decodeCatalogPreparationJson(owned);if(!validate(input))throw new AcceptanceInputInspectionError('schema');
   const wire=input as unknown as AcceptanceInput;
   if(wire.documents.length>512)throw new AcceptanceInputInspectionError('resource');
   let totalArtifacts=0;const documents:{documentId:string;documentRevision:string;originalText:string;sha256:string}[]=[];const identities=new Set<string>();

@@ -2,7 +2,7 @@
 import {resolve} from 'node:path';
 import {createCatalogInputPreparation} from './catalog-input';
 import {CatalogDocumentRejected} from './catalog-input';
-import {decodeAcceptanceJson,preflightSourceJson} from '../../postgresql/src/acceptance-json';
+import {decodeAcceptanceJson,decodeCatalogPreparationJson} from '../../postgresql/src/acceptance-json';
 const root=resolve(import.meta.dir,'../../..');
 const MAX_OUTPUT=67108864;
 const emit=(value:unknown)=>{
@@ -13,7 +13,7 @@ let diagnostics:unknown[]=[];
 try{
  const bytes=new Uint8Array(await Bun.stdin.arrayBuffer());
  if(bytes.length>16777216)throw Error('resource');
- const request=decodeAcceptanceJson(bytes) as any;
+ const request=decodeCatalogPreparationJson(bytes) as any;
  if(!['configurationHex,documents','configurationHex,documents,registration'].includes(Object.keys(request).sort().join(','))||(Object.hasOwn(request,'registration')&&request.registration!==true)||typeof request.configurationHex!=='string'
    ||!/^(?:[0-9a-f]{2})+$/.test(request.configurationHex)||!Array.isArray(request.documents)||request.documents.length<1||request.documents.length>512)throw Error('invalid_input');
  const configuration=decodeAcceptanceJson(Buffer.from(request.configurationHex,'hex')) as any;
