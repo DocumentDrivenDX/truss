@@ -15,6 +15,30 @@ ddx:
 
 # Practical functionality and performance
 
+## 2026-10-17: stable plans as attempt history grows
+
+The full hosted workload exposed a statistics-dependent regression: repeated
+1,000-update calls grew until macOS exceeded the original SQL budget. Actual
+EXPLAIN ANALYZE showed current-attempt cardinality estimated as one row and
+nested loops discarding nearly two million event/digest join pairs. Switching
+between generic and custom plans did not remove the structural problem.
+
+Ordered window aggregates now carry event context and compute each group digest
+once. Complete-key parameterized lookups close physical plans, transitions and
+journals; ordinal maps seal results without a history-sensitive UPDATE join.
+All original comparisons and independent commit guards remain. The engine
+preserves caller optimizer settings and both original deadlines.
+
+The [focused native checks and actual-plan evidence](results/2026-10-17-planner-stable-batches-qualification.json)
+cover custom and generic plans after ANALYZE, retained key reservations, no-ops,
+late rollback and both retained semantic oracles. Across five repeated updates,
+with 200 preceding small writes and explicit statistics refreshes, journal
+history grew from 5,410 to 13,410 rows while both plans discarded zero join
+pairs. Public update calls remained between 2.72 and 2.97 seconds on the local
+machine. Extra diagnostic queries ran separately; these are not p95 or hosted
+qualification. The full original hosted gates remain required before native71
+publication.
+
 ## 2026-10-17: relational update closure and buffered graph scope
 
 Distinct stored rootless updates under the captured current catalog now close

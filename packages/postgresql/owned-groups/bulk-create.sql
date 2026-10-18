@@ -8,6 +8,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;installation truss.catalog_
  expected jsonb;actual jsonb;dictionary jsonb:='{}';namespaces jsonb:='{}';metadata jsonb;
  selected_type int;property record;definition record;pin record;type_pin text;property_pins jsonb;property_order jsonb;
  group_id uuid:=gen_random_uuid();actor oid;counted int;total int;compiled_namespace bytea;route record;
+ slot_results jsonb;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
  actor:=truss.runtime_person(false);input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
@@ -174,11 +175,13 @@ BEGIN
    'events',jsonb_build_array(jsonb_build_object('sourceEpoch',installation.source_epoch::text,'historyProfile','truss-native-owned-create/0.1',
     'xid',attempt.writer_xid::text,'seq',j.value->'journal'->>'seq')))
    ||CASE WHEN (o.value->'operation') ? 'alias' THEN jsonb_build_object('alias',o.value->'operation'->>'alias') ELSE '{}'::jsonb END result
-  FROM jsonb_array_elements(objects) o JOIN jsonb_array_elements(journals) j ON j.value->'index'=o.value->'index'),
- updated AS (
-  UPDATE truss.runtime_owned_operation p SET result=s.result FROM slots s
-  WHERE p.attempt_id=selected_attempt AND p.operation_index=s.index AND p.result IS NULL RETURNING p.operation_index,p.result)
- SELECT count(*),jsonb_agg(result ORDER BY operation_index) INTO counted,results FROM updated;
+  FROM jsonb_array_elements(objects) o JOIN jsonb_array_elements(journals) j ON j.value->'index'=o.value->'index')
+ SELECT jsonb_object_agg(index::text,result) INTO slot_results FROM slots;
+ WITH updated AS (
+  UPDATE truss.runtime_owned_operation p SET result=slot_results->p.operation_index::text
+  WHERE p.attempt_id=selected_attempt AND p.result IS NULL AND slot_results ? p.operation_index::text
+  RETURNING p.operation_index,p.result)
+ SELECT count(*) INTO counted FROM updated;
  IF counted<>total THEN RAISE EXCEPTION 'complete sealed batch result slots required' USING ERRCODE='55000';END IF;
  UPDATE truss.runtime_object_attempt SET next_index=total WHERE id=selected_attempt AND next_index=0 AND NOT complete;
  IF NOT FOUND THEN RAISE EXCEPTION 'one batch progress advance required' USING ERRCODE='55000';END IF;

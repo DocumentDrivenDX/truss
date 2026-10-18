@@ -1,0 +1,262 @@
+{
+  "runtime": "truss-catalog-runtime/0.71-candidate",
+  "releaseStatus": "unreleased",
+  "runtimeManifestSha256": "5e9d905b9b6e92f10476abde6188abc6fe2cef53c681057317963d08b2c293ac",
+  "focusedNativeTestsPassed": 9,
+  "focusedNativeLog": "2026-10-17-planner-stable-batches-focused-native-tests.log",
+  "analyzedHistoryRegression": "Two 1000-key-changing-update groups after ANALYZE, one force_custom_plan and one force_generic_plan; original caller setting preserved.",
+  "executionPlans": {
+    "before-window": {
+      "file": "truss-journal-query-plans-before-window.json",
+      "sha256": "f2f994490ac06663a3d9da2f3b501f4251dbf1d1837b5486bb028394772d5177",
+      "rows": [
+        {
+          "journalRows": 5410,
+          "plans": {
+            "force_generic_plan": {
+              "elapsedMs": 202.49241599958623,
+              "discardedJoinPairs": 3000,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = $1) AND (operation_index = t.operation_index))"
+              ]
+            },
+            "force_custom_plan": {
+              "elapsedMs": 246.6234589992382,
+              "discardedJoinPairs": 3000,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = '9ad80e49-b752-4169-8d85-9c1f532f1524'::uuid) AND (operation_index = t.operation_index))"
+              ]
+            }
+          }
+        },
+        {
+          "journalRows": 7410,
+          "plans": {
+            "force_generic_plan": {
+              "elapsedMs": 205.5074580021028,
+              "discardedJoinPairs": 3000,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = $1) AND (operation_index = t.operation_index))"
+              ]
+            },
+            "force_custom_plan": {
+              "elapsedMs": 251.84558399996604,
+              "discardedJoinPairs": 3000,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = 'a23a3696-b272-4154-a2b5-d82e94a22293'::uuid) AND (operation_index = t.operation_index))"
+              ]
+            }
+          }
+        },
+        {
+          "journalRows": 9410,
+          "plans": {
+            "force_generic_plan": {
+              "elapsedMs": 201.35649999792804,
+              "discardedJoinPairs": 3000,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = $1) AND (operation_index = t.operation_index))"
+              ]
+            },
+            "force_custom_plan": {
+              "elapsedMs": 244.26737500107265,
+              "discardedJoinPairs": 3000,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = 'b1c1ac2b-4388-42a6-98ba-da68d1b31ed9'::uuid) AND (operation_index = t.operation_index))"
+              ]
+            }
+          }
+        },
+        {
+          "journalRows": 11410,
+          "plans": {
+            "force_generic_plan": {
+              "elapsedMs": 199.9171249990468,
+              "discardedJoinPairs": 3000,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = $1) AND (operation_index = t.operation_index))"
+              ]
+            },
+            "force_custom_plan": {
+              "elapsedMs": 243.82533400057582,
+              "discardedJoinPairs": 3000,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = '6dd0f54c-24da-4f54-93ce-e973ccdfbfc7'::uuid) AND (operation_index = t.operation_index))"
+              ]
+            }
+          }
+        },
+        {
+          "journalRows": 13410,
+          "plans": {
+            "force_generic_plan": {
+              "elapsedMs": 1150.2679170007468,
+              "discardedJoinPairs": 2001000,
+              "maxOperationLookupRows": 1000.0,
+              "exactOperationKeyConditions": [
+                null
+              ]
+            },
+            "force_custom_plan": {
+              "elapsedMs": 543.8290829988546,
+              "discardedJoinPairs": 4495500,
+              "maxOperationLookupRows": 500.5,
+              "exactOperationKeyConditions": [
+                "(attempt_id = '0d99a10d-f540-49aa-b7b8-c6251f5c55ed'::uuid)"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "after-window": {
+      "file": "truss-journal-query-plans-after-window.json",
+      "sha256": "8f995781177d2ce5970734fdc778fdf5e04094b667d70bff71fd340fa8285b6e",
+      "rows": [
+        {
+          "journalRows": 5410,
+          "plans": {
+            "force_generic_plan": {
+              "elapsedMs": 236.47758300285204,
+              "discardedJoinPairs": 0,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = t.attempt_id) AND (operation_index = t.operation_index))"
+              ]
+            },
+            "force_custom_plan": {
+              "elapsedMs": 276.7215000021679,
+              "discardedJoinPairs": 0,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = t.attempt_id) AND (operation_index = t.operation_index))"
+              ]
+            }
+          }
+        },
+        {
+          "journalRows": 7410,
+          "plans": {
+            "force_generic_plan": {
+              "elapsedMs": 229.98208300123224,
+              "discardedJoinPairs": 0,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = t.attempt_id) AND (operation_index = t.operation_index))"
+              ]
+            },
+            "force_custom_plan": {
+              "elapsedMs": 277.0787909976207,
+              "discardedJoinPairs": 0,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = t.attempt_id) AND (operation_index = t.operation_index))"
+              ]
+            }
+          }
+        },
+        {
+          "journalRows": 9410,
+          "plans": {
+            "force_generic_plan": {
+              "elapsedMs": 228.65258299862035,
+              "discardedJoinPairs": 0,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = t.attempt_id) AND (operation_index = t.operation_index))"
+              ]
+            },
+            "force_custom_plan": {
+              "elapsedMs": 288.0249170011666,
+              "discardedJoinPairs": 0,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = t.attempt_id) AND (operation_index = t.operation_index))"
+              ]
+            }
+          }
+        },
+        {
+          "journalRows": 11410,
+          "plans": {
+            "force_generic_plan": {
+              "elapsedMs": 232.3303750017658,
+              "discardedJoinPairs": 0,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = t.attempt_id) AND (operation_index = t.operation_index))"
+              ]
+            },
+            "force_custom_plan": {
+              "elapsedMs": 285.49912499875063,
+              "discardedJoinPairs": 0,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = t.attempt_id) AND (operation_index = t.operation_index))"
+              ]
+            }
+          }
+        },
+        {
+          "journalRows": 13410,
+          "plans": {
+            "force_generic_plan": {
+              "elapsedMs": 227.26295900065452,
+              "discardedJoinPairs": 0,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = t.attempt_id) AND (operation_index = t.operation_index))"
+              ]
+            },
+            "force_custom_plan": {
+              "elapsedMs": 273.5116249968996,
+              "discardedJoinPairs": 0,
+              "maxOperationLookupRows": 1.0,
+              "exactOperationKeyConditions": [
+                "((attempt_id = t.attempt_id) AND (operation_index = t.operation_index))"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "diagnosticScope": "Exact journal-validation SELECT executed independently with matching native UTC serialization, the committed original attempt/input/dictionary, and actual EXPLAIN ANALYZE BUFFERS. Healthy query result asserted false. After fix, ANALYZE repeated after each committed large group; custom and generic plans captured. Extra diagnostic queries are outside public-call timings; these are not p95 or clean hosted timing claims.",
+  "repeatedWorkload": {
+    "functionalPassed": true,
+    "externalJavaScriptForbidden": true,
+    "warmSingleWrites": 200,
+    "bulkObjects": 1000,
+    "bulkEdges": 1000,
+    "bulkUpdateRepeats": 5,
+    "updateCallsMs": [
+      2716.359291,
+      2911.365792,
+      2967.152542,
+      2897.488417,
+      2973.791625
+    ],
+    "updateCommitsMs": [
+      1561.018125,
+      2169.703416,
+      2181.728666,
+      2179.607958,
+      2232.119083
+    ]
+  },
+  "changes": "Ordered window aggregates replace materialized event/digest self-joins; complete-key parameterized lookups retain physical plan, transition and journal closure; ordinal maps seal batch result slots. No schema, deadline, global optimizer setting or validation-obligation change.",
+  "originalLimits": {
+    "statementTimeoutMs": 10000,
+    "operationTimeoutMs": 30000
+  },
+  "previousHostedRun": 39080510003,
+  "remainingQualification": "Every original Linux/macOS gate remains required; broad local regression is running separately."
+}

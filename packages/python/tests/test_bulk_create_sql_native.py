@@ -289,3 +289,25 @@ class BulkUpdateSqlTests(base.PublicCreateGroupTests):
         self.assertEqual([r.outcome for r in second.value.response.semantic.results],['unchanged']*4+['changed']*5)
         host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object WHERE ver=2').fetchone(),(9,))
+
+    def test_analyzed_history_and_both_plan_modes_preserve_bulk_updates(self):
+        connection,host,assembly,tx,identities=self.initialized_updates(1000)
+        host.detach();connection.rollback()
+        for round_index,mode in enumerate(('force_custom_plan','force_generic_plan')):
+            # Production autovacuum updates these statistics as history grows.
+            # Exercise both parameter-plan choices with retained prior groups.
+            for table in ('runtime_object_transition','runtime_owned_operation','journal','object'):
+                self.admin.execute('ANALYZE truss.'+table)
+            connection,host,assembly,tx=self.consumer()
+            connection.execute('SET LOCAL plan_cache_mode='+mode)
+            context=assembly.group_context_in_transaction(tx).value
+            operations=tuple(UpdateObject(target=StoredObjectReference(identity=identity),
+                set=(AuthoredValue(name='A-value',value=TextValue(kind='string',text=f'round-{round_index}-{i}')),),
+                unset=(),expected_version=str(round_index+1)) for i,identity in enumerate(identities))
+            result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=self.documents)
+            self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
+            self.assertTrue(all(r.outcome=='changed' and r.version==str(round_index+2) for r in result.value.response.semantic.results))
+            self.assertEqual(connection.execute('SHOW plan_cache_mode').fetchone(),(mode,))
+            host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object WHERE ver=3').fetchone(),(1000,))
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object_key_reservation_bucket').fetchone(),(4000,))

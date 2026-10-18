@@ -1,0 +1,14 @@
+test_thousand_objects_use_one_insert_per_physical_home (test_bulk_create_sql_native.BulkCreateSqlTests.test_thousand_objects_use_one_insert_per_physical_home) ... ok
+test_buffered_edge_plans_equal_the_retained_general_planner (test_bulk_create_sql_native.BulkEdgeSqlTests.test_buffered_edge_plans_equal_the_retained_general_planner) ... ok
+test_buffered_scope_equals_retained_observer_with_thousand_edges (test_bulk_create_sql_native.BulkEdgeSqlTests.test_buffered_scope_equals_retained_observer_with_thousand_edges) ... ok
+test_thousand_parallel_edges_use_one_insert_per_physical_home (test_bulk_create_sql_native.BulkEdgeSqlTests.test_thousand_parallel_edges_use_one_insert_per_physical_home) ... ok
+test_analyzed_history_and_both_plan_modes_preserve_bulk_updates (test_bulk_create_sql_native.BulkUpdateSqlTests.test_analyzed_history_and_both_plan_modes_preserve_bulk_updates) ... ok
+test_late_update_fault_rolls_back_the_complete_batch (test_bulk_create_sql_native.BulkUpdateSqlTests.test_late_update_fault_rolls_back_the_complete_batch) ... ok
+test_noop_batch_preserves_versions_timestamps_and_journals (test_bulk_create_sql_native.BulkUpdateSqlTests.test_noop_batch_preserves_versions_timestamps_and_journals) ... ok
+test_relational_update_closure_agrees_with_retained_general_validator (test_bulk_create_sql_native.BulkUpdateSqlTests.test_relational_update_closure_agrees_with_retained_general_validator) ... ok
+test_thousand_updates_use_one_update_and_one_journal_insert (test_bulk_create_sql_native.BulkUpdateSqlTests.test_thousand_updates_use_one_update_and_one_journal_insert) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 67.694s
+
+OK
