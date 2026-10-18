@@ -239,7 +239,7 @@ class RealWorkflows(PublicCatalogRuntimeTests):
             return
         def read(identity):
             result=ok(assembly.get_object_in_transaction(tx,document_id=document_id,module_id=module_id,record_id=type_to_record[identity.type_id] if workload else record,object_id=int(identity.id)))
-            if not isinstance(result,ObjectFound):raise AssertionError('Committed object not found')
+            if not isinstance(result,ObjectFound):raise AssertionError('Committed object not found: '+repr(result)+'; native: '+str(host._custody.last_attempt.error))
             return result.object
         positions=sorted(set(range(min(workload['types'],count)))|{i*count//100 for i in range(100)}|{count-1}) if workload else range(count)
         for i in positions:

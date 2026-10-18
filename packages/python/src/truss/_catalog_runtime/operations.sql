@@ -468,7 +468,7 @@ REVOKE ALL ON FUNCTION truss.runtime_object_history(jsonb,jsonb) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_owned_history_record_in_metadata(object_image jsonb,identity jsonb,metadata jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
-DECLARE properties jsonb:='[]';retained jsonb;entry jsonb;property_id text;
+DECLARE properties jsonb:='[]';retained jsonb;missing_pin boolean;
 BEGIN
  IF metadata->>'typeId' IS DISTINCT FROM object_image->>'type_id'
   OR metadata->>'revision' IS DISTINCT FROM object_image->>'rev'
@@ -477,15 +477,16 @@ BEGIN
   OR jsonb_typeof(metadata->'propertyPins') IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'original compiled history metadata required' USING ERRCODE='55000';END IF;
  identity:=jsonb_set(identity,'{definitionPin}',metadata->'typePin');
- FOR entry IN SELECT value FROM jsonb_array_elements(metadata->'propertyOrder') LOOP
-  property_id:=entry#>>'{}';
-  IF object_image->'props' ? property_id THEN
-   IF NOT ((metadata->'propertyPins') ? property_id) THEN
-    RAISE EXCEPTION 'complete original history property pins required' USING ERRCODE='55000';END IF;
-   properties:=properties||jsonb_build_array(jsonb_build_object('propertyId',property_id,
-    'definitionPin',metadata->'propertyPins'->property_id,'value',object_image->'props'->property_id));
-  END IF;
- END LOOP;
+ SELECT coalesce(jsonb_agg(jsonb_build_object('propertyId',property_id,
+    'definitionPin',metadata->'propertyPins'->property_id,'value',object_image->'props'->property_id)
+    ORDER BY ordinality),'[]'::jsonb),
+  coalesce(bool_or(NOT ((metadata->'propertyPins') ? property_id)),false)
+ INTO properties,missing_pin
+ FROM (SELECT entry#>>'{}' property_id,ordinality
+  FROM jsonb_array_elements(metadata->'propertyOrder') WITH ORDINALITY ordered(entry,ordinality)) selected
+ WHERE object_image->'props' ? property_id;
+ IF missing_pin THEN
+  RAISE EXCEPTION 'complete original history property pins required' USING ERRCODE='55000';END IF;
  SELECT coalesce(jsonb_agg(jsonb_build_object('name',key,'value',value) ORDER BY key COLLATE "C"),'[]'::jsonb) INTO retained FROM jsonb_each(coalesce(nullif(object_image->'retained','null'::jsonb),'{}'));
  RETURN jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','object','identity',identity,
   'recordVersion',object_image->>'ver','catalogRevision',object_image->>'rev',

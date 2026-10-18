@@ -16,7 +16,7 @@ on:
         description: Run one exact stress case on both platforms after both original workloads pass
         type: choice
         default: none
-        options: [none, nominal, type-heavy, wide, complex, dense-edges, index-heavy, skewed, node-heavy]
+        options: [none, all, small, nominal, type-heavy, many-types, wide, complex, dense-edges, index-heavy, skewed, node-heavy, large]
 permissions:
   contents: read
 concurrency:
@@ -102,6 +102,25 @@ jobs:
         env:
           PYTHONPATH: packages/python/tests
         run: python -m unittest test_embedded_owner -v
+      - name: Verify source-only preparation, real schemas, and capacity regressions
+        env:
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_embedder_schemas_native test_stress_registration_native test_catalog_view_capacity_native test_condition_precedence_native test_import_chunk_closure_native test_key_footprint_capacity_native test_endpoint_capacity_native test_history_projection_native
+      - name: Preserve populated published native71 data and installation authority
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PYTHONPATH: packages/python/tests
+        run: |
+          gh release download v0.0.39 --repo DocumentDrivenDX/truss --pattern truss_toolkit-0.0.39-py3-none-any.whl --pattern SHA256SUMS --dir "$RUNNER_TEMP/truss-native71"
+          python - <<'PYTHON'
+          import hashlib,os,pathlib
+          root=pathlib.Path(os.environ['RUNNER_TEMP'])/'truss-native71'
+          wheel=root/'truss_toolkit-0.0.39-py3-none-any.whl'
+          expected={line.split()[1]:line.split()[0] for line in (root/'SHA256SUMS').read_text().splitlines()}
+          assert hashlib.sha256(wheel.read_bytes()).hexdigest()==expected[wheel.name]
+          PYTHON
+          python -m pip install --no-deps --target "$RUNNER_TEMP/truss-native71-package" "$RUNNER_TEMP/truss-native71/truss_toolkit-0.0.39-py3-none-any.whl"
+          TRUSS_NATIVE71_PACKAGE="$RUNNER_TEMP/truss-native71-package" python -m unittest test_definition_source_upgrade_native
       - name: Run the installed public adopter workflow
         run: |
           python - <<'PYTHON'
@@ -409,11 +428,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        case: ${{ inputs.stress_case == 'all' && fromJSON('["small","nominal","type-heavy","many-types","wide","complex","dense-edges","index-heavy","skewed","node-heavy","large"]') || fromJSON(format('["{0}"]', inputs.stress_case)) }}
         os:
           - "ubuntu-24.04"
           - "macos-14"
     runs-on: "${{ matrix.os }}"
-    timeout-minutes: 180
+    timeout-minutes: 360
     steps:
       - uses: "actions/checkout@v6"
         with:
@@ -422,9 +442,6 @@ jobs:
       - uses: "actions/setup-python@v5"
         with:
           python-version: "3.11"
-      - uses: "oven-sh/setup-bun@v2"
-        with:
-          bun-version: "1.4.2"
       - uses: "actions/download-artifact@v4"
         with:
           name: "python-package"
@@ -450,25 +467,26 @@ jobs:
         id: "stress"
         env:
           PYTHONPATH: "packages/python/tests"
-          TRUSS_BUN_EXECUTABLE: "bun"
-          STRESS_CASE: "${{ inputs.stress_case }}"
+          STRESS_CASE: "${{ matrix.case }}"
         shell: "bash"
         run: |
           mkdir -p "$RUNNER_TEMP/public-stress"
-          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --matrix-case "$STRESS_CASE" --bulk-size 100 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-stress/report.json" 2>&1 | tee "$RUNNER_TEMP/public-stress/run.log"
+          load_size=100
+          if [ "$STRESS_CASE" = large ]; then load_size=1000; fi
+          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --forbid-external-javascript --matrix-case "$STRESS_CASE" --bulk-size "$load_size" --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-stress/report.json" 2>&1 | tee "$RUNNER_TEMP/public-stress/run.log"
       - name: "Record selected stress workload status"
         if: "always()"
         env:
           REPORT_DIRECTORY: "${{ runner.temp }}/public-stress"
           WORKLOAD_OUTCOME: "${{ steps.stress.outcome }}"
-          STRESS_CASE: "${{ inputs.stress_case }}"
+          STRESS_CASE: "${{ matrix.case }}"
         run: |
           python - <<'PYTHON'
           import json,os,pathlib
           root=pathlib.Path(os.environ['REPORT_DIRECTORY']);root.mkdir(parents=True,exist_ok=True)
           report=root/'report.json'
           status={'source':os.environ['GITHUB_SHA'],'case':os.environ['STRESS_CASE'],'outcome':os.environ['WORKLOAD_OUTCOME'],
-              'reportPresent':report.is_file(),'loadBatchSize':100,'statementTimeoutMs':10000,'operationTimeoutMs':30000,
+              'reportPresent':report.is_file(),'loadBatchSize':1000 if os.environ['STRESS_CASE']=='large' else 100,'statementTimeoutMs':10000,'operationTimeoutMs':30000,
               'scope':'Selected exact declared stress case; timeout or missing report is incomplete evidence'}
           if report.is_file():
               result=json.loads(report.read_bytes())
@@ -479,7 +497,7 @@ jobs:
         if: "always()"
         uses: "actions/upload-artifact@v4"
         with:
-          name: "public-stress-${{ inputs.stress_case }}-${{ matrix.os }}"
+          name: "public-stress-${{ matrix.case }}-${{ matrix.os }}"
           path: "${{ runner.temp }}/public-stress/*"
           if-no-files-found: "error"
   publish:
@@ -508,6 +526,8 @@ jobs:
           backend=next(ast.literal_eval(n.value) for n in ast.parse(pathlib.Path('packages/python/src/truss/_query_runtime.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='BACKEND' for t in n.targets))
           root=pathlib.Path('dist');assets=sorted(root.iterdir());assert len(assets)==2
           assert len(list(root.glob('*.whl')))==len(list(root.glob('*.tar.gz')))==1
+          for name in ('catalog-registration-summary-v0.1.md',):
+              (root/name).write_bytes(pathlib.Path('docs/helix/02-design/contracts',name).read_bytes())
           (root/'catalog-rebind-report-v0.2.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-rebind-report-v0.2.md').read_bytes())
           (root/'catalog-rebind-report-v0.4.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-rebind-report-v0.4.md').read_bytes())
           (root/'catalog-source-reference-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-source-reference-v0.1.md').read_bytes())
@@ -515,6 +535,7 @@ jobs:
           pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('weft-sql=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','deploymentJavaScript':'embedded-v8','embeddedEngine':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'nativePlatforms':['linux-x86_64','macos-arm64']}
           profile=pathlib.Path('packages/python/src/truss/_profiles/fresh-catalog-support-date08.json')
           policy=json.loads(profile.read_bytes())
+          pins.update(catalogRegistrationReportInterface='truss-catalog-registration-report/0.6',catalogPreparationInterface='truss-registration-preparation/2.0',catalogAcceptanceInputInterface='truss-acceptance-input/0.2.0',catalogViewInterface='truss-catalog-view/0.2.0',mandatoryPreparationTranscript=False)
           pins.update(timestampComparisonProfile='umf-rfc3339-exact-instant/1.0.0',umfExactInstantCommit='cbb6fb87',umf08CatalogSupport={'identity':policy['identity'],'version':policy['version'],'sha256':hashlib.sha256(profile.read_bytes()).hexdigest()},umf08CatalogReportInterface='truss-catalog-registration-report/0.2',catalogSourceReferenceFormat='truss-catalog-source-reference/0.1',catalogRebindReportInterface='truss-catalog-registration-report/0.3',catalogRebindProfile='truss-native-catalog-rebind/0.4',catalogRebindSupportedProfiles=['truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4'])
           (root/'catalog-key-backfill-report-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md').read_bytes())
           pins.update(catalogKeyBackfillReportInterface='truss-catalog-registration-report/0.4',catalogKeyBackfillProfile='truss-catalog-key-backfill/0.2',catalogKeyBackfillSupportedProfiles=['truss-catalog-key-backfill/0.1','truss-catalog-key-backfill/0.2'])

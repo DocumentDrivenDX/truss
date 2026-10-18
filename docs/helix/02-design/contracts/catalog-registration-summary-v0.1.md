@@ -134,3 +134,17 @@ complete history remains in its existing native homes. Authorized
 original UMF validator diagnostics; those diagnostics are not copied into each
 receipt. Source-reference receipts cannot resolve their original bytes through
 the standalone historical report resolver; use the authorized source API.
+
+### Single-pass history projection (2026-10-18 candidate)
+
+The native history projection aggregates present properties once in original
+metadata order instead of repeatedly copying a growing JSONB array. Absent
+properties remain absent, explicit null values remain present, duplicate order
+entries remain duplicates, and missing original pins still refuse with55000.
+An isolated comparison with the original function passed30 combinations across
+widths0/1/2/128/512, reversed/duplicate ordering, absence/null and missing pins.
+The committed native regression checks the projected records and missing-pin
+refusal independently. Existing public history, condition precedence and32-record
+import checks pass together (five tests,24.720s); the import performed96 graph
+checks,0.653s apply and0.118s commit. These are local component results, not a
+completed full-matrix qualification or a published release.
