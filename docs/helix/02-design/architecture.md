@@ -21,6 +21,22 @@ ddx:
 
 # Truss architecture
 
+## Validation placement and schema lifetime — owner decision 2026-10-18
+
+The trusted application engine interprets the selected UMF schema, resolves fields and validates values. It loads or compiles an immutable application-memory schema once per revision, with indexed lookup by qualified type/property identity. Reuse it across records and operations; replace the selected snapshot when its installation, source epoch, catalog revision or relevant source identity changes. Bind each write to the selected revision and check it under the database's concurrency protocol. Authorization remains current and is not made permanent by a schema cache.
+
+| Responsibility | Default placement | Reason |
+| --- | --- | --- |
+| Schema interpretation, field resolution, scalar/container semantics and batch preparation | Application engine and its immutable schema indexes | Reuse compiled meaning without repeated catalog scans, parsing or per-record schema copies |
+| Atomic current-state, key and journal writes | Parameterized set-based database operations | One transactional outcome for the batch |
+| Uniqueness, typed foreign keys, row/version/revision conflicts and required locking | Database | Direct relational and concurrency value |
+| Additional native semantic checks or caches | Only where measured benefit justifies cost and complexity | No requirement to reproduce the complete engine's validation or history construction |
+| Correctness and fault qualification | Independent integration and stress tests | Observe outcomes without turning the test oracle into mandatory duplicate production work |
+
+The database remains the durable schema authority. A PostgreSQL cache may support a justified native responsibility, but does not satisfy application-memory schema reuse. Retain one original source and required durable history/receipts; avoid redundant schema, payload and transcript copies. Budget memory from type/property counts, representative declaration/value sizes, live copies and batch fanout, then verify peak memory experimentally. Preserve UMF meaning and unknown content.
+
+This decision refines ADR-002/008 and implements PRD RES-05/06. It supersedes earlier assumptions that all semantic validation or key preparation must be database-owned. Native key encoding may remain when its measured cost and value support that choice. Stronger SQL-only or protected deployment guarantees must name their separate requirements, costs and qualification; they cannot silently become the ordinary embedding baseline.
+
 ## Database-owned key derivation — owner direction 2026-10-15
 
 The accepted catalog and actual native typed values are the key derivation

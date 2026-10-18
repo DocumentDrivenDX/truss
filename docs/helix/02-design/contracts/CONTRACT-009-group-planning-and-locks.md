@@ -19,6 +19,12 @@ ddx:
 
 # Contract: Group planning and locks
 
+## Owner clarification — trusted engine and validation cost, 2026-10-18
+
+Under ADR-008 and PRD RES-05/06, the application engine validates against a reusable immutable in-memory schema and prepares each batch once. PostgreSQL supplies atomic set-based effects, useful relational constraints and the locking/version/revision checks needed for concurrency. This contract does not require a complete second semantic execution, reconstruction of every history payload at finish/commit, or persistent per-record copies of the execution graph. Independent tests qualify semantic correctness; they are not a requirement to run the same oracle again inside every production transaction.
+
+A native check is retained when its prevented failure and measured value justify its cost. Current authorization, stale catalog/version rejection, operation atomicity, required journal/history, requested replay receipts and honest unknown-outcome recovery remain observable obligations. Previously published history and receipts remain readable. Exact declaration and value interpretation follows UMF; moving work out of PostgreSQL does not create competing semantics. Stronger direct-SQL enforcement is separately identified and qualified rather than imposed on ordinary trusted embedding.
+
 ## Owner decisions — 2026-10-07
 
 ADR-005 is owner-selected: request-enabled groups require a complete immutable request receipt persisted atomically with effects, including all-no-op results. Exact equal identity/input replays; unequal full input conflicts; unknown commit uses original lookup/retry custody. Retired/expired request identity cannot silently reapply. Receipt storage and its native protocol must join the selected installer before replay readiness; request-free groups remain independent.

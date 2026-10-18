@@ -22,6 +22,14 @@ kind: product
 
 # Product Requirements Document
 
+## Owner decision — validation placement and schema reuse, 2026-10-18
+
+Truss is a trusted application engine under ADR-008. It owns semantic validation; PostgreSQL does not have to independently revalidate every semantic detail of an engine write. Keep database enforcement where it provides high integrity, concurrency or isolation value at low measured cost. Requiring all validation, schema interpretation or effect reconstruction to run in PostgreSQL regardless of cost or complexity is not an accepted product requirement.
+
+Reuse an efficient immutable in-memory schema in the application, initialized once for each selected schema revision. Per-record work validates the record's values against that schema; it does not parse or rebuild the schema. Database catalog persistence remains necessary, but a persisted PostgreSQL cache does not satisfy this application-memory requirement.
+
+Cheap database constraints, transactions, uniqueness, typed foreign keys, locking, expected-version and catalog-revision checks remain appropriate. Place each additional check according to its concrete benefit and measured cost. Report engine enforcement as engine enforcement; direct SQL bypass does not acquire engine guarantees. Exact values, unknown content, authorization, atomic journal production and honest transaction/recovery outcomes remain required. This decision supersedes blanket database-validation or repeated semantic-reconstruction demands in earlier designs, rather than those observable guarantees.
+
 ## Owner decision — proportional resource controls, 2026-10-11
 
 Truss selects maintained stock psycopg 3 as the baseline Python PostgreSQL driver. Exact psycopg/libpq versions, execution mode and deployment tuples require qualification; this decision is not a released support claim. The host owns connections, pooling, credentials and outer transactions.
@@ -239,9 +247,15 @@ RES-03. Use supported maintained infrastructure for PostgreSQL transport. Custom
 
 RES-04. Strict transport accounting is optional. Require it only after separate owner adoption of a concrete consumer outcome, threat model and measurable guarantee. Tests and implementation proposals cannot independently strengthen product scope or make optional instrumentation a baseline release gate.
 
+RES-05 (P0). The trusted Truss engine owns semantic validation. A required database check must identify the integrity, concurrency or isolation failure it prevents and justify its cost and complexity on representative workloads. Independent database replay of the engine's complete semantic validation or history construction is not a baseline requirement.
+
+RES-06 (P0). Reuse one immutable application-memory schema per selected revision, with efficient indexed field/type lookup and no schema reconstruction per record. Invalidate or replace the selection when its catalog identity changes; reject a stale write rather than use an old schema. Bound cache memory using declaration counts and sizes, retained copies and measured peak memory. Qualify cold initialization and warm reuse on real schemas and the complete declared stress matrix; report unsupported scope explicitly.
+
 Owner decision — 2026-10-11: the Python release uses practical stock-PostgreSQL input/row/carrier limits, bounded queries and supported deadlines. Remove custom tracing, metrics and exact native allocation/cumulative-work instrumentation from this release. Keep basic safe logging and product correctness, authorization, transaction and retry guarantees.
 
 ## Acceptance Test Sketches
+
+Validation-placement acceptance (RES-05/06): load a schema once, process a batch and repeated operations, and verify that schema parsing/index construction does not grow with the record count. Exercise a revision change and a concurrent stale writer, current permission changes, invalid values, key conflicts, journal failure and rollback. Measure application cache memory, database statement counts and end-to-end latency on Pizza, Northwind, catalog and every unchanged stress workload. Correct behavior does not require the database to reproduce the complete engine validation or history payload.
 
 Resource acceptance (RES-01–04): exercise each published maximum and one-over input/value/page/batch/concurrency limit, long-running and lock-wait deadlines, large individual values and maximum supported fanout. Observe peak process memory and latency on the pinned supported tuple. Failures preserve prior caller work or retain explicit uncertainty; no truncation, premature pool reuse or blind write retry is permitted. Baseline qualification uses stock supported driver APIs; absence of custom wire hooks and unrun optional strict-profile tests cannot fail release. Review any proposed custom transport against a reproduced necessary deficiency and owner-approved ADR before implementation.
 

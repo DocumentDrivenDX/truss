@@ -46,6 +46,9 @@ The protocol: admit the original catalog/configuration/authority context, lock t
 - [ ] **US-012-AC3** — Given a write that changes no value, when it runs, then it writes nothing and does not raise the version.
 - [ ] **US-012-AC4** — Given each failure kind, when it occurs, then the error kind and its retry rule are as defined.
 
+- [ ] **US-012-AC5** (MUT-10/11, RES-05/06) — Given one selected schema revision and many records, the engine initializes one immutable application-memory schema and reuses its indexed definitions without per-record schema parsing or reconstruction. A revision change prevents stale writes.
+- [ ] **US-012-AC6** (MUT-12, RES-05/06) — Given the real schemas and full unchanged stress matrix, set-based batches preserve required validation, exactness, authorization, journal and transaction outcomes within published operating limits. Database checks have a documented integrity/concurrency/isolation purpose and measured cost; complete duplicate semantic execution is not required.
+
 ## Edge Cases
 
 - **Unknown values**: retained and reported, not an error.

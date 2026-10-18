@@ -23,6 +23,8 @@ US-012, TD-012, SD-003, TP-001 and CONTRACT-004/007/009. Planned tests are not r
 
 ## Scope and Objective
 
+Owner clarification, 2026-10-18: qualify MUT-10/11/12 and PRD RES-05/06. The independent test oracle must not become a mandatory repeated production validator in PostgreSQL. Tests observe the supported engine boundary and accurately distinguish any separate direct-SQL guarantee.
+
 Prove common mutation behavior, complete applicable diagnostics and defined retry advice without loss of transaction ownership.
 
 ## Acceptance Criteria Test Mapping
@@ -34,11 +36,18 @@ Prove common mutation behavior, complete applicable diagnostics and defined retr
 | US-012-AC3 | `exact_noop_does_not_advance` | No changed rows, derived effects or journal events; version unchanged | `@covers US-012-AC3` | Native integration | Same file; exact presence/value fixtures |
 | US-012-AC4 | `failure_inventory_matches_retry_contract` | Each finalized contract failure maps to its expected kind/scope/retry advice; fatal/unknown commit does not trigger blind retry | `@covers US-012-AC4` | Contract | `tests/mutations/failures.test.ts`; contract-derived inventory and named native/transport fault supplements |
 
+| US-012-AC5 | `schema_initialized_once_and_reused` | One immutable application schema per loaded revision; indexed lookup and stale-revision rejection | `@covers US-012-AC5` | Application plus native integration | Real schemas, repeated batches and concurrent revision change |
+| US-012-AC6 | `real_schemas_and_full_stress_preserve_batch_contract` | Required observable behavior, measured database-check costs, unchanged workload dimensions and operating limits | `@covers US-012-AC6` | End-to-end performance and fault integration | All declared stress cases and original Pizza/Northwind/catalog workflows |
+
 ## Executable Proof
 
 Future commands: `bun test tests/mutations/protocol.test.ts` and `bun test tests/mutations/failures.test.ts`. Actual files/harness do not exist. Tests carry criterion citations and receipts identify adapter/server/journal/ownership profiles. Missing required failure cases prevent full support.
 
 ## Data and Setup
+
+For US-012-AC5, count application schema parsing/index construction over cold initialization, repeated records, multiple batches and a revision change. Verify efficient indexed field resolution, source/epoch/revision selection and live permission behavior; measure retained cache and peak process memory. A persisted PostgreSQL cache alone does not pass.
+
+For US-012-AC6, run original Pizza, Northwind and catalog registration/seed/list/open/modify/reopen paths and every declared stress case without reducing type/field/record/edge/key counts, repeats or deadlines. Record statement counts, validation/journal work, commit cost, latency and memory. Compare each proposed database check with the failure it prevents and its operating cost. Invalid values, uniqueness/endpoint conflicts, stale revision/version, failed conditions, late write failure and uncertain settlement retain their required outcomes.
 
 Independent observer snapshots canonical, key, marker, journal and version state. Caller-scope cases include an earlier host sentinel write: ordinary refusal preserves it while removing call effects. Engine-owned cases prove rollback/commit behavior. Fault inventory is derived from finalized contract definitions, not implementation branches.
 
@@ -48,7 +57,7 @@ Catalog mismatch, uniqueness/endpoint refusal, deadlock, serialization, cancella
 
 ## Build Handoff
 
-Consume the existing failure-order inventory/red tests, select exact equality and original failure/containment producers, then implement the shared pipeline. All four criteria and ownership/fault supplements block closeout. A complete error enum without observed state/retry behavior is insufficient.
+Consume the existing failure-order inventory/red tests, select exact equality and original failure/containment producers, then implement the shared pipeline. All six criteria and ownership/fault supplements block closeout. A complete error enum without observed state/retry behavior is insufficient.
 
 
 ## Complete diagnostics and original transaction outcome

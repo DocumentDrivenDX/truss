@@ -73,6 +73,12 @@ MUT-07. A caller can apply several operations as one atomic group, with one orig
 MUT-08. A caller can give a group a request identifier so that applying it again returns the original results and changes nothing, including when two identical requests arrive at once, and reuse with different inputs is refused (FR-54).
 MUT-09. A caller can run any operation or group inside a transaction it controls, see its effects, and roll it back, leaving nothing behind (FR-55).
 
+MUT-10 (RES-05). The trusted application engine owns semantic validation. Database checks must justify their integrity/concurrency/isolation benefit against measured cost and complexity. Complete independent native semantic replay is not required.
+
+MUT-11 (RES-06). Load or compile an immutable schema into application-memory indexes once per selected revision and reuse it for every record and batch. Per-record value validation must not rebuild the schema; a changed revision invalidates the selection before a stale write can succeed.
+
+MUT-12 (RES-05/06). Prepare batches once and use set-based writes while preserving atomicity, exact values, unknown data, current permissions, expected versions, catalog-race detection, required history and recovery behavior. Verify these outcomes on the real schemas and every declared stress case at its unchanged dimensions and operating limits.
+
 ### Non-Functional Requirements
 
 - **Correctness**: tested against the stale-write cases of SPIKE-003 (head row detects under both isolation levels; advisory-only and new-row-per-revision do not).

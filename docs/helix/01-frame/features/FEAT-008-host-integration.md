@@ -17,6 +17,8 @@ ddx:
 
 ## Baseline host requirements — owner decision 2026-10-11
 
+Owner clarification, 2026-10-18: HST-10 (RES-05/06). The trusted host/engine retains efficient immutable application-memory schema indexes once per revision, reusing them across records and operations. Database persistence or native caching is not a substitute. Publish measured cache size, cold/warm cost and invalidation behavior. Additional database validation requires a concrete value/cost justification; preserve the actual enforcement-layer distinction in support reports.
+
 HST-07. The Python implementation uses maintained stock psycopg 3 through supported APIs. It accepts host-owned authenticated connections and preserves HST-03 transaction/pooling behavior; qualified exact version/mode/deployment claims remain required.
 
 HST-08 (RES-01/02). Operations enforce published input/value/page/batch and concurrency limits, deadlines and bounded toolkit processing. Measure peak memory under maximum admitted loads and failure schedules. Row limits alone do not bound a single value. No baseline guarantee of exact driver allocation accounting or a hard process memory ceiling is made.
