@@ -80,6 +80,23 @@ Invalid inputs fall back to that path so public refusal and failed-condition
 precedence remain unchanged. Qualification must establish both path agreement
 and actual cache reuse, not infer them from a catalog-view cache test.
 
+### Single-function execution guard
+
+Known toolkit function calls combine fresh transaction identity and timeout
+observations with the function invocation in one statement. A materialized guard
+row must match the adopted transaction and selected timeout before the function
+can execute. With a matching timeout, one function call therefore uses three
+commands: savepoint, guarded call and savepoint release. Adoption likewise uses
+three commands. A cold write may need an additional schema-basis function call.
+
+If the caller changed its timeout, the guarded statement observes that change
+without executing the function. The adapter then uses its ordinary timeout
+setting and restoration path and invokes the function once. This exceptional
+path costs additional commands; it does not repeat a mutation. It does not rely
+on changing the deadline of an already-running SQL statement. Arbitrary SQL and
+general callbacks retain the existing containment path. The closed function
+inventory selects this optimization, not Weft language coverage.
+
 ## Database-owned key derivation — owner direction 2026-10-15
 
 The accepted catalog and actual native typed values are the key derivation

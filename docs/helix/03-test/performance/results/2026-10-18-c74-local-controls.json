@@ -1,0 +1,77 @@
+{
+  "candidate": "C74",
+  "status": "local focused and real-schema controls passed; full hosted matrix not qualified",
+  "sourceCommit": "7fcb4c5a9719c1a9a86468e1a2a05510cbf8c80b",
+  "sourceWorkingTreeDirty": true,
+  "wheelSha256": "c9c60f0ee523221cb7af5ae28a0c6d29eaecd76582f672de50efa79d7d1b827f",
+  "nativeManifestSha256": "38876116356364408e2c1de39d73b4561f39e08638474b16d4686c500dcdd097",
+  "runtimePayloads": 528,
+  "compiler": "published weft-sql==0.4.42",
+  "nativePostgres": "18.6",
+  "python": "3.11.17",
+  "controls": {
+    "tests": 44,
+    "elapsedSeconds": 53.707,
+    "result": "passed",
+    "nativeTests": 43,
+    "pureTests": 1
+  },
+  "realSchemas": [
+    {
+      "schema": "pizza",
+      "loadedObjects": 1000,
+      "idReads": 1000,
+      "committedSingleUpdates": 200,
+      "medianCommittedUpdateMs": 22.9310625,
+      "p95CommittedUpdateMs": 65.510125,
+      "executeSubmissionsPerCommittedUpdate": 10.0,
+      "commitCallsPerCommittedUpdate": 1.0
+    },
+    {
+      "schema": "northwind",
+      "loadedObjects": 1000,
+      "idReads": 1000,
+      "committedSingleUpdates": 200,
+      "medianCommittedUpdateMs": 23.807021,
+      "p95CommittedUpdateMs": 51.80125,
+      "executeSubmissionsPerCommittedUpdate": 10.0,
+      "commitCallsPerCommittedUpdate": 1.0
+    },
+    {
+      "schema": "catalog",
+      "loadedObjects": 1000,
+      "idReads": 1000,
+      "committedSingleUpdates": 200,
+      "medianCommittedUpdateMs": 25.0824585,
+      "p95CommittedUpdateMs": 38.937958,
+      "executeSubmissionsPerCommittedUpdate": 10.0,
+      "commitCallsPerCommittedUpdate": 1.0
+    }
+  ],
+  "retained": {
+    "nativeControls": {
+      "path": "2026-10-18-c74-nativeControls.gz",
+      "uncompressedSha256": "a3c0560e36159f80ffb061fa5f9c0c057240525556365626d53c1bd2099b39cf"
+    },
+    "packageParity": {
+      "path": "2026-10-18-c74-packageParity.gz",
+      "uncompressedSha256": "0b8457baf77735f93f5fc65c4d354c0dd7267c15358dd59d999ddb43fd4e94dd"
+    },
+    "real1000": {
+      "path": "2026-10-18-c74-real1000.gz",
+      "uncompressedSha256": "d2b0d576fee76525133b3ea58d2cb84605513659849c557ae4c7bd6319e5c129"
+    },
+    "real1000Samples": {
+      "path": "2026-10-18-c74-real1000Samples.gz",
+      "uncompressedSha256": "2c9fb47d789f3bf417ffe803c12de49906f55951450100e69ea6dd2fdf0d8802"
+    }
+  },
+  "scope": "Clean frozen local wheel from staged uncommitted source; no full hosted qualification. The supplemental earlier 100-row sample run is not substituted for the assigned 1000-row run. Next changes require their own qualification.",
+  "applicationMemory": {
+    "processLifetimePeakRssBytes": 198623232,
+    "retainedSchemaCacheEstimatedBytes": 332056,
+    "retainedSchemaCacheEntries": 2,
+    "schemaCacheBudgetBytes": 134217728,
+    "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+  }
+}

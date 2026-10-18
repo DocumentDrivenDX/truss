@@ -79,11 +79,22 @@ class RecordSchemaOracleTests(base.PublicCatalogRuntimeTests):
             value=SequenceValue(items=(child,)*4)
             containers.append({'cell':wire(value),'property':prop,'python':schema.validate_values('1',pin,(AuthoredValue(name='items',value=value),)).valid})
         # Each independently admitted value has the ordinary SQL deadline. Do
-        # not combine the entire correctness corpus into one timed operation.
-        rows=[(i,self.admin.execute(
-            'SELECT truss.valid_property_value(%s::jsonb,jsonb_populate_record(NULL::truss.prop_def,%s::jsonb))',
-            (json.dumps(case['cell']),json.dumps(case['property']))).fetchone()[0])
-            for i,case in enumerate(containers)]
+        # not combine the entire correctness corpus into one timed operation;
+        # identify the exact input if one native validator call times out.
+        def cell_nodes(cell):
+            kind=cell.get('kind')
+            if kind=='sequence':return 1+sum(cell_nodes(item) for item in cell['items'])
+            if kind=='map':return 1+sum(1+cell_nodes(entry['value']) for entry in cell['entries'])
+            return 1
+        rows=[]
+        for i,case in enumerate(containers):
+            cell=case['cell'];members=len(cell.get('items',cell.get('entries',[])))
+            with self.subTest(container_case=i,cardinality=case['property']['cardinality'],
+                    members=members,cell_nodes=cell_nodes(cell),cell_bytes=len(json.dumps(cell))):
+                native=self.admin.execute(
+                    'SELECT truss.valid_property_value(%s::jsonb,jsonb_populate_record(NULL::truss.prop_def,%s::jsonb))',
+                    (json.dumps(cell),json.dumps(case['property']))).fetchone()[0]
+                rows.append((i,native))
         cm=[{'case':i,'cardinality':containers[i]['property']['cardinality'],'members':len(containers[i]['cell'].get('items',containers[i]['cell'].get('entries',[]))),'python':containers[i]['python'],'native':native} for i,native in rows if containers[i]['python'] is not native]
         self.assertFalse(cm,cm)
 

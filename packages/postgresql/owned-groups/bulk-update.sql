@@ -6,6 +6,9 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SE
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;installation truss.catalog_runtime_installation%ROWTYPE;
  input jsonb;objects jsonb;transitions jsonb;results jsonb;expected jsonb;actual jsonb;
  dictionary jsonb:='{}';history_basis jsonb;image_revision int;selected_type int;property record;pin record;type_pin text;
+ dictionary_keys text[]:=ARRAY[]::text[];dictionary_values jsonb[]:=ARRAY[]::jsonb[];
+ codec_keys text[]:=ARRAY[]::text[];codec_values jsonb[]:=ARRAY[]::jsonb[];
+ namespace_keys text[]:=ARRAY[]::text[];namespace_values jsonb[]:=ARRAY[]::jsonb[];map_count int;
  property_pins jsonb;property_order jsonb;source record;actor oid;total int;counted int;
  namespaces jsonb:='{}';compiled_namespace bytea;definition record;keys jsonb;route record;
  slot_results jsonb;projection_problem boolean;journal_refs jsonb;key_taken boolean;unchanged_problem boolean;
@@ -138,8 +141,12 @@ BEGIN
    RAISE EXCEPTION 'current property and item readers required' USING ERRCODE='42501';END IF;
   SELECT metadata-'propertyAccess' INTO STRICT history_basis FROM truss.runtime_type_schema
    WHERE rev=image_revision AND type_id=selected_type;
-  dictionary:=dictionary||jsonb_build_object(jsonb_build_array(image_revision,selected_type)::text,history_basis);
+  map_count:=cardinality(dictionary_keys)+1;
+  dictionary_keys[map_count]:=jsonb_build_array(image_revision,selected_type)::text;
+  dictionary_values[map_count]:=history_basis;
  END LOOP;
+ SELECT coalesce(jsonb_object_agg(k,v),'{}'::jsonb) INTO dictionary
+  FROM unnest(dictionary_keys,dictionary_values) AS entries(k,v);
  -- Preserve the preflight's complete ordered key simulation and locks. Lower
  -- only the already admitted physical key changes; unchanged memberships keep
  -- their original bytes and permanent reservations are never removed.
@@ -148,15 +155,23 @@ BEGIN
    SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected_type,definition.key_num);
    codec:=truss.runtime_owned_key_codec_metadata(selected_type,definition.key_num);
    IF codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32<=4194304 THEN
-    codecs:=codecs||jsonb_build_object(selected_type::text||':'||definition.key_num::text,codec);
+    map_count:=cardinality(codec_keys)+1;
+    codec_keys[map_count]:=selected_type::text||':'||definition.key_num::text;
+    codec_values[map_count]:=codec;
     codec_bytes:=codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32;
    END IF;
    compiled_namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
     'sourceEpoch',installation.source_epoch::text,'typeId',selected_type::text,'keyNumber',definition.key_num::text,
     'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
-   namespaces:=namespaces||jsonb_build_object(selected_type::text||':'||definition.key_num::text,encode(compiled_namespace,'hex'));
+   map_count:=cardinality(namespace_keys)+1;
+   namespace_keys[map_count]:=selected_type::text||':'||definition.key_num::text;
+   namespace_values[map_count]:=to_jsonb(encode(compiled_namespace,'hex'));
   END LOOP;
  END LOOP;
+ SELECT coalesce(jsonb_object_agg(k,v),'{}'::jsonb) INTO codecs
+  FROM unnest(codec_keys,codec_values) AS entries(k,v);
+ SELECT coalesce(jsonb_object_agg(k,v),'{}'::jsonb) INTO namespaces
+  FROM unnest(namespace_keys,namespace_values) AS entries(k,v);
  WITH cells AS MATERIALIZED (
   SELECT o.value object,k.key_num,decode(namespaces->>((o.value->'after'->>'type_id')||':'||k.key_num::text),'hex') namespace,
    truss.runtime_owned_key_tuple_in_metadata(k.type_id,k.key_num,
@@ -269,7 +284,7 @@ BEGIN
   ON o.id=(v.value->'after'->>'id')::bigint AND o.type_id=(v.value->'after'->>'type_id')::int
   WHERE to_jsonb(o) IS DISTINCT FROM v.value->'after') THEN
   RAISE EXCEPTION 'exact batch object updates required' USING ERRCODE='55000';END IF;
- WITH object_properties AS MATERIALIZED (
+ WITH object_properties AS NOT MATERIALIZED (
   SELECT value object,value->'before'->'props' before_props,value->'after'->'props' after_props
    FROM jsonb_array_elements(objects) WHERE value->'changed'='true'::jsonb),
  semantic AS MATERIALIZED (
@@ -290,13 +305,14 @@ BEGIN
    'after',truss.runtime_owned_history_record_in_metadata(o.object->'after',o.object->'identity',dictionary->jsonb_build_array((o.object->'after'->>'rev')::int,(o.object->'after'->>'type_id')::int)::text))
   FROM object_properties o WHERE o.object->'changed'='true'::jsonb),
  allocated AS MATERIALIZED (
-  SELECT *,nextval('truss.journal_seq') seq,clock_timestamp() at FROM semantic ORDER BY operation_index,ordinal),
+  SELECT operation_index,ordinal,nextval('truss.journal_seq') seq,clock_timestamp() at
+  FROM semantic ORDER BY operation_index,ordinal),
  events AS MATERIALIZED (
-  SELECT operation_index,ordinal,seq,at,object_id,type_id,version,revision,
-   event->>'operation' operation,(event->>'propertyId')::int property_id,event||jsonb_build_object('interfaceVersion','truss-history-event/0.2.0-proposal','sourceEpoch',installation.source_epoch::text,
-   'historyProfile','truss-native-owned-mutation/0.1','xid',attempt.writer_xid::text,'seq',seq::text,'identity',identity,
-   'eventVersion',version::text,'eventCatalogRevision',revision::text,
-   'origin',origin_payload) payload FROM allocated),
+  SELECT s.operation_index,s.ordinal,a.seq,a.at,s.object_id,s.type_id,s.version,s.revision,
+   s.event->>'operation' operation,(s.event->>'propertyId')::int property_id,s.event||jsonb_build_object('interfaceVersion','truss-history-event/0.2.0-proposal','sourceEpoch',installation.source_epoch::text,
+   'historyProfile','truss-native-owned-mutation/0.1','xid',attempt.writer_xid::text,'seq',a.seq::text,'identity',s.identity,
+   'eventVersion',s.version::text,'eventCatalogRevision',s.revision::text,
+   'origin',origin_payload) payload FROM semantic s JOIN allocated a USING(operation_index,ordinal)),
  digests AS MATERIALIZED (
   SELECT operation_index,count(*) amount,encode(sha256(convert_to(jsonb_agg(payload ORDER BY ordinal)::text,'UTF8')),'hex') digest
   FROM events GROUP BY operation_index)
@@ -316,20 +332,25 @@ BEGIN
   SELECT seq,at,xid,entity_kind,entity_id,entity_type,ver,op,prop_id,old_value,rev,new_value,origin FROM expected_rows
   RETURNING seq,at,xid,entity_kind,entity_id,entity_type,ver,op,prop_id,old_value,rev,
    sha256(convert_to(new_value::text,'UTF8')) new_value_hash,
-   sha256(convert_to(origin::text,'UTF8')) origin_hash)
+   sha256(convert_to(origin::text,'UTF8')) origin_hash,
+   new_value->'bytesSha256' event_sha256,origin->'bytesSha256' origin_sha256)
  SELECT coalesce(bool_or(ROW(i.seq,i.at,i.xid,i.entity_kind,i.entity_id,i.entity_type,i.ver,i.op,i.prop_id,i.old_value,i.rev)
   IS DISTINCT FROM ROW(e.seq,e.at,e.xid,e.entity_kind,e.entity_id,e.entity_type,e.ver,e.op,e.prop_id,e.old_value,e.rev)
   OR ROW(i.new_value_hash,i.origin_hash) IS DISTINCT FROM ROW(e.new_value_hash,e.origin_hash)),false),
-  coalesce(jsonb_agg(jsonb_build_object('index',e.operation_index,'seq',e.seq,'at',e.at) ORDER BY e.seq),'[]')
+  coalesce(jsonb_agg(jsonb_build_object('index',e.operation_index,'reference',jsonb_build_object(
+   'referenceProfile','truss-native-journal-reference/0.1','seq',i.seq,'at',i.at,'xid',i.xid,
+   'entity_kind',i.entity_kind,'entity_id',i.entity_id,'entity_type',i.entity_type,'ver',i.ver,
+   'op',i.op,'prop_id',i.prop_id,'old_value',i.old_value,'rev',i.rev,
+   'eventSha256',i.event_sha256,'originSha256',i.origin_sha256)) ORDER BY i.seq),'[]')
  INTO projection_problem,journal_refs
  FROM fingerprints e FULL JOIN inserted i ON i.seq=e.seq;
  IF projection_problem THEN RAISE EXCEPTION 'exact batch update journals required' USING ERRCODE='55000';END IF;
  -- The physical journal owns the canonical event and origin payloads. Object
  -- transitions retain compact, payload-free references with their exact digests.
  WITH journal_sets AS MATERIALIZED (
-  SELECT (r.value->>'index')::int operation_index,jsonb_agg(truss.runtime_owned_journal_reference(j) ORDER BY j.seq) rows
-  FROM jsonb_array_elements(journal_refs) r JOIN truss.journal j ON j.seq=(r.value->>'seq')::bigint AND j.at=(r.value->>'at')::timestamptz
-  GROUP BY (r.value->>'index')::int),
+  SELECT (r.value->>'index')::int operation_index,
+   jsonb_agg(r.value->'reference' ORDER BY (r.value->'reference'->>'seq')::bigint) rows
+  FROM jsonb_array_elements(journal_refs) r GROUP BY (r.value->>'index')::int),
  expected_rows AS MATERIALIZED (
   SELECT attempt.id attempt_id,(o.value->>'index')::int operation_index,attempt.writer_xid writer_xid,
    (o.value->'after'->>'id')::bigint object_id,(o.value->'after'->>'type_id')::int type_id,
@@ -361,8 +382,8 @@ BEGIN
  IF projection_problem THEN RAISE EXCEPTION 'exact batch update transitions required' USING ERRCODE='55000';END IF;
  WITH journal_sets AS MATERIALIZED (
   SELECT (value->>'index')::int operation_index,jsonb_agg(jsonb_build_object('sourceEpoch',installation.source_epoch::text,
-   'historyProfile','truss-native-owned-mutation/0.1','xid',attempt.writer_xid::text,'seq',value->>'seq')
-    ORDER BY (value->>'seq')::bigint) events FROM jsonb_array_elements(journal_refs) GROUP BY (value->>'index')::int),
+   'historyProfile','truss-native-owned-mutation/0.1','xid',attempt.writer_xid::text,'seq',value->'reference'->>'seq')
+    ORDER BY (value->'reference'->>'seq')::bigint) events FROM jsonb_array_elements(journal_refs) GROUP BY (value->>'index')::int),
  slots AS (
   SELECT (o.value->>'index')::int operation_index,jsonb_build_object('operation','update_object',
    'outcome',CASE WHEN o.value->'changed'='true'::jsonb THEN 'changed' ELSE 'unchanged' END,'identity',o.value->'identity',

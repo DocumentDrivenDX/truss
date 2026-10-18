@@ -152,7 +152,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/public-workflows"
-          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --matrix-case small --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-workflows/report.json" 2>&1 | tee "$RUNNER_TEMP/public-workflows/run.log"
+          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --count-sql-submissions --matrix-case small --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-workflows/report.json" 2>&1 | tee "$RUNNER_TEMP/public-workflows/run.log"
 
       - name: Record original public workload status
         if: always() && (github.ref_type == 'tag' || inputs.public_workflows || (github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'))
@@ -276,6 +276,10 @@ jobs:
         run: python -m unittest test_decimal_scale2_native.DecimalScale2Tests test_decimal_scale2_native.DecimalScale208Tests
       - name: Run public registration-owned rebinding workflows
         run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_catalog_rebind_native test_required_catalog_rebind_native
+      - name: Run pending receipt visibility and bundled group preparation
+        run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_receipt_visibility_native.ReceiptVisibilityTests
+      - name: Verify managed-function statement budget and host fault containment
+        run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_managed_function_guard test_managed_function_guard_native.ManagedFunctionGuardTests test_psycopg_host_native.PsycopgHostNativeTests
       - name: Run public recursive-container workflows
         run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_recursive_containers_native
       - name: Upgrade the published native63 predecessor
@@ -509,7 +513,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/public-stress"
           load_size=100
           if [ "$STRESS_CASE" = large ]; then load_size=1000; fi
-          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --forbid-external-javascript --capture-failure-diagnostics --matrix-case "$STRESS_CASE" --bulk-size "$load_size" --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-stress/report.json" 2>&1 | tee "$RUNNER_TEMP/public-stress/run.log"
+          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --forbid-external-javascript --capture-failure-diagnostics --count-sql-submissions --matrix-case "$STRESS_CASE" --bulk-size "$load_size" --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/public-stress/report.json" 2>&1 | tee "$RUNNER_TEMP/public-stress/run.log"
       - name: "Record selected stress workload status"
         if: "always()"
         env:

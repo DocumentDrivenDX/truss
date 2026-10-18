@@ -1128,7 +1128,7 @@ class CatalogReferenceAssembly:
             raw=bytes(cursor.fetchone()[0])
             if json.loads(raw)['revision']!=str(revision):raise ValueError('Original report revision required')
             return CatalogReport(revision,raw)
-        return _catalog_failure(self._host._run_operation(transaction,observe))
+        return _catalog_failure(self._host._run_operation(transaction,observe, function_call=True))
 
     def catalog_view_request(self,*,definition_count: str='65536',encoded_bytes: str='16777216') -> CatalogViewRequest:
         from .catalog_view import CatalogViewRequest, CatalogViewLimits, CurrentCatalogSelection, CompleteCatalogScope
@@ -1272,7 +1272,7 @@ class CatalogReferenceAssembly:
             view=cached_catalog_view(bytes(raw),layout,expected_release=manifest['releaseId'],expected_digest=digest)
             if len(view.definitions)>count or len(view.original_bytes)>size:return CatalogViewUnavailable(reason='resource')
             return CatalogViewAvailable(view=view)
-        result=self._host._run_operation(transaction,observe)
+        result=self._host._run_operation(transaction,observe, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation' and result.error.sql_state=='54000':
             return Ok(CatalogViewUnavailable(reason='resource'))
         return _catalog_failure(result)
@@ -1305,7 +1305,7 @@ class CatalogReferenceAssembly:
             objects=tuple(_object_result(json.dumps(item).encode(),manifest,digest).object for item in basis['objects'])
             if tuple((o.type_id,o.id) for o in objects)!=tuple(sorted(set((o.type_id,o.id) for o in objects))):raise ValueError('Ordered unique traversal terminals required')
             return TraversalComplete(objects=objects,catalog_revision=int(basis['catalogRevision']))
-        result=self._host._run_operation(transaction,observe)
+        result=self._host._run_operation(transaction,observe, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             if result.error.sql_state=='22023':return Ok(ObjectReadInvalid(code='selection'))
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
@@ -1336,7 +1336,7 @@ class CatalogReferenceAssembly:
             raw=cursor.fetchone()[0]
             if raw is None:return ObjectNotFound()
             return _object_result(raw,manifest,digest)
-        result=self._host._run_operation(transaction,observe)
+        result=self._host._run_operation(transaction,observe, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
             if reason:return Ok(ObjectReadUnavailable(reason=reason))
@@ -1367,7 +1367,7 @@ class CatalogReferenceAssembly:
             return ImportRuntimeContext(layout_profile=ProfilePin(**value['layoutProfile']),import_profile=ProfilePin(**value['importProfile']),
                 value_profile=ProfilePin(**value['valueProfile']),payload_profile=ProfilePin(**value['importPayloadProfile']),
                 catalog=ImportCatalogPin(revision=value['catalog']['revision'],model_bundle_sha256=value['catalog']['modelBundleSha256']))
-        return self._host._run_operation(transaction,observe)
+        return self._host._run_operation(transaction,observe, function_call=True)
 
     @_active_operation
     def owned_import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[OwnedImportRuntimeContext]:
@@ -1382,7 +1382,7 @@ class CatalogReferenceAssembly:
                 import_profile=ProfilePin(**value['ownedImportProfile']),value_profile=ProfilePin(**value['valueProfile']),
                 payload_profile=ProfilePin(**value['ownedImportPayloadProfile']),
                 catalog=ImportCatalogPin(revision=value['catalog']['revision'],model_bundle_sha256=value['catalog']['modelBundleSha256']))
-        return self._host._run_operation(transaction,observe)
+        return self._host._run_operation(transaction,observe, function_call=True)
 
     @_active_operation
     def owned_object_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,
@@ -1430,7 +1430,7 @@ class CatalogReferenceAssembly:
             reference=json.loads(bytes(raw))
             return EdgeImportRecord(identity=EdgeImportIdentity(relationship_definition_pin=reference['definitionPin'],
                 source=source_endpoint,target=target_endpoint),payload=payload,payload_profile=builder.payload_profile)
-        return self._host._run_operation(transaction,observe)
+        return self._host._run_operation(transaction,observe, function_call=True)
 
     @_active_operation
     def object_import_record_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,
@@ -1456,7 +1456,7 @@ class CatalogReferenceAssembly:
                 value_profile=ProfilePin(**context['valueProfile']),payload_profile=ProfilePin(**context['importPayloadProfile']),
                 catalog=ImportCatalogPin(revision=context['catalog']['revision'],model_bundle_sha256=context['catalog']['modelBundleSha256']))
             return ObjectImportRecord(identity=identity,payload=builder.object_payload(values,source=source),payload_profile=builder.payload_profile)
-        return self._host._run_operation(transaction,observe)
+        return self._host._run_operation(transaction,observe, function_call=True)
 
     @_active_operation
     def reached_in_transaction(self,transaction: TransactionHandle,token: str,*,maximum_token_bytes: int=16384,
@@ -1483,7 +1483,7 @@ class CatalogReferenceAssembly:
             value=json.loads(bytes(cursor.fetchone()[0]))
             if value['outcome']=='unavailable':return ReceiptVisibilityUnavailable(reason=value['reason'])
             return ReceiptIncluded(included=value['included'],comparison_profile=ProfilePin(**value['comparisonProfile']))
-        result=self._host._run_operation(transaction,observe)
+        result=self._host._run_operation(transaction,observe, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'42501':'authorization','0A000':'epoch_profile','54000':'resource','55P03':'observation_integrity','55000':'observation_integrity'}.get(result.error.sql_state)
             if reason:return Ok(ReceiptVisibilityUnavailable(reason=reason))
@@ -1526,7 +1526,7 @@ class CatalogReferenceAssembly:
             if edge_id is not None:return EdgeFound(edge=_edge_result(value))
             token=None if value['continuation'] is None else EdgePageCursor(content=_bytes(value['continuation']))
             return EdgePage(edges=tuple(_edge_result(v) for v in value['edges']),catalog_revision=value['catalogRevision'],continuation=token)
-        result=self._host._run_operation(transaction,observe)
+        result=self._host._run_operation(transaction,observe, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'0A000':'profile','54000':'resource','55P03':'observation','P1002':'context'}.get(result.error.sql_state)
             if reason:return Ok(ObjectReadUnavailable(reason=reason))
@@ -1572,7 +1572,7 @@ class CatalogReferenceAssembly:
                     type_id=int(continuation['typeId']),definition_pin=continuation['definitionPin'],catalog_revision=int(continuation['catalogRevision']),after_id=int(continuation['afterId']))
             return ObjectPage(objects=tuple(_object_result(json.dumps(value).encode(),manifest,digest).object for value in basis['objects']),
                 catalog_revision=basis['catalogRevision'],continuation=following)
-        result=self._host._run_operation(transaction,observe)
+        result=self._host._run_operation(transaction,observe, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             if result.error.sql_state=='22023':return Ok(ObjectReadInvalid(code='cursor'))
             reason={'0A000':'profile','P1002':'context','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
@@ -1624,7 +1624,7 @@ class CatalogReferenceAssembly:
             value=json.loads(bytes(raw))
             return CatalogDefinitionReference(kind='type',definition_pin=value['definitionPin'],type_id=value['typeId'],
                 authored_identity=value['authoredIdentity'],owner=QualifiedOwner(document_id=value['owner']['documentId'],module_id=value['owner']['moduleId']))
-        return self._host._run_operation(transaction,observe)
+        return self._host._run_operation(transaction,observe, function_call=True)
 
     @_active_operation
     def get_relationship_reference_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str) -> Outcome[CatalogDefinitionReference | None]:
@@ -1639,7 +1639,7 @@ class CatalogReferenceAssembly:
             value=json.loads(bytes(raw))
             return CatalogDefinitionReference(kind='relationship',definition_pin=value['definitionPin'],relationship_id=value['relationshipId'],
                 authored_identity=value['authoredIdentity'],owner=QualifiedOwner(document_id=value['owner']['documentId'],module_id=value['owner']['moduleId']))
-        return self._host._run_operation(transaction,observe)
+        return self._host._run_operation(transaction,observe, function_call=True)
 
     @property
     def group_selection(self) -> CapabilitySelection[Literal['group']]:
@@ -1687,7 +1687,7 @@ class CatalogReferenceAssembly:
             content=base64.b64decode(value['contentBase64'],validate=True)
             if sha256(content).hexdigest()!=value['sha256']:raise ValueError('Exact retained native provenance required')
             return ImportSourceFound(load_id=value['loadId'],content=content,sha256=value['sha256'],writer_xid=value['writerXid'])
-        result=self._host._run_operation(transaction,read)
+        result=self._host._run_operation(transaction,read, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'42501':'authorization','22023':'context','0A000':'profile','55000':'integrity','54000':'resource','P1010':'observation','55P03':'observation'}.get(result.error.sql_state)
             if reason:return Ok(ImportSourceUnavailable(reason=reason))
@@ -1729,7 +1729,7 @@ class CatalogReferenceAssembly:
             record=base64.b64decode(value['recordBase64'],validate=True);event=retained(value['event'])
             if value['outcome']=='deleted':return HistoricalDeleted(deletion_version=int(value['version']),before=record,event=event)
             return HistoricalRecord(record=record,event=event)
-        result=self._host._run_operation(transaction,read)
+        result=self._host._run_operation(transaction,read, function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'42501':'authorization','54000':'resource','55P03':'observation','0A000':'profile','55000':'integrity','22023':'context','P1010':'history'}.get(result.error.sql_state)
             if reason:return Ok(HistoryUnavailable(reason=reason))
@@ -1807,7 +1807,7 @@ class CatalogReferenceAssembly:
             return FeedPage(consumer_id=value['consumerId'],registration_id=value['registrationId'],
                 prior=FeedCursor(content=base64.b64decode(value['priorBase64'],validate=True)),next=FeedCursor(content=base64.b64decode(value['nextBase64'],validate=True)),
                 content=content,sha256=value['sha256'],writer_xid=value['writerXid'],safe_watermark_xid=value['safeWatermarkXid'],outcome=value['outcome'])
-        return self._feed_result(self._host._run_operation(transaction,read))
+        return self._feed_result(self._host._run_operation(transaction,read, function_call=True))
 
     @_active_operation
     def reread_feed_in_transaction(self,transaction: TransactionHandle,page: FeedPage,*,maximum_facts: int=4096,maximum_bytes: int=8388608) -> Outcome[FeedPage | FeedUnavailable]:
@@ -1838,7 +1838,7 @@ class CatalogReferenceAssembly:
                 return FeedUnavailable(reason='integrity')
             return FeedPage(consumer_id=value['consumerId'],registration_id=value['registrationId'],prior=prior,next=next_cursor,
                 content=content,sha256=value['sha256'],writer_xid=value['writerXid'],safe_watermark_xid=value['safeWatermarkXid'],outcome=value['outcome'])
-        return self._feed_result(self._host._run_operation(transaction,read))
+        return self._feed_result(self._host._run_operation(transaction,read, function_call=True))
 
     @_active_operation
     def acknowledge_feed_with_receipt_in_transaction(self,transaction: TransactionHandle,page: FeedPage,*,destination_id: str,request_sha256: str,publication_id: str,receipt_bytes: bytes) -> Outcome[FeedReceiptAcknowledged | FeedUnavailable]:
@@ -1898,7 +1898,7 @@ class CatalogReferenceAssembly:
             cursor.execute('SELECT truss.acknowledge_feed(%s,%s,%s,%s,%s,%s)',(page.consumer_id,page.prior.content,page.next.content,page.sha256,manifest['releaseId'],digest),prepare=False)
             value=json.loads(bytes(cursor.fetchone()[0]))
             return FeedAcknowledged(outcome=value['outcome'],checkpoint=FeedCursor(content=base64.b64decode(value['checkpointBase64'],validate=True)))
-        return self._feed_result(self._host._run_operation(transaction,acknowledge))
+        return self._feed_result(self._host._run_operation(transaction,acknowledge, function_call=True))
 
     @_active_operation
     def reader_catalog_in_transaction(self,transaction: TransactionHandle,*,maximum_count: int=65536,maximum_bytes: int=1048576) -> Outcome[ReaderCatalog | CatalogInvalid | CatalogRefused | CatalogUnavailable]:
@@ -1910,7 +1910,7 @@ class CatalogReferenceAssembly:
             cursor.execute('SELECT truss.reader_catalog(%s,%s,%s,%s)',(maximum_count,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             basis=json.loads(bytes(cursor.fetchone()[0]))
             return ReaderCatalog(catalog_revision=basis['catalogRevision'],layout_profile=basis['layoutProfile'],modules=tuple(basis['modules']))
-        return self._reader_result(self._host._run_operation(transaction,read))
+        return self._reader_result(self._host._run_operation(transaction,read, function_call=True))
 
     @_active_operation
     def accepted_document_in_transaction(self,transaction: TransactionHandle,*,document_id: str,maximum_bytes: int=1048576) -> Outcome[AcceptedDocument | CatalogInvalid | CatalogRefused | CatalogUnavailable]:
@@ -1925,7 +1925,7 @@ class CatalogReferenceAssembly:
             basis=json.loads(bytes(cursor.fetchone()[0]));content=base64.b64decode(basis['contentBase64'])
             if sha256(content).hexdigest()!=basis['sha256']:raise ValueError('Exact accepted document digest required')
             return AcceptedDocument(document_id=basis['documentId'],document_revision=basis['documentRevision'],artifact_identity=basis['artifactIdentity'],content=content,sha256=basis['sha256'],catalog_revision=basis['catalogRevision'],registration_id=basis['registrationId'],source_catalog_revision=basis['sourceCatalogRevision'],validation_bytes=json.dumps(basis['validation'],ensure_ascii=False,separators=(',',':')).encode('utf8'))
-        return self._reader_result(self._host._run_operation(transaction,read))
+        return self._reader_result(self._host._run_operation(transaction,read, function_call=True))
 
     @_active_operation
     def lookup_key_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,key_id: str,
@@ -1949,11 +1949,11 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         def read(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute('SELECT truss.lookup_string_key(%s,%s,%s,%s,%s,%s,NULL,%s,%s,%s)',
-                (document_id,module_id,record_id,key_id,original_document,encoded_values,maximum_bytes,manifest['releaseId'],digest),prepare=False)
+            cursor.execute('SELECT truss.lookup_string_key(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+                (document_id,module_id,record_id,key_id,original_document,encoded_values,None,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             raw=cursor.fetchone()[0]
             return ObjectNotFound() if raw is None else _object_result(raw,manifest,digest)
-        result=self._host._run_operation(transaction,read)
+        result=self._host._run_operation(transaction,read,function_call=True)
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             if result.error.sql_state=='22023':return Ok(ObjectReadInvalid(code='source_or_key'))
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)

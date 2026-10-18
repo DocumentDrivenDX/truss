@@ -24,28 +24,30 @@ REVOKE ALL ON FUNCTION truss.catalog_item_meaning(jsonb) FROM PUBLIC;
 -- no inferred item declaration; known properties validate their original item.
 CREATE FUNCTION truss.valid_flat_cell(cell jsonb) RETURNS boolean
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE member jsonb;cell_node jsonb;entry jsonb;pending jsonb:=jsonb_build_array(jsonb_build_object('cell',cell,'depth',0));depth int;count_nodes int:=0;
+DECLARE member jsonb;cell_node jsonb;entry jsonb;pending jsonb[];head int:=1;tail int:=1;depth int;count_nodes int:=0;
 BEGIN
  IF cell IS NULL OR octet_length(cell::text)>1048576 THEN RETURN false;END IF;
- WHILE jsonb_array_length(pending)>0 LOOP
-  entry:=pending->0;pending:=pending-0;cell_node:=entry->'cell';depth:=(entry->>'depth')::int;count_nodes:=count_nodes+1;
+ IF truss.valid_scalar_cell(cell) IS TRUE THEN RETURN true;END IF;
+ pending:=array_fill(NULL::jsonb,ARRAY[4096]);pending[1]:=jsonb_build_object('cell',cell,'depth',0);
+ WHILE head<=tail LOOP
+  entry:=pending[head];pending[head]:=NULL;head:=head+1;cell_node:=entry->'cell';depth:=(entry->>'depth')::int;count_nodes:=count_nodes+1;
   IF depth>32 OR count_nodes>4096 THEN RETURN false;END IF;
   IF truss.valid_scalar_cell(cell_node) IS TRUE THEN CONTINUE;END IF;
   IF jsonb_typeof(cell_node) IS DISTINCT FROM 'object' THEN RETURN false;END IF;
   IF cell_node->>'kind'='sequence' THEN
    IF cell_node-ARRAY['kind','items']<>'{}'::jsonb OR jsonb_typeof(cell_node->'items') IS DISTINCT FROM 'array' OR jsonb_array_length(cell_node->'items')>1024 THEN RETURN false;END IF;
    FOR member IN SELECT value FROM jsonb_array_elements(cell_node->'items') LOOP
-    pending:=pending||jsonb_build_array(jsonb_build_object('cell',member,'depth',depth+1));
+    IF tail>=4096 THEN RETURN false;END IF;tail:=tail+1;pending[tail]:=jsonb_build_object('cell',member,'depth',depth+1);
    END LOOP;
   ELSIF cell_node->>'kind'='map' THEN
    IF cell_node-ARRAY['kind','entries']<>'{}'::jsonb OR jsonb_typeof(cell_node->'entries') IS DISTINCT FROM 'array' OR jsonb_array_length(cell_node->'entries')>1024 THEN RETURN false;END IF;
    IF jsonb_array_length(cell_node->'entries')<>(SELECT count(DISTINCT value->>'key' COLLATE "C") FROM jsonb_array_elements(cell_node->'entries')) THEN RETURN false;END IF;
    FOR member IN SELECT value FROM jsonb_array_elements(cell_node->'entries') LOOP
     IF jsonb_typeof(member) IS DISTINCT FROM 'object' OR member-ARRAY['key','value']<>'{}'::jsonb OR jsonb_typeof(member->'key') IS DISTINCT FROM 'string' OR octet_length(member->>'key')>4096 THEN RETURN false;END IF;
-    pending:=pending||jsonb_build_array(jsonb_build_object('cell',member->'value','depth',depth+1));
+    IF tail>=4096 THEN RETURN false;END IF;tail:=tail+1;pending[tail]:=jsonb_build_object('cell',member->'value','depth',depth+1);
    END LOOP;
   ELSE RETURN false;END IF;
-  IF jsonb_array_length(pending)+count_nodes>4096 THEN RETURN false;END IF;
+  IF tail>4096 THEN RETURN false;END IF;
  END LOOP;
  RETURN true;
 END;
@@ -92,7 +94,7 @@ REVOKE ALL ON FUNCTION truss.valid_item_chain(jsonb) FROM PUBLIC;
 
 CREATE FUNCTION truss.valid_property_value(cell jsonb,property truss.prop_def) RETURNS boolean
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE nodes jsonb;node jsonb;member jsonb;entry jsonb;declaration jsonb;pending jsonb:='[]';index_node int;
+DECLARE nodes jsonb;node jsonb;member jsonb;entry jsonb;declaration jsonb;pending jsonb[];head int:=1;tail int:=0;index_node int;
 BEGIN
  IF property.cardinality='one' THEN RETURN property.home='json' AND coalesce(property.scalar_type,'') IN ('string','integer','decimal','boolean','timestamp','binary','date') AND property.nullability IN ('required','absent-allowed') AND property.item IS NULL AND truss.valid_scalar_property(cell,property.scalar_type,property.nullability='absent-allowed',property.facets);END IF;
  IF property.cardinality NOT IN ('array','map') OR property.scalar_type IS NOT NULL OR property.home IS DISTINCT FROM 'json'
@@ -100,17 +102,18 @@ BEGIN
  IF cell='{"kind":"null"}'::jsonb THEN RETURN property.nullability='absent-allowed';END IF;
  IF truss.valid_flat_cell(cell) IS NOT TRUE OR cell->>'kind' IS DISTINCT FROM (CASE property.cardinality WHEN 'array' THEN 'sequence' ELSE 'map' END) THEN RETURN false;END IF;
  nodes:=jsonb_build_array(property.item)||coalesce(property.item->'descendants','[]'::jsonb);
+ pending:=array_fill(NULL::jsonb,ARRAY[4096]);
  FOR member IN SELECT CASE property.cardinality WHEN 'array' THEN value ELSE value->'value' END FROM jsonb_array_elements(CASE property.cardinality WHEN 'array' THEN cell->'items' ELSE cell->'entries' END) LOOP
-  pending:=pending||jsonb_build_array(jsonb_build_object('cell',member,'index',0));
+  IF tail>=4096 THEN RETURN false;END IF;tail:=tail+1;pending[tail]:=jsonb_build_object('cell',member,'index',0);
  END LOOP;
- WHILE jsonb_array_length(pending)>0 LOOP
-  entry:=pending->0;pending:=pending-0;member:=entry->'cell';index_node:=(entry->>'index')::int;node:=nodes->index_node;declaration:=node->'declaration';
+ WHILE head<=tail LOOP
+  entry:=pending[head];pending[head]:=NULL;head:=head+1;member:=entry->'cell';index_node:=(entry->>'index')::int;node:=nodes->index_node;declaration:=node->'declaration';
   IF declaration->>'cardinality'='one' THEN
    IF truss.valid_scalar_property(member,declaration->>'scalarType',false,declaration->'facets') IS NOT TRUE THEN RETURN false;END IF;
   ELSE
    IF member->>'kind' IS DISTINCT FROM (CASE declaration->>'cardinality' WHEN 'array' THEN 'sequence' ELSE 'map' END) THEN RETURN false;END IF;
    FOR member IN SELECT CASE declaration->>'cardinality' WHEN 'array' THEN value ELSE value->'value' END FROM jsonb_array_elements(CASE declaration->>'cardinality' WHEN 'array' THEN member->'items' ELSE member->'entries' END) LOOP
-    pending:=pending||jsonb_build_array(jsonb_build_object('cell',member,'index',index_node+1));
+    IF tail>=4096 THEN RETURN false;END IF;tail:=tail+1;pending[tail]:=jsonb_build_object('cell',member,'index',index_node+1);
    END LOOP;
   END IF;
  END LOOP;

@@ -138,7 +138,7 @@ def group_context(host,transaction,manifest,digest,pin_cursor):
         cursor.execute('SELECT truss.group_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
         value=json.loads(bytes(cursor.fetchone()[0]))
         return _runtime_context(value)
-    return host._run_operation(transaction,observe)
+    return host._run_operation(transaction,observe, function_call=True)
 
 
 def _bounded_name(value):
@@ -179,7 +179,7 @@ def catalog_revision(host,transaction,manifest,digest,pin_cursor,document_id):
             document_id=value['documentId'] if 'documentId' in value else ABSENT,
             document_revision=value['documentRevision'] if 'documentRevision' in value else ABSENT,
             source_catalog_revision=value['sourceCatalogRevision'] if 'sourceCatalogRevision' in value else ABSENT)
-    return host._run_operation(transaction,observe)
+    return host._run_operation(transaction,observe, function_call=True)
 
 
 def prepare_group(host,transaction,manifest,digest,pin_cursor,records,relationships):
@@ -193,7 +193,7 @@ def prepare_group(host,transaction,manifest,digest,pin_cursor,records,relationsh
         value=json.loads(bytes(cursor.fetchone()[0]))
         return PreparedGroup(catalog_revision=value['catalogRevision'],context=_runtime_context(value['context']),
             types=tuple(_definition(entry) for entry in value['types']),relationships=tuple(_definition(entry) for entry in value['relationships']))
-    return host._run_operation(transaction,observe)
+    return host._run_operation(transaction,observe, function_call=True)
 
 
 def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cursor,*,bun_executable='bun',_cursor=None,_attempt_capture=None,_schema_state=None):
@@ -262,7 +262,7 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
             _schema_state.clear()
         return result
     if _cursor is not None:return Ok(apply(_cursor,None))
-    result=host._run_operation(transaction,apply)
+    result=host._run_operation(transaction,apply, function_call=True)
     # Revocation can remove EXECUTE before the native facade can return its
     # typed refusal. Only translate a permission failure the host contained;
     # unresolved transaction/connection failures retain their execution outcome.

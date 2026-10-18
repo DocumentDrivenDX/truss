@@ -60,6 +60,24 @@ identity remain unchanged. A malicious embedding process with the same database
 credentials is outside this selected boundary; no signature or server-issued
 semantic attestation is implied.
 
+### Managed single-function calls
+
+For the closed, source-verified toolkit function inventory, the adapter MAY
+combine fresh transaction/profile observations and the function call in one
+statement. The function MUST NOT execute unless the observed adopted identity
+and selected timeout match. The ordinary matching-timeout path uses three
+commands including the savepoint pair; adoption uses three commands. Cold
+metadata fetches and calls containing several functions have their actual
+additional commands reported separately.
+
+A timeout mismatch MUST produce a no-effect observation before the ordinary
+setting/restoration path invokes the function once. This is not a mutation
+retry. Caller-current timeout restoration, operation-local rollback, cancellation
+and quarantine behavior remain required. General SQL/callback execution keeps
+its separately qualified guard. Qualification MUST measure frontend execute
+submissions and distinguish them from internal server statements, multi-statement
+setup strings, executemany calls and outer transaction settlement.
+
 ## Owner decisions — 2026-10-07
 
 Selected execution boundary: engine-owned callback transactions commit before returning committed results; adopted transactions remain caller-owned and return explicit pending results. Pending object/edge IDs are usable only within the same live transaction. Only confirmed outer commit authorizes durable external publication; savepoint release and successful Truss operations do not. Unknown commit requires original recovery/receipt observation. No commit-by-string-ID or live cross-network transaction protocol is selected.

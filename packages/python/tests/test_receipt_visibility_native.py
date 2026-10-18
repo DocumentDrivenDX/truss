@@ -20,6 +20,7 @@ class ReceiptVisibilityTests(mutation_tests.ObjectMutationTests):
 
     def test_commit_token_readonly_reached_and_current_reader_authority(self):
         connection,host,assembly,tx=self.ready()
+        self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE')
         revision=assembly.catalog_revision_in_transaction(tx,document_id='adoc')
         self.assertIsInstance(revision,Ok);self.assertIsInstance(revision.value,CatalogRevisionProbe);self.assertTrue(revision.value.catalog_revision)
         prepared=assembly.prepare_group_in_transaction(tx,records=(('adoc','m','A'),))
@@ -42,12 +43,21 @@ class ReceiptVisibilityTests(mutation_tests.ObjectMutationTests):
         connection,host,assembly,tx=self.consumer()
         applied,input,request=self.run_group(assembly,tx,(self.create(),),'receipt')
         token=applied.response.receipt_token;identity=applied.response.semantic.results[0].identity
-        host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
+        host.detach();connection.commit()
+        # The original pending token becomes reached directly at commit. Do
+        # not replay the request first: replay returns the same token and would
+        # conceal a regression in the token returned by the original writer.
+        reader_connection,reader_host,reader_assembly,reader_tx=self.readonly()
+        reached_original=reader_assembly.reached_in_transaction(reader_tx,token)
+        self.assertIsInstance(reached_original,Ok);self.assertIsInstance(reached_original.value,ReceiptIncluded)
+        self.assertTrue(reached_original.value.included)
+        reader_host.detach();reader_connection.rollback()
+        connection,host,assembly,tx=self.consumer()
         replay=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable='/opt/homebrew/bin/bun').value
         self.assertIsInstance(replay.response,CommittedReceiptReplay);token=replay.response.receipt_token;self.assertIsNot(token,ABSENT)
         deleted,_,_=self.run_group(assembly,tx,(Delete(operation='delete_object',target=StoredObjectReference(identity=identity)),),'delete')
         self.assertIsInstance(deleted,GroupSuccess);host.detach();connection.commit()
-        self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE');self.admin.execute('REVOKE group_writer FROM consumer')
+        self.admin.execute('REVOKE group_writer FROM consumer')
         connection,host,assembly,tx=self.readonly()
         reached=assembly.reached_in_transaction(tx,token);self.assertIsInstance(reached,Ok);self.assertIsInstance(reached.value,ReceiptIncluded);self.assertTrue(reached.value.included)
         host.detach();connection.rollback();self.admin.execute('REVOKE group_reader FROM consumer')

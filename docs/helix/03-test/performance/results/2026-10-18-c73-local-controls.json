@@ -114,5 +114,20 @@
     "seconds": 17.083,
     "status": "passed",
     "scope": "Existing unchanged eight-key capacity method; real1,024-operation updates with ordinary deadlines."
+  },
+  "packagingComparison": {
+    "hostedRunId": 39164763845,
+    "hostedSourceCommit": "7fcb4c5a9719c1a9a86468e1a2a05510cbf8c80b",
+    "hostedWheelSha256": "f62070e4be523f801eed807a1e65eea6bae959b2554e86cdc056afb2a4ebca68",
+    "sharedShippedPayloads": 528,
+    "sharedPayloadsByteIdentical": true,
+    "localOnlyExcludedFiles": [
+      "truss/_umf/owners/assertion-fields/producer.js",
+      "truss/_umf/owners/declarations/producer.js",
+      "truss/_umf/owners/record-members/producer.js",
+      "truss/_umf/owners/reference-links/producer.js",
+      "truss/_umf/owners/scalar-types/producer.js"
+    ],
+    "scope": "Local wheel retained five supplemental producer files from its build directory. pyproject explicitly excludes these files from clean packages. The pinned embedded archive supplies executed owner JavaScript; the archive and all shipped runtime payloads are byte-identical. Hosted native and stress qualification uses the clean hosted wheel."
   }
 }

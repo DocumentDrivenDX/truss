@@ -87,9 +87,9 @@ class PsycopgHostNativeTests(unittest.TestCase):
                 return self.cursor.execute(query, *args, **kwargs)
         self.host._cursor = lambda: Counting(original())
         transaction = self.begin()
-        self.assertEqual(len(queries), 4)
+        self.assertEqual(len(queries), 3)
         import truss.psycopg_host as psycopg_host
-        self.assertEqual(sum(query == psycopg_host._IDENTITY_SQL for query in queries), 2)
+        self.assertEqual(sum(query == psycopg_host._IDENTITY_SQL for query in queries), 1)
         self.assertFalse(any(isinstance(query, str) and query.startswith('SET LOCAL statement_timeout') for query in queries))
         queries.clear()
         self.assertEqual(self.scalar(transaction, 'SELECT 1::text'), Ok('1'))

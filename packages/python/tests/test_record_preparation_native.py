@@ -20,13 +20,26 @@ class RecordPreparationTests(base.PublicCreateGroupTests):
     def test_cold_schema_and_warm_batches_do_not_replay_native_value_validation(self):
         connection, host, assembly, tx = self.ready(document_ids=('adoc',))
         import truss._record_schema as schema
+        queries=[]
+        original_cursor=host._cursor
+        class Counted:
+            def __init__(self,cursor):self.cursor=cursor
+            def __getattr__(self,name):return getattr(self.cursor,name)
+            def execute(self,query,*args,**kwargs):
+                queries.append(query)
+                return self.cursor.execute(query,*args,**kwargs)
+        host._cursor=lambda:Counted(original_cursor())
         context = assembly.group_context_in_transaction(tx).value
+        self.assertEqual(len(queries),3)
+        queries.clear()
         with patch.object(schema, 'compile_records', wraps=schema.compile_records) as compile_once:
             first = assembly.apply_in_transaction(tx, context.input(tuple(
                 self.create(label=f'first-{i}', alias=f'first-{i}') for i in range(16)), MapValue(entries=())),
                 RequestNone(), documents=self.documents)
             self.assertIsInstance(first, Ok, repr(first) + ' ' + str(host._custody.last_attempt.error))
             self.assertIsInstance(first.value, GroupSuccess)
+            self.assertEqual(len(queries),4) # Cold basis + mutation + savepoint pair.
+            queries.clear()
             identities = tuple(item.identity for item in first.value.response.semantic.results)
             updated = assembly.apply_in_transaction(tx, context.input(tuple(
                 UpdateObject(target=StoredObjectReference(identity=identity),
@@ -34,6 +47,8 @@ class RecordPreparationTests(base.PublicCreateGroupTests):
                 for i, identity in enumerate(identities)), MapValue(entries=())), RequestNone(), documents=self.documents)
             self.assertIsInstance(updated, Ok, repr(updated) + ' ' + str(host._custody.last_attempt.error))
             self.assertIsInstance(updated.value, GroupSuccess)
+            self.assertEqual(len(queries),3)
+            queries.clear()
             facade = create_reference_assembly(CatalogRuntimeConfiguration(), host).value
             self.assertIs(facade._record_schema_state, assembly._record_schema_state)
             other = facade.apply_in_transaction(tx, context.input((
@@ -41,6 +56,7 @@ class RecordPreparationTests(base.PublicCreateGroupTests):
                 RequestNone(), documents=self.documents)
             self.assertIsInstance(other, Ok, repr(other) + ' ' + str(host._custody.last_attempt.error))
             self.assertIsInstance(other.value, GroupSuccess)
+            self.assertEqual(len(queries),3)
             self.assertEqual(compile_once.call_count, 1)
         calls = dict(connection.execute('''SELECT p.proname, sum(s.calls) FROM pg_stat_xact_user_functions s
             JOIN pg_proc p ON p.oid=s.funcid WHERE s.schemaname='truss' GROUP BY p.proname''').fetchall())
@@ -58,6 +74,15 @@ class RecordPreparationTests(base.PublicCreateGroupTests):
         self.assertEqual(settled.get('owned_object_values', 0), 0)
         self.assertEqual(settled.get('runtime_owned_object_value_delta', 0), 0)
         self.assertEqual(settled.get('valid_property_value', 0), 0)
+        # Read validation is independent of the write counters above. The
+        # ordinary key lookup is also one guarded function, not five commands.
+        queries.clear()
+        found=assembly.lookup_key_in_transaction(tx,document_id='adoc',module_id='m',
+            record_id='A',key_id='z-alt',values=('first-0',))
+        self.assertIsInstance(found,Ok,repr(found)+' '+str(host._custody.last_attempt.error))
+        self.assertIsInstance(found.value,ObjectFound)
+        self.assertEqual(found.value.object.identity,identities[0])
+        self.assertEqual(len(queries),3)
         host.detach(); connection.commit()
         compact = self.admin.execute('''SELECT count(*),bool_and(
             NOT (plan->'beforeNodes'->(plan->>'primary')->'image' ? 'props')

@@ -20,6 +20,7 @@ import subprocess
 import sys
 import time
 import unittest
+from contextlib import contextmanager
 
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--truss-root',type=Path,required=True)
@@ -34,6 +35,8 @@ parser.add_argument('--write-samples',type=int,default=200)
 parser.add_argument('--profile-native-functions',action='store_true',help='Diagnostic run: enable PostgreSQL PL function timing for benchmark consumer')
 parser.add_argument('--capture-failure-diagnostics',action='store_true',help='On a failed case, capture completed PostgreSQL function stats, exact Truss table row counts and database/relation sizes before teardown')
 parser.add_argument('--keep-failed-database',action='store_true',help='On a failed case, stop PostgreSQL but preserve its local PGDATA directory; no artifact upload')
+parser.add_argument('--count-sql-submissions',action='store_true',help='Diagnostic mode: count actual psycopg execute/executemany submissions by timed operation and case, plus commit/rollback calls separately; timing includes counter overhead')
+parser.add_argument('--self-test-sql-counter',action='store_true',help='Run the SQL counter against mocked cursors and exit without starting PostgreSQL')
 parser.add_argument('--load-only',action='store_true',help='Measure and verify object/edge loading, omitting the later read/update matrix')
 parser.add_argument('--forbid-external-javascript',action='store_true',help='Fail if any code attempts to launch Bun, Node, or NodeJS')
 parser.add_argument('--profile-read',type=Path,help='Optional separate cProfile of one warm public ID read, outside timed samples')
@@ -81,9 +84,173 @@ from test_catalog_runtime_native import PublicCatalogRuntimeTests
 
 measurements=[]
 results=[]
-args.output.parent.mkdir(parents=True,exist_ok=True)
 progress_path=args.output.with_suffix('.jsonl')
-progress_path.write_text('')
+if not args.self_test_sql_counter:
+    args.output.parent.mkdir(parents=True,exist_ok=True)
+    progress_path.write_text('')
+
+class SQLSubmissionCounter:
+    """Count driver calls without retaining statement text or parameters."""
+    def __init__(self,enabled):
+        self.enabled=enabled
+        self._scopes=[]
+
+    @contextmanager
+    def scope(self,name,kind):
+        counts={'total':0,'host':0,'driver':0,'executemanyCalls':0,'hostAdoptions':0,'groupContextAcquisitions':0,'bySqlClass':{},'transactionActions':{'commit':0,'rollback':0}}
+        if not self.enabled:
+            yield counts
+            return
+        scope={'name':name,'kind':kind,'counts':counts}
+        self._scopes.append(scope)
+        try:
+            yield counts
+        finally:
+            if self._scopes[-1] is not scope:
+                raise RuntimeError('SQL counter scope order changed')
+            self._scopes.pop()
+
+    def _classification(self,query):
+        # Inspect transient SQL only to increment a fixed label; retain neither
+        # query text nor parameters in the counter or report.
+        text=str(query).lower()
+        if 'writer_schema_basis' in text:return 'cold_schema_basis'
+        if 'apply_group_prepared' in text:return 'prepared_payload'
+        if 'apply_group(' in text:return 'legacy_payload'
+        if 'truss.' in text and text.lstrip().startswith(('select','with')):return 'public_function_payload'
+        if 'rollback to savepoint' in text:return 'savepoint_rollback'
+        if 'release savepoint' in text:return 'savepoint_release'
+        if 'savepoint' in text:return 'savepoint_open'
+        if 'set local statement_timeout' in text:return 'timeout_set'
+        if 'pg_backend_pid' in text or 'pg_current_xact_id' in text:return 'admission_observer'
+        return 'other'
+
+    def record_sql(self,channel,query):
+        if not self.enabled:return
+        label=self._classification(query)
+        for scope in self._scopes:
+            counts=scope['counts']
+            counts['total']+=1
+            counts[channel]+=1
+            counts['bySqlClass'][label]=counts['bySqlClass'].get(label,0)+1
+
+    def record_transaction(self,action):
+        if not self.enabled:return
+        for scope in self._scopes:
+            scope['counts']['transactionActions'][action]+=1
+
+    def record_executemany(self):
+        if not self.enabled:return
+        for scope in self._scopes:
+            scope['counts']['executemanyCalls']+=1
+
+    def record_high_level(self,action):
+        if not self.enabled:return
+        for scope in self._scopes:
+            scope['counts'][action]+=1
+
+statement_counter=SQLSubmissionCounter(args.count_sql_submissions)
+
+def install_sql_submission_counter(psycopg,host_module,counter,assembly_module=None):
+    """Instrument only this benchmark process while preserving connection types."""
+    class CountingCursor(psycopg.Cursor):
+        def __init__(self,*args,_channel='driver',**kwargs):
+            super().__init__(*args,**kwargs)
+            self._benchmark_channel=_channel
+        def execute(self,query,*args,**kwargs):
+            counter.record_sql(self._benchmark_channel,query)
+            return super().execute(query,*args,**kwargs)
+        def executemany(self,query,params_seq,*args,**kwargs):
+            # Psycopg may pipeline multiple parameter sets, so don't misreport
+            # one API call as an exact count of server statements.
+            counter.record_executemany()
+            return super().executemany(query,params_seq,*args,**kwargs)
+
+    original_connect=psycopg.connect
+    def counted_connect(*args,**kwargs):
+        connection=original_connect(*args,**kwargs)
+        connection.cursor_factory=CountingCursor
+        original_commit=connection.commit
+        original_rollback=connection.rollback
+        def counted_commit(*args,**kwargs):
+            counter.record_transaction('commit')
+            return original_commit(*args,**kwargs)
+        def counted_rollback(*args,**kwargs):
+            counter.record_transaction('rollback')
+            return original_rollback(*args,**kwargs)
+        connection.commit=counted_commit
+        connection.rollback=counted_rollback
+        return connection
+    psycopg.connect=counted_connect
+
+    def counted_host_cursor(host):
+        from psycopg.rows import tuple_row
+        from psycopg.types.string import TextLoader
+        cursor=CountingCursor(host.connection,row_factory=tuple_row,_channel='host')
+        cursor.adapters.register_loader(25,TextLoader)
+        return cursor
+    host_module.PsycopgHost._cursor=counted_host_cursor
+
+    def count_calls(target,method,action):
+        original=getattr(target,method)
+        def counted(self,*args,**kwargs):
+            counter.record_high_level(action)
+            return original(self,*args,**kwargs)
+        setattr(target,method,counted)
+    count_calls(host_module.PsycopgHost,'adopt_transaction','hostAdoptions')
+    if assembly_module is not None:
+        count_calls(assembly_module.CatalogReferenceAssembly,'group_context_in_transaction','groupContextAcquisitions')
+
+
+def self_test_sql_counter():
+    from types import SimpleNamespace
+    class FakeAdapters:
+        def register_loader(self,*args,**kwargs):pass
+    class FakeCursor:
+        def __init__(self,connection,row_factory=None):self.connection=connection;self.adapters=FakeAdapters()
+        def execute(self,query,*args,**kwargs):return query
+        def executemany(self,query,params,*args,**kwargs):return query
+    class FakeConnection:
+        def cursor(self):return self.cursor_factory(self)
+        def commit(self):return 'commit'
+        def rollback(self):return 'rollback'
+    class FakeHost:
+        def __init__(self,connection):self.connection=connection
+        def adopt_transaction(self):return 'adopted'
+    class FakeAssembly:
+        def group_context_in_transaction(self,transaction):return 'context'
+    fake_psycopg=SimpleNamespace(Cursor=FakeCursor,connect=lambda *a,**k:FakeConnection())
+    fake_host_module=SimpleNamespace(PsycopgHost=FakeHost)
+    fake_assembly_module=SimpleNamespace(CatalogReferenceAssembly=FakeAssembly)
+    counter=SQLSubmissionCounter(True)
+    install_sql_submission_counter(fake_psycopg,fake_host_module,counter,fake_assembly_module)
+    with counter.scope('mock','case') as case_counts:
+        with counter.scope('mock.apply','operation') as operation_counts:
+            connection=fake_psycopg.connect()
+            connection.cursor().execute('SELECT truss.writer_schema_basis($1)')
+            connection.cursor().executemany('INSERT INTO x VALUES ($1)',[(1,),(2,)])
+            host=FakeHost(connection)
+            connection.cursor().execute('WITH guard AS (SELECT pg_backend_pid()) SELECT truss.runtime_owned_admit() FROM guard')
+            host._cursor().execute('SELECT truss.apply_group_prepared($1)')
+            host.adopt_transaction();FakeAssembly().group_context_in_transaction('tx')
+            connection.commit();connection.rollback()
+    expected={'total':3,'host':1,'driver':2,'executemanyCalls':1,'hostAdoptions':1,'groupContextAcquisitions':1,
+              'bySqlClass':{'cold_schema_basis':1,'prepared_payload':1,'public_function_payload':1},
+              'transactionActions':{'commit':1,'rollback':1}}
+    if case_counts!=expected or operation_counts!=expected:
+        raise AssertionError({'expected':expected,'case':case_counts,'operation':operation_counts})
+    print(json.dumps({'selfTest':'passed','scope':case_counts},sort_keys=True))
+
+
+if args.self_test_sql_counter:
+    self_test_sql_counter()
+    sys.exit(0)
+if args.count_sql_submissions:
+    from truss import psycopg_host
+    from truss import catalog_runtime
+    install_sql_submission_counter(psycopg,psycopg_host,statement_counter,catalog_runtime)
+
+
 def record_measurement(measurement):
     measurements.append(measurement)
     with progress_path.open('a') as stream:
@@ -92,15 +259,19 @@ def record_measurement(measurement):
 
 def timed(case,operation,call,rows=1):
     start=time.perf_counter_ns()
-    try:
-        result=call()
-    except BaseException as error:
-        failure=dict(case=case,operation=operation,rows=rows,ms=(time.perf_counter_ns()-start)/1e6,status='failed',error=str(error))
-        diagnostics=getattr(error,'diagnostics',())
-        if diagnostics:failure['diagnostics']=[d.decode('utf-8',errors='replace')[:4096] if isinstance(d,bytes) else str(d)[:4096] for d in diagnostics[:4]]
-        record_measurement(failure)
-        raise
-    record_measurement(dict(case=case,operation=operation,rows=rows,ms=(time.perf_counter_ns()-start)/1e6,status='ok'))
+    with statement_counter.scope(case+'.'+operation,'operation') as sql_counts:
+        try:
+            result=call()
+        except BaseException as error:
+            failure=dict(case=case,operation=operation,rows=rows,ms=(time.perf_counter_ns()-start)/1e6,status='failed',error=str(error))
+            if args.count_sql_submissions:failure['sqlSubmissions']=json.loads(json.dumps(sql_counts))
+            diagnostics=getattr(error,'diagnostics',())
+            if diagnostics:failure['diagnostics']=[d.decode('utf-8',errors='replace')[:4096] if isinstance(d,bytes) else str(d)[:4096] for d in diagnostics[:4]]
+            record_measurement(failure)
+            raise
+    measurement=dict(case=case,operation=operation,rows=rows,ms=(time.perf_counter_ns()-start)/1e6,status='ok')
+    if args.count_sql_submissions:measurement['sqlSubmissions']=json.loads(json.dumps(sql_counts))
+    record_measurement(measurement)
     if operation in ('install','prepare','register','registrar_catalog_view','bulk_create','bulk_edges'):
         print(f'{case}: {operation} {measurements[-1]["ms"]:.2f} ms ({rows} rows)',file=sys.stderr,flush=True)
     return result
@@ -510,6 +681,18 @@ for sample in selected_cases:
     def test(self,sample=sample):self.workflow(sample)
     setattr(RealWorkflows,'test_'+sample,test)
 
+if args.count_sql_submissions:
+    _unmeasured_workflow=RealWorkflows.workflow
+    def _counted_workflow(self,sample):
+        with statement_counter.scope(sample,'case') as sql_counts:
+            try:
+                return _unmeasured_workflow(self,sample)
+            finally:
+                current=next((case for case in reversed(results) if case.get('sample')==sample),None)
+                if current is not None:
+                    current['driverSqlSubmissions']=json.loads(json.dumps(sql_counts))
+    RealWorkflows.workflow=_counted_workflow
+
 start=time.perf_counter()
 suite=unittest.TestSuite(RealWorkflows('test_'+sample) for sample in selected_cases)
 class ImmediateFailures(unittest.TextTestResult):
@@ -528,6 +711,21 @@ for sample in ['runtime',*selected_cases]:
         attempts=[m for m in matching if m['status']!='unsupported']
         values=sorted(m['ms'] for m in attempts if m['status']=='ok')
         row={'case':sample,'operation':operation,'attempts':len(attempts),'unsupportedCount':unsupported,'failures':sum(m['status']!='ok' for m in attempts),'totalElapsedMs':sum(m['ms'] for m in attempts),'failedElapsedMs':[m['ms'] for m in attempts if m['status']!='ok']}
+        if args.count_sql_submissions:
+            submission_rows=[m.get('sqlSubmissions',{}) for m in attempts]
+            row['sqlSubmissions']={
+                'total':sum(x.get('total',0) for x in submission_rows),
+                'host':sum(x.get('host',0) for x in submission_rows),
+                'driver':sum(x.get('driver',0) for x in submission_rows),
+                'executemanyCalls':sum(x.get('executemanyCalls',0) for x in submission_rows),
+                'hostAdoptions':sum(x.get('hostAdoptions',0) for x in submission_rows),
+                'groupContextAcquisitions':sum(x.get('groupContextAcquisitions',0) for x in submission_rows),
+                'bySqlClass':{},
+                'transactionActions':{'commit':sum(x.get('transactionActions',{}).get('commit',0) for x in submission_rows),
+                                      'rollback':sum(x.get('transactionActions',{}).get('rollback',0) for x in submission_rows)}}
+            for x in submission_rows:
+                for label,count in x.get('bySqlClass',{}).items():
+                    row['sqlSubmissions']['bySqlClass'][label]=row['sqlSubmissions']['bySqlClass'].get(label,0)+count
         if values and (operation=='bulk_create' or operation.startswith('bulk_update_') and 'commit' not in operation or operation=='bulk_edges'):row['rowsPerSecond']=sum(m['rows'] for m in attempts if m['status']=='ok')/(sum(values)/1000)
         if values:
             row.update(p50Ms=statistics.median(values),minMs=min(values),maxMs=max(values))
@@ -598,6 +796,13 @@ report={'runtimePackage':runtime_package,'runtimeManifestSha256':hashlib.sha256(
         'applicationMemory':application_memory,
         'cases':results,'summary':summary,'samples':measurements,
         'scope':'Actual public workflows on isolated local PostgreSQL. Connection reopen, not server restart. Cold server/install separate. '+('Only the selected generated cases; indexes are unique business-key properties.' if args.matrix_case else 'Real-sample results only; no synthetic stress result implied.')}
+if args.count_sql_submissions:
+    report['sqlSubmissionCounts']={
+        'enabled':True,
+        'scope':'Cursor execute submissions counted by direct psycopg and PsycopgHost channels; executemany API calls are counted separately because psycopg may pipeline multiple parameter sets. Python connection.commit()/rollback() calls and high-level host adoption/group-context acquisition calls are reported separately. Includes setup, SAVEPOINT, observers, payload, timeout SET, RELEASE, and cleanup submissions occurring inside each workflow case. Query text and parameters are inspected transiently for fixed SQL-class labels, then discarded.',
+        'operationCountScope':'Per-operation counts include nested timed calls; operation summary rows overlap and must not be summed across operation names. Per-case totals are disjoint across selected cases and include untimed workflow setup/adoption/context calls.',
+        'timingsIncludeCounterOverhead':True,
+        'caseTotals':[{'case':case['sample'],**case.get('driverSqlSubmissions',{})} for case in results]}
 args.output.parent.mkdir(parents=True,exist_ok=True)
 args.output.write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps({'passed':report['passed'],'functionalPassed':report['functionalPassed'],'performanceQualification':report['performanceQualification'],'capacityScope':capacity_scope,'cases':results,'summary':summary},indent=2))

@@ -97,7 +97,7 @@ and [key-backfill contract](../../docs/helix/02-design/contracts/catalog-key-bac
 define those scopes. Cyclic definitions, descendant evolution and record-valued
 properties remain unfinished.
 
-Ownership support is available in the unreleased development checkpoint above.
+Ownership support shipped in v0.0.39.
 The [owned-object implementation plan](../../docs/helix/04-build/python-owned-objects-plan.md)
 records its implementation scope and remaining work. Published SDK0.0.35 retains
 the rootless profile; development native71 adds owned reads and mutations.
@@ -449,6 +449,7 @@ broader draft protocol does not imply that every declared profile is implemented
 | --- | --- |
 | Register UMF | `prepare_catalog`, `accept_in_transaction` |
 | Catalog reports | `report_in_transaction`, `catalog_view_in_transaction` |
+| Cached write planning | `prepare_group_in_transaction`, `catalog_revision_in_transaction` |
 | Reader-scoped catalog/source | `reader_catalog_in_transaction`, `accepted_document_in_transaction` |
 | Object IDs and business keys | `get_object_in_transaction`, `lookup_key_in_transaction` |
 | Object and relationship pages | `page_objects_in_transaction`, `get_edge_in_transaction`, `page_edges_in_transaction` |
@@ -465,6 +466,15 @@ capability selectors. Imports/groups accept exact original `CatalogDocument`
 inputs. The legacy `bun_executable` keyword is retained for source compatibility
 and does not select or launch an executable.
 Separate broad `mutations` and physical-optimization families remain unavailable.
+
+Version0.0.40 adds `prepare_group_in_transaction(tx,
+records=((document_id, module_id, record_id),), relationships=())`, returning the
+catalog revision, group context and requested references together. A host may
+cache this planning metadata for the same installation, source epoch, principal
+and catalog basis. `catalog_revision_in_transaction(tx, document_id=...)` provides
+a small revision probe. Build groups with the cached `prepared.context.input(...)`
+and the returned definition pins; the write still checks its current basis and
+authority. A stale write refuses rather than silently retrying a mutation.
 
 ## Catalog meaning and evolution
 
@@ -557,7 +567,7 @@ carries immutable import provenance, as it does for object records. Construction
 does not establish live endpoints or authorize a write: `import_in_transaction`
 validates current endpoint types, access, reservations and payload semantics.
 
-The development atomic profile uses `owned_import_context_in_transaction`,
+The atomic owned-import profile uses `owned_import_context_in_transaction`,
 `owned_object_import_record_in_transaction` and
 `owned_edge_import_record_in_transaction`. Build rootless roots first, then
 children with `root=root_record.identity`, then edges whose endpoints are those
@@ -571,15 +581,15 @@ Caller-owned execution leaves settlement to the host. `run_import_batches` also
 accepts this explicit owned input and commits the entire aggregate as one batch;
 legacy inputs retain one-record batches. Original record indices, source bytes
 and load IDs remain available through `lookup_import_source_in_transaction`.
-This is an unreleased development feature with basic PostgreSQL18.6 workflow
-coverage, not a managed-database or performance qualification.
+This feature shipped in v0.0.39 with basic PostgreSQL18.6 workflow coverage.
+Managed-database and broader performance qualification remain separate.
 
 ## Values, reads and query limits
 
 Published rootless JSON-home objects and independent directed relationships
 support strings and exact scalar properties: integer, decimal, boolean,
 timestamp and binary. Acyclic nested arrays/maps use required item Fields and
-exact scalar leaves. The development checkpoint adds owned objects and composed
+exact scalar leaves. Version0.0.39 adds owned objects and composed
 graphs, plus direct date and generic-decimal values. Ordinary Date queries support
 projection and equality with literals, fields and `TextValue(kind="date", text="2000-02-29")`
 parameters, preserving absent and null. Broader generic-decimal SQL queries remain unfinished. Record-valued cells and cyclic value definitions
@@ -639,6 +649,12 @@ before ACK. Read-only `reread_feed_in_transaction` recovers the exact retained
 page; checkpoints do not advance until the ACK transaction commits.
 
 `reached_in_transaction(tx, token)` checks source receipt visibility.
+For a request-bearing group, version0.0.40 returns the token in `AppliedPending`,
+before outer commit. An authorized observer sees `not_yet` until that commit;
+the original token becomes included after commit without replaying the request.
+A rolled-back token remains `not_yet`. The token alone does not establish a
+confirmed commit or authorize publication. Committed replay remains available
+for recovery of an unknown outcome.
 `reached_in_transaction(tx, token, consumer_id='sink')` compares the registered
 consumer's committed source checkpoint. The latter requires a fresh read-only
 transaction with no assigned transaction ID, so pending ACKs cannot count as

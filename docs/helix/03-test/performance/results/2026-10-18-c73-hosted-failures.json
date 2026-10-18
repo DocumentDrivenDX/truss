@@ -1,0 +1,262 @@
+{
+  "candidate": "C73",
+  "sourceCommit": "7fcb4c5a9719c1a9a86468e1a2a05510cbf8c80b",
+  "runId": 39164763845,
+  "runUrl": "https://github.com/DocumentDrivenDX/truss/actions/runs/39164763845",
+  "observedAt": "2026-10-18T21:11:55.143594+00:00",
+  "status": "release_blocked; hosted campaign still running; successor under development",
+  "wheelSha256": "f62070e4be523f801eed807a1e65eea6bae959b2554e86cdc056afb2a4ebca68",
+  "nativeManifestSha256": "0f78918b3104d8e541a1861daa90e02423d8894c6599a255a476f4b234a9b046",
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "downloadedStressReports": [
+    {
+      "artifact": "public-stress-complex-macos-14",
+      "functionalPassed": true,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 173195264,
+        "retainedSchemaCacheEstimatedBytes": 598970,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [],
+      "originalSha256": "2b50dddadf006823318b3d35db21f9038846bc7502fba8e98c9fc6e2e41baade"
+    },
+    {
+      "artifact": "public-stress-complex-ubuntu-24.04",
+      "functionalPassed": true,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 186904576,
+        "retainedSchemaCacheEstimatedBytes": 598970,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [],
+      "originalSha256": "68a1ba130ae23c0b3e7845f99643447c9400416312e9589d0d3b79c15384410b"
+    },
+    {
+      "artifact": "public-stress-index-heavy-macos-14",
+      "functionalPassed": false,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 170147840,
+        "retainedSchemaCacheEstimatedBytes": 767391,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [
+        {
+          "operation": "bulk_update_1000",
+          "attempts": 1,
+          "failures": 1,
+          "failedElapsedMs": [
+            10162.401083
+          ]
+        },
+        {
+          "operation": "bulk_update_end_to_end_1000",
+          "attempts": 1,
+          "failures": 1,
+          "failedElapsedMs": [
+            10166.135959
+          ]
+        }
+      ],
+      "originalSha256": "465f71966d6ed856b2072026e2d9b3f475d63efb7d63fa03513d7e6df877d468",
+      "retainedReport": "2026-10-18-c73-public-stress-index-heavy-macos-14.json.gz"
+    },
+    {
+      "artifact": "public-stress-index-heavy-ubuntu-24.04",
+      "functionalPassed": false,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 185401344,
+        "retainedSchemaCacheEstimatedBytes": 767391,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [
+        {
+          "operation": "bulk_update_1024",
+          "attempts": 2,
+          "failures": 1,
+          "failedElapsedMs": [
+            10197.464925
+          ]
+        },
+        {
+          "operation": "bulk_update_end_to_end_1024",
+          "attempts": 2,
+          "failures": 1,
+          "failedElapsedMs": [
+            10199.709719
+          ]
+        }
+      ],
+      "originalSha256": "69056a5fd6cb725901b206541f4dee122315a721450422d4f1e2c4e834547fef",
+      "retainedReport": "2026-10-18-c73-public-stress-index-heavy-ubuntu-24.04.json.gz"
+    },
+    {
+      "artifact": "public-stress-many-types-ubuntu-24.04",
+      "functionalPassed": false,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 587198464,
+        "retainedSchemaCacheEstimatedBytes": 58274664,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [
+        {
+          "operation": "bulk_update_1000",
+          "attempts": 1,
+          "failures": 1,
+          "failedElapsedMs": [
+            10192.424393
+          ]
+        },
+        {
+          "operation": "bulk_update_end_to_end_1000",
+          "attempts": 1,
+          "failures": 1,
+          "failedElapsedMs": [
+            10194.317911
+          ]
+        }
+      ],
+      "originalSha256": "44299f97137da5b4379cb5b5df301b3a2b402ce5c81c3a2b853fece634ac6abc",
+      "retainedReport": "2026-10-18-c73-public-stress-many-types-ubuntu-24.04.json.gz"
+    },
+    {
+      "artifact": "public-stress-node-heavy-ubuntu-24.04",
+      "functionalPassed": true,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 188100608,
+        "retainedSchemaCacheEstimatedBytes": 586746,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [],
+      "originalSha256": "5ca4bacf7cf36a8f1c774b72d0f8f366f4298a4c54c5f0130544aa92bb5b2f0b"
+    },
+    {
+      "artifact": "public-stress-nominal-ubuntu-24.04",
+      "functionalPassed": true,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 184733696,
+        "retainedSchemaCacheEstimatedBytes": 586323,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [],
+      "originalSha256": "e1e67d6876f3e074cd7c69d5bb53deec9136cd9290f122f2fd57f4fa3fe1c093"
+    },
+    {
+      "artifact": "public-stress-skewed-ubuntu-24.04",
+      "functionalPassed": true,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 184705024,
+        "retainedSchemaCacheEstimatedBytes": 586182,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [],
+      "originalSha256": "ffe4656d807da9e95d7458818e45b4fb66087a5c3236c6685574ce22e1b86081"
+    },
+    {
+      "artifact": "public-stress-small-ubuntu-24.04",
+      "functionalPassed": true,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 180953088,
+        "retainedSchemaCacheEstimatedBytes": 31306,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [],
+      "originalSha256": "93be1c9d9d1143310eac4f873da40263f4cb9ef79c10cca1a78216cf48dd501a"
+    },
+    {
+      "artifact": "public-stress-type-heavy-macos-14",
+      "functionalPassed": true,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 214040576,
+        "retainedSchemaCacheEstimatedBytes": 5820711,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [],
+      "originalSha256": "e838d0930de8d04e10a62429c3aeee075bf68d4dd95dcc491146d51a1ee6d71d"
+    },
+    {
+      "artifact": "public-stress-type-heavy-ubuntu-24.04",
+      "functionalPassed": true,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 229834752,
+        "retainedSchemaCacheEstimatedBytes": 5820711,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [],
+      "originalSha256": "915cddf10392fbe77485365e43aaa1f57bd60ae6e01e0ff4ca896bdc353fb787"
+    },
+    {
+      "artifact": "public-stress-wide-ubuntu-24.04",
+      "functionalPassed": false,
+      "applicationMemory": {
+        "processLifetimePeakRssBytes": 223526912,
+        "retainedSchemaCacheEstimatedBytes": 4997574,
+        "retainedSchemaCacheEntries": 2,
+        "schemaCacheBudgetBytes": 134217728,
+        "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+      },
+      "failedOperations": [
+        {
+          "operation": "bulk_update_1000",
+          "attempts": 1,
+          "failures": 1,
+          "failedElapsedMs": [
+            10254.899015
+          ]
+        },
+        {
+          "operation": "bulk_update_end_to_end_1000",
+          "attempts": 1,
+          "failures": 1,
+          "failedElapsedMs": [
+            10257.342231
+          ]
+        }
+      ],
+      "originalSha256": "cf95142962a03139c4e8e4deaff7b85ba3056af6946b761a35d3de6d8dfb14ea",
+      "retainedReport": "2026-10-18-c73-public-stress-wide-ubuntu-24.04.json.gz"
+    }
+  ],
+  "scope": "Snapshot of downloaded completed reports; absent cases are not inferred passed. Both native platform jobs failed: independent container oracle timeout; Ubuntu also eight-key capacity timeout. This is not release qualification. Frontend statement counters were not yet implemented in this candidate.",
+  "localLargeDiagnostic": {
+    "status": "cancelled_superseded",
+    "exitCode": 130,
+    "declaredNodes": 1000000,
+    "declaredEdges": 2000000,
+    "clientConfirmedCommittedNodeRows": 206000,
+    "successfulCreateApplyCalls": 207,
+    "completedEdges": 0,
+    "interruptedCommitOutcome": "unknown; no persisted-row count inferred for the interrupted batch",
+    "scope": "Stopped after hosted failures showed the candidate needed further changes; no completed large-case qualification or final report exists.",
+    "log": {
+      "path": "2026-10-18-c73-cancelled-large-log.gz",
+      "uncompressedSha256": "7d5b797b7fe582ba87016ad4ff5387a3050d6740123bca8e9a0192fe07a34bfa"
+    },
+    "measurements": {
+      "path": "2026-10-18-c73-cancelled-large-measurements.gz",
+      "uncompressedSha256": "e47eb987e34584d4012de56dcded69703cc351eb6f8516a2f50132254f5457be"
+    }
+  }
+}

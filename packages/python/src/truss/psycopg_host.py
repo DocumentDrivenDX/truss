@@ -15,6 +15,15 @@ from .execution import AccessMode, Error, ExecutionFailure, Isolation, Ok, Trans
 
 _registry_lock = Lock()
 _registry = WeakKeyDictionary()
+# Closed toolkit entry points only. Their installed source is VOLATILE, cannot
+# settle the caller transaction from SELECT, and restores function-local GUCs.
+# Keep the native source correspondence test when extending this inventory.
+_MANAGED_FUNCTIONS = frozenset(('accepted_document','acknowledge_feed','apply_group',
+    'apply_group_prepared','catalog_report','catalog_revision','catalog_view_basis',
+    'feed_reached','get_edge','get_object','group_context','group_relationship_reference',
+    'group_type_reference','import_context','import_key_selection','lookup_import_source','lookup_string_key',
+    'page_edges','page_objects','prepare_group','reached','read_feed','read_history',
+    'reader_catalog','reread_feed','traverse_objects','writer_schema_basis'))
 _IDENTITY_SQL = """SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,
  l.virtualtransaction::pg_catalog.text,
  pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,
@@ -287,6 +296,93 @@ class _AdmissionCursor:
         return chunk
 
 
+class _FunctionCursor(_AdmissionCursor):
+    """Private fixed-function calls: fresh admission and payload in one command.
+
+    The payload is a target expression over a materialized, filtered guard row,
+    so a changed transaction or timeout cannot invoke it. A timeout mismatch is
+    a no-effect observation, followed by the ordinary setting/restore path.
+    Arbitrary SQL callbacks retain _AdmissionCursor's separate observations.
+    """
+    def __init__(self, inner, host, custody):
+        super().__init__(inner, host, custody, custody.identity, None)
+        self.before = None
+
+    def execute(self, query, *args, **kwargs):
+        import re
+        if self._host._custody.retry_identity == self._custody.identity:
+            raise ValueError('Whole caller transaction must be retried')
+        selected = (re.fullmatch(
+            r'SELECT truss\.([a-z_0-9]+)\((?:%s(?:::[a-z_0-9]+)?(?:,\s*%s(?:::[a-z_0-9]+)?)*)?\)', query)
+            if isinstance(query,str) else None)
+        if (selected is None or selected[1] not in _MANAGED_FUNCTIONS
+                or kwargs.get('binary') or len(args) > 1):
+            raise ValueError('One registered parameterized function SELECT required')
+        parameters = args[0] if args else ()
+        if not isinstance(parameters, (tuple, list)):
+            raise ValueError('Positional function parameters required')
+        self.executions += 1
+        self._rows = None
+        self._desc = None
+        self._pos = 0
+        # Target expressions execute only for rows surviving the guard filter.
+        # Do not use an uncorrelated LATERAL subquery, which may run first.
+        guard = ('WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED ('
+                 + _IDENTITY_SQL + '), truss_payload AS MATERIALIZED ('
+                 + query + ' AS value FROM truss_guard WHERE '
+                 '(SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 '
+                 'AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s '
+                 'AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s '
+                 'AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) '
+                 'AND timeout OPERATOR(pg_catalog.=) %s) '
+                 'SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,'
+                 'EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g '
+                 'LEFT JOIN truss_payload p ON true')
+        identity = self._custody.identity
+        expected = (identity[0], identity[1], identity[2].replace('_', ' '),
+                    'on' if identity[3] == 'read_only' else 'off',
+                    self._custody.permanent_xid, self._custody.permanent_xid,
+                    str(self._desired))
+        self._inner.execute(guard, tuple(parameters) + expected, **kwargs)
+        rows = self._inner.fetchall()
+        description = self._inner.description
+        if (len(rows) != 1 or len(rows[0]) != 8 or description is None
+                or len(description) != 8 or any(d.type_code != 25 for d in description[1:])
+                or rows[0][7] not in ('true','false')):
+            raise ValueError('One exact guarded function result required')
+        observation = self._host._apply_admission(
+            _parse_identity_row(rows[0][1:7]), self._custody, self._baseline)
+        if self._host._custody.retry_identity == observation[0]:
+            raise ValueError('Whole caller transaction must be retried')
+        if self._host._custody.retry_identity is not None:
+            self._host._custody.retry_identity = None
+        if self.before is None:
+            self.before = observation
+            self._restore_to = observation[2]
+        self.admission = observation
+        self.checked = True
+        if rows[0][7] == 'true':
+            self._rows = [(rows[0][0],)]
+            self._desc = description[:1]
+            return self
+        # Identity failures raised above. Only a mismatching, bounded timeout
+        # reaches this branch; the guarded function has not executed at all.
+        if int(observation[2]) == self._desired:
+            raise ValueError('Guarded function execution inventory required')
+        self._timeout_applied = False
+        self._ensure_timeout()
+        self._inner.execute(_fuse_admission(query), tuple(parameters), **kwargs)
+        rows = self._inner.fetchall()
+        description = self._inner.description
+        if (len(rows) != 1 or len(rows[0]) != 7 or description is None
+                or len(description) != 7 or any(d.type_code != 25 for d in description[1:])):
+            raise ValueError('One exact function result and admission required')
+        self._remember(_parse_identity_row(rows[0][-6:]))
+        self._rows = [row[:-6] for row in rows]
+        self._desc = description[:-6]
+        return self
+
+
 def _failure(code, message, sql_state=None, retry_scope='none'):
     return Error(ExecutionFailure(code, message, sql_state=sql_state, retry_scope=retry_scope))
 
@@ -438,7 +534,7 @@ class PsycopgHost:
                 raise
             return False
 
-    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None, parameter_limit=4194304):
+    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None, parameter_limit=4194304, function_call=False, adoption=False):
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
         host_reservation=self._custody.reservation
@@ -531,17 +627,18 @@ class PsycopgHost:
                 cursor.execute(sql.SQL('SAVEPOINT {}').format(name), prepare=False)
                 established = True
                 attempt.phase = 'savepoint'
-                before = self._apply_admission(self._observe(cursor), custody, None)
+                before = (None if function_call else self._apply_admission(self._observe(cursor), custody, None))
                 deadline.check()
-                if not 1 <= int(before[2]) <= 60000:
+                if before is not None and not 1 <= int(before[2]) <= 60000:
                     raise ValueError('Host statement_timeout must be 1..60000 milliseconds')
-                if self._custody.retry_identity == before[0]:
+                if before is not None and self._custody.retry_identity == before[0]:
                     raise ValueError('Whole caller transaction must be retried')
-                if self._custody.retry_identity is not None:
+                if before is not None and self._custody.retry_identity is not None:
                     self._custody.retry_identity = None
                 deadline.check()
                 attempt.phase = 'executing'
-                work = _AdmissionCursor(cursor, self, custody, before[0], before[2])
+                work = (_FunctionCursor(cursor,self,custody) if function_call else
+                        _AdmissionCursor(cursor, self, custody, before[0], before[2]))
                 if parameter_producer is not None:
                     parameters = parameter_producer(attempt.ordinal_reservation.result.ordinal)
                     if (type(parameters) is not tuple or not 1 <= len(parameters) <= 64
@@ -556,6 +653,10 @@ class PsycopgHost:
                 else:
                     result = (callback(work, before, attempt.ordinal_reservation.result.ordinal)
                               if semantic else callback(work, before))
+                if function_call:
+                    before = work.before
+                    if before is None or not work.checked:
+                        raise ValueError('Managed function dispatch required')
                 if work.checked and work.admission is not None:
                     self._admission_satisfied = work.admission
                 elif work.executions == 0:
@@ -563,7 +664,7 @@ class PsycopgHost:
                 attempt.result = result
                 attempt.phase = 'command_returned'
                 deadline.check()
-                after = self._observe(cursor)
+                after = (work.admission if function_call else before if adoption else self._observe(cursor))
                 if before[0] != after[0]:
                     raise ValueError('Original caller transaction changed during operation')
                 if custody is not None: self._match(custody, after)
@@ -592,6 +693,8 @@ class PsycopgHost:
             except BaseException as error:
                 primary = error
                 attempt.error = error
+                if function_call and before is None and work is not None:
+                    before = work.before
                 # Savepoint rollback undoes SET LOCAL. Keep the admitted timeout
                 # aligned with the caller's value when containment succeeds.
                 if before is not None and self._admitted is not None and self._admitted[2] != before[2]:
@@ -673,12 +776,12 @@ class PsycopgHost:
             return _TransactionCustody(handle, observed[0], observed[1])
         def publish(custody):
             self._transactions[custody.handle._key] = custody
-        result = self._attempt(adopt, publish=publish)
+        result = self._attempt(adopt, publish=publish, adoption=True)
         if isinstance(result, Error): return result
         custody = result.value
         return Ok(custody.handle)
 
-    def _run_operation(self, transaction, callback, *, operation_deadline=None):
+    def _run_operation(self, transaction, callback, *, operation_deadline=None, function_call=False):
         if operation_deadline is not None:
             if type(operation_deadline) is not float or not 0<operation_deadline<float('inf'):
                 return _failure('execution_obligation','Finite original absolute deadline required')
@@ -689,7 +792,7 @@ class PsycopgHost:
         if (custody is None or custody.handle is not transaction
                 or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
             return _failure('invalid_transaction', 'Original issued transaction handle required')
-        return self._attempt(callback, custody, operation_deadline=operation_deadline)
+        return self._attempt(callback, custody, operation_deadline=operation_deadline, function_call=function_call)
 
     def _run_published_operation(self, transaction, callback, publisher):
         """Private trusted receiver hook after native completion, under lease.

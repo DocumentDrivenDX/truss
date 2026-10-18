@@ -15,7 +15,15 @@ ddx:
 
 # Practical functionality and performance
 
-## 2026-10-18: current local candidate; hosted matrix pending
+## 2026-10-18: C73 hosted failures; successor under test
+
+[Run 39164763845](https://github.com/DocumentDrivenDX/truss/actions/runs/39164763845)
+tests source `7fcb4c5a9719c1a9a86468e1a2a05510cbf8c80b` against all eleven
+unchanged workloads on Linux x86_64 and macOS ARM64, alongside both complete
+native release jobs. The [failure snapshot](results/2026-10-18-c73-hosted-failures.json)
+records container-oracle, wide, many-type and eight-key/index-heavy SQL timeouts.
+Remaining hosted cases are still running. This candidate cannot be published.
+Its replacement is under test with unchanged deadlines and workloads.
 
 The [C73 controls](results/2026-10-18-c73-local-controls.json) identify the exact
 installed wheel and native runtime. Production writes reuse one compiled schema
