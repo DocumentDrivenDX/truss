@@ -14,13 +14,10 @@ BEGIN
    SELECT * INTO STRICT relation FROM jsonb_populate_recordset(NULL::truss.rel_def,truss.catalog_all_expected_records(historical_revision)->'rel_def') r WHERE r.rel_type_id=selected_relationship;
   END IF;
  END IF;
- SELECT * INTO STRICT archive FROM truss.schema_doc WHERE rev=relation.definition_rev AND ord=relation.definition_doc_ord AND doc_id=relation.definition_document_id;
- SELECT value,ordinality::int-1 INTO STRICT module_json,mi FROM json_array_elements(archive.document::json->'modules') WITH ORDINALITY m WHERE value->>'id'=relation.module;
- SELECT value,ordinality::int-1 INTO STRICT fragment,ri FROM json_array_elements(module_json->'relationships') WITH ORDINALITY r WHERE value->>'id'=relation.rel_id;
- pointer:='/modules/'||mi||'/relationships/'||ri;original:=convert_to(fragment::text,'UTF8');
- pin_input:='['||archive.rev||','||archive.ord||',"'||archive.content_sha256||'","'||pointer
- ||'",{"identity":"truss-original-json-definition","sha256":"08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d","version":"0.1"},"'||encode(sha256(original),'hex')||'"]';
- RETURN encode(sha256(convert_to(pin_input,'UTF8')),'hex');
+ SELECT d.definition_pin INTO STRICT pin_input FROM truss.runtime_definition_source d
+ WHERE d.rev=relation.definition_rev AND d.ord=relation.definition_doc_ord AND d.doc_id=relation.definition_document_id
+  AND d.module_id=relation.module AND d.element_id=relation.rel_id AND d.kind='relationship' AND d.key_id='';
+ RETURN pin_input;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_relationship_pin(int,int) FROM PUBLIC;
@@ -38,7 +35,7 @@ BEGIN
   RAISE EXCEPTION 'qualified exact condition identity required' USING ERRCODE='22023';END IF;
  SELECT * INTO selected FROM truss.type_def WHERE type_id=type_number::int AND kind='record' AND NOT provisional AND retired_rev IS NULL;
  IF NOT FOUND THEN RAISE EXCEPTION 'known condition type required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',selected.type_id);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',selected.type_id);
  IF identity->>'definitionPin' IS DISTINCT FROM pin.definition_pin OR identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module) THEN
   RAISE EXCEPTION 'current qualified condition definition required' USING ERRCODE='22023';END IF;
  RETURN selected;
@@ -73,7 +70,7 @@ BEGIN
   ELSIF condition->>'condition'='key_absent' THEN
    IF condition-ARRAY['condition','id','reason','typeDefinitionPin','keyId','values']<>'{}'::jsonb OR jsonb_typeof(condition->'values') IS DISTINCT FROM 'array'
     OR jsonb_array_length(condition->'values') NOT BETWEEN 1 AND 1024 THEN RAISE EXCEPTION 'closed key condition required' USING ERRCODE='22023';END IF;
-   SELECT t.* INTO selected FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p WHERE p.definition_pin=condition->>'typeDefinitionPin';
+   SELECT t.* INTO selected FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_owned_definition_metadata('type',t.type_id) p WHERE p.definition_pin=condition->>'typeDefinitionPin';
    IF NOT FOUND THEN RAISE EXCEPTION 'known predicate type required' USING ERRCODE='22023';END IF;
    SELECT * INTO key_row FROM truss.key_def WHERE type_id=selected.type_id AND key_id=condition->>'keyId' AND retired_rev IS NULL;
    IF NOT FOUND THEN RAISE EXCEPTION 'known predicate key required' USING ERRCODE='22023';END IF;
@@ -156,7 +153,7 @@ BEGIN
  FOR entry IN SELECT value FROM jsonb_array_elements(inventory) WHERE value->'condition'->>'condition'='key_absent' LOOP
   tuple_bytes:=truss.derive_catalog_key_tuple((entry->>'typeId')::int,(entry->>'keyNumber')::smallint,entry->'values');
   keys:=keys||jsonb_build_array(jsonb_build_object('conditionIndex',entry->>'index','tupleHex',encode(tuple_bytes,'hex')));
-  SELECT * INTO STRICT pin FROM truss.runtime_definition('key',(entry->>'typeId')::int,(entry->>'keyNumber')::int);
+  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',(entry->>'typeId')::int,(entry->>'keyNumber')::int);
   ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
    'typeId',entry->>'typeId','keyNumber',entry->>'keyNumber','definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
   transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');PERFORM truss.lock_string_key_bucket(ns,transport);
@@ -172,7 +169,7 @@ BEGIN
    END IF;
   ELSIF condition->>'condition'='key_absent' THEN
    SELECT value INTO STRICT key_input FROM jsonb_array_elements(keys) WHERE value->>'conditionIndex'=entry->>'index';
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('key',(entry->>'typeId')::int,(entry->>'keyNumber')::int);
+   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',(entry->>'typeId')::int,(entry->>'keyNumber')::int);
    ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
     'typeId',entry->>'typeId','keyNumber',entry->>'keyNumber','definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
    transport:=convert_to('umf-key-tuple-v1:hex:'||encode(decode(key_input->>'tupleHex','hex'),'hex'),'UTF8');SELECT * INTO STRICT observed FROM truss.lock_string_key_bucket(ns,transport);

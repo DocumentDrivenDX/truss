@@ -2,7 +2,7 @@
   "interfaceVersion": "truss-core08-catalog-producer/0.2.0",
   "runtimeVersion": "1.4.2",
   "owner": {
-    "revision": "7c0f0c98beee2cc1a5a407992b5c53cc2616da8e",
+    "revision": "aa944733fc45c090853ca051fd79c26bd3681307",
     "producerMode": "core08-catalog",
     "buildDependencies": {
       "yaml": {
@@ -14,9 +14,10 @@
         "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
       }
     },
-    "archiveSha256": "d25f545ca0988b66b42aad32c1942f8d5fd04174a2f31f2d3b887c097c1ddad4",
-    "bundleSha256": "88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3",
+    "archiveSha256": "82d078ff364cfee30a0c73b88c9f4286c9eb4498d5a82cbcdc6b823ea35d922a",
+    "bundleSha256": "880ea89a123c02e6bd6ddbb2c692e544bcbdc6767797e30143f6978240462965",
     "operations": [
+      "withCatalogResourceProfile",
       "readDocument",
       "validateDocument",
       "inspectCoreSchemaProperties",
@@ -40,9 +41,9 @@
     "licenses/json-schema-traverse.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
     "licenses/require-from-string.txt": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
     "licenses/yaml.txt": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869",
-    "preparation.mjs": "3f3c29f66ae043cbb1ff8c6b38240143ebca1be26c21d46405d55a5b0cd95161",
-    "producer-manifest.json": "3123647a3443894052b670de8444e6ba0197abd83f647819faaad01fcaaedc81",
-    "producer.js": "88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3",
+    "preparation.mjs": "b4ad178be5598cac9822818010954bb663202954ba626d7f42f2f2e67f20be72",
+    "producer-manifest.json": "f94609345ccbec55f5e293997526f7fe75ea49d7f612aebe8f896c416eb307d1",
+    "producer.js": "880ea89a123c02e6bd6ddbb2c692e544bcbdc6767797e30143f6978240462965",
     "receiver.mjs": "08d0ca7d3122374505287a016c66c47b864c0feb17a45d5c2c9687afb8994443"
   },
   "scope": "Original core0.8 observation source only. No native ingress, report acceptance, migration, issuer authentication or protected execution."

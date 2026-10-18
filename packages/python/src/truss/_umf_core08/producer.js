@@ -32,7 +32,7 @@ var __toESM = (mod, isNodeMode, target) => {
 };
 var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/codegen/code.js
+// ../umf/node_modules/ajv/dist/compile/codegen/code.js
 var require_code = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.regexpCode = exports.getEsmExportName = exports.getProperty = exports.safeStringify = exports.stringify = exports.strConcat = exports.addCodeArg = exports.str = exports._ = exports.nil = exports._Code = exports.Name = exports.IDENTIFIER = exports._CodeOrName = undefined;
@@ -186,7 +186,7 @@ var require_code = __commonJS(function(exports) {
   exports.regexpCode = regexpCode;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/codegen/scope.js
+// ../umf/node_modules/ajv/dist/compile/codegen/scope.js
 var require_scope = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.ValueScope = exports.ValueScopeName = exports.Scope = exports.varKinds = exports.UsedValueState = undefined;
@@ -332,7 +332,7 @@ var require_scope = __commonJS(function(exports) {
   exports.ValueScope = ValueScope;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/codegen/index.js
+// ../umf/node_modules/ajv/dist/compile/codegen/index.js
 var require_codegen = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.or = exports.and = exports.not = exports.CodeGen = exports.operators = exports.varKinds = exports.ValueScopeName = exports.ValueScope = exports.Scope = exports.Name = exports.regexpCode = exports.stringify = exports.getProperty = exports.nil = exports.strConcat = exports.str = exports._ = undefined;
@@ -1042,7 +1042,7 @@ var require_codegen = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/util.js
+// ../umf/node_modules/ajv/dist/compile/util.js
 var require_util = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.checkStrictMode = exports.getErrorPath = exports.Type = exports.useFunc = exports.setEvaluated = exports.evaluatedPropsToName = exports.mergeEvaluated = exports.eachItem = exports.unescapeJsonPointer = exports.escapeJsonPointer = exports.escapeFragment = exports.unescapeFragment = exports.schemaRefOrVal = exports.schemaHasRulesButRef = exports.schemaHasRules = exports.checkUnknownRules = exports.alwaysValidSchema = exports.toHash = undefined;
@@ -1206,7 +1206,7 @@ var require_util = __commonJS(function(exports) {
   exports.checkStrictMode = checkStrictMode;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/names.js
+// ../umf/node_modules/ajv/dist/compile/names.js
 var require_names = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -1231,7 +1231,7 @@ var require_names = __commonJS(function(exports) {
   exports.default = names;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/errors.js
+// ../umf/node_modules/ajv/dist/compile/errors.js
 var require_errors = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.extendErrors = exports.resetErrorsCount = exports.reportExtraError = exports.reportError = exports.keyword$DataError = exports.keywordError = undefined;
@@ -1349,7 +1349,7 @@ var require_errors = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/validate/boolSchema.js
+// ../umf/node_modules/ajv/dist/compile/validate/boolSchema.js
 var require_boolSchema = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.boolOrEmptySchema = exports.topBoolOrEmptySchema = undefined;
@@ -1397,7 +1397,7 @@ var require_boolSchema = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/rules.js
+// ../umf/node_modules/ajv/dist/compile/rules.js
 var require_rules = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.getRules = exports.isJSONType = undefined;
@@ -1425,7 +1425,7 @@ var require_rules = __commonJS(function(exports) {
   exports.getRules = getRules;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/validate/applicability.js
+// ../umf/node_modules/ajv/dist/compile/validate/applicability.js
 var require_applicability = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.shouldUseRule = exports.shouldUseGroup = exports.schemaHasRulesForType = undefined;
@@ -1445,7 +1445,7 @@ var require_applicability = __commonJS(function(exports) {
   exports.shouldUseRule = shouldUseRule;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/validate/dataType.js
+// ../umf/node_modules/ajv/dist/compile/validate/dataType.js
 var require_dataType = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.reportTypeError = exports.checkDataTypes = exports.checkDataType = exports.coerceAndCheckDataType = exports.getJSONTypes = exports.getSchemaTypes = exports.DataType = undefined;
@@ -1626,7 +1626,7 @@ var require_dataType = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/validate/defaults.js
+// ../umf/node_modules/ajv/dist/compile/validate/defaults.js
 var require_defaults = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.assignDefaults = undefined;
@@ -1660,7 +1660,7 @@ var require_defaults = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/code.js
+// ../umf/node_modules/ajv/dist/vocabularies/code.js
 var require_code2 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateUnion = exports.validateArray = exports.usePattern = exports.callValidateCode = exports.schemaProperties = exports.allSchemaProperties = exports.noPropertyInData = exports.propertyInData = exports.isOwnProperty = exports.hasPropFunc = exports.reportMissingProp = exports.checkMissingProp = exports.checkReportMissingProp = undefined;
@@ -1789,7 +1789,7 @@ var require_code2 = __commonJS(function(exports) {
   exports.validateUnion = validateUnion;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/validate/keyword.js
+// ../umf/node_modules/ajv/dist/compile/validate/keyword.js
 var require_keyword = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateKeywordUsage = exports.validSchemaType = exports.funcKeywordCode = exports.macroKeywordCode = undefined;
@@ -1904,7 +1904,7 @@ var require_keyword = __commonJS(function(exports) {
   exports.validateKeywordUsage = validateKeywordUsage;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/validate/subschema.js
+// ../umf/node_modules/ajv/dist/compile/validate/subschema.js
 var require_subschema = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.extendSubschemaMode = exports.extendSubschemaData = exports.getSubschema = undefined;
@@ -1984,7 +1984,7 @@ var require_subschema = __commonJS(function(exports) {
   exports.extendSubschemaMode = extendSubschemaMode;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/fast-deep-equal/index.js
+// ../umf/node_modules/fast-deep-equal/index.js
 var require_fast_deep_equal = __commonJS(function(exports, module) {
   module.exports = function equal(a, b) {
     if (a === b)
@@ -2026,7 +2026,7 @@ var require_fast_deep_equal = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/json-schema-traverse/index.js
+// ../umf/node_modules/json-schema-traverse/index.js
 var require_json_schema_traverse = __commonJS(function(exports, module) {
   var traverse = module.exports = function(schema, opts, cb) {
     if (typeof opts == "function") {
@@ -2109,7 +2109,7 @@ var require_json_schema_traverse = __commonJS(function(exports, module) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/resolve.js
+// ../umf/node_modules/ajv/dist/compile/resolve.js
 var require_resolve = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.getSchemaRefs = exports.resolveUrl = exports.normalizeId = exports._getFullPath = exports.getFullPath = exports.inlineRef = undefined;
@@ -2262,7 +2262,7 @@ var require_resolve = __commonJS(function(exports) {
   exports.getSchemaRefs = getSchemaRefs;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/validate/index.js
+// ../umf/node_modules/ajv/dist/compile/validate/index.js
 var require_validate = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.getData = exports.KeywordCxt = exports.validateFunctionCode = undefined;
@@ -2767,7 +2767,7 @@ var require_validate = __commonJS(function(exports) {
   exports.getData = getData;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/runtime/validation_error.js
+// ../umf/node_modules/ajv/dist/runtime/validation_error.js
 var require_validation_error = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -2781,7 +2781,7 @@ var require_validation_error = __commonJS(function(exports) {
   exports.default = ValidationError;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/ref_error.js
+// ../umf/node_modules/ajv/dist/compile/ref_error.js
 var require_ref_error = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var resolve_1 = require_resolve();
@@ -2796,7 +2796,7 @@ var require_ref_error = __commonJS(function(exports) {
   exports.default = MissingRefError;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/compile/index.js
+// ../umf/node_modules/ajv/dist/compile/index.js
 var require_compile = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.resolveSchema = exports.getCompilingSchema = exports.resolveRef = exports.compileSchema = exports.SchemaEnv = undefined;
@@ -3017,7 +3017,7 @@ var require_compile = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/refs/data.json
+// ../umf/node_modules/ajv/dist/refs/data.json
 var require_data = __commonJS(function(exports, module) {
   module.exports = {
     $id: "https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json#",
@@ -3034,7 +3034,7 @@ var require_data = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/fast-uri/lib/utils.js
+// ../umf/node_modules/fast-uri/lib/utils.js
 var require_utils = __commonJS(function(exports, module) {
   var isUUID = RegExp.prototype.test.bind(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iu);
   var isIPv4 = RegExp.prototype.test.bind(/^(?:(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)$/u);
@@ -3551,7 +3551,7 @@ var require_utils = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/fast-uri/lib/schemes.js
+// ../umf/node_modules/fast-uri/lib/schemes.js
 var require_schemes = __commonJS(function(exports, module) {
   var { isUUID } = require_utils();
   var URN_REG = /^([\da-z][\d\-a-z]{0,31}):((?:[\w!$'()*+,\-./:;=@]|%[\da-f]{2})+)$/iu;
@@ -3726,7 +3726,7 @@ var require_schemes = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/fast-uri/index.js
+// ../umf/node_modules/fast-uri/index.js
 var require_fast_uri = __commonJS(function(exports, module) {
   var { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizePercentEncoding, normalizePathEncoding, serializePathEncoding, normalizeQueryFragmentEncoding, encodeQuery, encodeFragment, reescapeHostDelimiters, isIPv4, nonSimpleDomain } = require_utils();
   var { SCHEMES, getSchemeHandler } = require_schemes();
@@ -4129,7 +4129,7 @@ var require_fast_uri = __commonJS(function(exports, module) {
   module.exports.fastUri = fastUri;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/runtime/uri.js
+// ../umf/node_modules/ajv/dist/runtime/uri.js
 var require_uri = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var uri = require_fast_uri();
@@ -4137,7 +4137,7 @@ var require_uri = __commonJS(function(exports) {
   exports.default = uri;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/core.js
+// ../umf/node_modules/ajv/dist/core.js
 var require_core = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = undefined;
@@ -4730,7 +4730,7 @@ var require_core = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/core/id.js
+// ../umf/node_modules/ajv/dist/vocabularies/core/id.js
 var require_id = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var def = {
@@ -4742,7 +4742,7 @@ var require_id = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/core/ref.js
+// ../umf/node_modules/ajv/dist/vocabularies/core/ref.js
 var require_ref = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.callRef = exports.getValidate = undefined;
@@ -4861,7 +4861,7 @@ var require_ref = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/core/index.js
+// ../umf/node_modules/ajv/dist/vocabularies/core/index.js
 var require_core2 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var id_1 = require_id();
@@ -4879,7 +4879,7 @@ var require_core2 = __commonJS(function(exports) {
   exports.default = core;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/limitNumber.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/limitNumber.js
 var require_limitNumber = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -4908,7 +4908,7 @@ var require_limitNumber = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/multipleOf.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/multipleOf.js
 var require_multipleOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -4933,7 +4933,7 @@ var require_multipleOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/runtime/ucs2length.js
+// ../umf/node_modules/ajv/dist/runtime/ucs2length.js
 var require_ucs2length = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   function ucs2length(str) {
@@ -4956,7 +4956,7 @@ var require_ucs2length = __commonJS(function(exports) {
   ucs2length.code = 'require("ajv/dist/runtime/ucs2length").default';
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/limitLength.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/limitLength.js
 var require_limitLength = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -4985,7 +4985,7 @@ var require_limitLength = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/pattern.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/pattern.js
 var require_pattern = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -5019,7 +5019,7 @@ var require_pattern = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/limitProperties.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/limitProperties.js
 var require_limitProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5045,7 +5045,7 @@ var require_limitProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/required.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/required.js
 var require_required = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -5124,7 +5124,7 @@ var require_required = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/limitItems.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/limitItems.js
 var require_limitItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5150,7 +5150,7 @@ var require_limitItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/runtime/equal.js
+// ../umf/node_modules/ajv/dist/runtime/equal.js
 var require_equal = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var equal = require_fast_deep_equal();
@@ -5158,7 +5158,7 @@ var require_equal = __commonJS(function(exports) {
   exports.default = equal;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
 var require_uniqueItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dataType_1 = require_dataType();
@@ -5222,7 +5222,7 @@ var require_uniqueItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/const.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/const.js
 var require_const = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5248,7 +5248,7 @@ var require_const = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/enum.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/enum.js
 var require_enum = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5294,7 +5294,7 @@ var require_enum = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/index.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/index.js
 var require_validation = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var limitNumber_1 = require_limitNumber();
@@ -5324,7 +5324,7 @@ var require_validation = __commonJS(function(exports) {
   exports.default = validation;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
 var require_additionalItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateAdditionalItems = undefined;
@@ -5374,7 +5374,7 @@ var require_additionalItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/items.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/items.js
 var require_items = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateTuple = undefined;
@@ -5428,7 +5428,7 @@ var require_items = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
 var require_prefixItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var items_1 = require_items();
@@ -5442,7 +5442,7 @@ var require_prefixItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/items2020.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/items2020.js
 var require_items2020 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5474,7 +5474,7 @@ var require_items2020 = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/contains.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/contains.js
 var require_contains = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5565,7 +5565,7 @@ var require_contains = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/dependencies.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/dependencies.js
 var require_dependencies = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateSchemaDeps = exports.validatePropertyDeps = exports.error = undefined;
@@ -5650,7 +5650,7 @@ var require_dependencies = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
 var require_propertyNames = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5690,7 +5690,7 @@ var require_propertyNames = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
 var require_additionalProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -5793,7 +5793,7 @@ var require_additionalProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/properties.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/properties.js
 var require_properties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var validate_1 = require_validate();
@@ -5848,7 +5848,7 @@ var require_properties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
 var require_patternProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -5919,7 +5919,7 @@ var require_patternProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/not.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/not.js
 var require_not = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -5947,7 +5947,7 @@ var require_not = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/anyOf.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/anyOf.js
 var require_anyOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -5961,7 +5961,7 @@ var require_anyOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/oneOf.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/oneOf.js
 var require_oneOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6016,7 +6016,7 @@ var require_oneOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/allOf.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/allOf.js
 var require_allOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -6040,7 +6040,7 @@ var require_allOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/if.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/if.js
 var require_if = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6106,7 +6106,7 @@ var require_if = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/thenElse.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/thenElse.js
 var require_thenElse = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -6121,7 +6121,7 @@ var require_thenElse = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/index.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/index.js
 var require_applicator = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var additionalItems_1 = require_additionalItems();
@@ -6164,7 +6164,7 @@ var require_applicator = __commonJS(function(exports) {
   exports.default = getApplicator;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/dynamic/dynamicAnchor.js
+// ../umf/node_modules/ajv/dist/vocabularies/dynamic/dynamicAnchor.js
 var require_dynamicAnchor = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.dynamicAnchor = undefined;
@@ -6196,7 +6196,7 @@ var require_dynamicAnchor = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/dynamic/dynamicRef.js
+// ../umf/node_modules/ajv/dist/vocabularies/dynamic/dynamicRef.js
 var require_dynamicRef = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.dynamicRef = undefined;
@@ -6239,7 +6239,7 @@ var require_dynamicRef = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/dynamic/recursiveAnchor.js
+// ../umf/node_modules/ajv/dist/vocabularies/dynamic/recursiveAnchor.js
 var require_recursiveAnchor = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dynamicAnchor_1 = require_dynamicAnchor();
@@ -6257,7 +6257,7 @@ var require_recursiveAnchor = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/dynamic/recursiveRef.js
+// ../umf/node_modules/ajv/dist/vocabularies/dynamic/recursiveRef.js
 var require_recursiveRef = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dynamicRef_1 = require_dynamicRef();
@@ -6269,7 +6269,7 @@ var require_recursiveRef = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/dynamic/index.js
+// ../umf/node_modules/ajv/dist/vocabularies/dynamic/index.js
 var require_dynamic = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dynamicAnchor_1 = require_dynamicAnchor();
@@ -6280,7 +6280,7 @@ var require_dynamic = __commonJS(function(exports) {
   exports.default = dynamic;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/dependentRequired.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/dependentRequired.js
 var require_dependentRequired = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dependencies_1 = require_dependencies();
@@ -6294,7 +6294,7 @@ var require_dependentRequired = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/applicator/dependentSchemas.js
+// ../umf/node_modules/ajv/dist/vocabularies/applicator/dependentSchemas.js
 var require_dependentSchemas = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dependencies_1 = require_dependencies();
@@ -6307,7 +6307,7 @@ var require_dependentSchemas = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/validation/limitContains.js
+// ../umf/node_modules/ajv/dist/vocabularies/validation/limitContains.js
 var require_limitContains = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -6324,7 +6324,7 @@ var require_limitContains = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/next.js
+// ../umf/node_modules/ajv/dist/vocabularies/next.js
 var require_next = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dependentRequired_1 = require_dependentRequired();
@@ -6334,7 +6334,7 @@ var require_next = __commonJS(function(exports) {
   exports.default = next;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedProperties.js
+// ../umf/node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedProperties.js
 var require_unevaluatedProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6397,7 +6397,7 @@ var require_unevaluatedProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedItems.js
+// ../umf/node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedItems.js
 var require_unevaluatedItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6438,7 +6438,7 @@ var require_unevaluatedItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/unevaluated/index.js
+// ../umf/node_modules/ajv/dist/vocabularies/unevaluated/index.js
 var require_unevaluated = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var unevaluatedProperties_1 = require_unevaluatedProperties();
@@ -6447,7 +6447,7 @@ var require_unevaluated = __commonJS(function(exports) {
   exports.default = unevaluated;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/format/format.js
+// ../umf/node_modules/ajv/dist/vocabularies/format/format.js
 var require_format = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6534,7 +6534,7 @@ var require_format = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/format/index.js
+// ../umf/node_modules/ajv/dist/vocabularies/format/index.js
 var require_format2 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var format_1 = require_format();
@@ -6542,7 +6542,7 @@ var require_format2 = __commonJS(function(exports) {
   exports.default = format;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/metadata.js
+// ../umf/node_modules/ajv/dist/vocabularies/metadata.js
 var require_metadata = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.contentVocabulary = exports.metadataVocabulary = undefined;
@@ -6562,7 +6562,7 @@ var require_metadata = __commonJS(function(exports) {
   ];
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/draft2020.js
+// ../umf/node_modules/ajv/dist/vocabularies/draft2020.js
 var require_draft2020 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var core_1 = require_core2();
@@ -6587,7 +6587,7 @@ var require_draft2020 = __commonJS(function(exports) {
   exports.default = draft2020Vocabularies;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/discriminator/types.js
+// ../umf/node_modules/ajv/dist/vocabularies/discriminator/types.js
 var require_types = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.DiscrError = undefined;
@@ -6598,7 +6598,7 @@ var require_types = __commonJS(function(exports) {
   })(DiscrError || (exports.DiscrError = DiscrError = {}));
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/vocabularies/discriminator/index.js
+// ../umf/node_modules/ajv/dist/vocabularies/discriminator/index.js
 var require_discriminator = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6700,7 +6700,7 @@ var require_discriminator = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/refs/json-schema-2020-12/schema.json
+// ../umf/node_modules/ajv/dist/refs/json-schema-2020-12/schema.json
 var require_schema = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6758,7 +6758,7 @@ var require_schema = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/applicator.json
+// ../umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/applicator.json
 var require_applicator2 = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6809,7 +6809,7 @@ var require_applicator2 = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/unevaluated.json
+// ../umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/unevaluated.json
 var require_unevaluated2 = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6827,7 +6827,7 @@ var require_unevaluated2 = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/content.json
+// ../umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/content.json
 var require_content = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6846,7 +6846,7 @@ var require_content = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/core.json
+// ../umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/core.json
 var require_core3 = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6900,7 +6900,7 @@ var require_core3 = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/format-annotation.json
+// ../umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/format-annotation.json
 var require_format_annotation = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6917,7 +6917,7 @@ var require_format_annotation = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/meta-data.json
+// ../umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/meta-data.json
 var require_meta_data = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6956,7 +6956,7 @@ var require_meta_data = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/validation.json
+// ../umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/validation.json
 var require_validation2 = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -7049,7 +7049,7 @@ var require_validation2 = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/refs/json-schema-2020-12/index.js
+// ../umf/node_modules/ajv/dist/refs/json-schema-2020-12/index.js
 var require_json_schema_2020_12 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var metaSchema = require_schema();
@@ -7080,7 +7080,7 @@ var require_json_schema_2020_12 = __commonJS(function(exports) {
   exports.default = addMetaSchema2020;
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/ajv/dist/2020.js
+// ../umf/node_modules/ajv/dist/2020.js
 var require__2020 = __commonJS(function(exports, module) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.MissingRefError = exports.ValidationError = exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = exports.Ajv2020 = undefined;
@@ -7155,7 +7155,200 @@ var require__2020 = __commonJS(function(exports, module) {
   } });
 });
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/nodes/identity.js
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/types.ts
+var SCALAR_TYPES = Object.freeze(["boolean", "integer", "decimal", "float", "string", "binary", "date", "time", "timestamp"]);
+var SCALAR_TYPES_V09 = Object.freeze([...SCALAR_TYPES, "bits128", "uuid"]);
+var scalarTypesForVersion = (version) => ["0.9.0", "0.10.0"].includes(version) ? SCALAR_TYPES_V09 : SCALAR_TYPES;
+var ELEMENT_KINDS = ["field", "record", "group"];
+var NULLABILITIES = ["required", "absent-allowed", "unspecified"];
+var CARDINALITIES = ["one", "array", "map", "unspecified"];
+
+class UmfError extends Error {
+  code;
+  path;
+  constructor(code, message, path = "") {
+    super(message);
+    this.code = code;
+    this.path = path;
+    this.name = "UmfError";
+  }
+}
+var pointer = (key) => key.replace(/~/g, "~0").replace(/\//g, "~1");
+
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/json.ts
+var LIMITS = { maxDepth: 128, maxValues: 1e5, maxTextLength: 4000000 };
+var catalogDepth = 0;
+function jsonValueLimit() {
+  return catalogDepth ? 1e6 : LIMITS.maxValues;
+}
+function withCatalogResourceProfile(work) {
+  catalogDepth++;
+  try {
+    const result = work();
+    if (result && typeof result.then === "function")
+      throw new UmfError("LIMIT", "Catalog resource scope must be synchronous");
+    return result;
+  } finally {
+    catalogDepth--;
+  }
+}
+function copyJson(input) {
+  return copyJsonCharged(input);
+}
+function copyJsonCharged(input, charge) {
+  const active = new Set;
+  let values = 0;
+  function visit(value, path, depth) {
+    charge?.(1);
+    if (++values > jsonValueLimit() || depth > LIMITS.maxDepth)
+      throw new UmfError("LIMIT", "JSON structural limit exceeded", path);
+    if (value === null || typeof value === "string" || typeof value === "boolean")
+      return value;
+    if (typeof value === "number") {
+      if (!Number.isFinite(value) || Object.is(value, -0) || Number.isInteger(value) && !Number.isSafeInteger(value))
+        throw new UmfError("NUMBER", "Number outside the core interoperable numeric profile", path);
+      return value;
+    }
+    if (typeof value !== "object")
+      throw new UmfError("NON_JSON", "Value is not JSON-compatible", path);
+    if (active.has(value))
+      throw new UmfError("CYCLE", "Cyclic value", path);
+    const proto = Object.getPrototypeOf(value);
+    if (Array.isArray(value) ? proto !== Array.prototype : proto !== Object.prototype && proto !== null)
+      throw new UmfError("NON_JSON", "Custom object prototype", path);
+    if (Object.getOwnPropertySymbols(value).length)
+      throw new UmfError("NON_JSON", "Symbol keys are not JSON-compatible", path);
+    active.add(value);
+    const descriptors = Object.getOwnPropertyDescriptors(value);
+    const result = Array.isArray(value) ? [] : Object.create(null);
+    for (const [key, descriptor] of Object.entries(descriptors)) {
+      if (Array.isArray(value) && key === "length")
+        continue;
+      if (!descriptor.enumerable || !("value" in descriptor))
+        throw new UmfError("NON_JSON", "Hidden fields and accessors cannot be serialized faithfully", path + "/" + pointer(key));
+      if (Array.isArray(value) && (!/^(0|[1-9][0-9]*)$/.test(key) || Number(key) >= 4294967295 || Number(key) >= value.length))
+        throw new UmfError("NON_JSON", "Non-index array property", path);
+      const item = visit(descriptor.value, path + "/" + pointer(key), depth + 1);
+      Object.defineProperty(result, key, { value: item, enumerable: true, writable: true, configurable: true });
+    }
+    if (Array.isArray(value) && Object.keys(value).length !== value.length)
+      throw new UmfError("NON_JSON", "Sparse arrays are not JSON values", path);
+    active.delete(value);
+    return result;
+  }
+  return visit(input, "", 0);
+}
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/internal/json-number.ts
+function decimal(text) {
+  const match = /^([+-]?)(\d*)(?:\.(\d*))?(?:[eE]([+-]?\d+))?$/.exec(text);
+  if (!match)
+    throw new UmfError("NUMBER", "Unsupported numeric spelling");
+  const digits = ((match[2] || "") + (match[3] || "")).replace(/^0+/, "");
+  if (!digits)
+    return "0";
+  const trimmed = digits.replace(/0+$/, "");
+  const exponent = BigInt(match[4] || "0") - BigInt((match[3] || "").length) + BigInt(digits.length - trimmed.length);
+  return `${match[1] === "-" ? "-" : ""}${trimmed}e${exponent}`;
+}
+function assertExactJsonNumber(token) {
+  const value = Number(token);
+  if (!Number.isFinite(value) || Number.isInteger(value) && !Number.isSafeInteger(value) || Object.is(value, -0))
+    throw new UmfError("NUMBER", "Noninteroperable JSON number");
+  if (value === 0 && /[1-9]/.test(token.split(/[eE]/)[0]))
+    throw new UmfError("NUMBER", "Parsing would change the decimal value");
+  if (decimal(token) !== decimal(String(value)))
+    throw new UmfError("NUMBER", "Parsing would change the decimal value");
+}
+
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/internal/scan-json-frame.ts
+function scanJsonFrame(text, maxNodes, maxDepth, onString = () => {}) {
+  const fail = (code, message) => {
+    throw new UmfError(code, message);
+  };
+  let at = 0, nodes = 0;
+  const ws = () => {
+    while (/[\t\n\r ]/.test(text[at] ?? "x"))
+      at++;
+  };
+  const string = () => {
+    const start = at++;
+    while (at < text.length) {
+      const c = text[at++];
+      if (c === '"') {
+        let value;
+        try {
+          value = JSON.parse(text.slice(start, at));
+        } catch {
+          return fail("SYNTAX", "Invalid JSON string");
+        }
+        onString(value);
+        return value;
+      }
+      if (c === "\\")
+        at++;
+    }
+    return fail("SYNTAX", "Unterminated JSON string");
+  };
+  const visit = (depth) => {
+    if (depth > maxDepth || ++nodes > maxNodes)
+      fail("LIMIT", "JSON depth/node bound exceeded");
+    ws();
+    const c = text[at];
+    if (c === '"') {
+      string();
+      return;
+    }
+    if (c === "{" || c === "[") {
+      const object = c === "{", end = object ? "}" : "]", keys = new Set;
+      at++;
+      ws();
+      if (text[at] === end) {
+        at++;
+        return;
+      }
+      while (at < text.length) {
+        if (object) {
+          ws();
+          if (text[at] !== '"')
+            fail("SYNTAX", "Expected JSON member");
+          const key = string();
+          if (keys.has(key))
+            fail("SYNTAX", "Duplicate JSON member");
+          keys.add(key);
+          ws();
+          if (text[at++] !== ":")
+            fail("SYNTAX", "Expected colon");
+        }
+        visit(depth + 1);
+        ws();
+        if (text[at] === end) {
+          at++;
+          return;
+        }
+        if (text[at++] !== ",")
+          fail("SYNTAX", "Expected comma");
+      }
+      fail("SYNTAX", "Unterminated JSON collection");
+    }
+    const m = /^(?:true|false|null|-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?)/.exec(text.slice(at));
+    if (!m)
+      fail("SYNTAX", "Invalid JSON value");
+    if (/^[0-9-]/.test(m[0])) {
+      try {
+        assertExactJsonNumber(m[0]);
+      } catch {
+        fail("SYNTAX", "Noninteroperable JSON number");
+      }
+    }
+    at += m[0].length;
+  };
+  visit(0);
+  ws();
+  if (at !== text.length)
+    fail("SYNTAX", "Trailing JSON");
+}
+
+// ../umf/node_modules/yaml/browser/dist/nodes/identity.js
 var ALIAS = Symbol.for("yaml.alias");
 var DOC = Symbol.for("yaml.document");
 var MAP = Symbol.for("yaml.map");
@@ -7191,7 +7384,7 @@ function isNode(node) {
 }
 var hasAnchor = (node) => (isScalar(node) || isCollection(node)) && !!node.anchor;
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/visit.js
+// ../umf/node_modules/yaml/browser/dist/visit.js
 var BREAK = Symbol("break visit");
 var SKIP = Symbol("skip children");
 var REMOVE = Symbol("remove node");
@@ -7341,7 +7534,7 @@ function replaceNode(key, path, node) {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/doc/directives.js
+// ../umf/node_modules/yaml/browser/dist/doc/directives.js
 var escapeChars = {
   "!": "%21",
   ",": "%2C",
@@ -7488,7 +7681,7 @@ class Directives {
 Directives.defaultYaml = { explicit: false, version: "1.2" };
 Directives.defaultTags = { "!!": "tag:yaml.org,2002:" };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/doc/anchors.js
+// ../umf/node_modules/yaml/browser/dist/doc/anchors.js
 function anchorIsValid(anchor) {
   if (/[\x00-\x19\s,[\]{}]/.test(anchor)) {
     const sa = JSON.stringify(anchor);
@@ -7542,7 +7735,7 @@ function createNodeAnchors(doc, prefix) {
   };
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/doc/applyReviver.js
+// ../umf/node_modules/yaml/browser/dist/doc/applyReviver.js
 function applyReviver(reviver, obj, key, val) {
   if (val && typeof val === "object") {
     if (Array.isArray(val)) {
@@ -7586,7 +7779,7 @@ function applyReviver(reviver, obj, key, val) {
   return reviver.call(obj, key, val);
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/nodes/toJS.js
+// ../umf/node_modules/yaml/browser/dist/nodes/toJS.js
 function toJS(value, arg, ctx) {
   if (Array.isArray(value))
     return value.map((v, i) => toJS(v, String(i), ctx));
@@ -7609,7 +7802,7 @@ function toJS(value, arg, ctx) {
   return value;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/nodes/Node.js
+// ../umf/node_modules/yaml/browser/dist/nodes/Node.js
 class NodeBase {
   constructor(type) {
     Object.defineProperty(this, NODE_TYPE, { value: type });
@@ -7639,7 +7832,7 @@ class NodeBase {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/nodes/Alias.js
+// ../umf/node_modules/yaml/browser/dist/nodes/Alias.js
 class Alias extends NodeBase {
   constructor(source) {
     super(ALIAS);
@@ -7742,7 +7935,7 @@ function getAliasCount(doc, node, anchors) {
   return 1;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/nodes/Scalar.js
+// ../umf/node_modules/yaml/browser/dist/nodes/Scalar.js
 var isScalarValue = (value) => !value || typeof value !== "function" && typeof value !== "object";
 
 class Scalar extends NodeBase {
@@ -7763,7 +7956,7 @@ Scalar.PLAIN = "PLAIN";
 Scalar.QUOTE_DOUBLE = "QUOTE_DOUBLE";
 Scalar.QUOTE_SINGLE = "QUOTE_SINGLE";
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/doc/createNode.js
+// ../umf/node_modules/yaml/browser/dist/doc/createNode.js
 var defaultTagPrefix = "tag:yaml.org,2002:";
 function findTagObject(value, tagName, tags) {
   if (tagName) {
@@ -7829,7 +8022,7 @@ function createNode(value, tagName, ctx) {
   return node;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/nodes/Collection.js
+// ../umf/node_modules/yaml/browser/dist/nodes/Collection.js
 function collectionFromPath(schema, path, value) {
   let v = value;
   for (let i = path.length - 1;i >= 0; --i) {
@@ -7936,7 +8129,7 @@ class Collection extends NodeBase {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/stringify/stringifyComment.js
+// ../umf/node_modules/yaml/browser/dist/stringify/stringifyComment.js
 var stringifyComment = (str) => str.replace(/^(?!$)(?: $)?/gm, "#");
 function indentComment(comment, indent) {
   if (/^\n+$/.test(comment))
@@ -7948,7 +8141,7 @@ var lineComment = (str, indent, comment) => str.endsWith(`
 `) ? `
 ` + indentComment(comment, indent) : (str.endsWith(" ") ? "" : " ") + comment;
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/stringify/foldFlowLines.js
+// ../umf/node_modules/yaml/browser/dist/stringify/foldFlowLines.js
 var FOLD_FLOW = "flow";
 var FOLD_BLOCK = "block";
 var FOLD_QUOTED = "quoted";
@@ -8079,7 +8272,7 @@ function consumeMoreIndentedLines(text, i, indent) {
   return end;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/stringify/stringifyString.js
+// ../umf/node_modules/yaml/browser/dist/stringify/stringifyString.js
 var getFoldOptions = (ctx, isBlock) => ({
   indentAtStart: isBlock ? ctx.indent.length : ctx.indentAtStart,
   lineWidth: ctx.options.lineWidth,
@@ -8372,7 +8565,7 @@ function stringifyString(item, ctx, onComment, onChompKeep) {
   return res;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/stringify/stringify.js
+// ../umf/node_modules/yaml/browser/dist/stringify/stringify.js
 function createStringifyContext(doc, options) {
   const opt = Object.assign({
     blockQuote: true,
@@ -8485,7 +8678,7 @@ function stringify(item, ctx, onComment, onChompKeep) {
 ${ctx.indent}${str}`;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/stringify/stringifyPair.js
+// ../umf/node_modules/yaml/browser/dist/stringify/stringifyPair.js
 function stringifyPair({ key, value }, ctx, onComment, onChompKeep) {
   const { allNullValues, doc, indent, indentStep, options: { commentString, indentSeq, simpleKeys } } = ctx;
   let keyComment = isNode(key) && key.comment || null;
@@ -8614,14 +8807,14 @@ ${ctx.indent}`;
   return str;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/log.js
+// ../umf/node_modules/yaml/browser/dist/log.js
 function warn(logLevel, warning) {
   if (logLevel === "debug" || logLevel === "warn") {
     console.warn(warning);
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/merge.js
+// ../umf/node_modules/yaml/browser/dist/schema/yaml-1.1/merge.js
 var MERGE_KEY = "<<";
 var merge = {
   identify: (value) => value === MERGE_KEY || typeof value === "symbol" && value.description === MERGE_KEY,
@@ -8671,7 +8864,7 @@ function resolveAliasValue(ctx, value) {
   return ctx && isAlias(value) ? value.resolve(ctx.doc, ctx) : value;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/nodes/addPairToJSMap.js
+// ../umf/node_modules/yaml/browser/dist/nodes/addPairToJSMap.js
 function addPairToJSMap(ctx, map, { key, value }) {
   if (isNode(key) && key.addToJSMap)
     key.addToJSMap(ctx, map, value);
@@ -8724,7 +8917,7 @@ function stringifyKey(key, jsKey, ctx) {
   return JSON.stringify(jsKey);
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/nodes/Pair.js
+// ../umf/node_modules/yaml/browser/dist/nodes/Pair.js
 function createPair(key, value, ctx) {
   const k = createNode(key, undefined, ctx);
   const v = createNode(value, undefined, ctx);
@@ -8754,7 +8947,7 @@ class Pair {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/stringify/stringifyCollection.js
+// ../umf/node_modules/yaml/browser/dist/stringify/stringifyCollection.js
 function stringifyCollection(collection, ctx, options) {
   const flow = ctx.inFlow ?? collection.flow;
   const stringify = flow ? stringifyFlowCollection : stringifyBlockCollection;
@@ -8900,7 +9093,7 @@ function addCommentBefore({ indent, options: { commentString } }, lines, comment
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/nodes/YAMLMap.js
+// ../umf/node_modules/yaml/browser/dist/nodes/YAMLMap.js
 function findPair(items, key) {
   const k = isScalar(key) ? key.value : key;
   for (const it of items) {
@@ -9017,7 +9210,7 @@ class YAMLMap extends Collection {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/common/map.js
+// ../umf/node_modules/yaml/browser/dist/schema/common/map.js
 var map = {
   collection: "map",
   default: true,
@@ -9031,7 +9224,7 @@ var map = {
   createNode: (schema, obj, ctx) => YAMLMap.from(schema, obj, ctx)
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/nodes/YAMLSeq.js
+// ../umf/node_modules/yaml/browser/dist/nodes/YAMLSeq.js
 class YAMLSeq extends Collection {
   static get tagName() {
     return "tag:yaml.org,2002:seq";
@@ -9114,7 +9307,7 @@ function asItemIndex(key) {
   return typeof idx === "number" && Number.isInteger(idx) && idx >= 0 ? idx : null;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/common/seq.js
+// ../umf/node_modules/yaml/browser/dist/schema/common/seq.js
 var seq = {
   collection: "seq",
   default: true,
@@ -9128,7 +9321,7 @@ var seq = {
   createNode: (schema, obj, ctx) => YAMLSeq.from(schema, obj, ctx)
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/common/string.js
+// ../umf/node_modules/yaml/browser/dist/schema/common/string.js
 var string = {
   identify: (value) => typeof value === "string",
   default: true,
@@ -9140,7 +9333,7 @@ var string = {
   }
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/common/null.js
+// ../umf/node_modules/yaml/browser/dist/schema/common/null.js
 var nullTag = {
   identify: (value) => value == null,
   createNode: () => new Scalar(null),
@@ -9151,7 +9344,7 @@ var nullTag = {
   stringify: ({ source }, ctx) => typeof source === "string" && nullTag.test.test(source) ? source : ctx.options.nullStr
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/core/bool.js
+// ../umf/node_modules/yaml/browser/dist/schema/core/bool.js
 var boolTag = {
   identify: (value) => typeof value === "boolean",
   default: true,
@@ -9168,7 +9361,7 @@ var boolTag = {
   }
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/stringify/stringifyNumber.js
+// ../umf/node_modules/yaml/browser/dist/stringify/stringifyNumber.js
 function stringifyNumber({ format, minFractionDigits, tag, value }) {
   if (typeof value === "bigint")
     return String(value);
@@ -9189,7 +9382,7 @@ function stringifyNumber({ format, minFractionDigits, tag, value }) {
   return n;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/core/float.js
+// ../umf/node_modules/yaml/browser/dist/schema/core/float.js
 var floatNaN = {
   identify: (value) => typeof value === "number",
   default: true,
@@ -9225,7 +9418,7 @@ var float = {
   stringify: stringifyNumber
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/core/int.js
+// ../umf/node_modules/yaml/browser/dist/schema/core/int.js
 var intIdentify = (value) => typeof value === "bigint" || Number.isInteger(value);
 var intResolve = (str, offset, radix, { intAsBigInt }) => intAsBigInt ? BigInt(str) : parseInt(str.substring(offset), radix);
 function intStringify(node, radix, prefix) {
@@ -9261,7 +9454,7 @@ var intHex = {
   stringify: (node) => intStringify(node, 16, "0x")
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/core/schema.js
+// ../umf/node_modules/yaml/browser/dist/schema/core/schema.js
 var schema = [
   map,
   seq,
@@ -9276,7 +9469,7 @@ var schema = [
   float
 ];
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/json/schema.js
+// ../umf/node_modules/yaml/browser/dist/schema/json/schema.js
 function intIdentify2(value) {
   return typeof value === "bigint" || Number.isInteger(value);
 }
@@ -9334,7 +9527,7 @@ var jsonError = {
 };
 var schema2 = [map, seq].concat(jsonScalars, jsonError);
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/binary.js
+// ../umf/node_modules/yaml/browser/dist/schema/yaml-1.1/binary.js
 var binary = {
   identify: (value) => value instanceof Uint8Array,
   default: false,
@@ -9379,7 +9572,7 @@ var binary = {
   }
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/pairs.js
+// ../umf/node_modules/yaml/browser/dist/schema/yaml-1.1/pairs.js
 function resolvePairs(seq, onError) {
   if (isSeq(seq)) {
     for (let i = 0;i < seq.items.length; ++i) {
@@ -9445,7 +9638,7 @@ var pairs = {
   createNode: createPairs
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/omap.js
+// ../umf/node_modules/yaml/browser/dist/schema/yaml-1.1/omap.js
 class YAMLOMap extends YAMLSeq {
   constructor() {
     super();
@@ -9507,7 +9700,7 @@ var omap = {
   createNode: (schema, iterable, ctx) => YAMLOMap.from(schema, iterable, ctx)
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/bool.js
+// ../umf/node_modules/yaml/browser/dist/schema/yaml-1.1/bool.js
 function boolStringify({ value, source }, ctx) {
   const boolObj = value ? trueTag : falseTag;
   if (source && boolObj.test.test(source))
@@ -9531,7 +9724,7 @@ var falseTag = {
   stringify: boolStringify
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/float.js
+// ../umf/node_modules/yaml/browser/dist/schema/yaml-1.1/float.js
 var floatNaN2 = {
   identify: (value) => typeof value === "number",
   default: true,
@@ -9570,7 +9763,7 @@ var float2 = {
   stringify: stringifyNumber
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/int.js
+// ../umf/node_modules/yaml/browser/dist/schema/yaml-1.1/int.js
 var intIdentify3 = (value) => typeof value === "bigint" || Number.isInteger(value);
 function intResolve2(str, offset, radix, { intAsBigInt }) {
   const sign = str[0];
@@ -9639,7 +9832,7 @@ var intHex2 = {
   stringify: (node) => intStringify2(node, 16, "0x")
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/set.js
+// ../umf/node_modules/yaml/browser/dist/schema/yaml-1.1/set.js
 class YAMLSet extends YAMLMap {
   constructor(schema) {
     super(schema);
@@ -9714,7 +9907,7 @@ var set = {
   }
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/timestamp.js
+// ../umf/node_modules/yaml/browser/dist/schema/yaml-1.1/timestamp.js
 function parseSexagesimal(str, asBigInt) {
   const sign = str[0];
   const parts = sign === "-" || sign === "+" ? str.substring(1) : str;
@@ -9790,7 +9983,7 @@ var timestamp = {
   stringify: ({ value }) => value?.toISOString().replace(/(T00:00:00)?\.000Z$/, "") ?? ""
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/schema.js
+// ../umf/node_modules/yaml/browser/dist/schema/yaml-1.1/schema.js
 var schema3 = [
   map,
   seq,
@@ -9815,7 +10008,7 @@ var schema3 = [
   timestamp
 ];
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/tags.js
+// ../umf/node_modules/yaml/browser/dist/schema/tags.js
 var schemas = new Map([
   ["core", schema],
   ["failsafe", [map, seq, string]],
@@ -9886,7 +10079,7 @@ function getTags(customTags, schemaName, addMergeTag) {
   }, []);
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/schema/Schema.js
+// ../umf/node_modules/yaml/browser/dist/schema/Schema.js
 var sortMapEntriesByKey = (a, b) => a.key < b.key ? -1 : a.key > b.key ? 1 : 0;
 
 class Schema {
@@ -9908,7 +10101,7 @@ class Schema {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/stringify/stringifyDocument.js
+// ../umf/node_modules/yaml/browser/dist/stringify/stringifyDocument.js
 function stringifyDocument(doc, options) {
   const lines = [];
   let hasDirectives = options.directives === true;
@@ -9982,7 +10175,7 @@ function stringifyDocument(doc, options) {
 `;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/doc/Document.js
+// ../umf/node_modules/yaml/browser/dist/doc/Document.js
 class Document {
   constructor(value, replacer, options) {
     this.commentBefore = null;
@@ -10202,7 +10395,7 @@ function assertCollection(contents) {
   throw new Error("Expected a YAML collection as document contents");
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/errors.js
+// ../umf/node_modules/yaml/browser/dist/errors.js
 class YAMLError extends Error {
   constructor(name, pos, code, message) {
     super();
@@ -10261,7 +10454,7 @@ ${pointer}
   }
 };
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/resolve-props.js
+// ../umf/node_modules/yaml/browser/dist/compose/resolve-props.js
 function resolveProps(tokens, { flow, indicator, next, offset, onError, parentIndent, startOnNewline }) {
   let spaceBefore = false;
   let atNewline = startOnNewline;
@@ -10388,7 +10581,7 @@ function resolveProps(tokens, { flow, indicator, next, offset, onError, parentIn
   };
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/util-contains-newline.js
+// ../umf/node_modules/yaml/browser/dist/compose/util-contains-newline.js
 function containsNewline(key) {
   if (!key)
     return null;
@@ -10425,7 +10618,7 @@ function containsNewline(key) {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/util-flow-indent-check.js
+// ../umf/node_modules/yaml/browser/dist/compose/util-flow-indent-check.js
 function flowIndentCheck(indent, fc, onError) {
   if (fc?.type === "flow-collection") {
     const end = fc.end[0];
@@ -10436,7 +10629,7 @@ function flowIndentCheck(indent, fc, onError) {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/util-map-includes.js
+// ../umf/node_modules/yaml/browser/dist/compose/util-map-includes.js
 function mapIncludes(ctx, items, search) {
   const { uniqueKeys } = ctx.options;
   if (uniqueKeys === false)
@@ -10445,7 +10638,7 @@ function mapIncludes(ctx, items, search) {
   return items.some((pair) => isEqual(pair.key, search));
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/resolve-block-map.js
+// ../umf/node_modules/yaml/browser/dist/compose/resolve-block-map.js
 var startColMsg = "All mapping items must start at the same column";
 function resolveBlockMap({ composeNode, composeEmptyNode }, ctx, bm, onError, tag) {
   const NodeClass = tag?.nodeClass ?? YAMLMap;
@@ -10543,7 +10736,7 @@ function resolveBlockMap({ composeNode, composeEmptyNode }, ctx, bm, onError, ta
   return map;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/resolve-block-seq.js
+// ../umf/node_modules/yaml/browser/dist/compose/resolve-block-seq.js
 function resolveBlockSeq({ composeNode, composeEmptyNode }, ctx, bs, onError, tag) {
   const NodeClass = tag?.nodeClass ?? YAMLSeq;
   const seq = new NodeClass(ctx.schema);
@@ -10585,7 +10778,7 @@ function resolveBlockSeq({ composeNode, composeEmptyNode }, ctx, bs, onError, ta
   return seq;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/resolve-end.js
+// ../umf/node_modules/yaml/browser/dist/compose/resolve-end.js
 function resolveEnd(end, offset, reqSpace, onError) {
   let comment = "";
   if (end) {
@@ -10622,7 +10815,7 @@ function resolveEnd(end, offset, reqSpace, onError) {
   return { comment, offset };
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/resolve-flow-collection.js
+// ../umf/node_modules/yaml/browser/dist/compose/resolve-flow-collection.js
 var blockMsg = "Block collections are not allowed within flow collections";
 var isBlock = (token) => token && (token.type === "block-map" || token.type === "block-seq");
 function resolveFlowCollection({ composeNode, composeEmptyNode }, ctx, fc, onError, tag) {
@@ -10802,7 +10995,7 @@ function resolveFlowCollection({ composeNode, composeEmptyNode }, ctx, fc, onErr
   return coll;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/compose-collection.js
+// ../umf/node_modules/yaml/browser/dist/compose/compose-collection.js
 function resolveCollection(CN, ctx, token, onError, tagName, tag) {
   const coll = token.type === "block-map" ? resolveBlockMap(CN, ctx, token, onError, tag) : token.type === "block-seq" ? resolveBlockSeq(CN, ctx, token, onError, tag) : resolveFlowCollection(CN, ctx, token, onError, tag);
   const Coll = coll.constructor;
@@ -10854,7 +11047,7 @@ function composeCollection(CN, ctx, token, props, onError) {
   return node;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/resolve-block-scalar.js
+// ../umf/node_modules/yaml/browser/dist/compose/resolve-block-scalar.js
 function resolveBlockScalar(ctx, scalar, onError) {
   const start = scalar.offset;
   const header = parseBlockScalarHeader(scalar, ctx.options.strict, onError);
@@ -11043,7 +11236,7 @@ function splitLines(source) {
   return lines;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/resolve-flow-scalar.js
+// ../umf/node_modules/yaml/browser/dist/compose/resolve-flow-scalar.js
 function resolveFlowScalar(scalar, strict, onError) {
   const { offset, type, source, end } = scalar;
   let _type;
@@ -11254,7 +11447,7 @@ function parseCharCode(source, offset, length, onError) {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/compose-scalar.js
+// ../umf/node_modules/yaml/browser/dist/compose/compose-scalar.js
 function composeScalar(ctx, token, tagToken, onError) {
   const { value, type, comment, range } = token.type === "block-scalar" ? resolveBlockScalar(ctx, token, onError) : resolveFlowScalar(token, ctx.options.strict, onError);
   const tagName = tagToken ? ctx.directives.tagName(tagToken.source, (msg) => onError(tagToken, "TAG_RESOLVE_FAILED", msg)) : null;
@@ -11325,7 +11518,7 @@ function findScalarTagByTest({ atKey, directives, schema }, value, token, onErro
   return tag;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/util-empty-scalar-position.js
+// ../umf/node_modules/yaml/browser/dist/compose/util-empty-scalar-position.js
 function emptyScalarPosition(offset, before, pos) {
   if (before) {
     pos ?? (pos = before.length);
@@ -11349,7 +11542,7 @@ function emptyScalarPosition(offset, before, pos) {
   return offset;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/compose-node.js
+// ../umf/node_modules/yaml/browser/dist/compose/compose-node.js
 var CN = { composeNode, composeEmptyNode };
 function composeNode(ctx, token, props, onError) {
   const atKey = ctx.atKey;
@@ -11442,7 +11635,7 @@ function composeAlias({ options }, { offset, source, end }, onError) {
   return alias;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/compose-doc.js
+// ../umf/node_modules/yaml/browser/dist/compose/compose-doc.js
 function composeDoc(options, directives, { offset, start, value, end }, onError) {
   const opts = Object.assign({ _directives: directives }, options);
   const doc = new Document(undefined, opts);
@@ -11475,7 +11668,7 @@ function composeDoc(options, directives, { offset, start, value, end }, onError)
   return doc;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/compose/composer.js
+// ../umf/node_modules/yaml/browser/dist/compose/composer.js
 function getErrorPos(src) {
   if (typeof src === "number")
     return [src, src + 1];
@@ -11653,7 +11846,7 @@ ${end.comment}` : end.comment;
     }
   }
 }
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/parse/cst-visit.js
+// ../umf/node_modules/yaml/browser/dist/parse/cst-visit.js
 var BREAK2 = Symbol("break visit");
 var SKIP2 = Symbol("skip children");
 var REMOVE2 = Symbol("remove item");
@@ -11709,7 +11902,7 @@ function _visit(path, item, visitor) {
   return typeof ctrl === "function" ? ctrl(item, path) : ctrl;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/parse/cst.js
+// ../umf/node_modules/yaml/browser/dist/parse/cst.js
 var BOM = "\uFEFF";
 var DOCUMENT = "\x02";
 var FLOW_END = "\x18";
@@ -11776,7 +11969,7 @@ function tokenType(source) {
   return null;
 }
 
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/parse/lexer.js
+// ../umf/node_modules/yaml/browser/dist/parse/lexer.js
 function isEmpty(ch) {
   switch (ch) {
     case undefined:
@@ -12368,7 +12561,7 @@ class Lexer {
     return yield* this.pushToIndex(i, false);
   }
 }
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/parse/line-counter.js
+// ../umf/node_modules/yaml/browser/dist/parse/line-counter.js
 class LineCounter {
   constructor() {
     this.lineStarts = [];
@@ -12392,7 +12585,7 @@ class LineCounter {
     };
   }
 }
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/parse/parser.js
+// ../umf/node_modules/yaml/browser/dist/parse/parser.js
 function includesToken(list, type) {
   for (let i = 0;i < list.length; ++i)
     if (list[i].type === type)
@@ -13239,7 +13432,7 @@ class Parser {
     }
   }
 }
-// ../../../Users/erik/.codex/worktrees/security-main-integration/umf/node_modules/yaml/browser/dist/public-api.js
+// ../umf/node_modules/yaml/browser/dist/public-api.js
 function parseOptions(options) {
   const prettyErrors = options.prettyErrors !== false;
   const lineCounter = options.lineCounter || prettyErrors && new LineCounter || null;
@@ -13264,88 +13457,18 @@ function parseDocument(source, options = {}) {
   }
   return doc;
 }
-// ../truss-umf-runtime-cOgFWm/src/model/types.ts
-var SCALAR_TYPES = ["boolean", "integer", "decimal", "float", "string", "binary", "date", "time", "timestamp"];
-var ELEMENT_KINDS = ["field", "record", "group"];
-var NULLABILITIES = ["required", "absent-allowed", "unspecified"];
-var CARDINALITIES = ["one", "array", "map", "unspecified"];
-
-class UmfError extends Error {
-  code;
-  path;
-  constructor(code, message, path = "") {
-    super(message);
-    this.code = code;
-    this.path = path;
-    this.name = "UmfError";
-  }
-}
-var pointer = (key) => key.replace(/~/g, "~0").replace(/\//g, "~1");
-
-// ../truss-umf-runtime-cOgFWm/src/model/json.ts
-var LIMITS = { maxDepth: 128, maxValues: 1e5, maxTextLength: 4000000 };
-function copyJson(input) {
-  return copyJsonCharged(input);
-}
-function copyJsonCharged(input, charge) {
-  const active = new Set;
-  let values = 0;
-  function visit(value, path, depth) {
-    charge?.(1);
-    if (++values > LIMITS.maxValues || depth > LIMITS.maxDepth)
-      throw new UmfError("LIMIT", "JSON structural limit exceeded", path);
-    if (value === null || typeof value === "string" || typeof value === "boolean")
-      return value;
-    if (typeof value === "number") {
-      if (!Number.isFinite(value) || Object.is(value, -0) || Number.isInteger(value) && !Number.isSafeInteger(value))
-        throw new UmfError("NUMBER", "Number outside the core interoperable numeric profile", path);
-      return value;
-    }
-    if (typeof value !== "object")
-      throw new UmfError("NON_JSON", "Value is not JSON-compatible", path);
-    if (active.has(value))
-      throw new UmfError("CYCLE", "Cyclic value", path);
-    const proto = Object.getPrototypeOf(value);
-    if (Array.isArray(value) ? proto !== Array.prototype : proto !== Object.prototype && proto !== null)
-      throw new UmfError("NON_JSON", "Custom object prototype", path);
-    if (Object.getOwnPropertySymbols(value).length)
-      throw new UmfError("NON_JSON", "Symbol keys are not JSON-compatible", path);
-    active.add(value);
-    const descriptors = Object.getOwnPropertyDescriptors(value);
-    const result = Array.isArray(value) ? [] : Object.create(null);
-    for (const [key, descriptor] of Object.entries(descriptors)) {
-      if (Array.isArray(value) && key === "length")
-        continue;
-      if (!descriptor.enumerable || !("value" in descriptor))
-        throw new UmfError("NON_JSON", "Hidden fields and accessors cannot be serialized faithfully", path + "/" + pointer(key));
-      if (Array.isArray(value) && (!/^(0|[1-9][0-9]*)$/.test(key) || Number(key) >= 4294967295 || Number(key) >= value.length))
-        throw new UmfError("NON_JSON", "Non-index array property", path);
-      const item = visit(descriptor.value, path + "/" + pointer(key), depth + 1);
-      Object.defineProperty(result, key, { value: item, enumerable: true, writable: true, configurable: true });
-    }
-    if (Array.isArray(value) && Object.keys(value).length !== value.length)
-      throw new UmfError("NON_JSON", "Sparse arrays are not JSON values", path);
-    active.delete(value);
-    return result;
-  }
-  return visit(input, "", 0);
-}
-
-// ../truss-umf-runtime-cOgFWm/src/model/serialization.ts
-function decimal(text) {
-  const match = /^([+-]?)(\d*)(?:\.(\d*))?(?:[eE]([+-]?\d+))?$/.exec(text);
-  if (!match)
-    throw new UmfError("NUMBER", "Unsupported numeric spelling");
-  const digits = ((match[2] || "") + (match[3] || "")).replace(/^0+/, "");
-  if (!digits)
-    return "0";
-  const trimmed = digits.replace(/0+$/, "");
-  const exponent = BigInt(match[4] || "0") - BigInt((match[3] || "").length) + BigInt(digits.length - trimmed.length);
-  return `${match[1] === "-" ? "-" : ""}${trimmed}e${exponent}`;
-}
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/serialization.ts
 function readJsonValue(text, format = "yaml") {
   if (text.length > LIMITS.maxTextLength)
     throw new UmfError("LIMIT", "Source text exceeds limit");
+  if (format === "json" && jsonValueLimit() > LIMITS.maxValues) {
+    try {
+      scanJsonFrame(text, jsonValueLimit(), LIMITS.maxDepth);
+      return JSON.parse(text);
+    } catch (error) {
+      throw error;
+    }
+  }
   if (format === "json") {
     try {
       JSON.parse(text);
@@ -13360,7 +13483,7 @@ function readJsonValue(text, format = "yaml") {
     throw new UmfError("SYNTAX", "Only YAML 1.2 is supported");
   let count = 0;
   function convert(node, path, depth) {
-    if (++count > LIMITS.maxValues || depth > LIMITS.maxDepth)
+    if (++count > jsonValueLimit() || depth > LIMITS.maxDepth)
       throw new UmfError("LIMIT", "Source structural limit exceeded", path);
     if (node === null)
       return null;
@@ -13403,7 +13526,7 @@ function readJsonValue(text, format = "yaml") {
   return convert(doc.contents, "", 0);
 }
 
-// ../truss-umf-runtime-cOgFWm/src/validation/internal-schema.ts
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/validation/internal-schema.ts
 function snapshotSchema(input) {
   const value = JSON.parse(JSON.stringify(input));
   const freeze = (v) => {
@@ -13416,7 +13539,5481 @@ function snapshotSchema(input) {
   freeze(value);
   return value;
 }
-// ../truss-umf-runtime-cOgFWm/spec/core/schema-properties-document.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/semantic-types-document.schema.json
+var semantic_types_document_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.10.0",
+  title: "UMF 0.10.0 semantic references over exact 128-bit and UUID values",
+  type: "object",
+  required: [
+    "umf",
+    "id",
+    "vocabularies",
+    "modules"
+  ],
+  properties: {
+    umf: {
+      const: "0.10.0"
+    },
+    id: {
+      $ref: "#/$defs/id"
+    },
+    vocabularies: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: {
+        type: "object",
+        required: [
+          "version"
+        ],
+        properties: {
+          version: {
+            $ref: "#/$defs/version"
+          }
+        }
+      }
+    },
+    modules: {
+      type: "array",
+      items: {
+        $ref: "#/$defs/module"
+      }
+    },
+    extensions: {
+      $ref: "#/$defs/extensions"
+    },
+    title: {
+      type: "string"
+    },
+    aliases: {
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "string",
+        minLength: 1
+      }
+    }
+  },
+  $defs: {
+    id: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    knownScalarType: {
+      enum: [
+        "boolean",
+        "integer",
+        "decimal",
+        "float",
+        "string",
+        "binary",
+        "date",
+        "time",
+        "timestamp",
+        "bits128",
+        "uuid"
+      ],
+      description: "Version-qualified value families; bits128 and uuid have intrinsic16-byte domains under umf-128/1; native refinements remain attached."
+    },
+    scalarType: {
+      anyOf: [
+        {
+          $ref: "#/$defs/knownScalarType"
+        },
+        {
+          type: "string",
+          minLength: 1,
+          not: {
+            $ref: "#/$defs/knownScalarType"
+          },
+          description: "Unknown family retained with incomplete semantic validation."
+        }
+      ]
+    },
+    extensions: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: true
+    },
+    reference: {
+      type: "object",
+      required: [
+        "role",
+        "module",
+        "element"
+      ],
+      properties: {
+        role: {
+          $ref: "#/$defs/id"
+        },
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    element: {
+      type: "object",
+      required: [
+        "id",
+        "extensions"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        scalarType: {
+          $ref: "#/$defs/scalarType"
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        references: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/reference"
+          }
+        },
+        kind: {
+          type: "string",
+          minLength: 1,
+          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
+        },
+        nullability: {
+          type: "string",
+          minLength: 1,
+          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
+        },
+        cardinality: {
+          type: "string",
+          minLength: 1,
+          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
+        },
+        itemType: {
+          $ref: "#/$defs/itemType"
+        },
+        facets: {
+          $ref: "#/$defs/facets"
+        },
+        members: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        keys: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/key"
+          }
+        },
+        title: {
+          type: "string"
+        },
+        aliases: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            type: "string",
+            minLength: 1
+          }
+        },
+        examples: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/literal"
+          }
+        },
+        allowedValues: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/literal"
+          }
+        },
+        default: {
+          type: "object",
+          required: [
+            "value",
+            "on"
+          ],
+          properties: {
+            value: {
+              $ref: "#/$defs/literal"
+            },
+            on: {
+              enum: [
+                "missing",
+                "null",
+                "missing-or-null"
+              ]
+            }
+          },
+          additionalProperties: true
+        },
+        semanticTypes: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "urn:umf:core:semantic-type-reference:1.0.0"
+          }
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                enum: [
+                  "record",
+                  "group"
+                ]
+              }
+            }
+          },
+          then: {
+            properties: {
+              scalarType: false
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "nullability"
+            ],
+            properties: {
+              nullability: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          },
+          then: {
+            not: {
+              required: [
+                "scalarType"
+              ]
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "itemType"
+            ],
+            properties: {
+              itemType: {}
+            }
+          },
+          then: {
+            required: [
+              "kind",
+              "cardinality"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              references: {
+                type: "array",
+                not: {
+                  contains: {
+                    type: "object",
+                    required: [
+                      "role"
+                    ],
+                    properties: {
+                      role: {
+                        const: "record-type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                enum: [
+                  "string",
+                  "binary"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "unicode-scalar"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "string"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "byte"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "binary"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "precision"
+                ],
+                properties: {
+                  precision: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "decimal"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "integerWidth"
+                ],
+                properties: {
+                  integerWidth: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "integer"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              members: {}
+            },
+            required: [
+              "members"
+            ]
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              keys: {}
+            },
+            required: [
+              "keys"
+            ]
+          },
+          then: {
+            required: [
+              "kind",
+              "members"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              },
+              members: {}
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "examples"
+            ],
+            properties: {
+              examples: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "allowedValues"
+            ],
+            properties: {
+              allowedValues: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "default"
+            ],
+            properties: {
+              default: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        }
+      ]
+    },
+    module: {
+      type: "object",
+      required: [
+        "id",
+        "namespace",
+        "elements"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        namespace: {
+          type: "string"
+        },
+        elements: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/element"
+          }
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        relationships: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/relationship"
+          }
+        },
+        title: {
+          type: "string"
+        },
+        aliases: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            type: "string",
+            minLength: 1
+          }
+        }
+      }
+    },
+    knownElementKind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    },
+    knownNullability: {
+      enum: [
+        "required",
+        "absent-allowed",
+        "unspecified"
+      ]
+    },
+    knownCardinality: {
+      enum: [
+        "one",
+        "array",
+        "map",
+        "unspecified"
+      ]
+    },
+    itemType: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    facets: {
+      type: "object",
+      description: "Missing members impose no bound. Unknown members and qualifiers are retained without interpretation.",
+      properties: {
+        length: {
+          type: "object",
+          required: [
+            "unit"
+          ],
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            unit: {
+              type: "string",
+              minLength: 1
+            }
+          },
+          additionalProperties: true
+        },
+        precision: {
+          type: "integer",
+          minimum: 1,
+          maximum: 9007199254740991,
+          description: "Decimal coefficient digit bound; requires scale. Absolute coefficient is less than 10^precision. No implicit rounding."
+        },
+        scale: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991,
+          description: "Fixed fractional digit count; requires precision. Semantic validation requires scale <= precision. Value equals integer coefficient times 10^-scale."
+        },
+        integerWidth: {
+          type: "object",
+          required: [
+            "bits",
+            "signed"
+          ],
+          properties: {
+            bits: {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            signed: {
+              type: "boolean"
+            }
+          },
+          description: "Signed [-2^(bits-1),2^(bits-1)-1] or unsigned [0,2^bits-1]; mathematical domain, not a physical storage-width assertion."
+        },
+        collectionSize: {
+          type: "object",
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            }
+          },
+          additionalProperties: true
+        },
+        range: {
+          type: "object",
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              $ref: "#/$defs/literal"
+            },
+            max: {
+              $ref: "#/$defs/literal"
+            },
+            minInclusive: {
+              type: "boolean"
+            },
+            maxInclusive: {
+              type: "boolean"
+            }
+          },
+          additionalProperties: true
+        }
+      },
+      dependentRequired: {
+        precision: [
+          "scale"
+        ],
+        scale: [
+          "precision"
+        ]
+      }
+    },
+    keyFieldReference: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    key: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "fields"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        fields: {
+          type: "array",
+          minItems: 1,
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        primary: {
+          type: "boolean"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipEndpoint: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipTarget: {
+      type: "object",
+      required: [
+        "module",
+        "element",
+        "key"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        },
+        key: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipMultiplicity: {
+      type: "object",
+      required: [
+        "min",
+        "max"
+      ],
+      properties: {
+        min: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991
+        },
+        max: {
+          anyOf: [
+            {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            {
+              const: "*"
+            }
+          ]
+        }
+      },
+      additionalProperties: true
+    },
+    relationship: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "source",
+        "target",
+        "sourceMultiplicity",
+        "targetMultiplicity",
+        "targetLifecycle",
+        "directed"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        source: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/relationshipEndpoint"
+          }
+        },
+        target: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/relationshipTarget"
+          }
+        },
+        sourceMultiplicity: {
+          $ref: "#/$defs/relationshipMultiplicity"
+        },
+        targetMultiplicity: {
+          $ref: "#/$defs/relationshipMultiplicity"
+        },
+        targetLifecycle: {
+          type: "string",
+          minLength: 1
+        },
+        directed: {
+          type: "boolean"
+        },
+        inverse: {
+          $ref: "#/$defs/id"
+        },
+        associationRecord: {
+          $ref: "#/$defs/relationshipEndpoint"
+        }
+      },
+      additionalProperties: true
+    },
+    literal: {
+      oneOf: [
+        {
+          type: "null"
+        },
+        {
+          type: "object",
+          required: [
+            "boolean"
+          ],
+          properties: {
+            boolean: {
+              type: "boolean"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "integerToken"
+          ],
+          properties: {
+            integerToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "decimalToken"
+          ],
+          properties: {
+            decimalToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "string"
+          ],
+          properties: {
+            string: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "binaryHex"
+          ],
+          properties: {
+            binaryHex: {
+              type: "string",
+              pattern: "^([0-9a-fA-F]{2})*$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "floatToken"
+          ],
+          properties: {
+            floatToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "date"
+          ],
+          properties: {
+            date: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "time"
+          ],
+          properties: {
+            time: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "timestamp"
+          ],
+          properties: {
+            timestamp: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "array"
+          ],
+          properties: {
+            array: {
+              type: "array",
+              items: {
+                $ref: "#/$defs/literal"
+              }
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "map"
+          ],
+          properties: {
+            map: {
+              type: "object",
+              additionalProperties: {
+                $ref: "#/$defs/literal"
+              }
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "bits128Hex"
+          ],
+          properties: {
+            bits128Hex: {
+              type: "string",
+              minLength: 32,
+              maxLength: 32,
+              pattern: "^[0-9a-fA-F]{32}$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "uuid"
+          ],
+          properties: {
+            uuid: {
+              type: "string",
+              minLength: 36,
+              maxLength: 36,
+              pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        }
+      ]
+    }
+  },
+  description: "Explicit semantic references compose with unchanged core0.9 UUID/128-bit domains; no external term or native enforcement inferred.",
+  $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/semantic-type-reference.schema.json
+var semantic_type_reference_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:semantic-type-reference:1.0.0",
+  title: "Exact publisher-owned semantic term reference",
+  type: "object",
+  required: [
+    "vocabulary",
+    "version",
+    "term"
+  ],
+  properties: {
+    vocabulary: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      minLength: 1
+    },
+    term: {
+      type: "string",
+      minLength: 1
+    }
+  }
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/relationship-document.schema.json
+var relationship_document_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.7.0",
+  title: "UMF 0.7.0 relationship envelope",
+  type: "object",
+  required: [
+    "umf",
+    "id",
+    "vocabularies",
+    "modules"
+  ],
+  properties: {
+    umf: {
+      const: "0.7.0"
+    },
+    id: {
+      $ref: "#/$defs/id"
+    },
+    vocabularies: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: {
+        type: "object",
+        required: [
+          "version"
+        ],
+        properties: {
+          version: {
+            $ref: "#/$defs/version"
+          }
+        }
+      }
+    },
+    modules: {
+      type: "array",
+      items: {
+        $ref: "#/$defs/module"
+      }
+    },
+    extensions: {
+      $ref: "#/$defs/extensions"
+    }
+  },
+  $defs: {
+    id: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    knownScalarType: {
+      enum: [
+        "boolean",
+        "integer",
+        "decimal",
+        "float",
+        "string",
+        "binary",
+        "date",
+        "time",
+        "timestamp"
+      ],
+      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
+    },
+    scalarType: {
+      anyOf: [
+        {
+          $ref: "#/$defs/knownScalarType"
+        },
+        {
+          type: "string",
+          minLength: 1,
+          not: {
+            $ref: "#/$defs/knownScalarType"
+          },
+          description: "Unknown family retained with incomplete semantic validation."
+        }
+      ]
+    },
+    extensions: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: true
+    },
+    reference: {
+      type: "object",
+      required: [
+        "role",
+        "module",
+        "element"
+      ],
+      properties: {
+        role: {
+          $ref: "#/$defs/id"
+        },
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    element: {
+      type: "object",
+      required: [
+        "id",
+        "extensions"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        scalarType: {
+          $ref: "#/$defs/scalarType"
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        references: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/reference"
+          }
+        },
+        kind: {
+          type: "string",
+          minLength: 1,
+          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
+        },
+        nullability: {
+          type: "string",
+          minLength: 1,
+          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
+        },
+        cardinality: {
+          type: "string",
+          minLength: 1,
+          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
+        },
+        itemType: {
+          $ref: "#/$defs/itemType"
+        },
+        facets: {
+          $ref: "#/$defs/facets"
+        },
+        members: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        keys: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/key"
+          }
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                enum: [
+                  "record",
+                  "group"
+                ]
+              }
+            }
+          },
+          then: {
+            properties: {
+              scalarType: false
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "nullability"
+            ],
+            properties: {
+              nullability: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          },
+          then: {
+            not: {
+              required: [
+                "scalarType"
+              ]
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "itemType"
+            ],
+            properties: {
+              itemType: {}
+            }
+          },
+          then: {
+            required: [
+              "kind",
+              "cardinality"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "one",
+                  "unspecified"
+                ]
+              },
+              references: {
+                type: "array",
+                not: {
+                  contains: {
+                    type: "object",
+                    required: [
+                      "role"
+                    ],
+                    properties: {
+                      role: {
+                        const: "record-type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                enum: [
+                  "string",
+                  "binary"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "unicode-scalar"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "string"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "byte"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "binary"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "precision"
+                ],
+                properties: {
+                  precision: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "decimal"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "integerWidth"
+                ],
+                properties: {
+                  integerWidth: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "integer"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              members: {}
+            },
+            required: [
+              "members"
+            ]
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              keys: {}
+            },
+            required: [
+              "keys"
+            ]
+          },
+          then: {
+            required: [
+              "kind",
+              "members"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              },
+              members: {}
+            }
+          }
+        }
+      ]
+    },
+    module: {
+      type: "object",
+      required: [
+        "id",
+        "namespace",
+        "elements"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        namespace: {
+          type: "string"
+        },
+        elements: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/element"
+          }
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        relationships: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/relationship"
+          }
+        }
+      }
+    },
+    knownElementKind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    },
+    knownNullability: {
+      enum: [
+        "required",
+        "absent-allowed",
+        "unspecified"
+      ]
+    },
+    knownCardinality: {
+      enum: [
+        "one",
+        "array",
+        "map",
+        "unspecified"
+      ]
+    },
+    itemType: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    facets: {
+      type: "object",
+      description: "Missing members impose no bound. Unknown members and qualifiers are retained without interpretation.",
+      properties: {
+        length: {
+          type: "object",
+          required: [
+            "max",
+            "unit"
+          ],
+          properties: {
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            unit: {
+              type: "string",
+              minLength: 1,
+              description: "Known units: unicode-scalar for string, byte for binary. Unknown units remain uninterpreted."
+            }
+          }
+        },
+        precision: {
+          type: "integer",
+          minimum: 1,
+          maximum: 9007199254740991,
+          description: "Decimal coefficient digit bound; requires scale. Absolute coefficient is less than 10^precision. No implicit rounding."
+        },
+        scale: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991,
+          description: "Fixed fractional digit count; requires precision. Semantic validation requires scale <= precision. Value equals integer coefficient times 10^-scale."
+        },
+        integerWidth: {
+          type: "object",
+          required: [
+            "bits",
+            "signed"
+          ],
+          properties: {
+            bits: {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            signed: {
+              type: "boolean"
+            }
+          },
+          description: "Signed [-2^(bits-1),2^(bits-1)-1] or unsigned [0,2^bits-1]; mathematical domain, not a physical storage-width assertion."
+        }
+      },
+      dependentRequired: {
+        precision: [
+          "scale"
+        ],
+        scale: [
+          "precision"
+        ]
+      }
+    },
+    keyFieldReference: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    key: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "fields"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        fields: {
+          type: "array",
+          minItems: 1,
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        primary: {
+          type: "boolean"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipEndpoint: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipTarget: {
+      type: "object",
+      required: [
+        "module",
+        "element",
+        "key"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        },
+        key: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipMultiplicity: {
+      type: "object",
+      required: [
+        "min",
+        "max"
+      ],
+      properties: {
+        min: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991
+        },
+        max: {
+          anyOf: [
+            {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            {
+              const: "*"
+            }
+          ]
+        }
+      },
+      additionalProperties: true
+    },
+    relationship: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "source",
+        "target",
+        "sourceMultiplicity",
+        "targetMultiplicity",
+        "targetLifecycle",
+        "directed"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        source: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/relationshipEndpoint"
+          }
+        },
+        target: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/relationshipTarget"
+          }
+        },
+        sourceMultiplicity: {
+          $ref: "#/$defs/relationshipMultiplicity"
+        },
+        targetMultiplicity: {
+          $ref: "#/$defs/relationshipMultiplicity"
+        },
+        targetLifecycle: {
+          type: "string",
+          minLength: 1
+        },
+        directed: {
+          type: "boolean"
+        },
+        inverse: {
+          $ref: "#/$defs/id"
+        },
+        associationRecord: {
+          $ref: "#/$defs/relationshipEndpoint"
+        }
+      },
+      additionalProperties: true
+    }
+  },
+  description: "Authored schema-level relationships between keyed Records; native enforcement and storage are not inferred. Unknown qualifiers are retained.",
+  $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/key-document.schema.json
+var key_document_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.6.0",
+  title: "UMF 0.6.0 key envelope",
+  type: "object",
+  required: [
+    "umf",
+    "id",
+    "vocabularies",
+    "modules"
+  ],
+  properties: {
+    umf: {
+      const: "0.6.0"
+    },
+    id: {
+      $ref: "#/$defs/id"
+    },
+    vocabularies: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: {
+        type: "object",
+        required: [
+          "version"
+        ],
+        properties: {
+          version: {
+            $ref: "#/$defs/version"
+          }
+        }
+      }
+    },
+    modules: {
+      type: "array",
+      items: {
+        $ref: "#/$defs/module"
+      }
+    },
+    extensions: {
+      $ref: "#/$defs/extensions"
+    }
+  },
+  $defs: {
+    id: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    knownScalarType: {
+      enum: [
+        "boolean",
+        "integer",
+        "decimal",
+        "float",
+        "string",
+        "binary",
+        "date",
+        "time",
+        "timestamp"
+      ],
+      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
+    },
+    scalarType: {
+      anyOf: [
+        {
+          $ref: "#/$defs/knownScalarType"
+        },
+        {
+          type: "string",
+          minLength: 1,
+          not: {
+            $ref: "#/$defs/knownScalarType"
+          },
+          description: "Unknown family retained with incomplete semantic validation."
+        }
+      ]
+    },
+    extensions: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: true
+    },
+    reference: {
+      type: "object",
+      required: [
+        "role",
+        "module",
+        "element"
+      ],
+      properties: {
+        role: {
+          $ref: "#/$defs/id"
+        },
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    element: {
+      type: "object",
+      required: [
+        "id",
+        "extensions"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        scalarType: {
+          $ref: "#/$defs/scalarType"
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        references: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/reference"
+          }
+        },
+        kind: {
+          type: "string",
+          minLength: 1,
+          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
+        },
+        nullability: {
+          type: "string",
+          minLength: 1,
+          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
+        },
+        cardinality: {
+          type: "string",
+          minLength: 1,
+          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
+        },
+        itemType: {
+          $ref: "#/$defs/itemType"
+        },
+        facets: {
+          $ref: "#/$defs/facets"
+        },
+        members: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        keys: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/key"
+          }
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                enum: [
+                  "record",
+                  "group"
+                ]
+              }
+            }
+          },
+          then: {
+            properties: {
+              scalarType: false
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "nullability"
+            ],
+            properties: {
+              nullability: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          },
+          then: {
+            not: {
+              required: [
+                "scalarType"
+              ]
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "itemType"
+            ],
+            properties: {
+              itemType: {}
+            }
+          },
+          then: {
+            required: [
+              "kind",
+              "cardinality"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "one",
+                  "unspecified"
+                ]
+              },
+              references: {
+                type: "array",
+                not: {
+                  contains: {
+                    type: "object",
+                    required: [
+                      "role"
+                    ],
+                    properties: {
+                      role: {
+                        const: "record-type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                enum: [
+                  "string",
+                  "binary"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "unicode-scalar"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "string"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "byte"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "binary"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "precision"
+                ],
+                properties: {
+                  precision: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "decimal"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "integerWidth"
+                ],
+                properties: {
+                  integerWidth: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "integer"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              members: {}
+            },
+            required: [
+              "members"
+            ]
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              keys: {}
+            },
+            required: [
+              "keys"
+            ]
+          },
+          then: {
+            required: [
+              "kind",
+              "members"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              },
+              members: {}
+            }
+          }
+        }
+      ]
+    },
+    module: {
+      type: "object",
+      required: [
+        "id",
+        "namespace",
+        "elements"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        namespace: {
+          type: "string"
+        },
+        elements: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/element"
+          }
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        }
+      }
+    },
+    knownElementKind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    },
+    knownNullability: {
+      enum: [
+        "required",
+        "absent-allowed",
+        "unspecified"
+      ]
+    },
+    knownCardinality: {
+      enum: [
+        "one",
+        "array",
+        "map",
+        "unspecified"
+      ]
+    },
+    itemType: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    facets: {
+      type: "object",
+      description: "Missing members impose no bound. Unknown members and qualifiers are retained without interpretation.",
+      properties: {
+        length: {
+          type: "object",
+          required: [
+            "max",
+            "unit"
+          ],
+          properties: {
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            unit: {
+              type: "string",
+              minLength: 1,
+              description: "Known units: unicode-scalar for string, byte for binary. Unknown units remain uninterpreted."
+            }
+          }
+        },
+        precision: {
+          type: "integer",
+          minimum: 1,
+          maximum: 9007199254740991,
+          description: "Decimal coefficient digit bound; requires scale. Absolute coefficient is less than 10^precision. No implicit rounding."
+        },
+        scale: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991,
+          description: "Fixed fractional digit count; requires precision. Semantic validation requires scale <= precision. Value equals integer coefficient times 10^-scale."
+        },
+        integerWidth: {
+          type: "object",
+          required: [
+            "bits",
+            "signed"
+          ],
+          properties: {
+            bits: {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            signed: {
+              type: "boolean"
+            }
+          },
+          description: "Signed [-2^(bits-1),2^(bits-1)-1] or unsigned [0,2^bits-1]; mathematical domain, not a physical storage-width assertion."
+        }
+      },
+      dependentRequired: {
+        precision: [
+          "scale"
+        ],
+        scale: [
+          "precision"
+        ]
+      }
+    },
+    keyFieldReference: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    key: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "fields"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        fields: {
+          type: "array",
+          minItems: 1,
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        primary: {
+          type: "boolean"
+        }
+      },
+      additionalProperties: true
+    }
+  },
+  description: "Candidate envelope for authored named primary/alternate keys and explicit Record membership, retaining earlier Field, availability, cardinality and facet ideals. Cross-reference and equality semantics require portable validation; native enforcement is not inferred.",
+  $comment: "Key membership resolution, unique ownership, key IDs/names/component sets, primary count and component domains require portable semantic validation. Native enforcement is not inferred."
+};
+
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/validation/schema.ts
+var import__2020 = __toESM(require__2020(), 1);
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/schema.json
+var schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.1.0",
+  title: "UMF 0.1.0 document envelope",
+  type: "object",
+  required: ["umf", "id", "vocabularies", "modules"],
+  properties: {
+    umf: { const: "0.1.0" },
+    id: { $ref: "#/$defs/id" },
+    vocabularies: { type: "object", propertyNames: { $ref: "#/$defs/id" }, additionalProperties: { type: "object", required: ["version"], properties: { version: { $ref: "#/$defs/version" } } } },
+    modules: { type: "array", items: { $ref: "#/$defs/module" } },
+    extensions: { $ref: "#/$defs/extensions" }
+  },
+  $defs: {
+    id: { type: "string", minLength: 1 },
+    version: { type: "string", pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+    knownScalarType: { enum: ["boolean", "integer", "decimal", "float", "string", "binary", "date", "time", "timestamp"], description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior." },
+    scalarType: { anyOf: [{ $ref: "#/$defs/knownScalarType" }, { type: "string", minLength: 1, not: { $ref: "#/$defs/knownScalarType" }, description: "Unknown family retained with incomplete semantic validation." }] },
+    extensions: { type: "object", propertyNames: { $ref: "#/$defs/id" }, additionalProperties: true },
+    reference: { type: "object", required: ["role", "module", "element"], properties: { role: { $ref: "#/$defs/id" }, module: { $ref: "#/$defs/id" }, element: { $ref: "#/$defs/id" } } },
+    element: { type: "object", required: ["id", "extensions"], properties: { id: { $ref: "#/$defs/id" }, name: { type: "string" }, description: { type: "string" }, scalarType: { $ref: "#/$defs/scalarType" }, extensions: { $ref: "#/$defs/extensions" }, references: { type: "array", items: { $ref: "#/$defs/reference" } } } },
+    module: { type: "object", required: ["id", "namespace", "elements"], properties: { id: { $ref: "#/$defs/id" }, namespace: { type: "string" }, elements: { type: "array", items: { $ref: "#/$defs/element" } }, extensions: { $ref: "#/$defs/extensions" } } }
+  }
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/field-document.schema.json
+var field_document_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.2.0",
+  title: "UMF 0.2.0 field envelope",
+  type: "object",
+  required: [
+    "umf",
+    "id",
+    "vocabularies",
+    "modules"
+  ],
+  properties: {
+    umf: {
+      const: "0.2.0"
+    },
+    id: {
+      $ref: "#/$defs/id"
+    },
+    vocabularies: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: {
+        type: "object",
+        required: [
+          "version"
+        ],
+        properties: {
+          version: {
+            $ref: "#/$defs/version"
+          }
+        }
+      }
+    },
+    modules: {
+      type: "array",
+      items: {
+        $ref: "#/$defs/module"
+      }
+    },
+    extensions: {
+      $ref: "#/$defs/extensions"
+    }
+  },
+  $defs: {
+    id: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    knownScalarType: {
+      enum: [
+        "boolean",
+        "integer",
+        "decimal",
+        "float",
+        "string",
+        "binary",
+        "date",
+        "time",
+        "timestamp"
+      ],
+      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
+    },
+    scalarType: {
+      anyOf: [
+        {
+          $ref: "#/$defs/knownScalarType"
+        },
+        {
+          type: "string",
+          minLength: 1,
+          not: {
+            $ref: "#/$defs/knownScalarType"
+          },
+          description: "Unknown family retained with incomplete semantic validation."
+        }
+      ]
+    },
+    extensions: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: true
+    },
+    reference: {
+      type: "object",
+      required: [
+        "role",
+        "module",
+        "element"
+      ],
+      properties: {
+        role: {
+          $ref: "#/$defs/id"
+        },
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    element: {
+      type: "object",
+      required: [
+        "id",
+        "extensions"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        scalarType: {
+          $ref: "#/$defs/scalarType"
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        references: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/reference"
+          }
+        },
+        kind: {
+          type: "string",
+          minLength: 1,
+          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                enum: [
+                  "record",
+                  "group"
+                ]
+              }
+            }
+          },
+          then: {
+            properties: {
+              scalarType: false
+            }
+          }
+        }
+      ]
+    },
+    module: {
+      type: "object",
+      required: [
+        "id",
+        "namespace",
+        "elements"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        namespace: {
+          type: "string"
+        },
+        elements: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/element"
+          }
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        }
+      }
+    },
+    knownElementKind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    }
+  },
+  description: "Opt-in field/record/group roles. No implicit upgrade from 0.1.0. Provenance, migration and binding evidence remain required."
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/nullability-document.schema.json
+var nullability_document_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.3.0",
+  title: "UMF 0.3.0 nullability envelope",
+  type: "object",
+  required: [
+    "umf",
+    "id",
+    "vocabularies",
+    "modules"
+  ],
+  properties: {
+    umf: {
+      const: "0.3.0"
+    },
+    id: {
+      $ref: "#/$defs/id"
+    },
+    vocabularies: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: {
+        type: "object",
+        required: [
+          "version"
+        ],
+        properties: {
+          version: {
+            $ref: "#/$defs/version"
+          }
+        }
+      }
+    },
+    modules: {
+      type: "array",
+      items: {
+        $ref: "#/$defs/module"
+      }
+    },
+    extensions: {
+      $ref: "#/$defs/extensions"
+    }
+  },
+  $defs: {
+    id: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    knownScalarType: {
+      enum: [
+        "boolean",
+        "integer",
+        "decimal",
+        "float",
+        "string",
+        "binary",
+        "date",
+        "time",
+        "timestamp"
+      ],
+      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
+    },
+    scalarType: {
+      anyOf: [
+        {
+          $ref: "#/$defs/knownScalarType"
+        },
+        {
+          type: "string",
+          minLength: 1,
+          not: {
+            $ref: "#/$defs/knownScalarType"
+          },
+          description: "Unknown family retained with incomplete semantic validation."
+        }
+      ]
+    },
+    extensions: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: true
+    },
+    reference: {
+      type: "object",
+      required: [
+        "role",
+        "module",
+        "element"
+      ],
+      properties: {
+        role: {
+          $ref: "#/$defs/id"
+        },
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    element: {
+      type: "object",
+      required: [
+        "id",
+        "extensions"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        scalarType: {
+          $ref: "#/$defs/scalarType"
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        references: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/reference"
+          }
+        },
+        kind: {
+          type: "string",
+          minLength: 1,
+          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
+        },
+        nullability: {
+          type: "string",
+          minLength: 1,
+          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                enum: [
+                  "record",
+                  "group"
+                ]
+              }
+            }
+          },
+          then: {
+            properties: {
+              scalarType: false
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "nullability"
+            ],
+            properties: {
+              nullability: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        }
+      ]
+    },
+    module: {
+      type: "object",
+      required: [
+        "id",
+        "namespace",
+        "elements"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        namespace: {
+          type: "string"
+        },
+        elements: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/element"
+          }
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        }
+      }
+    },
+    knownElementKind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    },
+    knownNullability: {
+      enum: [
+        "required",
+        "absent-allowed",
+        "unspecified"
+      ]
+    }
+  },
+  description: "Explicit ideal value availability on Fields. No implicit upgrade from older envelopes, native NULL mapping, or default execution."
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/cardinality-document.schema.json
+var cardinality_document_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.4.0",
+  title: "UMF 0.4.0 cardinality envelope",
+  type: "object",
+  required: [
+    "umf",
+    "id",
+    "vocabularies",
+    "modules"
+  ],
+  properties: {
+    umf: {
+      const: "0.4.0"
+    },
+    id: {
+      $ref: "#/$defs/id"
+    },
+    vocabularies: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: {
+        type: "object",
+        required: [
+          "version"
+        ],
+        properties: {
+          version: {
+            $ref: "#/$defs/version"
+          }
+        }
+      }
+    },
+    modules: {
+      type: "array",
+      items: {
+        $ref: "#/$defs/module"
+      }
+    },
+    extensions: {
+      $ref: "#/$defs/extensions"
+    }
+  },
+  $defs: {
+    id: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    knownScalarType: {
+      enum: [
+        "boolean",
+        "integer",
+        "decimal",
+        "float",
+        "string",
+        "binary",
+        "date",
+        "time",
+        "timestamp"
+      ],
+      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
+    },
+    scalarType: {
+      anyOf: [
+        {
+          $ref: "#/$defs/knownScalarType"
+        },
+        {
+          type: "string",
+          minLength: 1,
+          not: {
+            $ref: "#/$defs/knownScalarType"
+          },
+          description: "Unknown family retained with incomplete semantic validation."
+        }
+      ]
+    },
+    extensions: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: true
+    },
+    reference: {
+      type: "object",
+      required: [
+        "role",
+        "module",
+        "element"
+      ],
+      properties: {
+        role: {
+          $ref: "#/$defs/id"
+        },
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    element: {
+      type: "object",
+      required: [
+        "id",
+        "extensions"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        scalarType: {
+          $ref: "#/$defs/scalarType"
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        references: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/reference"
+          }
+        },
+        kind: {
+          type: "string",
+          minLength: 1,
+          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
+        },
+        nullability: {
+          type: "string",
+          minLength: 1,
+          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
+        },
+        cardinality: {
+          type: "string",
+          minLength: 1,
+          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
+        },
+        itemType: {
+          $ref: "#/$defs/itemType"
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                enum: [
+                  "record",
+                  "group"
+                ]
+              }
+            }
+          },
+          then: {
+            properties: {
+              scalarType: false
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "nullability"
+            ],
+            properties: {
+              nullability: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          },
+          then: {
+            not: {
+              required: [
+                "scalarType"
+              ]
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "itemType"
+            ],
+            properties: {
+              itemType: {}
+            }
+          },
+          then: {
+            required: [
+              "kind",
+              "cardinality"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    module: {
+      type: "object",
+      required: [
+        "id",
+        "namespace",
+        "elements"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        namespace: {
+          type: "string"
+        },
+        elements: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/element"
+          }
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        }
+      }
+    },
+    knownElementKind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    },
+    knownNullability: {
+      enum: [
+        "required",
+        "absent-allowed",
+        "unspecified"
+      ]
+    },
+    knownCardinality: {
+      enum: [
+        "one",
+        "array",
+        "map",
+        "unspecified"
+      ]
+    },
+    itemType: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    }
+  },
+  description: "Explicit Field shape and optional array-item/map-value Field reference; no native repetition, dimension or physical encoding inference."
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/facet-document.schema.json
+var facet_document_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.5.0",
+  title: "UMF 0.5.0 facet envelope",
+  type: "object",
+  required: [
+    "umf",
+    "id",
+    "vocabularies",
+    "modules"
+  ],
+  properties: {
+    umf: {
+      const: "0.5.0"
+    },
+    id: {
+      $ref: "#/$defs/id"
+    },
+    vocabularies: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: {
+        type: "object",
+        required: [
+          "version"
+        ],
+        properties: {
+          version: {
+            $ref: "#/$defs/version"
+          }
+        }
+      }
+    },
+    modules: {
+      type: "array",
+      items: {
+        $ref: "#/$defs/module"
+      }
+    },
+    extensions: {
+      $ref: "#/$defs/extensions"
+    }
+  },
+  $defs: {
+    id: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    knownScalarType: {
+      enum: [
+        "boolean",
+        "integer",
+        "decimal",
+        "float",
+        "string",
+        "binary",
+        "date",
+        "time",
+        "timestamp"
+      ],
+      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
+    },
+    scalarType: {
+      anyOf: [
+        {
+          $ref: "#/$defs/knownScalarType"
+        },
+        {
+          type: "string",
+          minLength: 1,
+          not: {
+            $ref: "#/$defs/knownScalarType"
+          },
+          description: "Unknown family retained with incomplete semantic validation."
+        }
+      ]
+    },
+    extensions: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: true
+    },
+    reference: {
+      type: "object",
+      required: [
+        "role",
+        "module",
+        "element"
+      ],
+      properties: {
+        role: {
+          $ref: "#/$defs/id"
+        },
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    element: {
+      type: "object",
+      required: [
+        "id",
+        "extensions"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        scalarType: {
+          $ref: "#/$defs/scalarType"
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        references: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/reference"
+          }
+        },
+        kind: {
+          type: "string",
+          minLength: 1,
+          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
+        },
+        nullability: {
+          type: "string",
+          minLength: 1,
+          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
+        },
+        cardinality: {
+          type: "string",
+          minLength: 1,
+          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
+        },
+        itemType: {
+          $ref: "#/$defs/itemType"
+        },
+        facets: {
+          $ref: "#/$defs/facets"
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                enum: [
+                  "record",
+                  "group"
+                ]
+              }
+            }
+          },
+          then: {
+            properties: {
+              scalarType: false
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "nullability"
+            ],
+            properties: {
+              nullability: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          },
+          then: {
+            not: {
+              required: [
+                "scalarType"
+              ]
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "itemType"
+            ],
+            properties: {
+              itemType: {}
+            }
+          },
+          then: {
+            required: [
+              "kind",
+              "cardinality"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "one",
+                  "unspecified"
+                ]
+              },
+              references: {
+                type: "array",
+                not: {
+                  contains: {
+                    type: "object",
+                    required: [
+                      "role"
+                    ],
+                    properties: {
+                      role: {
+                        const: "record-type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                enum: [
+                  "string",
+                  "binary"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "unicode-scalar"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "string"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "byte"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "binary"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "precision"
+                ],
+                properties: {
+                  precision: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "decimal"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "integerWidth"
+                ],
+                properties: {
+                  integerWidth: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "integer"
+              }
+            }
+          }
+        }
+      ]
+    },
+    module: {
+      type: "object",
+      required: [
+        "id",
+        "namespace",
+        "elements"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        namespace: {
+          type: "string"
+        },
+        elements: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/element"
+          }
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        }
+      }
+    },
+    knownElementKind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    },
+    knownNullability: {
+      enum: [
+        "required",
+        "absent-allowed",
+        "unspecified"
+      ]
+    },
+    knownCardinality: {
+      enum: [
+        "one",
+        "array",
+        "map",
+        "unspecified"
+      ]
+    },
+    itemType: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    facets: {
+      type: "object",
+      description: "Missing members impose no bound. Unknown members and qualifiers are retained without interpretation.",
+      properties: {
+        length: {
+          type: "object",
+          required: [
+            "max",
+            "unit"
+          ],
+          properties: {
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            unit: {
+              type: "string",
+              minLength: 1,
+              description: "Known units: unicode-scalar for string, byte for binary. Unknown units remain uninterpreted."
+            }
+          }
+        },
+        precision: {
+          type: "integer",
+          minimum: 1,
+          maximum: 9007199254740991,
+          description: "Decimal coefficient digit bound; requires scale. Absolute coefficient is less than 10^precision. No implicit rounding."
+        },
+        scale: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991,
+          description: "Fixed fractional digit count; requires precision. Semantic validation requires scale <= precision. Value equals integer coefficient times 10^-scale."
+        },
+        integerWidth: {
+          type: "object",
+          required: [
+            "bits",
+            "signed"
+          ],
+          properties: {
+            bits: {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            signed: {
+              type: "boolean"
+            }
+          },
+          description: "Signed [-2^(bits-1),2^(bits-1)-1] or unsigned [0,2^bits-1]; mathematical domain, not a physical storage-width assertion."
+        }
+      },
+      dependentRequired: {
+        precision: [
+          "scale"
+        ],
+        scale: [
+          "precision"
+        ]
+      }
+    }
+  },
+  description: "Candidate facet envelope: author-stated scalar bounds with explicit units. Requires semantic validation of scale <= precision, identities and references. Native enforcement, encoding and exactness require separate bindings."
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/extension-package.schema.json
+var extension_package_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:extension-package:0.1.0",
+  title: "UMF extension package declaration",
+  type: "object",
+  required: ["id", "version", "coreVersion", "description", "schema", "semantics", "scopes", "capabilities"],
+  properties: {
+    id: { type: "string", minLength: 1 },
+    version: { type: "string", pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+    coreVersion: { const: "0.1.0" },
+    description: { type: "string", minLength: 1 },
+    schema: { type: ["object", "boolean"] },
+    semantics: { type: "string", minLength: 1 },
+    scopes: { type: "array", minItems: 1, uniqueItems: true, items: { enum: ["document", "module", "element"] } },
+    capabilities: {
+      type: "object",
+      required: ["validation", "directions", "evidence"],
+      properties: {
+        validation: { enum: ["structural", "semantic"] },
+        directions: { type: "array", uniqueItems: true, items: { enum: ["import", "export"] } },
+        evidence: { type: "array", items: { type: "string", minLength: 1 } },
+        native: { type: "object", required: ["system", "version", "subset"], properties: { system: { type: "string", minLength: 1 }, version: { type: "string", minLength: 1 }, subset: { type: "string", minLength: 1 } } }
+      },
+      allOf: [{ if: { properties: { directions: { type: "array", minItems: 1 } } }, then: { properties: { native: true }, required: ["native"] } }]
+    }
+  }
+};
+
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/validation/schema.ts
+function canonical(value) {
+  if (Array.isArray(value))
+    return "a[" + value.map(canonical).join(",") + "]";
+  if (value !== null && typeof value === "object")
+    return "o{" + Object.keys(value).sort().map((key) => JSON.stringify(key) + ":" + canonical(value[key])).join(",") + "}";
+  return JSON.stringify(value);
+}
+function createValidator(strict = true) {
+  const validator = new import__2020.default({ allErrors: true, strict, allowUnionTypes: true, ownProperties: true, validateFormats: false });
+  installJsonEquality(validator);
+  return validator;
+}
+function installJsonEquality(validator) {
+  validator.removeKeyword("uniqueItems").addKeyword({ keyword: "uniqueItems", type: "array", schemaType: "boolean", errors: false, validate: (unique, data) => !unique || new Set(data.map(canonical)).size === data.length });
+  validator.removeKeyword("const").addKeyword({ keyword: "const", errors: false, validate: (expected, data) => canonical(expected) === canonical(data) });
+  validator.removeKeyword("enum").addKeyword({ keyword: "enum", schemaType: "array", errors: false, validate: (expected, data) => expected.some((value) => canonical(value) === canonical(data)) });
+}
+var ajv = createValidator();
+var checkCore = ajv.compile(snapshotSchema(schema_default));
+var checkCoreFields = ajv.compile(snapshotSchema(field_document_schema_default));
+var checkCoreNullability = ajv.compile(snapshotSchema(nullability_document_schema_default));
+var checkCoreCardinality = ajv.compile(snapshotSchema(cardinality_document_schema_default));
+var checkCoreFacets = ajv.compile(snapshotSchema(facet_document_schema_default));
+var checkPackage = ajv.compile(snapshotSchema(extension_package_schema_default));
+var checkCoreKeys = ajv.compile(snapshotSchema(key_document_schema_default));
+var checkCoreRelationships = ajv.compile(snapshotSchema(relationship_document_schema_default));
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/bit128-document.schema.json
+var bit128_document_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.9.0",
+  title: "UMF 0.9.0 exact 128-bit and UUID values",
+  type: "object",
+  required: [
+    "umf",
+    "id",
+    "vocabularies",
+    "modules"
+  ],
+  properties: {
+    umf: {
+      const: "0.9.0"
+    },
+    id: {
+      $ref: "#/$defs/id"
+    },
+    vocabularies: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: {
+        type: "object",
+        required: [
+          "version"
+        ],
+        properties: {
+          version: {
+            $ref: "#/$defs/version"
+          }
+        }
+      }
+    },
+    modules: {
+      type: "array",
+      items: {
+        $ref: "#/$defs/module"
+      }
+    },
+    extensions: {
+      $ref: "#/$defs/extensions"
+    },
+    title: {
+      type: "string"
+    },
+    aliases: {
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "string",
+        minLength: 1
+      }
+    }
+  },
+  $defs: {
+    id: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    knownScalarType: {
+      enum: [
+        "boolean",
+        "integer",
+        "decimal",
+        "float",
+        "string",
+        "binary",
+        "date",
+        "time",
+        "timestamp",
+        "bits128",
+        "uuid"
+      ],
+      description: "Version-qualified value families; bits128 and uuid have intrinsic16-byte domains under umf-128/1; native refinements remain attached."
+    },
+    scalarType: {
+      anyOf: [
+        {
+          $ref: "#/$defs/knownScalarType"
+        },
+        {
+          type: "string",
+          minLength: 1,
+          not: {
+            $ref: "#/$defs/knownScalarType"
+          },
+          description: "Unknown family retained with incomplete semantic validation."
+        }
+      ]
+    },
+    extensions: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: true
+    },
+    reference: {
+      type: "object",
+      required: [
+        "role",
+        "module",
+        "element"
+      ],
+      properties: {
+        role: {
+          $ref: "#/$defs/id"
+        },
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    element: {
+      type: "object",
+      required: [
+        "id",
+        "extensions"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        scalarType: {
+          $ref: "#/$defs/scalarType"
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        references: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/reference"
+          }
+        },
+        kind: {
+          type: "string",
+          minLength: 1,
+          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
+        },
+        nullability: {
+          type: "string",
+          minLength: 1,
+          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
+        },
+        cardinality: {
+          type: "string",
+          minLength: 1,
+          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
+        },
+        itemType: {
+          $ref: "#/$defs/itemType"
+        },
+        facets: {
+          $ref: "#/$defs/facets"
+        },
+        members: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        keys: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/key"
+          }
+        },
+        title: {
+          type: "string"
+        },
+        aliases: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            type: "string",
+            minLength: 1
+          }
+        },
+        examples: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/literal"
+          }
+        },
+        allowedValues: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/literal"
+          }
+        },
+        default: {
+          type: "object",
+          required: [
+            "value",
+            "on"
+          ],
+          properties: {
+            value: {
+              $ref: "#/$defs/literal"
+            },
+            on: {
+              enum: [
+                "missing",
+                "null",
+                "missing-or-null"
+              ]
+            }
+          },
+          additionalProperties: true
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                enum: [
+                  "record",
+                  "group"
+                ]
+              }
+            }
+          },
+          then: {
+            properties: {
+              scalarType: false
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "nullability"
+            ],
+            properties: {
+              nullability: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          },
+          then: {
+            not: {
+              required: [
+                "scalarType"
+              ]
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "itemType"
+            ],
+            properties: {
+              itemType: {}
+            }
+          },
+          then: {
+            required: [
+              "kind",
+              "cardinality"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              references: {
+                type: "array",
+                not: {
+                  contains: {
+                    type: "object",
+                    required: [
+                      "role"
+                    ],
+                    properties: {
+                      role: {
+                        const: "record-type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                enum: [
+                  "string",
+                  "binary"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "unicode-scalar"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "string"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "byte"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "binary"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "precision"
+                ],
+                properties: {
+                  precision: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "decimal"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "integerWidth"
+                ],
+                properties: {
+                  integerWidth: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "integer"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              members: {}
+            },
+            required: [
+              "members"
+            ]
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              keys: {}
+            },
+            required: [
+              "keys"
+            ]
+          },
+          then: {
+            required: [
+              "kind",
+              "members"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              },
+              members: {}
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "examples"
+            ],
+            properties: {
+              examples: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "allowedValues"
+            ],
+            properties: {
+              allowedValues: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "default"
+            ],
+            properties: {
+              default: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        }
+      ]
+    },
+    module: {
+      type: "object",
+      required: [
+        "id",
+        "namespace",
+        "elements"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        namespace: {
+          type: "string"
+        },
+        elements: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/element"
+          }
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        relationships: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/relationship"
+          }
+        },
+        title: {
+          type: "string"
+        },
+        aliases: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            type: "string",
+            minLength: 1
+          }
+        }
+      }
+    },
+    knownElementKind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    },
+    knownNullability: {
+      enum: [
+        "required",
+        "absent-allowed",
+        "unspecified"
+      ]
+    },
+    knownCardinality: {
+      enum: [
+        "one",
+        "array",
+        "map",
+        "unspecified"
+      ]
+    },
+    itemType: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    facets: {
+      type: "object",
+      description: "Missing members impose no bound. Unknown members and qualifiers are retained without interpretation.",
+      properties: {
+        length: {
+          type: "object",
+          required: [
+            "unit"
+          ],
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            unit: {
+              type: "string",
+              minLength: 1
+            }
+          },
+          additionalProperties: true
+        },
+        precision: {
+          type: "integer",
+          minimum: 1,
+          maximum: 9007199254740991,
+          description: "Decimal coefficient digit bound; requires scale. Absolute coefficient is less than 10^precision. No implicit rounding."
+        },
+        scale: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991,
+          description: "Fixed fractional digit count; requires precision. Semantic validation requires scale <= precision. Value equals integer coefficient times 10^-scale."
+        },
+        integerWidth: {
+          type: "object",
+          required: [
+            "bits",
+            "signed"
+          ],
+          properties: {
+            bits: {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            signed: {
+              type: "boolean"
+            }
+          },
+          description: "Signed [-2^(bits-1),2^(bits-1)-1] or unsigned [0,2^bits-1]; mathematical domain, not a physical storage-width assertion."
+        },
+        collectionSize: {
+          type: "object",
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            }
+          },
+          additionalProperties: true
+        },
+        range: {
+          type: "object",
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              $ref: "#/$defs/literal"
+            },
+            max: {
+              $ref: "#/$defs/literal"
+            },
+            minInclusive: {
+              type: "boolean"
+            },
+            maxInclusive: {
+              type: "boolean"
+            }
+          },
+          additionalProperties: true
+        }
+      },
+      dependentRequired: {
+        precision: [
+          "scale"
+        ],
+        scale: [
+          "precision"
+        ]
+      }
+    },
+    keyFieldReference: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    key: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "fields"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        fields: {
+          type: "array",
+          minItems: 1,
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        primary: {
+          type: "boolean"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipEndpoint: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipTarget: {
+      type: "object",
+      required: [
+        "module",
+        "element",
+        "key"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        },
+        key: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipMultiplicity: {
+      type: "object",
+      required: [
+        "min",
+        "max"
+      ],
+      properties: {
+        min: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991
+        },
+        max: {
+          anyOf: [
+            {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            {
+              const: "*"
+            }
+          ]
+        }
+      },
+      additionalProperties: true
+    },
+    relationship: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "source",
+        "target",
+        "sourceMultiplicity",
+        "targetMultiplicity",
+        "targetLifecycle",
+        "directed"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        source: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/relationshipEndpoint"
+          }
+        },
+        target: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/relationshipTarget"
+          }
+        },
+        sourceMultiplicity: {
+          $ref: "#/$defs/relationshipMultiplicity"
+        },
+        targetMultiplicity: {
+          $ref: "#/$defs/relationshipMultiplicity"
+        },
+        targetLifecycle: {
+          type: "string",
+          minLength: 1
+        },
+        directed: {
+          type: "boolean"
+        },
+        inverse: {
+          $ref: "#/$defs/id"
+        },
+        associationRecord: {
+          $ref: "#/$defs/relationshipEndpoint"
+        }
+      },
+      additionalProperties: true
+    },
+    literal: {
+      oneOf: [
+        {
+          type: "null"
+        },
+        {
+          type: "object",
+          required: [
+            "boolean"
+          ],
+          properties: {
+            boolean: {
+              type: "boolean"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "integerToken"
+          ],
+          properties: {
+            integerToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "decimalToken"
+          ],
+          properties: {
+            decimalToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "string"
+          ],
+          properties: {
+            string: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "binaryHex"
+          ],
+          properties: {
+            binaryHex: {
+              type: "string",
+              pattern: "^([0-9a-fA-F]{2})*$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "floatToken"
+          ],
+          properties: {
+            floatToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "date"
+          ],
+          properties: {
+            date: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "time"
+          ],
+          properties: {
+            time: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "timestamp"
+          ],
+          properties: {
+            timestamp: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "array"
+          ],
+          properties: {
+            array: {
+              type: "array",
+              items: {
+                $ref: "#/$defs/literal"
+              }
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "map"
+          ],
+          properties: {
+            map: {
+              type: "object",
+              additionalProperties: {
+                $ref: "#/$defs/literal"
+              }
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "bits128Hex"
+          ],
+          properties: {
+            bits128Hex: {
+              type: "string",
+              minLength: 32,
+              maxLength: 32,
+              pattern: "^[0-9a-fA-F]{32}$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "uuid"
+          ],
+          properties: {
+            uuid: {
+              type: "string",
+              minLength: 36,
+              maxLength: 36,
+              pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        }
+      ]
+    }
+  },
+  description: "Shared annotations, literal defaults and exact value/collection bounds; semantic validator required.",
+  $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/schema-properties-document.schema.json
 var schema_properties_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.8.0",
@@ -14607,3003 +20204,8 @@ var schema_properties_document_schema_default = {
   description: "Shared annotations, literal defaults and exact value/collection bounds; semantic validator required.",
   $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/relationship-document.schema.json
-var relationship_document_schema_default = {
-  $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "urn:umf:core:0.7.0",
-  title: "UMF 0.7.0 relationship envelope",
-  type: "object",
-  required: [
-    "umf",
-    "id",
-    "vocabularies",
-    "modules"
-  ],
-  properties: {
-    umf: {
-      const: "0.7.0"
-    },
-    id: {
-      $ref: "#/$defs/id"
-    },
-    vocabularies: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: {
-        type: "object",
-        required: [
-          "version"
-        ],
-        properties: {
-          version: {
-            $ref: "#/$defs/version"
-          }
-        }
-      }
-    },
-    modules: {
-      type: "array",
-      items: {
-        $ref: "#/$defs/module"
-      }
-    },
-    extensions: {
-      $ref: "#/$defs/extensions"
-    }
-  },
-  $defs: {
-    id: {
-      type: "string",
-      minLength: 1
-    },
-    version: {
-      type: "string",
-      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
-    },
-    knownScalarType: {
-      enum: [
-        "boolean",
-        "integer",
-        "decimal",
-        "float",
-        "string",
-        "binary",
-        "date",
-        "time",
-        "timestamp"
-      ],
-      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
-    },
-    scalarType: {
-      anyOf: [
-        {
-          $ref: "#/$defs/knownScalarType"
-        },
-        {
-          type: "string",
-          minLength: 1,
-          not: {
-            $ref: "#/$defs/knownScalarType"
-          },
-          description: "Unknown family retained with incomplete semantic validation."
-        }
-      ]
-    },
-    extensions: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: true
-    },
-    reference: {
-      type: "object",
-      required: [
-        "role",
-        "module",
-        "element"
-      ],
-      properties: {
-        role: {
-          $ref: "#/$defs/id"
-        },
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      }
-    },
-    element: {
-      type: "object",
-      required: [
-        "id",
-        "extensions"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        name: {
-          type: "string"
-        },
-        description: {
-          type: "string"
-        },
-        scalarType: {
-          $ref: "#/$defs/scalarType"
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        },
-        references: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/reference"
-          }
-        },
-        kind: {
-          type: "string",
-          minLength: 1,
-          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
-        },
-        nullability: {
-          type: "string",
-          minLength: 1,
-          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
-        },
-        cardinality: {
-          type: "string",
-          minLength: 1,
-          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
-        },
-        itemType: {
-          $ref: "#/$defs/itemType"
-        },
-        facets: {
-          $ref: "#/$defs/facets"
-        },
-        members: {
-          type: "array",
-          uniqueItems: true,
-          items: {
-            $ref: "#/$defs/keyFieldReference"
-          }
-        },
-        keys: {
-          type: "array",
-          minItems: 1,
-          items: {
-            $ref: "#/$defs/key"
-          }
-        }
-      },
-      allOf: [
-        {
-          if: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                enum: [
-                  "record",
-                  "group"
-                ]
-              }
-            }
-          },
-          then: {
-            properties: {
-              scalarType: false
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "nullability"
-            ],
-            properties: {
-              nullability: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "cardinality"
-            ],
-            properties: {
-              cardinality: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "cardinality"
-            ],
-            properties: {
-              cardinality: {
-                enum: [
-                  "array",
-                  "map"
-                ]
-              }
-            }
-          },
-          then: {
-            not: {
-              required: [
-                "scalarType"
-              ]
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "itemType"
-            ],
-            properties: {
-              itemType: {}
-            }
-          },
-          then: {
-            required: [
-              "kind",
-              "cardinality"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              },
-              cardinality: {
-                enum: [
-                  "array",
-                  "map"
-                ]
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              },
-              cardinality: {
-                enum: [
-                  "one",
-                  "unspecified"
-                ]
-              },
-              references: {
-                type: "array",
-                not: {
-                  contains: {
-                    type: "object",
-                    required: [
-                      "role"
-                    ],
-                    properties: {
-                      role: {
-                        const: "record-type"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "length"
-                ],
-                properties: {
-                  length: {}
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                enum: [
-                  "string",
-                  "binary"
-                ]
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "length"
-                ],
-                properties: {
-                  length: {
-                    type: "object",
-                    required: [
-                      "unit"
-                    ],
-                    properties: {
-                      unit: {
-                        const: "unicode-scalar"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "string"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "length"
-                ],
-                properties: {
-                  length: {
-                    type: "object",
-                    required: [
-                      "unit"
-                    ],
-                    properties: {
-                      unit: {
-                        const: "byte"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "binary"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "precision"
-                ],
-                properties: {
-                  precision: {}
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "decimal"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "integerWidth"
-                ],
-                properties: {
-                  integerWidth: {}
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "integer"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            properties: {
-              members: {}
-            },
-            required: [
-              "members"
-            ]
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "record"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            properties: {
-              keys: {}
-            },
-            required: [
-              "keys"
-            ]
-          },
-          then: {
-            required: [
-              "kind",
-              "members"
-            ],
-            properties: {
-              kind: {
-                const: "record"
-              },
-              members: {}
-            }
-          }
-        }
-      ]
-    },
-    module: {
-      type: "object",
-      required: [
-        "id",
-        "namespace",
-        "elements"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        namespace: {
-          type: "string"
-        },
-        elements: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/element"
-          }
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        },
-        relationships: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/relationship"
-          }
-        }
-      }
-    },
-    knownElementKind: {
-      enum: [
-        "field",
-        "record",
-        "group"
-      ]
-    },
-    knownNullability: {
-      enum: [
-        "required",
-        "absent-allowed",
-        "unspecified"
-      ]
-    },
-    knownCardinality: {
-      enum: [
-        "one",
-        "array",
-        "map",
-        "unspecified"
-      ]
-    },
-    itemType: {
-      type: "object",
-      required: [
-        "module",
-        "element"
-      ],
-      properties: {
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      }
-    },
-    facets: {
-      type: "object",
-      description: "Missing members impose no bound. Unknown members and qualifiers are retained without interpretation.",
-      properties: {
-        length: {
-          type: "object",
-          required: [
-            "max",
-            "unit"
-          ],
-          properties: {
-            max: {
-              type: "integer",
-              minimum: 0,
-              maximum: 9007199254740991
-            },
-            unit: {
-              type: "string",
-              minLength: 1,
-              description: "Known units: unicode-scalar for string, byte for binary. Unknown units remain uninterpreted."
-            }
-          }
-        },
-        precision: {
-          type: "integer",
-          minimum: 1,
-          maximum: 9007199254740991,
-          description: "Decimal coefficient digit bound; requires scale. Absolute coefficient is less than 10^precision. No implicit rounding."
-        },
-        scale: {
-          type: "integer",
-          minimum: 0,
-          maximum: 9007199254740991,
-          description: "Fixed fractional digit count; requires precision. Semantic validation requires scale <= precision. Value equals integer coefficient times 10^-scale."
-        },
-        integerWidth: {
-          type: "object",
-          required: [
-            "bits",
-            "signed"
-          ],
-          properties: {
-            bits: {
-              type: "integer",
-              minimum: 1,
-              maximum: 9007199254740991
-            },
-            signed: {
-              type: "boolean"
-            }
-          },
-          description: "Signed [-2^(bits-1),2^(bits-1)-1] or unsigned [0,2^bits-1]; mathematical domain, not a physical storage-width assertion."
-        }
-      },
-      dependentRequired: {
-        precision: [
-          "scale"
-        ],
-        scale: [
-          "precision"
-        ]
-      }
-    },
-    keyFieldReference: {
-      type: "object",
-      required: [
-        "module",
-        "element"
-      ],
-      properties: {
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      },
-      additionalProperties: true
-    },
-    key: {
-      type: "object",
-      required: [
-        "id",
-        "name",
-        "fields"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        name: {
-          $ref: "#/$defs/id"
-        },
-        fields: {
-          type: "array",
-          minItems: 1,
-          uniqueItems: true,
-          items: {
-            $ref: "#/$defs/keyFieldReference"
-          }
-        },
-        primary: {
-          type: "boolean"
-        }
-      },
-      additionalProperties: true
-    },
-    relationshipEndpoint: {
-      type: "object",
-      required: [
-        "module",
-        "element"
-      ],
-      properties: {
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      },
-      additionalProperties: true
-    },
-    relationshipTarget: {
-      type: "object",
-      required: [
-        "module",
-        "element",
-        "key"
-      ],
-      properties: {
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        },
-        key: {
-          $ref: "#/$defs/id"
-        }
-      },
-      additionalProperties: true
-    },
-    relationshipMultiplicity: {
-      type: "object",
-      required: [
-        "min",
-        "max"
-      ],
-      properties: {
-        min: {
-          type: "integer",
-          minimum: 0,
-          maximum: 9007199254740991
-        },
-        max: {
-          anyOf: [
-            {
-              type: "integer",
-              minimum: 1,
-              maximum: 9007199254740991
-            },
-            {
-              const: "*"
-            }
-          ]
-        }
-      },
-      additionalProperties: true
-    },
-    relationship: {
-      type: "object",
-      required: [
-        "id",
-        "name",
-        "source",
-        "target",
-        "sourceMultiplicity",
-        "targetMultiplicity",
-        "targetLifecycle",
-        "directed"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        name: {
-          $ref: "#/$defs/id"
-        },
-        source: {
-          type: "array",
-          minItems: 1,
-          items: {
-            $ref: "#/$defs/relationshipEndpoint"
-          }
-        },
-        target: {
-          type: "array",
-          minItems: 1,
-          items: {
-            $ref: "#/$defs/relationshipTarget"
-          }
-        },
-        sourceMultiplicity: {
-          $ref: "#/$defs/relationshipMultiplicity"
-        },
-        targetMultiplicity: {
-          $ref: "#/$defs/relationshipMultiplicity"
-        },
-        targetLifecycle: {
-          type: "string",
-          minLength: 1
-        },
-        directed: {
-          type: "boolean"
-        },
-        inverse: {
-          $ref: "#/$defs/id"
-        },
-        associationRecord: {
-          $ref: "#/$defs/relationshipEndpoint"
-        }
-      },
-      additionalProperties: true
-    }
-  },
-  description: "Authored schema-level relationships between keyed Records; native enforcement and storage are not inferred. Unknown qualifiers are retained.",
-  $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
-};
-// ../truss-umf-runtime-cOgFWm/spec/core/key-document.schema.json
-var key_document_schema_default = {
-  $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "urn:umf:core:0.6.0",
-  title: "UMF 0.6.0 key envelope",
-  type: "object",
-  required: [
-    "umf",
-    "id",
-    "vocabularies",
-    "modules"
-  ],
-  properties: {
-    umf: {
-      const: "0.6.0"
-    },
-    id: {
-      $ref: "#/$defs/id"
-    },
-    vocabularies: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: {
-        type: "object",
-        required: [
-          "version"
-        ],
-        properties: {
-          version: {
-            $ref: "#/$defs/version"
-          }
-        }
-      }
-    },
-    modules: {
-      type: "array",
-      items: {
-        $ref: "#/$defs/module"
-      }
-    },
-    extensions: {
-      $ref: "#/$defs/extensions"
-    }
-  },
-  $defs: {
-    id: {
-      type: "string",
-      minLength: 1
-    },
-    version: {
-      type: "string",
-      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
-    },
-    knownScalarType: {
-      enum: [
-        "boolean",
-        "integer",
-        "decimal",
-        "float",
-        "string",
-        "binary",
-        "date",
-        "time",
-        "timestamp"
-      ],
-      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
-    },
-    scalarType: {
-      anyOf: [
-        {
-          $ref: "#/$defs/knownScalarType"
-        },
-        {
-          type: "string",
-          minLength: 1,
-          not: {
-            $ref: "#/$defs/knownScalarType"
-          },
-          description: "Unknown family retained with incomplete semantic validation."
-        }
-      ]
-    },
-    extensions: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: true
-    },
-    reference: {
-      type: "object",
-      required: [
-        "role",
-        "module",
-        "element"
-      ],
-      properties: {
-        role: {
-          $ref: "#/$defs/id"
-        },
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      }
-    },
-    element: {
-      type: "object",
-      required: [
-        "id",
-        "extensions"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        name: {
-          type: "string"
-        },
-        description: {
-          type: "string"
-        },
-        scalarType: {
-          $ref: "#/$defs/scalarType"
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        },
-        references: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/reference"
-          }
-        },
-        kind: {
-          type: "string",
-          minLength: 1,
-          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
-        },
-        nullability: {
-          type: "string",
-          minLength: 1,
-          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
-        },
-        cardinality: {
-          type: "string",
-          minLength: 1,
-          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
-        },
-        itemType: {
-          $ref: "#/$defs/itemType"
-        },
-        facets: {
-          $ref: "#/$defs/facets"
-        },
-        members: {
-          type: "array",
-          uniqueItems: true,
-          items: {
-            $ref: "#/$defs/keyFieldReference"
-          }
-        },
-        keys: {
-          type: "array",
-          minItems: 1,
-          items: {
-            $ref: "#/$defs/key"
-          }
-        }
-      },
-      allOf: [
-        {
-          if: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                enum: [
-                  "record",
-                  "group"
-                ]
-              }
-            }
-          },
-          then: {
-            properties: {
-              scalarType: false
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "nullability"
-            ],
-            properties: {
-              nullability: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "cardinality"
-            ],
-            properties: {
-              cardinality: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "cardinality"
-            ],
-            properties: {
-              cardinality: {
-                enum: [
-                  "array",
-                  "map"
-                ]
-              }
-            }
-          },
-          then: {
-            not: {
-              required: [
-                "scalarType"
-              ]
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "itemType"
-            ],
-            properties: {
-              itemType: {}
-            }
-          },
-          then: {
-            required: [
-              "kind",
-              "cardinality"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              },
-              cardinality: {
-                enum: [
-                  "array",
-                  "map"
-                ]
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              },
-              cardinality: {
-                enum: [
-                  "one",
-                  "unspecified"
-                ]
-              },
-              references: {
-                type: "array",
-                not: {
-                  contains: {
-                    type: "object",
-                    required: [
-                      "role"
-                    ],
-                    properties: {
-                      role: {
-                        const: "record-type"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "length"
-                ],
-                properties: {
-                  length: {}
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                enum: [
-                  "string",
-                  "binary"
-                ]
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "length"
-                ],
-                properties: {
-                  length: {
-                    type: "object",
-                    required: [
-                      "unit"
-                    ],
-                    properties: {
-                      unit: {
-                        const: "unicode-scalar"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "string"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "length"
-                ],
-                properties: {
-                  length: {
-                    type: "object",
-                    required: [
-                      "unit"
-                    ],
-                    properties: {
-                      unit: {
-                        const: "byte"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "binary"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "precision"
-                ],
-                properties: {
-                  precision: {}
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "decimal"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "integerWidth"
-                ],
-                properties: {
-                  integerWidth: {}
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "integer"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            properties: {
-              members: {}
-            },
-            required: [
-              "members"
-            ]
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "record"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            properties: {
-              keys: {}
-            },
-            required: [
-              "keys"
-            ]
-          },
-          then: {
-            required: [
-              "kind",
-              "members"
-            ],
-            properties: {
-              kind: {
-                const: "record"
-              },
-              members: {}
-            }
-          }
-        }
-      ]
-    },
-    module: {
-      type: "object",
-      required: [
-        "id",
-        "namespace",
-        "elements"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        namespace: {
-          type: "string"
-        },
-        elements: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/element"
-          }
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        }
-      }
-    },
-    knownElementKind: {
-      enum: [
-        "field",
-        "record",
-        "group"
-      ]
-    },
-    knownNullability: {
-      enum: [
-        "required",
-        "absent-allowed",
-        "unspecified"
-      ]
-    },
-    knownCardinality: {
-      enum: [
-        "one",
-        "array",
-        "map",
-        "unspecified"
-      ]
-    },
-    itemType: {
-      type: "object",
-      required: [
-        "module",
-        "element"
-      ],
-      properties: {
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      }
-    },
-    facets: {
-      type: "object",
-      description: "Missing members impose no bound. Unknown members and qualifiers are retained without interpretation.",
-      properties: {
-        length: {
-          type: "object",
-          required: [
-            "max",
-            "unit"
-          ],
-          properties: {
-            max: {
-              type: "integer",
-              minimum: 0,
-              maximum: 9007199254740991
-            },
-            unit: {
-              type: "string",
-              minLength: 1,
-              description: "Known units: unicode-scalar for string, byte for binary. Unknown units remain uninterpreted."
-            }
-          }
-        },
-        precision: {
-          type: "integer",
-          minimum: 1,
-          maximum: 9007199254740991,
-          description: "Decimal coefficient digit bound; requires scale. Absolute coefficient is less than 10^precision. No implicit rounding."
-        },
-        scale: {
-          type: "integer",
-          minimum: 0,
-          maximum: 9007199254740991,
-          description: "Fixed fractional digit count; requires precision. Semantic validation requires scale <= precision. Value equals integer coefficient times 10^-scale."
-        },
-        integerWidth: {
-          type: "object",
-          required: [
-            "bits",
-            "signed"
-          ],
-          properties: {
-            bits: {
-              type: "integer",
-              minimum: 1,
-              maximum: 9007199254740991
-            },
-            signed: {
-              type: "boolean"
-            }
-          },
-          description: "Signed [-2^(bits-1),2^(bits-1)-1] or unsigned [0,2^bits-1]; mathematical domain, not a physical storage-width assertion."
-        }
-      },
-      dependentRequired: {
-        precision: [
-          "scale"
-        ],
-        scale: [
-          "precision"
-        ]
-      }
-    },
-    keyFieldReference: {
-      type: "object",
-      required: [
-        "module",
-        "element"
-      ],
-      properties: {
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      },
-      additionalProperties: true
-    },
-    key: {
-      type: "object",
-      required: [
-        "id",
-        "name",
-        "fields"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        name: {
-          $ref: "#/$defs/id"
-        },
-        fields: {
-          type: "array",
-          minItems: 1,
-          uniqueItems: true,
-          items: {
-            $ref: "#/$defs/keyFieldReference"
-          }
-        },
-        primary: {
-          type: "boolean"
-        }
-      },
-      additionalProperties: true
-    }
-  },
-  description: "Candidate envelope for authored named primary/alternate keys and explicit Record membership, retaining earlier Field, availability, cardinality and facet ideals. Cross-reference and equality semantics require portable validation; native enforcement is not inferred.",
-  $comment: "Key membership resolution, unique ownership, key IDs/names/component sets, primary count and component domains require portable semantic validation. Native enforcement is not inferred."
-};
 
-// ../truss-umf-runtime-cOgFWm/src/validation/schema.ts
-var import__2020 = __toESM(require__2020(), 1);
-// ../truss-umf-runtime-cOgFWm/spec/core/schema.json
-var schema_default = {
-  $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "urn:umf:core:0.1.0",
-  title: "UMF 0.1.0 document envelope",
-  type: "object",
-  required: ["umf", "id", "vocabularies", "modules"],
-  properties: {
-    umf: { const: "0.1.0" },
-    id: { $ref: "#/$defs/id" },
-    vocabularies: { type: "object", propertyNames: { $ref: "#/$defs/id" }, additionalProperties: { type: "object", required: ["version"], properties: { version: { $ref: "#/$defs/version" } } } },
-    modules: { type: "array", items: { $ref: "#/$defs/module" } },
-    extensions: { $ref: "#/$defs/extensions" }
-  },
-  $defs: {
-    id: { type: "string", minLength: 1 },
-    version: { type: "string", pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
-    knownScalarType: { enum: ["boolean", "integer", "decimal", "float", "string", "binary", "date", "time", "timestamp"], description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior." },
-    scalarType: { anyOf: [{ $ref: "#/$defs/knownScalarType" }, { type: "string", minLength: 1, not: { $ref: "#/$defs/knownScalarType" }, description: "Unknown family retained with incomplete semantic validation." }] },
-    extensions: { type: "object", propertyNames: { $ref: "#/$defs/id" }, additionalProperties: true },
-    reference: { type: "object", required: ["role", "module", "element"], properties: { role: { $ref: "#/$defs/id" }, module: { $ref: "#/$defs/id" }, element: { $ref: "#/$defs/id" } } },
-    element: { type: "object", required: ["id", "extensions"], properties: { id: { $ref: "#/$defs/id" }, name: { type: "string" }, description: { type: "string" }, scalarType: { $ref: "#/$defs/scalarType" }, extensions: { $ref: "#/$defs/extensions" }, references: { type: "array", items: { $ref: "#/$defs/reference" } } } },
-    module: { type: "object", required: ["id", "namespace", "elements"], properties: { id: { $ref: "#/$defs/id" }, namespace: { type: "string" }, elements: { type: "array", items: { $ref: "#/$defs/element" } }, extensions: { $ref: "#/$defs/extensions" } } }
-  }
-};
-// ../truss-umf-runtime-cOgFWm/spec/core/field-document.schema.json
-var field_document_schema_default = {
-  $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "urn:umf:core:0.2.0",
-  title: "UMF 0.2.0 field envelope",
-  type: "object",
-  required: [
-    "umf",
-    "id",
-    "vocabularies",
-    "modules"
-  ],
-  properties: {
-    umf: {
-      const: "0.2.0"
-    },
-    id: {
-      $ref: "#/$defs/id"
-    },
-    vocabularies: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: {
-        type: "object",
-        required: [
-          "version"
-        ],
-        properties: {
-          version: {
-            $ref: "#/$defs/version"
-          }
-        }
-      }
-    },
-    modules: {
-      type: "array",
-      items: {
-        $ref: "#/$defs/module"
-      }
-    },
-    extensions: {
-      $ref: "#/$defs/extensions"
-    }
-  },
-  $defs: {
-    id: {
-      type: "string",
-      minLength: 1
-    },
-    version: {
-      type: "string",
-      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
-    },
-    knownScalarType: {
-      enum: [
-        "boolean",
-        "integer",
-        "decimal",
-        "float",
-        "string",
-        "binary",
-        "date",
-        "time",
-        "timestamp"
-      ],
-      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
-    },
-    scalarType: {
-      anyOf: [
-        {
-          $ref: "#/$defs/knownScalarType"
-        },
-        {
-          type: "string",
-          minLength: 1,
-          not: {
-            $ref: "#/$defs/knownScalarType"
-          },
-          description: "Unknown family retained with incomplete semantic validation."
-        }
-      ]
-    },
-    extensions: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: true
-    },
-    reference: {
-      type: "object",
-      required: [
-        "role",
-        "module",
-        "element"
-      ],
-      properties: {
-        role: {
-          $ref: "#/$defs/id"
-        },
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      }
-    },
-    element: {
-      type: "object",
-      required: [
-        "id",
-        "extensions"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        name: {
-          type: "string"
-        },
-        description: {
-          type: "string"
-        },
-        scalarType: {
-          $ref: "#/$defs/scalarType"
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        },
-        references: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/reference"
-          }
-        },
-        kind: {
-          type: "string",
-          minLength: 1,
-          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
-        }
-      },
-      allOf: [
-        {
-          if: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                enum: [
-                  "record",
-                  "group"
-                ]
-              }
-            }
-          },
-          then: {
-            properties: {
-              scalarType: false
-            }
-          }
-        }
-      ]
-    },
-    module: {
-      type: "object",
-      required: [
-        "id",
-        "namespace",
-        "elements"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        namespace: {
-          type: "string"
-        },
-        elements: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/element"
-          }
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        }
-      }
-    },
-    knownElementKind: {
-      enum: [
-        "field",
-        "record",
-        "group"
-      ]
-    }
-  },
-  description: "Opt-in field/record/group roles. No implicit upgrade from 0.1.0. Provenance, migration and binding evidence remain required."
-};
-// ../truss-umf-runtime-cOgFWm/spec/core/nullability-document.schema.json
-var nullability_document_schema_default = {
-  $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "urn:umf:core:0.3.0",
-  title: "UMF 0.3.0 nullability envelope",
-  type: "object",
-  required: [
-    "umf",
-    "id",
-    "vocabularies",
-    "modules"
-  ],
-  properties: {
-    umf: {
-      const: "0.3.0"
-    },
-    id: {
-      $ref: "#/$defs/id"
-    },
-    vocabularies: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: {
-        type: "object",
-        required: [
-          "version"
-        ],
-        properties: {
-          version: {
-            $ref: "#/$defs/version"
-          }
-        }
-      }
-    },
-    modules: {
-      type: "array",
-      items: {
-        $ref: "#/$defs/module"
-      }
-    },
-    extensions: {
-      $ref: "#/$defs/extensions"
-    }
-  },
-  $defs: {
-    id: {
-      type: "string",
-      minLength: 1
-    },
-    version: {
-      type: "string",
-      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
-    },
-    knownScalarType: {
-      enum: [
-        "boolean",
-        "integer",
-        "decimal",
-        "float",
-        "string",
-        "binary",
-        "date",
-        "time",
-        "timestamp"
-      ],
-      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
-    },
-    scalarType: {
-      anyOf: [
-        {
-          $ref: "#/$defs/knownScalarType"
-        },
-        {
-          type: "string",
-          minLength: 1,
-          not: {
-            $ref: "#/$defs/knownScalarType"
-          },
-          description: "Unknown family retained with incomplete semantic validation."
-        }
-      ]
-    },
-    extensions: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: true
-    },
-    reference: {
-      type: "object",
-      required: [
-        "role",
-        "module",
-        "element"
-      ],
-      properties: {
-        role: {
-          $ref: "#/$defs/id"
-        },
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      }
-    },
-    element: {
-      type: "object",
-      required: [
-        "id",
-        "extensions"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        name: {
-          type: "string"
-        },
-        description: {
-          type: "string"
-        },
-        scalarType: {
-          $ref: "#/$defs/scalarType"
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        },
-        references: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/reference"
-          }
-        },
-        kind: {
-          type: "string",
-          minLength: 1,
-          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
-        },
-        nullability: {
-          type: "string",
-          minLength: 1,
-          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
-        }
-      },
-      allOf: [
-        {
-          if: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                enum: [
-                  "record",
-                  "group"
-                ]
-              }
-            }
-          },
-          then: {
-            properties: {
-              scalarType: false
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "nullability"
-            ],
-            properties: {
-              nullability: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              }
-            }
-          }
-        }
-      ]
-    },
-    module: {
-      type: "object",
-      required: [
-        "id",
-        "namespace",
-        "elements"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        namespace: {
-          type: "string"
-        },
-        elements: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/element"
-          }
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        }
-      }
-    },
-    knownElementKind: {
-      enum: [
-        "field",
-        "record",
-        "group"
-      ]
-    },
-    knownNullability: {
-      enum: [
-        "required",
-        "absent-allowed",
-        "unspecified"
-      ]
-    }
-  },
-  description: "Explicit ideal value availability on Fields. No implicit upgrade from older envelopes, native NULL mapping, or default execution."
-};
-// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-document.schema.json
-var cardinality_document_schema_default = {
-  $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "urn:umf:core:0.4.0",
-  title: "UMF 0.4.0 cardinality envelope",
-  type: "object",
-  required: [
-    "umf",
-    "id",
-    "vocabularies",
-    "modules"
-  ],
-  properties: {
-    umf: {
-      const: "0.4.0"
-    },
-    id: {
-      $ref: "#/$defs/id"
-    },
-    vocabularies: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: {
-        type: "object",
-        required: [
-          "version"
-        ],
-        properties: {
-          version: {
-            $ref: "#/$defs/version"
-          }
-        }
-      }
-    },
-    modules: {
-      type: "array",
-      items: {
-        $ref: "#/$defs/module"
-      }
-    },
-    extensions: {
-      $ref: "#/$defs/extensions"
-    }
-  },
-  $defs: {
-    id: {
-      type: "string",
-      minLength: 1
-    },
-    version: {
-      type: "string",
-      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
-    },
-    knownScalarType: {
-      enum: [
-        "boolean",
-        "integer",
-        "decimal",
-        "float",
-        "string",
-        "binary",
-        "date",
-        "time",
-        "timestamp"
-      ],
-      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
-    },
-    scalarType: {
-      anyOf: [
-        {
-          $ref: "#/$defs/knownScalarType"
-        },
-        {
-          type: "string",
-          minLength: 1,
-          not: {
-            $ref: "#/$defs/knownScalarType"
-          },
-          description: "Unknown family retained with incomplete semantic validation."
-        }
-      ]
-    },
-    extensions: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: true
-    },
-    reference: {
-      type: "object",
-      required: [
-        "role",
-        "module",
-        "element"
-      ],
-      properties: {
-        role: {
-          $ref: "#/$defs/id"
-        },
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      }
-    },
-    element: {
-      type: "object",
-      required: [
-        "id",
-        "extensions"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        name: {
-          type: "string"
-        },
-        description: {
-          type: "string"
-        },
-        scalarType: {
-          $ref: "#/$defs/scalarType"
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        },
-        references: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/reference"
-          }
-        },
-        kind: {
-          type: "string",
-          minLength: 1,
-          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
-        },
-        nullability: {
-          type: "string",
-          minLength: 1,
-          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
-        },
-        cardinality: {
-          type: "string",
-          minLength: 1,
-          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
-        },
-        itemType: {
-          $ref: "#/$defs/itemType"
-        }
-      },
-      allOf: [
-        {
-          if: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                enum: [
-                  "record",
-                  "group"
-                ]
-              }
-            }
-          },
-          then: {
-            properties: {
-              scalarType: false
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "nullability"
-            ],
-            properties: {
-              nullability: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "cardinality"
-            ],
-            properties: {
-              cardinality: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "cardinality"
-            ],
-            properties: {
-              cardinality: {
-                enum: [
-                  "array",
-                  "map"
-                ]
-              }
-            }
-          },
-          then: {
-            not: {
-              required: [
-                "scalarType"
-              ]
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "itemType"
-            ],
-            properties: {
-              itemType: {}
-            }
-          },
-          then: {
-            required: [
-              "kind",
-              "cardinality"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              },
-              cardinality: {
-                enum: [
-                  "array",
-                  "map"
-                ]
-              }
-            }
-          }
-        }
-      ]
-    },
-    module: {
-      type: "object",
-      required: [
-        "id",
-        "namespace",
-        "elements"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        namespace: {
-          type: "string"
-        },
-        elements: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/element"
-          }
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        }
-      }
-    },
-    knownElementKind: {
-      enum: [
-        "field",
-        "record",
-        "group"
-      ]
-    },
-    knownNullability: {
-      enum: [
-        "required",
-        "absent-allowed",
-        "unspecified"
-      ]
-    },
-    knownCardinality: {
-      enum: [
-        "one",
-        "array",
-        "map",
-        "unspecified"
-      ]
-    },
-    itemType: {
-      type: "object",
-      required: [
-        "module",
-        "element"
-      ],
-      properties: {
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      }
-    }
-  },
-  description: "Explicit Field shape and optional array-item/map-value Field reference; no native repetition, dimension or physical encoding inference."
-};
-// ../truss-umf-runtime-cOgFWm/spec/core/facet-document.schema.json
-var facet_document_schema_default = {
-  $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "urn:umf:core:0.5.0",
-  title: "UMF 0.5.0 facet envelope",
-  type: "object",
-  required: [
-    "umf",
-    "id",
-    "vocabularies",
-    "modules"
-  ],
-  properties: {
-    umf: {
-      const: "0.5.0"
-    },
-    id: {
-      $ref: "#/$defs/id"
-    },
-    vocabularies: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: {
-        type: "object",
-        required: [
-          "version"
-        ],
-        properties: {
-          version: {
-            $ref: "#/$defs/version"
-          }
-        }
-      }
-    },
-    modules: {
-      type: "array",
-      items: {
-        $ref: "#/$defs/module"
-      }
-    },
-    extensions: {
-      $ref: "#/$defs/extensions"
-    }
-  },
-  $defs: {
-    id: {
-      type: "string",
-      minLength: 1
-    },
-    version: {
-      type: "string",
-      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
-    },
-    knownScalarType: {
-      enum: [
-        "boolean",
-        "integer",
-        "decimal",
-        "float",
-        "string",
-        "binary",
-        "date",
-        "time",
-        "timestamp"
-      ],
-      description: "Basic value families; native refinements remain authoritative for ranges, precision, encoding and temporal behavior."
-    },
-    scalarType: {
-      anyOf: [
-        {
-          $ref: "#/$defs/knownScalarType"
-        },
-        {
-          type: "string",
-          minLength: 1,
-          not: {
-            $ref: "#/$defs/knownScalarType"
-          },
-          description: "Unknown family retained with incomplete semantic validation."
-        }
-      ]
-    },
-    extensions: {
-      type: "object",
-      propertyNames: {
-        $ref: "#/$defs/id"
-      },
-      additionalProperties: true
-    },
-    reference: {
-      type: "object",
-      required: [
-        "role",
-        "module",
-        "element"
-      ],
-      properties: {
-        role: {
-          $ref: "#/$defs/id"
-        },
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      }
-    },
-    element: {
-      type: "object",
-      required: [
-        "id",
-        "extensions"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        name: {
-          type: "string"
-        },
-        description: {
-          type: "string"
-        },
-        scalarType: {
-          $ref: "#/$defs/scalarType"
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        },
-        references: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/reference"
-          }
-        },
-        kind: {
-          type: "string",
-          minLength: 1,
-          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
-        },
-        nullability: {
-          type: "string",
-          minLength: 1,
-          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
-        },
-        cardinality: {
-          type: "string",
-          minLength: 1,
-          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
-        },
-        itemType: {
-          $ref: "#/$defs/itemType"
-        },
-        facets: {
-          $ref: "#/$defs/facets"
-        }
-      },
-      allOf: [
-        {
-          if: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                enum: [
-                  "record",
-                  "group"
-                ]
-              }
-            }
-          },
-          then: {
-            properties: {
-              scalarType: false
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "nullability"
-            ],
-            properties: {
-              nullability: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "cardinality"
-            ],
-            properties: {
-              cardinality: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "cardinality"
-            ],
-            properties: {
-              cardinality: {
-                enum: [
-                  "array",
-                  "map"
-                ]
-              }
-            }
-          },
-          then: {
-            not: {
-              required: [
-                "scalarType"
-              ]
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "itemType"
-            ],
-            properties: {
-              itemType: {}
-            }
-          },
-          then: {
-            required: [
-              "kind",
-              "cardinality"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              },
-              cardinality: {
-                enum: [
-                  "array",
-                  "map"
-                ]
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {}
-            }
-          },
-          then: {
-            required: [
-              "kind"
-            ],
-            properties: {
-              kind: {
-                const: "field"
-              },
-              cardinality: {
-                enum: [
-                  "one",
-                  "unspecified"
-                ]
-              },
-              references: {
-                type: "array",
-                not: {
-                  contains: {
-                    type: "object",
-                    required: [
-                      "role"
-                    ],
-                    properties: {
-                      role: {
-                        const: "record-type"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "length"
-                ],
-                properties: {
-                  length: {}
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                enum: [
-                  "string",
-                  "binary"
-                ]
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "length"
-                ],
-                properties: {
-                  length: {
-                    type: "object",
-                    required: [
-                      "unit"
-                    ],
-                    properties: {
-                      unit: {
-                        const: "unicode-scalar"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "string"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "length"
-                ],
-                properties: {
-                  length: {
-                    type: "object",
-                    required: [
-                      "unit"
-                    ],
-                    properties: {
-                      unit: {
-                        const: "byte"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "binary"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "precision"
-                ],
-                properties: {
-                  precision: {}
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "decimal"
-              }
-            }
-          }
-        },
-        {
-          if: {
-            required: [
-              "facets"
-            ],
-            properties: {
-              facets: {
-                type: "object",
-                required: [
-                  "integerWidth"
-                ],
-                properties: {
-                  integerWidth: {}
-                }
-              }
-            }
-          },
-          then: {
-            required: [
-              "scalarType"
-            ],
-            properties: {
-              scalarType: {
-                const: "integer"
-              }
-            }
-          }
-        }
-      ]
-    },
-    module: {
-      type: "object",
-      required: [
-        "id",
-        "namespace",
-        "elements"
-      ],
-      properties: {
-        id: {
-          $ref: "#/$defs/id"
-        },
-        namespace: {
-          type: "string"
-        },
-        elements: {
-          type: "array",
-          items: {
-            $ref: "#/$defs/element"
-          }
-        },
-        extensions: {
-          $ref: "#/$defs/extensions"
-        }
-      }
-    },
-    knownElementKind: {
-      enum: [
-        "field",
-        "record",
-        "group"
-      ]
-    },
-    knownNullability: {
-      enum: [
-        "required",
-        "absent-allowed",
-        "unspecified"
-      ]
-    },
-    knownCardinality: {
-      enum: [
-        "one",
-        "array",
-        "map",
-        "unspecified"
-      ]
-    },
-    itemType: {
-      type: "object",
-      required: [
-        "module",
-        "element"
-      ],
-      properties: {
-        module: {
-          $ref: "#/$defs/id"
-        },
-        element: {
-          $ref: "#/$defs/id"
-        }
-      }
-    },
-    facets: {
-      type: "object",
-      description: "Missing members impose no bound. Unknown members and qualifiers are retained without interpretation.",
-      properties: {
-        length: {
-          type: "object",
-          required: [
-            "max",
-            "unit"
-          ],
-          properties: {
-            max: {
-              type: "integer",
-              minimum: 0,
-              maximum: 9007199254740991
-            },
-            unit: {
-              type: "string",
-              minLength: 1,
-              description: "Known units: unicode-scalar for string, byte for binary. Unknown units remain uninterpreted."
-            }
-          }
-        },
-        precision: {
-          type: "integer",
-          minimum: 1,
-          maximum: 9007199254740991,
-          description: "Decimal coefficient digit bound; requires scale. Absolute coefficient is less than 10^precision. No implicit rounding."
-        },
-        scale: {
-          type: "integer",
-          minimum: 0,
-          maximum: 9007199254740991,
-          description: "Fixed fractional digit count; requires precision. Semantic validation requires scale <= precision. Value equals integer coefficient times 10^-scale."
-        },
-        integerWidth: {
-          type: "object",
-          required: [
-            "bits",
-            "signed"
-          ],
-          properties: {
-            bits: {
-              type: "integer",
-              minimum: 1,
-              maximum: 9007199254740991
-            },
-            signed: {
-              type: "boolean"
-            }
-          },
-          description: "Signed [-2^(bits-1),2^(bits-1)-1] or unsigned [0,2^bits-1]; mathematical domain, not a physical storage-width assertion."
-        }
-      },
-      dependentRequired: {
-        precision: [
-          "scale"
-        ],
-        scale: [
-          "precision"
-        ]
-      }
-    }
-  },
-  description: "Candidate facet envelope: author-stated scalar bounds with explicit units. Requires semantic validation of scale <= precision, identities and references. Native enforcement, encoding and exactness require separate bindings."
-};
-// ../truss-umf-runtime-cOgFWm/spec/core/extension-package.schema.json
-var extension_package_schema_default = {
-  $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "urn:umf:extension-package:0.1.0",
-  title: "UMF extension package declaration",
-  type: "object",
-  required: ["id", "version", "coreVersion", "description", "schema", "semantics", "scopes", "capabilities"],
-  properties: {
-    id: { type: "string", minLength: 1 },
-    version: { type: "string", pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
-    coreVersion: { const: "0.1.0" },
-    description: { type: "string", minLength: 1 },
-    schema: { type: ["object", "boolean"] },
-    semantics: { type: "string", minLength: 1 },
-    scopes: { type: "array", minItems: 1, uniqueItems: true, items: { enum: ["document", "module", "element"] } },
-    capabilities: {
-      type: "object",
-      required: ["validation", "directions", "evidence"],
-      properties: {
-        validation: { enum: ["structural", "semantic"] },
-        directions: { type: "array", uniqueItems: true, items: { enum: ["import", "export"] } },
-        evidence: { type: "array", items: { type: "string", minLength: 1 } },
-        native: { type: "object", required: ["system", "version", "subset"], properties: { system: { type: "string", minLength: 1 }, version: { type: "string", minLength: 1 }, subset: { type: "string", minLength: 1 } } }
-      },
-      allOf: [{ if: { properties: { directions: { type: "array", minItems: 1 } } }, then: { properties: { native: true }, required: ["native"] } }]
-    }
-  }
-};
-
-// ../truss-umf-runtime-cOgFWm/src/validation/schema.ts
-function canonical(value) {
-  if (Array.isArray(value))
-    return "a[" + value.map(canonical).join(",") + "]";
-  if (value !== null && typeof value === "object")
-    return "o{" + Object.keys(value).sort().map((key) => JSON.stringify(key) + ":" + canonical(value[key])).join(",") + "}";
-  return JSON.stringify(value);
-}
-function createValidator(strict = true) {
-  const validator = new import__2020.default({ allErrors: true, strict, allowUnionTypes: true, ownProperties: true, validateFormats: false });
-  installJsonEquality(validator);
-  return validator;
-}
-function installJsonEquality(validator) {
-  validator.removeKeyword("uniqueItems").addKeyword({ keyword: "uniqueItems", type: "array", schemaType: "boolean", errors: false, validate: (unique, data) => !unique || new Set(data.map(canonical)).size === data.length });
-  validator.removeKeyword("const").addKeyword({ keyword: "const", errors: false, validate: (expected, data) => canonical(expected) === canonical(data) });
-  validator.removeKeyword("enum").addKeyword({ keyword: "enum", schemaType: "array", errors: false, validate: (expected, data) => expected.some((value) => canonical(value) === canonical(data)) });
-}
-var ajv = createValidator();
-var checkCore = ajv.compile(snapshotSchema(schema_default));
-var checkCoreFields = ajv.compile(snapshotSchema(field_document_schema_default));
-var checkCoreNullability = ajv.compile(snapshotSchema(nullability_document_schema_default));
-var checkCoreCardinality = ajv.compile(snapshotSchema(cardinality_document_schema_default));
-var checkCoreFacets = ajv.compile(snapshotSchema(facet_document_schema_default));
-var checkPackage = ajv.compile(snapshotSchema(extension_package_schema_default));
-var checkCoreKeys = ajv.compile(snapshotSchema(key_document_schema_default));
-var checkCoreRelationships = ajv.compile(snapshotSchema(relationship_document_schema_default));
-
-// ../truss-umf-runtime-cOgFWm/src/registry/registry.ts
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/registry/registry.ts
 function freeze(value) {
   if (value && typeof value === "object") {
     Object.freeze(value);
@@ -17639,9 +20241,35 @@ class Registry {
   }
 }
 
-// ../truss-umf-runtime-cOgFWm/src/model/schema-literals.ts
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/bit128.ts
+var BIT128_PROFILE = "umf-128/1";
+var MOD64 = 1n << 64n;
+var MOD128 = 1n << 128n;
+function fail(code, message) {
+  throw new UmfError("BIT128_" + code, message);
+}
+function parseBits128(hex) {
+  if (typeof hex !== "string")
+    fail("TYPE", "Expected hexadecimal text");
+  if (hex.length !== 32 || !/^[0-9a-fA-F]{32}$(?![\s\S])/.test(hex))
+    fail("SYNTAX", "Expected exactly 32 hexadecimal digits");
+  return Object.freeze({ profile: BIT128_PROFILE, hex: hex.toLowerCase() });
+}
+
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/uuid.ts
+function parseUuid(text) {
+  if (typeof text !== "string")
+    throw new UmfError("BIT128_TYPE", "Expected UUID text");
+  if (text.length !== 36 || !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(text))
+    throw new UmfError("UUID_SYNTAX", "Expected complete hyphenated UUID text");
+  const hex = text.replaceAll("-", "").toLowerCase();
+  return Object.freeze({ profile: BIT128_PROFILE, hex, canonicalText: text.toLowerCase(), originalText: text });
+}
+
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/schema-literals.ts
 var schemaPropertyNames = ["title", "aliases", "examples", "allowedValues", "default"];
 var newFacetNames = ["collectionSize", "range"];
+var canonicalSchemaJson = (value) => Array.isArray(value) ? "[" + value.map(canonicalSchemaJson).join(",") + "]" : value !== null && typeof value === "object" ? "{" + Object.keys(value).sort().map((k) => JSON.stringify(k) + ":" + canonicalSchemaJson(value[k])).join(",") + "}" : JSON.stringify(value);
 function schemaError(message, path = "") {
   throw new UmfError("CORE_SCHEMA_PROPERTIES", message, path);
 }
@@ -17699,10 +20327,14 @@ function literalIdentity(field, value) {
   if (value === null)
     schemaError("Null has no allowed-value equality");
   const v = object(value), keys = Object.keys(v), kind = field.scalarType;
-  const wrapper = { boolean: "boolean", integer: "integerToken", decimal: "decimalToken", string: "string", binary: "binaryHex" }[kind];
+  const wrapper = { boolean: "boolean", integer: "integerToken", decimal: "decimalToken", string: "string", binary: "binaryHex", bits128: "bits128Hex", uuid: "uuid" }[kind];
   if (!wrapper || keys.length !== 1 || keys[0] !== wrapper)
     schemaError("No exact equality for this literal/domain");
   const facets = object(field.facets ?? {});
+  if (kind === "bits128")
+    return "bits128:" + parseBits128(v.bits128Hex).hex;
+  if (kind === "uuid")
+    return "uuid:" + parseUuid(v.uuid).hex;
   if (kind === "integer")
     return "integer:" + schemaCoefficient(v[wrapper], 0);
   if (kind === "decimal") {
@@ -17770,7 +20402,10 @@ function evaluateSchemaLiteral(doc, field, value, refinements = true, depth = 0,
   } else {
     if (field.cardinality !== undefined && !["one", "unspecified"].includes(field.cardinality))
       schemaError("Unknown cardinality");
-    const kind = field.scalarType, wrapper = { boolean: "boolean", integer: "integerToken", decimal: "decimalToken", string: "string", binary: "binaryHex", float: "floatToken", date: "date", time: "time", timestamp: "timestamp" }[kind];
+    const kind = field.scalarType;
+    if (["bits128", "uuid"].includes(kind ?? "") && doc.umf !== "0.9.0")
+      schemaError("128-bit domains require core 0.9.0");
+    const wrapper = { boolean: "boolean", integer: "integerToken", decimal: "decimalToken", string: "string", binary: "binaryHex", bits128: "bits128Hex", uuid: "uuid", float: "floatToken", date: "date", time: "time", timestamp: "timestamp" }[kind];
     if (!wrapper || !Object.hasOwn(v, wrapper))
       schemaError("Literal does not match scalar family");
     if (["float", "date", "time", "timestamp"].includes(kind)) {
@@ -17821,8 +20456,10 @@ function evaluateSchemaLiteral(doc, field, value, refinements = true, depth = 0,
   }
 }
 
-// ../truss-umf-runtime-cOgFWm/src/validation/schema-properties.ts
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/validation/schema-properties.ts
 var validator = createValidator();
+var checkBit128Properties = validator.compile(snapshotSchema(bit128_document_schema_default));
+var checkBit128Literal = validator.compile(snapshotSchema({ $defs: bit128_document_schema_default.$defs, $ref: "#/$defs/literal" }));
 var checkSchemaProperties = validator.compile(snapshotSchema(schema_properties_document_schema_default));
 var checkCoreLiteral = validator.compile(snapshotSchema({ $defs: schema_properties_document_schema_default.$defs, $ref: "#/$defs/literal" }));
 function schemaPropertiesLegacyView(input) {
@@ -17836,6 +20473,8 @@ function schemaPropertiesLegacyView(input) {
       delete node[key];
   for (const m of base.modules)
     for (const e of m.elements) {
+      if (input.umf === "0.9.0" && ["bits128", "uuid"].includes(e.scalarType ?? ""))
+        e.scalarType = "binary";
       const f = e.facets;
       if (!f)
         continue;
@@ -17885,8 +20524,9 @@ function validateSchemaPropertiesDocument(input, registry = new Registry) {
     add(error.message, error.path);
     return { valid: false, complete: false, diagnostics };
   }
-  if (!checkSchemaProperties(doc)) {
-    for (const e of checkSchemaProperties.errors ?? [])
+  const check = doc.umf === "0.9.0" ? checkBit128Properties : checkSchemaProperties;
+  if (!check(doc)) {
+    for (const e of check.errors ?? [])
       add(e.message ?? "Invalid schema properties", e.instancePath);
     return { valid: false, complete: false, diagnostics };
   }
@@ -17991,7 +20631,59 @@ function validateSchemaPropertiesDocument(input, registry = new Registry) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime-cOgFWm/src/validation/keys.ts
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/validation/semantic-types.ts
+var validator2 = createValidator();
+validator2.addSchema(snapshotSchema(semantic_type_reference_schema_default));
+var checkSemanticTypesDocument = validator2.compile(snapshotSchema(semantic_types_document_schema_default));
+var checkSemanticTypeReferences = validator2.compile({ type: "array", minItems: 1, items: { $ref: semantic_type_reference_schema_default.$id } });
+function validateSemanticTypesDocument(input, registry = new Registry) {
+  const diagnostics = [];
+  const add = (code, path, message, severity = "warning") => diagnostics.push({ code, path, message, severity });
+  let source;
+  try {
+    source = copyJson(input);
+  } catch (error) {
+    if (!(error instanceof UmfError))
+      throw error;
+    add(error.code, error.path, error.message, "error");
+    return { valid: false, complete: false, diagnostics };
+  }
+  if (!checkSemanticTypesDocument(source)) {
+    for (const e of checkSemanticTypesDocument.errors ?? [])
+      add("SEMANTIC_TYPE_STRUCTURE", e.instancePath, e.message ?? "Invalid core semantic type structure", "error");
+    return { valid: false, complete: false, diagnostics };
+  }
+  const base = copyJson(source);
+  base.umf = "0.9.0";
+  for (const m of base.modules)
+    for (const e of m.elements)
+      delete e.semanticTypes;
+  const contextualRegistry = new Registry;
+  for (const [id, declaration] of Object.entries(source.vocabularies)) {
+    const entry = registry.get(id, declaration.version);
+    if (entry)
+      contextualRegistry.register(entry.manifest, entry.semantics ? (payload, context) => entry.semantics(payload, { ...context, document: copyJson(source) }) : undefined);
+  }
+  diagnostics.push(...validateSchemaPropertiesDocument(base, contextualRegistry).diagnostics);
+  add("EXPERIMENTAL_CORE_SEMANTIC_TYPES", "/umf", "Experimental semantic references; publisher-owned meanings and native enforcement are not inferred");
+  source.modules.forEach((m, mi) => m.elements.forEach((e, ei) => {
+    if (!e.semanticTypes)
+      return;
+    const path = `/modules/${mi}/elements/${ei}/semanticTypes`;
+    add("SEMANTIC_TYPE_EXTERNAL", path, "Exact external semantic definitions and value validators are resolved separately");
+    const proto = e.extensions["umf.semantic-types"];
+    if (proto && typeof proto === "object" && !Array.isArray(proto) && "types" in proto && canonicalSchemaJson(proto.types) !== canonicalSchemaJson(e.semanticTypes))
+      add("SEMANTIC_TYPE_COMPETING_MEANING", path, "Core semanticTypes differ from the umf.semantic-types extension payload; core is authoritative and the extension is retained unchanged");
+    e.semanticTypes.forEach((ref, i) => {
+      for (const key of Object.keys(ref))
+        if (!["vocabulary", "version", "term"].includes(key))
+          add("UNKNOWN_SEMANTIC_TYPE_QUALIFIER", path + `/${i}/` + pointer(key), "Qualifier retained without interpretation");
+    });
+  }));
+  return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
+}
+
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/validation/keys.ts
 var check = createValidator().compile(snapshotSchema(key_document_schema_default));
 var identity = (ref) => JSON.stringify([ref.module, ref.element]);
 function validateKeyCandidate(input, validateBase = true) {
@@ -18097,7 +20789,7 @@ function validateKeyCandidate(input, validateBase = true) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime-cOgFWm/src/validation/relationships.ts
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/validation/relationships.ts
 var check2 = createValidator().compile(snapshotSchema(relationship_document_schema_default));
 var identity2 = (ref) => JSON.stringify([ref.module, ref.element]);
 function validateRelationshipCandidate(input, validateBase = true) {
@@ -18200,7 +20892,7 @@ function validateRelationshipCandidate(input, validateBase = true) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime-cOgFWm/src/validation/facets.ts
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/validation/facets.ts
 var check3 = createValidator().compile({ $defs: facet_document_schema_default.$defs, $ref: "#/$defs/element" });
 function validateFacetElement(input, path = "") {
   const diagnostics = [];
@@ -18241,7 +20933,7 @@ function validateFacetElement(input, path = "") {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime-cOgFWm/src/validation/document.ts
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/validation/document.ts
 function validateDocument(input, registry = new Registry) {
   const diagnostics = [];
   const add = (code, path, message, severity = "error") => diagnostics.push({ code, path, message, severity });
@@ -18255,7 +20947,9 @@ function validateDocument(input, registry = new Registry) {
     return { valid: false, complete: false, diagnostics };
   }
   const version = value?.umf;
-  if (version === "0.8.0")
+  if (version === "0.10.0")
+    return validateSemanticTypesDocument(value, registry);
+  if (version === "0.8.0" || version === "0.9.0")
     return validateSchemaPropertiesDocument(value, registry);
   const check = version === "0.7.0" ? checkCoreRelationships : version === "0.6.0" ? checkCoreKeys : version === "0.5.0" ? checkCoreFacets : version === "0.4.0" ? checkCoreCardinality : version === "0.3.0" ? checkCoreNullability : version === "0.2.0" ? checkCoreFields : checkCore;
   if (!check(value)) {
@@ -18363,7 +21057,7 @@ function validateDocument(input, registry = new Registry) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime-cOgFWm/src/model/document.ts
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/document.ts
 function readDocument(text, format = "yaml") {
   const value = readJsonValue(text, format);
   const result = validateDocument(value);
@@ -18371,11 +21065,70 @@ function readDocument(text, format = "yaml") {
     throw new UmfError("INVALID_DOCUMENT", JSON.stringify(result.diagnostics));
   return value;
 }
-// ../truss-umf-runtime-cOgFWm/src/model/schema-properties.ts
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/internal/inspection-meanings.ts
+var unknown = (diagnostics, path) => diagnostics.filter((d) => d.code === "UNKNOWN_KEY_QUALIFIER" && (d.path === path || d.path.startsWith(path + "/"))).map((d) => d.path);
+function keyMeaning(l) {
+  const path = l.path + "/keys";
+  let meaning = { state: "missing" };
+  if (Object.hasOwn(l.element, "keys")) {
+    if (l.source.umf !== "0.6.0" && l.source.umf !== "0.7.0" && l.source.umf !== "0.8.0" && l.source.umf !== "0.9.0")
+      meaning = { state: "legacy", value: copyJson(l.element.keys) };
+    else {
+      const uninterpretedPaths = unknown(l.validation.diagnostics, path);
+      meaning = { state: uninterpretedPaths.length ? "partial" : "known", keys: copyJson(l.element.keys), uninterpretedPaths };
+    }
+  } else if ((l.source.umf === "0.6.0" || l.source.umf === "0.7.0" || (l.source.umf === "0.8.0" || l.source.umf === "0.9.0")) && l.element.kind !== "record")
+    meaning = { state: "inapplicable" };
+  return meaning;
+}
+function facetMeaning(located) {
+  const { source, element } = located, path = located.path + "/facets";
+  let meaning = { state: "missing" };
+  if (Object.hasOwn(element, "facets")) {
+    if (source.umf !== "0.5.0" && source.umf !== "0.6.0" && source.umf !== "0.7.0" && source.umf !== "0.8.0" && source.umf !== "0.9.0")
+      meaning = { state: "legacy", value: copyJson(element.facets) };
+    else {
+      const value = copyJson(element.facets), interpreted = {};
+      if (value.length && (value.length.unit === "unicode-scalar" || value.length.unit === "byte"))
+        interpreted.length = { ...value.length.max !== undefined ? { max: value.length.max } : {}, ...(source.umf === "0.8.0" || source.umf === "0.9.0") && value.length.min !== undefined ? { min: value.length.min } : {}, unit: value.length.unit };
+      if (value.integerWidth)
+        interpreted.integerWidth = { bits: value.integerWidth.bits, signed: value.integerWidth.signed };
+      if (value.precision !== undefined) {
+        interpreted.precision = value.precision;
+        interpreted.scale = value.scale;
+      }
+      if (source.umf === "0.8.0" || source.umf === "0.9.0") {
+        for (const group of ["collectionSize", "range"]) {
+          const raw = value[group];
+          if (!raw)
+            continue;
+          const selected = {};
+          for (const key of group === "range" ? ["min", "max", "minInclusive", "maxInclusive"] : ["min", "max"])
+            if (Object.hasOwn(raw, key))
+              selected[key] = copyJson(raw[key]);
+          Object.assign(interpreted, { [group]: selected });
+        }
+      }
+      const uninterpretedPaths = (source.umf === "0.8.0" || source.umf === "0.9.0" ? located.validation.diagnostics.filter((d) => d.path.startsWith(path + "/")) : validateFacetElement(element, path.slice(0, -7)).diagnostics).filter((d) => d.severity === "warning").map((d) => d.path);
+      meaning = { state: uninterpretedPaths.length ? "partial" : "known", facets: value, interpreted, uninterpretedPaths };
+    }
+  } else if ((source.umf === "0.5.0" || (source.umf === "0.6.0" || source.umf === "0.7.0" || (source.umf === "0.8.0" || source.umf === "0.9.0"))) && element.kind !== "field")
+    meaning = { state: "inapplicable" };
+  return meaning;
+}
+function schemaProperties(node) {
+  const properties = Object.create(null);
+  for (const key of [...schemaPropertyNames, "facets"])
+    if (Object.hasOwn(node, key))
+      properties[key] = copyJson(node[key]);
+  return properties;
+}
+
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/schema-properties.ts
 function locate(input, identityInput) {
   const source = copyJson(input), identity = copyJson(identityInput);
   const validation = validateDocument(source);
-  if (source.umf !== "0.8.0" || !validation.valid)
+  if (!["0.8.0", "0.9.0"].includes(source.umf) || !validation.valid)
     schemaError("Expected valid 0.8.0 envelope");
   const keys = identity?.scope === "document" ? ["scope"] : identity?.scope === "module" ? ["scope", "module"] : identity?.scope === "element" ? ["scope", "module", "element"] : [];
   knownSchemaMembers(identity, keys, "/identity");
@@ -18399,13 +21152,330 @@ function locate(input, identityInput) {
   return { source, identity, node: module.elements[ei], path: `/modules/${mi}/elements/${ei}`, validation };
 }
 function inspectCoreSchemaProperties(input, identity) {
-  const located = locate(input, identity), properties = Object.create(null);
-  for (const key of [...schemaPropertyNames, "facets"])
-    if (Object.hasOwn(located.node, key))
-      properties[key] = copyJson(located.node[key]);
-  return { operation: "inspect-core-schema-properties", version: "1.0.0", source: located.source, identity: located.identity, path: located.path, properties, diagnostics: located.validation.diagnostics, provenance: "unverified" };
+  const located = locate(input, identity), properties = schemaProperties(located.node);
+  return { operation: "inspect-core-schema-properties", version: located.source.umf === "0.9.0" ? "2.0.0" : "1.0.0", source: located.source, identity: located.identity, path: located.path, properties, diagnostics: located.validation.diagnostics, provenance: "unverified" };
 }
-// ../truss-umf-runtime-cOgFWm/spec/core/key-operation-v3.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/key-operation-v4.schema.json
+var key_operation_v4_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:key-operation:4.0.0",
+  title: "Core 0.9.0 key-operation-v4",
+  $defs: {
+    identity: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      additionalProperties: false,
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    keyIdentity: {
+      type: "object",
+      required: [
+        "module",
+        "element",
+        "key"
+      ],
+      additionalProperties: false,
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
+        },
+        key: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    keyRequest: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "fields"
+      ],
+      additionalProperties: false,
+      properties: {
+        id: {
+          type: "string",
+          minLength: 1
+        },
+        name: {
+          type: "string",
+          minLength: 1
+        },
+        fields: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            type: "object",
+            required: [
+              "module",
+              "element"
+            ],
+            additionalProperties: false,
+            properties: {
+              module: {
+                type: "string",
+                minLength: 1
+              },
+              element: {
+                type: "string",
+                minLength: 1
+              }
+            }
+          },
+          minItems: 1
+        },
+        primary: {
+          type: "boolean"
+        }
+      }
+    },
+    memberRequest: {
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "object",
+        required: [
+          "module",
+          "element"
+        ],
+        additionalProperties: false,
+        properties: {
+          module: {
+            type: "string",
+            minLength: 1
+          },
+          element: {
+            type: "string",
+            minLength: 1
+          }
+        }
+      }
+    },
+    inspection: {
+      type: "object",
+      required: [
+        "operation",
+        "version",
+        "source",
+        "identity",
+        "path",
+        "meaning",
+        "provenance"
+      ],
+      additionalProperties: false,
+      properties: {
+        operation: {
+          const: "inspect-core-keys"
+        },
+        version: {
+          const: "4.0.0"
+        },
+        source: {
+          $ref: "urn:umf:core:0.9.0"
+        },
+        identity: {
+          type: "object",
+          required: [
+            "module",
+            "element"
+          ],
+          additionalProperties: false,
+          properties: {
+            module: {
+              type: "string",
+              minLength: 1
+            },
+            element: {
+              type: "string",
+              minLength: 1
+            }
+          }
+        },
+        path: {
+          type: "string"
+        },
+        provenance: {
+          const: "unverified"
+        },
+        meaning: {
+          oneOf: [
+            {
+              type: "object",
+              required: [
+                "state"
+              ],
+              additionalProperties: false,
+              properties: {
+                state: {
+                  const: "missing"
+                }
+              }
+            },
+            {
+              type: "object",
+              required: [
+                "state"
+              ],
+              additionalProperties: false,
+              properties: {
+                state: {
+                  const: "inapplicable"
+                }
+              }
+            },
+            {
+              type: "object",
+              required: [
+                "state",
+                "keys",
+                "uninterpretedPaths"
+              ],
+              additionalProperties: false,
+              properties: {
+                state: {
+                  const: "known"
+                },
+                keys: {
+                  type: "array",
+                  minItems: 1,
+                  items: {
+                    $ref: "urn:umf:core:0.9.0#/$defs/key"
+                  }
+                },
+                uninterpretedPaths: {
+                  type: "array",
+                  items: {
+                    type: "string"
+                  },
+                  maxItems: 0
+                }
+              }
+            },
+            {
+              type: "object",
+              required: [
+                "state",
+                "keys",
+                "uninterpretedPaths"
+              ],
+              additionalProperties: false,
+              properties: {
+                state: {
+                  const: "partial"
+                },
+                keys: {
+                  type: "array",
+                  minItems: 1,
+                  items: {
+                    $ref: "urn:umf:core:0.9.0#/$defs/key"
+                  }
+                },
+                uninterpretedPaths: {
+                  type: "array",
+                  items: {
+                    type: "string"
+                  },
+                  minItems: 1
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    lookup: {
+      type: "object",
+      required: [
+        "operation",
+        "version",
+        "source",
+        "identity",
+        "path",
+        "key",
+        "uninterpretedPaths",
+        "provenance"
+      ],
+      additionalProperties: false,
+      properties: {
+        operation: {
+          const: "lookup-core-key"
+        },
+        version: {
+          const: "4.0.0"
+        },
+        source: {
+          $ref: "urn:umf:core:0.9.0"
+        },
+        identity: {
+          type: "object",
+          required: [
+            "module",
+            "element",
+            "key"
+          ],
+          additionalProperties: false,
+          properties: {
+            module: {
+              type: "string",
+              minLength: 1
+            },
+            element: {
+              type: "string",
+              minLength: 1
+            },
+            key: {
+              type: "string",
+              minLength: 1
+            }
+          }
+        },
+        path: {
+          type: "string"
+        },
+        key: {
+          $ref: "urn:umf:core:0.9.0#/$defs/key"
+        },
+        uninterpretedPaths: {
+          type: "array",
+          items: {
+            type: "string"
+          }
+        },
+        provenance: {
+          const: "unverified"
+        }
+      }
+    }
+  },
+  oneOf: [
+    {
+      $ref: "#/$defs/inspection"
+    },
+    {
+      $ref: "#/$defs/lookup"
+    }
+  ],
+  description: "Structural validation does not prove author intent or native enforcement. Recompute receipts and validate their current source/target context before trusting operation results."
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/key-operation-v3.schema.json
 var key_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:key-operation:3.0.0",
@@ -18725,7 +21795,7 @@ var key_operation_v3_schema_default = {
   ],
   description: "Structural validation does not prove author intent or native enforcement. Recompute receipts and validate their current source/target context before trusting operation results."
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/key-operation-v2.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/key-operation-v2.schema.json
 var key_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:key-operation:2.0.0",
@@ -19243,7 +22313,7 @@ var key_operation_v2_schema_default = {
   ],
   description: "Structural validation does not prove author intent or native enforcement. Recompute receipts and validate their current source/target context before trusting operation results."
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/key-operation.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/key-operation.schema.json
 var key_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:key-operation:1.0.0",
@@ -19781,18 +22851,20 @@ var key_operation_schema_default = {
   description: "Structural validation does not prove author intent or native enforcement. Recompute receipts and validate their current source/target context before trusting operation results."
 };
 
-// ../truss-umf-runtime-cOgFWm/src/model/keys.ts
-var validator2 = createValidator();
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/keys.ts
+var validator3 = createValidator();
+validator3.addSchema(snapshotSchema(bit128_document_schema_default));
+var checkBit128 = validator3.compile(snapshotSchema(key_operation_v4_schema_default));
 for (const s of [schema_default, field_document_schema_default, nullability_document_schema_default, cardinality_document_schema_default, facet_document_schema_default, key_document_schema_default, relationship_document_schema_default, schema_properties_document_schema_default])
-  validator2.addSchema(s);
-var checkV1 = validator2.compile(key_operation_schema_default);
-var checkV2 = validator2.compile(key_operation_v2_schema_default);
-var checkV3 = validator2.compile(key_operation_v3_schema_default);
-var identityCheck = validator2.compile(key_operation_schema_default.$defs.identity);
-var keyIdentityCheck = validator2.compile(key_operation_schema_default.$defs.keyIdentity);
-var requestCheck = validator2.compile(key_operation_schema_default.$defs.keyRequest);
-var membersCheck = validator2.compile(key_operation_schema_default.$defs.memberRequest);
-var checker = (version) => version === "3.0.0" ? checkV3 : version === "2.0.0" ? checkV2 : checkV1;
+  validator3.addSchema(s);
+var checkV1 = validator3.compile(key_operation_schema_default);
+var checkV2 = validator3.compile(key_operation_v2_schema_default);
+var checkV3 = validator3.compile(key_operation_v3_schema_default);
+var identityCheck = validator3.compile(key_operation_schema_default.$defs.identity);
+var keyIdentityCheck = validator3.compile(key_operation_schema_default.$defs.keyIdentity);
+var requestCheck = validator3.compile(key_operation_schema_default.$defs.keyRequest);
+var membersCheck = validator3.compile(key_operation_schema_default.$defs.memberRequest);
+var checker = (version) => version === "4.0.0" ? checkBit128 : version === "3.0.0" ? checkV3 : version === "2.0.0" ? checkV2 : checkV1;
 function finish(result) {
   const copied = copyJson(result), check = checker(result.version);
   if (!check(copied))
@@ -19811,22 +22883,470 @@ function locate2(input, identityInput) {
     throw new UmfError("CORE_KEY_MISSING", "Element identity does not resolve");
   return { source, identity, mi, ei, element: source.modules[mi].elements[ei], path: `/modules/${mi}/elements/${ei}`, validation };
 }
-var unknown = (diagnostics, path) => diagnostics.filter((d) => d.code === "UNKNOWN_KEY_QUALIFIER" && (d.path === path || d.path.startsWith(path + "/"))).map((d) => d.path);
 function inspectCoreKeys(input, identity) {
-  const l = locate2(input, identity), path = l.path + "/keys";
-  let meaning = { state: "missing" };
-  if (Object.hasOwn(l.element, "keys")) {
-    if (l.source.umf !== "0.6.0" && l.source.umf !== "0.7.0" && l.source.umf !== "0.8.0")
-      meaning = { state: "legacy", value: copyJson(l.element.keys) };
-    else {
-      const uninterpretedPaths = unknown(l.validation.diagnostics, path);
-      meaning = { state: uninterpretedPaths.length ? "partial" : "known", keys: copyJson(l.element.keys), uninterpretedPaths };
-    }
-  } else if ((l.source.umf === "0.6.0" || l.source.umf === "0.7.0" || l.source.umf === "0.8.0") && l.element.kind !== "record")
-    meaning = { state: "inapplicable" };
-  return finish({ operation: "inspect-core-keys", version: l.source.umf === "0.8.0" ? "3.0.0" : l.source.umf === "0.7.0" ? "2.0.0" : "1.0.0", source: l.source, identity: l.identity, path, meaning, provenance: "unverified" });
+  const l = locate2(input, identity), path = l.path + "/keys", meaning = keyMeaning(l);
+  return finish({ operation: "inspect-core-keys", version: l.source.umf === "0.9.0" ? "4.0.0" : l.source.umf === "0.8.0" ? "3.0.0" : l.source.umf === "0.7.0" ? "2.0.0" : "1.0.0", source: l.source, identity: l.identity, path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-cOgFWm/spec/core/relationship-operation-v2.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/relationship-operation-v3.schema.json
+var relationship_operation_v3_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:relationship-operation:3.0.0",
+  title: "Core 0.9.0 relationship-operation-v3",
+  $defs: {
+    identity: {
+      type: "object",
+      required: [
+        "module"
+      ],
+      additionalProperties: false,
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    lookupIdentity: {
+      type: "object",
+      required: [
+        "module",
+        "id"
+      ],
+      additionalProperties: false,
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        id: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    request: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "source",
+        "target",
+        "sourceMultiplicity",
+        "targetMultiplicity",
+        "targetLifecycle",
+        "directed"
+      ],
+      additionalProperties: false,
+      properties: {
+        id: {
+          type: "string",
+          minLength: 1
+        },
+        name: {
+          type: "string",
+          minLength: 1
+        },
+        source: {
+          type: "array",
+          minItems: 1,
+          items: {
+            type: "object",
+            required: [
+              "module",
+              "element"
+            ],
+            additionalProperties: false,
+            properties: {
+              module: {
+                type: "string",
+                minLength: 1
+              },
+              element: {
+                type: "string",
+                minLength: 1
+              }
+            }
+          }
+        },
+        target: {
+          type: "array",
+          minItems: 1,
+          items: {
+            type: "object",
+            required: [
+              "module",
+              "element",
+              "key"
+            ],
+            additionalProperties: false,
+            properties: {
+              module: {
+                type: "string",
+                minLength: 1
+              },
+              element: {
+                type: "string",
+                minLength: 1
+              },
+              key: {
+                type: "string",
+                minLength: 1
+              }
+            }
+          }
+        },
+        sourceMultiplicity: {
+          type: "object",
+          required: [
+            "min",
+            "max"
+          ],
+          additionalProperties: false,
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              anyOf: [
+                {
+                  type: "integer",
+                  minimum: 1,
+                  maximum: 9007199254740991
+                },
+                {
+                  const: "*"
+                }
+              ]
+            }
+          }
+        },
+        targetMultiplicity: {
+          type: "object",
+          required: [
+            "min",
+            "max"
+          ],
+          additionalProperties: false,
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              anyOf: [
+                {
+                  type: "integer",
+                  minimum: 1,
+                  maximum: 9007199254740991
+                },
+                {
+                  const: "*"
+                }
+              ]
+            }
+          }
+        },
+        targetLifecycle: {
+          enum: [
+            "owned",
+            "independent",
+            "unspecified"
+          ]
+        },
+        directed: {
+          type: "boolean"
+        },
+        inverse: {
+          anyOf: [
+            {
+              type: "string",
+              minLength: 1
+            },
+            {
+              type: "null"
+            }
+          ]
+        },
+        associationRecord: {
+          type: "object",
+          required: [
+            "module",
+            "element"
+          ],
+          additionalProperties: false,
+          properties: {
+            module: {
+              type: "string",
+              minLength: 1
+            },
+            element: {
+              type: "string",
+              minLength: 1
+            }
+          }
+        }
+      }
+    },
+    inspection: {
+      type: "object",
+      required: [
+        "operation",
+        "version",
+        "source",
+        "identity",
+        "path",
+        "meaning",
+        "provenance",
+        "diagnostics",
+        "residuals"
+      ],
+      additionalProperties: false,
+      properties: {
+        operation: {
+          const: "inspect-core-relationships"
+        },
+        version: {
+          const: "3.0.0"
+        },
+        source: {
+          $ref: "urn:umf:core:0.9.0"
+        },
+        identity: {
+          type: "object",
+          required: [
+            "module"
+          ],
+          additionalProperties: false,
+          properties: {
+            module: {
+              type: "string",
+              minLength: 1
+            }
+          }
+        },
+        path: {
+          type: "string"
+        },
+        provenance: {
+          const: "unverified"
+        },
+        meaning: {
+          oneOf: [
+            {
+              type: "object",
+              required: [
+                "state"
+              ],
+              additionalProperties: false,
+              properties: {
+                state: {
+                  const: "missing"
+                }
+              }
+            },
+            {
+              type: "object",
+              required: [
+                "state",
+                "relationships",
+                "uninterpretedPaths"
+              ],
+              additionalProperties: false,
+              properties: {
+                state: {
+                  const: "known"
+                },
+                relationships: {
+                  type: "array",
+                  items: {
+                    $ref: "urn:umf:core:0.9.0#/$defs/relationship"
+                  }
+                },
+                uninterpretedPaths: {
+                  type: "array",
+                  items: {
+                    type: "string"
+                  },
+                  maxItems: 0
+                }
+              }
+            },
+            {
+              type: "object",
+              required: [
+                "state",
+                "relationships",
+                "uninterpretedPaths"
+              ],
+              additionalProperties: false,
+              properties: {
+                state: {
+                  const: "partial"
+                },
+                relationships: {
+                  type: "array",
+                  items: {
+                    $ref: "urn:umf:core:0.9.0#/$defs/relationship"
+                  }
+                },
+                uninterpretedPaths: {
+                  type: "array",
+                  items: {
+                    type: "string"
+                  },
+                  minItems: 1
+                }
+              }
+            }
+          ]
+        },
+        diagnostics: {
+          type: "array",
+          items: {
+            type: "object",
+            required: [
+              "code",
+              "path",
+              "message",
+              "severity"
+            ],
+            additionalProperties: false,
+            properties: {
+              code: {
+                type: "string"
+              },
+              path: {
+                type: "string"
+              },
+              message: {
+                type: "string"
+              },
+              severity: {
+                enum: [
+                  "error",
+                  "warning"
+                ]
+              }
+            }
+          }
+        },
+        residuals: {
+          type: "array",
+          maxItems: 0,
+          description: "Core authoring and read operations retain the complete source without projection loss; native binding residuals are separate."
+        }
+      }
+    },
+    lookup: {
+      type: "object",
+      required: [
+        "operation",
+        "version",
+        "source",
+        "identity",
+        "path",
+        "relationship",
+        "uninterpretedPaths",
+        "provenance",
+        "diagnostics",
+        "residuals"
+      ],
+      additionalProperties: false,
+      properties: {
+        operation: {
+          const: "lookup-core-relationship"
+        },
+        version: {
+          const: "3.0.0"
+        },
+        source: {
+          $ref: "urn:umf:core:0.9.0"
+        },
+        identity: {
+          type: "object",
+          required: [
+            "module",
+            "id"
+          ],
+          additionalProperties: false,
+          properties: {
+            module: {
+              type: "string",
+              minLength: 1
+            },
+            id: {
+              type: "string",
+              minLength: 1
+            }
+          }
+        },
+        path: {
+          type: "string"
+        },
+        relationship: {
+          $ref: "urn:umf:core:0.9.0#/$defs/relationship"
+        },
+        uninterpretedPaths: {
+          type: "array",
+          items: {
+            type: "string"
+          }
+        },
+        provenance: {
+          const: "unverified"
+        },
+        diagnostics: {
+          type: "array",
+          items: {
+            type: "object",
+            required: [
+              "code",
+              "path",
+              "message",
+              "severity"
+            ],
+            additionalProperties: false,
+            properties: {
+              code: {
+                type: "string"
+              },
+              path: {
+                type: "string"
+              },
+              message: {
+                type: "string"
+              },
+              severity: {
+                enum: [
+                  "error",
+                  "warning"
+                ]
+              }
+            }
+          }
+        },
+        residuals: {
+          type: "array",
+          maxItems: 0,
+          description: "Core authoring and read operations retain the complete source without projection loss; native binding residuals are separate."
+        }
+      }
+    }
+  },
+  oneOf: [
+    {
+      $ref: "#/$defs/inspection"
+    },
+    {
+      $ref: "#/$defs/lookup"
+    }
+  ],
+  description: "Structure only. Verify retained operation and current context by recomputation; do not infer native enforcement or authenticated authorship."
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/relationship-operation-v2.schema.json
 var relationship_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:relationship-operation:2.0.0",
@@ -20285,7 +23805,7 @@ var relationship_operation_v2_schema_default = {
   ],
   description: "Structure only. Verify retained operation and current context by recomputation; do not infer native enforcement or authenticated authorship."
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/relationship-operation.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/relationship-operation.schema.json
 var relationship_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:relationship-operation:1.0.0",
@@ -21051,20 +24571,22 @@ var relationship_operation_schema_default = {
   description: "Structure only. Verify retained operation and current context by recomputation; do not infer native enforcement or authenticated authorship."
 };
 
-// ../truss-umf-runtime-cOgFWm/src/model/relationships.ts
-var validator3 = createValidator();
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/relationships.ts
+var validator4 = createValidator();
+validator4.addSchema(snapshotSchema(bit128_document_schema_default));
+var checkBit1282 = validator4.compile(snapshotSchema(relationship_operation_v3_schema_default));
 for (const s of [schema_default, field_document_schema_default, nullability_document_schema_default, cardinality_document_schema_default, facet_document_schema_default, key_document_schema_default, relationship_document_schema_default, schema_properties_document_schema_default])
-  validator3.addSchema(s);
-var check4 = validator3.compile(relationship_operation_schema_default);
-var checkV22 = validator3.compile(relationship_operation_v2_schema_default);
-var identityCheck2 = validator3.compile(relationship_operation_schema_default.$defs.identity);
-var lookupCheck = validator3.compile(relationship_operation_schema_default.$defs.lookupIdentity);
-var requestCheck2 = validator3.compile(relationship_operation_schema_default.$defs.request);
+  validator4.addSchema(s);
+var check4 = validator4.compile(relationship_operation_schema_default);
+var checkV22 = validator4.compile(relationship_operation_v2_schema_default);
+var identityCheck2 = validator4.compile(relationship_operation_schema_default.$defs.identity);
+var lookupCheck = validator4.compile(relationship_operation_schema_default.$defs.lookupIdentity);
+var requestCheck2 = validator4.compile(relationship_operation_schema_default.$defs.request);
 function finish2(r) {
   const context = r, document = context.target ?? context.source;
   const validation = document.umf === "0.7.0" ? validateRelationshipCandidate(document) : validateDocument(document);
   const copied = copyJson({ ...r, diagnostics: validation.diagnostics, residuals: [] });
-  const selected = r.version === "2.0.0" ? checkV22 : check4;
+  const selected = r.version === "3.0.0" ? checkBit1282 : r.version === "2.0.0" ? checkV22 : check4;
   if (!selected(copied))
     throw new UmfError("RELATIONSHIP_RESULT", JSON.stringify(selected.errors));
   return copied;
@@ -21086,16 +24608,138 @@ function inspectCoreRelationships(input, identity) {
   const l = locate3(input, identity);
   let meaning = { state: "missing" };
   if (Object.hasOwn(l.module, "relationships")) {
-    if (l.source.umf !== "0.7.0" && l.source.umf !== "0.8.0")
+    if (l.source.umf !== "0.7.0" && l.source.umf !== "0.8.0" && l.source.umf !== "0.9.0")
       meaning = { state: "legacy", value: copyJson(l.module.relationships) };
     else {
       const uninterpretedPaths = unknown2(l, l.path);
       meaning = { state: uninterpretedPaths.length ? "partial" : "known", relationships: copyJson(l.module.relationships), uninterpretedPaths };
     }
   }
-  return finish2({ operation: "inspect-core-relationships", version: l.source.umf === "0.8.0" ? "2.0.0" : "1.0.0", source: l.source, identity: l.identity, path: l.path, meaning, provenance: "unverified" });
+  return finish2({ operation: "inspect-core-relationships", version: l.source.umf === "0.9.0" ? "3.0.0" : l.source.umf === "0.8.0" ? "2.0.0" : "1.0.0", source: l.source, identity: l.identity, path: l.path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v7.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/kind-operation-v8.schema.json
+var kind_operation_v8_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:kind-operation:8.0.0",
+  title: "Core 0.9.0 kind-operation-v8",
+  $defs: {
+    kind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    },
+    identity: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    source: {
+      $ref: "urn:umf:core:0.9.0"
+    },
+    lookup: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "operation",
+        "version",
+        "source",
+        "identity",
+        "path",
+        "meaning",
+        "provenance"
+      ],
+      properties: {
+        operation: {
+          const: "inspect-core-kind"
+        },
+        version: {
+          const: "8.0.0"
+        },
+        source: {
+          $ref: "#/$defs/source"
+        },
+        identity: {
+          $ref: "#/$defs/identity"
+        },
+        path: {
+          type: "string"
+        },
+        provenance: {
+          const: "unverified"
+        },
+        meaning: {
+          oneOf: [
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state",
+                "kind"
+              ],
+              properties: {
+                state: {
+                  const: "known"
+                },
+                kind: {
+                  $ref: "#/$defs/kind"
+                }
+              }
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state"
+              ],
+              properties: {
+                state: {
+                  const: "unspecified"
+                }
+              }
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state",
+                "value"
+              ],
+              properties: {
+                state: {
+                  const: "unknown"
+                },
+                value: {
+                  type: "string",
+                  minLength: 1,
+                  not: {
+                    $ref: "#/$defs/kind"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  $ref: "#/$defs/lookup"
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/kind-operation-v7.schema.json
 var kind_operation_v7_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:7.0.0",
@@ -21217,7 +24861,7 @@ var kind_operation_v7_schema_default = {
   },
   $ref: "#/$defs/lookup"
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v6.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/kind-operation-v6.schema.json
 var kind_operation_v6_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:6.0.0",
@@ -21410,7 +25054,7 @@ var kind_operation_v6_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v5.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/kind-operation-v5.schema.json
 var kind_operation_v5_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:5.0.0",
@@ -21603,7 +25247,7 @@ var kind_operation_v5_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v4.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/kind-operation-v4.schema.json
 var kind_operation_v4_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:4.0.0",
@@ -21796,7 +25440,7 @@ var kind_operation_v4_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/kind-operation.schema.json
 var kind_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:1.0.0",
@@ -22010,7 +25654,7 @@ var kind_operation_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v3.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/kind-operation-v3.schema.json
 var kind_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:3.0.0",
@@ -22203,7 +25847,7 @@ var kind_operation_v3_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/kind-operation-v2.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/kind-operation-v2.schema.json
 var kind_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:kind-operation:2.0.0",
@@ -22397,24 +26041,26 @@ var kind_operation_v2_schema_default = {
   ]
 };
 
-// ../truss-umf-runtime-cOgFWm/src/model/field-kind.ts
-var validator4 = createValidator();
-validator4.addSchema(schema_default);
-validator4.addSchema(field_document_schema_default);
-validator4.addSchema(nullability_document_schema_default);
-validator4.addSchema(cardinality_document_schema_default);
-validator4.addSchema(facet_document_schema_default);
-validator4.addSchema(key_document_schema_default);
-validator4.addSchema(relationship_document_schema_default);
-validator4.addSchema(schema_properties_document_schema_default);
-var checkV12 = validator4.compile(kind_operation_schema_default);
-var checkV23 = validator4.compile(kind_operation_v2_schema_default);
-var checkV32 = validator4.compile(kind_operation_v3_schema_default);
-var checkV4 = validator4.compile(kind_operation_v4_schema_default);
-var checkV5 = validator4.compile(kind_operation_v5_schema_default);
-var checkV6 = validator4.compile(kind_operation_v6_schema_default);
-var checkV7 = validator4.compile(kind_operation_v7_schema_default);
-var checker2 = (version) => version === "7.0.0" ? checkV7 : version === "6.0.0" ? checkV6 : version === "5.0.0" ? checkV5 : version === "4.0.0" ? checkV4 : version === "3.0.0" ? checkV32 : version === "2.0.0" ? checkV23 : checkV12;
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/field-kind.ts
+var validator5 = createValidator();
+validator5.addSchema(snapshotSchema(bit128_document_schema_default));
+var checkBit1283 = validator5.compile(snapshotSchema(kind_operation_v8_schema_default));
+validator5.addSchema(schema_default);
+validator5.addSchema(field_document_schema_default);
+validator5.addSchema(nullability_document_schema_default);
+validator5.addSchema(cardinality_document_schema_default);
+validator5.addSchema(facet_document_schema_default);
+validator5.addSchema(key_document_schema_default);
+validator5.addSchema(relationship_document_schema_default);
+validator5.addSchema(schema_properties_document_schema_default);
+var checkV12 = validator5.compile(kind_operation_schema_default);
+var checkV23 = validator5.compile(kind_operation_v2_schema_default);
+var checkV32 = validator5.compile(kind_operation_v3_schema_default);
+var checkV4 = validator5.compile(kind_operation_v4_schema_default);
+var checkV5 = validator5.compile(kind_operation_v5_schema_default);
+var checkV6 = validator5.compile(kind_operation_v6_schema_default);
+var checkV7 = validator5.compile(kind_operation_v7_schema_default);
+var checker2 = (version) => version === "8.0.0" ? checkBit1283 : version === "7.0.0" ? checkV7 : version === "6.0.0" ? checkV6 : version === "5.0.0" ? checkV5 : version === "4.0.0" ? checkV4 : version === "3.0.0" ? checkV32 : version === "2.0.0" ? checkV23 : checkV12;
 function finish3(value) {
   const result = copyJson(value), check = checker2(value.version);
   if (!check(result))
@@ -22445,9 +26091,143 @@ function inspectCoreElementKind(input, identity) {
     else
       meaning = { state: "unknown", value: element.kind };
   }
-  return finish3({ operation: "inspect-core-kind", version: source.umf === "0.8.0" ? "7.0.0" : source.umf === "0.7.0" ? "6.0.0" : source.umf === "0.6.0" ? "5.0.0" : source.umf === "0.5.0" ? "4.0.0" : source.umf === "0.4.0" ? "3.0.0" : source.umf === "0.3.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
+  return finish3({ operation: "inspect-core-kind", version: source.umf === "0.9.0" ? "8.0.0" : source.umf === "0.8.0" ? "7.0.0" : source.umf === "0.7.0" ? "6.0.0" : source.umf === "0.6.0" ? "5.0.0" : source.umf === "0.5.0" ? "4.0.0" : source.umf === "0.4.0" ? "3.0.0" : source.umf === "0.3.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation-v6.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/nullability-operation-v7.schema.json
+var nullability_operation_v7_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:nullability-operation:7.0.0",
+  title: "Core 0.9.0 nullability-operation-v7",
+  $defs: {
+    nullability: {
+      enum: [
+        "required",
+        "absent-allowed",
+        "unspecified"
+      ]
+    },
+    identity: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    source: {
+      $ref: "urn:umf:core:0.9.0"
+    },
+    lookup: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "operation",
+        "version",
+        "source",
+        "identity",
+        "path",
+        "meaning",
+        "provenance"
+      ],
+      properties: {
+        operation: {
+          const: "inspect-core-nullability"
+        },
+        version: {
+          const: "7.0.0"
+        },
+        source: {
+          $ref: "#/$defs/source"
+        },
+        identity: {
+          $ref: "#/$defs/identity"
+        },
+        path: {
+          type: "string"
+        },
+        provenance: {
+          const: "unverified"
+        },
+        meaning: {
+          oneOf: [
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state",
+                "nullability"
+              ],
+              properties: {
+                state: {
+                  const: "known"
+                },
+                nullability: {
+                  $ref: "#/$defs/nullability"
+                }
+              }
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state"
+              ],
+              properties: {
+                state: {
+                  const: "missing"
+                }
+              }
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state",
+                "value"
+              ],
+              properties: {
+                state: {
+                  const: "unknown"
+                },
+                value: {
+                  type: "string",
+                  minLength: 1,
+                  not: {
+                    $ref: "#/$defs/nullability"
+                  }
+                }
+              }
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state"
+              ],
+              properties: {
+                state: {
+                  const: "inapplicable"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  $ref: "#/$defs/lookup"
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/nullability-operation-v6.schema.json
 var nullability_operation_v6_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:6.0.0",
@@ -22581,7 +26361,7 @@ var nullability_operation_v6_schema_default = {
   },
   $ref: "#/$defs/lookup"
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation-v5.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/nullability-operation-v5.schema.json
 var nullability_operation_v5_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:5.0.0",
@@ -22786,7 +26566,7 @@ var nullability_operation_v5_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation-v4.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/nullability-operation-v4.schema.json
 var nullability_operation_v4_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:4.0.0",
@@ -22991,7 +26771,7 @@ var nullability_operation_v4_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation-v3.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/nullability-operation-v3.schema.json
 var nullability_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:3.0.0",
@@ -23196,7 +26976,7 @@ var nullability_operation_v3_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/nullability-operation.schema.json
 var nullability_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:1.0.0",
@@ -23425,7 +27205,7 @@ var nullability_operation_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/nullability-operation-v2.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/nullability-operation-v2.schema.json
 var nullability_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:nullability-operation:2.0.0",
@@ -23631,23 +27411,25 @@ var nullability_operation_v2_schema_default = {
   ]
 };
 
-// ../truss-umf-runtime-cOgFWm/src/model/nullability.ts
-var validator5 = createValidator();
-validator5.addSchema(schema_default);
-validator5.addSchema(field_document_schema_default);
-validator5.addSchema(nullability_document_schema_default);
-validator5.addSchema(cardinality_document_schema_default);
-validator5.addSchema(facet_document_schema_default);
-validator5.addSchema(key_document_schema_default);
-validator5.addSchema(relationship_document_schema_default);
-validator5.addSchema(schema_properties_document_schema_default);
-var checkV13 = validator5.compile(nullability_operation_schema_default);
-var checkV24 = validator5.compile(nullability_operation_v2_schema_default);
-var checkV33 = validator5.compile(nullability_operation_v3_schema_default);
-var checkV42 = validator5.compile(nullability_operation_v4_schema_default);
-var checkV52 = validator5.compile(nullability_operation_v5_schema_default);
-var checkV62 = validator5.compile(nullability_operation_v6_schema_default);
-var checker3 = (version) => version === "6.0.0" ? checkV62 : version === "5.0.0" ? checkV52 : version === "4.0.0" ? checkV42 : version === "3.0.0" ? checkV33 : version === "2.0.0" ? checkV24 : checkV13;
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/nullability.ts
+var validator6 = createValidator();
+validator6.addSchema(snapshotSchema(bit128_document_schema_default));
+var checkBit1284 = validator6.compile(snapshotSchema(nullability_operation_v7_schema_default));
+validator6.addSchema(schema_default);
+validator6.addSchema(field_document_schema_default);
+validator6.addSchema(nullability_document_schema_default);
+validator6.addSchema(cardinality_document_schema_default);
+validator6.addSchema(facet_document_schema_default);
+validator6.addSchema(key_document_schema_default);
+validator6.addSchema(relationship_document_schema_default);
+validator6.addSchema(schema_properties_document_schema_default);
+var checkV13 = validator6.compile(nullability_operation_schema_default);
+var checkV24 = validator6.compile(nullability_operation_v2_schema_default);
+var checkV33 = validator6.compile(nullability_operation_v3_schema_default);
+var checkV42 = validator6.compile(nullability_operation_v4_schema_default);
+var checkV52 = validator6.compile(nullability_operation_v5_schema_default);
+var checkV62 = validator6.compile(nullability_operation_v6_schema_default);
+var checker3 = (version) => version === "7.0.0" ? checkBit1284 : version === "6.0.0" ? checkV62 : version === "5.0.0" ? checkV52 : version === "4.0.0" ? checkV42 : version === "3.0.0" ? checkV33 : version === "2.0.0" ? checkV24 : checkV13;
 function finish4(value) {
   const result = copyJson(value), check = checker3(value.version);
   if (!check(result))
@@ -23671,17 +27453,240 @@ function inspectCoreNullability(input, identity) {
   const { source, element, path } = located;
   let meaning = { state: "missing" };
   if (Object.hasOwn(element, "nullability")) {
-    if (source.umf !== "0.3.0" && source.umf !== "0.4.0" && source.umf !== "0.5.0" && source.umf !== "0.6.0" && source.umf !== "0.7.0" && source.umf !== "0.8.0")
+    if (source.umf !== "0.3.0" && source.umf !== "0.4.0" && source.umf !== "0.5.0" && source.umf !== "0.6.0" && source.umf !== "0.7.0" && source.umf !== "0.8.0" && source.umf !== "0.9.0")
       meaning = { state: "legacy", value: copyJson(element.nullability) };
     else if (NULLABILITIES.includes(element.nullability))
       meaning = { state: "known", nullability: element.nullability };
     else
       meaning = { state: "unknown", value: element.nullability };
-  } else if ((source.umf === "0.3.0" || source.umf === "0.4.0" || (source.umf === "0.5.0" || (source.umf === "0.6.0" || source.umf === "0.7.0" || source.umf === "0.8.0"))) && element.kind !== "field")
+  } else if ((source.umf === "0.3.0" || source.umf === "0.4.0" || (source.umf === "0.5.0" || (source.umf === "0.6.0" || source.umf === "0.7.0" || (source.umf === "0.8.0" || source.umf === "0.9.0")))) && element.kind !== "field")
     meaning = { state: "inapplicable" };
-  return finish4({ operation: "inspect-core-nullability", version: source.umf === "0.8.0" ? "6.0.0" : source.umf === "0.7.0" ? "5.0.0" : source.umf === "0.6.0" ? "4.0.0" : source.umf === "0.5.0" ? "3.0.0" : source.umf === "0.4.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
+  return finish4({ operation: "inspect-core-nullability", version: source.umf === "0.9.0" ? "7.0.0" : source.umf === "0.8.0" ? "6.0.0" : source.umf === "0.7.0" ? "5.0.0" : source.umf === "0.6.0" ? "4.0.0" : source.umf === "0.5.0" ? "3.0.0" : source.umf === "0.4.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-operation-v5.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/cardinality-operation-v6.schema.json
+var cardinality_operation_v6_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:cardinality-operation:6.0.0",
+  title: "Core 0.9.0 cardinality-operation-v6",
+  $defs: {
+    cardinality: {
+      enum: [
+        "one",
+        "array",
+        "map",
+        "unspecified"
+      ]
+    },
+    identity: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    source: {
+      $ref: "urn:umf:core:0.9.0"
+    },
+    lookup: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "operation",
+        "version",
+        "source",
+        "identity",
+        "path",
+        "meaning",
+        "provenance"
+      ],
+      properties: {
+        operation: {
+          const: "inspect-core-cardinality"
+        },
+        version: {
+          const: "6.0.0"
+        },
+        source: {
+          $ref: "#/$defs/source"
+        },
+        identity: {
+          $ref: "#/$defs/identity"
+        },
+        path: {
+          type: "string"
+        },
+        provenance: {
+          const: "unverified"
+        },
+        meaning: {
+          oneOf: [
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state",
+                "cardinality"
+              ],
+              properties: {
+                state: {
+                  const: "known"
+                },
+                cardinality: {
+                  $ref: "#/$defs/cardinality"
+                },
+                itemType: {
+                  $ref: "#/$defs/itemType"
+                }
+              },
+              allOf: [
+                {
+                  if: {
+                    required: [
+                      "itemType"
+                    ],
+                    properties: {
+                      itemType: {}
+                    }
+                  },
+                  then: {
+                    properties: {
+                      cardinality: {
+                        enum: [
+                          "array",
+                          "map"
+                        ]
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state"
+              ],
+              properties: {
+                state: {
+                  const: "missing"
+                }
+              }
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state",
+                "value"
+              ],
+              properties: {
+                state: {
+                  const: "unknown"
+                },
+                value: {
+                  type: "string",
+                  minLength: 1,
+                  not: {
+                    $ref: "#/$defs/cardinality"
+                  }
+                }
+              }
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state"
+              ],
+              properties: {
+                state: {
+                  const: "inapplicable"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    itemType: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    request: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "cardinality"
+      ],
+      properties: {
+        cardinality: {
+          $ref: "#/$defs/cardinality"
+        },
+        itemType: {
+          oneOf: [
+            {
+              $ref: "#/$defs/itemType"
+            },
+            {
+              type: "null"
+            }
+          ]
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "itemType"
+            ],
+            properties: {
+              itemType: {
+                type: "object"
+              }
+            }
+          },
+          then: {
+            properties: {
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  $ref: "#/$defs/lookup"
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/cardinality-operation-v5.schema.json
 var cardinality_operation_v5_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:cardinality-operation:5.0.0",
@@ -23904,7 +27909,7 @@ var cardinality_operation_v5_schema_default = {
   },
   $ref: "#/$defs/lookup"
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-operation-v4.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/cardinality-operation-v4.schema.json
 var cardinality_operation_v4_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:cardinality-operation:4.0.0",
@@ -24202,7 +28207,7 @@ var cardinality_operation_v4_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-operation-v3.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/cardinality-operation-v3.schema.json
 var cardinality_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:cardinality-operation:3.0.0",
@@ -24500,7 +28505,7 @@ var cardinality_operation_v3_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-operation-v2.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/cardinality-operation-v2.schema.json
 var cardinality_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:cardinality-operation:2.0.0",
@@ -24798,7 +28803,7 @@ var cardinality_operation_v2_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/cardinality-operation.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/cardinality-operation.schema.json
 var cardinality_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:cardinality-operation:1.0.0",
@@ -25124,23 +29129,25 @@ var cardinality_operation_schema_default = {
   ]
 };
 
-// ../truss-umf-runtime-cOgFWm/src/model/cardinality.ts
-var validator6 = createValidator();
-validator6.addSchema(schema_default);
-validator6.addSchema(field_document_schema_default);
-validator6.addSchema(nullability_document_schema_default);
-validator6.addSchema(cardinality_document_schema_default);
-validator6.addSchema(facet_document_schema_default);
-validator6.addSchema(key_document_schema_default);
-validator6.addSchema(relationship_document_schema_default);
-validator6.addSchema(schema_properties_document_schema_default);
-var checkV14 = validator6.compile(cardinality_operation_schema_default);
-var checkV25 = validator6.compile(cardinality_operation_v2_schema_default);
-var checkV34 = validator6.compile(cardinality_operation_v3_schema_default);
-var checkV43 = validator6.compile(cardinality_operation_v4_schema_default);
-var checkV53 = validator6.compile(cardinality_operation_v5_schema_default);
-var checker4 = (version) => version === "5.0.0" ? checkV53 : version === "4.0.0" ? checkV43 : version === "3.0.0" ? checkV34 : version === "2.0.0" ? checkV25 : checkV14;
-var checkRequest = validator6.compile({ $defs: cardinality_operation_schema_default.$defs, $ref: "#/$defs/request" });
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/cardinality.ts
+var validator7 = createValidator();
+validator7.addSchema(snapshotSchema(bit128_document_schema_default));
+var checkBit1285 = validator7.compile(snapshotSchema(cardinality_operation_v6_schema_default));
+validator7.addSchema(schema_default);
+validator7.addSchema(field_document_schema_default);
+validator7.addSchema(nullability_document_schema_default);
+validator7.addSchema(cardinality_document_schema_default);
+validator7.addSchema(facet_document_schema_default);
+validator7.addSchema(key_document_schema_default);
+validator7.addSchema(relationship_document_schema_default);
+validator7.addSchema(schema_properties_document_schema_default);
+var checkV14 = validator7.compile(cardinality_operation_schema_default);
+var checkV25 = validator7.compile(cardinality_operation_v2_schema_default);
+var checkV34 = validator7.compile(cardinality_operation_v3_schema_default);
+var checkV43 = validator7.compile(cardinality_operation_v4_schema_default);
+var checkV53 = validator7.compile(cardinality_operation_v5_schema_default);
+var checker4 = (version) => version === "6.0.0" ? checkBit1285 : version === "5.0.0" ? checkV53 : version === "4.0.0" ? checkV43 : version === "3.0.0" ? checkV34 : version === "2.0.0" ? checkV25 : checkV14;
+var checkRequest = validator7.compile({ $defs: cardinality_operation_schema_default.$defs, $ref: "#/$defs/request" });
 function finish5(value) {
   const result = copyJson(value), check = checker4(value.version);
   if (!check(result))
@@ -25164,17 +29171,323 @@ function inspectCoreCardinality(input, identity) {
   const { source, element, path } = located;
   let meaning = { state: "missing" };
   if (Object.hasOwn(element, "cardinality")) {
-    if (source.umf !== "0.4.0" && source.umf !== "0.5.0" && source.umf !== "0.6.0" && source.umf !== "0.7.0" && source.umf !== "0.8.0")
+    if (source.umf !== "0.4.0" && source.umf !== "0.5.0" && source.umf !== "0.6.0" && source.umf !== "0.7.0" && source.umf !== "0.8.0" && source.umf !== "0.9.0")
       meaning = { state: "legacy", value: copyJson(element.cardinality) };
     else if (CARDINALITIES.includes(element.cardinality))
       meaning = { state: "known", cardinality: element.cardinality, ...Object.hasOwn(element, "itemType") ? { itemType: copyJson(element.itemType) } : {} };
     else
       meaning = { state: "unknown", value: element.cardinality };
-  } else if ((source.umf === "0.4.0" || (source.umf === "0.5.0" || (source.umf === "0.6.0" || source.umf === "0.7.0" || source.umf === "0.8.0"))) && element.kind !== "field")
+  } else if ((source.umf === "0.4.0" || (source.umf === "0.5.0" || (source.umf === "0.6.0" || source.umf === "0.7.0" || (source.umf === "0.8.0" || source.umf === "0.9.0")))) && element.kind !== "field")
     meaning = { state: "inapplicable" };
-  return finish5({ operation: "inspect-core-cardinality", version: source.umf === "0.8.0" ? "5.0.0" : source.umf === "0.7.0" ? "4.0.0" : source.umf === "0.6.0" ? "3.0.0" : source.umf === "0.5.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
+  return finish5({ operation: "inspect-core-cardinality", version: source.umf === "0.9.0" ? "6.0.0" : source.umf === "0.8.0" ? "5.0.0" : source.umf === "0.7.0" ? "4.0.0" : source.umf === "0.6.0" ? "3.0.0" : source.umf === "0.5.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
 }
-// ../truss-umf-runtime-cOgFWm/spec/core/facet-operation-v4.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/facet-operation-v5.schema.json
+var facet_operation_v5_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:facet-operation:5.0.0",
+  title: "Core 0.9.0 facet-operation-v5",
+  $defs: {
+    identity: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    source: {
+      $ref: "urn:umf:core:0.9.0"
+    },
+    bounds: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        length: {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "unit"
+          ],
+          properties: {
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            unit: {
+              enum: [
+                "unicode-scalar",
+                "byte"
+              ]
+            },
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            }
+          },
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ]
+        },
+        precision: {
+          type: "integer",
+          minimum: 1,
+          maximum: 9007199254740991
+        },
+        scale: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991
+        },
+        integerWidth: {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "bits",
+            "signed"
+          ],
+          properties: {
+            bits: {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            signed: {
+              type: "boolean"
+            }
+          }
+        },
+        collectionSize: {
+          type: "object",
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            }
+          },
+          additionalProperties: false
+        },
+        range: {
+          type: "object",
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              $ref: "urn:umf:core:0.9.0#/$defs/literal"
+            },
+            max: {
+              $ref: "urn:umf:core:0.9.0#/$defs/literal"
+            },
+            minInclusive: {
+              type: "boolean"
+            },
+            maxInclusive: {
+              type: "boolean"
+            }
+          },
+          additionalProperties: false
+        }
+      },
+      dependentRequired: {
+        precision: [
+          "scale"
+        ],
+        scale: [
+          "precision"
+        ]
+      }
+    },
+    lookup: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "operation",
+        "version",
+        "source",
+        "identity",
+        "path",
+        "meaning",
+        "provenance"
+      ],
+      properties: {
+        operation: {
+          const: "inspect-core-facets"
+        },
+        version: {
+          const: "5.0.0"
+        },
+        source: {
+          $ref: "#/$defs/source"
+        },
+        identity: {
+          $ref: "#/$defs/identity"
+        },
+        path: {
+          type: "string"
+        },
+        meaning: {
+          oneOf: [
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state",
+                "facets",
+                "interpreted",
+                "uninterpretedPaths"
+              ],
+              properties: {
+                state: {
+                  const: "known"
+                },
+                facets: {
+                  $ref: "urn:umf:core:0.9.0#/$defs/facets"
+                },
+                interpreted: {
+                  $ref: "#/$defs/bounds"
+                },
+                uninterpretedPaths: {
+                  type: "array",
+                  items: {
+                    type: "string"
+                  },
+                  maxItems: 0
+                }
+              }
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state",
+                "facets",
+                "interpreted",
+                "uninterpretedPaths"
+              ],
+              properties: {
+                state: {
+                  const: "partial"
+                },
+                facets: {
+                  $ref: "urn:umf:core:0.9.0#/$defs/facets"
+                },
+                interpreted: {
+                  $ref: "#/$defs/bounds"
+                },
+                uninterpretedPaths: {
+                  type: "array",
+                  items: {
+                    type: "string"
+                  },
+                  minItems: 1
+                }
+              }
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state"
+              ],
+              properties: {
+                state: {
+                  const: "missing"
+                }
+              }
+            },
+            {
+              type: "object",
+              additionalProperties: false,
+              required: [
+                "state"
+              ],
+              properties: {
+                state: {
+                  const: "inapplicable"
+                }
+              }
+            }
+          ]
+        },
+        provenance: {
+          const: "unverified"
+        }
+      }
+    }
+  },
+  oneOf: [
+    {
+      $ref: "#/$defs/lookup"
+    }
+  ]
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/facet-operation-v4.schema.json
 var facet_operation_v4_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:facet-operation:4.0.0",
@@ -25480,7 +29793,7 @@ var facet_operation_v4_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/facet-operation-v3.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/facet-operation-v3.schema.json
 var facet_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:facet-operation:3.0.0",
@@ -25835,7 +30148,7 @@ var facet_operation_v3_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/facet-operation-v2.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/facet-operation-v2.schema.json
 var facet_operation_v2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:facet-operation:2.0.0",
@@ -26190,7 +30503,7 @@ var facet_operation_v2_schema_default = {
     }
   ]
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/facet-operation.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/facet-operation.schema.json
 var facet_operation_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:facet-operation:1.0.0",
@@ -26576,17 +30889,19 @@ var facet_operation_schema_default = {
   ]
 };
 
-// ../truss-umf-runtime-cOgFWm/src/model/facets.ts
-var validator7 = createValidator();
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/facets.ts
+var validator8 = createValidator();
+validator8.addSchema(snapshotSchema(bit128_document_schema_default));
+var checkBit1286 = validator8.compile(snapshotSchema(facet_operation_v5_schema_default));
 for (const s of [schema_default, field_document_schema_default, nullability_document_schema_default, cardinality_document_schema_default, facet_document_schema_default, key_document_schema_default, relationship_document_schema_default, schema_properties_document_schema_default])
-  validator7.addSchema(s);
-var checkV44 = validator7.compile(facet_operation_v4_schema_default);
-var checkInterpreted = validator7.compile({ $defs: facet_operation_v4_schema_default.$defs, $ref: "#/$defs/bounds" });
-var checkV15 = validator7.compile(facet_operation_schema_default);
-var checkV26 = validator7.compile(facet_operation_v2_schema_default);
-var checkV35 = validator7.compile(facet_operation_v3_schema_default);
-var checker5 = (version) => version === "4.0.0" ? checkV44 : version === "3.0.0" ? checkV35 : version === "2.0.0" ? checkV26 : checkV15;
-var checkRequest2 = validator7.compile({ $defs: facet_operation_schema_default.$defs, $ref: "#/$defs/request" });
+  validator8.addSchema(s);
+var checkV44 = validator8.compile(facet_operation_v4_schema_default);
+var checkInterpreted = validator8.compile(snapshotSchema({ $defs: facet_operation_v4_schema_default.$defs, $ref: "#/$defs/bounds" }));
+var checkV15 = validator8.compile(facet_operation_schema_default);
+var checkV26 = validator8.compile(facet_operation_v2_schema_default);
+var checkV35 = validator8.compile(facet_operation_v3_schema_default);
+var checker5 = (version) => version === "5.0.0" ? checkBit1286 : version === "4.0.0" ? checkV44 : version === "3.0.0" ? checkV35 : version === "2.0.0" ? checkV26 : checkV15;
+var checkRequest2 = validator8.compile({ $defs: facet_operation_schema_default.$defs, $ref: "#/$defs/request" });
 function finish6(value) {
   const copied = copyJson(value), check = checker5(value.version);
   if (!check(copied))
@@ -26603,44 +30918,148 @@ function locate7(input, identityInput) {
   const mi = source.modules.findIndex((m) => m.id === identity.module), ei = source.modules[mi]?.elements.findIndex((e) => e.id === identity.element) ?? -1;
   if (mi < 0 || ei < 0)
     throw new UmfError("CORE_FACET_MISSING", "Element identity is absent");
-  return { source, identity, mi, ei, element: source.modules[mi].elements[ei], path: `/modules/${mi}/elements/${ei}/facets` };
+  return { source, identity, mi, ei, element: source.modules[mi].elements[ei], path: `/modules/${mi}/elements/${ei}/facets`, validation };
 }
 function inspectCoreFacets(input, identity) {
-  const located = locate7(input, identity), { source, element, path } = located;
-  let meaning = { state: "missing" };
-  if (Object.hasOwn(element, "facets")) {
-    if (source.umf !== "0.5.0" && source.umf !== "0.6.0" && source.umf !== "0.7.0" && source.umf !== "0.8.0")
-      meaning = { state: "legacy", value: copyJson(element.facets) };
-    else {
-      const value = copyJson(element.facets), interpreted = {};
-      if (value.length && (value.length.unit === "unicode-scalar" || value.length.unit === "byte"))
-        interpreted.length = { ...value.length.max !== undefined ? { max: value.length.max } : {}, ...source.umf === "0.8.0" && value.length.min !== undefined ? { min: value.length.min } : {}, unit: value.length.unit };
-      if (value.integerWidth)
-        interpreted.integerWidth = { bits: value.integerWidth.bits, signed: value.integerWidth.signed };
-      if (value.precision !== undefined) {
-        interpreted.precision = value.precision;
-        interpreted.scale = value.scale;
-      }
-      if (source.umf === "0.8.0") {
-        for (const group of ["collectionSize", "range"]) {
-          const raw = value[group];
-          if (!raw)
-            continue;
-          const selected = {};
-          for (const key of group === "range" ? ["min", "max", "minInclusive", "maxInclusive"] : ["min", "max"])
-            if (Object.hasOwn(raw, key))
-              selected[key] = copyJson(raw[key]);
-          Object.assign(interpreted, { [group]: selected });
+  const located = locate7(input, identity), { source, path } = located, meaning = facetMeaning({ ...located, path: located.path.slice(0, -7) });
+  return finish6({ operation: "inspect-core-facets", version: source.umf === "0.9.0" ? "5.0.0" : source.umf === "0.8.0" ? "4.0.0" : source.umf === "0.7.0" ? "3.0.0" : source.umf === "0.6.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
+}
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/record-members-inspection-v0.3.schema.json
+var record_members_inspection_v0_3_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:record-members-inspection:0.3.0",
+  title: "Core 0.9.0 record-members-inspection-v0.3",
+  type: "object",
+  additionalProperties: false,
+  required: [
+    "operation",
+    "version",
+    "source",
+    "identity",
+    "path",
+    "meaning",
+    "provenance"
+  ],
+  properties: {
+    operation: {
+      const: "inspect-core-record-members"
+    },
+    version: {
+      const: "0.3.0"
+    },
+    source: {
+      $ref: "urn:umf:core:0.9.0"
+    },
+    identity: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
         }
       }
-      const uninterpretedPaths = (source.umf === "0.8.0" ? validateDocument(source).diagnostics.filter((d) => d.path.startsWith(path + "/")) : validateFacetElement(element, path.slice(0, -7)).diagnostics).filter((d) => d.severity === "warning").map((d) => d.path);
-      meaning = { state: uninterpretedPaths.length ? "partial" : "known", facets: value, interpreted, uninterpretedPaths };
+    },
+    path: {
+      type: "string",
+      pattern: "^/modules/[0-9]+/elements/[0-9]+/members$"
+    },
+    meaning: {
+      oneOf: [
+        {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "state",
+            "members",
+            "uninterpretedPaths"
+          ],
+          properties: {
+            state: {
+              const: "known"
+            },
+            members: {
+              type: "array",
+              items: {
+                $ref: "urn:umf:core:0.9.0#/$defs/keyFieldReference"
+              }
+            },
+            uninterpretedPaths: {
+              type: "array",
+              items: {
+                type: "string"
+              },
+              maxItems: 0
+            }
+          }
+        },
+        {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "state",
+            "members",
+            "uninterpretedPaths"
+          ],
+          properties: {
+            state: {
+              const: "partial"
+            },
+            members: {
+              type: "array",
+              items: {
+                $ref: "urn:umf:core:0.9.0#/$defs/keyFieldReference"
+              }
+            },
+            uninterpretedPaths: {
+              type: "array",
+              items: {
+                type: "string"
+              },
+              minItems: 1
+            }
+          }
+        },
+        {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "state"
+          ],
+          properties: {
+            state: {
+              const: "missing"
+            }
+          }
+        },
+        {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "state"
+          ],
+          properties: {
+            state: {
+              const: "inapplicable"
+            }
+          }
+        }
+      ]
+    },
+    provenance: {
+      const: "unverified"
     }
-  } else if ((source.umf === "0.5.0" || (source.umf === "0.6.0" || source.umf === "0.7.0" || source.umf === "0.8.0")) && element.kind !== "field")
-    meaning = { state: "inapplicable" };
-  return finish6({ operation: "inspect-core-facets", version: source.umf === "0.8.0" ? "4.0.0" : source.umf === "0.7.0" ? "3.0.0" : source.umf === "0.6.0" ? "2.0.0" : "1.0.0", source, identity: located.identity, path, meaning, provenance: "unverified" });
-}
-// ../truss-umf-runtime-cOgFWm/spec/core/record-members-inspection-v0.2.schema.json
+  }
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/record-members-inspection-v0.2.schema.json
 var record_members_inspection_v0_2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:record-members-inspection:0.2.0",
@@ -26775,7 +31194,7 @@ var record_members_inspection_v0_2_schema_default = {
     }
   }
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/record-members-inspection.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/record-members-inspection.schema.json
 var record_members_inspection_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:record-members-inspection:0.1.0",
@@ -26911,17 +31330,19 @@ var record_members_inspection_schema_default = {
   }
 };
 
-// ../truss-umf-runtime-cOgFWm/src/model/record-members.ts
-var validator8 = createValidator();
-validator8.addSchema(relationship_document_schema_default);
-validator8.addSchema(schema_properties_document_schema_default);
-var legacyCheck = validator8.compile(record_members_inspection_schema_default);
-var currentCheck = validator8.compile(record_members_inspection_v0_2_schema_default);
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/record-members.ts
+var validator9 = createValidator();
+validator9.addSchema(snapshotSchema(bit128_document_schema_default));
+var bit128Check = validator9.compile(snapshotSchema(record_members_inspection_v0_3_schema_default));
+validator9.addSchema(relationship_document_schema_default);
+validator9.addSchema(schema_properties_document_schema_default);
+var legacyCheck = validator9.compile(record_members_inspection_schema_default);
+var currentCheck = validator9.compile(record_members_inspection_v0_2_schema_default);
 function inspectCoreRecordMembers(input, identityInput) {
   const source = copyJson(input), identity = copyJson(identityInput);
   if (!identity || typeof identity !== "object" || Array.isArray(identity) || Object.keys(identity).some((k) => k !== "module" && k !== "element") || typeof identity.module !== "string" || !identity.module || typeof identity.element !== "string" || !identity.element)
     throw new UmfError("CORE_RECORD_MEMBERS_IDENTITY", "Expected explicit module and element identities");
-  if (source?.umf !== "0.7.0" && source?.umf !== "0.8.0")
+  if (source?.umf !== "0.7.0" && source?.umf !== "0.8.0" && source?.umf !== "0.9.0")
     throw new UmfError("CORE_RECORD_MEMBERS_VERSION", "Only original 0.7 or 0.8 documents are admitted by their versioned inspection profiles");
   const validation = validateDocument(source);
   if (!validation.valid)
@@ -26932,13 +31353,158 @@ function inspectCoreRecordMembers(input, identityInput) {
   const element = source.modules[mi].elements[ei], path = `/modules/${mi}/elements/${ei}/members`;
   const uninterpretedPaths = validation.diagnostics.filter((d) => d.severity === "warning" && d.code === "UNKNOWN_KEY_QUALIFIER" && (d.path === path || d.path.startsWith(path + "/"))).map((d) => d.path);
   const meaning = element.kind !== "record" ? { state: "inapplicable" } : !Object.hasOwn(element, "members") ? { state: "missing" } : { state: uninterpretedPaths.length ? "partial" : "known", members: element.members, uninterpretedPaths };
-  const result = copyJson({ operation: "inspect-core-record-members", version: source.umf === "0.8.0" ? "0.2.0" : "0.1.0", source, identity, path, meaning, provenance: "unverified" });
-  const check = source.umf === "0.8.0" ? currentCheck : legacyCheck;
+  const result = copyJson({ operation: "inspect-core-record-members", version: source.umf === "0.9.0" ? "0.3.0" : source.umf === "0.8.0" ? "0.2.0" : "0.1.0", source, identity, path, meaning, provenance: "unverified" });
+  const check = source.umf === "0.9.0" ? bit128Check : source.umf === "0.8.0" ? currentCheck : legacyCheck;
   if (!check(result))
     throw new UmfError("CORE_RECORD_MEMBERS_RESULT", JSON.stringify(check.errors));
   return result;
 }
-// ../truss-umf-runtime-cOgFWm/spec/core/scalar-type-inspection-v0.2.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/scalar-type-inspection-v0.3.schema.json
+var scalar_type_inspection_v0_3_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:scalar-type-inspection:0.3.0",
+  title: "Core 0.9.0 scalar-type-inspection-v0.3",
+  type: "object",
+  additionalProperties: false,
+  required: [
+    "operation",
+    "version",
+    "source",
+    "identity",
+    "path",
+    "meaning",
+    "provenance"
+  ],
+  properties: {
+    operation: {
+      const: "inspect-core-scalar-type"
+    },
+    version: {
+      const: "0.3.0"
+    },
+    source: {
+      $ref: "urn:umf:core:0.9.0"
+    },
+    identity: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    path: {
+      type: "string",
+      pattern: "^/modules/[0-9]+/elements/[0-9]+/scalarType$"
+    },
+    meaning: {
+      oneOf: [
+        {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "state",
+            "scalarType"
+          ],
+          properties: {
+            state: {
+              const: "known"
+            },
+            scalarType: {
+              enum: [
+                "boolean",
+                "integer",
+                "decimal",
+                "float",
+                "string",
+                "binary",
+                "date",
+                "time",
+                "timestamp",
+                "bits128",
+                "uuid"
+              ]
+            }
+          }
+        },
+        {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "state",
+            "value"
+          ],
+          properties: {
+            state: {
+              const: "unknown"
+            },
+            value: {
+              type: "string",
+              minLength: 1,
+              not: {
+                enum: [
+                  "boolean",
+                  "integer",
+                  "decimal",
+                  "float",
+                  "string",
+                  "binary",
+                  "date",
+                  "time",
+                  "timestamp",
+                  "bits128",
+                  "uuid"
+                ]
+              }
+            }
+          }
+        },
+        {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "state"
+          ],
+          properties: {
+            state: {
+              const: "missing"
+            }
+          }
+        },
+        {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "state"
+          ],
+          properties: {
+            state: {
+              const: "inapplicable"
+            },
+            authoredScalarType: {
+              type: "string",
+              minLength: 1
+            }
+          }
+        }
+      ]
+    },
+    provenance: {
+      const: "unverified"
+    }
+  }
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/scalar-type-inspection-v0.2.schema.json
 var scalar_type_inspection_v0_2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:scalar-type-inspection:0.2.0",
@@ -27079,7 +31645,7 @@ var scalar_type_inspection_v0_2_schema_default = {
     }
   }
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/scalar-type-inspection.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/scalar-type-inspection.schema.json
 var scalar_type_inspection_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:scalar-type-inspection:0.1.0",
@@ -27221,17 +31787,19 @@ var scalar_type_inspection_schema_default = {
   }
 };
 
-// ../truss-umf-runtime-cOgFWm/src/model/scalar-type.ts
-var validator9 = createValidator();
-validator9.addSchema(relationship_document_schema_default);
-validator9.addSchema(schema_properties_document_schema_default);
-var legacyCheck2 = validator9.compile(scalar_type_inspection_schema_default);
-var currentCheck2 = validator9.compile(scalar_type_inspection_v0_2_schema_default);
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/scalar-type.ts
+var validator10 = createValidator();
+validator10.addSchema(snapshotSchema(bit128_document_schema_default));
+var bit128Check2 = validator10.compile(snapshotSchema(scalar_type_inspection_v0_3_schema_default));
+validator10.addSchema(relationship_document_schema_default);
+validator10.addSchema(schema_properties_document_schema_default);
+var legacyCheck2 = validator10.compile(scalar_type_inspection_schema_default);
+var currentCheck2 = validator10.compile(scalar_type_inspection_v0_2_schema_default);
 function inspectCoreScalarType(input, identityInput) {
   const source = copyJson(input), identity = copyJson(identityInput);
   if (!identity || typeof identity !== "object" || Array.isArray(identity) || Object.keys(identity).some((k) => k !== "module" && k !== "element") || typeof identity.module !== "string" || !identity.module || typeof identity.element !== "string" || !identity.element)
     throw new UmfError("CORE_SCALAR_TYPE_IDENTITY", "Expected explicit module and element identities");
-  if (source?.umf !== "0.7.0" && source?.umf !== "0.8.0")
+  if (source?.umf !== "0.7.0" && source?.umf !== "0.8.0" && source?.umf !== "0.9.0")
     throw new UmfError("CORE_SCALAR_TYPE_VERSION", "Only original 0.7 or 0.8 documents are admitted by their versioned inspection profiles");
   const validation = validateDocument(source);
   if (!validation.valid)
@@ -27240,14 +31808,169 @@ function inspectCoreScalarType(input, identityInput) {
   if (mi < 0 || ei < 0)
     throw new UmfError("CORE_SCALAR_TYPE_MISSING", "Element identity is absent");
   const element = source.modules[mi].elements[ei], present = Object.hasOwn(element, "scalarType"), value = element.scalarType;
-  const meaning = element.kind !== "field" ? { state: "inapplicable", ...present ? { authoredScalarType: value } : {} } : !present ? { state: "missing" } : SCALAR_TYPES.includes(value) ? { state: "known", scalarType: value } : { state: "unknown", value };
-  const result = copyJson({ operation: "inspect-core-scalar-type", version: source.umf === "0.8.0" ? "0.2.0" : "0.1.0", source, identity, path: `/modules/${mi}/elements/${ei}/scalarType`, meaning, provenance: "unverified" });
-  const check = source.umf === "0.8.0" ? currentCheck2 : legacyCheck2;
+  const meaning = element.kind !== "field" ? { state: "inapplicable", ...present ? { authoredScalarType: value } : {} } : !present ? { state: "missing" } : scalarTypesForVersion(source.umf).includes(value) ? { state: "known", scalarType: value } : { state: "unknown", value };
+  const result = copyJson({ operation: "inspect-core-scalar-type", version: source.umf === "0.9.0" ? "0.3.0" : source.umf === "0.8.0" ? "0.2.0" : "0.1.0", source, identity, path: `/modules/${mi}/elements/${ei}/scalarType`, meaning, provenance: "unverified" });
+  const check = source.umf === "0.9.0" ? bit128Check2 : source.umf === "0.8.0" ? currentCheck2 : legacyCheck2;
   if (!check(result))
     throw new UmfError("CORE_SCALAR_TYPE_RESULT", JSON.stringify(check.errors));
   return result;
 }
-// ../truss-umf-runtime-cOgFWm/spec/core/reference-links-inspection-v0.2.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/reference-links-inspection-v0.3.schema.json
+var reference_links_inspection_v0_3_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:reference-links-inspection:0.3.0",
+  title: "Core 0.9.0 reference-links-inspection-v0.3",
+  type: "object",
+  additionalProperties: false,
+  required: [
+    "operation",
+    "version",
+    "source",
+    "identity",
+    "path",
+    "meaning",
+    "provenance"
+  ],
+  properties: {
+    operation: {
+      const: "inspect-core-reference-links"
+    },
+    version: {
+      const: "0.3.0"
+    },
+    source: {
+      $ref: "urn:umf:core:0.9.0"
+    },
+    identity: {
+      type: "object",
+      additionalProperties: false,
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    path: {
+      type: "string",
+      pattern: "^/modules/[0-9]+/elements/[0-9]+/references$"
+    },
+    meaning: {
+      oneOf: [
+        {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "state"
+          ],
+          properties: {
+            state: {
+              const: "missing"
+            }
+          }
+        },
+        {
+          type: "object",
+          additionalProperties: false,
+          required: [
+            "state",
+            "links"
+          ],
+          properties: {
+            state: {
+              const: "present"
+            },
+            links: {
+              type: "array",
+              items: {
+                type: "object",
+                additionalProperties: false,
+                required: [
+                  "index",
+                  "path",
+                  "reference",
+                  "target",
+                  "uninterpretedPaths",
+                  "typeAssertion"
+                ],
+                properties: {
+                  index: {
+                    type: "integer",
+                    minimum: 0
+                  },
+                  path: {
+                    type: "string",
+                    pattern: "^/modules/[0-9]+/elements/[0-9]+/references/[0-9]+$"
+                  },
+                  reference: {
+                    $ref: "urn:umf:core:0.9.0#/$defs/reference"
+                  },
+                  target: {
+                    type: "object",
+                    additionalProperties: false,
+                    required: [
+                      "identity",
+                      "path"
+                    ],
+                    properties: {
+                      identity: {
+                        type: "object",
+                        additionalProperties: false,
+                        required: [
+                          "module",
+                          "element"
+                        ],
+                        properties: {
+                          module: {
+                            type: "string",
+                            minLength: 1
+                          },
+                          element: {
+                            type: "string",
+                            minLength: 1
+                          }
+                        }
+                      },
+                      path: {
+                        type: "string",
+                        pattern: "^/modules/[0-9]+/elements/[0-9]+$"
+                      },
+                      kind: {
+                        type: "string",
+                        minLength: 1
+                      }
+                    }
+                  },
+                  uninterpretedPaths: {
+                    type: "array",
+                    items: {
+                      type: "string"
+                    }
+                  },
+                  typeAssertion: {
+                    const: "unverified"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    provenance: {
+      const: "unverified"
+    }
+  }
+};
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/reference-links-inspection-v0.2.schema.json
 var reference_links_inspection_v0_2_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:reference-links-inspection:0.2.0",
@@ -27402,7 +32125,7 @@ var reference_links_inspection_v0_2_schema_default = {
     }
   }
 };
-// ../truss-umf-runtime-cOgFWm/spec/core/reference-links-inspection.schema.json
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/spec/core/reference-links-inspection.schema.json
 var reference_links_inspection_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:reference-links-inspection:0.1.0",
@@ -27558,17 +32281,19 @@ var reference_links_inspection_schema_default = {
   }
 };
 
-// ../truss-umf-runtime-cOgFWm/src/model/reference-links.ts
-var validator10 = createValidator();
-validator10.addSchema(relationship_document_schema_default);
-validator10.addSchema(schema_properties_document_schema_default);
-var legacyCheck3 = validator10.compile(reference_links_inspection_schema_default);
-var currentCheck3 = validator10.compile(reference_links_inspection_v0_2_schema_default);
+// ../../../../private/tmp/truss-umf-runtime-q0El9B/src/model/reference-links.ts
+var validator11 = createValidator();
+validator11.addSchema(snapshotSchema(bit128_document_schema_default));
+var bit128Check3 = validator11.compile(snapshotSchema(reference_links_inspection_v0_3_schema_default));
+validator11.addSchema(relationship_document_schema_default);
+validator11.addSchema(schema_properties_document_schema_default);
+var legacyCheck3 = validator11.compile(reference_links_inspection_schema_default);
+var currentCheck3 = validator11.compile(reference_links_inspection_v0_2_schema_default);
 function inspectCoreReferenceLinks(input, identityInput) {
   const source = copyJson(input), identity = copyJson(identityInput);
   if (!identity || typeof identity !== "object" || Array.isArray(identity) || Object.keys(identity).some((k) => k !== "module" && k !== "element") || typeof identity.module !== "string" || !identity.module || typeof identity.element !== "string" || !identity.element)
     throw new UmfError("CORE_REFERENCE_LINKS_IDENTITY", "Expected explicit qualified identity");
-  if (source?.umf !== "0.7.0" && source?.umf !== "0.8.0")
+  if (source?.umf !== "0.7.0" && source?.umf !== "0.8.0" && source?.umf !== "0.9.0")
     throw new UmfError("CORE_REFERENCE_LINKS_VERSION", "Only original 0.7 or 0.8 documents are admitted by their versioned inspection profiles");
   const validation = validateDocument(source);
   if (!validation.valid)
@@ -27581,8 +32306,8 @@ function inspectCoreReferenceLinks(input, identityInput) {
     const ti = source.modules.findIndex((m) => m.id === reference.module), te = source.modules[ti].elements.findIndex((e) => e.id === reference.element), target = source.modules[ti].elements[te], at = path + "/" + index;
     return { index, path: at, reference, target: { identity: { module: reference.module, element: reference.element }, path: `/modules/${ti}/elements/${te}`, ...Object.hasOwn(target, "kind") ? { kind: target.kind } : {} }, uninterpretedPaths: validation.diagnostics.filter((d) => d.severity === "warning" && d.code === "UNKNOWN_CORE_FIELD" && (d.path === at || d.path.startsWith(at + "/"))).map((d) => d.path), typeAssertion: "unverified" };
   }) };
-  const result = copyJson({ operation: "inspect-core-reference-links", version: source.umf === "0.8.0" ? "0.2.0" : "0.1.0", source, identity, path, meaning, provenance: "unverified" });
-  const check = source.umf === "0.8.0" ? currentCheck3 : legacyCheck3;
+  const result = copyJson({ operation: "inspect-core-reference-links", version: source.umf === "0.9.0" ? "0.3.0" : source.umf === "0.8.0" ? "0.2.0" : "0.1.0", source, identity, path, meaning, provenance: "unverified" });
+  const check = source.umf === "0.9.0" ? bit128Check3 : source.umf === "0.8.0" ? currentCheck3 : legacyCheck3;
   if (!check(result))
     throw new UmfError("CORE_REFERENCE_LINKS_RESULT", JSON.stringify(check.errors));
   return result;
@@ -27599,5 +32324,6 @@ export {
   inspectCoreScalarType,
   inspectCoreSchemaProperties,
   readDocument,
-  validateDocument
+  validateDocument,
+  withCatalogResourceProfile
 };

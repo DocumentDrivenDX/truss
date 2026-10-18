@@ -8,11 +8,24 @@ export function requireLoadedUmfAssertionOwner(owner:object,mode:'declarations'|
  if(assertionOwners.get(owner)!==mode)throw Error('Original loaded assertion owner required');
 }
 export const UMF_RUNTIME_SOURCE='c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3';
+export const UMF_RECORD_SOURCE='aa944733fc45c090853ca051fd79c26bd3681307';
+/** One canonical original-source validator for both admitted core versions. */
+export async function loadCatalogSourceOwner(directory:string){
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_RECORD_SOURCE,'catalog-record',['withCatalogResourceProfile','readJsonValue','validateDocument']);
+ return Object.freeze({sourceRevision:UMF_RECORD_SOURCE,bundleSha256:hash,
+  inspect(originalText:string){return captured.withCatalogResourceProfile(()=>{
+   if(typeof originalText!=='string'||Buffer.byteLength(originalText)>4194304)throw Error('Original document bound');
+   const source=captured.readJsonValue(originalText,'json');
+   const sourceValidation=captured.validateDocument(source);
+   if(sourceValidation.valid&&!['0.7.0','0.8.0'].includes(source.umf))throw Error('Unsupported original UMF version');
+   return {originalText,source,sourceValidation,transition:null,targetValidation:sourceValidation,target:source};
+  });}});
+}
 export async function loadUmfProducer(directory:string){
- const {hash,captured}=await loadPinnedFunctions(directory,UMF_RUNTIME_SOURCE,'record',['readDocument','validateDocument','validateCoreRecordValues','upgradeSchemaPropertiesEnvelope','verifySchemaPropertiesUpgrade','rollbackSchemaPropertiesEnvelope']);
- return Object.freeze({sourceRevision:UMF_RUNTIME_SOURCE,bundleSha256:hash,
-  inspect(originalText:string){
-   if(typeof originalText!=='string'||Buffer.byteLength(originalText)>1048576)throw Error('Original document bound');
+ const {hash,captured}=await loadPinnedFunctions(directory,UMF_RECORD_SOURCE,'record',['withCatalogResourceProfile','readDocument','validateDocument','validateCoreRecordValues','upgradeSchemaPropertiesEnvelope','verifySchemaPropertiesUpgrade','rollbackSchemaPropertiesEnvelope']);
+ return Object.freeze({sourceRevision:UMF_RECORD_SOURCE,bundleSha256:hash,
+  inspect(originalText:string){return captured.withCatalogResourceProfile(()=>{
+   if(typeof originalText!=='string'||Buffer.byteLength(originalText)>4194304)throw Error('Original document bound');
    const source=captured.readDocument(originalText,'json');const sourceValidation=captured.validateDocument(source);
    if(!sourceValidation.valid) return {originalText,source,sourceValidation,transition:null,targetValidation:null};
    let transition=null,target=source;
@@ -25,7 +38,14 @@ export async function loadUmfProducer(directory:string){
     target=transition.target;
    }else if(source.umf!=='0.8.0')throw Error('Unsupported original UMF version');
    return {originalText,source,sourceValidation,transition,targetValidation:captured.validateDocument(target),target};
-  },
+  });},
+  inspectCatalog(originalText:string){return captured.withCatalogResourceProfile(()=>{
+   if(typeof originalText!=='string'||Buffer.byteLength(originalText)>4194304)throw Error('Original document bound');
+   const source=captured.readDocument(originalText,'json');
+   if(!['0.7.0','0.8.0'].includes(source.umf))throw Error('Unsupported original UMF version');
+   const sourceValidation=captured.validateDocument(source);
+   return {originalText,source,sourceValidation,transition:null,targetValidation:sourceValidation,target:source};
+  });},
   checkRecord(target:unknown,identity:unknown,values:unknown){return captured.validateCoreRecordValues(target,identity,values)}
  });
 }
@@ -117,20 +137,20 @@ export async function loadUmfRecordTypeJournalProducer(directory:string){
 }
 
 /** Separate current original0.8 catalog owner; no legacy profile replacement. */
-export const UMF_CORE08_CATALOG_SOURCE='7c0f0c98beee2cc1a5a407992b5c53cc2616da8e';
+export const UMF_CORE08_CATALOG_SOURCE='aa944733fc45c090853ca051fd79c26bd3681307';
 export async function loadCore08CatalogOwners(directory:string){
  const revision=UMF_CORE08_CATALOG_SOURCE;
  const {hash,captured}=await loadPinnedFunctions(directory,revision,'core08-catalog',[
-  'readDocument','validateDocument','inspectCoreSchemaProperties','inspectCoreKeys','inspectCoreRelationships',
+  'withCatalogResourceProfile','readDocument','validateDocument','inspectCoreSchemaProperties','inspectCoreKeys','inspectCoreRelationships',
   'inspectCoreElementKind','inspectCoreNullability','inspectCoreCardinality','inspectCoreFacets',
   'inspectCoreScalarType','inspectCoreRecordMembers','inspectCoreReferenceLinks']);
  const pin={sourceRevision:revision,bundleSha256:hash};
- const record=Object.freeze({...pin,inspect(originalText:string){
-  if(typeof originalText!=='string'||Buffer.byteLength(originalText)>1048576)throw Error('Original document bound');
+ const record=Object.freeze({...pin,inspect(originalText:string){return captured.withCatalogResourceProfile(()=>{
+  if(typeof originalText!=='string'||Buffer.byteLength(originalText)>4194304)throw Error('Original document bound');
   const source=captured.readDocument(originalText,'json');if(source.umf!=='0.8.0')throw Error('Unsupported original UMF version');
   const sourceValidation=captured.validateDocument(source);
   return {originalText,source,sourceValidation,transition:null,targetValidation:sourceValidation,target:source};
- }});
+ });}});
  return Object.freeze({record,
   declarations:registerAssertionOwner(Object.freeze({...pin,inspectSchemaProperties:captured.inspectCoreSchemaProperties,inspectKeys:captured.inspectCoreKeys,inspectRelationships:captured.inspectCoreRelationships}),'declarations'),
   fields:registerAssertionOwner(Object.freeze({...pin,inspectKind:captured.inspectCoreElementKind,inspectNullability:captured.inspectCoreNullability,inspectCardinality:captured.inspectCoreCardinality,inspectFacets:captured.inspectCoreFacets}),'assertion-fields'),

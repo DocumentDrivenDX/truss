@@ -155,7 +155,7 @@ Deferred items are tracked in `docs/helix/parking-lot.md` when it exists.
 - **FR-5** — A revision that tightens or adds a rule lists every stored object that would violate it before it is accepted, and is rejected if any does.
 - **FR-6** — A revision that changes a property's type or cardinality is accepted only with a declared total transform applied in the same acceptance.
 - **FR-7** — Accepting a revision creates no table, partition, column or index. Its cost is catalog rows only.
-- **FR-8** — Every acceptance produces a report of the UMF versions seen, the elements added, retired and provisional, the data re-bound, and the enforcement layer of every assertion.
+- **FR-8** — Every acceptance produces a compact receipt identifying its revision, original source hashes, UMF versions and applicable storage capability profile. Catalog and history APIs expose definitions and actual changes without duplicating them into the receipt. Exact source bytes and original validation diagnostics have one archival home. New definitions do not require redundant insertion snapshots; changes to existing definitions preserve their before/after history. Preparation retains original schema bytes and validation diagnostics through one shared implementation across public entrypoints. Intermediate inspector transcripts are not required inputs or outputs of normal preparation or registration, and their size cannot cause a valid schema to fail preparation. Existing accepted reports and exact retry semantics remain preserved.
 - **FR-47** — Every accepted catalog revision records who or what accepted it: the actor the caller asserted and the database role, which comes from the database and never from the caller.
 
 ### Subsystem: Storage, identity and exactness

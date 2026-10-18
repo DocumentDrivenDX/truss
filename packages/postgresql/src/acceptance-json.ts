@@ -8,12 +8,12 @@ type Frame={kind:'object';value:{[key:string]:AcceptanceJson};state:'first'|'key
 /** Caller must retain original immutable bytes; this component copies its input.
  * Finite logical limits below do not qualify host heap or the shared operation account. */
 export function decodeAcceptanceJson(original:Uint8Array):AcceptanceJson {
- return scanJson(original,false);
+ return scanJson(original,false,undefined,16777216);
 }
 /** Structural source preflight only. Numeric lexemes are scanned, never converted
  * to JavaScript numbers. No semantic tree or precision qualification is returned. */
 export function preflightSourceJson(original:Uint8Array):void {
- scanJson(original,true);
+ scanJson(original,true,undefined,4194304,1000000,65536);
 }
 type SourceOccurrence={pointer:string;kind:'object'|'array'|'string'|'number'|'boolean'|'null';start:number;end:number};
 type SourceIndex=Readonly<{originalByteLength:number;occurrences:readonly Readonly<SourceOccurrence>[];scope:'original_json_value_occurrences_only'}>;
@@ -32,9 +32,9 @@ export function originalSourceOccurrenceBytes(index:SourceIndex,position:number)
  if(!Number.isSafeInteger(position)||position<0||position>=index.occurrences.length)throw Error('Original source occurrence position required');
  const span=index.occurrences[position]!;return bytes.slice(span.start,span.end);
 }
-function scanJson(original:Uint8Array,sourceNumbers:boolean,capture?:{occurrences:SourceOccurrence[];bytes?:Uint8Array}):AcceptanceJson {
+function scanJson(original:Uint8Array,sourceNumbers:boolean,capture?:{occurrences:SourceOccurrence[];bytes?:Uint8Array},maximumBytes=1048576,maximumNodes=MAX_NODES,maximumMembers=MAX_MEMBERS):AcceptanceJson {
  const refuse=(reason:WireRefusal):never=>{throw new AcceptanceJsonError(reason)};
- let bytes:Uint8Array;try{bytes=copyOriginalByteCustody(original)}catch(error){if(error instanceof OriginalByteCustodyError)refuse(error.reason==='resource'?'resource':'grammar');throw error}if(capture)capture.bytes=bytes;
+ let bytes:Uint8Array;try{bytes=copyOriginalByteCustody(original,false,maximumBytes)}catch(error){if(error instanceof OriginalByteCustodyError)refuse(error.reason==='resource'?'resource':'grammar');throw error}if(capture)capture.bytes=bytes;
  let index=0,nodes=0;const stack:Frame[]=[];let root:AcceptanceJson|undefined;
  const take=()=>bytes[index++];
  const whitespace=()=>{while(index<bytes.length&&[32,9,10,13].includes(bytes[index]!))take()};
@@ -52,14 +52,14 @@ function scanJson(original:Uint8Array,sourceNumbers:boolean,capture?:{occurrence
   try{return JSON.parse(text!) as string}catch{return refuse('grammar')}
  };
  const attach=(value:AcceptanceJson)=>{const parent=stack.at(-1);if(!parent){if(root!==undefined)refuse('grammar');root=value;return}
-  if(parent.kind==='array'){if(parent.value.length>=MAX_MEMBERS)refuse('resource');parent.value.push(value);parent.state='comma'}
+  if(parent.kind==='array'){if(parent.value.length>=maximumMembers)refuse('resource');parent.value.push(value);parent.state='comma'}
   else {Object.defineProperty(parent.value,parent.key,{value,enumerable:true,writable:true,configurable:true});parent.state='comma'}
  };
  const close=()=>{take();const frame=stack.pop()!;if(capture&&frame.occurrence!==undefined)capture.occurrences[frame.occurrence]!.end=index};
  const value=()=>{whitespace();const start=index,parent=stack.at(-1);let pointer='';
   if(capture&&parent){const prefix=capture.occurrences[parent.occurrence!]!.pointer;pointer=prefix+'/'+(parent.kind==='array'?String(parent.value.length):parent.key.replace(/~/g,'~0').replace(/\//g,'~1'));}
   const record=(kind:SourceOccurrence['kind'])=>{if(!capture)return undefined;const position=capture.occurrences.length;capture.occurrences.push({pointer,kind,start,end:index});return position};
-  if(++nodes>MAX_NODES||stack.length>MAX_DEPTH)refuse('resource');const c=bytes[index];
+  if(++nodes>maximumNodes||stack.length>MAX_DEPTH)refuse('resource');const c=bytes[index];
   if(c===34){const text=string();record('string');attach(text);return}if(c===123||c===91){take();const item:AcceptanceJson=c===123?Object.create(null):[];const occurrence=record(c===123?'object':'array');attach(item);stack.push(c===123?{kind:'object',value:item as {[key:string]:AcceptanceJson},state:'first',key:'',keys:new Set<string>(),occurrence}:{kind:'array',value:item as AcceptanceJson[],state:'first',occurrence});return}
   for(const [token,result] of [['null',null],['true',true],['false',false]] as const){if(c===token.charCodeAt(0)){for(const ch of token)if(take()!==ch.charCodeAt(0))refuse('grammar');record(result===null?'null':'boolean');attach(result);return}}
   if(c===45||(c!==undefined&&c>=48&&c<=57)){
@@ -81,7 +81,7 @@ function scanJson(original:Uint8Array,sourceNumbers:boolean,capture?:{occurrence
   }else{
    if(frame.state==='first'&&c===125){close()}
    else if(frame.state==='first'||frame.state==='key'){
-    if(c!==34)refuse('grammar');if(frame.keys.size>=MAX_MEMBERS)refuse('resource');const key=string();
+    if(c!==34)refuse('grammar');if(frame.keys.size>=maximumMembers)refuse('resource');const key=string();
     if(frame.keys.has(key))refuse('duplicate_member');
     frame.keys.add(key);frame.key=key;frame.state='colon';
    }else if(frame.state==='colon'){if(take()!==58)refuse('grammar');frame.state='value'}

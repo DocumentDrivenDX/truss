@@ -1,18 +1,13 @@
 /** Installed Python ingress for the existing original catalog preparation route. */
 import {resolve} from 'node:path';
 import {createCore08CatalogInputPreparation} from './catalog-input';
+import {CatalogDocumentRejected} from './catalog-input';
 import {loadCore08CatalogOwners} from './index';
-import {collectCatalogAssertionObservations} from './catalog-assertion-observations';
-import {assessCatalogObservationCoverage} from './catalog-observation-coverage';
-import {collectCatalogCoreAssertionIdentities} from './catalog-core-assertion-identities';
-import {collectCatalogValidationEvidence} from './catalog-validation-evidence';
-import {collectCatalogExtensionArtifacts} from './catalog-extension-artifacts';
-import {collectCatalogIngressReportBasis} from './catalog-ingress-report-basis';
 import {decodeAcceptanceJson,preflightSourceJson} from '../../postgresql/src/acceptance-json';
 const root=resolve(import.meta.dir);
 const dependencies=resolve(root,'../_umf/runtime/package.json');
 const schemaUrl=new URL('./acceptance-input-v0.1.schema.json',import.meta.url);
-const MAX_OUTPUT=16777216;
+const MAX_OUTPUT=67108864;
 const emit=(value:unknown)=>{
  const text=JSON.stringify(value);
  console.log(Buffer.byteLength(text)+1<=MAX_OUTPUT?text:JSON.stringify({status:'refused',reason:'resource',diagnostics:[]}));
@@ -20,7 +15,7 @@ const emit=(value:unknown)=>{
 let diagnostics:unknown[]=[];
 try{
  const bytes=new Uint8Array(await Bun.stdin.arrayBuffer());
- if(bytes.length>1048576)throw Error('resource');
+ if(bytes.length>16777216)throw Error('resource');
  const request=decodeAcceptanceJson(bytes) as any;
  if(!['configurationHex,documents','configurationHex,documents,registration'].includes(Object.keys(request).sort().join(','))||(Object.hasOwn(request,'registration')&&request.registration!==true)||typeof request.configurationHex!=='string'
    ||!/^(?:[0-9a-f]{2})+$/.test(request.configurationHex)||!Array.isArray(request.documents)||request.documents.length<1||request.documents.length>512)throw Error('invalid_input');
@@ -35,57 +30,31 @@ try{
  });
  const input={interfaceVersion:'truss-acceptance-input/0.1.0',...configuration,documents};
  const original=new TextEncoder().encode(JSON.stringify(input));
- // Original inspector verifies carriers before the extra diagnostics observation.
- const {createAcceptanceInputInspector}=await import('./acceptance-input');
- const inspected=(await createAcceptanceInputInspector(dependencies,schemaUrl)).inspect(original);
- for(const source of inspected.documents){
-  try{
-   preflightSourceJson(new TextEncoder().encode(source.originalText));
-   const observation=owner.inspect(source.originalText);
-   diagnostics.push({documentId:source.documentId,documentRevision:source.documentRevision,observation});
-  }catch(error){
-   const message=error instanceof Error?error.message:'Original document refused';
-   diagnostics.push({documentId:source.documentId,documentRevision:source.documentRevision,
-    originalError:{message:message.slice(0,8192),truncated:message.length>8192
-      ||(typeof (error as any)?.code==='string'&&(error as any).code.length>256)
-      ||(typeof (error as any)?.path==='string'&&(error as any).path.length>8192),
-     ...(typeof (error as any)?.code==='string'?{code:(error as any).code.slice(0,256)}:{}),
-     ...(typeof (error as any)?.path==='string'?{path:(error as any).path.slice(0,8192)}:{})}});
-  }
- }
- if(diagnostics.some((d:any)=>d.originalError||!d.observation.sourceValidation.valid||!d.observation.targetValidation?.valid)){
-  emit({status:'refused',reason:'invalid_document',diagnostics});
- }else{
   const prepared=preparation.prepare(original);
-  let reportEvidence:unknown;
-  if(request.registration===true){
-    // The document validator already ran. No per-operation transcript is needed.
-    reportEvidence={interfaceVersion:'truss-registration-preparation/1.0',
-      documents:prepared.documents.map((document,index)=>({documentId:document.documentId,
-        contentSha256:prepared.original.documents[index]!.sha256,
-        sourceValidation:document.interpretation.sourceValidation,
-        targetValidation:document.interpretation.targetValidation}))};
-  }else try {
-    const {declarations,fields,scalars,members,links}=current;
-    const observations=collectCatalogAssertionObservations(prepared,declarations,fields,scalars,members,links);
-    reportEvidence={ownerObservations:observations,observationCoverage:assessCatalogObservationCoverage(prepared,observations),
-    coreAssertionIdentities:collectCatalogCoreAssertionIdentities(prepared,observations),
-    validation:collectCatalogValidationEvidence(prepared),
-    retainedExtensions:collectCatalogExtensionArtifacts(prepared),
-    ingress:prepared.original.input.binding.state==='absent'&&!prepared.original.input.transforms.length
-     ?{state:'available',basis:collectCatalogIngressReportBasis(prepared)}
-     :{state:'unavailable',reason:'registered_binding_or_transform_report_producer_required'},
-    scope:'original_owner_report_preparation_only'};
-  } catch { reportEvidence={scope:'original_owner_report_preparation_only',ingress:{state:'unavailable',reason:'report_evidence_unavailable'}}; }
-  const response:any={status:'prepared',inputHex:prepared.original.originalUtf8Hex,documents:prepared.documents,
-   declarations:prepared.declarations,archiveDocuments:prepared.archiveDocuments,
+  // Every preparation entrypoint uses the validator result already obtained.
+  // Inspector transcripts are not a prerequisite for preparing a schema.
+  const reportEvidence={interfaceVersion:'truss-registration-preparation/2.0',
+    documents:prepared.documents.map((document,index)=>({documentId:document.documentId,
+      contentSha256:prepared.original.documents[index]!.sha256,
+      validation:document.interpretation.sourceValidation}))};
+  const descriptor={...prepared.original.input,interfaceVersion:'truss-acceptance-input/0.2.0',
+    documents:prepared.original.input.documents.map(document=>({...document,
+      artifact:{identity:document.artifact.identity,sha256:document.artifact.sha256}}))};
+  const response:any={status:'prepared',input:descriptor,
+   documents:prepared.documents.map(document=>({documentId:document.documentId,revision:document.revision,
+     umfVersion:document.umfVersion,validation:document.interpretation.sourceValidation})),
    reportEvidence,
    provenance:{umfProfile:prepared.umfProfile,schemaSha256:prepared.original.schemaSha256,scope:prepared.scope}};
-  if(Buffer.byteLength(JSON.stringify(response))+1>MAX_OUTPUT)response.reportEvidence={scope:'original_owner_report_preparation_only',ingress:{state:'unavailable',reason:'report_evidence_resource'}};
   emit(response);
- }
+
 }catch(error){
+ if(error instanceof CatalogDocumentRejected){
+  const cause=error.originalError as any;const message=cause instanceof Error?cause.message:'Original document refused';
+  diagnostics=[{documentId:error.documentId,documentRevision:error.documentRevision,
+   ...(error.observation?{validation:(error.observation as any).sourceValidation}:{originalError:{message:message.slice(0,8192),truncated:message.length>8192,
+    ...(typeof cause?.code==='string'?{code:cause.code.slice(0,256)}:{}),...(typeof cause?.path==='string'?{path:cause.path.slice(0,8192)}:{})}})}];
+ }
  const message=error instanceof Error?error.message:'';
- const reason=message==='resource'?'resource':message.includes('Unsupported')?'unsupported_profile':message.includes('pin mismatch')||message.includes('Missing original producer')?'producer_unavailable':'invalid_input';
+ const reason=message==='invalid_document'?'invalid_document':message==='resource'?'resource':message.includes('Unsupported')?'unsupported_profile':message.includes('pin mismatch')||message.includes('Missing original producer')?'producer_unavailable':'invalid_input';
  emit({status:'refused',reason,diagnostics});
 }

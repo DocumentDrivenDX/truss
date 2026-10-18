@@ -33,14 +33,17 @@ BEGIN
  -- Stored targets already carry their exact native type coordinate. Resolve
  -- that candidate before deriving pins for unrelated catalog records.
  IF identity IS NOT NULL THEN
-  SELECT t.* INTO selected FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p
+  SELECT t.* INTO selected FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_owned_definition_metadata('type',t.type_id) p
    WHERE t.type_id::text=identity->>'typeId' AND t.kind='record' AND NOT t.provisional
     AND t.retired_rev IS NULL AND p.definition_pin=pin;
  END IF;
  IF selected.type_id IS NULL THEN
   -- Preserve original CREATE/alias lookup and stored-identity refusal precedence.
-  SELECT t.* INTO STRICT selected FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p
-   WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND p.definition_pin=pin;
+  SELECT t.* INTO STRICT selected FROM truss.runtime_definition_source p JOIN truss.type_def t
+    ON t.definition_rev=p.rev AND t.definition_doc_ord=p.ord AND t.definition_document_id=p.doc_id
+     AND t.module=p.module_id AND t.element=p.element_id
+   WHERE p.definition_pin=pin AND p.kind='element' AND p.key_id=''
+    AND t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL;
  END IF;
  IF identity IS NOT NULL AND (identity->>'typeId' IS DISTINCT FROM selected.type_id::text
   OR identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module)
@@ -80,8 +83,10 @@ BEGIN
    pin:=creation->>'relationshipDefinitionPin';
   ELSE RAISE EXCEPTION 'stored or prior edge alias target required' USING ERRCODE='22023';END IF;
  ELSE RAISE EXCEPTION 'selected edge operation required' USING ERRCODE='22023';END IF;
- SELECT r.* INTO selected FROM truss.rel_def r
-  WHERE r.retired_rev IS NULL AND truss.runtime_relationship_pin(r.rel_type_id)=pin;
+ SELECT r.* INTO STRICT selected FROM truss.runtime_definition_source p JOIN truss.rel_def r
+  ON r.definition_rev=p.rev AND r.definition_doc_ord=p.ord AND r.definition_document_id=p.doc_id
+   AND r.module=p.module_id AND r.rel_id=p.element_id
+  WHERE p.definition_pin=pin AND p.kind='relationship' AND p.key_id='' AND r.retired_rev IS NULL;
  IF NOT FOUND THEN RAISE EXCEPTION 'accepted relationship pin required' USING ERRCODE='22023';END IF;
  IF identity IS NOT NULL AND (jsonb_typeof(identity->'typeId') IS DISTINCT FROM 'string'
   OR jsonb_typeof(identity->'definitionPin') IS DISTINCT FROM 'string'
@@ -311,15 +316,23 @@ BEGIN
  IF input ? 'preconditions' THEN
   PERFORM truss.group_condition_key_metadata(original_input,original_documents,expected_release,expected_digest);
  END IF;
- INSERT INTO truss.runtime_object_attempt(writer_xid,actor_oid,input_bytes,documents_bytes,request_bytes,context)
- VALUES(writer,person,original_input,original_documents,original_request,context) RETURNING * INTO attempt;
+ -- Conditions observe the locked prestate before operation planning can fail.
+ -- Receipt replay and complete owner/source admission above retain their order.
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
-  PERFORM truss.runtime_owned_capture(attempt.id);
+  IF NOT pg_try_advisory_xact_lock(1953658227,1735549296) THEN
+   RAISE EXCEPTION 'graph writer in flight' USING ERRCODE='55P03';END IF;
+  LOCK TABLE truss.object IN ROW EXCLUSIVE MODE NOWAIT;
+  LOCK TABLE truss.edge IN ROW EXCLUSIVE MODE NOWAIT;
  ELSE
   LOCK TABLE truss.object IN SHARE ROW EXCLUSIVE MODE NOWAIT;
   LOCK TABLE truss.edge IN SHARE ROW EXCLUSIVE MODE NOWAIT;
  END IF;
  PERFORM truss.runtime_evaluate_preconditions(input,original_condition_keys);
+ INSERT INTO truss.runtime_object_attempt(writer_xid,actor_oid,input_bytes,documents_bytes,request_bytes,context)
+ VALUES(writer,person,original_input,original_documents,original_request,context) RETURNING * INTO attempt;
+ IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
+  PERFORM truss.runtime_owned_capture(attempt.id);
+ END IF;
  RETURN convert_to(jsonb_build_object('outcome','execute','attemptId',attempt.id::text)::text,'UTF8');
 EXCEPTION WHEN SQLSTATE 'P1006' THEN
  GET STACKED DIAGNOSTICS failure_detail=PG_EXCEPTION_DETAIL;
@@ -435,11 +448,11 @@ BEGIN
    'type_def',(SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]'::jsonb) FROM truss.type_def t WHERE t.type_id=(object_image->>'type_id')::int),
    'prop_def',(SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]'::jsonb) FROM truss.prop_def p WHERE p.type_id=(object_image->>'type_id')::int)) END INTO basis;
  IF basis IS NULL THEN basis:=truss.catalog_all_expected_records(written_revision);END IF;
- SELECT * INTO STRICT pin FROM truss.runtime_definition_in_basis('type',(object_image->>'type_id')::int,NULL,written_revision,basis);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata_in_basis('type',(object_image->>'type_id')::int,NULL,written_revision,basis);
  identity:=jsonb_set(identity,'{definitionPin}',to_jsonb(pin.definition_pin));
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(object_image->>'type_id')::int ORDER BY prop_id LOOP
   IF object_image->'props' ? property.prop_id::text THEN
-   SELECT * INTO STRICT pin FROM truss.runtime_definition_in_basis('property',property.type_id,property.prop_id,written_revision,basis);
+   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata_in_basis('property',property.type_id,property.prop_id,written_revision,basis);
    properties:=properties||jsonb_build_array(jsonb_build_object('propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'value',object_image->'props'->property.prop_id::text));
   END IF;
  END LOOP;
@@ -505,7 +518,7 @@ BEGIN
    key_facets:=key_facets||jsonb_build_array(coalesce(component.facets,'{}'::jsonb));
   END LOOP;
   tuple_bytes:=truss.derive_catalog_key_tuple(selected_type,key_definition.key_num,values_cells);
-  SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected_type,key_definition.key_num);
+  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected_type,key_definition.key_num);
   ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
    'sourceEpoch',installation.source_epoch::text,'typeId',selected_type::text,'keyNumber',key_definition.key_num::text,
    'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
@@ -594,7 +607,7 @@ BEGIN
    after_record:=truss.runtime_object_history(new_image,identity);
    FOR property IN SELECT * FROM truss.prop_def WHERE type_id=object_row.type_id AND retired_rev IS NULL ORDER BY prop_id LOOP
     IF old_image->'props'->property.prop_id::text IS DISTINCT FROM object_row.props->property.prop_id::text THEN
-     SELECT * INTO STRICT pin FROM truss.runtime_definition('property',object_row.type_id,property.prop_id);
+     SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',object_row.type_id,property.prop_id);
      events:=events||jsonb_build_array(jsonb_build_object('operation','property','propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,
       'before',CASE WHEN old_image->'props' ? property.prop_id::text THEN jsonb_build_object('present',true,'value',old_image->'props'->property.prop_id::text) ELSE '{"present":false}'::jsonb END,
       'after',CASE WHEN object_row.props ? property.prop_id::text THEN jsonb_build_object('present',true,'value',object_row.props->property.prop_id::text) ELSE '{"present":false}'::jsonb END));
@@ -917,7 +930,9 @@ BEGIN
   END LOOP;
  ELSIF EXISTS(SELECT 1 FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=attempt.id AND before_object IS NULL) THEN
   RAISE EXCEPTION 'historical attempts have no synthetic creation transitions' USING ERRCODE='55000';END IF;
- PERFORM truss.runtime_graph_validate(true);
+ IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
+  PERFORM truss.runtime_owned_graph_validate_attempt(attempt.id,true);
+ ELSE PERFORM truss.runtime_graph_validate(true);END IF;
  PERFORM truss.runtime_edge_authorize(attempt_id);
  -- Marker refresh above can fire triggers. Recheck mutable progress before
  -- reusing the already closed immutable owned result-slot census.
@@ -1019,7 +1034,9 @@ BEGIN
  -- Row events recheck every endpoint they can change, avoiding a complete
  -- transaction scan for each row. No validation cache survives later writes.
  IF TG_TABLE_NAME='runtime_object_attempt' THEN
-  PERFORM truss.runtime_graph_validate(false);
+  IF attempt.context->'mutationProfile'=truss.runtime_owned_profile() THEN
+   PERFORM truss.runtime_owned_graph_validate_attempt(attempt.id,false);
+  ELSE PERFORM truss.runtime_graph_validate(false);END IF;
  ELSIF TG_TABLE_NAME='object' THEN
   IF TG_OP='DELETE' THEN PERFORM truss.runtime_graph_validate_object_qualified(OLD.id,OLD.type_id,false,current_actor);
   ELSE PERFORM truss.runtime_graph_validate_object_qualified(NEW.id,NEW.type_id,false,current_actor);END IF;
@@ -1150,10 +1167,10 @@ BEGIN
   IF operation ? 'expectedVersion' AND (jsonb_typeof(operation->'expectedVersion') IS DISTINCT FROM 'string' OR operation->>'expectedVersion' IS DISTINCT FROM prior.ver::text) THEN
    RAISE EXCEPTION 'expected edge version failed' USING ERRCODE='P1003';END IF;
   SELECT * INTO STRICT endpoint FROM truss.type_def WHERE type_id=prior.source_type;
-  SELECT * INTO STRICT pin FROM truss.runtime_definition('type',endpoint.type_id);
+  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',endpoint.type_id);
   old_source:=jsonb_build_object('id',prior.source_id::text,'typeId',prior.source_type::text,'definitionPin',pin.definition_pin,'owner',jsonb_build_object('documentId',endpoint.document_id,'moduleId',endpoint.module));
   SELECT * INTO STRICT endpoint FROM truss.type_def WHERE type_id=prior.target_type;
-  SELECT * INTO STRICT pin FROM truss.runtime_definition('type',endpoint.type_id);
+  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',endpoint.type_id);
   old_target:=jsonb_build_object('id',prior.target_id::text,'typeId',prior.target_type::text,'definitionPin',pin.definition_pin,'owner',jsonb_build_object('documentId',endpoint.document_id,'moduleId',endpoint.module));
   source_identity:=truss.runtime_edge_endpoint(jsonb_build_object('state','stored','identity',old_source),attempt_id,operation_index);
   target_identity:=truss.runtime_edge_endpoint(jsonb_build_object('state','stored','identity',old_target),attempt_id,operation_index);
@@ -1214,9 +1231,9 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS
 DECLARE selected_revision int:=coalesce(interpretation_revision,(image->>'rev')::int);pin record;
 BEGIN
  identity:=jsonb_set(identity,'{definitionPin}',to_jsonb(truss.runtime_relationship_pin((image->>'rel_type_id')::int,selected_revision)));
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(source_identity->>'typeId')::int,NULL,selected_revision);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',(source_identity->>'typeId')::int,NULL,selected_revision);
  source_identity:=jsonb_set(source_identity,'{definitionPin}',to_jsonb(pin.definition_pin));
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(target_identity->>'typeId')::int,NULL,selected_revision);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',(target_identity->>'typeId')::int,NULL,selected_revision);
  target_identity:=jsonb_set(target_identity,'{definitionPin}',to_jsonb(pin.definition_pin));
  RETURN jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','edge','identity',identity,
   'recordVersion',image->>'ver','catalogRevision',image->>'rev',
@@ -1472,7 +1489,8 @@ BEGIN
    UNION ALL SELECT object_id,type_id FROM truss.runtime_catalog_key_backfill WHERE writer_xid=pg_current_xact_id()
    UNION ALL SELECT o.id,o.type_id FROM truss.object o
     JOIN truss.rel_endpoint e ON o.type_id IN(e.source_type,e.target_type)
-    JOIN truss.schema_change c ON c.kind='rel' AND c.def_id=e.rel_type_id
+    JOIN (SELECT rel_type_id,since_rev rev FROM truss.rel_def
+     UNION SELECT def_id,rev FROM truss.schema_change WHERE kind='rel') c ON c.rel_type_id=e.rel_type_id
     JOIN truss.catalog_registration_request r ON r.revision=c.rev
     WHERE r.writer_xid=pg_current_xact_id()
    UNION ALL SELECT (i.value->>'id')::bigint,(i.value->>'typeId')::int FROM truss.runtime_edge_transition t
@@ -1483,6 +1501,31 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_graph_validate(boolean) FROM PUBLIC;
+
+-- Group and deferred settlement recheck actual current state for this attempt,
+-- including every old/new edge endpoint. Catalog-wide evolution remains global.
+CREATE FUNCTION truss.runtime_owned_graph_validate_attempt(selected_attempt uuid,refresh_markers boolean) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE affected record;current_actor oid;
+BEGIN
+ current_actor:=truss.runtime_person(false);
+ IF refresh_markers IS NULL OR NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt a
+  WHERE a.id=selected_attempt AND a.writer_xid=pg_current_xact_id() AND a.actor_oid=current_actor) THEN
+  RAISE EXCEPTION 'current original graph attempt required' USING ERRCODE='55000';END IF;
+ FOR affected IN
+  SELECT DISTINCT object_id,type_id FROM (
+   SELECT object_id,type_id FROM truss.runtime_object_transition WHERE attempt_id=selected_attempt
+   UNION ALL SELECT (i.value->>'id')::bigint,(i.value->>'typeId')::int
+    FROM truss.runtime_edge_transition t CROSS JOIN LATERAL
+     jsonb_array_elements(jsonb_build_array(t.old_source,t.old_target,t.source_identity,t.target_identity)) i
+    WHERE t.attempt_id=selected_attempt AND i.value<>'null'::jsonb) members
+  ORDER BY object_id,type_id LOOP
+  PERFORM truss.runtime_graph_validate_object_qualified(affected.object_id,affected.type_id,refresh_markers,current_actor);
+ END LOOP;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_graph_validate_attempt(uuid,boolean) FROM PUBLIC;
+
 CREATE CONSTRAINT TRIGGER runtime_edge_commit AFTER INSERT OR UPDATE OR DELETE ON truss.edge DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_object_commit_check();
 CREATE CONSTRAINT TRIGGER runtime_edge_transition_commit AFTER INSERT ON truss.runtime_edge_transition DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_object_commit_check();
 ALTER TABLE truss.edge ENABLE ALWAYS TRIGGER runtime_edge_commit;
@@ -1562,10 +1605,10 @@ BEGIN
   END IF;
  END LOOP;
  endpoint:=frozen.source_definition;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',endpoint.type_id);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',endpoint.type_id);
  source_identity:=jsonb_build_object('id',edge_row.source_id::text,'typeId',endpoint.type_id::text,'definitionPin',pin.definition_pin,'owner',jsonb_build_object('documentId',endpoint.document_id,'moduleId',endpoint.module));
  endpoint:=frozen.target_definition;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',endpoint.type_id);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',endpoint.type_id);
  target_identity:=jsonb_build_object('id',edge_row.target_id::text,'typeId',endpoint.type_id::text,'definitionPin',pin.definition_pin,'owner',jsonb_build_object('documentId',endpoint.document_id,'moduleId',endpoint.module));
  identity:=jsonb_build_object('id',edge_row.id::text,'typeId',relation.rel_type_id::text,'definitionPin',truss.runtime_relationship_pin(relation.rel_type_id),'owner',jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module));
  result:=convert_to((truss.runtime_edge_history(to_jsonb(edge_row),identity,source_identity,target_identity,captured_revision)||jsonb_build_object('executedCatalogRevision',captured_revision::text))::text,'UTF8');

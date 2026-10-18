@@ -118,7 +118,7 @@ CREATE FUNCTION truss.lock_string_key_bucket(original_namespace bytea,canonical_
 RETURNS TABLE(generation bigint,member_ids bigint[],reservation_ids bigint[])
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off SET plan_cache_mode='force_generic_plan' AS $$
 DECLARE namespace_route bytea;key_route bytea;guard_generation bigint;
- exclusion bigint;candidate_count bigint;candidate_bytes bigint;
+ candidate_count bigint;candidate_bytes bigint;
  inserted_namespace bytea;inserted_key bytea;
 BEGIN
  IF current_setting('transaction_isolation')<>'read committed' THEN
@@ -129,8 +129,9 @@ BEGIN
  IF convert_from(canonical_key,'UTF8') !~ '^umf-key-tuple-v1:hex:([0-9a-f]{2})+$' THEN
   RAISE EXCEPTION 'selected canonical key transport required' USING ERRCODE='22023'; END IF;
  namespace_route:=sha256(original_namespace);key_route:=sha256(canonical_key);
- exclusion:=('x'||substring(encode(sha256(namespace_route||key_route),'hex') FROM 1 FOR 16))::bit(64)::bigint;
- IF NOT pg_try_advisory_xact_lock(exclusion) THEN
+ -- Graph mutation and catalog key writes share one finite transaction gate.
+ -- Row guards still protect exact key identity and membership observations.
+ IF NOT pg_try_advisory_xact_lock(1953658227,1735549296) THEN
   RAISE EXCEPTION 'key route is in flight' USING ERRCODE='55P03'; END IF;
  SELECT g.generation INTO guard_generation FROM truss.key_bucket_guard g
   WHERE namespace_sha256=namespace_route AND key_sha256=key_route FOR UPDATE NOWAIT;

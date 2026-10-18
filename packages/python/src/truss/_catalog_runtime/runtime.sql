@@ -115,7 +115,7 @@ BEGIN
   IF request.revision<>next_revision OR request.type_offset<>types OR request.property_offset<>properties OR request.relationship_offset<>relationships THEN
    RAISE EXCEPTION 'original contiguous catalog allocation required' USING ERRCODE='55000';END IF;
   origin:=convert_to((convert_from(request.origin_bytes,'UTF8')::jsonb||jsonb_build_object('actor',request.actor_name,'db_role',request.actor_name))::text,'UTF8');
-  part:=truss.catalog_expected_records(request.declaration_bytes,request.document_bytes,origin,request.accepted_at,genesis,
+  part:=truss.catalog_expected_records(truss.runtime_owned_request_declarations(request),truss.runtime_owned_request_documents(request),origin,request.accepted_at,genesis,
     request.revision,0,0,0);
   expected:=truss.catalog_revision_plan(expected,part);
   SELECT coalesce(max((v.value->>'type_id')::int),0) INTO types FROM jsonb_array_elements(expected->'type_def') v;
@@ -136,9 +136,22 @@ CREATE FUNCTION truss.catalog_make_report(request truss.catalog_registration_req
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET bytea_output='hex' AS $$
 DECLARE report jsonb; source jsonb; basis jsonb;rebind_profile text;profile_count int;
 BEGIN
+ IF octet_length(request.document_bytes)=0 THEN
+  source:=convert_from(request.source_bytes,'UTF8')::jsonb;
+  RETURN convert_to(jsonb_build_object('interfaceVersion','truss-catalog-registration-report/0.6',
+   'registrationId',request.registration_id::text,'installationId',request.installation_id::text,
+   'revision',request.revision::text,'actor',request.actor_name,'actorOid',request.actor_oid::text,
+   'writerXid',request.writer_xid::text,'requestKey',request.request_key,
+   'acceptedAt',to_char(request.accepted_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
+   'release',source->'runtimeRelease','acceptedInput',convert_from(request.input_bytes,'UTF8')::jsonb,
+   'source',source,'assertedOrigin',convert_from(request.origin_bytes,'UTF8')::jsonb,
+   'effects',jsonb_build_object(
+    'reboundObjects',(SELECT count(*) FROM truss.runtime_catalog_rebind_transition WHERE registration_id=request.registration_id),
+    'keyBackfills',(SELECT count(*) FROM truss.runtime_catalog_key_backfill WHERE registration_id=request.registration_id)))::text,'UTF8');
+ END IF;
  basis:=coalesce(planned_basis,truss.catalog_all_expected_records(request.revision));
  source:=convert_from(request.source_bytes,'UTF8')::jsonb;
- report:=jsonb_build_object('interfaceVersion',CASE WHEN source->>'sourceFormat'='truss-registration-summary/1.0' THEN 'truss-catalog-registration-report/0.5' WHEN (convert_from(request.input_bytes,'UTF8')::jsonb)->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.14.0","sha256":"1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.18.0","sha256":"5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838"}'::jsonb) AND source->>'sourceFormat'='truss-catalog-source-reference/0.1' THEN 'truss-catalog-registration-report/0.2' ELSE 'truss-catalog-registration-report/0.1' END,
+ report:=jsonb_build_object('interfaceVersion',CASE WHEN source->>'sourceFormat' IN ('truss-registration-summary/1.0','truss-registration-summary/2.0') THEN 'truss-catalog-registration-report/0.5' WHEN (convert_from(request.input_bytes,'UTF8')::jsonb)->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.14.0","sha256":"1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.18.0","sha256":"5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838"}'::jsonb) AND source->>'sourceFormat'='truss-catalog-source-reference/0.1' THEN 'truss-catalog-registration-report/0.2' ELSE 'truss-catalog-registration-report/0.1' END,
   'registrationId',request.registration_id::text,'installationId',request.installation_id::text,
   'revision',request.revision::text,'actor',request.actor_name,'actorOid',request.actor_oid::text,
   'writerXid',request.writer_xid::text,'requestKey',request.request_key,
@@ -167,14 +180,14 @@ BEGIN
  IF EXISTS(SELECT 1 FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id) THEN
   SELECT min(truss.catalog_rebind_profile(t.journal)),count(DISTINCT truss.catalog_rebind_profile(t.journal)) INTO rebind_profile,profile_count FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id;
   IF profile_count<>1 THEN RAISE EXCEPTION 'one original registration rebind profile required' USING ERRCODE='55000';END IF;
-  report:=report||jsonb_build_object('interfaceVersion',CASE WHEN source->>'sourceFormat'='truss-registration-summary/1.0' THEN 'truss-catalog-registration-report/0.5' ELSE 'truss-catalog-registration-report/0.3' END,'rebindProfile',rebind_profile,
+  report:=report||jsonb_build_object('interfaceVersion',CASE WHEN source->>'sourceFormat' IN ('truss-registration-summary/1.0','truss-registration-summary/2.0') THEN 'truss-catalog-registration-report/0.5' ELSE 'truss-catalog-registration-report/0.3' END,'rebindProfile',rebind_profile,
    'rebinds',(SELECT jsonb_agg(jsonb_build_object('objectId',t.object_id::text,'typeId',t.type_id::text,
     'beforeVersion',t.before_object->>'ver','afterVersion',t.after_object->>'ver','effects',t.effects,
     'events',(SELECT jsonb_agg(j.value->'new_value' ORDER BY j.ordinality) FROM jsonb_array_elements(t.journal) WITH ORDINALITY j)) ORDER BY t.type_id,t.object_id)
     FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id));
  END IF;
  IF EXISTS(SELECT 1 FROM truss.runtime_catalog_key_backfill t WHERE t.registration_id=request.registration_id) THEN
-  report:=report||jsonb_build_object('interfaceVersion',CASE WHEN source->>'sourceFormat'='truss-registration-summary/1.0' THEN 'truss-catalog-registration-report/0.5' ELSE 'truss-catalog-registration-report/0.4' END,'keyBackfillProfile',CASE WHEN EXISTS(
+  report:=report||jsonb_build_object('interfaceVersion',CASE WHEN source->>'sourceFormat' IN ('truss-registration-summary/1.0','truss-registration-summary/2.0') THEN 'truss-catalog-registration-report/0.5' ELSE 'truss-catalog-registration-report/0.4' END,'keyBackfillProfile',CASE WHEN EXISTS(
     SELECT 1 FROM truss.runtime_catalog_key_backfill b CROSS JOIN LATERAL jsonb_array_elements(b.effects) e
     JOIN jsonb_populate_recordset(NULL::truss.key_def,basis->'key_def') k ON k.type_id=b.type_id AND k.key_num=(e.value->>'keyNumber')::smallint
     JOIN jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p ON p.type_id=k.type_id AND p.prop_id=ANY(k.prop_ids)
@@ -297,6 +310,7 @@ CREATE FUNCTION truss.catalog_check_source_correspondence(input_bytes bytea,docu
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE input jsonb; documents jsonb; declarations jsonb; doc jsonb; source jsonb; rec jsonb;
  source_record jsonb; field jsonb; source_field jsonb; resolved_item jsonb; rel jsonb; source_relation jsonb; ref jsonb;
+ source_element_index jsonb;source_relationship_index jsonb;claimed_fields jsonb;source_element_count int;
  selected_doc jsonb; i int:=0; expected_records int; expected_fields int; expected_relations int;
 BEGIN
  input:=convert_from(input_bytes,'UTF8')::jsonb;documents:=convert_from(documents_bytes,'UTF8')::jsonb;
@@ -304,6 +318,17 @@ BEGIN
 
  FOR doc IN SELECT value FROM jsonb_array_elements(documents) LOOP
   selected_doc:=input->'documents'->i;source:=(doc->>'originalText')::jsonb;
+  SELECT coalesce(jsonb_object_agg(jsonb_build_array(m.value->>'id',e.value->>'id')::text,e.value),'{}'::jsonb),count(*)
+   INTO source_element_index,source_element_count
+   FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e;
+  IF (SELECT count(*) FROM jsonb_object_keys(source_element_index))<>source_element_count THEN
+   RAISE EXCEPTION 'unique original source coordinates required' USING ERRCODE='22023';END IF;
+  SELECT coalesce(jsonb_object_agg(jsonb_build_array(m.value->>'id',r.value->>'id')::text,r.value),'{}'::jsonb)
+   INTO source_relationship_index FROM jsonb_array_elements(source->'modules') m
+   CROSS JOIN LATERAL jsonb_array_elements(m.value->'relationships') r;
+  SELECT coalesce(jsonb_object_agg(jsonb_build_array(f.value->>'fieldModule',f.value->>'fieldId')::text,true),'{}'::jsonb)
+   INTO claimed_fields FROM jsonb_array_elements(declarations->i->'records') r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f;
+
   IF input->'supportProfile' IS DISTINCT FROM '{"identity":"truss-fresh-catalog-support","version":"0.18.0","sha256":"5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838"}'::jsonb AND EXISTS(
    SELECT 1 FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
    WHERE e.value->>'kind'='field' AND (e.value->>'scalarType'='date' OR e.value->>'scalarType'='decimal'
@@ -314,7 +339,8 @@ BEGIN
   IF selected_doc->>'documentId' IS DISTINCT FROM doc->>'documentId'
    OR selected_doc->>'documentRevision' IS DISTINCT FROM doc->>'revision'
    OR selected_doc->'artifact'->>'sha256' IS DISTINCT FROM encode(sha256(convert_to(doc->>'originalText','UTF8')),'hex')
-   OR decode(selected_doc->'artifact'->>'bytesBase64','base64') IS DISTINCT FROM convert_to(doc->>'originalText','UTF8')
+   OR (input->>'interfaceVersion'='truss-acceptance-input/0.1.0' AND decode(selected_doc->'artifact'->>'bytesBase64','base64') IS DISTINCT FROM convert_to(doc->>'originalText','UTF8'))
+   OR (input->>'interfaceVersion'='truss-acceptance-input/0.2.0' AND selected_doc->'artifact' ? 'bytesBase64')
    OR source->>'id' IS DISTINCT FROM doc->>'documentId' OR source->>'umf' IS DISTINCT FROM (CASE WHEN input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.13.0","sha256":"d660fab21eabe2d52ef0609cafcea6112f506786e359424235714718f6c769a7"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.14.0","sha256":"1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb ,'{"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.18.0","sha256":"5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838"}'::jsonb) THEN '0.8.0' ELSE '0.7.0' END)
    OR doc->>'umfVersion' IS DISTINCT FROM source->>'umf'
    OR (input->'supportProfile'->>'version' NOT IN ('0.6.0','0.7.0','0.8.0','0.9.0','0.10.0','0.11.0','0.12.0','0.13.0','0.14.0','0.15.0','0.16.0','0.17.0','0.18.0') AND (coalesce(source->'vocabularies','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb OR coalesce(source->'extensions','{}'::jsonb) IS DISTINCT FROM '{}'::jsonb)) THEN
@@ -327,7 +353,7 @@ BEGIN
    OR (SELECT count(*) FROM jsonb_array_elements(declarations->i->'records') r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f)
       +(SELECT count(*) FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
         WHERE input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.12.0","sha256":"f2c2495fdfab81d555194e5a3dfafe1c7cf58e17035fe5b03698e2808d3b027f"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.13.0","sha256":"d660fab21eabe2d52ef0609cafcea6112f506786e359424235714718f6c769a7"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.14.0","sha256":"1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"}'::jsonb ,'{"identity":"truss-fresh-catalog-support","version":"0.15.0","sha256":"a69a3035fcc0927730977ad05a1f60b0d10ec765413ab7c57d763f14d409c455"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.18.0","sha256":"5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838"}'::jsonb) AND e.value->>'kind'='field'
-        AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(declarations->i->'records') r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f WHERE f.value->>'fieldModule'=m.value->>'id' AND f.value->>'fieldId'=e.value->>'id')
+        AND NOT claimed_fields ? jsonb_build_array(m.value->>'id',e.value->>'id')::text
         AND (EXISTS(SELECT 1 FROM jsonb_array_elements(declarations->i->'records') r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f
          CROSS JOIN LATERAL (SELECT truss.catalog_item_definition(doc->>'originalText',doc->>'documentId',1,i,f.value->'declaration'->'itemType') item
           WHERE f.value->'declaration'->>'cardinality' IN ('array','map')) resolved
@@ -352,16 +378,16 @@ BEGIN
     GROUP BY r.value->>'documentId',r.value->>'moduleId',r.value->'declaration'->>'id' HAVING count(*)<>1) THEN
    RAISE EXCEPTION 'original declaration occurrence bijection required' USING ERRCODE='22023'; END IF;
   FOR rec IN SELECT value FROM jsonb_array_elements(declarations->i->'records') LOOP
-   SELECT e.value INTO STRICT source_record FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
-    WHERE m.value->>'id'=rec->>'moduleId' AND e.value->>'id'=rec->>'elementId' AND e.value->>'kind'='record';
+   source_record:=source_element_index->jsonb_build_array(rec->>'moduleId',rec->>'elementId')::text;
+   IF source_record IS NULL OR source_record->>'kind'<>'record' THEN RAISE EXCEPTION 'original Record coordinate required' USING ERRCODE='22023';END IF;
    IF rec->>'documentId' IS DISTINCT FROM doc->>'documentId' OR rec->'declaration' IS DISTINCT FROM source_record
     OR rec->'keys' IS DISTINCT FROM coalesce(source_record->'keys','[]'::jsonb)
     OR jsonb_typeof(rec->'fields') IS DISTINCT FROM 'array' OR jsonb_typeof(source_record->'members') IS DISTINCT FROM 'array'
     OR jsonb_array_length(rec->'fields')<>jsonb_array_length(source_record->'members') THEN
     RAISE EXCEPTION 'original Record declaration required' USING ERRCODE='22023'; END IF;
    FOR field IN SELECT value FROM jsonb_array_elements(rec->'fields') LOOP
-    SELECT e.value INTO STRICT source_field FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
-     WHERE m.value->>'id'=field->>'fieldModule' AND e.value->>'id'=field->>'fieldId' AND e.value->>'kind'='field';
+    source_field:=source_element_index->jsonb_build_array(field->>'fieldModule',field->>'fieldId')::text;
+    IF source_field IS NULL OR source_field->>'kind'<>'field' THEN RAISE EXCEPTION 'original Field coordinate required' USING ERRCODE='22023';END IF;
     IF field->'reference' IS DISTINCT FROM jsonb_build_object('module',field->>'fieldModule','element',field->>'fieldId')
      OR field->'declaration' IS DISTINCT FROM source_field OR NOT (
        (source_field->>'cardinality'='one' AND coalesce(source_field->>'scalarType','') IN ('string','integer','decimal','boolean','timestamp','binary','date') AND NOT source_field ? 'itemType')
@@ -387,15 +413,14 @@ BEGIN
    GROUP BY f.value->>'fieldModule',f.value->>'fieldId' HAVING count(*)<>1) THEN
    RAISE EXCEPTION 'unique original Field ownership required' USING ERRCODE='22023'; END IF;
   FOR rel IN SELECT value FROM jsonb_array_elements(declarations->i->'relationships') LOOP
-   SELECT r.value INTO STRICT source_relation FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'relationships') r
-    WHERE m.value->>'id'=rel->>'moduleId' AND r.value->>'id'=rel->'declaration'->>'id';
+   source_relation:=source_relationship_index->jsonb_build_array(rel->>'moduleId',rel->'declaration'->>'id')::text;
+   IF source_relation IS NULL THEN RAISE EXCEPTION 'original Relationship coordinate required' USING ERRCODE='22023';END IF;
    IF rel->>'documentId' IS DISTINCT FROM doc->>'documentId' OR rel->'declaration' IS DISTINCT FROM source_relation
     OR (SELECT count(DISTINCT t.value->>'key') FROM jsonb_array_elements(source_relation->'target') t)<>1 THEN
     RAISE EXCEPTION 'selected original Relationship declaration required' USING ERRCODE='0A000'; END IF;
    FOR ref IN SELECT value FROM jsonb_array_elements(source_relation->'target') LOOP
-    IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e
-     CROSS JOIN LATERAL jsonb_array_elements(e.value->'keys') k WHERE m.value->>'id'=ref->>'module' AND e.value->>'id'=ref->>'element'
-     AND e.value->>'kind'='record' AND k.value->>'id'=ref->>'key') THEN
+    IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements((source_element_index->jsonb_build_array(ref->>'module',ref->>'element')::text)->'keys') k
+      WHERE (source_element_index->jsonb_build_array(ref->>'module',ref->>'element')::text)->>'kind'='record' AND k.value->>'id'=ref->>'key') THEN
      RAISE EXCEPTION 'original target Key required' USING ERRCODE='22023'; END IF;
    END LOOP;
   END LOOP;
@@ -409,7 +434,7 @@ DECLARE input jsonb;documents jsonb;declarations jsonb;
 BEGIN
  input:=convert_from(input_bytes,'UTF8')::jsonb;documents:=convert_from(documents_bytes,'UTF8')::jsonb;
  declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
- IF jsonb_typeof(input) IS DISTINCT FROM 'object' OR ((input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation()) AND (input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.12.0","sha256":"f2c2495fdfab81d555194e5a3dfafe1c7cf58e17035fe5b03698e2808d3b027f"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.13.0","sha256":"d660fab21eabe2d52ef0609cafcea6112f506786e359424235714718f6c769a7"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.14.0","sha256":"1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb ,'{"identity":"truss-fresh-catalog-support","version":"0.15.0","sha256":"a69a3035fcc0927730977ad05a1f60b0d10ec765413ab7c57d763f14d409c455"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.18.0","sha256":"5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838"}'::jsonb) AND (input-'interfaceVersion'-'documents'-'supportProfile')=(SELECT preparation_configuration-'supportProfile' FROM truss.runtime_current_installation())) IS NOT TRUE)
+ IF input->>'interfaceVersion' NOT IN ('truss-acceptance-input/0.1.0','truss-acceptance-input/0.2.0') OR jsonb_typeof(input) IS DISTINCT FROM 'object' OR ((input-'interfaceVersion'-'documents') IS DISTINCT FROM (SELECT preparation_configuration FROM truss.runtime_current_installation()) AND (input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.12.0","sha256":"f2c2495fdfab81d555194e5a3dfafe1c7cf58e17035fe5b03698e2808d3b027f"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.13.0","sha256":"d660fab21eabe2d52ef0609cafcea6112f506786e359424235714718f6c769a7"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.14.0","sha256":"1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.7.0","sha256":"a37ace85f20b58b82c06a174bcc30ad3fe69d26fc1fd77d52e4e0392c671338f"}'::jsonb ,'{"identity":"truss-fresh-catalog-support","version":"0.15.0","sha256":"a69a3035fcc0927730977ad05a1f60b0d10ec765413ab7c57d763f14d409c455"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.18.0","sha256":"5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838"}'::jsonb) AND (input-'interfaceVersion'-'documents'-'supportProfile')=(SELECT preparation_configuration-'supportProfile' FROM truss.runtime_current_installation())) IS NOT TRUE)
   OR input->'layoutProfile' IS DISTINCT FROM (SELECT layout_profile FROM truss.runtime_current_installation())
   OR input->'binding' IS DISTINCT FROM '{"state":"absent"}'::jsonb OR input->'transforms' IS DISTINCT FROM '[]'::jsonb
   OR jsonb_typeof(documents) IS DISTINCT FROM 'array' OR jsonb_array_length(documents) NOT BETWEEN 1 AND 512
@@ -429,22 +454,25 @@ DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
  alias_request truss.catalog_unchanged_request%ROWTYPE;
  stored_alias truss.catalog_unchanged_request%ROWTYPE;
  expected jsonb; prior_expected jsonb; origin bytea; original_report bytea; table_name text; columns text; assignments text;identity_column text; rows jsonb; raw bytea; total bigint:=0; request_count bigint;
- prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;violations bytea;key_candidates jsonb;verified_keys jsonb;
+ prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;compact boolean;violations bytea;key_candidates jsonb;verified_keys jsonb;
 BEGIN
  IF preview_mode IS NULL THEN RAISE EXCEPTION 'explicit catalog mode required' USING ERRCODE='22023';END IF;
+ compact:=(convert_from(input_bytes,'UTF8')::jsonb)->>'interfaceVersion'='truss-acceptance-input/0.2.0';
+ IF compact AND declarations_bytes<>''::bytea THEN RAISE EXCEPTION 'source-only catalog request required' USING ERRCODE='22023';END IF;
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.71-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.72-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;
-  component_limit:=CASE WHEN component_index=4 THEN 4194304 ELSE 1048576 END;
-  IF raw IS NULL OR octet_length(raw) NOT BETWEEN 1 AND component_limit THEN
+  component_limit:=CASE WHEN component_index=5 THEN 1048576 WHEN component_index=4 THEN 4194304 ELSE 16777216 END;
+  IF raw IS NULL OR NOT (compact AND component_index=3 AND octet_length(raw)=0) AND octet_length(raw) NOT BETWEEN 1 AND component_limit THEN
    RAISE EXCEPTION 'catalog input byte limit exceeded' USING ERRCODE='22023'; END IF;
   total:=total+octet_length(raw);
  END LOOP;
- IF total>8388608 OR jsonb_typeof(convert_from(origin_bytes,'UTF8')::jsonb) IS DISTINCT FROM 'object' THEN
+ IF total>16777216 OR jsonb_typeof(convert_from(origin_bytes,'UTF8')::jsonb) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'bounded catalog request required' USING ERRCODE='22023'; END IF;
+ IF compact THEN declarations_bytes:=truss.runtime_owned_catalog_declarations(documents_bytes);END IF;
  -- Bound concurrency without an automatic retry loop.
  SELECT rev INTO STRICT prior_revision FROM truss.schema_head WHERE id=1 FOR UPDATE NOWAIT;
  prior_expected:=truss.catalog_all_expected_records();
@@ -455,8 +483,9 @@ BEGIN
  IF request_count>1 THEN RAISE EXCEPTION 'unambiguous catalog request required' USING ERRCODE='55000'; END IF;
  SELECT * INTO existing FROM truss.catalog_registration_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept_with_keys.request_key;
  IF FOUND THEN
-  IF existing.input_bytes IS DISTINCT FROM input_bytes OR existing.document_bytes IS DISTINCT FROM documents_bytes
-   OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes OR existing.origin_bytes IS DISTINCT FROM origin_bytes THEN
+  IF existing.input_bytes IS DISTINCT FROM input_bytes OR (CASE WHEN octet_length(existing.document_bytes)=0 THEN
+    convert_from(truss.runtime_owned_request_documents(existing),'UTF8')::jsonb IS DISTINCT FROM convert_from(documents_bytes,'UTF8')::jsonb
+   ELSE existing.document_bytes IS DISTINCT FROM documents_bytes OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes END) OR existing.origin_bytes IS DISTINCT FROM origin_bytes THEN
    RAISE EXCEPTION 'request key reused with different registration input' USING ERRCODE='P1001'; END IF;
   PERFORM truss.catalog_actor();
   PERFORM truss.catalog_rebind_report_reader(existing.registration_id);
@@ -470,8 +499,9 @@ BEGIN
   WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept_with_keys.request_key;
  IF FOUND THEN
   SELECT * INTO STRICT existing FROM truss.catalog_registration_request r WHERE r.registration_id=alias_request.registration_id;
-  IF existing.input_bytes IS DISTINCT FROM input_bytes OR existing.document_bytes IS DISTINCT FROM documents_bytes
-   OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes
+  IF existing.input_bytes IS DISTINCT FROM input_bytes OR (CASE WHEN octet_length(existing.document_bytes)=0 THEN
+    convert_from(truss.runtime_owned_request_documents(existing),'UTF8')::jsonb IS DISTINCT FROM convert_from(documents_bytes,'UTF8')::jsonb
+   ELSE existing.document_bytes IS DISTINCT FROM documents_bytes OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes END)
    OR alias_request.origin_bytes IS DISTINCT FROM origin_bytes THEN
    RAISE EXCEPTION 'request key reused with different registration input' USING ERRCODE='P1001'; END IF;
   PERFORM truss.catalog_actor();
@@ -485,7 +515,7 @@ BEGIN
  END IF;
  -- Ordinary registration keeps one validation summary per original document.
  -- Semantic source/declaration checks and atomic publication remain native.
- IF (convert_from(source_bytes,'UTF8')::jsonb)->>'sourceFormat'='truss-registration-summary/1.0' THEN
+ IF (convert_from(source_bytes,'UTF8')::jsonb)->>'sourceFormat' IN ('truss-registration-summary/1.0','truss-registration-summary/2.0') THEN
   DECLARE
    summary jsonb:=convert_from(source_bytes,'UTF8')::jsonb;
    original_input jsonb:=convert_from(input_bytes,'UTF8')::jsonb;
@@ -502,6 +532,17 @@ BEGIN
    FOR doc IN SELECT value FROM jsonb_array_elements(original_docs) LOOP
     validation:=summary->'documentValidations'->doc_index;
     selected_doc:=original_input->'documents'->doc_index;
+    IF summary->>'sourceFormat'='truss-registration-summary/2.0' THEN
+     IF (SELECT count(*) FROM jsonb_object_keys(validation))<>3
+      OR validation->>'documentId' IS DISTINCT FROM doc->>'documentId'
+      OR validation->>'contentSha256' IS DISTINCT FROM selected_doc->'artifact'->>'sha256'
+      OR selected_doc->'ingress' IS DISTINCT FROM '{"kind":"native"}'::jsonb
+      OR validation->'validation' IS DISTINCT FROM doc->'validation'->'sourceValidation'
+      OR validation->'validation'->'valid' IS DISTINCT FROM 'true'::jsonb
+      OR jsonb_typeof(validation->'validation'->'complete') IS DISTINCT FROM 'boolean'
+      OR jsonb_typeof(validation->'validation'->'diagnostics') IS DISTINCT FROM 'array' THEN
+      RAISE EXCEPTION 'original document validation summary required' USING ERRCODE='22023';END IF;
+    ELSE
     IF (SELECT count(*) FROM jsonb_object_keys(validation))<>4
      OR validation->>'documentId' IS DISTINCT FROM doc->>'documentId'
      OR validation->>'contentSha256' IS DISTINCT FROM selected_doc->'artifact'->>'sha256'
@@ -514,6 +555,7 @@ BEGIN
      OR jsonb_typeof(validation->'sourceValidation'->'diagnostics') IS DISTINCT FROM 'array'
      OR jsonb_typeof(validation->'targetValidation'->'diagnostics') IS DISTINCT FROM 'array' THEN
      RAISE EXCEPTION 'original document validation summary required' USING ERRCODE='22023';END IF;
+    END IF;
     doc_index:=doc_index+1;
    END LOOP;
   END;
@@ -552,8 +594,12 @@ BEGIN
   FOR doc IN SELECT value FROM jsonb_array_elements(original_docs) LOOP
    SELECT value INTO STRICT selected_doc FROM jsonb_array_elements(original_input->'documents') d WHERE d.value->>'documentId'=doc->>'documentId';
    original:=(doc->>'originalText')::jsonb;
-   IF selected_doc->'umfProfile'='{"identity":"umf-record-interpretation","version":"7c0f0c98beee2cc1a5a407992b5c53cc2616da8e","sha256":"88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3"}'::jsonb THEN
+   IF selected_doc->'umfProfile'='{"identity":"umf-record-interpretation","version":"b24e07abae445414c41d2f122deae596915c6bd5","sha256":"42faf52491d9198a03a0c9216856002183c6f75e1e11394a89e99c0d86cbc744"}'::jsonb THEN
+    validation_profile:='{"identity":"truss-umf-validation-evidence","version":"0.1.0","sha256":"d13b0d8053664eaaf1a403fce192cec4e9aa07bfb9f3a24ab5f7a99242e7bb7e"}'::jsonb;
+   ELSIF selected_doc->'umfProfile'='{"identity":"umf-record-interpretation","version":"7c0f0c98beee2cc1a5a407992b5c53cc2616da8e","sha256":"88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3"}'::jsonb THEN
     validation_profile:='{"identity":"truss-umf-validation-evidence","version":"0.1.0","sha256":"ec2880b96e17af8a4a4bef74d4aad3da21ca177599c16c9d6070c2ec7d91e972"}'::jsonb;
+   ELSIF selected_doc->'umfProfile'='{"identity":"umf-record-interpretation","version":"b24e07abae445414c41d2f122deae596915c6bd5","sha256":"437019db698a0650883970430f1a3d87935eedbfb103b6c588c8905965d2420b"}'::jsonb THEN
+    validation_profile:='{"identity":"truss-umf-validation-evidence","version":"0.1.0","sha256":"c8e95a25174426bd4fd36f2d62528c2185dd18bf28458ad5116768b4595ac6d2"}'::jsonb;
    ELSIF selected_doc->'umfProfile'='{"identity":"umf-record-interpretation","version":"c45c72a2a8a3c4fba61c40c5927dd9091acf8cc3","sha256":"db1d813cafd6f48cb20549ea7e847aca754b53c21bbc624ff88aa963d917c90b"}'::jsonb THEN
     validation_profile:='{"identity":"truss-umf-validation-evidence","version":"0.1.0","sha256":"668f717089e9d5fbb097429c93c31b36ad2ebb562a6a76c5971c7725e7002c97"}'::jsonb;
    ELSE RAISE EXCEPTION 'original selected diagnostic producer required' USING ERRCODE='22023';END IF;
@@ -665,7 +711,9 @@ BEGIN
  END IF;
 
  SELECT r.* INTO existing FROM truss.catalog_registration_request r
-  WHERE r.input_bytes=catalog_accept_with_keys.input_bytes AND r.document_bytes=catalog_accept_with_keys.documents_bytes AND r.declaration_bytes=catalog_accept_with_keys.declarations_bytes
+  WHERE r.input_bytes=catalog_accept_with_keys.input_bytes AND CASE WHEN octet_length(r.document_bytes)=0 THEN
+   convert_from(truss.runtime_owned_request_documents(r),'UTF8')::jsonb=convert_from(catalog_accept_with_keys.documents_bytes,'UTF8')::jsonb
+  ELSE r.document_bytes=catalog_accept_with_keys.documents_bytes AND r.declaration_bytes=catalog_accept_with_keys.declarations_bytes END
   AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(catalog_accept_with_keys.documents_bytes,'UTF8')::jsonb) d
    WHERE NOT EXISTS(SELECT 1 FROM truss.schema_doc current_doc WHERE current_doc.doc_id=d.value->>'documentId'
     AND current_doc.rev=(SELECT max(latest.rev) FROM truss.schema_doc latest WHERE latest.doc_id=current_doc.doc_id)
@@ -750,8 +798,18 @@ BEGIN
  request.actor_oid:=actor;request.actor_name:=session_user::text;request.request_key:=request_key;
  request.writer_xid:=pg_current_xact_id();request.accepted_at:=transaction_timestamp();request.revision:=new_revision;
  request.type_offset:=type_start;request.property_offset:=property_start;request.relationship_offset:=relationship_start;
- request.input_bytes:=input_bytes;request.document_bytes:=documents_bytes;request.declaration_bytes:=declarations_bytes;
- request.source_bytes:=source_bytes;request.origin_bytes:=origin_bytes;
+ request.input_bytes:=input_bytes;request.document_bytes:=CASE WHEN compact THEN ''::bytea ELSE documents_bytes END;
+ request.declaration_bytes:=CASE WHEN compact THEN ''::bytea ELSE declarations_bytes END;
+ IF compact THEN
+  request.source_bytes:=convert_to(jsonb_build_object('sourceFormat','truss-registration-summary/2.0',
+   'umf',(convert_from(source_bytes,'UTF8')::jsonb)->'umf',
+   'runtimeRelease',jsonb_build_object('id',installation.release_id,'sha256',installation.release_sha256),
+   'validationLocation','schema_doc.validation',
+   'documentValidations',(SELECT jsonb_agg(jsonb_build_object('documentId',v.value->>'documentId',
+    'contentSha256',v.value->>'contentSha256','valid',v.value->'validation'->'valid','complete',v.value->'validation'->'complete') ORDER BY v.ordinality)
+    FROM jsonb_array_elements((convert_from(source_bytes,'UTF8')::jsonb)->'documentValidations') WITH ORDINALITY v))::text,'UTF8');
+ ELSE request.source_bytes:=source_bytes;END IF;
+ request.origin_bytes:=origin_bytes;
  PERFORM truss.catalog_rebind_objects(request,expected);
  PERFORM truss.catalog_key_backfill_apply(request,verified_keys);
  PERFORM truss.catalog_rebind_report_reader(request.registration_id,expected);

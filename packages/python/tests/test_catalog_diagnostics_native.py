@@ -19,14 +19,16 @@ class CatalogDiagnosticTests(base.NumericFacetTests):
         source=a.accepted_document_in_transaction(t,document_id='adoc').value;self.assertIsInstance(source,AcceptedDocument);self.assertEqual(source.content,original);self.assertEqual(source.sha256,hashlib.sha256(original).hexdigest())
         self.admin.execute('GRANT '+self.installation.registrar_role+' TO consumer WITH SET FALSE')
         report=a.report_in_transaction(t).value.original_bytes;decoded=json.loads(report)['source']
-        self.assertEqual(decoded['sourceFormat'],'truss-registration-summary/1.0')
+        self.assertEqual(decoded['sourceFormat'],'truss-registration-summary/2.0')
         validations=decoded['documentValidations']
-        self.assertTrue(all(d['sourceValidation']['valid'] for d in validations))
-        self.assertTrue(any(not d['sourceValidation']['complete'] for d in validations))
-        diagnostics=[diagnostic for d in validations for diagnostic in d['sourceValidation']['diagnostics']]
-        self.assertTrue(any(d['code']=='UNKNOWN_EXTENSION' for d in diagnostics))
+        self.assertTrue(all(d['valid'] for d in validations))
+        self.assertTrue(any(not d['complete'] for d in validations))
+        self.assertEqual(decoded['validationLocation'],'schema_doc.validation')
+        validation=json.loads(source.validation_bytes)
+        self.assertTrue(any(d['code']=='UNKNOWN_EXTENSION' for d in validation['diagnostics']))
         prepared=a.prepare_catalog(self.documents,source_version=self.source_version,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
-        self.assertEqual(validations,json.loads(prepared.report_evidence_bytes)['documents'])
+        expected=next(d['validation'] for d in json.loads(prepared.report_evidence_bytes)['documents'] if d['documentId']=='adoc')
+        self.assertEqual(validation,expected)
         self.assertEqual(json.loads(source.content)['extensions'],json.loads(original)['extensions'])
         created=self.apply(a,t,*self.input(a,t,(CreateObject(type_definition_pin=self.types[('adoc','A')].definition_pin,values=self.values(),ownership=RootlessOwnership()),)))
         self.assertIsInstance(created,GroupSuccess);h.detach();c.commit();c,h,a,t=self.consumer()

@@ -46,7 +46,7 @@ def capture_accepted_catalog(cursor,original_request,*,existing_source_cut=False
     cursor.execute('SELECT coalesce(sum(octet_length(input_bytes)::bigint+octet_length(document_bytes)+octet_length(declaration_bytes)),0)<=%s FROM truss.catalog_registration_request',(MAX_BYTES,),prepare=False)
     budget=cursor.fetchmany(2)
     if budget!=[(True,)] or type(budget[0][0]) is not bool:raise ValueError('Stored receipt assessment budget exceeded')
-    cursor.execute('''SELECT r.input_bytes,r.document_bytes,r.declaration_bytes,
+    cursor.execute('''SELECT r.input_bytes,truss.runtime_owned_request_documents(r),truss.runtime_owned_request_declarations(r),
       a.report_bytes,r.report_sha256,truss.catalog_make_report(r),r.installation_id::text,r.revision
       FROM truss.catalog_registration_request r JOIN truss.catalog_acceptance_report a ON a.rev=r.revision
       WHERE r.revision<=%s ORDER BY r.revision''',(revision,),prepare=False)

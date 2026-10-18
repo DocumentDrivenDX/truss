@@ -30,9 +30,36 @@ DECLARE result jsonb:=prior;types jsonb:=coalesce(prior->'type_def','[]');proper
  lineages jsonb:=coalesce(prior->'relationship_lineage','[]');endpoints jsonb:=coalesce(prior->'rel_endpoint','[]');
  changes jsonb:=coalesce(prior->'schema_change','[]');type_map jsonb:='{}';property_map jsonb:='{}';relationship_map jsonb:='{}';
  row jsonb;old jsonb;candidate jsonb;old_source jsonb;new_source jsonb;component jsonb;remapped jsonb;
- tightening boolean;facet_map jsonb;
+ tightening boolean;facet_map jsonb;compact_insertions boolean;
  assigned int;type_next int;property_next int;relationship_next int;key_next int;sequence int:=0;revision int;
 BEGIN
+ -- Original archives plus normalized rows already preserve newly inserted definitions.
+ -- Retained-row changes still keep their complete before/after history.
+ compact_insertions:=NOT EXISTS(SELECT 1 FROM jsonb_array_elements(fresh->'schema_doc') d
+  WHERE d.value->'validation'->>'storageFormat' IS DISTINCT FROM 'truss-catalog-source/2');
+ -- On the empty genesis there are no old identities to remap or evolve.
+ -- Materialize each normalized source row and insertion event once.
+ IF prior->'type_def'='[]'::jsonb AND prior->'prop_def'='[]'::jsonb AND prior->'key_def'='[]'::jsonb
+  AND prior->'rel_def'='[]'::jsonb AND prior->'schema_doc'='[]'::jsonb
+  AND prior->'relationship_lineage'='[]'::jsonb AND prior->'rel_endpoint'='[]'::jsonb
+  AND prior->'schema_change'='[]'::jsonb AND jsonb_array_length(prior->'schema_rev')=1
+  AND prior->'schema_rev'->0=fresh->'schema_rev'->0
+  AND jsonb_array_length(fresh->'schema_rev')=2 AND fresh->'schema_rev'->1->>'rev'='1' THEN
+  IF compact_insertions THEN RETURN fresh||jsonb_build_object('schema_change','[]'::jsonb);END IF;
+  WITH events AS (
+   SELECT 0 family,r.ordinality ordinal,'type' kind,(r.value->>'type_id')::int def_id,
+    to_jsonb(jsonb_populate_record(NULL::truss.type_def,r.value)) after FROM jsonb_array_elements(fresh->'type_def') WITH ORDINALITY r
+   UNION ALL
+   SELECT 1,r.ordinality,'prop',(r.value->>'prop_id')::int,to_jsonb(jsonb_populate_record(NULL::truss.prop_def,r.value))
+    FROM jsonb_array_elements(fresh->'prop_def') WITH ORDINALITY r
+   UNION ALL
+   SELECT 2,r.ordinality,'rel',(r.value->>'rel_type_id')::int,to_jsonb(jsonb_populate_record(NULL::truss.rel_def,r.value))
+    FROM jsonb_array_elements(fresh->'rel_def') WITH ORDINALITY r),
+  numbered AS (SELECT *,row_number() OVER(ORDER BY family,ordinal) seq FROM events)
+  SELECT coalesce(jsonb_agg(jsonb_build_object('rev',1,'seq',seq,'kind',kind,'def_id',def_id,'before',NULL,'after',after) ORDER BY seq),'[]'::jsonb)
+   INTO changes FROM numbered;
+  RETURN fresh||jsonb_build_object('schema_change',changes);
+ END IF;
  SELECT coalesce(max((v.value->>'type_id')::int),0) INTO type_next FROM jsonb_array_elements(types) v;
  SELECT coalesce(max((v.value->>'prop_id')::int),0) INTO property_next FROM jsonb_array_elements(properties) v;
  SELECT coalesce(max((v.value->>'rel_type_id')::int),0) INTO relationship_next FROM jsonb_array_elements(relations) v;
@@ -58,7 +85,9 @@ BEGIN
    SELECT coalesce(jsonb_agg(v.value),'[]') INTO types FROM jsonb_array_elements(types) v WHERE v.value->>'type_id'<>assigned::text;
   END IF;
   types:=types||jsonb_build_array(candidate);sequence:=sequence+1;
+  IF old IS NOT NULL OR NOT compact_insertions THEN
   changes:=changes||jsonb_build_array(jsonb_build_object('rev',revision,'seq',sequence,'kind','type','def_id',assigned,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.type_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.type_def,candidate))));
+  END IF;
  END LOOP;
  FOR row IN SELECT value FROM jsonb_array_elements(fresh->'prop_def') LOOP
   assigned:=(type_map->> (row->>'type_id'))::int;
@@ -113,7 +142,9 @@ BEGIN
   IF EXISTS(SELECT 1 FROM jsonb_array_elements(properties) p WHERE p.value->>'type_id'=assigned::text AND p.value->>'name'=candidate->>'name') THEN
    RAISE EXCEPTION 'retained field name collision requires rebind support' USING ERRCODE='0A000';END IF;
   properties:=properties||jsonb_build_array(candidate);sequence:=sequence+1;
+  IF old IS NOT NULL OR NOT compact_insertions THEN
   changes:=changes||jsonb_build_array(jsonb_build_object('rev',revision,'seq',sequence,'kind','prop','def_id',(candidate->>'prop_id')::int,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.prop_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.prop_def,candidate))));
+  END IF;
  END LOOP;
  FOR row IN SELECT value FROM jsonb_array_elements(fresh->'key_def') LOOP
   assigned:=(type_map->> (row->>'type_id'))::int;remapped:='[]';
@@ -169,7 +200,9 @@ BEGIN
    SELECT coalesce(jsonb_agg(v.value),'[]') INTO relations FROM jsonb_array_elements(relations) v WHERE v.value->>'rel_type_id'<>assigned::text;
   END IF;
   relations:=relations||jsonb_build_array(candidate);sequence:=sequence+1;
+  IF old IS NOT NULL OR NOT compact_insertions THEN
   changes:=changes||jsonb_build_array(jsonb_build_object('rev',revision,'seq',sequence,'kind','rel','def_id',assigned,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.rel_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.rel_def,candidate))));
+  END IF;
  END LOOP;
  FOR row IN SELECT value FROM jsonb_array_elements(fresh->'relationship_lineage') LOOP
   assigned:=(relationship_map->> (row->>'rel_type_id'))::int;
@@ -195,123 +228,94 @@ REVOKE ALL ON FUNCTION truss.catalog_revision_plan(jsonb,jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.catalog_expected_records(declarations_bytes bytea,documents_bytes bytea,
  origin_bytes bytea,accepted_clock timestamptz,genesis_clock timestamptz,
  selected_revision int DEFAULT 1,type_offset int DEFAULT 0,property_offset int DEFAULT 0,relationship_offset int DEFAULT 0)
-RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY INVOKER
-SET search_path=pg_catalog,pg_temp AS $$
-DECLARE declarations jsonb; documents jsonb; origin jsonb;
- expected jsonb:='{}'; rows jsonb; actual jsonb; table_name text; doc jsonb; rec record;
- field record; key record; rel record; ref jsonb; planned_row jsonb; docord int; ownerid int;
- assigned int:=0; type_map jsonb:='[]'; property_map jsonb:='[]'; types jsonb:='[]';
- properties jsonb:='[]'; keys jsonb:='[]'; relationships jsonb:='[]'; lineages jsonb:='[]'; endpoints jsonb:='[]';
- identity_bytes bytea; source_ids int[]; target_ids int[]; components int[]; sourceid int; targetid int;
- prop_row truss.prop_def%ROWTYPE;
- target_key text; keynum int; expected_events bigint;
+RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE validated_declarations jsonb;validated_documents jsonb;validated_origin jsonb;
 BEGIN
  IF selected_revision<1 OR type_offset<0 OR property_offset<0 OR relationship_offset<0 THEN
   RAISE EXCEPTION 'valid catalog allocation basis required' USING ERRCODE='22023';END IF;
- assigned:=type_offset;
- declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
- documents:=convert_from(documents_bytes,'UTF8')::jsonb; origin:=convert_from(origin_bytes,'UTF8')::jsonb;
- IF jsonb_typeof(declarations) IS DISTINCT FROM 'array' OR jsonb_typeof(documents) IS DISTINCT FROM 'array'
-  OR jsonb_typeof(origin) IS DISTINCT FROM 'object' THEN RAISE EXCEPTION 'original record-plan shape required' USING ERRCODE='22023'; END IF;
- -- Clock and allocation rules are the selected native staging rules, not values
- -- copied from the poststate. Genesis is unchanged original prestate.
- rows:=jsonb_build_array(jsonb_build_object('rev',selected_revision,'accepted_at',accepted_clock,'origin',origin));
- IF selected_revision=1 THEN rows:=jsonb_build_array(jsonb_build_object('rev',0,'accepted_at',genesis_clock,'origin','{}'::jsonb))||rows;END IF;
- expected:=jsonb_set(expected,'{schema_rev}',rows);
- rows:='[]'; docord:=0;
- FOR doc IN SELECT value FROM jsonb_array_elements(documents) LOOP
-  rows:=rows||jsonb_build_array(jsonb_build_object('rev',selected_revision,'ord',docord,'doc_id',doc->>'documentId',
-   'doc_revision',doc->>'revision','umf_version',doc->>'umfVersion','content_sha256',
-   encode(sha256(convert_to(doc->>'originalText','UTF8')),'hex'),'document',doc->>'originalText','validation',doc->'validation'));
-  docord:=docord+1;
- END LOOP;
- expected:=jsonb_set(expected,'{schema_doc}',rows);
- FOR rec IN SELECT r.value FROM jsonb_array_elements(declarations) d
-  CROSS JOIN LATERAL jsonb_array_elements(d.value->'records') r
-  ORDER BY (r.value->>'documentId') COLLATE "C",(r.value->>'moduleId') COLLATE "C",(r.value->>'elementId') COLLATE "C" LOOP
-  assigned:=assigned+1;
-  SELECT ordinality::int-1 INTO STRICT docord FROM jsonb_array_elements(documents) WITH ORDINALITY d(value,ordinality)
-   WHERE d.value->>'documentId'=rec.value->>'documentId';
-  identity_bytes:=truss.runtime_lineage_bytes('record',rec.value->>'documentId',rec.value->>'moduleId',rec.value->>'elementId');
-  planned_row:=jsonb_build_object('document_id',rec.value->>'documentId','type_id',assigned,'module',rec.value->>'moduleId',
-   'element',rec.value->>'elementId','kind','record','provisional',false,'since_rev',selected_revision,'doc_ord',docord,
-   'lineage_profile','truss-type-lineage/0.1.0','lineage_bytes',chr(92)||'x'||encode(identity_bytes,'hex'),
-   'lineage_sha256',chr(92)||'x'||encode(sha256(identity_bytes),'hex'),'definition_source_kind','accepted_document',
-   'definition_rev',selected_revision,'definition_doc_ord',docord,'definition_document_id',rec.value->>'documentId');
-  types:=types||jsonb_build_array(planned_row);
-  type_map:=type_map||jsonb_build_array(jsonb_build_object('source',rec.value,'typeId',assigned,'docOrd',docord));
- END LOOP;
- expected:=jsonb_set(expected,'{type_def}',types); assigned:=property_offset;
- FOR field IN SELECT t.value AS owner,f.value AS source FROM jsonb_array_elements(type_map) t
-  CROSS JOIN LATERAL jsonb_array_elements(t.value->'source'->'fields') f
-  ORDER BY (t.value->'source'->>'documentId') COLLATE "C",(t.value->'source'->>'moduleId') COLLATE "C",
-   (t.value->'source'->>'elementId') COLLATE "C",(f.value->>'fieldModule') COLLATE "C",(f.value->'declaration'->>'id') COLLATE "C" LOOP
-  assigned:=assigned+1; ownerid:=(field.owner->>'typeId')::int; docord:=(field.owner->>'docOrd')::int;
-  planned_row:=jsonb_build_object('prop_id',assigned,'type_id',ownerid,'element',field.source->'declaration'->>'id',
-   'declaration_module',field.source->>'fieldModule','name',coalesce(field.source->'declaration'->>'name',field.source->'declaration'->>'id'),
-   'scalar_type',field.source->'declaration'->>'scalarType','nullability',field.source->'declaration'->>'nullability',
-   'cardinality',field.source->'declaration'->>'cardinality','facets',field.source->'declaration'->'facets',
-   'item',CASE WHEN field.source->'declaration'->>'cardinality' IN ('array','map') THEN truss.catalog_item_definition((documents->docord)->>'originalText',field.owner->'source'->>'documentId',selected_revision,docord,field.source->'declaration'->'itemType') ELSE field.source->'declaration'->'itemType' END,'home','json','since_rev',selected_revision,'doc_ord',docord,
-   'definition_source_kind','accepted_document','definition_rev',selected_revision,'definition_doc_ord',docord,
-   'definition_document_id',field.owner->'source'->>'documentId','_originalField',field.source->'declaration');
-  properties:=properties||jsonb_build_array(planned_row);
-  property_map:=property_map||jsonb_build_array(planned_row);
- END LOOP;
- expected:=jsonb_set(expected,'{prop_def}',properties);
- FOR rec IN SELECT value FROM jsonb_array_elements(type_map) LOOP
-  keynum:=0; ownerid:=(rec.value->>'typeId')::int;
-  FOR key IN SELECT value FROM jsonb_array_elements(rec.value->'source'->'keys') ORDER BY (value->>'id') COLLATE "C" LOOP
-   keynum:=keynum+1; components:=ARRAY[]::int[];
-   FOR ref IN SELECT value FROM jsonb_array_elements(key.value->'fields') LOOP
-    SELECT (p.value->>'prop_id')::int INTO STRICT assigned FROM jsonb_array_elements(property_map) p
-     WHERE (p.value->>'type_id')::int=ownerid AND p.value->>'declaration_module'=ref->>'module' AND p.value->>'element'=ref->>'element';
-    components:=array_append(components,assigned);
-   END LOOP;
-   keys:=keys||jsonb_build_array(jsonb_build_object('type_id',ownerid,'key_id',key.value->>'id','key_num',keynum,
-    'prop_ids',to_jsonb(components),'is_primary',coalesce((key.value->>'primary')::boolean,false),'since_rev',selected_revision,
-    'definition_source_kind','accepted_document','definition_rev',selected_revision,'definition_doc_ord',(rec.value->>'docOrd')::int,
-    'definition_document_id',rec.value->'source'->>'documentId'));
-  END LOOP;
- END LOOP;
- expected:=jsonb_set(expected,'{key_def}',keys); assigned:=relationship_offset;
- FOR rel IN SELECT r.value FROM jsonb_array_elements(declarations) d
-  CROSS JOIN LATERAL jsonb_array_elements(d.value->'relationships') r
-  ORDER BY (r.value->>'documentId') COLLATE "C",(r.value->>'moduleId') COLLATE "C",(r.value->'declaration'->>'id') COLLATE "C" LOOP
-  assigned:=assigned+1; source_ids:=ARRAY[]::int[]; target_ids:=ARRAY[]::int[];
-  SELECT ordinality::int-1 INTO STRICT docord FROM jsonb_array_elements(documents) WITH ORDINALITY d(value,ordinality)
-   WHERE d.value->>'documentId'=rel.value->>'documentId';
-  FOR ref IN SELECT value FROM jsonb_array_elements(rel.value->'declaration'->'source') LOOP
-   SELECT (t.value->>'typeId')::int INTO STRICT sourceid FROM jsonb_array_elements(type_map) t
-    WHERE t.value->'source'->>'documentId'=rel.value->>'documentId' AND t.value->'source'->>'moduleId'=ref->>'module' AND t.value->'source'->>'elementId'=ref->>'element';
-   source_ids:=array_append(source_ids,sourceid);
-  END LOOP;
-  target_key:=NULL;
-  FOR ref IN SELECT value FROM jsonb_array_elements(rel.value->'declaration'->'target') LOOP
-   SELECT (t.value->>'typeId')::int INTO STRICT targetid FROM jsonb_array_elements(type_map) t
-    WHERE t.value->'source'->>'documentId'=rel.value->>'documentId' AND t.value->'source'->>'moduleId'=ref->>'module' AND t.value->'source'->>'elementId'=ref->>'element';
-   target_ids:=array_append(target_ids,targetid);
-   IF ref ? 'key' THEN target_key:=ref->>'key'; END IF;
-  END LOOP;
-  planned_row:=jsonb_build_object('document_id',rel.value->>'documentId','rel_type_id',assigned,'module',rel.value->>'moduleId',
-   'rel_id',rel.value->'declaration'->>'id','name',rel.value->'declaration'->>'name',
-   'source_min',(rel.value->'declaration'->'sourceMultiplicity'->>'min')::int,
-   'source_max',nullif(rel.value->'declaration'->'sourceMultiplicity'->>'max','*')::int,
-   'target_min',(rel.value->'declaration'->'targetMultiplicity'->>'min')::int,
-   'target_max',nullif(rel.value->'declaration'->'targetMultiplicity'->>'max','*')::int,
-   'lifecycle',rel.value->'declaration'->>'targetLifecycle','directed',(rel.value->'declaration'->>'directed')::boolean,
-   'target_key',target_key,'composition',false,'since_rev',selected_revision,'doc_ord',docord,
-   'definition_source_kind','accepted_document','definition_rev',selected_revision,'definition_doc_ord',docord,'definition_document_id',rel.value->>'documentId');
-  relationships:=relationships||jsonb_build_array(planned_row);
-  identity_bytes:=truss.runtime_lineage_bytes('authored',rel.value->>'documentId',rel.value->>'moduleId',rel.value->'declaration'->>'id');
-  lineages:=lineages||jsonb_build_array(jsonb_build_object('rel_type_id',assigned,'lineage_category','authored',
-   'identity_profile','truss-relationship-lineage-bytes/0.1.0','original_identity_bytes',chr(92)||'x'||encode(identity_bytes,'hex'),
-   'identity_sha256',chr(92)||'x'||encode(sha256(identity_bytes),'hex')));
-  FOREACH sourceid IN ARRAY source_ids LOOP FOREACH targetid IN ARRAY target_ids LOOP
-   endpoints:=endpoints||jsonb_build_array(jsonb_build_object('rel_type_id',assigned,'source_type',sourceid,'target_type',targetid));
-  END LOOP; END LOOP;
- END LOOP;
- expected:=expected||jsonb_build_object('rel_def',relationships,'relationship_lineage',lineages,'rel_endpoint',endpoints);
- RETURN expected;
+ validated_declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
+ validated_documents:=convert_from(documents_bytes,'UTF8')::jsonb;
+ validated_origin:=convert_from(origin_bytes,'UTF8')::jsonb;
+ IF jsonb_typeof(validated_declarations) IS DISTINCT FROM 'array' OR jsonb_typeof(validated_documents) IS DISTINCT FROM 'array'
+  OR jsonb_typeof(validated_origin) IS DISTINCT FROM 'object' THEN
+  RAISE EXCEPTION 'original record-plan shape required' USING ERRCODE='22023';END IF;
+ RETURN (WITH docs AS MATERIALIZED (
+  SELECT d.value,d.ordinality::int-1 ord FROM jsonb_array_elements(validated_documents) WITH ORDINALITY d),
+ records AS MATERIALIZED (
+  SELECT r.value,d.ord,type_offset+row_number() OVER(ORDER BY (r.value->>'documentId') COLLATE "C",(r.value->>'moduleId') COLLATE "C",(r.value->>'elementId') COLLATE "C")::int type_id
+  FROM jsonb_array_elements(validated_declarations) a
+  CROSS JOIN LATERAL jsonb_array_elements(a.value->'records') r JOIN docs d ON d.value->>'documentId'=r.value->>'documentId'),
+ type_rows AS MATERIALIZED (
+  SELECT r.type_id,jsonb_build_object('document_id',r.value->>'documentId','type_id',r.type_id,'module',r.value->>'moduleId',
+   'element',r.value->>'elementId','kind','record','provisional',false,'since_rev',selected_revision,'doc_ord',r.ord,
+   'lineage_profile','truss-type-lineage/0.1.0','lineage_bytes',chr(92)||'x'||encode(l.bytes,'hex'),
+   'lineage_sha256',chr(92)||'x'||encode(sha256(l.bytes),'hex'),'definition_source_kind','accepted_document',
+   'definition_rev',selected_revision,'definition_doc_ord',r.ord,'definition_document_id',r.value->>'documentId') value
+  FROM records r CROSS JOIN LATERAL (SELECT truss.runtime_lineage_bytes('record',r.value->>'documentId',r.value->>'moduleId',r.value->>'elementId') bytes) l),
+ field_input AS MATERIALIZED (
+  SELECT r.type_id,r.ord,r.value->>'documentId' document_id,f.value,
+   property_offset+row_number() OVER(ORDER BY (r.value->>'documentId') COLLATE "C",(r.value->>'moduleId') COLLATE "C",
+    (r.value->>'elementId') COLLATE "C",(f.value->>'fieldModule') COLLATE "C",(f.value->'declaration'->>'id') COLLATE "C")::int prop_id
+  FROM records r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f),
+ prop_rows AS MATERIALIZED (
+  SELECT f.type_id,f.prop_id,f.value->>'fieldModule' field_module,f.value->'declaration'->>'id' element_id,
+   jsonb_build_object('prop_id',f.prop_id,'type_id',f.type_id,'element',f.value->'declaration'->>'id',
+    'declaration_module',f.value->>'fieldModule','name',coalesce(f.value->'declaration'->>'name',f.value->'declaration'->>'id'),
+    'scalar_type',f.value->'declaration'->>'scalarType','nullability',f.value->'declaration'->>'nullability',
+    'cardinality',f.value->'declaration'->>'cardinality','facets',f.value->'declaration'->'facets',
+    'item',CASE WHEN f.value->'declaration'->>'cardinality' IN ('array','map') THEN truss.catalog_item_definition(d.value->>'originalText',f.document_id,selected_revision,f.ord,f.value->'declaration'->'itemType') ELSE f.value->'declaration'->'itemType' END,
+    'home','json','since_rev',selected_revision,'doc_ord',f.ord,'definition_source_kind','accepted_document',
+    'definition_rev',selected_revision,'definition_doc_ord',f.ord,'definition_document_id',f.document_id,'_originalField',f.value->'declaration') value
+  FROM field_input f JOIN docs d USING(ord)),
+ key_input AS MATERIALIZED (
+  SELECT r.type_id,r.ord,r.value->>'documentId' document_id,k.value,
+   row_number() OVER(PARTITION BY r.type_id ORDER BY (k.value->>'id') COLLATE "C")::int key_num
+  FROM records r CROSS JOIN LATERAL jsonb_array_elements(r.value->'keys') k),
+ key_components AS (
+  SELECT k.type_id,k.key_num,jsonb_agg(p.prop_id ORDER BY ref.ordinality) ids
+  FROM key_input k CROSS JOIN LATERAL jsonb_array_elements(k.value->'fields') WITH ORDINALITY ref
+  JOIN prop_rows p ON p.type_id=k.type_id AND p.field_module=ref.value->>'module' AND p.element_id=ref.value->>'element'
+  GROUP BY k.type_id,k.key_num),
+ key_rows AS (
+  SELECT k.type_id,k.key_num,jsonb_build_object('type_id',k.type_id,'key_id',k.value->>'id','key_num',k.key_num,
+   'prop_ids',coalesce(c.ids,'[]'::jsonb),'is_primary',coalesce((k.value->>'primary')::boolean,false),'since_rev',selected_revision,
+   'definition_source_kind','accepted_document','definition_rev',selected_revision,'definition_doc_ord',k.ord,'definition_document_id',k.document_id) value
+  FROM key_input k LEFT JOIN key_components c USING(type_id,key_num)),
+ rel_input AS MATERIALIZED (
+  SELECT r.value,d.ord,relationship_offset+row_number() OVER(ORDER BY (r.value->>'documentId') COLLATE "C",(r.value->>'moduleId') COLLATE "C",(r.value->'declaration'->>'id') COLLATE "C")::int rel_type_id
+  FROM jsonb_array_elements(validated_declarations) a CROSS JOIN LATERAL jsonb_array_elements(a.value->'relationships') r
+  JOIN docs d ON d.value->>'documentId'=r.value->>'documentId'),
+ rel_rows AS MATERIALIZED (
+  SELECT r.rel_type_id,jsonb_build_object('document_id',r.value->>'documentId','rel_type_id',r.rel_type_id,'module',r.value->>'moduleId',
+   'rel_id',r.value->'declaration'->>'id','name',r.value->'declaration'->>'name',
+   'source_min',(r.value->'declaration'->'sourceMultiplicity'->>'min')::int,'source_max',nullif(r.value->'declaration'->'sourceMultiplicity'->>'max','*')::int,
+   'target_min',(r.value->'declaration'->'targetMultiplicity'->>'min')::int,'target_max',nullif(r.value->'declaration'->'targetMultiplicity'->>'max','*')::int,
+   'lifecycle',r.value->'declaration'->>'targetLifecycle','directed',(r.value->'declaration'->>'directed')::boolean,
+   'target_key',(r.value->'declaration'->'target'->-1)->>'key','composition',false,'since_rev',selected_revision,'doc_ord',r.ord,
+   'definition_source_kind','accepted_document','definition_rev',selected_revision,'definition_doc_ord',r.ord,'definition_document_id',r.value->>'documentId') value
+  FROM rel_input r),
+ lineage_rows AS (
+  SELECT r.rel_type_id,jsonb_build_object('rel_type_id',r.rel_type_id,'lineage_category','authored','identity_profile','truss-relationship-lineage-bytes/0.1.0',
+   'original_identity_bytes',chr(92)||'x'||encode(l.bytes,'hex'),'identity_sha256',chr(92)||'x'||encode(sha256(l.bytes),'hex')) value
+  FROM rel_input r CROSS JOIN LATERAL (SELECT truss.runtime_lineage_bytes('authored',r.value->>'documentId',r.value->>'moduleId',r.value->'declaration'->>'id') bytes) l),
+ endpoint_rows AS (
+  SELECT r.rel_type_id,s.ordinality source_ord,t.ordinality target_ord,
+   jsonb_build_object('rel_type_id',r.rel_type_id,'source_type',sr.type_id,'target_type',tr.type_id) value
+  FROM rel_input r CROSS JOIN LATERAL jsonb_array_elements(r.value->'declaration'->'source') WITH ORDINALITY s
+  CROSS JOIN LATERAL jsonb_array_elements(r.value->'declaration'->'target') WITH ORDINALITY t
+  JOIN records sr ON sr.value->>'documentId'=r.value->>'documentId' AND sr.value->>'moduleId'=s.value->>'module' AND sr.value->>'elementId'=s.value->>'element'
+  JOIN records tr ON tr.value->>'documentId'=r.value->>'documentId' AND tr.value->>'moduleId'=t.value->>'module' AND tr.value->>'elementId'=t.value->>'element')
+ SELECT jsonb_build_object(
+  'schema_rev',CASE WHEN selected_revision=1 THEN jsonb_build_array(jsonb_build_object('rev',0,'accepted_at',genesis_clock,'origin','{}'::jsonb)) ELSE '[]'::jsonb END
+   ||jsonb_build_array(jsonb_build_object('rev',selected_revision,'accepted_at',accepted_clock,'origin',validated_origin)),
+  'schema_doc',(SELECT coalesce(jsonb_agg(jsonb_build_object('rev',selected_revision,'ord',d.ord,'doc_id',d.value->>'documentId','doc_revision',d.value->>'revision',
+   'umf_version',d.value->>'umfVersion','content_sha256',encode(sha256(convert_to(d.value->>'originalText','UTF8')),'hex'),'document',d.value->>'originalText','validation',d.value->'validation') ORDER BY d.ord),'[]'::jsonb) FROM docs d),
+  'type_def',(SELECT coalesce(jsonb_agg(value ORDER BY type_id),'[]'::jsonb) FROM type_rows),
+  'prop_def',(SELECT coalesce(jsonb_agg(value ORDER BY prop_id),'[]'::jsonb) FROM prop_rows),
+  'key_def',(SELECT coalesce(jsonb_agg(value ORDER BY type_id,key_num),'[]'::jsonb) FROM key_rows),
+  'rel_def',(SELECT coalesce(jsonb_agg(value ORDER BY rel_type_id),'[]'::jsonb) FROM rel_rows),
+  'relationship_lineage',(SELECT coalesce(jsonb_agg(value ORDER BY rel_type_id),'[]'::jsonb) FROM lineage_rows),
+  'rel_endpoint',(SELECT coalesce(jsonb_agg(value ORDER BY rel_type_id,source_ord,target_ord),'[]'::jsonb) FROM endpoint_rows)));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_expected_records(bytea,bytea,bytea,timestamptz,timestamptz,int,int,int,int) FROM PUBLIC;

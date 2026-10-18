@@ -1,6 +1,8 @@
 """Catalog view request contracts; shapes alone confer no catalog authority."""
 from dataclasses import dataclass, field
 from typing import Literal
+import base64
+import weakref
 from .contracts import ProfilePin, QualifiedOwner, ExactArtifact, _Carrier
 
 
@@ -94,12 +96,35 @@ class CatalogDocumentProvenance(_Carrier):
     kind: Literal['accepted_document'] = field(default='accepted_document',init=False)
 
 
+_definition_sources={}
+
+@dataclass(frozen=True,slots=True,kw_only=True,weakref_slot=True)
+class CatalogDefinitionSource(_Carrier):
+    """Source identity; compatibility bytes are extracted only when requested."""
+    identity: str
+    sha256: str
+
+    @property
+    def bytes_base64(self):
+        original=_definition_sources.get(id(self))
+        if original is None or original[0]() is not self:raise ValueError('Original catalog source unavailable')
+        _,text,start,end=original
+        return base64.b64encode(text[start:end].encode('utf8')).decode('ascii')
+
+
+def _definition_source(identity,digest,text,start,end):
+    value=CatalogDefinitionSource(identity=identity,sha256=digest)
+    key=id(value)
+    _definition_sources[key]=(weakref.ref(value,lambda ref:_definition_sources.pop(key,None)),text,start,end)
+    return value
+
+
 @dataclass(frozen=True,slots=True,kw_only=True)
 class CatalogDefinitionEntry(_Carrier):
     reference: CatalogDefinitionReference
     lifecycle: Literal['active','retired']
     resolution: Literal['defined','provisional']
-    definition: ExactArtifact
+    definition: CatalogDefinitionSource
     provenance: CatalogDocumentProvenance
     dependencies: tuple[CatalogDefinitionReference,...]
 
@@ -112,9 +137,14 @@ class CatalogView(_Carrier):
     consistency_evidence_sha256: str
     definitions: tuple[CatalogDefinitionEntry,...]
     inventory_sha256: str
-    original_bytes: bytes
+    extraction_profile: ProfilePin
     scope: CompleteCatalogScope = field(default_factory=CompleteCatalogScope)
-    interface_version: Literal['truss-catalog-view/0.1.0'] = field(default='truss-catalog-view/0.1.0',init=False)
+    interface_version: Literal['truss-catalog-view/0.2.0'] = field(default='truss-catalog-view/0.2.0',init=False)
+
+    @property
+    def original_bytes(self):
+        from ._catalog_view_build import encoded,wire
+        return encoded(wire(self))
 
 
 @dataclass(frozen=True,slots=True,kw_only=True)

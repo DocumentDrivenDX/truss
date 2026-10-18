@@ -90,7 +90,7 @@ BEGIN
  END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF expected_release IS DISTINCT FROM installation.release_id OR expected_digest IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.71-candidate' THEN
+ OR installation.release_id<>'truss-catalog-runtime/0.72-candidate' THEN
   RAISE EXCEPTION 'selected installed object runtime required' USING ERRCODE='0A000'; END IF;
  IF captured_revision<1 THEN RAISE EXCEPTION 'accepted read catalog required' USING ERRCODE='0A000'; END IF;
  -- No object observation until exact document/module membership is established.
@@ -110,7 +110,7 @@ BEGIN
  -- Require every declaration owner before any object observation.
  IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RETURN NULL;END IF;
  SELECT coalesce(array_agg(p ORDER BY p.prop_id),ARRAY[]::truss.prop_def[]) INTO properties FROM truss.prop_def p WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL;
- SELECT d.definition_pin INTO STRICT definition_pin FROM truss.runtime_definition('type',selected_type.type_id) d;
+ SELECT d.definition_pin INTO STRICT definition_pin FROM truss.runtime_owned_definition_metadata('type',selected_type.type_id) d;
  SELECT o AS object,ro AS root_object,rt AS root_definition,
  false AS row_home
  INTO frozen FROM truss.object o
@@ -129,7 +129,7 @@ BEGIN
    RAISE EXCEPTION 'catalog changed during ownership observation' USING ERRCODE='55P03';END IF;
   IF NOT truss.runtime_can_read(root_definition.document_id,root_definition.module) THEN RETURN NULL;END IF;
   root_identity:=jsonb_build_object('id',root_object.id::text,'typeId',root_object.type_id::text,
-   'definitionPin',(SELECT d.definition_pin FROM truss.runtime_definition('type',root_object.type_id) d),
+   'definitionPin',(SELECT d.definition_pin FROM truss.runtime_owned_definition_metadata('type',root_object.type_id) d),
    'owner',jsonb_build_object('documentId',root_definition.document_id,'moduleId',root_definition.module));
  END IF;
  result:=truss.render_logical_object(current_object,selected_type,properties,has_row_home,definition_pin,captured_revision,maximum_bytes,installation.release_id,installation.release_sha256,root_identity);

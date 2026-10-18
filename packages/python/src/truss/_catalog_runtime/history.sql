@@ -40,7 +40,7 @@ BEGIN
   'prop_def',(SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]'::jsonb) FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=property_id)) END INTO basis;
  IF basis IS NULL THEN basis:=truss.catalog_all_expected_records(revision);END IF;
  SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=selected_type AND p.prop_id=property_id;
- SELECT * INTO STRICT pin FROM truss.runtime_definition_in_basis('property',selected_type,property_id,revision,basis);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata_in_basis('property',selected_type,property_id,revision,basis);
  IF pin.definition_pin IS DISTINCT FROM definition_pin THEN RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
  IF NOT truss.runtime_can_read_qualified(property.definition_document_id,property.declaration_module,qualified_actor) THEN RAISE EXCEPTION 'current historical property reader required' USING ERRCODE='42501';END IF;
  IF property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable_qualified(property.item,qualified_actor) IS NOT TRUE THEN RAISE EXCEPTION 'current historical item reader required' USING ERRCODE='42501';END IF;
@@ -65,7 +65,7 @@ BEGIN
  OR image->'identity'->'owner' IS DISTINCT FROM jsonb_build_object('documentId',entity->>'documentId','moduleId',entity->>'moduleId')
  OR image->>'recordVersion' IS DISTINCT FROM expected_version::text THEN RAISE EXCEPTION 'original complete history image required' USING ERRCODE='55000';END IF;
  revision:=(image->>'catalogRevision')::int;
- IF entity->>'kind'='object' THEN SELECT definition_pin INTO STRICT pin FROM truss.runtime_definition('type',(entity->>'typeId')::int,NULL,revision);
+ IF entity->>'kind'='object' THEN SELECT definition_pin INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',(entity->>'typeId')::int,NULL,revision);
  ELSE pin:=truss.runtime_relationship_pin((entity->>'typeId')::int,revision);END IF;
  IF image->'identity'->>'definitionPin' IS DISTINCT FROM pin THEN RAISE EXCEPTION 'original image interpretation required' USING ERRCODE='55000';END IF;
  FOR member IN SELECT value FROM jsonb_array_elements(image->'properties') LOOP
@@ -74,7 +74,7 @@ BEGIN
  IF entity->>'kind'='object' THEN PERFORM truss.runtime_history_ownership_qualified(image,qualified_actor);END IF;
  IF entity->>'kind'='edge' THEN
   FOR endpoint IN SELECT value FROM jsonb_array_elements(jsonb_build_array(image->'source',image->'target')) LOOP
-   SELECT * INTO STRICT endpoint_pin FROM truss.runtime_definition('type',(endpoint->>'typeId')::int,NULL,revision);
+   SELECT * INTO STRICT endpoint_pin FROM truss.runtime_owned_definition_metadata('type',(endpoint->>'typeId')::int,NULL,revision);
    IF endpoint->>'definitionPin' IS DISTINCT FROM endpoint_pin.definition_pin OR endpoint->'owner' IS DISTINCT FROM jsonb_build_object('documentId',endpoint_pin.document_id,'moduleId',endpoint_pin.module_id) THEN
     RAISE EXCEPTION 'original endpoint interpretation required' USING ERRCODE='55000';END IF;
    IF NOT truss.runtime_can_read_qualified(endpoint_pin.document_id,endpoint_pin.module_id,qualified_actor) THEN RAISE EXCEPTION 'current historical endpoint reader required' USING ERRCODE='42501';END IF;
@@ -131,7 +131,7 @@ BEGIN
      AND j.value=to_jsonb(physical);
    PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,true);
   END IF;
-  IF entity->>'kind'='object' THEN SELECT definition_pin INTO STRICT expected_pin FROM truss.runtime_definition('type',physical.entity_type,NULL,physical.rev);
+  IF entity->>'kind'='object' THEN SELECT definition_pin INTO STRICT expected_pin FROM truss.runtime_owned_definition_metadata('type',physical.entity_type,NULL,physical.rev);
   ELSE expected_pin:=truss.runtime_relationship_pin(physical.entity_type,physical.rev);END IF;
   IF event->'identity'->>'definitionPin' IS DISTINCT FROM expected_pin THEN RAISE EXCEPTION 'original event interpretation required' USING ERRCODE='55000';END IF;
   IF event->>'operation'='property' THEN

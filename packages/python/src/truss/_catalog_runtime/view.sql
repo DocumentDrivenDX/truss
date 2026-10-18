@@ -17,7 +17,7 @@ BEGIN
  SELECT * INTO STRICT request FROM truss.catalog_registration_request WHERE revision=captured_revision;
  IF request.installation_id<>installation.installation_id THEN
   RAISE EXCEPTION 'installed catalog provenance required' USING ERRCODE='55000'; END IF;
- PERFORM truss.catalog_check_source_correspondence(request.input_bytes,request.document_bytes,request.declaration_bytes);
+ PERFORM truss.catalog_check_source_correspondence(request.input_bytes,truss.runtime_owned_request_documents(request),truss.runtime_owned_request_declarations(request));
  origin:=convert_to((convert_from(request.origin_bytes,'UTF8')::jsonb||jsonb_build_object('actor',request.actor_name,'db_role',request.actor_name))::text,'UTF8');
  expected:=truss.catalog_all_expected_records();
  PERFORM truss.catalog_check_records(expected);

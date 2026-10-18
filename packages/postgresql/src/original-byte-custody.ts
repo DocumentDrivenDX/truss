@@ -12,7 +12,7 @@ export class OriginalByteCustodyError extends Error{
  * copied for structural source scanning, but is not an atomic concurrent snapshot.
  * Ordinary wire handoffs require actual ArrayBuffer storage, including cross-realm buffers. */
 export function copyOriginalByteCustody(original:Uint8Array,ordinaryOnly=false,maxBytes=1048576):Uint8Array{
- if(typeof ordinaryOnly!=='boolean'||!Number.isSafeInteger(maxBytes)||maxBytes<0||maxBytes>1048576)throw new OriginalByteCustodyError('resource');
+ if(typeof ordinaryOnly!=='boolean'||!Number.isSafeInteger(maxBytes)||maxBytes<0||maxBytes>16777216)throw new OriginalByteCustodyError('resource');
  if(brand.call(original)!=='Uint8Array')throw new OriginalByteCustodyError('carrier');
  const size=length.call(original) as number;
  if(size>maxBytes)throw new OriginalByteCustodyError('resource');

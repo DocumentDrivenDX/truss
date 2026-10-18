@@ -59,7 +59,7 @@ BEGIN
   FROM jsonb_array_elements(objects) o CROSS JOIN LATERAL (VALUES(o.value->'before'),(o.value->'after')) v(image)
   WHERE o.value->'changed'='true'::jsonb LOOP
   selected_type:=source.type_id;image_revision:=source.revision;
-  SELECT * INTO STRICT pin FROM truss.runtime_definition('type',selected_type,NULL,image_revision);type_pin:=pin.definition_pin;
+  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',selected_type,NULL,image_revision);type_pin:=pin.definition_pin;
   PERFORM truss.runtime_module_writer_qualified(pin.document_id,pin.module_id,actor);
   IF NOT truss.runtime_object_values_readable_qualified(selected_type,actor) THEN
    RAISE EXCEPTION 'current property and item readers required' USING ERRCODE='42501';END IF;
@@ -71,7 +71,7 @@ BEGIN
   ELSE history_basis:=truss.catalog_all_expected_records(image_revision);END IF;
   FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,history_basis->'prop_def') p
    WHERE p.type_id=selected_type ORDER BY prop_id LOOP
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('property',selected_type,property.prop_id,image_revision);
+   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',selected_type,property.prop_id,image_revision);
    property_pins:=property_pins||jsonb_build_object(property.prop_id::text,pin.definition_pin);
    property_order:=property_order||jsonb_build_array(property.prop_id::text);
   END LOOP;
@@ -84,7 +84,7 @@ BEGIN
  -- their original bytes and permanent reservations are never removed.
  FOR selected_type IN SELECT DISTINCT (value->'after'->>'type_id')::int FROM jsonb_array_elements(objects) LOOP
   FOR definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY key_num LOOP
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected_type,definition.key_num);
+   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected_type,definition.key_num);
    codec:=truss.runtime_owned_key_codec_metadata(selected_type,definition.key_num);
    IF codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32<=4194304 THEN
     codecs:=codecs||jsonb_build_object(selected_type::text||':'||definition.key_num::text,codec);
@@ -277,7 +277,7 @@ BEGIN
  WITH types AS MATERIALIZED (
   SELECT DISTINCT (value->>'type_id')::int type_id FROM jsonb_each(initial_scope->'nodes')),
  pins AS MATERIALIZED (
-  SELECT t.type_id,d.* FROM types t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id,NULL,(last_plan->>'catalogRevision')::int) d)
+  SELECT t.type_id,d.* FROM types t CROSS JOIN LATERAL truss.runtime_owned_definition_metadata('type',t.type_id,NULL,(last_plan->>'catalogRevision')::int) d)
  SELECT coalesce(jsonb_object_agg('stored:'||n.key,jsonb_build_object('identity',jsonb_build_object(
   'id',n.value->>'id','typeId',n.value->>'type_id','definitionPin',p.definition_pin,
   'owner',jsonb_build_object('documentId',p.document_id,'moduleId',p.module_id)),
@@ -364,7 +364,7 @@ BEGIN
    SELECT e.event,row_number() OVER(ORDER BY e.metadata,e.ordinal)-1 event_index,count(*) OVER() event_count FROM (
     SELECT false metadata,p.prop_id::bigint ordinal,jsonb_build_object('operation','property','propertyId',p.prop_id::text,
      'definitionPin',coalesce(history_dictionary->jsonb_build_array((m.after_object->>'rev')::int,m.type_id)::text->'propertyPins'->>p.prop_id::text,
-      (SELECT d.definition_pin FROM truss.runtime_definition('property',m.type_id,p.prop_id,m.capture_revision::int) d)),
+      (SELECT d.definition_pin FROM truss.runtime_owned_definition_metadata('property',m.type_id,p.prop_id,m.capture_revision::int) d)),
      'before',CASE WHEN m.before_object->'props' ? p.prop_id::text THEN jsonb_build_object('present',true,'value',m.before_object->'props'->p.prop_id::text) ELSE '{"present":false}'::jsonb END,
      'after',CASE WHEN m.after_object->'props' ? p.prop_id::text THEN jsonb_build_object('present',true,'value',m.after_object->'props'->p.prop_id::text) ELSE '{"present":false}'::jsonb END) event
     FROM truss.prop_def p WHERE p.type_id=m.type_id AND p.since_rev<=m.capture_revision::int

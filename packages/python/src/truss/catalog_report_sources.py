@@ -42,6 +42,8 @@ def resolve_catalog_report_source(report_bytes: bytes, source: dict[str, object]
         report=json.loads(report_bytes.decode('utf8'),object_pairs_hook=pairs,parse_float=number,parse_constant=nonfinite)
     except (UnicodeError,RecursionError) as error:
         raise ValueError('Catalog report encoding required') from error
+    if type(report) is dict and report.get('interfaceVersion')=='truss-catalog-registration-report/0.6':
+        raise ValueError('Source-reference receipt: retrieve original bytes with accepted_document_in_transaction')
     if type(report) is not dict or report.get('interfaceVersion') not in ('truss-catalog-registration-report/0.2','truss-catalog-registration-report/0.3','truss-catalog-registration-report/0.4','truss-catalog-registration-report/0.5'):
         raise ValueError('Supported retained catalog report required')
     if (type(source) is not dict or set(source)!={'identity','sha256','reference'}

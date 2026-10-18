@@ -2,7 +2,7 @@
 ALTER TABLE truss.catalog_runtime_installation ADD COLUMN source_epoch uuid NOT NULL DEFAULT pg_catalog.gen_random_uuid();
 
 -- Match the existing original-definition pin recipe without reserializing source.
-CREATE FUNCTION truss.runtime_definition_in_basis(selected_kind text,selected_type int,selected_number int,historical_revision int,basis jsonb)
+CREATE FUNCTION truss.runtime_owned_definition_metadata_in_basis(selected_kind text,selected_type int,selected_number int,historical_revision int,basis jsonb)
 RETURNS TABLE(definition_pin text,original_fragment bytea,original_pointer text,document_id text,module_id text,element_id text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE source_kind text;source_revision int;source_ordinal int;source_document text;source_key text; archive record; native_type truss.type_def%ROWTYPE;
@@ -35,51 +35,18 @@ BEGIN
  ELSE RAISE EXCEPTION 'supported definition kind required' USING ERRCODE='22023'; END IF;
  IF source_kind<>'accepted_document' OR source_revision<1 THEN
   RAISE EXCEPTION 'original accepted definition source required' USING ERRCODE='0A000'; END IF;
- SELECT d.document,d.rev,d.ord,d.content_sha256 INTO STRICT archive FROM truss.schema_doc d WHERE d.rev=source_revision AND d.ord=source_ordinal
-  AND d.doc_id=source_document;
- -- Binary JSON is used only to locate coordinates, never for source bytes.
- BEGIN
-  document_lookup:=archive.document::jsonb;
- EXCEPTION WHEN untranslatable_character OR numeric_value_out_of_range THEN
-  -- Unknown JSON content may be valid source but outside JSONB's value domain.
-  document_lookup:=NULL;
- END;
- IF document_lookup IS NULL THEN
-  SELECT m.value,m.ordinality::int-1 INTO STRICT module_json,module_index
-   FROM json_array_elements(archive.document::json->'modules') WITH ORDINALITY m WHERE m.value->>'id'=source_module;
-  SELECT e.value,e.ordinality::int-1 INTO STRICT element_json,element_index
-   FROM json_array_elements(module_json->'elements') WITH ORDINALITY e WHERE e.value->>'id'=source_element;
- ELSE
- SELECT m.value,m.ordinality::int-1 INTO STRICT module_lookup,module_index
-  FROM jsonb_array_elements(document_lookup->'modules') WITH ORDINALITY m WHERE m.value->>'id'=source_module;
- SELECT e.value,e.ordinality::int-1 INTO STRICT element_lookup,element_index
-  FROM jsonb_array_elements(module_lookup->'elements') WITH ORDINALITY e WHERE e.value->>'id'=source_element;
- element_json:=json_extract_path(archive.document::json,'modules',module_index::text,'elements',element_index::text);
- END IF;
- fragment:=element_json;pointer:='/modules/'||module_index||'/elements/'||element_index;
- IF selected_kind='key' THEN
-  IF document_lookup IS NULL THEN
-   SELECT k.value,k.ordinality::int-1 INTO STRICT key_json,key_index
-    FROM json_array_elements(element_json->'keys') WITH ORDINALITY k WHERE k.value->>'id'=source_key;
-  ELSE
-   SELECT k.ordinality::int-1 INTO STRICT key_index
-    FROM jsonb_array_elements(element_lookup->'keys') WITH ORDINALITY k WHERE k.value->>'id'=source_key;
-   key_json:=json_extract_path(element_json,'keys',key_index::text);
-  END IF;
-  fragment:=key_json;pointer:=pointer||'/keys/'||key_index;
- END IF;
- original_fragment:=convert_to(fragment::text,'UTF8');original_pointer:=pointer;
- pin_input:='['||archive.rev||','||archive.ord||',"'||archive.content_sha256||'","'||pointer
-  ||'",{"identity":"truss-original-json-definition","sha256":"08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d","version":"0.1"},"'
-  ||encode(sha256(original_fragment),'hex')||'"]';
- definition_pin:=encode(sha256(convert_to(pin_input,'UTF8')),'hex');
+ SELECT d.definition_pin,NULL::bytea,d.pointer INTO STRICT definition_pin,original_fragment,original_pointer
+ FROM truss.runtime_definition_source d WHERE d.rev=source_revision AND d.ord=source_ordinal
+  AND d.doc_id=source_document AND d.module_id=source_module AND d.element_id=source_element
+  AND d.kind=CASE WHEN selected_kind='key' THEN 'key' ELSE 'element' END
+  AND d.key_id=coalesce(source_key,'');
  document_id:=native_type.document_id;module_id:=native_type.module;element_id:=native_type.element;
  RETURN NEXT;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_definition_in_basis(text,int,int,int,jsonb) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_definition_metadata_in_basis(text,int,int,int,jsonb) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_definition(selected_kind text,selected_type int,selected_number int DEFAULT NULL,historical_revision int DEFAULT NULL)
+CREATE FUNCTION truss.runtime_owned_definition_metadata(selected_kind text,selected_type int,selected_number int DEFAULT NULL,historical_revision int DEFAULT NULL)
 RETURNS TABLE(definition_pin text,original_fragment bytea,original_pointer text,document_id text,module_id text,element_id text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE basis jsonb;
@@ -95,8 +62,31 @@ BEGIN
    'key_def',(SELECT coalesce(jsonb_agg(to_jsonb(k)),'[]'::jsonb) FROM truss.key_def k WHERE k.type_id=selected_type AND k.key_num=selected_number)) END INTO basis;
   IF basis IS NULL THEN basis:=truss.catalog_all_expected_records(historical_revision);END IF;
  END IF;
- RETURN QUERY SELECT * FROM truss.runtime_definition_in_basis(selected_kind,selected_type,selected_number,historical_revision,basis);
+ RETURN QUERY SELECT * FROM truss.runtime_owned_definition_metadata_in_basis(selected_kind,selected_type,selected_number,historical_revision,basis);
 END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_definition_metadata(text,int,int,int) FROM PUBLIC;
+
+
+CREATE FUNCTION truss.runtime_definition_in_basis(selected_kind text,selected_type int,selected_number int,historical_revision int,basis jsonb)
+RETURNS TABLE(definition_pin text,original_fragment bytea,original_pointer text,document_id text,module_id text,element_id text)
+LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT m.definition_pin,convert_to((s.document::json #> string_to_array(substr(d.pointer,2),'/'))::text,'UTF8'),
+  m.original_pointer,m.document_id,m.module_id,m.element_id
+ FROM truss.runtime_owned_definition_metadata_in_basis(selected_kind,selected_type,selected_number,historical_revision,basis) m
+ JOIN truss.runtime_definition_source d ON d.definition_pin=m.definition_pin
+ JOIN truss.schema_doc s ON s.rev=d.rev AND s.ord=d.ord;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_definition_in_basis(text,int,int,int,jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_definition(selected_kind text,selected_type int,selected_number int DEFAULT NULL,historical_revision int DEFAULT NULL)
+RETURNS TABLE(definition_pin text,original_fragment bytea,original_pointer text,document_id text,module_id text,element_id text)
+LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT m.definition_pin,convert_to((s.document::json #> string_to_array(substr(d.pointer,2),'/'))::text,'UTF8'),
+  m.original_pointer,m.document_id,m.module_id,m.element_id
+ FROM truss.runtime_owned_definition_metadata(selected_kind,selected_type,selected_number,historical_revision) m
+ JOIN truss.runtime_definition_source d ON d.definition_pin=m.definition_pin
+ JOIN truss.schema_doc s ON s.rev=d.rev AND s.ord=d.ord;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_definition(text,int,int,int) FROM PUBLIC;
 
@@ -189,7 +179,7 @@ BEGIN
     (input->'mutationProfile'=truss.runtime_owned_profile() AND operation->'ownership'->>'state'='owned'
      AND (operation->'ownership')-ARRAY['state','root']='{}'::jsonb) IS NOT TRUE) THEN
    RAISE EXCEPTION 'explicit selected create ownership required' USING ERRCODE='0A000'; END IF;
-  SELECT t.* INTO STRICT selected_type FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_definition('type',t.type_id) p
+  SELECT t.* INTO STRICT selected_type FROM truss.type_def t CROSS JOIN LATERAL truss.runtime_owned_definition_metadata('type',t.type_id) p
    WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND p.definition_pin=operation->>'typeDefinitionPin';
   PERFORM truss.runtime_module_writer_qualified(selected_type.document_id,selected_type.module,qualified_actor);
   IF NOT truss.runtime_object_values_readable_qualified(selected_type.type_id,qualified_actor) THEN RAISE EXCEPTION 'current property and item interpretation reader required' USING ERRCODE='42501';END IF;
@@ -545,7 +535,7 @@ BEGIN
    END LOOP;
    IF jsonb_array_length(values_cells)<>cardinality(key_definition.prop_ids) THEN RAISE EXCEPTION 'complete key components required' USING ERRCODE='55000'; END IF;
    tuple_bytes:=truss.derive_catalog_key_tuple(selected_type.type_id,key_definition.key_num,values_cells);
-   SELECT * INTO STRICT source_pin FROM truss.runtime_definition('key',selected_type.type_id,key_definition.key_num);
+   SELECT * INTO STRICT source_pin FROM truss.runtime_owned_definition_metadata('key',selected_type.type_id,key_definition.key_num);
    namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
     'sourceEpoch',installation.source_epoch::text,'typeId',selected_type.type_id::text,'keyNumber',key_definition.key_num::text,
     'definitionPin',source_pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
@@ -757,7 +747,7 @@ BEGIN
  SELECT * INTO selected_type FROM truss.type_def WHERE document_id=selected_document AND module=selected_module
   AND element=selected_record AND kind='record' AND retired_rev IS NULL AND NOT provisional;
  IF NOT FOUND THEN RETURN NULL; END IF;
- SELECT * INTO STRICT source_pin FROM truss.runtime_definition('type',selected_type.type_id);
+ SELECT * INTO STRICT source_pin FROM truss.runtime_owned_definition_metadata('type',selected_type.type_id);
  person:=truss.runtime_person(false);
  IF NOT EXISTS(WITH RECURSIVE memberships(role_oid) AS (
   SELECT person UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.role_oid)

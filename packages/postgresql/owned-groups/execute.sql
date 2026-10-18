@@ -115,7 +115,7 @@ BEGIN
   -- Ordered initial rows share immutable catalog meaning; permissions and
   -- per-object state are still checked on their original paths.
   IF scope_node_type IS NULL OR scope_node_type IS DISTINCT FROM (image->>'type_id')::int THEN
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(image->>'type_id')::int);
+   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',(image->>'type_id')::int);
    scope_node_type:=(image->>'type_id')::int;
   END IF;
   identity:=jsonb_build_object('id',image->>'id','typeId',image->>'type_id','definitionPin',pin.definition_pin,
@@ -511,8 +511,12 @@ BEGIN
  END LOOP;
  -- Every graph writer joins this same exclusion in object/edge order. NOWAIT
  -- gives one refusal; it does not hide a retry loop in the embedded library.
- LOCK TABLE truss.object IN SHARE ROW EXCLUSIVE MODE NOWAIT;
- LOCK TABLE truss.edge IN SHARE ROW EXCLUSIVE MODE NOWAIT;
+ -- Join the same gate as every native row writer. SHARE ROW EXCLUSIVE table
+ -- locks conflict with routine autovacuum and caused spurious observation refusals.
+ IF NOT pg_try_advisory_xact_lock(1953658227,1735549296) THEN
+  RAISE EXCEPTION 'graph writer in flight' USING ERRCODE='55P03';END IF;
+ LOCK TABLE truss.object IN ROW EXCLUSIVE MODE NOWAIT;
+ LOCK TABLE truss.edge IN ROW EXCLUSIVE MODE NOWAIT;
  locked:=truss.runtime_owned_input_scope(input);
  IF locked IS DISTINCT FROM observed THEN
   RAISE EXCEPTION 'graph changed before write exclusion' USING ERRCODE='55P03';END IF;
@@ -581,7 +585,7 @@ BEGIN
   SELECT jsonb_extract_path(p.plan,'initialScope','boundary',substring(reference FROM 8)) INTO witness
    FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND p.operation_index=0;
   IF witness IS NOT NULL THEN
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(witness->'object'->>'type_id')::int,NULL,(plan->>'catalogRevision')::int);
+   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',(witness->'object'->>'type_id')::int,NULL,(plan->>'catalogRevision')::int);
    state:=jsonb_build_object('identity',jsonb_build_object('id',witness->'object'->>'id','typeId',witness->'object'->>'type_id',
     'definitionPin',pin.definition_pin,'owner',jsonb_build_object('documentId',pin.document_id,'moduleId',pin.module_id)));
   END IF;
@@ -898,7 +902,7 @@ BEGIN
   after_record:=truss.runtime_object_history(new_image,identity);
   FOR property IN SELECT * FROM truss.prop_def WHERE type_id=object_row.type_id AND retired_rev IS NULL ORDER BY prop_id LOOP
    IF old_image->'props'->property.prop_id::text IS DISTINCT FROM new_image->'props'->property.prop_id::text THEN
-    SELECT * INTO STRICT pin FROM truss.runtime_definition('property',object_row.type_id,property.prop_id);
+    SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',object_row.type_id,property.prop_id);
     events:=events||jsonb_build_array(jsonb_build_object('operation','property','propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,
      'before',CASE WHEN old_image->'props' ? property.prop_id::text THEN jsonb_build_object('present',true,'value',old_image->'props'->property.prop_id::text) ELSE '{"present":false}'::jsonb END,
      'after',CASE WHEN new_image->'props' ? property.prop_id::text THEN jsonb_build_object('present',true,'value',new_image->'props'->property.prop_id::text) ELSE '{"present":false}'::jsonb END));
@@ -1066,7 +1070,7 @@ BEGIN
    namespace_key:=definition.type_id::text||':'||definition.key_num::text;
    namespace_hex:=namespaces->>namespace_key;
    IF namespace_hex IS NULL THEN
-    SELECT * INTO STRICT pin FROM truss.runtime_definition('key',definition.type_id,definition.key_num);
+    SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',definition.type_id,definition.key_num);
     namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
      'sourceEpoch',installation.source_epoch::text,'typeId',definition.type_id::text,'keyNumber',definition.key_num::text,
      'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
@@ -1085,7 +1089,7 @@ BEGIN
      ELSE false END);
    route_bytes:=route_bytes+octet_length(convert_to(entry::text,'UTF8'))+CASE WHEN cardinality(route_items)=0 THEN 0 ELSE 2 END;
    route_items:=array_append(route_items,entry);
-   IF cardinality(route_items)>4096 OR route_bytes>8388608 THEN
+   IF cardinality(route_items)>16384 OR route_bytes>16777216 THEN
     RAISE EXCEPTION 'bounded whole-group key footprint required' USING ERRCODE='54000';END IF;
   END LOOP;
  END LOOP;
@@ -1102,10 +1106,10 @@ BEGIN
   entry:=jsonb_build_object('namespace',encode(member.namespace_bytes,'hex'),'transport',encode(member.key_bytes,'hex'));
   lock_route_bytes:=lock_route_bytes+octet_length(convert_to(entry::text,'UTF8'))+CASE WHEN cardinality(lock_route_items)=0 THEN 0 ELSE 2 END;
   lock_route_items:=array_append(lock_route_items,entry);
-  IF cardinality(lock_route_items)+cardinality(route_items)>4096 OR lock_route_bytes+route_bytes>8388608 THEN
+  IF cardinality(lock_route_items)+cardinality(route_items)>16384 OR lock_route_bytes+route_bytes>16777216 THEN
    RAISE EXCEPTION 'bounded whole-group key footprint required' USING ERRCODE='54000';END IF;
  END LOOP;
- IF cardinality(lock_route_items)+cardinality(route_items)>4096 OR lock_route_bytes+route_bytes>8388608 THEN
+ IF cardinality(lock_route_items)+cardinality(route_items)>16384 OR lock_route_bytes+route_bytes>16777216 THEN
   RAISE EXCEPTION 'bounded whole-group key footprint required' USING ERRCODE='54000';END IF;
  routes:=to_jsonb(route_items);lock_routes:=to_jsonb(lock_route_items);
  FOR route IN SELECT DISTINCT decode(value->>'namespace','hex') route_namespace,decode(value->>'transport','hex') route_transport FROM jsonb_array_elements(routes||lock_routes)
@@ -1240,7 +1244,7 @@ BEGIN
      AND jsonb_typeof(history_metadata->'propertyPins'->property.prop_id::text)='string' THEN
      expected_property_pin:=history_metadata->'propertyPins'->>property.prop_id::text;
     ELSE
-     SELECT * INTO STRICT pin FROM truss.runtime_definition('property',transition.type_id,property.prop_id,(plan->>'catalogRevision')::int);
+     SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',transition.type_id,property.prop_id,(plan->>'catalogRevision')::int);
      expected_property_pin:=pin.definition_pin;
     END IF;
     expected_events:=expected_events||jsonb_build_array(jsonb_build_object('operation','property','propertyId',property.prop_id::text,'definitionPin',expected_property_pin,

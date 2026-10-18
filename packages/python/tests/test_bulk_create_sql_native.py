@@ -130,6 +130,25 @@ class BulkEdgeSqlTests(edge_base.EdgeMutationTests):
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(10,))
 
 
+    def test_value_update_preserves_thousand_unrelated_independent_edges(self):
+        connection,host,assembly,tx,a,b,pin=self.initialized()
+        context=assembly.group_context_in_transaction(tx).value
+        operations=tuple(self.link(pin,StoredObjectReference(identity=a),StoredObjectReference(identity=b),alias=f'independent-{i}') for i in range(1000))
+        result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
+        host.detach();connection.commit()
+        before=self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall()
+        connection,host,assembly,tx=self.consumer()
+        from truss.groups import UpdateObject,AuthoredValue
+        from truss.contracts import TextValue
+        context=assembly.group_context_in_transaction(tx).value
+        operation=UpdateObject(target=StoredObjectReference(identity=a),set=(AuthoredValue(name='A-value',value=TextValue(kind='string',text='updated')),),unset=(),expected_version='1')
+        result=assembly.apply_in_transaction(tx,context.input((operation,),MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall(),before)
+        self.assertEqual(self.admin.execute('SELECT ver FROM truss.object WHERE id=%s',(int(a.id),)).fetchone(),(2,))
+
     def test_buffered_scope_equals_retained_observer_with_thousand_edges(self):
         connection,host,assembly,tx,a,b,pin=self.initialized()
         context=assembly.group_context_in_transaction(tx).value

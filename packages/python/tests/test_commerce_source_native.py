@@ -22,16 +22,17 @@ class CommerceSourceTests(base.PublicCreateGroupTests):
         self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))
         self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
         report=json.loads(accepted.value.report_bytes)
-        self.assertEqual(report['interfaceVersion'],'truss-catalog-registration-report/0.5')
-        self.assertEqual(report['source']['sourceFormat'],'truss-registration-summary/1.0')
+        self.assertEqual(report['interfaceVersion'],'truss-catalog-registration-report/0.6')
+        self.assertEqual(report['source']['sourceFormat'],'truss-registration-summary/2.0')
         self.assertNotIn('assertionEntries',report['source'])
         retained=report['acceptedInput']['documents'][0]
         artifact=retained['artifact']
         reference={'identity':artifact['identity'],'sha256':artifact['sha256'],
             'reference':{'interfaceVersion':'truss-catalog-source-reference/0.1',
                 'documentId':doc,'contentSha256':digest,'documentRevision':digest,'basis':'original'}}
-        resolved=resolve_catalog_report_source(accepted.value.report_bytes,reference)
-        self.assertEqual((resolved.content,resolved.sha256,resolved.document_revision),(raw,digest,digest))
+        self.assertNotIn('bytesBase64',artifact)
+        with self.assertRaisesRegex(ValueError,'accepted_document_in_transaction'):
+            resolve_catalog_report_source(accepted.value.report_bytes,reference)
         h.detach();c.commit()
         for role in ('group_reader','group_writer'):
             self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))

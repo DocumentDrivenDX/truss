@@ -210,7 +210,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.assertIsInstance(result.value,CatalogViewAvailable)
         view=result.value.view
         from jsonschema import Draft202012Validator
-        schema_path=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts/catalog-view-v0.1.schema.json'
+        schema_path=Path(__file__).resolve().parents[3]/'docs/helix/02-design/contracts/catalog-view-v0.2.schema.json'
         Draft202012Validator(json.loads(schema_path.read_bytes())).validate(json.loads(view.original_bytes))
         self.assertEqual(len(view.definitions),22)
         self.assertEqual([entry.reference.kind for entry in view.definitions],['type']*4+['property']*8+['key']*8+['relationship']*2)

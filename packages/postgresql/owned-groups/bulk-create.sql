@@ -36,21 +36,21 @@ BEGIN
  -- Catalog interpretation is compiled once per type, not once per object.
  FOR selected_type IN SELECT DISTINCT (p.plan->'afterNodes'->(p.plan->>'primary')->'image'->>'type_id')::int
   FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt LOOP
-  SELECT * INTO STRICT pin FROM truss.runtime_definition('type',selected_type);
+  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',selected_type);
   type_pin:=pin.definition_pin;
   PERFORM truss.runtime_module_writer_qualified(pin.document_id,pin.module_id,actor);
   IF NOT truss.runtime_object_values_readable_qualified(selected_type,actor) THEN
    RAISE EXCEPTION 'current property and item readers required' USING ERRCODE='42501';END IF;
   property_pins:='{}';property_order:='[]';
   FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY prop_id LOOP
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('property',selected_type,property.prop_id);
+   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',selected_type,property.prop_id);
    property_pins:=property_pins||jsonb_build_object(property.prop_id::text,pin.definition_pin);
    property_order:=property_order||to_jsonb(property.prop_id::text);
   END LOOP;
   dictionary:=dictionary||jsonb_build_object(selected_type::text,jsonb_build_object('typeId',selected_type::text,
    'revision',(SELECT rev::text FROM truss.schema_head WHERE id=1),'typePin',type_pin,'propertyOrder',property_order,'propertyPins',property_pins));
   FOR definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY key_num LOOP
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected_type,definition.key_num);
+   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected_type,definition.key_num);
    codec:=truss.runtime_owned_key_codec_metadata(selected_type,definition.key_num);
    IF codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32<=4194304 THEN
     codecs:=codecs||jsonb_build_object(selected_type::text||':'||definition.key_num::text,codec);

@@ -201,7 +201,7 @@ class OwnedObjectTests(receipt_tests.ReceiptVisibilityTests):
             query = assembly.query_in_transaction(tx,
                 sql='SELECT a.* FROM "A" a WHERE a."A-label" = :label',
                 document_ids=('adoc',), parameters={'label': 'grandchild'}, read_profile='complete-entity')
-            self.assertIsInstance(query, Ok, repr(query))
+            self.assertIsInstance(query, Ok, repr(query)+' '+str(host._custody.last_attempt.error))
             self.assertIsInstance(query.value, QueryRows, repr(query.value))
             row = dict(zip(query.value.columns, query.value.rows[0], strict=True))
             self.assertEqual((row['_version'], row['_created_by'], row['_updated_by']),

@@ -33,12 +33,12 @@ BEGIN
  IF NOT FOUND THEN RAISE EXCEPTION 'accepted import record type required' USING ERRCODE='22023';END IF;
  SELECT * INTO key_row FROM truss.key_def WHERE type_id=selected.type_id AND is_primary AND retired_rev IS NULL;
  IF NOT FOUND THEN RAISE EXCEPTION 'import primary key required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',selected.type_id);type_pin:=pin.definition_pin;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected.type_id,key_row.key_num);key_pin:=pin.definition_pin;
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',selected.type_id);type_pin:=pin.definition_pin;
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected.type_id,key_row.key_num);key_pin:=pin.definition_pin;
  FOR property IN SELECT p.* FROM unnest(key_row.prop_ids) WITH ORDINALITY i(prop_id,ord) JOIN truss.prop_def p ON p.type_id=selected.type_id AND p.prop_id=i.prop_id ORDER BY i.ord LOOP
   IF property.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR property.scalar_type IS NULL OR property.cardinality<>'one' OR property.nullability<>'required' OR property.home<>'json' OR property.retired_rev IS NOT NULL THEN RAISE EXCEPTION 'selected string primary key required' USING ERRCODE='0A000';END IF;
   IF NOT truss.runtime_can_read(selected_document,property.declaration_module) THEN RAISE EXCEPTION 'primary property reader required' USING ERRCODE='42501';END IF;
-  SELECT * INTO STRICT pin FROM truss.runtime_definition('property',selected.type_id,property.prop_id);
+  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',selected.type_id,property.prop_id);
   components:=components||jsonb_build_array(jsonb_build_object('name',property.name,'propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'scalarType',property.scalar_type,'facets',coalesce(property.facets,'{}'::jsonb)));
  END LOOP;
  FOR property IN SELECT p.* FROM unnest(key_row.prop_ids) i(prop_id) JOIN truss.prop_def p ON p.type_id=selected.type_id AND p.prop_id=i.prop_id LOOP
@@ -459,20 +459,20 @@ BEGIN
  SELECT * INTO STRICT selected FROM truss.type_def WHERE type_id=(identity->'type'->>'typeId')::int
   AND kind='record' AND NOT provisional AND retired_rev IS NULL;
  SELECT * INTO STRICT key_row FROM truss.key_def WHERE type_id=selected.type_id AND is_primary AND retired_rev IS NULL;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',selected.type_id);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',selected.type_id);
  IF identity->'type' IS DISTINCT FROM jsonb_build_object('typeId',selected.type_id::text,'definitionPin',pin.definition_pin,
     'owner',jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module))
   OR identity->>'keyNumber' IS DISTINCT FROM key_row.key_num::text
   OR identity->'keyEncodingProfile' IS DISTINCT FROM context->'importKeyProfile'
   OR jsonb_array_length(identity->'components') IS DISTINCT FROM cardinality(key_row.prop_ids) THEN
   RAISE EXCEPTION 'current qualified primary reference required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected.type_id,key_row.key_num);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected.type_id,key_row.key_num);
  IF identity->>'keyDefinitionPin' IS DISTINCT FROM pin.definition_pin THEN
   RAISE EXCEPTION 'current original primary definition required' USING ERRCODE='22023';END IF;
  FOR component IN SELECT p.*,i.n FROM unnest(key_row.prop_ids) WITH ORDINALITY i(prop_id,n)
   JOIN truss.prop_def p ON p.type_id=selected.type_id AND p.prop_id=i.prop_id ORDER BY i.n LOOP
   supplied:=identity->'components'->(component.n::int-1);
-  SELECT * INTO STRICT pin FROM truss.runtime_definition('property',selected.type_id,component.prop_id);
+  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',selected.type_id,component.prop_id);
   IF supplied-ARRAY['propertyId','definitionPin','value']<>'{}'::jsonb
    OR supplied->>'propertyId' IS DISTINCT FROM component.prop_id::text
    OR supplied->>'definitionPin' IS DISTINCT FROM pin.definition_pin THEN

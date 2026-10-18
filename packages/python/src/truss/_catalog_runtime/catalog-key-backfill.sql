@@ -182,7 +182,7 @@ BEGIN
    END LOOP;
    IF values_cells IS DISTINCT FROM entry->'values' OR truss.verify_umf_scalar_key_tuple(decode(entry->>'tupleHex','hex'),values_cells,facets) IS NOT TRUE THEN
     RAISE EXCEPTION 'unchanged exact final key values required' USING ERRCODE='55000';END IF;
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected.type_id,definition.key_num);
+   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected.type_id,definition.key_num);
    ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
     'sourceEpoch',installation.source_epoch::text,'typeId',selected.type_id::text,'keyNumber',definition.key_num::text,
     'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');

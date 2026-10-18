@@ -23,7 +23,7 @@ BEGIN
   AND element=selected_record AND kind='record' AND NOT provisional AND retired_rev IS NULL AND since_rev<=captured_revision;
  IF NOT FOUND THEN RETURN NULL;END IF;
  IF NOT truss.runtime_object_values_readable(selected_type.type_id) THEN RETURN NULL;END IF;
- SELECT * INTO STRICT source_pin FROM truss.runtime_definition('type',selected_type.type_id);
+ SELECT * INTO STRICT source_pin FROM truss.runtime_owned_definition_metadata('type',selected_type.type_id);
  IF original_cursor IS NOT NULL THEN
   IF octet_length(original_cursor) NOT BETWEEN 1 AND 65536 OR (convert_from(original_cursor,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
    RAISE EXCEPTION 'bounded original page cursor required' USING ERRCODE='22023';END IF;

@@ -55,7 +55,7 @@ class CurrentQuerySubjectCutNativeTests(base.CurrentQuerySubjectsNativeTests):
             # original Key encoder runs, with no partial Subject or retained cut.
             writer.execute('BEGIN');writer.execute('LOCK TABLE ONLY truss.edge IN ROW EXCLUSIVE MODE NOWAIT')
             blocked_connection,blocked_host,_,blocked_tx=self.consumer()
-            bun=os.environ['TRUSS_BUN_EXECUTABLE']
+            bun='/unused/embedded-only'
             try:
                 with patch('truss._current_query_subjects.encode_string_key_tuples') as encoder:
                     refused=observe_current_query_subject_in_transaction(blocked_host,blocked_tx,self.current_subject_registration,bun_executable=bun)

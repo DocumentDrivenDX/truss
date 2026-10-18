@@ -17,7 +17,7 @@ export async function createAcceptanceInputInspector(dependenciesPackage:string,
  const require=createRequire(dependenciesPackage);const Ajv=require('ajv/dist/2020').default;
  const validate=new Ajv({strict:true}).compile(JSON.parse(schemaBytes.toString('utf8')));
  return Object.freeze({schemaSha256:SCHEMA_SHA,inspect(original:Uint8Array){
-  let owned:Uint8Array;try{owned=copyOriginalByteCustody(original,true)}catch(error){if(error instanceof OriginalByteCustodyError)throw new AcceptanceInputInspectionError(error.reason==='resource'?'resource':'source_custody');throw error}
+  let owned:Uint8Array;try{owned=copyOriginalByteCustody(original,true,16777216)}catch(error){if(error instanceof OriginalByteCustodyError)throw new AcceptanceInputInspectionError(error.reason==='resource'?'resource':'source_custody');throw error}
   const input=decodeAcceptanceJson(owned);if(!validate(input))throw new AcceptanceInputInspectionError('schema');
   const wire=input as unknown as AcceptanceInput;
   if(wire.documents.length>512)throw new AcceptanceInputInspectionError('resource');
@@ -25,7 +25,7 @@ export async function createAcceptanceInputInspector(dependenciesPackage:string,
   function artifact(value:ExactArtifact):Buffer{
    const bytes=Buffer.from(value.bytesBase64,'base64');
    if(bytes.toString('base64')!==value.bytesBase64||digest(bytes)!==value.sha256)throw new AcceptanceInputInspectionError('artifact_integrity');
-   totalArtifacts+=bytes.length;if(bytes.length>1048576||totalArtifacts>4194304)throw new AcceptanceInputInspectionError('resource');return bytes;
+   totalArtifacts+=bytes.length;if(bytes.length>4194304||totalArtifacts>16777216)throw new AcceptanceInputInspectionError('resource');return bytes;
   }
   for(const document of wire.documents){
    if(identities.has(document.documentId))throw new AcceptanceInputInspectionError('document_identity');identities.add(document.documentId);
@@ -36,6 +36,6 @@ export async function createAcceptanceInputInspector(dependenciesPackage:string,
   }
   if(wire.binding.state==='present')artifact(wire.binding.artifact);
   function freeze(value:unknown):void{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value)}}freeze(wire);
-  return Object.freeze({input:wire,documents:Object.freeze(documents),originalUtf8Hex:Buffer.from(owned).toString('hex'),schemaSha256:SCHEMA_SHA,scope:'wire_and_artifact_inspection_only' as const});
+  return Object.freeze({input:wire,documents:Object.freeze(documents),get originalUtf8Hex(){return Buffer.from(owned).toString('hex')},schemaSha256:SCHEMA_SHA,scope:'wire_and_artifact_inspection_only' as const});
  }});
 }

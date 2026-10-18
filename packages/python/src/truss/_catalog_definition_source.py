@@ -5,7 +5,7 @@ slice at an explicit JSON pointer after strict archive validation.
 """
 import json
 from decimal import Decimal
-from ._owner_evidence_json import decode_owner_evidence_json
+from ._owner_evidence_json import decode_owner_evidence_json,decode_catalog_source_json
 
 
 def extract_definition(original: bytes,pointer: str) -> bytes:
@@ -59,8 +59,13 @@ def extract_definition(original: bytes,pointer: str) -> bytes:
 
 
 def extract_definitions(original: bytes, pointers) -> dict[str, bytes]:
-    """Locate requested exact slices in one walk of a strictly validated archive."""
-    decode_owner_evidence_json(original)
+    text,locations=extract_definition_locations(original,pointers)
+    return {pointer:text[start:end].encode('utf-8') for pointer,(start,end) in locations.items()}
+
+
+def extract_definition_locations(original: bytes,pointers):
+    """One bounded walk; callers can share the source without retained slices."""
+    decode_catalog_source_json(original)
     requested={}
     prefixes={()}
     for pointer in pointers:
@@ -105,9 +110,9 @@ def extract_definitions(original: bytes, pointers) -> dict[str, bytes]:
                 cursor=skip(cursor+1)
             end=cursor+1
         for pointer in requested.get(path,()):
-            result[pointer]=text[start:end].encode('utf-8')
+            result[pointer]=(start,end)
         return end
     visit(skip(0),())
     if len(result)!=len(set(pointer for values in requested.values() for pointer in values)):
         raise ValueError('Definition pointer does not resolve')
-    return result
+    return text,result

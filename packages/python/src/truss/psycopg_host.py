@@ -438,7 +438,7 @@ class PsycopgHost:
                 raise
             return False
 
-    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None):
+    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None, parameter_limit=4194304):
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
         host_reservation=self._custody.reservation
@@ -548,7 +548,7 @@ class PsycopgHost:
                             or any(type(cell) not in (str, bytes) for cell in parameters)):
                         raise ValueError('Exact immutable semantic parameters required')
                     if sum(len(cell.encode('utf8')) if type(cell) is str else len(cell)
-                           for cell in parameters) > 4194304:
+                           for cell in parameters) > parameter_limit:
                         raise ValueError('Semantic parameter capacity exceeded')
                     attempt.dispatch_parameters = parameters
                     deadline.check()
@@ -706,7 +706,7 @@ class PsycopgHost:
             return _failure('invalid_transaction', 'Original issued transaction handle required')
         return self._attempt(callback, custody, publish=publisher)
 
-    def _run_semantic_operation(self, transaction, callback, *, parameter_producer=None):
+    def _run_semantic_operation(self, transaction, callback, *, parameter_producer=None, parameter_limit=4194304):
         """Reserve a nonrewinding ordinal before SQL on the shared connection.
 
         Private execution primitive for protected catalog/group facades. An
@@ -723,7 +723,9 @@ class PsycopgHost:
         if (custody is None or custody.handle is not transaction
                 or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
             return _failure('invalid_transaction', 'Original issued transaction handle required')
-        return self._attempt(callback, custody, semantic=True, parameter_producer=parameter_producer)
+        if parameter_limit not in (4194304,16777216) or type(parameter_limit) is not int:
+            return _failure('invalid_transaction','Registered semantic parameter budget required')
+        return self._attempt(callback, custody, semantic=True, parameter_producer=parameter_producer,parameter_limit=parameter_limit)
 
     def detach(self):
         self._closed = True

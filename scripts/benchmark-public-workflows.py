@@ -5,6 +5,7 @@ Uses the existing native test fixture only for isolated PostgreSQL/role setup.
 Business operations use the public Truss API. No private table writes or mocks.
 """
 import argparse
+import gzip
 import hashlib
 import importlib.metadata
 import importlib.resources
@@ -48,7 +49,7 @@ if args.forbid_external_javascript:
 if min(args.bulk_size,args.read_samples,args.write_samples)<1:parser.error('sample sizes must be positive')
 if args.expected_group_limit<1:parser.error('--expected-group-limit must be positive')
 if args.bulk_size>args.expected_group_limit:parser.error('--bulk-size exceeds the configured expected group limit')
-if not args.matrix_case and not args.examples_root:parser.error('--examples-root is required for real samples')
+
 from performance_workloads import workloads, schema as workload_schema, values as workload_values, edges as workload_edges
 selected_workloads=workloads()
 matrix_settings=json.loads((Path(__file__).resolve().parents[1]/'docs/helix/03-test/performance/workloads.json').read_text())
@@ -75,6 +76,14 @@ from test_catalog_runtime_native import PublicCatalogRuntimeTests
 
 measurements=[]
 results=[]
+args.output.parent.mkdir(parents=True,exist_ok=True)
+progress_path=args.output.with_suffix('.jsonl')
+progress_path.write_text('')
+def record_measurement(measurement):
+    measurements.append(measurement)
+    with progress_path.open('a') as stream:
+        stream.write(json.dumps(measurement,separators=(',',':'))+'\n')
+
 
 def timed(case,operation,call,rows=1):
     start=time.perf_counter_ns()
@@ -84,9 +93,9 @@ def timed(case,operation,call,rows=1):
         failure=dict(case=case,operation=operation,rows=rows,ms=(time.perf_counter_ns()-start)/1e6,status='failed',error=str(error))
         diagnostics=getattr(error,'diagnostics',())
         if diagnostics:failure['diagnostics']=[d.decode('utf-8',errors='replace')[:4096] if isinstance(d,bytes) else str(d)[:4096] for d in diagnostics[:4]]
-        measurements.append(failure)
+        record_measurement(failure)
         raise
-    measurements.append(dict(case=case,operation=operation,rows=rows,ms=(time.perf_counter_ns()-start)/1e6,status='ok'))
+    record_measurement(dict(case=case,operation=operation,rows=rows,ms=(time.perf_counter_ns()-start)/1e6,status='ok'))
     if operation in ('install','prepare','register','registrar_catalog_view','bulk_create','bulk_edges'):
         print(f'{case}: {operation} {measurements[-1]["ms"]:.2f} ms ({rows} rows)',file=sys.stderr,flush=True)
     return result
@@ -111,7 +120,14 @@ class RealWorkflows(PublicCatalogRuntimeTests):
         case={'sample':sample,'status':'running'};results.append(case)
         workload=selected_workloads[sample] if args.matrix_case else None
         record='R0' if workload else {'pizza':'Country','northwind':'Category','catalog':'UseCase'}[sample]
-        raw=json.dumps(workload_schema(workload),separators=(',',':')).encode() if workload else (args.examples_root/sample/(sample+'.umf.json')).read_bytes()
+        if workload:raw=json.dumps(workload_schema(workload),separators=(',',':')).encode()
+        elif args.examples_root:raw=(args.examples_root/sample/(sample+'.umf.json')).read_bytes()
+        else:
+            corpus=json.loads(gzip.decompress((root/'packages/python/tests/fixtures/hohfeld/originals.json.gz').read_bytes()))
+            fixture=next(d for d in corpus['documents'] if d['sample']==sample)
+            raw=fixture['sourceText'].encode()
+            if hashlib.sha256(raw).hexdigest()!=fixture['sha256']:raise AssertionError('Original real-schema fixture hash mismatch')
+            case['sourceCommit']=corpus['sourceCommit'] if 'sourceCommit' in corpus else fixture.get('sourceCommit')
         source=json.loads(raw);module=source['modules'][0];document_id=source['id'];module_id=module['id']
         if workload:case['workload']=workload
         count=workload['nodes'] if workload else args.bulk_size

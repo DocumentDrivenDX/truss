@@ -71,7 +71,7 @@ BEGIN
  OR binding-ARRAY['interfaceVersion','queryAbi','schema','installationId','releaseId','releaseSha256','catalogRevision','documents','records','relationships','maximumScanRows','maximumResultRows','maximumBytes']<>'{}'::jsonb
  OR binding->>'schema' IS DISTINCT FROM 'truss' OR binding->>'installationId' IS DISTINCT FROM installation.installation_id::text
  OR binding->>'releaseId' IS DISTINCT FROM installation.release_id OR binding->>'releaseSha256' IS DISTINCT FROM installation.release_sha256
- OR installation.release_id<>'truss-catalog-runtime/0.71-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+ OR installation.release_id<>'truss-catalog-runtime/0.72-candidate' OR (binding->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
  OR binding->>'maximumResultRows' IS NULL OR (binding->>'maximumResultRows')::int NOT BETWEEN 1 AND 10000 OR binding->>'maximumScanRows' IS NULL OR binding->>'maximumBytes' IS NULL OR (binding->>'maximumScanRows')::int NOT BETWEEN 1 AND 10000 OR (binding->>'maximumBytes')::int NOT BETWEEN 1 AND 16777216
  OR octet_length(binding::text)>4194304 OR jsonb_typeof(binding->'documents') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'documents') NOT BETWEEN 1 AND 32
  OR jsonb_typeof(binding->'relationships') IS DISTINCT FROM 'array' OR jsonb_array_length(binding->'relationships')>1024
@@ -181,7 +181,7 @@ BEGIN
   WHERE archive.doc_id=root_type.document_id AND archive.rev<=captured_revision
    AND EXISTS(SELECT 1 FROM jsonb_array_elements(archive.document::jsonb->'modules') m WHERE m.value->>'id'=root_type.module)) THEN RAISE EXCEPTION 'aggregate root document must be selected for query' USING ERRCODE='0A000';END IF;
  IF NOT truss.runtime_can_read(root_type.document_id,root_type.module) THEN RAISE EXCEPTION 'current query aggregate root reader required' USING ERRCODE='42501';END IF;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',root_row.type_id,NULL,captured_revision);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',root_row.type_id,NULL,captured_revision);
  RETURN jsonb_build_object('id',root_row.id::text,'typeId',root_row.type_id::text,'definitionPin',pin.definition_pin,
   'owner',jsonb_build_object('documentId',root_type.document_id,'moduleId',root_type.module));
 END;

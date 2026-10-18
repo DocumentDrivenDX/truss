@@ -30,7 +30,7 @@ class CatalogKeyBackfillTests(base.CatalogRebindTests):
     def test_register_existing_objects_lookup_and_query(self):
         identities=self.seed(('first','second'));c,h,a,t=self.consumer();accepted=self.register(a,t)
         self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error));self.assertIsInstance(accepted.value,CatalogRegistration)
-        report=json.loads(accepted.value.report_bytes);self.assertEqual(len(report['keyBackfills']),2)
+        report=json.loads(accepted.value.report_bytes);self.assertEqual(report['effects']['keyBackfills'],2)
         found=a.lookup_key_in_transaction(t,document_id='adoc',module_id='m',record_id='A',key_id='a-backfill',values=('first',),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.assertIsInstance(found.value,ObjectFound,repr(found));self.assertEqual(found.value.object.id,int(identities[0].id));self.assertEqual(found.value.object.version,1)
         query=a.query_in_transaction(t,sql='SELECT a."A-value" FROM "A" a ORDER BY a."A-value"',document_ids=('adoc',))
@@ -129,7 +129,7 @@ class OwnedCatalogKeyBackfillTests(CatalogKeyBackfillTests):
         self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))
         self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
         original=accepted.value.report_bytes;revision=accepted.value.revision
-        self.assertEqual(len(json.loads(original)['keyBackfills']),2)
+        self.assertEqual(json.loads(original)['effects']['keyBackfills'],2)
         h.detach();c.commit();self.assert_preserved()
         c,h,a,t=self.consumer()
         found=a.lookup_key_in_transaction(t,document_id='adoc',module_id='m',record_id='A',key_id='a-backfill',values=('first',))
@@ -207,7 +207,7 @@ class OwnedCatalogRebindTests(OwnedCatalogKeyBackfillTests):
         self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))
         self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
         report=accepted.value.report_bytes;revision=accepted.value.revision
-        self.assertEqual(len(json.loads(report)['rebinds']),2)
+        self.assertEqual(json.loads(report)['effects']['reboundObjects'],2)
         new_root=a.get_type_reference_in_transaction(t,document_id='adoc',module_id='roots',record_id='B').value
         self.assertNotEqual(new_root.definition_pin,root.definition_pin)
         retry=self.register(a,t);self.assertIsInstance(retry,Ok,repr(retry))
@@ -256,7 +256,7 @@ class OwnedCatalogRebindTests(OwnedCatalogKeyBackfillTests):
         self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))
         self.assertIsInstance(accepted.value,CatalogRegistration,repr(accepted))
         report=json.loads(accepted.value.report_bytes)
-        self.assertEqual((len(report['rebinds']),len(report['keyBackfills'])),(2,2))
+        self.assertEqual((report['effects']['reboundObjects'],report['effects']['keyBackfills']),(2,2))
         h.detach();c.commit();c,h,a,t=self.consumer()
         found=a.lookup_key_in_transaction(t,document_id='adoc',module_id='m',record_id='A',key_id='note-key',values=('owned first',))
         self.assertIsInstance(found.value,ObjectFound,repr(found))

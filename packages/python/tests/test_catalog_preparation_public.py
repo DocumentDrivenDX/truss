@@ -13,9 +13,9 @@ class CatalogPreparationPublicTests(unittest.TestCase):
         self.assertIsInstance(prepared,PreparedAcceptance)
         self.assertEqual(prepared.documents[0].document.content,raw)
         summary=json.loads(prepared.report_evidence_bytes)
-        self.assertEqual(summary['interfaceVersion'],'truss-registration-preparation/1.0')
+        self.assertEqual(summary['interfaceVersion'],'truss-registration-preparation/2.0')
         self.assertEqual(set(summary),{'interfaceVersion','documents'})
-        self.assertTrue(summary['documents'][0]['sourceValidation']['valid'])
+        self.assertTrue(summary['documents'][0]['validation']['valid'])
         self.assertEqual(summary['documents'][0]['contentSha256'],hashlib.sha256(raw).hexdigest())
 
     def test_large_original_document_does_not_generate_inspection_transcripts(self):
@@ -33,5 +33,20 @@ class CatalogPreparationPublicTests(unittest.TestCase):
         support=evaluate_catalog_support(prepared)
         self.assertEqual(support['closedSourceInventory']['state'],'supported')
         semantic=compose_original_catalog_report_semantics(prepared,support)
-        self.assertEqual(semantic['sourceFormat'],'truss-registration-summary/1.0')
+        self.assertEqual(semantic['sourceFormat'],'truss-registration-summary/2.0')
         self.assertNotIn('assertionEntries',semantic)
+
+    def test_source_selects_its_profile_and_explicit_mismatch_refuses(self):
+        from test_preparation import document
+        from truss import PreparationRejected
+        from truss.catalog_preparation import _configuration
+        for version in ('0.7.0','0.8.0'):
+            source=json.loads(document('selected').content);source['umf']=version
+            original=CatalogDocument('selected','r1',json.dumps(source).encode())
+            prepared=prepare_catalog((original,))
+            self.assertEqual(prepared.input()['supportProfile'],_configuration(version)['supportProfile'])
+            self.assertEqual(prepared.documents[0].document.content,original.content)
+            self.assertIsNone(prepared.documents[0].observation()['transition'])
+            other='0.8.0' if version=='0.7.0' else '0.7.0'
+            with self.assertRaises(PreparationRejected) as rejected:prepare_catalog((original,),source_version=other)
+            self.assertEqual(rejected.exception.reason,'unsupported_profile')

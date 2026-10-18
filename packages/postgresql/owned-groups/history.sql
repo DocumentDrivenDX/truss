@@ -14,7 +14,7 @@ BEGIN
  IF revision IS NULL OR revision<1 OR root_id IS NULL OR root_id<1 OR root_type IS NULL OR root_type<1
   OR root_id=(object_image->>'id')::bigint AND root_type=(object_image->>'type_id')::int THEN
   RAISE EXCEPTION 'original aggregate root identity required' USING ERRCODE='55000';END IF;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',root_type,NULL,revision);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',root_type,NULL,revision);
  RETURN jsonb_build_object('state','owned','root',jsonb_build_object('id',root_id::text,
   'typeId',root_type::text,'definitionPin',pin.definition_pin,
   'owner',jsonb_build_object('documentId',pin.document_id,'moduleId',pin.module_id)));
@@ -39,7 +39,7 @@ BEGIN
   OR root->>'id'=image->'identity'->>'id' AND root->>'typeId'=image->'identity'->>'typeId'
   OR revision IS NULL OR revision<1 THEN
   RAISE EXCEPTION 'exact historical aggregate root required' USING ERRCODE='55000';END IF;
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(root->>'typeId')::int,NULL,revision);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',(root->>'typeId')::int,NULL,revision);
  IF root->>'definitionPin' IS DISTINCT FROM pin.definition_pin
   OR root->'owner' IS DISTINCT FROM jsonb_build_object('documentId',pin.document_id,'moduleId',pin.module_id) THEN
   RAISE EXCEPTION 'original aggregate root interpretation required' USING ERRCODE='55000';END IF;
@@ -62,11 +62,11 @@ LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SE
 DECLARE properties jsonb:='[]';retained jsonb;property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;
 BEGIN
  basis:=truss.catalog_all_expected_records(written_revision);
- SELECT * INTO STRICT pin FROM truss.runtime_definition('type',(object_image->>'type_id')::int,NULL,written_revision);
+ SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',(object_image->>'type_id')::int,NULL,written_revision);
  identity:=jsonb_set(identity,'{definitionPin}',to_jsonb(pin.definition_pin));
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(object_image->>'type_id')::int ORDER BY prop_id LOOP
   IF object_image->'props' ? property.prop_id::text THEN
-   SELECT * INTO STRICT pin FROM truss.runtime_definition('property',property.type_id,property.prop_id,written_revision);
+   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',property.type_id,property.prop_id,written_revision);
    properties:=properties||jsonb_build_array(jsonb_build_object('propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'value',object_image->'props'->property.prop_id::text));
   END IF;
  END LOOP;
@@ -88,7 +88,7 @@ BEGIN
  OR image->'identity'->'owner' IS DISTINCT FROM jsonb_build_object('documentId',entity->>'documentId','moduleId',entity->>'moduleId')
  OR image->>'recordVersion' IS DISTINCT FROM expected_version::text THEN RAISE EXCEPTION 'original complete history image required' USING ERRCODE='55000';END IF;
  revision:=(image->>'catalogRevision')::int;
- IF entity->>'kind'='object' THEN SELECT definition_pin INTO STRICT pin FROM truss.runtime_definition('type',(entity->>'typeId')::int,NULL,revision);
+ IF entity->>'kind'='object' THEN SELECT definition_pin INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',(entity->>'typeId')::int,NULL,revision);
  ELSE pin:=truss.runtime_relationship_pin((entity->>'typeId')::int,revision);END IF;
  IF image->'identity'->>'definitionPin' IS DISTINCT FROM pin THEN RAISE EXCEPTION 'original image interpretation required' USING ERRCODE='55000';END IF;
  FOR member IN SELECT value FROM jsonb_array_elements(image->'properties') LOOP
@@ -97,7 +97,7 @@ BEGIN
  IF entity->>'kind'='object' THEN PERFORM truss.runtime_history_ownership(image);END IF;
  IF entity->>'kind'='edge' THEN
   FOR endpoint IN SELECT value FROM jsonb_array_elements(jsonb_build_array(image->'source',image->'target')) LOOP
-   SELECT * INTO STRICT endpoint_pin FROM truss.runtime_definition('type',(endpoint->>'typeId')::int,NULL,revision);
+   SELECT * INTO STRICT endpoint_pin FROM truss.runtime_owned_definition_metadata('type',(endpoint->>'typeId')::int,NULL,revision);
    IF endpoint->>'definitionPin' IS DISTINCT FROM endpoint_pin.definition_pin OR endpoint->'owner' IS DISTINCT FROM jsonb_build_object('documentId',endpoint_pin.document_id,'moduleId',endpoint_pin.module_id) THEN
     RAISE EXCEPTION 'original endpoint interpretation required' USING ERRCODE='55000';END IF;
    IF NOT truss.runtime_can_read(endpoint_pin.document_id,endpoint_pin.module_id) THEN RAISE EXCEPTION 'current historical endpoint reader required' USING ERRCODE='42501';END IF;

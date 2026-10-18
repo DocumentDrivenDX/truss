@@ -220,3 +220,16 @@ class SemanticOrdinalTests(unittest.TestCase):
         self.assertEqual(self.host._custody.pending.ordinal_reservation.result.ordinal,'0')
 
 if __name__ == '__main__': unittest.main(verbosity=2)
+
+    def test_catalog_budget_is_explicit_and_default_parameter_bound_is_unchanged(self):
+        parameters=(b'x'*(4194304+1),)
+        refused=self.host._run_semantic_operation(self.tx,lambda *args:self.fail('Over-budget callback must not run'),parameter_producer=lambda ordinal:parameters)
+        self.assertIsInstance(refused,Error)
+        self.assertEqual(self.connection.execute('SELECT value FROM caller_work').fetchall(),[('kept',)])
+        accepted=self.host._run_semantic_operation(self.tx,lambda cursor,observed,ordinal,retained:len(retained[0]),parameter_producer=lambda ordinal:parameters,parameter_limit=16777216)
+        self.assertEqual(accepted,Ok(4194305))
+        for budget in (True,0,16777217,67108864):
+            refused=self.host._run_semantic_operation(self.tx,lambda *args:self.fail('Unregistered budget'),parameter_limit=budget)
+            self.assertIsInstance(refused,Error)
+        refused=self.host._run_semantic_operation(self.tx,lambda *args:self.fail('Larger catalog budget must remain finite'),parameter_producer=lambda ordinal:(b'x'*(16777216+1),),parameter_limit=16777216)
+        self.assertIsInstance(refused,Error)

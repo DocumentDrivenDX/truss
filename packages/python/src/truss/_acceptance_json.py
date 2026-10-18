@@ -13,8 +13,8 @@ class AcceptanceJsonError(ValueError):
 
 
 def decode_acceptance_json(original: bytes):
-    """Strict numeric-free acceptance JSON with a 1-MiB byte limit."""
-    return _decode_numeric_free(original, 1_048_576)
+    """Strict numeric-free acceptance JSON with a 16-MiB byte limit."""
+    return _decode_numeric_free(original, 16_777_216)
 
 
 def decode_row_operation_json(original: bytes):

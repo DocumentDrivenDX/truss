@@ -141,7 +141,7 @@ REVOKE ALL ON FUNCTION truss.owned_graph_scope(jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_owned_input_scope(input jsonb) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE operation jsonb;object_references jsonb;reference jsonb;identity jsonb;
- seeds jsonb;seed_items jsonb[]:='{}';seed jsonb;stored_edge truss.edge%ROWTYPE;reference_type truss.type_def%ROWTYPE;current_actor oid;
+ seeds jsonb;seed_items jsonb[]:='{}';seed jsonb;lean_nodes jsonb;lean_types jsonb;lean_order jsonb;lean_forest jsonb;lean_count int;stored_edge truss.edge%ROWTYPE;reference_type truss.type_def%ROWTYPE;current_actor oid;
 BEGIN
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
   OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 1024 THEN
@@ -194,6 +194,34 @@ BEGIN
  SELECT coalesce(jsonb_agg(seed_value ORDER BY first_ordinal),'[]'::jsonb) INTO seeds
  FROM (SELECT item seed_value,min(ordinality) first_ordinal
   FROM unnest(seed_items) WITH ORDINALITY entries(item,ordinality) GROUP BY item) distinct_seeds;
+ -- Pure value updates and independent edge creates have no ownership edits.
+ -- When the catalog has no owned relationships and every observed row is
+ -- rootless, incident independent edge images cannot affect these operations.
+ -- Read each explicit endpoint once; native final constraints still inspect
+ -- actual relationship cardinalities and current reader/writer authority.
+ IF NOT EXISTS(SELECT 1 FROM truss.rel_def WHERE retired_rev IS NULL AND lifecycle='owned')
+  AND (NOT EXISTS(SELECT 1 FROM jsonb_array_elements(input->'operations') o
+       WHERE o.value->>'operation'<>'update_object' OR o.value ? 'ownershipChange' OR o.value->'target'->>'state'<>'stored')
+   OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(input->'operations') o
+       WHERE o.value->>'operation'<>'create_edge' OR o.value->'source'->>'state'<>'stored' OR o.value->'target'->>'state'<>'stored'))
+  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(seeds) s JOIN truss.object o
+    ON o.id=(s.value->>'id')::bigint AND o.type_id=(s.value->>'typeId')::int
+    WHERE o.root_id IS NOT NULL OR o.root_type IS NOT NULL) THEN
+  SELECT count(*),coalesce(jsonb_agg(to_jsonb(o.type_id::text||':'||o.id::text) ORDER BY s.ordinality),'[]'::jsonb),
+   coalesce(jsonb_object_agg(o.type_id::text||':'||o.id::text,to_jsonb(o)),'{}'::jsonb),
+   coalesce(jsonb_object_agg(t.type_id::text,to_jsonb(t)),'{}'::jsonb),
+   coalesce(jsonb_agg(jsonb_build_object('node',s.ordinality-1,'parent',NULL,'root',NULL,'incomingEdges','[]'::jsonb) ORDER BY s.ordinality),'[]'::jsonb)
+   INTO lean_count,lean_order,lean_nodes,lean_types,lean_forest
+   FROM jsonb_array_elements(seeds) WITH ORDINALITY s JOIN truss.object o
+    ON o.id=(s.value->>'id')::bigint AND o.type_id=(s.value->>'typeId')::int
+   JOIN truss.type_def t ON t.type_id=o.type_id;
+  IF lean_count<>jsonb_array_length(seeds) OR lean_count>2048
+   OR octet_length(lean_nodes::text)+octet_length(lean_types::text)>4194304 THEN
+   RAISE EXCEPTION 'bounded complete explicit rootless rows required' USING ERRCODE='54000';END IF;
+  RETURN jsonb_build_object('catalogRevision',(SELECT rev FROM truss.schema_head WHERE id=1),
+   'independentEndpointScope',true,'nodeOrder',lean_order,'ownedEdgeOrder','[]'::jsonb,'nodes',lean_nodes,'edges','{}'::jsonb,
+   'types',lean_types,'relationships','{}'::jsonb,'boundary','{}'::jsonb,'forest',lean_forest);
+ END IF;
  -- The scope observer checks exact native ranges and complete membership.
  RETURN truss.owned_graph_scope(seeds);
 END;

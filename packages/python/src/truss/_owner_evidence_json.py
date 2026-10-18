@@ -16,7 +16,12 @@ def decode_issued_model_requirements_json(original):
     return _decode_evidence_json(original, 16_000_000)
 
 
-def _decode_evidence_json(original, max_bytes):
+def decode_catalog_source_json(original):
+    """Catalog source profile; ordinary evidence member bounds stay unchanged."""
+    return _decode_evidence_json(original,4_194_304,65_536)
+
+
+def _decode_evidence_json(original, max_bytes, max_members=4096):
     if type(original) is not bytes or not 1 <= len(original) <= max_bytes:
         raise ValueError('Bounded original owner evidence required')
 
@@ -54,12 +59,12 @@ def _decode_evidence_json(original, max_bytes):
         if nodes > 1_000_000 or depth > 128:
             raise ValueError('Owner evidence tree capacity exceeded')
         if type(item) is dict:
-            if len(item) > 4096:
+            if len(item) > max_members:
                 raise ValueError('Owner evidence object capacity exceeded')
             pending.extend((key, depth + 1) for key in item)
             pending.extend((child, depth + 1) for child in item.values())
         elif type(item) is list:
-            if len(item) > 4096:
+            if len(item) > max_members:
                 raise ValueError('Owner evidence array capacity exceeded')
             pending.extend((child, depth + 1) for child in item)
         elif type(item) is str:

@@ -5,31 +5,36 @@ from hashlib import sha256
 import json
 from .contracts import ProfilePin, QualifiedOwner, ExactArtifact
 from .catalog_view import (CatalogDefinitionReference, CatalogDocumentProvenance,
-    CatalogDefinitionEntry, CatalogView)
-from ._catalog_definition_source import extract_definitions
-from ._owner_evidence_json import decode_owner_evidence_json
+    CatalogDefinitionEntry, CatalogView, CatalogDefinitionSource, _definition_source)
+from ._catalog_definition_source import extract_definition_locations
+from ._owner_evidence_json import decode_catalog_source_json
 
 _EXTRACTION_RULE=b'UTF-8 JSON value slice at RFC6901 pointer; exclude surrounding whitespace; preserve original tokens; v1'
 EXTRACTION_PROFILE=ProfilePin(identity='truss-original-json-definition',version='0.1',sha256=sha256(_EXTRACTION_RULE).hexdigest())
-_VIEW_RULE=b"""truss-complete-catalog-view/0.3
+_VIEW_RULE=b"""truss-complete-catalog-view/0.4
 Supported accepted revisions: positive current revision, immutable cumulative archives with compatible evolution. Native definition IDs remain stable; unchanged definitions retain original archive pins and changed definitions resolve their accepted revision/ordinal/document archive. Complete scope only. Maximum definitions65536, bytes16777216.
 Hash serialization: json.dumps(ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf-8'). SHA256 lowercase hex.
 Definition pin input array: [document.rev integer,document.ord integer,original document SHA256 string,authored JSON pointer string,extraction profile wire object,exact value-slice SHA256 string]. Artifact identity equals definition pin.
-Inventory hash input: exact ordered definition-entry wire array, including artifacts, provenance and dependency references.
+Inventory hash input object: extractionProfile once, and definitions as ordered compact entries with source SHA256, provenance and ordered dependency pins. Source bytes are archived once and extracted only on explicit compatibility access. Extraction profile is shared at view level. Original view bytes are derived, not retained.
 Consistency hash input object: installationId,releaseId,releaseSha256,revision,registrationId,reportSha256; each value exact native text.
 Inventory order: type numeric type_id; property numeric prop_id; key numeric(type_id,key_num); relationship numeric rel_type_id.
 Type dependencies: authored Record.members order. Property dependencies: owning Record. Key dependencies: owning Record then authored ordered fields. Relationship dependencies: authored source types then each authored target type and its type-local key. Preserve repeated dependencies, including self endpoints.
 Key pointers use authored keys array position, not native key_num. Property source owner module is declaration_module. Relationship identity is numeric rel_type_id.
 Complete encoded-byte budget includes all view fields. Internal native basis has a separate16MiB bound. No truncation.
 """
-VIEW_PROFILE=ProfilePin(identity='truss-complete-catalog-view',version='0.3',sha256=sha256(_VIEW_RULE).hexdigest())
+VIEW_PROFILE=ProfilePin(identity='truss-complete-catalog-view',version='0.4',sha256=sha256(_VIEW_RULE).hexdigest())
 
 
 def wire(value):
+    if type(value) is CatalogDefinitionSource:return {'sha256':value.sha256}
+    if type(value) is CatalogDefinitionEntry:
+        return {'reference':wire(value.reference),'lifecycle':value.lifecycle,'resolution':value.resolution,
+            'definition':wire(value.definition),'provenance':wire(value.provenance),
+            'dependencies':[reference.definition_pin for reference in value.dependencies]}
     if is_dataclass(value):
         result={}
         for item in fields(value):
-            if item.name=='original_bytes':continue
+            if item.name=='original_bytes' or type(value) is CatalogDocumentProvenance and item.name=='extraction_profile':continue
             child=getattr(value,item.name)
             if child is None:continue
             parts=item.name.split('_');name=parts[0]+''.join(part.title() for part in parts[1:])
@@ -49,7 +54,7 @@ def build_catalog_view(basis,layout_profile):
     for document in basis['documents']:
         original=document['document'].encode('utf-8')
         if sha256(original).hexdigest()!=document['content_sha256']:raise ValueError('Original archive digest required')
-        parsed=decode_owner_evidence_json(original)
+        parsed=decode_catalog_source_json(original)
         if parsed['id']!=document['doc_id']:raise ValueError('Original archive identity required')
         archive_key=(document['rev'],document['ord'],document['doc_id'])
         if archive_key in archives:raise ValueError('Unique accepted archive required')
@@ -70,7 +75,7 @@ def build_catalog_view(basis,layout_profile):
                 pointer=f'/modules/{mi}/relationships/{ri}'
                 occurrences[address]=(rel,pointer)
                 pointers.append(pointer)
-        fragments[archive_key]=extract_definitions(original,pointers)
+        fragments[archive_key]=extract_definition_locations(original,pointers)
     entries=[];references={};sources={};native={}
     def archive_key(row):
         return (row['definition_rev'],row['definition_doc_ord'],row['definition_document_id'])
@@ -79,7 +84,9 @@ def build_catalog_view(basis,layout_profile):
         doc,original=archives[archive_key(row)]
         if row['definition_document_id']!=address[0] or row['definition_doc_ord']!=doc['ord'] or row['definition_rev']!=doc['rev']:
             raise ValueError('Accepted native source provenance required')
-        fragment=fragments[archive_key(row)][pointer]
+        text,locations=fragments[archive_key(row)]
+        start,end=locations[pointer]
+        fragment=text[start:end].encode('utf8')
         digest=sha256(fragment).hexdigest()
         pin=sha256(encoded([doc['rev'],doc['ord'],doc['content_sha256'],pointer,wire(EXTRACTION_PROFILE),digest])).hexdigest()
         reference=CatalogDefinitionReference(kind=kind,definition_pin=pin,
@@ -90,7 +97,7 @@ def build_catalog_view(basis,layout_profile):
         key=(kind,tuple(ids.items()))
         if key in references:raise ValueError('Unique native definition reference required')
         references[key]=reference;sources[key]=source;native[key]=row
-        entries.append((key,reference,ExactArtifact(identity=pin,bytes_base64=base64.b64encode(fragment).decode(),sha256=digest),provenance))
+        entries.append((key,reference,_definition_source(pin,digest,text,start,end),provenance))
         return reference
     type_refs={};prop_refs={};key_refs={};type_source={}
     for row in basis['types']:
@@ -138,9 +145,8 @@ def build_catalog_view(basis,layout_profile):
             lifecycle='retired' if row['retired_rev'] is not None else 'active',
             resolution='provisional' if row.get('provisional',False) else 'defined',
             definition=artifact,provenance=provenance,dependencies=tuple(dependencies)))
-    inventory=sha256(encoded([wire(entry) for entry in definitions])).hexdigest()
+    inventory=sha256(encoded({'extractionProfile':wire(EXTRACTION_PROFILE),'definitions':[wire(entry) for entry in definitions]})).hexdigest()
     evidence=sha256(encoded({key:basis[key] for key in ('installationId','releaseId','releaseSha256','revision','registrationId','reportSha256')})).hexdigest()
     view=CatalogView(catalog_revision=basis['revision'],layout_profile=layout_profile,view_profile=VIEW_PROFILE,
-        consistency_evidence_sha256=evidence,definitions=tuple(definitions),inventory_sha256=inventory,original_bytes=b'')
-    from dataclasses import replace
-    return replace(view,original_bytes=encoded(wire(view)))
+        consistency_evidence_sha256=evidence,definitions=tuple(definitions),inventory_sha256=inventory,extraction_profile=EXTRACTION_PROFILE)
+    return view

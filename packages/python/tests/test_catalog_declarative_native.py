@@ -27,7 +27,6 @@ class DeclarativeCatalogNativeTests(unittest.TestCase):
                         elif mutation=='unknown_home':clear['futureStorage']={'home':'unselected'}
                         raw=json.dumps(source,separators=(',',':')).encode()
                         inputs=copy.deepcopy(prepared.input());archive=json.loads(prepared.archive_documents_bytes)
-                        inputs['documents'][0]['artifact']['bytesBase64']=base64.b64encode(raw).decode()
                         inputs['documents'][0]['artifact']['sha256']=sha256(raw).hexdigest()
                         archive[0]['originalText']=raw.decode()
                         args=(json.dumps(inputs).encode(),json.dumps(archive).encode(),prepared.declarations_bytes)

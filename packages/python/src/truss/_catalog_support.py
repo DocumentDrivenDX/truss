@@ -59,16 +59,15 @@ def evaluate_catalog_support(prepared):
         raise ValueError('Original selected catalog support policy required')
     if (choices['binding']!={'state':'absent'} or choices['transforms']
         or any(d['ingress']!={'kind':'native'} for d in choices['documents'])
-        or any(d.observation()['source']['umf']!=('0.8.0' if current else '0.7.0') for d in prepared.documents)):
+        or any(d.source()['umf']!=('0.8.0' if current else '0.7.0') for d in prepared.documents)):
         raise ValueError('Unselected catalog support source')
     evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
-    ordinary=evidence.get('interfaceVersion')=='truss-registration-preparation/1.0'
+    ordinary=evidence.get('interfaceVersion') in ('truss-registration-preparation/1.0','truss-registration-preparation/2.0')
     if ordinary:
         expected=[{'documentId':d.document.document_id,
             'contentSha256':sha256(d.document.content).hexdigest(),
-            'sourceValidation':d.observation()['sourceValidation'],
-            'targetValidation':d.observation()['targetValidation']} for d in prepared.documents]
-        if evidence!={'interfaceVersion':'truss-registration-preparation/1.0','documents':expected}:
+            'validation':next(entry['validation'] for entry in evidence['documents'] if entry['documentId']==d.document.document_id)} for d in prepared.documents]
+        if evidence!={'interfaceVersion':'truss-registration-preparation/2.0','documents':expected}:
             raise ValueError('Original registration validation results required')
     else:
         observations,coverage,core=require_catalog_owner_evidence(prepared,evidence)
@@ -76,7 +75,7 @@ def evaluate_catalog_support(prepared):
     staged=set()
     unresolved=[]
     for document in prepared.documents:
-        source=document.observation()['source']
+        source=document.source()
         for module in source['modules']:
             for element in module['elements']:
                 source_elements[(document.document.document_id,module['id'],element['id'])]=element
@@ -165,6 +164,10 @@ def evaluate_catalog_support(prepared):
     return decision
 
 
+def _whole_number(value):
+    return type(value) is int or type(value) is float and value.is_integer()
+
+
 def _closed_source_inventory(prepared, observations, core, *, relational=False,scalars=False,named=False,inverse=False,metadata=False,current=False,faceted=False,containers=False,decimal2=False,recursive=False,standalone_scalars=False,ordinary=False,dates=False):
     """Complete source occurrence inventory for explicit scalar string Records.
 
@@ -181,7 +184,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
     declaration_values={}
     documents={d['documentId']:catalog_source_artifact(prepared,d['documentId']) for d in prepared.input()['documents']}
     for document in prepared.documents:
-        source=document.observation()['source']
+        source=document.source()
         if source['umf']!=('0.8.0' if current else '0.7.0') or set(source)-({'umf','id','modules','vocabularies','extensions'}|({'title'} if compact_catalog_sources(prepared) else set())):
             return unavailable
         if not metadata and (source.get('vocabularies',{})!={} or source.get('extensions',{})!={}):
@@ -253,10 +256,10 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                     if not container:operations.append('scalarType')
                     if faceted and 'facets' in element:
                         facet=element['facets'];family=element.get('scalarType')
-                        signed=(family=='integer' and facet=={'integerWidth':{'bits':64,'signed':True}} and type(facet['integerWidth']['bits']) is int and type(facet['integerWidth']['signed']) is bool)
-                        decimal=(family=='decimal' and facet in (({'precision':18,'scale':4},{'precision':18,'scale':2}) if decimal2 else ({'precision':18,'scale':4},)) and type(facet['precision']) is int and type(facet['scale']) is int)
+                        signed=(family=='integer' and facet=={'integerWidth':{'bits':64,'signed':True}} and _whole_number(facet['integerWidth']['bits']) and type(facet['integerWidth']['signed']) is bool)
+                        decimal=(family=='decimal' and facet in (({'precision':18,'scale':4},{'precision':18,'scale':2}) if decimal2 else ({'precision':18,'scale':4},)) and _whole_number(facet['precision']) and _whole_number(facet['scale']))
                         if ordinary and family=='decimal' and facet=={'precision':12,'scale':2}:decimal=True
-                        if dates and family=='decimal' and type(facet) is dict and set(facet)=={'precision','scale'} and type(facet['precision']) is int and type(facet['scale']) is int and 1<=facet['precision']<=2147483647 and 0<=facet['scale']<=facet['precision']:decimal=True
+                        if dates and family=='decimal' and type(facet) is dict and set(facet)=={'precision','scale'} and _whole_number(facet['precision']) and _whole_number(facet['scale']) and 1<=facet['precision']<=2147483647 and 0<=facet['scale']<=facet['precision']:decimal=True
                         if facet!={} and not (signed or decimal):return unavailable
                     if (current or faceted) and 'facets' in element:
                         operations.append('facets');declaration_values[(document.document.document_id,'facets',module['id'],element['id'])]=element['facets']
@@ -281,8 +284,8 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                         refs=relation[side];multiplicity=relation[side+'Multiplicity']
                         if (type(refs) is not list or any(type(ref) is not dict or set(ref)!=({'module','element'} if side=='source' else {'module','element','key'}) for ref in refs)
                             or type(multiplicity) is not dict or set(multiplicity)!={'min','max'}
-                            or type(multiplicity['min']) is not int or not 0<=multiplicity['min']<=2147483647
-                            or not (multiplicity['max']=='*' or (type(multiplicity['max']) is int and multiplicity['min']<=multiplicity['max']<=2147483647))):
+                            or not _whole_number(multiplicity['min']) or not 0<=multiplicity['min']<=2147483647
+                            or not (multiplicity['max']=='*' or (_whole_number(multiplicity['max']) and multiplicity['min']<=multiplicity['max']<=2147483647))):
                             return unavailable
                     address=(document.document.document_id,f'/modules/{mi}/relationships/{ri}')
                     expected[address]='core.relationships';authored[address]=relation['id']
@@ -313,7 +316,7 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                     raise ValueError('Original authored declaration meaning correspondence required')
             elif operation in ('relationships','keys','referenceLinks') or (operation=='facets' and kind=='field'):
                 expected_state='missing';classification='authored_absence'
-            elif (containers and kind=='field' and operation=='scalarType' and any(e.get('cardinality') in ('array','map') for d in prepared.documents if d.document.document_id==observed['documentId'] for m in d.observation()['source']['modules'] if m['id']==identity.get('module') for e in m['elements'] if e['id']==identity.get('element'))):
+            elif (containers and kind=='field' and operation=='scalarType' and any(e.get('cardinality') in ('array','map') for d in prepared.documents if d.document.document_id==observed['documentId'] for m in d.source()['modules'] if m['id']==identity.get('module') for e in m['elements'] if e['id']==identity.get('element'))):
                 expected_state='missing';classification='authored_absence'
             elif (kind=='record' and operation in ('nullability','cardinality','facets','scalarType')) or (kind=='field' and operation=='members'):
                 expected_state='inapplicable';classification='inapplicable_to_source_kind'
@@ -371,7 +374,7 @@ def verified_retained_metadata(prepared):
     evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
     documents={d['documentId']:d['artifact'] for d in prepared.input()['documents']}
     profiles={d['documentId']:d['umfProfile'] for d in prepared.input()['documents']}
-    sources={d.document.document_id:d.observation()['source'] for d in prepared.documents}
+    sources={d.document.document_id:d.source() for d in prepared.documents}
     def read(artifact):
         raw=base64.b64decode(artifact['bytesBase64'],validate=True)
         if sha256(raw).hexdigest()!=artifact['sha256']:raise ValueError('Original retained artifact hash required')

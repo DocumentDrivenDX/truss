@@ -84,3 +84,22 @@ class EmbeddedOwnerTests(unittest.TestCase):
             self.assertIsNone(owner.vm)
 
 if __name__=='__main__':unittest.main()
+
+class EmbeddedByteCodecTests(unittest.TestCase):
+    def test_chunked_utf8_matches_independent_codecs_and_keeps_exact_buffer_lengths(self):
+        import json,random
+        from truss._embedded import OwnerVM
+        samples=['','ASCII','é漢字🧵','\x00\n\t','\ud800','\udfff','a'*1048576]
+        generator=random.Random(20261017)
+        samples.extend(''.join(chr(generator.choice([0x20,0x61,0xe9,0x3bb,0x4e2d,0x1f9f5])) for _ in range(128)) for _ in range(20))
+        with OwnerVM('_umf_keys08/bridge.mjs',input_bytes=b'{}',timeout=15) as owner:
+            result=json.loads(owner.eval('JSON.stringify('+json.dumps(samples)+'.map(text=>{const a=new TextEncoder().encode(text),b=Buffer.from(text,"utf8");return {same:Buffer.from(a).equals(b),exact:a.buffer.byteLength===a.byteLength};}))'))
+            self.assertTrue(all(r['same'] and r['exact'] for r in result))
+            for text in ('','é漢字🧵','\ufeffabc','A'*1048576):
+                original=text.encode('utf8')
+                decoded=owner.eval('new TextDecoder().decode(Buffer.from('+json.dumps(original.hex())+',"hex"))')
+                self.assertEqual(decoded,original.decode('utf-8-sig'))
+            for encoded in ('80','c0af','e080af','f4908080','e282'):
+                actual=owner.eval('new TextDecoder().decode(Buffer.from('+json.dumps(encoded)+',"hex"))')
+                self.assertEqual(actual,bytes.fromhex(encoded).decode('utf8',errors='replace'))
+                self.assertTrue(owner.eval('(()=>{try{new TextDecoder("utf-8",{fatal:true}).decode(Buffer.from('+json.dumps(encoded)+',"hex"));return false}catch{return true}})()'))

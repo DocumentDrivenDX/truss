@@ -34,3 +34,4 @@ class AcceptedDocument:
     catalog_revision: int
     registration_id: str
     source_catalog_revision: int
+    validation_bytes: bytes | None = None

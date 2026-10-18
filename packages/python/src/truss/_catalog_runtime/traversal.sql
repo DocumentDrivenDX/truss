@@ -40,7 +40,7 @@ BEGIN
   END LOOP;
   types:=types||jsonb_build_object(selected_type.type_id::text,to_jsonb(selected_type));
   properties_by_type:=properties_by_type||jsonb_build_object(selected_type.type_id::text,(SELECT coalesce(jsonb_agg(p ORDER BY p.prop_id),'[]') FROM truss.prop_def p WHERE p.type_id=selected_type.type_id AND p.retired_rev IS NULL));
-  pins:=pins||jsonb_build_object(selected_type.type_id::text,(SELECT definition_pin FROM truss.runtime_definition('type',selected_type.type_id)));
+  pins:=pins||jsonb_build_object(selected_type.type_id::text,(SELECT definition_pin FROM truss.runtime_owned_definition_metadata('type',selected_type.type_id)));
  END LOOP;
  IF octet_length(types::text)+octet_length(properties_by_type::text)+octet_length(pins::text)>maximum_bytes THEN result:=convert_to('{"outcome":"limited","reason":"retained_bytes"}','UTF8');END IF;
  IF result IS NULL THEN
@@ -85,7 +85,7 @@ BEGIN
    root_owners:=root_owners||jsonb_build_object(root_owner::text,root_owner);
    IF octet_length(root_owners::text)>16777216 THEN RAISE EXCEPTION 'bounded traversal authority context required' USING ERRCODE='54000';END IF;
    root_identity:=jsonb_build_object('id',frozen_root.id::text,'typeId',frozen_root.type_id::text,
-    'definitionPin',(SELECT d.definition_pin FROM truss.runtime_definition('type',frozen_root.type_id) d),'owner',root_owner);
+    'definitionPin',(SELECT d.definition_pin FROM truss.runtime_owned_definition_metadata('type',frozen_root.type_id) d),'owner',root_owner);
   END IF;
   IF NOT observation.terminal OR result IS NOT NULL THEN CONTINUE;END IF;
   index:=index+1;

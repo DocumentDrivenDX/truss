@@ -60,7 +60,7 @@ BEGIN
   WHERE k.type_id=(selection->>'typeId')::int AND k.key_num=(selection->>'keyNumber')::smallint;
  tuple_bytes:=truss.derive_catalog_key_tuple((selection->>'typeId')::int,(selection->>'keyNumber')::smallint,values_json);
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- SELECT * INTO STRICT source_pin FROM truss.runtime_definition('key',(selection->>'typeId')::int,(selection->>'keyNumber')::int);
+ SELECT * INTO STRICT source_pin FROM truss.runtime_owned_definition_metadata('key',(selection->>'typeId')::int,(selection->>'keyNumber')::int);
  namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
   'sourceEpoch',installation.source_epoch::text,'typeId',selection->>'typeId','keyNumber',selection->>'keyNumber',
   'definitionPin',source_pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');

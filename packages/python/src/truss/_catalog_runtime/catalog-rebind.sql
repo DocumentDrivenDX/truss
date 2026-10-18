@@ -113,8 +113,8 @@ BEGIN
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  selected_profile:=CASE WHEN EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.since_rev=request.revision AND p.cardinality IN ('array','map') AND p.item ? 'descendants')
   THEN 'truss-native-catalog-rebind/0.4' WHEN EXISTS(
-  SELECT 1 FROM jsonb_populate_recordset(NULL::truss.key_def,planned_basis->'key_def') k
-  JOIN jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p ON p.type_id=k.type_id AND p.prop_id=ANY(k.prop_ids)
+  SELECT 1 FROM truss.key_def k CROSS JOIN LATERAL unnest(k.prop_ids) member(prop_id)
+  JOIN truss.prop_def p ON p.type_id=k.type_id AND p.prop_id=member.prop_id
   WHERE k.since_rev=request.revision AND NOT k.is_primary AND p.since_rev=request.revision)
   THEN 'truss-native-catalog-rebind/0.3' ELSE 'truss-native-catalog-rebind/0.2' END;
  FOR object_row IN SELECT o.* FROM truss.object o WHERE EXISTS(SELECT 1 FROM truss.prop_def p
@@ -194,10 +194,11 @@ REVOKE ALL ON FUNCTION truss.catalog_rebind_objects(truss.catalog_registration_r
 -- Check retained candidates against the actual native planned property definition.
 CREATE FUNCTION truss.catalog_rebind_violations(planned_basis jsonb,revision int) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE property truss.prop_def%ROWTYPE;owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;affected bigint;missing bigint;violations jsonb:='[]';
+DECLARE property truss.prop_def%ROWTYPE;owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;affected bigint;missing bigint;violations jsonb:='[]';owner_index jsonb;
 BEGIN
+ SELECT coalesce(jsonb_object_agg(t.value->>'type_id',t.value),'{}'::jsonb) INTO owner_index FROM jsonb_array_elements(planned_basis->'type_def') t;
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p WHERE p.since_rev=revision LOOP
-  SELECT * INTO STRICT owner FROM jsonb_populate_recordset(NULL::truss.type_def,planned_basis->'type_def') t WHERE t.type_id=property.type_id;
+  SELECT * INTO STRICT owner FROM jsonb_populate_record(NULL::truss.type_def,owner_index->property.type_id::text) t WHERE t.type_id=property.type_id;
   IF NOT EXISTS(SELECT 1 FROM truss.type_def WHERE type_id=property.type_id) THEN CONTINUE;END IF;
   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE
    OR truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
@@ -237,7 +238,7 @@ BEGIN
   END IF;
  END LOOP;
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p WHERE p.since_rev=revision AND EXISTS(SELECT 1 FROM truss.type_def t WHERE t.type_id=p.type_id) LOOP
-  SELECT * INTO STRICT owner FROM jsonb_populate_recordset(NULL::truss.type_def,planned_basis->'type_def') t WHERE t.type_id=property.type_id;
+  SELECT * INTO STRICT owner FROM jsonb_populate_record(NULL::truss.type_def,owner_index->property.type_id::text) t WHERE t.type_id=property.type_id;
   IF truss.runtime_can_read(owner.document_id,owner.module) IS NOT TRUE
    OR truss.runtime_can_read(owner.document_id,property.declaration_module) IS NOT TRUE
    OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
@@ -272,7 +273,7 @@ BEGIN
   END LOOP;
   FOR property_id IN SELECT jsonb_object_keys(transition.before_object->'props') LOOP
    PERFORM truss.runtime_history_property(transition.type_id,property_id::int,(transition.before_object->>'rev')::int,
-    (SELECT definition_pin FROM truss.runtime_definition('property',transition.type_id,property_id::int,(transition.before_object->>'rev')::int)));
+    (SELECT definition_pin FROM truss.runtime_owned_definition_metadata('property',transition.type_id,property_id::int,(transition.before_object->>'rev')::int)));
   END LOOP;
   FOR property_id IN SELECT jsonb_object_keys(transition.after_object->'props') LOOP
    SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=transition.type_id AND p.prop_id=property_id::int;

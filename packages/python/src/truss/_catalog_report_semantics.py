@@ -64,11 +64,11 @@ def compose_original_catalog_report_semantics(prepared,support):
             return {'state':'unavailable','reason':'unsupported_storage_definition'}
         memberships=[]
         for document in prepared.input()['documents']:
-            membership={'version':next(d.observation()['source']['umf'] for d in prepared.documents
+            membership={'version':next(d.source()['umf'] for d in prepared.documents
                 if d.document.document_id==document['documentId']),
                 'interpretationProfile':document['umfProfile'],'supportedSubset':support['supportedSubset']}
             if membership not in memberships:memberships.append(membership)
-        return {'state':'source_fields_ready','sourceFormat':'truss-registration-summary/1.0',
+        return {'state':'source_fields_ready','sourceFormat':'truss-registration-summary/2.0',
             'umf':memberships,'documentValidations':support['registrationSummary']['documents']}
     if inventory.get('state')!='inventoried':
         return {'state':'unavailable','reason':'complete_closed_source_inventory_required'}
@@ -86,7 +86,7 @@ def compose_original_catalog_report_semantics(prepared,support):
     digest=sha256((b'truss-canonical/0.1.0\ntruss-catalog-assertion-inventory/0.2.0\n' if compact else b'truss-canonical/0.1.0\ntruss-catalog-assertion-inventory/0.1.0\n')+canonical).hexdigest()
     groups=[]
     for document in prepared.input()['documents']:
-        membership={'version':next(d.observation()['source']['umf'] for d in prepared.documents if d.document.document_id==document['documentId']),'interpretationProfile':document['umfProfile'],
+        membership={'version':next(d.source()['umf'] for d in prepared.documents if d.document.document_id==document['documentId']),'interpretationProfile':document['umfProfile'],
                     'supportedSubset':support['supportedSubset']}
         group=next((group for group in groups if group['umf']==membership),None)
         if group is None:

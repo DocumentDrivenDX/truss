@@ -19,8 +19,9 @@ from ._umf_release import MANIFEST_SHA256
 from ._core08_catalog_release import MANIFEST_SHA256 as CORE08_MANIFEST_SHA256
 from ._acceptance_json import decode_acceptance_json
 
-MAX_INPUT=1048576
-MAX_OUTPUT=16777216
+MAX_INPUT=16777216
+MAX_DOCUMENT=4194304
+MAX_OUTPUT=67108864
 
 @dataclass(frozen=True,slots=True)
 class CatalogDocument:
@@ -36,7 +37,19 @@ class DocumentInterpretation:
 
     def observation(self) -> dict[str, object]:
         """Fresh copy of the complete original owner observation/diagnostics."""
-        return json.loads(self.observation_bytes)
+        evidence=json.loads(self.observation_bytes)
+        if evidence.get('interfaceVersion')=='truss-registration-preparation/2.0':
+            entry=next(d for d in evidence['documents'] if d['documentId']==self.document.document_id)
+            if entry['contentSha256']!=sha256(self.document.content).hexdigest():raise ValueError('Original source digest required')
+            source=self.source()
+            return {'originalText':self.document.content.decode('utf8'),'source':source,
+                'sourceValidation':entry['validation'],'transition':None,
+                'targetValidation':json.loads(json.dumps(entry['validation'])),'target':self.source()}
+        return evidence
+
+    def source(self) -> dict[str,object]:
+        """Fresh original schema; no retained duplicate source representation."""
+        return json.loads(self.document.content)
 
 @dataclass(frozen=True,slots=True)
 class PreparationProvenance:
@@ -52,10 +65,22 @@ class PreparationProvenance:
 class PreparedAcceptance:
     input_bytes: bytes
     documents: tuple[DocumentInterpretation,...]
-    declarations_bytes: bytes
-    archive_documents_bytes: bytes
     provenance: PreparationProvenance
     report_evidence_bytes: bytes
+
+    @property
+    def declarations_bytes(self) -> bytes:
+        """Compatibility projection, derived on demand from the one original source."""
+        return _json([_catalog_declarations(d.document.document_id,d.source()) for d in self.documents])
+
+    @property
+    def archive_documents_bytes(self) -> bytes:
+        summary=json.loads(self.report_evidence_bytes)
+        validations={d['documentId']:d['validation'] for d in summary['documents']}
+        return _json([{'documentId':d.document.document_id,'revision':d.document.document_revision,
+            'umfVersion':d.source()['umf'],'originalText':d.document.content.decode('utf8'),
+            'validation':{'storageFormat':'truss-catalog-source/2','sourceValidation':validations[d.document.document_id],'transition':None}}
+            for d in self.documents])
 
     def input(self) -> dict[str, object]:
         """Fresh AcceptanceInput dictionary; exact source remains in artifacts."""
@@ -66,7 +91,7 @@ _original_preparations = {}
 def _snapshot(prepared):
     if (type(prepared) is not PreparedAcceptance
             or any(type(getattr(prepared,name)) is not bytes for name in
-                   ('input_bytes','declarations_bytes','archive_documents_bytes','report_evidence_bytes'))
+                   ('input_bytes','report_evidence_bytes'))
             or type(prepared.documents) is not tuple
             or type(prepared.provenance) is not PreparationProvenance):
         raise ValueError('Exact original preparation carrier required')
@@ -82,8 +107,7 @@ def _snapshot(prepared):
         expected=bool if name=='installation_profiles_verified' else str
         if type(getattr(prepared.provenance,name)) is not expected:
             raise ValueError('Exact original provenance carrier required')
-    return (prepared.input_bytes, prepared.declarations_bytes,
-            prepared.archive_documents_bytes, prepared.report_evidence_bytes,
+    return (prepared.input_bytes, prepared.report_evidence_bytes,
             tuple((d.document.document_id, d.document.document_revision,
                    d.document.content, d.document.artifact_identity, d.observation_bytes)
                   for d in prepared.documents),
@@ -186,14 +210,17 @@ def _capture(command,*,input_bytes=b'',limit,timeout,cwd=None):
                 if process.poll() is None:
                     process.kill();process.wait()
 
-def prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes,*,bun_executable: str='bun') -> PreparedAcceptance:
-    return _prepare_acceptance(documents,configuration,bun_executable=bun_executable,current=False)
+def prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes | None=None,*,bun_executable: str='bun') -> PreparedAcceptance:
+    if configuration is None:
+        from .catalog_preparation import prepare_catalog
+        return prepare_catalog(documents,bun_executable=bun_executable)
+    return _prepare_acceptance(documents,configuration,bun_executable=bun_executable)
 
-def prepare_core08_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes,*,bun_executable: str='bun') -> PreparedAcceptance:
-    """Separate current original0.8 owner pipeline; no native acceptance authority."""
-    return _prepare_acceptance(documents,configuration,bun_executable=bun_executable,current=True)
+def prepare_core08_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes | None=None,*,bun_executable: str='bun') -> PreparedAcceptance:
+    """Compatibility spelling for the same source-selected preparation operation."""
+    return prepare_acceptance(documents,configuration,bun_executable=bun_executable)
 
-def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes,*,bun_executable: str='bun',current:bool=False,registration:bool=False) -> PreparedAcceptance:
+def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes,*,bun_executable: str='bun') -> PreparedAcceptance:
     """Prepare original native JSON UMF documents under explicit acceptance choices.
 
     configuration is the numeric-free AcceptanceInput JSON object without its
@@ -214,14 +241,25 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
         _text(identity)
         if document.document_id in seen:_reject('invalid_input')
         seen.add(document.document_id)
-        if type(document.content) is not bytes or not 1<=len(document.content)<=MAX_INPUT:_reject('resource')
+        if type(document.content) is not bytes or not 1<=len(document.content)<=MAX_DOCUMENT:_reject('resource')
         total+=len(document.content)
         if total>MAX_INPUT:_reject('resource')
         carriers.append({'documentId':document.document_id,'documentRevision':document.document_revision,
                          'artifact':{'identity':identity,'bytesBase64':base64.b64encode(document.content).decode('ascii'),
                                      'sha256':sha256(document.content).hexdigest()}})
-    request=_json({'configurationHex':configuration.hex(),'documents':carriers,**({'registration':True} if registration else {})})
+    request=_json({'configurationHex':configuration.hex(),'documents':carriers})
     if len(request)>MAX_INPUT:_reject('resource')
+    versions=set()
+    for document in documents:
+        try:
+            source=json.loads(document.content.decode('utf8'))
+            version=source.get('umf') if type(source) is dict else None
+        except (ValueError,UnicodeError,RecursionError):_reject('invalid_document')
+        if version is None:_reject('invalid_document')
+        if version not in ('0.7.0','0.8.0'):_reject('unsupported_profile')
+        versions.add(version)
+    if len(versions)!=1:_reject('unsupported_profile')
+    current=False  # One source validator owns both core versions; selectors only choose storage policy.
     root,manifest=(_release_core08() if current else _release())
     release_digest=CORE08_MANIFEST_SHA256 if current else MANIFEST_SHA256
     try:
@@ -240,22 +278,18 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
         raise PreparationRejected(reason,diagnostics=diagnostics)
     try:
         if result['status']!='prepared' or result['provenance']['scope']!='original_umf_preparation_only':_reject('producer_unavailable')
-        original=bytes.fromhex(result['inputHex']);parsed=decode_acceptance_json(original)
-        if parsed['documents']!=[{**carrier,'umfProfile':result['provenance']['umfProfile'],'ingress':{'kind':'native'}} for carrier in carriers]:_reject('producer_unavailable')
+        original=_json(result['input']);parsed=decode_acceptance_json(original)
+        if parsed['documents']!=[{**carrier,'artifact':{k:v for k,v in carrier['artifact'].items() if k!='bytesBase64'},'umfProfile':result['provenance']['umfProfile'],'ingress':{'kind':'native'}} for carrier in carriers]:_reject('producer_unavailable')
         expected_configuration=decode_acceptance_json(configuration)
         actual_configuration={key:value for key,value in parsed.items() if key not in ('documents','interfaceVersion')}
-        if actual_configuration!=expected_configuration or parsed['interfaceVersion']!='truss-acceptance-input/0.1.0':_reject('producer_unavailable')
+        if actual_configuration!=expected_configuration or parsed['interfaceVersion']!='truss-acceptance-input/0.2.0':_reject('producer_unavailable')
         observed=result['documents']
         if len(observed)!=len(documents):_reject('producer_unavailable')
-        archives=result['archiveDocuments']
-        if len(archives)!=len(documents):_reject('producer_unavailable')
-        for document,item,archive in zip(documents,observed,archives,strict=True):
-            if (item['documentId']!=document.document_id or item['revision']!=document.document_revision
-                    or item['originalText']!=document.content.decode('utf8')
-                    or item['interpretation']['originalText']!=document.content.decode('utf8')
-                    or archive!={key:value for key,value in item.items() if key!='interpretation'}):
-                _reject('producer_unavailable')
-        evidence=tuple(DocumentInterpretation(document,_json(item['interpretation'])) for document,item in zip(documents,observed,strict=True))
+        for document,item in zip(documents,observed,strict=True):
+            if (set(item)!={'documentId','revision','umfVersion','validation'}
+                    or item['documentId']!=document.document_id or item['revision']!=document.document_revision
+                    or item['umfVersion']!=json.loads(document.content)['umf']
+                    or item['validation'].get('valid') is not True):_reject('producer_unavailable')
         pin=result['provenance']['umfProfile']
         if (pin['identity'] != 'umf-record-interpretation'
                 or pin['version'] != manifest['owner']['revision']
@@ -263,17 +297,34 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
                 or result['provenance']['schemaSha256'] != manifest['files']['acceptance-input-v0.1.schema.json' if current else 'docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json']):
             _reject('producer_unavailable')
         report_evidence=result['reportEvidence']
-        ingress=report_evidence.get('ingress') if type(report_evidence) is dict else None
-        if type(ingress) is dict and ingress.get('state')=='unavailable':
-            reason=ingress.get('reason')
-            if reason in ('report_evidence_resource','report_evidence_unavailable'):
-                # The legacy producer drops the complete bundle before transport.
-                # It does not report its original size; never fabricate that value.
-                raise PreparationRejected('evidence_too_large' if reason=='report_evidence_resource' else 'evidence_unavailable',
-                    diagnostics=(_json(report_evidence),),
-                    limit_bytes=MAX_OUTPUT if reason=='report_evidence_resource' else None)
-        return _retain_original(PreparedAcceptance(original,evidence,_json(result['declarations']),_json(result['archiveDocuments']),
-            PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],release_digest,'mini-racer==0.14.1/V8 14.4.258.23'),_json(result['reportEvidence'])))
+        expected_summary={'interfaceVersion':'truss-registration-preparation/2.0','documents':[
+            {'documentId':document.document_id,'contentSha256':sha256(document.content).hexdigest(),
+             'validation':item['validation']}
+            for document,item in zip(documents,observed,strict=True)]}
+        if report_evidence!=expected_summary:_reject('producer_unavailable')
+        summary_bytes=_json(report_evidence)
+        evidence=tuple(DocumentInterpretation(document,summary_bytes) for document in documents)
+        return _retain_original(PreparedAcceptance(original,evidence,
+            PreparationProvenance(pin['version'],pin['sha256'],result['provenance']['schemaSha256'],release_digest,'mini-racer==0.14.1/V8 14.4.258.23'),summary_bytes))
     except (KeyError,ValueError,TypeError) as error:
         if isinstance(error,PreparationRejected):raise
         _reject('producer_unavailable')
+
+
+def _catalog_declarations(document_id,source):
+    """Truss storage references only; original UMF validation owns schema meaning."""
+    index={(m['id'],e['id']):e for m in source['modules'] for e in m['elements']}
+    records=[];relationships=[]
+    for module in source['modules']:
+        for element in module['elements']:
+            if element['kind']!='record':continue
+            fields=[]
+            for ref in element.get('members',[]):
+                field=index[(ref['module'],ref['element'])]
+                if field['kind']!='field':raise ValueError('Original Field member required')
+                fields.append({'fieldModule':ref['module'],'fieldId':ref['element'],'reference':ref,'declaration':field})
+            records.append({'documentId':document_id,'moduleId':module['id'],'elementId':element['id'],
+                'declaration':element,'membership':'declared' if 'members' in element else 'missing',
+                'fields':fields,'keys':element.get('keys',[])})
+        relationships.extend({'documentId':document_id,'moduleId':module['id'],'declaration':rel} for rel in module.get('relationships',[]))
+    return {'records':records,'relationships':relationships,'scope':'original_declaration_correspondence_only'}

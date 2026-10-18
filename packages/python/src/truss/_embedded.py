@@ -16,23 +16,28 @@ from time import monotonic
 from ._current_query_pipe import CurrentQueryPipeError, _envelope
 
 
-@lru_cache(maxsize=1)
-def _assets():
+@lru_cache(maxsize=8)
+def _assets(cohort):
     root = files('truss').joinpath('_embedded_js')
     from ._embedded_release import MANIFEST_SHA256
     raw_manifest=root.joinpath('manifest.json').read_bytes()
     if sha256(raw_manifest).hexdigest()!=MANIFEST_SHA256:
         raise ValueError('Embedded owner manifest pin mismatch')
     manifest = json.loads(raw_manifest)
-    if manifest['profile'] != 'truss.embedded-v8/1' or manifest['engine'] != 'mini-racer==0.14.1':
+    if manifest['profile'] != 'truss.embedded-v8/2' or manifest['engine'] != 'mini-racer==0.14.1':
         raise ValueError('Qualified embedded owner profile required')
+    if cohort not in ('_umf','_umf_core08','_umf_keys','_umf_keys08','_current_query_owner','_current_disclosure_owner','_preparation_sources'):
+        raise ValueError('Packaged owner cohort required')
+    required={cohort+'.json.gz','runtime.js','polyfills.js'}
+    if not required<=manifest['files'].keys():raise ValueError('Complete selected owner cohort required')
     values = {}
     for name, digest in manifest['files'].items():
+        if name not in required:continue
         raw = root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest() != digest:
             raise ValueError('Embedded owner asset digest mismatch')
         values[name] = (gzip.decompress(raw) if name.endswith('.gz') else raw).decode('utf8')
-    values['archive']=json.loads(values['modules.json.gz'])
+    values['archive']=json.loads(values[cohort+'.json.gz'])
     return values
 
 
@@ -63,18 +68,19 @@ class OwnerVM:
             self.vm = MiniRacer()
             if self.vm.v8_version!='14.4.258.23':
                 raise OSError('Qualified embedded V8 revision required')
+            self.vm.set_soft_memory_limit(128 * 1024 * 1024)
             self.vm.set_hard_memory_limit(512 * 1024 * 1024)
-            assets = _assets()
+            name=_entry(entry)
+            assets = _assets(name.split('/')[0])
             self.eval(assets['runtime.js'])
             self.eval(assets['polyfills.js'])
-            name=_entry(entry)
-            cohort=name.split('/')[0]+'/'
-            prefixes=(cohort,'_umf/') if cohort=='_umf_core08/' else (cohort,)
-            archive={kind:{key:value for key,value in group.items() if key.startswith(prefixes)} for kind,group in assets['archive'].items()}
+            archive=assets['archive']
             if name not in archive['modules']:
                 raise ValueError('Packaged owner entry required')
+            buffer=self.eval('globalThis.__inputBuffer=new ArrayBuffer('+str(len(input_bytes))+')')
+            buffer[:]=input_bytes
             self.eval('__install(' + json.dumps(archive,separators=(',',':')) + ',' + json.dumps(name) + ','
-                      + json.dumps(input_bytes.hex()) + ',' + json.dumps(list(args)) + ','
+                      + 'globalThis.__inputBuffer,' + json.dumps(list(args)) + ','
                       + json.dumps(extra or {}) + ')')
         except BaseException:
             self.close()
@@ -121,13 +127,14 @@ def capture(entry, *, input_bytes=b'', limit, timeout, args=(), extra=None):
         raise OSError('Qualified embedded engine unavailable') from error
     try:
         with OwnerVM(entry, input_bytes=input_bytes, args=args, extra=extra, timeout=timeout) as owner:
-            result = json.loads(owner.promise('__result()'))
+            code = owner.promise('__capture()')
+            stdout = bytes(owner.eval("__captureBytes('stdout')"))
+            stderr = bytes(owner.eval("__captureBytes('stderr')"))
     except JSPromiseError as error:
         raise ValueError('Embedded owner output refused') from error
-    stdout, stderr = bytes.fromhex(result['stdout']), bytes.fromhex(result['stderr'])
     if len(stdout) > limit:
         raise ValueError('Original owner output capacity exceeded')
-    return CompletedProcess(('embedded-v8', _entry(entry)), result['code'], stdout, stderr)
+    return CompletedProcess(('embedded-v8', _entry(entry)), code, stdout, stderr)
 
 
 class EmbeddedOwnerPipe:
