@@ -1067,9 +1067,17 @@ BEGIN
    PERFORM truss.runtime_owned_graph_validate_attempt(attempt.id,false);
   ELSE PERFORM truss.runtime_graph_validate(false);END IF;
  ELSIF TG_TABLE_NAME='object' THEN
+  -- Values/version/timestamps cannot change topology or multiplicity. Every
+  -- actual edge/ownership/catalog change still queues its own structural check.
   IF TG_OP='DELETE' THEN PERFORM truss.runtime_graph_validate_object_qualified(OLD.id,OLD.type_id,false,current_actor);
-  ELSE PERFORM truss.runtime_graph_validate_object_qualified(NEW.id,NEW.type_id,false,current_actor);END IF;
- ELSIF TG_TABLE_NAME IN ('runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill') THEN
+  ELSIF TG_OP<>'UPDATE' OR ROW(OLD.id,OLD.type_id,OLD.root_id,OLD.root_type,OLD.rev)
+    IS DISTINCT FROM ROW(NEW.id,NEW.type_id,NEW.root_id,NEW.root_type,NEW.rev) THEN
+   PERFORM truss.runtime_graph_validate_object_qualified(NEW.id,NEW.type_id,false,current_actor);END IF;
+ ELSIF TG_TABLE_NAME='runtime_object_transition' THEN
+  IF (NEW.before_object-ARRAY['props','retained','ver','created_at','updated_at'])
+    IS DISTINCT FROM (NEW.after_object-ARRAY['props','retained','ver','created_at','updated_at']) THEN
+   PERFORM truss.runtime_graph_validate_object_qualified(NEW.object_id,NEW.type_id,false,current_actor);END IF;
+ ELSIF TG_TABLE_NAME IN ('runtime_catalog_rebind_transition','runtime_catalog_key_backfill') THEN
   PERFORM truss.runtime_graph_validate_object_qualified(NEW.object_id,NEW.type_id,false,current_actor);
  ELSE
   -- Include old and new endpoints of every transition for this edge in this
@@ -1544,6 +1552,8 @@ BEGIN
  FOR affected IN
   SELECT DISTINCT object_id,type_id FROM (
    SELECT object_id,type_id FROM truss.runtime_object_transition WHERE attempt_id=selected_attempt
+    AND (before_object-ARRAY['props','retained','ver','created_at','updated_at'])
+      IS DISTINCT FROM (after_object-ARRAY['props','retained','ver','created_at','updated_at'])
    UNION ALL SELECT (i.value->>'id')::bigint,(i.value->>'typeId')::int
     FROM truss.runtime_edge_transition t CROSS JOIN LATERAL
      jsonb_array_elements(jsonb_build_array(t.old_source,t.old_target,t.source_identity,t.target_identity)) i

@@ -11,7 +11,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;plan jsonb;last
  node_order text[];projection jsonb;local_owned jsonb;root_reference text;index int;current_actor oid;live_edges jsonb;final_nodes jsonb;final_edges jsonb;final_problem text;
  history_dictionary jsonb:='{}';historical_basis jsonb;historical_revision int;history_group record;history_basis jsonb;
  history_property truss.prop_def%ROWTYPE;history_pin record;history_pins jsonb;history_order jsonb;history_key text;history_type_pin text;sealed record;
- independent_updates boolean;independent_endpoints boolean;
+ independent_updates boolean;independent_endpoints boolean;independent_edge_creates boolean;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
@@ -89,6 +89,15 @@ BEGIN
   AND NOT EXISTS(SELECT 1 FROM truss.runtime_owned_operation p CROSS JOIN LATERAL jsonb_each(p.plan->'initialScope'->'nodes') n
    WHERE p.attempt_id=selected_attempt AND p.operation_index=0 AND
     (n.value->'root_id' IS DISTINCT FROM 'null'::jsonb OR n.value->'root_type' IS DISTINCT FROM 'null'::jsonb));
+ SELECT p.plan->'initialScope' INTO STRICT initial_scope FROM truss.runtime_owned_operation p
+  WHERE p.attempt_id=selected_attempt AND p.operation_index=0;
+ independent_edge_creates:=initial_scope->'independentEndpointScope'='true'::jsonb
+  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(operations) o
+   WHERE o.value->>'operation' IS DISTINCT FROM 'create_edge'
+    OR o.value->'source'->>'state' IS DISTINCT FROM 'stored' OR o.value->'target'->>'state' IS DISTINCT FROM 'stored')
+  AND NOT EXISTS(SELECT 1 FROM truss.rel_def WHERE retired_rev IS NULL AND lifecycle='owned')
+  AND NOT EXISTS(SELECT 1 FROM jsonb_each(initial_scope->'nodes') n
+   WHERE n.value->'root_id' IS DISTINCT FROM 'null'::jsonb OR n.value->'root_type' IS DISTINCT FROM 'null'::jsonb);
  IF independent_updates THEN
   PERFORM truss.runtime_owned_update_batch_validate(attempt,input,history_dictionary,current_actor);
   SELECT p.plan->'initialScope' INTO STRICT initial_scope FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND p.operation_index=0;
@@ -97,6 +106,49 @@ BEGIN
    SELECT last_plan||jsonb_build_object('afterNodes',jsonb_object_agg(p.plan->>'primary',p.plan->'afterNodes'->(p.plan->>'primary')))
     INTO last_plan FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt;
   END IF;
+ ELSIF independent_edge_creates THEN
+  SELECT p.plan INTO STRICT last_plan FROM truss.runtime_owned_operation p
+   WHERE p.attempt_id=selected_attempt AND p.operation_index=attempt.next_index-1;
+  IF (last_plan->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
+   OR EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>(last_plan->>'catalogRevision')::int)
+   OR (SELECT count(*) FROM truss.runtime_edge_transition WHERE attempt_id=selected_attempt)<>attempt.next_index
+   OR EXISTS(SELECT 1 FROM truss.runtime_object_transition WHERE attempt_id=selected_attempt) THEN
+   RAISE EXCEPTION 'complete original edge batch effect inventory required' USING ERRCODE='55000';END IF;
+  -- The trusted batch producer already checked the actual edge, journal and
+  -- transition INSERTs. Settlement closes source/result/effect slots and keeps
+  -- current authority and final physical images below; it does not execute the
+  -- entire edge semantic/history program a second time for every operation.
+  IF EXISTS(
+   SELECT 1 FROM truss.runtime_owned_operation p
+   LEFT JOIN truss.runtime_edge_transition t ON t.attempt_id=p.attempt_id AND t.operation_index=p.operation_index
+   WHERE p.attempt_id=selected_attempt AND (
+    p.plan->>'profile' IS DISTINCT FROM 'truss-owned-operation-plan/0.2'
+    OR p.plan->'operationIndex' IS DISTINCT FROM to_jsonb(p.operation_index)
+    OR p.plan->'operation' IS DISTINCT FROM operations->p.operation_index
+    OR p.plan->'mutationProfile' IS DISTINCT FROM input->'mutationProfile'
+    OR p.plan->>'actorName' IS DISTINCT FROM session_user::text
+    OR p.plan->>'primary' IS DISTINCT FROM 'create:'||p.operation_index::text
+    OR t.transition_id IS NULL OR t.writer_xid IS DISTINCT FROM attempt.writer_xid
+    OR t.before_edge IS NOT NULL OR t.after_edge IS NULL
+    OR p.result->>'operation' IS DISTINCT FROM 'create_edge' OR p.result->>'outcome' IS DISTINCT FROM 'created'
+    OR p.result->>'version' IS DISTINCT FROM '1'
+    OR p.result->'identity'->>'id' IS DISTINCT FROM t.edge_id::text
+    OR p.result->'identity'->>'typeId' IS DISTINCT FROM t.rel_type_id::text
+    OR (p.result->'identity')-'id' IS DISTINCT FROM
+     (p.plan->'afterEdges'->(p.plan->>'primary')->'identity')-'id'
+    OR t.source_identity IS DISTINCT FROM p.plan->'operation'->'source'->'identity'
+    OR t.target_identity IS DISTINCT FROM p.plan->'operation'->'target'->'identity'
+    OR jsonb_array_length(t.journal) IS DISTINCT FROM 1
+    OR jsonb_array_length(p.result->'events') IS DISTINCT FROM 1
+    OR p.result->'events'->0->>'seq' IS DISTINCT FROM t.journal->0->>'seq'
+    OR p.result->'events'->0->>'xid' IS DISTINCT FROM attempt.writer_xid::text)) THEN
+   RAISE EXCEPTION 'original edge batch source result and transition correspondence required' USING ERRCODE='55000';END IF;
+  -- Lean endpoint scopes do not carry a relationship inventory. Recheck each
+  -- actual relationship writer explicitly, including mandatory commit closure.
+  FOR owner IN SELECT DISTINCT r.document_id,r.module FROM truss.runtime_edge_transition t
+   JOIN truss.rel_def r ON r.rel_type_id=t.rel_type_id WHERE t.attempt_id=selected_attempt LOOP
+   PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module,current_actor);
+  END LOOP;
  ELSE
  FOR index IN 0..attempt.next_index-1 LOOP
   plan:=truss.runtime_owned_plan(selected_attempt,index);operation:=plan->'operation';
@@ -186,12 +238,17 @@ BEGIN
    jsonb_build_object('catalogRevision',last_plan->'catalogRevision','afterNodes',jsonb_build_object(n.reference,n.state)),attempt) END identity
   FROM jsonb_each(last_plan->'afterNodes') WITH ORDINALITY n(reference,state,ordinal))
  SELECT coalesce(jsonb_object_agg(resolved.reference,resolved.identity ORDER BY resolved.ordinal),'{}'::jsonb) INTO final_nodes FROM resolved;
+ IF independent_edge_creates THEN
+  SELECT jsonb_object_agg('create:'||p.operation_index::text,p.result->'identity') INTO final_edges
+   FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt;
+ ELSE
  WITH resolved AS MATERIALIZED (
   SELECT e.reference,e.ordinal,CASE WHEN e.reference='stored:'||(e.state->'identity'->>'typeId')||':'||(e.state->'identity'->>'id')
    THEN e.state->'identity' ELSE truss.runtime_owned_identity(selected_attempt,attempt.next_index-1,e.reference,'edge',
    jsonb_build_object('catalogRevision',last_plan->'catalogRevision','afterEdges',jsonb_build_object(e.reference,e.state)),attempt) END identity
   FROM jsonb_each(last_plan->'afterEdges') WITH ORDINALITY e(reference,state,ordinal))
  SELECT coalesce(jsonb_object_agg(resolved.reference,resolved.identity ORDER BY resolved.ordinal),'{}'::jsonb) INTO final_edges FROM resolved;
+ END IF;
  SELECT coalesce(jsonb_object_agg(jsonb_build_array(e.value->>'typeId',e.value->>'id')::text,true),'{}'::jsonb)
   INTO live_edges FROM jsonb_each(final_edges) e WHERE jsonb_extract_path(last_plan,'afterEdges',e.key,'deleted')='false'::jsonb;
  -- A lean endpoint scope intentionally omits unrelated independent edges.
@@ -251,6 +308,14 @@ BEGIN
     'target_id',(m.target_identity->>'id')::bigint,'target_type',(m.target_identity->>'typeId')::int,
     'order_key',m.state->'orderKey'->>'text') END ORDER BY m.ordinal LIMIT 1;
  IF final_problem='edge' THEN RAISE EXCEPTION 'actual final owned edge required' USING ERRCODE='55000';END IF;
+ IF independent_edge_creates THEN
+  -- This scope contains only rootless stored endpoints and the catalog has no
+  -- owned relationships. Every node is a forest root without graph traversal.
+  IF EXISTS(SELECT 1 FROM jsonb_each(last_plan->'afterNodes') n
+   WHERE n.value->'root' IS DISTINCT FROM 'null'::jsonb) THEN
+   RAISE EXCEPTION 'actual final forest and explicit root correspondence required' USING ERRCODE='55000';END IF;
+  RETURN;
+ END IF;
  SELECT coalesce(array_agg(key ORDER BY key COLLATE "C"),'{}'::text[]) INTO node_order FROM jsonb_each(last_plan->'afterNodes') WHERE value->'deleted'='false'::jsonb;
  local_owned:=truss.runtime_owned_local_edges(last_plan->'afterEdges',node_order,'{}'::text[],true);
  projection:=truss.owned_forest_projection(cardinality(node_order),local_owned);

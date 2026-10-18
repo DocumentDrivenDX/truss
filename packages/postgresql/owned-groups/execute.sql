@@ -1116,7 +1116,10 @@ BEGIN
  IF cardinality(lock_route_items)+cardinality(route_items)>16384 OR lock_route_bytes+route_bytes>16777216 THEN
   RAISE EXCEPTION 'bounded whole-group key footprint required' USING ERRCODE='54000';END IF;
  routes:=to_jsonb(route_items);lock_routes:=to_jsonb(lock_route_items);
- FOR route IN SELECT DISTINCT decode(value->>'namespace','hex') route_namespace,decode(value->>'transport','hex') route_transport FROM jsonb_array_elements(routes||lock_routes)
+ -- Active routes are locked once below, in operation order. All acquisition is
+ -- NOWAIT under the single transaction writer gate, so no lock-order wait cycle
+ -- is possible. Only retired routes have no active candidate below.
+ FOR route IN SELECT DISTINCT decode(value->>'namespace','hex') route_namespace,decode(value->>'transport','hex') route_transport FROM jsonb_array_elements(lock_routes)
   ORDER BY route_namespace,route_transport LOOP
   PERFORM truss.lock_string_key_bucket(route.route_namespace,route.route_transport);
  END LOOP;
@@ -1134,10 +1137,13 @@ BEGIN
   SELECT * INTO STRICT observed FROM truss.lock_string_key_bucket(namespace,transport);
   IF entry->>'phase'='initial' THEN
    IF cardinality(observed.member_ids)<>1 THEN RAISE EXCEPTION 'one original live key member required' USING ERRCODE='55000';END IF;
+   -- The candidate tuple was derived once above from the locked initial row.
+   -- Compare its exact physical membership rather than decoding and validating
+   -- the same object's schema and key a second time.
    SELECT * INTO STRICT member FROM truss.object_key_bucket WHERE storage_row_id=observed.member_ids[1];
    IF member.object_id::text IS DISTINCT FROM entry->>'objectId' OR member.type_id IS DISTINCT FROM (entry->>'typeId')::int
     OR member.key_num IS DISTINCT FROM (entry->>'keyNumber')::smallint
-    OR NOT truss.verify_object_string_key(member.object_id,member.type_id,member.key_num,decode(entry->>'tuple','hex')) THEN
+    OR member.namespace_bytes IS DISTINCT FROM namespace OR member.key_bytes IS DISTINCT FROM transport THEN
     RAISE EXCEPTION 'original key membership and values required' USING ERRCODE='55000';END IF;
   ELSIF entry->'unchanged'='true'::jsonb THEN
    IF route.previous_reference IS DISTINCT FROM reference THEN RAISE EXCEPTION 'original unchanged key owner required' USING ERRCODE='55000';END IF;

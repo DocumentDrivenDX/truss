@@ -122,7 +122,7 @@ class FinalEdgeInventoryTests(edge_tests.EdgeMutationTests):
             result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),context.request('presealed-edge-batch'),documents=self.documents)
             self.assertIsInstance(result,Error,repr(result))
             self.assertEqual(result.error.sql_state,'55000',repr(result))
-            self.assertIn('exact stored prepared operation required',str(host._custody.last_attempt.error))
+            self.assertIn('exact retained prepared operation inventory required',str(host._custody.last_attempt.error))
         finally:
             self.admin.execute('DROP TRIGGER preseal_captured_edge_slot ON truss.runtime_owned_operation')
             self.admin.execute('DROP TRIGGER reject_any_batch_edge ON truss.edge')

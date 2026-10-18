@@ -8,7 +8,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;installation truss.catalog_
  dictionary jsonb:='{}';history_basis jsonb;image_revision int;selected_type int;property record;pin record;type_pin text;
  property_pins jsonb;property_order jsonb;source record;actor oid;total int;counted int;
  namespaces jsonb:='{}';compiled_namespace bytea;definition record;keys jsonb;route record;
- slot_results jsonb;projection_problem boolean;journal_refs jsonb;
+ slot_results jsonb;projection_problem boolean;journal_refs jsonb;key_taken boolean;unchanged_problem boolean;
  codecs jsonb:='{}';codec jsonb;codec_bytes bigint:=2;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
@@ -101,29 +101,51 @@ BEGIN
   SELECT *,namespace IS DISTINCT FROM decode(substring(old->>'namespace_bytes' FROM 3),'hex')
    OR transport IS DISTINCT FROM decode(substring(old->>'key_bytes' FROM 3),'hex') changed FROM encoded),
  allocated AS MATERIALIZED (
-  SELECT *,CASE WHEN changed THEN nextval('truss.key_storage_row_seq') END member_id,
+  SELECT *,sha256(namespace) namespace_sha256,sha256(transport) key_sha256,
+   CASE WHEN changed THEN nextval('truss.key_storage_row_seq') END member_id,
    CASE WHEN changed THEN nextval('truss.key_storage_row_seq') END reservation_id FROM checked)
  SELECT coalesce(jsonb_agg(jsonb_build_object('old',old,'changed',changed,'namespace',encode(namespace,'hex'),'transport',encode(transport,'hex'),
   'membership',jsonb_build_object('storage_row_id',member_id,'type_id',(object->'after'->>'type_id')::int,'key_num',key_num,
    'object_id',(object->'after'->>'id')::bigint,'namespace_bytes',namespace,'key_bytes',transport,
-   'namespace_sha256',sha256(namespace),'key_sha256',sha256(transport),
+   'namespace_sha256',namespace_sha256,'key_sha256',key_sha256,
    'original_context_bytes',convert_to(jsonb_build_object('profile','truss-updated-key-context/0.2','attemptId',selected_attempt::text,
     'operationIndex',object->>'index','objectId',object->'after'->>'id','xid',attempt.writer_xid::text,'derivation','postgresql-umf-key-tuple-v1')::text,'UTF8')),
   'reservation',jsonb_build_object('storage_row_id',reservation_id,'namespace_bytes',namespace,'key_bytes',transport,
-   'namespace_sha256',sha256(namespace),'key_sha256',sha256(transport),
+   'namespace_sha256',namespace_sha256,'key_sha256',key_sha256,
    'original_reservation_bytes',convert_to(jsonb_build_object('profile','truss-updated-key-reservation/0.1','attemptId',selected_attempt::text,
     'operationIndex',object->>'index','objectId',object->'after'->>'id','typeId',object->'after'->>'type_id',
     'keyNumber',key_num::text,'xid',attempt.writer_xid::text)::text,'UTF8')))),'[]') INTO keys FROM allocated;
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(keys) k WHERE k.value->'old'='null'::jsonb) THEN
   RAISE EXCEPTION 'original live batch key membership required' USING ERRCODE='55000';END IF;
- FOR route IN SELECT k.value,observed.member_ids,observed.reservation_ids FROM jsonb_array_elements(keys) k
-  CROSS JOIN LATERAL truss.lock_string_key_bucket(decode(k.value->>'namespace','hex'),decode(k.value->>'transport','hex')) observed LOOP
-  IF route.value->'changed'='true'::jsonb THEN
-   IF cardinality(route.member_ids)>0 OR cardinality(route.reservation_ids)>0 THEN
-    RAISE EXCEPTION 'key allocated or reserved' USING ERRCODE='23505';END IF;
-  ELSIF cardinality(route.member_ids)<>1 OR route.member_ids[1]<>(route.value->'old'->>'storage_row_id')::bigint THEN
-   RAISE EXCEPTION 'owned unchanged batch key required' USING ERRCODE='55000';END IF;
- END LOOP;
+ -- The planner's key preflight already locked every old and proposed route
+ -- under the transaction's graph-writer gate. Replaying
+ -- lock_string_key_bucket once per key here repeated several indexed queries
+ -- for every row in large batches. Recheck the relevant exact bytes in two
+ -- set-based reads while the preflight row locks remain held.
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(keys) k
+  WHERE NOT EXISTS(SELECT 1 FROM truss.key_bucket_guard g
+   WHERE g.namespace_sha256=decode(substring(k.value->'membership'->>'namespace_sha256' FROM 3),'hex')
+    AND g.key_sha256=decode(substring(k.value->'membership'->>'key_sha256' FROM 3),'hex'))) THEN
+  RAISE EXCEPTION 'original locked batch key routes required' USING ERRCODE='55000';END IF;
+ WITH routes AS MATERIALIZED (
+  SELECT value,decode(value->>'namespace','hex') namespace_bytes,decode(value->>'transport','hex') key_bytes,
+   decode(substring(value->'membership'->>'namespace_sha256' FROM 3),'hex') namespace_sha256,
+   decode(substring(value->'membership'->>'key_sha256' FROM 3),'hex') key_sha256,
+   (value->'changed'='true'::jsonb) changed,(value->'old'->>'storage_row_id')::bigint old_storage_row_id
+  FROM jsonb_array_elements(keys)), observed AS MATERIALIZED (
+  SELECT r.*,coalesce(m.members,0) members,m.member_id,
+   EXISTS(SELECT 1 FROM truss.object_key_reservation_bucket z WHERE z.namespace_sha256=r.namespace_sha256
+    AND z.key_sha256=r.key_sha256 AND z.namespace_bytes=r.namespace_bytes AND z.key_bytes=r.key_bytes) reserved
+  FROM routes r LEFT JOIN LATERAL (SELECT count(*) members,min(b.storage_row_id) member_id
+   FROM truss.object_key_bucket b WHERE b.namespace_sha256=r.namespace_sha256
+    AND b.key_sha256=r.key_sha256 AND b.namespace_bytes=r.namespace_bytes AND b.key_bytes=r.key_bytes) m ON true)
+ SELECT coalesce(bool_or(changed AND (members>0 OR reserved)),false),
+  coalesce(bool_or(NOT changed AND (members<>1 OR member_id<>old_storage_row_id)),false)
+ INTO key_taken,unchanged_problem FROM observed;
+ IF key_taken THEN
+  RAISE EXCEPTION 'key allocated or reserved' USING ERRCODE='23505';END IF;
+ IF unchanged_problem THEN
+  RAISE EXCEPTION 'owned unchanged batch key required' USING ERRCODE='55000';END IF;
  SELECT coalesce(jsonb_agg(value->'old' ORDER BY (value->'old'->>'storage_row_id')::bigint),'[]') INTO expected
   FROM jsonb_array_elements(keys) WHERE value->'changed'='true'::jsonb;
  WITH deleted AS (
