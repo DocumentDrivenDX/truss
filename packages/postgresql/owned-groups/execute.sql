@@ -1028,7 +1028,7 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;candidate jsonb;
  component int;cells jsonb;before_cells jsonb;tuple_bytes bytea;namespace bytea;transport bytea;pin record;
  routes jsonb:='[]';lock_routes jsonb:='[]';entry jsonb;route record;observed record;member truss.object_key_bucket%ROWTYPE;
  reference text;unchanged boolean;
- namespaces jsonb:='{}';namespace_key text;namespace_hex text;
+ namespaces jsonb:='{}';namespace_key text;namespace_hex text;codecs jsonb:='{}';codec jsonb;codec_bytes bigint:=2;
  route_items jsonb[]:='{}';lock_route_items jsonb[]:='{}';route_bytes bigint:=2;lock_route_bytes bigint:=2;
 BEGIN
  IF inventory->>'profile' IS DISTINCT FROM 'truss-owned-group-plan/0.1'
@@ -1050,7 +1050,16 @@ BEGIN
     cells:=cells||jsonb_build_array(candidate->'image'->'props'->component::text);
     before_cells:=before_cells||jsonb_build_array(candidate->'before'->'props'->component::text);
    END LOOP;
-   tuple_bytes:=truss.derive_catalog_key_tuple(definition.type_id,definition.key_num,cells);
+   namespace_key:=definition.type_id::text||':'||definition.key_num::text;
+   codec:=codecs->namespace_key;
+   IF codec IS NULL THEN
+    codec:=truss.runtime_owned_key_codec_metadata(definition.type_id,definition.key_num);
+    IF codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+octet_length(namespace_key)+8<=4194304 THEN
+     codecs:=codecs||jsonb_build_object(namespace_key,codec);
+     codec_bytes:=codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+octet_length(namespace_key)+8;
+    END IF;
+   END IF;
+   tuple_bytes:=truss.runtime_owned_key_tuple_in_metadata(definition.type_id,definition.key_num,cells,codec);
    -- Source metadata is constant under the admitted catalog-head lock. Reuse
    -- only the namespace bytes within this preflight invocation; every tuple,
    -- bucket, membership and reservation check below still runs for every row.
@@ -1072,7 +1081,7 @@ BEGIN
     -- canonical equivalence and invalid prior values retain their behavior.
     'unchanged',CASE WHEN candidate->'before' IS NOT NULL AND candidate->'before'<>'null'::jsonb
      THEN CASE WHEN before_cells=cells THEN true
-      ELSE truss.derive_catalog_key_tuple(definition.type_id,definition.key_num,before_cells)=tuple_bytes END
+      ELSE truss.runtime_owned_key_tuple_in_metadata(definition.type_id,definition.key_num,before_cells,codec)=tuple_bytes END
      ELSE false END);
    route_bytes:=route_bytes+octet_length(convert_to(entry::text,'UTF8'))+CASE WHEN cardinality(route_items)=0 THEN 0 ELSE 2 END;
    route_items:=array_append(route_items,entry);

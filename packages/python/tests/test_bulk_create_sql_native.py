@@ -305,7 +305,7 @@ class BulkUpdateSqlTests(base.PublicCreateGroupTests):
                 set=(AuthoredValue(name='A-value',value=TextValue(kind='string',text=f'round-{round_index}-{i}')),),
                 unset=(),expected_version=str(round_index+1)) for i,identity in enumerate(identities))
             result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=self.documents)
-            self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
+            self.assertIsInstance(result,Ok,mode+' '+repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
             self.assertTrue(all(r.outcome=='changed' and r.version==str(round_index+2) for r in result.value.response.semantic.results))
             self.assertEqual(connection.execute('SHOW plan_cache_mode').fetchone(),(mode,))
             host.detach();connection.commit()

@@ -1452,7 +1452,7 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;candidate jsonb;
  component int;cells jsonb;before_cells jsonb;tuple_bytes bytea;namespace bytea;transport bytea;pin record;
  routes jsonb:='[]';lock_routes jsonb:='[]';entry jsonb;route record;observed record;member truss.object_key_bucket%ROWTYPE;
  reference text;unchanged boolean;
- namespaces jsonb:='{}';namespace_key text;namespace_hex text;
+ namespaces jsonb:='{}';namespace_key text;namespace_hex text;codecs jsonb:='{}';codec jsonb;codec_bytes bigint:=2;
  route_items jsonb[]:='{}';lock_route_items jsonb[]:='{}';route_bytes bigint:=2;lock_route_bytes bigint:=2;
 BEGIN
  IF inventory->>'profile' IS DISTINCT FROM 'truss-owned-group-plan/0.1'
@@ -1474,7 +1474,16 @@ BEGIN
     cells:=cells||jsonb_build_array(candidate->'image'->'props'->component::text);
     before_cells:=before_cells||jsonb_build_array(candidate->'before'->'props'->component::text);
    END LOOP;
-   tuple_bytes:=truss.derive_catalog_key_tuple(definition.type_id,definition.key_num,cells);
+   namespace_key:=definition.type_id::text||':'||definition.key_num::text;
+   codec:=codecs->namespace_key;
+   IF codec IS NULL THEN
+    codec:=truss.runtime_owned_key_codec_metadata(definition.type_id,definition.key_num);
+    IF codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+octet_length(namespace_key)+8<=4194304 THEN
+     codecs:=codecs||jsonb_build_object(namespace_key,codec);
+     codec_bytes:=codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+octet_length(namespace_key)+8;
+    END IF;
+   END IF;
+   tuple_bytes:=truss.runtime_owned_key_tuple_in_metadata(definition.type_id,definition.key_num,cells,codec);
    -- Source metadata is constant under the admitted catalog-head lock. Reuse
    -- only the namespace bytes within this preflight invocation; every tuple,
    -- bucket, membership and reservation check below still runs for every row.
@@ -1496,7 +1505,7 @@ BEGIN
     -- canonical equivalence and invalid prior values retain their behavior.
     'unchanged',CASE WHEN candidate->'before' IS NOT NULL AND candidate->'before'<>'null'::jsonb
      THEN CASE WHEN before_cells=cells THEN true
-      ELSE truss.derive_catalog_key_tuple(definition.type_id,definition.key_num,before_cells)=tuple_bytes END
+      ELSE truss.runtime_owned_key_tuple_in_metadata(definition.type_id,definition.key_num,before_cells,codec)=tuple_bytes END
      ELSE false END);
    route_bytes:=route_bytes+octet_length(convert_to(entry::text,'UTF8'))+CASE WHEN cardinality(route_items)=0 THEN 0 ELSE 2 END;
    route_items:=array_append(route_items,entry);
@@ -1724,6 +1733,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;installation truss.catalog_
  selected_type int;property record;definition record;pin record;type_pin text;property_pins jsonb;property_order jsonb;
  group_id uuid:=gen_random_uuid();actor oid;counted int;total int;compiled_namespace bytea;route record;
  slot_results jsonb;
+ codecs jsonb:='{}';codec jsonb;codec_bytes bigint:=2;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
  actor:=truss.runtime_person(false);input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
@@ -1765,6 +1775,11 @@ BEGIN
    'revision',(SELECT rev::text FROM truss.schema_head WHERE id=1),'typePin',type_pin,'propertyOrder',property_order,'propertyPins',property_pins));
   FOR definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY key_num LOOP
    SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected_type,definition.key_num);
+   codec:=truss.runtime_owned_key_codec_metadata(selected_type,definition.key_num);
+   IF codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32<=4194304 THEN
+    codecs:=codecs||jsonb_build_object(selected_type::text||':'||definition.key_num::text,codec);
+    codec_bytes:=codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32;
+   END IF;
    compiled_namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
     'sourceEpoch',installation.source_epoch::text,'typeId',selected_type::text,'keyNumber',definition.key_num::text,
     'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
@@ -1798,9 +1813,10 @@ BEGIN
   RAISE EXCEPTION 'exact batch object insert required' USING ERRCODE='55000';END IF;
  WITH cells AS MATERIALIZED (
   SELECT o.value object,k.key_num,k.prop_ids,decode(namespaces->>((o.value->'object'->>'type_id')||':'||k.key_num::text),'hex') namespace,
-   truss.derive_catalog_key_tuple(k.type_id,k.key_num,
+   truss.runtime_owned_key_tuple_in_metadata(k.type_id,k.key_num,
     (SELECT jsonb_agg(o.value->'object'->'props'->i.prop_id::text ORDER BY i.ordinal)
-     FROM unnest(k.prop_ids) WITH ORDINALITY i(prop_id,ordinal))) tuple
+     FROM unnest(k.prop_ids) WITH ORDINALITY i(prop_id,ordinal)),
+    coalesce(codecs->(k.type_id::text||':'||k.key_num::text),truss.runtime_owned_key_codec_metadata(k.type_id,k.key_num))) tuple
   FROM jsonb_array_elements(objects) o JOIN truss.key_def k ON k.type_id=(o.value->'object'->>'type_id')::int AND k.retired_rev IS NULL),
  encoded AS MATERIALIZED (
   SELECT *,convert_to('umf-key-tuple-v1:hex:'||encode(tuple,'hex'),'UTF8') transport,
@@ -2135,6 +2151,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;installation truss.catalog_
  property_pins jsonb;property_order jsonb;source record;actor oid;total int;counted int;
  namespaces jsonb:='{}';compiled_namespace bytea;definition record;keys jsonb;route record;
  slot_results jsonb;
+ codecs jsonb:='{}';codec jsonb;codec_bytes bigint:=2;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
  actor:=truss.runtime_person(false);input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
@@ -2210,6 +2227,11 @@ BEGIN
  FOR selected_type IN SELECT DISTINCT (value->'after'->>'type_id')::int FROM jsonb_array_elements(objects) LOOP
   FOR definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY key_num LOOP
    SELECT * INTO STRICT pin FROM truss.runtime_definition('key',selected_type,definition.key_num);
+   codec:=truss.runtime_owned_key_codec_metadata(selected_type,definition.key_num);
+   IF codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32<=4194304 THEN
+    codecs:=codecs||jsonb_build_object(selected_type::text||':'||definition.key_num::text,codec);
+    codec_bytes:=codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32;
+   END IF;
    compiled_namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
     'sourceEpoch',installation.source_epoch::text,'typeId',selected_type::text,'keyNumber',definition.key_num::text,
     'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
@@ -2218,11 +2240,14 @@ BEGIN
  END LOOP;
  WITH cells AS MATERIALIZED (
   SELECT o.value object,k.key_num,decode(namespaces->>((o.value->'after'->>'type_id')||':'||k.key_num::text),'hex') namespace,
-   truss.derive_catalog_key_tuple(k.type_id,k.key_num,
+   truss.runtime_owned_key_tuple_in_metadata(k.type_id,k.key_num,
     (SELECT jsonb_agg(o.value->'after'->'props'->i.prop_id::text ORDER BY i.ordinal)
-     FROM unnest(k.prop_ids) WITH ORDINALITY i(prop_id,ordinal))) tuple,to_jsonb(old) old
-  FROM jsonb_array_elements(objects) o JOIN truss.key_def k ON k.type_id=(o.value->'after'->>'type_id')::int AND k.retired_rev IS NULL
-  LEFT JOIN truss.object_key_bucket old ON old.object_id=(o.value->'after'->>'id')::bigint AND old.type_id=k.type_id AND old.key_num=k.key_num
+     FROM unnest(k.prop_ids) WITH ORDINALITY i(prop_id,ordinal)),
+    coalesce(codecs->(k.type_id::text||':'||k.key_num::text),truss.runtime_owned_key_codec_metadata(k.type_id,k.key_num))) tuple,to_jsonb(old) old
+  FROM jsonb_array_elements(objects) o CROSS JOIN LATERAL (
+   SELECT k.* FROM truss.key_def k WHERE k.type_id=(o.value->'after'->>'type_id')::int AND k.retired_rev IS NULL OFFSET 0) k
+  LEFT JOIN LATERAL (SELECT old.* FROM truss.object_key_bucket old WHERE old.object_id=(o.value->'after'->>'id')::bigint
+   AND old.type_id=k.type_id AND old.key_num=k.key_num OFFSET 0) old ON true
   WHERE o.value->'changed'='true'::jsonb),
  encoded AS MATERIALIZED (
   SELECT *,convert_to('umf-key-tuple-v1:hex:'||encode(tuple,'hex'),'UTF8') transport FROM cells),

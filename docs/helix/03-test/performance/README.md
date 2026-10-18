@@ -15,6 +15,29 @@ ddx:
 
 # Practical functionality and performance
 
+## 2026-10-17: compile native key metadata once per phase
+
+[Hosted run 39082059330](https://github.com/DocumentDrivenDX/truss/actions/runs/39082059330)
+passed the original capacity controls but failed the added analyzed-history,
+forced-plan 1,000-key update on both platforms. Full public workloads were skipped.
+Profiling showed thousands of identical source-definition walks alongside
+per-value checks. Each read-only preflight and batch phase now compiles the
+original native key metadata once per type/key. Every value retains the original
+source-domain validator and encoder. The cache is invocation-local, bounded at
+4 MiB, and falls back to fresh compilation without imposing a new source limit.
+The public derivation wrapper retains source validation and refusal ordering;
+planned catalog basis derivation is preserved. Complete membership coordinates
+also constrain each existing-key lookup independently of row estimates.
+
+The analyzed-history test and four independent native key derivation controls
+passed in 32.865 seconds. A separate instrumented comparison measured custom-plan
+apply at 4,912ms versus 5,574ms before compilation reuse; generic-plan apply was
+2,635ms versus 2,909ms. Commit remained approximately 5.1/2.0 seconds respectively.
+These single local diagnostic observations establish neither hosted qualification
+nor p95 performance. The original SQL/operation budgets, caller optimizer settings,
+independent finish/commit guards and full hosted release gates remain unchanged.
+Native71 remains unreleased.
+
 ## 2026-10-17: stable plans as attempt history grows
 
 The full hosted workload exposed a statistics-dependent regression: repeated

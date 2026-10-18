@@ -112,7 +112,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.umf_key_field_values_valid(jsonb,jsonb,text) FROM PUBLIC;
 
-CREATE FUNCTION truss.derive_catalog_key_tuple(selected_type int,selected_key smallint,cells jsonb,planned_basis jsonb DEFAULT NULL) RETURNS bytea
+CREATE FUNCTION truss.runtime_owned_key_codec_metadata(selected_type int,selected_key smallint,planned_basis jsonb DEFAULT NULL,checked_cells jsonb DEFAULT NULL,require_cells boolean DEFAULT false) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE definition truss.key_def%ROWTYPE;owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;archive truss.schema_doc%ROWTYPE;
  record_source jsonb;key_source jsonb;field_source jsonb;reference jsonb;facets jsonb:='[]';fields jsonb:='[]';component int;position int:=0;
@@ -130,7 +130,7 @@ BEGIN
   CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e WHERE m.value->>'id'=owner.module AND e.value->>'id'=owner.element;
  SELECT value INTO STRICT key_source FROM jsonb_array_elements(record_source->'keys') WHERE value->>'id'=definition.key_id;
  IF key_source-ARRAY['id','name','fields','primary']<>'{}'::jsonb OR jsonb_array_length(key_source->'fields')<>cardinality(definition.prop_ids)
-  OR jsonb_typeof(cells) IS DISTINCT FROM 'array' OR jsonb_array_length(cells)<>cardinality(definition.prop_ids) THEN
+  OR require_cells AND (jsonb_typeof(checked_cells) IS DISTINCT FROM 'array' OR jsonb_array_length(checked_cells)<>cardinality(definition.prop_ids)) THEN
   RAISE EXCEPTION 'qualified ordered key definition required' USING ERRCODE='22023';END IF;
  FOREACH component IN ARRAY definition.prop_ids LOOP
   IF planned_basis IS NULL THEN SELECT * INTO STRICT property FROM truss.prop_def WHERE type_id=selected_type AND prop_id=component AND retired_rev IS NULL;
@@ -144,9 +144,34 @@ BEGIN
    RAISE EXCEPTION 'native key domain must match accepted source' USING ERRCODE='55000';END IF;
   facets:=facets||jsonb_build_array(coalesce(property.facets,'{}'));fields:=fields||jsonb_build_array(field_source);position:=position+1;
  END LOOP;
- IF truss.umf_key_field_values_valid(cells,fields,archive.umf_version) IS NOT TRUE THEN
+ RETURN jsonb_build_object('profile','truss-native-key-codec-metadata/0.1','typeId',selected_type::text,'keyNumber',selected_key::text,
+  'fields',fields,'facets',facets,'umfVersion',archive.umf_version);
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_key_codec_metadata(int,smallint,jsonb,jsonb,boolean) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_owned_key_tuple_in_metadata(selected_type int,selected_key smallint,cells jsonb,metadata jsonb) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ IF metadata->>'profile' IS DISTINCT FROM 'truss-native-key-codec-metadata/0.1'
+  OR metadata->>'typeId' IS DISTINCT FROM selected_type::text OR metadata->>'keyNumber' IS DISTINCT FROM selected_key::text
+  OR jsonb_typeof(metadata->'fields') IS DISTINCT FROM 'array' OR jsonb_typeof(metadata->'facets') IS DISTINCT FROM 'array'
+  OR jsonb_typeof(metadata->'umfVersion') IS DISTINCT FROM 'string' THEN
+  RAISE EXCEPTION 'original compiled key codec metadata required' USING ERRCODE='55000';END IF;
+ IF jsonb_typeof(cells) IS DISTINCT FROM 'array' OR jsonb_array_length(cells)<>jsonb_array_length(metadata->'fields') THEN
+  RAISE EXCEPTION 'qualified ordered key definition required' USING ERRCODE='22023';END IF;
+ IF truss.umf_key_field_values_valid(cells,metadata->'fields',metadata->>'umfVersion') IS NOT TRUE THEN
   RAISE EXCEPTION 'key values outside accepted source domain' USING ERRCODE='22023';END IF;
- RETURN truss.encode_umf_scalar_key_tuple(cells,facets);
+ RETURN truss.encode_umf_scalar_key_tuple(cells,metadata->'facets');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_key_tuple_in_metadata(int,smallint,jsonb,jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.derive_catalog_key_tuple(selected_type int,selected_key smallint,cells jsonb,planned_basis jsonb DEFAULT NULL) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+BEGIN
+ RETURN truss.runtime_owned_key_tuple_in_metadata(selected_type,selected_key,cells,
+  truss.runtime_owned_key_codec_metadata(selected_type,selected_key,planned_basis,cells,true));
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.derive_catalog_key_tuple(int,smallint,jsonb,jsonb) FROM PUBLIC;
