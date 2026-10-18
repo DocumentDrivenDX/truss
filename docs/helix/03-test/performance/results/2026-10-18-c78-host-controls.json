@@ -1,0 +1,68 @@
+{
+  "candidate": "C78-host",
+  "sourceCommit": "3c9ea60ad9acf9e25881abda96225b4eeb9cce1c",
+  "sourceWorkingTreeDirty": true,
+  "sourceScope": "Reviewed host-only working-tree changes over the stated commit; SQL payloads are byte-identical to frozen C77. Exact patch is retained.",
+  "wheelSha256": "52b1657df9b5ec942ac28356511ad3e99d92acd0f66d0656a1262ac1b901952c",
+  "nativeManifestSha256": "08b082ab3836dbb5717360f875773190488d6b886971cd6e10b63b894a3a4ebe",
+  "matchedRuntimePayloads": 528,
+  "runtimePayloadInventorySha256": "5dfdb80ec923972fbfdaed85adc7733e60482e0d565b4104d71a6e528d3a5e87",
+  "changedRuntimePayloads": [
+    "truss/catalog_runtime.py",
+    "truss/psycopg_host.py"
+  ],
+  "controls": {
+    "tests": 44,
+    "passed": 44,
+    "unittestElapsedSeconds": 23.034,
+    "runnerElapsedSeconds": 23.337846916008857,
+    "breakdown": {
+      "pureVolatilityInventory": 1,
+      "existingScalarGuards": 4,
+      "newTableAndCatalogGuards": 9,
+      "unchangedGenericHostFaultControls": 30
+    },
+    "scope": [
+      "Matching-timeout installed catalog status and fresh acceptance use three total commands; replayed acceptance uses four because it also fetches the current head.",
+      "Fixed TABLE projections retain ordered names/type OIDs, stock adapters and one invocation. Zero/multiple rows refuse without automatic dispatch retry and roll back effects.",
+      "Caller timeout changes from 100ms/7s execute no payload in the first guard, dispatch once under the requested budget and restore the caller value.",
+      "Cancellation, stale transaction, invalid pre-dispatch SDK parameters, absent installation and broken installed schema preserve the tested containment behavior.",
+      "All existing generic host fault/quarantine controls remain unchanged."
+    ]
+  },
+  "environment": {
+    "python": "3.11.17",
+    "postgresql": "18.6",
+    "pgserverPackage": "pgserver-pg18==18.6.1",
+    "psycopg": "3.3.6",
+    "weft": "Official published 0.4.42 isolated prefix"
+  },
+  "setupAttempt": "The initial sandboxed native setup was denied shared-memory/cache access before native tests; raw setup failure is retained. The unchanged command succeeded with approved sandbox escalation.",
+  "qualification": "Focused local host-guard evidence only. This is not a full native gate, stress/memory/latency qualification, hosted platform result or released package. Final SQL successor and complete unchanged two-platform matrix remain required.",
+  "artifacts": {
+    "2026-10-18-c78-host-controls.log.gz": {
+      "uncompressedSha256": "03d22fc849b753243c1eb8df999884e96194194cde3106f58c6a45fdcc06a041",
+      "compressedSha256": "0ee14f2795c5b29297c7be3a04d2c80d1e11a29a11b491e98e54172492ad8ff1"
+    },
+    "2026-10-18-c78-host-controls.log.argv.gz": {
+      "uncompressedSha256": "5da942a4d1450af492044bcd8e614a76984afdcb13a96ea93d3ff8b9a57b0e52",
+      "compressedSha256": "795f62baeecf404069b944b13021c7a6804d67a9c6f8dcbf7806da41a4c464b2"
+    },
+    "2026-10-18-c78-host-package-parity.json.gz": {
+      "uncompressedSha256": "44e50e10212e428ddbc0eba4d39e01d7626a763069350cc97a827bf5c0767fa0",
+      "compressedSha256": "3ff0b08c36a6afb3d4cd001c782066cc2cbbbb66ab3fd27cd89aef02277aaf24"
+    },
+    "2026-10-18-c78-host-control-receipt.json.gz": {
+      "uncompressedSha256": "d053c80b1a749e8e02f31f2485aa87ed13426cafc13c82fce4d32bbbc72abe28",
+      "compressedSha256": "5c53f370bbd35ca365301401e20131ee7663a388e267193aa5e424a6deb7ef95"
+    },
+    "2026-10-18-c78-host-sandbox-setup.log.gz": {
+      "uncompressedSha256": "05898f6fe5ffb2f197ff6c74055db648b17d3c5cb8976552dcb41782eb23fdc3",
+      "compressedSha256": "69a2c81cc2f42c163787042f55ffd61de045ae824eaf7e71e698d0d21ce98a16"
+    },
+    "2026-10-18-c78-host-source.patch.gz": {
+      "uncompressedSha256": "63f4a747b86ad36e9845c85ef032eb018ccc3512693e0394c6ab8ceb59301f0c",
+      "compressedSha256": "aaaad69c5f757a556ca19269fa09d2bb6bfa27c3f63bf9744071d1321153c812"
+    }
+  }
+}

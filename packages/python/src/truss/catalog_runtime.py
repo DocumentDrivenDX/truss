@@ -1017,8 +1017,6 @@ class CatalogReferenceAssembly:
         local_failure=[None]
         def observe(cursor,observed):
             _pin_cursor(cursor)
-            cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_namespace WHERE nspname='truss')",prepare=False)
-            if not cursor.fetchone()[0]:return CatalogRuntimeStatus(False)
             cursor.execute('SELECT * FROM truss.catalog_status()',prepare=False)
             row=cursor.fetchone()
             if row is None:raise ValueError('Complete installed status required')
@@ -1027,7 +1025,19 @@ class CatalogReferenceAssembly:
                 raise ValueError('Unsupported installed catalog release')
             return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility','feed:caller-asserted-authority','feed:destination-receipt-reconciliation','history:retained-native-groups','compiled_query:weft-scalar-runtime'),
                 release_id=row[1],release_sha256=row[2],layout_profile=ProfilePin(**json.loads(row[3])))
-        return _catalog_failure(self._host._run_operation(transaction,observe),local_failure[0])
+        result=self._host._run_operation(transaction,observe,function_call=True)
+        if isinstance(result,Error) and result.error.sql_state in ('3F000','42883'):
+            # PostgreSQL must resolve the TABLE descriptor before its guard can
+            # execute. Only an absent installation uses the ordinary fallback;
+            # a present schema with a missing routine keeps the original error.
+            def absent(cursor,observed):
+                _pin_cursor(cursor)
+                cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_namespace WHERE nspname='truss')",prepare=False)
+                return not cursor.fetchone()[0]
+            missing=self._host._run_operation(transaction,absent)
+            if isinstance(missing,Ok) and missing.value:return Ok(CatalogRuntimeStatus(False))
+            if isinstance(missing,Error):return _catalog_failure(missing,local_failure[0])
+        return _catalog_failure(result,local_failure[0])
     @_active_operation
     def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}',bun_executable: str='bun') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
         self._available()
@@ -1110,7 +1120,7 @@ class CatalogReferenceAssembly:
                 cache_current[0]=cursor.fetchone()[0]==revision
             if unchanged:return CatalogUnchanged(int(revision),identity,report,replayed,request_key,origin_bytes,actor)
             return CatalogRegistration(int(revision),identity,report,replayed)
-        result=_catalog_failure(self._host._run_semantic_operation(transaction,execute,parameter_producer=produce,parameter_limit=16777216),local_failure[0])
+        result=_catalog_failure(self._host._run_semantic_operation(transaction,execute,parameter_producer=produce,parameter_limit=16777216,function_call=True),local_failure[0])
         if isinstance(result,Ok) and not isinstance(result.value,CatalogAcceptanceRefused) and cache_current[0]:
             known={document.document_id:document for document in self._group_documents}
             for interpretation in prepared.documents:

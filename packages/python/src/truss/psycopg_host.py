@@ -24,6 +24,20 @@ _MANAGED_FUNCTIONS = frozenset(('accepted_document','acknowledge_feed','apply_gr
     'group_type_reference','import_context','import_key_selection','lookup_import_source','lookup_string_key',
     'page_edges','page_objects','prepare_group','reached','read_feed','read_history',
     'reader_catalog','reread_feed','traverse_objects','writer_schema_basis'))
+_MANAGED_TABLE_FUNCTIONS = {
+    'catalog_status': (('installation_id',25),('release_id',25),('release_sha256',25),
+                       ('layout_profile',25),('revision',25)),
+    'catalog_accept_with_keys': (('revision',25),('registration_id',25),('report_bytes',17),
+                                 ('replayed',16),('unchanged',16),('actor_name',25),('violations_bytes',17)),
+}
+# Closed projections only; literal NULL/false remain SQL constants so borrowed
+# connection dumpers cannot change the selected acceptance mode.
+_MANAGED_TABLE_CALLS = {
+    'SELECT * FROM truss.catalog_status()': ('catalog_status','truss.catalog_status()',None),
+    'SELECT revision FROM truss.catalog_status()': ('catalog_status','truss.catalog_status()',('revision',)),
+    'SELECT * FROM truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false)': (
+        'catalog_accept_with_keys','truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false)',None),
+}
 _IDENTITY_SQL = """SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,
  l.virtualtransaction::pg_catalog.text,
  pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,
@@ -302,6 +316,8 @@ class _FunctionCursor(_AdmissionCursor):
     The payload is a target expression over a materialized, filtered guard row,
     so a changed transaction or timeout cannot invoke it. A timeout mismatch is
     a no-effect observation, followed by the ordinary setting/restore path.
+    TABLE results materialize the composite before field expansion, preserving
+    one invocation and its exact ordered descriptor and one-row inventory.
     Arbitrary SQL callbacks retain _AdmissionCursor's separate observations.
     """
     def __init__(self, inner, host, custody):
@@ -315,9 +331,23 @@ class _FunctionCursor(_AdmissionCursor):
         selected = (re.fullmatch(
             r'SELECT truss\.([a-z_0-9]+)\((?:%s(?:::[a-z_0-9]+)?(?:,\s*%s(?:::[a-z_0-9]+)?)*)?\)', query)
             if isinstance(query,str) else None)
-        if (selected is None or selected[1] not in _MANAGED_FUNCTIONS
+        table_call = _MANAGED_TABLE_CALLS.get(query) if isinstance(query,str) else None
+        if ((table_call is None and (selected is None or selected[1] not in _MANAGED_FUNCTIONS))
                 or kwargs.get('binary') or len(args) > 1):
             raise ValueError('One registered parameterized function SELECT required')
+        payload_columns = None
+        if table_call is not None:
+            function,expression,projection = table_call
+            declared = _MANAGED_TABLE_FUNCTIONS[function]
+            payload_columns = (declared if projection is None else
+                               tuple(column for column in declared if column[0] in projection))
+            payload_select = ('(p.value).*' if projection is None else
+                              ','.join('(p.value).'+name+' AS '+name for name in projection))
+            payload_query = 'SELECT '+expression
+        else:
+            payload_query = query
+            payload_select = 'p.value'
+        payload_width = len(payload_columns) if payload_columns is not None else 1
         parameters = args[0] if args else ()
         if not isinstance(parameters, (tuple, list)):
             raise ValueError('Positional function parameters required')
@@ -329,13 +359,13 @@ class _FunctionCursor(_AdmissionCursor):
         # Do not use an uncorrelated LATERAL subquery, which may run first.
         guard = ('WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED ('
                  + _IDENTITY_SQL + '), truss_payload AS MATERIALIZED ('
-                 + query + ' AS value FROM truss_guard WHERE '
+                 + payload_query + ' AS value FROM truss_guard WHERE '
                  '(SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 '
                  'AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s '
                  'AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s '
                  'AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) '
                  'AND timeout OPERATOR(pg_catalog.=) %s) '
-                 'SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,'
+                 'SELECT '+payload_select+',g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,'
                  'EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g '
                  'LEFT JOIN truss_payload p ON true')
         identity = self._custody.identity
@@ -344,14 +374,16 @@ class _FunctionCursor(_AdmissionCursor):
                     self._custody.permanent_xid, self._custody.permanent_xid,
                     str(self._desired))
         self._inner.execute(guard, tuple(parameters) + expected, **kwargs)
-        rows = self._inner.fetchall()
+        rows = self._inner.fetchmany(2)
         description = self._inner.description
-        if (len(rows) != 1 or len(rows[0]) != 8 or description is None
-                or len(description) != 8 or any(d.type_code != 25 for d in description[1:])
-                or rows[0][7] not in ('true','false')):
+        if (len(rows) != 1 or len(rows[0]) != payload_width+7 or description is None
+                or len(description) != payload_width+7
+                or any(d.type_code != 25 for d in description[payload_width:])
+                or payload_columns is not None and tuple((d.name,d.type_code) for d in description[:payload_width]) != payload_columns
+                or rows[0][-1] not in ('true','false')):
             raise ValueError('One exact guarded function result required')
         observation = self._host._apply_admission(
-            _parse_identity_row(rows[0][1:7]), self._custody, self._baseline)
+            _parse_identity_row(rows[0][payload_width:payload_width+6]), self._custody, self._baseline)
         if self._host._custody.retry_identity == observation[0]:
             raise ValueError('Whole caller transaction must be retried')
         if self._host._custody.retry_identity is not None:
@@ -361,9 +393,9 @@ class _FunctionCursor(_AdmissionCursor):
             self._restore_to = observation[2]
         self.admission = observation
         self.checked = True
-        if rows[0][7] == 'true':
-            self._rows = [(rows[0][0],)]
-            self._desc = description[:1]
+        if rows[0][-1] == 'true':
+            self._rows = [rows[0][:payload_width]]
+            self._desc = description[:payload_width]
             return self
         # Identity failures raised above. Only a mismatching, bounded timeout
         # reaches this branch; the guarded function has not executed at all.
@@ -372,10 +404,11 @@ class _FunctionCursor(_AdmissionCursor):
         self._timeout_applied = False
         self._ensure_timeout()
         self._inner.execute(_fuse_admission(query), tuple(parameters), **kwargs)
-        rows = self._inner.fetchall()
+        rows = self._inner.fetchmany(2)
         description = self._inner.description
-        if (len(rows) != 1 or len(rows[0]) != 7 or description is None
-                or len(description) != 7 or any(d.type_code != 25 for d in description[1:])):
+        if (len(rows) != 1 or len(rows[0]) != payload_width+6 or description is None
+                or len(description) != payload_width+6 or any(d.type_code != 25 for d in description[payload_width:])
+                or payload_columns is not None and tuple((d.name,d.type_code) for d in description[:payload_width]) != payload_columns):
             raise ValueError('One exact function result and admission required')
         self._remember(_parse_identity_row(rows[0][-6:]))
         self._rows = [row[:-6] for row in rows]
@@ -710,6 +743,16 @@ class PsycopgHost:
                         cursor.execute(sql.SQL('ROLLBACK TO SAVEPOINT {}').format(name), prepare=False)
                         attempt.phase = 'rolled_back'
                         restored = self._observe(cursor)
+                        # A closed SDK parameter producer can fail before its
+                        # first guarded SELECT. The unique savepoint still
+                        # proves containment in the caller's current transaction;
+                        # invalidate an older handle without quarantining that
+                        # untouched transaction. Arbitrary callbacks retain the
+                        # ordinary correspondence checks below.
+                        if (function_call and before is None and self._attempt_seen is None
+                                and work is not None and work.executions == 0
+                                and custody is not None and restored[0] != custody.identity):
+                            custody.usable = False
                         # A fused check can be the first observation of a replacement
                         # transaction. Rollback returns that transaction to the timeout
                         # it had before this attempt's SET LOCAL, which the fused row
@@ -809,14 +852,15 @@ class PsycopgHost:
             return _failure('invalid_transaction', 'Original issued transaction handle required')
         return self._attempt(callback, custody, publish=publisher)
 
-    def _run_semantic_operation(self, transaction, callback, *, parameter_producer=None, parameter_limit=4194304):
+    def _run_semantic_operation(self, transaction, callback, *, parameter_producer=None, parameter_limit=4194304, function_call=False):
         """Reserve a nonrewinding ordinal before SQL on the shared connection.
 
         Private execution primitive for protected catalog/group facades. An
         issued ordinal is host custody, never database authorization. Inspection
         calls use _run_operation and consume no semantic ordinal. An optional
-        trusted SDK producer derives exact immutable parameters after native
-        custody validation. The retained tuple is passed unchanged to the
+        trusted SDK producer derives exact immutable parameters under host
+        custody; fixed function guards verify fresh native custody before any
+        payload executes. The retained tuple is passed unchanged to the
         callback; fixed statement/parameter correspondence belongs to that
         registered executor. Bounds count every cell, including the ordinal,
         using UTF-8 bytes for text.
@@ -828,7 +872,7 @@ class PsycopgHost:
             return _failure('invalid_transaction', 'Original issued transaction handle required')
         if parameter_limit not in (4194304,16777216) or type(parameter_limit) is not int:
             return _failure('invalid_transaction','Registered semantic parameter budget required')
-        return self._attempt(callback, custody, semantic=True, parameter_producer=parameter_producer,parameter_limit=parameter_limit)
+        return self._attempt(callback, custody, semantic=True, parameter_producer=parameter_producer,parameter_limit=parameter_limit,function_call=function_call)
 
     def detach(self):
         self._closed = True
