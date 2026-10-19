@@ -789,7 +789,6 @@ BEGIN
  current_actor:=truss.runtime_person(false);
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id;
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor OR attempt.complete OR attempt.next_index IS DISTINCT FROM operation_index THEN RAISE EXCEPTION 'current ordered object attempt required' USING ERRCODE='55000';END IF;
- IF attempt.input_bytes IS DISTINCT FROM original_input THEN RAISE EXCEPTION 'original step input required' USING ERRCODE='55000';END IF;
  input:=parsed_input;operation:=jsonb_extract_path(input,'operations',operation_index::text);
  IF input->'mutationProfile'=truss.runtime_owned_profile() AND operation->>'operation'<>'create_object' THEN
   RETURN truss.runtime_owned_step(attempt_id,operation_index,input,attempt.input_bytes,current_actor);
@@ -803,13 +802,8 @@ BEGIN
    RAISE EXCEPTION 'create operation refused' USING ERRCODE=native_state;
   END IF;
   result:=raw->'semantic'->'results'->0;
-  -- The create leaf owns insertion AND one-shot outer progress advancement.
-  IF NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt a WHERE a.id=attempt_id
-   AND a.next_index=operation_index+1 AND CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN
-    a.results='[]'::jsonb AND a.aliases='[]'::jsonb AND EXISTS(
-     SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=a.id AND p.operation_index=runtime_owned_group_step_in_input.operation_index AND p.result=ordered_group_step.result)
-    ELSE a.results->operation_index=result END) THEN
-   RAISE EXCEPTION 'original atomic create progress required' USING ERRCODE='55000';END IF;
+  -- The leaf advances the indexed slot and ordinal atomically. Group finish
+  -- performs the one complete inventory check; no immediate progress readback.
   RETURN convert_to(result::text,'UTF8');
  END IF;
  metadata:=truss.runtime_object_metadata(attempt_id,operation_index);
@@ -1134,6 +1128,10 @@ BEGIN
    PERFORM truss.catalog_key_backfill_transition_reader((SELECT t FROM truss.runtime_catalog_key_backfill t WHERE t.transition_id=latest.transition_id));
   ELSE PERFORM truss.catalog_rebind_transition_reader((SELECT t FROM truss.runtime_catalog_rebind_transition t WHERE t.transition_id=latest.transition_id));END IF;
  ELSIF NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE id=latest.attempt_id AND writer_xid=latest.writer_xid AND actor_oid=current_actor) THEN RAISE EXCEPTION 'current mutation owner required' USING ERRCODE='55000';END IF;
+ -- Current owned writes settle once at their mandatory attempt boundary.
+ -- Their private transition carries no second physical key-row image.
+ IF latest.transition_kind='ordinary' AND EXISTS(SELECT 1 FROM truss.runtime_object_attempt a
+  WHERE a.id=latest.attempt_id AND a.complete AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN RETURN;END IF;
  SELECT to_jsonb(o) INTO actual FROM truss.object o WHERE id=selected_id AND type_id=selected_type;
  SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]'::jsonb) INTO keys FROM truss.object_key_bucket k WHERE k.object_id=selected_id AND k.type_id=selected_type;
  IF actual IS DISTINCT FROM latest.after_object OR keys IS DISTINCT FROM latest.after_keys THEN RAISE EXCEPTION 'exact final object/key state required' USING ERRCODE='55000';END IF;

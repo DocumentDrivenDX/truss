@@ -57,17 +57,38 @@ REVOKE ALL ON FUNCTION truss.runtime_history_property(int,int,int,text) FROM PUB
 CREATE FUNCTION truss.runtime_history_image_qualified(image jsonb,entity jsonb,expected_version bigint,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE revision int;pin text;member jsonb;endpoint jsonb;endpoint_pin record;
+ schema_metadata jsonb;property_pins jsonb;property_access jsonb;property_context jsonb;property_pin text;property_id int;reader jsonb;
 BEGIN
  IF image->>'interfaceVersion' IS DISTINCT FROM 'truss-history-record/0.1.0' OR image->>'kind' IS DISTINCT FROM entity->>'kind'
  OR image->'identity'->>'id' IS DISTINCT FROM entity->>'id' OR image->'identity'->>'typeId' IS DISTINCT FROM entity->>'typeId'
  OR image->'identity'->'owner' IS DISTINCT FROM jsonb_build_object('documentId',entity->>'documentId','moduleId',entity->>'moduleId')
  OR image->>'recordVersion' IS DISTINCT FROM expected_version::text THEN RAISE EXCEPTION 'original complete history image required' USING ERRCODE='55000';END IF;
  revision:=(image->>'catalogRevision')::int;
- IF entity->>'kind'='object' THEN SELECT definition_pin INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',(entity->>'typeId')::int,NULL,revision);
+ IF entity->>'kind'='object' THEN
+  -- Force one detoast, then retain only flat property maps for this image.
+  SELECT s.metadata||'{}'::jsonb INTO STRICT schema_metadata FROM truss.runtime_type_schema s
+   WHERE s.rev=revision AND s.type_id=(entity->>'typeId')::int;
+  pin:=schema_metadata->>'typePin';property_pins:=schema_metadata->'propertyPins';property_access:=schema_metadata->'propertyAccess';
+  schema_metadata:=NULL;
  ELSE pin:=truss.runtime_relationship_pin((entity->>'typeId')::int,revision);END IF;
- IF image->'identity'->>'definitionPin' IS DISTINCT FROM pin THEN RAISE EXCEPTION 'original image interpretation required' USING ERRCODE='55000';END IF;
+ IF pin IS NULL OR image->'identity'->>'definitionPin' IS DISTINCT FROM pin THEN RAISE EXCEPTION 'original image interpretation required' USING ERRCODE='55000';END IF;
  FOR member IN SELECT value FROM jsonb_array_elements(image->'properties') LOOP
-  PERFORM truss.runtime_history_property_qualified((entity->>'typeId')::int,(member->>'propertyId')::int,revision,member->>'definitionPin',qualified_actor);
+  property_id:=(member->>'propertyId')::int;
+  IF property_pins IS NULL THEN
+   -- Project flat local maps once; repeated helper calls would detoast the
+   -- complete stored type metadata again for every property in this image.
+   SELECT s.metadata||'{}'::jsonb INTO STRICT schema_metadata FROM truss.runtime_type_schema s
+    WHERE s.rev=revision AND s.type_id=(entity->>'typeId')::int;
+   property_pins:=schema_metadata->'propertyPins';property_access:=schema_metadata->'propertyAccess';schema_metadata:=NULL;
+  END IF;
+  property_pin:=property_pins->>property_id::text;property_context:=property_access->property_id::text;
+  IF property_pin IS DISTINCT FROM member->>'definitionPin' OR property_context IS NULL
+   OR (property_context->>'itemsValid')::boolean IS NOT TRUE OR jsonb_typeof(property_context->'readers') IS DISTINCT FROM 'array' THEN
+   RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
+  FOR reader IN SELECT value FROM jsonb_array_elements(property_context->'readers') LOOP
+   IF NOT truss.runtime_can_read_qualified(reader->>'documentId',reader->>'moduleId',qualified_actor) THEN
+    RAISE EXCEPTION 'current historical property/item reader required' USING ERRCODE='42501';END IF;
+  END LOOP;
  END LOOP;
  IF entity->>'kind'='object' THEN PERFORM truss.runtime_history_ownership_qualified(image,qualified_actor);END IF;
  IF entity->>'kind'='edge' THEN
@@ -94,6 +115,8 @@ CREATE FUNCTION truss.runtime_history_group_qualified(entity jsonb,writer xid8,v
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE physical truss.journal%ROWTYPE;original bytea;event jsonb;items jsonb:='[]';semantic jsonb:='[]';group_pin jsonb;
  count_events int:=0;size int:=0;expected_pin text;
+ schema_metadata jsonb;property_pins jsonb;property_access jsonb;property_context jsonb;property_pin text;event_property_pin text;reader jsonb;property_type_pin text;
+ property_revision int;property_type int;
  item_buffer jsonb[]:='{}';semantic_buffer jsonb[]:='{}';edge_context jsonb;endpoint_context jsonb;edge_readers_checked boolean:=false;
 BEGIN
  FOR physical IN SELECT * FROM truss.journal j WHERE j.entity_kind=(CASE entity->>'kind' WHEN 'object' THEN 'o' ELSE 'e' END)::char(1)
@@ -133,14 +156,37 @@ BEGIN
    END LOOP;
    edge_readers_checked:=true;
   END IF;
-  IF entity->>'kind'='object' THEN SELECT definition_pin INTO STRICT expected_pin FROM truss.runtime_owned_definition_metadata('type',physical.entity_type,NULL,physical.rev);
+  IF entity->>'kind'='object' THEN
+   IF property_pins IS NULL OR property_revision IS DISTINCT FROM physical.rev OR property_type IS DISTINCT FROM physical.entity_type THEN
+    -- One detoast per revision/type; permissions below remain live per reader.
+    SELECT s.metadata||'{}'::jsonb INTO STRICT schema_metadata FROM truss.runtime_type_schema s
+     WHERE s.rev=physical.rev AND s.type_id=physical.entity_type;
+    property_type_pin:=schema_metadata->>'typePin';property_pins:=schema_metadata->'propertyPins';property_access:=schema_metadata->'propertyAccess';
+    schema_metadata:=NULL;
+    property_revision:=physical.rev;property_type:=physical.entity_type;
+   END IF;
+   expected_pin:=property_type_pin;
   ELSE expected_pin:=truss.runtime_relationship_pin(physical.entity_type,physical.rev);END IF;
-  IF event->'identity'->>'definitionPin' IS DISTINCT FROM expected_pin THEN RAISE EXCEPTION 'original event interpretation required' USING ERRCODE='55000';END IF;
-  IF event->>'operation'='property' THEN
-   PERFORM truss.runtime_history_property_qualified(physical.entity_type,physical.prop_id,physical.rev,event->>'definitionPin',qualified_actor);
-  ELSIF event->>'operation'='rebind' THEN
-   IF (event->>'historyProfile' IN ('truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4')) IS NOT TRUE THEN RAISE EXCEPTION 'original catalog rebind profile required' USING ERRCODE='55000';END IF;
-   PERFORM truss.runtime_history_property_qualified(physical.entity_type,physical.prop_id,physical.rev,event->>'afterDefinitionPin',qualified_actor);
+  IF expected_pin IS NULL OR event->'identity'->>'definitionPin' IS DISTINCT FROM expected_pin THEN RAISE EXCEPTION 'original event interpretation required' USING ERRCODE='55000';END IF;
+  IF event->>'operation' IN ('property','rebind') THEN
+   IF event->>'operation'='rebind' AND
+    (event->>'historyProfile' IN ('truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4')) IS NOT TRUE THEN
+    RAISE EXCEPTION 'original catalog rebind profile required' USING ERRCODE='55000';END IF;
+   IF property_pins IS NULL OR property_revision IS DISTINCT FROM physical.rev OR property_type IS DISTINCT FROM physical.entity_type THEN
+    SELECT s.metadata||'{}'::jsonb INTO STRICT schema_metadata FROM truss.runtime_type_schema s
+     WHERE s.rev=physical.rev AND s.type_id=physical.entity_type;
+    property_pins:=schema_metadata->'propertyPins';property_access:=schema_metadata->'propertyAccess';schema_metadata:=NULL;
+    property_revision:=physical.rev;property_type:=physical.entity_type;
+   END IF;
+   event_property_pin:=CASE WHEN event->>'operation'='rebind' THEN event->>'afterDefinitionPin' ELSE event->>'definitionPin' END;
+   property_pin:=property_pins->>physical.prop_id::text;property_context:=property_access->physical.prop_id::text;
+   IF property_pin IS DISTINCT FROM event_property_pin OR property_context IS NULL
+    OR (property_context->>'itemsValid')::boolean IS NOT TRUE OR jsonb_typeof(property_context->'readers') IS DISTINCT FROM 'array' THEN
+    RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
+   FOR reader IN SELECT value FROM jsonb_array_elements(property_context->'readers') LOOP
+    IF NOT truss.runtime_can_read_qualified(reader->>'documentId',reader->>'moduleId',qualified_actor) THEN
+     RAISE EXCEPTION 'current historical property/item reader required' USING ERRCODE='42501';END IF;
+   END LOOP;
   ELSIF event->>'operation'='create' THEN PERFORM truss.runtime_history_image_qualified(event->'after',entity,version,qualified_actor);
   ELSIF event->>'operation'='metadata' THEN
    PERFORM truss.runtime_history_image_qualified(event->'before',entity,version-1,qualified_actor);PERFORM truss.runtime_history_image_qualified(event->'after',entity,version,qualified_actor);

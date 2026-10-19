@@ -568,51 +568,60 @@ REVOKE ALL ON FUNCTION truss.owned_delete_projection(int,jsonb,jsonb,int) FROM P
 
 -- Per-invocation mutable planner helpers.  The executor passes the identifier
 -- of its uniquely named pg_temp relation; these helpers never retain state.
-CREATE FUNCTION truss.runtime_owned_workspace_state(workspace text,member_kind char,member_ref text) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_workspace_state(workspace text,member_kind char,member_ref text,header_only boolean DEFAULT false) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE result jsonb;
 BEGIN
- EXECUTE format('SELECT state FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace) INTO result USING member_kind,member_ref;
+ EXECUTE format('SELECT CASE WHEN $3 THEN header_state ELSE state END FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace) INTO result USING member_kind,member_ref,header_only;
  RETURN result;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state(text,char,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state(text,char,text,boolean) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_workspace_state_or(workspace text,member_kind char,member_ref text,fallback_map jsonb) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_workspace_state_or(workspace text,member_kind char,member_ref text,fallback_map jsonb,header_only boolean DEFAULT false) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE result jsonb;
 BEGIN
- IF workspace IS NULL THEN RETURN fallback_map->member_ref;END IF;
- EXECUTE format('SELECT state FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace) INTO result USING member_kind,member_ref;
+ IF workspace IS NULL THEN
+  result:=fallback_map->member_ref;
+  IF header_only AND result IS NOT NULL THEN RETURN jsonb_set(result,'{image}',((result->'image')-ARRAY['props','retained']));END IF;
+  RETURN result;
+ END IF;
+ EXECUTE format('SELECT CASE WHEN $3 THEN header_state ELSE state END FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace) INTO result USING member_kind,member_ref,header_only;
  RETURN result;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_or(text,char,text,jsonb) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_or(text,char,text,jsonb,boolean) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_workspace_state_at(workspace text,member_kind char,member_ref text,operation_index int,before_image boolean DEFAULT false) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_workspace_state_at(workspace text,member_kind char,member_ref text,operation_index int,before_image boolean DEFAULT false,header_only boolean DEFAULT false) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE result jsonb;
 BEGIN
- EXECUTE format('SELECT CASE WHEN $4 AND created_operation=$3 THEN NULL WHEN $4 AND before_operation=$3 THEN before_state ELSE state END FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace)
-  INTO result USING member_kind,member_ref,operation_index,before_image;
+ EXECUTE format('SELECT CASE WHEN $4 AND created_operation=$3 THEN NULL WHEN $5 AND $4 AND before_operation=$3 THEN before_header_state WHEN $5 THEN header_state WHEN $4 AND before_operation=$3 THEN before_state ELSE state END FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace)
+  INTO result USING member_kind,member_ref,operation_index,before_image,header_only;
  RETURN result;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_at(text,char,text,int,boolean) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_at(text,char,text,int,boolean,boolean) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_workspace_state_at_or(workspace text,member_kind char,member_ref text,operation_index int,before_image boolean,fallback_map jsonb) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_workspace_state_at_or(workspace text,member_kind char,member_ref text,operation_index int,before_image boolean,fallback_map jsonb,header_only boolean DEFAULT false) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE result jsonb;
 BEGIN
- IF workspace IS NULL THEN RETURN fallback_map->member_ref;END IF;
- RETURN truss.runtime_owned_workspace_state_at(workspace,member_kind,member_ref,operation_index,before_image);
+ IF workspace IS NULL THEN
+  result:=fallback_map->member_ref;
+  IF header_only AND result IS NOT NULL THEN RETURN jsonb_set(result,'{image}',((result->'image')-ARRAY['props','retained']));END IF;
+  RETURN result;
+ END IF;
+ RETURN truss.runtime_owned_workspace_state_at(workspace,member_kind,member_ref,operation_index,before_image,header_only);
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_at_or(text,char,text,int,boolean,jsonb) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_at_or(text,char,text,int,boolean,jsonb,boolean) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_owned_workspace_put(workspace text,member_kind char,member_ref text,operation_index int,new_state jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
- EXECUTE format('UPDATE pg_temp.%I SET before_state=CASE WHEN before_operation IS DISTINCT FROM $3 THEN state ELSE before_state END,before_operation=$3,state=$4,deleted=coalesce(($4->>''deleted'')::boolean,false),root_ref=$4->>''root'',source_ref=$4->>''source'',target_ref=$4->>''target'',lifecycle=$4->>''lifecycle'' WHERE member_kind=$1 AND member_ref=$2',workspace)
+ EXECUTE format('UPDATE pg_temp.%I SET before_state=CASE WHEN before_operation IS DISTINCT FROM $3 THEN state ELSE before_state END,before_header_state=CASE WHEN before_operation IS DISTINCT FROM $3 THEN header_state ELSE before_header_state END,before_operation=$3,state=$4,header_state=jsonb_set($4,''{image}'',($4->''image'')-ARRAY[''props'',''retained'']),deleted=coalesce(($4->>''deleted'')::boolean,false),root_ref=$4->>''root'',source_ref=$4->>''source'',target_ref=$4->>''target'',lifecycle=$4->>''lifecycle'' WHERE member_kind=$1 AND member_ref=$2',workspace)
   USING member_kind,member_ref,operation_index,new_state;
 END;
 $$;
@@ -631,7 +640,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_write(text,char,text,int,js
 CREATE FUNCTION truss.runtime_owned_workspace_insert(workspace text,member_kind char,member_ref text,member_ordinal int,operation_index int,new_state jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
- EXECUTE format('INSERT INTO pg_temp.%I(member_kind,member_ref,member_ordinal,created_operation,state,deleted,root_ref,source_ref,target_ref,lifecycle) VALUES($1,$2,$3,$5,$4,coalesce(($4->>''deleted'')::boolean,false),$4->>''root'',$4->>''source'',$4->>''target'',$4->>''lifecycle'')',workspace)
+ EXECUTE format('INSERT INTO pg_temp.%I(member_kind,member_ref,member_ordinal,created_operation,state,header_state,deleted,root_ref,source_ref,target_ref,lifecycle) VALUES($1,$2,$3,$5,$4,jsonb_set($4,''{image}'',($4->''image'')-ARRAY[''props'',''retained'']),coalesce(($4->>''deleted'')::boolean,false),$4->>''root'',$4->>''source'',$4->>''target'',$4->>''lifecycle'')',workspace)
   USING member_kind,member_ref,member_ordinal,new_state,operation_index;
 END;
 $$;
@@ -655,7 +664,7 @@ BEGIN
    RAISE EXCEPTION 'closed original stored reference required' USING ERRCODE='22023';END IF;
   selected:='stored:'||(identity->>'typeId')||':'||(identity->>'id');
  ELSE RAISE EXCEPTION 'stored or prior alias required' USING ERRCODE='22023';END IF;
- selected_state:=truss.runtime_owned_workspace_state(workspace,member_kind,selected);
+ selected_state:=truss.runtime_owned_workspace_state(workspace,member_kind,selected,true);
  IF selected_state IS NULL THEN RAISE EXCEPTION 'existing reference of the correct kind required' USING ERRCODE='22023';END IF;
  IF selected_state->'deleted'='true'::jsonb THEN RAISE EXCEPTION 'referenced graph member deleted' USING ERRCODE='P1004';END IF;
  IF identity IS NOT NULL AND identity IS DISTINCT FROM selected_state->'identity' THEN
@@ -665,16 +674,16 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_reference(jsonb,text,char,int) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_workspace_map(workspace text,member_kind char,operation_index int,member_refs text[],before_image boolean DEFAULT false) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_workspace_map(workspace text,member_kind char,operation_index int,member_refs text[],before_image boolean DEFAULT false,full_payload_refs text[] DEFAULT NULL) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE result jsonb;
 BEGIN
- EXECUTE format('SELECT coalesce(jsonb_object_agg(w.member_ref,CASE WHEN $4 AND w.before_operation=$3 THEN w.before_state ELSE w.state END),''{}''::jsonb) FROM pg_temp.%I w WHERE w.member_kind=$1 AND ($2 IS NULL OR w.member_ref=ANY($2)) AND (NOT $4 OR w.created_operation IS DISTINCT FROM $3)',workspace)
-  INTO result USING member_kind,member_refs,operation_index,before_image;
+ EXECUTE format('SELECT coalesce(jsonb_object_agg(w.member_ref,CASE WHEN $5 IS NULL OR full_payload.member_ref IS NOT NULL THEN CASE WHEN $4 AND w.before_operation=$3 THEN w.before_state ELSE w.state END ELSE CASE WHEN $4 AND w.before_operation=$3 THEN w.before_header_state ELSE w.header_state END END),''{}''::jsonb) FROM pg_temp.%I w LEFT JOIN unnest(coalesce($5,ARRAY[]::text[])) full_payload(member_ref) ON full_payload.member_ref=w.member_ref WHERE w.member_kind=$1 AND ($2 IS NULL OR w.member_ref=ANY($2)) AND (NOT $4 OR w.created_operation IS DISTINCT FROM $3)',workspace)
+  INTO result USING member_kind,member_refs,operation_index,before_image,full_payload_refs;
  RETURN result;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_map(text,char,int,text[],boolean) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_map(text,char,int,text[],boolean,text[]) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_owned_workspace_aliases(workspace text) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
@@ -840,7 +849,7 @@ DECLARE input_operations jsonb;application_operations jsonb;
  selected_type truss.type_def%ROWTYPE;relation truss.rel_def%ROWTYPE;pin record;identity jsonb;revision int;
  index int:=0;before_count int;descendants text[];descendant text;projection jsonb;deleted jsonb;local_owned jsonb;local_independent jsonb;
  unset_name text;authored jsonb;retained jsonb;order_key jsonb;selected_source_type int;selected_target_type int;plan jsonb;outgoing bigint;incoming bigint;
- retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;current_actor oid;resolved_creates jsonb:='{}';
+ retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];full_node_refs text[];plans_bytes bigint:=2;current_actor oid;resolved_creates jsonb:='{}';
  alias_names text[]:='{}';alias_values text[]:='{}';duplicate_alias_index int;alias_operations jsonb:='{}';
  rootless_creates boolean;created_states jsonb[]:='{}';
  edge_creates boolean;created_edge_states jsonb[]:='{}';initial_edge_count int;edge_member_count int;
@@ -957,13 +966,13 @@ BEGIN
  IF indexed_workspace THEN
   workspace_name:='truss_owned_plan_'||replace(gen_random_uuid()::text,'-','');
   workspace_index_name:=workspace_name||'_source_idx';
-  EXECUTE format('CREATE TEMP TABLE %I (member_kind char(1) NOT NULL,member_ref text NOT NULL,member_ordinal integer NOT NULL,created_operation integer,before_operation integer,before_state jsonb,state jsonb,deleted boolean NOT NULL DEFAULT false,root_ref text,source_ref text,target_ref text,lifecycle text,PRIMARY KEY(member_kind,member_ref)) ON COMMIT DROP',workspace_name);
+  EXECUTE format('CREATE TEMP TABLE %I (member_kind char(1) NOT NULL,member_ref text NOT NULL,member_ordinal integer NOT NULL,created_operation integer,before_operation integer,before_state jsonb,before_header_state jsonb,state jsonb,header_state jsonb,deleted boolean NOT NULL DEFAULT false,root_ref text,source_ref text,target_ref text,lifecycle text,PRIMARY KEY(member_kind,member_ref)) ON COMMIT DROP',workspace_name);
   EXECUTE format('CREATE INDEX %I ON pg_temp.%I(source_ref) WHERE member_kind=''e'' AND NOT deleted',workspace_index_name,workspace_name);
   workspace_index_name:=workspace_name||'_target_idx';
   EXECUTE format('CREATE INDEX %I ON pg_temp.%I(target_ref) WHERE member_kind=''e'' AND NOT deleted',workspace_index_name,workspace_name);
-  EXECUTE format('INSERT INTO pg_temp.%I(member_kind,member_ref,member_ordinal,state,deleted,root_ref) SELECT ''n'',r.member_ref,r.ordinal::int,j.value,coalesce((j.value->>''deleted'')::boolean,false),j.value->>''root'' FROM unnest($1::text[]) WITH ORDINALITY r(member_ref,ordinal) JOIN jsonb_each($2) j ON j.key=r.member_ref',workspace_name) USING node_order,nodes;
-  EXECUTE format('INSERT INTO pg_temp.%I(member_kind,member_ref,member_ordinal,state,deleted,source_ref,target_ref,lifecycle) SELECT ''e'',key,row_number() OVER(ORDER BY key COLLATE "C")::int,value,coalesce((value->>''deleted'')::boolean,false),value->>''source'',value->>''target'',value->>''lifecycle'' FROM jsonb_each($1)',workspace_name) USING edges;
-  EXECUTE format('INSERT INTO pg_temp.%I(member_kind,member_ref,member_ordinal,state,deleted) SELECT ''b'',r.member_ref,r.ordinal::int,j.value,false FROM unnest($1::text[]) WITH ORDINALITY r(member_ref,ordinal) JOIN jsonb_each($2) j ON ''stored:''||j.key=r.member_ref',workspace_name) USING boundary_order,scope->'boundary';
+  EXECUTE format('INSERT INTO pg_temp.%I(member_kind,member_ref,member_ordinal,state,header_state,deleted,root_ref) SELECT ''n'',r.member_ref,r.ordinal::int,j.value,jsonb_set(j.value,''{image}'',(j.value->''image'')-ARRAY[''props'',''retained'']),coalesce((j.value->>''deleted'')::boolean,false),j.value->>''root'' FROM unnest($1::text[]) WITH ORDINALITY r(member_ref,ordinal) JOIN jsonb_each($2) j ON j.key=r.member_ref',workspace_name) USING node_order,nodes;
+  EXECUTE format('INSERT INTO pg_temp.%I(member_kind,member_ref,member_ordinal,state,header_state,deleted,source_ref,target_ref,lifecycle) SELECT ''e'',key,row_number() OVER(ORDER BY key COLLATE "C")::int,value,jsonb_set(value,''{image}'',(value->''image'')-ARRAY[''props'',''retained'']),coalesce((value->>''deleted'')::boolean,false),value->>''source'',value->>''target'',value->>''lifecycle'' FROM jsonb_each($1)',workspace_name) USING edges;
+  EXECUTE format('INSERT INTO pg_temp.%I(member_kind,member_ref,member_ordinal,state,header_state,deleted) SELECT ''b'',r.member_ref,r.ordinal::int,j.value,j.value,false FROM unnest($1::text[]) WITH ORDINALITY r(member_ref,ordinal) JOIN jsonb_each($2) j ON ''stored:''||j.key=r.member_ref',workspace_name) USING boundary_order,scope->'boundary';
   nodes:='{}'::jsonb;edges:='{}'::jsonb;aliases:='{}'::jsonb;
  END IF;
  FOR operation IN SELECT value FROM jsonb_array_elements(input_operations) LOOP
@@ -1058,7 +1067,7 @@ BEGIN
      ELSIF ownership->>'state'='owned' AND ownership-ARRAY['state','root']='{}'::jsonb THEN
       IF indexed_workspace THEN root_ref:=truss.runtime_owned_workspace_reference(ownership->'root',workspace_name,'n',index);
       ELSE root_ref:=truss.runtime_owned_reference(ownership->'root',aliases,nodes);END IF;
-      IF root_ref=selected OR truss.runtime_owned_workspace_state_or(workspace_name,'n',root_ref,nodes)->'root'<>'null'::jsonb THEN RAISE EXCEPTION 'selected live rootless aggregate root required' USING ERRCODE='22023';END IF;
+      IF root_ref=selected OR truss.runtime_owned_workspace_state_or(workspace_name,'n',root_ref,nodes,true)->'root'<>'null'::jsonb THEN RAISE EXCEPTION 'selected live rootless aggregate root required' USING ERRCODE='22023';END IF;
      ELSE RAISE EXCEPTION 'explicit exact ownership selection required' USING ERRCODE='22023';END IF;
      IF state->'root' IS DISTINCT FROM coalesce(to_jsonb(root_ref),'null'::jsonb) THEN
       IF indexed_workspace THEN descendants:=truss.runtime_owned_workspace_descendants(workspace_name,selected);
@@ -1196,21 +1205,25 @@ BEGIN
    ELSE alias_names:=array_append(alias_names,operation->>'alias');alias_values:=array_append(alias_values,selected);END IF;
   END IF;
   IF indexed_workspace THEN
+   SELECT coalesce(array_agg(reference),'{}'::text[]) INTO full_node_refs FROM (
+    SELECT unnest(changed_nodes) reference
+    UNION SELECT selected WHERE operation->>'operation' IN ('create_object','update_object','delete_object')
+   ) full_members;
    SELECT coalesce(array_agg(DISTINCT reference),'{}'::text[]) INTO retained_nodes FROM (
     SELECT unnest(changed_nodes) reference
     UNION SELECT selected WHERE operation->>'operation' IN ('create_object','update_object','delete_object')
     UNION SELECT truss.runtime_owned_workspace_state_at(workspace_name,'e',reference,index,true)->>'source' FROM unnest(changed_edges) c(reference)
     UNION SELECT truss.runtime_owned_workspace_state_at(workspace_name,'e',reference,index,true)->>'target' FROM unnest(changed_edges) c(reference)
-    UNION SELECT truss.runtime_owned_workspace_state(workspace_name,'e',reference)->>'source' FROM unnest(changed_edges) c(reference)
-    UNION SELECT truss.runtime_owned_workspace_state(workspace_name,'e',reference)->>'target' FROM unnest(changed_edges) c(reference)
+    UNION SELECT truss.runtime_owned_workspace_state(workspace_name,'e',reference,true)->>'source' FROM unnest(changed_edges) c(reference)
+    UNION SELECT truss.runtime_owned_workspace_state(workspace_name,'e',reference,true)->>'target' FROM unnest(changed_edges) c(reference)
    ) refs WHERE reference IS NOT NULL;
    SELECT coalesce(array_agg(DISTINCT reference),'{}'::text[]) INTO retained_nodes FROM (
     SELECT unnest(retained_nodes) reference
     UNION SELECT truss.runtime_owned_workspace_state_at(workspace_name,'n',reference,index,true)->>'root' FROM unnest(retained_nodes) n(reference)
-    UNION SELECT truss.runtime_owned_workspace_state(workspace_name,'n',reference)->>'root' FROM unnest(retained_nodes) n(reference)
+    UNION SELECT truss.runtime_owned_workspace_state(workspace_name,'n',reference,true)->>'root' FROM unnest(retained_nodes) n(reference)
    ) roots WHERE reference IS NOT NULL;
-   before_nodes:=truss.runtime_owned_workspace_map(workspace_name,'n',index,retained_nodes,true);
-   nodes:=truss.runtime_owned_workspace_map(workspace_name,'n',index,retained_nodes,false);
+   before_nodes:=truss.runtime_owned_workspace_map(workspace_name,'n',index,retained_nodes,true,full_node_refs);
+   nodes:=truss.runtime_owned_workspace_map(workspace_name,'n',index,retained_nodes,false,full_node_refs);
    before_edges:=truss.runtime_owned_workspace_map(workspace_name,'e',index,changed_edges,true);
    edges:=truss.runtime_owned_workspace_map(workspace_name,'e',index,changed_edges,false);
   END IF;
@@ -1240,8 +1253,8 @@ BEGIN
     'beforeEdges','{}'::jsonb,'afterEdges','{}'::jsonb);
   ELSIF edge_creates THEN
    SELECT array_agg(DISTINCT reference) INTO retained_nodes FROM unnest(ARRAY[
-    source_ref,target_ref,truss.runtime_owned_workspace_state_or(workspace_name,'n',source_ref,nodes)->>'root',truss.runtime_owned_workspace_state_or(workspace_name,'n',target_ref,nodes)->>'root']) r(reference) WHERE reference IS NOT NULL;
-   SELECT coalesce(jsonb_object_agg(r.reference,nodes->r.reference),'{}'::jsonb) INTO before_nodes
+    source_ref,target_ref,truss.runtime_owned_workspace_state_or(workspace_name,'n',source_ref,nodes,true)->>'root',truss.runtime_owned_workspace_state_or(workspace_name,'n',target_ref,nodes,true)->>'root']) r(reference) WHERE reference IS NOT NULL;
+   SELECT coalesce(jsonb_object_agg(r.reference,jsonb_set(nodes->r.reference,'{image}',((nodes->r.reference)->'image')-ARRAY['props','retained'])),'{}'::jsonb) INTO before_nodes
     FROM unnest(retained_nodes) r(reference) WHERE nodes ? r.reference;
    plan:=jsonb_build_object('beforeNodes',before_nodes,'afterNodes',before_nodes,
     'beforeEdges','{}'::jsonb,'afterEdges',jsonb_build_object(selected,state));
@@ -1250,7 +1263,7 @@ BEGIN
    -- These operations change one object only. Use point lookups for its root
    -- witnesses instead of rescanning the complete growing working graph.
    SELECT array_agg(DISTINCT reference) INTO retained_nodes FROM unnest(ARRAY[
-    selected,truss.runtime_owned_workspace_state_at_or(workspace_name,'n',selected,index,true,before_nodes)->>'root',truss.runtime_owned_workspace_state_or(workspace_name,'n',selected,nodes)->>'root']) r(reference) WHERE reference IS NOT NULL;
+    selected,truss.runtime_owned_workspace_state_at_or(workspace_name,'n',selected,index,true,before_nodes,true)->>'root',truss.runtime_owned_workspace_state_or(workspace_name,'n',selected,nodes,true)->>'root']) r(reference) WHERE reference IS NOT NULL;
    plan:=jsonb_build_object(
     'beforeNodes',(SELECT coalesce(jsonb_object_agg(r.reference,before_nodes->r.reference),'{}'::jsonb) FROM unnest(retained_nodes) r(reference) WHERE before_nodes ? r.reference),
     'afterNodes',(SELECT coalesce(jsonb_object_agg(r.reference,nodes->r.reference),'{}'::jsonb) FROM unnest(retained_nodes) r(reference) WHERE nodes ? r.reference),
@@ -1265,21 +1278,32 @@ BEGIN
     SELECT reference FROM unnest(changed_nodes) n(reference)
      WHERE truss.runtime_owned_workspace_state_at_or(workspace_name,'n',reference,index,true,before_nodes) IS DISTINCT FROM truss.runtime_owned_workspace_state_or(workspace_name,'n',reference,nodes)
     UNION SELECT selected WHERE operation->>'operation' IN ('create_object','update_object','delete_object')
-    UNION SELECT truss.runtime_owned_workspace_state_at_or(workspace_name,'e',reference,index,true,before_edges)->>'source' FROM unnest(retained_edges) e(reference)
-    UNION SELECT truss.runtime_owned_workspace_state_at_or(workspace_name,'e',reference,index,true,before_edges)->>'target' FROM unnest(retained_edges) e(reference)
-    UNION SELECT truss.runtime_owned_workspace_state_or(workspace_name,'e',reference,edges)->>'source' FROM unnest(retained_edges) e(reference)
-    UNION SELECT truss.runtime_owned_workspace_state_or(workspace_name,'e',reference,edges)->>'target' FROM unnest(retained_edges) e(reference)
+    UNION SELECT truss.runtime_owned_workspace_state_at_or(workspace_name,'e',reference,index,true,before_edges,true)->>'source' FROM unnest(retained_edges) e(reference)
+    UNION SELECT truss.runtime_owned_workspace_state_at_or(workspace_name,'e',reference,index,true,before_edges,true)->>'target' FROM unnest(retained_edges) e(reference)
+    UNION SELECT truss.runtime_owned_workspace_state_or(workspace_name,'e',reference,edges,true)->>'source' FROM unnest(retained_edges) e(reference)
+    UNION SELECT truss.runtime_owned_workspace_state_or(workspace_name,'e',reference,edges,true)->>'target' FROM unnest(retained_edges) e(reference)
    ) changed WHERE reference IS NOT NULL;
    SELECT coalesce(array_agg(reference),'{}'::text[]) INTO retained_nodes FROM (
     SELECT unnest(retained_nodes) reference
-    UNION SELECT truss.runtime_owned_workspace_state_at_or(workspace_name,'n',reference,index,true,before_nodes)->>'root' FROM unnest(retained_nodes) n(reference)
-    UNION SELECT truss.runtime_owned_workspace_state_or(workspace_name,'n',reference,nodes)->>'root' FROM unnest(retained_nodes) n(reference)
+    UNION SELECT truss.runtime_owned_workspace_state_at_or(workspace_name,'n',reference,index,true,before_nodes,true)->>'root' FROM unnest(retained_nodes) n(reference)
+    UNION SELECT truss.runtime_owned_workspace_state_or(workspace_name,'n',reference,nodes,true)->>'root' FROM unnest(retained_nodes) n(reference)
    ) witnesses WHERE reference IS NOT NULL;
-   plan:=jsonb_build_object(
-    'beforeNodes',(SELECT coalesce(jsonb_object_agg(reference,truss.runtime_owned_workspace_state_at_or(workspace_name,'n',reference,index,true,before_nodes)),'{}'::jsonb) FROM unnest(retained_nodes) r(reference) WHERE before_nodes ? reference),
-    'afterNodes',(SELECT coalesce(jsonb_object_agg(reference,truss.runtime_owned_workspace_state_or(workspace_name,'n',reference,nodes)),'{}'::jsonb) FROM unnest(retained_nodes) r(reference) WHERE nodes ? reference),
+   IF indexed_workspace THEN
+    plan:=jsonb_build_object(
+    'beforeNodes',(SELECT coalesce(jsonb_object_agg(r.reference,before_nodes->r.reference),'{}'::jsonb) FROM unnest(retained_nodes) r(reference) WHERE before_nodes ? r.reference),
+    'afterNodes',(SELECT coalesce(jsonb_object_agg(r.reference,nodes->r.reference),'{}'::jsonb) FROM unnest(retained_nodes) r(reference) WHERE nodes ? r.reference),
     'beforeEdges',(SELECT coalesce(jsonb_object_agg(reference,truss.runtime_owned_workspace_state_at_or(workspace_name,'e',reference,index,true,before_edges)),'{}'::jsonb) FROM unnest(retained_edges) r(reference) WHERE before_edges ? reference),
     'afterEdges',(SELECT coalesce(jsonb_object_agg(reference,truss.runtime_owned_workspace_state_or(workspace_name,'e',reference,edges)),'{}'::jsonb) FROM unnest(retained_edges) r(reference) WHERE edges ? reference));
+   ELSE
+    full_node_refs:=array_cat(changed_nodes,CASE WHEN operation->>'operation' IN ('create_object','update_object','delete_object') THEN ARRAY[selected]::text[] ELSE ARRAY[]::text[] END);
+    plan:=jsonb_build_object(
+    'beforeNodes',(SELECT coalesce(jsonb_object_agg(r.reference,CASE WHEN payload.reference IS NOT NULL THEN before_nodes->r.reference ELSE jsonb_set(before_nodes->r.reference,'{image}',((before_nodes->r.reference)->'image')-ARRAY['props','retained']) END),'{}'::jsonb)
+     FROM unnest(retained_nodes) r(reference) LEFT JOIN unnest(full_node_refs) payload(reference) ON payload.reference=r.reference WHERE before_nodes ? r.reference),
+    'afterNodes',(SELECT coalesce(jsonb_object_agg(r.reference,CASE WHEN payload.reference IS NOT NULL THEN nodes->r.reference ELSE jsonb_set(nodes->r.reference,'{image}',((nodes->r.reference)->'image')-ARRAY['props','retained']) END),'{}'::jsonb)
+     FROM unnest(retained_nodes) r(reference) LEFT JOIN unnest(full_node_refs) payload(reference) ON payload.reference=r.reference WHERE nodes ? r.reference),
+    'beforeEdges',(SELECT coalesce(jsonb_object_agg(reference,truss.runtime_owned_workspace_state_at_or(workspace_name,'e',reference,index,true,before_edges)),'{}'::jsonb) FROM unnest(retained_edges) r(reference) WHERE before_edges ? reference),
+    'afterEdges',(SELECT coalesce(jsonb_object_agg(reference,truss.runtime_owned_workspace_state_or(workspace_name,'e',reference,edges)),'{}'::jsonb) FROM unnest(retained_edges) r(reference) WHERE edges ? reference));
+   END IF;
   END IF;
   plan:=plan||jsonb_build_object('profile','truss-owned-operation-plan/0.2',
    'operationIndex',index,'operation',operation,'primary',selected);
@@ -1297,12 +1321,12 @@ BEGIN
   nodes:=truss.runtime_owned_workspace_map(workspace_name,'n',index,NULL,false);
   edges:=truss.runtime_owned_workspace_map(workspace_name,'e',index,NULL,false);
  END IF;
- SELECT coalesce(array_agg(reference ORDER BY ordinal),'{}'::text[]) INTO node_order FROM unnest(node_order) WITH ORDINALITY n(reference,ordinal) WHERE truss.runtime_owned_workspace_state_or(workspace_name,'n',reference,nodes)->'deleted'='false'::jsonb;
+ SELECT coalesce(array_agg(reference ORDER BY ordinal),'{}'::text[]) INTO node_order FROM unnest(node_order) WITH ORDINALITY n(reference,ordinal) WHERE truss.runtime_owned_workspace_state_or(workspace_name,'n',reference,nodes,true)->'deleted'='false'::jsonb;
  local_owned:=truss.runtime_owned_local_edges(edges,node_order,boundary_order,true);
  projection:=truss.owned_forest_projection(cardinality(node_order),local_owned);
  FOR entry IN SELECT value FROM jsonb_array_elements(projection) LOOP
   selected:=node_order[(entry.value->>'node')::int+1];root_ref:=CASE WHEN entry.value->'root'='null'::jsonb THEN NULL ELSE node_order[(entry.value->>'root')::int+1] END;
-  IF truss.runtime_owned_workspace_state_or(workspace_name,'n',selected,nodes)->'root' IS DISTINCT FROM coalesce(to_jsonb(root_ref),'null'::jsonb) THEN RAISE EXCEPTION 'final ownership graph requires explicit root change' USING ERRCODE='22023';END IF;
+  IF truss.runtime_owned_workspace_state_or(workspace_name,'n',selected,nodes,true)->'root' IS DISTINCT FROM coalesce(to_jsonb(root_ref),'null'::jsonb) THEN RAISE EXCEPTION 'final ownership graph requires explicit root change' USING ERRCODE='22023';END IF;
  END LOOP;
  -- The final simulated edges are immutable here. Count each live edge once
  -- per direction rather than scanning the full map for every node/relation.
@@ -1908,7 +1932,8 @@ BEGIN
   FROM unnest(journal_items) WITH ORDINALITY AS item(value,ordinality);
  SELECT coalesce(jsonb_agg(item.value ORDER BY item.ordinality),'[]'::jsonb) INTO event_refs
   FROM unnest(event_ref_items) WITH ORDINALITY AS item(value,ordinality);
- SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]'::jsonb) INTO keys FROM truss.object_key_bucket k WHERE k.object_id=object_row.id AND k.type_id=object_row.type_id;
+ -- Physical key rows are canonical; no duplicate expected-key image is retained.
+ keys:='[]'::jsonb;
  INSERT INTO truss.runtime_object_transition(attempt_id,operation_index,writer_xid,object_id,type_id,before_object,after_object,after_keys,journal)
  VALUES(selected_attempt,selected_index,attempt.writer_xid,object_row.id,object_row.type_id,old_image,new_image,keys,journals);
  current_actor:=truss.runtime_person(false);
@@ -2554,15 +2579,11 @@ BEGIN
   CROSS JOIN LATERAL jsonb_populate_record(NULL::truss.journal,o.value->'journal') r;
  GET DIAGNOSTICS counted=ROW_COUNT;
  IF counted<>jsonb_array_length(journals) THEN RAISE EXCEPTION 'complete batch journal append required' USING ERRCODE='55000';END IF;
- WITH key_sets AS MATERIALIZED (
-  SELECT (value->>'index')::int index,jsonb_agg(value->'membership' ORDER BY (value->'membership'->>'key_num')::int) members
-  FROM jsonb_array_elements(keys) GROUP BY (value->>'index')::int)
  SELECT jsonb_agg(jsonb_build_object('attempt_id',attempt.id,'operation_index',(o.value->>'index')::int,
   'writer_xid',attempt.writer_xid::text,'object_id',(o.value->'object'->>'id')::bigint,'type_id',(o.value->'object'->>'type_id')::int,
-  'before_object',NULL,'after_object',o.value->'object','after_keys',coalesce(k.members,'[]'::jsonb),
+  'before_object',NULL,'after_object',o.value->'object','after_keys','[]'::jsonb,
   'journal',jsonb_build_array(j.value->'journal')) ORDER BY (o.value->>'index')::int) INTO transitions
- FROM jsonb_array_elements(objects) o JOIN jsonb_array_elements(journals) j ON (j.value->>'index')::int=(o.value->>'index')::int
- LEFT JOIN key_sets k ON k.index=(o.value->>'index')::int;
+ FROM jsonb_array_elements(objects) o JOIN jsonb_array_elements(journals) j ON (j.value->>'index')::int=(o.value->>'index')::int;
  INSERT INTO truss.runtime_object_transition(attempt_id,operation_index,writer_xid,object_id,type_id,before_object,after_object,after_keys,journal)
  SELECT r.attempt_id,r.operation_index,r.writer_xid,r.object_id,r.type_id,r.before_object,r.after_object,r.after_keys,r.journal
  FROM jsonb_populate_recordset(NULL::truss.runtime_object_transition,transitions) r;
@@ -3026,8 +3047,7 @@ BEGIN
   SELECT attempt.id attempt_id,(o.value->>'index')::int operation_index,attempt.writer_xid writer_xid,
    (o.value->'after'->>'id')::bigint object_id,(o.value->'after'->>'type_id')::int type_id,
    o.value->'before' before_object,o.value->'after' after_object,
-   (SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]') FROM truss.object_key_bucket k
-    WHERE k.object_id=(o.value->'after'->>'id')::bigint AND k.type_id=(o.value->'after'->>'type_id')::int) after_keys,
+   '[]'::jsonb after_keys,
    j.rows journal FROM jsonb_array_elements(objects) o JOIN journal_sets j ON j.operation_index=(o.value->>'index')::int),
  inserted AS (
   INSERT INTO truss.runtime_object_transition(attempt_id,operation_index,writer_xid,object_id,type_id,before_object,after_object,after_keys,journal)
@@ -3161,12 +3181,13 @@ BEGIN
  LOOP
   SELECT metadata INTO STRICT history_basis FROM truss.runtime_type_schema
    WHERE rev=source_cut.revision AND type_id=source_cut.type_id;
-  IF EXISTS(SELECT 1 FROM jsonb_each(history_basis->'propertyAccess') p
-   WHERE p.key=ANY(source_cut.present_names) AND p.value->'itemsValid' IS DISTINCT FROM 'true'::jsonb) THEN
+  IF EXISTS(SELECT 1 FROM unnest(source_cut.present_names) p(name)
+   WHERE (history_basis->'propertyAccess') ? p.name
+    AND history_basis->'propertyAccess'->p.name->'itemsValid' IS DISTINCT FROM 'true'::jsonb) THEN
    RAISE EXCEPTION 'current historical property/item readers required' USING ERRCODE='42501';END IF;
   FOR owner IN SELECT DISTINCT r.value->>'documentId' document_id,r.value->>'moduleId' module_id
-   FROM jsonb_each(history_basis->'propertyAccess') p CROSS JOIN LATERAL jsonb_array_elements(p.value->'readers') r
-   WHERE p.key=ANY(source_cut.present_names) LOOP
+   FROM unnest(source_cut.present_names) p(name)
+   CROSS JOIN LATERAL jsonb_array_elements(history_basis->'propertyAccess'->p.name->'readers') r LOOP
    IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
     RAISE EXCEPTION 'current historical property/item readers required' USING ERRCODE='42501';END IF;
   END LOOP;

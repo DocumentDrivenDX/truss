@@ -21,7 +21,7 @@ that forge private engine plans and effects are outside ADR-008's ordinary calle
 boundary. A test simulating those callbacks does not create a requirement to
 reconstruct the engine's semantics independently at every database layer.
 
-The structural review is being completed against the current source; qualification remains pending. Earlier C83
+The structural review covers the selected current write profile and its public read/replay paths; qualification remains pending. The canceled 089dbf14 run never started stress: final review found the mixed CREATE leaf still recounting completed slots and replaying inserted rows. The corrected leaf uses indexed ordinal custody and mandatory group settlement. Earlier C83
 failed macOS eight-key capacity, macOS index-heavy updates and Ubuntu wide updates.
 Cancellation frames identify the active statement, not the dominant cost.
 
@@ -98,6 +98,11 @@ formulas.
 | Settlement | Check current custody, result completeness and distinct actual owner/reader dependencies; apply bounded relationship constraints. | A second semantic/history execution over private plans and transitions, including repeat final object/key snapshots for owned execution. |
 | Feed | Publish required original facts; capture transaction configuration once per nonempty carrier statement. | Configuration discovery per journal/reservation row. |
 
+New owned transitions leave the compatibility `after_keys` carrier empty. The
+physical key tables already hold the canonical memberships; neither public
+history, provenance, feed nor receipt interpretation needs another complete
+expected copy. Older stored copies remain readable without a data rewrite.
+
 Canonical before/after metadata history is product data required by ADR-007.
 Property deltas, exact original import bytes, actual source metadata, and ordered
 wire hashes remain for their public meanings. They are not a license to keep
@@ -128,12 +133,12 @@ ordinary SQL planner choices remain subject to correctness/capacity qualificatio
 | Adopt / status / group context / schema revision | Constant command count, small current installation/transaction/catalog observations. No object scans. Host containment is separate from payload work. |
 | Get object / exact key lookup | Typed primary-key or exact-byte key-bucket index probe, actual owner/root permission and bounded payload: O(log D + P), plus bounded collision-bucket evidence. |
 | List / compiled query | Select immutable binding, lower once, read bounded complete source bags, current authorization before/after, and decode returned data. Scalar scan follows selected bag rows; joins/sorts follow query semantics. Complete-entity attribution resolves indexed creation/latest transition and actor without semantic/history replay. Descriptor lookup is a dictionary built once per query. |
-| Create / changed update | Admit supplied values once against loaded schema. Write selected objects, changed key routes/reservations, history and results atomically. Work follows supplied/affected bytes, affected key rows and required history; table/index operations add log D. No key-stage object-image multiplication. |
+| Create / changed update | Admit supplied values once against loaded schema. Write selected objects, changed key routes/reservations, history and results atomically. Work follows supplied/affected bytes, affected key rows and required history; table/index operations add log D. No key-stage object-image multiplication. Mixed/owned CREATE leaves reuse the already admitted source and prepared values; they do not recount prior results, compare whole group bytes, replay physical inserts, or observe the same protected key routes again. |
 | No-op update | Validate supplied changes and expected version, retain the existing version/timestamps, produce no history delta. Group completion and current authorization still apply. |
 | Edge create / retarget / unlink | Selected typed endpoints and distinct business-key routes, version/count DML, actual edge metadata/history. No full endpoint property copies. Edge pages collect payloads with an incremental byte total and deduplicate root dependencies once. |
 | Reparent / delete cascade | Observe the bounded connected component once; traverse actual owned adjacency, update/remove A affected nodes/edges, produce required history. Repeating a reparent may necessarily touch the subtree again; copied work must follow those actual effects, not all unrelated G members. The mixed planner uses one invocation-local indexed working relation; each operation projects only its changed members and root/endpoint witnesses. The initial snapshot is retained once, and complete final graph projection occurs once. |
 | Import | Identity/key preflight, one atomic admitted group, one batched source attachment. Original record bytes and one immutable source fact per created entity are retained. Decode the operation group once; source/field and primary-key component projections aggregate once. Original payload envelope validation and execution each decode record bytes, giving two linear passes rather than one. |
-| Read history / source | Indexed retained coordinates, actual requested event/source bytes and their current historical readers. Returning H bytes necessarily costs O(H); historical event validation buffers semantic events and serializes each array once. Historical property readers use compiled revision/type/property metadata; a returned property does not reconstruct the full catalog. Full transition replay is removed, while original edge endpoint/root policy is checked once per group. Ordinary entity attribution must not read H just to return actor names. |
+| Read history / source | Indexed retained coordinates, actual requested event/source bytes and their current historical readers. Returning H bytes necessarily costs O(H); historical event validation buffers semantic events and serializes each array once. Historical property readers load compiled revision/type metadata once per returned group or complete image, then use local property lookups; a returned property neither reconstructs the full catalog nor decompresses the same schema row again. Full transition replay is removed, while original edge endpoint/root policy is checked once per group. Ordinary entity attribution must not read H just to return actor names. |
 | Preconditions | Capture the actual selected object cut and acquire exact key routes, then evaluate current conditions in authored order. Predicate-key bytes are indexed by condition ordinal; ordered failures aggregate once. Preserve condition failure precedence and current dependency authority. |
 | Receipt / reached | Exact retained receipt and transaction inclusion, distinct retained dependency readers. Modern receipt authority uses indexed results plus compiled revision/type dependencies once, rather than parsing the complete group for each operation. |
 | Feed / acknowledge | Indexed writer position, whole transaction facts and actual required revision prerequisites within explicit caps. Preserve original facts; no per-property configuration discovery. Acknowledgement changes the selected consumer position atomically. |
@@ -143,7 +148,10 @@ ordinary SQL planner choices remain subject to correctness/capacity qualificatio
 The mixed planner creates one temporary working relation and two adjacency indexes per
 invocation, drops it on completion, and retains no cross-call state. Initialization
 and final projection follow G; indexed point access and actual adjacency/effects
-follow A (with index access costs). Shared scope discovery uses recursive set
+follow A (with index access costs). Unchanged root and endpoint witnesses use small header columns in the invocation
+working relation, initialized once and refreshed only on actual state changes.
+Their reads and plan aggregation do not repeatedly detoast a shared property map.
+Shared scope discovery uses recursive set
 membership, and forest root resolution marks each node once. It does not walk
 every ancestor chain afresh or copy G for each of n operations. Positive minimum
 relationship constraints still inspect applicable node/relationship pairs: those
@@ -163,3 +171,35 @@ flat JSONB array/map at each iteration. See the pinned-major
 and [PL/pgSQL array regression cases](https://github.com/postgres/postgres/blob/REL_18_STABLE/src/pl/plpgsql/src/sql/plpgsql_array.sql).
 This does not assert that arbitrary SQL `array_cat` or arrays passed through
 serialization have the same in-place behavior.
+
+
+### Reachability of retained compatibility code
+
+The installed `runtime_group_profiles` selects the owned profile. On a new request,
+`object_group_begin_prepared` rejects any other mutation profile before effects.
+Older scalar step implementations remain installed for compatibility references;
+their growing result carriers are not selected for new public writes. Older
+committed receipts replay before that gate, using the retained-receipt readers
+covered above. This is a call-path fact, not a claim that every dormant historical
+implementation has a linear algorithm. New CREATE, UPDATE, edge, mixed and owned
+execution all use the selected profile and are included in this review.
+
+
+### Canonical write statement families
+
+These counts describe producer DML, not the entire protected frontend call or all
+PostgreSQL-internal statements. Native revision/current-permission observations,
+key preflight, transaction containment and group settlement are separate ledger
+entries above. Empty sets can still submit a statement affecting zero rows.
+
+| Producer | Canonical writes and justification |
+| --- | --- |
+| Rootless CREATE batch | One set INSERT each for objects, key memberships, retained reservations, journal and transitions; one grouped key-guard UPDATE; one result-slot UPDATE and one ordinal UPDATE. Each writes actual required state or completes its native operation slot. No INSERT/RETURNING/physical-image equality program follows it. |
+| Distinct stored UPDATE batch | One changed-key DELETE, membership INSERT, reservation INSERT and grouped guard UPDATE; one version-matched object UPDATE; at most ceil(n/64) journal INSERTs; one transition INSERT, one result-slot UPDATE and one ordinal UPDATE. Journal sets bound formatting intermediates while the whole group remains atomic. |
+| Mixed or owned CREATE leaf | One actual object INSERT; actual membership/reservation INSERTs and guard advancement per affected key; one create journal INSERT and one transition INSERT; one once-only indexed result-slot UPDATE and scalar ordinal UPDATE. It uses captured immutable schema/values and the group's held key gate, without rescanning prior slots or reobserving protected routes. |
+| Generic object/edge effect | Typed indexed current-state/version access, DML for actual changed/deleted members and keys, canonical event production, and one transition per actual affected entity. Required cascades scale with their effects, while unchanged endpoint/root witnesses carry headers. |
+
+Every producer checks affected-row counts for its selected actual writes. Native
+PK/FK/unique constraints, the held writer/key gates and expected-version predicates
+supply their independent relational/concurrency guarantees. Full private row
+images are not read back merely to demonstrate that their producer worked.

@@ -297,8 +297,7 @@ BEGIN
   SELECT attempt.id attempt_id,(o.value->>'index')::int operation_index,attempt.writer_xid writer_xid,
    (o.value->'after'->>'id')::bigint object_id,(o.value->'after'->>'type_id')::int type_id,
    o.value->'before' before_object,o.value->'after' after_object,
-   (SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]') FROM truss.object_key_bucket k
-    WHERE k.object_id=(o.value->'after'->>'id')::bigint AND k.type_id=(o.value->'after'->>'type_id')::int) after_keys,
+   '[]'::jsonb after_keys,
    j.rows journal FROM jsonb_array_elements(objects) o JOIN journal_sets j ON j.operation_index=(o.value->>'index')::int),
  inserted AS (
   INSERT INTO truss.runtime_object_transition(attempt_id,operation_index,writer_xid,object_id,type_id,before_object,after_object,after_keys,journal)

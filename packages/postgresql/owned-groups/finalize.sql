@@ -79,12 +79,13 @@ BEGIN
  LOOP
   SELECT metadata INTO STRICT history_basis FROM truss.runtime_type_schema
    WHERE rev=source_cut.revision AND type_id=source_cut.type_id;
-  IF EXISTS(SELECT 1 FROM jsonb_each(history_basis->'propertyAccess') p
-   WHERE p.key=ANY(source_cut.present_names) AND p.value->'itemsValid' IS DISTINCT FROM 'true'::jsonb) THEN
+  IF EXISTS(SELECT 1 FROM unnest(source_cut.present_names) p(name)
+   WHERE (history_basis->'propertyAccess') ? p.name
+    AND history_basis->'propertyAccess'->p.name->'itemsValid' IS DISTINCT FROM 'true'::jsonb) THEN
    RAISE EXCEPTION 'current historical property/item readers required' USING ERRCODE='42501';END IF;
   FOR owner IN SELECT DISTINCT r.value->>'documentId' document_id,r.value->>'moduleId' module_id
-   FROM jsonb_each(history_basis->'propertyAccess') p CROSS JOIN LATERAL jsonb_array_elements(p.value->'readers') r
-   WHERE p.key=ANY(source_cut.present_names) LOOP
+   FROM unnest(source_cut.present_names) p(name)
+   CROSS JOIN LATERAL jsonb_array_elements(history_basis->'propertyAccess'->p.name->'readers') r LOOP
    IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
     RAISE EXCEPTION 'current historical property/item readers required' USING ERRCODE='42501';END IF;
   END LOOP;

@@ -1,50 +1,59 @@
 -- Per-invocation mutable planner helpers.  The executor passes the identifier
 -- of its uniquely named pg_temp relation; these helpers never retain state.
-CREATE FUNCTION truss.runtime_owned_workspace_state(workspace text,member_kind char,member_ref text) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_workspace_state(workspace text,member_kind char,member_ref text,header_only boolean DEFAULT false) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE result jsonb;
 BEGIN
- EXECUTE format('SELECT state FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace) INTO result USING member_kind,member_ref;
+ EXECUTE format('SELECT CASE WHEN $3 THEN header_state ELSE state END FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace) INTO result USING member_kind,member_ref,header_only;
  RETURN result;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state(text,char,text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state(text,char,text,boolean) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_workspace_state_or(workspace text,member_kind char,member_ref text,fallback_map jsonb) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_workspace_state_or(workspace text,member_kind char,member_ref text,fallback_map jsonb,header_only boolean DEFAULT false) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE result jsonb;
 BEGIN
- IF workspace IS NULL THEN RETURN fallback_map->member_ref;END IF;
- EXECUTE format('SELECT state FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace) INTO result USING member_kind,member_ref;
+ IF workspace IS NULL THEN
+  result:=fallback_map->member_ref;
+  IF header_only AND result IS NOT NULL THEN RETURN jsonb_set(result,'{image}',((result->'image')-ARRAY['props','retained']));END IF;
+  RETURN result;
+ END IF;
+ EXECUTE format('SELECT CASE WHEN $3 THEN header_state ELSE state END FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace) INTO result USING member_kind,member_ref,header_only;
  RETURN result;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_or(text,char,text,jsonb) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_or(text,char,text,jsonb,boolean) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_workspace_state_at(workspace text,member_kind char,member_ref text,operation_index int,before_image boolean DEFAULT false) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_workspace_state_at(workspace text,member_kind char,member_ref text,operation_index int,before_image boolean DEFAULT false,header_only boolean DEFAULT false) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE result jsonb;
 BEGIN
- EXECUTE format('SELECT CASE WHEN $4 AND created_operation=$3 THEN NULL WHEN $4 AND before_operation=$3 THEN before_state ELSE state END FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace)
-  INTO result USING member_kind,member_ref,operation_index,before_image;
+ EXECUTE format('SELECT CASE WHEN $4 AND created_operation=$3 THEN NULL WHEN $5 AND $4 AND before_operation=$3 THEN before_header_state WHEN $5 THEN header_state WHEN $4 AND before_operation=$3 THEN before_state ELSE state END FROM pg_temp.%I WHERE member_kind=$1 AND member_ref=$2',workspace)
+  INTO result USING member_kind,member_ref,operation_index,before_image,header_only;
  RETURN result;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_at(text,char,text,int,boolean) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_at(text,char,text,int,boolean,boolean) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_workspace_state_at_or(workspace text,member_kind char,member_ref text,operation_index int,before_image boolean,fallback_map jsonb) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_workspace_state_at_or(workspace text,member_kind char,member_ref text,operation_index int,before_image boolean,fallback_map jsonb,header_only boolean DEFAULT false) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE result jsonb;
 BEGIN
- IF workspace IS NULL THEN RETURN fallback_map->member_ref;END IF;
- RETURN truss.runtime_owned_workspace_state_at(workspace,member_kind,member_ref,operation_index,before_image);
+ IF workspace IS NULL THEN
+  result:=fallback_map->member_ref;
+  IF header_only AND result IS NOT NULL THEN RETURN jsonb_set(result,'{image}',((result->'image')-ARRAY['props','retained']));END IF;
+  RETURN result;
+ END IF;
+ RETURN truss.runtime_owned_workspace_state_at(workspace,member_kind,member_ref,operation_index,before_image,header_only);
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_at_or(text,char,text,int,boolean,jsonb) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_state_at_or(text,char,text,int,boolean,jsonb,boolean) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_owned_workspace_put(workspace text,member_kind char,member_ref text,operation_index int,new_state jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
- EXECUTE format('UPDATE pg_temp.%I SET before_state=CASE WHEN before_operation IS DISTINCT FROM $3 THEN state ELSE before_state END,before_operation=$3,state=$4,deleted=coalesce(($4->>''deleted'')::boolean,false),root_ref=$4->>''root'',source_ref=$4->>''source'',target_ref=$4->>''target'',lifecycle=$4->>''lifecycle'' WHERE member_kind=$1 AND member_ref=$2',workspace)
+ EXECUTE format('UPDATE pg_temp.%I SET before_state=CASE WHEN before_operation IS DISTINCT FROM $3 THEN state ELSE before_state END,before_header_state=CASE WHEN before_operation IS DISTINCT FROM $3 THEN header_state ELSE before_header_state END,before_operation=$3,state=$4,header_state=jsonb_set($4,''{image}'',($4->''image'')-ARRAY[''props'',''retained'']),deleted=coalesce(($4->>''deleted'')::boolean,false),root_ref=$4->>''root'',source_ref=$4->>''source'',target_ref=$4->>''target'',lifecycle=$4->>''lifecycle'' WHERE member_kind=$1 AND member_ref=$2',workspace)
   USING member_kind,member_ref,operation_index,new_state;
 END;
 $$;
@@ -63,7 +72,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_write(text,char,text,int,js
 CREATE FUNCTION truss.runtime_owned_workspace_insert(workspace text,member_kind char,member_ref text,member_ordinal int,operation_index int,new_state jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
- EXECUTE format('INSERT INTO pg_temp.%I(member_kind,member_ref,member_ordinal,created_operation,state,deleted,root_ref,source_ref,target_ref,lifecycle) VALUES($1,$2,$3,$5,$4,coalesce(($4->>''deleted'')::boolean,false),$4->>''root'',$4->>''source'',$4->>''target'',$4->>''lifecycle'')',workspace)
+ EXECUTE format('INSERT INTO pg_temp.%I(member_kind,member_ref,member_ordinal,created_operation,state,header_state,deleted,root_ref,source_ref,target_ref,lifecycle) VALUES($1,$2,$3,$5,$4,jsonb_set($4,''{image}'',($4->''image'')-ARRAY[''props'',''retained'']),coalesce(($4->>''deleted'')::boolean,false),$4->>''root'',$4->>''source'',$4->>''target'',$4->>''lifecycle'')',workspace)
   USING member_kind,member_ref,member_ordinal,new_state,operation_index;
 END;
 $$;
@@ -87,7 +96,7 @@ BEGIN
    RAISE EXCEPTION 'closed original stored reference required' USING ERRCODE='22023';END IF;
   selected:='stored:'||(identity->>'typeId')||':'||(identity->>'id');
  ELSE RAISE EXCEPTION 'stored or prior alias required' USING ERRCODE='22023';END IF;
- selected_state:=truss.runtime_owned_workspace_state(workspace,member_kind,selected);
+ selected_state:=truss.runtime_owned_workspace_state(workspace,member_kind,selected,true);
  IF selected_state IS NULL THEN RAISE EXCEPTION 'existing reference of the correct kind required' USING ERRCODE='22023';END IF;
  IF selected_state->'deleted'='true'::jsonb THEN RAISE EXCEPTION 'referenced graph member deleted' USING ERRCODE='P1004';END IF;
  IF identity IS NOT NULL AND identity IS DISTINCT FROM selected_state->'identity' THEN
@@ -97,16 +106,16 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_reference(jsonb,text,char,int) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_owned_workspace_map(workspace text,member_kind char,operation_index int,member_refs text[],before_image boolean DEFAULT false) RETURNS jsonb
+CREATE FUNCTION truss.runtime_owned_workspace_map(workspace text,member_kind char,operation_index int,member_refs text[],before_image boolean DEFAULT false,full_payload_refs text[] DEFAULT NULL) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE result jsonb;
 BEGIN
- EXECUTE format('SELECT coalesce(jsonb_object_agg(w.member_ref,CASE WHEN $4 AND w.before_operation=$3 THEN w.before_state ELSE w.state END),''{}''::jsonb) FROM pg_temp.%I w WHERE w.member_kind=$1 AND ($2 IS NULL OR w.member_ref=ANY($2)) AND (NOT $4 OR w.created_operation IS DISTINCT FROM $3)',workspace)
-  INTO result USING member_kind,member_refs,operation_index,before_image;
+ EXECUTE format('SELECT coalesce(jsonb_object_agg(w.member_ref,CASE WHEN $5 IS NULL OR full_payload.member_ref IS NOT NULL THEN CASE WHEN $4 AND w.before_operation=$3 THEN w.before_state ELSE w.state END ELSE CASE WHEN $4 AND w.before_operation=$3 THEN w.before_header_state ELSE w.header_state END END),''{}''::jsonb) FROM pg_temp.%I w LEFT JOIN unnest(coalesce($5,ARRAY[]::text[])) full_payload(member_ref) ON full_payload.member_ref=w.member_ref WHERE w.member_kind=$1 AND ($2 IS NULL OR w.member_ref=ANY($2)) AND (NOT $4 OR w.created_operation IS DISTINCT FROM $3)',workspace)
+  INTO result USING member_kind,member_refs,operation_index,before_image,full_payload_refs;
  RETURN result;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_map(text,char,int,text[],boolean) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_map(text,char,int,text[],boolean,text[]) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_owned_workspace_aliases(workspace text) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

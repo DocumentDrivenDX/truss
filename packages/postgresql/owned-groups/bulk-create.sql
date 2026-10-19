@@ -174,15 +174,11 @@ BEGIN
   CROSS JOIN LATERAL jsonb_populate_record(NULL::truss.journal,o.value->'journal') r;
  GET DIAGNOSTICS counted=ROW_COUNT;
  IF counted<>jsonb_array_length(journals) THEN RAISE EXCEPTION 'complete batch journal append required' USING ERRCODE='55000';END IF;
- WITH key_sets AS MATERIALIZED (
-  SELECT (value->>'index')::int index,jsonb_agg(value->'membership' ORDER BY (value->'membership'->>'key_num')::int) members
-  FROM jsonb_array_elements(keys) GROUP BY (value->>'index')::int)
  SELECT jsonb_agg(jsonb_build_object('attempt_id',attempt.id,'operation_index',(o.value->>'index')::int,
   'writer_xid',attempt.writer_xid::text,'object_id',(o.value->'object'->>'id')::bigint,'type_id',(o.value->'object'->>'type_id')::int,
-  'before_object',NULL,'after_object',o.value->'object','after_keys',coalesce(k.members,'[]'::jsonb),
+  'before_object',NULL,'after_object',o.value->'object','after_keys','[]'::jsonb,
   'journal',jsonb_build_array(j.value->'journal')) ORDER BY (o.value->>'index')::int) INTO transitions
- FROM jsonb_array_elements(objects) o JOIN jsonb_array_elements(journals) j ON (j.value->>'index')::int=(o.value->>'index')::int
- LEFT JOIN key_sets k ON k.index=(o.value->>'index')::int;
+ FROM jsonb_array_elements(objects) o JOIN jsonb_array_elements(journals) j ON (j.value->>'index')::int=(o.value->>'index')::int;
  INSERT INTO truss.runtime_object_transition(attempt_id,operation_index,writer_xid,object_id,type_id,before_object,after_object,after_keys,journal)
  SELECT r.attempt_id,r.operation_index,r.writer_xid,r.object_id,r.type_id,r.before_object,r.after_object,r.after_keys,r.journal
  FROM jsonb_populate_recordset(NULL::truss.runtime_object_transition,transitions) r;
