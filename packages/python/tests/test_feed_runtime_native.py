@@ -111,8 +111,8 @@ class FeedRuntimeTests(receipt_tests.ReceiptVisibilityTests):
         self.admin.execute('SAVEPOINT mixed_reservation_writers')
         with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
             self.admin.execute("""INSERT INTO feed_reservation_probe VALUES
-                (1,convert_to(jsonb_build_object('xid',%s)::text,'UTF8')),
-                (2,convert_to(jsonb_build_object('xid',%s)::text,'UTF8'))""",(writer,wrong_writer))
+                (1,convert_to(jsonb_build_object('xid',%s::text)::text,'UTF8')),
+                (2,convert_to(jsonb_build_object('xid',%s::text)::text,'UTF8'))""",(writer,wrong_writer))
         self.admin.execute('ROLLBACK TO SAVEPOINT mixed_reservation_writers')
         self.admin.execute('RELEASE SAVEPOINT mixed_reservation_writers')
         self.assertEqual(self.admin.execute('SELECT note FROM feed_reservation_caller_work').fetchall(),[('preserve',)])

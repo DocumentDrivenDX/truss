@@ -1282,7 +1282,7 @@ CREATE TRIGGER runtime_object_attempt_guard BEFORE UPDATE OR DELETE ON truss.run
 
 CREATE FUNCTION truss.runtime_object_commit_check() RETURNS trigger
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;actual jsonb;expected jsonb;endpoint record;selected_edge bigint;selected_relation int;journal_kind text;journal_id bigint;journal_type int;current_actor oid;journal_problem boolean;expected_count bigint;distinct_expected bigint;actual_count bigint;
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;actual jsonb;expected jsonb;endpoint record;selected_edge bigint;selected_relation int;journal_kind text;journal_id bigint;journal_type int;current_actor oid;journal_problem boolean;expected_count bigint;distinct_expected bigint;actual_count bigint;owned_resource_kind text;owned_resource_type int;owner_document text;owner_module text;
 BEGIN
  -- One fresh actor per constraint-trigger event. Resource authorization stays
  -- live below; this identity is never retained across events or commands.
@@ -1293,7 +1293,11 @@ BEGIN
   IF EXISTS(SELECT 1 FROM truss.runtime_object_attempt a WHERE a.id=NEW.attempt_id
     AND a.writer_xid=pg_current_xact_id() AND a.complete
     AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
-   RETURN NULL;
+   IF TG_TABLE_NAME='runtime_object_transition' THEN
+    owned_resource_kind:='object';owned_resource_type:=NEW.type_id;
+   ELSE
+    owned_resource_kind:='edge';owned_resource_type:=NEW.rel_type_id;
+   END IF;
   END IF;
  END IF;
  -- For an entity INSERT/UPDATE, tie the queued row image to the owned transition
@@ -1309,7 +1313,7 @@ BEGIN
     AND t.after_object->'root_type'=coalesce(to_jsonb(NEW.root_type),'null'::jsonb)
     AND a.writer_xid=pg_current_xact_id() AND a.complete
     AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
-   RETURN NULL;
+   owned_resource_kind:='object';owned_resource_type:=NEW.type_id;
   END IF;
  END IF;
  -- Deleted objects are attributed to the owned deletion's before header.
@@ -1320,7 +1324,7 @@ BEGIN
     AND t.before_object->'root_id'=coalesce(to_jsonb(OLD.root_id),'null'::jsonb)
     AND t.before_object->'root_type'=coalesce(to_jsonb(OLD.root_type),'null'::jsonb)
     AND a.writer_xid=pg_current_xact_id() AND a.complete AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
-   RETURN NULL;
+   owned_resource_kind:='object';owned_resource_type:=OLD.type_id;
   END IF;
  END IF;
  -- Match each queued edge header to its completed owned effect. Later legacy
@@ -1333,7 +1337,7 @@ BEGIN
      AND t.before_edge->>'source_id'=OLD.source_id::text AND t.before_edge->>'target_id'=OLD.target_id::text
      AND t.before_edge->>'source_type'=OLD.source_type::text AND t.before_edge->>'target_type'=OLD.target_type::text
      AND a.writer_xid=pg_current_xact_id() AND a.complete AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
-    RETURN NULL;
+    owned_resource_kind:='edge';owned_resource_type:=OLD.rel_type_id;
    END IF;
   ELSE
    IF EXISTS(SELECT 1 FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
@@ -1342,9 +1346,27 @@ BEGIN
      AND t.after_edge->>'source_id'=NEW.source_id::text AND t.after_edge->>'target_id'=NEW.target_id::text
      AND t.after_edge->>'source_type'=NEW.source_type::text AND t.after_edge->>'target_type'=NEW.target_type::text
      AND a.writer_xid=pg_current_xact_id() AND a.complete AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
-    RETURN NULL;
+    owned_resource_kind:='edge';owned_resource_type:=NEW.rel_type_id;
    END IF;
   END IF;
+ END IF;
+ -- A completed owned callback still rechecks current caller identity and writer
+ -- authority for the row's exact owning module before taking its cheap path.
+ IF owned_resource_type IS NOT NULL THEN
+  -- The completed attempt already passed full actor qualification. Refresh
+  -- only direct session safety flags and the exact module-writer membership;
+  -- do not rescan installation privileges and every catalog table per row.
+  SELECT r.oid INTO current_actor FROM pg_roles r
+   WHERE r.rolname=session_user AND current_setting('role')='none' AND r.rolcanlogin
+    AND NOT r.rolsuper AND NOT r.rolcreaterole AND NOT r.rolcreatedb AND NOT r.rolreplication AND NOT r.rolbypassrls;
+  IF NOT FOUND THEN RAISE EXCEPTION 'current qualified module writer required' USING ERRCODE='42501';END IF;
+  IF owned_resource_kind='object' THEN
+   SELECT document_id,module INTO STRICT owner_document,owner_module FROM truss.type_def WHERE type_id=owned_resource_type;
+  ELSE
+   SELECT document_id,module INTO STRICT owner_document,owner_module FROM truss.rel_def WHERE rel_type_id=owned_resource_type;
+  END IF;
+  PERFORM truss.runtime_module_writer_qualified(owner_document,owner_module,current_actor);
+  RETURN NULL;
  END IF;
  IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL;END IF;
  -- A completed owned attempt requalifies actor and dependencies once in its

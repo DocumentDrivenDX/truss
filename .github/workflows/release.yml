@@ -1,7 +1,5 @@
 name: Release Python package
 on:
-  push:
-    tags: ['v*']
   workflow_dispatch:
     inputs:
       capacity_statistics:

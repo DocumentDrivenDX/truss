@@ -75,8 +75,9 @@ def lane(index):
                            'logSha256': hashlib.sha256(log_path.read_bytes()).hexdigest(), 'skippedTests': skips}
                 result['modules'].append(outcome)
                 progress({'worker': index, **outcome})
-                if not passed:
-                    break  # Stop and discard the worker after any failed module.
+                if not restored:
+                    break  # Never reuse a worker after fixture cleanup drift.
+                # Keep collecting independent failures when the baseline is clean.
             fixture_log = worker.root / 'fixtures.jsonl'
             result['fixtures'] = [json.loads(line) for line in fixture_log.read_text().splitlines()] if fixture_log.exists() else []
             started = time.perf_counter()

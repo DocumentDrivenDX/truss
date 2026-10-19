@@ -39,7 +39,7 @@ Cancellation frames identify the active statement, not the dominant cost.
 | Group finish | Return complete ordered results, resolve conflicts, check current policy | Result slots assembled, then immediately reaggregated and compared again | Assemble once; retain one mandatory commit inventory check |
 | Query stored values | Return admitted engine-valid values; enforce native numeric representability | A prop_def scan plus full property semantics replay for every object | Read numeric metadata once per type; compute numeric validity in the source query; retain root authority, header and complete-bag caps |
 | UPDATE settlement | Current actor, transaction, revision, owner/read dependencies and effect count | Private immutable plan interpreted and checked again at finish and commit | Remove semantic replay; retain cheap live context/count checks; resolve dependency authority once per distinct type |
-| Deferred entity checks | Complete attempt and live authority at commit | Object and transition events each replay object/key/journal proof for the same owner | Consolidate engine-owned work at mandatory attempt settlement; issue current actor once there, retaining separately supported direct-SQL routes |
+| Deferred entity checks | Complete attempt and live authority at commit | Object and transition events each replay object/key/journal proof for the same owner | Consolidate engine-owned semantic work at mandatory attempt settlement; queued owned callbacks retain a narrow current resource-writer check so early attempt-constraint flushing cannot bypass later revocation; direct-SQL routes retain their separate validators |
 | Deferred journal checks | Produce history atomically through private writers | Another callback per property event rereads journal and immutable claims | Private table ACLs and canonical producers define the boundary; remove unsupported administrator-forgery oracle |
 | Feed capture | Preserve complete reservation facts and transaction configuration | One nested INSERT per reservation plus configuration query per reservation and journal row | Bulk transition-table capture; configuration once per nonempty carrier statement; refuse actual cross-statement drift |
 | Installation | Select compatible runtime, owner and facade privileges | Diagnostic trace saw >1,800 frontend submissions per schema installation, including repeated per-object dependency and ACL observations | Retain one-time installation owner/privilege inventory; these observations are outside ordinary record execution and are not repeated per record |
@@ -477,3 +477,26 @@ queries have separate endpoint predicates so the index can stop early. Catalog
 evolution keeps exact counts of violating objects while bounding each object's
 inner degree probe; public reports do not substitute capped counts for actual
 reported facts. Maximum-one marker identities remain separate exact facts.
+
+
+### Deferred writer observation after an explicit constraint flush
+
+The mandatory attempt callback performs group settlement. A caller can flush
+that constraint before commit, so a remaining owned entity or transition callback
+cannot return solely because the attempt is complete. It matches the existing
+effect header, looks up the current session role and the exact type/relationship
+owner, then checks that module's current writer membership. Direct role-safety
+flags are checked in the same role lookup. This costs one indexed resource lookup
+and the relevant role-membership closure per callback; it does not scan other
+operations, source definitions, object values or incident edges. For `e` queued callbacks and relevant membership-closure cost `r`, the additional
+authority-check work is
+`O(e * r)` plus indexed identity/owner lookups; it has no batch-inventory or
+schema-size multiplier. The existing indexed transition-header matching precedes
+this authority check.
+
+The callback does not repeat the complete installation and inherited-capability
+audit in `runtime_person`. Full actor qualification remains at request, finish
+and attempt settlement; separately supported legacy paths retain their own
+validators. This narrow writer check is required by the existing early-flush
+revocation behavior, rather than a second proof that the engine executed its
+mutation correctly.
