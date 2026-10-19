@@ -260,7 +260,9 @@ def _closed_source_inventory(prepared, observations, core, *, relational=False,s
                         decimal=(family=='decimal' and facet in (({'precision':18,'scale':4},{'precision':18,'scale':2}) if decimal2 else ({'precision':18,'scale':4},)) and _whole_number(facet['precision']) and _whole_number(facet['scale']))
                         if ordinary and family=='decimal' and facet=={'precision':12,'scale':2}:decimal=True
                         if dates and family=='decimal' and type(facet) is dict and set(facet)=={'precision','scale'} and _whole_number(facet['precision']) and _whole_number(facet['scale']) and 1<=facet['precision']<=2147483647 and 0<=facet['scale']<=facet['precision']:decimal=True
-                        if facet!={} and not (signed or decimal):return unavailable
+                        length_facet=facet.get('length') if type(facet) is dict and set(facet)=={'length'} else None
+                        length=(type(length_facet) is dict and set(length_facet)=={'max','unit'} and type(length_facet['max']) is not bool and _whole_number(length_facet['max']) and 0<=length_facet['max']<=9007199254740991 and ((family=='string' and length_facet['unit']=='unicode-scalar') or (family=='binary' and length_facet['unit']=='byte')))
+                        if facet!={} and not (signed or decimal or length):return unavailable
                     if (current or faceted) and 'facets' in element:
                         operations.append('facets');declaration_values[(document.document.document_id,'facets',module['id'],element['id'])]=element['facets']
                     if current:

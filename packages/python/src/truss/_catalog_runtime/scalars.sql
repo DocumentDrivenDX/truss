@@ -65,12 +65,49 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.valid_decimal_facets(jsonb) FROM PUBLIC;
 
+-- UMF length is {max, unit: unicode-scalar|byte}. Scalar count is the UTF-8 code-point length.
+CREATE FUNCTION truss.valid_length_facets(facets jsonb) RETURNS boolean
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE maximum numeric;
+BEGIN
+ IF jsonb_typeof(facets) IS DISTINCT FROM 'object' OR facets-ARRAY['length']<>'{}'::jsonb
+  OR jsonb_typeof(facets->'length') IS DISTINCT FROM 'object' OR (facets->'length')-ARRAY['max','unit']<>'{}'::jsonb
+  OR jsonb_typeof(facets->'length'->'max') IS DISTINCT FROM 'number'
+  OR (facets->'length'->>'unit') NOT IN ('unicode-scalar','byte') THEN RETURN false;END IF;
+ maximum:=(facets#>>'{length,max}')::numeric;
+ RETURN maximum=trunc(maximum) AND maximum BETWEEN 0 AND 9007199254740991;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.valid_length_facets(jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.checked_scalar_facets(family text,facets jsonb) RETURNS boolean
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT family='integer' AND facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
+  OR family='decimal' AND truss.valid_decimal_facets(facets)
+  OR family='string' AND facets#>>'{length,unit}'='unicode-scalar' AND truss.valid_length_facets(facets)
+  OR family='binary' AND facets#>>'{length,unit}'='byte' AND truss.valid_length_facets(facets);
+$$;
+REVOKE ALL ON FUNCTION truss.checked_scalar_facets(text,jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.known_scalar_facets(family text,facets jsonb) RETURNS boolean
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT coalesce(facets,'{}'::jsonb)='{}'::jsonb OR truss.checked_scalar_facets(family,facets);
+$$;
+REVOKE ALL ON FUNCTION truss.known_scalar_facets(text,jsonb) FROM PUBLIC;
+
 CREATE FUNCTION truss.valid_scalar_property(cell jsonb,family text,allow_null boolean,facets jsonb) RETURNS boolean
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE token text;limit_text text;mantissa text;exponent_token text;coefficient text;fraction_length int;shift bigint;trailing_zero_count int;exponent_value bigint:=0;
+DECLARE token text;limit_text text;mantissa text;exponent_token text;coefficient text;fraction_length int;shift bigint;trailing_zero_count int;exponent_value bigint:=0;maximum bigint;
 BEGIN
  IF truss.valid_scalar_cell(cell,family,allow_null) IS NOT TRUE THEN RETURN false;END IF;
  IF facets IS NULL OR facets='{}'::jsonb THEN RETURN true;END IF;
+ IF family='string' AND facets#>>'{length,unit}'='unicode-scalar' AND truss.valid_length_facets(facets)
+  OR family='binary' AND facets#>>'{length,unit}'='byte' AND truss.valid_length_facets(facets) THEN
+  IF cell='{"kind":"null"}'::jsonb THEN RETURN allow_null;END IF;
+  token:=cell->>'text';maximum:=(facets#>>'{length,max}')::numeric::bigint;
+  IF family='binary' THEN RETURN octet_length(decode(token,'base64'))<=maximum;END IF;
+  RETURN char_length(token)<=maximum;
+ END IF;
  IF family='decimal' AND truss.valid_decimal_facets(facets) THEN
   IF cell='{"kind":"null"}'::jsonb THEN RETURN allow_null;END IF;
   token:=cell->>'text';mantissa:=split_part(lower(token),'e',1);

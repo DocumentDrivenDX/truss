@@ -193,8 +193,7 @@ BEGIN
     'propertyId',p.prop_id::text,'facets',p.facets,'enforcement','engine') ORDER BY p.prop_id),'[]'::jsonb)
     FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p
     JOIN jsonb_populate_recordset(NULL::truss.type_def,basis->'type_def') t ON t.type_id=p.type_id
-    WHERE p.since_rev<=request.revision AND ((p.scalar_type='integer' AND p.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb)
-      OR (p.scalar_type='decimal' AND truss.valid_decimal_facets(p.facets))))));
+    WHERE p.since_rev<=request.revision AND truss.checked_scalar_facets(p.scalar_type,p.facets))));
  END IF;
  IF EXISTS(SELECT 1 FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id) THEN
   SELECT min(truss.catalog_rebind_profile(t.journal)),count(DISTINCT truss.catalog_rebind_profile(t.journal)) INTO rebind_profile,profile_count FROM truss.runtime_catalog_rebind_transition t WHERE t.registration_id=request.registration_id;
@@ -386,9 +385,7 @@ BEGIN
          AND NOT e.value ? 'itemType'
          AND NOT EXISTS(SELECT 1 FROM jsonb_object_keys(e.value) k WHERE k NOT IN
           ('id','kind','name','scalarType','nullability','cardinality','extensions','facets','allowedValues','default','title','description','aliases','examples'))
-         AND (coalesce(e.value->'facets','{}'::jsonb)='{}'::jsonb
-          OR e.value->>'scalarType'='integer' AND e.value->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
-          OR e.value->>'scalarType'='decimal' AND truss.valid_decimal_facets(e.value->'facets'))
+         AND truss.known_scalar_facets(e.value->>'scalarType',e.value->'facets')
         )))<>expected_fields THEN
    RAISE EXCEPTION 'complete original declaration set required' USING ERRCODE='22023'; END IF;
   IF input->'supportProfile' IN ('{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb) AND EXISTS(SELECT 1 FROM jsonb_array_elements(source->'modules') m CROSS JOIN LATERAL jsonb_array_elements(m.value->'elements') e WHERE e.value->>'kind'='field' AND e.value->'facets'='{"precision":18,"scale":2}'::jsonb) THEN RAISE EXCEPTION 'scale2 requires its original selected support policy' USING ERRCODE='0A000';END IF;
@@ -417,9 +414,7 @@ BEGIN
      OR (input->'supportProfile' IN (
       '{"identity":"truss-fresh-catalog-support","version":"0.8.0","sha256":"9fd5ab418905f95257563740528a6d80403ab154af8d1f6edfd28c93b7ae0620"}'::jsonb,
       '{"identity":"truss-fresh-catalog-support","version":"0.10.0","sha256":"28c130f83be7b7ac6786759c1b625b0d316497104fc5f635a485f923e755758d"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.12.0","sha256":"f2c2495fdfab81d555194e5a3dfafe1c7cf58e17035fe5b03698e2808d3b027f"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.11.0","sha256":"d6d7782d0d111876c1fa2102703cebc52de981c6b6c36cccd88fc2f6524fc60c"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.13.0","sha256":"d660fab21eabe2d52ef0609cafcea6112f506786e359424235714718f6c769a7"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.14.0","sha256":"1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.9.0","sha256":"12705eba231df82a2e0d1ae049d69e376819a78c895f6823e0154a36d0d614e9"}'::jsonb ,'{"identity":"truss-fresh-catalog-support","version":"0.15.0","sha256":"a69a3035fcc0927730977ad05a1f60b0d10ec765413ab7c57d763f14d409c455"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.16.0","sha256":"f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.17.0","sha256":"76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0"}'::jsonb,'{"identity":"truss-fresh-catalog-support","version":"0.18.0","sha256":"5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838"}'::jsonb)
-      AND NOT (coalesce(source_field->'facets','{}'::jsonb)='{}'::jsonb
-       OR source_field->>'scalarType'='integer' AND source_field->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
-       OR source_field->>'scalarType'='decimal' AND truss.valid_decimal_facets(source_field->'facets')) IS TRUE)
+      AND truss.known_scalar_facets(source_field->>'scalarType',source_field->'facets') IS NOT TRUE)
      OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(source_record->'members') m WHERE m.value=field->'reference') THEN
      RAISE EXCEPTION 'selected original Field declaration required' USING ERRCODE='0A000'; END IF;
     IF source_field->>'cardinality' IN ('array','map') THEN

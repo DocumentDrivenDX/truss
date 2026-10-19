@@ -19,7 +19,7 @@ from functools import wraps
 from typing import Literal, overload, TypeVar, Mapping
 from .current_query import CurrentQueryExecutor
 from .current_disclosure import CurrentDisclosureExecutor,CurrentDisclosureRows
-from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport)
+from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogStoredViolator, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport)
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
     NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability, NativeCompiledExecutionCapability)
 from .history import (HistoryEntity,HistoryCursor,RetainedHistoryEvent,HistoryPage,
@@ -1108,6 +1108,15 @@ class CatalogReferenceAssembly:
                         parsed.append(CatalogRelationshipCompatibilityViolation(entry['documentId'],entry['moduleId'],entry['relationshipId'],entry['side'],entry['rule'],int(count)))
                     elif set(entry)=={'documentId','moduleId','recordId','fieldModuleId','fieldId','rule','affectedObjectCount'} and entry['rule'] in ('property.required','property.scalar_type','property.facets','property.retained_name_collision','property.rebind_value'):
                         parsed.append(CatalogCompatibilityViolation(entry['documentId'],entry['moduleId'],entry['recordId'],entry['fieldModuleId'],entry['fieldId'],entry['rule'],int(count)))
+                    elif set(entry)=={'documentId','moduleId','recordId','fieldModuleId','fieldId','rule','affectedObjectCount','storedValues'} and entry['rule']=='property.facets':
+                        stored=entry['storedValues']
+                        if type(stored) is not list or len(stored)!=int(count):raise ValueError('Stored facet violator inventory required')
+                        values=[]
+                        for item in stored:
+                            if type(item) is not dict or set(item)!={'objectId','text'} or type(item['objectId']) is not str or type(item['text']) is not str or not item['objectId'].isdecimal() or str(int(item['objectId']))!=item['objectId']:
+                                raise ValueError('Stored facet violator required')
+                            values.append(CatalogStoredViolator(item['objectId'],item['text']))
+                        parsed.append(CatalogCompatibilityViolation(entry['documentId'],entry['moduleId'],entry['recordId'],entry['fieldModuleId'],entry['fieldId'],entry['rule'],int(count),tuple(values)))
                     elif set(entry)=={'documentId','moduleId','recordId','keyId','rule','affectedObjectCount'} and entry['rule']=='key.duplicate':
                         parsed.append(CatalogKeyCompatibilityViolation(entry['documentId'],entry['moduleId'],entry['recordId'],entry['keyId'],entry['rule'],int(count)))
                     else:raise ValueError('Qualified compatibility violation required')

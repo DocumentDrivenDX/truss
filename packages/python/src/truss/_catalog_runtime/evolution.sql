@@ -1,7 +1,7 @@
 -- Real-data validation before compatible catalog publication.
 CREATE FUNCTION truss.catalog_scalar_violations(declarations_bytes bytea) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE rec jsonb;field jsonb;selected_type int;property_id int;missing_count bigint;family_count bigint;retained_count bigint;facet_count bigint;
+DECLARE rec jsonb;field jsonb;selected_type int;property_id int;missing_count bigint;family_count bigint;retained_count bigint;facet_count bigint;facet_values jsonb;
  rel jsonb;old_relation jsonb;tightening boolean;selected_relation truss.rel_def%ROWTYPE;side text;minimum int;maximum int;low_count bigint;high_count bigint;
  violations jsonb:='[]';scope jsonb;scopes jsonb:='[]';owner record;original_item jsonb;
 BEGIN
@@ -39,13 +39,20 @@ BEGIN
     ,count(*) FILTER (WHERE field->'declaration'->>'cardinality'='one' AND property_id IS NOT NULL AND o.props ? property_id::text
      AND o.props->property_id::text<>'{"kind":"null"}'::jsonb
      AND truss.valid_scalar_cell(o.props->property_id::text,field->'declaration'->>'scalarType',true) IS TRUE
-     AND ((field->'declaration'->>'scalarType'='integer' AND field->'declaration'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (field->'declaration'->>'scalarType'='decimal' AND truss.valid_decimal_facets(field->'declaration'->'facets')))
+     AND truss.checked_scalar_facets(field->'declaration'->>'scalarType',field->'declaration'->'facets')
      AND truss.valid_scalar_property(o.props->property_id::text,field->'declaration'->>'scalarType',true,field->'declaration'->'facets') IS NOT TRUE)
     ,count(*) FILTER (WHERE (property_id IS NULL OR EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.prop_id=property_id AND p.name IS DISTINCT FROM coalesce(field->'declaration'->>'name',field->'declaration'->>'id'))) AND o.retained ? (coalesce(field->'declaration'->>'name',field->'declaration'->>'id')))
-    INTO missing_count,family_count,facet_count,retained_count FROM truss.object o WHERE o.type_id=selected_type;
+    ,coalesce(jsonb_agg(jsonb_build_object('objectId',o.id::text,'text',o.props->property_id::text->>'text') ORDER BY o.id)
+     FILTER (WHERE field->'declaration'->>'cardinality'='one' AND property_id IS NOT NULL AND o.props ? property_id::text
+      AND o.props->property_id::text<>'{"kind":"null"}'::jsonb
+      AND truss.checked_scalar_facets(field->'declaration'->>'scalarType',field->'declaration'->'facets')
+      AND field->'declaration'->>'scalarType' IN ('string','binary')
+      AND truss.valid_scalar_cell(o.props->property_id::text,field->'declaration'->>'scalarType',true) IS TRUE
+      AND truss.valid_scalar_property(o.props->property_id::text,field->'declaration'->>'scalarType',true,field->'declaration'->'facets') IS NOT TRUE),'[]'::jsonb)
+    INTO missing_count,family_count,facet_count,retained_count,facet_values FROM truss.object o WHERE o.type_id=selected_type;
    IF missing_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.required','affectedObjectCount',missing_count::text));END IF;
    IF family_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.scalar_type','affectedObjectCount',family_count::text));END IF;
-   IF facet_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.facets','affectedObjectCount',facet_count::text));END IF;
+   IF facet_count>0 THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.facets','affectedObjectCount',facet_count::text)||CASE WHEN facet_values='[]'::jsonb THEN '{}'::jsonb ELSE jsonb_build_object('storedValues',facet_values) END);END IF;
    IF retained_count>0 AND property_id IS NOT NULL THEN violations:=violations||jsonb_build_array(scope||jsonb_build_object('rule','property.retained_name_collision','affectedObjectCount',retained_count::text));END IF;
   END LOOP;
  END LOOP;
@@ -144,13 +151,13 @@ LANGUAGE sql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
   SELECT jsonb_build_object('rule','property.facets','enforcement','engine','documentId',t.document_id,'moduleId',p.declaration_module,'elementId',p.element,'evidence','runtime scalar validation, no table check')
   FROM truss.prop_def p JOIN truss.type_def t ON t.type_id=p.type_id
   WHERE p.since_rev<=selected_revision AND (p.retired_rev IS NULL OR p.retired_rev>selected_revision)
-   AND ((p.scalar_type='integer' AND p.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (p.scalar_type='decimal' AND truss.valid_decimal_facets(p.facets)))
+   AND truss.checked_scalar_facets(p.scalar_type,p.facets)
   UNION ALL
   SELECT jsonb_build_object('rule','property.facets','enforcement','none','documentId',t.document_id,'moduleId',p.declaration_module,'elementId',p.element,'evidence','facet is stored and not checked')
   FROM truss.prop_def p JOIN truss.type_def t ON t.type_id=p.type_id
   WHERE p.since_rev<=selected_revision AND (p.retired_rev IS NULL OR p.retired_rev>selected_revision)
    AND p.facets IS NOT NULL AND p.facets<>'{}'::jsonb
-   AND NOT ((p.scalar_type='integer' AND p.facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb) OR (p.scalar_type='decimal' AND truss.valid_decimal_facets(p.facets)))
+   AND truss.checked_scalar_facets(p.scalar_type,p.facets) IS NOT TRUE
  ) rules;
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_enforcement(int) FROM PUBLIC;

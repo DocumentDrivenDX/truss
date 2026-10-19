@@ -81,7 +81,7 @@ BEGIN
   seen:=seen||jsonb_build_array(node->'reference');
   IF index_node=jsonb_array_length(nodes)-1 THEN
    IF declaration->>'cardinality' IS DISTINCT FROM 'one' OR family IS NULL OR family NOT IN ('string','integer','decimal','boolean','timestamp','binary','date') OR declaration ? 'itemType'
-    OR NOT ((coalesce(facets,'{}')='{}'::jsonb OR family='integer' AND facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR family='decimal' AND truss.valid_decimal_facets(facets)) IS TRUE) THEN RETURN false;END IF;
+    OR truss.known_scalar_facets(family,facets) IS NOT TRUE THEN RETURN false;END IF;
   ELSE
    IF (declaration->>'cardinality' IN ('array','map')) IS NOT TRUE OR declaration ? 'scalarType' OR coalesce(facets,'{}')<>'{}'::jsonb
     OR declaration->'itemType' IS DISTINCT FROM nodes->(index_node+1)->'reference' THEN RETURN false;END IF;
@@ -154,7 +154,7 @@ BEGIN
    RAISE EXCEPTION 'required original item Field required' USING ERRCODE='0A000';END IF;
   IF declaration->>'cardinality'='one' THEN
    IF coalesce(declaration->>'scalarType','') NOT IN ('string','integer','decimal','boolean','timestamp','binary','date') OR declaration ? 'itemType'
-    OR NOT ((coalesce(declaration->'facets','{}'::jsonb)='{}'::jsonb OR declaration->>'scalarType'='integer' AND declaration->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR declaration->>'scalarType'='decimal' AND truss.valid_decimal_facets(declaration->'facets')) IS TRUE) THEN
+    OR truss.known_scalar_facets(declaration->>'scalarType',declaration->'facets') IS NOT TRUE THEN
     RAISE EXCEPTION 'required exact scalar leaf Field required' USING ERRCODE='0A000';END IF;
   ELSIF declaration->>'cardinality' IN ('array','map') THEN
    IF declaration ? 'scalarType' OR coalesce(declaration->'facets','{}'::jsonb)<>'{}'::jsonb OR NOT declaration ? 'itemType' THEN
