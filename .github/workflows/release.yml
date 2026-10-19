@@ -222,7 +222,7 @@ jobs:
         env:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_owned_objects_native.OwnedObjectTests test_owned_group_batch_native.OwnedGroupBatchTests test_journal_row_guard_native.JournalRowGuardTests test_prepared_plan_capture_native.PreparedPlanCaptureTests test_query_export_sources_native.QueryExportSourceTests test_rootless_preparation_native.RootlessPreparationTests test_operation_result_slots_native.OperationResultSlotTests test_edge_authority_native.EdgeAuthorityTests test_final_edge_inventory_native.FinalEdgeInventoryTests
+        run: python -m unittest test_feed_runtime_native.FeedRuntimeTests test_history_runtime_native.HistoryRuntimeTests test_owned_objects_native.OwnedObjectTests test_owned_group_batch_native.OwnedGroupBatchTests test_journal_row_guard_native.JournalRowGuardTests test_prepared_plan_capture_native.PreparedPlanCaptureTests test_query_export_sources_native.QueryExportSourceTests test_rootless_preparation_native.RootlessPreparationTests test_operation_result_slots_native.OperationResultSlotTests test_edge_authority_native.EdgeAuthorityTests test_final_edge_inventory_native.FinalEdgeInventoryTests
       - name: Upgrade the published native68 predecessor
         env:
           GH_TOKEN: ${{ github.token }}
@@ -428,6 +428,21 @@ jobs:
           TRUSS_BUN_EXECUTABLE: bun
         run: python -m unittest test_relationship_names_native
 
+      - name: Run the original three real schemas once
+        if: github.event_name == 'workflow_dispatch' && inputs.stress_case == 'all' && matrix.os == 'ubuntu-24.04'
+        env:
+          PYTHONPATH: packages/python/tests
+        run: |
+          mkdir -p "$RUNNER_TEMP/real-schemas"
+          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --forbid-external-javascript --capture-failure-diagnostics --count-sql-submissions --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/real-schemas/report.json" 2>&1 | tee "$RUNNER_TEMP/real-schemas/run.log"
+      - name: Retain original real-schema report and log
+        if: always() && github.event_name == 'workflow_dispatch' && inputs.stress_case == 'all' && matrix.os == 'ubuntu-24.04'
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-real-schemas
+          path: ${{ runner.temp }}/real-schemas/*
+          if-no-files-found: warn
+
   large-capacity:
     if: "github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'"
     strategy:
@@ -454,6 +469,7 @@ jobs:
   stress:
     needs:
       - "package"
+      - "native"
     if: "github.event_name == 'workflow_dispatch' && inputs.stress_case != '' && inputs.stress_case != 'none'"
     strategy:
       fail-fast: false
