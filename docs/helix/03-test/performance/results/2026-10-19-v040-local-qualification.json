@@ -1,0 +1,233 @@
+{
+  "release": "v0.0.40",
+  "platform": "local macOS ARM64",
+  "postgres": "18.6",
+  "qualifiedRuntimeSourceCommit": "269aa029526fef49d9a59d3c6cb0ff8bdf18e19a",
+  "qualifiedWheelSha256": "c49fd4908d25cda28c17c939509b43831c81b1fabeebc90212417a9cd772c335",
+  "runtimePayloadFileCount": 412,
+  "allRealSchemasPassed": true,
+  "allElevenStressCasesPassed": true,
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "externalJavaScriptForbidden": true,
+  "reports": [
+    {
+      "path": "real-schemas/report.json",
+      "sha256": "eb302638ec97eebd5ed81c0480bef0d444183cf508fe07b56dfdd3d8ba04f21d",
+      "seconds": 60.806363707990386,
+      "cases": [
+        {
+          "name": "pizza",
+          "status": "passed",
+          "objects": 1000,
+          "edges": null,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "northwind",
+          "status": "passed",
+          "objects": 1000,
+          "edges": null,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "catalog",
+          "status": "passed",
+          "objects": 1000,
+          "edges": null,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        }
+      ]
+    },
+    {
+      "path": "stress/large/report.json",
+      "sha256": "68b21114a467b564af5dab4096de9ac804c7343008f2547d76fdfd3832223c72",
+      "seconds": 3825.631312625017,
+      "cases": [
+        {
+          "name": "large",
+          "status": "passed",
+          "objects": 1000000,
+          "edges": 2000000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "outside_published_query_scan_bound",
+          "reopenedValuesVerified": true
+        }
+      ]
+    },
+    {
+      "path": "stress/other-ten/report.json",
+      "sha256": "5447d745be192bf8cf808dccc22f9e4b604238f42605564c6a0f2d0b87e76e36",
+      "seconds": 2063.771377666999,
+      "cases": [
+        {
+          "name": "dense-edges",
+          "status": "passed",
+          "objects": 10000,
+          "edges": 500000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "outside_published_query_edge_scan_bound",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "wide",
+          "status": "passed",
+          "objects": 10000,
+          "edges": 20000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "many-types",
+          "status": "passed",
+          "objects": 10000,
+          "edges": 20000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "index-heavy",
+          "status": "passed",
+          "objects": 10000,
+          "edges": 20000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "nominal",
+          "status": "passed",
+          "objects": 10000,
+          "edges": 20000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "type-heavy",
+          "status": "passed",
+          "objects": 10000,
+          "edges": 20000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "complex",
+          "status": "passed",
+          "objects": 10000,
+          "edges": 20000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "skewed",
+          "status": "passed",
+          "objects": 10000,
+          "edges": 20000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "outside_published_relationship_cardinality_bound",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "node-heavy",
+          "status": "passed",
+          "objects": 20000,
+          "edges": 40000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        },
+        {
+          "name": "small",
+          "status": "passed",
+          "objects": 1000,
+          "edges": 1000,
+          "reads": 1000,
+          "committedUpdates": 200,
+          "listStatus": "passed",
+          "reopenedValuesVerified": true
+        }
+      ]
+    }
+  ],
+  "ordinaryReleaseSelection": {
+    "selectors": 95,
+    "modules": 88,
+    "methods": 287,
+    "latestFailures": 0,
+    "evidence": "Merged local broad and affected-test results; not all rerun on final wheel"
+  },
+  "excludedClaims": [
+    "Historical full discovery suite pass",
+    "Linux qualification",
+    "p95 latency certification",
+    "SQL lists exceeding published source or relationship bounds"
+  ],
+  "rawFailuresPreserved": true,
+  "archive": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification-evidence.tar.gz",
+  "finalDistributionIdentity": "See release qualification.json and SHA256SUMS; final runtime bytes must equal the qualified wheel.",
+  "finalArtifacts": [
+    {
+      "name": "truss_toolkit-0.0.40-py3-none-any.whl",
+      "sha256": "aa48506e98410fbfc6c66b64bdf7098fc7bd6210feca104a0b30aaad1f6bd49b"
+    },
+    {
+      "name": "truss_toolkit-0.0.40.tar.gz",
+      "sha256": "971e3b84d7db9eb88349b9a1f9e8d6fdab65b85d17dc84c8c3264b9c51ae0a52"
+    }
+  ],
+  "payloadEquivalence": {
+    "runtimeFiles": 412,
+    "qualifiedWheelSha256": "c49fd4908d25cda28c17c939509b43831c81b1fabeebc90212417a9cd772c335",
+    "finalWheelSha256": "aa48506e98410fbfc6c66b64bdf7098fc7bd6210feca104a0b30aaad1f6bd49b",
+    "runtimePayloadIdentical": true,
+    "finalRuntimeSourceIdentical": true,
+    "installedRuntimeIdentical": true
+  },
+  "publicExamples": [
+    {
+      "example": "adopter_workflow",
+      "exitCode": 0,
+      "seconds": 5.992714666004758,
+      "bunExecutable": "/missing/bun",
+      "PATH": "/usr/bin:/bin"
+    },
+    {
+      "example": "owned_objects_workflow",
+      "exitCode": 0,
+      "seconds": 4.430673666996881,
+      "bunExecutable": "/missing/bun",
+      "PATH": "/usr/bin:/bin"
+    },
+    {
+      "example": "current_query_workflow",
+      "exitCode": 0,
+      "seconds": 6.302902666997397,
+      "bunExecutable": "/missing/bun",
+      "PATH": "/usr/bin:/bin"
+    }
+  ]
+}

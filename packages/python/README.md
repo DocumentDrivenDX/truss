@@ -1,10 +1,18 @@
 # Truss Python toolkit
 
 Truss `0.0.40` selects native `0.72-candidate` and Weft `0.4.47`.
-Publication requires installed Linux x86_64/macOS ARM64 qualification, the three
-real schemas and the complete 22-workflow stress matrix. See the
-[v0.0.40 release page](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.40)
-for published artifacts and their exact qualification.
+Current qualification is local macOS ARM64 with PostgreSQL 18.6. The three real
+schemas and all 11 unchanged stress cases pass once locally, preserving their
+eligible boundary controls and original 10s SQL/30s operation limits. Final
+artifact and public-example results are identified in the release evidence.
+All 95 existing native release unittest selectors have passing latest local method results,
+combining broad and affected-test runs. The raw broad discovery sweep remains
+failed/incomplete and is not a full-suite pass. See the
+[v0.0.40 qualification notes](../../docs/helix/04-build/releases/v0.0.40.md)
+for exact package identity, test scope and limits. The release carries
+a [qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification.json)
+and [evidence archive](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification-evidence.tar.gz).
+
 This version accepts only UMF `0.10.0` source documents and fresh current
 installations. Earlier UMF source formats are unsupported, as are upgrades from an older Truss
 installation. `upgrade_in_transaction` returns an explicit unsupported error
@@ -22,11 +30,11 @@ The v0.0.39 source passed both complete Linux x86_64/macOS ARM64 native jobs,
 including the original 1,024-operation capacity controls and full
 1,000-object/1,000-edge workload, with unchanged 10s SQL/30s operation limits.
 Those results qualify v0.0.39 only; they do not establish v0.0.40 qualification.
-[Performance evidence](../../docs/helix/03-test/performance/README.md)
-and [published release notes](../../docs/helix/04-build/releases/v0.0.39.md)
-record exact scope. Version 0.0.40 behavior and bounds are listed in the
-[v0.0.40 notes](../../docs/helix/04-build/releases/v0.0.40.md).
-Broader scale and p95 targets are not certified.
+[Historical v0.0.39 notes](../../docs/helix/04-build/releases/v0.0.39.md)
+retain that release's scope. The current
+[performance record](../../docs/helix/03-test/performance/README.md) identifies
+0.0.40's installed payload and completed local workloads. Provisional latency
+budgets and recorded performance triage signals do not establish p95 certification.
 
 Current owned groups admit up to 1,024 operations per atomic group. Basic native tests cover
 1,024 real creates, committed changed updates, original receipt replay and
@@ -34,26 +42,29 @@ complete ordered public readback, plus refusal at 1,025 and rollback on a
 failure at operation 1,024. Other
 byte/value limits and ordinary deadlines still apply.
 
-The published v0.0.39 package uses `weft-sql==0.4.41`, backend
-`0.4.41` / binding `0.5`. The current source candidate pins
-`weft-sql==0.4.47`, backend `0.4.41` / binding `0.5`, and query ABI 1.1.
+Version 0.0.40 pins `weft-sql==0.4.47`, backend `0.4.41` / binding `0.5`,
+and query ABI 1.1. The backend version identifies the runtime ABI separately
+from the compiler package version. The historical v0.0.39 package used
+`weft-sql==0.4.41` with the same backend/binding versions.
 ABI 1.1 buffers complete source sets before caller predicates and scans at most
 10,000 rows per selected Record or Relationship type; a small output limit does
 not bypass that source bound. Complete-entity relationships have a separate
-100-related-key limit. These remain candidate limits, not qualified support
-claims. Basic v0.0.39 native
-workflows exercise the default public compiler with owned descendants, the
-original Northwind Product model, decimal(12,2), and stable UMF IDs for unnamed
-records and fields. These checks do not qualify the broader protected engine.
+100-related-key limit. The million-object stress case reports its SQL list
+outside the source cap; its declared ID/key read and write workload still runs.
+The dense case retains its edge-source cap and exact scalar-list control; the
+skewed case retains the 100-related-key cap and explicit bounded-read truncation.
+Existing local release tests exercise the default public compiler with owned
+descendants, the original Northwind Product model, decimal(12,2), and stable
+UMF IDs for unnamed records and fields. These checks do not qualify the broader
+protected engine.
 
-The v0.0.40 candidate uses one source-only catalog preparation path; a mandatory
+Version 0.0.40 uses one source-only catalog preparation path; a mandatory
 inspector transcript is no longer required. Loaded views reuse immutable schema
 indexes in application memory for the exact source and catalog basis. Warm
 eligible writes reuse compiled record schemas without another schema query or
 legacy per-record value validation. Native admission still checks the current
-registration identity, source basis, revision and authority. The candidate
-remains subject to the pending full release qualification above.
-The v0.0.39 release adds explicit atomic owned imports, alternate-key backfill
+registration identity, source basis, revision and authority.
+Current APIs include explicit atomic owned imports, alternate-key backfill
 and retained-value rebinding for existing owned objects. Ordinary Date queries
 preserve canonical Gregorian `YYYY-MM-DD` tokens for years
 0001–9999, including exact equality, optional values and query pages. Date ordering,
@@ -69,8 +80,8 @@ current package and local PG18 dependencies installed:
 python packages/python/examples/owned_objects_workflow.py /tmp/truss-owned-demo
 ```
 
-It uses the adjacent `notes-owned.umf.json` with the current UMF0.10 preparation
-profile. The directory must be new or empty. Compiled queries have separate
+It uses the adjacent `notes-owned.umf.json`, validated as complete current
+UMF0.10 source. The directory must be new or empty. Compiled queries have separate
 native workflows using the matching published Weft wheel.
 
 The Python reference assembly provides catalog registration, object and edge
@@ -85,9 +96,9 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-## Current candidate scope
+## Current release scope
 
-The candidate retains exact scalar values, required scalar-field/key backfill,
+This release retains exact scalar values, required scalar-field/key backfill,
 acyclic nested arrays/maps with required item Fields, owned graphs, imports,
 history, receipts and feed reads. Cyclic definitions, descendant evolution and
 record-valued properties remain unsupported. Source validation selects UMF
@@ -97,7 +108,7 @@ Otherwise-supported standalone singular scalar Fields remain declarations until
 a Record uses them. The authored document revision is distinct from its content
 hash. Object reads distinguish rootless and owned objects with typed roots.
 The Python distribution, native runtime and compiler versions are separate pins.
-Use the exact candidate cohort listed above; no older installation is upgraded.
+Use the exact release cohort listed above; no older installation is upgraded.
 
 The `truss.access` typed-SDK integration remains experimental and requires its
 matching UMF SDK cohort. It has no published `typed-sdk` extra. A bounded cursor
@@ -125,7 +136,7 @@ matching wheels installed:
 python packages/python/examples/current_query_workflow.py /tmp/truss-policy-example
 ```
 
-It prints `{"columns": ["salary"], "rows": [["[private]"]]}`. The adjacent model,
+Expected output is `{"columns": ["salary"], "rows": [["[private]"]]}`. The adjacent model,
 policy and static binding are the original reference fixture; they are not a
 universal security configuration or a protected-write API.
 
@@ -138,7 +149,7 @@ only scoped catalog metadata and the verified own-session Subject facade remain.
 Guarded queries require this committed activation. Cached legacy query bindings
 do not retain access. Module configuration, feed enrollment and privileged bootstrap installers
 refuse after activation until an explicit protection migration exists.
-Installation upgrades are unsupported for the current candidate.
+Installation upgrades are unsupported for this release.
 
 This first protected profile supports reads through `query_current_in_transaction`.
 Legacy mutations, imports, direct reads, history and feed are unavailable after
@@ -187,8 +198,9 @@ Unknown modules refuse. Reopening a registration under another known wheel still
 requires an explicit migration; the factory never upgrades retained pins.
 
 This first local PostgreSQL18.6 profile uses exact original candidate Weft ABI2
-and UMF child pins. The selected Weft0.4.47 macOS ARM and Linux x64 wheels require
-installed public-workflow qualification on both platforms. Other platforms and newer result ABIs remain outside this profile.
+and UMF child pins. Its native workflow tests pass locally on macOS ARM64;
+the release qualification archive records the public reference-example run.
+Linux x64 and other platforms, and newer result ABIs, remain unqualified.
 It currently requires rootless, present String or explicit signed64 query
 domains. Empty or all-read-denied populations return empty rows when genuine
 compiled operator routes establish one unambiguous original projection domain;
@@ -246,8 +258,8 @@ additional explicit bounds, documented with the evidence.
 Earlier local disclosure evidence retains its original version scope and does
 not qualify the current candidate or activate a complete security profile.
 
-Use a fresh Python3.11+ environment on the declared Linuxx86_64/macOSarm64
-PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
+Use a fresh Python3.11+ environment on the locally qualified macOS ARM64
+PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
@@ -264,16 +276,16 @@ not deployment requirements. Ordinary object keys are derived in PostgreSQL
 for admitted current catalogs. Create/update, imports, preconditions, backfills
 and lookups require no client encoder or per-key receipt. Weft remains optional
 through `query` and is not a key-encoding dependency.
-Each release publishes package checksums and source/runtime/backend pins. The Truss release
-workflow exercises the exact uploaded wheel with its exactly paired published Weft wheels and verified
-PG18 dependency wheels on both declared native platforms.
+Each release publishes package checksums and source/runtime/backend pins. The
+current evidence qualifies the exact installed wheel on local macOS ARM64 only;
+it does not claim Linux x86_64 or other native-platform qualification.
 
 ## Run a real workflow
 
-Check out the v0.0.39 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.40 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.39 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.40 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
@@ -284,9 +296,10 @@ commits Notes and a link, recovers the original request, reads by key, compiles 
 relationship query, rolls back a dry-run, imports a Note and durably saves feed
 pages before source ACKs. Administrator SQL sets up roles only.
 
-The [portable preview0.10](../../docs/helix/04-build/corpus/public-python/0.10/README.md)
-retains22 basic and10 exact-scalar observations for runtime0.38. Earlier previews
-retain their historical pins; none claims independent interchange.
+The [historical public Python preview labeled 0.10](../../docs/helix/04-build/corpus/public-python/0.10/README.md)
+retains22 basic and10 exact-scalar observations for UMF0.7 and runtime0.38.
+It is incompatible with the current UMF0.10-only v0.0.40 candidate; earlier
+previews retain their historical pins and none claims independent interchange.
 
 For a local server with an installed Truss candidate, use the explicit launcher
 option after installing the `[local,native]` extras:
@@ -428,7 +441,7 @@ inputs. The legacy `bun_executable` keyword is retained for source compatibility
 and does not select or launch an executable.
 Separate broad `mutations` and physical-optimization families remain unavailable.
 
-The v0.0.40 candidate adds `prepare_group_in_transaction(tx,
+Version 0.0.40 includes `prepare_group_in_transaction(tx,
 records=((document_id, module_id, record_id),), relationships=())`, returning the
 catalog revision, group context and requested references together. A host may
 cache this planning metadata for the same installation, source epoch, principal
@@ -436,8 +449,8 @@ and catalog basis. `catalog_revision_in_transaction(tx, document_id=...)` provid
 a small revision probe. Build groups with the cached `prepared.context.input(...)`
 and the returned definition pins; the write still checks its current basis and
 authority. A stale write refuses rather than silently retrying a mutation. This
-candidate API is pending the full release qualification and is not available in
-the latest published v0.0.39 package.
+API is exercised by the local release tests and public workload runs. It was not
+available in v0.0.39.
 
 ## Catalog meaning and evolution
 

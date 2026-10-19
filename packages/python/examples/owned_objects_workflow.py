@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""Owned graph example for the unreleased native69 development assembly.
+"""Owned graph example for the current Truss runtime and UMF 0.10 source.
 
 The application owns transactions. No data is inserted administratively and no
 private Truss API is used. Run against a new local PG18 directory.
@@ -41,7 +41,7 @@ def run_workflow(directory, *, bun_executable='bun'):
             with psycopg.connect(**dict(params, user='owned_demo'), autocommit=True,
                                  options='-c statement_timeout=10000') as person:
                 with transaction(person) as (assembly, tx):
-                    accepted = assembly.prepare_catalog(documents, source_version='0.8.0', bun_executable=bun_executable)
+                    accepted = assembly.prepare_catalog(documents, source_version='0.10.0', bun_executable=bun_executable)
                     success(assembly.accept_in_transaction(tx, accepted, request_key='register-notes',
                         origin_bytes=b'{"x-action":"register"}'))
                     view = success(assembly.catalog_view_in_transaction(tx, assembly.catalog_view_request())).view

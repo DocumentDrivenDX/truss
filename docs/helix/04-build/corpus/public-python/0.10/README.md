@@ -1,5 +1,10 @@
 # Public Python preview 0.10
 
+This directory preserves a historical preview case, not the current Truss
+v0.0.40 owned workflow. Its model fixtures use UMF 0.7.0 and its recorded
+runtime is 0.38-candidate; both are incompatible with the current UMF 0.10-only
+v0.0.40 source path. Keep this corpus for its historical observations only.
+
 Two portable JSON examples run through the installed public Python API on
 truss-toolkit0.1.0.dev38/native runtime0.38-candidate, layout0.16 candidate,
 Weft runtime backend0.4.8, DocumentDrivenDX pgserver-pg18==18.6.1/PostgreSQL18.6

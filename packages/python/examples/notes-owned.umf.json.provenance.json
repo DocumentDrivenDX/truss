@@ -1,0 +1,20 @@
+{
+  "sourcePath": "packages/python/examples/notes-owned.umf.json before current-format migration",
+  "predecessorVersion": "0.8.0",
+  "sourceVersion": "0.10.0",
+  "originalSha256": "b2c18abb21f3e0fc3fde14df0cdfdab8a5634441bfa00344a9285061ecae3e59",
+  "currentSha256": "3b5ab8d6c229b82755aa47317bf29505723a812f588d5063c0422c60bed434df",
+  "changedPointers": [
+    "/umf"
+  ],
+  "preservedMeaning": "Only the UMF version marker changed. Module/element/relationship IDs, record membership, key fields, scalar declarations, ownership target, multiplicities, direction, and extension content are otherwise retained.",
+  "validation": {
+    "implementation": "UMF",
+    "commit": "4fc64adf30e2f49eae28162cf476ecd01ce505e3",
+    "api": "src/validation/document.ts validateDocument",
+    "valid": true,
+    "complete": true,
+    "diagnostics": []
+  },
+  "scope": "Fixture derivation and current source validation only; not a broader UMF 0.10 or Truss compatibility claim."
+}

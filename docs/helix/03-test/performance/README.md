@@ -22,8 +22,64 @@ purposes and removes duplicate engine-plan/image proofs, per-key image copies,
 row-at-a-time feed/configuration work and per-record schema revalidation.
 Canonical writes retain transaction/revision/version checks, current authority,
 relational constraints, required history and unchanged query/capacity bounds.
-The final combined candidate is awaiting its installed-package qualification;
-earlier C83 results do not qualify these bytes. No release has been published.
+The current candidate has local installed-package evidence below, including the
+three real schemas and all 11 stress cases. Earlier C83 results do not qualify
+these bytes. The release evidence identifies the final distribution artifacts
+and public-example results.
+
+## 2026-10-19: current local qualification checkpoint
+
+Qualification is local macOS ARM64 with PostgreSQL18.6, Python3.11, native
+`0.72-candidate`, published Weft `0.4.47` and embedded V8. The reviewed source
+`269aa029526fef49d9a59d3c6cb0ff8bdf18e19a`, installed package and wheel SHA-256
+`c49fd4908d25cda28c17c939509b43831c81b1fabeebc90212417a9cd772c335`
+have identical bytes for all 412 Truss runtime payload files. Final packaging
+must retain that payload identity; documentation and distribution metadata may
+change separately.
+
+The existing [`release.yml`](../../../../.github/workflows/release.yml) native
+job selects 95 unittest module/class/method strings across 88 modules. Local
+logs cover 287 distinct selected method IDs; all latest results pass, with zero
+missing selectors or selected-method failures. This merges the earlier broad
+run and focused corrections. It does not claim that all selectors were rerun on
+the current wheel. The raw broad receipt remains failed/incomplete at 1,927
+tests and 295 of 313 modules, with confirmed worker shutdown. The 197-test and
+22-test targeted receipts also remain failed as originally recorded; later
+affected tests, including the final five source-preparation tests, pass. Missing
+external protected-profile producers and retired layout experiments remain
+unqualified, and explicit future-profile skips are not counted as support.
+
+The three original real schemas pass in 60.806 seconds: each registers, creates
+1,000 objects, lists 51 complete entities, performs 1,000 ID reads and 100 key
+reads, commits 200 individual updates and verifies reopened values. External
+JavaScript execution is forbidden. These are functional results; provisional
+latency budgets do not establish a p95 certification.
+
+All 11 unchanged cases complete once locally with functional passes: `small`,
+`nominal`, `type-heavy`, `many-types`, `wide`, `complex`, `node-heavy`,
+`dense-edges`, `skewed`, `index-heavy` and `large`. `large` loads one
+million objects and two million edges, then runs the declared 1,000 reads, 200
+committed individual updates and atomic update controls through 1,024 operations.
+Its report records 3,825.631 seconds and explicitly excludes SQL lists above the
+ABI 1.1 source limit. The other ten cases complete in 2,063.771 seconds.
+Dense relationship lists retain the documented edge-source refusal and exact
+scalar-list control below. The skewed case retains the 100-related-key bound
+and verifies bounded `RELATED_KEYS` output with explicit truncation. Every
+case retains its eligible atomic boundary controls; the 1,000-object `small`
+case has no 1,024-operation sample. The original 10s SQL/30s operation deadlines,
+workloads and capacity limits are unchanged.
+
+The other-ten report records `measured_with_triage_signals`, with provisional
+budgets and no prior nominal regression baseline. Wide bulk-100 speedup is
+3.218 against a triage threshold of 5. Functional success does not clear that
+performance signal or establish a latency certification.
+
+The release [qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification.json)
+and [qualification evidence archive](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification-evidence.tar.gz)
+preserve the exact selector review, raw broad/targeted receipts, focused
+corrections, real-schema and complete stress reports with package identities,
+plus final artifact verification and public-example results.
+Sections below retain their earlier candidate scope.
 
 ## 2026-10-19: shared batch history and graph qualification
 

@@ -1,17 +1,25 @@
 # truss project documentation
 
-The current release is [Python SDK v0.0.39](04-build/releases/v0.0.39.md),
-native `0.71-candidate`, using published Weft `0.4.41` / backend `0.4.41`.
-Python deployment requires no Bun or Node. Owned graphs, atomic owned imports,
-owned-object catalog evolution, compact registration evidence and batched native
-writes are included. The tested source passed complete Linux/macOS release jobs,
-original 1,024-operation capacity controls and the full 1,000-object/1,000-edge
-workload with unchanged 10s SQL/30s operation limits; the tag workflow qualifies
-the final package before publication. See [performance evidence](03-test/performance/README.md)
-and the [current Python interface](../../packages/python/README.md) for scope.
-Broader stress/p95 targets, additional query domains and managed-service
-qualification remain unfinished. Earlier checkpoints below retain their
-historical scope.
+The current release is [Python SDK v0.0.40](04-build/releases/v0.0.40.md). It targets fresh UMF0.10
+installations on local macOS ARM64/PostgreSQL18.6, with native `0.72-candidate`
+and published Weft `0.4.47`. Existing release unittest selectors all have passing
+latest local results; the broader discovery sweep remains failed/incomplete.
+The three real schemas and all 11 unchanged stress cases pass once locally with
+the original 10s SQL/30s operation limits;
+the million-object case does not qualify SQL lists beyond ABI 1.1's source cap.
+See the [current qualification checkpoint](03-test/performance/README.md#2026-10-19-current-local-qualification-checkpoint)
+for package identity, exact test scope and limits. These results do not
+extend qualification to Linux, managed databases or separately gated profiles.
+The release carries a [qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification.json)
+and [evidence archive](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification-evidence.tar.gz).
+
+Historically, [v0.0.39](04-build/releases/v0.0.39.md) used native `0.71-candidate`
+and Weft `0.4.41` / backend `0.4.41`. Its tested source passed complete
+Linux/macOS native jobs, original 1,024-operation capacity controls and the full
+1,000-object/1,000-edge workload. Those results retain their original scope and
+do not extend v0.0.40's platform qualification. Broader p95 targets, additional
+query domains and managed-service qualification remain unfinished. Earlier
+checkpoints below retain their historical scope.
 
 ## First-release scope — owner direction, 2026-10-13
 
