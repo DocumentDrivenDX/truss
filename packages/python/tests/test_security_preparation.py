@@ -48,9 +48,9 @@ class SecurityPreparationTests(unittest.TestCase):
   source=json.loads(CORE);source['modules'][0]['elements'][0]['kind']='unissued-kind'
   with self.assertRaises(PreparationRejected) as caught:prepare(json.dumps(source).encode())
   self.assertEqual(caught.exception.reason,'invalid_document')
-  diagnostic=json.loads(caught.exception.diagnostics[0]);self.assertEqual(diagnostic['documentId'],'domain');self.assertEqual(diagnostic['originalError']['code'],'INVALID_DOCUMENT')
-  owner=json.loads(diagnostic['originalError']['message'])
-  self.assertTrue(any(item['code']=='CORE_SCHEMA_PROPERTIES' and item['path']=='/modules/0/elements/0/kind' and item['severity']=='error' for item in owner))
+  diagnostic=json.loads(caught.exception.diagnostics[0]);self.assertEqual(diagnostic['documentId'],'domain')
+  owner=diagnostic['validation'];self.assertFalse(owner['valid'])
+  self.assertTrue(any(item['code']=='SEMANTIC_TYPE_STRUCTURE' and item['path']=='/modules/0/elements/0/kind' and item['severity']=='error' for item in owner['diagnostics']))
  def test_present_association_binding_is_retained_without_semantic_claim(self):
   choices=json.loads(current_configuration())
   choices['binding']={'state':'present','vocabulary':{'identity':'truss-binary-association-candidate','version':'0.1.0','sha256':sha256(b'opaque association vocabulary pin').hexdigest()},
