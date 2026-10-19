@@ -440,3 +440,40 @@ These focused checks used the installed local Weft 0.4.46 candidate and current
 Truss source. Final installed-package qualification on both platforms and the
 unchanged complete stress campaign remain pending. The plan analysis establishes
 the access pattern, not a latency claim.
+
+### Ownership-preserving scope
+
+Scope selection follows the operations' ownership effects, rather than the
+presence of an owned relationship elsewhere in the catalog. Rootless creates,
+value updates without ownership changes, and independent-edge creates, updates
+and deletes do not require copies of unrelated existing independent edges.
+The same rule applies when these operations are mixed or use earlier aliases.
+The existing ordered planner owns alias validation; capture does not repeat it.
+
+The observer reads explicit stored endpoints, retains each selected existing
+independent edge before image once, and resolves the owned component and roots
+where a stored owned endpoint requires them. New edges have no before image.
+Distinct selected relationship pins use the existing indexed resolver. This work
+follows selected endpoints, required owned membership, selected edge images and
+actual payload bytes, plus database index access. Growing unrelated independent
+edge populations do not contribute to these scopes. An unrelated owned
+definition cannot disable this behavior.
+
+A scope that omits independent edges does not represent their absence. The
+planner therefore does not simulate complete relationship counts from that
+partial inventory. Native final cardinality and current authority checks remain
+the existing authoritative checks. Ownership-changing operations, object
+deletion/cascade, and reparenting retain the incident facts required to update
+actual membership and endpoint ownership. Existing operation, image and scope
+limits remain in force. Qualification of this correction is pending the frozen
+installed-package campaign.
+
+Threshold-only degree checks use bounded indexed probes. With no maximum they
+visit at most the declared minimum number of matching rows; with a finite
+maximum they visit at most `maximum + 1`. Counts beyond that threshold cannot
+change the predicate. Upper-bound arithmetic uses `bigint`; a condition whose
+maximum is `BIGINT_MAX` needs only its minimum witness. Incoming and outgoing
+queries have separate endpoint predicates so the index can stop early. Catalog
+evolution keeps exact counts of violating objects while bounding each object's
+inner degree probe; public reports do not substitute capped counts for actual
+reported facts. Maximum-one marker identities remain separate exact facts.

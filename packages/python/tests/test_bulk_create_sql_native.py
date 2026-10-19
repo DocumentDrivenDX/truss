@@ -60,11 +60,12 @@ class BulkEdgeSqlTests(edge_base.EdgeMutationTests):
     for _name in tuple(n for n in dir(edge_base.EdgeMutationTests) if n.startswith('test_')):
         locals()[_name]=None
 
-    def ready(self):
+    def ready(self, mutate_source=None):
         def unbounded(source):
             relationship=source['modules'][0]['relationships'][0]
             relationship['sourceMultiplicity']={'min':0,'max':'*'}
             relationship['targetMultiplicity']={'min':0,'max':'*'}
+            if mutate_source is not None:mutate_source(source)
         return super().ready(unbounded)
 
     def test_thousand_parallel_edges_use_one_insert_per_physical_home(self):
@@ -131,24 +132,135 @@ class BulkEdgeSqlTests(edge_base.EdgeMutationTests):
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(10,))
 
 
-    def test_value_update_preserves_thousand_unrelated_independent_edges(self):
-        connection,host,assembly,tx,a,b,pin=self.initialized()
+    def test_endpoint_only_update_and_independent_create_preserve_large_owned_component(self):
+        from dataclasses import replace
+        from truss.groups import AliasObjectReference,OwnedOwnership
+        def add_owned_relation(source):
+            module=source['modules'][0]
+            independent=next(r for r in module['relationships'] if r['id']=='A-B')
+            independent['sourceMultiplicity']={'min':0,'max':'*'}
+            independent['targetMultiplicity']={'min':0,'max':'*'}
+            module['relationships'].append({
+                'id':'owned-children','name':'owned-children',
+                'source':[{'module':'m','element':'A'}],
+                'target':[{'module':'m','element':'B','key':'a-primary'}],
+                'sourceMultiplicity':{'min':0,'max':1},
+                'targetMultiplicity':{'min':1,'max':4},
+                'targetLifecycle':'owned','directed':True,
+            })
+        connection,host,assembly,tx=self.ready(add_owned_relation)
         context=assembly.group_context_in_transaction(tx).value
-        operations=tuple(self.link(pin,StoredObjectReference(identity=a),StoredObjectReference(identity=b),alias=f'independent-{i}') for i in range(1000))
+        owned_pin=assembly.get_relationship_reference_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='owned-children').value.definition_pin
+        operations=(self.create(alias='root'),
+            replace(self.create(label='child',value='child',alias='child',record='B'),ownership=OwnedOwnership(root=AliasObjectReference(alias='root'))),
+            self.create(label='target',value='target',alias='target',record='B'),
+            self.link(owned_pin,AliasObjectReference(alias='root'),AliasObjectReference(alias='child'),alias='owned-child-edge'))
+        initial=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(initial,Ok,repr(initial)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(initial.value,GroupSuccess)
+        root,child,target,owned_edge=(entry.identity for entry in initial.value.response.semantic.results)
+        host.detach();connection.commit()
+        connection,host,assembly,tx=self.consumer()
+        pin=assembly.get_relationship_reference_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B').value.definition_pin
+        context=assembly.group_context_in_transaction(tx).value
+        operations=tuple(self.link(pin,StoredObjectReference(identity=root),StoredObjectReference(identity=target),alias=f'e{i}') for i in range(1000))
         result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),RequestNone(),documents=self.documents)
         self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
+        selected_edge=result.value.response.semantic.results[0].identity
         host.detach();connection.commit()
+        connection,host,assembly,tx=self.consumer()
+        context=assembly.group_context_in_transaction(tx).value
+        extra_existing=tuple(self.link(pin,StoredObjectReference(identity=root),StoredObjectReference(identity=target),alias=f'e{i}') for i in range(1000,1025))
+        result=assembly.apply_in_transaction(tx,context.input(extra_existing,MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
+        selected_delete=result.value.response.semantic.results[0].identity
+        host.detach();connection.commit()
+        connection,host,assembly,tx=self.consumer()
+        context=assembly.group_context_in_transaction(tx).value
+        extra_existing=self.link(pin,StoredObjectReference(identity=root),StoredObjectReference(identity=target),alias='e1025')
+        result=assembly.apply_in_transaction(tx,context.input((extra_existing,),MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(1027,))
         before=self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall()
+        self.assertEqual(len(before),1027)
         connection,host,assembly,tx=self.consumer()
         from truss.groups import UpdateObject,AuthoredValue
         from truss.contracts import TextValue
         context=assembly.group_context_in_transaction(tx).value
-        operation=UpdateObject(target=StoredObjectReference(identity=a),set=(AuthoredValue(name='A-value',value=TextValue(kind='string',text='updated')),),unset=(),expected_version='1')
+        operation=UpdateObject(target=StoredObjectReference(identity=root),set=(AuthoredValue(name='A-value',value=TextValue(kind='string',text='updated')),),unset=(),expected_version='1')
         result=assembly.apply_in_transaction(tx,context.input((operation,),MapValue(entries=())),RequestNone(),documents=self.documents)
         self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
         host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall(),before)
-        self.assertEqual(self.admin.execute('SELECT ver FROM truss.object WHERE id=%s',(int(a.id),)).fetchone(),(2,))
+        self.assertEqual(self.admin.execute('SELECT ver FROM truss.object WHERE id=%s',(int(root.id),)).fetchone(),(2,))
+        connection,host,assembly,tx=self.consumer()
+        context=assembly.group_context_in_transaction(tx).value
+        child_update=UpdateObject(target=StoredObjectReference(identity=child),set=(AuthoredValue(name='B-value',value=TextValue(kind='string',text='child-updated')),),unset=(),expected_version='1')
+        result=assembly.apply_in_transaction(tx,context.input((child_update,),MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall(),before)
+        connection,host,assembly,tx=self.consumer()
+        context=assembly.group_context_in_transaction(tx).value
+        extra=self.link(pin,StoredObjectReference(identity=root),StoredObjectReference(identity=target),alias='e-after-bound')
+        created=assembly.apply_in_transaction(tx,context.input((extra,),MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(created,Ok,repr(created)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(created.value,GroupSuccess)
+        host.detach();connection.commit()
+        after=self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall()
+        self.assertEqual(len(after),1028)
+        self.assertEqual(after[:len(before)],before)
+        connection,host,assembly,tx=self.consumer()
+        read=assembly.get_edge_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='owned-children',edge_id=int(owned_edge.id))
+        from truss import EdgeFound
+        self.assertIsInstance(read.value,EdgeFound)
+        self.assertEqual(read.value.edge.target,child)
+        # The partial scope must retain the exact selected independent edge
+        # beforeimage while omitting 1025 unselected independent rows.
+        from truss.groups import UpdateEdge,Delete,AliasObjectReference
+        from truss.contracts import TextValue
+        connection,host,assembly,tx=self.consumer()
+        context=assembly.group_context_in_transaction(tx).value
+        update=UpdateEdge(target=StoredObjectReference(identity=selected_edge),
+            set=(AuthoredValue(name='note',value=TextValue(kind='string',text='changed-selected')),),unset=(),expected_version='1')
+        updated=assembly.apply_in_transaction(tx,context.input((update,),MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(updated,Ok,repr(updated)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(updated.value,GroupSuccess)
+        self.assertEqual(updated.value.response.semantic.results[0].version,'2')
+        host.detach();connection.commit()
+        changed_snapshot=self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall()
+        self.assertEqual(len(changed_snapshot),1028)
+        before_by_id={row[0]['id']:row[0] for row in after}
+        changed_by_id={row[0]['id']:row[0] for row in changed_snapshot}
+        self.assertEqual(before_by_id.keys(),changed_by_id.keys())
+        changed_ids=[identity for identity in before_by_id if before_by_id[identity]!=changed_by_id[identity]]
+        self.assertEqual(changed_ids,[int(selected_edge.id)])
+        connection,host,assembly,tx=self.consumer()
+        context=assembly.group_context_in_transaction(tx).value
+        deleted=assembly.apply_in_transaction(tx,context.input((Delete(operation='delete_edge',target=StoredObjectReference(identity=selected_delete),expected_version='1'),),MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(deleted,Ok,repr(deleted)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(deleted.value,GroupSuccess)
+        host.detach();connection.commit()
+        deleted_snapshot=self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall()
+        self.assertEqual(len(deleted_snapshot),1027)
+        deleted_by_id={row[0]['id']:row[0] for row in deleted_snapshot}
+        self.assertNotIn(int(selected_delete.id),deleted_by_id)
+        for identity,row in changed_by_id.items():
+            if identity!=int(selected_delete.id):self.assertEqual(deleted_by_id[identity],row)
+        connection,host,assembly,tx=self.consumer()
+        context=assembly.group_context_in_transaction(tx).value
+        mixed=(self.create(label='new',value='new',alias='new-object',record='B'),
+            self.link(pin,StoredObjectReference(identity=root),AliasObjectReference(alias='new-object'),alias='new-edge'),
+            UpdateObject(target=StoredObjectReference(identity=root),set=(AuthoredValue(name='A-value',value=TextValue(kind='string',text='mixed-update')),),unset=(),expected_version='2'))
+        mixed_result=assembly.apply_in_transaction(tx,context.input(mixed,MapValue(entries=())),RequestNone(),documents=self.documents)
+        self.assertIsInstance(mixed_result,Ok,repr(mixed_result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(mixed_result.value,GroupSuccess)
+        self.assertEqual(len(mixed_result.value.response.semantic.results),3)
+        host.detach();connection.commit()
+        final_snapshot=self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall()
+        self.assertEqual(len(final_snapshot),1028)
+        final_by_id={row[0]['id']:row[0] for row in final_snapshot}
+        mixed_edge_id=int(mixed_result.value.response.semantic.results[1].identity.id)
+        self.assertIn(mixed_edge_id,final_by_id)
+        for identity,row in deleted_by_id.items():self.assertEqual(final_by_id[identity],row)
+        self.assertEqual(self.admin.execute('SELECT ver FROM truss.object WHERE id=%s',(int(root.id),)).fetchone(),(3,))
+        host.detach();connection.rollback()
 
     def test_update_changes_one_of_thousand_edges_and_preserves_the_other_999(self):
         connection,host,assembly,tx,a,b,pin=self.initialized()

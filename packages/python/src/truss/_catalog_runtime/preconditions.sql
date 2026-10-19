@@ -205,7 +205,20 @@ BEGIN
     AND NOT EXISTS(SELECT 1 FROM truss.edge WHERE rel_type_id=(entry->>'relationshipId')::int AND source_id=(condition->'source'->>'id')::bigint AND source_type=(condition->'source'->>'typeId')::int AND target_id=(condition->'target'->>'id')::bigint AND target_type=(condition->'target'->>'typeId')::int);
   ELSE
    IF EXISTS(SELECT 1 FROM truss.object WHERE id=(condition->'anchor'->>'id')::bigint AND type_id=(condition->'anchor'->>'typeId')::int) THEN
-    SELECT count(*) INTO counted FROM truss.edge WHERE rel_type_id=(entry->>'relationshipId')::int AND (condition->>'direction'='outgoing' AND source_id=(condition->'anchor'->>'id')::bigint AND source_type=(condition->'anchor'->>'typeId')::int OR condition->>'direction'='incoming' AND target_id=(condition->'anchor'->>'id')::bigint AND target_type=(condition->'anchor'->>'typeId')::int);
+    -- Keep predicate witnesses bounded and each endpoint probe indexable.
+    IF condition->>'direction'='outgoing' THEN
+     SELECT count(*) INTO counted FROM (
+      SELECT 1 FROM truss.edge WHERE rel_type_id=(entry->>'relationshipId')::int
+       AND source_id=(condition->'anchor'->>'id')::bigint AND source_type=(condition->'anchor'->>'typeId')::int
+      LIMIT CASE WHEN NOT condition ? 'maximum' OR (condition->>'maximum')::bigint=9223372036854775807 THEN (condition->>'minimum')::bigint ELSE (condition->>'maximum')::bigint+1 END
+     ) matching_edges;
+    ELSE
+     SELECT count(*) INTO counted FROM (
+      SELECT 1 FROM truss.edge WHERE rel_type_id=(entry->>'relationshipId')::int
+       AND target_id=(condition->'anchor'->>'id')::bigint AND target_type=(condition->'anchor'->>'typeId')::int
+      LIMIT CASE WHEN NOT condition ? 'maximum' OR (condition->>'maximum')::bigint=9223372036854775807 THEN (condition->>'minimum')::bigint ELSE (condition->>'maximum')::bigint+1 END
+     ) matching_edges;
+    END IF;
     passed:=counted>=(condition->>'minimum')::bigint AND (NOT condition ? 'maximum' OR counted<=(condition->>'maximum')::bigint);
    END IF;
   END IF;

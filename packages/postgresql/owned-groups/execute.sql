@@ -589,6 +589,11 @@ BEGIN
   selected:=node_order[(entry.value->>'node')::int+1];root_ref:=CASE WHEN entry.value->'root'='null'::jsonb THEN NULL ELSE node_order[(entry.value->>'root')::int+1] END;
   IF truss.runtime_owned_workspace_state_or(workspace_name,'n',selected,nodes,true)->'root' IS DISTINCT FROM coalesce(to_jsonb(root_ref),'null'::jsonb) THEN RAISE EXCEPTION 'final ownership graph requires explicit root change' USING ERRCODE='22023';END IF;
  END LOOP;
+ -- Partial endpoint/owned scopes omit old independent edge images. Such scopes
+ -- are admitted only for ownership-preserving object and independent-edge
+ -- operations; authoritative final checks still inspect actual affected rows.
+ -- Do not interpret an intentionally omitted edge as a zero multiplicity.
+ IF scope->'independentEdgesIncluded' IS DISTINCT FROM 'false'::jsonb THEN
  -- The final simulated edges are immutable here. Count each live edge once
  -- per direction rather than scanning the full map for every node/relation.
  WITH counts AS (
@@ -625,6 +630,7 @@ BEGIN
     AND coalesce((incoming_counts->>jsonb_build_array(r.rel_type_id::text,n.reference)::text)::bigint,0)<r.source_min)
  SELECT reason INTO multiplicity_failure FROM violations LIMIT 1;
  IF FOUND THEN RAISE EXCEPTION '%',multiplicity_failure USING ERRCODE='P1005';END IF;
+ END IF;
  plan:=jsonb_build_object('profile','truss-owned-group-plan/0.1','catalogRevision',revision,
   'initialScope',scope,'operations',to_jsonb(plans),'aliases',aliases);
  IF octet_length(convert_to(plan::text,'UTF8'))>33554432 THEN RAISE EXCEPTION 'bounded complete group execution inventory required' USING ERRCODE='54000';END IF;

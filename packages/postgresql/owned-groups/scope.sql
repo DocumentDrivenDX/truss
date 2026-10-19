@@ -2,7 +2,7 @@
 -- Uninstalled observation component. One invocation uses one statement snapshot.
 -- No locks, authority issuance or effects. Reobserve after the graph-write gate;
 -- the executor must refuse newly required earlier guards before performing writes.
-CREATE FUNCTION truss.owned_graph_scope(seeds jsonb) RETURNS jsonb
+CREATE FUNCTION truss.owned_graph_scope(seeds jsonb,include_independent boolean DEFAULT true) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE node_keys text[]:='{}';edge_keys text[]:='{}';boundary_keys text[]:='{}';owned_edge_order text[]:='{}';
  nodes jsonb:='{}';node_images jsonb[]:='{}';edges jsonb:='{}';edge_images jsonb[]:='{}';boundary jsonb:='{}';boundary_images jsonb[]:='{}';
@@ -41,11 +41,37 @@ BEGIN
   UNION
   SELECT next_member.kind,next_member.member_type,next_member.member_id FROM members current_member
   CROSS JOIN LATERAL (
+   -- Full observations use separate endpoint-index probes. Their output is
+   -- canonically sorted after the visited-set union, so no unbounded sort is
+   -- needed before the 1025-row refusal threshold.
    (SELECT 'e'::text kind,e.rel_type_id member_type,e.id member_id FROM truss.edge e
-    WHERE current_member.kind='n' AND
-     ((e.source_id=current_member.member_id AND e.source_type=current_member.member_type)
-      OR (e.target_id=current_member.member_id AND e.target_type=current_member.member_type))
-    ORDER BY e.id LIMIT 1025)
+    WHERE current_member.kind='n' AND include_independent IS TRUE
+     AND e.source_id=current_member.member_id AND e.source_type=current_member.member_type LIMIT 1025)
+   UNION ALL
+   (SELECT 'e'::text,e.rel_type_id,e.id FROM truss.edge e
+    WHERE current_member.kind='n' AND include_independent IS TRUE
+     AND e.target_id=current_member.member_id AND e.target_type=current_member.member_type LIMIT 1025)
+   UNION ALL
+   -- Partial observations enumerate only owned relation IDs before probing
+   -- their source/target endpoint indexes. Unrelated independent degrees
+   -- therefore do not enter a broad incident-edge scan.
+   (SELECT 'e'::text,e.rel_type_id,e.id FROM
+    (SELECT DISTINCT ep.rel_type_id FROM truss.rel_endpoint ep
+     JOIN truss.rel_def selected_relation USING(rel_type_id)
+     WHERE ep.source_type=current_member.member_type AND selected_relation.lifecycle='owned') owned_relation
+    CROSS JOIN LATERAL (SELECT edge.id,edge.rel_type_id FROM truss.edge edge
+     WHERE edge.source_id=current_member.member_id AND edge.source_type=current_member.member_type
+      AND edge.rel_type_id=owned_relation.rel_type_id LIMIT 1025 OFFSET 0) e
+    WHERE current_member.kind='n' AND include_independent IS NOT TRUE)
+   UNION ALL
+   (SELECT 'e'::text,e.rel_type_id,e.id FROM
+    (SELECT DISTINCT ep.rel_type_id FROM truss.rel_endpoint ep
+     JOIN truss.rel_def selected_relation USING(rel_type_id)
+     WHERE ep.target_type=current_member.member_type AND selected_relation.lifecycle='owned') owned_relation
+    CROSS JOIN LATERAL (SELECT edge.id,edge.rel_type_id FROM truss.edge edge
+     WHERE edge.target_id=current_member.member_id AND edge.target_type=current_member.member_type
+      AND edge.rel_type_id=owned_relation.rel_type_id LIMIT 1025 OFFSET 0) e
+    WHERE current_member.kind='n' AND include_independent IS NOT TRUE)
    UNION ALL
    SELECT 'n'::text,endpoint.type_id,endpoint.object_id FROM truss.edge e
     JOIN truss.rel_def r ON r.rel_type_id=e.rel_type_id
@@ -152,11 +178,12 @@ BEGIN
  END LOOP;
  result_json:=jsonb_build_object('catalogRevision',head,'nodeOrder',node_keys,'ownedEdgeOrder',owned_edge_order,'nodes',nodes,'edges',edges,
   'types',types,'relationships',relations,'boundary',boundary,'forest',projection);
+ IF include_independent IS NOT TRUE THEN result_json:=result_json||jsonb_build_object('independentEdgesIncluded',false);END IF;
  IF octet_length(convert_to(result_json::text,'UTF8'))>4194304 THEN RAISE EXCEPTION 'bounded complete graph image result required' USING ERRCODE='54000';END IF;
  RETURN result_json;
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.owned_graph_scope(jsonb) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.owned_graph_scope(jsonb,boolean) FROM PUBLIC;
 
 
 -- Discover stored components from original operations before acquiring graph
@@ -164,8 +191,10 @@ REVOKE ALL ON FUNCTION truss.owned_graph_scope(jsonb) FROM PUBLIC;
 -- owners, acquire the common gate, and compare a second observation.
 CREATE FUNCTION truss.runtime_owned_input_scope(input jsonb) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE operation jsonb;object_references jsonb;reference jsonb;identity jsonb;
+DECLARE operation jsonb;object_references jsonb;reference jsonb;identity jsonb;selected_operation jsonb;
+ selected_ordinal int;selected_relation truss.rel_def%ROWTYPE;topology_batch boolean;has_edge_operations boolean;
  seeds jsonb;seed_items jsonb[]:='{}';seed jsonb;lean_nodes jsonb;lean_types jsonb;lean_order jsonb;lean_forest jsonb;lean_count int;stored_edge truss.edge%ROWTYPE;reference_type truss.type_def%ROWTYPE;current_actor oid;
+ selected_edge_images jsonb[]:='{}';partial_scope jsonb;selected_edges jsonb;selected_relations jsonb;seed_types int[];
 BEGIN
  IF jsonb_typeof(input->'operations') IS DISTINCT FROM 'array'
   OR jsonb_array_length(input->'operations') NOT BETWEEN 1 AND 1024 THEN
@@ -179,6 +208,7 @@ BEGIN
     SELECT * INTO stored_edge FROM truss.edge
      WHERE id=(identity->>'id')::bigint AND rel_type_id=(identity->>'typeId')::int;
     IF NOT FOUND THEN RAISE EXCEPTION 'target edge absent' USING ERRCODE='P1004';END IF;
+    selected_edge_images:=array_append(selected_edge_images,jsonb_build_object('edge',to_jsonb(stored_edge)));
     -- Native witnesses stay separate from all caller-authored references.
     FOR seed IN SELECT value FROM jsonb_array_elements(jsonb_build_array(
      jsonb_build_object('id',stored_edge.source_id::text,'typeId',stored_edge.source_type::text),
@@ -218,17 +248,51 @@ BEGIN
  SELECT coalesce(jsonb_agg(seed_value ORDER BY first_ordinal),'[]'::jsonb) INTO seeds
  FROM (SELECT item seed_value,min(ordinality) first_ordinal
   FROM unnest(seed_items) WITH ORDINALITY entries(item,ordinality) GROUP BY item) distinct_seeds;
- -- Pure value updates and independent edge creates have no ownership edits.
- -- When the catalog has no owned relationships and every observed row is
- -- rootless, incident independent edge images cannot affect these operations.
- -- Read each explicit endpoint once; native final constraints still inspect
- -- actual relationship cardinalities and current reader/writer authority.
- IF NOT EXISTS(SELECT 1 FROM truss.rel_def WHERE retired_rev IS NULL AND lifecycle='owned')
-  AND (NOT EXISTS(SELECT 1 FROM jsonb_array_elements(input->'operations') o
-       WHERE o.value->>'operation'<>'update_object' OR o.value ? 'ownershipChange' OR o.value->'target'->>'state'<>'stored')
-   OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(input->'operations') o
-       WHERE o.value->>'operation'<>'create_edge' OR o.value->'source'->>'state'<>'stored' OR o.value->'target'->>'state'<>'stored'))
-  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(seeds) s JOIN truss.object o
+ SELECT coalesce(array_agg(DISTINCT (value->>'typeId')::int),'{}'::int[]) INTO seed_types
+ FROM jsonb_array_elements(seeds);
+ -- Topology-preserving groups retain the owned closure and exact selected
+ -- independent edge beforeimages, omitting unrelated independent rows.
+ SELECT coalesce(bool_and(CASE
+   WHEN value->>'operation'='create_object' THEN value->'ownership'->>'state'='rootless'
+     AND NOT (value ? 'ownershipChange')
+   WHEN value->>'operation'='update_object' THEN NOT (value ? 'ownershipChange')
+   WHEN value->>'operation' IN ('create_edge','update_edge','delete_edge') THEN true
+   ELSE false END),false),
+  coalesce(bool_or(value->>'operation' IN ('create_edge','update_edge','delete_edge')),false)
+ INTO topology_batch,has_edge_operations FROM jsonb_array_elements(input->'operations');
+ IF topology_batch AND has_edge_operations THEN
+  FOR selected_operation,selected_ordinal IN
+   SELECT selected.operation,selected.operation_ordinal FROM (
+    SELECT DISTINCT ON (CASE WHEN o.value->>'operation'='create_edge'
+      THEN o.value->>'relationshipDefinitionPin' ELSE o.value->'target'->'identity'->>'definitionPin' END)
+     o.value operation,(o.ordinality-1)::int operation_ordinal,
+     CASE WHEN o.value->>'operation'='create_edge'
+      THEN o.value->>'relationshipDefinitionPin' ELSE o.value->'target'->'identity'->>'definitionPin' END pin
+    FROM jsonb_array_elements(input->'operations') WITH ORDINALITY o(value,ordinality)
+    WHERE o.value->>'operation'='create_edge'
+     OR o.value->>'operation' IN ('update_edge','delete_edge') AND o.value->'target'->>'state'='stored'
+    ORDER BY CASE WHEN o.value->>'operation'='create_edge'
+      THEN o.value->>'relationshipDefinitionPin' ELSE o.value->'target'->'identity'->>'definitionPin' END,o.ordinality
+   ) selected ORDER BY selected.operation_ordinal
+  LOOP
+   selected_relation:=truss.runtime_operation_relationship(selected_operation,input->'operations',selected_ordinal);
+   IF selected_relation.lifecycle IS DISTINCT FROM 'independent' THEN
+    topology_batch:=false;EXIT;
+   END IF;
+  END LOOP;
+ END IF;
+ IF topology_batch THEN
+  IF NOT EXISTS(
+    SELECT 1 FROM (
+     SELECT seed_type.type_id FROM unnest(seed_types) seed_type(type_id)
+      JOIN truss.rel_endpoint ep ON ep.source_type=seed_type.type_id
+      JOIN truss.rel_def r USING(rel_type_id) WHERE r.retired_rev IS NULL AND r.lifecycle='owned'
+     UNION ALL
+     SELECT seed_type.type_id FROM unnest(seed_types) seed_type(type_id)
+      JOIN truss.rel_endpoint ep ON ep.target_type=seed_type.type_id
+      JOIN truss.rel_def r USING(rel_type_id) WHERE r.retired_rev IS NULL AND r.lifecycle='owned'
+    ) seed_owned_relations)
+   AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(seeds) s JOIN truss.object o
     ON o.id=(s.value->>'id')::bigint AND o.type_id=(s.value->>'typeId')::int
     WHERE o.root_id IS NOT NULL OR o.root_type IS NOT NULL) THEN
   SELECT count(*),coalesce(jsonb_agg(to_jsonb(o.type_id::text||':'||o.id::text) ORDER BY s.ordinality),'[]'::jsonb),
@@ -242,12 +306,36 @@ BEGIN
   IF lean_count<>jsonb_array_length(seeds) OR lean_count>2048
    OR octet_length(lean_nodes::text)+octet_length(lean_types::text)>16777216 THEN
    RAISE EXCEPTION 'bounded complete explicit rootless rows required' USING ERRCODE='54000';END IF;
-  RETURN jsonb_build_object('catalogRevision',(SELECT rev FROM truss.schema_head WHERE id=1),
-   'independentEndpointScope',true,'nodeOrder',lean_order,'ownedEdgeOrder','[]'::jsonb,'nodes',lean_nodes,'edges','{}'::jsonb,
+  partial_scope:=jsonb_build_object('catalogRevision',(SELECT rev FROM truss.schema_head WHERE id=1),
+   'independentEndpointScope',true,'independentEdgesIncluded',false,
+   'nodeOrder',lean_order,'ownedEdgeOrder','[]'::jsonb,'nodes',lean_nodes,'edges','{}'::jsonb,
    'types',lean_types,'relationships','{}'::jsonb,'boundary','{}'::jsonb,'forest',lean_forest);
+  ELSE
+   partial_scope:=truss.owned_graph_scope(seeds,false);
+  END IF;
+  IF cardinality(selected_edge_images)>0 THEN
+   WITH selected AS MATERIALIZED (
+    SELECT DISTINCT ON ((entry->'edge'->>'id')::bigint) entry->'edge' edge_image
+    FROM unnest(selected_edge_images) entries(entry)
+    ORDER BY (entry->'edge'->>'id')::bigint), maps AS MATERIALIZED (
+    SELECT edge_image,r.rel_type_id::text rel_key,to_jsonb(r) relation_image
+    FROM selected JOIN truss.rel_def r ON r.rel_type_id=(edge_image->>'rel_type_id')::int)
+   SELECT coalesce((SELECT jsonb_object_agg(edge_image->>'id',edge_image) FROM maps), '{}'::jsonb),
+    coalesce((SELECT jsonb_object_agg(rel_key,relation_image) FROM (SELECT DISTINCT ON (rel_key) rel_key,relation_image FROM maps ORDER BY rel_key) relations),'{}'::jsonb)
+    INTO selected_edges,selected_relations;
+   IF (SELECT count(*) FROM jsonb_each(partial_scope->'edges'))+
+      (SELECT count(*) FROM jsonb_each(selected_edges))>1024 THEN
+    RAISE EXCEPTION 'bounded complete ownership component required' USING ERRCODE='54000';END IF;
+   partial_scope:=partial_scope||jsonb_build_object(
+    'edges',(partial_scope->'edges')||selected_edges,
+    'relationships',(partial_scope->'relationships')||selected_relations);
+  END IF;
+  IF octet_length(convert_to(partial_scope::text,'UTF8'))>(CASE WHEN partial_scope->'independentEndpointScope'='true'::jsonb THEN 16777216 ELSE 4194304 END) THEN
+   RAISE EXCEPTION 'bounded complete graph image result required' USING ERRCODE='54000';END IF;
+  RETURN partial_scope;
  END IF;
  -- The scope observer checks exact native ranges and complete membership.
- RETURN truss.owned_graph_scope(seeds);
+ RETURN truss.owned_graph_scope(seeds,true);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_input_scope(jsonb) FROM PUBLIC;

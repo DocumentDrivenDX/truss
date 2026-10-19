@@ -166,10 +166,22 @@ BEGIN
       AND (maximum IS NULL OR selected_relation.target_max IS NOT NULL AND maximum>=selected_relation.target_max)
     OR side='target' AND minimum<=selected_relation.source_min
       AND (maximum IS NULL OR selected_relation.source_max IS NOT NULL AND maximum>=selected_relation.source_max) THEN CONTINUE;END IF;
-   SELECT count(*) FILTER(WHERE degree<minimum),count(*) FILTER(WHERE maximum IS NOT NULL AND degree>maximum) INTO low_count,high_count FROM (
-    SELECT (SELECT count(*) FROM truss.edge e WHERE e.rel_type_id=selected_relation.rel_type_id AND
-     CASE WHEN side='source' THEN e.source_id=o.id AND e.source_type=o.type_id ELSE e.target_id=o.id AND e.target_type=o.type_id END) AS degree
-    FROM truss.object o WHERE EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=selected_relation.rel_type_id AND CASE WHEN side='source' THEN e.source_type=o.type_id ELSE e.target_type=o.type_id END)) anchors;
+   -- Bound each degree probe while retaining exact violation totals.
+   IF side='source' THEN
+    SELECT count(*) FILTER(WHERE degree<minimum),count(*) FILTER(WHERE maximum IS NOT NULL AND degree>maximum) INTO low_count,high_count FROM (
+     SELECT (SELECT count(*) FROM (
+      SELECT 1 FROM truss.edge e WHERE e.rel_type_id=selected_relation.rel_type_id AND e.source_id=o.id AND e.source_type=o.type_id
+      LIMIT CASE WHEN maximum IS NULL THEN minimum::bigint ELSE maximum::bigint+1 END
+     ) matching_edges) AS degree
+     FROM truss.object o WHERE EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=selected_relation.rel_type_id AND e.source_type=o.type_id)) anchors;
+   ELSE
+    SELECT count(*) FILTER(WHERE degree<minimum),count(*) FILTER(WHERE maximum IS NOT NULL AND degree>maximum) INTO low_count,high_count FROM (
+     SELECT (SELECT count(*) FROM (
+      SELECT 1 FROM truss.edge e WHERE e.rel_type_id=selected_relation.rel_type_id AND e.target_id=o.id AND e.target_type=o.type_id
+      LIMIT CASE WHEN maximum IS NULL THEN minimum::bigint ELSE maximum::bigint+1 END
+     ) matching_edges) AS degree
+     FROM truss.object o WHERE EXISTS(SELECT 1 FROM truss.rel_endpoint e WHERE e.rel_type_id=selected_relation.rel_type_id AND e.target_type=o.type_id)) anchors;
+   END IF;
    scope:=jsonb_build_object('documentId',selected_relation.document_id,'moduleId',selected_relation.module,'relationshipId',selected_relation.rel_id,'side',side);
    IF low_count>0 THEN violations:=array_append(violations,scope||jsonb_build_object('rule','relationship.min','affectedObjectCount',low_count::text));END IF;
    IF high_count>0 THEN violations:=array_append(violations,scope||jsonb_build_object('rule','relationship.max','affectedObjectCount',high_count::text));END IF;
