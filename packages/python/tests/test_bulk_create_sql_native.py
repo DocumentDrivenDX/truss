@@ -150,7 +150,7 @@ class BulkEdgeSqlTests(edge_base.EdgeMutationTests):
         self.assertEqual(self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall(),before)
         self.assertEqual(self.admin.execute('SELECT ver FROM truss.object WHERE id=%s',(int(a.id),)).fetchone(),(2,))
 
-    def test_buffered_scope_equals_retained_observer_with_thousand_edges(self):
+    def test_update_changes_one_of_thousand_edges_and_preserves_the_other_999(self):
         connection,host,assembly,tx,a,b,pin=self.initialized()
         context=assembly.group_context_in_transaction(tx).value
         operations=tuple(self.link(pin,StoredObjectReference(identity=a),StoredObjectReference(identity=b),alias=f'scope-{i}') for i in range(1000))
@@ -158,24 +158,9 @@ class BulkEdgeSqlTests(edge_base.EdgeMutationTests):
         self.assertIsInstance(result,Ok,repr(result)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(result.value,GroupSuccess)
         edge=result.value.response.semantic.results[0].identity
         host.detach();connection.commit()
-        definition=self.admin.execute("SELECT pg_get_functiondef('truss.owned_graph_scope(jsonb)'::regprocedure)").fetchone()[0]
-        append='edge_images:=array_append(edge_images,observed.edge_image);'
-        assembly_sql=" SELECT coalesce(jsonb_object_agg(c.edge_key,c.image),'{}'::jsonb) INTO edges\n FROM unnest(edge_keys,edge_images) AS c(edge_key,image);"
-        self.assertEqual(definition.count(append),1);self.assertEqual(definition.count(assembly_sql),1)
-        reference=definition.replace('truss.owned_graph_scope(', 'public.reference_graph_scope(',1)
-        reference=reference.replace(append,'edges:=edges||jsonb_build_object(edge_key,observed.edge_image);').replace(assembly_sql,'')
-        self.admin.execute(reference)
-        self.addCleanup(self.admin.execute,'DROP FUNCTION public.reference_graph_scope(jsonb)')
-        self.admin.execute("""CREATE FUNCTION public.compare_scope_buffers() RETURNS trigger LANGUAGE plpgsql AS $$
-            DECLARE seeds jsonb;BEGIN
-              IF NEW.operation_index=0 THEN
-                SELECT jsonb_agg(jsonb_build_object('typeId',split_part(n.node_key,':',1),'id',split_part(n.node_key,':',2)) ORDER BY n.ordinal)
-                INTO seeds FROM jsonb_array_elements_text(NEW.plan->'initialScope'->'nodeOrder') WITH ORDINALITY n(node_key,ordinal);
-                IF truss.owned_graph_scope(seeds) IS DISTINCT FROM public.reference_graph_scope(seeds) THEN
-                  RAISE EXCEPTION 'buffered and retained scope observers differ' USING ERRCODE='P9998';END IF;
-              END IF;RETURN NEW;END $$""")
-        self.addCleanup(self.admin.execute,'DROP FUNCTION public.compare_scope_buffers() CASCADE')
-        self.admin.execute('CREATE TRIGGER compare_scope_buffers BEFORE INSERT ON truss.runtime_owned_operation FOR EACH ROW EXECUTE FUNCTION public.compare_scope_buffers()')
+        before=self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall()
+        self.assertEqual(len(before),1000)
+        self.assertEqual(len({row[0]['id'] for row in before}),1000)
         connection,host,assembly,tx=self.consumer()
         from truss.groups import UpdateEdge,AuthoredValue
         from truss.contracts import TextValue
@@ -183,8 +168,25 @@ class BulkEdgeSqlTests(edge_base.EdgeMutationTests):
         operation=UpdateEdge(target=StoredObjectReference(identity=edge),set=(AuthoredValue(name='note',value=TextValue(kind='string',text='buffered')),),unset=(),expected_version='1')
         updated=assembly.apply_in_transaction(tx,context.input((operation,),MapValue(entries=())),RequestNone(),documents=self.documents)
         self.assertIsInstance(updated,Ok,repr(updated)+' '+str(host._custody.last_attempt.error));self.assertIsInstance(updated.value,GroupSuccess)
+        self.assertEqual(len(updated.value.response.semantic.results),1)
+        self.assertEqual(updated.value.response.semantic.results[0].outcome,'changed')
+        self.assertEqual(updated.value.response.semantic.results[0].version,'2')
         host.detach();connection.commit()
-        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge').fetchone(),(1000,))
+        after=self.admin.execute('SELECT to_jsonb(e) FROM truss.edge e ORDER BY id').fetchall()
+        self.assertEqual(len(after),1000)
+        before_by_id={row[0]['id']:row[0] for row in before}
+        after_by_id={row[0]['id']:row[0] for row in after}
+        self.assertEqual(after_by_id.keys(),before_by_id.keys())
+        edge_id=int(edge.id)
+        changed=[identity for identity in before_by_id if before_by_id[identity]!=after_by_id[identity]]
+        self.assertEqual(changed,[edge_id])
+        connection,host,assembly,tx=self.consumer()
+        read=assembly.get_edge_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='A-B',edge_id=edge_id)
+        from truss import EdgeFound
+        self.assertIsInstance(read.value,EdgeFound)
+        self.assertEqual(read.value.edge.version,2)
+        self.assertEqual(dict(read.value.edge.retained),{'note':'buffered'})
+        host.detach();connection.rollback()
 
 
 from truss import Error
