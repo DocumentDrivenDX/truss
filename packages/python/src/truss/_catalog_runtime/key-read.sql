@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Authored-key reads over the writer's active exact key memberships. No route writes.
 CREATE FUNCTION truss.key_read_selection(selected_document text,selected_module text,selected_record text,selected_key text,original_document bytea,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$

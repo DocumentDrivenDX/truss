@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Storage projections and original-source references; no retained schema copies.
 CREATE FUNCTION truss.runtime_owned_catalog_declarations(documents_bytes bytea) RETURNS bytea
 LANGUAGE sql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

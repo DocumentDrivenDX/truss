@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Public scalar object operations. Progress is internal to one host savepoint.
 CREATE TABLE truss.runtime_object_attempt (
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),writer_xid xid8 NOT NULL,actor_oid oid NOT NULL,

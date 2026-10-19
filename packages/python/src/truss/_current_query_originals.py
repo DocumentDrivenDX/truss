@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Static original query-source correspondence, never consumer admission."""
 from dataclasses import dataclass
 from hashlib import sha256

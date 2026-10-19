@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Person-scoped catalog metadata; no complete unauthorized source crosses the facade.
 -- Private actor is issued by the current native invocation, never retained
 -- or accepted from a public caller. Module policy/membership checks stay live.

@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Additive timestamp projection for installed runtime 0.34.
 -- Object timestamps belong to the verified current after-image, not journal.at.
 CREATE FUNCTION truss.query_object_times(binding jsonb,selected_type int,selected_id bigint)

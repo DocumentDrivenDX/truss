@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native controls for socket collision isolation and fixture cleanup."""
 from concurrent.futures import ThreadPoolExecutor
 import hashlib

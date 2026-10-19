@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Verified accepted catalog basis for the Python view extractor.
 CREATE FUNCTION truss.catalog_view_basis(selected_revision int,maximum_count int,maximum_bytes int) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET bytea_output=hex AS $$

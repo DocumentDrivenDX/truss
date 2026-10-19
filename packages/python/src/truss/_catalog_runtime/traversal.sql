@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- One-call live traversal. The bounded CTE counts attempted states (cycles
 -- included) before filtering, terminal deduplication or output ordering.
 CREATE FUNCTION truss.traverse_objects(start_identity jsonb,hops jsonb,maximum_objects int,maximum_states int,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea

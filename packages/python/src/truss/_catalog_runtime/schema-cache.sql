@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Compile immutable schema metadata once at revision initialization.
 CREATE TABLE truss.runtime_type_schema (
  rev int NOT NULL REFERENCES truss.schema_rev(rev),type_id int NOT NULL,

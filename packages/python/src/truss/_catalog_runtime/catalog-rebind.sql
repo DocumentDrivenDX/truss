@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Native61 candidate: storage prefix is retained source; install uses the UMF owner export.
 -- Registration-owned retained-value transitions; never ordinary mutation attempts.
 CREATE TABLE truss.runtime_catalog_rebind_transition (

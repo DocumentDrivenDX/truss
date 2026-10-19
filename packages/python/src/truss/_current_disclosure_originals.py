@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Distinct immutable presence-source registration; never native admission."""
 from dataclasses import dataclass
 from hashlib import sha256

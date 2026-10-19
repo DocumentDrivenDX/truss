@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native ordinary caller -> original computations -> guarded public result."""
 import subprocess
 from .execution import Ok, Error, ExecutionFailure

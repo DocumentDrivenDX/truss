@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Fresh installations have one immutable runtime identity; live catalog revisions remain separate.
 CREATE FUNCTION truss.runtime_current_installation() RETURNS SETOF truss.catalog_runtime_installation
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

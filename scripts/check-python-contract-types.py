@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Run pinned mypy against public consumers; negative markers are exact or fail.
 
 Usage: mypy-environment-python scripts/check-python-contract-types.py PACKAGE_ROOT

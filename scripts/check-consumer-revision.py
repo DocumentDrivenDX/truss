@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Read-only frozen consumer revision comparison; no compiler/native adoption."""
 from datetime import datetime, timezone
 import copy

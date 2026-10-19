@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Render frozen row/catalog inputs without observing current data tables.
 CREATE FUNCTION truss.render_scalar_object(current_object truss.object,selected_type truss.type_def,properties truss.prop_def[],has_row_home boolean,definition_pin text,captured_revision int,maximum_bytes int,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

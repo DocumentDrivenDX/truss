@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Current-reader access to complete original committed mutation groups.
 CREATE FUNCTION truss.runtime_history_entity(selection jsonb,expected_release text,expected_digest text) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
