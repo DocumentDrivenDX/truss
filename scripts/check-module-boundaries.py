@@ -33,7 +33,8 @@ ALLOWED = {
     # Reviewed disclosure consumer: explicit held computation and transport edges.
     '_current_disclosure_computation': {'truss._embedded','contextlib','hashlib','importlib.resources','json','shutil','subprocess','time','truss._current_disclosure_pipe'},
     '_current_disclosure_evaluation': {'truss._current_disclosure_context_capture','dataclasses','hashlib','time','truss._current_disclosure_computation','truss._current_disclosure_originals','truss._current_disclosure_session','truss._current_disclosure_stage','truss._current_disclosure_wire','truss._current_query_evaluation','truss._current_query_sources','truss._owner_evidence_json','weft.weft'},
-    '_current_disclosure_originals': {'dataclasses','hashlib','json','pathlib','truss._current_disclosure_computation','truss._current_query_originals','truss._owner_evidence_json','weft.weft'},
+    # Immutable embedded-manifest identity only; disclosure original bytes stay separately verified.
+    '_current_disclosure_originals': {'dataclasses','hashlib','json','pathlib','truss._embedded_release','truss._current_disclosure_computation','truss._current_query_originals','truss._owner_evidence_json','weft.weft'},
     '_current_disclosure_pipe': {'truss._current_query_pipe'},
     '_current_disclosure_session': {'truss._current_disclosure_pipe','truss._current_disclosure_wire','truss._current_query_evaluation','truss._owner_evidence_json'},
     '_current_disclosure_stage': {'dataclasses','hashlib','json','psycopg','psycopg.rows','truss._current_disclosure_wire','truss._current_query_evaluation','truss._owner_evidence_json','truss._security_catalog_subject_installation','uuid'},
