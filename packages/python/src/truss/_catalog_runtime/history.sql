@@ -31,19 +31,17 @@ REVOKE ALL ON FUNCTION truss.runtime_history_entity(jsonb,text,text) FROM PUBLIC
 
 CREATE FUNCTION truss.runtime_history_property_qualified(selected_type int,property_id int,revision int,definition_pin text,qualified_actor oid) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE basis jsonb;property truss.prop_def%ROWTYPE;pin record;
+DECLARE access jsonb;pin text;reader jsonb;
 BEGIN
- SELECT CASE WHEN revision=(SELECT rev FROM truss.schema_head WHERE id=1)
-  AND NOT EXISTS(SELECT 1 FROM truss.schema_rev WHERE rev>revision)
- THEN jsonb_build_object(
-  'type_def',(SELECT coalesce(jsonb_agg(to_jsonb(t)),'[]'::jsonb) FROM truss.type_def t WHERE t.type_id=selected_type),
-  'prop_def',(SELECT coalesce(jsonb_agg(to_jsonb(p)),'[]'::jsonb) FROM truss.prop_def p WHERE p.type_id=selected_type AND p.prop_id=property_id)) END INTO basis;
- IF basis IS NULL THEN basis:=truss.catalog_all_expected_records(revision);END IF;
- SELECT * INTO STRICT property FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=selected_type AND p.prop_id=property_id;
- SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata_in_basis('property',selected_type,property_id,revision,basis);
- IF pin.definition_pin IS DISTINCT FROM definition_pin THEN RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
- IF NOT truss.runtime_can_read_qualified(property.definition_document_id,property.declaration_module,qualified_actor) THEN RAISE EXCEPTION 'current historical property reader required' USING ERRCODE='42501';END IF;
- IF property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable_qualified(property.item,qualified_actor) IS NOT TRUE THEN RAISE EXCEPTION 'current historical item reader required' USING ERRCODE='42501';END IF;
+ SELECT s.metadata->'propertyPins'->>property_id::text,s.metadata->'propertyAccess'->property_id::text
+  INTO STRICT pin,access FROM truss.runtime_type_schema s WHERE s.rev=revision AND s.type_id=selected_type;
+ IF pin IS DISTINCT FROM definition_pin OR access IS NULL OR (access->>'itemsValid')::boolean IS NOT TRUE
+  OR jsonb_typeof(access->'readers') IS DISTINCT FROM 'array' THEN
+  RAISE EXCEPTION 'original property interpretation required' USING ERRCODE='55000';END IF;
+ FOR reader IN SELECT value FROM jsonb_array_elements(access->'readers') LOOP
+  IF NOT truss.runtime_can_read_qualified(reader->>'documentId',reader->>'moduleId',qualified_actor) THEN
+   RAISE EXCEPTION 'current historical property/item reader required' USING ERRCODE='42501';END IF;
+ END LOOP;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_history_property_qualified(int,int,int,text,oid) FROM PUBLIC;
@@ -95,7 +93,8 @@ REVOKE ALL ON FUNCTION truss.runtime_history_image(jsonb,jsonb,bigint) FROM PUBL
 CREATE FUNCTION truss.runtime_history_group_qualified(entity jsonb,writer xid8,version bigint,maximum_events int,maximum_bytes int,qualified_actor oid) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE physical truss.journal%ROWTYPE;original bytea;event jsonb;items jsonb:='[]';semantic jsonb:='[]';group_pin jsonb;
- count_events int:=0;size int:=0;expected_pin text;selected_transition bigint;
+ count_events int:=0;size int:=0;expected_pin text;
+ item_buffer jsonb[]:='{}';semantic_buffer jsonb[]:='{}';edge_context jsonb;endpoint_context jsonb;edge_readers_checked boolean:=false;
 BEGIN
  FOR physical IN SELECT * FROM truss.journal j WHERE j.entity_kind=(CASE entity->>'kind' WHEN 'object' THEN 'o' ELSE 'e' END)::char(1)
   AND j.entity_id=(entity->>'id')::bigint AND j.entity_type=(entity->>'typeId')::int AND j.xid=writer AND j.ver=version ORDER BY j.seq LIMIT maximum_events+1 LOOP
@@ -118,20 +117,21 @@ BEGIN
   OR physical.prop_id IS DISTINCT FROM (event->>'propertyId')::int
   OR physical.origin IS DISTINCT FROM truss.runtime_exact_wrapper('origin',convert_to((event->'origin')::text,'UTF8')) THEN
    RAISE EXCEPTION 'physical and semantic history correspondence required' USING ERRCODE='55000';END IF;
-  IF event->>'historyProfile'='truss-native-owned-mutation/0.1' THEN
-   SELECT t.transition_id INTO STRICT selected_transition FROM truss.runtime_object_transition t
-    CROSS JOIN LATERAL jsonb_array_elements(t.journal) j WHERE t.object_id=physical.entity_id
-     AND t.type_id=physical.entity_type AND t.writer_xid=physical.xid
-     AND CASE WHEN j.value->>'referenceProfile'='truss-native-journal-reference/0.1'
-      THEN j.value=truss.runtime_owned_journal_reference(physical) ELSE j.value=to_jsonb(physical) END;
-   PERFORM truss.runtime_owned_object_transition_validate_qualified(selected_transition,true,qualified_actor);
-  END IF;
-  IF event->>'historyProfile'='truss-native-owned-edge-mutation/0.1' THEN
-   SELECT t.transition_id INTO STRICT selected_transition FROM truss.runtime_edge_transition t
-    CROSS JOIN LATERAL jsonb_array_elements(t.journal) j
-    WHERE t.edge_id=physical.entity_id AND t.rel_type_id=physical.entity_type AND t.writer_xid=physical.xid
-     AND j.value=to_jsonb(physical);
-   PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,true);
+  -- The canonical producer already settled the transition. Only the original
+  -- edge endpoint/root policy is additional to the public history images.
+  IF event->>'historyProfile'='truss-native-owned-edge-mutation/0.1' AND NOT edge_readers_checked THEN
+   SELECT t.endpoint_ownership INTO STRICT edge_context FROM truss.runtime_edge_transition t
+    WHERE t.edge_id=physical.entity_id AND t.rel_type_id=physical.entity_type AND t.writer_xid=writer
+     AND CASE WHEN t.after_edge IS NULL THEN (t.before_edge->>'ver')::bigint+1 ELSE (t.after_edge->>'ver')::bigint END=version;
+   FOR endpoint_context IN SELECT value FROM jsonb_array_elements(jsonb_build_array(
+    edge_context->'before'->'source',edge_context->'before'->'target',edge_context->'after'->'source',edge_context->'after'->'target'))
+    WHERE value<>'null'::jsonb LOOP
+    IF NOT truss.runtime_can_read_qualified(endpoint_context->'identity'->'owner'->>'documentId',endpoint_context->'identity'->'owner'->>'moduleId',qualified_actor) THEN
+     RAISE EXCEPTION 'current original endpoint reader required' USING ERRCODE='42501';END IF;
+    PERFORM truss.runtime_history_ownership_qualified(jsonb_build_object('identity',endpoint_context->'identity',
+     'catalogRevision',edge_context->>'captureCatalogRevision','ownership',endpoint_context->'ownership'),qualified_actor);
+   END LOOP;
+   edge_readers_checked:=true;
   END IF;
   IF entity->>'kind'='object' THEN SELECT definition_pin INTO STRICT expected_pin FROM truss.runtime_owned_definition_metadata('type',physical.entity_type,NULL,physical.rev);
   ELSE expected_pin:=truss.runtime_relationship_pin(physical.entity_type,physical.rev);END IF;
@@ -141,7 +141,6 @@ BEGIN
   ELSIF event->>'operation'='rebind' THEN
    IF (event->>'historyProfile' IN ('truss-native-catalog-rebind/0.1','truss-native-catalog-rebind/0.2','truss-native-catalog-rebind/0.3','truss-native-catalog-rebind/0.4')) IS NOT TRUE THEN RAISE EXCEPTION 'original catalog rebind profile required' USING ERRCODE='55000';END IF;
    PERFORM truss.runtime_history_property_qualified(physical.entity_type,physical.prop_id,physical.rev,event->>'afterDefinitionPin',qualified_actor);
-   PERFORM truss.catalog_rebind_history_group(entity,writer,version);
   ELSIF event->>'operation'='create' THEN PERFORM truss.runtime_history_image_qualified(event->'after',entity,version,qualified_actor);
   ELSIF event->>'operation'='metadata' THEN
    PERFORM truss.runtime_history_image_qualified(event->'before',entity,version-1,qualified_actor);PERFORM truss.runtime_history_image_qualified(event->'after',entity,version,qualified_actor);
@@ -149,10 +148,11 @@ BEGIN
   ELSE RAISE EXCEPTION 'supported retained event required' USING ERRCODE='0A000';END IF;
   IF group_pin IS NULL THEN group_pin:=event->'mutationGroup';
   ELSIF group_pin IS DISTINCT FROM event->'mutationGroup' THEN RAISE EXCEPTION 'one complete mutation group required' USING ERRCODE='55000';END IF;
-  semantic:=semantic||jsonb_build_array(event-'mutationGroup');
-  items:=items||jsonb_build_array(jsonb_build_object('contentBase64',replace(encode(original,'base64'),chr(10),''),'sha256',encode(sha256(original),'hex'),
+  semantic_buffer:=array_append(semantic_buffer,event-'mutationGroup');
+  item_buffer:=array_append(item_buffer,jsonb_build_object('contentBase64',replace(encode(original,'base64'),chr(10),''),'sha256',encode(sha256(original),'hex'),
    'writerXid',physical.xid::text,'seq',physical.seq::text,'version',physical.ver::text));
  END LOOP;
+ semantic:=to_jsonb(semantic_buffer);items:=to_jsonb(item_buffer);
  IF count_events=0 THEN RAISE EXCEPTION 'retained history unavailable' USING ERRCODE='P1010';END IF;
  IF group_pin IS DISTINCT FROM jsonb_build_object('profile','truss-history-group/0.1.0','eventCount',count_events::text,'orderedEventDigest',encode(sha256(convert_to(semantic::text,'UTF8')),'hex')) THEN
   RAISE EXCEPTION 'complete original history group digest required' USING ERRCODE='55000';END IF;
@@ -227,6 +227,7 @@ CREATE FUNCTION truss.lookup_import_source(selection jsonb,maximum_bytes int,exp
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' AS $$
 DECLARE entity jsonb;kind char(1);ledger truss.runtime_import_source%ROWTYPE;attempt truss.runtime_object_attempt%ROWTYPE;
  identity jsonb;actual jsonb;content bytea;result bytea;creation jsonb;captured_revision int;frontier xid8;
+ source_operation jsonb;source_result jsonb;legacy_input jsonb;
 BEGIN
  entity:=truss.runtime_history_entity(selection,expected_release,expected_digest);
  captured_revision:=(SELECT rev FROM truss.schema_head WHERE id=1);frontier:=pg_snapshot_xmin(pg_current_snapshot());
@@ -248,22 +249,33 @@ BEGIN
  ELSE
   IF ledger.writer_xid>=frontier THEN RAISE EXCEPTION 'committed provenance unavailable' USING ERRCODE='P1010';END IF;
   SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=ledger.group_attempt_id;
-  identity:=attempt.results->ledger.operation_index->'identity';
+  IF attempt.context->'mutationProfile'=truss.runtime_owned_profile() THEN
+   SELECT p.plan->'operation',p.result INTO STRICT source_operation,source_result
+   FROM truss.runtime_owned_operation p
+   WHERE p.attempt_id=attempt.id AND p.operation_index=ledger.operation_index AND p.writer_xid=ledger.writer_xid;
+  ELSE
+   legacy_input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+   source_operation:=legacy_input->'operations'->ledger.operation_index;
+   source_result:=attempt.results->ledger.operation_index;
+   IF convert_from(ledger.original_record,'UTF8')::jsonb->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'ownedImportPayloadProfile'
+    AND attempt.next_index<>1 THEN
+    RAISE EXCEPTION 'legacy singleton import creation required' USING ERRCODE='55000';END IF;
+  END IF;
+  identity:=source_result->'identity';
   IF NOT attempt.complete OR ledger.operation_index<0 OR ledger.operation_index>=attempt.next_index
-   OR (convert_from(ledger.original_record,'UTF8')::jsonb->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'ownedImportPayloadProfile' AND attempt.next_index<>1)
    OR attempt.writer_xid IS DISTINCT FROM ledger.writer_xid
-   OR attempt.results->ledger.operation_index->>'outcome' IS DISTINCT FROM 'created' OR identity->>'id' IS DISTINCT FROM entity->>'id'
+   OR source_result->>'outcome' IS DISTINCT FROM 'created' OR identity->>'id' IS DISTINCT FROM entity->>'id'
    OR identity->>'typeId' IS DISTINCT FROM entity->>'typeId'
    OR identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',entity->>'documentId','moduleId',entity->>'moduleId')
-   OR (convert_from(attempt.input_bytes,'UTF8')::jsonb)->'operations'->ledger.operation_index->>'operation' IS DISTINCT FROM
+   OR source_operation->>'operation' IS DISTINCT FROM
       (CASE kind WHEN 'o' THEN 'create_object' ELSE 'create_edge' END) THEN
    RAISE EXCEPTION 'original qualified import creation required' USING ERRCODE='55000';END IF;
   IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RAISE EXCEPTION 'original creation dependency reader required' USING ERRCODE='42501';END IF;
   SELECT to_jsonb(s) INTO actual FROM truss.record_source s WHERE entity_kind=kind AND entity_id=(entity->>'id')::bigint;
-  IF actual IS DISTINCT FROM ledger.expected_source OR actual->>'entity_kind' IS DISTINCT FROM kind::text
+  IF actual IS NULL OR actual->>'entity_kind' IS DISTINCT FROM kind::text
    OR actual->>'entity_id' IS DISTINCT FROM entity->>'id' THEN
    RAISE EXCEPTION 'retained native source correspondence required' USING ERRCODE='55000';END IF;
-  content:=convert_to(ledger.expected_source::text,'UTF8');
+  content:=convert_to(actual::text,'UTF8');
   result:=convert_to(jsonb_build_object('outcome','found','loadId',actual->>'load_id','writerXid',ledger.writer_xid::text,
    'contentBase64',replace(encode(content,'base64'),chr(10),''),'sha256',encode(sha256(content),'hex'))::text,'UTF8');
   IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RAISE EXCEPTION 'current creation dependency reader required' USING ERRCODE='42501';END IF;

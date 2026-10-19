@@ -47,24 +47,30 @@ CREATE FUNCTION truss.runtime_condition_inventory(input jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE conditions jsonb:=coalesce(input->'preconditions','[]');condition jsonb;selected truss.type_def%ROWTYPE;other truss.type_def%ROWTYPE;
  relation truss.rel_def%ROWTYPE;property truss.prop_def%ROWTYPE;key_row truss.key_def%ROWTYPE;component record;owner record;
- inventory jsonb:='[]';entry jsonb;objects jsonb;scopes jsonb;identity jsonb;bound text;index int:=0;
+ inventory jsonb;inventory_entries jsonb[]:='{}';entry jsonb;objects jsonb;scopes jsonb;scope_entries jsonb[];scope_entry jsonb;identity jsonb;bound text;index int:=0;
 BEGIN
  IF jsonb_typeof(conditions) IS DISTINCT FROM 'array' OR jsonb_array_length(conditions)>128 THEN RAISE EXCEPTION 'bounded condition list required' USING ERRCODE='22023';END IF;
  IF jsonb_array_length(conditions)<>(SELECT count(DISTINCT value->>'id') FROM jsonb_array_elements(conditions)) THEN RAISE EXCEPTION 'unique condition IDs required' USING ERRCODE='22023';END IF;
  FOR condition IN SELECT value FROM jsonb_array_elements(conditions) LOOP
   IF jsonb_typeof(condition->'id') IS DISTINCT FROM 'string' OR octet_length(condition->>'id') NOT BETWEEN 1 AND 1024
    OR jsonb_typeof(condition->'reason') IS DISTINCT FROM 'string' OR octet_length(condition->>'reason')>4096 THEN RAISE EXCEPTION 'caller condition ID/reason required' USING ERRCODE='22023';END IF;
-  objects:='[]';scopes:='[]';entry:=jsonb_build_object('index',index,'condition',condition);
+  objects:='[]';scope_entries:='{}';entry:=jsonb_build_object('index',index,'condition',condition);
   IF condition->>'condition' IN ('object_exists','property_equals') THEN
    IF condition-(CASE condition->>'condition' WHEN 'object_exists' THEN ARRAY['condition','id','reason','target'] ELSE ARRAY['condition','id','reason','target','name','value'] END)<>'{}'::jsonb THEN RAISE EXCEPTION 'closed object condition required' USING ERRCODE='22023';END IF;
    selected:=truss.runtime_condition_type(condition->'target');objects:=jsonb_build_array(condition->'target');
-   scopes:=jsonb_build_array(jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module));
+   scope_entries[cardinality(scope_entries)+1]:=jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module);
    IF condition->>'condition'='property_equals' THEN
     IF jsonb_typeof(condition->'name') IS DISTINCT FROM 'string' OR octet_length(condition->>'name') NOT BETWEEN 1 AND 4096 OR truss.valid_flat_cell(condition->'value') IS NOT TRUE THEN RAISE EXCEPTION 'exact scalar property equality required' USING ERRCODE='22023';END IF;
     SELECT * INTO property FROM truss.prop_def p WHERE p.type_id=selected.type_id AND p.name=condition->>'name' AND p.retired_rev IS NULL;
     IF FOUND THEN entry:=entry||jsonb_build_object('propertyId',property.prop_id::text);
-     scopes:=scopes||jsonb_build_array(jsonb_build_object('documentId',selected.document_id,'moduleId',property.declaration_module));
-     IF property.cardinality IN ('array','map') THEN scopes:=scopes||(SELECT jsonb_agg(jsonb_build_object('documentId',node.value->>'documentId','moduleId',node.value->'reference'->>'module')) FROM jsonb_array_elements(jsonb_build_array(property.item)||coalesce(property.item->'descendants','[]'::jsonb)) node);END IF;
+     scope_entries[cardinality(scope_entries)+1]:=jsonb_build_object('documentId',selected.document_id,'moduleId',property.declaration_module);
+     IF property.cardinality IN ('array','map') THEN
+      FOR scope_entry IN SELECT jsonb_build_object('documentId',node.value->>'documentId','moduleId',node.value->'reference'->>'module')
+       FROM jsonb_array_elements(jsonb_build_array(property.item)||coalesce(property.item->'descendants','[]'::jsonb)) WITH ORDINALITY node(value,ordinality)
+       ORDER BY node.ordinality LOOP
+       scope_entries[cardinality(scope_entries)+1]:=scope_entry;
+      END LOOP;
+     END IF;
     END IF;
    END IF;
   ELSIF condition->>'condition'='key_absent' THEN
@@ -81,11 +87,11 @@ BEGIN
    SELECT * INTO key_row FROM truss.key_def WHERE type_id=selected.type_id AND key_id=condition->>'keyId' AND retired_rev IS NULL;
    IF NOT FOUND THEN RAISE EXCEPTION 'known predicate key required' USING ERRCODE='22023';END IF;
    IF cardinality(key_row.prop_ids)<>jsonb_array_length(condition->'values') OR EXISTS(SELECT 1 FROM jsonb_array_elements(condition->'values') v WHERE v.value->>'kind' NOT IN ('string','integer','decimal','boolean','binary') OR truss.valid_scalar_cell(v.value,NULL,false) IS NOT TRUE) THEN RAISE EXCEPTION 'complete exact key values required' USING ERRCODE='22023';END IF;
-   scopes:=jsonb_build_array(jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module));
+   scope_entries[cardinality(scope_entries)+1]:=jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module);
    FOR component IN SELECT p.*,i.ord AS component_ordinal FROM unnest(key_row.prop_ids) WITH ORDINALITY i(prop_id,ord) JOIN truss.prop_def p ON p.prop_id=i.prop_id AND p.type_id=selected.type_id ORDER BY i.ord LOOP
     IF component.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR component.nullability IS DISTINCT FROM 'required' OR component.retired_rev IS NOT NULL THEN RAISE EXCEPTION 'supported string key required' USING ERRCODE='0A000';END IF;
     IF truss.valid_scalar_property(condition->'values'->(component.component_ordinal::int-1),component.scalar_type,false,component.facets) IS NOT TRUE THEN RAISE EXCEPTION 'exact declared condition key cell required' USING ERRCODE='22023';END IF;
-    scopes:=scopes||jsonb_build_array(jsonb_build_object('documentId',selected.document_id,'moduleId',component.declaration_module));
+    scope_entries[cardinality(scope_entries)+1]:=jsonb_build_object('documentId',selected.document_id,'moduleId',component.declaration_module);
    END LOOP;
    entry:=entry||jsonb_build_object('typeId',selected.type_id::text,'documentId',selected.document_id,'moduleId',selected.module,'recordId',selected.element,'keyId',key_row.key_id,'keyNumber',key_row.key_num::text,'values',condition->'values');
   ELSIF condition->>'condition' IN ('relationship_absent','relationship_count') THEN
@@ -100,9 +106,9 @@ BEGIN
      AND r.module=p.module_id AND r.rel_id=p.element_id
     WHERE r.retired_rev IS NULL;
    IF NOT FOUND THEN RAISE EXCEPTION 'known predicate relationship required' USING ERRCODE='22023';END IF;
-   scopes:=jsonb_build_array(jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module));
+   scope_entries[cardinality(scope_entries)+1]:=jsonb_build_object('documentId',relation.document_id,'moduleId',relation.module);
    FOR owner IN SELECT DISTINCT t.document_id,t.module FROM truss.rel_endpoint e JOIN truss.type_def t ON t.type_id=e.source_type OR t.type_id=e.target_type WHERE e.rel_type_id=relation.rel_type_id LOOP
-    scopes:=scopes||jsonb_build_array(jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module));
+    scope_entries[cardinality(scope_entries)+1]:=jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module);
    END LOOP;
    entry:=entry||jsonb_build_object('relationshipId',relation.rel_type_id::text);
    IF condition->>'condition'='relationship_absent' THEN
@@ -120,11 +126,13 @@ BEGIN
     IF condition ? 'maximum' AND (condition->>'minimum')::bigint>(condition->>'maximum')::bigint THEN RAISE EXCEPTION 'ordered count bounds required' USING ERRCODE='22023';END IF;
    END IF;
   ELSE RAISE EXCEPTION 'known condition required' USING ERRCODE='22023';END IF;
+  SELECT coalesce(jsonb_agg(value ORDER BY ord),'[]'::jsonb) INTO scopes FROM unnest(scope_entries) WITH ORDINALITY s(value,ord);
   FOR owner IN SELECT DISTINCT value->>'documentId' AS document_id,value->>'moduleId' AS module_id FROM jsonb_array_elements(scopes) LOOP
    IF NOT truss.runtime_can_read(owner.document_id,owner.module_id) THEN RAISE EXCEPTION 'current predicate owner read authority required' USING ERRCODE='42501';END IF;
   END LOOP;
-  inventory:=inventory||jsonb_build_array(entry||jsonb_build_object('objects',objects,'scopes',scopes));index:=index+1;
+  inventory_entries[cardinality(inventory_entries)+1]:=entry||jsonb_build_object('objects',objects,'scopes',scopes);index:=index+1;
  END LOOP;
+ SELECT coalesce(jsonb_agg(value ORDER BY ord),'[]'::jsonb) INTO inventory FROM unnest(inventory_entries) WITH ORDINALITY i(value,ord);
  RETURN inventory;
 END;
 $$;
@@ -152,14 +160,14 @@ REVOKE ALL ON FUNCTION truss.group_condition_key_metadata(bytea,bytea,text,text)
 
 CREATE FUNCTION truss.runtime_evaluate_preconditions(input jsonb,original_keys bytea) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE inventory jsonb;entry jsonb;condition jsonb;owner record;target record;current_object truss.object%ROWTYPE;keys jsonb;key_input jsonb;
+DECLARE inventory jsonb;entry jsonb;condition jsonb;owner record;target record;current_object truss.object%ROWTYPE;key_tuples bytea[];key_tuple bytea;
  installation truss.catalog_runtime_installation%ROWTYPE;pin record;ns bytea;transport bytea;tuple_bytes bytea;values_text text[];key_facets jsonb;observed record;passed boolean;counted bigint;
- failures jsonb:='[]';receipt jsonb;scope jsonb;
+ failure_buffer jsonb[]:=ARRAY[]::jsonb[];failures jsonb;receipt jsonb;scope jsonb;
 BEGIN
  inventory:=truss.runtime_condition_inventory(input);
  IF original_keys IS NULL OR octet_length(original_keys) NOT BETWEEN 1 AND 8388608 OR (convert_from(original_keys,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'original predicate key inventory required' USING ERRCODE='22023';END IF;
- keys:=convert_from(original_keys,'UTF8')::jsonb;
- IF keys<>'[]'::jsonb THEN RAISE EXCEPTION 'client predicate key encoding is no longer accepted' USING ERRCODE='22023';END IF;
+ IF convert_from(original_keys,'UTF8')::jsonb<>'[]'::jsonb THEN RAISE EXCEPTION 'client predicate key encoding is no longer accepted' USING ERRCODE='22023';END IF;
+ IF jsonb_array_length(inventory)>0 THEN key_tuples:=array_fill(NULL::bytea,ARRAY[jsonb_array_length(inventory)]);ELSE key_tuples:=ARRAY[]::bytea[];END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  -- Acquire the complete object cut before evaluating any predicate.
  FOR target IN SELECT DISTINCT (o.value->>'id')::bigint AS id,(o.value->>'typeId')::int AS type_id FROM jsonb_array_elements(inventory) e CROSS JOIN LATERAL jsonb_array_elements(e.value->'objects') o ORDER BY id,type_id LOOP
@@ -167,7 +175,7 @@ BEGIN
  END LOOP;
  FOR entry IN SELECT value FROM jsonb_array_elements(inventory) WHERE value->'condition'->>'condition'='key_absent' LOOP
   tuple_bytes:=truss.derive_catalog_key_tuple((entry->>'typeId')::int,(entry->>'keyNumber')::smallint,entry->'values');
-  keys:=keys||jsonb_build_array(jsonb_build_object('conditionIndex',entry->>'index','tupleHex',encode(tuple_bytes,'hex')));
+  key_tuples[(entry->>'index')::int+1]:=tuple_bytes;
   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',(entry->>'typeId')::int,(entry->>'keyNumber')::int);
   ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
    'typeId',entry->>'typeId','keyNumber',entry->>'keyNumber','definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
@@ -183,11 +191,12 @@ BEGIN
     ELSE passed:=coalesce(current_object.retained,'{}') ? (condition->>'name') AND current_object.retained->(condition->>'name')=truss.canonical_flat_cell(condition->'value');END IF;
    END IF;
   ELSIF condition->>'condition'='key_absent' THEN
-   SELECT value INTO STRICT key_input FROM jsonb_array_elements(keys) WHERE value->>'conditionIndex'=entry->>'index';
+   key_tuple:=key_tuples[(entry->>'index')::int+1];
+   IF key_tuple IS NULL THEN RAISE EXCEPTION 'precondition key tuple missing' USING ERRCODE='55000';END IF;
    SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',(entry->>'typeId')::int,(entry->>'keyNumber')::int);
    ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
     'typeId',entry->>'typeId','keyNumber',entry->>'keyNumber','definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
-   transport:=convert_to('umf-key-tuple-v1:hex:'||encode(decode(key_input->>'tupleHex','hex'),'hex'),'UTF8');SELECT * INTO STRICT observed FROM truss.lock_string_key_bucket(ns,transport);
+   transport:=convert_to('umf-key-tuple-v1:hex:'||encode(key_tuple,'hex'),'UTF8');SELECT * INTO STRICT observed FROM truss.lock_string_key_bucket(ns,transport);
    passed:=cardinality(observed.member_ids)=0; -- Live absence; reservations remain an independent write rule.
   ELSIF condition->>'condition'='relationship_absent' THEN
    passed:=EXISTS(SELECT 1 FROM truss.object WHERE id=(condition->'source'->>'id')::bigint AND type_id=(condition->'source'->>'typeId')::int)
@@ -199,10 +208,11 @@ BEGIN
     passed:=counted>=(condition->>'minimum')::bigint AND (NOT condition ? 'maximum' OR counted<=(condition->>'maximum')::bigint);
    END IF;
   END IF;
-  IF passed IS NOT TRUE THEN failures:=failures||jsonb_build_array(jsonb_build_object('conditionId',condition->>'id','reason',condition->>'reason','rule',condition->>'condition'));END IF;
+  IF passed IS NOT TRUE THEN failure_buffer:=array_append(failure_buffer,jsonb_build_object('conditionId',condition->>'id','reason',condition->>'reason','rule',condition->>'condition'));END IF;
  END LOOP;
  -- A lost predicate authority never returns a partial or complete failure list.
  PERFORM truss.runtime_condition_inventory(input);
+ failures:=to_jsonb(failure_buffer);
  IF failures<>'[]'::jsonb THEN RAISE EXCEPTION 'caller preconditions failed' USING ERRCODE='P1006',DETAIL=jsonb_build_object('outcome','failed','code','precondition_failed','failures',failures)::text;END IF;
 END;
 $$;

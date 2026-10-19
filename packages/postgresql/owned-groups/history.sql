@@ -59,7 +59,7 @@ REVOKE ALL ON FUNCTION truss.runtime_history_ownership(jsonb) FROM PUBLIC;
 
 CREATE OR REPLACE FUNCTION truss.runtime_object_history(object_image jsonb,identity jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
-DECLARE properties jsonb:='[]';retained jsonb;property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;
+DECLARE properties jsonb:='[]';property_items jsonb[]:='{}';retained jsonb;property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;
 BEGIN
  basis:=truss.catalog_all_expected_records(written_revision);
  SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('type',(object_image->>'type_id')::int,NULL,written_revision);
@@ -67,9 +67,10 @@ BEGIN
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(object_image->>'type_id')::int ORDER BY prop_id LOOP
   IF object_image->'props' ? property.prop_id::text THEN
    SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',property.type_id,property.prop_id,written_revision);
-   properties:=properties||jsonb_build_array(jsonb_build_object('propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'value',object_image->'props'->property.prop_id::text));
+   property_items[cardinality(property_items)+1]:=jsonb_build_object('propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'value',object_image->'props'->property.prop_id::text);
   END IF;
  END LOOP;
+ SELECT coalesce(jsonb_agg(item ORDER BY ord),'[]'::jsonb) INTO properties FROM unnest(property_items) WITH ORDINALITY p(item,ord);
  SELECT coalesce(jsonb_agg(jsonb_build_object('name',key,'value',value) ORDER BY key COLLATE "C"),'[]'::jsonb) INTO retained FROM jsonb_each(coalesce(nullif(object_image->'retained','null'::jsonb),'{}'));
  RETURN jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','object','identity',identity,
   'recordVersion',object_image->>'ver','catalogRevision',object_image->>'rev',

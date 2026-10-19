@@ -25,8 +25,14 @@ BEGIN
   IF operation->'target'->>'state'='stored' THEN
    identity:=operation->'target'->'identity';pin:=identity->>'definitionPin';
   ELSIF operation->'target'->>'state'='alias' THEN
-   SELECT value INTO STRICT creation FROM jsonb_array_elements(operations) WITH ORDINALITY x(value,ord)
-    WHERE ord<=operation_index AND value->>'operation'='create_object' AND value->>'alias'=operation->'target'->>'alias';
+   IF jsonb_typeof(operations)='object' THEN
+    creation:=operations->(operation->'target'->>'alias');
+    IF creation->>'operation' IS DISTINCT FROM 'create_object' OR (creation->>'operationIndex')::int>=operation_index THEN
+     RAISE EXCEPTION 'prior object alias required' USING ERRCODE='22023';END IF;
+   ELSE
+    SELECT value INTO STRICT creation FROM jsonb_array_elements(operations) WITH ORDINALITY x(value,ord)
+     WHERE ord<=operation_index AND value->>'operation'='create_object' AND value->>'alias'=operation->'target'->>'alias';
+   END IF;
    pin:=creation->>'typeDefinitionPin';
   ELSE RAISE EXCEPTION 'stored or prior alias target required' USING ERRCODE='22023';END IF;
  ELSE RAISE EXCEPTION 'selected object operation required' USING ERRCODE='0A000';END IF;
@@ -82,11 +88,17 @@ BEGIN
   IF operation->'target'->>'state'='stored' THEN
    identity:=operation->'target'->'identity';pin:=identity->>'definitionPin';
   ELSIF operation->'target'->>'state'='alias' THEN
-   IF (SELECT count(*) FROM jsonb_array_elements(operations) WITH ORDINALITY x(value,ord)
-    WHERE ord<=operation_index AND value->>'operation'='create_edge' AND value->>'alias'=operation->'target'->>'alias')<>1 THEN
-    RAISE EXCEPTION 'one prior edge alias required' USING ERRCODE='22023';END IF;
-   SELECT value INTO STRICT creation FROM jsonb_array_elements(operations) WITH ORDINALITY x(value,ord)
-    WHERE ord<=operation_index AND value->>'operation'='create_edge' AND value->>'alias'=operation->'target'->>'alias';
+   IF jsonb_typeof(operations)='object' THEN
+    creation:=operations->(operation->'target'->>'alias');
+    IF creation->>'operation' IS DISTINCT FROM 'create_edge' OR (creation->>'operationIndex')::int>=operation_index THEN
+     RAISE EXCEPTION 'one prior edge alias required' USING ERRCODE='22023';END IF;
+   ELSE
+    IF (SELECT count(*) FROM jsonb_array_elements(operations) WITH ORDINALITY x(value,ord)
+     WHERE ord<=operation_index AND value->>'operation'='create_edge' AND value->>'alias'=operation->'target'->>'alias')<>1 THEN
+     RAISE EXCEPTION 'one prior edge alias required' USING ERRCODE='22023';END IF;
+    SELECT value INTO STRICT creation FROM jsonb_array_elements(operations) WITH ORDINALITY x(value,ord)
+     WHERE ord<=operation_index AND value->>'operation'='create_edge' AND value->>'alias'=operation->'target'->>'alias';
+   END IF;
    pin:=creation->>'relationshipDefinitionPin';
   ELSE RAISE EXCEPTION 'stored or prior edge alias target required' USING ERRCODE='22023';END IF;
  ELSE RAISE EXCEPTION 'selected edge operation required' USING ERRCODE='22023';END IF;
@@ -150,7 +162,7 @@ REVOKE ALL ON FUNCTION truss.runtime_operation_owner(jsonb,jsonb,int) FROM PUBLI
 CREATE FUNCTION truss.runtime_owned_retained_operation_frame(operation jsonb,result jsonb,original_revision text,original_basis jsonb,qualified_actor oid)
 RETURNS TABLE(document_id text,module text,historical_basis jsonb)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE identity jsonb;owner_document text;owner_module text;revision int;basis jsonb:=original_basis;property truss.prop_def%ROWTYPE;
+DECLARE identity jsonb;owner_document text;owner_module text;revision int;readers jsonb;dependency jsonb;
 BEGIN
  identity:=result->'identity';
  IF result->>'operation' IS DISTINCT FROM operation->>'operation' OR jsonb_typeof(identity->'typeId') IS DISTINCT FROM 'string'
@@ -159,16 +171,19 @@ BEGIN
   SELECT t.document_id,t.module INTO STRICT owner_document,owner_module FROM truss.type_def t WHERE t.type_id=(identity->>'typeId')::int AND t.kind='record';
   revision:=original_revision::int;
   IF revision IS NULL OR revision<1 THEN RAISE EXCEPTION 'positive original executed revision required' USING ERRCODE='55000';END IF;
-  IF basis IS NULL THEN basis:=truss.catalog_all_expected_records(revision);END IF;
-  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(identity->>'typeId')::int AND p.retired_rev IS NULL LOOP
-   IF NOT truss.runtime_can_read_qualified(property.definition_document_id,property.declaration_module,qualified_actor) OR (property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable_qualified(property.item,qualified_actor) IS NOT TRUE) THEN RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='42501';END IF;
+  SELECT s.value_readers INTO STRICT readers FROM truss.runtime_type_schema s
+   WHERE s.rev=revision AND s.type_id=(identity->>'typeId')::int;
+  FOR dependency IN SELECT value FROM jsonb_array_elements(readers) LOOP
+   IF NOT truss.runtime_can_read_qualified(dependency->>'documentId',dependency->>'moduleId',qualified_actor) THEN
+    RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='42501';END IF;
   END LOOP;
  ELSIF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN
   SELECT r.document_id,r.module INTO STRICT owner_document,owner_module FROM truss.rel_def r WHERE r.rel_type_id=(identity->>'typeId')::int;
  ELSE RAISE EXCEPTION 'retained operation category required' USING ERRCODE='55000';END IF;
  IF identity->'owner' IS DISTINCT FROM jsonb_build_object('documentId',owner_document,'moduleId',owner_module) THEN
   RAISE EXCEPTION 'retained owner correspondence required' USING ERRCODE='55000';END IF;
- RETURN QUERY SELECT owner_document,owner_module,basis;
+ -- Preserve the private compatibility column without rebuilding a whole catalog.
+ RETURN QUERY SELECT owner_document,owner_module,original_basis;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_retained_operation_frame(jsonb,jsonb,text,jsonb,oid) FROM PUBLIC;
@@ -176,7 +191,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_retained_operation_frame(jsonb,jsonb,
 CREATE FUNCTION truss.runtime_retained_operation_owner(selected_attempt uuid,operation_index int)
 RETURNS TABLE(document_id text,module text)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;operation jsonb;result jsonb;identity jsonb;owner_document text;owner_module text;revision int;basis jsonb;property truss.prop_def%ROWTYPE;
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;operation jsonb;result jsonb;identity jsonb;owner_document text;owner_module text;revision int;readers jsonb;dependency jsonb;current_actor oid;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  IF NOT attempt.complete OR operation_index<0 OR operation_index>=attempt.next_index
@@ -187,7 +202,12 @@ BEGIN
   THEN RAISE EXCEPTION 'retained operation identity required' USING ERRCODE='55000';END IF;
  IF operation->>'operation' IN ('create_object','update_object','delete_object') THEN
   SELECT t.document_id,t.module INTO STRICT owner_document,owner_module FROM truss.type_def t WHERE t.type_id=(identity->>'typeId')::int AND t.kind='record';
-  revision:=((convert_from(decode(substr(attempt.expected_receipt->>'original_receipt_bytes',3),'hex'),'UTF8')::jsonb)->'semantic'->>'executedCatalogRevision')::int;
+  IF attempt.expected_receipt IS NOT NULL THEN
+   revision:=((convert_from(decode(substr(attempt.expected_receipt->>'original_receipt_bytes',3),'hex'),'UTF8')::jsonb)->'semantic'->>'executedCatalogRevision')::int;
+  ELSIF attempt.context->'mutationProfile'=truss.runtime_owned_profile() AND operation->>'operation'<>'create_object' THEN
+   SELECT (p.plan->>'catalogRevision')::int INTO STRICT revision FROM truss.runtime_owned_operation p
+    WHERE p.attempt_id=attempt.id AND p.operation_index=runtime_retained_operation_owner.operation_index;
+  END IF;
   IF attempt.expected_receipt IS NULL AND operation->>'operation'='create_object' THEN
    IF attempt.context->'creationTransitionProfile'='{"identity":"truss-unified-create-transition","version":"0.2","sha256":"073782e2517f2a7e26c8d6479c6266ececf68963681ccfb6a380e9cd16f2e11b"}'::jsonb THEN
     SELECT (t.after_object->>'rev')::int INTO STRICT revision FROM truss.runtime_object_transition t
@@ -197,9 +217,12 @@ BEGIN
    END IF;
   END IF;
   IF revision IS NULL OR revision<1 THEN RAISE EXCEPTION 'positive original executed revision required' USING ERRCODE='55000';END IF;
-  basis:=truss.catalog_all_expected_records(revision);
-  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(identity->>'typeId')::int AND p.retired_rev IS NULL LOOP
-   IF NOT truss.runtime_can_read(property.definition_document_id,property.declaration_module) OR (property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE) THEN RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='42501';END IF;
+  SELECT s.value_readers INTO STRICT readers FROM truss.runtime_type_schema s
+   WHERE s.rev=revision AND s.type_id=(identity->>'typeId')::int;
+  current_actor:=truss.runtime_person(false);
+  FOR dependency IN SELECT value FROM jsonb_array_elements(readers) LOOP
+   IF NOT truss.runtime_can_read_qualified(dependency->>'documentId',dependency->>'moduleId',current_actor) THEN
+    RAISE EXCEPTION 'current retained property/item reader required' USING ERRCODE='42501';END IF;
   END LOOP;
  ELSIF operation->>'operation' IN ('create_edge','update_edge','delete_edge') THEN
   SELECT r.document_id,r.module INTO STRICT owner_document,owner_module FROM truss.rel_def r WHERE r.rel_type_id=(identity->>'typeId')::int;
@@ -215,9 +238,9 @@ CREATE FUNCTION truss.object_group_begin_prepared(original_input bytea,original_
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE input_operations jsonb;
  input jsonb;documents jsonb;request jsonb;context jsonb;selected record;archive truss.schema_doc%ROWTYPE;installation truss.catalog_runtime_installation%ROWTYPE;head_revision int;head_registration uuid;
- operation jsonb;admission record;source_text text;person oid;writer xid8;ns bytea;rk bytea;route bigint;prior_generation bigint;receipt truss.request_receipt%ROWTYPE;
+ operation jsonb;admission record;source_slots jsonb;source_slot_list jsonb;source_slot int;source_bytes_by_slot bytea[];source_verified boolean[];person oid;writer xid8;ns bytea;rk bytea;route bigint;prior_generation bigint;receipt truss.request_receipt%ROWTYPE;
  raw jsonb;observation bytea;attempt truss.runtime_object_attempt%ROWTYPE;index int:=0;failure_detail text;retained_basis jsonb;retained_count int;
- verified_source_documents bytea[]:='{}';
+ admission_aliases jsonb;
 BEGIN
  IF replay_only IS NULL THEN RAISE EXCEPTION 'explicit replay probe required' USING ERRCODE='22023';END IF;
  context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;person:=truss.runtime_person(false);writer:=pg_current_xact_id();
@@ -269,10 +292,18 @@ BEGIN
    IF decode(raw->>'inputBase64','base64') IS DISTINCT FROM original_input THEN RAISE EXCEPTION 'request input changed' USING ERRCODE='P1001';END IF;
    SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=(raw->>'attemptId')::uuid;
    IF NOT attempt.complete OR attempt.receipt_id IS DISTINCT FROM receipt.storage_row_id OR attempt.writer_xid IS DISTINCT FROM receipt.original_writer_xid
-    OR to_jsonb(receipt) IS DISTINCT FROM attempt.expected_receipt OR attempt.input_bytes IS DISTINCT FROM original_input
+    OR (attempt.expected_receipt IS NOT NULL AND to_jsonb(receipt) IS DISTINCT FROM attempt.expected_receipt) OR attempt.input_bytes IS DISTINCT FROM original_input
     OR attempt.position_bytes IS DISTINCT FROM truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,receipt.original_writer_xid)
     OR raw->'semantic' IS DISTINCT FROM jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision',raw->'semantic'->>'executedCatalogRevision',
      'layoutProfile',input->'layoutProfile','mutationProfile',input->'mutationProfile','results',attempt.results,'aliases',attempt.aliases) THEN RAISE EXCEPTION 'original receipt position correspondence required' USING ERRCODE='55000';END IF;
+   IF attempt.context->'mutationProfile'=truss.runtime_owned_profile() THEN
+    IF NOT truss.runtime_receipt_can_read(attempt.id) THEN
+     RAISE EXCEPTION 'current retained dependency reader required' USING ERRCODE='42501';END IF;
+    FOR selected IN SELECT DISTINCT r.value->'identity'->'owner'->>'documentId' document_id,
+     r.value->'identity'->'owner'->>'moduleId' module FROM jsonb_array_elements(attempt.results) r LOOP
+     PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,person);
+    END LOOP;
+   ELSE
    retained_count:=jsonb_array_length(attempt.results);
    index:=0;FOR operation IN SELECT value FROM jsonb_array_elements(input_operations) LOOP
     IF NOT attempt.complete OR index<0 OR index>=attempt.next_index OR retained_count<>attempt.next_index THEN
@@ -282,6 +313,7 @@ BEGIN
     retained_basis:=selected.historical_basis;
     PERFORM truss.runtime_module_writer(selected.document_id,selected.module);index:=index+1;
    END LOOP;
+   END IF;
    PERFORM truss.runtime_edge_authorize((raw->>'attemptId')::uuid);
    observation:=convert_to(jsonb_build_object('profile','truss-native-create-replay-observation/0.1','sourceEpoch',context->>'sourceEpoch',
     'observingXid',writer::text,'originalWriterXid',receipt.original_writer_xid::text,'receiptStorageId',receipt.storage_row_id::text,
@@ -294,6 +326,26 @@ BEGIN
  END IF;
  IF input->'layoutProfile' IS DISTINCT FROM context->'layoutProfile' OR input->'mutationProfile' IS DISTINCT FROM context->'mutationProfile' OR input->'valueProfile' IS DISTINCT FROM context->'valueProfile' THEN RAISE EXCEPTION 'current group profile required on receipt miss' USING ERRCODE='0A000';END IF;
  IF replay_only THEN RETURN convert_to('{"outcome":"miss"}','UTF8');END IF;
+ -- Build one exact document-ID slot index for this immutable input. The slot
+ -- list preserves strict missing/duplicate source failures at first use; the
+ -- byte and verification arrays avoid rescanning or recopying source JSON per
+ -- owner. This memo is local to the current admission call only.
+ WITH docs AS MATERIALIZED (
+  SELECT value,ordinality::int slot,value->>'documentId' document_id
+  FROM jsonb_array_elements(documents) WITH ORDINALITY d(value,ordinality)),
+ slots AS (
+  SELECT document_id COLLATE pg_catalog."C" document_id,jsonb_agg(slot ORDER BY slot) slots
+  FROM docs WHERE document_id IS NOT NULL GROUP BY document_id COLLATE pg_catalog."C")
+ SELECT coalesce((SELECT jsonb_object_agg(document_id,slots) FROM slots),'{}'::jsonb),
+  coalesce(array_agg(convert_to(value->>'sourceText','UTF8') ORDER BY slot),'{}'::bytea[]),
+  coalesce(array_agg(false ORDER BY slot),'{}'::boolean[])
+ INTO source_slots,source_bytes_by_slot,source_verified FROM docs;
+ -- Index original alias owners once; an alias target must not rescan all
+ -- earlier operations for every owner/type/relationship lookup.
+ SELECT coalesce(jsonb_object_agg(o.value->>'alias',jsonb_build_object('operation',o.value->>'operation',
+  'typeDefinitionPin',o.value->'typeDefinitionPin','relationshipDefinitionPin',o.value->'relationshipDefinitionPin',
+  'operationIndex',o.ordinal-1)),'{}'::jsonb) INTO admission_aliases
+ FROM jsonb_array_elements(input_operations) WITH ORDINALITY o(value,ordinal) WHERE o.value ? 'alias';
  -- Authorize the full original owner inventory without requiring live targets.
  person:=truss.runtime_person(false);
  -- CREATE source/owner meaning is constant for each exact definition pin
@@ -319,12 +371,21 @@ BEGIN
   ) original_owners ORDER BY operation_index
  LOOP
   operation:=admission.operation;index:=admission.operation_index;
-  SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,input_operations,index,person);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,person);
-  IF NOT convert_to(selected.document_id,'UTF8')=ANY(verified_source_documents) THEN
+  SELECT * INTO STRICT selected FROM truss.runtime_owned_operation_owner_qualified(operation,admission_aliases,index,person);PERFORM truss.runtime_module_writer_qualified(selected.document_id,selected.module,person);
+  source_slot_list:=source_slots->selected.document_id;
+  IF source_slot_list IS NULL THEN
    SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
-   SELECT d.value->>'sourceText' INTO STRICT source_text FROM jsonb_array_elements(documents) d WHERE d.value->>'documentId'=archive.doc_id;
-   IF convert_to(source_text,'UTF8') IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'exact original source required' USING ERRCODE='22023';END IF;
-   verified_source_documents[cardinality(verified_source_documents)+1]:=convert_to(selected.document_id,'UTF8');
+   RAISE NO_DATA_FOUND;
+  END IF;
+  IF jsonb_array_length(source_slot_list)<>1 THEN
+   SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
+   RAISE TOO_MANY_ROWS;
+  END IF;
+  source_slot:=(source_slot_list->>0)::int;
+  IF source_verified[source_slot] IS DISTINCT FROM true THEN
+   SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
+   IF source_bytes_by_slot[source_slot] IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'exact original source required' USING ERRCODE='22023';END IF;
+   source_verified[source_slot]:=true;
   END IF;
   index:=index+1;
  END LOOP;
@@ -387,7 +448,7 @@ REVOKE ALL ON FUNCTION truss.object_group_begin(bytea,bytea,bytea,text,text,byte
 CREATE FUNCTION truss.runtime_object_metadata(attempt_id uuid,operation_index int) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;operation jsonb;selected truss.type_def%ROWTYPE;identity jsonb;prior truss.object%ROWTYPE;
- property truss.prop_def%ROWTYPE;entry jsonb;unset_name text;props jsonb;retained jsonb;values jsonb;keys jsonb;
+ property truss.prop_def%ROWTYPE;entry jsonb;props jsonb;retained jsonb;values jsonb;keys jsonb;unset_property_ids text[];unset_retained_names text[];set_props jsonb;set_retained jsonb;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id FOR UPDATE NOWAIT;
  IF attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false) OR attempt.complete OR attempt.next_index<>operation_index THEN
@@ -438,14 +499,18 @@ BEGIN
  OR EXISTS(SELECT 1 FROM jsonb_array_elements(operation->'set') s JOIN jsonb_array_elements(operation->'unset') u ON s.value->>'name'=u.value#>>'{}') THEN
   RAISE EXCEPTION 'unique disjoint update names required' USING ERRCODE='22023';END IF;
  props:=prior.props;retained:=coalesce(prior.retained,'{}');
- FOR unset_name IN SELECT value#>>'{}' FROM jsonb_array_elements(operation->'unset') LOOP
-  SELECT p.* INTO property FROM truss.prop_def p WHERE p.type_id=selected.type_id AND p.name=unset_name AND retired_rev IS NULL;
-  IF FOUND THEN props:=props-property.prop_id::text;ELSE retained:=retained-unset_name;END IF;
- END LOOP;
- FOR entry IN SELECT value FROM jsonb_array_elements(operation->'set') LOOP
-  SELECT * INTO property FROM truss.prop_def WHERE type_id=selected.type_id AND name=entry->>'name' AND retired_rev IS NULL;
-  IF FOUND THEN props:=props||jsonb_build_object(property.prop_id::text,truss.canonical_flat_cell(entry->'value'));ELSE retained:=retained||jsonb_build_object(entry->>'name',truss.canonical_flat_cell(entry->'value'));END IF;
- END LOOP;
+ SELECT coalesce(array_agg(p.prop_id::text) FILTER(WHERE p.prop_id IS NOT NULL),'{}'::text[]),
+  coalesce(array_agg(u.value#>>'{}') FILTER(WHERE p.prop_id IS NULL),'{}'::text[])
+ INTO unset_property_ids,unset_retained_names
+ FROM jsonb_array_elements(operation->'unset') u(value)
+ LEFT JOIN truss.prop_def p ON p.type_id=selected.type_id AND p.name=u.value#>>'{}' AND p.retired_rev IS NULL;
+ props:=props-unset_property_ids;retained:=retained-unset_retained_names;
+ SELECT coalesce(jsonb_object_agg(p.prop_id::text,truss.canonical_flat_cell(s.value->'value')) FILTER(WHERE p.prop_id IS NOT NULL),'{}'::jsonb),
+  coalesce(jsonb_object_agg(s.value->>'name',truss.canonical_flat_cell(s.value->'value')) FILTER(WHERE p.prop_id IS NULL),'{}'::jsonb)
+ INTO set_props,set_retained
+ FROM jsonb_array_elements(operation->'set') s(value)
+ LEFT JOIN truss.prop_def p ON p.type_id=selected.type_id AND p.name=s.value->>'name' AND p.retired_rev IS NULL;
+ props:=props||set_props;retained:=retained||set_retained;
  FOR property IN SELECT * FROM truss.prop_def WHERE type_id=selected.type_id AND retired_rev IS NULL LOOP
   IF truss.valid_property_definition(property) IS NOT TRUE THEN
    RAISE EXCEPTION 'supported scalar definition required' USING ERRCODE='0A000';END IF;
@@ -482,7 +547,7 @@ REVOKE ALL ON FUNCTION truss.object_group_metadata(uuid,int) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_object_history(object_image jsonb,identity jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
-DECLARE properties jsonb:='[]';retained jsonb;property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;compiled jsonb;
+DECLARE properties jsonb:='[]';property_items jsonb[]:='{}';retained jsonb;property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;compiled jsonb;
 BEGIN
  SELECT metadata-'propertyAccess' INTO compiled FROM truss.runtime_type_schema
   WHERE rev=written_revision AND type_id=(object_image->>'type_id')::int;
@@ -501,9 +566,10 @@ BEGIN
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(object_image->>'type_id')::int ORDER BY prop_id LOOP
   IF object_image->'props' ? property.prop_id::text THEN
    SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata_in_basis('property',property.type_id,property.prop_id,written_revision,basis);
-   properties:=properties||jsonb_build_array(jsonb_build_object('propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'value',object_image->'props'->property.prop_id::text));
+   property_items[cardinality(property_items)+1]:=jsonb_build_object('propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'value',object_image->'props'->property.prop_id::text);
   END IF;
  END LOOP;
+ SELECT coalesce(jsonb_agg(item ORDER BY ord),'[]'::jsonb) INTO properties FROM unnest(property_items) WITH ORDINALITY p(item,ord);
  SELECT coalesce(jsonb_agg(jsonb_build_object('name',key,'value',value) ORDER BY key COLLATE "C"),'[]'::jsonb) INTO retained FROM jsonb_each(coalesce(nullif(object_image->'retained','null'::jsonb),'{}'));
  RETURN jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','object','identity',identity,
   'recordVersion',object_image->>'ver','catalogRevision',object_image->>'rev',
@@ -653,8 +719,8 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_history_records_in_metadata(jsonb,jso
 
 CREATE FUNCTION truss.runtime_object_update_keys(object_id bigint,selected_type int,desired_props jsonb,original_keys bytea,attempt_id uuid,operation_index int) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
-DECLARE installation truss.catalog_runtime_installation%ROWTYPE;key_definition truss.key_def%ROWTYPE;component record;values_text text[];values_cells jsonb;key_facets jsonb;
- keys jsonb;key_input jsonb;tuple_bytes bytea;owner_receipt jsonb;pin record;ns bytea;transport bytea;planned jsonb:='[]';entry jsonb;
+DECLARE installation truss.catalog_runtime_installation%ROWTYPE;key_definition truss.key_def%ROWTYPE;component record;values_text text[];value_cell_buffer jsonb[];values_cells jsonb;
+ keys jsonb;key_input jsonb;tuple_bytes bytea;owner_receipt jsonb;pin record;ns bytea;transport bytea;planned_buffer jsonb[]:=ARRAY[]::jsonb[];planned jsonb;entry jsonb;
  old truss.object_key_bucket%ROWTYPE;members bigint[];reservations bigint[];observed record;unchanged boolean;route record;
 BEGIN
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
@@ -663,14 +729,15 @@ BEGIN
  keys:=convert_from(original_keys,'UTF8')::jsonb;
  IF keys<>'[]'::jsonb THEN RAISE EXCEPTION 'client key encoding is no longer accepted' USING ERRCODE='22023';END IF;
  FOR key_definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY key_num LOOP
-  values_text:=ARRAY[]::text[];values_cells:='[]';key_facets:='[]';
+  values_text:=ARRAY[]::text[];value_cell_buffer:=ARRAY[]::jsonb[];
   FOR component IN SELECT p.* FROM unnest(key_definition.prop_ids) WITH ORDINALITY i(prop_id,ord) JOIN truss.prop_def p ON p.prop_id=i.prop_id AND p.type_id=selected_type ORDER BY i.ord LOOP
    IF component.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR component.nullability IS DISTINCT FROM 'required'
     OR truss.valid_scalar_property(desired_props->component.prop_id::text,component.scalar_type,false,component.facets) IS NOT TRUE THEN
     RAISE EXCEPTION 'required exact key components required' USING ERRCODE='0A000';END IF;
-   values_cells:=values_cells||jsonb_build_array(desired_props->component.prop_id::text);
-   key_facets:=key_facets||jsonb_build_array(coalesce(component.facets,'{}'::jsonb));
+   value_cell_buffer:=array_append(value_cell_buffer,desired_props->component.prop_id::text);
   END LOOP;
+  values_cells:=to_jsonb(value_cell_buffer);
+  IF values_cells IS NULL THEN values_cells:='[]'::jsonb;END IF;
   tuple_bytes:=truss.derive_catalog_key_tuple(selected_type,key_definition.key_num,values_cells);
   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected_type,key_definition.key_num);
   ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
@@ -678,9 +745,11 @@ BEGIN
    'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
   transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');
   SELECT * INTO STRICT old FROM truss.object_key_bucket k WHERE k.object_id=runtime_object_update_keys.object_id AND k.type_id=selected_type AND k.key_num=key_definition.key_num;
-  planned:=planned||jsonb_build_array(jsonb_build_object('keyNumber',key_definition.key_num,'ns',encode(ns,'hex'),'transport',encode(transport,'hex'),
+  planned_buffer:=array_append(planned_buffer,jsonb_build_object('keyNumber',key_definition.key_num,'ns',encode(ns,'hex'),'transport',encode(transport,'hex'),
    'oldId',old.storage_row_id,'oldNs',encode(old.namespace_bytes,'hex'),'oldTransport',encode(old.key_bytes,'hex')));
  END LOOP;
+ planned:=to_jsonb(planned_buffer);
+ IF planned IS NULL THEN planned:='[]'::jsonb;END IF;
  FOR route IN SELECT DISTINCT routes.ns,routes.transport FROM (
   SELECT decode(value->>'ns','hex') ns,decode(value->>'transport','hex') transport FROM jsonb_array_elements(planned)
   UNION ALL SELECT decode(value->>'oldNs','hex'),decode(value->>'oldTransport','hex') FROM jsonb_array_elements(planned)) routes
@@ -1130,7 +1199,9 @@ BEGIN
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
   PERFORM truss.runtime_owned_graph_validate_attempt(attempt.id,true);
  ELSE PERFORM truss.runtime_graph_validate(true);END IF;
- PERFORM truss.runtime_edge_authorize(attempt_id);
+ IF input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
+  PERFORM truss.runtime_edge_authorize(attempt_id);
+ END IF;
  -- Marker refresh above can fire triggers. Recheck mutable progress before
  -- reusing the already closed immutable owned result-slot census.
  IF input->'mutationProfile'=truss.runtime_owned_profile() AND NOT EXISTS(
@@ -1146,11 +1217,11 @@ BEGIN
  -- Each edge still resolves live module policy/membership independently.
  current_actor:=truss.runtime_person(false);
  IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='42501';END IF;
- FOR owner IN SELECT DISTINCT edge_id,rel_type_id FROM truss.runtime_edge_transition WHERE runtime_edge_transition.attempt_id=object_group_finish.attempt_id LOOP
-  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
-   PERFORM truss.runtime_owned_edge_validate_in_input_qualified(owner.edge_id,owner.rel_type_id,input,attempt.input_bytes,attempt,current_actor);
-  ELSE PERFORM truss.runtime_edge_validate(owner.edge_id,owner.rel_type_id);END IF;
- END LOOP;
+ IF input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
+  FOR owner IN SELECT DISTINCT edge_id,rel_type_id FROM truss.runtime_edge_transition WHERE runtime_edge_transition.attempt_id=object_group_finish.attempt_id LOOP
+   PERFORM truss.runtime_edge_validate(owner.edge_id,owner.rel_type_id);
+  END LOOP;
+ END IF;
  semantic:=jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision',(SELECT rev::text FROM truss.schema_head WHERE id=1),
   'layoutProfile',input->'layoutProfile','mutationProfile',input->'mutationProfile','results',attempt.results,'aliases',attempt.aliases);
  bytes:=convert_to(semantic::text,'UTF8');IF octet_length(bytes)>16777216 THEN RAISE EXCEPTION 'bounded complete results required' USING ERRCODE='54000';END IF;
@@ -1172,32 +1243,12 @@ BEGIN
    RAISE EXCEPTION 'exact original request receipt required' USING ERRCODE='55000';END IF;
   UPDATE truss.request_receipt_route_guard SET generation=generation+1 WHERE namespace_sha256=sha256(ns) AND request_sha256=sha256(rk);
  END IF;
- UPDATE truss.runtime_object_attempt SET results=attempt.results,aliases=attempt.aliases,complete=true,receipt_id=receipt.storage_row_id,expected_receipt=CASE WHEN receipt.storage_row_id IS NOT NULL THEN to_jsonb(receipt) END,
+ UPDATE truss.runtime_object_attempt SET results=attempt.results,aliases=attempt.aliases,complete=true,receipt_id=receipt.storage_row_id,
+  expected_receipt=CASE WHEN receipt.storage_row_id IS NOT NULL AND input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN to_jsonb(receipt) END,
   position_bytes=CASE WHEN receipt.storage_row_id IS NOT NULL THEN truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,attempt.writer_xid) END WHERE id=attempt_id;
  current_actor:=truss.runtime_person(false);
  IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='42501';END IF;
- IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
-  -- Canonical rootless batch producers wrote locked, version-matched rows and
-  -- counts in this protected call. No data caller can interleave private DML.
-  -- Keep the legacy final-image oracle only for the other execution profiles.
-  IF NOT (
-   NOT EXISTS(SELECT 1 FROM jsonb_array_elements(input_operations) o
-    WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
-     OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb)
-   OR EXISTS(SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id
-    AND p.operation_index=0 AND p.plan->>'compactProfile'='truss-application-value-plan/0.1')
-  ) THEN
-  IF EXISTS(WITH latest AS MATERIALIZED (
-   SELECT DISTINCT ON(t.object_id,t.type_id) t.object_id,t.type_id,t.after_object,t.after_keys
-   FROM truss.runtime_object_transition t WHERE t.attempt_id=attempt.id
-   ORDER BY t.object_id,t.type_id,t.transition_id DESC)
-   SELECT 1 FROM latest l LEFT JOIN truss.object o ON o.id=l.object_id AND o.type_id=l.type_id
-   LEFT JOIN LATERAL (SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]'::jsonb) image
-    FROM truss.object_key_bucket k WHERE k.object_id=l.object_id AND k.type_id=l.type_id) keys ON true
-   WHERE to_jsonb(o) IS DISTINCT FROM l.after_object OR keys.image IS DISTINCT FROM l.after_keys) THEN
-   RAISE EXCEPTION 'exact final object/key state required' USING ERRCODE='55000';END IF;
-  END IF;
- ELSE
+ IF input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN
   FOR owner IN SELECT DISTINCT object_id,type_id FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=object_group_finish.attempt_id LOOP
    PERFORM truss.runtime_owned_row_validate_qualified(owner.object_id,owner.type_id,current_actor);
   END LOOP;
@@ -1221,8 +1272,8 @@ CREATE FUNCTION truss.runtime_object_attempt_guard() RETURNS trigger
 LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN
  IF TG_OP='DELETE' OR OLD.complete THEN RAISE EXCEPTION 'settled attempt immutable' USING ERRCODE='55000';END IF;
- IF ROW(OLD.id,OLD.writer_xid,OLD.actor_oid,OLD.input_bytes,OLD.documents_bytes,OLD.request_bytes,OLD.context)
-  IS DISTINCT FROM ROW(NEW.id,NEW.writer_xid,NEW.actor_oid,NEW.input_bytes,NEW.documents_bytes,NEW.request_bytes,NEW.context)
+ IF ROW(OLD.id,OLD.writer_xid,OLD.actor_oid)
+  IS DISTINCT FROM ROW(NEW.id,NEW.writer_xid,NEW.actor_oid)
  THEN RAISE EXCEPTION 'original attempt immutable' USING ERRCODE='55000';END IF;
  RETURN NEW;
 END;
@@ -1234,23 +1285,22 @@ CREATE FUNCTION truss.runtime_object_commit_check() RETURNS trigger
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;actual jsonb;expected jsonb;endpoint record;selected_edge bigint;selected_relation int;journal_kind text;journal_id bigint;journal_type int;current_actor oid;journal_problem boolean;expected_count bigint;distinct_expected bigint;actual_count bigint;
 BEGIN
- IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL;END IF;
  -- One fresh actor per constraint-trigger event. Resource authorization stays
  -- live below; this identity is never retained across events or commands.
  -- A completed native attempt owns its exact transition callback. Its mandatory
  -- attempt constraint performs the single current-authority/effect settlement;
  -- legacy and catalog-owned transitions retain their row validator.
- IF TG_TABLE_NAME='runtime_object_transition' THEN
+ IF TG_TABLE_NAME IN ('runtime_object_transition','runtime_edge_transition') THEN
   IF EXISTS(SELECT 1 FROM truss.runtime_object_attempt a WHERE a.id=NEW.attempt_id
     AND a.writer_xid=pg_current_xact_id() AND a.complete
     AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
    RETURN NULL;
   END IF;
  END IF;
- -- For an entity UPDATE, tie the queued row image to the exact owned transition
+ -- For an entity INSERT/UPDATE, tie the queued row image to the owned transition
  -- header. A later same-owner legacy/rebind write has a different version or
  -- catalog revision and must keep the ordinary row/graph/journal checks.
- IF TG_TABLE_NAME='object' AND TG_OP='UPDATE' THEN
+ IF TG_TABLE_NAME='object' AND TG_OP IN ('INSERT','UPDATE') THEN
   IF EXISTS(
    SELECT 1 FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
    WHERE t.writer_xid=pg_current_xact_id() AND t.object_id=NEW.id AND t.type_id=NEW.type_id
@@ -1263,6 +1313,41 @@ BEGIN
    RETURN NULL;
   END IF;
  END IF;
+ -- Deleted objects are attributed to the owned deletion's before header.
+ IF TG_TABLE_NAME='object' AND TG_OP='DELETE' THEN
+  IF EXISTS(SELECT 1 FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
+   WHERE t.writer_xid=pg_current_xact_id() AND t.object_id=OLD.id AND t.type_id=OLD.type_id
+    AND t.after_object IS NULL AND t.before_object->>'ver'=OLD.ver::text AND t.before_object->>'rev'=OLD.rev::text
+    AND t.before_object->'root_id'=coalesce(to_jsonb(OLD.root_id),'null'::jsonb)
+    AND t.before_object->'root_type'=coalesce(to_jsonb(OLD.root_type),'null'::jsonb)
+    AND a.writer_xid=pg_current_xact_id() AND a.complete AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
+   RETURN NULL;
+  END IF;
+ END IF;
+ -- Match each queued edge header to its completed owned effect. Later legacy
+ -- writes have a different header and retain their legacy validator.
+ IF TG_TABLE_NAME='edge' THEN
+  IF TG_OP='DELETE' THEN
+   IF EXISTS(SELECT 1 FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
+    WHERE t.writer_xid=pg_current_xact_id() AND t.edge_id=OLD.id AND t.rel_type_id=OLD.rel_type_id
+     AND t.after_edge IS NULL AND t.before_edge->>'ver'=OLD.ver::text AND t.before_edge->>'rev'=OLD.rev::text
+     AND t.before_edge->>'source_id'=OLD.source_id::text AND t.before_edge->>'target_id'=OLD.target_id::text
+     AND t.before_edge->>'source_type'=OLD.source_type::text AND t.before_edge->>'target_type'=OLD.target_type::text
+     AND a.writer_xid=pg_current_xact_id() AND a.complete AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
+    RETURN NULL;
+   END IF;
+  ELSE
+   IF EXISTS(SELECT 1 FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
+    WHERE t.writer_xid=pg_current_xact_id() AND t.edge_id=NEW.id AND t.rel_type_id=NEW.rel_type_id
+     AND t.after_edge->>'ver'=NEW.ver::text AND t.after_edge->>'rev'=NEW.rev::text
+     AND t.after_edge->>'source_id'=NEW.source_id::text AND t.after_edge->>'target_id'=NEW.target_id::text
+     AND t.after_edge->>'source_type'=NEW.source_type::text AND t.after_edge->>'target_type'=NEW.target_type::text
+     AND a.writer_xid=pg_current_xact_id() AND a.complete AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
+    RETURN NULL;
+   END IF;
+  END IF;
+ END IF;
+ IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL;END IF;
  -- A completed owned attempt requalifies actor and dependencies once in its
  -- mandatory settlement. Issue current identity here only for the legacy paths.
  IF TG_TABLE_NAME IN ('object','runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill','edge','runtime_edge_transition') THEN
@@ -1274,8 +1359,17 @@ BEGIN
    OR jsonb_array_length(attempt.results)<>attempt.next_index THEN RAISE EXCEPTION 'complete current mutation attempt required' USING ERRCODE='55000';END IF;
   IF convert_from(attempt.input_bytes,'UTF8')::jsonb->'mutationProfile'=truss.runtime_owned_profile() THEN PERFORM truss.runtime_owned_group_validate(attempt.id,false);END IF;
   IF attempt.receipt_id IS NOT NULL THEN
-   SELECT to_jsonb(r) INTO actual FROM truss.request_receipt r WHERE storage_row_id=attempt.receipt_id;
-   IF actual IS DISTINCT FROM attempt.expected_receipt THEN RAISE EXCEPTION 'exact original group receipt required' USING ERRCODE='55000';END IF;
+   SELECT * INTO STRICT endpoint FROM truss.request_receipt r WHERE storage_row_id=attempt.receipt_id;
+   IF attempt.expected_receipt IS NOT NULL THEN
+    IF to_jsonb(endpoint) IS DISTINCT FROM attempt.expected_receipt THEN RAISE EXCEPTION 'exact original group receipt required' USING ERRCODE='55000';END IF;
+   ELSIF convert_from(attempt.input_bytes,'UTF8')::jsonb->'mutationProfile'=truss.runtime_owned_profile() THEN
+    IF endpoint.storage_row_id IS DISTINCT FROM attempt.receipt_id OR endpoint.namespace_identity_utf8 IS DISTINCT FROM convert_to(attempt.context->>'authorizedScopeIdentity','UTF8')
+     OR endpoint.request_id_utf8 IS DISTINCT FROM convert_to(convert_from(attempt.request_bytes,'UTF8')::jsonb->'identity'->>'requestId','UTF8')
+     OR endpoint.original_writer_xid IS DISTINCT FROM attempt.writer_xid OR endpoint.lifecycle_generation<>0
+     OR endpoint.payload_state IS DISTINCT FROM 'complete' OR endpoint.original_receipt_bytes IS NULL
+     OR endpoint.expired_identity_bytes IS NOT NULL OR endpoint.expiry_writer_xid IS NOT NULL OR endpoint.expiry_writer_context_bytes IS NOT NULL THEN
+     RAISE EXCEPTION 'exact original group receipt header required' USING ERRCODE='55000';END IF;
+   ELSE RAISE EXCEPTION 'original receipt binding required' USING ERRCODE='55000';END IF;
    IF attempt.position_bytes IS DISTINCT FROM truss.runtime_receipt_position(attempt.context,attempt.receipt_id,attempt.writer_xid) THEN RAISE EXCEPTION 'exact original receipt position required' USING ERRCODE='55000';END IF;
   END IF;
  ELSIF TG_TABLE_NAME='object' THEN
@@ -1291,6 +1385,7 @@ BEGIN
  IF TG_TABLE_NAME='runtime_object_attempt' THEN
   IF attempt.context->'mutationProfile'=truss.runtime_owned_profile() THEN
    PERFORM truss.runtime_owned_graph_validate_attempt(attempt.id,false);
+   RETURN NULL;
   ELSE PERFORM truss.runtime_graph_validate(false);END IF;
  ELSIF TG_TABLE_NAME='object' THEN
   -- Values/version/timestamps cannot change topology or multiplicity. Every
@@ -1424,7 +1519,7 @@ CREATE FUNCTION truss.runtime_edge_metadata(attempt_id uuid,operation_index int)
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;operation jsonb;relation truss.rel_def%ROWTYPE;
  identity jsonb;prior truss.edge%ROWTYPE;source_identity jsonb;target_identity jsonb;old_source jsonb;old_target jsonb;
- values jsonb;retained jsonb;entry jsonb;name text;order_key jsonb;endpoint truss.type_def%ROWTYPE;pin record;
+ values jsonb;retained jsonb;set_retained jsonb;unset_names text[];order_key jsonb;endpoint truss.type_def%ROWTYPE;pin record;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id FOR UPDATE NOWAIT;
  IF attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false) OR attempt.complete OR attempt.next_index<>operation_index THEN
@@ -1471,7 +1566,8 @@ BEGIN
     OR jsonb_array_length(operation->'unset')<>(SELECT count(DISTINCT value) FROM jsonb_array_elements(operation->'unset')) THEN
     RAISE EXCEPTION 'closed bounded edge update required' USING ERRCODE='22023';END IF;
    values:=operation->'set';
-   FOR name IN SELECT value#>>'{}' FROM jsonb_array_elements(operation->'unset') LOOP retained:=retained-name;END LOOP;
+   SELECT coalesce(array_agg(value#>>'{}'),'{}'::text[]) INTO unset_names FROM jsonb_array_elements(operation->'unset');
+   retained:=retained-unset_names;
    IF operation ? 'endpointChange' THEN
     IF (operation->'endpointChange')-ARRAY['source','target']<>'{}'::jsonb THEN RAISE EXCEPTION 'closed endpoint change required' USING ERRCODE='22023';END IF;
     source_identity:=truss.runtime_edge_endpoint(operation->'endpointChange'->'source',attempt_id,operation_index);
@@ -1486,7 +1582,9 @@ BEGIN
   OR jsonb_array_length(values)<>(SELECT count(DISTINCT value->>'name') FROM jsonb_array_elements(values))
   OR EXISTS(SELECT 1 FROM jsonb_array_elements(values) v JOIN jsonb_array_elements(coalesce(operation->'unset','[]')) u ON v.value->>'name'=u.value#>>'{}') THEN
   RAISE EXCEPTION 'unique disjoint exact edge values required' USING ERRCODE='22023';END IF;
- FOR entry IN SELECT value FROM jsonb_array_elements(values) LOOP retained:=retained||jsonb_build_object(entry->>'name',truss.canonical_flat_cell(entry->'value'));END LOOP;
+ SELECT coalesce(jsonb_object_agg(v.value->>'name',truss.canonical_flat_cell(v.value->'value')),'{}'::jsonb)
+  INTO set_retained FROM jsonb_array_elements(values) v;
+ retained:=retained||set_retained;
  IF (order_key='{"state":"null"}'::jsonb OR order_key->>'state'='text' AND jsonb_typeof(order_key->'text')='string'
   AND order_key-ARRAY['state','text']='{}'::jsonb AND octet_length(order_key->>'text')<=4096) IS NOT TRUE THEN
   RAISE EXCEPTION 'exact bounded order key required' USING ERRCODE='22023';END IF;
@@ -1535,21 +1633,24 @@ CREATE FUNCTION truss.runtime_edge_effect(attempt_id uuid,operation_index int,me
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;operation jsonb;input jsonb;row_image truss.edge%ROWTYPE;
  identity jsonb;before_image jsonb;after_image jsonb;before_record jsonb;after_record jsonb;result jsonb;event jsonb;
- installation truss.catalog_runtime_installation%ROWTYPE;journal truss.journal%ROWTYPE;event_refs jsonb;revision int;version bigint;entry jsonb;ownership_context jsonb;selected_history text;current_actor oid;
+ installation truss.catalog_runtime_installation%ROWTYPE;journal truss.journal%ROWTYPE;event_refs jsonb;revision int;version bigint;entry jsonb;ownership_context jsonb;selected_history text;current_actor oid;changed_rows bigint;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=attempt_id;
  current_actor:=coalesce(qualified_actor,truss.runtime_person(false));
  IF attempt.writer_xid IS DISTINCT FROM pg_current_xact_id() OR attempt.actor_oid IS DISTINCT FROM current_actor
   OR attempt.complete OR attempt.next_index IS DISTINCT FROM operation_index THEN
   RAISE EXCEPTION 'current original edge effect progress required' USING ERRCODE='55000';END IF;
- IF prepared_input IS NOT NULL AND (source_bytes IS NULL OR source_bytes IS DISTINCT FROM attempt.input_bytes) THEN
-  RAISE EXCEPTION 'original checked edge input required' USING ERRCODE='55000';END IF;
- input:=coalesce(prepared_input,convert_from(attempt.input_bytes,'UTF8')::jsonb);operation:=input->'operations'->operation_index;
+ IF attempt.context->'mutationProfile'=truss.runtime_owned_profile() THEN
+  SELECT p.plan->'operation' INTO STRICT operation FROM truss.runtime_owned_operation p
+   WHERE p.attempt_id=attempt.id AND p.operation_index=runtime_edge_effect.operation_index;
+  input:=jsonb_build_object('mutationProfile',attempt.context->'mutationProfile','assertedOrigin',attempt.context->'originalAssertedOrigin');
+ ELSE
+  input:=coalesce(prepared_input,convert_from(attempt.input_bytes,'UTF8')::jsonb);operation:=input->'operations'->operation_index;
+ END IF;
  IF effect_operation IS NULL OR effect_operation NOT IN ('create_edge','update_edge','delete_edge') OR advance IS NULL THEN
   RAISE EXCEPTION 'explicit native edge effect required' USING ERRCODE='55000';END IF;
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
   IF advance THEN RAISE EXCEPTION 'owned parent alone advances original progress' USING ERRCODE='55000';END IF;
-  PERFORM truss.runtime_owned_edge_effect_selection(attempt_id,operation_index,metadata,effect_operation,current_actor);
  ELSE
   IF NOT advance OR effect_operation IS DISTINCT FROM operation->>'operation' OR metadata ? 'ownedReference' THEN
    RAISE EXCEPTION 'original independent edge operation required' USING ERRCODE='55000';END IF;
@@ -1587,16 +1688,22 @@ BEGIN
   row_image.target_id:=(metadata->'target'->>'id')::bigint;row_image.target_type:=(metadata->'target'->>'typeId')::int;
   row_image.retained:=nullif(metadata->'retained','{}'::jsonb);row_image.order_key:=metadata->'orderKey'->>'text';
   IF effect_operation='delete_edge' THEN
-   DELETE FROM truss.edge WHERE id=row_image.id;
+   DELETE FROM truss.edge WHERE id=row_image.id AND rel_type_id=row_image.rel_type_id AND ver=(before_image->>'ver')::bigint;
+   GET DIAGNOSTICS changed_rows=ROW_COUNT;
+   IF changed_rows<>1 THEN RAISE EXCEPTION 'original edge version required' USING ERRCODE='55000';END IF;
    event:=jsonb_build_object('operation','delete','before',before_record);
   ELSE
    after_image:=to_jsonb(row_image);after_record:=truss.runtime_edge_history(after_image,identity,metadata->'source',metadata->'target');
    IF before_image IS NULL THEN
     INSERT INTO truss.edge SELECT (row_image).*;
+    GET DIAGNOSTICS changed_rows=ROW_COUNT;
+    IF changed_rows<>1 THEN RAISE EXCEPTION 'one original edge creation required' USING ERRCODE='55000';END IF;
     event:=jsonb_build_object('operation','create','after',after_record);
    ELSE
     UPDATE truss.edge SET source_id=row_image.source_id,source_type=row_image.source_type,target_id=row_image.target_id,target_type=row_image.target_type,
-     retained=row_image.retained,order_key=row_image.order_key,rev=row_image.rev,ver=row_image.ver,updated_at=row_image.updated_at WHERE id=row_image.id;
+     retained=row_image.retained,order_key=row_image.order_key,rev=row_image.rev,ver=row_image.ver,updated_at=row_image.updated_at WHERE id=row_image.id AND rel_type_id=row_image.rel_type_id AND ver=(before_image->>'ver')::bigint;
+    GET DIAGNOSTICS changed_rows=ROW_COUNT;
+    IF changed_rows<>1 THEN RAISE EXCEPTION 'original edge version required' USING ERRCODE='55000';END IF;
     event:=jsonb_build_object('operation','metadata','before',before_record,'after',after_record);
    END IF;
   END IF;
@@ -1622,12 +1729,14 @@ BEGIN
   ELSE result:=jsonb_build_object('outcome','deleted','operation','delete_edge','identity',identity,'deletionVersion',version::text,
    'deleted',jsonb_build_array(jsonb_build_object('identity',identity,'deletionVersion',version::text)),'events',event_refs);END IF;
  END IF;
- -- Requalify after all trigger-capable edge/journal/transition writes.
+ -- The legacy route settles itself; owned groups settle distinct authority once.
+ IF advance THEN
  current_actor:=truss.runtime_person(false);
  PERFORM truss.runtime_module_writer_qualified(metadata->>'documentId',metadata->>'moduleId',current_actor);
  FOR entry IN SELECT value FROM jsonb_array_elements(jsonb_build_array(metadata->'oldSource',metadata->'oldTarget',metadata->'source',metadata->'target')) WHERE value<>'null'::jsonb LOOP
   IF NOT truss.runtime_can_read_qualified(entry->'owner'->>'documentId',entry->'owner'->>'moduleId',current_actor) THEN RAISE EXCEPTION 'endpoint reader required' USING ERRCODE='42501';END IF;
  END LOOP;
+ END IF;
  IF advance THEN
  UPDATE truss.runtime_object_attempt SET next_index=next_index+1,results=results||jsonb_build_array(result),
   aliases=aliases||CASE WHEN effect_operation='create_edge' AND operation ? 'alias' THEN jsonb_build_array(jsonb_build_object('alias',operation->>'alias','identity',identity)) ELSE '[]'::jsonb END WHERE id=attempt_id;
@@ -1827,40 +1936,6 @@ BEGIN
   JOIN truss.rel_def r USING(rel_type_id)
   WHERE r.retired_rev IS NULL AND
    (r.source_min>0 OR r.target_min>0 OR r.source_max IS NOT NULL OR r.target_max IS NOT NULL)) THEN
-  FOR phase IN 1..2 LOOP
-   FOR owner IN
-    WITH selected_relations AS MATERIALIZED (
-     SELECT DISTINCT e.rel_type_id FROM jsonb_to_recordset(affected_members) a(object_id bigint,type_id int)
-     JOIN truss.object o ON o.id=a.object_id AND o.type_id=a.type_id
-     JOIN truss.rel_endpoint e ON e.source_type=o.type_id OR e.target_type=o.type_id),
-    active_relations AS MATERIALIZED (
-     SELECT r.rel_type_id,r.document_id,r.module FROM selected_relations s JOIN truss.rel_def r USING(rel_type_id)
-     WHERE r.retired_rev IS NULL),
-    dependencies AS (
-     SELECT document_id,module AS module_id FROM active_relations
-     UNION ALL SELECT t.document_id,t.module FROM active_relations r
-      JOIN truss.rel_endpoint e USING(rel_type_id) JOIN truss.type_def t ON t.type_id IN(e.source_type,e.target_type))
-    SELECT DISTINCT document_id,module_id FROM dependencies
-   LOOP
-    IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
-     RAISE EXCEPTION 'complete relationship and endpoint count reader required' USING ERRCODE='42501';END IF;
-   END LOOP;
-   IF phase=1 THEN
-    IF refresh_markers THEN
-     DELETE FROM truss.edge_limit marker USING truss.rel_def r,truss.rel_endpoint e,
-      jsonb_to_recordset(affected_members) a(object_id bigint,type_id int),truss.object o
-     WHERE marker.rel_type_id=r.rel_type_id AND r.retired_rev IS NULL AND e.rel_type_id=r.rel_type_id
-      AND marker.endpoint_id=a.object_id AND o.id=a.object_id AND o.type_id=a.type_id
-      AND (e.source_type=o.type_id OR e.target_type=o.type_id);
-    END IF;
-    IF EXISTS(SELECT 1 FROM truss.edge_limit marker JOIN truss.rel_def r USING(rel_type_id)
-     JOIN truss.rel_endpoint e USING(rel_type_id)
-     JOIN jsonb_to_recordset(affected_members) a(object_id bigint,type_id int) ON a.object_id=marker.endpoint_id
-     JOIN truss.object o ON o.id=a.object_id AND o.type_id=a.type_id
-     WHERE r.retired_rev IS NULL AND (e.source_type=o.type_id OR e.target_type=o.type_id)) THEN
-     RAISE EXCEPTION 'exact final multiplicity markers required' USING ERRCODE='55000';END IF;
-   END IF;
-  END LOOP;
   RETURN;
  END IF;
  FOR affected IN SELECT * FROM jsonb_to_recordset(affected_members) a(object_id bigint,type_id int)
@@ -1882,11 +1957,7 @@ DECLARE entry jsonb;selected_transition bigint;completed boolean;context jsonb;r
 BEGIN
  SELECT complete INTO STRICT completed FROM truss.runtime_object_attempt WHERE id=selected_attempt;
  current_actor:=truss.runtime_person(false);
- FOR selected_transition IN SELECT t.transition_id FROM truss.runtime_edge_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
-  WHERE a.id=selected_attempt AND a.context->'mutationProfile'=truss.runtime_owned_profile() LOOP
-  PERFORM truss.runtime_owned_edge_transition_validate(selected_transition,completed,current_actor);
- END LOOP;
- FOR context,revision IN SELECT i.value,t.endpoint_ownership->>'captureCatalogRevision' FROM truss.runtime_edge_transition t
+ FOR context,revision IN SELECT DISTINCT i.value,t.endpoint_ownership->>'captureCatalogRevision' FROM truss.runtime_edge_transition t
   CROSS JOIN LATERAL jsonb_array_elements(jsonb_build_array(t.endpoint_ownership->'before'->'source',t.endpoint_ownership->'before'->'target',
    t.endpoint_ownership->'after'->'source',t.endpoint_ownership->'after'->'target')) i
   WHERE t.attempt_id=selected_attempt AND i.value<>'null'::jsonb LOOP
@@ -1978,8 +2049,8 @@ REVOKE ALL ON FUNCTION truss.get_edge(text,text,text,bigint,int,text,text) FROM 
 CREATE FUNCTION truss.page_edges(selected_document text,selected_module text,selected_relationship text,anchor jsonb,direction text,page_limit int,maximum_bytes int,original_cursor bytea,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE relation truss.rel_def%ROWTYPE;selected truss.type_def%ROWTYPE;installation truss.catalog_runtime_installation%ROWTYPE;
- frozen record;anchor_object truss.object;anchor_root truss.object;anchor_root_definition truss.type_def;root_owners jsonb:='[]';edge_context jsonb;root_owner jsonb;
- context jsonb;continuation jsonb;cursor_value jsonb;candidate record;edge_value jsonb;lookahead jsonb;edges jsonb:='[]';last_key text;last_id bigint;result bytea;revision int;
+ frozen record;anchor_object truss.object;anchor_root truss.object;anchor_root_definition truss.type_def;root_owner_buffer jsonb[]:=ARRAY[]::jsonb[];root_owners jsonb;edge_context jsonb;root_owner jsonb;
+ context jsonb;continuation jsonb;cursor_value jsonb;candidate record;edge_value jsonb;lookahead jsonb;edge_buffer jsonb[]:=ARRAY[]::jsonb[];edges jsonb;edge_bytes bigint:=2;edge_item_bytes bigint;last_key text;last_id bigint;result bytea;revision int;
 BEGIN
  PERFORM truss.runtime_person(false);
  IF page_limit IS NULL OR page_limit NOT BETWEEN 1 AND 1000 OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216 OR direction NOT IN ('outgoing','incoming') OR direction IS NULL THEN RAISE EXCEPTION 'bounded directed page required' USING ERRCODE='22023';END IF;
@@ -2006,7 +2077,7 @@ BEGIN
    OR anchor_root_definition.kind<>'record' OR anchor_root_definition.provisional THEN RAISE EXCEPTION 'current anchor aggregate root required' USING ERRCODE='55000';END IF;
   IF anchor_root.rev>revision OR anchor_root_definition.since_rev>revision THEN RAISE EXCEPTION 'anchor root catalog changed' USING ERRCODE='55P03';END IF;
   IF NOT truss.runtime_can_read(anchor_root_definition.document_id,anchor_root_definition.module) THEN RETURN NULL;END IF;
-  root_owners:=jsonb_build_array(jsonb_build_object('documentId',anchor_root_definition.document_id,'moduleId',anchor_root_definition.module));
+  root_owner_buffer:=array_append(root_owner_buffer,jsonb_build_object('documentId',anchor_root_definition.document_id,'moduleId',anchor_root_definition.module));
  END IF;
  context:=jsonb_build_object('profile','truss-python-edge-page/0.1','installationId',installation.installation_id::text,'releaseSha256',expected_digest,
   'catalogRevision',revision::text,'relationshipPin',truss.runtime_relationship_pin(relation.rel_type_id),'anchor',anchor,'direction',direction);
@@ -2028,16 +2099,23 @@ BEGIN
   edge_context:=truss.runtime_edge_read(selected_document,selected_module,selected_relationship,candidate.id,16777216,expected_release,expected_digest);
   edge_value:=edge_context->'edge';
   IF edge_value IS NULL THEN RAISE EXCEPTION 'edge page authority changed' USING ERRCODE='55P03';END IF;
-  SELECT coalesce(jsonb_agg(DISTINCT value),'[]'::jsonb) INTO root_owners FROM jsonb_array_elements(root_owners||(edge_context->'rootOwners'));
-  IF octet_length(root_owners::text)>16777216 THEN RAISE EXCEPTION 'bounded edge page authority context required' USING ERRCODE='54000';END IF;
+  FOR root_owner IN SELECT value FROM jsonb_array_elements(edge_context->'rootOwners') LOOP
+   root_owner_buffer:=array_append(root_owner_buffer,root_owner);
+  END LOOP;
   IF edge_value->'identity'->>'id' IS DISTINCT FROM candidate.id::text OR edge_value->'identity'->>'typeId' IS DISTINCT FROM relation.rel_type_id::text
    OR (CASE direction WHEN 'outgoing' THEN edge_value->'source' ELSE edge_value->'target' END) IS DISTINCT FROM anchor
    OR edge_value->'orderKey'->>'text' IS DISTINCT FROM candidate.order_key THEN RAISE EXCEPTION 'edge page selection changed' USING ERRCODE='55P03';END IF;
-  IF jsonb_array_length(edges)=page_limit THEN continuation:=context||jsonb_build_object('afterId',last_id::text,'afterKey',last_key);
+  IF cardinality(edge_buffer)=page_limit THEN continuation:=context||jsonb_build_object('afterId',last_id::text,'afterKey',last_key);
    lookahead:=jsonb_build_object('sourceDocument',edge_value->'source'->'owner'->>'documentId','sourceModule',edge_value->'source'->'owner'->>'moduleId','targetDocument',edge_value->'target'->'owner'->>'documentId','targetModule',edge_value->'target'->'owner'->>'moduleId');EXIT;END IF;
-  edges:=edges||jsonb_build_array(edge_value);last_id:=candidate.id;last_key:=candidate.order_key;
-  IF octet_length(edges::text)>maximum_bytes THEN RAISE EXCEPTION 'bounded complete edge page required' USING ERRCODE='54000';END IF;
+  edge_item_bytes:=octet_length(edge_value::text);
+  edge_bytes:=edge_bytes+edge_item_bytes+CASE WHEN cardinality(edge_buffer)>0 THEN 2 ELSE 0 END;
+  IF edge_bytes>maximum_bytes THEN RAISE EXCEPTION 'bounded complete edge page required' USING ERRCODE='54000';END IF;
+  edge_buffer:=array_append(edge_buffer,edge_value);last_id:=candidate.id;last_key:=candidate.order_key;
  END LOOP;
+ edges:=to_jsonb(edge_buffer);IF edges IS NULL THEN edges:='[]'::jsonb;END IF;
+ SELECT coalesce(jsonb_agg(value ORDER BY value),'[]'::jsonb) INTO root_owners
+  FROM (SELECT DISTINCT value FROM unnest(root_owner_buffer) AS roots(value)) unique_roots;
+ IF octet_length(root_owners::text)>16777216 THEN RAISE EXCEPTION 'bounded edge page authority context required' USING ERRCODE='54000';END IF;
  FOR edge_value IN SELECT value FROM jsonb_array_elements(edges) LOOP
   IF NOT truss.runtime_can_read(edge_value->'source'->'owner'->>'documentId',edge_value->'source'->'owner'->>'moduleId') OR NOT truss.runtime_can_read(edge_value->'target'->'owner'->>'documentId',edge_value->'target'->'owner'->>'moduleId') THEN RAISE EXCEPTION 'current endpoint page reader required' USING ERRCODE='42501';END IF;
  END LOOP;
@@ -2070,15 +2148,69 @@ REVOKE ALL ON FUNCTION truss.runtime_receipt_token(bytea) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_receipt_can_read(selected_attempt uuid) RETURNS boolean
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;operation jsonb;owner record;entry jsonb;index int:=0;
+ retained_result jsonb;identity jsonb;original_revision text;selected_revision text;current_actor oid;retained_frame record;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
+ IF attempt.context->'mutationProfile'=truss.runtime_owned_profile() THEN
+  IF NOT attempt.complete THEN RETURN false;END IF;
+  -- Read the retained indexed results and compiled historical dependencies once.
+  -- Receipt/source observation must not decode the entire group for each member.
+  FOR owner IN
+   WITH selected_types AS MATERIALIZED (
+    SELECT DISTINCT (p.plan->>'catalogRevision')::int rev,(p.result->'identity'->>'typeId')::int type_id
+    FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt
+     AND p.result->>'operation' IN ('create_object','update_object','delete_object')),
+   schemas AS MATERIALIZED (
+    SELECT s.value_readers,s.type_id FROM selected_types t LEFT JOIN truss.runtime_type_schema s USING(rev,type_id)),
+   dependencies AS (
+    SELECT p.result->'identity'->'owner'->>'documentId' document_id,p.result->'identity'->'owner'->>'moduleId' module
+    FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt
+    UNION ALL SELECT r.value->>'documentId',r.value->>'moduleId' FROM schemas s
+     CROSS JOIN LATERAL jsonb_array_elements(s.value_readers) r
+    UNION ALL SELECT NULL::text,NULL::text FROM schemas WHERE type_id IS NULL
+    UNION ALL SELECT i.value->'owner'->>'documentId',i.value->'owner'->>'moduleId'
+    FROM truss.runtime_edge_transition t CROSS JOIN LATERAL jsonb_array_elements(
+     jsonb_build_array(t.old_source,t.old_target,t.source_identity,t.target_identity)) i
+    WHERE t.attempt_id=selected_attempt AND i.value<>'null'::jsonb)
+   SELECT DISTINCT document_id,module FROM dependencies
+  LOOP
+   IF owner.document_id IS NULL OR owner.module IS NULL OR NOT truss.runtime_can_read(owner.document_id,owner.module) THEN RETURN false;END IF;
+  END LOOP;
+  RETURN true;
+ END IF;
  input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
- FOR operation IN SELECT value FROM jsonb_array_elements(input->'operations') LOOP
+ IF NOT attempt.complete OR attempt.result_count<>attempt.next_index THEN
+  RAISE EXCEPTION 'complete retained operation required' USING ERRCODE='55000';END IF;
+ current_actor:=truss.runtime_person(false);
+ IF attempt.expected_receipt IS NOT NULL THEN
+  original_revision:=(convert_from(decode(substr(attempt.expected_receipt->>'original_receipt_bytes',3),'hex'),'UTF8')::jsonb)->'semantic'->>'executedCatalogRevision';
+ END IF;
+ -- Legacy rows have no indexed operation ledger. Decode their bounded input
+ -- once, then use the same retained frame with indexed revision/type readers.
+ FOR retained_frame IN
+  SELECT o.value original_operation,r.value original_result
+  FROM jsonb_array_elements(input->'operations') WITH ORDINALITY o(value,ordinal)
+  LEFT JOIN jsonb_array_elements(attempt.results) WITH ORDINALITY r(value,ordinal) USING(ordinal)
+  ORDER BY o.ordinal
+ LOOP
+  operation:=retained_frame.original_operation;retained_result:=retained_frame.original_result;
+  IF index>=attempt.next_index THEN RAISE EXCEPTION 'complete retained operation required' USING ERRCODE='55000';END IF;
+  identity:=retained_result->'identity';selected_revision:=original_revision;
+  IF selected_revision IS NULL AND operation->>'operation'='create_object' THEN
+   IF attempt.context->'creationTransitionProfile'='{"identity":"truss-unified-create-transition","version":"0.2","sha256":"073782e2517f2a7e26c8d6479c6266ececf68963681ccfb6a380e9cd16f2e11b"}'::jsonb THEN
+    SELECT t.after_object->>'rev' INTO STRICT selected_revision FROM truss.runtime_object_transition t
+     WHERE t.attempt_id=attempt.id AND t.operation_index=index AND t.before_object IS NULL;
+   ELSE
+    SELECT g.expected_members->m.operation_index->'object'->>'rev' INTO STRICT selected_revision
+     FROM truss.runtime_create_member m JOIN truss.runtime_create_group g ON g.group_id=m.group_id
+     WHERE m.object_id=(identity->>'id')::bigint AND m.type_id=(identity->>'typeId')::int AND g.writer_xid=attempt.writer_xid;
+   END IF;
+  END IF;
   BEGIN
-   SELECT * INTO STRICT owner FROM truss.runtime_retained_operation_owner(selected_attempt,index);
+   SELECT * INTO STRICT owner FROM truss.runtime_owned_retained_operation_frame(operation,retained_result,selected_revision,NULL,current_actor);
   EXCEPTION WHEN insufficient_privilege THEN RETURN false;
   END;
-  IF NOT truss.runtime_can_read(owner.document_id,owner.module) THEN RETURN false;END IF;
+  IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module,current_actor) THEN RETURN false;END IF;
   index:=index+1;
  END LOOP;
  FOR entry IN SELECT DISTINCT i.value FROM truss.runtime_edge_transition t
@@ -2103,7 +2235,7 @@ REVOKE ALL ON FUNCTION truss.runtime_receipt_refusal(uuid,text) FROM PUBLIC;
 CREATE FUNCTION truss.reached(original_position bytea,maximum_evidence_bytes int,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET bytea_output=hex AS $$
 DECLARE locator jsonb;installation truss.catalog_runtime_installation%ROWTYPE;receipt truss.request_receipt%ROWTYPE;
- attempt truss.runtime_object_attempt%ROWTYPE;payload jsonb;included boolean;actual jsonb;
+ attempt truss.runtime_object_attempt%ROWTYPE;payload jsonb;included boolean;observed_receipt record;
 BEGIN
  PERFORM truss.runtime_person(false);
  IF pg_is_in_recovery() THEN RETURN convert_to('{"outcome":"unavailable","reason":"epoch_profile"}','UTF8');END IF;
@@ -2129,9 +2261,10 @@ BEGIN
  IF attempt.position_bytes IS DISTINCT FROM original_position THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
  IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
  -- Receipt and snapshot come from one original native statement.
- SELECT to_jsonb(r),pg_visible_in_snapshot(r.original_writer_xid,pg_current_snapshot()) INTO actual,included FROM truss.request_receipt r WHERE storage_row_id=attempt.receipt_id;
+ SELECT r AS receipt_row,pg_visible_in_snapshot(r.original_writer_xid,pg_current_snapshot()) AS is_included
+  INTO observed_receipt FROM truss.request_receipt r WHERE storage_row_id=attempt.receipt_id;
  IF NOT FOUND THEN RETURN truss.runtime_receipt_refusal(attempt.id,'retention');END IF;
- receipt:=jsonb_populate_record(NULL::truss.request_receipt,actual);
+ receipt:=observed_receipt.receipt_row;included:=observed_receipt.is_included;
  IF receipt.payload_state<>'complete' THEN RETURN truss.runtime_receipt_refusal(attempt.id,'retention');END IF;
  IF octet_length(attempt.input_bytes)+octet_length(receipt.original_receipt_bytes)+octet_length(original_position)>maximum_evidence_bytes THEN RETURN truss.runtime_receipt_refusal(attempt.id,'resource');END IF;
  payload:=convert_from(receipt.original_receipt_bytes,'UTF8')::jsonb;
@@ -2139,14 +2272,18 @@ BEGIN
  IF payload->>'attemptId' IS DISTINCT FROM attempt.id::text THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
  IF NOT attempt.complete OR receipt.original_writer_xid IS NOT DISTINCT FROM pg_current_xact_id_if_assigned()
   OR attempt.receipt_id IS DISTINCT FROM receipt.storage_row_id OR attempt.writer_xid IS DISTINCT FROM receipt.original_writer_xid
-  OR to_jsonb(receipt) IS DISTINCT FROM attempt.expected_receipt OR attempt.position_bytes IS DISTINCT FROM original_position
+  OR receipt.namespace_identity_utf8 IS DISTINCT FROM convert_to(attempt.context->>'authorizedScopeIdentity','UTF8')
+  OR receipt.request_id_utf8 IS DISTINCT FROM convert_to(convert_from(attempt.request_bytes,'UTF8')::jsonb->'identity'->>'requestId','UTF8')
+  OR receipt.lifecycle_generation<>0 OR receipt.payload_state IS DISTINCT FROM 'complete'
+  OR receipt.expired_identity_bytes IS NOT NULL OR receipt.expiry_writer_xid IS NOT NULL OR receipt.expiry_writer_context_bytes IS NOT NULL
+  OR attempt.expected_receipt IS NOT NULL AND to_jsonb(receipt) IS DISTINCT FROM attempt.expected_receipt
+  OR attempt.expected_receipt IS NULL AND convert_from(attempt.input_bytes,'UTF8')::jsonb->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
+  OR attempt.position_bytes IS DISTINCT FROM original_position
   OR original_position IS DISTINCT FROM truss.runtime_receipt_position(attempt.context,receipt.storage_row_id,receipt.original_writer_xid)
   OR decode(payload->>'inputBase64','base64') IS DISTINCT FROM attempt.input_bytes
   OR payload->'semantic' IS DISTINCT FROM jsonb_build_object('interfaceVersion','truss-group-result/0.1.0','executedCatalogRevision',payload->'semantic'->>'executedCatalogRevision',
     'layoutProfile',convert_from(attempt.input_bytes,'UTF8')::jsonb->'layoutProfile','mutationProfile',convert_from(attempt.input_bytes,'UTF8')::jsonb->'mutationProfile','results',attempt.results,'aliases',attempt.aliases) THEN
   RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
- SELECT to_jsonb(r) INTO actual FROM truss.request_receipt r WHERE storage_row_id=receipt.storage_row_id;
- IF actual IS DISTINCT FROM attempt.expected_receipt THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
  IF NOT truss.runtime_receipt_can_read(attempt.id) THEN RETURN convert_to('{"outcome":"unavailable","reason":"observation_integrity"}','UTF8');END IF;
  IF included IS NOT TRUE THEN RETURN convert_to('{"outcome":"unavailable","reason":"not_yet"}','UTF8');END IF;
  RETURN convert_to(jsonb_build_object('outcome','available','included',included,'comparisonProfile',attempt.context->'positionProfile')::text,'UTF8');

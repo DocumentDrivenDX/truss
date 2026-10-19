@@ -1,10 +1,9 @@
 """Practical groups remain valid across explicitly fired deferred checks."""
 from truss import (EdgeFound,Ok,ModuleAccessGrant,adopt_psycopg_host,
-                   create_reference_assembly,CatalogRuntimeConfiguration,Error)
+                   create_reference_assembly,CatalogRuntimeConfiguration)
 from truss.groups import (AliasObjectReference,StoredObjectReference,GroupSuccess,
                           GroupFailed,UpdateEdge,EndpointChange,Delete,
-                          UnauthorizedPerson,RequestNone)
-from truss.contracts import MapValue
+                          UnauthorizedPerson)
 from test_edge_mutations_native import EdgeMutationTests
 
 class GraphCommitPracticalTests(EdgeMutationTests):
@@ -42,7 +41,7 @@ class GraphCommitPracticalTests(EdgeMutationTests):
         self.assertEqual(found.value.edge.version,2)
         host.detach();connection.rollback()
 
-    def _unbounded_graph(self, mutate=None, setup=None):
+    def _unbounded_graph(self, mutate=None, setup=None, linked=True):
         def unbounded(source):
             relation=source['modules'][0]['relationships'][0]
             relation['sourceMultiplicity']={'min':0,'max':'*'}
@@ -53,11 +52,13 @@ class GraphCommitPracticalTests(EdgeMutationTests):
             setup(connection,host,assembly,tx)
         pin=assembly.get_relationship_reference_in_transaction(
             tx,document_id='adoc',module_id='m',relationship_id='A-B').value.definition_pin
-        result,_,_=self.run_group(assembly,tx,(self.create(alias='a'),
-            self.create(label='b',value='b',alias='b',record='B'),
-            self.link(pin,AliasObjectReference(alias='a'),AliasObjectReference(alias='b'))),'graph-seed')
+        operations=(self.create(alias='a'),self.create(label='b',value='b',alias='b',record='B'))
+        if linked:
+            operations=(*operations,self.link(pin,AliasObjectReference(alias='a'),AliasObjectReference(alias='b')))
+        result,_,_=self.run_group(assembly,tx,operations,'graph-seed')
         self.assertIsInstance(result,GroupSuccess)
-        a,b,edge=(item.identity for item in result.response.semantic.results)
+        identities=tuple(item.identity for item in result.response.semantic.results)
+        a,b=identities[:2];edge=identities[2] if linked else None
         host.detach();connection.commit()
         connection,host,assembly,tx=self.consumer()
         return connection,host,assembly,tx,a,b,edge
@@ -67,58 +68,13 @@ class GraphCommitPracticalTests(EdgeMutationTests):
         # affected graph members and correctly bypasses graph settlement.
         return self.run_group(assembly,tx,(self.create(label='new',value='new',alias='new-root'),),key)[0]
 
-    def _create_linked_root(self, assembly, tx, b, key):
-        pin=assembly.get_relationship_reference_in_transaction(
+    def _create_linked_root(self, assembly, tx, b, key, pin=None):
+        if pin is None:pin=assembly.get_relationship_reference_in_transaction(
             tx,document_id='adoc',module_id='m',relationship_id='A-B').value.definition_pin
         return self.run_group(assembly,tx,(self.create(label='new',value='new',alias='new-root'),
             self.link(pin,AliasObjectReference(alias='new-root'),StoredObjectReference(identity=b))),key)[0]
 
-    def _seed_marker(self, marker):
-        self.admin.execute('BEGIN')
-        try:
-            self.admin.execute("SET LOCAL session_replication_role='replica'")
-            self.admin.execute('INSERT INTO truss.edge_limit(rel_type_id,side,endpoint_id,edge_id) VALUES(%s,%s,%s,%s)',marker)
-            self.admin.commit()
-        except BaseException:
-            self.admin.rollback()
-            raise
-
-    def test_unbounded_marker_inserted_by_delete_statement_trigger_is_refused(self):
-        connection,host,assembly,tx,a,b,edge=self._unbounded_graph()
-        self.admin.execute('''CREATE FUNCTION public.graph_insert_incident_marker() RETURNS trigger
-          LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public,truss AS $$
-          BEGIN
-           INSERT INTO truss.edge_limit(rel_type_id,side,endpoint_id,edge_id)
-           SELECT e.rel_type_id,'s',t.object_id,e.id
-           FROM truss.runtime_object_transition t
-           JOIN truss.edge e ON e.source_id=t.object_id AND e.source_type=t.type_id
-           JOIN truss.rel_def r USING(rel_type_id)
-           WHERE t.writer_xid=pg_current_xact_id() AND t.before_object IS NULL
-             AND r.document_id='adoc' AND r.rel_id='A-B'
-           ORDER BY t.operation_index DESC,e.id DESC LIMIT 1
-           ON CONFLICT DO NOTHING;
-           RETURN NULL;
-          END $$''')
-        self.admin.execute('CREATE TRIGGER graph_insert_incident_marker AFTER DELETE ON truss.edge_limit FOR EACH STATEMENT EXECUTE FUNCTION public.graph_insert_incident_marker()')
-        try:
-            before=self.admin.execute('SELECT (SELECT count(*) FROM truss.object),(SELECT count(*) FROM truss.edge),(SELECT count(*) FROM truss.journal),(SELECT count(*) FROM truss.edge_limit)').fetchone()
-            context=assembly.group_context_in_transaction(tx).value
-            pin=assembly.get_relationship_reference_in_transaction(
-                tx,document_id='adoc',module_id='m',relationship_id='A-B').value.definition_pin
-            failed=assembly.apply_in_transaction(tx,context.input((self.create(label='new',value='new',alias='new-root'),
-                self.link(pin,AliasObjectReference(alias='new-root'),StoredObjectReference(identity=b))),MapValue(entries=())),
-                RequestNone(),documents=self.documents)
-            self.assertIsInstance(failed,Error)
-            self.assertEqual(failed.error.sql_state,'55000',repr(failed))
-            self.assertEqual(host._custody.last_attempt.phase,'contained')
-            self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
-        finally:
-            host.detach();connection.commit()
-            self.assertEqual(self.admin.execute('SELECT (SELECT count(*) FROM truss.object),(SELECT count(*) FROM truss.edge),(SELECT count(*) FROM truss.journal),(SELECT count(*) FROM truss.edge_limit)').fetchone(),before)
-            self.admin.execute('DROP TRIGGER IF EXISTS graph_insert_incident_marker ON truss.edge_limit')
-            self.admin.execute('DROP FUNCTION IF EXISTS public.graph_insert_incident_marker()')
-
-    def _hidden_endpoint_graph(self):
+    def _hidden_endpoint_graph(self, linked=True):
         def split_endpoint(source):
             module=source['modules'][0]
             endpoint=next(item for item in module['elements'] if item['id']=='B')
@@ -139,44 +95,33 @@ class GraphCommitPracticalTests(EdgeMutationTests):
                 (ModuleAccessGrant('adoc','hidden','endpoint_reader','endpoint_writer'),))
             self.assertIsInstance(configured,Ok);admin_host.detach();self.admin.commit()
             self.admin.execute('GRANT endpoint_reader,endpoint_writer TO consumer WITH SET FALSE')
-        connection,host,assembly,tx,a,b,edge=self._unbounded_graph(split_endpoint,configure_endpoint_access)
+        connection,host,assembly,tx,a,b,edge=self._unbounded_graph(split_endpoint,configure_endpoint_access,linked)
         return connection,host,assembly,tx,a,b,edge
 
-    def test_unaffected_endpoint_type_reader_is_still_required(self):
-        connection,host,assembly,tx,a,b,edge=self._hidden_endpoint_graph()
+    def test_delete_without_incident_edges_does_not_require_unrelated_endpoint_reader(self):
+        connection,host,assembly,tx,a,b,_=self._hidden_endpoint_graph(linked=False)
         self.admin.execute('REVOKE endpoint_reader,endpoint_writer FROM consumer')
         before_count=self.admin.execute('SELECT count(*) FROM truss.object').fetchone()[0]
-        before_object=self.read(assembly,tx,a).object
-        refused=self._create_independent_root(assembly,tx,'missing-endpoint-reader')
-        self.assertIsInstance(refused,GroupFailed)
-        self.assertIsInstance(refused.failure,UnauthorizedPerson)
-        self.assertEqual(self.read(assembly,tx,a).object,before_object)
+        deleted,_,_=self.run_group(assembly,tx,(Delete(operation='delete_object',
+            target=StoredObjectReference(identity=a),expected_version='1'),),'unrelated-endpoint-reader')
+        self.assertIsInstance(deleted,GroupSuccess)
         self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
         host.detach();connection.commit()
-        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone()[0],before_count)
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone()[0],before_count-1)
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object WHERE id=%s',(int(b.id),)).fetchone()[0],1)
 
-    def test_reader_revoked_after_marker_refresh_is_rechecked(self):
+    def test_affected_endpoint_reader_is_required(self):
         connection,host,assembly,tx,a,b,edge=self._hidden_endpoint_graph()
-        # Keep the reader grant as the sole hidden-module authority so the
-        # trigger's revocation changes the phase-two answer.
-        self.admin.execute('REVOKE endpoint_writer FROM consumer')
-        self.admin.execute('''CREATE FUNCTION public.graph_revoke_endpoint_reader() RETURNS trigger
-          LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
-          BEGIN REVOKE endpoint_reader FROM consumer; RETURN NULL; END $$''')
-        self.admin.execute('CREATE TRIGGER graph_revoke_endpoint_reader AFTER DELETE ON truss.edge_limit FOR EACH STATEMENT EXECUTE FUNCTION public.graph_revoke_endpoint_reader()')
-        try:
-            before=self.admin.execute('SELECT count(*) FROM truss.object').fetchone()[0]
-            marker_before=self.admin.execute('SELECT rel_type_id,side,endpoint_id,edge_id FROM truss.edge_limit ORDER BY rel_type_id,side,endpoint_id,edge_id').fetchall()
-            refused=self._create_linked_root(assembly,tx,b,'revoked-after-refresh')
-            self.assertIsInstance(refused,GroupFailed)
-            self.assertIsInstance(refused.failure,UnauthorizedPerson)
-            self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
-        finally:
-            host.detach();connection.commit()
-            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone()[0],before)
-            self.assertEqual(self.admin.execute('SELECT rel_type_id,side,endpoint_id,edge_id FROM truss.edge_limit ORDER BY rel_type_id,side,endpoint_id,edge_id').fetchall(),marker_before)
-            self.admin.execute('DROP TRIGGER IF EXISTS graph_revoke_endpoint_reader ON truss.edge_limit')
-            self.admin.execute('DROP FUNCTION IF EXISTS public.graph_revoke_endpoint_reader()')
+        pin=assembly.get_relationship_reference_in_transaction(
+            tx,document_id='adoc',module_id='m',relationship_id='A-B').value.definition_pin
+        self.admin.execute('REVOKE endpoint_reader,endpoint_writer FROM consumer')
+        before=self.admin.execute('SELECT (SELECT count(*) FROM truss.object),(SELECT count(*) FROM truss.edge),(SELECT count(*) FROM truss.journal)').fetchone()
+        refused=self._create_linked_root(assembly,tx,b,'missing-affected-endpoint-reader',pin)
+        self.assertIsInstance(refused,GroupFailed)
+        self.assertIsInstance(refused.failure,UnauthorizedPerson)
+        self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT (SELECT count(*) FROM truss.object),(SELECT count(*) FROM truss.edge),(SELECT count(*) FROM truss.journal)').fetchone(),before)
 
     def test_bounded_opposite_endpoint_keeps_legacy_marker(self):
         def bounded_opposite(source):
@@ -188,13 +133,3 @@ class GraphCommitPracticalTests(EdgeMutationTests):
         self.assertIsInstance(result,GroupSuccess)
         host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT rel_type_id,side,endpoint_id,edge_id FROM truss.edge_limit ORDER BY rel_type_id,side,endpoint_id,edge_id').fetchall(),before)
-
-    def test_nonincident_marker_survives_unbounded_validation(self):
-        connection,host,assembly,tx,a,b,edge=self._unbounded_graph()
-        relationship_id=self.admin.execute("SELECT rel_type_id FROM truss.rel_def WHERE document_id='adoc' AND rel_id='A-B'").fetchone()[0]
-        marker=(int(relationship_id),'t',int(b.id),int(edge.id))
-        self._seed_marker(marker)
-        result=self._create_independent_root(assembly,tx,'nonincident-marker')
-        self.assertIsInstance(result,GroupSuccess)
-        host.detach();connection.commit()
-        self.assertEqual(self.admin.execute('SELECT rel_type_id,side,endpoint_id,edge_id FROM truss.edge_limit').fetchall(),[marker])

@@ -11,7 +11,7 @@ DECLARE context jsonb;installation truss.catalog_runtime_installation%ROWTYPE;bu
 BEGIN
  context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();profiles:=truss.runtime_import_profiles();
- IF (SELECT value FROM truss.setting WHERE key='key_reuse') IS DISTINCT FROM '"forbid"'::jsonb OR (SELECT value FROM truss.setting WHERE key='journal_mode') IS DISTINCT FROM '"engine"'::jsonb THEN
+ IF (SELECT selected_setting.value FROM truss.setting selected_setting WHERE selected_setting.key='key_reuse') IS DISTINCT FROM '"forbid"'::jsonb OR (SELECT selected_setting.value FROM truss.setting selected_setting WHERE selected_setting.key='journal_mode') IS DISTINCT FROM '"engine"'::jsonb THEN
   RAISE EXCEPTION 'installed engine/forbid import policy required' USING ERRCODE='0A000';END IF;
  SELECT encode(sha256(convert_to(coalesce(jsonb_agg(jsonb_build_object('documentId',doc_id,'revision',doc_revision,'sha256',content_sha256) ORDER BY doc_id COLLATE "C"),'[]')::text,'UTF8')),'hex') INTO bundle
   FROM (SELECT DISTINCT ON(doc_id) doc_id,doc_revision,content_sha256 FROM truss.schema_doc WHERE rev>0 ORDER BY doc_id,rev DESC) documents;
@@ -25,9 +25,14 @@ REVOKE ALL ON FUNCTION truss.import_context(text,text) FROM PUBLIC;
 
 CREATE FUNCTION truss.import_key_selection(selected_document text,selected_module text,selected_record text,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE context jsonb;selected truss.type_def%ROWTYPE;key_row truss.key_def%ROWTYPE;pin record;property truss.prop_def%ROWTYPE;components jsonb:='[]';type_pin text;key_pin text;
+DECLARE context jsonb;selected truss.type_def%ROWTYPE;key_row truss.key_def%ROWTYPE;pin record;property truss.prop_def%ROWTYPE;components jsonb;component_buffer jsonb[]:=ARRAY[]::jsonb[];type_pin text;key_pin text;
 BEGIN
- context:=convert_from(truss.import_context(expected_release,expected_digest),'UTF8')::jsonb;
+ -- Selection needs current custody/configuration and the key profile, not a
+ -- reconstruction/hash of the complete catalog bundle for every record.
+ PERFORM truss.group_context(expected_release,expected_digest);
+ IF (SELECT selected_setting.value FROM truss.setting selected_setting WHERE selected_setting.key='key_reuse') IS DISTINCT FROM '"forbid"'::jsonb OR (SELECT selected_setting.value FROM truss.setting selected_setting WHERE selected_setting.key='journal_mode') IS DISTINCT FROM '"engine"'::jsonb THEN
+  RAISE EXCEPTION 'installed engine/forbid import policy required' USING ERRCODE='0A000';END IF;
+ context:=truss.runtime_import_profiles();
  PERFORM truss.runtime_module_writer(selected_document,selected_module);
  SELECT * INTO selected FROM truss.type_def WHERE document_id=selected_document AND module=selected_module AND element=selected_record AND kind='record' AND NOT provisional AND retired_rev IS NULL;
  IF NOT FOUND THEN RAISE EXCEPTION 'accepted import record type required' USING ERRCODE='22023';END IF;
@@ -39,12 +44,13 @@ BEGIN
   IF property.scalar_type NOT IN ('string','integer','decimal','boolean','binary') OR property.scalar_type IS NULL OR property.cardinality<>'one' OR property.nullability<>'required' OR property.home<>'json' OR property.retired_rev IS NOT NULL THEN RAISE EXCEPTION 'selected string primary key required' USING ERRCODE='0A000';END IF;
   IF NOT truss.runtime_can_read(selected_document,property.declaration_module) THEN RAISE EXCEPTION 'primary property reader required' USING ERRCODE='42501';END IF;
   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('property',selected.type_id,property.prop_id);
-  components:=components||jsonb_build_array(jsonb_build_object('name',property.name,'propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'scalarType',property.scalar_type,'facets',coalesce(property.facets,'{}'::jsonb)));
+  component_buffer:=array_append(component_buffer,jsonb_build_object('name',property.name,'propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'scalarType',property.scalar_type,'facets',coalesce(property.facets,'{}'::jsonb)));
  END LOOP;
  FOR property IN SELECT p.* FROM unnest(key_row.prop_ids) i(prop_id) JOIN truss.prop_def p ON p.type_id=selected.type_id AND p.prop_id=i.prop_id LOOP
   IF NOT truss.runtime_can_read(selected_document,property.declaration_module) THEN RAISE EXCEPTION 'current primary declaration reader required' USING ERRCODE='42501';END IF;
  END LOOP;
  PERFORM truss.runtime_module_writer(selected_document,selected_module);
+ components:=to_jsonb(component_buffer);
  RETURN convert_to(jsonb_build_object('recordId',selected.element,'type',jsonb_build_object('typeId',selected.type_id::text,'definitionPin',type_pin,'owner',jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module)),
   'keyNumber',key_row.key_num::text,'keyId',key_row.key_id,'keyDefinitionPin',key_pin,'keyEncodingProfile',context->'importKeyProfile','components',components)::text,'UTF8');
 END;
@@ -54,7 +60,7 @@ REVOKE ALL ON FUNCTION truss.import_key_selection(text,text,text,text,text) FROM
 CREATE FUNCTION truss.import_object_identity(original_identity bytea,original_document bytea,tuple_bytes bytea,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' AS $$
 DECLARE identity jsonb;selected truss.type_def%ROWTYPE;metadata jsonb;key_row truss.key_def%ROWTYPE;installation truss.catalog_runtime_installation%ROWTYPE;
- archive truss.schema_doc%ROWTYPE;component jsonb;values_text text[]:=ARRAY[]::text[];values_cells jsonb:='[]';key_facets jsonb:='[]';fields jsonb:='[]';component_index int:=0;pin record;namespace bytea;transport bytea;observed record;member truss.object_key_bucket%ROWTYPE;object_row truss.object%ROWTYPE;result jsonb;owned_selection boolean:=false;root_owner record;
+ archive truss.schema_doc%ROWTYPE;component jsonb;values_text text[]:=ARRAY[]::text[];values_cells jsonb;values_buffer jsonb[]:=ARRAY[]::jsonb[];key_facets jsonb;facets_buffer jsonb[]:=ARRAY[]::jsonb[];fields jsonb;fields_buffer jsonb[]:=ARRAY[]::jsonb[];component_index int:=0;pin record;namespace bytea;transport bytea;observed record;member truss.object_key_bucket%ROWTYPE;object_row truss.object%ROWTYPE;result jsonb;owned_selection boolean:=false;root_owner record;
 BEGIN
  IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 1048576 OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique import identity required' USING ERRCODE='22023';END IF;
  identity:=convert_from(original_identity,'UTF8')::jsonb;
@@ -73,13 +79,19 @@ BEGIN
  IF jsonb_typeof(identity->'keyNumber') IS DISTINCT FROM 'string' OR jsonb_typeof(identity->'keyDefinitionPin') IS DISTINCT FROM 'string' OR identity->'type' IS DISTINCT FROM metadata->'type' OR identity->>'keyNumber' IS DISTINCT FROM metadata->>'keyNumber'
   OR identity->>'keyDefinitionPin' IS DISTINCT FROM metadata->>'keyDefinitionPin' OR (identity->'keyEncodingProfile' IS DISTINCT FROM metadata->'keyEncodingProfile' AND NOT ((identity->'keyEncodingProfile'='{"identity":"truss-selected-umf-string-key","version":"0.1","sha256":"07e1b99b22803e55a378f8068a6b80454b7581129c66eabcb117545746a16625"}'::jsonb AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(identity->'components') c WHERE c.value->'value'->>'kind' IS DISTINCT FROM 'string')) IS TRUE))
   OR jsonb_array_length(identity->'components')<>jsonb_array_length(metadata->'components') THEN RAISE EXCEPTION 'actual complete primary definition required' USING ERRCODE='22023';END IF;
- SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
- IF original_document IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'caller-known original document required' USING ERRCODE='22023';END IF;
+ IF NOT owned_selection THEN
+  SELECT * INTO STRICT archive FROM truss.schema_doc WHERE doc_id=selected.document_id ORDER BY rev DESC LIMIT 1;
+  IF original_document IS DISTINCT FROM convert_to(archive.document,'UTF8') THEN RAISE EXCEPTION 'caller-known original document required' USING ERRCODE='22023';END IF;
+ END IF;
  FOR component IN SELECT value FROM jsonb_array_elements(identity->'components') LOOP
   IF jsonb_typeof(component->'propertyId') IS DISTINCT FROM 'string' OR jsonb_typeof(component->'definitionPin') IS DISTINCT FROM 'string' OR component-ARRAY['propertyId','definitionPin','value']<>'{}'::jsonb OR component->>'propertyId' IS DISTINCT FROM metadata->'components'->component_index->>'propertyId'
    OR component->>'definitionPin' IS DISTINCT FROM metadata->'components'->component_index->>'definitionPin' OR truss.valid_scalar_property(component->'value',metadata->'components'->component_index->>'scalarType',false,metadata->'components'->component_index->'facets') IS NOT TRUE THEN RAISE EXCEPTION 'exact ordered primary component required' USING ERRCODE='22023';END IF;
-  values_cells:=values_cells||jsonb_build_array(component->'value');key_facets:=key_facets||jsonb_build_array(metadata->'components'->component_index->'facets');fields:=fields||jsonb_build_array(jsonb_build_object('name',metadata->'components'->component_index->>'name','value',component->'value'));component_index:=component_index+1;
+  values_buffer:=array_append(values_buffer,component->'value');
+  facets_buffer:=array_append(facets_buffer,metadata->'components'->component_index->'facets');
+  fields_buffer:=array_append(fields_buffer,jsonb_build_object('name',metadata->'components'->component_index->>'name','value',component->'value'));
+  component_index:=component_index+1;
  END LOOP;
+ values_cells:=to_jsonb(values_buffer);key_facets:=to_jsonb(facets_buffer);fields:=to_jsonb(fields_buffer);
  IF tuple_bytes IS NOT NULL THEN RAISE EXCEPTION 'client key encoding is no longer accepted' USING ERRCODE='22023';END IF;
  tuple_bytes:=truss.derive_catalog_key_tuple(selected.type_id,(metadata->>'keyNumber')::smallint,values_cells);
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
@@ -112,12 +124,11 @@ CREATE TABLE truss.runtime_import_source (entity_kind char(1) NOT NULL, entity_i
 CREATE TRIGGER runtime_import_source_immutable BEFORE UPDATE OR DELETE ON truss.runtime_import_source FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 CREATE TRIGGER runtime_record_source_immutable BEFORE UPDATE OR DELETE ON truss.record_source FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 
-CREATE FUNCTION truss.runtime_owned_import_record_source(selected_attempt uuid,selected_index int,original_record bytea,load_id text) RETURNS bytea
+CREATE FUNCTION truss.runtime_owned_import_record_source_checked(checked_attempt uuid,checked_next_index int,checked_writer_xid xid8,checked_operation jsonb,checked_result jsonb,owned_profile_matches boolean,load_id_asserted boolean,selected_index int,original_record bytea,load_id text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE attempt truss.runtime_object_attempt%ROWTYPE;record jsonb;payload bytea;value jsonb;input jsonb;operation jsonb;result jsonb;source_value jsonb:='{}';entry jsonb;source_row truss.record_source%ROWTYPE;kind char(1);metadata jsonb;selected_type truss.type_def%ROWTYPE;component_index int:=0;owned_selection boolean;root_identity jsonb;source_identity jsonb;target_identity jsonb;
+DECLARE selected_attempt uuid:=checked_attempt;record jsonb;payload bytea;value jsonb;operation jsonb:=checked_operation;result jsonb:=checked_result;source_value jsonb:='{}';source_invalid boolean;component_invalid boolean;expected_source jsonb;source_row truss.record_source%ROWTYPE;kind char(1);metadata jsonb;selected_type truss.type_def%ROWTYPE;owned_selection boolean;root_identity jsonb;resolved_source_identity jsonb;resolved_target_identity jsonb;source_entity_id bigint;inserted_rows int;
 BEGIN
- SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
- IF NOT attempt.complete OR attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false) OR selected_index IS NULL OR selected_index<0 OR selected_index>=attempt.next_index THEN RAISE EXCEPTION 'current complete indexed import group required' USING ERRCODE='55000';END IF;
+ IF selected_index IS NULL OR selected_index<0 OR selected_index>=checked_next_index THEN RAISE EXCEPTION 'current complete indexed import group required' USING ERRCODE='55000';END IF;
  IF original_record IS NULL OR octet_length(original_record) NOT BETWEEN 1 AND 2097152 OR (convert_from(original_record,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE
   OR load_id IS NULL OR octet_length(load_id) NOT BETWEEN 1 AND 4096 THEN RAISE EXCEPTION 'bounded original import record/load required' USING ERRCODE='22023';END IF;
  record:=convert_from(original_record,'UTF8')::jsonb;payload:=decode(record->'payload'->>'bytesBase64','base64');
@@ -125,7 +136,7 @@ BEGIN
  IF octet_length(payload) NOT BETWEEN 1 AND 1048576 OR (convert_from(payload,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique original payload required' USING ERRCODE='22023';END IF;
  value:=convert_from(payload,'UTF8')::jsonb;
  owned_selection:=record->'payloadProfile'=truss.runtime_import_profiles()->'ownedImportPayloadProfile';
- IF owned_selection IS NOT TRUE AND (selected_index<>0 OR attempt.next_index<>1) THEN
+ IF owned_selection IS NOT TRUE AND (selected_index<>0 OR checked_next_index<>1) THEN
   RAISE EXCEPTION 'legacy one-create import group required' USING ERRCODE='0A000';END IF;
 
  IF (record->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'ownedImportPayloadProfile'
@@ -137,11 +148,10 @@ BEGIN
     WHERE truss.valid_scalar_cell(CASE v.value->'value'->>'kind' WHEN 'map' THEN child.value->'value' ELSE child.value END) IS NOT TRUE)) IS TRUE)
   AND NOT ((record->'payloadProfile'='{"identity":"truss-scalar-import-payload","version":"0.1","sha256":"bc7624102bf13a1f87d5382be8d7d02007c49f1775dbca14489a650d7d7ec2ed"}'::jsonb AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(value->'values') v WHERE truss.valid_scalar_cell(v.value->'value') IS NOT TRUE)) IS TRUE)) OR encode(sha256(payload),'hex') IS DISTINCT FROM record->'payload'->>'sha256'
   OR octet_length(payload) NOT BETWEEN 1 AND 1048576 OR (convert_from(payload,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'exact original profiled payload required' USING ERRCODE='22023';END IF;
- input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;operation:=input->'operations'->selected_index;result:=attempt.results->selected_index;
- IF owned_selection AND input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile() THEN RAISE EXCEPTION 'owned import group profile required' USING ERRCODE='0A000';END IF;
+ IF owned_selection AND owned_profile_matches IS NOT TRUE THEN RAISE EXCEPTION 'owned import group profile required' USING ERRCODE='0A000';END IF;
  IF value-ARRAY['interfaceVersion','kind','values','source',CASE record->>'kind' WHEN 'object' THEN 'ownership' ELSE 'orderKey' END]<>'{}'::jsonb THEN RAISE EXCEPTION 'closed profiled import payload required' USING ERRCODE='22023';END IF;
  IF (record->>'kind' IN ('object','edge')) IS NOT TRUE OR value->>'interfaceVersion' IS DISTINCT FROM (CASE WHEN owned_selection THEN 'truss-owned-import-payload/0.1.0' ELSE 'truss-import-payload/0.1.0' END) OR value->>'kind' IS DISTINCT FROM record->>'kind' OR result->>'outcome'<>'created'
-  OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(input->'assertedOrigin'->'entries') e WHERE e.value->>'key'='x-load-id' AND e.value->'value'=jsonb_build_object('kind','string','text',load_id)) THEN
+  OR load_id_asserted IS NOT TRUE THEN
   RAISE EXCEPTION 'original import creation/load origin required' USING ERRCODE='22023';END IF;
  IF record->>'kind'='object' THEN
   kind:='o';
@@ -153,16 +163,32 @@ BEGIN
   IF (record->'identity')-ARRAY['operation','type','keyNumber','keyDefinitionPin','keyEncodingProfile','components']<>'{}'::jsonb OR record->'identity'->>'operation' IS DISTINCT FROM 'object_key' OR jsonb_typeof(record->'identity'->'components') IS DISTINCT FROM 'array' OR record->'identity'->'type' IS DISTINCT FROM metadata->'type' OR record->'identity'->>'keyNumber' IS DISTINCT FROM metadata->>'keyNumber'
    OR record->'identity'->>'keyDefinitionPin' IS DISTINCT FROM metadata->>'keyDefinitionPin' OR (record->'identity'->'keyEncodingProfile' IS DISTINCT FROM metadata->'keyEncodingProfile' AND NOT ((record->'identity'->'keyEncodingProfile'='{"identity":"truss-selected-umf-string-key","version":"0.1","sha256":"07e1b99b22803e55a378f8068a6b80454b7581129c66eabcb117545746a16625"}'::jsonb AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(record->'identity'->'components') c WHERE c.value->'value'->>'kind' IS DISTINCT FROM 'string')) IS TRUE))
    OR jsonb_array_length(record->'identity'->'components') IS DISTINCT FROM jsonb_array_length(metadata->'components') THEN RAISE EXCEPTION 'actual complete import primary key required' USING ERRCODE='22023';END IF;
-  FOR entry IN SELECT v.value FROM jsonb_array_elements(record->'identity'->'components') v LOOP
-   IF entry-ARRAY['propertyId','definitionPin','value']<>'{}'::jsonb OR jsonb_typeof(entry->'propertyId') IS DISTINCT FROM 'string' OR jsonb_typeof(entry->'definitionPin') IS DISTINCT FROM 'string' OR truss.valid_scalar_cell(entry->'value',NULL,false) IS NOT TRUE OR entry->>'propertyId' IS DISTINCT FROM metadata->'components'->component_index->>'propertyId'
-    OR entry->>'definitionPin' IS DISTINCT FROM metadata->'components'->component_index->>'definitionPin'
-    OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements(value->'values') v WHERE v.value->>'name'=metadata->'components'->component_index->>'name' AND v.value->'value'=entry->'value') THEN
-    RAISE EXCEPTION 'original primary field/payload agreement required' USING ERRCODE='22023';END IF;
-   component_index:=component_index+1;
-   IF NOT EXISTS(SELECT 1 FROM truss.object o WHERE o.id=(result->'identity'->>'id')::bigint AND o.type_id=(result->'identity'->>'typeId')::int AND o.props->(entry->>'propertyId')=entry->'value') THEN RAISE EXCEPTION 'import primary payload agreement required' USING ERRCODE='22023';END IF;
-  END LOOP;
+  WITH value_rows AS MATERIALIZED (
+   SELECT v.value AS authored_value,v.ordinality
+   FROM jsonb_array_elements(value->'values') WITH ORDINALITY v(value,ordinality)
+  ), values_by_name AS MATERIALIZED (
+   SELECT jsonb_object_agg(authored_value->>'name',authored_value->'value')
+    FILTER(WHERE jsonb_typeof(authored_value->'name')='string') AS value_map FROM value_rows
+  ), components AS MATERIALIZED (
+   SELECT c.value AS component,c.ordinality,
+    metadata->'components'->((c.ordinality-1)::int) AS metadata_field
+   FROM jsonb_array_elements(record->'identity'->'components') WITH ORDINALITY c(value,ordinality)
+  ), component_checks AS (
+   SELECT (component-ARRAY['propertyId','definitionPin','value']<>'{}'::jsonb
+    OR jsonb_typeof(component->'propertyId') IS DISTINCT FROM 'string'
+    OR jsonb_typeof(component->'definitionPin') IS DISTINCT FROM 'string'
+    OR truss.valid_scalar_cell(component->'value',NULL,false) IS NOT TRUE
+    OR component->>'propertyId' IS DISTINCT FROM metadata_field->>'propertyId'
+    OR component->>'definitionPin' IS DISTINCT FROM metadata_field->>'definitionPin'
+    OR value_map->(metadata_field->>'name') IS DISTINCT FROM component->'value') AS invalid
+   FROM components CROSS JOIN values_by_name
+  )
+  SELECT coalesce(bool_or(invalid),false)
+    OR (SELECT count(*)<>count(DISTINCT authored_value->>'name') FROM value_rows)
+   INTO component_invalid FROM component_checks;
+  IF component_invalid THEN RAISE EXCEPTION 'original primary field/payload agreement required' USING ERRCODE='22023';END IF;
  ELSE
-  kind:='e';PERFORM truss.runtime_edge_authorize(selected_attempt);
+  kind:='e';
   IF operation->>'operation'<>'create_edge' OR operation->>'relationshipDefinitionPin' IS DISTINCT FROM record->'identity'->>'relationshipDefinitionPin'
    OR NOT owned_selection AND (operation->'source' IS DISTINCT FROM jsonb_build_object('state','stored','identity',record->'identity'->'source') OR operation->'target' IS DISTINCT FROM jsonb_build_object('state','stored','identity',record->'identity'->'target'))
    OR operation->'values' IS DISTINCT FROM value->'values' OR operation->'orderKey' IS DISTINCT FROM value->'orderKey' THEN RAISE EXCEPTION 'original edge payload creation required' USING ERRCODE='22023';END IF;
@@ -184,17 +210,15 @@ BEGIN
      AND o.root_type IS NOT DISTINCT FROM (root_identity->>'typeId')::int) THEN
     RAISE EXCEPTION 'original imported ownership correspondence required' USING ERRCODE='55000';END IF;
   ELSE
-   source_identity:=truss.runtime_owned_import_reference(convert_to((record->'identity'->'source')::text,'UTF8'),
+   resolved_source_identity:=truss.runtime_owned_import_reference(convert_to((record->'identity'->'source')::text,'UTF8'),
     (SELECT release_id FROM truss.runtime_current_installation()),(SELECT release_sha256 FROM truss.runtime_current_installation()))->'identity';
-   target_identity:=truss.runtime_owned_import_reference(convert_to((record->'identity'->'target')::text,'UTF8'),
+   resolved_target_identity:=truss.runtime_owned_import_reference(convert_to((record->'identity'->'target')::text,'UTF8'),
     (SELECT release_id FROM truss.runtime_current_installation()),(SELECT release_sha256 FROM truss.runtime_current_installation()))->'identity';
-   source_identity:=nullif(source_identity,'null'::jsonb);target_identity:=nullif(target_identity,'null'::jsonb);
-   IF source_identity IS NULL OR target_identity IS NULL OR NOT EXISTS(
-    SELECT 1 FROM truss.edge e WHERE e.id=(result->'identity'->>'id')::bigint AND e.rel_type_id=(result->'identity'->>'typeId')::int
-     AND e.source_id=(source_identity->>'id')::bigint AND e.source_type=(source_identity->>'typeId')::int
-     AND e.target_id=(target_identity->>'id')::bigint AND e.target_type=(target_identity->>'typeId')::int)
-    OR NOT EXISTS(SELECT 1 FROM truss.runtime_edge_transition t WHERE t.attempt_id=selected_attempt AND t.operation_index=selected_index
-     AND t.before_edge IS NULL AND t.edge_id=(result->'identity'->>'id')::bigint AND t.rel_type_id=(result->'identity'->>'typeId')::int) THEN
+   resolved_source_identity:=nullif(resolved_source_identity,'null'::jsonb);resolved_target_identity:=nullif(resolved_target_identity,'null'::jsonb);
+   IF resolved_source_identity IS NULL OR resolved_target_identity IS NULL OR NOT EXISTS(
+    SELECT 1 FROM truss.runtime_edge_transition t WHERE t.attempt_id=selected_attempt AND t.operation_index=selected_index
+     AND t.before_edge IS NULL AND t.edge_id=(result->'identity'->>'id')::bigint AND t.rel_type_id=(result->'identity'->>'typeId')::int
+     AND t.source_identity IS NOT DISTINCT FROM resolved_source_identity AND t.target_identity IS NOT DISTINCT FROM resolved_target_identity) THEN
     RAISE EXCEPTION 'original imported endpoint correspondence required' USING ERRCODE='55000';END IF;
   END IF;
  ELSIF kind='o' THEN
@@ -217,22 +241,98 @@ BEGIN
  END IF;
  IF value ? 'source' THEN
   IF (value->'source')-ARRAY['kind','entries']<>'{}'::jsonb OR value->'source'->>'kind' IS DISTINCT FROM 'map' OR jsonb_typeof(value->'source'->'entries') IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'exact source map required' USING ERRCODE='22023';END IF;
-  FOR entry IN SELECT v.value FROM jsonb_array_elements(value->'source'->'entries') v LOOP
-   IF entry-ARRAY['key','value']<>'{}'::jsonb OR jsonb_typeof(entry->'key') IS DISTINCT FROM 'string' OR octet_length(entry->>'key') NOT BETWEEN 1 AND 4096 OR source_value ? (entry->>'key') OR truss.valid_scalar_cell(entry->'value') IS NOT TRUE
-    OR entry->>'key' IN ('author','at','system') AND entry->'value'->>'kind' NOT IN ('string','null') THEN RAISE EXCEPTION 'lossless scalar source facts required' USING ERRCODE='22023';END IF;
-   source_value:=source_value||jsonb_build_object(entry->>'key',CASE entry->'value'->>'kind' WHEN 'string' THEN entry->'value'->'text' WHEN 'null' THEN 'null'::jsonb WHEN 'boolean' THEN entry->'value'->'value' ELSE entry->'value' END);
-  END LOOP;
+  WITH source_entries AS MATERIALIZED (
+   SELECT e.value AS source_entry,e.ordinal
+   FROM jsonb_array_elements(value->'source'->'entries') WITH ORDINALITY e(value,ordinal)
+  ), projected AS (
+   SELECT se.source_entry,se.ordinal,se.source_entry->>'key' AS source_key,
+    CASE se.source_entry->'value'->>'kind' WHEN 'string' THEN se.source_entry->'value'->'text' WHEN 'null' THEN 'null'::jsonb WHEN 'boolean' THEN se.source_entry->'value'->'value' ELSE se.source_entry->'value' END AS cell_source_value,
+    (se.source_entry-ARRAY['key','value']<>'{}'::jsonb OR jsonb_typeof(se.source_entry->'key') IS DISTINCT FROM 'string'
+     OR octet_length(se.source_entry->>'key') NOT BETWEEN 1 AND 4096 OR truss.valid_scalar_cell(se.source_entry->'value') IS NOT TRUE
+     OR se.source_entry->>'key' IN ('author','at','system') AND se.source_entry->'value'->>'kind' NOT IN ('string','null')) AS invalid
+   FROM source_entries se
+  )
+  SELECT coalesce(bool_or(projected.invalid),false) OR count(projected.source_key)<>count(DISTINCT projected.source_key),
+   coalesce(jsonb_object_agg(projected.source_key,projected.cell_source_value ORDER BY projected.ordinal)
+    FILTER(WHERE projected.source_key IS NOT NULL),'{}'::jsonb)
+   INTO source_invalid,source_value FROM projected;
+  IF source_invalid THEN RAISE EXCEPTION 'lossless unique scalar source facts required' USING ERRCODE='22023';END IF;
  END IF;
- INSERT INTO truss.record_source(entity_kind,entity_id,load_id,source) VALUES(kind,(result->'identity'->>'id')::bigint,load_id,source_value) RETURNING * INTO source_row;
- IF source_row.entity_kind IS DISTINCT FROM kind OR source_row.entity_id IS DISTINCT FROM (result->'identity'->>'id')::bigint
-  OR source_row.load_id IS DISTINCT FROM load_id OR source_row.source IS DISTINCT FROM source_value THEN RAISE EXCEPTION 'payload-derived import provenance required' USING ERRCODE='55000';END IF;
+ source_entity_id:=(result->'identity'->>'id')::bigint;
+ INSERT INTO truss.record_source(entity_kind,entity_id,load_id,source) VALUES(kind,source_entity_id,load_id,source_value) RETURNING * INTO source_row;
+ GET DIAGNOSTICS inserted_rows=ROW_COUNT;
+ IF inserted_rows<>1 THEN RAISE EXCEPTION 'one imported source row required' USING ERRCODE='55000';END IF;
+ expected_source:=to_jsonb(source_row);
+ -- Preserve imported_at in the scalar result; the immutable row is the
+ -- canonical source fact, so the compatibility ledger column stays empty.
  INSERT INTO truss.runtime_import_source(entity_kind,entity_id,group_attempt_id,writer_xid,original_record,expected_source,operation_index)
- VALUES(kind,source_row.entity_id,selected_attempt,attempt.writer_xid,original_record,to_jsonb(source_row),selected_index);
+ VALUES(kind,source_entity_id,selected_attempt,checked_writer_xid,original_record,'{}'::jsonb,selected_index);
  PERFORM truss.runtime_module_writer(result->'identity'->'owner'->>'documentId',result->'identity'->'owner'->>'moduleId');
- RETURN convert_to(to_jsonb(source_row)::text,'UTF8');
+ RETURN convert_to(expected_source::text,'UTF8');
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_import_record_source_checked(uuid,int,xid8,jsonb,jsonb,boolean,boolean,int,bytea,text) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_owned_import_record_source(selected_attempt uuid,selected_index int,original_record bytea,load_id text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;operations jsonb;results jsonb;owned_profile_matches boolean;load_id_asserted boolean;
+BEGIN
+ SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
+ IF NOT attempt.complete OR attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false) THEN
+  RAISE EXCEPTION 'current complete import attempt required' USING ERRCODE='55000';END IF;
+ input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+ operations:=input->'operations';results:=attempt.results;
+ owned_profile_matches:=input->'mutationProfile' IS NOT DISTINCT FROM truss.runtime_owned_profile();
+ load_id_asserted:=EXISTS(SELECT 1 FROM jsonb_array_elements(input->'assertedOrigin'->'entries') e
+  WHERE e.value->>'key'='x-load-id' AND e.value->'value'=jsonb_build_object('kind','string','text',load_id));
+ RETURN truss.runtime_owned_import_record_source_checked(attempt.id,attempt.next_index,attempt.writer_xid,
+  operations->selected_index,results->selected_index,owned_profile_matches,load_id_asserted,selected_index,original_record,load_id);
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_import_record_source(uuid,int,bytea,text) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_owned_import_record_sources(selected_attempt uuid,records jsonb,load_id text) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
+DECLARE attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;operations jsonb;results jsonb;owned_profile_matches boolean;load_id_asserted boolean;entry jsonb;encoded text;original_record bytea;selected_index int;record_count int;
+BEGIN
+ SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt;
+ IF NOT attempt.complete OR attempt.writer_xid<>pg_current_xact_id() OR attempt.actor_oid<>truss.runtime_person(false)
+  OR records IS NULL OR jsonb_typeof(records) IS DISTINCT FROM 'array'
+  OR octet_length(records::text)>16777216 OR load_id IS NULL OR octet_length(load_id) NOT BETWEEN 1 AND 4096 THEN
+  RAISE EXCEPTION 'bounded current completed import source batch required' USING ERRCODE='22023';END IF;
+ input:=convert_from(attempt.input_bytes,'UTF8')::jsonb;
+ operations:=input->'operations';results:=attempt.results;
+ owned_profile_matches:=input->'mutationProfile' IS NOT DISTINCT FROM truss.runtime_owned_profile();
+ load_id_asserted:=EXISTS(SELECT 1 FROM jsonb_array_elements(input->'assertedOrigin'->'entries') e
+  WHERE e.value->>'key'='x-load-id' AND e.value->'value'=jsonb_build_object('kind','string','text',load_id));
+ record_count:=jsonb_array_length(records);
+ IF record_count NOT BETWEEN 1 AND 1024 THEN RAISE EXCEPTION 'bounded nonempty import source batch required' USING ERRCODE='22023';END IF;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(records) r WHERE jsonb_typeof(r.value) IS DISTINCT FROM 'object'
+  OR r.value-ARRAY['operationIndex','originalRecordBase64']<>'{}'::jsonb
+  OR jsonb_typeof(r.value->'operationIndex') IS DISTINCT FROM 'number'
+  OR (r.value->>'operationIndex') !~ '^(0|[1-9][0-9]{0,2}|10[01][0-9]|102[0-3])$'
+  OR jsonb_typeof(r.value->'originalRecordBase64') IS DISTINCT FROM 'string'
+  OR octet_length(r.value->>'originalRecordBase64') NOT BETWEEN 4 AND 2796204) THEN
+  RAISE EXCEPTION 'exact bounded ordered import source batch entries required' USING ERRCODE='22023';END IF;
+ IF (SELECT count(DISTINCT (r.value->>'operationIndex')::int) FROM jsonb_array_elements(records) r)<>record_count
+  OR EXISTS(SELECT 1 FROM (SELECT (r.value->>'operationIndex')::int selected_index,
+    lag((r.value->>'operationIndex')::int) OVER(ORDER BY r.ordinal) previous_index
+   FROM jsonb_array_elements(records) WITH ORDINALITY r(value,ordinal)) ordered
+   WHERE ordered.previous_index IS NOT NULL AND ordered.selected_index<=ordered.previous_index)
+  OR EXISTS(SELECT 1 FROM jsonb_array_elements(records) r
+   WHERE (r.value->>'operationIndex')::int>=attempt.next_index) THEN
+  RAISE EXCEPTION 'unique input-ordered completed import indexes required' USING ERRCODE='22023';END IF;
+ FOR entry IN SELECT r.value FROM jsonb_array_elements(records) WITH ORDINALITY r(value,ordinal) ORDER BY r.ordinal LOOP
+  selected_index:=(entry->>'operationIndex')::int;encoded:=entry->>'originalRecordBase64';
+  original_record:=decode(encoded,'base64');
+  IF octet_length(original_record) NOT BETWEEN 1 AND 2097152 THEN
+   RAISE EXCEPTION 'bounded original import record required' USING ERRCODE='22023';END IF;
+  PERFORM truss.runtime_owned_import_record_source_checked(attempt.id,attempt.next_index,attempt.writer_xid,
+   operations->selected_index,results->selected_index,owned_profile_matches,load_id_asserted,selected_index,original_record,load_id);
+ END LOOP;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_import_record_sources(uuid,jsonb,text) FROM PUBLIC;
 
 CREATE FUNCTION truss.import_record_source(selected_attempt uuid,original_record bytea,load_id text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
@@ -264,10 +364,8 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_import_source_commit() FROM PUBLIC;
-CREATE CONSTRAINT TRIGGER runtime_import_source_commit AFTER INSERT ON truss.runtime_import_source DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_import_source_commit();
-CREATE CONSTRAINT TRIGGER runtime_record_source_commit AFTER INSERT ON truss.record_source DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_import_source_commit();
-ALTER TABLE truss.runtime_import_source ENABLE ALWAYS TRIGGER runtime_import_source_commit;
-ALTER TABLE truss.record_source ENABLE ALWAYS TRIGGER runtime_record_source_commit;
+-- Retained for upgrade compatibility with recorded routine inventories; new
+-- installs do not attach this legacy per-row deferred proof trigger.
 
 CREATE FUNCTION truss.runtime_edge_business_key(relation int,source_identity jsonb,target_identity jsonb) RETURNS text
 LANGUAGE sql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
@@ -288,7 +386,12 @@ CREATE FUNCTION truss.import_edge_identity(original_identity bytea,expected_rele
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE context jsonb;identity jsonb;relation truss.rel_def%ROWTYPE;source_definition truss.type_def%ROWTYPE;target_definition truss.type_def%ROWTYPE;key text;edge_row truss.edge%ROWTYPE;result jsonb;matches int;owned_selection boolean:=false;endpoint record;
 BEGIN
- context:=convert_from(truss.import_context(expected_release,expected_digest),'UTF8')::jsonb;
+ -- Selection needs current custody/configuration and the key profile, not a
+ -- reconstruction/hash of the complete catalog bundle for every record.
+ PERFORM truss.group_context(expected_release,expected_digest);
+ IF (SELECT selected_setting.value FROM truss.setting selected_setting WHERE selected_setting.key='key_reuse') IS DISTINCT FROM '"forbid"'::jsonb OR (SELECT selected_setting.value FROM truss.setting selected_setting WHERE selected_setting.key='journal_mode') IS DISTINCT FROM '"engine"'::jsonb THEN
+  RAISE EXCEPTION 'installed engine/forbid import policy required' USING ERRCODE='0A000';END IF;
+ context:=truss.runtime_import_profiles();
  IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 65536 OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded exact edge import identity required' USING ERRCODE='22023';END IF;
  identity:=convert_from(original_identity,'UTF8')::jsonb;
  IF identity->'profile'=truss.runtime_import_profiles()->'ownedImportProfile'
@@ -442,9 +545,14 @@ REVOKE ALL ON FUNCTION truss.import_report_record_authority(bytea,text,text,text
 CREATE FUNCTION truss.runtime_owned_import_reference(original_identity bytea,expected_release text,expected_digest text) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE identity jsonb;selected truss.type_def%ROWTYPE;key_row truss.key_def%ROWTYPE;pin record;
- component record;supplied jsonb;values_json jsonb:='[]';found_bytes bytea;found_object jsonb;context jsonb;
+ component record;supplied jsonb;values_json jsonb;values_buffer jsonb[]:=ARRAY[]::jsonb[];found_bytes bytea;found_object jsonb;context jsonb;
 BEGIN
- context:=convert_from(truss.import_context(expected_release,expected_digest),'UTF8')::jsonb;
+ -- Selection needs current custody/configuration and the key profile, not a
+ -- reconstruction/hash of the complete catalog bundle for every record.
+ PERFORM truss.group_context(expected_release,expected_digest);
+ IF (SELECT selected_setting.value FROM truss.setting selected_setting WHERE selected_setting.key='key_reuse') IS DISTINCT FROM '"forbid"'::jsonb OR (SELECT selected_setting.value FROM truss.setting selected_setting WHERE selected_setting.key='journal_mode') IS DISTINCT FROM '"engine"'::jsonb THEN
+  RAISE EXCEPTION 'installed engine/forbid import policy required' USING ERRCODE='0A000';END IF;
+ context:=truss.runtime_import_profiles();
  IF original_identity IS NULL OR octet_length(original_identity) NOT BETWEEN 1 AND 1048576
   OR (convert_from(original_identity,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN
   RAISE EXCEPTION 'bounded exact primary reference required' USING ERRCODE='22023';END IF;
@@ -477,8 +585,9 @@ BEGIN
    OR supplied->>'propertyId' IS DISTINCT FROM component.prop_id::text
    OR supplied->>'definitionPin' IS DISTINCT FROM pin.definition_pin THEN
    RAISE EXCEPTION 'original ordered primary component required' USING ERRCODE='22023';END IF;
-  values_json:=values_json||jsonb_build_array(supplied->'value');
+  values_buffer:=array_append(values_buffer,supplied->'value');
  END LOOP;
+ values_json:=to_jsonb(values_buffer);
  found_bytes:=truss.lookup_string_key(selected.document_id,selected.module,selected.element,key_row.key_id,
   NULL,convert_to(values_json::text,'UTF8'),NULL,1048576,expected_release,expected_digest);
  IF found_bytes IS NULL THEN RETURN jsonb_build_object('identity',NULL,'keyIdentity',jsonb_build_array(selected.type_id,key_row.key_num,encode(truss.derive_catalog_key_tuple(selected.type_id,key_row.key_num,values_json),'hex'))::text);END IF;

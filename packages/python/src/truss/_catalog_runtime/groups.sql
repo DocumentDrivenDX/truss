@@ -345,6 +345,17 @@ REVOKE ALL ON FUNCTION truss.runtime_create_validate_group(uuid) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_create_commit_check() RETURNS trigger
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 BEGIN
+ IF TG_TABLE_NAME='object' THEN
+  -- The canonical owned attempt settles its writes once. Match this queued
+  -- create header; legacy profiles retain their separate member validator.
+  IF EXISTS(SELECT 1 FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
+   WHERE t.object_id=NEW.id AND t.type_id=NEW.type_id AND t.before_object IS NULL
+    AND t.writer_xid=pg_current_xact_id() AND a.writer_xid=pg_current_xact_id() AND a.complete
+    AND a.context->'mutationProfile'=truss.runtime_owned_profile()
+    AND t.after_object->>'ver'=NEW.ver::text AND t.after_object->>'rev'=NEW.rev::text
+    AND t.after_object->'root_id'=coalesce(to_jsonb(NEW.root_id),'null'::jsonb)
+    AND t.after_object->'root_type'=coalesce(to_jsonb(NEW.root_type),'null'::jsonb)) THEN RETURN NULL;END IF;
+ END IF;
  -- Trusted administrators may seed private read fixtures; they cannot call the
  -- ordinary-person mutation facade. This is not an ordinary-caller bypass.
  IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL; END IF;

@@ -233,7 +233,8 @@ BEGIN
   +(SELECT count(*) FROM truss.runtime_feed_reservation WHERE writer_xid=writer)+(SELECT count(*) FROM truss.catalog_registration_request WHERE writer_xid=writer);
  IF count_facts>maximum_facts THEN RAISE EXCEPTION 'whole feed transaction exceeds fact limit' USING ERRCODE='54000';END IF;
  SELECT coalesce(jsonb_agg(to_jsonb(j) ORDER BY j.seq),'[]') INTO changes FROM truss.journal j WHERE xid=writer;
- SELECT coalesce(jsonb_agg(expected_source ORDER BY entity_kind,entity_id),'[]') INTO sources FROM truss.runtime_import_source WHERE writer_xid=writer;
+ SELECT coalesce(jsonb_agg(to_jsonb(s) ORDER BY l.entity_kind,l.entity_id),'[]') INTO sources
+  FROM truss.runtime_import_source l JOIN truss.record_source s USING(entity_kind,entity_id) WHERE l.writer_xid=writer;
  SELECT coalesce(jsonb_agg(jsonb_build_object('kind',kind,'row',original_row) ORDER BY reservation_id),'[]') INTO reservations FROM truss.runtime_feed_reservation WHERE writer_xid=writer;
  SELECT coalesce(jsonb_agg(truss.runtime_feed_revision(r.rev) ORDER BY r.rev),'[]') INTO revisions
   FROM truss.schema_rev r JOIN truss.catalog_registration_request q ON q.revision=r.rev WHERE q.writer_xid=writer;

@@ -2,7 +2,8 @@
 import base64
 from dataclasses import replace
 from hashlib import sha256
-from truss import Ok,ObjectFound,EdgeFound,HistoryEntity,ImportSourceFound
+import json
+from truss import Ok,ObjectFound,EdgeFound,HistoryEntity,ImportSourceFound,QueryRows
 from truss.contracts import MapValue,MapEntry,TextValue,ExactArtifact
 from truss.groups import NullOrderKey,OwnedOwnership
 from truss.imports import ImportReported,ImportCreated,ImportSkipped,ImportRejected
@@ -52,10 +53,22 @@ class OwnedImportTests(base.OwnedObjectTests):
         edge=assembly.get_edge_in_transaction(tx,document_id='adoc',module_id='m',relationship_id='children',edge_id=int(identities[2].id))
         self.assertIsInstance(edge,Ok,repr(edge));self.assertIsInstance(edge.value,EdgeFound)
         self.assertEqual(edge.value.edge.source,identities[0]);self.assertEqual(edge.value.edge.target,identities[1])
+        complete=assembly.query_in_transaction(tx,sql='SELECT a.* FROM "A" a ORDER BY a."A-label"',
+            document_ids=('adoc',),read_profile='complete-entity')
+        self.assertIsInstance(complete,Ok,repr(complete)+' '+str(host._custody.last_attempt.error))
+        self.assertIsInstance(complete.value,QueryRows)
+        projected=[dict(zip(complete.value.columns,row,strict=True)) for row in complete.value.rows]
+        self.assertEqual(len(projected),2)
+        attribution={row['A-label']:(row['_created_by'],row['_updated_by'],row['_original_author'],row['_load_id']) for row in projected}
+        self.assertEqual(attribution,{
+            'one-root':('consumer','consumer','root-source','original'),
+            'one-child':('consumer','consumer','child-source','original')})
+        expected_sources=({'author':'root-source'},{'author':'child-source'},{'author':'edge-source'})
         for index,identity in enumerate(identities):
             found=assembly.lookup_import_source_in_transaction(tx,entity=HistoryEntity(kind='edge' if index==2 else 'object',document_id='adoc',module_id='m',definition_id='children' if index==2 else 'A',id=int(identity.id)))
             self.assertIsInstance(found,Ok,repr(found));self.assertIsInstance(found.value,ImportSourceFound)
             self.assertEqual(found.value.load_id,'original')
+            self.assertEqual(json.loads(found.value.content)['source'],expected_sources[index])
         cap=self.capability(assembly);context=cap.owned_import_context_in_transaction(tx).value
         retry=cap.import_in_transaction(tx,context.input(tuple(self.invalid_payload(r) for r in records),load_id='replacement',asserted_origin=MapValue(entries=())))
         self.assertIsInstance(retry,ImportReported,repr(retry)+' '+str(host._custody.last_attempt.error))

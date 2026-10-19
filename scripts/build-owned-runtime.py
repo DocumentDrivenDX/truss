@@ -18,14 +18,14 @@ def main():
         raise ValueError('Select the original native72 runtime manifest')
     parts = [(owner / 'operation-storage.generated.sql').read_text() + ';\n', '''CREATE TRIGGER runtime_owned_operation_immutable AFTER UPDATE ON truss.runtime_owned_operation FOR EACH ROW
 WHEN (OLD.result IS NOT NULL OR NEW.result IS NULL OR
- ROW(OLD.attempt_id,OLD.operation_index,OLD.writer_xid,OLD.plan) IS DISTINCT FROM
- ROW(NEW.attempt_id,NEW.operation_index,NEW.writer_xid,NEW.plan)) EXECUTE FUNCTION truss.catalog_immutable();
+ ROW(OLD.attempt_id,OLD.operation_index,OLD.writer_xid) IS DISTINCT FROM
+ ROW(NEW.attempt_id,NEW.operation_index,NEW.writer_xid)) EXECUTE FUNCTION truss.catalog_immutable();
 CREATE TRIGGER runtime_owned_operation_no_delete BEFORE DELETE ON truss.runtime_owned_operation FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 CREATE TRIGGER runtime_owned_operation_no_truncate BEFORE TRUNCATE ON truss.runtime_owned_operation FOR EACH STATEMENT EXECUTE FUNCTION truss.catalog_immutable();
 REVOKE ALL ON TABLE truss.runtime_owned_operation FROM PUBLIC;
 ''']
     parts.extend((owner / name).read_text() for name in (
-        'values.sql', 'forest.sql', 'scope.sql', 'delete.sql', 'execute.sql', 'bulk-create.sql', 'bulk-edge.sql', 'bulk-update.sql', 'finalize.sql'))
+        'values.sql', 'forest.sql', 'scope.sql', 'delete.sql', 'planner-workspace.sql', 'execute.sql', 'bulk-create.sql', 'bulk-edge.sql', 'bulk-update.sql', 'finalize.sql'))
     parts.append((owner / 'history.sql').read_text().split('CREATE OR REPLACE FUNCTION', 1)[0])
     assembled = ('\n'.join(parts).rstrip() + '\n').encode('utf8')
     if arguments.check:

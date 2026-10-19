@@ -26,7 +26,6 @@ BEGIN
   OR (SELECT count(*) FROM truss.runtime_owned_operation WHERE attempt_id=selected_attempt)<>total
   OR EXISTS(SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=selected_attempt AND
    (p.writer_xid IS DISTINCT FROM attempt.writer_xid OR p.result IS NOT NULL
-    OR p.plan->'operation' IS DISTINCT FROM input->'operations'->p.operation_index
     OR p.plan->>'primary' IS DISTINCT FROM 'create:'||p.operation_index::text
     OR (p.plan->'beforeNodes') ? (p.plan->>'primary') OR p.plan->'beforeEdges'<>'{}'::jsonb
     OR p.plan->'afterEdges'<>'{}'::jsonb

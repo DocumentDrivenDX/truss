@@ -72,7 +72,7 @@ REVOKE ALL ON FUNCTION truss.catalog_rebind_definition(text,int,int,jsonb) FROM 
 
 CREATE FUNCTION truss.catalog_rebind_history(object_image jsonb,identity jsonb,planned_basis jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
-DECLARE properties jsonb:='[]';retained jsonb;ownership jsonb:='{"state":"rootless"}';property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;
+DECLARE properties jsonb;property_buffer jsonb[]:=ARRAY[]::jsonb[];retained jsonb;ownership jsonb:='{"state":"rootless"}';property truss.prop_def%ROWTYPE;pin record;basis jsonb;written_revision int:=(object_image->>'rev')::int;
 BEGIN
  basis:=planned_basis;
  SELECT * INTO STRICT pin FROM truss.catalog_rebind_definition('type',(object_image->>'type_id')::int,NULL,planned_basis);
@@ -80,7 +80,7 @@ BEGIN
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,basis->'prop_def') p WHERE p.type_id=(object_image->>'type_id')::int ORDER BY prop_id LOOP
   IF object_image->'props' ? property.prop_id::text THEN
    SELECT * INTO STRICT pin FROM truss.catalog_rebind_definition('property',property.type_id,property.prop_id,planned_basis);
-   properties:=properties||jsonb_build_array(jsonb_build_object('propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'value',object_image->'props'->property.prop_id::text));
+   property_buffer:=array_append(property_buffer,jsonb_build_object('propertyId',property.prop_id::text,'definitionPin',pin.definition_pin,'value',object_image->'props'->property.prop_id::text));
   END IF;
  END LOOP;
  SELECT coalesce(jsonb_agg(jsonb_build_object('name',key,'value',value) ORDER BY key COLLATE "C"),'[]'::jsonb) INTO retained FROM jsonb_each(coalesce(nullif(object_image->'retained','null'::jsonb),'{}'));
@@ -92,6 +92,7 @@ BEGIN
    'id',object_image->>'root_id','typeId',object_image->>'root_type','definitionPin',pin.definition_pin,
    'owner',jsonb_build_object('documentId',pin.document_id,'moduleId',pin.module_id)));
  END IF;
+ properties:=to_jsonb(property_buffer);
  RETURN jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','object','identity',identity,
   'recordVersion',object_image->>'ver','catalogRevision',object_image->>'rev',
   'createdAt',to_char((object_image->>'created_at')::timestamptz AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
@@ -105,7 +106,7 @@ CREATE FUNCTION truss.catalog_rebind_objects(request truss.catalog_registration_
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE object_row truss.object%ROWTYPE;original jsonb;after_image jsonb;identity jsonb;before_record jsonb;after_record jsonb;
  owner truss.type_def%ROWTYPE;property truss.prop_def%ROWTYPE;pin record;installation truss.catalog_runtime_installation%ROWTYPE;
- observed_after jsonb;effects jsonb;events jsonb;event jsonb;journals jsonb;journal truss.journal%ROWTYPE;keys jsonb;group_digest text;property_count int;object_count int:=0;selected_profile text;
+ observed_after jsonb;effects jsonb;effects_buffer jsonb[];events jsonb;event jsonb;event_buffer jsonb[];decorated_events jsonb[];journals jsonb;journal_buffer jsonb[];journal truss.journal%ROWTYPE;keys jsonb;group_digest text;property_count int;object_count int:=0;selected_profile text;
 BEGIN
  IF request.actor_oid IS DISTINCT FROM truss.catalog_actor() OR request.actor_name IS DISTINCT FROM session_user::text
   OR request.writer_xid IS DISTINCT FROM pg_current_xact_id() OR request.registration_id IS NULL THEN
@@ -127,7 +128,7 @@ BEGIN
   PERFORM truss.runtime_history_ownership(jsonb_build_object(
    'identity',jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text),
    'catalogRevision',object_row.rev,'ownership',truss.runtime_object_ownership_at(to_jsonb(object_row))));
-  original:=to_jsonb(object_row);effects:='[]';events:='[]';journals:='[]';property_count:=0;
+  original:=to_jsonb(object_row);effects_buffer:=ARRAY[]::jsonb[];event_buffer:=ARRAY[]::jsonb[];decorated_events:=ARRAY[]::jsonb[];journal_buffer:=ARRAY[]::jsonb[];property_count:=0;
   SELECT definition_pin INTO STRICT pin FROM truss.catalog_rebind_definition('type',object_row.type_id,NULL,planned_basis);
   identity:=jsonb_build_object('id',object_row.id::text,'typeId',object_row.type_id::text,
    'definitionPin',pin.definition_pin,'owner',jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module));
@@ -143,9 +144,9 @@ BEGIN
     OR truss.valid_property_definition(property) IS NOT TRUE OR truss.valid_property_value(object_row.retained->property.name,property) IS NOT TRUE THEN
     RAISE EXCEPTION 'valid absent catalog rebind destination required' USING ERRCODE='22023';END IF;
    SELECT definition_pin INTO STRICT pin FROM truss.catalog_rebind_definition('property',property.type_id,property.prop_id,planned_basis);
-   effects:=effects||jsonb_build_array(jsonb_build_object('propertyId',property.prop_id::text,'originalName',property.name,
+   effects_buffer:=array_append(effects_buffer,jsonb_build_object('propertyId',property.prop_id::text,'originalName',property.name,
     'definitionPin',pin.definition_pin,'value',object_row.retained->property.name));
-   events:=events||jsonb_build_array(jsonb_build_object('operation','rebind','propertyId',property.prop_id::text,
+   event_buffer:=array_append(event_buffer,jsonb_build_object('operation','rebind','propertyId',property.prop_id::text,
     'retainedName',property.name,'beforeDefinitionContext',before_record->'identity'->>'definitionPin','afterDefinitionPin',pin.definition_pin,
     'retainedBefore',jsonb_build_object('present',true,'value',object_row.retained->property.name),
     'retainedAfter',jsonb_build_object('present',false),'propertyBefore',jsonb_build_object('present',false),
@@ -158,15 +159,16 @@ BEGIN
   object_row.retained:=nullif(object_row.retained,'{}'::jsonb);object_row.ver:=object_row.ver+1;
   object_row.rev:=request.revision;object_row.updated_at:=clock_timestamp();after_image:=to_jsonb(object_row);
   after_record:=truss.catalog_rebind_history(after_image,identity,planned_basis);
-  events:=events||jsonb_build_array(jsonb_build_object('operation','metadata','before',before_record,'after',after_record));
-  FOR event_index IN 0..jsonb_array_length(events)-1 LOOP
-   event:=(events->event_index)||jsonb_build_object('interfaceVersion','truss-history-event/0.2.0-proposal',
+  event_buffer:=array_append(event_buffer,jsonb_build_object('operation','metadata','before',before_record,'after',after_record));
+  FOR event_index IN 1..cardinality(event_buffer) LOOP
+   event:=event_buffer[event_index]||jsonb_build_object('interfaceVersion','truss-history-event/0.2.0-proposal',
     'historyProfile',selected_profile,'sourceEpoch',installation.source_epoch::text,
     'xid',request.writer_xid::text,'seq',nextval('truss.journal_seq')::text,
     'identity',identity,'eventVersion',object_row.ver::text,'eventCatalogRevision',request.revision::text,
     'origin',jsonb_build_object('asserted',convert_from(request.origin_bytes,'UTF8')::jsonb,'databaseRole',session_user::text));
-   events:=jsonb_set(events,ARRAY[event_index::text],event);
+   decorated_events:=array_append(decorated_events,event);
   END LOOP;
+  events:=to_jsonb(decorated_events);effects:=to_jsonb(effects_buffer);
   group_digest:=encode(sha256(convert_to(events::text,'UTF8')),'hex');
   FOR event IN SELECT value FROM jsonb_array_elements(events) LOOP
    event:=event||jsonb_build_object('mutationGroup',jsonb_build_object('profile','truss-history-group/0.1.0',
@@ -177,8 +179,9 @@ BEGIN
    journal.new_value:=truss.runtime_exact_wrapper('event',convert_to(event::text,'UTF8'));journal.rev:=request.revision;
    journal.origin:=truss.runtime_exact_wrapper('origin',convert_to((event->'origin')::text,'UTF8'));
    INSERT INTO truss.journal SELECT (jsonb_populate_record(NULL::truss.journal,to_jsonb(journal))).*;
-   journals:=journals||jsonb_build_array(to_jsonb(journal));
+   journal_buffer:=array_append(journal_buffer,to_jsonb(journal));
   END LOOP;
+  journals:=to_jsonb(journal_buffer);
   SELECT coalesce(jsonb_agg(to_jsonb(k) ORDER BY k.key_num),'[]'::jsonb) INTO keys FROM truss.object_key_bucket k
    WHERE k.object_id=object_row.id AND k.type_id=object_row.type_id;
   UPDATE truss.object o SET props=object_row.props,retained=object_row.retained,ver=object_row.ver,rev=object_row.rev,updated_at=object_row.updated_at
@@ -194,7 +197,7 @@ REVOKE ALL ON FUNCTION truss.catalog_rebind_objects(truss.catalog_registration_r
 -- Check retained candidates against the actual native planned property definition.
 CREATE FUNCTION truss.catalog_rebind_violations(planned_basis jsonb,revision int) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE property truss.prop_def%ROWTYPE;owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;affected bigint;missing bigint;violations jsonb:='[]';owner_index jsonb;
+DECLARE property truss.prop_def%ROWTYPE;owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;affected bigint;missing bigint;violations jsonb;violation_buffer jsonb[]:=ARRAY[]::jsonb[];owner_index jsonb;
 BEGIN
  SELECT coalesce(jsonb_object_agg(t.value->>'type_id',t.value),'{}'::jsonb) INTO owner_index FROM jsonb_array_elements(planned_basis->'type_def') t;
  FOR property IN SELECT * FROM jsonb_populate_recordset(NULL::truss.prop_def,planned_basis->'prop_def') p WHERE p.since_rev=revision LOOP
@@ -215,7 +218,7 @@ BEGIN
   SELECT count(*) INTO missing FROM truss.object o WHERE o.type_id=property.type_id AND property.nullability='required'
    AND (coalesce(o.retained ? property.name,false) IS NOT TRUE OR o.retained->property.name='{"kind":"null"}'::jsonb);
   IF missing>0 THEN
-   violations:=violations||jsonb_build_array(jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module,
+   violation_buffer:=array_append(violation_buffer,jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module,
     'recordId',owner.element,'fieldModuleId',property.declaration_module,'fieldId',property.element,
     'rule','property.required','affectedObjectCount',missing::text));
   END IF;
@@ -232,7 +235,7 @@ BEGIN
    OR property.cardinality IN ('array','map') AND truss.runtime_item_chain_readable(property.item) IS NOT TRUE THEN
    RAISE EXCEPTION 'original candidate owner/property/item readers required' USING ERRCODE='42501';END IF;
   IF affected>0 THEN
-   violations:=violations||jsonb_build_array(jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module,
+   violation_buffer:=array_append(violation_buffer,jsonb_build_object('documentId',owner.document_id,'moduleId',owner.module,
     'recordId',owner.element,'fieldModuleId',property.declaration_module,'fieldId',property.element,
     'rule','property.rebind_value','affectedObjectCount',affected::text));
   END IF;
@@ -251,6 +254,7 @@ BEGIN
    'catalogRevision',object_row.rev,'ownership',truss.runtime_object_ownership_at(to_jsonb(object_row))));
   END LOOP;
  END LOOP;
+ violations:=to_jsonb(violation_buffer);
  IF violations='[]'::jsonb THEN RETURN NULL;END IF;
  RETURN convert_to(violations::text,'UTF8');
 END;

@@ -31,11 +31,13 @@ credentials would impose a different deployment boundary.
 
 ### Owner clarification — validation placement, 2026-10-18
 
-The trusted application engine owns schema interpretation and semantic write validation. PostgreSQL is not required to independently reproduce them. Retain low-cost, high-value database protections such as atomic transactions, uniqueness, foreign keys, locks and revision/version conflict checks. A further database check needs a concrete failure it prevents and measured justification for its cost and complexity; blanket placement in PostgreSQL is rejected.
+The trusted application engine owns schema interpretation and semantic write validation. PostgreSQL is not required to independently reproduce them. Retain low-cost, high-value database protections such as atomic transactions, uniqueness, foreign keys, locks and revision/version conflict checks. A further database check needs a concrete failure it prevents and a resource-cost analysis that justifies its cost and complexity; blanket placement in PostgreSQL is rejected.
 
 Compile or load the selected immutable schema into efficient application-memory indexes once per revision. Reuse those indexes for field resolution, value validation and batch preparation. Schema persistence and any justified native index serve database responsibilities; they do not replace this application cache. Permission changes and concurrent catalog changes must remain effective. Cache schema meaning, not a permanent authorization decision.
 
 Do not repeatedly reconstruct complete semantic history or revalidate unchanged values merely to prove that the trusted engine performed its own work. Produce the required journal and current-state changes atomically and qualify their behavior through independent tests. This clarification narrows earlier exhaustive native-effect verification proposals; it does not turn a failed, stale, unauthorized or unresolved operation into success. Report the actual enforcement layer and any separate direct-SQL guarantees accurately.
+
+Efficiency is justified first by request/statement analysis: identify cardinalities, indexed access, byte copies, retained state and asymptotic cost for each operation. Remove redundant replay and quadratic accumulation before qualification. Timing alone cannot establish an efficient design. Run representative correctness and capacity qualification on the final implementation; repeated noisy local timing campaigns are not a substitute for the analysis.
 
 The PRD's RES-05/06 and ADR-002 govern the corresponding performance and storage boundary.
 

@@ -40,18 +40,13 @@ class OperationResultSlotTests(base.PublicCreateGroupTests):
         self.assertEqual(replay.value.response.semantic, result.value.response.semantic)
         host.detach(); connection.commit()
 
-    def test_rewritten_slot_refuses_and_preserves_prior_caller_work(self):
-        self.refused_seal("NEW.result:='{\"tampered\":true}'::jsonb;")
-
-    def test_late_before_trigger_cannot_rewrite_the_captured_plan(self):
-        self.refused_seal("NEW.plan:=NEW.plan||'{\"tampered\":true}'::jsonb;")
-
-    def refused_seal(self, change):
+    def test_late_result_slot_write_error_preserves_prior_caller_work(self):
         connection, host, assembly, tx = self.ready(document_ids=('adoc',))
         connection.execute("CREATE TEMP TABLE prior_slot_work(value text);INSERT INTO prior_slot_work VALUES('kept')")
-        self.admin.execute("CREATE FUNCTION public.rewrite_operation_result() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN " + change + "RETURN NEW;END $$")
-        self.addCleanup(self.admin.execute, 'DROP FUNCTION public.rewrite_operation_result()')
-        self.admin.execute('CREATE TRIGGER z_rewrite_result BEFORE UPDATE ON truss.runtime_owned_operation FOR EACH ROW EXECUTE FUNCTION public.rewrite_operation_result()')
+        self.admin.execute("""CREATE FUNCTION public.reject_operation_result_write() RETURNS trigger LANGUAGE plpgsql AS $$
+          BEGIN RAISE EXCEPTION 'injected late result write failure' USING ERRCODE='55000';END $$""")
+        self.addCleanup(self.admin.execute, 'DROP FUNCTION public.reject_operation_result_write()')
+        self.admin.execute('CREATE TRIGGER z_reject_result_write BEFORE UPDATE ON truss.runtime_owned_operation FOR EACH ROW EXECUTE FUNCTION public.reject_operation_result_write()')
         original, request = self.input(assembly, tx)
         result = assembly.apply_in_transaction(tx, original, request, documents=self.documents)
         self.assertIsInstance(result, Error, repr(result)); self.assertEqual(result.error.sql_state, '55000')

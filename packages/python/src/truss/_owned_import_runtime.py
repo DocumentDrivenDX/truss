@@ -64,9 +64,12 @@ def run_owned_import(host,transaction,input,documents,manifest,digest,pin_cursor
     def native_context(cursor):
         cursor.execute('SELECT truss.import_context(%s,%s)',(manifest['releaseId'],digest),prepare=False)
         return json.loads(bytes(cursor.fetchone()[0]))
-    def key(cursor,selection):
-        cursor.execute('SELECT truss.runtime_owned_import_reference(%s,%s,%s)',(_bytes(selection if type(selection) is dict else _wire(selection)),manifest['releaseId'],digest),prepare=False)
-        return cursor.fetchone()[0]
+    def key(cursor,selection,cache):
+        payload=_bytes(selection if type(selection) is dict else _wire(selection))
+        if payload not in cache:
+            cursor.execute('SELECT truss.runtime_owned_import_reference(%s,%s,%s)',(payload,manifest['releaseId'],digest),prepare=False)
+            cache[payload]=cursor.fetchone()[0]
+        return cache[payload]
     def envelope(identity):return _bytes({'profile':context[0]['ownedImportProfile'],'identity':_wire(identity)})
     def finish_authority(cursor,selected_outcomes):
         if native_context(cursor)!=context[0]:raise ValueError('Original import context changed')
@@ -78,19 +81,22 @@ def run_owned_import(host,transaction,input,documents,manifest,digest,pin_cursor
             cursor.fetchone()
     def execute(cursor,observed):
         pin_cursor(cursor);context[0]=native_context(cursor);c=context[0]
+        # Reuse identical selected references only inside this protected
+        # transaction operation. No authorization decision survives the call.
+        key_cache={}
         if any(_wire(value)!=c[name] for value,name in ((input.layout_profile,'layoutProfile'),(input.import_profile,'ownedImportProfile'),(input.value_profile,'valueProfile'),(input.catalog,'catalog'))) or any(_wire(r.payload_profile)!=c['ownedImportPayloadProfile'] for r in input.records):raise ValueError('Selected original owned import context required')
         cursor.execute('SELECT pg_current_xact_id()::text',prepare=False);transaction_id='truss-pending-transaction:'+c['sourceEpoch']+':'+cursor.fetchone()[0]
         # Resolve identities across the input before decoding any replacement.
         for index,record in enumerate(input.records):
             if type(record) is OwnedObjectImportRecord:
                 cursor.execute('SELECT truss.import_object_identity(%s,%s,NULL,%s,%s)',(envelope(record.identity),sources[record.identity.type.owner.document_id],manifest['releaseId'],digest),prepare=False)
-                metadata=json.loads(bytes(cursor.fetchone()[0]));route=key(cursor,record.identity)
+                metadata=json.loads(bytes(cursor.fetchone()[0]));route=key(cursor,record.identity,key_cache)
                 entry={'metadata':metadata,'route':route}
                 if metadata['state']=='eligible':
                     if route['keyIdentity'] in first_objects:entry['duplicate']=first_objects[route['keyIdentity']]
                     else:first_objects[route['keyIdentity']]=index
             else:
-                source=key(cursor,record.identity.source);target=key(cursor,record.identity.target)
+                source=key(cursor,record.identity.source,key_cache);target=key(cursor,record.identity.target,key_cache)
                 if source['identity'] is not None and target['identity'] is not None:
                     selected={'relationshipDefinitionPin':record.identity.relationship_definition_pin,'source':source['identity'],'target':target['identity']}
                     cursor.execute('SELECT truss.import_edge_identity(%s,%s,%s)',(_bytes({'profile':c['ownedImportProfile'],'identity':selected}),manifest['releaseId'],digest),prepare=False)
@@ -99,7 +105,7 @@ def run_owned_import(host,transaction,input,documents,manifest,digest,pin_cursor
                 entry={'metadata':metadata,'source':source,'target':target}
             entries.append(entry)
         def resolve(selection,index):
-            route=key(cursor,selection)
+            route=key(cursor,selection,key_cache)
             if route['identity'] is not None:return StoredObjectReference(identity=_identity(route['identity']))
             prior=first_objects.get(route['keyIdentity'])
             if prior is None:raise ValueError('Referenced primary identity is missing or reserved')
@@ -127,10 +133,16 @@ def run_owned_import(host,transaction,input,documents,manifest,digest,pin_cursor
             applied=apply_group(host,transaction,group.input(tuple(operations),origin),RequestNone(),documents,manifest,digest,pin_cursor,bun_executable=bun_executable,_cursor=cursor,_attempt_capture=capture)
             if not isinstance(applied,Ok) or not isinstance(applied.value,GroupSuccess):
                 raise _RecordRefused('Atomic owned import group refused',native_state=_group_refusal_state(applied.value) if isinstance(applied,Ok) else None)
-            for index,operation_index in operation_indices.items():
+            source_records=[]
+            for index,operation_index in sorted(operation_indices.items()):
                 result=applied.value.response.semantic.results[operation_index]
-                cursor.execute('SELECT truss.runtime_owned_import_record_source(%s::uuid,%s,%s,%s)',(capture[0],operation_index,_bytes(_wire(input.records[index])),input.load_id),prepare=False);cursor.fetchone()
+                original_record=_bytes(_wire(input.records[index]))
+                source_records.append({'operationIndex':operation_index,
+                    'originalRecordBase64':base64.b64encode(original_record).decode('ascii')})
                 created[index]=result
+            if source_records:
+                cursor.execute('SELECT truss.runtime_owned_import_record_sources(%s::uuid,%s::jsonb,%s)',
+                    (capture[0],_bytes(source_records).decode('utf8'),input.load_id),prepare=False);cursor.fetchone()
         for index,entry in enumerate(entries):
             metadata=entry['metadata']
             if metadata['state']=='skipped':outcomes.append(ImportSkipped(input_index=str(index),batch_id=batch_id,reason=metadata['reason'],identity=_identity(metadata['identity']) if 'identity' in metadata else ABSENT))

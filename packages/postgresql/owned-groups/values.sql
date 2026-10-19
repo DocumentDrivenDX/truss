@@ -3,7 +3,7 @@
 -- this function performs no graph write, allocation or authorization issuance.
 CREATE FUNCTION truss.owned_object_values(selected_type int,operation jsonb,prior_props jsonb,prior_retained jsonb) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE authored jsonb;removed jsonb;props jsonb;retained jsonb;entry jsonb;unset_name text;
+DECLARE authored jsonb;removed jsonb;props jsonb;retained jsonb;removed_props text[];removed_retained text[];set_props jsonb;set_retained jsonb;
  property truss.prop_def%ROWTYPE;values_json jsonb;keys_json jsonb;result_json jsonb;
 BEGIN
  IF jsonb_typeof(operation) IS DISTINCT FROM 'object' THEN RAISE EXCEPTION 'explicit operation value projection required' USING ERRCODE='22023';END IF;
@@ -35,15 +35,18 @@ BEGIN
    SELECT 1 FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.prop_id::text=k))
   OR EXISTS(SELECT 1 FROM jsonb_each(retained) e WHERE truss.valid_flat_cell(e.value) IS NOT TRUE) THEN
   RAISE EXCEPTION 'supported complete prior value representation required' USING ERRCODE='0A000';END IF;
- FOR unset_name IN SELECT value#>>'{}' FROM jsonb_array_elements(removed) LOOP
-  SELECT p.* INTO property FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=unset_name;
-  IF FOUND THEN props:=props-property.prop_id::text;ELSE retained:=retained-unset_name;END IF;
- END LOOP;
- FOR entry IN SELECT value FROM jsonb_array_elements(authored) LOOP
-  SELECT p.* INTO property FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=entry->>'name';
-  IF FOUND THEN props:=props||jsonb_build_object(property.prop_id::text,truss.canonical_flat_cell(entry->'value'));
-  ELSE retained:=retained||jsonb_build_object(entry->>'name',truss.canonical_flat_cell(entry->'value'));END IF;
- END LOOP;
+ SELECT coalesce(array_agg(p.prop_id::text) FILTER(WHERE p.prop_id IS NOT NULL),'{}'::text[]),
+  coalesce(array_agg(u.name) FILTER(WHERE p.prop_id IS NULL),'{}'::text[])
+ INTO removed_props,removed_retained
+ FROM jsonb_array_elements_text(removed) u(name)
+ LEFT JOIN truss.prop_def p ON p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=u.name;
+ props:=props-removed_props;retained:=retained-removed_retained;
+ SELECT coalesce(jsonb_object_agg(p.prop_id::text,truss.canonical_flat_cell(a.value->'value')) FILTER(WHERE p.prop_id IS NOT NULL),'{}'::jsonb),
+  coalesce(jsonb_object_agg(a.value->>'name',truss.canonical_flat_cell(a.value->'value')) FILTER(WHERE p.prop_id IS NULL),'{}'::jsonb)
+ INTO set_props,set_retained
+ FROM jsonb_array_elements(authored) a(value)
+ LEFT JOIN truss.prop_def p ON p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=a.value->>'name';
+ props:=props||set_props;retained:=retained||set_retained;
  FOR property IN SELECT p.* FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL LOOP
   IF truss.valid_property_definition(property) IS NOT TRUE THEN RAISE EXCEPTION 'supported exact property definition required' USING ERRCODE='0A000';END IF;
   IF NOT props ? property.prop_id::text THEN
@@ -72,17 +75,14 @@ REVOKE ALL ON FUNCTION truss.owned_object_values(int,jsonb,jsonb,jsonb) FROM PUB
 -- this function performs no graph write, allocation or authorization issuance.
 CREATE FUNCTION truss.runtime_owned_object_value_delta(selected_type int,operation jsonb,prior_props jsonb,prior_retained jsonb,selected_id bigint) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE authored jsonb;removed jsonb;props jsonb;retained jsonb;entry jsonb;unset_name text;
+DECLARE authored jsonb;removed jsonb;props jsonb;retained jsonb;removed_props text[];removed_retained text[];set_props jsonb;set_retained jsonb;
  property truss.prop_def%ROWTYPE;values_json jsonb;keys_json jsonb;result_json jsonb;validated_prior boolean;
 BEGIN
- SELECT EXISTS(SELECT 1 FROM truss.object o JOIN LATERAL (
-  SELECT t.after_object FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
-  WHERE t.object_id=o.id AND t.type_id=o.type_id AND a.complete
-  ORDER BY t.transition_id DESC LIMIT 1) certificate ON true
+ SELECT EXISTS(SELECT 1 FROM truss.object o
   JOIN truss.runtime_type_schema compiled ON compiled.rev=o.rev AND compiled.type_id=o.type_id
   WHERE o.id=selected_id AND o.type_id=selected_type AND o.rev=(SELECT rev FROM truss.schema_head WHERE id=1)
    AND o.props=prior_props AND o.retained IS NOT DISTINCT FROM prior_retained
-   AND certificate.after_object=to_jsonb(o) AND compiled.valid_properties)
+   AND compiled.valid_properties)
  INTO validated_prior;
  IF NOT validated_prior THEN RETURN truss.owned_object_values(selected_type,operation,prior_props,prior_retained);END IF;
  IF jsonb_typeof(operation) IS DISTINCT FROM 'object' THEN RAISE EXCEPTION 'explicit operation value projection required' USING ERRCODE='22023';END IF;
@@ -109,15 +109,18 @@ BEGIN
   OR jsonb_array_length(removed)<>(SELECT count(DISTINCT v.value) FROM jsonb_array_elements(removed) v)
   OR EXISTS(SELECT 1 FROM jsonb_array_elements(authored) a JOIN jsonb_array_elements(removed) r ON a.value->>'name'=r.value#>>'{}') THEN
   RAISE EXCEPTION 'unique disjoint exact authored values required' USING ERRCODE='22023';END IF;
- FOR unset_name IN SELECT value#>>'{}' FROM jsonb_array_elements(removed) LOOP
-  SELECT p.* INTO property FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=unset_name;
-  IF FOUND THEN props:=props-property.prop_id::text;ELSE retained:=retained-unset_name;END IF;
- END LOOP;
- FOR entry IN SELECT value FROM jsonb_array_elements(authored) LOOP
-  SELECT p.* INTO property FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=entry->>'name';
-  IF FOUND THEN props:=props||jsonb_build_object(property.prop_id::text,truss.canonical_flat_cell(entry->'value'));
-  ELSE retained:=retained||jsonb_build_object(entry->>'name',truss.canonical_flat_cell(entry->'value'));END IF;
- END LOOP;
+ SELECT coalesce(array_agg(p.prop_id::text) FILTER(WHERE p.prop_id IS NOT NULL),'{}'::text[]),
+  coalesce(array_agg(u.name) FILTER(WHERE p.prop_id IS NULL),'{}'::text[])
+ INTO removed_props,removed_retained
+ FROM jsonb_array_elements_text(removed) u(name)
+ LEFT JOIN truss.prop_def p ON p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=u.name;
+ props:=props-removed_props;retained:=retained-removed_retained;
+ SELECT coalesce(jsonb_object_agg(p.prop_id::text,truss.canonical_flat_cell(a.value->'value')) FILTER(WHERE p.prop_id IS NOT NULL),'{}'::jsonb),
+  coalesce(jsonb_object_agg(a.value->>'name',truss.canonical_flat_cell(a.value->'value')) FILTER(WHERE p.prop_id IS NULL),'{}'::jsonb)
+ INTO set_props,set_retained
+ FROM jsonb_array_elements(authored) a(value)
+ LEFT JOIN truss.prop_def p ON p.type_id=selected_type AND p.retired_rev IS NULL AND p.name=a.value->>'name';
+ props:=props||set_props;retained:=retained||set_retained;
  FOR property IN SELECT p.* FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL
   AND p.name IN (SELECT value->>'name' FROM jsonb_array_elements(authored) UNION SELECT value#>>'{}' FROM jsonb_array_elements(removed)) LOOP
   IF truss.valid_property_definition(property) IS NOT TRUE THEN RAISE EXCEPTION 'supported exact property definition required' USING ERRCODE='0A000';END IF;

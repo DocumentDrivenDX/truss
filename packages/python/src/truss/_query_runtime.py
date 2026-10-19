@@ -80,8 +80,22 @@ def _page_key_token(value,t):
     return token
 
 
-def _decode_value(value, descriptor_id, descriptors):
-    descriptor = next(d for d in descriptors if d['identity'] == descriptor_id)
+def _descriptor_identity_key(identity):
+    return json.dumps(identity, sort_keys=True, ensure_ascii=False, separators=(',',':'))
+
+
+def _index_value_descriptors(descriptors):
+    indexed = {}
+    for descriptor in descriptors:
+        key = _descriptor_identity_key(descriptor['identity'])
+        if key in indexed:
+            raise ValueError('Unique logical value descriptor identity required')
+        indexed[key] = descriptor
+    return indexed
+
+
+def _decode_value(value, descriptor_id, descriptors_by_identity):
+    descriptor = descriptors_by_identity[_descriptor_identity_key(descriptor_id)]
     optional = descriptor.get('availability') == 'absent-allowed'
     if optional:
         if value == {'state': 'absent'}:
@@ -102,15 +116,15 @@ def _decode_value(value, descriptor_id, descriptors):
         return TextValue(kind=kind, text=value)
     if descriptor['kind'] == 'sequence':
         if type(value) is not list:raise ValueError('Complete logical sequence required')
-        return tuple(_decode_value(item,descriptor['item'],descriptors) for item in value)
+        return tuple(_decode_value(item,descriptor['item'],descriptors_by_identity) for item in value)
     if descriptor['kind'] == 'map':
         if type(value) is not dict or any(type(key) is not str for key in value):raise ValueError('Complete logical map required')
-        return MappingProxyType({key:_decode_value(value[key],descriptor['item'],descriptors) for key in sorted(value)})
+        return MappingProxyType({key:_decode_value(value[key],descriptor['item'],descriptors_by_identity) for key in sorted(value)})
     if descriptor['kind'] == 'record':
         members = descriptor['members']
         if type(value) is not dict or set(value) != {m['name'] for m in members}:
             raise ValueError('Complete logical record required')
-        return MappingProxyType({m['name']: _decode_value(value[m['name']], m['identity'], descriptors) for m in members})
+        return MappingProxyType({m['name']: _decode_value(value[m['name']], m['identity'], descriptors_by_identity) for m in members})
     raise ValueError('Unsupported query result shape')
 
 
@@ -121,6 +135,9 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
     total = 0
     rows = []
     graph = artifact['logicalPlan']['typeGraph']
+    descriptors_by_identity = None
+    if any(column['representation']['kind'] == 'value' for column in columns):
+        descriptors_by_identity = _index_value_descriptors(graph)
     for raw_row in raw_rows:
         if len(raw_row) != len(columns):
             raise ValueError('Exact compiled result shape required')
@@ -139,7 +156,7 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
                     raise ValueError('Exact boolean result required')
                 decoded.append(_decode_scalar(value, family))
             elif representation['kind'] == 'value':
-                decoded.append(_decode_value(json.loads(raw), representation['descriptor'], graph))
+                decoded.append(_decode_value(json.loads(raw), representation['descriptor'], descriptors_by_identity))
             elif representation['kind'] == 'nativeMetadata':
                 metadata = representation['metadata']
                 family = 'integer' if metadata == 'version' else 'string'

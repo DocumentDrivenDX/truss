@@ -1,0 +1,25 @@
+{
+  "runtimeFiles": 528,
+  "runtimeInventorySha256": "d5f8a85332d0f4cb59f22affa9455bd6167148f06ecee82cd822c41dcc87b279",
+  "wheelSha256": "0f73e04d61b628fe060d021a5610b74aaacd70c7283a8c63c5021c60ebed2331",
+  "runtimeManifestSha256": "6e4c0153d6fbd605db2fa2984399965243086ee430c684e6ec897f6265445cfa",
+  "sourceWheelInstalledDifferences": [],
+  "distribution": "truss-toolkit",
+  "version": "0.0.40",
+  "releaseId": "truss-catalog-runtime/0.72-candidate",
+  "weft": "0.4.42",
+  "weftBackend": "0.4.41",
+  "qualification": "pending hosted native, real schemas and unchanged full stress matrix",
+  "focusedCorrectness": {
+    "tests": 8,
+    "passed": true,
+    "scope": [
+      "corrected rebind digest on core08/current",
+      "same-transaction changed/no-op update followed by rebind",
+      "object and edge history after canonical deletion",
+      "precondition failures, success, replay and authority",
+      "edge link, retarget, unlink and original retry"
+    ],
+    "log": "/private/tmp/truss-final-release-focused-20261018.log"
+  }
+}

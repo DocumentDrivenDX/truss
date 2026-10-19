@@ -624,7 +624,7 @@ class CatalogReferenceAssembly:
         replacements=[]
         for source in sources:
             replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=258:raise ValueError('Exact additive runtime routine inventory required')
+        if len(replacements)!=272:raise ValueError('Exact additive runtime routine inventory required')
         signatures=[]
         for statement in replacements:
             header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
@@ -880,6 +880,8 @@ class CatalogReferenceAssembly:
             # producers and mandatory group settlement own history; do not queue
             # an independent private-row proof for every property event.
             cursor.execute('DROP TRIGGER IF EXISTS runtime_owned_journal_insert_commit ON truss.journal',prepare=False)
+            cursor.execute('DROP TRIGGER IF EXISTS runtime_import_source_commit ON truss.runtime_import_source',prepare=False)
+            cursor.execute('DROP TRIGGER IF EXISTS runtime_record_source_commit ON truss.record_source',prepare=False)
             # Replace the predecessor's row-at-a-time feed carriers. Transition
             # tables preserve complete row images with one capture per INSERT.
             for table,function in (('object_key_reservation_bucket','runtime_feed_capture_object_reservations'),
@@ -984,7 +986,7 @@ class CatalogReferenceAssembly:
             cursor.execute('REVOKE ALL ON FUNCTION truss.catalog_check_source_correspondence(bytea,bytea,bytea) FROM PUBLIC',prepare=False)
             cursor.execute(sql.SQL('ALTER FUNCTION truss.runtime_current_installation() OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
             cursor.execute('REVOKE ALL ON FUNCTION truss.runtime_current_installation() FROM PUBLIC',prepare=False)
-            for signature in ('runtime_owned_import_reference(bytea,text,text)','runtime_owned_import_record_source(uuid,int,bytea,text)','catalog_revision(text,text,text)','prepare_group(bytea,bytea,text,text)','query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_export_objects(jsonb,int)','query_export_edges(jsonb,int)','query_export_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)'):
+            for signature in ('runtime_owned_import_reference(bytea,text,text)','runtime_owned_import_record_source(uuid,int,bytea,text)','runtime_owned_import_record_sources(uuid,jsonb,text)','catalog_revision(text,text,text)','prepare_group(bytea,bytea,text,text)','query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_export_objects(jsonb,int)','query_export_edges(jsonb,int)','query_export_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)'):
                 cursor.execute(sql.SQL('ALTER FUNCTION truss.{} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
                 cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION truss.{} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
                 cursor.execute('SELECT reader_role,writer_role FROM truss.module_access',prepare=False)
@@ -1240,7 +1242,7 @@ class CatalogReferenceAssembly:
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(role)),prepare=False)
-                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.traverse_objects(jsonb,jsonb,int,int,int,text,text),truss.get_object(text,text,text,bigint,int,text,text),truss.get_edge(text,text,text,bigint,int,text,text),truss.reached(bytea,int,text,text),truss.feed_reached(text,bytea,int,text,text),truss.import_context(text,text),truss.import_key_selection(text,text,text,text,text),truss.import_identity_key_selection(bytea,text,text),truss.import_object_identity(bytea,bytea,bytea,text,text),truss.import_edge_identity(bytea,text,text),truss.import_record_source(uuid,bytea,text),truss.runtime_owned_import_reference(bytea,text,text),truss.runtime_owned_import_record_source(uuid,int,bytea,text),truss.import_report_record_authority(bytea,text,text,text),truss.page_edges(text,text,text,jsonb,text,int,int,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
+                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.traverse_objects(jsonb,jsonb,int,int,int,text,text),truss.get_object(text,text,text,bigint,int,text,text),truss.get_edge(text,text,text,bigint,int,text,text),truss.reached(bytea,int,text,text),truss.feed_reached(text,bytea,int,text,text),truss.import_context(text,text),truss.import_key_selection(text,text,text,text,text),truss.import_identity_key_selection(bytea,text,text),truss.import_object_identity(bytea,bytea,bytea,text,text),truss.import_edge_identity(bytea,text,text),truss.import_record_source(uuid,bytea,text),truss.runtime_owned_import_reference(bytea,text,text),truss.runtime_owned_import_record_source(uuid,int,bytea,text),truss.runtime_owned_import_record_sources(uuid,jsonb,text),truss.import_report_record_authority(bytea,text,text,text),truss.page_edges(text,text,text,jsonb,text,int,int,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',

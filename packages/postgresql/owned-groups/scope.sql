@@ -4,16 +4,21 @@
 CREATE FUNCTION truss.owned_graph_scope(seeds jsonb) RETURNS jsonb
 LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE node_keys text[]:='{}';edge_keys text[]:='{}';boundary_keys text[]:='{}';owned_edge_order text[]:='{}';
- nodes jsonb:='{}';node_images jsonb[]:='{}';edges jsonb:='{}';edge_images jsonb[]:='{}';boundary jsonb:='{}';types jsonb:='{}';relations jsonb:='{}';
+ nodes jsonb:='{}';node_images jsonb[]:='{}';edges jsonb:='{}';edge_images jsonb[]:='{}';boundary jsonb:='{}';boundary_images jsonb[]:='{}';
+ types jsonb:='{}';type_images jsonb[]:='{}';relations jsonb:='{}';relation_images jsonb[]:='{}';node_positions jsonb;
  entry jsonb;image jsonb;relation_image jsonb;witness jsonb;definition jsonb;
- node_key text;other_key text;edge_key text;root_key text;selected_type int;selected_id bigint;
- selected_node int:=1;observed record;side text;projection jsonb;local_edges jsonb:='[]';local_index int:=0;
+ node_key text;edge_key text;root_key text;selected_type int;selected_id bigint;
+ selected_node int:=1;projection jsonb;local_edges jsonb:='[]';seed_ordinal int:=0;duplicate_seed_ordinal bigint;
  result_json jsonb;used_bytes bigint:=0;head int;
 BEGIN
  IF jsonb_typeof(seeds) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'explicit typed scope seeds required' USING ERRCODE='22023';END IF;
  IF jsonb_array_length(seeds) NOT BETWEEN 0 AND 1024 OR octet_length(convert_to(seeds::text,'UTF8'))>1048576 THEN
   RAISE EXCEPTION 'bounded scope seeds required' USING ERRCODE='54000';END IF;
- FOR entry IN SELECT value FROM jsonb_array_elements(seeds) LOOP
+ SELECT min(ordinal) INTO duplicate_seed_ordinal FROM (
+  SELECT ordinal,row_number() OVER(PARTITION BY value->>'typeId',value->>'id' ORDER BY ordinal) occurrence
+  FROM jsonb_array_elements(seeds) WITH ORDINALITY s(value,ordinal)) repeated WHERE occurrence>1;
+ FOR entry IN SELECT value FROM jsonb_array_elements(seeds) WITH ORDINALITY s(value,ordinal) ORDER BY ordinal LOOP
+  seed_ordinal:=seed_ordinal+1;
   IF jsonb_typeof(entry) IS DISTINCT FROM 'object' THEN RAISE EXCEPTION 'typed scope seed required' USING ERRCODE='22023';END IF;
   IF entry-ARRAY['typeId','id']<>'{}'::jsonb OR jsonb_typeof(entry->'typeId') IS DISTINCT FROM 'string'
    OR jsonb_typeof(entry->'id') IS DISTINCT FROM 'string' THEN RAISE EXCEPTION 'exact typed seed fields required' USING ERRCODE='22023';END IF;
@@ -21,98 +26,116 @@ BEGIN
    RAISE EXCEPTION 'positive exact native seed identities required' USING ERRCODE='22023';END IF;
   IF (entry->>'typeId')::bigint>2147483647 OR (entry->>'id')::numeric>9223372036854775807 THEN
    RAISE EXCEPTION 'native seed identity range exceeded' USING ERRCODE='22023';END IF;
-  node_key:=(entry->>'typeId')||':'||(entry->>'id');
-  IF node_key=ANY(node_keys) THEN RAISE EXCEPTION 'duplicate scope seed' USING ERRCODE='22023';END IF;
-  node_keys:=array_append(node_keys,node_key);
+  IF seed_ordinal=duplicate_seed_ordinal THEN RAISE EXCEPTION 'duplicate scope seed' USING ERRCODE='22023';END IF;
  END LOOP;
  SELECT rev INTO STRICT head FROM truss.schema_head WHERE id=1;
- WHILE selected_node<=cardinality(node_keys) LOOP
-  node_key:=node_keys[selected_node];selected_type:=split_part(node_key,':',1)::int;selected_id:=split_part(node_key,':',2)::bigint;
+ -- UNION owns the visited set. Nodes discover incident edge identities and
+ -- owned edges discover both endpoints, without copying growing image maps.
+ -- A valid component has at most 1024 nodes plus 1024 incident edges.
+ WITH RECURSIVE seed_positions AS MATERIALIZED (
+  SELECT (s.value->>'typeId')::int type_id,(s.value->>'id')::bigint object_id,s.ordinal
+  FROM jsonb_array_elements(seeds) WITH ORDINALITY s(value,ordinal)),
+ members(kind,member_type,member_id) AS (
+  SELECT 'n'::text,s.type_id,s.object_id FROM seed_positions s
+  UNION
+  SELECT next_member.kind,next_member.member_type,next_member.member_id FROM members current_member
+  CROSS JOIN LATERAL (
+   (SELECT 'e'::text kind,e.rel_type_id member_type,e.id member_id FROM truss.edge e
+    WHERE current_member.kind='n' AND
+     ((e.source_id=current_member.member_id AND e.source_type=current_member.member_type)
+      OR (e.target_id=current_member.member_id AND e.target_type=current_member.member_type))
+    ORDER BY e.id LIMIT 1025)
+   UNION ALL
+   SELECT 'n'::text,endpoint.type_id,endpoint.object_id FROM truss.edge e
+    JOIN truss.rel_def r ON r.rel_type_id=e.rel_type_id
+    CROSS JOIN LATERAL (VALUES(e.source_type,e.source_id),(e.target_type,e.target_id)) endpoint(type_id,object_id)
+    WHERE current_member.kind='e' AND e.id=current_member.member_id AND e.rel_type_id=current_member.member_type
+     AND r.lifecycle='owned'
+  ) next_member),
+ bounded AS MATERIALIZED (SELECT * FROM members LIMIT 2049)
+ SELECT coalesce(array_agg(b.member_type::text||':'||b.member_id::text
+   ORDER BY coalesce(s.ordinal,2147483647),b.member_type,b.member_id) FILTER(WHERE b.kind='n'),'{}'::text[]),
+  coalesce(array_agg(b.member_id::text ORDER BY b.member_id) FILTER(WHERE b.kind='e'),'{}'::text[])
+ INTO node_keys,edge_keys FROM bounded b LEFT JOIN seed_positions s
+  ON b.kind='n' AND s.type_id=b.member_type AND s.object_id=b.member_id;
+ IF cardinality(node_keys)>1024 OR cardinality(edge_keys)>1024 THEN
+  RAISE EXCEPTION 'bounded complete ownership component required' USING ERRCODE='54000';END IF;
+ SELECT coalesce(jsonb_object_agg(n.key,n.ordinal-1),'{}'::jsonb) INTO node_positions
+ FROM unnest(node_keys) WITH ORDINALITY n(key,ordinal);
+ FOREACH node_key IN ARRAY node_keys LOOP
+  selected_type:=split_part(node_key,':',1)::int;selected_id:=split_part(node_key,':',2)::bigint;
   SELECT to_jsonb(o) INTO STRICT image FROM truss.object o WHERE o.id=selected_id AND o.type_id=selected_type;
-  SELECT to_jsonb(t) INTO STRICT definition FROM truss.type_def t WHERE t.type_id=selected_type;
-  used_bytes:=used_bytes+octet_length(convert_to(image::text,'UTF8'))+octet_length(convert_to(definition::text,'UTF8'));
+  used_bytes:=used_bytes+octet_length(convert_to(image::text,'UTF8'));
   IF used_bytes>4194304 THEN RAISE EXCEPTION 'bounded complete graph image required' USING ERRCODE='54000';END IF;
-  node_images:=array_append(node_images,image);types:=types||jsonb_build_object(selected_type::text,definition);
-  FOR observed IN SELECT to_jsonb(e) AS edge_image,to_jsonb(r) AS relationship_image FROM truss.edge e
-   JOIN truss.rel_def r ON r.rel_type_id=e.rel_type_id
-   WHERE (e.source_id=selected_id AND e.source_type=selected_type) OR (e.target_id=selected_id AND e.target_type=selected_type)
-   ORDER BY e.id LIMIT 1025 LOOP
-   edge_key:=observed.edge_image->>'id';
-   IF edge_key=ANY(edge_keys) THEN CONTINUE;END IF;
-   IF cardinality(edge_keys)=1024 THEN RAISE EXCEPTION 'bounded incident edge image required' USING ERRCODE='54000';END IF;
-   relation_image:=observed.relationship_image;
-   IF relation_image->>'lifecycle' NOT IN ('owned','independent') OR relation_image->'retired_rev'<>'null'::jsonb THEN
-    RAISE EXCEPTION 'supported current incident lifecycle required' USING ERRCODE='0A000';END IF;
-   IF relation_image->>'lifecycle'='owned' AND (relation_image->'directed'<>'true'::jsonb
-    OR relation_image->'composition'<>'false'::jsonb OR relation_image->'assoc_type_id'<>'null'::jsonb) THEN
-    RAISE EXCEPTION 'selected parent to target ownership required' USING ERRCODE='0A000';END IF;
-   used_bytes:=used_bytes+octet_length(convert_to(observed.edge_image::text,'UTF8'))+octet_length(convert_to(relation_image::text,'UTF8'));
-   IF used_bytes>4194304 THEN RAISE EXCEPTION 'bounded complete graph image required' USING ERRCODE='54000';END IF;
-   edge_keys:=array_append(edge_keys,edge_key);edge_images:=array_append(edge_images,observed.edge_image);
-   relations:=relations||jsonb_build_object(relation_image->>'rel_type_id',relation_image);
-   IF relation_image->>'lifecycle'='owned' THEN
-    FOREACH side IN ARRAY ARRAY['source','target'] LOOP
-     other_key:=(observed.edge_image->>(side||'_type'))||':'||(observed.edge_image->>(side||'_id'));
-     IF NOT other_key=ANY(node_keys) THEN
-      IF cardinality(node_keys)=1024 THEN RAISE EXCEPTION 'bounded complete ownership component required' USING ERRCODE='54000';END IF;
-      node_keys:=array_append(node_keys,other_key);
-     END IF;
-    END LOOP;
-   END IF;
-  END LOOP;
+  node_images[selected_node]:=image;
   selected_node:=selected_node+1;
  END LOOP;
- -- Traversal observes each node once in node_keys order. Assemble the output
- -- map once; it is only consumed after complete component discovery.
+ FOR selected_type IN SELECT DISTINCT split_part(n.key,':',1)::int FROM unnest(node_keys) n(key) ORDER BY 1 LOOP
+  SELECT to_jsonb(t) INTO STRICT definition FROM truss.type_def t WHERE t.type_id=selected_type;
+  used_bytes:=used_bytes+octet_length(convert_to(definition::text,'UTF8'));
+  IF used_bytes>4194304 THEN RAISE EXCEPTION 'bounded complete graph image required' USING ERRCODE='54000';END IF;
+  type_images[cardinality(type_images)+1]:=definition;
+ END LOOP;
+ FOREACH edge_key IN ARRAY edge_keys LOOP
+  SELECT to_jsonb(e) INTO STRICT image FROM truss.edge e WHERE e.id=edge_key::bigint;
+  used_bytes:=used_bytes+octet_length(convert_to(image::text,'UTF8'));
+  IF used_bytes>4194304 THEN RAISE EXCEPTION 'bounded complete graph image required' USING ERRCODE='54000';END IF;
+  edge_images[cardinality(edge_images)+1]:=image;
+ END LOOP;
+ FOR selected_type IN SELECT DISTINCT (e.image->>'rel_type_id')::int FROM unnest(edge_images) e(image) ORDER BY 1 LOOP
+  SELECT to_jsonb(r) INTO STRICT relation_image FROM truss.rel_def r WHERE r.rel_type_id=selected_type;
+  IF relation_image->>'lifecycle' NOT IN ('owned','independent') OR relation_image->'retired_rev'<>'null'::jsonb THEN
+   RAISE EXCEPTION 'supported current incident lifecycle required' USING ERRCODE='0A000';END IF;
+  IF relation_image->>'lifecycle'='owned' AND (relation_image->'directed'<>'true'::jsonb
+   OR relation_image->'composition'<>'false'::jsonb OR relation_image->'assoc_type_id'<>'null'::jsonb) THEN
+   RAISE EXCEPTION 'selected parent to target ownership required' USING ERRCODE='0A000';END IF;
+  used_bytes:=used_bytes+octet_length(convert_to(relation_image::text,'UTF8'));
+  IF used_bytes>4194304 THEN RAISE EXCEPTION 'bounded complete graph image required' USING ERRCODE='54000';END IF;
+  relation_images[cardinality(relation_images)+1]:=relation_image;
+ END LOOP;
  SELECT coalesce(jsonb_object_agg(c.node_key,c.image),'{}'::jsonb) INTO nodes
  FROM unnest(node_keys,node_images) AS c(node_key,image);
- -- Traversal only reads edge membership above. Materialize original edge
- -- images once instead of recopying the complete growing JSONB map per edge.
  SELECT coalesce(jsonb_object_agg(c.edge_key,c.image),'{}'::jsonb) INTO edges
  FROM unnest(edge_keys,edge_images) AS c(edge_key,image);
- -- Outside independent endpoints are witnesses, not traversed components.
- FOREACH edge_key IN ARRAY edge_keys LOOP
-  image:=edges->edge_key;relation_image:=relations->(image->>'rel_type_id');
-  IF relation_image->>'lifecycle'='owned' THEN
-   local_edges:=local_edges||jsonb_build_array(jsonb_build_object('edge',local_index,
-    'source',array_position(node_keys,(image->>'source_type')||':'||(image->>'source_id'))-1,
-    'target',array_position(node_keys,(image->>'target_type')||':'||(image->>'target_id'))-1));
-   owned_edge_order:=array_append(owned_edge_order,edge_key);
-   local_index:=local_index+1;
-  ELSE
-   FOREACH side IN ARRAY ARRAY['source','target'] LOOP
-    other_key:=(image->>(side||'_type'))||':'||(image->>(side||'_id'));
-    IF NOT other_key=ANY(node_keys) AND NOT other_key=ANY(boundary_keys) THEN
-     IF cardinality(boundary_keys)=256 THEN RAISE EXCEPTION 'bounded boundary witnesses required' USING ERRCODE='54000';END IF;
-     boundary_keys:=array_append(boundary_keys,other_key);
-    END IF;
-   END LOOP;
-  END IF;
- END LOOP;
+ SELECT coalesce(jsonb_object_agg(t.image->>'type_id',t.image),'{}'::jsonb) INTO types FROM unnest(type_images) t(image);
+ SELECT coalesce(jsonb_object_agg(r.image->>'rel_type_id',r.image),'{}'::jsonb) INTO relations FROM unnest(relation_images) r(image);
+ WITH owned AS (
+  SELECT e.image,row_number() OVER(ORDER BY (e.image->>'id')::bigint)-1 ordinal
+  FROM unnest(edge_images) e(image) JOIN truss.rel_def r ON r.rel_type_id=(e.image->>'rel_type_id')::int WHERE r.lifecycle='owned')
+ SELECT coalesce(jsonb_agg(jsonb_build_object('edge',o.ordinal,
+   'source',(node_positions->>((o.image->>'source_type')||':'||(o.image->>'source_id')))::int,
+   'target',(node_positions->>((o.image->>'target_type')||':'||(o.image->>'target_id')))::int) ORDER BY o.ordinal),'[]'::jsonb),
+  coalesce(array_agg(o.image->>'id' ORDER BY o.ordinal),'{}'::text[])
+ INTO local_edges,owned_edge_order FROM owned o;
+ -- Independent endpoints and their roots are witnesses, not traversed nodes.
+ WITH RECURSIVE witnesses(type_id,object_id) AS (
+  SELECT endpoint.type_id,endpoint.object_id FROM unnest(edge_images) e(image)
+   JOIN truss.rel_def r ON r.rel_type_id=(e.image->>'rel_type_id')::int
+   CROSS JOIN LATERAL (VALUES((e.image->>'source_type')::int,(e.image->>'source_id')::bigint),
+    ((e.image->>'target_type')::int,(e.image->>'target_id')::bigint)) endpoint(type_id,object_id)
+   WHERE r.lifecycle='independent' AND NOT (node_positions ? (endpoint.type_id::text||':'||endpoint.object_id::text))
+  UNION
+  SELECT o.root_type,o.root_id FROM witnesses w JOIN truss.object o ON o.id=w.object_id AND o.type_id=w.type_id
+   WHERE o.root_id IS NOT NULL AND NOT (node_positions ? (o.root_type::text||':'||o.root_id::text)))
+ SELECT coalesce(array_agg(w.type_id::text||':'||w.object_id::text ORDER BY w.type_id,w.object_id),'{}'::text[])
+ INTO boundary_keys FROM (SELECT * FROM witnesses LIMIT 257) w;
  IF cardinality(boundary_keys)>256 THEN RAISE EXCEPTION 'bounded boundary witnesses required' USING ERRCODE='54000';END IF;
- selected_node:=1;
- WHILE selected_node<=cardinality(boundary_keys) LOOP
-  node_key:=boundary_keys[selected_node];selected_type:=split_part(node_key,':',1)::int;selected_id:=split_part(node_key,':',2)::bigint;
+ FOREACH node_key IN ARRAY boundary_keys LOOP
+  selected_type:=split_part(node_key,':',1)::int;selected_id:=split_part(node_key,':',2)::bigint;
   SELECT jsonb_build_object('id',o.id,'type_id',o.type_id,'root_id',o.root_id,'root_type',o.root_type,'rev',o.rev,'ver',o.ver)
    INTO STRICT witness FROM truss.object o WHERE o.id=selected_id AND o.type_id=selected_type;
   SELECT to_jsonb(t) INTO STRICT definition FROM truss.type_def t WHERE t.type_id=selected_type;
-  boundary:=boundary||jsonb_build_object(node_key,jsonb_build_object('object',witness,'definition',definition));
+  boundary_images[cardinality(boundary_images)+1]:=jsonb_build_object('object',witness,'definition',definition);
   used_bytes:=used_bytes+octet_length(convert_to(witness::text,'UTF8'))+octet_length(convert_to(definition::text,'UTF8'));
   IF used_bytes>4194304 THEN RAISE EXCEPTION 'bounded complete graph image required' USING ERRCODE='54000';END IF;
-  IF witness->'root_id'<>'null'::jsonb THEN
-   root_key:=(witness->>'root_type')||':'||(witness->>'root_id');
-   IF NOT root_key=ANY(node_keys) AND NOT root_key=ANY(boundary_keys) THEN
-    IF cardinality(boundary_keys)=256 THEN RAISE EXCEPTION 'bounded boundary root witnesses required' USING ERRCODE='54000';END IF;
-    boundary_keys:=array_append(boundary_keys,root_key);
-   END IF;
-  END IF;
-  selected_node:=selected_node+1;
  END LOOP;
+ SELECT coalesce(jsonb_object_agg(b.key,b.image),'{}'::jsonb) INTO boundary
+ FROM unnest(boundary_keys,boundary_images) b(key,image);
  -- An aggregate root pointer without a connecting owned-edge path is corrupt
  -- membership, not permission to invent an edge or silently omit a cascade child.
  IF EXISTS(SELECT 1 FROM unnest(node_keys) n(node_key) JOIN truss.object o
    ON o.root_type=split_part(n.node_key,':',1)::int AND o.root_id=split_part(n.node_key,':',2)::bigint
-   WHERE NOT (o.type_id::text||':'||o.id::text)=ANY(node_keys) LIMIT 1) THEN
+   WHERE NOT (node_positions ? (o.type_id::text||':'||o.id::text)) LIMIT 1) THEN
   RAISE EXCEPTION 'complete stored aggregate membership correspondence required' USING ERRCODE='55000';
  END IF;
  projection:=truss.owned_forest_projection(cardinality(node_keys),local_edges);

@@ -25,7 +25,7 @@ ddx:
 
 ## Owner clarification — cost-proportionate enforcement, 2026-10-18
 
-The trusted Truss application engine owns semantic validation, using one immutable indexed schema in application memory per revision. PostgreSQL owns durable catalog/data storage and the transactional and relational checks whose integrity value justifies their measured cost. Persisting a second full schema in PostgreSQL is not an application cache. Reinterpreting the schema for every record or replaying all engine validation and history construction in native functions is not required.
+The trusted Truss application engine owns semantic validation, using one immutable indexed schema in application memory per revision. PostgreSQL owns durable catalog/data storage and the transactional and relational checks whose integrity value justifies their analyzed resource cost. Persisting a second full schema in PostgreSQL is not an application cache. Reinterpreting the schema for every record or replaying all engine validation and history construction in native functions is not required.
 
 D7 and D9 retain their engine/database/none distinction. Keep useful database constraints and concurrency controls; assess further native checks by prevented failure, complexity, latency, statement count and memory on the real schemas and full stress matrix. Native helpers, including key encoding, may remain where that comparison supports them. No blanket rule requires every semantic function to execute in PostgreSQL. This owner decision and ADR-008 take precedence over contrary placement assumptions in downstream designs.
 
