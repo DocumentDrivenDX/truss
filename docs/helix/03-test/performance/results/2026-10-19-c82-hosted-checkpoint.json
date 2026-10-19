@@ -1,0 +1,544 @@
+{
+  "candidate": {
+    "runId": "39181726399",
+    "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+    "runtimePayloadInventorySha256": "05e838d643817e2f66e471e5900b577af42b312ba0825f7dd87571638402663c",
+    "hostedRuntimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+    "wheelSha256": "b612605e9398b345462266212c2257f2f67c5848d77a1ad68b65d6183bcaeb25",
+    "sdistSha256": "7cefe497bb50497534e57cdf40aa1982a2dc25f559877e63bc28c5b288be0a73"
+  },
+  "snapshot": {
+    "status": "in_progress",
+    "package": "success",
+    "largeCapacityUbuntu": "success",
+    "largeCapacityMacos": "success",
+    "nativeUbuntu": "failure",
+    "nativeMacos": "failure",
+    "stressCompleted": 11,
+    "stressPassed": 9,
+    "stressFailed": 2,
+    "stressInProgress": 5,
+    "stressQueued": 6
+  },
+  "failures": [
+    {
+      "kind": "native-test-fixture",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911788",
+      "tests": [
+        "test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind",
+        "test_required_catalog_rebind_native.RequiredCatalogRebind08Tests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind"
+      ],
+      "correctedAttribution": "Only RequiredCatalogRebindTests and RequiredCatalogRebind08Tests failed. Their revised() override changes giftFlags to required; the inherited compact-settlement fixture seeded both objects without giftFlags. The fixture now seeds a valid SequenceValue for giftFlags. This is not a runtime failure.",
+      "rawLog": "/private/tmp/truss-c82-native-ubuntu-job.log",
+      "rawLogSha256": "9c36cef48e356191234e5f084f8d7369e2f7621fadb09718782602120e496de8",
+      "testRun": {
+        "testsRun": 14,
+        "failures": 2,
+        "logExcerptLines": [
+          1971,
+          1979
+        ]
+      }
+    },
+    {
+      "kind": "native-capacity-timeout",
+      "platform": "macos-14",
+      "jobId": "117835911753",
+      "stage": "initial 72-test gate",
+      "test": "StressRegistrationTests.test_thousand_distinct_type_single_create_group",
+      "sqlstate": "57014",
+      "rawLog": "/private/tmp/truss-c82-native-macos-job.log",
+      "rawLogSha256": "5cb5b27d04ae976c96d2aaf20ab0573576d27e62d956732907f3f198de9b5929",
+      "testRun": {
+        "testsRun": 72,
+        "elapsedSeconds": 337.847,
+        "failedTests": [
+          "StressRegistrationTests.test_thousand_distinct_type_single_create_group"
+        ],
+        "logExcerptLines": [
+          510,
+          523,
+          525
+        ]
+      }
+    },
+    {
+      "kind": "stress-timeout",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911868",
+      "case": "wide",
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 128,
+        "nodes": 10000,
+        "edges": 20000,
+        "elements": 1290,
+        "attemptedBatchSizes": [
+          1,
+          100,
+          1000
+        ],
+        "committedBatchSizes": [
+          1,
+          100
+        ]
+      },
+      "sqlstate": "57014",
+      "stage": "journal semantic CTE; runtime_owned_history_record_in_metadata(jsonb,jsonb,jsonb)",
+      "elapsedSeconds": 778.532,
+      "report": "/private/tmp/truss-c82-stress-wide-ubuntu/report.json",
+      "reportSha256": "971116c28171d16644577bb98bb392e7149b27622907d2a6d5b0489546b23969"
+    }
+  ],
+  "scope": "Checkpoint only; matrix has not reached terminal status and does not qualify release. Stress counts are from the same run snapshot.",
+  "stressReports": [
+    {
+      "case": "many-types",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911907",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-hosted-artifacts/many-types-ubuntu/report.json",
+      "reportSha256": "be1e410a0ee6e462cefcfc9dda7ebef7a0d73bc519c0667977b126feaf2cf4ed",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured",
+      "performanceTriageSignals": [],
+      "seconds": 788.227265607,
+      "workload": {
+        "types": 1000,
+        "fieldsPerType": 12,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "elements": 13000,
+      "schemaBytes": 2528638,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ]
+    },
+    {
+      "case": "complex",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911894",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-stress-complex-ubuntu/report.json",
+      "reportSha256": "496fd03d9354765ff192c2a5d898c10195f68e71e06d68e2ab497963fd5d50b7",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured",
+      "performanceTriageSignals": [],
+      "seconds": 509.953293256,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 12,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed-nested"
+      },
+      "elements": 150,
+      "schemaBytes": 28465,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ]
+    },
+    {
+      "case": "index-heavy",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911915",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-stress-index-heavy-ubuntu/report.json",
+      "reportSha256": "697dcde9b58b7c035ac1e1c697f3aa5b8b9c54fafcaf10f5a7f5e9581f055cd8",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured_with_triage_signals",
+      "performanceTriageSignals": [
+        {
+          "case": "index-heavy",
+          "signal": "bulk100_speedup",
+          "observed": 4.236477529868054,
+          "triageThreshold": 5
+        }
+      ],
+      "seconds": 437.70246144099997,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 12,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 8,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "elements": 130,
+      "schemaBytes": 30119,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ]
+    },
+    {
+      "case": "node-heavy",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911939",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-stress-node-heavy-ubuntu/report.json",
+      "reportSha256": "fa8407e6a94ae7175ca346ae6eac739506b932858a39f7c294fff48d30bbc4eb",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured",
+      "performanceTriageSignals": [],
+      "seconds": 777.425262792,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 12,
+        "nodes": 20000,
+        "edges": 40000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "elements": 130,
+      "schemaBytes": 24838,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ]
+    },
+    {
+      "case": "nominal",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911856",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-stress-nominal-ubuntu/report.json",
+      "reportSha256": "a236348734cd12a2f3c5e1a36e5e055a8c25b5097ad1055cd31bcbfa4b35453a",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured",
+      "performanceTriageSignals": [],
+      "seconds": 262.703462362,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 12,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "elements": 130,
+      "schemaBytes": 24835,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ]
+    },
+    {
+      "case": "skewed",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911958",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-stress-skewed-ubuntu/report.json",
+      "reportSha256": "21d51e728214efda494cd04d0ceeccd03ea0166971ce7a444ae2bc0f22c7614f",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured",
+      "performanceTriageSignals": [],
+      "seconds": 552.5084338190001,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 12,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "95_percent_edges_on_1_percent_nodes",
+        "shape": "mixed"
+      },
+      "elements": 130,
+      "schemaBytes": 24834,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ]
+    },
+    {
+      "case": "small",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911901",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-stress-small-ubuntu/report.json",
+      "reportSha256": "c481c6669dbd42faa11ba3a35100aff81050412892c7545ce80d153c85a6c399",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured",
+      "performanceTriageSignals": [],
+      "seconds": 114.72579979,
+      "workload": {
+        "types": 1,
+        "fieldsPerType": 4,
+        "nodes": 1000,
+        "edges": 1000,
+        "indexedPropertiesPerType": 1,
+        "distribution": "uniform",
+        "shape": "scalar"
+      },
+      "elements": 5,
+      "schemaBytes": 1224,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000
+      ]
+    },
+    {
+      "case": "type-heavy",
+      "platform": "macos-14",
+      "jobId": "117835911852",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-stress-type-heavy-macos/report.json",
+      "reportSha256": "2a51fa8e820ee337bfa54b765d7fea1844d8f5164fe6adcba9879c15df3f6d86",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured",
+      "performanceTriageSignals": [],
+      "seconds": 490.85765849999996,
+      "workload": {
+        "types": 100,
+        "fieldsPerType": 12,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "elements": 1300,
+      "schemaBytes": 249838,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ]
+    },
+    {
+      "case": "type-heavy",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911910",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-stress-type-heavy-ubuntu/report.json",
+      "reportSha256": "d02f90039775b79abdccfea61f5199eaaef5b663dea5d1e278a4a38b864b7c60",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured",
+      "performanceTriageSignals": [],
+      "seconds": 450.681955863,
+      "workload": {
+        "types": 100,
+        "fieldsPerType": 12,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "elements": 1300,
+      "schemaBytes": 249838,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ]
+    },
+    {
+      "case": "wide",
+      "platform": "ubuntu-24.04",
+      "jobId": "117835911868",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-stress-wide-ubuntu/report.json",
+      "reportSha256": "971116c28171d16644577bb98bb392e7149b27622907d2a6d5b0489546b23969",
+      "passed": false,
+      "functionalPassed": false,
+      "performanceQualification": "incomplete",
+      "performanceTriageSignals": [
+        {
+          "case": "wide",
+          "signal": "bulk100_speedup",
+          "observed": 3.7296077599835704,
+          "triageThreshold": 5
+        }
+      ],
+      "seconds": 778.53160174,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 128,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "elements": 1290,
+      "schemaBytes": 224762,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100
+      ]
+    },
+    {
+      "case": "index-heavy",
+      "platform": "macos-14",
+      "jobId": "117835911853",
+      "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+      "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+      "reportPath": "/private/tmp/truss-c82-hosted-artifacts/index-heavy-macos/report.json",
+      "reportSha256": "544e59169d12006fb2c540839ed6fd24078eb1095c9025c8fba3fc488190818b",
+      "passed": false,
+      "functionalPassed": false,
+      "performanceQualification": "incomplete",
+      "performanceTriageSignals": [
+        {
+          "case": "index-heavy",
+          "signal": "bulk100_speedup",
+          "observed": 4.207069786816837,
+          "triageThreshold": 5
+        }
+      ],
+      "seconds": 488.6478076249999,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 12,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 8,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "elements": 130,
+      "schemaBytes": 30119,
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "failedOperations": [
+        {
+          "operation": "bulk_update_1024",
+          "failures": 1,
+          "failedElapsedMs": [
+            10292.917125
+          ]
+        },
+        {
+          "operation": "bulk_update_end_to_end_1024",
+          "failures": 1,
+          "failedElapsedMs": [
+            10296.914083
+          ]
+        }
+      ]
+    }
+  ],
+  "retainedArtifacts": {
+    "directory": "docs/helix/03-test/performance/results/c82-hosted-20261019",
+    "manifest": "docs/helix/03-test/performance/results/c82-hosted-20261019/manifest.json",
+    "manifestSha256": "a47a9d9654b5a9c1d01eb6543ac37b844298fe9801e321ec38ec156f784e2a4e",
+    "reportsRetained": 11,
+    "nativeLogsRetained": 2,
+    "capacityStatisticsRetained": 9
+  }
+}

@@ -15,6 +15,16 @@ ddx:
 
 # Practical functionality and performance
 
+## Trusted-engine statement audit
+
+The [statement audit](operation-statement-audit-20261019.md) records retained
+purposes and removes duplicate engine-plan/image proofs, per-key image copies,
+row-at-a-time feed/configuration work and per-record schema revalidation.
+Canonical writes retain transaction/revision/version checks, current authority,
+relational constraints, required history and unchanged query/capacity bounds.
+The final combined candidate is awaiting its installed-package qualification;
+earlier C83 results do not qualify these bytes. No release has been published.
+
 ## 2026-10-19: shared batch history and graph qualification
 
 C82 remained below the required capacity: wide updates timed out in history

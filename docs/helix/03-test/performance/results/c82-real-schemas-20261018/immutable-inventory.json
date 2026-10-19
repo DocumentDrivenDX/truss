@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+  "payloadCount": 528,
+  "runtimeInventorySha256": "05e838d643817e2f66e471e5900b577af42b312ba0825f7dd87571638402663c",
+  "wheelSha256": "5cf717b94068eac13063e06ae270b7a8cd1a0e9f595ce86a04bf329a052cce3e",
+  "sourceMismatches": [],
+  "excludedSourceFiles": [
+    "truss/_umf/owners/assertion-fields/producer.js",
+    "truss/_umf/owners/declarations/producer.js",
+    "truss/_umf/owners/record-members/producer.js",
+    "truss/_umf/owners/reference-links/producer.js",
+    "truss/_umf/owners/scalar-types/producer.js"
+  ],
+  "exclusionBasis": "packages/python/pyproject.toml tool.setuptools.exclude-package-data: _umf/owners/*/producer.js",
+  "immutablePayloadParity": "PASS: all 528 wheel payloads equal source commit; only five explicitly excluded producer source files absent"
+}

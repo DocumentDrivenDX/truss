@@ -1,0 +1,9 @@
+{
+  "candidate": "C83",
+  "payloadCount": 528,
+  "runtimeInventorySha256": "c26941e706919a974d1bc3d07c99138ed5b8652ee45e6d52a248dd1fb290dbbf",
+  "nativeManifestSha256": "7845223dec360e632a962d8b19cc8dce1df67b09c1ebd0772c8233fe92df87a9",
+  "wheelSha256": "9ac6fde6cee33ca41d333a8273bb2212701aa28a3df0cf89a3bd57d81269804e",
+  "sourceMismatches": [],
+  "sourceState": "uncommitted combined structural fixes; immutable commit parity pending"
+}

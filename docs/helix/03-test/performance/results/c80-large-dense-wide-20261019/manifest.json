@@ -1,0 +1,39 @@
+{
+  "runId": "39176421417",
+  "sourceSha": "109d474a3df68fa8de2d29f87557b020c2d70486",
+  "runtimeManifestSha256": "32e5c7cb7d56d39e692d1f024cd5733f6b52c7281d4e1378d0b7e3bb564c8013",
+  "files": [
+    {
+      "source": "/private/tmp/truss-c80-hosted-artifacts/public-stress-wide-ubuntu-24.04/report.json",
+      "retained": "docs/helix/03-test/performance/results/c80-large-dense-wide-20261019/wide-ubuntu-report.json.gz",
+      "rawBytes": 1139814,
+      "rawSha256": "1abe48cf2c33d7ec8eccbb80072f2f684fc7bfd22f5fe432a0a74f65865b3fe9",
+      "gzipBytes": 30510,
+      "gzipSha256": "870d44ba5c32f07be943cebb79944063ca3f7a20e12724d84925914f2fbd65d4"
+    },
+    {
+      "source": "/private/tmp/truss-c80-hosted-artifacts/public-stress-wide-macos-14/report.json",
+      "retained": "docs/helix/03-test/performance/results/c80-large-dense-wide-20261019/wide-macos-report.json.gz",
+      "rawBytes": 1140343,
+      "rawSha256": "a7154010704710f485bb8daad2d6c601536c9953f90ec37e83ef009b04833934",
+      "gzipBytes": 29445,
+      "gzipSha256": "d4d546d42aff9cc8a918a3b546bc2383f45f6dd7957e8c4f1c6f9e85ab207f94"
+    },
+    {
+      "source": "/private/tmp/truss-c80-hosted-artifacts/public-stress-dense-edges-ubuntu-24.04/report.json",
+      "retained": "docs/helix/03-test/performance/results/c80-large-dense-wide-20261019/dense-edges-ubuntu-report.json.gz",
+      "rawBytes": 6149799,
+      "rawSha256": "13099b9dd88a26b29139c187a9cc7cffd25ef0713210293da528bbb468bff91c",
+      "gzipBytes": 108599,
+      "gzipSha256": "a5a22a47ef1b67cf241186c83654835221f50e1c22d4e31f9ab6f91288bbdec5"
+    },
+    {
+      "source": "/private/tmp/truss-c80-hosted-artifacts/public-stress-dense-edges-macos-14/report.json",
+      "retained": "docs/helix/03-test/performance/results/c80-large-dense-wide-20261019/dense-edges-macos-report.json.gz",
+      "rawBytes": 6147848,
+      "rawSha256": "f64bd3418f39f4423164029de6c7642f3a2fa115a750ecdeb5c6389716321950",
+      "gzipBytes": 111995,
+      "gzipSha256": "69e7d5cf8a6950fdb99465605f79c6973ca21be16ac65104620a40dcf7bee3ab"
+    }
+  ]
+}

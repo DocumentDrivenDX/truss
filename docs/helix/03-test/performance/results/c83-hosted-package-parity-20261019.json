@@ -1,0 +1,23 @@
+{
+  "artifactId": "12157840817",
+  "artifactName": "python-package",
+  "expectedRuntimeInventorySha256": "c26941e706919a974d1bc3d07c99138ed5b8652ee45e6d52a248dd1fb290dbbf",
+  "extraPayloads": [],
+  "hostedPayloadCount": 528,
+  "method": "Compare every truss/ entry in the hosted wheel byte-for-byte against immutable source files at sourceCommit, excluding only the five producer.js files specified by pyproject package-data exclusions.",
+  "missingPayloads": [],
+  "parity": "pass",
+  "payloadCount": 528,
+  "run": "https://github.com/DocumentDrivenDX/truss/actions/runs/39184532606",
+  "runtimeManifestSha256": "7845223dec360e632a962d8b19cc8dce1df67b09c1ebd0772c8233fe92df87a9",
+  "sdist": {
+    "path": "/private/tmp/truss-c83-hosted-package/truss_toolkit-0.0.40.tar.gz",
+    "sha256": "9fec51e307e69ff967fdb01c4d0b8c44a811eb154089b28cf655a27d9882c623"
+  },
+  "sourceCommit": "d442e5c616ee27ac0b945ec2f03804cabc324e8c",
+  "sourceMismatches": [],
+  "wheel": {
+    "path": "/private/tmp/truss-c83-hosted-package/truss_toolkit-0.0.40-py3-none-any.whl",
+    "sha256": "85ae954afadf9a09921855e57eab28489281483c78aed0897147e8dd77c27ecd"
+  }
+}

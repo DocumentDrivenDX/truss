@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "d442e5c616ee27ac0b945ec2f03804cabc324e8c",
+  "payloadCount": 528,
+  "runtimeInventorySha256": "c26941e706919a974d1bc3d07c99138ed5b8652ee45e6d52a248dd1fb290dbbf",
+  "wheelSha256": "9ac6fde6cee33ca41d333a8273bb2212701aa28a3df0cf89a3bd57d81269804e",
+  "sourceMismatches": [],
+  "excludedSourceFiles": [
+    "truss/_umf/owners/assertion-fields/producer.js",
+    "truss/_umf/owners/declarations/producer.js",
+    "truss/_umf/owners/record-members/producer.js",
+    "truss/_umf/owners/reference-links/producer.js",
+    "truss/_umf/owners/scalar-types/producer.js"
+  ],
+  "exclusionBasis": "packages/python/pyproject.toml tool.setuptools.exclude-package-data",
+  "qualification": "PASS: all 528 installed-wheel payloads equal immutable source commit"
+}

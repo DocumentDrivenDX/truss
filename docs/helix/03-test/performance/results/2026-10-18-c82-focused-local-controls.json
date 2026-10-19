@@ -1,0 +1,131 @@
+{
+  "candidate": "C82",
+  "scope": "Focused native PostgreSQL controls for bounded journal batches, key capacity, large grouped writes, relationship evolution, rootless preparation, and history transition guards.",
+  "qualification": {
+    "focusedControls": "20 requested selectors have passing results across two invocations; the first invocation was not all-green.",
+    "performance": "not_evaluated",
+    "fullRelease": "pending"
+  },
+  "package": {
+    "wheel": "/private/tmp/truss-c82-dist/truss_toolkit-0.0.40-py3-none-any.whl",
+    "wheelSha256": "5cf717b94068eac13063e06ae270b7a8cd1a0e9f595ce86a04bf329a052cce3e",
+    "runtimePayloadCount": 528,
+    "runtimeInventorySha256": "05e838d643817e2f66e471e5900b577af42b312ba0825f7dd87571638402663c",
+    "nativeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+    "sourceRevision": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+    "sourceMismatches": []
+  },
+  "environment": {
+    "python": "/private/tmp/truss-bunfree-venv/bin/python",
+    "weftPrefix": "/private/tmp/weft-042-final-package",
+    "testSource": "/private/tmp/truss-performance-release-20261018/packages/python/tests",
+    "database": "local pgserver PostgreSQL 18",
+    "statementTimeoutMs": 10000,
+    "operationTimeoutMs": 30000,
+    "runtimeWheelChangedBetweenInvocations": false
+  },
+  "invocations": [
+    {
+      "id": "focused-20",
+      "selectorCount": 20,
+      "passed": 17,
+      "failed": 3,
+      "failedSelectors": [
+        "test_journal_batches_native.JournalBatchTests.test_63_mixed_changed_noop_history_order_and_refs",
+        "test_journal_batches_native.JournalBatchTests.test_64_mixed_changed_noop_history_order_and_refs",
+        "test_journal_batches_native.JournalBatchTests.test_65_mixed_changed_noop_history_order_and_refs"
+      ],
+      "failureClassification": "Test-oracle timezone representation mismatch: the test compared object JSON captured in the admin session's local timezone with transition JSON serialized in UTC. The displayed timestamps represented the same instants. No runtime failure was observed in these three cases before the direct snapshot equality assertion.",
+      "result": "17 passed; 3 test-oracle failures",
+      "log": {
+        "path": "2026-10-18-c82-focused-17pass-3oraclefail.log.gz",
+        "sha256": "9d530a5270a59f681648b74584a5fb16227c12eb5eafe39b88160edfddd128b2",
+        "sha256Scope": "uncompressed original bytes",
+        "compressedSha256": "2ede771399da84b0bb585eb391d8c78e5f91f8a2d2ae386c8e14e8ebd7da977e",
+        "compressedBytes": 1255
+      },
+      "argv": {
+        "path": "2026-10-18-c82-focused-17pass-3oraclefail.argv.gz",
+        "sha256": "32e52e4c5202bb85c01b37dc691817ce1afd6bec99c71fd53de53924e617a85b",
+        "sha256Scope": "uncompressed original bytes",
+        "compressedSha256": "cb073268ed80c8902349f3857b4dcfbcf42ada8c8dd1a0aef07f4896a7448062",
+        "compressedBytes": 822
+      }
+    },
+    {
+      "id": "utc-boundary-rerun-3",
+      "selectorCount": 3,
+      "passed": 3,
+      "failed": 0,
+      "correctiveSetup": "The isolated test setup sets the admin session TimeZone to UTC before reading the to_jsonb(object) snapshot. Assertions remain exact; no timestamp fields were omitted or normalized away.",
+      "result": "3 passed in 9.012 seconds",
+      "log": {
+        "path": "2026-10-18-c82-boundary-oracle-utc-rerun-3pass.log.gz",
+        "sha256": "b933ba78b3cd86b2d26ca4c4dba5bdb0ea03bd5dbcf9756f3dd3c121e88333d2",
+        "sha256Scope": "uncompressed original bytes",
+        "compressedSha256": "9c6d2dd5014ea1feb9360ad3c6614439f8858d32ce40c5f9384e3e02b4e2a7d0",
+        "compressedBytes": 161
+      },
+      "argv": {
+        "path": "2026-10-18-c82-boundary-oracle-utc-rerun-3pass.argv.gz",
+        "sha256": "0fdca9ce702cb920788bfbb71ca841f0fabed4c327639029a879b1cf53c2c5ee",
+        "sha256Scope": "uncompressed original bytes",
+        "compressedSha256": "052117fe992be572347f2c440575e69100ccd6ddab14d3d17facf90892cc0cdb",
+        "compressedBytes": 257
+      }
+    }
+  ],
+  "coveredControls": [
+    "63/64/65 operation journal chunk boundaries with mixed changed/no-op operations",
+    "65-operation all-no-op group emits no journal or transition rows",
+    "suppressed journal insert in a later chunk refuses and rolls back earlier chunks while preserving caller work",
+    "1,000-operation set-based object update with bounded journal batches",
+    "unmodified eight-key 1,024-operation capacity case",
+    "1,000 distinct-type single create group",
+    "both relationship evolution cohorts",
+    "asymmetric relationship minimum endpoint validation",
+    "graph retarget after explicit checks and failed unlink",
+    "rootless singleton/batch planner parity and required relationship refusal",
+    "compact history reads and four transition/journal tamper controls",
+    "rewritten result-slot refusal"
+  ],
+  "notes": [
+    "The 17 successful selectors from the first invocation were not rerun after the timezone-only test setup correction.",
+    "The three corrected boundary selectors were rerun separately. The evidence does not claim one all-green 20-selector invocation.",
+    "This local focused receipt does not establish hosted matrix success, full release qualification, or a performance claim."
+  ],
+  "compression": {
+    "format": "gzip, deterministic mtime=0",
+    "rawOriginalsPreservedOutsideCheckout": true,
+    "files": [
+      {
+        "path": "2026-10-18-c82-focused-17pass-3oraclefail.log.gz",
+        "uncompressedSha256": "9d530a5270a59f681648b74584a5fb16227c12eb5eafe39b88160edfddd128b2",
+        "compressedSha256": "2ede771399da84b0bb585eb391d8c78e5f91f8a2d2ae386c8e14e8ebd7da977e",
+        "uncompressedBytes": 6822,
+        "compressedBytes": 1255
+      },
+      {
+        "path": "2026-10-18-c82-focused-17pass-3oraclefail.argv.gz",
+        "uncompressedSha256": "32e52e4c5202bb85c01b37dc691817ce1afd6bec99c71fd53de53924e617a85b",
+        "compressedSha256": "cb073268ed80c8902349f3857b4dcfbcf42ada8c8dd1a0aef07f4896a7448062",
+        "uncompressedBytes": 2645,
+        "compressedBytes": 822
+      },
+      {
+        "path": "2026-10-18-c82-boundary-oracle-utc-rerun-3pass.log.gz",
+        "uncompressedSha256": "b933ba78b3cd86b2d26ca4c4dba5bdb0ea03bd5dbcf9756f3dd3c121e88333d2",
+        "compressedSha256": "9c6d2dd5014ea1feb9360ad3c6614439f8858d32ce40c5f9384e3e02b4e2a7d0",
+        "uncompressedBytes": 563,
+        "compressedBytes": 161
+      },
+      {
+        "path": "2026-10-18-c82-boundary-oracle-utc-rerun-3pass.argv.gz",
+        "uncompressedSha256": "0fdca9ce702cb920788bfbb71ca841f0fabed4c327639029a879b1cf53c2c5ee",
+        "compressedSha256": "052117fe992be572347f2c440575e69100ccd6ddab14d3d17facf90892cc0cdb",
+        "uncompressedBytes": 535,
+        "compressedBytes": 257
+      }
+    ]
+  }
+}

@@ -1177,8 +1177,16 @@ BEGIN
  current_actor:=truss.runtime_person(false);
  IF current_actor IS DISTINCT FROM attempt.actor_oid THEN RAISE EXCEPTION 'original current finishing actor required' USING ERRCODE='42501';END IF;
  IF input->'mutationProfile'=truss.runtime_owned_profile() THEN
-  -- Close final native object/key images as one relation. Deferred row/journal
-  -- guards still observe later caller work and current permission changes.
+  -- Canonical rootless batch producers wrote locked, version-matched rows and
+  -- counts in this protected call. No data caller can interleave private DML.
+  -- Keep the legacy final-image oracle only for the other execution profiles.
+  IF NOT (
+   NOT EXISTS(SELECT 1 FROM jsonb_array_elements(input_operations) o
+    WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
+     OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb)
+   OR EXISTS(SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=attempt.id
+    AND p.operation_index=0 AND p.plan->>'compactProfile'='truss-application-value-plan/0.1')
+  ) THEN
   IF EXISTS(WITH latest AS MATERIALIZED (
    SELECT DISTINCT ON(t.object_id,t.type_id) t.object_id,t.type_id,t.after_object,t.after_keys
    FROM truss.runtime_object_transition t WHERE t.attempt_id=attempt.id
@@ -1188,6 +1196,7 @@ BEGIN
     FROM truss.object_key_bucket k WHERE k.object_id=l.object_id AND k.type_id=l.type_id) keys ON true
    WHERE to_jsonb(o) IS DISTINCT FROM l.after_object OR keys.image IS DISTINCT FROM l.after_keys) THEN
    RAISE EXCEPTION 'exact final object/key state required' USING ERRCODE='55000';END IF;
+  END IF;
  ELSE
   FOR owner IN SELECT DISTINCT object_id,type_id FROM truss.runtime_object_transition WHERE runtime_object_transition.attempt_id=object_group_finish.attempt_id LOOP
    PERFORM truss.runtime_owned_row_validate_qualified(owner.object_id,owner.type_id,current_actor);
@@ -1228,6 +1237,34 @@ BEGIN
  IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname=session_user AND rolsuper) THEN RETURN NULL;END IF;
  -- One fresh actor per constraint-trigger event. Resource authorization stays
  -- live below; this identity is never retained across events or commands.
+ -- A completed native attempt owns its exact transition callback. Its mandatory
+ -- attempt constraint performs the single current-authority/effect settlement;
+ -- legacy and catalog-owned transitions retain their row validator.
+ IF TG_TABLE_NAME='runtime_object_transition' THEN
+  IF EXISTS(SELECT 1 FROM truss.runtime_object_attempt a WHERE a.id=NEW.attempt_id
+    AND a.writer_xid=pg_current_xact_id() AND a.complete
+    AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
+   RETURN NULL;
+  END IF;
+ END IF;
+ -- For an entity UPDATE, tie the queued row image to the exact owned transition
+ -- header. A later same-owner legacy/rebind write has a different version or
+ -- catalog revision and must keep the ordinary row/graph/journal checks.
+ IF TG_TABLE_NAME='object' AND TG_OP='UPDATE' THEN
+  IF EXISTS(
+   SELECT 1 FROM truss.runtime_object_transition t JOIN truss.runtime_object_attempt a ON a.id=t.attempt_id
+   WHERE t.writer_xid=pg_current_xact_id() AND t.object_id=NEW.id AND t.type_id=NEW.type_id
+    AND t.after_object->>'id'=NEW.id::text AND t.after_object->>'type_id'=NEW.type_id::text
+    AND t.after_object->>'ver'=NEW.ver::text AND t.after_object->>'rev'=NEW.rev::text
+    AND t.after_object->'root_id'=coalesce(to_jsonb(NEW.root_id),'null'::jsonb)
+    AND t.after_object->'root_type'=coalesce(to_jsonb(NEW.root_type),'null'::jsonb)
+    AND a.writer_xid=pg_current_xact_id() AND a.complete
+    AND a.context->'mutationProfile'=truss.runtime_owned_profile()) THEN
+   RETURN NULL;
+  END IF;
+ END IF;
+ -- A completed owned attempt requalifies actor and dependencies once in its
+ -- mandatory settlement. Issue current identity here only for the legacy paths.
  IF TG_TABLE_NAME IN ('object','runtime_object_transition','runtime_catalog_rebind_transition','runtime_catalog_key_backfill','edge','runtime_edge_transition') THEN
   current_actor:=truss.runtime_person(false);END IF;
  IF TG_TABLE_NAME='runtime_object_attempt' THEN
@@ -2218,5 +2255,3 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_journal_insert_check() FROM PUBLIC;
-CREATE CONSTRAINT TRIGGER runtime_owned_journal_insert_commit AFTER INSERT ON truss.journal DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_journal_insert_check();
-ALTER TABLE truss.journal ENABLE ALWAYS TRIGGER runtime_owned_journal_insert_commit;

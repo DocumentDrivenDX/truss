@@ -1,0 +1,31 @@
+{
+  "PYTHONPATH": "/private/tmp/weft-042-final-package:/private/tmp/truss-c83-final-package:/private/tmp/truss-performance-release-20261018/packages/python/tests",
+  "argv": [
+    "/private/tmp/truss-bunfree-venv/bin/python",
+    "scripts/benchmark-public-workflows.py",
+    "--truss-root",
+    "/private/tmp/truss-performance-release-20261018",
+    "--installed-package",
+    "--forbid-external-javascript",
+    "--capture-failure-diagnostics",
+    "--count-sql-submissions",
+    "--bulk-size",
+    "1000",
+    "--read-samples",
+    "1000",
+    "--write-samples",
+    "200",
+    "--output",
+    "/private/tmp/truss-c83-real-schemas.json"
+  ],
+  "elapsedSeconds": 152.8158185420034,
+  "eventRecords": 3926,
+  "exitCode": 0,
+  "immutableRuntimeInventorySha256": "c26941e706919a974d1bc3d07c99138ed5b8652ee45e6d52a248dd1fb290dbbf",
+  "log": "/private/tmp/truss-c83-real-schemas.log",
+  "package": "/private/tmp/truss-c83-final-package",
+  "qualification": "Original Pizza, Northwind and catalog; unchanged default sample dimensions; 1000-object load batch; 1000 ID reads and 200 committed writes; exact installed package; external JavaScript process forbidden; SQL submissions counted.",
+  "runtimeManifestSha256": "7845223dec360e632a962d8b19cc8dce1df67b09c1ebd0772c8233fe92df87a9",
+  "sourceCommit": "d442e5c616ee27ac0b945ec2f03804cabc324e8c",
+  "wheelSha256": "9ac6fde6cee33ca41d333a8273bb2212701aa28a3df0cf89a3bd57d81269804e"
+}

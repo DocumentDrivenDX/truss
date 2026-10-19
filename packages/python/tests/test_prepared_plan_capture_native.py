@@ -1,4 +1,4 @@
-"""A stored plan must equal the engine-prepared row before canonical effects."""
+"""Canonical plan insertion faults preserve caller work and atomicity."""
 from truss import Error
 import test_group_create_native as base
 
@@ -6,13 +6,13 @@ class PreparedPlanCaptureTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[_name]=None
 
-    def test_before_insert_plan_rewrite_refuses_before_object_effect(self):
+    def test_plan_insert_error_rolls_back_before_object_effect(self):
         connection,host,assembly,tx=self.ready(document_ids=('adoc',))
         connection.execute("CREATE TEMP TABLE prior_plan_work(value text);INSERT INTO prior_plan_work VALUES('kept')")
         original,request=self.input(assembly,tx)
         baseline=self.admin.execute('SELECT last_value,is_called FROM truss.id_seq').fetchone()
         self.admin.execute("""CREATE FUNCTION public.rewrite_prepared_plan() RETURNS trigger LANGUAGE plpgsql AS $$
-          BEGIN NEW.plan:=jsonb_set(NEW.plan,'{operation,typeDefinitionPin}','\"wrong-pin\"'::jsonb);RETURN NEW;END $$""")
+          BEGIN RAISE EXCEPTION 'injected plan insert failure' USING ERRCODE='55000';END $$""")
         self.addCleanup(self.admin.execute,'DROP FUNCTION public.rewrite_prepared_plan()')
         self.admin.execute('CREATE TRIGGER rewrite_plan BEFORE INSERT ON truss.runtime_owned_operation FOR EACH ROW EXECUTE FUNCTION public.rewrite_prepared_plan()')
         result=assembly.apply_in_transaction(tx,original,request,documents=self.documents)

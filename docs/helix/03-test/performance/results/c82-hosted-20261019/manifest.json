@@ -1,0 +1,184 @@
+{
+  "runId": "39181726399",
+  "sourceSha": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+  "runtimePayloadInventorySha256": "05e838d643817e2f66e471e5900b577af42b312ba0825f7dd87571638402663c",
+  "hostedRuntimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+  "files": [
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/capacity-ubuntu/collection-status.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/capacity-ubuntu--collection-status.json.gz",
+      "rawBytes": 1915,
+      "rawSha256": "4df97cc7c4836de305a0dab93660f2bc8d00a2caddb95b94f89ad43d7feaf172",
+      "gzipBytes": 461,
+      "gzipSha256": "2d0956316916bf16c9f95545ace2cd137d2f517de0656cbf147e9084e6c7b1a1"
+    },
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/capacity-ubuntu/linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-create.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/capacity-ubuntu--linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-create.json.gz",
+      "rawBytes": 5906,
+      "rawSha256": "692fdcae6b27eb97185bb87e65e157ecff89df7d29b232290d3be162faaf9723",
+      "gzipBytes": 1549,
+      "gzipSha256": "222dad067278b199bbf75d7d771acf0192d5597015b66d71d3078b97925d9ffa"
+    },
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/capacity-ubuntu/linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-cumulative-after-close.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/capacity-ubuntu--linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-cumulative-after-close.json.gz",
+      "rawBytes": 11289,
+      "rawSha256": "4ace9aca34e2e0bc26cdbb3a4d921909f5c0aaa5ed8a2d00dcd23977b2919f3f",
+      "gzipBytes": 2550,
+      "gzipSha256": "78897439dac2c005738ab96e01889ff5cfc53ffd57f764e9900297c56ceddc6b"
+    },
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/capacity-ubuntu/linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-following.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/capacity-ubuntu--linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-following.json.gz",
+      "rawBytes": 5912,
+      "rawSha256": "f5b13b6af86b413ccea47e1f3d0dffcc9c6e981b60d2a722dac3cf6c23b21f4d",
+      "gzipBytes": 1557,
+      "gzipSha256": "f1ca60cc3f1306f5b6758dfc203256be8a13ff05641ad793a4645f15c8774682"
+    },
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/capacity-ubuntu/linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-replay.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/capacity-ubuntu--linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-replay.json.gz",
+      "rawBytes": 3251,
+      "rawSha256": "28f219e3f4fc8b28cc147a46328a992e76a0c10af865ff25f3a96be6e45032dd",
+      "gzipBytes": 967,
+      "gzipSha256": "76bc692c1bcb02f324a3b7244cf77a82ba9955f6531a2409d1263b92442ae557"
+    },
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/capacity-ubuntu/linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-update.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/capacity-ubuntu--linux-x86_64-test_1024_real_creates_updates_replay_and_ordered_public_readback-update.json.gz",
+      "rawBytes": 5918,
+      "rawSha256": "4b6c1f1cbe0edd4780f1c4be71bb278bb4dfc5488c10c6baa0756ef7a92431ae",
+      "gzipBytes": 1555,
+      "gzipSha256": "308085d9ce8eacccc0f93382254b1592830776a507b9f0faccaf104b395f717b"
+    },
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/capacity-ubuntu/linux-x86_64-test_1025_refuses_in_host_and_native_without_durable_effects-cumulative-after-close.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/capacity-ubuntu--linux-x86_64-test_1025_refuses_in_host_and_native_without_durable_effects-cumulative-after-close.json.gz",
+      "rawBytes": 8666,
+      "rawSha256": "0f2e30844dafbf77f0c031c14a82d4b03cc5309753e54fceba8592fe51c741b9",
+      "gzipBytes": 1893,
+      "gzipSha256": "ddbf72faf680ba3d62d21e38c2c6dc88e6070b8a22021be2d49ec91f2f77a8c8"
+    },
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/capacity-ubuntu/linux-x86_64-test_effect_fault_at_index_1023_rolls_back_the_entire_group-cumulative-after-close.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/capacity-ubuntu--linux-x86_64-test_effect_fault_at_index_1023_rolls_back_the_entire_group-cumulative-after-close.json.gz",
+      "rawBytes": 7320,
+      "rawSha256": "1fdfe5735b30cd2ffe2f94008cc5319cea0ba8d4226a169388907a65f1665e72",
+      "gzipBytes": 1692,
+      "gzipSha256": "44e1581c29125210733310adfa85394755de2bfaa3d53fe60ad9ddca68cb6ed2"
+    },
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/capacity-ubuntu/linux-x86_64-test_effect_fault_at_index_1023_rolls_back_the_entire_group-late-fault.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/capacity-ubuntu--linux-x86_64-test_effect_fault_at_index_1023_rolls_back_the_entire_group-late-fault.json.gz",
+      "rawBytes": 4322,
+      "rawSha256": "ad52fe0e7d7cce0e45abe80e46bbb771e3980bdf03f4e62cfa51970ab0d5ba1a",
+      "gzipBytes": 1189,
+      "gzipSha256": "3bec45ef4e525e68031ce40a5c30aeef1e98940975fdfbc06ac0aa0c0946871e"
+    },
+    {
+      "source": "/private/tmp/truss-c82-native-macos-job.log",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/native-macos.log.gz",
+      "rawBytes": 63975,
+      "rawSha256": "5cb5b27d04ae976c96d2aaf20ab0573576d27e62d956732907f3f198de9b5929",
+      "gzipBytes": 13863,
+      "gzipSha256": "9d321d3da71468d7bffd27a34dd6b4f4073809a2522b1e6372c95dc3752ede82"
+    },
+    {
+      "source": "/private/tmp/truss-c82-native-ubuntu-job.log",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/native-ubuntu.log.gz",
+      "rawBytes": 155178,
+      "rawSha256": "9c36cef48e356191234e5f084f8d7369e2f7621fadb09718782602120e496de8",
+      "gzipBytes": 29568,
+      "gzipSha256": "de7f4c3d7119cea22f8fd89015596192c928b208fe9eb84e1c8ae0a532dbf39f"
+    },
+    {
+      "source": "/private/tmp/truss-c82-stress-complex-ubuntu/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/truss-c82-stress-complex-ubuntu--report.json.gz",
+      "rawBytes": 1125213,
+      "rawSha256": "496fd03d9354765ff192c2a5d898c10195f68e71e06d68e2ab497963fd5d50b7",
+      "gzipBytes": 23975,
+      "gzipSha256": "8f5cc37c7ba26c8c0549627658d6371fbfe80068e72df07991e4ab2b16105210"
+    },
+    {
+      "source": "/private/tmp/truss-c82-stress-index-heavy-ubuntu/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/truss-c82-stress-index-heavy-ubuntu--report.json.gz",
+      "rawBytes": 1133316,
+      "rawSha256": "697dcde9b58b7c035ac1e1c697f3aa5b8b9c54fafcaf10f5a7f5e9581f055cd8",
+      "gzipBytes": 24167,
+      "gzipSha256": "d8c105fdf3d71386dfbb4a9e309061fbef0cc35b48178cd8e81f214a58d13f9a"
+    },
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/many-types-ubuntu/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/truss-c82-stress-many-types-ubuntu--report.json.gz",
+      "rawBytes": 1291935,
+      "rawSha256": "be1e410a0ee6e462cefcfc9dda7ebef7a0d73bc519c0667977b126feaf2cf4ed",
+      "gzipBytes": 31510,
+      "gzipSha256": "1ddbb4331adc3547a7c8f80cd5628e6bffdc7e5b073caeab4a9a70ee85c86d6d"
+    },
+    {
+      "source": "/private/tmp/truss-c82-stress-node-heavy-ubuntu/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/truss-c82-stress-node-heavy-ubuntu--report.json.gz",
+      "rawBytes": 1444585,
+      "rawSha256": "fa8407e6a94ae7175ca346ae6eac739506b932858a39f7c294fff48d30bbc4eb",
+      "gzipBytes": 29611,
+      "gzipSha256": "728ba2f3c223ef755a839591b18f1acaccc38265aa8800a1ff93f3404510f124"
+    },
+    {
+      "source": "/private/tmp/truss-c82-stress-nominal-ubuntu/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/truss-c82-stress-nominal-ubuntu--report.json.gz",
+      "rawBytes": 1125073,
+      "rawSha256": "a236348734cd12a2f3c5e1a36e5e055a8c25b5097ad1055cd31bcbfa4b35453a",
+      "gzipBytes": 24364,
+      "gzipSha256": "e4a2dd70ac61870954e490320b2bbc830b0e9eba086a73058fbe9ad266d1fa69"
+    },
+    {
+      "source": "/private/tmp/truss-c82-stress-skewed-ubuntu/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/truss-c82-stress-skewed-ubuntu--report.json.gz",
+      "rawBytes": 1124845,
+      "rawSha256": "21d51e728214efda494cd04d0ceeccd03ea0166971ce7a444ae2bc0f22c7614f",
+      "gzipBytes": 24475,
+      "gzipSha256": "97181e43d5952e5dd9e0ceaa6e4afac6d946d930e984d004c09b0b9353c16e96"
+    },
+    {
+      "source": "/private/tmp/truss-c82-stress-small-ubuntu/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/truss-c82-stress-small-ubuntu--report.json.gz",
+      "rawBytes": 818206,
+      "rawSha256": "c481c6669dbd42faa11ba3a35100aff81050412892c7545ce80d153c85a6c399",
+      "gzipBytes": 17923,
+      "gzipSha256": "3973ed6d51cad1908321ae3e30c8263ee734c972095894621f2a0936fa98f5bd"
+    },
+    {
+      "source": "/private/tmp/truss-c82-stress-type-heavy-macos/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/truss-c82-stress-type-heavy-macos--report.json.gz",
+      "rawBytes": 1145419,
+      "rawSha256": "2a51fa8e820ee337bfa54b765d7fea1844d8f5164fe6adcba9879c15df3f6d86",
+      "gzipBytes": 24793,
+      "gzipSha256": "d03721b06a6759fdbcc76f5884977a9ace465a1a43313c4edc0eb10b463baddc"
+    },
+    {
+      "source": "/private/tmp/truss-c82-stress-type-heavy-ubuntu/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/truss-c82-stress-type-heavy-ubuntu--report.json.gz",
+      "rawBytes": 1145788,
+      "rawSha256": "d02f90039775b79abdccfea61f5199eaaef5b663dea5d1e278a4a38b864b7c60",
+      "gzipBytes": 24810,
+      "gzipSha256": "ab774206b7177483bb490eec6b11f44d6d25766d25ad5ef8b1725f35b02a134d"
+    },
+    {
+      "source": "/private/tmp/truss-c82-stress-wide-ubuntu/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/truss-c82-stress-wide-ubuntu--report.json.gz",
+      "rawBytes": 1141042,
+      "rawSha256": "971116c28171d16644577bb98bb392e7149b27622907d2a6d5b0489546b23969",
+      "gzipBytes": 30068,
+      "gzipSha256": "86d84b7f075c7fcef261de397f2ce4b0e09198576a5a8037cda203d0dbd646d7"
+    },
+    {
+      "source": "/private/tmp/truss-c82-hosted-artifacts/index-heavy-macos/report.json",
+      "retained": "docs/helix/03-test/performance/results/c82-hosted-20261019/stress-index-heavy-macos-report.json.gz",
+      "rawBytes": 1156653,
+      "rawSha256": "544e59169d12006fb2c540839ed6fd24078eb1095c9025c8fba3fc488190818b",
+      "gzipBytes": 27878,
+      "gzipSha256": "6d316f03a1c89c0351cf3f92bb21f013c42f2efb8f8ea76ddad99817546fe64f"
+    }
+  ]
+}

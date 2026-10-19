@@ -1,0 +1,11 @@
+{
+  "candidate": "C82",
+  "payloadCount": 528,
+  "runtimeInventorySha256": "05e838d643817e2f66e471e5900b577af42b312ba0825f7dd87571638402663c",
+  "nativeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+  "wheelSha256": "5cf717b94068eac13063e06ae270b7a8cd1a0e9f595ce86a04bf329a052cce3e",
+  "sourceMismatches": [],
+  "wheel": "/private/tmp/truss-c82-dist/truss_toolkit-0.0.40-py3-none-any.whl",
+  "source": "/private/tmp/truss-performance-release-20261018",
+  "sourceState": "uncommitted isolated successor; immutable commit parity will follow"
+}

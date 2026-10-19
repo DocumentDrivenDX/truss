@@ -308,9 +308,11 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         slots = artifact['parameters']
         if [s['position'] for s in slots] != list(range(1, len(slots) + 1)) or any(type(s['value']) is not str for s in slots):
             raise ValueError('Original native parameter slots required')
-        cursor.execute("SELECT pg_catalog.current_setting('search_path')", prepare=False)
-        original_path = cursor.fetchone()[0]
-        cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog,pg_temp',true)", prepare=False)
+        cursor.execute("WITH prior AS MATERIALIZED (SELECT pg_catalog.current_setting('search_path') AS path) "
+            "SELECT path,pg_catalog.set_config('search_path','pg_catalog,pg_temp',true) FROM prior", prepare=False)
+        original_path, pinned_path = cursor.fetchone()
+        if pinned_path != 'pg_catalog,pg_temp':
+            raise ValueError('Fixed query search path required')
         # Fixed context handler and source functions independently recheck all owners.
         cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
         for slot in slots:
@@ -365,9 +367,10 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             if raw.description is None or [(c.name, c.type_code) for c in raw.description] != [(c['outputName'], 25) for c in artifact['columns']]:
                 raise ValueError('Original result column labels and text carriers required')
             result = _decode_rows(raw.fetchmany(maximum_rows + 1), artifact, maximum_rows, maximum_bytes)
-        cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
-        cursor.execute('SELECT oid::text FROM pg_roles WHERE rolname=session_user', prepare=False)
-        if cursor.fetchone() != (bundle['actorOid'],):
+        cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb),r.oid::text '
+            'FROM pg_catalog.pg_roles r WHERE r.rolname=session_user', (binding_json,), prepare=False)
+        post_scope = cursor.fetchone()
+        if post_scope is None or post_scope[1] != bundle['actorOid']:
             raise ValueError('Original query actor required')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)", (original_path,), prepare=False)
         if cursor.fetchone() != (original_path,):

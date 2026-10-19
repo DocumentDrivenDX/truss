@@ -1,0 +1,130 @@
+{
+  "candidate": "C83",
+  "environment": {
+    "python": "/private/tmp/truss-bunfree-venv/bin/python",
+    "testSource": "/private/tmp/truss-performance-release-20261018/packages/python/tests",
+    "trussPrefix": "/private/tmp/truss-c83-final-package",
+    "weftPrefix": "/private/tmp/weft-042-final-package"
+  },
+  "files": {
+    "combined-argv": {
+      "gzipSha256": "3474cba26ca1deca98f02c419d9ac2bf8cbc9cfebfb7133f36d9ccc22a55928d",
+      "path": "combined-argv.txt.gz",
+      "rawBytes": 1950,
+      "rawSha256": "c4bd48d121c5dcf6acf069baef2f328388405dbe33d9d8e21c08cc88cec70436"
+    },
+    "combined-log": {
+      "gzipSha256": "fdb321e632c44dbfd5b4e2c9f3acffb6ef5cd41afd63c655bd655bad500d8fa2",
+      "path": "combined-log.txt.gz",
+      "rawBytes": 8246,
+      "rawSha256": "d537a8b135ba975303d1a0083aa2c81696e7c2a0ead8d39224b5fda9840bc9ad"
+    },
+    "history-argv": {
+      "gzipSha256": "a71312f00958d24fe58662bafc92e8eb9522ecaf463dfec3a17a833d2ccc1e1a",
+      "path": "history-argv.txt.gz",
+      "rawBytes": 430,
+      "rawSha256": "fd8963273b2b543d5f2e2467f013653ed73077396c0a8b3380a9799f533a7a6a"
+    },
+    "history-log": {
+      "gzipSha256": "280b002fa412342fcbddc95d260b49a0338749cccef67efb930a4d0f6ae4c464",
+      "path": "history-log.txt.gz",
+      "rawBytes": 444,
+      "rawSha256": "45936a9bb8307f90d0956ccb072b33e0cd99d207155f3d2b828eaa223e3ad6a3"
+    },
+    "rebind-rerun-argv": {
+      "gzipSha256": "1c5010ad464ff990a9ffccd929d8ff47c4be92ef4938d2f1ec6edcb1082f730b",
+      "path": "rebind-rerun-argv.txt.gz",
+      "rawBytes": 734,
+      "rawSha256": "1eb6d8392d4c9f4a9d121739bfe74f68b955eb603e3a1deb4a434e96ba95bd1a"
+    },
+    "rebind-rerun-log": {
+      "gzipSha256": "b521d49c3514da892eff9d8f1b1f48f3aace9e1660de9299e2f33fbd509960d2",
+      "path": "rebind-rerun-log.txt.gz",
+      "rawBytes": 957,
+      "rawSha256": "c61cda9e21c52e32bd5553bb9ec06f9fc2a1fa4d8ef86b83e91731063ecdb196"
+    }
+  },
+  "overall": {
+    "allPassAcrossRuns": true,
+    "qualificationCaveat": "The 28-test combined run had four fixture assertion failures; only those four were rerun after test-source correction. All other 24 combined tests and both history tests passed in their original invocation.",
+    "uniqueSelectedMethods": 30
+  },
+  "packageInventory": {
+    "candidate": "C83",
+    "nativeManifestSha256": "7845223dec360e632a962d8b19cc8dce1df67b09c1ebd0772c8233fe92df87a9",
+    "payloadCount": 528,
+    "runtimeInventorySha256": "c26941e706919a974d1bc3d07c99138ed5b8652ee45e6d52a248dd1fb290dbbf",
+    "sourceMismatches": [],
+    "sourceState": "uncommitted combined structural fixes; immutable commit parity pending",
+    "wheelSha256": "9ac6fde6cee33ca41d333a8273bb2212701aa28a3df0cf89a3bd57d81269804e"
+  },
+  "runs": [
+    {
+      "argv": {
+        "gzipSha256": "a71312f00958d24fe58662bafc92e8eb9522ecaf463dfec3a17a833d2ccc1e1a",
+        "path": "history-argv.txt.gz",
+        "rawBytes": 430,
+        "rawSha256": "fd8963273b2b543d5f2e2467f013653ed73077396c0a8b3380a9799f533a7a6a"
+      },
+      "argvProvenance": "Exact command as executed, transcribed from the tool call.",
+      "elapsedSeconds": 6.973,
+      "failed": 0,
+      "label": "history projection",
+      "log": {
+        "gzipSha256": "280b002fa412342fcbddc95d260b49a0338749cccef67efb930a4d0f6ae4c464",
+        "path": "history-log.txt.gz",
+        "rawBytes": 444,
+        "rawSha256": "45936a9bb8307f90d0956ccb072b33e0cd99d207155f3d2b828eaa223e3ad6a3"
+      },
+      "logProvenance": "Verbatim captured functions.exec tool output; the first invocation was not redirected to a file.",
+      "passed": 2,
+      "tests": 2
+    },
+    {
+      "argv": {
+        "gzipSha256": "3474cba26ca1deca98f02c419d9ac2bf8cbc9cfebfb7133f36d9ccc22a55928d",
+        "path": "combined-argv.txt.gz",
+        "rawBytes": 1950,
+        "rawSha256": "c4bd48d121c5dcf6acf069baef2f328388405dbe33d9d8e21c08cc88cec70436"
+      },
+      "elapsedSeconds": 165.487,
+      "failed": 4,
+      "failureCause": "fixture expected retained names {'giftWrap'} after a separate actor added giftFlags; no runtime failure",
+      "failures": [
+        "test_catalog_rebind_native.CatalogRebindTests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind",
+        "test_catalog_rebind_native.CatalogRebind08Tests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind",
+        "test_required_catalog_rebind_native.RequiredCatalogRebindTests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind",
+        "test_required_catalog_rebind_native.RequiredCatalogRebind08Tests.test_compact_changed_and_noop_updates_settle_after_same_transaction_rebind"
+      ],
+      "label": "focused combined controls initial",
+      "log": {
+        "gzipSha256": "fdb321e632c44dbfd5b4e2c9f3acffb6ef5cd41afd63c655bd655bad500d8fa2",
+        "path": "combined-log.txt.gz",
+        "rawBytes": 8246,
+        "rawSha256": "d537a8b135ba975303d1a0083aa2c81696e7c2a0ead8d39224b5fda9840bc9ad"
+      },
+      "passed": 24,
+      "tests": 28
+    },
+    {
+      "argv": {
+        "gzipSha256": "1c5010ad464ff990a9ffccd929d8ff47c4be92ef4938d2f1ec6edcb1082f730b",
+        "path": "rebind-rerun-argv.txt.gz",
+        "rawBytes": 734,
+        "rawSha256": "1eb6d8392d4c9f4a9d121739bfe74f68b955eb603e3a1deb4a434e96ba95bd1a"
+      },
+      "elapsedSeconds": 19.107,
+      "failed": 0,
+      "label": "corrected compact rebind assertions",
+      "log": {
+        "gzipSha256": "b521d49c3514da892eff9d8f1b1f48f3aace9e1660de9299e2f33fbd509960d2",
+        "path": "rebind-rerun-log.txt.gz",
+        "rawBytes": 957,
+        "rawSha256": "c61cda9e21c52e32bd5553bb9ec06f9fc2a1fa4d8ef86b83e91731063ecdb196"
+      },
+      "passed": 4,
+      "sourceOnlyCorrection": "expected retained names now include giftFlags and exact SequenceValue(True) readback; runtime/package unchanged",
+      "tests": 4
+    }
+  ]
+}

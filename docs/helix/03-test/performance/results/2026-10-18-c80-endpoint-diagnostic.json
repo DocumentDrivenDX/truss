@@ -1,0 +1,128 @@
+{
+  "candidate": "C80",
+  "runtimeSourceCommit": "109d474a3df68fa8de2d29f87557b020c2d70486",
+  "nativeManifestSha256": "32e5c7cb7d56d39e692d1f024cd5733f6b52c7281d4e1378d0b7e3bb564c8013",
+  "scope": "Diagnostic-only instrumented execution of the unchanged disjoint-endpoint native control on local macOS; test-only finish NOTICE overlay and track_functions. Not a clean timing qualification or a fix for the observed hosted failure. No source/runtime change adopted.",
+  "hostedFailure": {
+    "runId": 39176421417,
+    "platform": "macos-14",
+    "jobId": 117820356013,
+    "test": "EndpointCapacityTests.test_disjoint_endpoints",
+    "sqlState": "57014",
+    "frame": "runtime_owned_edge_validate_in_input_qualified physical edge image lookup during object_group_finish"
+  },
+  "dimensions": {
+    "edges": 1024,
+    "distinctStoredEndpoints": 2048,
+    "statementTimeoutMs": 10000,
+    "operationTimeoutMs": 30000
+  },
+  "localResults": [
+    {
+      "testElapsedSeconds": 13.716,
+      "edgeApplySeconds": 2.734,
+      "passed": true,
+      "globalFunctionStats": "empty; use v2 transaction counters"
+    },
+    {
+      "testElapsedSeconds": 19.565153458999703,
+      "edgeApplySeconds": 3.464210500009358,
+      "passed": true
+    }
+  ],
+  "functionTotalsNotAdditive": [
+    {
+      "schema": "truss",
+      "function": "runtime_owned_edge_create_batch",
+      "calls": 1,
+      "totalMs": 1323.627,
+      "selfMs": 390.566
+    },
+    {
+      "schema": "truss",
+      "function": "runtime_owned_capture_application",
+      "calls": 1,
+      "totalMs": 1018.279,
+      "selfMs": 263.009
+    },
+    {
+      "schema": "truss",
+      "function": "object_group_finish",
+      "calls": 1,
+      "totalMs": 998.542,
+      "selfMs": 38.193
+    },
+    {
+      "schema": "truss",
+      "function": "runtime_edge_authorize",
+      "calls": 1,
+      "totalMs": 616.498,
+      "selfMs": 13.89
+    },
+    {
+      "schema": "truss",
+      "function": "runtime_owned_edge_transition_validate_qualified",
+      "calls": 1024,
+      "totalMs": 554.24,
+      "selfMs": 424.024
+    },
+    {
+      "schema": "truss",
+      "function": "runtime_owned_graph_validate_attempt",
+      "calls": 1,
+      "totalMs": 184.302,
+      "selfMs": 6.135
+    },
+    {
+      "schema": "truss",
+      "function": "runtime_owned_edge_validate_in_input_qualified",
+      "calls": 1024,
+      "totalMs": 71.995,
+      "selfMs": 58.831
+    }
+  ],
+  "decision": "The final edge helper loop is only72ms total locally, so no thin-argument or closure rewrite was adopted. Hosted failure is unresolved and must remain visible; a fresh hosted native run is separate evidence. Investigation now prioritizes the independently failing wide journal path.",
+  "initialHarnessFailure": "Overlay attempted before installation; no workload ran. Setup-only raw failure is retained. Current driver corresponds to v2 xact-stat collection; v1 did not collect xact stats.",
+  "artifacts": {
+    "2026-10-18-c80-endpoint-v1.json.gz": {
+      "uncompressedSha256": "9fca9a058f1a9e2d10b6f6afa8acd904638312a47e998aefa4b2b009e25f5165",
+      "compressedSha256": "51f9e57ac18d0c98f9d9ef055540fdcb885a7c5bdbcf3cfd6b66d458da62f2a3"
+    },
+    "2026-10-18-c80-endpoint-v1.log.gz": {
+      "uncompressedSha256": "0449cdefc44f831d3dd195f705cb49e167d9b1f264f81ff4b48a2d84070bf261",
+      "compressedSha256": "4c8ed934b0a9fa90a0e160933cc31c7152273777d25bd050cc3851ddaa351437"
+    },
+    "2026-10-18-c80-endpoint-v1.notices.jsonl.gz": {
+      "uncompressedSha256": "8870c4ad44fc7c51f6d5e67a9e67d353310b034650d05e582b0098cac6752ed9",
+      "compressedSha256": "8a6cc984eb31daa3488cac6d883dec5738490b8655419f5158b2b775868920a4"
+    },
+    "2026-10-18-c80-endpoint-v2.json.gz": {
+      "uncompressedSha256": "4e160eea1d52fcc595750de4d7035ea3da76374da92bbdd85b90514f3149892c",
+      "compressedSha256": "a89cf805b5b0599e268cca065e2a84cb8a2c2e98d37673fb4ae6b9f50c460c95"
+    },
+    "2026-10-18-c80-endpoint-v2.log.gz": {
+      "uncompressedSha256": "bfdef4bb8bac4b32d33e446b4898fa53fd382361022cfa8cafb060ec2cbd3ef0",
+      "compressedSha256": "b400f3aeb26c92ab2e27bf05e9ea4bedbcdeed82ebab706a42ee1cb178c94ffa"
+    },
+    "2026-10-18-c80-endpoint-v2.notices.jsonl.gz": {
+      "uncompressedSha256": "2c206315f165f41a3900c5af6ec2c4865235279709acc026b9b648e114402f57",
+      "compressedSha256": "b74f6597d27ce80f523e7e53e12add288826f28c5cb9dcda7ffeac1894fc8b8d"
+    },
+    "2026-10-18-c80-endpoint-log.argv.gz": {
+      "uncompressedSha256": "a8bbcdb1ec65cb98628c154a2c0629049ff8a1b613f6e13818befd1741011f59",
+      "compressedSha256": "ffe84528021c45130196c93ddee8400eba05d6db091a36ba890c05c7d160d4f2"
+    },
+    "2026-10-18-c80-endpoint-py.gz": {
+      "uncompressedSha256": "50d03d704aae92d70561de7e2d5192c4f52c073dde446dd71248b9bf435de839",
+      "compressedSha256": "c6359d782bfc887876583d749cbe7253db22b55500218aad576c9dc2107a8d2b"
+    },
+    "2026-10-18-c80-endpoint-setup-failure.json.gz": {
+      "uncompressedSha256": "15450fbb3e375051c4a4284238a90e3c9e5c4685f7e025eaecea8ba32a2ded20",
+      "compressedSha256": "24cfa31ecfd1d678502f945358c192455eb1aaf22975c380c4fd88503cf2cb32"
+    },
+    "2026-10-18-c80-endpoint-setup-failure.log.gz": {
+      "uncompressedSha256": "43c95bf672ac5c53be256384ee3b8c1b1b44e6d57edfe00362cf6c7f12c94fb9",
+      "compressedSha256": "8dc279e100db1b4d9e1e079303a9ffcce609b9f7df53a6448a7093d28d69ef27"
+    }
+  }
+}

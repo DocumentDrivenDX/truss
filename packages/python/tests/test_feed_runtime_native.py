@@ -39,6 +39,87 @@ class FeedRuntimeTests(receipt_tests.ReceiptVisibilityTests):
             'truss.runtime_feed_transaction_configuration WHERE writer_xid=%s::xid8',(writer,)).fetchone(),
             (self.admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone()[0],))
 
+    def test_statement_configuration_capture_handles_empty_sets_and_wrong_writers(self):
+        connection,host,assembly,tx=self.ready()
+        host.detach();connection.rollback()
+        self.admin.execute('BEGIN')
+        self.addCleanup(self.admin.rollback)
+        writer=self.admin.execute('SELECT pg_current_xact_id()::text').fetchone()[0]
+        self.admin.execute('CREATE TEMP TABLE feed_statement_probe(writer_xid xid8)')
+        self.admin.execute('CREATE TEMP TABLE feed_statement_caller_work(note text)')
+        self.admin.execute('CREATE TRIGGER feed_statement_capture AFTER INSERT ON feed_statement_probe '
+            'REFERENCING NEW TABLE AS inserted_rows FOR EACH STATEMENT '
+            'EXECUTE FUNCTION truss.runtime_feed_capture_configuration_statement()')
+
+        self.admin.execute('INSERT INTO feed_statement_probe SELECT %s::xid8 WHERE false',(writer,))
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_feed_transaction_configuration '
+            'WHERE writer_xid=%s::xid8',(writer,)).fetchone(),(0,))
+        self.admin.execute('INSERT INTO feed_statement_probe VALUES (%s::xid8),(%s::xid8)',(writer,writer))
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_feed_transaction_configuration '
+            'WHERE writer_xid=%s::xid8',(writer,)).fetchone(),(1,))
+
+        self.admin.execute("INSERT INTO feed_statement_caller_work VALUES ('preserve')")
+        self.admin.execute('SAVEPOINT wrong_statement_writer')
+        wrong_writer=self.admin.execute("SELECT CASE WHEN pg_current_xact_id()::text='1' THEN '2' ELSE '1' END").fetchone()[0]
+        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
+            self.admin.execute('INSERT INTO feed_statement_probe VALUES (%s::xid8)',(wrong_writer,))
+        self.admin.execute('ROLLBACK TO SAVEPOINT wrong_statement_writer')
+        self.admin.execute('RELEASE SAVEPOINT wrong_statement_writer')
+        self.assertEqual(self.admin.execute('SELECT note FROM feed_statement_caller_work').fetchall(),[('preserve',)])
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_feed_transaction_configuration '
+            'WHERE writer_xid=%s::xid8',(wrong_writer,)).fetchone(),(0,))
+
+    def test_statement_configuration_capture_rejects_between_statement_config_drift(self):
+        connection,host,assembly,tx=self.ready()
+        host.detach();connection.rollback()
+        self.admin.execute('BEGIN')
+        self.addCleanup(self.admin.rollback)
+        writer=self.admin.execute('SELECT pg_current_xact_id()::text').fetchone()[0]
+        original=self.admin.execute("SELECT value FROM truss.setting WHERE key='journal_mode'").fetchone()[0]
+        self.admin.execute('CREATE TEMP TABLE feed_config_drift_probe(writer_xid xid8)')
+        self.admin.execute('CREATE TEMP TABLE feed_config_drift_caller_work(note text)')
+        self.admin.execute('CREATE TRIGGER feed_config_drift_capture AFTER INSERT ON feed_config_drift_probe '
+            'REFERENCING NEW TABLE AS inserted_rows FOR EACH STATEMENT '
+            'EXECUTE FUNCTION truss.runtime_feed_capture_configuration_statement()')
+        self.admin.execute('INSERT INTO feed_config_drift_probe VALUES (%s::xid8)',(writer,))
+        self.admin.execute("INSERT INTO feed_config_drift_caller_work VALUES ('preserve')")
+        self.admin.execute('SAVEPOINT changed_configuration')
+        self.admin.execute("UPDATE truss.setting SET value='\"changed\"'::jsonb WHERE key='journal_mode'")
+        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
+            self.admin.execute('INSERT INTO feed_config_drift_probe VALUES (%s::xid8)',(writer,))
+        self.admin.execute('ROLLBACK TO SAVEPOINT changed_configuration')
+        self.admin.execute('RELEASE SAVEPOINT changed_configuration')
+        self.assertEqual(self.admin.execute('SELECT value FROM truss.setting WHERE key=\'journal_mode\'').fetchone(),(original,))
+        self.assertEqual(self.admin.execute('SELECT note FROM feed_config_drift_caller_work').fetchall(),[('preserve',)])
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_feed_transaction_configuration '
+            'WHERE writer_xid=%s::xid8',(writer,)).fetchone(),(1,))
+
+    def test_object_reservation_statement_rejects_mixed_embedded_writers_atomically(self):
+        connection,host,assembly,tx=self.ready()
+        host.detach();connection.rollback()
+        self.admin.execute('BEGIN')
+        self.addCleanup(self.admin.rollback)
+        writer=self.admin.execute('SELECT pg_current_xact_id()::text').fetchone()[0]
+        wrong_writer=self.admin.execute("SELECT CASE WHEN pg_current_xact_id()::text='1' THEN '2' ELSE '1' END").fetchone()[0]
+        self.admin.execute('CREATE TEMP TABLE feed_reservation_probe(storage_row_id bigint,original_reservation_bytes bytea)')
+        self.admin.execute('CREATE TEMP TABLE feed_reservation_caller_work(note text)')
+        self.admin.execute('CREATE TRIGGER feed_reservation_capture AFTER INSERT ON feed_reservation_probe '
+            'REFERENCING NEW TABLE AS inserted_rows FOR EACH STATEMENT '
+            'EXECUTE FUNCTION truss.runtime_feed_capture_object_reservations()')
+        self.admin.execute("INSERT INTO feed_reservation_caller_work VALUES ('preserve')")
+        self.admin.execute('SAVEPOINT mixed_reservation_writers')
+        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
+            self.admin.execute("""INSERT INTO feed_reservation_probe VALUES
+                (1,convert_to(jsonb_build_object('xid',%s)::text,'UTF8')),
+                (2,convert_to(jsonb_build_object('xid',%s)::text,'UTF8'))""",(writer,wrong_writer))
+        self.admin.execute('ROLLBACK TO SAVEPOINT mixed_reservation_writers')
+        self.admin.execute('RELEASE SAVEPOINT mixed_reservation_writers')
+        self.assertEqual(self.admin.execute('SELECT note FROM feed_reservation_caller_work').fetchall(),[('preserve',)])
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_feed_reservation '
+            'WHERE writer_xid=%s::xid8',(writer,)).fetchone(),(0,))
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_feed_transaction_configuration '
+            'WHERE writer_xid=%s::xid8',(writer,)).fetchone(),(0,))
+
     def enrolled(self):
         connection,host,assembly,tx=self.ready()
         host.detach();connection.rollback()
@@ -113,6 +194,17 @@ class FeedRuntimeTests(receipt_tests.ReceiptVisibilityTests):
         self.assertTrue(payload['catalogPrerequisites']);self.assertTrue(payload['reservations'])
         self.assertEqual(payload['sources'][0]['load_id'],'feed-load')
         self.assertIn('edge_key',{v['kind'] for v in payload['reservations']})
+        for reservation in payload['reservations']:
+            row=reservation['row']
+            if reservation['kind']=='object_key':
+                source=self.admin.execute('SELECT to_jsonb(r) FROM truss.object_key_reservation_bucket r '
+                    'WHERE storage_row_id=%s',(row['storage_row_id'],)).fetchone()
+            else:
+                source=self.admin.execute('SELECT to_jsonb(r) FROM truss.key_tombstone r '
+                    'WHERE entity_kind=%s AND type_id=%s AND key_num=%s AND k=%s',
+                    (row['entity_kind'],row['type_id'],row['key_num'],row['k'])).fetchone()
+            self.assertIsNotNone(source)
+            self.assertEqual(row,source[0])
         # The complete delete event remains present after the object is gone.
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object WHERE id=%s',(int(identity.id),)).fetchone()[0],0)
         self.assertEqual(self.ack(assembly,tx,page).outcome,'advanced')

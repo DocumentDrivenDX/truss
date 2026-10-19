@@ -1,0 +1,146 @@
+{
+  "applicationMemory": {
+    "processLifetimePeakRssBytes": 200835072,
+    "retainedSchemaCacheEntries": 2,
+    "retainedSchemaCacheEstimatedBytes": 332056,
+    "schemaCacheBudgetBytes": 134217728,
+    "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+  },
+  "candidate": "C83",
+  "compressedEvidence": {
+    "events.jsonl.gz": {
+      "compressedBytes": 26291,
+      "sha256": "7810dab8b4385a578cba4130be6202162022b2d5bf0ead4907d630b4a056376d",
+      "uncompressedBytes": 1337166,
+      "uncompressedSha256": "8c51e2d08abac57968c1c5886e300cf9152fff96c3410cf4007b5bcc491233f6"
+    },
+    "report.json.gz": {
+      "compressedBytes": 37625,
+      "sha256": "09b9092af7ff4cf62d2866df17b5a6d580f093d9dac95b38b97a93237acad8b1",
+      "uncompressedBytes": 2269760,
+      "uncompressedSha256": "3e160b8a8c121e40f334375910b710b10c7d124f19d9e446b8b1ad63642d643f"
+    },
+    "run.log.argv.gz": {
+      "compressedBytes": 326,
+      "sha256": "9905199523ab1c5c943ee9e1e202c215358461103bc4d74cf6619e91689e3b37",
+      "uncompressedBytes": 645,
+      "uncompressedSha256": "acf56a78e27a7e315fdd4c733d33f77c387ee76f3fea9e6c3b5bf987f98115ac"
+    },
+    "run.log.gz": {
+      "compressedBytes": 3170,
+      "sha256": "ac777c9c3376114d07bba9b6acec3f3054e77690e4b60d554a865828be96295d",
+      "uncompressedBytes": 32251,
+      "uncompressedSha256": "166588f49598354439d1a8797fc7253a56ca79f93eb1e78ad75326ab8f5916b9"
+    },
+    "runner.py.gz": {
+      "compressedBytes": 787,
+      "sha256": "a83f44025afaf9e1276c23ef782aafe28f911b0911d59a54e0e678d332c89fef",
+      "uncompressedBytes": 1600,
+      "uncompressedSha256": "4dd662d6e7c848d7443bd4087862929d11ae93536c6afd3f37e3f7d8c1e85340"
+    }
+  },
+  "deadlinesMs": {
+    "operation": 30000,
+    "statement": 10000
+  },
+  "dirtyTreeInterpretation": "The raw report records sourceWorkingTreeDirty=true. Parent identifies untracked result evidence as the cause; the report is unchanged. Immutable package inventory matches source commit d442e5c. No clean-worktree claim.",
+  "elapsedSeconds": 152.8158185420034,
+  "evidenceRawSha256AndBytes": {
+    "events.jsonl.gz": {
+      "bytes": 1337166,
+      "sha256": "8c51e2d08abac57968c1c5886e300cf9152fff96c3410cf4007b5bcc491233f6"
+    },
+    "immutable-inventory.json": {
+      "bytes": 767,
+      "sha256": "820007d1bdef7ea99831664140df53c2211a8cdf8a1ef5ae234695c75c9d937b"
+    },
+    "native-inventory.json": {
+      "bytes": 440,
+      "sha256": "d0336d2fedb42345e72a76bf51b26d7f8a190874664fd93a6bf818aaa03aa75f"
+    },
+    "report.json.gz": {
+      "bytes": 2269760,
+      "sha256": "3e160b8a8c121e40f334375910b710b10c7d124f19d9e446b8b1ad63642d643f"
+    },
+    "run.log.argv.gz": {
+      "bytes": 645,
+      "sha256": "acf56a78e27a7e315fdd4c733d33f77c387ee76f3fea9e6c3b5bf987f98115ac"
+    },
+    "run.log.gz": {
+      "bytes": 32251,
+      "sha256": "166588f49598354439d1a8797fc7253a56ca79f93eb1e78ad75326ab8f5916b9"
+    },
+    "runner.py.gz": {
+      "bytes": 1600,
+      "sha256": "4dd662d6e7c848d7443bd4087862929d11ae93536c6afd3f37e3f7d8c1e85340"
+    }
+  },
+  "expectedAtomicGroupLimit": 1024,
+  "externalJavaScriptForbidden": true,
+  "files": [
+    "events.jsonl.gz",
+    "immutable-inventory.json",
+    "native-inventory.json",
+    "report.json.gz",
+    "run.log.argv.gz",
+    "run.log.gz",
+    "runner.py.gz"
+  ],
+  "hostedPackageParity": {
+    "payloadCount": 528,
+    "receipt": "../c83-hosted-package-parity-20261019.json",
+    "runtimeInventorySha256": "c26941e706919a974d1bc3d07c99138ed5b8652ee45e6d52a248dd1fb290dbbf",
+    "scope": "All hosted runtime payloads equal the immutable source used for local installed-wheel evidence; not a full release gate receipt.",
+    "sourceCommit": "d442e5c616ee27ac0b945ec2f03804cabc324e8c",
+    "status": "pass"
+  },
+  "immutableInventory": {
+    "excludedSourceFiles": [
+      "truss/_umf/owners/assertion-fields/producer.js",
+      "truss/_umf/owners/declarations/producer.js",
+      "truss/_umf/owners/record-members/producer.js",
+      "truss/_umf/owners/reference-links/producer.js",
+      "truss/_umf/owners/scalar-types/producer.js"
+    ],
+    "exclusionBasis": "packages/python/pyproject.toml tool.setuptools.exclude-package-data",
+    "payloadCount": 528,
+    "qualification": "PASS: all 528 installed-wheel payloads equal immutable source commit",
+    "runtimeInventorySha256": "c26941e706919a974d1bc3d07c99138ed5b8652ee45e6d52a248dd1fb290dbbf",
+    "sourceCommit": "d442e5c616ee27ac0b945ec2f03804cabc324e8c",
+    "sourceMismatches": [],
+    "wheelSha256": "9ac6fde6cee33ca41d333a8273bb2212701aa28a3df0cf89a3bd57d81269804e"
+  },
+  "nativeInventory": {
+    "candidate": "C83",
+    "nativeManifestSha256": "7845223dec360e632a962d8b19cc8dce1df67b09c1ebd0772c8233fe92df87a9",
+    "payloadCount": 528,
+    "runtimeInventorySha256": "c26941e706919a974d1bc3d07c99138ed5b8652ee45e6d52a248dd1fb290dbbf",
+    "sourceMismatches": [],
+    "sourceState": "uncommitted combined structural fixes; immutable commit parity pending",
+    "wheelSha256": "9ac6fde6cee33ca41d333a8273bb2212701aa28a3df0cf89a3bd57d81269804e"
+  },
+  "operationTimeoutMs": 30000,
+  "performanceBudgetStatus": "Latency budgets remain provisional; no prior-run nominal regression baseline supplied",
+  "performanceQualification": "measured",
+  "qualification": "Real Pizza, Northwind, and catalog workflows passed; the installed package is bound to the immutable source commit and workload dimensions are verified. The raw report retains its dirty-tree flag; no clean-checkout claim.",
+  "runtimeManifestSha256": "7845223dec360e632a962d8b19cc8dce1df67b09c1ebd0772c8233fe92df87a9",
+  "runtimeVersion": "0.0.40",
+  "sourceCommit": "d442e5c616ee27ac0b945ec2f03804cabc324e8c",
+  "sourceWorkingTreeDirty": true,
+  "statementTimeoutMs": 10000,
+  "workload": {
+    "allThreeCasesPassed": true,
+    "committedUpdatesPerCase": 200,
+    "eventRecordCount": 3926,
+    "listRowsPerCase": 51,
+    "loadedPerCase": 1000,
+    "readByIdPerCase": 1000,
+    "readByKeyPerCase": 100,
+    "reopenedValuesVerifiedPerCase": true,
+    "sampleCases": [
+      "pizza",
+      "northwind",
+      "catalog"
+    ]
+  }
+}

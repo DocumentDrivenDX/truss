@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+  "run": "https://github.com/DocumentDrivenDX/truss/actions/runs/39181726399",
+  "payloadCount": 528,
+  "runtimeInventorySha256": "05e838d643817e2f66e471e5900b577af42b312ba0825f7dd87571638402663c",
+  "sourceMismatches": [],
+  "assets": {
+    "truss_toolkit-0.0.40.tar.gz": "7cefe497bb50497534e57cdf40aa1982a2dc25f559877e63bc28c5b288be0a73",
+    "truss_toolkit-0.0.40-py3-none-any.whl": "b612605e9398b345462266212c2257f2f67c5848d77a1ad68b65d6183bcaeb25"
+  },
+  "qualification": "Hosted build runtime equals all 528 locally tested runtime payloads; this receipt is not native or full stress completion."
+}

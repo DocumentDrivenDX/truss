@@ -1,0 +1,116 @@
+{
+  "candidate": "C82",
+  "qualification": "Local real-schema functional workload passed; performance qualification is measured, with latency budgets still provisional.",
+  "elapsedSeconds": 61.286088542008656,
+  "runtimeVersion": "0.0.40",
+  "runtimeManifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+  "sourceCommit": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+  "sourceWorkingTreeDirty": true,
+  "dirtyTreeInterpretation": "The benchmark report records a dirty source tree. The separate immutable package inventory confirms all 528 wheel payloads match the recorded source commit, with only five explicitly excluded producer.js files absent. No clean-checkout claim is made.",
+  "workload": {
+    "sampleCases": [
+      "pizza",
+      "northwind",
+      "catalog"
+    ],
+    "loadedPerCase": 1000,
+    "readSamplesPerCase": 1000,
+    "committedUpdatesPerCase": 200,
+    "listRowsPerCase": 51,
+    "reopenedValuesVerifiedPerCase": true,
+    "readByIdPerCase": 1000,
+    "readByKeyPerCase": 100
+  },
+  "deadlinesMs": {
+    "statement": 10000,
+    "operation": 30000
+  },
+  "externalJavaScriptForbidden": true,
+  "immutableInventory": {
+    "payloadCount": 528,
+    "runtimeInventorySha256": "05e838d643817e2f66e471e5900b577af42b312ba0825f7dd87571638402663c",
+    "wheelSha256": "5cf717b94068eac13063e06ae270b7a8cd1a0e9f595ce86a04bf329a052cce3e",
+    "sourceMismatches": [],
+    "excludedSourceFiles": [
+      "truss/_umf/owners/assertion-fields/producer.js",
+      "truss/_umf/owners/declarations/producer.js",
+      "truss/_umf/owners/record-members/producer.js",
+      "truss/_umf/owners/reference-links/producer.js",
+      "truss/_umf/owners/scalar-types/producer.js"
+    ],
+    "exclusionBasis": "packages/python/pyproject.toml tool.setuptools.exclude-package-data: _umf/owners/*/producer.js",
+    "immutablePayloadParity": "PASS: all 528 wheel payloads equal source commit; only five explicitly excluded producer source files absent"
+  },
+  "nativeInventory": {
+    "manifestSha256": "2a0129e606cc8a4180caa53263203cdd3ba039e565d9a947ff62172756c6de66",
+    "payloadCount": 528,
+    "runtimeInventorySha256": "05e838d643817e2f66e471e5900b577af42b312ba0825f7dd87571638402663c",
+    "wheelSha256": "5cf717b94068eac13063e06ae270b7a8cd1a0e9f595ce86a04bf329a052cce3e"
+  },
+  "evidenceRawSha256AndBytes": {
+    "report.json": {
+      "sha256": "8ce8657ac6a4fdafc55b07c548518b9ca6f8d60a7a5f672c8c7528851e08aad7",
+      "bytes": 2268628
+    },
+    "receipt.json": {
+      "sha256": "7118ddee34bee8880e0fcc3510a77fbe4c14992b4add1fb2365641ab82c9d90f",
+      "bytes": 1058
+    },
+    "events.jsonl": {
+      "sha256": "58c4ba8500e6dd75b27f6bfd3036ea4c2ecaf616040930bef624218efeda04cc",
+      "bytes": 1336143
+    },
+    "run.log": {
+      "sha256": "0624723f55097dd7edebf81b38252c8097ff7628584e1d3392c3c17dff872db1",
+      "bytes": 32132
+    },
+    "run.log.argv": {
+      "sha256": "5e89b6919056be0f3242661d3f0f60c6bfe1d92f56c5bfa92ffacda616bf1dc0",
+      "bytes": 645
+    },
+    "runner.py": {
+      "sha256": "cc17f25e243067159bee8bd685c4c2241de9449c247648b9860d7d818f5b30f3",
+      "bytes": 1600
+    },
+    "immutable-inventory.json": {
+      "sha256": "e988656d2c9194324f09f5a2b81ccce6b48c365f3950f4883dad33c706220035",
+      "bytes": 843
+    },
+    "native-inventory.json": {
+      "sha256": "30b5e2360db3eb1ab7e7260a021efbd76235a460372b2a42d864ce35f0544ee3",
+      "bytes": 580
+    }
+  },
+  "files": [
+    "events.jsonl.gz",
+    "hosted-package-inventory-receipt.json",
+    "immutable-inventory.json",
+    "native-inventory.json",
+    "receipt.json",
+    "report.json.gz",
+    "run.log.argv.gz",
+    "run.log.gz",
+    "runner.py.gz",
+    "summary.json"
+  ],
+  "compressedEvidence": {
+    "report.json.gz": {
+      "sha256": "bbb8b3ea2beb500299b7e7f72685b9ceaaeb7bb8eacb9357fbbea84a973ce57e",
+      "compressedBytes": 35256,
+      "uncompressedSha256": "8ce8657ac6a4fdafc55b07c548518b9ca6f8d60a7a5f672c8c7528851e08aad7",
+      "uncompressedBytes": 2268628
+    }
+  },
+  "hostedBuildParity": {
+    "run": "https://github.com/DocumentDrivenDX/truss/actions/runs/39181726399",
+    "sourceCommit": "73f71bbc57c67f5b45aec095c1593f5afdd18ad0",
+    "payloadCount": 528,
+    "runtimeInventorySha256": "05e838d643817e2f66e471e5900b577af42b312ba0825f7dd87571638402663c",
+    "sourceMismatches": [],
+    "assetSha256": {
+      "truss_toolkit-0.0.40.tar.gz": "7cefe497bb50497534e57cdf40aa1982a2dc25f559877e63bc28c5b288be0a73",
+      "truss_toolkit-0.0.40-py3-none-any.whl": "b612605e9398b345462266212c2257f2f67c5848d77a1ad68b65d6183bcaeb25"
+    },
+    "qualification": "Hosted build runtime equals all 528 locally tested runtime payloads; this receipt is not native or full stress completion."
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "runId": "39176421417",
+  "sourceSha": "109d474a3df68fa8de2d29f87557b020c2d70486",
+  "runtimeManifestSha256": "32e5c7cb7d56d39e692d1f024cd5733f6b52c7281d4e1378d0b7e3bb564c8013",
+  "snapshotStatus": "in_progress",
+  "stressSnapshot": {
+    "completed": 20,
+    "passed": 18,
+    "failed": 2,
+    "inProgress": 2,
+    "queued": 0
+  },
+  "outstandingJobs": [
+    {
+      "jobId": "117820356370",
+      "case": "large",
+      "platform": "ubuntu-24.04",
+      "status": "in_progress"
+    },
+    {
+      "jobId": "117820356394",
+      "case": "large",
+      "platform": "macos-14",
+      "status": "in_progress"
+    }
+  ],
+  "completedReports": [
+    {
+      "case": "wide",
+      "platform": "ubuntu-24.04",
+      "report": "docs/helix/03-test/performance/results/c80-large-dense-wide-20261019/wide-ubuntu-report.json.gz",
+      "rawSha256": "1abe48cf2c33d7ec8eccbb80072f2f684fc7bfd22f5fe432a0a74f65865b3fe9",
+      "gzipSha256": "870d44ba5c32f07be943cebb79944063ca3f7a20e12724d84925914f2fbd65d4",
+      "passed": false,
+      "functionalPassed": false,
+      "performanceQualification": "incomplete",
+      "performanceTriageSignals": [
+        {
+          "case": "wide",
+          "signal": "bulk100_speedup",
+          "observed": 3.8441815836047377,
+          "triageThreshold": 5
+        }
+      ],
+      "seconds": 629.024187816,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 128,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100
+      ],
+      "failedOperations": [
+        {
+          "operation": "bulk_update_1000",
+          "failedElapsedMs": [
+            10206.67879
+          ]
+        },
+        {
+          "operation": "bulk_update_end_to_end_1000",
+          "failedElapsedMs": [
+            10208.353758
+          ]
+        }
+      ]
+    },
+    {
+      "case": "wide",
+      "platform": "macos-14",
+      "report": "docs/helix/03-test/performance/results/c80-large-dense-wide-20261019/wide-macos-report.json.gz",
+      "rawSha256": "a7154010704710f485bb8daad2d6c601536c9953f90ec37e83ef009b04833934",
+      "gzipSha256": "d4d546d42aff9cc8a918a3b546bc2383f45f6dd7957e8c4f1c6f9e85ab207f94",
+      "passed": false,
+      "functionalPassed": false,
+      "performanceQualification": "incomplete",
+      "performanceTriageSignals": [
+        {
+          "case": "wide",
+          "signal": "bulk100_speedup",
+          "observed": 3.8004473235017304,
+          "triageThreshold": 5
+        }
+      ],
+      "seconds": 793.4394585420005,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 128,
+        "nodes": 10000,
+        "edges": 20000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100
+      ],
+      "failedOperations": [
+        {
+          "operation": "bulk_update_1000",
+          "failedElapsedMs": [
+            10204.82025
+          ]
+        },
+        {
+          "operation": "bulk_update_end_to_end_1000",
+          "failedElapsedMs": [
+            10206.705209
+          ]
+        }
+      ]
+    },
+    {
+      "case": "dense-edges",
+      "platform": "ubuntu-24.04",
+      "report": "docs/helix/03-test/performance/results/c80-large-dense-wide-20261019/dense-edges-ubuntu-report.json.gz",
+      "rawSha256": "13099b9dd88a26b29139c187a9cc7cffd25ef0713210293da528bbb468bff91c",
+      "gzipSha256": "a5a22a47ef1b67cf241186c83654835221f50e1c22d4e31f9ab6f91288bbdec5",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured",
+      "performanceTriageSignals": [],
+      "seconds": 3587.076557531,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 12,
+        "nodes": 10000,
+        "edges": 500000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "failedOperations": []
+    },
+    {
+      "case": "dense-edges",
+      "platform": "macos-14",
+      "report": "docs/helix/03-test/performance/results/c80-large-dense-wide-20261019/dense-edges-macos-report.json.gz",
+      "rawSha256": "f64bd3418f39f4423164029de6c7642f3a2fa115a750ecdeb5c6389716321950",
+      "gzipSha256": "69e7d5cf8a6950fdb99465605f79c6973ca21be16ac65104620a40dcf7bee3ab",
+      "passed": true,
+      "functionalPassed": true,
+      "performanceQualification": "measured",
+      "performanceTriageSignals": [],
+      "seconds": 5816.489336625,
+      "workload": {
+        "types": 10,
+        "fieldsPerType": 12,
+        "nodes": 10000,
+        "edges": 500000,
+        "indexedPropertiesPerType": 2,
+        "distribution": "uniform",
+        "shape": "mixed"
+      },
+      "attemptedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "committedAtomicGroupSizes": [
+        1,
+        100,
+        1000,
+        1024
+      ],
+      "failedOperations": []
+    }
+  ],
+  "nativeFailures": [
+    "native (ubuntu-24.04)",
+    "native (macos-14)"
+  ],
+  "manifest": "docs/helix/03-test/performance/results/c80-large-dense-wide-20261019/manifest.json",
+  "manifestSha256": "ede3018715b9923c182b2324c5cd991c76385959c9a0e90d518805303fc43620"
+}

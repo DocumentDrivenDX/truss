@@ -25,8 +25,10 @@ BEGIN
   OR attempt.next_index<>jsonb_array_length(operations) OR jsonb_array_length(attempt.results)<>attempt.next_index
   OR (SELECT count(*) FROM truss.runtime_owned_operation WHERE attempt_id=selected_attempt)<>attempt.next_index THEN
   RAISE EXCEPTION 'complete original owned group required' USING ERRCODE='55000';END IF;
- -- Both finish and mandatory commit close the retained arrays against every
- -- immutable result slot, including no-ops and aggregate cascade results.
+ -- Finish has just assembled these immutable slots into the attempt result.
+ -- Close that inventory once at mandatory commit; repeating its aggregation
+ -- immediately at finish cannot detect a different caller action.
+ IF NOT check_final THEN
  SELECT coalesce(jsonb_agg(p.result ORDER BY p.operation_index),'[]'::jsonb) results,
   coalesce(jsonb_agg(jsonb_build_object('alias',p.plan->'operation'->>'alias','identity',p.result->'identity') ORDER BY p.operation_index)
    FILTER(WHERE (p.plan->'operation') ? 'alias'),'[]'::jsonb) aliases,
@@ -37,6 +39,7 @@ BEGIN
   OR sealed.ordinals IS DISTINCT FROM ARRAY(SELECT generate_series(0,attempt.next_index-1))
   OR sealed.results IS DISTINCT FROM attempt.results OR sealed.aliases IS DISTINCT FROM attempt.aliases THEN
   RAISE EXCEPTION 'exact complete retained owned result slots required' USING ERRCODE='55000';END IF;
+ END IF;
  -- The supported apply_group route always uses the canonical batch producer
  -- for this closed shape. Its exact INSERT/slot comparisons bind immutable
  -- payloads already; current created values have no historical reader cut.
@@ -261,7 +264,15 @@ BEGIN
   IF NOT truss.runtime_can_read_qualified(entry.value->'definition'->>'document_id',entry.value->'definition'->>'module',current_actor) THEN
    RAISE EXCEPTION 'current original boundary reader required' USING ERRCODE='42501';END IF;
  END LOOP;
- FOR entry IN SELECT DISTINCT (value->'identity'->>'typeId')::int type_id FROM jsonb_each(last_plan->'afterNodes') LOOP
+ -- Independent updates already captured all affected identities in one scope.
+ -- Resolve current reader dependencies once per type, including no-op targets.
+ FOR entry IN
+  SELECT DISTINCT type_id FROM (
+   SELECT (value->>'type_id')::int type_id FROM jsonb_each(initial_scope->'nodes') WHERE independent_updates
+   UNION ALL
+   SELECT (value->'identity'->>'typeId')::int FROM jsonb_each(last_plan->'afterNodes') WHERE NOT independent_updates
+  ) affected_types
+ LOOP
   IF NOT truss.runtime_object_values_readable_qualified(entry.type_id,current_actor) THEN RAISE EXCEPTION 'current complete object value readers required' USING ERRCODE='42501';END IF;
  END LOOP;
  -- The closed value-update producer bound the original prestate and checked

@@ -202,28 +202,30 @@ REVOKE ALL ON FUNCTION truss.query_object_root(jsonb,truss.object) FROM PUBLIC;
 
 CREATE FUNCTION truss.query_objects(binding jsonb,selected_type int) RETURNS TABLE(id bigint,props jsonb)
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
-DECLARE owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;property truss.prop_def%ROWTYPE;cell jsonb;row_count int:=0;byte_count bigint:=0;root_identity jsonb;roots jsonb:='{}';root_entry jsonb;
+DECLARE owner truss.type_def%ROWTYPE;object_row truss.object%ROWTYPE;selected_row record;numeric_properties jsonb;numeric_valid boolean;
+ row_count int:=0;byte_count bigint:=0;root_identity jsonb;roots jsonb:='{}';root_entry jsonb;
 BEGIN
  PERFORM truss.query_scope(binding);
  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(binding->'records') r WHERE (r.value->>'typeId')::int=selected_type) THEN RAISE EXCEPTION 'selected query record required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT owner FROM truss.type_def t WHERE t.type_id=selected_type AND t.retired_rev IS NULL;
- FOR property IN SELECT * FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL LOOP
-  IF truss.valid_property_definition(property) IS NOT TRUE THEN RAISE EXCEPTION 'query value profile unavailable' USING ERRCODE='0A000';END IF;
- END LOOP;
- FOR object_row IN SELECT * FROM truss.object o WHERE o.type_id=selected_type ORDER BY o.id LIMIT (binding->>'maximumScanRows')::int+1 LOOP
+ SELECT coalesce(jsonb_agg(jsonb_build_object('propertyId',p.prop_id::text,'scalarType',p.scalar_type) ORDER BY p.prop_id),'[]'::jsonb)
+ INTO numeric_properties FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.scalar_type IN ('integer','decimal');
+ FOR selected_row IN
+  SELECT o AS object_row,NOT EXISTS(
+   SELECT 1 FROM jsonb_array_elements(numeric_properties) f
+   CROSS JOIN LATERAL (SELECT o.props->(f.value->>'propertyId') AS cell) selected_cell
+   WHERE selected_cell.cell IS NOT NULL AND selected_cell.cell<>'{"kind":"null"}'::jsonb
+    AND truss.query_numeric_value(selected_cell.cell->>'text',f.value->>'scalarType') IS NOT TRUE
+  ) AS numeric_valid
+  FROM truss.object o WHERE o.type_id=selected_type ORDER BY o.id LIMIT (binding->>'maximumScanRows')::int+1 LOOP
+  object_row:=selected_row.object_row;numeric_valid:=selected_row.numeric_valid;
   row_count:=row_count+1;byte_count:=byte_count+octet_length(object_row.props::text);
   IF row_count>(binding->>'maximumScanRows')::int OR byte_count>(binding->>'maximumBytes')::int THEN RAISE EXCEPTION 'bounded query source required' USING ERRCODE='54000';END IF;
   root_identity:=truss.query_object_root(binding,object_row);
   IF root_identity IS NOT NULL THEN roots:=roots||jsonb_build_object((root_identity->>'typeId')||':'||(root_identity->>'id'),root_identity);END IF;
   IF byte_count+(CASE WHEN roots='{}'::jsonb THEN 0 ELSE octet_length(roots::text) END)>(binding->>'maximumBytes')::int THEN RAISE EXCEPTION 'bounded query root witnesses required' USING ERRCODE='54000';END IF;
-  IF object_row.ver<=0 OR object_row.rev> (binding->>'catalogRevision')::int
-   OR EXISTS(SELECT 1 FROM jsonb_object_keys(object_row.props) k WHERE NOT EXISTS(SELECT 1 FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL AND p.prop_id::text=k)) THEN RAISE EXCEPTION 'complete scalar source required' USING ERRCODE='0A000';END IF;
-  FOR property IN SELECT * FROM truss.prop_def p WHERE p.type_id=selected_type AND p.retired_rev IS NULL LOOP
-   cell:=object_row.props->property.prop_id::text;
-   IF cell IS NULL THEN IF property.nullability='required' THEN RAISE EXCEPTION 'required query value missing' USING ERRCODE='55000';END IF;
-   ELSIF truss.valid_property_value(cell,property) IS NOT TRUE THEN RAISE EXCEPTION 'malformed query scalar' USING ERRCODE='55000';
-   ELSIF property.scalar_type IN ('integer','decimal') AND cell->>'kind'<>'null' AND truss.query_numeric_value(cell->>'text',property.scalar_type) IS NOT TRUE THEN RAISE EXCEPTION 'exact native numeric domain unavailable' USING ERRCODE='22003';END IF;
-  END LOOP;
+  IF object_row.ver<=0 OR object_row.rev> (binding->>'catalogRevision')::int THEN RAISE EXCEPTION 'complete scalar source required' USING ERRCODE='0A000';END IF;
+  IF NOT numeric_valid THEN RAISE EXCEPTION 'exact native numeric domain unavailable' USING ERRCODE='22003';END IF;
   id:=object_row.id;props:=object_row.props;RETURN NEXT;
  END LOOP;
  FOR root_entry IN SELECT value FROM jsonb_each(roots) LOOP

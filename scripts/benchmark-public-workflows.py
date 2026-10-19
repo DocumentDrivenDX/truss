@@ -37,12 +37,19 @@ parser.add_argument('--profile-native-functions',action='store_true',help='Diagn
 parser.add_argument('--capture-failure-diagnostics',action='store_true',help='On a failed case, capture completed PostgreSQL function stats, exact Truss table row counts and database/relation sizes before teardown')
 parser.add_argument('--keep-failed-database',action='store_true',help='On a failed case, stop PostgreSQL but preserve its local PGDATA directory; no artifact upload')
 parser.add_argument('--count-sql-submissions',action='store_true',help='Diagnostic mode: count actual psycopg execute/executemany submissions by timed operation and case, plus commit/rollback calls separately; timing includes counter overhead')
+parser.add_argument('--trace-sql',type=Path,help='Diagnostic JSONL: ordered driver SQL text, workflow scopes and elapsed times; bind values omitted. Includes nested server work only in the outer call time.')
 parser.add_argument('--self-test-sql-counter',action='store_true',help='Run the SQL counter against mocked cursors and exit without starting PostgreSQL')
 parser.add_argument('--load-only',action='store_true',help='Measure and verify object/edge loading, omitting the later read/update matrix')
 parser.add_argument('--forbid-external-javascript',action='store_true',help='Fail if any code attempts to launch Bun, Node, or NodeJS')
 parser.add_argument('--profile-read',type=Path,help='Optional separate cProfile of one warm public ID read, outside timed samples')
 parser.add_argument('--output',type=Path,default=Path('truss-public-performance.json'))
 args=parser.parse_args()
+if args.trace_sql:
+    args.count_sql_submissions=True
+    args.trace_sql.parent.mkdir(parents=True,exist_ok=True)
+    import atexit
+    sql_trace_stream=args.trace_sql.open('w')
+    atexit.register(sql_trace_stream.close)
 external_processes=[]
 if args.forbid_external_javascript:
     def process_audit(event,values):
@@ -141,6 +148,13 @@ class SQLSubmissionCounter:
             counts[channel]+=1
             counts['bySqlClass'][label]=counts['bySqlClass'].get(label,0)+1
 
+    def trace(self,channel,query,started,error=None):
+        if not args.trace_sql or not self._scopes:return
+        event={'scopes':[{'name':scope['name'],'kind':scope['kind']} for scope in self._scopes],
+            'channel':channel,'sql':str(query),'elapsedMs':(time.perf_counter_ns()-started)/1e6,
+            'sqlState':getattr(error,'sqlstate',None),'failed':error is not None}
+        sql_trace_stream.write(json.dumps(event,separators=(',',':'))+'\n')
+
     def record_transaction(self,action):
         if not self.enabled:return
         for scope in self._scopes:
@@ -166,7 +180,13 @@ def install_sql_submission_counter(psycopg,host_module,counter,assembly_module=N
             self._benchmark_channel=_channel
         def execute(self,query,*args,**kwargs):
             counter.record_sql(self._benchmark_channel,query)
-            return super().execute(query,*args,**kwargs)
+            started=time.perf_counter_ns()
+            error=None
+            try:return super().execute(query,*args,**kwargs)
+            except BaseException as caught:
+                error=caught
+                raise
+            finally:counter.trace(self._benchmark_channel,query,started,error)
         def executemany(self,query,params_seq,*args,**kwargs):
             # Psycopg may pipeline multiple parameter sets, so don't misreport
             # one API call as an exact count of server statements.
@@ -181,10 +201,22 @@ def install_sql_submission_counter(psycopg,host_module,counter,assembly_module=N
         original_rollback=connection.rollback
         def counted_commit(*args,**kwargs):
             counter.record_transaction('commit')
-            return original_commit(*args,**kwargs)
+            started=time.perf_counter_ns()
+            error=None
+            try:return original_commit(*args,**kwargs)
+            except BaseException as caught:
+                error=caught
+                raise
+            finally:counter.trace('driver','COMMIT',started,error)
         def counted_rollback(*args,**kwargs):
             counter.record_transaction('rollback')
-            return original_rollback(*args,**kwargs)
+            started=time.perf_counter_ns()
+            error=None
+            try:return original_rollback(*args,**kwargs)
+            except BaseException as caught:
+                error=caught
+                raise
+            finally:counter.trace('driver','ROLLBACK',started,error)
         connection.commit=counted_commit
         connection.rollback=counted_rollback
         return connection

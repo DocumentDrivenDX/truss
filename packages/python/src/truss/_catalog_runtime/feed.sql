@@ -8,25 +8,99 @@ CREATE INDEX runtime_feed_reservation_writer ON truss.runtime_feed_reservation(w
 CREATE TRIGGER runtime_feed_reservation_immutable BEFORE UPDATE OR DELETE ON truss.runtime_feed_reservation
  FOR EACH ROW EXECUTE FUNCTION truss.catalog_immutable();
 
-CREATE FUNCTION truss.runtime_feed_capture_reservation() RETURNS trigger
-LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE original_xid xid8;
+CREATE FUNCTION truss.runtime_feed_current_configuration() RETURNS jsonb
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE installation truss.catalog_runtime_installation%ROWTYPE;
 BEGIN
- IF TG_TABLE_NAME='object_key_reservation_bucket' THEN
-  original_xid:=(convert_from(NEW.original_reservation_bytes,'UTF8')::jsonb->>'xid')::xid8;
-  IF original_xid IS DISTINCT FROM pg_current_xact_id() THEN RAISE EXCEPTION 'original reservation writer required' USING ERRCODE='55000';END IF;
-  INSERT INTO truss.runtime_feed_reservation(writer_xid,kind,original_row) VALUES(original_xid,'object_key',to_jsonb(NEW));
- ELSE
-  INSERT INTO truss.runtime_feed_reservation(writer_xid,kind,original_row) VALUES(pg_current_xact_id(),'edge_key',to_jsonb(NEW));
- END IF;
- RETURN NEW;
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
+ RETURN jsonb_build_object('releaseId',installation.release_id,'releaseSha256',installation.release_sha256,
+  'layoutProfile',installation.layout_profile,'preparationConfiguration',installation.preparation_configuration,
+  'settings',(SELECT jsonb_object_agg(key,value) FROM truss.setting));
 END;
 $$;
-REVOKE ALL ON FUNCTION truss.runtime_feed_capture_reservation() FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.runtime_feed_current_configuration() FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_feed_retain_configuration(writer xid8,configuration jsonb) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE retained jsonb;
+BEGIN
+ SELECT t.configuration INTO retained FROM truss.runtime_feed_transaction_configuration t WHERE t.writer_xid=writer;
+ IF FOUND THEN
+  IF retained IS DISTINCT FROM configuration THEN RAISE EXCEPTION 'stable feed writer configuration required' USING ERRCODE='55000';END IF;
+ ELSE
+  INSERT INTO truss.runtime_feed_transaction_configuration VALUES(writer,configuration);
+  SELECT t.configuration INTO retained FROM truss.runtime_feed_transaction_configuration t WHERE t.writer_xid=writer;
+  IF NOT FOUND OR retained IS DISTINCT FROM configuration THEN RAISE EXCEPTION 'original feed writer configuration required' USING ERRCODE='55000';END IF;
+ END IF;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_feed_retain_configuration(xid8,jsonb) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_feed_capture_configuration_statement() RETURNS trigger
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE row_count bigint; configuration jsonb; writer xid8:=pg_current_xact_id();
+BEGIN
+ IF TG_TABLE_NAME='journal' THEN
+  SELECT count(*) INTO row_count FROM inserted_rows;
+  IF row_count>0 AND EXISTS(SELECT 1 FROM inserted_rows WHERE xid IS DISTINCT FROM writer) THEN
+   RAISE EXCEPTION 'current feed fact writer required' USING ERRCODE='55000';END IF;
+ ELSE
+  SELECT count(*) INTO row_count FROM inserted_rows;
+  IF row_count>0 AND EXISTS(SELECT 1 FROM inserted_rows WHERE writer_xid IS DISTINCT FROM writer) THEN
+   RAISE EXCEPTION 'current feed fact writer required' USING ERRCODE='55000';END IF;
+ END IF;
+ IF row_count>0 THEN
+  configuration:=truss.runtime_feed_current_configuration();
+  PERFORM truss.runtime_feed_retain_configuration(writer,configuration);
+ END IF;
+ RETURN NULL;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_feed_capture_configuration_statement() FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_feed_capture_object_reservations() RETURNS trigger
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE row_count bigint; inserted_count bigint;
+BEGIN
+ SELECT count(*) INTO row_count FROM inserted_rows;
+ IF row_count=0 THEN
+  RETURN NULL;
+ END IF;
+ WITH parsed AS MATERIALIZED (
+  SELECT r.storage_row_id,(convert_from(r.original_reservation_bytes,'UTF8')::jsonb->>'xid')::xid8 AS writer_xid,to_jsonb(r) AS original_row
+  FROM inserted_rows r ORDER BY r.storage_row_id)
+ INSERT INTO truss.runtime_feed_reservation(writer_xid,kind,original_row)
+ SELECT writer_xid,'object_key',original_row FROM parsed WHERE writer_xid=pg_current_xact_id() ORDER BY storage_row_id;
+ GET DIAGNOSTICS inserted_count=ROW_COUNT;
+ IF inserted_count IS DISTINCT FROM row_count THEN RAISE EXCEPTION 'original reservation writer required' USING ERRCODE='55000';END IF;
+ RETURN NULL;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_feed_capture_object_reservations() FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_feed_capture_edge_reservations() RETURNS trigger
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE row_count bigint; inserted_count bigint; writer xid8:=pg_current_xact_id();
+BEGIN
+ SELECT count(*) INTO row_count FROM inserted_rows;
+ IF row_count=0 THEN
+  RETURN NULL;
+ END IF;
+ INSERT INTO truss.runtime_feed_reservation(writer_xid,kind,original_row)
+ SELECT writer,'edge_key',to_jsonb(r) FROM inserted_rows r ORDER BY r.at,r.type_id,r.key_num,r.k,r.entity_id;
+ GET DIAGNOSTICS inserted_count=ROW_COUNT;
+ IF inserted_count IS DISTINCT FROM row_count THEN RAISE EXCEPTION 'complete edge reservation feed required' USING ERRCODE='55000';END IF;
+ RETURN NULL;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_feed_capture_edge_reservations() FROM PUBLIC;
+
 CREATE TRIGGER runtime_feed_object_reservation AFTER INSERT ON truss.object_key_reservation_bucket
- FOR EACH ROW EXECUTE FUNCTION truss.runtime_feed_capture_reservation();
+ REFERENCING NEW TABLE AS inserted_rows FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_feed_capture_object_reservations();
+ALTER TABLE truss.object_key_reservation_bucket ENABLE ALWAYS TRIGGER runtime_feed_object_reservation;
 CREATE TRIGGER runtime_feed_edge_reservation AFTER INSERT ON truss.key_tombstone
- FOR EACH ROW EXECUTE FUNCTION truss.runtime_feed_capture_reservation();
+ REFERENCING NEW TABLE AS inserted_rows FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_feed_capture_edge_reservations();
+ALTER TABLE truss.key_tombstone ENABLE ALWAYS TRIGGER runtime_feed_edge_reservation;
 
 CREATE TABLE truss.runtime_feed_configuration (singleton boolean PRIMARY KEY CHECK(singleton),original_settings jsonb NOT NULL);
 INSERT INTO truss.runtime_feed_configuration SELECT true,jsonb_object_agg(key,value) FROM truss.setting;
@@ -97,10 +171,12 @@ BEGIN
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_capture_feed_configuration() FROM PUBLIC;
-CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.journal FOR EACH ROW EXECUTE FUNCTION truss.runtime_capture_feed_configuration('xid');
 CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.catalog_registration_request FOR EACH ROW EXECUTE FUNCTION truss.runtime_capture_feed_configuration('writer_xid');
 CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.runtime_import_source FOR EACH ROW EXECUTE FUNCTION truss.runtime_capture_feed_configuration('writer_xid');
-CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.runtime_feed_reservation FOR EACH ROW EXECUTE FUNCTION truss.runtime_capture_feed_configuration('writer_xid');
+CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.journal
+ REFERENCING NEW TABLE AS inserted_rows FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_feed_capture_configuration_statement();
+CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.runtime_feed_reservation
+ REFERENCING NEW TABLE AS inserted_rows FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_feed_capture_configuration_statement();
 ALTER TABLE truss.journal ENABLE ALWAYS TRIGGER runtime_capture_feed_configuration;
 ALTER TABLE truss.catalog_registration_request ENABLE ALWAYS TRIGGER runtime_capture_feed_configuration;
 ALTER TABLE truss.runtime_import_source ENABLE ALWAYS TRIGGER runtime_capture_feed_configuration;

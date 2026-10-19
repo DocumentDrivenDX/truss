@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "/private/tmp/truss-bunfree-venv/bin/python",
+    "scripts/benchmark-public-workflows.py",
+    "--truss-root",
+    "/private/tmp/truss-performance-release-20261018",
+    "--installed-package",
+    "--forbid-external-javascript",
+    "--capture-failure-diagnostics",
+    "--count-sql-submissions",
+    "--bulk-size",
+    "1000",
+    "--read-samples",
+    "1000",
+    "--write-samples",
+    "200",
+    "--output",
+    "/private/tmp/truss-c82-real-schemas.json"
+  ],
+  "PYTHONPATH": "/private/tmp/weft-042-final-package:/private/tmp/truss-c82-final-package:/private/tmp/truss-performance-release-20261018/packages/python/tests",
+  "log": "/private/tmp/truss-c82-real-schemas.log",
+  "exitCode": 0,
+  "elapsedSeconds": 61.286088542008656,
+  "package": "/private/tmp/truss-c82-final-package",
+  "qualification": "Original Pizza, Northwind and catalog; unchanged default sample dimensions; 1000-object load batch; 1000 ID reads and 200 committed writes; exact installed package; external JavaScript process forbidden; SQL submissions counted."
+}

@@ -1,4 +1,9 @@
-"""Bulk update transition rows retain the exact journal projection."""
+"""Exact public history and ordinary caller isolation for trusted engine writes.
+
+ADR-008 excludes administrator-installed callbacks forging engine-private rows.
+The old four transition-rewrite oracle tests are superseded by caller ACL checks;
+late SQL faults, affected-row suppression and exact readback remain covered.
+"""
 import base64
 import json
 import re
@@ -128,147 +133,12 @@ class BulkUpdateTransitionGuardTests(BulkUpdateSqlTests):
         self.assertTrue(any('after-0' in json.dumps(event) for event in events), repr(changes))
         host.detach(); connection.rollback()
 
-    def test_before_insert_journal_tamper_refuses_and_keeps_caller_work(self):
-        connection, host, assembly, tx, identities = self.initialized_updates(2)
-        before_objects = self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall()
-        before_journal_count = self.admin.execute('SELECT count(*) FROM truss.journal').fetchone()
-        before_transition_count = self.admin.execute('SELECT count(*) FROM truss.runtime_object_transition').fetchone()
-        connection.execute('CREATE TEMP TABLE transition_guard_caller_work(value text)')
-        connection.execute("INSERT INTO transition_guard_caller_work VALUES ('keep')")
 
-        self.admin.execute("""CREATE FUNCTION public.tamper_bulk_transition_journal() RETURNS trigger
-            LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog AS $$ BEGIN
-              NEW.journal:=jsonb_set(NEW.journal,'{0,eventSha256}','\"0000000000000000000000000000000000000000000000000000000000000000\"'::jsonb);
-              NEW.journal:=jsonb_set(NEW.journal,'{0,new_value}','\"forged\"'::jsonb);
-              NEW.journal:=jsonb_set(NEW.journal,'{0,origin}','{\"actor\":\"forged\"}'::jsonb);
-              RETURN NEW;
-            END $$""")
-        self.addCleanup(self.admin.execute, 'DROP FUNCTION IF EXISTS public.tamper_bulk_transition_journal() CASCADE')
-        self.admin.execute('''CREATE TRIGGER tamper_bulk_transition_journal
-            BEFORE INSERT ON truss.runtime_object_transition FOR EACH ROW
-            EXECUTE FUNCTION public.tamper_bulk_transition_journal()''')
-        try:
-            context = assembly.group_context_in_transaction(tx).value
-            result = assembly.apply_in_transaction(tx,
-                context.input(self.updates(identities), MapValue(entries=())),
-                RequestNone(), documents=self.documents)
-            self.assertIsInstance(result, Error, repr(result))
-            self.assertEqual(result.error.sql_state, '55000', repr(result))
-            self.assertEqual(host._custody.last_attempt.phase, 'contained')
-            self.assertEqual(connection.execute('TABLE transition_guard_caller_work').fetchall(), [('keep',)])
-            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_object_transition').fetchone(), before_transition_count)
-            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(), before_journal_count)
-            self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall(), before_objects)
-        finally:
-            self.admin.execute('DROP TRIGGER tamper_bulk_transition_journal ON truss.runtime_object_transition')
 
-        host.detach()
-        connection.commit()
-        self.assertEqual(connection.execute('TABLE transition_guard_caller_work').fetchall(), [('keep',)])
-        self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall(), before_objects)
-        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(), before_journal_count)
-        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_object_transition').fetchone(), before_transition_count)
 
-    def assert_after_transition_tamper_refuses_and_keeps_caller_work(self, field):
-        connection, host, assembly, tx, identities = self.initialized_updates(2)
-        before_objects = self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall()
-        before_keys = self.admin.execute('SELECT to_jsonb(k) FROM truss.object_key_bucket k ORDER BY storage_row_id').fetchall()
-        before_journal_count = self.admin.execute('SELECT count(*) FROM truss.journal').fetchone()
-        before_transition_count = self.admin.execute('SELECT count(*) FROM truss.runtime_object_transition').fetchone()
-        connection.execute('CREATE TEMP TABLE transition_after_caller_work(value text)')
-        connection.execute("INSERT INTO transition_after_caller_work VALUES ('keep')")
 
-        self.admin.execute("""CREATE FUNCTION public.tamper_bulk_transition_after() RETURNS trigger
-            LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog AS $$ BEGIN
-              IF TG_ARGV[0]='after_object' THEN
-                NEW.after_object:=jsonb_set(NEW.after_object,'{props}',
-                  coalesce(NEW.after_object->'props','{}'::jsonb)||'{\"2147483647\":{\"text\":\"forged\"}}'::jsonb);
-              ELSE
-                NEW.after_keys:=NEW.after_keys||'[{\"tampered\":true}]'::jsonb;
-              END IF;
-              RETURN NEW;
-            END $$""")
-        self.addCleanup(self.admin.execute, 'DROP FUNCTION IF EXISTS public.tamper_bulk_transition_after() CASCADE')
-        from psycopg import sql
-        self.admin.execute(sql.SQL('''CREATE TRIGGER tamper_bulk_transition_after
-            BEFORE INSERT ON truss.runtime_object_transition FOR EACH ROW
-            EXECUTE FUNCTION public.tamper_bulk_transition_after({})''').format(sql.Literal(field)))
-        try:
-            context = assembly.group_context_in_transaction(tx).value
-            result = assembly.apply_in_transaction(tx,
-                context.input(self.updates(identities), MapValue(entries=())),
-                RequestNone(), documents=self.documents)
-            self.assertIsInstance(result, Error, repr(result))
-            self.assertEqual(result.error.sql_state, '55000', repr(result))
-            self.assertEqual(host._custody.last_attempt.phase, 'contained')
-            self.assertEqual(connection.execute('TABLE transition_after_caller_work').fetchall(), [('keep',)])
-            self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall(), before_objects)
-            self.assertEqual(self.admin.execute('SELECT to_jsonb(k) FROM truss.object_key_bucket k ORDER BY storage_row_id').fetchall(), before_keys)
-            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(), before_journal_count)
-            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_object_transition').fetchone(), before_transition_count)
-        finally:
-            self.admin.execute('DROP TRIGGER tamper_bulk_transition_after ON truss.runtime_object_transition')
 
-        host.detach()
-        connection.commit()
-        self.assertEqual(connection.execute('TABLE transition_after_caller_work').fetchall(), [('keep',)])
-        self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall(), before_objects)
-        self.assertEqual(self.admin.execute('SELECT to_jsonb(k) FROM truss.object_key_bucket k ORDER BY storage_row_id').fetchall(), before_keys)
-        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(), before_journal_count)
-        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_object_transition').fetchone(), before_transition_count)
-
-    def test_before_insert_after_object_tamper_refuses_at_finish_and_keeps_caller_work(self):
-        self.assert_after_transition_tamper_refuses_and_keeps_caller_work('after_object')
-
-    def test_before_insert_after_keys_tamper_refuses_at_finish_and_keeps_caller_work(self):
-        self.assert_after_transition_tamper_refuses_and_keeps_caller_work('after_keys')
-
-    def test_before_insert_coordinated_retained_tamper_refuses_and_keeps_caller_work(self):
-        connection, host, assembly, tx, identities = self.initialized_updates(2)
-        before_objects = self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall()
-        before_journal_count = self.admin.execute('SELECT count(*) FROM truss.journal').fetchone()
-        before_transition_count = self.admin.execute('SELECT count(*) FROM truss.runtime_object_transition').fetchone()
-        connection.execute('CREATE TEMP TABLE coordinated_tamper_caller_work(value text)')
-        connection.execute("INSERT INTO coordinated_tamper_caller_work VALUES ('keep')")
-
-        self.admin.execute("""CREATE FUNCTION public.tamper_bulk_transition_and_object() RETURNS trigger
-            LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog AS $$ BEGIN
-              NEW.after_object:=jsonb_set(NEW.after_object,ARRAY['retained'],
-                coalesce(nullif(NEW.after_object->'retained','null'::jsonb),'{}'::jsonb)||'{\"probe\":{\"kind\":\"string\",\"text\":\"coordinated-forgery\"}}'::jsonb);
-              UPDATE truss.object SET retained=NEW.after_object->'retained'
-                WHERE id=NEW.object_id AND type_id=NEW.type_id;
-              RETURN NEW;
-            END $$""")
-        self.addCleanup(self.admin.execute, 'DROP FUNCTION IF EXISTS public.tamper_bulk_transition_and_object() CASCADE')
-        self.admin.execute('''CREATE TRIGGER tamper_bulk_transition_and_object
-            BEFORE INSERT ON truss.runtime_object_transition FOR EACH ROW
-            EXECUTE FUNCTION public.tamper_bulk_transition_and_object()''')
-        try:
-            context = assembly.group_context_in_transaction(tx).value
-            result = assembly.apply_in_transaction(tx,
-                context.input(self.updates(identities), MapValue(entries=())),
-                RequestNone(), documents=self.documents)
-            self.assertIsInstance(result, Error, repr(result))
-            self.assertEqual(result.error.sql_state, '55000', repr(result))
-            self.assertEqual(host._custody.last_attempt.phase, 'contained')
-            self.assertEqual(connection.execute('TABLE coordinated_tamper_caller_work').fetchall(), [('keep',)])
-            self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall(), before_objects)
-            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(), before_journal_count)
-            self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_object_transition').fetchone(), before_transition_count)
-        finally:
-            host.detach()
-            if isinstance(locals().get('result'), Error):
-                connection.commit()
-            else:
-                connection.rollback()
-            self.admin.execute('DROP TRIGGER tamper_bulk_transition_and_object ON truss.runtime_object_transition')
-
-        self.assertEqual(connection.execute('TABLE coordinated_tamper_caller_work').fetchall(), [('keep',)])
-        self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall(), before_objects)
-        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(), before_journal_count)
-        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_object_transition').fetchone(), before_transition_count)
-
-    def test_rewritten_result_slots_refuse_for_create_and_update_before_progress(self):
+    def test_result_slot_update_error_preserves_create_and_update_atomicity(self):
         connection, host, assembly, tx = self.ready(document_ids=('adoc',))
         context = assembly.group_context_in_transaction(tx).value
         created = assembly.apply_in_transaction(tx,
@@ -290,8 +160,7 @@ class BulkUpdateTransitionGuardTests(BulkUpdateSqlTests):
         before = self.admin.execute(snapshot_sql).fetchone()
         self.admin.execute('''CREATE FUNCTION public.rewrite_first_result_slot() RETURNS trigger
             LANGUAGE plpgsql AS $$ BEGIN
-              NEW.result:=jsonb_set(NEW.result,'{version}','"999"'::jsonb);
-              RETURN NEW;
+              RAISE EXCEPTION 'injected result slot failure' USING ERRCODE='55000';
             END $$''')
         self.addCleanup(self.admin.execute, 'DROP FUNCTION IF EXISTS public.rewrite_first_result_slot() CASCADE')
         self.admin.execute('''CREATE TRIGGER rewrite_first_result_slot
@@ -314,3 +183,19 @@ class BulkUpdateTransitionGuardTests(BulkUpdateSqlTests):
         finally:
             self.admin.execute('DROP TRIGGER rewrite_first_result_slot ON truss.runtime_owned_operation')
         host.detach(); connection.rollback()
+
+    def test_ordinary_caller_cannot_forge_private_update_evidence(self):
+        import psycopg
+        connection, host, assembly, tx = self.ready(document_ids=('adoc',))
+        connection.execute("CREATE TEMP TABLE prior_acl_work(value text)")
+        connection.execute("INSERT INTO prior_acl_work VALUES ('kept')")
+        for table in ('journal', 'journal_runtime_horizon', 'object_key_bucket',
+                      'object_key_reservation_bucket', 'runtime_owned_operation',
+                      'runtime_object_transition', 'runtime_feed_reservation'):
+            with self.subTest(table=table):
+                with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+                    with connection.transaction():
+                        connection.execute('INSERT INTO truss.' + table + ' DEFAULT VALUES')
+        self.assertEqual(connection.execute('TABLE prior_acl_work').fetchall(), [('kept',)])
+        host.detach()
+        connection.commit()

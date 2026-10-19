@@ -1,0 +1,34 @@
+{
+  "argv": "PYTHONPATH=/private/tmp/weft-042-final-package:/private/tmp/truss-c83-final-package:/private/tmp/truss-performance-release-20261018/packages/python/tests /private/tmp/truss-bunfree-venv/bin/python -m unittest -v test_graph_commit_practical_native.GraphCommitPracticalTests",
+  "argvEvidence": {
+    "bytes": 190,
+    "path": "docs/helix/03-test/performance/results/c83-graph-controls-20261019/argv.txt.gz",
+    "sha256": "5a8d5f3f8a1ca5850d8a8adaec0f0229e85fd302e6ae3167b4f6a5da7a6c6276"
+  },
+  "candidateSource": "d442e5c616ee27ac0b945ec2f03804cabc324e8c",
+  "logs": {
+    "corrected-six-pass": {
+      "gzipBytes": 324,
+      "gzipSha256": "be31b9e5fa05cbf52bde76490264225fdc8dafb0132e4685f071a16d09fd8bf3",
+      "path": "docs/helix/03-test/performance/results/c83-graph-controls-20261019/corrected-six-pass.log.gz",
+      "rawBytes": 1195,
+      "rawSha256": "71390fda17f9600bc148387df5cbd196f5a2b2c5c7d4bb9a150aebfc3a2cab6d"
+    },
+    "initial-cleanup-errors": {
+      "gzipBytes": 538,
+      "gzipSha256": "0109c4e79e76e873afa457b613590013e0ceed27c5314490ddebe2f7c37a76b8",
+      "path": "docs/helix/03-test/performance/results/c83-graph-controls-20261019/initial-cleanup-errors.log.gz",
+      "rawBytes": 2352,
+      "rawSha256": "a944ae1a4785b3691fc34a1f99cf0cb74e24d6786e000f8bfb4635df81125278"
+    }
+  },
+  "packagePrefix": "/private/tmp/truss-c83-final-package",
+  "python": "/private/tmp/truss-bunfree-venv/bin/python (3.11)",
+  "results": {
+    "corrected": "6 tests passed in 11.002 seconds; no runtime changes",
+    "initial": "6 test bodies reached completion; two test cleanup callbacks errored because base teardown had dropped temporary role consumer"
+  },
+  "runtimeManifestSha256": "7845223dec360e632a962d8b19cc8dce1df67b09c1ebd0772c8233fe92df87a9",
+  "scope": "one focused unittest invocation; six methods: existing retarget plus five graph controls",
+  "weftPrefix": "/private/tmp/weft-042-final-package"
+}
