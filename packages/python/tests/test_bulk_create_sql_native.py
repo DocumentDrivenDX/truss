@@ -211,7 +211,7 @@ class BulkUpdateSqlTests(base.PublicCreateGroupTests):
             set=(AuthoredValue(name='A-value',value=TextValue(kind='string',text=f'{"before" if unchanged else "after"}-{i}')),),
             unset=(),expected_version='1') for i,identity in enumerate(identities))
 
-    def test_thousand_updates_use_one_update_and_one_journal_insert(self):
+    def test_thousand_updates_use_set_based_writes_and_bounded_journal_batches(self):
         connection,host,assembly,tx,identities=self.initialized_updates(1000)
         before_keys=self.admin.execute('SELECT to_jsonb(k) FROM truss.object_key_bucket k ORDER BY storage_row_id').fetchall()
         self.admin.execute('CREATE TABLE public.bulk_update_observation(home text, rows_written bigint)')
@@ -233,7 +233,7 @@ class BulkUpdateSqlTests(base.PublicCreateGroupTests):
         host.detach();connection.commit()
         observed=self.admin.execute('SELECT home,count(*),sum(rows_written) FROM public.bulk_update_observation GROUP BY home').fetchall()
         self.assertEqual({home:(statements,int(rows)) for home,statements,rows in observed},
-            {'object':(1,1000),'journal':(1,2000),'runtime_object_transition':(1,1000),'object_key_bucket':(1,1000)})
+            {'object':(1,1000),'journal':(16,2000),'runtime_object_transition':(1,1000),'object_key_bucket':(1,1000)})
         import json
         after_keys=self.admin.execute('SELECT to_jsonb(k) FROM truss.object_key_bucket k ORDER BY storage_row_id').fetchall()
         # A-value participates in the composite primary key. The independent

@@ -141,7 +141,7 @@ jobs:
           PYTHONPATH: packages/python/tests
           TRUSS_BUN_EXECUTABLE: bun
           TRUSS_CAPACITY_FUNCTION_STATS: ${{ inputs.capacity_statistics && format('{0}/capacity-function-statistics', runner.temp) || '' }}
-        run: python -m unittest test_group_capacity_native.GroupCapacityTests test_bulk_create_sql_native
+        run: python -m unittest test_group_capacity_native.GroupCapacityTests test_bulk_create_sql_native test_journal_batches_native
 
       - name: Run installed original public workload
         id: public_workflows

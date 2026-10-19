@@ -1589,11 +1589,13 @@ BEGIN
    SELECT DISTINCT rel_type_id FROM truss.rel_endpoint WHERE source_type=selected_type OR target_type=selected_type
   ) selected JOIN truss.rel_def r USING(rel_type_id) WHERE r.retired_rev IS NULL ORDER BY r.rel_type_id LOOP
    outgoing:=NULL;incoming:=NULL;
-   IF EXISTS(SELECT 1 FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id AND source_type=selected_type) THEN
+   IF (relation.target_min>0 OR relation.target_max IS NOT NULL)
+    AND EXISTS(SELECT 1 FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id AND source_type=selected_type) THEN
     SELECT count(*) INTO outgoing FROM truss.edge WHERE rel_type_id=relation.rel_type_id AND source_id=selected_id AND source_type=selected_type;
     IF outgoing<relation.target_min OR relation.target_max IS NOT NULL AND outgoing>relation.target_max THEN RAISE EXCEPTION 'outgoing multiplicity failed' USING ERRCODE='P1005';END IF;
    END IF;
-   IF EXISTS(SELECT 1 FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id AND target_type=selected_type) THEN
+   IF (relation.source_min>0 OR relation.source_max IS NOT NULL)
+    AND EXISTS(SELECT 1 FROM truss.rel_endpoint WHERE rel_type_id=relation.rel_type_id AND target_type=selected_type) THEN
     SELECT count(*) INTO incoming FROM truss.edge WHERE rel_type_id=relation.rel_type_id AND target_id=selected_id AND target_type=selected_type;
     IF incoming<relation.source_min OR relation.source_max IS NOT NULL AND incoming>relation.source_max THEN RAISE EXCEPTION 'incoming multiplicity failed' USING ERRCODE='P1005';END IF;
    END IF;

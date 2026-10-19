@@ -15,7 +15,28 @@ ddx:
 
 # Practical functionality and performance
 
-## 2026-10-18: C80 real schemas pass; full hosted matrix pending
+## 2026-10-18: bounded journal successor under qualification
+
+The C80 hosted run exposed wide-update timeouts and native capacity failures;
+it is not a release qualification. The successor retains the complete original
+workloads and deadlines. Its independent update producer writes history in
+internal sets of at most 64 objects, with the original exact journal proof for
+each set and the original four transition fingerprints afterward. All sets
+execute within one protected native call and its single 10s SQL deadline.
+An error in a later set rolls back the whole operation, preserving caller work.
+For 1,000 changed objects, statement observers see 16 journal INSERTs; the
+object UPDATE and transition INSERT remain set based. Frontend guard submissions
+are unchanged. This bounds the number of objects in journal intermediates;
+server peak memory has not been measured.
+
+Permanent native controls cover 63/64/65-operation boundaries, mixed no-ops,
+complete metadata, global event order, ordered digests and compact references,
+an all-no-op group, and suppression in the second journal set. Separate graph
+cleanup avoids edge counts for unrestricted multiplicity sides while retaining
+bounded checks, both permission phases and marker verification. No timing gain
+is claimed for that cleanup. Final installed-wheel and hosted evidence is pending.
+
+## 2026-10-18: C80 real schemas pass; hosted failures retained
 
 The [installed-wheel real-schema run](results/2026-10-18-c80-real-schemas.json)
 passes Pizza, Northwind and catalog in 101.105 seconds. Each original schema
@@ -36,9 +57,10 @@ cache estimate is 332,056 bytes in two entries. These are distinct measures.
 
 All 528 runtime payloads match committed source
 `109d474a3df68fa8de2d29f87557b020c2d70486` independently. The full unchanged
-eleven-case/two-platform matrix and both native release suites are running in
-[39176421417](https://github.com/DocumentDrivenDX/truss/actions/runs/39176421417).
-No full matrix or publication success is claimed by this local receipt.
+eleven-case/two-platform run
+[39176421417](https://github.com/DocumentDrivenDX/truss/actions/runs/39176421417)
+exposed wide-update timeouts and native-gate failures. It does not qualify the
+release. No full matrix or publication success is claimed by this local receipt.
 
 ## Dense relationship source boundary
 

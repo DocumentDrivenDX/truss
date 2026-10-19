@@ -2343,6 +2343,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;installation truss.catalog_
  property_pins jsonb;property_order jsonb;source record;actor oid;total int;counted int;
  namespaces jsonb:='{}';compiled_namespace bytea;definition record;keys jsonb;route record;
  slot_results jsonb;projection_problem boolean;journal_refs jsonb;key_taken boolean;unchanged_problem boolean;
+ journal_chunk_objects jsonb;journal_ref_chunks jsonb[]:=ARRAY[]::jsonb[];journal_chunk_count int;journal_chunk_index int;journal_chunk_start int;
  codecs jsonb:='{}';codec jsonb;codec_bytes bigint:=2;
  origin_payload jsonb;expected_origin_wrapper jsonb;expected_origin_hash bytea;
  compact_plans boolean:=false;scope_nodes jsonb;head_revision int;
@@ -2615,9 +2616,15 @@ BEGIN
   ON o.id=(v.value->'after'->>'id')::bigint AND o.type_id=(v.value->'after'->>'type_id')::int
   WHERE to_jsonb(o) IS DISTINCT FROM v.value->'after') THEN
   RAISE EXCEPTION 'exact batch object updates required' USING ERRCODE='55000';END IF;
+ journal_chunk_count:=(total+63)/64;
+ FOR journal_chunk_index IN 1..journal_chunk_count LOOP
+  journal_chunk_start:=(journal_chunk_index-1)*64;
+  SELECT coalesce(jsonb_agg(objects->object_offset ORDER BY object_offset),'[]'::jsonb)
+   INTO journal_chunk_objects
+  FROM generate_series(journal_chunk_start,least(journal_chunk_start+63,total-1)) object_offset;
  WITH object_properties AS NOT MATERIALIZED (
   SELECT value object,value->'before'->'props' before_props,value->'after'->'props' after_props
-   FROM jsonb_array_elements(objects) WHERE value->'changed'='true'::jsonb),
+   FROM jsonb_array_elements(journal_chunk_objects) WHERE value->'changed'='true'::jsonb),
  semantic AS MATERIALIZED (
   SELECT (o.object->>'index')::int operation_index,o.object->'identity' identity,(o.object->'after'->>'id')::bigint object_id,
    (o.object->'after'->>'type_id')::int type_id,(o.object->'after'->>'ver')::bigint version,
@@ -2676,6 +2683,12 @@ BEGIN
  INTO projection_problem,journal_refs
  FROM fingerprints e FULL JOIN inserted i ON i.seq=e.seq;
  IF projection_problem THEN RAISE EXCEPTION 'exact batch update journals required' USING ERRCODE='55000';END IF;
+  journal_ref_chunks[journal_chunk_index]:=journal_refs;
+ END LOOP;
+ SELECT coalesce(jsonb_agg(entry.value ORDER BY page.page_index,entry.item_index),'[]'::jsonb)
+  INTO journal_refs
+ FROM unnest(journal_ref_chunks) WITH ORDINALITY page(page_refs,page_index)
+ CROSS JOIN LATERAL jsonb_array_elements(page.page_refs) WITH ORDINALITY entry(value,item_index);
  -- The physical journal owns the canonical event and origin payloads. Object
  -- transitions retain compact, payload-free references with their exact digests.
  WITH journal_sets AS MATERIALIZED (
