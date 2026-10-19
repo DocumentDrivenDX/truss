@@ -1,10 +1,33 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""Private scoped correspondence rejects damaged native fixture packets."""
+"""Synthetic current-profile checker inputs; no native qualification claim."""
 import json
 from dataclasses import replace
 from pathlib import Path
 import unittest
 from truss._installed_admission_inventory import Inventory, Section, QueryResult, RoutineDeclaration, reconcile_inventory
+
+def synthetic_current_profile_inventory(sections):
+    """Derived checker inputs only; never current native installation evidence.
+
+    Frozen receipts supply opaque identity/body tokens and rejection variants.
+    Relabel only the selected home names and version for the current checker.
+    """
+    homes={'row_home_operation':'runtime_object_attempt',
+           'installation_admission':'installation_marker'}
+    derived=[]
+    for section in sections:
+        name=section['name'];columns=tuple(section['columns']);rows=[]
+        for original in section['rows']:
+            row=list(original)
+            if name=='context':row[columns.index('version')]='180006'
+            elif name=='relations':
+                index=columns.index('name');row[index]=homes.get(row[index],row[index])
+            elif name=='effective' and row[columns.index('kind')] in ('relation','column'):
+                index=columns.index('object');row[index]=homes.get(row[index],row[index])
+            rows.append(tuple(row))
+        derived.append(Section(name,QueryResult(columns,tuple(rows))))
+    return Inventory(tuple(derived),4096,1048576,'inventory_ordinary')
+
 
 class InstalledInventoryTests(unittest.TestCase):
     @classmethod
@@ -13,7 +36,7 @@ class InstalledInventoryTests(unittest.TestCase):
         receipt=json.loads((root/'docs/helix/04-build/evidence/design-audit/installed-definer-final-reviewed-native.json').read_text())
         def packet(label):
             row=next(i for i in receipt['inventories'] if i['id']==label)
-            return Inventory(tuple(Section(s['name'],QueryResult(tuple(s['columns']),tuple(tuple(r) for r in s['rows']))) for s in row['sections']),4096,1048576,'inventory_ordinary')
+            return synthetic_current_profile_inventory(row['sections'])
         cls.packet=staticmethod(packet)
         cls.baseline=packet('original-native-comparison-baseline');cls.original=packet('original')
         import hashlib

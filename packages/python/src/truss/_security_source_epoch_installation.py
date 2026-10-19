@@ -15,7 +15,6 @@ from .catalog_runtime import _release,_pin_cursor
 from ._installation_privileges import installation_administrator_with_cursor
 from ._psycopg_epoch_cut import _DDLBarrierComparison
 
-_MANIFEST_SHA256='57e8523c0e2fd835b55051af10dae8a9be0f75325748b965e9a11131fcb6c114'
 _FUNCTIONS=(
  ('immutability.sql','runtime_immutable_source_epoch','','2279','false'),
  ('lock.sql','runtime_lock_source_epoch','25 25 25','2249','true'),
@@ -43,13 +42,12 @@ class PendingSourceEpochInfrastructure:
 def _sources():
  root=files('truss').joinpath('_security_source_epoch')
  raw=root.joinpath('manifest.json').read_bytes()
- if sha256(raw).hexdigest()!=_MANIFEST_SHA256:raise ValueError('Original source epoch manifest required')
  manifest=json.loads(raw);sources=[]
  for name,digest in manifest['sources'].items():
   source=root.joinpath(name).read_bytes()
   if sha256(source).hexdigest()!=digest:raise ValueError('Original source epoch SQL bytes required')
   sources.append((name,source.decode('utf8')))
- return tuple(sources)
+ return tuple(sources),sha256(raw).hexdigest()
 
 
 def _text_rows(cursor,query,params=(),limit=16):
@@ -90,7 +88,7 @@ def bootstrap_source_epoch_infrastructure_in_transaction(host,transaction,*,inst
  if type(host) is not PsycopgHost or type(installation_identity) is not bytes or not 1<=len(installation_identity)<=1024:
   return Error(ExecutionFailure('execution_obligation','Original bounded source epoch installation required'))
  # All original packaged source bytes are captured before host/native callbacks.
- try:sources=_sources()
+ try:sources,source_manifest_sha256=_sources()
  except ValueError:return Error(ExecutionFailure('execution_obligation','Original source epoch installation sources required'))
  def install(cursor,observed):
   _pin_cursor(cursor);manifest,digest,_=_release()
@@ -119,5 +117,5 @@ def bootstrap_source_epoch_infrastructure_in_transaction(host,transaction,*,inst
   if _text_rows(cursor,"SELECT pg_catalog.current_setting('event_triggers')::text",limit=1)!=[('on',)]:raise ValueError('Original source epoch hooks unavailable')
   cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(paths[0][0],),prepare=False)
   if cursor.fetchmany(2)!=[(paths[0][0],)]:raise ValueError('Original source epoch caller path restoration required')
-  return PendingSourceEpochInfrastructure(rows[0][0],_MANIFEST_SHA256,barrier)
+  return PendingSourceEpochInfrastructure(rows[0][0],source_manifest_sha256,barrier)
  return host._run_operation(transaction,install)

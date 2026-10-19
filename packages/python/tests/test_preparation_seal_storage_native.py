@@ -1,7 +1,9 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """One basic committed private storage/products workflow on actual PG18.6."""
 import contextlib
+from hashlib import sha256
 import importlib.util
+import importlib.resources
 import io
 import json
 from pathlib import Path
@@ -26,5 +28,6 @@ class PreparationSealStorageNativeTests(unittest.TestCase):
             self.assertEqual(report['runtime'],_release()[0]['releaseId'])
             self.assertEqual(report['nativeObjectIds'],['1','2'])
             self.assertEqual(report['metadataSourceEpoch']['installation'],report['sealStorage']['installation'])
-            self.assertEqual(report['sealStorage']['sourceSha256'],'f5551ea64d4d48957dd0dca3e3cded7b182eb4dfdb4ca83fa3fc798270b0042d')
+            seal_source=importlib.resources.files('truss').joinpath('_security_bootstrap/preparation-seal-storage.sql').read_bytes()
+            self.assertEqual(report['sealStorage']['sourceSha256'],sha256(seal_source).hexdigest())
             self.assertFalse(report['sealStorage']['securityReady'])

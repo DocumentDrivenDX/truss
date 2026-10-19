@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""Original-source mapping checks; no owner semantics/native authority claim."""
+"""Current UMF 0.10 source mapping checks; no owner semantics/native authority claim."""
 from dataclasses import FrozenInstanceError
 from hashlib import sha256
 import json
@@ -8,7 +8,8 @@ import unittest
 from truss._security_association_binding import prepare_association_binding, AssociationBindingError
 
 ROOT=Path(__file__).parent/'fixtures'
-CORE=(ROOT/'security-association-core.json').read_bytes()
+CORE=(ROOT/'security-association-core010.json').read_bytes()
+LINEAGE=json.loads((ROOT/'security-association-core010.lineage.json').read_bytes())
 ONTOLOGY=(ROOT/'security-association-ontology.json').read_bytes()
 def wire(value):return json.dumps(value,separators=(',',':')).encode()
 def inputs(core=CORE,ontology=ONTOLOGY):
@@ -26,7 +27,15 @@ class BindingTests(unittest.TestCase):
  def refuse(self,change,reason):
   binding=inputs();change(binding)
   with self.assertRaisesRegex(AssociationBindingError,reason):self.run_binding(binding)
- def test_original_complete_two_association_basis(self):
+ def test_current_successor_lineage_and_complete_two_association_basis(self):
+  self.assertEqual(sha256(CORE).hexdigest(),LINEAGE['successor']['sha256'])
+  self.assertEqual(LINEAGE['successor']['umf'],'0.10.0')
+  self.assertEqual(LINEAGE['predecessor']['sha256'],'bb6a609480975f782bea1a8d6cae9e0623218a8711a7cba1669353ea8ef3962a')
+  self.assertEqual(LINEAGE['producerValidation']['commit'],'4fc64adf30e2f49eae28162cf476ecd01ce505e3')
+  self.assertTrue(LINEAGE['producerValidation']['valid'] and LINEAGE['producerValidation']['complete'])
+  predecessor=(ROOT/'security-association-core.json').read_bytes()
+  self.assertEqual(sha256(predecessor).hexdigest(),LINEAGE['predecessor']['sha256'])
+  self.assertEqual(json.loads(CORE),{**json.loads(predecessor),'umf':'0.10.0'})
   result=self.run_binding();self.assertEqual(result.core_bytes,CORE);self.assertEqual(result.ontology_bytes,ONTOLOGY);self.assertEqual([a.association[2] for a in result.associations],['Ownership','Assignment']);self.assertEqual(len(result.associations[1].all_member_fields),3);self.assertEqual(result.scope,'original_source_correspondence_only')
  def test_exact_mapping_fragments_preserve_authored_format(self):
   binding=inputs();fragments=[json.dumps(m,indent=3,ensure_ascii=False).encode() for m in binding.pop('mappings')]

@@ -9,12 +9,12 @@ from truss._umf_key_tuples import encode_literal_key_tuple
 
 FIXTURE=Path(__file__).parent/'fixtures'
 def key_source(fields):
- source=json.loads(json.loads((FIXTURE/'security-mapping-request.json').read_bytes())['modules'][0]['documentJson'])
  members=[{'module':'m','element':f['id']} for f in fields]
- source['modules'][0]['elements']=[{'id':'Staff','kind':'record','name':'Staff','members':members,'keys':[{'id':'pk','name':'Key','fields':members}],'extensions':{}},
+ source={'umf':'0.10.0','id':'truss-literal-key-vector','vocabularies':{},'modules':[{'id':'m','namespace':'','elements':[
+  {'id':'Staff','kind':'record','name':'Staff','members':members,'keys':[{'id':'pk','name':'Key','fields':members}],'extensions':{}},
   *[{'id':f['id'],'kind':'field','name':f['id'],'scalarType':f['scalarType'],'cardinality':'one','nullability':'required','extensions':{},
-     **({'facets':{'precision':f['precision'],'scale':f['scale']}} if 'precision'in f else {})} for f in fields]]
- return json.dumps(source).encode()
+     **({'facets':{'precision':f['precision'],'scale':f['scale']}} if 'precision'in f else {})} for f in fields]]}]}
+ return json.dumps(source,separators=(',',':')).encode()
 
 class LiteralKeyTests(unittest.TestCase):
  def encode(self,source,values,identity=('m','Staff','pk')):
@@ -25,7 +25,10 @@ class LiteralKeyTests(unittest.TestCase):
    with self.subTest(vector=vector['id']):
     output=self.encode(key_source(vector['fields']),vector['values'])
     self.assertEqual(output.tuple_bytes.hex(),vector['expectedHex'])
-    self.assertEqual(json.loads(output.original_receipt_bytes)['version'],'3.0.0')
+    receipt=json.loads(output.original_receipt_bytes)
+    self.assertEqual(receipt['operation'],'truss-encode-key-tuple')
+    self.assertEqual(receipt['version'],'1.0.0')
+    self.assertEqual(receipt['profile'],'umf-key-tuple-v1')
   for vector in corpus['refusals']:
    with self.subTest(vector=vector['id']),self.assertRaises(ValueError):self.encode(key_source(vector['fields']),vector['values'])
  def test_five_admitted_families_exact_large_values_and_leading_binary_zero(self):

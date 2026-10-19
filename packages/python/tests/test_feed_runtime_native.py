@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public committed feed, caller settlement and ordinary-role ACK workflow."""
 import json
+from datetime import datetime, timezone
 import psycopg
 from psycopg import sql
 from truss import (Ok,FeedPage,FeedAcknowledged,FeedUnavailable,ModuleAccessGrant,
@@ -205,7 +206,16 @@ class FeedRuntimeTests(receipt_tests.ReceiptVisibilityTests):
                     'WHERE entity_kind=%s AND type_id=%s AND key_num=%s AND k=%s',
                     (row['entity_kind'],row['type_id'],row['key_num'],row['k'])).fetchone()
             self.assertIsNotNone(source)
-            self.assertEqual(row,source[0])
+            expected_row=dict(source[0])
+            actual_row=dict(row)
+            self.assertEqual('at' in actual_row,'at' in expected_row)
+            if 'at' in actual_row:
+                actual_at=datetime.fromisoformat(actual_row.pop('at'))
+                expected_at=datetime.fromisoformat(expected_row.pop('at'))
+                self.assertIsNotNone(actual_at.tzinfo)
+                self.assertIsNotNone(expected_at.tzinfo)
+                self.assertEqual(actual_at.astimezone(timezone.utc),expected_at.astimezone(timezone.utc))
+            self.assertEqual(actual_row,expected_row)
         # The complete delete event remains present after the object is gone.
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object WHERE id=%s',(int(identity.id),)).fetchone()[0],0)
         self.assertEqual(self.ack(assembly,tx,page).outcome,'advanced')

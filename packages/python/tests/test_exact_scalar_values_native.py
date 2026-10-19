@@ -3,7 +3,7 @@
 from dataclasses import replace
 from truss import Ok,Error,ObjectFound,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
 from truss.contracts import TextValue,BooleanValue
-from truss.groups import AuthoredValue,GroupSuccess,GroupFailed,CommittedReceiptReplay,RequestNone
+from truss.groups import AuthoredValue,GroupSuccess,GroupFailed,CommittedReceiptReplay,RequestNone,InvalidGroupInput
 import test_group_create_native as group_tests
 
 class ExactScalarTests(group_tests.PublicCreateGroupTests):
@@ -30,7 +30,7 @@ class ExactScalarTests(group_tests.PublicCreateGroupTests):
         operation=self.operation();input,request=self.input(assembly,tx,operations=(operation,))
         result=self.apply(assembly,tx,input,request);self.assertIsInstance(result,GroupSuccess)
         identity=int(result.response.semantic.results[0].identity.id)
-        self.assertEqual(result.response.semantic.results[0].events[0].history_profile,'truss-native-scalar-create/0.2')
+        self.assertEqual(result.response.semantic.results[0].events[0].history_profile,'truss-native-owned-create/0.1')
         host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
         replay=self.apply(assembly,tx,input,request)
         self.assertIsInstance(replay.response,CommittedReceiptReplay);self.assertEqual(replay.response.semantic,result.response.semantic)
@@ -58,8 +58,10 @@ class ExactScalarTests(group_tests.PublicCreateGroupTests):
             input,_=self.input(assembly,tx,operations=(self.operation(**{name:value}),))
             refused=assembly.apply_in_transaction(tx,input,RequestNone(),documents=self.documents,bun_executable='/opt/homebrew/bin/bun')
             self.assertIsInstance(refused,Ok);self.assertIsInstance(refused.value,GroupFailed)
+            self.assertIsInstance(refused.value.failure,InvalidGroupInput)
             import base64,json
-            self.assertEqual(json.loads(base64.b64decode(refused.value.failure.inner_error.bytes_base64))['nativeState'],'22023')
+            self.assertEqual(json.loads(base64.b64decode(refused.value.failure.diagnostic.bytes_base64)),
+                {'code':'invalid_input','nativeState':'22023','operationIndex':'0','outcome':'failed'})
         self.assertEqual(connection.execute('SELECT count(*) FROM scalar_prior').fetchone(),(1,))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
         input,_=self.input(assembly,tx,operations=(self.operation(blob=TextValue(kind='binary',text='')),))

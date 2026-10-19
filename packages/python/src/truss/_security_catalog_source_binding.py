@@ -5,7 +5,7 @@ import hashlib,json
 from ._security_mapping import PreparedSecurityMapping
 from ._security_relationship_source import PreparedRelationshipSecuritySource,snapshot_relationship_security_source,capture_relationship_source_comparison
 from ._security_graph_source import PreparedGraphSecuritySource,snapshot_graph_security_source
-from ._security_source_epoch_installation import _MANIFEST_SHA256
+from ._security_source_epoch_installation import _sources
 
 def _snapshot_source_binding(mapping,fact_relations,barrier):
     """Private byte/recipe binding packet; not an authenticated issuer artifact."""
@@ -33,7 +33,9 @@ def _snapshot_source_binding(mapping,fact_relations,barrier):
     return mapping,fact_relations,barrier
 
 
-def derive_catalog_source_epoch_profile(mapping,fact_relations,barrier,*,subject_source):
+def derive_catalog_source_epoch_profile(mapping,fact_relations,barrier,*,subject_source,source_manifest_sha256=None):
+    if source_manifest_sha256 is None:source_manifest_sha256=_sources()[1]
+    if type(source_manifest_sha256) is not str or len(source_manifest_sha256)!=64:raise ValueError('Original source epoch manifest digest required')
     mapping,fact_relations,barrier=_snapshot_source_binding(mapping,fact_relations,barrier)
     request,assessment=mapping.original_request,mapping.accepted_catalog_assessment
     if type(subject_source) is not bytes or not 1<=len(subject_source)<=65536:
@@ -43,7 +45,7 @@ def derive_catalog_source_epoch_profile(mapping,fact_relations,barrier,*,subject
         columns=[(c.name,c.number,c.type_oid,c.type_modifier,c.not_null,c.collation_oid,c.generated,c.identity) for c in r.columns]
         recipes.append({'schema':r.schema,'name':r.name,'oid':r.oid,'ownerOid':r.owner_oid,'guardSha256':hashlib.sha256(r.guard_source.encode('utf8')).hexdigest(),'columnsSha256':hashlib.sha256(json.dumps(columns,separators=(',',':'),ensure_ascii=False).encode('utf8')).hexdigest(),'columnCount':len(columns)})
     packet={'interfaceVersion':'truss-owned-catalog-source-profile/0.4',
-            'sourceEpochManifestSha256':_MANIFEST_SHA256,
+            'sourceEpochManifestSha256':source_manifest_sha256,
             'requestSha256':hashlib.sha256(request).hexdigest(),
             'acceptedCatalogSha256':hashlib.sha256(assessment).hexdigest(),
             'subjectHelperSha256':hashlib.sha256(subject_source).hexdigest(),

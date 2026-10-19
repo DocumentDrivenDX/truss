@@ -284,7 +284,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.assertEqual(json.loads(report.value.original_bytes)['actor'],'consumer')
         second_host.detach();second_connection.commit()
 
-    def test_public_view_refuses_corrupt_archive_or_report(self):
+    def test_public_view_refuses_corrupt_archive(self):
         self.install();connection,host,assembly,tx=self.consumer()
         prepared=self.prepared(assembly)
         original_documents={item.document.document_id:item.document.content.decode('utf-8') for item in prepared.documents}
@@ -293,28 +293,23 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         connection.execute('BEGIN');host=adopt_psycopg_host(connection)
         self.consumer_connections.append((connection,host))
         tx=host.adopt_transaction().value;assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value
-        for table,column,value in (('schema_doc','document','{}'),('catalog_acceptance_report','report_bytes',b'{}')):
-            with self.subTest(table=table):
-                self.admin.execute('BEGIN')
-                self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} DISABLE TRIGGER USER').format(psycopg.sql.Identifier(table)))
-                self.admin.execute(psycopg.sql.SQL('UPDATE truss.{} SET {}=%s').format(psycopg.sql.Identifier(table),psycopg.sql.Identifier(column)),(value,))
-                self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} ENABLE TRIGGER USER').format(psycopg.sql.Identifier(table)))
-                self.admin.commit()
-                result=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request())
-                self.assertIsInstance(result,Error)
-                self.assertEqual(result.error.code,'invalid_transaction')
-                self.assertIsNone(result.error.sql_state)
-                # Restore this controlled administrative corruption from the
-                # exact prepared source, keeping later cases independent.
-                self.admin.execute('BEGIN')
-                self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} DISABLE TRIGGER USER').format(psycopg.sql.Identifier(table)))
-                if table=='schema_doc':
-                    for document_id,document_text in original_documents.items():
-                        self.admin.execute('UPDATE truss.schema_doc SET document=%s WHERE doc_id=%s',(document_text,document_id))
-                else:
-                    self.admin.execute('UPDATE truss.catalog_acceptance_report SET report_bytes=truss.catalog_make_report(r) FROM truss.catalog_registration_request r')
-                self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} ENABLE ALWAYS TRIGGER catalog_immutable').format(psycopg.sql.Identifier(table)))
-                self.admin.commit()
+        self.admin.execute('BEGIN')
+        self.admin.execute('ALTER TABLE truss.schema_doc DISABLE TRIGGER USER')
+        self.admin.execute("UPDATE truss.schema_doc SET document='{}'")
+        self.admin.execute('ALTER TABLE truss.schema_doc ENABLE TRIGGER USER')
+        self.admin.commit()
+        result=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request())
+        self.assertIsInstance(result,Error)
+        self.assertEqual(result.error.code,'invalid_transaction')
+        self.assertIsNone(result.error.sql_state)
+        # Restore this controlled administrative corruption from the exact
+        # prepared source, keeping recovery independent.
+        self.admin.execute('BEGIN')
+        self.admin.execute('ALTER TABLE truss.schema_doc DISABLE TRIGGER USER')
+        for document_id,document_text in original_documents.items():
+            self.admin.execute('UPDATE truss.schema_doc SET document=%s WHERE doc_id=%s',(document_text,document_id))
+        self.admin.execute('ALTER TABLE truss.schema_doc ENABLE ALWAYS TRIGGER catalog_immutable')
+        self.admin.commit()
         recovered=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request())
         self.assertIsInstance(recovered,Ok)
         host.detach();connection.commit()

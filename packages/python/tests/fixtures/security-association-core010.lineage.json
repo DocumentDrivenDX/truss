@@ -1,0 +1,21 @@
+{
+  "predecessor": {
+    "path": "security-association-core.json",
+    "sha256": "bb6a609480975f782bea1a8d6cae9e0623218a8711a7cba1669353ea8ef3962a",
+    "umf": "0.8.0"
+  },
+  "successor": {
+    "path": "security-association-core010.json",
+    "sha256": "d13cfec2009189ef6051aa361eea77eae969a1ee4b10aee9207fd05ccee2ee69",
+    "umf": "0.10.0"
+  },
+  "producerValidation": {
+    "repository": "DocumentDrivenDX/umf",
+    "commit": "4fc64adf30e2f49eae28162cf476ecd01ce505e3",
+    "api": "validateDocument",
+    "valid": true,
+    "complete": true,
+    "diagnostics": []
+  },
+  "transformation": "The candidate was admitted only after current-core validation. Its sole structural difference from the predecessor is the UMF core version marker; record/field/key/association source content and identifiers remain byte-semantically unchanged. The current validation result confirms the entire document is valid and complete under core 0.10.0. Scope remains source correspondence only: these tests do not assert native authorization or storage."
+}

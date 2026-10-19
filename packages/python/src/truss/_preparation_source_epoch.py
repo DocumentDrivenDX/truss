@@ -17,7 +17,7 @@ from .psycopg_host import PsycopgHost
 from ._installation_privileges import installation_administrator_with_cursor
 from ._security_catalog_assessment import SOURCE_TABLES, capture_accepted_catalog
 from ._security_source_epoch_installation import (
-    PendingSourceEpochInfrastructure, _MANIFEST_SHA256, _sources, _verify,
+    PendingSourceEpochInfrastructure, _sources, _verify,
 )
 from ._psycopg_epoch_cut import _EpochComparison
 
@@ -233,14 +233,18 @@ def issue_initial_preparation_source_epoch_in_transaction(host, transaction, *, 
         return Error(ExecutionFailure('execution_obligation', 'Original metadata source inputs required'))
     manifest, digest, sources = _release()
     release = files('truss').joinpath('_catalog_runtime', 'manifest.json').read_bytes()
-    if marker.release_sha256 != digest or infrastructure.installation_id != marker.installation_id or infrastructure.source_manifest_sha256 != _MANIFEST_SHA256 or marker.security_ready is not False or infrastructure.security_ready is not False:
+    try:
+        epoch_sources, source_manifest_sha256 = _sources()
+    except ValueError:
+        return Error(ExecutionFailure('execution_obligation', 'Original metadata source installation required'))
+    if marker.release_sha256 != digest or infrastructure.installation_id != marker.installation_id or infrastructure.source_manifest_sha256 != source_manifest_sha256 or marker.security_ready is not False or infrastructure.security_ready is not False:
         return Error(ExecutionFailure('execution_obligation', 'Matching metadata source installation required'))
     def issue(cursor, observed):
         path, identity, owner, actor = _context(cursor)
         if identity != marker.installation_id: raise ValueError('Original metadata source installation required')
         # Marker row lock precedes source recapture and holds through native issuance.
         _verify_marker(cursor, marker, release, manifest)
-        _verify(cursor, _sources(), actor)
+        _verify(cursor, epoch_sources, actor)
         if _runtime_inventory(cursor, sources, owner) != marker.routines or capture_accepted_catalog(cursor, marker.source_request, existing_source_cut=True) != marker.assessment: raise ValueError('Current original metadata source correspondence required')
         cursor.execute('SELECT (SELECT count(*) FROM truss.source_epoch_current),(SELECT count(*) FROM truss.source_epoch_registry)', prepare=False)
         if cursor.fetchmany(2) != [(0,0)]: raise ValueError('Existing source epoch requires migration')

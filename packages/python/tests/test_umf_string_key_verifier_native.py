@@ -76,8 +76,18 @@ class NativeUmfStringKeyVerifierTests(catalog_tests.PublicCatalogRuntimeTests):
                 {'id':'m','namespace':'m','extensions':{},'elements':[
                     {'id':'R','kind':'record','members':refs,'keys':[{'id':'limit','name':'limit','fields':refs}],'extensions':{}},*fields]}]}
             values=('',)*count;request=KeyTupleRequest('m','R','limit',values)
-            receipt=encode_string_key_tuples(json.dumps(source).encode(),(request,),bun_executable='/opt/homebrew/bin/bun')[0]
-            with self.subTest(count=count):self.assertEqual(self.matches(receipt.tuple_bytes,list(values)),count==1024)
+            with self.subTest(count=count):
+                if count==1024:
+                    receipt=encode_string_key_tuples(json.dumps(source).encode(),(request,),bun_executable='/opt/homebrew/bin/bun')[0]
+                    self.assertTrue(self.matches(receipt.tuple_bytes,list(values)))
+                else:
+                    with self.assertRaisesRegex(ValueError,'UMF key tuple refused'):
+                        encode_string_key_tuples(json.dumps(source).encode(),(request,),bun_executable='/opt/homebrew/bin/bun')
+                    # Canonical UMFK1 with a 1025-component count and empty strings.
+                    # The current producer refuses this count before emitting bytes.
+                    original=b'UMFK1'+b'\x81\x08'+b'\x04\x00'*1025
+                    self.assertFalse(self.matches(original,list(values)))
+                    self.assertFalse(self.matches(original,list(values[:-1])))
 
     def test_exact_tuple_byte_limit_with_direct_original_owner(self):
         import json
@@ -86,8 +96,13 @@ class NativeUmfStringKeyVerifierTests(catalog_tests.PublicCatalogRuntimeTests):
         # Direct owner invocation qualifies the native bound, without widening
         # the Python helper's smaller JSON transport ceiling.
         source=key_tests.OriginalUmfKeyTupleTests().source().decode()
-        module=str(files('truss').joinpath('_umf_keys','producer.js'))
-        script='const o=await import('+json.dumps(module)+');const r=JSON.parse(await Bun.stdin.text());process.stdout.write(o.encodeCoreKeyTuple(o.readJsonValue(r.sourceText,"json"),r.identity,r.values).bytesHex);'
+        module=str(files('truss').joinpath('_umf_core10','producer.js'))
+        script=('const o=await import('+json.dumps(module)+');'
+            'const r=JSON.parse(await Bun.stdin.text());'
+            'const source=o.readJsonValue(r.sourceText,"json");'
+            'const validation=o.validateSemanticTypesDocument(source);'
+            'if(!validation.valid)throw Error("Invalid current source");'
+            'process.stdout.write(o.encodeCoreKeyTupleBody(source,r.identity,r.values,validation).bytesHex);')
         for total in (1048576,1048577):
             value='x'*(total-10)
             payload=json.dumps({'sourceText':source,'identity':{'module':'m','element':'A','key':'z-alt'},'values':[{'string':value}]}).encode()

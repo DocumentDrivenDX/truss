@@ -1,5 +1,4 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
-from pathlib import Path
 import unittest
 import test_catalog_runtime_native as catalog_tests
 import test_umf_key_tuples as key_tests
@@ -13,9 +12,7 @@ class ObjectStringKeyNativeTests(catalog_tests.PublicCatalogRuntimeTests):
         prepared=self.prepared(assembly)
         self.assertIsInstance(assembly.accept_in_transaction(tx,prepared,request_key='native-key-row'),Ok)
         host.detach();connection.commit()
-        root=Path(__file__).resolve().parents[3]/'packages/postgresql/native'
-        for name in ('verify-umf-string-key-tuple.sql','verify-object-string-key.sql'):
-            self.admin.execute((root/name).read_text())
+        # Runtime installation provisions both private verifier functions.
         type_id=self.admin.execute("SELECT type_id FROM truss.type_def WHERE document_id='adoc' AND element='A'").fetchone()[0]
         props=self.admin.execute('SELECT prop_id,element FROM truss.prop_def WHERE type_id=%s',(type_id,)).fetchall()
         values={str(identity):{'kind':'string','text':'value' if name.endswith('value') else 'label'} for identity,name in props}

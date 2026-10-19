@@ -18,11 +18,15 @@ class RowOperationJsonTests(unittest.TestCase):
             decode_row_operation_json(original + b' ')
         self.assertEqual(caught.exception.reason, 'resource')
 
-    def test_larger_profile_does_not_widen_acceptance(self):
-        original = b'"' + b'a' * 1_048_576 + b'"'
-        self.assertEqual(len(decode_row_operation_json(original)), 1_048_576)
+    def test_acceptance_and_row_operation_have_independent_exact_byte_caps(self):
+        acceptance = b'"' + b'a' * (16_777_216 - 2) + b'"'
+        self.assertEqual(len(acceptance), 16_777_216)
+        self.assertEqual(len(decode_acceptance_json(acceptance)), 16_777_214)
         with self.assertRaises(AcceptanceJsonError) as caught:
-            decode_acceptance_json(original)
+            decode_acceptance_json(acceptance + b' ')
+        self.assertEqual(caught.exception.reason, 'resource')
+        with self.assertRaises(AcceptanceJsonError) as caught:
+            decode_row_operation_json(acceptance)
         self.assertEqual(caught.exception.reason, 'resource')
 
     def test_complete_ordered_syntax_does_not_rewrite_native_identity(self):

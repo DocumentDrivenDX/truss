@@ -18,7 +18,7 @@ from ._security_catalog_assessment import capture_accepted_catalog
 from ._security_relationship_source import PreparedRelationshipSecuritySource
 from ._security_graph_source import PreparedGraphSecuritySource,acquire_graph_source_catalog_cut,verify_graph_fact_recipe_completeness
 from ._security_source_epoch_installation import (PendingSourceEpochInfrastructure,
-    _sources,_verify,_MANIFEST_SHA256,_text_rows)
+    _sources,_verify,_text_rows)
 from ._security_catalog_source_binding import derive_catalog_source_epoch_profile
 from ._psycopg_epoch_cut import _EpochComparison,_DDLBarrierComparison
 from ._psycopg_fact_cut import _prepare_fenced_fact_cut,_FactRelationComparison,_FactColumnComparison
@@ -43,7 +43,6 @@ def issue_initial_catalog_source_epoch_in_transaction(host,transaction,*,mapping
       or marker.status!='pending_commit' or marker.security_ready is not False
       or infrastructure.status!='pending_commit' or infrastructure.security_ready is not False
       or infrastructure.installation_id!=marker.installation_id
-      or infrastructure.source_manifest_sha256!=_MANIFEST_SHA256
       or type(marker.target_incarnation) is not bytes or not 1<=len(marker.target_incarnation)<=1024
       or type(fact_relations) is not tuple or not 1<=len(fact_relations)<=32
       or any(type(r) is not _FactRelationComparison or type(r.columns) is not tuple or len(r.columns)>1600 or any(type(c) is not _FactColumnComparison for c in r.columns) for r in fact_relations)):
@@ -51,8 +50,9 @@ def issue_initial_catalog_source_epoch_in_transaction(host,transaction,*,mapping
   fact_relations=tuple(replace(r,columns=tuple(replace(c) for c in r.columns)) for r in fact_relations)
   if type(mapping) in (PreparedGraphSecuritySource,PreparedRelationshipSecuritySource) and (len(fact_relations)!=3 or {(r.schema,r.name) for r in fact_relations}!={('truss','object'),('truss','edge'),('truss','catalog_subject_map')} or any(not r.columns for r in fact_relations)):
    raise ValueError('Complete original graph fact recipes required')
-  profile=derive_catalog_source_epoch_profile(mapping,fact_relations,infrastructure.barrier,subject_source=subject_source)
-  sources=_sources()
+  sources,source_manifest_sha256=_sources()
+  if infrastructure.source_manifest_sha256!=source_manifest_sha256:raise ValueError('Original catalog source epoch manifest required')
+  profile=derive_catalog_source_epoch_profile(mapping,fact_relations,infrastructure.barrier,subject_source=subject_source,source_manifest_sha256=source_manifest_sha256)
  except (ValueError,TypeError,AttributeError,KeyError,UnicodeError):
   return Error(ExecutionFailure('execution_obligation','Original bounded catalog source factory comparison required'))
  def issue(cursor,observed):

@@ -1,15 +1,16 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""Replay original native hidden operator implementation routes, not a resolver."""
+"""Synthetic current-profile operator routes; no native qualification claim."""
 import hashlib,json,unittest
 from pathlib import Path
-from truss._installed_admission_inventory import Inventory,Section,QueryResult,RoutineDeclaration,reconcile_inventory
+from truss._installed_admission_inventory import RoutineDeclaration,reconcile_inventory
+from test_installed_admission_inventory import synthetic_current_profile_inventory
 
 class OperatorRouteTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         root=Path(__file__).resolve().parents[3]
         receipt=json.loads((root/'docs/helix/04-build/evidence/design-audit/installed-operator-final-native.json').read_text())
-        cls.packets={v['id']:Inventory(tuple(Section(s['name'],QueryResult(tuple(s['columns']),tuple(tuple(row) for row in s['rows']))) for s in v['sections']),4096,1048576,'inventory_ordinary') for v in receipt['inventories']}
+        cls.packets={v['id']:synthetic_current_profile_inventory(v['sections']) for v in receipt['inventories']}
         cls.baseline=cls.packets['original-native-comparison-baseline']
         rows=next(s.result.rows for s in cls.baseline.sections if s.name=='routines')
         cls.declarations=tuple(RoutineDeclaration(row[4],hashlib.sha256(row[8].encode()).hexdigest(),row[3],row[5],row[13],row[11],row[6]) for row in rows)

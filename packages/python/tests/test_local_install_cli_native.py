@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic explicit CLI installation and retained-directory status confirmation."""
 import json
+import importlib.resources
 import os
 from pathlib import Path
 import shutil
@@ -28,11 +29,10 @@ class LocalInstallCliTests(unittest.TestCase):
         self.assertEqual(first['trussInstallation'], 'installed')
         self.assertEqual(first['serverVersion'], '18.6')
         self.assertEqual(first['installation']['action'], 'created')
-        self.assertEqual(first['installation']['releaseId'], 'truss-catalog-runtime/0.31-candidate')
+        runtime_manifest=json.loads(importlib.resources.files('truss').joinpath('_catalog_runtime/manifest.json').read_bytes())
+        self.assertEqual(first['installation']['releaseId'], runtime_manifest['releaseId'])
         self.assertRegex(first['installation']['releaseSha256'], r'^[0-9a-f]{64}$')
-        self.assertEqual(first['installation']['layoutProfile'], {
-            'identity': 'truss-layout', 'version': '0.16',
-            'sha256': '261e32c6c62624418f124ac7fbe3c206338322a03755b7ac0f1a7c7d86002368'})
+        self.assertEqual(first['installation']['layoutProfile'], runtime_manifest['layoutProfile'])
         self.assertTrue(first['installation']['ownerRole'])
         self.assertTrue(first['installation']['registrarRole'])
         self.assertEqual(second['installation']['action'], 'status_confirmed')
