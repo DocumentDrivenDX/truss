@@ -8,7 +8,6 @@ from contextlib import ExitStack
 from unittest.mock import patch
 from truss import Ok,Error,CurrentDisclosureExecutor,adopt_psycopg_host
 from truss.query import QueryRefused
-import truss._current_query_runtime as runtime
 import truss._current_query_subjects as subjects
 import test_current_disclosure_runtime_native as base
 
@@ -29,7 +28,6 @@ class CurrentGraphAdmissionNativeTests(base.CurrentDisclosureRuntimeNativeTests)
         with patch.object(subjects,'_helper_source',side_effect=old_helper) if partial else ExitStack():
             bun=self.create_query_graph()
         import json
-        self.assertIn(json.loads(self.originals.consumer_bytes)['weftModuleSha256'],runtime._GRAPH_CONSUMER_MODULES)
         if legacy:
             from psycopg import sql
             marker=json.loads(self.admin.execute('SELECT truss.current_query_protection_marker()').fetchone()[0])

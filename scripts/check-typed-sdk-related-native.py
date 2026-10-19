@@ -30,7 +30,7 @@ sys.path.insert(0,str(args.generated.absolute()))
 from native_sales.models import Order
 from native_sales.keys import CustomerKey
 assert Order.UMF_SOURCE.document_sha256==digest
-if cohort is None:assert weft.__version__=='0.4.45'
+if cohort is None:assert weft.__version__=='0.4.47'
 else:assert weft.__version__==cohort['packages']['weft']['moduleVersion']
 documents=(CatalogDocument(doc['id'],digest,original,digest),);checks=[];started=False
 pg=out/'postgres';sock=out/'socket';sock.mkdir()

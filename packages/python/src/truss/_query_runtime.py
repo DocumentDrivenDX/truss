@@ -19,7 +19,7 @@ BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.41',
 def compiler(*, engine_catalog=False, engine_pages=False):
     try:
         import weft
-        if weft.__version__ != '0.4.45' or not callable(getattr(weft,'compile_truss_runtime_json',None)):
+        if weft.__version__ != '0.4.47' or not callable(getattr(weft,'compile_truss_runtime_json',None)):
             return None
         if engine_catalog and not callable(getattr(weft,'check_engine_read_json',None)):return None
         if engine_pages and not callable(getattr(weft,'check_engine_page_json',None)):return None

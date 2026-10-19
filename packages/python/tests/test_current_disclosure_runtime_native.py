@@ -27,11 +27,12 @@ else:_NativeBase=unittest.TestCase
 
 @unittest.skipUnless(_NATIVE,'requires serialized explicit native qualification window')
 class CurrentDisclosureRuntimeNativeTests(_NativeBase):
+    NATIVE_WEFT_FIXTURE='native-weft-request-current010.json'
     for name in tuple(n for n in dir(_NativeBase) if n.startswith('test_')):
         locals()[name]=None
 
     def source_inputs(self):
-        raw=(Path(__file__).parent/'fixtures/current-disclosure/native-weft-request.json').read_bytes()
+        raw=(Path(__file__).parent/'fixtures/current-disclosure'/self.NATIVE_WEFT_FIXTURE).read_bytes()
         prepared=weft.prepare_application_lineage(raw.decode()).prepare_current_presence()
         self.assertEqual(json.loads(prepared.native_request_json())['version'],'weft.current-presence.native-input/0.1-candidate')
         request=json.loads(raw);opaque=request['opaqueSources'];source={r['role']:json.loads(r['utf8']) for r in opaque}

@@ -1,0 +1,13 @@
+{
+  "scope": "Derived test-only UMF 0.10 successor for current disclosure and explicit Graph admission refusal tests; not an owner capture or a production authority claim.",
+  "derivedFrom": "native-weft-request.json",
+  "sourceSha256": "6310a3fb71192e85db41dc4c7765cb559ed6c1f3d5266c19bc0893ef7dd0e558",
+  "successor": "native-weft-request-current010.json",
+  "successorSha256": "fcf0b0ed19664a5d9a1a501a8fc04e07b0fd09d9c5f3a908be03946b71d00c60",
+  "changes": [
+    "domain document umf set to 0.10.0",
+    "domain source pin advanced to query-value-core-current010-r1 and hashes recomputed",
+    "ontology closure revision and source hash recomputed",
+    "presence designation model pin and ontology source hash recomputed"
+  ]
+}

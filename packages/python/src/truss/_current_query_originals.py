@@ -19,16 +19,16 @@ class CurrentQueryOriginals:
 _CURRENT_CONSUMER={'profile': 'truss-current-query-consumer/0.2-candidate', 'umfRevision': '9ff2ba12271be889aad81c09695487e14655893d', 'umfBundleSha256': '5c0996adf80552753899d7b3e196b93f7641bdf82d6bbb30dace8c90ad1ff004', 'umfManifestSha256': '16df44d7d0d1ce2a59c9b12129ab803f025d3fdb4a4aefdf98474b9e22fcbc62', 'resultAbi': 'weft.postgresql.current-values/0.2-candidate', 'embeddedRuntime': 'mini-racer==0.14.1', 'embeddedProfile': 'truss.embedded-v8/2', 'embeddedV8Version': '14.4.258.23'}
 _CURRENT_CONSUMER['embeddedManifestSha256']=EMBEDDED_MANIFEST_SHA256
 
-# Published Weft 0.4.45 compiler identities for the supported platform wheels.
+# Published Weft 0.4.47 compiler identities for the supported platform wheels.
 _CONSUMER_COHORTS=(
     {**_CURRENT_CONSUMER,
-        'weftRevision':'ae7d18f1e22323348dbd7b6a06093f12557d3add',
-        'weftWheelSha256':'e9ebddd11929b7cf8a1b2885e092010bc556b886a72bedf50dc0c14b0e762463',
-        'weftModuleSha256':'2d64636f1e4929c1cd1529ec9cefff5ab47499fe31f65590af7d0063554f6dac'},
+        'weftRevision':'12051af87cd9f910f880f21fe6b95a507e2fcb94',
+        'weftWheelSha256':'643b6bb2a93a0ee881ddc5950c4e9c53e38207ac3d2b97acb47b9361666f95b0',
+        'weftModuleSha256':'7f1241ac473a76b83926683a2999ec1378eaaada539756d3d550f6b01d52c4a1'},
     {**_CURRENT_CONSUMER,
-        'weftRevision':'ae7d18f1e22323348dbd7b6a06093f12557d3add',
-        'weftWheelSha256':'fe96773709df20ba38db6ab1247489603befafff6e55af20a1b448719a20e5a9',
-        'weftModuleSha256':'1a7f9c3e43aa41419725d43c3f54a34499bc28b97f175a6eccbcf1d8b5b3b437'},
+        'weftRevision':'12051af87cd9f910f880f21fe6b95a507e2fcb94',
+        'weftWheelSha256':'729d632ce9ea97c52100a8d23f513821372173e2962622d357b85c99b11b457c',
+        'weftModuleSha256':'6226f88d2b25715c73c9669c9b3d8124100813698522a746cf9ed99627987c85'},
 )
 
 

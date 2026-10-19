@@ -1,33 +1,31 @@
 # Truss Python toolkit
 
-The latest published package is
-[Truss v0.0.39](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.39),
-paired with native `0.71-candidate` and Weft `0.4.41` / backend `0.4.41`.
-The current `0.0.40` candidate targets native `0.72-candidate` and Weft
-`0.4.45`; its full release qualification is pending, so it is not a published
-or qualified release.
-The candidate targets only UMF `0.10.0` source documents and fresh current
+Truss `0.0.40` selects native `0.72-candidate` and Weft `0.4.47`.
+Publication requires installed Linux x86_64/macOS ARM64 qualification, the three
+real schemas and the complete 22-workflow stress matrix. See the
+[v0.0.40 release page](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.40)
+for published artifacts and their exact qualification.
+This version accepts only UMF `0.10.0` source documents and fresh current
 installations. Earlier UMF source formats are unsupported, as are upgrades from an older Truss
 installation. `upgrade_in_transaction` returns an explicit unsupported error
 without issuing SQL; the CLI has no `--upgrade` option. No automatic migration,
 reset or data rewrite is performed. Historical catalog revisions, receipts and
 retained events created within a current installation remain supported.
 Earlier release evidence retains its original scope and does not extend this
-candidate's compatibility.
+version's compatibility.
 Python deployment uses embedded V8 and requires no Bun, Node or external
-JavaScript process. The candidate includes owned graphs, explicit subtree reparenting, cascade
+JavaScript process. This version includes owned graphs, explicit subtree reparenting, cascade
 deletion, atomic owned imports, owned-object catalog evolution, compact
 registration reports and batched native writes.
 
 The v0.0.39 source passed both complete Linux x86_64/macOS ARM64 native jobs,
 including the original 1,024-operation capacity controls and full
 1,000-object/1,000-edge workload, with unchanged 10s SQL/30s operation limits.
-Those results qualify v0.0.39 only. The v0.0.40 candidate remains pending its
-complete 22-workflow qualification; no passing or publication claim is made here.
+Those results qualify v0.0.39 only; they do not establish v0.0.40 qualification.
 [Performance evidence](../../docs/helix/03-test/performance/README.md)
 and [published release notes](../../docs/helix/04-build/releases/v0.0.39.md)
-record exact scope. Candidate behavior and bounds are listed in the
-[v0.0.40 candidate notes](../../docs/helix/04-build/releases/v0.0.40.md).
+record exact scope. Version 0.0.40 behavior and bounds are listed in the
+[v0.0.40 notes](../../docs/helix/04-build/releases/v0.0.40.md).
 Broader scale and p95 targets are not certified.
 
 Current owned groups admit up to 1,024 operations per atomic group. Basic native tests cover
@@ -38,7 +36,7 @@ byte/value limits and ordinary deadlines still apply.
 
 The published v0.0.39 package uses `weft-sql==0.4.41`, backend
 `0.4.41` / binding `0.5`. The current source candidate pins
-`weft-sql==0.4.45`, backend `0.4.41` / binding `0.5`, and query ABI 1.1.
+`weft-sql==0.4.47`, backend `0.4.41` / binding `0.5`, and query ABI 1.1.
 ABI 1.1 buffers complete source sets before caller predicates and scans at most
 10,000 rows per selected Record or Relationship type; a small output limit does
 not bypass that source bound. Complete-entity relationships have a separate
@@ -106,11 +104,10 @@ matching UMF SDK cohort. It has no published `typed-sdk` extra. A bounded cursor
 stream that cannot prove exhaustion raises `QueryStreamRefused` after cleaning
 up its portal and transaction. An exact row-limit boundary is not exhaustion.
 
-## Install the current candidate
+## Install version 0.0.40
 
-The v0.0.40/native0.72 and Weft0.4.45 candidate is not yet published or
-qualified. The release command below becomes available after publication;
-until then, use its built wheel in a separate development environment.
+Use the matching Truss and Weft release artifacts below. Source builds require
+the same version cohort; an older installation is not upgraded.
 
 The experimental **current-policy query interface** is:
 `assembly.query_current_in_transaction(tx, executor=..., sql=...,
@@ -190,7 +187,7 @@ Unknown modules refuse. Reopening a registration under another known wheel still
 requires an explicit migration; the factory never upgrades retained pins.
 
 This first local PostgreSQL18.6 profile uses exact original candidate Weft ABI2
-and UMF child pins. The selected Weft0.4.45 macOS ARM and Linux x64 wheels require
+and UMF child pins. The selected Weft0.4.47 macOS ARM and Linux x64 wheels require
 installed public-workflow qualification on both platforms. Other platforms and newer result ABIs remain outside this profile.
 It currently requires rootless, present String or explicit signed64 query
 domains. Empty or all-read-denied populations return empty rows when genuine
@@ -255,7 +252,7 @@ PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 ```sh
 python -m pip install --only-binary=:all: \
   --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.40 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.45 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.47 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
   'truss-toolkit[local,native,query]==0.0.40'
 ```

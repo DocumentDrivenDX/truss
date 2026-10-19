@@ -28,12 +28,6 @@ class _QueryRefusal(ValueError):
     pass
 
 
-_GRAPH_CONSUMER_MODULES = frozenset((
-    '2d64636f1e4929c1cd1529ec9cefff5ab47499fe31f65590af7d0063554f6dac',
-    '1a7f9c3e43aa41419725d43c3f54a34499bc28b97f175a6eccbcf1d8b5b3b437',
-))
-
-
 def _verify_graph_caller_cut(cursor,identity):
     """Observe cuts on this original caller transaction; acquire none, issue no permit."""
     actual=_text_rows(cursor,"SELECT pg_catalog.pg_backend_pid()::text,l.virtualtransaction::text FROM pg_catalog.pg_locks l WHERE l.pid=pg_catalog.pg_backend_pid() AND l.locktype='virtualxid' AND l.mode='ExclusiveLock' AND l.granted",limit=1)

@@ -15,7 +15,7 @@ class CurrentDisclosureOriginals:
     consumer_bytes:bytes
 
 
-# Published Weft 0.4.45 consumer identities for the supported platform wheels.
+# Published Weft 0.4.47 consumer identities for the supported platform wheels.
 _EMBEDDED_CONSUMER={
     'embeddedRuntime':'mini-racer==0.14.1',
     'embeddedProfile':'truss.embedded-v8/2',
@@ -29,10 +29,10 @@ _CONSUMER_COHORTS=({
     'umfBundleSha256':'bf3e2af7728fe056ef8b3aba37ad048b0b8ac9485ec31920a1f585a6b72d10d8',
     'umfManifestSha256':'153d939786bb01dd2cd206302b3696dd5d5c8e4e1092fbfa4fd64155d09c483c',
     **_EMBEDDED_CONSUMER,
-    'weftRevision':'ae7d18f1e22323348dbd7b6a06093f12557d3add',
-    'weftVersion':'0.4.45',
-    'weftWheelSha256':'e9ebddd11929b7cf8a1b2885e092010bc556b886a72bedf50dc0c14b0e762463',
-    'weftModuleSha256':'2d64636f1e4929c1cd1529ec9cefff5ab47499fe31f65590af7d0063554f6dac',
+    'weftRevision':'12051af87cd9f910f880f21fe6b95a507e2fcb94',
+    'weftVersion':'0.4.47',
+    'weftWheelSha256':'643b6bb2a93a0ee881ddc5950c4e9c53e38207ac3d2b97acb47b9361666f95b0',
+    'weftModuleSha256':'7f1241ac473a76b83926683a2999ec1378eaaada539756d3d550f6b01d52c4a1',
     'weftShimSha256':'cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d',
     'graphSha256':_GRAPH_SHA256,
     'childProtocol':'umf.security.private-disclosure-child/0.2-candidate',
@@ -44,10 +44,10 @@ _CONSUMER_COHORTS=({
  'umfBundleSha256':'bf3e2af7728fe056ef8b3aba37ad048b0b8ac9485ec31920a1f585a6b72d10d8',
  'umfManifestSha256':'153d939786bb01dd2cd206302b3696dd5d5c8e4e1092fbfa4fd64155d09c483c',
  **_EMBEDDED_CONSUMER,
- 'weftRevision':'ae7d18f1e22323348dbd7b6a06093f12557d3add',
- 'weftVersion':'0.4.45',
- 'weftWheelSha256':'fe96773709df20ba38db6ab1247489603befafff6e55af20a1b448719a20e5a9',
- 'weftModuleSha256':'1a7f9c3e43aa41419725d43c3f54a34499bc28b97f175a6eccbcf1d8b5b3b437',
+ 'weftRevision':'12051af87cd9f910f880f21fe6b95a507e2fcb94',
+ 'weftVersion':'0.4.47',
+ 'weftWheelSha256':'729d632ce9ea97c52100a8d23f513821372173e2962622d357b85c99b11b457c',
+ 'weftModuleSha256':'6226f88d2b25715c73c9669c9b3d8124100813698522a746cf9ed99627987c85',
  'weftShimSha256':'cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d',
  'graphSha256':_GRAPH_SHA256,
  'childProtocol':'umf.security.private-disclosure-child/0.2-candidate',
