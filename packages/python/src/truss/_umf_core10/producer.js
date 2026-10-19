@@ -13285,6 +13285,21 @@ var pointer = (key) => key.replace(/~/g, "~0").replace(/\//g, "~1");
 
 // ../truss-umf-runtime/src/model/json.ts
 var LIMITS = { maxDepth: 128, maxValues: 1e5, maxTextLength: 4000000 };
+var catalogDepth = 0;
+function jsonValueLimit() {
+  return catalogDepth ? 1e6 : LIMITS.maxValues;
+}
+function withCatalogResourceProfile(work) {
+  catalogDepth++;
+  try {
+    const result = work();
+    if (result && typeof result.then === "function")
+      throw new UmfError("LIMIT", "Catalog resource scope must be synchronous");
+    return result;
+  } finally {
+    catalogDepth--;
+  }
+}
 function copyJson(input) {
   return copyJsonCharged(input);
 }
@@ -13293,7 +13308,7 @@ function copyJsonCharged(input, charge) {
   let values = 0;
   function visit(value, path, depth) {
     charge?.(1);
-    if (++values > LIMITS.maxValues || depth > LIMITS.maxDepth)
+    if (++values > jsonValueLimit() || depth > LIMITS.maxDepth)
       throw new UmfError("LIMIT", "JSON structural limit exceeded", path);
     if (value === null || typeof value === "string" || typeof value === "boolean")
       return value;
@@ -13361,7 +13376,7 @@ function readJsonValue(text, format = "yaml") {
     throw new UmfError("SYNTAX", "Only YAML 1.2 is supported");
   let count = 0;
   function convert(node, path, depth) {
-    if (++count > LIMITS.maxValues || depth > LIMITS.maxDepth)
+    if (++count > jsonValueLimit() || depth > LIMITS.maxDepth)
       throw new UmfError("LIMIT", "Source structural limit exceeded", path);
     if (node === null)
       return null;
@@ -21469,5 +21484,6 @@ function encodeCoreKeyTupleBody(source, identity, values, validation, checkLiter
 export {
   encodeCoreKeyTupleBody,
   readJsonValue,
-  validateSemanticTypesDocument
+  validateSemanticTypesDocument,
+  withCatalogResourceProfile
 };

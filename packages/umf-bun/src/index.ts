@@ -2,20 +2,22 @@
 /** Pinned UMF 0.10 source validation and Truss key-body producer. */
 import {resolve} from 'node:path';
 
-export const UMF_CORE10_CATALOG_SOURCE='d187bfa7d7de5f3cd94dea314eed003a35bb6c82';
+export const UMF_CORE10_CATALOG_SOURCE='b24e07abae445414c41d2f122deae596915c6bd5';
 
 /** Load the sole current UMF producer and validate an original 0.10 document. */
 export async function loadCore10CatalogOwner(directory:string){
  const revision=UMF_CORE10_CATALOG_SOURCE;
  const {hash,captured}=await loadPinnedFunctions(directory,revision,'core10-catalog',[
-  'readJsonValue','validateSemanticTypesDocument','encodeCoreKeyTupleBody']);
+  'readJsonValue','validateSemanticTypesDocument','encodeCoreKeyTupleBody','withCatalogResourceProfile']);
  return Object.freeze({sourceRevision:revision,bundleSha256:hash,
   inspect(originalText:string){
    if(typeof originalText!=='string'||Buffer.byteLength(originalText)>4194304)throw Error('Original document bound');
-   const source=captured.readJsonValue(originalText,'json');
-   if(source?.umf!=='0.10.0')throw Error('Unsupported original UMF version');
-   const sourceValidation=captured.validateSemanticTypesDocument(source);
-   return {originalText,source,sourceValidation,transition:null,targetValidation:sourceValidation,target:source};
+   return captured.withCatalogResourceProfile(()=>{
+    const source=captured.readJsonValue(originalText,'json');
+    if(source?.umf!=='0.10.0')throw Error('Unsupported original UMF version');
+    const sourceValidation=captured.validateSemanticTypesDocument(source);
+    return {originalText,source,sourceValidation,transition:null,targetValidation:sourceValidation,target:source};
+   });
   }});
 }
 
@@ -23,7 +25,7 @@ export async function loadCore10CatalogOwner(directory:string){
 export async function loadCurrentNumericOwner(directory:string){
  const {hash,captured}=await loadPinnedFunctions(directory,UMF_CORE10_CATALOG_SOURCE,'numeric-current',[
   'exactDecimal','integerFromBigInt','integerToBigInt','admitJavascriptNumber','numericToNumberLossless',
-  'readJsonValue','validateSemanticTypesDocument','encodeCoreKeyTupleBody']);
+  'readJsonValue','validateSemanticTypesDocument','encodeCoreKeyTupleBody','withCatalogResourceProfile']);
  return Object.freeze({sourceRevision:UMF_CORE10_CATALOG_SOURCE,bundleSha256:hash,...captured});
 }
 

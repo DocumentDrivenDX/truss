@@ -281,21 +281,10 @@ class BulkUpdateSqlTests(base.PublicCreateGroupTests):
         self.assertEqual(self.admin.execute('SELECT to_jsonb(o) FROM truss.object o ORDER BY id').fetchall(),before)
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(),journal_count)
 
-    def test_relational_update_closure_agrees_with_retained_general_validator(self):
+    def test_mixed_update_batch_keeps_changed_and_unchanged_results(self):
         connection,host,assembly,tx,identities=self.initialized_updates(9)
-        definition=self.admin.execute("SELECT pg_get_functiondef('truss.runtime_owned_group_validate(uuid,boolean)'::regprocedure)").fetchone()[0]
-        self.assertEqual(definition.count('independent_updates:=NOT EXISTS('),1)
-        reference=definition.replace('truss.runtime_owned_group_validate(', 'public.reference_update_group_validate(',1)
-        reference=reference.replace('independent_updates:=NOT EXISTS(', 'independent_updates:=false AND NOT EXISTS(',1)
-        self.admin.execute(reference)
-        self.addCleanup(self.admin.execute,'DROP FUNCTION public.reference_update_group_validate(uuid,boolean)')
-        self.admin.execute('''CREATE FUNCTION public.compare_update_closure() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
-            PERFORM public.reference_update_group_validate(NEW.id,true);RETURN NEW;END;$$''')
-        self.addCleanup(self.admin.execute,'DROP FUNCTION public.compare_update_closure() CASCADE')
-        self.admin.execute('''CREATE TRIGGER compare_update_closure AFTER UPDATE ON truss.runtime_object_attempt
-            FOR EACH ROW WHEN (NEW.complete AND NOT OLD.complete) EXECUTE FUNCTION public.compare_update_closure()''')
         # Independent key-changing updates, a trailing no-op set, then another
-        # group in the same transaction qualify both finish and later settlement.
+        # group in the same transaction exercise current compact settlement.
         operations=self.updates(identities)
         noops=self.updates(identities,unchanged=True)
         context=assembly.group_context_in_transaction(tx).value

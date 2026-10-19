@@ -1,5 +1,5 @@
 {
-  "revision": "d187bfa7d7de5f3cd94dea314eed003a35bb6c82",
+  "revision": "b24e07abae445414c41d2f122deae596915c6bd5",
   "producerMode": "core10-catalog",
   "buildDependencies": {
     "yaml": {
@@ -11,12 +11,13 @@
       "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
     }
   },
-  "archiveSha256": "d4337558839bf668eee91413685e9e0adbd270106f5585622430cecabe93e0b9",
-  "bundleSha256": "b436a3cb20f0127082080df09657d74d851eda66709bf89b6170e26f85e18ccd",
+  "archiveSha256": "df5dc79e607c95810574ce4d1015ed5846e7a8614d9a75c3980171f46176c027",
+  "bundleSha256": "16bf60b634484ceee7f56304014fbf0b4ac2f1aaf7fe6ceff15ea7f8267c9adc",
   "operations": [
     "readJsonValue",
     "validateSemanticTypesDocument",
-    "encodeCoreKeyTupleBody"
+    "encodeCoreKeyTupleBody",
+    "withCatalogResourceProfile"
   ],
   "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
 }

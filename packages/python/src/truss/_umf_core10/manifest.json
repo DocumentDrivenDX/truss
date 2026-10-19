@@ -2,7 +2,7 @@
   "interfaceVersion": "truss-core10-catalog-producer/0.1.0",
   "runtimeVersion": "1.4.3",
   "owner": {
-    "revision": "d187bfa7d7de5f3cd94dea314eed003a35bb6c82",
+    "revision": "b24e07abae445414c41d2f122deae596915c6bd5",
     "producerMode": "core10-catalog",
     "buildDependencies": {
       "yaml": {
@@ -14,21 +14,22 @@
         "packageSha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
       }
     },
-    "archiveSha256": "d4337558839bf668eee91413685e9e0adbd270106f5585622430cecabe93e0b9",
-    "bundleSha256": "b436a3cb20f0127082080df09657d74d851eda66709bf89b6170e26f85e18ccd",
+    "archiveSha256": "df5dc79e607c95810574ce4d1015ed5846e7a8614d9a75c3980171f46176c027",
+    "bundleSha256": "16bf60b634484ceee7f56304014fbf0b4ac2f1aaf7fe6ceff15ea7f8267c9adc",
     "operations": [
       "readJsonValue",
       "validateSemanticTypesDocument",
-      "encodeCoreKeyTupleBody"
+      "encodeCoreKeyTupleBody",
+      "withCatalogResourceProfile"
     ],
     "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
   },
   "files": {
     "acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
     "keys.mjs": "a2ce760252646f92fc716a3eadf68d6797f1fcb2b777ed8d00be92bb8169918e",
-    "preparation.mjs": "969de7f6c94f4d8ac03b1a6c100f90b0d8ebe6cef2ef2a2384c31af48c4395d4",
-    "producer-manifest.json": "40778c632560e569bb43d45eec393cebd4b9facd43b29a6c3872fddcebfca5ea",
-    "producer.js": "b436a3cb20f0127082080df09657d74d851eda66709bf89b6170e26f85e18ccd",
+    "preparation.mjs": "b1e2526cdf9648f81f4aa629a53422fee8a2a05f7e06beee6e1f50ed9c60d62d",
+    "producer-manifest.json": "286dc750385f8097e0593b3025bbf0ae4349a085a62530f5d73bc8b92c30d6f9",
+    "producer.js": "16bf60b634484ceee7f56304014fbf0b4ac2f1aaf7fe6ceff15ea7f8267c9adc",
     "licenses/ajv.txt": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
     "licenses/fast-deep-equal.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
     "licenses/fast-uri.txt": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",

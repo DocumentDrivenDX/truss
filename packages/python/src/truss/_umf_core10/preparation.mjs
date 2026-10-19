@@ -379,13 +379,14 @@ async function createAcceptanceInputInspector(dependenciesPackage, schemaUrl = n
 
 // packages/umf-bun/src/index.ts
 import { resolve } from "path";
-var UMF_CORE10_CATALOG_SOURCE = "d187bfa7d7de5f3cd94dea314eed003a35bb6c82";
+var UMF_CORE10_CATALOG_SOURCE = "b24e07abae445414c41d2f122deae596915c6bd5";
 async function loadCore10CatalogOwner(directory) {
   const revision = UMF_CORE10_CATALOG_SOURCE;
   const { hash, captured } = await loadPinnedFunctions(directory, revision, "core10-catalog", [
     "readJsonValue",
     "validateSemanticTypesDocument",
-    "encodeCoreKeyTupleBody"
+    "encodeCoreKeyTupleBody",
+    "withCatalogResourceProfile"
   ]);
   return Object.freeze({
     sourceRevision: revision,
@@ -393,11 +394,13 @@ async function loadCore10CatalogOwner(directory) {
     inspect(originalText) {
       if (typeof originalText !== "string" || Buffer.byteLength(originalText) > 4194304)
         throw Error("Original document bound");
-      const source = captured.readJsonValue(originalText, "json");
-      if (source?.umf !== "0.10.0")
-        throw Error("Unsupported original UMF version");
-      const sourceValidation = captured.validateSemanticTypesDocument(source);
-      return { originalText, source, sourceValidation, transition: null, targetValidation: sourceValidation, target: source };
+      return captured.withCatalogResourceProfile(() => {
+        const source = captured.readJsonValue(originalText, "json");
+        if (source?.umf !== "0.10.0")
+          throw Error("Unsupported original UMF version");
+        const sourceValidation = captured.validateSemanticTypesDocument(source);
+        return { originalText, source, sourceValidation, transition: null, targetValidation: sourceValidation, target: source };
+      });
     }
   });
 }

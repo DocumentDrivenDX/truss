@@ -2,7 +2,7 @@
 import {createRequire} from 'node:module';
 const path=process.env.TRUSS_UMF_NUMERIC_PRODUCER;if(!path)throw Error('Pinned numeric-current producer directory required');
 const manifest=await Bun.file(path+'/producer-manifest.json').json();
-if(manifest.revision!=='d187bfa7d7de5f3cd94dea314eed003a35bb6c82'||manifest.producerMode!=='numeric-current')throw Error('Wrong original producer');
+if(manifest.revision!=='b24e07abae445414c41d2f122deae596915c6bd5'||manifest.producerMode!=='numeric-current')throw Error('Wrong original producer');
 const bytes=await Bun.file(path+'/producer.js').bytes();if(new Bun.CryptoHasher('sha256').update(bytes).digest('hex')!==manifest.bundleSha256)throw Error('Bundle integrity');
 const {chromium}=createRequire('/Users/erik/Projects/umf/package.json')('playwright');
 const server=Bun.serve({hostname:'127.0.0.1',port:0,fetch(req){return new URL(req.url).pathname==='/producer.js'?new Response(bytes,{headers:{'content-type':'text/javascript'}}):new Response('<!doctype html><title>Original UMF numeric producer</title>')}});

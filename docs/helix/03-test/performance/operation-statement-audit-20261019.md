@@ -330,3 +330,113 @@ canonical homes.
 
 The final native and unchanged real-schema/stress qualification is still pending;
 source analysis and in-memory SQL differential checks do not replace it.
+
+
+### Native qualification correction: key-route observations
+
+The first current candidate's native gate canceled inside key preflight. Source
+inspection identified a retained JSON-array join between every distinct route
+and every captured guard, followed by further route/observation array joins.
+Those representations allowed a route-count squared comparison path despite
+sharing the initial guard acquisition.
+
+EXPLAIN also showed the planner reexecuting each globally grouped membership
+and reservation subquery for every outer route, because the JSON input was
+estimated at 100 rows and its joined aggregate at one row. Those subqueries are
+now correlated aggregates over this route's existing hash index, with exact-byte
+filters and the collision-budget gate before payload aggregation.
+
+The corrected implementation reads canonical guard generations through the
+existing composite primary key. The admitted entry already holds the shared
+transaction-wide graph-writer gate, used by scalar and catalog key writers too.
+Preflight therefore removes its repeated advisory-lock call and separate row-lock
+pass; actual guard updates acquire their own row locks.
+It builds exact-route observations once in a JSON object keyed by the complete
+namespace and transport bytes; each ordered operation looks up its observation
+by that exact key. Hash-collision budgets, original membership, reservation
+conflicts, generation exhaustion and authored error order remain enforced.
+The guard JSON copy and two inventory recounts are removed. Work follows
+distinct routes, actual collision candidates and ordered uses, with indexed
+physical-row probes and dictionary lookups; no route/guard array cross product
+is needed. The unchanged eight-key 1,024-operation create/update and 1,024
+disjoint-endpoint edge cases pass locally after this change. Both custom/generic
+plan modes and the remaining full matrix still require the final campaign.
+
+Capture has the same upstream exclusion: `object_group_begin_prepared` acquires
+the writer gate and object/edge table locks before conditions and capture. The
+private capture helper no longer reacquires those three locks or reads the
+complete input scope twice to compare it with itself. One captured scope supplies
+reader checks and planning. This removes a second full graph/object read while
+retaining the original current reader and writer checks. Final native
+qualification must exercise this consolidated path.
+
+Capture retains its bounded plan array directly as `jsonb[]` after computing the
+existing sum of original plan UTF-8 bytes. Publication inserts each plan with
+scalar attempt/index/transaction columns. It no longer wraps all plans in a
+second JSON array of SQL rows and reparses that array with
+`jsonb_populate_recordset`. The same 32MiB retained-plan budget and affected-row
+count check remain; there is no new payload readback.
+
+### Catalog item source indexing
+
+The complete native gate passed 66 cases and found five failures sharing the
+1,000-type registration path. The raw-JSON source index extracted the module ID
+from the complete module for every definition. PostgreSQL JSON extraction parses
+that raw module again, producing work proportional to definitions times module
+bytes. Module identity, ordinal and raw element array are now materialized once
+per module before expanding definitions. Original element fragment text, source
+hash and ordinals retain their exact meaning.
+
+Scalar catalog preparation does not need an item-source lookup at all. The
+expected-record builder and stored-value compatibility scan now select distinct
+documents referenced by actual array/map fields and build one index only for
+those documents. The compatibility scan parses its declaration and document
+carriers once; scalar-only catalogs skip item-source indexing. Property projection
+uses the already selected field rows without a second join to their source documents. This is a removal of unused work, not an increase in statement
+time limits. Final native qualification must verify container interpretation and
+the unchanged 1,000-type cases.
+
+Focused native qualification after the lazy-index change passed both recursive
+container cases and the unchanged 1,000-type complete-view case: 16,000
+definitions and 12,456,454 wire bytes. The three distinct-type write cases now
+reach a separate timeout in `runtime_owned_prepare_application`, during the
+requested-definition-pin join. That query remains under analysis; the write
+qualification and complete final campaign are still pending. This result does
+not close the operation audit.
+
+### Requested type-definition pins
+
+The next native failure exposed a separate multiplicative join. A request with
+1,000 distinct CREATE pins faced 1,000 current record types and 16,000 indexed
+source definitions. The fresh-catalog plan estimated both the request and current
+types at one row. Its requested-pin outer loop repeated the full type/source
+mapping. Source identity columns used default text collation while native type
+identity used `C`, preventing module/element index conditions; the explicit
+`C` pin predicate also did not match the original default-collation pin index.
+
+Source identity and pin columns now use the existing native byte-exact `C`
+semantics. One partial current-record source-coordinate index supplies the
+five-column native lookup; it changes schema-metadata storage, not object-write
+index maintenance. The existing pin index is reused, without a duplicate index.
+The first revised plan still scanned all current types for each requested pin,
+so merely adding indexes was insufficient. Two correlated LATERAL projections
+with `OFFSET 0` keep the planner from moving the complete mapping back inside
+the request loop. This is a planning boundary, not a result limit or another
+semantic verification layer.
+
+Both forced custom and generic plans now perform the requested pin's source
+index lookup followed by the five-coordinate native type lookup. Work follows
+actual distinct requested pins and indexed matches (plus index access and the
+existing ambiguity grouping), rather than requested pins times all types times
+source definitions. An empty CREATE-pin set enters neither lookup. Original
+source bytes, pin construction, all matching rows, ambiguity refusal and current
+record filters remain unchanged. The three previously failing native cases now
+pass: a 1,000-type single-create group, a 1,000-type update batch and a
+catalog-first distinct-type create batch. Their retained log SHA-256 is
+`1363e70e4704fa5bbad20385e6bafd263b460a6bef5b7d6ec657e4ff2adc29f3`;
+the custom/generic JSON plan receipt SHA-256 is
+`80749c28489e4604df976abb50a6f946ac8b39338d505328f6a141c5dd595a18`.
+These focused checks used the installed local Weft 0.4.46 candidate and current
+Truss source. Final installed-package qualification on both platforms and the
+unchanged complete stress campaign remain pending. The plan analysis establishes
+the access pattern, not a latency claim.

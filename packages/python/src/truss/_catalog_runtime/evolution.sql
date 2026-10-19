@@ -191,11 +191,24 @@ REVOKE ALL ON FUNCTION truss.catalog_scalar_violations(bytea) FROM PUBLIC;
 -- The current acceptance route supplies exact original candidate documents.
 CREATE FUNCTION truss.catalog_scalar_violations_with_sources(declarations_bytes bytea,documents_bytes bytea) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE rec jsonb;field jsonb;item jsonb;node jsonb;source_indexes jsonb;scopes jsonb[]:=ARRAY[]::jsonb[];result bytea;
+DECLARE rec jsonb;field jsonb;item jsonb;node jsonb;source_indexes jsonb;
+ parsed_declarations jsonb;parsed_documents jsonb;scopes jsonb[]:=ARRAY[]::jsonb[];result bytea;
 BEGIN
- SELECT coalesce(jsonb_object_agg(d.value->>'documentId',truss.catalog_item_source_index(d.value->>'originalText')),'{}'::jsonb)
-  INTO source_indexes FROM jsonb_array_elements(convert_from(documents_bytes,'UTF8')::jsonb) d;
- FOR rec IN SELECT r.value FROM jsonb_array_elements(convert_from(declarations_bytes,'UTF8')::jsonb) d CROSS JOIN LATERAL jsonb_array_elements(d.value->'records') r LOOP
+ parsed_declarations:=convert_from(declarations_bytes,'UTF8')::jsonb;
+ parsed_documents:=convert_from(documents_bytes,'UTF8')::jsonb;
+ WITH needed_documents AS MATERIALIZED (
+  SELECT DISTINCT (r.value->>'documentId') COLLATE "C" document_id
+  FROM jsonb_array_elements(parsed_declarations) d
+  CROSS JOIN LATERAL jsonb_array_elements(d.value->'records') r
+  WHERE EXISTS(SELECT 1 FROM jsonb_array_elements(r.value->'fields') f
+   WHERE f.value->'declaration'->>'cardinality' IN ('array','map'))
+ )
+ SELECT coalesce(jsonb_object_agg(d.value->>'documentId',
+   truss.catalog_item_source_index(d.value->>'originalText')),'{}'::jsonb)
+ INTO source_indexes
+ FROM jsonb_array_elements(parsed_documents) d
+ JOIN needed_documents n ON n.document_id=d.value->>'documentId' COLLATE "C";
+ FOR rec IN SELECT r.value FROM jsonb_array_elements(parsed_declarations) d CROSS JOIN LATERAL jsonb_array_elements(d.value->'records') r LOOP
   IF NOT EXISTS(SELECT 1 FROM truss.type_def t WHERE t.document_id=rec->>'documentId' AND t.module=rec->>'moduleId' AND t.element=rec->>'elementId' AND t.retired_rev IS NULL) THEN CONTINUE;END IF;
   FOR field IN SELECT value FROM jsonb_array_elements(rec->'fields') LOOP
    IF field->'declaration'->>'cardinality' NOT IN ('array','map') THEN CONTINUE;END IF;

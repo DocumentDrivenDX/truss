@@ -1,12 +1,15 @@
 -- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Derived immutable coordinates and pins; original fragments remain only in schema_doc.
 CREATE TABLE truss.runtime_definition_source (
- rev int NOT NULL,ord int NOT NULL,doc_id text NOT NULL,module_id text NOT NULL,
- element_id text NOT NULL,kind text NOT NULL,key_id text NOT NULL DEFAULT '',
- pointer text NOT NULL,definition_pin text NOT NULL,
+ rev int NOT NULL,ord int NOT NULL,doc_id text COLLATE pg_catalog."C" NOT NULL,module_id text COLLATE pg_catalog."C" NOT NULL,
+ element_id text COLLATE pg_catalog."C" NOT NULL,kind text COLLATE pg_catalog."C" NOT NULL,key_id text COLLATE pg_catalog."C" NOT NULL DEFAULT '',
+ pointer text COLLATE pg_catalog."C" NOT NULL,definition_pin text COLLATE pg_catalog."C" NOT NULL,
  PRIMARY KEY(rev,ord,pointer),UNIQUE(rev,ord,module_id,element_id,kind,key_id),
  FOREIGN KEY(rev,ord) REFERENCES truss.schema_doc(rev,ord));
 CREATE INDEX runtime_definition_source_pin ON truss.runtime_definition_source(definition_pin);
+CREATE INDEX type_def_current_definition_source_route ON truss.type_def
+ (definition_rev,definition_doc_ord,definition_document_id,module,element)
+ WHERE kind='record' AND NOT provisional AND retired_rev IS NULL;
 CREATE FUNCTION truss.runtime_owned_index_definition_source() RETURNS trigger
 LANGUAGE plpgsql SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 BEGIN

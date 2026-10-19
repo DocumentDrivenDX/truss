@@ -384,7 +384,7 @@ BEGIN
   OR jsonb_typeof(validated_origin) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'original record-plan shape required' USING ERRCODE='22023';END IF;
  RETURN (WITH docs AS MATERIALIZED (
-  SELECT d.value,d.ordinality::int-1 ord,truss.catalog_item_source_index(d.value->>'originalText') source_index
+  SELECT d.value,d.ordinality::int-1 ord
   FROM jsonb_array_elements(validated_documents) WITH ORDINALITY d),
  records AS MATERIALIZED (
   SELECT r.value,d.ord,type_offset+row_number() OVER(ORDER BY (r.value->>'documentId') COLLATE "C",(r.value->>'moduleId') COLLATE "C",(r.value->>'elementId') COLLATE "C")::int type_id
@@ -402,16 +402,24 @@ BEGIN
    property_offset+row_number() OVER(ORDER BY (r.value->>'documentId') COLLATE "C",(r.value->>'moduleId') COLLATE "C",
     (r.value->>'elementId') COLLATE "C",(f.value->>'fieldModule') COLLATE "C",(f.value->'declaration'->>'id') COLLATE "C")::int prop_id
   FROM records r CROSS JOIN LATERAL jsonb_array_elements(r.value->'fields') f),
+ item_source_indexes AS MATERIALIZED (
+  SELECT d.value->>'documentId' document_id,
+   truss.catalog_item_source_index(d.value->>'originalText') source_index
+  FROM docs d
+  JOIN (SELECT DISTINCT document_id COLLATE "C" document_id FROM field_input
+        WHERE value->'declaration'->>'cardinality' IN ('array','map')) needed
+   ON needed.document_id=d.value->>'documentId' COLLATE "C"),
  prop_rows AS MATERIALIZED (
   SELECT f.type_id,f.prop_id,f.value->>'fieldModule' field_module,f.value->'declaration'->>'id' element_id,
    jsonb_build_object('prop_id',f.prop_id,'type_id',f.type_id,'element',f.value->'declaration'->>'id',
     'declaration_module',f.value->>'fieldModule','name',coalesce(f.value->'declaration'->>'name',f.value->'declaration'->>'id'),
     'scalar_type',f.value->'declaration'->>'scalarType','nullability',f.value->'declaration'->>'nullability',
     'cardinality',f.value->'declaration'->>'cardinality','facets',f.value->'declaration'->'facets',
-    'item',CASE WHEN f.value->'declaration'->>'cardinality' IN ('array','map') THEN truss.catalog_item_definition_indexed(d.source_index,f.document_id,selected_revision,f.ord,f.value->'declaration'->'itemType') ELSE f.value->'declaration'->'itemType' END,
+    'item',CASE WHEN f.value->'declaration'->>'cardinality' IN ('array','map') THEN truss.catalog_item_definition_indexed(i.source_index,f.document_id,selected_revision,f.ord,f.value->'declaration'->'itemType') ELSE f.value->'declaration'->'itemType' END,
     'home','json','since_rev',selected_revision,'doc_ord',f.ord,'definition_source_kind','accepted_document',
     'definition_rev',selected_revision,'definition_doc_ord',f.ord,'definition_document_id',f.document_id,'_originalField',f.value->'declaration') value
-  FROM field_input f JOIN docs d USING(ord)),
+  FROM field_input f
+  LEFT JOIN item_source_indexes i ON i.document_id COLLATE "C"=f.document_id COLLATE "C"),
  key_input AS MATERIALIZED (
   SELECT r.type_id,r.ord,r.value->>'documentId' document_id,k.value,
    row_number() OVER(PARTITION BY r.type_id ORDER BY (k.value->>'id') COLLATE "C")::int key_num

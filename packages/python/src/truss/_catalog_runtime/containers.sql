@@ -141,12 +141,16 @@ DECLARE source_doc json;source_digest text;result jsonb;
 BEGIN
  source_doc:=original_text::json;
  source_digest:=encode(sha256(convert_to(original_text,'UTF8')),'hex');
- WITH definitions AS (
+ WITH modules AS MATERIALIZED (
   SELECT m.value->>'id' module_id,(m.ordinality::int-1) module_ordinal,
+   m.value->'elements' elements
+  FROM json_array_elements(source_doc->'modules') WITH ORDINALITY m
+ ), definitions AS (
+  SELECT m.module_id,m.module_ordinal,
    e.value->>'id' element_id,(e.ordinality::int-1) element_ordinal,
    e.value::text original_fragment,e.value::jsonb declaration
-  FROM json_array_elements(source_doc->'modules') WITH ORDINALITY m
-  CROSS JOIN LATERAL json_array_elements(m.value->'elements') WITH ORDINALITY e
+  FROM modules m
+  CROSS JOIN LATERAL json_array_elements(m.elements) WITH ORDINALITY e
  ) SELECT jsonb_build_object('sourceSha256',source_digest,'umfVersion',source_doc->>'umf',
    'definitions',coalesce(jsonb_object_agg(jsonb_build_array(module_id,element_id)::text,
     jsonb_build_object('moduleOrdinal',module_ordinal,'elementOrdinal',element_ordinal,

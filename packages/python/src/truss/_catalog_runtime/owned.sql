@@ -919,13 +919,27 @@ BEGIN
   SELECT DISTINCT (value->>'typeDefinitionPin') COLLATE "C" definition_pin FROM jsonb_array_elements(input_operations) operations(value)
   WHERE value->>'operation'='create_object' AND jsonb_typeof(value->'typeDefinitionPin')='string'
  ), matched AS MATERIALIZED (
-  SELECT requested.definition_pin,to_jsonb(t) native_type,
+  SELECT requested.definition_pin,matched_type.native_type,
    count(*) OVER(PARTITION BY requested.definition_pin) match_count
-  FROM requested JOIN truss.runtime_definition_source d ON d.definition_pin COLLATE "C"=requested.definition_pin COLLATE "C"
-   AND d.kind='element' AND d.key_id=''
-  JOIN truss.type_def t ON t.definition_rev=d.rev AND t.definition_doc_ord=d.ord
-   AND t.definition_document_id=d.doc_id AND t.module=d.module_id AND t.element=d.element_id
-  WHERE t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL
+  FROM requested
+  CROSS JOIN LATERAL (
+   SELECT d.rev,d.ord,d.doc_id,d.module_id,d.element_id
+   FROM truss.runtime_definition_source d
+   WHERE d.definition_pin=requested.definition_pin COLLATE "C"
+    AND d.kind='element' AND d.key_id=''
+   OFFSET 0
+  ) matched_source
+  CROSS JOIN LATERAL (
+   SELECT to_jsonb(t) native_type
+   FROM truss.type_def t
+   WHERE t.definition_rev=matched_source.rev
+    AND t.definition_doc_ord=matched_source.ord
+    AND t.definition_document_id=matched_source.doc_id
+    AND t.module=matched_source.module_id
+    AND t.element=matched_source.element_id
+    AND t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL
+   OFFSET 0
+  ) matched_type
  )
  SELECT coalesce(jsonb_object_agg(definition_pin,native_type) FILTER(WHERE match_count=1),'{}'::jsonb)
   INTO resolved_creates FROM matched;
@@ -1393,8 +1407,8 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_prepare(jsonb,jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_owned_capture_application(selected_attempt uuid,application_prepared jsonb) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE observed_operation_count int;input_operations jsonb;
- attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;observed jsonb;locked jsonb;
- inventory jsonb;entry jsonb;expected_operation jsonb;actual_operation jsonb;owner record;selected_type int;relation truss.rel_def%ROWTYPE;endpoint_owner record;retained_bytes bigint:=0;current_actor oid;
+ attempt truss.runtime_object_attempt%ROWTYPE;input jsonb;locked jsonb;
+ inventory jsonb;entry jsonb;prepared_plans jsonb[];owner record;selected_type int;relation truss.rel_def%ROWTYPE;endpoint_owner record;retained_bytes bigint:=0;current_actor oid;
  original_projection_problem boolean;compact_updates boolean;application_operations jsonb;
 BEGIN
  SELECT * INTO STRICT attempt FROM truss.runtime_object_attempt WHERE id=selected_attempt FOR UPDATE NOWAIT;
@@ -1408,17 +1422,18 @@ BEGIN
   OR input->'mutationProfile' IS DISTINCT FROM truss.runtime_owned_profile()
   OR EXISTS(SELECT 1 FROM truss.runtime_owned_operation WHERE attempt_id=selected_attempt) THEN
   RAISE EXCEPTION 'original unused owned attempt required' USING ERRCODE='55000';END IF;
- observed:=truss.runtime_owned_input_scope(input);
+ -- The admitted entry already holds the graph gate and table locks.
+ locked:=truss.runtime_owned_input_scope(input);
  -- All component objects and relationships can participate in reparent/cascade;
  -- outside independent endpoints are read witnesses only.
  FOR owner IN SELECT document_id,module_id FROM (SELECT DISTINCT document_id,module_id FROM (
-  SELECT value->>'document_id' document_id,value->>'module' module_id FROM jsonb_each(observed->'types')
-  UNION ALL SELECT value->>'document_id',value->>'module' FROM jsonb_each(observed->'relationships')
+  SELECT value->>'document_id' document_id,value->>'module' module_id FROM jsonb_each(locked->'types')
+  UNION ALL SELECT value->>'document_id',value->>'module' FROM jsonb_each(locked->'relationships')
  ) owners) distinct_owners ORDER BY document_id COLLATE "C",module_id COLLATE "C" LOOP
   PERFORM truss.runtime_module_writer_qualified(owner.document_id,owner.module_id,current_actor);
  END LOOP;
  FOR owner IN SELECT document_id,module_id FROM (SELECT DISTINCT value->'definition'->>'document_id' document_id,
-  value->'definition'->>'module' module_id FROM jsonb_each(observed->'boundary')) distinct_owners
+  value->'definition'->>'module' module_id FROM jsonb_each(locked->'boundary')) distinct_owners
   ORDER BY document_id COLLATE "C",module_id COLLATE "C" LOOP
   IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
    RAISE EXCEPTION 'current outside endpoint reader required' USING ERRCODE='42501';END IF;
@@ -1426,8 +1441,8 @@ BEGIN
  -- Implicit descendant values and zero-edge multiplicity checks require the
  -- same original readers as explicit operations, before graph exclusion.
  FOR selected_type IN SELECT type_id FROM (
-  SELECT DISTINCT (value->>'type_id')::int type_id FROM jsonb_each(observed->'types')
-  -- Stored update/delete targets are already in observed.types; alias targets
+  SELECT DISTINCT (value->>'type_id')::int type_id FROM jsonb_each(locked->'types')
+  -- Stored update/delete targets are already in locked.types; alias targets
   -- come from the CREATE pins below. Original reference admission remains in
   -- input_scope and the ordered planner, so this type-set pass adds no new type.
   -- This is a type set, not operation admission. Resolve each exact CREATE pin
@@ -1455,17 +1470,6 @@ BEGIN
    END LOOP;
   END LOOP;
  END LOOP;
- -- Every graph writer joins this same exclusion in object/edge order. NOWAIT
- -- gives one refusal; it does not hide a retry loop in the embedded library.
- -- Join the same gate as every native row writer. SHARE ROW EXCLUSIVE table
- -- locks conflict with routine autovacuum and caused spurious observation refusals.
- IF NOT pg_try_advisory_xact_lock(1953658227,1735549296) THEN
-  RAISE EXCEPTION 'graph writer in flight' USING ERRCODE='55P03';END IF;
- LOCK TABLE truss.object IN ROW EXCLUSIVE MODE NOWAIT;
- LOCK TABLE truss.edge IN ROW EXCLUSIVE MODE NOWAIT;
- locked:=truss.runtime_owned_input_scope(input);
- IF locked IS DISTINCT FROM observed THEN
-  RAISE EXCEPTION 'graph changed before write exclusion' USING ERRCODE='55P03';END IF;
  inventory:=truss.runtime_owned_prepare_application(input,locked,application_prepared);
  PERFORM truss.runtime_owned_key_preflight(inventory);
  -- The shared original scope owns one before snapshot. Trusted independent
@@ -1499,15 +1503,14 @@ BEGIN
     THEN jsonb_build_object('initialScope',inventory->'initialScope') ELSE '{}'::jsonb END plan
   FROM selected_plans)
  SELECT sum(octet_length(convert_to(plan::text,'UTF8'))),
-  jsonb_agg(jsonb_build_object('attempt_id',attempt.id,'operation_index',(plan->>'operationIndex')::int,
-   'writer_xid',attempt.writer_xid::text,'plan',plan,'result',NULL) ORDER BY (plan->>'operationIndex')::int)
- INTO retained_bytes,expected_operation FROM plans;
+  array_agg(plan ORDER BY (plan->>'operationIndex')::int)
+ INTO retained_bytes,prepared_plans FROM plans;
  IF retained_bytes>33554432 THEN RAISE EXCEPTION 'bounded retained whole group inventory required' USING ERRCODE='54000';END IF;
  INSERT INTO truss.runtime_owned_operation(attempt_id,operation_index,writer_xid,plan)
- SELECT r.attempt_id,r.operation_index,r.writer_xid,r.plan
- FROM jsonb_populate_recordset(NULL::truss.runtime_owned_operation,expected_operation) r;
+ SELECT attempt.id,(p.plan->>'operationIndex')::int,attempt.writer_xid,p.plan
+ FROM unnest(prepared_plans) WITH ORDINALITY p(plan,ordinal) ORDER BY p.ordinal;
  GET DIAGNOSTICS observed_operation_count=ROW_COUNT;
- IF observed_operation_count<>jsonb_array_length(expected_operation) THEN
+ IF observed_operation_count<>cardinality(prepared_plans) THEN
   RAISE EXCEPTION 'complete prepared operation insert required' USING ERRCODE='55000';END IF;
 END;
 $$;
@@ -2034,7 +2037,7 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;candidate jsonb;
  namespaces jsonb:='{}';namespace_key text;namespace_hex text;codecs jsonb:='{}';codec jsonb;codec_bytes bigint:=2;
  route_items jsonb[]:='{}';lock_route_items jsonb[]:='{}';route_bytes bigint:=2;lock_route_bytes bigint:=2;
  metadata_keys text[]:='{}';namespace_values text[]:='{}';codec_keys text[]:='{}';codec_values jsonb[]:='{}';
- all_routes jsonb;guard_rows jsonb;route_observations jsonb;
+ all_routes jsonb;route_observations jsonb;
 BEGIN
  IF inventory->>'profile' IS DISTINCT FROM 'truss-owned-group-plan/0.1'
   OR (inventory->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
@@ -2116,14 +2119,11 @@ BEGIN
  IF cardinality(lock_route_items)+cardinality(route_items)>16384 OR lock_route_bytes+route_bytes>16777216 THEN
   RAISE EXCEPTION 'bounded whole-group key footprint required' USING ERRCODE='54000';END IF;
  routes:=to_jsonb(route_items);lock_routes:=to_jsonb(lock_route_items);all_routes:=routes||lock_routes;
- -- execute.sql already owns the global graph-writer gate. Recheck that same
- -- gate once here, then acquire all key-row guards in deterministic hash order.
- -- The scalar helper remains available to non-batch callers.
+ -- The admitted entry holds the transaction-wide graph-writer gate. Scalar
+ -- callers use that same gate; no second key-row lock pass is necessary.
  IF jsonb_array_length(all_routes)>0 THEN
   IF current_setting('transaction_isolation')<>'read committed' THEN
    RAISE EXCEPTION 'current key observation requires READ COMMITTED' USING ERRCODE='0A000';END IF;
-  IF NOT pg_try_advisory_xact_lock(1953658227,1735549296) THEN
-   RAISE EXCEPTION 'key route is in flight' USING ERRCODE='55P03';END IF;
  END IF;
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(all_routes) r
   WHERE octet_length(decode(r.value->>'namespace','hex')) NOT BETWEEN 1 AND 65536
@@ -2142,19 +2142,8 @@ BEGIN
  LEFT JOIN truss.key_bucket_guard g USING(namespace_sha256,key_sha256)
  WHERE g.namespace_sha256 IS NULL ORDER BY h.namespace_sha256,h.key_sha256
  ON CONFLICT(namespace_sha256,key_sha256) DO NOTHING;
- WITH exact_routes AS MATERIALIZED (
-  SELECT DISTINCT decode(value->>'namespace','hex') namespace_bytes,decode(value->>'transport','hex') key_bytes
-  FROM jsonb_array_elements(all_routes)), hashes AS MATERIALIZED (
-  SELECT DISTINCT sha256(namespace_bytes) namespace_sha256,sha256(key_bytes) key_sha256 FROM exact_routes)
- SELECT coalesce(jsonb_agg(jsonb_build_object('namespaceHash',encode(locked.namespace_sha256,'hex'),
-  'keyHash',encode(locked.key_sha256,'hex'),'generation',locked.generation)
-  ORDER BY locked.namespace_sha256,locked.key_sha256),'[]'::jsonb)
- INTO guard_rows FROM (
-  SELECT g.namespace_sha256,g.key_sha256,g.generation FROM truss.key_bucket_guard g JOIN hashes h USING(namespace_sha256,key_sha256)
-  ORDER BY g.namespace_sha256,g.key_sha256 FOR UPDATE OF g NOWAIT) locked;
- IF jsonb_array_length(guard_rows)<>(SELECT count(*) FROM (SELECT DISTINCT sha256(decode(value->>'namespace','hex')) ns,
-   sha256(decode(value->>'transport','hex')) ky FROM jsonb_array_elements(all_routes)) h) THEN
-  RAISE EXCEPTION 'complete native key guard inventory required' USING ERRCODE='55000';END IF;
+ -- Generations below come from canonical indexed guard rows. Actual guard
+ -- UPDATE statements acquire their own row locks under the held writer gate.
  -- One bounded scan per hash bucket computes collision-budget statistics;
  -- exact byte membership is aggregated separately for each original route.
  WITH exact_routes AS MATERIALIZED (
@@ -2172,40 +2161,36 @@ BEGIN
      FROM truss.object_key_reservation_bucket g WHERE g.namespace_sha256=h.namespace_sha256 AND g.key_sha256=h.key_sha256 LIMIT 10001)
    ) c
   ) b),
- memberships AS (SELECT r.namespace_bytes,r.key_bytes,
-  coalesce(jsonb_agg(jsonb_build_object('storage_row_id',m.storage_row_id,'object_id',m.object_id,'type_id',m.type_id,
-   'key_num',m.key_num,'namespaceExact',m.namespace_bytes=r.namespace_bytes,'keyExact',m.key_bytes=r.key_bytes)
-   ORDER BY m.storage_row_id) FILTER(WHERE m.storage_row_id IS NOT NULL),'[]'::jsonb) member_rows
-  FROM exact_routes r JOIN stats s ON s.namespace_sha256=sha256(r.namespace_bytes) AND s.key_sha256=sha256(r.key_bytes)
-   AND s.candidate_count<=10000 AND s.candidate_bytes<=16777216
-  LEFT JOIN truss.object_key_bucket m ON m.namespace_sha256=sha256(r.namespace_bytes)
-   AND m.key_sha256=sha256(r.key_bytes) AND m.namespace_bytes=r.namespace_bytes AND m.key_bytes=r.key_bytes
-  GROUP BY r.namespace_bytes,r.key_bytes),
- reservations AS (SELECT r.namespace_bytes,r.key_bytes,
-  coalesce(jsonb_agg(q.storage_row_id ORDER BY q.storage_row_id) FILTER(WHERE q.storage_row_id IS NOT NULL),'[]'::jsonb) reservation_ids
-  FROM exact_routes r JOIN stats s ON s.namespace_sha256=sha256(r.namespace_bytes) AND s.key_sha256=sha256(r.key_bytes)
-   AND s.candidate_count<=10000 AND s.candidate_bytes<=16777216
-  LEFT JOIN truss.object_key_reservation_bucket q ON q.namespace_sha256=sha256(r.namespace_bytes)
-   AND q.key_sha256=sha256(r.key_bytes) AND q.namespace_bytes=r.namespace_bytes AND q.key_bytes=r.key_bytes
-  GROUP BY r.namespace_bytes,r.key_bytes), observed_routes AS (
-  SELECT r.namespace_bytes,r.key_bytes,(g.value->>'generation')::bigint generation,coalesce(s.candidate_count,0) candidate_count,
-   coalesce(s.candidate_bytes,0) candidate_bytes,m.member_rows,q.reservation_ids
-  FROM exact_routes r JOIN jsonb_array_elements(guard_rows) g(value) ON g.value->>'namespaceHash'=encode(sha256(r.namespace_bytes),'hex')
-   AND g.value->>'keyHash'=encode(sha256(r.key_bytes),'hex')
-  JOIN stats s ON s.namespace_sha256=sha256(r.namespace_bytes) AND s.key_sha256=sha256(r.key_bytes)
-  LEFT JOIN memberships m USING(namespace_bytes,key_bytes) LEFT JOIN reservations q USING(namespace_bytes,key_bytes))
- SELECT coalesce(jsonb_agg(jsonb_build_object('namespace',encode(namespace_bytes,'hex'),'transport',encode(key_bytes,'hex'),
-  'generation',generation,'candidateCount',candidate_count,'candidateBytes',candidate_bytes,
-  'memberRows',coalesce(member_rows,'[]'::jsonb),'reservationIds',coalesce(reservation_ids,'[]'::jsonb))),'[]'::jsonb)
+ observed_routes AS (
+  SELECT r.namespace_bytes,r.key_bytes,g.generation,s.candidate_count,s.candidate_bytes,
+   m.member_rows,q.reservation_ids
+  FROM exact_routes r JOIN stats s ON s.namespace_sha256=sha256(r.namespace_bytes)
+   AND s.key_sha256=sha256(r.key_bytes)
+  JOIN truss.key_bucket_guard g USING(namespace_sha256,key_sha256)
+  -- Each aggregate is an indexed lookup for this exact route. Global grouped
+  -- subqueries here can be reexecuted for each route when planner estimates
+  -- for the JSON input are small, producing route-count-squared work.
+  CROSS JOIN LATERAL (
+   SELECT coalesce(jsonb_agg(jsonb_build_object('storage_row_id',m.storage_row_id,
+    'object_id',m.object_id,'type_id',m.type_id,'key_num',m.key_num,
+    'namespaceExact',true,'keyExact',true) ORDER BY m.storage_row_id),'[]'::jsonb) member_rows
+   FROM truss.object_key_bucket m WHERE m.namespace_sha256=s.namespace_sha256
+    AND m.key_sha256=s.key_sha256 AND m.namespace_bytes=r.namespace_bytes AND m.key_bytes=r.key_bytes
+    AND s.candidate_count<=10000 AND s.candidate_bytes<=16777216
+  ) m CROSS JOIN LATERAL (
+   SELECT coalesce(jsonb_agg(q.storage_row_id ORDER BY q.storage_row_id),'[]'::jsonb) reservation_ids
+   FROM truss.object_key_reservation_bucket q WHERE q.namespace_sha256=s.namespace_sha256
+    AND q.key_sha256=s.key_sha256 AND q.namespace_bytes=r.namespace_bytes AND q.key_bytes=r.key_bytes
+    AND s.candidate_count<=10000 AND s.candidate_bytes<=16777216
+  ) q)
+ SELECT coalesce(jsonb_object_agg(encode(namespace_bytes,'hex')||':'||encode(key_bytes,'hex'),
+  jsonb_build_object('generation',generation,'candidateCount',candidate_count,'candidateBytes',candidate_bytes,
+  'memberRows',coalesce(member_rows,'[]'::jsonb),'reservationIds',coalesce(reservation_ids,'[]'::jsonb))),'{}'::jsonb)
  INTO route_observations FROM observed_routes;
- IF jsonb_array_length(route_observations)<>(SELECT count(*) FROM (SELECT DISTINCT decode(value->>'namespace','hex') ns,
-   decode(value->>'transport','hex') ky FROM jsonb_array_elements(all_routes)) r) THEN
-  RAISE EXCEPTION 'complete native key observation inventory required' USING ERRCODE='55000';END IF;
  -- Retired live memberships are locked/checked before current active routes,
  -- matching the former two-phase ordering. Their bytes are not reinterpreted.
- FOR route IN SELECT DISTINCT ON ((r.value->>'namespace') COLLATE "C",(r.value->>'transport') COLLATE "C") r.value entry,o.value observation FROM jsonb_array_elements(lock_routes) r
-  JOIN jsonb_array_elements(route_observations) o ON o.value->>'namespace'=r.value->>'namespace'
-   AND o.value->>'transport'=r.value->>'transport'
+ FOR route IN SELECT DISTINCT ON ((r.value->>'namespace') COLLATE "C",(r.value->>'transport') COLLATE "C") r.value entry,route_observations->((r.value->>'namespace')||':'||(r.value->>'transport')) observation
+  FROM jsonb_array_elements(lock_routes) r
   ORDER BY (r.value->>'namespace') COLLATE "C",(r.value->>'transport') COLLATE "C" LOOP
   IF (route.observation->>'candidateCount')::bigint>10000 OR (route.observation->>'candidateBytes')::bigint>16777216 THEN
    RAISE EXCEPTION 'complete collision bucket exceeds limits' USING ERRCODE='54000';END IF;
@@ -2216,10 +2201,9 @@ BEGIN
  -- and guard locks are shared by every repeated route.
  FOR route IN SELECT r.value entry,
   lag(r.value->>'reference') OVER route_history previous_reference,
-  lag(r.ordinality) OVER route_history previous_ordinal,o.value observation
+  lag(r.ordinality) OVER route_history previous_ordinal,
+  route_observations->((r.value->>'namespace')||':'||(r.value->>'transport')) observation
   FROM jsonb_array_elements(routes) WITH ORDINALITY r(value,ordinality)
-  JOIN jsonb_array_elements(route_observations) o ON o.value->>'namespace'=r.value->>'namespace'
-   AND o.value->>'transport'=r.value->>'transport'
   WINDOW route_history AS (PARTITION BY (r.value->>'namespace') COLLATE "C",(r.value->>'transport') COLLATE "C" ORDER BY r.ordinality)
   ORDER BY r.ordinality LOOP
   entry:=route.entry;namespace:=decode(entry->>'namespace','hex');transport:=decode(entry->>'transport','hex');reference:=entry->>'reference';
