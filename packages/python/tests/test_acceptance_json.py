@@ -34,7 +34,10 @@ class AcceptanceJsonTests(unittest.TestCase):
         self.refuse_resource(b'[' * 130 + b']' * 130)
         self.assertEqual(len(decode_acceptance_json(b'[' + b','.join([b'null'] * 4096) + b']')), 4096)
         self.refuse_resource(b'[' + b','.join([b'null'] * 4097) + b']')
-        self.refuse_resource(bytes(1048577))
+        with self.assertRaises(AcceptanceJsonError) as raised:
+            decode_acceptance_json(bytes(1048577))
+        self.assertEqual(raised.exception.reason, 'grammar')
+        self.refuse_resource(bytes(16_777_217))
         keys = [json.dumps('key-' + str(i).zfill(5)) + ':null' for i in range(1000)]
         self.assertEqual(len(decode_acceptance_json(('{' + ','.join(keys) + '}').encode())),1000)
         def nodes(last):

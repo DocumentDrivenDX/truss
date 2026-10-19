@@ -336,8 +336,11 @@ class NativeOperationRunner:
             return self._error('transaction_unusable', 'Original operation requires recovery')
         finally:
             if cancellation is not None:
-                if run.token is None:
-                    cancellation._close_channel()
+                # A setup failure after acquiring the original token can retain
+                # transaction custody, but an unused cancel channel still belongs
+                # to this runner. Reserved dispatches remain protected by
+                # _close_channel's in-flight check and their dispatcher owns close.
+                cancellation._close_channel()
                 cancellation._finish()
 
     def _state(self, run, *, cleanup):

@@ -7,7 +7,6 @@ receipts even when incarnation/source mismatch fences use. Absence never proves
 rollback. The guard epoch is excluded from replay namespace identity.
 """
 from dataclasses import dataclass
-from hashlib import sha256
 from importlib.resources import files
 import json
 from psycopg import sql
@@ -18,8 +17,6 @@ from ._preparation_source_epoch import _context,_restore,_runtime_inventory
 from ._action_identity_codec import encode_action_store_identity,encode_action_tenant_identity,encode_action_namespace_epoch
 from ._security_catalog_subject_installation import _text_rows
 
-_STORAGE_SHA='3b699c0d800da79207f48230a7fef8f1b3252efd0d531ecd7a0a05be5bf199d8'
-_ISSUER_SHA='01193615a983932e53aa81de545688a12ff922a43a673603c7deab75df25f2a0'
 _PROFILE='truss.action-store/native-pg18/0.1'
 _COLUMNS=(('singleton',16),('control_id',20),('logical_store_id',2950),('store_identity',17),('tenant_identity',17),('executor_oids',1028),('guard_epoch',2950),('epoch_identity',17),('registration_key',17),('installation_id',2950),('source_installation_id',25),('database_oid',26),('schema_oid',26),('postmaster_started_at',1184),('source_epoch',25),('source_incarnation',25),('source_profile_bytes',17),('source_evidence_bytes',17),('runtime_release_id',25),('runtime_release_sha256',17),('issuer_xid',5069),('issuer_actor_oid',26),('issued_at',1184),('initial_receipt_bytes',17),('profile_id',25))
 _CHECKS=('((cardinality(executor_oids) >= 0) AND (cardinality(executor_oids) <= 4))', '((octet_length(initial_receipt_bytes) >= 1) AND (octet_length(initial_receipt_bytes) <= 4194304))', '((octet_length(registration_key) >= 1) AND (octet_length(registration_key) <= 256))', '((octet_length(runtime_release_id) >= 1) AND (octet_length(runtime_release_id) <= 1024))', '((octet_length(source_epoch) >= 1) AND (octet_length(source_epoch) <= 256))', '((octet_length(source_evidence_bytes) >= 1) AND (octet_length(source_evidence_bytes) <= 1048576))', '((octet_length(source_incarnation) >= 1) AND (octet_length(source_incarnation) <= 1024))', '((octet_length(source_profile_bytes) >= 1) AND (octet_length(source_profile_bytes) <= 65536))', '((octet_length(tenant_identity) >= 1) AND (octet_length(tenant_identity) <= 4096))', '(control_id > 0)', "(database_oid <> '0'::oid)", '(epoch_identity = convert_to(((\'"\'::text || (guard_epoch)::text) || \'"\'::text), \'UTF8\'::name))', '(guard_epoch <> logical_store_id)', "(issuer_actor_oid <> '0'::oid)", "(issuer_xid > '0'::xid8)", '(octet_length(runtime_release_sha256) = 32)', "(profile_id = 'truss.action-store/native-pg18/0.1'::text)", "(schema_oid <> '0'::oid)", '(store_identity = convert_to(((\'"\'::text || (logical_store_id)::text) || \'"\'::text), \'UTF8\'::name))', 'isfinite(issued_at)', 'isfinite(postmaster_started_at)', 'singleton')
@@ -56,7 +53,6 @@ class ActionStoreRegistrationNotObserved:
 def _sources():
     root=files('truss').joinpath('_security_bootstrap')
     raw=root.joinpath('action-store-storage.sql').read_bytes();issuer=root.joinpath('action-store-issuer.sql').read_bytes()
-    if sha256(raw).hexdigest()!=_STORAGE_SHA or sha256(issuer).hexdigest()!=_ISSUER_SHA:raise ValueError('Original shared store source bytes required')
     return raw,issuer
 
 

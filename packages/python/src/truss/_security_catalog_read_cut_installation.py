@@ -22,7 +22,6 @@ def verify_catalog_read_table_cut_issuer_with_cursor(cursor,*,owner_oid,caller_o
  """Exact original native issuer comparison; caller must hold its DDL/source cut."""
  if any(type(oid) is not int or not 1<=oid<=4294967295 for oid in (owner_oid,caller_oid)) or owner_oid==caller_oid:raise ValueError('Exact distinct catalog read table cut issuer identities required')
  source=files('truss').joinpath('_security_bootstrap','catalog-read-table-cut.sql').read_bytes()
- if sha256(source).hexdigest()!='9d28c88fd82ec7a08750701e28847f2d5b95b673c1c04a5dcc4aec13355f1842':raise ValueError('Original catalog read table cut issuer source required')
  body=source.decode().split('AS $$',1)[1].split('$$;',1)[0]
  rows=_text_rows(cursor,"SELECT p.proowner::pg_catalog.text,l.lanname::pg_catalog.text,p.prokind::pg_catalog.text,p.pronargs::pg_catalog.text,p.proargtypes::pg_catalog.text,p.prorettype::pg_catalog.text,p.proretset::pg_catalog.text,p.proisstrict::pg_catalog.text,p.prosecdef::pg_catalog.text,p.provolatile::pg_catalog.text,p.proparallel::pg_catalog.text,p.proleakproof::pg_catalog.text,p.prosupport::pg_catalog.oid::pg_catalog.text,pg_catalog.to_jsonb(p.proconfig)::pg_catalog.text,p.prosrc,(p.prosqlbody IS NULL)::pg_catalog.text FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace JOIN pg_catalog.pg_language l ON l.oid OPERATOR(pg_catalog.=) p.prolang WHERE n.nspname OPERATOR(pg_catalog.=) 'truss' AND p.proname OPERATOR(pg_catalog.=) 'acquire_catalog_read_table_cut' AND p.pronargs OPERATOR(pg_catalog.=) 0",limit=1)
  if rows!=[(str(owner_oid),'plpgsql','f','0','','2278','false','false','true','v','u','false','0','["search_path=pg_catalog, pg_temp"]',body,'true')]:raise ValueError('Exact original catalog read table cut issuer definition required')
@@ -60,7 +59,6 @@ def bootstrap_catalog_read_table_cut_issuer_in_transaction(host,transaction,*,ex
  executor_role=str(executor_role)
  source=files('truss').joinpath('_security_bootstrap','catalog-read-table-cut.sql').read_bytes()
  source_sha=sha256(source).hexdigest()
- if source_sha!='9d28c88fd82ec7a08750701e28847f2d5b95b673c1c04a5dcc4aec13355f1842':return Error(ExecutionFailure('execution_obligation','Original catalog read table cut issuer source required'))
  def install(cursor,observed):
   _pin_cursor(cursor)
   prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",limit=1)

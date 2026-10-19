@@ -35,7 +35,7 @@ class CatalogCodeTests(catalog_tests.PublicCatalogRuntimeTests):
         self.assertIsInstance(unchanged,Ok);self.assertIsInstance(unchanged.value,CatalogUnchanged)
         source=relational_document();source['id']='adoc'
         changed=assembly.prepare_catalog((CatalogDocument('adoc','r2',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
-        self.code(assembly.accept_in_transaction(tx,changed,request_key='changed'),'unsupported_profile','0A000')
+        self.code(assembly.accept_in_transaction(tx,changed,request_key='changed'),'unauthorized','42501')
         self.assertIsInstance(assembly.report_in_transaction(tx),Ok)
         self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(self.installation.registrar_role)))
         for result in (assembly.accept_in_transaction(tx,prepared,request_key='denied'),assembly.report_in_transaction(tx),
@@ -59,5 +59,5 @@ class CatalogCodeTests(catalog_tests.PublicCatalogRuntimeTests):
         try:self.admin.execute("UPDATE truss.catalog_runtime_installation SET release_id='different-profile'")
         finally:self.admin.execute('ALTER TABLE truss.catalog_runtime_installation ENABLE ALWAYS TRIGGER catalog_immutable')
         mismatch=assembly.status_in_transaction(tx);self.code(mismatch,'unsupported_profile')
-        self.assertEqual(mismatch.error.code,'invalid_transaction')
+        self.assertEqual(mismatch.error.code,'execution_obligation')
         host.detach();connection.rollback()

@@ -14,7 +14,6 @@ from .psycopg_host import PsycopgHost
 from .catalog_runtime import _release, _pin_cursor
 from ._preparation_source_epoch import _context, _restore, _runtime_inventory
 
-_SOURCE_SHA256 = '235f2ce982eeda53eaee09f7608a388f96a815cde5354f4ce6db9bb3091422fe'
 _TABLE = 'runtime_preparation_seal'
 _SEQUENCE = 'runtime_preparation_seal_seq'
 _COLUMNS = (
@@ -109,8 +108,6 @@ def bootstrap_preparation_seal_storage_in_transaction(host, transaction):
     if type(host) is not PsycopgHost:
         return Error(ExecutionFailure('execution_obligation','Original native seal storage installer required'))
     raw=files('truss').joinpath('_security_bootstrap','preparation-seal-storage.sql').read_bytes()
-    if sha256(raw).hexdigest()!=_SOURCE_SHA256:
-        return Error(ExecutionFailure('execution_obligation','Original UMF seal owner export required'))
     _,_,sources=_release()
     def install(cursor,observed):
         path,identity,owner,actor=_context(cursor)
@@ -127,5 +124,5 @@ def bootstrap_preparation_seal_storage_in_transaction(host, transaction):
         cursor.execute(sql.SQL('ALTER SEQUENCE truss.runtime_preparation_seal_seq OWNER TO {}').format(sql.Identifier(namespace[0][1])),prepare=False)
         table_oid,sequence_oid=verify_preparation_seal_storage_with_cursor(cursor,owner_oid=owner)
         _restore(cursor,path)
-        return PendingPreparationSealStorage(identity,owner,table_oid,sequence_oid,_SOURCE_SHA256)
+        return PendingPreparationSealStorage(identity,owner,table_oid,sequence_oid,sha256(raw).hexdigest())
     return host._run_operation(transaction,install)

@@ -189,18 +189,15 @@ def observe_preparation_owners_with_cursor(cursor, issuer, original):
 
 
 _SOURCES = {
-    PendingPreparationAuthorityLock: ('acquire_preparation_authority_lock', 'preparation-authority-lock.sql', '8105c84fa96b7afbfd9cedb01a6aef0fdecaaf1dec5d53b80804e0f0f2095481'),
-    PendingPreparationDataAuthorityLock: ('acquire_preparation_data_authority_lock', 'preparation-data-authority-lock.sql', 'e8bd655e40ecd6bbbaa4b83d4e6660577bfca12dfb4353ea189948545260ba4b'),
+    PendingPreparationAuthorityLock: ('acquire_preparation_authority_lock', 'preparation-authority-lock.sql'),
+    PendingPreparationDataAuthorityLock: ('acquire_preparation_data_authority_lock', 'preparation-data-authority-lock.sql'),
 }
 
 def _source(kind=PendingPreparationAuthorityLock):
     if kind not in _SOURCES:
         raise ValueError('Original preparation lock kind required')
-    name, path, expected = _SOURCES[kind]
-    raw = files('truss').joinpath('_security_bootstrap', path).read_bytes()
-    if sha256(raw).hexdigest() != expected:
-        raise ValueError('Original preparation lock source pin required')
-    return raw
+    name, path = _SOURCES[kind]
+    return files('truss').joinpath('_security_bootstrap', path).read_bytes()
 
 
 def _verify(cursor, issuer):

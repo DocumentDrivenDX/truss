@@ -125,31 +125,17 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         if isinstance(result,Error):self.fail(repr(result.error))
         host.detach();connection.commit()
 
-    def test_native_facade_refuses_duplicate_or_incomplete_declarations(self):
-        import copy
+    def test_native_facade_rejects_retired_declaration_payload_atomically(self):
         self.install();connection,host,assembly,tx=self.consumer()
-        source=relational_document();source['id']='malformed'
-        extra=copy.deepcopy(source['modules'][0]['relationships'][0]);extra['id']='A-B-second';extra['name']='A-B-second'
-        source['modules'][0]['relationships'].append(extra)
-        prepared=assembly.prepare_catalog((CatalogDocument('malformed','r1',json.dumps(source).encode()),),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
-        original=json.loads(prepared.declarations_bytes)
-        for mutation in ('duplicate-record','duplicate-relationship','field-swap','missing-records','missing-relationships'):
-            declarations=copy.deepcopy(original)
-            if mutation=='duplicate-record':declarations[0]['records'][1]=copy.deepcopy(declarations[0]['records'][0])
-            elif mutation=='duplicate-relationship':declarations[0]['relationships'][1]=copy.deepcopy(declarations[0]['relationships'][0])
-            elif mutation=='field-swap':
-                field=declarations[0]['records'][0]['fields'][0]
-                other=declarations[0]['records'][1]['fields'][0]
-                for key in ('fieldModule','fieldId','declaration'):field[key]=copy.deepcopy(other[key])
-            elif mutation=='missing-records':del declarations[0]['records']
-            else:del declarations[0]['relationships']
-            with self.subTest(mutation=mutation):
-                connection.execute('SAVEPOINT malformed')
-                error=psycopg.errors.FeatureNotSupported if mutation=='field-swap' else psycopg.errors.InvalidParameterValue
-                with self.assertRaises(error):
-                    connection.execute('SELECT * FROM truss.catalog_accept(%s,%s,%s,%s,%s,%s)',
-                        (prepared.input_bytes,prepared.archive_documents_bytes,json.dumps(declarations).encode(),b'{}',b'{}',mutation),prepare=False)
-                connection.execute('ROLLBACK TO malformed');connection.execute('RELEASE malformed')
+        connection.execute("CREATE TEMP TABLE prior_work(value text);INSERT INTO prior_work VALUES('kept')")
+        prepared=self.prepared(assembly)
+        connection.execute('SAVEPOINT retired_declarations')
+        with self.assertRaises(psycopg.errors.InvalidParameterValue) as raised:
+            connection.execute('SELECT * FROM truss.catalog_accept(%s,%s,%s,%s,%s,%s)',
+                (prepared.input_bytes,prepared.archive_documents_bytes,b'[]',b'{}',b'{}','retired-declarations'),prepare=False)
+        self.assertEqual(raised.exception.sqlstate,'22023')
+        connection.execute('ROLLBACK TO retired_declarations');connection.execute('RELEASE retired_declarations')
+        self.assertEqual(connection.execute('TABLE prior_work').fetchall(),[('kept',)])
         self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.catalog_registration_request').fetchone(),(0,))
         host.detach();connection.commit()
@@ -300,7 +286,9 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
 
     def test_public_view_refuses_corrupt_archive_or_report(self):
         self.install();connection,host,assembly,tx=self.consumer()
-        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='corruption'),Ok)
+        prepared=self.prepared(assembly)
+        original_documents={item.document.document_id:item.document.content.decode('utf-8') for item in prepared.documents}
+        self.assertIsInstance(assembly.accept_in_transaction(tx,prepared,request_key='corruption'),Ok)
         host.detach();connection.commit()
         connection.execute('BEGIN');host=adopt_psycopg_host(connection)
         self.consumer_connections.append((connection,host))
@@ -313,19 +301,22 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
                 self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} ENABLE TRIGGER USER').format(psycopg.sql.Identifier(table)))
                 self.admin.commit()
                 result=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request())
-                self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'55000')
+                self.assertIsInstance(result,Error)
+                self.assertEqual(result.error.code,'invalid_transaction')
+                self.assertIsNone(result.error.sql_state)
                 # Restore this controlled administrative corruption from the
-                # original accepted request, keeping later cases independent.
+                # exact prepared source, keeping later cases independent.
                 self.admin.execute('BEGIN')
                 self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} DISABLE TRIGGER USER').format(psycopg.sql.Identifier(table)))
                 if table=='schema_doc':
-                    self.admin.execute("""UPDATE truss.schema_doc d SET document=a.value->>'originalText'
-                     FROM truss.catalog_registration_request r CROSS JOIN LATERAL jsonb_array_elements(convert_from(r.document_bytes,'UTF8')::jsonb) a
-                     WHERE a.value->>'documentId'=d.doc_id""")
+                    for document_id,document_text in original_documents.items():
+                        self.admin.execute('UPDATE truss.schema_doc SET document=%s WHERE doc_id=%s',(document_text,document_id))
                 else:
                     self.admin.execute('UPDATE truss.catalog_acceptance_report SET report_bytes=truss.catalog_make_report(r) FROM truss.catalog_registration_request r')
                 self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.{} ENABLE ALWAYS TRIGGER catalog_immutable').format(psycopg.sql.Identifier(table)))
                 self.admin.commit()
+        recovered=assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request())
+        self.assertIsInstance(recovered,Ok)
         host.detach();connection.commit()
     def test_public_module_access_configuration_is_qualified_atomic_and_host_owned(self):
         from truss import ModuleAccessGrant
@@ -654,29 +645,45 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
             host.detach();connection.commit()
 
 
-    def test_unknown_policy_extensions_refuse_without_losing_source_or_prior_work(self):
+    def test_unknown_document_extension_is_retained_without_policy_interpretation(self):
+        from hashlib import sha256
+        from truss import AcceptedDocument,ModuleAccessGrant
         self.install();connection,host,assembly,tx=self.consumer()
         connection.execute("CREATE TEMP TABLE prior_work(value text);INSERT INTO prior_work VALUES('kept')")
-        payload={'opaquePolicy':{'subject':'Staff','resource':'Projects','rule':'active assignment required'}}
-        for scope in ('document','module','record','field'):
-            with self.subTest(scope=scope):
-                source=relational_document();source['id']='policy'
-                source['vocabularies']={'security-next':{'version':'99.0.0'}}
-                module=source['modules'][0]
-                target={'document':source,'module':module,'record':module['elements'][0],
-                    'field':next(e for e in module['elements'] if e['kind']=='field')}[scope]
-                target['extensions']={'security-next':payload}
-                prepared=assembly.prepare_catalog((CatalogDocument('policy','r1',json.dumps(source).encode()),),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
-                self.assertEqual(prepared.documents[0].observation()['source'],source)
-                result=assembly.accept_in_transaction(tx,prepared,request_key='unsupported-'+scope)
-                self.assertIsInstance(result,Error)
-                self.assertEqual(connection.execute('TABLE prior_work').fetchall(),[('kept',)])
-                self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))
-                for table in ('schema_doc','type_def','catalog_registration_request','catalog_acceptance_report'):
-                    self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(table))).fetchone(),(0,))
-        self.assertIsInstance(assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='supported-after-refusal'),Ok)
+        source=relational_document();source['id']='opaque-policy'
+        source['vocabularies']={'security-next':{'version':'99.0.0'}}
+        source['extensions']={'security-next':{'opaquePolicy':{'subject':'Staff','resource':'Projects','rule':'active assignment required'}}}
+        content=json.dumps(source).encode()
+        prepared=assembly.prepare_catalog((CatalogDocument('opaque-policy','r1',content),),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        self.assertEqual(prepared.documents[0].observation()['source'],source)
+        accepted=assembly.accept_in_transaction(tx,prepared,request_key='opaque-document-extension')
+        self.assertIsInstance(accepted,Ok)
+        report=assembly.report_in_transaction(tx)
+        self.assertIsInstance(report,Ok)
+        validation=json.loads(report.value.original_bytes)['source']['documentValidations'][0]
+        self.assertTrue(validation['valid'])
+        self.assertFalse(validation['complete'])
+        self.assertEqual(connection.execute('TABLE prior_work').fetchall(),[('kept',)])
         host.detach();connection.commit()
-        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.catalog_registration_request').fetchone(),(1,))
+
+        for role in ('opaque_reader','opaque_writer'):
+            self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))
+            self.addCleanup(self.admin.execute,psycopg.sql.SQL('DROP ROLE IF EXISTS {}').format(psycopg.sql.Identifier(role)))
+        self.admin.execute('BEGIN');admin_host=adopt_psycopg_host(self.admin)
+        admin_tx=admin_host.adopt_transaction().value
+        admin_assembly=create_reference_assembly(CatalogRuntimeConfiguration(),admin_host).value
+        configured=admin_assembly.configure_module_access_in_transaction(admin_tx,
+            (ModuleAccessGrant('opaque-policy','m','opaque_reader','opaque_writer'),))
+        self.assertIsInstance(configured,Ok)
+        admin_host.detach();self.admin.commit()
+        self.admin.execute('GRANT opaque_reader TO consumer WITH SET FALSE')
+
+        connection,host,assembly,tx=self.consumer()
+        archived=assembly.accepted_document_in_transaction(tx,document_id='opaque-policy')
+        self.assertIsInstance(archived.value,AcceptedDocument)
+        self.assertEqual(archived.value.content,content)
+        self.assertEqual(archived.value.sha256,sha256(content).hexdigest())
+        host.detach();connection.rollback()
 
 
     def test_public_actor_refuses_admin_option_private_storage_escalation(self):

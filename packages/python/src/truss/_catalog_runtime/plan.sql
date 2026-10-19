@@ -296,6 +296,7 @@ BEGIN
   assigned:=(relationship_map->>(row->>'rel_type_id'))::int;
   old:=prior_relation_identity->jsonb_build_array(row->>'document_id',row->>'module',row->>'rel_id')::text;
   candidate:=row||jsonb_build_object('rel_type_id',assigned);
+  candidate:=to_jsonb(jsonb_populate_record(NULL::truss.rel_def,candidate));
   IF old IS NOT NULL THEN
    old_source:=source_index->jsonb_build_array(old->>'definition_rev',old->>'definition_doc_ord',old->>'definition_document_id',old->>'module','relationship',old->>'rel_id')::text;
    new_source:=source_index->jsonb_build_array(row->>'definition_rev',row->>'definition_doc_ord',row->>'definition_document_id',row->>'module','relationship',row->>'rel_id')::text;

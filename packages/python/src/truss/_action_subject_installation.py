@@ -6,7 +6,6 @@ credential exchange, role lifecycle/DDL custody and current action permission
 remain separate. Caller owns COMMIT. This does not repurpose ontology Staff.
 """
 from dataclasses import dataclass
-from hashlib import sha256
 from importlib.resources import files
 from psycopg import sql
 from .psycopg_host import PsycopgHost
@@ -15,8 +14,6 @@ from .catalog_runtime import _pin_cursor
 from ._installation_privileges import installation_administrator_with_cursor
 from ._security_catalog_subject_installation import _text_rows
 
-_CUT_SHA256 = '5b070599774386b6c995b46e6d4154534e951acde27a5ae22604ff10cc7ded1d'
-_MAPPING_CUT_SHA256 = 'fd1a0724ac93a977643b059f618d0a111b7e3320536d413c2dc8b6fefac8ba68'
 
 
 @dataclass(frozen=True, slots=True)
@@ -79,8 +76,6 @@ def bootstrap_action_subjects_in_transaction(host, transaction, *, bindings, wit
         if actual != [(str(oid), principal.hex(), kind, identity, 'truss.local-scram/0.1') for oid, principal, kind in sorted(enrolled)]:
             raise ValueError('Exact original Subject enrollment readback required')
         source = files('truss').joinpath('_security_bootstrap', 'action-subject-cut.sql').read_bytes()
-        if sha256(source).hexdigest() != _CUT_SHA256:
-            raise ValueError('Original Subject cut source required')
         cursor.execute(source.decode(), prepare=False)
         cursor.execute(sql.SQL('ALTER FUNCTION truss.acquire_action_subject_cut() OWNER TO {}').format(sql.Identifier(owner_row[0][0])), prepare=False)
         for name, principal, kind in bindings:
@@ -99,8 +94,6 @@ def bootstrap_action_subjects_in_transaction(host, transaction, *, bindings, wit
                 if home != [(owner,'r','p','false','false')]:
                     raise ValueError('Original private action declaration/mapping home required')
             source = files('truss').joinpath('_security_bootstrap','action-mapping-cut.sql').read_bytes()
-            if sha256(source).hexdigest() != _MAPPING_CUT_SHA256:
-                raise ValueError('Original combined mapping cut source required')
             cursor.execute(source.decode(),prepare=False)
             cursor.execute(sql.SQL('ALTER FUNCTION truss.acquire_action_mapping_cut() OWNER TO {}').format(sql.Identifier(owner_row[0][0])),prepare=False)
             for name, principal, kind in bindings:

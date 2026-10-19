@@ -16,12 +16,10 @@ from ._installation_privileges import installation_administrator_with_cursor
 from ._security_catalog_assessment import SOURCE_TABLES
 from ._security_catalog_subject_installation import _text_rows
 
-_SOURCE_SHA256='d2d3e063d89f50cbbc19689b84501903777fee77ba4a82bd88dea81f178db979'
 _TABLES=('source_epoch_current','source_epoch_registry',*SOURCE_TABLES,'installation_archive')
 
 def acquire_preparation_catalog_cut_with_cursor(cursor):
     raw=files('truss').joinpath('_security_bootstrap','preparation-catalog-cut.sql').read_bytes()
-    if sha256(raw).hexdigest()!=_SOURCE_SHA256:raise ValueError('Original preparation catalog cut source required')
     body=raw.decode().split('AS $$',1)[1].split('$$;',1)[0]
     identity=_text_rows(cursor,"SELECT pg_catalog.current_setting('server_version_num'),pg_catalog.current_setting('transaction_isolation'),pg_catalog.current_setting('transaction_read_only'),pg_catalog.current_setting('role'),session_user::text,current_user::text",limit=1)
     if len(identity)!=1 or identity[0][:4]!=('180006','repeatable read','off','none') or identity[0][4]!=identity[0][5]:
@@ -81,8 +79,6 @@ def bootstrap_preparation_catalog_cut_in_transaction(host,transaction,*,executor
             or '\0' in executor_role or len(executor_role.encode())>63):
         return Error(ExecutionFailure('execution_obligation','Original bounded preparation executor required'))
     raw=files('truss').joinpath('_security_bootstrap','preparation-catalog-cut.sql').read_bytes()
-    if sha256(raw).hexdigest()!=_SOURCE_SHA256:
-        return Error(ExecutionFailure('execution_obligation','Original preparation cut source required'))
     def install(cursor,observed):
         _pin_cursor(cursor)
         prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::text",limit=1)
@@ -112,5 +108,5 @@ def bootstrap_preparation_catalog_cut_in_transaction(host,transaction,*,executor
         if acl!=expected:raise ValueError('Exact private preparation cut enrollment required')
         cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(prior[0][0],),prepare=False)
         if cursor.fetchone()!=(prior[0][0],):raise ValueError('Original preparation installer path restoration required')
-        return PendingPreparationCatalogCutIssuer(installed[0][0],owner_oid,int(executor[0][0]),_SOURCE_SHA256)
+        return PendingPreparationCatalogCutIssuer(installed[0][0],owner_oid,int(executor[0][0]),sha256(raw).hexdigest())
     return host._run_operation(transaction,install)

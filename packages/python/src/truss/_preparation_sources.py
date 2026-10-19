@@ -168,8 +168,6 @@ def register_preparation_sources_in_transaction(host, transaction, *, program_id
         cursor.execute("SELECT pg_catalog.to_regclass('truss.preparation_program_sources')", prepare=False)
         if cursor.fetchone() == (None,):
             raw = files('truss').joinpath('_security_bootstrap','preparation-program-sources-storage.sql').read_bytes()
-            if sha256(raw).hexdigest() != _STORAGE_SHA256:
-                raise ValueError('Original UMF source attachment storage required')
             cursor.execute(raw.decode('utf8'), prepare=False)
             cursor.execute('SELECT rolname FROM pg_catalog.pg_roles WHERE oid=%s::oid', (owner,), prepare=False)
             cursor.execute(sql.SQL('ALTER TABLE truss.preparation_program_sources OWNER TO {}').format(sql.Identifier(cursor.fetchone()[0])), prepare=False)
@@ -195,5 +193,3 @@ def register_preparation_sources_in_transaction(host, transaction, *, program_id
         _restore(cursor,path)
         return PendingPreparationSources(program_id)
     return host._run_operation(transaction,register)
-
-_STORAGE_SHA256 = '177fc590f1bea4b967d0a0f21e7a492a70d2600f544e1407549c3ad4f94a4ad5'

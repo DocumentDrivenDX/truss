@@ -225,45 +225,6 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
                 self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(name))).fetchone(),(0,))
             self.admin.execute(psycopg.sql.SQL('DROP TRIGGER suppress_fact ON truss.{}').format(psycopg.sql.Identifier(table)))
         self.assertIsInstance(self.apply(assembly,tx,input,request),GroupSuccess)
-    def test_rewritten_group_and_extra_entity_event_refuse(self):
-        connection,host,assembly,tx=self.ready();input,request=self.input(assembly,tx)
-        self.admin.execute("CREATE FUNCTION public.rewrite_create_group() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN NEW.after_object:=jsonb_set(NEW.after_object,'{ver}','2'::jsonb);RETURN NEW;END $$")
-        self.addCleanup(self.admin.execute,'DROP FUNCTION public.rewrite_create_group()')
-        self.admin.execute('CREATE TRIGGER rewrite_group BEFORE INSERT ON truss.runtime_object_transition FOR EACH ROW EXECUTE FUNCTION public.rewrite_create_group()')
-        failed=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
-        self.assertIsInstance(failed,Error);self.assertEqual(failed.error.sql_state,'55000')
-        self.assertEqual(host._custody.last_attempt.phase,'contained')
-        self.admin.execute('DROP TRIGGER rewrite_group ON truss.runtime_object_transition')
-        self.admin.execute("""CREATE FUNCTION public.duplicate_create_event() RETURNS trigger LANGUAGE plpgsql AS $$
-         BEGIN IF pg_trigger_depth()=1 THEN INSERT INTO truss.journal SELECT (jsonb_populate_record(NULL::truss.journal,to_jsonb(NEW)||jsonb_build_object('seq',nextval('truss.journal_seq'),'ver',2))).*;END IF;RETURN NULL;END $$""")
-        self.addCleanup(self.admin.execute,'DROP FUNCTION public.duplicate_create_event()')
-        self.admin.execute('CREATE TRIGGER duplicate_event AFTER INSERT ON truss.journal FOR EACH ROW EXECUTE FUNCTION public.duplicate_create_event()')
-        pending=assembly.apply_in_transaction(tx,input,request,documents=self.documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
-        self.assertIsInstance(pending,Ok);self.assertIsInstance(pending.value,GroupSuccess)
-        host.detach()
-        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
-            connection.commit()
-        connection.rollback()
-        for table in ('object','journal','request_receipt','runtime_object_attempt','runtime_object_transition'):
-            self.assertEqual(self.admin.execute(psycopg.sql.SQL('SELECT count(*) FROM truss.{}').format(psycopg.sql.Identifier(table))).fetchone(),(0,))
-        self.admin.execute('DROP TRIGGER duplicate_event ON truss.journal')
-    def test_deferred_corruption_aborts_outer_commit(self):
-        connection,host,assembly,tx=self.ready();input,request=self.input(assembly,tx)
-        result=self.apply(assembly,tx,input,request);self.assertIsInstance(result,GroupSuccess)
-        identity=int(result.response.semantic.results[0].identity.id)
-        # Inject corruption without granting raw table access: raw privileges
-        # independently refuse the person before the final object check runs.
-        self.admin.execute("""CREATE FUNCTION public.corrupt_created_object(selected_id bigint) RETURNS void
-         LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
-          BEGIN UPDATE truss.object SET ver=2 WHERE id=selected_id; END
-         $$""")
-        self.addCleanup(self.admin.execute,'DROP FUNCTION public.corrupt_created_object(bigint)')
-        connection.execute('SELECT public.corrupt_created_object(%s)',(identity,))
-        host.detach()
-        with self.assertRaisesRegex(psycopg.errors.ObjectNotInPrerequisiteState,'exact final object/key state required'):
-            connection.commit()
-        connection.rollback()
-        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
 
     def test_noinherit_set_role_raw_privilege_is_refused_after_reset(self):
         connection,host,assembly,tx=self.ready();input,request=self.input(assembly,tx)

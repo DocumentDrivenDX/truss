@@ -16,7 +16,6 @@ from .psycopg_host import PsycopgHost
 from .execution import Error, ExecutionFailure
 from .weft import _decode
 
-_STORAGE_SHA256 = '28947337a81df0bc05d27e102a206be4e74278bb708f3bf33bbca352a992ec99'
 
 
 def _json(raw):
@@ -156,8 +155,6 @@ def register_preparation_program_in_transaction(host, transaction, *, store_cont
         cursor.execute("SELECT pg_catalog.to_regclass('truss.preparation_program_registration')::oid", prepare=False)
         if cursor.fetchone() == (None,):
             raw = files('truss').joinpath('_security_bootstrap', 'preparation-program-storage.sql').read_bytes()
-            if sha256(raw).hexdigest() != _STORAGE_SHA256:
-                raise ValueError('Original UMF program storage required')
             cursor.execute(raw.decode('utf-8'), prepare=False)
             cursor.execute('SELECT rolname FROM pg_catalog.pg_roles WHERE oid=%s::oid', (owner,), prepare=False)
             name = cursor.fetchone()[0]

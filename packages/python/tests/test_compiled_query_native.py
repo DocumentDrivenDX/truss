@@ -130,10 +130,14 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         optional=query.query_in_transaction(tx,sql='SELECT a.optional_at, a.optional_blob FROM "A" a ORDER BY a."A-label"',document_ids=('adoc',))
         self.assertIsInstance(optional.value,QueryRows)
         self.assertEqual(optional.value.rows,((QueryAbsent(),QueryAbsent()),(None,None),(timestamp,binary)))
-        for sql in ('SELECT a.at FROM "A" a WHERE a.at = :at','SELECT a.blob FROM "A" a ORDER BY a.blob ASC',
-                    'SELECT a.at, COUNT(*) FROM "A" a GROUP BY a.at'):
+        refusals=(
+            ('SELECT a.at FROM "A" a WHERE a.at = :at','invalid_query'),
+            ('SELECT a.blob FROM "A" a ORDER BY a.blob ASC','unsupported_query'),
+            ('SELECT a.at, COUNT(*) FROM "A" a GROUP BY a.at','unsupported_query'),
+        )
+        for sql,expected_code in refusals:
             refused=query.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters={'at':timestamp.text} if ':at' in sql else {})
-            self.assertIsInstance(refused.value,QueryRefused);self.assertEqual(refused.value.code,'unsupported_query')
+            self.assertIsInstance(refused.value,QueryRefused);self.assertEqual(refused.value.code,expected_code)
         self.assertIsNone(connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone()[0])
 
     def test_grouped_count_preserves_string_boolean_bags(self):

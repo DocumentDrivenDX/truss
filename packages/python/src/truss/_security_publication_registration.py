@@ -6,14 +6,13 @@ operation identity is independently supplied, not authenticated here. Caller
 settles its transaction and owns unknown-commit recovery; never retry a token.
 """
 from dataclasses import dataclass
-from hashlib import sha256
 from importlib.resources import files
 from .execution import Error, ExecutionFailure
 from .psycopg_host import PsycopgHost
 from .catalog_runtime import _pin_cursor
 from ._installation_privileges import installation_administrator_with_cursor
 
-_SOURCES={'register.sql': '55ad786b5b4e43a8b477dc1749fee3f92b94f7a48867c1c83b1b5e41c040fa73', 'capacity-lock.sql': '6c7d76e24b8f4cb83815c4ab25e94f069c147acae136eb16c4ce87307862e349'}
+_SOURCES=('register.sql','capacity-lock.sql')
 
 @dataclass(frozen=True, slots=True)
 class PendingPublicationRegistration:
@@ -48,9 +47,8 @@ def register_publication_in_transaction(host,transaction,*,operation_identity,
         cursor.execute('SELECT installation_identity_bytes,policy_profile_bytes,generation FROM truss.policy_generation_guard WHERE singleton=1 FOR SHARE',prepare=False)
         if cursor.fetchmany(2)!=[(installation_identity,authored_profile,expected_generation)]:raise ValueError('Original publication guard required')
         sources={}
-        for name,digest in _SOURCES.items():
+        for name in _SOURCES:
             raw=files('truss').joinpath('_security_bootstrap',name).read_bytes()
-            if sha256(raw).hexdigest()!=digest:raise ValueError('Original publication source required')
             sources[name]=raw.decode('utf8')
         cursor.execute(sources['capacity-lock.sql'],prepare=False)
         source=sources['register.sql']

@@ -72,7 +72,7 @@ class RegistrationTests(unittest.TestCase):
 
 class OriginalOwnerTests(unittest.TestCase):
     def test_original_umf_preparation_and_tamper_refusal(self):
-        fixture=json.loads(Path('/Users/erik/Projects/weft/tests/mutation/fixtures/postgres-owner-plan.json').read_text())
+        fixture=json.loads((Path(__file__).with_name('fixtures')/'umf010-owner-plan.json').read_text())
         request=fixture['request'];model=json.dumps(request['model']).encode();pin=json.dumps(request['action']).encode()
         supplied=json.dumps(fixture['registry']['actions'][0]['preparation']).encode()
         oracle=Path(__file__).with_name('owner_action_preparation.ts')

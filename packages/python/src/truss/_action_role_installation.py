@@ -6,7 +6,6 @@ No current membership/Subject/permit or arbitrary native writer is admitted.
 Complete semantic keys are compared as bytes; digest indexes route only.
 """
 from dataclasses import dataclass
-from hashlib import sha256
 from importlib.resources import files
 import json
 from psycopg import sql
@@ -20,7 +19,6 @@ from ._installation_privileges import installation_administrator_with_cursor
 from ._security_catalog_subject_installation import _text_rows
 
 
-_STORAGE_SHA256 = 'e4b8502c3ca7f6515f9b0491e4d2fc8ff9bbca18c96b4b66e6b86bf5ceaa6bb2'
 
 @dataclass(frozen=True, slots=True)
 class PendingActionRoles:
@@ -94,8 +92,6 @@ def bootstrap_action_roles_in_transaction(host, transaction, *, registration, en
         # Full semantic uniqueness is established by this closed fresh producer;
         # no native mutation API is admitted. Hashes are nonunique routing only.
         source = files('truss').joinpath('_security_bootstrap','action-role-registry-storage.sql').read_bytes()
-        if sha256(source).hexdigest() != _STORAGE_SHA256:
-            raise ValueError('Original UMF action registry storage source required')
         cursor.execute(source.decode('utf8'), prepare=False)
         for table in ('action_family_registration','action_role_binding'):
             cursor.execute(sql.SQL('ALTER TABLE truss.{} OWNER TO {}').format(sql.Identifier(table),sql.Identifier(owners[0][0])), prepare=False)

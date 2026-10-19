@@ -64,7 +64,11 @@ def _runtime_recipe(sources):
                 volatility='i' if 'IMMUTABLE' in attributes else 's' if 'STABLE' in attributes else 'v',
                 parallel='s' if 'PARALLEL SAFE' in attributes else 'r' if 'PARALLEL RESTRICTED' in attributes else 'u',
                 settings=settings or None, body=body[2:-2] if body.startswith('$$') else body[1:-1].replace("''", "'")))
-    if len(result) != 228 or len({r['name'] for r in result}) != 228:
+    declared_names = [name for source in sources for name in
+        re.findall(r'\bCREATE FUNCTION\s+(truss\.\w+)\s*\(', source)]
+    recipe_names = [routine['name'] for routine in result]
+    if (not declared_names or len(set(declared_names)) != len(declared_names)
+            or recipe_names != declared_names):
         raise ValueError('Complete original runtime routine recipe required')
     return result
 

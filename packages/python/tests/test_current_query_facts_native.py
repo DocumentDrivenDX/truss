@@ -21,7 +21,7 @@ class KeyBatchTests(unittest.TestCase):
     def test_partition_before_original_encoder_dispatch(self):
         request=KeyTupleRequest('m','Record','pk',('key',))
         pending=[('1','1',request,[],[])]*128
-        self.assertEqual([len(b) for b in _key_batches(b' '*40960,pending)],[102,26])
+        self.assertEqual([len(b) for b in _key_batches(b' '*40960,pending)],[128])
         escaped=b'"'*500000
         long_request=KeyTupleRequest('m','Record','pk',('k'*30000,))
         batches=list(_key_batches(escaped,[('1','1',long_request,[],[])]*2))

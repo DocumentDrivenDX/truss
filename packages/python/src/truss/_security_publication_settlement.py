@@ -7,14 +7,13 @@ not proved by this adapter. Caller owns commit and unknown-ack reconciliation;
 never automatically retry, delete or reuse the original operation token.
 """
 from dataclasses import dataclass
-from hashlib import sha256
 from importlib.resources import files
 from .execution import Error, ExecutionFailure
 from .psycopg_host import PsycopgHost
 from .catalog_runtime import _pin_cursor
 from ._installation_privileges import installation_administrator_with_cursor
 
-_SOURCES={'settle.sql': '3671425cba05dd5baf1d604f5a775d67fcdefaa1ce7d8e5e67e57d282118fd78'}
+_SOURCES=('settle.sql',)
 
 @dataclass(frozen=True, slots=True)
 class PendingPublicationSettlement:
@@ -49,9 +48,8 @@ def settle_publication_in_transaction(host,transaction,*,operation_identity,
         cursor.execute('SELECT installation_identity_bytes,policy_profile_bytes,generation FROM truss.policy_generation_guard WHERE singleton=1 FOR SHARE',prepare=False)
         if cursor.fetchmany(2)!=[(installation_identity,authored_profile,expected_generation)]:raise ValueError('Original publication guard required')
         sources={}
-        for name,digest in _SOURCES.items():
+        for name in _SOURCES:
             raw=files('truss').joinpath('_security_bootstrap',name).read_bytes()
-            if sha256(raw).hexdigest()!=digest:raise ValueError('Original publication source required')
             sources[name]=raw.decode('utf8')
         source=sources['settle.sql']
         for i in range(1,5):source=source.replace('$'+str(i),'%(p'+str(i)+')s')

@@ -19,7 +19,6 @@ from ._security_relationship_source import PreparedRelationshipSecuritySource,sn
 from ._security_graph_source import snapshot_graph_security_source,acquire_graph_source_catalog_cut
 from ._owner_evidence_json import decode_owner_evidence_json
 
-_DIGEST='0520931a9060692a99282b18d98b6f9becff7c00e735562a2ed7d1b69e83c0b8'
 
 @dataclass(frozen=True,slots=True)
 class PendingGraphSubjects:
@@ -27,14 +26,13 @@ class PendingGraphSubjects:
  owner_oid:int
  profile_bytes:bytes
  bindings:tuple
- source_sha256:str=_DIGEST
+ source_sha256:str
  status:str='pending_commit'
  security_ready:bool=False
 
 
 def _source():
  raw=files('truss').joinpath('_security_bootstrap','graph-subject.sql').read_bytes()
- if sha256(raw).hexdigest()!=_DIGEST:raise ValueError('Original graph Subject issuer source required')
  return raw
 
 
@@ -130,7 +128,7 @@ def bootstrap_graph_subjects_in_transaction(host,transaction,*,source,bindings):
   if reads!=[('true','true')]:raise ValueError('Original graph Subject owner read privileges required')
   locks=_text_rows(cursor,"SELECT (NOT EXISTS(SELECT 1 FROM pg_catalog.unnest(%s::pg_catalog.text[]) table_name WHERE NOT (pg_catalog.has_table_privilege(%s::pg_catalog.oid,table_name,'MAINTAIN') OR pg_catalog.has_table_privilege(%s::pg_catalog.oid,table_name,'UPDATE') OR pg_catalog.has_table_privilege(%s::pg_catalog.oid,table_name,'DELETE') OR pg_catalog.has_table_privilege(%s::pg_catalog.oid,table_name,'TRUNCATE'))))::pg_catalog.text",(dependencies,owner,owner,owner,owner),1)
   if locks!=[('true',)]:raise ValueError('Original graph Subject owner SHARE privileges required')
-  subjects=PendingGraphSubjects(target[0][0],owner,profile,tuple(sorted(principals)))
+  subjects=PendingGraphSubjects(target[0][0],owner,profile,tuple(sorted(principals)),sha256(raw).hexdigest())
   verify_graph_subject_issuer_with_cursor(cursor,subjects)
   if _text_rows(cursor,'SELECT role_oid::pg_catalog.text,staff_key::pg_catalog.text FROM ONLY truss.catalog_subject_map ORDER BY role_oid',limit=256)!=[(str(oid),key) for oid,key in subjects.bindings]:raise ValueError('Exact registered graph Subject map readback required')
   if capture_accepted_catalog(cursor,source.original_request,existing_source_cut=True)!=source.accepted_catalog_assessment:raise ValueError('Graph Subject source changed during registration')
@@ -144,7 +142,7 @@ def snapshot_graph_subjects(subjects):
  if (type(subjects) is not PendingGraphSubjects or type(subjects.installation_id) is not str or not 1<=len(subjects.installation_id.encode())<=1024
      or type(subjects.owner_oid) is not int or not 1<=subjects.owner_oid<=4294967295
      or type(subjects.profile_bytes) is not bytes or not 1<=len(subjects.profile_bytes)<=65536
-     or subjects.source_sha256!=_DIGEST or subjects.status!='pending_commit' or subjects.security_ready is not False
+     or subjects.source_sha256!=sha256(_source()).hexdigest() or subjects.status!='pending_commit' or subjects.security_ready is not False
      or type(subjects.bindings) is not tuple or not 1<=len(subjects.bindings)<=256
      or any(type(b) is not tuple or len(b)!=2 or type(b[0]) is not int or not 1<=b[0]<=4294967295 or b[0]==subjects.owner_oid or type(b[1]) is not str or not 1<=len(b[1].encode())<=4096 or '\0' in b[1] for b in subjects.bindings)
      or tuple(sorted(subjects.bindings))!=subjects.bindings or len({b[0] for b in subjects.bindings})!=len(subjects.bindings)):

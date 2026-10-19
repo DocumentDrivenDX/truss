@@ -47,7 +47,7 @@ class ActionRoleInstallationNativeTests(base.PublicCreateGroupTests):
         store = checked(observe_action_store_in_transaction(host,tx,registration_key=b'original-role-store'))
         self.assertFalse(store.authority)
         host.detach(); self.admin.commit()
-        fixture = json.loads(Path('/Users/erik/Projects/weft/tests/mutation/fixtures/postgres-owner-plan.json').read_text())
+        fixture = json.loads((Path(__file__).with_name('fixtures')/'umf010-owner-plan.json').read_text())
         request = fixture['request']
         # Original owner admits a two-role OR variant; only the second role
         # will be held in the positive schedule, distinguishing OR from AND.

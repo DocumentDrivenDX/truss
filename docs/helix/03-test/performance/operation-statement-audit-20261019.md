@@ -500,3 +500,27 @@ and attempt settlement; separately supported legacy paths retain their own
 validators. This narrow writer check is required by the existing early-flush
 revocation behavior, rather than a second proof that the engine executed its
 mutation correctly.
+
+
+### Qualification corrections and retired proof oracles
+
+The current release uses the source-only acceptance protocol. Tests no longer
+submit or mutate retired inspector declarations. Opaque document extensions
+remain original retained content, with no claim of interpreted enforcement.
+Corrupt archive decoding is checked in trusted Python and retains transaction
+recovery; it need not produce an error from a removed native replay.
+
+The administrator-created transition rewrite, extra-journal injection and
+post-effect object corruption oracles in `test_group_create_native` are retired
+under ADR-008. They bypass ordinary caller ACLs and demand a second proof of
+private engine output. Actual missing-effect counts, version conflicts, caller
+ACL denial, later writer revocation, SQL error containment and rollback remain
+covered. No write protection is added against an administrator replacing the
+trusted engine itself.
+
+Bootstrap source identity is derived from the actual packaged SQL bytes where
+it is retained as issuance metadata. Fixed duplicate self-hashes broken solely
+by license comments are removed; supplied original inputs and installed
+function bodies, owners and ACLs retain their existing checks. The routine
+recipe must cover the complete current canonical declarations rather than a
+permanent historical count.

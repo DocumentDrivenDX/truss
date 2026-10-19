@@ -6,7 +6,6 @@ mutation callback are premises. Native guard/claim/source parity and complete
 participant coverage remain separate admission. Caller settles the transaction.
 """
 from dataclasses import dataclass
-from hashlib import sha256
 from importlib.resources import files
 import inspect
 from .execution import Error, ExecutionFailure
@@ -14,7 +13,6 @@ from .psycopg_host import PsycopgHost
 from .catalog_runtime import _pin_cursor
 from ._installation_privileges import installation_administrator_with_cursor
 
-_ADVANCE_SHA256='d1772dd74faf7a52fd3a86fb7dec0889223a5c2e970c396d9a6f78bdb64c18a6'
 
 @dataclass(frozen=True, slots=True)
 class PendingAuthorityGeneration:
@@ -54,7 +52,6 @@ def change_authority_in_transaction(host, transaction, *, installation_identity,
         cursor.execute('SELECT 1 FROM truss.policy_publication_claim WHERE NOT settled LIMIT 1',prepare=False)
         if cursor.fetchall():raise ValueError('Original publication operations remain unsettled')
         raw=files('truss').joinpath('_security_bootstrap','advance.sql').read_bytes()
-        if sha256(raw).hexdigest()!=_ADVANCE_SHA256:raise ValueError('Original authority advance source required')
         source=raw.decode('utf8')
         for i in range(1,4):source=source.replace('$'+str(i),'%(p'+str(i)+')s')
         result=action(cursor)

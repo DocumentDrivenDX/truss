@@ -19,7 +19,6 @@ from ._security_catalog_assessment import capture_accepted_catalog
 from ._psycopg_epoch_cut import _EpochComparison
 from ._owner_evidence_json import decode_owner_evidence_json
 
-_DIGEST='dd3ed9553c33a0a72274f24caf9f37ed5af1162832aaa25a4cc70929d3203d26'
 _TABLES=('source_epoch_current','source_epoch_registry','installation_archive','policy_generation_guard')
 
 @dataclass(frozen=True,slots=True)
@@ -41,7 +40,6 @@ class RelationshipEpochReadContext:
 
 def _source():
  raw=files('truss').joinpath('_security_bootstrap','graph-epoch-read-cut.sql').read_bytes()
- if sha256(raw).hexdigest()!=_DIGEST:raise ValueError('Original graph epoch cut source required')
  return raw
 
 
@@ -91,7 +89,7 @@ def bootstrap_relationship_epoch_read_cut_in_transaction(host,transaction,*,exec
   cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.acquire_graph_epoch_read_cut() TO {}').format(sql.Identifier(executor_role)),prepare=False)
   cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}').format(sql.Identifier(executor_role)),prepare=False)
   for name in _TABLES:cursor.execute(sql.SQL('GRANT SELECT ON {} TO {}').format(sql.Identifier('truss',name),sql.Identifier(executor_role)),prepare=False)
-  result=PendingRelationshipEpochReadCut(target[0][0],actor[0],int(caller[0][0]),_DIGEST)
+  result=PendingRelationshipEpochReadCut(target[0][0],actor[0],int(caller[0][0]),sha256(raw).hexdigest())
   _verify_issuer(cursor,result)
   _verify_private_permissions(cursor,result.caller_oid)
   cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(prior[0][0],),prepare=False)
@@ -108,7 +106,7 @@ def snapshot_relationship_epoch_read_context(context):
      or type(comparison.evidence) is not bytes or comparison.evidence!=source.accepted_catalog_assessment
      or type(issuer.installation_id) is not str or issuer.installation_id!=comparison.installation
      or any(type(v) is not int or not 1<=v<=4294967295 for v in (issuer.owner_oid,issuer.caller_oid)) or issuer.owner_oid==issuer.caller_oid
-     or issuer.source_sha256!=_DIGEST or issuer.status!='pending_commit' or issuer.security_ready is not False
+     or issuer.source_sha256!=sha256(_source()).hexdigest() or issuer.status!='pending_commit' or issuer.security_ready is not False
      or type(context.subject_source) is not bytes or not 1<=len(context.subject_source)<=65536
      or type(source.native_guard) is not tuple or len(source.native_guard)!=3
      or any(type(v) is not bytes or not 1<=len(v)<=32768 for v in source.native_guard[:2])

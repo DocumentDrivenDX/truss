@@ -249,6 +249,8 @@ class AdoptionCancellationTests(custody.NativeBoundaryFixture,unittest.TestCase)
         self.assertIsNotNone(self.boundary._operation)
         self.assertIsNotNone(self.boundary._operation_ledger)
         self.assertFalse(self.executor._original_custody(tx).usable)
+        self.assertIsNotNone(r._cancellations[-1]._channel)
+        self.assertEqual(r._cancellations[-1]._channel.fileno(),-1)
         self.assertEqual(r.execute(tx,s,{'value':'blocked'}).error.code,'transaction_unusable')
         self.assertIs(self.boundary.last_call,before)
 

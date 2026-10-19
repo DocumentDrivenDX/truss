@@ -18,7 +18,6 @@ from ._security_catalog_source_installation import _catalog_mapping_snapshot
 from ._security_catalog_assessment import capture_accepted_catalog
 from ._security_catalog_subject_helpers import verify_catalog_subject_helpers_with_cursor
 
-_SOURCE_SHA256='2b0d63e005889278bd103696bf4fcd8db15112a5733dfba20f809309cc01ebb8'
 
 @dataclass(frozen=True,slots=True)
 class PendingCatalogSubjects:
@@ -62,7 +61,6 @@ def bootstrap_catalog_subjects_in_transaction(host,transaction,*,mapping,binding
   bindings=tuple((role,key) for role,key in bindings)
   type_id,prop_id=_staff_recipe(mapping)
   source=files('truss').joinpath('_security_bootstrap','catalog-subject.sql').read_bytes()
-  if sha256(source).hexdigest()!=_SOURCE_SHA256:raise ValueError('Original Subject helper source required')
  except (ValueError,TypeError,KeyError,UnicodeError):return Error(ExecutionFailure('execution_obligation','Original bounded named Subject installation required'))
  def install(cursor,observed):
   _pin_cursor(cursor);manifest,digest,_=_release()
@@ -111,14 +109,14 @@ def bootstrap_catalog_subjects_in_transaction(host,transaction,*,mapping,binding
   if capture_accepted_catalog(cursor,mapping.original_request)!=mapping.accepted_catalog_assessment:raise ValueError('Subject accepted catalog changed during installation')
   cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(prior[0][0],),prepare=False)
   if cursor.fetchmany(2)!=[(prior[0][0],)]:raise ValueError('Original Subject installation path restoration required')
-  return PendingCatalogSubjects(identity,_SOURCE_SHA256,tuple(sorted(principals)))
+  return PendingCatalogSubjects(identity,sha256(source).hexdigest(),tuple(sorted(principals)))
  return host._run_operation(transaction,install)
 
 
 def snapshot_catalog_subjects(subjects):
  """Bounded original comparison carriers; not an authenticated issuer token."""
  if (type(subjects) is not PendingCatalogSubjects or type(subjects.installation_id) is not str
-     or not 1<=len(subjects.installation_id.encode())<=1024 or type(subjects.source_sha256) is not str or type(subjects.status) is not str or subjects.source_sha256!=_SOURCE_SHA256
+     or not 1<=len(subjects.installation_id.encode())<=1024 or type(subjects.source_sha256) is not str or type(subjects.status) is not str
      or subjects.status!='pending_commit' or subjects.security_ready is not False
      or type(subjects.bindings) is not tuple or not 1<=len(subjects.bindings)<=256
      or any(type(b) is not tuple or len(b)!=2 or type(b[0]) is not int or not 1<=b[0]<=4294967295 or type(b[1]) is not str or not b[1] or '\0' in b[1] or len(b[1].encode())>4096 for b in subjects.bindings)
@@ -156,7 +154,6 @@ def verify_role_catalog_cut_issuer_with_cursor(cursor,*,owner_oid,caller_oid):
  """Exact original native issuer comparison; caller must hold its DDL/source cut."""
  if any(type(oid) is not int or not 1<=oid<=4294967295 for oid in (owner_oid,caller_oid)) or owner_oid==caller_oid:raise ValueError('Exact distinct role cut issuer identities required')
  source=files('truss').joinpath('_security_bootstrap','registered-role-catalog-cut.sql').read_bytes()
- if sha256(source).hexdigest()!='91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb':raise ValueError('Original role cut issuer source required')
  body=source.decode().split('AS $$',1)[1].split('$$;',1)[0]
  rows=_text_rows(cursor,"SELECT p.proowner::pg_catalog.text,l.lanname::pg_catalog.text,p.prokind::pg_catalog.text,p.pronargs::pg_catalog.text,p.proargtypes::pg_catalog.text,p.prorettype::pg_catalog.text,p.proretset::pg_catalog.text,p.proisstrict::pg_catalog.text,p.prosecdef::pg_catalog.text,p.provolatile::pg_catalog.text,p.proparallel::pg_catalog.text,p.proleakproof::pg_catalog.text,p.prosupport::pg_catalog.oid::pg_catalog.text,pg_catalog.to_jsonb(p.proconfig)::pg_catalog.text,p.prosrc,(p.prosqlbody IS NULL)::pg_catalog.text FROM pg_catalog.pg_proc p JOIN pg_catalog.pg_namespace n ON n.oid OPERATOR(pg_catalog.=) p.pronamespace JOIN pg_catalog.pg_language l ON l.oid OPERATOR(pg_catalog.=) p.prolang WHERE n.nspname OPERATOR(pg_catalog.=) 'truss' AND p.proname OPERATOR(pg_catalog.=) 'acquire_registered_role_catalog_cut' AND p.pronargs OPERATOR(pg_catalog.=) 0",limit=1)
  if rows!=[(str(owner_oid),'plpgsql','f','0','','2278','false','false','true','v','u','false','0','["search_path=pg_catalog, pg_temp"]',body,'true')]:raise ValueError('Exact original role cut issuer definition required')
@@ -194,7 +191,6 @@ def bootstrap_role_catalog_cut_issuer_in_transaction(host,transaction,*,executor
  executor_role=str(executor_role)
  source=files('truss').joinpath('_security_bootstrap','registered-role-catalog-cut.sql').read_bytes()
  source_sha=sha256(source).hexdigest()
- if source_sha!='91b4225ea29bee4a4629d745d5325fcb52afc7ea10cda19891d25be5aa1a91fb':return Error(ExecutionFailure('execution_obligation','Original role cut issuer source required'))
  def install(cursor,observed):
   _pin_cursor(cursor)
   prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",limit=1)
@@ -228,8 +224,6 @@ def verify_owned_action_role_cut_with_cursor(cursor,*,issuer_owner_oid,action_ow
  if any(type(oid) is not int or not 1<=oid<=4294967295 for oid in (issuer_owner_oid,action_owner_oid)) or issuer_owner_oid==action_owner_oid:
   raise ValueError('Distinct original action cut owners required')
  source=files('truss').joinpath('_security_bootstrap','owned-action-role-catalog-cut.sql').read_bytes()
- if sha256(source).hexdigest()!='9c4019763e9c4a741d678e7cbeb6c3c570cdf71f8b5ee1058061fe7531b4c4a4':
-  raise ValueError('Original owned action role cut source required')
  body=source.decode().split('AS $$',1)[1].split('$$;',1)[0]
  rows=_text_rows(cursor,"""SELECT p.proowner::text,l.lanname::text,p.prokind::text,p.pronargs::text,
   p.proargtypes::text,p.prorettype::text,p.proretset::text,p.proisstrict::text,p.prosecdef::text,
@@ -263,8 +257,6 @@ def bootstrap_owned_action_role_cut_in_transaction(host,transaction):
  if type(host) is not PsycopgHost:return Error(ExecutionFailure('execution_obligation','Original action cut host required'))
  source=files('truss').joinpath('_security_bootstrap','owned-action-role-catalog-cut.sql').read_bytes()
  source_sha=sha256(source).hexdigest()
- if source_sha!='9c4019763e9c4a741d678e7cbeb6c3c570cdf71f8b5ee1058061fe7531b4c4a4':
-  return Error(ExecutionFailure('execution_obligation','Original action cut source required'))
  def install(cursor,observed):
   _pin_cursor(cursor)
   prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')",limit=1)
