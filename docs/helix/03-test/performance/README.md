@@ -5,7 +5,7 @@ ddx:
   activity: test
   status: draft
   owner: Erik LaBianca
-  updated: 2026-10-18
+  updated: 2026-10-19
   links:
     - id: truss.prd
       kind: informed_by
@@ -15,7 +15,27 @@ ddx:
 
 # Practical functionality and performance
 
-## 2026-10-18: bounded journal successor under qualification
+## 2026-10-19: shared batch history and graph qualification
+
+C82 remained below the required capacity: wide updates timed out in history
+formatting, macOS index-heavy updates timed out, and its 1,000-type create
+failed the native gate. Completed evidence is retained in the
+[hosted checkpoint](results/2026-10-19-c82-hosted-checkpoint.json). Outstanding
+jobs for the failed C80/C82 candidates were cancelled; missing workloads are
+incomplete evidence, not passes.
+
+The combined successor expands history property order and definition pins once
+per distinct revision/type in each bounded journal set, then formats both full
+images together. Pure unique-type create batches omit caches that cannot be
+read again; create key codecs reuse the already bound schema metadata.
+Prepared operation arrays are extracted once. Graph settlement checks entirely
+unbounded active relationships as a set, retaining ordered NOWAIT live-object
+locks, complete endpoint reader dependencies before and after marker refresh,
+and exact active-incident marker readback. Any bounded relationship retains the
+existing object validator. These are structural changes, not timing claims.
+The final native gates, real schemas and full matrix remain required.
+
+## 2026-10-18: bounded journal sets
 
 The C80 hosted run exposed wide-update timeouts and native capacity failures;
 it is not a release qualification. The successor retains the complete original

@@ -89,7 +89,7 @@ REVOKE ALL ON FUNCTION truss.runtime_owned_application_values(int,int,jsonb,json
 
 CREATE FUNCTION truss.runtime_owned_prepare_application(input jsonb,scope jsonb,application_prepared jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE input_operations jsonb;
+DECLARE input_operations jsonb;application_operations jsonb;
  nodes jsonb:='{}';edges jsonb:='{}';aliases jsonb:='{}';plans jsonb[]:='{}';
  node_order text[]:='{}';boundary_order text[]:='{}';entry record;selected text;source_ref text;target_ref text;root_ref text;
  operation jsonb;before_nodes jsonb;before_edges jsonb;state jsonb;prior jsonb;image jsonb;values_image jsonb;ownership jsonb;
@@ -97,7 +97,7 @@ DECLARE input_operations jsonb;
  index int:=0;before_count int;descendants text[];descendant text;projection jsonb;deleted jsonb;local_owned jsonb;local_independent jsonb;
  unset_name text;authored jsonb;retained jsonb;order_key jsonb;selected_source_type int;selected_target_type int;plan jsonb;outgoing bigint;incoming bigint;
  retained_nodes text[];retained_edges text[];changed_nodes text[];changed_edges text[];plans_bytes bigint:=2;current_actor oid;resolved_creates jsonb:='{}';
- rootless_creates boolean;created_states jsonb[]:='{}';
+ rootless_creates boolean;cache_create_types boolean:=true;created_states jsonb[]:='{}';
  edge_creates boolean;created_edge_states jsonb[]:='{}';initial_edge_count int;
  value_updates boolean;updated_states jsonb[]:='{}';updated_references text[]:='{}';
  scope_node_states jsonb[]:='{}';scope_edge_states jsonb[]:='{}';
@@ -105,6 +105,7 @@ DECLARE input_operations jsonb;
 BEGIN
  current_actor:=truss.runtime_person(false);
  input_operations:=input->'operations';
+ application_operations:=application_prepared->'operations';
  IF jsonb_typeof(input_operations) IS DISTINCT FROM 'array' OR jsonb_array_length(input_operations) NOT BETWEEN 1 AND 1024
   OR jsonb_typeof(scope->'nodes') IS DISTINCT FROM 'object' OR jsonb_typeof(scope->'edges') IS DISTINCT FROM 'object'
   OR octet_length(convert_to(scope::text,'UTF8'))>(CASE WHEN scope->'independentEndpointScope'='true'::jsonb THEN 16777216 ELSE 4194304 END) THEN
@@ -116,6 +117,13 @@ BEGIN
    SELECT 1 FROM jsonb_array_elements(input_operations) o
    WHERE o.value->>'operation' IS DISTINCT FROM 'create_object'
     OR o.value->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb),false);
+ -- Unique create pins cannot hit the local type cache. Keep resolution and
+ -- authorization in operation order, but do not repeatedly copy a growing
+ -- JSONB map whose entries will never be read.
+ IF rootless_creates THEN
+  SELECT count(DISTINCT o.value->>'typeDefinitionPin')<jsonb_array_length(input_operations)
+   INTO cache_create_types FROM jsonb_array_elements(input_operations) o;
+ END IF;
  -- Pure edge creates cannot read an earlier newly-created edge. Buffer them
  -- and build the complete final map once, avoiding growing JSONB copies/counts.
  edge_creates:=NOT EXISTS(SELECT 1 FROM jsonb_array_elements(input_operations) o
@@ -192,7 +200,7 @@ BEGIN
     -- Only alias resolution reads earlier operations; stored/create targets do not.
     selected_type:=truss.runtime_owned_operation_type_qualified(operation,
      CASE WHEN operation->'target'->>'state'='alias' THEN input_operations END,index,current_actor);
-    IF operation->>'operation'='create_object' THEN
+    IF operation->>'operation'='create_object' AND cache_create_types THEN
      resolved_creates:=resolved_creates||jsonb_build_object(operation->>'typeDefinitionPin',to_jsonb(selected_type));
     END IF;
    END IF;
@@ -203,7 +211,7 @@ BEGIN
     IF cardinality(node_order)>=1024 THEN RAISE EXCEPTION 'bounded complete group objects required' USING ERRCODE='54000';END IF;
     selected:='create:'||index;node_order:=array_append(node_order,selected);
     IF application_prepared IS NOT NULL THEN
-     values_image:=truss.runtime_owned_application_values(selected_type.type_id,index,application_prepared->'operations'->index,NULL,NULL);
+     values_image:=truss.runtime_owned_application_values(selected_type.type_id,index,application_operations->index,NULL,NULL);
     ELSE values_image:=truss.owned_object_values(selected_type.type_id,operation,NULL,NULL);END IF;
     state:=jsonb_build_object('identity',jsonb_build_object('id',NULL,'typeId',selected_type.type_id::text,
      'definitionPin',operation->>'typeDefinitionPin','owner',jsonb_build_object('documentId',selected_type.document_id,'moduleId',selected_type.module)),
@@ -241,7 +249,7 @@ BEGIN
     IF operation->>'operation'='update_object' THEN
      IF operation-ARRAY['operation','target','set','unset','expectedVersion','ownershipChange']<>'{}'::jsonb THEN RAISE EXCEPTION 'closed object update required' USING ERRCODE='22023';END IF;
      IF application_prepared IS NOT NULL AND state->'image'->>'rev'=revision::text THEN
-      values_image:=truss.runtime_owned_application_values(selected_type.type_id,index,application_prepared->'operations'->index,
+      values_image:=truss.runtime_owned_application_values(selected_type.type_id,index,application_operations->index,
        state->'image'->'props',nullif(state->'image'->'retained','null'::jsonb));
      ELSE values_image:=truss.runtime_owned_object_value_delta(selected_type.type_id,operation,state->'image'->'props',nullif(state->'image'->'retained','null'::jsonb),(state->'image'->>'id')::bigint);END IF;
      state:=jsonb_set(state,'{image,props}',values_image->'props');
@@ -1132,12 +1140,22 @@ DECLARE installation truss.catalog_runtime_installation%ROWTYPE;candidate jsonb;
  reference text;unchanged boolean;
  namespaces jsonb:='{}';namespace_key text;namespace_hex text;codecs jsonb:='{}';codec jsonb;codec_bytes bigint:=2;
  route_items jsonb[]:='{}';lock_route_items jsonb[]:='{}';route_bytes bigint:=2;lock_route_bytes bigint:=2;
+ cache_key_metadata boolean:=true;
 BEGIN
  IF inventory->>'profile' IS DISTINCT FROM 'truss-owned-group-plan/0.1'
   OR (inventory->>'catalogRevision')::int IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1)
   OR (SELECT value FROM truss.setting WHERE key='key_reuse') IS DISTINCT FROM '"forbid"'::jsonb THEN
   RAISE EXCEPTION 'original current forbid-reuse inventory required' USING ERRCODE='55000';END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
+ -- A pure create batch with one object per type cannot revisit a key codec
+ -- or namespace. Avoid copying growing JSONB caches that have no later reader.
+ IF inventory->'initialScope'->'nodes'='{}'::jsonb AND NOT EXISTS(
+  SELECT 1 FROM jsonb_array_elements(inventory->'operations') p
+  WHERE p.value->'operation'->>'operation' IS DISTINCT FROM 'create_object'
+   OR p.value->'operation'->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb) THEN
+  SELECT count(DISTINCT p.value->'operation'->>'typeDefinitionPin')<jsonb_array_length(inventory->'operations')
+   INTO cache_key_metadata FROM jsonb_array_elements(inventory->'operations') p;
+ END IF;
  FOR candidate IN SELECT value FROM (
   SELECT -1 ordinal,n.key reference,jsonb_build_object('phase','initial','reference','stored:'||n.key,'image',n.value) value
    FROM jsonb_each(inventory->'initialScope'->'nodes') n
@@ -1156,7 +1174,7 @@ BEGIN
    codec:=codecs->namespace_key;
    IF codec IS NULL THEN
     codec:=truss.runtime_owned_key_codec_metadata(definition.type_id,definition.key_num);
-    IF codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+octet_length(namespace_key)+8<=4194304 THEN
+    IF cache_key_metadata AND codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+octet_length(namespace_key)+8<=4194304 THEN
      codecs:=codecs||jsonb_build_object(namespace_key,codec);
      codec_bytes:=codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+octet_length(namespace_key)+8;
     END IF;
@@ -1172,7 +1190,9 @@ BEGIN
     namespace:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,
      'sourceEpoch',installation.source_epoch::text,'typeId',definition.type_id::text,'keyNumber',definition.key_num::text,
      'definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
-    namespaces:=namespaces||jsonb_build_object(namespace_key,encode(namespace,'hex'));
+    IF cache_key_metadata THEN
+     namespaces:=namespaces||jsonb_build_object(namespace_key,encode(namespace,'hex'));
+    END IF;
    ELSE namespace:=decode(namespace_hex,'hex');END IF;
    transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');
    entry:=jsonb_build_object('phase',candidate->>'phase','reference',candidate->>'reference',

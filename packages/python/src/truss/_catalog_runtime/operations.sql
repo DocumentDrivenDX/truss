@@ -546,6 +546,110 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_history_record_in_metadata(jsonb,jsonb,jsonb) FROM PUBLIC;
 
+-- Compile complete before/after history records for a bounded object batch.
+-- The caller supplies the same metadata dictionary already used for event
+-- construction; property order and pins are expanded once per catalog key,
+-- then shared across both images for every operation in the batch.
+CREATE FUNCTION truss.runtime_owned_history_records_in_metadata(object_batch jsonb,metadata_dictionary jsonb) RETURNS jsonb
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
+DECLARE projection jsonb;has_missing_pin boolean;has_invalid_metadata boolean;
+BEGIN
+ IF jsonb_typeof(object_batch) IS DISTINCT FROM 'array'
+  OR jsonb_typeof(metadata_dictionary) IS DISTINCT FROM 'object' THEN
+  RAISE EXCEPTION 'original batch history metadata required' USING ERRCODE='55000';END IF;
+ IF jsonb_array_length(object_batch)>64 THEN
+  RAISE EXCEPTION 'bounded batch history projection required' USING ERRCODE='54000';END IF;
+ IF EXISTS (
+  SELECT 1 FROM jsonb_array_elements(object_batch) o
+  CROSS JOIN LATERAL (VALUES(o.value->'before'),(o.value->'after')) images(image)
+  CROSS JOIN LATERAL (SELECT metadata_dictionary->
+   jsonb_build_array((images.image->>'rev')::int,(images.image->>'type_id')::int)::text metadata) m
+  WHERE o.value->'changed'='true'::jsonb AND
+   (m.metadata->>'typeId' IS DISTINCT FROM images.image->>'type_id'
+    OR m.metadata->>'revision' IS DISTINCT FROM images.image->>'rev'
+    OR jsonb_typeof(m.metadata->'typePin') IS DISTINCT FROM 'string'
+    OR jsonb_typeof(m.metadata->'propertyOrder') IS DISTINCT FROM 'array'
+    OR jsonb_typeof(m.metadata->'propertyPins') IS DISTINCT FROM 'object')) THEN
+  RAISE EXCEPTION 'original compiled history metadata required' USING ERRCODE='55000';END IF;
+ WITH batch AS MATERIALIZED (
+  SELECT (o.value->>'index')::int operation_index,o.value->'identity' identity,
+   o.value->'before' before_image,o.value->'after' after_image
+  FROM jsonb_array_elements(object_batch) o
+  WHERE o.value->'changed'='true'::jsonb),
+ image_rows AS MATERIALIZED (
+  SELECT operation_index,identity,'before'::text image_side,before_image image FROM batch
+  UNION ALL
+  SELECT operation_index,identity,'after'::text image_side,after_image image FROM batch),
+ image_metadata AS MATERIALIZED (
+  SELECT i.*,metadata_dictionary->jsonb_build_array((image->>'rev')::int,(image->>'type_id')::int)::text metadata,
+   (image->>'rev')::int revision,(image->>'type_id')::int type_id
+  FROM image_rows i),
+ metadata_basis AS MATERIALIZED (
+  SELECT DISTINCT revision,type_id FROM image_metadata),
+ property_order AS MATERIALIZED (
+  SELECT b.revision,b.type_id,m.metadata->'typePin' type_pin,
+   entry.value#>>'{}' property_id,entry.ordinality,
+   m.metadata->'propertyPins'->(entry.value#>>'{}') definition_pin,
+   (m.metadata->'propertyPins') ? (entry.value#>>'{}') pin_present
+  FROM metadata_basis b CROSS JOIN LATERAL (SELECT metadata_dictionary->
+    jsonb_build_array(b.revision,b.type_id)::text metadata) m CROSS JOIN LATERAL
+   jsonb_array_elements(m.metadata->'propertyOrder') WITH ORDINALITY entry(value,ordinality)
+ ),
+ property_values AS MATERIALIZED (
+  SELECT i.operation_index,i.image_side,p.property_id,p.ordinality,p.definition_pin,p.pin_present,cell.value
+  FROM image_metadata i CROSS JOIN LATERAL
+   jsonb_each(CASE WHEN jsonb_typeof(i.image->'props')='object' THEN i.image->'props' ELSE '{}'::jsonb END) cell
+  JOIN property_order p ON p.revision=i.revision AND p.type_id=i.type_id AND p.property_id=cell.key),
+ property_arrays AS MATERIALIZED (
+  SELECT i.operation_index,i.image_side,
+   coalesce(jsonb_agg(jsonb_build_object('propertyId',p.property_id,
+    'definitionPin',p.definition_pin,'value',p.value)
+    ORDER BY p.ordinality) FILTER (WHERE p.property_id IS NOT NULL),'[]'::jsonb) properties,
+   coalesce(bool_or(NOT p.pin_present) FILTER (WHERE p.property_id IS NOT NULL),false) missing_pin
+  FROM image_metadata i LEFT JOIN property_values p USING(operation_index,image_side)
+  GROUP BY i.operation_index,i.image_side),
+ image_properties AS MATERIALIZED (
+  SELECT i.*,a.properties,a.missing_pin
+  FROM image_metadata i JOIN property_arrays a USING(operation_index,image_side)),
+ checked AS MATERIALIZED (
+  SELECT *,
+   (metadata->>'typeId' IS DISTINCT FROM type_id::text
+    OR metadata->>'revision' IS DISTINCT FROM revision::text
+    OR jsonb_typeof(metadata->'typePin') IS DISTINCT FROM 'string'
+    OR jsonb_typeof(metadata->'propertyOrder') IS DISTINCT FROM 'array'
+    OR jsonb_typeof(metadata->'propertyPins') IS DISTINCT FROM 'object') metadata_invalid
+  FROM image_properties),
+ records AS MATERIALIZED (
+  SELECT operation_index,image_side,missing_pin,metadata_invalid,
+   jsonb_build_object('interfaceVersion','truss-history-record/0.1.0','kind','object',
+    'identity',jsonb_set(identity,'{definitionPin}',metadata->'typePin'),
+    'recordVersion',image->>'ver','catalogRevision',image->>'rev',
+    'createdAt',to_char((image->>'created_at')::timestamptz AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
+    'updatedAt',to_char((image->>'updated_at')::timestamptz AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),
+    'properties',properties,
+    'retained',(SELECT coalesce(jsonb_agg(jsonb_build_object('name',key,'value',value) ORDER BY key COLLATE "C"),'[]'::jsonb)
+     FROM jsonb_each(coalesce(nullif(image->'retained','null'::jsonb),'{}'::jsonb))),
+    'ownership',truss.runtime_object_ownership_at(image)) record_image
+  FROM checked),
+ pairs AS MATERIALIZED (
+  SELECT operation_index,
+   jsonb_object_agg(image_side,record_image) FILTER (WHERE image_side IN ('before','after')) images,
+   count(*) image_count,
+   coalesce(bool_or(missing_pin),false) missing_pin,
+   coalesce(bool_or(metadata_invalid IS TRUE),false) metadata_invalid
+  FROM records GROUP BY operation_index)
+ SELECT coalesce(jsonb_object_agg(operation_index::text,images),'{}'::jsonb),
+  coalesce(bool_or(missing_pin),false),coalesce(bool_or(metadata_invalid OR image_count<>2),false)
+ INTO projection,has_missing_pin,has_invalid_metadata FROM pairs;
+ IF has_invalid_metadata THEN
+  RAISE EXCEPTION 'original compiled history metadata required' USING ERRCODE='55000';END IF;
+ IF has_missing_pin THEN
+  RAISE EXCEPTION 'complete original history property pins required' USING ERRCODE='55000';END IF;
+ RETURN coalesce(projection,'{}'::jsonb);
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_owned_history_records_in_metadata(jsonb,jsonb) FROM PUBLIC;
+
 
 CREATE FUNCTION truss.runtime_object_update_keys(object_id bigint,selected_type int,desired_props jsonb,original_keys bytea,attempt_id uuid,operation_index int) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' AS $$
@@ -1655,21 +1759,74 @@ REVOKE ALL ON FUNCTION truss.runtime_graph_validate(boolean) FROM PUBLIC;
 -- including every old/new edge endpoint. Catalog-wide evolution remains global.
 CREATE FUNCTION truss.runtime_owned_graph_validate_attempt(selected_attempt uuid,refresh_markers boolean) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE affected record;current_actor oid;
+DECLARE affected record;current_actor oid;affected_members jsonb;owner record;phase int;
 BEGIN
  current_actor:=truss.runtime_person(false);
  IF refresh_markers IS NULL OR NOT EXISTS(SELECT 1 FROM truss.runtime_object_attempt a
   WHERE a.id=selected_attempt AND a.writer_xid=pg_current_xact_id() AND a.actor_oid=current_actor) THEN
   RAISE EXCEPTION 'current original graph attempt required' USING ERRCODE='55000';END IF;
- FOR affected IN
-  SELECT DISTINCT object_id,type_id FROM (
+ SELECT coalesce(jsonb_agg(to_jsonb(m) ORDER BY object_id,type_id),'[]'::jsonb)
+ INTO affected_members FROM (SELECT DISTINCT object_id,type_id FROM (
    SELECT object_id,type_id FROM truss.runtime_object_transition WHERE attempt_id=selected_attempt
     AND (before_object-ARRAY['props','retained','ver','created_at','updated_at'])
       IS DISTINCT FROM (after_object-ARRAY['props','retained','ver','created_at','updated_at'])
    UNION ALL SELECT (i.value->>'id')::bigint,(i.value->>'typeId')::int
     FROM truss.runtime_edge_transition t CROSS JOIN LATERAL
      jsonb_array_elements(jsonb_build_array(t.old_source,t.old_target,t.source_identity,t.target_identity)) i
-    WHERE t.attempt_id=selected_attempt AND i.value<>'null'::jsonb) members
+    WHERE t.attempt_id=selected_attempt AND i.value<>'null'::jsonb) members) m;
+ IF affected_members='[]'::jsonb THEN RETURN;END IF;
+ -- No per-object count can constrain an entirely unbounded incident graph.
+ -- Qualify that case as a set, retaining live row locks, both current-reader
+ -- phases, and exact empty-marker effects. Any bounded relation stays on the
+ -- original per-object path, including bounds on the opposite endpoint side.
+ PERFORM 1 FROM truss.object o
+  JOIN jsonb_to_recordset(affected_members) a(object_id bigint,type_id int)
+   ON o.id=a.object_id AND o.type_id=a.type_id
+  ORDER BY o.id,o.type_id FOR UPDATE OF o NOWAIT;
+ IF NOT EXISTS(
+  SELECT 1 FROM jsonb_to_recordset(affected_members) a(object_id bigint,type_id int)
+  JOIN truss.object o ON o.id=a.object_id AND o.type_id=a.type_id
+  JOIN truss.rel_endpoint e ON e.source_type=o.type_id OR e.target_type=o.type_id
+  JOIN truss.rel_def r USING(rel_type_id)
+  WHERE r.retired_rev IS NULL AND
+   (r.source_min>0 OR r.target_min>0 OR r.source_max IS NOT NULL OR r.target_max IS NOT NULL)) THEN
+  FOR phase IN 1..2 LOOP
+   FOR owner IN
+    WITH selected_relations AS MATERIALIZED (
+     SELECT DISTINCT e.rel_type_id FROM jsonb_to_recordset(affected_members) a(object_id bigint,type_id int)
+     JOIN truss.object o ON o.id=a.object_id AND o.type_id=a.type_id
+     JOIN truss.rel_endpoint e ON e.source_type=o.type_id OR e.target_type=o.type_id),
+    active_relations AS MATERIALIZED (
+     SELECT r.rel_type_id,r.document_id,r.module FROM selected_relations s JOIN truss.rel_def r USING(rel_type_id)
+     WHERE r.retired_rev IS NULL),
+    dependencies AS (
+     SELECT document_id,module AS module_id FROM active_relations
+     UNION ALL SELECT t.document_id,t.module FROM active_relations r
+      JOIN truss.rel_endpoint e USING(rel_type_id) JOIN truss.type_def t ON t.type_id IN(e.source_type,e.target_type))
+    SELECT DISTINCT document_id,module_id FROM dependencies
+   LOOP
+    IF NOT truss.runtime_can_read_qualified(owner.document_id,owner.module_id,current_actor) THEN
+     RAISE EXCEPTION 'complete relationship and endpoint count reader required' USING ERRCODE='42501';END IF;
+   END LOOP;
+   IF phase=1 THEN
+    IF refresh_markers THEN
+     DELETE FROM truss.edge_limit marker USING truss.rel_def r,truss.rel_endpoint e,
+      jsonb_to_recordset(affected_members) a(object_id bigint,type_id int),truss.object o
+     WHERE marker.rel_type_id=r.rel_type_id AND r.retired_rev IS NULL AND e.rel_type_id=r.rel_type_id
+      AND marker.endpoint_id=a.object_id AND o.id=a.object_id AND o.type_id=a.type_id
+      AND (e.source_type=o.type_id OR e.target_type=o.type_id);
+    END IF;
+    IF EXISTS(SELECT 1 FROM truss.edge_limit marker JOIN truss.rel_def r USING(rel_type_id)
+     JOIN truss.rel_endpoint e USING(rel_type_id)
+     JOIN jsonb_to_recordset(affected_members) a(object_id bigint,type_id int) ON a.object_id=marker.endpoint_id
+     JOIN truss.object o ON o.id=a.object_id AND o.type_id=a.type_id
+     WHERE r.retired_rev IS NULL AND (e.source_type=o.type_id OR e.target_type=o.type_id)) THEN
+     RAISE EXCEPTION 'exact final multiplicity markers required' USING ERRCODE='55000';END IF;
+   END IF;
+  END LOOP;
+  RETURN;
+ END IF;
+ FOR affected IN SELECT * FROM jsonb_to_recordset(affected_members) a(object_id bigint,type_id int)
   ORDER BY object_id,type_id LOOP
   PERFORM truss.runtime_graph_validate_object_qualified(affected.object_id,affected.type_id,refresh_markers,current_actor);
  END LOOP;

@@ -58,7 +58,12 @@ BEGIN
    'revision',head_revision::text,'typePin',type_pin,'propertyOrder',property_order,'propertyPins',property_pins);
   FOR definition IN SELECT * FROM truss.key_def WHERE type_id=selected_type AND retired_rev IS NULL ORDER BY key_num LOOP
    SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',selected_type,definition.key_num);
-   codec:=truss.runtime_owned_key_codec_metadata(selected_type,definition.key_num);
+   -- The current, exactly bound type schema above already owns this codec.
+   -- Avoid resolving the same owner/key/schema again for every key.
+   codec:=metadata->'keyCodecs'->definition.key_num::text;
+   IF codec IS NULL THEN
+    codec:=truss.runtime_owned_key_codec_metadata(selected_type,definition.key_num);
+   END IF;
    IF codec_bytes+octet_length(convert_to(codec::text,'UTF8'))+32<=4194304 THEN
     map_count:=cardinality(codec_keys)+1;
     codec_keys[map_count]:=selected_type::text||':'||definition.key_num::text;

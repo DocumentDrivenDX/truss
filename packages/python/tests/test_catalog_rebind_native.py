@@ -136,7 +136,8 @@ class CatalogRebindTests(base.PublicCreateGroupTests):
         context=a.group_context_in_transaction(t).value
         creations=tuple(replace(self.create(label=label,alias=label),
             values=self.create(label=label,alias=label).values+(
-                AuthoredValue(name='giftWrap',value=BooleanValue(value=True)),))
+                AuthoredValue(name='giftWrap',value=BooleanValue(value=True)),
+                AuthoredValue(name='giftFlags',value=SequenceValue(items=(BooleanValue(value=True),)))))
             for label in ('changed','noop'))
         created=self.apply(a,t,context.input(creations,MapValue(entries=())),context.request('compact-seed'))
         self.assertIsInstance(created,GroupSuccess)
@@ -170,6 +171,7 @@ class CatalogRebindTests(base.PublicCreateGroupTests):
             self.assertEqual(read.value.object.version,3 if index==0 else 2)
             self.assertEqual(dict(read.value.object.values)['A-value'],'updated' if index==0 else 'value')
             self.assertIs(dict(read.value.object.values)['giftWrap'],True)
+            self.assertEqual(dict(read.value.object.values)['giftFlags'],SequenceValue(items=(BooleanValue(value=True),)))
             for version in range(1,read.value.object.version+1):
                 history=a.reconstruct_in_transaction(t,entity=HistoryEntity(kind='object',document_id='adoc',module_id='m',definition_id='A',id=int(identity.id)),version=version)
                 self.assertIsInstance(history.value,HistoricalRecord,repr(history)+' '+str(h._custody.last_attempt.error))
@@ -178,7 +180,7 @@ class CatalogRebindTests(base.PublicCreateGroupTests):
                 values={entry['propertyId']:entry['value'] for entry in image['properties']}
                 self.assertEqual(values[value_id],{'kind':'string','text':'updated' if index==0 and version>=2 else 'value'})
                 self.assertEqual({entry['name'] for entry in image['retained']},
-                    {'giftWrap'} if version<read.value.object.version else set())
+                    {'giftWrap','giftFlags'} if version<read.value.object.version else set())
         h.detach();c.commit()
 
 class CatalogRebind08Tests(CatalogRebindTests):

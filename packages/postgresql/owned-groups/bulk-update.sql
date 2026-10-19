@@ -13,6 +13,7 @@ DECLARE attempt truss.runtime_object_attempt%ROWTYPE;installation truss.catalog_
  namespaces jsonb:='{}';compiled_namespace bytea;definition record;keys jsonb;route record;
  slot_results jsonb;projection_problem boolean;journal_refs jsonb;key_taken boolean;unchanged_problem boolean;
  journal_chunk_objects jsonb;journal_ref_chunks jsonb[]:=ARRAY[]::jsonb[];journal_chunk_count int;journal_chunk_index int;journal_chunk_start int;
+ history_records jsonb;
  codecs jsonb:='{}';codec jsonb;codec_bytes bigint:=2;
  origin_payload jsonb;expected_origin_wrapper jsonb;expected_origin_hash bytea;
  compact_plans boolean:=false;scope_nodes jsonb;head_revision int;
@@ -291,6 +292,8 @@ BEGIN
   SELECT coalesce(jsonb_agg(objects->object_offset ORDER BY object_offset),'[]'::jsonb)
    INTO journal_chunk_objects
   FROM generate_series(journal_chunk_start,least(journal_chunk_start+63,total-1)) object_offset;
+  SELECT truss.runtime_owned_history_records_in_metadata(journal_chunk_objects,dictionary)
+   INTO history_records;
  WITH object_properties AS NOT MATERIALIZED (
   SELECT value object,value->'before'->'props' before_props,value->'after'->'props' after_props
    FROM jsonb_array_elements(journal_chunk_objects) WHERE value->'changed'='true'::jsonb),
@@ -308,8 +311,8 @@ BEGIN
   UNION ALL SELECT (o.object->>'index')::int,o.object->'identity' identity,(o.object->'after'->>'id')::bigint object_id,
    (o.object->'after'->>'type_id')::int type_id,(o.object->'after'->>'ver')::bigint version,
    (o.object->'after'->>'rev')::int revision,2147483648,jsonb_build_object('operation','metadata',
-   'before',truss.runtime_owned_history_record_in_metadata(o.object->'before',o.object->'identity',dictionary->jsonb_build_array((o.object->'before'->>'rev')::int,(o.object->'before'->>'type_id')::int)::text),
-   'after',truss.runtime_owned_history_record_in_metadata(o.object->'after',o.object->'identity',dictionary->jsonb_build_array((o.object->'after'->>'rev')::int,(o.object->'after'->>'type_id')::int)::text))
+   'before',history_records->(o.object->>'index')->'before',
+   'after',history_records->(o.object->>'index')->'after')
   FROM object_properties o WHERE o.object->'changed'='true'::jsonb),
  allocated AS MATERIALIZED (
   SELECT operation_index,ordinal,nextval('truss.journal_seq') seq,clock_timestamp() at
