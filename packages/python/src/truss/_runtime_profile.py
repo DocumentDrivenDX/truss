@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Selected embedded runtime tuple; wheel builds belong to the pgserver repository."""
 import json
 from importlib.resources import files

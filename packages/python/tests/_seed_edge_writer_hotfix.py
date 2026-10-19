@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Leave a genuine published35 graph/receipt for the hotfix upgrade test."""
 import os,pickle,sys
 from pathlib import Path

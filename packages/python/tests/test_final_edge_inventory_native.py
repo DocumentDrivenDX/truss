@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Final edge membership still refuses an actual edge absent from the plan."""
 from truss import Error,EdgeFound
 from truss.contracts import MapValue,TextValue

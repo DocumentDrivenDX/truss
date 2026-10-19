@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original v0.3 field assembly. Missing authority never becomes report bytes."""
 from hashlib import sha256
 from importlib.resources import files

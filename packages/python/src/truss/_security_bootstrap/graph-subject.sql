@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Selected graph Subject metadata only; no target argument or resource exporter.
 CREATE FUNCTION truss.graph_subject_current()
 RETURNS TABLE(staff_key pg_catalog.text,installation_id pg_catalog.text,database_oid pg_catalog.text,role_oid pg_catalog.text,profile_sha256 pg_catalog.text)

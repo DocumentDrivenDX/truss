@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Immutable original compiler packet storage; no native execution admission. */
 const root=process.argv[2];
 if(!root?.startsWith('/'))throw Error('Explicit original UMF checkout required');

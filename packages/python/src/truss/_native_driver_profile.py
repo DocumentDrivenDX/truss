@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private selected original pg8000 profile; no capability or closure claim.
 
 Pure inspection only. The selected resource-free subset refuses preexisting

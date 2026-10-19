@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic stock PG18 role-writer settlement check; not full authority closure."""
 from importlib.resources import files
 from pathlib import Path

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Complete public results are retained once, with immutable operation slots."""
 import psycopg
 from truss import Ok, Error

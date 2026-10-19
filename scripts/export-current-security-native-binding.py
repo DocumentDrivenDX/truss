@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact named owner source -> public catalog/seed/readback -> actual binding.
 
 Disposable PG18 only. No source editing, synthetic layout or security admission.

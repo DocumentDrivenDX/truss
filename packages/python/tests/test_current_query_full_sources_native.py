@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original Weft sources + actual selected consumers + native Subject binding."""
 from pathlib import Path
 from hashlib import sha256

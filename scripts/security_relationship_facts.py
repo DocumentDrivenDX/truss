@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Complete six-relationship native capture under caller-supplied held cuts."""
 import json
 from truss._security_catalog_assessment import capture_accepted_catalog

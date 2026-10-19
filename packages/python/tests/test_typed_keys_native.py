@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public composite typed keys using the original UMF tuple producers."""
 import os
 from truss import Ok,ObjectFound,ObjectNotFound

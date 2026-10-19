@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Real selected metadata policy on original Python UMF preparation and staging."""
 import copy
 import json

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public catalog refusal codes without diagnostic-message parsing."""
 import psycopg
 from truss import Ok,Error

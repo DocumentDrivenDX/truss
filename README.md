@@ -39,7 +39,7 @@ qualification remain unfinished.
 
 ## License
 
-[Apache License 2.0](LICENSE).
+[MIT OR Apache-2.0](LICENSE.md), at your option.
 
 ## Experimental runtime build
 

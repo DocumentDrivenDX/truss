@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Build an isolated owner producer from committed source, never sibling working edits. */
 import {mkdtemp,writeFile,readFile,symlink} from 'node:fs/promises';
 const repository=process.argv[2];if(!repository)throw Error('UMF Git repository required');

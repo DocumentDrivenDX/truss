@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original monotonic scheduling custody, not I/O termination proof."""
 from time import monotonic_ns
 

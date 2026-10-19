@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Test-only original UMF literal evaluator; never a runtime JS sidecar.
 const root=process.env.UMF_OWNER_ROOT??'/Users/erik/.codex/worktrees/0ede/umf';
 const owner=await import(root+'/src/model/schema-literals.ts');

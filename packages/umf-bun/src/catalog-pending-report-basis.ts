@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Exact private pending source/value basis; no accepted report or readiness authority. */
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 import type {CatalogStageConnection} from './catalog-new-stage';

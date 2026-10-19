@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Governing wire correspondence only, not native actor/capture authority. */
 import {createRequire} from 'node:module';
 import {mapAssertedOrigin} from '../packages/postgresql/src/asserted-origin-map';

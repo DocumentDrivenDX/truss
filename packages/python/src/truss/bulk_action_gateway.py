@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private bounded action registration; no native authority or execution issuer.
 
 The trusted host supplies the original owner preparation port. Byte comparison

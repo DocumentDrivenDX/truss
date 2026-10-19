@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original configured request encoding; no installed authority claim."""
 import json
 import unittest

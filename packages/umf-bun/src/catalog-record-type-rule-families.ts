@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private receipt-consistent declaration duties; record-valued literal semantics are unavailable. */
 import {createHash} from 'node:crypto';
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';

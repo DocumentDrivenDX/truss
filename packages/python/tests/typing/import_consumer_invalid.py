@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Negative import typing vectors; every bad marker must be rejected."""
 from dataclasses import replace
 from typing import Literal

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private original supplied-source ordering; no registered extension or acceptance authority. */
 import {createCatalogEndpointIntentBasis} from './catalog-endpoint-intent-basis';
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';

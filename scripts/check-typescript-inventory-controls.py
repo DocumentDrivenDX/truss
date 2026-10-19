@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Run the actual compiler inventory against disposable known import graphs."""
 import hashlib
 import json

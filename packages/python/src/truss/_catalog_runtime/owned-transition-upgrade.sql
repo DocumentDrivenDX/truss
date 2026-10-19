@@ -1,1 +1,2 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 ALTER TABLE truss.runtime_object_transition DROP CONSTRAINT runtime_object_transition_attempt_id_operation_index_key, ADD UNIQUE (attempt_id, operation_index, object_id, type_id); ALTER TABLE truss.runtime_edge_transition DROP CONSTRAINT runtime_edge_transition_attempt_id_operation_index_key, ADD UNIQUE (attempt_id, operation_index, edge_id, rel_type_id), ADD COLUMN endpoint_ownership jsonb;

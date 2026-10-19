@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Owner-private identity resolution only: no permission, permit or SQL execution.
 -- An admitted guard must independently establish compiler/source/DDL custody,
 -- current Subject/action/owner authority, and the complete operation lifecycle.

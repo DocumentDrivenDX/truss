@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Supplied-definition joins; no native custody or admission from these carriers."""
 import copy,json,unittest,os
 from pathlib import Path

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """A secondary-key conflict is a rejected import, not an unsupported profile."""
 from truss import Ok
 from truss.groups import GroupSuccess

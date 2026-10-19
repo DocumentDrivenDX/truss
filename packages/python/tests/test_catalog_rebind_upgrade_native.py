@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Preserve a genuine native60 report while adding required rebinding in native61."""
 import json,os,pickle,subprocess,sys,tempfile,unittest
 from pathlib import Path

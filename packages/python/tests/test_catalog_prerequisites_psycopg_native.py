@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual pending prerequisite registration via supported guarded psycopg execution.
 
 Administrative synthetic setup; every outer transaction rolls back. No public

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public alternate-key backfill and qualified duplicate refusal."""
 import json,os
 from dataclasses import replace

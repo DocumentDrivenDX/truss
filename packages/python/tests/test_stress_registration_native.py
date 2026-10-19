@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Every unchanged stress schema through public preparation and native registration."""
 import json,sys,time
 from pathlib import Path

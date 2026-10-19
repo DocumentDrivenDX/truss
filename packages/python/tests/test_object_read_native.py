@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public ordinary-person reads; administrative seed does not qualify writes."""
 import json
 import psycopg

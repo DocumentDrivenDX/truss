@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Installed original mapping source admission through the native publication cut."""
 from unittest.mock import patch
 import psycopg

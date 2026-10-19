@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Current native guard comparison in owned catalog reads; no ready authority."""
 from unittest.mock import patch
 import test_security_catalog_source_cut_native as source

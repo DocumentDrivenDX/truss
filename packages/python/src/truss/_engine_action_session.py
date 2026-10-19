@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private one-invocation RC lifetime; native settlement is not action authority."""
 from dataclasses import dataclass
 from time import monotonic

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original owner ticket→private native role enrollment, not permission."""
 import json
 from dataclasses import replace

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native component tests: owned lifecycle, refusal custody, retained commit."""
 from pathlib import Path
 import importlib.metadata

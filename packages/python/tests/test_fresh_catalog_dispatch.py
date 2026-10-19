@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Trusted SDK dispatch input; no native facade or accepted-result claim."""
 import dataclasses
 import json

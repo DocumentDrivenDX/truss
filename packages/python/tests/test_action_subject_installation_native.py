@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native protected enrollment component; no invocation authentication claim."""
 import psycopg
 import test_group_create_native as base

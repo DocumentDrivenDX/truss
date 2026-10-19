@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Database derivation matches UMF and preserves source constraints without clients."""
 import base64
 from dataclasses import replace

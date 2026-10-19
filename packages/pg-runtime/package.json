@@ -9,7 +9,10 @@
     "@types/pg": "8.15.5"
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE.md",
+    "LICENSE-MIT",
+    "LICENSE-APACHE"
   ],
   "exports": {
     ".": {
@@ -17,5 +20,6 @@
       "import": "./dist/index.js"
     }
   },
-  "types": "./dist/index.d.ts"
+  "types": "./dist/index.d.ts",
+  "license": "MIT OR Apache-2.0"
 }

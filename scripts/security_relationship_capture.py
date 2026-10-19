@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original buffered operand captures under held cuts; not a release permit.
 
 Trusted original producer/codec checker and genuinely derived native Subject

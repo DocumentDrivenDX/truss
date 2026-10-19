@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original prepared-resource facts; no public/resource-profile claim."""
 import unittest
 from unittest.mock import patch

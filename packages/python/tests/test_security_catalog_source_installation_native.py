@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native original source marker construction; no protected profile activation."""
 from dataclasses import replace
 from truss import Ok,Error

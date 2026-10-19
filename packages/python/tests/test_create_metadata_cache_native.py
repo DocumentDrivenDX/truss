@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """CREATE uses the exact immutable five-key schema basis compiled at head."""
 import json
 import os

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One basic committed private storage/products workflow on actual PG18.6."""
 import contextlib
 import importlib.util

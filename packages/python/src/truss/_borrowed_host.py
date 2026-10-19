@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Selected idle connection attachment; never creates or settles a connection."""
 from importlib.metadata import version
 from ._native_attachment import DriverAttachment

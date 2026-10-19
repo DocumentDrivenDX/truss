@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic exact composite business-key SQL page workflow."""
 import json
 from decimal import Decimal

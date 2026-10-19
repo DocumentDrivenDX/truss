@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Closed report wire to native codec input; not acceptance/provenance admission. */
 import {createRequire} from 'node:module';
 import {readFile} from 'node:fs/promises';

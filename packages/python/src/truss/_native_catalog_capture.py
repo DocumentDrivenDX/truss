@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Closed catalog response custody; provisional native effects only."""
 from dataclasses import dataclass
 import re

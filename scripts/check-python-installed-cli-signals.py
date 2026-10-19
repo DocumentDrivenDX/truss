@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned installed CLI signal checks; preserve data on uncertain cleanup."""
 from native_fixture import evidence_directory
 import hashlib

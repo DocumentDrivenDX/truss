@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One populated native62 upgrade through public keyed rebinding."""
 import json,os,pickle,subprocess,sys,tempfile,unittest
 from pathlib import Path

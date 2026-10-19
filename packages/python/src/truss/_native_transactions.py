@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private coordinated native lifecycle; not public E06/protected admission.
 
 Install before host BEGIN. Typed controls retain original generation and ordered

@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Compact native catalog plan. Original source meaning; no full-operation snapshots.
 CREATE FUNCTION truss.catalog_planned_changes(records jsonb) RETURNS SETOF truss.schema_change
 LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

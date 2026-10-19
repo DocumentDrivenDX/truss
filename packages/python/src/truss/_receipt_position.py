@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private candidate locator decoder, not receipt/commit/visibility authority."""
 import base64
 import binascii

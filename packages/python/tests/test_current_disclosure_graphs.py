@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Physical mapping controls; supplied catalog/cursor fixtures are not native evidence."""
 import copy,hashlib,itertools,json,unittest
 from types import SimpleNamespace

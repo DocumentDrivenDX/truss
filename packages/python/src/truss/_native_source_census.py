@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original-census response custody, not provider/authority admission.
 
 Cooperative host and exact pg8000 driver ownership remain premises. This capture

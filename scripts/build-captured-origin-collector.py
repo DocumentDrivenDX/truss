@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Versioned collector preserves original native actor and cut checks."""
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]

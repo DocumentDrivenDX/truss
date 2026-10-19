@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Embedding configuration for current-policy query execution.
 
 The host supplies a separate, fresh privileged transaction dedicated to one

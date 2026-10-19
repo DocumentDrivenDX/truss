@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createOrdinarySubjectKeyBinding} from '../packages/pg-runtime/src/subject-key';
 import * as owner from '../packages/python/src/truss/_umf_keys08/producer.js';

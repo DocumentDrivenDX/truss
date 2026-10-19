@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual helper ACL drift; component admission, not complete backend B11."""
 from unittest.mock import patch
 import test_security_catalog_source_cut_native as source

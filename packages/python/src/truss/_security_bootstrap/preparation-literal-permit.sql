@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private selected-literal native composition component. No production grant,
 -- protected selector/finalizer or complete source/legacy-writer qualification.
 -- Trusted excluded installer/owners and original helper custody are premises.

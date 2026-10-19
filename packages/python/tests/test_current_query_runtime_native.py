@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public ordinary-person query with original UMF/Weft and private SQL."""
 import os
 import shutil

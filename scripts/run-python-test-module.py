@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Run unittest and drain registered fixture cleanup even after interruption."""
 from pathlib import Path
 import os

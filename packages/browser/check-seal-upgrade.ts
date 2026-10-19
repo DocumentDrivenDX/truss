@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Real Chromium worker/IndexedDB test. Supply a package.json resolving playwright. */
 import {createRequire} from 'node:module';
 import {join} from 'node:path';

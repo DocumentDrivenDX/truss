@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original owner interpretation before native catalog effects. No acceptance authority. */
 import {createAcceptanceInputInspector} from './acceptance-input';
 import {loadCatalogSourceOwner,loadCore08CatalogOwners} from './index';

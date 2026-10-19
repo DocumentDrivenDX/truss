@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Verify that the packaged catalog SQL can be retained and exported by UMF. */
 import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
 import {readDocument} from '/Users/erik/Projects/umf/src/model/document';

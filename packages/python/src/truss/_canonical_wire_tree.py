@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Existing numeric-free wire → native tagged-tree protocol; no report authority."""
 from dataclasses import dataclass
 import json

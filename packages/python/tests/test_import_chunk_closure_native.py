@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual multi-attempt imports do linear graph validation at finish and commit."""
 import json,time
 from truss import Ok

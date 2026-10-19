@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private C2 structural link check over shape-admitted, bounded projections.
  * Does not establish artifact authenticity, native scope or observer completeness. */
 export type ConformanceLinkPin={identity:string;version:string;sha256:string};

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original core0.8 create/commit/read/key/replay prerequisite; no security admission.
 @covers US-056-AC2
 @covers US-056-AC9

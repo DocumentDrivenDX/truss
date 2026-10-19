@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One public name-only evolution workflow retaining keys and original receipts."""
 import json, os
 from truss import Ok, Error, CatalogDocument, CatalogRegistration, CatalogAcceptanceRefused, ObjectFound, QueryRows, HistoryEntity, HistoricalRecord

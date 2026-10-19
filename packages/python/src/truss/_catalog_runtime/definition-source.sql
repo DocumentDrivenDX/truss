@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Derived immutable coordinates and pins; original fragments remain only in schema_doc.
 CREATE TABLE truss.runtime_definition_source (
  rev int NOT NULL,ord int NOT NULL,doc_id text NOT NULL,module_id text NOT NULL,

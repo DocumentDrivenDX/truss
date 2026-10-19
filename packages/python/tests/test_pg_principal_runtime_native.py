@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native caller/subject adapter integration in an isolated local server."""
 import json,os,subprocess,tempfile,unittest
 from pathlib import Path

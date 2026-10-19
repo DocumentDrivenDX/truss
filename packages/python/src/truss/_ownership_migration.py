@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Transactional transition-storage upgrade used by the public runtime installer."""
 from psycopg import sql
 

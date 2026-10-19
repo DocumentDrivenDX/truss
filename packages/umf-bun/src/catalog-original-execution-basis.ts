@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original native actor facts only, not a complete originalExecution report. */
 import {createHash} from 'node:crypto';
 import {decodeAcceptanceJson} from '../../postgresql/src/acceptance-json';

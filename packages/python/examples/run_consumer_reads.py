@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Run selected unchanged consumer read/action workflows on the authority database."""
 import argparse
 from contextlib import ExitStack

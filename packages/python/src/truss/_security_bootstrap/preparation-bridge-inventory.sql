@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private selected-home definition correspondence adjunct, PG18.6 only.
 -- Trusted original installation/dispatch and excluded administrative writers are
 -- premises. No role membership, allocator state, policy, permit or execution.

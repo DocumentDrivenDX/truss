@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic new date/generic decimal values, keys, import and rollback workflow."""
 import os
 from truss import Ok,ObjectFound

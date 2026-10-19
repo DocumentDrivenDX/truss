@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic explicit CLI installation and retained-directory status confirmation."""
 import json
 import os

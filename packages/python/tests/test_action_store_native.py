@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic original store registration, committed observation and retry on PG18."""
 import contextlib
 import importlib.util

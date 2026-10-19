@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original public schema acceptance, instance creation and typed engine reads.
 
 Owns a new Homebrew PostgreSQL18 cluster; it never borrows a running service.

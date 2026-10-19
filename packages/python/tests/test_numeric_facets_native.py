@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public signed64/fixed-decimal workflow; no rounding or float path."""
 from decimal import Decimal
 import psycopg

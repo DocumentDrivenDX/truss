@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Build a committed Weft source tree without reading its working-tree edits."""
 import pathlib,subprocess,tarfile,io,hashlib,json,os,sys
 revision='f05f2df09e9c2494ac8c6d703dfe38413dbc4181'

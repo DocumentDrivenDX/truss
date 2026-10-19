@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {decodeNativeTextArray} from '../packages/postgresql/src/index';
 import vectors from '../docs/helix/02-design/contracts/bindings/bootstrap-native-array-decoder-v0.1.vectors.proposal.json';

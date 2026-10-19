@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import type {PGlite} from '@electric-sql/pglite';
 // Original pinned browser-compatible owner bundle; it publishes JavaScript only.
 // @ts-expect-error Original UMF JavaScript bundle has no declaration file.

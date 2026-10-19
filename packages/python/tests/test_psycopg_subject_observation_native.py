@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original Python host/source owner observation, not protected native admission.
 @covers US-056-AC2
 @covers US-056-AC10

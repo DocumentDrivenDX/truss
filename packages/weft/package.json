@@ -10,6 +10,10 @@
     }
   },
   "files": [
-    "dist"
-  ]
+    "dist",
+    "LICENSE.md",
+    "LICENSE-MIT",
+    "LICENSE-APACHE"
+  ],
+  "license": "MIT OR Apache-2.0"
 }

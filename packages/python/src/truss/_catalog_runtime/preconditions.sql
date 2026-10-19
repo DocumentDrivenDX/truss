@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Caller predicates observe the locked group prestate, before effects.
 CREATE FUNCTION truss.runtime_relationship_pin(selected_relationship int,historical_revision int DEFAULT NULL) RETURNS text
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original catalog-source factory issuance, not complete protected admission.
 
 Direct trusted administrator, genuine source/installer custody and administrative

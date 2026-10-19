@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original pending-read timeout custody; buffered outbound remains unqualified."""
 import io
 import socket

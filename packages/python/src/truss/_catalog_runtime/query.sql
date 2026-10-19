@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Pure stock-PostgreSQL exact numeric input domain, never typmod coercion.
 -- Explicit UMF CONTRACT-065 instant recipe; retain original cells/parameter text.
 CREATE FUNCTION truss.query_timestamp_instant_key(token text,profile text) RETURNS jsonb

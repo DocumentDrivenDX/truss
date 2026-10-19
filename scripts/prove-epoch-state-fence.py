@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional epoch-state event/order laws, not SQL or driver refinement."""
 from pathlib import Path
 import hashlib,json,uuid

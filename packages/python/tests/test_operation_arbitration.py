@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 import unittest
 from threading import Event, Thread
 from truss._host_execution import HostExecutor

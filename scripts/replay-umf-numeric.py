@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Replay selected owner controls; does not adopt or qualify a Truss runtime."""
 import hashlib
 import io

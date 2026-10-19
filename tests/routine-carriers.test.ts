@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {decodeNativeRoutineCarriers} from '../packages/postgresql/src/index';
 const limits={maxBytes:4096,maxNodes:128,maxDepth:6,maxTokens:64};

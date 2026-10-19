@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import type {PGlite} from '@electric-sql/pglite';
 import {readCatalog} from './catalog';
 import {journalHorizon,targetSource} from './objects';

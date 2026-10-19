@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createQueryEngine,serializeStorageBinding,WEFT_SOURCE,type Compiler,type Host,type BindingInput} from '../../packages/weft/src/index';
 import {loadCompiler} from '../../packages/weft-bun/src/index';

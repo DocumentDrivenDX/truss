@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Independent rootless creates have no order-dependent reads. Lower their
 -- already admitted native plans to INSERT ... SELECT, retaining the ordinary
 -- transitions, original journals, permanent key reservations and settlement.

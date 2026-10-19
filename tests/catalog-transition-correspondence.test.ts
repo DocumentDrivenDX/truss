@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {requireUnchangedCatalogTransition} from '../packages/umf-bun/src/catalog-transition-correspondence';
 const source={umf:'0.7.0',extensions:{unknown:{meaning:'雪🙂',present:null}}};

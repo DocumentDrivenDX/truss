@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {stageNewCatalogCohort} from '../packages/umf-bun/src/catalog-new-stage';
 import {prepareDefaultCatalogHomes} from '../packages/umf-bun/src/catalog-default-homes';
 import {test,expect} from 'bun:test';

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {copyOriginalByteCustody,OriginalByteCustodyError} from './original-byte-custody';
 /** Internal wire decoder component. Not complete input/profile/native admission. */
 export type AcceptanceJson = null|boolean|string|AcceptanceJson[]|{[key:string]:AcceptanceJson};

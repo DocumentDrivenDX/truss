@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original-call observations; no retry, cleanup or public recovery API.
 
 Original executor and boundary custody survives facade collection. Preallocated

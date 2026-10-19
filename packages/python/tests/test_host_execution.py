@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 import unittest
 from dataclasses import replace
 from truss.execution import TransactionObservation, ExecutionFailure, TransactionHandle, Ok, Error

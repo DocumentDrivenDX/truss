@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test, expect} from 'bun:test';
 import {createReferenceAssembly, INERT_ASSEMBLY_PROFILE} from '../packages/postgresql/src/index';
 import type {ReferenceAssemblyConfiguration, Executor, HostRecoveryRegistry, CapabilitySelection} from '../packages/postgresql/src/index';

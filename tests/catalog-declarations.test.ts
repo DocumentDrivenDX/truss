@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {collectCatalogDeclarations} from '../packages/umf-bun/src/catalog-declarations';
 function source(){return {id:'doc',modules:[{id:'owner',elements:[{id:'R',kind:'record',members:[{module:'right',element:'same'},{module:'left',element:'same'}],keys:[{id:'K',fields:[{module:'left',element:'same'},{module:'right',element:'same'}],extensions:{opaque:{must:'remain'}}}]}],relationships:[{id:'rel',source:[{module:'owner',element:'R'}],target:[{module:'owner',element:'R',key:'K'}]}]},{id:'left',elements:[{id:'same',kind:'field',name:'left'}]},{id:'right',elements:[{id:'same',kind:'field',name:'right'}]}]}}

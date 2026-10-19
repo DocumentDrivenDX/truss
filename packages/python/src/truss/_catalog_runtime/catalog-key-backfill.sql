@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Registration-owned alternate-key effects; object images remain unchanged.
 -- This source is not installed until the native62 public acceptance path lands.
 CREATE TABLE truss.runtime_catalog_key_backfill (

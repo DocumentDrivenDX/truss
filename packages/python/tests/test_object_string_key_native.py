@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 from pathlib import Path
 import unittest
 import test_catalog_runtime_native as catalog_tests

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public scalar array/map workflows using original UMF item Fields."""
 import json,os
 from decimal import Decimal

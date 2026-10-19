@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public multi-object create/update/commit/read workflow."""
 from truss import Ok, ObjectFound, HistoryEntity, HistoricalRecord, HistoricalDeleted
 from truss.contracts import ABSENT, MapValue, TextValue

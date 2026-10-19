@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual original source compiler and Weft replay, immutable native association."""
 from importlib.resources import files
 import json

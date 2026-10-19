@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private exact-producer replay; no database, SQL execution or permission.
 
 The engine's Python executable, Truss sources, installed native binary and their

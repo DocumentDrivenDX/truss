@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- UMF owns the grammar; this private native realization grants no admission.
 CREATE FUNCTION truss.umf_key_uleb128(number bigint) RETURNS bytea
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

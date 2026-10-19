@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private new-catalog staging and native correspondence; never acceptance.
 
 Requires an already admitted original native catalog operation. No transaction

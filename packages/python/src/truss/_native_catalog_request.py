@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original catalog request; not accepted registration or authority."""
 from dataclasses import dataclass
 from ._catalog_candidate import encode_original_catalog_candidate

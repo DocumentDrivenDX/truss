@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Initial private action-role enrollment from original registry tickets.
 
 Administrative quiescence and qualified original owner preparation are premises.

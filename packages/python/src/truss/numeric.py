@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Python conveniences for already admitted finite numeric tokens.
 
 This module converts already admitted tokens; it does not admit UMF grammar,

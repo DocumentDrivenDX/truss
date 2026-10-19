@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Same independent counter/custody corpus as TypeScript; no native authority."""
 import json
 from pathlib import Path

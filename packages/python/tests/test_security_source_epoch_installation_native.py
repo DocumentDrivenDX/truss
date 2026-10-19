@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original packaged native epoch/barrier installation into accepted catalog."""
 from truss import Ok,Error
 from truss._security_catalog_source_installation import bootstrap_catalog_source_marker_in_transaction

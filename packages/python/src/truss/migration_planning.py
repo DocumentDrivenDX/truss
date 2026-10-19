@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Declared migration metadata planning only; no installation or execution authority."""
 from dataclasses import dataclass
 import re

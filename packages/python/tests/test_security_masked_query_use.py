@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """@covers US-056-AC6
 Original compiler query-use admission controls, not native backend acceptance.
 """

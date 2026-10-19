@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Thin bounded host bridge; all key semantics remain in the original UMF owner. */
 import {encodeCoreKeyTuple,readCoreKeyTupleBytes,readJsonValue} from './producer.js';
 try {

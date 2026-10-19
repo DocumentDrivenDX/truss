@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original buffered order and raw-stream visit accounting."""
 import io
 import unittest

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private flat-table/graph-store fact cuts; no authority or public policy API."""
 from dataclasses import dataclass
 from ._psycopg_epoch_cut import _run_fenced_epoch_operation

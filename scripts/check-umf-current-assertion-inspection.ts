@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Owner checkpoint only; current probe bundles are never runtime registrations. */
 import {loadUmfProducer} from '../packages/umf-bun/src/index';
 import {preflightSourceJson} from '../packages/postgresql/src/acceptance-json';

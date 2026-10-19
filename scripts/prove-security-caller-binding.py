@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional native caller-binding model; issuer/mapping authority is a separate premise."""
 from pathlib import Path
 import hashlib,json,uuid,z3

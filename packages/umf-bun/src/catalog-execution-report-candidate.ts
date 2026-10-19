@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Composed original field candidate; profile meaning/installed authority remain unqualified. */
 import {createHash} from 'node:crypto';
 import {mapAssertedOrigin} from '../../postgresql/src/asserted-origin-map';

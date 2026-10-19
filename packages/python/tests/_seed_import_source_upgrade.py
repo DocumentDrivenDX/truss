@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Populate source rows using an independently installed published predecessor."""
 import json,pickle,sys
 from pathlib import Path

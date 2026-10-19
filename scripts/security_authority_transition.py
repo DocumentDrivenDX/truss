@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private committed-pending authority transition spike; no qualified issuer.
 
 The original installed native issuer owns epochs. Pending is deliberately outside

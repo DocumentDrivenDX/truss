@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public draft data contracts; shapes confer no registration/native authority.
 
 Exact token/source spelling is retained. Value-domain interpretation belongs to

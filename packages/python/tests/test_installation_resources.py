@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Pinned resource capture against real files; no native install qualification."""
 from hashlib import sha256
 from pathlib import Path

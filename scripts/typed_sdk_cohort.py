@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Optional installed-wheel correspondence for the two native SDK runners."""
 import hashlib
 import importlib

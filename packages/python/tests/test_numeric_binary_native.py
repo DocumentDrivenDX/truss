@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original numeric_send byte correspondence, not protected scalar admission."""
 import struct
 from test_numeric_witness_native import NumericWitnessNativeTests, ROOT

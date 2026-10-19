@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {createRequire} from 'node:module';
 const {chromium}=createRequire('/Users/erik/Projects/umf/package.json')('playwright');
 const build=await Bun.build({entrypoints:['packages/postgresql/src/acceptance-json.ts'],target:'browser',format:'esm'});if(!build.success)throw Error('Decoder browser build failed');const bundle=await build.outputs[0].text();

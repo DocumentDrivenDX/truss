@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Author separate traversal fixture sources; never install or authorize them."""
 from pathlib import Path
 import copy,hashlib,json

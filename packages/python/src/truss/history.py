@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact retained native history, independent of live canonical rows."""
 from dataclasses import dataclass, field
 from typing import Literal

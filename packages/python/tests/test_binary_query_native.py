@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public binary writes, reads and Weft byte equality."""
 from dataclasses import replace
 from truss import Ok,QueryRows,QueryRefused,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration

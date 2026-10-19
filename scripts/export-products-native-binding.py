@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Accept original demo bytes and export observed native bindings on disposable PG18.
 
 No protected RR/bulk claim. Role setup is installation operations; objects and

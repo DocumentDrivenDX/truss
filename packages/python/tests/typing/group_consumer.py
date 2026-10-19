@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Static consumer: no callable provider or native authority is supplied."""
 from typing import Literal, assert_type
 from truss.contracts import BooleanValue, TextValue, PresentValue, NullValue, Absent

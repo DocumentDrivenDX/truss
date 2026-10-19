@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private archive row correspondence; complete observation/authority external."""
 from dataclasses import dataclass
 from hashlib import sha256

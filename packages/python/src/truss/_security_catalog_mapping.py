@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Map original Weft dependency references to assessed native catalog homes.
 
 This does not interpret policy expressions, authorize rows, or issue SQL.

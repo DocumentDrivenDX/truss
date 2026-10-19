@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public import construction from accepted native catalog identities."""
 from dataclasses import dataclass
 from .contracts import ProfilePin,MapValue,ExactArtifact,ObjectKeySelection

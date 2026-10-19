@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public graph source-cut regression; disposable policy/setting experiment, not admission."""
 import json,subprocess,os
 from pathlib import Path

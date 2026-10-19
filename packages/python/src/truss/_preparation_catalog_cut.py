@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private metadata-only cut consumer; complete source/authority bridge is required.
 
 The security owner must admit original helper/DDL custody before invoking this

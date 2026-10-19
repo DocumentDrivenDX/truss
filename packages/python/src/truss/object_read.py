@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public logical identity reads with exact scalars and flat containers."""
 from dataclasses import dataclass, field
 from typing import Literal

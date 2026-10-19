@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact integer codec laws, not a PostgreSQL arithmetic refinement theorem."""
 from pathlib import Path
 import json,hashlib

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {describe,expect,test} from 'bun:test';
 import {planLayoutMigration} from '../packages/tooling/src/layout-migration-plan';
 const bytes=(value:unknown)=>new TextEncoder().encode(JSON.stringify(value));

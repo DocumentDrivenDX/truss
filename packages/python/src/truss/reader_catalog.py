@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public person-scoped catalog results and exact accepted source bytes."""
 from dataclasses import dataclass, field
 from typing import Literal, Any

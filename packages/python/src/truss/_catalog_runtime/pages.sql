@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Live ID-keyset object paging, not an authority token or held snapshot.
 CREATE FUNCTION truss.page_objects(selected_document text,selected_module text,selected_record text,
  page_limit int,maximum_bytes int,original_cursor bytea,expected_release text,expected_digest text) RETURNS bytea

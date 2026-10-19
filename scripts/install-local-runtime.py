@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Install the selected released runtime; refuse source fallback and bad checksums."""
 import argparse,hashlib,importlib.metadata,json,subprocess,sys,urllib.request
 from pathlib import Path

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Opted-in owned PG source observation, not binding/authority/release admission."""
 import json,hashlib,os,unittest
 from pathlib import Path

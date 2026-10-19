@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned native scalar/member/reference/type receipt and multi-Field journal report composition; no backend enforcement admission."""
 from pathlib import Path
 import os,json,hashlib,uuid,subprocess,time,zipfile

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original owner evidence and native fresh-graph report basis; no acceptance."""
 import dataclasses
 import json

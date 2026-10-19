@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private original type receipt ingress/report candidate; never issuer or admission authority. */
 import {createHash} from 'node:crypto';
 import {copyOriginalByteCustody} from '../../postgresql/src/original-byte-custody';

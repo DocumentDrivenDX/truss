@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native parity/forgery controls; this private verifier enables no mutation API."""
 from pathlib import Path
 import unittest

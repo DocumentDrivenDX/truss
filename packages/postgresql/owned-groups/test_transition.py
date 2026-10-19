@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owner-generated unified transition DDL preserves a real legacy mutation."""
 from pathlib import Path
 from truss.contracts import TextValue

@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Lock-only original Subject mapping cut; never current permission or a permit.
 CREATE FUNCTION truss.acquire_action_subject_cut()
 RETURNS pg_catalog.void

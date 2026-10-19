@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual native report INSERT/readback algorithm; every fixture rolls back.
 
 The explicit candidate recipe is not an installed authority producer. These

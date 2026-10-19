@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public import consumer; preserves progress rather than wrapping Outcome."""
 from typing import Literal, assert_type
 from truss.contracts import ExactArtifact, ProfilePin

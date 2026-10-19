@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private selected-literal execution component, not production admission.
 -- Original immutable producer/source enrollment and excluded owner are premises.
 CREATE FUNCTION truss.preparation_literal_parameters(statement pg_catalog.jsonb)

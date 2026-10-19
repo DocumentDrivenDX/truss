@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Immutable comparison custody only; historical native receipt is no authority."""
 from dataclasses import replace
 import json

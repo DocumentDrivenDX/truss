@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Real configuration/epoch correspondence with administrative installation fixtures.
 
 Release selection is not protected installation or accepted-report authority.

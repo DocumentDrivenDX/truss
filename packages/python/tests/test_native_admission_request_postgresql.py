@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native argument decoding only; does not invoke or qualify admission routines."""
 import unittest
 from dataclasses import replace

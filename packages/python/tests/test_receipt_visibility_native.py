@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public committed receipt token and authority inclusion workflows."""
 import base64,json
 from truss import (Ok,ReceiptIncluded,ReceiptVisibilityUnavailable,CatalogRevisionProbe,PreparedGroup,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration)

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private bridge source adjunct; no installer, permission or allocator proof."""
 from importlib.resources import files
 from ._security_source_epoch_installation import _sources

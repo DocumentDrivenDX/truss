@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Pure original-source structural correspondence; never a native permit."""
 from dataclasses import dataclass
 from hashlib import sha256

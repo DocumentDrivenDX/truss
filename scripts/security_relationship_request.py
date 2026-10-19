@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact source-bound traversal request preparation; never an execution permit."""
 from pathlib import Path
 from hashlib import sha256

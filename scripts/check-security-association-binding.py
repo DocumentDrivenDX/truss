@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Retained private component test evidence; no native/backend qualification."""
 import ast,hashlib,json,os,re,subprocess,sys,uuid
 from pathlib import Path

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Bounded byte custody only; no JSON, semantic or native admission. */
 const typed=Object.getPrototypeOf(Uint8Array.prototype);
 const brand=Object.getOwnPropertyDescriptor(typed,Symbol.toStringTag)!.get!;

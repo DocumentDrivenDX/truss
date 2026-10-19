@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Host-only PostgreSQL driver. Portable Truss package imports no pg dependency. */
 export {inspectOriginalQueryFile,type OriginalQueryInspection,createFileQueryJournal,type OriginalQueryJournal,type LocalQueryCustody} from './journal';
 import type {OriginalQueryJournal} from './journal';

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {createRequire} from 'node:module';
 const path=process.env.TRUSS_UMF_NUMERIC_PRODUCER;if(!path)throw Error('Pinned numeric-current producer directory required');
 const manifest=await Bun.file(path+'/producer-manifest.json').json();

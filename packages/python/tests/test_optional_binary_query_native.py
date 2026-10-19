@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Optional binary equality preserves absent/null/empty/present reads."""
 from dataclasses import replace
 from truss import Ok,QueryRows,QueryRefused,QueryAbsent,QueryPage,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration

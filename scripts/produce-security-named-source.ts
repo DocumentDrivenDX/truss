@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Exact shared named source packet; source correspondence, not issuer authority. */
 import {namedSecurityFixture} from './security-named-source-fixture';
 import {securityIdentityTransportDependencies} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/dependencies';

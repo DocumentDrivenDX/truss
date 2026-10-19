@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Pure candidate mapping; role text is a supplied fact, never native authority. */
 import {copyOriginalByteCustody} from './original-byte-custody';
 import {decodeAcceptanceJson,type AcceptanceJson} from './acceptance-json';

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Executable original report source inputs; installed issuance remains separate."""
 import base64
 from hashlib import sha256

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual guarded semantic ordinals; no catalog acceptance qualification."""
 from pathlib import Path
 import os

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual public atomic capacity; no deadline increases or no-op substitutes."""
 from dataclasses import replace
 import json

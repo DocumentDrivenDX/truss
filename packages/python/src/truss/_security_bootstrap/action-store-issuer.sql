@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private shared namespace issuance. Comparison outputs are never authority.
 CREATE FUNCTION truss.action_store_original_receipt(r truss.action_store_registration)
 RETURNS bytea LANGUAGE sql STABLE SECURITY INVOKER

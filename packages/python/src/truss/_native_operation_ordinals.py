@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original-generation operation issuance; no native authority grant.
 
 Retained attempt capacity precedes issuance. Actual artifact admission and the

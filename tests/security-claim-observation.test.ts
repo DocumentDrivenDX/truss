@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {decodeCandidatePublicationClaim} from '../packages/postgresql/src/security-claim-observation';
 const packet=()=>({columns:['operation_identity_bytes_hex','installation_identity_bytes_hex','policy_profile_bytes_hex','generation','settled'].map(name=>({name,typeOid:'25'})),rows:[['01','02','03','9223372036854775807','false']],expected:{operationIdentityHex:'01',installationIdentityHex:'02',policyProfileHex:'03',generation:'9223372036854775807'}});

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Derive versioned private capture from the original epoch admission source."""
 from pathlib import Path
 import sys

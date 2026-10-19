@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Fixed selected read-source table cut. Installer grants only the private executor.
 CREATE FUNCTION truss.acquire_catalog_read_table_cut()
 RETURNS pg_catalog.void

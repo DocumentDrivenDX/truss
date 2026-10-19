@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Fixed lock-only issuer for an ordinary private graph executor.
 
 Original owner/caller identities and routine/DDL lifetime are trusted custody.

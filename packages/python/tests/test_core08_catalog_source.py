@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original current UMF catalog source observer; native0.8 ingress remains open."""
 import copy,json,unittest,subprocess
 from unittest.mock import patch

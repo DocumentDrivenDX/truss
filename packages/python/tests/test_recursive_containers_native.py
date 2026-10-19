@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public nested-container workflow preserving exact decimal tokens."""
 import json,os
 from decimal import Decimal

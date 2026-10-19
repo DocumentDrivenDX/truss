@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Browser component qualification with original pinned compiler response. */
 import {createRequire} from 'node:module';
 import {createQueryEngine,WEFT_SOURCE} from '../packages/weft/src/index';

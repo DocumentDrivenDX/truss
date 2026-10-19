@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Thin native observation → original semantic owner handoff. No credentials. */
 import {createHash} from 'node:crypto';
 import {types as nativeTypes} from 'node:util';

@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Exact scalar cells: lexical numbers/timestamps never pass through floats or
 -- PostgreSQL's finite precision numeric/timestamp projections.
 CREATE FUNCTION truss.valid_scalar_cell(cell jsonb,expected_family text DEFAULT NULL,allow_null boolean DEFAULT true) RETURNS boolean

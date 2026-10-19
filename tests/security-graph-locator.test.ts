@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {describe, expect, test} from 'bun:test';
 import {projectSecurityGraphEndpoints, projectDeclaredSecurityGraphEndpoints, resolveSecurityGraphKeyLocator} from '../packages/postgresql/src/security-graph-locator';
 const original = () => ({

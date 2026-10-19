@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native caller -> private full graph executor -> buffered receiver spike.
 
 Host authentication, original registration/source/routine custody and DDL

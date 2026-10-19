@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Revision initialization compiles schema once; record work keeps authority live."""
 import json
 import psycopg

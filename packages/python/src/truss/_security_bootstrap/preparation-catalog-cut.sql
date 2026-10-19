@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Candidate metadata-only preparation cut; not authority or complete source custody.
 -- Grant only an explicitly installed private ordinary engine executor.
 -- Routine/role/ACL/DDL exclusion and fresh RC correspondence remain prerequisites.

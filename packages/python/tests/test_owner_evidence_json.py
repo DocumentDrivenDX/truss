@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact numeric-bearing owner evidence; semantic wire remains numeric-free."""
 import unittest
 from decimal import Decimal, InvalidOperation, localcontext

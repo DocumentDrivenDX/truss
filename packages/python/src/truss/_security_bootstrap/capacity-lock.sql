@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Original compatible read/write coordinator only, before registration.
 -- Required order: schema-head SHARE, installation guard SHARE, then this lock.
 -- Retain through original registration commit/rollback. No lock upgrade after

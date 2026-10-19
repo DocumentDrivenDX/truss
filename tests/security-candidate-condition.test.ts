@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {lowerCandidateSecurityCondition,lowerCandidateSecurityRuleFold,lowerCandidateSecurityDisclosure,type CandidateConditionScan} from '../packages/postgresql/src/security-candidate-condition';
 import proof from './fixtures/security-original-graph-ir-formal.json';

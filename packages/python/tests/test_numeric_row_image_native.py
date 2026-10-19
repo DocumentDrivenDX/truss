@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual scalar composite image correspondence, not protected codec admission."""
 from test_row_touch_observer_native import RowTouchObserverNativeTests, ROOT
 import json

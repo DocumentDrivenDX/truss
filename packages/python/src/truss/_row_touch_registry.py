@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private complete touch projection; supplied native cells are not authority."""
 from dataclasses import dataclass
 from ._operation_registry import _integer

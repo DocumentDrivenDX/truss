@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Stable catalog IDs with Record SQL names/member order and retained history."""
 import json,os
 from truss import Ok,CatalogDocument,CatalogRegistration,ObjectFound,QueryRows,HistoryEntity,HistoricalRecord

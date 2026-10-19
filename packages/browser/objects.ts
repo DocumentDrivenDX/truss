@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import * as umf from '@truss/umf-local-actions';
 import type {PGlite} from '@electric-sql/pglite';
 import {readCatalog,prepareDocument,type CatalogSnapshot} from './catalog';

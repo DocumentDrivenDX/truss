@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original catalog sources retained before admission; no installed authority."""
 import json
 from dataclasses import asdict

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Produce original .23 facts using that installed public Python package."""
 import pickle,sys
 from pathlib import Path

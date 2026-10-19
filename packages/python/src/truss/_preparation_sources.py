@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original owner source compilation; private, never current authority."""
 from dataclasses import dataclass
 from hashlib import sha256

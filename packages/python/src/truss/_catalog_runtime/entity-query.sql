@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Truss entity projection source. Integrated by the next versioned query profile.
 -- All reads below use the caller query's statement snapshot, including own writes.
 CREATE FUNCTION truss.query_object_attribution(binding jsonb,selected_type int,selected_id bigint)

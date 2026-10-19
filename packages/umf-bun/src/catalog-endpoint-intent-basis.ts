@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private candidate shape/source basis. Not registered interpretation or acceptance. */
 import {createRequire} from 'node:module';
 import {readFile} from 'node:fs/promises';

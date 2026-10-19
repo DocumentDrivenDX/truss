@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Untrusted offline vectors exercise shape/codec, never acceptance."""
 import copy
 from hashlib import sha256

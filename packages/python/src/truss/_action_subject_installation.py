@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Deployment-owned native Subject enrollment; never invocation authentication.
 
 Trusted direct administrator and quiescent installation are required. SCRAM

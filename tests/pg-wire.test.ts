@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {decodeResponseFrame} from '../packages/pg-runtime/src/wire';
 const limits={maxFrameBytes:4096,maxFields:16};

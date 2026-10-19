@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private fixed admission request encoding; supplies no issuance or authority.
 
 Actual dispatch must bind original artifact provenance, the retained issued

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original native epoch-state fence; no complete source/authority admission."""
 import unittest,threading,time
 from pathlib import Path

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Source correspondence after owner validation. No storage IDs or binding choices. */
 type SourceObject = Record<string, unknown>;
 function object(value: unknown): SourceObject {

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Real packaged UMF + native Weft bridge; explicitly simulated SQL cursor.
 
 Opt in with TRUSS_DISCLOSURE_COMPONENT_QUALIFICATION=1 and the reviewed

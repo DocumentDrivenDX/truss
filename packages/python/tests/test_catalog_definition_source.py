@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 import unittest
 from truss._catalog_definition_source import extract_definition,extract_definitions
 

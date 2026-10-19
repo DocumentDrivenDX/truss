@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original semantic key producer across admitted families; no database authority.
 @covers US-056-AC2
 @covers US-056-AC10

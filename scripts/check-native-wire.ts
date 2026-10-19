@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** One-query private pre-parser probe; no full driver producer qualification. */
 import {createRequire} from 'node:module';
 import {writeFile} from 'node:fs/promises';

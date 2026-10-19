@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Seed genuine predecessor key bytes/receipts using the predecessor package."""
 import os,pickle,sys
 from pathlib import Path

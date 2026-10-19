@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Python execution outcome contracts; ports are trusted host integrations.
 
 This executor never begins, commits, rolls back or closes a caller transaction.

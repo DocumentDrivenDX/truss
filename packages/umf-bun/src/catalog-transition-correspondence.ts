@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private comparison of already observed owner outputs; no validation authority. */
 export function requireUnchangedCatalogTransition(
  originalSourceJson:string,

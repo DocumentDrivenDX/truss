@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Complete committed transaction delivery and caller-asserted source checkpoints.
 
 An acknowledgement asserts the consumer durably applied the delivered interval.

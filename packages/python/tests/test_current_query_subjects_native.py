@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic actual own-session Subject observation and original UMF Key bytes."""
 from hashlib import sha256
 from dataclasses import replace

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One adopter workflow for a composed subtree and its original receipts.
 
 This is the next owned-provider implementation target, not a released capability.

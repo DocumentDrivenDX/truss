@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** One immutable source attachment to the original program; no new identity. */
 const root=process.argv[2];if(!root?.startsWith('/'))throw Error('Explicit UMF checkout required');
 const {backend}=await import(root+'/native/postgresql/runtime');

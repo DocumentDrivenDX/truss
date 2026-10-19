@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public engine-owned import durability and interrupted progress."""
 import os
 from dataclasses import replace

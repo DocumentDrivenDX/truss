@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private immutable custody-body decoding; no registry/profile/authority admission."""
 import base64
 from dataclasses import dataclass

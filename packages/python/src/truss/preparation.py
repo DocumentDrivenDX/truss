@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public original UMF preparation. No catalog acceptance or database effects.
 
 The original JavaScript producer runs inside the packaged embedded V8 boundary.

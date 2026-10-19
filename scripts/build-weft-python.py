@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Build the original frozen Weft Python extension, never working-tree sources."""
 import hashlib
 import io

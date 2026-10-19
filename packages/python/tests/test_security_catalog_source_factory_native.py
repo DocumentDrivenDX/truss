@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native initial factory source correspondence and savepoint containment."""
 from dataclasses import replace
 from truss import Ok,Error

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Compiler-AST/resolver inventory. Findings do not constitute an admission gate. */
 import {createRequire} from 'node:module';
 import {readFileSync,readdirSync,writeFileSync} from 'node:fs';

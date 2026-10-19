@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Practical groups remain valid across explicitly fired deferred checks."""
 from truss import EdgeFound,Ok
 from truss.groups import (AliasObjectReference,StoredObjectReference,GroupSuccess,

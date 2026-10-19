@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Host-only read-only native text/dimensions/JSON correspondence probe. */
 import {decodeNativeTextArray} from '../packages/postgresql/src/index';
 import {writeFile} from 'node:fs/promises';

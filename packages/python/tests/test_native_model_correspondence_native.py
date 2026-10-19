@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original catalog/issued compiler model correspondence; no native admission."""
 import hashlib,json,os,unittest
 from pathlib import Path

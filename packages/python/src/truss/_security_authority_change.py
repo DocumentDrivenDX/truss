@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private participating authority mutation; no permission or ready-profile issuer.
 
 Trusted direct installation administrator and independently qualified physical

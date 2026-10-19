@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic actual producer SQL selection; private excluded-admin diagnostic only."""
 import psycopg
 from truss._preparation_selection import diagnose_preparation_selection

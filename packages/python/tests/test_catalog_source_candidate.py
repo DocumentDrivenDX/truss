@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original candidate custody and duplicate-preserving native source grammar."""
 import dataclasses
 import json

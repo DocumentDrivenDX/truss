@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic required-field rebinding through the public assembly."""
 import os
 from dataclasses import replace

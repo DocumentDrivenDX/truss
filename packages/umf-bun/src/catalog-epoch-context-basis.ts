@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original context4/native epoch and cut custody only, not complete installed admission. */
 import {copyOriginalByteCustody} from '../../postgresql/src/original-byte-custody';
 import {createHash} from 'node:crypto';

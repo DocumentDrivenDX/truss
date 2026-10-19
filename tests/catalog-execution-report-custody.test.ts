@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {requireOriginalCatalogExecutionReportCandidate,recheckOriginalCatalogExecutionReportCandidate} from '../packages/umf-bun/src/catalog-execution-report-candidate';
 test('unissued execution report candidates refuse before any native query',async()=>{

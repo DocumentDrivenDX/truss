@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual issued Graph context/native catalog definition correspondence only."""
 import hashlib,json,os,unittest
 from pathlib import Path

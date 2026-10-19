@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Python convenience view of already admitted offset timestamp text.
 
 Original source semantics remain upstream. Unavailable datetime conversion never

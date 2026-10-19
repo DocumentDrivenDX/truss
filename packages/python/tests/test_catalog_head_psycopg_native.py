@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private provisional configured head; raw commit remains refused."""
 from pathlib import Path
 from truss import Ok, Error

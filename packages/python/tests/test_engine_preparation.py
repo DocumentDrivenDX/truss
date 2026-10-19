@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic lifecycle containment; no native seal qualification."""
 import unittest
 from unittest.mock import Mock,patch

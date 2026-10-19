@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic owned-action settlement custody; no action authority claim."""
 import unittest
 from unittest.mock import Mock,patch

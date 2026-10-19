@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public typed relationship-key predicates and projections."""
 import os
 from decimal import Decimal

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public grouped-operation contracts; select providers through the reference assembly.
 
 All facade calls are synchronous. The host transaction owns durability; creating

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {NativeDecodeBudget,decodeNativeTextArray,decodeNativeVector,decodeNativeRoutineCarriers} from '../packages/postgresql/src/index';
 test('individually valid fields exhaust shared budget before second materialization',()=>{

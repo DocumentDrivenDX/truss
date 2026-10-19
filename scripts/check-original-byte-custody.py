@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Fresh owned PostgreSQL codec/Chromium/host custody evidence, not backend admission."""
 from pathlib import Path
 import os, json, uuid, hashlib, zipfile, subprocess, time

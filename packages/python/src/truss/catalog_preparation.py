@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public source-version-selected catalog preparation without a database."""
 from hashlib import sha256
 from importlib.resources import files

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Compile original release definitions on an independent disposable PG18.6.
 
 No installation constructor, target observation or target snapshot is consumed.

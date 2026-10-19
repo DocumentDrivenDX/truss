@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic wheel correspondence controls; no native runtime or installation."""
 import hashlib
 import importlib

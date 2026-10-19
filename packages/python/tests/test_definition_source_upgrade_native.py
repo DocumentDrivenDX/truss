@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Populated published native71 upgrade preserves originals and derives exact pins."""
 import os,pickle,subprocess,sys,tempfile,unittest
 from pathlib import Path

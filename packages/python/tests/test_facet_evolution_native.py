@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic real-data non-key numeric refinement acceptance/refusal workflow."""
 import json,os
 from decimal import Decimal

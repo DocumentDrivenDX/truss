@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Produce real native64 object and edge transitions through published Python."""
 import os,pickle,sys
 from pathlib import Path

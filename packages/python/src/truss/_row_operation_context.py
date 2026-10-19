@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original-context projection and correspondence; never native authority."""
 from dataclasses import dataclass
 from ._acceptance_json import AcceptanceJsonError, decode_row_operation_json

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public refusal, repair and acceptance of existing scalar requiredness."""
 import json,os
 from truss import CatalogDocument,CatalogAcceptanceRefused,CatalogRegistration,ObjectFound,Ok,QueryRows

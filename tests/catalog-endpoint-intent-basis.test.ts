@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createCatalogEndpointRecords} from '../packages/umf-bun/src/catalog-endpoint-records';
 import {createCatalogEndpointDocumentOrder} from '../packages/umf-bun/src/catalog-endpoint-document-order';

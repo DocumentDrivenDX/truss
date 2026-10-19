@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """The exact Pizza, Northwind and catalog schemas that previously failed registration."""
 import gzip,hashlib,json
 from pathlib import Path

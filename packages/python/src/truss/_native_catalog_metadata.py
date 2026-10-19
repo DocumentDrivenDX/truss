@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Bound original configured response bytes; no installed-profile authority."""
 import json
 import re

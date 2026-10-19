@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Before-effect same-backend fact exclusion in accepted-catalog policy read."""
 import json,sys
 from pathlib import Path

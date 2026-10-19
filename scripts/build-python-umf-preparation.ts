@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Rebuild packaged Python ingress from committed UMF and original Truss sources. */
 import {mkdir,readFile,writeFile,copyFile} from 'node:fs/promises';
 import {resolve} from 'node:path';

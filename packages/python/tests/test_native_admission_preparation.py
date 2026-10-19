@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original attempt request custody; never artifact authority/admission evidence."""
 from unittest.mock import patch
 from test_native_operation_ordinals import ReservedNativeOperationOrdinalTests

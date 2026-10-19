@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {createRequire} from 'node:module';
 import {loadUmfNumericProducer} from '../packages/umf-bun/src/index';
 const directory=process.env.TRUSS_UMF_NUMERIC_PRODUCER;if(!directory)throw Error('Original UMF numeric build required');

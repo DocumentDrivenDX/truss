@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Focused tests for the immutable application-side value schema."""
 import unittest
 

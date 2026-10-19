@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Owned-provider history implementation; installed with the complete provider.
 -- Root interpretation comes from the original image revision, never a live root.
 CREATE FUNCTION truss.runtime_object_ownership_at(object_image jsonb) RETURNS jsonb

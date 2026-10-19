@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Additive import-load projection for the next installed runtime 0.35.
 -- This source is not activated by the current runtime 0.34 bundle.
 CREATE FUNCTION truss.query_object_load_id(binding jsonb,selected_type int,selected_id bigint)

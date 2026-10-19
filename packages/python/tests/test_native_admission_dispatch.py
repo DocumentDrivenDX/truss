@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Administrative issued-candidate dispatch only; synthetic artifacts grant no authority."""
 from pathlib import Path
 from unittest.mock import patch

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original private report preparation/readback, never accepted report authority.
 
 Final accepted construction and persistence belong inside the future protected

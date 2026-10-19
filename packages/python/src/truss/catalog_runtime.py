@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public catalog runtime over caller-owned psycopg transactions.
 
 The selected runtime provides accepted scalar catalogs, graph groups and reads,

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One populated published native61 upgrade through public key backfill."""
 import json,os,pickle,subprocess,sys,tempfile,unittest
 from pathlib import Path

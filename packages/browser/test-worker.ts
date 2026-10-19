@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {KEY_RECEIPT_ENCODING,compactKeyReceipts,sealIntentUtf8} from './key-receipt-storage';
 import {openBrowserStore,type StoreOpen} from './store';
 import {PGlite} from '@electric-sql/pglite';

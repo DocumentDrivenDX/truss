@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual EL multiset body under administrative test custody, not public admission."""
 import json
 from pathlib import Path

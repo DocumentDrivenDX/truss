@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Draft condition, rule-fold and disclosure-metadata SQL: no source
  * authentication, fact completeness, native inventory admission or authorization permit. */
 import {bindCandidateSecurityEndpoint,type CandidateEndpointColumns} from './security-candidate-endpoint';

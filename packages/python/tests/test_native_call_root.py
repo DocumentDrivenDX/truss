@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Atomic original call bookkeeping; not native admission authority."""
 import unittest
 from types import SimpleNamespace

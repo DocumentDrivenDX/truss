@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private PG16.15 installed correspondence; never readiness or protected cut.
 
 The trusted administrative port materializes before admission. Limits bound only

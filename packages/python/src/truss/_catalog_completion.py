@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original private physical completion custody; never report admission/finalization.
 
 The trusted administrative port and physical report bytes remain explicitly

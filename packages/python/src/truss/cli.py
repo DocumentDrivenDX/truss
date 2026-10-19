@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Pinned pgserver development launcher with explicit Truss installation/migration."""
 import argparse
 import json

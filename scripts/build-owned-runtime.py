@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Assemble owner sources for the native72 owned graph runtime."""
 from pathlib import Path
 import argparse

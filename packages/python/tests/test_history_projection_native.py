@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """History projection preserves ordering, absence, explicit null, and pin checks."""
 import json
 import psycopg

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original fresh lifecycle fields; no accepted publication authority."""
 from dataclasses import dataclass
 from hashlib import sha256

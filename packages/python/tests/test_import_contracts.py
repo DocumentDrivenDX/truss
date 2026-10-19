@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Local report accounting; fixtures are not native import evidence."""
 import unittest
 from dataclasses import fields, replace

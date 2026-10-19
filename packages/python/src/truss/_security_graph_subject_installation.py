@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Source-validated graph Subject registration and own-session metadata issuer.
 
 Fresh trusted administrator/compiler/source and DDL/routine custody remain

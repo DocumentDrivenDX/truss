@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Contract carriers do not assert native support or issue authority."""
 import unittest
 import json

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """An ordinary writer can apply a group but cannot drive its private steps."""
 import psycopg
 from truss import Ok,ModuleAccessGrant,CatalogRuntimeConfiguration,adopt_psycopg_host,create_reference_assembly

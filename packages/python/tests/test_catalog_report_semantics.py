@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Independent canonical vectors and original source report-field projection."""
 import base64
 import copy

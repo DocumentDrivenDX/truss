@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Supplied metadata unit controls; actual source/witness/backend gates separate."""
 import copy,hashlib,json,os,unittest
 from pathlib import Path

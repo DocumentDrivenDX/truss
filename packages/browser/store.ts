@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {createFeed,captureFeed,type FeedInput,type FeedPage} from './feed';
 import {createBulk,captureExecute,captureClaim,captureSubmit,captureJob,type SubmitInput,type SubmitResult,type JobRef,type JobState,type JobReview,type ClaimInput,type ClaimResult,type CancelInput,type CancelResult,type ExecuteInput,type BatchOutcome} from './bulk';
 import {createObjectAccess,captureLoad,captureTarget,captureObjectPage,journalHorizon,type LoadInput,type LoadOutcome,type RecordIdentity,type ObjectPageInput,type ObjectPage} from './objects';

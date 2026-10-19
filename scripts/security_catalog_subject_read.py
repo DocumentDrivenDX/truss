@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native ordinary subject -> private accepted-source executor fixture.
 
 Issuer/helper authenticity, cluster uniqueness and exclusive host use are

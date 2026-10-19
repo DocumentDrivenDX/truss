@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual native fresh lifecycle fields and insert-only event evidence."""
 import dataclasses
 import hashlib

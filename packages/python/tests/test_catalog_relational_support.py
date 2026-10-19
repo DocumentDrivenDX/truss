@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original UMF authored key/relationship inventory; not accepted enforcement."""
 import copy
 import json

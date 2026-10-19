@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public registration-owned retained scalar/container rebinding."""
 import json, os
 from dataclasses import replace

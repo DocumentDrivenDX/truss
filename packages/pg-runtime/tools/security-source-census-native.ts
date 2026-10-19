@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Installer-only native original-response census witness; credentials enter through private stdin. */
 import {Client} from 'pg';
 import {readFileSync,writeFileSync,mkdirSync,readdirSync,statSync} from 'node:fs';

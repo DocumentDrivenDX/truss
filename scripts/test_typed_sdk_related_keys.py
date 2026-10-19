@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic native-to-generated Key adapter checks; requires generated commerce models."""
 import copy
 from types import SimpleNamespace

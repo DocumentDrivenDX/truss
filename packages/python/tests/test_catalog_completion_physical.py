@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Administrative post-head physical correspondence, never accepted catalog authority.
 
 The report bytes are deliberately a non-semantic fixture. These tests establish

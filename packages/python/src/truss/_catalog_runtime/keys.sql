@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private PostgreSQL implementation of UMF CONTRACT-040's UMFK1 string grammar.
 -- The protected writer supplies values from actual rows in authored key order.
 -- Qualified document/type/Key namespace checks belong to that writer.

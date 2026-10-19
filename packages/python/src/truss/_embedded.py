@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private embedded owner host. No executable discovery or host JavaScript process.
 
 This delivery boundary is replaceable by native UMF. Owner receipts and native

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private reusable caller operation for the selected bounded text profile.
 
 Registered physical statements are qualification inputs, not logical SQL

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Core structural projection of one original adjunct; no installed identity allocation. */
 import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
 import {getPostgresqlNode} from '/Users/erik/Projects/umf/src/adapters/postgresql';

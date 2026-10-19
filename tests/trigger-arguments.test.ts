@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {decodeNativeTriggerArguments} from '../packages/postgresql/src/index';
 import vectors from '../docs/helix/02-design/contracts/bindings/bootstrap-trigger-arguments-v0.1.vectors.proposal.json';

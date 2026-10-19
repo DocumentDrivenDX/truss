@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Owner-private physical binding check, NOT an authorization gate.
 -- Anchor/store/source/coordinator incarnation must be derived by a separately
 -- qualified native guard. No login/coordinator receives direct execution.

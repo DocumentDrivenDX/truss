@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Experimental pg 8.16.3 private listener composition; not full producer/transport qualification. */
 import type {PoolClient} from 'pg';
 import type {Socket} from 'node:net';

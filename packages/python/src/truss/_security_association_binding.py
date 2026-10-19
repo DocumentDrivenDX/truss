@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original-source correspondence only; no authority or UMF semantics.
 
 The caller still needs genuine UMF/ontology owner validation, authenticated

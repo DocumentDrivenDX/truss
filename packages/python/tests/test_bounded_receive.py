@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Logical frame limits and transport faults; no allocation accounting."""
 import struct
 import unittest

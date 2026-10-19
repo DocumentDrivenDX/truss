@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One-time selected native epoch/barrier installation, not protected admission.
 
 Trusted direct superuser installer, administrative quiescence and original

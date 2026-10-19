@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Load original UMF pack ontologies through the public Python API.
 
 Set TRUSS_UMF_DOMAIN_PACK_ROOT to an UMF checkout. These checks cover native

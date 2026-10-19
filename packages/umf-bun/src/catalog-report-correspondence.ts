@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Existing producer fields only; never full report/effect admission. */
 import {requireOriginalCatalogExecutionReportCandidate,recheckOriginalCatalogExecutionReportCandidate,type composeCatalogExecutionReportCandidate} from './catalog-execution-report-candidate';
 import {requireOriginalCatalogUmfMembershipCandidate,type composeCatalogUmfMembershipCandidate} from './catalog-umf-membership-candidate';

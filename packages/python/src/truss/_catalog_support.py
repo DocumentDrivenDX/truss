@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 from ._catalog_source_reference import REFERENCE08_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE,RECURSIVE08_PROFILE,compact_catalog_sources,catalog_source_artifact,resolve_catalog_observation
 """Selected catalog metadata policy; incomplete support, never acceptance."""
 import base64

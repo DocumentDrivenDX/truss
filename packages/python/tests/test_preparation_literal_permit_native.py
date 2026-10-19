@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original C/D mint/check composition; no public protected execution."""
 from importlib.resources import files
 from concurrent.futures import ThreadPoolExecutor

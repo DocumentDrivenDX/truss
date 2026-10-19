@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private comparison/lock primitive only. Expected values do not confer trusted
 -- deployment admission or transition authority. Invoke on original executor.
 CREATE FUNCTION truss.runtime_lock_source_epoch(

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {loadUmfValueProducer,UMF_VALUE_SOURCE} from '../packages/umf-bun/src/index';
 const directory=process.env.TRUSS_UMF_VALUE_PRODUCER;if(!directory)throw Error('Pinned original UMF value producer required');

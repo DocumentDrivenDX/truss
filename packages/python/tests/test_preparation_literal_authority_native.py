@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original literal packet + native current human/action/module checks, no permit."""
 from importlib.resources import files
 import json

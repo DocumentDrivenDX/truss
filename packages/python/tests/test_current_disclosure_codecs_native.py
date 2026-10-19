@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual public scalar/capture/UMF transport; supplied source wrapper, no admission."""
 import base64,copy,json,os,struct,hashlib,unittest
 from pathlib import Path

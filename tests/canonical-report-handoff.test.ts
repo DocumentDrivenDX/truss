@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createCanonicalAcceptanceReportHandoff} from '../packages/umf-bun/src/canonical-report-handoff';
 const codec=await createCanonicalAcceptanceReportHandoff('/Users/erik/Projects/umf/package.json');

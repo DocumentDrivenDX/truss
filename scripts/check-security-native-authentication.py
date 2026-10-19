@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned PostgreSQL authentication spike; not a production credential provider."""
 from pathlib import Path
 import hashlib

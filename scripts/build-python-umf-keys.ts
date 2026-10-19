@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Package an isolated committed UMF key producer without changing preparation. */
 import {mkdir,readFile,writeFile,copyFile,readdir} from 'node:fs/promises';
 const repository=process.argv[2];if(!repository)throw Error('UMF repository required');

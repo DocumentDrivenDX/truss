@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic replay of original actual native compiler artifacts, no database."""
 from dataclasses import replace
 import json

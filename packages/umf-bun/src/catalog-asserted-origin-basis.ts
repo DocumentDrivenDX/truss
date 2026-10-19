@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original native actor plus separately captured asserted bytes; not full context. */
 import {copyOriginalByteCustody} from '../../postgresql/src/original-byte-custody';
 import {createHash} from 'node:crypto';

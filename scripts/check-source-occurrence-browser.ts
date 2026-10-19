@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Scoped portable source-index check; not semantic assertion admission. */
 const {chromium}=await import(Bun.env.UMF_PLAYWRIGHT_MODULE ?? 'playwright');
 import {createHash} from 'node:crypto';

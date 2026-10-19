@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Compiler boundary controls with synthetic responses; no SQL/native oracle."""
 import copy
 from dataclasses import FrozenInstanceError

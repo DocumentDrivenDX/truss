@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Independent fixture checks; no native or public-adapter qualification."""
 import json
 from decimal import localcontext

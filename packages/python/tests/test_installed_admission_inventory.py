@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private scoped correspondence rejects damaged native fixture packets."""
 import json
 from dataclasses import replace

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Owned flat conformance fixture only; trusted=true is not production authority. */
 import {securityFixture,ref} from '/Users/erik/.codex/worktrees/security-main-integration/umf/tests/security/fixture';
 import {evaluateSecurityAccess,type SecurityFact,type SecurityFactCut} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/evaluate';

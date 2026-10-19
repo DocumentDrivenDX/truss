@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Resolve a source reference within a catalog report's retained document."""
 import base64
 from dataclasses import dataclass

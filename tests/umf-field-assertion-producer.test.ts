@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {loadUmfProducer,loadUmfFieldAssertionProducer} from '../packages/umf-bun/src/index';
 const recordDir=process.env.TRUSS_UMF_PRODUCER,fieldDir=process.env.TRUSS_UMF_FIELD_ASSERTION_PRODUCER;

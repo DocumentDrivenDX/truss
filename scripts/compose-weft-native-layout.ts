@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Source repair experiment: ordinary digest plus complete CHECK, never mislabeled IMMUTABLE code. */
 import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
 import {readDocument} from '/Users/erik/Projects/umf/src/model/document';

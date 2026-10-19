@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Separate relational0.2 source correspondence; no native codec/admission token."""
 from ._security_guarded_source import _capture_source_comparison
 from ._owner_evidence_json import decode_owner_evidence_json

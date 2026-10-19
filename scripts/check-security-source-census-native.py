@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned PostgreSQL17.9 original-response census witness, never backend acceptance."""
 import hashlib,json,os,secrets,subprocess,tempfile,time,uuid,zipfile
 from pathlib import Path

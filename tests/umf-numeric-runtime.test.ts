@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {loadUmfNumericProducer,loadUmfValueProducer,UMF_NUMERIC_SOURCE} from '../packages/umf-bun/src/index';
 const directory=process.env.TRUSS_UMF_NUMERIC_PRODUCER;

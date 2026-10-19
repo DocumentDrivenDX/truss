@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Pure composition of sources captured at one original NativeCall.
 
 This snapshot confers neither current-state revalidation nor accepted authority.

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Trusted host startup pin custody. Resolution alone is not semantic admission. */
 import {createHash} from 'node:crypto';
 import type {AcceptanceInput,ProfilePin,ExactArtifact} from '../../../docs/helix/02-design/contracts/bindings/truss-acceptance-input-v0.1';

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original relationship PostgreSQL codec preflight; no SQL/session/authority admission."""
 from pathlib import Path
 from hashlib import sha256

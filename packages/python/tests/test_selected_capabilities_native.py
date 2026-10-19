@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One adopter workflow through real selected public capability objects."""
 from dataclasses import replace
 import psycopg

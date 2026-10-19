@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Numeric-free original wire to the existing native canonical-tree codec carrier.
  * This does not admit report shape, semantic provenance, resources or publication. */
 import {copyOriginalByteCustody,OriginalByteCustodyError} from './original-byte-custody';

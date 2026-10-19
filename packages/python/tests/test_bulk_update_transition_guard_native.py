@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Bulk update transition rows retain the exact journal projection."""
 import base64
 import json

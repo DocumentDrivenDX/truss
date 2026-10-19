@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual native required revision sources; no complete report/feed admission."""
 import dataclasses
 import json

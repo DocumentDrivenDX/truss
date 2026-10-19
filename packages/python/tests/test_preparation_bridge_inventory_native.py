@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original SCRAM D/C/E workflow with selected definition custody adjunct."""
 from concurrent.futures import ThreadPoolExecutor
 from importlib.resources import files

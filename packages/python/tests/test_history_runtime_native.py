@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One public object/edge reconstruction workflow after canonical deletion."""
 import json
 from truss import (Ok,Error,HistoryEntity,HistoryPage,HistoricalRecord,HistoricalDeleted,

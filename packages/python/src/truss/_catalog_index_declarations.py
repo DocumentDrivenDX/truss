@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original selected immutable index declarations; never installed readiness."""
 from dataclasses import dataclass
 from hashlib import sha256

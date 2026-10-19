@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Selected native routine-DDL writer participation, never complete source admission."""
 import gzip,json,hashlib,os,unittest
 from pathlib import Path

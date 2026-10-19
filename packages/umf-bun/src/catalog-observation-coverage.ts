@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {compactCatalogSources,catalogObservationIdentity,SOURCE_REFERENCE_FORMAT} from './catalog-source-reference';
 /** Observation correspondence only: never an enforcement or complete assertion report. */
 import {createHash} from 'node:crypto';

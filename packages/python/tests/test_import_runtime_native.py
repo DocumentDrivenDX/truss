@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Small adopter workflows for public caller-owned imports."""
 import base64,json
 from dataclasses import replace

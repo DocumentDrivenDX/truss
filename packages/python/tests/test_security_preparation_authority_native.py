@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual authority-exclusion component; no bulk seal or fixed-cut bridge claim."""
 import psycopg
 from dataclasses import replace

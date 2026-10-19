@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Promote only an immutable tag's fully completed, tested first-run artifact."""
 import argparse
 from datetime import datetime

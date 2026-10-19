@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public current-policy query reference workflow on a fresh local PG18 runtime.
 
 The adjacent original model/policy/designation is a reference fixture, not a

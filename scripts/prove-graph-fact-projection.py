@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional graph-fact projection preservation; not native-trigger refinement."""
 from pathlib import Path
 import hashlib,json,uuid,z3

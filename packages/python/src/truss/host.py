@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Explicit fresh native host composition; no graph capability or installation.
 
 The selected adapter is pinned pg8000 over a Unix socket. The returned boundary

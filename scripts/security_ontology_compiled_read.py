@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original Weft graph query under the existing owned native graph cut.
 
 Diagnostic composition only: trusted compiler binary/source, registration and

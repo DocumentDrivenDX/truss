@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {equalAdmittedDiagnosticMultisets as equal,type AdmittedDiagnosticComparison as Entry} from '../packages/tooling/src/conformance-diagnostic-multiset';
 const error:Entry={sourceIdentity:'original-document-A',diagnosticProfile:'original-umf-0.7-profile',classification:'upstream_validation',severity:'error',code:'STRUCTURE',path:''};

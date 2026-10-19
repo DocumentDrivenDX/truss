@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public one-call traversal of a diamond/cycle on stock PostgreSQL18."""
 from truss import (Ok,Error,ObjectFound,TraversalHop,TraversalComplete,TraversalLimited,
     adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration)

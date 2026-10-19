@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private PostgreSQL frame limits; no allocation or copy accounting."""
 import struct
 from threading import Lock

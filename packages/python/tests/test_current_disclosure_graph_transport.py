@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual packaged semantic child; supplied facts, no SQL or native admission."""
 import copy,json,os,pathlib,unittest
 from truss._current_disclosure_wire import disclosure_fact_cut,frame_digest

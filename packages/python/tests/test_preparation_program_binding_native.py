@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owner-private native program binding; no authorization or SQL execution."""
 import contextlib
 from importlib.resources import files

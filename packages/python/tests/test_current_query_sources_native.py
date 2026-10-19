@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic actual PG18 original-source storage, not current-query permission."""
 from hashlib import sha256
 import json

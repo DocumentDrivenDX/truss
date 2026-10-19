@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Composed private prepared-Execute cancellation; no public C02 claim."""
 import unittest
 from concurrent.futures import ThreadPoolExecutor

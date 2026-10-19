@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original UMF/support byte custody only; not supported-subset semantic admission. */
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;

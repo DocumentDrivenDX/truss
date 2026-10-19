@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Negative static cases; each named line must produce a type error."""
 from typing import Literal
 from truss.contracts import TextValue, BooleanValue, ProfilePin

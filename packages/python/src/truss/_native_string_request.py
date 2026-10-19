@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Fixed private pending writer input; no registered family or authority."""
 from dataclasses import dataclass
 import re

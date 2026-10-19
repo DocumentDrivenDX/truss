@@ -1,1 +1,2 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 ALTER TABLE truss.runtime_import_source ADD COLUMN operation_index int NOT NULL DEFAULT 0 CHECK (operation_index BETWEEN 0 AND 1023); ALTER TABLE truss.runtime_import_source DROP CONSTRAINT runtime_import_source_group_attempt_id_key; ALTER TABLE truss.runtime_import_source ADD CONSTRAINT runtime_import_source_attempt_operation UNIQUE (group_attempt_id, operation_index);

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Embeddable experimental Truss Python interface; see the declared runtime profile."""
 from .execution import ExecutionFailure, Ok, Error, Outcome, TransactionHandle, Isolation, AccessMode
 from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedCursor, FeedPage, FeedConsumer, FeedAcknowledged, FeedUnavailable

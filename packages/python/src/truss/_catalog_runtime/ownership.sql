@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Original operation-time endpoint contexts. No current-row fallback for history.
 CREATE FUNCTION truss.runtime_endpoint_ownership(identity jsonb,captured_revision int) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

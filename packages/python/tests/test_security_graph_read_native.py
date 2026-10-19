@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual Truss object/edge facts fed into the original shared UMF policy."""
 import unittest,json,sys
 from pathlib import Path

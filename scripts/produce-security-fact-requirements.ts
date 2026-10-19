@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original UMF dependency producer fixture; no authenticated production handoff. */
 import {securityPolicyDependencies} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/dependencies';
 import {securityFixture} from '/Users/erik/.codex/worktrees/security-main-integration/umf/tests/security/fixture';

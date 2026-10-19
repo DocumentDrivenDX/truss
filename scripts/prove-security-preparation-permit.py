@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional native-permit binding laws; no SQL/issuer/selection refinement."""
 from pathlib import Path
 import hashlib, json, z3

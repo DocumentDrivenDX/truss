@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original reified graph source archive; never a compiler/native admission token.
 
 The trusted host supplies original owner compiler bytes. Comparisons preserve

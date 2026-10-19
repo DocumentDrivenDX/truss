@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private stronger epoch-state acquisition, not complete installed-source custody.
 -- NOWAIT refuses pending epoch writers; no internal retry or substituted epoch.
 CREATE FUNCTION truss.runtime_lock_fenced_fresh_source_epoch(

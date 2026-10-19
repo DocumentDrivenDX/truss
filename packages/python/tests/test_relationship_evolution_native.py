@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public relationship multiplicity refusal, repair and compatible acceptance."""
 import base64,json,os
 from truss import Ok,CatalogDocument,CatalogAcceptanceRefused,CatalogRegistration,CatalogRelationshipCompatibilityViolation

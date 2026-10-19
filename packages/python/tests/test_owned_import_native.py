@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic atomic owned aggregate import through the public capability."""
 import base64
 from dataclasses import replace

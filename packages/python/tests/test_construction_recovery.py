@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original executable construction custody, not installed runtime qualification."""
 import dataclasses
 import unittest

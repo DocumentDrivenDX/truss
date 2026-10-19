@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Catalog view request contracts; shapes alone confer no catalog authority."""
 from dataclasses import dataclass, field
 from typing import Literal

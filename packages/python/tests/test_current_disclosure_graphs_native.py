@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual public population and native projection; source wrapper is diagnostic only.
 
 No registration/native binding/authenticated protected release admission. The

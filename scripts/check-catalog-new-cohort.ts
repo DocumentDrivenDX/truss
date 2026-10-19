@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {collectCatalogTypeJournals} from '../packages/umf-bun/src/catalog-type-journals';
 import {collectCatalogTypeReceipts} from '../packages/umf-bun/src/catalog-type-receipts';
 import {composeCatalogUmfMembershipCandidate} from '../packages/umf-bun/src/catalog-umf-membership-candidate';

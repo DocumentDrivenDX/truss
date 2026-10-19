@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact copied0.2 inspection correspondence; no native authority credential."""
 import json
 from hashlib import sha256

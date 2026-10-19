@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original-source mapping checks; no owner semantics/native authority claim."""
 from dataclasses import FrozenInstanceError
 from hashlib import sha256

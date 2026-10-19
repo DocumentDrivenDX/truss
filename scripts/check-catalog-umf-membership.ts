@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {collectCatalogReportPreparation} from '../packages/umf-bun/src/catalog-report-preparation';
 import {createCatalogReportCorrespondence} from '../packages/umf-bun/src/catalog-report-correspondence';
 import {loadUmfDeclarationProducer,loadUmfFieldAssertionProducer} from '../packages/umf-bun/src/index';

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Freeze and execute the private native catalog source-cut spike on an owned native Unix-socket fixture."""
 import hashlib,json,os,secrets,subprocess,tempfile,time,uuid,zipfile,importlib.util,importlib.metadata
 from pathlib import Path

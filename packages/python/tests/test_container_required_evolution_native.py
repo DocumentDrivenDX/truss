@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Missing/null refusal and empty/nonempty repair for flat containers."""
 import json,os
 from truss import CatalogDocument,CatalogAcceptanceRefused,CatalogRegistration,ObjectFound,QueryRows,Ok

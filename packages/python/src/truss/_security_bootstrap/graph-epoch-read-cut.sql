@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Fixed no-input epoch/archive/guard cut for an ordinary private graph reader.
 CREATE FUNCTION truss.acquire_graph_epoch_read_cut() RETURNS pg_catalog.void
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$

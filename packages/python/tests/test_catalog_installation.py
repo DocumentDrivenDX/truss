@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual original-owner DDL constructor; no ready installation publication."""
 import json
 import unittest

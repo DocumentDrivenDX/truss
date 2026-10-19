@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Selected native source epoch/DDL cut through actual Subject publication."""
 import json,os
 from pathlib import Path

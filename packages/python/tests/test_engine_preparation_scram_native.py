@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One native SCRAM connection through pre-RR capture, RR and COMMIT."""
 from pathlib import Path
 import secrets

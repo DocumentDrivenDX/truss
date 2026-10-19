@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One real installed candidate upgrade workflow, including caller rollback."""
 import json,os,pickle,subprocess,sys,tempfile,unittest
 from pathlib import Path

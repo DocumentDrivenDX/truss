@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private epoch registry guard. Issuance/current-pointer transitions and
 -- installation/target-incarnation admission remain separate obligations.
 CREATE FUNCTION truss.runtime_immutable_source_epoch() RETURNS trigger

@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Fixed original graph/source/role cut; no data export or caller parameters.
 CREATE FUNCTION truss.acquire_ontology_read_cut() RETURNS pg_catalog.void
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$

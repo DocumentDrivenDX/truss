@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual public Graph candidate refuses without a qualified authority protocol.
 
 The local PG18.6 caller fixture is not SCRAM or complete B-008 qualification.

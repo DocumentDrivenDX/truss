@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Real-data validation before compatible catalog publication.
 CREATE FUNCTION truss.catalog_scalar_violations(declarations_bytes bytea) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual engine D custody and excluded E invocation of the pinned owner ABI."""
 import contextlib
 from importlib.resources import files

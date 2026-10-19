@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Build the separate original core0.8 catalog observer from committed UMF."""
 from pathlib import Path
 import hashlib,json,shutil,subprocess,sys

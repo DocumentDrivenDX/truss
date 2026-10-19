@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private PostgreSQL16.15 routine-DDL writer participation adjunct.
 -- No epoch transition is issued. Fresh source comparison remains mandatory.
 -- Closed six-tag subset; NOT aggregate/ALTER ROUTINE/cascade/grant/shared-object,

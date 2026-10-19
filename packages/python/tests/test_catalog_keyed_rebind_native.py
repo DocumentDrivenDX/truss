@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public registration of a required retained field and its alternate key."""
 import json, os
 from dataclasses import replace

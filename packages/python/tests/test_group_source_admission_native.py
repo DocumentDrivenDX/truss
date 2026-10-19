@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Prepared group admission verifies exact document sources without cross-call reuse."""
 import json
 

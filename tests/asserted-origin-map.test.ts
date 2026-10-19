@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {describe,test,expect} from 'bun:test';
 import {mapAssertedOrigin} from '../packages/postgresql/src/asserted-origin-map';
 const bytes=(s:string)=>new TextEncoder().encode(s);

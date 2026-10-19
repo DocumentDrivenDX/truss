@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original version-specific warnings remain retained and uninterpreted."""
 import base64,json,hashlib,os
 from decimal import Decimal

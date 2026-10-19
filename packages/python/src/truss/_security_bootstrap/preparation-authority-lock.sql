@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Separate preparation candidate. No caller inputs, credentials, data snapshot,
 -- seal or authority result. Exact privileged owner/caller ACL is installer-owned.
 -- Broad native role and module-policy exclusion; not complete helper/DDL closure.

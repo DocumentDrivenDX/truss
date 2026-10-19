@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private complete-cohort projection matching; supplied rows are not authority."""
 from dataclasses import dataclass
 from ._operation_registry import COLUMNS, decode_operation_registry

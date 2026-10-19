@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual Python/TypeScript structural replay; no native or corpus release claim."""
 from pathlib import Path
 import hashlib

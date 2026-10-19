@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Synthetic invalidation controls; native custody is qualified separately."""
 import unittest
 from types import SimpleNamespace as S

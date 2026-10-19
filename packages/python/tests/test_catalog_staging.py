@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Real Python catalog effects on administrative native component custody."""
 import dataclasses
 import json

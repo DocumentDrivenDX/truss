@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Foreign catalog descriptors must refuse before row decoding or callback.
 @covers US-056-AC10
 """

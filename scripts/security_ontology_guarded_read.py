@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Full reified graph capture/evaluation/buffered-release composition spike.
 
 Trusted administrative host, subject selection and mapping custody are premises.

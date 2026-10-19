@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public type/profile separation; deliberately no adopted host or SQL."""
 import unittest,typing
 from truss import CurrentDisclosureExecutor,CurrentDisclosureRows,CurrentQueryExecutor

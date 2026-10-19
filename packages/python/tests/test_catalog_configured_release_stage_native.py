@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Configured native stage/source composition. Administrative fixtures, no PA authority."""
 import copy,hashlib,json,unittest
 from test_native_pg8000 import NativeBoundaryFixture

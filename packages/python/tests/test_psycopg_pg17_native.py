@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Explicit PG18.6 tuple; no installer or ordinary authority qualification."""
 from truss import PsycopgProfile,adopt_psycopg_host,Ok,Error
 from test_psycopg_host_native import PsycopgHostNativeTests

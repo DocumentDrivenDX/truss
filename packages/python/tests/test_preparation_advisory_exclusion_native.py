@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Direct native advisory acquisition exclusion, not complete authority closure."""
 from importlib.resources import files
 import psycopg

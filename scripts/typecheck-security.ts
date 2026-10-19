@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Check private security components independently of the ordinary Weft build. */
 import {readdir} from 'node:fs/promises';
 const directory='packages/postgresql/src';

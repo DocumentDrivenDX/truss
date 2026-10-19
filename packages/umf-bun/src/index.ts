@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Trusted host-only original producer registration. No alternate UMF validation. */
 import {resolve} from 'node:path';
 import {requireUnchangedCatalogTransition} from './catalog-transition-correspondence';

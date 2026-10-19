@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private fresh-install privilege boundary; no facade or readiness authority.
 
 The trusted installer must quiesce administrative changes. The caller owns its

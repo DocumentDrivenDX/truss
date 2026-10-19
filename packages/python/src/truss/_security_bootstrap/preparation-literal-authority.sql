@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private literal-only current-check component; not a permit or production gate.
 -- Trusted original source/installer/executable custody remains a premise.
 -- Install this helper under the existing excluded runtime owner. Never SET ROLE.

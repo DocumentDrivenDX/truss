@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Retained native side attribution, without original producer authority."""
 from test_native_state_owner import NativeStateOwnerTests
 from pathlib import Path

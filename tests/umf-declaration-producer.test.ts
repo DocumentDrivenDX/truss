@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {loadUmfProducer,loadUmfDeclarationProducer} from '../packages/umf-bun/src/index';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';

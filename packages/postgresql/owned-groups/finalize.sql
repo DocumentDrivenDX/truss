@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Close the original plan against every actual effect. The final image check is
 -- performed at group finish; commit rechecks custody and authority after later
 -- groups may legitimately have superseded those images in the same transaction.

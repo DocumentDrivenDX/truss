@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Edge authority remains current at post-write and deferred settlement boundaries."""
 import psycopg
 from truss import Ok

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {indexSourceJsonOccurrences as index,originalSourceOccurrenceBytes as bytes,preflightSourceJson,decodeAcceptanceJson} from '../packages/postgresql/src/acceptance-json';
 const utf8=(s:string)=>new TextEncoder().encode(s),text=(b:Uint8Array)=>new TextDecoder().decode(b);

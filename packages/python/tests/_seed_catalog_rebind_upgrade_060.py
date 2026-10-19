@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Create a real optional-only rebind using the installed native60 predecessor."""
 import os,pickle,sys
 from dataclasses import replace

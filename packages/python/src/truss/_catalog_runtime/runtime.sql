@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Catalog-only runtime. Business mutation/feed APIs are not granted by this release.
 CREATE TABLE truss.catalog_runtime_installation (
  singleton boolean PRIMARY KEY DEFAULT true CHECK(singleton),installation_id uuid NOT NULL UNIQUE,

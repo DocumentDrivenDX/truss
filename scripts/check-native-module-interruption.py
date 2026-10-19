@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native owned-module interrupt cleanup and unrelated-worker survival control."""
 from truss._runtime_profile import SERVER_VERSION
 from pathlib import Path

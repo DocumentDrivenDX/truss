@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Published source rows survive the operation-indexed storage upgrade."""
 import os,pickle,subprocess,sys,tempfile,unittest
 from pathlib import Path

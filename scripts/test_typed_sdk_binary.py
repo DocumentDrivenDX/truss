@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic private conversion controls; no binary profile activation."""
 import base64
 import unittest

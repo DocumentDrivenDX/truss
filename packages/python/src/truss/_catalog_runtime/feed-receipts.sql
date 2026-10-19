@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Source-side opaque destination receipt retention; no foreign commit attestation.
 CREATE TABLE truss.runtime_feed_ack_receipt (
  registration_id uuid NOT NULL REFERENCES truss.runtime_feed_consumer(registration_id),

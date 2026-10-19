@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original borrowed driver hooks; restoration performs no native I/O."""
 
 class DriverAttachment:

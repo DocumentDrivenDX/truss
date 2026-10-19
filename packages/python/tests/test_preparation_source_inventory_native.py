@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Independent original native routine inventory refusal witnesses."""
 import unittest
 import psycopg

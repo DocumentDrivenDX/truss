@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Current configuration bytes under original operation custody; not an at-admission capture. */
 import {createHash} from 'node:crypto';
 import {requireOriginalCatalogEpochContextBasis,recheckOriginalCatalogEpochContextBasis,type collectCatalogEpochContextBasis} from './catalog-epoch-context-basis';

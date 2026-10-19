@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Optional PostgreSQL18.6 schema-DDL writer participation extension.
 -- Fences selected CREATE/ALTER/DROP SCHEMA tags using original epoch/marker ordering.
 -- Does not issue a new epoch or prove role/grant/event-trigger/admin lifetime.

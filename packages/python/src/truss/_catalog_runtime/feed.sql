@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Caller-owned complete transaction feed; no downstream durability attestation.
 CREATE SEQUENCE truss.runtime_feed_reservation_seq;
 CREATE TABLE truss.runtime_feed_reservation (

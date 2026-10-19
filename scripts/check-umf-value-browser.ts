@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {createRequire} from 'node:module';
 import {loadUmfValueProducer} from '../packages/umf-bun/src/index';
 const directory=process.env.TRUSS_UMF_VALUE_PRODUCER;if(!directory)throw Error('Original UMF value build required');

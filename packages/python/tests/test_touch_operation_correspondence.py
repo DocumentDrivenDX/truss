@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 import copy,json,unittest
 from truss._row_operation_custody import decode_row_operation_custody
 from truss._row_touch_registry import COLUMNS,decode_touch_registry

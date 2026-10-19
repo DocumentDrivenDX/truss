@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Retain scoped original-owner inventory evidence; no backend admission claim."""
 from pathlib import Path
 import os, json, hashlib, zipfile, subprocess, uuid

@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Native export sources v0.1: separately selected by the export compiler profile.
 -- Ordinary binding scan/result limits do not cap these complete sources.
 -- Each row remains byte-bounded; metadata admission and all value/root checks remain.

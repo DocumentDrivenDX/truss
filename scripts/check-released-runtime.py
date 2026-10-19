@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Focused public-release consumer verification; no full semantic-corpus claim."""
 import argparse,hashlib,importlib.metadata,json,os,re,subprocess,sys,tempfile,time,zipfile
 from pathlib import Path

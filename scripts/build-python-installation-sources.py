@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Package original installation inputs; incomplete sources grant no authority.
 
 This is the first release-definition input to the integrated installer workstream,

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Isolated native internal component; no normal installation marker or public writer. */
 import {SQL} from 'bun';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';

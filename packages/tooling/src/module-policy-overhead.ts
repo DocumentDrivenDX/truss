@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Pure protocol0.1.0 timing adjudication; no native/profile/correctness authority. */
 export interface PolicyTimingPair {
  readonly baselineNanoseconds:string;

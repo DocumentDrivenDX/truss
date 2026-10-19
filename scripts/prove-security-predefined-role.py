@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional predefined-role reachability model; native privilege and lifetime refinement remain unproved."""
 from pathlib import Path
 import hashlib,json,uuid,z3

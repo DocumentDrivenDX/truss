@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native lifecycle and private adopted-executor composition evidence."""
 import unittest
 from truss._native_pg8000 import NativeBoundaryRefusal

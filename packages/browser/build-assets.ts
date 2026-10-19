@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Host-only reproducible packaging. The provider itself contains no Bun/Node API. */
 import {mkdir,cp,readFile,readdir,writeFile} from 'node:fs/promises';
 import {join,resolve,isAbsolute} from 'node:path';

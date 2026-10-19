@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Lock-only RR component. No permission, owner-union, lease, selection or seal.
 -- The privileged installer fixes the original caller and source/ABI/ACL.
 CREATE FUNCTION truss.acquire_preparation_data_authority_lock()

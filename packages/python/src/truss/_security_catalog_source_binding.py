@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Pure original source binding; no native authority or policy interpretation."""
 from dataclasses import replace
 import hashlib,json

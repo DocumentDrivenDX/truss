@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Registered Alice/Bob/outsider native callers through one guarded source profile."""
 from dataclasses import replace
 import json,uuid

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One tiny public workflow over the unchanged consumer commerce UMF0.8 model."""
 import base64, hashlib, json, os
 from decimal import Decimal

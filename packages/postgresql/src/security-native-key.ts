@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Experimental physical-key correspondence. Inputs must be original admitted
  * compiler declarations and original native inventory, independently held at a
  * stable cut. Shape/content equality is not source authentication or admission. */

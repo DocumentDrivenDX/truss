@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 from ._catalog_source_reference import compact_catalog_sources,SOURCE_REFERENCE_FORMAT
 """Original packaged owner observation correspondence; no support authority."""
 import base64

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Fresh original construction without uncaptured setup SQL or fabricated idle."""
 import unittest
 import importlib.util

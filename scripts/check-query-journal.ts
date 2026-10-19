@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Offline native correspondence check. Never resubmits SQL or interprets commit authority. */
 import {readdir,readFile,stat,writeFile} from 'node:fs/promises';
 import {join} from 'node:path';

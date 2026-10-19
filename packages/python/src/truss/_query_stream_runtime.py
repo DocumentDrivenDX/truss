@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original Truss portal execution; compiler owns SQL, native scope owns admission."""
 from dataclasses import dataclass
 from decimal import Decimal

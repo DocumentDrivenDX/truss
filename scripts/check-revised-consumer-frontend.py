@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Prepare/assess original revised consumer SQL using frozen Weft test frontend."""
 import copy
 import hashlib

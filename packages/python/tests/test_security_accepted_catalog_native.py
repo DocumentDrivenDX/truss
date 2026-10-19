@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Accepted core0.8 sources through genuine Weft under the native guard.
 @covers US-056-AC2
 @covers US-056-AC6

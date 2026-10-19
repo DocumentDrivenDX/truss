@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Opt-in actual PG18.6 disclosure flow; original fixture binding is not admission.
 
 This campaign requires a serialized native test window. It exercises genuine

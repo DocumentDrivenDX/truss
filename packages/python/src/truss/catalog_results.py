@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public outcomes from accepted native UMF catalog operations."""
 from dataclasses import dataclass
 from typing import Literal

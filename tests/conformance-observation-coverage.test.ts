@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {expect, test} from 'bun:test';
 import {checkAdmittedConformanceObservationCoverage as covers,
   type ConformanceObservationKey as Key} from '../packages/tooling/src/conformance-observation-coverage';

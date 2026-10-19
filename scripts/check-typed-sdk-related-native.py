@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One genuine public SDK RelatedKeys read/page/stream workflow on fresh PG18."""
 from contextlib import contextmanager
 from datetime import timedelta

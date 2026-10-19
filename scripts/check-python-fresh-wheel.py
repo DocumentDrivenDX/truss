@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Build and verify a fresh installed component wheel; no engine release claim."""
 import hashlib,json,os,re,shutil,subprocess,sys,tempfile,zipfile
 from pathlib import Path

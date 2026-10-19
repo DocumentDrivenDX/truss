@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Additive runtime releases never rewrite immutable genesis or producer facts.
 CREATE SEQUENCE truss.runtime_release_generation;
 CREATE TABLE truss.runtime_release (

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original public catalog + mutation population for full ontology graph qualification.
 Seed/endpoint prerequisite only: no protected read or backend admission claimed.
 """

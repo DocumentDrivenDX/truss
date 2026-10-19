@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public exact-instant query workflow over original timestamp tokens."""
 from dataclasses import replace
 from truss import Ok, QueryRows, QueryRefused, adopt_psycopg_host, create_reference_assembly, CatalogRuntimeConfiguration

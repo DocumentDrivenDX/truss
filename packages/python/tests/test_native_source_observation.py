@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Supplied native row controls; no actual source/caller/authority claim."""
 import json,unittest
 from decimal import Decimal

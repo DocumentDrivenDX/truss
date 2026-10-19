@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original selected declaration policy integrated with actual native reports."""
 import dataclasses
 import hashlib

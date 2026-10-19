@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Declared decimal18,2 through public catalog, mutation, key, query and feed APIs."""
 import json,os,base64
 from decimal import Decimal

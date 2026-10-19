@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private original journal ingress; no issuer, accepted-report or enforcement authority. */
 import {createTypeJournalEvidenceBudget} from './catalog-type-journal-evidence-budget';
 import {createHash} from 'node:crypto';

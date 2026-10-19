@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Committed registered-source capture and one retained compiler context.
 
 Native fixture Subject/binding are diagnostic; no ordinary-caller admission.

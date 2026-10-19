@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Versioned Truss wrapper references; original UMF producer results remain upstream. */
 import type {createCatalogInputPreparation} from './catalog-input';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;

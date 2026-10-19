@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One original shared store registration; no authentication or native permit.
 
 Trusted quiescent direct installer, PG18.6 and complete original metadata basis.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private complete fixture dependency cuts; comparisons do not confer authority.
 
 UMF owns semantic traversal. This composes original dependency coverage with

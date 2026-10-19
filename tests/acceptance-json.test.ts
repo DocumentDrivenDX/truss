@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {decodeAcceptanceJson,AcceptanceJsonError} from '../packages/postgresql/src/acceptance-json';
 const corpus=await Bun.file('docs/helix/03-test/acceptance-outer-json-expected.proposal.json').json();

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Build a rollback-only native component probe from original source bytes."""
 from pathlib import Path
 import sys

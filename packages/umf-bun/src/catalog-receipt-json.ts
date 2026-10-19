@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Exact receipt JSON custody checks; not UMF semantic verification or host containment. */
 import {indexSourceJsonOccurrences,originalSourceOccurrenceBytes} from '../../postgresql/src/acceptance-json';
 /** Normalize a finite JSON decimal without materializing its exponent. */

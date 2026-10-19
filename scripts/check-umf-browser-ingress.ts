@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Real browser qualification for exact ingress + original UMF semantic producer. */
 import {createRequire} from 'node:module';
 import {readFile,writeFile,mkdtemp} from 'node:fs/promises';

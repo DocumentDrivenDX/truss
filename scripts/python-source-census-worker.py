@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Fresh-process original Python source-census witness on an owned native fixture."""
 import hashlib,json,struct,sys
 from pathlib import Path

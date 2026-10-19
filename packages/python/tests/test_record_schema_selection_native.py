@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Compiled meaning may be shared; live writer selections must not collide."""
 import json
 from unittest.mock import patch

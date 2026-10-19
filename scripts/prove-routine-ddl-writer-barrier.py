@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional selected routine-DDL writer barrier, not native/SQL refinement."""
 from pathlib import Path
 import hashlib,json,uuid,z3

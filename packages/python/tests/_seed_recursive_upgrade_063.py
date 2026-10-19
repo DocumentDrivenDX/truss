@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Seed an original native63 alternate-key report and a retained future key cell."""
 import os,pickle,sys
 from dataclasses import replace

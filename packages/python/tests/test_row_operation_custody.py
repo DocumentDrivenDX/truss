@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 import base64
 from dataclasses import FrozenInstanceError
 from hashlib import sha256

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional ordering model; native snapshot semantics are a separate premise."""
 import hashlib,json,sys
 from pathlib import Path

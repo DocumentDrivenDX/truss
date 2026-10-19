@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Replay original native hidden operator implementation routes, not a resolver."""
 import hashlib,json,unittest
 from pathlib import Path

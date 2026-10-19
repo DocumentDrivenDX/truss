@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private executor-issued persistent adoption signal; no native outcome claims."""
 from threading import RLock
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {SQL} from 'bun';
 import {createCanonicalAcceptanceReportHandoff} from '../packages/umf-bun/src/canonical-report-handoff';
 import {prepareCanonicalWireTree} from '../packages/postgresql/src/canonical-wire-tree';

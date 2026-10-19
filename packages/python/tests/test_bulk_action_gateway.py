@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Registration custody controls; synthetic port does not qualify owner/native semantics."""
 import hashlib
 import json

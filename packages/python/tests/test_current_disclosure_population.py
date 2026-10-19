@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Complete-census correspondence only; no native authority or release proof."""
 import copy
 import json

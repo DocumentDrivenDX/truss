@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Closed-function guard inventory; arbitrary callbacks keep their own guard."""
 import re
 import unittest

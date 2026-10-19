@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Engine data capture and excluded control issuance; no native authority.
 
 Consumes UMF a8f73415's private claim ABI only when independently installed and

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original core0.8 native catalog metadata; protected security remains unqualified.
 @covers US-056-AC2
 @covers US-056-AC9

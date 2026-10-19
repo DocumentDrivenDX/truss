@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional private-fact privilege exclusion; native callable closure and lifetime remain unproved."""
 from pathlib import Path
 import hashlib,json,uuid,z3

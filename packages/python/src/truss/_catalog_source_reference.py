@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 DATE08_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.18.0', 'sha256': '5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838'}
 DECLARATIVE08_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.17.0', 'sha256': '76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0'}
 RECURSIVE08_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.16.0', 'sha256': 'f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315'}

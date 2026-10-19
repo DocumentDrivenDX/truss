@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Distinct transport/source profiles, not owner semantics or native admission."""
 import copy,json,unittest
 from pathlib import Path

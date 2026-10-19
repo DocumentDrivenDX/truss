@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Rollback-only candidate metadata effects. No installed authority or commit."""
 from hashlib import sha256
 from importlib.resources import files

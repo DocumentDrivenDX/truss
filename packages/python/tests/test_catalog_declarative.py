@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic source preparation for declaration-only scalar Fields; no native claim."""
 import json
 import os

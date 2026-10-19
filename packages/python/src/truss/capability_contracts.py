@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Structural operation contract for the implemented native Python profiles.
 
 The protocol describes callable operations, not readiness, native authority,

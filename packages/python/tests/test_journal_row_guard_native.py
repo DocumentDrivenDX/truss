@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Journal inserts remain checked after earlier commit guards have fired."""
 import psycopg
 from truss.groups import GroupSuccess

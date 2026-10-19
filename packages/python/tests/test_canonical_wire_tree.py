@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Python handoff parity with the original TypeScript and native codecs."""
 import json
 import subprocess

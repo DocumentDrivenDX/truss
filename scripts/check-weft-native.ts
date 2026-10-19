@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Component native execution against the owner object definition; not protected engine adoption. */
 import {SQL} from 'bun';
 import {LocalPgProbe} from '../packages/weft-pg-probe/src/index';

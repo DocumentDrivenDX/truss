@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private action entry points alone call this fixed privileged role cut.
 CREATE FUNCTION truss.acquire_owned_action_role_catalog_cut()
 RETURNS pg_catalog.void

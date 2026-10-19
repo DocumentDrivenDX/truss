@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Real prepared catalog through original host custody; no accepted authority."""
 import json
 from unittest.mock import patch

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Distinct ordinary caller/private executor traversal publication candidate.
 
 Trusted source/binary/host/server/installer custody remains required. This

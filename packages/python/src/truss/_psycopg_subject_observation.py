@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private ordinary caller/TEXT observation; not subject issuance or authority."""
 from dataclasses import dataclass
 from hashlib import sha256

@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Owner-private epoch reconciliation only, not peer/incarnation authorization.
 CREATE FUNCTION truss.require_preparation_peer_xid(
  original_pid pg_catalog.int4, claimed_xid pg_catalog.xid8)

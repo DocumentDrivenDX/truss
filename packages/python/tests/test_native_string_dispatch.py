@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original Python host dispatch of real pending effects; no public apply."""
 import unittest
 from test_native_operation_ordinals import ReservedNativeOperationOrdinalTests

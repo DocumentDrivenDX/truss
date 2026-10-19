@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional original-request identity and closed-family laws; no Python refinement."""
 from pathlib import Path
 import hashlib,json,uuid

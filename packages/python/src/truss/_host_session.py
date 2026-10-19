@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private cooperative automatic-call scope; not public C02 qualification.
 
 Native generation/adoption custody stays authoritative. The shared arbitration

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Bounded exact owner-evidence JSON; never a Truss semantic wire codec.
 
 Original bytes remain authoritative. Numbers are inspected without conversion

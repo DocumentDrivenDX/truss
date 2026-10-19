@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Empty packed consumer; no driver, network, database, bootstrap or compiler startup. */
 import {mkdtemp, mkdir, readFile, writeFile, readdir} from 'node:fs/promises';
 import {tmpdir} from 'node:os';

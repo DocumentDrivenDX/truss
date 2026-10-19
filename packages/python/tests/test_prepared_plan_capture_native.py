@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """A stored plan must equal the engine-prepared row before canonical effects."""
 from truss import Error
 import test_group_create_native as base

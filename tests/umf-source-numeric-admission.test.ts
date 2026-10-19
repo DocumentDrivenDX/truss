@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {loadUmfProducer} from '../packages/umf-bun/src/index';
 import {preflightSourceJson} from '../packages/postgresql/src/acceptance-json';

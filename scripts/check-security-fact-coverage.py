@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Retain actual owner-produced dependency fixture and exact consumer controls."""
 from pathlib import Path
 import hashlib,json,os,subprocess,sys,uuid,zipfile

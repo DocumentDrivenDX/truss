@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original consumer model preparation through the public source-only entrypoint."""
 import hashlib,json,os,unittest
 from pathlib import Path

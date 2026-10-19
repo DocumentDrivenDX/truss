@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private pg8000 1.31.5 original-call boundary, not qualified adoption.
 
 Attach on an idle connection before beginning host work. All supported host

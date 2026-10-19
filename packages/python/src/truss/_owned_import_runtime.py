@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Atomic owned imports composed through the existing protected group executor."""
 import base64,json
 from hashlib import sha256

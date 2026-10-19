@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Explicit private-profile installation step, before any ordinary D cut.
 -- Not part of the ordinary public runtime installer. Direct superuser only.
 REVOKE EXECUTE ON FUNCTION

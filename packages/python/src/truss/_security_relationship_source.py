@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Distinct relationship source byte archive; not native/SQL authority.
 
 Trusted original relationship producer custody remains a host premise. Native

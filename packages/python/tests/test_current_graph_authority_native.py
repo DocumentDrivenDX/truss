@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual SCRAM public Graph reads under trusted administrative quiescence.
 
 No diagnostic source substitution; not concurrent privileged-DDL qualification.

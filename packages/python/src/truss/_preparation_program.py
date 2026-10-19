@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original compiler packet custody. This module never executes lowered SQL.
 
 The configured compiler is trusted engine code. Recording its claimed source

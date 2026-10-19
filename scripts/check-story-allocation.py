@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Check current declared criterion references; no semantic or runtime verdict."""
 import hashlib
 import json

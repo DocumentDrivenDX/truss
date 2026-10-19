@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Retired historical frozen-source catalog-report experiment producer.
 
 Original sources and receipts remain in the HELIX evidence archives. Current

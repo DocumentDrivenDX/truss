@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private native scalar carrier shape; codec/domain/native value meaning external."""
 from ._row_image import NativeRowImage
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Declared failed conditions win over operation failures on the same locked prestate."""
 from dataclasses import replace
 from truss import Ok

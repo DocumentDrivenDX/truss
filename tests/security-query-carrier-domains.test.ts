@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {expect,test} from 'bun:test';
 import {lowerSecurityQueryCarrierDomains} from '../packages/postgresql/src/security-query-carrier-domains';
 const original=()=>({schema:'security_raw',table:'source',fields:[{column:'id',family:'string' as const},{column:'salary',family:'integer' as const}]});

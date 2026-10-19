@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual coordinator issuance; original artifact/native admission remains open."""
 import unittest
 from unittest.mock import patch

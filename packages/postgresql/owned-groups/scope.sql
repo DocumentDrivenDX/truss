@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Uninstalled observation component. One invocation uses one statement snapshot.
 -- No locks, authority issuance or effects. Reobserve after the graph-write gate;
 -- the executor must refuse newly required earlier guards before performing writes.

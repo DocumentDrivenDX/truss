@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native single-use pending revision registration; every fixture rolls back."""
 import hashlib
 import json

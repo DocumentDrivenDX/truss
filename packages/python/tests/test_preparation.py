@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public preparation with original owner assets; no native acceptance claims."""
 import base64
 import hashlib

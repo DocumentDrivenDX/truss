@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Run the separately versioned public Python preview corpus using public APIs."""
 import argparse
 import base64

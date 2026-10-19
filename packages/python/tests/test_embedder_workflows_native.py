@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original embedder schemas: every record/relationship, list, open and modify."""
 import gzip, hashlib, json
 from pathlib import Path

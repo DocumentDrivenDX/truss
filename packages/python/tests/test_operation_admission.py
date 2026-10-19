@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Synthetic original-port controls; no native authority qualification."""
 import copy
 import unittest

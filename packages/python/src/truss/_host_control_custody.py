@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original simple-query control ledger; no public adoption claim.
 
 Explicit host baseline observation may retire prior unnamed resources. Subsequent

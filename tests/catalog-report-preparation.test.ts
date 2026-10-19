@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {collectCatalogExtensionArtifacts} from '../packages/umf-bun/src/catalog-extension-artifacts';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';

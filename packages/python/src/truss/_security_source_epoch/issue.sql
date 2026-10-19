@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private native issuance component. Only the installed lifecycle producer may
 -- receive a grant after authority/profile/target evidence qualification.
 -- Inputs are comparison/evidence carriers, never caller authorization.

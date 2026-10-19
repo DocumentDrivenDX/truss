@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional original host/handle identity; authentication and native lease refinement remain independent."""
 from pathlib import Path
 import hashlib,json,uuid,z3

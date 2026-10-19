@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Compare complete authored item meaning separately from revision/source pins.
 -- Historical flat items have no descendants; their original metadata is retained.
 CREATE FUNCTION truss.catalog_item_meaning(item jsonb) RETURNS jsonb

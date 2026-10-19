@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Build the committed Weft wheel used by the public Truss PG18 runtime."""
 import argparse
 import io

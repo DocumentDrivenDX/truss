@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional role snapshot model; no native role-lifetime theorem."""
 from pathlib import Path
 import hashlib,json,uuid,z3

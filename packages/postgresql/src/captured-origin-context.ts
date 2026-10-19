@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Decode complete context0.3 bytes only; native collector authority is separate. */
 import {copyOriginalByteCustody} from './original-byte-custody';
 import {decodeAcceptanceJson} from './acceptance-json';

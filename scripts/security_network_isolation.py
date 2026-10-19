@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned PostgreSQL18.6 network-domain controls; not protected backend admission."""
 import subprocess,json,secrets,uuid,time,sys
 from pathlib import Path

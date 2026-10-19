@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private administrative accepted-source assessment; never an execution permit.
 
 Uses original native expected-record/report consistency checks. The caller must

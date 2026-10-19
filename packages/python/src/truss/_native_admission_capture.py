@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private bounded admission result capture; never artifact authority or readiness."""
 from dataclasses import dataclass
 import struct

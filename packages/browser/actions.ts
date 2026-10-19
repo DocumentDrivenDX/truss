@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Original public UMF ESM is emitted unchanged by the owned asset builder.
 import * as owner from '@truss/umf-local-actions';
 import {prepareDocument,type CatalogSnapshot,CATALOG_PROFILE} from './catalog';

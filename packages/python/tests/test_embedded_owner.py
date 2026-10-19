@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Installed owner execution with JavaScript process launch forbidden."""
 from hashlib import sha256
 import json

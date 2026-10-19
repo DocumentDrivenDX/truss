@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private PostgreSQL16.15 candidate binary image framing; no event authority."""
 from dataclasses import dataclass
 import struct

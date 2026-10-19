@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Ordinary graph epoch/archive read cut; not public compiler admission.
 
 Original issuer/installer/routine/DDL/authentication custody are premises.

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Owned fixture only; storage constraints do not qualify epoch issuance. */
 import {SQL} from 'bun';
 const url=process.env.TRUSS_OPERATION_TEST_URL;

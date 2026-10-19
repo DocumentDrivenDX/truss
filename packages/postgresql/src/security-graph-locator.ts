@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private candidate graph projection boundary. Native rows/source custody and
  * a stable complete inventory are host premises. This neither resolves business
  * keys nor grants authorization or qualifies an installed graph. */

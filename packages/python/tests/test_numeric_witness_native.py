@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native mathematical witnesses; not original codec/facet admission."""
 import json
 import unittest

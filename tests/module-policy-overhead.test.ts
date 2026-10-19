@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {assessModulePolicyTimings} from '../packages/tooling/src/module-policy-overhead';
 const blocks=()=>Array.from({length:3},()=>Array.from({length:1000},()=>({baselineNanoseconds:'10000000000000000',policyNanoseconds:'10000000000010000'})));

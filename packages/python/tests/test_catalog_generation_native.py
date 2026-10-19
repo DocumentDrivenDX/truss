@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Generation correspondence on real catalog staging; no acceptance authority."""
 import unittest
 from pg8000.exceptions import DatabaseError

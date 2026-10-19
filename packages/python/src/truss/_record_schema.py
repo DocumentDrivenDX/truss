@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Immutable application-side value schemas compiled from native definitions.
 
 For an exact selected definition pin, the compiled subset validates authored

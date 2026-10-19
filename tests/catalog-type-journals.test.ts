@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {createTypeJournalEvidenceBudget} from '../packages/umf-bun/src/catalog-type-journal-evidence-budget';
 import {test,expect} from 'bun:test';
 import {mkdtemp,rm,writeFile} from 'node:fs/promises';

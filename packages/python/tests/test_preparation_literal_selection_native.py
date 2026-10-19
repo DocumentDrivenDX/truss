@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original enrolled Weft SQL inside private native permit checks."""
 from importlib.resources import files
 import json

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {compactCatalogSources} from './catalog-source-reference';
 /** Complete original value positions with explicitly incomplete assertion interpretation. */
 import {indexSourceJsonOccurrences,originalSourceOccurrenceBytes} from '../../postgresql/src/acceptance-json';

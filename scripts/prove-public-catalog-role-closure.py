@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Finite membership-closure laws, not PostgreSQL protocol refinement."""
 from pathlib import Path
 import hashlib,json,uuid,z3

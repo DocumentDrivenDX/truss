@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Inspect PostgreSQL through public Truss APIs without ending a host transaction.
 
 The command uses libpq PGHOST/PGPORT/PGUSER/PGDATABASE settings.

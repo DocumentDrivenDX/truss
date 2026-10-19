@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Ordered simulation only. The executor supplies the complete current graph
 -- after earlier operations; a later unlink cannot rescue this delete.
 CREATE FUNCTION truss.owned_delete_projection(node_count int,owned_edges jsonb,

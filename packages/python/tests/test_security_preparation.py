@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original security cohort through public preparation; no native authority."""
 import base64
 from hashlib import sha256

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic original compiler -> private native registration/commit/retry workflow."""
 import contextlib
 import importlib.util

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic native declaration-only admission and unsupported-shape refusals."""
 import base64,copy,json,os,sys,tempfile,unittest
 from hashlib import sha256

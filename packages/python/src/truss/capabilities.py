@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Typed providers for the implemented native Python profiles.
 
 These are selected operation surfaces, not authority or readiness credentials.

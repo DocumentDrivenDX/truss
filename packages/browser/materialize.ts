@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {KEY_RECEIPT_ENCODING,compactKeyReceipts,checkSealEncoding} from './key-receipt-storage';
 import * as umf from '@truss/umf-local-actions';
 import * as weft from '@truss/weft-local';

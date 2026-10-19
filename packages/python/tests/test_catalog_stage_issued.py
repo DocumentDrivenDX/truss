@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native issued staging component; fixture artifacts do not grant authority."""
 import json
 import unittest

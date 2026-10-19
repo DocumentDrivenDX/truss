@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {Buffer} from 'buffer/';
 import {URL,URLSearchParams} from 'whatwg-url';
 import clone from '@ungap/structured-clone';

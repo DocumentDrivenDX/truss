@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private, process-lifetime operation registry; no native authority claim.
 
 One registry belongs to one executor and is shared by its assembled protocols.

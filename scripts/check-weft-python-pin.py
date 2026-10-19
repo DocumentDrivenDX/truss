@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Pinned Python/CLI compiler correspondence; no database or host qualification."""
 import copy
 import hashlib

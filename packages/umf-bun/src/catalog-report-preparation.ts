@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private composed new-only report basis, never an accepted report or commit grant. */
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 import {collectCatalogAssertionObservations} from './catalog-assertion-observations';

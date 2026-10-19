@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native original epoch projection component; no protected admission."""
 import json,sys,threading,time,hashlib,struct,copy
 from pathlib import Path

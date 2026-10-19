@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One configured native call and original Python report-source validation."""
 import copy
 import json

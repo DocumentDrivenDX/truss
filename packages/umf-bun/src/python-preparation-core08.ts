@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Installed Python ingress for the existing original catalog preparation route. */
 import {resolve} from 'node:path';
 import {createCore08CatalogInputPreparation} from './catalog-input';

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private retained-byte ledger only; not a shared operation heap/text/CPU budget. */
 export function createTypeJournalEvidenceBudget(){
  let retained=0;

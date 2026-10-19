@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Experimental compiler boundary. No database execution or authority issuance.
 
 The trusted host supplies the original Weft compile_json function. The frozen

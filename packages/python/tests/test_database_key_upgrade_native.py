@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Genuine predecessor → database-derived keys, preserving stored key/context bytes."""
 import json,os,pickle,subprocess,sys,tempfile,unittest
 from pathlib import Path

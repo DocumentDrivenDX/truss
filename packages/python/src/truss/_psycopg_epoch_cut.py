@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private within-operation epoch cut; not authenticated source/authority admission.
 
 Requires independently qualified installed helper/ACL and caller-exclusive host

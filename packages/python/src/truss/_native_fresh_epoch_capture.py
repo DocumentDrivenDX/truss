@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original fresh-epoch response custody; never a held-cut capability.
 
 The observed row is historical after return. Autocommit, savepoint rollback,

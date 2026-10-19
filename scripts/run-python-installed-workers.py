@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Installed test modules on owned socket workers; lifecycle fixtures stay isolated."""
 from concurrent.futures import ThreadPoolExecutor
 import gzip

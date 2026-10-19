@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original compiler correspondence controls; no native admission evidence."""
 import json,os,subprocess,unittest
 from pathlib import Path

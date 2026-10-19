@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Distinct stored-object value updates with unchanged ownership
 -- have no order-dependent effects. The original planner, key preflight and
 -- finish/commit validators still establish their complete source correspondence.

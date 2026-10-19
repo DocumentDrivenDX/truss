@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """A thousand public creates lower to a constant number of physical INSERTs."""
 from truss import Ok
 from truss.contracts import MapValue

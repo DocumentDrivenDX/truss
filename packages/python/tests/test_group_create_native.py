@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public create group → caller commit → direct read → original receipt replay."""
 import base64
 from dataclasses import replace

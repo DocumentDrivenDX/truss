@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Candidate lineage codec, private component only; not a general canonical report encoder.
 CREATE FUNCTION truss.runtime_lineage_quote(value text) RETURNS text
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

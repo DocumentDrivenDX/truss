@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Projection refuses incomplete or mistyped graph endpoints before UMF evaluation."""
 import json,sys,unittest
 from pathlib import Path
