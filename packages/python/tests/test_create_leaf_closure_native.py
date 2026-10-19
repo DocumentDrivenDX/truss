@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Direct regression controls for replacing duplicate CREATE history reconstruction."""
 import psycopg
 from truss import Ok,Error

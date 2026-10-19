@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owner-private native tuple binding only; no authority/anchor/permit claim."""
 from importlib.resources import files
 import psycopg

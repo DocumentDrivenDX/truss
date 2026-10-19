@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original native claim transitions; no full E06/resource qualification."""
 import unittest
 from unittest.mock import patch

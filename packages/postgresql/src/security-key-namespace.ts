@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Namespace grammar/correspondence only. Original installation/catalog/codec
  * authority and native canonical producer custody must be qualified separately. */
 export interface SecurityKeyNamespaceSelection {

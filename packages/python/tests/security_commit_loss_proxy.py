@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned local fixture relay: drop native COMMIT response, never forge SQLSTATE.
 Stock psycopg/libpq runs unchanged. Not a production transport or recovery service.
 """

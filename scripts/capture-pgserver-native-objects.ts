@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Extract existing UMF native declarations; no SQL generation or execution. */
 import {readDocument} from '/Users/erik/Projects/umf/src/model/document';
 import {getPostgresqlNode} from '/Users/erik/Projects/umf/src/adapters/postgresql';

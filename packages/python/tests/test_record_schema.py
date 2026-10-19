@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Focused tests for the immutable application-side value schema."""
 import unittest
 
@@ -28,6 +29,18 @@ def item_chain():
 
 
 class RecordSchemaTests(unittest.TestCase):
+    def test_length_facets_count_unicode_scalars_and_decoded_binary_bytes(self):
+        schema = compile_records([{'typeId': '8', 'definitionPin': PIN, 'properties': [
+            prop(1, 'text', 'string', facets={'length': {'max': 2, 'unit': 'unicode-scalar'}}),
+            prop(2, 'bytes', 'binary', facets={'length': {'max': 2, 'unit': 'byte'}}),
+        ]}])
+        for text, binary, expected in [('😀a', 'AQI=', True), ('e\u0301', 'AA==', True),
+                                       ('😀ab', 'AQI=', False), ('a', 'AQID', False), ('', '', True)]:
+            with self.subTest(text=text, binary=binary):
+                values = (AuthoredValue(name='text', value=TextValue(kind='string', text=text)),
+                          AuthoredValue(name='bytes', value=TextValue(kind='binary', text=binary)))
+                self.assertEqual(schema.validate_values('8', PIN, values, mode='create').valid, expected)
+
     def setUp(self):
         self.schema = compile_records([{
             'typeId': '7', 'definitionPin': PIN,

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Independent original Bun reference oracle, including native UTF-16 cases."""
 import json
 from pathlib import Path

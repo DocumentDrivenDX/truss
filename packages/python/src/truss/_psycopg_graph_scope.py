@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original graph-scope registration/readback, never caller authorization."""
 from dataclasses import dataclass
 import json

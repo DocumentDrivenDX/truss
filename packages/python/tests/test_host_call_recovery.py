@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original composed-call recovery facts, not graph receipt/recovery evidence."""
 import gc
 import unittest

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private pinned resource capture; not complete index or installer admission.
 
 Only a trusted registered resource handle supplies open/read. This component

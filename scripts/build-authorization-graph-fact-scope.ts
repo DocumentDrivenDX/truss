@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private adjunct SQL retention, not core layout or installed authority. */
 import {backend} from '/Users/erik/.codex/worktrees/security-main-integration/umf/native/postgresql/runtime';
 import {readDocument} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/model/document';

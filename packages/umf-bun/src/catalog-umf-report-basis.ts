@@ -1,9 +1,10 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original UMF/support byte custody only; not supported-subset semantic admission. */
+import type {createAcceptanceProfileResolver} from './acceptance-profiles';
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;
-export function collectCatalogUmfReportBasis(prepared:Prepared){
+export function collectCatalogUmfReportBasis(prepared:Prepared,registrations?:ReturnType<ReturnType<typeof createAcceptanceProfileResolver>['resolve']>){
  requireOriginalCatalogPreparation(prepared);
- const registrations=prepared.registeredProfiles;
  if(!registrations)throw Error('Original registered support artifact required');
  const support=registrations.profiles.filter(item=>item.role==='support'&&item.pointer==='/supportProfile');
  if(support.length!==1)throw Error('One original registered support artifact required');

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {KEY_RECEIPT_ENCODING,sealIntentUtf8} from './key-receipt-storage';
 import {createFrozenBatchApplier,BatchRefusal,type ItemResult} from './batch';
 import type {PGlite} from '@electric-sql/pglite';

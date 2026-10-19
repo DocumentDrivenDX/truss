@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional participating-writer interval model; no native whole-authority theorem."""
 from pathlib import Path
 import hashlib,json,uuid,z3

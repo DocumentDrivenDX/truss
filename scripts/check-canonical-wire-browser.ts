@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {createRequire} from 'node:module';
 const {chromium}=createRequire('/Users/erik/Projects/umf/package.json')('playwright');
 const source='packages/postgresql/src/canonical-wire-tree.ts';

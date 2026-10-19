@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual accepted named model and ordinary-created native Record facts.
 @covers US-056-AC2; component prerequisites, not backend case promotion.
 """

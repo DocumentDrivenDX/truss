@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Native text/int64 descriptor guard for the experimental query consumer.
  * Current source custody, view dependencies and concurrent DDL remain host duties.
  * Value nullability is checked separately by source completeness, including views. */

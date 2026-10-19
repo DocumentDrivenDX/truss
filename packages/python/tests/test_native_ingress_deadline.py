@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual socket/BufferedRWPair deadline restoration and original failure custody."""
 import socket
 import unittest

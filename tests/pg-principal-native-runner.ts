@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Dedicated disposable native fixture; no installed-policy authority. */
 import {createPgConnectionSource,createOrdinarySubjectKeyBinding} from '../packages/pg-runtime/src/index';
 import * as owner from '../packages/python/src/truss/_umf_keys08/producer.js';

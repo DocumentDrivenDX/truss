@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {collectCatalogReportDocumentBasis} from '../packages/umf-bun/src/catalog-report-document-basis';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
 const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Original producer required');
 const preparation=await createCatalogInputPreparation(directory,'/Users/erik/Projects/umf/package.json');
 const input=structuredClone((await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json()).input);input.binding={state:'absent'};input.transforms=[];
-const bytes=Buffer.from(JSON.stringify({umf:'0.7.0',id:'doc',vocabularies:{unknown:{version:'1.0.0'}},extensions:{unknown:{opaque:true}},modules:[]}));const digest=new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
+const bytes=Buffer.from(JSON.stringify({umf:'0.10.0',id:'doc',vocabularies:{unknown:{version:'1.0.0'}},extensions:{unknown:{opaque:true}},modules:[]}));const digest=new Bun.CryptoHasher('sha256').update(bytes).digest('hex');
 input.documents=[{documentId:'doc',documentRevision:'r1',artifact:{identity:'doc',bytesBase64:bytes.toString('base64'),sha256:digest},umfProfile:preparation.umfProfile,ingress:{kind:'native'}}];
 const original=preparation.prepare(new TextEncoder().encode(JSON.stringify(input)));function basis(){return original}
 // Native result rows remain synthetic here; source preparation uses the actual pinned owner.

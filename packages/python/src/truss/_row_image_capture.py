@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private complete result framing; original producer/scope/cut/authority external."""
 from dataclasses import dataclass
 from ._row_image import decode_row_image

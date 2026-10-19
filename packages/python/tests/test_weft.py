@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Compiler boundary controls with synthetic responses; no SQL/native oracle."""
 import copy
 from dataclasses import FrozenInstanceError
@@ -10,7 +11,7 @@ from truss.weft import CompilerBoundary, CompileRefusal
 
 def fixture():
     digest = hashlib.sha256(b'{}').hexdigest()
-    pin = {'documentId':'d','revision':'1','umfVersion':'0.7.0','sha256':digest}
+    pin = {'documentId':'d','revision':'1','umfVersion':'0.10.0','sha256':digest}
     target = {'backendId':'truss.postgresql','backendVersion':'fixture',
               'targetProfile':'fixture','bindingJson':'{}','bindingSha256':digest}
     request = {'interfaceVersion':'weft-compile/0.2.0','dialect':'weft-sql/0.2.0',

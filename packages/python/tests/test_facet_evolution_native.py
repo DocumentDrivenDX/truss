@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic real-data non-key numeric refinement acceptance/refusal workflow."""
 import json,os
 from decimal import Decimal
@@ -9,7 +10,7 @@ import test_group_create_native as create_tests
 class FacetEvolutionTests(create_tests.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(create_tests.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version
         module=source['modules'][0];record=next(v for v in module['elements'] if v['id']=='A');record['name']='A'
@@ -57,6 +58,3 @@ class FacetEvolutionTests(create_tests.PublicCreateGroupTests):
         self.assertIsInstance(accepted.value,CatalogRegistration)
         self.assertTrue(assembly.accept_in_transaction(tx,widened,request_key='widen').value.replayed)
         host.detach();connection.commit()
-
-class FacetEvolution08Tests(FacetEvolutionTests):
-    source_version='0.8.0'

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One basic committed private storage/products workflow on actual PG18.6."""
 import contextlib
 import importlib.util
@@ -16,7 +17,7 @@ class PreparationSealStorageNativeTests(unittest.TestCase):
     def test_install_commit_private_storage_and_public_products_workflow(self):
         spec=importlib.util.spec_from_file_location('products_seal_storage_workflow',_ROOT/'scripts/export-products-native-binding.py')
         module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-        model=_ROOT/'docs/helix/04-build/evidence/products-native-binding-20261014/original-demo-model.json'
+        model=_ROOT/'packages/browser/fixtures/local-products-model.json'
         with tempfile.TemporaryDirectory(prefix='truss-preparation-seal-') as directory:
             output=Path(directory)/'products'
             with contextlib.redirect_stdout(io.StringIO()):
@@ -25,5 +26,5 @@ class PreparationSealStorageNativeTests(unittest.TestCase):
             self.assertEqual(report['runtime'],_release()[0]['releaseId'])
             self.assertEqual(report['nativeObjectIds'],['1','2'])
             self.assertEqual(report['metadataSourceEpoch']['installation'],report['sealStorage']['installation'])
-            self.assertEqual(report['sealStorage']['sourceSha256'],'235f2ce982eeda53eaee09f7608a388f96a815cde5354f4ce6db9bb3091422fe')
+            self.assertEqual(report['sealStorage']['sourceSha256'],'f5551ea64d4d48957dd0dca3e3cded7b182eb4dfdb4ca83fa3fc798270b0042d')
             self.assertFalse(report['sealStorage']['securityReady'])

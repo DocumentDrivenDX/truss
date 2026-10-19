@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Internal binding primitive only. Do not grant to a login/coordinator.
 -- Original native guarded issuer must establish current authority first.
 CREATE FUNCTION truss.mint_preparation_permit_binding(

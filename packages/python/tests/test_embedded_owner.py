@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Installed owner execution with JavaScript process launch forbidden."""
 from hashlib import sha256
 import json
@@ -12,7 +13,6 @@ from truss._current_query_pipe import CurrentQueryPipeError
 from truss._current_disclosure_computation import open_current_disclosure_computation
 from truss._current_disclosure_wire import frame_digest
 from truss._umf_key_tuples import KeyTupleRequest, encode_string_key_tuples
-from truss._core08_catalog_source import prepare_core08_catalog_source
 from test_preparation import prepare, document
 
 FIXTURES=Path(__file__).with_name('fixtures')
@@ -24,12 +24,10 @@ class EmbeddedOwnerTests(unittest.TestCase):
             prepared=prepare((document('embedded'),))
             self.assertEqual(prepared.documents[0].document.content,document('embedded').content)
             self.assertEqual(prepared.provenance.runtime_version,'mini-racer==0.14.1/V8 14.4.258.23')
-            original=json.loads((FIXTURES/'security-mapping-request.json').read_bytes())['modules'][0]['documentJson'].encode()
-            observed=prepare_core08_catalog_source(original,document_id='domain',document_revision='r1',bun_executable='/missing/bun')
-            self.assertEqual(observed.original_document,original)
+            original=(FIXTURES/'catalog-security-core-umf10.json').read_bytes()
             from truss.catalog_preparation import prepare_catalog
             from truss import CatalogDocument
-            current=prepare_catalog((CatalogDocument('domain','r1',original),),source_version='0.8.0',bun_executable='/missing/bun')
+            current=prepare_catalog((CatalogDocument('domain','r1',original),),source_version='0.10.0',bun_executable='/missing/bun')
             self.assertEqual(current.documents[0].document.content,original)
             from test_umf_key_tuples import OriginalUmfKeyTupleTests
             raw=OriginalUmfKeyTupleTests().source()
@@ -68,14 +66,14 @@ class EmbeddedOwnerTests(unittest.TestCase):
 
     def test_isolate_deadline_interrupts_nonterminating_code(self):
         start=time.monotonic()
-        with OwnerVM('_umf_keys08/bridge.mjs',input_bytes=b'{}',timeout=1) as owner:
+        with OwnerVM('_umf_core10/keys.mjs',input_bytes=b'{}',timeout=1) as owner:
             with self.assertRaises(TimeoutError):
                 owner.eval('for(;;){}')
         self.assertLess(time.monotonic()-start,4)
         self.assertIsNone(owner.vm)
 
     def test_virtual_host_refuses_unbundled_files_and_modules(self):
-        with OwnerVM('_umf_keys08/bridge.mjs',input_bytes=b'{}',timeout=5) as owner:
+        with OwnerVM('_umf_core10/keys.mjs',input_bytes=b'{}',timeout=5) as owner:
             self.assertEqual(owner.eval('typeof require'), 'undefined')
             self.assertEqual(owner.eval('JSON.stringify(Object.keys(process.env))'),'[]')
             self.assertEqual(owner.eval('typeof process.spawn'),'undefined')
@@ -92,7 +90,7 @@ class EmbeddedByteCodecTests(unittest.TestCase):
         samples=['','ASCII','é漢字🧵','\x00\n\t','\ud800','\udfff','a'*1048576]
         generator=random.Random(20261017)
         samples.extend(''.join(chr(generator.choice([0x20,0x61,0xe9,0x3bb,0x4e2d,0x1f9f5])) for _ in range(128)) for _ in range(20))
-        with OwnerVM('_umf_keys08/bridge.mjs',input_bytes=b'{}',timeout=15) as owner:
+        with OwnerVM('_umf_core10/keys.mjs',input_bytes=b'{}',timeout=15) as owner:
             result=json.loads(owner.eval('JSON.stringify('+json.dumps(samples)+'.map(text=>{const a=new TextEncoder().encode(text),b=Buffer.from(text,"utf8");return {same:Buffer.from(a).equals(b),exact:a.buffer.byteLength===a.byteLength};}))'))
             self.assertTrue(all(r['same'] and r['exact'] for r in result))
             for text in ('','é漢字🧵','\ufeffabc','A'*1048576):

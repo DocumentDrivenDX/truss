@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private feasibility candidate; not an adopted layout or AuthorityLease issuer.
 -- Retain settled original identities permanently for this installed profile.
 -- No deletion, reset, token reuse, expiration or auto-repair. Not a migration.

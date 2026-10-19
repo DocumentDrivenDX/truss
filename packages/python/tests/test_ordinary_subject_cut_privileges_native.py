@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Fixed native least-privilege cut spike; no production policy/release admission.
 @covers US-056-AC5
 @covers US-056-AC10

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One tiny public workflow over the unchanged consumer commerce UMF0.8 model."""
 import base64, hashlib, json, os
 from decimal import Decimal
@@ -13,10 +14,10 @@ import test_group_create_native as base
 class CommerceSourceTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):locals()[_name]=None
     def test_original_document_register_create_link_query_replay_feed(self):
-        raw=(Path(__file__).parent/'fixtures/commerce-original-umf08.json').read_bytes()
+        raw=(Path(__file__).parent/'fixtures/commerce-current-umf10.json').read_bytes()
         source=json.loads(raw);doc=source['id'];digest=hashlib.sha256(raw).hexdigest()
         document=CatalogDocument(doc,digest,raw);self.documents=(document,)
-        prepared=prepare_catalog(self.documents,source_version='0.8.0',bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        prepared=prepare_catalog(self.documents,source_version='0.10.0',bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.install();c,h,a,t=self.consumer()
         accepted=a.accept_in_transaction(t,prepared,request_key='original-commerce')
         self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(h._custody.last_attempt.error))

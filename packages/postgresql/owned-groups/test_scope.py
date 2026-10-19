@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One bounded native ownership image; graph setup is an uninstalled fixture."""
 import copy
 import json

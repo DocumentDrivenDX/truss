@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import type {PGlite} from '@electric-sql/pglite';
 // Original pinned browser-compatible owner bundle; it publishes JavaScript only.
-// @ts-expect-error Original UMF JavaScript bundle has no declaration file.
-import * as owner from '../python/src/truss/_umf_core08/producer.js';
+// @ts-expect-error Pinned UMF 0.10 producer has no declarations file.
+import * as owner from '../python/src/truss/_umf_core10/producer.js';
 import lineageSql from '../python/src/truss/_catalog_runtime/lineage.sql' with {type:'text'};
 import containersSql from '../python/src/truss/_catalog_runtime/containers.sql' with {type:'text'};
 import planSql from '../python/src/truss/_catalog_runtime/plan.sql' with {type:'text'};
@@ -30,18 +31,12 @@ export async function prepareDocument(input:Readonly<DocumentInput>){
   const bytes=new TextEncoder().encode(input.sourceUtf8);
   if(new TextDecoder('utf-8',{fatal:true}).decode(bytes)!==input.sourceUtf8)throw Error('Lossless UTF8 source required');
   preflightSourceJson(bytes);
-  const source=owner.readDocument(input.sourceUtf8,'json'),validation=owner.validateDocument(source);
-  if(source.umf!=='0.8.0'||source.id!==input.documentId||!validation.valid||!Array.isArray(validation.diagnostics)
-    ||validation.diagnostics.some((d:any)=>d.code!=='UNKNOWN_EXTENSION'||d.path!=='/vocabularies/umf.actions'||d.severity!=='warning')
-    ||!validation.complete&&!validation.diagnostics.length)throw Error('Original supported UMF core required');
-  closed(source,['umf','id','vocabularies','modules']);
-  if(source.vocabularies){closed(source.vocabularies,['umf.actions']);if(source.vocabularies['umf.actions']){
-    closed(source.vocabularies['umf.actions'],['version']);if(source.vocabularies['umf.actions'].version!=='0.1.0')throw Error('Unsupported opaque actions version');}}
+  const source=owner.readJsonValue(input.sourceUtf8,'json'),validation=owner.validateSemanticTypesDocument(source);
+  if(source.umf!=='0.10.0'||source.id!==input.documentId||!validation.valid)throw Error('Original supported UMF core required');
+  closed(source,['umf','id','vocabularies','modules','title','extensions']);
   if(!Array.isArray(source.modules)||source.modules.length<1||source.modules.length>16)throw Error('Bounded modules required');
   const elements=source.modules.flatMap((m:any)=>m.elements??[]);
   if(elements.length<1||elements.length>65||bytes.length*(elements.length*7+16)>8388608)throw Error('Bounded complete declarations required');
-  const observations:any[]=[];
-  const inspect=(operation:string,identity:any)=>{const result=owner[operation](source,identity);observations.push({operation,identity,result});return result.meaning;};
   const records:any[]=[],fields:any[]=[];
   for(const module of source.modules){
     closed(module,['id','namespace','elements','extensions']);
@@ -50,22 +45,17 @@ export async function prepareDocument(input:Readonly<DocumentInput>){
     if(!Array.isArray(module.elements))throw Error('Explicit module elements required');
     for(const element of module.elements){
       const identity={module:module.id,element:element.id};
-      if(inspect('inspectCoreElementKind',identity).kind!==element.kind)throw Error('Original element kind required');
-      if(inspect('inspectCoreReferenceLinks',identity).state!=='missing')throw Error('Unsupported reference links');
       if(element.extensions)closed(element.extensions,[]);
       if(element.kind==='record'){
-        closed(element,['id','name','kind','members','keys','extensions']);
-        const members=inspect('inspectCoreRecordMembers',identity),keys=inspect('inspectCoreKeys',identity);
-        if(members.state!=='known'||members.uninterpretedPaths.length||keys.state!=='known'||keys.uninterpretedPaths.length
-          ||keys.keys.length!==1||keys.keys[0].primary!==true||keys.keys[0].fields.length!==1)throw Error('Explicit single primary key required');
-        records.push({identity,members:members.members});
+        closed(element,['id','name','kind','members','keys','extensions','semanticTypes']);
+        if(!Array.isArray(element.members)||!Array.isArray(element.keys)||element.keys.length!==1
+          ||element.keys[0].primary!==true||!Array.isArray(element.keys[0].fields)||element.keys[0].fields.length!==1)throw Error('Explicit single primary key required');
+        records.push({identity,members:element.members});
       }else if(element.kind==='field'){
-        closed(element,['id','name','kind','scalarType','nullability','cardinality','extensions']);
+        closed(element,['id','name','kind','scalarType','nullability','cardinality','extensions','semanticTypes']);
         if(typeof element.name!=='string'||!element.name||element.name.includes('\0')
-          ||inspect('inspectCoreScalarType',identity).scalarType!=='string'
-          ||inspect('inspectCoreNullability',identity).nullability!=='required'
-          ||inspect('inspectCoreCardinality',identity).cardinality!=='one'
-          ||inspect('inspectCoreFacets',identity).state!=='missing')throw Error('Required singular String subset required');
+          ||element.scalarType!=='string'||element.nullability!=='required'||element.cardinality!=='one'
+          ||Object.hasOwn(element,'facets'))throw Error('Required singular String subset required');
         fields.push(identity);
       }else throw Error('Unsupported element kind');
     }
@@ -73,9 +63,9 @@ export async function prepareDocument(input:Readonly<DocumentInput>){
   if(records.length!==1||!fields.length||records[0].members.length!==fields.length
     ||fields.some(f=>!records[0].members.some((m:any)=>m.module===f.module&&m.element===f.element)))throw Error('Complete single Record membership required');
   const sourceSha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(n=>n.toString(16).padStart(2,'0')).join('');
-  const evidence={sourceValidation:validation,observations,producerRevision:'7c0f0c98beee2cc1a5a407992b5c53cc2616da8e',producerSha256:'88899e3c1221ca3998e80a878d37d5344d68062afa82eb15d6cffc49dd3752f3',scope:'core_catalog_only_actions_opaque'};
+  const evidence={sourceValidation:validation,scope:'core_catalog_only'};
   if(encode(evidence).length>8388608)throw Error('Catalog evidence limit');
-  return {input,sourceSha256,declarations:[collectCatalogDeclarations(input.documentId,source)],documents:[{documentId:input.documentId,revision:input.documentRevision,umfVersion:'0.8.0',originalText:input.sourceUtf8,validation:evidence}]};
+  return {input,sourceSha256,declarations:[collectCatalogDeclarations(input.documentId,source)],documents:[{documentId:input.documentId,revision:input.documentRevision,umfVersion:'0.10.0',originalText:input.sourceUtf8,validation:evidence}]};
 }
 
 export async function readCatalog(db:Pick<PGlite,'query'>):Promise<CatalogSnapshot|null>{

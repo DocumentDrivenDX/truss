@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One adopter workflow for a composed subtree and its original receipts.
 
 This is the next owned-provider implementation target, not a released capability.
@@ -47,7 +48,7 @@ class OwnedObjectTests(receipt_tests.ReceiptVisibilityTests):
 
     @staticmethod
     def owned_model(source):
-        source['umf'] = '0.8.0'
+        source['umf'] = '0.10.0'
         module = source['modules'][0]
         for element in module['elements']:
             if element['kind'] == 'record':

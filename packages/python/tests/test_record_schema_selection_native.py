@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Compiled meaning may be shared; live writer selections must not collide."""
 import json
 from unittest.mock import patch
@@ -22,7 +23,7 @@ class RecordSchemaSelectionTests(base.PublicCatalogRuntimeTests):
                  'extensions':{}},
                 {'id':'code','name':'code','kind':'field','scalarType':'string',
                  'nullability':'required','cardinality':'one','extensions':{}}]})
-        raw=json.dumps({'umf':'0.7.0','id':'shared-doc','vocabularies':{},'extensions':{},'modules':modules}).encode()
+        raw=json.dumps({'umf':'0.10.0','id':'shared-doc','vocabularies':{},'extensions':{},'modules':modules}).encode()
         self.documents=(CatalogDocument('shared-doc','v1',raw),)
         c,h,a,t=self.consumer()
         accepted=a.accept_in_transaction(t,a.prepare_catalog(self.documents),request_key='two-modules')

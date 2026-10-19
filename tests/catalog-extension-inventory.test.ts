@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
 import {collectCatalogExtensionInventory} from '../packages/umf-bun/src/catalog-extension-inventory';
@@ -6,7 +7,7 @@ const directory=process.env.TRUSS_UMF_PRODUCER;if(!directory)throw Error('Origin
 const preparation=await createCatalogInputPreparation(directory,'/Users/erik/Projects/umf/package.json');
 async function prepared(){const input=structuredClone((await Bun.file('docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').json()).input);input.binding={state:'absent'};input.transforms=[];
  const id='a/~',extensions={[id]:{expression:'opaque()',exact:'9007199254740993'}};
- const original=' \n'+JSON.stringify({umf:'0.7.0',id:'source',vocabularies:{[id]:{version:'1.0.0'}},extensions,modules:[{id:'m',namespace:'m',extensions,elements:[{id:'value',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions}]}]})+'\n';const bytes=Buffer.from(original);
+ const original=' \n'+JSON.stringify({umf:'0.10.0',id:'source',vocabularies:{[id]:{version:'1.0.0'}},extensions,modules:[{id:'m',namespace:'m',extensions,elements:[{id:'value',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions}]}]})+'\n';const bytes=Buffer.from(original);
  input.documents=[{documentId:'source',documentRevision:'r1',artifact:{identity:'source',bytesBase64:bytes.toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(bytes).digest('hex')},umfProfile:preparation.umfProfile,ingress:{kind:'native'}}];return preparation.prepare(new TextEncoder().encode(JSON.stringify(input)))}
 test('repeated extension identity retains distinct original scopes and escaped source pointers',async()=>{
  const result=collectCatalogExtensionInventory(await prepared());expect(result.entries.map(e=>e.sourcePointer)).toEqual(['/extensions/a~1~0','/modules/0/extensions/a~1~0','/modules/0/elements/0/extensions/a~1~0']);expect(result.entries.map(e=>e.owner)).toEqual([{scope:'document',documentId:'source'},{documentId:'source',moduleId:'m'},{documentId:'source',moduleId:'m'}]);expect(result.entries.map(e=>e.scope)).toEqual(['document','module','element']);

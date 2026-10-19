@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original reference [module,action] family codec; no registry or authority.
 
 Preserves UTF-16 identity, including NUL, pairs and lone surrogates, through

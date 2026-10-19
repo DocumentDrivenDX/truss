@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native export sources only; administrative rows do not qualify public writes/SDKs."""
 import json
 import psycopg

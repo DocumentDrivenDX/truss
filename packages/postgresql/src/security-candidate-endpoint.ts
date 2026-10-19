@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Draft endpoint/column correspondence only. Caller mappings are not native
  * inventory, complete fact custody, source authentication or authorization. */
 type Ref={documentId:string;moduleId:string;elementId:string};

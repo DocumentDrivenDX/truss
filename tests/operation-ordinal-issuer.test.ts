@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {expect,test} from 'bun:test';
 import {createOperationOrdinalIssuer} from '../packages/postgresql/src/operation-ordinal-issuer';
 const corpus=await Bun.file('tests/fixtures/operation-ordinal-issuer.json').json();

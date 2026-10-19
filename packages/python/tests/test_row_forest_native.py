@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Physical retained-forest parity; no complete native scope authority."""
 import json
 from test_row_touch_observer_native import RowTouchObserverNativeTests, ROOT

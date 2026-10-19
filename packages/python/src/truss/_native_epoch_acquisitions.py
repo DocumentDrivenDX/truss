@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original acquisition lifecycle; not source/authority admission.
 
 Only mediated native controls preserve this state. Any ordinary subsequent

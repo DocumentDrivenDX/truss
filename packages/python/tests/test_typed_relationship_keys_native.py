@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public typed relationship-key predicates and projections."""
 import os
 from decimal import Decimal
@@ -8,7 +9,7 @@ import test_group_create_native as create_tests
 
 class TypedRelationshipKeysTests(create_tests.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(create_tests.PublicCreateGroupTests) if n.startswith('test_')):locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version;m=source['modules'][0]
         for e in m['elements']:
@@ -42,6 +43,3 @@ class TypedRelationshipKeysTests(create_tests.PublicCreateGroupTests):
         h=adopt_psycopg_host(c);self.addCleanup(h.detach);a=create_reference_assembly(CatalogRuntimeConfiguration(),h).value;t=h.adopt_transaction(access_mode='read_only').value
         self.assertEqual(query(predicate,parameters).rows,((1,),));self.assertEqual(query(bounded).rows,((expected,),))
         h.detach();c.rollback()
-
-class TypedRelationshipKeys08Tests(TypedRelationshipKeysTests):
-    source_version='0.8.0'

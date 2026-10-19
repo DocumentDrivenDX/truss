@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original codec preflight controls; no native population/authority claim."""
 import os,json,subprocess,unittest
 from pathlib import Path

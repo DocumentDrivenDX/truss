@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Draft import carriers and local consistency, not native import execution."""
 from dataclasses import dataclass, field, fields
 from typing import Generic, Literal, TypeAlias, TypeVar

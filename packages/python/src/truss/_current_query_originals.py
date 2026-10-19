@@ -15,128 +15,20 @@ class CurrentQueryOriginals:
     consumer_bytes: bytes
 
 
-_ABI2_CONSUMER={
-    'profile':'truss-current-query-consumer/0.1-candidate',
-    'umfRevision':'579675bdad79c349b06e25979108f8ac1bb7f7e0',
-    'umfBundleSha256':'36e2c63fb0d942c9b94141f1753bcd9b56aad9e32dec5aa1a9ee27aabc674248',
-    'umfManifestSha256':'98eed644128b6f77d087293360e062fc06cce941dcb686e09c35632a5560f03d',
-    'bunVersion':'1.4.2',
-    'weftRevision':'718a9649413baa4e3ede5c0c3b7ed24f4ae48d46',
-    'weftWheelSha256':'3e9bd6f6ac42c944dd12e36ce3ea0481ca116a3ab639ef2c2ede933751ff17a8',
-    'weftModuleSha256':'6b8af80b8d6da4216b1338e79e869faee4f5cd25af8500034368ef709005f523',
-    'resultAbi':'weft.postgresql.current-values/0.2-candidate',
-}
-# Published standard-feature wheel, qualified only for the existing ABI2 flow.
-# Extra APIs in that wheel do not enroll aggregates or a newer result ABI.
-_ABI2_WEFT_033_ARM={**_ABI2_CONSUMER,
-    'weftRevision':'cc943a2f0ad87e3742cccdc171184bad7d4dbf60',
-    'weftWheelSha256':'8ea8e06b7e8cf3623df69dd1e27c3bde3a1189f3adbd01c43f4a1519431b2b35',
-    'weftModuleSha256':'60b977a1c8b8a355b86be40375aab209ed894b172dbed972498721eab8bbddae',
-}
-# Exact published Linux x64 artifact; native admission is gated by the installed
-# release workflow before a release claim. No other platform is enrolled.
-_ABI2_WEFT_033_LINUX_X64={**_ABI2_CONSUMER,
-    'weftRevision':'cc943a2f0ad87e3742cccdc171184bad7d4dbf60',
-    'weftWheelSha256':'5eddce42e8fc1497bad36413fe8153c85973d69e579ad5d6d261ff1b1ca1dd63',
-    'weftModuleSha256':'7e62d921d83cb9cefbf97d74819e41573339a6219793217edfe52402a6384134',
-}
-# Finished owner candidate for native68. Published artifacts have their own
-# exact whole selections; earlier registrations never migrate implicitly.
-_ABI2_WEFT_034_ARM={**_ABI2_CONSUMER,
-    'weftRevision':'e4ccbd9d2a0d6aee53993a40e0c7be35ecf59456',
-    'weftWheelSha256':'8d22c78c29b32bef3fcffb6063c2eea55946e3eb2b10e4ed251bee4ca90df00f',
-    'weftModuleSha256':'19010ec2bacae8effcdd77df5c6777118a689dcd6fef9a0c817f6a180a511d64',
-}
-_ABI2_WEFT_034_PUBLIC_ARM={**_ABI2_CONSUMER,
-    'weftRevision':'86273dd3c2b4c2b99c8d0268c9dff8537e6ce20e',
-    'weftWheelSha256':'fb0d79679c158208418199df144cfc21917b3955c382ef933980bb89645eed37',
-    'weftModuleSha256':'877bfafd51a7f50478be954c0cbabd0cba0a705f004a5b5e99d317fd087f19d9',
-}
-_ABI2_WEFT_034_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
-    'weftRevision':'86273dd3c2b4c2b99c8d0268c9dff8537e6ce20e',
-    'weftWheelSha256':'bfc70a4d1f9146c3630ebb177be5a4f52231fd81b276233b3e0aa1a2c5e73246',
-    'weftModuleSha256':'6de57d7dfcd604fbdbd78534fcb5bca16c59a9fb71ccae58df0e08a67457e22c',
-}
-# Published matching query-ABI release; retain the original UMF child and ABI2.
-# Native policy integration remains a release gate for these exact artifacts.
-_ABI2_WEFT_035_PUBLIC_ARM={**_ABI2_CONSUMER,
-    'weftRevision':'ff3695af5ece9d386b3dcbf266cf23d632997733',
-    'weftWheelSha256':'7b8e37c34cf157bf399bda7b430b4891d7a0b37d87db16979ade0355e0b0d79d',
-    'weftModuleSha256':'b3467b40a3b80a33b71f7400cdf513cb064c82bf64cd91c239afa41cbb204e4f',
-}
-_ABI2_WEFT_035_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
-    'weftRevision':'ff3695af5ece9d386b3dcbf266cf23d632997733',
-    'weftWheelSha256':'a14259260331f29b0725caa1912cedb02db4dde5ab4a96632d474a06e683d744',
-    'weftModuleSha256':'8b4149a8cc407622e6b645bbb891f5e344767fbd527418724f8d7e742d3c2ab9',
-}
-_ABI2_WEFT_036_PUBLIC_ARM={**_ABI2_CONSUMER,
-    'weftRevision':'a14640f2bb288e58de0c9846fb10162e3e4030fc',
-    'weftWheelSha256':'ab14b73dcf94ea329514b5e9a54e6d37bbdca08e45319446f0e6d6181117deab',
-    'weftModuleSha256':'fd9f6a76b1c584ee4c49fbdb452cf9c1349918d417e3a4f303691c2a8d33f853',
-}
-_ABI2_WEFT_036_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
-    'weftRevision':'a14640f2bb288e58de0c9846fb10162e3e4030fc',
-    'weftWheelSha256':'453d994f468cfd5dd67d808fbcb5132187402f211e1c246e74ee42ac508a6599',
-    'weftModuleSha256':'32fd387564d116e6b73a76faededfcf33b9afabdbcf9403e004cd0b807088e19',
-}
-_ABI2_WEFT_038_PUBLIC_ARM={**_ABI2_CONSUMER,
-    'weftRevision':'e2eba1ba323e6e9c08400fd0daf22bb456857d43',
-    'weftWheelSha256':'f30a8e8207eb7a159966b66ea3ebce90efcc57414311b1a4be7d14eac954c852',
-    'weftModuleSha256':'8e7aa047a9b205ca8afe3a3fcf4d5f7da950b8f9ef56cda41c60b17ccd03a671',
-}
-_ABI2_WEFT_038_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
-    'weftRevision':'e2eba1ba323e6e9c08400fd0daf22bb456857d43',
-    'weftWheelSha256':'6d9ef828dffb2363ff1501980f2c4aade449a8f0ff0ce5714dae57035295f55e',
-    'weftModuleSha256':'6a037c5c15efa3e7df58ac157a1bfe9e56fb35d1aed68850d17255439fbc730e',
-}
-_ABI2_WEFT_040_PUBLIC_ARM={**_ABI2_CONSUMER,
-    'weftRevision':'685691d3f7e2b9cd98285c74a56a6707a7b01cfd',
-    'weftWheelSha256':'24d5514c779bd43fceafb6f89268f4fb4dc6a28b1332370fcaefd9f4c20b63cc',
-    'weftModuleSha256':'e2ea98d4cb370fe098cb7355cf240d4bc6a6679cc3f9eb1382a4287124ae81e7',
-}
-_ABI2_WEFT_040_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
-    'weftRevision':'685691d3f7e2b9cd98285c74a56a6707a7b01cfd',
-    'weftWheelSha256':'328d4359c3a272679457cd0ae63ec3805bc219bfd32c8b0bfe81301f0e9158cb',
-    'weftModuleSha256':'7257c6e26308093ab1e3d37a323cc63c20e9fdb89730146effd1b3d9cd9d45d3',
-}
-_ABI2_WEFT_041_PUBLIC_ARM={**_ABI2_CONSUMER,
-    'profile':'truss-current-query-consumer/0.2-candidate',
-    'weftRevision':'4289fa35cd6f75ea7e25975154d1b3d4dd3e707e',
-    'weftWheelSha256':'863e6487b513610d25581d8307bf5cea5df6928bc704171ec256f00c68b155dc',
-    'weftModuleSha256':'2879b4f997c61ae1f122ae1502adffc1f2964ab8a1e34422e86d33f7210d7848',
-}
-del _ABI2_WEFT_041_PUBLIC_ARM['bunVersion']
-_ABI2_WEFT_041_PUBLIC_ARM.update(embeddedRuntime='mini-racer==0.14.1',embeddedProfile='truss.embedded-v8/1',embeddedManifestSha256=EMBEDDED_MANIFEST_SHA256,embeddedV8Version='14.4.258.23')
+_CURRENT_CONSUMER={'profile': 'truss-current-query-consumer/0.2-candidate', 'umfRevision': '9ff2ba12271be889aad81c09695487e14655893d', 'umfBundleSha256': '5c0996adf80552753899d7b3e196b93f7641bdf82d6bbb30dace8c90ad1ff004', 'umfManifestSha256': '16df44d7d0d1ce2a59c9b12129ab803f025d3fdb4a4aefdf98474b9e22fcbc62', 'resultAbi': 'weft.postgresql.current-values/0.2-candidate', 'embeddedRuntime': 'mini-racer==0.14.1', 'embeddedProfile': 'truss.embedded-v8/2', 'embeddedV8Version': '14.4.258.23'}
+_CURRENT_CONSUMER['embeddedManifestSha256']=EMBEDDED_MANIFEST_SHA256
 
-_ABI2_WEFT_041_PUBLIC_LINUX_X64={**_ABI2_CONSUMER,
-    'profile':'truss-current-query-consumer/0.2-candidate',
-    'weftRevision':'4289fa35cd6f75ea7e25975154d1b3d4dd3e707e',
-    'weftWheelSha256':'f7cb3612303db4a1d95ae66b3624ad678f3f80df0a1bc70b86d2909f6fdb9266',
-    'weftModuleSha256':'6af3c8946eefb9940f5e13a170e53af6841e3addb3d67f2210e31757cae8b4e1',
-}
-del _ABI2_WEFT_041_PUBLIC_LINUX_X64['bunVersion']
-_ABI2_WEFT_041_PUBLIC_LINUX_X64.update(embeddedRuntime='mini-racer==0.14.1',embeddedProfile='truss.embedded-v8/1',embeddedManifestSha256=EMBEDDED_MANIFEST_SHA256,embeddedV8Version='14.4.258.23')
-
-# Exact published 0.4.42 maintenance wheels retain the existing ABI2 flow.
-# Adding these identities does not activate any additional compiler APIs.
-_ABI2_WEFT_042_PUBLIC_ARM={**_ABI2_WEFT_041_PUBLIC_ARM,
-    'weftRevision':'e3c107cf14b0fc8f17423ebfbbcc686dda1237db',
-    'weftWheelSha256':'5573e7b98f35e6a5d2fc476579237ae87d5802876795e0b3fe1fc4261f01ad04',
-    'weftModuleSha256':'b07461765807c07f3dc140e2b997bcff56c4c75fdace06fcc289ef82657b944b',
-}
-_ABI2_WEFT_042_PUBLIC_LINUX_X64={**_ABI2_WEFT_041_PUBLIC_LINUX_X64,
-    'weftRevision':'e3c107cf14b0fc8f17423ebfbbcc686dda1237db',
-    'weftWheelSha256':'8c52e62f0d9643c3b874dd761e94a48db2771f4f6012a59e5b177766deffb76a',
-    'weftModuleSha256':'f25910c391676d28599d63b4e293781d554a221f3edc28d18e64d913e9306dd6',
-}
-
-_CONSUMER_COHORTS=(_ABI2_CONSUMER,_ABI2_WEFT_033_ARM,_ABI2_WEFT_033_LINUX_X64,
-                  _ABI2_WEFT_034_ARM,_ABI2_WEFT_034_PUBLIC_ARM,_ABI2_WEFT_034_PUBLIC_LINUX_X64,
-                  _ABI2_WEFT_035_PUBLIC_ARM,_ABI2_WEFT_035_PUBLIC_LINUX_X64,
-                  _ABI2_WEFT_036_PUBLIC_ARM,_ABI2_WEFT_036_PUBLIC_LINUX_X64,
-                  _ABI2_WEFT_038_PUBLIC_ARM,_ABI2_WEFT_038_PUBLIC_LINUX_X64,
-                  _ABI2_WEFT_040_PUBLIC_ARM,_ABI2_WEFT_040_PUBLIC_LINUX_X64,_ABI2_WEFT_041_PUBLIC_ARM,_ABI2_WEFT_041_PUBLIC_LINUX_X64,
-                  _ABI2_WEFT_042_PUBLIC_ARM,_ABI2_WEFT_042_PUBLIC_LINUX_X64)
+# Published Weft 0.4.45 compiler identities for the supported platform wheels.
+_CONSUMER_COHORTS=(
+    {**_CURRENT_CONSUMER,
+        'weftRevision':'ae7d18f1e22323348dbd7b6a06093f12557d3add',
+        'weftWheelSha256':'e9ebddd11929b7cf8a1b2885e092010bc556b886a72bedf50dc0c14b0e762463',
+        'weftModuleSha256':'2d64636f1e4929c1cd1529ec9cefff5ab47499fe31f65590af7d0063554f6dac'},
+    {**_CURRENT_CONSUMER,
+        'weftRevision':'ae7d18f1e22323348dbd7b6a06093f12557d3add',
+        'weftWheelSha256':'fe96773709df20ba38db6ab1247489603befafff6e55af20a1b448719a20e5a9',
+        'weftModuleSha256':'1a7f9c3e43aa41419725d43c3f54a34499bc28b97f175a6eccbcf1d8b5b3b437'},
+)
 
 
 def _actual_consumer():
@@ -263,12 +155,11 @@ def check_query_originals(originals, initialize_bytes, accepted_request_bytes):
             or binding['sha256']!=by_role['native-binding']['sha256']):
         raise ValueError('Original static Weft binding correspondence required')
     consumer=decode_owner_evidence_json(originals.consumer_bytes)
-    fields={'profile','umfRevision','umfBundleSha256','umfManifestSha256','bunVersion',
-            'weftRevision','weftWheelSha256','weftModuleSha256','resultAbi'}
-    if type(consumer) is dict and consumer.get('profile')=='truss-current-query-consumer/0.2-candidate':
-        fields=(fields-{'bunVersion'})|{'embeddedRuntime','embeddedProfile','embeddedManifestSha256','embeddedV8Version'}
+    fields={'profile','umfRevision','umfBundleSha256','umfManifestSha256',
+            'weftRevision','weftWheelSha256','weftModuleSha256','resultAbi',
+            'embeddedRuntime','embeddedProfile','embeddedManifestSha256','embeddedV8Version'}
     if (type(consumer) is not dict or set(consumer)!=fields
-            or consumer['profile'] not in ('truss-current-query-consumer/0.1-candidate','truss-current-query-consumer/0.2-candidate')
+            or consumer['profile']!='truss-current-query-consumer/0.2-candidate'
             or any(type(v) is not str or not v for v in consumer.values())
             or any(re.fullmatch('[0-9a-f]{64}',consumer[k]) is None for k in fields if k.endswith('Sha256'))
             or any(re.fullmatch('[0-9a-f]{40}',consumer[k]) is None for k in ('umfRevision','weftRevision'))

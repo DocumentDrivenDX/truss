@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Structural operation contract for the implemented native Python profiles.
 
 The protocol describes callable operations, not readiness, native authority,
@@ -32,7 +33,7 @@ class NativeRuntimeOperations(Protocol):
     def reconstruct_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,version: int,
                                    maximum_events: int=4096,maximum_bytes: int=8388608) -> Outcome[HistoricalRecord | HistoricalDeleted | HistoryUnavailable]: ...
 
-    def prepare_catalog(self, documents: tuple[CatalogDocument, ...], *, bun_executable: str='bun', source_version: str='0.7.0') -> PreparedAcceptance: ...
+    def prepare_catalog(self, documents: tuple[CatalogDocument, ...], *, bun_executable: str='bun', source_version: str='0.10.0') -> PreparedAcceptance: ...
 
     def accept_in_transaction(self, transaction: TransactionHandle, prepared: PreparedAcceptance, *, request_key: str,
                                   origin_bytes: bytes=b'{}',bun_executable: str='bun') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]: ...

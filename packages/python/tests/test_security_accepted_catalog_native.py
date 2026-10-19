@@ -1,4 +1,5 @@
-"""Accepted core0.8 sources through genuine Weft under the native guard.
+# SPDX-License-Identifier: MIT OR Apache-2.0
+"""Accepted core0.10 sources through genuine Weft under the native guard.
 @covers US-056-AC2
 @covers US-056-AC6
 @covers US-056-AC9
@@ -16,14 +17,14 @@ class AcceptedCatalogMappingTests(mapping.MappingNativeTests):
  def accepted(self,second=False,source=None):
   self.install();source=json.loads(mapping.FIXTURE.read_text()) if source is None else source;self.reference=mapping.encoded(source)
   c,h,a,t=self.consumer();m=source['modules'][0];p=m['pin']
-  prepared=a.prepare_catalog((CatalogDocument(p['documentId'],p['revision'],m['documentJson'].encode()),),source_version='0.8.0',bun_executable='/opt/homebrew/bin/bun')
+  prepared=a.prepare_catalog((CatalogDocument(p['documentId'],p['revision'],m['documentJson'].encode()),),source_version='0.10.0',bun_executable='/opt/homebrew/bin/bun')
   result=a.accept_in_transaction(t,prepared,request_key='accepted-mapping08');self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error))
   if second:
    h.detach();c.commit()
    self.admin.execute("CREATE ROLE assessment_writer;INSERT INTO truss.module_access VALUES('domain','m','consumer','assessment_writer')")
    self.addCleanup(self.admin.execute,'DROP OWNED BY assessment_writer;DROP ROLE assessment_writer')
    c,h,a,t=self.consumer()
-   another=a.prepare_catalog((CatalogDocument(p['documentId'],'schema-2',m['documentJson'].encode()),),source_version='0.8.0',bun_executable='/opt/homebrew/bin/bun')
+   another=a.prepare_catalog((CatalogDocument(p['documentId'],'schema-2',m['documentJson'].encode()),),source_version='0.10.0',bun_executable='/opt/homebrew/bin/bun')
    result=a.accept_in_transaction(t,another,request_key='accepted-mapping08-second');self.assertIsInstance(result,Ok,str(h._custody.last_attempt.error))
   h.detach();c.commit()
   self.admin.execute('BEGIN');self.host=adopt_psycopg_host(self.admin);self.tx=self.host.adopt_transaction().value
@@ -103,10 +104,9 @@ class AcceptedCatalogMappingTests(mapping.MappingNativeTests):
   result=self.prepare_accepted();self.assertIsInstance(result,Error);self.assertEqual(self.calls,[])
   self.assertIn('Exact current accepted revision history required',str(self.host._custody.last_attempt.error))
   self.assertEqual(self.admin.execute('TABLE accepted_prior').fetchall(),[('kept',)])
- def test_missing_historical_report_refused_before_compiler(self):
+ def test_current_source_capture_does_not_replay_historical_reports(self):
   self.accepted(second=True);self.admin.execute('ALTER TABLE truss.catalog_acceptance_report DISABLE TRIGGER USER;DELETE FROM truss.catalog_acceptance_report WHERE rev=1;ALTER TABLE truss.catalog_acceptance_report ENABLE TRIGGER USER')
-  result=self.prepare_accepted();self.assertIsInstance(result,Error);self.assertEqual(self.calls,[])
-  self.assertIn('Complete accepted revision receipt history required',str(self.host._custody.last_attempt.error))
+  result=self.prepare_accepted();self.assertIsInstance(result,Ok,str(self.host._custody.last_attempt.error));self.assertEqual(len(self.calls),1)
   self.assertEqual(self.admin.execute('TABLE accepted_prior').fetchall(),[('kept',)])
  def test_genuine_compound_endpoint_key_preserves_native_position(self):
   source=json.loads(mapping.FIXTURE.read_text());module=source['modules'][0];document=json.loads(module['documentJson']);ontology=json.loads(source['ontologyJson'])

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public binary writes, reads and Weft byte equality."""
 from dataclasses import replace
 from truss import Ok,QueryRows,QueryRefused,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
@@ -7,7 +8,7 @@ import test_object_mutations_native as base
 
 class BinaryQueryTests(base.ObjectMutationTests):
     for _name in tuple(n for n in dir(base.ObjectMutationTests) if n.startswith('test_')):locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version
         module=source['modules'][0]
@@ -37,6 +38,3 @@ class BinaryQueryTests(base.ObjectMutationTests):
             result=query.query_in_transaction(t,sql=sql,document_ids=('adoc',),parameters={'blob':value});self.assertIsInstance(result.value,QueryRefused,repr(result))
         h.detach();c.commit();c.execute('BEGIN READ ONLY;SET LOCAL statement_timeout=10000');h=adopt_psycopg_host(c);t=h.adopt_transaction(access_mode='read_only').value;query=create_reference_assembly(CatalogRuntimeConfiguration(),h).value.compiled_execution(a.compiled_selection).capability
         check(sql,{'blob':TextValue(kind='binary',text='AP8=')},(('one',),),tx=t);h.detach();c.rollback()
-
-class BinaryQuery08Tests(BinaryQueryTests):
-    source_version='0.8.0'

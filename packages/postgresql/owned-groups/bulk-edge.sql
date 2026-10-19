@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Independent edges between stored endpoints do not read earlier operations.
 -- Keep ownership-changing/alias/mixed groups on the ordered graph path.
 CREATE FUNCTION truss.runtime_owned_edge_create_batch(selected_attempt uuid) RETURNS void

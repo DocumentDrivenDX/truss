@@ -84,3 +84,10 @@ required native routines/owners/grants and independent allowed/denied tests.
 Installation and initial Python operations need this concrete subset; unrelated
 security capabilities are not prerequisites. Truss must not fork its resolver or
 adopt a partial component count as a complete handoff.
+
+The 2026-10-18 owner decision selects UMF 0.10.0 as the sole current source
+format and removes all earlier-format adapters and predecessor installation
+upgrades. This is pre-release software: design iterations do not establish a
+permanent compatibility obligation. Current-format schema revisions within a
+live installation remain required for evolution and historical reads. Fresh
+installation refuses existing data; no automatic reset or migration is implied.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public parallel independent self-edges retain distinct stored identities."""
 import os,base64
 from dataclasses import replace

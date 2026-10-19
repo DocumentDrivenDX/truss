@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Portable custody/codec execution only; no installed backend admission. */
 const {chromium}=await import(Bun.env.UMF_PLAYWRIGHT_MODULE??'playwright');
 const sources=['original-byte-custody','acceptance-json','canonical-wire-tree','asserted-origin-map','captured-origin-context'].map(n=>'packages/postgresql/src/'+n+'.ts');

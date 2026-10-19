@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private counter component. Construction is not original transaction admission.
  * Bind one instance to the qualified shared physical-connection/epoch issuer.
  * Reserve control/account permits before reserve; submit savepoint only afterward.

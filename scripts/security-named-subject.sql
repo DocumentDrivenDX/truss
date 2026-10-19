@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Fixed native fixture helper. Not a generic subject mapping or installer.
 CREATE FUNCTION truss.named_subject_current(actor text)
 RETURNS TABLE(staff_id text)

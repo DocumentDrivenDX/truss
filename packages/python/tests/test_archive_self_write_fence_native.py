@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual lock-lifetime fence, not authenticated installed archive admission."""
 import unittest
 from pathlib import Path

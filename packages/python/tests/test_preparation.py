@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public preparation with original owner assets; no native acceptance claims."""
 import base64
 import hashlib
@@ -7,17 +8,15 @@ import unittest
 import sys
 import subprocess
 from truss.preparation import _capture
+from truss.catalog_preparation import _configuration
 from unittest.mock import patch
 from truss import CatalogDocument, PreparationRejected, prepare_acceptance
 
 ROOT=Path(__file__).resolve().parents[3]
-CONFIG=json.loads((ROOT/'docs/helix/02-design/contracts/bindings/acceptance-input-capacity-v0.1.fixture.json').read_text())['input']
-CONFIG={k:v for k,v in CONFIG.items() if k not in ('interfaceVersion','documents')}
-CONFIG['binding']={'state':'absent'}
-CONFIG['transforms']=[]
+CONFIG=_configuration()
 
 def document(identity):
-    value={'umf':'0.7.0','id':identity,'vocabularies':{},'extensions':{},'modules':[{'id':'m','namespace':'m','elements':[
+    value={'umf':'0.10.0','id':identity,'vocabularies':{},'extensions':{},'modules':[{'id':'m','namespace':'m','elements':[
         {'id':'Item','kind':'record','members':[{'module':'m','element':'label'}],'extensions':{}},
         {'id':'label','kind':'field','scalarType':'string','nullability':'required','cardinality':'one','extensions':{}}]}]}
     return CatalogDocument(identity,'r1',(' \n'+json.dumps(value)+'\n').encode())
@@ -37,8 +36,9 @@ class PreparationTests(unittest.TestCase):
             self.assertEqual(observed.document.content,original.content)
             self.assertEqual(carrier['artifact']['sha256'],hashlib.sha256(original.content).hexdigest())
             self.assertEqual(observed.document,original)
-            self.assertEqual(observed.observation()['target']['umf'],'0.7.0')
-            self.assertIsNone(observed.observation()['transition'])
+            observation=observed.observation()
+            self.assertEqual(observation['source']['umf'],'0.10.0')
+            self.assertTrue(observation['sourceValidation']['valid'])
         copy=result.input();copy['documents'].clear()
         self.assertEqual(len(result.input()['documents']),2)
         self.assertNotIn('acceptedIds',result.input())
@@ -48,22 +48,19 @@ class PreparationTests(unittest.TestCase):
 
     def test_unavailable_registration_report_is_rejected_during_preparation(self):
         original = _capture
-        for reason, code, limit in (
-            ('report_evidence_resource', 'evidence_too_large', 16777216),
-            ('report_evidence_unavailable', 'evidence_unavailable', None),
-        ):
+        for mutation in ('missing_document','extra_summary_field'):
             def unavailable(command, **kwargs):
                 completed = original(command, **kwargs)
-                if command[-1].endswith('bridge.js'):
+                if command[-1].endswith('preparation.mjs'):
                     reply = json.loads(completed.stdout)
-                    reply['reportEvidence'] = {
-                        'scope': 'original_owner_report_preparation_only',
-                        'ingress': {'state': 'unavailable', 'reason': reason},
-                    }
+                    if mutation=='missing_document':
+                        reply['reportEvidence']['documents']=[]
+                    else:
+                        reply['reportEvidence']['extraField']='unavailable'
                     return subprocess.CompletedProcess(command, completed.returncode,
                         json.dumps(reply).encode(), completed.stderr)
                 return completed
-            with self.subTest(reason=reason), patch('truss.preparation._capture', unavailable):
+            with self.subTest(mutation=mutation), patch('truss.preparation._capture', unavailable):
                 with self.assertRaises(PreparationRejected) as raised:
                     prepare((document('ordinary'),))
                 self.assertEqual(raised.exception.reason, 'producer_unavailable')
@@ -72,14 +69,14 @@ class PreparationTests(unittest.TestCase):
 
     def test_all_entrypoints_share_the_same_summary(self):
         from truss import prepare_catalog
-        from truss.preparation import prepare_core08_acceptance
+        from truss.preparation import prepare_core10_acceptance
         from truss.catalog_preparation import _configuration
         from truss._catalog_report_semantics import canonical_numeric_free
-        for version in ('0.7.0','0.8.0'):
+        for version in ('0.10.0',):
             source=json.loads(document('same').content);source['umf']=version
             original=CatalogDocument('same','r1',json.dumps(source).encode())
-            configuration=canonical_numeric_free(_configuration(version))
-            methods=(prepare_acceptance,prepare_core08_acceptance)
+            configuration=canonical_numeric_free(_configuration())
+            methods=(prepare_acceptance,prepare_core10_acceptance)
             for method in methods:
                 with self.subTest(version=version),patch.object(subprocess,'Popen',side_effect=AssertionError('No external process')):
                     legacy=method((original,),configuration,bun_executable='/missing/bun')
@@ -170,15 +167,16 @@ print(json.loads(prepared.report_evidence_bytes)['interfaceVersion'])
 
     def test_unsupported_version_refuses(self):
         source=document('future');value=json.loads(source.content);value['umf']='99.0.0'
-        with self.assertRaises(PreparationRejected):
+        with self.assertRaises(PreparationRejected) as raised:
             prepare((CatalogDocument('future','r1',json.dumps(value).encode()),))
+        self.assertEqual(raised.exception.reason,'unsupported_profile')
 
     def test_duplicate_document_identity_refuses(self):
         with self.assertRaises(PreparationRejected) as raised:prepare((document('same'),document('same')))
         self.assertEqual(raised.exception.reason,'invalid_input')
 
     def test_invalid_document_refuses(self):
-        with self.assertRaises(PreparationRejected) as raised:prepare((CatalogDocument('bad','r1',b'{"umf":"0.7.0"}'),))
+        with self.assertRaises(PreparationRejected) as raised:prepare((CatalogDocument('bad','r1',b'{"umf":"0.10.0","id":"bad"}'),))
         self.assertEqual(raised.exception.reason,'invalid_document')
         self.assertTrue(raised.exception.diagnostics)
         self.assertFalse(json.loads(raised.exception.diagnostics[0])['validation']['valid'])
@@ -243,7 +241,7 @@ print(json.loads(prepared.report_evidence_bytes)['interfaceVersion'])
         original=Path.read_bytes
         def read(path):
             value=original(path)
-            return value+b'altered' if str(path).endswith('/owner/producer.js') else value
+            return value+b'altered' if str(path).endswith('/_umf_core10/producer.js') else value
         with patch.object(Path,'read_bytes',read):
             with self.assertRaises(PreparationRejected) as raised:prepare((document('first'),))
         self.assertEqual(raised.exception.reason,'producer_unavailable')

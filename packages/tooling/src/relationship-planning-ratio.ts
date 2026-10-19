@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Candidate benchmark arithmetic only; does not admit timing/profile/native evidence. */
 export function checkRelationshipPlanningRatio(baseline:readonly string[],candidate:readonly string[],resolution:string):'within_target'|'above_target'|'invalid_samples' {
  const parse=(value:string)=> typeof value==='string'&&/^(0|[1-9][0-9]*)$/.test(value)&&value.length<=30?BigInt(value):null;

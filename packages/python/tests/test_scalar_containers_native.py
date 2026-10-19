@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public scalar array/map workflows using original UMF item Fields."""
 import json,os
 from decimal import Decimal
@@ -12,7 +13,7 @@ import test_group_create_native as create_tests
 class ScalarContainerTests(create_tests.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(create_tests.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version;module=source['modules'][0]
         for e in module['elements']:
@@ -91,6 +92,3 @@ class ScalarContainerTests(create_tests.PublicCreateGroupTests):
         connection,host,assembly,tx=self.consumer()
         self.assertIsInstance(assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id)).value,ObjectNotFound)
         refused,_,_=self.run_group(assembly,tx,(UpdateObject(target=StoredObjectReference(identity=identity),set=(),unset=()),),'no-item-authority');self.assertIsInstance(refused,GroupFailed);self.assertIsInstance(refused.failure,UnauthorizedPerson)
-
-class ScalarContainer08Tests(ScalarContainerTests):
-    source_version='0.8.0'

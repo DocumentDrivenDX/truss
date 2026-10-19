@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Explicit isolated SCRAM caller extension of the native disclosure campaign.
 
 Both TRUSS_DISCLOSURE_NATIVE_QUALIFICATION=1 and

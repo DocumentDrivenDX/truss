@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Consumer reader catalog/source workflows on actual protected PostgreSQL."""
 import hashlib
 import psycopg

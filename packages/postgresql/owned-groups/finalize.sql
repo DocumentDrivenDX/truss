@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- The trusted engine has already planned and written the group. Settlement
 -- checks current custody, completeness and authority; it does not execute a
 -- second semantic/history program over private immutable plans and effects.

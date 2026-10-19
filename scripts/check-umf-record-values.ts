@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Actual logical Record checker with explicit 0.7 -> 0.8 receipts. */
 import {verifyExactArtifacts} from '@documentdrivendx/truss-postgresql';
 import {readFile,writeFile,mkdtemp} from 'node:fs/promises';

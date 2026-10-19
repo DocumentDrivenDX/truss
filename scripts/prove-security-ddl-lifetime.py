@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional source-byte lifetime model; no source/native refinement theorem."""
 import hashlib,json,sys
 from pathlib import Path

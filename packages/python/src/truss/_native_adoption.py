@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private native original-generation adoption claim; no public E06 claim.
 
 The native generation owns the authoritative immutable claim root. Executor

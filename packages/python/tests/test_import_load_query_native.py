@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public whole-object import load provenance, pending and committed."""
 from truss import Ok,QueryRows,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
 from truss.contracts import MapValue,MapEntry,TextValue

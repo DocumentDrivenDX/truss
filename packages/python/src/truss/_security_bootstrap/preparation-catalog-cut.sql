@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Candidate metadata-only preparation cut; not authority or complete source custody.
 -- Grant only an explicitly installed private ordinary engine executor.
 -- Routine/role/ACL/DDL exclusion and fresh RC correspondence remain prerequisites.
@@ -23,7 +24,6 @@ BEGIN
  LOCK TABLE ONLY truss.source_epoch_current IN SHARE MODE NOWAIT;
  LOCK TABLE ONLY truss.source_epoch_registry IN SHARE MODE NOWAIT;
  LOCK TABLE ONLY truss.catalog_runtime_installation IN SHARE MODE NOWAIT;
- LOCK TABLE ONLY truss.runtime_release IN SHARE MODE NOWAIT;
  LOCK TABLE ONLY truss.schema_head IN SHARE MODE NOWAIT;
  LOCK TABLE ONLY truss.schema_rev IN SHARE MODE NOWAIT;
  LOCK TABLE ONLY truss.schema_doc IN SHARE MODE NOWAIT;

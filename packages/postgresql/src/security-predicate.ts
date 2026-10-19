@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Experimental normalized-IR row predicate lowering. No credentials, installation,
  * fact/issuer trust, disclosure publication or complete host admission. */
 import {requireCandidateGraphSource,type CandidateGraphSource} from './security-graph-source';

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Administrative native catalog-cut feasibility; no protected provider or authority."""
 import hashlib,json,re,sys,threading,time
 from pathlib import Path

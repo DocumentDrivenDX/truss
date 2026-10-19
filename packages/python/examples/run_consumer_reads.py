@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Run selected unchanged consumer read/action workflows on the authority database."""
 import argparse
 from contextlib import ExitStack
@@ -39,7 +40,7 @@ def run_reads(corpus_path, directory, *, bun='bun', case_ids=CASES):
         raise ValueError('Original model must remain within the corpus directory')
     source = model_path.read_bytes()
     model = json.loads(source)
-    if model['umf'] != '0.7.0' or len(model['modules']) != 1:
+    if model['umf'] != '0.10.0' or len(model['modules']) != 1:
         raise ValueError('Selected original single-module model required')
     module = model['modules'][0]
     module_id, document_id = module['id'], model['id']

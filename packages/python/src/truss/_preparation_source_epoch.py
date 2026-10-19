@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private metadata-source bootstrap for ordinary accepted UMF catalogs.
 
 Direct trusted superuser and quiescent initial installation are premises. This

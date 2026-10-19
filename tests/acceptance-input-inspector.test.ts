@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createAcceptanceInputInspector,AcceptanceInputInspectionError} from '../packages/umf-bun/src/acceptance-input';
 const inspector=await createAcceptanceInputInspector('/Users/erik/Projects/umf/package.json');

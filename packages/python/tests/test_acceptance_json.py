@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Shared original wire vectors plus independent boundary expectations."""
 import hashlib
 import json

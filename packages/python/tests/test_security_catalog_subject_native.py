@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native ordinary subject bound to the actual accepted-catalog policy read."""
 import json,sys,os,subprocess
 from pathlib import Path

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Actual upstream producer evidence; does not install or accept a Truss catalog. */
 import {verifyExactArtifacts} from '@documentdrivendx/truss-postgresql';
 import {readFile,writeFile,mkdtemp} from 'node:fs/promises';

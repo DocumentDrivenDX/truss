@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private embedded owner host. No executable discovery or host JavaScript process.
 
 This delivery boundary is replaceable by native UMF. Owner receipts and native
@@ -26,7 +27,7 @@ def _assets(cohort):
     manifest = json.loads(raw_manifest)
     if manifest['profile'] != 'truss.embedded-v8/2' or manifest['engine'] != 'mini-racer==0.14.1':
         raise ValueError('Qualified embedded owner profile required')
-    if cohort not in ('_umf','_umf_core08','_umf_keys','_umf_keys08','_current_query_owner','_current_disclosure_owner','_preparation_sources'):
+    if cohort not in ('_umf_core10','_current_query_owner','_current_disclosure_owner','_preparation_sources'):
         raise ValueError('Packaged owner cohort required')
     required={cohort+'.json.gz','runtime.js','polyfills.js'}
     if not required<=manifest['files'].keys():raise ValueError('Complete selected owner cohort required')

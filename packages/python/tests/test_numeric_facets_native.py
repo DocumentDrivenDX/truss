@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public signed64/fixed-decimal workflow; no rounding or float path."""
 from decimal import Decimal
 import psycopg
@@ -57,10 +58,6 @@ class NumericFacetTests(groups.PublicCreateGroupTests):
         self.assertEqual(rows.value.rows,((9007199254740993,Decimal('1.23000')),));self.assertEqual(str(rows.value.rows[0][1]),'1.23000')
         h.detach();c.rollback()
 
-class NumericFacet08Tests(NumericFacetTests):
-    def fields(self, source):
-        source['umf'] = '0.8.0'
-        super().fields(source)
 
 
 class NumericFacet12_2Tests(NumericFacetTests):

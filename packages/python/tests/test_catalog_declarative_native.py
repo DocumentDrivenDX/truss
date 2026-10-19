@@ -1,38 +1,61 @@
-"""Basic native declaration-only admission and unsupported-shape refusals."""
-import base64,copy,json,os,sys,tempfile,unittest
-from hashlib import sha256
-from pathlib import Path
-import psycopg
-from truss import LocalPostgres,CatalogDocument
-from truss.catalog_preparation import prepare_catalog
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'examples'))
-from adopter_workflow import transaction,success
+# SPDX-License-Identifier: MIT OR Apache-2.0
+"""Current UMF 0.10 source retention and explicit native storage refusal."""
+import json
+import unittest
+
+from truss import Error, Ok
+import test_catalog_runtime_native as catalog
+from test_catalog_relational_support import relational_document
 
 
-class DeclarativeCatalogNativeTests(unittest.TestCase):
-    def test_native_scalar_declaration_does_not_admit_unknown_or_container_homes(self):
-        content=(Path(__file__).resolve().parents[3]/'docs/helix/04-build/evidence/named-current-native-refusal-20261015/original-core.json').read_bytes()
-        prepared=prepare_catalog((CatalogDocument('domain','named-query-core-r1',content),),source_version='0.8.0',bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
-        with tempfile.TemporaryDirectory(prefix='truss-declarative-') as directory,LocalPostgres(Path(directory)/'data') as runtime:
-            with psycopg.connect(runtime.info.connection_uri,autocommit=True,options='-c statement_timeout=10000') as admin:
-                with transaction(admin) as (assembly,tx):success(assembly.install_in_transaction(tx))
-                for mutation in (None,'unknown_scalar','orphan_container','unknown_home'):
-                    with self.subTest(mutation=mutation):
-                        source=json.loads(content)
-                        clear=next(e for m in source['modules'] for e in m['elements'] if e['id']=='clear')
-                        if mutation=='unknown_scalar':clear['scalarType']='future'
-                        elif mutation=='orphan_container':
-                            clear['cardinality']='array';clear['itemType']={'module':'m','element':'salary'}
-                            clear.pop('scalarType');clear.pop('facets')
-                        elif mutation=='unknown_home':clear['futureStorage']={'home':'unselected'}
-                        raw=json.dumps(source,separators=(',',':')).encode()
-                        inputs=copy.deepcopy(prepared.input());archive=json.loads(prepared.archive_documents_bytes)
-                        inputs['documents'][0]['artifact']['sha256']=sha256(raw).hexdigest()
-                        archive[0]['originalText']=raw.decode()
-                        args=(json.dumps(inputs).encode(),json.dumps(archive).encode(),prepared.declarations_bytes)
-                        if mutation is None:
-                            admin.execute('SELECT truss.catalog_check_source_correspondence(%s,%s,%s)',args)
-                        else:
-                            with self.assertRaises(psycopg.Error) as refused:
-                                admin.execute('SELECT truss.catalog_check_source_correspondence(%s,%s,%s)',args)
-                            self.assertEqual(refused.exception.sqlstate,'22023')
+class DeclarativeCatalogNativeTests(catalog.PublicCatalogRuntimeTests):
+    for name in tuple(n for n in dir(catalog.PublicCatalogRuntimeTests) if n.startswith('test_')):
+        locals()[name] = None
+
+    def test_semantic_type_source_is_retained_and_uuid_storage_refuses(self):
+        self.install()
+        connection, host, assembly, tx = self.consumer()
+
+        unsupported = relational_document()
+        unsupported['id'] = 'uuid-domain'
+        unsupported['vocabularies'] = {'example.identity': {'version': '1.0.0'}}
+        uuid_field = next(e for e in unsupported['modules'][0]['elements'] if e['id'] == 'A-label')
+        uuid_field['scalarType'] = 'uuid'
+        uuid_field['examples'] = [{'uuid': '01234567-89ab-cdef-8123-456789abcdef'}]
+        uuid_field['semanticTypes'] = [
+            {'vocabulary': 'example.identity', 'version': '1.0.0', 'term': 'external-id'}
+        ]
+        refused = assembly.prepare_catalog((catalog.CatalogDocument('uuid-domain', 'r1', json.dumps(unsupported).encode()),),
+            bun_executable=__import__('os').environ.get('TRUSS_BUN_EXECUTABLE', 'bun'))
+        result = assembly.accept_in_transaction(tx, refused, request_key='unsupported-uuid-storage')
+        self.assertIsInstance(result, Error)
+        self.assertEqual(result.error.catalog_code, 'unsupported_profile')
+
+        source = relational_document()
+        source['id'] = 'semantic-domain'
+        source['vocabularies'] = {'example.identity': {'version': '1.0.0'}}
+        label = next(e for e in source['modules'][0]['elements'] if e['id'] == 'A-label')
+        semantic_types = [
+            {'vocabulary': 'example.identity', 'version': '1.0.0', 'term': 'external-id'}
+        ]
+        label['semanticTypes'] = semantic_types
+        document = catalog.CatalogDocument('semantic-domain', 'r1', json.dumps(source).encode())
+        prepared = assembly.prepare_catalog((document,), bun_executable=__import__('os').environ.get('TRUSS_BUN_EXECUTABLE', 'bun'))
+        accepted = assembly.accept_in_transaction(tx, prepared, request_key='retain-semantic-types')
+        self.assertIsInstance(accepted, Ok, str(host._custody.last_attempt.error))
+        host.detach(); connection.commit()
+
+        connection, host, assembly, tx = self.consumer()
+        view = assembly.catalog_view_in_transaction(tx, assembly.catalog_view_request())
+        self.assertIsInstance(view, Ok, str(host._custody.last_attempt.error))
+        retained = []
+        import base64
+        for entry in view.value.view.definitions:
+            try:
+                definition = json.loads(base64.b64decode(entry.definition.bytes_base64))
+            except (ValueError, json.JSONDecodeError):
+                continue
+            if definition.get('semanticTypes'):
+                retained.append(definition['semanticTypes'])
+        self.assertIn(semantic_types, retained)
+        host.detach(); connection.commit()

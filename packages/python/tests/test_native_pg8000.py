@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private native-call evidence; no public adoption or protected admission."""
 import importlib.util
 import os,stat

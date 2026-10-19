@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Restricted native caller plus qualified caller/executor fact guards."""
 import json,sys,os
 from pathlib import Path

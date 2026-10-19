@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Bounded exact census chunk controls; synthetic cursor, no native authority."""
 from types import SimpleNamespace
 import unittest

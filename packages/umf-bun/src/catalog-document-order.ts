@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private bounded ordering of already-validated graphs; no acceptance authority. */
 export function orderCatalogDocuments(nodes:readonly string[],edges:readonly (readonly [string,string])[],limits:{documents:number;edges:number;identityBytes:number}){
  for(const value of [limits.documents,limits.edges,limits.identityBytes])if(!Number.isSafeInteger(value)||value<0)throw Error('Selected graph bounds required');

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Explicit current disclosure query configuration and tagged V2 results.
 
 This separate local candidate requires its exact reviewed presence wheel. The

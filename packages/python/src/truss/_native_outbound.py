@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original direct-send ledger; trusted successful empty-writer baseline."""
 from dataclasses import dataclass
 from ._native_pg8000 import NativeBoundaryRefusal, NativeCall, HostSimpleWitness

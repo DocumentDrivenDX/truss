@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original durable claim registration; no release or issuer authority.
 
 Trusted direct installation administrator/coordinator is a premise. Original

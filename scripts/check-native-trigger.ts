@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Host-only temporary native catalog probe; transaction always rolled back. */
 import {decodeNativeTriggerArguments} from '../packages/postgresql/src/index';
 import {writeFile} from 'node:fs/promises';

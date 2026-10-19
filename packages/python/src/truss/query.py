@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public compiled-query results. Numbers remain exact Python values."""
 from decimal import Decimal
 from datetime import datetime

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """The unchanged eight-key, 1,024-operation capacity with one native writer gate."""
 import unittest,json
 from truss import Ok

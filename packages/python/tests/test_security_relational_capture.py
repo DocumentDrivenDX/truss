@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original preflight ordering control; native completeness is still required."""
 import os,json,subprocess,unittest
 from pathlib import Path

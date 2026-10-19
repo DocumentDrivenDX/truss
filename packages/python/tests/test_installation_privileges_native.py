@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Fresh native privilege protection, not a callable catalog installation."""
 from pathlib import Path
 import unittest

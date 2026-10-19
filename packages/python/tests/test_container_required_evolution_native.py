@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Missing/null refusal and empty/nonempty repair for flat containers."""
 import json,os
 from truss import CatalogDocument,CatalogAcceptanceRefused,CatalogRegistration,ObjectFound,QueryRows,Ok
@@ -26,6 +27,3 @@ class ContainerRequiredEvolutionTests(base.ScalarContainerTests):
             found=a.get_object_in_transaction(t,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id)).value;self.assertIsInstance(found,ObjectFound);self.assertEqual(found.object.version,2);self.assertEqual(dict(found.object.values)['tags'],ops[index].set[0].value);self.assertEqual(dict(found.object.values)['amounts'],ops[index].set[1].value)
         rows=a.query_in_transaction(t,sql='SELECT a.tags,a.amounts FROM "A" a WHERE a."A-label" = :label',parameters={'label':'missing'},document_ids=('adoc',));self.assertIsInstance(rows.value,QueryRows,repr(rows));self.assertEqual(rows.value.rows,(((),{}),))
         replay=a.apply_in_transaction(t,semantic,request,documents=original_documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'));self.assertIsInstance(replay.value.response,CommittedReceiptReplay);h.detach();c.commit()
-
-class ContainerRequiredEvolution08Tests(ContainerRequiredEvolutionTests):
-    source_version='0.8.0'

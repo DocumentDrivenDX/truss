@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual owned Docker cleanup after a controlled lost creation response."""
 from pathlib import Path
 import os,json,uuid,hashlib,subprocess,tempfile,shutil,sys,zipfile

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Fixed reference domain, no original codec/facet authority."""
 from test_numeric_row_image_native import NumericRowImageNativeTests,ROOT
 class ReferenceDecimalNativeTests(NumericRowImageNativeTests):

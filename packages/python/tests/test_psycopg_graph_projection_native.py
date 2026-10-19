@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private native graph projection guards, not ordinary mutation admission."""
 import unittest,json
 from pathlib import Path

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional typed graph IDs/business-key membership correspondence.
 
 Original UMF string-key equality, complete faithful selected edge projection,

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Focused adapter lifecycle controls; real FETCH controls live in stream checks."""
 from contextlib import contextmanager
 from datetime import timedelta

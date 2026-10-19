@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned test service for external-peer guarded native TLS qualification.
 
 Uses the original native fixture; not a production service or backend admission.

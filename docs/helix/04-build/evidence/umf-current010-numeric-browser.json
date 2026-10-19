@@ -1,0 +1,83 @@
+{
+  "sourceRevision": "d187bfa7d7de5f3cd94dea314eed003a35bb6c82",
+  "bundleSha256": "e547ed1f5e705b057674684a9c842d857b6bd353b0e1525ff7b69a04d00dba01",
+  "corpusSha256": "7aba308c8d58303765a7bf585942317481705357ada8d6315dd1e0db71cac52e",
+  "browser": "153.0.8010.12",
+  "observations": [
+    {
+      "name": "safe integer number",
+      "value": {
+        "integerToken": "123"
+      }
+    },
+    {
+      "name": "exact decimal number",
+      "value": {
+        "decimalToken": "0.5"
+      }
+    },
+    {
+      "name": "inexact decimal number",
+      "error": "JAVASCRIPT_NUMERIC"
+    },
+    {
+      "name": "unsafe integer number",
+      "error": "JAVASCRIPT_NUMERIC"
+    },
+    {
+      "name": "negative zero number",
+      "error": "JAVASCRIPT_NUMERIC"
+    },
+    {
+      "name": "nonfinite number",
+      "error": "JAVASCRIPT_NUMERIC"
+    },
+    {
+      "name": "decimal spelling retained",
+      "value": {
+        "decimalToken": "0.500"
+      }
+    },
+    {
+      "name": "exact decimal output",
+      "value": 0.5
+    },
+    {
+      "name": "lossy decimal output",
+      "error": "JAVASCRIPT_NUMERIC"
+    },
+    {
+      "name": "large bigint input",
+      "value": {
+        "integerToken": "9007199254740993"
+      }
+    },
+    {
+      "name": "large bigint output",
+      "value": "9007199254740993"
+    },
+    {
+      "name": "lossy integer output",
+      "error": "JAVASCRIPT_NUMERIC"
+    },
+    {
+      "name": "negative zero bigint output",
+      "error": "JAVASCRIPT_NUMERIC"
+    },
+    {
+      "name": "original Field scale admitted",
+      "value": {
+        "decimalToken": "1.250"
+      }
+    },
+    {
+      "name": "original Field scale exceeded",
+      "error": "JAVASCRIPT_NUMERIC"
+    },
+    {
+      "name": "original Field precision exceeded",
+      "error": "JAVASCRIPT_NUMERIC"
+    }
+  ],
+  "qualification": "Actual Chromium executes current UMF numeric primitives and current-source key-field constraints; field-context boundary errors are normalized to the existing corpus category. Explicit JavaScript number input fixtures and safe number outputs are conveniences; exact carriers remain strings/bigint. No native codec, database, Record/dataset, containment, resource or installed runtime qualification."
+}

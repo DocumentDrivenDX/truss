@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {lowerSecurityRowPredicate} from '../packages/postgresql/src/security-predicate';
 import {request} from './fixtures/security-resource-parameters';

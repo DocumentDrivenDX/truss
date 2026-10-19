@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Test-only owned pgserver workers and disposable database/role fixtures.
 
 No application connection is accepted here. Workers own fresh local clusters;

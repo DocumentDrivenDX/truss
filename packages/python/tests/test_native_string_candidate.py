@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Selected JSON string source correspondence; no full scope or installation authority."""
 from test_native_connected_string_writer import installation_sql
 import json

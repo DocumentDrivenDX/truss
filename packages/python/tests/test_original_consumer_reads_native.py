@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Selected original consumer read/action workflows through installed public APIs."""
 import json
 import os

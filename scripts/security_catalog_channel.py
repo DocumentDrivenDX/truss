@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One admitted local authenticated publication channel; not backend readiness.
 
 The trusted owner supplies a private random credential and the original guarded

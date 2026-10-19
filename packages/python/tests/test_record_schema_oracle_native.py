@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Independent native correspondence for the trusted application value compiler."""
 import json,random,unittest
 import test_catalog_runtime_native as base

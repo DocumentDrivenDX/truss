@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public registration of a required retained field and its alternate key."""
 import json, os
 from dataclasses import replace
@@ -49,6 +50,3 @@ class CatalogKeyedRebindTests(base.CatalogKeyBackfillTests):
         history=a.reconstruct_in_transaction(t,entity=HistoryEntity(kind='object',document_id='adoc',module_id='m',definition_id='A',id=int(identities[0].id)),version=2)
         self.assertIsInstance(history.value,HistoricalRecord,repr(history))
         h.detach();c.rollback()
-
-class CatalogKeyedRebind08Tests(CatalogKeyedRebindTests):
-    source_version='0.8.0'

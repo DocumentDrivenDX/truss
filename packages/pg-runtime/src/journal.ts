@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Host-local originals; local IDs confer no native issuer, epoch or settlement authority. */
 import {openSync,writeSync,fsyncSync,closeSync,lstatSync,fstatSync,readSync,constants} from 'node:fs';
 import {join} from 'node:path';

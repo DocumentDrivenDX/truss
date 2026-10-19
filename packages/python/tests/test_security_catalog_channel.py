@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual loopback HTTP controls; no SQL topology/auth issuer qualification."""
 import http.client,threading,secrets,unittest,sys,socket,time
 from pathlib import Path

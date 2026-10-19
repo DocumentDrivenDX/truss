@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Scoped occurrence retention wrappers, not extension semantic admission. */
 import {createHash} from 'node:crypto';
 import {collectCatalogExtensionInventory} from './catalog-extension-inventory';

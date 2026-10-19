@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private synchronous query coordination; no native/security service factory.
 
 Only original admitted host services may supply this boundary. Unit callbacks

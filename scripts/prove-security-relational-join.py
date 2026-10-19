@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional bag join law; not SQL/native/compiler refinement evidence."""
 from pathlib import Path
 import hashlib,json,z3

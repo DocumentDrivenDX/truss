@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Independent timestamp fixtures; no source grammar/native qualification."""
 import json
 from pathlib import Path

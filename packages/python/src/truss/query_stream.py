@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Explicit ordinary-role cursor streams and host-owned connection leases.
 
 This profile is synchronous, RC module ACL only; it grants no protected policy

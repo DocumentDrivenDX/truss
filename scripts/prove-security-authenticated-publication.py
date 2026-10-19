@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional caller-login gates, not native/semantic/issuer refinement."""
 from pathlib import Path
 import hashlib,json,sys,uuid,z3

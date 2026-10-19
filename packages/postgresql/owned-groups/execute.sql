@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Profile digest: SHA-256 of these exact UTF-8 bytes, without a newline:
 -- Owned scalar graph groups v1: existing exact value profile; explicit aggregate root selection and subtree reparent; directed acyclic owned forest; independent edge delete refusal; ordered cascade; global native keys; original per-operation custody; same host transaction and idempotent receipts.
 CREATE FUNCTION truss.runtime_owned_profile() RETURNS jsonb

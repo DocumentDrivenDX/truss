@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original-owner comparison for the bounded required set-value consumer."""
 import copy
 import json

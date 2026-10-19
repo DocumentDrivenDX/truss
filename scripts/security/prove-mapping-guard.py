@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional source/profile-cell and one participating writer model; not refinement."""
 import hashlib,json
 from pathlib import Path

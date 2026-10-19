@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Immutable application schema indexes; no retained authorization decisions."""
 from collections import OrderedDict
 from collections.abc import Mapping

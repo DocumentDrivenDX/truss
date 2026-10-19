@@ -1,26 +1,29 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
-import {loadUmfValueProducer,UMF_VALUE_SOURCE} from '../packages/umf-bun/src/index';
-const directory=process.env.TRUSS_UMF_VALUE_PRODUCER;if(!directory)throw Error('Pinned original UMF value producer required');
-const producer=await loadUmfValueProducer(directory);
+import {loadCurrentNumericOwner,UMF_CORE10_CATALOG_SOURCE} from '../packages/umf-bun/src/index';
+const directory=process.env.TRUSS_UMF_NUMERIC_PRODUCER;
+if(!directory)throw Error('Pinned current producer required');
+const owner=await loadCurrentNumericOwner(directory);
 const {model,identity,values,expectedHex}=await Bun.file('tests/umf-fixtures/value-key.json').json();
-test('original current-core Field producer retains exact validity and completeness',()=>{
- expect(producer.sourceRevision).toBe(UMF_VALUE_SOURCE);
- const decimal=producer.validateCoreFieldValue(model,{module:'m',element:'amount'},values[0]);
- expect(decimal.valid).toBe(true);expect(decimal.complete).toBe(true);
- expect(producer.validateCoreFieldValue(model,{module:'m',element:'amount'},{decimalToken:'12.3401'}).valid).toBe(false);
- expect(producer.validateCoreFieldValue(model,{module:'m',element:'count'},values[2]).valid).toBe(true);
- expect(producer.validateCoreFieldValue(model,{module:'m',element:'count'},{integerToken:'18446744073709551616'}).valid).toBe(false);
- expect(producer.validateCoreFieldValue(model,{module:'m',element:'amount'},{string:'12.340'}).valid).toBe(false);
+const validation=owner.validateSemanticTypesDocument(model);
+const encode=(source:unknown,key:unknown,literals:unknown[])=>{
+ const checked=owner.validateSemanticTypesDocument(source);
+ if(!checked.valid)throw Error('Invalid current source');
+ return owner.encodeCoreKeyTupleBody(source,key,literals,checked);
+};
+test('actual current source and ordered UMFK1 bytes preserve exact carriers',()=>{
+ expect(owner.sourceRevision).toBe(UMF_CORE10_CATALOG_SOURCE);
+ expect(validation.valid).toBe(true);expect(model.umf).toBe('0.10.0');
+ const original=JSON.stringify(model),literals=JSON.stringify(values);
+ const encoded=encode(model,identity,values);
+ expect(encoded.profile).toBe('umf-key-tuple-v1');expect(encoded.bytesHex).toBe(expectedHex);
+ expect(JSON.stringify(model)).toBe(original);expect(JSON.stringify(values)).toBe(literals);
 });
-test('original current-core tuple encoder preserves ordered exact source and mathematical encoding',()=>{
- const receipt=producer.encodeCoreKeyTuple(model,identity,values);
- expect(receipt.version).toBe('3.0.0');expect(receipt.profile).toBe('umf-key-tuple-v1');
- // Independently specified UMFK1 count/tag/length, scale/coefficient, UTF-8 and integer bytes.
- expect(receipt.bytesHex).toBe(expectedHex);
- expect(receipt.values).toEqual(values);expect(receipt.source).toEqual(model);
- expect(producer.verifyCoreKeyTuple(receipt,model)).toEqual(receipt);
- expect(()=>producer.verifyCoreKeyTuple({...receipt,bytesHex:'00'},model)).toThrow();
- expect(()=>producer.verifyCoreKeyTuple(receipt,{...model,id:'changed'})).toThrow();
- expect(()=>producer.encodeCoreKeyTuple(model,identity,[values[1],values[0],values[2]])).toThrow();
- expect(()=>producer.encodeCoreKeyTuple(model,identity,[values[0],values[1],{integerToken:'18446744073709551616'}])).toThrow();
+test('current key primitive enforces exact field scale, precision and width',()=>{
+ expect(()=>encode(model,identity,[{decimalToken:'12.3401'},values[1],values[2]])).toThrow();
+ expect(()=>encode(model,identity,[{decimalToken:'1000000000000000000'},values[1],values[2]])).toThrow();
+ expect(()=>encode(model,identity,[values[0],values[1],{integerToken:'18446744073709551616'}])).toThrow();
+ expect(()=>encode(model,identity,[values[1],values[0],values[2]])).toThrow();
+ expect(()=>encode(model,identity,values.slice(1))).toThrow();
+ expect(()=>encode(model,{...identity,key:'missing'},values)).toThrow();
 });

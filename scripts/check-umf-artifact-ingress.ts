@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original Ashlar UMF bytes through public Truss integrity ingress, not catalog acceptance. */
 import {verifyExactArtifacts} from '@documentdrivendx/truss-postgresql';
 import {readFile,writeFile} from 'node:fs/promises';

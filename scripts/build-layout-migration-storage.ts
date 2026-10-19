@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Review-only migration receipt adjunct. UMF owns import and DDL generation. */
 import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
 import {readDocument} from '/Users/erik/Projects/umf/src/model/document';

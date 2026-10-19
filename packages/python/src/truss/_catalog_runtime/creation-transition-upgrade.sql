@@ -1,1 +1,0 @@
-ALTER TABLE truss.runtime_object_transition ALTER COLUMN before_object DROP NOT NULL

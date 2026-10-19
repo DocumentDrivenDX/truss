@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Trusted engine preparation over an immutable, revision-bound value schema.
 
 Only closed object create/update groups select this route. The original native

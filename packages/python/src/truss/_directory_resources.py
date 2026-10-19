@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private POSIX directory resource resolver; explicit start/close, no fallback."""
 import os
 import stat

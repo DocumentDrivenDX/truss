@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact-input unchanged registration, durable requests and caller settlement."""
 import json
 import os

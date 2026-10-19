@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private metadata-only cut consumer; complete source/authority bridge is required.
 
 The security owner must admit original helper/DDL custody before invoking this
@@ -15,7 +16,7 @@ from ._installation_privileges import installation_administrator_with_cursor
 from ._security_catalog_assessment import SOURCE_TABLES
 from ._security_catalog_subject_installation import _text_rows
 
-_SOURCE_SHA256='4d10ae19b0c6771db3bef105bb99095497a437ee3e1d5d813e6bfe36aecab677'
+_SOURCE_SHA256='d2d3e063d89f50cbbc19689b84501903777fee77ba4a82bd88dea81f178db979'
 _TABLES=('source_epoch_current','source_epoch_registry',*SOURCE_TABLES,'installation_archive')
 
 def acquire_preparation_catalog_cut_with_cursor(cursor):

@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private valid-forest projection used by the installed owned runtime.
 -- Ordinals refer to the executor's complete scoped simulation, never native IDs.
 -- The executor retains its original identity/alias mapping separately.

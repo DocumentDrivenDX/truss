@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native preparation authority *component*, not a fixed-cut/seal issuer.
 
 Trusted engine capture and independently qualified source-head/DDL custody are

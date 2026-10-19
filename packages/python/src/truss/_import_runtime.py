@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Host-owned imports through the existing protected group and source producers."""
 import base64,json
 from contextlib import nullcontext

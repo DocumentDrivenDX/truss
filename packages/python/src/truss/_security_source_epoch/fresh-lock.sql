@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private native READ COMMITTED epoch-lock projection. This is not complete
 -- source/authority admission, an installed producer grant or a release receipt.
 -- The host must bind original transaction/savepoint custody and exclude same-

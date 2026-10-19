@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Genuine admitted IR predicates on ordinary-writer populated native graphs.
 Not protected SQL admission, caller authentication or complete writer closure.
 @covers US-056-AC2

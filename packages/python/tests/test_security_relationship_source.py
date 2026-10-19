@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Distinct archive refusal controls; positive owner traversal output pending."""
 import json,os,subprocess,unittest
 from pathlib import Path

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Ordinary callers cannot write private journal or settlement tables."""
 import psycopg
 from psycopg import sql

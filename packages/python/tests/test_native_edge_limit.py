@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual EL multiset body under administrative test custody, not public admission."""
 import json
 from pathlib import Path
@@ -22,7 +23,7 @@ class NativeEdgeLimitTests(NativeBoundaryFixture,unittest.TestCase):
         self.connection.run('BEGIN')
         self.connection.run('LOCK TABLE truss.schema_head IN EXCLUSIVE MODE')
         self.admit()
-        self.connection.run("INSERT INTO truss.schema_doc VALUES(0,0,'synthetic','fixture','0.7.0','fixture-only','{}','{}')")
+        self.connection.run("INSERT INTO truss.schema_doc VALUES(0,0,'synthetic','fixture','0.10.0','fixture-only','{}','{}')")
     def tearDown(self):
         self.connection.run('ROLLBACK');self.connection.close()
     def admit(self,ordinal=0,kind='catalog-acceptance'):

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Host package build; portable package must be built first. */
 import {resolve} from 'node:path';
 import {mkdir,readFile,writeFile,rm} from 'node:fs/promises';

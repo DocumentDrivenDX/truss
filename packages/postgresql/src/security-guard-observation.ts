@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Local candidate decoding only; no native exclusion, original issuer, caller,
  * current-authority, completion or lease authenticity is established here. */
 export interface CandidateGuardObservation {readonly singleton:'1';readonly installationIdentityHex:string;readonly policyProfileHex:string;readonly generation:string}

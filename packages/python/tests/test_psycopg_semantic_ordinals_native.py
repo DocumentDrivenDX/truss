@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual guarded semantic ordinals; no catalog acceptance qualification."""
 from pathlib import Path
 import os
@@ -128,41 +129,6 @@ class SemanticOrdinalTests(unittest.TestCase):
         self.assertFalse(self.host._custody.quarantined)
         self.assertEqual(self.host._run_operation(self.tx,lambda c,o:'usable'),Ok('usable'))
         self.assertEqual(self.connection.execute('TABLE caller_work').fetchall(), [('kept',)])
-
-    def test_original_catalog_tuple_retained_and_bound_with_stock_dumpers(self):
-        from test_catalog_support import selected
-        from truss._catalog_candidate import encode_fresh_catalog_dispatch_parameters
-        from psycopg.adapt import Dumper
-        from psycopg.pq import Format
-        class AlterText(Dumper):
-            def dump(self,obj): return b'changed'
-        class AlterBytes(Dumper):
-            format = Format.BINARY
-            oid = 17
-            def dump(self,obj): return b'changed'
-        self.connection.adapters.register_dumper(str,AlterText)
-        self.connection.adapters.register_dumper(bytes,AlterBytes)
-        prepared = selected()
-        origin = b' {"x-action":"register","note":"caf\\u00e9"} '
-        retained = []
-        def produce(ordinal):
-            result = encode_fresh_catalog_dispatch_parameters(prepared,ordinal,origin)
-            retained.append(result)
-            return result
-        def execute(cursor, observed, ordinal, parameters):
-            self.assertIs(parameters,retained[0])
-            self.assertIs(parameters,self.host._custody.pending.dispatch_parameters)
-            cursor.execute("SELECT %s::text,encode(%s::bytea,'hex'),encode(%s::bytea,'hex'),"
-                "encode(%s::bytea,'hex'),encode(%s::bytea,'hex'),encode(%s::bytea,'hex')",
-                parameters,prepare=False,binary=False)
-            row = cursor.fetchone()
-            self.assertEqual(row,(ordinal,*(raw.hex() for raw in parameters[1:])))
-            return ordinal
-        self.assertEqual(self.host._run_semantic_operation(self.tx,execute,parameter_producer=produce),Ok('0'))
-        self.assertIs(self.host._custody.last_attempt.dispatch_parameters,retained[0])
-        # Cursor-scoped pinning did not alter the host's original adapter choices.
-        self.assertEqual(self.connection.execute('SELECT %s::text',('original',)).fetchone(),('changed',))
-        self.assertEqual(self.connection.execute("SELECT encode(%s::bytea,'hex')",(b'original',)).fetchone(),(b'changed'.hex(),))
 
     def test_semantic_sql_failure_retains_parameters_and_caller_work(self):
         parameters = ('0', b'\x00original\xff')

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Composer source custody across revisions; not native evolution acceptance."""
 import base64
 import copy

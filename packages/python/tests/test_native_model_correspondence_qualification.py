@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original catalog/issued compiler model correspondence; no native admission."""
 import hashlib,json,os,unittest
 from pathlib import Path
@@ -18,7 +19,7 @@ class NativeModelCorrespondenceTests(base.PublicCatalogRuntimeTests):
         self.assertEqual(len(request['modules']),1);module=request['modules'][0];pin=module['pin'];raw=module['documentJson'].encode()
         self.assertEqual(hashlib.sha256(raw).hexdigest(),pin['sha256']);self.assertEqual(pin['documentId'],'domain')
         self.install();connection,host,assembly,transaction=self.consumer()
-        prepared=assembly.prepare_catalog((CatalogDocument(pin['documentId'],pin['revision'],raw),),source_version='0.8.0',bun_executable=os.environ['TRUSS_BUN_EXECUTABLE'])
+        prepared=assembly.prepare_catalog((CatalogDocument(pin['documentId'],pin['revision'],raw),),source_version='0.10.0',bun_executable=os.environ['TRUSS_BUN_EXECUTABLE'])
         self.assertEqual(prepared.documents[0].document.content,raw)
         accepted=assembly.accept_in_transaction(transaction,prepared,request_key='exact-weft-model')
         self.assertIsInstance(accepted,Ok,str(host._custody.last_attempt.error));host.detach();connection.commit()

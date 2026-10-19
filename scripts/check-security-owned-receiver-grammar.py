@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exercise the actual private receiver parser; no native/authentication claim."""
 from pathlib import Path
 import base64

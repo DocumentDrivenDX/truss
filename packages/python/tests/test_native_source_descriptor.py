@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Independently authored supplied data; no native observation or authority."""
 import unittest,json,copy
 from hashlib import sha256
@@ -7,8 +8,8 @@ def wire(value):return json.dumps(value,separators=(',',':')).encode()
 
 class NativeSourceDescriptorTests(unittest.TestCase):
  def setUp(self):
-  self.document='{"id":"d","umf":"0.8.0","modules":[],"opaque":1.2300e-999999}'
-  self.pin={'documentId':'d','revision':'r','umfVersion':'0.8.0','sha256':sha256(self.document.encode()).hexdigest()}
+  self.document='{"id":"d","umf":"0.10.0","modules":[],"opaque":1.2300e-999999}'
+  self.pin={'documentId':'d','revision':'r','umfVersion':'0.10.0','sha256':sha256(self.document.encode()).hexdigest()}
   self.release=b'{"releaseId":"layout-r1","unknown":{"n":1.2300e-999999,"escaped":"\\u0061"}}'
   self.request=wire({'modules':[{'pin':self.pin,'documentJson':self.document}],'unknown':{'keep':True}})
   self.assessment=wire({'version':'truss.accepted-catalog-assessment/0.1','securityReady':False,'installationId':'installation-one','releaseId':'layout-r1','releaseSha256':sha256(self.release).hexdigest(),'modelPins':[self.pin],'unknown':{'keep':'all'}})
@@ -60,7 +61,7 @@ class NativeSourceDescriptorTests(unittest.TestCase):
   del request['modules'][0]['pin']['revision'];del assessment['modelPins'][0]['revision']
   with self.assertRaises(ValueError):self.prepare(accepted_request=wire(request),accepted_assessment=wire(assessment))
  def test_nested_model_json_refuses_with_recomputed_matching_hash(self):
-  for raw in ('{"id":"d","id":"d","umf":"0.8.0"}','{','[]','{"id":"other","umf":"0.8.0"}','{"id":"d","umf":"0.7.0"}','{"id":"d","umf":"0.8.0","x":NaN}'):
+  for raw in ('{"id":"d","id":"d","umf":"0.10.0"}','{','[]','{"id":"other","umf":"0.10.0"}','{"id":"d","umf":"0.7.0"}','{"id":"d","umf":"0.10.0","x":NaN}'):
    request=json.loads(self.request);assessment=json.loads(self.assessment)
    request['modules'][0]['documentJson']=raw
    digest=sha256(raw.encode()).hexdigest();request['modules'][0]['pin']['sha256']=digest;assessment['modelPins'][0]['sha256']=digest
@@ -103,8 +104,8 @@ class NativeSourceDescriptorTests(unittest.TestCase):
   def inputs(count):
    modules=[]
    for n in range(count):
-    body=wire({'id':'doc'+str(n),'umf':'0.8.0','modules':[]}).decode()
-    modules.append({'documentJson':body,'pin':{'documentId':'doc'+str(n),'revision':'r','umfVersion':'0.8.0','sha256':sha256(body.encode()).hexdigest()}})
+    body=wire({'id':'doc'+str(n),'umf':'0.10.0','modules':[]}).decode()
+    modules.append({'documentJson':body,'pin':{'documentId':'doc'+str(n),'revision':'r','umfVersion':'0.10.0','sha256':sha256(body.encode()).hexdigest()}})
    request=wire({'modules':modules});assessment=json.loads(self.assessment);assessment['modelPins']=[m['pin'] for m in modules]
    return request,wire(assessment)
   request,assessment=inputs(256);self.assertEqual(self.prepare(accepted_request=request,accepted_assessment=assessment).accepted_request,request)

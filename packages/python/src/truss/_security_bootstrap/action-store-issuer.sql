@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private shared namespace issuance. Comparison outputs are never authority.
 CREATE FUNCTION truss.action_store_original_receipt(r truss.action_store_registration)
 RETURNS bytea LANGUAGE sql STABLE SECURITY INVOKER
@@ -99,7 +100,7 @@ BEGIN
   RAISE EXCEPTION 'original bounded store observation context required' USING ERRCODE='55000';END IF;
  LOCK TABLE truss.source_epoch_current,truss.source_epoch_registry IN SHARE MODE NOWAIT;
  PERFORM 1 FROM truss.installation_marker WHERE singleton_id=1 FOR SHARE NOWAIT;
- LOCK TABLE ONLY truss.catalog_runtime_installation,truss.runtime_release,truss.action_store_registration IN SHARE MODE NOWAIT;
+ LOCK TABLE ONLY truss.catalog_runtime_installation,truss.action_store_registration IN SHARE MODE NOWAIT;
  SELECT * INTO r FROM ONLY truss.action_store_registration WHERE singleton AND registration_key=original_key FOR SHARE NOWAIT;
  IF NOT FOUND THEN RETURN NULL;END IF;
  SELECT oid,rolsuper INTO STRICT executor,recovery FROM pg_catalog.pg_roles WHERE rolname=session_user;

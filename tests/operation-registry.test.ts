@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {decodeOperationRegistry,OPERATION_REGISTRY_COLUMNS,type StatementResult} from '../packages/postgresql/src/index';
 const values:(string|null)[]=['123','0','mutation','admitted','0',null,null,null,'61','62','63','64','65','66','67',null];

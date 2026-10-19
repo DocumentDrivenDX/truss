@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Two-connection lock schedule; isolated component namespace, no issued epochs. */
 import {SQL} from 'bun';
 const url=process.env.TRUSS_OPERATION_TEST_URL;

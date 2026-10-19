@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One basic test executes the exact documented public adopter program."""
 import importlib.util
 from pathlib import Path

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private physical row-home forest check; original scope/meaning/authority external."""
 from ._row_image_capture import RowImageCapture
 from ._row_event_attribution import _index, _integer

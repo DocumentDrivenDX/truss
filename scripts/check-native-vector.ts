@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Host-only narrow read-only PostgreSQL 17 vector-output probe. */
 import {decodeNativeVector} from '../packages/postgresql/src/index';
 import {mkdir, writeFile} from 'node:fs/promises';

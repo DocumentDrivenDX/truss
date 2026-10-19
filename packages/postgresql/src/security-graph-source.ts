@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private candidate source construction. Original catalog/namespace custody,
  * complete source admission and current authority remain host obligations.
  * This is neither an installed view nor a permit. */

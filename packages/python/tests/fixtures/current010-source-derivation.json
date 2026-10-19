@@ -1,0 +1,69 @@
+{
+  "profile": "truss-current010-fixture-derivation/0.1",
+  "scope": "Derived current-format source fixtures; not a new native capture or the unchanged original source capture.",
+  "sourceVersionBefore": "0.8.0",
+  "sourceVersionAfter": "0.10.0",
+  "policyMeaning": "Unchanged original policy, ontology, catalog, owner and binding bytes; actual current010 source is validated by the rebuilt owner.",
+  "nativeGraphCapture": "Only the initialize source envelope is derived; supplied cut rows and expected key outcomes remain the original fixture facts, not a recaptured database result.",
+  "files": [
+    {
+      "path": "packages/python/tests/fixtures/current-query-weft-request.json",
+      "originalSha256": "192614d9e7b0dee56364299a9d7cfee0d72b0a7c8778b91640da818cb8ef8ad4",
+      "derivedSha256": "8d110c0e8389d7aef928dccc7a1d1d04d6d8558daf909f2a5e525d69435520a8",
+      "changes": [
+        "/modules/*/documentJson: root umf only",
+        "/modules/*/pin: umfVersion and exact content sha256",
+        "/opaqueSources[query-designation]: matching modelPins and exact utf8 sha256"
+      ],
+      "unchangedOpaqueSourceRoles": [
+        "policy",
+        "ontology",
+        "catalog",
+        "owner",
+        "native-binding"
+      ]
+    },
+    {
+      "path": "packages/python/examples/current-query-model-request.json",
+      "originalSha256": "192614d9e7b0dee56364299a9d7cfee0d72b0a7c8778b91640da818cb8ef8ad4",
+      "derivedSha256": "8d110c0e8389d7aef928dccc7a1d1d04d6d8558daf909f2a5e525d69435520a8",
+      "changes": [
+        "/modules/*/documentJson: root umf only",
+        "/modules/*/pin: umfVersion and exact content sha256",
+        "/opaqueSources[query-designation]: matching modelPins and exact utf8 sha256"
+      ],
+      "unchangedOpaqueSourceRoles": [
+        "policy",
+        "ontology",
+        "catalog",
+        "owner",
+        "native-binding"
+      ]
+    },
+    {
+      "path": "packages/python/tests/fixtures/current-query-initialize.json",
+      "originalSha256": "f064f26a61f9616137d9289ed9d8a661218dbe5d89716669482fbbe13df92852",
+      "derivedSha256": "dd3f85cf44a801d55b79b035d684cba976ebe600a5b1e5ed5f3f217b815d8e50",
+      "changes": [
+        "/sources/closure/documents/*/document/umf"
+      ]
+    },
+    {
+      "path": "packages/python/tests/fixtures/current-disclosure/native-graph-capture.json",
+      "originalSha256": "5e667a4a49c656ab7021641bf98d5a6bd5fb903d13e4e3fb4acbdb93ac123459",
+      "derivedSha256": "d60763930801c73e202aa40e443ff361b764c395625b05f5c3c3ee919880d03c",
+      "changes": [
+        "/initialize/sources/closure/documents/*/document/umf"
+      ]
+    },
+    {
+      "path": "packages/python/examples/current_query_workflow.py",
+      "originalSha256": "360f5c2d5140782909fc08c84d0aed28d76c949c13993493eaf8cbd3cfa0830f",
+      "derivedSha256": "73e54d89392a99b1d49eca2a4ad9a78d6d79aee3b44addb37a81e5bb0cbff812",
+      "changes": [
+        "explicit source_version current0.10.0",
+        "clarify derived current-format source provenance"
+      ]
+    }
+  ]
+}

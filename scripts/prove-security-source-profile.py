@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional exact-source comparison model; digests are not authenticated identity."""
 from pathlib import Path
 import hashlib,json,uuid,z3

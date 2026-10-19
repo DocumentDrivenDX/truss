@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Import batches on a connection and outer transactions owned by Truss."""
 from __future__ import annotations
 from typing import Literal

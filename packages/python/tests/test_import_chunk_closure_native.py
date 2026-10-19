@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual multi-attempt imports do not rescan other attempts at commit."""
 import json,time
 from truss import Ok

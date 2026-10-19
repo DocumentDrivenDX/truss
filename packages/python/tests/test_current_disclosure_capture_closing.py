@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private recapture comparison only; supplied values are not native evidence."""
 from dataclasses import replace
 from types import SimpleNamespace

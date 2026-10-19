@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original native operation ledger composed with private arbitration.
 
 Successful release requires the exact registered original completion producer.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Authority receipt and registered feed inclusion in the caller's read transaction."""
 from dataclasses import dataclass,field
 from typing import Literal

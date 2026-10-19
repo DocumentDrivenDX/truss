@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Browser-compatible compiler/host boundary. No SQL compiler or database ownership. */
 export const WEFT_SOURCE = 'f05f2df09e9c2494ac8c6d703dfe38413dbc4181';
 export interface Compiler { compileJson(request: string): string | Promise<string> }

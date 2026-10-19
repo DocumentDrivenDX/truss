@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One public workflow using a CREATEROLE installer with no superuser privilege."""
 import psycopg
 from truss import (Ok,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration,

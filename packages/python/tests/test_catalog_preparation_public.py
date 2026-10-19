@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original consumer model preparation through the public source-only entrypoint."""
 import hashlib,json,os,unittest
 from pathlib import Path
@@ -6,10 +7,10 @@ from truss import CatalogDocument,PreparedAcceptance,prepare_catalog
 
 class CatalogPreparationPublicTests(unittest.TestCase):
     def test_prepare_original_commerce_without_database(self):
-        raw=(Path(__file__).parent/'fixtures/commerce-original-umf08.json').read_bytes()
+        raw=(Path(__file__).parent/'fixtures/commerce-current-umf10.json').read_bytes()
         document=CatalogDocument(json.loads(raw)['id'],hashlib.sha256(raw).hexdigest(),raw)
         with patch('psycopg.connect',side_effect=AssertionError('Preparation must not connect')):
-            prepared=prepare_catalog((document,),source_version='0.8.0',bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+            prepared=prepare_catalog((document,),source_version='0.10.0',bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
         self.assertIsInstance(prepared,PreparedAcceptance)
         self.assertEqual(prepared.documents[0].document.content,raw)
         summary=json.loads(prepared.report_evidence_bytes)
@@ -40,13 +41,15 @@ class CatalogPreparationPublicTests(unittest.TestCase):
         from test_preparation import document
         from truss import PreparationRejected
         from truss.catalog_preparation import _configuration
-        for version in ('0.7.0','0.8.0'):
+        for version in ('0.10.0',):
             source=json.loads(document('selected').content);source['umf']=version
             original=CatalogDocument('selected','r1',json.dumps(source).encode())
             prepared=prepare_catalog((original,))
-            self.assertEqual(prepared.input()['supportProfile'],_configuration(version)['supportProfile'])
+            self.assertEqual(prepared.input()['supportProfile'],_configuration()['supportProfile'])
             self.assertEqual(prepared.documents[0].document.content,original.content)
-            self.assertIsNone(prepared.documents[0].observation()['transition'])
-            other='0.8.0' if version=='0.7.0' else '0.7.0'
+            observation=prepared.documents[0].observation()
+            self.assertEqual(observation['source']['umf'],version)
+            self.assertTrue(observation['sourceValidation']['valid'])
+            other='0.7.0'
             with self.assertRaises(PreparationRejected) as rejected:prepare_catalog((original,),source_version=other)
             self.assertEqual(rejected.exception.reason,'unsupported_profile')

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original source validation only; no native admission or installation. */
 import {validateDocument} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/validation/document';
 import {inspectSecurityPolicy} from '/Users/erik/.codex/worktrees/security-main-integration/umf/src/extensions/security/policy';

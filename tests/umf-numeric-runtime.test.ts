@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
-import {loadUmfNumericProducer,loadUmfValueProducer,UMF_NUMERIC_SOURCE} from '../packages/umf-bun/src/index';
+import {loadCurrentNumericOwner,UMF_CORE10_CATALOG_SOURCE} from '../packages/umf-bun/src/index';
 const directory=process.env.TRUSS_UMF_NUMERIC_PRODUCER;
 if(!directory)throw Error('Pinned original UMF numeric producer required');
-const producer=await loadUmfNumericProducer(directory);
+const producer=await loadCurrentNumericOwner(directory);
 test('original UMF number convenience requires lossless value correspondence',()=>{
- expect(producer.sourceRevision).toBe(UMF_NUMERIC_SOURCE);
+ expect(producer.sourceRevision).toBe(UMF_CORE10_CATALOG_SOURCE);
  expect(producer.admitJavascriptNumber(123,'integer')).toEqual({integerToken:'123'});
  expect(producer.admitJavascriptNumber(0.5,'decimal')).toEqual({decimalToken:'0.5'});
  expect(()=>producer.admitJavascriptNumber(0.1,'decimal')).toThrow();
@@ -25,14 +26,8 @@ test('original UMF exact carriers retain spelling and require exact output conve
  expect(()=>producer.numericToNumberLossless(integer)).toThrow();
  expect(()=>producer.integerToBigInt({integerToken:'-0'})).toThrow();
 });
-test('original current-core Field validation remains authoritative for numeric convenience',()=>{
- const context={document:{umf:'0.8.0',id:'truss-numeric-context',vocabularies:{},extensions:{},modules:[{id:'m',namespace:'m',elements:[{id:'amount',name:'amount',kind:'field',scalarType:'decimal',nullability:'required',cardinality:'one',facets:{precision:21,scale:3},extensions:{}}]}]},field:{module:'m',element:'amount'}};
- expect(producer.exactDecimal('1.250',context)).toEqual({decimalToken:'1.250'});
- expect(producer.admitJavascriptNumber(1.25,'decimal',context)).toEqual({decimalToken:'1.25'});
- expect(()=>producer.exactDecimal('1.2345',context)).toThrow();
- expect(()=>producer.exactDecimal('1000000000000000000',context)).toThrow();
-});
-
-test('numeric registration cannot substitute for current-core value registration',async()=>{
- await expect(loadUmfValueProducer(directory)).rejects.toThrow('Original UMF producer pin mismatch');
+test('numeric loader refuses a catalog-only owner bundle',async()=>{
+ const catalog=process.env.TRUSS_UMF_PRODUCER;
+ if(!catalog)throw Error('Current core10 catalog producer required');
+ await expect(loadCurrentNumericOwner(catalog)).rejects.toThrow('Original UMF producer pin mismatch');
 });

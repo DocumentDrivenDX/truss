@@ -1,5 +1,5 @@
 {
-  "umf": "0.7.0",
+  "umf": "0.10.0",
   "id": "northwind-example",
   "vocabularies": {
     "umf.ddd": {

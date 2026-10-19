@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original fixed constructor custody; never proves idle or authority."""
 from dataclasses import dataclass
 from threading import Lock

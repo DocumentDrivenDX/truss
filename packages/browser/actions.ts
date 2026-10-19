@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Original public UMF ESM is emitted unchanged by the owned asset builder.
 import * as owner from '@truss/umf-local-actions';
 import {prepareDocument,type CatalogSnapshot,CATALOG_PROFILE} from './catalog';
@@ -41,17 +42,18 @@ export function createActionIssuer(info:StoreInfo,isOpen:()=>boolean){
    // Reuse the existing closed, unprotected browser catalog subset before issuing reads.
    const admitted=await prepareDocument({documentId:documentId as string,documentRevision:documentRevision as string,sourceUtf8:sourceUtf8 as string});
    const model=frozen({mediaType:'application/json',utf8:sourceUtf8 as string,sha256:sha256 as string});
-   const modelPin=frozen({documentId:documentId as string,revision:documentRevision as string,umfVersion:'0.8.0',sha256:sha256 as string});
+   const modelPin=frozen({documentId:documentId as string,revision:documentRevision as string,umfVersion:'0.10.0',sha256:sha256 as string});
    const actionPin=frozen({identity:{module:input.module,action:input.action},documentSha256:sha256,invocation:{id:'umf.actions.local-tx',version:'1'}});
    const context={registry:owner.createUmfRegistry(),models:[{pin:modelPin,artifact:model}],actions:[{pin:actionPin,artifact:model}],selections:[]};
    const preparation=frozen(owner.prepareActionPlanModel(modelPin,actionPin,context) as Artifact),prepared=JSON.parse(preparation.utf8);
    if(prepared.producer?.build!==PRODUCER||prepared.action.invocation.id!=='umf.actions.local-tx'||prepared.action.invocation.version!=='1')throw Error('Pinned original local preparation required');
    if(admitted.sourceSha256!==sha256)throw Error('Original document digest mismatch');
-   const observations=admitted.documents[0]!.validation.observations.filter((o:any)=>o.operation==='inspectCoreRecordMembers'&&o.identity.module===prepared.target.module&&o.identity.element===prepared.target.element);
-   if(observations.length!==1)throw Error('Original target membership observation required');
-   const members=observations[0].result.meaning;
-   if(members.state!=='known'||members.uninterpretedPaths.length||!members.members.length)throw Error('Complete original target membership required');
-   const target=frozen(copy(prepared.target)),fields=frozen(copy(members.members));
+   const targets=admitted.declarations.flatMap(document=>document.records).filter(record=>
+    record.documentId===documentId&&record.moduleId===prepared.target.module&&record.elementId===prepared.target.element);
+   if(targets.length!==1||!targets[0]!.fields.length)throw Error('Original validated target membership required');
+   const references=targets[0]!.fields.map(field=>field.reference);
+   if(references.some(reference=>Object.keys(reference).sort().join(',')!=='element,module'))throw Error('Supported qualified target members required');
+   const target=frozen(copy(prepared.target)),fields=frozen(copy(references));
    open(); // An admitted async request cannot issue a handle after close starts.
    const action=Object.freeze(Object.create(null)) as LocalAction;
    actions.set(action,{cut:originalCut,model,modelPin,actionPin,preparation,context,target,fields});

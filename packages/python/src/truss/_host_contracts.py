@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private inert caller-lifetime contracts; no native or executor dependencies."""
 from dataclasses import dataclass
 from .execution import HostTransactionPort, TransactionObservation, TransactionHandle

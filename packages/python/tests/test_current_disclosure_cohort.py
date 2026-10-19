@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Packaged computation custody only; no native authority or held-file proof."""
 import json,pathlib,shutil,tempfile,unittest
 from unittest.mock import patch

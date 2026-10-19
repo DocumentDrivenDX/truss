@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native observed CoreLiteral texts handed to original UMF; no release authority.
 @covers US-056-AC2
 @covers US-056-AC10

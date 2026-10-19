@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {expect,test} from 'bun:test';
 import corpus from './fixtures/layout-migration-planning.json';
 import {planLayoutMigration} from '../packages/tooling/src/layout-migration-plan';

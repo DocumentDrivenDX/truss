@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Cleanup failures cannot replace cancellation or escape credential diagnostics."""
 import unittest
 from unittest.mock import patch

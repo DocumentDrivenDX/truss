@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private coverage check over shape-admitted bounded projections.
  * Required keys must come from original registered procedures, never case claims.
  * This function does not establish that provenance or perform observations. */

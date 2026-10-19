@@ -1,0 +1,8 @@
+{
+  "sourceRepository": "DocumentDrivenDX/truss",
+  "sourceCommit": "f086ea57205ea931b242187d79b05332cc00be4a",
+  "sourcePath": "packages/python/tests/fixtures/consumer/northwind.umf.json",
+  "originalSha256": "e3063579431155a2b8d75398a0defc8ad1f9c1d3bc7f000f822ae30ada552983",
+  "currentSha256": "3454c94aa8bfd9ea829ca3c9610cc0c824a436848a27c7956d9d9af80df4ef18",
+  "scope": "Derived test input for the UMF 0.10.0-only current validator; only the envelope umf version changed from retained UMF 0.7.0 bytes. Revalidate before any support claim."
+}

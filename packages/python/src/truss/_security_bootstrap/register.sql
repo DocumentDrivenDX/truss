@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Capacity is sourced from the protected original native profile, never $5.
 -- Required order: schema-head SHARE, installation guard SHARE, claim table
 -- capacity lock; fresh READ COMMITTED statement after acquisition. All profile

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native evidence failure channels must not publish ephemeral credentials."""
 import importlib.util
 import json

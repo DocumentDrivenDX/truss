@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native component decoding; no accepted catalog or installed authority claim."""
 import base64
 import hashlib

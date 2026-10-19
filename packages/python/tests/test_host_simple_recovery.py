@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original selected host simple-call flush witness; not a public SQL profile."""
 import unittest
 from dataclasses import replace

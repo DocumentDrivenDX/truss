@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """A thousand-type catalog view keeps source once and transmits references."""
 import base64,hashlib,json
 from truss import Ok

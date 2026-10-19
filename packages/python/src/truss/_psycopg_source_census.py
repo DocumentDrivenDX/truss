@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private supported-API source response observation, not authority admission.
 
 One statement observes selected whole-database catalogs. Native scan/heap work,

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public refusal, repair and acceptance of existing scalar requiredness."""
 import json,os
 from truss import CatalogDocument,CatalogAcceptanceRefused,CatalogRegistration,ObjectFound,Ok,QueryRows
@@ -7,7 +8,7 @@ import test_group_create_native as base
 
 class RequiredEvolutionTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version
         module=source['modules'][0];record=next(e for e in module['elements'] if e['id']=='A');record['name']='A'
@@ -33,6 +34,3 @@ class RequiredEvolutionTests(base.PublicCreateGroupTests):
         rows=a.query_in_transaction(t,sql='SELECT a.optional FROM "A" a',document_ids=('adoc',));self.assertIsInstance(rows.value,QueryRows,repr(rows));self.assertEqual(rows.value.rows,(('present',),))
         replay=a.apply_in_transaction(t,semantic,request,documents=original_documents,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'));self.assertIsInstance(replay.value.response,CommittedReceiptReplay)
         self.assertEqual(a.report_in_transaction(t,revision=1).value.original_bytes,original_report);h.detach();c.commit()
-
-class RequiredEvolution08Tests(RequiredEvolutionTests):
-    source_version='0.8.0'

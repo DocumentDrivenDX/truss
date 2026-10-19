@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Separately authored source profile. Legacy fixture bytes are not modified. */
 import {securityFixture} from '/Users/erik/.codex/worktrees/security-main-integration/umf/tests/security/fixture';
 

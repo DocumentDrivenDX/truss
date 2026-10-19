@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Explicit full-ontology graph binding to the original logical security fixture.
 
 Logical endpoint fields are declared by the original logical document, not

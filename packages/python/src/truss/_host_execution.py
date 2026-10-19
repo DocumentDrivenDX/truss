@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private adoption candidate; E06 native arbitration is not yet integrated.
 
 Unit-test ports provide component evidence only. Never advertise these handles

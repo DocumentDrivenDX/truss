@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Selected native writer metadata checks, not an issuer or DDL lifetime proof."""
 from hashlib import sha256
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Unmodified consumer schema: exact numeric create/read/update/query/reopen."""
 from decimal import Decimal
 from hashlib import sha256

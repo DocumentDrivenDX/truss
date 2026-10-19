@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {expect,test} from 'bun:test';
 import {createReportResponseSchemaCandidate} from '../docs/helix/04-build/evidence/design-audit/report-response-schema-candidate';
 import {decodeReportResponseJson as decode,ReportResponseJsonError} from '../docs/helix/04-build/evidence/design-audit/report-response-json-candidate';

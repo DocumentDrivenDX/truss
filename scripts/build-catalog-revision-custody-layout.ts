@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Review-only original catalog custody home; DDL is exported by UMF. */
 import {backend} from '/Users/erik/Projects/umf/native/postgresql/runtime';
 import {readDocument} from '/Users/erik/Projects/umf/src/model/document';

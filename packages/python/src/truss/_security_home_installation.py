@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private one-time candidate security-home installation; no policy activation.
 
 Direct trusted installation administrator and administrative quiescence required.

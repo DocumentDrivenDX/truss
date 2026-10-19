@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public construction/lifetime controls; native inspection has separate evidence."""
 import hashlib
 from importlib.resources import files

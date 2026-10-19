@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Bun-only pinned compiler process adapter. Content never chooses executable code. */
 import type {Compiler} from '../../weft/src/index';
 import {WEFT_SOURCE} from '../../weft/src/index';

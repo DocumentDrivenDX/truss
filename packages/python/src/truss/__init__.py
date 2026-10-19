@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Embeddable experimental Truss Python interface; see the declared runtime profile."""
 from .execution import ExecutionFailure, Ok, Error, Outcome, TransactionHandle, Isolation, AccessMode
 from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedCursor, FeedPage, FeedConsumer, FeedAcknowledged, FeedUnavailable
@@ -54,10 +55,10 @@ __all__ += ["InstallationInspectionConfiguration", "InstallationInspectionAssemb
             "inspect_installation_in_transaction"]
 
 from .catalog_runtime import (CatalogRuntimeConfiguration, CatalogReferenceAssembly,
-    PendingCatalogInstallation, CatalogRuntimeStatus, CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport,
+    PendingCatalogInstallation, CatalogRuntimeStatus, CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogStoredViolator, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport,
     ModuleAccessGrant, PendingModuleAccessConfiguration)
 __all__ += ["CatalogRuntimeConfiguration", "CatalogReferenceAssembly", "PendingCatalogInstallation",
-            "CatalogRuntimeStatus", "CatalogRegistration", "CatalogUnchanged", "CatalogAcceptanceRefused", "CatalogCompatibilityViolation", "CatalogRelationshipCompatibilityViolation", "CatalogKeyCompatibilityViolation", "CatalogReport",
+            "CatalogRuntimeStatus", "CatalogRegistration", "CatalogUnchanged", "CatalogAcceptanceRefused", "CatalogCompatibilityViolation", "CatalogStoredViolator", "CatalogRelationshipCompatibilityViolation", "CatalogKeyCompatibilityViolation", "CatalogReport",
             "ModuleAccessGrant", "PendingModuleAccessConfiguration"]
 
 from .catalog_view import (CatalogViewRequest, CatalogViewLimits, CurrentCatalogSelection,

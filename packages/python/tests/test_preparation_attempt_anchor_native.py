@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original native identity anchor only; no program/authority/permit admission."""
 from importlib.resources import files
 import uuid

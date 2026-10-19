@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Select exact UTF-8 definition bytes from an accepted JSON archive.
 
 JSON interpretation remains with the owner. This helper only locates a source

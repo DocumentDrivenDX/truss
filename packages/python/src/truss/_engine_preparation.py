@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One engine-owned RR session; does not issue authority, cuts or seals.
 
 Only trusted native preparation orchestration may use this session. Ordinary

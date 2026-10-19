@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private counter component; not original transaction/driver/native admission.
 
 One instance belongs to the qualified shared physical-connection/epoch issuer.

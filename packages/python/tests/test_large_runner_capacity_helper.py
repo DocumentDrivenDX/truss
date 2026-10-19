@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Safety controls for the large stress runner's narrowly scoped cleanup."""
 
 import contextlib

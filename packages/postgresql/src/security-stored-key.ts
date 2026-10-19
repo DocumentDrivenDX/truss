@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Experimental binding assembly, not a permit. The registered producer and
  * original native scope/cut must be independently authenticated before calling. */
 import {createSecurityKeyNamespaceVerifier,type SecurityKeyNamespaceSelection} from './security-key-namespace';

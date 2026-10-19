@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Physical mapping controls; supplied catalog/cursor fixtures are not native evidence."""
 import copy,hashlib,itertools,json,unittest
 from types import SimpleNamespace
@@ -7,8 +8,8 @@ ref=lambda name:{'documentId':'d','moduleId':'m','elementId':name}
 relationship={'documentId':'d','moduleId':'m','relationshipId':'WorksOn'}
 
 def fixture():
-    core={'umf':'0.8.0','id':'d','modules':[{'id':'m','elements':[], 'relationships':[{'id':'WorksOn','directed':True,'source':[{'module':'m','element':'Staff'}],'target':[{'module':'m','element':'Project','key':'pk'}],'sourceMultiplicity':{'min':0,'max':'*'},'targetMultiplicity':{'min':0,'max':'*'},'targetLifecycle':'independent'}]}]}
-    encoded=json.dumps(core,separators=(',',':'));pin={'documentId':'d','revision':'1','umfVersion':'0.8.0','sha256':hashlib.sha256(encoded.encode()).hexdigest()}
+    core={'umf':'0.10.0','id':'d','modules':[{'id':'m','elements':[], 'relationships':[{'id':'WorksOn','directed':True,'source':[{'module':'m','element':'Staff'}],'target':[{'module':'m','element':'Project','key':'pk'}],'sourceMultiplicity':{'min':0,'max':'*'},'targetMultiplicity':{'min':0,'max':'*'},'targetLifecycle':'independent'}]}]}
+    encoded=json.dumps(core,separators=(',',':'));pin={'documentId':'d','revision':'1','umfVersion':'0.10.0','sha256':hashlib.sha256(encoded.encode()).hexdigest()}
     association={'kind':'core-relationship','relationship':relationship,'witness':{'kind':'opaque-existential'},'endpoints':[{'role':'worker','side':'source','target':ref('Staff'),'keyId':'pk'},{'role':'project','side':'target','target':ref('Project'),'keyId':'pk'}]}
     ontology={'entities':[{'type':ref(name),'keyId':'pk'} for name in ('Staff','Project')],'associations':[association]}
     source={'ontology':ontology,'closure':{'pins':[{'documentId':'d','revision':'1'}],'documents':[{'revision':'1','document':core}]}}

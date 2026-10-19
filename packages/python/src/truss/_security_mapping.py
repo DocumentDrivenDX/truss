@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private source-bound preparation under a native profile guard; no SQL permit.
 
 The host supplies original compiler code and source inputs. Neither this Python

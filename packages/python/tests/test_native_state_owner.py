@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native state attribution primitive; administrative fixture grants no authority."""
 from pathlib import Path
 import unittest

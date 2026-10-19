@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned ephemeral local certificate; no production issuer/key qualification."""
 from pathlib import Path
 import tempfile,subprocess,ssl

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Small ordinary-role source ACK receipt and uncertain-commit reconciliation flow."""
 from truss import Ok,FeedReceiptAcknowledged,FeedAckReconciled,FeedUnavailable
 import test_feed_runtime_native as feed_tests

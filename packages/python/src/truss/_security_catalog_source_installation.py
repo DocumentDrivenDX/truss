@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original catalog source-marker installation; not protected-profile admission.
 
 Trusted direct installation administrator and installation quiescence required.

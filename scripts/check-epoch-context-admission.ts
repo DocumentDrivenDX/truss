@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {decodeCapturedOriginContext} from '../packages/postgresql/src/captured-origin-context';
 /** Rollback-contained context0.3 byte custody, not full installed admission. */
 import {SQL} from 'bun';

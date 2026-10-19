@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original claim settlement; no completion authentication or release grant.
 
 Only the trusted original coordinator after protected release completed or was

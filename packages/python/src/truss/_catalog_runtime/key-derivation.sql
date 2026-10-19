@@ -83,16 +83,16 @@ CREATE FUNCTION truss.umf_key_field_values_valid(cells jsonb,fields jsonb,core t
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE field jsonb;cell jsonb;literal jsonb;candidate jsonb;facet jsonb;expected bytea;matched boolean;position int:=0;token text;kind text;
 BEGIN
- IF core NOT IN ('0.7.0','0.8.0') OR jsonb_array_length(cells)<>jsonb_array_length(fields) THEN RETURN false;END IF;
+ IF core IS DISTINCT FROM '0.10.0' OR jsonb_array_length(cells)<>jsonb_array_length(fields) THEN RETURN false;END IF;
  FOR field IN SELECT value FROM jsonb_array_elements(fields) LOOP
   cell:=cells->position;position:=position+1;kind:=field->>'scalarType';facet:=coalesce(field->'facets','{}');
   IF field->>'kind' IS DISTINCT FROM 'field' OR field->>'cardinality' IS DISTINCT FROM 'one'
    OR field->>'nullability' IS DISTINCT FROM 'required' OR cell->>'kind' IS DISTINCT FROM kind THEN RETURN false;END IF;
   token:=cell->>'text';
-  IF core='0.8.0' AND kind IN ('integer','decimal') AND length(split_part(lower(token),'e',2))>32
+  IF core='0.10.0' AND kind IN ('integer','decimal') AND length(split_part(lower(token),'e',2))>32
    AND ltrim(replace(ltrim(split_part(lower(token),'e',1),'-'),'.',''),'0')<>'' THEN RETURN false;END IF;
   IF NOT field ? 'allowedValues' THEN CONTINUE;END IF;
-  IF core<>'0.8.0' OR jsonb_typeof(field->'allowedValues') IS DISTINCT FROM 'array' THEN RETURN false;END IF;
+  IF core<>'0.10.0' OR jsonb_typeof(field->'allowedValues') IS DISTINCT FROM 'array' THEN RETURN false;END IF;
   expected:=truss.encode_umf_scalar_key_tuple(jsonb_build_array(cell),jsonb_build_array(facet));matched:=false;
   FOR literal IN SELECT value FROM jsonb_array_elements(field->'allowedValues') LOOP
    CASE kind

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Declared decimal18,2 through public catalog, mutation, key, query and feed APIs."""
 import json,os,base64
 from decimal import Decimal
@@ -62,7 +63,3 @@ class DecimalScale2Tests(base.NumericFacetTests):
             self.assertIsInstance(a.acknowledge_feed_in_transaction(t,feed.value),Ok);h.detach();c.commit()
             if maximum in tokens and maximum+'00' in tokens and '1.20' in tokens:break
         self.assertIn(maximum,tokens,repr(json.loads(feed.value.content))[:1800]);self.assertIn(maximum+'00',tokens);self.assertIn('1.20',tokens)
-
-class DecimalScale208Tests(DecimalScale2Tests):
-    def fields(self,source):
-        source['umf']='0.8.0';super().fields(source)

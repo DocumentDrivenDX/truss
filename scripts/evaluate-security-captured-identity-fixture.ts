@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Flat table-per-record fixture reconstruction from fixed captured identity cells.
  * No authority is issued; trusted=true is an owned administrative fixture premise.
  */

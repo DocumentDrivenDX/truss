@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {SQL} from 'bun';
 const url=process.env.TRUSS_OPERATION_TEST_URL;if(!url)throw Error('Explicit isolated native test URL required');
 const sourcePath='packages/postgresql/native/catalog-report-immutability.sql',source=await Bun.file(sourcePath).text();

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 from typing import assert_type
 from truss import (ConnectedHost, connect_pg8000_host, Ok, HostServices,
     ReferenceAssemblyConfiguration, create_reference_assembly, ReferenceAssembly,

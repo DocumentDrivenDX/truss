@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic database originals -> complete facts -> original UMF child workflow.
 Private supplied-cut evaluation, not native query permission or public release.
 """

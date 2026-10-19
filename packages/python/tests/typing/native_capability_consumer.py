@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Type the same capability selection used by native adopter workflows."""
 from truss import (CatalogReferenceAssembly,CapabilityAvailable,TransactionHandle,
     CatalogDocument,Ok,ObjectFound,FeedPage,HistoryEntity)

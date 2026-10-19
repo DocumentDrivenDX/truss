@@ -14,6 +14,8 @@ The selected PostgreSQL storage design packs values into one flat JSONB map per 
 
 A fixed shared layout stores objects, business keys, relationships and schema definitions. Adding a type, property, key or relationship adds catalog rows rather than per-type tables, columns or indexes. The object row is canonical; the journal is designed to capture property history in the same transaction.
 
+The current `0.0.40` candidate selects UMF `0.10.0` documents and fresh PostgreSQL `18.6` installations. Python deployment embeds V8 and does not require Bun, Node or an external JavaScript process. This is a candidate scope, not a completed platform-support claim; full installed-package and stress qualification remains pending. See the [candidate notes](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/releases/v0.0.40.md), the [Python guide](https://github.com/DocumentDrivenDX/truss/blob/main/packages/python/README.md) and the [cost ledger](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/03-test/performance/operation-statement-audit-20261019.md).
+
 ## Three responsibilities
 
 | Project | Responsibility |
@@ -26,8 +28,8 @@ Truss consumes UMF; it does not redefine UMF semantics or implement a second SQL
 
 ## Integrity must be inspectable
 
-The intended report classifies each assertion as enforced by the database, by the engine, or by neither. Retaining an assertion is not the same as enforcing it. Protected runtime behavior, provider-specific installation and full native qualification remain delivery gates.
+The current report distinguishes database constraints from engine checks. Business-key uniqueness is database-enforced. String `maxLength` counts Unicode scalar values and binary `maxLength` counts bytes; catalog evolution checks actual stored values before accepting a tightened limit. Retaining an assertion is not the same as enforcing it. Full installed-package qualification remains pending.
 
-[Read the product vision](https://github.com/DocumentDrivenDX/truss/blob/5cff55183c0c7aad647c49611c2110ce1cdecca8/docs/helix/00-discover/product-vision.md), [storage decision](https://github.com/DocumentDrivenDX/truss/blob/5cff55183c0c7aad647c49611c2110ce1cdecca8/docs/helix/02-design/adr/ADR-002-storage-strategy.md) and [architecture](https://github.com/DocumentDrivenDX/truss/blob/5cff55183c0c7aad647c49611c2110ce1cdecca8/docs/helix/02-design/architecture.md).
+[Read the product vision](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/00-discover/product-vision.md), [storage decision](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/02-design/adr/ADR-002-storage-strategy.md) and [architecture](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/02-design/architecture.md).
 
 [See what the experiments establish →](../evidence/)

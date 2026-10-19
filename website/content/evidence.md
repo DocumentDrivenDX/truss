@@ -4,25 +4,21 @@ description: "Design intent, scoped experiments and unfinished gates are differe
 composition: model-primary
 number: "03"
 ---
-## Current evidence
+## Current candidate evidence
 
-The repository documentation records the following bounded results as of October 8, 2026. These are experiment summaries, not a production support matrix.
+Truss `0.0.40` is an unpublished candidate for PostgreSQL `18.6`, UMF `0.10.0` source documents and fresh installations. It targets Linux x86_64 and macOS ARM64 and embeds V8 for Python deployment. The complete installed-package native and stress qualification is pending; this page does not claim full release qualification.
 
 | Scope | Evidence | Boundary |
 | --- | --- | --- |
-| Baseline storage layout DDL | Checks recorded on PostgreSQL 16.2 and 17.9 | Does not qualify the later complete protected runtime; PostgreSQL 18 untested |
-| Experimental Weft integration | Six native PostgreSQL 17.9 scenarios using original SQL and native Parse/Bind; fourteen compiler/host and three protocol tests | Fixtures do not establish accepted catalog identities or production execution |
-| 0.13 generated layout repair | Isolated PostgreSQL 17.9 installation and checked archive INSERT | Complete protected installation and populated conversion unfinished |
+| Current catalog planner and stored-value evolution | Source analysis plus 57 in-memory PGlite differential cases | Covers selected planner, evolution and SQL bookkeeping/length-boundary behavior; it does not establish PostgreSQL authority, trigger, concurrency or full-runtime behavior |
+| Candidate workflows | Focused native controls and a real-schema workflow have been exercised against PostgreSQL 18.6 | The final installed-package gate and unchanged stress matrix are pending |
+| Earlier storage and query prototypes | Earlier records include PostgreSQL 16.2 and 17.9 checks | They do not qualify this candidate or establish PostgreSQL 18.6 support |
 
-[Current documentation index](https://github.com/DocumentDrivenDX/truss/blob/5cff55183c0c7aad647c49611c2110ce1cdecca8/docs/helix/README.md) connects these results to their exact source packets. [Weft iteration feedback](https://github.com/DocumentDrivenDX/truss/blob/5cff55183c0c7aad647c49611c2110ce1cdecca8/docs/helix/02-design/contracts/weft-integration-iteration-feedback.proposal.md) records reproduction scope and the filtered-SUM refusal.
+Read the [current candidate notes](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/releases/v0.0.40.md), the [Python guide](https://github.com/DocumentDrivenDX/truss/blob/main/packages/python/README.md), and the [operation cost ledger](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/03-test/performance/operation-statement-audit-20261019.md) for exact scope, bounds and pending gates. The [current documentation index](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/README.md) connects these results to the governed artifacts. [Weft iteration feedback](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/02-design/contracts/weft-integration-iteration-feedback.proposal.md) remains a separate historical experiment.
 
 ## What remains open
 
-Complete native routine bodies and security profiles, protected mutation and feed behavior, catalog identity acceptance, provider/version qualification and performance evidence remain open. Requirements and contracts are authored drafts. No production-readiness or complete adapter-support claim is made here.
-
-The current integration notes do not establish a single supported UMF core/version/subset tuple for a finished Truss runtime. Consult the source-pinned packets; do not combine independent experiments into an inferred support claim.
-
-[Inspect the implementation sequence](https://github.com/DocumentDrivenDX/truss/blob/5cff55183c0c7aad647c49611c2110ce1cdecca8/docs/helix/04-build/implementation-plan.md) and [decision queue](https://github.com/DocumentDrivenDX/truss/blob/5cff55183c0c7aad647c49611c2110ce1cdecca8/docs/helix/04-build/design-decision-queue.md).
+The full cross-platform installed-package gate, unchanged large stress matrix and final source-bound package qualification remain open. A passing in-memory data comparison is narrower than a native PostgreSQL control; focused native checks are narrower than the full release suite. No production-readiness claim is made.
 
 ## What the seal proves
 

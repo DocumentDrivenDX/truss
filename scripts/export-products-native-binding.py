@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Accept original demo bytes and export observed native bindings on disposable PG18.
 
 No protected RR/bulk claim. Role setup is installation operations; objects and
@@ -22,14 +23,14 @@ def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storag
     source_epoch=None;seal_storage=None;action_store=None
     output=output.resolve()
     if output.exists() and any(output.iterdir()):raise ValueError('New empty output directory required')
+    original=model_path.read_bytes();document=json.loads(original)
+    if type(document) is not dict or document.get('umf')!='0.10.0' or document.get('id')!='product-local-action-demo':
+        raise ValueError('Current core 0.10.0 local-products source required')
+    if register_preparation_program:
+        raise ValueError('Preparation-program registration requires a separately supplied current compiler request')
     output.mkdir(parents=True,exist_ok=True)
-    original=model_path.read_bytes();packet=json.loads(original)
-    snapshot=packet['configuration']['actions'][0]['snapshot']
-    content=snapshot['utf8'].encode('utf8')
-    if hashlib.sha256(content).hexdigest()!=snapshot['sha256']:raise ValueError('Original model snapshot digest required')
-    document=json.loads(content)
-    if document['umf']!='0.8.0' or document['id']!='product-action-demo':raise ValueError('Original demo core0.8 model required')
-    documents=(CatalogDocument(document['id'],snapshot['sha256'],content,snapshot['sha256']),)
+    content=original;document_sha256=hashlib.sha256(content).hexdigest()
+    documents=(CatalogDocument(document['id'],document_sha256,content,document_sha256),)
     manifest,digest,_=_release()
     with LocalPostgres(output/'postgres') as runtime:
         params=psycopg.conninfo.conninfo_to_dict(runtime.info.connection_uri)
@@ -41,7 +42,7 @@ def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storag
             admin.execute(sql.SQL('GRANT {} TO products_person WITH SET FALSE').format(sql.Identifier(installed.registrar_role)))
             with psycopg.connect(**dict(params,user='products_person'),autocommit=True,options='-c statement_timeout=10000') as person:
                 with transaction(person) as (assembly,tx):
-                    prepared=assembly.prepare_catalog(documents,source_version='0.8.0',bun_executable=bun)
+                    prepared=assembly.prepare_catalog(documents,source_version=document['umf'],bun_executable=bun)
                     registered=success(assembly.accept_in_transaction(tx,prepared,request_key='original-products',bun_executable=bun))
                     if not hasattr(registered,'registration_id'):raise ValueError('Original catalog acceptance required')
                 with transaction(admin) as (assembly,tx):
@@ -116,34 +117,6 @@ def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storag
                         if len(rows)!=1:raise ValueError('Original complete native query binding required')
                         return bytes(rows[0][0])
                     bundle_bytes=success(assembly._host._run_operation(tx,export))
-                if register_preparation_program:
-                    import weft
-                    from dataclasses import replace
-                    from truss._preparation_program import compile_preparation_program,register_preparation_program_in_transaction
-                    if action_store is None:raise ValueError('Original committed action store required')
-                    source_packet=json.loads(original)
-                    binding_text=json.loads(bundle_bytes)['bindingJson']
-                    binding_artifact=json.dumps({'mediaType':'application/json','utf8':binding_text,'sha256':hashlib.sha256(binding_text.encode()).hexdigest()},separators=(',',':')).encode()
-                    program=compile_preparation_program(weft.MutationCompiler,
-                        compiler_source_pin='c0c6449481a87eed38d3f7a6ebebc1f4ab4beeb4',
-                        configuration=json.dumps(source_packet['configuration'],separators=(',',':')).encode(),
-                        request=json.dumps(source_packet['request'],separators=(',',':')).encode(),
-                        binding_artifact=binding_artifact,evidence=('Original same-installation products binding; byte enrollment only',))
-                    with transaction(admin) as (assembly,tx):
-                        enrolled=success(register_preparation_program_in_transaction(assembly._host,tx,store_context=action_store,registration_key=b'products-program',program=program))
-                    with transaction(admin) as (assembly,tx):
-                        replayed=success(register_preparation_program_in_transaction(assembly._host,tx,store_context=action_store,registration_key=b'products-program',program=program))
-                        if replayed!=enrolled:raise ValueError('Exact original program registration retry required')
-                        changed=replace(program,configuration=program.configuration+b' ')
-                        if not isinstance(register_preparation_program_in_transaction(assembly._host,tx,store_context=action_store,registration_key=b'products-program',program=changed),Error):raise ValueError('Changed original bytes must conflict on retry')
-                    row=admin.execute('SELECT program_identity::text,original_configuration,original_request,original_plan_artifact,original_binding_artifact,original_lowering FROM truss.preparation_program_registration').fetchone()
-                    if json.loads(enrolled.program_identity)!=row[0] or row[1:]!=(program.configuration,program.request,program.compile_response,program.binding_artifact,program.lowering):raise ValueError('Committed original program bytes required')
-                    try:person.execute('SELECT * FROM truss.preparation_program_registration')
-                    except psycopg.errors.InsufficientPrivilege:pass
-                    else:raise ValueError('Ordinary caller cannot read private compiler packet')
-                    for label,raw in [('configuration',program.configuration),('request',program.request),('compile-response',program.compile_response),('binding',program.binding_artifact),('lowering-invocation',program.lowering)]:
-                        (output/('program-'+label+'.json')).write_bytes(raw)
-                    (output/'program-registration.json').write_text(json.dumps({'programIdentity':json.loads(enrolled.program_identity),'authority':False,'scope':'Trusted administrative original compiler byte enrollment; not native program admission.'},indent=2)+'\n')
     bundle=json.loads(bundle_bytes)
     binding=bundle['bindingJson'].encode('utf8')
     if json.loads(binding)!=bundle['binding'] or bundle['binding']['releaseId']!=manifest['releaseId'] or bundle['binding']['releaseSha256']!=digest:
@@ -154,7 +127,7 @@ def run(model_path,output,bun,*,bootstrap_source_epoch=False,install_seal_storag
     for name,raw in artifacts.items():(output/name).write_bytes(raw)
     report={'scope':'Actual ordinary-person RC catalog/public mutation/readback and native binding export. No action, RR selection, bulk seal or security qualification.',
         'runtime':manifest['releaseId'],'runtimeSha256':digest,'layout':manifest['layoutProfile'],
-        'documentSha256':snapshot['sha256'],'nativeObjectIds':[v.id for v in identities],
+        'documentSha256':document_sha256,'nativeObjectIds':[v.id for v in identities],
         'preparationOwnerRevision':prepared.provenance.owner_revision,
         'files':{name:hashlib.sha256(raw).hexdigest() for name,raw in artifacts.items()}}
     if source_epoch is not None:

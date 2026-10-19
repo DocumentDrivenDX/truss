@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Candidate durable-claim profile only. Acquire original schema-head and guard
 -- UPDATE; freshly check zero outstanding claims BEFORE authority effects. This
 -- post-effect condition is a second gate; zero rows requires whole rollback.

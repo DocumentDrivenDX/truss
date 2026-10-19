@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Practical groups remain valid across explicitly fired deferred checks."""
 from truss import (EdgeFound,Ok,ModuleAccessGrant,adopt_psycopg_host,
                    create_reference_assembly,CatalogRuntimeConfiguration)

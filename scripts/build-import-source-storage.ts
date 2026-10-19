@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Import source operation identity, exported through UMF rather than handwritten DDL. */
 import {backend} from '/Users/erik/.codex/worktrees/0e51/umf/native/postgresql/runtime';
 import {readDocument} from '/Users/erik/.codex/worktrees/0e51/umf/src/model/document';

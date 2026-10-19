@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private PostgreSQL17.9 census transport. No source/issuer or held-cut authority. */
 import {createHash,randomUUID} from 'node:crypto';
 import type {PoolClient} from 'pg';

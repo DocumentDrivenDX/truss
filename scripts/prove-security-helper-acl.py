@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional direct ACL equality proof, not PostgreSQL/effective-role refinement."""
 import json
 import z3

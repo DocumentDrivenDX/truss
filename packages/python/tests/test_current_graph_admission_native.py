@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual public Graph candidate refuses without a qualified authority protocol.
 
 The local PG18.6 caller fixture is not SCRAM or complete B-008 qualification.
@@ -28,7 +29,7 @@ class CurrentGraphAdmissionNativeTests(base.CurrentDisclosureRuntimeNativeTests)
         with patch.object(subjects,'_helper_source',side_effect=old_helper) if partial else ExitStack():
             bun=self.create_query_graph()
         import json
-        self.assertEqual(json.loads(self.originals.consumer_bytes)['weftModuleSha256'],runtime._GRAPH_CONSUMER_MODULE)
+        self.assertIn(json.loads(self.originals.consumer_bytes)['weftModuleSha256'],runtime._GRAPH_CONSUMER_MODULES)
         if legacy:
             from psycopg import sql
             marker=json.loads(self.admin.execute('SELECT truss.current_query_protection_marker()').fetchone()[0])

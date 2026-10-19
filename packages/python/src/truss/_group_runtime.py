@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public group composition over protected native calls and original UMF encoding."""
 from dataclasses import dataclass, fields, is_dataclass
 from hashlib import sha256

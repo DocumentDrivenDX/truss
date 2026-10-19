@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Same-original-operation epoch observation, not trusted installation authority."""
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact numeric-bearing owner evidence; semantic wire remains numeric-free."""
 import unittest
 from decimal import Decimal, InvalidOperation, localcontext
@@ -28,26 +29,6 @@ class OwnerEvidenceJsonTests(unittest.TestCase):
         for raw in cases:
             with self.subTest(prefix=raw[:30]), self.assertRaises(ValueError):
                 decode_owner_evidence_json(raw)
-
-    def test_real_original_owner_artifact_correspondence(self):
-        from test_catalog_support import selected
-        from truss._catalog_owner_evidence import require_catalog_owner_evidence
-        from test_catalog_staging import native_document
-        source=json.loads(native_document('support').content)
-        record=source['modules'][0]['elements'][0]['id']
-        source['modules'][0]['elements'][0]['keys']=[{'id':'pk','name':'pk','fields':[{'module':'m','element':'label'}],'primary':True}]
-        source['modules'][0]['relationships']=[{'id':'self','name':'self','source':[{'module':'m','element':record}],
-            'target':[{'module':'m','element':record,'key':'pk'}],'sourceMultiplicity':{'min':0,'max':1},
-            'targetMultiplicity':{'min':0,'max':1},'targetLifecycle':'independent','directed':True}]
-        prepared=selected(source)
-        original=prepared.report_evidence_bytes
-        evidence=decode_owner_evidence_json(original)
-        require_catalog_owner_evidence(prepared,evidence)
-        # A bool/int collision previously passed ordinary Python equality.
-        changed=decode_owner_evidence_json(original)
-        changed['coreAssertionIdentities']['complete']=0
-        with self.assertRaises(ValueError):require_catalog_owner_evidence(prepared,changed)
-        self.assertEqual(prepared.report_evidence_bytes,original)
 
     def test_extreme_exponent_refuses_independently_of_decimal_traps(self):
         raw=b'1e'+b'9'*100

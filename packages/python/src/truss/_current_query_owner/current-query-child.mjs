@@ -14149,7 +14149,8 @@ var $visit = visit.visit;
 var $visitAsync = visit.visitAsync;
 
 // src/model/types.ts
-var SCALAR_TYPES = ["boolean", "integer", "decimal", "float", "string", "binary", "date", "time", "timestamp"];
+var SCALAR_TYPES = Object.freeze(["boolean", "integer", "decimal", "float", "string", "binary", "date", "time", "timestamp"]);
+var SCALAR_TYPES_V09 = Object.freeze([...SCALAR_TYPES, "bits128", "uuid"]);
 var ELEMENT_KINDS = ["field", "record", "group"];
 var NULLABILITIES = ["required", "absent-allowed", "unspecified"];
 var CARDINALITIES = ["one", "array", "map", "unspecified"];
@@ -14287,6 +14288,65 @@ function readJsonValue(text, format = "yaml") {
   return convert(doc.contents, "", 0);
 }
 
+// src/model/bit128.ts
+var BIT128_PROFILE = "umf-128/1";
+var MOD64 = 1n << 64n;
+var MOD128 = 1n << 128n;
+function fail(code, message) {
+  throw new UmfError("BIT128_" + code, message);
+}
+function parseBits128(hex) {
+  if (typeof hex !== "string")
+    fail("TYPE", "Expected hexadecimal text");
+  if (hex.length !== 32 || !/^[0-9a-fA-F]{32}$(?![\s\S])/.test(hex))
+    fail("SYNTAX", "Expected exactly 32 hexadecimal digits");
+  return Object.freeze({ profile: BIT128_PROFILE, hex: hex.toLowerCase() });
+}
+function checked(value) {
+  if (!value || typeof value !== "object" || ![Object.prototype, null].includes(Object.getPrototypeOf(value)) || Object.keys(value).length !== 2 || Object.getOwnPropertyNames(value).length !== 2 || Object.getOwnPropertySymbols(value).length || !Object.hasOwn(value, "profile") || !Object.hasOwn(value, "hex"))
+    fail("VALUE", "Invalid bit value snapshot");
+  const descriptors = Object.getOwnPropertyDescriptors(value);
+  if (!("value" in descriptors.profile) || !("value" in descriptors.hex))
+    fail("VALUE", "Accessors are not value snapshots");
+  if (descriptors.profile.value !== BIT128_PROFILE)
+    fail("VALUE", "Unknown bit profile");
+  if (typeof descriptors.hex.value !== "string" || !/^[0-9a-f]{32}$(?![\s\S])/.test(descriptors.hex.value))
+    fail("VALUE", "Noncanonical bit snapshot");
+  const parsed = parseBits128(descriptors.hex.value);
+  if (parsed.hex !== descriptors.hex.value)
+    fail("VALUE", "Noncanonical snapshot");
+  return parsed;
+}
+function bits128ToBytes(value) {
+  const { hex } = checked(value);
+  return Uint8Array.from({ length: 16 }, (_, i) => parseInt(hex.slice(i * 2, i * 2 + 2), 16));
+}
+
+// src/model/uuid.ts
+function parseUuid(text) {
+  if (typeof text !== "string")
+    throw new UmfError("BIT128_TYPE", "Expected UUID text");
+  if (text.length !== 36 || !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(text))
+    throw new UmfError("UUID_SYNTAX", "Expected complete hyphenated UUID text");
+  const hex = text.replaceAll("-", "").toLowerCase();
+  return Object.freeze({ profile: BIT128_PROFILE, hex, canonicalText: text.toLowerCase(), originalText: text });
+}
+function uuidToBits128(value) {
+  if (!value || typeof value !== "object" || ![Object.prototype, null].includes(Object.getPrototypeOf(value)) || Object.keys(value).length !== 4 || Object.getOwnPropertyNames(value).length !== 4 || Object.getOwnPropertySymbols(value).length)
+    throw new UmfError("BIT128_VALUE", "Invalid UUID snapshot");
+  const props = Object.getOwnPropertyDescriptors(value);
+  for (const key of ["profile", "hex", "canonicalText", "originalText"])
+    if (!props[key] || !("value" in props[key]))
+      throw new UmfError("BIT128_VALUE", "Unknown UUID snapshot members or accessors");
+  const original = props.originalText.value;
+  if (typeof original !== "string" || original.length !== 36 || !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(original))
+    throw new UmfError("BIT128_VALUE", "Invalid original UUID text in snapshot");
+  const parsed = parseUuid(original);
+  if (parsed.profile !== props.profile.value || parsed.hex !== props.hex.value || parsed.canonicalText !== props.canonicalText.value)
+    throw new UmfError("BIT128_VALUE", "Inconsistent UUID snapshot");
+  return parseBits128(parsed.hex);
+}
+
 // src/model/schema-literals.ts
 var schemaPropertyNames = ["title", "aliases", "examples", "allowedValues", "default"];
 var newFacetNames = ["collectionSize", "range"];
@@ -14348,10 +14408,14 @@ function literalIdentity(field, value) {
   if (value === null)
     schemaError("Null has no allowed-value equality");
   const v = object(value), keys = Object.keys(v), kind = field.scalarType;
-  const wrapper = { boolean: "boolean", integer: "integerToken", decimal: "decimalToken", string: "string", binary: "binaryHex" }[kind];
+  const wrapper = { boolean: "boolean", integer: "integerToken", decimal: "decimalToken", string: "string", binary: "binaryHex", bits128: "bits128Hex", uuid: "uuid" }[kind];
   if (!wrapper || keys.length !== 1 || keys[0] !== wrapper)
     schemaError("No exact equality for this literal/domain");
   const facets = object(field.facets ?? {});
+  if (kind === "bits128")
+    return "bits128:" + parseBits128(v.bits128Hex).hex;
+  if (kind === "uuid")
+    return "uuid:" + parseUuid(v.uuid).hex;
   if (kind === "integer")
     return "integer:" + schemaCoefficient(v[wrapper], 0);
   if (kind === "decimal") {
@@ -14422,7 +14486,10 @@ function evaluateSchemaLiteral(doc, field, value, refinements = true, depth = 0,
   } else {
     if (field.cardinality !== undefined && !["one", "unspecified"].includes(field.cardinality))
       schemaError("Unknown cardinality");
-    const kind = field.scalarType, wrapper = { boolean: "boolean", integer: "integerToken", decimal: "decimalToken", string: "string", binary: "binaryHex", float: "floatToken", date: "date", time: "time", timestamp: "timestamp" }[kind];
+    const kind = field.scalarType;
+    if (["bits128", "uuid"].includes(kind ?? "") && doc.umf !== "0.9.0")
+      schemaError("128-bit domains require core 0.9.0");
+    const wrapper = { boolean: "boolean", integer: "integerToken", decimal: "decimalToken", string: "string", binary: "binaryHex", bits128: "bits128Hex", uuid: "uuid", float: "floatToken", date: "date", time: "time", timestamp: "timestamp" }[kind];
     if (!wrapper || !Object.hasOwn(v, wrapper))
       schemaError("Literal does not match scalar family");
     if (["float", "date", "time", "timestamp"].includes(kind)) {
@@ -19292,7 +19359,7 @@ function inspectSecurityPolicyV2Source(input) {
 
 // src/extensions/security/action-purpose-declarations.ts
 var SECURITY_ACTION_PURPOSES = Object.freeze(["read", "field", "original-authorized", "reverse", "vault-write", "other"]);
-var fail = () => {
+var fail2 = () => {
   throw new UmfError("SECURITY_ACTION_PURPOSES", "Complete exact known action-purpose closure required");
 };
 function checkActionPurposeDeclarations(ontology) {
@@ -19300,26 +19367,2505 @@ function checkActionPurposeDeclarations(ontology) {
     return;
   const { actionPurposes: entries, actions } = ontology;
   if (!Array.isArray(entries) || entries.length < 1 || entries.length > 256 || !Array.isArray(actions) || actions.length < 1 || actions.length > 256)
-    fail();
+    fail2();
   const universe = new Set;
   for (const action of actions) {
     if (typeof action !== "string" || !action.length || action.length > 4096 || universe.has(action))
-      fail();
+      fail2();
     universe.add(action);
   }
   for (const entry of entries) {
     if (!entry || typeof entry !== "object" || Array.isArray(entry) || Object.keys(entry).length !== 2 || !Object.hasOwn(entry, "action") || !Object.hasOwn(entry, "purposes") || !universe.delete(entry.action))
-      fail();
+      fail2();
     const values = entry.purposes;
     if (!Array.isArray(values) || values.length < 1 || values.length > 6 || new Set(values).size !== values.length || values.some((v) => !SECURITY_ACTION_PURPOSES.includes(v)))
-      fail();
+      fail2();
     if (values.some((v) => ["reverse", "vault-write", "other"].includes(v)) && values.length !== 1)
-      fail();
+      fail2();
   }
   if (universe.size)
-    fail();
+    fail2();
   return entries;
 }
+// spec/core/semantic-types-document.schema.json
+var semantic_types_document_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.10.0",
+  title: "UMF 0.10.0 semantic references over exact 128-bit and UUID values",
+  type: "object",
+  required: [
+    "umf",
+    "id",
+    "vocabularies",
+    "modules"
+  ],
+  properties: {
+    umf: {
+      const: "0.10.0"
+    },
+    id: {
+      $ref: "#/$defs/id"
+    },
+    vocabularies: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: {
+        type: "object",
+        required: [
+          "version"
+        ],
+        properties: {
+          version: {
+            $ref: "#/$defs/version"
+          }
+        }
+      }
+    },
+    modules: {
+      type: "array",
+      items: {
+        $ref: "#/$defs/module"
+      }
+    },
+    extensions: {
+      $ref: "#/$defs/extensions"
+    },
+    title: {
+      type: "string"
+    },
+    aliases: {
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "string",
+        minLength: 1
+      }
+    }
+  },
+  $defs: {
+    id: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    knownScalarType: {
+      enum: [
+        "boolean",
+        "integer",
+        "decimal",
+        "float",
+        "string",
+        "binary",
+        "date",
+        "time",
+        "timestamp",
+        "bits128",
+        "uuid"
+      ],
+      description: "Version-qualified value families; bits128 and uuid have intrinsic16-byte domains under umf-128/1; native refinements remain attached."
+    },
+    scalarType: {
+      anyOf: [
+        {
+          $ref: "#/$defs/knownScalarType"
+        },
+        {
+          type: "string",
+          minLength: 1,
+          not: {
+            $ref: "#/$defs/knownScalarType"
+          },
+          description: "Unknown family retained with incomplete semantic validation."
+        }
+      ]
+    },
+    extensions: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: true
+    },
+    reference: {
+      type: "object",
+      required: [
+        "role",
+        "module",
+        "element"
+      ],
+      properties: {
+        role: {
+          $ref: "#/$defs/id"
+        },
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    element: {
+      type: "object",
+      required: [
+        "id",
+        "extensions"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        scalarType: {
+          $ref: "#/$defs/scalarType"
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        references: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/reference"
+          }
+        },
+        kind: {
+          type: "string",
+          minLength: 1,
+          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
+        },
+        nullability: {
+          type: "string",
+          minLength: 1,
+          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
+        },
+        cardinality: {
+          type: "string",
+          minLength: 1,
+          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
+        },
+        itemType: {
+          $ref: "#/$defs/itemType"
+        },
+        facets: {
+          $ref: "#/$defs/facets"
+        },
+        members: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        keys: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/key"
+          }
+        },
+        title: {
+          type: "string"
+        },
+        aliases: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            type: "string",
+            minLength: 1
+          }
+        },
+        examples: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/literal"
+          }
+        },
+        allowedValues: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/literal"
+          }
+        },
+        default: {
+          type: "object",
+          required: [
+            "value",
+            "on"
+          ],
+          properties: {
+            value: {
+              $ref: "#/$defs/literal"
+            },
+            on: {
+              enum: [
+                "missing",
+                "null",
+                "missing-or-null"
+              ]
+            }
+          },
+          additionalProperties: true
+        },
+        semanticTypes: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "urn:umf:core:semantic-type-reference:1.0.0"
+          }
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                enum: [
+                  "record",
+                  "group"
+                ]
+              }
+            }
+          },
+          then: {
+            properties: {
+              scalarType: false
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "nullability"
+            ],
+            properties: {
+              nullability: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          },
+          then: {
+            not: {
+              required: [
+                "scalarType"
+              ]
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "itemType"
+            ],
+            properties: {
+              itemType: {}
+            }
+          },
+          then: {
+            required: [
+              "kind",
+              "cardinality"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              references: {
+                type: "array",
+                not: {
+                  contains: {
+                    type: "object",
+                    required: [
+                      "role"
+                    ],
+                    properties: {
+                      role: {
+                        const: "record-type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                enum: [
+                  "string",
+                  "binary"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "unicode-scalar"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "string"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "byte"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "binary"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "precision"
+                ],
+                properties: {
+                  precision: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "decimal"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "integerWidth"
+                ],
+                properties: {
+                  integerWidth: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "integer"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              members: {}
+            },
+            required: [
+              "members"
+            ]
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              keys: {}
+            },
+            required: [
+              "keys"
+            ]
+          },
+          then: {
+            required: [
+              "kind",
+              "members"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              },
+              members: {}
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "examples"
+            ],
+            properties: {
+              examples: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "allowedValues"
+            ],
+            properties: {
+              allowedValues: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "default"
+            ],
+            properties: {
+              default: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        }
+      ]
+    },
+    module: {
+      type: "object",
+      required: [
+        "id",
+        "namespace",
+        "elements"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        namespace: {
+          type: "string"
+        },
+        elements: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/element"
+          }
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        relationships: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/relationship"
+          }
+        },
+        title: {
+          type: "string"
+        },
+        aliases: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            type: "string",
+            minLength: 1
+          }
+        }
+      }
+    },
+    knownElementKind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    },
+    knownNullability: {
+      enum: [
+        "required",
+        "absent-allowed",
+        "unspecified"
+      ]
+    },
+    knownCardinality: {
+      enum: [
+        "one",
+        "array",
+        "map",
+        "unspecified"
+      ]
+    },
+    itemType: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    facets: {
+      type: "object",
+      description: "Missing members impose no bound. Unknown members and qualifiers are retained without interpretation.",
+      properties: {
+        length: {
+          type: "object",
+          required: [
+            "unit"
+          ],
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            unit: {
+              type: "string",
+              minLength: 1
+            }
+          },
+          additionalProperties: true
+        },
+        precision: {
+          type: "integer",
+          minimum: 1,
+          maximum: 9007199254740991,
+          description: "Decimal coefficient digit bound; requires scale. Absolute coefficient is less than 10^precision. No implicit rounding."
+        },
+        scale: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991,
+          description: "Fixed fractional digit count; requires precision. Semantic validation requires scale <= precision. Value equals integer coefficient times 10^-scale."
+        },
+        integerWidth: {
+          type: "object",
+          required: [
+            "bits",
+            "signed"
+          ],
+          properties: {
+            bits: {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            signed: {
+              type: "boolean"
+            }
+          },
+          description: "Signed [-2^(bits-1),2^(bits-1)-1] or unsigned [0,2^bits-1]; mathematical domain, not a physical storage-width assertion."
+        },
+        collectionSize: {
+          type: "object",
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            }
+          },
+          additionalProperties: true
+        },
+        range: {
+          type: "object",
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              $ref: "#/$defs/literal"
+            },
+            max: {
+              $ref: "#/$defs/literal"
+            },
+            minInclusive: {
+              type: "boolean"
+            },
+            maxInclusive: {
+              type: "boolean"
+            }
+          },
+          additionalProperties: true
+        }
+      },
+      dependentRequired: {
+        precision: [
+          "scale"
+        ],
+        scale: [
+          "precision"
+        ]
+      }
+    },
+    keyFieldReference: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    key: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "fields"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        fields: {
+          type: "array",
+          minItems: 1,
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        primary: {
+          type: "boolean"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipEndpoint: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipTarget: {
+      type: "object",
+      required: [
+        "module",
+        "element",
+        "key"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        },
+        key: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipMultiplicity: {
+      type: "object",
+      required: [
+        "min",
+        "max"
+      ],
+      properties: {
+        min: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991
+        },
+        max: {
+          anyOf: [
+            {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            {
+              const: "*"
+            }
+          ]
+        }
+      },
+      additionalProperties: true
+    },
+    relationship: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "source",
+        "target",
+        "sourceMultiplicity",
+        "targetMultiplicity",
+        "targetLifecycle",
+        "directed"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        source: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/relationshipEndpoint"
+          }
+        },
+        target: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/relationshipTarget"
+          }
+        },
+        sourceMultiplicity: {
+          $ref: "#/$defs/relationshipMultiplicity"
+        },
+        targetMultiplicity: {
+          $ref: "#/$defs/relationshipMultiplicity"
+        },
+        targetLifecycle: {
+          type: "string",
+          minLength: 1
+        },
+        directed: {
+          type: "boolean"
+        },
+        inverse: {
+          $ref: "#/$defs/id"
+        },
+        associationRecord: {
+          $ref: "#/$defs/relationshipEndpoint"
+        }
+      },
+      additionalProperties: true
+    },
+    literal: {
+      oneOf: [
+        {
+          type: "null"
+        },
+        {
+          type: "object",
+          required: [
+            "boolean"
+          ],
+          properties: {
+            boolean: {
+              type: "boolean"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "integerToken"
+          ],
+          properties: {
+            integerToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "decimalToken"
+          ],
+          properties: {
+            decimalToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "string"
+          ],
+          properties: {
+            string: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "binaryHex"
+          ],
+          properties: {
+            binaryHex: {
+              type: "string",
+              pattern: "^([0-9a-fA-F]{2})*$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "floatToken"
+          ],
+          properties: {
+            floatToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "date"
+          ],
+          properties: {
+            date: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "time"
+          ],
+          properties: {
+            time: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "timestamp"
+          ],
+          properties: {
+            timestamp: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "array"
+          ],
+          properties: {
+            array: {
+              type: "array",
+              items: {
+                $ref: "#/$defs/literal"
+              }
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "map"
+          ],
+          properties: {
+            map: {
+              type: "object",
+              additionalProperties: {
+                $ref: "#/$defs/literal"
+              }
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "bits128Hex"
+          ],
+          properties: {
+            bits128Hex: {
+              type: "string",
+              minLength: 32,
+              maxLength: 32,
+              pattern: "^[0-9a-fA-F]{32}$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "uuid"
+          ],
+          properties: {
+            uuid: {
+              type: "string",
+              minLength: 36,
+              maxLength: 36,
+              pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        }
+      ]
+    }
+  },
+  description: "Explicit semantic references compose with unchanged core0.9 UUID/128-bit domains; no external term or native enforcement inferred.",
+  $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
+};
+// spec/core/semantic-type-reference.schema.json
+var semantic_type_reference_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:semantic-type-reference:1.0.0",
+  title: "Exact publisher-owned semantic term reference",
+  type: "object",
+  required: [
+    "vocabulary",
+    "version",
+    "term"
+  ],
+  properties: {
+    vocabulary: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      minLength: 1
+    },
+    term: {
+      type: "string",
+      minLength: 1
+    }
+  }
+};
+// spec/core/bit128-document.schema.json
+var bit128_document_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:0.9.0",
+  title: "UMF 0.9.0 exact 128-bit and UUID values",
+  type: "object",
+  required: [
+    "umf",
+    "id",
+    "vocabularies",
+    "modules"
+  ],
+  properties: {
+    umf: {
+      const: "0.9.0"
+    },
+    id: {
+      $ref: "#/$defs/id"
+    },
+    vocabularies: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: {
+        type: "object",
+        required: [
+          "version"
+        ],
+        properties: {
+          version: {
+            $ref: "#/$defs/version"
+          }
+        }
+      }
+    },
+    modules: {
+      type: "array",
+      items: {
+        $ref: "#/$defs/module"
+      }
+    },
+    extensions: {
+      $ref: "#/$defs/extensions"
+    },
+    title: {
+      type: "string"
+    },
+    aliases: {
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "string",
+        minLength: 1
+      }
+    }
+  },
+  $defs: {
+    id: {
+      type: "string",
+      minLength: 1
+    },
+    version: {
+      type: "string",
+      pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    knownScalarType: {
+      enum: [
+        "boolean",
+        "integer",
+        "decimal",
+        "float",
+        "string",
+        "binary",
+        "date",
+        "time",
+        "timestamp",
+        "bits128",
+        "uuid"
+      ],
+      description: "Version-qualified value families; bits128 and uuid have intrinsic16-byte domains under umf-128/1; native refinements remain attached."
+    },
+    scalarType: {
+      anyOf: [
+        {
+          $ref: "#/$defs/knownScalarType"
+        },
+        {
+          type: "string",
+          minLength: 1,
+          not: {
+            $ref: "#/$defs/knownScalarType"
+          },
+          description: "Unknown family retained with incomplete semantic validation."
+        }
+      ]
+    },
+    extensions: {
+      type: "object",
+      propertyNames: {
+        $ref: "#/$defs/id"
+      },
+      additionalProperties: true
+    },
+    reference: {
+      type: "object",
+      required: [
+        "role",
+        "module",
+        "element"
+      ],
+      properties: {
+        role: {
+          $ref: "#/$defs/id"
+        },
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    element: {
+      type: "object",
+      required: [
+        "id",
+        "extensions"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          type: "string"
+        },
+        description: {
+          type: "string"
+        },
+        scalarType: {
+          $ref: "#/$defs/scalarType"
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        references: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/reference"
+          }
+        },
+        kind: {
+          type: "string",
+          minLength: 1,
+          description: "UMF role; unknown labels remain uninterpreted. Missing is unspecified, never inferred from scalarType."
+        },
+        nullability: {
+          type: "string",
+          minLength: 1,
+          description: "Ideal value availability. Unknown labels remain uninterpreted. Missing and unspecified assert no availability constraint. Native absence carriers require explicit bindings."
+        },
+        cardinality: {
+          type: "string",
+          minLength: 1,
+          description: "One ideal value, finite ordered sequence with duplicates allowed, finite exact string-key mapping with unique keys, or no assertion. Unknown labels remain uninterpreted."
+        },
+        itemType: {
+          $ref: "#/$defs/itemType"
+        },
+        facets: {
+          $ref: "#/$defs/facets"
+        },
+        members: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        keys: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/key"
+          }
+        },
+        title: {
+          type: "string"
+        },
+        aliases: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            type: "string",
+            minLength: 1
+          }
+        },
+        examples: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/literal"
+          }
+        },
+        allowedValues: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/literal"
+          }
+        },
+        default: {
+          type: "object",
+          required: [
+            "value",
+            "on"
+          ],
+          properties: {
+            value: {
+              $ref: "#/$defs/literal"
+            },
+            on: {
+              enum: [
+                "missing",
+                "null",
+                "missing-or-null"
+              ]
+            }
+          },
+          additionalProperties: true
+        }
+      },
+      allOf: [
+        {
+          if: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                enum: [
+                  "record",
+                  "group"
+                ]
+              }
+            }
+          },
+          then: {
+            properties: {
+              scalarType: false
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "nullability"
+            ],
+            properties: {
+              nullability: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "cardinality"
+            ],
+            properties: {
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          },
+          then: {
+            not: {
+              required: [
+                "scalarType"
+              ]
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "itemType"
+            ],
+            properties: {
+              itemType: {}
+            }
+          },
+          then: {
+            required: [
+              "kind",
+              "cardinality"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              cardinality: {
+                enum: [
+                  "array",
+                  "map"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              },
+              references: {
+                type: "array",
+                not: {
+                  contains: {
+                    type: "object",
+                    required: [
+                      "role"
+                    ],
+                    properties: {
+                      role: {
+                        const: "record-type"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                enum: [
+                  "string",
+                  "binary"
+                ]
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "unicode-scalar"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "string"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "length"
+                ],
+                properties: {
+                  length: {
+                    type: "object",
+                    required: [
+                      "unit"
+                    ],
+                    properties: {
+                      unit: {
+                        const: "byte"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "binary"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "precision"
+                ],
+                properties: {
+                  precision: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "decimal"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "facets"
+            ],
+            properties: {
+              facets: {
+                type: "object",
+                required: [
+                  "integerWidth"
+                ],
+                properties: {
+                  integerWidth: {}
+                }
+              }
+            }
+          },
+          then: {
+            required: [
+              "scalarType"
+            ],
+            properties: {
+              scalarType: {
+                const: "integer"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              members: {}
+            },
+            required: [
+              "members"
+            ]
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            properties: {
+              keys: {}
+            },
+            required: [
+              "keys"
+            ]
+          },
+          then: {
+            required: [
+              "kind",
+              "members"
+            ],
+            properties: {
+              kind: {
+                const: "record"
+              },
+              members: {}
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "examples"
+            ],
+            properties: {
+              examples: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "allowedValues"
+            ],
+            properties: {
+              allowedValues: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        },
+        {
+          if: {
+            required: [
+              "default"
+            ],
+            properties: {
+              default: {}
+            }
+          },
+          then: {
+            required: [
+              "kind"
+            ],
+            properties: {
+              kind: {
+                const: "field"
+              }
+            }
+          }
+        }
+      ]
+    },
+    module: {
+      type: "object",
+      required: [
+        "id",
+        "namespace",
+        "elements"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        namespace: {
+          type: "string"
+        },
+        elements: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/element"
+          }
+        },
+        extensions: {
+          $ref: "#/$defs/extensions"
+        },
+        relationships: {
+          type: "array",
+          items: {
+            $ref: "#/$defs/relationship"
+          }
+        },
+        title: {
+          type: "string"
+        },
+        aliases: {
+          type: "array",
+          uniqueItems: true,
+          items: {
+            type: "string",
+            minLength: 1
+          }
+        }
+      }
+    },
+    knownElementKind: {
+      enum: [
+        "field",
+        "record",
+        "group"
+      ]
+    },
+    knownNullability: {
+      enum: [
+        "required",
+        "absent-allowed",
+        "unspecified"
+      ]
+    },
+    knownCardinality: {
+      enum: [
+        "one",
+        "array",
+        "map",
+        "unspecified"
+      ]
+    },
+    itemType: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      }
+    },
+    facets: {
+      type: "object",
+      description: "Missing members impose no bound. Unknown members and qualifiers are retained without interpretation.",
+      properties: {
+        length: {
+          type: "object",
+          required: [
+            "unit"
+          ],
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            unit: {
+              type: "string",
+              minLength: 1
+            }
+          },
+          additionalProperties: true
+        },
+        precision: {
+          type: "integer",
+          minimum: 1,
+          maximum: 9007199254740991,
+          description: "Decimal coefficient digit bound; requires scale. Absolute coefficient is less than 10^precision. No implicit rounding."
+        },
+        scale: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991,
+          description: "Fixed fractional digit count; requires precision. Semantic validation requires scale <= precision. Value equals integer coefficient times 10^-scale."
+        },
+        integerWidth: {
+          type: "object",
+          required: [
+            "bits",
+            "signed"
+          ],
+          properties: {
+            bits: {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            signed: {
+              type: "boolean"
+            }
+          },
+          description: "Signed [-2^(bits-1),2^(bits-1)-1] or unsigned [0,2^bits-1]; mathematical domain, not a physical storage-width assertion."
+        },
+        collectionSize: {
+          type: "object",
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            },
+            max: {
+              type: "integer",
+              minimum: 0,
+              maximum: 9007199254740991
+            }
+          },
+          additionalProperties: true
+        },
+        range: {
+          type: "object",
+          anyOf: [
+            {
+              required: [
+                "min"
+              ],
+              properties: {
+                min: {}
+              }
+            },
+            {
+              required: [
+                "max"
+              ],
+              properties: {
+                max: {}
+              }
+            }
+          ],
+          properties: {
+            min: {
+              $ref: "#/$defs/literal"
+            },
+            max: {
+              $ref: "#/$defs/literal"
+            },
+            minInclusive: {
+              type: "boolean"
+            },
+            maxInclusive: {
+              type: "boolean"
+            }
+          },
+          additionalProperties: true
+        }
+      },
+      dependentRequired: {
+        precision: [
+          "scale"
+        ],
+        scale: [
+          "precision"
+        ]
+      }
+    },
+    keyFieldReference: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    key: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "fields"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        fields: {
+          type: "array",
+          minItems: 1,
+          uniqueItems: true,
+          items: {
+            $ref: "#/$defs/keyFieldReference"
+          }
+        },
+        primary: {
+          type: "boolean"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipEndpoint: {
+      type: "object",
+      required: [
+        "module",
+        "element"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipTarget: {
+      type: "object",
+      required: [
+        "module",
+        "element",
+        "key"
+      ],
+      properties: {
+        module: {
+          $ref: "#/$defs/id"
+        },
+        element: {
+          $ref: "#/$defs/id"
+        },
+        key: {
+          $ref: "#/$defs/id"
+        }
+      },
+      additionalProperties: true
+    },
+    relationshipMultiplicity: {
+      type: "object",
+      required: [
+        "min",
+        "max"
+      ],
+      properties: {
+        min: {
+          type: "integer",
+          minimum: 0,
+          maximum: 9007199254740991
+        },
+        max: {
+          anyOf: [
+            {
+              type: "integer",
+              minimum: 1,
+              maximum: 9007199254740991
+            },
+            {
+              const: "*"
+            }
+          ]
+        }
+      },
+      additionalProperties: true
+    },
+    relationship: {
+      type: "object",
+      required: [
+        "id",
+        "name",
+        "source",
+        "target",
+        "sourceMultiplicity",
+        "targetMultiplicity",
+        "targetLifecycle",
+        "directed"
+      ],
+      properties: {
+        id: {
+          $ref: "#/$defs/id"
+        },
+        name: {
+          $ref: "#/$defs/id"
+        },
+        source: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/relationshipEndpoint"
+          }
+        },
+        target: {
+          type: "array",
+          minItems: 1,
+          items: {
+            $ref: "#/$defs/relationshipTarget"
+          }
+        },
+        sourceMultiplicity: {
+          $ref: "#/$defs/relationshipMultiplicity"
+        },
+        targetMultiplicity: {
+          $ref: "#/$defs/relationshipMultiplicity"
+        },
+        targetLifecycle: {
+          type: "string",
+          minLength: 1
+        },
+        directed: {
+          type: "boolean"
+        },
+        inverse: {
+          $ref: "#/$defs/id"
+        },
+        associationRecord: {
+          $ref: "#/$defs/relationshipEndpoint"
+        }
+      },
+      additionalProperties: true
+    },
+    literal: {
+      oneOf: [
+        {
+          type: "null"
+        },
+        {
+          type: "object",
+          required: [
+            "boolean"
+          ],
+          properties: {
+            boolean: {
+              type: "boolean"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "integerToken"
+          ],
+          properties: {
+            integerToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "decimalToken"
+          ],
+          properties: {
+            decimalToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "string"
+          ],
+          properties: {
+            string: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "binaryHex"
+          ],
+          properties: {
+            binaryHex: {
+              type: "string",
+              pattern: "^([0-9a-fA-F]{2})*$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "floatToken"
+          ],
+          properties: {
+            floatToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "date"
+          ],
+          properties: {
+            date: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "time"
+          ],
+          properties: {
+            time: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "timestamp"
+          ],
+          properties: {
+            timestamp: {
+              type: "string"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "array"
+          ],
+          properties: {
+            array: {
+              type: "array",
+              items: {
+                $ref: "#/$defs/literal"
+              }
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "map"
+          ],
+          properties: {
+            map: {
+              type: "object",
+              additionalProperties: {
+                $ref: "#/$defs/literal"
+              }
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "bits128Hex"
+          ],
+          properties: {
+            bits128Hex: {
+              type: "string",
+              minLength: 32,
+              maxLength: 32,
+              pattern: "^[0-9a-fA-F]{32}$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "uuid"
+          ],
+          properties: {
+            uuid: {
+              type: "string",
+              minLength: 36,
+              maxLength: 36,
+              pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        }
+      ]
+    }
+  },
+  description: "Shared annotations, literal defaults and exact value/collection bounds; semantic validator required.",
+  $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
+};
 // spec/core/schema-properties-document.schema.json
 var schema_properties_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -20550,6 +23096,8 @@ class Registry {
 
 // src/validation/schema-properties.ts
 var validator2 = createValidator();
+var checkBit128Properties = validator2.compile(snapshotSchema(bit128_document_schema_default));
+var checkBit128Literal = validator2.compile(snapshotSchema({ $defs: bit128_document_schema_default.$defs, $ref: "#/$defs/literal" }));
 var checkSchemaProperties = validator2.compile(snapshotSchema(schema_properties_document_schema_default));
 var checkCoreLiteral = validator2.compile(snapshotSchema({ $defs: schema_properties_document_schema_default.$defs, $ref: "#/$defs/literal" }));
 function schemaPropertiesLegacyView(input) {
@@ -20563,6 +23111,8 @@ function schemaPropertiesLegacyView(input) {
       delete node[key];
   for (const m of base.modules)
     for (const e of m.elements) {
+      if (input.umf === "0.9.0" && ["bits128", "uuid"].includes(e.scalarType ?? ""))
+        e.scalarType = "binary";
       const f = e.facets;
       if (!f)
         continue;
@@ -20612,8 +23162,9 @@ function validateSchemaPropertiesDocument(input, registry = new Registry) {
     add(error.message, error.path);
     return { valid: false, complete: false, diagnostics };
   }
-  if (!checkSchemaProperties(doc)) {
-    for (const e of checkSchemaProperties.errors ?? [])
+  const check = doc.umf === "0.9.0" ? checkBit128Properties : checkSchemaProperties;
+  if (!check(doc)) {
+    for (const e of check.errors ?? [])
       add(e.message ?? "Invalid schema properties", e.instancePath);
     return { valid: false, complete: false, diagnostics };
   }
@@ -20714,6 +23265,58 @@ function validateSchemaPropertiesDocument(input, registry = new Registry) {
       unknown(d, ["value", "on"], path + "/default");
       attempt(() => checkSchemaLiteral(doc, e, d.value), path + "/default/value");
     }
+  }));
+  return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
+}
+
+// src/validation/semantic-types.ts
+var validator3 = createValidator();
+validator3.addSchema(snapshotSchema(semantic_type_reference_schema_default));
+var checkSemanticTypesDocument = validator3.compile(snapshotSchema(semantic_types_document_schema_default));
+var checkSemanticTypeReferences = validator3.compile({ type: "array", minItems: 1, items: { $ref: semantic_type_reference_schema_default.$id } });
+function validateSemanticTypesDocument(input, registry = new Registry) {
+  const diagnostics = [];
+  const add = (code, path, message, severity = "warning") => diagnostics.push({ code, path, message, severity });
+  let source;
+  try {
+    source = copyJson(input);
+  } catch (error) {
+    if (!(error instanceof UmfError))
+      throw error;
+    add(error.code, error.path, error.message, "error");
+    return { valid: false, complete: false, diagnostics };
+  }
+  if (!checkSemanticTypesDocument(source)) {
+    for (const e of checkSemanticTypesDocument.errors ?? [])
+      add("SEMANTIC_TYPE_STRUCTURE", e.instancePath, e.message ?? "Invalid core semantic type structure", "error");
+    return { valid: false, complete: false, diagnostics };
+  }
+  const base = copyJson(source);
+  base.umf = "0.9.0";
+  for (const m of base.modules)
+    for (const e of m.elements)
+      delete e.semanticTypes;
+  const contextualRegistry = new Registry;
+  for (const [id, declaration] of Object.entries(source.vocabularies)) {
+    const entry = registry.get(id, declaration.version);
+    if (entry)
+      contextualRegistry.register(entry.manifest, entry.semantics ? (payload, context) => entry.semantics(payload, { ...context, document: copyJson(source) }) : undefined);
+  }
+  diagnostics.push(...validateSchemaPropertiesDocument(base, contextualRegistry).diagnostics);
+  add("EXPERIMENTAL_CORE_SEMANTIC_TYPES", "/umf", "Experimental semantic references; publisher-owned meanings and native enforcement are not inferred");
+  source.modules.forEach((m, mi) => m.elements.forEach((e, ei) => {
+    if (!e.semanticTypes)
+      return;
+    const path = `/modules/${mi}/elements/${ei}/semanticTypes`;
+    add("SEMANTIC_TYPE_EXTERNAL", path, "Exact external semantic definitions and value validators are resolved separately");
+    const proto = e.extensions["umf.semantic-types"];
+    if (proto && typeof proto === "object" && !Array.isArray(proto) && "types" in proto && canonicalSchemaJson(proto.types) !== canonicalSchemaJson(e.semanticTypes))
+      add("SEMANTIC_TYPE_COMPETING_MEANING", path, "Core semanticTypes differ from the umf.semantic-types extension payload; core is authoritative and the extension is retained unchanged");
+    e.semanticTypes.forEach((ref, i) => {
+      for (const key of Object.keys(ref))
+        if (!["vocabulary", "version", "term"].includes(key))
+          add("UNKNOWN_SEMANTIC_TYPE_QUALIFIER", path + `/${i}/` + pointer(key), "Qualifier retained without interpretation");
+    });
   }));
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
@@ -20982,7 +23585,9 @@ function validateDocument(input, registry = new Registry) {
     return { valid: false, complete: false, diagnostics };
   }
   const version = value?.umf;
-  if (version === "0.8.0")
+  if (version === "0.10.0")
+    return validateSemanticTypesDocument(value, registry);
+  if (version === "0.8.0" || version === "0.9.0")
     return validateSchemaPropertiesDocument(value, registry);
   const check = version === "0.7.0" ? checkCoreRelationships : version === "0.6.0" ? checkCoreKeys : version === "0.5.0" ? checkCoreFacets : version === "0.4.0" ? checkCoreCardinality : version === "0.3.0" ? checkCoreNullability : version === "0.2.0" ? checkCoreFields : checkCore;
   if (!check(value)) {
@@ -21282,8 +23887,8 @@ function compileActionRule(documentInput, actionInput, ruleInput, phase) {
   const document = copyJson(documentInput), action = copyJson(actionInput), rule = copyJson(ruleInput);
   admitAction(action);
   exactActionReferences(action);
-  if (document.umf !== "0.8.0" || !validateDocument(document).valid)
-    actionExpressionError("ACTION_RULE_SOURCE", "Expected valid exact core 0.8.0 document");
+  if (document.umf !== "0.10.0" || !validateDocument(document).valid)
+    actionExpressionError("ACTION_RULE_SOURCE", "Expected valid exact core 0.10.0 document");
   for (const list of [action.parameters, action.outputs, [...action.reads, ...action.writes]])
     if (new Set(list.map((entry) => entry.id)).size !== list.length)
       actionExpressionError("ACTION_RULE_SYNTAX", "Duplicate declaration identity is ambiguous");
@@ -21437,6 +24042,183 @@ function equalReference(a, b) {
   }
   return false;
 }
+// spec/core/key-tuple-operation-v4.schema.json
+var key_tuple_operation_v4_schema_default = {
+  $schema: "https://json-schema.org/draft/2020-12/schema",
+  $id: "urn:umf:core:key-tuple-operation:4.0.0",
+  title: "Current core key tuple encoding receipt",
+  type: "object",
+  required: [
+    "operation",
+    "version",
+    "profile",
+    "source",
+    "identity",
+    "values",
+    "keyPath",
+    "bytesHex"
+  ],
+  additionalProperties: false,
+  properties: {
+    operation: {
+      const: "encode-core-key-tuple"
+    },
+    version: {
+      const: "4.0.0"
+    },
+    profile: {
+      enum: [
+        "umf-key-tuple-v1",
+        "umf-key-tuple-v2"
+      ]
+    },
+    source: {
+      $ref: "urn:umf:core:0.9.0"
+    },
+    identity: {
+      $ref: "#/$defs/identity"
+    },
+    values: {
+      type: "array",
+      minItems: 1,
+      items: {
+        $ref: "#/$defs/value"
+      }
+    },
+    keyPath: {
+      type: "string",
+      pattern: "^/modules/[0-9]+/elements/[0-9]+/keys/[0-9]+$"
+    },
+    bytesHex: {
+      type: "string",
+      pattern: "^554d464b3[12]([0-9a-f]{2})+$",
+      maxLength: 8000000
+    }
+  },
+  $defs: {
+    identity: {
+      type: "object",
+      required: [
+        "module",
+        "element",
+        "key"
+      ],
+      additionalProperties: false,
+      properties: {
+        module: {
+          type: "string",
+          minLength: 1
+        },
+        element: {
+          type: "string",
+          minLength: 1
+        },
+        key: {
+          type: "string",
+          minLength: 1
+        }
+      }
+    },
+    value: {
+      oneOf: [
+        {
+          type: "object",
+          required: [
+            "boolean"
+          ],
+          additionalProperties: false,
+          properties: {
+            boolean: {
+              type: "boolean"
+            }
+          }
+        },
+        {
+          type: "object",
+          required: [
+            "integerToken"
+          ],
+          additionalProperties: false,
+          properties: {
+            integerToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$"
+            }
+          }
+        },
+        {
+          type: "object",
+          required: [
+            "decimalToken"
+          ],
+          additionalProperties: false,
+          properties: {
+            decimalToken: {
+              type: "string",
+              pattern: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$"
+            }
+          }
+        },
+        {
+          type: "object",
+          required: [
+            "string"
+          ],
+          additionalProperties: false,
+          properties: {
+            string: {
+              type: "string"
+            }
+          }
+        },
+        {
+          type: "object",
+          required: [
+            "binaryHex"
+          ],
+          additionalProperties: false,
+          properties: {
+            binaryHex: {
+              type: "string",
+              pattern: "^([0-9a-fA-F]{2})*$"
+            }
+          }
+        },
+        {
+          type: "object",
+          required: [
+            "bits128Hex"
+          ],
+          properties: {
+            bits128Hex: {
+              type: "string",
+              minLength: 32,
+              maxLength: 32,
+              pattern: "^[0-9a-fA-F]{32}$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        },
+        {
+          type: "object",
+          required: [
+            "uuid"
+          ],
+          properties: {
+            uuid: {
+              type: "string",
+              minLength: 36,
+              maxLength: 36,
+              pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$(?![\\s\\S])"
+            }
+          },
+          additionalProperties: false
+        }
+      ]
+    }
+  },
+  description: "Structural receipt validation is insufficient: verification recomputes exact tuple bytes from retained candidate source/values and checks current document context. This establishes neither authorship nor native enforcement."
+};
 // spec/core/key-tuple-operation-v3.schema.json
 var key_tuple_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -21583,13 +24365,15 @@ var key_tuple_operation_v3_schema_default = {
 };
 
 // src/model/key-tuple.ts
-var validator3 = createValidator();
-validator3.addSchema(schema_properties_document_schema_default);
-var check5 = validator3.compile(key_tuple_operation_v3_schema_default);
-var checkIdentity = validator3.compile(key_tuple_operation_v3_schema_default.$defs.identity);
+var validator4 = createValidator();
+validator4.addSchema(snapshotSchema(bit128_document_schema_default));
+var checkBit128 = validator4.compile(snapshotSchema(key_tuple_operation_v4_schema_default));
+validator4.addSchema(schema_properties_document_schema_default);
+var check5 = validator4.compile(key_tuple_operation_v3_schema_default);
+var checkIdentity = validator4.compile(key_tuple_operation_v3_schema_default.$defs.identity);
 var encoder = new TextEncoder;
 var limit = LIMITS.maxTextLength;
-function fail2(code, message, path) {
+function fail3(code, message, path) {
   throw new UmfError(code, message, path);
 }
 var id = (r) => JSON.stringify([r.module, r.element]);
@@ -21605,32 +24389,32 @@ function leb(value) {
 function coefficient(token, scale, precision, path) {
   const m = /^(-?)(0|[1-9][0-9]*)(?:\.([0-9]+))?(?:[eE]([+-]?[0-9]+))?$/.exec(token);
   if (!m)
-    fail2("KEY_TUPLE_TOKEN", "Expected exact JSON numeric token", path);
+    fail3("KEY_TUPLE_TOKEN", "Expected exact JSON numeric token", path);
   let digits = (m[2] + (m[3] ?? "")).replace(/^0+/, "");
   if (!digits)
     return "0";
   const exponent = (m[4] ?? "0").replace(/^([+-]?)0+/, "$1") || "0";
   if (exponent.replace(/^[+-]/, "").length > 32)
-    fail2("LIMIT", "Nonzero exponent exceeds bounded tuple domain", path);
+    fail3("LIMIT", "Nonzero exponent exceeds bounded tuple domain", path);
   const shift = BigInt(exponent === "+" || exponent === "-" ? "0" : exponent) - BigInt((m[3] ?? "").length) + BigInt(scale);
   if (shift < 0n) {
     const cut = -shift;
     if (cut > BigInt(digits.length))
-      fail2("KEY_TUPLE_ROUNDING", "Value is not exactly representable at declared scale", path);
+      fail3("KEY_TUPLE_ROUNDING", "Value is not exactly representable at declared scale", path);
     const split = digits.length - Number(cut);
     if (/[^0]/.test(digits.slice(split)))
-      fail2("KEY_TUPLE_ROUNDING", "Value is not exactly representable at declared scale", path);
+      fail3("KEY_TUPLE_ROUNDING", "Value is not exactly representable at declared scale", path);
     digits = digits.slice(0, split) || "0";
   } else {
     const length = BigInt(digits.length) + shift;
     if (precision !== undefined && length > BigInt(precision))
-      fail2("KEY_TUPLE_DOMAIN", "Decimal coefficient exceeds precision", path);
+      fail3("KEY_TUPLE_DOMAIN", "Decimal coefficient exceeds precision", path);
     if (length + BigInt(m[1].length) > BigInt(limit))
-      fail2("LIMIT", "Numeric expansion exceeds tuple limit", path);
+      fail3("LIMIT", "Numeric expansion exceeds tuple limit", path);
     digits += "0".repeat(Number(shift));
   }
   if (precision !== undefined && digits.length > precision)
-    fail2("KEY_TUPLE_DOMAIN", "Decimal coefficient exceeds precision", path);
+    fail3("KEY_TUPLE_DOMAIN", "Decimal coefficient exceeds precision", path);
   return (m[1] && digits !== "0" ? "-" : "") + digits;
 }
 function scalarCount(text, path) {
@@ -21640,39 +24424,45 @@ function scalarCount(text, path) {
     if (c >= 55296 && c <= 56319) {
       const next = text.charCodeAt(++i);
       if (!(next >= 56320 && next <= 57343))
-        fail2("KEY_TUPLE_UNICODE", "Unpaired high surrogate", path);
+        fail3("KEY_TUPLE_UNICODE", "Unpaired high surrogate", path);
       bytes += 4;
     } else if (c >= 56320 && c <= 57343)
-      fail2("KEY_TUPLE_UNICODE", "Unpaired low surrogate", path);
+      fail3("KEY_TUPLE_UNICODE", "Unpaired low surrogate", path);
     else
       bytes += c < 128 ? 1 : c < 2048 ? 2 : 3;
     if (bytes > limit)
-      fail2("LIMIT", "UTF-8 payload exceeds tuple limit", path);
+      fail3("LIMIT", "UTF-8 payload exceeds tuple limit", path);
   }
   return count;
 }
-function payload(field, value, path) {
+function payload(field, value, path, profile) {
   if (value === null || typeof value !== "object" || Array.isArray(value) || Object.hasOwn(value, "absent"))
-    fail2("KEY_TUPLE_ABSENT", "Key component must be present and typed", path);
-  const wrappers = { boolean: "boolean", integer: "integerToken", decimal: "decimalToken", string: "string", binary: "binaryHex" };
+    fail3("KEY_TUPLE_ABSENT", "Key component must be present and typed", path);
+  const wrappers = { boolean: "boolean", integer: "integerToken", decimal: "decimalToken", string: "string", binary: "binaryHex", bits128: "bits128Hex", uuid: "uuid" };
   const keys = Object.keys(value), expected = wrappers[field.scalarType];
   if (keys.length !== 1 || keys[0] !== expected)
-    fail2("KEY_TUPLE_VALUE", "Value wrapper does not match key component", path);
+    fail3("KEY_TUPLE_VALUE", "Value wrapper does not match key component", path);
   const v = value[expected], facets = field.facets;
   if (expected === "boolean") {
     if (typeof v !== "boolean")
-      fail2("KEY_TUPLE_VALUE", "Expected boolean", path);
+      fail3("KEY_TUPLE_VALUE", "Expected boolean", path);
     return { tag: 1, bytes: new Uint8Array([v ? 1 : 0]) };
   }
   if (typeof v !== "string")
-    fail2("KEY_TUPLE_VALUE", "Numeric and binary values require exact lexical strings", path);
+    fail3("KEY_TUPLE_VALUE", "Numeric and binary values require exact lexical strings", path);
+  if (expected === "bits128Hex" || expected === "uuid") {
+    if (profile !== "umf-key-tuple-v2")
+      fail3("KEY_TUPLE_PROFILE", "128-bit values require tuple v2", path);
+    const value = expected === "uuid" ? uuidToBits128(parseUuid(v)) : parseBits128(v);
+    return { tag: expected === "uuid" ? 7 : 6, bytes: bits128ToBytes(value) };
+  }
   if (expected === "integerToken") {
     const token = coefficient(v, 0, undefined, path), width = facets?.integerWidth;
     if (width) {
       const negative = token.startsWith("-"), magnitude = BigInt(negative ? token.slice(1) : token), bits = magnitude === 0n ? 0 : magnitude.toString(2).length;
       const fits = width.signed ? negative ? bits < width.bits || bits === width.bits && (magnitude & magnitude - 1n) === 0n : bits < width.bits : !negative && bits <= width.bits;
       if (!fits)
-        fail2("KEY_TUPLE_DOMAIN", "Integer exceeds declared width/signedness", path);
+        fail3("KEY_TUPLE_DOMAIN", "Integer exceeds declared width/signedness", path);
     }
     return { tag: 2, bytes: encoder.encode(token) };
   }
@@ -21686,24 +24476,24 @@ function payload(field, value, path) {
   if (expected === "string") {
     const count = scalarCount(v, path);
     if (facets?.length && count > facets.length.max)
-      fail2("KEY_TUPLE_DOMAIN", "String exceeds Unicode scalar bound", path);
+      fail3("KEY_TUPLE_DOMAIN", "String exceeds Unicode scalar bound", path);
     return { tag: 4, bytes: encoder.encode(v) };
   }
   if (v.length % 2 || !/^[0-9a-fA-F]*$/.test(v))
-    fail2("KEY_TUPLE_VALUE", "Binary input must be whole hexadecimal bytes", path);
+    fail3("KEY_TUPLE_VALUE", "Binary input must be whole hexadecimal bytes", path);
   if (facets?.length && v.length / 2 > facets.length.max)
-    fail2("KEY_TUPLE_DOMAIN", "Binary exceeds byte bound", path);
+    fail3("KEY_TUPLE_DOMAIN", "Binary exceeds byte bound", path);
   const bytes = new Uint8Array(v.length / 2);
   for (let i = 0;i < bytes.length; i++)
     bytes[i] = parseInt(v.slice(i * 2, i * 2 + 2), 16);
   return { tag: 5, bytes };
 }
-function encodeCoreKeyTupleBody(source, identity, values, validation, checkLiteral = checkSchemaLiteral, selection) {
+function encodeCoreKeyTupleBody(source, identity, values, validation, checkLiteral = checkSchemaLiteral, selection, profile = "umf-key-tuple-v1") {
   const originalSelection = () => {
     const modules = source.modules, mi = modules.findIndex((m) => m.id === identity.module), ei = modules[mi]?.elements.findIndex((e) => e.id === identity.element) ?? -1;
     const record = modules[mi]?.elements[ei], keys = record?.keys, ki = keys?.findIndex((k) => k.id === identity.key) ?? -1;
     if (!record || record.kind !== "record" || ki < 0)
-      fail2("KEY_TUPLE_MISSING", "Explicit Record/Key identity does not resolve", "/identity");
+      fail3("KEY_TUPLE_MISSING", "Explicit Record/Key identity does not resolve", "/identity");
     const key = keys[ki], recordPath = `/modules/${mi}/elements/${ei}`, keyPath = recordPath + `/keys/${ki}`;
     const fields = key.fields.map((ref) => {
       const mi = modules.findIndex((m) => m.id === ref.module), ei = modules[mi].elements.findIndex((e) => e.id === ref.element);
@@ -21714,7 +24504,7 @@ function encodeCoreKeyTupleBody(source, identity, values, validation, checkLiter
   };
   const { key, keyPath, fields } = selection ?? originalSelection();
   if (!Array.isArray(values) || values.length !== key.fields.length)
-    fail2("KEY_TUPLE_ARITY", "Expected one value per key component", "/values");
+    fail3("KEY_TUPLE_ARITY", "Expected one value per key component", "/values");
   let text = 0;
   for (const value of values)
     if (value && typeof value === "object") {
@@ -21722,22 +24512,22 @@ function encodeCoreKeyTupleBody(source, identity, values, validation, checkLiter
         if (typeof v === "string") {
           text += v.length;
           if (text > limit)
-            fail2("LIMIT", "Aggregate key value text exceeds limit", "/values");
+            fail3("LIMIT", "Aggregate key value text exceeds limit", "/values");
         }
     }
   const relevant = [keyPath, ...fields.flatMap((f) => [f.path, f.member])];
   for (const d of validation.diagnostics)
     if (d.severity === "warning" && ["UNKNOWN_KEY_QUALIFIER", "UNKNOWN_FACET", "UNKNOWN_FACET_UNIT"].includes(d.code) && relevant.some((p) => d.path === p || d.path.startsWith(p + "/")))
-      fail2("KEY_TUPLE_UNKNOWN", "Relevant qualifier has no defined encoding meaning", d.path);
-  const parts = [encoder.encode("UMFK1"), new Uint8Array(leb(values.length))];
+      fail3("KEY_TUPLE_UNKNOWN", "Relevant qualifier has no defined encoding meaning", d.path);
+  const parts = [encoder.encode(profile === "umf-key-tuple-v2" ? "UMFK2" : "UMFK1"), new Uint8Array(leb(values.length))];
   let length = parts.reduce((n, p) => n + p.length, 0);
   fields.forEach(({ field }, i) => {
-    const p = payload(field, values[i], `/values/${i}`);
+    const p = payload(field, values[i], `/values/${i}`, profile);
     checkLiteral(source, field, values[i]);
     const header = new Uint8Array([p.tag, ...leb(p.bytes.length)]);
     length += header.length + p.bytes.length;
     if (length > limit)
-      fail2("LIMIT", "Encoded tuple exceeds limit", "/values");
+      fail3("LIMIT", "Encoded tuple exceeds limit", "/values");
     parts.push(header, p.bytes);
   });
   const bytes = new Uint8Array(length);
@@ -21749,7 +24539,7 @@ function encodeCoreKeyTupleBody(source, identity, values, validation, checkLiter
   const chunks = [];
   for (let start = 0;start < bytes.length; start += 4096)
     chunks.push(Array.from(bytes.subarray(start, start + 4096), (b) => b.toString(16).padStart(2, "0")).join(""));
-  return { operation: "encode-core-key-tuple", version: "3.0.0", profile: "umf-key-tuple-v1", identity, values, keyPath, bytesHex: chunks.join("") };
+  return { operation: "encode-core-key-tuple", version: "3.0.0", profile, identity, values, keyPath, bytesHex: chunks.join("") };
 }
 
 // src/extensions/actions/selector.ts
@@ -21765,8 +24555,8 @@ function compileActionSelector(documentInput, actionInput, frameInput) {
   const document = copyJson(documentInput), action = copyJson(actionInput), frame = copyJson(frameInput);
   admitAction(action);
   exactActionReferences(action);
-  if (document.umf !== "0.8.0" || !validateDocument(document).valid)
-    actionExpressionError("ACTION_SELECTOR_SOURCE", "Expected valid exact core 0.8.0 document");
+  if (document.umf !== "0.10.0" || !validateDocument(document).valid)
+    actionExpressionError("ACTION_SELECTOR_SOURCE", "Expected valid exact core 0.10.0 document");
   if (new Set(action.parameters.map((p) => p.id)).size !== action.parameters.length || new Set([...action.reads, ...action.writes].map((f) => f.id)).size !== action.reads.length + action.writes.length)
     actionExpressionError("ACTION_SELECTOR_SYNTAX", "Duplicate input/frame identity is ambiguous");
   if (![...action.reads, ...action.writes].some((f) => canonicalSchemaJson(f) === canonicalSchemaJson(frame)))
@@ -21826,6 +24616,22 @@ function compileActionSelector(documentInput, actionInput, frameInput) {
     return { literal: node.literal };
   });
   return { language: "umf.actions.keys", version: "1", expression: selector.expression, frame: frame.id, ast: { key: x.key, components } };
+}
+
+// src/extensions/actions/local-profiles.ts
+var localActionProfiles = Object.freeze({ actor: "umf.actions.local-owner", policy: "umf.actions.local-store-owner", invocation: "umf.actions.local-tx", bulk: "umf.actions.local-bulk" });
+var exactLocalProfile = (profile, id) => profile.id === id && profile.version === "1";
+function hasLocalActor(action) {
+  return action.attribution.subject === "actor-profile" && exactLocalProfile(action.attribution.profile, localActionProfiles.actor);
+}
+function hasLocalPolicy(action) {
+  return action.authorization.kind === "policy" && exactLocalProfile(action.authorization.profile, localActionProfiles.policy);
+}
+function hasLocalActionBundle(action) {
+  if (!hasLocalActor(action) || !hasLocalPolicy(action) || action.authorization.kind !== "policy")
+    return false;
+  const frames = [...action.reads, ...action.writes].map((frame) => frame.id);
+  return frames.length === action.authorization.resources.length && frames.every((frame, i) => action.authorization.kind === "policy" && action.authorization.resources[i] === frame);
 }
 
 // src/extensions/actions/analysis.ts
@@ -22099,8 +24905,10 @@ function analyzeAction(document, action, path, dddInterpreted = false) {
   unknown(action.attribution, action.attribution.subject === "person-required" ? ["subject"] : ["subject", "profile"], path + "/attribution");
   if (action.attribution.subject === "actor-profile") {
     unknown(action.attribution.profile, ["id", "version"], path + "/attribution/profile");
-    obligation(path + "/attribution", "attribution", "unchecked");
-    add("ACTION_UNCHECKED", path + "/attribution", "Actor semantics require exact qualification", "warning");
+    if (!hasLocalActor(action)) {
+      obligation(path + "/attribution", "attribution", "unchecked");
+      add("ACTION_UNCHECKED", path + "/attribution", "Actor semantics require exact qualification", "warning");
+    }
   }
   unknown(action.authorization, action.authorization.kind === "roles" ? ["kind", "profile", "roles"] : ["kind", "profile", "resources"], path + "/authorization");
   unknown(action.authorization.profile, ["id", "version"], path + "/authorization/profile");
@@ -22108,10 +24916,12 @@ function analyzeAction(document, action, path, dddInterpreted = false) {
   if (knownRoles) {
     if (action.authorization.roles.some((role) => role.length > 256))
       add("LIMIT", path + "/authorization/roles", "roles/1 identity bound exceeded");
-  } else {
+  } else if (!hasLocalPolicy(action)) {
     obligation(path + "/authorization", "authorization", "unchecked");
     add("ACTION_UNCHECKED", path + "/authorization", "Authorization profile is an inert declaration requiring exact interpretation", "warning");
   }
+  if ((hasLocalActor(action) || hasLocalPolicy(action)) && !hasLocalActionBundle(action))
+    add("ACTION_PROFILE", path + "/authorization", "Local owner actor/policy require the complete ordered original frame bundle");
   if (action.authorization.kind === "policy")
     action.authorization.resources.forEach((id, i) => {
       if (!frames.some((f) => f.id === id))
@@ -25059,27 +27869,27 @@ var executor_profile_schema_default = {
 
 // src/extensions/actions/plan-structure.ts
 var schemas = [schema_properties_document_schema_default, executor_profile_schema_default, plan_schema_default, plan_model_schema_default, plan_capabilities_schema_default, plan_inspection_schema_default, plan_assessment_schema_default, manifest_schema_default, manifest_inspection_schema_default, tx_results_schema_default, bulk_schema_default].map(snapshotSchema);
-var validator4 = createValidator(false);
+var validator5 = createValidator(false);
 for (const schema of schemas)
-  validator4.addSchema(schema);
-var checkBulkOutcome = validator4.getSchema(bulk_schema_default.$id);
-var checkActionManifest = validator4.getSchema(manifest_schema_default.$id);
-var checkActionManifestInspection = validator4.getSchema(manifest_inspection_schema_default.$id);
-var checkActionPlan = validator4.getSchema(plan_schema_default.$id);
-var checkPreparedActionPlanModel = validator4.getSchema(plan_model_schema_default.$id);
-var checkActionPlanCapabilities = validator4.getSchema(plan_capabilities_schema_default.$id);
-var checkActionPlanInspection = validator4.getSchema(plan_inspection_schema_default.$id);
-var checkActionPlanAssessment = validator4.getSchema(plan_assessment_schema_default.$id);
-var checkActionPlanModelPin = validator4.compile({ $ref: plan_schema_default.$id + "#/$defs/model" });
-var checkPortableActionPin = validator4.compile({ $ref: plan_schema_default.$id + "#/$defs/action" });
-var checkActionPlanDiagnostic = validator4.compile({ $ref: plan_schema_default.$id + "#/$defs/diagnostic" });
-var checkActionPlanField = validator4.compile({ $ref: plan_schema_default.$id + "#/$defs/field" });
+  validator5.addSchema(schema);
+var checkBulkOutcome = validator5.getSchema(bulk_schema_default.$id);
+var checkActionManifest = validator5.getSchema(manifest_schema_default.$id);
+var checkActionManifestInspection = validator5.getSchema(manifest_inspection_schema_default.$id);
+var checkActionPlan = validator5.getSchema(plan_schema_default.$id);
+var checkPreparedActionPlanModel = validator5.getSchema(plan_model_schema_default.$id);
+var checkActionPlanCapabilities = validator5.getSchema(plan_capabilities_schema_default.$id);
+var checkActionPlanInspection = validator5.getSchema(plan_inspection_schema_default.$id);
+var checkActionPlanAssessment = validator5.getSchema(plan_assessment_schema_default.$id);
+var checkActionPlanModelPin = validator5.compile({ $ref: plan_schema_default.$id + "#/$defs/model" });
+var checkPortableActionPin = validator5.compile({ $ref: plan_schema_default.$id + "#/$defs/action" });
+var checkActionPlanDiagnostic = validator5.compile({ $ref: plan_schema_default.$id + "#/$defs/diagnostic" });
+var checkActionPlanField = validator5.compile({ $ref: plan_schema_default.$id + "#/$defs/field" });
 // src/extensions/actions/index.ts
 function registerActions(registry) {
   return registry.register(actionsPackage, (payload, context) => {
     const diagnostics = [];
-    if (context.document.umf !== "0.8.0")
-      return [{ code: "ACTION_STRUCTURE", path: context.path, message: "Actions require exact core 0.8.0", severity: "error" }];
+    if (context.document.umf !== "0.10.0")
+      return [{ code: "ACTION_STRUCTURE", path: context.path, message: "Action semantics require exact core 0.10.0", severity: "error" }];
     const data = payload, ids = new Set, names = new Set;
     for (const key of Object.keys(data))
       if (key !== "actions")
@@ -25140,9 +27950,12 @@ function freeze3(value) {
   }
   return value;
 }
+function candidateCoreSourceComplete(source, checked) {
+  return source?.umf === "0.10.0" && checked.valid && checked.diagnostics.every((d) => d.code === "EXPERIMENTAL_CORE_SEMANTIC_TYPES" && d.path === "/umf" && d.severity === "warning");
+}
 function captureCandidateCoreSource(input, extensionClosure) {
   const source = copyJson(input), checked = extensionClosure === undefined ? validateDocument(source) : validateDocument(source, requireCandidateCoreExtensionRegistry(extensionClosure));
-  if (!checked.valid || !checked.complete)
+  if (!candidateCoreSourceComplete(source, checked))
     throw Error("SECURITY_CANDIDATE_CORE_SOURCE_UNRESOLVED");
   const handle = Object.freeze({ kind: "candidate-core-source/0.1" });
   sources.set(handle, freeze3(source));
@@ -25584,21 +28397,21 @@ var ontology_schema_default = {
 // src/extensions/security/association-candidate.ts
 var sources2 = new WeakMap;
 var sourceHandles = new WeakMap;
-var fail3 = () => {
+var fail4 = () => {
   throw Error("SECURITY_ASSOCIATION_CANDIDATE_UNSUPPORTED");
 };
 var id2 = (r) => JSON.stringify([r.documentId, r.moduleId, r.elementId]);
 function shape(v, keys) {
   if (!v || typeof v !== "object" || Array.isArray(v) || Object.keys(v).length !== keys.length || keys.some((k) => !Object.hasOwn(v, k)))
-    fail3();
+    fail4();
 }
 function text(v) {
   if (typeof v !== "string" || !v)
-    return fail3();
+    return fail4();
   let n = 0;
   for (const c of v)
     if (++n > 4096)
-      fail3();
+      fail4();
 }
 function ref(v) {
   shape(v, ["documentId", "moduleId", "elementId"]);
@@ -25615,40 +28428,40 @@ function resolveCandidateRecordAssociation(input, document, entities) {
   const s = copyJson(input), d = readCandidateCoreSource(document), choices = copyJson(entities);
   shape(s, ["kind", "type", "keyId", "endpoints"]);
   if (s.kind !== "record-members")
-    fail3();
+    fail4();
   ref(s.type);
   text(s.keyId);
-  if (!["0.7.0", "0.8.0"].includes(d.umf) || !Array.isArray(d.modules) || !Array.isArray(choices) || choices.length > 256)
-    fail3();
+  if (d.umf !== "0.10.0" || !Array.isArray(d.modules) || !Array.isArray(choices) || choices.length > 256)
+    fail4();
   const keys = new Map;
   for (const e of choices) {
     shape(e, ["type", "keyId"]);
     ref(e.type);
     text(e.keyId);
     if (keys.has(id2(e.type)))
-      fail3();
+      fail4();
     keys.set(id2(e.type), e.keyId);
   }
   function record(r) {
     ref(r);
     if (r.documentId !== d.id)
-      fail3();
+      fail4();
     const ms = d.modules.filter((m) => m.id === r.moduleId);
     if (ms.length !== 1 || !Array.isArray(ms[0].elements))
-      return fail3();
+      return fail4();
     const rs = ms[0].elements.filter((e) => e.id === r.elementId);
     if (rs.length !== 1 || rs[0].kind !== "record" || !Array.isArray(rs[0].members) || !Array.isArray(rs[0].keys))
-      return fail3();
+      return fail4();
     return rs[0];
   }
   function selected(r, keyId) {
     text(keyId);
     const ks = r.keys.filter((k) => k.id === keyId);
     if (ks.length !== 1)
-      return fail3();
+      return fail4();
     const k = ks[0];
     if (Object.keys(k).some((n) => !["id", "name", "fields", "primary"].includes(n)) || "primary" in k && typeof k.primary !== "boolean" || !Array.isArray(k.fields) || !k.fields.length)
-      return fail3();
+      return fail4();
     const seen = new Set;
     for (const f of k.fields) {
       shape(f, ["module", "element"]);
@@ -25656,32 +28469,32 @@ function resolveCandidateRecordAssociation(input, document, entities) {
       text(f.element);
       const token = JSON.stringify([f.module, f.element]);
       if (seen.has(token) || !r.members.some((m) => m.module === f.module && m.element === f.element))
-        fail3();
+        fail4();
       seen.add(token);
     }
     return k;
   }
   const source = record(s.type), key = selected(source, s.keyId), roles = new Set;
   if (!Array.isArray(s.endpoints) || !s.endpoints.length || s.endpoints.length > 256)
-    fail3();
+    fail4();
   const endpoints = s.endpoints.map((e) => {
     shape(e, ["role", "target", "fields"]);
     text(e.role);
     ref(e.target);
     if (roles.has(e.role))
-      fail3();
+      fail4();
     roles.add(e.role);
     const keyId = keys.get(id2(e.target));
     if (!keyId)
-      return fail3();
+      return fail4();
     const target = record(e.target), key = selected(target, keyId);
     if (!Array.isArray(e.fields) || !e.fields.length || e.fields.length > 256 || e.fields.length !== key.fields.length)
-      fail3();
+      fail4();
     const fields = new Set;
     for (const f of e.fields) {
       ref(f);
       if (f.documentId !== s.type.documentId || fields.has(id2(f)) || !source.members.some((m) => m.module === f.moduleId && m.element === f.elementId))
-        fail3();
+        fail4();
       fields.add(id2(f));
     }
     return { role: e.role, target: e.target, key, fields: e.fields };
@@ -25698,40 +28511,40 @@ function canonical2(v) {
 function requireCandidateEndpointDomainCorrespondence(plan) {
   const document = sources2.get(plan);
   if (!document)
-    return fail3();
+    return fail4();
   function domain(r) {
     const modules = document.modules.filter((m) => m.id === r.moduleId);
     if (r.documentId !== document.id || modules.length !== 1)
-      return fail3();
+      return fail4();
     const fields = modules[0].elements.filter((f) => f.id === r.elementId);
     if (fields.length !== 1)
-      return fail3();
+      return fail4();
     const f = fields[0];
     const known = ["id", "kind", "name", "description", "title", "aliases", "examples", "extensions", "scalarType", "nullability", "cardinality", "facets", "allowedValues", "references"];
     if (Object.keys(f).some((k) => !known.includes(k)) || f.kind !== "field" || !["boolean", "string", "integer", "decimal", "binary"].includes(f.scalarType) || f.cardinality !== "one" || f.nullability !== "required" || f.extensions && Object.keys(f.extensions).length)
-      return fail3();
+      return fail4();
     if (f.references !== undefined) {
       if (!Array.isArray(f.references))
-        return fail3();
+        return fail4();
       for (const reference of f.references) {
         shape(reference, ["role", "module", "element"]);
         Object.values(reference).forEach(text);
         if (reference.role === "record-type")
-          return fail3();
+          return fail4();
       }
     }
     const facets = f.facets ?? {};
     if (!facets || typeof facets !== "object" || Array.isArray(facets))
-      return fail3();
+      return fail4();
     if (Object.keys(facets).some((k) => !["length", "precision", "scale", "integerWidth", "range"].includes(k)))
-      return fail3();
+      return fail4();
     for (const [group, allowed] of Object.entries({ length: ["min", "max", "unit"], integerWidth: ["bits", "signed"], range: ["min", "max", "minInclusive", "maxInclusive"] })) {
       const value = facets[group];
       if (value !== undefined && (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).some((k) => !allowed.includes(k))))
-        return fail3();
+        return fail4();
     }
     if (f.scalarType === "decimal" && (!Number.isSafeInteger(facets.precision) || !Number.isSafeInteger(facets.scale) || facets.precision < 1 || facets.scale < 0))
-      return fail3();
+      return fail4();
     return canonical2({ scalarType: f.scalarType, cardinality: f.cardinality, nullability: f.nullability, facets, allowedValues: f.allowedValues ?? null });
   }
   for (const endpoint of plan.endpoints) {
@@ -25739,77 +28552,77 @@ function requireCandidateEndpointDomainCorrespondence(plan) {
     endpoint.fields.forEach((field, i) => {
       const target = { documentId: endpoint.target.documentId, moduleId: fields[i].module, elementId: fields[i].element };
       if (domain(field) !== domain(target))
-        fail3();
+        fail4();
     });
   }
 }
 function requireCandidateAssociationClassifications(plan, input) {
   const document = sources2.get(plan);
   if (!document)
-    return fail3();
+    return fail4();
   return checkCandidateRecordClassifications(sourceHandles.get(plan) ?? document, [plan.type, ...plan.endpoints.map((e) => e.target)], input);
 }
 function checkCandidateRecordClassifications(source, scope, input) {
   const shared = isIssuedCandidateCoreSource(source), packet = copyJson({ ...!shared ? { source } : {}, scope, input }), document = shared ? readCandidateCoreSource(source) : packet.source, declarations = packet.input;
   if (!Array.isArray(packet.scope) || packet.scope.length > 257)
-    fail3();
+    fail4();
   packet.scope.forEach((r) => {
     ref(r);
     if (r.documentId !== document.id)
-      fail3();
+      fail4();
   });
   if (!Array.isArray(declarations) || declarations.length > 257)
-    return fail3();
+    return fail4();
   const required = new Map(packet.scope.map((r) => [id2(r), r])), seen = new Set;
   for (const declaration of declarations) {
     shape(declaration, ["type", "fields"]);
     ref(declaration.type);
     const token = id2(declaration.type);
     if (!required.has(token) || seen.has(token) || !Array.isArray(declaration.fields))
-      fail3();
+      fail4();
     seen.add(token);
     const record = document.modules.find((m) => m.id === declaration.type.moduleId).elements.find((e) => e.id === declaration.type.elementId);
     const members = new Set(record.members.map((r) => id2({ documentId: document.id, moduleId: r.module, elementId: r.element }))), classified = new Set;
     for (const field of declaration.fields) {
       if (!field || typeof field !== "object" || Array.isArray(field) || Object.keys(field).some((k) => !["ref", "protection", "queryUse"].includes(k)) || !Object.hasOwn(field, "ref") || !Object.hasOwn(field, "protection"))
-        fail3();
+        fail4();
       ref(field.ref);
       const key = id2(field.ref);
       if (!members.has(key) || classified.has(key) || !["protected", "unprotected"].includes(field.protection))
-        fail3();
+        fail4();
       classified.add(key);
       if (field.queryUse !== undefined) {
         if (!field.queryUse || typeof field.queryUse !== "object" || Array.isArray(field.queryUse))
-          fail3();
+          fail4();
         for (const [operator, use] of Object.entries(field.queryUse))
           if (!["predicate", "order", "group", "join", "aggregate"].includes(operator) || !["disclosed", "original-authorized", "prohibited"].includes(use))
-            fail3();
+            fail4();
       }
     }
     if (classified.size !== members.size)
-      fail3();
+      fail4();
   }
   if (seen.size !== required.size)
-    fail3();
+    fail4();
   return freeze4(declarations);
 }
 
 // src/extensions/security/relationship-candidate.ts
 var issued = new WeakSet;
-var fail4 = () => {
+var fail5 = () => {
   throw Error("SECURITY_RELATIONSHIP_CANDIDATE_UNSUPPORTED");
 };
 function shape2(value, keys) {
   if (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).length !== keys.length || keys.some((k) => !Object.hasOwn(value, k)))
-    fail4();
+    fail5();
 }
 function text2(value) {
   if (typeof value !== "string" || !value)
-    return fail4();
+    return fail5();
   let size = 0;
   for (const character of value) {
     if (++size > 4096)
-      return fail4();
+      return fail5();
   }
   return value;
 }
@@ -25831,56 +28644,56 @@ function resolveCandidateRelationship(selector, document, entities) {
   const packet = copyJson(selector), model = readCandidateCoreSource(document), identities = copyJson(entities);
   shape2(packet, ["kind", "relationship", "witness", "endpoints"]);
   if (packet.kind !== "core-relationship")
-    fail4();
+    fail5();
   shape2(packet.relationship, ["documentId", "moduleId", "relationshipId"]);
   for (const v of Object.values(packet.relationship))
     text2(v);
-  if (!["0.7.0", "0.8.0"].includes(model.umf) || packet.relationship.documentId !== model.id || !Array.isArray(model.modules) || !Array.isArray(identities) || identities.length > 256)
-    fail4();
+  if (model.umf !== "0.10.0" || packet.relationship.documentId !== model.id || !Array.isArray(model.modules) || !Array.isArray(identities) || identities.length > 256)
+    fail5();
   const chosen = new Map;
   for (const e of identities) {
     shape2(e, ["type", "keyId"]);
     ref2(e.type);
     text2(e.keyId);
     if (chosen.has(identity5(e.type)))
-      fail4();
+      fail5();
     chosen.set(identity5(e.type), e.keyId);
   }
   const module = model.modules.filter((m) => m.id === packet.relationship.moduleId);
   if (module.length !== 1 || !Array.isArray(module[0].relationships))
-    fail4();
+    fail5();
   const relations = module[0].relationships.filter((r) => r.id === packet.relationship.relationshipId);
   if (relations.length !== 1)
-    fail4();
+    fail5();
   const relation = relations[0];
   if (relation.directed !== true || !Array.isArray(relation.source) || relation.source.length !== 1 || !Array.isArray(relation.target) || relation.target.length !== 1 || !Array.isArray(packet.endpoints) || packet.endpoints.length !== 2)
-    fail4();
+    fail5();
   const key = (type, keyId) => {
     ref2(type);
     text2(keyId);
     if (type.documentId !== model.id)
-      fail4();
+      fail5();
     const modules = model.modules.filter((m) => m.id === type.moduleId);
     if (modules.length !== 1 || !Array.isArray(modules[0].elements))
-      fail4();
+      fail5();
     const records = modules[0].elements.filter((r) => r.id === type.elementId);
     if (records.length !== 1)
-      fail4();
+      fail5();
     const record = records[0];
     if (record.kind !== "record" || !Array.isArray(record.keys) || !Array.isArray(record.members))
-      fail4();
+      fail5();
     const keys = record.keys.filter((k) => k.id === keyId);
     if (keys.length !== 1)
-      fail4();
+      fail5();
     const selected = keys[0];
     if (Object.keys(selected).some((k) => !["id", "name", "fields", "primary"].includes(k)) || "primary" in selected && typeof selected.primary !== "boolean" || !Array.isArray(selected.fields) || !selected.fields.length)
-      fail4();
+      fail5();
     const fields = new Set;
     for (const field of selected.fields) {
       shape2(field, ["module", "element"]);
       const token = JSON.stringify([field.module, field.element]);
       if (fields.has(token) || !record.members.some((m) => m.module === field.module && m.element === field.element))
-        fail4();
+        fail5();
       fields.add(token);
     }
     return { record, selected };
@@ -25891,28 +28704,28 @@ function resolveCandidateRelationship(selector, document, entities) {
     ref2(e.target);
     text2(e.role);
     if (roles.has(e.role) || !["source", "target"].includes(e.side) || sides.has(e.side))
-      fail4();
+      fail5();
     roles.add(e.role);
     sides.add(e.side);
     const native = relation[e.side][0];
     if (e.target.documentId !== model.id || e.target.moduleId !== native.module || e.target.elementId !== native.element || native.key !== undefined && native.key !== e.keyId || chosen.get(identity5(e.target)) !== e.keyId)
-      fail4();
+      fail5();
     return { ...e, key: key(e.target, e.keyId).selected, keyId: undefined };
   }).map(({ keyId, ...e }) => e);
   let witness;
   if (packet.witness.kind === "opaque-existential") {
     shape2(packet.witness, ["kind"]);
     if (relation.associationRecord !== undefined)
-      fail4();
+      fail5();
     witness = { kind: "opaque-existential" };
   } else {
     shape2(packet.witness, ["kind", "type", "keyId"]);
     if (packet.witness.kind !== "record-key")
-      fail4();
+      fail5();
     ref2(packet.witness.type);
     const a = relation.associationRecord;
     if (!a || packet.witness.type.documentId !== model.id || packet.witness.type.moduleId !== a.module || packet.witness.type.elementId !== a.element || a.key !== undefined && a.key !== packet.witness.keyId)
-      fail4();
+      fail5();
     const { record, selected } = key(packet.witness.type, packet.witness.keyId);
     witness = { kind: "record-key", type: packet.witness.type, key: selected, sourceRecord: record, attributes: record.members.map((m) => ({ documentId: model.id, moduleId: m.module, elementId: m.element })) };
   }
@@ -25922,30 +28735,30 @@ function resolveCandidateRelationship(selector, document, entities) {
 }
 function requireCandidateWitnessTerm(plan, term) {
   if (!issued.has(plan))
-    return fail4();
+    return fail5();
   if (term === "exists" || term === "endpoint")
     return;
   if (plan.witness.kind === "record-key" && (term === "identity" || term === "attribute"))
     return;
-  return fail4();
+  return fail5();
 }
 function resolveCandidateRelationshipTerm(plan, input) {
   if (!issued.has(plan))
-    return fail4();
+    return fail5();
   const term = copyJson(input);
   if (term.kind === "endpoint") {
     shape2(term, ["kind", "role"]);
     text2(term.role);
     const endpoint = plan.endpoints.find((e) => e.role === term.role);
     if (!endpoint)
-      return fail4();
+      return fail5();
     return freeze5({ kind: "entity-identity", relationship: plan.relationship, role: endpoint.role, side: endpoint.side, type: endpoint.target, key: endpoint.key });
   }
   if (term.kind === "identity") {
     shape2(term, ["kind"]);
     requireCandidateWitnessTerm(plan, "identity");
     if (plan.witness.kind !== "record-key")
-      return fail4();
+      return fail5();
     return freeze5({ kind: "record-identity", relationship: plan.relationship, type: plan.witness.type, key: plan.witness.key });
   }
   if (term.kind === "attribute") {
@@ -25953,10 +28766,10 @@ function resolveCandidateRelationshipTerm(plan, input) {
     ref2(term.field);
     requireCandidateWitnessTerm(plan, "attribute");
     if (plan.witness.kind !== "record-key" || !plan.witness.attributes.some((f) => identity5(f) === identity5(term.field)))
-      return fail4();
+      return fail5();
     return freeze5({ kind: "record-attribute", relationship: plan.relationship, type: plan.witness.type, field: term.field });
   }
-  return fail4();
+  return fail5();
 }
 
 // src/extensions/security/association-checks.ts
@@ -26055,13 +28868,13 @@ function requireIssuedCandidateSecurityOntology(value) {
   if (!value || typeof value !== "object" || !issuedOntologies.has(value))
     throw Error("SECURITY_ONTOLOGY_CANDIDATE_UNISSUED");
 }
-var fail5 = () => {
+var fail6 = () => {
   throw Error("SECURITY_ONTOLOGY_CANDIDATE_UNRESOLVED");
 };
 var id3 = (r) => JSON.stringify([r.documentId, r.moduleId, r.elementId]);
 function shape3(v, keys) {
   if (!v || typeof v !== "object" || Array.isArray(v) || Object.keys(v).length !== keys.length || keys.some((k) => !Object.hasOwn(v, k)))
-    fail5();
+    fail6();
 }
 function freeze6(v) {
   if (v && typeof v === "object" && !Object.isFrozen(v)) {
@@ -26073,24 +28886,24 @@ function freeze6(v) {
 function resolveCandidateSecurityOntology(input, documentsInput, extensionClosure) {
   const packet = copyJson({ ontology: input, documents: documentsInput }), ontology = packet.ontology;
   if (!Boolean(check6(ontology)) || !Array.isArray(packet.documents) || packet.documents.length > 256)
-    fail5();
+    fail6();
   const pins = new Map, documents = new Map, sourceHandles = new Map;
   for (const pin of ontology.documents) {
     if (pins.has(pin.documentId))
-      fail5();
+      fail6();
     pins.set(pin.documentId, pin.revision);
   }
   for (const entry of packet.documents) {
     shape3(entry, ["revision", "document"]);
     const handle = captureCandidateCoreSource(entry.document, extensionClosure), document = readCandidateCoreSource(handle);
     if (documents.has(document.id) || pins.get(document.id) !== entry.revision)
-      fail5();
+      fail6();
     entry.document = document;
     documents.set(document.id, document);
     sourceHandles.set(document.id, handle);
   }
   if (documents.size !== pins.size)
-    fail5();
+    fail6();
   const entities = new Map, sourceFields = new Set;
   for (const document of documents.values())
     for (const module of document.modules)
@@ -26100,55 +28913,55 @@ function resolveCandidateSecurityOntology(input, documentsInput, extensionClosur
   for (const entity of ontology.entities) {
     const token = id3(entity.type);
     if (entities.has(token))
-      fail5();
+      fail6();
     entities.set(token, entity);
     const document = documents.get(entity.type.documentId);
     if (!document)
-      fail5();
+      fail6();
     const record = document.modules.find((m) => m.id === entity.type.moduleId)?.elements.find((e) => e.id === entity.type.elementId);
     if (record?.kind !== "record")
-      fail5();
+      fail6();
     const keys = record.keys?.filter((k) => k.id === entity.keyId);
     if (keys?.length !== 1 || !keys[0].fields?.length)
-      fail5();
+      fail6();
     for (const member of keys[0].fields) {
       const field = document.modules.find((m) => m.id === member.module)?.elements.find((e) => e.id === member.element);
       if (field?.kind !== "field" || !["boolean", "string", "integer", "decimal", "binary"].includes(field.scalarType) || field.cardinality !== "one" || field.nullability !== "required" || field.references?.some((r) => r.role === "record-type") || Object.keys(field.extensions ?? {}).length)
-        fail5();
+        fail6();
       if (field.scalarType === "decimal" && (!Number.isSafeInteger(field.facets?.precision) || !Number.isSafeInteger(field.facets?.scale)))
-        fail5();
+        fail6();
     }
     checkCandidateRecordClassifications(sourceHandles.get(entity.type.documentId), [entity.type], [{ type: entity.type, fields: entity.fields }]);
   }
   if (!entities.has(id3(ontology.subject)))
-    fail5();
+    fail6();
   const contexts = new Set;
   for (const context of ontology.context) {
     const token = id3(context);
     if (contexts.has(token) || !sourceFields.has(token))
-      fail5();
+      fail6();
     contexts.add(token);
   }
   if (new Set(ontology.actions).size !== ontology.actions.length)
-    fail5();
+    fail6();
   checkActionPurposeDeclarations(ontology);
   const associations = [], seen = new Set;
   for (const selector of ontology.associations) {
     const graph = selector.kind === "core-relationship", ref = graph ? selector.relationship : selector.type, token = JSON.stringify([graph ? "relationship" : "record", ref.documentId, ref.moduleId, graph ? ref.relationshipId : ref.elementId]);
     if (seen.has(token))
-      fail5();
+      fail6();
     seen.add(token);
     const witness = graph ? selector.witness : selector.kind === "record-members" ? { kind: "record-key", type: selector.type, keyId: selector.keyId } : undefined;
     if (!witness)
-      fail5();
+      fail6();
     if (witness.kind === "record-key" && entities.get(id3(witness.type))?.keyId !== witness.keyId)
-      fail5();
+      fail6();
     const scope = new Set(selector.endpoints.map((e) => id3(e.target)));
     if (witness.kind === "record-key")
       scope.add(id3(witness.type));
     for (const record of scope)
       if (!entities.has(record))
-        fail5();
+        fail6();
     const declarations = [...scope].map((token) => {
       const entity = entities.get(token);
       return { type: entity.type, fields: entity.fields };
@@ -26244,24 +29057,24 @@ class ProtectionLiteralBudget {
 }
 
 // src/extensions/security/entity-terms-candidate.ts
-var validator5 = createValidator();
-validator5.addSchema(schema_properties_document_schema_default);
-var literalShape = validator5.compile({ $ref: schema_properties_document_schema_default.$id + "#/$defs/literal" });
+var validator6 = createValidator();
+validator6.addSchema(schema_properties_document_schema_default);
+var literalShape = validator6.compile({ $ref: schema_properties_document_schema_default.$id + "#/$defs/literal" });
 var sourceIndexes = new WeakMap;
 var scopes = new WeakMap;
 var terms = new WeakMap;
-var fail6 = () => {
+var fail7 = () => {
   throw Error("SECURITY_ENTITY_TERM_UNRESOLVED");
 };
 var id4 = (r) => JSON.stringify([r.documentId, r.moduleId, r.elementId]);
 function shape4(v, keys) {
   if (!v || typeof v !== "object" || Array.isArray(v) || Object.keys(v).length !== keys.length || keys.some((k) => !Object.hasOwn(v, k)))
-    fail6();
+    fail7();
 }
 function ref3(r) {
   shape4(r, ["documentId", "moduleId", "elementId"]);
   if (Object.values(r).some((v) => typeof v !== "string" || !v))
-    fail6();
+    fail7();
 }
 function canonical3(v) {
   return Array.isArray(v) ? "[" + v.map(canonical3).join(",") + "]" : v && typeof v === "object" ? "{" + Object.keys(v).sort().map((k) => JSON.stringify(k) + ":" + canonical3(v[k])).join(",") + "}" : JSON.stringify(v);
@@ -26275,10 +29088,10 @@ function freeze7(v) {
 }
 function scalar(field, identity = false) {
   if (field?.kind !== "field" || !["boolean", "string", "integer", "decimal", "binary"].includes(field.scalarType) || field.cardinality !== "one" || !(identity ? field.nullability === "required" : ["required", "absent-allowed"].includes(field.nullability)) || field.references?.some((r) => r.role === "record-type") || Object.keys(field.extensions ?? {}).length)
-    fail6();
+    fail7();
   const facets = field.facets ?? {};
   if (field.scalarType === "decimal" && (!Number.isSafeInteger(facets.precision) || !Number.isSafeInteger(facets.scale)))
-    fail6();
+    fail7();
   return { scalarType: field.scalarType, cardinality: field.cardinality, nullability: field.nullability, facets, allowedValues: field.allowedValues ?? null };
 }
 function createCandidateEntityTermScopeFromChecks(checkedInput, targetInput) {
@@ -26299,7 +29112,7 @@ function createCandidateEntityTermScopeFromChecks(checkedInput, targetInput) {
     sourceIndexes.set(checked, index);
   }
   if (!index.entities.has(id4(target)))
-    fail6();
+    fail7();
   const result = freeze7({ kind: "candidate-entity-term-scope/0.1", ontology, documents: checked.documents, target });
   scopes.set(result, { ...index, target, checked });
   return result;
@@ -26315,12 +29128,12 @@ function createCandidateEntityTermScopeSet(checkedInput) {
 }
 function readCandidateEntityTermScopeRoot(scope) {
   if (!scope || typeof scope !== "object" || !scopes.has(scope))
-    fail6();
+    fail7();
   return scopes.get(scope).checked;
 }
 function resolveCandidateEntityTerm(scopeInput, termInput) {
   if (!scopeInput || typeof scopeInput !== "object" || !scopes.has(scopeInput))
-    return fail6();
+    return fail7();
   const scope = scopes.get(scopeInput), value = copyJson(termInput);
   let descriptor, domain;
   if (value?.kind === "subject" || value?.kind === "resource") {
@@ -26328,7 +29141,7 @@ function resolveCandidateEntityTerm(scopeInput, termInput) {
     if (Object.hasOwn(value, "identity")) {
       shape4(value, ["kind", "identity"]);
       if (value.identity !== true)
-        fail6();
+        fail7();
       const document = scope.fields.get(id4(entity.fields[0].ref)).document;
       const key = document.modules.find((m) => m.id === entity.type.moduleId).elements.find((e) => e.id === entity.type.elementId).keys.find((k) => k.id === entity.keyId);
       const domains = key.fields.map((f) => scalar(scope.fields.get(id4({ documentId: entity.type.documentId, moduleId: f.module, elementId: f.element })).field, true));
@@ -26338,7 +29151,7 @@ function resolveCandidateEntityTerm(scopeInput, termInput) {
       shape4(value, ["kind", "field"]);
       ref3(value.field);
       if (!entity.fields.some((f) => id4(f.ref) === id4(value.field)))
-        fail6();
+        fail7();
       descriptor = { kind: "record-attribute", context: value.kind, type: entity.type, field: value.field };
       domain = "scalar:" + canonical3(scalar(scope.fields.get(id4(value.field)).field));
     }
@@ -26346,17 +29159,17 @@ function resolveCandidateEntityTerm(scopeInput, termInput) {
     shape4(value, ["kind", "field"]);
     ref3(value.field);
     if (!scope.ontology.context.some((f) => id4(f) === id4(value.field)))
-      fail6();
+      fail7();
     descriptor = { kind: "context-attribute", field: value.field };
     domain = "scalar:" + canonical3(scalar(scope.fields.get(id4(value.field)).field));
   } else if (value?.kind === "constant") {
     shape4(value, ["kind", "field", "value"]);
     ref3(value.field);
     if (!literalShape(value.value))
-      fail6();
+      fail7();
     const source = scope.fields.get(id4(value.field));
     if (!source)
-      fail6();
+      fail7();
     domain = "scalar:" + canonical3(scalar(source.field));
     if (scope.literalBudget)
       scope.literalBudget.check(source.document, source.field, value.value);
@@ -26364,7 +29177,7 @@ function resolveCandidateEntityTerm(scopeInput, termInput) {
       checkSchemaLiteral(source.document, source.field, value.value);
     descriptor = { kind: "constant", field: value.field, value: value.value };
   } else
-    return fail6();
+    return fail7();
   const result = freeze7({ kind: "candidate-entity-term/0.1", term: descriptor, domain });
   terms.set(result, { scope: scopeInput, domain });
   return result;
@@ -26373,7 +29186,7 @@ function resolveCandidateEntityTerm(scopeInput, termInput) {
 // src/extensions/security/association-witness.ts
 var scopes2 = new WeakMap;
 var witnesses = new WeakSet;
-var fail7 = () => {
+var fail8 = () => {
   throw Error("SECURITY_ASSOCIATION_WITNESS_UNSUPPORTED");
 };
 function scope(names) {
@@ -26387,16 +29200,16 @@ function createCandidateAssociationScope() {
 function bindCandidateAssociationWitness(parent, checks, name) {
   const names = scopes2.get(parent);
   if (!names)
-    return fail7();
+    return fail8();
   requireIssuedCandidateAssociationChecks(checks);
   if (typeof name !== "string" || !name)
-    return fail7();
+    return fail8();
   let n = 0;
   for (const c of name)
     if (++n > 4096)
-      fail7();
+      fail8();
   if (names.has(name))
-    fail7();
+    fail8();
   const witness = Object.freeze({ name, checks });
   witnesses.add(witness);
   const next = new Map(names);
@@ -26405,7 +29218,7 @@ function bindCandidateAssociationWitness(parent, checks, name) {
 }
 function resolveCandidateAssociationWitnessTerm(witness, input) {
   if (!witnesses.has(witness))
-    return fail7();
+    return fail8();
   const term = copyJson(input), checks = witness.checks;
   if (checks.kind === "candidate-graph-relationship-checks/0.1")
     return Object.freeze({ witness, term: resolveCandidateRelationshipTerm(checks.plan, term) });
@@ -26413,32 +29226,32 @@ function resolveCandidateAssociationWitnessTerm(witness, input) {
   let selected;
   if (term.kind === "endpoint") {
     if (Object.keys(term).length !== 2 || typeof term.role !== "string")
-      return fail7();
+      return fail8();
     const endpoint = plan.endpoints.find((e) => e.role === term.role);
     if (!endpoint)
-      return fail7();
+      return fail8();
     selected = Object.freeze({ kind: "entity-identity", association: plan.type, role: endpoint.role, type: endpoint.target, key: endpoint.key, fields: endpoint.fields });
   } else if (term.kind === "identity") {
     if (Object.keys(term).length !== 1)
-      return fail7();
+      return fail8();
     selected = Object.freeze({ kind: "record-identity", type: plan.type, key: plan.key });
   } else if (term.kind === "attribute") {
     if (Object.keys(term).length !== 2 || !term.field || typeof term.field !== "object" || Array.isArray(term.field) || Object.keys(term.field).length !== 3 || !["documentId", "moduleId", "elementId"].every((k) => Object.hasOwn(term.field, k) && typeof term.field[k] === "string"))
-      return fail7();
+      return fail8();
     if (term.field.documentId !== plan.type.documentId || !plan.sourceRecord.members.some((r) => r.module === term.field.moduleId && r.element === term.field.elementId))
-      return fail7();
+      return fail8();
     selected = Object.freeze({ kind: "record-attribute", type: plan.type, field: Object.freeze(term.field) });
   } else
-    return fail7();
+    return fail8();
   return Object.freeze({ witness, term: selected });
 }
 function resolveCandidateAssociationScopeTerm(active, name, input) {
   const names = scopes2.get(active);
   if (!names || typeof name !== "string")
-    return fail7();
+    return fail8();
   const witness = names.get(name);
   if (!witness)
-    return fail7();
+    return fail8();
   return resolveCandidateAssociationWitnessTerm(witness, input);
 }
 
@@ -26449,18 +29262,18 @@ function canonical4(v) {
 var literalValidator = createValidator();
 literalValidator.addSchema(schema_properties_document_schema_default);
 var literalShape2 = literalValidator.compile({ $ref: schema_properties_document_schema_default.$id + "#/$defs/literal" });
-var fail8 = () => {
+var fail9 = () => {
   throw Error("SECURITY_ASSOCIATION_EXPRESSION_UNSUPPORTED");
 };
 function shape5(v, keys) {
   if (!v || typeof v !== "object" || Array.isArray(v) || Object.keys(v).length !== keys.length || keys.some((k) => !Object.hasOwn(v, k)))
-    fail8();
+    fail9();
 }
 function reference(r, relationship = false) {
   shape5(r, relationship ? ["documentId", "moduleId", "relationshipId"] : ["documentId", "moduleId", "elementId"]);
   for (const v of Object.values(r))
     if (typeof v !== "string" || !v)
-      fail8();
+      fail9();
 }
 function identity6(r, relationship = false) {
   reference(r, relationship);
@@ -26505,36 +29318,36 @@ function normalizeCandidateAssociationExpression(input, available, contextInput,
   const packet = copyJson({ input, ...contextInput === undefined ? {} : { context: contextInput } }), expression = packet.input, contexts = Object.hasOwn(packet, "context") ? packet.context : {}, bindings = new Map;
   const models = new Map, classifications = new Map;
   if (!Array.isArray(available))
-    return fail8();
+    return fail9();
   const length = Object.getOwnPropertyDescriptor(available, "length");
   if (!length || !("value" in length) || typeof length.value !== "number" || !Number.isSafeInteger(length.value) || length.value < 0 || length.value > 256)
-    return fail8();
+    return fail9();
   const count = length.value;
   for (let i = 0;i < count; i++) {
     const item = Object.getOwnPropertyDescriptor(available, String(i));
     if (!item || !("value" in item))
-      return fail8();
+      return fail9();
     const checks = item.value;
     requireIssuedCandidateAssociationChecks(checks);
     const source = sourceFor(checks), { document: captured, encoded } = source, existing = models.get(captured.id);
     if (existing !== undefined && existing !== encoded)
-      fail8();
+      fail9();
     models.set(captured.id, encoded);
     for (const { key, encoded } of classificationsFor(checks)) {
       const existing = classifications.get(key);
       if (existing !== undefined && existing !== encoded)
-        fail8();
+        fail9();
       classifications.set(key, encoded);
     }
     const graph = checks.kind === "candidate-graph-relationship-checks/0.1", key = identity6(graph ? checks.plan.relationship : checks.plan.type, graph);
     if (bindings.has(key))
-      fail8();
+      fail9();
     bindings.set(key, checks);
   }
   if (entityScope !== undefined) {
     const root = readCandidateEntityTermScopeRoot(entityScope);
     if (root.associations.length !== bindings.size)
-      fail8();
+      fail9();
     const original = root.associations.every((checks) => {
       const graph = checks.kind === "candidate-graph-relationship-checks/0.1", key = identity6(graph ? checks.plan.relationship : checks.plan.type, graph);
       return bindings.get(key) === checks;
@@ -26543,35 +29356,35 @@ function normalizeCandidateAssociationExpression(input, available, contextInput,
       for (const entry of root.documents) {
         const existing = models.get(entry.document.id);
         if (existing !== undefined && existing !== canonical4(entry.document))
-          fail8();
+          fail9();
       }
       for (const checks of root.associations) {
         const graph = checks.kind === "candidate-graph-relationship-checks/0.1", key = identity6(graph ? checks.plan.relationship : checks.plan.type, graph), existing = bindings.get(key);
         if (!existing || canonical4(existing) !== canonical4(checks))
-          fail8();
+          fail9();
       }
     }
   }
   if (!contexts || typeof contexts !== "object" || Array.isArray(contexts) || Object.keys(contexts).some((k) => !["subject", "resource"].includes(k)))
-    fail8();
+    fail9();
   const resolvedContexts = new Map;
   for (const [name, context] of Object.entries(contexts)) {
     shape5(context, ["association", "endpoint"]);
     if (typeof context.endpoint !== "string" || !context.endpoint)
-      fail8();
+      fail9();
     const checks = bindings.get(identity6(context.association, Object.hasOwn(context.association ?? {}, "relationshipId")));
     if (!checks)
-      fail8();
+      fail9();
     const endpoint = checks.plan.endpoints.find((e) => e.role === context.endpoint);
     if (!endpoint)
-      fail8();
+      fail9();
     resolvedContexts.set(name, { checks, endpoint });
   }
   if (entityScope !== undefined)
     for (const [name, binding] of resolvedContexts) {
       const intrinsic = resolveCandidateEntityTerm(entityScope, { kind: name, identity: true });
       if (canonical4(intrinsic.term.type) !== canonical4(binding.endpoint.target) || canonical4(intrinsic.term.key) !== canonical4(binding.endpoint.key))
-        fail8();
+        fail9();
     }
   const residuals = [];
   let nodes = 0;
@@ -26583,21 +29396,21 @@ function normalizeCandidateAssociationExpression(input, available, contextInput,
       if ("identity" in value) {
         shape5(value, ["kind", "identity"]);
         if (value.identity !== true)
-          fail8();
+          fail9();
         return { context: value.kind, checks, term: { kind: "entity-identity", type: endpoint.target, key: endpoint.key } };
       }
       shape5(value, ["kind", "field"]);
       reference(value.field);
       const classified = checks.classifications.find((record) => identity6(record.type) === identity6(endpoint.target));
       if (!classified?.fields.some((f) => identity6(f.ref) === identity6(value.field)))
-        fail8();
+        fail9();
       return { context: value.kind, checks, term: { kind: "record-attribute", type: endpoint.target, field: value.field } };
     }
     if (value?.kind === "constant") {
       shape5(value, ["kind", "field", "value"]);
       reference(value.field);
       if (!literalShape2(value.value))
-        fail8();
+        fail9();
       const candidates = [...bindings.values()].filter((checks) => checks.classifications.some((record) => record.fields.some((f) => identity6(f.ref) === identity6(value.field))));
       if (!candidates.length) {
         residuals.push({ path, reason: "constant-field-source-unresolved" });
@@ -26607,10 +29420,10 @@ function normalizeCandidateAssociationExpression(input, available, contextInput,
       for (const checks of candidates) {
         const source = sourceFor(checks), document = source.document, field = source.fields.get(JSON.stringify([value.field.documentId, value.field.moduleId, value.field.elementId]));
         if (!field)
-          fail8();
+          fail9();
         const encoded = canonical4(field);
         if (definition !== undefined && definition !== encoded)
-          fail8();
+          fail9();
         definition = encoded;
         checkSchemaLiteral(document, field, value.value);
       }
@@ -26627,7 +29440,7 @@ function normalizeCandidateAssociationExpression(input, available, contextInput,
     if ("identity" in value) {
       shape5(value, ["kind", "name", "identity"]);
       if (value.identity !== true)
-        fail8();
+        fail9();
       return resolveCandidateAssociationScopeTerm(scope, value.name, { kind: "identity" });
     }
     shape5(value, ["kind", "name", "field"]);
@@ -26642,38 +29455,38 @@ function normalizeCandidateAssociationExpression(input, available, contextInput,
     const source = sourceFor(checks), document = source.document;
     function domain(ref, identity = false) {
       if (ref.documentId !== document.id)
-        fail8();
+        fail9();
       const field = source.fields.get(JSON.stringify([ref.documentId, ref.moduleId, ref.elementId]));
       if (!field)
-        fail8();
+        fail9();
       if (field.kind !== "field" || !["boolean", "string", "integer", "decimal", "binary"].includes(field.scalarType) || field.cardinality !== "one" || !(identity ? field.nullability === "required" : ["required", "absent-allowed"].includes(field.nullability)) || field.references?.some((r) => r.role === "record-type") || field.extensions && Object.keys(field.extensions).length)
-        fail8();
+        fail9();
       const facets = field.facets ?? {};
       if (field.scalarType === "decimal" && (!Number.isSafeInteger(facets.precision) || !Number.isSafeInteger(facets.scale)))
-        fail8();
+        fail9();
       return { scalarType: field.scalarType, cardinality: field.cardinality, nullability: field.nullability, facets, allowedValues: field.allowedValues ?? null };
     }
     if (selected.kind === "record-attribute" || selected.kind === "constant")
       return "scalar:" + canonical4(domain(selected.field));
     if (!["entity-identity", "record-identity"].includes(selected.kind))
-      return fail8();
+      return fail9();
     const domains = selected.key.fields.map((f) => domain({ documentId: selected.type.documentId, moduleId: f.module, elementId: f.element }, true));
     return "identity:" + canonical4({ type: selected.type, keyId: selected.key.id, domains });
   }
   function walk(value, scope, path, depth) {
     if (++nodes > 4096 || depth > 16)
-      fail8();
+      fail9();
     if (value?.op === "literal") {
       shape5(value, ["op", "value"]);
       if (typeof value.value !== "boolean")
-        fail8();
+        fail9();
       return value;
     }
     if (value?.op === "eq") {
       shape5(value, ["op", "left", "right"]);
       const left = term(value.left, scope, path + "/left"), right = term(value.right, scope, path + "/right"), lt = operandType(left), rt = operandType(right);
       if (lt !== undefined && rt !== undefined && lt !== rt)
-        fail8();
+        fail9();
       return { op: "eq", left, right };
     }
     if (value?.op === "not") {
@@ -26683,15 +29496,15 @@ function normalizeCandidateAssociationExpression(input, available, contextInput,
     if (value?.op === "and" || value?.op === "or") {
       shape5(value, ["op", "args"]);
       if (!Array.isArray(value.args) || !value.args.length || value.args.length > 64)
-        fail8();
+        fail9();
       return { op: value.op, args: value.args.map((v, i) => walk(v, scope, path + "/args/" + i, depth + 1)) };
     }
     if (value?.op !== "exists")
-      return fail8();
+      return fail9();
     shape5(value, ["op", "association", "as", "where"]);
     const graph = Object.hasOwn(value.association ?? {}, "relationshipId"), key = identity6(value.association, graph), checks = bindings.get(key);
     if (!checks)
-      return fail8();
+      return fail9();
     const binding = bindCandidateAssociationWitness(scope, checks, value.as);
     return { op: "exists", witness: binding.witness, where: walk(value.where, binding.scope, path + "/where", depth + 1) };
   }
@@ -26711,12 +29524,12 @@ function encodeCandidateCondition(input, association) {
     if (value.witness) {
       const occurrence = scope.get(value.witness);
       if (occurrence === undefined)
-        fail8();
+        fail9();
       return { kind: "witness-term", occurrence, term: copyJson(value.term) };
     }
     if (value.checks)
       return { kind: value.context ? "context-term" : "constant-term", ...value.context ? { context: value.context } : {}, association: association(value.checks), term: copyJson(value.term) };
-    return fail8();
+    return fail9();
   }
   function walk(value, scope) {
     if (value.op === "literal")
@@ -26728,7 +29541,7 @@ function encodeCandidateCondition(input, association) {
     if (value.op === "and" || value.op === "or")
       return { op: value.op, args: value.args.map((v) => walk(v, scope)) };
     if (value.op !== "exists")
-      return fail8();
+      return fail9();
     const occurrence = nextOccurrence++, nested = new Map(scope);
     nested.set(value.witness, occurrence);
     return { op: "exists", occurrence, alias: value.witness.name, association: association(value.witness.checks), where: walk(value.where, nested) };
@@ -26738,43 +29551,43 @@ function encodeCandidateCondition(input, association) {
 var compactConditions = new WeakMap;
 function requireIssuedCandidateCompactCondition(value, available, entityScope) {
   if (!value || typeof value !== "object" || !compactConditions.has(value) || !Array.isArray(available))
-    fail8();
+    fail9();
   const binding = compactConditions.get(value), length = Object.getOwnPropertyDescriptor(available, "length");
   if (!length || !("value" in length) || length.value !== binding.associations.length || entityScope !== binding.entityScope)
-    fail8();
+    fail9();
   for (let i = 0;i < binding.associations.length; i++) {
     const item = Object.getOwnPropertyDescriptor(available, String(i));
     if (!item || !("value" in item) || item.value !== binding.associations[i])
-      fail8();
+      fail9();
   }
 }
 function compileCandidateAssociationCondition(normalized, available) {
   if (!normalized || typeof normalized !== "object" || !issuedExpressions.has(normalized))
-    fail8();
+    fail9();
   const input = normalized;
   if (input.residuals.length || !Array.isArray(available))
-    fail8();
+    fail9();
   const length = Object.getOwnPropertyDescriptor(available, "length");
   if (!length || !("value" in length) || !Number.isSafeInteger(length.value) || length.value < 0 || length.value > 256)
-    fail8();
+    fail9();
   const indexes = new Map;
   for (let i = 0;i < length.value; i++) {
     const item = Object.getOwnPropertyDescriptor(available, String(i));
     if (!item || !("value" in item))
-      fail8();
+      fail9();
     const checks = item.value;
     requireIssuedCandidateAssociationChecks(checks);
     if (indexes.has(checks))
-      fail8();
+      fail9();
     indexes.set(checks, i);
   }
   const original = expressionChecks.get(normalized);
   if (indexes.size !== original.length || original.some((checks) => !indexes.has(checks)))
-    fail8();
+    fail9();
   const expression = encodeCandidateCondition(input, (checks) => {
     const index = indexes.get(checks);
     if (index === undefined)
-      fail8();
+      fail9();
     return index;
   });
   const result = freeze8({ kind: "candidate-compact-condition/0.1", expression });
@@ -27954,8 +30767,8 @@ function resolveSecurityProtectionDomains(policyInput, catalogInput, closureInpu
   }
   for (const [i, entry] of resolved.documents.entries()) {
     const at = `/closure/documents/${i}`, validation = validateDocument(entry.document);
-    if (entry.document.umf !== "0.8.0" || !validation.valid || !validation.complete) {
-      add("PROTECTION_DOMAIN_DOCUMENT", at, "Known complete core0.8 document required");
+    if (!candidateCoreSourceComplete(entry.document, validation)) {
+      add("PROTECTION_DOMAIN_DOCUMENT", at, "Known core0.10 security domain required");
       for (const d of validation.diagnostics)
         diagnostics.push({ ...d, path: at + "/document" + d.path });
     }
@@ -28071,22 +30884,22 @@ function freeze12(value) {
   }
   return value;
 }
-function fail9(message) {
+function fail10(message) {
   throw new UmfError("PROTECTION_FUNCTION", message);
 }
 function scalar2(field) {
   if (field.kind !== "field" || field.cardinality !== "one" || !SCALAR_TYPES.includes(field.scalarType) || !["required", "absent-allowed"].includes(field.nullability) || field.itemType !== undefined || field.references?.length)
-    fail9("Explicit scalar-one Field with known value/nullability semantics required");
+    fail10("Explicit scalar-one Field with known value/nullability semantics required");
   if (field.scalarType === "decimal") {
     const facets = field.facets;
     if (!Number.isSafeInteger(facets?.precision) || !Number.isSafeInteger(facets?.scale) || facets.precision < 1 || facets.scale < 0 || facets.scale > facets.precision)
-      fail9("Decimal value domain requires explicit precision/scale");
+      fail10("Decimal value domain requires explicit precision/scale");
   }
 }
 function dateField(field) {
   scalar2(field);
   if (field.scalarType !== "date" || Object.keys(field.facets ?? {}).length || Object.hasOwn(field, "allowedValues") || Object.hasOwn(field, "default"))
-    fail9("Exact Gregorian date profile Field required; no refinements/defaults");
+    fail10("Exact Gregorian date profile Field required; no refinements/defaults");
 }
 function boundedLiteral(value, budget) {
   let text = 0;
@@ -28116,11 +30929,11 @@ function checkedValue(location, value, budget, date = false) {
   dateField(location.field);
   if (value === null) {
     if (location.field.nullability !== "absent-allowed")
-      fail9("Null is outside required Gregorian date domain");
+      fail10("Null is outside required Gregorian date domain");
     return;
   }
   if (typeof value !== "object" || Array.isArray(value) || Object.keys(value).length !== 1 || typeof value.date !== "string")
-    fail9("Exact date literal required");
+    fail10("Exact date literal required");
   parseGregorianDate(value.date);
 }
 function inspect(policy, catalog, closure, requestInput, evaluate, definitionContext) {
@@ -28135,10 +30948,10 @@ function inspect(policy, catalog, closure, requestInput, evaluate, definitionCon
   try {
     selection = copyJson(requestInput);
     if (selection === null || typeof selection !== "object" || Array.isArray(selection))
-      fail9("Exact selection object required");
+      fail10("Exact selection object required");
     const request = selection, names = definitionContext ? evaluate ? ["transformIndex", "value"] : ["transformIndex"] : evaluate ? ["ruleIndex", "disclosureIndex", "value"] : ["ruleIndex", "disclosureIndex"];
     if (Object.keys(request).length !== names.length || Object.keys(request).some((key) => !names.includes(key)) || names.some((key) => !Object.hasOwn(request, key)) || !(definitionContext ? [request.transformIndex] : [request.ruleIndex, request.disclosureIndex]).every((n) => typeof n === "number" && Number.isSafeInteger(n) && n >= 0))
-      fail9("Closed selection with nonnegative safe indices and explicit present value required");
+      fail10("Closed selection with nonnegative safe indices and explicit present value required");
     if (evaluate)
       input = request.value;
     if (parameters.status === "refused")
@@ -28148,56 +30961,56 @@ function inspect(policy, catalog, closure, requestInput, evaluate, definitionCon
     if (definitionContext) {
       transform = c.transforms[request.transformIndex];
       if (!transform)
-        fail9("Exact transform definition missing");
+        fail10("Exact transform definition missing");
     } else {
       const disposition = p.rules[request.ruleIndex]?.disclosure?.[request.disclosureIndex]?.disposition;
       if (disposition?.kind !== "transformed" || disposition.vocabulary !== "umf.security.protection")
-        fail9("Actual selected catalog disposition required");
+        fail10("Actual selected catalog disposition required");
       transform = c.transforms.find((t) => t.id === disposition.transform && t.version === disposition.version);
       if (!transform)
-        fail9("Exact selected transform missing");
+        fail10("Exact selected transform missing");
       const selectedDisclosure = p.rules[request.ruleIndex].disclosure[request.disclosureIndex];
       const sameRef = (a, b) => ["documentId", "moduleId", "elementId"].every((key) => a?.[key] === b?.[key]);
       if (!sameRef(selectedDisclosure.field, transform.inputDomain) || !sameRef(disposition.field, transform.outputDomain))
-        fail9("Selected policy input/output Fields must equal the exact transform domains; no inferred domain inclusion");
+        fail10("Selected policy input/output Fields must equal the exact transform domains; no inferred domain inclusion");
     }
     const operation = transform.kind + "/" + transform.function, expected = signatures[operation], isDate = operation === "generalize/truncate-date";
     if (!expected)
-      fail9("Transform has no qualified pure reference recipe; native/keyed/vault code is never executed");
+      fail10("Transform has no qualified pure reference recipe; native/keyed/vault code is never executed");
     if (transform.determinism !== "deterministic" || transform.reversibility !== "none")
-      fail9("Pure reference function requires deterministic/non-reversing declaration");
+      fail10("Pure reference function requires deterministic/non-reversing declaration");
     const fields = definitionContext?.fields ?? protectionFieldIndex(parameters.closure), resolve = (ref) => {
       const result = fields.get(ref);
       if (!result)
-        fail9("Exact qualified Field missing");
+        fail10("Exact qualified Field missing");
       scalar2(result.field);
       return result;
     };
     const from = resolve(transform.inputDomain), to = resolve(transform.outputDomain);
     const coreValueFamilies = ["boolean", "integer", "decimal", "string", "binary"];
     if (!isDate && (!coreValueFamilies.includes(from.field.scalarType) || !coreValueFamilies.includes(to.field.scalarType)))
-      fail9("No selected value profile for temporal/float input or output");
+      fail10("No selected value profile for temporal/float input or output");
     inputDomain = transform.inputDomain;
     outputDomain = transform.outputDomain;
     const args = new Map;
     for (const parameter of transform.parameters) {
       const location = resolve(parameter.field);
       if (!coreValueFamilies.includes(location.field.scalarType))
-        fail9("No selected core value semantics for parameter");
+        fail10("No selected core value semantics for parameter");
       args.set(parameter.name, { ...parameter, location });
     }
     if (args.size !== expected.length || expected.some((name) => !args.has(name)))
-      fail9("Exact function-specific parameter-name set required");
+      fail10("Exact function-specific parameter-name set required");
     const argument = (name, family) => {
       const a = args.get(name);
       if (a.location.field.scalarType !== family)
-        fail9("Parameter " + name + " requires " + family + " domain");
+        fail10("Parameter " + name + " requires " + family + " domain");
       return a;
     };
     const text = (name) => {
       const a = argument(name, "string");
       if (a.value === null || typeof a.value !== "object" || Array.isArray(a.value) || typeof a.value.string !== "string")
-        fail9("String parameter " + name + " required");
+        fail10("String parameter " + name + " required");
       return a.value.string;
     };
     const coefficient = (location, v) => {
@@ -28208,7 +31021,7 @@ function inspect(policy, catalog, closure, requestInput, evaluate, definitionCon
     const count = (name) => {
       const a = argument(name, "integer"), n = coefficient(a.location, a.value);
       if (n < 0n || n > 4096n)
-        fail9("Count " + name + " outside0..4096");
+        fail10("Count " + name + " outside0..4096");
       return Number(n);
     };
     let prefix = 0, suffix = 0, length = 0, padding = "", unit = "", width = 0n, origin = 0n;
@@ -28220,28 +31033,28 @@ function inspect(policy, catalog, closure, requestInput, evaluate, definitionCon
       dateField(from.field);
       dateField(to.field);
       if (text("calendar") !== GREGORIAN_DATE_PROFILE)
-        fail9("Exact Gregorian date operation profile must be explicitly selected");
+        fail10("Exact Gregorian date operation profile must be explicitly selected");
       unit = text("unit");
       if (!["year", "quarter", "month", "day"].includes(unit))
-        fail9("Unsupported Gregorian date truncation unit");
+        fail10("Unsupported Gregorian date truncation unit");
       valueProfile = GREGORIAN_DATE_PROFILE;
     } else if (operation === "generalize/range-bucket") {
       if (!["integer", "decimal"].includes(from.field.scalarType) || to.field.scalarType !== from.field.scalarType)
-        fail9("Bucket input/output must share exact numeric family");
+        fail10("Bucket input/output must share exact numeric family");
       for (const name of ["width", "origin"]) {
         const a = argument(name, from.field.scalarType);
         if (from.field.scalarType === "decimal" && (a.location.field.facets?.scale !== from.field.facets?.scale || to.field.facets?.scale !== from.field.facets?.scale))
-          fail9("Bucket operands/output must share input decimal scale");
+          fail10("Bucket operands/output must share input decimal scale");
       }
       width = coefficient(args.get("width").location, args.get("width").value);
       origin = coefficient(args.get("origin").location, args.get("origin").value);
       if (width <= 0n)
-        fail9("Bucket width must be positive");
+        fail10("Bucket width must be positive");
     } else {
       if (from.field.scalarType !== "string" || to.field.scalarType !== "string")
-        fail9("String reference function requires string input/output");
+        fail10("String reference function requires string input/output");
       if (text("unit") !== "unicode-scalar")
-        fail9("Explicit unicode-scalar unit required");
+        fail10("Explicit unicode-scalar unit required");
       if (operation === "mask/partial") {
         prefix = count("prefix");
         suffix = count("suffix");
@@ -28250,7 +31063,7 @@ function inspect(policy, catalog, closure, requestInput, evaluate, definitionCon
       if (operation !== "generalize/prefix-only") {
         padding = text("padding");
         if (Array.from(padding).length !== 1)
-          fail9("Padding must be exactly one Unicode scalar");
+          fail10("Padding must be exactly one Unicode scalar");
       }
     }
     diagnostics.push({ code: "PROTECTION_REFERENCE_ONLY", path: "", severity: "warning", message: "Pure reference recipe only; no policy decision, property-fact proof, actual compiler lineage or native authority" });
@@ -28325,7 +31138,7 @@ function checkProtectionFunctionDefinitions(policy, catalog, closure) {
 function evaluateIssuedProtectionDefinition(issued, transformIndex, value, budget) {
   const context = issued && typeof issued === "object" ? issuedDefinitions.get(issued) : undefined;
   if (!context)
-    fail9("Original issued definition context required");
+    fail10("Original issued definition context required");
   return inspect(null, null, null, { transformIndex, value }, true, { ...context, budget });
 }
 
@@ -28397,7 +31210,7 @@ function freeze14(v) {
   }
   return v;
 }
-var fail10 = (message) => {
+var fail11 = (message) => {
   throw new UmfError("PROTECTION_DECLARATIONS", message);
 };
 function inspectProtectionObligations(policy, catalog, closure, ontologyInput) {
@@ -28414,16 +31227,16 @@ function inspectProtectionObligations(policy, catalog, closure, ontologyInput) {
   try {
     const { policy: p, catalog: c } = source, o = action.ontology;
     if (p.ontology.documentId !== o.documentId || p.ontology.revision !== o.revision)
-      fail10("Exact policy ontology document/revision pin required");
+      fail11("Exact policy ontology document/revision pin required");
     const purposes = new Map(action.purposes.map((e) => [e.action, e.purposes]));
     for (const rule of p.rules)
       for (const id of rule.actions)
         if (!purposes.has(id))
-          fail10("Every policy action must belong to the source-owned ontology action universe");
+          fail11("Every policy action must belong to the source-owned ontology action universe");
     const role = (id, expected) => {
       const found = purposes.get(id);
       if (!found || found.length !== 1 || found[0] !== expected)
-        fail10("Exact separately purposed " + expected + " action required");
+        fail11("Exact separately purposed " + expected + " action required");
     };
     const transforms = new Map(c.transforms.map((t) => [JSON.stringify([t.id, t.version]), t]));
     for (const rule of p.rules)
@@ -28433,7 +31246,7 @@ function inspectProtectionObligations(policy, catalog, closure, ontologyInput) {
           continue;
         const t = transforms.get(JSON.stringify([d.transform, d.version]));
         if (!t || !sameRef(entry.field, t.inputDomain) || !sameRef(d.field, t.outputDomain))
-          fail10("Exact selected policy input/output transform domains required");
+          fail11("Exact selected policy input/output transform domains required");
       }
     for (const t of c.transforms) {
       const add = (kind, declaration) => obligations.push({ transform: { id: t.id, version: t.version }, kind, status: "unverified", declaration });
@@ -28442,7 +31255,7 @@ function inspectProtectionObligations(policy, catalog, closure, ontologyInput) {
         add("salt-custody", t.saltCustody);
         if (t.saltCustody.kind === "none") {
           if (!["deterministic", "keyed-deterministic"].includes(t.determinism) && !t.disclosureProfile.includes("equality"))
-            fail10("Unsalted hash requires retained effective equality");
+            fail11("Unsalted hash requires retained effective equality");
           add("dictionary-attack-warning", { code: "UNSALTED_HASH_DICTIONARY_ATTACK", warning: "Unsalted hashes expose equality and need assessment for dictionary attacks; no algorithm or custody enforcement is verified." });
         }
       }
@@ -28459,7 +31272,7 @@ function inspectProtectionObligations(policy, catalog, closure, ontologyInput) {
         role(t.reverseAction, "reverse");
         add("reverse-action", { action: t.reverseAction, reversibility: t.reversibility });
       } else if (t.reverseAction !== undefined)
-        fail10("Reverse action contradicts non-reversing declaration");
+        fail11("Reverse action contradicts non-reversing declaration");
     }
     diagnostics.push({ code: "PROTECTION_OBLIGATIONS_UNVERIFIED", path: "", severity: "warning", message: "Declared and preserved; enforcement unqualified. No operation-owner route compatibility, source authenticity, algorithm execution, current permission or native vault/key custody verified." });
     return finish(true);
@@ -28473,18 +31286,18 @@ function inspectProtectionObligations(policy, catalog, closure, ontologyInput) {
 
 // src/extensions/security/catalog-program-candidate.ts
 var programs = new WeakMap;
-var fail11 = (message) => {
+var fail12 = (message) => {
   throw Error("SECURITY_CATALOG_PROGRAM_UNRESOLVED: " + message);
 };
 var id5 = (r) => JSON.stringify([r.documentId, r.moduleId, r.elementId]);
 var associationId = (r) => JSON.stringify([Object.hasOwn(r, "relationshipId") ? "relationship" : "record", r.documentId, r.moduleId, r.relationshipId ?? r.elementId]);
 function shape6(v, keys) {
   if (!v || typeof v !== "object" || Array.isArray(v) || Object.keys(v).length !== keys.length || keys.some((k) => !Object.hasOwn(v, k)))
-    fail11("Closed source shape required");
+    fail12("Closed source shape required");
 }
 function unique(values) {
   if (new Set(values).size !== values.length)
-    fail11("Duplicate source identity");
+    fail12("Duplicate source identity");
 }
 function freeze15(v) {
   if (v && typeof v === "object" && !Object.isFrozen(v)) {
@@ -28506,7 +31319,7 @@ function textBound(v) {
         pending.push(child);
       }
     if (units > 4000000)
-      fail11("Source text budget exhausted");
+      fail12("Source text budget exhausted");
   }
 }
 function expansion(policy) {
@@ -28517,7 +31330,7 @@ function expansion(policy) {
     while (pending.length) {
       const x = pending.pop();
       if (++count + sourceNodes > 4096)
-        fail11("Source expression budget exhausted");
+        fail12("Source expression budget exhausted");
       if (x.op === "eq")
         terms += 2;
       if (x.op === "and" || x.op === "or")
@@ -28533,7 +31346,7 @@ function expansion(policy) {
     operands += terms * rule.target.length;
     conditionText += JSON.stringify(rule.condition).length * rule.target.length;
     if (targets > 4096 || nodes > 65536 || conditionText > 64000000)
-      fail11("Rule-target expansion budget exhausted");
+      fail12("Rule-target expansion budget exhausted");
   }
   return { targets, nodes, operands, conditionText };
 }
@@ -28542,41 +31355,41 @@ function compileCandidateCatalogProgram(policyInput, catalogInput, closureInput,
   textBound(packet);
   const inspection = inspectSecurityPolicyV2Source(packet.policy);
   if (!inspection.valid || inspection.diagnostics.some((d) => d.code === "SECURITY_V2_UNKNOWN"))
-    fail11("Known canonical policy source required");
+    fail12("Known canonical policy source required");
   let policy = inspection.source, catalog = null, definitions = [], obligations = [], functionDefinitions = null;
   const charged = expansion(policy);
   shape6(packet.closure, ["pins", "documents"]);
   if (!Array.isArray(packet.closure.pins) || !Array.isArray(packet.closure.documents) || packet.closure.pins.length > 256 || packet.closure.documents.length > 256)
-    fail11("Bounded core closure required");
+    fail12("Bounded core closure required");
   for (const pin of packet.closure.pins) {
     shape6(pin, ["documentId", "revision"]);
     if (typeof pin.documentId !== "string" || !pin.documentId || typeof pin.revision !== "string" || !pin.revision)
-      fail11("Exact closure pins required");
+      fail12("Exact closure pins required");
   }
   unique(packet.closure.pins.map((p) => p.documentId));
   if (Object.hasOwn(policy, "protection")) {
     const typed = checkProtectionFunctionDefinitions(policy, packet.catalog, packet.closure);
     if (typed.status === "refused")
-      fail11("Whole catalog function/domain closure failed");
+      fail12("Whole catalog function/domain closure failed");
     const declared = inspectProtectionObligations(typed.policy, typed.catalog, typed.closure, packet.ontology);
     if (declared.status === "refused")
-      fail11("Exact declared obligations/purposes required");
+      fail12("Exact declared obligations/purposes required");
     functionDefinitions = typed;
     policy = typed.policy;
     catalog = typed.catalog;
     definitions = [...typed.definitions];
     obligations = [...declared.obligations];
   } else if (packet.catalog !== null)
-    fail11("Unpinned policy cannot acquire catalog semantics");
+    fail12("Unpinned policy cannot acquire catalog semantics");
   const root = resolveCandidateSecurityOntology(packet.ontology, packet.closure.documents, extensionClosure), ontology = root.ontology;
   if (policy.ontology.documentId !== ontology.documentId || policy.ontology.revision !== ontology.revision)
-    fail11("Exact ontology pin required");
+    fail12("Exact ontology pin required");
   const pins = new Map(packet.closure.pins.map((p) => [p.documentId, p.revision]));
   if (pins.size !== ontology.documents.length || ontology.documents.some((p) => pins.get(p.documentId) !== p.revision))
-    fail11("Ontology and core closure pins must coincide");
+    fail12("Ontology and core closure pins must coincide");
   for (const entry of root.documents)
-    if (entry.document.umf !== "0.8.0")
-      fail11("Known core0.8 source profile required");
+    if (entry.document.umf !== "0.10.0")
+      fail12("Known core0.10 source profile required");
   const entities = new Map(ontology.entities.map((e) => [id5(e.type), e]));
   const sourceFields = new Map;
   let descriptorUnits = 128;
@@ -28597,28 +31410,28 @@ function compileCandidateCatalogProgram(policyInput, catalogInput, closureInput,
   }
   const expandedText = charged.conditionText + charged.operands * descriptorUnits;
   if (!Number.isSafeInteger(expandedText) || expandedText > 64000000)
-    fail11("Expanded condition/descriptor text budget exhausted");
+    fail12("Expanded condition/descriptor text budget exhausted");
   unique(policy.rules.map((r) => r.id));
   if (!Array.isArray(packet.bindings) || packet.bindings.length > 4096)
-    fail11("Bounded binding table required");
+    fail12("Bounded binding table required");
   const bindings = new Map;
   for (const binding of packet.bindings) {
     shape6(binding, ["ruleId", "target", "context"]);
     shape6(binding.target, ["documentId", "moduleId", "elementId"]);
     const rule = policy.rules.find((r) => r.id === binding.ruleId);
     if (!rule || !rule.target.some((t) => id5(t) === id5(binding.target)))
-      fail11("Binding must name actual rule target");
+      fail12("Binding must name actual rule target");
     const key = JSON.stringify([binding.ruleId, id5(binding.target)]);
     if (bindings.has(key))
-      fail11("Duplicate binding");
+      fail12("Duplicate binding");
     if (!binding.context || typeof binding.context !== "object" || Array.isArray(binding.context) || Object.keys(binding.context).some((k) => !["subject", "resource"].includes(k)))
-      fail11("Exact intrinsic binding names required");
+      fail12("Exact intrinsic binding names required");
     for (const [name, context] of Object.entries(binding.context)) {
       shape6(context, ["association", "endpoint"]);
       shape6(context.association, Object.hasOwn(context.association ?? {}, "relationshipId") ? ["documentId", "moduleId", "relationshipId"] : ["documentId", "moduleId", "elementId"]);
       const association = root.associations.find((c) => associationId(c.kind === "candidate-graph-relationship-checks/0.1" ? c.plan.relationship : c.plan.type) === associationId(context.association)), endpoint = association?.plan.endpoints.find((e) => e.role === context.endpoint);
       if (!endpoint || id5(endpoint.target) !== id5(name === "subject" ? ontology.subject : binding.target))
-        fail11("Binding endpoint/type correspondence failed");
+        fail12("Binding endpoint/type correspondence failed");
     }
     bindings.set(key, binding.context);
   }
@@ -28627,14 +31440,14 @@ function compileCandidateCatalogProgram(policyInput, catalogInput, closureInput,
     unique(rule.actions);
     unique(rule.target.map(id5));
     if (rule.actions.some((a) => !ontology.actions.includes(a)))
-      fail11("Undeclared action");
+      fail12("Undeclared action");
     if (rule.effect !== "permit" && rule.disclosure !== undefined)
-      fail11("Only permits may disclose");
+      fail12("Only permits may disclose");
     unique((rule.disclosure ?? []).map((d) => id5(d.field)));
     for (const target of rule.target) {
       const key = id5(target), entity = entities.get(key);
       if (!entity)
-        fail11("Missing target entity");
+        fail12("Missing target entity");
       let scope = scopes.get(key);
       if (!scope) {
         scope = scopeFor(target);
@@ -28642,20 +31455,20 @@ function compileCandidateCatalogProgram(policyInput, catalogInput, closureInput,
       }
       for (const disclosure of rule.disclosure ?? []) {
         if (!entity.fields.some((f) => id5(f.ref) === id5(disclosure.field)))
-          fail11("Disclosure input must be a live target Field");
+          fail12("Disclosure input must be a live target Field");
         const d = disclosure.disposition;
         if (d.kind === "transformed") {
           if (d.vocabulary === "umf.security.protection") {
             const transform = catalog?.transforms.find((t) => t.id === d.transform && t.version === d.version);
             if (!transform || id5(transform.inputDomain) !== id5(disclosure.field) || id5(transform.outputDomain) !== id5(d.field))
-              fail11("Exact catalog input/output domains required");
+              fail12("Exact catalog input/output domains required");
           } else
             resolveCandidateEntityTerm(scope, { kind: "constant", field: d.field, value: d.value });
         }
       }
       const normalized = normalizeCandidateAssociationExpression(rule.condition, root.associations, bindings.get(JSON.stringify([rule.id, key])), scope);
       if (normalized.residuals.length)
-        fail11("Residual condition meaning");
+        fail12("Residual condition meaning");
       const condition = compileCandidateAssociationCondition(normalized, root.associations);
       requireIssuedCandidateCompactCondition(condition, root.associations, scope);
       conditions.push(freeze15({ ruleIndex, target, condition, scope }));
@@ -28668,7 +31481,7 @@ function compileCandidateCatalogProgram(policyInput, catalogInput, closureInput,
 }
 function readCandidateCatalogProgram(handle) {
   if (!handle || typeof handle !== "object" || !programs.has(handle))
-    fail11("Original compiled program required");
+    fail12("Original compiled program required");
   return programs.get(handle);
 }
 // spec/extensions/security-protection/schema.json
@@ -29496,16 +32309,16 @@ var schema_default4 = {
 
 // src/extensions/security/catalog-storage-candidate.ts
 var id6 = (r) => JSON.stringify([r.documentId, r.moduleId, r.elementId]);
-var fail12 = (message) => {
+var fail13 = (message) => {
   throw Error("SECURITY_CATALOG_STORAGE: " + message);
 };
 function shape7(v, required, optional = []) {
   if (!v || typeof v !== "object" || Array.isArray(v) || required.some((k) => !Object.hasOwn(v, k)) || Object.keys(v).some((k) => !required.includes(k) && !optional.includes(k)))
-    fail12("Closed source shape required");
+    fail13("Closed source shape required");
 }
 function text3(v) {
   if (typeof v !== "string" || !v.length)
-    fail12("Exact source identity required");
+    fail13("Exact source identity required");
 }
 function ref4(r) {
   shape7(r, ["documentId", "moduleId", "elementId"]);
@@ -29518,12 +32331,12 @@ function validateCandidateCatalogStorage(program, o, step) {
   text3(o.id);
   text3(o.revision);
   if (o.version !== "umf.security.logical-owner/0.1" || !Array.isArray(o.storage) || o.storage.length > 4096)
-    fail12("Exact stored-query source profile required");
+    fail13("Exact stored-query source profile required");
   if (Object.hasOwn(o, "disclosure")) {
     shape7(o.disclosure, ["readAction"]);
     text3(o.disclosure.readAction);
     if (!ont.actionPurposes.some((p) => p.action === o.disclosure.readAction && p.purposes.includes("read")))
-      fail12("Exact owner read-purpose declaration required");
+      fail13("Exact owner read-purpose declaration required");
   }
   const fields = new Map(ont.entities.map((e) => [id6(e.type), new Set(e.fields.map((f) => id6(f.ref)))]));
   const storage = new Map;
@@ -29532,29 +32345,29 @@ function validateCandidateCatalogStorage(program, o, step) {
     shape7(entry, ["type", "field", "storageEffect"], ["storageTransform"]);
     const type = ref4(entry.type), field = ref4(entry.field), key = JSON.stringify([type, field]);
     if (!fields.get(type)?.has(field) || storage.has(key))
-      fail12("Invalid or duplicate owner storage member");
+      fail13("Invalid or duplicate owner storage member");
     const stored = c.transforms.filter((t) => {
       step();
       return t.custody?.storageEffect === "stored-transformed" && id6(t.outputDomain) === field;
     });
     if (entry.storageEffect === "canonical") {
       if (Object.hasOwn(entry, "storageTransform") || stored.length)
-        fail12("Canonical storage downgrade");
+        fail13("Canonical storage downgrade");
     } else if (entry.storageEffect === "stored-transformed") {
       shape7(entry.storageTransform, ["id", "version"]);
       text3(entry.storageTransform.id);
       text3(entry.storageTransform.version);
       if (!stored.some((t) => t.id === entry.storageTransform.id && t.version === entry.storageTransform.version && ["tokenize", "encrypt"].includes(t.kind)))
-        fail12("Exact stored output transform required");
+        fail13("Exact stored output transform required");
     } else
-      fail12("Unsupported storage effect");
+      fail13("Unsupported storage effect");
     storage.set(key, entry);
   }
   for (const [type, members] of fields)
     for (const field of members) {
       step();
       if (!storage.has(JSON.stringify([type, field])))
-        fail12("Incomplete owner storage map");
+        fail13("Incomplete owner storage map");
     }
   return storage;
 }
@@ -29659,7 +32472,7 @@ close3(defs2);
 var reference2 = { type: "object", properties: { documentId: { type: "string", minLength: 1, maxLength: 4096 }, moduleId: { type: "string", minLength: 1, maxLength: 4096 }, elementId: { type: "string", minLength: 1, maxLength: 4096 } }, required: ["documentId", "moduleId", "elementId"], additionalProperties: false };
 var check9 = createValidator().compile({ type: "object", properties: { scan: { type: "string", maxLength: 32, pattern: "^[st][0-9]+$" }, path: { type: "string", minLength: 1, maxLength: 4096 }, type: reference2, field: reference2, operator: { enum: ["predicate", "join", "group", "order", "aggregate"] }, operation: { type: "string", minLength: 1, maxLength: 128 }, required: { type: "array", minItems: 1, maxItems: 32, items: { $ref: "#/$defs/property" } } }, required: ["scan", "path", "type", "field", "operator", "operation", "required"], additionalProperties: false, $defs: defs2 });
 var id7 = (r) => JSON.stringify([r.documentId, r.moduleId, r.elementId]);
-var fail13 = () => {
+var fail14 = () => {
   throw Error("SECURITY_QUERY_VALUE_ROUTES_REFUSED");
 };
 function freeze17(v) {
@@ -29689,27 +32502,27 @@ function inspectCandidateQueryValueRoutes(handle, ownerInput, useInput) {
           pending.push(v);
         }
       if (sourceText > 4000000)
-        fail13();
+        fail14();
     }
     if (!check9(use))
-      fail13();
+      fail14();
     const u = use, ontology = program.ontology.ontology;
     if (u.scan.trim() !== u.scan)
-      fail13();
+      fail14();
     const storage = validateCandidateCatalogStorage(program, owner, () => budget.step());
     if (!owner.disclosure)
-      fail13();
+      fail14();
     const entity = ontology.entities.find((e) => id7(e.type) === id7(u.type)), member = entity?.fields.find((f) => id7(f.ref) === id7(u.field));
     if (!member)
-      fail13();
+      fail14();
     const own = storage.get(JSON.stringify([id7(u.type), id7(u.field)]));
     if (!own)
-      fail13();
+      fail14();
     const retain = (v) => {
       budget.step();
       retained += JSON.stringify(v).length + 2;
       if (retained > 4000000)
-        fail13();
+        fail14();
       return v;
     };
     const indexed = new Map;
@@ -29724,7 +32537,7 @@ function inspectCandidateQueryValueRoutes(handle, ownerInput, useInput) {
     const domain = (ref) => {
       const key = id7(ref), f = indexed.get(key);
       if (!f)
-        fail13();
+        fail14();
       if (!domainKeys.has(key)) {
         domainKeys.add(key);
         domains.push(retain({ field: ref, identity: { documentId: f.document.id, revision: program.closure.pins.find((p) => p.documentId === f.document.id).revision, module: ref.moduleId, element: ref.elementId }, element: f.element }));
@@ -29737,19 +32550,19 @@ function inspectCandidateQueryValueRoutes(handle, ownerInput, useInput) {
       if (property && typeof property === "object" && property.kind === "range") {
         const f = indexed.get(id7(property.bucket.field));
         if (!f || canonicalSchemaJson(property.bucket.value).length > 4096)
-          fail13();
+          fail14();
         budget.identity(f.document, f.element, property.bucket.value);
       }
     }
     const mode = (v) => {
       if (!["prohibited", "disclosed", "original-authorized"].includes(v))
-        fail13();
+        fail14();
       return v;
     };
     const ontologyConstraint = { source: "ontology", mode: mode(member.queryUse?.[u.operator] ?? (member.protection === "protected" ? "prohibited" : "disclosed")) };
     const parameters = program.catalog ? checkProtectionParametersWithinBudget(program.policy, program.catalog, program.closure, budget) : null;
     if (parameters?.status === "refused")
-      fail13();
+      fail14();
     const transformIndices = new Map;
     const selectedTransform = (name, version) => {
       const index = program.catalog?.transforms.findIndex((t) => {
@@ -29757,7 +32570,7 @@ function inspectCandidateQueryValueRoutes(handle, ownerInput, useInput) {
         return t.id === name && t.version === version;
       }) ?? -1;
       if (index < 0)
-        fail13();
+        fail14();
       const t = program.catalog.transforms[index];
       if (!transformIndices.has(t)) {
         transformIndices.set(t, index);
@@ -29767,10 +32580,10 @@ function inspectCandidateQueryValueRoutes(handle, ownerInput, useInput) {
     };
     const properties = (t) => {
       if (!parameters)
-        fail13();
+        fail14();
       const report = compareSelectedProtectionQueryProperties(parameters, { type: u.type, field: u.field, operator: u.operator, required: u.required }, t, budget, []);
       if (report.diagnostics.some((d) => d.severity === "error" && d.code !== "PROTECTION_QUERY_MISSING"))
-        fail13();
+        fail14();
       return { status: report.status, effective: report.effectiveProperties, required: report.requiredProperties, missing: report.missingProperties };
     };
     const stored = own.storageEffect === "stored-transformed" ? selectedTransform(own.storageTransform.id, own.storageTransform.version) : null;
@@ -29784,14 +32597,14 @@ function inspectCandidateQueryValueRoutes(handle, ownerInput, useInput) {
       if (kind === "transformed" && disposition.vocabulary !== "umf.security.protection") {
         const f = indexed.get(id7(disposition.field));
         if (!f)
-          fail13();
+          fail14();
         const literal = disposition.value === null ? (budget.check(f.document, f.element, null), budget.retain("null")) : budget.identity(f.document, f.element, disposition.value);
         key = canonicalSchemaJson([disposition.transform, disposition.version, id7(disposition.field), literal]);
       }
       let index = groupIndex.get(key);
       if (index === undefined) {
         if (groups.length >= 256)
-          fail13();
+          fail14();
         index = groups.length;
         groupIndex.set(key, index);
         groups.push({ kind, disposition, ruleIndices: [], disclosureIndices: [], sourceDispositions: [] });
@@ -29933,30 +32746,30 @@ function securityOr(values) {
 }
 
 // src/extensions/security/catalog-runtime-candidate.ts
-var fail14 = (message) => {
+var fail15 = (message) => {
   throw Error("SECURITY_CATALOG_RUNTIME: " + message);
 };
 var id8 = (r) => JSON.stringify([r.documentId, r.moduleId, r.elementId]);
 var relationId = (r) => JSON.stringify([r.documentId, r.moduleId, r.relationshipId]);
 function shape8(v, required, optional = []) {
   if (!v || typeof v !== "object" || Array.isArray(v) || required.some((k) => !Object.hasOwn(v, k)) || Object.keys(v).some((k) => !required.includes(k) && !optional.includes(k)))
-    fail14("Closed fact shape required");
+    fail15("Closed fact shape required");
 }
 function list(v, max) {
   if (!Array.isArray(v) || v.length > max)
-    fail14("Fact list bound");
+    fail15("Fact list bound");
   return v;
 }
 function ref5(r) {
   shape8(r, ["documentId", "moduleId", "elementId"]);
   if (Object.values(r).some((v) => typeof v !== "string" || !v))
-    fail14("Exact Field/Record reference");
+    fail15("Exact Field/Record reference");
   return id8(r);
 }
 function relationship(r) {
   shape8(r, ["documentId", "moduleId", "relationshipId"]);
   if (Object.values(r).some((v) => typeof v !== "string" || !v))
-    fail14("Exact relationship reference");
+    fail15("Exact relationship reference");
   return relationId(r);
 }
 function freeze18(v) {
@@ -29971,7 +32784,7 @@ function readRuleScan(handle, ownerInput, cut, selectionInput, operation) {
     const packet = copyJson({ owner: ownerInput, selection: selectionInput });
     shape8(packet.selection, ["type"]);
     if (!packet.owner?.disclosure)
-      fail14("Original owner read action required");
+      fail15("Original owner read action required");
     return run(handle, packet.owner, cut, { type: packet.selection.type, fields: [] }, false, operation, true, true);
   } catch {
     return freeze18({ status: "refused", complete: false, authority: false, rows: [] });
@@ -29983,8 +32796,10 @@ function evaluateCandidateCatalogReadRuleScan(handle, owner, cut, selection) {
 function evaluateCandidateCatalogReadRuleScanWithinOperation(handle, owner, cut, selection, operation) {
   return readRuleScan(handle, owner, cut, selection, operation);
 }
-function run(handle, ownerInput, cutInput, requestInput, render, operation, scanPopulation = false, ruleTrace = false) {
+function run(handle, ownerInput, cutInput, requestInput, render, operation, scanPopulation = false, ruleTrace = false, disclosureTrace = false, disclosureBatch = false) {
   const program = readCandidateCatalogProgram(handle), packet = copyJson({ owner: ownerInput, cut: cutInput, request: requestInput }), { owner, cut } = packet;
+  if (disclosureBatch && !program.catalog)
+    fail15("Atomic V2 batch requires original protection catalog");
   let request = packet.request;
   if (scanPopulation) {
     shape8(request, ["type", "fields"]);
@@ -29994,11 +32809,11 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
   shape8(cut, ["version", "trusted", "generation", "expectedGeneration", "policy", "ontology", "protection", "domains", "owner", "subject", "facts", "graphs", "coverage", "graphCoverage", "context", "valueProfiles", "maxFacts", "maxSteps"]);
   shape8(request, ["action", "resources", "targets", "fields"]);
   if (owner.version !== "umf.security.logical-owner/0.1" || cut.version !== "umf.security.logical-facts/0.1" || cut.trusted !== true || typeof cut.generation !== "string" || !cut.generation || cut.generation !== cut.expectedGeneration || typeof owner.id !== "string" || !owner.id || typeof owner.revision !== "string" || !owner.revision)
-    fail14("Unadmitted logical cut");
+    fail15("Unadmitted logical cut");
   const pin = (actual, expected, keys) => {
     shape8(actual, keys);
     if (keys.some((k) => actual[k] !== expected[k]))
-      fail14("Stale source/owner pin");
+      fail15("Stale source/owner pin");
   };
   pin(cut.owner, owner, ["id", "revision"]);
   pin(cut.policy, program.policy, ["id", "revision"]);
@@ -30006,18 +32821,18 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
   if (program.catalog)
     pin(cut.protection, program.catalog, ["id", "revision"]);
   else if (cut.protection !== null)
-    fail14("Unpinned protection");
+    fail15("Unpinned protection");
   const domains = new Map(program.closure.pins.map((p) => [p.documentId, p.revision]));
   for (const p of list(cut.domains, 256)) {
     shape8(p, ["documentId", "revision"]);
     if (domains.get(p.documentId) !== p.revision)
-      fail14("Core pin mismatch");
+      fail15("Core pin mismatch");
     domains.delete(p.documentId);
   }
   if (domains.size)
-    fail14("Missing core pin");
+    fail15("Missing core pin");
   if (!Number.isSafeInteger(cut.maxFacts) || cut.maxFacts < 1 || cut.maxFacts > 1e4 || !Number.isSafeInteger(cut.maxSteps) || cut.maxSteps < 1 || cut.maxSteps > 1e6)
-    fail14("Invalid operation limits");
+    fail15("Invalid operation limits");
   const ledger = operation ?? new CandidateSecurityOperationBudget(cut.maxSteps);
   ledger.constrain(cut.maxSteps);
   const step = (units = 1) => ledger.step(units);
@@ -30037,7 +32852,7 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
   list(cut.graphs, cut.maxFacts);
   list(request.resources, cut.maxFacts);
   if (cut.facts.length + cut.graphs.length + request.resources.length > cut.maxFacts)
-    fail14("Aggregate facts exhausted");
+    fail15("Aggregate facts exhausted");
   list(cut.coverage, 256);
   list(cut.graphCoverage, 256);
   list(cut.context, 256);
@@ -30060,48 +32875,50 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
     shape8(owner.disclosure, ["readAction"]);
     const action = owner.disclosure.readAction;
     if (typeof action !== "string" || !action || !ontology.actionPurposes?.some((p) => p.action === action && p.purposes.includes("read")))
-      fail14("Exact owner read action and source read purpose required");
+      fail15("Exact owner read action and source read purpose required");
   }
   if (render && (!owner.disclosure || request.action !== owner.disclosure.readAction))
-    fail14("Collection requires exact owner read action");
+    fail15("Collection requires exact owner read action");
   const memberships = new Map;
   for (const e of entities.values()) {
     step();
     memberships.set(id8(e.type), new Map(e.fields.map((f) => [id8(f.ref), f])));
   }
   const member = (type, name) => memberships.get(id8(type))?.get(name);
-  const field = (r) => fields.get(ref5(r)) ?? fail14("Missing source Field"), entity = (r) => entities.get(ref5(r)) ?? fail14("Missing source entity");
+  const field = (r) => fields.get(ref5(r)) ?? fail15("Missing source Field"), entity = (r) => entities.get(ref5(r)) ?? fail15("Missing source entity");
   const profiles = new Map;
   for (const p of cut.valueProfiles) {
     shape8(p, ["field", "profile"]);
     const key = ref5(p.field), f = field(p.field).field;
     if (profiles.has(key) || p.profile !== GREGORIAN_DATE_PROFILE || f.scalarType !== "date" || f.cardinality !== "one" || !["required", "absent-allowed"].includes(f.nullability) || f.itemType !== undefined || f.references?.length || Object.keys(f.facets ?? {}).length || Object.hasOwn(f, "allowedValues") || Object.hasOwn(f, "default"))
-      fail14("Unsupported value profile");
+      fail15("Unsupported value profile");
     profiles.set(key, p.profile);
   }
   const budget = ledger.literal;
+  if (disclosureBatch && checkProtectionParametersWithinBudget(program.policy, program.catalog, program.closure, budget).status === "refused")
+    fail15("V2 catalog parameter budget refused");
   const literal = (r, v) => {
     step();
     const selected = field(r), f = selected.field;
     if (f.cardinality !== "one" || f.itemType !== undefined || f.references?.some((r) => r.role === "record-type"))
-      fail14("Unsupported logical literal");
+      fail15("Unsupported logical literal");
     if (f.scalarType === "date") {
       if (profiles.get(id8(r)) !== GREGORIAN_DATE_PROFILE)
-        fail14("Explicit Gregorian profile required");
+        fail15("Explicit Gregorian profile required");
       budget.step();
       if (v === null) {
         if (f.nullability !== "absent-allowed")
-          fail14("Required date null");
+          fail15("Required date null");
         return "null";
       }
       shape8(v, ["date"]);
       if (typeof v.date !== "string")
-        fail14("Date literal");
+        fail15("Date literal");
       parseGregorianDate(v.date);
       return budget.retain("date:" + v.date);
     }
     if (!["boolean", "string", "integer", "decimal", "binary"].includes(f.scalarType))
-      fail14("Unsupported logical scalar");
+      fail15("Unsupported logical scalar");
     if (v === null) {
       budget.check(selected.document, f, v);
       return "null";
@@ -30118,7 +32935,7 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
     const e = entity(type), key = keys.get(id8(type));
     list(values, 64);
     if (values.length !== key.fields.length)
-      fail14("Key arity");
+      fail15("Key arity");
     for (const [i, k] of key.fields.entries()) {
       const r = { documentId: type.documentId, moduleId: k.module, elementId: k.element }, f = field(r);
       budget.check(f.document, f.field, values[i]);
@@ -30138,14 +32955,14 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
   };
   const projections = new WeakMap, absences = new WeakMap;
   const factIdentity = new WeakMap, inventory = new Map, byType = new Map;
-  const factKey = (f) => factIdentity.get(f) ?? fail14("Unvalidated fact");
+  const factKey = (f) => factIdentity.get(f) ?? fail15("Unvalidated fact");
   const value = (f, r) => projections.get(f)?.get(id8(r));
   for (const fact of cut.facts) {
     step();
     shape8(fact, ["type", "key", "fields", "absent"]);
     const e = entity(fact.type), key = tuple(fact.type, fact.key);
     if (inventory.has(key))
-      fail14("Duplicate normalized Record identity");
+      fail15("Duplicate normalized Record identity");
     list(fact.fields, 4096);
     list(fact.absent, 4096);
     const names = new Set, projection = new Map, absent = new Set;
@@ -30156,7 +32973,7 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       shape8(p, ["field", "value"]);
       const name = ref5(p.field);
       if (names.has(name) || !member(e.type, name))
-        fail14("Invalid projection");
+        fail15("Invalid projection");
       names.add(name);
       literal(p.field, p.value);
       projection.set(name, p.value);
@@ -30165,14 +32982,14 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       step();
       const name = ref5(r);
       if (names.has(name) || !member(e.type, name) || field(r).field.nullability !== "absent-allowed")
-        fail14("Invalid absence");
+        fail15("Invalid absence");
       names.add(name);
       absent.add(name);
     }
     for (const [i, k] of keys.get(id8(fact.type)).fields.entries()) {
       const r = { documentId: fact.type.documentId, moduleId: k.module, elementId: k.element }, v = value(fact, r);
       if (v !== undefined && literal(r, v) !== literal(r, fact.key[i]))
-        fail14("Key projection mismatch");
+        fail15("Key projection mismatch");
     }
     factIdentity.set(fact, key);
     inventory.set(key, fact);
@@ -30180,29 +32997,29 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
     rows.push(fact);
     byType.set(id8(fact.type), rows);
   }
-  const subject = inventory.get(selector(cut.subject)) ?? fail14("Missing subject fact");
+  const subject = inventory.get(selector(cut.subject)) ?? fail15("Missing subject fact");
   if (id8(subject.type) !== id8(ontology.subject))
-    fail14("Wrong subject type");
+    fail15("Wrong subject type");
   if (scanPopulation) {
     const target = entity(request.targets[0]), candidates = byType.get(id8(target.type)) ?? [];
     if (cut.facts.length + cut.graphs.length + candidates.length > cut.maxFacts)
-      fail14("Aggregate scan facts exhausted");
+      fail15("Aggregate scan facts exhausted");
     step(candidates.length);
     request.resources = candidates.map((row) => ({ type: row.type, key: row.key }));
   }
-  const resources = request.resources.map((s) => inventory.get(selector(s)) ?? fail14("Missing requested fact"));
+  const resources = request.resources.map((s) => inventory.get(selector(s)) ?? fail15("Missing requested fact"));
   const covered = new Map;
   for (const c of cut.coverage) {
     shape8(c, ["type", "complete", "fields"]);
     const e = entity(c.type), key = id8(c.type);
     list(c.fields, 4096);
     if (covered.has(key) || typeof c.complete !== "boolean")
-      fail14("Invalid Record coverage");
+      fail15("Invalid Record coverage");
     const set = new Set;
     for (const r of c.fields) {
       const name = ref5(r);
       if (set.has(name) || !member(e.type, name))
-        fail14("Invalid covered Field");
+        fail15("Invalid covered Field");
       set.add(name);
     }
     covered.set(key, { complete: c.complete, fields: set });
@@ -30212,22 +33029,22 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       for (const name of c.fields) {
         step();
         if (!projections.get(row).has(name) && !absences.get(row).has(name))
-          fail14("Declared projection is missing");
+          fail15("Declared projection is missing");
       }
   const complete = (type) => {
     if (!covered.get(id8(type))?.complete)
-      fail14("Missing complete Record coverage");
+      fail15("Missing complete Record coverage");
   };
   const known = (f, r) => value(f, r) !== undefined || absences.get(f).has(id8(r));
   const admitField = (type, r, rows) => {
     step();
     complete(type);
     if (!covered.get(id8(type))?.fields.has(id8(r)))
-      fail14("Missing Field coverage");
+      fail15("Missing Field coverage");
     for (const f of rows) {
       step();
       if (!known(f, r))
-        fail14("Missing Field projection");
+        fail15("Missing Field projection");
     }
   };
   const storage = validateCandidateCatalogStorage(program, owner, () => step());
@@ -30239,32 +33056,32 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
   for (const row of cut.graphs) {
     step();
     shape8(row, ["relationship", "witness", "endpoints"]);
-    const rk = relationship(row.relationship), table = graphTables.get(rk) ?? fail14("Undeclared graph relationship"), plan = table.checks.plan;
+    const rk = relationship(row.relationship), table = graphTables.get(rk) ?? fail15("Undeclared graph relationship"), plan = table.checks.plan;
     list(row.endpoints, 2);
     let witnessFact, identity;
     if (plan.witness.kind === "record-key") {
       shape8(row.witness, ["kind", "type", "key"]);
       if (row.witness.kind !== "record-key" || ref5(row.witness.type) !== id8(plan.witness.type))
-        fail14("Wrong Record witness");
-      witnessFact = inventory.get(tuple(row.witness.type, row.witness.key)) ?? fail14("Missing Record witness");
+        fail15("Wrong Record witness");
+      witnessFact = inventory.get(tuple(row.witness.type, row.witness.key)) ?? fail15("Missing Record witness");
       identity = factKey(witnessFact);
     } else {
       shape8(row.witness, ["kind", "id"]);
       if (row.witness.kind !== "opaque-existential" || typeof row.witness.id !== "string" || !row.witness.id)
-        fail14("Opaque witness required");
+        fail15("Opaque witness required");
       identity = row.witness.id;
     }
     const unique = JSON.stringify([rk, identity]);
     if (graphIdentities.has(unique))
-      fail14("Duplicate graph witness identity");
+      fail15("Duplicate graph witness identity");
     graphIdentities.add(unique);
     const endpoints = new Map;
     for (const endpoint of row.endpoints) {
       shape8(endpoint, ["role", "key"]);
       const declared = plan.endpoints.find((e) => e.role === endpoint.role);
       if (!declared || endpoints.has(endpoint.role))
-        fail14("Unknown/duplicate graph role");
-      const target = inventory.get(tuple(declared.target, endpoint.key)) ?? fail14("Missing endpoint Record");
+        fail15("Unknown/duplicate graph role");
+      const target = inventory.get(tuple(declared.target, endpoint.key)) ?? fail15("Missing endpoint Record");
       endpoints.set(endpoint.role, target);
     }
     table.rows.push({ source: row, witnessFact, endpoints });
@@ -30272,21 +33089,21 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
   const graphCover = new Map;
   for (const c of cut.graphCoverage) {
     shape8(c, ["relationship", "complete", "roles", "fields"]);
-    const key = relationship(c.relationship), table = graphTables.get(key) ?? fail14("Undeclared graph coverage");
+    const key = relationship(c.relationship), table = graphTables.get(key) ?? fail15("Undeclared graph coverage");
     list(c.roles, 2);
     list(c.fields, 4096);
     if (graphCover.has(key) || typeof c.complete !== "boolean")
-      fail14("Invalid graph coverage");
+      fail15("Invalid graph coverage");
     const roles = new Set, attrs = new Set;
     for (const role of c.roles) {
       if (roles.has(role) || !table.checks.plan.endpoints.some((e) => e.role === role))
-        fail14("Invalid covered role");
+        fail15("Invalid covered role");
       roles.add(role);
     }
     for (const r of c.fields) {
       const name = ref5(r), w = table.checks.plan.witness;
       if (attrs.has(name) || w.kind !== "record-key" || !w.attributes.some((a) => id8(a) === name))
-        fail14("Invalid covered witness Field");
+        fail15("Invalid covered witness Field");
       attrs.add(name);
     }
     graphCover.set(key, { complete: c.complete, roles, fields: attrs });
@@ -30296,12 +33113,12 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       for (const role of c.roles) {
         step();
         if (!row.endpoints.has(role))
-          fail14("Declared graph role projection is missing");
+          fail15("Declared graph role projection is missing");
       }
       for (const name of c.fields) {
         step();
         if (!row.witnessFact || !projections.get(row.witnessFact).has(name) && !absences.get(row.witnessFact).has(name))
-          fail14("Declared graph attribute projection is missing");
+          fail15("Declared graph attribute projection is missing");
       }
     }
   const context = new Map;
@@ -30309,32 +33126,32 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
     shape8(c, ["field", "value"]);
     const key = ref5(c.field);
     if (context.has(key) || !ontology.context.some((r) => id8(r) === key))
-      fail14("Invalid context");
+      fail15("Invalid context");
     literal(c.field, c.value);
     context.set(key, c.value);
   }
   if (typeof request.action !== "string" || !ontology.actions.includes(request.action) || !request.targets.length)
-    fail14("Undeclared action/target");
+    fail15("Undeclared action/target");
   const targets = new Set;
   for (const r of request.targets) {
     const key = ref5(r);
     entity(r);
     if (targets.has(key))
-      fail14("Duplicate target");
+      fail15("Duplicate target");
     complete(r);
     targets.add(key);
   }
   if (resources.some((r) => !targets.has(id8(r.type))))
-    fail14("Resource outside target set");
+    fail15("Resource outside target set");
   const selectedFields = new Set;
   for (const r of request.fields) {
     const key = ref5(r);
     if (selectedFields.has(key))
-      fail14("Duplicate requested Field");
+      fail15("Duplicate requested Field");
     selectedFields.add(key);
     for (const type of request.targets)
       if (!member(type, key))
-        fail14("Field outside selected target");
+        fail15("Field outside selected target");
   }
   const scopedByType = new Map;
   for (const key of targets)
@@ -30354,7 +33171,7 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
         return;
       if (d.kind === "context-attribute") {
         if (!context.has(id8(d.field)))
-          fail14("Missing context dependency");
+          fail15("Missing context dependency");
         return;
       }
       const rows = d.context === "subject" ? [subject] : resources.filter((r) => id8(r.type) === id8(target));
@@ -30364,28 +33181,28 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       return;
     }
     if (t.kind !== "witness-term")
-      fail14("Unsupported compiled term");
-    const checks = vars.get(t.occurrence) ?? fail14("Lexical occurrence missing"), rows = sourceRows(checks);
+      fail15("Unsupported compiled term");
+    const checks = vars.get(t.occurrence) ?? fail15("Lexical occurrence missing"), rows = sourceRows(checks);
     if (checks.kind === "candidate-graph-relationship-checks/0.1") {
       const gc = graphCover.get(relationId(checks.plan.relationship));
       if (!gc?.complete)
-        fail14("Missing complete graph coverage");
+        fail15("Missing complete graph coverage");
       if (d.kind === "entity-identity") {
         if (!gc.roles.has(d.role))
-          fail14("Missing graph role coverage");
+          fail15("Missing graph role coverage");
         complete(d.type);
         for (const row of rows) {
           step();
           if (!row.endpoints.has(d.role))
-            fail14("Missing graph endpoint projection");
+            fail15("Missing graph endpoint projection");
         }
       } else {
         if (checks.plan.witness.kind !== "record-key")
-          fail14("Opaque witness is not a Record");
+          fail15("Opaque witness is not a Record");
         complete(d.type);
         if (d.kind === "record-attribute") {
           if (!gc.fields.has(id8(d.field)))
-            fail14("Missing graph witness Field coverage");
+            fail15("Missing graph witness Field coverage");
           step(rows.length);
           admitField(d.type, d.field, rows.map((r) => r.witnessFact));
         }
@@ -30401,7 +33218,7 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
         for (const row of rows) {
           const values = d.fields.map((r) => value(row, r));
           if (values.some((v) => v === undefined || v === null) || !inventory.has(tuple(d.type, values)))
-            fail14("Missing member endpoint Record");
+            fail15("Missing member endpoint Record");
         }
       }
     }
@@ -30420,7 +33237,7 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       const checks = associations[expr.association];
       if (checks.kind === "candidate-graph-relationship-checks/0.1") {
         if (!graphCover.get(relationId(checks.plan.relationship))?.complete)
-          fail14("Graph inventory is not complete");
+          fail15("Graph inventory is not complete");
       } else
         complete(checks.plan.type);
       const nested = new Map(vars);
@@ -30445,12 +33262,12 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       const v = value(row, d.field);
       return v === undefined ? undefined : literal(d.field, v);
     }
-    const bound = vars.get(t.occurrence) ?? fail14("Unbound occurrence");
+    const bound = vars.get(t.occurrence) ?? fail15("Unbound occurrence");
     let row = bound.row;
     if (bound.checks.kind === "candidate-graph-relationship-checks/0.1") {
       if (d.kind === "entity-identity")
         return factKey(row.endpoints.get(d.role));
-      row = row.witnessFact ?? fail14("Opaque Record access");
+      row = row.witnessFact ?? fail15("Opaque Record access");
     }
     if (d.kind === "record-identity")
       return factKey(row);
@@ -30473,25 +33290,40 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       }
       case "not":
         return securityNot(evaluate(expr.arg, resource, vars));
-      case "and":
-        return securityAnd(expr.args.map((x) => evaluate(x, resource, vars)));
-      case "or":
-        return securityOr(expr.args.map((x) => evaluate(x, resource, vars)));
+      case "and": {
+        let truth = "T";
+        for (const arg of expr.args) {
+          truth = securityAnd([truth, evaluate(arg, resource, vars)]);
+          if (truth === "F")
+            return "F";
+        }
+        return truth;
+      }
+      case "or": {
+        let truth = "F";
+        for (const arg of expr.args) {
+          truth = securityOr([truth, evaluate(arg, resource, vars)]);
+          if (truth === "T")
+            return "T";
+        }
+        return truth;
+      }
       case "exists": {
         const checks = associations[expr.association];
-        let found = false, unknown = false;
+        let unknown = false;
         for (const row of sourceRows(checks)) {
           step();
           const nested = new Map(vars);
           nested.set(expr.occurrence, { checks, row });
-          const t = evaluate(expr.where, resource, nested);
-          found ||= t === "T";
-          unknown ||= t === "U";
+          const truth = evaluate(expr.where, resource, nested);
+          if (truth === "T")
+            return "T";
+          unknown ||= truth === "U";
         }
-        return found ? "T" : unknown ? "U" : "F";
+        return unknown ? "U" : "F";
       }
       default:
-        return fail14("Unknown compiled operation");
+        return fail15("Unknown compiled operation");
     }
   };
   const traces = [];
@@ -30503,22 +33335,36 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
     if (decision === "permit")
       for (const r of request.fields) {
         step();
-        const ds = [];
+        const ds = [], origins = [];
         for (const x of evaluated) {
           step();
-          if (x.rule.effect === "permit" && x.truth === "T")
-            for (const d of x.rule.disclosure ?? []) {
+          if (x.rule.effect === "permit" && x.truth === "T") {
+            let matched = false;
+            for (const [disclosureIndex, d] of (x.rule.disclosure ?? []).entries()) {
               step();
-              if (id8(d.field) === id8(r))
+              if (id8(d.field) === id8(r)) {
+                matched = true;
                 ds.push(d.disposition);
+                if (disclosureTrace)
+                  origins.push({ ruleIndex: x.ruleIndex, disclosureIndex, disposition: d.disposition });
+              }
             }
+            if (disclosureTrace && !matched && member(resource.type, id8(r)).protection === "unprotected")
+              origins.push({ ruleIndex: x.ruleIndex, disclosureIndex: null, disposition: { kind: "original" } });
+          }
         }
+        const retainDisposition = (d) => {
+          if (!disclosureTrace)
+            return { field: r, disposition: d };
+          const sourceOccurrences = origins.filter((o) => o.disposition.kind === d.kind).map(({ ruleIndex, disclosureIndex }) => ({ ruleIndex, disclosureIndex }));
+          return { field: r, disposition: d, sourceOccurrences, selectedOccurrence: d.kind === "transformed" ? sourceOccurrences[0] : null };
+        };
         if (!ds.length && member(resource.type, id8(r)).protection === "protected") {
           decision = "indeterminate";
           break;
         }
         if (ds.some((d) => d.kind === "withheld")) {
-          dispositions.push({ field: r, disposition: { kind: "withheld" } });
+          dispositions.push(retainDisposition({ kind: "withheld" }));
           continue;
         }
         const transforms = ds.filter((d) => d.kind === "transformed"), identities = new Set(transforms.map((d) => d.vocabulary === "umf.security.protection" ? canonicalSchemaJson([d.vocabulary, d.transform, d.version, id8(d.field)]) : canonicalSchemaJson([d.transform, d.version, id8(d.field), literal(d.field, d.value)])));
@@ -30529,10 +33375,10 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
         const d = transforms[0] ?? { kind: "original" };
         if (d.kind === "original")
           admitField(resource.type, r, [resource]);
-        dispositions.push({ field: r, disposition: d });
+        dispositions.push(retainDisposition(d));
       }
-    if (ruleTrace) {
-      const trace = { resource: { type: resource.type, key: resource.key }, decision, rules: evaluated.map((r) => ({ ruleIndex: r.ruleIndex, truth: r.truth })) };
+    if (ruleTrace || disclosureTrace) {
+      const trace = { resource: { type: resource.type, key: resource.key }, decision, rules: evaluated.map((r) => ({ ruleIndex: r.ruleIndex, truth: r.truth })), ...disclosureTrace ? { dispositions: decision === "permit" ? dispositions : [] } : {} };
       const pending = [trace];
       while (pending.length) {
         step();
@@ -30549,12 +33395,20 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
     }
     rows.push({ decision, dispositions: decision === "permit" ? dispositions : [] });
   }
+  const disclosureSources = () => ({ policy: { id: program.policy.id, revision: program.policy.revision }, ontology: { documentId: ontology.documentId, revision: ontology.revision }, protection: program.catalog ? { id: program.catalog.id, revision: program.catalog.revision } : null, domains: program.closure.pins, owner: { id: owner.id, revision: owner.revision }, generation: cut.generation, readAction: owner.disclosure.readAction });
+  if (disclosureTrace && !disclosureBatch) {
+    const sources = { policy: { id: program.policy.id, revision: program.policy.revision }, ontology: { documentId: ontology.documentId, revision: ontology.revision }, protection: program.catalog ? { id: program.catalog.id, revision: program.catalog.revision } : null, domains: program.closure.pins, owner: { id: owner.id, revision: owner.revision }, generation: cut.generation, readAction: owner.disclosure.readAction };
+    const retained = JSON.stringify(sources);
+    step(retained.length);
+    budget.reserveText(retained.length);
+    return freeze18({ version: "umf.security.logical-disclosure-selection/0.1-candidate", status: "evaluated", complete: false, authority: false, sources, rows: traces });
+  }
   if (ruleTrace)
     return freeze18({ status: "evaluated", complete: false, authority: false, rows: traces });
   if (!render)
     return freeze18({ status: "evaluated", complete: false, authority: false, rows });
   if (rows.some((r) => r.decision === "indeterminate" || r.decision === "conflict"))
-    fail14("Collection decision is unresolved");
+    fail15("Collection decision is unresolved");
   const selected = rows.map((r, i) => ({ row: r, resource: resources[i] })).filter((r) => r.row.decision === "permit");
   const recipeCache = new WeakMap;
   const recipe = (d) => {
@@ -30570,9 +33424,9 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       return x.transformIndex === index;
     });
     if (index < 0 || !definition || !program.functionDefinitions)
-      fail14("No issued pure definition for selected directive");
+      fail15("No issued pure definition for selected directive");
     if (definition.valueProfile && (profiles.get(id8(definition.inputDomain)) !== definition.valueProfile || profiles.get(id8(definition.outputDomain)) !== definition.valueProfile))
-      fail14("Exact input/output value profiles required");
+      fail15("Exact input/output value profiles required");
     recipeCache.set(d, index);
     return index;
   };
@@ -30643,7 +33497,7 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       recipe(d);
       admitField(resource.type, r, [resource]);
       if (value(resource, r) === undefined)
-        fail14("Catalog recipe requires present input, not absence");
+        fail15("Catalog recipe requires present input, not absence");
     }
   const totalCells = selected.reduce((n, x) => n + x.row.dispositions.length, 0);
   step(totalCells + selected.length);
@@ -30678,7 +33532,7 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
     const r = cell.disposition === "transformed" ? cell.outputType : cell.field;
     if ((cell.disposition === "original" || cell.disposition === "transformed") && field(r).field.scalarType === "date") {
       if (profiles.get(id8(r)) !== GREGORIAN_DATE_PROFILE)
-        fail14("Rendered date requires exact output profile");
+        fail15("Rendered date requires exact output profile");
       outputProfiles.set(id8(r), { field: r, profile: GREGORIAN_DATE_PROFILE });
     }
     return retainOutput(cell);
@@ -30693,12 +33547,14 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
       else if (d.kind === "original") {
         const v = value(resource, r);
         cell = v === undefined ? { field: r, disposition: "absent" } : { field: r, disposition: "original", value: v };
-      } else if (d.vocabulary !== "umf.security.protection")
+      } else if (d.vocabulary !== "umf.security.protection") {
+        if (disclosureBatch)
+          fail15("Inline transform has no V2 catalog representation");
         cell = { field: r, disposition: "transformed", outputType: d.field, value: d.value };
-      else {
+      } else {
         const result = evaluateIssuedProtectionDefinition(program.functionDefinitions, recipe(d), value(resource, r), budget);
         if (result.status !== "transformed")
-          fail14("Pure recipe evaluation refused");
+          fail15("Pure recipe evaluation refused");
         cell = { field: r, disposition: "transformed", outputType: d.field, value: result.value };
       }
       cells.push(retainCell(cell));
@@ -30707,6 +33563,62 @@ function run(handle, ownerInput, cutInput, requestInput, render, operation, scan
   }
   const valueProfiles = [...outputProfiles.values()];
   retainOutput(valueProfiles);
+  if (disclosureBatch) {
+    if (request.fields.length > 256 || selected.length > 4096 || totalCells > 16384)
+      fail15("V2 batch cardinality bound");
+    const wireText = (v) => {
+      step();
+      if (typeof v !== "string" || !v.length || v.length > 4096)
+        fail15("V2 bounded source string required");
+    };
+    const wireRef = (r) => {
+      ref5(r);
+      Object.values(r).forEach(wireText);
+    };
+    for (const pin of [program.policy, program.catalog]) {
+      wireText(pin.id);
+      wireText(pin.revision);
+    }
+    for (const pin of program.closure.pins) {
+      wireText(pin.documentId);
+      wireText(pin.revision);
+    }
+    const columns = request.fields.map((r) => {
+      step();
+      wireRef(r);
+      const own = storage.get(JSON.stringify([id8(request.targets[0]), id8(r)])) ?? fail15("Missing selected storage declaration");
+      if (own.storageTransform) {
+        wireText(own.storageTransform.id);
+        wireText(own.storageTransform.version);
+      }
+      return { field: r, storageEffect: own.storageEffect, ...own.storageTransform ? { storageTransform: own.storageTransform } : {}, ...profiles.has(id8(r)) ? { valueProfile: profiles.get(id8(r)) } : {} };
+    });
+    const permitted = traces.filter((t) => t.decision === "permit");
+    if (permitted.length !== output.length)
+      fail15("Original row correspondence failed");
+    const wireRows = output.map((cells, rowIndex) => cells.map((cell, columnIndex) => {
+      step();
+      if (!("value" in cell))
+        return { disposition: cell.disposition };
+      const encoded = canonicalSchemaJson(cell.value);
+      step(encoded.length);
+      budget.step(encoded.length);
+      if (encoded.length > 4096)
+        fail15("V2 canonical literal bound");
+      if (cell.disposition === "original")
+        return { disposition: "original", value: cell.value };
+      const provenance = permitted[rowIndex].dispositions[columnIndex], { disposition: d, selectedOccurrence: occurrence } = provenance;
+      if (cell.disposition !== "transformed" || d.kind !== "transformed" || d.vocabulary !== "umf.security.protection" || !occurrence || !Number.isSafeInteger(occurrence.ruleIndex) || !Number.isSafeInteger(occurrence.disclosureIndex) || occurrence.ruleIndex < 0 || occurrence.disclosureIndex < 0 || id8(cell.outputType) !== id8(d.field))
+        fail15("V2 requires exact original selected catalog transform");
+      wireRef(d.field);
+      wireText(d.transform);
+      wireText(d.version);
+      return { disposition: "transformed", selection: occurrence, outputDomain: d.field, transform: { id: d.transform, version: d.version }, value: cell.value, ...profiles.has(id8(d.field)) ? { valueProfile: profiles.get(id8(d.field)) } : {} };
+    }));
+    const result = { version: "umf.security.logical-disclosure-batch/0.1-candidate", status: "rendered", complete: false, authority: false, sources: disclosureSources(), decisions: traces, resources: permitted.map((t) => t.resource), batch: { version: "umf.security.disclosure/0.2.0", policy: { id: program.policy.id, revision: program.policy.revision }, protection: { id: program.catalog.id, revision: program.catalog.revision }, domains: program.closure.pins, columns, rows: wireRows } };
+    retainOutput(result);
+    return freeze18(result);
+  }
   return freeze18({ status: "rendered", complete: false, authority: false, rows: output, valueProfiles });
 }
 function evaluateCandidateCatalogActionWithinOperation(handle, owner, cut, request, operation) {
@@ -30771,12 +33683,12 @@ function evaluateCandidateQueryValueRoutes(handle, ownerInput, cutInput, useInpu
 }
 
 // src/extensions/security/catalog-operation-batch-candidate.ts
-var fail15 = () => {
+var fail16 = () => {
   throw Error("SECURITY_OPERATION_BATCH_REFUSED");
 };
 function shape9(v, keys) {
   if (!v || typeof v !== "object" || Array.isArray(v) || Object.keys(v).length !== keys.length || keys.some((k) => !Object.hasOwn(v, k)))
-    fail15();
+    fail16();
 }
 function freeze20(v) {
   if (v && typeof v === "object" && !Object.isFrozen(v)) {
@@ -30788,7 +33700,7 @@ function freeze20(v) {
 var ref6 = (r) => {
   shape9(r, ["documentId", "moduleId", "elementId"]);
   if (Object.values(r).some((v) => typeof v !== "string" || !v))
-    fail15();
+    fail16();
   return JSON.stringify([r.documentId, r.moduleId, r.elementId]);
 };
 function evaluateCandidateCatalogOperationBatch(handle, ownerInput, cutInput, operationsInput) {
@@ -30797,7 +33709,7 @@ function evaluateCandidateCatalogOperationBatch(handle, ownerInput, cutInput, op
     readCandidateCatalogProgram(handle);
     const packet = copyJson({ owner: ownerInput, cut: cutInput, operations: operationsInput }), { owner, cut, operations } = packet;
     if (!Array.isArray(operations) || !operations.length || operations.length > 256 || !Number.isSafeInteger(cut.maxFacts) || cut.maxFacts < 1 || cut.maxFacts > 1e4 || !Array.isArray(cut.facts) || !Array.isArray(cut.graphs))
-      fail15();
+      fail16();
     const ledger = new CandidateSecurityOperationBudget(cut.maxSteps), pending = [packet];
     while (pending.length) {
       ledger.step();
@@ -30814,7 +33726,7 @@ function evaluateCandidateCatalogOperationBatch(handle, ownerInput, cutInput, op
     const ids = new Set;
     for (const op of operations) {
       if (typeof op.id !== "string" || !/^[A-Za-z][A-Za-z0-9_-]{0,63}$/.test(op.id) || ids.has(op.id))
-        fail15();
+        fail16();
       ids.add(op.id);
       if (op.kind === "scan" || op.kind === "read-rules") {
         shape9(op, ["id", "kind", "selection"]);
@@ -30829,29 +33741,29 @@ function evaluateCandidateCatalogOperationBatch(handle, ownerInput, cutInput, op
         shape9(op, ["id", "kind", "request"]);
         shape9(op.request, ["action", "resources", "targets", "fields"]);
         if (!Array.isArray(op.request.resources))
-          fail15();
+          fail16();
         population += op.request.resources.length;
       } else
-        fail15();
+        fail16();
       if (population > cut.maxFacts)
-        fail15();
+        fail16();
     }
     const results = [];
     for (const op of operations) {
       if (op.kind === "scan") {
         const outcome = evaluateCandidateCatalogScanWithinOperation(handle, owner, cut, op.selection, ledger);
         if (outcome.status !== "rendered")
-          fail15();
+          fail16();
         results.push({ id: op.id, kind: "scan", outcome });
       } else if (op.kind === "read-rules") {
         const outcome = evaluateCandidateCatalogReadRuleScanWithinOperation(handle, owner, cut, op.selection, ledger);
         if (outcome.status !== "evaluated")
-          fail15();
+          fail16();
         results.push({ id: op.id, kind: "read-rules", outcome });
       } else {
         const outcome = evaluateCandidateCatalogActionWithinOperation(handle, owner, cut, op.request, ledger);
         if (outcome.status !== "evaluated")
-          fail15();
+          fail16();
         results.push({ id: op.id, kind: "action", outcome });
       }
     }
@@ -30863,12 +33775,12 @@ function evaluateCandidateCatalogOperationBatch(handle, ownerInput, cutInput, op
 
 // tools/security/current-query-child.ts
 var CURRENT_QUERY_LIMITS = Object.freeze({ requestBytes: 4 * 1024 * 1024, responseBytes: 16 * 1024 * 1024, routes: 4096, operations: 256, scans: 16, facts: 1e4 });
-var fail16 = () => {
+var fail17 = () => {
   throw Error("UMF_QUERY_CHILD_REFUSED");
 };
 function shape10(value, keys) {
   if (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).length !== keys.length || keys.some((k) => !Object.hasOwn(value, k)))
-    fail16();
+    fail17();
 }
 function freezeJson(value) {
   if (value && typeof value === "object") {
@@ -30880,12 +33792,12 @@ function freezeJson(value) {
 }
 function id9(value) {
   if (typeof value !== "string" || !/^[A-Za-z0-9_-]{1,64}$/.test(value))
-    fail16();
+    fail17();
 }
 function encodeCurrentQueryFrame(value) {
   const body = Buffer.from(JSON.stringify(value), "utf8");
   if (body.length < 1 || body.length > CURRENT_QUERY_LIMITS.responseBytes)
-    fail16();
+    fail17();
   const frame = Buffer.allocUnsafe(4 + body.length);
   frame.writeUInt32BE(body.length);
   body.copy(frame, 4);
@@ -30900,21 +33812,21 @@ class CurrentQueryChildSession {
   inspected = null;
   process(frame) {
     if (this.phase === "failed" || this.phase === "evaluated")
-      fail16();
+      fail17();
     let request, requestId;
     try {
       if (frame.length < 5 || frame.length > 4 + CURRENT_QUERY_LIMITS.requestBytes || new DataView(frame.buffer, frame.byteOffset, frame.byteLength).getUint32(0) !== frame.length - 4)
-        fail16();
+        fail17();
       const body = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(frame.subarray(4));
       request = freezeJson(readJsonValue(body, "json"));
       id9(request.requestId);
       requestId = request.requestId;
       if (this.ids.has(requestId))
-        fail16();
+        fail17();
       this.ids.add(requestId);
       if (request.kind === "initialize") {
         if (this.phase !== "new")
-          fail16();
+          fail17();
         this.receipt = createHash("sha256").update(frame).digest("hex");
         shape10(request, ["kind", "requestId", "sources"]);
         shape10(request.sources, ["policy", "catalog", "closure", "ontology", "associationBindings", "extensionSelection"]);
@@ -30924,10 +33836,10 @@ class CurrentQueryChildSession {
         return encodeCurrentQueryFrame({ kind: "initialized", requestId, sourceReceipt: this.receipt });
       }
       if (this.receipt === null || request.sourceReceipt !== this.receipt)
-        fail16();
+        fail17();
       if (request.kind === "inspect-routes") {
         if (this.phase !== "initialized")
-          fail16();
+          fail17();
         shape10(request, ["kind", "requestId", "sourceReceipt", "owner", "routes"]);
         this.routes(request.routes);
         const reply = { kind: "routes-inspected", requestId, sourceReceipt: this.receipt, routeResults: [] };
@@ -30943,23 +33855,23 @@ class CurrentQueryChildSession {
       }
       if (request.kind === "evaluate") {
         if (this.phase !== "inspected")
-          fail16();
+          fail17();
         shape10(request, ["kind", "requestId", "sourceReceipt", "owner", "cut", "operations", "routes"]);
         this.routes(request.routes);
         if (canonicalSchemaJson({ owner: request.owner, routes: request.routes }) !== this.inspected)
-          fail16();
+          fail17();
         if (!Array.isArray(request.operations) || request.operations.length < 1 || request.operations.length > CURRENT_QUERY_LIMITS.operations || !Array.isArray(request.cut?.facts) || !Array.isArray(request.cut?.graphs) || request.cut.facts.length + request.cut.graphs.length > CURRENT_QUERY_LIMITS.facts)
-          fail16();
+          fail17();
         if (request.operations.filter((op) => op?.kind === "scan").length > CURRENT_QUERY_LIMITS.scans || request.operations.filter((op) => op?.kind === "read-rules").length > CURRENT_QUERY_LIMITS.scans)
-          fail16();
+          fail17();
         const fields = request.operations.reduce((n, op) => n + (Array.isArray(op?.selection?.fields) ? op.selection.fields.length : 0) + (Array.isArray(op?.request?.fields) ? op.request.fields.length : 0), 0);
         if (fields > 4096)
-          fail16();
+          fail17();
         const batch = evaluateCandidateCatalogOperationBatch(this.handle, request.owner, request.cut, request.operations);
         const reply = { kind: "evaluation", requestId, sourceReceipt: this.receipt, batch, routeResults: [] };
         let bytes = Buffer.byteLength(JSON.stringify(reply), "utf8");
         if (bytes > CURRENT_QUERY_LIMITS.responseBytes)
-          fail16();
+          fail17();
         for (const route of request.routes) {
           const value = { id: route.id, result: evaluateCandidateQueryValueRoutes(this.handle, request.owner, request.cut, route.use) };
           bytes = this.retain(bytes, value, reply.routeResults.length);
@@ -30968,37 +33880,37 @@ class CurrentQueryChildSession {
         this.phase = "evaluated";
         return encodeCurrentQueryFrame(reply);
       }
-      return fail16();
+      return fail17();
     } catch {
       this.phase = "failed";
       this.handle = undefined;
       this.inspected = null;
       if (requestId !== undefined && this.receipt !== null)
         return encodeCurrentQueryFrame({ kind: "refused", requestId, sourceReceipt: this.receipt, code: "UMF_QUERY_CHILD_REFUSED" });
-      return fail16();
+      return fail17();
     }
   }
   routes(routes) {
     if (!Array.isArray(routes) || routes.length > CURRENT_QUERY_LIMITS.routes)
-      fail16();
+      fail17();
     const ids = new Set, scans = new Set;
     for (const route of routes) {
       shape10(route, ["id", "use"]);
       id9(route.id);
       if (ids.has(route.id))
-        fail16();
+        fail17();
       ids.add(route.id);
       if (typeof route.use?.scan !== "string")
-        fail16();
+        fail17();
       scans.add(route.use.scan);
     }
     if (scans.size > CURRENT_QUERY_LIMITS.scans)
-      fail16();
+      fail17();
   }
   retain(bytes, value, count) {
     const next = bytes + Buffer.byteLength(JSON.stringify(value), "utf8") + (count ? 1 : 0);
     if (next > CURRENT_QUERY_LIMITS.responseBytes)
-      fail16();
+      fail17();
     return next;
   }
 }

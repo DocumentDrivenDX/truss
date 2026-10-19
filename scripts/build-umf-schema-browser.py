@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Reuse pinned UMF browser assets with the current reviewed Truss catalog."""
 from pathlib import Path
 import subprocess, json, hashlib, sys, re

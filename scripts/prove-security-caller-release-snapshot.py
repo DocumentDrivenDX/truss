@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional endpoint privilege observations; uninterrupted authority lifetime remains unproved."""
 from pathlib import Path
 import hashlib,json,uuid,z3

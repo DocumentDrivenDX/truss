@@ -1,1 +1,10 @@
-{"name":"@documentdrivendx/truss-umf-bun","version":"0.0.0-experimental.1","private":true,"type":"module","exports":{".":"./src/index.ts"}}
+{
+  "name": "@documentdrivendx/truss-umf-bun",
+  "version": "0.0.0-experimental.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "license": "MIT OR Apache-2.0"
+}

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Build the committed Weft wheel used by the public Truss PG18 runtime."""
 import argparse
 import io
@@ -11,7 +12,7 @@ import tarfile
 import tempfile
 import tomllib
 
-REVISION = 'e3c107cf14b0fc8f17423ebfbbcc686dda1237db'
+REVISION = 'ae7d18f1e22323348dbd7b6a06093f12557d3add'
 
 
 def check_wheel(wheel: Path, expected_version: str):

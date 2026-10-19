@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional selected-fact stability, not SQL/trigger/native refinement.
 
 Reader continuously holds a conflicting table cut, foreign writes participate,

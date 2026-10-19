@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private literal-only current-check component; not a permit or production gate.
 -- Trusted original source/installer/executable custody remains a premise.
 -- Install this helper under the existing excluded runtime owner. Never SET ROLE.
@@ -37,7 +38,7 @@ DECLARE observation pg_catalog.jsonb; packet pg_catalog.jsonb; producer pg_catal
 BEGIN
  -- Home prelocks precede private claim/source reads and policy/role cuts.
  LOCK TABLE ONLY truss.action_family_registration,truss.action_subject_binding,
-  truss.action_role_binding,truss.runtime_release IN ACCESS SHARE MODE NOWAIT;
+  truss.action_role_binding IN ACCESS SHARE MODE NOWAIT;
  observation:=truss.observe_preparation_bridge(original_anchor,original_nonce);
  IF observation->'sourceAttachment' IS NULL OR observation->'sourceAttachment'='null'::jsonb THEN
   RAISE EXCEPTION 'source-aware original program required' USING ERRCODE='55000';END IF;

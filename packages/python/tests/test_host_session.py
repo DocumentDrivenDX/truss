@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private complete-call scopes over original native lifetime custody."""
 import unittest
 from unittest.mock import patch

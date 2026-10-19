@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private numeric-free wire decoder; not operation or native admission.
 
 Uses byte, tree-depth, member-count and node-count limits.

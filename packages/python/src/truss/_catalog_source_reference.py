@@ -1,13 +1,11 @@
-DATE08_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.18.0', 'sha256': '5f8903ccb48244851fece0a7778eb07eb8a32950449e3ac6ca0d657441acb838'}
-DECLARATIVE08_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.17.0', 'sha256': '76dafc79768be61a311e4161b936ccf176aba32b539af51794fe22d679725fc0'}
-RECURSIVE08_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.16.0', 'sha256': 'f5c40d9539a4a6788f34b04c1dc41b7a094ff830117c1feaed1a41db4408b315'}
-"""Same-preparation source references at defined Truss wrapper positions only."""
-REFERENCE08_PROFILE={'identity':'truss-fresh-catalog-support','version':'0.14.0','sha256':'1d89c2cdaa468a0ca01f837624787ca678aa6b4dafed6417018e63c0ebcfca56'}
+# SPDX-License-Identifier: MIT OR Apache-2.0
+"""Same-preparation source references for current UMF 0.10 catalogs."""
+DATE10_PROFILE={'identity': 'truss-fresh-catalog-support', 'version': '0.20.0', 'sha256': '364335de9a0e6968106af189dcb11d5b4c86b2114361fcffd722c4154bf809cb'}
 SOURCE_REFERENCE_FORMAT='truss-catalog-source-reference/0.1'
 
 
 def compact_catalog_sources(prepared):
-    return prepared.input()['supportProfile'] in (REFERENCE08_PROFILE,RECURSIVE08_PROFILE,DECLARATIVE08_PROFILE,DATE08_PROFILE)
+    return prepared.input()['supportProfile']==DATE10_PROFILE
 
 
 def catalog_source_reference(prepared, document_id, basis='original'):

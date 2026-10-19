@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 // Build-time only: preserve owner source bytes and compile their module syntax.
 import ts from 'typescript-compiler';
 import {gzipSync} from 'node:zlib';
@@ -5,11 +6,11 @@ import {readdir,readFile,writeFile,unlink} from 'node:fs/promises';
 import {join,dirname} from 'node:path';
 import {createHash} from 'node:crypto';
 const root=join(import.meta.dir,'../packages/python/src/truss');
-const cohorts=['_umf','_umf_core08','_umf_keys','_umf_keys08','_current_query_owner','_current_disclosure_owner','_preparation_sources'];
+const cohorts=['_umf_core10','_current_query_owner','_current_disclosure_owner','_preparation_sources'];
 const modules:Record<string,string>={}, sources:Record<string,string>={}, hashes:Record<string,string>={};
 async function walk(dir:string){for(const item of (await readdir(join(root,dir),{withFileTypes:true})).sort((a,b)=>a.name<b.name?-1:a.name>b.name?1:0)){
  const path=dir+'/'+item.name;if(item.isDirectory()){await walk(path);continue;}
- if(!/\.(m?js|json)$/.test(path)||/^_umf\/owners\/.*\/producer\.js$/.test(path))continue;
+ if(!/\.(m?js|json|txt)$/.test(path)||/^_umf\/owners\/.*\/producer\.js$/.test(path))continue;
  const raw=await readFile(join(root,path));sources[path]=raw.toString('base64');hashes[path]=createHash('sha256').update(raw).digest('hex');
  if(!/\.m?js$/.test(path))continue;
  const source=raw.toString('utf8');
@@ -36,16 +37,19 @@ async function walk(dir:string){for(const item of (await readdir(join(root,dir),
  modules[path]=transformed;
 }}
 for(const cohort of cohorts)await walk(cohort);
+// The current preparation bridge resolves its pinned AJV runtime from this
+// shared package path; it is included only in the core10 owner archive.
+await walk('_umf/runtime');
 const output=join(root,'_embedded_js');
 const archives:string[]=[];
 for(const cohort of cohorts){
- const include=(path:string)=>path.startsWith(cohort+'/')||(cohort==='_umf_core08'&&path.startsWith('_umf/runtime/'));
+ const include=(path:string)=>path.startsWith(cohort+'/')||(cohort==='_umf_core10'&&(path.startsWith('_umf/runtime/')||path.startsWith('_umf/licenses/')));
  const archive={modules:Object.fromEntries(Object.entries(modules).filter(([path])=>include(path))),
   sources:Object.fromEntries(Object.entries(sources).filter(([path])=>include(path)))};
  const compressed=gzipSync(JSON.stringify(archive),{level:9});compressed[9]=255;
  const name=cohort+'.json.gz';archives.push(name);await writeFile(join(output,name),compressed);
 }
-await unlink(join(output,'modules.json.gz')).catch(error=>{if(error.code!=='ENOENT')throw error;});
+for(const name of await readdir(output))if(name.endsWith('.json.gz')&&!archives.includes(name))await unlink(join(output,name));
 await writeFile(join(output,'sources.json'),JSON.stringify(hashes,null,2)+'\n');
 const built=await Bun.build({entrypoints:[join(import.meta.dir,'embedded-polyfills.ts')],target:'browser',format:'iife',minify:false});
 if(!built.success)throw new AggregateError(built.logs);

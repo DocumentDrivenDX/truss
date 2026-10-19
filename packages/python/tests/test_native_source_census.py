@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Synthetic frame controls: no native/provider/authentication qualification."""
 import struct
 import unittest

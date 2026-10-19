@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Bounded one-call live traversal; complete terminals or explicit restart."""
 from dataclasses import dataclass,field
 from typing import Literal

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private Unix-socket SCRAM login adapter, not human/permit admission.
 
 The trusted host supplies the original server socket/database and credentials.

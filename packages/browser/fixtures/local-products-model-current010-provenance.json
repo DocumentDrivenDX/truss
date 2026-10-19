@@ -1,0 +1,11 @@
+{
+  "interfaceVersion": "truss-current-source-derivation/0.1",
+  "scope": "Derived current010 browser fixture; no original-capture or runtime qualification claim. All other JSON content is preserved.",
+  "path": "packages/browser/fixtures/local-products-model.json",
+  "originalSha256": "b8ce3cfe76eeda7c1531b2bbf8aba121c9d9614800ff1f3301f853c048516f27",
+  "derivedSha256": "f5551ea64d4d48957dd0dca3e3cded7b182eb4dfdb4ca83fa3fc798270b0042d",
+  "changedPointers": [
+    "/umf"
+  ],
+  "sourceVersion": "0.10.0"
+}

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Independent JS check against Python-specified exact wire vectors; no issuer. */
 import {decodeAcceptanceJson} from '../packages/postgresql/src/acceptance-json';
 const data=await Bun.file('docs/helix/04-build/evidence/receipt-position-locator-vectors.json').json();

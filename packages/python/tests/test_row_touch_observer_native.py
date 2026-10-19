@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Integrated observer SQL compilation and original image component evidence.
 
 Administrative fixtures do not prove protected installation or public readiness.

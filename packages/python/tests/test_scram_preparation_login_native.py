@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual SCRAM exchange under explicit disposable HBA; no human admission."""
 from pathlib import Path
 import secrets

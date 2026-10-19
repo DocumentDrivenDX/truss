@@ -59,10 +59,10 @@ def _cell(cell, family):
 
 
 def _key_batches(document, pending):
-    """Partition before dispatch within the original encoder's unchanged limits."""
+    """Partition by actual encoded request bytes and the bounded key count."""
     if not 0 < len(document) <= 1048576:
         raise ValueError('Bounded original fact Key document required')
-    maximum=min(128,4194304//len(document))
+    maximum=128
     base=len(json.dumps({'sourceText':document.decode('utf-8'),'requests':[]},
                         ensure_ascii=True,separators=(',',':')).encode())
     batch=[];size=base

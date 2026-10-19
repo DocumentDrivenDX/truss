@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createCatalogInputPreparation} from '../packages/umf-bun/src/catalog-input';
 import {resolveCatalogEndpointSuppliedSources} from '../packages/umf-bun/src/catalog-endpoint-source-references';
@@ -7,7 +8,7 @@ const fixture=await Bun.file('docs/helix/02-design/contracts/bindings/acceptance
 function request(){
  const input=structuredClone(fixture.input);input.binding={state:'absent'};input.transforms=[];
  input.documents=['first-doc','second-doc'].map(documentId=>{
-  const text=' \n'+JSON.stringify({umf:'0.7.0',id:documentId,vocabularies:{},extensions:{},modules:[{id:'m',namespace:'m',elements:[{id:'Item',kind:'record',members:[{module:'m',element:'label'}],extensions:{}},{id:'label',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions:{}}]}]})+'\n';
+  const text=' \n'+JSON.stringify({umf:'0.10.0',id:documentId,vocabularies:{},extensions:{},modules:[{id:'m',namespace:'m',elements:[{id:'Item',kind:'record',members:[{module:'m',element:'label'}],extensions:{}},{id:'label',kind:'field',scalarType:'string',nullability:'required',cardinality:'one',extensions:{}}]}]})+'\n';
   return {documentId,documentRevision:'r1',artifact:{identity:documentId+'-source',bytesBase64:Buffer.from(text).toString('base64'),sha256:new Bun.CryptoHasher('sha256').update(text).digest('hex')},umfProfile:preparation.umfProfile,ingress:{kind:'native'}};
  });return input;
 }
@@ -20,7 +21,7 @@ test('original local and mutual supplied selections retain actual source bytes r
  expect(first.matches.map(m=>m.documentId)).toEqual(['first-doc','second-doc']);
  expect(second.matches[0]!.artifact).toEqual(prepared.original.input.documents[0]!.artifact);
  expect(first.matches[0]!.originalText).toBe(prepared.documents[0]!.originalText);
- expect(first.matches[0]!.umfVersion).toBe('0.7.0');
+ expect(first.matches[0]!.umfVersion).toBe('0.10.0');
  expect(first.scope).toBe('original_supplied_source_reference_correspondence_only');
  expect(Object.isFrozen(first.matches[0]!.artifact)).toBe(true);
 });

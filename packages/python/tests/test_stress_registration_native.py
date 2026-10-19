@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Every unchanged stress schema through public preparation and native registration."""
 import json,sys,time
 from pathlib import Path
@@ -233,7 +234,9 @@ def registration_case(name,workload):
         self.install();connection,host,assembly,tx=self.consumer()
         prepared=assembly.prepare_catalog((CatalogDocument('perf-'+name,'matrix-v1',raw),))
         self.assertEqual(prepared.documents[0].document.content,raw)
-        self.assertIsNone(prepared.documents[0].observation()['transition'])
+        observation=prepared.documents[0].observation()
+        self.assertEqual(observation['source']['umf'],'0.10.0')
+        self.assertTrue(observation['sourceValidation']['valid'])
         started=time.monotonic()
         accepted=assembly.accept_in_transaction(tx,prepared,request_key='matrix-'+name)
         self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(host._custody.last_attempt.error))

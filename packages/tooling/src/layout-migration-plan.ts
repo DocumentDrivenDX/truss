@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Pure candidate path planning. Metadata is not installed state or execution authority. */
 import {decodeAcceptanceJson} from '../../postgresql/src/acceptance-json';
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic actual PG18 original-source storage, not current-query permission."""
 from hashlib import sha256
 import json
@@ -32,7 +33,7 @@ class CurrentQuerySourcesNativeTests(catalog.PublicCatalogRuntimeTests):
                             'documentJson':original})
             documents.append(CatalogDocument(document['id'], revision, original.encode()))
         connection, host, assembly, tx = self.consumer()
-        prepared = assembly.prepare_catalog(tuple(documents), source_version='0.8.0', bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE', shutil.which('bun') or 'bun'))
+        prepared = assembly.prepare_catalog(tuple(documents), source_version='0.10.0', bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE', shutil.which('bun') or 'bun'))
         accepted = assembly.accept_in_transaction(tx, prepared, request_key='current-source-catalog')
         self.assertIsInstance(accepted, Ok, str(host._custody.last_attempt.error))
         host.detach(); connection.commit()

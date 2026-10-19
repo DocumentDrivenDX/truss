@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {createPgConnectionSource,createFileQueryJournal} from '@documentdrivendx/truss-pg-runtime';
 import {createEngineExecutor,decodeOperationRegistry} from '@documentdrivendx/truss-postgresql';
 import {mkdtemp} from 'node:fs/promises';

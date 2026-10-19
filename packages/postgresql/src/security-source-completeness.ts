@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Physical admission SQL only. Caller owns original binding, eligibility,
  * type/key correspondence, source custody and final-release qualification. */
 import type {SecurityPhysicalType} from './security-predicate';

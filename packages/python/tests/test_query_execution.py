@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Independent coordinator ordering/fault controls; synthetic host only."""
 from contextlib import contextmanager
 import json

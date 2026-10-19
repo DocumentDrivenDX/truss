@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original UMF adapter owns the private PG anchor storage syntax. */
 const root=process.argv[2];
 if(!root?.startsWith('/'))throw Error('Explicit original UMF checkout required');

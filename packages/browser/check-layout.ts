@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Dependency/layout check only; this package does not export a provider yet. */
 import {PGlite} from '@electric-sql/pglite';
 

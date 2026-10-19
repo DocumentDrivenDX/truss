@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public installation footprint observation, without readiness authority.
 
 Only PostgreSQL system catalogs are read. No Truss relation body, report,

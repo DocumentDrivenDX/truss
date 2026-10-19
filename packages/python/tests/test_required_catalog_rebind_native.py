@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic required-field rebinding through the public assembly."""
 import os
 from dataclasses import replace
@@ -34,6 +35,3 @@ class RequiredCatalogRebindTests(prior.CatalogRebindTests):
         h.detach();c.commit()
         self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(1,))
         self.assertEqual(self.admin.execute('SELECT ver FROM truss.object ORDER BY id').fetchall(),[(1,),(1,)])
-
-class RequiredCatalogRebind08Tests(RequiredCatalogRebindTests):
-    source_version='0.8.0'

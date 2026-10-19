@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private existing-sandbox driver qualification; credentials remain memory-only. */
 import {SQL} from 'bun';
 import {writeFile} from 'node:fs/promises';

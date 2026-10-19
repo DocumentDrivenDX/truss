@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 from hashlib import sha256
 import unittest
 from truss._installation_archive import COLUMNS,compare_archive_rows

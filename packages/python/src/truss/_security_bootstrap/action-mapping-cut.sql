@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Mapping-only RR exclusion. Fresh source/current authority remains separate.
 CREATE FUNCTION truss.acquire_action_mapping_cut()
 RETURNS pg_catalog.void

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original UMF native owner generates a private shared action-store home. */
 const root=process.argv[2];
 if(!root?.startsWith('/'))throw Error('Explicit original UMF owner checkout required');

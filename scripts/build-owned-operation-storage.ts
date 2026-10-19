@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Native operation custody for cascades/reparents, through UMF's SQL exporter. */
 import {backend} from '/Users/erik/.codex/worktrees/0e51/umf/native/postgresql/runtime';
 import {readDocument} from '/Users/erik/.codex/worktrees/0e51/umf/src/model/document';

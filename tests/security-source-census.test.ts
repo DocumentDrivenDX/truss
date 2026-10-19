@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {CensusChunkAssembly} from '../packages/pg-runtime/src/security-source-census';
 import {decodeResponseFrame,ResponseIngress} from '../packages/pg-runtime/src/wire';

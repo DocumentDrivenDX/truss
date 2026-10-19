@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private one-use prepared-Execute cancellation; not public adoption.
 
 Cancel transport completion is distinct from the original native response and

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual-context/native identity join data; never a native authority witness."""
 from dataclasses import dataclass
 from hashlib import sha256

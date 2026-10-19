@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Per-invocation mutable planner helpers.  The executor passes the identifier
 -- of its uniquely named pg_temp relation; these helpers never retain state.
 CREATE FUNCTION truss.runtime_owned_workspace_state(workspace text,member_kind char,member_ref text,header_only boolean DEFAULT false) RETURNS jsonb

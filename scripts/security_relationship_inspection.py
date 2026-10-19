@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Pinned original relationship inspector; correspondence, never native admission."""
 from pathlib import Path
 from hashlib import sha256

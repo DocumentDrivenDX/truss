@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public nested-container workflow preserving exact decimal tokens."""
 import json,os
 from decimal import Decimal
@@ -10,7 +11,7 @@ import test_group_create_native as base
 
 class RecursiveContainerTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version;module=source['modules'][0]
         for element in module['elements']:
@@ -64,12 +65,10 @@ class RecursiveContainerTests(base.PublicCreateGroupTests):
         self.assertEqual(dict(reread.value.object.values)['A-value'],actual)
         h.detach();c.rollback()
 
-class RecursiveContainer08Tests(RecursiveContainerTests):
-    source_version='0.8.0'
 
 class RecursiveRebindTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version
         for element in source['modules'][0]['elements']:
@@ -102,6 +101,3 @@ class RecursiveRebindTests(base.PublicCreateGroupTests):
         history=a.reconstruct_in_transaction(t,entity=HistoryEntity(kind='object',document_id='adoc',module_id='m',definition_id='A',id=int(identity.id)),version=2)
         self.assertIsInstance(history.value,HistoricalRecord,repr(history));self.assertIn('1.23000',history.value.record.decode())
         h.detach();c.rollback()
-
-class RecursiveRebind08Tests(RecursiveRebindTests):
-    source_version='0.8.0'

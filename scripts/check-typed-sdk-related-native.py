@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One genuine public SDK RelatedKeys read/page/stream workflow on fresh PG18."""
 from contextlib import contextmanager
 from datetime import timedelta
@@ -17,19 +18,20 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'packages/python/examp
 from adopter_workflow import transaction, success, expect
 
 parser=argparse.ArgumentParser()
-for name in ('generated','model','output','pg-bin','bun-executable'):parser.add_argument('--'+name,type=Path,required=True)
+for name in ('generated','model','output','pg-bin'):parser.add_argument('--'+name,type=Path,required=True)
+parser.add_argument('--bun-executable',type=Path,default=Path('bun'))
 add_cohort_arguments(parser)
 args=parser.parse_args();out=args.output.absolute();out.mkdir(parents=True,exist_ok=False)
 cohort=verify_cohort(args)
 if cohort is not None:(out/'installed-cohort.json').write_text(json.dumps(cohort,indent=2)+'\n')
 original=args.model.read_bytes();digest=hashlib.sha256(original).hexdigest();doc=json.loads(original)
+if type(doc) is not dict or doc.get('umf')!='0.10.0':raise ValueError('exact current UMF 0.10.0 model required')
 sys.path.insert(0,str(args.generated.absolute()))
 from native_sales.models import Order
 from native_sales.keys import CustomerKey
 assert Order.UMF_SOURCE.document_sha256==digest
-if cohort is None:assert weft.__version__=='0.4.42-dev.0'
+if cohort is None:assert weft.__version__=='0.4.45'
 else:assert weft.__version__==cohort['packages']['weft']['moduleVersion']
-assert subprocess.check_output([str(args.bun_executable),'--version'],text=True).strip()=='1.4.2'
 documents=(CatalogDocument(doc['id'],digest,original,digest),);checks=[];started=False
 pg=out/'postgres';sock=out/'socket';sock.mkdir()
 def run(*command):
@@ -45,7 +47,7 @@ try:
         admin.execute(sql.SQL('GRANT {} TO sdk_person WITH SET FALSE').format(sql.Identifier(installed.registrar_role)))
         with psycopg.connect(host=str(sock),port=55495,dbname='postgres',user='sdk_person',autocommit=True,options='-c statement_timeout=10000')as person:
             with transaction(person)as(a,t):
-                prepared=a.prepare_catalog(documents,source_version='0.8.0',bun_executable=str(args.bun_executable))
+                prepared=a.prepare_catalog(documents,source_version=doc['umf'],bun_executable=str(args.bun_executable))
                 success(a.accept_in_transaction(t,prepared,request_key='sdk-related-model'))
             with transaction(admin)as(a,t):success(a.configure_module_access_in_transaction(t,(ModuleAccessGrant(doc['id'],'sales','sdk_reader','sdk_writer'),)))
             admin.execute('GRANT sdk_reader,sdk_writer TO sdk_person WITH SET FALSE')

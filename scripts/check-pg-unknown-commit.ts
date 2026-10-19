@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Isolated child probe: deliberate lost driver completion after original server commit frame. */
 import {inspectOriginalQueryFile,createPgConnectionSource,createFileQueryJournal,decodeResponseFrame,type OriginalQueryJournal} from '@documentdrivendx/truss-pg-runtime';
 import {createEngineExecutor} from '@documentdrivendx/truss-postgresql';

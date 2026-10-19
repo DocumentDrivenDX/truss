@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original compiler/profile guard coupling; no security-ready physical profile.
 @covers US-056-AC6
 @covers US-056-AC9

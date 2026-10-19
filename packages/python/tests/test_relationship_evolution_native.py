@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public relationship multiplicity refusal, repair and compatible acceptance."""
 import base64,json,os
 from truss import Ok,CatalogDocument,CatalogAcceptanceRefused,CatalogRegistration,CatalogRelationshipCompatibilityViolation
@@ -7,7 +8,7 @@ import test_group_create_native as base
 
 class RelationshipEvolutionTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version
         rel=source['modules'][0]['relationships'][0];rel['sourceMultiplicity']={'min':0,'max':'*'};rel['targetMultiplicity']={'min':0,'max':'*'}
@@ -40,6 +41,3 @@ class RelationshipEvolutionTests(base.PublicCreateGroupTests):
         failed=self.run_group(a,t,(Delete(operation='delete_edge',target=StoredObjectReference(identity=e1)),),'violate-min');self.assertIsInstance(failed,GroupFailed);self.assertEqual(json.loads(base64.b64decode(failed.failure.inner_error.bytes_base64))['code'],'dependencies')
         failed=self.run_group(a,t,(self.create('b3',record='B',alias='b3'),self.link(pin,StoredObjectReference(identity=source),AliasObjectReference(alias='b3'))),'violate-max');self.assertIsInstance(failed,GroupFailed);self.assertEqual(json.loads(base64.b64decode(failed.failure.inner_error.bytes_base64))['code'],'dependencies')
         h.detach();c.commit();self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.edge_limit').fetchone(),(4,))
-
-class RelationshipEvolution08Tests(RelationshipEvolutionTests):
-    source_version='0.8.0'

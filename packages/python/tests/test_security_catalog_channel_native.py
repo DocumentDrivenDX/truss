@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual authenticated loopback channel + original native guarded publication."""
 import http.client,threading,secrets,json,os
 from pathlib import Path

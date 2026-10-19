@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic original store registration, committed observation and retry on PG18."""
 import contextlib
 import importlib.util
@@ -19,7 +20,7 @@ class ActionStoreNativeTests(unittest.TestCase):
         )
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        model = _ROOT / 'docs/helix/04-build/evidence/products-native-binding-20261014/original-demo-model.json'
+        model = _ROOT / 'packages/browser/fixtures/local-products-model.json'
         with tempfile.TemporaryDirectory(prefix='truss-action-store-') as directory:
             output = Path(directory) / 'products'
             with contextlib.redirect_stdout(io.StringIO()):

@@ -374,3 +374,10 @@ exclude custom instrumentation and mandatory formal/receiver qualification from
 release gates; see the explicit scope amendment in CONTRACT-013. Historical
 component claims without retained evidence remain unverified. Existing implemented
 gateway/authority components must be reused rather than replaced.
+
+The 2026-10-18 owner decision selects UMF 0.10.0 as the sole current source
+format and removes all earlier-format adapters and predecessor installation
+upgrades. This is pre-release software: design iterations do not establish a
+permanent compatibility obligation. Current-format schema revisions within a
+live installation remain required for evolution and historical reads. Fresh
+installation refuses existing data; no automatic reset or migration is implied.

@@ -1,0 +1,7 @@
+{
+  "sourcePath": "packages/python/tests/fixtures/security-mapping-request.json#/modules/0/documentJson",
+  "sourceCommit": "f086ea57205ea931b242187d79b05332cc00be4a",
+  "originalSha256": "005db769cca65703cad146f6805ddf2ef1a074dfeb8840e49e9cec96828709fb",
+  "currentSha256": "76b1c1fb9d72d02da72c56db70b6e388b57ea686ef64f044241f8739111341d2",
+  "scope": "Derived current-format test input. The retained captured request fixture is unchanged; only the UMF envelope was changed to 0.10.0. Current validator output, not this derivation, is required before any support claim."
+}

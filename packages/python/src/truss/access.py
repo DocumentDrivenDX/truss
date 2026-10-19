@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Typed SDK reads through Truss-owned transactions and original native admission.
 
 The host supplies a bounded operation context, not a borrowed SQL connection.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original context0.4 collector with independent current epoch correspondence."""
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private one-use admission custody; not a native confirmation/authority factory.
 
 The original admitted producer must register its own confirmations. Trusted port

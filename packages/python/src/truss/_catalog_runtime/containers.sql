@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Compare complete authored item meaning separately from revision/source pins.
 -- Historical flat items have no descendants; their original metadata is retained.
 CREATE FUNCTION truss.catalog_item_meaning(item jsonb) RETURNS jsonb
@@ -81,7 +82,7 @@ BEGIN
   seen:=seen||jsonb_build_array(node->'reference');
   IF index_node=jsonb_array_length(nodes)-1 THEN
    IF declaration->>'cardinality' IS DISTINCT FROM 'one' OR family IS NULL OR family NOT IN ('string','integer','decimal','boolean','timestamp','binary','date') OR declaration ? 'itemType'
-    OR NOT ((coalesce(facets,'{}')='{}'::jsonb OR family='integer' AND facets='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR family='decimal' AND truss.valid_decimal_facets(facets)) IS TRUE) THEN RETURN false;END IF;
+    OR truss.known_scalar_facets(family,facets) IS NOT TRUE THEN RETURN false;END IF;
   ELSE
    IF (declaration->>'cardinality' IN ('array','map')) IS NOT TRUE OR declaration ? 'scalarType' OR coalesce(facets,'{}')<>'{}'::jsonb
     OR declaration->'itemType' IS DISTINCT FROM nodes->(index_node+1)->'reference' THEN RETURN false;END IF;
@@ -131,14 +132,45 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.logical_flat_cell(jsonb) FROM PUBLIC;
 
--- Resolve one explicit same-document item Field from the exact source archive.
--- Item-only Fields are definitions; they never become synthetic record props.
-CREATE FUNCTION truss.catalog_item_definition(original_text text,selected_document text,selected_revision int,selected_ordinal int,reference jsonb) RETURNS jsonb
+-- Build one direct lookup for the exact source fragments used by item chains.
+-- Fragment text comes from PostgreSQL json, matching the historical `fragment::text`
+-- pin input; sourceSha256 continues to cover the original UTF-8 archive bytes.
+CREATE FUNCTION truss.catalog_item_source_index(original_text text) RETURNS jsonb
 LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE source json;module_json json;fragment json;module_index int;element_index int;pointer text;original bytea;source_digest text;pin_input text;result jsonb;declaration jsonb;
- selected_reference jsonb:=reference;seen jsonb:='[]';chain jsonb:='[]';node jsonb;depth int:=0;
+DECLARE source_doc json;source_digest text;result jsonb;
 BEGIN
- source:=original_text::json;source_digest:=encode(sha256(convert_to(original_text,'UTF8')),'hex');
+ source_doc:=original_text::json;
+ source_digest:=encode(sha256(convert_to(original_text,'UTF8')),'hex');
+ WITH definitions AS (
+  SELECT m.value->>'id' module_id,(m.ordinality::int-1) module_ordinal,
+   e.value->>'id' element_id,(e.ordinality::int-1) element_ordinal,
+   e.value::text original_fragment,e.value::jsonb declaration
+  FROM json_array_elements(source_doc->'modules') WITH ORDINALITY m
+  CROSS JOIN LATERAL json_array_elements(m.value->'elements') WITH ORDINALITY e
+ ) SELECT jsonb_build_object('sourceSha256',source_digest,'umfVersion',source_doc->>'umf',
+   'definitions',coalesce(jsonb_object_agg(jsonb_build_array(module_id,element_id)::text,
+    jsonb_build_object('moduleOrdinal',module_ordinal,'elementOrdinal',element_ordinal,
+     'originalFragment',original_fragment,'declaration',declaration)),'{}'::jsonb))
+  INTO result FROM definitions;
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_item_source_index(text) FROM PUBLIC;
+
+-- Resolve a bounded explicit same-document item Field chain by indexed source
+-- coordinates. This keeps exact source bytes and the old pin/projection contract.
+CREATE FUNCTION truss.catalog_item_definition_indexed(source_index jsonb,selected_document text,
+ selected_revision int,selected_ordinal int,reference jsonb) RETURNS jsonb
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE source_digest text;umf_version text;pointer text;original bytea;pin_input text;result jsonb;declaration jsonb;
+ selected_reference jsonb:=reference;seen jsonb:='[]';chain jsonb:='[]';node jsonb;entry jsonb;fragment_text text;
+ module_index int;element_index int;depth int:=0;
+BEGIN
+ IF jsonb_typeof(source_index) IS DISTINCT FROM 'object'
+  OR jsonb_typeof(source_index->'definitions') IS DISTINCT FROM 'object'
+  OR jsonb_typeof(source_index->'sourceSha256') IS DISTINCT FROM 'string' THEN
+  RAISE EXCEPTION 'original item source index required' USING ERRCODE='22023';END IF;
+ source_digest:=source_index->>'sourceSha256';umf_version:=source_index->>'umfVersion';
  LOOP
   depth:=depth+1;
   IF depth>32 THEN RAISE EXCEPTION 'item definition depth limit' USING ERRCODE='54000';END IF;
@@ -147,24 +179,25 @@ BEGIN
    RAISE EXCEPTION 'explicit qualified item Field required' USING ERRCODE='0A000';END IF;
   IF seen @> jsonb_build_array(selected_reference) THEN RAISE EXCEPTION 'acyclic item definition chain required' USING ERRCODE='0A000';END IF;
   seen:=seen||jsonb_build_array(selected_reference);
-  SELECT m.value,m.ordinality::int-1 INTO STRICT module_json,module_index FROM json_array_elements(source->'modules') WITH ORDINALITY m WHERE m.value->>'id'=selected_reference->>'module';
-  SELECT e.value,e.ordinality::int-1 INTO STRICT fragment,element_index FROM json_array_elements(module_json->'elements') WITH ORDINALITY e WHERE e.value->>'id'=selected_reference->>'element';
-  declaration:=fragment::jsonb;
+  entry:=source_index->'definitions'->jsonb_build_array(selected_reference->>'module',selected_reference->>'element')::text;
+  IF entry IS NULL THEN RAISE NO_DATA_FOUND;END IF;
+  module_index:=(entry->>'moduleOrdinal')::int;element_index:=(entry->>'elementOrdinal')::int;
+  fragment_text:=entry->>'originalFragment';declaration:=entry->'declaration';
   IF declaration->>'kind' IS DISTINCT FROM 'field' OR declaration->>'nullability' IS DISTINCT FROM 'required' THEN
    RAISE EXCEPTION 'required original item Field required' USING ERRCODE='0A000';END IF;
   IF declaration->>'cardinality'='one' THEN
    IF coalesce(declaration->>'scalarType','') NOT IN ('string','integer','decimal','boolean','timestamp','binary','date') OR declaration ? 'itemType'
-    OR NOT ((coalesce(declaration->'facets','{}'::jsonb)='{}'::jsonb OR declaration->>'scalarType'='integer' AND declaration->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR declaration->>'scalarType'='decimal' AND truss.valid_decimal_facets(declaration->'facets')) IS TRUE) THEN
+    OR truss.known_scalar_facets(declaration->>'scalarType',declaration->'facets') IS NOT TRUE THEN
     RAISE EXCEPTION 'required exact scalar leaf Field required' USING ERRCODE='0A000';END IF;
   ELSIF declaration->>'cardinality' IN ('array','map') THEN
    IF declaration ? 'scalarType' OR coalesce(declaration->'facets','{}'::jsonb)<>'{}'::jsonb OR NOT declaration ? 'itemType' THEN
     RAISE EXCEPTION 'explicit unfaceted container item Field required' USING ERRCODE='0A000';END IF;
   ELSE RAISE EXCEPTION 'supported item Field cardinality required' USING ERRCODE='0A000';END IF;
-  pointer:='/modules/'||module_index||'/elements/'||element_index;original:=convert_to(fragment::text,'UTF8');
+  pointer:='/modules/'||module_index||'/elements/'||element_index;original:=convert_to(fragment_text,'UTF8');
   pin_input:='['||selected_revision||','||selected_ordinal||',"'||source_digest||'","'||pointer
    ||'",{"identity":"truss-original-json-definition","sha256":"08c2ec8c520b39ded40f270be0b26812db1d240d5bac1a00339b437200a2f58d","version":"0.1"},"'||encode(sha256(original),'hex')||'"]';
   node:=jsonb_build_object('reference',selected_reference,'documentId',selected_document,'catalogRevision',selected_revision::text,'documentOrdinal',selected_ordinal::text,
-   'umfVersion',source->>'umf','sourceSha256',source_digest,'originalPointer',pointer,'originalFragment',fragment::text,'definitionPin',encode(sha256(convert_to(pin_input,'UTF8')),'hex'),'declaration',declaration);
+   'umfVersion',umf_version,'sourceSha256',source_digest,'originalPointer',pointer,'originalFragment',fragment_text,'definitionPin',encode(sha256(convert_to(pin_input,'UTF8')),'hex'),'declaration',declaration);
   chain:=chain||jsonb_build_array(node);
   EXIT WHEN declaration->>'cardinality'='one';
   selected_reference:=declaration->'itemType';
@@ -176,6 +209,14 @@ BEGIN
  IF octet_length(result::text)>65536 THEN RAISE EXCEPTION 'item definition byte limit' USING ERRCODE='54000';END IF;
  RETURN result;
 END;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_item_definition_indexed(jsonb,text,int,int,jsonb) FROM PUBLIC;
+
+-- Keep the narrow one-off interface for existing internal callers.
+CREATE FUNCTION truss.catalog_item_definition(original_text text,selected_document text,selected_revision int,selected_ordinal int,reference jsonb) RETURNS jsonb
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT truss.catalog_item_definition_indexed(truss.catalog_item_source_index(original_text),
+  selected_document,selected_revision,selected_ordinal,reference);
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_item_definition(text,text,int,int,jsonb) FROM PUBLIC;
 

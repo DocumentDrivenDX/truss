@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Buffered independent creates preserve the general planner and final rules."""
 import base64
 import json

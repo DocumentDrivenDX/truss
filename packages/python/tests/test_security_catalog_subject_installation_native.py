@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original named Subject construction and bounded native role registration."""
 from truss import Ok,Error
 from truss._security_catalog_subject_installation import bootstrap_catalog_subjects_in_transaction

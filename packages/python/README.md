@@ -4,12 +4,20 @@ The latest published package is
 [Truss v0.0.39](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.39),
 paired with native `0.71-candidate` and Weft `0.4.41` / backend `0.4.41`.
 The current `0.0.40` candidate targets native `0.72-candidate` and Weft
-`0.4.42`; its full release qualification is pending, so it is not a published
+`0.4.45`; its full release qualification is pending, so it is not a published
 or qualified release.
+The candidate targets only UMF `0.10.0` source documents and fresh current
+installations. Earlier UMF source formats are unsupported, as are upgrades from an older Truss
+installation. `upgrade_in_transaction` returns an explicit unsupported error
+without issuing SQL; the CLI has no `--upgrade` option. No automatic migration,
+reset or data rewrite is performed. Historical catalog revisions, receipts and
+retained events created within a current installation remain supported.
+Earlier release evidence retains its original scope and does not extend this
+candidate's compatibility.
 Python deployment uses embedded V8 and requires no Bun, Node or external
-JavaScript process. The v0.0.39 release includes owned graphs, explicit subtree
-reparenting, cascade deletion, atomic owned imports, owned-object catalog
-evolution, compact registration evidence and batched native writes.
+JavaScript process. The candidate includes owned graphs, explicit subtree reparenting, cascade
+deletion, atomic owned imports, owned-object catalog evolution, compact
+registration reports and batched native writes.
 
 The v0.0.39 source passed both complete Linux x86_64/macOS ARM64 native jobs,
 including the original 1,024-operation capacity controls and full
@@ -17,22 +25,20 @@ including the original 1,024-operation capacity controls and full
 Those results qualify v0.0.39 only. The v0.0.40 candidate remains pending its
 complete 22-workflow qualification; no passing or publication claim is made here.
 [Performance evidence](../../docs/helix/03-test/performance/README.md)
-and [published release/upgrade notes](../../docs/helix/04-build/releases/v0.0.39.md)
+and [published release notes](../../docs/helix/04-build/releases/v0.0.39.md)
 record exact scope. Candidate behavior and bounds are listed in the
 [v0.0.40 candidate notes](../../docs/helix/04-build/releases/v0.0.40.md).
 Broader scale and p95 targets are not certified.
 
-Modern owned groups admit up to 1,024 operations per atomic group; legacy
-rootless groups retain their 128-operation limit. Basic native tests cover
+Current owned groups admit up to 1,024 operations per atomic group. Basic native tests cover
 1,024 real creates, committed changed updates, original receipt replay and
 complete ordered public readback, plus refusal at 1,025 and rollback on a
-failure at operation 1,024. Upgrading published v0.0.35 widens the retained
-attempt constraint without rewriting receipts or historical data. Other
+failure at operation 1,024. Other
 byte/value limits and ordinary deadlines still apply.
 
 The published v0.0.39 package uses `weft-sql==0.4.41`, backend
 `0.4.41` / binding `0.5`. The current source candidate pins
-`weft-sql==0.4.42`, backend `0.4.41` / binding `0.5`, and query ABI 1.1.
+`weft-sql==0.4.45`, backend `0.4.41` / binding `0.5`, and query ABI 1.1.
 ABI 1.1 buffers complete source sets before caller predicates and scans at most
 10,000 rows per selected Record or Relationship type; a small output limit does
 not bypass that source bound. Complete-entity relationships have a separate
@@ -65,7 +71,7 @@ current package and local PG18 dependencies installed:
 python packages/python/examples/owned_objects_workflow.py /tmp/truss-owned-demo
 ```
 
-It uses the adjacent `notes-owned.umf.json` with an explicit UMF0.8 preparation
+It uses the adjacent `notes-owned.umf.json` with the current UMF0.10 preparation
 profile. The directory must be new or empty. Compiled queries have separate
 native workflows using the matching published Weft wheel.
 
@@ -81,90 +87,32 @@ commit outcomes. Repeating input uses current identity policy and does not
 recover the original import report. Reports may be withheld when current
 disclosure authority cannot be established.
 
-Historical v0.0.35 scope: Python distribution `truss-toolkit==0.0.35`,
-native runtime `0.68-candidate`, layout `1.0`
-candidate, UMF core `0.7.0` and `0.8.0`, and Weft runtime backend `0.4.37`. The tested local
-stack is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL 18.6,
-psycopg/psycopg-binary 3.3.6 and libpq 18.6. Aurora, Lakebase and other driver or
-server versions are not qualified. The broader protected engine remains
-unfinished; this runtime enforces its installed ordinary-person/module boundaries
-and includes the explicitly activated policy-query profile described below.
+## Current candidate scope
 
-This earlier release is [v0.0.35](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.35).
+The candidate retains exact scalar values, required scalar-field/key backfill,
+acyclic nested arrays/maps with required item Fields, owned graphs, imports,
+history, receipts and feed reads. Cyclic definitions, descendant evolution and
+record-valued properties remain unsupported. Source validation selects UMF
+0.10.0; UUID, bits128 and 128-bit integer storage are explicitly refused.
 
-Published [v0.0.37](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.37)
-addresses deferred edge writer authorization after an early attempt-constraint
-flush. Its transactional upgrade from v0.0.35/native68 preserves rows and
-receipts; both platform release workflows passed with matching Weft v0.4.38.
+Otherwise-supported standalone singular scalar Fields remain declarations until
+a Record uses them. The authored document revision is distinct from its content
+hash. Object reads distinguish rootless and owned objects with typed roots.
+The Python distribution, native runtime and compiler versions are separate pins.
+Use the exact candidate cohort listed above; no older installation is upgraded.
 
-Creation now joins the common object transition ledger while retaining its sole
-original journal and receipt evidence. Populated native67 installations can
-upgrade without rewriting original rows or committed receipts. The earlier public rootless read profile remains supported alongside owned
-objects in v0.0.39.
+The `truss.access` typed-SDK integration remains experimental and requires its
+matching UMF SDK cohort. It has no published `typed-sdk` extra. A bounded cursor
+stream that cannot prove exhaustion raises `QueryStreamRefused` after cleaning
+up its portal and transaction. An exact row-limit boundary is not exhaustion.
 
-Registration-owned optional and required non-key rebinding is included in25; its
-[report0.3 contract](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.2.md)
-retains original effects/events and requires current data-reader authority.
+## Install the current candidate
 
-The Python distribution version is distinct from native runtime/layout versions;
-future distributed changes receive a new package version.
+The v0.0.40/native0.72 and Weft0.4.45 candidate is not yet published or
+qualified. The release command below becomes available after publication;
+until then, use its built wheel in a separate development environment.
 
-## Published feature scope
-
-Published SDK0.0.35 supports required scalar-field/key backfill and acyclic
-nested array/map properties with required item Fields and exact scalar leaves,
-including writes, reads, history, imports, Weft queries and retained-cell
-rebinding. The
-[rebind addendum](../../docs/helix/02-design/contracts/catalog-rebind-report-v0.4.md)
-and [key-backfill contract](../../docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md)
-define those scopes. Cyclic definitions, descendant evolution and record-valued
-properties remain unfinished.
-
-Ownership support shipped in v0.0.39.
-The [owned-object implementation plan](../../docs/helix/04-build/python-owned-objects-plan.md)
-records its implementation scope and remaining work. Published SDK0.0.35 retains
-the rootless profile; published v0.0.39/native0.71 adds owned reads and
-mutations.
-
-## Storage and compiler pairing
-
-UMF0.8 support0.17 admits otherwise-supported standalone singular scalar Fields
-as declarations. Their original assertions remain in the accepted source/report;
-no stored property is allocated until a Field is a Record member. The supplied
-`CatalogDocument.document_revision` is preserved independently of its content
-SHA256. Unknown selected shapes and standalone containers refuse.
-
-Published direct object, key and page results expose `object.ownership.state` as
-`rootless`. The development checkpoint also returns `owned` with its typed root reference;
-it does not reinterpret owned objects as rootless.
-
-The exact consumer model passes public accept/apply/readback and native binding
-export. Populated native65 upgrades preserve transitions and receipt replay.
-SDK0.0.35 selects Weft0.4.34 for native68 queries and original
-mutation-selection registration/lowering, preserving native65. See the
-[SDK35 release evidence](../../docs/helix/04-build/releases/v0.0.35.md).
-This compiler support does not enable a protected bulk-action executor.
-
-The `truss.access` typed-SDK integration remains experimental and requires a
-matching locally supplied UMF SDK cohort. Its 14 native controls used published
-Weft 0.4.40 with a pinned local UMF wheel; they do not establish published UMF
-dependency availability. The development `typed-sdk` extra is deferred until a
-matching immutable public UMF artifact and fresh consumer-install workflow pass.
-A typed cursor stream that reaches `max_rows` without proving exhaustion yields
-its bounded prefix, then raises `QueryStreamRefused` containing `QueryRefused`
-with code `limits` and diagnostic `stream_row_limit`. Portal close and owned
-transaction cleanup precede the final page and refusal. A short final fetch
-proves exhaustion and completes normally; an exact boundary remains unproved.
-The ordinary query, native and local-runtime extras are unchanged.
-
-## Install the latest published release
-
-The command below installs the latest published and qualified package,
-v0.0.39/native0.71 with its paired Weft0.4.41. The v0.0.40/native0.72 and
-Weft0.4.42 candidate is not yet published; do not infer candidate qualification
-from installing this older release.
-
-SDK0.0.35 includes the experimental **current-policy query interface**:
+The experimental **current-policy query interface** is:
 `assembly.query_current_in_transaction(tx, executor=..., sql=...,
 document_ids=(...), parameters=...)`. It composes an ordinary caller's actual
 Subject and module access, original UMF policy evaluation, original Weft query
@@ -191,8 +139,9 @@ subject_registration=subjects)` and commit. Activation checks that no other
 client sessions remain. It revokes every ordinary legacy data routine grant;
 only scoped catalog metadata and the verified own-session Subject facade remain.
 Guarded queries require this committed activation. Cached legacy query bindings
-do not retain access. Module configuration, feed enrollment, runtime upgrades and privileged bootstrap
-installers refuse after activation until an explicit protection migration exists.
+do not retain access. Module configuration, feed enrollment and privileged bootstrap installers
+refuse after activation until an explicit protection migration exists.
+Installation upgrades are unsupported for the current candidate.
 
 This first protected profile supports reads through `query_current_in_transaction`.
 Legacy mutations, imports, direct reads, history and feed are unavailable after
@@ -241,9 +190,8 @@ Unknown modules refuse. Reopening a registration under another known wheel still
 requires an explicit migration; the factory never upgrades retained pins.
 
 This first local PostgreSQL18.6 profile uses exact original candidate Weft ABI2
-and UMF child pins. The published Weft0.4.34 macOS ARM and Linux x64 wheels
-are selected explicitly and checked in installed public workflows on both
-platforms. Other platforms and newer result ABIs remain outside this profile.
+and UMF child pins. The selected Weft0.4.45 macOS ARM and Linux x64 wheels require
+installed public-workflow qualification on both platforms. Other platforms and newer result ABIs remain outside this profile.
 It currently requires rootless, present String or explicit signed64 query
 domains. Empty or all-read-denied populations return empty rows when genuine
 compiled operator routes establish one unambiguous original projection domain;
@@ -264,12 +212,10 @@ transformed cells in UTF-8 `batch_json`. `columns` contains SQL output aliases;
 `field_indexes` maps those output positions to the batch's unique field columns,
 including repeated projections. It does not convert these cells to `QueryRows`.
 
-This candidate requires the exact local presence-enabled Weft wheel and UMF
-held-inspector cohort in the [consumer evidence](../../docs/helix/04-build/evidence/current-disclosure-consumer-20261016/README.md).
-The `query` extra remains Weft0.4.40; installing that extra does not enable this
-candidate. The selected compiler currently supports direct field projections.
-Further SQL coverage belongs to Weft and requires corresponding qualified
-adapter integration, rather than a permanent Truss language allowlist.
+This separate experimental candidate requires the exact current presence-enabled
+compiler and UMF producer identities. Earlier local-cohort evidence does not
+qualify this candidate. Further SQL coverage requires corresponding compiler and
+adapter integration.
 
 For a fresh trusted installation, explicitly enroll
 `prepare_current_disclosure_originals(opaque_sources_bytes)` using
@@ -300,34 +246,27 @@ bounds. The transport's16MiB inspection capacity does not establish a16MiB
 composed application payload: the owner decoder and compiler transport have
 additional explicit bounds, documented with the evidence.
 
-Six local PostgreSQL18.6 SCRAM native tests cover masked, denied and empty
-results, whole-batch tampering after the native checker, source drift before
-release, credential rejection and cleanup. The reference native binding remains
-unadmitted. Native core-edge capture, non-JSON property homes, Record-backed
-edges, managed backends and the remaining original132 security cases stay open;
-these tests do not activate the complete security profile.
+Earlier local disclosure evidence retains its original version scope and does
+not qualify the current candidate or activate a complete security profile.
 
 Use a fresh Python3.11+ environment on the declared Linuxx86_64/macOSarm64
 PG18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requirement:
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.39 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.41 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.40 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.45 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.39'
+  'truss-toolkit[local,native,query]==0.0.40'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
 wheel uses `mini-racer==0.14.1` to execute the preserved UMF producer inside V8.
 Original producer manifests retain their build-time Bun pins; these are provenance,
-not deployment requirements. SDK 0.0.39 / native 0.71 derives ordinary object keys in PostgreSQL for admitted UMF 0.7/0.8
-catalogs. Create/update, imports, preconditions, backfills and lookups require no
-client encoder or per-key receipt. Existing stored key and namespace bytes are
-preserved. Weft remains optional through `query` (version 0.4.41); it is not a
-key-encoding dependency. The separate protected security observation retains its
-original producer boundary.
-The installation command selects SDK0.0.39 and its matching Weft0.4.41.
+not deployment requirements. Ordinary object keys are derived in PostgreSQL
+for admitted current catalogs. Create/update, imports, preconditions, backfills
+and lookups require no client encoder or per-key receipt. Weft remains optional
+through `query` and is not a key-encoding dependency.
 Each release publishes package checksums and source/runtime/backend pins. The Truss release
 workflow exercises the exact uploaded wheel with its exactly paired published Weft wheels and verified
 PG18 dependency wheels on both declared native platforms.
@@ -414,7 +353,7 @@ cancellation do not guarantee hard wall-clock termination. Failed containment
 can quarantine a connection; detach/re-adoption does not clear that condition.
 Recover the host transaction/connection before reuse.
 
-## Installation, access and upgrades
+## Fresh installation and access
 
 Call `install_in_transaction(tx)` on a fresh database without a `truss` schema,
 then commit the caller transaction. Inspect `status_in_transaction(tx)` rather
@@ -445,27 +384,23 @@ Existing-installation administration additionally needs inherited authority over
 the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
-`upgrade_in_transaction(tx)` validates exact retained predecessor manifests before
-upgrading to native0.71. The release workflows include populated native68
-(SDK0.0.35) and native70 (SDK0.0.37/0.0.38 storage) upgrade routes. The trusted administrator must quiesce consumers and
-settle the upgrade transaction. Active consumers cause a nonblocking refusal;
-there is no retry loop. Supported upgrades preserve installation identity,
-catalog IDs, data, receipts and feed checkpoints. Arbitrary older versions,
-modified installations and downgrade routes are unsupported.
+The current candidate has no installation upgrade route. Install only into a
+fresh database without a `truss` schema. `upgrade_in_transaction(tx)` returns
+`Error` with `catalog_code='unsupported_profile'` and performs no database work.
+An existing installation with different release pins refuses current operations;
+installing this wheel does not migrate or repair it. Keep the older package and
+its database together if that deployment must remain in service.
 
-The local launcher exposes that same explicit migration operation:
+The local launcher can install or confirm a current installation:
 
 ```sh
-truss-local-postgres --data-dir /tmp/truss-local --upgrade --probe
+truss-local-postgres --data-dir /tmp/truss-current --install --probe
 ```
 
-`--upgrade` and `--install` are mutually exclusive. A missing installation or
-unsupported source refuses without falling back to installation. The output
-reports `upgraded` or `unchanged`, with actual previous/current release IDs, only
-after commit and fresh status confirmation of the same installation identity.
-An explicit upgrade of the current candidate is unchanged. Keep application
-connections quiescent for the migration; ordinary launch and `--install` never
-perform upgrades.
+Use a new directory for a fresh local runtime. `--install` never resets existing
+data, and `--upgrade` is not a recognized option. The output confirms the
+committed installation identity and exact current release through a fresh
+status check.
 
 ## Public operations
 
@@ -488,7 +423,7 @@ broader draft protocol does not imply that every declared profile is implemented
 | Weft queries | `query_in_transaction`, or `compiled_execution(assembly.compiled_selection)` |
 | Receipt visibility | `reached_in_transaction` |
 | Feed enrollment/delivery | `register_feed_consumer_in_transaction`, `read_feed_in_transaction`, `reread_feed_in_transaction`, `acknowledge_feed_in_transaction` |
-| Installation | `install_in_transaction`, `status_in_transaction`, `upgrade_in_transaction` |
+| Installation | `install_in_transaction`, `status_in_transaction` |
 
 Catalog, groups, imports, direct reads, history and feed also have typed
 capability selectors. Imports/groups accept exact original `CatalogDocument`
@@ -708,448 +643,3 @@ accepted scope amendment. Experimental pg8000 and older private profiles are his
 
 The [runtime history](docs/runtime-history.md) preserves the earlier release diary.
 Its old limitations describe their named versions, not the current interface.
-
-## Historical section links
-
-These links retain earlier README section addresses.
-
-<a id="run-the-adopter-workflow"></a>
-
-[Run the adopter workflow](docs/runtime-history.md#run-the-adopter-workflow) — historical release notes.
-
-<a id="public-catalog-workflow"></a>
-
-[Public catalog workflow](docs/runtime-history.md#public-catalog-workflow) — historical release notes.
-
-<a id="python-execution-contracts"></a>
-
-[Python execution contracts](docs/runtime-history.md#python-execution-contracts) — historical release notes.
-
-<a id="draft-public-group-contracts"></a>
-
-[Draft public group contracts](docs/runtime-history.md#draft-public-group-contracts) — historical release notes.
-
-<a id="draft-import-contracts"></a>
-
-[Draft import contracts](docs/runtime-history.md#draft-import-contracts) — historical release notes.
-
-<a id="prepare-original-umf-for-catalog-registration"></a>
-
-[Prepare original UMF for catalog registration](docs/runtime-history.md#prepare-original-umf-for-catalog-registration) — historical release notes.
-
-<a id="private-native-catalog-staging"></a>
-
-[Private native catalog staging](docs/runtime-history.md#private-native-catalog-staging) — historical release notes.
-
-<a id="private-catalog-report-integration"></a>
-
-[Private catalog report integration](docs/runtime-history.md#private-catalog-report-integration) — historical release notes.
-
-<a id="selected-host-transaction-entry-point"></a>
-
-[Selected host transaction entry point](docs/runtime-history.md#selected-host-transaction-entry-point) — historical release notes.
-
-<a id="explicit-postgresql-186-host-profile"></a>
-
-[Explicit PostgreSQL 18.6 host profile](docs/runtime-history.md#explicit-postgresql-186-host-profile) — historical release notes.
-
-<a id="public-object-identity-read"></a>
-
-[Public object identity read](docs/runtime-history.md#public-object-identity-read) — historical release notes.
-
-<a id="public-create-only-group-provider-runtime-04"></a>
-
-[Public create-only group provider: runtime 0.4](docs/runtime-history.md#public-create-only-group-provider-runtime-04) — historical release notes.
-
-<a id="ordinary-reader-catalog-and-accepted-source-runtime-05"></a>
-
-[Ordinary-reader catalog and accepted source: runtime 0.5](docs/runtime-history.md#ordinary-reader-catalog-and-accepted-source-runtime-05) — historical release notes.
-
-<a id="public-reads-on-read-only-transactions-runtime-06"></a>
-
-[Public reads on read-only transactions: runtime 0.6](docs/runtime-history.md#public-reads-on-read-only-transactions-runtime-06) — historical release notes.
-
-<a id="typed-catalog-failure-codes-runtime-07"></a>
-
-[Typed catalog failure codes: runtime 0.7](docs/runtime-history.md#typed-catalog-failure-codes-runtime-07) — historical release notes.
-
-<a id="business-key-lookup-runtime-08"></a>
-
-[Business-key lookup: runtime 0.8](docs/runtime-history.md#business-key-lookup-runtime-08) — historical release notes.
-
-<a id="atomic-caller-preconditions-runtime-015-candidate"></a>
-
-[Atomic caller preconditions (runtime 0.15 candidate)](docs/runtime-history.md#atomic-caller-preconditions-runtime-015-candidate) — historical release notes.
-
-<a id="public-object-updates-and-deletes-runtime-014-candidate"></a>
-
-[Public object updates and deletes (runtime 0.14 candidate)](docs/runtime-history.md#public-object-updates-and-deletes-runtime-014-candidate) — historical release notes.
-
-<a id="changed-document-scalar-refusal-runtime-013-candidate"></a>
-
-[Changed-document scalar refusal (runtime 0.13 candidate)](docs/runtime-history.md#changed-document-scalar-refusal-runtime-013-candidate) — historical release notes.
-
-<a id="exact-input-unchanged-registration-runtime-09-candidate"></a>
-
-[Exact-input unchanged registration (runtime 0.9 candidate)](docs/runtime-history.md#exact-input-unchanged-registration-runtime-09-candidate) — historical release notes.
-
-<a id="additional-documents-runtime-010-candidate"></a>
-
-[Additional documents (runtime 0.10 candidate)](docs/runtime-history.md#additional-documents-runtime-010-candidate) — historical release notes.
-
-<a id="exact-scalar-properties-runtime-011-candidate"></a>
-
-[Exact scalar properties (runtime 0.11 candidate)](docs/runtime-history.md#exact-scalar-properties-runtime-011-candidate) — historical release notes.
-
-<a id="live-object-pages-runtime-012-candidate"></a>
-
-[Live object pages (runtime 0.12 candidate)](docs/runtime-history.md#live-object-pages-runtime-012-candidate) — historical release notes.
-
-<a id="independent-directed-relationships-runtime-016-candidate"></a>
-
-[Independent directed relationships (runtime 0.16 candidate)](docs/runtime-history.md#independent-directed-relationships-runtime-016-candidate) — historical release notes.
-
-<a id="committed-receipt-tokens-and-reached-runtime-017-candidate"></a>
-
-[Committed receipt tokens and reached (runtime 0.17 candidate)](docs/runtime-history.md#committed-receipt-tokens-and-reached-runtime-017-candidate) — historical release notes.
-
-<a id="caller-owned-imports-runtime-018-candidate"></a>
-
-[Caller-owned imports (runtime 0.18 candidate)](docs/runtime-history.md#caller-owned-imports-runtime-018-candidate) — historical release notes.
-
-<a id="compatible-document-acceptance-runtime-019-candidate"></a>
-
-[Compatible document acceptance (runtime 0.19 candidate)](docs/runtime-history.md#compatible-document-acceptance-runtime-019-candidate) — historical release notes.
-
-<a id="public-committed-feed-and-source-ack-runtime-020-candidate"></a>
-
-[Public committed feed and source ACK (runtime 0.20 candidate)](docs/runtime-history.md#public-committed-feed-and-source-ack-runtime-020-candidate) — historical release notes.
-
-<a id="selected-native-capability-objects"></a>
-
-[Selected native capability objects](docs/runtime-history.md#selected-native-capability-objects) — historical release notes.
-
-<a id="public-retained-history-runtime-021-candidate"></a>
-
-[Public retained history (runtime 0.21 candidate)](docs/runtime-history.md#public-retained-history-runtime-021-candidate) — historical release notes.
-
-<a id="read-only-feed-recovery-runtime-022-candidate"></a>
-
-[Read-only feed recovery (runtime 0.22 candidate)](docs/runtime-history.md#read-only-feed-recovery-runtime-022-candidate) — historical release notes.
-
-<a id="retained-import-provenance-runtime-023-candidate"></a>
-
-[Retained import provenance (runtime 0.23 candidate)](docs/runtime-history.md#retained-import-provenance-runtime-023-candidate) — historical release notes.
-
-<a id="additive-runtime-upgrade-023--024-candidate"></a>
-
-[Additive runtime upgrade (0.23 → 0.24 candidate)](docs/runtime-history.md#additive-runtime-upgrade-023--024-candidate) — historical release notes.
-
-<a id="installation-without-postgresql-superuser-runtime-025-candidate"></a>
-
-[Installation without PostgreSQL superuser (runtime 0.25 candidate)](docs/runtime-history.md#installation-without-postgresql-superuser-runtime-025-candidate) — historical release notes.
-
-<a id="public-compiled-queries"></a>
-
-[Public compiled queries](docs/runtime-history.md#public-compiled-queries) — historical release notes.
-
-<a id="compiled-query-pages"></a>
-
-[Compiled query pages](docs/runtime-history.md#compiled-query-pages) — historical release notes.
-
-<a id="has-a-feed-consumer-acknowledged-a-receipt"></a>
-
-[Has a feed consumer acknowledged a receipt?](docs/runtime-history.md#has-a-feed-consumer-acknowledged-a-receipt) — historical release notes.
-
-<a id="versioned-public-preview-corpus"></a>
-
-[Versioned public preview corpus](docs/runtime-history.md#versioned-public-preview-corpus) — historical release notes.
-
-Catalog registration also retains original vocabulary and extension artifacts and
-owner-reported module actions as uninterpreted metadata. It preserves the original
-validation diagnostics and partial interpretation; it does not execute actions or
-interpret placement, DDD or security annotations. Required core semantics still
-must be supported. The original consumer corpus has fourteen original read/action/import workflows
-exercised through public registration, grouped object/edge mutation, committed replay, receipt visibility and read-only queries;
-Mixed imports exercise native create/skip/reject results and provenance; a missing
-relationship endpoint is a separately identified host rejection after public
-source/catalog/key reads. Replica execution and the full consumer corpus remain unqualified.
-
-Select `read_profile="complete-entity"` for `alias.*` with complete relationship
-keys and `_version`, `_created_by`, `_created_at`, `_updated_by`, `_updated_at`, `_original_author` and
-`_original_at` and `_load_id`. Truss derives attribution from original native mutation/import
-evidence. Missing evidence, output-name collisions or more than100 related keys
-refuse the query. Single-component relationship keys are immutable scalar tuples;
-composite keys retain nested tuples. Ordinary projections keep their authored
-member shape. Whole-object timestamps use exact six-fraction UTC strings from the verified object image. The original whole-entity SQL/output observations pass on the pinned tuple; position/time shape checks use the declared committed lower-bound semantics, while complete consumer-adapter and harness qualification remain open.
-
-The original consumer AddSolution example is a trusted host handler bound to the exact retained fixture document. It resolves a target by public business-key lookup, submits one create/link group with a native ObjectExists precondition and x-action origin, retains the invocation's original request for committed recovery, and reads the result through the public API. It does not interpret arbitrary UMF action declarations. Counts, initial disposition and versions come from native semantic results; the committed token is attached only after verified replay following the host's known commit.
-
-The selected AddUseCase retry workflow maps its caller key directly to the group request ID, applies the original native KeyAbsent predicate, and retains the canonical input/request for retry. Every repeated step still calls Truss; the host cache supplies no result. The original committed token and semantic result are returned with replay disposition, and readback finds one object. The original AddSolution dry-run case now uses the public caller-rollback group workflow; other consumer action cases remain outside this example handler.
-
-Dry-run previews execute the actual create/link group and roll back the caller transaction before returning validation. They return no provisional identity or receipt token and retain no invocation cache. A later real write with the same caller key is admitted normally. Missing-target previews require an exact public ObjectNotFound plus current authorized source/catalog/type/key visibility in the known fixture; other results refuse. This is a host authority observation, not a general native key-exists predicate. The dry-run case uses its own fresh basic fixture; rolled-back sequence allocations may still leave gaps.
-
-The original CorrectSolution workflow now resolves the authored business key, applies an optimistic-version UpdateObject with the declared ObjectExists precondition, and recovers the committed native receipt using its original request. Complete-entity readback proves one version increment and preserves creation attribution while recording the connecting person as updater. This is a trusted host handler for the exact retained consumer document, not a general action interpreter.
-
-The original `read.count-group-by` case is runnable with `--case`, including its record seed through public groups. Counts are exact integers, but the unchanged case currently fails its positional row oracle: the SQL has no `ORDER BY` and PostgreSQL returns the correct groups in another order. It is excluded from the passing aggregate pending a consumer-owned ordering expectation correction.
-
-The original edge-first import workflow is exercised by a trusted host mapping: import objects, resolve both authored business keys through public reads, then import relationships within the same caller transaction. The two native reports stay unchanged and pending as returned; the host publishes aggregate consumer counts only after its outer commit. This supports the selected consumer flow without inventing endpoint identities, a combined ImportReport or a commit token. General unresolved-reference batch ingestion remains outside the low-level typed-identity API.
-
-
-### Destination receipt retention and ACK recovery (runtime0.38)
-
-The ordinary feed provider exposes these methods, also available on CatalogReferenceAssembly:
-
-```python
-pending = feed.acknowledge_feed_with_receipt_in_transaction(
-    tx, page, destination_id="ashlar-delta", request_sha256=request_digest,
-    publication_id=publication_id, receipt_bytes=exact_destination_receipt,
-)
-# The host commits its PostgreSQL transaction.
-observed = feed.reconcile_feed_ack_in_transaction(
-    fresh_read_only_tx, page, destination_id="ashlar-delta",
-    request_sha256=request_digest, publication_id=publication_id,
-    receipt_bytes=exact_destination_receipt,
-)
-```
-
-Both calls return Outcome. A successful write carries FeedReceiptAcknowledged
-with pending durability and advanced/equal disposition. A successful read carries
-FeedAckReconciled with matched/missing/conflicting, the observed checkpoint and
-an authorized retained FeedAckReceipt (None only for missing). The receipt binds
-installation/source epoch, consumer/registration, exact prior/next cursors and
-feed digest to destination identity, request digest, publication identity and
-exact opaque bytes. Receipt bytes are limited to1MiB; destination/publication IDs
-to1024/4096 UTF-8 bytes. Hashes never replace exact-byte comparison.
-
-Reconciliation assigns no transaction ID and performs no ACK write. Use a fresh
-read-only transaction after an uncertain COMMIT; an earlier matching receipt
-remains matched after later checkpoint advances. Missing means no committed
-receipt is visible in this observation, not proof of rollback or permission to
-republish. Conflicting evidence refuses a write without checkpoint movement.
-Plain ACK has no receipt evidence and cannot be backfilled after its advance.
-First receipt creation refuses a zero-width interval. Receipts remain retained;
-there is no cleanup API. The destination consumer verifies its own publication
-before ACK. Truss confirms source retention and checkpoint inclusion and does
-not verify another database's commit or grant history-deletion authority.
-
-### Exact numeric facets (v0.0.14)
-
-Numeric support began in v0.0.2 and is retained by runtime `0.40-candidate`
-and Weft `0.4.5` / backend `0.4.10`. Fresh UMF 0.7 and 0.8 catalogs can declare signed
-64-bit integers and decimal precision 18, scale 4. Public creates, updates,
-imports, reads and compiled queries enforce these facets without float coercion
-or rounding. Decimal `1.2`, `1.2300` and `1.23000` are exact representable values;
-`1.23001` is refused. Direct reads preserve the authored token; Python queries
-return `int` and `Decimal`. Other facet combinations and key-facet evolution remain
-unsupported. Existing non-key properties may add/remove these known facets after
-native real-data validation. A narrowing that fails returns typed
-`property.facets` rules and affected counts; acceptance preserves object versions
-and original value tokens. Enforcement is through runtime operations, not bare-table CHECKs.
-Existing installation upgrades preserve original reports and receipts.
-
-These capabilities were added after v0.0.1.
-
-### Typed business keys (v0.0.14)
-
-The `0.0.3` package / runtime `0.40-candidate` adds authored business-key
-writes, updates, lookup, imports and key-absence preconditions for strings,
-integers, decimal(18,4), booleans and binary. The matching compiler is Weft
-`0.4.5` / backend `0.4.10`. Use existing `TextValue` and `BooleanValue` key
-components; bare strings retain their previous meaning. For example:
-
-```python
-values = ('invoice', TextValue(kind='integer', text='9007199254740993'),
-          TextValue(kind='decimal', text='1.23000'), BooleanValue(value=True),
-          TextValue(kind='binary', text='AP8='))
-result = reads.lookup_key_in_transaction(
-    tx, document_id='orders', module_id='orders', record_id='Invoice',
-    key_id='primary', values=values, bun_executable='bun',
-)
-```
-
-Equal decimal spellings identify the same key without changing stored tokens.
-Updates preserve old reservations; imports skip reserved or live identities.
-Historical committed requests retain their original results across upgrade.
-Timestamp/float keys are refused. Weft pagination still requires string keys. Relationship predicates and key
-projections now also support required boolean, integer and decimal(18,4) keys. This tranche was added after v0.0.2.
-
-## One-call graph traversal
-
-After obtaining a current typed object identity and relationship reference:
-
-```python
-from truss import TraversalHop, TraversalComplete, TraversalLimited
-relationship = assembly.get_relationship_reference_in_transaction(
-    tx, document_id="notes", module_id="notes", relationship_id="related").value
-result = assembly.traverse_in_transaction(
-    tx, start=note.identity, hops=(TraversalHop(relationship=relationship),),
-    maximum_objects=100, maximum_path_states=10000)
-```
-
-One to three ordered hops support outgoing, incoming or both directions over
-independent directed relationships. Complete results contain all unique terminal
-objects in numeric type/id order. Paths cannot repeat a typed object, including
-the start. Read-only READ COMMITTED transactions work. All selected relationship,
-endpoint and property declaration modules require current read access.
-
-A limited result contains no objects and requires restart. Bounds cover logical
-attempted states and output; use ordinary PostgreSQL deadlines too. Membership is
-live per call; no cursor, held snapshot, resume or exact backend allocation claim.
-
-## Scalar arrays and maps (v0.0.14)
-
-Original UMF core0.7/0.8 Fields may declare `cardinality: array` or `map`
-with an explicit same-document `itemType` reference to a required singular
-scalar Field. Item-only Fields remain schema definitions, not object properties.
-String, integer, decimal, boolean, timestamp and binary items use the scalar
-carriers, including signed64 and decimal(18,4) facets. Nested containers,
-record-valued items and optional items are refused.
-
-Pass `SequenceValue(items=(...))` or `MapValue(entries=(MapEntry(...), ...))`
-in `AuthoredValue`. Sequences preserve order and duplicates; map keys must be
-unique exact strings and are stored in canonical key order. Absent, null and
-empty containers remain distinct. Writes, imports, direct reads, preconditions
-and retained history preserve exact item tokens. The item definition's module
-requires current reader or writer authority alongside property declarations.
-
-Containers have at most1024 items, map keys at most4096 UTF-8 bytes and complete
-cells at most1 MiB, in addition to ordinary group/result bounds. Item meaning or
-reference changes are refused in this tranche. Native admission recognizes old
-scalar-only import payloads; the Python importer requires its current profile.
-Development Weft0.4.9 projects these values and complete entities through
-`QueryRows`: arrays become tuples, maps become immutable key-sorted mappings,
-and integer/decimal items become exact Python int/Decimal values. v0.0.6 with
-Weft0.4.8 still refuses container-bearing query selections. Container comparisons,
-unnesting and nested values remain unsupported.
-Runtime0.43 upgrades0.42 additively without rewriting original data or receipts.
-
-## Typed relationship keys (v0.0.14)
-
-`HAS_RELATED`, `RELATED_KEYS` and complete-entity relationship key lists support
-required string, boolean, integer (unfaceted or signed64), and decimal(18,4)
-components. Comparison and ordering are typed; projection preserves original
-numeric token text until exact Python int/Decimal decoding. `QueryRelatedKeys`
-contains immutable tuples of those types, with its existing truncation flag.
-Complete lists refuse overflow rather than returning a partial complete result.
-
-Business-key query pages remain string-only. Binary/timestamp relationship keys
-and unfaceted decimal business keys remain unsupported. This is native0.45 /
-Weft0.4.10/backend0.4.15; original0.44 upgrades additively.
-
-## Exact typed SQL pages (v0.0.14)
-
-`assembly.query_page_in_transaction(tx, sql=..., document_ids=(...), limit=100,
-cursor=prior.next_cursor)` supports required string, boolean, integer and
-decimal(18,4) authored primary keys. The entrypoint supplies complete primary-key
-ordering and lookahead; caller SQL must omit ORDER BY/LIMIT, aggregates and joins.
-Returned int/Decimal/bool values remain exact. Opaque cursor0.2 carries lossless
-lexical key tokens and the original query/catalog/runtime context.
-
-A page is live per call, not a held multi-call snapshot. Catalog/query/runtime
-changes invalidate continuation. Existing explicit `entity-page` and
-`related-entity-page` query profiles retain their string-only key scope; typed
-pages use the selected Weft SQL-page0.2 wrapper. No binary/timestamp or unfaceted
-decimal key claim. Native0.46 upgrades0.45 additively.
-
-## Record names and member order (v0.0.14)
-
-Reaccept a document to rename a Record or reorder retained qualified members.
-Catalog IDs and stored object/key rows stay stable. SQL uses the current Record
-name and complete-entity column order follows its members. Property names, key
-components and all other Record meaning retain compatibility guards. Original
-documents, reports, committed history and idempotent receipt replay are retained.
-Native0.47/layout0.16 pairs with Weft0.4.12/backend0.4.17;0.46 upgrades additively.
-
-## Compatible required-field tightening (v0.0.14)
-
-Existing non-key singular scalar fields may change from absent-allowed to
-required. Acceptance refuses missing/null/incompatible values with rule and
-affected-object counts. Repair with ordinary public writes and reaccept. No
-object values, versions, IDs or original history are changed by acceptance.
-New required fields, key-participating fields and containers retain their
-existing restrictions. Native0.48/Weft backend0.4.18 upgrade0.47 additively.
-
-## Compatible relationship bounds (v0.0.14)
-
-Existing independent relationships may tighten min/max bounds when current
-data satisfies them. CatalogAcceptanceRefused.violations can contain
-CatalogRelationshipCompatibilityViolation with document_id, module_id,
-relationship_id, side, rule and affected_object_count. Side source counts
-source objects using targetMultiplicity; side target counts target objects
-using sourceMultiplicity. Zero-edge objects participate. Relationship and
-all endpoint modules require current read authority to disclose counts.
-Repair using public groups and retry acceptance. Tightening preserves endpoint
-declarations. Existing object/edge rows remain unchanged; later writes enforce
-the new bounds. Native0.49/Weft backend0.4.19 upgrade0.48 additively.
-
-## Required flat containers (v0.0.14)
-
-Existing non-key scalar array/map fields can tighten absent-allowed to required
-while keeping cardinality, item reference and definition unchanged. Missing or
-null containers refuse with property.required counts; empty arrays/maps count
-as present. Repair through public writes and reaccept. Native0.50/Weft
-backend0.4.20 upgrades0.49 additively. Nested values remain outside this profile.
-
-
-## Parallel independent edges (v0.0.15)
-
-Create distinct edge IDs with the same relationship and endpoints, including
-self-edges. Each occurrence counts toward multiplicity. Edge pages/history keep
-the IDs; relationship-key lists preserve duplicate occurrences; traversal
-still returns distinct terminal objects. Delete a chosen edge by its ID.
-Endpoint-only imports refuse multiple live matches before decoding payloads.
-
-Layout1.0 removes the old unique endpoint index. Use the trusted administrative
-upgrade for populated layout0.16 installations. Genesis, original receipts and
-saved feed pages remain retained; new facts carry their producing transaction's
-configuration. Native0.52 pairs with Weft0.4.17/backend0.4.22.
-
-
-## Relationship presentation names (v0.0.16)
-
-Reaccept a document to rename an existing relationship `name` or an existing
-string `inverse` label. Stable document/module/relationship IDs, endpoints,
-keys, direction and lifecycle retain their guards. This tranche does not add or
-remove inverse labels. Current SQL uses the new forward/inverse labels; obtain
-a fresh relationship reference for mutations and traversal. Acceptance leaves
-edge IDs, versions and values unchanged. Original request replay and history
-retain the original meaning. Native0.53/layout1.0 pairs with
-Weft0.4.18/backend0.4.23 and upgrades0.52 additively.
-
-## Binary byte equality (SDK0.0.17 source tranche)
-
-Native0.54 and Weft0.4.19/backend0.4.24 add required singular binary equality to
-filters and INNER joins. Query-page filters retain the same exact parameter map
-in their cursor context. Canonical base64 is checked independently in Python
-and Weft; SQL compares decoded bytes while projections preserve source text.
-Empty binary values are valid. Timestamp semantics remain projection-only.
-The native upgrade from0.53 retains existing data, receipts and feed custody.
-
-## Optional binary equality (SDK0.0.18 source tranche)
-
-Native0.55 and Weft0.4.20/backend0.4.25 extend byte equality to optional
-binary fields. Absent and explicit null retain distinct projections and yield
-SQL UNKNOWN in equality predicates; neither matches an ordinary binary value.
-Empty bytes remain a value. The new optional-equality capability is refused by
-the retained required-only backend0.4.24. No timestamp, ordering, grouping or
-null-parameter support is implied. Wire0.2.5 remains unchanged.
-
-## Decimal(18,2) and field names (v0.0.21)
-
-Adds original decimal(18,2) facets alongside decimal(18,4) across catalog acceptance, writes/imports, reads, business keys and Weft queries/pages. Exact tokens are preserved, including redundant zeros. Maximum9999999999999999.99 is valid; excess precision or nonrepresentable scale refuses. Name-only Field evolution retains property/key identities. Native57 upgrades56 transactionally and requires matching Weft0.4.22/backend0.4.27. The unpublished20 candidate failed retained-extension checks;21 corrects that omission. Published21 passed its release workflows on both declared native platforms.
-
-## Original documents and compact reports (v0.0.22)
-
-Prepare a model without starting PostgreSQL:
-
-```python
-from truss import CatalogDocument, prepare_catalog
-
-prepared = prepare_catalog((CatalogDocument(document_id, revision, original_bytes),),
-                           source_version="0.8.0")
-```
-
-The assembly method uses the same preparation. Registration still uses the caller's transaction. UMF0.8 support0.14 preserves top-level title metadata and emits catalog report0.2 with same-report source references; exact source bytes remain in acceptedInput. Use public `resolve_catalog_report_source(report_bytes, entry["source"])` to retrieve their checked bytes, digest, identity and revision. Occurrence locations and required-field inventory remain in assertion entries; unknown extension content stays intact. See the [source-reference contract](../../docs/helix/02-design/contracts/catalog-source-reference-v0.1.md).
-
-One unchanged original commerce slice is tested through registration, supplier/product/required relationship creation, key lookup, exact decimal(18,2) queries, committed replay and feed. Other packs are separately unqualified. Matching native58/layout1.0 and Weft0.4.23/backend0.4.28 are required; native57 upgrades transactionally. Published22 passed its Linux and macOS release workflows; the install example above selects22 and matching Weft23.

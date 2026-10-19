@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private lossless seal encoding; public UMF receipts retain their full source. */
 export const KEY_RECEIPT_ENCODING='model-source-once/1';
 const members=['bytesHex','identity','keyPath','operation','profile','values','version'];

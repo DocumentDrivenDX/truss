@@ -1,0 +1,10 @@
+{
+  "sourcePath": "packages/python/examples/typed_sdk_related_schema.json before current-format migration",
+  "originalSha256": "b98ba2d8f66d8e2a6c14e8a137f8c0eb2e8527d918ca21a3ea983551ca8a68e4",
+  "currentSha256": "70871af5c6dd3d1020c0302a52c0396f7a13ece35e019913090b016d15d5a591",
+  "scope": "Derived current UMF 0.10.0 native SDK fixture; only /umf changed from the retained 0.8 fixture. This records fixture derivation, not a claim that the old producer output is valid. Current producer preparation is checked separately.",
+  "sourceVersion": "0.10.0",
+  "changedPointers": [
+    "/umf"
+  ]
+}

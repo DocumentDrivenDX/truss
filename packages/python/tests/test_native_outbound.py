@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Direct socket primitive ledger tests; synthetic basis is not native qualification."""
 import socket
 import unittest

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {verifyExactArtifacts} from '../packages/postgresql/src/index';
 const limits={maxArtifacts:2,maxSingleBytes:1024,maxTotalBytes:1024};

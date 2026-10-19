@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {decodeCandidateAuthorityGuard} from '../packages/postgresql/src/security-guard-observation';
 const packet=()=>({columns:['singleton','installation_identity_bytes_hex','policy_profile_bytes_hex','generation'].map(name=>({name,typeOid:'25'})),rows:[['1','00ff','0102','1']],expected:{installationIdentityHex:'00ff',policyProfileHex:'0102'}});

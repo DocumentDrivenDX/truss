@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One installed-package execution of the portable JSON public preview case."""
 import json
 import os

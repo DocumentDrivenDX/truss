@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Selected named catalog Subject construction; not protected caller admission.
 
 Trusted direct installation administrator, original accepted source custody and

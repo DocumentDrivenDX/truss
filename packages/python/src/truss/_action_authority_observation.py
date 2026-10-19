@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Fresh native Subject/action-role observations, never a permit.
 
 Original source/DDL/role lifecycle, authenticated engine peer capture and complete

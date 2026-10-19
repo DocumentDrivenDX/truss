@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public composite typed keys using the original UMF tuple producers."""
 import os
 from truss import Ok,ObjectFound,ObjectNotFound
@@ -10,7 +11,7 @@ BUN=os.environ.get('TRUSS_BUN_EXECUTABLE','bun')
 
 class TypedKeyTests(groups.PublicCreateGroupTests):
     for name in tuple(n for n in dir(groups.PublicCreateGroupTests) if n.startswith('test_')):locals()[name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
 
     def ready(self,*args,**kwargs):
         result=super().ready(*args,**kwargs)
@@ -114,6 +115,3 @@ class TypedKeyTests(groups.PublicCreateGroupTests):
         original,request=self.input(a,t,(create,))
         self.assertIsInstance(self.apply(a,t,original,request),GroupSuccess)
         for _ in range(1000):self.assertIsInstance(self.lookup(a,t),ObjectFound)
-
-class TypedKey08Tests(TypedKeyTests):
-    source_version='0.8.0'

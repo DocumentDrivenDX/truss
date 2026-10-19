@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Selected privileged lock issuer. Installer controls ownership and exact caller ACL.
 -- No dynamic identifiers, catalog writes, caller inputs or capability reuse state.
 CREATE FUNCTION truss.acquire_registered_role_catalog_cut()

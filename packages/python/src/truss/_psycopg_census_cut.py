@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original source comparison inside the selected epoch-state fence.
 
 Expected image and epoch comparison are independently selected premises, not

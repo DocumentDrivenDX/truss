@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public original UMF preparation. No catalog acceptance or database effects.
 
 The original JavaScript producer runs inside the packaged embedded V8 boundary.
@@ -15,8 +16,7 @@ import selectors
 import tempfile
 import time
 import weakref
-from ._umf_release import MANIFEST_SHA256
-from ._core08_catalog_release import MANIFEST_SHA256 as CORE08_MANIFEST_SHA256
+from ._core10_catalog_release import MANIFEST_SHA256 as CORE10_MANIFEST_SHA256
 from ._acceptance_json import decode_acceptance_json
 
 MAX_INPUT=16777216
@@ -36,15 +36,13 @@ class DocumentInterpretation:
     observation_bytes: bytes
 
     def observation(self) -> dict[str, object]:
-        """Fresh copy of the complete original owner observation/diagnostics."""
+        """Fresh source and the exact current UMF validation result."""
         evidence=json.loads(self.observation_bytes)
         if evidence.get('interfaceVersion')=='truss-registration-preparation/2.0':
             entry=next(d for d in evidence['documents'] if d['documentId']==self.document.document_id)
             if entry['contentSha256']!=sha256(self.document.content).hexdigest():raise ValueError('Original source digest required')
-            source=self.source()
-            return {'originalText':self.document.content.decode('utf8'),'source':source,
-                'sourceValidation':entry['validation'],'transition':None,
-                'targetValidation':json.loads(json.dumps(entry['validation'])),'target':self.source()}
+            return {'originalText':self.document.content.decode('utf8'),'source':self.source(),
+                'sourceValidation':entry['validation']}
         return evidence
 
     def source(self) -> dict[str,object]:
@@ -143,11 +141,12 @@ def _text(value):
 
 def _json(value):return json.dumps(value,ensure_ascii=True,separators=(',',':')).encode('utf8')
 
-def _release():
+def _release_runtime():
     root=Path(__file__).parent/'_umf'
     try:
-        manifest_bytes=(root/'manifest.json').read_bytes()
-        if sha256(manifest_bytes).hexdigest()!=MANIFEST_SHA256:_reject('producer_unavailable')
+        manifest_bytes=(root/'runtime-manifest.json').read_bytes()
+        from ._umf_runtime_release import MANIFEST_SHA256 as runtime_manifest_sha256
+        if sha256(manifest_bytes).hexdigest()!=runtime_manifest_sha256:_reject('producer_unavailable')
         manifest=json.loads(manifest_bytes)
         for relative,digest in manifest['files'].items():
             if sha256((root/relative).read_bytes()).hexdigest()!=digest:_reject('producer_unavailable')
@@ -156,15 +155,15 @@ def _release():
         if isinstance(error,PreparationRejected):raise
         _reject('producer_unavailable')
 
-def _release_core08():
-    root=Path(__file__).parent/'_umf_core08'
+def _release_core10():
+    root=Path(__file__).parent/'_umf_core10'
     try:
         raw=(root/'manifest.json').read_bytes()
-        if sha256(raw).hexdigest()!=CORE08_MANIFEST_SHA256:_reject('producer_unavailable')
+        if sha256(raw).hexdigest()!=CORE10_MANIFEST_SHA256:_reject('producer_unavailable')
         manifest=json.loads(raw)
         for relative,digest in manifest['files'].items():
             if sha256((root/relative).read_bytes()).hexdigest()!=digest:_reject('producer_unavailable')
-        _release() # Original isolated Ajv/runtime dependency closure remains pinned.
+        _release_runtime()
         return root,manifest
     except (OSError,KeyError,ValueError) as error:
         if isinstance(error,PreparationRejected):raise
@@ -172,8 +171,7 @@ def _release_core08():
 
 def _release_for_prepared(prepared):
     _require_original_preparation(prepared)
-    if prepared.provenance.release_manifest_sha256==CORE08_MANIFEST_SHA256:return _release_core08()
-    if prepared.provenance.release_manifest_sha256==MANIFEST_SHA256:return _release()
+    if prepared.provenance.release_manifest_sha256==CORE10_MANIFEST_SHA256:return _release_core10()
     _reject('producer_unavailable')
 
 def _capture(command,*,input_bytes=b'',limit,timeout,cwd=None):
@@ -216,8 +214,8 @@ def prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byte
         return prepare_catalog(documents,bun_executable=bun_executable)
     return _prepare_acceptance(documents,configuration,bun_executable=bun_executable)
 
-def prepare_core08_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes | None=None,*,bun_executable: str='bun') -> PreparedAcceptance:
-    """Compatibility spelling for the same source-selected preparation operation."""
+def prepare_core10_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes | None=None,*,bun_executable: str='bun') -> PreparedAcceptance:
+    """Current UMF 0.10.0 preparation entrypoint."""
     return prepare_acceptance(documents,configuration,bun_executable=bun_executable)
 
 def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:bytes,*,bun_executable: str='bun') -> PreparedAcceptance:
@@ -244,26 +242,21 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
         if type(document.content) is not bytes or not 1<=len(document.content)<=MAX_DOCUMENT:_reject('resource')
         total+=len(document.content)
         if total>MAX_INPUT:_reject('resource')
-        carriers.append({'documentId':document.document_id,'documentRevision':document.document_revision,
-                         'artifact':{'identity':identity,'bytesBase64':base64.b64encode(document.content).decode('ascii'),
-                                     'sha256':sha256(document.content).hexdigest()}})
-    request=_json({'configurationHex':configuration.hex(),'documents':carriers})
-    if len(request)>MAX_INPUT:_reject('resource')
-    versions=set()
-    for document in documents:
         try:
             source=json.loads(document.content.decode('utf8'))
             version=source.get('umf') if type(source) is dict else None
         except (ValueError,UnicodeError,RecursionError):_reject('invalid_document')
         if version is None:_reject('invalid_document')
-        if version not in ('0.7.0','0.8.0'):_reject('unsupported_profile')
-        versions.add(version)
-    if len(versions)!=1:_reject('unsupported_profile')
-    current=False  # One source validator owns both core versions; selectors only choose storage policy.
-    root,manifest=(_release_core08() if current else _release())
-    release_digest=CORE08_MANIFEST_SHA256 if current else MANIFEST_SHA256
+        if version!='0.10.0':_reject('unsupported_profile')
+        carriers.append({'documentId':document.document_id,'documentRevision':document.document_revision,
+                         'artifact':{'identity':identity,'bytesBase64':base64.b64encode(document.content).decode('ascii'),
+                                     'sha256':sha256(document.content).hexdigest()}})
+    request=_json({'configurationHex':configuration.hex(),'documents':carriers})
+    if len(request)>MAX_INPUT:_reject('resource')
+    root,manifest=_release_core10()
+    release_digest=CORE10_MANIFEST_SHA256
     try:
-        completed=_capture(['embedded-v8',str(root/'preparation.mjs' if current else root/'packages/umf-bun/src/bridge.js')],input_bytes=request,
+        completed=_capture(['embedded-v8',str(root/'preparation.mjs')],input_bytes=request,
                            limit=MAX_OUTPUT,timeout=10,cwd=root)
     except (OSError,subprocess.TimeoutExpired,TimeoutError,UnicodeError):_reject('runtime_unavailable')
     if completed.returncode or len(completed.stdout)>MAX_OUTPUT:_reject('producer_unavailable')
@@ -291,10 +284,10 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
                     or item['umfVersion']!=json.loads(document.content)['umf']
                     or item['validation'].get('valid') is not True):_reject('producer_unavailable')
         pin=result['provenance']['umfProfile']
-        if (pin['identity'] != 'umf-record-interpretation'
+        if (pin['identity'] != 'umf-core-document-validation'
                 or pin['version'] != manifest['owner']['revision']
                 or pin['sha256'] != manifest['owner']['bundleSha256']
-                or result['provenance']['schemaSha256'] != manifest['files']['acceptance-input-v0.1.schema.json' if current else 'docs/helix/02-design/contracts/acceptance-input-v0.1.schema.json']):
+                or result['provenance']['schemaSha256'] != manifest['files']['acceptance-input-v0.1.schema.json']):
             _reject('producer_unavailable')
         report_evidence=result['reportEvidence']
         expected_summary={'interfaceVersion':'truss-registration-preparation/2.0','documents':[

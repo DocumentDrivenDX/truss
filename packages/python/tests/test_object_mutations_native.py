@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic adopter workflows for the public object mutation interface."""
 import os
 import psycopg

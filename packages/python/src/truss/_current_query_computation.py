@@ -6,7 +6,7 @@ import json
 from time import monotonic
 from ._current_query_pipe import CurrentQueryPipe
 
-_MANIFEST = '39bd15f5c2f65679b0474860563d8304f4c8bb3d167dbd63d019f50c33274dbe'
+_MANIFEST = '4fe89ac2d318c9df10de578c31d1f955b5bc57baf843c036a05a178802a8796f'
 
 
 @contextmanager

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public outcomes from accepted native UMF catalog operations."""
 from dataclasses import dataclass
 from typing import Literal
@@ -23,6 +24,11 @@ class CatalogUnchanged:
     status: str = 'pending_commit'
 
 @dataclass(frozen=True,slots=True)
+class CatalogStoredViolator:
+    object_id: str
+    text: str
+
+@dataclass(frozen=True,slots=True)
 class CatalogCompatibilityViolation:
     document_id: str
     module_id: str
@@ -31,6 +37,7 @@ class CatalogCompatibilityViolation:
     field_id: str
     rule: Literal['property.required','property.scalar_type','property.facets','property.retained_name_collision','property.rebind_value']
     affected_object_count: int
+    stored_values: tuple[CatalogStoredViolator, ...] = ()
 
 @dataclass(frozen=True,slots=True)
 class CatalogRelationshipCompatibilityViolation:

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private structural registry decoding; no producer/cut/authority admission."""
 COLUMNS = ('original_writer_xid','operation_ordinal','operation_kind','phase',
            'effect_generation','readiness_generation','sealed_generation','application_generation',

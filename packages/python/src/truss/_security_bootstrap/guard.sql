@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- CONTRACT-005 optional installation-wide current-authority guard.
 -- Not adopted or included in layout 0.9. No automatic repair/initialization.
 CREATE TABLE truss.policy_generation_guard (

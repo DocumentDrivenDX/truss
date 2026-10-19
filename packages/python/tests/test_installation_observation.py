@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public footprint inspection: no installed or readiness claim."""
 import unittest
 from test_native_pg8000 import NativeBoundaryFixture

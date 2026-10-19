@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Accepted-catalog Record capture into the shared named UMF policy fixture.
 
 Association Records retain their actual object homes. No edge type is invented.

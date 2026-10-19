@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Pure cache identity checks for native catalog revision reuse."""
 import json
 import unittest

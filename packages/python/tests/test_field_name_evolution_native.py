@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One public name-only evolution workflow retaining keys and original receipts."""
 import json, os
 from truss import Ok, Error, CatalogDocument, CatalogRegistration, CatalogAcceptanceRefused, ObjectFound, QueryRows, HistoryEntity, HistoricalRecord
@@ -7,7 +8,7 @@ import test_group_create_native as base
 
 class FieldNameEvolutionTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')): locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self, source):
         source['umf']=self.source_version
         elements=source['modules'][0]['elements']
@@ -87,9 +88,6 @@ class FieldNameEvolutionTests(base.PublicCreateGroupTests):
             refused=a.accept_in_transaction(t,prepared,request_key='occupied-prior-name-'+str(new_first))
             self.assertIsInstance(refused,Error,repr(refused));self.assertEqual(refused.error.catalog_code,'unsupported_profile')
             h.detach();c.rollback()
-
-class FieldNameEvolution08Tests(FieldNameEvolutionTests):
-    source_version='0.8.0'
 
     def test_unset_after_name_change_preserves_historical_property_pin(self):
         """An old image's removed field need not occur in new-revision metadata."""

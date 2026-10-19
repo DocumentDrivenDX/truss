@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Host-only compiler/packaging; libraries contain no driver or tooling import. */
 import {resolve, dirname, basename} from 'node:path';
 import {mkdir, readFile, writeFile, rm} from 'node:fs/promises';

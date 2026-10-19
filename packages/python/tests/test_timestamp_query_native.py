@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public exact-instant query workflow over original timestamp tokens."""
 from dataclasses import replace
 from truss import Ok, QueryRows, QueryRefused, adopt_psycopg_host, create_reference_assembly, CatalogRuntimeConfiguration
@@ -7,7 +8,7 @@ import test_object_mutations_native as base
 
 class TimestampQueryTests(base.ObjectMutationTests):
     for _name in tuple(n for n in dir(base.ObjectMutationTests) if n.startswith('test_')): locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version
         module=source['modules'][0]
@@ -49,6 +50,3 @@ class TimestampQueryTests(base.ObjectMutationTests):
         query=create_reference_assembly(CatalogRuntimeConfiguration(),h).value.compiled_execution(a.compiled_selection).capability
         check(sql,{'at':TextValue(kind='timestamp',text=tokens[0][1])},(('one',),('two',)),tx=t)
         h.detach();c.rollback()
-
-class TimestampQuery08Tests(TimestampQueryTests):
-    source_version='0.8.0'

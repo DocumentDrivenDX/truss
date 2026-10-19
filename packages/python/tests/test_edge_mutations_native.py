@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic adopter workflows for native relationship groups."""
 from dataclasses import replace
 from truss import Ok,EdgeFound,EdgeNotFound,EdgePage,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration

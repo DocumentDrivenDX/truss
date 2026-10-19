@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original version-specific warnings remain retained and uninterpreted."""
 import base64,json,hashlib,os
 from decimal import Decimal
@@ -8,7 +9,7 @@ import test_numeric_facets_native as base
 
 class CatalogDiagnosticTests(base.NumericFacetTests):
     for _name in tuple(n for n in dir(base.NumericFacetTests) if n.startswith('test_')):locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         super().fields(source);source['umf']=self.source_version
         source['vocabularies']={'urn:truss:test:opaque':{'version':'0.1.0'}}
@@ -36,6 +37,3 @@ class CatalogDiagnosticTests(base.NumericFacetTests):
         self.assertEqual(dict(value.values)['quantity'],TextValue(kind='integer',text='9007199254740993'))
         query=a.query_in_transaction(t,sql='SELECT a.quantity,a.amount FROM "A" a',document_ids=('adoc',));self.assertIsInstance(query.value,QueryRows,repr(query));self.assertEqual(query.value.rows,((9007199254740993,Decimal('1.2300')),))
         self.assertEqual(a.report_in_transaction(t).value.original_bytes,report);h.detach();c.rollback()
-
-class CatalogDiagnostic08Tests(CatalogDiagnosticTests):
-    source_version='0.8.0'

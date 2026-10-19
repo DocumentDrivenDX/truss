@@ -5,6 +5,7 @@ from pathlib import Path
 import json
 from ._owner_evidence_json import decode_owner_evidence_json,same_owner_evidence
 from ._current_query_originals import require_current_model_correspondence
+from ._embedded_release import MANIFEST_SHA256 as EMBEDDED_MANIFEST_SHA256
 
 
 @dataclass(frozen=True,slots=True)
@@ -13,22 +14,43 @@ class CurrentDisclosureOriginals:
     consumer_bytes:bytes
 
 
-# Explicit local reviewed ARM/Python3.11 cohort, not a public release/default.
-# Whole selections stay fixed; no ABI2 or unrecognized-module fallback.
+# Published Weft 0.4.45 consumer identities for the supported platform wheels.
+_EMBEDDED_CONSUMER={
+    'embeddedRuntime':'mini-racer==0.14.1',
+    'embeddedProfile':'truss.embedded-v8/2',
+    'embeddedV8Version':'14.4.258.23',
+    'embeddedManifestSha256':EMBEDDED_MANIFEST_SHA256,
+}
+_GRAPH_SHA256='9875a58cf96d0cdbe178018a3c0bb27459b1771d7e1b9a378d391448514ca377'
 _CONSUMER_COHORTS=({
     'profile':'truss-current-disclosure-consumer/0.1-candidate',
-    'umfRevision':'11b412e4a783fef8075aeb4109a286650a0bda28',
-    'umfBundleSha256':'548b7ff64dabf3bc796afe99ecca265f5bcf242202e367ba7125e62c64f0a735',
-    'umfManifestSha256':'45154e0f3bd5973ddc4d6fb40fdebf27afb51fdc018d2f055ba580c9c07437d2',
-    'bunVersion':'1.4.2',
-    'weftRevision':'b8c34c84f3c8cae8e07680e4960942d685f9bb63',
-    'weftWheelSha256':'2b5806d53cb50b95b56f0dda0dee8ea79e6f1d72b839f5ec74304943fe3022ad',
-    'weftModuleSha256':'a94439b3949c6db574ded8d95d9b81b23e128b0cbb7570edff65228d3737c402',
+    'umfRevision':'9ff2ba12271be889aad81c09695487e14655893d',
+    'umfBundleSha256':'bf3e2af7728fe056ef8b3aba37ad048b0b8ac9485ec31920a1f585a6b72d10d8',
+    'umfManifestSha256':'153d939786bb01dd2cd206302b3696dd5d5c8e4e1092fbfa4fd64155d09c483c',
+    **_EMBEDDED_CONSUMER,
+    'weftRevision':'ae7d18f1e22323348dbd7b6a06093f12557d3add',
+    'weftVersion':'0.4.45',
+    'weftWheelSha256':'e9ebddd11929b7cf8a1b2885e092010bc556b886a72bedf50dc0c14b0e762463',
+    'weftModuleSha256':'2d64636f1e4929c1cd1529ec9cefff5ab47499fe31f65590af7d0063554f6dac',
+    'weftShimSha256':'cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d',
+    'graphSha256':_GRAPH_SHA256,
     'childProtocol':'umf.security.private-disclosure-child/0.2-candidate',
     'resultAbi':'weft.postgresql.current-presence.sql/0.1-candidate',
 },
-# Separately qualified GraphRequirements candidate; no default dependency repin.
-{'profile': 'truss-current-disclosure-consumer/0.1-candidate', 'umfRevision': '11b412e4a783fef8075aeb4109a286650a0bda28', 'umfBundleSha256': '548b7ff64dabf3bc796afe99ecca265f5bcf242202e367ba7125e62c64f0a735', 'umfManifestSha256': '45154e0f3bd5973ddc4d6fb40fdebf27afb51fdc018d2f055ba580c9c07437d2', 'bunVersion': '1.4.2', 'weftRevision': 'b34a823911fb127e2bf4914fac6ca4415bb4adb1', 'weftWheelSha256': '25947eaea9cd42db79a2671664e7829af10d79a802a82cf92f5ddc0b2675e5c8', 'weftModuleSha256': '7e6384ddada0f67a45839a222ffb059e04a5de00f6a9281ad811eefacdeffa42', 'childProtocol': 'umf.security.private-disclosure-child/0.2-candidate', 'resultAbi': 'weft.postgresql.current-presence.sql/0.1-candidate'},)
+# Both published platform modules passed the same exact-source Graph smoke.
+{'profile':'truss-current-disclosure-consumer/0.1-candidate',
+ 'umfRevision':'9ff2ba12271be889aad81c09695487e14655893d',
+ 'umfBundleSha256':'bf3e2af7728fe056ef8b3aba37ad048b0b8ac9485ec31920a1f585a6b72d10d8',
+ 'umfManifestSha256':'153d939786bb01dd2cd206302b3696dd5d5c8e4e1092fbfa4fd64155d09c483c',
+ **_EMBEDDED_CONSUMER,
+ 'weftRevision':'ae7d18f1e22323348dbd7b6a06093f12557d3add',
+ 'weftVersion':'0.4.45',
+ 'weftWheelSha256':'fe96773709df20ba38db6ab1247489603befafff6e55af20a1b448719a20e5a9',
+ 'weftModuleSha256':'1a7f9c3e43aa41419725d43c3f54a34499bc28b97f175a6eccbcf1d8b5b3b437',
+ 'weftShimSha256':'cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d',
+ 'graphSha256':_GRAPH_SHA256,
+ 'childProtocol':'umf.security.private-disclosure-child/0.2-candidate',
+ 'resultAbi':'weft.postgresql.current-presence.sql/0.1-candidate'},)
 
 
 def _actual_disclosure_consumer():
@@ -125,6 +147,5 @@ def is_graph_disclosure_originals(originals):
     if type(originals) is not CurrentDisclosureOriginals:
         return False
     consumer=decode_owner_evidence_json(originals.consumer_bytes)
-    if same_owner_evidence(consumer,_CONSUMER_COHORTS[1]):return True
-    if same_owner_evidence(consumer,_CONSUMER_COHORTS[0]):return False
+    if any(same_owner_evidence(consumer,cohort) for cohort in _CONSUMER_COHORTS):return True
     raise ValueError('Exact registered disclosure consumer cohort required')

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public ordinary-person query with original UMF/Weft and private SQL."""
 import os
 import shutil
@@ -220,9 +221,6 @@ class CurrentQueryRuntimeNativeTests(full.CurrentQueryFullSourcesNativeTests):
         self.assertIsInstance(blocked,Error)
         self.assertIn('protection migration',str(self.host._custody.last_attempt.error))
         self.assertEqual(self.admin.execute("SELECT to_regprocedure('truss.acquire_registered_role_catalog_cut()')").fetchone(),(None,))
-        blocked=admin_assembly.upgrade_in_transaction(self.tx)
-        self.assertIsInstance(blocked,Error)
-        self.assertIn('protection migration',str(self.host._custody.last_attempt.error))
         self.host.detach();self.admin.rollback()
         self.assertEqual(c.execute("SELECT has_function_privilege('truss.query_objects(jsonb,integer)','EXECUTE')").fetchone(),(False,))
         from truss._current_query_sources import capture_current_query_sources_with_cursor

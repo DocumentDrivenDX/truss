@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Protocol sequencing controls; fake child is not UMF/native evidence."""
 import json
 import unittest

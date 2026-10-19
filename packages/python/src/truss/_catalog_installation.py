@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Executable rollback-only fresh layout construction, never installed readiness.
 
 The private installer supplies an exclusively owned idle administrative session.

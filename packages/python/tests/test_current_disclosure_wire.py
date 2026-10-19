@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact framing/transport profile only; no UMF permission or native campaign."""
 import unittest,json,struct,sys
 from hashlib import sha256

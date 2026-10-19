@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Candidate values only. No fresh cut, native exclusion, issuer, completion or lease proof. */
 export type CandidateClaimObservation = Readonly<{state:'not-observed'} | {state:'observed';operationIdentityHex:string;installationIdentityHex:string;policyProfileHex:string;generation:string;settled:boolean}>;
 const fail=():never=>{throw Error('TRUSS_SECURITY_CLAIM_OBSERVATION_UNSUPPORTED');};

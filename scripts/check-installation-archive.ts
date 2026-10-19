@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {SQL} from 'bun';
 const url=process.env.TRUSS_WEFT_TEST_URL;if(!url)throw Error('Fresh isolated database URL required');
 const sql=new SQL(url,{max:1});

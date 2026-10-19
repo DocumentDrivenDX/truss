@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original UMF extension occurrences; preservation never implies interpretation. */
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 import type {AssertionOwner} from '../../../docs/helix/02-design/contracts/bindings/truss-enforcement-report-v0.1';

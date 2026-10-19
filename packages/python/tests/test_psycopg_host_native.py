@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Real supported-API transaction adoption; no installed graph capabilities."""
 import os
 import subprocess

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional SET-reachability model; no native membership or role-lifetime theorem."""
 from pathlib import Path
 import hashlib,json,uuid,z3

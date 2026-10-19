@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private selected text operation; never protected capability evidence."""
 import unittest
 from test_native_pg8000 import NativeBoundaryFixture

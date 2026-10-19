@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Python assembly carriers; construction/admission is implemented separately.
 
 These shapes never qualify a database, profile, host service or graph operation.

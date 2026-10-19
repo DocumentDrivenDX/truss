@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Persistent private adoption signal; original native custody remains authoritative."""
 import unittest
 from concurrent.futures import ThreadPoolExecutor

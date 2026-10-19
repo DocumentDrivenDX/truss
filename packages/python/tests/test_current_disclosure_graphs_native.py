@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual public population and native projection; source wrapper is diagnostic only.
 
 No registration/native binding/authenticated protected release admission. The
@@ -79,7 +80,7 @@ class NativeGraphCaptureTests(base.PublicCreateGroupTests):
             self.assertIsInstance(duplicate,GroupSuccess);expected_incidence.append((name,src,dst));h.detach();c.commit()
         case='parallel' if parallel else 'base'
         original_document=self.documents[0];raw=original_document.content
-        request=wire({'modules':[{'pin':{'documentId':'adoc','revision':original_document.document_revision,'umfVersion':'0.8.0','sha256':hashlib.sha256(raw).hexdigest()},'documentJson':raw.decode()}]})
+        request=wire({'modules':[{'pin':{'documentId':'adoc','revision':original_document.document_revision,'umfVersion':'0.10.0','sha256':hashlib.sha256(raw).hexdigest()},'documentJson':raw.decode()}]})
         # The semantic closure must retain exact accepted revision and document.
         initial['sources']['closure']={'pins':[{'documentId':'adoc','revision':original_document.document_revision}],'documents':[{'revision':original_document.document_revision,'document':json.loads(raw)}]}
         initial['sources']['ontology']['documents']=[{'documentId':'adoc','revision':original_document.document_revision}]

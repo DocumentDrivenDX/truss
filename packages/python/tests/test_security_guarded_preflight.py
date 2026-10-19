@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Compiler-backed pre-SQL refusal; no native authentication claim."""
 import json,os,unittest,subprocess
 from pathlib import Path

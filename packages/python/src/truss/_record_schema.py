@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Immutable application-side value schemas compiled from native definitions.
 
 For an exact selected definition pin, the compiled subset validates authored
@@ -155,6 +156,12 @@ def _check_facets(family, facets, *, item=False):
         if (type(precision) is int and 1 <= precision <= 2_147_483_647
                 and type(scale) is int and 0 <= scale <= precision):
             return MappingProxyType({'precision': precision, 'scale': scale})
+    if family in ('string', 'binary') and set(facets) == {'length'}:
+        length = facets['length']
+        if (isinstance(length, Mapping) and set(length) == {'max', 'unit'}
+                and type(length['max']) is int and 0 <= length['max'] <= 9_007_199_254_740_991
+                and length['unit'] == ('unicode-scalar' if family == 'string' else 'byte')):
+            return MappingProxyType({'length': MappingProxyType(dict(length))})
     raise SchemaCompilationError('Property facets outside the current native exact-value subset')
 
 
@@ -451,7 +458,7 @@ def _scalar(value, family, facets, allow_null):
         return False
     token = value.text
     if family == 'string':
-        return '\x00' not in token
+        return '\x00' not in token and ('length' not in facets or len(token) <= facets['length']['max'])
     if family == 'integer':
         if not _INTEGER_TOKEN.fullmatch(token):
             return False
@@ -485,7 +492,9 @@ def _scalar(value, family, facets, allow_null):
         return not (shift < 0 and -shift > trailing_zeros) and len(coefficient) + shift <= precision
     if family == 'binary':
         try:
-            return base64.b64encode(base64.b64decode(token, validate=True)).decode('ascii') == token
+            decoded = base64.b64decode(token, validate=True)
+            return (base64.b64encode(decoded).decode('ascii') == token
+                    and ('length' not in facets or len(decoded) <= facets['length']['max']))
         except (ValueError, base64.binascii.Error):
             return False
     if family == 'date':

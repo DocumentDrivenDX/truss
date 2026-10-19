@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private PostgreSQL18.6 unfiltered ddl_command_start participation adjunct.
 -- Native event-supported commands only; no role/database/tablespace/parameter
 -- privilege/ALTER SYSTEM/event-trigger administration coverage. No protection

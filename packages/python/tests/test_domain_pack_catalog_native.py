@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original UMF domain packs through public catalog acceptance and commit/retry."""
 import gzip
 import hashlib

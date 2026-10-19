@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public registration-owned retained scalar/container rebinding."""
 import json, os
 from dataclasses import replace
@@ -8,7 +9,7 @@ import test_group_create_native as base
 
 class CatalogRebindTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')): locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self, source):
         source['umf']=self.source_version
         for element in source['modules'][0]['elements']:
@@ -182,6 +183,3 @@ class CatalogRebindTests(base.PublicCreateGroupTests):
                 self.assertEqual({entry['name'] for entry in image['retained']},
                     {'giftWrap','giftFlags'} if version<read.value.object.version else set())
         h.detach();c.commit()
-
-class CatalogRebind08Tests(CatalogRebindTests):
-    source_version='0.8.0'

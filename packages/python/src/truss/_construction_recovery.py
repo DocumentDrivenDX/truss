@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Process-lifetime original construction custody; not qualified bootstrap recovery.
 
 The trusted caller owns the administrative connection exclusively. Calls retained

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private original-source correspondence only; no authority or UMF semantics.
 
 The caller still needs genuine UMF/ontology owner validation, authenticated
@@ -183,7 +184,7 @@ def _prepare_association_binding(core_bytes: bytes, ontology_bytes: bytes,
         _closed(binding, keys)
     else: _fail('binding_profile')
     if binding['coreSha256'] != sha256(core_bytes).hexdigest() or binding['ontologySha256'] != sha256(ontology_bytes).hexdigest(): _fail('source_digest')
-    if core.get('umf') != '0.8.0' or ontology.get('version') != '0.1.0': _fail('source_version')
+    if core.get('umf') != '0.10.0' or ontology.get('version') != '0.1.0': _fail('source_version')
     document = _text(core.get('id'))
     if ontology.get('documents') != [{'documentId': document, 'revision': binding['modelRevision']}]: _fail('model_revision')
     _text(binding['modelRevision']); _text(binding['ontologyRevision'])

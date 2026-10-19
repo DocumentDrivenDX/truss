@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Bounded original PostgreSQL response-frame subset; not a socket/authority producer. */
 export interface WireLimits {readonly maxFrameBytes:number;readonly maxFields:number}
 export function decodeResponseFrame(frame:Uint8Array,limits:WireLimits): {

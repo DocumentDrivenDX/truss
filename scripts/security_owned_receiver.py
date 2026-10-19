@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned fixed semantic receiver candidate; no authenticated public endpoint."""
 import json,hashlib
 from truss.psycopg_host import PsycopgHost

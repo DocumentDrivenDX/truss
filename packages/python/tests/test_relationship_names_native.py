@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public relationship presentation names evolve while edge identities remain."""
 import json,os
 from truss import Ok,CatalogDocument,CatalogRegistration,QueryRows,HistoryEntity,HistoricalRecord,TraversalHop,TraversalComplete,EdgeFound
@@ -7,7 +8,7 @@ import test_group_create_native as base
 
 class RelationshipNameTests(base.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version
         for element in source['modules'][0]['elements']:
@@ -45,6 +46,3 @@ class RelationshipNameTests(base.PublicCreateGroupTests):
         replay=a.apply_in_transaction(t,semantic,request,documents=original_documents,bun_executable=bun);self.assertIsInstance(replay.value.response,CommittedReceiptReplay)
         self.assertEqual(a.report_in_transaction(t,revision=1).value.original_bytes,report)
         h.detach();c.rollback()
-
-class RelationshipName08Tests(RelationshipNameTests):
-    source_version='0.8.0'

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Borrowed native host controls and original hook restoration."""
 import unittest
 from unittest.mock import patch

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional declaration-duty tuple/gate algebra; not a JavaScript or native proof."""
 from pathlib import Path
 import hashlib,json,uuid

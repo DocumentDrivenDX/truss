@@ -17,13 +17,8 @@ BEGIN
  SELECT * INTO STRICT request FROM truss.catalog_registration_request WHERE revision=captured_revision;
  IF request.installation_id<>installation.installation_id THEN
   RAISE EXCEPTION 'installed catalog provenance required' USING ERRCODE='55000'; END IF;
- PERFORM truss.catalog_check_source_correspondence(request.input_bytes,truss.runtime_owned_request_documents(request),truss.runtime_owned_request_declarations(request));
- origin:=convert_to((convert_from(request.origin_bytes,'UTF8')::jsonb||jsonb_build_object('actor',request.actor_name,'db_role',request.actor_name))::text,'UTF8');
- expected:=truss.catalog_all_expected_records();
- PERFORM truss.catalog_check_records(expected);
  SELECT report_bytes INTO STRICT original_report FROM truss.catalog_acceptance_report WHERE rev=captured_revision;
- IF sha256(original_report) IS DISTINCT FROM request.report_sha256 OR original_report IS DISTINCT FROM truss.catalog_make_report(request) THEN
-  RAISE EXCEPTION 'original accepted report required' USING ERRCODE='55000'; END IF;
+ -- Accepted native rows are authoritative; do not replay schema compilation or report construction on load.
  SELECT (SELECT count(*) FROM truss.type_def)+(SELECT count(*) FROM truss.prop_def)
        +(SELECT count(*) FROM truss.key_def)+(SELECT count(*) FROM truss.rel_def) INTO definition_count;
  IF definition_count>maximum_count THEN RAISE EXCEPTION 'catalog definition budget exceeded' USING ERRCODE='54000'; END IF;

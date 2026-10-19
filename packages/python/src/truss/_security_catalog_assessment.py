@@ -1,6 +1,7 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private administrative accepted-source assessment; never an execution permit.
 
-Uses original native expected-record/report consistency checks. The caller must
+Reads the current accepted source and native definitions. The caller must
 hold installation/head/profile barriers. Output/retained assessment bounds do
 not establish total libpq/process allocation limits. This does not prove complete writer
 closure, issuer authenticity, or same-transaction ABA absence.
@@ -13,7 +14,7 @@ from .weft import _decode
 MAX_BYTES=16777216
 SOURCE_TABLES=('schema_head','schema_rev','schema_doc','catalog_registration_request','catalog_acceptance_report',
               'type_def','prop_def','key_def','rel_def','rel_endpoint','relationship_lineage','schema_change',
-              'catalog_runtime_installation','runtime_release','runtime_catalog_rebind_transition','runtime_catalog_key_backfill')
+              'catalog_runtime_installation','runtime_catalog_rebind_transition','runtime_catalog_key_backfill')
 
 
 def verify_held_accepted_catalog_source_cut(cursor):
@@ -36,32 +37,12 @@ def capture_accepted_catalog(cursor,original_request,*,existing_source_cut=False
     if len(heads)!=1 or type(heads[0][0]) is not int or heads[0][0]<1:
         raise ValueError('Positive accepted catalog revision required')
     revision=heads[0][0]
-    cursor.execute('SELECT (SELECT max(revision) FROM truss.catalog_registration_request),(SELECT count(*) FROM truss.catalog_registration_request),(SELECT max(rev) FROM truss.schema_rev),(SELECT count(*) FROM truss.schema_rev)',prepare=False)
-    if cursor.fetchmany(2)!=[(revision,revision,revision,revision+1)]:
+    cursor.execute('SELECT (SELECT max(revision) FROM truss.catalog_registration_request),(SELECT max(rev) FROM truss.schema_rev),EXISTS(SELECT 1 FROM truss.catalog_acceptance_report WHERE rev=%s)',(revision,),prepare=False)
+    if cursor.fetchmany(2)!=[(revision,revision,True)]:
         raise ValueError('Exact current accepted revision history required')
-    cursor.execute('SELECT truss.catalog_check_records(truss.catalog_all_expected_records())',prepare=False)
-    cursor.fetchmany(2)
-    # Original stored receipts must still correspond to source and deterministic
-    # native report construction; hashes alone do not supply owner execution.
-    cursor.execute('SELECT coalesce(sum(octet_length(input_bytes)::bigint+octet_length(document_bytes)+octet_length(declaration_bytes)),0)<=%s FROM truss.catalog_registration_request',(MAX_BYTES,),prepare=False)
-    budget=cursor.fetchmany(2)
-    if budget!=[(True,)] or type(budget[0][0]) is not bool:raise ValueError('Stored receipt assessment budget exceeded')
-    cursor.execute('''SELECT r.input_bytes,truss.runtime_owned_request_documents(r),truss.runtime_owned_request_declarations(r),
-      a.report_bytes,r.report_sha256,truss.catalog_make_report(r),r.installation_id::text,r.revision
-      FROM truss.catalog_registration_request r JOIN truss.catalog_acceptance_report a ON a.rev=r.revision
-      WHERE r.revision<=%s ORDER BY r.revision''',(revision,),prepare=False)
-    receipts=cursor.fetchmany(65537)
-    if not receipts or len(receipts)>65536:raise ValueError('Bounded complete registration receipts required')
-    if len(receipts)!=revision or any(row[-1]!=i for i,row in enumerate(receipts,1)):raise ValueError('Complete accepted revision receipt history required')
+    # The trusted engine already accepted these definitions atomically. Current
+    # source capture does not replay every receipt or rebuild historical reports.
     retained=0
-    for input_bytes,docs,decls,report,report_hash,rebuilt,receipt_installation,receipt_revision in receipts:
-        if receipt_installation!=installation[0][0]:raise ValueError('Original receipt installation required')
-        if any(type(v) is not bytes for v in (input_bytes,docs,decls,report,report_hash,rebuilt)):
-            raise ValueError('Original stock bytea catalog receipt required')
-        retained+=sum(len(v) for v in (input_bytes,docs,decls,report,rebuilt))
-        if retained>MAX_BYTES:raise ValueError('Catalog receipt assessment budget exceeded')
-        if sha256(report).digest()!=report_hash or report!=rebuilt:raise ValueError('Original accepted report correspondence required')
-        cursor.execute('SELECT truss.catalog_require_sources(%s,%s,%s)',(input_bytes,docs,decls),prepare=False);cursor.fetchmany(2)
     cursor.execute('''SELECT doc_id,doc_revision,umf_version,content_sha256,document FROM
       (SELECT DISTINCT ON (doc_id) * FROM truss.schema_doc WHERE rev<=%s ORDER BY doc_id,rev DESC,ord DESC) d
       ORDER BY doc_id''',(revision,),prepare=False)

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 from dataclasses import FrozenInstanceError
 import unittest
 from unittest.mock import patch

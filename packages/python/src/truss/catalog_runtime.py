@@ -1,12 +1,13 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public catalog runtime over caller-owned psycopg transactions.
 
 The selected runtime provides accepted scalar catalogs, graph groups and reads,
-imports, retained history, receipts, feeds and additive candidate upgrades.
+imports, retained history, receipts and feeds on fresh current installations.
 Ordinary-person catalog calls require READ COMMITTED, so authorization reads
 observe committed membership changes. Higher isolation returns a refusal.
 """
 from __future__ import annotations
-from ._catalog_source_reference import REFERENCE08_PROFILE,RECURSIVE08_PROFILE,SOURCE_REFERENCE_FORMAT,compact_catalog_sources
+from ._catalog_source_reference import SOURCE_REFERENCE_FORMAT,compact_catalog_sources
 from dataclasses import dataclass, replace
 from hashlib import sha256
 from importlib.resources import files
@@ -19,7 +20,7 @@ from functools import wraps
 from typing import Literal, overload, TypeVar, Mapping
 from .current_query import CurrentQueryExecutor
 from .current_disclosure import CurrentDisclosureExecutor,CurrentDisclosureRows
-from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport)
+from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogStoredViolator, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport)
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
     NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability, NativeCompiledExecutionCapability)
 from .history import (HistoryEntity,HistoryCursor,RetainedHistoryEvent,HistoryPage,
@@ -45,8 +46,9 @@ from decimal import Decimal
 from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor,QueryCatalogSources
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
-from .preparation import CatalogDocument, PreparedAcceptance, prepare_acceptance, prepare_core08_acceptance, _require_original_preparation
-from ._catalog_support import DECIMAL207_PROFILE,DECIMAL208_PROFILE,CONTAINER07_PROFILE,CONTAINER08_PROFILE,FACET07_PROFILE,FACET08_PROFILE,evaluate_catalog_support, CORE08_PROFILE, RETAINED_METADATA_PROFILE, SCALAR_PROFILE, NAMED_SCALAR_PROFILE, NAMED_RELATIONSHIP_PROFILE
+from .preparation import CatalogDocument, PreparedAcceptance, _require_original_preparation
+from ._catalog_support import evaluate_catalog_support
+from ._catalog_source_reference import DATE10_PROFILE
 from ._catalog_report_semantics import compose_original_catalog_report_semantics, canonical_numeric_free
 
 
@@ -169,15 +171,16 @@ def _release():
     for entry in json.loads(public_profiles)['profiles']+json.loads(public_profiles).get('retainedProfiles',[]):
         if sha256(entry['definition'].encode('utf8')).hexdigest()!=entry['pin']['sha256']:raise ValueError('Original public capability definition required')
         if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
-    for name in ('query-abi.json','preparation-baseline.json','upgrade-source-023.json','upgrade-source-024.json','upgrade-source-025.json','upgrade-source-026.json','upgrade-source-027.json','upgrade-source-028.json','upgrade-source-029.json','upgrade-source-030.json','upgrade-source-031.json','upgrade-source-032.json','upgrade-source-033.json','upgrade-source-034.json','upgrade-source-035.json','upgrade-source-036.json','upgrade-source-037.json','upgrade-source-038.json','upgrade-source-039.json','upgrade-source-040.json','upgrade-source-041.json','upgrade-source-042.json','upgrade-source-043.json','upgrade-source-044.json','upgrade-source-045.json','upgrade-source-046.json','upgrade-source-047.json','upgrade-source-048.json','upgrade-source-049.json','upgrade-source-050.json','upgrade-source-051.json','upgrade-source-052.json','upgrade-source-053.json','upgrade-source-054.json','upgrade-source-055.json','upgrade-source-056.json','upgrade-source-057.json','upgrade-source-058.json','upgrade-source-059.json','upgrade-source-060.json','upgrade-source-061.json','upgrade-source-062.json','upgrade-source-063.json','upgrade-source-064.json','upgrade-source-065.json','upgrade-source-066.json','upgrade-source-067.json','upgrade-source-068.json','upgrade-source-070.json','upgrade-source-071.json','owned-transition-upgrade.sql','creation-transition-upgrade.sql','import-source-upgrade.sql'):
-        if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original migration/preparation baseline required')
+    for name in ('query-abi.json','preparation-baseline.json'):
+        if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original query/preparation baseline required')
     return manifest,sha256(original).hexdigest(),tuple(sources)
 
 
-def _configuration(source_version="0.7.0"):
+def _configuration(source_version="0.10.0"):
     manifest,_,_=_release()
     from .catalog_preparation import _configuration as preparation_configuration
-    return preparation_configuration(source_version,manifest)
+    if source_version!="0.10.0":raise ValueError("Only current UMF 0.10.0 source is supported")
+    return preparation_configuration(manifest)
 
 
 def _active_operation(method):
@@ -458,7 +461,7 @@ class CatalogReferenceAssembly:
             cursor.execute("SELECT pg_catalog.current_setting('server_version_num')",prepare=False)
             if cursor.fetchone()[0]!=manifest['postgresVersion']:raise ValueError('Supported PostgreSQL release required')
             cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_namespace WHERE nspname='truss')",prepare=False)
-            if cursor.fetchone()[0]:raise ValueError('Existing namespace requires a supported migration')
+            if cursor.fetchone()[0]:raise ValueError('Fresh installation requires an absent namespace; installation upgrades are unsupported')
             for source in sources:cursor.execute(source,prepare=False)
             privileges=protect_installation_with_cursor(cursor,roles)
             cursor.execute('''INSERT INTO truss.catalog_runtime_installation(singleton,installation_id,release_id,release_sha256,layout_profile,preparation_configuration,owner_oid,registrar_oid,genesis_at)
@@ -475,556 +478,10 @@ class CatalogReferenceAssembly:
         return self._host._run_operation(transaction,install)
     @_active_operation
     def upgrade_in_transaction(self,transaction: TransactionHandle) -> Outcome[PendingRuntimeUpgrade]:
-        """Upgrade a supported original predecessor to the packaged runtime; caller settles it.
-
-        Requires a direct trusted installation administrator and quiescence.
-        Native NOWAIT fencing refuses active consumers without internal retries.
-        Genesis, accepted identities, data, receipts and checkpoints are retained.
-        """
-        from psycopg import sql
-        manifest,digest,sources=_release()
-        bundled=files('truss').joinpath('_catalog_runtime')
-        previous_raw=bundled.joinpath('upgrade-source-023.json').read_bytes()
-        previous=json.loads(previous_raw);previous_digest=sha256(previous_raw).hexdigest()
-        previous_024_raw=bundled.joinpath('upgrade-source-024.json').read_bytes()
-        previous_024=json.loads(previous_024_raw)
-        previous_025_raw=bundled.joinpath('upgrade-source-025.json').read_bytes()
-        previous_025=json.loads(previous_025_raw)
-        previous_026_raw=bundled.joinpath('upgrade-source-026.json').read_bytes()
-        previous_026=json.loads(previous_026_raw)
-        previous_027_raw=bundled.joinpath('upgrade-source-027.json').read_bytes()
-        previous_027=json.loads(previous_027_raw)
-        previous_028_raw=bundled.joinpath('upgrade-source-028.json').read_bytes()
-        previous_028=json.loads(previous_028_raw)
-        previous_029_raw=bundled.joinpath('upgrade-source-029.json').read_bytes()
-        previous_029=json.loads(previous_029_raw)
-        previous_030_raw=bundled.joinpath('upgrade-source-030.json').read_bytes()
-        previous_030=json.loads(previous_030_raw)
-        supported={(previous['releaseId'],previous_digest),(previous_024['releaseId'],sha256(previous_024_raw).hexdigest()),(previous_025['releaseId'],sha256(previous_025_raw).hexdigest()),(previous_026['releaseId'],sha256(previous_026_raw).hexdigest()),(previous_027['releaseId'],sha256(previous_027_raw).hexdigest()),(previous_028['releaseId'],sha256(previous_028_raw).hexdigest()),(previous_029['releaseId'],sha256(previous_029_raw).hexdigest()),(previous_030['releaseId'],sha256(previous_030_raw).hexdigest())}
-        previous_031_raw=bundled.joinpath('upgrade-source-031.json').read_bytes()
-        previous_031=json.loads(previous_031_raw)
-        supported.add((previous_031['releaseId'],sha256(previous_031_raw).hexdigest()))
-        previous_032_raw=bundled.joinpath('upgrade-source-032.json').read_bytes()
-        previous_032=json.loads(previous_032_raw)
-        supported.add((previous_032['releaseId'],sha256(previous_032_raw).hexdigest()))
-        previous_033_raw=bundled.joinpath('upgrade-source-033.json').read_bytes()
-        previous_033=json.loads(previous_033_raw)
-        previous_034_raw=bundled.joinpath('upgrade-source-034.json').read_bytes()
-        previous_034=json.loads(previous_034_raw)
-        supported.add((previous_033['releaseId'],sha256(previous_033_raw).hexdigest()))
-        supported.add((previous_034['releaseId'],sha256(previous_034_raw).hexdigest()))
-        previous_035_raw=bundled.joinpath('upgrade-source-035.json').read_bytes()
-        previous_035=json.loads(previous_035_raw)
-        supported.add((previous_035['releaseId'],sha256(previous_035_raw).hexdigest()))
-        previous_036_raw=bundled.joinpath('upgrade-source-036.json').read_bytes()
-        previous_036=json.loads(previous_036_raw)
-        supported.add((previous_036['releaseId'],sha256(previous_036_raw).hexdigest()))
-        previous_037_raw=bundled.joinpath('upgrade-source-037.json').read_bytes()
-        previous_037=json.loads(previous_037_raw)
-        supported.add((previous_037['releaseId'],sha256(previous_037_raw).hexdigest()))
-        previous_038_raw=bundled.joinpath('upgrade-source-038.json').read_bytes()
-        previous_038=json.loads(previous_038_raw)
-        supported.add((previous_038['releaseId'],sha256(previous_038_raw).hexdigest()))
-        previous_039_raw=bundled.joinpath('upgrade-source-039.json').read_bytes()
-        previous_039=json.loads(previous_039_raw)
-        supported.add((previous_039['releaseId'],sha256(previous_039_raw).hexdigest()))
-        previous_040_raw=bundled.joinpath('upgrade-source-040.json').read_bytes()
-        previous_040=json.loads(previous_040_raw)
-        supported.add((previous_040['releaseId'],sha256(previous_040_raw).hexdigest()))
-        previous_041_raw=bundled.joinpath('upgrade-source-041.json').read_bytes()
-        previous_041=json.loads(previous_041_raw)
-        supported.add((previous_041['releaseId'],sha256(previous_041_raw).hexdigest()))
-        previous_042_raw=bundled.joinpath('upgrade-source-042.json').read_bytes()
-        previous_042=json.loads(previous_042_raw)
-        supported.add((previous_042['releaseId'],sha256(previous_042_raw).hexdigest()))
-        previous_043_raw=bundled.joinpath('upgrade-source-043.json').read_bytes()
-        previous_043=json.loads(previous_043_raw)
-        supported.add((previous_043['releaseId'],sha256(previous_043_raw).hexdigest()))
-        previous_044_raw=bundled.joinpath('upgrade-source-044.json').read_bytes()
-        previous_044=json.loads(previous_044_raw)
-        supported.add((previous_044['releaseId'],sha256(previous_044_raw).hexdigest()))
-        previous_045_raw=bundled.joinpath('upgrade-source-045.json').read_bytes()
-        previous_045=json.loads(previous_045_raw)
-        supported.add((previous_045['releaseId'],sha256(previous_045_raw).hexdigest()))
-        previous_046_raw=bundled.joinpath('upgrade-source-046.json').read_bytes()
-        previous_046=json.loads(previous_046_raw)
-        supported.add((previous_046['releaseId'],sha256(previous_046_raw).hexdigest()))
-        previous_047_raw=bundled.joinpath('upgrade-source-047.json').read_bytes()
-        previous_047=json.loads(previous_047_raw)
-        supported.add((previous_047['releaseId'],sha256(previous_047_raw).hexdigest()))
-        previous_048_raw=bundled.joinpath('upgrade-source-048.json').read_bytes()
-        previous_048=json.loads(previous_048_raw)
-        supported.add((previous_048['releaseId'],sha256(previous_048_raw).hexdigest()))
-        previous_049_raw=bundled.joinpath('upgrade-source-049.json').read_bytes()
-        previous_049=json.loads(previous_049_raw)
-        supported.add((previous_049['releaseId'],sha256(previous_049_raw).hexdigest()))
-        previous_050_raw=bundled.joinpath('upgrade-source-050.json').read_bytes()
-        previous_050=json.loads(previous_050_raw)
-        supported.add((previous_050['releaseId'],sha256(previous_050_raw).hexdigest()))
-        previous_051_raw=bundled.joinpath('upgrade-source-051.json').read_bytes()
-        previous_051=json.loads(previous_051_raw)
-        supported.add((previous_051['releaseId'],sha256(previous_051_raw).hexdigest()))
-        previous_052_raw=bundled.joinpath('upgrade-source-052.json').read_bytes()
-        previous_052=json.loads(previous_052_raw)
-        supported.add((previous_052['releaseId'],sha256(previous_052_raw).hexdigest()))
-        previous_053_raw=bundled.joinpath('upgrade-source-053.json').read_bytes()
-        previous_053=json.loads(previous_053_raw)
-        supported.add((previous_053['releaseId'],sha256(previous_053_raw).hexdigest()))
-        previous_054_raw=bundled.joinpath('upgrade-source-054.json').read_bytes()
-        previous_054=json.loads(previous_054_raw)
-        supported.add((previous_054['releaseId'],sha256(previous_054_raw).hexdigest()))
-        previous_055_raw=bundled.joinpath('upgrade-source-055.json').read_bytes()
-        previous_055=json.loads(previous_055_raw)
-        supported.add((previous_055['releaseId'],sha256(previous_055_raw).hexdigest()))
-        previous_056_raw=bundled.joinpath('upgrade-source-056.json').read_bytes()
-        previous_056=json.loads(previous_056_raw)
-        supported.add((previous_056['releaseId'],sha256(previous_056_raw).hexdigest()))
-        previous_057_raw=bundled.joinpath('upgrade-source-057.json').read_bytes()
-        previous_057=json.loads(previous_057_raw)
-        supported.add((previous_057['releaseId'],sha256(previous_057_raw).hexdigest()))
-        previous_058_raw=bundled.joinpath('upgrade-source-058.json').read_bytes()
-        previous_058=json.loads(previous_058_raw)
-        supported.add((previous_058['releaseId'],sha256(previous_058_raw).hexdigest()))
-        previous_059_raw=bundled.joinpath('upgrade-source-059.json').read_bytes()
-        previous_059=json.loads(previous_059_raw)
-        supported.add((previous_059['releaseId'],sha256(previous_059_raw).hexdigest()))
-        previous_060_raw=bundled.joinpath('upgrade-source-060.json').read_bytes()
-        previous_060=json.loads(previous_060_raw)
-        supported.add((previous_060['releaseId'],sha256(previous_060_raw).hexdigest()))
-        previous_061_raw=bundled.joinpath('upgrade-source-061.json').read_bytes()
-        previous_061=json.loads(previous_061_raw)
-        supported.add((previous_061['releaseId'],sha256(previous_061_raw).hexdigest()))
-        previous_062_raw=bundled.joinpath('upgrade-source-062.json').read_bytes()
-        previous_062=json.loads(previous_062_raw)
-        supported.add((previous_062['releaseId'],sha256(previous_062_raw).hexdigest()))
-        previous_063_raw=bundled.joinpath('upgrade-source-063.json').read_bytes()
-        previous_063=json.loads(previous_063_raw)
-        supported.add((previous_063['releaseId'],sha256(previous_063_raw).hexdigest()))
-        previous_064_raw=bundled.joinpath('upgrade-source-064.json').read_bytes()
-        previous_064=json.loads(previous_064_raw)
-        supported.add((previous_064['releaseId'],sha256(previous_064_raw).hexdigest()))
-        previous_065_raw=bundled.joinpath('upgrade-source-065.json').read_bytes()
-        previous_065=json.loads(previous_065_raw)
-        supported.add((previous_065['releaseId'],sha256(previous_065_raw).hexdigest()))
-        previous_066_raw=bundled.joinpath('upgrade-source-066.json').read_bytes()
-        previous_066=json.loads(previous_066_raw)
-        supported.add((previous_066['releaseId'],sha256(previous_066_raw).hexdigest()))
-        previous_067_raw=bundled.joinpath('upgrade-source-067.json').read_bytes()
-        previous_067=json.loads(previous_067_raw)
-        supported.add((previous_067['releaseId'],sha256(previous_067_raw).hexdigest()))
-        previous_068_raw=bundled.joinpath('upgrade-source-068.json').read_bytes()
-        previous_068=json.loads(previous_068_raw)
-        supported.add((previous_068['releaseId'],sha256(previous_068_raw).hexdigest()))
-        previous_070_raw=bundled.joinpath('upgrade-source-070.json').read_bytes()
-        previous_070=json.loads(previous_070_raw)
-        supported.add((previous_070['releaseId'],sha256(previous_070_raw).hexdigest()))
-        previous_071_raw=bundled.joinpath('upgrade-source-071.json').read_bytes()
-        previous_071=json.loads(previous_071_raw)
-        supported.add((previous_071['releaseId'],sha256(previous_071_raw).hexdigest()))
-        replacements=[]
-        for source in sources:
-            replacements.extend(re.findall(r"CREATE FUNCTION\s+truss\.\w+[\s\S]*?\bAS\s+(?:\$\$[\s\S]*?\$\$|'(?:[^']|'')*')\s*;",source))
-        if len(replacements)!=272:raise ValueError('Exact additive runtime routine inventory required')
-        signatures=[]
-        for statement in replacements:
-            header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
-            if header is None:raise ValueError('Original routine header required')
-            name,arguments=header.groups();types=[]
-            arguments=re.sub(r"DEFAULT convert_to\('[^']*','[^']*'\)",'DEFAULT NULL',arguments)
-            for argument in arguments.split(',') if arguments.strip() else ():
-                parameter=re.fullmatch(r'\s*\w+\s+([\w.]+(?:\[\])?)(?:\s+DEFAULT\s+[^,]+)?\s*',argument)
-                if parameter is None:raise ValueError('Owned additive routine argument profile required')
-                types.append(parameter.group(1))
-            signature=name+'('+','.join(types)+')'
-            if not name.startswith('truss.runtime_owned_') and name not in ('truss.runtime_feed_current_configuration','truss.runtime_feed_retain_configuration','truss.runtime_feed_capture_configuration_statement','truss.runtime_feed_capture_object_reservations','truss.runtime_feed_capture_edge_reservations','truss.runtime_graph_validate_object_qualified','truss.runtime_item_chain_readable_qualified','truss.runtime_history_ownership_qualified','truss.runtime_history_property_qualified','truss.runtime_history_image_qualified','truss.runtime_history_group_qualified','truss.runtime_create_transition_validate_qualified','truss.group_context_qualified','truss.group_create_metadata_qualified','truss.apply_create_group_qualified','truss.runtime_can_read_qualified','truss.runtime_module_writer_qualified','truss.runtime_object_values_readable_qualified','truss.valid_decimal_facets','truss.catalog_revision','truss.prepare_group','truss.runtime_definition_in_basis','truss.writer_schema_basis','truss.apply_group_prepared','truss.object_group_begin_prepared','truss.apply_group','truss.runtime_graph_validate_object','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.runtime_create_transition_validate','truss.umf_key_uleb128','truss.umf_key_coefficient','truss.encode_umf_scalar_key_tuple','truss.umf_key_field_values_valid','truss.derive_catalog_key_tuple','truss.runtime_endpoint_ownership','truss.catalog_scalar_violations_with_sources','truss.catalog_item_meaning','truss.valid_item_chain','truss.runtime_item_chain_readable','truss.catalog_accept_with_keys','truss.catalog_accept_preview','truss.catalog_key_backfill_candidates','truss.catalog_key_backfill_verify','truss.catalog_key_backfill_violations','truss.catalog_key_backfill_apply','truss.catalog_key_backfill_transition_reader','truss.catalog_key_backfill_report_reader','truss.catalog_rebind_profile','truss.catalog_rebind_transition_reader','truss.catalog_rebind_definition','truss.catalog_rebind_history','truss.catalog_rebind_objects','truss.catalog_rebind_violations','truss.catalog_rebind_report_reader','truss.catalog_rebind_history_group','truss.runtime_capture_feed_configuration','truss.catalog_check_source_correspondence','truss.runtime_object_values_readable','truss.valid_property_definition','truss.valid_flat_cell','truss.canonical_flat_cell','truss.valid_property_value','truss.logical_flat_cell','truss.catalog_item_definition','truss.render_scalar_object','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.traverse_objects','truss.umf_key_values','truss.verify_umf_scalar_key_tuple','truss.valid_scalar_property','truss.runtime_current_installation','truss.query_binding','truss.query_scope','truss.query_objects','truss.query_numeric_value','truss.query_timestamp_instant_key','truss.query_edges','truss.query_page_objects','truss.query_export_objects','truss.query_export_edges','truss.query_export_page_objects','truss.feed_reached','truss.query_object_attribution','truss.query_complete_related_keys','truss.query_object_times','truss.query_object_load_id','truss.feed_ack_receipt_binding','truss.acknowledge_feed_with_receipt','truss.reconcile_feed_ack'):signatures.append(signature)
-        def upgrade(cursor,observed):
-            _pin_cursor(cursor)
-            cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False);original_path=cursor.fetchone()[0]
-            cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
-            from ._current_query_protection import require_unprotected_configuration
-            require_unprotected_configuration(cursor)
-            from ._installation_privileges import installation_administrator_with_cursor
-            installation_administrator_with_cursor(cursor)
-            cursor.execute("SELECT current_setting('server_version_num')",prepare=False)
-            if cursor.fetchone()[0]!=manifest['postgresVersion']:raise ValueError('Exact supported PostgreSQL version required')
-            cursor.execute('LOCK TABLE truss.catalog_runtime_installation IN ACCESS EXCLUSIVE MODE NOWAIT',prepare=False)
-            cursor.execute('SELECT i.*,r.rolname FROM truss.catalog_runtime_installation i JOIN pg_roles r ON r.oid=i.owner_oid',prepare=False)
-            row=cursor.fetchone()
-            if row is None:raise ValueError('Original installation required')
-            # Explicit named projection keeps the immutable composite shape independent.
-            cursor.execute('SELECT installation_id::text,release_id,release_sha256,layout_profile,preparation_configuration,owner_oid,registrar_oid FROM truss.catalog_runtime_installation',prepare=False)
-            identity,genesis_release,genesis_digest,layout,configuration,owner_oid,registrar_oid=cursor.fetchone()
-            owner_role=row[-1]
-            installation_administrator_with_cursor(cursor,owner_oid)
-            cursor.execute("SELECT nspowner FROM pg_namespace WHERE nspname='truss'",prepare=False)
-            if cursor.fetchone()!=(owner_oid,):raise ValueError('Original namespace owner required')
-            for role_oid in (owner_oid,registrar_oid):
-                cursor.execute("SELECT rolcanlogin,rolsuper,rolcreatedb,rolcreaterole,rolreplication,rolbypassrls,rolinherit FROM pg_roles WHERE oid=%s",(role_oid,),prepare=False)
-                if cursor.fetchone()!=(False,False,False,False,False,False,False):raise ValueError('Original protected role attributes required')
-            cursor.execute("SELECT to_regclass('truss.runtime_release') IS NOT NULL",prepare=False)
-            has_ledger=cursor.fetchone()[0]
-            active_release,active_digest=genesis_release,genesis_digest
-            if has_ledger:
-                cursor.execute('SELECT release_id,release_sha256 FROM truss.runtime_current_installation()',prepare=False)
-                active_release,active_digest=cursor.fetchone()
-            if (active_release,active_digest)==(manifest['releaseId'],digest):
-                cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
-                if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
-                return PendingRuntimeUpgrade(identity,active_release,manifest['releaseId'],'unchanged')
-            source_configurations=[_configuration(),_configuration('0.8.0'),{**_configuration(),'supportProfile':dict(DECIMAL207_PROFILE)},{**_configuration(),'supportProfile':dict(REFERENCE08_PROFILE)},{**_configuration(),'supportProfile':dict(RECURSIVE08_PROFILE)},{**_configuration(),'supportProfile':dict(DECIMAL208_PROFILE)},{**_configuration(),'supportProfile':dict(CONTAINER07_PROFILE)},{**_configuration(),'supportProfile':dict(CONTAINER08_PROFILE)},{**_configuration(),'supportProfile':dict(FACET07_PROFILE)},{**_configuration(),'supportProfile':dict(FACET08_PROFILE)},{**_configuration(),'supportProfile':dict(RETAINED_METADATA_PROFILE)},{**_configuration(),'supportProfile':dict(NAMED_RELATIONSHIP_PROFILE)},json.loads(bundled.joinpath('preparation-baseline.json').read_bytes())]
-            if active_release in ('truss-catalog-runtime/0.26-candidate','truss-catalog-runtime/0.27-candidate'):
-                previous_named=json.loads(bundled.joinpath('preparation-baseline.json').read_bytes())
-                previous_named['supportProfile']=dict(NAMED_SCALAR_PROFILE)
-                source_configurations.append(previous_named)
-            source_configurations.extend({**entry,'layoutProfile':previous_051['layoutProfile']} for entry in tuple(source_configurations))
-            if (active_release,active_digest) not in supported or layout not in (previous_051['layoutProfile'],manifest['layoutProfile']) or configuration not in source_configurations:
-                raise ValueError('Exact supported .23/.24/.25/.26/.27/.28/.29/.30/.31/.32/.33/.34 installation and preparation required')
-            # Exact populated layout0.16 ->1.0 conversion; transactional DDL rolls back with this upgrade.
-            active_layout=layout
-            if has_ledger:
-                cursor.execute('SELECT layout_profile FROM truss.runtime_current_installation()',prepare=False)
-                active_layout=cursor.fetchone()[0]
-            if active_layout==previous_051['layoutProfile']:
-                cursor.execute('LOCK TABLE truss.edge IN ACCESS EXCLUSIVE MODE NOWAIT',prepare=False)
-                cursor.execute("SELECT pg_get_indexdef(i.indexrelid),c.relowner,i.indisvalid,i.indisready FROM pg_index i JOIN pg_class c ON c.oid=i.indexrelid WHERE i.indexrelid='truss.edge_out'::regclass",prepare=False)
-                expected_index='CREATE UNIQUE INDEX edge_out ON truss.edge USING btree (source_id, rel_type_id, target_id) INCLUDE (target_type)'
-                if cursor.fetchone()!=(expected_index,owner_oid,True,True):raise ValueError('Exact original endpoint uniqueness index required')
-                cursor.execute('DROP INDEX truss.edge_out',prepare=False)
-                cursor.execute('CREATE INDEX edge_out ON truss.edge USING btree (source_id,rel_type_id,target_id) INCLUDE(target_type)',prepare=False)
-                cursor.execute("SELECT pg_get_indexdef(i.indexrelid),c.relowner,i.indisvalid,i.indisready FROM pg_index i JOIN pg_class c ON c.oid=i.indexrelid WHERE i.indexrelid='truss.edge_out'::regclass",prepare=False)
-                if cursor.fetchone()!=(expected_index.replace('CREATE UNIQUE INDEX','CREATE INDEX'),owner_oid,True,True):raise ValueError('Exact parallel endpoint lookup index required')
-            elif active_layout!=manifest['layoutProfile']:
-                raise ValueError('Supported active layout required')
-            if active_release=='truss-catalog-runtime/0.71-candidate':
-                # This published runtime already has all owned storage and facade
-                # grants. Preserve every existing ACL; add only the source index.
-                cursor.execute("SELECT p.oid,p.proowner,p.proacl::text FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' ORDER BY p.oid",prepare=False)
-                original_routine_acl=cursor.fetchall()
-                cursor.execute(bundled.joinpath('definition-source.sql').read_text(),prepare=False)
-                cursor.execute(bundled.joinpath('schema-cache.sql').read_text(),prepare=False)
-                for cache_table in ('runtime_type_schema','runtime_document_schema'):
-                    cursor.execute(sql.SQL('ALTER TABLE truss.{} OWNER TO {}').format(sql.Identifier(cache_table),sql.Identifier(owner_role)),prepare=False)
-                cursor.execute(sql.SQL('ALTER TABLE truss.runtime_definition_source OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-                cursor.execute('REVOKE ALL ON TYPE truss.runtime_definition_source FROM PUBLIC',prepare=False)
-                cursor.execute('CREATE TEMP TABLE truss_definition_backfill (LIKE truss.schema_doc INCLUDING ALL) ON COMMIT DROP',prepare=False)
-                cursor.execute('CREATE TRIGGER truss_definition_backfill_capture AFTER INSERT ON truss_definition_backfill FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_index_definition_source()',prepare=False)
-                cursor.execute('INSERT INTO truss_definition_backfill SELECT * FROM truss.schema_doc',prepare=False)
-                for statement in replacements:
-                    cursor.execute(statement.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION',1),prepare=False)
-                cursor.execute('CREATE TEMP TABLE truss_schema_backfill(rev integer) ON COMMIT DROP',prepare=False)
-                cursor.execute('CREATE TRIGGER truss_schema_backfill_capture AFTER INSERT ON truss_schema_backfill FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_index_type_schema()',prepare=False)
-                cursor.execute('INSERT INTO truss_schema_backfill SELECT rev FROM truss.schema_rev WHERE rev>0 ORDER BY rev',prepare=False)
-                original_oids=[row[0] for row in original_routine_acl]
-                cursor.execute("SELECT p.oid::regprocedure::text FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss' AND NOT p.oid=ANY(%s::oid[])",(original_oids,),prepare=False)
-                for signature, in cursor.fetchall():
-                    cursor.execute(sql.SQL('ALTER FUNCTION {} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
-                    cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION {} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
-                cursor.execute("SELECT p.oid,p.proowner,p.proacl::text FROM pg_proc p WHERE p.oid=ANY(%s::oid[]) ORDER BY p.oid",(original_oids,),prepare=False)
-                if cursor.fetchall()!=original_routine_acl:raise ValueError('Published native71 routine ownership and ACLs must remain unchanged')
-                _grant_application_writers(cursor)
-                cursor.execute('INSERT INTO truss.runtime_release(previous_release_id,previous_release_sha256,release_id,release_sha256,manifest_bytes,actor_oid) VALUES(%s,%s,%s,%s,%s,(SELECT oid FROM pg_roles WHERE rolname=session_user))',(active_release,active_digest,manifest['releaseId'],digest,bundled.joinpath('manifest.json').read_bytes()),prepare=False)
-                cursor.execute("SELECT set_config('search_path',%s,true)",(original_path,),prepare=False)
-                if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
-                return PendingRuntimeUpgrade(identity,active_release,manifest['releaseId'],'upgraded')
-            if active_release in ('truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.umf_key_values(jsonb)','truss.verify_umf_scalar_key_tuple(bytea,jsonb,jsonb)'))
-            if active_release in ('truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.render_scalar_object(truss.object,truss.type_def,truss.prop_def[],boolean,text,int,int,text,text)','truss.traverse_objects(jsonb,jsonb,int,int,int,text,text)'))
-            if active_release in ('truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.runtime_object_values_readable(int)','truss.valid_property_definition(truss.prop_def)','truss.valid_flat_cell(jsonb)','truss.canonical_flat_cell(jsonb)','truss.valid_property_value(jsonb,truss.prop_def)','truss.logical_flat_cell(jsonb)','truss.catalog_item_definition(text,text,int,int,jsonb)'))
-            if active_release in ('truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):signatures.append('truss.query_timestamp_instant_key(text,text)')
-            if active_release in ('truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.catalog_rebind_definition(text,int,int,jsonb)','truss.catalog_rebind_history(jsonb,jsonb,jsonb)','truss.catalog_rebind_objects(truss.catalog_registration_request,jsonb)','truss.catalog_rebind_violations(jsonb,int)','truss.catalog_rebind_transition_reader(truss.runtime_catalog_rebind_transition,jsonb)','truss.catalog_rebind_report_reader(uuid,jsonb)','truss.catalog_rebind_history_group(jsonb,xid8,bigint)'))
-            if active_release in ('truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):signatures.append('truss.catalog_rebind_profile(jsonb)')
-            if active_release in ('truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.catalog_key_backfill_candidates(jsonb,int)','truss.catalog_key_backfill_verify(jsonb,int,bytea)','truss.catalog_key_backfill_violations(jsonb)','truss.catalog_key_backfill_apply(truss.catalog_registration_request,jsonb)','truss.catalog_key_backfill_transition_reader(truss.runtime_catalog_key_backfill,jsonb)','truss.catalog_key_backfill_report_reader(uuid,jsonb)','truss.catalog_accept_preview(bytea,bytea,bytea,bytea,bytea,text)','truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)'))
-            if has_ledger:signatures.append('truss.runtime_current_installation()')
-            if active_release in ('truss-catalog-runtime/0.26-candidate','truss-catalog-runtime/0.27-candidate','truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate','truss-catalog-runtime/0.35-candidate','truss-catalog-runtime/0.36-candidate','truss-catalog-runtime/0.37-candidate','truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.query_binding(jsonb,int,int,int,text,text)','truss.query_scope(jsonb)','truss.query_objects(jsonb,int)'))
-            if active_release in ('truss-catalog-runtime/0.27-candidate','truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate','truss-catalog-runtime/0.35-candidate','truss-catalog-runtime/0.36-candidate','truss-catalog-runtime/0.37-candidate','truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):signatures.append('truss.query_numeric_value(text,text)')
-            if active_release in ('truss-catalog-runtime/0.28-candidate','truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate','truss-catalog-runtime/0.35-candidate','truss-catalog-runtime/0.36-candidate','truss-catalog-runtime/0.37-candidate','truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):signatures.append('truss.query_edges(jsonb,int)')
-            if active_release in ('truss-catalog-runtime/0.29-candidate','truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate','truss-catalog-runtime/0.35-candidate','truss-catalog-runtime/0.36-candidate','truss-catalog-runtime/0.37-candidate','truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):signatures.append('truss.query_page_objects(jsonb,int,text)')
-            if active_release in ('truss-catalog-runtime/0.30-candidate','truss-catalog-runtime/0.31-candidate','truss-catalog-runtime/0.32-candidate','truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate','truss-catalog-runtime/0.35-candidate','truss-catalog-runtime/0.36-candidate','truss-catalog-runtime/0.37-candidate','truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):signatures.append('truss.feed_reached(text,bytea,int,text,text)')
-            if active_release in ('truss-catalog-runtime/0.33-candidate','truss-catalog-runtime/0.34-candidate','truss-catalog-runtime/0.35-candidate','truss-catalog-runtime/0.36-candidate','truss-catalog-runtime/0.37-candidate','truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.query_object_attribution(jsonb,int,bigint)','truss.query_complete_related_keys(jsonb,int,int)'))
-            if active_release in ('truss-catalog-runtime/0.34-candidate','truss-catalog-runtime/0.35-candidate','truss-catalog-runtime/0.36-candidate','truss-catalog-runtime/0.37-candidate','truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):signatures.append('truss.query_object_times(jsonb,int,bigint)')
-            if active_release in ('truss-catalog-runtime/0.35-candidate','truss-catalog-runtime/0.36-candidate','truss-catalog-runtime/0.37-candidate','truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):signatures.append('truss.query_object_load_id(jsonb,int,bigint)')
-            if active_release in ('truss-catalog-runtime/0.37-candidate','truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):signatures.append('truss.valid_scalar_property(jsonb,text,boolean,jsonb)')
-            if active_release in ('truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.feed_ack_receipt_binding(text,bytea,bytea,text,text,text,text,bytea,text,text)','truss.acknowledge_feed_with_receipt(text,bytea,bytea,text,text,text,text,bytea,text,text)','truss.reconcile_feed_ack(text,bytea,bytea,text,text,text,text,bytea,text,text)'))
-            if active_release in ('truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.runtime_capture_feed_configuration()','truss.catalog_check_source_correspondence(bytea,bytea,bytea)'))
-            if active_release in ('truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.catalog_scalar_violations_with_sources(bytea,bytea)','truss.catalog_item_meaning(jsonb)','truss.valid_item_chain(jsonb)','truss.runtime_item_chain_readable(jsonb)'))
-            if active_release in ('truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.append('truss.runtime_endpoint_ownership(jsonb,int)')
-            if active_release in ('truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                signatures.extend(('truss.umf_key_uleb128(bigint)','truss.umf_key_coefficient(text,int,int)',
-                    'truss.encode_umf_scalar_key_tuple(jsonb,jsonb)','truss.umf_key_field_values_valid(jsonb,jsonb,text)',
-                    'truss.derive_catalog_key_tuple(int,smallint,jsonb,jsonb)'))
-            if active_release in ('truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):signatures.append('truss.runtime_create_transition_validate(bigint)')
-            original_routines=[]
-            for signature in signatures:
-                cursor.execute('SELECT oid,proowner,proacl FROM pg_proc WHERE oid=to_regprocedure(%s)',(signature,),prepare=False)
-                routine=cursor.fetchone()
-                if routine is None or routine[1]!=owner_oid:raise ValueError('Exact original routine signature and owner required')
-                original_routines.append(routine)
-            if not has_ledger:cursor.execute(bundled.joinpath('migrations.sql').read_text(),prepare=False)
-            # New query entry points are additive; old routine OIDs/ACLs stay fixed.
-            # This exact owned release has dollar/quoted function bodies; replay no other
-            # DDL, triggers or data statements from its fresh-install sources.
-            if active_release not in ('truss-catalog-runtime/0.38-candidate','truss-catalog-runtime/0.39-candidate','truss-catalog-runtime/0.40-candidate','truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                cursor.execute(bundled.joinpath('feed-receipts.sql').read_text().split('CREATE FUNCTION',1)[0],prepare=False)
-
-            feed_source=bundled.joinpath('feed.sql').read_text()
-            capture_setup=feed_source.split('-- Parallel-layout transaction configuration capture; historical intervals are never backfilled.',1)[1].split('-- End parallel-layout transaction configuration capture.',1)[0]
-            cursor.execute("SELECT to_regclass('truss.runtime_feed_transaction_configuration')",prepare=False)
-            capture_exists=cursor.fetchone()[0] is not None
-            if active_release in ('truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                if not capture_exists:raise ValueError('Retained feed configuration table required')
-            else:
-                if capture_exists:raise ValueError('Unexpected predecessor feed configuration table')
-                cursor.execute(capture_setup,prepare=False)
-            cursor.execute(sql.SQL('ALTER TABLE truss.runtime_feed_transaction_configuration OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON TABLE truss.runtime_feed_transaction_configuration FROM PUBLIC',prepare=False)
-            cursor.execute('REVOKE ALL ON TYPE truss.runtime_feed_transaction_configuration FROM PUBLIC',prepare=False)
-            cursor.execute("SELECT to_regclass('truss.runtime_catalog_rebind_transition')",prepare=False)
-            existing_rebind=cursor.fetchone()[0]
-            if active_release in ('truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                if existing_rebind is None:raise ValueError('Original registration transition storage required')
-            else:
-                if existing_rebind is not None:raise ValueError('New registration transition storage must be absent')
-                cursor.execute(bundled.joinpath('catalog-rebind-storage.sql').read_text(),prepare=False)
-            cursor.execute(sql.SQL('ALTER TABLE truss.runtime_catalog_rebind_transition OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON TABLE truss.runtime_catalog_rebind_transition FROM PUBLIC',prepare=False)
-            cursor.execute('REVOKE ALL ON TYPE truss.runtime_catalog_rebind_transition FROM PUBLIC',prepare=False)
-            cursor.execute("SELECT to_regclass('truss.runtime_catalog_key_backfill')",prepare=False)
-            existing_key_backfill=cursor.fetchone()[0]
-            if active_release in ('truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                if existing_key_backfill is None:raise ValueError('Original key backfill storage required')
-            else:
-                if existing_key_backfill is not None:raise ValueError('New key backfill storage must be absent')
-                cursor.execute(bundled.joinpath('catalog-key-backfill-storage.sql').read_text(),prepare=False)
-            cursor.execute(sql.SQL('ALTER TABLE truss.runtime_catalog_key_backfill OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON TABLE truss.runtime_catalog_key_backfill FROM PUBLIC',prepare=False)
-            cursor.execute('REVOKE ALL ON TYPE truss.runtime_catalog_key_backfill FROM PUBLIC',prepare=False)
-            from ._ownership_migration import upgrade_transition_storage,verify_transition_storage
-            if active_release in ('truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                verify_transition_storage(cursor,owner_oid)
-            else:
-                upgrade_transition_storage(cursor,bundled.joinpath('owned-transition-upgrade.sql').read_text(),owner_oid)
-            from ._ownership_migration import upgrade_creation_transition_storage
-            if active_release in ('truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                cursor.execute("SELECT format_type(atttypid,atttypmod),attnotnull,atthasdef FROM pg_attribute WHERE attrelid='truss.runtime_object_transition'::regclass AND attname='before_object' AND NOT attisdropped",prepare=False)
-                if cursor.fetchone()!=('jsonb',False,False):raise ValueError('Original native68 creation transition shape required')
-            else:
-                upgrade_creation_transition_storage(cursor,bundled.joinpath('creation-transition-upgrade.sql').read_text(),owner_oid)
-            # Published predecessors retain the original 128-operation attempt
-            # CHECK. Change it under the same exclusive upgrade cut. The stored
-            # generated count physically backfills attempt rows; original source,
-            # result, transition and receipt values remain unchanged.
-            if active_release!='truss-catalog-runtime/0.71-candidate':
-                cursor.execute('LOCK TABLE truss.runtime_object_attempt IN ACCESS EXCLUSIVE MODE NOWAIT',prepare=False)
-                cursor.execute("SELECT relowner FROM pg_class WHERE oid='truss.runtime_object_attempt'::regclass",prepare=False)
-                if cursor.fetchone()!=(owner_oid,):raise ValueError('Original attempt storage owner required')
-                cursor.execute("SELECT contype,convalidated,pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid='truss.runtime_object_attempt'::regclass AND conname='runtime_object_attempt_next_index_check'",prepare=False)
-                if cursor.fetchall()!=[('c',True,'CHECK (((next_index >= 0) AND (next_index <= 128)))')]:
-                    raise ValueError('Original attempt operation bound required')
-                cursor.execute('ALTER TABLE truss.runtime_object_attempt DROP CONSTRAINT runtime_object_attempt_next_index_check, ADD CONSTRAINT runtime_object_attempt_next_index_check CHECK(next_index BETWEEN 0 AND 1024)',prepare=False)
-                cursor.execute("SELECT contype,convalidated,pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid='truss.runtime_object_attempt'::regclass AND conname='runtime_object_attempt_next_index_check'",prepare=False)
-                if cursor.fetchall()!=[('c',True,'CHECK (((next_index >= 0) AND (next_index <= 1024)))')]:
-                    raise ValueError('Upgraded attempt operation bound required')
-                cursor.execute("SELECT 1 FROM pg_attribute WHERE attrelid='truss.runtime_object_attempt'::regclass AND attname='result_count' AND NOT attisdropped",prepare=False)
-                if cursor.fetchone() is not None:raise ValueError('Original attempt result count must be absent')
-                cursor.execute("SELECT format_type(atttypid,atttypmod),attnotnull FROM pg_attribute WHERE attrelid='truss.runtime_object_attempt'::regclass AND attname='results' AND NOT attisdropped",prepare=False)
-                if cursor.fetchall()!=[('jsonb',True)]:raise ValueError('Original nonnull JSONB results required')
-                cursor.execute("SELECT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE jsonb_typeof(results) IS DISTINCT FROM 'array')",prepare=False)
-                if cursor.fetchone()!=(False,):raise ValueError('Original array results required')
-                cursor.execute('ALTER TABLE truss.runtime_object_attempt ADD COLUMN result_count int GENERATED ALWAYS AS (pg_catalog.jsonb_array_length(results)) STORED',prepare=False)
-                cursor.execute("SELECT format_type(a.atttypid,a.atttypmod),a.attgenerated,a.attidentity,a.attnotnull,pg_get_expr(d.adbin,d.adrelid),a.attacl FROM pg_attribute a JOIN pg_attrdef d ON d.adrelid=a.attrelid AND d.adnum=a.attnum WHERE a.attrelid='truss.runtime_object_attempt'::regclass AND a.attname='result_count' AND NOT a.attisdropped",prepare=False)
-                if cursor.fetchall()!=[('integer','s','',False,'jsonb_array_length(results)',None)]:
-                    raise ValueError('Exact stored attempt result count required')
-                cursor.execute('SELECT EXISTS(SELECT 1 FROM truss.runtime_object_attempt WHERE result_count IS DISTINCT FROM pg_catalog.jsonb_array_length(results))',prepare=False)
-                if cursor.fetchone()!=(False,):raise ValueError('Original attempt result counts required')
-                cursor.execute("SELECT to_regclass('truss.runtime_owned_operation')",prepare=False)
-                if cursor.fetchone()[0] is not None:raise ValueError('New owned operation storage must be absent')
-                cursor.execute(bundled.joinpath('owned.sql').read_text().split('CREATE FUNCTION',1)[0],prepare=False)
-                cursor.execute(sql.SQL('ALTER TABLE truss.runtime_owned_operation OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-                cursor.execute('REVOKE ALL ON TABLE truss.runtime_owned_operation FROM PUBLIC',prepare=False)
-                cursor.execute('REVOKE ALL ON TYPE truss.runtime_owned_operation FROM PUBLIC',prepare=False)
-                # Published source rows belong to the one-operation legacy import.
-                # Add its index-zero interpretation without changing original bytes.
-                cursor.execute('LOCK TABLE truss.runtime_import_source IN ACCESS EXCLUSIVE MODE NOWAIT',prepare=False)
-                cursor.execute("SELECT 1 FROM pg_attribute WHERE attrelid='truss.runtime_import_source'::regclass AND attname='operation_index' AND NOT attisdropped",prepare=False)
-                if cursor.fetchone() is not None:raise ValueError('Original import operation index must be absent')
-                cursor.execute("SELECT contype,convalidated,pg_get_constraintdef(oid) FROM pg_constraint WHERE conrelid='truss.runtime_import_source'::regclass AND conname='runtime_import_source_group_attempt_id_key'",prepare=False)
-                if cursor.fetchall()!=[('u',True,'UNIQUE (group_attempt_id)')]:raise ValueError('Original one-source-per-attempt constraint required')
-                cursor.execute(bundled.joinpath('import-source-upgrade.sql').read_text(),prepare=False)
-                cursor.execute('SELECT EXISTS(SELECT 1 FROM truss.runtime_import_source WHERE operation_index IS DISTINCT FROM 0)',prepare=False)
-                if cursor.fetchone()!=(False,):raise ValueError('Preserved legacy source operation zero required')
-            cursor.execute(bundled.joinpath('definition-source.sql').read_text(),prepare=False)
-            cursor.execute(bundled.joinpath('schema-cache.sql').read_text(),prepare=False)
-            for cache_table in ('runtime_type_schema','runtime_document_schema'):
-                cursor.execute(sql.SQL('ALTER TABLE truss.{} OWNER TO {}').format(sql.Identifier(cache_table),sql.Identifier(owner_role)),prepare=False)
-            cursor.execute(sql.SQL('ALTER TABLE truss.runtime_definition_source OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            # Replay only source indexing, never acceptance or user effects.
-            cursor.execute("CREATE TEMP TABLE truss_definition_backfill (LIKE truss.schema_doc INCLUDING ALL) ON COMMIT DROP",prepare=False)
-            cursor.execute("CREATE TRIGGER truss_definition_backfill_capture AFTER INSERT ON truss_definition_backfill FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_index_definition_source()",prepare=False)
-            cursor.execute("INSERT INTO truss_definition_backfill SELECT * FROM truss.schema_doc",prepare=False)
-            for statement in replacements:
-                cursor.execute(statement.replace('CREATE FUNCTION','CREATE OR REPLACE FUNCTION',1),prepare=False)
-            cursor.execute('CREATE TEMP TABLE truss_schema_backfill(rev integer) ON COMMIT DROP',prepare=False)
-            cursor.execute('CREATE TRIGGER truss_schema_backfill_capture AFTER INSERT ON truss_schema_backfill FOR EACH ROW EXECUTE FUNCTION truss.runtime_owned_index_type_schema()',prepare=False)
-            cursor.execute('INSERT INTO truss_schema_backfill SELECT rev FROM truss.schema_rev WHERE rev>0 ORDER BY rev',prepare=False)
-            # Ordinary callers cannot write the private journal. Atomic engine
-            # producers and mandatory group settlement own history; do not queue
-            # an independent private-row proof for every property event.
-            cursor.execute('DROP TRIGGER IF EXISTS runtime_owned_journal_insert_commit ON truss.journal',prepare=False)
-            cursor.execute('DROP TRIGGER IF EXISTS runtime_import_source_commit ON truss.runtime_import_source',prepare=False)
-            cursor.execute('DROP TRIGGER IF EXISTS runtime_record_source_commit ON truss.record_source',prepare=False)
-            # Replace the predecessor's row-at-a-time feed carriers. Transition
-            # tables preserve complete row images with one capture per INSERT.
-            for table,function in (('object_key_reservation_bucket','runtime_feed_capture_object_reservations'),
-                                   ('key_tombstone','runtime_feed_capture_edge_reservations')):
-                trigger='runtime_feed_object_reservation' if table=='object_key_reservation_bucket' else 'runtime_feed_edge_reservation'
-                cursor.execute(sql.SQL('DROP TRIGGER IF EXISTS {} ON truss.{}').format(sql.Identifier(trigger),sql.Identifier(table)),prepare=False)
-                cursor.execute(sql.SQL('CREATE TRIGGER {} AFTER INSERT ON truss.{} REFERENCING NEW TABLE AS inserted_rows FOR EACH STATEMENT EXECUTE FUNCTION truss.{}()').format(sql.Identifier(trigger),sql.Identifier(table),sql.Identifier(function)),prepare=False)
-                cursor.execute(sql.SQL('ALTER TABLE truss.{} ENABLE ALWAYS TRIGGER {}').format(sql.Identifier(table),sql.Identifier(trigger)),prepare=False)
-            for table in ('journal','runtime_feed_reservation'):
-                cursor.execute(sql.SQL('DROP TRIGGER runtime_capture_feed_configuration ON truss.{}').format(sql.Identifier(table)),prepare=False)
-                cursor.execute(sql.SQL('CREATE TRIGGER runtime_capture_feed_configuration AFTER INSERT ON truss.{} REFERENCING NEW TABLE AS inserted_rows FOR EACH STATEMENT EXECUTE FUNCTION truss.runtime_feed_capture_configuration_statement()').format(sql.Identifier(table)),prepare=False)
-                cursor.execute(sql.SQL('ALTER TABLE truss.{} ENABLE ALWAYS TRIGGER runtime_capture_feed_configuration').format(sql.Identifier(table)),prepare=False)
-            cursor.execute('DROP FUNCTION IF EXISTS truss.runtime_feed_capture_reservation()',prepare=False)
-            private_signatures=[]
-            # New helpers have no predecessor OID or grants. Set their owner
-            # explicitly; CREATE OR REPLACE preserves every original facade ACL.
-            for statement in replacements:
-                header=re.match(r'CREATE FUNCTION\s+(truss\.\w+)\(([\s\S]*?)\)\s+RETURNS\b',statement)
-                name,arguments=header.groups()
-                if name.startswith('truss.runtime_owned_') or name in ('truss.runtime_feed_current_configuration','truss.runtime_feed_retain_configuration','truss.runtime_feed_capture_configuration_statement','truss.runtime_feed_capture_object_reservations','truss.runtime_feed_capture_edge_reservations','truss.runtime_graph_validate_object_qualified','truss.runtime_item_chain_readable_qualified','truss.runtime_history_ownership_qualified','truss.runtime_history_property_qualified','truss.runtime_history_image_qualified','truss.runtime_history_group_qualified','truss.runtime_create_transition_validate_qualified','truss.group_context_qualified','truss.group_create_metadata_qualified','truss.apply_create_group_qualified','truss.runtime_can_read_qualified','truss.runtime_module_writer_qualified','truss.runtime_object_values_readable_qualified','truss.valid_decimal_facets','truss.catalog_revision','truss.prepare_group','truss.runtime_definition_in_basis','truss.writer_schema_basis','truss.apply_group_prepared','truss.object_group_begin_prepared','truss.owned_delete_projection','truss.owned_forest_projection','truss.owned_graph_scope','truss.owned_object_values','truss.runtime_edge_effect','truss.runtime_history_ownership','truss.runtime_object_ownership_at','truss.render_logical_object','truss.runtime_edge_read','truss.query_object_root','truss.query_abi','truss.runtime_graph_validate_object','truss.apply_group'):
-                    types=[re.match(r'\s*\w+\s+([\w.]+(?:\[\])?)',part).group(1) for part in (arguments.split(',') if arguments.strip() else ())]
-                    signature=name+'('+','.join(types)+')'
-                    private_signatures.append(signature)
-                    cursor.execute(sql.SQL('ALTER FUNCTION {} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
-                    cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION {} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
-            cursor.execute("""SELECT EXISTS(SELECT 1 FROM (
-                SELECT relacl acl,relowner owner,'r'::\"char\" kind FROM pg_class WHERE oid='truss.runtime_owned_operation'::regclass
-                UNION ALL SELECT typacl,typowner,'T'::\"char\" FROM pg_type WHERE oid='truss.runtime_owned_operation'::regtype
-                UNION ALL SELECT proacl,proowner,'f'::\"char\" FROM pg_proc WHERE oid IN (
-                    SELECT to_regprocedure(signature)::oid FROM unnest(%s::text[]) signature)
-                ) objects CROSS JOIN LATERAL aclexplode(coalesce(objects.acl,acldefault(objects.kind,objects.owner))) a
-                WHERE objects.owner<>%s OR a.grantee<>objects.owner OR a.is_grantable)""",(private_signatures,owner_oid),prepare=False)
-            if cursor.fetchone()[0]:
-                cursor.execute("SELECT p.oid::regprocedure::text,a.grantee,a.is_grantable FROM pg_proc p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE p.oid IN (SELECT to_regprocedure(signature)::oid FROM unnest(%s::text[]) signature) AND (p.proowner<>%s OR a.grantee<>p.proowner OR a.is_grantable)",(private_signatures,owner_oid),prepare=False)
-                raise ValueError('Owner-only owned operation storage and private helpers required: '+repr(cursor.fetchall()))
-            cursor.execute(sql.SQL('ALTER FUNCTION truss.runtime_endpoint_ownership(jsonb,int) OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON FUNCTION truss.runtime_endpoint_ownership(jsonb,int) FROM PUBLIC',prepare=False)
-            cursor.execute(sql.SQL('ALTER FUNCTION truss.runtime_create_transition_validate(bigint) OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON FUNCTION truss.runtime_create_transition_validate(bigint) FROM PUBLIC',prepare=False)
-            for signature in ('catalog_key_backfill_candidates(jsonb,int)','catalog_key_backfill_verify(jsonb,int,bytea)','catalog_key_backfill_violations(jsonb)','catalog_key_backfill_apply(truss.catalog_registration_request,jsonb)','catalog_key_backfill_transition_reader(truss.runtime_catalog_key_backfill,jsonb)','catalog_key_backfill_report_reader(uuid,jsonb)','catalog_accept_preview(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)'):
-                cursor.execute(sql.SQL('ALTER FUNCTION truss.{} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
-                cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION truss.{} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
-            cursor.execute('SELECT rolname FROM pg_roles WHERE oid=%s',(registrar_oid,),prepare=False)
-            registrar_role=cursor.fetchone()[0]
-            for signature in ('catalog_accept_preview(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)'):
-                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(registrar_role)),prepare=False)
-            cursor.execute("SELECT EXISTS(SELECT 1 FROM (SELECT relacl acl,relowner owner,'r'::\"char\" kind FROM pg_class WHERE oid='truss.runtime_catalog_key_backfill'::regclass UNION ALL SELECT typacl,typowner,'T'::\"char\" FROM pg_type WHERE oid='truss.runtime_catalog_key_backfill'::regtype) objects CROSS JOIN LATERAL aclexplode(coalesce(objects.acl,acldefault(objects.kind,objects.owner))) a WHERE objects.owner<>%s OR a.grantee<>objects.owner)",(owner_oid,),prepare=False)
-            if cursor.fetchone()[0]:raise ValueError('Owner-only original key backfill storage required')
-            cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE n.nspname='truss' AND (p.proname LIKE 'catalog_key_backfill_%%' OR p.proname IN ('catalog_accept_preview','catalog_accept_with_keys')) AND (p.proowner<>%s OR a.grantee<>p.proowner AND (p.proname NOT IN ('catalog_accept_preview','catalog_accept_with_keys') OR a.grantee<>%s OR a.privilege_type<>'EXECUTE' OR a.is_grantable)))",(owner_oid,registrar_oid),prepare=False)
-            if cursor.fetchone()[0]:raise ValueError('Original key helper and registrar facade privileges required')
-            for signature in ('catalog_rebind_profile(jsonb)','catalog_rebind_transition_reader(truss.runtime_catalog_rebind_transition,jsonb)','catalog_rebind_definition(text,int,int,jsonb)','catalog_rebind_history(jsonb,jsonb,jsonb)','catalog_rebind_objects(truss.catalog_registration_request,jsonb)','catalog_rebind_violations(jsonb,int)','catalog_rebind_report_reader(uuid,jsonb)','catalog_rebind_history_group(jsonb,xid8,bigint)'):
-                cursor.execute(sql.SQL('ALTER FUNCTION truss.{} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
-                cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION truss.{} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
-            if active_release not in ('truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):
-                cursor.execute('CREATE CONSTRAINT TRIGGER runtime_catalog_rebind_commit AFTER INSERT ON truss.runtime_catalog_rebind_transition DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION truss.runtime_object_commit_check()',prepare=False)
-            cursor.execute('ALTER TABLE truss.runtime_catalog_rebind_transition ENABLE ALWAYS TRIGGER runtime_catalog_rebind_commit',prepare=False)
-            cursor.execute('ALTER TABLE truss.runtime_catalog_rebind_transition ENABLE ALWAYS TRIGGER runtime_catalog_rebind_immutable',prepare=False)
-
-            for signature in ('catalog_scalar_violations_with_sources(bytea,bytea)','catalog_item_meaning(jsonb)','valid_item_chain(jsonb)','runtime_item_chain_readable(jsonb)','runtime_object_values_readable(int)','valid_property_definition(truss.prop_def)','valid_flat_cell(jsonb)','canonical_flat_cell(jsonb)','valid_property_value(jsonb,truss.prop_def)','logical_flat_cell(jsonb)','catalog_item_definition(text,text,int,int,jsonb)','render_scalar_object(truss.object,truss.type_def,truss.prop_def[],boolean,text,int,int,text,text)','traverse_objects(jsonb,jsonb,int,int,int,text,text)','umf_key_values(jsonb)','verify_umf_scalar_key_tuple(bytea,jsonb,jsonb)','umf_key_uleb128(bigint)','umf_key_coefficient(text,int,int)','encode_umf_scalar_key_tuple(jsonb,jsonb)','umf_key_field_values_valid(jsonb,jsonb,text)','derive_catalog_key_tuple(int,smallint,jsonb,jsonb)'):
-                cursor.execute(sql.SQL('ALTER FUNCTION truss.{} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
-                cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION truss.{} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
-            cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_proc p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE p.oid='truss.traverse_objects(jsonb,jsonb,int,int,int,text,text)'::regprocedure AND a.grantee<>p.proowner)",prepare=False)
-            if cursor.fetchone()[0] and active_release not in ('truss-catalog-runtime/0.41-candidate','truss-catalog-runtime/0.42-candidate','truss-catalog-runtime/0.43-candidate','truss-catalog-runtime/0.44-candidate','truss-catalog-runtime/0.45-candidate','truss-catalog-runtime/0.46-candidate','truss-catalog-runtime/0.47-candidate','truss-catalog-runtime/0.48-candidate','truss-catalog-runtime/0.49-candidate','truss-catalog-runtime/0.50-candidate','truss-catalog-runtime/0.51-candidate','truss-catalog-runtime/0.52-candidate','truss-catalog-runtime/0.53-candidate','truss-catalog-runtime/0.54-candidate','truss-catalog-runtime/0.55-candidate','truss-catalog-runtime/0.56-candidate','truss-catalog-runtime/0.57-candidate','truss-catalog-runtime/0.58-candidate','truss-catalog-runtime/0.59-candidate','truss-catalog-runtime/0.60-candidate','truss-catalog-runtime/0.61-candidate','truss-catalog-runtime/0.62-candidate','truss-catalog-runtime/0.63-candidate','truss-catalog-runtime/0.64-candidate','truss-catalog-runtime/0.65-candidate','truss-catalog-runtime/0.66-candidate','truss-catalog-runtime/0.67-candidate','truss-catalog-runtime/0.68-candidate','truss-catalog-runtime/0.70-candidate','truss-catalog-runtime/0.71-candidate'):raise ValueError('New traversal facade must begin owner-only')
-            cursor.execute('SELECT DISTINCT reader_role FROM truss.module_access UNION SELECT writer_role FROM truss.module_access',prepare=False)
-            for (role,) in cursor.fetchall():
-                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.traverse_objects(jsonb,jsonb,int,int,int,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
-            cursor.execute('SELECT oid,proowner,proacl FROM pg_proc WHERE oid=ANY(%s::oid[]) ORDER BY oid',([r[0] for r in original_routines],),prepare=False)
-            if cursor.fetchall()!=sorted(original_routines,key=lambda r:r[0]):raise ValueError('Original routine identity, owner and ACL preservation required')
-            for name in ('runtime_release','runtime_release_generation'):
-                cursor.execute(sql.SQL('ALTER {} truss.{} OWNER TO {}').format(sql.SQL('TABLE' if name=='runtime_release' else 'SEQUENCE'),sql.Identifier(name),sql.Identifier(owner_role)),prepare=False)
-                cursor.execute(sql.SQL('REVOKE ALL ON {} truss.{} FROM PUBLIC').format(sql.SQL('TABLE' if name=='runtime_release' else 'SEQUENCE'),sql.Identifier(name)),prepare=False)
-            cursor.execute(sql.SQL('ALTER TABLE truss.runtime_feed_ack_receipt OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON TABLE truss.runtime_feed_ack_receipt FROM PUBLIC',prepare=False)
-            cursor.execute('REVOKE ALL ON TYPE truss.runtime_feed_ack_receipt FROM PUBLIC',prepare=False)
-            for routine in ('feed_ack_receipt_binding','acknowledge_feed_with_receipt','reconcile_feed_ack'):
-                signature=routine+'(text,bytea,bytea,text,text,text,text,bytea,text,text)'
-                cursor.execute(sql.SQL('ALTER FUNCTION truss.{} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
-                cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION truss.{} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
-                if routine!='feed_ack_receipt_binding':
-                    cursor.execute('SELECT DISTINCT r.rolname FROM truss.runtime_feed_consumer c JOIN pg_roles r ON r.oid=c.reader_oid',prepare=False)
-                    for feed_role, in cursor.fetchall():
-                        cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(feed_role)),prepare=False)
-            cursor.execute("""SELECT EXISTS(SELECT 1 FROM (
-                SELECT relacl AS acl,relowner AS owner,'r'::"char" AS kind FROM pg_class WHERE oid='truss.runtime_feed_ack_receipt'::regclass
-                UNION ALL SELECT typacl,typowner,'T'::"char" FROM pg_type WHERE oid='truss.runtime_feed_ack_receipt'::regtype
-                UNION ALL SELECT proacl,proowner,'f'::"char" FROM pg_proc WHERE oid='truss.feed_ack_receipt_binding(text,bytea,bytea,text,text,text,text,bytea,text,text)'::regprocedure
-                UNION ALL SELECT proacl,proowner,'f'::"char" FROM pg_proc WHERE oid IN ('truss.catalog_scalar_violations_with_sources(bytea,bytea)'::regprocedure,'truss.catalog_item_meaning(jsonb)'::regprocedure,'truss.valid_item_chain(jsonb)'::regprocedure,'truss.runtime_item_chain_readable(jsonb)'::regprocedure,'truss.runtime_object_values_readable(int)'::regprocedure,'truss.valid_property_definition(truss.prop_def)'::regprocedure,'truss.valid_flat_cell(jsonb)'::regprocedure,'truss.canonical_flat_cell(jsonb)'::regprocedure,'truss.valid_property_value(jsonb,truss.prop_def)'::regprocedure,'truss.logical_flat_cell(jsonb)'::regprocedure,'truss.catalog_item_definition(text,text,int,int,jsonb)'::regprocedure,'truss.render_scalar_object(truss.object,truss.type_def,truss.prop_def[],boolean,text,int,int,text,text)'::regprocedure,'truss.umf_key_values(jsonb)'::regprocedure,'truss.verify_umf_scalar_key_tuple(bytea,jsonb,jsonb)'::regprocedure)
-                ) objects CROSS JOIN LATERAL aclexplode(coalesce(acl,acldefault(kind,owner))) a
-                WHERE objects.owner<>%s OR a.grantee<>objects.owner)""",(owner_oid,),prepare=False)
-            if cursor.fetchone()[0]:raise ValueError('Owner-only ACK receipt and typed-key helper privileges required')
-            cursor.execute("""SELECT EXISTS(SELECT 1 FROM pg_proc p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a
-                WHERE p.oid IN ('truss.acknowledge_feed_with_receipt(text,bytea,bytea,text,text,text,text,bytea,text,text)'::regprocedure,
-                    'truss.reconcile_feed_ack(text,bytea,bytea,text,text,text,text,bytea,text,text)'::regprocedure)
-                AND (p.proowner<>%s OR a.grantee<>p.proowner AND
-                    (a.privilege_type<>'EXECUTE' OR a.is_grantable OR NOT EXISTS(SELECT 1 FROM truss.runtime_feed_consumer c WHERE c.reader_oid=a.grantee))))""",(owner_oid,),prepare=False)
-            if cursor.fetchone()[0]:raise ValueError('Only enrolled ordinary feed roles may execute ACK receipt facades')
-            cursor.execute(sql.SQL('ALTER FUNCTION truss.valid_scalar_property(jsonb,text,boolean,jsonb) OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON FUNCTION truss.valid_scalar_property(jsonb,text,boolean,jsonb) FROM PUBLIC',prepare=False)
-            cursor.execute(sql.SQL('ALTER FUNCTION truss.runtime_capture_feed_configuration() OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON FUNCTION truss.runtime_capture_feed_configuration() FROM PUBLIC',prepare=False)
-            cursor.execute(sql.SQL('ALTER FUNCTION truss.catalog_check_source_correspondence(bytea,bytea,bytea) OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON FUNCTION truss.catalog_check_source_correspondence(bytea,bytea,bytea) FROM PUBLIC',prepare=False)
-            cursor.execute(sql.SQL('ALTER FUNCTION truss.runtime_current_installation() OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON FUNCTION truss.runtime_current_installation() FROM PUBLIC',prepare=False)
-            for signature in ('runtime_owned_import_reference(bytea,text,text)','runtime_owned_import_record_source(uuid,int,bytea,text)','runtime_owned_import_record_sources(uuid,jsonb,text)','catalog_revision(text,text,text)','prepare_group(bytea,bytea,text,text)','query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_export_objects(jsonb,int)','query_export_edges(jsonb,int)','query_export_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)'):
-                cursor.execute(sql.SQL('ALTER FUNCTION truss.{} OWNER TO {}').format(sql.SQL(signature),sql.Identifier(owner_role)),prepare=False)
-                cursor.execute(sql.SQL('REVOKE ALL ON FUNCTION truss.{} FROM PUBLIC').format(sql.SQL(signature)),prepare=False)
-                cursor.execute('SELECT reader_role,writer_role FROM truss.module_access',prepare=False)
-                roles=sorted({role for row in cursor.fetchall() for role in row})
-                for role in roles:
-                    cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(role)),prepare=False)
-            cursor.execute(sql.SQL('ALTER FUNCTION truss.feed_reached(text,bytea,int,text,text) OWNER TO {}').format(sql.Identifier(owner_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON FUNCTION truss.feed_reached(text,bytea,int,text,text) FROM PUBLIC',prepare=False)
-            cursor.execute('SELECT DISTINCT r.rolname FROM truss.runtime_feed_consumer c JOIN pg_roles r ON r.oid=c.reader_oid',prepare=False)
-            for feed_role, in cursor.fetchall():
-                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.feed_reached(text,bytea,int,text,text) TO {}').format(sql.Identifier(feed_role)),prepare=False)
-            cursor.execute('REVOKE ALL ON TYPE truss.runtime_release FROM PUBLIC',prepare=False)
-            cursor.execute("""SELECT EXISTS(SELECT 1 FROM (
-                SELECT relacl AS acl,relowner AS owner,'r'::"char" AS kind FROM pg_class WHERE oid='truss.runtime_feed_transaction_configuration'::regclass
-                UNION ALL SELECT relacl,relowner,'r'::"char" FROM pg_class WHERE oid='truss.runtime_catalog_rebind_transition'::regclass
-                UNION ALL SELECT typacl,typowner,'T'::"char" FROM pg_type WHERE oid='truss.runtime_catalog_rebind_transition'::regtype
-                UNION ALL SELECT proacl,proowner,'f'::"char" FROM pg_proc WHERE pronamespace='truss'::regnamespace AND proname LIKE 'catalog_rebind_%%'
-                UNION ALL SELECT typacl,typowner,'T'::"char" FROM pg_type WHERE oid='truss.runtime_feed_transaction_configuration'::regtype
-                UNION ALL SELECT relacl,relowner,'r'::"char" FROM pg_class WHERE oid='truss.runtime_release'::regclass
-                UNION ALL SELECT relacl,relowner,'s'::"char" FROM pg_class WHERE oid='truss.runtime_release_generation'::regclass
-                UNION ALL SELECT typacl,typowner,'T'::"char" FROM pg_type WHERE oid='truss.runtime_release'::regtype
-                UNION ALL SELECT proacl,proowner,'f'::"char" FROM pg_proc WHERE oid IN ('truss.runtime_endpoint_ownership(jsonb,int)'::regprocedure,'truss.runtime_capture_feed_configuration()'::regprocedure,'truss.catalog_check_source_correspondence(bytea,bytea,bytea)'::regprocedure,'truss.runtime_current_installation()'::regprocedure,'truss.valid_scalar_property(jsonb,text,boolean,jsonb)'::regprocedure)
-                ) objects CROSS JOIN LATERAL aclexplode(coalesce(acl,acldefault(kind,owner))) a
-                WHERE objects.owner<>%s OR a.grantee<>%s)""",(owner_oid,owner_oid),prepare=False)
-            if cursor.fetchone()[0]:raise ValueError('Private owned migration objects required')
-            # Preserve predecessor checks above, then intentionally close its
-            # partial-write grants and enable the complete public operation.
-            _grant_application_writers(cursor)
-            _close_partial_group_grants(cursor)
-            cursor.execute('SELECT DISTINCT writer_role FROM truss.module_access',prepare=False)
-            for writer_role, in cursor.fetchall():
-                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(writer_role)),prepare=False)
-            cursor.execute('INSERT INTO truss.runtime_release(previous_release_id,previous_release_sha256,release_id,release_sha256,manifest_bytes,actor_oid) VALUES(%s,%s,%s,%s,%s,(SELECT oid FROM pg_roles WHERE rolname=session_user))',
-                (active_release,active_digest,manifest['releaseId'],digest,bundled.joinpath('manifest.json').read_bytes()),prepare=False)
-            cursor.execute("SELECT set_config('search_path',%s,true)",(original_path,),prepare=False)
-            if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
-            return PendingRuntimeUpgrade(identity,active_release,manifest['releaseId'],'upgraded')
-        return self._host._run_operation(transaction,upgrade)
+        """Refuse installation upgrades without executing SQL or changing data."""
+        return Error(ExecutionFailure('execution_obligation',
+            'Installation upgrades are unsupported; only fresh current installations are supported',
+            catalog_code='unsupported_profile'))
 
     @_active_operation
     def status_in_transaction(self,transaction: TransactionHandle) -> Outcome[CatalogRuntimeStatus]:
@@ -1068,10 +525,8 @@ class CatalogReferenceAssembly:
         def produce(ordinal):
             require_original()
             choices={key:value for key,value in prepared.input().items() if key not in ('interfaceVersion','documents')}
-            configurations=(_configuration(),_configuration('0.8.0'),{**_configuration(),'supportProfile':dict(DECIMAL207_PROFILE)},{**_configuration(),'supportProfile':dict(REFERENCE08_PROFILE)},{**_configuration(),'supportProfile':dict(RECURSIVE08_PROFILE)},{**_configuration(),'supportProfile':dict(DECIMAL208_PROFILE)},{**_configuration(),'supportProfile':dict(CONTAINER07_PROFILE)},{**_configuration(),'supportProfile':dict(CONTAINER08_PROFILE)},{**_configuration(),'supportProfile':dict(RETAINED_METADATA_PROFILE)},{**_configuration(),'supportProfile':dict(CORE08_PROFILE)},{**_configuration(),'supportProfile':dict(NAMED_RELATIONSHIP_PROFILE)})
-            retained_layout=json.loads(files('truss').joinpath('_catalog_runtime','upgrade-source-051.json').read_bytes())['layoutProfile']
-            configurations+=tuple({**entry,'layoutProfile':retained_layout} for entry in configurations)
-            if choices not in configurations:reject('unsupported_profile','Exact selected catalog preparation required')
+            configuration=_configuration()
+            if choices!=configuration:reject('unsupported_profile','Exact current catalog preparation required')
             try:valid_request=type(request_key) is str and 1<=len(request_key.encode('utf8'))<=1024 and '\0' not in request_key
             except UnicodeError:valid_request=False
             if not valid_request:reject('invalid_input','Stable request key required')
@@ -1124,6 +579,15 @@ class CatalogReferenceAssembly:
                         parsed.append(CatalogRelationshipCompatibilityViolation(entry['documentId'],entry['moduleId'],entry['relationshipId'],entry['side'],entry['rule'],int(count)))
                     elif set(entry)=={'documentId','moduleId','recordId','fieldModuleId','fieldId','rule','affectedObjectCount'} and entry['rule'] in ('property.required','property.scalar_type','property.facets','property.retained_name_collision','property.rebind_value'):
                         parsed.append(CatalogCompatibilityViolation(entry['documentId'],entry['moduleId'],entry['recordId'],entry['fieldModuleId'],entry['fieldId'],entry['rule'],int(count)))
+                    elif set(entry)=={'documentId','moduleId','recordId','fieldModuleId','fieldId','rule','affectedObjectCount','storedValues'} and entry['rule']=='property.facets':
+                        stored=entry['storedValues']
+                        if type(stored) is not list or len(stored)!=int(count):raise ValueError('Stored facet violator inventory required')
+                        values=[]
+                        for item in stored:
+                            if type(item) is not dict or set(item)!={'objectId','text'} or type(item['objectId']) is not str or type(item['text']) is not str or not item['objectId'].isascii() or not item['objectId'].isdecimal() or str(int(item['objectId']))!=item['objectId']:
+                                raise ValueError('Stored facet violator required')
+                            values.append(CatalogStoredViolator(item['objectId'],item['text']))
+                        parsed.append(CatalogCompatibilityViolation(entry['documentId'],entry['moduleId'],entry['recordId'],entry['fieldModuleId'],entry['fieldId'],entry['rule'],int(count),tuple(values)))
                     elif set(entry)=={'documentId','moduleId','recordId','keyId','rule','affectedObjectCount'} and entry['rule']=='key.duplicate':
                         parsed.append(CatalogKeyCompatibilityViolation(entry['documentId'],entry['moduleId'],entry['recordId'],entry['keyId'],entry['rule'],int(count)))
                     else:raise ValueError('Qualified compatibility violation required')

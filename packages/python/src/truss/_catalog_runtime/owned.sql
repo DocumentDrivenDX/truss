@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 CREATE TABLE truss.runtime_owned_operation (attempt_id uuid NOT NULL REFERENCES truss.runtime_object_attempt (id), operation_index int NOT NULL CHECK (operation_index BETWEEN 0 AND 1023), writer_xid xid8 NOT NULL, plan jsonb NOT NULL, result jsonb, PRIMARY KEY (attempt_id, operation_index), CHECK (jsonb_typeof(plan) = 'object'), CHECK (octet_length(convert_to(plan::text, 'UTF8')) BETWEEN 1 AND 16777216), CHECK (result IS NULL OR (jsonb_typeof(result) = 'object' AND octet_length(convert_to(result::text, 'UTF8')) BETWEEN 1 AND 16777216)));
 
 CREATE TRIGGER runtime_owned_operation_immutable AFTER UPDATE ON truss.runtime_owned_operation FOR EACH ROW
@@ -8,6 +9,7 @@ CREATE TRIGGER runtime_owned_operation_no_delete BEFORE DELETE ON truss.runtime_
 CREATE TRIGGER runtime_owned_operation_no_truncate BEFORE TRUNCATE ON truss.runtime_owned_operation FOR EACH STATEMENT EXECUTE FUNCTION truss.catalog_immutable();
 REVOKE ALL ON TABLE truss.runtime_owned_operation FROM PUBLIC;
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Ordered object-value simulation for the owned-group executor.
 -- Uninstalled candidate. Caller supplies an admitted type and simulated prior image;
 -- this function performs no graph write, allocation or authorization issuance.
@@ -147,6 +149,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_object_value_delta(int,jsonb,jsonb,jsonb,bigint) FROM PUBLIC;
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private valid-forest projection used by the installed owned runtime.
 -- Ordinals refer to the executor's complete scoped simulation, never native IDs.
 -- The executor retains its original identity/alias mapping separately.
@@ -225,6 +228,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.owned_forest_projection(int,jsonb) FROM PUBLIC;
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Uninstalled observation component. One invocation uses one statement snapshot.
 -- No locks, authority issuance or effects. Reobserve after the graph-write gate;
 -- the executor must refuse newly required earlier guards before performing writes.
@@ -478,6 +482,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_input_scope(jsonb) FROM PUBLIC;
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Ordered simulation only. The executor supplies the complete current graph
 -- after earlier operations; a later unlink cannot rescue this delete.
 CREATE FUNCTION truss.owned_delete_projection(node_count int,owned_edges jsonb,
@@ -566,6 +571,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.owned_delete_projection(int,jsonb,jsonb,int) FROM PUBLIC;
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Per-invocation mutable planner helpers.  The executor passes the identifier
 -- of its uniquely named pg_temp relation; these helpers never retain state.
 CREATE FUNCTION truss.runtime_owned_workspace_state(workspace text,member_kind char,member_ref text,header_only boolean DEFAULT false) RETURNS jsonb
@@ -752,6 +758,7 @@ $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_workspace_delete_plan(text,text) FROM PUBLIC;
 
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Profile digest: SHA-256 of these exact UTF-8 bytes, without a newline:
 -- Owned scalar graph groups v1: existing exact value profile; explicit aggregate root selection and subtree reparent; directed acyclic owned forest; independent edge delete refusal; ordered cascade; global native keys; original per-operation custody; same host transaction and idempotent receipts.
 CREATE FUNCTION truss.runtime_owned_profile() RETURNS jsonb
@@ -2403,6 +2410,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_object_transition_validate(bigint,boolean) FROM PUBLIC;
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Independent rootless creates have no order-dependent reads. Lower their
 -- already admitted native plans to INSERT ... SELECT, retaining the ordinary
 -- transitions, original journals, permanent key reservations and settlement.
@@ -2640,6 +2648,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_create_batch_validate(truss.runtime_object_attempt,jsonb,jsonb,boolean,oid) FROM PUBLIC;
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Independent edges between stored endpoints do not read earlier operations.
 -- Keep ownership-changing/alias/mixed groups on the ordered graph path.
 CREATE FUNCTION truss.runtime_owned_edge_create_batch(selected_attempt uuid) RETURNS void
@@ -2748,6 +2757,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_edge_create_batch(uuid) FROM PUBLIC;
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Distinct stored-object value updates with unchanged ownership
 -- have no order-dependent effects. The original planner, key preflight and
 -- finish/commit validators still establish their complete source correspondence.
@@ -3100,6 +3110,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_update_batch_validate(truss.runtime_object_attempt,jsonb,jsonb,oid) FROM PUBLIC;
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- The trusted engine has already planned and written the group. Settlement
 -- checks current custody, completeness and authority; it does not execute a
 -- second semantic/history program over private immutable plans and effects.
@@ -3209,6 +3220,7 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_owned_group_validate(uuid,boolean) FROM PUBLIC;
 
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Owned-provider history implementation; installed with the complete provider.
 -- Root interpretation comes from the original image revision, never a live root.
 CREATE FUNCTION truss.runtime_object_ownership_at(object_image jsonb) RETURNS jsonb

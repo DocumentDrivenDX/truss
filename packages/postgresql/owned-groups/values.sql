@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Ordered object-value simulation for the owned-group executor.
 -- Uninstalled candidate. Caller supplies an admitted type and simulated prior image;
 -- this function performs no graph write, allocation or authorization issuance.

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public alternate-key backfill and qualified duplicate refusal."""
 import json,os
 from dataclasses import replace
@@ -54,15 +55,13 @@ class CatalogKeyBackfillTests(base.CatalogRebindTests):
         self.assertEqual([(v.key_id,v.rule,v.affected_object_count) for v in accepted.value.violations],[('a-backfill','key.duplicate',2)])
         self.assertEqual(a.status_in_transaction(t).value.revision,prior);h.detach();c.rollback()
 
-class CatalogKeyBackfill08Tests(CatalogKeyBackfillTests):
-    source_version='0.8.0'
 
 
 class OwnedCatalogKeyBackfillTests(CatalogKeyBackfillTests):
     """Existing owned children gain keys without changing their data or roots."""
     for _name in tuple(n for n in dir(CatalogKeyBackfillTests) if n.startswith('test_')):
         locals()[_name]=None
-    source_version='0.8.0'
+    source_version='0.10.0'
 
     def fields(self,source):
         super().fields(source)

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Real pending native effects only; no accepted catalog or ordinary authority."""
 from importlib.resources import files
 from io import BytesIO

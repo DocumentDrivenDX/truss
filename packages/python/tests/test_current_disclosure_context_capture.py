@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Supplied population correspondence controls; no native capture authority."""
 import copy,json,os,unittest
 from pathlib import Path

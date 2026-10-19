@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original relationship preflight/inspection boundary, not native custody."""
 import json,os,subprocess,unittest
 from pathlib import Path

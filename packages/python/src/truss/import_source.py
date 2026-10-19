@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Retained import provenance, independent of live object or edge rows."""
 from dataclasses import dataclass,field
 from typing import Literal

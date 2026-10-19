@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Deterministic schemas and values for the practical Truss stress matrix."""
 import json
 from pathlib import Path
@@ -34,7 +35,7 @@ def schema(case):
         elements.append({'id':record,'name':record,'kind':'record','members':members,'keys':keys,'extensions':{}})
         relationships.append({'id':record+'.link','name':record+'.link','source':[{'module':'m','element':record}],
             'target':[{'module':'m','element':record,'key':'key0'}],'sourceMultiplicity':{'min':0,'max':'*'},'targetMultiplicity':{'min':0,'max':'*'},'targetLifecycle':'independent','directed':True,'extensions':{}})
-    return {'umf':'0.7.0','id':'perf-'+case['id'],'vocabularies':{},'extensions':{},
+    return {'umf':'0.10.0','id':'perf-'+case['id'],'vocabularies':{},'extensions':{},
             'modules':[{'id':'m','namespace':'m','elements':elements,'relationships':relationships,'extensions':{}}]}
 
 def values(case,row):

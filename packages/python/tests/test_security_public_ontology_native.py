@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual public graph ontology fixture; candidate lowering, not admitted security."""
 import json,os,subprocess
 from pathlib import Path

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Ordered cascade simulation; no public owned-write support claim."""
 import json
 from pathlib import Path

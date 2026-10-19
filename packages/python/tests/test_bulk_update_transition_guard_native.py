@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact public history and ordinary caller isolation for trusted engine writes.
 
 ADR-008 excludes administrator-installed callbacks forging engine-private rows.

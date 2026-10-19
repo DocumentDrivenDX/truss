@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Tombstone profile0.2: retain original exact identity/profile/generation.
 -- Repeated settlement returns zero; original uncertainty requires reconciliation.
 -- Only original admitted recovery/publication owner after all protected release

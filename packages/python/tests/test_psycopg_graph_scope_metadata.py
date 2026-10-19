@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Wrong graph metadata must refuse before invoking row decoders."""
 import unittest
 from types import SimpleNamespace

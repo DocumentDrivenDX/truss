@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import * as umf from '@truss/umf-local-actions';
 import type {PGlite} from '@electric-sql/pglite';
 import {readCatalog,prepareDocument,type CatalogSnapshot} from './catalog';
@@ -51,10 +52,12 @@ export async function targetSource(catalog:CatalogSnapshot|null,target:RecordIde
  const prepared=await prepareDocument({documentId:target.documentId,documentRevision:catalog.document.documentRevision as string,sourceUtf8:catalog.document.sourceUtf8 as string});
  const types=(catalog.types as any[]).filter(t=>t.documentId===target.documentId&&t.moduleId===target.module&&t.recordId===target.record);
  if(types.length!==1)throw Error('Accepted Record required');const type=types[0];
- const observations=prepared.documents[0]!.validation.observations.filter((o:any)=>o.operation==='inspectCoreRecordMembers'&&o.identity.module===target.module&&o.identity.element===target.record);
- if(observations.length!==1||observations[0].result.meaning.state!=='known')throw Error('Original member observation required');
- const members=observations[0].result.meaning.members.map((m:any)=>{
-  const props=(catalog.properties as any[]).filter(p=>p.typeId===type.typeId&&p.moduleId===m.module&&p.fieldId===m.element);if(props.length!==1)throw Error('Original property correspondence required');return {...m,propertyId:props[0].propertyId};
+ const declarations=prepared.declarations.flatMap(document=>document.records).filter(record=>
+  record.documentId===target.documentId&&record.moduleId===target.module&&record.elementId===target.record);
+ if(declarations.length!==1)throw Error('Original validated Record membership required');
+ const members=declarations[0]!.fields.map(field=>{
+  const m=field.reference;
+  const props=(catalog.properties as any[]).filter(p=>p.typeId===type.typeId&&p.moduleId===m.module&&p.fieldId===m.element);if(props.length!==1)throw Error('Original property correspondence required');return {...m,module:m.module as string,element:m.element as string,propertyId:props[0].propertyId};
  });
  const keys=(catalog.keys as any[]).filter(k=>k.typeId===type.typeId);if(keys.length!==1||!keys[0].primary||keys[0].propertyIds.length!==1)throw Error('Single primary Key required');
  return {type,members, key:keys[0],source:JSON.parse(catalog.document.sourceUtf8 as string)};

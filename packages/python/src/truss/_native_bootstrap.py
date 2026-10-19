@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private factory bootstrap; startup/auth accounting and public C02 remain open.
 
 Creation cleanup owns only unexposed resources. Successful exposure transfers

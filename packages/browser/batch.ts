@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {expandKeyReceipts} from './key-receipt-storage';
 import * as umf from '@truss/umf-local-actions';
 import type {PGlite} from '@electric-sql/pglite';

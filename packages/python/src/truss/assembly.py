@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Inert Python ReferenceAssembly; graph providers remain unavailable.
 
 Construction captures host-supplied service registrations without calling them.

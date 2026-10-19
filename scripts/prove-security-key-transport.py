@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional ordered-key transport algebra, not encoder/native refinement."""
 from pathlib import Path
 import hashlib,json,uuid,z3

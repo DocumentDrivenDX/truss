@@ -1,0 +1,8 @@
+{
+  "sourceRepository": "DocumentDrivenDX/ashlar",
+  "sourceCommit": "689cb4eef1b07eb582f59e08ff81c0d08771b72a",
+  "sourcePath": "examples/domain-packs/commerce/upstream/ontology.json",
+  "originalSha256": "51d87c554df36846e41378cfaafc81277fcab61f6c891a6c64f34dba8fd9ac2a",
+  "currentSha256": "c2ffba1673f7e66797639a3797fe3e15e6f385ec72105ea838916efeafab6f9e",
+  "scope": "Derived UMF 0.10.0 current-format test fixture from the retained original UMF 0.8 source. Only the envelope version changed; current validator evidence is required before any support claim."
+}

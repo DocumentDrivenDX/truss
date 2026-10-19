@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 import hashlib,json,os,subprocess,sys,uuid,zipfile,importlib.metadata,shutil,resource
 from pathlib import Path
 root=Path.cwd()

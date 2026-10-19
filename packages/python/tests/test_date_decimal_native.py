@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic new date/generic decimal values, keys, import and rollback workflow."""
 import os
 from truss import Ok,ObjectFound
@@ -10,7 +11,7 @@ class DateDecimalTests(NumericFacetTests):
     for name in tuple(n for n in dir(NumericFacetTests) if n.startswith('test_')):locals()[name]=None
 
     def fields(self,source):
-        super().fields(source);source['umf']='0.8.0'
+        super().fields(source);source['umf']='0.10.0'
         module=source['modules'][0];record=next(e for e in module['elements'] if e['id']=='A')
         next(e for e in module['elements'] if e['id']=='amount')['facets']={'precision':14.0,'scale':2.0}
         module['elements'].append({'id':'day','name':'day','kind':'field','scalarType':'date','nullability':'required','cardinality':'one','extensions':{}})

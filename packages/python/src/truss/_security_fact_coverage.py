@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Exact original owner-artifact coverage diagnostics, never policy interpretation.
 
 The expected artifact digest is an independently selected comparison premise,

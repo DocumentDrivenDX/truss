@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional original-attempt identity laws; not SQL/source refinement.
 
 Native premises: immutable authenticated anchor; unique full native transaction

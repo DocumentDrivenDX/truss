@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Production value preparation uses one immutable schema and live admission."""
 import json
 from unittest.mock import patch

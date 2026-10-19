@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public catalog workflow on PostgreSQL: no private staging or fabricated IDs."""
 import json
 import os

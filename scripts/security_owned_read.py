@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned flat identity read spike within one host operation; no public authority.
 
 UMF owns decoding, keys and policy semantics. Administrative issuer/mapping and

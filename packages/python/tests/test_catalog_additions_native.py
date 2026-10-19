@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Append-only registrations preserve old identities and real public operations."""
 import json
 import concurrent.futures

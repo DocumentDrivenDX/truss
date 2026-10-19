@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Experimental actual-owner IR consumer. A packet is not authority: registered
  * compiler provenance, native mapping/cut and final-release guard are host duties. */
 import {lowerSecurityRowPredicate,type SecurityPhysicalType} from './security-predicate';

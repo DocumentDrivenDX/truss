@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic actual own-session Subject observation and original UMF Key bytes."""
 from hashlib import sha256
 from dataclasses import replace
@@ -35,7 +36,7 @@ class CurrentQuerySubjectsNativeTests(catalog.PublicCatalogRuntimeTests):
             modules.append({'pin':{'documentId':doc['id'],'revision':revision,'umfVersion':doc['umf'],'sha256':sha256(raw.encode()).hexdigest()},'documentJson':raw})
             documents.append(CatalogDocument(doc['id'],revision,raw.encode()))
         c,h,a,t = self.consumer()
-        prepared = a.prepare_catalog(tuple(documents),source_version='0.8.0',bun_executable=bun)
+        prepared = a.prepare_catalog(tuple(documents),source_version='0.10.0',bun_executable=bun)
         self.assertIsInstance(a.accept_in_transaction(t,prepared,request_key='subject-model'),Ok,str(h._custody.last_attempt.error))
         h.detach();c.commit()
         self.admin.execute('CREATE ROLE subject_reader;CREATE ROLE subject_writer;CREATE ROLE subject_outsider LOGIN')

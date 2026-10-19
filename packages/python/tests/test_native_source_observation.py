@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Supplied native row controls; no actual source/caller/authority claim."""
 import json,unittest
 from decimal import Decimal
@@ -13,7 +14,7 @@ class Cursor:
     def fetchmany(self,n):return self.rows[:n]
 
 class NativeSourceObservationTests(unittest.TestCase):
-    def request(self):return b'{"modules":[{"pin":{"documentId":"d","revision":"r","umfVersion":"0.8.0","sha256":"x"}}],"unknown":{"escaped":"\\u0061","n":1.2300}}'
+    def request(self):return b'{"modules":[{"pin":{"documentId":"d","revision":"r","umfVersion":"0.10.0","sha256":"x"}}],"unknown":{"escaped":"\\u0061","n":1.2300}}'
     def exact(self,rows):
         cursor=Cursor(rows)
         with patch('truss._native_source_observation.capture_accepted_catalog',return_value=b'{"legacy":"retained"}') as original:

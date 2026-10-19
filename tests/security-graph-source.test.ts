@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createCandidateGraphSource,createCandidateGraphEndpointKeys,requireCandidateGraphSource} from '../packages/postgresql/src/security-graph-source';
 const input=()=>({kind:'edge' as const,typeId:'2',propertyOwnerTypeId:'1',fields:[{propertyId:'1',column:'active',scalar:'boolean' as const}]});

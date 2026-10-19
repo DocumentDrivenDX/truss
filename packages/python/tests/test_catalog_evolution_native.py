@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Changed-document validation uses real committed data and current authority."""
 import json
 from truss import CatalogDocument,CatalogAcceptanceRefused,Ok,Error

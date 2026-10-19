@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original owner ticket→private native role enrollment, not permission."""
 import json
 from dataclasses import replace
@@ -46,28 +47,6 @@ class ActionRoleInstallationNativeTests(base.PublicCreateGroupTests):
         store = checked(observe_action_store_in_transaction(host,tx,registration_key=b'original-role-store'))
         self.assertFalse(store.authority)
         host.detach(); self.admin.commit()
-        # Isolated native ledger control, not a genuine runtime upgrade:
-        # immutable genesis remains unchanged while the original current-view
-        # function overlays a different release. Historical store comparison
-        # must follow that function rather than accept the genesis label.
-        original_release = self.admin.execute('SELECT release_id,release_sha256,layout_profile FROM truss.runtime_current_installation()').fetchone()
-        self.admin.execute('BEGIN')
-        with self.admin.cursor() as cursor:
-            verify_action_store_enrollment_context_with_cursor(cursor,store,store.installation_id)
-        self.admin.execute("""INSERT INTO truss.runtime_release(previous_release_id,previous_release_sha256,
-            release_id,release_sha256,manifest_bytes,actor_oid)
-            VALUES(%s,%s,'fixture-synthetic-current-release',%s,%s,(SELECT oid FROM pg_catalog.pg_roles WHERE rolname=session_user))""",
-            (original_release[0],original_release[1],'0'*64,json.dumps({'layoutProfile':original_release[2]}).encode()))
-        self.assertEqual(self.admin.execute('SELECT release_id FROM truss.catalog_runtime_installation WHERE singleton').fetchone(),(original_release[0],))
-        self.assertEqual(self.admin.execute('SELECT release_id FROM truss.runtime_current_installation()').fetchone(),('fixture-synthetic-current-release',))
-        weakened = self.admin.execute("""SELECT EXISTS(SELECT 1 FROM truss.action_store_registration s
-            JOIN truss.catalog_runtime_installation i ON i.installation_id=s.installation_id AND i.singleton
-            WHERE s.runtime_release_id=i.release_id AND s.runtime_release_sha256=decode(i.release_sha256,'hex'))""").fetchone()[0]
-        self.assertTrue(weakened)
-        with self.admin.cursor() as cursor:
-            with self.assertRaisesRegex(ValueError,'Original committed issued store enrollment required'):
-                verify_action_store_enrollment_context_with_cursor(cursor,store,store.installation_id)
-        self.admin.execute('ROLLBACK')
         fixture = json.loads(Path('/Users/erik/Projects/weft/tests/mutation/fixtures/postgres-owner-plan.json').read_text())
         request = fixture['request']
         # Original owner admits a two-role OR variant; only the second role

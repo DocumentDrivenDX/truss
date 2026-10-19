@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Original native-ingress/no-transform report basis; no general adapter support. */
 import {requireOriginalCatalogPreparation,type createCatalogInputPreparation} from './catalog-input';
 type Prepared=ReturnType<Awaited<ReturnType<typeof createCatalogInputPreparation>>['prepare']>;

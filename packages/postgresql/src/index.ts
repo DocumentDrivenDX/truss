@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Inert construction only. No native capability, profile or permission is inferred. */
 import type {ReferenceAssemblyConfiguration, ReferenceAssembly, AssemblyConstructionResult, AssemblyDisposalResult}
   from '../../../docs/helix/02-design/contracts/bindings/truss-reference-assembly-v0.1';

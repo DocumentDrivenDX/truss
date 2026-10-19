@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public exact mixed scalar values without float or timestamp projection."""
 from dataclasses import replace
 from truss import Ok,Error,ObjectFound,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration

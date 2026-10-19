@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """One real adopter workflow through compatible acceptance and recovery."""
 import json
 import psycopg

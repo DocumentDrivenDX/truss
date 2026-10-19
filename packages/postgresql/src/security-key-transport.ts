@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Exact key transport comparison with an independently registered original UMF
  * producer. Neither a codec-shaped object nor namespace bytes authenticate scope. */
 export interface SecurityKeyTupleProducer {

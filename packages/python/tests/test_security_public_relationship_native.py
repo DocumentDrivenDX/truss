@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """@covers US-056-AC2
 Actual authored relationship installation/population prerequisite, not protected traversal.
 """
@@ -66,7 +67,7 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
    from hashlib import sha256
    from truss._security_catalog_assessment import capture_accepted_catalog,SOURCE_TABLES
    from psycopg import sql
-   physical_request=json.dumps({'modules':[{'pin':{'documentId':d.document_id,'revision':d.document_revision,'umfVersion':'0.8.0','sha256':sha256(d.content).hexdigest()},'documentJson':d.content.decode()} for d in self.documents]}).encode()
+   physical_request=json.dumps({'modules':[{'pin':{'documentId':d.document_id,'revision':d.document_revision,'umfVersion':'0.10.0','sha256':sha256(d.content).hexdigest()},'documentJson':d.content.decode()} for d in self.documents]}).encode()
    with self.admin.transaction():
     self.admin.execute(sql.SQL('LOCK TABLE {} IN SHARE MODE').format(sql.SQL(',').join(sql.Identifier('truss',name) for name in SOURCE_TABLES)))
     with self.admin.cursor() as cursor:assessment=capture_accepted_catalog(cursor,physical_request)
@@ -135,7 +136,7 @@ class PublicRelationshipNativeTests(base.PublicCreateGroupTests):
    from truss._psycopg_fact_cut import _FactRelationComparison,_FactColumnComparison
    from security_relationship_request import prepare_relationship_request
    binary=os.environ['TRUSS_SECURITY_RELATIONSHIP_COMPILER_BINARY']
-   physical_request=json.dumps({'modules':[{'pin':{'documentId':d.document_id,'revision':d.document_revision,'umfVersion':'0.8.0','sha256':sha256(d.content).hexdigest()},'documentJson':d.content.decode()} for d in self.documents]}).encode()
+   physical_request=json.dumps({'modules':[{'pin':{'documentId':d.document_id,'revision':d.document_revision,'umfVersion':'0.10.0','sha256':sha256(d.content).hexdigest()},'documentJson':d.content.decode()} for d in self.documents]}).encode()
    self.admin.execute('BEGIN');factory=adopt_psycopg_host(self.admin,operation_timeout_ms=30000);factory_tx=factory.adopt_transaction().value
    self.addCleanup(factory.detach)
    with self.admin.cursor() as cursor:assessment=capture_accepted_catalog(cursor,physical_request)

@@ -1,7 +1,8 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {requireUnchangedCatalogTransition} from '../packages/umf-bun/src/catalog-transition-correspondence';
-const source={umf:'0.7.0',extensions:{unknown:{meaning:'雪🙂',present:null}}};
-const target={...structuredClone(source),umf:'0.8.0'};
+const source={format:'original',extensions:{unknown:{meaning:'雪🙂',present:null}}};
+const target={...structuredClone(source),format:'derived'};
 const receipt=()=>({source:structuredClone(source),target:structuredClone(target)});
 const rollback=()=>({source:structuredClone(target),target:structuredClone(source)});
 test('complete source and interpretation target correspond independently',()=>{

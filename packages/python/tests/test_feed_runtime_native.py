@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public committed feed, caller settlement and ordinary-role ACK workflow."""
 import json
 import psycopg

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Stable catalog IDs with Record SQL names/member order and retained history."""
 import json,os
 from truss import Ok,CatalogDocument,CatalogRegistration,ObjectFound,QueryRows,HistoryEntity,HistoricalRecord
@@ -7,7 +8,7 @@ import test_group_create_native as create_tests
 
 class RecordLabelEvolutionTests(create_tests.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(create_tests.PublicCreateGroupTests) if n.startswith('test_')):locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version
         for e in source['modules'][0]['elements']:
@@ -41,6 +42,3 @@ class RecordLabelEvolutionTests(create_tests.PublicCreateGroupTests):
         restored=CatalogDocument('adoc','r3',json.dumps(original).encode());prepared=a.prepare_catalog((restored,),source_version=self.source_version,bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'));self.assertIsInstance(a.accept_in_transaction(t,prepared,request_key='restore-labels').value,CatalogRegistration)
         query=a.query_in_transaction(t,sql='SELECT a.* FROM "A" a',document_ids=('adoc',));self.assertIsInstance(query.value,QueryRows,repr(query.value));self.assertEqual(query.value.columns,('A-label','A-value'));self.assertEqual(query.value.rows,(('one','changed'),))
         h.detach();c.commit()
-
-class RecordLabelEvolution08Tests(RecordLabelEvolutionTests):
-    source_version='0.8.0'

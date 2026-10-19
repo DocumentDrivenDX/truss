@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Three-command fixed-function calls with unchanged borrowed-host containment."""
 from unittest.mock import patch
 from truss import psycopg_host

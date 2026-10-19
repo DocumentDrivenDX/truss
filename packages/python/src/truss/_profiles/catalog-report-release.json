@@ -9,7 +9,7 @@
   "canonicalEncoding": "truss-canonical/0.1.0 numeric-free UTF8 unsigned-key ordering",
   "selection": {
     "catalog": "first positive revision, fresh definitions and graph",
-    "sourceUmf": "0.7.0",
+    "sourceUmf": "0.10.0",
     "ingress": "native",
     "binding": "absent",
     "transforms": "empty",
@@ -116,8 +116,8 @@
       "sha256": "c54196f8b4324aec768a33eeeab89bc2615a954af0e45559ed2038ccad7f14bf"
     },
     {
-      "path": "packages/python/src/truss/_profiles/fresh-catalog-support.json",
-      "sha256": "1226bb636125567d1e628f5250655a615d104c401ba639f1c6b6031ba346bcdd"
+      "path": "packages/python/src/truss/_profiles/fresh-catalog-support-current010.json",
+      "sha256": "cf99993e8baa0934f9416a5ed0ddceca518aa9c946c7ef44acbdc130ac1b9745"
     },
     {
       "path": "packages/python/src/truss/_profiles/catalog-enforcement-projection.json",

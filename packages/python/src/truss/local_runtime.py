@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Explicit, retained-data pgserver lifecycle; no Truss install or migration."""
 from dataclasses import dataclass
 import importlib.metadata

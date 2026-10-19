@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic real Bun pipe workflow; no semantic/native security support claim."""
 import json
 from pathlib import Path

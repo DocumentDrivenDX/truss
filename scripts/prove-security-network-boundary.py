@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional network membership model, not Docker/kernel refinement proof."""
 import json
 from z3 import Bool,And,Or,Not,Solver,sat,unsat,get_version_string

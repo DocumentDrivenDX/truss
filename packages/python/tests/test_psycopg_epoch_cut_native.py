@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Supported psycopg epoch-cut composition; administrative fixture, no backend admission."""
 from pathlib import Path
 import psycopg

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {mkdir} from 'node:fs/promises';
 const tsc=process.env.TRUSS_TSC ?? '/Users/erik/Projects/umf/node_modules/.bin/tsc';
 await mkdir('packages/weft/dist',{recursive:true});

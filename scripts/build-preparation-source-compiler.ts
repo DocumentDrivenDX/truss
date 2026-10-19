@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Package the original committed host-only source compiler, without rewriting it. */
 import {mkdtemp,writeFile,readFile,symlink,mkdir,copyFile,readdir} from 'node:fs/promises';
 const repository=process.argv[2];if(!repository?.startsWith('/'))throw Error('Absolute UMF Git repository required');

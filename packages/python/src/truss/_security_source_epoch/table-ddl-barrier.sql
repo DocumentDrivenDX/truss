@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Optional private PostgreSQL16.15 table-DDL participation adjunct.
 -- Reuses the qualified six-tag routine writer boundary's original epoch/marker
 -- lock ordering. This does not qualify event-trigger custody or whole source

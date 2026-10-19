@@ -1,9 +1,10 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """The exact Pizza, Northwind and catalog schemas that previously failed registration."""
 import gzip,hashlib,json
 from pathlib import Path
 from unittest.mock import patch
 from truss import CatalogDocument,Ok,prepare_acceptance
-from truss.preparation import prepare_core08_acceptance
+from truss.preparation import prepare_core10_acceptance
 from truss.catalog_preparation import _configuration
 from truss.catalog_results import CatalogRegistration
 import test_catalog_runtime_native as base
@@ -18,8 +19,8 @@ def registration_case(document):
         self.install();connection,host,assembly,tx=self.consumer()
         with patch('subprocess.Popen',side_effect=AssertionError('No external process during preparation')):
             prepared=assembly.prepare_catalog(documents)
-            for alias in (prepare_acceptance,prepare_core08_acceptance):
-                compatible=alias(documents,json.dumps(_configuration(source['umf'])).encode())
+            for alias in (prepare_acceptance,prepare_core10_acceptance):
+                compatible=alias(documents,json.dumps(_configuration()).encode())
                 self.assertEqual(compatible.input(),prepared.input())
                 self.assertEqual(compatible.report_evidence_bytes,prepared.report_evidence_bytes)
                 self.assertEqual(compatible.documents[0].document.content,raw)

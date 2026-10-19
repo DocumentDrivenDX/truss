@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Atomic edge capacity includes two distinct stored endpoints per operation."""
 import unittest
 from truss import Ok

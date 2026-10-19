@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original compiler packet custody. This module never executes lowered SQL.
 
 The configured compiler is trusted engine code. Recording its claimed source
@@ -73,7 +74,11 @@ def compile_preparation_program(compiler_factory, *, compiler_source_pin,
             or type(evidence) is not tuple or not 1 <= len(evidence) <= 64
             or any(type(x) is not str or not 1 <= len(x.encode('utf-8')) <= 4096 for x in evidence)):
         raise ValueError('Original mutation request and source evidence required')
-    model = original_request['model']; _artifact(model)
+    model = original_request['model']; document = _artifact(model)
+    if (type(original_request.get('modelPin')) is not dict
+            or original_request['modelPin'].get('umfVersion') != '0.10.0'
+            or type(document) is not dict or document.get('umf') != '0.10.0'):
+        raise ValueError('Only current UMF 0.10.0 preparation programs are supported')
     compiler = compiler_factory(configuration.decode('utf-8'))
     response = compiler.compile_json(request.decode('utf-8'))
     if type(response) is not str:

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 import json
 from dataclasses import asdict, FrozenInstanceError
 from pathlib import Path

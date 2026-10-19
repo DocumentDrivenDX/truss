@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private C5 candidate helper over already admitted, bounded JSON projections.
  * Does not establish native issuer, namespace, scope or visibility authority.
  * The original runner must validate the complete substituted public wire. */

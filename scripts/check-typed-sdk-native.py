@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original public schema acceptance, instance creation and typed engine reads.
 
 Owns a new Homebrew PostgreSQL18 cluster; it never borrows a running service.
@@ -23,7 +24,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'packages/python/examp
 from adopter_workflow import transaction,success,expect
 class Parameters(StrictModel):status:str
 
-parser=argparse.ArgumentParser();parser.add_argument("--streams",action="store_true");parser.add_argument("--streams-basic",action="store_true");parser.add_argument('--output',type=Path,required=True);parser.add_argument('--model-request',type=Path,required=True);parser.add_argument('--generated',type=Path,required=True);parser.add_argument('--bun-executable',type=Path,default=Path('/opt/homebrew/Cellar/bun/1.4.2/bin/bun'));parser.add_argument('--pg-bin',type=Path,default=Path('/opt/homebrew/opt/postgresql@18/bin'));add_cohort_arguments(parser);args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument("--streams",action="store_true");parser.add_argument("--streams-basic",action="store_true");parser.add_argument('--output',type=Path,required=True);parser.add_argument('--model-request',type=Path,required=True);parser.add_argument('--generated',type=Path,required=True);parser.add_argument('--bun-executable',type=Path,default=Path('bun'));parser.add_argument('--pg-bin',type=Path,default=Path('/opt/homebrew/opt/postgresql@18/bin'));add_cohort_arguments(parser);args=parser.parse_args()
 basic_only=args.streams_basic and not args.streams
 root=Path(__file__).resolve().parents[1];out=args.output.absolute();out.mkdir(parents=True,exist_ok=False);pg=out/'postgres';sock=out/'socket';sock.mkdir();started=False;checks=[]
 def run(*command):
@@ -32,13 +33,12 @@ def run(*command):
 cohort=verify_cohort(args)
 if cohort is not None:(out/'installed-cohort.json').write_text(json.dumps(cohort,indent=2)+'\n')
 try:
- bun_version=subprocess.run([str(args.bun_executable),'--version'],capture_output=True,text=True,check=True).stdout.strip()
- assert bun_version=='1.4.2','exact Bun1.4.2 native producer required'
- (out/'toolchain.json').write_text(json.dumps({'bunPath':str(args.bun_executable),'bunVersion':bun_version,'python':sys.version.split()[0],'psycopg':psycopg.__version__},indent=2)+'\n')
+ (out/'toolchain.json').write_text(json.dumps({'embeddedRuntime':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'python':sys.version.split()[0],'psycopg':psycopg.__version__},indent=2)+'\n')
  run(args.pg_bin/'initdb','-D',pg,'-A','trust','-U','sdk_test','--no-sync')
  run(args.pg_bin/'pg_ctl','-D',pg,'-l',out/'postgres.log','-o',f"-F -k {sock} -c listen_addresses='' -p 55495",'-w','start');started=True
  dsn=f'host={sock} port=55495 dbname=postgres user=sdk_test'
  packet=json.loads(args.model_request.read_bytes());original=packet['binding']['modelJson'].encode();digest=hashlib.sha256(original).hexdigest();doc=json.loads(original)
+ assert type(doc) is dict and doc.get('umf')=='0.10.0','exact current UMF 0.10.0 model required'
  sys.path.insert(0,str(args.generated.absolute()));from native_sales.models import Order
  documents=(CatalogDocument(doc['id'],digest,original,digest),)
  with psycopg.connect(dsn,autocommit=True,options='-c statement_timeout=10000')as admin:
@@ -49,13 +49,13 @@ try:
   params=psycopg.conninfo.conninfo_to_dict(dsn);params['user']='sdk_person'
   with psycopg.connect(**params,autocommit=True,options='-c statement_timeout=10000')as person:
    with transaction(person)as(a,t):
-    prepared=a.prepare_catalog(documents,source_version='0.8.0',bun_executable=str(args.bun_executable))
+    prepared=a.prepare_catalog(documents,source_version=doc['umf'],bun_executable=str(args.bun_executable))
     accepted=success(a.accept_in_transaction(t,prepared,request_key='typed-sdk-original',bun_executable=str(args.bun_executable)))
     assert hasattr(accepted,'registration_id')
    with transaction(admin)as(a,t):success(a.configure_module_access_in_transaction(t,(ModuleAccessGrant(doc['id'],'sales','sdk_reader','sdk_writer'),)))
    admin.execute('GRANT sdk_reader,sdk_writer TO sdk_person WITH SET FALSE')
    admin.execute(sql.SQL('REVOKE {} FROM sdk_person').format(sql.Identifier(installed.registrar_role)))
-   checks.append('original core08 schema accepted through public API')
+   checks.append('current core 0.10 schema accepted through public API')
    with transaction(person)as(a,t):
     ref=success(a.get_type_reference_in_transaction(t,document_id=doc['id'],module_id='sales',record_id='order'))
     context=success(a.group_context_in_transaction(t))

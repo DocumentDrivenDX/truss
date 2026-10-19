@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public directed relationship reads with exact retained scalar values."""
 from dataclasses import dataclass,field
 from typing import Literal

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 import struct
 import unittest
 from truss._row_image_capture import decode_row_image_capture,COLUMNS

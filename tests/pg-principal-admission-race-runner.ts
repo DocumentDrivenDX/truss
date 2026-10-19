@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {mock} from 'bun:test';
 import {EventEmitter} from 'node:events';
 class Stream extends EventEmitter { destroyed=false;closed=false; destroy(){this.destroyed=true;this.closed=true;this.emit('close');} }

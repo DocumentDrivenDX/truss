@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual flat Assignment and native Truss edge fact-cut components."""
 import unittest,hashlib,json,subprocess
 from dataclasses import asdict

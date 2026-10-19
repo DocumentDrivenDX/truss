@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {createCandidateGraphSource} from '../packages/postgresql/src/security-graph-source';
 import {lowerSecurityRowPredicate,type SecurityPredicateType} from '../packages/postgresql/src/security-predicate';

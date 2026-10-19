@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {createRequire} from 'node:module';
 const build=process.env.TRUSS_WEFT_WASM;if(!build)throw Error('TRUSS_WEFT_WASM directory required');
 const require=createRequire(process.env.TRUSS_PLAYWRIGHT_PACKAGE ?? '/Users/erik/Projects/umf/package.json');

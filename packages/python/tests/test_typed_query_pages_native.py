@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic exact composite business-key SQL page workflow."""
 import json
 from decimal import Decimal
@@ -8,7 +9,7 @@ import test_group_create_native as create_tests
 
 class TypedQueryPagesTests(create_tests.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(create_tests.PublicCreateGroupTests) if n.startswith('test_')):locals()[_name]=None
-    source_version='0.7.0'
+    source_version='0.10.0'
     def fields(self,source):
         source['umf']=self.source_version;m=source['modules'][0]
         for e in m['elements']:
@@ -39,8 +40,6 @@ class TypedQueryPagesTests(create_tests.PublicCreateGroupTests):
         self.assertIsInstance(legacy.value,QueryRefused)
         h.detach();c.rollback()
 
-class TypedQueryPages08Tests(TypedQueryPagesTests):
-    source_version='0.8.0'
 
 class StringQueryPagesTests(create_tests.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(create_tests.PublicCreateGroupTests) if n.startswith('test_')):locals()[_name]=None

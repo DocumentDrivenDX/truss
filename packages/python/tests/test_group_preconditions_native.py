@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic public precondition and typed-refusal adopter workflows."""
 from dataclasses import replace
 from truss import Ok

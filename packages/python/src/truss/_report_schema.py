@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Offline governing report schema validation; no acceptance authority."""
 from hashlib import sha256
 from importlib.resources import files

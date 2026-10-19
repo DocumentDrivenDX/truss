@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Run against a NEW local PG18 data directory; all data uses public Truss APIs."""
 import argparse
 from contextlib import contextmanager

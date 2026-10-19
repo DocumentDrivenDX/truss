@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional generation arithmetic, not SQL/Python or DDL-route refinement."""
 import hashlib,json,sys
 from pathlib import Path

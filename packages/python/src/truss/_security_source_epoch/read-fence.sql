@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private epoch-state fence; does not exclude routine/role/configuration writers.
 CREATE FUNCTION truss.runtime_fence_selected_epoch_writes() RETURNS trigger
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$

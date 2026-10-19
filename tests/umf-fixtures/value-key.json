@@ -1,6 +1,6 @@
 {
   "model": {
-    "umf": "0.8.0",
+    "umf": "0.10.0",
     "id": "truss-value-owner",
     "vocabularies": {},
     "extensions": {},

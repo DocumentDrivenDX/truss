@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Supported synchronous psycopg host adoption; no graph or commit authority.
 
 The caller owns the connection and outer transaction. Raw aliases must remain

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Private comparison over bounded, original-source/profile-admitted projections.
  * Does not issue source identity, validate pointers or admit diagnostic artifacts. */
 export interface AdmittedDiagnosticComparison {

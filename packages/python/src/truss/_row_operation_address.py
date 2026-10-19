@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private candidate address codec/correspondence; never transaction authority."""
 from dataclasses import dataclass
 import json

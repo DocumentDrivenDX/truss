@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Committed helper owner/definition drift; selected B11 prerequisites only."""
 from unittest.mock import patch
 import test_security_helper_acl_native as acl

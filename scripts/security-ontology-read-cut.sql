@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Fixed original graph/source/role cut; no data export or caller parameters.
 CREATE FUNCTION truss.acquire_ontology_read_cut() RETURNS pg_catalog.void
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
@@ -18,7 +19,6 @@ BEGIN
   LOCK TABLE ONLY truss.relationship_lineage IN SHARE MODE NOWAIT;
   LOCK TABLE ONLY truss.schema_change IN SHARE MODE NOWAIT;
   LOCK TABLE ONLY truss.catalog_runtime_installation IN SHARE MODE NOWAIT;
-  LOCK TABLE ONLY truss.runtime_release IN SHARE MODE NOWAIT;
   LOCK TABLE ONLY truss.runtime_catalog_rebind_transition IN SHARE MODE NOWAIT;
   LOCK TABLE ONLY truss.runtime_catalog_key_backfill IN SHARE MODE NOWAIT;
   LOCK TABLE ONLY truss.catalog_subject_map IN SHARE MODE NOWAIT;

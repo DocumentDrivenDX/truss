@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original pure inspection tests; empty captures are not population proof."""
 import json,os,subprocess,unittest
 from pathlib import Path

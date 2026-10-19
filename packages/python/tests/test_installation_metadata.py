@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual provisional metadata effects, never committed installation."""
 import json
 import unittest

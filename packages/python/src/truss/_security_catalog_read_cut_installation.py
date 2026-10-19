@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original selected read-table lock issuer; no complete source/backend admission."""
 from dataclasses import dataclass
 from hashlib import sha256

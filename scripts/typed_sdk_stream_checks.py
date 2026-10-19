@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Real original engine-stream E2Es, sharing the public schema/instance fixture."""
 from contextlib import contextmanager
 from datetime import timedelta

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Owned graph example for the unreleased native69 development assembly.
 
 The application owns transactions. No data is inserted administratively and no

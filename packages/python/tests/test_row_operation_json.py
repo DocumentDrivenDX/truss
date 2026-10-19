@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Custody syntax profile controls; no native registry or semantic admission."""
 import unittest
 from truss._acceptance_json import (

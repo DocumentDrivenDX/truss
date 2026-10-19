@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conditional producer intersection model, not implementation/native refinement."""
 import json
 from pathlib import Path

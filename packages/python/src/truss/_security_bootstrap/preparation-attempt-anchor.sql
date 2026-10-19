@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private native attempt identity only. No program, authorization or permit
 -- admission. All routines remain owner-private; no production installer exists.
 CREATE FUNCTION truss.create_preparation_attempt_anchor(

@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Fresh private candidate, not layout adoption or automatic initialization.
 -- Verified bootstrap supplies original exact installation/profile and capacity.
 -- Complete native parity must include this home and exclude uncontrolled writes.

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {runInNewContext} from 'node:vm';
 import {copyOriginalByteCustody} from '../packages/postgresql/src/original-byte-custody';

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Conforming candidate for original UMF required set-Field literal semantics.
 
 Only owner-prepared Boolean/Integer/String Fields; no native admission. Retain

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Selected named Subject native helper readback; no role/issuer lifetime proof."""
 import json
 

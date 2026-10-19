@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Private selected-literal native composition component. No production grant,
 -- protected selector/finalizer or complete source/legacy-writer qualification.
 -- Trusted excluded installer/owners and original helper custody are premises.
@@ -8,7 +9,7 @@ DECLARE relation_name pg_catalog.text; required_mode pg_catalog.text;
 BEGIN
  FOR relation_name,required_mode IN SELECT * FROM (VALUES
   ('truss.source_epoch_current','ShareLock'),('truss.source_epoch_registry','ShareLock'),
-  ('truss.catalog_runtime_installation','ShareLock'),('truss.runtime_release','ShareLock'),
+  ('truss.catalog_runtime_installation','ShareLock'),
   ('truss.schema_head','ShareLock'),('truss.schema_rev','ShareLock'),('truss.schema_doc','ShareLock'),
   ('truss.schema_change','ShareLock'),('truss.type_def','ShareLock'),('truss.prop_def','ShareLock'),
   ('truss.key_def','ShareLock'),('truss.rel_def','ShareLock'),('truss.rel_endpoint','ShareLock'),

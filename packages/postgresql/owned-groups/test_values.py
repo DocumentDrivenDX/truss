@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Basic value and forest simulation on a publicly accepted numeric catalog."""
 import json
 from pathlib import Path

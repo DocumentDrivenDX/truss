@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual bounded protocol capture; no protected routine or artifact qualification."""
 from test_native_arbitration import NativeArbitrationTests
 from truss._native_admission_capture import NativeAdmissionCapture

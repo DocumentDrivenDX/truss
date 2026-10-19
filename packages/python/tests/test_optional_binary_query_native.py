@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Optional binary equality preserves absent/null/empty/present reads."""
 from dataclasses import replace
 from truss import Ok,QueryRows,QueryRefused,QueryAbsent,QueryPage,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
@@ -43,6 +44,3 @@ class OptionalBinaryTests(base.BinaryQueryTests):
         self.assertTrue(any(d.code=='WFT-BINDING' for d in refused.value.diagnostics),repr(refused))
         h.detach();c.commit();c.execute('BEGIN READ ONLY;SET LOCAL statement_timeout=10000');h=adopt_psycopg_host(c);t=h.adopt_transaction(access_mode='read_only').value;query=create_reference_assembly(CatalogRuntimeConfiguration(),h).value.compiled_execution(a.compiled_selection).capability
         result=query.query_in_transaction(t,sql=sql,document_ids=('adoc',),parameters={'blob':TextValue(kind='binary',text='AP8=')});self.assertIsInstance(result.value,QueryRows,repr(result));self.assertEqual(result.value.rows,(('present',),));h.detach();c.rollback()
-
-class OptionalBinary08Tests(OptionalBinaryTests):
-    source_version='0.8.0'

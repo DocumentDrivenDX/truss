@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Host-only complete wire inspection, not semantic/native acceptance authority. */
 import {createRequire} from 'node:module';
 import {readFile} from 'node:fs/promises';

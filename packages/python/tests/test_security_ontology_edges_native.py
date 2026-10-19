@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original public catalog + mutation population for full ontology graph qualification.
 Seed/endpoint prerequisite only: no protected read or backend admission claimed.
 """
@@ -16,7 +17,7 @@ def ontology_document(identity):
         for field,family in fields.items():elements.append({'id':field,'name':field,'kind':'field','scalarType':family,'nullability':'required','cardinality':'one','extensions':{}})
     pairs=(('ProjectClient','Project','Client'),('StaffAssignment','Staff','Assignment'),('AssignmentProject','Assignment','Project'),('OwnershipResource','Ownership','Resource'),('OwnershipProject','Ownership','Project'))
     relationships=[{'id':name,'name':name,'source':[{'module':'m','element':source}],'target':[{'module':'m','element':target,'key':'pk'}],'sourceMultiplicity':{'min':0,'max':'*'},'targetMultiplicity':{'min':0,'max':'*'},'targetLifecycle':'independent','directed':True} for name,source,target in pairs]
-    return {'umf':'0.8.0','id':identity,'vocabularies':{},'extensions':{},'modules':[{'id':'m','namespace':'m','extensions':{},'elements':elements,'relationships':relationships}]}
+    return {'umf':'0.10.0','id':identity,'vocabularies':{},'extensions':{},'modules':[{'id':'m','namespace':'m','extensions':{},'elements':elements,'relationships':relationships}]}
 
 
 class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
@@ -112,7 +113,7 @@ class SecurityOntologyEdgesNativeTests(base.PublicCreateGroupTests):
         from truss import adopt_psycopg_host,Ok,Error
         import psycopg
         import security_ontology_guarded_read as guarded
-        request=json.dumps({'modules':[{'pin':{'documentId':d.document_id,'revision':d.document_revision,'umfVersion':'0.8.0','sha256':sha256(d.content).hexdigest()},'documentJson':d.content.decode()} for d in self.documents]}).encode()
+        request=json.dumps({'modules':[{'pin':{'documentId':d.document_id,'revision':d.document_revision,'umfVersion':'0.10.0','sha256':sha256(d.content).hexdigest()},'documentJson':d.content.decode()} for d in self.documents]}).encode()
         self.admin.execute('BEGIN')
         host=adopt_psycopg_host(self.admin);transaction=host.adopt_transaction().value
         self.admin.execute("CREATE TEMP TABLE graph_guard_prior(value text);INSERT INTO graph_guard_prior VALUES('kept')")

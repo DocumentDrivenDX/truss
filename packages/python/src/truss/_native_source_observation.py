@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Stock-cursor native source observation; data, never an authority witness.
 
 Original host ownership, source/routine/authority fencing and final release remain

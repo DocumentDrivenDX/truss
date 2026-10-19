@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Derive versioned capture from the original admission procedure, no repair UPDATE."""
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]

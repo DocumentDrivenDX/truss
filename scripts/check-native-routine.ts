@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Host-only routine carrier composition probe; complete transaction rolled back. */
 import {readFile,writeFile} from 'node:fs/promises';
 import {decodeNativeRoutineCarriers} from '../packages/postgresql/src/index';

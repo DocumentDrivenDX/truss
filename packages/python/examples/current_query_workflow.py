@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public current-policy query reference workflow on a fresh local PG18 runtime.
 
 The adjacent original model/policy/designation is a reference fixture, not a
@@ -65,7 +66,7 @@ def adopted(connection, *, commit=True):
 
 def original_sources():
     request = json.loads(Path(__file__).with_name('current-query-model-request.json').read_bytes())
-    # Keep the exact original inner strings and pins; do not reserialize models.
+    # Keep the exact derived current-format inner strings and pins; do not reserialize models.
     modules = [{'pin': m['pin'], 'documentJson': m['documentJson']} for m in request['modules']]
     documents = tuple(CatalogDocument(m['pin']['documentId'], m['pin']['revision'],
                                      m['documentJson'].encode('utf8')) for m in modules)
@@ -105,7 +106,7 @@ def run_workflow(directory, *, bun_executable='bun'):
             person_params = dict(params, user='policy_person')
             with psycopg.connect(**person_params, autocommit=True, options='-c statement_timeout=10000') as person:
                 with adopted(person) as (_, tx, assembly):
-                    prepared = assembly.prepare_catalog(documents, source_version='0.8.0',
+                    prepared = assembly.prepare_catalog(documents, source_version='0.10.0',
                                                         bun_executable=bun_executable)
                     success(assembly.accept_in_transaction(tx, prepared, request_key='reference-policy-model'))
                     view = success(assembly.catalog_view_in_transaction(tx, assembly.catalog_view_request())).view

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original UMF owner dependency coverage, not physical or issuer qualification."""
 import hashlib,json,unittest
 from pathlib import Path

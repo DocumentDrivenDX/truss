@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 import {test,expect} from 'bun:test';
 import {checkRelationshipPlanningRatio as ratio} from '../packages/tooling/src/relationship-planning-ratio';
 const samples=(value:string)=>Array(1000).fill(value) as string[];

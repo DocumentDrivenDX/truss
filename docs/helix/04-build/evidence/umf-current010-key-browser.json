@@ -1,0 +1,17 @@
+{
+  "sourceRevision": "d187bfa7d7de5f3cd94dea314eed003a35bb6c82",
+  "bundleSha256": "e547ed1f5e705b057674684a9c842d857b6bd353b0e1525ff7b69a04d00dba01",
+  "fixtureSha256": "0953c0bd74ab99c7dd2a6030935187b687f669e1a97f8b3289575b6c7c59ec3a",
+  "browser": "153.0.8010.12",
+  "observations": {
+    "sourceValid": true,
+    "bytesHex": "554d464b310303060331323334300407e99baaf09f9982021039303037313939323534373430393933",
+    "scaleRefused": true,
+    "precisionRefused": true,
+    "widthRefused": true,
+    "orderRefused": true,
+    "originalUnchanged": true,
+    "valuesUnchanged": true
+  },
+  "qualification": "Actual Chromium current 0.10 validation and shared UMFK1 body primitive; no public UMF 0.10 receipt verification claim. Exact source and value carriers retained; no native uniqueness/comparator/storage/resource/installed runtime qualification."
+}

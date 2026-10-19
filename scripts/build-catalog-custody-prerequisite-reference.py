@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Compile original candidate sources in an owned independent PostgreSQL17 DB.
 
 Administrative candidate evidence only. No target connection is accepted. Frozen

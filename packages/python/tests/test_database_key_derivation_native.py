@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Database derivation matches UMF and preserves source constraints without clients."""
 import base64
 from dataclasses import replace
@@ -16,7 +17,7 @@ import test_typed_keys_native as typed
 
 class DatabaseKeyDerivationTests(typed.TypedKeyTests):
     for name in tuple(n for n in dir(typed.TypedKeyTests) if n.startswith('test_')):locals()[name]=None
-    source_version='0.8.0'
+    source_version='0.10.0'
 
     def test_cross_document_key_predicate_requires_exact_source(self):
         from truss import ModuleAccessGrant,adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration
@@ -43,7 +44,7 @@ class DatabaseKeyDerivationTests(typed.TypedKeyTests):
     def test_native_scalar_vectors_match_original_producers(self):
         self.install()
         corpus=json.loads((Path(__file__).parent/'fixtures/umf-literal-key-vectors.json').read_bytes())
-        for core in ('0.7.0','0.8.0'):
+        for core in ('0.10.0',):
             for vector in corpus['vectors']:
                 fields=[{**f,**({'precision':18} if f['scalarType']=='decimal' else {})} for f in vector['fields']]
                 source=json.loads(key_source(fields));source['umf']=core

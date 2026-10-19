@@ -1,5 +1,7 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public type/profile separation; deliberately no adopted host or SQL."""
 import unittest,typing
+from unittest.mock import patch
 from truss import CurrentDisclosureExecutor,CurrentDisclosureRows,CurrentQueryExecutor
 from truss.catalog_runtime import CatalogReferenceAssembly,CatalogRuntimeConfiguration
 from truss.psycopg_host import PsycopgHost
@@ -7,7 +9,9 @@ from truss.execution import Ok
 
 class DisclosureApiTests(unittest.TestCase):
  def test_wrong_executor_profiles_refuse_before_host_use(self):
-  assembly=CatalogReferenceAssembly(CatalogRuntimeConfiguration(),object.__new__(PsycopgHost))
+  host=object.__new__(PsycopgHost);host._connection=object()
+  with patch('truss._schema_memory.record_state',return_value=None):
+   assembly=CatalogReferenceAssembly(CatalogRuntimeConfiguration(),host)
   for executor in (object.__new__(CurrentQueryExecutor),None,{}):
    result=assembly.query_current_disclosure_in_transaction(None,executor=executor,sql='SELECT r.x FROM R r',document_ids=('d',))
    self.assertIsInstance(result,Ok);self.assertEqual(result.value.code,'invalid_query')

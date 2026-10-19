@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Fixed graph-to-original-ontology spike; administrative mapping, not admission.
 
 Native row IDs only locate typed endpoints. Semantic keys come from authored

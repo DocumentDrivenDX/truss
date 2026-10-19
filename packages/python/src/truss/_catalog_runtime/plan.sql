@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Compact native catalog plan. Original source meaning; no full-operation snapshots.
 CREATE FUNCTION truss.catalog_planned_changes(records jsonb) RETURNS SETOF truss.schema_change
 LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
@@ -29,6 +30,13 @@ DECLARE result jsonb:=prior;types jsonb:=coalesce(prior->'type_def','[]');proper
  keys jsonb:=coalesce(prior->'key_def','[]');relations jsonb:=coalesce(prior->'rel_def','[]');
  lineages jsonb:=coalesce(prior->'relationship_lineage','[]');endpoints jsonb:=coalesce(prior->'rel_endpoint','[]');
  changes jsonb:=coalesce(prior->'schema_change','[]');type_map jsonb:='{}';property_map jsonb:='{}';relationship_map jsonb:='{}';
+ prior_type_identity jsonb;prior_property_identity jsonb;prior_relation_identity jsonb;
+ prior_type_id jsonb;prior_property_id jsonb;prior_property_name jsonb;prior_key_identity jsonb;
+ prior_key_property jsonb;prior_key_max jsonb;prior_lineage_id jsonb;prior_endpoint_id jsonb;prior_revision_id jsonb;
+ current_property_id jsonb;source_index jsonb;fresh_key_number jsonb;fresh_document_ids jsonb;fresh_type_identities jsonb;fresh_relation_identities jsonb;
+ next_types jsonb[]:=ARRAY[]::jsonb[];next_properties jsonb[]:=ARRAY[]::jsonb[];next_relations jsonb[]:=ARRAY[]::jsonb[];
+ next_keys jsonb[]:=ARRAY[]::jsonb[];next_lineages jsonb[]:=ARRAY[]::jsonb[];next_endpoints jsonb[]:=ARRAY[]::jsonb[];next_changes jsonb[]:=ARRAY[]::jsonb[];
+ removed_type_ids int[]:=ARRAY[]::int[];removed_property_ids int[]:=ARRAY[]::int[];removed_relation_ids int[]:=ARRAY[]::int[];
  row jsonb;old jsonb;candidate jsonb;old_source jsonb;new_source jsonb;component jsonb;remapped jsonb;
  tightening boolean;facet_map jsonb;compact_insertions boolean;
  assigned int;type_next int;property_next int;relationship_next int;key_next int;sequence int:=0;revision int;
@@ -63,43 +71,150 @@ BEGIN
  SELECT coalesce(max((v.value->>'type_id')::int),0) INTO type_next FROM jsonb_array_elements(types) v;
  SELECT coalesce(max((v.value->>'prop_id')::int),0) INTO property_next FROM jsonb_array_elements(properties) v;
  SELECT coalesce(max((v.value->>'rel_type_id')::int),0) INTO relationship_next FROM jsonb_array_elements(relations) v;
+ SELECT coalesce(jsonb_object_agg(jsonb_build_array(v.value->>'document_id',v.value->>'module',v.value->>'element')::text,v.value),'{}'::jsonb),
+        coalesce(jsonb_object_agg(v.value->>'type_id',v.value),'{}'::jsonb)
+  INTO prior_type_identity,prior_type_id FROM jsonb_array_elements(types) v;
+ WITH prop_rows AS (SELECT value FROM jsonb_array_elements(properties)),names AS (
+  SELECT jsonb_build_array(value->>'type_id',value->>'name')::text name_key,jsonb_agg(value->>'prop_id') prop_ids FROM prop_rows GROUP BY 1
+ ) SELECT (SELECT coalesce(jsonb_object_agg(jsonb_build_array(value->>'type_id',value->>'declaration_module',value->>'element')::text,value),'{}'::jsonb) FROM prop_rows),
+          (SELECT coalesce(jsonb_object_agg(value->>'prop_id',value),'{}'::jsonb) FROM prop_rows),
+          coalesce((SELECT jsonb_object_agg(name_key,prop_ids) FROM names),'{}'::jsonb)
+  INTO prior_property_identity,prior_property_id,prior_property_name;
+ SELECT coalesce(jsonb_object_agg(jsonb_build_array(v.value->>'document_id',v.value->>'module',v.value->>'rel_id')::text,v.value),'{}'::jsonb)
+  INTO prior_relation_identity FROM jsonb_array_elements(relations) v;
+ SELECT coalesce(jsonb_object_agg(jsonb_build_array(v.value->>'type_id',v.value->>'key_id')::text,v.value),'{}'::jsonb),
+        coalesce(jsonb_object_agg(jsonb_build_array(v.value->>'type_id',p.value#>>'{}')::text,'true'::jsonb),'{}'::jsonb),
+        coalesce(jsonb_object_agg(v.value->>'type_id',to_jsonb(v.max_num)),'{}'::jsonb)
+  INTO prior_key_identity,prior_key_property,prior_key_max
+  FROM (SELECT k.value,max((k.value->>'key_num')::int) OVER(PARTITION BY k.value->>'type_id') max_num
+         FROM jsonb_array_elements(keys) k) v
+  LEFT JOIN LATERAL jsonb_array_elements(v.value->'prop_ids') p ON true;
+ SELECT coalesce(jsonb_object_agg(v.value->>'rel_type_id','true'::jsonb),'{}'::jsonb)
+  INTO prior_lineage_id FROM jsonb_array_elements(lineages) v;
+ SELECT coalesce(jsonb_object_agg(jsonb_build_array(v.value->>'rel_type_id',v.value->>'source_type',v.value->>'target_type')::text,'true'::jsonb),'{}'::jsonb)
+  INTO prior_endpoint_id FROM jsonb_array_elements(endpoints) v;
+ SELECT coalesce(jsonb_object_agg(v.value->>'rev',v.value),'{}'::jsonb)
+  INTO prior_revision_id FROM jsonb_array_elements(coalesce(prior->'schema_rev','[]'::jsonb)) v;
+ -- Index immutable source declarations once for the whole revision. Public catalog preparation
+ -- has already validated unique document/module/declaration identities.
+ WITH documents AS (
+  SELECT d.value->>'rev' rev,d.value->>'ord' ord,d.value->>'doc_id' doc_id,(d.value->>'document')::jsonb document
+   FROM jsonb_array_elements(coalesce(prior->'schema_doc','[]'::jsonb)) d
+  UNION ALL
+  SELECT d.value->>'rev',d.value->>'ord',d.value->>'doc_id',(d.value->>'document')::jsonb
+   FROM jsonb_array_elements(coalesce(fresh->'schema_doc','[]'::jsonb)) d
+ ),source_rows AS (
+  SELECT d.rev,d.ord,d.doc_id,m.value->>'id' module,'element' kind,e.value->>'id' authored_id,e.value source
+   FROM documents d CROSS JOIN LATERAL jsonb_array_elements(d.document->'modules') m
+   CROSS JOIN LATERAL jsonb_array_elements(coalesce(m.value->'elements','[]'::jsonb)) e
+  UNION ALL
+  SELECT d.rev,d.ord,d.doc_id,m.value->>'id','relationship',e.value->>'id',e.value
+   FROM documents d CROSS JOIN LATERAL jsonb_array_elements(d.document->'modules') m
+   CROSS JOIN LATERAL jsonb_array_elements(coalesce(m.value->'relationships','[]'::jsonb)) e
+ ) SELECT coalesce(jsonb_object_agg(jsonb_build_array(rev,ord,doc_id,module,kind,authored_id)::text,source),'{}'::jsonb)
+   INTO source_index FROM source_rows;
+ -- Resolve every fresh identity and allocate new IDs in input order before validation. Loops below
+ -- still perform each semantic decision and append history in the original type/property/relation order.
+ WITH fresh_rows AS (
+  SELECT f.value,f.ordinality,
+   jsonb_build_array(f.value->>'document_id',f.value->>'module',f.value->>'element')::text identity_key
+   FROM jsonb_array_elements(fresh->'type_def') WITH ORDINALITY f
+ ),matched AS (
+  SELECT f.*,p.value->>'type_id' existing_id FROM fresh_rows f LEFT JOIN jsonb_each(prior_type_identity) p ON p.key=f.identity_key
+ ),assigned AS (
+  SELECT *,CASE WHEN existing_id IS NULL THEN type_next+sum((existing_id IS NULL)::int) OVER(ORDER BY ordinality)
+   ELSE existing_id::int END assigned_id FROM matched
+ ) SELECT coalesce(jsonb_object_agg(value->>'type_id',to_jsonb(assigned_id)),'{}'::jsonb)
+   INTO type_map FROM assigned;
+ WITH fresh_rows AS (
+  SELECT f.value,f.ordinality,(type_map->>(f.value->>'type_id'))::int assigned_type,
+   jsonb_build_array(type_map->>(f.value->>'type_id'),f.value->>'declaration_module',f.value->>'element')::text identity_key
+   FROM jsonb_array_elements(fresh->'prop_def') WITH ORDINALITY f
+ ),matched AS (
+  SELECT f.*,p.value->>'prop_id' existing_id,p.value existing_row FROM fresh_rows f LEFT JOIN jsonb_each(prior_property_identity) p ON p.key=f.identity_key
+ ),assigned AS (
+  SELECT *,CASE WHEN existing_id IS NULL THEN property_next+sum((existing_id IS NULL)::int) OVER(ORDER BY ordinality)
+   ELSE existing_id::int END assigned_id FROM matched
+ ) SELECT coalesce(jsonb_object_agg(value->>'prop_id',to_jsonb(assigned_id)),'{}'::jsonb),
+          coalesce(jsonb_object_agg(jsonb_build_array(assigned_type::text,assigned_id::text)::text,
+           value||jsonb_build_object('type_id',assigned_type,'prop_id',assigned_id,
+   'since_rev',coalesce(existing_row->'since_rev',value->'since_rev'),'doc_ord',coalesce(existing_row->'doc_ord',value->'doc_ord'))),'{}'::jsonb)
+   INTO property_map,current_property_id FROM assigned;
+ WITH fresh_rows AS (
+  SELECT f.value,f.ordinality,jsonb_build_array(f.value->>'document_id',f.value->>'module',f.value->>'rel_id')::text identity_key
+   FROM jsonb_array_elements(fresh->'rel_def') WITH ORDINALITY f
+ ),matched AS (
+  SELECT f.*,p.value->>'rel_type_id' existing_id FROM fresh_rows f LEFT JOIN jsonb_each(prior_relation_identity) p ON p.key=f.identity_key
+ ),assigned AS (
+  SELECT *,CASE WHEN existing_id IS NULL THEN relationship_next+sum((existing_id IS NULL)::int) OVER(ORDER BY ordinality)
+   ELSE existing_id::int END assigned_id FROM matched
+ ) SELECT coalesce(jsonb_object_agg(value->>'rel_type_id',to_jsonb(assigned_id)),'{}'::jsonb)
+   INTO relationship_map FROM assigned;
+ WITH fresh_rows AS (
+  SELECT f.value,f.ordinality,(type_map->>(f.value->>'type_id'))::int assigned_type,
+   jsonb_build_array(type_map->>(f.value->>'type_id'),f.value->>'key_id')::text identity_key
+   FROM jsonb_array_elements(fresh->'key_def') WITH ORDINALITY f
+ ),matched AS (
+  SELECT f.*,p.value->>'key_num' existing_num,coalesce((prior_key_max->>f.assigned_type::text)::int,0) max_num
+   FROM fresh_rows f LEFT JOIN jsonb_each(prior_key_identity) p ON p.key=f.identity_key
+ ),assigned AS (
+  SELECT *,CASE WHEN existing_num IS NOT NULL THEN existing_num::int
+   WHEN prior_type_id ? assigned_type::text THEN max_num+sum((existing_num IS NULL)::int) OVER(PARTITION BY assigned_type ORDER BY ordinality)
+   ELSE (value->>'key_num')::int END assigned_num FROM matched
+ ) SELECT coalesce(jsonb_object_agg(identity_key,to_jsonb(assigned_num)),'{}'::jsonb)
+   INTO fresh_key_number FROM assigned;
+ SELECT coalesce(jsonb_object_agg(d.value->>'doc_id','true'::jsonb),'{}'::jsonb) INTO fresh_document_ids
+  FROM jsonb_array_elements(coalesce(fresh->'schema_doc','[]'::jsonb)) d;
+ SELECT coalesce(jsonb_object_agg(identity_key,'true'::jsonb),'{}'::jsonb) INTO fresh_type_identities
+  FROM (SELECT jsonb_build_array(v.value->>'document_id',v.value->>'module',v.value->>'element')::text identity_key
+    FROM jsonb_array_elements(fresh->'type_def') v) q;
+ SELECT coalesce(jsonb_object_agg(identity_key,'true'::jsonb),'{}'::jsonb) INTO fresh_relation_identities
+  FROM (SELECT jsonb_build_array(v.value->>'document_id',v.value->>'module',v.value->>'rel_id')::text identity_key
+    FROM jsonb_array_elements(fresh->'rel_def') v) q;
  SELECT max((v.value->>'rev')::int) INTO STRICT revision FROM jsonb_array_elements(fresh->'schema_rev') v;
  -- A submitted document cannot implicitly retire an omitted declaration.
- IF EXISTS(SELECT 1 FROM jsonb_array_elements(types) p WHERE EXISTS(SELECT 1 FROM jsonb_array_elements(fresh->'schema_doc') d WHERE d.value->>'doc_id'=p.value->>'document_id')
-  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(fresh->'type_def') n WHERE n.value->>'document_id'=p.value->>'document_id' AND n.value->>'module'=p.value->>'module' AND n.value->>'element'=p.value->>'element')) THEN
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(types) p WHERE fresh_document_ids ? (p.value->>'document_id')
+  AND NOT fresh_type_identities ? jsonb_build_array(p.value->>'document_id',p.value->>'module',p.value->>'element')::text) THEN
   RAISE EXCEPTION 'record retirement requires explicit support' USING ERRCODE='0A000';END IF;
  FOR row IN SELECT value FROM jsonb_array_elements(fresh->'type_def') LOOP
-  SELECT v.value INTO old FROM jsonb_array_elements(types) v WHERE v.value->>'document_id'=row->>'document_id' AND v.value->>'module'=row->>'module' AND v.value->>'element'=row->>'element';
-  IF old IS NULL THEN type_next:=type_next+1;assigned:=type_next;
-  ELSE assigned:=(old->>'type_id')::int;END IF;
-  type_map:=type_map||jsonb_build_object(row->>'type_id',assigned);
+  assigned:=(type_map->>(row->>'type_id'))::int;
+  old:=prior_type_identity->jsonb_build_array(row->>'document_id',row->>'module',row->>'element')::text;
   candidate:=row||jsonb_build_object('type_id',assigned);
   IF old IS NOT NULL THEN
-   old_source:=truss.catalog_plan_source(prior,old);new_source:=truss.catalog_plan_source(fresh,row);
+   old_source:=source_index->jsonb_build_array(old->>'definition_rev',old->>'definition_doc_ord',old->>'definition_document_id',old->>'module','element',old->>'element')::text;
+   new_source:=source_index->jsonb_build_array(row->>'definition_rev',row->>'definition_doc_ord',row->>'definition_document_id',row->>'module','element',row->>'element')::text;
+   IF old_source IS NULL OR new_source IS NULL THEN RAISE NO_DATA_FOUND;END IF;
    IF old_source=new_source THEN CONTINUE;END IF;
    IF old_source-ARRAY['members','name','keys'] IS DISTINCT FROM new_source-ARRAY['members','name','keys']
-    OR EXISTS(SELECT 1 FROM jsonb_array_elements(coalesce(old_source->'keys','[]')) k WHERE NOT EXISTS(SELECT 1 FROM jsonb_array_elements(coalesce(new_source->'keys','[]')) n WHERE n.value=k.value))
-    OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'members') m GROUP BY m.value HAVING count(*)>(SELECT count(*) FROM jsonb_array_elements(new_source->'members') n WHERE n.value=m.value)) THEN
+    OR EXISTS(SELECT value FROM jsonb_array_elements(coalesce(old_source->'keys','[]')) EXCEPT
+              SELECT value FROM jsonb_array_elements(coalesce(new_source->'keys','[]')))
+    OR EXISTS(SELECT value FROM jsonb_array_elements(old_source->'members') EXCEPT ALL
+              SELECT value FROM jsonb_array_elements(new_source->'members')) THEN
     RAISE EXCEPTION 'existing record keys, meaning and retained members require explicit evolution support' USING ERRCODE='0A000';END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
-   SELECT coalesce(jsonb_agg(v.value),'[]') INTO types FROM jsonb_array_elements(types) v WHERE v.value->>'type_id'<>assigned::text;
+   removed_type_ids[cardinality(removed_type_ids)+1]:=assigned;
   END IF;
-  types:=types||jsonb_build_array(candidate);sequence:=sequence+1;
+  next_types[cardinality(next_types)+1]:=candidate;sequence:=sequence+1;
   IF old IS NOT NULL OR NOT compact_insertions THEN
-  changes:=changes||jsonb_build_array(jsonb_build_object('rev',revision,'seq',sequence,'kind','type','def_id',assigned,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.type_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.type_def,candidate))));
+  next_changes[cardinality(next_changes)+1]:=jsonb_build_object('rev',revision,'seq',sequence,'kind','type','def_id',assigned,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.type_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.type_def,candidate)));
   END IF;
  END LOOP;
+ SELECT coalesce(jsonb_agg(value ORDER BY family,ordinal),'[]'::jsonb) INTO types FROM (
+  SELECT v.value,0 family,v.ordinality ordinal FROM jsonb_array_elements(coalesce(prior->'type_def','[]'::jsonb)) WITH ORDINALITY v
+   LEFT JOIN (SELECT DISTINCT id FROM unnest(removed_type_ids) AS removed(id)) removed ON removed.id=(v.value->>'type_id')::int
+   WHERE removed.id IS NULL
+  UNION ALL SELECT n.value,1,n.ordinality FROM unnest(next_types) WITH ORDINALITY n(value,ordinality)) merged;
  FOR row IN SELECT value FROM jsonb_array_elements(fresh->'prop_def') LOOP
   assigned:=(type_map->> (row->>'type_id'))::int;
-  SELECT v.value INTO old FROM jsonb_array_elements(properties) v WHERE v.value->>'type_id'=assigned::text AND v.value->>'declaration_module'=row->>'declaration_module' AND v.value->>'element'=row->>'element';
+  old:=prior_property_identity->jsonb_build_array(assigned::text,row->>'declaration_module',row->>'element')::text;
   IF old IS NULL THEN
-   IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'type_def') t WHERE t.value->>'type_id'=assigned::text) AND row->>'nullability' NOT IN ('required','absent-allowed') THEN
+   IF prior_type_id ? assigned::text AND row->>'nullability' NOT IN ('required','absent-allowed') THEN
     RAISE EXCEPTION 'supported new field nullability required' USING ERRCODE='0A000';END IF;
-   property_next:=property_next+1;
   END IF;
-  property_map:=property_map||jsonb_build_object(row->>'prop_id',CASE WHEN old IS NULL THEN property_next ELSE (old->>'prop_id')::int END);
   candidate:=row||jsonb_build_object('type_id',assigned,'prop_id',(property_map->> (row->>'prop_id'))::int);
-  IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'prop_def') p WHERE p.value->>'type_id'=assigned::text AND p.value->>'prop_id'<>candidate->>'prop_id' AND p.value->>'name'=candidate->>'name') THEN
+  IF coalesce(prior_property_name ? jsonb_build_array(assigned::text,candidate->>'name')::text,false)
+   AND EXISTS(SELECT 1 FROM jsonb_array_elements(prior_property_name->jsonb_build_array(assigned::text,candidate->>'name')::text) old_name
+    WHERE old_name.value#>>'{}' IS DISTINCT FROM candidate->>'prop_id') THEN
    RAISE EXCEPTION 'field name occupied in prior catalog' USING ERRCODE='0A000';END IF;
   IF old IS NOT NULL THEN
    IF old->>'cardinality' IN ('array','map') THEN
@@ -116,76 +231,84 @@ BEGIN
     IF ((old->>'cardinality'='one' AND row->>'cardinality'='one' AND old->>'scalar_type' IN ('string','integer','decimal','boolean','timestamp','binary','date') AND row->>'scalar_type'=old->>'scalar_type') OR (old->>'cardinality' IN ('array','map') AND row->>'cardinality'=old->>'cardinality' AND truss.valid_property_definition(jsonb_populate_record(NULL::truss.prop_def,candidate)) IS TRUE)) IS DISTINCT FROM TRUE THEN
      RAISE EXCEPTION 'required tightening requires a supported retained scalar or flat container' USING ERRCODE='0A000';END IF;
     FOREACH facet_map IN ARRAY ARRAY[coalesce(old->'_originalField'->'facets','{}'::jsonb),coalesce(row->'_originalField'->'facets','{}'::jsonb)] LOOP
-     IF NOT ((facet_map='{}'::jsonb OR old->>'scalar_type'='integer' AND facet_map='{"integerWidth":{"bits":64,"signed":true}}'::jsonb OR old->>'scalar_type'='decimal' AND truss.valid_decimal_facets(facet_map)) IS TRUE) THEN
+     IF truss.known_scalar_facets(old->>'scalar_type',facet_map) IS NOT TRUE THEN
       RAISE EXCEPTION 'required tightening needs known scalar facets' USING ERRCODE='0A000';END IF;
     END LOOP;
    END IF;
    -- Historical nullability-only folds keep their original admission. Actual
    -- facet changes require both maps to belong to this explicit native subset.
    IF coalesce(old->'_originalField'->'facets','{}'::jsonb) IS DISTINCT FROM coalesce(row->'_originalField'->'facets','{}'::jsonb) THEN
-    IF NOT ((coalesce(old->'_originalField'->'facets','{}'::jsonb)='{}'::jsonb
-      OR old->>'scalar_type'='integer' AND old->'_originalField'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
-      OR old->>'scalar_type'='decimal' AND truss.valid_decimal_facets(old->'_originalField'->'facets')) IS TRUE)
-    OR NOT ((coalesce(row->'_originalField'->'facets','{}'::jsonb)='{}'::jsonb
-      OR row->>'scalar_type'='integer' AND row->'_originalField'->'facets'='{"integerWidth":{"bits":64,"signed":true}}'::jsonb
-      OR row->>'scalar_type'='decimal' AND truss.valid_decimal_facets(row->'_originalField'->'facets')) IS TRUE) THEN
+    IF truss.known_scalar_facets(old->>'scalar_type',old->'_originalField'->'facets') IS NOT TRUE
+     OR truss.known_scalar_facets(row->>'scalar_type',row->'_originalField'->'facets') IS NOT TRUE THEN
      RAISE EXCEPTION 'known native scalar facet transition required' USING ERRCODE='0A000';END IF;
    END IF;
    IF ((old->'_originalField')-ARRAY['nullability','facets']) IS DISTINCT FROM ((row->'_originalField')-ARRAY['nullability','facets'])
     OR NOT (old->>'nullability'=row->>'nullability' OR old->>'nullability'='required' AND row->>'nullability'='absent-allowed' OR tightening)
-    OR EXISTS(SELECT 1 FROM jsonb_array_elements(keys) k WHERE k.value->>'type_id'=assigned::text AND k.value->'prop_ids' @> jsonb_build_array((old->>'prop_id')::int)) THEN
+    OR prior_key_property ? jsonb_build_array(assigned::text,old->>'prop_id')::text THEN
     RAISE EXCEPTION 'existing field change requires explicit evolution support' USING ERRCODE='0A000';END IF;
    END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
-   SELECT coalesce(jsonb_agg(v.value),'[]') INTO properties FROM jsonb_array_elements(properties) v WHERE v.value->>'prop_id'<>old->>'prop_id';
+   removed_property_ids[cardinality(removed_property_ids)+1]:=(old->>'prop_id')::int;
   END IF;
-  IF EXISTS(SELECT 1 FROM jsonb_array_elements(properties) p WHERE p.value->>'type_id'=assigned::text AND p.value->>'name'=candidate->>'name') THEN
-   RAISE EXCEPTION 'retained field name collision requires rebind support' USING ERRCODE='0A000';END IF;
-  properties:=properties||jsonb_build_array(candidate);sequence:=sequence+1;
+  -- Public source validation already rejects duplicate property names within a type. The
+  -- immutable prior-name map above preserves the planner's cross-revision collision refusal.
+  next_properties[cardinality(next_properties)+1]:=candidate;sequence:=sequence+1;
   IF old IS NOT NULL OR NOT compact_insertions THEN
-  changes:=changes||jsonb_build_array(jsonb_build_object('rev',revision,'seq',sequence,'kind','prop','def_id',(candidate->>'prop_id')::int,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.prop_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.prop_def,candidate))));
+  next_changes[cardinality(next_changes)+1]:=jsonb_build_object('rev',revision,'seq',sequence,'kind','prop','def_id',(candidate->>'prop_id')::int,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.prop_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.prop_def,candidate)));
   END IF;
  END LOOP;
+ SELECT coalesce(jsonb_agg(value ORDER BY family,ordinal),'[]'::jsonb) INTO properties FROM (
+  SELECT v.value,0 family,v.ordinality ordinal FROM jsonb_array_elements(coalesce(prior->'prop_def','[]'::jsonb)) WITH ORDINALITY v
+   LEFT JOIN (SELECT DISTINCT id FROM unnest(removed_property_ids) AS removed(id)) removed ON removed.id=(v.value->>'prop_id')::int
+   WHERE removed.id IS NULL
+  UNION ALL SELECT n.value,1,n.ordinality FROM unnest(next_properties) WITH ORDINALITY n(value,ordinality)) merged;
  FOR row IN SELECT value FROM jsonb_array_elements(fresh->'key_def') LOOP
   assigned:=(type_map->> (row->>'type_id'))::int;remapped:='[]';
-  FOR component IN SELECT value FROM jsonb_array_elements(row->'prop_ids') LOOP remapped:=remapped||jsonb_build_array((property_map->> (component#>>'{}'))::int);END LOOP;
-  SELECT v.value INTO old FROM jsonb_array_elements(keys) v WHERE v.value->>'type_id'=assigned::text AND v.value->>'key_id'=row->>'key_id';
+  SELECT coalesce(jsonb_agg(to_jsonb((property_map->>(p.value#>>'{}'))::int) ORDER BY p.ordinality),'[]'::jsonb)
+   INTO remapped FROM jsonb_array_elements(row->'prop_ids') WITH ORDINALITY p;
+  old:=prior_key_identity->jsonb_build_array(assigned::text,row->>'key_id')::text;
   IF old IS NOT NULL THEN
    IF old->'prop_ids' IS DISTINCT FROM remapped OR old->'is_primary' IS DISTINCT FROM row->'is_primary' THEN RAISE EXCEPTION 'existing key change requires backfill support' USING ERRCODE='0A000';END IF;
   ELSE
-   IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'type_def') t WHERE t.value->>'type_id'=assigned::text) THEN
-    IF (row->>'is_primary')::boolean IS NOT FALSE OR EXISTS(SELECT 1 FROM jsonb_array_elements(remapped) component WHERE NOT EXISTS(
-     SELECT 1 FROM jsonb_array_elements(properties) p WHERE p.value->>'type_id'=assigned::text AND p.value->>'prop_id'=component.value#>>'{}'
-      AND (EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'prop_def') old_property
-        WHERE old_property.value->>'prop_id'=p.value->>'prop_id' AND old_property.value->>'type_id'=assigned::text
-         AND old_property.value->>'nullability'='required' AND old_property.value->>'cardinality'='one'
-         AND old_property.value->>'scalar_type' IN ('string','integer','decimal','boolean','binary'))
-       OR ((p.value->>'since_rev')::int=revision AND NOT EXISTS(
-        SELECT 1 FROM jsonb_array_elements(prior->'prop_def') old_property
-         WHERE old_property.value->>'prop_id'=p.value->>'prop_id' AND old_property.value->>'type_id'=assigned::text)))
-      AND p.value->>'nullability'='required' AND p.value->>'cardinality'='one' AND p.value->>'scalar_type' IN ('string','integer','decimal','boolean','binary'))) THEN
+   IF prior_type_id ? assigned::text THEN
+    IF (row->>'is_primary')::boolean IS NOT FALSE OR EXISTS(SELECT 1 FROM jsonb_array_elements(remapped) component
+     CROSS JOIN LATERAL (SELECT current_property_id->jsonb_build_array(assigned::text,component.value#>>'{}')::text current_row,
+       prior_property_id->>(component.value#>>'{}') prior_row) p
+     WHERE p.current_row IS NULL
+      OR p.current_row->>'nullability'<>'required' OR p.current_row->>'cardinality'<>'one'
+      OR p.current_row->>'scalar_type' NOT IN ('string','integer','decimal','boolean','binary')
+      OR NOT ((p.prior_row IS NOT NULL AND p.prior_row::jsonb->>'type_id'=assigned::text
+         AND p.prior_row::jsonb->>'nullability'='required' AND p.prior_row::jsonb->>'cardinality'='one'
+         AND p.prior_row::jsonb->>'scalar_type' IN ('string','integer','decimal','boolean','binary'))
+       OR (p.current_row->>'since_rev')::int=revision AND p.prior_row IS NULL)) THEN
      RAISE EXCEPTION 'new alternate key requires existing or newly rebound required scalar components' USING ERRCODE='0A000';END IF;
-    SELECT coalesce(max((k.value->>'key_num')::int),0)+1 INTO key_next FROM jsonb_array_elements(keys) k WHERE k.value->>'type_id'=assigned::text;
-    IF key_next>32767 THEN RAISE EXCEPTION 'owner-local key range exhausted' USING ERRCODE='54000';END IF;
-   ELSE key_next:=(row->>'key_num')::int;END IF;
-   keys:=keys||jsonb_build_array(row||jsonb_build_object('type_id',assigned,'prop_ids',remapped,'key_num',key_next));
+   END IF;
+   key_next:=(fresh_key_number->>jsonb_build_array(assigned::text,row->>'key_id')::text)::int;
+   IF key_next>32767 THEN RAISE EXCEPTION 'owner-local key range exhausted' USING ERRCODE='54000';END IF;
+   next_keys[cardinality(next_keys)+1]:=row||jsonb_build_object('type_id',assigned,'prop_ids',remapped,'key_num',key_next);
   END IF;
  END LOOP;
+ SELECT coalesce(jsonb_agg(value ORDER BY family,ordinal),'[]'::jsonb) INTO keys FROM (
+  SELECT v.value,0 family,v.ordinality ordinal FROM jsonb_array_elements(coalesce(prior->'key_def','[]'::jsonb)) WITH ORDINALITY v
+  UNION ALL SELECT n.value,1,n.ordinality FROM unnest(next_keys) WITH ORDINALITY n(value,ordinality)) merged;
  -- Relationship IDs and lineage remain stable; independent multiplicity evolution retains endpoints.
  FOR row IN SELECT value FROM jsonb_array_elements(fresh->'rel_def') LOOP
-  SELECT v.value INTO old FROM jsonb_array_elements(relations) v WHERE v.value->>'document_id'=row->>'document_id' AND v.value->>'module'=row->>'module' AND v.value->>'rel_id'=row->>'rel_id';
-  IF old IS NULL THEN relationship_next:=relationship_next+1;assigned:=relationship_next;ELSE assigned:=(old->>'rel_type_id')::int;END IF;
-  relationship_map:=relationship_map||jsonb_build_object(row->>'rel_type_id',assigned);
+  assigned:=(relationship_map->>(row->>'rel_type_id'))::int;
+  old:=prior_relation_identity->jsonb_build_array(row->>'document_id',row->>'module',row->>'rel_id')::text;
   candidate:=row||jsonb_build_object('rel_type_id',assigned);
   IF old IS NOT NULL THEN
-   old_source:=truss.catalog_plan_source(prior,old);new_source:=truss.catalog_plan_source(fresh,row);
+   old_source:=source_index->jsonb_build_array(old->>'definition_rev',old->>'definition_doc_ord',old->>'definition_document_id',old->>'module','relationship',old->>'rel_id')::text;
+   new_source:=source_index->jsonb_build_array(row->>'definition_rev',row->>'definition_doc_ord',row->>'definition_document_id',row->>'module','relationship',row->>'rel_id')::text;
+   IF old_source IS NULL OR new_source IS NULL THEN RAISE NO_DATA_FOUND;END IF;
    IF old_source=new_source THEN CONTINUE;END IF;
    IF (old_source-ARRAY['name','inverse','source','target','sourceMultiplicity','targetMultiplicity']) IS DISTINCT FROM (new_source-ARRAY['name','inverse','source','target','sourceMultiplicity','targetMultiplicity'])
     OR (old_source ? 'inverse') IS DISTINCT FROM (new_source ? 'inverse')
     OR (old_source->'name' IS DISTINCT FROM new_source->'name' AND (jsonb_typeof(old_source->'name') IS DISTINCT FROM 'string' OR jsonb_typeof(new_source->'name') IS DISTINCT FROM 'string'))
     OR (old_source->'inverse' IS DISTINCT FROM new_source->'inverse' AND (jsonb_typeof(old_source->'inverse') IS DISTINCT FROM 'string' OR jsonb_typeof(new_source->'inverse') IS DISTINCT FROM 'string'))
-    OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'source') x WHERE NOT (new_source->'source') @> jsonb_build_array(x.value))
-    OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'target') x WHERE NOT (new_source->'target') @> jsonb_build_array(x.value)) THEN
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'source') x
+              WHERE NOT ((new_source->'source') @> jsonb_build_array(x.value)))
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements(old_source->'target') x
+              WHERE NOT ((new_source->'target') @> jsonb_build_array(x.value))) THEN
     RAISE EXCEPTION 'relationship source meaning must be retained' USING ERRCODE='0A000';END IF;
    IF ((candidate->>'source_min')::int>(old->>'source_min')::int OR (candidate->>'target_min')::int>(old->>'target_min')::int
     OR candidate->'source_max'<>'null'::jsonb AND (old->'source_max'='null'::jsonb OR (candidate->>'source_max')::int<(old->>'source_max')::int)
@@ -197,27 +320,48 @@ BEGIN
  THEN
     RAISE EXCEPTION 'relationship change requires unchanged independent endpoints and meaning' USING ERRCODE='0A000';END IF;
    candidate:=candidate||jsonb_build_object('since_rev',old->'since_rev','doc_ord',old->'doc_ord');
-   SELECT coalesce(jsonb_agg(v.value),'[]') INTO relations FROM jsonb_array_elements(relations) v WHERE v.value->>'rel_type_id'<>assigned::text;
+   removed_relation_ids[cardinality(removed_relation_ids)+1]:=assigned;
   END IF;
-  relations:=relations||jsonb_build_array(candidate);sequence:=sequence+1;
+  next_relations[cardinality(next_relations)+1]:=candidate;sequence:=sequence+1;
   IF old IS NOT NULL OR NOT compact_insertions THEN
-  changes:=changes||jsonb_build_array(jsonb_build_object('rev',revision,'seq',sequence,'kind','rel','def_id',assigned,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.rel_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.rel_def,candidate))));
+  next_changes[cardinality(next_changes)+1]:=jsonb_build_object('rev',revision,'seq',sequence,'kind','rel','def_id',assigned,'before',CASE WHEN old IS NULL THEN 'null'::jsonb ELSE to_jsonb(jsonb_populate_record(NULL::truss.rel_def,old)) END,'after',to_jsonb(jsonb_populate_record(NULL::truss.rel_def,candidate)));
   END IF;
  END LOOP;
+ SELECT coalesce(jsonb_agg(value ORDER BY family,ordinal),'[]'::jsonb) INTO relations FROM (
+  SELECT v.value,0 family,v.ordinality ordinal FROM jsonb_array_elements(coalesce(prior->'rel_def','[]'::jsonb)) WITH ORDINALITY v
+   LEFT JOIN (SELECT DISTINCT id FROM unnest(removed_relation_ids) AS removed(id)) removed ON removed.id=(v.value->>'rel_type_id')::int
+   WHERE removed.id IS NULL
+  UNION ALL SELECT n.value,1,n.ordinality FROM unnest(next_relations) WITH ORDINALITY n(value,ordinality)) merged;
  FOR row IN SELECT value FROM jsonb_array_elements(fresh->'relationship_lineage') LOOP
   assigned:=(relationship_map->> (row->>'rel_type_id'))::int;
-  IF NOT EXISTS(SELECT 1 FROM jsonb_array_elements(lineages) p WHERE p.value->>'rel_type_id'=assigned::text) THEN lineages:=lineages||jsonb_build_array(row||jsonb_build_object('rel_type_id',assigned));END IF;
+  IF NOT prior_lineage_id ? assigned::text THEN next_lineages[cardinality(next_lineages)+1]:=row||jsonb_build_object('rel_type_id',assigned);END IF;
  END LOOP;
  FOR row IN SELECT value FROM jsonb_array_elements(fresh->'rel_endpoint') LOOP
   candidate:=jsonb_build_object('rel_type_id',(relationship_map->> (row->>'rel_type_id'))::int,'source_type',(type_map->> (row->>'source_type'))::int,'target_type',(type_map->> (row->>'target_type'))::int);
-  IF NOT endpoints @> jsonb_build_array(candidate) THEN endpoints:=endpoints||jsonb_build_array(candidate);END IF;
+  IF NOT prior_endpoint_id ? jsonb_build_array(candidate->>'rel_type_id',candidate->>'source_type',candidate->>'target_type')::text THEN
+   next_endpoints[cardinality(next_endpoints)+1]:=candidate;END IF;
  END LOOP;
- IF EXISTS(SELECT 1 FROM jsonb_array_elements(relations) p WHERE EXISTS(SELECT 1 FROM jsonb_array_elements(fresh->'schema_doc') d WHERE d.value->>'doc_id'=p.value->>'document_id')
-  AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(fresh->'rel_def') n WHERE n.value->>'document_id'=p.value->>'document_id' AND n.value->>'module'=p.value->>'module' AND n.value->>'rel_id'=p.value->>'rel_id')) THEN
+ WITH additions AS (
+  SELECT n.value,n.ordinality,row_number() OVER(PARTITION BY n.value->>'rel_type_id' ORDER BY n.ordinality) duplicate_rank
+   FROM unnest(next_lineages) WITH ORDINALITY n(value,ordinality)
+ ) SELECT coalesce(jsonb_agg(value ORDER BY family,ordinal),'[]'::jsonb) INTO lineages FROM (
+  SELECT v.value,0 family,v.ordinality ordinal FROM jsonb_array_elements(coalesce(prior->'relationship_lineage','[]'::jsonb)) WITH ORDINALITY v
+  UNION ALL SELECT a.value,1,a.ordinality FROM additions a WHERE a.duplicate_rank=1) merged;
+ WITH additions AS (
+  SELECT n.value,n.ordinality,row_number() OVER(PARTITION BY n.value->>'rel_type_id',n.value->>'source_type',n.value->>'target_type' ORDER BY n.ordinality) duplicate_rank
+   FROM unnest(next_endpoints) WITH ORDINALITY n(value,ordinality)
+ ) SELECT coalesce(jsonb_agg(value ORDER BY family,ordinal),'[]'::jsonb) INTO endpoints FROM (
+  SELECT v.value,0 family,v.ordinality ordinal FROM jsonb_array_elements(coalesce(prior->'rel_endpoint','[]'::jsonb)) WITH ORDINALITY v
+  UNION ALL SELECT a.value,1,a.ordinality FROM additions a WHERE a.duplicate_rank=1) merged;
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(relations) p WHERE fresh_document_ids ? (p.value->>'document_id')
+  AND NOT fresh_relation_identities ? jsonb_build_array(p.value->>'document_id',p.value->>'module',p.value->>'rel_id')::text) THEN
   RAISE EXCEPTION 'relationship retirement requires explicit support' USING ERRCODE='0A000';END IF;
- IF EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'schema_rev') p JOIN jsonb_array_elements(fresh->'schema_rev') f ON p.value->>'rev'=f.value->>'rev' WHERE p.value IS DISTINCT FROM f.value) THEN
+ IF EXISTS(SELECT 1 FROM jsonb_array_elements(fresh->'schema_rev') f JOIN jsonb_each(prior_revision_id) p ON p.key=f.value->>'rev' WHERE p.value IS DISTINCT FROM f.value) THEN
   RAISE EXCEPTION 'original revision history required' USING ERRCODE='55000';END IF;
- SELECT coalesce(jsonb_agg(f.value),'[]') INTO remapped FROM jsonb_array_elements(fresh->'schema_rev') f WHERE NOT EXISTS(SELECT 1 FROM jsonb_array_elements(prior->'schema_rev') p WHERE p.value->>'rev'=f.value->>'rev');
+ SELECT coalesce(jsonb_agg(f.value ORDER BY f.ordinality),'[]'::jsonb) INTO remapped FROM jsonb_array_elements(fresh->'schema_rev') WITH ORDINALITY f
+  WHERE NOT prior_revision_id ? (f.value->>'rev');
+ SELECT coalesce(jsonb_agg(n.value ORDER BY n.ordinality),'[]'::jsonb) INTO changes FROM unnest(next_changes) WITH ORDINALITY n(value,ordinality);
+ changes:=coalesce(prior->'schema_change','[]'::jsonb)||changes;
  result:=result||jsonb_build_object('schema_rev',coalesce(prior->'schema_rev','[]')||remapped,'schema_doc',coalesce(prior->'schema_doc','[]')||(fresh->'schema_doc'),
   'type_def',types,'prop_def',properties,'key_def',keys,'rel_def',relations,'relationship_lineage',lineages,'rel_endpoint',endpoints,'schema_change',changes);
  RETURN result;
@@ -240,7 +384,8 @@ BEGIN
   OR jsonb_typeof(validated_origin) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'original record-plan shape required' USING ERRCODE='22023';END IF;
  RETURN (WITH docs AS MATERIALIZED (
-  SELECT d.value,d.ordinality::int-1 ord FROM jsonb_array_elements(validated_documents) WITH ORDINALITY d),
+  SELECT d.value,d.ordinality::int-1 ord,truss.catalog_item_source_index(d.value->>'originalText') source_index
+  FROM jsonb_array_elements(validated_documents) WITH ORDINALITY d),
  records AS MATERIALIZED (
   SELECT r.value,d.ord,type_offset+row_number() OVER(ORDER BY (r.value->>'documentId') COLLATE "C",(r.value->>'moduleId') COLLATE "C",(r.value->>'elementId') COLLATE "C")::int type_id
   FROM jsonb_array_elements(validated_declarations) a
@@ -263,7 +408,7 @@ BEGIN
     'declaration_module',f.value->>'fieldModule','name',coalesce(f.value->'declaration'->>'name',f.value->'declaration'->>'id'),
     'scalar_type',f.value->'declaration'->>'scalarType','nullability',f.value->'declaration'->>'nullability',
     'cardinality',f.value->'declaration'->>'cardinality','facets',f.value->'declaration'->'facets',
-    'item',CASE WHEN f.value->'declaration'->>'cardinality' IN ('array','map') THEN truss.catalog_item_definition(d.value->>'originalText',f.document_id,selected_revision,f.ord,f.value->'declaration'->'itemType') ELSE f.value->'declaration'->'itemType' END,
+    'item',CASE WHEN f.value->'declaration'->>'cardinality' IN ('array','map') THEN truss.catalog_item_definition_indexed(d.source_index,f.document_id,selected_revision,f.ord,f.value->'declaration'->'itemType') ELSE f.value->'declaration'->'itemType' END,
     'home','json','since_rev',selected_revision,'doc_ord',f.ord,'definition_source_kind','accepted_document',
     'definition_rev',selected_revision,'definition_doc_ord',f.ord,'definition_document_id',f.document_id,'_originalField',f.value->'declaration') value
   FROM field_input f JOIN docs d USING(ord)),

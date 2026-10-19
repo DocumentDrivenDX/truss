@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual ordinary Subject transaction retains source/data cuts after helper return.
 
 No graph activation, role-catalog issuer or full guarded-release qualification.

@@ -1,0 +1,7 @@
+{
+  "sourcePath": "docs/helix/04-build/evidence/named-current-native-refusal-20261015/original-core.json",
+  "sourceCommit": "3401a4adf4c9f4811594f17efcce0797715d9b82",
+  "originalSha256": "acec104f93bd9f78ebe1b7872c04ae777827415c36d7c8532d1e9177aafd446a",
+  "currentSha256": "ea0a6f6f63a4ef6e8d90ab506454ecfe674ebdcd26643506b83132bcde1baa98",
+  "scope": "Derived UMF 0.10 test source. The original UMF 0.8 evidence source remains unchanged; only the envelope was changed. Current producer validation is exercised by the test."
+}

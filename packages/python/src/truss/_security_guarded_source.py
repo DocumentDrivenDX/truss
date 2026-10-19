@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Original guarded source bytes, separate from query and native authority.
 
 Trusted original compiler custody is a premise. These snapshots are comparisons,

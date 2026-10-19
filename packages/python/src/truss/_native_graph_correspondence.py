@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual-context/native association definition data; never a native permit."""
 from dataclasses import dataclass
 from hashlib import sha256

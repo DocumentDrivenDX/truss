@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Excluded-administrator selection diagnostic, never a protected data entrypoint.
 
 The trusted assessor supplies a dedicated RR/read-only connection. No ordinary

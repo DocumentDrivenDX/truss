@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Public business-key lookup against real created objects and active memberships."""
 import psycopg
 from truss import (Ok,Error,ObjectFound,ObjectNotFound,ObjectReadInvalid,

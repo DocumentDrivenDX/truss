@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Owned fixture: private role-OID/Staff-key issuer table, never PUBLIC data.
 CREATE FUNCTION truss.catalog_subject_current(actor text) RETURNS TABLE(staff_id text)
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private selected pg8000 frame/context/result custody, not a heap bound.
 
 Logical frame and result limits bound returned carriers. Connection-owned buffering,

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Declared-cut native composition; broad fixture grants are not protected admission.
 @covers US-056-AC2
 @covers US-056-AC10

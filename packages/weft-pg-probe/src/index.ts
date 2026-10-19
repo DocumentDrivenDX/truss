@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
 /** Local trust-auth-only protocol probe. Not a production connection/pool/transport profile. */
 import {createConnection,type Socket} from 'node:net';
 const utf8=new TextDecoder('utf-8',{fatal:true});

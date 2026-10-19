@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual issued Graph context/native catalog definition correspondence only."""
 import hashlib,json,os,unittest
 from pathlib import Path
@@ -14,7 +15,7 @@ class NativeGraphJoinTests(base.PublicCatalogRuntimeTests):
   self.assertEqual(hashlib.sha256(Path(native.__file__).read_bytes()).hexdigest(),'7e6384ddada0f67a45839a222ffb059e04a5de00f6a9281ad811eefacdeffa42')
   original=(ROOT/'original-request.json').read_bytes();module=json.loads(original)['modules'][0];pin=module['pin']
   self.install();connection,host,assembly,transaction=self.consumer()
-  prepared=assembly.prepare_catalog((CatalogDocument(pin['documentId'],pin['revision'],module['documentJson'].encode()),),source_version='0.8.0',bun_executable=os.environ['TRUSS_BUN_EXECUTABLE'])
+  prepared=assembly.prepare_catalog((CatalogDocument(pin['documentId'],pin['revision'],module['documentJson'].encode()),),source_version='0.10.0',bun_executable=os.environ['TRUSS_BUN_EXECUTABLE'])
   accepted=assembly.accept_in_transaction(transaction,prepared,request_key='graph-definition-join')
   self.assertIsInstance(accepted,Ok,str(host._custody.last_attempt.error));host.detach();connection.commit()
   accepted_request=json.dumps({'modules':[{'pin':pin,'documentJson':module['documentJson']}]},separators=(',',':')).encode()

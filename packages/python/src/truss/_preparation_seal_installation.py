@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Private installation of original UMF-exported preparation seal storage.
 
 Trusted direct superuser, initial administrative quiescence and original runtime

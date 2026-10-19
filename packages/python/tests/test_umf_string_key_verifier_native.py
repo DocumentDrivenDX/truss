@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Native parity/forgery controls; this private verifier enables no mutation API."""
 from pathlib import Path
 import unittest
@@ -56,7 +57,7 @@ class NativeUmfStringKeyVerifierTests(catalog_tests.PublicCatalogRuntimeTests):
         fields=[{'id':f'f{i}','name':f'f{i}','kind':'field','scalarType':'string',
             'nullability':'required','cardinality':'one','extensions':{}} for i in range(128)]
         refs=[{'module':'m','element':field['id']} for field in fields]
-        source={'umf':'0.7.0','id':'wide-key','vocabularies':{},'extensions':{},'modules':[
+        source={'umf':'0.10.0','id':'wide-key','vocabularies':{},'extensions':{},'modules':[
             {'id':'m','namespace':'m','extensions':{},'elements':[
                 {'id':'R','kind':'record','members':refs,'keys':[{'id':'wide','name':'wide','fields':refs}],'extensions':{}},*fields]}]}
         values=('x'*16384,*('' for _ in range(127)))
@@ -71,7 +72,7 @@ class NativeUmfStringKeyVerifierTests(catalog_tests.PublicCatalogRuntimeTests):
             fields=[{'id':f'f{i}','name':f'f{i}','kind':'field','scalarType':'string',
                 'nullability':'required','cardinality':'one','extensions':{}} for i in range(count)]
             refs=[{'module':'m','element':field['id']} for field in fields]
-            source={'umf':'0.7.0','id':'limit-key','vocabularies':{},'extensions':{},'modules':[
+            source={'umf':'0.10.0','id':'limit-key','vocabularies':{},'extensions':{},'modules':[
                 {'id':'m','namespace':'m','extensions':{},'elements':[
                     {'id':'R','kind':'record','members':refs,'keys':[{'id':'limit','name':'limit','fields':refs}],'extensions':{}},*fields]}]}
             values=('',)*count;request=KeyTupleRequest('m','R','limit',values)

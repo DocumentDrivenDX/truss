@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 """Actual caller-owned read-only transaction workflows, with native permission changes."""
 import concurrent.futures
 import time
