@@ -17,6 +17,52 @@ ddx:
 
 # STP-040: Atomic groups
 
+## Python embedder E1 supplement
+
+CONTRACT-003/004/007 select the following bounded Python supplement. Existing
+criteria retain their original strength. The local E1 cases below have native
+and installed-wheel qualification recorded in the
+[E0/E1 continuation evidence](../../04-build/embedder-e0-e1-plan.md#continuation-evidence),
+with canonical `@covers US-040-AC1` / `@covers US-040-AC2` citations on the
+affected tests. This qualification covers the selected owned profile and typed
+refusals; the broader story's planned tests below retain their separate gates.
+
+| Case | Concrete test target | Independently expected result |
+| --- | --- | --- |
+| 51 coverage items × 3 conditions | Extend `test_group_preconditions_native.GroupPreconditionTests` | All 153 conditions evaluate on locked prestate; success preserves ordered effects. One failed middle condition returns exact caller ID/reason, restores full graph/key/journal/receipt inventory and preserves earlier host work. |
+| Count and resource controls | Same suite, selected owned profile and retired inventory component | 3,072 valid owned conditions fit admitted bytes/scope; 3,073 refuses resource. The retired inventory component accepts 128 and refuses 129 under synthetic test custody only; this does not readmit legacy group execution. Oversized bytes/scope/results still refuse below the count ceiling. Duplicate IDs remain invalid. No partial list/effects. |
+| Exact target metadata memo | `GroupPreconditionTests.test_owned_precondition_ceiling_plus_one_refuses_in_native` and `test_owned_3072_mixed_preconditions_succeed` | Missing target before/after a valid target and changed pin, owner, type ID, invalid object ID or extra identity field refuse. A 3,072-condition mixed ObjectExists/PropertyEquals case alternates valid A/B identities and preserves exact values, proving cache hits and misses under unchanged 10s SQL/30s operation limits. Each condition retains current authority and fresh predicate truth; metadata reuse never supplies authorization. |
+| Precedence and replay | Existing all-failures/replay tests plus larger list | Complete authorized failures in authored order; no fresh mutation admission before successful exact receipt replay; revocation withholds the complete receipt/failure payload. |
+| Collision ordinal and code | `test_group_create_native.PublicCreateGroupTests` first/middle/last, simultaneous-conflict and tombstone cases | Live and reserved keys at indices 0/middle/last name the actual original index and stable `key_conflict`; duplicate input selects the later colliding create, multiple conflicts select earliest failing operation. All native state and journal effects roll back. |
+| Whole-group invariant | Existing edge/multiplicity/group tests | A finalization error with no qualified operation provenance omits the index; no guessed first/last offender. Inner original artifact and stable code remain consistent. |
+| Permission family | Extend group/reference/key/edge read suites | Original non-member, revoked module grant and revoked function EXECUTE return permitted typed refusal after containment. No hidden ID/count/role/native prose or partial failure list; authorized absent returns its distinct missing result. Retry, cancelled, unusable/unknown execution results remain outer errors. |
+| ID-only executable source | Existing `ObjectMutationTests.test_unnamed_fields_register_create_update_and_reopen` and `UnnamedSqlTests.test_default_compiler_uses_stable_ids_without_authored_names` | Valid nameless source registers and original stable IDs work through create/update/query/reopen. Submitted bytes/IDs remain exact. An unsupported executable shape leaves head and accepted source unchanged with typed refusal. |
+| Appended relationship output | Existing `test_embedder_workflows_native` | Duplicate relationship alias after complete-entity `x.*` retains `WFT-OUTPUT-NAME`; explicit distinct safe alias succeeds without renamed/dropped/overwritten columns. |
+
+Use existing native fresh-database/role fixtures on one owned Unix-socket worker;
+independent observer queries establish graph/key/reservation/source/journal/
+receipt and head before/after expectations. Retain original input/error artifacts,
+actual native SQLSTATE, commands, source/wheel pins, worker baseline and cleanup.
+Source-only decoder mocks establish type mapping only. Run focused tests from
+the fresh installed wheel as well as source before delivery. The E0/E1 build
+plan records execution ordering and exact cohort; broad protected-engine or
+cross-platform support is outside these cases. The qualified ceiling workloads
+are repeated ObjectExists and mixed ObjectExists/PropertyEquals predicates;
+the 153-condition case additionally exercises KeyAbsent. No complete
+3,072-condition key-route or relationship workload qualification is inferred.
+
+The retired inventory's positive native control requires a test-only definer
+wrapper owned by the actual installation owner, with fixed
+`pg_catalog,pg_temp` search path and execute permission limited to the fixture
+consumer. Capture the genuine connecting consumer through `runtime_person(false)`
+before invoking the private inventory; return only its length. Expect 128 and
+SQLSTATE `54000` at 129, using an explicit caller savepoint and rollback before
+administrative wrapper cleanup. Do not grant consumers private inventory/helper
+execution or privileged table access. This synthetic administrative fixture
+qualifies count selection only, not the original installed callable closure,
+legacy execution or public API support. Its component result is recorded
+separately from the final owned-capacity and integration gates.
+
 ## Story Reference and Scope
 
 US-040, TD-040, SD-003, TP-001 and CONTRACT-004/007/009. Tests are planned. Request-free atomicity is independent of gated receipt replay.
@@ -34,7 +80,7 @@ US-040, TD-040, SD-003, TP-001 and CONTRACT-004/007/009. Tests are planned. Requ
 
 Use independently expected rows/versions/journal and observer connections. Include owned-deletion closure expansion between discovery and lock, re-key swaps/collisions, stronger delete locks, single/group overlap, mixed no-op operations and final minimum participation. Forward/duplicate aliases and empty group refuse without effects. Barrier/lock-state observations establish actual overlap; timing sleeps alone cannot prove concurrency.
 
-Opposed-order proof excludes arbitrary prior host locks. Include host-induced deadlock as a separate retry/rollback probe without pretending it satisfies AC3. For caller adoption, successful group is pending; caller rollback removes it and failed group preserves earlier host work. Final invariant errors retain last-affecting index and all violation paths.
+Opposed-order proof excludes arbitrary prior host locks. Include host-induced deadlock as a separate retry/rollback probe without pretending it satisfies AC3. For caller adoption, successful group is pending; caller rollback removes it and failed group preserves earlier host work. Final invariant errors retain a last-affecting index only when the selected profile establishes that provenance; whole-group failures without it omit the index and retain permitted violation paths.
 
 ## Executable Proof and Handoff
 

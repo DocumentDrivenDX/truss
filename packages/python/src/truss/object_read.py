@@ -74,6 +74,11 @@ class ObjectReadInvalid:
     outcome: Literal['invalid'] = field(default='invalid', init=False)
 
 @dataclass(frozen=True, slots=True, kw_only=True)
+class ObjectReadRefused:
+    code: Literal['unauthorized'] = 'unauthorized'
+    outcome: Literal['refused'] = field(default='refused', init=False)
+
+@dataclass(frozen=True, slots=True, kw_only=True)
 class ObjectReadUnavailable:
     reason: Literal['profile','resource','observation','context']
     outcome: Literal['unavailable'] = field(default='unavailable', init=False)

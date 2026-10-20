@@ -1,0 +1,100 @@
+setUpClass (test_action_transport_native.NativeGeneratedActionTransportTests) ... ERROR
+setUpClass (test_group_result_wire_native.GroupResultWireNativeContainmentTests) ... ERROR
+setUpClass (test_receipt_visibility_native.ReceiptVisibilityTests) ... ERROR
+setUpClass (test_group_create_native.PublicCreateGroupTests) ... ERROR
+setUpClass (test_bulk_create_sql_native.BulkUpdateSqlTests) ... ERROR
+
+======================================================================
+ERROR: setUpClass (test_action_transport_native.NativeGeneratedActionTransportTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/src/truss/local_runtime.py", line 60, in __enter__
+    import pgserver
+ModuleNotFoundError: No module named 'pgserver'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 19, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/local_runtime.py", line 67, in __enter__
+    raise LocalRuntimeError('Install truss-toolkit[local] for the local runtime') from error
+truss.local_runtime.LocalRuntimeError: Install truss-toolkit[local] for the local runtime
+
+======================================================================
+ERROR: setUpClass (test_group_result_wire_native.GroupResultWireNativeContainmentTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/src/truss/local_runtime.py", line 60, in __enter__
+    import pgserver
+ModuleNotFoundError: No module named 'pgserver'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 19, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/local_runtime.py", line 67, in __enter__
+    raise LocalRuntimeError('Install truss-toolkit[local] for the local runtime') from error
+truss.local_runtime.LocalRuntimeError: Install truss-toolkit[local] for the local runtime
+
+======================================================================
+ERROR: setUpClass (test_receipt_visibility_native.ReceiptVisibilityTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/src/truss/local_runtime.py", line 60, in __enter__
+    import pgserver
+ModuleNotFoundError: No module named 'pgserver'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 19, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/local_runtime.py", line 67, in __enter__
+    raise LocalRuntimeError('Install truss-toolkit[local] for the local runtime') from error
+truss.local_runtime.LocalRuntimeError: Install truss-toolkit[local] for the local runtime
+
+======================================================================
+ERROR: setUpClass (test_group_create_native.PublicCreateGroupTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/src/truss/local_runtime.py", line 60, in __enter__
+    import pgserver
+ModuleNotFoundError: No module named 'pgserver'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 19, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/local_runtime.py", line 67, in __enter__
+    raise LocalRuntimeError('Install truss-toolkit[local] for the local runtime') from error
+truss.local_runtime.LocalRuntimeError: Install truss-toolkit[local] for the local runtime
+
+======================================================================
+ERROR: setUpClass (test_bulk_create_sql_native.BulkUpdateSqlTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/src/truss/local_runtime.py", line 60, in __enter__
+    import pgserver
+ModuleNotFoundError: No module named 'pgserver'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_runtime_native.py", line 19, in setUpClass
+    cls.runtime.__enter__();cls.info=cls.runtime.info
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/local_runtime.py", line 67, in __enter__
+    raise LocalRuntimeError('Install truss-toolkit[local] for the local runtime') from error
+truss.local_runtime.LocalRuntimeError: Install truss-toolkit[local] for the local runtime
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.005s
+
+FAILED (errors=5)

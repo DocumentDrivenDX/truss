@@ -52,7 +52,15 @@ def main():
     for label, filename, addition, expected in cases:
         with tempfile.TemporaryDirectory(prefix='truss-module-control-') as temporary:
             source = Path(temporary) / 'truss'
-            shutil.copytree(SOURCE, source, ignore=shutil.ignore_patterns('__pycache__'))
+            # The checker inspects recursive Python sources only. Embedded
+            # database/compiler assets are not inputs to this AST-only gate.
+            source.mkdir()
+            for original in SOURCE.rglob('*.py'):
+                if '__pycache__' in original.parts:
+                    continue
+                copied = source / original.relative_to(SOURCE)
+                copied.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(original, copied)
             path = source / filename
             path.write_text((path.read_text() if path.exists() else '') + addition)
             result = run(source)

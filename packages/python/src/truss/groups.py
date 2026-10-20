@@ -321,7 +321,8 @@ class GroupSuccess(_Carrier, Generic[Response]):
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class GroupOperationFailure(_Carrier):
-    operation_index: str
+    operation_index: str | Absent
+    operation_code: Literal['invalid_input', 'key_conflict', 'expected_version', 'not_found', 'dependencies']
     error_profile: ProfilePin
     inner_error: ExactArtifact
     code: Literal['group_failed'] = field(default='group_failed', init=False)

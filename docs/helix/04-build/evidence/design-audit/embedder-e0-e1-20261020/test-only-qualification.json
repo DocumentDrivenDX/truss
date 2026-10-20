@@ -1,0 +1,11 @@
+{
+  "originalFileSha256": "f0d27ebd59362223dfbf38a68ae3bda08e88f181c93c3b5b5cfa637dc8b5d6cb",
+  "currentFileSha256": "22783916998544a6176f43b586f4955e337b44a42847e5496ed778f8f5737068",
+  "changedMethods": [
+    "test_legacy_precondition_128_accepts_and_129_refuses"
+  ],
+  "runtimeChangedByThisCorrection": false,
+  "unchangedOtherDefinitionsAndImports": true,
+  "broaderReceipt": "e1-installed-final.json",
+  "correctiveReceipt": "e1-installed-corrective.json"
+}

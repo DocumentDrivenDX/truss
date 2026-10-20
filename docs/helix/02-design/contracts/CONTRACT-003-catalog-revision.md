@@ -21,6 +21,22 @@ ddx:
 
 # Contract: Catalog revision
 
+## Python embedder registration selection — 2026-10-20
+
+The executable scalar/graph profile MUST preserve valid UMF Records and Fields
+with omitted authored names. Its selected binding uses the original stable
+element ID when no name is authored; the original document bytes and IDs remain
+unchanged. Absence of a name alone MUST NOT cause registration refusal or an
+invented name in retained UMF. This qualifies only the selected executable subset.
+
+For a valid UMF shape outside that subset, registration MUST refuse before head
+publication with a typed unsupported-profile outcome. Invalid input, unsupported
+profile and native execution failure remain distinct. Permitted diagnostics may
+identify the submitted document/module/element ID and source path; they MUST NOT
+reveal hidden catalog existence, role names or native diagnostic prose. Failed
+registration leaves head, accepted source and graph/history unchanged. UMF owns
+metadata validity; this executable selection adds no UMF core name requirement.
+
 ## Owner decisions — 2026-10-07
 
 The owner selected the separate immutable complete acceptance-report home. Create the qualified revision parent, perform admitted effects and obtain original generated event identities, persist the complete report once, then publish/verify the head in the same transaction. No placeholder report or report-less accepted head is permitted. The legacy schema_rev.report disposition, retained conversion, exact report version/producer/security and installed inventory must be reconciled before readiness. Separate storage is selected; the physical/source candidates do not by themselves qualify native support.

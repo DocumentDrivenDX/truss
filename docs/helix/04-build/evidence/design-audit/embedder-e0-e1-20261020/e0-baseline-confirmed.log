@@ -1,0 +1,16 @@
+test_153_conditions_are_refused_before_change (baseline_probe.BaselineProbe.test_153_conditions_are_refused_before_change) ... ok
+test_guarded_client_statement_baseline (baseline_probe.BaselineProbe.test_guarded_client_statement_baseline) ... ERROR
+
+======================================================================
+ERROR: test_guarded_client_statement_baseline (baseline_probe.BaselineProbe.test_guarded_client_statement_baseline)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/embedder-e0-e1-20261020/baseline_probe.py", line 33, in test_guarded_client_statement_baseline
+    original = native.Cursor
+               ^^^^^^^^^^^^^
+AttributeError: module 'truss.psycopg_host' has no attribute 'Cursor'
+
+----------------------------------------------------------------------
+Ran 2 tests in 18.920s
+
+FAILED (errors=1)

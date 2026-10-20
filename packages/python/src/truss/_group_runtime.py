@@ -206,27 +206,35 @@ def _result(raw: bytes, *, request_present: bool):
                         or failure['rule'] not in rules):
                     raise ValueError('Original typed precondition failure required')
         else:
-            _closed_object(value,('outcome','code','operationIndex','nativeState'),'group failure')
+            required_fields=('outcome','code','nativeState')
+            allowed_fields=(set(required_fields),set(required_fields)|{'operationIndex'})
+            if type(value) is not dict or set(value) not in allowed_fields:
+                raise ValueError('Exact native group failure required')
             native_codes={'invalid_input':'22023','key_conflict':'23505','request_conflict':'P1001',
                 'expected_version':'P1003','not_found':'P1004','dependencies':'P1005',
                 'unauthorized_person':'42501'}
             if (value.get('code') not in native_codes
-                    or value['nativeState'] != native_codes[value['code']]
-                    or type(value['operationIndex']) is not str
+                    or value['nativeState'] != native_codes[value['code']]):
+                raise ValueError('Original native group failure mapping required')
+            if 'operationIndex' in value and (type(value['operationIndex']) is not str
                     or not re.fullmatch('0|[1-9][0-9]*',value['operationIndex'])
                     or int(value['operationIndex']) > 1023):
-                raise ValueError('Original native group failure mapping required')
+                raise ValueError('Canonical original native operation ordinal required')
         evidence=_artifact(raw)
         if value['code']=='precondition_failed':
             failures=tuple(FailedPrecondition(condition_id=v['conditionId'],reason=v['reason'],rule=v['rule']) for v in value['failures'])
             if not failures:raise ValueError('Nonempty failed preconditions required')
             return GroupFailed(failure=PreconditionFailed(failures=(failures[0],*failures[1:])))
-        if value['code']=='invalid_input':return GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
+        if value['code']=='invalid_input' and 'operationIndex' not in value:
+            return GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
         if value['code']=='unauthorized_person':return GroupFailed(failure=UnauthorizedPerson())
         if value['code']=='request_conflict':
             if not request_present:raise ValueError('Request-free native result cannot claim a request conflict')
             return GroupFailed(failure=RequestConflict(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
-        return GroupFailed(failure=GroupOperationFailure(operation_index=value['operationIndex'],error_profile=_DIAGNOSTIC,inner_error=evidence))
+        if value['code'] not in ('invalid_input','key_conflict','expected_version','not_found','dependencies'):
+            raise ValueError('Selected native operation failure code required')
+        return GroupFailed(failure=GroupOperationFailure(operation_index=value.get('operationIndex',ABSENT),
+            operation_code=value['code'],error_profile=_DIAGNOSTIC,inner_error=evidence))
     if value['outcome']!='success':raise ValueError('Supported native group outcome required')
     disposition=value.get('disposition')
     if disposition=='applied':
@@ -342,7 +350,11 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
     if (type(input.catalog) is not CurrentCatalog or type(input.asserted_origin) is not MapValue
         or any(not (type(op) is CreateObject and ownership(op.ownership) or type(op) is UpdateObject and (op.ownership_change is ABSENT or selected_owned and ownership(op.ownership_change)) and type(op.target) in (StoredObjectReference,AliasObjectReference) or type(op) in (CreateEdge,UpdateEdge) or type(op) is Delete and op.operation in ('delete_object','delete_edge') and type(op.target) in (StoredObjectReference,AliasObjectReference)) for op in input.operations)):
         return Ok(GroupUnavailable(reason='profile'))
-    if not 1<=len(input.operations)<=(1024 if selected_owned else 128) or any(len(op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())>1024 for op in input.operations):
+    if type(input.preconditions) is not tuple:
+        return Ok(GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=_artifact(b'{"code":"preconditions_shape"}'))))
+    if (not 1<=len(input.operations)<=(1024 if selected_owned else 128)
+        or len(input.preconditions)>(3072 if selected_owned else 128)
+        or any(len(op.values if type(op) in (CreateObject,CreateEdge) else op.set if type(op) in (UpdateObject,UpdateEdge) else ())>1024 for op in input.operations)):
         return Ok(GroupUnavailable(reason='resource'))
     def scalar(value):return type(value) in (NullValue,TextValue,BooleanValue)
     def container(value):

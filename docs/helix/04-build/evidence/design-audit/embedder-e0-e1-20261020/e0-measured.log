@@ -1,0 +1,6 @@
+test_guarded_client_statement_baseline (baseline_probe.BaselineProbe.test_guarded_client_statement_baseline) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 88.607s
+
+OK

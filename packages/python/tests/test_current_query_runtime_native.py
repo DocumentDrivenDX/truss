@@ -3,7 +3,7 @@
 import os
 import shutil
 from typing import get_type_hints
-from truss import (Ok, Error, CurrentQueryExecutor, adopt_psycopg_host, activate_current_query_protection_in_transaction)
+from truss import (Ok, Error, ObjectReadRefused, CurrentQueryExecutor, adopt_psycopg_host, activate_current_query_protection_in_transaction)
 import psycopg
 import json
 from truss.contracts import TextValue,BooleanValue,MapValue
@@ -196,8 +196,8 @@ class CurrentQueryRuntimeNativeTests(full.CurrentQueryFullSourcesNativeTests):
                 with c.transaction():
                     c.execute(statement,parameters)
         result=a.get_object_in_transaction(t,document_id='domain',module_id='m',record_id='Resource',object_id=3)
-        self.assertIsInstance(result,Error)
-        self.assertEqual(result.error.sql_state,'42501')
+        self.assertIsInstance(result,Ok)
+        self.assertEqual(result.value,ObjectReadRefused())
         self.assertEqual(c.execute("SELECT has_table_privilege('truss.object','SELECT')").fetchone(),(False,))
         self.assertIsInstance(a.reader_catalog_in_transaction(t),Ok)
 

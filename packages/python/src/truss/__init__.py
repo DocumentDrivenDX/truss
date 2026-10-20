@@ -70,8 +70,8 @@ __all__ += ["CatalogViewRequest", "CatalogViewLimits", "CurrentCatalogSelection"
     "CatalogDefinitionReference", "CatalogDocumentProvenance", "CatalogDefinitionEntry",
     "CatalogView", "CatalogViewAvailable", "CatalogViewUnavailable"]
 
-from .object_read import ScalarObject, LogicalObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
-__all__ += ["ScalarObject", "LogicalObject", "ObjectFound", "ObjectNotFound", "ObjectReadInvalid", "ObjectReadUnavailable", "ObjectPage", "ObjectPageCursor"]
+from .object_read import ScalarObject, LogicalObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadRefused, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
+__all__ += ["ScalarObject", "LogicalObject", "ObjectFound", "ObjectNotFound", "ObjectReadInvalid", "ObjectReadRefused", "ObjectReadUnavailable", "ObjectPage", "ObjectPageCursor"]
 
 from ._group_runtime import GroupRuntimeContext, CatalogRevisionProbe, PreparedGroup
 __all__ += ["GroupRuntimeContext", "CatalogRevisionProbe", "PreparedGroup"]

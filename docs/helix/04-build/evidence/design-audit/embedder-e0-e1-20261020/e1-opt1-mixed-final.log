@@ -1,0 +1,9 @@
+test_owned_3072_mixed_preconditions_succeed (test_group_preconditions_native.GroupPreconditionTests.test_owned_3072_mixed_preconditions_succeed)
+@covers US-040-AC1: mixed predicates cover the full owned condition ceiling. ... ok
+test_owned_precondition_ceiling_plus_one_refuses_in_native (test_group_preconditions_native.GroupPreconditionTests.test_owned_precondition_ceiling_plus_one_refuses_in_native)
+@covers US-040-AC2: over-ceiling input refuses without group effects. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 28.879s
+
+OK

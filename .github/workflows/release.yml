@@ -36,6 +36,10 @@ jobs:
         env:
           PYTHONPATH: packages/python/tests
         run: python -m unittest test_large_runner_capacity_helper
+      - name: Test frozen Weft wheel archive verification controls
+        env:
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_verify_weft_release_wheel -v
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: '1.4.3'
@@ -53,6 +57,20 @@ jobs:
           PYTHON
           python -m pip install build==1.3.0
           python -m build --outdir dist packages/python
+      - name: Verify complete source payload in wheel and sdist
+        run: |
+          python - <<'PYTHON'
+          import pathlib,tarfile,zipfile
+          source=pathlib.Path('packages/python/src/truss')
+          expected={p.relative_to(source).as_posix():p.read_bytes() for p in source.rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.suffix!='.pyc'}
+          with zipfile.ZipFile(next(pathlib.Path('dist').glob('*.whl'))) as wheel:
+              actual={n.removeprefix('truss/'):wheel.read(n) for n in wheel.namelist() if n.startswith('truss/') and not n.endswith('/')}
+              assert actual==expected, 'Wheel runtime payload differs from source'
+          with tarfile.open(next(pathlib.Path('dist').glob('*.tar.gz'))) as sdist:
+              actual={m.name.split('/src/truss/',1)[1]:sdist.extractfile(m).read() for m in sdist.getmembers() if m.isfile() and '/src/truss/' in m.name}
+              assert actual==expected, 'Sdist runtime payload differs from source'
+          print(f'Verified {len(expected)} exact source payloads in wheel and sdist')
+          PYTHON
       - uses: actions/upload-artifact@v4
         with:
           name: python-package
@@ -65,7 +83,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04, macos-14]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 25
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v6
         with:
@@ -92,6 +110,7 @@ jobs:
           entries={line.split()[1]:line.split()[0] for line in text.splitlines()}
           assert hashlib.sha256(wheels[0].read_bytes()).hexdigest()==entries[wheels[0].name]
           PYTHON
+          python scripts/verify-weft-release-wheel.py /tmp/weft-wheels/*.whl
           python -m pip install --no-deps /tmp/weft-wheels/*.whl
       - name: Install checksum-verified PG18 and this exact Truss wheel
         run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find dist -name 'truss_toolkit-*.whl' -print -quit)"
@@ -99,6 +118,15 @@ jobs:
         env:
           PYTHONPATH: packages/python/tests
         run: python -m unittest test_embedded_owner -v
+      - name: Run combined typed-host and strict native result controls
+        env:
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_group_result_wire test_group_result_wire_native test_action_transport -v
+      - name: Run installed E1 group and admission regressions
+        env:
+          PYTHONPATH: packages/python/tests
+          TRUSS_BUN_EXECUTABLE: bun
+        run: python -m unittest -v test_group_runtime_bounds test_catalog_admission_outcomes test_group_preconditions_native.GroupPreconditionTests test_group_create_native.PublicCreateGroupTests test_key_lookup_native.KeyLookupTests test_object_read_native.PublicObjectReadTests test_object_pages_native.ObjectPageTests test_typed_query_pages_native.TypedQueryPagesTests test_typed_query_pages_native.StringQueryPagesTests test_read_only_public_native.ReadOnlyPublicTests
       - name: Verify source-only preparation, real schemas, and capacity regressions
         env:
           PYTHONPATH: packages/python/tests
@@ -189,6 +217,12 @@ jobs:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
         run: python -m unittest test_current_query_runtime_native test_current_query_subject_cut_native -v
+      - name: Run installed disclosure cohort and source correspondence regressions
+        env:
+          PYTHONPATH: packages/python/tests
+          TRUSS_DISCLOSURE_NATIVE_QUALIFICATION: '1'
+          TRUSS_BUN_EXECUTABLE: bun
+        run: python -m unittest test_current_disclosure_cohort test_current_disclosure_originals test_current_disclosure_runtime_native.CurrentDisclosureRuntimeNativeTests -v
       - name: Run the public-only policy query reference example
         run: python packages/python/examples/current_query_workflow.py "$RUNNER_TEMP/truss-policy-example" --bun /missing/bun
       - name: Register original UMF domain-pack catalogs through the installed API
@@ -236,7 +270,14 @@ jobs:
       - name: Run pending receipt visibility and bundled group preparation
         run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_receipt_visibility_native.ReceiptVisibilityTests
       - name: Verify managed-function statement budget and host fault containment
-        run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_managed_function_guard test_managed_function_guard_native.ManagedFunctionGuardTests test_managed_function_guard_native.ManagedTableFunctionGuardTests test_managed_function_guard_native.CatalogTableFunctionGuardTests test_psycopg_host_native.PsycopgHostNativeTests
+        env:
+          PYTHONPATH: packages/python/tests
+        run: |
+          TRUSS_CENSUS_POSTGRES_BIN="$(python -c 'from pgserver._commands import POSTGRES_BIN_PATH; print(POSTGRES_BIN_PATH)')"
+          test -x "$TRUSS_CENSUS_POSTGRES_BIN/initdb"
+          test -x "$TRUSS_CENSUS_POSTGRES_BIN/pg_ctl"
+          export TRUSS_CENSUS_POSTGRES_BIN
+          PYTHONDONTWRITEBYTECODE=1 python -m unittest test_managed_function_guard test_managed_function_guard_native.ManagedFunctionGuardTests test_managed_function_guard_native.ManagedTableFunctionGuardTests test_managed_function_guard_native.CatalogTableFunctionGuardTests test_psycopg_host_native.PsycopgHostNativeTests
       - name: Run public recursive-container workflows
         run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_recursive_containers_native
       - name: Run installed current exact timestamp workflows
@@ -421,6 +462,7 @@ jobs:
           entries={line.split()[1]:line.split()[0] for line in text.splitlines()}
           assert hashlib.sha256(wheels[0].read_bytes()).hexdigest()==entries[wheels[0].name]
           PYTHON
+          python scripts/verify-weft-release-wheel.py /tmp/weft-wheels/*.whl
           python -m pip install --no-deps /tmp/weft-wheels/*.whl
       - name: "Install checksum-verified PG18 and this exact Truss wheel"
         run: "python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel \"$(find dist -name 'truss_toolkit-*.whl' -print -quit)\""

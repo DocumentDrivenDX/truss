@@ -3,7 +3,7 @@
 import json
 import psycopg
 from truss import (Ok,Error,ModuleAccessGrant,CatalogRuntimeConfiguration,create_reference_assembly,
-    adopt_psycopg_host,ObjectFound,ObjectNotFound,ObjectReadInvalid,ObjectReadUnavailable)
+    adopt_psycopg_host,ObjectFound,ObjectNotFound,ObjectReadInvalid,ObjectReadRefused,ObjectReadUnavailable)
 import test_catalog_runtime_native as catalog_tests
 
 class PublicObjectReadTests(catalog_tests.PublicCatalogRuntimeTests):
@@ -54,7 +54,7 @@ class PublicObjectReadTests(catalog_tests.PublicCatalogRuntimeTests):
         self.assertEqual(obj.updated_at,'2026-10-12T01:02:04.654321Z');self.assertEqual(obj.version,1)
         self.assertEqual(connection.execute("SELECT has_table_privilege(current_user,'truss.object','SELECT')").fetchone(),(False,))
         self.admin.execute('REVOKE object_reader FROM consumer')
-        refused=self.lookup(assembly,tx);self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+        refused=self.lookup(assembly,tx);self.assertIsInstance(refused,Ok);self.assertEqual(refused.value,ObjectReadRefused())
         self.admin.execute('GRANT object_writer TO consumer WITH SET FALSE')
         self.assertIsInstance(self.lookup(assembly,tx).value,ObjectFound)
         self.assertIsInstance(assembly.report_in_transaction(tx),Error)
@@ -64,7 +64,7 @@ class PublicObjectReadTests(catalog_tests.PublicCatalogRuntimeTests):
             result=assembly.get_object_in_transaction(tx,document_id=document,module_id='m',record_id='A',object_id=identity)
             self.assertIsInstance(result.value,ObjectNotFound)
         self.admin.execute('REVOKE object_reader FROM consumer')
-        self.assertIsInstance(self.lookup(assembly,tx),Error)
+        self.assertEqual(self.lookup(assembly,tx).value,ObjectReadRefused())
     def test_invalid_and_budget_refusal_preserve_prior_host_work(self):
         connection,host,assembly,tx=self.seed()
         connection.execute("CREATE TEMP TABLE prior(value text);INSERT INTO prior VALUES('kept')")
@@ -122,7 +122,7 @@ class PublicObjectReadTests(catalog_tests.PublicCatalogRuntimeTests):
         connection,host,assembly,tx=self.seed()
         self.admin.execute('GRANT SELECT ON truss.object TO consumer')
         refused=self.lookup(assembly,tx)
-        self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+        self.assertIsInstance(refused,Ok);self.assertEqual(refused.value,ObjectReadRefused())
         self.admin.execute('REVOKE SELECT ON truss.object FROM consumer')
         self.assertIsInstance(self.lookup(assembly,tx).value,ObjectFound)
 
@@ -147,7 +147,7 @@ class PublicObjectReadTests(catalog_tests.PublicCatalogRuntimeTests):
                         psycopg.sql.SQL(str(first_inherit)),psycopg.sql.SQL(str(first_set))))
                     result=self.lookup(assembly,tx)
                     if exposed:
-                        self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'42501')
+                        self.assertIsInstance(result,Ok);self.assertEqual(result.value,ObjectReadRefused())
                         connection.execute('SET ROLE '+('path_storage' if last_set else 'path_bridge'))
                         self.assertEqual(connection.execute('SELECT props FROM truss.object').fetchone()[0],self.props)
                         connection.execute('RESET ROLE')

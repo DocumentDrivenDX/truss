@@ -1,0 +1,12 @@
+{
+  "reviewFinding": "https://github.com/DocumentDrivenDX/truss/pull/18#discussion_r4330459807",
+  "behavior": "Owned edge import builder maps nested CatalogRefused to safe outer42501 and preserves original Error identity",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/src:packages/python/tests python -m unittest test_catalog_admission_outcomes.CatalogAdmissionOutcomeTests -v",
+  "testsPassed": 4,
+  "boundaryEdges": 1526,
+  "sha256": {
+    "packages/python/src/truss/catalog_runtime.py": "b07774c01381395e3e5ec3366037ccaeee642bee1f5ae950a3b6472ad5e56cf7",
+    "packages/python/tests/test_catalog_admission_outcomes.py": "90eedcccef5dbd2ad10f1e29df7222801d1226a7a9f1bbf79b83db7b9a40548d"
+  },
+  "scope": "Source unit regression and boundary check; rebuilt installed-wheel CI pending. Earlier412-file receipts remain historical for their exact pre-review payload."
+}

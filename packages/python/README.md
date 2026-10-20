@@ -1,17 +1,24 @@
 # Truss Python toolkit
 
-Truss `0.0.42` selects native `0.72-candidate` and Weft `0.4.48`.
-Current qualification is local macOS ARM64 with PostgreSQL 18.6: 11 focused
+Version 0.0.43 includes the embedder changes described in the
+[E0/E1 execution plan](../../docs/helix/04-build/embedder-e0-e1-plan.md).
+The [v0.0.43 notes](../../docs/helix/04-build/releases/v0.0.43.md) record the selected E1 qualification.
+The historical release qualifications below describe their original bytes.
+
+Historical release Truss `0.0.41` selects native `0.72-candidate` and Weft `0.4.48`.
+Its qualification is local macOS ARM64 with PostgreSQL 18.6: 11 focused
 cache/cohort controls and nine current-query/disclosure runtime checks pass.
-The clean wheel contains the complete current runtime source inventory. The
+The clean wheel contains its complete release runtime source inventory. The
 unchanged native SQL and embedded owner assets retain the three real-schema
 and 11 stress-case results from v0.0.40; those workloads were not repeated.
 Other platforms receive packaging checks only. See the
-[v0.0.42 qualification notes](../../docs/helix/04-build/releases/v0.0.42.md) and
-[qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.42/qualification.json).
+[v0.0.41 qualification notes](../../docs/helix/04-build/releases/v0.0.41.md) and
+[qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.41/qualification.json).
 The earlier [v0.0.40 evidence archive](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification-evidence.tar.gz)
 retains the original scoped workload results and incomplete broad discovery
 receipt; no full-suite pass is claimed.
+
+Historical [v0.0.42](../../docs/helix/04-build/releases/v0.0.42.md) adds the registered synchronous action host and strict group-response decoding. Its separate [qualification receipt](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.42/qualification.json) records 31 component controls and six focused native cases, including one registered create-action fixture under ordinary ACLs. Those cases do not rerun the v0.0.41 query/disclosure cohort above.
 
 This version accepts only UMF `0.10.0` source documents and fresh current
 installations. Earlier UMF source formats are unsupported, as are upgrades from an older Truss
@@ -42,7 +49,7 @@ complete ordered public readback, plus refusal at 1,025 and rollback on a
 failure at operation 1,024. Other
 byte/value limits and ordinary deadlines still apply.
 
-Version 0.0.41 pins `weft-sql==0.4.48`, backend `0.4.41` / binding `0.5`,
+Version 0.0.43 pins `weft-sql==0.4.48`, backend `0.4.41` / binding `0.5`,
 and query ABI 1.1. The backend version identifies the runtime ABI separately
 from the compiler package version. The historical v0.0.39 package used
 `weft-sql==0.4.41` with the same backend/binding versions.
@@ -138,7 +145,7 @@ retries. Reads, non-atomic batches and actions without a qualified whole-batch
 handler return `UNSUPPORTED`. See the experimental public composition in
 `truss.action_transport` and its focused native tests for the exact cohort.
 
-## Install version 0.0.42
+## Install version 0.0.43
 
 Use the matching Truss and Weft release artifacts below. Source builds require
 the same version cohort; an older installation is not upgraded.
@@ -286,10 +293,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.42 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.43 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.48 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.42'
+  'truss-toolkit[local,native,query]==0.0.43'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -305,10 +312,10 @@ it does not claim Linux x86_64 or other native-platform qualification.
 
 ## Run a real workflow
 
-Check out the v0.0.42 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.43 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.42 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.43 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
@@ -525,6 +532,14 @@ group effects. `expected_version` remains available for updates/deletes.
 `PropertyEquals` compares exact typed representations: absence, null and token
 spelling remain distinct.
 
+The owned scalar-graph profile permits 1,024 operations and 3,072 preconditions
+per group. The retired rootless condition-inventory component retains its
+128-condition ceiling; this does not restore executable legacy-profile support. Conditions
+use unique IDs across the whole group and all observe prestate, including when
+an earlier operation creates or changes their target. Failed conditions take
+precedence over operation failures. The existing input-byte, scope, lock and
+operation-time limits also apply; an oversized group is never silently split.
+
 Use `context.request(your_idempotency_key)` to request durable replay, or
 `RequestNone()` to omit it. Retain the original input/request for recovery; do not
 rebuild retries using a later catalog. Repeating committed original input returns
@@ -539,6 +554,17 @@ unavailable value: inspect its concrete result type. Groups distinguish
 and failed-precondition carriers. Known catalog execution refusals expose
 `ExecutionFailure.catalog_code`. Use typed codes, not message parsing.
 
+Contained permission denials return `UnauthorizedPerson` for group context,
+`CatalogRefused` for catalog planning/reference calls, and `ObjectReadRefused`
+for direct object/key/edge/page/traversal calls. Each has the stable
+`unauthorized` code (`unauthorized_person` for `UnauthorizedPerson`) without
+disclosing hidden existence or role details. Native
+transport failures and unusable transactions retain their outer `Error`.
+`GroupOperationFailure.code` remains `group_failed`; its `operation_code`
+exposes the native leaf classification and `inner_error` retains the original
+artifact. Batched key conflicts identify the original colliding operation,
+including conflicts with reserved deleted keys.
+
 Imports return `ImportReported` or `ImportExecutionFailed` directly, rather than
 the general outer `Ok`/`Error` wrapper. Host-owned imports return per-item created/skipped/rejected outcomes and batch
 dispositions. Retain the load ID, authenticated actor and immutable source
@@ -547,6 +573,14 @@ caller-committed batch failed. For legacy inputs, `run_import_batches` supplies 
 engine-owned one-record transactions on a fresh connection, preserving prior
 confirmed commits when a later batch fails. Explicit owned inputs use one atomic
 aggregate transaction. The runner returns unknown commit outcomes explicitly.
+
+Legacy `ImportInput` calls accept at most 128 records and 8 MiB of canonical
+input, with a 1 MiB payload ceiling per record. These are per-call limits, not a
+promise that repeated calls fit the cumulative transaction limits. The current
+legacy builder and executor perform work per record; larger and batched imports
+remain separate work. Handle `ImportInvalid`, `ImportReported`,
+`ImportResourceLimited` and `ImportExecutionFailed` according to their declared
+carriers; retain every report's pending, rollback and unknown durability state.
 
 Build relationship import records through the same selected import provider:
 
@@ -584,6 +618,16 @@ This feature shipped in v0.0.39 with basic PostgreSQL18.6 workflow coverage.
 Managed-database and broader performance qualification remain separate.
 
 ## Values, reads and query limits
+
+`read_profile='complete-entity'` adds native facts and relationship-key columns
+to a supported single-source `alias.*` projection. An explicit `RELATED_KEYS`
+output whose alias collides with an added relationship column is refused with
+`WFT-OUTPUT-NAME`; the compiler does not overwrite or rename either output.
+Choose a distinct explicit alias, for example
+`RELATED_KEYS(a."A-B",100) AS "_A-B"`, when also selecting `a.*`. Quote aliases
+whose spelling/case must be preserved. The complete relationship column is
+bounded at 100 keys and refuses rather than silently truncating; an explicit
+bounded related-key projection has its own reported truncation semantics.
 
 Published rootless JSON-home objects and independent directed relationships
 support strings and exact scalar properties: integer, decimal, boolean,

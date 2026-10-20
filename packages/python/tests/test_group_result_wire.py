@@ -7,7 +7,8 @@ import unittest
 
 from truss._group_runtime import _decode_group_result, _result
 from truss.contracts import ABSENT
-from truss.groups import AppliedPending, CommittedReceiptReplay, SameTransactionReplay
+from truss.groups import (AppliedPending, CommittedReceiptReplay, SameTransactionReplay,
+    GroupFailed, GroupOperationFailure, InvalidGroupInput, RequestConflict)
 
 
 def _position():
@@ -69,6 +70,56 @@ def _wire(value):
 
 
 class GroupResultWireTests(unittest.TestCase):
+    def test_typed_operation_failure_preserves_optional_index_and_original_artifact(self):
+        for index in (ABSENT, '17'):
+            value = {'outcome': 'failed', 'code': 'key_conflict', 'nativeState': '23505'}
+            if index is not ABSENT:
+                value['operationIndex'] = index
+            raw = _wire(value)
+            result = _result(raw, request_present=False)
+            self.assertIsInstance(result, GroupFailed)
+            failure = result.failure
+            self.assertIsInstance(failure, GroupOperationFailure)
+            self.assertEqual((failure.code, failure.operation_code, failure.operation_index),
+                ('group_failed', 'key_conflict', index))
+            self.assertEqual(base64.b64decode(failure.inner_error.bytes_base64), raw)
+            self.assertEqual(failure.inner_error.sha256, hashlib.sha256(raw).hexdigest())
+
+    def test_invalid_input_without_index_is_group_input_and_indexed_is_operation_failure(self):
+        unindexed = _wire({'outcome': 'failed', 'code': 'invalid_input', 'nativeState': '22023'})
+        result = _result(unindexed, request_present=False)
+        self.assertIsInstance(result.failure, InvalidGroupInput)
+        self.assertEqual(base64.b64decode(result.failure.diagnostic.bytes_base64), unindexed)
+
+        indexed = _wire({'outcome': 'failed', 'code': 'invalid_input', 'nativeState': '22023',
+            'operationIndex': '0'})
+        result = _result(indexed, request_present=False)
+        self.assertIsInstance(result.failure, GroupOperationFailure)
+        self.assertEqual((result.failure.code, result.failure.operation_code, result.failure.operation_index),
+            ('group_failed', 'invalid_input', '0'))
+        self.assertEqual(base64.b64decode(result.failure.inner_error.bytes_base64), indexed)
+
+    def test_request_conflict_requires_a_present_request(self):
+        raw = _wire({'outcome': 'failed', 'code': 'request_conflict', 'nativeState': 'P1001'})
+        with self.assertRaisesRegex(ValueError, 'Request-free'):
+            _result(raw, request_present=False)
+        result = _result(raw, request_present=True)
+        self.assertIsInstance(result.failure, RequestConflict)
+        self.assertEqual(base64.b64decode(result.failure.diagnostic.bytes_base64), raw)
+
+    def test_optional_failure_index_keeps_closed_native_grammar(self):
+        malformed = (
+            {'outcome': 'failed', 'code': 'key_conflict', 'nativeState': '23505', 'operationIndex': '00'},
+            {'outcome': 'failed', 'code': 'key_conflict', 'nativeState': '23505', 'operationIndex': '-1'},
+            {'outcome': 'failed', 'code': 'key_conflict', 'nativeState': '23505', 'operationIndex': '1024'},
+            {'outcome': 'failed', 'code': 'key_conflict', 'nativeState': '23505', 'operationIndex': None},
+            {'outcome': 'failed', 'code': 'key_conflict', 'nativeState': '23505', 'operationIndex': '0', 'extra': 'x'},
+            {'outcome': 'failed', 'code': 'key_conflict', 'nativeState': 'P1001'},
+        )
+        for value in malformed:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                _result(_wire(value), request_present=True)
+
     def test_request_free_applied_null_token_is_absent(self):
         value = {
             'outcome': 'success', 'disposition': 'applied', 'durability': 'pending',

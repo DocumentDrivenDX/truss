@@ -2327,9 +2327,28 @@ REVOKE ALL ON FUNCTION truss.reached(bytea,int,text,text) FROM PUBLIC;
 -- owns the outer transaction and decides whether to commit or roll back.
 CREATE FUNCTION truss.apply_group_prepared(original_input bytea,original_documents bytea,original_request bytea,expected_release text,expected_digest text,app_prepared jsonb) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
-DECLARE opened jsonb;attempt_id uuid;operation_index int:=0;operation_count int;result jsonb;
- native_state text;failure_code text;unavailable_reason text;parsed_input jsonb;
+DECLARE opened jsonb;attempt_id uuid;operation_index int:=0;operation_count int;result jsonb;failure_result jsonb;input_text text;
+ failure_operation_index int;operation_local_failure boolean:=false;
+ native_state text;native_detail text;native_detail_json jsonb;failure_code text;unavailable_reason text;parsed_input jsonb;
 BEGIN
+ -- Read only a guarded count hint before admission so a trusted conflict
+ -- ordinal raised during group-begin can be bounded. The original bytes still
+ -- enter the normal admission function unchanged; malformed input leaves the
+ -- hint unset and receives its established admission outcome.
+ BEGIN
+  IF original_input IS NOT NULL AND octet_length(original_input) BETWEEN 1 AND 1048576 THEN
+   input_text:=convert_from(original_input,'UTF8');
+   IF input_text IS JSON OBJECT WITH UNIQUE KEYS THEN
+    parsed_input:=input_text::jsonb;
+    IF jsonb_typeof(parsed_input->'operations')='array'
+     AND jsonb_array_length(parsed_input->'operations') BETWEEN 1 AND 1024 THEN
+     operation_count:=jsonb_array_length(parsed_input->'operations');
+    END IF;
+   END IF;
+  END IF;
+ EXCEPTION WHEN others THEN
+  parsed_input:=NULL;operation_count:=NULL;
+ END;
  opened:=convert_from(truss.object_group_begin_prepared(original_input,original_documents,original_request,expected_release,expected_digest,convert_to('[]','UTF8'),false,app_prepared),'UTF8')::jsonb;
  IF opened->>'outcome'<>'execute' THEN RETURN convert_to(opened::text,'UTF8');END IF;
  attempt_id:=(opened->>'attemptId')::uuid;
@@ -2358,9 +2377,12 @@ BEGIN
  ELSE
  FOR step_index IN 0..operation_count-1 LOOP
   operation_index:=step_index;
+  operation_local_failure:=true;
   PERFORM truss.runtime_owned_group_step_in_input(attempt_id,operation_index,convert_to('[]','UTF8'),original_input,parsed_input);
+  operation_local_failure:=false;
  END LOOP;
  END IF;
+ operation_local_failure:=false;
  operation_index:=operation_count-1;
  result:=convert_from(truss.object_group_finish(attempt_id),'UTF8')::jsonb;
  -- Internal import provenance attaches to the same completed attempt. This field
@@ -2369,7 +2391,23 @@ BEGIN
 EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE 'P1001' OR SQLSTATE 'P1003'
  OR SQLSTATE 'P1004' OR SQLSTATE 'P1005' OR SQLSTATE '42501' OR SQLSTATE '0A000'
  OR SQLSTATE '54000' OR SQLSTATE '55P03' THEN
- GET STACKED DIAGNOSTICS native_state=RETURNED_SQLSTATE;
+ GET STACKED DIAGNOSTICS native_state=RETURNED_SQLSTATE,native_detail=PG_EXCEPTION_DETAIL;
+ IF operation_local_failure THEN failure_operation_index:=operation_index;END IF;
+ -- Batched key preflight reports the original colliding operation in the
+ -- exception raised while the graph writer gate is still held. Keep this
+ -- mapping in the same native decision; never guess by rereading catalog rows.
+ IF native_state='23505' AND native_detail IS NOT NULL
+  AND native_detail IS JSON OBJECT WITH UNIQUE KEYS THEN
+  native_detail_json:=native_detail::jsonb;
+  IF native_detail_json-ARRAY['operationIndex']='{}'::jsonb
+   AND jsonb_typeof(native_detail_json->'operationIndex')='number' THEN
+   IF (native_detail_json->>'operationIndex') ~ '^(0|[1-9][0-9]{0,3})$' THEN
+    IF (native_detail_json->>'operationIndex')::int<operation_count THEN
+     failure_operation_index:=(native_detail_json->>'operationIndex')::int;
+    END IF;
+   END IF;
+  END IF;
+ END IF;
  -- This exception block has rolled back admission, every step and finalization.
  -- Cancellation, deadlock and serialization errors propagate to host settlement.
  unavailable_reason:=CASE native_state WHEN '0A000' THEN 'profile' WHEN '54000' THEN 'resource' WHEN '55P03' THEN 'observation' END;
@@ -2378,7 +2416,11 @@ EXCEPTION WHEN SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE 'P1001' OR SQLST
  failure_code:=CASE native_state WHEN '22023' THEN 'invalid_input' WHEN '23505' THEN 'key_conflict'
   WHEN 'P1001' THEN 'request_conflict' WHEN 'P1003' THEN 'expected_version' WHEN 'P1004' THEN 'not_found'
   WHEN 'P1005' THEN 'dependencies' WHEN '42501' THEN 'unauthorized_person' END;
- RETURN convert_to(jsonb_build_object('outcome','failed','code',failure_code,'operationIndex',operation_index::text,'nativeState',native_state)::text,'UTF8');
+ failure_result:=jsonb_build_object('outcome','failed','code',failure_code,'nativeState',native_state);
+ IF failure_operation_index IS NOT NULL THEN
+  failure_result:=failure_result||jsonb_build_object('operationIndex',failure_operation_index::text);
+ END IF;
+ RETURN convert_to(failure_result::text,'UTF8');
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.apply_group_prepared(bytea,bytea,bytea,text,text,jsonb) FROM PUBLIC;

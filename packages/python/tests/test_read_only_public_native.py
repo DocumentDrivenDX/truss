@@ -3,7 +3,7 @@
 import concurrent.futures
 import time
 import psycopg
-from truss import (Ok,Error,ObjectFound,ObjectNotFound,ReaderCatalog,AcceptedDocument,
+from truss import (Ok,Error,ObjectFound,ObjectNotFound,ObjectReadRefused,ReaderCatalog,AcceptedDocument,
     adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration)
 from truss.groups import GroupSuccess,RequestNone
 import test_reader_catalog_native as reader_tests
@@ -44,7 +44,7 @@ class ReadOnlyPublicTests(reader_tests.ReaderCatalogTests):
         self.assertIsInstance(self.object(assembly,tx,identity).value,ObjectFound)
         self.admin.execute('REVOKE group_reader FROM consumer')
         refused=self.object(assembly,tx,identity)
-        self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+        self.assertIsInstance(refused,Ok);self.assertEqual(refused.value,ObjectReadRefused())
         self.admin.execute('GRANT group_reader TO consumer WITH SET FALSE')
         self.assertIsInstance(self.object(assembly,tx,identity).value,ObjectFound)
         host.detach();connection.rollback()

@@ -1316,7 +1316,7 @@ BEGIN
  FOR candidate IN SELECT value FROM (
   SELECT -1 ordinal,n.key reference,jsonb_build_object('phase','initial','reference','stored:'||n.key,'image',n.value) value
    FROM jsonb_each(inventory->'initialScope'->'nodes') n
-  UNION ALL SELECT (p.value->>'operationIndex')::int,n.key,jsonb_build_object('phase','after','reference',n.key,
+  UNION ALL SELECT (p.value->>'operationIndex')::int,n.key,jsonb_build_object('phase','after','operationIndex',(p.value->>'operationIndex')::int,'reference',n.key,
    'image',n.value->'image','before',p.value->'beforeNodes'->n.key->'image')
    FROM jsonb_array_elements(inventory->'operations') p CROSS JOIN LATERAL jsonb_each(p.value->'afterNodes') n
    WHERE n.value->'deleted'='false'::jsonb AND n.value IS DISTINCT FROM p.value->'beforeNodes'->n.key
@@ -1330,7 +1330,7 @@ BEGIN
    tuple_bytes:=truss.runtime_owned_key_tuple_in_metadata(definition.type_id,definition.key_num,cells,codec);
    namespace:=decode(namespaces->>namespace_key,'hex');
    transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');
-   entry:=jsonb_build_object('phase',candidate->>'phase','reference',candidate->>'reference',
+   entry:=jsonb_build_object('phase',candidate->>'phase','operationIndex',candidate->'operationIndex','reference',candidate->>'reference',
     'objectId',candidate->'image'->>'id','typeId',definition.type_id,'keyNumber',definition.key_num,
     'namespace',encode(namespace,'hex'),'transport',encode(transport,'hex'),'tuple',encode(tuple_bytes,'hex'),
     -- Identical cells have already passed this exact derivation above.
@@ -1470,7 +1470,8 @@ BEGIN
   ELSE
    IF route.previous_ordinal IS NOT NULL OR jsonb_array_length(route.observation->'memberRows')>0
     OR jsonb_array_length(route.observation->'reservationIds')>0 THEN
-    RAISE EXCEPTION 'key already allocated or reserved' USING ERRCODE='23505';END IF;
+    RAISE EXCEPTION 'key already allocated or reserved' USING ERRCODE='23505',
+     DETAIL=jsonb_build_object('operationIndex',entry->'operationIndex')::text;END IF;
   END IF;
  END LOOP;
 END;
