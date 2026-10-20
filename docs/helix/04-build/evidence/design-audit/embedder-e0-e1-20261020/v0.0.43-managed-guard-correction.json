@@ -1,0 +1,17 @@
+{
+  "failedRun": 39507142986,
+  "failure": "Both release runners lacked TRUSS_CENSUS_POSTGRES_BIN for three native fixture classes; their setUpClass failed before test execution.",
+  "correction": "Resolve installed pgserver._commands.POSTGRES_BIN_PATH, require executable initdb and pg_ctl, export only for the unchanged managed-guard step.",
+  "localCorrectedResult": {
+    "tests": 44,
+    "seconds": 16.436,
+    "passed": true,
+    "python": "3.11.17",
+    "pgserver": "pgserver-pg18==18.6.1",
+    "server": "PostgreSQL18.6",
+    "fixture": "isolated temporary clusters owned by original tests"
+  },
+  "originalFailureLog": "v0.0.43-managed-guard-original-failures.log",
+  "correctedLog": "v0.0.43-managed-guard-corrected.log",
+  "limitations": "Local source result only; corrected hosted matrix remains required."
+}

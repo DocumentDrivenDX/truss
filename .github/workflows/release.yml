@@ -270,7 +270,14 @@ jobs:
       - name: Run pending receipt visibility and bundled group preparation
         run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_receipt_visibility_native.ReceiptVisibilityTests
       - name: Verify managed-function statement budget and host fault containment
-        run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_managed_function_guard test_managed_function_guard_native.ManagedFunctionGuardTests test_managed_function_guard_native.ManagedTableFunctionGuardTests test_managed_function_guard_native.CatalogTableFunctionGuardTests test_psycopg_host_native.PsycopgHostNativeTests
+        env:
+          PYTHONPATH: packages/python/tests
+        run: |
+          TRUSS_CENSUS_POSTGRES_BIN="$(python -c 'from pgserver._commands import POSTGRES_BIN_PATH; print(POSTGRES_BIN_PATH)')"
+          test -x "$TRUSS_CENSUS_POSTGRES_BIN/initdb"
+          test -x "$TRUSS_CENSUS_POSTGRES_BIN/pg_ctl"
+          export TRUSS_CENSUS_POSTGRES_BIN
+          PYTHONDONTWRITEBYTECODE=1 python -m unittest test_managed_function_guard test_managed_function_guard_native.ManagedFunctionGuardTests test_managed_function_guard_native.ManagedTableFunctionGuardTests test_managed_function_guard_native.CatalogTableFunctionGuardTests test_psycopg_host_native.PsycopgHostNativeTests
       - name: Run public recursive-container workflows
         run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_recursive_containers_native
       - name: Run installed current exact timestamp workflows

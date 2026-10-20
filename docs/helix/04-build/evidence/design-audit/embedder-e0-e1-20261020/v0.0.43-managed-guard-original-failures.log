@@ -1,0 +1,111 @@
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	﻿2026-10-20T22:35:53.7857006Z ##[group]Run PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_managed_function_guard test_managed_function_guard_native.ManagedFunctionGuardTests test_managed_function_guard_native.ManagedTableFunctionGuardTests test_managed_function_guard_native.CatalogTableFunctionGuardTests test_psycopg_host_native.PsycopgHostNativeTests
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:53.7861306Z ^[[36;1mPYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_managed_function_guard test_managed_function_guard_native.ManagedFunctionGuardTests test_managed_function_guard_native.ManagedTableFunctionGuardTests test_managed_function_guard_native.CatalogTableFunctionGuardTests test_psycopg_host_native.PsycopgHostNativeTests^[[0m
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:53.7914314Z shell: /usr/bin/bash -e {0}
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:53.7914648Z env:
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:53.7915001Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.17/x64
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:53.7915591Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib/pkgconfig
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:53.7916211Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:53.7916744Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:53.7917264Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.17/x64
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:53.7917789Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.17/x64/lib
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:53.7918534Z ##[endgroup]
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2445064Z .EE....E
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2445582Z ======================================================================
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2446287Z ERROR: setUpClass (test_managed_function_guard_native.ManagedFunctionGuardTests)
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2447004Z ----------------------------------------------------------------------
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2447552Z Traceback (most recent call last):
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2455705Z   File "/home/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2456961Z     cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2457807Z                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2459351Z   File "/home/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 18, in postgres_bin_for_profile
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2460351Z     return Path(os.environ[variable])
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2460802Z                 ~~~~~~~~~~^^^^^^^^^^
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2461292Z   File "<frozen os>", line 679, in __getitem__
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2461804Z KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2462109Z 
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2462302Z ======================================================================
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2463082Z ERROR: setUpClass (test_managed_function_guard_native.ManagedTableFunctionGuardTests)
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2463835Z ----------------------------------------------------------------------
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2464303Z Traceback (most recent call last):
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2465029Z   File "/home/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2465946Z     cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2466597Z                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2467452Z   File "/home/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 18, in postgres_bin_for_profile
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2468551Z     return Path(os.environ[variable])
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2469087Z                 ~~~~~~~~~~^^^^^^^^^^
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2469684Z   File "<frozen os>", line 679, in __getitem__
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2470310Z KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2470694Z 
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2470918Z ======================================================================
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2471501Z ERROR: setUpClass (test_psycopg_host_native.PsycopgHostNativeTests)
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2472388Z ----------------------------------------------------------------------
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2472841Z Traceback (most recent call last):
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2473589Z   File "/home/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2474437Z     cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2475035Z                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2475833Z   File "/home/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 18, in postgres_bin_for_profile
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2476748Z     return Path(os.environ[variable])
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2477080Z                 ~~~~~~~~~~^^^^^^^^^^
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2477466Z   File "<frozen os>", line 679, in __getitem__
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2477839Z KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2478075Z 
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2478487Z ----------------------------------------------------------------------
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2478911Z Ran 5 tests in 4.108s
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2479081Z 
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2479188Z FAILED (errors=3)
+native (ubuntu-24.04)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:58.2986495Z ##[error]Process completed with exit code 1.
+native (macos-14)	Verify managed-function statement budget and host fault containment	﻿2026-10-20T22:34:58.8088630Z ##[group]Run PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_managed_function_guard test_managed_function_guard_native.ManagedFunctionGuardTests test_managed_function_guard_native.ManagedTableFunctionGuardTests test_managed_function_guard_native.CatalogTableFunctionGuardTests test_psycopg_host_native.PsycopgHostNativeTests
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:34:58.8091220Z ^[[36;1mPYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_managed_function_guard test_managed_function_guard_native.ManagedFunctionGuardTests test_managed_function_guard_native.ManagedTableFunctionGuardTests test_managed_function_guard_native.CatalogTableFunctionGuardTests test_psycopg_host_native.PsycopgHostNativeTests^[[0m
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:34:58.8156610Z shell: /bin/bash -e {0}
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:34:58.8156990Z env:
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:34:58.8157450Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:34:58.8157940Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.11.9/arm64/lib/pkgconfig
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:34:58.8158600Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:34:58.8159200Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:34:58.8159720Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:34:58.8160070Z ##[endgroup]
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2818490Z .EE....E
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2826830Z ======================================================================
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2832120Z ERROR: setUpClass (test_managed_function_guard_native.ManagedFunctionGuardTests)
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2834590Z ----------------------------------------------------------------------
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2836880Z Traceback (most recent call last):
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2870780Z   File "/Users/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2871760Z     cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2873050Z                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2874020Z   File "/Users/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 18, in postgres_bin_for_profile
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2874720Z     return Path(os.environ[variable])
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2875090Z                 ~~~~~~~~~~^^^^^^^^^^
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2875700Z   File "<frozen os>", line 679, in __getitem__
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2876180Z KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2876360Z 
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2876590Z ======================================================================
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2877260Z ERROR: setUpClass (test_managed_function_guard_native.ManagedTableFunctionGuardTests)
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2877940Z ----------------------------------------------------------------------
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2878450Z Traceback (most recent call last):
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2879030Z   File "/Users/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2931050Z     cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2931970Z                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2932740Z   File "/Users/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 18, in postgres_bin_for_profile
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2933300Z     return Path(os.environ[variable])
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2933680Z                 ~~~~~~~~~~^^^^^^^^^^
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2934200Z   File "<frozen os>", line 679, in __getitem__
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2934550Z KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2934710Z 
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2934920Z ======================================================================
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2935370Z ERROR: setUpClass (test_psycopg_host_native.PsycopgHostNativeTests)
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2937360Z ----------------------------------------------------------------------
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2937770Z Traceback (most recent call last):
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2939040Z   File "/Users/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 35, in setUpClass
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2939660Z     cls.pgbin = postgres_bin_for_profile(getattr(cls, 'selected_profile', PsycopgProfile()))
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2940160Z                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2941080Z   File "/Users/runner/work/truss/truss/packages/python/tests/test_psycopg_host_native.py", line 18, in postgres_bin_for_profile
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2941640Z     return Path(os.environ[variable])
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2942090Z                 ~~~~~~~~~~^^^^^^^^^^
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2942630Z   File "<frozen os>", line 679, in __getitem__
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2943040Z KeyError: 'TRUSS_CENSUS_POSTGRES_BIN'
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2943230Z 
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2943390Z ----------------------------------------------------------------------
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2943820Z Ran 5 tests in 4.218s
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2944210Z 
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.2944390Z FAILED (errors=3)
+native (macos-14)	Verify managed-function statement budget and host fault containment	2026-10-20T22:35:03.3966520Z ##[error]Process completed with exit code 1.
