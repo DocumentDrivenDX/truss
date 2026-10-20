@@ -7,11 +7,11 @@ on:
         type: boolean
         default: false
       public_workflows:
-        description: Run the original installed 1000-node/1000-edge public workload on both platforms
+        description: Run the original installed 1000-node/1000-edge public workload on Linux
         type: boolean
         default: false
       stress_case:
-        description: Run exact stress cases on both platforms alongside native qualification
+        description: Run exact stress cases on Linux alongside native qualification
         type: choice
         default: none
         options: [none, all, small, nominal, type-heavy, many-types, wide, complex, dense-edges, index-heavy, skewed, node-heavy, large]
@@ -81,7 +81,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-14]
+        os: [ubuntu-24.04]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 40
     steps:
@@ -394,7 +394,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-14]
+        os: [ubuntu-24.04]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
     steps:
@@ -423,7 +423,6 @@ jobs:
         case: ${{ inputs.stress_case == 'all' && fromJSON('["large","dense-edges","wide","many-types","index-heavy","nominal","type-heavy","complex","skewed","node-heavy","small"]') || fromJSON(format('["{0}"]', inputs.stress_case)) }}
         os:
           - "ubuntu-24.04"
-          - "macos-14"
     runs-on: "${{ matrix.os }}"
     timeout-minutes: 360
     steps:
@@ -543,7 +542,7 @@ jobs:
           (root/'catalog-rebind-report-v0.4.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-rebind-report-v0.4.md').read_bytes())
           (root/'catalog-source-reference-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-source-reference-v0.1.md').read_bytes())
           manifest=pathlib.Path('packages/python/src/truss/_catalog_runtime/manifest.json');runtime=json.loads(manifest.read_bytes())
-          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('weft-sql=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','deploymentJavaScript':'embedded-v8','embeddedEngine':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'nativePlatforms':['linux-x86_64','macos-arm64']}
+          pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('weft-sql=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','deploymentJavaScript':'embedded-v8','embeddedEngine':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'nativePlatforms':['linux-x86_64']}
           profile=pathlib.Path('packages/python/src/truss/_profiles/fresh-catalog-support-current010.json')
           policy=json.loads(profile.read_bytes())
           pins.update(catalogRegistrationReportInterface='truss-catalog-registration-report/0.6',catalogPreparationInterface='truss-registration-preparation/2.0',catalogAcceptanceInputInterface='truss-acceptance-input/0.2.0',catalogViewInterface='truss-catalog-view/0.2.0',mandatoryPreparationTranscript=False,supportedUmfVersions=['0.10.0'],installationUpgradesSupported=False)
@@ -551,7 +550,7 @@ jobs:
           (root/'catalog-key-backfill-report-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md').read_bytes())
           pins.update(catalogKeyBackfillReportInterface='truss-catalog-registration-report/0.4',catalogKeyBackfillProfile='truss-catalog-key-backfill/0.2',catalogKeyBackfillSupportedProfiles=['truss-catalog-key-backfill/0.1','truss-catalog-key-backfill/0.2'])
           compiler_source=next(ast.literal_eval(n.value) for n in ast.parse(pathlib.Path('scripts/build-weft-runtime-python.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='REVISION' for t in n.targets))
-          pins.update(currentQueryProfile='truss-current-query-protection/0.1-candidate',currentQueryResultAbi='weft.postgresql.current-values/0.2-candidate',currentQueryMode='explicitly-activated-read-only',currentQueryPlatforms=['linux-x86_64','macos-arm64'],currentQueryWeftSource=compiler_source)
+          pins.update(currentQueryProfile='truss-current-query-protection/0.1-candidate',currentQueryResultAbi='weft.postgresql.current-values/0.2-candidate',currentQueryMode='explicitly-activated-read-only',currentQueryPlatforms=['linux-x86_64'],currentQueryWeftSource=compiler_source)
           group_profiles=json.loads(pathlib.Path('packages/python/src/truss/_catalog_runtime/group-profiles.json').read_bytes())['profiles']
           query_abi_bytes=pathlib.Path('packages/python/src/truss/_catalog_runtime/query-abi.json').read_bytes()
           query_abi=json.loads(query_abi_bytes)
