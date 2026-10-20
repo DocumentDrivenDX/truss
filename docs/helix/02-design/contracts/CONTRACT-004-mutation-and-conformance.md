@@ -22,6 +22,28 @@ ddx:
 ---
 
 # Contract: Mutation protocol and conformance corpus
+## Strict native group response admission — 2026-10-20
+
+The in-transaction group decoder admits only declared response branches.
+Successful newly applied results require `success/applied/pending`; replay is
+`success/replayed/pending` or `success/replayed/committed`. Newly applied
+committed results are not valid in-transaction responses. Unknown outcomes or
+dispositions must not fall through into success or replay. Failure and
+unavailable responses require their declared shape without incompatible success
+fields. Request mode, native attempt identity and receipt-token presence must
+correspond to the actual native producer; request-free applied null tokens mean
+absence and do not fabricate replay support.
+
+Replay observation requires the original valid encoding and digest, the declared
+versioned grammar, and correspondence of source epoch, receipt row, writer and
+observer transaction identities, replay basis and durability. A matching digest
+proves byte correspondence, not native authority or committed durability.
+Malformed output must not manufacture a receipt or imply rollback without
+settlement evidence. If the operation savepoint is confirmed rolled back, the
+existing caller-owned execution error and containment semantics remain in force;
+otherwise uncertain cleanup retains uncertainty. This does not transfer ownership
+of the caller's outer transaction.
+
 
 **Contract ID**: CONTRACT-004
 **Type**: library

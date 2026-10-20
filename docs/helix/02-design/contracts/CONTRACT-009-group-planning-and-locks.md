@@ -18,6 +18,18 @@ ddx:
 ---
 
 # Contract: Group planning and locks
+## Typed host request custody — 2026-10-20
+
+A registered typed action handler using request-enabled execution must bind the
+original idempotency identity to the entire canonical request, including ordered
+inputs, parameters and batch mode. The adapter must use native request custody,
+not a separate in-memory replay cache or reconstructed current records. Equal
+identity with unequal complete input conflicts under ADR-005. A lost commit
+acknowledgement preserves the original request identity; explicit recovery uses
+the same native boundary without automatic reapplication. Same-transaction
+replay stays pending, and committed replay retains the complete original result
+and committed observation. A key alone does not establish recovery support.
+
 
 ## Owner clarification — trusted engine and validation cost, 2026-10-18
 

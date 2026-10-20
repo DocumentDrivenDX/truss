@@ -116,6 +116,28 @@ Install that optional host from the UMF release assets. A bounded cursor
 stream that cannot prove exhaustion raises `QueryStreamRefused` after cleaning
 up its portal and transaction. An exact row-limit boundary is not exhaustion.
 
+The synchronous generated-action bridge is also experimental. A host composes
+`TrussActionTransport` with one `SchemaBinding` per generated source digest,
+an original-source observer that returns `None` only after byte-exact
+acceptance, typed decoders, and native whole-action handlers
+that use public Truss group operations. Truss does not interpret generated
+action semantics or infer native key mappings: the host supplies receipt
+validators tied to the accepted source and actual native group result. The
+connection factory supplies an exclusive context-managed idle/autocommit
+psycopg lease with a mandatory discard operation for unresolved owned settlement
+or cleanup; its exit releases the connection only, while the transport owns and
+explicitly acknowledges its READ COMMITTED transaction. The local operation
+timeout checks admission, dispatch, settlement and release but cannot preempt
+trusted synchronous host callbacks. Requests and staged JSON receipts are limited to
+1 MiB, 100,000 values, and 64 levels. A newly applied native
+group result remains pending until the outer commit is confirmed. Replays are
+accepted only with the original native same-transaction or committed-receipt
+evidence. An unconfirmed commit or failed post-commit lease release returns
+`WRITE_OUTCOME_UNKNOWN` with the caller's idempotency key; the bridge never
+retries. Reads, non-atomic batches and actions without a qualified whole-batch
+handler return `UNSUPPORTED`. See the experimental public composition in
+`truss.action_transport` and its focused native tests for the exact cohort.
+
 ## Install version 0.0.41
 
 Use the matching Truss and Weft release artifacts below. Source builds require

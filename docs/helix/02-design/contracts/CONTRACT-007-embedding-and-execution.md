@@ -20,6 +20,107 @@ ddx:
 ---
 
 # Contract: Embedding and execution
+## Bounded synchronous typed action host — 2026-10-20
+
+`TrussActionTransport` hosts registered generated `umf.access/1` synchronous
+single actions, complete atomic batches and advisory validation. Unsupported
+operations, actions and batch modes refuse before mutation dispatch. This is an
+ordinary installed-ACL profile; it does not qualify the protected profile.
+`TrussTarget` retains its existing read/page/stream contract.
+
+A `SchemaBinding` binds a generated schema identity to explicit `ActionBinding`
+registrations and an original-source observer. Registrations preserve the exact
+accepted document and document-qualified action identity. Native execution and
+input decoding are trusted host composition, not new authority or a competing
+UMF semantic interpreter. Mapped business keys and complete results must derive
+from the declared action and original native results; identifiers must not be
+inferred from mutable current rows.
+
+The Python composition surface is:
+
+- `SchemaBinding(schema, observe, actions)`: immutable action inventory per exact
+  source digest. `observe(assembly, tx)` must return exactly `None` after fresh
+  public accepted-document correspondence; deferred or other returns refuse.
+- `ActionBinding(action_id, decode, execute, validate=None,
+  validate_receipt=..., execute_batch=None, validate_batch_receipt=None)`:
+  `decode(inputs)` receives a detached input map;
+  `execute(assembly, tx, decoded, key, original_request)` returns `StagedAction`;
+  advisory `validate(assembly, tx, decoded, original_request)` returns exactly
+  `True` after native validation. A batch callback receives decoded items and
+  context containing the full original request, flags, ordered original items and
+  key. Receipt validators are required for each enabled execution mode and return
+  exactly `True` only for corresponding original native/source results.
+- `StagedAction(body, native_group_success, native_key_maps, request_digest,
+  request_key, asserted_origin)` and `StagedBatch` with the same fields plus
+  `flags` retain complete native pending/replay results. Batch key maps are one
+  ordered map per input. `request_digest` is SHA-256 of UTF-8 JSON containing
+  `request` and `asserted_origin`, with sorted keys, no whitespace or nonfinite
+  values, and unescaped Unicode. The handler must bind that complete original
+  request in native request custody; matching adapter fields alone grant no
+  native authority. Receipt key mapping must retain original command/result
+  correspondence, including replays, rather than read mutable current records.
+- `ActionRefusal(code, message="Action refused", *, field=None,
+  precondition=None)` retains optional nonempty UTF-8 identities bounded to1024
+  bytes without NUL. Transport envelopes contain code/identities only. A condition
+  identity must belong to the source-declared action. Decoder and native refusals
+  use the same envelope shape; native refusals require confirmed owned rollback.
+- `TrussActionTransport(connection_factory=..., assembly_factory=...,
+  schemas=..., statement_timeout_ms=2000, operation_timeout_ms=5000)` implements
+  synchronous `execute(request) -> Mapping`. Statement budgets are1–10000ms and
+  operation budgets1–30000ms. Assembly creation uses the public native host.
+
+The complete request is snapshotted before decoding. Receipt bodies are detached
+and structurally validated before settlement; validator or lease mutation of a
+retained alias cannot change the admitted response. Explicit empty created/changed
+arrays and empty counts maps are valid, including no-op outcomes.
+
+Each call requires an exclusive host connection lease explicitly transferring
+transaction ownership for that invocation. The connection must be open, idle,
+autocommit and outside pipeline mode before BEGIN. An active foreign transaction
+refuses without COMMIT or ROLLBACK. The host retains pool ownership. The transport
+begins its own transaction, adopts it through the public psycopg host, observes
+the accepted original source, and checks the binding before dispatch.
+
+Staged native results remain private until their complete mapped wire receipt
+has been validated and native settlement confirmed. Pending group results are
+not committed receipts. Newly applied results become externally committed only
+after exact COMMIT acknowledgement and idle status on the original connection
+and backend. Idle status, context exit, callback return or disconnection alone
+cannot prove commit. Receipt release also requires successful lease cleanup.
+
+Dispatch starts immediately before the registered execution callback. After
+mutation dispatch, a definite error envelope requires explicit registered refusal
+and confirmed owned rollback.
+Other postdispatch exceptions, malformed responses and uncertain settlement
+preserve `WRITE_OUTCOME_UNKNOWN` and original request identity. Cancellation
+preserves the original exception after cleanup. Mutations are never retried
+automatically. An entire atomic batch uses one registered whole-batch execution
+and one transaction, never independently committed per-item calls.
+
+Advisory validation uses a fresh owned transaction and confirmed rollback. It
+issues no durable receipt and does not replace fresh admission on later apply.
+For example, a staged `AppliedPending` stays private until the transport's own
+COMMIT succeeds; a lost COMMIT acknowledgement yields uncertainty even if an
+independent observer subsequently finds the effects. Recovery follows ADR-005
+with the original request identity.
+
+The exclusive synchronous lease provides `__enter__`, release-only `__exit__`,
+and mandatory `discard()` quarantine. Release must not independently settle the
+transaction. Unconfirmed owned settlement, failed detach/cleanup or an unsafe
+connection requires quarantine before release. Rejected foreign transactions
+remain untouched by the transport; the host's lease policy owns their release.
+
+The initial transport admits canonical JSON requests up to1 MiB,100,000 tree
+nodes and64 levels, and atomic batches of1–100 items. Limits refuse before lease
+acquisition. Whole-invocation deadlines span observation, dispatch, settlement and
+release; trusted synchronous Python callbacks cannot be forcibly interrupted.
+A late confirmed commit retains its native durability but does not become an
+on-time receipt; the external write outcome remains unknown.
+
+The pinned UMF CONTRACT-079 owns generated wire fields and their requiredness;
+this section owns Truss lease, source and settlement obligations. The build
+companion records the exact generator source and qualified subset.
+
 
 ## Query and execution ownership — owner direction, 2026-10-11
 
