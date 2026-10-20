@@ -36,6 +36,10 @@ jobs:
         env:
           PYTHONPATH: packages/python/tests
         run: python -m unittest test_large_runner_capacity_helper
+      - name: Test frozen Weft wheel archive verification controls
+        env:
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_verify_weft_release_wheel -v
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: '1.4.3'
@@ -92,6 +96,7 @@ jobs:
           entries={line.split()[1]:line.split()[0] for line in text.splitlines()}
           assert hashlib.sha256(wheels[0].read_bytes()).hexdigest()==entries[wheels[0].name]
           PYTHON
+          python scripts/verify-weft-release-wheel.py /tmp/weft-wheels/*.whl
           python -m pip install --no-deps /tmp/weft-wheels/*.whl
       - name: Install checksum-verified PG18 and this exact Truss wheel
         run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find dist -name 'truss_toolkit-*.whl' -print -quit)"
@@ -432,6 +437,7 @@ jobs:
           entries={line.split()[1]:line.split()[0] for line in text.splitlines()}
           assert hashlib.sha256(wheels[0].read_bytes()).hexdigest()==entries[wheels[0].name]
           PYTHON
+          python scripts/verify-weft-release-wheel.py /tmp/weft-wheels/*.whl
           python -m pip install --no-deps /tmp/weft-wheels/*.whl
       - name: "Install checksum-verified PG18 and this exact Truss wheel"
         run: "python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel \"$(find dist -name 'truss_toolkit-*.whl' -print -quit)\""

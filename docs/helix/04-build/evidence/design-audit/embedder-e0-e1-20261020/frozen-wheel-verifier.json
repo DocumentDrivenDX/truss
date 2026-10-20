@@ -1,0 +1,32 @@
+{
+  "reviewFinding": "https://github.com/DocumentDrivenDX/truss/pull/18#discussion_r4330646909",
+  "officialArtifacts": [
+    {
+      "cohortCount": 2,
+      "nativeModule": "weft/weft.abi3.so",
+      "nativeModuleSha256": "de3289ad3d8779bd2e347c15379596495acb08381741991935b6f85c7a24b2fc",
+      "record": "weft_sql-0.4.48.dist-info/RECORD",
+      "recordedPayloadCount": 9,
+      "status": "verified",
+      "wheel": "weft_sql-0.4.48-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "wheelSha256": "8226b0cbc17b611abaaff30357aad7230e135fa713c8d3d4e05e0536a6d9a2c3"
+    },
+    {
+      "cohortCount": 2,
+      "nativeModule": "weft/weft.abi3.so",
+      "nativeModuleSha256": "36224fd006f525e26e79ad2504bee7ffd75439ce1c8367564cfeb7c826e736a4",
+      "record": "weft_sql-0.4.48.dist-info/RECORD",
+      "recordedPayloadCount": 9,
+      "status": "verified",
+      "wheel": "weft_sql-0.4.48-cp39-abi3-macosx_11_0_arm64.whl",
+      "wheelSha256": "def824d16bc00f9deb50c7c63bc08a728cff631eef25cf2616032b761e1c679c"
+    }
+  ],
+  "controlsPassed": 5,
+  "scope": "Frozen reference-wheel archive identity + unique native pair + complete RECORD before release qualification installation; runtime guards identify native/owner assets and select the reference cohort, not reconstruct original ZIP bytes",
+  "sha256": {
+    "scripts/verify-weft-release-wheel.py": "b0fe98d592be8e95c430cad2db80331ec3dbb1f6ce6d6b7aa89f95f87f76f65a",
+    "packages/python/tests/test_verify_weft_release_wheel.py": "01d94f23c0e2898f0d415c66a0961efee0cce16e5e9cd94fa9ab504747efb838",
+    ".github/workflows/release.yml": "e126eb3dea94fd820bf7f0f7e9939a83c43f00a4d1b42449bfe46ecb2faee68f"
+  }
+}
