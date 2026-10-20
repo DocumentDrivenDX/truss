@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-20",
+  "reviewModel": "gpt-6-astra",
+  "review": "no remaining actionable findings",
+  "localPlatform": "macOS27.0.1 arm64",
+  "python": "3.11.17",
+  "cohort": {
+    "sdk": "0.5.3",
+    "umf_access": "0.1.0.dev5",
+    "umf_codegen": "0.1.0a2",
+    "umf_core": "0.10.0",
+    "truss_toolkit": "0.0.42",
+    "weft": "0.4.48 (unchanged)"
+  },
+  "sourceSha256": {
+    "packages/python/pyproject.toml": "623c4c4898d665c033b893ff44f068e8d381315d8632045515815e5269f55549",
+    "packages/python/src/truss/action_transport.py": "90c6aa2c6b7db69bac4b62f29537b9fe20f5e60077e59b999a2a520bb2907524",
+    "packages/python/src/truss/_group_runtime.py": "f9845e6e6d4bcfc4a85b5249403d562ec374be7f918072467d538828716680b5",
+    "packages/python/tests/test_action_transport.py": "3714bc3d871383405a07fba2d2c7fc677da2615bc2ea1cd9d499db588ee28916"
+  },
+  "assetSha256": {
+    "truss_toolkit-0.0.42-py3-none-any.whl": "55258175590cd068f92641bfedcef9861cc4fa5566fce0f9f01ea1a3a25f02ac",
+    "truss_toolkit-0.0.42.tar.gz": "44be51f62f22bdb3b072e7e142826332d75246c4db27678fab08649d61bc71dc"
+  },
+  "verification": {
+    "freshWheelDependencyCheck": true,
+    "wheelRECORDAndSourceMatch": true,
+    "installedTrussComponents": 31,
+    "installedGeneratorCorpusCases": 27,
+    "installedGeneratorWriterAndIntegrityControls": true,
+    "externalJavascriptProcesses": "forbidden during installed generator probe",
+    "codegenBoundaryControls": 3,
+    "sdkInstalledConformanceCases": 139,
+    "sdkRuntimeManifestFiles": 1736,
+    "sdkTotalArchiveFiles": 1742,
+    "nativeTests": 6,
+    "nativeElapsedSeconds": 36.426,
+    "nativeCandidateImport": "typed-api-release-cohort-20261020/lib/python3.11/site-packages/truss",
+    "nativePostgresql": "18.6",
+    "nativePsycopg": "3.3.6",
+    "nativeSelectors": [
+      "generated SyncActions owned native group and exact receipts",
+      "malformed native response rollback preserving prior host work",
+      "receipt commit token reader authority",
+      "no-op token stability and absent evidence",
+      "changed request origin and no-cache None",
+      "bulk no-op version timestamp journal preservation"
+    ]
+  },
+  "limits": [
+    "Focused local qualification, not full repository suite",
+    "Native generated registration covers create fixture only",
+    "Replay fixture covers unchanged rows, not later edits/deletion",
+    "No new full graph-write/2 executor or general action interpreter",
+    "Final hosted checks and publication are recorded in release qualification assets"
+  ]
+}

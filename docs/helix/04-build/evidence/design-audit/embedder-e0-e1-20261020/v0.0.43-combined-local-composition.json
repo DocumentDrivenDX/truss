@@ -1,0 +1,83 @@
+{
+  "label": "v0.0.43-combined-local-composition",
+  "passed": true,
+  "scope": "Focused local combined-source composition only; no hosted CI, downloaded release artifact, or full-suite claim.",
+  "trussHeadAtCapture": "7db40633e94c1416b72d9baa45157f4907fcfd5d",
+  "environment": {
+    "python": "3.11.17",
+    "pythonExecutable": "/private/tmp/truss041-final-env-20261020/bin/python",
+    "platform": "macOS-27.0.1-arm64-arm-64bit",
+    "pythonEnvironment": "PYTHONDONTWRITEBYTECODE=1; PYTHONPATH=packages/python/src:packages/python/tests:/private/tmp/typed-api-release-cohort-20261020/lib/python3.11/site-packages; base interpreter provides pgserver and Weft",
+    "dependencies": {
+      "truss-toolkit": "0.0.42",
+      "umf-access": "0.1.0.dev5",
+      "psycopg": "3.3.6",
+      "weft-sql": "0.4.48",
+      "mini-racer": "0.14.1",
+      "pgserver-pg18": "18.6.1"
+    },
+    "packageMetadataNote": "Installed truss-toolkit metadata is 0.0.42; tests import the combined 0.0.43 candidate from packages/python/src first. This is source composition evidence, not installed 0.0.43 wheel evidence."
+  },
+  "frozenUmfGenerator": {
+    "path": "/private/tmp/truss043-umf-generator-1231",
+    "commit": "1231aea28a998a504fed941c11790c86b2f4f0cd",
+    "bun": "1.4.3",
+    "bunLockSha256": "5fb58795dfe9ef5df89597c44372cf2a0739e1855f322f7622ae0c9d0ac71ce4",
+    "sourceSha256": {
+      "src/access/index.ts": "77256da4a67a6437607dabc78109080e75018dbef5df40d052ad966d761b4d0c",
+      "src/access/python-runtime.ts": "e7634778fabcfd95752638f7ba874b133fc4857b38aa7d38fe614ce2dd57feeb",
+      "src/access/constants.ts": "948f07c20c03bb889b71ffd631f756b135a190ffdf16c66bb1088df54f3cc2ff",
+      "python/umf_codegen/src/umf_codegen/_assets/manifest.json": "cd7394ee0072abc1e8636d9c62d4cc003fcd246e22ef6ad9ecaa2a298fb63118"
+    }
+  },
+  "trussRuntimeSourceSha256": {
+    "packages/python/src/truss/__init__.py": "d68b3694cb30690311ca8647524c9f9750a73f6e5d97cfd90a051ef2e297e648",
+    "packages/python/src/truss/_group_runtime.py": "44b06fb86b733de247ef4b8994da63544d0e3c363deca41365cb7bf8f33e3852",
+    "packages/python/src/truss/action_transport.py": "90c6aa2c6b7db69bac4b62f29537b9fe20f5e60077e59b999a2a520bb2907524"
+  },
+  "gates": [
+    {
+      "name": "generated/native",
+      "log": "v0.0.43-combined-generated-native.log",
+      "passed": true,
+      "tests": 6,
+      "durationSeconds": 34.057,
+      "selectors": [
+        "test_action_transport_native.NativeGeneratedActionTransportTests.test_generated_sync_actions_use_owned_native_group_and_exact_receipts",
+        "test_group_result_wire_native.GroupResultWireNativeContainmentTests.test_malformed_native_response_rolls_back_group_and_keeps_prior_host_work",
+        "test_receipt_visibility_native.ReceiptVisibilityTests.test_commit_token_readonly_reached_and_current_reader_authority",
+        "test_receipt_visibility_native.ReceiptVisibilityTests.test_noop_token_is_stable_and_missing_evidence_is_unavailable",
+        "test_group_create_native.PublicCreateGroupTests.test_changed_request_origin_and_none_has_no_cache",
+        "test_bulk_create_sql_native.BulkUpdateSqlTests.test_noop_batch_preserves_versions_timestamps_and_journals"
+      ]
+    },
+    {
+      "name": "action-transport/result-wire/whole-group",
+      "log": "v0.0.43-combined-action-wire.log",
+      "passed": true,
+      "tests": 36,
+      "durationSeconds": 5.532,
+      "skipped": 1,
+      "skipReason": "Generated-client preflight unit requires TRUSS_UMF_SOURCE_ROOT and Bun; separate generated native test passed.",
+      "selectors": [
+        "test_group_result_wire",
+        "test_action_transport",
+        "test_group_create_native.PublicCreateGroupTests.test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint"
+      ]
+    },
+    {
+      "name": "static/build controls",
+      "passed": true,
+      "checks": {
+        "pythonImportBoundaryEdges": 1546,
+        "boundaryControls": 18,
+        "generatedOwnedRuntimeCheck": "scripts/build-owned-runtime.py --check"
+      }
+    }
+  ],
+  "limitations": [
+    "Local focused test coverage only; hosted CI and release-artifact gates remain pending.",
+    "No full suite or cross-platform native qualification is claimed."
+  ],
+  "retainedSetupFailure": "v0.0.43-combined-native-missing-pgserver.log: first read-only cohort interpreter lacked pgserver; no tests ran. Corrected by using the local native interpreter with the pinned dev5 site-packages."
+}

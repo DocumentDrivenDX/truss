@@ -76,6 +76,11 @@ __all__ += ["ScalarObject", "LogicalObject", "ObjectFound", "ObjectNotFound", "O
 from ._group_runtime import GroupRuntimeContext, CatalogRevisionProbe, PreparedGroup
 __all__ += ["GroupRuntimeContext", "CatalogRevisionProbe", "PreparedGroup"]
 
+from .action_transport import (ActionBinding, ActionRefusal, ActionWireError,
+    SchemaBinding, StagedAction, StagedBatch, TrussActionTransport)
+__all__ += ["ActionBinding", "ActionRefusal", "ActionWireError", "SchemaBinding",
+    "StagedAction", "StagedBatch", "TrussActionTransport"]
+
 from ._group_runtime import NativeGroupCapability, GroupCapabilityAvailable
 __all__ += ["NativeGroupCapability", "GroupCapabilityAvailable"]
 

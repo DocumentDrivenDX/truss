@@ -1,0 +1,12 @@
+{'truss': '/private/tmp/typed-api-release-cohort-20261020/lib/python3.11/site-packages/truss/__init__.py', 'truss_version': '0.0.42', 'umf_access': '0.1.0.dev5', 'umf_codegen': '0.1.0a2', 'umf_core': '0.10.0'}
+test_generated_sync_actions_use_owned_native_group_and_exact_receipts (test_action_transport_native.NativeGeneratedActionTransportTests.test_generated_sync_actions_use_owned_native_group_and_exact_receipts) ... ok
+test_malformed_native_response_rolls_back_group_and_keeps_prior_host_work (test_group_result_wire_native.GroupResultWireNativeContainmentTests.test_malformed_native_response_rolls_back_group_and_keeps_prior_host_work) ... ok
+test_commit_token_readonly_reached_and_current_reader_authority (test_receipt_visibility_native.ReceiptVisibilityTests.test_commit_token_readonly_reached_and_current_reader_authority) ... ok
+test_noop_token_is_stable_and_missing_evidence_is_unavailable (test_receipt_visibility_native.ReceiptVisibilityTests.test_noop_token_is_stable_and_missing_evidence_is_unavailable) ... ok
+test_changed_request_origin_and_none_has_no_cache (test_group_create_native.PublicCreateGroupTests.test_changed_request_origin_and_none_has_no_cache) ... ok
+test_noop_batch_preserves_versions_timestamps_and_journals (test_bulk_create_sql_native.BulkUpdateSqlTests.test_noop_batch_preserves_versions_timestamps_and_journals) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 36.426s
+
+OK

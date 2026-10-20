@@ -1,0 +1,78 @@
+{
+  "observedAt": "2026-10-20T20:30:44.428530+00:00",
+  "baseCommit": "6158dbbc9e306cb85d5290a9af4d22189f893ea9",
+  "profile": "experimental synchronous umf.access/1 registered create action, ordinary installed module ACL",
+  "sourceSha256": {
+    "packages/python/src/truss/action_transport.py": "575293802ebed4885a1dfc49f102bbd7cbae319ef9eefd09add6349241559aef",
+    "packages/python/src/truss/_group_runtime.py": "f9845e6e6d4bcfc4a85b5249403d562ec374be7f918072467d538828716680b5",
+    "packages/python/src/truss/__init__.py": "a7c991dd16fac60f8b5c521cfd156620a4ce3916b7b2dfc4b262f2b191c21c32",
+    "packages/python/tests/test_action_transport.py": "793e614cf7ba029e73c0fb03ef30fd16138c60573c9a6bd07dadc743928f1693",
+    "packages/python/tests/test_action_transport_native.py": "87604d28da27d8285d4b865dcba123b485525b00509caea547f3b28dbda661c0",
+    "packages/python/tests/test_group_result_wire.py": "87e257b6a9732ca3c2145d02a3761f6d4c903771c7b08054b78f114f22c2d175",
+    "packages/python/tests/test_group_result_wire_native.py": "9e506bfa7d9ac5d23cf8a2561782a86fb08ead55bb48a91f32efaaf7760be32e",
+    "scripts/check-module-boundaries.py": "2c999438f0362a1247529b486edea82a07748f8f50e26178ee7dc2b1a39d0195",
+    ".github/workflows/python-runtime.yml": "ce095d375123821ce72a27eaa511ea626c169813003188781093857c49959ea8"
+  },
+  "umf": {
+    "commit": "1231aea28a998a504fed941c11790c86b2f4f0cd",
+    "pr": "https://github.com/DocumentDrivenDX/umf/pull/40",
+    "sourceSha256": {
+      "src/access/index.ts": "77256da4a67a6437607dabc78109080e75018dbef5df40d052ad966d761b4d0c",
+      "src/access/python-runtime.ts": "e7634778fabcfd95752638f7ba874b133fc4857b38aa7d38fe614ce2dd57feeb",
+      "src/access/constants.ts": "948f07c20c03bb889b71ffd631f756b135a190ffdf16c66bb1088df54f3cc2ff",
+      "python/umf_codegen/src/umf_codegen/_assets/manifest.json": "cd7394ee0072abc1e8636d9c62d4cc003fcd246e22ef6ad9ecaa2a298fb63118"
+    }
+  },
+  "runtime": {
+    "platform": "macOS27.0.1 arm64",
+    "python": "3.11.17",
+    "psycopg": "3.3.6",
+    "libpq": 180006,
+    "postgresql": "18.6",
+    "pgserverPg18Wheel": "18.6.1",
+    "nativeStatementTimeoutMs": 10000,
+    "nativeOperationTimeoutMs": 30000
+  },
+  "checks": {
+    "componentSourceTests": 28,
+    "componentInstalledWheelTests": 28,
+    "nativeTests": 6,
+    "nativeSeconds": 69.185,
+    "nativeSelectors": [
+      "test_action_transport_native.NativeGeneratedActionTransportTests.test_generated_sync_actions_use_owned_native_group_and_exact_receipts",
+      "test_group_result_wire_native.GroupResultWireNativeContainmentTests.test_malformed_native_response_rolls_back_group_and_keeps_prior_host_work",
+      "test_receipt_visibility_native.ReceiptVisibilityTests",
+      "test_group_create_native.PublicCreateGroupTests.test_changed_request_origin_and_none_has_no_cache",
+      "test_bulk_create_sql_native.BulkUpdateSqlTests.test_noop_batch_preserves_versions_timestamps_and_journals"
+    ],
+    "pythonBoundaryImports": 1546,
+    "pythonBoundaryControls": 18,
+    "boundaryCheckerSha256": "2c999438f0362a1247529b486edea82a07748f8f50e26178ee7dc2b1a39d0195",
+    "solReview": "no remaining actionable findings after documented corrections",
+    "diffWhitespace": true
+  },
+  "localWheel": {
+    "filename": "truss_toolkit-0.0.41-py3-none-any.whl",
+    "sha256": "4952b0c7b3b40d60212731a5d11fb6f8f8f348f84e86a687d3d75a78dc59d965",
+    "sourceBytesVerified": [
+      "action_transport.py",
+      "_group_runtime.py",
+      "__init__.py"
+    ],
+    "published": false
+  },
+  "cleanup": {
+    "ownedTestRoots": [],
+    "ownedPostmasterPidFiles": [],
+    "ownedPostgresProcesses": [],
+    "processCheck": "scoped escalated macOS ps check; no matching owned PostgreSQL processes"
+  },
+  "remainingQualifications": [
+    "generated no-op/update/delete/link action registrations beyond the tested create fixture",
+    "protected security/execution profile",
+    "non-atomic batch modes",
+    "generic umf.access/1 read transport",
+    "exhaustive host/resource/platform qualification"
+  ],
+  "releasePublished": false
+}

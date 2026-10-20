@@ -37,6 +37,15 @@ ddx:
 ---
 
 # Truss build plan
+## Typed API host adoption — 2026-10-20
+
+The bounded [host adoption execution plan](typed-api-host-adoption-plan.md)
+implements CONTRACT-004/007/009 and ADR-005 with TP-001 qualification. It adds
+explicit registered synchronous action hosting and strict native receipt decoding.
+Existing generic read and protected-host qualification remain separate. Its
+execution evidence must identify the original source tuple and remaining gaps
+before this slice is marked complete.
+
 
 ## PostgreSQL18.6 consumer delivery — owner direction 2026-10-11
 

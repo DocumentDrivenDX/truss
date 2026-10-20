@@ -5,15 +5,15 @@ Version 0.0.43 includes the embedder changes described in the
 The [v0.0.43 notes](../../docs/helix/04-build/releases/v0.0.43.md) record the selected E1 qualification.
 The historical release qualifications below describe their original bytes.
 
-Truss `0.0.41` selects native `0.72-candidate` and Weft `0.4.48`.
-Current qualification is local macOS ARM64 with PostgreSQL 18.6: 11 focused
+Historical release Truss `0.0.41` selects native `0.72-candidate` and Weft `0.4.48`.
+Its qualification is local macOS ARM64 with PostgreSQL 18.6: 11 focused
 cache/cohort controls and nine current-query/disclosure runtime checks pass.
-The clean wheel contains exactly the 412 current runtime source files. The
+The clean wheel contains the complete current runtime source inventory. The
 unchanged native SQL and embedded owner assets retain the three real-schema
 and 11 stress-case results from v0.0.40; those workloads were not repeated.
 Other platforms receive packaging checks only. See the
-[v0.0.41 qualification notes](../../docs/helix/04-build/releases/v0.0.41.md) and
-[qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.41/qualification.json).
+[v0.0.42 qualification notes](../../docs/helix/04-build/releases/v0.0.42.md) and
+[qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.42/qualification.json).
 The earlier [v0.0.40 evidence archive](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification-evidence.tar.gz)
 retains the original scoped workload results and incomplete broad discovery
 receipt; no full-suite pass is claimed.
@@ -116,10 +116,32 @@ The Python distribution, native runtime and compiler versions are separate pins.
 Use the exact release cohort listed above; no older installation is upgraded.
 
 The `truss.access` typed-SDK integration remains experimental and requires its
-matching UMF SDK 0.5.2 / host 0.1.0.dev4 cohort through the `typed-sdk` extra.
+matching UMF SDK 0.5.3 / host 0.1.0.dev5 cohort through the `typed-sdk` extra.
 Install that optional host from the UMF release assets. A bounded cursor
 stream that cannot prove exhaustion raises `QueryStreamRefused` after cleaning
 up its portal and transaction. An exact row-limit boundary is not exhaustion.
+
+The synchronous generated-action bridge is also experimental. A host composes
+`TrussActionTransport` with one `SchemaBinding` per generated source digest,
+an original-source observer that returns `None` only after byte-exact
+acceptance, typed decoders, and native whole-action handlers
+that use public Truss group operations. Truss does not interpret generated
+action semantics or infer native key mappings: the host supplies receipt
+validators tied to the accepted source and actual native group result. The
+connection factory supplies an exclusive context-managed idle/autocommit
+psycopg lease with a mandatory discard operation for unresolved owned settlement
+or cleanup; its exit releases the connection only, while the transport owns and
+explicitly acknowledges its READ COMMITTED transaction. The local operation
+timeout checks admission, dispatch, settlement and release but cannot preempt
+trusted synchronous host callbacks. Requests and staged JSON receipts are limited to
+1 MiB, 100,000 values, and 64 levels. A newly applied native
+group result remains pending until the outer commit is confirmed. Replays are
+accepted only with the original native same-transaction or committed-receipt
+evidence. An unconfirmed commit or failed post-commit lease release returns
+`WRITE_OUTCOME_UNKNOWN` with the caller's idempotency key; the bridge never
+retries. Reads, non-atomic batches and actions without a qualified whole-batch
+handler return `UNSUPPORTED`. See the experimental public composition in
+`truss.action_transport` and its focused native tests for the exact cohort.
 
 ## Install version 0.0.43
 
