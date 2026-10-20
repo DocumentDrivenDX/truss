@@ -1,5 +1,6 @@
 """Separate held disclosure assets; no fallback to the old query child."""
 from contextlib import contextmanager
+from functools import lru_cache
 from hashlib import sha256
 from importlib.resources import files
 import json
@@ -10,6 +11,7 @@ from ._current_disclosure_pipe import CurrentDisclosurePipe
 _ASSET_MANIFEST_SHA256 = '83a04c63fe3f2420e4b7d526d4b51bb7e91f248b1164169625d263930aff23a4'
 
 
+@lru_cache(maxsize=1)
 def verify_current_disclosure_owner_assets():
     if _ASSET_MANIFEST_SHA256 is None:
         raise ValueError('Reviewed original disclosure assets are not enrolled')

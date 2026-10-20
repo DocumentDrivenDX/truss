@@ -30,6 +30,9 @@ class DisclosureOriginalTests(unittest.TestCase):
    else:
     with self.assertRaises(ValueError):_check_disclosure_sources(wire(rows),self.initial,self.accepted)
  def test_unenrolled_installed_consumer_cannot_activate(self):
+  from truss._current_disclosure_originals import _actual_disclosure_consumer_json
+  from truss._current_query_originals import _actual_weft_module_sha256
+  _actual_disclosure_consumer_json.cache_clear();_actual_weft_module_sha256.cache_clear()
   with patch('truss._current_disclosure_originals._CONSUMER_COHORTS',()):
    with self.assertRaises(ValueError):prepare_current_disclosure_originals(wire(self.rows))
   with self.assertRaises(ValueError):check_disclosure_originals(CurrentDisclosureOriginals(wire(self.rows),b'{}'),self.initial,self.accepted)

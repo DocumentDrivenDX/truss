@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Distinct immutable presence-source registration; never native admission."""
 from dataclasses import dataclass
+from functools import lru_cache
 from hashlib import sha256
-from pathlib import Path
 import json
 from ._owner_evidence_json import decode_owner_evidence_json,same_owner_evidence
-from ._current_query_originals import require_current_model_correspondence
+from ._current_query_originals import require_current_model_correspondence,_actual_weft_module_sha256
 from ._embedded_release import MANIFEST_SHA256 as EMBEDDED_MANIFEST_SHA256
 
 
@@ -15,7 +15,7 @@ class CurrentDisclosureOriginals:
     consumer_bytes:bytes
 
 
-# Published Weft 0.4.47 consumer identities for the supported platform wheels.
+# Frozen local Weft 0.4.48 source and exact macOS wheel identity.
 _EMBEDDED_CONSUMER={
     'embeddedRuntime':'mini-racer==0.14.1',
     'embeddedProfile':'truss.embedded-v8/2',
@@ -29,35 +29,22 @@ _CONSUMER_COHORTS=({
     'umfBundleSha256':'bf3e2af7728fe056ef8b3aba37ad048b0b8ac9485ec31920a1f585a6b72d10d8',
     'umfManifestSha256':'153d939786bb01dd2cd206302b3696dd5d5c8e4e1092fbfa4fd64155d09c483c',
     **_EMBEDDED_CONSUMER,
-    'weftRevision':'12051af87cd9f910f880f21fe6b95a507e2fcb94',
-    'weftVersion':'0.4.47',
-    'weftWheelSha256':'643b6bb2a93a0ee881ddc5950c4e9c53e38207ac3d2b97acb47b9361666f95b0',
-    'weftModuleSha256':'7f1241ac473a76b83926683a2999ec1378eaaada539756d3d550f6b01d52c4a1',
+    'weftRevision':'db1e0dc5b1ec6aec0f12646421cefc314989d974',
+    'weftVersion':'0.4.48',
+    'weftWheelSha256':'def824d16bc00f9deb50c7c63bc08a728cff631eef25cf2616032b761e1c679c',
+    'weftModuleSha256':'36224fd006f525e26e79ad2504bee7ffd75439ce1c8367564cfeb7c826e736a4',
     'weftShimSha256':'cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d',
     'graphSha256':_GRAPH_SHA256,
     'childProtocol':'umf.security.private-disclosure-child/0.2-candidate',
     'resultAbi':'weft.postgresql.current-presence.sql/0.1-candidate',
-},
-# Both published platform modules passed the same exact-source Graph smoke.
-{'profile':'truss-current-disclosure-consumer/0.1-candidate',
- 'umfRevision':'9ff2ba12271be889aad81c09695487e14655893d',
- 'umfBundleSha256':'bf3e2af7728fe056ef8b3aba37ad048b0b8ac9485ec31920a1f585a6b72d10d8',
- 'umfManifestSha256':'153d939786bb01dd2cd206302b3696dd5d5c8e4e1092fbfa4fd64155d09c483c',
- **_EMBEDDED_CONSUMER,
- 'weftRevision':'12051af87cd9f910f880f21fe6b95a507e2fcb94',
- 'weftVersion':'0.4.47',
- 'weftWheelSha256':'729d632ce9ea97c52100a8d23f513821372173e2962622d357b85c99b11b457c',
- 'weftModuleSha256':'6226f88d2b25715c73c9669c9b3d8124100813698522a746cf9ed99627987c85',
- 'weftShimSha256':'cd0fa27c9580742333d14e24d5ebfd74babb47d31720bb4c577278d05486f11d',
- 'graphSha256':_GRAPH_SHA256,
- 'childProtocol':'umf.security.private-disclosure-child/0.2-candidate',
- 'resultAbi':'weft.postgresql.current-presence.sql/0.1-candidate'},)
+},)
 
 
-def _actual_disclosure_consumer():
+@lru_cache(maxsize=1)
+def _actual_disclosure_consumer_json():
     try:
         import weft.weft as native
-        digest=sha256(Path(native.__file__).read_bytes()).hexdigest()
+        digest=_actual_weft_module_sha256()
         selected=[c for c in _CONSUMER_COHORTS if c['weftModuleSha256']==digest]
         if len(selected)!=1:raise ValueError('Explicit reviewed disclosure consumer required')
         for name in ('native_request_json','json','lower_postgresql_current_presence_candidate_json','check_postgresql_current_presence_candidate_json'):
@@ -68,9 +55,15 @@ def _actual_disclosure_consumer():
         if (sha256(root.joinpath('manifest.json').read_bytes()).hexdigest()!=consumer['umfManifestSha256']
                 or sha256(root.joinpath('current-native-disclosure-child.mjs').read_bytes()).hexdigest()!=consumer['umfBundleSha256']):
             raise ValueError('Exact original disclosure producer cohort required')
-        return dict(consumer)
+        return json.dumps(consumer,separators=(',',':')).encode()
     except (ImportError,AttributeError,OSError) as error:
         raise ValueError('Actual original presence consumer required') from error
+
+
+def _actual_disclosure_consumer():
+    # The selected native module and installed UMF assets are immutable for
+    # this process. Return a fresh mapping so callers cannot mutate the cache.
+    return decode_owner_evidence_json(_actual_disclosure_consumer_json())
 
 
 def _check_disclosure_sources(raw,initialize_bytes,accepted_request_bytes):

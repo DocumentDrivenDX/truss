@@ -1,10 +1,12 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Static original query-source correspondence, never consumer admission."""
 from dataclasses import dataclass
+from functools import lru_cache
 from hashlib import sha256
+import json
 import re
 from pathlib import Path
-from ._current_query_computation import verify_current_query_owner_assets
+from ._current_query_computation import current_query_owner_asset_sha256,verify_current_query_owner_assets
 from ._embedded_release import MANIFEST_SHA256 as EMBEDDED_MANIFEST_SHA256
 from ._owner_evidence_json import decode_owner_evidence_json, same_owner_evidence
 from ._umf_key_tuples import _same_json_meaning
@@ -19,30 +21,48 @@ class CurrentQueryOriginals:
 _CURRENT_CONSUMER={'profile': 'truss-current-query-consumer/0.2-candidate', 'umfRevision': '9ff2ba12271be889aad81c09695487e14655893d', 'umfBundleSha256': '5c0996adf80552753899d7b3e196b93f7641bdf82d6bbb30dace8c90ad1ff004', 'umfManifestSha256': '16df44d7d0d1ce2a59c9b12129ab803f025d3fdb4a4aefdf98474b9e22fcbc62', 'resultAbi': 'weft.postgresql.current-values/0.2-candidate', 'embeddedRuntime': 'mini-racer==0.14.1', 'embeddedProfile': 'truss.embedded-v8/2', 'embeddedV8Version': '14.4.258.23'}
 _CURRENT_CONSUMER['embeddedManifestSha256']=EMBEDDED_MANIFEST_SHA256
 
-# Published Weft 0.4.47 compiler identities for the supported platform wheels.
+# Frozen local Weft 0.4.48 source and exact macOS wheel identity.
 _CONSUMER_COHORTS=(
     {**_CURRENT_CONSUMER,
-        'weftRevision':'12051af87cd9f910f880f21fe6b95a507e2fcb94',
-        'weftWheelSha256':'643b6bb2a93a0ee881ddc5950c4e9c53e38207ac3d2b97acb47b9361666f95b0',
-        'weftModuleSha256':'7f1241ac473a76b83926683a2999ec1378eaaada539756d3d550f6b01d52c4a1'},
-    {**_CURRENT_CONSUMER,
-        'weftRevision':'12051af87cd9f910f880f21fe6b95a507e2fcb94',
-        'weftWheelSha256':'729d632ce9ea97c52100a8d23f513821372173e2962622d357b85c99b11b457c',
-        'weftModuleSha256':'6226f88d2b25715c73c9669c9b3d8124100813698522a746cf9ed99627987c85'},
+        'weftRevision':'db1e0dc5b1ec6aec0f12646421cefc314989d974',
+        'weftWheelSha256':'def824d16bc00f9deb50c7c63bc08a728cff631eef25cf2616032b761e1c679c',
+        'weftModuleSha256':'36224fd006f525e26e79ad2504bee7ffd75439ce1c8367564cfeb7c826e736a4'},
 )
 
 
-def _actual_consumer():
+@lru_cache(maxsize=1)
+def _actual_consumer_json():
     try:
         import weft.weft as native
-        digest=sha256(Path(native.__file__).read_bytes()).hexdigest()
+        digest=_actual_weft_module_sha256()
         cohorts=[c for c in _CONSUMER_COHORTS if c['weftModuleSha256']==digest]
         if (len(cohorts)!=1 or not callable(native.CurrentQueryPreparation.native_request_json)
                 or not callable(native.CurrentQueryPreparation.lower_postgresql_current_rows_candidate_json)):
             raise ValueError('Actual selected original Weft ABI2 module required')
+        verify_current_query_owner_assets()
+        consumer=cohorts[0]
+        if (current_query_owner_asset_sha256('manifest.json')!=consumer['umfManifestSha256']
+                or current_query_owner_asset_sha256('current-query-child.mjs')!=consumer['umfBundleSha256']):
+            raise ValueError('Actual original UMF consumer required')
     except (ImportError,AttributeError,OSError) as error:
         raise ValueError('Actual selected original Weft ABI2 module required') from error
-    return dict(cohorts[0])
+    return json.dumps(cohorts[0],separators=(',',':')).encode()
+
+
+@lru_cache(maxsize=1)
+def _actual_weft_module_sha256():
+    """Identify the installed native module once; package changes need restart."""
+    try:
+        import weft.weft as native
+        return sha256(Path(native.__file__).read_bytes()).hexdigest()
+    except (ImportError,AttributeError,OSError) as error:
+        raise ValueError('Actual selected original Weft ABI2 module required') from error
+
+
+def _actual_consumer():
+    # The selected native module and installed UMF assets are immutable for
+    # this process. Return a fresh mapping so callers cannot mutate the cache.
+    return decode_owner_evidence_json(_actual_consumer_json())
 
 
 def _match_consumer(consumer):
@@ -50,10 +70,6 @@ def _match_consumer(consumer):
     # cohort. Another known wheel still requires explicit source migration.
     if not same_owner_evidence(consumer,_actual_consumer()):
         raise ValueError('Unsupported exact query consumer selection')
-    root=verify_current_query_owner_assets()
-    if (sha256(root.joinpath('manifest.json').read_bytes()).hexdigest()!=consumer['umfManifestSha256']
-            or sha256(root.joinpath('current-query-child.mjs').read_bytes()).hexdigest()!=consumer['umfBundleSha256']):
-        raise ValueError('Actual original UMF consumer required')
 
 
 def prepare_current_query_originals(opaque_sources_bytes):
@@ -62,7 +78,6 @@ def prepare_current_query_originals(opaque_sources_bytes):
         raise ValueError('Bounded immutable original opaque source bytes required')
     consumer=_actual_consumer()
     _match_consumer(consumer)
-    import json
     return CurrentQueryOriginals(opaque_sources_bytes,json.dumps(consumer,separators=(',',':')).encode())
 
 
@@ -163,7 +178,8 @@ def check_query_originals(originals, initialize_bytes, accepted_request_bytes):
             or consumer['profile']!='truss-current-query-consumer/0.2-candidate'
             or any(type(v) is not str or not v for v in consumer.values())
             or any(re.fullmatch('[0-9a-f]{64}',consumer[k]) is None for k in fields if k.endswith('Sha256'))
-            or any(re.fullmatch('[0-9a-f]{40}',consumer[k]) is None for k in ('umfRevision','weftRevision'))
+            or re.fullmatch('[0-9a-f]{40}',consumer['umfRevision']) is None
+            or re.fullmatch('[0-9a-f]{40}',consumer['weftRevision']) is None
             or consumer['resultAbi']!='weft.postgresql.current-values/0.2-candidate'):
         raise ValueError('Explicit exact query consumer/result ABI selection required')
     _match_consumer(consumer)
