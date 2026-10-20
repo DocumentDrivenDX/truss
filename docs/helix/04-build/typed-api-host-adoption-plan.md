@@ -173,3 +173,20 @@ require exact native/source correspondence. Rollback of this code change removes
 the new transport; existing native receipts and historical evidence retain their
 meaning and must not be rewritten. The original caller-owned transaction API
 continues to report pending results.
+
+## Astra release review — 2026-10-20
+
+Astra identified two admission defects: preflight resource refusals omitted a
+validated registered schema digest, and the deadline began after decoding. Both
+are corrected: definite LIMIT/BUSY responses retain source identity and the budget
+starts at execute entry, including decoding before any lease. New generated-client
+and fake-clock controls cover single/batch refusal without database acquisition.
+The subprocess probe follows the actually imported Truss package, including wheel
+qualification. All31 installed component/parser tests pass in the candidate
+0.0.42/access0.1.0.dev5 cohort; dependency admission and wheel RECORD/source
+correspondence pass. Astra's final review has no remaining actionable finding.
+[Release notes](releases/v0.0.42.md) preserve the create-fixture and unchanged-row
+replay limits; historical execution receipts remain unchanged. Final packaged
+qualification accompanies the release. All six native candidate-wheel controls
+pass on macOS (36.426s), including generated actions, commit loss/recovery,
+cancellation and prior-work containment. Hosted Linux checks remain a release gate.

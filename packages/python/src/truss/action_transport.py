@@ -363,14 +363,31 @@ class TrussActionTransport:
 
     def execute(self, request: Mapping[str, Any]) -> Mapping[str, Any]:
         """Execute one generated UMF ``umf.access/1`` request."""
-        if not isinstance(request, Mapping) or any(type(key) is not str for key in request):
+        if not isinstance(request, Mapping):
             return {"schema": "", "error": {"code": ActionWireError.INVALID.value}}
+        deadline = monotonic() + self._operation_timeout_ms / 1000
+        try:
+            supplied_digest = request.get("schema")
+            registered_digest = (supplied_digest if type(supplied_digest) is str
+                                 and supplied_digest in self._schemas else "")
+        except Exception:
+            registered_digest = ""
+        if any(type(key) is not str for key in request):
+            code = ActionWireError.BUSY if monotonic() >= deadline else ActionWireError.INVALID
+            return {"schema": registered_digest, "error": {"code": code.value}}
         try:
             request = json.loads(_canonical(dict(request)).decode("utf-8"))
         except _RequestLimitExceeded:
-            return {"schema": "", "error": {"code": ActionWireError.LIMIT_EXCEEDED.value}}
+            code = ActionWireError.BUSY if monotonic() >= deadline else ActionWireError.LIMIT_EXCEEDED
+            return {"schema": registered_digest,
+                    "error": {"code": code.value}}
         except (TypeError, ValueError, UnicodeError):
-            return {"schema": "", "error": {"code": ActionWireError.INVALID.value}}
+            code = ActionWireError.BUSY if monotonic() >= deadline else ActionWireError.INVALID
+            return {"schema": registered_digest,
+                    "error": {"code": code.value}}
+        if monotonic() >= deadline:
+            return {"schema": registered_digest,
+                    "error": {"code": ActionWireError.BUSY.value}}
         digest = request.get("schema")
         schema = self._schemas.get(digest) if type(digest) is str else None
         if schema is None:
@@ -386,11 +403,11 @@ class TrussActionTransport:
             return {"schema": digest, "error": {"code": ActionWireError.UNSUPPORTED.value}}
         kind = request.get("kind")
         if kind == "validate":
-            return self._validate(schema, binding, request)
+            return self._validate(schema, binding, request, deadline)
         if kind == "apply":
-            return self._apply(schema, binding, request)
+            return self._apply(schema, binding, request, deadline)
         if kind == "apply_batch":
-            return self._apply_batch(schema, binding, request)
+            return self._apply_batch(schema, binding, request, deadline)
         return {"schema": digest, "error": {"code": ActionWireError.UNSUPPORTED.value}}
 
     def _inputs(self, schema: SchemaBinding, binding: ActionBinding,
@@ -412,17 +429,20 @@ class TrussActionTransport:
             return {"schema": schema.schema, "error": {"code": ActionWireError.INVALID.value}}
 
     def _apply(self, schema: SchemaBinding, binding: ActionBinding,
-               request: Mapping[str, Any]) -> Mapping[str, Any]:
+               request: Mapping[str, Any], deadline: float) -> Mapping[str, Any]:
         if set(request) != {"contract", "schema", "kind", "action", "inputs", "idempotency_key"}:
             return {"schema": schema.schema, "error": {"code": ActionWireError.INVALID.value}}
         key = request["idempotency_key"]
         if key is not None and (type(key) is not str or not key or "\0" in key):
             return {"schema": schema.schema, "error": {"code": ActionWireError.INVALID.value}}
         prepared = self._inputs(schema, binding, request["inputs"])
+        if monotonic() >= deadline:
+            return {"schema": schema.schema, "error": {"code": ActionWireError.BUSY.value}}
         if isinstance(prepared, Mapping):
             return prepared
         decoded, _inputs = prepared
-        result = self._run(schema, binding, decoded, key, original_request=_clone_json(dict(request)))
+        result = self._run(schema, binding, decoded, key, deadline=deadline,
+                           original_request=_clone_json(dict(request)))
         if type(result) is ActionApplied:
             return {"schema": schema.schema, "status": "committed", **result.body}
         if type(result) is ActionRefusalResult:
@@ -430,16 +450,18 @@ class TrussActionTransport:
         return {"schema": schema.schema, "error": {"code": ActionWireError.WRITE_OUTCOME_UNKNOWN.value}}
 
     def _validate(self, schema: SchemaBinding, binding: ActionBinding,
-                  request: Mapping[str, Any]) -> Mapping[str, Any]:
+                  request: Mapping[str, Any], deadline: float) -> Mapping[str, Any]:
         if set(request) != {"contract", "schema", "kind", "action", "inputs"}:
             return {"schema": schema.schema, "error": {"code": ActionWireError.INVALID.value}}
         if binding.validate is None:
             return {"schema": schema.schema, "error": {"code": ActionWireError.UNSUPPORTED.value}}
         prepared = self._inputs(schema, binding, request["inputs"])
+        if monotonic() >= deadline:
+            return {"schema": schema.schema, "error": {"code": ActionWireError.BUSY.value}}
         if isinstance(prepared, Mapping):
             return prepared
         decoded, _inputs = prepared
-        result = self._run(schema, binding, decoded, None,
+        result = self._run(schema, binding, decoded, None, deadline=deadline,
                            original_request=_clone_json(dict(request)), advisory=True)
         if type(result) is ActionValidated:
             return {"schema": schema.schema, "valid": True}
@@ -448,7 +470,7 @@ class TrussActionTransport:
         return {"schema": schema.schema, "error": {"code": ActionWireError.BUSY.value}}
 
     def _apply_batch(self, schema: SchemaBinding, binding: ActionBinding,
-                     request: Mapping[str, Any]) -> Mapping[str, Any]:
+                     request: Mapping[str, Any], deadline: float) -> Mapping[str, Any]:
         if binding.execute_batch is None or binding.validate_batch_receipt is None:
             return {"schema": schema.schema, "error": {"code": ActionWireError.UNSUPPORTED.value}}
         fields = {"contract", "schema", "kind", "action", "items", "atomic", "stop_on_error", "idempotency_key"}
@@ -465,6 +487,8 @@ class TrussActionTransport:
         original_items = []
         for raw in raw_items:
             prepared = self._inputs(schema, binding, raw)
+            if monotonic() >= deadline:
+                return {"schema": schema.schema, "error": {"code": ActionWireError.BUSY.value}}
             if isinstance(prepared, Mapping):
                 return prepared
             decoded, original = prepared
@@ -475,7 +499,7 @@ class TrussActionTransport:
         original_request = _clone_json(dict(request))
         context = {"request": _clone_json(original_request), "request_key": request_key,
                    "flags": flags, "original_items": tuple(original_items)}
-        result = self._run(schema, binding, tuple(decoded_items), request_key,
+        result = self._run(schema, binding, tuple(decoded_items), request_key, deadline=deadline,
                            original_request=original_request, batch_context=context)
         if type(result) is ActionApplied:
             return {"schema": schema.schema, "status": "committed", **result.body}
@@ -484,7 +508,7 @@ class TrussActionTransport:
         return {"schema": schema.schema, "error": {"code": ActionWireError.WRITE_OUTCOME_UNKNOWN.value}}
 
     def _run(self, schema: SchemaBinding, binding: ActionBinding, decoded: Any,
-             request_key: str | None, *, original_request: Mapping[str, Any],
+             request_key: str | None, *, deadline: float, original_request: Mapping[str, Any],
              batch_context: Mapping[str, Any] | None = None, advisory: bool = False) -> Any:
         from psycopg import pq
         from .psycopg_host import adopt_psycopg_host
@@ -506,8 +530,9 @@ class TrussActionTransport:
         cleanup_base_exception: BaseException | None = None
         staged: StagedAction | StagedBatch | None = None
         backend_pid = None
-        deadline = monotonic() + self._operation_timeout_ms / 1000
         try:
+            if monotonic() >= deadline:
+                raise ActionRefusal(ActionWireError.BUSY)
             lease = self._connection_factory()
             if not (callable(getattr(lease, "__enter__", None)) and callable(getattr(lease, "__exit__", None))):
                 raise ActionRefusal(ActionWireError.UNSUPPORTED)

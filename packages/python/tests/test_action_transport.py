@@ -2,6 +2,13 @@
 """Pure Python admission controls for the generated-action transport."""
 import asyncio
 import asyncio
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tempfile
 import unittest
 from contextlib import AbstractContextManager
 from types import SimpleNamespace
@@ -9,6 +16,7 @@ from unittest.mock import patch
 
 import psycopg
 from psycopg import pq
+import truss as truss_package
 from truss import ActionBinding, ActionRefusal, ActionWireError, SchemaBinding, TrussActionTransport
 from truss.execution import Ok
 from truss.action_transport import ActionRefusalResult, _wire_refusal
@@ -164,7 +172,7 @@ class ActionTransportAdmissionTests(unittest.TestCase):
         self.assertEqual(state["discarded"], 1)
 
     def test_deadline_expiring_during_commit_cleanup_never_acknowledges(self):
-        reads = iter((0.0, 0.0, 0.0, 0.0, 31.0))
+        reads = iter((0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 31.0))
         response, statements, state = self._run_component_lifecycle(now=lambda: next(reads))
         self.assertEqual(response["error"]["code"], ActionWireError.WRITE_OUTCOME_UNKNOWN.value)
         self.assertEqual(statements[-1], "COMMIT")
@@ -226,6 +234,7 @@ class ActionTransportAdmissionTests(unittest.TestCase):
         self.assertEqual(result["error"]["code"], ActionWireError.UNSUPPORTED.value)
         self.assertEqual(self.leases, [])
 
+
     def test_reads_and_unqualified_actions_are_rejected_before_lease(self):
         for request in (
             {"contract": "umf.access/1", "schema": SOURCE, "kind": "read", "query": "x"},
@@ -280,9 +289,57 @@ class ActionTransportAdmissionTests(unittest.TestCase):
         request = {"contract": "umf.access/1", "schema": SOURCE, "kind": "apply",
                    "action": "sample.Create", "inputs": {"text": "x" * (1_048_577)},
                    "idempotency_key": "k"}
-        self.assertEqual(self.transport.execute(request)["error"]["code"],
-                         ActionWireError.LIMIT_EXCEEDED.value)
+        result = self.transport.execute(request)
+        self.assertEqual(result, {"schema": SOURCE,
+                                  "error": {"code": ActionWireError.LIMIT_EXCEEDED.value}})
         self.assertEqual(self.leases, [])
+
+    def test_malformed_request_keeps_registered_identity_before_lease(self):
+        request = {"contract": "umf.access/1", "schema": SOURCE, "kind": "apply",
+                   "action": "sample.Create", "inputs": {"value": object()},
+                   "idempotency_key": "k"}
+        result = self.transport.execute(request)
+        self.assertEqual(result, {"schema": SOURCE,
+                                  "error": {"code": ActionWireError.INVALID.value}})
+        self.assertEqual(self.leases, [])
+
+    def test_deadline_including_single_and_batch_decoders_precedes_lease(self):
+        for kind in ("apply", "apply_batch"):
+            with self.subTest(kind=kind):
+                clock = [0.0]
+                dispatched = []
+
+                def decode(inputs):
+                    clock[0] = 2.0
+                    return dict(inputs)
+
+                binding = ActionBinding(
+                    "sample.Create", decode,
+                    lambda *args: dispatched.append("single"),
+                    validate_receipt=lambda body, native: True,
+                    execute_batch=lambda *args: dispatched.append("batch"),
+                    validate_batch_receipt=lambda body, native: True)
+                transport = TrussActionTransport(
+                    connection_factory=lambda: self.leases.append("requested"),
+                    assembly_factory=lambda host: self.fail("expired request must not compose"),
+                    schemas={SOURCE: SchemaBinding(SOURCE, lambda assembly, tx: None,
+                                                   {binding.action_id: binding})},
+                    operation_timeout_ms=1)
+                if kind == "apply":
+                    request = {"contract": "umf.access/1", "schema": SOURCE,
+                               "kind": kind, "action": binding.action_id,
+                               "inputs": {"value": "x"}, "idempotency_key": "k"}
+                else:
+                    request = {"contract": "umf.access/1", "schema": SOURCE,
+                               "kind": kind, "action": binding.action_id,
+                               "items": [{"value": "x"}], "atomic": True,
+                               "stop_on_error": True, "idempotency_key": "k"}
+                with patch("truss.action_transport.monotonic", side_effect=lambda: clock[0]):
+                    result = transport.execute(request)
+                self.assertEqual(result, {"schema": SOURCE,
+                                          "error": {"code": ActionWireError.BUSY.value}})
+                self.assertEqual(self.leases, [])
+                self.assertEqual(dispatched, [])
 
     def test_escaped_canonical_request_bytes_are_limited_before_lease(self):
         request = {"contract": "umf.access/1", "schema": SOURCE, "kind": "apply",
@@ -571,6 +628,61 @@ class ActionTransportAdmissionTests(unittest.TestCase):
                          ["BEGIN ISOLATION LEVEL READ COMMITTED READ WRITE"])
         self.assertEqual(response["error"]["code"], ActionWireError.WRITE_OUTCOME_UNKNOWN.value)
         self.assertEqual(discarded, [True])
+
+
+
+UMF_ROOT = os.environ.get("TRUSS_UMF_SOURCE_ROOT")
+BUN = os.environ.get("TRUSS_BUN_EXECUTABLE") or shutil.which("bun")
+
+
+class GeneratedClientPreflightTests(unittest.TestCase):
+    @unittest.skipUnless(UMF_ROOT and BUN,
+                         "Set TRUSS_UMF_SOURCE_ROOT and install Bun for generated-client coverage")
+    def test_sync_client_classifies_oversized_registered_request_as_limit(self):
+        root = Path(UMF_ROOT).resolve()
+        source_path = root / "tests/unified/adoption.json"
+        self.assertTrue(source_path.is_file())
+        with tempfile.TemporaryDirectory(prefix="truss-generated-preflight-") as directory:
+            script = '''const root = process.env.TRUSS_UMF_SOURCE_ROOT;
+const { generatePythonClient } = await import(new URL("src/access/index.ts", `file://${root}/`).href);
+const source = await Bun.file("tests/unified/adoption.json").text();
+const result = generatePythonClient({text: source, package: "adoption"});
+if (!Array.isArray(result.files) || result.files.length === 0) throw new Error("UMF generator returned no files");
+for (const file of result.files) {
+  const path = `${process.env.TRUSS_GENERATED_DIR}/${file.path}`;
+  await Bun.write(path, file.text);
+}
+console.log(result.sourceDigest);'''
+            generated = subprocess.run(
+                [BUN, "-e", script], cwd=root, text=True, capture_output=True,
+                timeout=60, env={**os.environ, "TRUSS_UMF_SOURCE_ROOT": str(root),
+                                 "TRUSS_GENERATED_DIR": directory})
+            self.assertEqual(generated.returncode, 0, generated.stderr[-2000:])
+            digest = generated.stdout.strip().splitlines()[-1]
+            probe = '''from adoption import CustomerKey, SyncActions, SyncClient
+from truss import SchemaBinding
+from truss.action_transport import TrussActionTransport
+leases = []
+transport = TrussActionTransport(connection_factory=lambda: leases.append("opened"),
+    assembly_factory=lambda connection: (_ for _ in ()).throw(AssertionError("must not compose")),
+    schemas={DIGEST: SchemaBinding(DIGEST, lambda assembly, tx: None, {})})
+try:
+    SyncActions(SyncClient(transport)).open_project(
+        code="P", title="x" * 1_048_577, client=CustomerKey(code="C1"))
+except Exception as error:
+    assert error.code == "LIMIT_EXCEEDED", error.code
+else:
+    raise AssertionError("oversized generated request was accepted")
+assert leases == [], leases
+'''.replace("DIGEST", repr(digest))
+            package_root = Path(truss_package.__file__).resolve().parent.parent
+            result = subprocess.run(
+                [sys.executable, "-c", probe], cwd=directory, text=True,
+                capture_output=True, timeout=30,
+                env={**os.environ,
+                     "PYTHONPATH": os.pathsep.join((directory, str(package_root))),
+                     "PYTHONDONTWRITEBYTECODE": "1"})
+            self.assertEqual(result.returncode, 0, result.stderr[-2000:])
 
 
 if __name__ == "__main__":
