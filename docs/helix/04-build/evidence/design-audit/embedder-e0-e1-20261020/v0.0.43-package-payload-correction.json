@@ -1,0 +1,14 @@
+{
+  "sourcePayloadFiles": 413,
+  "correctedWheelAndSdistExact": true,
+  "rejectedCandidateRun": 39506786625,
+  "omittedCandidateFiles": [
+    "_umf/licenses/ajv.txt",
+    "_umf/licenses/fast-deep-equal.txt",
+    "_umf/licenses/fast-uri.txt",
+    "_umf/licenses/json-schema-traverse.txt",
+    "_umf/licenses/require-from-string.txt",
+    "_umf/licenses/yaml.txt"
+  ],
+  "correction": "Explicit _umf/licenses/*.txt package-data glob; CI requires complete wheel and sdist runtime source equality before upload."
+}

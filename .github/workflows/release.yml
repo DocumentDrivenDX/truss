@@ -57,6 +57,20 @@ jobs:
           PYTHON
           python -m pip install build==1.3.0
           python -m build --outdir dist packages/python
+      - name: Verify complete source payload in wheel and sdist
+        run: |
+          python - <<'PYTHON'
+          import pathlib,tarfile,zipfile
+          source=pathlib.Path('packages/python/src/truss')
+          expected={p.relative_to(source).as_posix():p.read_bytes() for p in source.rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.suffix!='.pyc'}
+          with zipfile.ZipFile(next(pathlib.Path('dist').glob('*.whl'))) as wheel:
+              actual={n.removeprefix('truss/'):wheel.read(n) for n in wheel.namelist() if n.startswith('truss/') and not n.endswith('/')}
+              assert actual==expected, 'Wheel runtime payload differs from source'
+          with tarfile.open(next(pathlib.Path('dist').glob('*.tar.gz'))) as sdist:
+              actual={m.name.split('/src/truss/',1)[1]:sdist.extractfile(m).read() for m in sdist.getmembers() if m.isfile() and '/src/truss/' in m.name}
+              assert actual==expected, 'Sdist runtime payload differs from source'
+          print(f'Verified {len(expected)} exact source payloads in wheel and sdist')
+          PYTHON
       - uses: actions/upload-artifact@v4
         with:
           name: python-package
