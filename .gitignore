@@ -17,3 +17,6 @@ __pycache__/
 packages/python/build/
 packages/python/truss_toolkit-*/
 packages/python/src/*.egg-info/
+
+# Local build-signing material; never commit
+.innsigle/private/

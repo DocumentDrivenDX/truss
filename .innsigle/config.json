@@ -25,5 +25,11 @@
   ],
   "kind_from_frontmatter": {
     "field": "composition"
+  },
+  "keys": {
+    "build": {
+      "key_id": "ed25519:bb0bf250e8eba05a0f7793a85a0824af",
+      "signing_key": ".innsigle/private/build.priv.pem"
+    }
   }
 }

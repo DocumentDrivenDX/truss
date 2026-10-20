@@ -10,6 +10,14 @@
       "created_at": "2026-10-08T22:23:42Z",
       "revoked_at": null,
       "role": "human"
+    },
+    {
+      "key_id": "ed25519:bb0bf250e8eba05a0f7793a85a0824af",
+      "alg": "ed25519",
+      "public_key": "emW-ZBoDgMcOnMuj_OYBe6AGWcdn6Chxhm6OMI7eEuo",
+      "created_at": "2026-10-20T14:47:44Z",
+      "revoked_at": null,
+      "role": "build"
     }
   ],
   "endorsements": []

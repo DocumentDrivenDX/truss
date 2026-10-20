@@ -2,19 +2,19 @@
   "payload": {
     "innsigle": "1",
     "type": "https://innsigle.dev/claim/colophon/v1",
-    "issued_at": "2026-10-08T22:26:04Z",
+    "issued_at": "2026-10-20T14:47:45Z",
     "issuer": {
       "id": "truss",
       "name": "Truss",
-      "key_id": "ed25519:5bc28375157046d0fd142abf3b834116",
+      "key_id": "ed25519:bb0bf250e8eba05a0f7793a85a0824af",
       "key_url": "https://documentdrivendx.github.io/truss/.well-known/innsigle/keys.json"
     },
     "subjects": [
       {
-        "uri": "https://documentdrivendx.github.io/truss/",
+        "uri": "https://documentdrivendx.github.io/truss/_index/",
         "digest": {
           "alg": "sha256",
-          "value": "b96cdf3c55034251efd8c13cc53643cc0c6bdee69f2c489669274da808ddb5a7"
+          "value": "176d743a04597f70877a7306d3a87b4e5b61a0d2b31051ae3cbf87ae20ebc8cc"
         }
       }
     ],
@@ -24,30 +24,30 @@
       "ingredients": [
         {
           "kind": "model",
-          "name": "Codex",
-          "role": "brand voice, design, copy and implementation"
-        },
-        {
-          "kind": "human",
-          "name": "project owner",
-          "role": "direction and publication request"
+          "name": "Claude",
+          "role": "draft"
         },
         {
           "kind": "tool",
-          "name": "HELIX",
-          "role": "governed source and design guidance"
+          "name": "sloptimizer",
+          "role": "rewrite"
+        },
+        {
+          "kind": "human",
+          "name": "operator",
+          "role": "structure-edit"
         }
       ],
-      "notes": "Codex authored this microsite from Truss repository artifacts under the project owner’s direction. The seal covers page source, including inline diagrams, and does not certify product support or performance. No human-input percentage is asserted."
+      "notes": null
     }
   },
   "payload_encoding": "json",
   "signatures": [
     {
-      "key_id": "ed25519:5bc28375157046d0fd142abf3b834116",
+      "key_id": "ed25519:bb0bf250e8eba05a0f7793a85a0824af",
       "alg": "ed25519",
-      "sig": "A68wLMImldsaA8fXBPTJkdF5IBvyLwA21NzRuzGsaapNhE9oqOR05SYhzqSUc48yPptynDYENpxRgn2pbjBQCw",
-      "signed_at": "2026-10-08T22:26:04Z"
+      "sig": "XJeUhbB09PBl6Be-RKB1gyW6QNFTLDrWYOmiflBdbEZlc_T0UAvWBKe0KT8QYkCcp5p9KTqyCNll8lDaSoNxDg",
+      "signed_at": "2026-10-20T14:47:45Z"
     }
   ]
 }
