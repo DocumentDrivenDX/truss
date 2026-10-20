@@ -11,13 +11,14 @@ and Weft-compiled scalar and relationship queries. The local baseline is Documen
 `pgserver-pg18==18.6.1` (PostgreSQL18.6) with psycopg3.3.6. Python deployments
 use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Start with the [runnable adopter workflow](packages/python/examples/adopter_workflow.py).
 
-**Version 0.0.40:** native `0.72-candidate`, Weft `0.4.47`, and UMF core
-`0.10.0`. Publication requires both installed native-platform gates, the three
-real schemas and all 22 stress workloads with unchanged SQL and operation
-limits. See the release page for published artifacts and their qualification:
-[v0.0.40 release page](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.40).
+**Version 0.0.41:** native `0.72-candidate`, Weft `0.4.48`, and UMF core
+`0.10.0`. Local macOS ARM64 qualification covers 11 cache/cohort controls and
+nine PostgreSQL query/disclosure checks. The unchanged SQL runtime retains the
+three real-schema and 11 stress-case results from v0.0.40; those workloads were
+not repeated. Other platform checks cover packaging only. See the
+[v0.0.41 release page](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.41).
 
-Version 0.0.40 accepts only original UMF `0.10.0` source documents and
+Version 0.0.41 accepts only original UMF `0.10.0` source documents and
 requires a fresh installation. Earlier UMF source formats and upgrades from older Truss
 installations are unsupported. Existing databases are never migrated or reset
 automatically. Earlier catalog revisions, receipts and retained history within
