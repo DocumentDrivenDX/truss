@@ -94,6 +94,7 @@ class DisclosureCohortTests(unittest.TestCase):
   self.assertEqual(first_disclosure['weftWheelSha256'],disclosure_wheels[first_disclosure['weftModuleSha256']])
 
  def test_enrolled_assets_are_identified_once_per_process_and_rechecked_after_restart(self):
+  self.addCleanup(verify_current_disclosure_owner_assets.cache_clear)
   enrolled=verify_current_disclosure_owner_assets()
   with tempfile.TemporaryDirectory(prefix='truss-disclosure-assets-') as directory:
    package=pathlib.Path(directory);assets=package/'_current_disclosure_owner'
@@ -119,6 +120,7 @@ class DisclosureCohortTests(unittest.TestCase):
 
  def test_query_assets_use_the_same_restart_scoped_identity(self):
   from truss._current_query_computation import verify_current_query_owner_assets,clear_current_query_owner_asset_cache
+  self.addCleanup(clear_current_query_owner_asset_cache)
   enrolled=verify_current_query_owner_assets()
   with tempfile.TemporaryDirectory(prefix='truss-query-assets-') as directory:
    package=pathlib.Path(directory);assets=package/'_current_query_owner'

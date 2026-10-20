@@ -1,0 +1,16 @@
+{
+  "originalRun": "https://github.com/DocumentDrivenDX/truss/actions/runs/39502041965",
+  "originalRunStatus": "failed on both platforms; not reclassified",
+  "observed": "13 cohort/source controls and all5 native disclosure cases passed;3 accidentally discovered query reruns failed after temporary-root asset-cache pollution",
+  "correction": "Restore test caches in cleanup and select intended five disclosure cases explicitly; original separate current-query gate unchanged",
+  "verification": "Full22-test module composition including all accidental query reruns passes after cleanup, without runtime changes",
+  "elapsedSeconds": 54.437,
+  "testsPassed": 22,
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/src:packages/python/tests TRUSS_DISCLOSURE_NATIVE_QUALIFICATION=1 python scripts/run-python-test-module.py test_current_disclosure_cohort test_current_disclosure_originals test_current_disclosure_runtime_native -v",
+  "sha256": {
+    "packages/python/tests/test_current_disclosure_cohort.py": "4e50e19c98306937430ab7591ab121621a754c28d6e43ce1a24ff9667a2fcdc5",
+    ".github/workflows/release.yml": "d98a82ce8afb05b022c4cbe1f23291ac65e2e06d932dbd90bf115e326accb52a"
+  },
+  "logSha256": "9fcb38972d465dc866a0eb456da6ace65eb8571ebe26aa3508556f00340d1117",
+  "scope": "Local macOS source fixture-composition regression; exact-head installed-wheel CI remains required"
+}
