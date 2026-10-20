@@ -1,0 +1,49 @@
+{
+  "status": "verified",
+  "unauthenticated": true,
+  "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.43",
+  "commit": "c8af523ac3f7e64f3be180e81e04e2d11f53601e",
+  "assetCount": 10,
+  "assets": {
+    "catalog-key-backfill-report-v0.1.md": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.43/catalog-key-backfill-report-v0.1.md",
+      "sha256": "fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50"
+    },
+    "catalog-rebind-report-v0.2.md": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.43/catalog-rebind-report-v0.2.md",
+      "sha256": "14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942"
+    },
+    "catalog-rebind-report-v0.4.md": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.43/catalog-rebind-report-v0.4.md",
+      "sha256": "38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4"
+    },
+    "catalog-registration-summary-v0.1.md": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.43/catalog-registration-summary-v0.1.md",
+      "sha256": "674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945"
+    },
+    "catalog-source-reference-v0.1.md": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.43/catalog-source-reference-v0.1.md",
+      "sha256": "41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7"
+    },
+    "logical-query-abi.json": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.43/logical-query-abi.json",
+      "sha256": "9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f"
+    },
+    "release-pins.json": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.43/release-pins.json",
+      "sha256": "855764d21c736b0f0091acb43991c16bbe00dc014650d0d90bcc5a6551dc75af"
+    },
+    "SHA256SUMS": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.43/SHA256SUMS",
+      "sha256": "dc0cee9b58f6bad188f88c1043bf647353e3bd8c4094331b77342e425d8fef34"
+    },
+    "truss_toolkit-0.0.43-py3-none-any.whl": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.43/truss_toolkit-0.0.43-py3-none-any.whl",
+      "sha256": "ee81c0c9ac138046d56b5eccd7c84a8fe0c9085e62962c8a8f6e0a3c1e4463a6"
+    },
+    "truss_toolkit-0.0.43.tar.gz": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.43/truss_toolkit-0.0.43.tar.gz",
+      "sha256": "0df33beb2318496e0ab04bbb52cf363e76b3d6960488626a2ba594bc6a51765c"
+    }
+  }
+}
