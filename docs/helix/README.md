@@ -1,17 +1,12 @@
 # truss project documentation
 
-The current release is [Python SDK v0.0.40](04-build/releases/v0.0.40.md). It targets fresh UMF0.10
-installations on local macOS ARM64/PostgreSQL18.6, with native `0.72-candidate`
-and published Weft `0.4.47`. Existing release unittest selectors all have passing
-latest local results; the broader discovery sweep remains failed/incomplete.
-The three real schemas and all 11 unchanged stress cases pass once locally with
-the original 10s SQL/30s operation limits;
-the million-object case does not qualify SQL lists beyond ABI 1.1's source cap.
-See the [current qualification checkpoint](03-test/performance/README.md#2026-10-19-current-local-qualification-checkpoint)
-for package identity, exact test scope and limits. These results do not
-extend qualification to Linux, managed databases or separately gated profiles.
-The release carries a [qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification.json)
-and [evidence archive](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification-evidence.tar.gz).
+The next release is [Python SDK v0.0.42](04-build/releases/v0.0.42.md), adding
+the experimental registered typed-action host and strict native receipt admission.
+Its final qualification is carried with the release assets. The
+[v0.0.40 checkpoint](03-test/performance/README.md#2026-10-19-current-local-qualification-checkpoint)
+retains its original broader workload evidence and limits. Neither the focused
+typed-action cases nor past checkpoints establish a complete new platform or
+production-handler qualification.
 
 Historically, [v0.0.39](04-build/releases/v0.0.39.md) used native `0.71-candidate`
 and Weft `0.4.41` / backend `0.4.41`. Its tested source passed complete

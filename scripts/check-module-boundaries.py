@@ -20,6 +20,8 @@ ALLOWED = {
     '_embedded': {'functools','hashlib','importlib.resources','importlib.metadata','json','gzip','struct','subprocess','threading','time','py_mini_racer','truss._embedded_release','truss._current_query_pipe','truss._current_disclosure_pipe'},
     '_embedded_release': set(),
     "access": {"base64","truss.contracts","umf_access.types","umf_access.dsl","umf_access.related_keys","truss.query_stream","hashlib","umf_access.native_program","__future__","collections.abc","contextlib","datetime","time","typing","json","decimal","pydantic","umf_access.adoption","umf_access.engine_catalog","umf_access.reviewed","umf_access.pages","umf_access.codec_support","umf_access.postgres_read","truss.execution","truss.query"},
+    # Explicit registered action composition; public native groups and owned psycopg lifecycle only.
+    'action_transport': {'time','__future__','dataclasses','enum','hashlib','inspect','json','collections.abc','types','typing','truss.groups','psycopg','truss.psycopg_host','truss.execution'},
     # Original-context/native correspondence data only; no witness admission.
     '_native_model_correspondence': {'dataclasses','hashlib','json','truss._native_source_observation','truss._owner_evidence_json','weft'},
     # Reviewed same-context association definition data; no permit or issuer.
@@ -31,10 +33,10 @@ ALLOWED = {
     # Native source descriptor data only; no native observation or permission.
     '_native_source_descriptor': {'dataclasses','hashlib','json','re','truss._owner_evidence_json'},
     # Reviewed disclosure consumer: explicit held computation and transport edges.
-    '_current_disclosure_computation': {'truss._embedded','contextlib','hashlib','importlib.resources','json','shutil','subprocess','time','truss._current_disclosure_pipe'},
+    '_current_disclosure_computation': {'functools','truss._embedded','contextlib','hashlib','importlib.resources','json','shutil','subprocess','time','truss._current_disclosure_pipe'},
     '_current_disclosure_evaluation': {'truss._current_disclosure_context_capture','dataclasses','hashlib','time','truss._current_disclosure_computation','truss._current_disclosure_originals','truss._current_disclosure_session','truss._current_disclosure_stage','truss._current_disclosure_wire','truss._current_query_evaluation','truss._current_query_sources','truss._owner_evidence_json','weft.weft'},
     # Immutable embedded-manifest identity only; disclosure original bytes stay separately verified.
-    '_current_disclosure_originals': {'dataclasses','hashlib','json','pathlib','truss._embedded_release','truss._current_disclosure_computation','truss._current_query_originals','truss._owner_evidence_json','weft.weft'},
+    '_current_disclosure_originals': {'functools','dataclasses','hashlib','json','pathlib','truss._embedded_release','truss._current_disclosure_computation','truss._current_query_originals','truss._owner_evidence_json','weft.weft'},
     '_current_disclosure_pipe': {'truss._current_query_pipe'},
     '_current_disclosure_session': {'truss._current_disclosure_pipe','truss._current_disclosure_wire','truss._current_query_evaluation','truss._owner_evidence_json'},
     '_current_disclosure_stage': {'dataclasses','hashlib','json','psycopg','psycopg.rows','truss._current_disclosure_wire','truss._current_query_evaluation','truss._owner_evidence_json','truss._security_catalog_subject_installation','uuid'},
@@ -42,11 +44,11 @@ ALLOWED = {
     'current_disclosure': {'dataclasses','truss._current_disclosure_originals','truss._current_query_sources','truss.current_query','truss.execution','truss.psycopg_host','typing'},
 
     # Current-policy query composition: explicit orchestration and installer edges.
-    '_current_query_computation': {'truss._embedded','contextlib','hashlib','importlib.resources','json','shutil','subprocess','time','truss._current_query_pipe'},
+    '_current_query_computation': {'functools','truss._embedded','contextlib','hashlib','importlib.resources','json','shutil','subprocess','time','truss._current_query_pipe'},
     '_current_query_evaluation': {'hashlib','json','time','truss._current_query_computation','truss._current_query_pipe','truss._owner_evidence_json','weft.weft'},
     '_current_disclosure_facts': {'base64','dataclasses','json','truss._current_query_originals','truss._current_query_pipe','truss._current_query_sources','truss._owner_evidence_json','truss._security_catalog_subject_installation','truss._umf_key_tuples'},
     '_current_query_facts': {'base64','dataclasses','json','truss._current_query_originals','truss._current_query_pipe','truss._current_query_sources','truss._owner_evidence_json','truss._security_catalog_subject_installation','truss._umf_key_tuples'},
-    '_current_query_originals': {'truss._embedded_release','dataclasses','hashlib','json','pathlib','re','truss._current_query_computation','truss._owner_evidence_json','truss._umf_key_tuples','weft.weft'},
+    '_current_query_originals': {'functools','truss._embedded_release','dataclasses','hashlib','json','pathlib','re','truss._current_query_computation','truss._owner_evidence_json','truss._umf_key_tuples','weft.weft'},
     '_current_query_pipe': {'decimal','json','os','pathlib','selectors','struct','subprocess','threading','time'},
     '_current_query_protection': {'truss._current_disclosure_originals','json','psycopg','re','truss._current_query_sources','truss._current_query_subjects','truss._installation_privileges','truss.catalog_runtime','truss.current_query','truss.execution','truss.psycopg_host'},
     '_current_query_runtime': {'truss._current_disclosure_context_capture','truss._security_catalog_assessment','subprocess','truss._current_query_evaluation','truss._current_query_facts','truss._current_query_pipe','truss._current_query_protection','truss._current_query_sources','truss._current_query_stage','truss._current_query_subjects','truss._installation_privileges','truss._owner_evidence_json','truss._security_catalog_subject_installation','truss.catalog_runtime','truss.execution','truss.psycopg_host','truss.query','truss._current_disclosure_evaluation','truss._current_disclosure_originals','truss._current_query_originals','truss.current_disclosure'},
@@ -94,7 +96,7 @@ ALLOWED = {
     '_umf_key_tuples': {'base64','truss.contracts','decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._core10_catalog_release','subprocess','time'},
     '_catalog_definition_source': {'json','decimal','truss._owner_evidence_json'},
     # Group preparation decodes the shared catalog reference contract; no catalog runtime dependency.
-    '_group_runtime': {'truss._record_preparation','truss.catalog_view','truss._receipt_position','typing','dataclasses','hashlib','base64','json','truss.contracts','truss.execution','truss.groups','truss.preparation','truss._umf_key_tuples'},
+    '_group_runtime': {'uuid','re','truss._acceptance_json','truss._record_preparation','truss.catalog_view','truss._receipt_position','typing','dataclasses','hashlib','base64','json','truss.contracts','truss.execution','truss.groups','truss.preparation','truss._umf_key_tuples'},
     '_preparation_seal_installation': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._preparation_source_epoch'},
     '_preparation_source_epoch': {'dataclasses','hashlib','importlib.resources','json','re','truss.catalog_runtime','truss.execution','truss.psycopg_host','truss._installation_privileges','truss._security_catalog_assessment','truss._security_source_epoch_installation','truss._psycopg_epoch_cut'},
     '_preparation_catalog_cut': {'dataclasses','hashlib','importlib.resources','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_assessment','truss._security_catalog_subject_installation','truss._current_query_protection'},
@@ -178,7 +180,7 @@ ALLOWED = {
     '_operation_arbitration': {'dataclasses', 'threading', 'truss._host_execution', 'uuid'},
     'execution': {'dataclasses', 'typing'},
     '_installation_archive': {'dataclasses', 'hashlib'},
-    '__init__': {'truss.catalog_preparation','truss.catalog_report_sources','truss.engine_import','truss.traversal','truss.query','truss.import_source','truss.history','truss.capabilities','truss.feed','truss.import_runtime','truss.receipt_visibility','truss.edge_read','truss.reader_catalog','truss._group_runtime','truss.object_read','truss.catalog_view','truss.catalog_runtime','truss.psycopg_host','truss._borrowed_host','truss.installation', 'truss.host', 'truss.assembly', 'truss.assembly_contracts', 'truss.local_runtime', 'truss.execution', 'truss.preparation','truss.current_query','truss.current_disclosure'},
+    '__init__': {'truss.action_transport','truss.catalog_preparation','truss.catalog_report_sources','truss.engine_import','truss.traversal','truss.query','truss.import_source','truss.history','truss.capabilities','truss.feed','truss.import_runtime','truss.receipt_visibility','truss.edge_read','truss.reader_catalog','truss._group_runtime','truss.object_read','truss.catalog_view','truss.catalog_runtime','truss.psycopg_host','truss._borrowed_host','truss.installation', 'truss.host', 'truss.assembly', 'truss.assembly_contracts', 'truss.local_runtime', 'truss.execution', 'truss.preparation','truss.current_query','truss.current_disclosure'},
     'installation': {'dataclasses','typing','truss.host','truss.execution','truss.psycopg_host'},
     'host': {'typing', 'truss.execution', 'truss._host_call_recovery', 'dataclasses', 'truss._native_bootstrap', 'truss._host_execution', 'truss._native_transactions', 'truss._native_arbitration', 'truss._host_control_custody', 'truss._host_session'},
     'assembly': {'truss.catalog_runtime','__future__', 'typing', 'dataclasses', 'threading', 'truss.contracts', 'truss.assembly_contracts', 'truss.execution', 'truss.psycopg_host', 'truss.installation'},

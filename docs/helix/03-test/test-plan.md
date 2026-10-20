@@ -28,6 +28,41 @@ ddx:
 ---
 
 # Truss project test plan
+## Typed host and receipt qualification — 2026-10-20
+
+P0 coverage for US-040/043 and CONTRACT-004/007/009 has two primary layers.
+Component controls cover closed native response cross-products, malformed replay
+observations, unsupported requests before dispatch, source mismatch, foreign
+transaction preservation, staged wire rejection, exact settlement acknowledgement,
+lost acknowledgement, lease cleanup failure and original cancellation identity.
+Use the existing Python unittest framework; focused controls avoid a second
+framework or duplicated platform matrix.
+
+Native integration must execute actual generated synchronous UMF clients against
+installed ordinary-role Truss groups. Independently observe single-action values,
+keys and journal/receipt effects; ordered atomic batch results including no-ops;
+late-failure rollback; validation leaving no durable effects followed by fresh
+apply; equal-request replay and unequal-input conflict; unsupported partial modes
+before effects; and lost COMMIT acknowledgement preserving the original key for
+explicit recovery. Corrupted actual native output must roll back only the
+operation and preserve earlier caller work. Component fakes alone cannot qualify
+host adoption.
+
+The Python dependency gate is `python scripts/check-module-boundaries.py`;
+`scripts/check-module-boundaries-controls.py` exercises permitted imports and
+forbidden driver/private imports, eager cycles, wildcard and dynamic imports.
+The new transport may compose public groups and psycopg ownership, not private
+protected engine admission. Dynamic callback semantics, source correspondence and
+native settlement remain explicit review/native-test obligations beyond the AST
+checker. Existing four immutable-asset cache imports require exact `functools`
+allowmap corrections; no wider module or driver permission is added.
+
+Run locally on the development host (currently macOS ARM64); CI remains native
+GitHub Actions Linux. Record source identities, Python/psycopg/libpq/PostgreSQL
+versions, selectors and cleanup evidence in the build companion. This bounded
+profile does not qualify generic query dispatch, partial batches, Lakebase or the
+protected host. Existing broader acceptance gates remain open.
+
 
 ## Baseline resource and driver acceptance — owner decision 2026-10-11
 

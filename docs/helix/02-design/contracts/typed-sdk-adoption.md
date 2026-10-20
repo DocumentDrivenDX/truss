@@ -13,6 +13,15 @@ ddx:
 **Version:** `weft.engine-read/0.1` and `umf.engine-catalog/0.1`.
 **Status:** local implementation candidate; RC module ACL scope.
 
+## Synchronous action host companion — 2026-10-20
+
+The separate `TrussActionTransport` profile in
+[CONTRACT-007](CONTRACT-007-embedding-and-execution.md#bounded-synchronous-typed-action-host--2026-10-20)
+hosts explicitly registered generated `umf.access/1` actions. This document's
+original engine-read/page evidence does not qualify that new wire protocol.
+[The host adoption plan](../../04-build/typed-api-host-adoption-plan.md) records
+its independent generated-client/native qualification and remaining limits.
+
 ## Purpose and scope
 
 Expose source-bound generated SDK reads through the original Truss public

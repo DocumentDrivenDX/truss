@@ -1,14 +1,14 @@
 # Truss Python toolkit
 
-Truss `0.0.41` selects native `0.72-candidate` and Weft `0.4.48`.
+Truss `0.0.42` selects native `0.72-candidate` and Weft `0.4.48`.
 Current qualification is local macOS ARM64 with PostgreSQL 18.6: 11 focused
 cache/cohort controls and nine current-query/disclosure runtime checks pass.
-The clean wheel contains exactly the 412 current runtime source files. The
+The clean wheel contains the complete current runtime source inventory. The
 unchanged native SQL and embedded owner assets retain the three real-schema
 and 11 stress-case results from v0.0.40; those workloads were not repeated.
 Other platforms receive packaging checks only. See the
-[v0.0.41 qualification notes](../../docs/helix/04-build/releases/v0.0.41.md) and
-[qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.41/qualification.json).
+[v0.0.42 qualification notes](../../docs/helix/04-build/releases/v0.0.42.md) and
+[qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.42/qualification.json).
 The earlier [v0.0.40 evidence archive](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification-evidence.tar.gz)
 retains the original scoped workload results and incomplete broad discovery
 receipt; no full-suite pass is claimed.
@@ -111,12 +111,34 @@ The Python distribution, native runtime and compiler versions are separate pins.
 Use the exact release cohort listed above; no older installation is upgraded.
 
 The `truss.access` typed-SDK integration remains experimental and requires its
-matching UMF SDK 0.5.2 / host 0.1.0.dev4 cohort through the `typed-sdk` extra.
+matching UMF SDK 0.5.3 / host 0.1.0.dev5 cohort through the `typed-sdk` extra.
 Install that optional host from the UMF release assets. A bounded cursor
 stream that cannot prove exhaustion raises `QueryStreamRefused` after cleaning
 up its portal and transaction. An exact row-limit boundary is not exhaustion.
 
-## Install version 0.0.41
+The synchronous generated-action bridge is also experimental. A host composes
+`TrussActionTransport` with one `SchemaBinding` per generated source digest,
+an original-source observer that returns `None` only after byte-exact
+acceptance, typed decoders, and native whole-action handlers
+that use public Truss group operations. Truss does not interpret generated
+action semantics or infer native key mappings: the host supplies receipt
+validators tied to the accepted source and actual native group result. The
+connection factory supplies an exclusive context-managed idle/autocommit
+psycopg lease with a mandatory discard operation for unresolved owned settlement
+or cleanup; its exit releases the connection only, while the transport owns and
+explicitly acknowledges its READ COMMITTED transaction. The local operation
+timeout checks admission, dispatch, settlement and release but cannot preempt
+trusted synchronous host callbacks. Requests and staged JSON receipts are limited to
+1 MiB, 100,000 values, and 64 levels. A newly applied native
+group result remains pending until the outer commit is confirmed. Replays are
+accepted only with the original native same-transaction or committed-receipt
+evidence. An unconfirmed commit or failed post-commit lease release returns
+`WRITE_OUTCOME_UNKNOWN` with the caller's idempotency key; the bridge never
+retries. Reads, non-atomic batches and actions without a qualified whole-batch
+handler return `UNSUPPORTED`. See the experimental public composition in
+`truss.action_transport` and its focused native tests for the exact cohort.
+
+## Install version 0.0.42
 
 Use the matching Truss and Weft release artifacts below. Source builds require
 the same version cohort; an older installation is not upgraded.
@@ -264,10 +286,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.41 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.42 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.48 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.41'
+  'truss-toolkit[local,native,query]==0.0.42'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -283,10 +305,10 @@ it does not claim Linux x86_64 or other native-platform qualification.
 
 ## Run a real workflow
 
-Check out the v0.0.41 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.42 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.41 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.42 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```

@@ -4,6 +4,8 @@ from dataclasses import dataclass, fields, is_dataclass
 from hashlib import sha256
 import base64
 import json
+import re
+import uuid
 from .contracts import SequenceValue,ABSENT, Absent, ExactArtifact, ProfilePin, QualifiedOwner, TypedIdentity, MapValue, MapEntry, TextValue, NullValue, BooleanValue
 from .execution import Ok, Error, ExecutionFailure, Outcome
 from .catalog_view import CatalogDefinitionReference
@@ -101,10 +103,119 @@ def _semantic(value):
         aliases=tuple(AliasIdentity(alias=a['alias'],identity=_identity(a['identity'])) for a in value['aliases']))
 
 
-def _result(raw: bytes):
-    value=json.loads(raw)
-    if value['outcome']=='unavailable':return GroupUnavailable(reason=value['reason'])
+def _closed_object(value, fields, description):
+    if type(value) is not dict or set(value) != set(fields):
+        raise ValueError(f'Exact native {description} required')
+    return value
+
+
+def _decode_group_result(raw):
+    """Decode a byte-bounded, duplicate-free JSON result with no number tokens."""
+    def unique_object(pairs):
+        result={}
+        for key,value in pairs:
+            if key in result:raise ValueError('Duplicate native group result member')
+            result[key]=value
+        return result
+    def reject_number(_token):
+        raise ValueError('Numeric native group result token')
+    try:
+        return json.loads(raw,object_pairs_hook=unique_object,parse_int=reject_number,
+            parse_float=reject_number,parse_constant=reject_number)
+    except (ValueError,UnicodeError,TypeError,RecursionError):
+        raise ValueError('Valid exact native group result required') from None
+
+
+def _native_receipt_observation(encoded, digest, token, durability):
+    """Validate the exact observation shape emitted by object_group_finish."""
+    if (type(encoded) is not str or len(encoded) > 1_398_104
+            or type(digest) is not str or len(digest) != 64
+            or any(char not in '0123456789abcdef' for char in digest)):
+        raise ValueError('Bounded original native receipt observation required')
+    try:
+        observation_bytes=base64.b64decode(encoded,validate=True)
+    except (ValueError,UnicodeError,base64.binascii.Error):
+        raise ValueError('Canonical native receipt observation required') from None
+    if (base64.b64encode(observation_bytes).decode('ascii') != encoded
+            or sha256(observation_bytes).hexdigest() != digest):
+        raise ValueError('Original native receipt observation digest required')
+    from ._acceptance_json import decode_acceptance_json
+    observation=_closed_object(decode_acceptance_json(observation_bytes),
+        ('profile','sourceEpoch','observingXid','originalWriterXid','receiptStorageId',
+         'receiptGeneration','receiptSha256','actorOid','actor','scopeIdentity',
+         'releaseId','releaseSha256','basis'),'receipt observation')
+    text_fields=('profile','sourceEpoch','observingXid','originalWriterXid','receiptStorageId',
+        'receiptGeneration','receiptSha256','actorOid','actor','scopeIdentity',
+        'releaseId','releaseSha256','basis')
+    if any(type(observation[name]) is not str or not observation[name]
+           or '\0' in observation[name] or len(observation[name].encode('utf-8')) > 4096
+           for name in text_fields):
+        raise ValueError('Complete native receipt observation fields required')
+    if observation['profile'] != 'truss-native-create-replay-observation/0.1':
+        raise ValueError('Supported native receipt observation profile required')
+    if (not re.fullmatch('[1-9][0-9]*',observation['observingXid'])
+            or not re.fullmatch('[1-9][0-9]*',observation['originalWriterXid'])
+            or not re.fullmatch('[1-9][0-9]*',observation['receiptStorageId'])
+            or not re.fullmatch('0|[1-9][0-9]*',observation['receiptGeneration'])
+            or not re.fullmatch('[a-f0-9]{64}',observation['receiptSha256'])
+            or not re.fullmatch('[1-9][0-9]*',observation['actorOid'])
+            or int(observation['actorOid']) > 4294967295
+            or not re.fullmatch('[a-f0-9]{64}',observation['releaseSha256'])):
+        raise ValueError('Canonical native receipt observation identifiers required')
+    if (int(observation['observingXid']) > 18446744073709551615
+            or int(observation['originalWriterXid']) > 18446744073709551615
+            or int(observation['receiptStorageId']) > 9223372036854775807
+            or int(observation['receiptGeneration']) > 9223372036854775807):
+        raise ValueError('Native receipt observation identifier range required')
+    locator=decode_receipt_position(token)
+    if (observation['sourceEpoch'] != locator.source_epoch
+            or observation['originalWriterXid'] != locator.writer_xid
+            or observation['receiptStorageId'] != locator.receipt_storage_row_id):
+        raise ValueError('Original native receipt locator correspondence required')
+    same_transaction=observation['observingXid'] == observation['originalWriterXid']
+    expected_basis='same_transaction' if durability=='pending' else 'committed_receipt'
+    if (observation['basis'] != expected_basis
+            or same_transaction != (durability == 'pending')):
+        raise ValueError('Native receipt durability correspondence required')
+    return observation_bytes
+
+
+def _result(raw: bytes, *, request_present: bool):
+    if type(raw) is not bytes or len(raw)>18_500_000:
+        raise ValueError('Bounded original native group result required')
+    value=_decode_group_result(raw)
+    if type(value) is not dict or type(value.get('outcome')) is not str:
+        raise ValueError('Original native group outcome required')
+    if value['outcome']=='unavailable':
+        _closed_object(value,('outcome','reason'),'group unavailability')
+        if value['reason'] not in ('profile','receipt','receipt_expired','observation','resource'):
+            raise ValueError('Supported native group unavailability required')
+        if not request_present and value['reason'] in ('receipt','receipt_expired'):
+            raise ValueError('Request-free native result cannot claim receipt availability')
+        return GroupUnavailable(reason=value['reason'])
     if value['outcome']=='failed':
+        if value.get('code')=='precondition_failed':
+            _closed_object(value,('outcome','code','failures'),'precondition result')
+            rules=('object_exists','key_absent','property_equals','relationship_absent','relationship_count')
+            if type(value['failures']) is not list or not value['failures']:
+                raise ValueError('Nonempty original precondition failures required')
+            for failure in value['failures']:
+                _closed_object(failure,('conditionId','reason','rule'),'precondition failure')
+                if (type(failure['conditionId']) is not str or not failure['conditionId']
+                        or type(failure['reason']) is not str or not failure['reason']
+                        or failure['rule'] not in rules):
+                    raise ValueError('Original typed precondition failure required')
+        else:
+            _closed_object(value,('outcome','code','operationIndex','nativeState'),'group failure')
+            native_codes={'invalid_input':'22023','key_conflict':'23505','request_conflict':'P1001',
+                'expected_version':'P1003','not_found':'P1004','dependencies':'P1005',
+                'unauthorized_person':'42501'}
+            if (value.get('code') not in native_codes
+                    or value['nativeState'] != native_codes[value['code']]
+                    or type(value['operationIndex']) is not str
+                    or not re.fullmatch('0|[1-9][0-9]*',value['operationIndex'])
+                    or int(value['operationIndex']) > 1023):
+                raise ValueError('Original native group failure mapping required')
         evidence=_artifact(raw)
         if value['code']=='precondition_failed':
             failures=tuple(FailedPrecondition(condition_id=v['conditionId'],reason=v['reason'],rule=v['rule']) for v in value['failures'])
@@ -112,24 +223,48 @@ def _result(raw: bytes):
             return GroupFailed(failure=PreconditionFailed(failures=(failures[0],*failures[1:])))
         if value['code']=='invalid_input':return GroupFailed(failure=InvalidGroupInput(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
         if value['code']=='unauthorized_person':return GroupFailed(failure=UnauthorizedPerson())
-        if value['code']=='request_conflict':return GroupFailed(failure=RequestConflict(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
+        if value['code']=='request_conflict':
+            if not request_present:raise ValueError('Request-free native result cannot claim a request conflict')
+            return GroupFailed(failure=RequestConflict(diagnostic_profile=_DIAGNOSTIC,diagnostic=evidence))
         return GroupFailed(failure=GroupOperationFailure(operation_index=value['operationIndex'],error_profile=_DIAGNOSTIC,inner_error=evidence))
+    if value['outcome']!='success':raise ValueError('Supported native group outcome required')
+    disposition=value.get('disposition')
+    if disposition=='applied':
+        _closed_object(value,('outcome','disposition','durability','semantic','receiptToken','attemptId'),'applied group result')
+        attempt_id=value['attemptId']
+        try:
+            canonical_attempt_id=type(attempt_id) is str and str(uuid.UUID(attempt_id)) == attempt_id
+        except (ValueError, AttributeError):
+            canonical_attempt_id=False
+        if value['durability']!='pending' or not canonical_attempt_id:
+            raise ValueError('Original pending group attempt required')
+        if type(value['semantic']) is not dict or set(value['semantic'])!={'interfaceVersion','executedCatalogRevision','layoutProfile','mutationProfile','results','aliases'} or value['semantic']['interfaceVersion']!='truss-group-result/0.1.0':
+            raise ValueError('Complete original semantic result required')
+        token_value=value['receiptToken']
+        if request_present:
+            if type(token_value) is not str:raise ValueError('Original request receipt token required')
+            decode_receipt_position(token_value)
+            token=token_value
+        else:
+            if token_value is not None:raise ValueError('Request-free native result cannot carry a receipt token')
+            token=ABSENT
+        return GroupSuccess(response=AppliedPending(semantic=_semantic(value['semantic']),receipt_token=token))
+    if disposition!='replayed':raise ValueError('Supported native group disposition required')
+    _closed_object(value,('outcome','disposition','durability','semantic','receiptToken','observationBase64','observationSha256'),'replayed group result')
+    if not request_present or value['durability'] not in ('pending','committed'):
+        raise ValueError('Original request replay durability required')
+    if type(value['receiptToken']) is not str:raise ValueError('Original request replay token required')
+    if type(value['semantic']) is not dict or set(value['semantic'])!={'interfaceVersion','executedCatalogRevision','layoutProfile','mutationProfile','results','aliases'} or value['semantic']['interfaceVersion']!='truss-group-result/0.1.0':
+        raise ValueError('Complete original semantic result required')
     semantic=_semantic(value['semantic'])
-    token=value.get('receiptToken')
-    if token is not None:decode_receipt_position(token)
-    else:token=ABSENT
-    if value['disposition']=='applied':return GroupSuccess(response=AppliedPending(semantic=semantic,receipt_token=token))
-    observation=base64.b64decode(value['observationBase64'],validate=True)
-    if sha256(observation).hexdigest()!=value['observationSha256']:raise ValueError('Original native replay observation required')
+    observation=_native_receipt_observation(value['observationBase64'],value['observationSha256'],value['receiptToken'],value['durability'])
     evidence=_artifact(observation)
     if value['durability']=='pending':
         return GroupSuccess(response=SameTransactionReplay(semantic=semantic,
-            replay=SameTransactionReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence),receipt_token=token))
+            replay=SameTransactionReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence),receipt_token=value['receiptToken']))
     if value['durability']=='committed':
-        token=value.get('receiptToken',ABSENT)
-        if token is not ABSENT:decode_receipt_position(token)
         return GroupSuccess(response=CommittedReceiptReplay(semantic=semantic,
-            replay=CommittedReceiptReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence),receipt_token=token))
+            replay=CommittedReceiptReplayEvidence(observation_profile=_OBSERVATION,evidence=evidence),receipt_token=value['receiptToken']))
     raise ValueError('Actual native receipt durability required')
 
 
@@ -254,11 +389,11 @@ def apply_group(host,transaction,input,request,documents,manifest,digest,pin_cur
             cursor.execute('SELECT truss.apply_group_prepared(%s,%s,%s,%s,%s,%s::jsonb)',
                 (original_input,original_documents,original_request,manifest['releaseId'],digest,_bytes(prepared).decode('utf8')),prepare=False)
         raw=bytes(cursor.fetchone()[0])
-        if _attempt_capture is not None:
-            value=json.loads(raw)
-            if value.get('disposition')=='applied' and value.get('outcome')=='success':
-                _attempt_capture.append(value['attemptId'])
-        result=_result(raw)
+        result=_result(raw,request_present=type(request) is RequestPresent)
+        if (_attempt_capture is not None and type(result) is GroupSuccess
+                and type(result.response) is AppliedPending):
+            decoded=_decode_group_result(raw)
+            _attempt_capture.append(decoded['attemptId'])
         if _schema_state is not None and type(result) is GroupUnavailable and result.reason=='observation':
             _schema_state.clear()
         return result
