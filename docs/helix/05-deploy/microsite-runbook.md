@@ -16,15 +16,15 @@ Publish four model-primary, build-signed source pages through Hugo 0.167.0 and G
 
 ## Update
 
-Edit `website/content/`, review against the brand voice and source evidence, then seal changed pages with pinned Innsigle using `seal --all --role build`, `.innsigle/colo.json` and their public URIs. Never relabel model-written material human-authored. The build private key is held locally in `.innsigle/private/build.priv.pem` (mode0600, directory0700), excluded by `.gitignore`. Its public key is registered with role `build`; no human-authorship or human-key-recognition claim is made. Verify all sources, build with `--panicOnWarning`, and run the link/seal checker before publishing.
+Edit `website/content/` and review against the brand voice and source evidence. Main publication seals all four pages with pinned Innsigle using `seal --all --role build`, `.innsigle/colo.json` and their public URIs. For a local preview, run the same sealing command before verification. Never relabel model-written material human-authored. The build private key is held locally in `.innsigle/private/build.priv.pem` (mode0600, directory0700), excluded by `.gitignore`. The same build key is stored as the encrypted repository Actions secret `INNSIGLE_BUILD_KEY` in `DocumentDrivenDX/truss`, explicitly authorized by the owner on 2026-10-20. Its public key is registered with role `build`; no human-authorship or human-key-recognition claim is made. Verify all sources, build with `--panicOnWarning`, and run the link/seal checker before publishing.
 
 ## Delivery
 
-The Pages workflow builds pull requests without deployment. Main pushes and manual main runs verify signatures, build, check links/current state/seal coverage, package public issuer files and deploy using Pages/OIDC permissions. GitHub Pages must use the Actions source. CI remains verification-only and never reads signing keys or re-signs copy. The four current model-primary pages use the build key; no human key is used.
+The Pages workflow checks the exact four-page inventory and `composition: model-primary` declarations on every run. Pull requests build and check links without signing, secret access or deployment. Main pushes and manual main runs seal sources with `INNSIGLE_BUILD_KEY`, verify signatures, build, check links/current state/seal coverage, package public issuer files and deploy using Pages/OIDC permissions. The secret is exposed only to the main signing step. GitHub Pages must use the Actions source. The four current model-primary pages use the build key; no human key is used. Generated attestations are published with the site; CI does not commit them back to source.
 
 ## Failure and recovery
 
-Invalid or missing signatures block publication. Re-seal only after reviewing the changed source. Build errors and broken subpath links block publication. A failed deployment leaves the previous version available. Roll back by reverting the microsite change and allowing the same verification workflow to redeploy; do not revert unrelated product changes.
+Invalid or missing signatures block publication. A missing or mismatched build key blocks the signing step; check the repository secret and registered public key before retrying. Review changed source before publishing; main CI then re-seals it automatically. Build errors and broken subpath links block publication. A failed deployment leaves the previous version available. Roll back by reverting the microsite change and allowing the same verification workflow to redeploy; do not revert unrelated product changes.
 
 ## Verification
 

@@ -48,14 +48,34 @@ jobs:
           mkdir -p "$RUNNER_TEMP/hugo-bin"
           tar -xzf "$RUNNER_TEMP/hugo.tar.gz" -C "$RUNNER_TEMP/hugo-bin" hugo
           echo "$RUNNER_TEMP/hugo-bin" >> "$GITHUB_PATH"
+      - name: Check model-primary source policy (no signing key required)
+        run: python3 website/scripts/check_model_primary_sources.py
+      - name: Seal model-primary page sources with the build key
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        env:
+          INNSIGLE_BUILD_KEY: ${{ secrets.INNSIGLE_BUILD_KEY }}
+        run: node .tools/innsigle/src/cli.mjs seal --all --role build
       - name: Verify signed page sources
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: node .tools/innsigle/src/cli.mjs verify --all
-      - name: Build verified production site
-        run: hugo --source website --destination public --cleanDestinationDir --panicOnWarning
+      - name: Build site
+        run: |
+          if [ "$GITHUB_REF" = 'refs/heads/main' ] && [ "$GITHUB_EVENT_NAME" != 'pull_request' ]; then
+            hugo --source website --destination public --cleanDestinationDir --panicOnWarning
+          else
+            # Existing committed attestations are expected to be stale on a PR;
+            # the source policy check above is the PR provenance gate.
+            hugo --source website --destination public --cleanDestinationDir
+          fi
       - name: Check links, navigation and seal coverage
-        run: python3 website/scripts/check_site.py website/public --require-seals
+        run: |
+          if [ "$GITHUB_REF" = 'refs/heads/main' ] && [ "$GITHUB_EVENT_NAME" != 'pull_request' ]; then
+            python3 website/scripts/check_site.py website/public --require-seals
+          else
+            python3 website/scripts/check_site.py website/public
+          fi
       - name: Package Pages including public issuer files
-        if: github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
           tar --dereference --hard-dereference --directory website/public -cf "$RUNNER_TEMP/artifact.tar" .
           python3 - <<'PY'
@@ -66,7 +86,7 @@ jobs:
               assert sum(name.endswith('.attestation.json') for name in names) == 4
           PY
       - name: Upload Pages artifact
-        if: github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: github-pages
