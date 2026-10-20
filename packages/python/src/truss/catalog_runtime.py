@@ -902,6 +902,9 @@ class CatalogReferenceAssembly:
         if isinstance(selected,Error):return selected
         reference=self.get_relationship_reference_in_transaction(transaction,document_id=document_id,module_id=module_id,relationship_id=relationship_id)
         if isinstance(reference,Error):return reference
+        if isinstance(reference.value,CatalogRefused):
+            return Error(ExecutionFailure('execution_obligation','Accepted relationship reference required',
+                sql_state='42501',catalog_code='unauthorized'))
         if reference.value is None:return Error(ExecutionFailure('execution_obligation','Accepted relationship reference required'))
         return Ok(OwnedEdgeImportRecord(identity=OwnedEdgeImportIdentity(relationship_definition_pin=reference.value.definition_pin,
             source=source_endpoint,target=target_endpoint),payload=selected.value.edge_payload(values,order_key,source=source),payload_profile=selected.value.payload_profile))

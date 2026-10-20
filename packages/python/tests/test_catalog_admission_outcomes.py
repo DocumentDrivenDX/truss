@@ -59,6 +59,29 @@ class CatalogAdmissionOutcomeTests(unittest.TestCase):
         self.assertIsInstance(edge, Ok)
         self.assertIsInstance(edge.value, ObjectReadRefused)
 
+    def test_owned_edge_builder_returns_safe_outer_refusal_without_dereference(self):
+        from unittest.mock import patch
+
+        assembly = self.assembly(Error(ExecutionFailure('execution_obligation', 'denied', sql_state='42501')))
+        with patch.object(assembly, 'owned_import_context_in_transaction', return_value=Ok(object())), \
+                patch.object(assembly, 'get_relationship_reference_in_transaction', return_value=Ok(CatalogRefused())):
+            result = assembly.owned_edge_import_record_in_transaction(
+                None, document_id='d', module_id='m', relationship_id='hidden-relationship-731',
+                source_endpoint=object(), target_endpoint=object(), values=(), order_key=object())
+        self.assertIsInstance(result, Error)
+        self.assertEqual(result.error.code, 'execution_obligation')
+        self.assertEqual(result.error.sql_state, '42501')
+        self.assertEqual(result.error.catalog_code, 'unauthorized')
+        self.assertNotIn('hidden-relationship-731', result.error.message)
+
+        original = Error(ExecutionFailure('transaction_unusable', 'original', sql_state='08006'))
+        with patch.object(assembly, 'owned_import_context_in_transaction', return_value=Ok(object())), \
+                patch.object(assembly, 'get_relationship_reference_in_transaction', return_value=original):
+            propagated = assembly.owned_edge_import_record_in_transaction(
+                None, document_id='d', module_id='m', relationship_id='hidden-relationship-731',
+                source_endpoint=object(), target_endpoint=object(), values=(), order_key=object())
+        self.assertIs(propagated, original)
+
     def test_only_contained_authorization_refusals_are_translated(self):
         for failure in (
             Error(ExecutionFailure('execution_obligation', 'transport', sql_state='08006')),
