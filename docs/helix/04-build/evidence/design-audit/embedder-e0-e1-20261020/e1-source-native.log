@@ -1,0 +1,63 @@
+test_all_failures_keep_ids_reasons_and_no_group_effects (test_group_preconditions_native.GroupPreconditionTests.test_all_failures_keep_ids_reasons_and_no_group_effects) ... ok
+test_legacy_precondition_128_accepts_and_129_refuses (test_group_preconditions_native.GroupPreconditionTests.test_legacy_precondition_128_accepts_and_129_refuses) ... FAIL
+test_middle_false_condition_and_duplicate_ids_leave_prestate_unchanged (test_group_preconditions_native.GroupPreconditionTests.test_middle_false_condition_and_duplicate_ids_leave_prestate_unchanged) ... ok
+test_owned_153_preconditions_accept_51_objects_times_three (test_group_preconditions_native.GroupPreconditionTests.test_owned_153_preconditions_accept_51_objects_times_three) ... ok
+test_owned_3072_preconditions_succeed (test_group_preconditions_native.GroupPreconditionTests.test_owned_3072_preconditions_succeed) ... ok
+test_owned_precondition_ceiling_plus_one_refuses_in_native (test_group_preconditions_native.GroupPreconditionTests.test_owned_precondition_ceiling_plus_one_refuses_in_native) ... ok
+test_success_replay_and_explicit_invalid_unauthorized (test_group_preconditions_native.GroupPreconditionTests.test_success_replay_and_explicit_invalid_unauthorized) ... ok
+test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint (test_group_create_native.PublicCreateGroupTests.test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint) ... ok
+test_batched_key_conflicts_report_original_first_middle_last_ordinals (test_group_create_native.PublicCreateGroupTests.test_batched_key_conflicts_report_original_first_middle_last_ordinals) ... ok
+test_changed_request_origin_and_none_has_no_cache (test_group_create_native.PublicCreateGroupTests.test_changed_request_origin_and_none_has_no_cache) ... ok
+test_committed_deleted_key_reservation_still_conflicts (test_group_create_native.PublicCreateGroupTests.test_committed_deleted_key_reservation_still_conflicts) ... ok
+test_create_commit_read_and_original_durable_replay (test_group_create_native.PublicCreateGroupTests.test_create_commit_read_and_original_durable_replay) ... ok
+test_create_preserves_absence_null_and_empty_retained_storage (test_group_create_native.PublicCreateGroupTests.test_create_preserves_absence_null_and_empty_retained_storage) ... ok
+test_current_writer_revocation_refuses_replay (test_group_create_native.PublicCreateGroupTests.test_current_writer_revocation_refuses_replay) ... ok
+test_genuine_type_reference_and_profile_definitions (test_group_create_native.PublicCreateGroupTests.test_genuine_type_reference_and_profile_definitions) ... ok
+test_group_failure_and_rollback_preserve_caller_work (test_group_create_native.PublicCreateGroupTests.test_group_failure_and_rollback_preserve_caller_work) ... ok
+test_key_conflict_after_create_delete_tombstone_keeps_original_ordinal (test_group_create_native.PublicCreateGroupTests.test_key_conflict_after_create_delete_tombstone_keeps_original_ordinal) ... ok
+test_multiple_reserved_conflicts_report_earliest_original_ordinal (test_group_create_native.PublicCreateGroupTests.test_multiple_reserved_conflicts_report_earliest_original_ordinal) ... ok
+test_native_late_journal_and_receipt_failures_are_atomic (test_group_create_native.PublicCreateGroupTests.test_native_late_journal_and_receipt_failures_are_atomic) ... ok
+test_native_retry_states_reach_host_without_internal_retry (test_group_create_native.PublicCreateGroupTests.test_native_retry_states_reach_host_without_internal_retry) ... ok
+test_noinherit_set_role_raw_privilege_is_refused_after_reset (test_group_create_native.PublicCreateGroupTests.test_noinherit_set_role_raw_privilege_is_refused_after_reset) ... FAIL
+test_raw_facade_rejects_missing_values_and_duplicate_json (test_group_create_native.PublicCreateGroupTests.test_raw_facade_rejects_missing_values_and_duplicate_json) ... ok
+test_reader_and_asserted_actor_cannot_authorize_first_create (test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create) ... ok
+test_repeated_create_pins_preserve_mixed_type_order_and_values (test_group_create_native.PublicCreateGroupTests.test_repeated_create_pins_preserve_mixed_type_order_and_values) ... ok
+test_selected_group_provider_is_callable_and_disposal_closes_it (test_group_create_native.PublicCreateGroupTests.test_selected_group_provider_is_callable_and_disposal_closes_it) ... ok
+test_nonmember_admission_is_typed_for_live_and_missing_selections (test_catalog_admission_outcomes.NativeCatalogAdmissionTests.test_nonmember_admission_is_typed_for_live_and_missing_selections) ... ERROR
+test_key_absent_precedes_duplicate_create (test_condition_precedence_native.ConditionPrecedenceTests.test_key_absent_precedes_duplicate_create) ... ok
+test_missing_target_condition_precedes_create_and_edge_plan (test_condition_precedence_native.ConditionPrecedenceTests.test_missing_target_condition_precedes_create_and_edge_plan) ... ok
+test_missing_target_condition_precedes_missing_update (test_condition_precedence_native.ConditionPrecedenceTests.test_missing_target_condition_precedes_missing_update) ... ok
+test_relationship_count_threshold_boundaries_preserve_precondition_semantics (test_condition_precedence_native.ConditionPrecedenceTests.test_relationship_count_threshold_boundaries_preserve_precondition_semantics) ... ok
+test_default_compiler_uses_stable_ids_without_authored_names (test_consumer_northwind_numeric_native.UnnamedSqlTests.test_default_compiler_uses_stable_ids_without_authored_names) ... ok
+
+======================================================================
+ERROR: test_nonmember_admission_is_typed_for_live_and_missing_selections (test_catalog_admission_outcomes.NativeCatalogAdmissionTests.test_nonmember_admission_is_typed_for_live_and_missing_selections)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_admission_outcomes.py", line 157, in test_nonmember_admission_is_typed_for_live_and_missing_selections
+    tx = host.adopt_transaction(access_mode='read_only').value
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Error' object has no attribute 'value'
+
+======================================================================
+FAIL: test_legacy_precondition_128_accepts_and_129_refuses (test_group_preconditions_native.GroupPreconditionTests.test_legacy_precondition_128_accepts_and_129_refuses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_preconditions_native.py", line 186, in test_legacy_precondition_128_accepts_and_129_refuses
+    self.assertIsInstance(accepted,Ok,repr(accepted));self.assertIsInstance(accepted.value,GroupSuccess,repr(accepted))
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: GroupUnavailable(reason='profile', outcome='unavailable') is not an instance of <class 'truss.groups.GroupSuccess'> : Ok(value=GroupUnavailable(reason='profile', outcome='unavailable'), status='ok')
+
+======================================================================
+FAIL: test_noinherit_set_role_raw_privilege_is_refused_after_reset (test_group_create_native.PublicCreateGroupTests.test_noinherit_set_role_raw_privilege_is_refused_after_reset)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 343, in test_noinherit_set_role_raw_privilege_is_refused_after_reset
+    self.admin.execute('CREATE ROLE dangerous_reader NOLOGIN')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Ok(value=UnauthorizedPerson(code='unauthorized_person'), status='ok') is not an instance of <class 'truss.execution.Error'>
+
+----------------------------------------------------------------------
+Ran 31 tests in 372.433s
+
+FAILED (failures=2, errors=1)

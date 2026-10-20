@@ -32,13 +32,13 @@ from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
 from .imports import ImportInput,OwnedImportInput,OwnedObjectImportRecord,OwnedEdgeImportRecord,OwnedEdgeImportIdentity,ImportExecutionResult,ObjectImportRecord,EdgeImportRecord
 from .import_runtime import ImportRuntimeContext,OwnedImportRuntimeContext
-from .groups import AuthoredValue
+from .groups import AuthoredValue, UnauthorizedPerson
 from .contracts import MapValue, TextValue, BooleanValue, ObjectKeySelection
 from .receipt_visibility import ReceiptIncluded,ReceiptVisibilityUnavailable
 from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
 from .contracts import TypedIdentity
-from .object_read import ScalarObject, LogicalObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
+from .object_read import ScalarObject, LogicalObject, ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadRefused, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from ._group_runtime import GroupRuntimeContext, CatalogRevisionProbe, PreparedGroup, NativeGroupCapability, GroupCapabilityAvailable
 from .contracts import CapabilitySelection, TypedIdentity, ProfilePin
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult, OrderKey
@@ -253,6 +253,15 @@ def _catalog_failure(result, local_code=None):
         code,message=local_code if type(local_code) is tuple else (local_code,'Unsupported installed catalog release')
         return Error(replace(failure,code='execution_obligation',message=message,catalog_code=code))
     return result if code is None else Error(replace(failure,catalog_code=code))
+
+
+def _admission_refused(result):
+    """Translate only a contained native authorization refusal.
+
+    Host/transaction failures and unrelated native errors retain their original
+    Error so callers can still distinguish retry, transport and execution state.
+    """
+    return isinstance(result, Error) and result.error.code == 'execution_obligation' and result.error.sql_state == '42501'
 
 
 _SelectedFamily=TypeVar('_SelectedFamily',Literal['catalog'],Literal['direct_read'],Literal['import'],Literal['feed'],Literal['history'],Literal['weft_execution'])
@@ -768,7 +777,7 @@ class CatalogReferenceAssembly:
         return _catalog_failure(result)
 
     @_active_operation
-    def traverse_in_transaction(self,transaction: TransactionHandle,*,start: TypedIdentity,hops: tuple[TraversalHop,...],maximum_objects: int=100,maximum_path_states: int=10000,maximum_bytes: int=1048576) -> Outcome[TraversalComplete | TraversalLimited | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+    def traverse_in_transaction(self,transaction: TransactionHandle,*,start: TypedIdentity,hops: tuple[TraversalHop,...],maximum_objects: int=100,maximum_path_states: int=10000,maximum_bytes: int=1048576) -> Outcome[TraversalComplete | TraversalLimited | ObjectNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         """Return unique terminals after 1–3 hops, or refuse the whole observation.
 
         Limits bound logical attempted path states and output, not physical
@@ -796,6 +805,7 @@ class CatalogReferenceAssembly:
             if tuple((o.type_id,o.id) for o in objects)!=tuple(sorted(set((o.type_id,o.id) for o in objects))):raise ValueError('Ordered unique traversal terminals required')
             return TraversalComplete(objects=objects,catalog_revision=int(basis['catalogRevision']))
         result=self._host._run_operation(transaction,observe, function_call=True)
+        if _admission_refused(result):return Ok(ObjectReadRefused())
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             if result.error.sql_state=='22023':return Ok(ObjectReadInvalid(code='selection'))
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
@@ -804,7 +814,7 @@ class CatalogReferenceAssembly:
 
     @_active_operation
     def get_object_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,
-                                  record_id: str,object_id: int,maximum_bytes: int=1048576) -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+                                  record_id: str,object_id: int,maximum_bytes: int=1048576) -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         """Read complete supported logical values using current module membership.
 
         This scalar-string profile uses authored addresses and native identities;
@@ -827,6 +837,7 @@ class CatalogReferenceAssembly:
             if raw is None:return ObjectNotFound()
             return _object_result(raw,manifest,digest)
         result=self._host._run_operation(transaction,observe, function_call=True)
+        if _admission_refused(result):return Ok(ObjectReadRefused())
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
             if reason:return Ok(ObjectReadUnavailable(reason=reason))
@@ -981,14 +992,14 @@ class CatalogReferenceAssembly:
 
     @_active_operation
     def get_edge_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,
-                                relationship_id: str,edge_id: int,maximum_bytes: int=1048576) -> Outcome[EdgeFound | EdgeNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+                                relationship_id: str,edge_id: int,maximum_bytes: int=1048576) -> Outcome[EdgeFound | EdgeNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         """Read one authorized directed scalar edge, preserving exact scalar values."""
         return self._read_edges(transaction,document_id,module_id,relationship_id,edge_id=edge_id,maximum_bytes=maximum_bytes)
 
     @_active_operation
     def page_edges_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
                                   anchor: TypedIdentity, direction: Literal['outgoing','incoming']='outgoing',limit: int=100,
-                                  maximum_bytes: int=1048576,continuation: EdgePageCursor | None=None) -> Outcome[EdgePage | EdgeNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+                                  maximum_bytes: int=1048576,continuation: EdgePageCursor | None=None) -> Outcome[EdgePage | EdgeNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         """Read a live relationship page ordered by order key, then native ID."""
         return self._read_edges(transaction,document_id,module_id,relationship_id,anchor=anchor,direction=direction,limit=limit,maximum_bytes=maximum_bytes,continuation=continuation)
 
@@ -1017,6 +1028,7 @@ class CatalogReferenceAssembly:
             token=None if value['continuation'] is None else EdgePageCursor(content=_bytes(value['continuation']))
             return EdgePage(edges=tuple(_edge_result(v) for v in value['edges']),catalog_revision=value['catalogRevision'],continuation=token)
         result=self._host._run_operation(transaction,observe, function_call=True)
+        if _admission_refused(result):return Ok(ObjectReadRefused())
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             reason={'0A000':'profile','54000':'resource','55P03':'observation','P1002':'context'}.get(result.error.sql_state)
             if reason:return Ok(ObjectReadUnavailable(reason=reason))
@@ -1025,7 +1037,7 @@ class CatalogReferenceAssembly:
 
     @_active_operation
     def page_objects_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,
-                                    limit: int=100,cursor: ObjectPageCursor | None=None,maximum_bytes: int=1048576) -> Outcome[ObjectPage | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+                                    limit: int=100,cursor: ObjectPageCursor | None=None,maximum_bytes: int=1048576) -> Outcome[ObjectPage | ObjectNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         try:
             valid=all(type(v) is str and 1<=len(v.encode('utf8'))<=4096 and '\0' not in v for v in (document_id,module_id,record_id))
         except UnicodeError:valid=False
@@ -1063,6 +1075,7 @@ class CatalogReferenceAssembly:
             return ObjectPage(objects=tuple(_object_result(json.dumps(value).encode(),manifest,digest).object for value in basis['objects']),
                 catalog_revision=basis['catalogRevision'],continuation=following)
         result=self._host._run_operation(transaction,observe, function_call=True)
+        if _admission_refused(result):return Ok(ObjectReadRefused())
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             if result.error.sql_state=='22023':return Ok(ObjectReadInvalid(code='cursor'))
             reason={'0A000':'profile','P1002':'context','54000':'resource','55P03':'observation'}.get(result.error.sql_state)
@@ -1070,25 +1083,28 @@ class CatalogReferenceAssembly:
         return result
 
     @_active_operation
-    def group_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[GroupRuntimeContext]:
+    def group_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[GroupRuntimeContext | UnauthorizedPerson]:
         from ._group_runtime import group_context
         manifest,digest,_=_release()
-        return group_context(self._host,transaction,manifest,digest,_pin_cursor)
+        result=group_context(self._host,transaction,manifest,digest,_pin_cursor)
+        return Ok(UnauthorizedPerson()) if _admission_refused(result) else result
 
     @_active_operation
-    def catalog_revision_in_transaction(self,transaction: TransactionHandle,*,document_id: str | None=None) -> Outcome[CatalogRevisionProbe]:
+    def catalog_revision_in_transaction(self,transaction: TransactionHandle,*,document_id: str | None=None) -> Outcome[CatalogRevisionProbe | CatalogRefused]:
         """Read the current catalog revision without locking it. Optional document revision is the cache key for one accepted document."""
         from ._group_runtime import catalog_revision
         manifest,digest,_=_release()
-        return catalog_revision(self._host,transaction,manifest,digest,_pin_cursor,document_id)
+        result=catalog_revision(self._host,transaction,manifest,digest,_pin_cursor,document_id)
+        return Ok(CatalogRefused()) if _admission_refused(result) else result
 
     @_active_operation
     def prepare_group_in_transaction(self,transaction: TransactionHandle,*,records: tuple[tuple[str,str,str],...],
-                                     relationships: tuple[tuple[str,str,str],...]=()) -> Outcome[PreparedGroup]:
+                                     relationships: tuple[tuple[str,str,str],...]=()) -> Outcome[PreparedGroup | CatalogRefused]:
         """One call for revision, group scope and the named type and relationship references."""
         from ._group_runtime import prepare_group
         manifest,digest,_=_release()
-        return prepare_group(self._host,transaction,manifest,digest,_pin_cursor,records,relationships)
+        result=prepare_group(self._host,transaction,manifest,digest,_pin_cursor,records,relationships)
+        return Ok(CatalogRefused()) if _admission_refused(result) else result
 
     @_active_operation
     def apply_in_transaction(self,transaction: TransactionHandle,input: GroupSemanticInput,request: GroupRequestSelection,*,
@@ -1100,7 +1116,7 @@ class CatalogReferenceAssembly:
                            manifest,digest,_pin_cursor,bun_executable=bun_executable,_schema_state=self._record_schema_state)
 
     @_active_operation
-    def get_type_reference_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str) -> Outcome[CatalogDefinitionReference | None]:
+    def get_type_reference_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str) -> Outcome[CatalogDefinitionReference | None | CatalogRefused]:
         """Resolve a genuine accepted type pin using current module read/write authority."""
         from .catalog_view import CatalogDefinitionReference
         from .contracts import QualifiedOwner
@@ -1114,10 +1130,11 @@ class CatalogReferenceAssembly:
             value=json.loads(bytes(raw))
             return CatalogDefinitionReference(kind='type',definition_pin=value['definitionPin'],type_id=value['typeId'],
                 authored_identity=value['authoredIdentity'],owner=QualifiedOwner(document_id=value['owner']['documentId'],module_id=value['owner']['moduleId']))
-        return self._host._run_operation(transaction,observe, function_call=True)
+        result=self._host._run_operation(transaction,observe, function_call=True)
+        return Ok(CatalogRefused()) if _admission_refused(result) else result
 
     @_active_operation
-    def get_relationship_reference_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str) -> Outcome[CatalogDefinitionReference | None]:
+    def get_relationship_reference_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str) -> Outcome[CatalogDefinitionReference | None | CatalogRefused]:
         from .contracts import QualifiedOwner
         manifest,digest,_=_release()
         def observe(cursor,observed):
@@ -1129,7 +1146,8 @@ class CatalogReferenceAssembly:
             value=json.loads(bytes(raw))
             return CatalogDefinitionReference(kind='relationship',definition_pin=value['definitionPin'],relationship_id=value['relationshipId'],
                 authored_identity=value['authoredIdentity'],owner=QualifiedOwner(document_id=value['owner']['documentId'],module_id=value['owner']['moduleId']))
-        return self._host._run_operation(transaction,observe, function_call=True)
+        result=self._host._run_operation(transaction,observe, function_call=True)
+        return Ok(CatalogRefused()) if _admission_refused(result) else result
 
     @property
     def group_selection(self) -> CapabilitySelection[Literal['group']]:
@@ -1420,7 +1438,7 @@ class CatalogReferenceAssembly:
     @_active_operation
     def lookup_key_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,key_id: str,
                                   values: tuple[str | TextValue | BooleanValue,...],original_document: bytes | None=None,maximum_bytes: int=1048576,
-                                  bun_executable: str='bun') -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+                                  bun_executable: str='bun') -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         """Resolve an authored business key into complete values, native identity and version."""
         try:selection_valid=all(type(v) is str and 1<=len(v.encode('utf8'))<=4096 and '\0' not in v for v in (document_id,module_id,record_id,key_id))
         except UnicodeError:selection_valid=False
@@ -1444,6 +1462,7 @@ class CatalogReferenceAssembly:
             raw=cursor.fetchone()[0]
             return ObjectNotFound() if raw is None else _object_result(raw,manifest,digest)
         result=self._host._run_operation(transaction,read,function_call=True)
+        if _admission_refused(result):return Ok(ObjectReadRefused())
         if isinstance(result,Error) and result.error.code=='execution_obligation':
             if result.error.sql_state=='22023':return Ok(ObjectReadInvalid(code='source_or_key'))
             reason={'0A000':'profile','54000':'resource','55P03':'observation'}.get(result.error.sql_state)

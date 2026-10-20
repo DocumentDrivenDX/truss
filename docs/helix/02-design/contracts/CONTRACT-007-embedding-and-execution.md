@@ -35,6 +35,24 @@ Stock supported driver APIs may supply execution, descriptors, errors and comple
 
 **Profile scope:** every stronger pre-read/predecode, raw-frame forwarding, physical backing-capacity, per-copy lifetime or rollback-resistant native-account requirement below is a historical proposal, not selected or queued for this release, and cannot be used as a release qualification gate. Shared semantic custody, exactness, parameter/result validation, authorization and recovery requirements continue to apply, implemented using supported driver APIs and conservative controlled-work budgets. The historical [producer port](reference-driver-producer-port.proposal.md) is not selected implementation work or an executor dependency. Custom protocol/private-hook work requires the PRD's hard documented deficiency evidence and owner-approved ADR.
 
+## Python typed permission refusals — 2026-10-20
+
+After confirmed operation-local containment, an `execution_obligation` failure
+with native SQLSTATE `42501` maps to the responsible public family: group apply
+returns `GroupFailed(UnauthorizedPerson())`; group-context retrieval returns
+`UnauthorizedPerson`; metadata reference/context preparation returns
+`CatalogRefused`; object/key/edge reads return `ObjectReadRefused`. The refusal
+has a stable unauthorized code, carries no entity existence, role inventory,
+partial result or native diagnostic prose, and remains distinct from a missing
+visible entity and unavailable observation/context. Publish the corresponding
+return unions and exported carriers before delivery.
+
+Permission translation MUST NOT intercept unresolved containment, cancellation,
+deadlock/serialization retry, unusable transaction or unknown commit outcomes.
+Those remain original outer `Error(ExecutionFailure)` results with their native
+state and recovery scope. The host owns its outer transaction; refusal preserves
+earlier host work and performs no implicit retry, commit or whole-host rollback.
+
 ## Trusted application preparation — ADR-008, 2026-10-18
 
 The selected Python engine MAY supply validated, canonical property-ID deltas

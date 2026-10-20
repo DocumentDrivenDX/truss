@@ -1,0 +1,32 @@
+{
+  "scope": "Final opt1 source/installed-wheel static gates; no native or platform-wide claim",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "wheelReceipt": "opt1-wheel.json",
+  "commands": {
+    "generatedRuntime": "scripts/build-owned-runtime.py --check",
+    "boundaries": "scripts/check-module-boundaries.py",
+    "controls": "scripts/check-module-boundaries-controls.py (retained boundary-controls.json pins rechecked)",
+    "typing": "scripts/check-python-contract-types.py /private/tmp/truss-embedder-e1-opt1-installed-20261020"
+  },
+  "passed": true,
+  "boundaryEdges": 1526,
+  "controlCount": 18,
+  "typeExpectedErrors": {
+    "group_consumer.py": 0,
+    "group_consumer_invalid.py": 10,
+    "import_consumer.py": 0,
+    "import_consumer_invalid.py": 10,
+    "native_capability_consumer.py": 0
+  },
+  "sha256": {
+    "scripts/build-owned-runtime.py": "fde11beea481e5641c3306409aec3e5ca44ff7c7d8ed969d347c25a7650c2ffc",
+    "scripts/check-module-boundaries.py": "35a96e9da772334c1cc96d9a34110cafc5a3879114f39698826edd2bf022fc03",
+    "scripts/check-module-boundaries-controls.py": "b089544f382e5701110f2fb425564fd4180272a965b68fa5a0bafdd009bfcd50",
+    "scripts/check-python-contract-types.py": "5d710d6887ac1b5d1c890e7d1b9769e12a28e5208404a06f75d15b3b7e86a548",
+    "packages/python/tests/typing/group_consumer.py": "3647cd391f4046d414d93b2b1aca24493b2db2a13a6bea11158d2e6750553f21",
+    "packages/python/tests/typing/group_consumer_invalid.py": "e36bb7eaa38ae84d62a6066f6c29440ac7c8502156eff3574d9b6275ca62b9f0",
+    "packages/python/tests/typing/import_consumer.py": "cd2119f6995d2748d30acefccc8c01e478d829baa22975baf5479dee8bf8462c",
+    "packages/python/tests/typing/import_consumer_invalid.py": "0449c141a5647fc9e173430f9c7a297bbdff068407df1ca334eca1c0429b4f74",
+    "packages/python/tests/typing/native_capability_consumer.py": "6bf81ec6381dfacd81665a23c3e05fdc797fd0bc956829430615bea954985289"
+  }
+}

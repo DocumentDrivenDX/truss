@@ -1,0 +1,19 @@
+test_owned_3072_preconditions_succeed (test_group_preconditions_native.GroupPreconditionTests.test_owned_3072_preconditions_succeed)
+@covers US-040-AC1: the full owned condition ceiling is accepted. ... FAIL
+test_legacy_precondition_128_accepts_and_129_refuses (test_group_preconditions_native.GroupPreconditionTests.test_legacy_precondition_128_accepts_and_129_refuses)
+@covers US-040-AC1 / @covers US-040-AC2: legacy inventory retains its 128 limit. ... ok
+
+======================================================================
+FAIL: test_owned_3072_preconditions_succeed (test_group_preconditions_native.GroupPreconditionTests.test_owned_3072_preconditions_succeed)
+@covers US-040-AC1: the full owned condition ceiling is accepted.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_preconditions_native.py", line 148, in test_owned_3072_preconditions_succeed
+    self.assertIsInstance(result,Ok,repr(result));self.assertIsInstance(result.value,GroupSuccess,repr(result))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error')
+
+----------------------------------------------------------------------
+Ran 2 tests in 41.648s
+
+FAILED (failures=1)

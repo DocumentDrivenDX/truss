@@ -1,0 +1,80 @@
+--- a/packages/python/tests/test_group_preconditions_native.py
++++ b/packages/python/tests/test_group_preconditions_native.py
+@@ -189,24 +189,59 @@
+                 unset=(),expected_version=version)
+             return replace(context.input((operation,),MapValue(entries=()),preconditions=conditions),mutation_profile=legacy)
+         # This retired profile is intentionally not admitted for group execution.
+-        # Exercise its retained SQL inventory ceiling directly under the current actor.
+-        self.admin.execute('GRANT EXECUTE ON FUNCTION truss.runtime_condition_inventory(jsonb) TO consumer')
+-        self.admin.commit()
+-        def revoke_inventory_access():
+-            self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.runtime_condition_inventory(jsonb) FROM consumer')
+-            self.admin.commit()
+-        self.addCleanup(revoke_inventory_access)
++        # Use a synthetic test-only component under the original caller; this does not readmit legacy execution.
+         from truss._group_runtime import _wire
+         accepted_input=json.dumps(_wire(candidate(128,'1')))
+-        inventory=connection.execute('SELECT truss.runtime_condition_inventory(%s::jsonb)',(accepted_input,)).fetchone()[0]
+-        self.assertEqual(len(inventory),128)
+         refused_input=json.dumps(_wire(candidate(129,'1')))
+-        connection.execute('SAVEPOINT legacy_inventory_ceiling')
+-        with self.assertRaises(psycopg.errors.ProgramLimitExceeded) as raised:
+-            connection.execute('SELECT truss.runtime_condition_inventory(%s::jsonb)',(refused_input,))
+-        self.assertEqual(getattr(raised.exception,'sqlstate',None),'54000')
+-        connection.execute('ROLLBACK TO SAVEPOINT legacy_inventory_ceiling')
+-        connection.execute('RELEASE SAVEPOINT legacy_inventory_ceiling')
+-        host.detach();connection.rollback()
+-        self.admin.execute('REVOKE EXECUTE ON FUNCTION truss.runtime_condition_inventory(jsonb) FROM consumer')
+-        self.admin.commit()
++        counts=('SELECT (SELECT count(*) FROM truss.runtime_object_attempt),'
++            '(SELECT count(*) FROM truss.request_receipt),(SELECT count(*) FROM truss.journal),'
++            '(SELECT count(*) FROM truss.object),(SELECT count(*) FROM truss.edge)')
++        before=self.admin.execute(counts).fetchone()
++
++        def drop_test_wrapper():
++            self.admin.rollback()
++            self.admin.execute('DROP FUNCTION IF EXISTS public.truss_test_legacy_condition_count(jsonb)')
++            self.admin.commit()
++        self.addCleanup(drop_test_wrapper)
++
++        try:
++            wrapper_sql = """
++                CREATE FUNCTION public.truss_test_legacy_condition_count(input jsonb)
++                RETURNS integer
++                LANGUAGE plpgsql
++                SECURITY DEFINER
++                SET search_path=pg_catalog,pg_temp
++                SET row_security=off
++                AS $$
++                BEGIN
++                  PERFORM truss.runtime_person(false);
++                  RETURN jsonb_array_length(truss.runtime_condition_inventory(input));
++                END;
++                $$
++            """
++            self.admin.execute(wrapper_sql)
++            self.admin.execute(psycopg.sql.SQL(
++                'ALTER FUNCTION public.truss_test_legacy_condition_count(jsonb) OWNER TO {}'
++            ).format(psycopg.sql.Identifier(self.installation.owner_role)))
++            self.admin.execute('REVOKE ALL ON FUNCTION public.truss_test_legacy_condition_count(jsonb) FROM PUBLIC')
++            self.admin.execute('GRANT EXECUTE ON FUNCTION public.truss_test_legacy_condition_count(jsonb) TO consumer')
++            self.admin.commit()
++
++            accepted_count=connection.execute(
++                'SELECT public.truss_test_legacy_condition_count(%s::jsonb)',(accepted_input,)
++            ).fetchone()[0]
++            self.assertEqual(accepted_count,128)
++            connection.execute('SAVEPOINT legacy_inventory_ceiling')
++            with self.assertRaises(psycopg.errors.ProgramLimitExceeded) as raised:
++                connection.execute(
++                    'SELECT public.truss_test_legacy_condition_count(%s::jsonb)',(refused_input,)
++                )
++            self.assertEqual(getattr(raised.exception,'sqlstate',None),'54000')
++            connection.execute('ROLLBACK TO SAVEPOINT legacy_inventory_ceiling')
++            connection.execute('RELEASE SAVEPOINT legacy_inventory_ceiling')
++        finally:
++            host.detach()
++            connection.rollback()
++            drop_test_wrapper()
++
++        self.assertEqual(self.admin.execute(counts).fetchone(),before)

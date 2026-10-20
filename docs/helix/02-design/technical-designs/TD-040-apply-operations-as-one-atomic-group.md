@@ -38,7 +38,30 @@ US-040-AC4 now states both legal schedules. Acceptance cannot commit while the g
 
 ## Validation, Security and Persistence
 
-Immediate field/type/version rules apply per operation; cross-row participation validates final simulated state. A final invariant names the last affecting operation and preserves all paths. Native deferred guards or qualified persistence ordering must enforce the valid final state without publishing an invalid committed graph. Alias references are typed and backward-only; empty/duplicate/forward aliases fail. Exact ordered no-op results remain present without version/journal mutation. Actual effective-role predicates constrain every operation; simulation cannot grant hidden endpoint authority.
+Immediate field/type/version rules apply per operation; cross-row participation validates final simulated state. A final invariant names the last affecting operation only when the selected profile establishes that provenance; whole-group failures without it omit the index and preserve permitted paths, following CONTRACT-004. Native deferred guards or qualified persistence ordering must enforce the valid final state without publishing an invalid committed graph. Alias references are typed and backward-only; empty/duplicate/forward aliases fail. Exact ordered no-op results remain present without version/journal mutation. Actual effective-role predicates constrain every operation; simulation cannot grant hidden endpoint authority.
+
+### Python embedder E1 wiring
+
+Use the existing protected complete-group facade. Native key preflight retains
+the original input ordinal in its closed trusted conflict detail while holding
+the shared writer gate and exact key observations; the outer facade propagates
+that provenance through the existing failure artifact. Batch admission and final
+settlement cannot manufacture a per-operation index. The Python decoder exposes
+CONTRACT-004's stable operation code alongside the complete unchanged artifact.
+CONTRACT-007 owns typed permission translation after confirmed containment.
+Native condition inventory applies the selected owned versus legacy count limit
+without changing prestate evaluation, locks, authority or predicate precedence.
+Within each inventory invocation, a one-entry memo may reuse successfully
+resolved type metadata only for an exactly equal complete object target. An
+explicit validity flag starts false and becomes true only after successful
+identity validation; missing/SQL-null input cannot match uninitialized state.
+The held catalog-head share lock keeps accepted definition metadata stable.
+Every condition still resolves its property/value meaning and performs its
+original authority checks. All source-validation and predicate revalidation
+passes remain; no authority decision, object state or predicate truth is cached.
+The memo ends with the inventory invocation and is never a cross-call grant.
+Run both Architecture boundary commands before dependent feature readiness;
+the STP-040 supplement owns exact independent native controls.
 
 The selected lock plan follows CONTRACT-009: head, complete current-authority policy guards, trusted namespace guards when request-bearing, request identity, complete old/new business keys, roots, other objects, edges, then derived effects. Request-free groups omit namespace/request levels without omitting current-authority admission. Complete owner/key/root discovery is provisional until fresh post-lock revalidation; new earlier owners, namespaces, buckets or roots cause contained retry rather than growing an earlier lock level after lower acquisition. Advisory and protected native bucket profiles require separate identities, snapshot and unavoidable-writer procedures. Reserve new ids before effects; rollback permits gaps. Arbitrary earlier host locks and external triggers are outside the constrained no-deadlock proof and may yield retry. Owned-deletion, mixed key changes and group/single-write overlap remain required forms, not silently refused shortcuts.
 

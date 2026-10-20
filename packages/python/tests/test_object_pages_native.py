@@ -4,7 +4,7 @@ import concurrent.futures
 import time
 from dataclasses import replace
 import psycopg
-from truss import (Ok,Error,ObjectPage,ObjectNotFound,ObjectReadInvalid,ObjectReadUnavailable,
+from truss import (Ok,Error,ObjectPage,ObjectNotFound,ObjectReadInvalid,ObjectReadRefused,ObjectReadUnavailable,
     create_reference_assembly,CatalogRuntimeConfiguration,adopt_psycopg_host)
 from truss.groups import RequestNone,GroupSuccess
 import test_group_create_native as group_tests
@@ -108,9 +108,10 @@ class ObjectPageTests(group_tests.PublicCreateGroupTests):
                 self.admin.execute('REVOKE group_writer FROM consumer')
                 self.admin.execute('SELECT pg_advisory_unlock(928390)')
                 refused=pending.result(timeout=5)
-                self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+                self.assertIsInstance(refused,Ok);self.assertEqual(refused.value,ObjectReadRefused())
         finally:
             self.admin.execute('SELECT pg_advisory_unlock_all()');self.admin.execute(original)
         denied=self.page(assembly,tx)
-        self.assertIsInstance(denied,Error);self.assertEqual(denied.error.sql_state,'42501')
+        self.assertIsInstance(denied,Ok);self.assertEqual(denied.value,ObjectReadRefused())
+        self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
         host.detach();connection.rollback()

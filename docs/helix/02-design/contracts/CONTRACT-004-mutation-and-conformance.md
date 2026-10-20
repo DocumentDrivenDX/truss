@@ -64,6 +64,42 @@ engine/corpus completion.
 
 ## Normative Surface
 
+### Python embedder conditions and operation diagnostics — 2026-10-20
+
+The selected owned 1,024-operation execution profile admits at most 3,072 caller
+preconditions. The retired rootless condition-inventory component retains its
+128-condition limit; component qualification MUST NOT readmit retired profiles
+for group execution. The count ceiling does not enlarge the 1,048,576-byte semantic input limit, selected
+scope/key/lock/result bounds or operation deadlines. Exceeding the selected
+condition count is a resource refusal. Conditions retain unique IDs, original
+order, locked-prestate evaluation, complete failure reporting under current
+authority and failure precedence. Atomic groups MUST NOT be silently split.
+
+`GroupOperationFailure.code` remains `group_failed`. Add `operation_code` with
+the selected stable vocabulary `key_conflict`, `expected_version`, `not_found`,
+`dependencies` and indexed operation `invalid_input`; each value MUST agree
+with the complete original profiled
+`inner_error`. Existing failure artifacts and retained replay bytes remain exact.
+New group-input validation retains its separate `InvalidGroupInput` result.
+No diagnostic text parsing may define a new operation meaning.
+
+A key-conflict failure carries its original zero-based input ordinal as
+canonical integer text, including conflicts discovered during batched
+admission before any effect. Every emitted ordinal requires qualified original
+operation provenance. For multiple key conflicts, select the earliest
+conflicting input operation using the serialized, locked key decision, including
+live membership, within-group duplicates and retained reservations. A later
+read of current keys MUST NOT reconstruct failure attribution. Whole-group
+finalization failure with no qualified single-operation provenance omits the
+ordinal (`ABSENT` in Python); it MUST NOT falsely identify the first or last
+operation. Preserve original artifact bytes even when older artifacts contain
+an ordinal whose historical provenance cannot be strengthened.
+
+For example, three creates with a reserved key only in the middle return
+`operation_code='key_conflict'`, `operation_index='1'` and no graph, key,
+journal or receipt effects after confirmed local containment. No conflicting
+key, hidden identity or native source diagnostic is exposed in this result.
+
 **Operations.** Inputs and outputs are abstract. `ref` is `(id, type)` of an object or an id of an edge.
 
 | Operation | Effect |

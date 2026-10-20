@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Public business-key lookup against real created objects and active memberships."""
 import psycopg
-from truss import (Ok,Error,ObjectFound,ObjectNotFound,ObjectReadInvalid,
+from truss import (Ok,Error,ObjectFound,ObjectNotFound,ObjectReadInvalid,ObjectReadRefused,
     adopt_psycopg_host,create_reference_assembly,CatalogRuntimeConfiguration)
 import test_group_create_native as group_tests
 
@@ -37,7 +37,9 @@ class KeyLookupTests(group_tests.PublicCreateGroupTests):
         self.assertEqual(self.admin.execute('SELECT count(*),sum(generation) FROM truss.key_bucket_guard').fetchone(),before)
         self.assertEqual(connection.execute('SHOW transaction_read_only').fetchone(),('on',))
         self.admin.execute('REVOKE group_reader FROM consumer')
-        refused=self.lookup(assembly,tx,(value,label),source=source);self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+        refused=self.lookup(assembly,tx,(value,label),source=source)
+        self.assertIsInstance(refused,Ok);self.assertEqual(refused.value,ObjectReadRefused())
+        self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
         host.detach();connection.rollback()
 
     def test_duplicate_exact_membership_is_integrity_refusal(self):

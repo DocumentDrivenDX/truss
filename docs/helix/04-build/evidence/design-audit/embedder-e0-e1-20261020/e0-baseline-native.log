@@ -1,0 +1,21 @@
+test_153_conditions_are_refused_before_change (baseline_probe.BaselineProbe.test_153_conditions_are_refused_before_change) ... FAIL
+test_nonmember_context_is_raw_error_before_change (baseline_probe.BaselineProbe.test_nonmember_context_is_raw_error_before_change) ... ok
+test_second_create_collision_reports_zero_before_change (baseline_probe.BaselineProbe.test_second_create_collision_reports_zero_before_change) ... ok
+test_unnamed_fields_register_create_update_and_reopen (test_object_mutations_native.ObjectMutationTests.test_unnamed_fields_register_create_update_and_reopen) ... ok
+test_default_compiler_uses_stable_ids_without_authored_names (test_consumer_northwind_numeric_native.UnnamedSqlTests.test_default_compiler_uses_stable_ids_without_authored_names) ... ok
+
+======================================================================
+FAIL: test_153_conditions_are_refused_before_change (baseline_probe.BaselineProbe.test_153_conditions_are_refused_before_change)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/embedder-e0-e1-20261020/baseline_probe.py", line 19, in test_153_conditions_are_refused_before_change
+    self.assertEqual(result.failure.code, 'invalid_input')
+AssertionError: 'invalid' != 'invalid_input'
+- invalid
++ invalid_input
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 102.634s
+
+FAILED (failures=1)

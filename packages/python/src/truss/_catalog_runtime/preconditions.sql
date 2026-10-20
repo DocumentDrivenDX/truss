@@ -47,10 +47,14 @@ REVOKE ALL ON FUNCTION truss.runtime_condition_type(jsonb) FROM PUBLIC;
 CREATE FUNCTION truss.runtime_condition_inventory(input jsonb) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
 DECLARE conditions jsonb:=coalesce(input->'preconditions','[]');condition jsonb;selected truss.type_def%ROWTYPE;other truss.type_def%ROWTYPE;
+ last_target jsonb;last_target_type truss.type_def%ROWTYPE;last_target_valid boolean:=false;
  relation truss.rel_def%ROWTYPE;property truss.prop_def%ROWTYPE;key_row truss.key_def%ROWTYPE;component record;owner record;
  inventory jsonb;inventory_entries jsonb[]:='{}';entry jsonb;objects jsonb;scopes jsonb;scope_entries jsonb[];scope_entry jsonb;identity jsonb;bound text;index int:=0;
 BEGIN
- IF jsonb_typeof(conditions) IS DISTINCT FROM 'array' OR jsonb_array_length(conditions)>128 THEN RAISE EXCEPTION 'bounded condition list required' USING ERRCODE='22023';END IF;
+ IF jsonb_typeof(conditions) IS DISTINCT FROM 'array' THEN
+  RAISE EXCEPTION 'condition array required' USING ERRCODE='22023';END IF;
+ IF jsonb_array_length(conditions)>(CASE WHEN input->'mutationProfile'=truss.runtime_owned_profile() THEN 3072 ELSE 128 END) THEN
+  RAISE EXCEPTION 'condition count exceeds selected profile' USING ERRCODE='54000';END IF;
  IF jsonb_array_length(conditions)<>(SELECT count(DISTINCT value->>'id') FROM jsonb_array_elements(conditions)) THEN RAISE EXCEPTION 'unique condition IDs required' USING ERRCODE='22023';END IF;
  FOR condition IN SELECT value FROM jsonb_array_elements(conditions) LOOP
   IF jsonb_typeof(condition->'id') IS DISTINCT FROM 'string' OR octet_length(condition->>'id') NOT BETWEEN 1 AND 1024
@@ -58,7 +62,14 @@ BEGIN
   objects:='[]';scope_entries:='{}';entry:=jsonb_build_object('index',index,'condition',condition);
   IF condition->>'condition' IN ('object_exists','property_equals') THEN
    IF condition-(CASE condition->>'condition' WHEN 'object_exists' THEN ARRAY['condition','id','reason','target'] ELSE ARRAY['condition','id','reason','target','name','value'] END)<>'{}'::jsonb THEN RAISE EXCEPTION 'closed object condition required' USING ERRCODE='22023';END IF;
-   selected:=truss.runtime_condition_type(condition->'target');objects:=jsonb_build_array(condition->'target');
+   -- Repeated exact targets share immutable type metadata within this one
+   -- inventory pass. Full identity equality retains the ID/owner/pin checks;
+   -- authority is still checked for every condition below.
+   IF last_target_valid AND last_target IS NOT DISTINCT FROM condition->'target' THEN selected:=last_target_type;
+   ELSE
+    selected:=truss.runtime_condition_type(condition->'target');last_target:=condition->'target';last_target_type:=selected;last_target_valid:=true;
+   END IF;
+   objects:=jsonb_build_array(condition->'target');
    scope_entries[cardinality(scope_entries)+1]:=jsonb_build_object('documentId',selected.document_id,'moduleId',selected.module);
    IF condition->>'condition'='property_equals' THEN
     IF jsonb_typeof(condition->'name') IS DISTINCT FROM 'string' OR octet_length(condition->>'name') NOT BETWEEN 1 AND 4096 OR truss.valid_flat_cell(condition->'value') IS NOT TRUE THEN RAISE EXCEPTION 'exact scalar property equality required' USING ERRCODE='22023';END IF;

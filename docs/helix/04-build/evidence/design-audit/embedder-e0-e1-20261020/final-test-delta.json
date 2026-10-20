@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "scope": "Final test delta only; runtime equality separately pinned",
+  "sha256": {
+    "docs/helix/04-build/evidence/design-audit/embedder-e0-e1-20261020/opt1-regression-test_group_preconditions_native.txt": "efb265a6978803185adeac46e1dafa481d1a128b679f673d104608f70250395b",
+    "packages/python/tests/test_group_preconditions_native.py": "2909089994e0e2b4464f559a09086e389919a89a518559706983b2103020dd0a"
+  },
+  "allOtherTestAndHelperAstUnchanged": true,
+  "changedOrAddedMethodsQualifiedBy": "e1-opt1-mixed-final.json",
+  "methods": [
+    "test_owned_3072_mixed_preconditions_succeed",
+    "test_owned_precondition_ceiling_plus_one_refuses_in_native"
+  ]
+}

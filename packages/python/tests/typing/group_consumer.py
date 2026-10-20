@@ -2,8 +2,8 @@
 """Static consumer: no callable provider or native authority is supplied."""
 from typing import Literal, assert_type
 from truss.contracts import BooleanValue, TextValue, PresentValue, NullValue, Absent
-from truss.execution import Error, Outcome, TransactionHandle
-from truss.groups import GroupCapability, GroupSemanticInput, RequestNone, RequestPresent, GroupRequestSelection, RequestFreeGroupApplicationResult, GroupApplicationResult, CreateObject
+from truss.execution import Error, Ok, Outcome, TransactionHandle
+from truss.groups import GroupCapability, GroupSemanticInput, RequestNone, RequestPresent, GroupRequestSelection, RequestFreeGroupApplicationResult, GroupApplicationResult, CreateObject, GroupFailed, GroupOperationFailure
 
 def consumer(capability: GroupCapability, transaction: TransactionHandle,
              data: GroupSemanticInput, request: RequestPresent, undecided: GroupRequestSelection) -> None:
@@ -15,6 +15,10 @@ def consumer(capability: GroupCapability, transaction: TransactionHandle,
     assert_type(unresolved, Outcome[GroupApplicationResult])
     if isinstance(free, Error):
         assert_type(free.error.retry_scope, Literal['none', 'whole_transaction', 'qualified_request_lookup'])
+    if isinstance(keyed, Ok) and isinstance(keyed.value, GroupFailed) and isinstance(keyed.value.failure, GroupOperationFailure):
+        assert_type(keyed.value.failure.code, Literal['group_failed'])
+        assert_type(keyed.value.failure.operation_code, Literal['invalid_input', 'key_conflict', 'expected_version', 'not_found', 'dependencies'])
+        assert_type(keyed.value.failure.operation_index, str | Absent)
 
 def exact(data: CreateObject) -> None:
     decimal = TextValue(kind='decimal', text='9007199254740993.00000000000000001')

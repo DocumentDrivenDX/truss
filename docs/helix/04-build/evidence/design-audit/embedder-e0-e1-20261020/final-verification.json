@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "scope": "E0/E1 selected local source/installed-wheel qualification only",
+  "runtimeFiles": 412,
+  "sameRuntimeInBroadAndMixedGates": true,
+  "runtimeMatchesFinalSource": true,
+  "finalTestMatchesMixedReceipt": true,
+  "broadTestSnapshotMatchesReceipt": true,
+  "existingFrontmatterPreserved": {
+    "docs/helix/02-design/contracts/CONTRACT-003-catalog-revision.md": true,
+    "docs/helix/02-design/contracts/CONTRACT-004-mutation-and-conformance.md": true,
+    "docs/helix/02-design/contracts/CONTRACT-007-embedding-and-execution.md": true,
+    "docs/helix/02-design/technical-designs/TD-040-apply-operations-as-one-atomic-group.md": true,
+    "docs/helix/03-test/test-plans/STP-040-apply-operations-as-one-atomic-group.md": true
+  },
+  "receiptSha256": {
+    "e1-opt1-regression.json": "cd01597f2f4bd0fcefeb739fc9e5f36b1d4b7e073e8cb179768f88f1f6ea8a3d",
+    "e1-opt1-mixed-final.json": "8162c27f60f9c8b512ac4a8bb51b634b63cf5dcc998bcbb87e5f85c1bfe30aac",
+    "final-wheel.json": "7cbce9a263fffd40132ada0227f5f408fd592aca2ac8a3869b32fd83fb67968d",
+    "opt1-static-gates.json": "f8029047896d68f8b5823bba5f3dba18ab28d5ffd38c0acc6702b01a590a7009",
+    "cohort.json": "b35e3843d9f4a4000ba668f1f7f0409ddaf7f49fa8ea8d6b5b774f78cf131525",
+    "final-test-delta.json": "fda5d60720867dedf50d3b7d654e3a567e90613132dfa77ba7fd41fc8bf21c4c"
+  },
+  "unreleased": true,
+  "E2AndLaterComplete": false
+}

@@ -15,7 +15,7 @@ from .preparation import CatalogDocument, PreparedAcceptance
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable
 from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogInvalid, CatalogRefused, CatalogUnavailable
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
-from .object_read import ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
+from .object_read import ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadRefused, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from .edge_read import EdgeFound, EdgeNotFound, EdgePage, EdgePageCursor
 from .imports import ImportInput, OwnedImportInput, ObjectImportRecord, EdgeImportRecord, OwnedObjectImportRecord, OwnedEdgeImportRecord, ImportExecutionResult
 from .import_runtime import ImportRuntimeContext,OwnedImportRuntimeContext
@@ -80,30 +80,30 @@ class NativeDirectReadCapability(_NativeCapability[Literal['direct_read']]):
                                             maximum_bytes: int=1048576) -> Outcome[ImportSourceFound | ImportSourceAbsent | ImportSourceUnavailable]:
         return self._assembly.lookup_import_source_in_transaction(transaction,entity=entity,maximum_bytes=maximum_bytes)
 
-    def traverse_in_transaction(self,transaction: TransactionHandle,*,start: TypedIdentity,hops: tuple[TraversalHop,...],maximum_objects: int=100,maximum_path_states: int=10000,maximum_bytes: int=1048576) -> Outcome[TraversalComplete | TraversalLimited | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+    def traverse_in_transaction(self,transaction: TransactionHandle,*,start: TypedIdentity,hops: tuple[TraversalHop,...],maximum_objects: int=100,maximum_path_states: int=10000,maximum_bytes: int=1048576) -> Outcome[TraversalComplete | TraversalLimited | ObjectNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         return self._assembly.traverse_in_transaction(transaction,start=start,hops=hops,maximum_objects=maximum_objects,maximum_path_states=maximum_path_states,maximum_bytes=maximum_bytes)
 
     def get_object_in_transaction(self, transaction: TransactionHandle, *, document_id: str,module_id: str,record_id: str,
-                                  object_id: int,maximum_bytes: int=1048576) -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+                                  object_id: int,maximum_bytes: int=1048576) -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         return self._assembly.get_object_in_transaction(transaction,document_id=document_id,module_id=module_id,record_id=record_id,object_id=object_id,maximum_bytes=maximum_bytes)
 
     def lookup_key_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,key_id: str,
                                   values: tuple[str | TextValue | BooleanValue,...],maximum_bytes: int=1048576,original_document: bytes | None=None,
-                                  bun_executable: str='bun') -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+                                  bun_executable: str='bun') -> Outcome[ObjectFound | ObjectNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         return self._assembly.lookup_key_in_transaction(transaction,document_id=document_id,module_id=module_id,record_id=record_id,key_id=key_id,
             values=values,maximum_bytes=maximum_bytes,original_document=original_document,bun_executable=bun_executable)
 
     def page_objects_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str,
-                                    limit: int=100,cursor: ObjectPageCursor | None=None,maximum_bytes: int=1048576) -> Outcome[ObjectPage | ObjectNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+                                    limit: int=100,cursor: ObjectPageCursor | None=None,maximum_bytes: int=1048576) -> Outcome[ObjectPage | ObjectNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         return self._assembly.page_objects_in_transaction(transaction,document_id=document_id,module_id=module_id,record_id=record_id,limit=limit,cursor=cursor,maximum_bytes=maximum_bytes)
 
     def get_edge_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
-                                edge_id: int,maximum_bytes: int=1048576) -> Outcome[EdgeFound | EdgeNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+                                edge_id: int,maximum_bytes: int=1048576) -> Outcome[EdgeFound | EdgeNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         return self._assembly.get_edge_in_transaction(transaction,document_id=document_id,module_id=module_id,relationship_id=relationship_id,edge_id=edge_id,maximum_bytes=maximum_bytes)
 
     def page_edges_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,relationship_id: str,
                                   anchor: TypedIdentity,direction: Literal['outgoing','incoming']='outgoing',limit: int=100,
-                                  maximum_bytes: int=1048576,continuation: EdgePageCursor | None=None) -> Outcome[EdgePage | EdgeNotFound | ObjectReadInvalid | ObjectReadUnavailable]:
+                                  maximum_bytes: int=1048576,continuation: EdgePageCursor | None=None) -> Outcome[EdgePage | EdgeNotFound | ObjectReadInvalid | ObjectReadRefused | ObjectReadUnavailable]:
         return self._assembly.page_edges_in_transaction(transaction,document_id=document_id,module_id=module_id,relationship_id=relationship_id,
             anchor=anchor,direction=direction,limit=limit,maximum_bytes=maximum_bytes,continuation=continuation)
 

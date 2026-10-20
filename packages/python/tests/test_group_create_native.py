@@ -8,9 +8,9 @@ import os
 import psycopg
 from truss import (Ok,Error,ModuleAccessGrant,CatalogRuntimeConfiguration,create_reference_assembly,
     adopt_psycopg_host,ObjectFound)
-from truss.contracts import MapValue,MapEntry,TextValue
-from truss.groups import (CreateObject,RootlessOwnership,AuthoredValue,GroupSuccess,GroupFailed,GroupUnavailable,
-    AppliedPending,SameTransactionReplay,CommittedReceiptReplay,RequestNone)
+from truss.contracts import ABSENT,MapValue,MapEntry,TextValue
+from truss.groups import (CreateObject,RootlessOwnership,AuthoredValue,GroupSuccess,GroupFailed,GroupUnavailable,UnauthorizedPerson,
+    AppliedPending,SameTransactionReplay,CommittedReceiptReplay,RequestNone,Delete,AliasObjectReference,StoredObjectReference)
 import test_catalog_runtime_native as catalog_tests
 
 class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
@@ -48,6 +48,11 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         return CreateObject(type_definition_pin=self.types[(document,record)].definition_pin,
             values=(AuthoredValue(name=record+'-label',value=TextValue(kind='string',text=label)),
                     AuthoredValue(name=record+'-value',value=TextValue(kind='string',text=value))),ownership=RootlessOwnership(),alias=alias)
+    def group_effect_counts(self):
+        return self.admin.execute('SELECT (SELECT count(*) FROM truss.object),(SELECT count(*) FROM truss.edge),'
+            '(SELECT count(*) FROM truss.object_key_bucket),(SELECT count(*) FROM truss.object_key_reservation_bucket),'
+            '(SELECT count(*) FROM truss.key_bucket_guard),(SELECT count(*) FROM truss.journal),'
+            '(SELECT count(*) FROM truss.request_receipt),(SELECT count(*) FROM truss.runtime_object_attempt)').fetchone()
     def input(self,assembly,tx,operations=None,action='create'):
         context=assembly.group_context_in_transaction(tx)
         self.assertIsInstance(context,Ok)
@@ -83,6 +88,108 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         observation=json.loads(base64.b64decode(replay.response.replay.evidence.bytes_base64))
         self.assertNotEqual(observation['observingXid'],observation['originalWriterXid'])
         self.assertEqual(observation['basis'],'committed_receipt')
+
+    def test_batched_key_conflicts_report_original_first_middle_last_ordinals(self):
+        """@covers US-040-AC2: batch conflicts report original ordinals and leave no effects."""
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        context=assembly.group_context_in_transaction(tx).value
+        seed=assembly.apply_in_transaction(tx,context.input((self.create(label='occupied-key',alias='seed'),),MapValue(entries=())),
+            context.request('seed-conflicting-key'),documents=self.documents)
+        self.assertIsInstance(seed,Ok,repr(seed));self.assertIsInstance(seed.value,GroupSuccess,repr(seed))
+        host.detach();connection.commit()
+
+        connection,host,assembly,tx=self.consumer()
+        before=self.group_effect_counts()
+        for conflict_index in (0,1,2):
+            context=assembly.group_context_in_transaction(tx).value
+            operations=tuple(self.create(label='occupied-key' if index==conflict_index else f'unique-{conflict_index}-{index}',
+                alias=f'candidate-{conflict_index}-{index}') for index in range(3))
+            result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),
+                context.request(f'conflict-position-{conflict_index}'),documents=self.documents)
+            self.assertIsInstance(result,Ok,repr(result));self.assertIsInstance(result.value,GroupFailed,repr(result))
+            failure=result.value.failure
+            self.assertEqual((failure.code,failure.operation_code,failure.operation_index),('group_failed','key_conflict',str(conflict_index)))
+            original=json.loads(base64.b64decode(failure.inner_error.bytes_base64,validate=True))
+            self.assertEqual((original['code'],original['operationIndex'],original['nativeState']),
+                ('key_conflict',str(conflict_index),'23505'))
+            self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
+        host.detach();connection.commit()
+        self.assertEqual(self.group_effect_counts(),before)
+
+    def test_key_conflict_after_create_delete_tombstone_keeps_original_ordinal(self):
+        """@covers US-040-AC2: a tombstoned batch key retains its original ordinal."""
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        context=assembly.group_context_in_transaction(tx).value
+        operations=(self.create(label='tombstoned-key',alias='temporary'),
+            Delete(operation='delete_object',target=AliasObjectReference(alias='temporary'),expected_version='1'),
+            self.create(label='tombstoned-key',alias='collision'))
+        before=self.group_effect_counts()
+        result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),
+            context.request('conflict-after-tombstone'),documents=self.documents)
+        self.assertIsInstance(result,Ok,repr(result));self.assertIsInstance(result.value,GroupFailed,repr(result))
+        failure=result.value.failure
+        self.assertEqual((failure.code,failure.operation_code,failure.operation_index),('group_failed','key_conflict','2'))
+        original=json.loads(base64.b64decode(failure.inner_error.bytes_base64,validate=True))
+        self.assertEqual((original['code'],original['operationIndex'],original['nativeState']),
+            ('key_conflict','2','23505'))
+        self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
+        host.detach();connection.commit();self.assertEqual(self.group_effect_counts(),before)
+
+    def test_multiple_reserved_conflicts_report_earliest_original_ordinal(self):
+        """@covers US-040-AC2: simultaneous key conflicts choose the earliest ordinal."""
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        context=assembly.group_context_in_transaction(tx).value
+        seed=assembly.apply_in_transaction(tx,context.input((self.create(label='simultaneous-key',alias='seed'),),MapValue(entries=())),
+            context.request('seed-simultaneous-conflicts'),documents=self.documents)
+        self.assertIsInstance(seed,Ok,repr(seed));self.assertIsInstance(seed.value,GroupSuccess,repr(seed))
+        host.detach();connection.commit()
+
+        connection,host,assembly,tx=self.consumer()
+        context=assembly.group_context_in_transaction(tx).value
+        before=self.group_effect_counts()
+        operations=(self.create(label='simultaneous-key',alias='first-conflict'),
+            self.create(label='unique-middle',alias='middle'),
+            self.create(label='simultaneous-key',alias='second-conflict'))
+        result=assembly.apply_in_transaction(tx,context.input(operations,MapValue(entries=())),
+            context.request('simultaneous-key-conflicts'),documents=self.documents)
+        self.assertIsInstance(result,Ok,repr(result));self.assertIsInstance(result.value,GroupFailed,repr(result))
+        failure=result.value.failure
+        self.assertEqual((failure.code,failure.operation_code,failure.operation_index),('group_failed','key_conflict','0'))
+        original=json.loads(base64.b64decode(failure.inner_error.bytes_base64,validate=True))
+        self.assertEqual((original['operationIndex'],original['nativeState']),('0','23505'))
+        self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
+        host.detach();connection.commit();self.assertEqual(self.group_effect_counts(),before)
+
+    def test_committed_deleted_key_reservation_still_conflicts(self):
+        """@covers US-040-AC2: committed tombstone reservations block key reuse atomically."""
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        context=assembly.group_context_in_transaction(tx).value
+        created=assembly.apply_in_transaction(tx,context.input((self.create(label='committed-deleted-key',alias='retained'),),MapValue(entries=())),
+            context.request('create-then-delete-key'),documents=self.documents)
+        self.assertIsInstance(created,Ok,repr(created));self.assertIsInstance(created.value,GroupSuccess,repr(created))
+        identity=created.value.response.semantic.results[0].identity
+        host.detach();connection.commit()
+
+        connection,host,assembly,tx=self.consumer()
+        context=assembly.group_context_in_transaction(tx).value
+        deleted=assembly.apply_in_transaction(tx,context.input((Delete(operation='delete_object',
+            target=StoredObjectReference(identity=identity),expected_version='1'),),MapValue(entries=())),
+            context.request('delete-key-owner'),documents=self.documents)
+        self.assertIsInstance(deleted,Ok,repr(deleted));self.assertIsInstance(deleted.value,GroupSuccess,repr(deleted))
+        host.detach();connection.commit()
+
+        connection,host,assembly,tx=self.consumer()
+        context=assembly.group_context_in_transaction(tx).value
+        before=self.group_effect_counts()
+        conflict=assembly.apply_in_transaction(tx,context.input((self.create(label='committed-deleted-key',alias='reused'),),MapValue(entries=())),
+            context.request('reuse-committed-deleted-key'),documents=self.documents)
+        self.assertIsInstance(conflict,Ok,repr(conflict));self.assertIsInstance(conflict.value,GroupFailed,repr(conflict))
+        failure=conflict.value.failure
+        self.assertEqual((failure.code,failure.operation_code,failure.operation_index),('group_failed','key_conflict','0'))
+        original=json.loads(base64.b64decode(failure.inner_error.bytes_base64,validate=True))
+        self.assertEqual((original['operationIndex'],original['nativeState']),('0','23505'))
+        self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
+        host.detach();connection.commit();self.assertEqual(self.group_effect_counts(),before)
     def test_repeated_create_pins_preserve_mixed_type_order_and_values(self):
         connection,host,assembly,tx=self.ready(document_ids=('adoc',))
         operations=(self.create(label='first',record='A',alias='a1'),
@@ -171,12 +278,20 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         self.assertEqual(set(selected),{'creationTransitionProfile','mutationProfile','valueProfile','canonicalizationProfile',
                                         'requestFingerprintProfile','adapterProfile','positionProfile','policyProfile'})
     def test_asymmetric_relationship_minimum_is_checked_on_the_right_endpoint(self):
+        """@covers US-040-AC2: whole-group dependency failures omit operation attribution."""
         def require_target(source):source['modules'][0]['relationships'][0]['targetMultiplicity']['min']=1
         connection,host,assembly,tx=self.ready(require_target)
+        counts='SELECT (SELECT count(*) FROM truss.object),(SELECT count(*) FROM truss.edge),(SELECT count(*) FROM truss.journal),(SELECT count(*) FROM truss.request_receipt),(SELECT count(*) FROM truss.runtime_object_attempt)'
+        before=self.admin.execute(counts).fetchone()
         input,request=self.input(assembly,tx)
         failed=self.apply(assembly,tx,input,request)
         self.assertIsInstance(failed,GroupFailed)
-        self.assertEqual(json.loads(base64.b64decode(failed.failure.inner_error.bytes_base64))['nativeState'],'P1005')
+        self.assertEqual((failed.failure.code,failed.failure.operation_code,failed.failure.operation_index),
+            ('group_failed','dependencies',ABSENT))
+        original=json.loads(base64.b64decode(failed.failure.inner_error.bytes_base64))
+        self.assertEqual(original['nativeState'],'P1005')
+        self.assertNotIn('operationIndex',original)
+        self.assertEqual(self.admin.execute(counts).fetchone(),before)
         target,_=self.input(assembly,tx,(self.create(record='B'),))
         self.assertIsInstance(self.apply(assembly,tx,target,RequestNone()),GroupSuccess)
         host.detach();connection.commit()
@@ -241,7 +356,8 @@ class PublicCreateGroupTests(catalog_tests.PublicCatalogRuntimeTests):
         self.assertEqual(connection.execute('SELECT count(*) FROM truss.object').fetchone(),(1,))
         connection.execute('RESET ROLE')
         refused=assembly.group_context_in_transaction(tx)
-        self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+        self.assertIsInstance(refused,Ok);self.assertIsInstance(refused.value,UnauthorizedPerson)
+        self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
         self.admin.execute('REVOKE dangerous_reader FROM consumer')
         self.assertIsInstance(assembly.group_context_in_transaction(tx),Ok)
     def test_selected_group_provider_is_callable_and_disposal_closes_it(self):
