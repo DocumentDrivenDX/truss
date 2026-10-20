@@ -1,0 +1,22 @@
+{
+  "reviewFinding": 4331105098,
+  "correction": "Retain historical41 qualification label; restore both41 evidence links and describe42 typedhost qualification separately.",
+  "evidence": {
+    "0.0.41": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.41/qualification.json",
+      "sha256": "162eeb49015407eeada6dc9e95e272df0aba0c070a4287a200257f0302bcba9f",
+      "selectedCounts": {
+        "cohortControls": 11,
+        "nativeQueryDisclosure": 9
+      }
+    },
+    "0.0.42": {
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.42/qualification.json",
+      "sha256": "81788d099f944a42bceb13ca90f1ef025d17ffa902e941c83d44f5370bc1e394",
+      "selectedCounts": {
+        "installedTrussComponents": 31,
+        "nativeTests": 6
+      }
+    }
+  }
+}

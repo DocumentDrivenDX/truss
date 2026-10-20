@@ -8,15 +8,17 @@ The historical release qualifications below describe their original bytes.
 Historical release Truss `0.0.41` selects native `0.72-candidate` and Weft `0.4.48`.
 Its qualification is local macOS ARM64 with PostgreSQL 18.6: 11 focused
 cache/cohort controls and nine current-query/disclosure runtime checks pass.
-The clean wheel contains the complete current runtime source inventory. The
+The clean wheel contains its complete release runtime source inventory. The
 unchanged native SQL and embedded owner assets retain the three real-schema
 and 11 stress-case results from v0.0.40; those workloads were not repeated.
 Other platforms receive packaging checks only. See the
-[v0.0.42 qualification notes](../../docs/helix/04-build/releases/v0.0.42.md) and
-[qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.42/qualification.json).
+[v0.0.41 qualification notes](../../docs/helix/04-build/releases/v0.0.41.md) and
+[qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.41/qualification.json).
 The earlier [v0.0.40 evidence archive](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.40/qualification-evidence.tar.gz)
 retains the original scoped workload results and incomplete broad discovery
 receipt; no full-suite pass is claimed.
+
+Historical [v0.0.42](../../docs/helix/04-build/releases/v0.0.42.md) adds the registered synchronous action host and strict group-response decoding. Its separate [qualification receipt](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.42/qualification.json) records 31 component controls and six focused native cases, including one registered create-action fixture under ordinary ACLs. Those cases do not rerun the v0.0.41 query/disclosure cohort above.
 
 This version accepts only UMF `0.10.0` source documents and fresh current
 installations. Earlier UMF source formats are unsupported, as are upgrades from an older Truss
