@@ -15,7 +15,7 @@ class CurrentDisclosureOriginals:
     consumer_bytes:bytes
 
 
-# Frozen local Weft 0.4.48 source and exact macOS wheel identity.
+# Frozen Weft 0.4.48 source with exact per-platform wheel/module identities.
 _EMBEDDED_CONSUMER={
     'embeddedRuntime':'mini-racer==0.14.1',
     'embeddedProfile':'truss.embedded-v8/2',
@@ -23,7 +23,7 @@ _EMBEDDED_CONSUMER={
     'embeddedManifestSha256':EMBEDDED_MANIFEST_SHA256,
 }
 _GRAPH_SHA256='9875a58cf96d0cdbe178018a3c0bb27459b1771d7e1b9a378d391448514ca377'
-_CONSUMER_COHORTS=({
+_DISCLOSURE_CONSUMER={
     'profile':'truss-current-disclosure-consumer/0.1-candidate',
     'umfRevision':'9ff2ba12271be889aad81c09695487e14655893d',
     'umfBundleSha256':'bf3e2af7728fe056ef8b3aba37ad048b0b8ac9485ec31920a1f585a6b72d10d8',
@@ -37,7 +37,13 @@ _CONSUMER_COHORTS=({
     'graphSha256':_GRAPH_SHA256,
     'childProtocol':'umf.security.private-disclosure-child/0.2-candidate',
     'resultAbi':'weft.postgresql.current-presence.sql/0.1-candidate',
-},)
+}
+_CONSUMER_COHORTS=(
+    _DISCLOSURE_CONSUMER,
+    {**_DISCLOSURE_CONSUMER,
+        'weftWheelSha256':'8226b0cbc17b611abaaff30357aad7230e135fa713c8d3d4e05e0536a6d9a2c3',
+        'weftModuleSha256':'de3289ad3d8779bd2e347c15379596495acb08381741991935b6f85c7a24b2fc'},
+)
 
 
 @lru_cache(maxsize=1)

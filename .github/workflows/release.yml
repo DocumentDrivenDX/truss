@@ -194,6 +194,12 @@ jobs:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
         run: python -m unittest test_current_query_runtime_native test_current_query_subject_cut_native -v
+      - name: Run installed disclosure cohort and source correspondence regressions
+        env:
+          PYTHONPATH: packages/python/tests
+          TRUSS_DISCLOSURE_NATIVE_QUALIFICATION: '1'
+          TRUSS_BUN_EXECUTABLE: bun
+        run: python -m unittest test_current_disclosure_cohort test_current_disclosure_originals test_current_disclosure_runtime_native -v
       - name: Run the public-only policy query reference example
         run: python packages/python/examples/current_query_workflow.py "$RUNNER_TEMP/truss-policy-example" --bun /missing/bun
       - name: Register original UMF domain-pack catalogs through the installed API

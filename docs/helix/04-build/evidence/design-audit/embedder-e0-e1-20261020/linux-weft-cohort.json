@@ -1,0 +1,28 @@
+{
+  "wheel": "weft_sql-0.4.48-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+  "wheelSha256": "8226b0cbc17b611abaaff30357aad7230e135fa713c8d3d4e05e0536a6d9a2c3",
+  "nativeModule": "weft/weft.abi3.so",
+  "moduleSha256": "de3289ad3d8779bd2e347c15379596495acb08381741991935b6f85c7a24b2fc",
+  "recordFilesVerified": 8,
+  "officialChecksumMatches": true,
+  "source": "https://github.com/DocumentDrivenDX/weft/releases/tag/v0.4.48",
+  "scope": "Byte/RECORD integrity only; Linux native behavior requires release CI",
+  "publishedCommit": "b80b9b0d710dc337d86099f44f7f2b372514496a",
+  "frozenNativeSource": "db1e0dc5b1ec6aec0f12646421cefc314989d974",
+  "sourceComparison": {
+    "changedFiles": [
+      "README.md",
+      "docs/helix/04-build/releases/local-macos-0.4.48.json",
+      "docs/helix/04-build/releases/v0.4.48.md"
+    ],
+    "compilerBuildSourceUnchanged": true,
+    "source": "https://api.github.com/repos/DocumentDrivenDX/weft/compare/db1e0dc5b1ec6aec0f12646421cefc314989d974...b80b9b0d710dc337d86099f44f7f2b372514496a"
+  },
+  "officialProvenanceSha256": {
+    "release-pins.json": "5ab7bf81db16bcfc71cece908d6183fe8ca7f70b23d9bfa338777ba66dbfbd09",
+    "packaging-x86_64-unknown-linux-gnu.json": "fe13783efe99d2e876acbd61de65b8ad3748dd43314151251df6a30744869949",
+    "SHA256SUMS": "2a8f9076337c2cccefa4fe2f124b0e1ce1b7353e6b218727f87c407007a10245"
+  },
+  "focusedCohortOriginalsTestsPassed": 13,
+  "nativeQualification": "Pending exact-head Linux/macOS release workflow; original failed Linux run retained at https://github.com/DocumentDrivenDX/truss/actions/runs/39500123394"
+}
