@@ -26,6 +26,14 @@ publishing an accepted revision. Never replace missing report fields with
 fixture identities or empty inventories. Component checks cannot establish the
 full acceptance → mutation → journal → feed → acknowledgement contract.
 
+## Verification platforms
+
+Run hosted CI on Linux only, including release, capacity and stress jobs.
+For local development, run native checks only on the development machine’s
+platform by default. Run additional local platforms only when explicitly
+requested. Keep historical cross-platform evidence scoped to its original run;
+new CI receipts must describe only the platforms actually tested.
+
 ## Accepted decisions
 
 Follow these unless a later ADR supersedes them. Points an ADR marks

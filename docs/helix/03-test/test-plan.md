@@ -28,6 +28,11 @@ ddx:
 ---
 
 # Truss project test plan
+
+Hosted CI runs on Linux only. Local development uses the host’s native platform
+by default; additional local platforms require an explicit request. Historical
+cross-platform receipts retain their original scope.
+
 ## Typed host and receipt qualification — 2026-10-20
 
 P0 coverage for US-040/043 and CONTRACT-004/007/009 has two primary layers.
