@@ -7,6 +7,8 @@ The immutable source tag retains the pre-publication notes; the public GitHub re
 To repeat the offline artifact checks after downloading the public release assets into a fresh directory, copy `delivery-result.json` into that directory and run Python 3.11 or later:
 
 ```sh
+git fetch origin refs/pull/18/head
+git rev-parse FETCH_HEAD # Must equal a2b9c8a1fc98a34528a32492b7ca5ad4a1bad955
 python docs/helix/04-build/evidence/design-audit/embedder-e0-e1-20261020/v0.0.43-published/verify-release.py --repo "$PWD" --delivery-dir /path/to/fresh-downloads --qualified-ref a2b9c8a1fc98a34528a32492b7ca5ad4a1bad955
 ```
 

@@ -9,5 +9,5 @@
   "candidateRun": 39510237205,
   "tagRun": 39512353059,
   "retainedVerifierSha256": "bb439d3f65f9e44077e5aced24c7d158c226f646327ef449d9bdd9775873a7ce",
-  "retainedVerifierNote": "Original executed verifier retained; only its default qualified ref is advanced to the explicitly supplied final candidate."
+  "retainedVerifierNote": "Original verifier retained; the final qualified candidate is supplied explicitly with --qualified-ref."
 }
