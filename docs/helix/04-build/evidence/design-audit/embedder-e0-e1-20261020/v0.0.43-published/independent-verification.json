@@ -1,0 +1,24 @@
+{
+  "status": "verified",
+  "version": "0.0.43",
+  "publicationCommit": "c8af523ac3f7e64f3be180e81e04e2d11f53601e",
+  "qualifiedSourceRef": "a2b9c8a1fc98a34528a32492b7ca5ad4a1bad955",
+  "sourceBinding": "Pinned candidate source; merge-tree equality is independently checked by the delivery pipeline",
+  "wheelSha256": "ee81c0c9ac138046d56b5eccd7c84a8fe0c9085e62962c8a8f6e0a3c1e4463a6",
+  "sdistSha256": "0df33beb2318496e0ab04bbb52cf363e76b3d6960488626a2ba594bc6a51765c",
+  "runtimeFiles": 413,
+  "wheelRecordMembers": 421,
+  "checksumAssets": 9,
+  "releasePinsExact": true,
+  "wheelMetadataExact": true,
+  "wheelRecordComplete": true,
+  "sdistSourceCorrespondence": true,
+  "umfLicenseFiles": [
+    "_umf/licenses/ajv.txt",
+    "_umf/licenses/fast-deep-equal.txt",
+    "_umf/licenses/fast-uri.txt",
+    "_umf/licenses/json-schema-traverse.txt",
+    "_umf/licenses/require-from-string.txt",
+    "_umf/licenses/yaml.txt"
+  ]
+}

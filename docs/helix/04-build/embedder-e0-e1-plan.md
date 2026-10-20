@@ -213,6 +213,14 @@ and unpublished development wheel: macOS ARM64, PostgreSQL 18.6, Python
 This is selected-subset qualification, not full-suite, platform, managed-service,
 upgrade or published-release qualification. E2 and later slices remain unfinished.
 
+### Published v0.0.43 continuation
+
+[PR #18](https://github.com/DocumentDrivenDX/truss/pull/18) merged the exact reviewed candidate tree as `c8af523ac3f7e64f3be180e81e04e2d11f53601e`. The [candidate matrix](https://github.com/DocumentDrivenDX/truss/actions/runs/39510237205) and [tagged matrix](https://github.com/DocumentDrivenDX/truss/actions/runs/39512353059) passed their selected installed-wheel and native workflows on Linux x86_64 and macOS ARM64. Independent exact-head review completed with no findings.
+
+[Published delivery receipts](evidence/design-audit/embedder-e0-e1-20261020/v0.0.43-published/README.md) bind all 413 source payloads in the downloaded wheel and sdist, six UMF dependency licenses, complete wheel RECORD, metadata, exact release pins and public checksums. All ten published assets, including the checksum manifest, passed unauthenticated public downloads. E0/E1 implementation, review, selected native/install gates and public delivery are complete for [v0.0.43](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.43).
+
+The earlier 65+2/412-file local receipts above retain their original scope; those receipts alone do not establish publication. The current combined boundary check covers 1,546 imports and 18 controls. No full-discovery, Windows, managed-service or upgrade claim is added. E2 and later import/performance slices remain unfinished. Existing three-schema and eleven-case stress benchmark evidence is historical; selected schema registration, replay and public workflow controls were repeated.
+
 ## Risks and Rollbacks
 
 | Risk | Response / rollback |

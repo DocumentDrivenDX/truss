@@ -1,0 +1,10 @@
+{
+  "status": "published-and-verified",
+  "pr": "https://github.com/DocumentDrivenDX/truss/pull/18",
+  "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.43",
+  "merge": "c8af523ac3f7e64f3be180e81e04e2d11f53601e",
+  "releaseRun": 39512353059,
+  "wheelSha256": "ee81c0c9ac138046d56b5eccd7c84a8fe0c9085e62962c8a8f6e0a3c1e4463a6",
+  "runtimeFiles": 413,
+  "publishedNotesUpdated": true
+}
