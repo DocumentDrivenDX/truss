@@ -1,8 +1,8 @@
 # Truss Python toolkit
 
-Version 0.0.42 includes the embedder changes described in the
+Version 0.0.43 includes the embedder changes described in the
 [E0/E1 execution plan](../../docs/helix/04-build/embedder-e0-e1-plan.md).
-The [v0.0.42 notes](../../docs/helix/04-build/releases/v0.0.42.md) record the selected E1 qualification.
+The [v0.0.43 notes](../../docs/helix/04-build/releases/v0.0.43.md) record the selected E1 qualification.
 The historical release qualifications below describe their original bytes.
 
 Truss `0.0.41` selects native `0.72-candidate` and Weft `0.4.48`.
@@ -47,7 +47,7 @@ complete ordered public readback, plus refusal at 1,025 and rollback on a
 failure at operation 1,024. Other
 byte/value limits and ordinary deadlines still apply.
 
-Version 0.0.42 pins `weft-sql==0.4.48`, backend `0.4.41` / binding `0.5`,
+Version 0.0.43 pins `weft-sql==0.4.48`, backend `0.4.41` / binding `0.5`,
 and query ABI 1.1. The backend version identifies the runtime ABI separately
 from the compiler package version. The historical v0.0.39 package used
 `weft-sql==0.4.41` with the same backend/binding versions.
@@ -121,7 +121,7 @@ Install that optional host from the UMF release assets. A bounded cursor
 stream that cannot prove exhaustion raises `QueryStreamRefused` after cleaning
 up its portal and transaction. An exact row-limit boundary is not exhaustion.
 
-## Install version 0.0.42
+## Install version 0.0.43
 
 Use the matching Truss and Weft release artifacts below. Source builds require
 the same version cohort; an older installation is not upgraded.
@@ -269,10 +269,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.42 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.43 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.48 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.42'
+  'truss-toolkit[local,native,query]==0.0.43'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -288,10 +288,10 @@ it does not claim Linux x86_64 or other native-platform qualification.
 
 ## Run a real workflow
 
-Check out the v0.0.42 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.43 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.42 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.43 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
