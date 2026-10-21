@@ -35,6 +35,7 @@ class SchemaCacheTests(base.PublicCreateGroupTests):
             with c.transaction():c.execute(query,(*parameters,first['validator']))
 
     def test_query_binding_cache_isolated_by_current_person(self):
+        from truss import Ok,adopt_psycopg_host
         from truss.catalog_runtime import _release
         c,h,a,t=self.ready(document_ids=('adoc',))
         manifest,digest,_=_release()
@@ -44,13 +45,17 @@ class SchemaCacheTests(base.PublicCreateGroupTests):
         self.admin.execute('CREATE ROLE other_reader LOGIN')
         self.addCleanup(self.admin.execute,'DROP ROLE other_reader')
         self.admin.execute('GRANT group_reader TO other_reader WITH SET FALSE')
-        other=psycopg.connect(**{**psycopg.conninfo.conninfo_to_dict(self.info.connection_uri),'user':'other_reader'},autocommit=True)
+        other=psycopg.connect(**{**psycopg.conninfo.conninfo_to_dict(self.info.connection_uri),'user':'other_reader'},autocommit=True,options='-c statement_timeout=10000')
         self.addCleanup(other.close)
         with other.transaction():
-            answer=json.loads(bytes(other.execute(query,(*parameters,first['validator'])).fetchone()[0]))
-            self.assertEqual(answer['outcome'],'snapshot')
-            self.assertNotEqual(answer['validator'],first['validator'])
-            self.assertNotEqual(answer['bundle']['actorOid'],first['bundle']['actorOid'])
+            latest=adopt_psycopg_host(other)
+            try:
+                self.assertIsInstance(latest.adopt_transaction(),Ok)
+                answer=json.loads(bytes(other.execute(query,(*parameters,first['validator'])).fetchone()[0]))
+                self.assertEqual(answer['outcome'],'snapshot')
+                self.assertNotEqual(answer['validator'],first['validator'])
+                self.assertNotEqual(answer['bundle']['actorOid'],first['bundle']['actorOid'])
+            finally:latest.detach()
 
     def test_query_binding_validator_misses_rolled_back_reused_revision(self):
         from truss import CatalogDocument,Ok
