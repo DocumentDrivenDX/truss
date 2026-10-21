@@ -52,6 +52,38 @@ class SchemaCacheTests(base.PublicCreateGroupTests):
             self.assertNotEqual(answer['validator'],first['validator'])
             self.assertNotEqual(answer['bundle']['actorOid'],first['bundle']['actorOid'])
 
+    def test_query_binding_validator_misses_rolled_back_reused_revision(self):
+        from truss import CatalogDocument,Ok
+        from truss.catalog_runtime import _release
+        c,h,a,t=self.ready(document_ids=('adoc',))
+        self.admin.execute(psycopg.sql.SQL('GRANT {} TO consumer WITH SET FALSE').format(
+            psycopg.sql.Identifier(self.installation.registrar_role)))
+        manifest,digest,_=_release()
+        parameters=('["adoc"]',10000,100,1048576,manifest['releaseId'],digest)
+        query='SELECT truss.query_binding_if_changed(%s::jsonb,%s,%s,%s,%s,%s,%s)'
+        original=self.documents[0]
+        def register(assembly,tx,ending):
+            source=CatalogDocument('adoc','r2',original.content+ending)
+            prepared=assembly.prepare_catalog((source,))
+            self.assertIsInstance(assembly.accept_in_transaction(tx,prepared,request_key='reused-revision'),Ok)
+            return source
+        first_source=register(a,t,b' ')
+        first=json.loads(bytes(c.execute(query,(*parameters,None)).fetchone()[0]))
+        self.assertEqual(first['bundle']['binding']['catalogRevision'],2)
+        h.detach();c.rollback()
+        c,h,a,t=self.consumer()
+        second_source=register(a,t,b'\n')
+        second=json.loads(bytes(c.execute(query,(*parameters,first['validator'])).fetchone()[0]))
+        self.assertEqual(second['outcome'],'snapshot')
+        self.assertEqual(second['bundle']['binding']['catalogRevision'],2)
+        self.assertNotEqual(second['validator'],first['validator'])
+        first_module=first['bundle']['modules'][0];second_module=second['bundle']['modules'][0]
+        self.assertEqual(first_module['documentJson'].encode(),first_source.content)
+        self.assertEqual(second_module['documentJson'].encode(),second_source.content)
+        self.assertNotEqual(first_module['pin']['sha256'],second_module['pin']['sha256'])
+        h.detach();c.rollback()
+        self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(1,))
+
     def test_record_work_reuses_immutable_compiled_schema(self):
         c, h, a, t = self.ready(document_ids=('adoc',))
         def snapshot():
