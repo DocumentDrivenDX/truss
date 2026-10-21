@@ -258,7 +258,7 @@ jobs:
         env:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_date_decimal_native.DateDecimalTests test_date_decimal_native.LargeScaleDecimalTests test_date_decimal_native.DateQueryTests test_consumer_northwind_numeric_native.ConsumerNorthwindNumericTests.test_original_product_exact_numeric_workflow test_consumer_northwind_numeric_native.UnnamedSqlTests.test_default_registration_refuses_missing_record_and_field_names test_object_mutations_native.ObjectMutationTests.test_writer_revoked_after_attempt_constraint_flush_still_aborts test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create
+        run: python -m unittest test_date_decimal_native.DateDecimalTests test_date_decimal_native.LargeScaleDecimalTests test_date_decimal_native.DateQueryTests test_consumer_northwind_numeric_native.ConsumerNorthwindNumericTests.test_named_revision_exact_numeric_workflow test_consumer_northwind_numeric_native.UnnamedSqlTests.test_default_registration_refuses_missing_record_and_field_names test_object_mutations_native.ObjectMutationTests.test_writer_revoked_after_attempt_constraint_flush_still_aborts test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create
       - name: Run public offline preparation and unchanged commerce workflow
         env:
           TRUSS_BUN_EXECUTABLE: bun

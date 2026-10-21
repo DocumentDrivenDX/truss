@@ -106,6 +106,12 @@ synthetic writer-selection Records and the public ontology generator now author
 their names. All eight affected local cases plus the ontology case passed.
 The benchmark's opt-in fixture-authoring path records both original/revised
 hashes; its native Pizza smoke passed. Runtime/UMF behavior was not weakened.
+A later numeric-workflow step found the separate frozen consumer Northwind
+source also lacked names. Its original remains unchanged and receives complete
+refusal coverage; an explicitly named revision passes exact decimal/integer
+create, update, query and reopen. The benchmark SQL counter now also counts its
+direct RawCursor query; an actual installed workflow confirms11 statements,
+matching the independent operation-budget control.
 
 ## Registration names — R16.4, 2026-10-21
 

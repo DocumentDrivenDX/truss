@@ -97,3 +97,18 @@ records the independent physical-DML observation:16 imports produce one INSERT
 each into object, journal and runtime_owned_operation (16 rows each), with
 original per-record source/provenance retained. Test-owned transition-table
 triggers count the actual server statements; no business implementation is mocked.
+
+Run39657810277 passed the corrected75-case schema section, native1,000-object/
+1,000-edge public workload, current query/disclosure and all27 performance/live-
+authority controls. It then found the separate frozen consumer Northwind source
+also omitted names. That original remains unchanged; its35 diagnostics and named
+revision exact numeric create/update/query/reopen now pass locally. The scan of
+all standalone current-UMF fixtures found no other unnamed document inputs.
+
+The older public benchmark counter bypassed directly constructed RawCursor data
+queries, reporting10 rather than11 submits for a compiled read. The independent
+statement-budget test was already correct. The benchmark now instruments that
+cursor too; its self-test and installed native Pizza workflow passed and report
+all11 submits. See `truss-hp-counter-native.json`. Earlier public workload counter
+receipts retain this specific counting limitation; their functional checks remain
+valid and are not promoted to complete statement budgets.

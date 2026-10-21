@@ -178,7 +178,7 @@ statement_counter=SQLSubmissionCounter(args.count_sql_submissions)
 
 def install_sql_submission_counter(psycopg,host_module,counter,assembly_module=None):
     """Instrument only this benchmark process while preserving connection types."""
-    class CountingCursor(psycopg.Cursor):
+    class CountedCursor:
         def __init__(self,*args,_channel='driver',**kwargs):
             super().__init__(*args,**kwargs)
             self._benchmark_channel=_channel
@@ -196,6 +196,12 @@ def install_sql_submission_counter(psycopg,host_module,counter,assembly_module=N
             # one API call as an exact count of server statements.
             counter.record_executemany()
             return super().executemany(query,params_seq,*args,**kwargs)
+
+    class CountingCursor(CountedCursor,psycopg.Cursor):pass
+    class CountingRawCursor(CountedCursor,psycopg.RawCursor):pass
+    # Compiled reads construct RawCursor directly, bypassing cursor_factory.
+    # Count that data statement as well as the ordinary guarded host cursors.
+    psycopg.RawCursor=CountingRawCursor
 
     original_connect=psycopg.connect
     def counted_connect(*args,**kwargs):
@@ -262,7 +268,7 @@ def self_test_sql_counter():
         def adopt_transaction(self):return 'adopted'
     class FakeAssembly:
         def group_context_in_transaction(self,transaction):return 'context'
-    fake_psycopg=SimpleNamespace(Cursor=FakeCursor,connect=lambda *a,**k:FakeConnection())
+    fake_psycopg=SimpleNamespace(Cursor=FakeCursor,RawCursor=FakeCursor,connect=lambda *a,**k:FakeConnection())
     fake_host_module=SimpleNamespace(PsycopgHost=FakeHost)
     fake_assembly_module=SimpleNamespace(CatalogReferenceAssembly=FakeAssembly)
     counter=SQLSubmissionCounter(True)
@@ -286,10 +292,11 @@ def self_test_sql_counter():
             host=FakeHost(connection)
             connection.cursor().execute('WITH guard AS (SELECT pg_backend_pid()) SELECT truss.runtime_owned_admit() FROM guard')
             host._cursor().execute('SELECT truss.apply_group_prepared($1)')
+            fake_psycopg.RawCursor(connection).execute('SELECT $1::text')
             host.adopt_transaction();FakeAssembly().group_context_in_transaction('tx')
             connection.commit();connection.rollback()
-    expected={'total':3,'host':1,'driver':2,'executemanyCalls':1,'hostAdoptions':1,'groupContextAcquisitions':1,
-              'bySqlClass':{'cold_schema_basis':1,'prepared_payload':1,'public_function_payload':1},
+    expected={'total':4,'host':1,'driver':3,'executemanyCalls':1,'hostAdoptions':1,'groupContextAcquisitions':1,
+              'bySqlClass':{'cold_schema_basis':1,'prepared_payload':1,'public_function_payload':1,'other':1},
               'transactionActions':{'commit':1,'rollback':1}}
     if case_counts!=expected or operation_counts!=expected:
         raise AssertionError({'expected':expected,'case':case_counts,'operation':operation_counts})
