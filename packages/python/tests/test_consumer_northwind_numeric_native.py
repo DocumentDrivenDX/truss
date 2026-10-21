@@ -86,20 +86,16 @@ class UnnamedSqlTests(group_tests.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(group_tests.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[_name] = None
 
-    def test_default_compiler_uses_stable_ids_without_authored_names(self):
+    def test_default_registration_refuses_missing_record_and_field_names(self):
+        import json
+        from truss import PreparationRejected
         def unnamed(source):
             for module in source['modules']:
-                for element in module['elements']:
-                    element.pop('name', None)
-        connection, host, assembly, tx = self.ready(unnamed, document_ids=('adoc',))
-        semantic, request = self.input(assembly, tx)
-        self.assertIsInstance(self.apply(assembly, tx, semantic, request), GroupSuccess)
-        host.detach(); connection.commit()
-        connection, host, assembly, tx = self.consumer()
-        rows = assembly.query_in_transaction(tx,
-            sql='SELECT a."A-label" FROM "A" a WHERE a."A-label" = :label',
-            document_ids=('adoc',), parameters={'label': 'one'})
-        self.assertIsInstance(rows, Ok, repr(rows))
-        self.assertIsInstance(rows.value, QueryRows, repr(rows.value))
-        self.assertEqual(rows.value.rows, (('one',),))
-        host.detach(); connection.rollback()
+                for element in module['elements']:element.pop('name',None)
+        with self.assertRaises(PreparationRejected) as caught:
+            self.ready(unnamed,document_ids=('adoc',))
+        diagnostics=[json.loads(raw) for raw in caught.exception.diagnostics]
+        self.assertEqual({d['kind'] for d in diagnostics},{'record','field'})
+        self.assertEqual(len(diagnostics),6)
+        self.assertTrue(all(d['code']=='TRUSS-NAME-MISSING' for d in diagnostics))
+        self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))

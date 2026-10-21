@@ -137,7 +137,13 @@ BEGIN
  IF octet_length(payload) NOT BETWEEN 1 AND 1048576 OR (convert_from(payload,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'bounded unique original payload required' USING ERRCODE='22023';END IF;
  value:=convert_from(payload,'UTF8')::jsonb;
  owned_selection:=record->'payloadProfile'=truss.runtime_import_profiles()->'ownedImportPayloadProfile';
- IF owned_selection IS NOT TRUE AND (selected_index<>0 OR checked_next_index<>1) THEN
+ -- Indexed rootless object batches use the same original scalar payload. Only
+ -- the indexed batch facade reaches this form; the legacy one-record facade
+ -- retains its one-operation check. All payload/key/actual-root checks below
+ -- still apply to the exact selected native operation and result.
+ IF owned_selection IS NOT TRUE AND (selected_index<>0 OR checked_next_index<>1)
+  AND (owned_profile_matches IS TRUE AND record->>'kind'='object'
+   AND operation->>'operation'='create_object' AND operation->'ownership'='{"state":"rootless"}'::jsonb) IS NOT TRUE THEN
   RAISE EXCEPTION 'legacy one-create import group required' USING ERRCODE='0A000';END IF;
 
  IF (record->'payloadProfile' IS DISTINCT FROM truss.runtime_import_profiles()->'ownedImportPayloadProfile'

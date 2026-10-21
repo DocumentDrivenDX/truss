@@ -313,6 +313,29 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
                  if 'dddProfile' in item else {})}
             for document,item in zip(documents,observed,strict=True)]}
         if report_evidence!=expected_summary:_reject('producer_unavailable')
+        # Truss's executable catalog needs names; UMF itself deliberately does
+        # not. Check only after original owner validation/correspondence, before
+        # issuing a preparation that can reach native catalog acceptance.
+        name_diagnostics=[]
+        for document in documents:
+            source=json.loads(document.content)
+            for module_index,module in enumerate(source['modules']):
+                for element_index,element in enumerate(module['elements']):
+                    if element.get('kind') not in ('record','field'):
+                        continue
+                    if type(element.get('name')) is str and element['name']:
+                        continue
+                    name_diagnostics.append(_json({
+                        'code':'TRUSS-NAME-MISSING','severity':'error',
+                        'documentId':document.document_id,
+                        'documentRevision':document.document_revision,
+                        'moduleId':module['id'],'elementId':element['id'],
+                        'kind':element['kind'],
+                        'path':f'/modules/{module_index}/elements/{element_index}/name',
+                        'message':f"Truss catalog registration requires a nonempty name for {element['kind']} {module['id']!r}/{element['id']!r}",
+                    }))
+        if name_diagnostics:
+            raise PreparationRejected('invalid_document',diagnostics=tuple(name_diagnostics))
         summary_bytes=_json(report_evidence)
         evidence=tuple(DocumentInterpretation(document,summary_bytes) for document in documents)
         return _retain_original(PreparedAcceptance(original,evidence,

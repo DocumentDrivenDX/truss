@@ -21,7 +21,7 @@ class CurrentQueryOriginals:
 _CURRENT_CONSUMER={'profile': 'truss-current-query-consumer/0.2-candidate', 'umfRevision': '9ff2ba12271be889aad81c09695487e14655893d', 'umfBundleSha256': '5c0996adf80552753899d7b3e196b93f7641bdf82d6bbb30dace8c90ad1ff004', 'umfManifestSha256': '16df44d7d0d1ce2a59c9b12129ab803f025d3fdb4a4aefdf98474b9e22fcbc62', 'resultAbi': 'weft.postgresql.current-values/0.2-candidate', 'embeddedRuntime': 'mini-racer==0.14.1', 'embeddedProfile': 'truss.embedded-v8/2', 'embeddedV8Version': '14.4.258.23'}
 _CURRENT_CONSUMER['embeddedManifestSha256']=EMBEDDED_MANIFEST_SHA256
 
-# Frozen Weft 0.4.48 source with exact per-platform wheel/module identities.
+# Frozen Weft 0.4.48/0.4.49 sources with exact per-platform wheel/module identities.
 _CONSUMER_COHORTS=(
     {**_CURRENT_CONSUMER,
         'weftRevision':'db1e0dc5b1ec6aec0f12646421cefc314989d974',
@@ -31,6 +31,10 @@ _CONSUMER_COHORTS=(
         'weftRevision':'db1e0dc5b1ec6aec0f12646421cefc314989d974',
         'weftWheelSha256':'8226b0cbc17b611abaaff30357aad7230e135fa713c8d3d4e05e0536a6d9a2c3',
         'weftModuleSha256':'de3289ad3d8779bd2e347c15379596495acb08381741991935b6f85c7a24b2fc'},
+    {**_CURRENT_CONSUMER,
+        'weftRevision':'5f013200cf36ddcaf5d4a380ba961267f819f7ca',
+        'weftWheelSha256':'695e12867dfcffedb0e4bde7fa571835ebd43fd1c06b0d775b1abecb45ffa117',
+        'weftModuleSha256':'2c0169ba875c3dd174e5c450c851d1cb295fddc2adf29943e660e8b6a9c9aa88'},
 )
 
 

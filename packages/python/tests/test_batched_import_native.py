@@ -31,6 +31,52 @@ class BatchedImportTests(legacy.ImportRuntimeTests):
         self.assertIsInstance(result.result,ImportReported,repr(result)+' '+str(assembly._host._custody.last_attempt.error))
         return result
 
+    def test_independent_imports_share_one_native_set_based_group_and_exact_sources(self):
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        built=self.build(assembly,tx,16)
+        result=self.run_batch(assembly,tx,built)
+        self.assertEqual(result.result.report.counts.created_pending,'16')
+        # Observe private native custody independently as the fixture owner,
+        # after the host confirms its own outer commit.
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*),count(DISTINCT group_attempt_id),count(DISTINCT operation_index) FROM truss.runtime_import_source').fetchone(),(16,1,16))
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_owned_operation').fetchone(),(16,))
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(16,))
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.journal').fetchone(),(16,))
+        originals=[bytes(row[0]) for row in self.admin.execute('SELECT original_record FROM truss.runtime_import_source ORDER BY operation_index').fetchall()]
+        import json
+        # The payload remains its exact original bytes, even though native
+        # source-reference envelopes use their existing jsonb representation.
+        for raw,record in zip(originals,built.records,strict=True):
+            value=json.loads(raw)
+            import base64
+            self.assertEqual(base64.b64decode(value['payload']['bytesBase64']),base64.b64decode(record.payload.bytes_base64))
+
+    def test_independent_batch_never_falls_back_after_stale_resource_or_retry_failure(self):
+        import psycopg
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        host.detach();connection.rollback()
+        signature='truss.apply_group(bytea,bytea,bytea,text,text)'
+        original=self.admin.execute('SELECT pg_get_functiondef(%s::regprocedure)',(signature,)).fetchone()[0]
+        self.admin.execute('CREATE SEQUENCE public.import_fast_path_calls')
+        self.addCleanup(self.admin.execute,'DROP SEQUENCE public.import_fast_path_calls')
+        self.admin.execute(psycopg.sql.SQL('GRANT USAGE ON SEQUENCE public.import_fast_path_calls TO {}').format(psycopg.sql.Identifier(self.installation.owner_role)))
+        try:
+            for state in ('55P03','54000','40001'):
+                with self.subTest(state=state):
+                    self.admin.execute('ALTER SEQUENCE public.import_fast_path_calls RESTART WITH 1')
+                    self.admin.execute(original.replace('BEGIN',"BEGIN\n PERFORM pg_catalog.nextval('public.import_fast_path_calls'::regclass);\n RAISE EXCEPTION 'injected batch failure' USING ERRCODE='"+state+"';",1))
+                    connection,host,assembly,tx=self.consumer()
+                    built=self.build(assembly,tx,2,prefix=state+'-')
+                    input=built.context.input(built.records,load_id='failure-'+state,asserted_origin=MapValue(entries=()),chunk_size=128)
+                    result=assembly.import_batched_in_transaction(tx,input,documents=self.documents)
+                    self.assertIsInstance(result,BatchedImportExecutionResult)
+                    self.assertNotIsInstance(result.result,ImportReported,repr(result))
+                    self.assertEqual(self.admin.execute('SELECT last_value,is_called FROM public.import_fast_path_calls').fetchone(),(1,True))
+                    host.detach();connection.rollback()
+                    self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
+        finally:self.admin.execute(original)
+
     def test_create_skip_reject_original_indices_and_caller_rollback(self):
         connection,host,assembly,tx=self.ready(document_ids=('adoc',));built=self.build(assembly,tx,3)
         invalid=replace(built.records[2],payload=built.context.object_payload(()))

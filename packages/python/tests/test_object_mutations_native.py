@@ -24,27 +24,20 @@ class ObjectMutationTests(group_tests.PublicCreateGroupTests):
         result=assembly.get_object_in_transaction(tx,document_id='adoc',module_id='m',record_id='A',object_id=int(identity.id))
         self.assertIsInstance(result,Ok);return result.value
 
-    def test_unnamed_fields_register_create_update_and_reopen(self):
+    def test_unnamed_fields_refuse_registration_with_element_diagnostics(self):
+        import json
+        from truss import PreparationRejected
         def unnamed(source):
             for module in source['modules']:
                 for field in module['elements']:
-                    if field['kind']=='field':
-                        field.pop('name',None)
-        connection,host,assembly,tx=self.ready(unnamed,document_ids=('adoc',))
-        created,_,_=self.run_group(assembly,tx,(self.create(),),'unnamed-create')
-        self.assertIsInstance(created,GroupSuccess,repr(created))
-        identity=created.response.semantic.results[0].identity
-        host.detach();connection.commit()
-        connection,host,assembly,tx=self.consumer()
-        self.assertEqual(dict(self.read(assembly,tx,identity).object.values)['A-label'],'one')
-        update=UpdateObject(target=StoredObjectReference(identity=identity),
-            set=(AuthoredValue(name='A-label',value=TextValue(kind='string',text='updated')),),unset=())
-        changed,_,_=self.run_group(assembly,tx,(update,),'unnamed-update')
-        self.assertIsInstance(changed,GroupSuccess,repr(changed))
-        host.detach();connection.commit()
-        connection,host,assembly,tx=self.consumer()
-        self.assertEqual(dict(self.read(assembly,tx,identity).object.values)['A-label'],'updated')
-        host.detach();connection.rollback()
+                    if field['kind']=='field':field.pop('name',None)
+        with self.assertRaises(PreparationRejected) as caught:
+            self.ready(unnamed,document_ids=('adoc',))
+        diagnostics=[json.loads(raw) for raw in caught.exception.diagnostics]
+        self.assertEqual(len(diagnostics),4)
+        self.assertTrue(all(d['code']=='TRUSS-NAME-MISSING' and d['kind']=='field' for d in diagnostics))
+        self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
 
     def test_create_update_read_dryrun_delete_and_durable_retry(self):
         connection,host,assembly,tx=self.ready()

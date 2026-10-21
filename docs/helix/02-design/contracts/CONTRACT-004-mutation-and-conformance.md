@@ -23,6 +23,30 @@ ddx:
 
 # Contract: Mutation protocol and conformance corpus
 
+## Independent set-based import execution
+
+The explicit batched import route MAY group an eligible chunk of new rootless
+objects into one native owned-create group, reusing its set-based INSERT/key/
+journal writer. Each original input retains its index, exact payload/source,
+created identity/version and actual native group attempt. Several outcomes may
+name the same group attempt; source custody additionally retains each operation
+index. No synthetic per-record attempt identities are introduced.
+
+Live/reserved identity checks still precede payload interpretation. Mixed edge,
+skipped, invalid or incompatible/constraint-conflicting chunks retain the
+existing per-record behavior. A known eligibility/constraint failure of an
+optimistic group is wholly rolled back before per-record evaluation, including
+object/key/journal/source/audit effects. Permanent sequence gaps remain legal.
+The cumulative admitted chunk budget is outside that contained block and does
+not rewind. Cancellation, resource limits, stale observation and native
+transaction-retry failures MUST propagate without a retry/fallback. The host
+still owns outer settlement, and unknown COMMIT outcomes remain unknown.
+
+This is not arbitrary graph set-based DML: dependent edges, owned aggregate
+creation and unsupported payloads keep their existing paths. Bulk eligibility
+does not weaken current authority, defaults/facets, keys, journal, feed, complete
+report publication or provenance checks.
+
 ## Selected batched import and advisory conditions
 
 The new explicit `BatchedImportInput` profile admits at most 1,024 records with

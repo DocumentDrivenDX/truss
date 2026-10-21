@@ -16,7 +16,7 @@ import re
 import base64
 from uuid import uuid4
 from threading import RLock
-from functools import wraps
+from functools import wraps, lru_cache
 from typing import Literal, overload, TypeVar, Mapping
 from .current_query import CurrentQueryExecutor
 from .current_disclosure import CurrentDisclosureExecutor,CurrentDisclosureRows
@@ -43,7 +43,7 @@ from ._group_runtime import GroupRuntimeContext, CatalogRevisionProbe, PreparedG
 from .contracts import CapabilitySelection, TypedIdentity, ProfilePin
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult, OrderKey
 from decimal import Decimal
-from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor,QueryCatalogSources
+from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor,QueryCatalogSources,QueryCatalogRead
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
 from .preparation import CatalogDocument, PreparedAcceptance, _require_original_preparation
@@ -158,7 +158,19 @@ def _pin_cursor(cursor):
         cursor.adapters.register_dumper(kind,dumper)
 
 
+_release_lock = RLock()
+
+
 def _release():
+    # Package replacement requires a process restart. Native installation,
+    # person, grants and schema are still observed by every operation.
+    with _release_lock:
+        original, digest, sources = _verified_release()
+    return json.loads(original), digest, sources
+
+
+@lru_cache(maxsize=1)
+def _verified_release():
     root=files('truss').joinpath('_catalog_runtime')
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
@@ -180,7 +192,7 @@ def _release():
         if 'policyPin' in entry and sha256(entry['policyDefinition'].encode('utf8')).hexdigest()!=entry['policyPin']['sha256']:raise ValueError('Original public capability policy required')
     for name in ('query-abi.json','preparation-baseline.json'):
         if sha256(root.joinpath(name).read_bytes()).hexdigest()!=manifest['files'][name]:raise ValueError('Original query/preparation baseline required')
-    return manifest,sha256(original).hexdigest(),tuple(sources)
+    return original,sha256(original).hexdigest(),tuple(sources)
 
 
 def _configuration(source_version="0.10.0"):
@@ -378,6 +390,21 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         return run_query(self._host,transaction,sql=sql,document_ids=document_ids,parameters={} if parameters is None else parameters,
             maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=read_profile,engine_program=engine_program)
+
+    @_active_operation
+    def query_with_catalog_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
+                             catalog_validator: str | None=None,maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
+                             read_profile: Literal['entity-page','related-entity-page','count-summary','complete-entity'] | None=None) -> Outcome[QueryCatalogRead | QueryRefused | QueryUnavailable]:
+        """One adopted transaction/operation for current catalog, sources and query.
+
+        Both rows and catalog are withheld if either authority/basis changes.
+        Source bytes come from the same freshly validated digest-bound bundle.
+        """
+        from ._query_runtime import run_query
+        manifest,digest,_=_release()
+        return run_query(self._host,transaction,sql=sql,document_ids=document_ids,parameters={} if parameters is None else parameters,
+            maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,manifest=manifest,digest=digest,
+            pin_cursor=_pin_cursor,read_profile=read_profile,read_catalog=True,catalog_validator=catalog_validator)
 
     @_active_operation
     def query_catalog_sources_in_transaction(self, transaction: TransactionHandle, *, sql: str,
@@ -811,7 +838,7 @@ class CatalogReferenceAssembly:
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
                                       'reader_catalog_if_changed(int,int,text,text,text)','registrar_status(text,text)',
                                       'person_runtime_status(text,text,jsonb)','preview_group_conditions(bytea,bytea,text,text)',
-                                      'query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_export_objects(jsonb,int)','query_export_edges(jsonb,int)','query_export_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)',
+                                      'query_binding(jsonb,int,int,int,text,text)','query_binding_if_changed(jsonb,int,int,int,text,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_export_objects(jsonb,int)','query_export_edges(jsonb,int)','query_export_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)',
                                       'key_read_selection(text,text,text,text,bytea,text,text)',
                                       'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)',
                                       'page_objects(text,text,text,int,int,bytea,text,text)','read_history(jsonb,bytea,bigint,int,int,text,text)','lookup_import_source(jsonb,int,text,text)'):

@@ -15,7 +15,7 @@ class CurrentDisclosureOriginals:
     consumer_bytes:bytes
 
 
-# Frozen Weft 0.4.48 source with exact per-platform wheel/module identities.
+# Frozen Weft 0.4.48/0.4.49 sources with exact per-platform wheel/module identities.
 _EMBEDDED_CONSUMER={
     'embeddedRuntime':'mini-racer==0.14.1',
     'embeddedProfile':'truss.embedded-v8/2',
@@ -43,6 +43,11 @@ _CONSUMER_COHORTS=(
     {**_DISCLOSURE_CONSUMER,
         'weftWheelSha256':'8226b0cbc17b611abaaff30357aad7230e135fa713c8d3d4e05e0536a6d9a2c3',
         'weftModuleSha256':'de3289ad3d8779bd2e347c15379596495acb08381741991935b6f85c7a24b2fc'},
+    {**_DISCLOSURE_CONSUMER,
+        'weftRevision':'5f013200cf36ddcaf5d4a380ba961267f819f7ca',
+        'weftVersion':'0.4.49',
+        'weftWheelSha256':'695e12867dfcffedb0e4bde7fa571835ebd43fd1c06b0d775b1abecb45ffa117',
+        'weftModuleSha256':'2c0169ba875c3dd174e5c450c851d1cb295fddc2adf29943e660e8b6a9c9aa88'},
 )
 
 

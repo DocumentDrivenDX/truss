@@ -87,12 +87,62 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.build_import_records(bytea,text,text) FROM PUBLIC;
 
+-- One payload interpreter for both independent batch and per-record paths.
+CREATE FUNCTION truss.runtime_import_operation(record jsonb,metadata jsonb) RETURNS jsonb
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE payload_bytes bytea;payload jsonb;operation jsonb;source_at text;
+BEGIN
+    payload_bytes:=decode(record->'payload'->>'bytesBase64','base64');
+    IF octet_length(payload_bytes) NOT BETWEEN 1 AND 1048576 OR encode(sha256(payload_bytes),'hex') IS DISTINCT FROM record->'payload'->>'sha256'
+     OR (convert_from(payload_bytes,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'original payload integrity required' USING ERRCODE='22023';END IF;
+    payload:=convert_from(payload_bytes,'UTF8')::jsonb;
+    IF payload->>'interfaceVersion' IS DISTINCT FROM 'truss-import-payload/0.1.0' OR payload->>'kind' IS DISTINCT FROM record->>'kind' THEN RAISE EXCEPTION 'exact original payload required' USING ERRCODE='22023';END IF;
+    IF jsonb_typeof(payload->'values') IS DISTINCT FROM 'array'
+     OR jsonb_array_length(payload->'values')>1024
+     OR (SELECT count(*)<>count(DISTINCT v.value->>'name') FROM jsonb_array_elements(payload->'values') v)
+     OR EXISTS(SELECT 1 FROM jsonb_array_elements(payload->'values') v WHERE jsonb_typeof(v.value) IS DISTINCT FROM 'object'
+      OR v.value-ARRAY['name','value']<>'{}'::jsonb OR jsonb_typeof(v.value->'name') IS DISTINCT FROM 'string') THEN
+     RAISE EXCEPTION 'unique original authored values required' USING ERRCODE='22023';END IF;
+    IF record->>'kind'='object' THEN
+     IF payload-ARRAY['interfaceVersion','kind','values','ownership','source']<>'{}'::jsonb
+      OR payload->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb
+      OR EXISTS(SELECT 1 FROM jsonb_array_elements(metadata->'primaryFields') f WHERE NOT EXISTS(
+       SELECT 1 FROM jsonb_array_elements(payload->'values') v WHERE v.value->>'name'=f.value->>'name' AND v.value->'value'=f.value->'value')) THEN
+      RAISE EXCEPTION 'original primary field/payload agreement required' USING ERRCODE='22023';END IF;
+    ELSIF payload-ARRAY['interfaceVersion','kind','values','orderKey','source']<>'{}'::jsonb
+     OR payload->'orderKey' IS DISTINCT FROM '{"state":"null"}'::jsonb AND
+      (jsonb_typeof(payload->'orderKey') IS DISTINCT FROM 'object' OR (payload->'orderKey')-ARRAY['state','text']<>'{}'::jsonb
+       OR payload->'orderKey'->>'state' IS DISTINCT FROM 'text' OR jsonb_typeof(payload->'orderKey'->'text') IS DISTINCT FROM 'string') THEN
+     RAISE EXCEPTION 'closed original edge payload required' USING ERRCODE='22023';END IF;
+    IF payload ? 'source' AND (jsonb_typeof(payload->'source') IS DISTINCT FROM 'object'
+     OR (payload->'source')-ARRAY['kind','entries']<>'{}'::jsonb OR payload->'source'->>'kind' IS DISTINCT FROM 'map'
+     OR jsonb_typeof(payload->'source'->'entries') IS DISTINCT FROM 'array'
+     OR (SELECT count(*)<>count(DISTINCT e.value->>'key') FROM jsonb_array_elements(payload->'source'->'entries') e)
+     OR EXISTS(SELECT 1 FROM jsonb_array_elements(payload->'source'->'entries') e WHERE e.value-ARRAY['key','value']<>'{}'::jsonb
+      OR jsonb_typeof(e.value->'key') IS DISTINCT FROM 'string' OR e.value->>'key' IN ('author','at','system') AND
+       (e.value->'value'->>'kind' IN ('string','null')) IS NOT TRUE)) THEN
+     RAISE EXCEPTION 'closed original source fields required' USING ERRCODE='22023';END IF;
+    SELECT e.value->'value'->>'text' INTO source_at FROM jsonb_array_elements(coalesce(payload->'source'->'entries','[]'::jsonb)) e WHERE e.value->>'key'='at' AND e.value->'value'->>'kind'='string';
+    IF source_at IS NOT NULL THEN
+     BEGIN PERFORM truss.query_timestamp_instant_key(source_at,'umf-rfc3339-exact-instant/1.0.0');
+     EXCEPTION WHEN data_exception THEN RAISE EXCEPTION 'selected source.at exact instant required' USING ERRCODE='22023';END;
+    END IF;
+    IF record->>'kind'='object' THEN operation:=jsonb_build_object('operation','create_object','typeDefinitionPin',metadata->>'definitionPin','values',payload->'values','ownership',payload->'ownership');
+    ELSE operation:=jsonb_build_object('operation','create_edge','relationshipDefinitionPin',record->'identity'->>'relationshipDefinitionPin','source',jsonb_build_object('state','stored','identity',record->'identity'->'source'),'target',jsonb_build_object('state','stored','identity',record->'identity'->'target'),'values',payload->'values','orderKey',payload->'orderKey');END IF;
+    RETURN operation;
+    EXCEPTION WHEN SQLSTATE '22021' OR SQLSTATE '22P05' OR SQLSTATE '22P02' THEN
+     RAISE EXCEPTION 'eligible original payload encoding required' USING ERRCODE='22023';
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_import_operation(jsonb,jsonb) FROM PUBLIC;
+
 CREATE FUNCTION truss.process_import_chunk(original_input bytea,original_documents bytea,invocation_id uuid,chunk_index int,expected_release text,expected_digest text) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off SET TimeZone='UTC' AS $$
 DECLARE input jsonb;documents jsonb;context jsonb;group_context jsonb;source_map jsonb;selected record;record jsonb;metadata jsonb;
  payload_bytes bytea;payload jsonb;operation jsonb;group_input jsonb;applied jsonb;created jsonb;state text;code text;
  outcomes jsonb[]:='{}';original_records jsonb[]:='{}';counted int;chunk_size int;total_chunks int;budget_rows int;input_digest text;
  origin jsonb;selected_outcome jsonb;result jsonb;source_at text;
+ batch_operations jsonb:='[]';batch_sources jsonb:='[]';batch_records jsonb[]:='{}';batch_outcomes jsonb[]:='{}';batch_done boolean:=false;batch_index int:=0;
 BEGIN
  context:=convert_from(truss.batched_import_context(expected_release,expected_digest),'UTF8')::jsonb;
  IF original_input IS NULL OR octet_length(original_input)>8388608 OR original_documents IS NULL OR octet_length(original_documents)>4194304 THEN RAISE EXCEPTION 'bounded original import required' USING ERRCODE='54000';END IF;
@@ -146,6 +196,46 @@ BEGIN
  WHERE truss.runtime_import_budget.records+EXCLUDED.records<=4096 AND truss.runtime_import_budget.submitted_bytes+EXCLUDED.submitted_bytes<=268435456;
  GET DIAGNOSTICS budget_rows=ROW_COUNT;IF budget_rows<>1 THEN RAISE EXCEPTION 'cumulative import work budget exceeded' USING ERRCODE='54000';END IF;
  group_context:=convert_from(truss.group_context(expected_release,expected_digest),'UTF8')::jsonb;
+ -- Independent new rootless objects can share the existing set-based group
+ -- writer. A contained eligibility/constraint failure falls through to the
+ -- original per-record semantics; stale admission, resource, cancellation and
+ -- transaction-retry failures are never retried here.
+ IF least(chunk_size,greatest(0,counted-chunk_index*chunk_size))>1 THEN
+  BEGIN
+   FOR selected IN SELECT value AS record,(ordinality-1)::int AS input_index FROM jsonb_array_elements(input->'records') WITH ORDINALITY
+    ORDER BY (value->>'kind'='edge'),ordinality OFFSET chunk_index*chunk_size LIMIT chunk_size LOOP
+    record:=selected.record;
+    IF record->>'kind' IS DISTINCT FROM 'object' THEN RAISE EXCEPTION 'independent object run required' USING ERRCODE='TRB01';END IF;
+    metadata:=convert_from(truss.import_object_identity(convert_to((record->'identity')::text,'UTF8'),convert_to(source_map->>(record->'identity'->'type'->'owner'->>'documentId'),'UTF8'),NULL,expected_release,expected_digest),'UTF8')::jsonb;
+    IF metadata->>'state'='skipped' THEN RAISE EXCEPTION 'per-record skip precedence required' USING ERRCODE='TRB01';END IF;
+    operation:=truss.runtime_import_operation(record,metadata);
+    batch_operations:=batch_operations||jsonb_build_array(operation);
+    batch_records:=array_append(batch_records,jsonb_build_object('inputIndex',selected.input_index::text,'record',record));
+    batch_sources:=batch_sources||jsonb_build_array(jsonb_build_object('operationIndex',batch_index,
+     'originalRecordBase64',replace(encode(convert_to(record::text,'UTF8'),'base64'),E'\n','')));
+    batch_index:=batch_index+1;
+   END LOOP;
+   group_input:=jsonb_build_object('interfaceVersion','truss-group-input/0.1.0','layoutProfile',group_context->'layoutProfile','mutationProfile',group_context->'mutationProfile','valueProfile',group_context->'valueProfile','catalog',jsonb_build_object('selection','current'),'preconditions','[]'::jsonb,'operations',batch_operations,'assertedOrigin',origin);
+   IF octet_length(group_input::text)>4194304 THEN RAISE EXCEPTION 'per-record envelope required' USING ERRCODE='TRB01';END IF;
+   applied:=convert_from(truss.apply_group(convert_to(group_input::text,'UTF8'),original_documents,convert_to('{"state":"none"}','UTF8'),expected_release,expected_digest),'UTF8')::jsonb;
+   IF applied->>'outcome'<>'success' THEN
+    state:=CASE WHEN applied->>'outcome'='failed' THEN coalesce(applied->>'nativeState','22023') WHEN applied->>'reason'='resource' THEN '54000' WHEN applied->>'reason'='observation' THEN '55P03' ELSE '0A000' END;
+    RAISE EXCEPTION 'independent import group refused' USING ERRCODE=state;
+   END IF;
+   PERFORM truss.runtime_owned_import_record_sources((applied->>'attemptId')::uuid,batch_sources,input->>'loadId');
+   FOR batch_index IN 0..array_length(batch_records,1)-1 LOOP
+    created:=applied->'semantic'->'results'->batch_index;
+    batch_outcomes:=array_append(batch_outcomes,jsonb_build_object('inputIndex',batch_records[batch_index+1]->>'inputIndex',
+     'outcome','created','identity',created->'identity','version',created->>'version','groupAttemptId',applied->>'attemptId'));
+   END LOOP;
+   original_records:=batch_records;outcomes:=batch_outcomes;batch_done:=true;
+  EXCEPTION WHEN SQLSTATE 'TRB01' OR SQLSTATE '22023' OR SQLSTATE '23505' OR SQLSTATE '42501' OR SQLSTATE '0A000' OR SQLSTATE 'P1004' OR SQLSTATE 'P1005' THEN
+   -- This entire block's database effects have rolled back. Nothing from the
+   -- rejected group may enter the original-record/outcome/provenance report.
+   batch_done:=false;
+  END;
+ END IF;
+ IF NOT batch_done THEN
  FOR selected IN SELECT value AS record,(ordinality-1)::int AS input_index FROM jsonb_array_elements(input->'records') WITH ORDINALITY
   ORDER BY (value->>'kind'='edge'),ordinality OFFSET chunk_index*chunk_size LIMIT chunk_size LOOP
   record:=selected.record;original_records:=array_append(original_records,jsonb_build_object('inputIndex',selected.input_index::text,'record',record));
@@ -161,48 +251,8 @@ BEGIN
     IF metadata ? 'identity' THEN selected_outcome:=selected_outcome||jsonb_build_object('identity',metadata->'identity');END IF;
    ELSE
     code:='invalid_payload';
-    BEGIN
-    payload_bytes:=decode(record->'payload'->>'bytesBase64','base64');
-    IF octet_length(payload_bytes) NOT BETWEEN 1 AND 1048576 OR encode(sha256(payload_bytes),'hex') IS DISTINCT FROM record->'payload'->>'sha256'
-     OR (convert_from(payload_bytes,'UTF8') IS JSON OBJECT WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'original payload integrity required' USING ERRCODE='22023';END IF;
-    payload:=convert_from(payload_bytes,'UTF8')::jsonb;
-    IF payload->>'interfaceVersion' IS DISTINCT FROM 'truss-import-payload/0.1.0' OR payload->>'kind' IS DISTINCT FROM record->>'kind' THEN RAISE EXCEPTION 'exact original payload required' USING ERRCODE='22023';END IF;
-    IF jsonb_typeof(payload->'values') IS DISTINCT FROM 'array'
-     OR jsonb_array_length(payload->'values')>1024
-     OR (SELECT count(*)<>count(DISTINCT v.value->>'name') FROM jsonb_array_elements(payload->'values') v)
-     OR EXISTS(SELECT 1 FROM jsonb_array_elements(payload->'values') v WHERE jsonb_typeof(v.value) IS DISTINCT FROM 'object'
-      OR v.value-ARRAY['name','value']<>'{}'::jsonb OR jsonb_typeof(v.value->'name') IS DISTINCT FROM 'string') THEN
-     RAISE EXCEPTION 'unique original authored values required' USING ERRCODE='22023';END IF;
-    IF record->>'kind'='object' THEN
-     IF payload-ARRAY['interfaceVersion','kind','values','ownership','source']<>'{}'::jsonb
-      OR payload->'ownership' IS DISTINCT FROM '{"state":"rootless"}'::jsonb
-      OR EXISTS(SELECT 1 FROM jsonb_array_elements(metadata->'primaryFields') f WHERE NOT EXISTS(
-       SELECT 1 FROM jsonb_array_elements(payload->'values') v WHERE v.value->>'name'=f.value->>'name' AND v.value->'value'=f.value->'value')) THEN
-      RAISE EXCEPTION 'original primary field/payload agreement required' USING ERRCODE='22023';END IF;
-    ELSIF payload-ARRAY['interfaceVersion','kind','values','orderKey','source']<>'{}'::jsonb
-     OR payload->'orderKey' IS DISTINCT FROM '{"state":"null"}'::jsonb AND
-      (jsonb_typeof(payload->'orderKey') IS DISTINCT FROM 'object' OR (payload->'orderKey')-ARRAY['state','text']<>'{}'::jsonb
-       OR payload->'orderKey'->>'state' IS DISTINCT FROM 'text' OR jsonb_typeof(payload->'orderKey'->'text') IS DISTINCT FROM 'string') THEN
-     RAISE EXCEPTION 'closed original edge payload required' USING ERRCODE='22023';END IF;
-    IF payload ? 'source' AND (jsonb_typeof(payload->'source') IS DISTINCT FROM 'object'
-     OR (payload->'source')-ARRAY['kind','entries']<>'{}'::jsonb OR payload->'source'->>'kind' IS DISTINCT FROM 'map'
-     OR jsonb_typeof(payload->'source'->'entries') IS DISTINCT FROM 'array'
-     OR (SELECT count(*)<>count(DISTINCT e.value->>'key') FROM jsonb_array_elements(payload->'source'->'entries') e)
-     OR EXISTS(SELECT 1 FROM jsonb_array_elements(payload->'source'->'entries') e WHERE e.value-ARRAY['key','value']<>'{}'::jsonb
-      OR jsonb_typeof(e.value->'key') IS DISTINCT FROM 'string' OR e.value->>'key' IN ('author','at','system') AND
-       (e.value->'value'->>'kind' IN ('string','null')) IS NOT TRUE)) THEN
-     RAISE EXCEPTION 'closed original source fields required' USING ERRCODE='22023';END IF;
-    SELECT e.value->'value'->>'text' INTO source_at FROM jsonb_array_elements(coalesce(payload->'source'->'entries','[]'::jsonb)) e WHERE e.value->>'key'='at' AND e.value->'value'->>'kind'='string';
-    IF source_at IS NOT NULL THEN
-     BEGIN PERFORM truss.query_timestamp_instant_key(source_at,'umf-rfc3339-exact-instant/1.0.0');
-     EXCEPTION WHEN data_exception THEN RAISE EXCEPTION 'selected source.at exact instant required' USING ERRCODE='22023';END;
-    END IF;
-    IF record->>'kind'='object' THEN operation:=jsonb_build_object('operation','create_object','typeDefinitionPin',metadata->>'definitionPin','values',payload->'values','ownership',payload->'ownership');
-    ELSE operation:=jsonb_build_object('operation','create_edge','relationshipDefinitionPin',record->'identity'->>'relationshipDefinitionPin','source',jsonb_build_object('state','stored','identity',record->'identity'->'source'),'target',jsonb_build_object('state','stored','identity',record->'identity'->'target'),'values',payload->'values','orderKey',payload->'orderKey');END IF;
+    operation:=truss.runtime_import_operation(record,metadata);
     group_input:=jsonb_build_object('interfaceVersion','truss-group-input/0.1.0','layoutProfile',group_context->'layoutProfile','mutationProfile',group_context->'mutationProfile','valueProfile',group_context->'valueProfile','catalog',jsonb_build_object('selection','current'),'preconditions','[]'::jsonb,'operations',jsonb_build_array(operation),'assertedOrigin',origin);
-    EXCEPTION WHEN SQLSTATE '22021' OR SQLSTATE '22P05' OR SQLSTATE '22P02' THEN
-     RAISE EXCEPTION 'eligible original payload encoding required' USING ERRCODE='22023';
-    END;
     code:=NULL;
     applied:=convert_from(truss.apply_group(convert_to(group_input::text,'UTF8'),original_documents,convert_to('{"state":"none"}','UTF8'),expected_release,expected_digest),'UTF8')::jsonb;
     IF applied->>'outcome'<>'success' THEN
@@ -220,6 +270,7 @@ BEGIN
   END;
   outcomes:=array_append(outcomes,selected_outcome);
  END LOOP;
+ END IF;
  FOR selected IN SELECT r.value AS original,o.value AS result FROM unnest(original_records) r(value) JOIN unnest(outcomes) o(value) ON r.value->>'inputIndex'=o.value->>'inputIndex' LOOP
   IF selected.result->>'outcome' IN ('created','skipped') THEN PERFORM truss.import_report_record_authority(convert_to(jsonb_build_object('originalIdentity',selected.original->'record'->'identity','outcomeIdentity',selected.result->'identity')::text,'UTF8'),selected.original->'record'->>'kind',expected_release,expected_digest);END IF;
  END LOOP;

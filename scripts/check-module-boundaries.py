@@ -88,11 +88,13 @@ ALLOWED = {
     '_security_catalog_source_epoch': {'truss._security_relationship_source','truss._security_graph_source','dataclasses','hashlib','json','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._security_catalog_source_installation','truss._security_catalog_assessment','truss._security_source_epoch_installation','truss._security_catalog_source_binding','truss._psycopg_epoch_cut','truss._psycopg_fact_cut'},
     '_security_source_epoch_installation': {'dataclasses','hashlib','importlib.resources','json','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss._installation_privileges','truss._psycopg_epoch_cut'},
     '_psycopg_subject_observation': {'dataclasses','hashlib','inspect','json','truss._owner_evidence_json','truss.psycopg_host','psycopg','truss._umf_key_tuples','truss._psycopg_fact_cut'},
-    'query': {'datetime','truss.contracts','decimal','dataclasses','typing'},
+    'query': {'truss.reader_catalog','datetime','truss.contracts','decimal','dataclasses','typing'},
     # Explicit original cursor custody and exclusive host lease; no SQL lowering.
     'query_stream': {'dataclasses','contextlib','datetime','math','psycopg','truss.execution','truss.psycopg_host','truss.catalog_runtime','truss.assembly'},
     '_query_stream_runtime': {'time','decimal','dataclasses','hashlib','json','uuid','weakref','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query','truss.query_stream','truss._query_runtime'},
-    '_query_runtime': {'base64','datetime','truss.contracts','hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
+    # Pure bounded compiler-result reuse; native scope remains in query execution.
+    '_query_cache': {'collections','json','sys','threading'},
+    '_query_runtime': {'truss.reader_catalog','truss._query_cache','base64','datetime','truss.contracts','hashlib','json','types','typing','decimal','re','weft','psycopg','psycopg.rows','truss.psycopg_host','truss.execution','truss.query'},
     '_umf_key_tuples': {'base64','truss.contracts','decimal','dataclasses','hashlib','importlib.resources','json','shutil','truss.preparation','truss._owner_evidence_json','truss._core10_catalog_release','subprocess','time'},
     '_catalog_definition_source': {'json','decimal','truss._owner_evidence_json'},
     # Group preparation decodes the shared catalog reference contract; no catalog runtime dependency.

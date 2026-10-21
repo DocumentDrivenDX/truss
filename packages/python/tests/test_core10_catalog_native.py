@@ -13,6 +13,30 @@ from truss._catalog_support import DATE10_PROFILE
 FIXTURE=Path(__file__).parent/'fixtures/catalog-security-core-umf10.json'
 class Core10CatalogNativeTests(catalog.PublicCatalogRuntimeTests):
  for name in tuple(n for n in dir(catalog.PublicCatalogRuntimeTests) if n.startswith('test_')):locals()[name]=None
+ def test_unnamed_elements_refuse_before_registration_and_preserve_transaction(self):
+  from truss import PreparationRejected
+  self.install();c,h,a,t=self.consumer()
+  original=self.source10()[0];source=json.loads(original.content)
+  targets=[]
+  for mi,module in enumerate(source['modules']):
+   for ei,element in enumerate(module['elements']):
+    if element['kind'] in ('record','field') and element['kind'] not in [entry[0] for entry in targets]:
+     element.pop('name',None);targets.append((element['kind'],module['id'],element['id'],f'/modules/{mi}/elements/{ei}/name'))
+  self.assertEqual({entry[0] for entry in targets},{'record','field'})
+  c.execute("CREATE TEMP TABLE name_prior(value text);INSERT INTO name_prior VALUES('kept')")
+  with self.assertRaises(PreparationRejected) as caught:
+   a.prepare_catalog((CatalogDocument(original.document_id,original.document_revision,json.dumps(source).encode()),))
+  self.assertEqual(caught.exception.reason,'invalid_document')
+  entries=[json.loads(raw) for raw in caught.exception.diagnostics]
+  self.assertEqual([(d['kind'],d['moduleId'],d['elementId'],d['path']) for d in entries],targets)
+  self.assertEqual(c.execute('TABLE name_prior').fetchall(),[('kept',)])
+  self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))
+  self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.schema_doc').fetchone(),(0,))
+  # A corrected source can still register using this caller-owned transaction.
+  prepared=a.prepare_catalog((original,));registered=a.accept_in_transaction(t,prepared,request_key='corrected-names')
+  self.assertIsInstance(registered,Ok,repr(registered))
+  h.detach();c.commit()
+  self.assertEqual(self.admin.execute('SELECT document FROM truss.schema_doc').fetchone(),(original.content.decode(),))
  def source10(self):
   source=json.loads(FIXTURE.read_text())
   return (CatalogDocument(source['id'],'schema-1',FIXTURE.read_bytes()),)

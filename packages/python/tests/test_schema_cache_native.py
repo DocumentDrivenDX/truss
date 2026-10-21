@@ -10,6 +10,48 @@ class SchemaCacheTests(base.PublicCreateGroupTests):
     for name in tuple(n for n in dir(base.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[name] = None
 
+    def test_conditional_query_binding_omits_source_on_hit_and_rechecks_reader(self):
+        from truss.catalog_runtime import _release
+        c,h,a,t=self.ready(document_ids=('adoc',))
+        manifest,digest,_=_release()
+        parameters=('['+'"adoc"'+']',10000,100,1048576,manifest['releaseId'],digest)
+        query='SELECT truss.query_binding_if_changed(%s::jsonb,%s,%s,%s,%s,%s,%s)'
+        first=json.loads(bytes(c.execute(query,(*parameters,None)).fetchone()[0]))
+        self.assertEqual(set(first),{'outcome','validator','bundle'})
+        self.assertEqual(first['outcome'],'snapshot')
+        original=json.loads(bytes(c.execute('SELECT truss.query_binding(%s::jsonb,%s,%s,%s,%s,%s)',parameters).fetchone()[0]))
+        self.assertEqual(first['bundle'],original)
+        hit_raw=bytes(c.execute(query,(*parameters,first['validator'])).fetchone()[0])
+        self.assertLess(len(hit_raw),160)
+        self.assertEqual(json.loads(hit_raw),{'outcome':'unchanged','validator':first['validator']})
+        miss=json.loads(bytes(c.execute(query,(*parameters,'0'*64)).fetchone()[0]))
+        self.assertEqual(miss,first)
+        changed_limits=(*parameters[:2],101,*parameters[3:])
+        changed=json.loads(bytes(c.execute(query,(*changed_limits,first['validator'])).fetchone()[0]))
+        self.assertEqual(changed['outcome'],'snapshot')
+        self.assertNotEqual(changed['validator'],first['validator'])
+        self.admin.execute('REVOKE group_writer FROM consumer')
+        with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+            with c.transaction():c.execute(query,(*parameters,first['validator']))
+
+    def test_query_binding_cache_isolated_by_current_person(self):
+        from truss.catalog_runtime import _release
+        c,h,a,t=self.ready(document_ids=('adoc',))
+        manifest,digest,_=_release()
+        parameters=('["adoc"]',10000,100,1048576,manifest['releaseId'],digest)
+        query='SELECT truss.query_binding_if_changed(%s::jsonb,%s,%s,%s,%s,%s,%s)'
+        first=json.loads(bytes(c.execute(query,(*parameters,None)).fetchone()[0]))
+        self.admin.execute('CREATE ROLE other_reader LOGIN')
+        self.addCleanup(self.admin.execute,'DROP ROLE other_reader')
+        self.admin.execute('GRANT group_reader TO other_reader WITH SET FALSE')
+        other=psycopg.connect(**{**psycopg.conninfo.conninfo_to_dict(self.info.connection_uri),'user':'other_reader'},autocommit=True)
+        self.addCleanup(other.close)
+        with other.transaction():
+            answer=json.loads(bytes(other.execute(query,(*parameters,first['validator'])).fetchone()[0]))
+            self.assertEqual(answer['outcome'],'snapshot')
+            self.assertNotEqual(answer['validator'],first['validator'])
+            self.assertNotEqual(answer['bundle']['actorOid'],first['bundle']['actorOid'])
+
     def test_record_work_reuses_immutable_compiled_schema(self):
         c, h, a, t = self.ready(document_ids=('adoc',))
         def snapshot():

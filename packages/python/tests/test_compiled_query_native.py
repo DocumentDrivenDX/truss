@@ -9,6 +9,113 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
     for _name in tuple(n for n in dir(mutation_tests.ObjectMutationTests) if n.startswith('test_')):
         locals()[_name]=None
 
+    def test_combined_catalog_source_query_uses_one_operation_and_current_visibility(self):
+        from truss import QueryCatalogRead,ReaderCatalogSnapshot,ReaderCatalogUnchanged
+        from hashlib import sha256
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        host.detach();connection.rollback();connection.execute('BEGIN READ ONLY')
+        host=adopt_psycopg_host(connection);self.addCleanup(host.detach)
+        self.consumer_connections.append((connection,host))
+        adopted=host.adopt_transaction(access_mode='read_only');self.assertIsInstance(adopted,Ok,repr(adopted))
+        tx=adopted.value
+        assembly=create_reference_assembly(CatalogRuntimeConfiguration(),host).value
+        sql='SELECT COUNT(*) AS total FROM "A" a'
+        first=assembly.query_with_catalog_in_transaction(tx,sql=sql,document_ids=('adoc',))
+        self.assertIsInstance(first,Ok,repr(first));self.assertIsInstance(first.value,QueryCatalogRead)
+        self.assertIsInstance(first.value.catalog,ReaderCatalogSnapshot)
+        self.assertEqual(first.value.result.rows,((0,),))
+        self.assertIsNotNone(first.value.result.as_of)
+        self.assertEqual(first.value.documents[0].content,self.documents[0].content)
+        self.assertEqual(first.value.documents[0].sha256,sha256(self.documents[0].content).hexdigest())
+        self.assertEqual(first.value.result.catalog_revision,first.value.catalog.catalog.catalog_revision)
+        second=assembly.query_with_catalog_in_transaction(tx,sql=sql,document_ids=('adoc',),catalog_validator=first.value.catalog.validator)
+        self.assertIsInstance(second.value.catalog,ReaderCatalogUnchanged)
+        self.assertEqual(second.value.documents,first.value.documents)
+        self.assertIsNone(connection.execute('SELECT pg_current_xact_id_if_assigned()').fetchone()[0])
+        self.admin.execute('REVOKE group_writer FROM consumer')
+        denied=assembly.query_with_catalog_in_transaction(tx,sql=sql,document_ids=('adoc',),catalog_validator=first.value.catalog.validator)
+        self.assertEqual(denied,Ok(QueryRefused(code='unauthorized')))
+
+
+    def test_repeated_query_compiles_once_but_revoked_reader_still_refuses(self):
+        from unittest.mock import Mock,patch
+        from truss._query_runtime import compiler
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        self.assertIsInstance(self.run_group(assembly,tx,(self.create(),),'cache-create')[0],GroupSuccess)
+        host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
+        original=compiler();self.assertIsNotNone(original)
+        counted=Mock(wraps=original)
+        sql='SELECT a."A-label" FROM "A" a WHERE a."A-label"=:label'
+        with patch('truss._query_runtime.compiler',return_value=counted):
+            for _ in range(3):
+                result=assembly.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters={'label':'one'})
+                self.assertIsInstance(result,Ok,repr(result))
+                self.assertEqual(result.value.rows,(('one',),))
+            self.assertEqual(counted.call_count,1)
+            other=assembly.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters={'label':'absent'})
+            self.assertEqual(other.value.rows,())
+            self.assertEqual(counted.call_count,2)
+            self.admin.execute('REVOKE group_writer FROM consumer')
+            denied=assembly.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters={'label':'one'})
+            self.assertEqual(denied,Ok(QueryRefused(code='unauthorized')))
+
+    def test_complete_entity_wildcard_names_include_relationship_outputs(self):
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        duplicate=assembly.query_in_transaction(tx,sql='SELECT a.*, RELATED_KEYS(a."A-B",1) AS "A-B" FROM "A" a',document_ids=('adoc',),read_profile='complete-entity')
+        self.assertIsInstance(duplicate.value,QueryRefused,repr(duplicate))
+        self.assertIn('WFT-OUTPUT-NAME',[d.code for d in duplicate.value.diagnostics])
+        distinct=assembly.query_in_transaction(tx,sql='SELECT a.*, RELATED_KEYS(a."A-B",1) AS explicit_keys FROM "A" a',document_ids=('adoc',),read_profile='complete-entity')
+        self.assertIsInstance(distinct.value,QueryRows,repr(distinct))
+        self.assertIn('A-B',distinct.value.columns)
+        self.assertIn('explicit_keys',distinct.value.columns)
+
+    def test_complete_entity_materializes_facts_and_retains_nested_proofs(self):
+        import psycopg
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        created=self.run_group(assembly,tx,(self.create(label='one',alias='one'),self.create(label='two',alias='two')),'facts-create')[0]
+        self.assertIsInstance(created,GroupSuccess)
+        host.detach();connection.commit();connection,host,assembly,tx=self.consumer()
+        originals={}
+        helpers=('query_object_attribution','query_object_times','query_object_load_id')
+        try:
+            for index,name in enumerate(helpers):
+                signature=f'truss.{name}(jsonb,int,bigint)'
+                original=self.admin.execute('SELECT pg_get_functiondef(%s::regprocedure)',(signature,)).fetchone()[0]
+                originals[name]=original
+                sequence=f'public.facts_calls_{index}'
+                self.admin.execute('CREATE SEQUENCE '+sequence)
+                self.addCleanup(self.admin.execute,'DROP SEQUENCE '+sequence)
+                self.admin.execute(psycopg.sql.SQL('GRANT USAGE ON SEQUENCE {} TO {}').format(psycopg.sql.Identifier('public',f'facts_calls_{index}'),psycopg.sql.Identifier(self.installation.owner_role)))
+                self.admin.execute(original.replace('BEGIN',f"BEGIN\n PERFORM pg_catalog.nextval('{sequence}'::regclass);",1))
+            result=assembly.query_in_transaction(tx,sql='SELECT a.* FROM "A" a WHERE a."A-label"=:label',document_ids=('adoc',),parameters={'label':'one'},read_profile='complete-entity')
+            self.assertIsInstance(result,Ok,repr(result));self.assertIsInstance(result.value,QueryRows,repr(result))
+            self.assertEqual(len(result.value.rows),1)
+            values=dict(zip(result.value.columns,result.value.rows[0],strict=True))
+            self.assertEqual(values['A-label'],'one');self.assertEqual(values['_version'],1)
+            self.assertEqual(values['_created_by'],'consumer');self.assertEqual(values['_updated_by'],'consumer')
+            for index in range(3):
+                # The time/load helpers each retain their own original
+                # attribution proof: one direct + two nested calls, not eight
+                # repeated projection evaluations in the old emitted SQL.
+                expected=3 if index==0 else 1
+                self.assertEqual(self.admin.execute(f'SELECT last_value,is_called FROM public.facts_calls_{index}').fetchone(),(expected,True),helpers[index])
+        finally:
+            for source in originals.values():self.admin.execute(source)
+
+    def test_legacy_source_bound_precedes_filter_limit_count_and_page(self):
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        created=self.run_group(assembly,tx,(self.create(label='first',alias='first'),self.create(label='second',alias='second')),'source-bound-create')[0]
+        self.assertIsInstance(created,GroupSuccess)
+        for sql,profile in (
+                ('SELECT a."A-label" FROM "A" a WHERE a."A-label"=:label LIMIT 1',None),
+                ('SELECT COUNT(*) AS total FROM "A" a',None),
+                ('SELECT a.* FROM "A" a ORDER BY a."A-value",a."A-label" LIMIT 1','entity-page')):
+            with self.subTest(sql=sql):
+                params={'label':'first'} if ':label' in sql else None
+                result=assembly.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters=params,maximum_scan_rows=1,read_profile=profile)
+                self.assertEqual(result,Ok(QueryRefused(code='limits')))
+
+
     def test_wide_complete_entity_preserves_fields_with_explicit_byte_budget(self):
         from dataclasses import replace
         from truss.contracts import TextValue
