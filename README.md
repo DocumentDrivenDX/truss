@@ -39,10 +39,13 @@ register UMF documents; public business-role and module-access configuration is
 separate. For development against the current checkout, use `./scripts/truss-local`.
 
 **Version 0.0.46:** native `0.72-candidate`, Weft `0.4.49`, UMF core `0.10.0`.
-Local macOS 27 ARM64 evidence uses Python3.11.17 and PostgreSQL18.6: eight
-focused lifecycle, isolation and CLI tests pass, and a clean `uvx` install and
-status confirmation retain the same installation identity. This is focused
-runtime evidence, not full engine qualification. See the [release notes](docs/helix/04-build/releases/v0.0.46.md), [local validation record](docs/helix/04-build/evidence/isolated-local-install-20261021/validation.json), [Python3.11 receipt](docs/helix/04-build/evidence/isolated-local-install-20261021/python311/receipt.json) and [focused test log](docs/helix/04-build/evidence/isolated-local-install-20261021/python311/focused-native-tests.log).
+Eight focused lifecycle, isolation and CLI tests pass on macOS ARM64 and Linux
+x86_64 with Python3.11.17 and PostgreSQL18.6. The [published-package receipt](docs/helix/04-build/evidence/isolated-local-install-20261021/published-0.0.46/receipt.json)
+verifies this exact quickstart outside the checkout: two simultaneous private
+instances retain separate data and installation identities across restarts.
+The [Linux release gate](https://github.com/DocumentDrivenDX/truss/actions/runs/39670547224) also passes the selected installed-engine workflows and original small public workload.
+Broad test discovery, managed-service support and performance certification
+remain unfinished. See the [release notes](docs/helix/04-build/releases/v0.0.46.md).
 
 For source development, the checkout wrapper selects the matching constraints
 and PostgreSQL wheel:

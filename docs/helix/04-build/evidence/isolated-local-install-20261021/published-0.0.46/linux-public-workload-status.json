@@ -1,0 +1,13 @@
+{
+  "source": "4c9a2a7d7abf47b10bb1d6db7dcfe5d5eea0b2ce",
+  "outcome": "success",
+  "reportPresent": true,
+  "scope": "Original small public workload; SQL 10s / operation 30s; no stress qualification",
+  "functionalPassed": true,
+  "runtimePackage": {
+    "mode": "installed",
+    "path": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/truss/__init__.py",
+    "version": "0.0.46",
+    "manifestPath": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/truss/_catalog_runtime/manifest.json"
+  }
+}

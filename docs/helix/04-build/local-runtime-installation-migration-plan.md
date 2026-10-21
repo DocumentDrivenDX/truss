@@ -11,6 +11,20 @@ and the existing `pgserver-pg18==18.6.1`/PostgreSQL18.6 tuple. The owner subsequ
 v0.0.46 and deployment of the released-package microsite quickstart; actual
 publication and deployment receipts follow their required gates.
 
+
+The authorized release is now published as [v0.0.46](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.46)
+from commit `4c9a2a7d7abf47b10bb1d6db7dcfe5d5eea0b2ce`.
+The [Linux release gate](https://github.com/DocumentDrivenDX/truss/actions/runs/39670547224) passed, including all eight focused runtime tests in8.973seconds,
+selected installed-engine workflows and the original small public workload;
+optional large-capacity and stress jobs were skipped. Retained [workflow metadata](evidence/isolated-local-install-20261021/published-0.0.46/release-workflow.json)
+and [workload status](evidence/isolated-local-install-20261021/published-0.0.46/linux-public-workload-status.json)
+identify the exact source and scope. The [public-package receipt](evidence/isolated-local-install-20261021/published-0.0.46/receipt.json)
+verifies every downloaded asset checksum and the exact README `uvx` command
+from an unrelated temporary directory on macOS ARM64/Python3.11.17: two simultaneous
+private instances retain separate data and installation identities after restart.
+The README and microsite quickstart now resolve released wheels and constraints
+without a source checkout. Earlier source-only evidence below remains historical.
+
 Truss now invokes the bundled initdb/pg_ctl/psql executables directly. Each
 cluster retains its own directory lease, explicit effective data directory,
 short private Unix-socket directory and socket mode0700. TCP is disabled and
