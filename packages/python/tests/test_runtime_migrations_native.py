@@ -56,6 +56,31 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
             env={**os.environ,'PYTHONPATH':str(cls.old)},text=True,capture_output=True,timeout=120)
         if result.returncode:raise AssertionError(result.stdout+result.stderr)
         cls.seed=json.loads((cls.root/'seed.json').read_bytes())
+        if directory:=os.environ.get('TRUSS_MIGRATION_EVIDENCE_DIRECTORY'):
+            # Test-only raw catalog evidence: diagnose real platform differences
+            # without changing admission or normalizing away native definitions.
+            from truss._migration_verify import canonical,matches_inventory
+            _,artifacts,_=load_recipe()
+            expected=json.loads(artifacts[manifest['sourceWheels'][cls.source_label]['runtimeManifestSha256']+'.json'])
+            with psycopg.connect(source_uri,autocommit=True) as connection,connection.cursor() as cursor:
+                cursor.execute('SET search_path=pg_catalog,pg_temp')
+                observed=structure(cursor)
+                cursor.execute('SELECT datcollate,datctype,datlocprovider FROM pg_database WHERE datname=current_database()')
+                locale=cursor.fetchone()
+            differences={}
+            for category,rows in expected['inventory'].items():
+                actual=observed[category]
+                if actual==rows:continue
+                wanted={canonical(row) for row in rows};found={canonical(row) for row in actual}
+                def sample(values):
+                    return [{'sha256':sha256(value).hexdigest(),'prefix':value.decode()[:1000]} for value in sorted(values)[:3]]
+                differences[category]={'expectedRows':len(rows),'observedRows':len(actual),
+                    'expectedOnly':sample(wanted-found),'observedOnly':sample(found-wanted),
+                    'orderingOnly':wanted==found}
+            diagnostic={'source':cls.source_label,'locale':locale,'matches':matches_inventory(observed,expected),
+                'differences':differences,'inventory':observed}
+            Path(directory,cls.source_label+'-native-inventory.json').write_text(json.dumps(diagnostic,indent=2)+'\n')
+            if not diagnostic['matches']:print('Native inventory admission diagnostic: '+json.dumps({k:v for k,v in diagnostic.items() if k!='inventory'}),flush=True)
 
     def setUp(self):
         self.database='migration_'+uuid4().hex[:12]

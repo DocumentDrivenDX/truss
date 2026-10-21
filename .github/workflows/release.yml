@@ -115,13 +115,13 @@ jobs:
       - name: Install checksum-verified PG18 and this exact Truss wheel
         run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find dist -name 'truss_toolkit-*.whl' -print -quit)"
       - name: Qualify all forward migration lineage sources with the installed latest toolkit
-        run: python scripts/qualify-runtime-migrations.py --installed-package --download --wheelhouse /tmp/truss-migration-wheels --output /tmp/truss-migration-qualification.json
+        run: python scripts/qualify-runtime-migrations.py --installed-package --download --wheelhouse /tmp/truss-migration-wheels --output /tmp/truss-migration-evidence/qualification.json
       - name: Retain migration qualification
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: runtime-migration-qualification-${{ matrix.os }}
-          path: /tmp/truss-migration-qualification.json
+          path: /tmp/truss-migration-evidence/*
           if-no-files-found: error
       - name: Verify installed embedded owners with every subprocess forbidden
         env:
