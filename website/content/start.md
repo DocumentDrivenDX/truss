@@ -10,16 +10,16 @@ Begin with the [current documentation index](https://github.com/DocumentDrivenDX
 
 ## Evaluate the Python release
 
-Truss `0.0.41` is published for fresh PostgreSQL `18.6` installations using UMF `0.10.0` source documents. Focused installed-package qualification on macOS ARM64 passed 11 cohort controls and 9 current-query/disclosure runtime checks. The three real schemas and 11 stress cases are retained from `0.0.40` evidence and were not rerun. Linux x86_64 Weft `0.4.48` has packaging verification only; this release makes no Linux functional or full-suite claim. Python deployment embeds V8 and does not require Bun, Node or an external JavaScript process.
+Truss `0.0.46` provides an explicit private PostgreSQL `18.6` runtime launcher alongside the Python embedding library. Local macOS 27 ARM64 evidence with Python `3.11.17` covers eight focused lifecycle, isolation and CLI tests, plus a clean `uvx` install and same-identity status confirmation. This is scoped local-runtime evidence, not full engine qualification. The hosted release workflow defines any additional platform qualification; broad test discovery, managed-service support and performance certification remain unfinished. Python deployment embeds V8 and does not require Bun, Node or an external JavaScript process.
 
-Use the [Python guide](https://github.com/DocumentDrivenDX/truss/blob/main/packages/python/README.md#install-version-0041) for installation and workflow details. The [release notes](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/releases/v0.0.41.md) and [qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.41/qualification.json) define the exact evidence and limits. Truss requires an empty/new database namespace; it does not migrate an older installation.
+Use the [Python guide](https://github.com/DocumentDrivenDX/truss/blob/main/packages/python/README.md) for installation and workflow details. The [v0.0.46 release notes](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/releases/v0.0.46.md), [published release and pins](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.46), [local validation record](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/evidence/isolated-local-install-20261021/validation.json) and [Python 3.11 receipt](https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/evidence/isolated-local-install-20261021/python311/receipt.json) define the exact scope. Truss requires a fresh database namespace; it does not migrate an older installation.
 
 ```sh
 git clone https://github.com/DocumentDrivenDX/truss.git
 cd truss
 ```
 
-The repository clone is for source inspection and development. Development checks may need Bun, a compiler and PostgreSQL; those tools are not runtime prerequisites for Python deployment. The release is available from [GitHub v0.0.41](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.41), with its [qualification summary](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.41/qualification.json).
+The repository clone below is for source inspection and development; the published package quickstart above does not require a clone. Development checks may need Bun, a compiler and PostgreSQL; those tools are not runtime prerequisites for Python deployment.
 
 ## Follow a requirement to evidence
 

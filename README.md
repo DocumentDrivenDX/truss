@@ -11,14 +11,49 @@ and Weft-compiled scalar and relationship queries. The local baseline is Documen
 `pgserver-pg18==18.6.1` (PostgreSQL18.6) with psycopg3.3.6. Python deployments
 use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Start with the [runnable adopter workflow](packages/python/examples/adopter_workflow.py).
 
-**Version 0.0.41:** native `0.72-candidate`, Weft `0.4.48`, and UMF core
-`0.10.0`. Local macOS ARM64 qualification covers 11 cache/cohort controls and
-nine PostgreSQL query/disclosure checks. The unchanged SQL runtime retains the
-three real-schema and 11 stress-case results from v0.0.40; those workloads were
-not repeated. Other platform checks cover packaging only. See the
-[v0.0.41 release page](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.41).
+## Run a private local instance
 
-Version 0.0.41 accepts only original UMF `0.10.0` source documents and
+With `uv` installed, run the published Truss `0.0.46` launcher in an isolated
+Python3.11 tool environment:
+
+```sh
+uvx --no-config --isolated --python 3.11 \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.46/isolated-runtime-constraints.txt \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.46 \
+  --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
+  --from 'truss-toolkit[local,native]==0.0.46' \
+  truss-local-postgres \
+  --data-dir "$HOME/.local/share/truss/beads" \
+  --install
+```
+
+The first run may download Python and package wheels. This provisions local
+PostgreSQL18.6 and the Truss schema/routines in private per-instance data and
+Unix-socket directories. It needs no system PostgreSQL, administrator access,
+TCP listener or port configuration. The launcher runs in the foreground;
+Ctrl-C stops it while retaining data. Rerun with the same directory to restart.
+Add `--probe` to install or confirm Truss and stop while retaining data. This is
+a local database runtime, not an HTTP, MCP or TrussRPC application service.
+Tools still embed the Python library, connect with an ordinary identity and
+register UMF documents; public business-role and module-access configuration is
+separate. For development against the current checkout, use `./scripts/truss-local`.
+
+**Version 0.0.46:** native `0.72-candidate`, Weft `0.4.49`, UMF core `0.10.0`.
+Local macOS 27 ARM64 evidence uses Python3.11.17 and PostgreSQL18.6: eight
+focused lifecycle, isolation and CLI tests pass, and a clean `uvx` install and
+status confirmation retain the same installation identity. This is focused
+runtime evidence, not full engine qualification. See the [release notes](docs/helix/04-build/releases/v0.0.46.md), [local validation record](docs/helix/04-build/evidence/isolated-local-install-20261021/validation.json), [Python3.11 receipt](docs/helix/04-build/evidence/isolated-local-install-20261021/python311/receipt.json) and [focused test log](docs/helix/04-build/evidence/isolated-local-install-20261021/python311/focused-native-tests.log).
+
+For source development, the checkout wrapper selects the matching constraints
+and PostgreSQL wheel:
+
+```sh
+./scripts/truss-local --data-dir "$HOME/.local/share/truss/beads" --install
+```
+
+Historical release summaries and their evidence follow.
+
+Version 0.0.41 accepted only original UMF `0.10.0` source documents and
 requires a fresh installation. Earlier UMF source formats and upgrades from older Truss
 installations are unsupported. Existing databases are never migrated or reset
 automatically. Earlier catalog revisions, receipts and retained history within
