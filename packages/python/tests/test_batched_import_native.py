@@ -33,12 +33,30 @@ class BatchedImportTests(legacy.ImportRuntimeTests):
 
     def test_independent_imports_share_one_native_set_based_group_and_exact_sources(self):
         connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        from psycopg import sql
+        self.admin.execute('CREATE TABLE public.import_statement_counts(home text,rows_written bigint)')
+        self.addCleanup(self.admin.execute,'DROP TABLE IF EXISTS public.import_statement_counts')
+        self.admin.execute('''CREATE FUNCTION public.observe_import_insert() RETURNS trigger
+            LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog AS $$
+            BEGIN
+              INSERT INTO public.import_statement_counts SELECT TG_TABLE_NAME,count(*) FROM new_rows;
+              RETURN NULL;
+            END;$$''')
+        self.addCleanup(self.admin.execute,'DROP FUNCTION IF EXISTS public.observe_import_insert() CASCADE')
+        homes=('object','journal','runtime_owned_operation')
+        for home in homes:
+            self.admin.execute(sql.SQL('''CREATE TRIGGER observe_import_insert AFTER INSERT ON truss.{}
+                REFERENCING NEW TABLE AS new_rows FOR EACH STATEMENT
+                EXECUTE FUNCTION public.observe_import_insert()''').format(sql.Identifier(home)))
         built=self.build(assembly,tx,16)
         result=self.run_batch(assembly,tx,built)
         self.assertEqual(result.result.report.counts.created_pending,'16')
         # Observe private native custody independently as the fixture owner,
         # after the host confirms its own outer commit.
         host.detach();connection.commit()
+        observed=self.admin.execute('SELECT home,count(*),sum(rows_written) FROM public.import_statement_counts GROUP BY home').fetchall()
+        self.assertEqual({home:(statements,rows) for home,statements,rows in observed},
+                         {home:(1,16) for home in homes})
         self.assertEqual(self.admin.execute('SELECT count(*),count(DISTINCT group_attempt_id),count(DISTINCT operation_index) FROM truss.runtime_import_source').fetchone(),(16,1,16))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_owned_operation').fetchone(),(16,))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(16,))

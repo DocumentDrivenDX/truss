@@ -5,6 +5,7 @@ This is test authoring, not a Truss name fallback. Each added authored name is
 the fixture element ID; the revised bytes receive their own source revision.
 """
 from hashlib import sha256
+from decimal import Decimal
 import json
 from truss import CatalogDocument
 
@@ -20,4 +21,12 @@ def named_revision(fixture):
                 missing.append((module['id'],element['id']))
                 element['name']=element['id']
     revised=json.dumps(source,indent=2,ensure_ascii=False).encode()
+    # Adding names must not round unknown extension numbers through binary64.
+    expected=json.loads(original,parse_float=Decimal)
+    missing_set=set(missing)
+    for module in expected['modules']:
+        for element in module['elements']:
+            if (module['id'],element['id']) in missing_set:
+                element['name']=element['id']
+    assert json.loads(revised,parse_float=Decimal)==expected
     return CatalogDocument(source['id'],sha256(revised).hexdigest(),revised),tuple(missing)

@@ -90,3 +90,10 @@ latency promise. Fresh public Weft0.4.49 macOS/Linux wheels match their publishe
 checksums and all four explicit Truss cohort pins. See
 `weft049-public-verification.json` for the release/packaging/compiler source
 identities and exact qualified workflow runs.
+
+`truss-hp-registration-adoption-native.log` records30 later registration/domain-
+pack/commerce/declarative/evolution controls. `truss-hp-set-based-dml-proof.log`
+records the independent physical-DML observation:16 imports produce one INSERT
+each into object, journal and runtime_owned_operation (16 rows each), with
+original per-record source/provenance retained. Test-owned transition-table
+triggers count the actual server statements; no business implementation is mocked.
