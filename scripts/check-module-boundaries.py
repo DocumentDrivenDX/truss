@@ -16,6 +16,13 @@ import sys
 # Imports are owned by the source module, including inside functions. New modules
 # require a reviewed map entry; there is no directory-wide exception or baseline.
 ALLOWED = {
+    'recovery_registry': {'json','sqlite3','pathlib','uuid','contextlib','hashlib','truss.contracts'},
+    'migrations': {'__future__','base64','dataclasses','typing','uuid','json','hashlib','psycopg','truss._migration_recipe','truss._migration_verify','truss._migration_execute','truss._installation_privileges'},
+    '_migration_recipe': {'functools','hashlib','importlib.resources','json','truss.catalog_preparation'},
+    '_migration_verify': {'hashlib','json','psycopg','truss._installation_privileges'},
+    '_migration_execute': {'json','hashlib','time','psycopg','truss._migration_verify'},
+    '_runtime_admission': {'functools','hashlib','importlib.resources'},
+
     # Isolated owner delivery and framing only; no SQL, host custody or native admission.
     '_embedded': {'functools','hashlib','importlib.resources','importlib.metadata','json','gzip','struct','subprocess','threading','time','py_mini_racer','truss._embedded_release','truss._current_query_pipe','truss._current_disclosure_pipe'},
     '_embedded_release': set(),
@@ -233,13 +240,16 @@ ALLOWED = {
     '_query_execution': {'dataclasses', 'inspect', 'threading', 'types', 'weakref', 'truss.weft'},
     '_receipt_position': {'base64', 'binascii', 'dataclasses', 'json', 're', 'truss._acceptance_json'},
     'cli': {'argparse', 'json', 'pathlib', 'signal', 'threading', 'truss', 'psycopg'},
-    'local_runtime': {'truss._runtime_profile', 'dataclasses', 'importlib.metadata', 'importlib.resources', 'pathlib',
-                      'subprocess', 'threading', 'pgserver', 'fasteners'},
+    'local_runtime': {'truss._runtime_profile', 'dataclasses', 'hashlib', 'importlib.metadata', 'importlib.resources', 'os', 'pathlib',
+                      'shlex', 'stat', 'subprocess', 'sys', 'tempfile', 'threading', 'urllib.parse', 'fasteners'},
     'migration_planning': {'dataclasses', 're', 'typing', 'truss._acceptance_json'},
     'numeric': {'dataclasses', 'decimal'},
     'timestamp': {'dataclasses', 'datetime', 're', 'truss.numeric'},
     'weft': {'dataclasses', 'decimal', 'hashlib', 'inspect', 'json', 'threading', 'types', 'typing'},
 }
+
+ALLOWED['psycopg_host'].add('truss._runtime_admission')
+ALLOWED['cli'].update({'truss.migrations','truss.recovery_registry','dataclasses','os','contextlib'})
 
 
 def inspect_sources(source: Path):

@@ -1,6 +1,6 @@
 {
   "interfaceVersion": "truss-catalog-runtime-release/0.1",
-  "releaseId": "truss-catalog-runtime/0.72-candidate",
+  "releaseId": "truss-catalog-runtime/0.73-candidate",
   "postgresVersion": "180006",
   "layoutProfile": {
     "identity": "truss-layout",
@@ -11,10 +11,10 @@
     "layout.sql": "fc2cdc8dfc80aef7f630a21ee9587751b9b026d9491832c0cdbb89c4a72feaa3",
     "lineage.sql": "b808d39ae44cbeca21bd301ff069469cbcea54c6b8fe28eb27f22ce53ce5e2fa",
     "plan.sql": "87a0fe05e1ed5339ba16a85c088cb0bae4625cd65b874db8ebe3d7e26aa20425",
-    "runtime.sql": "6139d240892d8d727ab47e58ec4a6f2875349bc4352293d7e73391ff20d4aa98",
+    "runtime.sql": "0f5a990730c932b63d3ad17e786be518963e870d571b6b4040c4b688c48bc75c",
     "barrier.sql": "659c4d9dfe8c4cf33b40e2249d3668b1c283e1815f719a47990387d81423d80e",
     "view.sql": "857a2c62c284a2462a71acfae88a1fcab840982fe274bcf39a49555692a88614",
-    "read.sql": "d899fa1c55efbae077b3b29585840a21cb963c4097eb354fd323e08c6b951793",
+    "read.sql": "85abe922d3e096df2ed1555def64e72b4095432bd29750e0c44b83e5d9e006bb",
     "keys.sql": "7dd48722c66c0dd255b098d93b92297539746b1ac4a06fe623564c268d4ad226",
     "groups.sql": "59bdf2fef8c8a1fcf1f0010d66186ecfc0e626a621a9f6024a776a6b7d8e7317",
     "group-profiles.json": "9a19eeafd78ae13a8baa884a58e22b1ec0f67c89899d9e66c826e595af7e160a",
@@ -29,9 +29,9 @@
     "feed.sql": "8a8dcf34eff071ae27f237b337d7046b51d49e53379aa11580eac0d062cd9abd",
     "capability-profiles.json": "b93cd0a1136551e1f8c307ece409163209951fb83842b5e787672b373f410c53",
     "history.sql": "ed88e27ff6e7448f0559ce33ea168e030710c2347bbc81faf90b6ccc141b9cc1",
-    "migrations.sql": "9160f8a7259e37045589920a6bd4fd46577e8ecdf3211c10c27f7a78706c4590",
+    "migrations.sql": "85f7ff1dac5afca7edc1157dc54edbba489b3fe2c2a3ac9211c0224a32fd468f",
     "preparation-baseline.json": "fecfedd6793948b915553c67710b3f4374014df5d89d9e140d591d31776d6c9e",
-    "query.sql": "da93ff139d39e749e88d45dfcc35147eba84724fb31803aa7f31e5dc49a8a957",
+    "query.sql": "d6ba3a282c84c76deca7dcb1261aec5653dad8992bd8f6f5771c4ea80a2162fa",
     "entity-query.sql": "845b1b05151fd4a7ab9732e4ca1f3654205dd73a67af7ecfe44f1e8cca46aca4",
     "entity-times.sql": "d01be128a08ccaf501a8f2cf30e61a9f48657bcf6da00507386392902d7a49f9",
     "entity-load.sql": "b799bf54ca48d589b6c14fa082de035ca419fe1371bc9cca1e21073031d16756",
@@ -58,5 +58,5 @@
     "import-batches.sql": "3958e5529154360c186c1deda4074e0197949803c89d78b60825f3f699b19261",
     "group-audit-reader.sql": "24b6629937e4139cd7e7b16a098c399d3788086b6ee986f352d1705ebf812cc2"
   },
-  "version": "0.72"
+  "version": "0.73"
 }

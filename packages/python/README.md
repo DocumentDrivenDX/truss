@@ -1,6 +1,91 @@
 # Truss Python toolkit
 
-Version 0.0.45 adds verified runtime and exact compiler caches, conditional query
+## Runtime migrations — v0.0.47 candidate
+
+Truss supports the latest application runtime only. Previous databases move
+forward through `RuntimeMigrations` or the explicit `truss-migrate` command;
+older application runtimes are not maintained as compatibility modes.
+
+The initial offline, transactional routes accept the exact UMF 0.10 installation
+from v0.0.44 and the shared installed tuple from v0.0.45/v0.0.46, on PostgreSQL
+18.6. The target is native `0.73-candidate`; exact manifest and installed definitions,
+privileges and preparation configuration decide admission. Matching release/layout
+labels alone do not. Pre-0.10 and protected-query installations are excluded.
+Unknown or modified sources refuse with their data intact. Current authored-name
+requirements apply to new registrations; already accepted v0.0.44 unnamed Records
+and Fields retain their original source and are exercised through latest reads/writes.
+
+Quiesce application and administrative writers and take a backup before applying.
+For logical backups on the qualified PG18.6 profile, also save
+`truss-migrate backup-metadata --registry ./truss-recovery.sqlite` alongside the
+dump. PG18.6 dump/restore omits private table-row-type ACLs in this profile.
+During an explicit offline restore, apply that original companion's
+`rowTypePrivilegeRestoreSql` before verification, migration or application access.
+Migration refuses privilege drift and never repairs it automatically. The two
+observed deparse spelling changes are qualified by identical pinned native parse
+trees; other definition differences remain refusals.
+The migration tool owns a separate idle administrative connection and its entire
+transaction. Application startup and `--install` never upgrade or reset a database.
+Set `TRUSS_DATABASE_URI` to the administrative connection URI, then use a durable,
+host-owned recovery registry and retain the returned reference across restarts:
+
+```sh
+truss-migrate status --registry ./truss-recovery.sqlite
+truss-migrate prepare --registry ./truss-recovery.sqlite
+truss-migrate apply --registry ./truss-recovery.sqlite --reference RETURNED_REFERENCE
+truss-migrate reconcile --registry ./truss-recovery.sqlite --reference RETURNED_REFERENCE
+truss-migrate verify --registry ./truss-recovery.sqlite
+```
+
+`migrated` and `already_applied` carry the original receipt reference and fresh verification.
+Use `truss-migrate receipt --registry ./truss-recovery.sqlite --reference RETURNED_REFERENCE`
+to export the complete immutable original request, recipe, native inventories,
+ordered step/privilege evidence and preservation bytes. `preparedAt` is receipt
+creation time, not a commit timestamp.
+`rolled_back` confirms the original rollback; a new attempt is explicit.
+`commit_unknown` and `recovery_required` retain the same reference for reconciliation.
+`committed_unverified` preserves a confirmed commit while verification or original
+resource cleanup remains unresolved. Do not repeat steps to resolve uncertainty.
+A later release retains immutable recipes and historical manifest evidence, so
+migration and receipt lookup stay in the latest tooling. Old unsubmitted requests
+cannot execute an older target. Applied recipes are immutable; repairs move forward.
+
+The Python entry point is `from truss.migrations import RuntimeMigrations` with
+`RuntimeMigrations(connection_factory, host_recovery_registry)`. The factory must
+return a newly owned, idle, autocommit psycopg connection. The host registry uses
+CONTRACT-007's installed target and immutable register/append/inspect operations;
+`truss.recovery_registry.HostRecoveryRegistry(path)` is the local SQLite-backed,
+restart-durable implementation. `upgrade_in_transaction` refuses caller-owned
+transaction upgrades and directs callers to this separate administrative boundary.
+
+Default migration limits are 256 MiB per preservation pass, 10s per SQL
+statement and a 30s operation deadline. Resource selection is retained in the
+original request. Larger finite scan/deadline budgets are explicit Python constructor
+parameters, with separate workload qualification; they do not change support to an old runtime. A limit refusal rolls back; no scale claim beyond the qualification
+fixtures follows. Preserve registry and database backups together. A package downgrade
+is not database rollback. The tested backup recovery is logical dump/restore into a
+new database identity before target writes, followed by migration to latest;
+other restore/incarnation procedures need their own qualification.
+
+The release-blocking [migration gate](../../scripts/qualify-runtime-migrations.py)
+runs every admitted source against the installed latest wheel and refuses removed
+paths or changed published recipes. Exact local evidence and remaining hosted
+qualification are recorded in the [execution plan](../../docs/helix/04-build/runtime-migration-restoration-plan.md).
+This candidate has not been published by this change.
+
+
+Version 0.0.46 adds an explicit local PostgreSQL 18.6 launcher using private
+per-instance data and Unix-socket directories. It installs or confirms the
+current Truss installation, retains data on stop, and keeps shell `PG*`
+settings from redirecting the owned server or installation connection. It
+does not provide an HTTP, MCP or TrussRPC service. Local macOS 27 ARM64 evidence
+uses Python 3.11.17 and records eight focused lifecycle/isolation/CLI tests plus
+a clean `uvx` installation and same-identity status confirmation. See the
+[published v0.0.46 release](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.46)
+for that release's original qualification. Those historical results are scoped
+to its original bytes.
+
+Historical version 0.0.45 added verified runtime and exact compiler caches, conditional query
 bindings, a combined catalog/source/query API and set-based independent imports.
 Registration now requires Record/Field names, with element-specific diagnostics;
 UMF optional-name semantics remain unchanged.
@@ -27,11 +112,11 @@ receipt; no full-suite pass is claimed.
 
 Historical [v0.0.42](../../docs/helix/04-build/releases/v0.0.42.md) adds the registered synchronous action host and strict group-response decoding. Its separate [qualification receipt](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.42/qualification.json) records 31 component controls and six focused native cases, including one registered create-action fixture under ordinary ACLs. Those cases do not rerun the v0.0.41 query/disclosure cohort above.
 
-This version accepts only UMF `0.10.0` source documents and fresh current
-installations. Earlier UMF source formats are unsupported, as are upgrades from an older Truss
-installation. `upgrade_in_transaction` returns an explicit unsupported error
-without issuing SQL; the CLI has no `--upgrade` option. No automatic migration,
-reset or data rewrite is performed. Historical catalog revisions, receipts and
+The current candidate accepts UMF `0.10.0` source and the explicitly qualified
+forward migration routes above. Earlier UMF source formats are unsupported.
+`upgrade_in_transaction` refuses caller-owned transaction upgrades; use the
+separate administrative tool. Startup never migrates or resets a database.
+Historical catalog revisions, receipts and
 retained events created within a current installation remain supported.
 Earlier release evidence retains its original scope and does not extend this
 version's compatibility.
@@ -122,7 +207,7 @@ Otherwise-supported standalone singular scalar Fields remain declarations until
 a Record uses them. The authored document revision is distinct from its content
 hash. Object reads distinguish rootless and owned objects with typed roots.
 The Python distribution, native runtime and compiler versions are separate pins.
-Use the exact release cohort listed above; no older installation is upgraded.
+Use the exact current release cohort. Existing installations require a qualified forward migration before application use.
 
 The `truss.access` typed-SDK integration remains experimental and requires its
 matching UMF SDK 0.5.3 / host 0.1.0.dev5 cohort through the `typed-sdk` extra.
@@ -238,10 +323,10 @@ retain a fixed committed frontier. Deleted and unchanged operations remain
 represented. Literal empty loads are retained but have no module scope and require
 the separate registrar disclosure path.
 
-## Install version 0.0.44
+## Install version 0.0.46
 
 Use the matching Truss and Weft release artifacts below. Source builds require
-the same version cohort; an older installation is not upgraded.
+the current version cohort; existing installations require explicit migration.
 
 The experimental **current-policy query interface** is:
 `assembly.query_current_in_transaction(tx, executor=..., sql=...,
@@ -272,7 +357,7 @@ only scoped catalog metadata and the verified own-session Subject facade remain.
 Guarded queries require this committed activation. Cached legacy query bindings
 do not retain access. Module configuration, feed enrollment and privileged bootstrap installers
 refuse after activation until an explicit protection migration exists.
-Installation upgrades are unsupported for this release.
+Protected-profile installation upgrades remain unsupported for this candidate.
 
 This first protected profile supports reads through `query_current_in_transaction`.
 Legacy mutations, imports, direct reads, history and feed are unavailable after
@@ -386,10 +471,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.45 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.46 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.49 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.45'
+  'truss-toolkit[local,native,query]==0.0.46'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -405,10 +490,10 @@ x86_64 qualification. Other platforms are outside the selected release gates.
 
 ## Run a real workflow
 
-Check out the v0.0.44 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.46 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.44 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.46 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
@@ -424,12 +509,56 @@ retains22 basic and10 exact-scalar observations for UMF0.7 and runtime0.38.
 It is incompatible with the current UMF0.10-only v0.0.40 candidate; earlier
 previews retain their historical pins and none claims independent interchange.
 
-For a local server with an installed Truss candidate, use the explicit launcher
-option after installing the `[local,native]` extras:
+## Run local PostgreSQL 18.6
+
+With `uv` installed, run the published `0.0.46` package in an isolated Python
+3.11 tool environment:
 
 ```sh
-truss-local-postgres --data-dir /tmp/truss-local --install
+uvx --no-config --isolated --python 3.11 \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.46/isolated-runtime-constraints.txt \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.46 \
+  --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
+  --from 'truss-toolkit[local,native]==0.0.46' \
+  truss-local-postgres \
+  --data-dir "$HOME/.local/share/truss/beads" \
+  --install
 ```
+
+The first run may download Python and package wheels. The launcher creates a
+private PostgreSQL cluster and Truss schema/routines using Unix sockets only;
+it needs no system PostgreSQL, administrator access, TCP listener or port
+configuration. It runs in the foreground. Ctrl-C stops the server and retains
+data; repeat with the same directory to restart. Add `--probe` to install or
+confirm Truss and stop while retaining data. This is a local database runtime,
+not an HTTP, MCP or TrussRPC application service. Tools still embed the Python
+library, connect with an ordinary identity and register UMF documents. Public
+business-role and module-access configuration remains a separate step.
+
+```sh
+./scripts/truss-local --data-dir "$HOME/.local/share/truss/beads" --install
+```
+
+For source development, `./scripts/truss-local` runs the checkout with its local
+constraints and PostgreSQL wheel source. Use a different data directory for each
+independent tool or instance.
+
+The Unix-only local runtime leases its cluster directory, makes it private
+(`0700`), and uses a distinct short private socket directory beneath
+`/private/tmp/truss-pg18-<uid>` on macOS or `/tmp/truss-pg18-<uid>` on Linux.
+The socket directory and socket are private (`0700`); every instance uses the
+same socket number5432 without opening a TCP listener. A long data path therefore
+does not require port discovery or shared sockets. The launcher reports its
+socket directory and exact connection URI. Shell PostgreSQL settings cannot
+redirect the owned server or installation connection.
+
+Stop the foreground launcher with SIGINT/SIGTERM; cluster data is retained.
+Repeat the command with the same directory to confirm the current installation
+and retain its identity. Socket directories contain transient runtime state and
+remain separate from durable cluster data. Local socket access trusts the owning
+OS user; this is installation isolation, not a security sandbox between processes
+running as that user. A stale postmaster marker or incompatible installation
+requires explicit recovery; startup never resets or upgrades it.
 
 Add `--probe` to install, confirm committed status and stop while retaining data.
 The launcher installs only when public status reports no Truss namespace. On a
@@ -517,12 +646,10 @@ Existing-installation administration additionally needs inherited authority over
 the retained owner role. Ordinary business calls refuse elevated installers and
 owner members.
 
-The current candidate has no installation upgrade route. Install only into a
-fresh database without a `truss` schema. `upgrade_in_transaction(tx)` returns
-`Error` with `catalog_code='unsupported_profile'` and performs no database work.
-An existing installation with different release pins refuses current operations;
-installing this wheel does not migrate or repair it. Keep the older package and
-its database together if that deployment must remain in service.
+Fresh installation requires a database without a `truss` schema. Existing
+installations use the explicit qualified migration route above. Installing a wheel
+does not migrate a database. Latest application operations refuse the old tuple
+until migration completes; old application runtimes refuse the upgraded tuple.
 
 The local launcher can install or confirm a current installation:
 

@@ -1,10 +1,24 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Pinned pgserver development launcher with fresh current Truss installation."""
 import argparse
+from contextlib import contextmanager
 import json
+import os
 from pathlib import Path
 import signal
 import threading
+
+
+@contextmanager
+def _without_postgres_environment():
+    """Keep inherited libpq defaults from changing the owned install session."""
+    saved = {name: value for name, value in os.environ.items() if name.startswith('PG')}
+    for name in saved:
+        os.environ.pop(name, None)
+    try:
+        yield
+    finally:
+        os.environ.update(saved)
 
 
 def _installation(connection_uri):
@@ -18,6 +32,8 @@ def _installation(connection_uri):
             raise RuntimeError(f'Truss installation/status refused: {result!r}')
         return result.value
 
+    # The URI carries the owned socket/database/user; the CLI has removed
+    # inherited PG* settings for this one-shot connection.
     with psycopg.connect(connection_uri, autocommit=True,
                          options='-c statement_timeout=10000') as connection:
         pending = None
@@ -81,9 +97,17 @@ def main():
         from truss import LocalPostgres
         with LocalPostgres(args.data_dir) as runtime:
             info = runtime.info
-            installation = _installation(info.connection_uri) if args.install else None
+            if args.install:
+                # This executable handles a single owned server in its own
+                # process, so temporarily remove libpq's process environment
+                # while creating its explicit host connection.
+                with _without_postgres_environment():
+                    installation = _installation(info.connection_uri)
+            else:
+                installation = None
             output = {'runtime': 'pgserver', 'runtimeVersion': info.runtime_version,
                               'serverVersion': info.server_version, 'dataDirectory': str(info.data_directory),
+                              'socketDirectory': str(info.socket_directory), 'port': info.port,
                               'connectionUri': info.connection_uri, 'trussInstallation': 'installed' if installation else info.truss_installation,
                               'scope': 'local_truss_candidate' if installation else 'local_postgresql_only'}
             if installation is not None:
@@ -98,3 +122,28 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def migrate_main():
+    """Explicit migration commands; never start an application or reset a database."""
+    import os
+    import psycopg
+    from dataclasses import asdict
+    from truss.migrations import RuntimeMigrations
+    from truss.recovery_registry import HostRecoveryRegistry
+    parser=argparse.ArgumentParser(description=migrate_main.__doc__)
+    parser.add_argument('action',choices=('status','verify','backup-metadata','prepare','apply','reconcile','receipt'))
+    parser.add_argument('--registry',required=True,type=Path,help='Host-owned restart-durable recovery registry')
+    parser.add_argument('--reference',help='Original reference returned by prepare; retain it across restarts')
+    args=parser.parse_args()
+    uri=os.environ.get('TRUSS_DATABASE_URI')
+    if not uri:parser.error('Set TRUSS_DATABASE_URI to the administrative connection URI')
+    if args.action in ('apply','reconcile','receipt') and not args.reference:parser.error('Original --reference required')
+    tool=RuntimeMigrations(lambda:psycopg.connect(uri,autocommit=True,options='-c statement_timeout=10000'),HostRecoveryRegistry(args.registry))
+    try:
+        result=getattr(tool,args.action)(args.reference) if args.action in ('apply','reconcile','receipt') else getattr(tool,args.action.replace('-','_'))()
+        value=result if isinstance(result,dict) else asdict(result)
+    except Exception as error:
+        print(json.dumps({'outcome':'refused','detail':str(error)}));raise SystemExit(1)
+    print(json.dumps(value))
+    if value.get('outcome') in ('rolled_back','commit_unknown','recovery_required','committed_unverified'):raise SystemExit(1)

@@ -7,6 +7,7 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+import shutil
 
 from truss import LocalPostgres, LocalRuntimeError
 from truss._runtime_profile import RUNTIME_DISTRIBUTION, SERVER_VERSION
@@ -80,7 +81,8 @@ class LocalRuntimeTests(unittest.TestCase):
             directory = Path(parent) / 'data'
             runtime = LocalPostgres(directory).__enter__()
             try:
-                with patch.object(runtime._server, 'cleanup', side_effect=OSError('injected cleanup failure')) as cleanup:
+                real_run = runtime._run
+                with patch.object(runtime, '_run', side_effect=OSError('injected cleanup failure')) as cleanup:
                     with self.assertRaisesRegex(LocalRuntimeError, 'lease retained'):
                         runtime.close()
                     self.assertEqual(cleanup.call_count, 1)
@@ -88,7 +90,7 @@ class LocalRuntimeTests(unittest.TestCase):
                         _ = runtime.info
                     with self.assertRaisesRegex(LocalRuntimeError, 'already in use'):
                         LocalPostgres(directory).__enter__()
-                with patch.object(runtime._server, 'cleanup', return_value=None) as cleanup:
+                with patch.object(runtime, '_run', return_value=subprocess.CompletedProcess([], 0, '', '')) as cleanup:
                     with self.assertRaisesRegex(LocalRuntimeError, 'stop unconfirmed'):
                         runtime.close()
                     self.assertEqual(cleanup.call_count, 1)
@@ -108,12 +110,12 @@ class LocalRuntimeTests(unittest.TestCase):
             directory = Path(parent) / 'data'
             runtime = LocalPostgres(directory)
             def fail_startup(*args, **kwargs):
-                directory.mkdir()
+                directory.mkdir(exist_ok=True)
                 (directory / 'PG_VERSION').write_text(SERVER_VERSION.split('.')[0] + '\n')
                 (directory / 'postmaster.pid').write_text('synthetic unresolved marker\n')
                 raise OSError('injected constructor failure')
             try:
-                with patch('pgserver.get_server', side_effect=fail_startup) as startup:
+                with patch.object(runtime, '_run', side_effect=lambda command, *args, **kwargs: fail_startup() if command == 'initdb' else None) as startup:
                     with self.assertRaisesRegex(LocalRuntimeError, 'startup stop unconfirmed'):
                         runtime.__enter__()
                     self.assertEqual(startup.call_count, 1)
@@ -121,13 +123,14 @@ class LocalRuntimeTests(unittest.TestCase):
                     _ = runtime.info
                 with self.assertRaisesRegex(LocalRuntimeError, 'already in use'):
                     LocalPostgres(directory).__enter__()
-                with self.assertRaisesRegex(LocalRuntimeError, 'lease retained'):
+                with self.assertRaisesRegex(LocalRuntimeError, 'startup stop unconfirmed'):
                     runtime.close()
                 # Model explicit host recovery of the synthetic marker, not a
                 # production rule to delete a live postmaster's custody file.
                 (directory / 'postmaster.pid').unlink()
                 runtime.close()
-                with patch('pgserver.get_server', side_effect=OSError('before native startup')):
+                shutil.rmtree(directory)
+                with patch.object(LocalPostgres, '_run', side_effect=OSError('before native startup')):
                     with self.assertRaisesRegex(OSError, 'before native startup'):
                         LocalPostgres(directory).__enter__()
             finally:

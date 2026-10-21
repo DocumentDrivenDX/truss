@@ -27,6 +27,23 @@ ddx:
       kind: informed_by
 ---
 
+## P0 forward migration release gate — 2026-10-21
+
+The latest-only policy requires a release-blocking populated predecessor-to-latest
+workflow, plus migration of every admitted lineage source using the latest tool.
+[STP-045](test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md) owns RM-T01–08
+and their CONTRACT-008 RM-01–07 traceability. Allocate recipe validation and import
+boundaries to fast tests; data preservation, fencing, old-wheel refusal, rollback
+and lost-ack settlement to real PostgreSQL; distribution completeness and skip-release
+chains to clean installed-package qualification. No synthetic-only success qualifies
+migration. Run local native checks on the development platform and hosted CI on
+Linux only. Exact server/driver/UMF/Weft/platform tuples scope each receipt.
+
+The first route uses UMF 0.10 v0.0.44 as source. Each future release adds its source
+fixture to the migration lineage; fixtures support conversion tests, not old runtime
+support. Pre-0.10, downgrade and mixed-runtime online operation remain excluded.
+
+
 # Truss project test plan
 
 ## Remaining embedder qualification

@@ -19,6 +19,34 @@ ddx:
       kind: informed_by
 ---
 
+## Latest runtime and migration boundary — 2026-10-21
+
+The PRD and ADR-008 select latest-only runtime support with forward database
+migration. The latest runtime contains current application execution only.
+Historical manifests, conversion recipes and preservation readers belong to the
+administrative migration boundary; they must not select an old runtime, schema
+producer, query compiler or general old-format admission path. Pre-0.10 is excluded.
+
+`truss.migrations.RuntimeMigrations` is the public administrative surface;
+`catalog_runtime.py` directs caller-owned upgrade requests to it. Implement recipe loading,
+source/target verification and execution in separate private migration modules;
+use the exact-manifest forward DAG in `_migration_recipe.py`, the installation
+privilege helper and existing host recovery meanings. The older release-label
+`migration_planning.py` is not the executor for these exact-byte native recipes. The CLI delegates to the same public
+administrative interface. Migration code may import those ports and packaged
+immutable artifacts; ordinary group/query/catalog preparation modules must not
+import version-specific migration implementations. No restored giant executor or
+version-string-generated SQL belongs in `catalog_runtime.py`.
+
+Extend `python3 scripts/check-module-boundaries.py` with explicit module/import
+entries and `python3 scripts/check-module-boundaries-controls.py` with allowed and
+forbidden import cases before feature implementation. Run the same checker locally,
+in the project's pre-commit path when configured, and Linux CI; Python-only checks
+still require semantic review of SQL, dynamic loading and settlement. Apply
+CONTRACT-008 RM-01–07 and [TD-045](technical-designs/TD-045-bootstrap-the-internal-layout-from-umf.md).
+No second ledger, compiler, authorization resolver or recovery service is introduced.
+
+
 # Truss architecture
 
 ## Validation placement and schema lifetime — owner decision 2026-10-18

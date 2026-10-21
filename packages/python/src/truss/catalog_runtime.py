@@ -590,7 +590,7 @@ class CatalogReferenceAssembly:
     def upgrade_in_transaction(self,transaction: TransactionHandle) -> Outcome[PendingRuntimeUpgrade]:
         """Refuse installation upgrades without executing SQL or changing data."""
         return Error(ExecutionFailure('execution_obligation',
-            'Installation upgrades are unsupported; only fresh current installations are supported',
+            'Use RuntimeMigrations on a separate idle administrative connection; caller-owned transaction upgrades are unsupported',
             catalog_code='unsupported_profile'))
 
     @_active_operation

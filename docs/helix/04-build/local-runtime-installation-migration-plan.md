@@ -1,3 +1,19 @@
+
+
+## Current migration direction — 2026-10-21
+
+The [restoration plan](runtime-migration-restoration-plan.md) and PRD owner
+decision supersede earlier migration sequencing and compatibility assumptions
+where they conflict. Support the latest runtime only; previous databases move
+forward through the latest migration tooling. Start with a populated UMF 0.10
+v0.0.44 source; pre-0.10, old-runtime operation and downgrades are excluded.
+Keep admitted database migration paths through future releases. Historical
+component receipts and older draft interfaces do not establish shipped support.
+Use CONTRACT-008 RM-01–07, STP-045 RM-T01–08 and restoration slices RM-S1–S7.
+The v0.0.47 candidate implements the selected routes and public `truss-migrate`
+flow. Follow the restoration plan and package README for its exact evidence,
+resource/restore limits and pending hosted release qualification. Earlier draft
+bindings below remain historical where they conflict with that selected profile.
 # Local runtime, installation and migration execution plan
 
 ## First-release scope — owner direction, 2026-10-13

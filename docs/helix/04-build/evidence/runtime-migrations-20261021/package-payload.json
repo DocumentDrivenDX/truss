@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "runtimeFiles": 444,
+  "artifacts": {
+    "truss_toolkit-0.0.47-py3-none-any.whl": "4cf6ed91feb3919b695f53661f76c629675fd12ea9b32f029a0157c6948c3b9f",
+    "truss_toolkit-0.0.47.tar.gz": "86d5e199ef1a29c9d264fc0b225c8d2afab77d67471fb128545bb2e70b7bf525"
+  },
+  "scope": "Every source runtime file byte-equal in wheel and sdist; tests execute installed wheel"
+}

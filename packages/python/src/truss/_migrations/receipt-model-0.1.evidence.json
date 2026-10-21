@@ -1,0 +1,15 @@
+{
+  "scope": "UMF0.10 PostgreSQL native AST import/export; source locations excluded from semantic comparison; native PG18.6 execution is qualified separately",
+  "backend": "@libpg-query/parser@17.6.10",
+  "sourceSha256": "85f7ff1dac5afca7edc1157dc54edbba489b3fe2c2a3ac9211c0224a32fd468f",
+  "originalSourceSha256": "c686d04d6044829db81aedb1c9ca494f500fb129fa8e7469a59ecfd30fa1a696",
+  "modelSha256": "55f602da57b3ddab50963fd177a440832d51bed1cd6354a1bae157f3a55cf042",
+  "ownerExportSha256": "be6a80307c14798adc0649e2f81370b460dec2fe67023e2fc49a3de3e0fa0629",
+  "ownerFiles": {
+    "src/adapters/postgresql/index.ts": "5ab9ade96f0b9bb923cad57eb33213653846f39808952d0f20bc3708e5b81810",
+    "native/postgresql/runtime.ts": "a88fea4cf15c9c3c3f0ad1f0a36d8f5de42a42ce8ea9712499f609beee3ea751",
+    "spec/extensions/postgresql/native-ast.schema.json": "aa3d3b50bc04edbc3ab3430e113ee8710edb1c10ff5cee15d4bcc7b16d9a9039",
+    "bun.lock": "5fb58795dfe9ef5df89597c44372cf2a0739e1855f322f7622ae0c9d0ac71ce4"
+  },
+  "passed": true
+}
