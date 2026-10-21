@@ -73,6 +73,31 @@ Backend/client RSS samples are observations, not complete memory accounting.
 ## Delivery status
 
 Independent source review and the complete request disposition are recorded in
-[review](review.md). Linux candidate/release CI, merge/tag identity and public
-asset verification will be recorded separately before publication is called
-complete. Historical releases and receipts remain unchanged.
+[review](review.md). The [Linux candidate run](https://github.com/DocumentDrivenDX/truss/actions/runs/39538360360)
+passed, including the 76 final new API/review controls and original public workload.
+Its 40 unittest invocations report 494 executions: 493 passed and one optional
+generated-client preflight unit skipped because its source/Bun opt-in was absent.
+That opt-in unit and generated native action ran in the separate local 70-test
+selection. The whole hosted run is not called zero-skip. Separate stress,
+large-capacity and diagnostic collection were not selected.
+
+[PR21](https://github.com/DocumentDrivenDX/truss/pull/21) merged as
+`5834509d641a2961b1871d00cb1fd59962c5f086`; tag `v0.0.44` points there. Candidate
+implementation `4a442f33`, review follow-up `3a5bf974` and the merge have identical
+runtime and test bytes; the intervening delta is review documentation only.
+The downloaded Linux candidate package matches all 428 runtime files and 772
+tracked sdist package files, with eight explicit backend metadata files.
+[Candidate status](linux-candidate.json), [compressed original log](linux-candidate.log.gz)
+and [delivery mapping](delivery.json) retain those distinct identities.
+
+[Tagged Linux CI](https://github.com/DocumentDrivenDX/truss/actions/runs/39540319279)
+and [fresh public verification](public-release.json) passed. All ten public assets
+(nine checksummed assets plus SHA256SUMS),436 RECORD members,428 runtime files,
+package metadata, source-build contents and every release pin match the qualified
+release source. Publication time is 2026-10-21T04:11:26Z. The reviewed
+[public verifier](verify-public-release.py) performs unauthenticated public API
+and artifact downloads, resolves the public tag, and calls its sibling
+[integrity verifier](verify-release-integrity.py) for complete checksums,
+archives, metadata, entry points, source, pins and published contracts/ABI.
+[Verifier controls](public-verifier-controls.json) reject representative duplicate,
+unsafe and symlink archive members. Historical releases/receipts remain unchanged.
