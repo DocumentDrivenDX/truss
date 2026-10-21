@@ -31,7 +31,11 @@ controls. `truss-hp-final-compiled.log`:16 native compiled-query/budget/capacity
 tests. `truss-hp-final-preconditions.log`:15 native group/preview controls.
 `truss-hp-final-disclosure.log`:five explicitly enabled native disclosure cases.
 `truss-hp-final-parity-audit.log`:eight parity/owned/audit tests and actual
-32/64/128 three-trial plus1,024-record measurements. Separate current-query and
+32/64/128 three-trial plus1,024-record measurements. `truss-hp-final-native-import.log` records the final22-case import/parity/audit
+campaign, including the unselected legacy profile whole-input refusal. The added
+rollback-validator case passed separately. `truss-hp-installed-final.log` records
+10 controls from the exact installed local wheel; `local-installed-wheel.json`
+proves all429 runtime payloads match source. Separate current-query and
 admission/import logs record their precise selected modules and test counts.
 `truss-hp-final-boundary-controls.json` records18 controls and source hashes;
 the actual module checker reports1,646 imports.
@@ -70,3 +74,10 @@ focused live-authority controls remain required. Whole-repository discovery is
 not claimed. Failure from two mistyped exploratory import module selectors was
 corrected with the maintained parity/audit modules; that failed invocation is
 not counted as a passing campaign.
+
+Final review confirmed that the complete import input already rejects a
+non-selected legacy payload profile before native mutation. An exploratory test
+initially expected a per-record rejection; its failed assertion was corrected to
+the actual whole-input22023 refusal, retained prior caller work and zero effects.
+The redundant speculative SQL check was removed; runtime SQL/manifest bytes are
+unchanged by this final review control. The corrected full22-case campaign passed.

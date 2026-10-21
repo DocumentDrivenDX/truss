@@ -77,6 +77,27 @@ class BatchedImportTests(legacy.ImportRuntimeTests):
                     self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
         finally:self.admin.execute(original)
 
+    def test_independent_batch_refuses_unselected_legacy_payload_profile_before_effects(self):
+        from truss.contracts import ProfilePin
+        from truss.imports import ImportExecutionFailed
+        connection,host,assembly,tx=self.ready(document_ids=('adoc',))
+        built=self.build(assembly,tx,2)
+        # This is a real legacy scalar profile accepted by the provenance
+        # helper, but it is not the profile selected by this batch context.
+        legacy=ProfilePin(identity='truss-scalar-import-payload',version='0.2',
+            sha256='45180a79836394b3c3c945cfe908b67e3a45ab3c81362f052b12ae45e7042281')
+        records=(replace(built.records[0],payload_profile=legacy),built.records[1])
+        input=built.context.input(records,load_id='profile-refusal',asserted_origin=MapValue(entries=()))
+        connection.execute("CREATE TEMP TABLE profile_prior(value text);INSERT INTO profile_prior VALUES('kept')")
+        result=assembly.import_batched_in_transaction(tx,input,documents=self.documents)
+        self.assertIsInstance(result.result,ImportExecutionFailed,repr(result))
+        self.assertEqual(result.result.error.sql_state,'22023')
+        self.assertIsNone(result.result.report)
+        self.assertEqual(connection.execute('TABLE profile_prior').fetchall(),[('kept',)])
+        host.detach();connection.commit()
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(0,))
+        self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.runtime_import_load_chunk').fetchone(),(0,))
+
     def test_create_skip_reject_original_indices_and_caller_rollback(self):
         connection,host,assembly,tx=self.ready(document_ids=('adoc',));built=self.build(assembly,tx,3)
         invalid=replace(built.records[2],payload=built.context.object_payload(()))
