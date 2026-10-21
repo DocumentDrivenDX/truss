@@ -56,10 +56,12 @@ __all__ += ["InstallationInspectionConfiguration", "InstallationInspectionAssemb
 
 from .catalog_runtime import (CatalogRuntimeConfiguration, CatalogReferenceAssembly,
     PendingCatalogInstallation, CatalogRuntimeStatus, CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogStoredViolator, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport,
-    ModuleAccessGrant, PendingModuleAccessConfiguration)
+    ModuleAccessGrant, PendingModuleAccessConfiguration, CatalogDocumentExpectation, CatalogCASConflict, RegistrarStatus,
+    ModuleAccessError, ModuleAccessBatchRefused)
 __all__ += ["CatalogRuntimeConfiguration", "CatalogReferenceAssembly", "PendingCatalogInstallation",
             "CatalogRuntimeStatus", "CatalogRegistration", "CatalogUnchanged", "CatalogAcceptanceRefused", "CatalogCompatibilityViolation", "CatalogStoredViolator", "CatalogRelationshipCompatibilityViolation", "CatalogKeyCompatibilityViolation", "CatalogReport",
-            "ModuleAccessGrant", "PendingModuleAccessConfiguration"]
+            "ModuleAccessGrant", "PendingModuleAccessConfiguration", "CatalogDocumentExpectation", "CatalogCASConflict", "RegistrarStatus",
+            "ModuleAccessError", "ModuleAccessBatchRefused"]
 
 from .catalog_view import (CatalogViewRequest, CatalogViewLimits, CurrentCatalogSelection,
     HistoricalCatalogSelection, CompleteCatalogScope, ProjectedCatalogScope,
@@ -84,8 +86,8 @@ __all__ += ["ActionBinding", "ActionRefusal", "ActionWireError", "SchemaBinding"
 from ._group_runtime import NativeGroupCapability, GroupCapabilityAvailable
 __all__ += ["NativeGroupCapability", "GroupCapabilityAvailable"]
 
-from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
-__all__ += ['ReaderCatalog','AcceptedDocument','CatalogRefused','CatalogInvalid','CatalogUnavailable']
+from .reader_catalog import ReaderCatalog, ReaderCatalogSnapshot, ReaderCatalogUnchanged, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
+__all__ += ['ReaderCatalog','ReaderCatalogSnapshot','ReaderCatalogUnchanged','AcceptedDocument','CatalogRefused','CatalogInvalid','CatalogUnavailable']
 
 from .edge_read import ScalarEdge,EdgeFound,EdgeNotFound,EdgePage,EdgePageCursor
 __all__ += ["ScalarEdge","EdgeFound","EdgeNotFound","EdgePage","EdgePageCursor"]
@@ -137,3 +139,31 @@ from .current_disclosure import (CurrentDisclosureExecutor,CurrentDisclosureRows
     prepare_current_disclosure_originals,register_current_disclosure_sources_in_transaction)
 __all__ += ['CurrentDisclosureExecutor','CurrentDisclosureRows','CurrentDisclosureOriginals',
     'prepare_current_disclosure_originals','register_current_disclosure_sources_in_transaction']
+
+from .preview import (GroupConditionPreviewInput, PreviewConditionResult, PreviewObservationBasis,
+                      PreviewObserved, PreviewRefused, ConditionPreviewResult)
+__all__ += ['GroupConditionPreviewInput','PreviewConditionResult','PreviewObservationBasis',
+    'PreviewObserved','PreviewRefused','ConditionPreviewResult']
+
+from .lifecycle import (PersonRuntimeStatus, AdminInstallRecovery, LifecycleRefused, InstallRefused,
+                        LifecycleStatusResult, AdminRecoveryResult)
+__all__ += ['PersonRuntimeStatus','AdminInstallRecovery','LifecycleRefused',
+    'InstallRefused','LifecycleStatusResult','AdminRecoveryResult']
+
+from .load_audit import (LoadAuditCursor, LoadAuditListingCursor, LoadAuditListingEnd,
+                         LoadAuditEntry, LoadAuditPage, LoadAuditChunkSummary,
+                         LoadAuditInvocationSummary, LoadAuditUnavailable,
+                         MutationGroupAuditListingCursor, MutationGroupAuditEntry,
+                         MutationGroupAuditListingEnd, MutationGroupAuditPage,
+                         ModuleAuditGrant, AuditAccessUpdated)
+__all__ += ['LoadAuditCursor','LoadAuditListingCursor','LoadAuditListingEnd',
+    'LoadAuditEntry','LoadAuditPage','LoadAuditChunkSummary','LoadAuditInvocationSummary',
+    'LoadAuditUnavailable','MutationGroupAuditListingCursor',
+    'MutationGroupAuditEntry','MutationGroupAuditListingEnd','MutationGroupAuditPage',
+    'ModuleAuditGrant','AuditAccessUpdated']
+
+from .batched_import import (BatchedImportInput, BatchedImportRuntimeContext,
+    ObjectImportDraft, EdgeImportDraft, ImportRecordDraft, BuiltImportRecords, EmptyLoadDisposition,
+    BatchedImportExecutionResult)
+__all__ += ['BatchedImportInput','BatchedImportRuntimeContext','ObjectImportDraft',
+    'EdgeImportDraft','ImportRecordDraft','BuiltImportRecords','EmptyLoadDisposition','BatchedImportExecutionResult']

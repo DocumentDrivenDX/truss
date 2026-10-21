@@ -29,6 +29,28 @@ ddx:
 
 # Truss project test plan
 
+## Remaining embedder qualification
+
+The [E2–E8 execution plan](../04-build/embedder-e2-e8-plan.md) binds the original
+feedback checklist to mandatory native and installed-consumer gates. Qualify
+batched-import partial progress/source/durability parity before raising the new
+profile to 1,024 records; retain the legacy 128-record route unchanged. Require
+current-authority catalog hit/miss races, document compare-and-set concurrency,
+known DDD/core optional-field correspondence, single-snapshot advisory preview,
+serialized installation/person-status/grant-batch negatives and separately
+granted complete group/load metadata audit, including an audit-only actor without
+ordinary data read, no raw origin/value disclosure and no writer self-grant.
+Existing pending-token, restrictive
+delete, owned cascade, original error/replay and caller-work containment cases
+remain regressions. New test modules must run explicitly in Linux installed-wheel
+CI; skipped generated/native or consumer cases cannot close a required gate.
+
+The consumer gate repeats the original Hohfeld catalog/Northwind/Pizza workflows
+on the exact package with no Bun/Node executable on deployment PATH. Report the
+full read/write/import statement categories, actual transaction settlement,
+transport and latency distributions. Internal SQL loops or single observations
+do not establish a set-based implementation, tenfold speedup or universal budget.
+
 Hosted CI runs on Linux only. Local development uses the host’s native platform
 by default; additional local platforms require an explicit request. Historical
 cross-platform receipts retain their original scope.

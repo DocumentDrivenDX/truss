@@ -20,6 +20,33 @@ ddx:
 ---
 
 # Contract: Embedding and execution
+
+## Selected remaining embedder execution boundaries
+
+The explicit batched import profile owns only its declared engine chunk
+transactions; legacy imports retain their original per-record settlement and
+caller-supplied transactions remain caller-owned. Reports retain each original
+input outcome, chunk membership, native attempt identity and actual durability.
+Lost COMMIT acknowledgement is unknown, not rollback; recovery uses the original
+attempt identity without an internal mutation retry. A fixed client statement
+budget includes builder, provenance and report checks and is qualified separately
+from BEGIN/COMMIT, server-internal work and network round trips.
+
+Conditional catalogs, registrar probes, condition previews and ordinary-person
+status are current observations. None is a reusable right or a promise that
+later mutation/registration admission will succeed. Preview success has only an
+observed catalog/snapshot basis and cannot produce a pending or committed receipt.
+Confirmed rolled-back work cannot become a reached committed position.
+
+`PersonRuntimeStatus` carries the minimal person status;
+`AdminInstallRecovery` carries separately authorized role recovery.
+Installer busy/already-installed/incompatible/unauthorized/invalid selections
+have typed bounded refusal outcomes after confirmed operation containment.
+Role-name recovery requires actual administrative authority; person status
+contains no such names or installation ID. New typed outcomes widen documented
+unions without collapsing transport, cancellation, retry, unusable-transaction
+or unknown-commit failures into ordinary refusals. No implicit reset or upgrade
+is introduced. Fresh install remains the delivery profile.
 ## Bounded synchronous typed action host — 2026-10-20
 
 `TrussActionTransport` hosts registered generated `umf.access/1` synchronous

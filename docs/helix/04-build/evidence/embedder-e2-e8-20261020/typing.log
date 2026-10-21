@@ -1,0 +1,5 @@
+group_consumer.py: 0 expected errors
+group_consumer_invalid.py: 10 expected errors
+import_consumer.py: 0 expected errors
+import_consumer_invalid.py: 10 expected errors
+native_capability_consumer.py: 0 expected errors

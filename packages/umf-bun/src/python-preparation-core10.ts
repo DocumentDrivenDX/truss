@@ -35,13 +35,17 @@ try{
   const reportEvidence={interfaceVersion:'truss-registration-preparation/2.0',
     documents:prepared.documents.map((document,index)=>({documentId:document.documentId,
       contentSha256:prepared.original.documents[index]!.sha256,
-      validation:document.interpretation.sourceValidation}))};
+      validation:document.interpretation.sourceValidation,
+      ...(document.interpretation.dddProfile?{dddProfile:document.interpretation.dddProfile}:{}),
+      ...(document.interpretation.dddValidation?{dddValidation:document.interpretation.dddValidation}:{})}))};
   const descriptor={...prepared.original.input,interfaceVersion:'truss-acceptance-input/0.2.0',
     documents:prepared.original.input.documents.map(document=>({...document,
       artifact:{identity:document.artifact.identity,sha256:document.artifact.sha256}}))};
   const response:any={status:'prepared',input:descriptor,
    documents:prepared.documents.map(document=>({documentId:document.documentId,revision:document.revision,
-     umfVersion:document.umfVersion,validation:document.interpretation.sourceValidation})),
+     umfVersion:document.umfVersion,validation:document.interpretation.sourceValidation,
+     ...(document.interpretation.dddProfile?{dddProfile:document.interpretation.dddProfile}:{}),
+     ...(document.interpretation.dddValidation?{dddValidation:document.interpretation.dddValidation}:{})})),
    reportEvidence,
    provenance:{umfProfile:prepared.umfProfile,schemaSha256:prepared.original.schemaSha256,scope:prepared.scope}};
   emit(response);
@@ -50,7 +54,9 @@ try{
  if(error instanceof CatalogDocumentRejected){
   const cause=error.originalError as any;const message=cause instanceof Error?cause.message:'Original document refused';
   diagnostics=[{documentId:error.documentId,documentRevision:error.documentRevision,
-   ...(error.observation?{validation:(error.observation as any).sourceValidation}:{originalError:{message:message.slice(0,8192),truncated:message.length>8192,
+   ...(error.observation?{validation:(error.observation as any).sourceValidation,
+    ...((error.observation as any).dddProfile?{dddProfile:(error.observation as any).dddProfile}:{}),
+    ...((error.observation as any).dddValidation?{dddValidation:(error.observation as any).dddValidation}:{})}:{originalError:{message:message.slice(0,8192),truncated:message.length>8192,
     ...(typeof cause?.code==='string'?{code:cause.code.slice(0,256)}:{}),...(typeof cause?.path==='string'?{path:cause.path.slice(0,8192)}:{})}})}];
  }
  const message=error instanceof Error?error.message:'';

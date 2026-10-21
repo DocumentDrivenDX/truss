@@ -32,7 +32,7 @@ var __toESM = (mod, isNodeMode, target) => {
 };
 var __commonJS = (cb, mod) => () => (mod || cb((mod = { exports: {} }).exports, mod), mod.exports);
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/codegen/code.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/codegen/code.js
 var require_code = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.regexpCode = exports.getEsmExportName = exports.getProperty = exports.safeStringify = exports.stringify = exports.strConcat = exports.addCodeArg = exports.str = exports._ = exports.nil = exports._Code = exports.Name = exports.IDENTIFIER = exports._CodeOrName = undefined;
@@ -186,7 +186,7 @@ var require_code = __commonJS(function(exports) {
   exports.regexpCode = regexpCode;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/codegen/scope.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/codegen/scope.js
 var require_scope = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.ValueScope = exports.ValueScopeName = exports.Scope = exports.varKinds = exports.UsedValueState = undefined;
@@ -332,7 +332,7 @@ var require_scope = __commonJS(function(exports) {
   exports.ValueScope = ValueScope;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/codegen/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/codegen/index.js
 var require_codegen = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.or = exports.and = exports.not = exports.CodeGen = exports.operators = exports.varKinds = exports.ValueScopeName = exports.ValueScope = exports.Scope = exports.Name = exports.regexpCode = exports.stringify = exports.getProperty = exports.nil = exports.strConcat = exports.str = exports._ = undefined;
@@ -1042,7 +1042,7 @@ var require_codegen = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/util.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/util.js
 var require_util = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.checkStrictMode = exports.getErrorPath = exports.Type = exports.useFunc = exports.setEvaluated = exports.evaluatedPropsToName = exports.mergeEvaluated = exports.eachItem = exports.unescapeJsonPointer = exports.escapeJsonPointer = exports.escapeFragment = exports.unescapeFragment = exports.schemaRefOrVal = exports.schemaHasRulesButRef = exports.schemaHasRules = exports.checkUnknownRules = exports.alwaysValidSchema = exports.toHash = undefined;
@@ -1206,7 +1206,7 @@ var require_util = __commonJS(function(exports) {
   exports.checkStrictMode = checkStrictMode;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/names.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/names.js
 var require_names = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -1231,7 +1231,7 @@ var require_names = __commonJS(function(exports) {
   exports.default = names;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/errors.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/errors.js
 var require_errors = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.extendErrors = exports.resetErrorsCount = exports.reportExtraError = exports.reportError = exports.keyword$DataError = exports.keywordError = undefined;
@@ -1349,7 +1349,7 @@ var require_errors = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/validate/boolSchema.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/validate/boolSchema.js
 var require_boolSchema = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.boolOrEmptySchema = exports.topBoolOrEmptySchema = undefined;
@@ -1397,7 +1397,7 @@ var require_boolSchema = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/rules.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/rules.js
 var require_rules = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.getRules = exports.isJSONType = undefined;
@@ -1425,7 +1425,7 @@ var require_rules = __commonJS(function(exports) {
   exports.getRules = getRules;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/validate/applicability.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/validate/applicability.js
 var require_applicability = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.shouldUseRule = exports.shouldUseGroup = exports.schemaHasRulesForType = undefined;
@@ -1445,7 +1445,7 @@ var require_applicability = __commonJS(function(exports) {
   exports.shouldUseRule = shouldUseRule;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/validate/dataType.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/validate/dataType.js
 var require_dataType = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.reportTypeError = exports.checkDataTypes = exports.checkDataType = exports.coerceAndCheckDataType = exports.getJSONTypes = exports.getSchemaTypes = exports.DataType = undefined;
@@ -1626,7 +1626,7 @@ var require_dataType = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/validate/defaults.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/validate/defaults.js
 var require_defaults = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.assignDefaults = undefined;
@@ -1660,7 +1660,7 @@ var require_defaults = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/code.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/code.js
 var require_code2 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateUnion = exports.validateArray = exports.usePattern = exports.callValidateCode = exports.schemaProperties = exports.allSchemaProperties = exports.noPropertyInData = exports.propertyInData = exports.isOwnProperty = exports.hasPropFunc = exports.reportMissingProp = exports.checkMissingProp = exports.checkReportMissingProp = undefined;
@@ -1789,7 +1789,7 @@ var require_code2 = __commonJS(function(exports) {
   exports.validateUnion = validateUnion;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/validate/keyword.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/validate/keyword.js
 var require_keyword = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateKeywordUsage = exports.validSchemaType = exports.funcKeywordCode = exports.macroKeywordCode = undefined;
@@ -1904,7 +1904,7 @@ var require_keyword = __commonJS(function(exports) {
   exports.validateKeywordUsage = validateKeywordUsage;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/validate/subschema.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/validate/subschema.js
 var require_subschema = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.extendSubschemaMode = exports.extendSubschemaData = exports.getSubschema = undefined;
@@ -1984,7 +1984,7 @@ var require_subschema = __commonJS(function(exports) {
   exports.extendSubschemaMode = extendSubschemaMode;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/fast-deep-equal/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/fast-deep-equal/index.js
 var require_fast_deep_equal = __commonJS(function(exports, module) {
   module.exports = function equal(a, b) {
     if (a === b)
@@ -2026,7 +2026,7 @@ var require_fast_deep_equal = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/json-schema-traverse/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/json-schema-traverse/index.js
 var require_json_schema_traverse = __commonJS(function(exports, module) {
   var traverse = module.exports = function(schema, opts, cb) {
     if (typeof opts == "function") {
@@ -2109,7 +2109,7 @@ var require_json_schema_traverse = __commonJS(function(exports, module) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/resolve.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/resolve.js
 var require_resolve = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.getSchemaRefs = exports.resolveUrl = exports.normalizeId = exports._getFullPath = exports.getFullPath = exports.inlineRef = undefined;
@@ -2262,7 +2262,7 @@ var require_resolve = __commonJS(function(exports) {
   exports.getSchemaRefs = getSchemaRefs;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/validate/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/validate/index.js
 var require_validate = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.getData = exports.KeywordCxt = exports.validateFunctionCode = undefined;
@@ -2767,7 +2767,7 @@ var require_validate = __commonJS(function(exports) {
   exports.getData = getData;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/runtime/validation_error.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/runtime/validation_error.js
 var require_validation_error = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -2781,7 +2781,7 @@ var require_validation_error = __commonJS(function(exports) {
   exports.default = ValidationError;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/ref_error.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/ref_error.js
 var require_ref_error = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var resolve_1 = require_resolve();
@@ -2796,7 +2796,7 @@ var require_ref_error = __commonJS(function(exports) {
   exports.default = MissingRefError;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/compile/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/compile/index.js
 var require_compile = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.resolveSchema = exports.getCompilingSchema = exports.resolveRef = exports.compileSchema = exports.SchemaEnv = undefined;
@@ -3017,7 +3017,7 @@ var require_compile = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/refs/data.json
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/refs/data.json
 var require_data = __commonJS(function(exports, module) {
   module.exports = {
     $id: "https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json#",
@@ -3034,7 +3034,7 @@ var require_data = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/fast-uri/lib/utils.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/fast-uri/lib/utils.js
 var require_utils = __commonJS(function(exports, module) {
   var isUUID = RegExp.prototype.test.bind(/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/iu);
   var isIPv4 = RegExp.prototype.test.bind(/^(?:(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]\d|\d)$/u);
@@ -3551,7 +3551,7 @@ var require_utils = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/fast-uri/lib/schemes.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/fast-uri/lib/schemes.js
 var require_schemes = __commonJS(function(exports, module) {
   var { isUUID } = require_utils();
   var URN_REG = /^([\da-z][\d\-a-z]{0,31}):((?:[\w!$'()*+,\-./:;=@]|%[\da-f]{2})+)$/iu;
@@ -3726,7 +3726,7 @@ var require_schemes = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/fast-uri/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/fast-uri/index.js
 var require_fast_uri = __commonJS(function(exports, module) {
   var { normalizeIPv6, removeDotSegments, recomposeAuthority, normalizePercentEncoding, normalizePathEncoding, serializePathEncoding, normalizeQueryFragmentEncoding, encodeQuery, encodeFragment, reescapeHostDelimiters, isIPv4, nonSimpleDomain } = require_utils();
   var { SCHEMES, getSchemeHandler } = require_schemes();
@@ -4129,7 +4129,7 @@ var require_fast_uri = __commonJS(function(exports, module) {
   module.exports.fastUri = fastUri;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/runtime/uri.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/runtime/uri.js
 var require_uri = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var uri = require_fast_uri();
@@ -4137,7 +4137,7 @@ var require_uri = __commonJS(function(exports) {
   exports.default = uri;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/core.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/core.js
 var require_core = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = undefined;
@@ -4730,7 +4730,7 @@ var require_core = __commonJS(function(exports) {
   }
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/core/id.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/core/id.js
 var require_id = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var def = {
@@ -4742,7 +4742,7 @@ var require_id = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/core/ref.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/core/ref.js
 var require_ref = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.callRef = exports.getValidate = undefined;
@@ -4861,7 +4861,7 @@ var require_ref = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/core/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/core/index.js
 var require_core2 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var id_1 = require_id();
@@ -4879,7 +4879,7 @@ var require_core2 = __commonJS(function(exports) {
   exports.default = core;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/limitNumber.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/limitNumber.js
 var require_limitNumber = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -4908,7 +4908,7 @@ var require_limitNumber = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/multipleOf.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/multipleOf.js
 var require_multipleOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -4933,7 +4933,7 @@ var require_multipleOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/runtime/ucs2length.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/runtime/ucs2length.js
 var require_ucs2length = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   function ucs2length(str) {
@@ -4956,7 +4956,7 @@ var require_ucs2length = __commonJS(function(exports) {
   ucs2length.code = 'require("ajv/dist/runtime/ucs2length").default';
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/limitLength.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/limitLength.js
 var require_limitLength = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -4985,7 +4985,7 @@ var require_limitLength = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/pattern.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/pattern.js
 var require_pattern = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -5019,7 +5019,7 @@ var require_pattern = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/limitProperties.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/limitProperties.js
 var require_limitProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5045,7 +5045,7 @@ var require_limitProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/required.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/required.js
 var require_required = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -5124,7 +5124,7 @@ var require_required = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/limitItems.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/limitItems.js
 var require_limitItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5150,7 +5150,7 @@ var require_limitItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/runtime/equal.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/runtime/equal.js
 var require_equal = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var equal = require_fast_deep_equal();
@@ -5158,7 +5158,7 @@ var require_equal = __commonJS(function(exports) {
   exports.default = equal;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/uniqueItems.js
 var require_uniqueItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dataType_1 = require_dataType();
@@ -5222,7 +5222,7 @@ var require_uniqueItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/const.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/const.js
 var require_const = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5248,7 +5248,7 @@ var require_const = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/enum.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/enum.js
 var require_enum = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5294,7 +5294,7 @@ var require_enum = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/index.js
 var require_validation = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var limitNumber_1 = require_limitNumber();
@@ -5324,7 +5324,7 @@ var require_validation = __commonJS(function(exports) {
   exports.default = validation;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/additionalItems.js
 var require_additionalItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateAdditionalItems = undefined;
@@ -5374,7 +5374,7 @@ var require_additionalItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/items.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/items.js
 var require_items = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateTuple = undefined;
@@ -5428,7 +5428,7 @@ var require_items = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/prefixItems.js
 var require_prefixItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var items_1 = require_items();
@@ -5442,7 +5442,7 @@ var require_prefixItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/items2020.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/items2020.js
 var require_items2020 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5474,7 +5474,7 @@ var require_items2020 = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/contains.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/contains.js
 var require_contains = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5565,7 +5565,7 @@ var require_contains = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/dependencies.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/dependencies.js
 var require_dependencies = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.validateSchemaDeps = exports.validatePropertyDeps = exports.error = undefined;
@@ -5650,7 +5650,7 @@ var require_dependencies = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/propertyNames.js
 var require_propertyNames = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -5690,7 +5690,7 @@ var require_propertyNames = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/additionalProperties.js
 var require_additionalProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -5793,7 +5793,7 @@ var require_additionalProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/properties.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/properties.js
 var require_properties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var validate_1 = require_validate();
@@ -5848,7 +5848,7 @@ var require_properties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/patternProperties.js
 var require_patternProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -5919,7 +5919,7 @@ var require_patternProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/not.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/not.js
 var require_not = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -5947,7 +5947,7 @@ var require_not = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/anyOf.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/anyOf.js
 var require_anyOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var code_1 = require_code2();
@@ -5961,7 +5961,7 @@ var require_anyOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/oneOf.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/oneOf.js
 var require_oneOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6016,7 +6016,7 @@ var require_oneOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/allOf.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/allOf.js
 var require_allOf = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -6040,7 +6040,7 @@ var require_allOf = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/if.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/if.js
 var require_if = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6106,7 +6106,7 @@ var require_if = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/thenElse.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/thenElse.js
 var require_thenElse = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -6121,7 +6121,7 @@ var require_thenElse = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/index.js
 var require_applicator = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var additionalItems_1 = require_additionalItems();
@@ -6164,7 +6164,7 @@ var require_applicator = __commonJS(function(exports) {
   exports.default = getApplicator;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/dynamic/dynamicAnchor.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/dynamic/dynamicAnchor.js
 var require_dynamicAnchor = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.dynamicAnchor = undefined;
@@ -6196,7 +6196,7 @@ var require_dynamicAnchor = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/dynamic/dynamicRef.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/dynamic/dynamicRef.js
 var require_dynamicRef = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.dynamicRef = undefined;
@@ -6239,7 +6239,7 @@ var require_dynamicRef = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/dynamic/recursiveAnchor.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/dynamic/recursiveAnchor.js
 var require_recursiveAnchor = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dynamicAnchor_1 = require_dynamicAnchor();
@@ -6257,7 +6257,7 @@ var require_recursiveAnchor = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/dynamic/recursiveRef.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/dynamic/recursiveRef.js
 var require_recursiveRef = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dynamicRef_1 = require_dynamicRef();
@@ -6269,7 +6269,7 @@ var require_recursiveRef = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/dynamic/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/dynamic/index.js
 var require_dynamic = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dynamicAnchor_1 = require_dynamicAnchor();
@@ -6280,7 +6280,7 @@ var require_dynamic = __commonJS(function(exports) {
   exports.default = dynamic;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/dependentRequired.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/dependentRequired.js
 var require_dependentRequired = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dependencies_1 = require_dependencies();
@@ -6294,7 +6294,7 @@ var require_dependentRequired = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/applicator/dependentSchemas.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/applicator/dependentSchemas.js
 var require_dependentSchemas = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dependencies_1 = require_dependencies();
@@ -6307,7 +6307,7 @@ var require_dependentSchemas = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/validation/limitContains.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/validation/limitContains.js
 var require_limitContains = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var util_1 = require_util();
@@ -6324,7 +6324,7 @@ var require_limitContains = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/next.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/next.js
 var require_next = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var dependentRequired_1 = require_dependentRequired();
@@ -6334,7 +6334,7 @@ var require_next = __commonJS(function(exports) {
   exports.default = next;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedProperties.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedProperties.js
 var require_unevaluatedProperties = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6397,7 +6397,7 @@ var require_unevaluatedProperties = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedItems.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/unevaluated/unevaluatedItems.js
 var require_unevaluatedItems = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6438,7 +6438,7 @@ var require_unevaluatedItems = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/unevaluated/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/unevaluated/index.js
 var require_unevaluated = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var unevaluatedProperties_1 = require_unevaluatedProperties();
@@ -6447,7 +6447,7 @@ var require_unevaluated = __commonJS(function(exports) {
   exports.default = unevaluated;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/format/format.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/format/format.js
 var require_format = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6534,7 +6534,7 @@ var require_format = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/format/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/format/index.js
 var require_format2 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var format_1 = require_format();
@@ -6542,7 +6542,7 @@ var require_format2 = __commonJS(function(exports) {
   exports.default = format;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/metadata.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/metadata.js
 var require_metadata = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.contentVocabulary = exports.metadataVocabulary = undefined;
@@ -6562,7 +6562,7 @@ var require_metadata = __commonJS(function(exports) {
   ];
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/draft2020.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/draft2020.js
 var require_draft2020 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var core_1 = require_core2();
@@ -6587,7 +6587,7 @@ var require_draft2020 = __commonJS(function(exports) {
   exports.default = draft2020Vocabularies;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/discriminator/types.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/discriminator/types.js
 var require_types = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.DiscrError = undefined;
@@ -6598,7 +6598,7 @@ var require_types = __commonJS(function(exports) {
   })(DiscrError || (exports.DiscrError = DiscrError = {}));
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/vocabularies/discriminator/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/vocabularies/discriminator/index.js
 var require_discriminator = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var codegen_1 = require_codegen();
@@ -6700,7 +6700,7 @@ var require_discriminator = __commonJS(function(exports) {
   exports.default = def;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/refs/json-schema-2020-12/schema.json
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/refs/json-schema-2020-12/schema.json
 var require_schema = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6758,7 +6758,7 @@ var require_schema = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/applicator.json
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/refs/json-schema-2020-12/meta/applicator.json
 var require_applicator2 = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6809,7 +6809,7 @@ var require_applicator2 = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/unevaluated.json
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/refs/json-schema-2020-12/meta/unevaluated.json
 var require_unevaluated2 = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6827,7 +6827,7 @@ var require_unevaluated2 = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/content.json
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/refs/json-schema-2020-12/meta/content.json
 var require_content = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6846,7 +6846,7 @@ var require_content = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/core.json
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/refs/json-schema-2020-12/meta/core.json
 var require_core3 = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6900,7 +6900,7 @@ var require_core3 = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/format-annotation.json
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/refs/json-schema-2020-12/meta/format-annotation.json
 var require_format_annotation = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6917,7 +6917,7 @@ var require_format_annotation = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/meta-data.json
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/refs/json-schema-2020-12/meta/meta-data.json
 var require_meta_data = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -6956,7 +6956,7 @@ var require_meta_data = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/refs/json-schema-2020-12/meta/validation.json
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/refs/json-schema-2020-12/meta/validation.json
 var require_validation2 = __commonJS(function(exports, module) {
   module.exports = {
     $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -7049,7 +7049,7 @@ var require_validation2 = __commonJS(function(exports, module) {
   };
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/refs/json-schema-2020-12/index.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/refs/json-schema-2020-12/index.js
 var require_json_schema_2020_12 = __commonJS(function(exports) {
   Object.defineProperty(exports, "__esModule", { value: true });
   var metaSchema = require_schema();
@@ -7080,7 +7080,7 @@ var require_json_schema_2020_12 = __commonJS(function(exports) {
   exports.default = addMetaSchema2020;
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/ajv/dist/2020.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/ajv/dist/2020.js
 var require__2020 = __commonJS(function(exports, module) {
   Object.defineProperty(exports, "__esModule", { value: true });
   exports.MissingRefError = exports.ValidationError = exports.CodeGen = exports.Name = exports.nil = exports.stringify = exports.str = exports._ = exports.KeywordCxt = exports.Ajv2020 = undefined;
@@ -7155,7 +7155,7 @@ var require__2020 = __commonJS(function(exports, module) {
   } });
 });
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/nodes/identity.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/nodes/identity.js
 var ALIAS = Symbol.for("yaml.alias");
 var DOC = Symbol.for("yaml.document");
 var MAP = Symbol.for("yaml.map");
@@ -7191,7 +7191,7 @@ function isNode(node) {
 }
 var hasAnchor = (node) => (isScalar(node) || isCollection(node)) && !!node.anchor;
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/visit.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/visit.js
 var BREAK = Symbol("break visit");
 var SKIP = Symbol("skip children");
 var REMOVE = Symbol("remove node");
@@ -7341,7 +7341,7 @@ function replaceNode(key, path, node) {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/doc/directives.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/doc/directives.js
 var escapeChars = {
   "!": "%21",
   ",": "%2C",
@@ -7488,7 +7488,7 @@ class Directives {
 Directives.defaultYaml = { explicit: false, version: "1.2" };
 Directives.defaultTags = { "!!": "tag:yaml.org,2002:" };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/doc/anchors.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/doc/anchors.js
 function anchorIsValid(anchor) {
   if (/[\x00-\x19\s,[\]{}]/.test(anchor)) {
     const sa = JSON.stringify(anchor);
@@ -7542,7 +7542,7 @@ function createNodeAnchors(doc, prefix) {
   };
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/doc/applyReviver.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/doc/applyReviver.js
 function applyReviver(reviver, obj, key, val) {
   if (val && typeof val === "object") {
     if (Array.isArray(val)) {
@@ -7586,7 +7586,7 @@ function applyReviver(reviver, obj, key, val) {
   return reviver.call(obj, key, val);
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/nodes/toJS.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/nodes/toJS.js
 function toJS(value, arg, ctx) {
   if (Array.isArray(value))
     return value.map((v, i) => toJS(v, String(i), ctx));
@@ -7609,7 +7609,7 @@ function toJS(value, arg, ctx) {
   return value;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/nodes/Node.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/nodes/Node.js
 class NodeBase {
   constructor(type) {
     Object.defineProperty(this, NODE_TYPE, { value: type });
@@ -7639,7 +7639,7 @@ class NodeBase {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/nodes/Alias.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/nodes/Alias.js
 class Alias extends NodeBase {
   constructor(source) {
     super(ALIAS);
@@ -7742,7 +7742,7 @@ function getAliasCount(doc, node, anchors) {
   return 1;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/nodes/Scalar.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/nodes/Scalar.js
 var isScalarValue = (value) => !value || typeof value !== "function" && typeof value !== "object";
 
 class Scalar extends NodeBase {
@@ -7763,7 +7763,7 @@ Scalar.PLAIN = "PLAIN";
 Scalar.QUOTE_DOUBLE = "QUOTE_DOUBLE";
 Scalar.QUOTE_SINGLE = "QUOTE_SINGLE";
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/doc/createNode.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/doc/createNode.js
 var defaultTagPrefix = "tag:yaml.org,2002:";
 function findTagObject(value, tagName, tags) {
   if (tagName) {
@@ -7829,7 +7829,7 @@ function createNode(value, tagName, ctx) {
   return node;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/nodes/Collection.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/nodes/Collection.js
 function collectionFromPath(schema, path, value) {
   let v = value;
   for (let i = path.length - 1;i >= 0; --i) {
@@ -7936,7 +7936,7 @@ class Collection extends NodeBase {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/stringify/stringifyComment.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/stringify/stringifyComment.js
 var stringifyComment = (str) => str.replace(/^(?!$)(?: $)?/gm, "#");
 function indentComment(comment, indent) {
   if (/^\n+$/.test(comment))
@@ -7948,7 +7948,7 @@ var lineComment = (str, indent, comment) => str.endsWith(`
 `) ? `
 ` + indentComment(comment, indent) : (str.endsWith(" ") ? "" : " ") + comment;
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/stringify/foldFlowLines.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/stringify/foldFlowLines.js
 var FOLD_FLOW = "flow";
 var FOLD_BLOCK = "block";
 var FOLD_QUOTED = "quoted";
@@ -8079,7 +8079,7 @@ function consumeMoreIndentedLines(text, i, indent) {
   return end;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/stringify/stringifyString.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/stringify/stringifyString.js
 var getFoldOptions = (ctx, isBlock) => ({
   indentAtStart: isBlock ? ctx.indent.length : ctx.indentAtStart,
   lineWidth: ctx.options.lineWidth,
@@ -8372,7 +8372,7 @@ function stringifyString(item, ctx, onComment, onChompKeep) {
   return res;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/stringify/stringify.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/stringify/stringify.js
 function createStringifyContext(doc, options) {
   const opt = Object.assign({
     blockQuote: true,
@@ -8485,7 +8485,7 @@ function stringify(item, ctx, onComment, onChompKeep) {
 ${ctx.indent}${str}`;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/stringify/stringifyPair.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/stringify/stringifyPair.js
 function stringifyPair({ key, value }, ctx, onComment, onChompKeep) {
   const { allNullValues, doc, indent, indentStep, options: { commentString, indentSeq, simpleKeys } } = ctx;
   let keyComment = isNode(key) && key.comment || null;
@@ -8614,14 +8614,14 @@ ${ctx.indent}`;
   return str;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/log.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/log.js
 function warn(logLevel, warning) {
   if (logLevel === "debug" || logLevel === "warn") {
     console.warn(warning);
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/merge.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/yaml-1.1/merge.js
 var MERGE_KEY = "<<";
 var merge = {
   identify: (value) => value === MERGE_KEY || typeof value === "symbol" && value.description === MERGE_KEY,
@@ -8671,7 +8671,7 @@ function resolveAliasValue(ctx, value) {
   return ctx && isAlias(value) ? value.resolve(ctx.doc, ctx) : value;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/nodes/addPairToJSMap.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/nodes/addPairToJSMap.js
 function addPairToJSMap(ctx, map, { key, value }) {
   if (isNode(key) && key.addToJSMap)
     key.addToJSMap(ctx, map, value);
@@ -8724,7 +8724,7 @@ function stringifyKey(key, jsKey, ctx) {
   return JSON.stringify(jsKey);
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/nodes/Pair.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/nodes/Pair.js
 function createPair(key, value, ctx) {
   const k = createNode(key, undefined, ctx);
   const v = createNode(value, undefined, ctx);
@@ -8754,7 +8754,7 @@ class Pair {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/stringify/stringifyCollection.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/stringify/stringifyCollection.js
 function stringifyCollection(collection, ctx, options) {
   const flow = ctx.inFlow ?? collection.flow;
   const stringify = flow ? stringifyFlowCollection : stringifyBlockCollection;
@@ -8900,7 +8900,7 @@ function addCommentBefore({ indent, options: { commentString } }, lines, comment
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/nodes/YAMLMap.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/nodes/YAMLMap.js
 function findPair(items, key) {
   const k = isScalar(key) ? key.value : key;
   for (const it of items) {
@@ -9017,7 +9017,7 @@ class YAMLMap extends Collection {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/common/map.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/common/map.js
 var map = {
   collection: "map",
   default: true,
@@ -9031,7 +9031,7 @@ var map = {
   createNode: (schema, obj, ctx) => YAMLMap.from(schema, obj, ctx)
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/nodes/YAMLSeq.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/nodes/YAMLSeq.js
 class YAMLSeq extends Collection {
   static get tagName() {
     return "tag:yaml.org,2002:seq";
@@ -9114,7 +9114,7 @@ function asItemIndex(key) {
   return typeof idx === "number" && Number.isInteger(idx) && idx >= 0 ? idx : null;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/common/seq.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/common/seq.js
 var seq = {
   collection: "seq",
   default: true,
@@ -9128,7 +9128,7 @@ var seq = {
   createNode: (schema, obj, ctx) => YAMLSeq.from(schema, obj, ctx)
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/common/string.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/common/string.js
 var string = {
   identify: (value) => typeof value === "string",
   default: true,
@@ -9140,7 +9140,7 @@ var string = {
   }
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/common/null.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/common/null.js
 var nullTag = {
   identify: (value) => value == null,
   createNode: () => new Scalar(null),
@@ -9151,7 +9151,7 @@ var nullTag = {
   stringify: ({ source }, ctx) => typeof source === "string" && nullTag.test.test(source) ? source : ctx.options.nullStr
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/core/bool.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/core/bool.js
 var boolTag = {
   identify: (value) => typeof value === "boolean",
   default: true,
@@ -9168,7 +9168,7 @@ var boolTag = {
   }
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/stringify/stringifyNumber.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/stringify/stringifyNumber.js
 function stringifyNumber({ format, minFractionDigits, tag, value }) {
   if (typeof value === "bigint")
     return String(value);
@@ -9189,7 +9189,7 @@ function stringifyNumber({ format, minFractionDigits, tag, value }) {
   return n;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/core/float.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/core/float.js
 var floatNaN = {
   identify: (value) => typeof value === "number",
   default: true,
@@ -9225,7 +9225,7 @@ var float = {
   stringify: stringifyNumber
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/core/int.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/core/int.js
 var intIdentify = (value) => typeof value === "bigint" || Number.isInteger(value);
 var intResolve = (str, offset, radix, { intAsBigInt }) => intAsBigInt ? BigInt(str) : parseInt(str.substring(offset), radix);
 function intStringify(node, radix, prefix) {
@@ -9261,7 +9261,7 @@ var intHex = {
   stringify: (node) => intStringify(node, 16, "0x")
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/core/schema.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/core/schema.js
 var schema = [
   map,
   seq,
@@ -9276,7 +9276,7 @@ var schema = [
   float
 ];
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/json/schema.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/json/schema.js
 function intIdentify2(value) {
   return typeof value === "bigint" || Number.isInteger(value);
 }
@@ -9334,7 +9334,7 @@ var jsonError = {
 };
 var schema2 = [map, seq].concat(jsonScalars, jsonError);
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/binary.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/yaml-1.1/binary.js
 var binary = {
   identify: (value) => value instanceof Uint8Array,
   default: false,
@@ -9379,7 +9379,7 @@ var binary = {
   }
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/pairs.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/yaml-1.1/pairs.js
 function resolvePairs(seq, onError) {
   if (isSeq(seq)) {
     for (let i = 0;i < seq.items.length; ++i) {
@@ -9445,7 +9445,7 @@ var pairs = {
   createNode: createPairs
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/omap.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/yaml-1.1/omap.js
 class YAMLOMap extends YAMLSeq {
   constructor() {
     super();
@@ -9507,7 +9507,7 @@ var omap = {
   createNode: (schema, iterable, ctx) => YAMLOMap.from(schema, iterable, ctx)
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/bool.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/yaml-1.1/bool.js
 function boolStringify({ value, source }, ctx) {
   const boolObj = value ? trueTag : falseTag;
   if (source && boolObj.test.test(source))
@@ -9531,7 +9531,7 @@ var falseTag = {
   stringify: boolStringify
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/float.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/yaml-1.1/float.js
 var floatNaN2 = {
   identify: (value) => typeof value === "number",
   default: true,
@@ -9570,7 +9570,7 @@ var float2 = {
   stringify: stringifyNumber
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/int.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/yaml-1.1/int.js
 var intIdentify3 = (value) => typeof value === "bigint" || Number.isInteger(value);
 function intResolve2(str, offset, radix, { intAsBigInt }) {
   const sign = str[0];
@@ -9639,7 +9639,7 @@ var intHex2 = {
   stringify: (node) => intStringify2(node, 16, "0x")
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/set.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/yaml-1.1/set.js
 class YAMLSet extends YAMLMap {
   constructor(schema) {
     super(schema);
@@ -9714,7 +9714,7 @@ var set = {
   }
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/timestamp.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/yaml-1.1/timestamp.js
 function parseSexagesimal(str, asBigInt) {
   const sign = str[0];
   const parts = sign === "-" || sign === "+" ? str.substring(1) : str;
@@ -9790,7 +9790,7 @@ var timestamp = {
   stringify: ({ value }) => value?.toISOString().replace(/(T00:00:00)?\.000Z$/, "") ?? ""
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/yaml-1.1/schema.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/yaml-1.1/schema.js
 var schema3 = [
   map,
   seq,
@@ -9815,7 +9815,7 @@ var schema3 = [
   timestamp
 ];
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/tags.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/tags.js
 var schemas = new Map([
   ["core", schema],
   ["failsafe", [map, seq, string]],
@@ -9886,7 +9886,7 @@ function getTags(customTags, schemaName, addMergeTag) {
   }, []);
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/schema/Schema.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/schema/Schema.js
 var sortMapEntriesByKey = (a, b) => a.key < b.key ? -1 : a.key > b.key ? 1 : 0;
 
 class Schema {
@@ -9908,7 +9908,7 @@ class Schema {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/stringify/stringifyDocument.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/stringify/stringifyDocument.js
 function stringifyDocument(doc, options) {
   const lines = [];
   let hasDirectives = options.directives === true;
@@ -9982,7 +9982,7 @@ function stringifyDocument(doc, options) {
 `;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/doc/Document.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/doc/Document.js
 class Document {
   constructor(value, replacer, options) {
     this.commentBefore = null;
@@ -10202,7 +10202,7 @@ function assertCollection(contents) {
   throw new Error("Expected a YAML collection as document contents");
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/errors.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/errors.js
 class YAMLError extends Error {
   constructor(name, pos, code, message) {
     super();
@@ -10261,7 +10261,7 @@ ${pointer}
   }
 };
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/resolve-props.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/resolve-props.js
 function resolveProps(tokens, { flow, indicator, next, offset, onError, parentIndent, startOnNewline }) {
   let spaceBefore = false;
   let atNewline = startOnNewline;
@@ -10388,7 +10388,7 @@ function resolveProps(tokens, { flow, indicator, next, offset, onError, parentIn
   };
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/util-contains-newline.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/util-contains-newline.js
 function containsNewline(key) {
   if (!key)
     return null;
@@ -10425,7 +10425,7 @@ function containsNewline(key) {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/util-flow-indent-check.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/util-flow-indent-check.js
 function flowIndentCheck(indent, fc, onError) {
   if (fc?.type === "flow-collection") {
     const end = fc.end[0];
@@ -10436,7 +10436,7 @@ function flowIndentCheck(indent, fc, onError) {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/util-map-includes.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/util-map-includes.js
 function mapIncludes(ctx, items, search) {
   const { uniqueKeys } = ctx.options;
   if (uniqueKeys === false)
@@ -10445,7 +10445,7 @@ function mapIncludes(ctx, items, search) {
   return items.some((pair) => isEqual(pair.key, search));
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/resolve-block-map.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/resolve-block-map.js
 var startColMsg = "All mapping items must start at the same column";
 function resolveBlockMap({ composeNode, composeEmptyNode }, ctx, bm, onError, tag) {
   const NodeClass = tag?.nodeClass ?? YAMLMap;
@@ -10543,7 +10543,7 @@ function resolveBlockMap({ composeNode, composeEmptyNode }, ctx, bm, onError, ta
   return map;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/resolve-block-seq.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/resolve-block-seq.js
 function resolveBlockSeq({ composeNode, composeEmptyNode }, ctx, bs, onError, tag) {
   const NodeClass = tag?.nodeClass ?? YAMLSeq;
   const seq = new NodeClass(ctx.schema);
@@ -10585,7 +10585,7 @@ function resolveBlockSeq({ composeNode, composeEmptyNode }, ctx, bs, onError, ta
   return seq;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/resolve-end.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/resolve-end.js
 function resolveEnd(end, offset, reqSpace, onError) {
   let comment = "";
   if (end) {
@@ -10622,7 +10622,7 @@ function resolveEnd(end, offset, reqSpace, onError) {
   return { comment, offset };
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/resolve-flow-collection.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/resolve-flow-collection.js
 var blockMsg = "Block collections are not allowed within flow collections";
 var isBlock = (token) => token && (token.type === "block-map" || token.type === "block-seq");
 function resolveFlowCollection({ composeNode, composeEmptyNode }, ctx, fc, onError, tag) {
@@ -10802,7 +10802,7 @@ function resolveFlowCollection({ composeNode, composeEmptyNode }, ctx, fc, onErr
   return coll;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/compose-collection.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/compose-collection.js
 function resolveCollection(CN, ctx, token, onError, tagName, tag) {
   const coll = token.type === "block-map" ? resolveBlockMap(CN, ctx, token, onError, tag) : token.type === "block-seq" ? resolveBlockSeq(CN, ctx, token, onError, tag) : resolveFlowCollection(CN, ctx, token, onError, tag);
   const Coll = coll.constructor;
@@ -10854,7 +10854,7 @@ function composeCollection(CN, ctx, token, props, onError) {
   return node;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/resolve-block-scalar.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/resolve-block-scalar.js
 function resolveBlockScalar(ctx, scalar, onError) {
   const start = scalar.offset;
   const header = parseBlockScalarHeader(scalar, ctx.options.strict, onError);
@@ -11043,7 +11043,7 @@ function splitLines(source) {
   return lines;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/resolve-flow-scalar.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/resolve-flow-scalar.js
 function resolveFlowScalar(scalar, strict, onError) {
   const { offset, type, source, end } = scalar;
   let _type;
@@ -11254,7 +11254,7 @@ function parseCharCode(source, offset, length, onError) {
   }
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/compose-scalar.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/compose-scalar.js
 function composeScalar(ctx, token, tagToken, onError) {
   const { value, type, comment, range } = token.type === "block-scalar" ? resolveBlockScalar(ctx, token, onError) : resolveFlowScalar(token, ctx.options.strict, onError);
   const tagName = tagToken ? ctx.directives.tagName(tagToken.source, (msg) => onError(tagToken, "TAG_RESOLVE_FAILED", msg)) : null;
@@ -11325,7 +11325,7 @@ function findScalarTagByTest({ atKey, directives, schema }, value, token, onErro
   return tag;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/util-empty-scalar-position.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/util-empty-scalar-position.js
 function emptyScalarPosition(offset, before, pos) {
   if (before) {
     pos ?? (pos = before.length);
@@ -11349,7 +11349,7 @@ function emptyScalarPosition(offset, before, pos) {
   return offset;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/compose-node.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/compose-node.js
 var CN = { composeNode, composeEmptyNode };
 function composeNode(ctx, token, props, onError) {
   const atKey = ctx.atKey;
@@ -11442,7 +11442,7 @@ function composeAlias({ options }, { offset, source, end }, onError) {
   return alias;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/compose-doc.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/compose-doc.js
 function composeDoc(options, directives, { offset, start, value, end }, onError) {
   const opts = Object.assign({ _directives: directives }, options);
   const doc = new Document(undefined, opts);
@@ -11475,7 +11475,7 @@ function composeDoc(options, directives, { offset, start, value, end }, onError)
   return doc;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/compose/composer.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/compose/composer.js
 function getErrorPos(src) {
   if (typeof src === "number")
     return [src, src + 1];
@@ -11653,7 +11653,7 @@ ${end.comment}` : end.comment;
     }
   }
 }
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/parse/cst-visit.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/parse/cst-visit.js
 var BREAK2 = Symbol("break visit");
 var SKIP2 = Symbol("skip children");
 var REMOVE2 = Symbol("remove item");
@@ -11709,7 +11709,7 @@ function _visit(path, item, visitor) {
   return typeof ctrl === "function" ? ctrl(item, path) : ctrl;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/parse/cst.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/parse/cst.js
 var BOM = "\uFEFF";
 var DOCUMENT = "\x02";
 var FLOW_END = "\x18";
@@ -11776,7 +11776,7 @@ function tokenType(source) {
   return null;
 }
 
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/parse/lexer.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/parse/lexer.js
 function isEmpty(ch) {
   switch (ch) {
     case undefined:
@@ -12368,7 +12368,7 @@ class Lexer {
     return yield* this.pushToIndex(i, false);
   }
 }
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/parse/line-counter.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/parse/line-counter.js
 class LineCounter {
   constructor() {
     this.lineStarts = [];
@@ -12392,7 +12392,7 @@ class LineCounter {
     };
   }
 }
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/parse/parser.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/parse/parser.js
 function includesToken(list, type) {
   for (let i = 0;i < list.length; ++i)
     if (list[i].type === type)
@@ -13239,7 +13239,7 @@ class Parser {
     }
   }
 }
-// ../../../Users/erik/.codex/worktrees/4d69/umf/node_modules/yaml/browser/dist/public-api.js
+// ../../../../private/tmp/truss043-umf-generator-1231/node_modules/yaml/browser/dist/public-api.js
 function parseOptions(options) {
   const prettyErrors = options.prettyErrors !== false;
   const lineCounter = options.lineCounter || prettyErrors && new LineCounter || null;
@@ -13264,7 +13264,7 @@ function parseDocument(source, options = {}) {
   }
   return doc;
 }
-// ../truss-umf-runtime/src/model/types.ts
+// ../../../../private/tmp/truss-umf-runtime/src/model/types.ts
 var SCALAR_TYPES = Object.freeze(["boolean", "integer", "decimal", "float", "string", "binary", "date", "time", "timestamp"]);
 var SCALAR_TYPES_V09 = Object.freeze([...SCALAR_TYPES, "bits128", "uuid"]);
 var ELEMENT_KINDS = ["field", "record", "group"];
@@ -13283,7 +13283,7 @@ class UmfError extends Error {
 }
 var pointer = (key) => key.replace(/~/g, "~0").replace(/\//g, "~1");
 
-// ../truss-umf-runtime/src/model/json.ts
+// ../../../../private/tmp/truss-umf-runtime/src/model/json.ts
 var LIMITS = { maxDepth: 128, maxValues: 1e5, maxTextLength: 4000000 };
 var catalogDepth = 0;
 function jsonValueLimit() {
@@ -13347,7 +13347,7 @@ function copyJsonCharged(input, charge) {
   return visit(input, "", 0);
 }
 
-// ../truss-umf-runtime/src/model/serialization.ts
+// ../../../../private/tmp/truss-umf-runtime/src/model/serialization.ts
 function decimal(text) {
   const match = /^([+-]?)(\d*)(?:\.(\d*))?(?:[eE]([+-]?\d+))?$/.exec(text);
   if (!match)
@@ -13418,7 +13418,7 @@ function readJsonValue(text, format = "yaml") {
   }
   return convert(doc.contents, "", 0);
 }
-// ../truss-umf-runtime/src/validation/internal-schema.ts
+// ../../../../private/tmp/truss-umf-runtime/src/validation/internal-schema.ts
 function snapshotSchema(input) {
   const value = JSON.parse(JSON.stringify(input));
   const freeze = (v) => {
@@ -13431,7 +13431,7 @@ function snapshotSchema(input) {
   freeze(value);
   return value;
 }
-// ../truss-umf-runtime/spec/core/semantic-types-document.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/semantic-types-document.schema.json
 var semantic_types_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.10.0",
@@ -14661,7 +14661,7 @@ var semantic_types_document_schema_default = {
   description: "Explicit semantic references compose with unchanged core0.9 UUID/128-bit domains; no external term or native enforcement inferred.",
   $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
 };
-// ../truss-umf-runtime/spec/core/semantic-type-reference.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/semantic-type-reference.schema.json
 var semantic_type_reference_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:semantic-type-reference:1.0.0",
@@ -14687,7 +14687,7 @@ var semantic_type_reference_schema_default = {
     }
   }
 };
-// ../truss-umf-runtime/spec/core/relationship-document.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/relationship-document.schema.json
 var relationship_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.7.0",
@@ -15517,7 +15517,7 @@ var relationship_document_schema_default = {
   description: "Authored schema-level relationships between keyed Records; native enforcement and storage are not inferred. Unknown qualifiers are retained.",
   $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
 };
-// ../truss-umf-runtime/spec/core/key-document.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/key-document.schema.json
 var key_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.6.0",
@@ -16224,9 +16224,9 @@ var key_document_schema_default = {
   $comment: "Key membership resolution, unique ownership, key IDs/names/component sets, primary count and component domains require portable semantic validation. Native enforcement is not inferred."
 };
 
-// ../truss-umf-runtime/src/validation/schema.ts
+// ../../../../private/tmp/truss-umf-runtime/src/validation/schema.ts
 var import__2020 = __toESM(require__2020(), 1);
-// ../truss-umf-runtime/spec/core/schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/schema.json
 var schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.1.0",
@@ -16251,7 +16251,7 @@ var schema_default = {
     module: { type: "object", required: ["id", "namespace", "elements"], properties: { id: { $ref: "#/$defs/id" }, namespace: { type: "string" }, elements: { type: "array", items: { $ref: "#/$defs/element" } }, extensions: { $ref: "#/$defs/extensions" } } }
   }
 };
-// ../truss-umf-runtime/spec/core/field-document.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/field-document.schema.json
 var field_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.2.0",
@@ -16453,7 +16453,7 @@ var field_document_schema_default = {
   },
   description: "Opt-in field/record/group roles. No implicit upgrade from 0.1.0. Provenance, migration and binding evidence remain required."
 };
-// ../truss-umf-runtime/spec/core/nullability-document.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/nullability-document.schema.json
 var nullability_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.3.0",
@@ -16687,7 +16687,7 @@ var nullability_document_schema_default = {
   },
   description: "Explicit ideal value availability on Fields. No implicit upgrade from older envelopes, native NULL mapping, or default execution."
 };
-// ../truss-umf-runtime/spec/core/cardinality-document.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/cardinality-document.schema.json
 var cardinality_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.4.0",
@@ -17021,7 +17021,7 @@ var cardinality_document_schema_default = {
   },
   description: "Explicit Field shape and optional array-item/map-value Field reference; no native repetition, dimension or physical encoding inference."
 };
-// ../truss-umf-runtime/spec/core/facet-document.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/facet-document.schema.json
 var facet_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.5.0",
@@ -17626,7 +17626,7 @@ var facet_document_schema_default = {
   },
   description: "Candidate facet envelope: author-stated scalar bounds with explicit units. Requires semantic validation of scale <= precision, identities and references. Native enforcement, encoding and exactness require separate bindings."
 };
-// ../truss-umf-runtime/spec/core/extension-package.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/extension-package.schema.json
 var extension_package_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:extension-package:0.1.0",
@@ -17655,7 +17655,7 @@ var extension_package_schema_default = {
   }
 };
 
-// ../truss-umf-runtime/src/validation/schema.ts
+// ../../../../private/tmp/truss-umf-runtime/src/validation/schema.ts
 function canonical(value) {
   if (Array.isArray(value))
     return "a[" + value.map(canonical).join(",") + "]";
@@ -17682,7 +17682,7 @@ var checkCoreFacets = ajv.compile(snapshotSchema(facet_document_schema_default))
 var checkPackage = ajv.compile(snapshotSchema(extension_package_schema_default));
 var checkCoreKeys = ajv.compile(snapshotSchema(key_document_schema_default));
 var checkCoreRelationships = ajv.compile(snapshotSchema(relationship_document_schema_default));
-// ../truss-umf-runtime/spec/core/bit128-document.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/bit128-document.schema.json
 var bit128_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.9.0",
@@ -18905,7 +18905,7 @@ var bit128_document_schema_default = {
   description: "Shared annotations, literal defaults and exact value/collection bounds; semantic validator required.",
   $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
 };
-// ../truss-umf-runtime/spec/core/schema-properties-document.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/schema-properties-document.schema.json
 var schema_properties_document_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:0.8.0",
@@ -20097,7 +20097,7 @@ var schema_properties_document_schema_default = {
   $comment: "Exact endpoint/key resolution, unique IDs/names, inverse collisions, multiplicity bounds and lifecycle coherence require portable semantic validation."
 };
 
-// ../truss-umf-runtime/src/validation/keys.ts
+// ../../../../private/tmp/truss-umf-runtime/src/validation/keys.ts
 var check = createValidator().compile(snapshotSchema(key_document_schema_default));
 var identity = (ref) => JSON.stringify([ref.module, ref.element]);
 function validateKeyCandidate(input, validateBase = true) {
@@ -20203,7 +20203,7 @@ function validateKeyCandidate(input, validateBase = true) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime/src/validation/relationships.ts
+// ../../../../private/tmp/truss-umf-runtime/src/validation/relationships.ts
 var check2 = createValidator().compile(snapshotSchema(relationship_document_schema_default));
 var identity2 = (ref) => JSON.stringify([ref.module, ref.element]);
 function validateRelationshipCandidate(input, validateBase = true) {
@@ -20306,7 +20306,7 @@ function validateRelationshipCandidate(input, validateBase = true) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime/src/validation/facets.ts
+// ../../../../private/tmp/truss-umf-runtime/src/validation/facets.ts
 var check3 = createValidator().compile({ $defs: facet_document_schema_default.$defs, $ref: "#/$defs/element" });
 function validateFacetElement(input, path = "") {
   const diagnostics = [];
@@ -20347,7 +20347,7 @@ function validateFacetElement(input, path = "") {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime/src/registry/registry.ts
+// ../../../../private/tmp/truss-umf-runtime/src/registry/registry.ts
 function freeze(value) {
   if (value && typeof value === "object") {
     Object.freeze(value);
@@ -20383,7 +20383,7 @@ class Registry {
   }
 }
 
-// ../truss-umf-runtime/src/validation/document.ts
+// ../../../../private/tmp/truss-umf-runtime/src/validation/document.ts
 function validateDocument(input, registry = new Registry) {
   const diagnostics = [];
   const add = (code, path, message, severity = "error") => diagnostics.push({ code, path, message, severity });
@@ -20507,7 +20507,7 @@ function validateDocument(input, registry = new Registry) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime/src/model/bit128.ts
+// ../../../../private/tmp/truss-umf-runtime/src/model/bit128.ts
 var BIT128_PROFILE = "umf-128/1";
 var MOD64 = 1n << 64n;
 var MOD128 = 1n << 128n;
@@ -20541,7 +20541,7 @@ function bits128ToBytes(value) {
   return Uint8Array.from({ length: 16 }, (_, i) => parseInt(hex.slice(i * 2, i * 2 + 2), 16));
 }
 
-// ../truss-umf-runtime/src/model/uuid.ts
+// ../../../../private/tmp/truss-umf-runtime/src/model/uuid.ts
 function parseUuid(text) {
   if (typeof text !== "string")
     throw new UmfError("BIT128_TYPE", "Expected UUID text");
@@ -20566,7 +20566,7 @@ function uuidToBits128(value) {
   return parseBits128(parsed.hex);
 }
 
-// ../truss-umf-runtime/src/model/schema-literals.ts
+// ../../../../private/tmp/truss-umf-runtime/src/model/schema-literals.ts
 var schemaPropertyNames = ["title", "aliases", "examples", "allowedValues", "default"];
 var newFacetNames = ["collectionSize", "range"];
 var canonicalSchemaJson = (value) => Array.isArray(value) ? "[" + value.map(canonicalSchemaJson).join(",") + "]" : value !== null && typeof value === "object" ? "{" + Object.keys(value).sort().map((k) => JSON.stringify(k) + ":" + canonicalSchemaJson(value[k])).join(",") + "}" : JSON.stringify(value);
@@ -20756,7 +20756,7 @@ function evaluateSchemaLiteral(doc, field, value, refinements = true, depth = 0,
   }
 }
 
-// ../truss-umf-runtime/src/validation/schema-properties.ts
+// ../../../../private/tmp/truss-umf-runtime/src/validation/schema-properties.ts
 var validator = createValidator();
 var checkBit128Properties = validator.compile(snapshotSchema(bit128_document_schema_default));
 var checkBit128Literal = validator.compile(snapshotSchema({ $defs: bit128_document_schema_default.$defs, $ref: "#/$defs/literal" }));
@@ -20931,7 +20931,7 @@ function validateSchemaPropertiesDocument(input, registry = new Registry) {
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
 
-// ../truss-umf-runtime/src/validation/semantic-types.ts
+// ../../../../private/tmp/truss-umf-runtime/src/validation/semantic-types.ts
 var validator2 = createValidator();
 validator2.addSchema(snapshotSchema(semantic_type_reference_schema_default));
 var checkSemanticTypesDocument = validator2.compile(snapshotSchema(semantic_types_document_schema_default));
@@ -20982,7 +20982,7 @@ function validateSemanticTypesDocument(input, registry = new Registry) {
   }));
   return { valid: !diagnostics.some((d) => d.severity === "error"), complete: diagnostics.length === 0, diagnostics };
 }
-// ../truss-umf-runtime/spec/core/key-tuple-operation-v4.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/key-tuple-operation-v4.schema.json
 var key_tuple_operation_v4_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:key-tuple-operation:4.0.0",
@@ -21159,7 +21159,7 @@ var key_tuple_operation_v4_schema_default = {
   },
   description: "Structural receipt validation is insufficient: verification recomputes exact tuple bytes from retained candidate source/values and checks current document context. This establishes neither authorship nor native enforcement."
 };
-// ../truss-umf-runtime/spec/core/key-tuple-operation-v3.schema.json
+// ../../../../private/tmp/truss-umf-runtime/spec/core/key-tuple-operation-v3.schema.json
 var key_tuple_operation_v3_schema_default = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
   $id: "urn:umf:core:key-tuple-operation:3.0.0",
@@ -21304,7 +21304,7 @@ var key_tuple_operation_v3_schema_default = {
   description: "Structural receipt validation is insufficient: verification recomputes exact tuple bytes from retained candidate source/values and checks current document context. This establishes neither authorship nor native enforcement."
 };
 
-// ../truss-umf-runtime/src/model/key-tuple.ts
+// ../../../../private/tmp/truss-umf-runtime/src/model/key-tuple.ts
 var validator3 = createValidator();
 validator3.addSchema(snapshotSchema(bit128_document_schema_default));
 var checkBit128 = validator3.compile(snapshotSchema(key_tuple_operation_v4_schema_default));
@@ -21481,8 +21481,741 @@ function encodeCoreKeyTupleBody(source, identity, values, validation, checkLiter
     chunks.push(Array.from(bytes.subarray(start, start + 4096), (b) => b.toString(16).padStart(2, "0")).join(""));
   return { operation: "encode-core-key-tuple", version: "3.0.0", profile, identity, values, keyPath, bytesHex: chunks.join("") };
 }
+// ../../../../private/tmp/truss-umf-runtime/spec/extensions/ddd/package.json
+var package_default = {
+  id: "umf.ddd",
+  version: "0.1.0",
+  coreVersion: "0.1.0",
+  description: "Context-scoped DDD declarations independent of physical representation",
+  schema: {
+    $schema: "https://json-schema.org/draft/2020-12/schema",
+    $id: "urn:umf:ddd:0.1.0",
+    title: "UMF-authored DDD semantic profile 0.1.0",
+    oneOf: [
+      {
+        $ref: "#/$defs/entity"
+      },
+      {
+        $ref: "#/$defs/value"
+      },
+      {
+        $ref: "#/$defs/event"
+      },
+      {
+        $ref: "#/$defs/service"
+      },
+      {
+        $ref: "#/$defs/repository"
+      },
+      {
+        $ref: "#/$defs/context"
+      },
+      {
+        $ref: "#/$defs/map"
+      }
+    ],
+    $defs: {
+      reference: {
+        type: "object",
+        required: [
+          "module",
+          "element"
+        ],
+        properties: {
+          module: {
+            type: "string",
+            minLength: 1
+          },
+          element: {
+            type: "string",
+            minLength: 1
+          }
+        }
+      },
+      type: {
+        oneOf: [
+          {
+            type: "object",
+            required: [
+              "kind",
+              "name"
+            ],
+            properties: {
+              kind: {
+                const: "scalar"
+              },
+              name: {
+                enum: [
+                  "string",
+                  "boolean",
+                  "integer",
+                  "decimal",
+                  "date-time",
+                  "bytes"
+                ]
+              }
+            }
+          },
+          {
+            type: "object",
+            required: [
+              "kind",
+              "target"
+            ],
+            properties: {
+              kind: {
+                const: "concept"
+              },
+              target: {
+                $ref: "#/$defs/reference"
+              }
+            }
+          }
+        ]
+      },
+      field: {
+        type: "object",
+        required: [
+          "type",
+          "cardinality"
+        ],
+        properties: {
+          type: {
+            $ref: "#/$defs/type"
+          },
+          cardinality: {
+            enum: [
+              "one",
+              "optional",
+              "many"
+            ]
+          },
+          description: {
+            type: "string",
+            minLength: 1
+          }
+        }
+      },
+      invariant: {
+        type: "object",
+        required: [
+          "id",
+          "scope",
+          "language",
+          "version",
+          "expression",
+          "references"
+        ],
+        properties: {
+          id: {
+            type: "string",
+            minLength: 1
+          },
+          scope: {
+            enum: [
+              "definition",
+              "aggregate"
+            ]
+          },
+          language: {
+            type: "string",
+            minLength: 1
+          },
+          version: {
+            type: "string",
+            minLength: 1
+          },
+          expression: {
+            type: "string",
+            minLength: 1
+          },
+          references: {
+            type: "array",
+            items: {
+              $ref: "#/$defs/reference"
+            },
+            uniqueItems: true
+          }
+        }
+      },
+      term: {
+        type: "object",
+        required: [
+          "term",
+          "definition"
+        ],
+        properties: {
+          term: {
+            type: "string",
+            minLength: 1
+          },
+          definition: {
+            type: "string",
+            minLength: 1
+          },
+          aliases: {
+            type: "array",
+            items: {
+              type: "string",
+              minLength: 1
+            },
+            uniqueItems: true
+          },
+          concept: {
+            $ref: "#/$defs/reference"
+          }
+        }
+      },
+      operation: {
+        type: "object",
+        required: [
+          "name"
+        ],
+        properties: {
+          name: {
+            type: "string",
+            minLength: 1
+          },
+          input: {
+            $ref: "#/$defs/reference"
+          },
+          output: {
+            $ref: "#/$defs/reference"
+          },
+          emits: {
+            type: "array",
+            items: {
+              $ref: "#/$defs/reference"
+            },
+            uniqueItems: true
+          }
+        }
+      },
+      mapping: {
+        type: "object",
+        required: [
+          "id",
+          "source",
+          "target",
+          "direction",
+          "equivalence",
+          "description",
+          "limitations"
+        ],
+        properties: {
+          id: {
+            type: "string",
+            minLength: 1
+          },
+          source: {
+            $ref: "#/$defs/reference"
+          },
+          target: {
+            $ref: "#/$defs/reference"
+          },
+          direction: {
+            enum: [
+              "source-to-target",
+              "target-to-source",
+              "bidirectional"
+            ]
+          },
+          equivalence: {
+            enum: [
+              "partial",
+              "asserted-equivalent",
+              "distinct"
+            ]
+          },
+          description: {
+            type: "string",
+            minLength: 1
+          },
+          limitations: {
+            type: "array",
+            items: {
+              type: "string",
+              minLength: 1
+            }
+          },
+          antiCorruptionLayer: {
+            type: "object",
+            required: [
+              "ownerModule",
+              "description"
+            ],
+            properties: {
+              ownerModule: {
+                type: "string",
+                minLength: 1
+              },
+              description: {
+                type: "string",
+                minLength: 1
+              }
+            }
+          }
+        }
+      },
+      entity: {
+        type: "object",
+        required: [
+          "kind",
+          "fields",
+          "identity"
+        ],
+        properties: {
+          kind: {
+            const: "entity"
+          },
+          fields: {
+            type: "object",
+            additionalProperties: {
+              $ref: "#/$defs/field"
+            }
+          },
+          invariants: {
+            type: "array",
+            items: {
+              $ref: "#/$defs/invariant"
+            }
+          },
+          description: {
+            type: "string",
+            minLength: 1
+          },
+          identity: {
+            type: "object",
+            required: [
+              "fields",
+              "scope"
+            ],
+            properties: {
+              fields: {
+                type: "array",
+                minItems: 1,
+                uniqueItems: true,
+                items: {
+                  type: "string",
+                  minLength: 1
+                }
+              },
+              scope: {
+                enum: [
+                  "context",
+                  "aggregate"
+                ]
+              }
+            }
+          },
+          aggregate: {
+            type: "object",
+            required: [
+              "members"
+            ],
+            properties: {
+              members: {
+                type: "array",
+                items: {
+                  $ref: "#/$defs/reference"
+                },
+                uniqueItems: true
+              }
+            }
+          }
+        }
+      },
+      value: {
+        type: "object",
+        required: [
+          "kind",
+          "fields",
+          "equality"
+        ],
+        properties: {
+          kind: {
+            const: "value"
+          },
+          fields: {
+            type: "object",
+            additionalProperties: {
+              $ref: "#/$defs/field"
+            }
+          },
+          invariants: {
+            type: "array",
+            items: {
+              $ref: "#/$defs/invariant"
+            }
+          },
+          description: {
+            type: "string",
+            minLength: 1
+          },
+          equality: {
+            type: "object",
+            required: [
+              "fields"
+            ],
+            properties: {
+              fields: {
+                type: "array",
+                uniqueItems: true,
+                items: {
+                  type: "string",
+                  minLength: 1
+                }
+              }
+            }
+          }
+        }
+      },
+      event: {
+        type: "object",
+        required: [
+          "kind",
+          "fields",
+          "emittedBy",
+          "immutable"
+        ],
+        properties: {
+          kind: {
+            const: "domain-event"
+          },
+          fields: {
+            type: "object",
+            additionalProperties: {
+              $ref: "#/$defs/field"
+            }
+          },
+          invariants: {
+            type: "array",
+            items: {
+              $ref: "#/$defs/invariant"
+            }
+          },
+          description: {
+            type: "string",
+            minLength: 1
+          },
+          emittedBy: {
+            $ref: "#/$defs/reference"
+          },
+          immutable: {
+            const: true
+          }
+        }
+      },
+      service: {
+        type: "object",
+        required: [
+          "kind",
+          "operations"
+        ],
+        properties: {
+          kind: {
+            const: "domain-service"
+          },
+          operations: {
+            type: "array",
+            items: {
+              $ref: "#/$defs/operation"
+            }
+          },
+          description: {
+            type: "string",
+            minLength: 1
+          }
+        }
+      },
+      repository: {
+        type: "object",
+        required: [
+          "kind",
+          "aggregate",
+          "operations"
+        ],
+        properties: {
+          kind: {
+            const: "repository"
+          },
+          aggregate: {
+            $ref: "#/$defs/reference"
+          },
+          operations: {
+            type: "array",
+            items: {
+              type: "string",
+              minLength: 1
+            },
+            uniqueItems: true
+          },
+          description: {
+            type: "string",
+            minLength: 1
+          }
+        }
+      },
+      context: {
+        type: "object",
+        required: [
+          "kind",
+          "terms"
+        ],
+        properties: {
+          kind: {
+            const: "bounded-context"
+          },
+          description: {
+            type: "string",
+            minLength: 1
+          },
+          terms: {
+            type: "array",
+            items: {
+              $ref: "#/$defs/term"
+            }
+          }
+        }
+      },
+      map: {
+        type: "object",
+        required: [
+          "kind",
+          "mappings"
+        ],
+        properties: {
+          kind: {
+            const: "context-map"
+          },
+          mappings: {
+            type: "array",
+            items: {
+              $ref: "#/$defs/mapping"
+            }
+          }
+        }
+      }
+    }
+  },
+  semantics: "CONTRACT-005. Identity, value equality, aggregate ownership, domain events/services/repositories and context maps are declarations. Opaque invariants and asserted equivalence are preserved without execution or proof. Unknown fields remain incomplete interpretation. No native external DDD serialization is claimed.",
+  scopes: [
+    "document",
+    "module",
+    "element"
+  ],
+  capabilities: {
+    validation: "semantic",
+    directions: [
+      "import",
+      "export"
+    ],
+    native: {
+      system: "UMF-authored DDD profile",
+      version: "0.1.0",
+      subset: "Versioned semantic declarations in UMF JSON/YAML; opaque invariant languages are retained, not executed; no external DDD tool compatibility claimed"
+    },
+    evidence: [
+      "tests/ddd/profile.test.ts"
+    ]
+  }
+};
+
+// ../../../../private/tmp/truss-umf-runtime/src/extensions/ddd/index.ts
+var DDD_EXTENSION = "umf.ddd";
+var dddPackage = package_default;
+var kinds = { entity: "entity", value: "value", "domain-event": "event", "domain-service": "service", repository: "repository", "bounded-context": "context", "context-map": "map" };
+function semantics(value, context) {
+  const p = value;
+  const doc = context.document;
+  const out = [];
+  const add = (code, path, message, severity = "error") => out.push({ code, path: context.path + path, message, severity });
+  const localIndex = /\/modules\/(\d+)/.exec(context.path);
+  const local = localIndex ? doc.modules[Number(localIndex[1])] : undefined;
+  const elementIndex = /\/elements\/(\d+)/.exec(context.path);
+  const current = elementIndex && local ? local.elements[Number(elementIndex[1])] : undefined;
+  const refKey = (r) => JSON.stringify([r.module, r.element]);
+  function resolve(ref, path) {
+    const module = doc.modules.find((m) => m.id === ref.module);
+    const element = module?.elements.find((e) => e.id === ref.element);
+    const target = element?.extensions[DDD_EXTENSION];
+    if (!target) {
+      add("DDD_REFERENCE", path, "Missing DDD concept " + refKey(ref));
+      return;
+    }
+    return target;
+  }
+  function unknown(node, schema, path) {
+    if (schema.$ref)
+      schema = package_default.schema.$defs[schema.$ref.split("/").at(-1)];
+    if (schema.oneOf) {
+      schema = schema.oneOf.find((candidate) => candidate.properties?.kind?.const === node?.kind);
+      if (!schema)
+        return;
+    }
+    if (schema.type === "object" && node && typeof node === "object" && !Array.isArray(node))
+      for (const [key, child] of Object.entries(node)) {
+        const next = (schema.properties && Object.hasOwn(schema.properties, key) ? schema.properties[key] : undefined) ?? (typeof schema.additionalProperties === "object" ? schema.additionalProperties : undefined);
+        if (next)
+          unknown(child, next, path + "/" + pointer(key));
+        else
+          add("DDD_UNKNOWN", path + "/" + pointer(key), "Unknown DDD content retained", "warning");
+      }
+    if (schema.type === "array" && Array.isArray(node))
+      node.forEach((child, index) => unknown(child, schema.items, path + "/" + index));
+  }
+  unknown(p, package_default.schema.$defs[kinds[p.kind]], "");
+  const expected = p.kind === "bounded-context" ? "module" : p.kind === "context-map" ? "document" : "element";
+  if (context.scope !== expected)
+    add("DDD_SCOPE", "", "DDD declaration has the wrong attachment scope");
+  if (context.scope === "element" && local?.extensions?.[DDD_EXTENSION]?.kind !== "bounded-context")
+    add("DDD_CONTEXT", "", "DDD concepts require an explicit bounded-context module");
+  if (p.fields)
+    for (const [name, field] of Object.entries(p.fields)) {
+      if (field.type.kind === "concept") {
+        const target = resolve(field.type.target, "/fields/" + name + "/type/target");
+        if (target && !["entity", "value", "domain-event"].includes(target.kind))
+          add("DDD_FIELD", "/fields/" + name, "Field type must denote data, not a service or repository");
+      }
+    }
+  if (p.kind === "entity") {
+    for (const name of p.identity.fields) {
+      const field = p.fields[name];
+      if (!field || field.cardinality !== "one")
+        add("DDD_IDENTITY", "/identity", "Identity fields must exist and be singular required values");
+    }
+    if (p.aggregate && p.identity.scope !== "context")
+      add("DDD_IDENTITY", "/identity", "An aggregate root requires context-scoped identity");
+    if (p.aggregate)
+      for (const [index, member] of p.aggregate.members.entries()) {
+        const target = resolve(member, "/aggregate/members/" + index);
+        if (member.module !== local?.id)
+          add("DDD_BOUNDARY", "/aggregate/members/" + index, "Aggregate membership cannot cross bounded contexts");
+        if (member.element === current?.id && member.module === local?.id)
+          add("DDD_BOUNDARY", "/aggregate/members/" + index, "A root cannot be its own member");
+        if (target && (!["entity", "value"].includes(target.kind) || target.aggregate))
+          add("DDD_BOUNDARY", "/aggregate/members/" + index, "Members must be non-root entities or value objects");
+        if (target?.kind === "entity") {
+          let owners = 0;
+          for (const module of doc.modules)
+            for (const element of module.elements) {
+              const other = element.extensions[DDD_EXTENSION];
+              if (other?.kind === "entity" && other.aggregate?.members?.some((r) => refKey(r) === refKey(member)))
+                owners++;
+            }
+          if (owners !== 1)
+            add("DDD_OWNERSHIP", "/aggregate/members/" + index, "An entity definition cannot belong to conflicting aggregate boundaries in this profile");
+        }
+      }
+    if (p.identity.scope === "aggregate") {
+      let owners = 0;
+      for (const module of doc.modules)
+        for (const element of module.elements) {
+          const other = element.extensions[DDD_EXTENSION];
+          if (other?.kind === "entity" && other.aggregate?.members?.some((r) => r.module === local?.id && r.element === current?.id))
+            owners++;
+        }
+      if (owners !== 1)
+        add("DDD_IDENTITY", "/identity", "Aggregate-scoped identity requires exactly one aggregate owner");
+    }
+  }
+  if (p.kind === "value") {
+    const names = Object.keys(p.fields).sort();
+    if (JSON.stringify([...p.equality.fields].sort()) !== JSON.stringify(names))
+      add("DDD_EQUALITY", "/equality", "Value equality must explicitly include every declared field");
+  }
+  if (p.kind === "repository") {
+    const target = resolve(p.aggregate, "/aggregate");
+    if (target && (target.kind !== "entity" || !target.aggregate))
+      add("DDD_REPOSITORY", "/aggregate", "Repository must target an aggregate root");
+    if (p.aggregate.module !== local?.id)
+      add("DDD_CONTEXT", "/aggregate", "Repository belongs to the aggregate bounded context");
+  }
+  if (p.kind === "domain-event") {
+    const target = resolve(p.emittedBy, "/emittedBy");
+    if (target && !["entity", "domain-service"].includes(target.kind))
+      add("DDD_EVENT", "/emittedBy", "Event producer must be an entity or domain service");
+    if (p.emittedBy.module !== local?.id)
+      add("DDD_CONTEXT", "/emittedBy", "Event declaration belongs to its producer context");
+  }
+  if (p.kind === "domain-service") {
+    const names = new Set;
+    for (const [index, op] of p.operations.entries()) {
+      if (names.has(op.name))
+        add("DDD_OPERATION", "/operations/" + index, "Duplicate operation");
+      names.add(op.name);
+      for (const key of ["input", "output"])
+        if (op[key])
+          resolve(op[key], "/operations/" + index + "/" + key);
+      for (const ref of op.emits ?? []) {
+        const target = resolve(ref, "/operations/" + index + "/emits");
+        if (target && target.kind !== "domain-event")
+          add("DDD_EVENT", "/operations/" + index + "/emits", "Operation emits must target a domain event");
+      }
+    }
+  }
+  if (p.invariants) {
+    const ids = new Set;
+    for (const [index, invariant] of p.invariants.entries()) {
+      if (ids.has(invariant.id))
+        add("DDD_INVARIANT", "/invariants/" + index, "Duplicate invariant id");
+      ids.add(invariant.id);
+      if (invariant.scope === "aggregate" && !p.aggregate)
+        add("DDD_INVARIANT", "/invariants/" + index, "Aggregate invariants belong on aggregate roots");
+      for (const ref of invariant.references) {
+        resolve(ref, "/invariants/" + index + "/references");
+        if (ref.module !== local?.id)
+          add("DDD_INVARIANT", "/invariants/" + index, "Invariant scope cannot cross a bounded context");
+        if (invariant.scope === "aggregate" && p.aggregate && !(ref.module === local?.id && ref.element === current?.id) && !p.aggregate.members.some((member) => refKey(member) === refKey(ref)))
+          add("DDD_INVARIANT", "/invariants/" + index, "Aggregate invariant reference lies outside the declared boundary");
+      }
+      add("DDD_INVARIANT_OPAQUE", "/invariants/" + index, "Invariant expression is preserved with its language/version; it is not interpreted or enforced", "warning");
+    }
+  }
+  if (p.kind === "bounded-context") {
+    const terms = new Set;
+    for (const [index, term] of p.terms.entries()) {
+      for (const text of [term.term, ...term.aliases ?? []]) {
+        if (terms.has(text))
+          add("DDD_TERM", "/terms/" + index, "Term or alias collides within its context");
+        terms.add(text);
+      }
+      if (term.concept) {
+        resolve(term.concept, "/terms/" + index + "/concept");
+        if (term.concept.module !== local?.id)
+          add("DDD_TERM", "/terms/" + index, "Ubiquitous-language term is local to its context");
+      }
+    }
+  }
+  if (p.kind === "context-map") {
+    const ids = new Set;
+    for (const [index, map] of p.mappings.entries()) {
+      if (ids.has(map.id))
+        add("DDD_MAPPING", "/mappings/" + index, "Duplicate mapping id");
+      ids.add(map.id);
+      resolve(map.source, "/mappings/" + index + "/source");
+      resolve(map.target, "/mappings/" + index + "/target");
+      if (map.source.module === map.target.module)
+        add("DDD_MAPPING", "/mappings/" + index, "A context mapping requires distinct contexts");
+      if (map.equivalence === "partial" && !map.limitations.length)
+        add("DDD_MAPPING", "/mappings/" + index, "Partial mappings must state limitations");
+      if (map.equivalence === "asserted-equivalent")
+        add("DDD_EQUIVALENCE_UNPROVEN", "/mappings/" + index, "Declared equivalence is retained but not proven by matching structure or names", "warning");
+      if (map.antiCorruptionLayer && ![map.source.module, map.target.module].includes(map.antiCorruptionLayer.ownerModule))
+        add("DDD_ACL", "/mappings/" + index, "Anti-corruption layer owner must be a participating context");
+    }
+  }
+  return out;
+}
+function dddRegistry() {
+  return new Registry().register(dddPackage, semantics);
+}
+function inspectDdd(document) {
+  return validateDocument(document, dddRegistry());
+}
 export {
   encodeCoreKeyTupleBody,
+  inspectDdd,
   readJsonValue,
   validateSemanticTypesDocument,
   withCatalogResourceProfile

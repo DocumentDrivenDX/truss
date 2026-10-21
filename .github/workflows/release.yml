@@ -267,6 +267,10 @@ jobs:
         run: python -m unittest test_decimal_scale2_native.DecimalScale2Tests
       - name: Run public registration-owned rebinding workflows
         run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_catalog_rebind_native test_required_catalog_rebind_native
+      - name: Qualify remaining embedder batch catalog preview lifecycle and audit APIs
+        env:
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_batched_import_native test_batched_import_parity_native test_catalog_additions_native test_catalog_continuation_native test_catalog_compatible_acceptance_native test_group_preview_native test_lifecycle_native test_install_preflight_native test_module_access_batch_native test_load_audit_native test_mutation_group_audit_native test_audit_disclosure_native test_owned_group_audit_native test_group_preview_wire test_load_audit_wire test_lifecycle_wire test_catalog_continuation_types test_ddd_owner_preparation -v
       - name: Run pending receipt visibility and bundled group preparation
         run: PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=packages/python/tests python -m unittest test_receipt_visibility_native.ReceiptVisibilityTests
       - name: Verify managed-function statement budget and host fault containment

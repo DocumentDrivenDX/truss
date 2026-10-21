@@ -8,7 +8,7 @@ export const UMF_CORE10_CATALOG_SOURCE='b24e07abae445414c41d2f122deae596915c6bd5
 export async function loadCore10CatalogOwner(directory:string){
  const revision=UMF_CORE10_CATALOG_SOURCE;
  const {hash,captured}=await loadPinnedFunctions(directory,revision,'core10-catalog',[
-  'readJsonValue','validateSemanticTypesDocument','encodeCoreKeyTupleBody','withCatalogResourceProfile']);
+  'readJsonValue','validateSemanticTypesDocument','inspectDdd','encodeCoreKeyTupleBody','withCatalogResourceProfile']);
  return Object.freeze({sourceRevision:revision,bundleSha256:hash,
   inspect(originalText:string){
    if(typeof originalText!=='string'||Buffer.byteLength(originalText)>4194304)throw Error('Original document bound');
@@ -16,7 +16,10 @@ export async function loadCore10CatalogOwner(directory:string){
     const source=captured.readJsonValue(originalText,'json');
     if(source?.umf!=='0.10.0')throw Error('Unsupported original UMF version');
     const sourceValidation=captured.validateSemanticTypesDocument(source);
-    return {originalText,source,sourceValidation,transition:null,targetValidation:sourceValidation,target:source};
+    const dddVersion=source?.vocabularies?.['umf.ddd']?.version;
+    const dddProfile=dddVersion==='0.1.0'?Object.freeze({identity:'umf-ddd-document-validation',version:revision,sha256:hash}):undefined;
+    const dddValidation=dddProfile?captured.inspectDdd(source):undefined;
+    return {originalText,source,sourceValidation,dddProfile,dddValidation,transition:null,targetValidation:sourceValidation,target:source};
    });
   }});
 }

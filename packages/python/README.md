@@ -1,8 +1,9 @@
 # Truss Python toolkit
 
-Version 0.0.43 includes the embedder changes described in the
-[E0/E1 execution plan](../../docs/helix/04-build/embedder-e0-e1-plan.md).
-The [v0.0.43 notes](../../docs/helix/04-build/releases/v0.0.43.md) record the selected E1 qualification.
+Version 0.0.44 adds batched imports, conditional catalog reads, document revision
+checks, condition preview, lifecycle outcomes and scoped group/load audit.
+The [v0.0.44 notes](../../docs/helix/04-build/releases/v0.0.44.md) describe compatibility and qualification;
+the [delivery plan](../../docs/helix/04-build/embedder-e2-e8-plan.md) records the accepted request dispositions.
 The historical release qualifications below describe their original bytes.
 
 Historical release Truss `0.0.41` selects native `0.72-candidate` and Weft `0.4.48`.
@@ -49,7 +50,7 @@ complete ordered public readback, plus refusal at 1,025 and rollback on a
 failure at operation 1,024. Other
 byte/value limits and ordinary deadlines still apply.
 
-Version 0.0.43 pins `weft-sql==0.4.48`, backend `0.4.41` / binding `0.5`,
+Version 0.0.44 pins `weft-sql==0.4.48`, backend `0.4.41` / binding `0.5`,
 and query ABI 1.1. The backend version identifies the runtime ABI separately
 from the compiler package version. The historical v0.0.39 package used
 `weft-sql==0.4.41` with the same backend/binding versions.
@@ -145,7 +146,93 @@ retries. Reads, non-atomic batches and actions without a qualified whole-batch
 handler return `UNSUPPORTED`. See the experimental public composition in
 `truss.action_transport` and its focused native tests for the exact cohort.
 
-## Install version 0.0.43
+## Embedder APIs
+
+The additive APIs below are qualified as described in the
+[E2–E8 plan](../../docs/helix/04-build/embedder-e2-e8-plan.md).
+They retain the legacy import and transaction contracts.
+
+`build_import_records_in_transaction(tx, drafts)` builds an entire tuple of
+`ObjectImportDraft` / `EdgeImportDraft` values from accepted definitions in one
+native call. Its `BuiltImportRecords` result contains `context` and `records`:
+
+```python
+built = assembly.build_import_records_in_transaction(tx, drafts).value
+input = built.context.input(
+    built.records, load_id="seed-1", asserted_origin=MapValue(entries=()),
+    chunk_size=128,
+)
+result = assembly.import_batched_in_transaction(tx, input, documents=documents)
+# result.result is the existing tagged ImportExecutionResult.
+# On an admitted empty input, result.empty_load_settlement is explicit.
+```
+
+The selected batched profile accepts at most 1,024 original records, an 8-MiB
+input envelope and 1-MiB individual payloads. Chunks contain 1–128 records.
+Objects precede edges across the complete input, with results attributed to
+original indices. Each eligible record has its own native subtransaction;
+created, skipped and rejected records can share a chunk. Existing identities
+skip before payload interpretation, after byte/hash admission. Source `at`
+strings on this profile must be exact RFC3339 instants. Legacy source strings
+and the legacy 128-record/per-record-settlement profile remain unchanged.
+
+Caller-owned imports remain pending. `run_import_batches` selects engine-owned
+chunk commits only for `BatchedImportInput`; it retains one-record commits for
+legacy inputs and atomic settlement for `OwnedImportInput`. The new route
+returns `BatchedImportExecutionResult`, wrapping the existing tagged result.
+`EmptyLoadDisposition` records pending, committed, rolled-back, commit-unknown
+or transaction-unresolved settlement without inventing a record index. A
+report can be withheld when current complete disclosure authority is unavailable.
+No unresolved commit is retried. Native retained work is bounded at 4,096
+records/256 MiB per transaction, with a separate nonrewinding submitted-work
+budget per adopted host handle; these are not a global CPU/allocation quota.
+
+On the measured local matching-timeout fixture, a builder uses three client
+statements; a single-chunk execution plus final report authorization uses six.
+Each additional chunk adds three. Connection/adoption and engine settlement are
+separate costs. This describes client statements, not set-based native DML or
+a universal latency guarantee.
+
+`reader_catalog_if_changed_in_transaction(tx, validator=...)` returns a typed
+`ReaderCatalogSnapshot(catalog, validator)` or `ReaderCatalogUnchanged(validator)`.
+Retain the snapshot and validator together. Each call rechecks current authority;
+the validator grants no access. Module entries expose `sourceCatalogRevision`.
+`registrar_status_in_transaction` is an advisory typed capability probe.
+Acceptance supports `expected_revision` and document-scoped
+`CatalogDocumentExpectation` values in `expected_documents`; zero requires that
+source document to be absent. Exact authorized request replay precedes current
+expectation checks. A contained `CatalogCASConflict` is distinct from a real
+serialization/deadlock retry. Known UMF core 0.10.0 / `umf.ddd` 0.1.0 paired
+optional Field/member additions retain original validation and unknown content;
+other extension changes keep their explicit compatibility refusal.
+
+`preview_group_conditions_in_transaction` evaluates `GroupConditionPreviewInput`
+on one data snapshot and returns `PreviewObserved` or `PreviewRefused`. Its
+observation basis is advisory and cannot be used as a mutation receipt. It does
+not reserve keys, create attempts or journal effects. Mutations still re-evaluate
+conditions under their own locks. Restrictive delete returns the typed dependency
+refusal; explicitly selected owned cascade retains its separate contract.
+
+`person_runtime_status_in_transaction` gives minimal installation compatibility
+and empty/accepted catalog state to enrolled people, including audit-only roles.
+Role-name recovery is a separate administrator-only API. Installation exclusion
+returns a typed busy refusal. Module grant batches remain atomic; invalid batches
+return original indexed `ModuleAccessBatchRefused` diagnostics before changes.
+Existing installations are not automatically migrated or reset.
+
+Audit access is separately configured by an installation administrator using
+`ModuleAuditGrant`; writers cannot self-grant. The metadata-only load/group page
+APIs require current audit membership across every retained owner in the complete
+selected group or load. Ordinary data-read grants alone do not authorize audit.
+Pages include native identities, operation kinds, actor/action and explicit
+observed times, with committed-visibility evidence; observation time and XID are
+not claimed to be commit time/order. Raw origin, key/property/source values and
+input payloads are excluded. Discovery filters and typed continuation cursors
+retain a fixed committed frontier. Deleted and unchanged operations remain
+represented. Literal empty loads are retained but have no module scope and require
+the separate registrar disclosure path.
+
+## Install version 0.0.44
 
 Use the matching Truss and Weft release artifacts below. Source builds require
 the same version cohort; an older installation is not upgraded.
@@ -293,10 +380,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.43 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.44 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.48 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.43'
+  'truss-toolkit[local,native,query]==0.0.44'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -307,15 +394,15 @@ for admitted current catalogs. Create/update, imports, preconditions, backfills
 and lookups require no client encoder or per-key receipt. Weft remains optional
 through `query` and is not a key-encoding dependency.
 Each release publishes package checksums and source/runtime/backend pins. The
-current evidence qualifies the exact installed wheel on local macOS ARM64 only;
-it does not claim Linux x86_64 or other native-platform qualification.
+release receipts distinguish local macOS ARM64 native checks from hosted Linux
+x86_64 qualification. Other platforms are outside the selected release gates.
 
 ## Run a real workflow
 
-Check out the v0.0.43 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.44 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.43 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.44 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```

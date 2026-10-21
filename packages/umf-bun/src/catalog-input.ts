@@ -22,7 +22,9 @@ async function createPreparation(directory:string,dependenciesPackage:string,sch
  return Object.freeze({umfProfile,prepare(original:Uint8Array){
    const inspected=inspector.inspect(original);
   const documents:{documentId:string;revision:string;umfVersion:string;originalText:string;
-   validation:{sourceValidation:ReturnType<typeof owner.inspect>['sourceValidation']};
+   validation:{sourceValidation:ReturnType<typeof owner.inspect>['sourceValidation'];
+    dddProfile?:NonNullable<ReturnType<typeof owner.inspect>['dddProfile']>;
+    dddValidation?:NonNullable<ReturnType<typeof owner.inspect>['dddValidation']>};
    interpretation:ReturnType<typeof owner.inspect>}[]=[];
   for(let i=0;i<inspected.input.documents.length;i++){
    const declaration=inspected.input.documents[i]!;const source=inspected.documents[i]!;
@@ -32,11 +34,16 @@ async function createPreparation(directory:string,dependenciesPackage:string,sch
    try {observation=owner.inspect(source.originalText);}
    catch(error){throw new CatalogDocumentRejected(source.documentId,source.documentRevision,error);}
 
-   if(!observation.sourceValidation.valid)throw new CatalogDocumentRejected(source.documentId,source.documentRevision,null,observation);
+   if(!observation.sourceValidation.valid||observation.dddValidation&&!observation.dddValidation.valid)
+    throw new CatalogDocumentRejected(source.documentId,source.documentRevision,null,observation);
    if(observation.source.id!==source.documentId)throw Error('Original document identity mismatch');
+   const validation:{sourceValidation:ReturnType<typeof owner.inspect>['sourceValidation'];
+    dddProfile?:NonNullable<ReturnType<typeof owner.inspect>['dddProfile']>;
+    dddValidation?:NonNullable<ReturnType<typeof owner.inspect>['dddValidation']>}={sourceValidation:observation.sourceValidation};
+   if(observation.dddProfile&&observation.dddValidation){validation.dddProfile=observation.dddProfile;validation.dddValidation=observation.dddValidation;}
    // Preserve the actual current source and its original validation result.
    documents.push(Object.freeze({documentId:source.documentId,revision:source.documentRevision,umfVersion:observation.source.umf,
-    originalText:source.originalText,validation:{sourceValidation:observation.sourceValidation},
+    originalText:source.originalText,validation,
     interpretation:observation}));
   }
   const declarations=()=>documents.map(document=>collectCatalogDeclarations(document.documentId,document.interpretation.source));

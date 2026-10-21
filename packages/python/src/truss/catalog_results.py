@@ -3,6 +3,52 @@
 from dataclasses import dataclass
 from typing import Literal
 
+@dataclass(frozen=True, slots=True)
+class CatalogDocumentExpectation:
+    """Expected accepted-source revision for one document; zero means absent."""
+    document_id: str
+    source_catalog_revision: int
+
+    def __post_init__(self):
+        try:valid_document=type(self.document_id) is str and 1<=len(self.document_id.encode('utf8'))<=4096 and '\0' not in self.document_id
+        except UnicodeError:valid_document=False
+        if not valid_document:
+            raise ValueError('Valid document identity required')
+        if type(self.source_catalog_revision) is not int or not 0 <= self.source_catalog_revision <= 2147483647:
+            raise ValueError('Bounded source catalog revision required')
+
+@dataclass(frozen=True, slots=True)
+class RegistrarStatus:
+    """Advisory current registration capability; admission always reauthorizes."""
+    can_register: bool
+
+    def __post_init__(self):
+        if type(self.can_register) is not bool:
+            raise ValueError('Boolean registrar status required')
+
+@dataclass(frozen=True, slots=True)
+class ModuleAccessError:
+    """Index-only diagnostic for one rejected module-policy selection."""
+    index: int
+    code: Literal['duplicate_selection','unknown_module','unknown_role','unsafe_role']
+
+    def __post_init__(self):
+        if type(self.index) is not int or not 0 <= self.index < 512:
+            raise ValueError('Bounded original module grant index required')
+        if self.code not in ('duplicate_selection','unknown_module','unknown_role','unsafe_role'):
+            raise ValueError('Selected module grant diagnostic required')
+
+@dataclass(frozen=True, slots=True)
+class ModuleAccessBatchRefused:
+    errors: tuple[ModuleAccessError,...]
+    outcome: Literal['refused'] = 'refused'
+
+    def __post_init__(self):
+        if (type(self.errors) is not tuple or not self.errors
+                or any(type(error) is not ModuleAccessError for error in self.errors)
+                or tuple(sorted(self.errors,key=lambda error:(error.index,error.code))) != self.errors):
+            raise ValueError('Ordered nonempty indexed module access errors required')
+
 @dataclass(frozen=True,slots=True)
 class CatalogRegistration:
     revision: int
@@ -63,6 +109,12 @@ class CatalogAcceptanceRefused:
     violations: tuple[CatalogCompatibilityViolation | CatalogRelationshipCompatibilityViolation | CatalogKeyCompatibilityViolation,...]
     outcome: Literal['refused'] = 'refused'
     code: Literal['incompatible'] = 'incompatible'
+
+@dataclass(frozen=True,slots=True)
+class CatalogCASConflict:
+    """Expected accepted-source basis changed before publication."""
+    code: Literal['revision_conflict'] = 'revision_conflict'
+    outcome: Literal['conflict'] = 'conflict'
 
 @dataclass(frozen=True,slots=True)
 class CatalogReport:

@@ -20,14 +20,14 @@ from functools import wraps
 from typing import Literal, overload, TypeVar, Mapping
 from .current_query import CurrentQueryExecutor
 from .current_disclosure import CurrentDisclosureExecutor,CurrentDisclosureRows
-from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogStoredViolator, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport)
+from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogCompatibilityViolation, CatalogStoredViolator, CatalogRelationshipCompatibilityViolation, CatalogKeyCompatibilityViolation, CatalogReport, CatalogDocumentExpectation, CatalogCASConflict, RegistrarStatus, ModuleAccessError, ModuleAccessBatchRefused)
 from .capabilities import (CapabilityAvailable, NativeCatalogCapability,
     NativeDirectReadCapability, NativeImportCapability, NativeFeedCapability, NativeHistoryCapability, NativeCompiledExecutionCapability)
 from .history import (HistoryEntity,HistoryCursor,RetainedHistoryEvent,HistoryPage,
     HistoricalRecord,HistoricalDeleted,HistoryUnavailable)
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 from .feed import FeedAckReceipt,FeedReceiptAcknowledged,FeedAckReconciled,FeedPage,FeedConsumer,FeedAcknowledged,FeedUnavailable
-from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable
+from .reader_catalog import ReaderCatalog, ReaderCatalogSnapshot, ReaderCatalogUnchanged, AcceptedDocument, CatalogRefused, CatalogInvalid, CatalogUnavailable, _validate_validator
 from .assembly_contracts import AssemblyDisposed, CapabilityUnavailable
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable, CatalogDefinitionReference
 from .imports import ImportInput,OwnedImportInput,OwnedObjectImportRecord,OwnedEdgeImportRecord,OwnedEdgeImportIdentity,ImportExecutionResult,ObjectImportRecord,EdgeImportRecord
@@ -50,6 +50,13 @@ from .preparation import CatalogDocument, PreparedAcceptance, _require_original_
 from ._catalog_support import evaluate_catalog_support
 from ._catalog_source_reference import DATE10_PROFILE
 from ._catalog_report_semantics import compose_original_catalog_report_semantics, canonical_numeric_free
+from .preview import GroupConditionPreviewInput, PreviewObserved, PreviewRefused
+from .lifecycle import (PersonRuntimeStatus, AdminInstallRecovery, LifecycleRefused, InstallRefused)
+from .load_audit import (ModuleAuditGrant, AuditAccessUpdated, LoadAuditCursor, LoadAuditListingCursor,
+    LoadAuditListingEnd, LoadAuditPage, LoadAuditInvocationSummary, LoadAuditUnavailable, MutationGroupAuditListingCursor,
+    MutationGroupAuditListingEnd, MutationGroupAuditPage)
+from .batched_import import (BatchedImportInput, BatchedImportRuntimeContext, ImportRecordDraft,
+    BuiltImportRecords, BatchedImportExecutionResult)
 
 
 @dataclass(frozen=True,slots=True)
@@ -156,7 +163,7 @@ def _release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql','schema-cache.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         source=raw.decode('utf-8')
@@ -244,6 +251,7 @@ def _catalog_failure(result, local_code=None):
     # outcomes remain unchanged. Codes never depend on diagnostic prose.
     if not isinstance(result,Error):return result
     failure=result.error
+    if failure.code=='execution_obligation' and failure.sql_state=='P1011':return Ok(CatalogCASConflict())
     code=None
     if failure.code=='execution_obligation':
         code={'42501':'unauthorized','22023':'invalid_input','P1001':'request_conflict',
@@ -453,24 +461,89 @@ class CatalogReferenceAssembly:
             from .catalog_preparation import prepare_catalog
             return prepare_catalog(documents,source_version=source_version,bun_executable=bun_executable)
     @_active_operation
-    def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None) -> Outcome[PendingCatalogInstallation]:
+    def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None) -> Outcome[PendingCatalogInstallation | InstallRefused]:
         self._available()
         from psycopg import sql
-        from ._installation_privileges import InstallationRoles, _name, protect_installation_with_cursor
+        from ._installation_privileges import (InstallationRoles, _name, protect_installation_with_cursor,
+                                                installation_administrator_with_cursor)
         manifest,digest,sources=_release()
         suffix=uuid4().hex[:16]
         roles=InstallationRoles(owner_role or 'truss_owner_'+suffix,registrar_role or 'truss_registrar_'+suffix)
-        if not _name(roles.owner) or not _name(roles.client) or roles.owner==roles.client:
-            return Error(ExecutionFailure('execution_obligation','Distinct valid installation roles required'))
+        try:
+            valid_roles=_name(roles.owner) and _name(roles.client) and roles.owner!=roles.client
+        except UnicodeError:
+            valid_roles=False
+        if not valid_roles:
+            return Ok(InstallRefused(code='invalid_roles'))
         def install(cursor,observed):
             _pin_cursor(cursor)
             cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False)
             original_path=cursor.fetchone()[0]
             cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
+
+            def refuse(code):
+                cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
+                if cursor.fetchone()[0]!=original_path:
+                    raise ValueError('Caller search path restoration failed')
+                return InstallRefused(code=code)
+
+            cursor.execute('SELECT pg_catalog.pg_try_advisory_xact_lock(1953658227,1735549296)',prepare=False)
+            if not cursor.fetchone()[0]:
+                return refuse('busy')
+            try:
+                actor = installation_administrator_with_cursor(cursor)
+            except ValueError:
+                return refuse('unauthorized')
+            cursor.execute("SELECT pg_catalog.current_setting('transaction_read_only')='off'",prepare=False)
+            if cursor.fetchone()!=(True,):
+                return refuse('read_only')
             cursor.execute("SELECT pg_catalog.current_setting('server_version_num')",prepare=False)
-            if cursor.fetchone()[0]!=manifest['postgresVersion']:raise ValueError('Supported PostgreSQL release required')
+            if cursor.fetchone()[0]!=manifest['postgresVersion']:
+                return refuse('unsupported_postgres')
+            if not actor[2]:
+                cursor.execute("SELECT pg_catalog.has_database_privilege(%s,pg_catalog.current_database(),'CREATE WITH GRANT OPTION')",(actor[0],),prepare=False)
+                if cursor.fetchone()!=(True,):
+                    return refuse('unauthorized')
             cursor.execute("SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_namespace WHERE nspname='truss')",prepare=False)
-            if cursor.fetchone()[0]:raise ValueError('Fresh installation requires an absent namespace; installation upgrades are unsupported')
+            if cursor.fetchone()[0]:
+                cursor.execute("SELECT pg_catalog.to_regclass('truss.catalog_runtime_installation') IS NOT NULL",prepare=False)
+                if not cursor.fetchone()[0]:
+                    return refuse('incompatible')
+                cursor.execute("""SELECT c.relkind,c.relpersistence,c.relrowsecurity,c.relforcerowsecurity,
+                    c.relhasrules,c.relispartition,
+                    EXISTS(SELECT 1 FROM pg_catalog.pg_inherits i WHERE i.inhparent=c.oid)
+                    FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+                    WHERE n.nspname='truss' AND c.relname='catalog_runtime_installation'""",prepare=False)
+                relation=cursor.fetchone()
+                if (relation is None or relation!=('r','p',False,False,False,False,False)):
+                    return refuse('incompatible')
+                cursor.execute("""SELECT a.attname,a.atttypid,a.attgenerated FROM pg_catalog.pg_attribute a
+                    JOIN pg_catalog.pg_class c ON c.oid=a.attrelid
+                    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+                    WHERE n.nspname='truss' AND c.relname='catalog_runtime_installation'
+                      AND a.attnum>0 AND NOT a.attisdropped""",prepare=False)
+                columns={row[0]:(row[1],row[2]) for row in cursor.fetchall()}
+                cursor.execute("""SELECT 'pg_catalog.bool'::pg_catalog.regtype::oid,
+                    'pg_catalog.text'::pg_catalog.regtype::oid,
+                    'pg_catalog.jsonb'::pg_catalog.regtype::oid""",prepare=False)
+                bool_oid,text_oid,jsonb_oid=cursor.fetchone()
+                if (not {'singleton','release_id','release_sha256','layout_profile'}<=set(columns)
+                        or any(generated!='' for _,generated in columns.values())
+                        or columns['singleton'][0]!=bool_oid
+                        or columns['release_id'][0]!=text_oid
+                        or columns['release_sha256'][0]!=text_oid
+                        or columns['layout_profile'][0]!=jsonb_oid):
+                    return refuse('incompatible')
+                cursor.execute("SELECT release_id,release_sha256,layout_profile FROM ONLY truss.catalog_runtime_installation WHERE singleton",prepare=False)
+                installed=cursor.fetchmany(2)
+                if (len(installed)==1 and installed[0][0]==manifest['releaseId']
+                        and installed[0][1]==digest and installed[0][2]==manifest['layoutProfile']):
+                    return refuse('already_installed')
+                return refuse('incompatible')
+            cursor.execute('SELECT EXISTS(SELECT 1 FROM pg_catalog.pg_roles WHERE rolname=ANY(%s))',
+                ([roles.owner,roles.client],),prepare=False)
+            if cursor.fetchone()[0]:
+                return refuse('role_exists')
             for source in sources:cursor.execute(source,prepare=False)
             privileges=protect_installation_with_cursor(cursor,roles)
             cursor.execute('''INSERT INTO truss.catalog_runtime_installation(singleton,installation_id,release_id,release_sha256,layout_profile,preparation_configuration,owner_oid,registrar_oid,genesis_at)
@@ -478,8 +551,9 @@ class CatalogReferenceAssembly:
                 FROM truss.schema_rev WHERE rev=0 RETURNING installation_id::pg_catalog.text''',
                 (manifest['releaseId'],digest,json.dumps(manifest['layoutProfile']),json.dumps(_configuration()),privileges.owner_oid,privileges.client_oid),prepare=False)
             identity=cursor.fetchone()[0]
-            for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_preview(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)'):
+            for signature in ('catalog_accept(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_preview(bytea,bytea,bytea,bytea,bytea,text)','catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)','catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,int,bytea)','catalog_report(int)','catalog_status()','catalog_view_basis(int,int,int)','reader_catalog_if_changed(int,int,text,text,text)','registrar_status(text,text)','person_runtime_status(text,text,jsonb)','admin_install_recovery()','grant_import_audit_access(text,text,text)'):
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
+            cursor.execute('GRANT EXECUTE ON FUNCTION truss.admin_install_recovery(),truss.grant_import_audit_access(text,text,text) TO CURRENT_USER',prepare=False)
             cursor.execute("COMMENT ON SCHEMA truss IS 'Truss installed runtime: exact active release and layout from truss.runtime_current_installation()'",prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
@@ -505,7 +579,7 @@ class CatalogReferenceAssembly:
             if row[1:3]!=(manifest['releaseId'],digest) or json.loads(row[3])!=manifest['layoutProfile']:
                 local_failure[0]='unsupported_profile'
                 raise ValueError('Unsupported installed catalog release')
-            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility','feed:caller-asserted-authority','feed:destination-receipt-reconciliation','history:retained-native-groups','compiled_query:weft-scalar-runtime'),
+            return CatalogRuntimeStatus(True,row[0],int(row[4]),('catalog:fresh-registration','catalog:compatible-evolution','catalog:document-cas','catalog:conditional-reader','catalog:registrar-status','catalog:ddd-optional-field','import:host-owned-scalar-graph','catalog:report','catalog:view','direct_read:scalar-object-id','group:rootless-scalar-graph','direct_read:edge-id','direct_read:relationship-page','receipt:authority-visibility','feed:caller-asserted-authority','feed:destination-receipt-reconciliation','history:retained-native-groups','compiled_query:weft-scalar-runtime'),
                 release_id=row[1],release_sha256=row[2],layout_profile=ProfilePin(**json.loads(row[3])))
         result=self._host._run_operation(transaction,observe,function_call=True)
         if isinstance(result,Error) and result.error.sql_state in ('3F000','42883'):
@@ -521,13 +595,19 @@ class CatalogReferenceAssembly:
             if isinstance(missing,Error):return _catalog_failure(missing,local_failure[0])
         return _catalog_failure(result,local_failure[0])
     @_active_operation
-    def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}',bun_executable: str='bun') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
+    def accept_in_transaction(self,transaction: TransactionHandle,prepared: PreparedAcceptance,*,request_key: str,origin_bytes: bytes=b'{}',bun_executable: str='bun',expected_revision: int | None=None,expected_documents: tuple[CatalogDocumentExpectation,...]=()) -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused | CatalogCASConflict]:
         self._available()
         local_failure=[None]
         cache_current=[True]
         def reject(code,message):
             local_failure[0]=(code,message)
             raise ValueError(message)
+        if expected_revision is not None and (type(expected_revision) is not int or not 0<=expected_revision<=2147483647):
+            return Error(ExecutionFailure('execution_obligation','Bounded catalog revision expectation required',catalog_code='invalid_input'))
+        if type(expected_documents) is not tuple or any(type(item) is not CatalogDocumentExpectation for item in expected_documents):
+            return Error(ExecutionFailure('execution_obligation','Exact catalog document expectations required',catalog_code='invalid_input'))
+        expected_docs_bytes=json.dumps([{'documentId':item.document_id,'sourceCatalogRevision':item.source_catalog_revision}
+            for item in expected_documents],ensure_ascii=False,separators=(',',':')).encode('utf8')
         def require_original():
             try:_require_original_preparation(prepared)
             except ValueError:reject('invalid_input','Original unchanged preparation required')
@@ -556,7 +636,7 @@ class CatalogReferenceAssembly:
                 source={key:semantic[key] for key in ('sourceFormat','umf','documentValidations')}
                 return (prepared.input_bytes,prepared.archive_documents_bytes,b'',
                     json.dumps(source,ensure_ascii=True,separators=(',',':'),allow_nan=False).encode('utf8'),
-                    origin_bytes,request_key)
+                    origin_bytes,request_key,str(-1 if expected_revision is None else expected_revision),expected_docs_bytes)
             evidence=decode_owner_evidence_json(prepared.report_evidence_bytes)
             source={'umf':semantic['umf'],'diagnostics':evidence['validation']['diagnostics'],
                 'documentInterpretations':evidence['validation']['documentInterpretations'],
@@ -566,11 +646,12 @@ class CatalogReferenceAssembly:
             if compact_catalog_sources(prepared):source['sourceFormat']=SOURCE_REFERENCE_FORMAT
             require_original()
             return (prepared.input_bytes,prepared.archive_documents_bytes,prepared.declarations_bytes,
-                    canonical_numeric_free(source),origin_bytes,request_key)
+                    canonical_numeric_free(source),origin_bytes,request_key,
+                    str(-1 if expected_revision is None else expected_revision),expected_docs_bytes)
         def execute(cursor,observed,ordinal,parameters):
             _pin_cursor(cursor)
             require_original()
-            cursor.execute('SELECT * FROM truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false)',parameters,prepare=False)
+            cursor.execute('SELECT * FROM truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false,%s::int,%s)',parameters,prepare=False)
             rows=cursor.fetchmany(2)
             if len(rows)!=1:raise ValueError('Complete catalog result required')
             revision,identity,report,replayed,unchanged,actor,violations=rows[0]
@@ -639,15 +720,13 @@ class CatalogReferenceAssembly:
             limits=CatalogViewLimits(definition_count=definition_count,encoded_bytes=encoded_bytes))
 
     @_active_operation
-    def configure_module_access_in_transaction(self,transaction: TransactionHandle,grants: tuple[ModuleAccessGrant,...]) -> Outcome[PendingModuleAccessConfiguration]:
+    def configure_module_access_in_transaction(self,transaction: TransactionHandle,grants: tuple[ModuleAccessGrant,...]) -> Outcome[PendingModuleAccessConfiguration | ModuleAccessBatchRefused]:
         """Configure existing module-policy rows as the trusted administrator.
 
         This does not grant raw-table privileges or install business capabilities.
         """
         if type(grants) is not tuple or not 1<=len(grants)<=512 or any(type(grant) is not ModuleAccessGrant for grant in grants):
             return Error(ExecutionFailure('execution_obligation','Bounded typed module grants required'))
-        if len({(grant.document_id,grant.module_id) for grant in grants})!=len(grants):
-            return Error(ExecutionFailure('execution_obligation','Unique document-qualified module grants required'))
         manifest,digest,_=_release()
         def configure(cursor,observed):
             _pin_cursor(cursor)
@@ -667,28 +746,39 @@ class CatalogReferenceAssembly:
             if cursor.fetchone()!=(manifest['releaseId'],digest):raise ValueError('Selected installed runtime required')
             cursor.execute('SELECT rev FROM truss.schema_head WHERE id=1 FOR SHARE NOWAIT',prepare=False)
             if cursor.fetchone()[0]<1:raise ValueError('Accepted catalog head required')
-            for grant in grants:
+            selection_indexes={}
+            for index,grant in enumerate(grants):selection_indexes.setdefault((grant.document_id,grant.module_id),[]).append(index)
+            errors=[]
+            for indexes in selection_indexes.values():
+                if len(indexes)>1:errors.extend(ModuleAccessError(index,'duplicate_selection') for index in indexes)
+            for index,grant in enumerate(grants):
                 cursor.execute("""SELECT EXISTS(SELECT 1 FROM truss.schema_doc d
                   CROSS JOIN LATERAL pg_catalog.jsonb_array_elements(d.document::pg_catalog.jsonb->'modules') m
-                  WHERE d.doc_id=%s AND m.value->>'id'=%s)""",(grant.document_id,grant.module_id),prepare=False)
-                if cursor.fetchone()!=(True,):raise ValueError('Accepted document-qualified module required')
-                cursor.execute("""WITH RECURSIVE permission_roles(oid) AS (
-                    SELECT oid FROM pg_catalog.pg_roles WHERE rolname::pg_catalog.text IN (%s::pg_catalog.text,%s::pg_catalog.text)
-                    UNION SELECT m.roleid FROM pg_catalog.pg_auth_members m JOIN permission_roles p ON m.member=p.oid)
-                  SELECT CASE WHEN EXISTS(SELECT 1 FROM permission_roles p JOIN pg_catalog.pg_roles r ON r.oid=p.oid
-                    CROSS JOIN truss.catalog_runtime_installation i
-                    WHERE r.rolcanlogin OR r.rolsuper OR r.rolcreaterole OR r.rolcreatedb
-                      OR r.rolreplication OR r.rolbypassrls OR r.oid IN (i.owner_oid,i.registrar_oid)
-                      OR r.rolname::pg_catalog.text IN ('pg_read_server_files','pg_write_server_files','pg_execute_server_program')
-                      OR pg_catalog.has_schema_privilege(r.oid,'truss','CREATE')
-                      OR EXISTS(SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
-                        WHERE n.nspname='truss' AND ((c.relkind IN ('r','p') AND
-                          (pg_catalog.has_table_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
-                           OR pg_catalog.has_any_column_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,REFERENCES')))
-                          OR (c.relkind='S' AND pg_catalog.has_sequence_privilege(r.oid,c.oid,'USAGE,SELECT,UPDATE')))))
-                   THEN 0 ELSE (SELECT count(*) FROM pg_catalog.pg_roles WHERE rolname::pg_catalog.text IN (%s::pg_catalog.text,%s::pg_catalog.text)) END""",
-                  (grant.reader_role,grant.writer_role,grant.reader_role,grant.writer_role),prepare=False)
-                if cursor.fetchone()!=(2,):raise ValueError('Existing ordinary permission roles required')
+                  WHERE d.doc_id=%s AND d.rev=(SELECT max(latest.rev) FROM truss.schema_doc latest WHERE latest.doc_id=d.doc_id)
+                    AND m.value->>'id'=%s)""",(grant.document_id,grant.module_id),prepare=False)
+                if cursor.fetchone()!=(True,):errors.append(ModuleAccessError(index,'unknown_module'))
+                for role in (grant.reader_role,grant.writer_role):
+                    cursor.execute("""WITH RECURSIVE permission_roles(oid) AS (
+                      SELECT oid FROM pg_catalog.pg_roles WHERE rolname::pg_catalog.text=%s::pg_catalog.text
+                      UNION SELECT m.roleid FROM pg_catalog.pg_auth_members m JOIN permission_roles p ON m.member=p.oid)
+                     SELECT count(*),coalesce(bool_or(r.rolcanlogin OR r.rolsuper OR r.rolcreaterole OR r.rolcreatedb
+                       OR r.rolreplication OR r.rolbypassrls OR r.oid IN (i.owner_oid,i.registrar_oid)
+                       OR r.rolname::pg_catalog.text IN ('pg_read_server_files','pg_write_server_files','pg_execute_server_program')
+                       OR pg_catalog.has_schema_privilege(r.oid,'truss','CREATE')
+                       OR EXISTS(SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+                         WHERE n.nspname='truss' AND ((c.relkind IN ('r','p') AND
+                           (pg_catalog.has_table_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
+                            OR pg_catalog.has_any_column_privilege(r.oid,c.oid,'SELECT,INSERT,UPDATE,REFERENCES')))
+                           OR (c.relkind='S' AND pg_catalog.has_sequence_privilege(r.oid,c.oid,'USAGE,SELECT,UPDATE'))))),false)
+                     FROM permission_roles p JOIN pg_catalog.pg_roles r ON r.oid=p.oid
+                     CROSS JOIN truss.catalog_runtime_installation i""",(role,),prepare=False)
+                    count,unsafe=cursor.fetchone()
+                    if count==0:errors.append(ModuleAccessError(index,'unknown_role'))
+                    elif unsafe:errors.append(ModuleAccessError(index,'unsafe_role'))
+            if errors:
+                cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
+                if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
+                return ModuleAccessBatchRefused(tuple(sorted(errors,key=lambda error:(error.index,error.code))))
             for grant in grants:
                 cursor.execute('''SELECT reader_role,writer_role FROM truss.module_access
                   WHERE document_id=%s AND module=%s FOR UPDATE NOWAIT''',(grant.document_id,grant.module_id),prepare=False)
@@ -719,6 +809,8 @@ class CatalogReferenceAssembly:
             for grant in grants:
                 for role in (grant.reader_role,grant.writer_role):
                     for signature in ('reader_catalog(int,int,text,text)','accepted_document(text,int,text,text)',
+                                      'reader_catalog_if_changed(int,int,text,text,text)','registrar_status(text,text)',
+                                      'person_runtime_status(text,text,jsonb)','preview_group_conditions(bytea,bytea,text,text)',
                                       'query_binding(jsonb,int,int,int,text,text)','query_scope(jsonb)','query_objects(jsonb,int)','query_numeric_value(text,text)','query_timestamp_instant_key(text,text)','query_edges(jsonb,int)','query_page_objects(jsonb,int,text)','query_export_objects(jsonb,int)','query_export_edges(jsonb,int)','query_export_page_objects(jsonb,int,text)','query_object_attribution(jsonb,int,bigint)','query_complete_related_keys(jsonb,int,int)','query_object_times(jsonb,int,bigint)','query_object_load_id(jsonb,int,bigint)',
                                       'key_read_selection(text,text,text,text,bytea,text,text)',
                                       'lookup_string_key(text,text,text,text,bytea,bytea,bytea,int,text,text)',
@@ -732,6 +824,7 @@ class CatalogReferenceAssembly:
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.catalog_revision(text,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                     cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.prepare_group(bytea,bytea,text,text) TO {}').format(sql.Identifier(role)),prepare=False)
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.apply_group(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
+                cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.batched_import_context(text,text),truss.build_import_records(bytea,text,text),truss.process_import_chunk(bytea,bytea,uuid,int,text,text),truss.validate_batched_import_report(bytea,bytea,bytea,text,text) TO {}').format(sql.Identifier(grant.writer_role)),prepare=False)
             _grant_application_writers(cursor)
             _close_partial_group_grants(cursor)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
@@ -854,6 +947,24 @@ class CatalogReferenceAssembly:
                 from ._owned_import_runtime import run_owned_import
                 return run_owned_import(self._host,transaction,input,documents,manifest,digest,_pin_cursor,bun_executable=bun_executable)
             return run_import(self._host,transaction,input,documents,manifest,digest,_pin_cursor,bun_executable=bun_executable)
+
+    @_active_operation
+    def batched_import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[BatchedImportRuntimeContext]:
+        from ._batched_import_runtime import context
+        manifest,digest,_=_release()
+        return context(self._host,transaction,manifest,digest,_pin_cursor)
+
+    @_active_operation
+    def build_import_records_in_transaction(self,transaction: TransactionHandle,drafts: tuple[ImportRecordDraft,...]) -> Outcome[BuiltImportRecords]:
+        from ._batched_import_runtime import build_records
+        manifest,digest,_=_release()
+        return build_records(self._host,transaction,drafts,manifest,digest,_pin_cursor)
+
+    @_active_operation
+    def import_batched_in_transaction(self,transaction: TransactionHandle,input: BatchedImportInput,*,documents: tuple[CatalogDocument,...]) -> BatchedImportExecutionResult:
+        from ._batched_import_runtime import run_batched_import
+        manifest,digest,_=_release()
+        return run_batched_import(self._host,transaction,input,documents,manifest,digest,_pin_cursor)
 
     @_active_operation
     def import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[ImportRuntimeContext]:
@@ -1091,6 +1202,73 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         result=group_context(self._host,transaction,manifest,digest,_pin_cursor)
         return Ok(UnauthorizedPerson()) if _admission_refused(result) else result
+
+    @_active_operation
+    def preview_group_conditions_in_transaction(self,transaction: TransactionHandle,input: GroupConditionPreviewInput,*,documents: tuple[CatalogDocument,...]=()) -> Outcome[PreviewObserved | PreviewRefused]:
+        from ._preview_runtime import preview_group_conditions
+        manifest,digest,_=_release()
+        return preview_group_conditions(self._host,transaction,input,documents,manifest,digest,_pin_cursor)
+
+    @_active_operation
+    def person_runtime_status_in_transaction(self,transaction: TransactionHandle) -> Outcome[PersonRuntimeStatus | LifecycleRefused]:
+        from ._lifecycle_runtime import person_runtime_status
+        manifest,digest,_=_release()
+        def acquire(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT pg_catalog.pg_try_advisory_xact_lock(1953658227,1735549296)',prepare=False)
+            return cursor.fetchone()[0]
+        lock=self._host._run_operation(transaction,acquire)
+        if isinstance(lock,Error):return lock
+        if not lock.value:return Ok(LifecycleRefused(reason='observation'))
+        return person_runtime_status(self._host,transaction,manifest,digest,_pin_cursor)
+
+    @_active_operation
+    def admin_install_recovery_in_transaction(self,transaction: TransactionHandle) -> Outcome[AdminInstallRecovery | LifecycleRefused]:
+        from ._lifecycle_runtime import admin_install_recovery
+        return admin_install_recovery(self._host,transaction,_pin_cursor)
+
+    @_active_operation
+    def grant_module_audit_access_in_transaction(self,transaction: TransactionHandle,grant: ModuleAuditGrant) -> Outcome[AuditAccessUpdated | LoadAuditUnavailable]:
+        from ._load_audit_runtime import _decode_grant, _reason
+        from psycopg import sql
+        if type(grant) is not ModuleAuditGrant:
+            return Ok(LoadAuditUnavailable(reason='observation'))
+        manifest,digest,_=_release()
+        def register(cursor,observed):
+            _pin_cursor(cursor)
+            from ._current_query_protection import require_unprotected_configuration
+            require_unprotected_configuration(cursor)
+            cursor.execute('SELECT truss.grant_import_audit_access(%s,%s,%s)',
+                (grant.document_id,grant.module_id,grant.auditor_role),prepare=False)
+            updated=_decode_grant(bytes(cursor.fetchone()[0]),grant)
+            cursor.execute(sql.SQL('GRANT USAGE ON SCHEMA truss TO {}')
+                .format(sql.Identifier(grant.auditor_role)),prepare=False)
+            cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.person_runtime_status(text,text,jsonb),truss.read_import_load_chunk(uuid,int,int,text,text),truss.page_import_load_audit(jsonb,int,bytea,text,text),truss.page_mutation_group_audit(jsonb,int,bytea,text,text) TO {}')
+                .format(sql.Identifier(grant.auditor_role)),prepare=False)
+            return updated
+        result=self._host._run_operation(transaction,register)
+        reason=_reason(result) if isinstance(result,Error) else None
+        return Ok(LoadAuditUnavailable(reason=reason)) if reason else result
+
+    @_active_operation
+    def read_import_load_chunk_in_transaction(self,transaction: TransactionHandle,*,cursor: LoadAuditCursor,page_limit: int=128) -> Outcome[LoadAuditPage | LoadAuditUnavailable]:
+        from ._load_audit_runtime import read_import_load_chunk
+        manifest,digest,_=_release()
+        return read_import_load_chunk(self._host,transaction,cursor,page_limit,manifest,digest,_pin_cursor)
+
+    @_active_operation
+    def page_import_load_audit_in_transaction(self,transaction: TransactionHandle,*,filters: dict[str,str],
+            cursor: LoadAuditListingCursor | None=None,maximum_entries: int=128) -> Outcome[LoadAuditInvocationSummary | LoadAuditListingEnd | LoadAuditUnavailable]:
+        from ._load_audit_runtime import page_import_load_audit
+        manifest,digest,_=_release()
+        return page_import_load_audit(self._host,transaction,filters,cursor,maximum_entries,manifest,digest,_pin_cursor)
+
+    @_active_operation
+    def page_mutation_group_audit_in_transaction(self,transaction: TransactionHandle,*,filters: dict,
+            cursor: MutationGroupAuditListingCursor | None=None,maximum_events: int=128) -> Outcome[MutationGroupAuditPage | MutationGroupAuditListingEnd | LoadAuditUnavailable]:
+        from ._load_audit_runtime import page_mutation_group_audit
+        manifest,digest,_=_release()
+        return page_mutation_group_audit(self._host,transaction,filters,cursor,maximum_events,manifest,digest,_pin_cursor)
 
     @_active_operation
     def catalog_revision_in_transaction(self,transaction: TransactionHandle,*,document_id: str | None=None) -> Outcome[CatalogRevisionProbe | CatalogRefused]:
@@ -1424,6 +1602,39 @@ class CatalogReferenceAssembly:
         return self._reader_result(self._host._run_operation(transaction,read, function_call=True))
 
     @_active_operation
+    def reader_catalog_if_changed_in_transaction(self,transaction: TransactionHandle,*,validator: str | None=None,maximum_count: int=65536,maximum_bytes: int=1048576) -> Outcome[ReaderCatalogSnapshot | ReaderCatalogUnchanged | CatalogInvalid | CatalogRefused | CatalogUnavailable]:
+        if type(maximum_count) is not int or not 1<=maximum_count<=65536 or type(maximum_bytes) is not int or not 1<=maximum_bytes<=16777216:
+            return Ok(CatalogInvalid(code='limits'))
+        if validator is not None and (type(validator) is not str or re.fullmatch(r'[0-9a-f]{64}',validator) is None):
+            return Ok(CatalogInvalid(code='selection'))
+        manifest,digest,_=_release()
+        def read(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.reader_catalog_if_changed(%s,%s,%s,%s,%s)',
+                (maximum_count,maximum_bytes,manifest['releaseId'],digest,validator),prepare=False)
+            basis=json.loads(bytes(cursor.fetchone()[0]))
+            if basis.get('outcome')=='unchanged' and set(basis)=={'outcome','validator'}:
+                return ReaderCatalogUnchanged(validator=basis['validator'])
+            if basis.get('outcome')!='snapshot' or set(basis)!={'outcome','validator','catalog'}:
+                raise ValueError('Exact conditional catalog result required')
+            catalog=basis['catalog']
+            return ReaderCatalogSnapshot(catalog=ReaderCatalog(catalog_revision=catalog['catalogRevision'],
+                layout_profile=catalog['layoutProfile'],modules=tuple(catalog['modules'])),validator=basis['validator'])
+        return self._reader_result(self._host._run_operation(transaction,read,function_call=True))
+
+    @_active_operation
+    def registrar_status_in_transaction(self,transaction: TransactionHandle) -> Outcome[RegistrarStatus | CatalogUnavailable]:
+        manifest,digest,_=_release()
+        def read(cursor,observed):
+            _pin_cursor(cursor)
+            cursor.execute('SELECT truss.registrar_status(%s,%s)',(manifest['releaseId'],digest),prepare=False)
+            basis=json.loads(bytes(cursor.fetchone()[0]))
+            if type(basis) is not dict or set(basis)!={'registrar'} or type(basis['registrar']) is not bool:
+                raise ValueError('Exact advisory registrar observation required')
+            return RegistrarStatus(can_register=basis['registrar'])
+        return self._reader_result(self._host._run_operation(transaction,read,function_call=True))
+
+    @_active_operation
     def accepted_document_in_transaction(self,transaction: TransactionHandle,*,document_id: str,maximum_bytes: int=1048576) -> Outcome[AcceptedDocument | CatalogInvalid | CatalogRefused | CatalogUnavailable]:
         try: valid=type(document_id) is str and 1<=len(document_id.encode('utf8'))<=4096 and '\0' not in document_id
         except UnicodeError:valid=False
@@ -1435,7 +1646,7 @@ class CatalogReferenceAssembly:
             cursor.execute('SELECT truss.accepted_document(%s,%s,%s,%s)',(document_id,maximum_bytes,manifest['releaseId'],digest),prepare=False)
             basis=json.loads(bytes(cursor.fetchone()[0]));content=base64.b64decode(basis['contentBase64'])
             if sha256(content).hexdigest()!=basis['sha256']:raise ValueError('Exact accepted document digest required')
-            return AcceptedDocument(document_id=basis['documentId'],document_revision=basis['documentRevision'],artifact_identity=basis['artifactIdentity'],content=content,sha256=basis['sha256'],catalog_revision=basis['catalogRevision'],registration_id=basis['registrationId'],source_catalog_revision=basis['sourceCatalogRevision'],validation_bytes=json.dumps(basis['validation'],ensure_ascii=False,separators=(',',':')).encode('utf8'))
+            return AcceptedDocument(document_id=basis['documentId'],document_revision=basis['documentRevision'],artifact_identity=basis['artifactIdentity'],content=content,sha256=basis['sha256'],catalog_revision=basis['catalogRevision'],registration_id=basis['registrationId'],source_catalog_revision=basis['sourceCatalogRevision'],validation_bytes=json.dumps(basis['validation'],ensure_ascii=False,separators=(',',':')).encode('utf8'),ddd_profile_bytes=json.dumps(basis['dddProfile'],ensure_ascii=False,separators=(',',':')).encode('utf8') if 'dddProfile' in basis else None,ddd_validation_bytes=json.dumps(basis['dddValidation'],ensure_ascii=False,separators=(',',':')).encode('utf8') if 'dddValidation' in basis else None)
         return self._reader_result(self._host._run_operation(transaction,read, function_call=True))
 
     @_active_operation

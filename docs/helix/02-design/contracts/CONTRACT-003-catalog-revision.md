@@ -21,6 +21,73 @@ ddx:
 
 # Contract: Catalog revision
 
+## Selected embedder catalog continuation
+
+The ordinary Python embedding profile adds conditional reader-catalog retrieval,
+document-scoped compare-and-set, a registrar probe and narrow optional-field
+evolution. These interfaces retain current authorization and publication order.
+
+`reader_catalog_if_changed_in_transaction(tx, validator=None, maximum_count=65536,
+maximum_bytes=1048576)` returns the existing outer `Outcome` with either
+`ReaderCatalogSnapshot(catalog, validator)` or `ReaderCatalogUnchanged(validator)`,
+or the existing catalog invalid/refused/unavailable variants. `catalog` is the
+complete authorized `ReaderCatalog`; `validator` is opaque UTF-8 text bounded to
+4,096 bytes. The complete conditional response respects `maximum_bytes`. A hit
+uses one native catalog invocation without reconstructing the complete type,
+property, key and relationship projection. A miss builds and releases the view
+under that same admission. The unconditional reader API remains compatible.
+
+A validator MUST bind installation/source epoch, runtime/layout identity,
+authenticated person, accepted source basis and the complete current visible
+projection/dependency policy. It MUST NOT authorize a later call, survive a
+changed basis by name matching, expose hidden owner identities/counts or bypass
+fresh membership/grant checks. Invalid token shape is typed invalid selection;
+a well-formed token from another basis is a cache miss. Both hit and miss recheck
+current person, policy and source basis before release; detected drift refuses
+without a partial view. Grant/revocation and hidden declaration/item/key/endpoint
+dependencies participate. Read-only callers require no forbidden write lock.
+Each returned module adds `sourceCatalogRevision`, the acceptance revision of the
+accepted document supplying that module, distinct from global `catalogRevision`
+and authored `documentRevision`. Existing accepted-document/revision probes do
+not establish a visibility cache validator.
+
+`accept_in_transaction` adds optional `expected_revision` and
+`expected_documents: tuple[CatalogDocumentExpectation, ...]`.
+`CatalogDocumentExpectation(document_id, source_catalog_revision)` uses a
+nonnegative acceptance revision; zero means the document must be absent.
+When document expectations are supplied, they cover exactly the submitted
+document identities without duplicates. Under the same publication head
+serialization, compare each document with its latest accepted source revision;
+an unrelated document's new global revision does not defeat document-only
+compare-and-set. A supplied global expectation independently compares the head.
+Mismatches produce typed conflict before effects using a distinct native
+expectation-conflict condition after confirmed operation containment. Actual
+serialization/deadlock retry, unresolved containment and unknown transaction
+outcomes remain their original outer execution failures; SQLSTATE `40001` is
+not reclassified as a compare-and-set conflict. Actual dependency pins are
+still checked. Exact authorized request replay retains its original result
+before a fresh expectation check; changed expectations belong to changed request
+custody. The no-expectation route and its historical artifacts remain exact.
+
+`registrar_status_in_transaction(tx)` returns a typed current-person capability
+answer without role names, membership inventories or administrative source.
+It is advisory; preparation and acceptance retain independent fresh admission.
+
+Known DDD means UMF's `umf.ddd` vocabulary version `0.1.0`, whose `fields` payload
+is defined by UMF CONTRACT-005 and `spec/extensions/ddd/schema.json`; it is not a
+new `umf.ddd.fields` vocabulary. A supported additive optional core Field/member
+and corresponding known DDD field addition MAY evolve together after original
+UMF structural/model validation and explicit core/extension correspondence.
+Preserve prior field identities, order/meaning, stored values and unchanged
+unknown extension content. Version names alone, guessed name pairing or generic
+extension equality relaxation MUST NOT establish compatibility. Required-field
+backfill, changed prior field meaning and unknown/unsupported extension edits
+retain explicit incompatibility and leave head/data/history unchanged.
+
+For example, a document accepted at revision 8 can be conditionally updated with
+expectation 8 after an unrelated document advances the global head to 9. Two
+different updates expecting that same document revision cannot both publish.
+
 ## Python embedder registration selection — 2026-10-20
 
 The executable scalar/graph profile MUST preserve valid UMF Records and Fields

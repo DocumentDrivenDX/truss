@@ -170,28 +170,60 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.group_condition_key_metadata(bytea,bytea,text,text) FROM PUBLIC;
 
-CREATE FUNCTION truss.runtime_evaluate_preconditions(input jsonb,original_keys bytea) RETURNS void
+-- Preview-only exact bucket observation. It has no lock or guard-row side
+-- effect and refuses an unbounded routed collision bucket before disclosure.
+CREATE FUNCTION truss.runtime_peek_string_key_bucket(original_namespace bytea,canonical_key bytea) RETURNS bigint[]
+LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE namespace_route bytea;key_route bytea;candidate_count bigint;candidate_bytes bigint;members bigint[];
+BEGIN
+ IF original_namespace IS NULL OR octet_length(original_namespace) NOT BETWEEN 1 AND 65536
+  OR canonical_key IS NULL OR octet_length(canonical_key) NOT BETWEEN 1 AND 1048576
+  OR convert_from(canonical_key,'UTF8') !~ '^umf-key-tuple-v1:hex:([0-9a-f]{2})+$' THEN
+  RAISE EXCEPTION 'bounded canonical key observation required' USING ERRCODE='22023';END IF;
+ namespace_route:=sha256(original_namespace);key_route:=sha256(canonical_key);
+ SELECT count(*),coalesce(sum(size),0) INTO candidate_count,candidate_bytes FROM (
+  (SELECT octet_length(namespace_bytes)::bigint+octet_length(key_bytes) AS size
+   FROM truss.object_key_bucket WHERE namespace_sha256=namespace_route AND key_sha256=key_route LIMIT 10001)
+  UNION ALL
+  (SELECT octet_length(namespace_bytes)::bigint+octet_length(key_bytes) AS size
+   FROM truss.object_key_reservation_bucket WHERE namespace_sha256=namespace_route AND key_sha256=key_route LIMIT 10001)
+ ) candidates;
+ IF candidate_count>10000 OR candidate_bytes>16777216 THEN
+  RAISE EXCEPTION 'complete collision bucket exceeds limits' USING ERRCODE='54000';END IF;
+ SELECT coalesce(array_agg(storage_row_id ORDER BY storage_row_id),'{}'::bigint[]) INTO members
+  FROM truss.object_key_bucket WHERE namespace_sha256=namespace_route AND key_sha256=key_route
+   AND namespace_bytes=original_namespace AND key_bytes=canonical_key;
+ RETURN members;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_peek_string_key_bucket(bytea,bytea) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_evaluate_preconditions_core(input jsonb,original_keys bytea,lock_state boolean) RETURNS jsonb
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
 DECLARE inventory jsonb;entry jsonb;condition jsonb;owner record;target record;current_object truss.object%ROWTYPE;key_tuples bytea[];key_tuple bytea;
  installation truss.catalog_runtime_installation%ROWTYPE;pin record;ns bytea;transport bytea;tuple_bytes bytea;values_text text[];key_facets jsonb;observed record;passed boolean;counted bigint;
- failure_buffer jsonb[]:=ARRAY[]::jsonb[];failures jsonb;receipt jsonb;scope jsonb;
+ failure_buffer jsonb[]:=ARRAY[]::jsonb[];condition_buffer jsonb[]:=ARRAY[]::jsonb[];failures jsonb;receipt jsonb;scope jsonb;
 BEGIN
+ IF lock_state IS NULL THEN RAISE EXCEPTION 'explicit precondition mode required' USING ERRCODE='22023';END IF;
  inventory:=truss.runtime_condition_inventory(input);
  IF original_keys IS NULL OR octet_length(original_keys) NOT BETWEEN 1 AND 8388608 OR (convert_from(original_keys,'UTF8') IS JSON ARRAY WITH UNIQUE KEYS) IS NOT TRUE THEN RAISE EXCEPTION 'original predicate key inventory required' USING ERRCODE='22023';END IF;
  IF convert_from(original_keys,'UTF8')::jsonb<>'[]'::jsonb THEN RAISE EXCEPTION 'client predicate key encoding is no longer accepted' USING ERRCODE='22023';END IF;
  IF jsonb_array_length(inventory)>0 THEN key_tuples:=array_fill(NULL::bytea,ARRAY[jsonb_array_length(inventory)]);ELSE key_tuples:=ARRAY[]::bytea[];END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  -- Acquire the complete object cut before evaluating any predicate.
- FOR target IN SELECT DISTINCT (o.value->>'id')::bigint AS id,(o.value->>'typeId')::int AS type_id FROM jsonb_array_elements(inventory) e CROSS JOIN LATERAL jsonb_array_elements(e.value->'objects') o ORDER BY id,type_id LOOP
-  PERFORM 1 FROM truss.object WHERE id=target.id AND type_id=target.type_id FOR UPDATE NOWAIT;
- END LOOP;
+ IF lock_state THEN
+  FOR target IN SELECT DISTINCT (o.value->>'id')::bigint AS id,(o.value->>'typeId')::int AS type_id FROM jsonb_array_elements(inventory) e CROSS JOIN LATERAL jsonb_array_elements(e.value->'objects') o ORDER BY id,type_id LOOP
+   PERFORM 1 FROM truss.object WHERE id=target.id AND type_id=target.type_id FOR UPDATE NOWAIT;
+  END LOOP;
+ END IF;
  FOR entry IN SELECT value FROM jsonb_array_elements(inventory) WHERE value->'condition'->>'condition'='key_absent' LOOP
   tuple_bytes:=truss.derive_catalog_key_tuple((entry->>'typeId')::int,(entry->>'keyNumber')::smallint,entry->'values');
   key_tuples[(entry->>'index')::int+1]:=tuple_bytes;
   SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',(entry->>'typeId')::int,(entry->>'keyNumber')::int);
   ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
    'typeId',entry->>'typeId','keyNumber',entry->>'keyNumber','definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
-  transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');PERFORM truss.lock_string_key_bucket(ns,transport);
+  transport:=convert_to('umf-key-tuple-v1:hex:'||encode(tuple_bytes,'hex'),'UTF8');
+  IF lock_state THEN PERFORM truss.lock_string_key_bucket(ns,transport);END IF;
  END LOOP;
  FOR entry IN SELECT value FROM jsonb_array_elements(inventory) LOOP
   condition:=entry->'condition';passed:=false;
@@ -208,8 +240,15 @@ BEGIN
    SELECT * INTO STRICT pin FROM truss.runtime_owned_definition_metadata('key',(entry->>'typeId')::int,(entry->>'keyNumber')::int);
    ns:=convert_to(jsonb_build_object('profile','truss-string-key-namespace/0.2','installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,
     'typeId',entry->>'typeId','keyNumber',entry->>'keyNumber','definitionPin',pin.definition_pin,'encoding','umf-key-tuple-v1')::text,'UTF8');
-   transport:=convert_to('umf-key-tuple-v1:hex:'||encode(key_tuple,'hex'),'UTF8');SELECT * INTO STRICT observed FROM truss.lock_string_key_bucket(ns,transport);
-   passed:=cardinality(observed.member_ids)=0; -- Live absence; reservations remain an independent write rule.
+   transport:=convert_to('umf-key-tuple-v1:hex:'||encode(key_tuple,'hex'),'UTF8');
+   IF lock_state THEN
+    SELECT * INTO STRICT observed FROM truss.lock_string_key_bucket(ns,transport);
+    passed:=cardinality(observed.member_ids)=0; -- Live absence; reservations remain an independent write rule.
+   ELSE
+    -- Advisory preview observes exact full bytes in the routed bucket without
+    -- creating a generation row, taking an advisory lock or reserving a key.
+    passed:=cardinality(truss.runtime_peek_string_key_bucket(ns,transport))=0;
+   END IF;
   ELSIF condition->>'condition'='relationship_absent' THEN
    passed:=EXISTS(SELECT 1 FROM truss.object WHERE id=(condition->'source'->>'id')::bigint AND type_id=(condition->'source'->>'typeId')::int)
     AND EXISTS(SELECT 1 FROM truss.object WHERE id=(condition->'target'->>'id')::bigint AND type_id=(condition->'target'->>'typeId')::int)
@@ -233,12 +272,26 @@ BEGIN
     passed:=counted>=(condition->>'minimum')::bigint AND (NOT condition ? 'maximum' OR counted<=(condition->>'maximum')::bigint);
    END IF;
   END IF;
+  condition_buffer:=array_append(condition_buffer,jsonb_build_object('conditionId',condition->>'id','rule',condition->>'condition','passed',passed IS TRUE));
   IF passed IS NOT TRUE THEN failure_buffer:=array_append(failure_buffer,jsonb_build_object('conditionId',condition->>'id','reason',condition->>'reason','rule',condition->>'condition'));END IF;
  END LOOP;
  -- A lost predicate authority never returns a partial or complete failure list.
  PERFORM truss.runtime_condition_inventory(input);
  failures:=to_jsonb(failure_buffer);
- IF failures<>'[]'::jsonb THEN RAISE EXCEPTION 'caller preconditions failed' USING ERRCODE='P1006',DETAIL=jsonb_build_object('outcome','failed','code','precondition_failed','failures',failures)::text;END IF;
+ RETURN jsonb_build_object('conditions',to_jsonb(condition_buffer),'failures',failures);
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.runtime_evaluate_preconditions_core(jsonb,bytea,boolean) FROM PUBLIC;
+
+CREATE FUNCTION truss.runtime_evaluate_preconditions(input jsonb,original_keys bytea) RETURNS void
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE evaluated jsonb;failures jsonb;
+BEGIN
+ evaluated:=truss.runtime_evaluate_preconditions_core(input,original_keys,true);
+ failures:=evaluated->'failures';
+ IF failures<>'[]'::jsonb THEN
+  RAISE EXCEPTION 'caller preconditions failed' USING ERRCODE='P1006',DETAIL=jsonb_build_object('outcome','failed','code','precondition_failed','failures',failures)::text;
+ END IF;
 END;
 $$;
 REVOKE ALL ON FUNCTION truss.runtime_evaluate_preconditions(jsonb,bytea) FROM PUBLIC;

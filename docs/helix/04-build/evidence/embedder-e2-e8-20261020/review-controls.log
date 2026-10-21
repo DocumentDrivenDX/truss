@@ -1,0 +1,8 @@
+test_edge_endpoints_and_owned_cascade_require_complete_audit_scope (test_owned_group_audit_native.OwnedGroupAuditNativeTests.test_edge_endpoints_and_owned_cascade_require_complete_audit_scope) ... ok
+test_preview_runs_on_an_adopted_read_only_transaction (test_group_preview_native.GroupPreviewNativeTests.test_preview_runs_on_an_adopted_read_only_transaction)
+@covers US-040-AC1 / US-040-AC2: all five predicates work in READ ONLY. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 8.020s
+
+OK

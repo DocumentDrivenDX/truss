@@ -18,6 +18,25 @@ ddx:
 ---
 
 # Contract: Group planning and locks
+
+## Selected embedder continuation ordering
+
+Document/global catalog compare-and-set checks occur under the existing
+publication head exclusion with dependency admission, before report/head/effect
+publication. An unrelated document's head increment does not fail document-only
+expectations. Installer exclusion precedes namespace/role effects. Module-policy
+batch validation precedes all grant effects. Each path preserves existing native
+lock order and caller transaction ownership.
+
+Batched imports establish whole-input object-before-edge phase order before
+forming bounded chunks. Per-record contained failures preserve prior accepted
+records in the selected chunk; whole-chunk/report failures preserve only earlier
+confirmed engine chunks. No batching shortcut drops complete key/reservation,
+endpoint, ownership or final relationship invariant checks.
+
+Advisory condition preview has a statement-snapshot basis and takes none of the
+mutation row locks, key-bucket reservations, request locks or writer markers.
+It cannot reserve a later group or replace the locked-prestate mutation protocol.
 ## Typed host request custody — 2026-10-20
 
 A registered typed action handler using request-enabled execution must bind the

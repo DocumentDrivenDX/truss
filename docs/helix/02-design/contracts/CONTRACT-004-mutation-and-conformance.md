@@ -22,6 +22,89 @@ ddx:
 ---
 
 # Contract: Mutation protocol and conformance corpus
+
+## Selected batched import and advisory conditions
+
+The new explicit `BatchedImportInput` profile admits at most 1,024 records with
+the existing 8-MiB canonical import envelope and 1-MiB individual payload limits.
+Its context/builder resolves a complete record run in bounded native calls;
+per-record client builder calls are not required. Legacy `ImportInput` retains
+its 128-record bound, original tagged reports and engine-owned per-record
+settlement. Atomic `OwnedImportInput` retains its whole-aggregate boundary.
+Selecting either different route MUST be explicit.
+
+New batched routes return `BatchedImportExecutionResult`: the complete tagged
+import result plus optional `EmptyLoadDisposition`. A zero-record admitted load
+still executes and retains its same-transaction load observation. Its settlement
+is independently pending, committed, rolled back, commit unknown or transaction
+unresolved with the corresponding native evidence/recovery reference. It has no
+fabricated input index and cannot change legacy nonempty record-batch accounting.
+An absent empty-load disposition is not proof of a committed load.
+
+The selected profile bounds 4,096 records and 256 MiB of original input plus
+source bytes. A native writer-transaction counter protects cumulative retained
+pending work; its counter effects roll back with that work. A separate host-local
+budget, scoped to the adopted transaction handle/generation, charges each admitted
+chunk submission before dispatch, including skipped/rejected records and repeated
+source occurrences. Contained rollback does not rewind that handle's submission
+budget. Detach/re-adoption creates a new host-budget scope, while a still-open
+native transaction retains its pending-work counter. Actual outer termination
+ends the native scope. Refuse the next chunk before any of its effects. These
+are conservative controlled-work bounds, not rollback-resistant global CPU/native
+allocation accounting or a guarantee for arbitrary SQL outside the toolkit.
+
+Batched import orders all objects before all edges across the whole submitted
+input, preserving original indices within phases. Declared execution chunks
+contain at most 128 records initially. Each record has native containment so
+invalid eligible records reject without erasing earlier accepted records in that
+chunk. Authorized live/reserved identity skips precede replacement payload
+decoding; malformed identities and denied rights never become skips. Repeated
+identities preserve first-create/later-skip order. Shared immutable schema
+meaning is resolved once per exact basis; current authority, complete endpoint
+and relationship invariants remain native admission obligations.
+
+One guarded native chunk invocation includes identity preparation, eligible
+value validation, mutation/source production and complete report authorization.
+Its client statement count MUST be fixed per bounded homogeneous chunk rather
+than per record. An internal per-record helper loop is not described as set-based
+native DML. Server work, latency and memory must be measured separately. Skips,
+rejections, original artifacts and pending/committed/rolled-back/unknown batch
+states remain lossless. A whole-chunk authority/report failure rolls back the
+current chunk and releases no partial forbidden report; earlier confirmed engine
+chunks retain their actual progress/recovery context. Caller-owned execution
+never settles the outer transaction. No automatic retry follows uncertain commit.
+
+Import value/source validation uses the selected apply/facet profiles. Unknown
+content must be retained or explicitly refused, never dropped. Any advertised
+parseable `source.at` requires its declared exact timestamp grammar. The selected
+audit extension records a distinct load attempt, including zero-created loads,
+in the same transaction as the corresponding import effects. This observation
+does not overwrite skipped canonical records or their original source facts;
+exact native request replay must not append a duplicate attempt.
+
+`GroupConditionPreviewInput` selects the condition-preview API. It returns
+`PreviewObserved` with ordered `PreviewConditionResult` entries and a
+`PreviewObservationBasis`, or typed `PreviewRefused`/outer execution failure.
+The API evaluates the selected original predicates and source
+identity on one read statement snapshot and returns ordered failures or a typed
+success with observed catalog revision and opaque snapshot basis. It performs
+no mutation, journal/source/setup write, reservation or request receipt and
+acquires no mutation-only row/advisory lock. Current full predicate-owner read
+authority is required before and after evaluation. Read-only transactions are
+supported. Capture the reported revision/snapshot inside the same STABLE truth
+statement; a separate VOLATILE publication boundary must freshly recheck the
+complete ordered owner inventory and current person/basis. Revocation committed
+during observation withholds the complete result rather than publishing stale
+authority or a partial failure list. Success is advisory, reserves no future state and does not replace
+conditions on a subsequent apply. Its basis is not a mutation read position.
+
+Delete retains restrictive dependency behavior except where an already selected
+owned/cascade profile explicitly governs the complete affected closure. Existing
+`operation_code='dependencies'` is the typed refusal; it exposes no hidden edge
+count or identity. No unconditional cascade or new dependency-listing contract
+is implied. Pending-token before/after rollback/commit qualification remains
+separate from preview and from committed `reached` results.
+
 ## Strict native group response admission — 2026-10-20
 
 The in-transaction group decoder admits only declared response branches.

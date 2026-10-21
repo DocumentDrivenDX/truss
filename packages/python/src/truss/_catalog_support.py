@@ -31,7 +31,8 @@ def evaluate_catalog_support(prepared):
         raise ValueError('Current registration validation results required')
     expected=[{'documentId':d.document.document_id,
         'contentSha256':sha256(d.document.content).hexdigest(),
-        'validation':entry['validation']} for d,entry in zip(prepared.documents,evidence['documents'])]
+        'validation':entry['validation'],**({'dddProfile':entry['dddProfile'],'dddValidation':entry['dddValidation']}
+            if 'dddProfile' in entry else {})} for d,entry in zip(prepared.documents,evidence['documents'])]
     if evidence!={'interfaceVersion':'truss-registration-preparation/2.0','documents':expected}:
         raise ValueError('Original registration validation results required')
     source_elements={}

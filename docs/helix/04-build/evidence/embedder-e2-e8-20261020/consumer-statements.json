@@ -1,0 +1,1198 @@
+{
+  "version": "0.0.44",
+  "runtimeManifestSha256": "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00",
+  "consumerCommit": "fed2c116db5dcdf2ac3b12b71bbfdddc35d03f6c",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "scope": "Unmodified original Hohfeld bench Ops over one warm kept person connection; setup/warmup/cleanup excluded; all driver SQL/control calls retained; server-internal work excluded",
+  "samples": [
+    {
+      "operation": "read-with-facts",
+      "sample": 0,
+      "seconds": 0.08851008303463459,
+      "driverWaitCalls": 31,
+      "connects": 0,
+      "calls": [
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_2a34e11353fa4a2184d364be50f9c61e\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_2a34e11353fa4a2184d364be50f9c61e\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_861ca99ff6f8407db8f5e34f22edaa96\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_861ca99ff6f8407db8f5e34f22edaa96\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_c8f3e406a5e44970ad83eff9ff89bbc3\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_c8f3e406a5e44970ad83eff9ff89bbc3\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_e57a60a1c7ce4e91a4acae49b248b14c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_e57a60a1c7ce4e91a4acae49b248b14c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_f5fb77651455438eb0ed3883e5f160f9\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT payload.*, (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text),\n (SELECT l.virtualtransaction::pg_catalog.text FROM pg_catalog.pg_locks l\n   WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n   AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted\n   AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text LIMIT 2),\n (SELECT pg_catalog.current_setting('transaction_isolation')::pg_catalog.text),\n (SELECT pg_catalog.current_setting('transaction_read_only')::pg_catalog.text),\n (SELECT pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text),\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text) FROM (SELECT truss.query_binding(%s::pg_catalog.jsonb,%s,%s,%s,%s,%s)) payload"
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH prior AS MATERIALIZED (SELECT pg_catalog.current_setting('search_path') AS path) SELECT path,pg_catalog.set_config('search_path','pg_catalog,pg_temp',true) FROM prior"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT truss.query_scope(%s::pg_catalog.jsonb)"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_snapshot_xmin(pg_catalog.pg_current_snapshot())::pg_catalog.text,pg_catalog.to_char(pg_catalog.clock_timestamp() AT TIME ZONE 'UTC','YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"'),pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT ((\"s0\".props->'27'->>'text') COLLATE pg_catalog.\"C\")::pg_catalog.text AS \"code\",((\"s0\".props->'29'->>'text') COLLATE pg_catalog.\"C\")::pg_catalog.text AS \"name\",(CASE WHEN NOT (\"s0\".props ? '30') THEN pg_catalog.jsonb_build_object('state','absent') WHEN \"s0\".props->'30'->>'kind'='null' THEN pg_catalog.jsonb_build_object('state','null') ELSE pg_catalog.jsonb_build_object('state','value','value',pg_catalog.to_jsonb((\"s0\".props->'30'->>'text') COLLATE pg_catalog.\"C\")) END)::pg_catalog.text AS \"practiceArea\",(CASE WHEN NOT (\"s0\".props ? '28') THEN pg_catalog.jsonb_build_object('state','absent') WHEN \"s0\".props->'28'->>'kind'='null' THEN pg_catalog.jsonb_build_object('state','null') ELSE pg_catalog.jsonb_build_object('state','value','value',pg_catalog.to_jsonb((\"s0\".props->'28'->>'text') COLLATE pg_catalog.\"C\")) END)::pg_catalog.text AS \"description\",(CASE WHEN NOT (\"s0\".props ? '31') THEN pg_catalog.jsonb_build_object('state','absent') WHEN \"s0\".props->'31'->>'kind'='null' THEN pg_catalog.jsonb_build_object('state','null') ELSE pg_catalog.jsonb_build_object('state','value','value',pg_catalog.to_jsonb((\"s0\".props->'31'->>'text') COLLATE pg_catalog.\"C\")) END)::pg_catalog.text AS \"problem\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_version')::pg_catalog.text AS \"_version\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_created_by')::pg_catalog.text AS \"_created_by\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_updated_by')::pg_catalog.text AS \"_updated_by\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_original_author')::pg_catalog.text AS \"_original_author\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_original_at')::pg_catalog.text AS \"_original_at\",(\"truss\".\"query_object_times\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_created_at')::pg_catalog.text AS \"_created_at\",(\"truss\".\"query_object_times\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_updated_at')::pg_catalog.text AS \"_updated_at\",(\"truss\".\"query_object_load_id\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_load_id')::pg_catalog.text AS \"_load_id\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_1_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_1_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,8::pg_catalog.int4) AS \"weft_runtime_related_1_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_1_target\" ON \"weft_runtime_related_1_target\".id=\"weft_runtime_related_1_edge\".source_id WHERE \"weft_runtime_related_1_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_1_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_1_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"addressedBy\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_2_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_2_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_2_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,1::pg_catalog.int4) AS \"weft_runtime_related_2_target\" ON \"weft_runtime_related_2_target\".id=\"weft_runtime_related_2_edge\".source_id WHERE \"weft_runtime_related_2_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_2_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_2_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"coveredBy\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_3_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_3_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,6::pg_catalog.int4) AS \"weft_runtime_related_3_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_3_target\" ON \"weft_runtime_related_3_target\".id=\"weft_runtime_related_3_edge\".source_id WHERE \"weft_runtime_related_3_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_3_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_3_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"evidence\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_4_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_4_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_4_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_4_target\" ON \"weft_runtime_related_4_target\".id=\"weft_runtime_related_4_edge\".source_id WHERE \"weft_runtime_related_4_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_4_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_4_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"adjacentEvidence\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_5_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_5_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,8::pg_catalog.int4) AS \"weft_runtime_related_5_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_5_target\" ON \"weft_runtime_related_5_target\".id=\"weft_runtime_related_5_edge\".source_id WHERE \"weft_runtime_related_5_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_5_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_5_bounded) AS \"_addressedBy\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_6_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_6_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_6_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,1::pg_catalog.int4) AS \"weft_runtime_related_6_target\" ON \"weft_runtime_related_6_target\".id=\"weft_runtime_related_6_edge\".source_id WHERE \"weft_runtime_related_6_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_6_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_6_bounded) AS \"_coveredBy\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_7_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_7_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,6::pg_catalog.int4) AS \"weft_runtime_related_7_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_7_target\" ON \"weft_runtime_related_7_target\".id=\"weft_runtime_related_7_edge\".source_id WHERE \"weft_runtime_related_7_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_7_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_7_bounded) AS \"_evidence\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_8_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_8_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_8_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_8_target\" ON \"weft_runtime_related_8_target\".id=\"weft_runtime_related_8_edge\".source_id WHERE \"weft_runtime_related_8_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_8_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_8_bounded) AS \"_adjacentEvidence\" FROM \"truss\".\"query_objects\"($1::pg_catalog.jsonb,6::pg_catalog.int4) AS \"s0\" WHERE ((\"s0\".props->'27'->>'text') COLLATE pg_catalog.\"C\" = $2::pg_catalog.text COLLATE pg_catalog.\"C\") ORDER BY (\"s0\".props->'27'->>'text') COLLATE pg_catalog.\"C\" ASC LIMIT 1"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT truss.query_scope(%s::pg_catalog.jsonb),r.oid::text FROM pg_catalog.pg_roles r WHERE r.rolname=session_user"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.set_config('search_path',%s,true)"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_f5fb77651455438eb0ed3883e5f160f9\""
+        },
+        {
+          "kind": "rollback"
+        }
+      ]
+    },
+    {
+      "operation": "read-with-facts",
+      "sample": 1,
+      "seconds": 0.08337250002659857,
+      "driverWaitCalls": 31,
+      "connects": 0,
+      "calls": [
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_69646531012d4cac85af52eb77eaebff\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_69646531012d4cac85af52eb77eaebff\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_78e19f76a1f74a67adb0a3a91f53fe09\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_78e19f76a1f74a67adb0a3a91f53fe09\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_7bd9441318264deaaec24780ece88c24\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_7bd9441318264deaaec24780ece88c24\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_53d5d95854ad47cfbf28b84cc67fbcf9\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_53d5d95854ad47cfbf28b84cc67fbcf9\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_4367442b207e494198739d74afedf9b8\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT payload.*, (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text),\n (SELECT l.virtualtransaction::pg_catalog.text FROM pg_catalog.pg_locks l\n   WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n   AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted\n   AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text LIMIT 2),\n (SELECT pg_catalog.current_setting('transaction_isolation')::pg_catalog.text),\n (SELECT pg_catalog.current_setting('transaction_read_only')::pg_catalog.text),\n (SELECT pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text),\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text) FROM (SELECT truss.query_binding(%s::pg_catalog.jsonb,%s,%s,%s,%s,%s)) payload"
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH prior AS MATERIALIZED (SELECT pg_catalog.current_setting('search_path') AS path) SELECT path,pg_catalog.set_config('search_path','pg_catalog,pg_temp',true) FROM prior"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT truss.query_scope(%s::pg_catalog.jsonb)"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_snapshot_xmin(pg_catalog.pg_current_snapshot())::pg_catalog.text,pg_catalog.to_char(pg_catalog.clock_timestamp() AT TIME ZONE 'UTC','YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"'),pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT ((\"s0\".props->'27'->>'text') COLLATE pg_catalog.\"C\")::pg_catalog.text AS \"code\",((\"s0\".props->'29'->>'text') COLLATE pg_catalog.\"C\")::pg_catalog.text AS \"name\",(CASE WHEN NOT (\"s0\".props ? '30') THEN pg_catalog.jsonb_build_object('state','absent') WHEN \"s0\".props->'30'->>'kind'='null' THEN pg_catalog.jsonb_build_object('state','null') ELSE pg_catalog.jsonb_build_object('state','value','value',pg_catalog.to_jsonb((\"s0\".props->'30'->>'text') COLLATE pg_catalog.\"C\")) END)::pg_catalog.text AS \"practiceArea\",(CASE WHEN NOT (\"s0\".props ? '28') THEN pg_catalog.jsonb_build_object('state','absent') WHEN \"s0\".props->'28'->>'kind'='null' THEN pg_catalog.jsonb_build_object('state','null') ELSE pg_catalog.jsonb_build_object('state','value','value',pg_catalog.to_jsonb((\"s0\".props->'28'->>'text') COLLATE pg_catalog.\"C\")) END)::pg_catalog.text AS \"description\",(CASE WHEN NOT (\"s0\".props ? '31') THEN pg_catalog.jsonb_build_object('state','absent') WHEN \"s0\".props->'31'->>'kind'='null' THEN pg_catalog.jsonb_build_object('state','null') ELSE pg_catalog.jsonb_build_object('state','value','value',pg_catalog.to_jsonb((\"s0\".props->'31'->>'text') COLLATE pg_catalog.\"C\")) END)::pg_catalog.text AS \"problem\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_version')::pg_catalog.text AS \"_version\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_created_by')::pg_catalog.text AS \"_created_by\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_updated_by')::pg_catalog.text AS \"_updated_by\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_original_author')::pg_catalog.text AS \"_original_author\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_original_at')::pg_catalog.text AS \"_original_at\",(\"truss\".\"query_object_times\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_created_at')::pg_catalog.text AS \"_created_at\",(\"truss\".\"query_object_times\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_updated_at')::pg_catalog.text AS \"_updated_at\",(\"truss\".\"query_object_load_id\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_load_id')::pg_catalog.text AS \"_load_id\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_1_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_1_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,8::pg_catalog.int4) AS \"weft_runtime_related_1_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_1_target\" ON \"weft_runtime_related_1_target\".id=\"weft_runtime_related_1_edge\".source_id WHERE \"weft_runtime_related_1_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_1_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_1_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"addressedBy\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_2_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_2_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_2_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,1::pg_catalog.int4) AS \"weft_runtime_related_2_target\" ON \"weft_runtime_related_2_target\".id=\"weft_runtime_related_2_edge\".source_id WHERE \"weft_runtime_related_2_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_2_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_2_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"coveredBy\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_3_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_3_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,6::pg_catalog.int4) AS \"weft_runtime_related_3_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_3_target\" ON \"weft_runtime_related_3_target\".id=\"weft_runtime_related_3_edge\".source_id WHERE \"weft_runtime_related_3_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_3_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_3_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"evidence\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_4_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_4_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_4_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_4_target\" ON \"weft_runtime_related_4_target\".id=\"weft_runtime_related_4_edge\".source_id WHERE \"weft_runtime_related_4_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_4_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_4_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"adjacentEvidence\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_5_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_5_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,8::pg_catalog.int4) AS \"weft_runtime_related_5_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_5_target\" ON \"weft_runtime_related_5_target\".id=\"weft_runtime_related_5_edge\".source_id WHERE \"weft_runtime_related_5_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_5_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_5_bounded) AS \"_addressedBy\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_6_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_6_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_6_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,1::pg_catalog.int4) AS \"weft_runtime_related_6_target\" ON \"weft_runtime_related_6_target\".id=\"weft_runtime_related_6_edge\".source_id WHERE \"weft_runtime_related_6_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_6_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_6_bounded) AS \"_coveredBy\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_7_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_7_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,6::pg_catalog.int4) AS \"weft_runtime_related_7_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_7_target\" ON \"weft_runtime_related_7_target\".id=\"weft_runtime_related_7_edge\".source_id WHERE \"weft_runtime_related_7_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_7_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_7_bounded) AS \"_evidence\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_8_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_8_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_8_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_8_target\" ON \"weft_runtime_related_8_target\".id=\"weft_runtime_related_8_edge\".source_id WHERE \"weft_runtime_related_8_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_8_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_8_bounded) AS \"_adjacentEvidence\" FROM \"truss\".\"query_objects\"($1::pg_catalog.jsonb,6::pg_catalog.int4) AS \"s0\" WHERE ((\"s0\".props->'27'->>'text') COLLATE pg_catalog.\"C\" = $2::pg_catalog.text COLLATE pg_catalog.\"C\") ORDER BY (\"s0\".props->'27'->>'text') COLLATE pg_catalog.\"C\" ASC LIMIT 1"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT truss.query_scope(%s::pg_catalog.jsonb),r.oid::text FROM pg_catalog.pg_roles r WHERE r.rolname=session_user"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.set_config('search_path',%s,true)"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_4367442b207e494198739d74afedf9b8\""
+        },
+        {
+          "kind": "rollback"
+        }
+      ]
+    },
+    {
+      "operation": "read-with-facts",
+      "sample": 2,
+      "seconds": 0.0854923750157468,
+      "driverWaitCalls": 31,
+      "connects": 0,
+      "calls": [
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_63d69ac7f67247f5b8faf502c1553216\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_63d69ac7f67247f5b8faf502c1553216\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_21672a83ef164dc5a1d590885e8451ca\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_21672a83ef164dc5a1d590885e8451ca\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_4832bace785643eaa277680e465e9fda\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_4832bace785643eaa277680e465e9fda\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_480973fface74bcf9d6834970a354bd4\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_480973fface74bcf9d6834970a354bd4\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_f5438fa0c1c944559000e92e0edc58b5\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT payload.*, (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text),\n (SELECT l.virtualtransaction::pg_catalog.text FROM pg_catalog.pg_locks l\n   WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n   AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted\n   AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text LIMIT 2),\n (SELECT pg_catalog.current_setting('transaction_isolation')::pg_catalog.text),\n (SELECT pg_catalog.current_setting('transaction_read_only')::pg_catalog.text),\n (SELECT pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text),\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text) FROM (SELECT truss.query_binding(%s::pg_catalog.jsonb,%s,%s,%s,%s,%s)) payload"
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH prior AS MATERIALIZED (SELECT pg_catalog.current_setting('search_path') AS path) SELECT path,pg_catalog.set_config('search_path','pg_catalog,pg_temp',true) FROM prior"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT truss.query_scope(%s::pg_catalog.jsonb)"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_snapshot_xmin(pg_catalog.pg_current_snapshot())::pg_catalog.text,pg_catalog.to_char(pg_catalog.clock_timestamp() AT TIME ZONE 'UTC','YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"'),pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT ((\"s0\".props->'27'->>'text') COLLATE pg_catalog.\"C\")::pg_catalog.text AS \"code\",((\"s0\".props->'29'->>'text') COLLATE pg_catalog.\"C\")::pg_catalog.text AS \"name\",(CASE WHEN NOT (\"s0\".props ? '30') THEN pg_catalog.jsonb_build_object('state','absent') WHEN \"s0\".props->'30'->>'kind'='null' THEN pg_catalog.jsonb_build_object('state','null') ELSE pg_catalog.jsonb_build_object('state','value','value',pg_catalog.to_jsonb((\"s0\".props->'30'->>'text') COLLATE pg_catalog.\"C\")) END)::pg_catalog.text AS \"practiceArea\",(CASE WHEN NOT (\"s0\".props ? '28') THEN pg_catalog.jsonb_build_object('state','absent') WHEN \"s0\".props->'28'->>'kind'='null' THEN pg_catalog.jsonb_build_object('state','null') ELSE pg_catalog.jsonb_build_object('state','value','value',pg_catalog.to_jsonb((\"s0\".props->'28'->>'text') COLLATE pg_catalog.\"C\")) END)::pg_catalog.text AS \"description\",(CASE WHEN NOT (\"s0\".props ? '31') THEN pg_catalog.jsonb_build_object('state','absent') WHEN \"s0\".props->'31'->>'kind'='null' THEN pg_catalog.jsonb_build_object('state','null') ELSE pg_catalog.jsonb_build_object('state','value','value',pg_catalog.to_jsonb((\"s0\".props->'31'->>'text') COLLATE pg_catalog.\"C\")) END)::pg_catalog.text AS \"problem\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_version')::pg_catalog.text AS \"_version\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_created_by')::pg_catalog.text AS \"_created_by\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_updated_by')::pg_catalog.text AS \"_updated_by\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_original_author')::pg_catalog.text AS \"_original_author\",(\"truss\".\"query_object_attribution\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_original_at')::pg_catalog.text AS \"_original_at\",(\"truss\".\"query_object_times\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_created_at')::pg_catalog.text AS \"_created_at\",(\"truss\".\"query_object_times\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_updated_at')::pg_catalog.text AS \"_updated_at\",(\"truss\".\"query_object_load_id\"($1::pg_catalog.jsonb,6::pg_catalog.int4,\"s0\".id)->E'_load_id')::pg_catalog.text AS \"_load_id\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_1_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_1_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,8::pg_catalog.int4) AS \"weft_runtime_related_1_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_1_target\" ON \"weft_runtime_related_1_target\".id=\"weft_runtime_related_1_edge\".source_id WHERE \"weft_runtime_related_1_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_1_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_1_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"addressedBy\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_2_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_2_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_2_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,1::pg_catalog.int4) AS \"weft_runtime_related_2_target\" ON \"weft_runtime_related_2_target\".id=\"weft_runtime_related_2_edge\".source_id WHERE \"weft_runtime_related_2_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_2_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_2_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"coveredBy\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_3_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_3_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,6::pg_catalog.int4) AS \"weft_runtime_related_3_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_3_target\" ON \"weft_runtime_related_3_target\".id=\"weft_runtime_related_3_edge\".source_id WHERE \"weft_runtime_related_3_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_3_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_3_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"evidence\",\"truss\".\"query_complete_related_keys\"(((SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_4_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_4_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_4_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_4_target\" ON \"weft_runtime_related_4_target\".id=\"weft_runtime_related_4_edge\".source_id WHERE \"weft_runtime_related_4_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_4_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_4_bounded))::pg_catalog.jsonb,100::pg_catalog.int4,1::pg_catalog.int4)::pg_catalog.text AS \"adjacentEvidence\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_5_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_5_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,8::pg_catalog.int4) AS \"weft_runtime_related_5_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_5_target\" ON \"weft_runtime_related_5_target\".id=\"weft_runtime_related_5_edge\".source_id WHERE \"weft_runtime_related_5_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_5_target\".props->'20'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_5_bounded) AS \"_addressedBy\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_6_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_6_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_6_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,1::pg_catalog.int4) AS \"weft_runtime_related_6_target\" ON \"weft_runtime_related_6_target\".id=\"weft_runtime_related_6_edge\".source_id WHERE \"weft_runtime_related_6_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_6_target\".props->'1'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_6_bounded) AS \"_coveredBy\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_7_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_7_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,6::pg_catalog.int4) AS \"weft_runtime_related_7_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_7_target\" ON \"weft_runtime_related_7_target\".id=\"weft_runtime_related_7_edge\".source_id WHERE \"weft_runtime_related_7_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_7_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_7_bounded) AS \"_evidence\",(SELECT pg_catalog.jsonb_build_object('items',COALESCE(pg_catalog.jsonb_agg(k ORDER BY ord) FILTER (WHERE ord<=100),'[]'::pg_catalog.jsonb),'truncated',pg_catalog.count(*)>100)::pg_catalog.text FROM (SELECT pg_catalog.jsonb_build_array((\"weft_runtime_related_8_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS k,pg_catalog.row_number() OVER (ORDER BY (\"weft_runtime_related_8_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\") AS ord FROM \"truss\".\"query_edges\"($1::pg_catalog.jsonb,5::pg_catalog.int4) AS \"weft_runtime_related_8_edge\" JOIN \"truss\".\"query_objects\"($1::pg_catalog.jsonb,2::pg_catalog.int4) AS \"weft_runtime_related_8_target\" ON \"weft_runtime_related_8_target\".id=\"weft_runtime_related_8_edge\".source_id WHERE \"weft_runtime_related_8_edge\".target_id=\"s0\".id ORDER BY (\"weft_runtime_related_8_target\".props->'4'->>'text') COLLATE pg_catalog.\"C\" LIMIT 101) AS weft_runtime_related_8_bounded) AS \"_adjacentEvidence\" FROM \"truss\".\"query_objects\"($1::pg_catalog.jsonb,6::pg_catalog.int4) AS \"s0\" WHERE ((\"s0\".props->'27'->>'text') COLLATE pg_catalog.\"C\" = $2::pg_catalog.text COLLATE pg_catalog.\"C\") ORDER BY (\"s0\".props->'27'->>'text') COLLATE pg_catalog.\"C\" ASC LIMIT 1"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT truss.query_scope(%s::pg_catalog.jsonb),r.oid::text FROM pg_catalog.pg_roles r WHERE r.rolname=session_user"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.set_config('search_path',%s,true)"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_f5438fa0c1c944559000e92e0edc58b5\""
+        },
+        {
+          "kind": "rollback"
+        }
+      ]
+    },
+    {
+      "operation": "single-object-update",
+      "sample": 0,
+      "seconds": 0.09636795800179243,
+      "driverWaitCalls": 33,
+      "connects": 0,
+      "calls": [
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_d9ac177d75a14ac693d1d271588d4d47\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_d9ac177d75a14ac693d1d271588d4d47\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_8f129951db134112bd48cd4a13a1977d\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_8f129951db134112bd48cd4a13a1977d\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ WRITE"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_eec854b2988b436eacedd231731c1e92\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_eec854b2988b436eacedd231731c1e92\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_449be824171942acb5a8df47e822dcc7\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_449be824171942acb5a8df47e822dcc7\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_717151bdb74b47e38ffd3173de6c6f8e\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.accepted_document(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_717151bdb74b47e38ffd3173de6c6f8e\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_89dcef8b4c06414dbed687c8aede350c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.lookup_string_key(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_89dcef8b4c06414dbed687c8aede350c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_ec1c6bd966024aa4a54f424f4f63f9df\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.group_context(%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_ec1c6bd966024aa4a54f424f4f63f9df\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_b958d840e25a475f966473ccae9494fd\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.apply_group_prepared(%s,%s,%s,%s,%s,%s::jsonb) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_b958d840e25a475f966473ccae9494fd\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SET CONSTRAINTS ALL IMMEDIATE"
+        },
+        {
+          "kind": "commit"
+        }
+      ]
+    },
+    {
+      "operation": "single-object-update",
+      "sample": 1,
+      "seconds": 0.09951508400263265,
+      "driverWaitCalls": 33,
+      "connects": 0,
+      "calls": [
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_3fef4126ae7d4cfb9a1d85b6877028a2\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_3fef4126ae7d4cfb9a1d85b6877028a2\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_cbab62ec2e4c46f285d594cf1e5f85f8\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_cbab62ec2e4c46f285d594cf1e5f85f8\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ WRITE"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_7fc0a5e7d278418bb52b077a217f6b63\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_7fc0a5e7d278418bb52b077a217f6b63\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_e0c715940d2f4fc4b78339f6967d23f2\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_e0c715940d2f4fc4b78339f6967d23f2\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_e6d5a93a4c9e40cbb59bda60a831d174\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.accepted_document(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_e6d5a93a4c9e40cbb59bda60a831d174\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_464def18b89e4fadb3a7a4d440f9891e\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.lookup_string_key(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_464def18b89e4fadb3a7a4d440f9891e\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_aa582db269334963b85fd2afaccb30a4\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.group_context(%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_aa582db269334963b85fd2afaccb30a4\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_3c1de4e48860463bb5b02759605a353b\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.apply_group_prepared(%s,%s,%s,%s,%s,%s::jsonb) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_3c1de4e48860463bb5b02759605a353b\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SET CONSTRAINTS ALL IMMEDIATE"
+        },
+        {
+          "kind": "commit"
+        }
+      ]
+    },
+    {
+      "operation": "single-object-update",
+      "sample": 2,
+      "seconds": 0.09735150000778958,
+      "driverWaitCalls": 33,
+      "connects": 0,
+      "calls": [
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_439d797add994ba394ee22378380403a\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_439d797add994ba394ee22378380403a\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_92e0ceb731eb4213a735385310358a2c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_92e0ceb731eb4213a735385310358a2c\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ WRITE"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_a8c28184d02c4e11a563854e78ce8f17\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_a8c28184d02c4e11a563854e78ce8f17\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_eee466f9be7c42d38aa9945f9de58076\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_eee466f9be7c42d38aa9945f9de58076\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_818e27e1bba7442f8db26d17ed903126\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.accepted_document(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_818e27e1bba7442f8db26d17ed903126\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_07801e9a2b3a43de8e93609dc4d25d2c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.lookup_string_key(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_07801e9a2b3a43de8e93609dc4d25d2c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_fa49fa0868634fb988a296156512385d\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.group_context(%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_fa49fa0868634fb988a296156512385d\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_6a24ce1da35549019a4c5a79437ddfe3\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.apply_group_prepared(%s,%s,%s,%s,%s,%s::jsonb) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_6a24ce1da35549019a4c5a79437ddfe3\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SET CONSTRAINTS ALL IMMEDIATE"
+        },
+        {
+          "kind": "commit"
+        }
+      ]
+    },
+    {
+      "operation": "describe-type-enumeration",
+      "sample": 0,
+      "seconds": 0.07152208295883611,
+      "driverWaitCalls": 30,
+      "connects": 1,
+      "calls": [
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_44f2749baedb46bbaccf19fb8c6ae47a\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_44f2749baedb46bbaccf19fb8c6ae47a\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_432bf82f0d334d7ea439859577c4125a\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_432bf82f0d334d7ea439859577c4125a\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_e86306742174498296ae3cc8b8d40860\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_e86306742174498296ae3cc8b8d40860\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_6dd544f7c25e4ec086c59f9be0465054\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.catalog_status() AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT (p.value).*,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_6dd544f7c25e4ec086c59f9be0465054\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_669fdc842acd4375a53f10a2d7142300\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_669fdc842acd4375a53f10a2d7142300\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_43266292db6f4e2e85cf3b991fdce80a\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_43266292db6f4e2e85cf3b991fdce80a\""
+        },
+        {
+          "kind": "rollback"
+        }
+      ]
+    },
+    {
+      "operation": "describe-type-enumeration",
+      "sample": 1,
+      "seconds": 0.06831325002713129,
+      "driverWaitCalls": 30,
+      "connects": 1,
+      "calls": [
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_9b161d7233ff44ae9e3fac1b3a785387\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_9b161d7233ff44ae9e3fac1b3a785387\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_9f7b2a372afd49afbb24942343aff41f\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_9f7b2a372afd49afbb24942343aff41f\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_91a7148f88a6421f9c9273dde68ed538\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_91a7148f88a6421f9c9273dde68ed538\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_910a2a83a58a44d981037c32f50d6d56\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.catalog_status() AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT (p.value).*,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_910a2a83a58a44d981037c32f50d6d56\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_56de6f7f7a7b41b4830654b1c3c50c7c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_56de6f7f7a7b41b4830654b1c3c50c7c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_fc4dafebb0a14b8a804ddbd23163a55e\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_fc4dafebb0a14b8a804ddbd23163a55e\""
+        },
+        {
+          "kind": "rollback"
+        }
+      ]
+    },
+    {
+      "operation": "describe-type-enumeration",
+      "sample": 2,
+      "seconds": 0.07926483399933204,
+      "driverWaitCalls": 30,
+      "connects": 1,
+      "calls": [
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_fb8a5439296949caa087f268b19330b8\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_fb8a5439296949caa087f268b19330b8\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_6bf192fd60fa40d5a7b386797d92ff52\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_6bf192fd60fa40d5a7b386797d92ff52\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_737b92b6c36247d7bf88e2ca744a4834\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_737b92b6c36247d7bf88e2ca744a4834\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_de082f10ccb944b590b1323958ed77e5\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.catalog_status() AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT (p.value).*,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_de082f10ccb944b590b1323958ed77e5\""
+        },
+        {
+          "kind": "rollback"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY"
+        },
+        {
+          "kind": "execute",
+          "sql": "SET LOCAL statement_timeout = '10000ms'"
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT current_setting('role')"
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_4bbf6acdd2c74c5f81eefdae7231e57c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_4bbf6acdd2c74c5f81eefdae7231e57c\""
+        },
+        {
+          "kind": "execute",
+          "sql": "SAVEPOINT \"truss_op_8fad780682684a53913b649a011840a3\""
+        },
+        {
+          "kind": "execute",
+          "sql": "WITH truss_guard(pid,vxid,isolation,readonly,xid,timeout) AS MATERIALIZED (SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,\n l.virtualtransaction::pg_catalog.text,\n pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,\n pg_catalog.current_setting('transaction_read_only')::pg_catalog.text,\n pg_catalog.pg_current_xact_id_if_assigned()::pg_catalog.text,\n (SELECT setting::pg_catalog.text FROM pg_catalog.pg_settings WHERE name OPERATOR(pg_catalog.=) 'statement_timeout'::pg_catalog.text)\n FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text\n AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text\n LIMIT 2), truss_payload AS MATERIALIZED (SELECT truss.reader_catalog(%s,%s,%s,%s) AS value FROM truss_guard WHERE (SELECT pg_catalog.count(*) FROM truss_guard) OPERATOR(pg_catalog.=) 1 AND pid OPERATOR(pg_catalog.=) %s AND vxid OPERATOR(pg_catalog.=) %s AND isolation OPERATOR(pg_catalog.=) %s AND readonly OPERATOR(pg_catalog.=) %s AND (%s::pg_catalog.text IS NULL OR xid OPERATOR(pg_catalog.=) %s) AND timeout OPERATOR(pg_catalog.=) %s) SELECT p.value,g.pid,g.vxid,g.isolation,g.readonly,g.xid,g.timeout,EXISTS(SELECT 1 FROM truss_payload)::pg_catalog.text FROM truss_guard g LEFT JOIN truss_payload p ON true"
+        },
+        {
+          "kind": "execute",
+          "sql": "RELEASE SAVEPOINT \"truss_op_8fad780682684a53913b649a011840a3\""
+        },
+        {
+          "kind": "rollback"
+        }
+      ]
+    }
+  ]
+}

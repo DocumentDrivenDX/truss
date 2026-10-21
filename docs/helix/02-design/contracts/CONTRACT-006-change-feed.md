@@ -19,6 +19,18 @@ ddx:
 
 # Contract: Change feed
 
+## Embedder audit and load boundary
+
+The separately granted group/load audit surface does not replace feed enrollment,
+complete committed transaction delivery or consumer acknowledgement. An audit
+cursor or preview snapshot is not a feed checkpoint or a committed mutation
+receipt. New load-attempt metadata states its selected feed/retention coverage
+explicitly; current import provenance and original canonical/journal/source
+effects MUST remain lossless. Any extended feed profile claiming those additional
+load records must deliver their complete committed inventories and required owner
+context before releasing or acknowledging the interval. Audit grants confer no
+replication or retention-release authority.
+
 ## Python caller-asserted source checkpoint profile — runtime 0.20
 
 The public Python `read_feed_in_transaction` and

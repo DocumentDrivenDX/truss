@@ -1,13 +1,14 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Import batches on a connection and outer transactions owned by Truss."""
 from __future__ import annotations
-from typing import Literal
+from typing import Literal, overload
 from hashlib import sha256
 from dataclasses import replace
 from .execution import Error,ExecutionFailure
 from .imports import (ImportInput,OwnedImportInput,ImportReported,ImportCounts,ImportExecutionResult,ImportExecutionFailed,CommittedBatch,RolledBackBatch,
     CommitUnknownBatch,TransactionUnresolvedBatch)
 from .preparation import CatalogDocument
+from .batched_import import BatchedImportInput, BatchedImportExecutionResult
 
 
 class _EngineImportSession:
@@ -126,8 +127,17 @@ class _EngineImportSession:
             finally:self.connection=None
 
 
+@overload
 def run_import_batches(input: ImportInput | OwnedImportInput,*,connection_info: str,documents: tuple[CatalogDocument,...],bun_executable: str='bun',
-        statement_timeout_ms: int=2000,operation_timeout_ms: int=5000) -> ImportExecutionResult[Literal['engine_owned']]:
+        statement_timeout_ms: int=2000,operation_timeout_ms: int=5000) -> ImportExecutionResult[Literal['engine_owned']]: ...
+
+@overload
+def run_import_batches(input: BatchedImportInput,*,connection_info: str,documents: tuple[CatalogDocument,...],bun_executable: str='bun',
+        statement_timeout_ms: int=2000,operation_timeout_ms: int=5000) -> BatchedImportExecutionResult: ...
+
+
+def run_import_batches(input: ImportInput | OwnedImportInput | BatchedImportInput,*,connection_info: str,documents: tuple[CatalogDocument,...],bun_executable: str='bun',
+        statement_timeout_ms: int=2000,operation_timeout_ms: int=5000) -> ImportExecutionResult[Literal['engine_owned']] | BatchedImportExecutionResult:
     """Own a fresh psycopg connection and READ COMMITTED import batches.
 
     Legacy input uses one-record batches; owned input uses one atomic group.
@@ -139,14 +149,18 @@ def run_import_batches(input: ImportInput | OwnedImportInput,*,connection_info: 
     if (type(connection_info) is not str or not connection_info or type(statement_timeout_ms) is not int
         or not 1<=statement_timeout_ms<=60000 or type(operation_timeout_ms) is not int
         or not 1<=operation_timeout_ms<=60000):
-        return ImportExecutionFailed(error=ExecutionFailure('invalid_transaction','Engine import connection or deadline options invalid'),report=None)
+        invalid=ImportExecutionFailed(error=ExecutionFailure('invalid_transaction','Engine import connection or deadline options invalid'),report=None)
+        return BatchedImportExecutionResult(result=invalid) if type(input) is BatchedImportInput else invalid
     from .catalog_runtime import _release,_pin_cursor
     from ._import_runtime import run_import
     session=_EngineImportSession(connection_info,statement_timeout_ms,operation_timeout_ms)
     result=None
     try:
         manifest,digest,_=_release();host,transaction=session.begin()
-        if type(input) is OwnedImportInput:
+        if type(input) is BatchedImportInput:
+            from ._batched_import_runtime import run_batched_import
+            result=run_batched_import(host,transaction,input,documents,manifest,digest,_pin_cursor,_engine=session)
+        elif type(input) is OwnedImportInput:
             from ._owned_import_runtime import run_owned_import
             result=run_owned_import(host,transaction,input,documents,manifest,digest,_pin_cursor,bun_executable=bun_executable)
             if isinstance(result,ImportReported):
@@ -169,11 +183,14 @@ def run_import_batches(input: ImportInput | OwnedImportInput,*,connection_info: 
             result=run_import(host,transaction,input,documents,manifest,digest,_pin_cursor,
                 bun_executable=bun_executable,_engine=session)
     except Exception:
-        result=ImportExecutionFailed(error=ExecutionFailure('transaction_unusable','Engine import connection or control unavailable'),report=None)
+        failure=ImportExecutionFailed(error=ExecutionFailure('transaction_unusable','Engine import connection or control unavailable'),report=None)
+        result=BatchedImportExecutionResult(result=failure) if type(input) is BatchedImportInput else failure
     finally:
         try:session.close()
         except Exception:
-            prior=getattr(result,'error',None)
+            retained=result.result if isinstance(result,BatchedImportExecutionResult) else result
+            prior=getattr(retained,'error',None)
             error=prior if prior is not None and prior.code=='commit_unknown' else ExecutionFailure('transaction_unusable','Engine connection cleanup unresolved')
-            result=ImportExecutionFailed(error=error,report=getattr(result,'report',None))
+            failure=ImportExecutionFailed(error=error,report=getattr(retained,'report',None))
+            result=BatchedImportExecutionResult(result=failure,empty_load_settlement=result.empty_load_settlement) if isinstance(result,BatchedImportExecutionResult) else failure
     return result

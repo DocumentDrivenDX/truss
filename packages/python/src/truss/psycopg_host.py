@@ -21,10 +21,14 @@ _registry = WeakKeyDictionary()
 # Keep the native source correspondence test when extending this inventory.
 _MANAGED_FUNCTIONS = frozenset(('accepted_document','acknowledge_feed','apply_group',
     'apply_group_prepared','catalog_report','catalog_revision','catalog_view_basis',
-    'feed_reached','get_edge','get_object','group_context','group_relationship_reference',
+    'admin_install_recovery','batched_import_context','build_import_records',
+    'feed_reached','get_edge','get_object','grant_import_audit_access','group_context','group_relationship_reference',
     'group_type_reference','import_context','import_key_selection','lookup_import_source','lookup_string_key',
-    'page_edges','page_objects','prepare_group','reached','read_feed','read_history',
-    'reader_catalog','reread_feed','traverse_objects','writer_schema_basis'))
+    'page_edges','page_objects','prepare_group','process_import_chunk',
+    'person_runtime_status','preview_group_conditions','page_import_load_audit','page_mutation_group_audit',
+    'read_import_load_chunk','reader_catalog',
+    'reader_catalog_if_changed','registrar_status','validate_batched_import_report',
+    'reached','read_feed','read_history','reread_feed','traverse_objects','writer_schema_basis'))
 _MANAGED_TABLE_FUNCTIONS = {
     'catalog_status': (('installation_id',25),('release_id',25),('release_sha256',25),
                        ('layout_profile',25),('revision',25)),
@@ -38,6 +42,10 @@ _MANAGED_TABLE_CALLS = {
     'SELECT revision FROM truss.catalog_status()': ('catalog_status','truss.catalog_status()',('revision',)),
     'SELECT * FROM truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false)': (
         'catalog_accept_with_keys','truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false)',None),
+    'SELECT * FROM truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false,%s,%s)': (
+        'catalog_accept_with_keys','truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false,%s,%s)',None),
+    'SELECT * FROM truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false,%s::int,%s)': (
+        'catalog_accept_with_keys','truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false,%s::int,%s)',None),
 }
 _IDENTITY_SQL = """SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,
  l.virtualtransaction::pg_catalog.text,
@@ -468,6 +476,9 @@ class PsycopgHost:
         self._timeout = statement_timeout_ms
         self._issuer = object()
         self._transactions = {}
+        # Per-adopted-handle cumulative ownership for source-owned batched imports.
+        # The import runtime updates this only while holding the original host reservation.
+        self._batched_import_budget = {}
         self._closed = False
         self._admitted = None
         self._admission_satisfied = None

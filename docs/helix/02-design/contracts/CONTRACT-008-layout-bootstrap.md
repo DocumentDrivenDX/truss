@@ -31,6 +31,36 @@ do not establish hidden server allocation bounds, and no such guarantee is made.
 
 # Contract: Layout bootstrap from UMF
 
+## Selected fresh installer concurrency and recovery
+
+`InstallRefused` carries known installer preflight refusals separately from
+person-status/recovery results: `busy`, `invalid_roles`, `unsupported_postgres`,
+`already_installed`, `incompatible`, `unauthorized`, `role_exists` and `read_only`.
+Only explicit
+contained preflight markers enter this family; transport, cancellation, native
+retry, unusable transactions and unknown commit remain original outer failures.
+
+Before namespace, role, grant or installation effects, acquire one qualified
+database/target-namespace transaction-scoped installation exclusion. Contention
+returns typed `busy` without partial roles or schema. Reobserve absence under
+that exclusion. Existing compatible installation returns typed `already_installed`;
+foreign, incomplete or mismatched installation returns typed `incompatible` and
+is never repaired, reset or overwritten. The exclusion lives until the actual
+outer transaction terminates and follows the existing caller-owned containment.
+Inspect an existing marker's native relation/column metadata before reading it.
+Never execute a foreign view, foreign-table scan, row-security policy or generated
+expression using the installer's authority to discover whether it is compatible;
+read only the admitted plain marker relation and builtin columns.
+
+An authorized administrative recovery call returns the actual recorded owner and
+registrar role names after checking original installed role/profile identity.
+Names are not guessed from prefixes and do not disappear merely because the
+first pending installer result was lost. Unknown install commit follows original
+attempt/status reconciliation; it does not start another install. Minimal person
+status remains CONTRACT-005's separate disclosure surface. Concurrent installers,
+rollback, lost acknowledgement, tampering and authorized role recovery require
+native qualification before this profile is claimed.
+
 **Contract ID:** CONTRACT-008. **Type:** generation/deployment boundary. **Version:** proposed `truss-bootstrap/0.1.0`. **Status:** draft.
 
 ## Purpose
