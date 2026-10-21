@@ -13,14 +13,24 @@ import unittest
 
 class LocalInstallCliTests(unittest.TestCase):
     def test_install_commit_and_restart_status(self):
-        parent = Path(tempfile.mkdtemp(prefix='truss-install-cli-', dir='/private/tmp'))
+        parent = Path(tempfile.mkdtemp(prefix='truss-install-cli-', dir='/tmp'))
         directory = parent / 'postgres'
         command = [sys.executable, '-m', 'truss.cli', '--data-dir', str(directory),
                    '--install', '--probe']
         reports = []
+        env = dict(os.environ)
+        env.update({
+            'PGHOST': '127.0.0.1',
+            'PGPORT': '1',
+            'PGDATABASE': 'missing_host_db',
+            'PGUSER': 'missing_host_user',
+            'PGPASSWORD': 'must-not-be-used',
+            'PGOPTIONS': '-c default_transaction_read_only=on',
+            'PGSERVICE': 'truss-missing-service-for-isolation',
+        })
         for _ in range(2):
             result = subprocess.run(command, check=True, capture_output=True, text=True,
-                                    env=dict(os.environ))
+                                    env=env)
             reports.append(json.loads(result.stdout))
             self.assertTrue((directory / 'PG_VERSION').is_file())
             self.assertFalse((directory / 'postmaster.pid').exists())
@@ -28,6 +38,10 @@ class LocalInstallCliTests(unittest.TestCase):
         self.assertEqual(first['scope'], 'local_truss_candidate')
         self.assertEqual(first['trussInstallation'], 'installed')
         self.assertEqual(first['serverVersion'], '18.6')
+        self.assertEqual(first['port'], 5432)
+        self.assertEqual(second['port'], first['port'])
+        self.assertEqual(first['socketDirectory'], second['socketDirectory'])
+        self.assertLess(len(first['socketDirectory'] + '/.s.PGSQL.5432'), 104)
         self.assertEqual(first['installation']['action'], 'created')
         runtime_manifest=json.loads(importlib.resources.files('truss').joinpath('_catalog_runtime/manifest.json').read_bytes())
         self.assertEqual(first['installation']['releaseId'], runtime_manifest['releaseId'])

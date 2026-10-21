@@ -1,0 +1,107 @@
+{
+  "passed": true,
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "python": "3.13.16",
+  "offline_cached_dependencies": true,
+  "source_checkout": "/private/tmp/truss-isolated-install-20261021",
+  "scope": "Clean isolated uv tool environments, simultaneous Unix-only installations, independent writes, SIGTERM, retained restart and installation identities; local macOS only",
+  "reports": [
+    {
+      "runtime": "pgserver",
+      "runtimeVersion": "18.6.1",
+      "serverVersion": "18.6",
+      "dataDirectory": "/private/tmp/truss-one-shot-consumer-6lizxn4f/first",
+      "socketDirectory": "/private/tmp/truss-pg18-501/a63bb30c88fc5e6fab29f1bc",
+      "port": 5432,
+      "connectionUri": "postgresql://postgres@/postgres?host=%2Fprivate%2Ftmp%2Ftruss-pg18-501%2Fa63bb30c88fc5e6fab29f1bc&port=5432",
+      "trussInstallation": "installed",
+      "scope": "local_truss_candidate",
+      "installation": {
+        "action": "created",
+        "installationId": "ba5233b0-7c64-4006-838e-8488c0d57006",
+        "catalogRevision": 0,
+        "releaseId": "truss-catalog-runtime/0.72-candidate",
+        "releaseSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+        "layoutProfile": {
+          "identity": "truss-layout",
+          "version": "1.0",
+          "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+        },
+        "ownerRole": "truss_owner_1588e1a6672f4a75",
+        "registrarRole": "truss_registrar_1588e1a6672f4a75"
+      }
+    },
+    {
+      "runtime": "pgserver",
+      "runtimeVersion": "18.6.1",
+      "serverVersion": "18.6",
+      "dataDirectory": "/private/tmp/truss-one-shot-consumer-6lizxn4f/second",
+      "socketDirectory": "/private/tmp/truss-pg18-501/a784864a5b41cd12f4cd9a9c",
+      "port": 5432,
+      "connectionUri": "postgresql://postgres@/postgres?host=%2Fprivate%2Ftmp%2Ftruss-pg18-501%2Fa784864a5b41cd12f4cd9a9c&port=5432",
+      "trussInstallation": "installed",
+      "scope": "local_truss_candidate",
+      "installation": {
+        "action": "created",
+        "installationId": "30af0439-aa64-402f-ba0f-6b1bbdd08d8e",
+        "catalogRevision": 0,
+        "releaseId": "truss-catalog-runtime/0.72-candidate",
+        "releaseSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+        "layoutProfile": {
+          "identity": "truss-layout",
+          "version": "1.0",
+          "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+        },
+        "ownerRole": "truss_owner_92e203080ce24388",
+        "registrarRole": "truss_registrar_92e203080ce24388"
+      }
+    },
+    {
+      "runtime": "pgserver",
+      "runtimeVersion": "18.6.1",
+      "serverVersion": "18.6",
+      "dataDirectory": "/private/tmp/truss-one-shot-consumer-6lizxn4f/first",
+      "socketDirectory": "/private/tmp/truss-pg18-501/a63bb30c88fc5e6fab29f1bc",
+      "port": 5432,
+      "connectionUri": "postgresql://postgres@/postgres?host=%2Fprivate%2Ftmp%2Ftruss-pg18-501%2Fa63bb30c88fc5e6fab29f1bc&port=5432",
+      "trussInstallation": "installed",
+      "scope": "local_truss_candidate",
+      "installation": {
+        "action": "status_confirmed",
+        "installationId": "ba5233b0-7c64-4006-838e-8488c0d57006",
+        "catalogRevision": 0,
+        "releaseId": "truss-catalog-runtime/0.72-candidate",
+        "releaseSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+        "layoutProfile": {
+          "identity": "truss-layout",
+          "version": "1.0",
+          "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+        }
+      }
+    },
+    {
+      "runtime": "pgserver",
+      "runtimeVersion": "18.6.1",
+      "serverVersion": "18.6",
+      "dataDirectory": "/private/tmp/truss-one-shot-consumer-6lizxn4f/second",
+      "socketDirectory": "/private/tmp/truss-pg18-501/a784864a5b41cd12f4cd9a9c",
+      "port": 5432,
+      "connectionUri": "postgresql://postgres@/postgres?host=%2Fprivate%2Ftmp%2Ftruss-pg18-501%2Fa784864a5b41cd12f4cd9a9c&port=5432",
+      "trussInstallation": "installed",
+      "scope": "local_truss_candidate",
+      "installation": {
+        "action": "status_confirmed",
+        "installationId": "30af0439-aa64-402f-ba0f-6b1bbdd08d8e",
+        "catalogRevision": 0,
+        "releaseId": "truss-catalog-runtime/0.72-candidate",
+        "releaseSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+        "layoutProfile": {
+          "identity": "truss-layout",
+          "version": "1.0",
+          "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+        }
+      }
+    }
+  ],
+  "retained_fixture": "/tmp/truss-one-shot-consumer-6lizxn4f"
+}

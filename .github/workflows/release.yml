@@ -71,6 +71,15 @@ jobs:
               assert actual==expected, 'Sdist runtime payload differs from source'
           print(f'Verified {len(expected)} exact source payloads in wheel and sdist')
           PYTHON
+      - name: Stage package-only local runtime constraints asset
+        run: |
+          python - <<'PYTHON'
+          import pathlib
+          source=pathlib.Path('packages/python/isolated-runtime-constraints.txt')
+          target=pathlib.Path('dist/isolated-runtime-constraints.txt')
+          target.write_bytes(source.read_bytes())
+          assert target.read_bytes()==source.read_bytes()
+          PYTHON
       - uses: actions/upload-artifact@v4
         with:
           name: python-package
@@ -114,6 +123,10 @@ jobs:
           python -m pip install --no-deps /tmp/weft-wheels/*.whl
       - name: Install checksum-verified PG18 and this exact Truss wheel
         run: python scripts/install-local-runtime.py --wheelhouse /tmp/runtime-wheels --truss-wheel "$(find dist -name 'truss_toolkit-*.whl' -print -quit)"
+      - name: Verify installed local runtime lifecycle and isolation
+        env:
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_local_runtime test_local_runtime_native_isolation test_local_install_cli_native -v
       - name: Verify installed embedded owners with every subprocess forbidden
         env:
           PYTHONPATH: packages/python/tests
@@ -542,8 +555,11 @@ jobs:
           import ast,hashlib,json,os,pathlib,tomllib
           project=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']
           backend=next(ast.literal_eval(n.value) for n in ast.parse(pathlib.Path('packages/python/src/truss/_query_runtime.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='BACKEND' for t in n.targets))
-          root=pathlib.Path('dist');assets=sorted(root.iterdir());assert len(assets)==2
+          root=pathlib.Path('dist');assets=sorted(root.iterdir());assert len(assets)==3
           assert len(list(root.glob('*.whl')))==len(list(root.glob('*.tar.gz')))==1
+          constraints=root/'isolated-runtime-constraints.txt'
+          assert constraints.is_file()
+          assert constraints.read_bytes()==pathlib.Path('packages/python/isolated-runtime-constraints.txt').read_bytes()
           for name in ('catalog-registration-summary-v0.1.md',):
               (root/name).write_bytes(pathlib.Path('docs/helix/02-design/contracts',name).read_bytes())
           (root/'catalog-rebind-report-v0.2.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-rebind-report-v0.2.md').read_bytes())
@@ -551,6 +567,7 @@ jobs:
           (root/'catalog-source-reference-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-source-reference-v0.1.md').read_bytes())
           manifest=pathlib.Path('packages/python/src/truss/_catalog_runtime/manifest.json');runtime=json.loads(manifest.read_bytes())
           pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('weft-sql=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','deploymentJavaScript':'embedded-v8','embeddedEngine':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'nativePlatforms':['linux-x86_64']}
+          pins.update(localRuntimeConstraintsAsset=constraints.name,localRuntimeConstraintsSha256=hashlib.sha256(constraints.read_bytes()).hexdigest())
           profile=pathlib.Path('packages/python/src/truss/_profiles/fresh-catalog-support-current010.json')
           policy=json.loads(profile.read_bytes())
           pins.update(catalogRegistrationReportInterface='truss-catalog-registration-report/0.6',catalogPreparationInterface='truss-registration-preparation/2.0',catalogAcceptanceInputInterface='truss-acceptance-input/0.2.0',catalogViewInterface='truss-catalog-view/0.2.0',mandatoryPreparationTranscript=False,supportedUmfVersions=['0.10.0'],installationUpgradesSupported=False)
@@ -573,10 +590,20 @@ jobs:
           assets=sorted(root.iterdir())
           (root/'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name+'\n' for p in assets))
           PYTHON
+          python - <<'PYTHON'
+          import os,pathlib
+          notes=pathlib.Path('docs/helix/04-build/releases')/(os.environ['GITHUB_REF_NAME']+'.md')
+          text=notes.read_text()
+          if text.startswith('---\n'):
+              end=text.find('\n---\n',4)
+              assert end>=0, 'Malformed HELIX release-note frontmatter'
+              text=text[end+5:]
+          pathlib.Path('/tmp/truss-release-notes.md').write_text(text)
+          PYTHON
           if gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft > /tmp/release-draft; then
             test "$(cat /tmp/release-draft)" = true
           else
-            gh release create "$GITHUB_REF_NAME" --verify-tag --draft --title "Truss ${GITHUB_REF_NAME}" --notes-file "docs/helix/04-build/releases/${GITHUB_REF_NAME}.md"
+            gh release create "$GITHUB_REF_NAME" --verify-tag --draft --title "Truss ${GITHUB_REF_NAME}" --notes-file /tmp/truss-release-notes.md
           fi
           gh release upload "$GITHUB_REF_NAME" dist/* --clobber
           gh release edit "$GITHUB_REF_NAME" --draft=false --latest

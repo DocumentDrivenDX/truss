@@ -1,6 +1,18 @@
 # Truss Python toolkit
 
-Version 0.0.45 adds verified runtime and exact compiler caches, conditional query
+Version 0.0.46 adds an explicit local PostgreSQL 18.6 launcher using private
+per-instance data and Unix-socket directories. It installs or confirms the
+current Truss installation, retains data on stop, and keeps shell `PG*`
+settings from redirecting the owned server or installation connection. It
+does not provide an HTTP, MCP or TrussRPC service. Local macOS 27 ARM64 evidence
+uses Python 3.11.17 and records eight focused lifecycle/isolation/CLI tests plus
+a clean `uvx` installation and same-identity status confirmation. See the
+[0.0.46 release notes](../../docs/helix/04-build/releases/v0.0.46.md),
+[local validation record](../../docs/helix/04-build/evidence/isolated-local-install-20261021/validation.json),
+[Python 3.11 receipt](../../docs/helix/04-build/evidence/isolated-local-install-20261021/python311/receipt.json) and
+[focused test log](../../docs/helix/04-build/evidence/isolated-local-install-20261021/python311/focused-native-tests.log).
+
+Historical version 0.0.45 added verified runtime and exact compiler caches, conditional query
 bindings, a combined catalog/source/query API and set-based independent imports.
 Registration now requires Record/Field names, with element-specific diagnostics;
 UMF optional-name semantics remain unchanged.
@@ -27,7 +39,7 @@ receipt; no full-suite pass is claimed.
 
 Historical [v0.0.42](../../docs/helix/04-build/releases/v0.0.42.md) adds the registered synchronous action host and strict group-response decoding. Its separate [qualification receipt](https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.42/qualification.json) records 31 component controls and six focused native cases, including one registered create-action fixture under ordinary ACLs. Those cases do not rerun the v0.0.41 query/disclosure cohort above.
 
-This version accepts only UMF `0.10.0` source documents and fresh current
+The current v0.0.46 distribution accepts only UMF `0.10.0` source documents and fresh current
 installations. Earlier UMF source formats are unsupported, as are upgrades from an older Truss
 installation. `upgrade_in_transaction` returns an explicit unsupported error
 without issuing SQL; the CLI has no `--upgrade` option. No automatic migration,
@@ -238,7 +250,7 @@ retain a fixed committed frontier. Deleted and unchanged operations remain
 represented. Literal empty loads are retained but have no module scope and require
 the separate registrar disclosure path.
 
-## Install version 0.0.44
+## Install version 0.0.46
 
 Use the matching Truss and Weft release artifacts below. Source builds require
 the same version cohort; an older installation is not upgraded.
@@ -386,10 +398,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.45 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.46 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.49 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.45'
+  'truss-toolkit[local,native,query]==0.0.46'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -405,10 +417,10 @@ x86_64 qualification. Other platforms are outside the selected release gates.
 
 ## Run a real workflow
 
-Check out the v0.0.44 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.46 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.44 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.46 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
@@ -424,12 +436,56 @@ retains22 basic and10 exact-scalar observations for UMF0.7 and runtime0.38.
 It is incompatible with the current UMF0.10-only v0.0.40 candidate; earlier
 previews retain their historical pins and none claims independent interchange.
 
-For a local server with an installed Truss candidate, use the explicit launcher
-option after installing the `[local,native]` extras:
+## Run local PostgreSQL 18.6
+
+With `uv` installed, run the published `0.0.46` package in an isolated Python
+3.11 tool environment:
 
 ```sh
-truss-local-postgres --data-dir /tmp/truss-local --install
+uvx --no-config --isolated --python 3.11 \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.46/isolated-runtime-constraints.txt \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.46 \
+  --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
+  --from 'truss-toolkit[local,native]==0.0.46' \
+  truss-local-postgres \
+  --data-dir "$HOME/.local/share/truss/beads" \
+  --install
 ```
+
+The first run may download Python and package wheels. The launcher creates a
+private PostgreSQL cluster and Truss schema/routines using Unix sockets only;
+it needs no system PostgreSQL, administrator access, TCP listener or port
+configuration. It runs in the foreground. Ctrl-C stops the server and retains
+data; repeat with the same directory to restart. Add `--probe` to install or
+confirm Truss and stop while retaining data. This is a local database runtime,
+not an HTTP, MCP or TrussRPC application service. Tools still embed the Python
+library, connect with an ordinary identity and register UMF documents. Public
+business-role and module-access configuration remains a separate step.
+
+```sh
+./scripts/truss-local --data-dir "$HOME/.local/share/truss/beads" --install
+```
+
+For source development, `./scripts/truss-local` runs the checkout with its local
+constraints and PostgreSQL wheel source. Use a different data directory for each
+independent tool or instance.
+
+The Unix-only local runtime leases its cluster directory, makes it private
+(`0700`), and uses a distinct short private socket directory beneath
+`/private/tmp/truss-pg18-<uid>` on macOS or `/tmp/truss-pg18-<uid>` on Linux.
+The socket directory and socket are private (`0700`); every instance uses the
+same socket number5432 without opening a TCP listener. A long data path therefore
+does not require port discovery or shared sockets. The launcher reports its
+socket directory and exact connection URI. Shell PostgreSQL settings cannot
+redirect the owned server or installation connection.
+
+Stop the foreground launcher with SIGINT/SIGTERM; cluster data is retained.
+Repeat the command with the same directory to confirm the current installation
+and retain its identity. Socket directories contain transient runtime state and
+remain separate from durable cluster data. Local socket access trusts the owning
+OS user; this is installation isolation, not a security sandbox between processes
+running as that user. A stale postmaster marker or incompatible installation
+requires explicit recovery; startup never resets or upgrades it.
 
 Add `--probe` to install, confirm committed status and stop while retaining data.
 The launcher installs only when public status reports no Truss namespace. On a

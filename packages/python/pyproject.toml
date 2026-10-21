@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 license = "MIT OR Apache-2.0"
 license-files = ["LICENSE.md", "LICENSE-MIT", "LICENSE-APACHE"]
 name = "truss-toolkit"
-version = "0.0.45"
+version = "0.0.46"
 description = "Experimental Truss Python embedding components"
 requires-python = ">=3.11"
 dependencies = ["jsonschema==4.26.0", "referencing==0.37.0", "mini-racer==0.14.1"]
@@ -29,3 +29,8 @@ truss = ["_embedded_js/*.json", "_embedded_js/*.gz", "_embedded_js/*.js", "_curr
 
 [tool.setuptools.exclude-package-data]
 truss = []
+
+[tool.uv]
+# Source-checkout tool runs must rebuild when Python or bundled runtime bytes
+# change, including offline runs using cached build/runtime dependencies.
+cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*" }]

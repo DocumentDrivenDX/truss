@@ -38,6 +38,39 @@ ddx:
 
 # Truss build plan
 
+## One-shot isolated local installation — owner direction 2026-10-21
+
+The owner authorizes implementation in a separate worktree, Luna implementation
+and monitoring, and Sol review. This slice extends the selected pgserver local
+runtime under CONTRACT-007/008 and the existing installation/migration plan;
+it does not change storage semantics or add a database backend. The owner
+subsequently authorized merging, publishing v0.0.46, deploying the microsite
+and replacing the checkout quickstart with the released package. Publication
+requires the tagged Linux native gate, then a real package-only uvx smoke;
+merge the microsite changes only after the package is verified.
+The installed HELIX0.18.0 `workflows/` catalog governs this planning update.
+
+| Slice | Change | Verification gate |
+| --- | --- | --- |
+| ISO-01 | Own bundled PostgreSQL lifecycle, leased private cluster and short private Unix socket paths; suppress TCP and ambient PostgreSQL configuration | Existing lifecycle/refusal tests, private permissions, actual socket/listener inspection and long-path coverage |
+| ISO-02 | One checkout command resolves an isolated uv environment with exact runtime constraints and explicitly installs/confirms Truss | Clean uv command, committed installation identity and repeat status confirmation |
+| ISO-03 | Qualify two concurrent instances and retained independent state; review fault/ownership behavior | Independent native integration, module boundary checks, Sol review and resolved material findings |
+
+The Python source map and `scripts/check-module-boundaries.py` remain the
+module boundary gate, with existing allowed/forbidden controls. The runtime owns
+processes/files only; the CLI explicitly invokes existing installation APIs.
+Run native checks only on this host's macOS ARM64 profile; Linux-compatible tests
+do not establish Linux execution evidence. No additional platform qualification
+or full protected-runtime claim follows from this slice. Dependencies remain
+the existing selected PG18.6/psycopg3.3.6/mini-racer0.14.1 cohort.
+
+Execution and review are in scope. Token estimate, total cost and enforcement
+limits are unknown because no metered ceiling was supplied. Preserve existing
+data on every refusal, never automatically migrate, and retain ownership when
+shutdown cannot be confirmed. Exit requires passing focused native and clean
+consumer checks, documentation, and resolution of material Sol review findings.
+Continuation and final evidence are recorded in the installation/migration plan.
+
 ## Hohfeld performance completion goal — 2026-10-21
 
 The owner authorizes implementation, native/consumer tests, review, merge and
