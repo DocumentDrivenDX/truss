@@ -97,6 +97,16 @@ all proposed latency targets. General10× import acceleration is not claimed.
 HP7 remains open for hosted checks, final artifact cohorts, review, merge and
 public release verification. No production data or active Hohfeld checkout changed.
 
+The first installed Linux run39655940920 passed package/source reproducibility
+and the52-case initial native campaign, then found eight old positive fixtures
+that omitted names. The frozen Hohfeld originals remain byte-identical and are
+now tested for complete element-specific refusal; explicit named revisions get
+new hashes and retain registration/replay/read/write custody checks. The two
+synthetic writer-selection Records and the public ontology generator now author
+their names. All eight affected local cases plus the ontology case passed.
+The benchmark's opt-in fixture-authoring path records both original/revised
+hashes; its native Pizza smoke passed. Runtime/UMF behavior was not weakened.
+
 ## Registration names — R16.4, 2026-10-21
 
 Owner-authorized fix under FEAT-001/CAT-01 and

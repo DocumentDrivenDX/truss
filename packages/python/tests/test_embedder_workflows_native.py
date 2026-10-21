@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""Original embedder schemas: every record/relationship, list, open and modify."""
+"""Explicit named revisions of frozen embedder samples: list, open and modify."""
 import gzip, hashlib, json
 from pathlib import Path
 import psycopg
@@ -9,6 +9,7 @@ from truss.groups import (CreateObject, RootlessOwnership, AuthoredValue, Create
     AliasObjectReference, NullOrderKey, GroupSuccess, RequestNone, UpdateObject,
     StoredObjectReference)
 import test_catalog_runtime_native as base
+from embedder_fixture_sources import named_revision
 
 CORPUS = json.loads(gzip.decompress((Path(__file__).with_name('fixtures')/'hohfeld/originals.json.gz').read_bytes()))
 quote = lambda text: '"'+text.replace('"', '""')+'"'
@@ -21,11 +22,13 @@ def workflow(fixture):
     def run(self):
         raw = fixture['sourceText'].encode()
         self.assertEqual(hashlib.sha256(raw).hexdigest(), fixture['sha256'])
-        source = json.loads(raw); module = source['modules'][0]
+        revised,missing = named_revision(fixture)
+        self.assertTrue(missing)
+        source = json.loads(revised.content); module = source['modules'][0]
         document = source['id']; module_id = module['id']
         elements = {e['id']: e for e in module['elements']}
         records = [e for e in module['elements'] if e['kind']=='record']
-        documents = (CatalogDocument(document, fixture['sha256'], raw),)
+        documents = (revised,)
         self.install(); c, h, a, t = self.consumer()
         registered = a.accept_in_transaction(t, a.prepare_catalog(documents), request_key='real-schema')
         self.assertIsInstance(registered, Ok, repr(registered)+' '+str(h._custody.last_attempt.error))

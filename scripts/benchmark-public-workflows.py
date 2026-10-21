@@ -28,6 +28,7 @@ parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--truss-root',type=Path,required=True)
 parser.add_argument('--installed-package',action='store_true',help='Exercise the installed wheel; refuse imports from the checkout source')
 parser.add_argument('--examples-root',type=Path)
+parser.add_argument('--author-fixture-names',action='store_true',help='Explicitly author missing Record/Field names as IDs in frozen sample revisions and record original/revised hashes')
 parser.add_argument('--matrix-case',nargs='+',help='Run selected workloads.json cases instead of real samples')
 parser.add_argument('--samples',nargs='+',default=['pizza','northwind','catalog'])
 parser.add_argument('--bulk-size',type=int,default=100)
@@ -45,6 +46,8 @@ parser.add_argument('--forbid-external-javascript',action='store_true',help='Fai
 parser.add_argument('--profile-read',type=Path,help='Optional separate cProfile of one warm public ID read, outside timed samples')
 parser.add_argument('--output',type=Path,default=Path('truss-public-performance.json'))
 args=parser.parse_args()
+if args.author_fixture_names and (args.examples_root or args.matrix_case):
+    parser.error('--author-fixture-names applies only to frozen sample fixtures')
 if args.trace_sql:
     args.count_sql_submissions=True
     args.trace_sql.parent.mkdir(parents=True,exist_ok=True)
@@ -439,11 +442,17 @@ class RealWorkflows(PublicCatalogRuntimeTests):
             raw=fixture['sourceText'].encode()
             if hashlib.sha256(raw).hexdigest()!=fixture['sha256']:raise AssertionError('Original real-schema fixture hash mismatch')
             case['sourceCommit']=corpus['sourceCommit'] if 'sourceCommit' in corpus else fixture.get('sourceCommit')
+            if args.author_fixture_names:
+                from embedder_fixture_sources import named_revision
+                revised,missing=named_revision(fixture)
+                case['schemaDerivation']={'kind':'explicit-fixture-names','originalSha256':fixture['sha256'],
+                    'revisedSha256':hashlib.sha256(revised.content).hexdigest(),'authoredElements':missing}
+                raw=revised.content
         source=json.loads(raw);module=source['modules'][0];document_id=source['id'];module_id=module['id']
         if workload:case['workload']=workload
         count=workload['nodes'] if workload else args.bulk_size
         case.update(schemaBytes=len(raw),records=sum(e['kind']=='record' for e in module['elements']),elements=len(module['elements']),actions=len(module.get('actions',[])))
-        documents=(CatalogDocument(document_id,'performance-v1',raw),)
+        documents=(CatalogDocument(document_id,'performance-named-v1' if args.author_fixture_names else 'performance-v1',raw),)
         timed(sample,'install',self.install)
         case['databaseSettings']=dict(self.admin.execute("SELECT name,setting FROM pg_catalog.pg_settings WHERE name IN ('server_version','fsync','synchronous_commit','full_page_writes','shared_buffers')").fetchall())
         if args.profile_native_functions or args.capture_failure_diagnostics:self.admin.execute("ALTER ROLE consumer SET track_functions='pl'")

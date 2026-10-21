@@ -18,7 +18,7 @@ class RecordSchemaSelectionTests(base.PublicCatalogRuntimeTests):
         modules=[]
         for module,record in (('left','A'),('right','B')):
             modules.append({'id':module,'namespace':module,'extensions':{},'elements':[
-                {'id':record,'kind':'record','members':[{'module':module,'element':'code'}],
+                {'id':record,'name':record,'kind':'record','members':[{'module':module,'element':'code'}],
                  'keys':[{'id':'identity','name':'identity','primary':True,'fields':[{'module':module,'element':'code'}]}],
                  'extensions':{}},
                 {'id':'code','name':'code','kind':'field','scalarType':'string',

@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "release": "https://github.com/DocumentDrivenDX/weft/releases/tag/v0.4.49",
+  "mergePullRequest": "https://github.com/DocumentDrivenDX/weft/pull/25",
+  "publisherRun": 39655468974,
+  "qualifiedCompilerRun": 39653099177,
+  "qualifiedNativeTableRun": 39653099184,
+  "releaseCommit": "6d12e657bed9bf8267e80b8cc7aebc50e57fc799",
+  "packagingCommit": "998209059c8b064211d7775c217ddf0b692cf658",
+  "frozenCompilerCommit": "5f013200cf36ddcaf5d4a380ba961267f819f7ca",
+  "nativeFunctionalScope": "macos-arm64 PostgreSQL18.6; five actual Chromium compilation parity cases; other platforms installed packaging only",
+  "freshPublicWheels": [
+    {
+      "name": "weft_sql-0.4.49-cp39-abi3-macosx_11_0_arm64.whl",
+      "sha256": "695e12867dfcffedb0e4bde7fa571835ebd43fd1c06b0d775b1abecb45ffa117"
+    },
+    {
+      "name": "weft_sql-0.4.49-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "sha256": "8ca1625249c1d3bed20864dfd71481d8b956b3901ffdc619fc3ec4a1a473be9c"
+    }
+  ],
+  "freshInstalledMacOSNativeCases": 5
+}

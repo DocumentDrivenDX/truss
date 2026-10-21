@@ -81,3 +81,12 @@ initially expected a per-record rejection; its failed assertion was corrected to
 the actual whole-input22023 refusal, retained prior caller work and zero effects.
 The redundant speculative SQL check was removed; runtime SQL/manifest bytes are
 unchanged by this final review control. The corrected full22-case campaign passed.
+
+The unchanged conditional reader-catalog hit in `statement-budgets.json` took
+1.98ms for the measured warm local call at load9.37, using three public driver
+statements/waits (one native observation plus the operation guard). This is a
+single observation on the51-record fixture, not a percentile or managed-host
+latency promise. Fresh public Weft0.4.49 macOS/Linux wheels match their published
+checksums and all four explicit Truss cohort pins. See
+`weft049-public-verification.json` for the release/packaging/compiler source
+identities and exact qualified workflow runs.
