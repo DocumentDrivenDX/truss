@@ -39,9 +39,11 @@ def load_recipe():
         raise ValueError('Exact native initialization qualification required')
     for endpoint in [manifest['target'],*manifest['sources']]:
         profile=json.loads(artifacts[endpoint+'.json'])
-        if profile['definitionAlternatives']!=equivalence['rules']:
+        if any(rule not in equivalence['rules'] for rule in profile['definitionAlternatives']):
             raise ValueError('Unqualified native definition alternative')
-        if profile['initializationAlternatives']!=initialization['rules']:
+        # Historical profiles stay immutable when a later proof adds a newly
+        # qualified target initializer. Each profile selects only its own rules.
+        if any(rule not in initialization['rules'] for rule in profile['initializationAlternatives']):
             raise ValueError('Unqualified native initialization alternative')
     for edge in manifest['edges']:
         candidate=json.loads(artifacts[edge['artifact']])
