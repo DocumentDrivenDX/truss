@@ -17,6 +17,9 @@ class CommitResponseDropProxy:
  def _run(self):
   try:
    self.client,_=self.listener.accept();self.client.settimeout(10)
+   # Forward protocol frames immediately. Linux delayed ACK + Nagle otherwise
+   # introduces an artificial per-frame wait into this fault-only local relay.
+   self.client.setsockopt(socket.IPPROTO_TCP,socket.TCP_NODELAY,1)
    self.backend=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);self.backend.settimeout(10);self.backend.connect(self.path)
    pending=b''
    while not self.stop.is_set():
