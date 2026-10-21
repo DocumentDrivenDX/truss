@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "scope": "local built installed wheel, not yet public release artifact",
+  "sourceCommit": "1c63818041201fddda12c9cc5c5ab1349af5b310",
+  "wheel": "truss_toolkit-0.0.45-py3-none-any.whl",
+  "sha256": "0af8a7cdfab72ae37917d8847ff902751de51b87fbf26c0b3f744f0da91bf46c",
+  "runtimePayloadCount": 429,
+  "exactSourcePayloads": true,
+  "installedTests": 10,
+  "installedCases": [
+    "immutable and compiler caches",
+    "combined read-only catalog/source/query with live revocation",
+    "entity-facts materialization with nested proofs",
+    "unnamed registration refusal and same-transaction correction"
+  ],
+  "weftVersion": "0.4.49",
+  "weftModuleSha256": "2c0169ba875c3dd174e5c450c851d1cb295fddc2adf29943e660e8b6a9c9aa88"
+}

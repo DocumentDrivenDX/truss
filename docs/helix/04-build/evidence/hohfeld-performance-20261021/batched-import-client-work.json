@@ -1,0 +1,29 @@
+[
+  {
+    "records": 32,
+    "builderClientStatements": 3,
+    "executeClientStatements": 6,
+    "builderSeconds": 0.06477695796638727,
+    "executeSeconds": 0.33126833400456235,
+    "created": "32",
+    "skipped": "0"
+  },
+  {
+    "records": 64,
+    "builderClientStatements": 3,
+    "executeClientStatements": 6,
+    "builderSeconds": 0.047778750013094395,
+    "executeSeconds": 0.5532932920032181,
+    "created": "64",
+    "skipped": "0"
+  },
+  {
+    "records": 128,
+    "builderClientStatements": 3,
+    "executeClientStatements": 6,
+    "builderSeconds": 0.10228962497785687,
+    "executeSeconds": 1.3517144999932498,
+    "created": "128",
+    "skipped": "0"
+  }
+]

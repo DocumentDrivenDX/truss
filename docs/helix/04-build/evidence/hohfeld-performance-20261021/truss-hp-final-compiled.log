@@ -1,0 +1,6 @@
+................
+----------------------------------------------------------------------
+Ran 16 tests in 47.440s
+
+OK
+HOHFELD_STATEMENT_BUDGETS=[{"operation": "read_by_business_key", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.020702874986454844}, {"operation": "list_page_51", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.041579540993552655}, {"operation": "type_enumeration", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.006358874961733818}, {"operation": "conditional_catalog_hit", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.0019329580245539546}, {"operation": "prepare_group", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.004188332997728139}, {"operation": "compiled_singleton_complete_entity", "executeCalls": 11, "driverWaitCalls": 11, "seconds": 0.006315332953818142}, {"operation": "combined_catalog_source_singleton", "executeCalls": 11, "driverWaitCalls": 11, "seconds": 0.007834832998923957}, {"operation": "single_effect_apply", "executeCalls": 4, "driverWaitCalls": 4, "seconds": 0.12969812500523403}, {"operation": "three_effect_apply", "executeCalls": 3, "driverWaitCalls": 3, "seconds": 0.08746279100887477}]

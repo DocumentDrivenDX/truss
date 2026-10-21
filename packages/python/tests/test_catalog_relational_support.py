@@ -11,7 +11,7 @@ from test_preparation import CONFIG, prepare
 def relational_document():
     return {'umf':'0.10.0','id':'cohort','vocabularies':{},'extensions':{},'modules':[
         {'id':'m','namespace':'m','extensions':{},'elements':[
-            *[{'id':name,'kind':'record','members':[
+            *[{'id':name,'name':name,'kind':'record','members':[
                 {'module':'m','element':name+'-label'}, {'module':'m','element':name+'-value'}],
                 'keys':[{'id':'z-alt','name':'alt','fields':[{'module':'m','element':name+'-label'}]},
                     {'id':'a-primary','name':'primary','primary':True,'fields':[

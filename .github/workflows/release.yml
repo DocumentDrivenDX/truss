@@ -245,16 +245,20 @@ jobs:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
         run: python -m unittest test_numeric_facets_native.NumericFacetTests.test_public_accept_create_update_import_read_and_query test_numeric_facets_native.NumericFacet12_2Tests.test_public_accept_create_update_import_read_and_query
+      - name: Run Hohfeld performance correctness and live-authority controls
+        env:
+          PYTHONPATH: packages/python/tests
+        run: python -m unittest test_runtime_release_cache test_query_compile_cache test_schema_cache_native test_hohfeld_statement_budgets_native test_compiled_query_native -v
       - name: Run installed unnamed-field and original registration retry workflows
         env:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_object_mutations_native.ObjectMutationTests.test_unnamed_fields_register_create_update_and_reopen test_catalog_unchanged_native.CatalogUnchangedTests test_graph_commit_practical_native.GraphCommitPracticalTests test_atomic_group_surface_native.AtomicGroupSurfaceTests test_import_rejection_practical_native.ImportRejectionPracticalTests
+        run: python -m unittest test_object_mutations_native.ObjectMutationTests.test_unnamed_fields_refuse_registration_with_element_diagnostics test_catalog_unchanged_native.CatalogUnchangedTests test_graph_commit_practical_native.GraphCommitPracticalTests test_atomic_group_surface_native.AtomicGroupSurfaceTests test_import_rejection_practical_native.ImportRejectionPracticalTests
       - name: Run basic current scalar and consumer workflows
         env:
           TRUSS_BUN_EXECUTABLE: bun
           PYTHONPATH: packages/python/tests
-        run: python -m unittest test_date_decimal_native.DateDecimalTests test_date_decimal_native.LargeScaleDecimalTests test_date_decimal_native.DateQueryTests test_consumer_northwind_numeric_native.ConsumerNorthwindNumericTests.test_original_product_exact_numeric_workflow test_consumer_northwind_numeric_native.UnnamedSqlTests.test_default_compiler_uses_stable_ids_without_authored_names test_object_mutations_native.ObjectMutationTests.test_writer_revoked_after_attempt_constraint_flush_still_aborts test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create
+        run: python -m unittest test_date_decimal_native.DateDecimalTests test_date_decimal_native.LargeScaleDecimalTests test_date_decimal_native.DateQueryTests test_consumer_northwind_numeric_native.ConsumerNorthwindNumericTests.test_named_revision_exact_numeric_workflow test_consumer_northwind_numeric_native.UnnamedSqlTests.test_default_registration_refuses_missing_record_and_field_names test_object_mutations_native.ObjectMutationTests.test_writer_revoked_after_attempt_constraint_flush_still_aborts test_group_create_native.PublicCreateGroupTests.test_reader_and_asserted_actor_cannot_authorize_first_create
       - name: Run public offline preparation and unchanged commerce workflow
         env:
           TRUSS_BUN_EXECUTABLE: bun
@@ -378,13 +382,13 @@ jobs:
           TRUSS_BUN_EXECUTABLE: bun
         run: python -m unittest test_relationship_names_native
 
-      - name: Run the original three real schemas once
+      - name: Run explicit named revisions of the three frozen real schemas
         if: github.event_name == 'workflow_dispatch' && inputs.stress_case == 'all' && matrix.os == 'ubuntu-24.04'
         env:
           PYTHONPATH: packages/python/tests
         run: |
           mkdir -p "$RUNNER_TEMP/real-schemas"
-          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --forbid-external-javascript --capture-failure-diagnostics --count-sql-submissions --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/real-schemas/report.json" 2>&1 | tee "$RUNNER_TEMP/real-schemas/run.log"
+          python scripts/benchmark-public-workflows.py --truss-root "$GITHUB_WORKSPACE" --installed-package --author-fixture-names --forbid-external-javascript --capture-failure-diagnostics --count-sql-submissions --bulk-size 1000 --read-samples 1000 --write-samples 200 --output "$RUNNER_TEMP/real-schemas/report.json" 2>&1 | tee "$RUNNER_TEMP/real-schemas/run.log"
       - name: Retain original real-schema report and log
         if: always() && github.event_name == 'workflow_dispatch' && inputs.stress_case == 'all' && matrix.os == 'ubuntu-24.04'
         uses: actions/upload-artifact@v4

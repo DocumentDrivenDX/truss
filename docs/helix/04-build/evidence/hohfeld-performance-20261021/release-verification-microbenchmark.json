@@ -1,0 +1,25 @@
+{
+  "scope": "local release-accessor microbenchmark; no database or end-to-end latency qualification",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.17",
+  "load": [
+    8.6552734375,
+    11.01220703125,
+    10.6982421875
+  ],
+  "uncached_complete_verification": {
+    "runs": 100,
+    "p50_ms": 1.7150205,
+    "p95_ms": 3.383083,
+    "min_ms": 1.580584,
+    "max_ms": 4.321458
+  },
+  "warm_release_accessor": {
+    "runs": 1000,
+    "p50_ms": 0.005625,
+    "p95_ms": 0.005792,
+    "min_ms": 0.005291,
+    "max_ms": 1.242833
+  },
+  "sourceSha256": "c9cb85687a99ceeabbdb58b85981383ebbf88c9f88b20685de29edad7c6712e9"
+}

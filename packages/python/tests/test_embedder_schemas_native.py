@@ -1,9 +1,10 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""The exact Pizza, Northwind and catalog schemas that previously failed registration."""
+"""Frozen unnamed originals refuse; explicit named revisions register exactly."""
 import gzip,hashlib,json
 from pathlib import Path
 from unittest.mock import patch
-from truss import CatalogDocument,Ok,prepare_acceptance
+from truss import CatalogDocument,Ok,prepare_acceptance,PreparationRejected
+from embedder_fixture_sources import named_revision
 from truss.preparation import prepare_core10_acceptance
 from truss.catalog_preparation import _configuration
 from truss.catalog_results import CatalogRegistration
@@ -15,9 +16,18 @@ class EmbedderSchemaTests(base.PublicCatalogRuntimeTests):
 def registration_case(document):
     def run(self):
         raw=document['sourceText'].encode();self.assertEqual(hashlib.sha256(raw).hexdigest(),document['sha256'])
-        source=json.loads(raw);documents=(CatalogDocument(source['id'],document['sha256'],raw),)
+        source=json.loads(raw);originals=(CatalogDocument(source['id'],document['sha256'],raw),)
         self.install();connection,host,assembly,tx=self.consumer()
         with patch('subprocess.Popen',side_effect=AssertionError('No external process during preparation')):
+            revised,missing=named_revision(document)
+            self.assertTrue(missing)
+            with self.assertRaises(PreparationRejected) as caught:assembly.prepare_catalog(originals)
+            diagnostics=[json.loads(d) for d in caught.exception.diagnostics]
+            self.assertEqual(caught.exception.reason,'invalid_document')
+            self.assertEqual({(d['moduleId'],d['elementId']) for d in diagnostics},set(missing))
+            self.assertTrue(all(d['code']=='TRUSS-NAME-MISSING' for d in diagnostics))
+            self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))
+            documents=(revised,);raw=revised.content
             prepared=assembly.prepare_catalog(documents)
             for alias in (prepare_acceptance,prepare_core10_acceptance):
                 compatible=alias(documents,json.dumps(_configuration()).encode())

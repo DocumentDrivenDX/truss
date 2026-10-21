@@ -5,6 +5,7 @@ from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Literal, Mapping, TypeAlias
 from .contracts import TextValue
+from .reader_catalog import ReaderCatalogSnapshot, ReaderCatalogUnchanged
 
 @dataclass(frozen=True, slots=True)
 class QueryAbsent:
@@ -32,6 +33,22 @@ class QueryRows:
     catalog_revision: int
     as_of: QueryReadPosition | None = None
     outcome: Literal['rows'] = field(default='rows', init=False)
+
+@dataclass(frozen=True, slots=True)
+class QueryDocument:
+    """Original admitted source and digest; no separate catalog-source call."""
+    document_id: str
+    document_revision: str
+    umf_version: str
+    sha256: str
+    content: bytes
+
+@dataclass(frozen=True, slots=True)
+class QueryCatalogRead:
+    result: QueryRows
+    catalog: ReaderCatalogSnapshot | ReaderCatalogUnchanged
+    documents: tuple[QueryDocument, ...]
+    outcome: Literal['catalog_rows'] = field(default='catalog_rows', init=False)
 
 @dataclass(frozen=True, slots=True)
 class QueryDiagnostic:

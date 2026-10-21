@@ -1,6 +1,12 @@
 # Truss Python toolkit
 
-Version 0.0.44 adds batched imports, conditional catalog reads, document revision
+Version 0.0.45 adds verified runtime and exact compiler caches, conditional query
+bindings, a combined catalog/source/query API and set-based independent imports.
+Registration now requires Record/Field names, with element-specific diagnostics;
+UMF optional-name semantics remain unchanged.
+See the [0.0.45 notes](../../docs/helix/04-build/releases/v0.0.45.md).
+
+Version 0.0.44 added batched imports, conditional catalog reads, document revision
 checks, condition preview, lifecycle outcomes and scoped group/load audit.
 The [v0.0.44 notes](../../docs/helix/04-build/releases/v0.0.44.md) describe compatibility and qualification;
 the [delivery plan](../../docs/helix/04-build/embedder-e2-e8-plan.md) records the accepted request dispositions.
@@ -50,7 +56,7 @@ complete ordered public readback, plus refusal at 1,025 and rollback on a
 failure at operation 1,024. Other
 byte/value limits and ordinary deadlines still apply.
 
-Version 0.0.44 pins `weft-sql==0.4.48`, backend `0.4.41` / binding `0.5`,
+Version 0.0.45 pins `weft-sql==0.4.49`, backend `0.4.41` / binding `0.5`,
 and query ABI 1.1. The backend version identifies the runtime ABI separately
 from the compiler package version. The historical v0.0.39 package used
 `weft-sql==0.4.41` with the same backend/binding versions.
@@ -380,10 +386,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.44 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.48 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.45 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.49 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.44'
+  'truss-toolkit[local,native,query]==0.0.45'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -576,6 +582,12 @@ original UTF-8 document bytes. Preparation runs the bundled UMF owner producer
 inside embedded V8; registration requires no external JavaScript runtime. Ordinary key
 operations derive keys in PostgreSQL, while catalog admission uses the broader
 UMF producer.
+The Python registration preparation routes require an explicitly authored,
+nonempty `name` on every Record and Field, including unreferenced Fields. UMF
+itself still permits unnamed elements. A refusal raises
+`PreparationRejected(reason='invalid_document')`; decode each entry of
+`error.diagnostics` with `json.loads` for `TRUSS-NAME-MISSING`, document/revision,
+module/element IDs, kind, JSON pointer and message. No catalog write occurs.
 Native accepted IDs and definition pins come from the catalog, not fixtures.
 Addresses are document-qualified. The authenticated person is recorded separately
 from asserted origin, such as `origin_bytes=b'{"x-action":"register"}'`.
@@ -706,6 +718,21 @@ Managed-database and broader performance qualification remain separate.
 
 ## Values, reads and query limits
 
+`query_with_catalog_in_transaction(tx, sql=sql, document_ids=(document_id,),
+catalog_validator=previous_validator)` returns `QueryCatalogRead`: query rows,
+a current `ReaderCatalogSnapshot` or `ReaderCatalogUnchanged`, and exact original
+`QueryDocument` bytes/digests. It uses one adopted caller transaction and one
+operation, with a final check for both query and catalog visibility. Retain the
+snapshot with its validator. Use this route when a host otherwise opens separate
+transactions for catalog access, document retrieval and the query. It creates no
+connection or transaction. The regular query API remains available.
+
+Successful compilations are cached under the complete exact compiler request,
+including parameters, model bytes/pins, binding and profiles. Different values
+miss; there is no value-independent template API. Warm query metadata uses a
+native current-person/dependency check and source-digest validator instead of
+transferring the complete source again. Neither cache retains authorization.
+
 `read_profile='complete-entity'` adds native facts and relationship-key columns
 to a supported single-source `alias.*` projection. An explicit `RELATED_KEYS`
 output whose alias collides with an added relationship column is refused with
@@ -715,6 +742,30 @@ Choose a distinct explicit alias, for example
 whose spelling/case must be preserved. The complete relationship column is
 bounded at 100 keys and refuses rather than silently truncating; an explicit
 bounded related-key projection has its own reported truncation semantics.
+Wildcard `EXCLUDE`/`REPLACE` syntax is not selected for this release, and no
+delivery date is committed. To omit or rename wildcard members, write an explicit
+projection list; to add a relationship projection after `a.*`, use a unique alias.
+
+For the pinned Weft0.4.49 Truss backend0.4.41 and query ABI1.1,
+`maximum_scan_rows` is a **source population bound**, capped at10,000. It applies
+before outer SQL predicates, joins, ordering, aggregates and `LIMIT`. A selective
+key predicate or small output does not make a large type admissible.
+
+| Statement shape | Source subject to the bound |
+| --- | --- |
+| Projection or singleton predicate, with or without `LIMIT` | Every object of each scanned type |
+| `COUNT`, grouped aggregates | Every object of each scanned type, even when one aggregate row is returned |
+| Property joins | Each scanned type independently; not merely matching joined rows |
+| `HAS_RELATED`, `RELATED_KEYS`, complete-entity relationships | Every object/edge source invoked by lowering; the separate related-key bound also applies |
+| Explicit entity-page and typed query-page APIs | The current page source delegates to the same complete bounded object source; continuation does not exempt it |
+
+Weft's compiled `logicalPlan` describes source/joins/relationship expressions;
+its emitted SQL names the fixed `query_objects`, `query_edges` and
+`query_page_objects` sources. Hosts can compile against admitted cached inputs
+and inspect that plan before dispatching data SQL, then conservatively refuse
+any source whose population is not known to fit. There is no cached cardinality
+or admission promise: native row and byte limits remain authoritative and a
+concurrent insert can make a previously fitting query refuse `limits`.
 
 Published rootless JSON-home objects and independent directed relationships
 support strings and exact scalar properties: integer, decimal, boolean,

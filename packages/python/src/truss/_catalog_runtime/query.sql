@@ -173,6 +173,59 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.query_binding(jsonb,int,int,int,text,text) FROM PUBLIC;
 
+-- A validator only identifies immutable input bytes. It never carries reader
+-- authority: complete current dependency visibility is checked on every call.
+CREATE FUNCTION truss.query_binding_if_changed(selected_documents jsonb,maximum_scan_rows int,maximum_result_rows int,maximum_bytes int,expected_release text,expected_digest text,validator text) RETURNS bytea
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET row_security=off AS $$
+DECLARE installation truss.catalog_runtime_installation%ROWTYPE;captured_revision int;actor oid;selected_document_id text;
+ compiled record;dependency jsonb;pins jsonb:='[]';readers jsonb:='[]';current_validator text;bundle bytea;result bytea;
+BEGIN
+ actor:=truss.runtime_person(false);
+ SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
+ IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest THEN
+  RAISE EXCEPTION 'selected query release required' USING ERRCODE='0A000';END IF;
+ IF maximum_scan_rows IS NULL OR maximum_scan_rows NOT BETWEEN 1 AND 10000 OR maximum_result_rows IS NULL OR maximum_result_rows NOT BETWEEN 1 AND 10000 OR maximum_bytes IS NULL OR maximum_bytes NOT BETWEEN 1 AND 16777216
+ OR jsonb_typeof(selected_documents) IS DISTINCT FROM 'array' OR jsonb_array_length(selected_documents) NOT BETWEEN 1 AND 32
+ OR EXISTS(SELECT 1 FROM jsonb_array_elements(selected_documents) v WHERE jsonb_typeof(v.value)<>'string')
+ OR (SELECT count(DISTINCT v.value) FROM jsonb_array_elements(selected_documents) v)<>jsonb_array_length(selected_documents)
+ OR validator IS NOT NULL AND validator !~ '^[0-9a-f]{64}$' THEN
+  RAISE EXCEPTION 'bounded original query validator request required' USING ERRCODE='22023';END IF;
+ SELECT rev INTO STRICT captured_revision FROM truss.schema_head WHERE id=1;
+ FOR selected_document_id IN SELECT value FROM jsonb_array_elements_text(selected_documents) LOOP
+  SELECT metadata->'pin' AS pin,metadata->'readers' AS readers INTO compiled
+   FROM truss.runtime_document_schema WHERE rev=captured_revision AND doc_id=selected_document_id;
+  IF NOT FOUND OR compiled.pin IS NULL OR jsonb_typeof(compiled.readers) IS DISTINCT FROM 'array' THEN
+   RAISE EXCEPTION 'current original query schema required' USING ERRCODE='0A000';END IF;
+  pins:=pins||jsonb_build_array(compiled.pin);readers:=readers||compiled.readers;
+ END LOOP;
+ FOR dependency IN SELECT value FROM jsonb_array_elements(readers) LOOP
+  IF NOT truss.runtime_can_read_qualified(dependency->>'documentId',dependency->>'moduleId',actor) THEN
+   RAISE EXCEPTION 'complete current query reader required' USING ERRCODE='42501';END IF;
+ END LOOP;
+ current_validator:=encode(sha256(convert_to(jsonb_build_object(
+  'installation',installation.installation_id::text,'release',expected_release,'digest',expected_digest,
+  'revision',captured_revision,'documents',pins,'person',actor::text,'sessionUser',session_user,
+  'maximumScanRows',maximum_scan_rows,'maximumResultRows',maximum_result_rows,'maximumBytes',maximum_bytes)::text,'UTF8')),'hex');
+ IF validator IS NOT NULL AND validator=current_validator THEN
+  result:=convert_to(jsonb_build_object('outcome','unchanged','validator',current_validator)::text,'UTF8');
+ ELSE
+  bundle:=truss.query_binding(selected_documents,maximum_scan_rows,maximum_result_rows,maximum_bytes,expected_release,expected_digest);
+  result:=convert_to(jsonb_build_object('outcome','snapshot','validator',current_validator,
+   'bundle',convert_from(bundle,'UTF8')::jsonb)::text,'UTF8');
+ END IF;
+ -- Do not publish a warm hint after a role/dependency change during observation.
+ IF truss.runtime_person(false) IS DISTINCT FROM actor OR captured_revision IS DISTINCT FROM (SELECT rev FROM truss.schema_head WHERE id=1) THEN
+  RAISE EXCEPTION 'query basis changed during observation' USING ERRCODE='55P03';END IF;
+ FOR dependency IN SELECT value FROM jsonb_array_elements(readers) LOOP
+  IF NOT truss.runtime_can_read_qualified(dependency->>'documentId',dependency->>'moduleId',actor) THEN
+   RAISE EXCEPTION 'complete current query reader required' USING ERRCODE='42501';END IF;
+ END LOOP;
+ IF octet_length(result)>maximum_bytes THEN RAISE EXCEPTION 'conditional query binding byte limit' USING ERRCODE='54000';END IF;
+ RETURN result;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.query_binding_if_changed(jsonb,int,int,int,text,text,text) FROM PUBLIC;
+
 -- Called inside STABLE query sources: root facts share the caller statement
 -- snapshot. Current role checks at return reuse this captured owner identity.
 CREATE FUNCTION truss.query_object_root(binding jsonb,object_row truss.object) RETURNS jsonb

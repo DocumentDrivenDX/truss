@@ -12,7 +12,7 @@ def ddd_document(*, valid=True):
         'umf':'0.10.0','id':'ddd-model','vocabularies':{'umf.ddd':{'version':'0.1.0'}},'extensions':{},
         'modules':[{'id':'sales','namespace':'sales','extensions':{'umf.ddd':{'kind':'bounded-context','terms':[]}},
             'elements':[
-                {'id':'Item','kind':'record','members':[{'module':'sales','element':'label'}],
+                {'id':'Item','name':'Item','kind':'record','members':[{'module':'sales','element':'label'}],
                     'extensions':{'umf.ddd':{'kind':'entity','fields':{
                         'label':{'type':{'kind':'scalar','name':'string'},'cardinality':'one'}},
                         'identity':{'fields':['missing' if not valid else 'label'],'scope':'context'}}}},

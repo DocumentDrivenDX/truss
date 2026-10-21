@@ -1,0 +1,429 @@
+{
+  "runtimePackage": {
+    "mode": "checkout",
+    "path": "/Users/erik/Projects/truss/packages/python/src/truss/__init__.py",
+    "version": null,
+    "manifestPath": "/Users/erik/Projects/truss/packages/python/src/truss/_catalog_runtime/manifest.json"
+  },
+  "runtimeManifestSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+  "sourceCommit": "1426fd573f71bcdab637e8ad7144cb6c0d56770f",
+  "sourceWorkingTreeDirty": true,
+  "machine": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.11.17",
+  "trussSource": "/Users/erik/Projects/truss",
+  "externalJavaScriptForbidden": true,
+  "externalProcessExecutables": [
+    "file",
+    "git",
+    "initdb",
+    "pg_ctl",
+    "psql",
+    "uname"
+  ],
+  "statementTimeoutMs": 10000,
+  "operationTimeoutMs": 30000,
+  "expectedAtomicGroupLimit": 1024,
+  "warmupReads": 20,
+  "seconds": 4.919703082996421,
+  "passed": true,
+  "functionalPassed": true,
+  "performanceQualification": "measured",
+  "performanceTriageSignals": [],
+  "performanceBudgetStatus": "Latency budgets remain provisional; no prior-run nominal regression baseline supplied",
+  "capacityScope": {
+    "targetAtomicOperations": 1024,
+    "configuredExpectedAtomicOperations": 1024,
+    "attemptedAtomicGroupSizes": [
+      1,
+      3
+    ],
+    "committedAtomicGroupSizes": [
+      1,
+      3
+    ],
+    "qualification": "Only observed attempts and commits; configured limits do not establish actual maximum capacity."
+  },
+  "applicationMemory": {
+    "processLifetimePeakRssBytes": 176914432,
+    "retainedSchemaCacheEstimatedBytes": 152557,
+    "retainedSchemaCacheEntries": 2,
+    "schemaCacheBudgetBytes": 134217728,
+    "scope": "Kernel peak resident memory for this Python benchmark process, including retained object identities and embedded native libraries; excludes the separate PostgreSQL server. Lifetime peak does not reset between selected cases. Cache size is an object-graph estimate, not a process ceiling."
+  },
+  "cases": [
+    {
+      "sample": "pizza",
+      "status": "passed",
+      "sourceCommit": "509275917364a2437dcca85a4992e40039fd3e46",
+      "schemaDerivation": {
+        "kind": "explicit-fixture-names",
+        "originalSha256": "000f5e89df2df4bedcda67fce5f87496a4f7fbe523f388c9a26e4065d62f68b0",
+        "revisedSha256": "065aaceca27acb82f0c6da13d3d20c41c67a1c25e5e2516bf251917878628041",
+        "authoredElements": [
+          [
+            "pizza",
+            "Pizza"
+          ],
+          [
+            "pizza",
+            "Pizza.code"
+          ],
+          [
+            "pizza",
+            "Pizza.name"
+          ],
+          [
+            "pizza",
+            "Pizza.description"
+          ],
+          [
+            "pizza",
+            "Pizza.price"
+          ],
+          [
+            "pizza",
+            "Pizza.vegetarian"
+          ],
+          [
+            "pizza",
+            "Topping"
+          ],
+          [
+            "pizza",
+            "Topping.code"
+          ],
+          [
+            "pizza",
+            "Topping.name"
+          ],
+          [
+            "pizza",
+            "Topping.category"
+          ],
+          [
+            "pizza",
+            "Topping.spiciness"
+          ],
+          [
+            "pizza",
+            "PizzaBase"
+          ],
+          [
+            "pizza",
+            "PizzaBase.code"
+          ],
+          [
+            "pizza",
+            "PizzaBase.name"
+          ],
+          [
+            "pizza",
+            "Country"
+          ],
+          [
+            "pizza",
+            "Country.code"
+          ],
+          [
+            "pizza",
+            "Country.name"
+          ]
+        ]
+      },
+      "schemaBytes": 37386,
+      "records": 4,
+      "elements": 17,
+      "actions": 15,
+      "databaseSettings": {
+        "fsync": "on",
+        "full_page_writes": "on",
+        "server_version": "18.6",
+        "shared_buffers": "16384",
+        "synchronous_commit": "on"
+      },
+      "schemaStorage": {
+        "sourceBytes": 37386,
+        "compiledTypeBytes": 4984,
+        "compiledDocumentBytes": 991
+      },
+      "bulkCreateIncludingCommitMs": 126.221709,
+      "bulkCreateRowsPerSecondIncludingCommit": 23.767702273782394,
+      "listRead": {
+        "status": "passed",
+        "sql": "SELECT x.* FROM \"pizza\".\"Country\" x LIMIT 51",
+        "maximumBytes": 1048576,
+        "rows": 3,
+        "columns": [
+          "Country.code",
+          "Country.name",
+          "_version",
+          "_created_by",
+          "_updated_by",
+          "_original_author",
+          "_original_at",
+          "_created_at",
+          "_updated_at",
+          "_load_id",
+          "originOf"
+        ]
+      },
+      "loaded": 3,
+      "readSamples": 1,
+      "committedUpdates": 1,
+      "reopenedValuesVerified": true
+    }
+  ],
+  "summary": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 3000.539333,
+      "failedElapsedMs": [],
+      "p50Ms": 3000.539333,
+      "minMs": 3000.539333,
+      "maxMs": 3000.539333
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 382.994375,
+      "failedElapsedMs": [],
+      "p50Ms": 382.994375,
+      "minMs": 382.994375,
+      "maxMs": 382.994375
+    },
+    {
+      "case": "pizza",
+      "operation": "bulk_create",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 120.032875,
+      "failedElapsedMs": [],
+      "rowsPerSecond": 24.99315291748198,
+      "p50Ms": 120.032875,
+      "minMs": 120.032875,
+      "maxMs": 120.032875
+    },
+    {
+      "case": "pizza",
+      "operation": "bulk_create_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 5.748375,
+      "failedElapsedMs": [],
+      "p50Ms": 5.748375,
+      "minMs": 5.748375,
+      "maxMs": 5.748375
+    },
+    {
+      "case": "pizza",
+      "operation": "install",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 385.72925,
+      "failedElapsedMs": [],
+      "p50Ms": 385.72925,
+      "minMs": 385.72925,
+      "maxMs": 385.72925
+    },
+    {
+      "case": "pizza",
+      "operation": "list_complete_entities",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 45.197584,
+      "failedElapsedMs": [],
+      "p50Ms": 45.197584,
+      "minMs": 45.197584,
+      "maxMs": 45.197584
+    },
+    {
+      "case": "pizza",
+      "operation": "prepare",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 482.475584,
+      "failedElapsedMs": [],
+      "p50Ms": 482.475584,
+      "minMs": 482.475584,
+      "maxMs": 482.475584
+    },
+    {
+      "case": "pizza",
+      "operation": "read_by_id",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 1.502333,
+      "failedElapsedMs": [],
+      "p50Ms": 1.502333,
+      "minMs": 1.502333,
+      "maxMs": 1.502333
+    },
+    {
+      "case": "pizza",
+      "operation": "read_by_key",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 6.128833,
+      "failedElapsedMs": [],
+      "p50Ms": 6.128833,
+      "minMs": 6.128833,
+      "maxMs": 6.128833
+    },
+    {
+      "case": "pizza",
+      "operation": "register",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 42.2745,
+      "failedElapsedMs": [],
+      "p50Ms": 42.2745,
+      "minMs": 42.2745,
+      "maxMs": 42.2745
+    },
+    {
+      "case": "pizza",
+      "operation": "registrar_catalog_view",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 7.879125,
+      "failedElapsedMs": [],
+      "p50Ms": 7.879125,
+      "minMs": 7.879125,
+      "maxMs": 7.879125
+    },
+    {
+      "case": "pizza",
+      "operation": "registration_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 3.114583,
+      "failedElapsedMs": [],
+      "p50Ms": 3.114583,
+      "minMs": 3.114583,
+      "maxMs": 3.114583
+    },
+    {
+      "case": "pizza",
+      "operation": "single_update_including_commit",
+      "attempts": 1,
+      "unsupportedCount": 0,
+      "failures": 0,
+      "totalElapsedMs": 18.420625,
+      "failedElapsedMs": [],
+      "p50Ms": 18.420625,
+      "minMs": 18.420625,
+      "maxMs": 18.420625
+    }
+  ],
+  "samples": [
+    {
+      "case": "runtime",
+      "operation": "cold_server_start",
+      "rows": 1,
+      "ms": 3000.539333,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "install",
+      "rows": 1,
+      "ms": 385.72925,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "prepare",
+      "rows": 1,
+      "ms": 482.475584,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "register",
+      "rows": 1,
+      "ms": 42.2745,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "registrar_catalog_view",
+      "rows": 1,
+      "ms": 7.879125,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "registration_commit",
+      "rows": 1,
+      "ms": 3.114583,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "bulk_create",
+      "rows": 3,
+      "ms": 120.032875,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "bulk_create_commit",
+      "rows": 3,
+      "ms": 5.748375,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "list_complete_entities",
+      "rows": 1,
+      "ms": 45.197584,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "read_by_id",
+      "rows": 1,
+      "ms": 1.502333,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "read_by_key",
+      "rows": 1,
+      "ms": 6.128833,
+      "status": "ok"
+    },
+    {
+      "case": "pizza",
+      "operation": "single_update_including_commit",
+      "rows": 1,
+      "ms": 18.420625,
+      "status": "ok"
+    },
+    {
+      "case": "runtime",
+      "operation": "server_cleanup",
+      "rows": 1,
+      "ms": 382.994375,
+      "status": "ok"
+    }
+  ],
+  "scope": "Actual public workflows on isolated local PostgreSQL. Connection reopen, not server restart. Cold server/install separate. Real-sample results only; no synthetic stress result implied."
+}

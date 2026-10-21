@@ -1,10 +1,11 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
-"""Unmodified consumer schema: exact numeric create/read/update/query/reopen."""
+"""Unnamed original refuses; named revision retains exact numeric workflows."""
 from decimal import Decimal
 from hashlib import sha256
 import json
 import os
 from pathlib import Path
+from embedder_fixture_sources import named_revision
 import psycopg
 from truss import (Ok, ObjectFound, QueryRows, CatalogDocument, ModuleAccessGrant,
                    adopt_psycopg_host, create_reference_assembly, CatalogRuntimeConfiguration)
@@ -19,17 +20,24 @@ class ConsumerNorthwindNumericTests(catalog_tests.PublicCatalogRuntimeTests):
     for _name in tuple(n for n in dir(catalog_tests.PublicCatalogRuntimeTests) if n.startswith('test_')):
         locals()[_name] = None
 
-    def test_original_product_exact_numeric_workflow(self):
+    def test_named_revision_exact_numeric_workflow(self):
         self.install()
         raw = FIXTURE.read_bytes()
         source = json.loads(raw)
         document_id = source['id']
         module_id = source['modules'][0]['id']
         connection, host, assembly, tx = self.consumer()
-        prepared = assembly.prepare_catalog((CatalogDocument(document_id, sha256(raw).hexdigest(), raw),),
+        from truss import PreparationRejected
+        revised,missing=named_revision({'sourceText':raw.decode(),'sha256':sha256(raw).hexdigest()})
+        with self.assertRaises(PreparationRejected) as caught:
+            assembly.prepare_catalog((CatalogDocument(document_id,sha256(raw).hexdigest(),raw),))
+        diagnostics=[json.loads(d) for d in caught.exception.diagnostics]
+        self.assertEqual({(d['moduleId'],d['elementId']) for d in diagnostics},set(missing))
+        self.assertTrue(all(d['code']=='TRUSS-NAME-MISSING' for d in diagnostics))
+        prepared = assembly.prepare_catalog((revised,),
             source_version=source['umf'], bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE', 'bun'))
         documents = tuple(item.document for item in prepared.documents)
-        self.assertIsInstance(assembly.accept_in_transaction(tx, prepared, request_key='northwind-original'), Ok)
+        self.assertIsInstance(assembly.accept_in_transaction(tx, prepared, request_key='northwind-named-revision'), Ok)
         view = assembly.catalog_view_in_transaction(tx, assembly.catalog_view_request()).value.view
         product = next(d.reference for d in view.definitions if d.reference.kind == 'type'
                        and d.reference.authored_identity == 'Product')
@@ -86,20 +94,16 @@ class UnnamedSqlTests(group_tests.PublicCreateGroupTests):
     for _name in tuple(n for n in dir(group_tests.PublicCreateGroupTests) if n.startswith('test_')):
         locals()[_name] = None
 
-    def test_default_compiler_uses_stable_ids_without_authored_names(self):
+    def test_default_registration_refuses_missing_record_and_field_names(self):
+        import json
+        from truss import PreparationRejected
         def unnamed(source):
             for module in source['modules']:
-                for element in module['elements']:
-                    element.pop('name', None)
-        connection, host, assembly, tx = self.ready(unnamed, document_ids=('adoc',))
-        semantic, request = self.input(assembly, tx)
-        self.assertIsInstance(self.apply(assembly, tx, semantic, request), GroupSuccess)
-        host.detach(); connection.commit()
-        connection, host, assembly, tx = self.consumer()
-        rows = assembly.query_in_transaction(tx,
-            sql='SELECT a."A-label" FROM "A" a WHERE a."A-label" = :label',
-            document_ids=('adoc',), parameters={'label': 'one'})
-        self.assertIsInstance(rows, Ok, repr(rows))
-        self.assertIsInstance(rows.value, QueryRows, repr(rows.value))
-        self.assertEqual(rows.value.rows, (('one',),))
-        host.detach(); connection.rollback()
+                for element in module['elements']:element.pop('name',None)
+        with self.assertRaises(PreparationRejected) as caught:
+            self.ready(unnamed,document_ids=('adoc',))
+        diagnostics=[json.loads(raw) for raw in caught.exception.diagnostics]
+        self.assertEqual({d['kind'] for d in diagnostics},{'record','field'})
+        self.assertEqual(len(diagnostics),6)
+        self.assertTrue(all(d['code']=='TRUSS-NAME-MISSING' for d in diagnostics))
+        self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))

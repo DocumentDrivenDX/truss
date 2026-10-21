@@ -21,6 +21,31 @@ ddx:
 
 # Contract: Catalog revision
 
+## Executable catalog names — R16.4
+
+The Python catalog registration preparation routes (`prepare_catalog`,
+`prepare_acceptance` and their assembly facades) MUST refuse every Record or Field
+without a nonempty string `name`, including unreferenced Fields. This is a Truss
+execution requirement; UMF core names remain optional and source identity remains
+document/module/element-qualified. Names MUST NOT be inferred from IDs or written
+back into the original document.
+
+After original UMF validation and source correspondence, and before issuing a
+preparation usable by native acceptance, refuse the whole submitted set with
+`PreparationRejected(reason='invalid_document')`. Each offending element has one
+UTF-8 JSON diagnostic in `diagnostics`, in submitted document/module/element order:
+`{code:'TRUSS-NAME-MISSING', severity:'error', documentId, documentRevision,
+moduleId, elementId, kind, path, message}`. `kind` is `record` or `field`; `path`
+is the document-relative JSON pointer to the missing/empty `name`, for example
+`/modules/0/elements/2/name`. The message identifies the element and required
+name. Existing original UMF structure/semantic refusals take precedence. No
+catalog publication or caller transaction effect occurs during preparation.
+
+Previously registrable unnamed inputs now require explicitly authored names.
+Existing accepted catalogs are not rewritten. This check does not claim to
+validate every downstream query naming restriction or change the separately
+scoped original-owner TypeScript preparation helpers.
+
 ## Selected embedder catalog continuation
 
 The ordinary Python embedding profile adds conditional reader-catalog retrieval,

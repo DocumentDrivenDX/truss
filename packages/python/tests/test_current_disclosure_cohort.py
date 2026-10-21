@@ -16,10 +16,17 @@ class DisclosureCohortTests(unittest.TestCase):
    'def824d16bc00f9deb50c7c63bc08a728cff631eef25cf2616032b761e1c679c':'36224fd006f525e26e79ad2504bee7ffd75439ce1c8367564cfeb7c826e736a4',
    '8226b0cbc17b611abaaff30357aad7230e135fa713c8d3d4e05e0536a6d9a2c3':'de3289ad3d8779bd2e347c15379596495acb08381741991935b6f85c7a24b2fc',
   }
+  expected['695e12867dfcffedb0e4bde7fa571835ebd43fd1c06b0d775b1abecb45ffa117']='2c0169ba875c3dd174e5c450c851d1cb295fddc2adf29943e660e8b6a9c9aa88'
+  expected['8ca1625249c1d3bed20864dfd71481d8b956b3901ffdc619fc3ec4a1a473be9c']='01a1e0002edafabffaa7611e40a3a33fc48d221a5e0084e96fe1806a0f0c3fa8'
+  revisions={'db1e0dc5b1ec6aec0f12646421cefc314989d974':'0.4.48',
+             '5f013200cf36ddcaf5d4a380ba961267f819f7ca':'0.4.49'}
   for cohorts in (query_cohorts,disclosure_cohorts):
    self.assertEqual({row['weftWheelSha256']:row['weftModuleSha256'] for row in cohorts},expected)
-   baseline={key:value for key,value in cohorts[0].items() if key not in ('weftWheelSha256','weftModuleSha256')}
-   self.assertTrue(all({key:value for key,value in row.items() if key not in ('weftWheelSha256','weftModuleSha256')}==baseline for row in cohorts))
+   baseline={key:value for key,value in cohorts[0].items() if key not in ('weftWheelSha256','weftModuleSha256','weftRevision','weftVersion')}
+   self.assertTrue(all({key:value for key,value in row.items() if key not in ('weftWheelSha256','weftModuleSha256','weftRevision','weftVersion')}==baseline for row in cohorts))
+   for row in cohorts:
+    self.assertIn(row['weftRevision'],revisions)
+    if 'weftVersion' in row:self.assertEqual(row['weftVersion'],revisions[row['weftRevision']])
   self.assertEqual(list(disclosure_cohorts[0]),[
    'profile','umfRevision','umfBundleSha256','umfManifestSha256','embeddedRuntime',
    'embeddedProfile','embeddedV8Version','embeddedManifestSha256','weftRevision','weftVersion',
@@ -85,12 +92,13 @@ class DisclosureCohortTests(unittest.TestCase):
   self.assertTrue(all(item==query_selections[0] for item in query_selections))
   self.assertEqual(first_disclosure,second_disclosure)
   self.assertEqual(sha256(native_path.read_bytes()).hexdigest(),selection['weftModuleSha256'])
-  self.assertEqual(selection['weftRevision'],'db1e0dc5b1ec6aec0f12646421cefc314989d974')
+  self.assertIn(selection,query_cohorts)
   query_wheels={row['weftModuleSha256']:row['weftWheelSha256'] for row in query_cohorts}
   disclosure_wheels={row['weftModuleSha256']:row['weftWheelSha256'] for row in disclosure_cohorts}
   self.assertEqual(selection['weftWheelSha256'],query_wheels[selection['weftModuleSha256']])
-  self.assertEqual(first_disclosure['weftRevision'],'db1e0dc5b1ec6aec0f12646421cefc314989d974')
-  self.assertEqual(first_disclosure['weftVersion'],'0.4.48')
+  self.assertEqual(first_disclosure['weftRevision'],selection['weftRevision'])
+  import weft
+  self.assertEqual(first_disclosure['weftVersion'],weft.__version__)
   self.assertEqual(first_disclosure['weftWheelSha256'],disclosure_wheels[first_disclosure['weftModuleSha256']])
 
  def test_enrolled_assets_are_identified_once_per_process_and_rechecked_after_restart(self):

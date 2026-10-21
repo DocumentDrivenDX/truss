@@ -17,14 +17,55 @@ CONFIG=_configuration()
 
 def document(identity):
     value={'umf':'0.10.0','id':identity,'vocabularies':{},'extensions':{},'modules':[{'id':'m','namespace':'m','elements':[
-        {'id':'Item','kind':'record','members':[{'module':'m','element':'label'}],'extensions':{}},
-        {'id':'label','kind':'field','scalarType':'string','nullability':'required','cardinality':'one','extensions':{}}]}]}
+        {'id':'Item','name':'Item','kind':'record','members':[{'module':'m','element':'label'}],'extensions':{}},
+        {'id':'label','name':'label','kind':'field','scalarType':'string','nullability':'required','cardinality':'one','extensions':{}}]}]}
     return CatalogDocument(identity,'r1',(' \n'+json.dumps(value)+'\n').encode())
 
 def prepare(documents,configuration=None):
     return prepare_acceptance(documents,json.dumps(CONFIG if configuration is None else configuration).encode(),bun_executable='/opt/homebrew/bin/bun')
 
 class PreparationTests(unittest.TestCase):
+    def test_registration_names_report_every_element_across_documents(self):
+        from truss import prepare_catalog
+        originals=[]
+        for identity in ('first','second'):
+            original=document(identity);source=json.loads(original.content)
+            for element in source['modules'][0]['elements']:del element['name']
+            originals.append(CatalogDocument(identity,'r1',json.dumps(source).encode()))
+        # Both public entrypoints must refuse before issuing an acceptance input.
+        for method in (prepare,prepare_catalog):
+            with self.subTest(method=method.__name__):
+                producer_results=[]
+                def capture(*args,**kwargs):
+                    result=_capture(*args,**kwargs)
+                    producer_results.append(json.loads(result.stdout))
+                    return result
+                with patch('truss.preparation._capture',side_effect=capture) as producer:
+                    with self.assertRaises(PreparationRejected) as caught:method(tuple(originals))
+                # The unchanged UMF owner accepts the optional names; it is
+                # Truss's subsequent executable-catalog check that refuses.
+                self.assertEqual(producer.call_count,1)
+                self.assertEqual(producer_results[0]['status'],'prepared')
+                self.assertTrue(all(d['validation']['valid'] for d in producer_results[0]['documents']))
+                self.assertEqual(caught.exception.reason,'invalid_document')
+                entries=[json.loads(raw) for raw in caught.exception.diagnostics]
+                self.assertEqual([(d['documentId'],d['documentRevision'],d['moduleId'],d['elementId'],d['kind'],d['path']) for d in entries],
+                    [(identity,'r1','m',element,kind,f'/modules/0/elements/{index}/name')
+                     for identity in ('first','second') for index,(element,kind) in enumerate((('Item','record'),('label','field')))])
+                self.assertTrue(all(d['code']=='TRUSS-NAME-MISSING' and d['severity']=='error' for d in entries))
+                self.assertTrue(all(d['elementId'] in d['message'] for d in entries))
+
+    def test_empty_registration_name_and_unreferenced_field_are_rejected(self):
+        original=document('first');source=json.loads(original.content)
+        source['modules'][0]['elements'][0]['name']=''
+        source['modules'].append({'id':'other/~','namespace':'other','elements':[
+            {'id':'unused/~','kind':'field','scalarType':'string','nullability':'required','cardinality':'one','extensions':{}}]})
+        with self.assertRaises(PreparationRejected) as caught:
+            prepare((CatalogDocument('first','r1',json.dumps(source).encode()),))
+        entries=[json.loads(raw) for raw in caught.exception.diagnostics]
+        self.assertEqual([(d['moduleId'],d['elementId'],d['path']) for d in entries],
+            [('m','Item','/modules/0/elements/0/name'),('other/~','unused/~','/modules/1/elements/0/name')])
+
     def test_public_original_documents_and_qualified_declarations(self):
         documents=(document('first'),document('second'))
         result=prepare(documents)

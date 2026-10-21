@@ -28,6 +28,7 @@ parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--truss-root',type=Path,required=True)
 parser.add_argument('--installed-package',action='store_true',help='Exercise the installed wheel; refuse imports from the checkout source')
 parser.add_argument('--examples-root',type=Path)
+parser.add_argument('--author-fixture-names',action='store_true',help='Explicitly author missing Record/Field names as IDs in frozen sample revisions and record original/revised hashes')
 parser.add_argument('--matrix-case',nargs='+',help='Run selected workloads.json cases instead of real samples')
 parser.add_argument('--samples',nargs='+',default=['pizza','northwind','catalog'])
 parser.add_argument('--bulk-size',type=int,default=100)
@@ -45,6 +46,8 @@ parser.add_argument('--forbid-external-javascript',action='store_true',help='Fai
 parser.add_argument('--profile-read',type=Path,help='Optional separate cProfile of one warm public ID read, outside timed samples')
 parser.add_argument('--output',type=Path,default=Path('truss-public-performance.json'))
 args=parser.parse_args()
+if args.author_fixture_names and (args.examples_root or args.matrix_case):
+    parser.error('--author-fixture-names applies only to frozen sample fixtures')
 if args.trace_sql:
     args.count_sql_submissions=True
     args.trace_sql.parent.mkdir(parents=True,exist_ok=True)
@@ -175,7 +178,7 @@ statement_counter=SQLSubmissionCounter(args.count_sql_submissions)
 
 def install_sql_submission_counter(psycopg,host_module,counter,assembly_module=None):
     """Instrument only this benchmark process while preserving connection types."""
-    class CountingCursor(psycopg.Cursor):
+    class CountedCursor:
         def __init__(self,*args,_channel='driver',**kwargs):
             super().__init__(*args,**kwargs)
             self._benchmark_channel=_channel
@@ -193,6 +196,12 @@ def install_sql_submission_counter(psycopg,host_module,counter,assembly_module=N
             # one API call as an exact count of server statements.
             counter.record_executemany()
             return super().executemany(query,params_seq,*args,**kwargs)
+
+    class CountingCursor(CountedCursor,psycopg.Cursor):pass
+    class CountingRawCursor(CountedCursor,psycopg.RawCursor):pass
+    # Compiled reads construct RawCursor directly, bypassing cursor_factory.
+    # Count that data statement as well as the ordinary guarded host cursors.
+    psycopg.RawCursor=CountingRawCursor
 
     original_connect=psycopg.connect
     def counted_connect(*args,**kwargs):
@@ -259,7 +268,7 @@ def self_test_sql_counter():
         def adopt_transaction(self):return 'adopted'
     class FakeAssembly:
         def group_context_in_transaction(self,transaction):return 'context'
-    fake_psycopg=SimpleNamespace(Cursor=FakeCursor,connect=lambda *a,**k:FakeConnection())
+    fake_psycopg=SimpleNamespace(Cursor=FakeCursor,RawCursor=FakeCursor,connect=lambda *a,**k:FakeConnection())
     fake_host_module=SimpleNamespace(PsycopgHost=FakeHost)
     fake_assembly_module=SimpleNamespace(CatalogReferenceAssembly=FakeAssembly)
     counter=SQLSubmissionCounter(True)
@@ -283,10 +292,11 @@ def self_test_sql_counter():
             host=FakeHost(connection)
             connection.cursor().execute('WITH guard AS (SELECT pg_backend_pid()) SELECT truss.runtime_owned_admit() FROM guard')
             host._cursor().execute('SELECT truss.apply_group_prepared($1)')
+            fake_psycopg.RawCursor(connection).execute('SELECT $1::text')
             host.adopt_transaction();FakeAssembly().group_context_in_transaction('tx')
             connection.commit();connection.rollback()
-    expected={'total':3,'host':1,'driver':2,'executemanyCalls':1,'hostAdoptions':1,'groupContextAcquisitions':1,
-              'bySqlClass':{'cold_schema_basis':1,'prepared_payload':1,'public_function_payload':1},
+    expected={'total':4,'host':1,'driver':3,'executemanyCalls':1,'hostAdoptions':1,'groupContextAcquisitions':1,
+              'bySqlClass':{'cold_schema_basis':1,'prepared_payload':1,'public_function_payload':1,'other':1},
               'transactionActions':{'commit':1,'rollback':1}}
     if case_counts!=expected or operation_counts!=expected:
         raise AssertionError({'expected':expected,'case':case_counts,'operation':operation_counts})
@@ -439,11 +449,17 @@ class RealWorkflows(PublicCatalogRuntimeTests):
             raw=fixture['sourceText'].encode()
             if hashlib.sha256(raw).hexdigest()!=fixture['sha256']:raise AssertionError('Original real-schema fixture hash mismatch')
             case['sourceCommit']=corpus['sourceCommit'] if 'sourceCommit' in corpus else fixture.get('sourceCommit')
+            if args.author_fixture_names:
+                from embedder_fixture_sources import named_revision
+                revised,missing=named_revision(fixture)
+                case['schemaDerivation']={'kind':'explicit-fixture-names','originalSha256':fixture['sha256'],
+                    'revisedSha256':hashlib.sha256(revised.content).hexdigest(),'authoredElements':missing}
+                raw=revised.content
         source=json.loads(raw);module=source['modules'][0];document_id=source['id'];module_id=module['id']
         if workload:case['workload']=workload
         count=workload['nodes'] if workload else args.bulk_size
         case.update(schemaBytes=len(raw),records=sum(e['kind']=='record' for e in module['elements']),elements=len(module['elements']),actions=len(module.get('actions',[])))
-        documents=(CatalogDocument(document_id,'performance-v1',raw),)
+        documents=(CatalogDocument(document_id,'performance-named-v1' if args.author_fixture_names else 'performance-v1',raw),)
         timed(sample,'install',self.install)
         case['databaseSettings']=dict(self.admin.execute("SELECT name,setting FROM pg_catalog.pg_settings WHERE name IN ('server_version','fsync','synchronous_commit','full_page_writes','shared_buffers')").fetchall())
         if args.profile_native_functions or args.capture_failure_diagnostics:self.admin.execute("ALTER ROLE consumer SET track_functions='pl'")

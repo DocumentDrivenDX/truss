@@ -21,6 +21,68 @@ ddx:
 
 # Contract: Embedding and execution
 
+## Immutable package verification lifetime
+
+An installed runtime package is immutable for the lifetime of its Python
+process. Truss MUST verify the complete selected runtime release and profile
+hash closure before first use. A successful verification MAY be retained for
+that process; failures MUST NOT be cached as successes. Concurrent first use
+MUST publish only a completely verified result. Public/internal callers of the
+release accessor receive independent mutable manifest copies and immutable SQL
+text, so caller mutation cannot alter the retained verified identity. Replacing
+package files in a running process is unsupported; restart after installation.
+This optimization MUST NOT cache database installation, schema, caller,
+permission, transaction or current-native-authority observations.
+
+The Truss Python query executor MAY retain pure successful Weft compile results
+under the exact compiler callable identity and complete original request text,
+including model bytes/pins, binding, selected backend/profile/limits and exact
+parameter values; page size and continuation values are also part of identity.
+The cache MUST be bounded by entry count and retained text bytes, MUST return
+fresh decoded objects and MUST NOT reuse blocked/failed results as success.
+It does not expose a host-held executable authority token. Engine-program
+correspondence and native current authorization before and after data execution
+remain required on cache hits. Different parameter values deliberately miss;
+value-independent templates require a separately compiler-owned contract.
+
+The native `query_binding_if_changed(jsonb,int,int,int,text,text,text)` observer
+accepts the existing selected-document, scan/result/byte limits and release
+identity plus an optional64-hex validator. Its bounded JSON bytes are either
+`{outcome:'snapshot', validator, bundle}` (the original `query_binding` bundle)
+or `{outcome:'unchanged', validator}`. Validators bind the installation, release,
+catalog head, original source pins, current person/session user and exact limits.
+They MUST NOT confer authority. Before either response the observer rechecks
+current-person and complete compiled document/dependency read scope; final
+current-basis/visibility checks precede publication. Existing query execution
+still checks full binding scope before and after data execution. An unchanged
+result is usable only with the caller's identical original snapshot bytes.
+The Python cache retains at most two such serialized bundles under its own
+16-MiB budget and contains no connection or reusable authorization decision.
+Package replacement needs restart; catalog changes, rolled-back/reused revisions
+with different source bytes, other people/installations and changed limits miss.
+
+`assembly.query_with_catalog_in_transaction(tx, *, sql, document_ids,
+parameters=None, catalog_validator=None, maximum_rows=1000,
+maximum_scan_rows=10000, maximum_bytes=1048576, read_profile=None)` combines the
+reader-catalog validator observation, original admitted source bytes/digests and
+ordinary query in one operation on the caller's one adopted transaction. Bounds
+and read profiles match `query_in_transaction`; `maximum_bytes` bounds each
+native metadata/catalog/query result. A supplied catalog validator uses the
+existing64-hex form. Invalid selections/limits retain ordinary query refusals.
+
+Success is `Ok(QueryCatalogRead(result:QueryRows,
+catalog:ReaderCatalogSnapshot|ReaderCatalogUnchanged,
+documents:tuple[QueryDocument,...]))`. Each `QueryDocument` carries document ID,
+document revision, UMF version, exact original UTF-8 bytes and their SHA-256;
+it is not the full registrar report or acceptance receipt. Query decoding and
+the final complete binding scope and reader-validator recheck precede release
+of every component. Changed catalog/visibility withholds the composite with
+`QueryRefused('stale_context')`; unauthorized source/query access refuses without
+partial data/catalog/source release. Existing query unavailable/failure families
+remain distinct. Hosts retain the catalog snapshot alongside its validator;
+an unchanged answer never reconstructs or authorizes an absent host snapshot.
+No transaction, connection, commit or internal mutation retry is created.
+
 ## Selected remaining embedder execution boundaries
 
 The explicit batched import profile owns only its declared engine chunk

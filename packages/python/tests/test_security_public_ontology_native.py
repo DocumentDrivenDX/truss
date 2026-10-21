@@ -732,7 +732,7 @@ class PublicOntologySecurityTests(groups.PublicCreateGroupTests):
   if document['id']!='adoc':return # The ontology belongs to adoc; retain zdoc baseline.
   m=document['modules'][0];m['elements']=[];m['relationships']=[]
   for name,fields in RECORDS.items():
-   m['elements'].append({'id':name,'kind':'record','members':[{'module':'m','element':name+'-'+f} for f in fields],'keys':[{'id':'pk','name':'primary','primary':True,'fields':[{'module':'m','element':name+'-code'}]}],'extensions':{}})
+   m['elements'].append({'id':name,'name':name,'kind':'record','members':[{'module':'m','element':name+'-'+f} for f in fields],'keys':[{'id':'pk','name':'primary','primary':True,'fields':[{'module':'m','element':name+'-code'}]}],'extensions':{}})
    for field,scalar in fields.items():m['elements'].append({'id':name+'-'+field,'name':name+'-'+field,'kind':'field','scalarType':scalar,'nullability':'required','cardinality':'one','extensions':{}})
   for name,(source,target) in LINKS.items():m['relationships'].append({'id':name,'name':name,'source':[{'module':'m','element':source}],'target':[{'module':'m','element':target,'key':'pk'}],'sourceMultiplicity':{'min':0,'max':100},'targetMultiplicity':{'min':0,'max':100},'targetLifecycle':'independent','directed':True})
  def test_public_created_membership_graph(self):

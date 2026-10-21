@@ -37,6 +37,153 @@ ddx:
 ---
 
 # Truss build plan
+
+## Hohfeld performance completion goal — 2026-10-21
+
+The owner authorizes implementation, native/consumer tests, review, merge and
+release for the complete Hohfeld T1–T8/W1–W3 request. The original source is
+Hohfeld branch `claude/truss-integration-readiness-f1ad63`,
+`docs/helix/02-design/truss-statement-overhead-spec.md` section E and
+`tests/bench_latency.py`; `adopt-truss-0-0-44` provides the adoption candidate.
+Active work is `codex/hohfeld-performance`. The prior R16.4 change is included.
+No token/cost ceiling or delivery date was supplied. Continue through delivery;
+do not equate API availability or local tests with consumer/release acceptance.
+
+| Slice | Work and boundary | Verification/exit |
+| --- | --- | --- |
+| HP1 | T3: verify immutable packaged runtime once per process, preserve fresh caller-owned manifest copies | Cold corruption refusal; warm zero filesystem reads; concurrency and mutation isolation; native regressions |
+| HP2 | W1: bounded compiled result reuse keyed by complete original compiler inputs and compiler identity | Hit/miss, exact parameter/model/binding/profile isolation, eviction and fresh per-call authority; original Weft results remain authoritative |
+| HP3 | T2/T5: digest-bound metadata reuse and combined conditional catalog/source/query execution in one caller-owned transaction | Stale/rollback/reused revision, identity/role/grant changes, no raw source transfer on warm hit, final authorization and real consumer adoption |
+| HP4 | T6/T7: lower apply fixed work and set-based independent import runs | Original outcome/order/provenance, mixed fallback, duplicates/reservations, rollback, unknown commit, constraints/journal/feed and actual server work |
+| HP5 | T1/T4/T8: qualify conditional hit cost and owned-group bounds; publish operation statement/round-trip budgets | Actual read/key/page/enumeration/write/group/import traces, setup/settlement/server work separated; 153/3,072/3,073 conditions |
+| HP6 | W2/W3: compiler-owned wildcard output naming/exclusion disposition and scan-bound description | Original Weft compiler artifacts and representative native cases; no competing Truss SQL parser |
+| HP7 | Full consumer and release | 100 sequential warm runs per target with nearest-rank p95, exact versions/load; correctness/negative controls; Linux CI, review, merge, versioned release and fresh public asset verification |
+
+Targets are host p95: singleton by key20ms, three-effect action with change
+record100ms, type enumeration20ms, 51-record list1s. Record failures honestly,
+including machine load and transport; improvements do not relax correctness,
+authorization, source preservation, limits or durability. Native SQL/ABI changes
+must preserve explicit version compatibility and supported installation policy.
+Source boundaries use `scripts/check-module-boundaries.py` and its positive/
+negative controls; new module/import ownership needs an explicit map entry.
+Weft owns compiler changes and shared Rust/Python/browser behavior. No subagent
+delegation is selected. This goal remains active until its delivery gates pass.
+
+### Local qualification checkpoint — 2026-10-21
+
+HP1–HP6 implementation is present. Final installed Weft0.4.49 local campaigns
+passed57 pure/custody controls,16 compiled-query/budget/capacity cases,15 group
+condition/preview cases,23 admission/schema-cache/import cases, eight import
+parity/audit cases, five current-query/subject-cut cases, and five explicitly
+enabled disclosure cases. The first current-query invocation also selected five
+opt-in disclosure cases which skipped; those were then run explicitly and passed.
+Weft passed372 affected release-feature Rust tests and five byte-exact actual
+Chromium/native cases; the frozen-source wheel rebuild has identical payloads.
+Module boundary gates passed1,646 imports and18 positive/negative controls.
+See [receipts and precise limitations](evidence/hohfeld-performance-20261021/README.md).
+
+Native operation budgets are3 statements for direct key/page/enumeration/catalog
+hit/preparation,4 for the tested single-create,3 for the mixed three-effect group,
+and11 for compiled or combined reads. Host acquisition/setup/adoption/settlement
+are explicitly separate. Independent batches preserve per-record source/provenance
+and real operation indices, share one native attempt, and do not retry stale,
+resource, cancellation or transaction-retry failures.
+
+The original Hohfeld host still opens separate catalog/query transactions.
+T5's combined API is available and natively exercised; this does not claim host
+adoption. Both100-run original-adapter benchmark snapshots, source hashes and
+machine loads are retained. Latest p95s28.19/208.51/10.51/13.66ms do not establish
+all proposed latency targets. General10× import acceleration is not claimed.
+HP7 remains open for hosted checks, final artifact cohorts, review, merge and
+public release verification. No production data or active Hohfeld checkout changed.
+
+The first installed Linux run39655940920 passed package/source reproducibility
+and the52-case initial native campaign, then found eight old positive fixtures
+that omitted names. The frozen Hohfeld originals remain byte-identical and are
+now tested for complete element-specific refusal; explicit named revisions get
+new hashes and retain registration/replay/read/write custody checks. The two
+synthetic writer-selection Records and the public ontology generator now author
+their names. All eight affected local cases plus the ontology case passed.
+The benchmark's opt-in fixture-authoring path records both original/revised
+hashes; its native Pizza smoke passed. Runtime/UMF behavior was not weakened.
+A later numeric-workflow step found the separate frozen consumer Northwind
+source also lacked names. Its original remains unchanged and receives complete
+refusal coverage; an explicitly named revision passes exact decimal/integer
+create, update, query and reopen. The benchmark SQL counter now also counts its
+direct RawCursor query; an actual installed workflow confirms11 statements,
+matching the independent operation-budget control.
+
+### Complete installed Linux gate — 2026-10-21
+
+Run39660391896 passed package reproducibility/exact payloads and the full selected
+native campaign:518 test executions across39 commands, including intentional
+repeated controls. This is release selection, not whole-repository discovery.
+The installed0.0.45 wheel and sdist each match all429 runtime source payloads.
+The public workload passed1,000 nodes,1,000 edges,1,000 read samples,200 committed
+updates and reopened-value verification with SQL10s/operation30s limits. The
+counter includes the raw compiled-data query. Current policy/disclosure, all27
+performance/live-authority controls, actual set-based import DML, lifecycle,
+audit and final host fault-containment checks passed. The original noisy-host
+latency targets remain separately qualified; no quiet-host certification follows.
+See `evidence/hohfeld-performance-20261021/linux-premerge-qualification.json`
+and its compressed original public-workload report. Review/merge/tagged-package
+qualification and fresh public release verification remain the final delivery steps.
+
+## Registration names — R16.4, 2026-10-21
+
+Owner-authorized fix under FEAT-001/CAT-01 and
+[CONTRACT-003](../02-design/contracts/CONTRACT-003-catalog-revision.md#executable-catalog-names--r164):
+the shared Python preparation boundary checks Record/Field names after original
+UMF validation and response correspondence, before retaining a native-usable
+preparation. It returns all element-specific `TRUSS-NAME-MISSING` diagnostics.
+Original bytes and UMF optional-name validity remain unchanged. No native SQL,
+owner bundle, authorization or performance path is changed. This is an
+unpublished source change after v0.0.44.
+
+Verification on macOS ARM64, Python3.11.17, PostgreSQL18.6,
+pgserver-pg18 18.6.1, psycopg3.3.6 and mini-racer0.14.1:
+
+- `test_preparation`, `test_catalog_relational_support`,
+  `test_ddd_owner_preparation`, `test_catalog_report_semantics`,
+  `test_catalog_support`: 39 tests passed. The final strengthened owner-result
+  control also passed separately: the actual embedded UMF producer accepts
+  unnamed sources before Truss refuses them.
+- `test_core10_catalog_native`: six passed, including unnamed Record/Field
+  refusal, unchanged catalog head/source inventory, retained caller work and
+  corrected source registration/commit on the same caller transaction.
+- The wider 40-test native run has nine assertion failures in four pre-existing
+  module-access test methods. They expect outer `Error`; v0.0.44 returns typed
+  `Ok(ModuleAccessBatchRefused)`. All nine failures reproduce with unchanged
+  HEAD `preparation.py` in an isolated package overlay. These unrelated tests
+  are not changed or counted as passing.
+
+Commands use `PYTHONPATH=packages/python/src:packages/python/tests`, the existing
+`/private/tmp/truss041-final-env-20261020/bin/python`, `-m unittest` for the pure
+suites and `scripts/run-python-test-module.py` for native cleanup. The first
+sandboxed native attempt failed on pgserver's user-cache lock before starting
+PostgreSQL; authorized reruns used owned disposable clusters and suite cleanup.
+No hosted CI, installed-wheel, publication or new performance qualification is
+claimed. Existing test fixtures now author explicit Record/Field names.
+
+Performance disposition from v0.0.44 source and retained release evidence:
+T1 conditional catalog observation, part of T5/T6 through `prepare_group`, T7
+client batching and T8's owned-profile 3,072-condition bound are available
+opt-ins. T1 rechecks current person/policy/dependencies and has a three-client-
+statement wrapper. T7 still enforces individual records server-side. T2's large
+query binding/source transfer, T3's repeated release verification, combined T5
+query/source/catalog operation, further T6 fixed-cost reduction and W1 compile
+caching remain work. T4 has scoped consumer traces rather than the complete
+requested operation-budget table. W2/W3 remain Weft-owned asks, not resolved here.
+
+The existing three-sample consumer trace records reads83–89ms,
+updates96–100ms and enumeration68–79ms, with a new connection per enumeration.
+It neither measures the newly adopted opt-ins nor establishes warm p95 over100
+runs. Proposed next sequence: measure adopted0.0.44, verify immutable releases
+once per process, reuse digest-bound schema/compiled statements with fresh
+per-call authorization, then combine query coordination and profile native
+apply/import. Dates and new gains are unknown; no optimization implementation
+is claimed here. See [release evidence](releases/v0.0.44.md#qualification-and-references).
+
 ## Typed API host adoption — 2026-10-20
 
 The bounded [host adoption execution plan](typed-api-host-adoption-plan.md)
