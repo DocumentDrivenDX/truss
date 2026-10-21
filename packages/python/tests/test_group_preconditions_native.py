@@ -123,6 +123,12 @@ class GroupPreconditionTests(mutation_tests.ObjectMutationTests):
         original_request=_bytes(_wire(request))
         before=self.admin.execute('SELECT (SELECT count(*) FROM truss.runtime_object_attempt),(SELECT count(*) FROM truss.request_receipt),(SELECT count(*) FROM truss.journal)').fetchone()
         host.detach();connection.commit()
+        unstamped=json.loads(bytes(connection.execute('SELECT truss.apply_group(%s,%s,%s,%s,%s)',
+            (original_input,original_documents,original_request,manifest['releaseId'],digest)).fetchone()[0]))
+        self.assertEqual((unstamped['outcome'],unstamped['reason']),('unavailable','profile'))
+        # Adopt a latest host transaction, then bypass host input validation to
+        # exercise the native resource guard under the required cohort stamp.
+        connection,host,assembly,tx=self.consumer()
         native=json.loads(bytes(connection.execute('SELECT truss.apply_group(%s,%s,%s,%s,%s)',
             (original_input,original_documents,original_request,manifest['releaseId'],digest)).fetchone()[0]))
         self.assertEqual((native['outcome'],native['reason']),('unavailable','resource'))
@@ -159,7 +165,7 @@ class GroupPreconditionTests(mutation_tests.ObjectMutationTests):
                 (_bytes(candidate),original_documents,original_request,manifest['releaseId'],digest)).fetchone()[0]))
             self.assertEqual((case,invalid_target['outcome'],invalid_target['code'],invalid_target['nativeState']),
                 (case,'failed','invalid_input','22023'))
-        connection.commit()
+        host.detach();connection.commit()
         self.assertEqual(self.admin.execute('SELECT (SELECT count(*) FROM truss.runtime_object_attempt),(SELECT count(*) FROM truss.request_receipt),(SELECT count(*) FROM truss.journal)').fetchone(),before)
 
     def test_owned_3072_preconditions_succeed(self):
