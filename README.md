@@ -13,15 +13,15 @@ use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Sta
 
 ## Run a private local instance
 
-With `uv` installed, run the published Truss `0.0.46` launcher in an isolated
+With `uv` installed, run the published Truss `0.0.47` launcher in an isolated
 Python3.11 tool environment:
 
 ```sh
 uvx --no-config --isolated --python 3.11 \
-  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.46/isolated-runtime-constraints.txt \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.46 \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.47/isolated-runtime-constraints.txt \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.47 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  --from 'truss-toolkit[local,native]==0.0.46' \
+  --from 'truss-toolkit[local,native]==0.0.47' \
   truss-local-postgres \
   --data-dir "$HOME/.local/share/truss/beads" \
   --install
@@ -38,14 +38,15 @@ Tools still embed the Python library, connect with an ordinary identity and
 register UMF documents; public business-role and module-access configuration is
 separate. For development against the current checkout, use `./scripts/truss-local`.
 
-**Version 0.0.46:** native `0.72-candidate`, Weft `0.4.49`, UMF core `0.10.0`.
-Eight focused lifecycle, isolation and CLI tests pass on macOS ARM64 and Linux
-x86_64 with Python3.11.17 and PostgreSQL18.6. The [published-package receipt](docs/helix/04-build/evidence/isolated-local-install-20261021/published-0.0.46/receipt.json)
-verifies this exact quickstart outside the checkout: two simultaneous private
-instances retain separate data and installation identities across restarts.
-The [Linux release gate](https://github.com/DocumentDrivenDX/truss/actions/runs/39670547224) also passes the selected installed-engine workflows and original small public workload.
+**Version 0.0.47:** native `0.73-candidate`, Weft `0.4.49`, UMF core `0.10.0`.
+The latest application runtime is the sole support target. Existing databases
+from the exact v0.0.44 and shared v0.0.45/46 tuples move forward through explicit
+transactional migration with original-attempt recovery. Startup never upgrades
+or resets a database. See the [migration guide](packages/python/README.md#runtime-migrations--v0047-candidate),
+[release notes](docs/helix/04-build/releases/v0.0.47.md) and
+[qualification plan](docs/helix/04-build/runtime-migration-restoration-plan.md).
 Broad test discovery, managed-service support and performance certification
-remain unfinished. See the [release notes](docs/helix/04-build/releases/v0.0.46.md).
+remain unfinished.
 
 For source development, the checkout wrapper selects the matching constraints
 and PostgreSQL wheel:

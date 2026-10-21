@@ -173,8 +173,10 @@ or extending old runtime support is not an acceptable workaround.
 
 Implementation is authorized by the owner's explicit 2026-10-21 request.
 RM-S1–S6 are implemented; RM-S7's blocking gate is wired and locally exercised.
-The candidate is unpublished. Hosted Linux qualification has not run in this
-workspace. No production database, remote branch, tag or release was changed.
+The candidate remains unpublished. The owner subsequently required full Linux
+qualification, review, PR merge, release publication and public-asset verification.
+PR #27 on `codex/runtime-migration-restoration` carries only this tranche. No
+production database was changed. Hosted attempts and current status follow below.
 Unrelated Hohfeld planning files already present in the checkout are outside this
 change. No extra agents, tracker items or external services were created.
 
@@ -232,6 +234,40 @@ pre-0.10, downgrade, physical restore/incarnation, managed-service or large-data
 migration claim is made. The pure two-edge graph test establishes planning only;
 first real subsequent native edge supplies skip-release execution proof.
 
+## Hosted Linux continuation and review
+
+The original local-only qualification remains archived unchanged. Hosted runs
+[39690997485](https://github.com/DocumentDrivenDX/truss/actions/runs/39690997485)
+and [39691446206](https://github.com/DocumentDrivenDX/truss/actions/runs/39691446206)
+refused native bounds before migration. Original initializer date literals produce
+distinct native instants under UTC and America/New_York. Fixed UTC inventory
+observation plus independently reproduced exact initializer profiles preserve both;
+a migration that substitutes the other qualified horizon must roll back. Source
+wheel hashes, native target `7ac989…b963ea`, SQL and business layout remain unchanged.
+The corrected recipe manifest is `5f6e099b8a315fdfabae99b41df86383cf78c9cf6a8afc8e1cd11d16ee7f3f80`.
+
+[39692489622](https://github.com/DocumentDrivenDX/truss/actions/runs/39692489622)
+passed the corrected native admission/preservation checks but its fault-only TCP
+relay hit the ordinary operation deadline before COMMIT on Linux. TCP_NODELAY in
+the test relay removes artificial frame delay; actual lost COMMIT evidence and
+production deadlines stay unchanged. The installed migration gate then passed all
+48 cases in [39692999225](https://github.com/DocumentDrivenDX/truss/actions/runs/39692999225).
+That run subsequently found a raw-native ceiling fixture without the latest cohort
+stamp. Ceiling and second-reader raw fixtures now adopt latest host transactions;
+explicit unstamped refusal, authority separation and original no-effect checks stay.
+A superseded run is canceled rather than presented as passing the full workflow.
+
+[Review](evidence/runtime-migrations-20261021/review.json),
+[local corrected qualification](evidence/runtime-migrations-20261021/initialization-fix/receipt.json),
+[original failed attempts and Linux migration receipt](evidence/runtime-migrations-20261021/hosted-linux/39692999225/qualification.json)
+and its package-correspondence record retain exact source/proof/artifact bindings.
+Local corrected installed qualification passes 48 cases; 23 real atomic-capacity
+checks and the isolated 1,000-type case pass. A broader parallel local sweep hit an
+administrator shutdown and the stale second-reader fixture; it is retained as
+incomplete, with no full-suite claim. Required complete Linux release/public-workload
+qualification, merge, publication and public installed verification remain pending.
+Native future multi-edge execution remains deferred until a real subsequent edge.
+
 ## Exit criteria
 
 - [x] First populated v0.0.44 → frozen candidate route and v0.0.45/46 exact tuple pass local installed qualification.
@@ -239,5 +275,6 @@ first real subsequent native edge supplies skip-release execution proof.
 - [x] Future-release lineage/removal/immutability gate is blocking; latest tooling retains every admitted source path.
 - [x] Package guidance, public binding and current HELIX specifications capture latest-only runtime support and forward database migration.
 - [x] Local boundaries, package payload and focused regression checks pass for the recorded exact artifacts.
-- [ ] Hosted Linux release workflow passes for the candidate; publication remains separate.
+- [ ] Complete hosted Linux release/public-workload workflow passes for the final migration candidate.
+- [ ] Reviewed PR is merged, v0.0.47 is published and its public checksums/assets/clean installed migration gates are verified.
 - [ ] First real subsequent edge supplies native skip-release-chain proof; no fabricated future-release evidence.

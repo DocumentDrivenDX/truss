@@ -1,16 +1,16 @@
 <section class="runtime-quickstart" aria-labelledby="runtime-quickstart-title">
   <p class="eyebrow">Published package / local PostgreSQL 18.6</p>
   <h2 id="runtime-quickstart-title">Run a private Truss instance</h2>
-  <p>With <code>uv</code> installed, run the published Truss <code>0.0.46</code> launcher in an isolated Python 3.11 tool environment. The first run may download Python and package wheels.</p>
+  <p>With <code>uv</code> installed, run the published Truss <code>0.0.47</code> launcher in an isolated Python 3.11 tool environment. The first run may download Python and package wheels.</p>
   <pre><code>uvx --no-config --isolated --python 3.11 \
-  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.46/isolated-runtime-constraints.txt \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.46 \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.47/isolated-runtime-constraints.txt \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.47 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  --from 'truss-toolkit[local,native]==0.0.46' \
+  --from 'truss-toolkit[local,native]==0.0.47' \
   truss-local-postgres \
   --data-dir "$HOME/.local/share/truss/beads" \
   --install</code></pre>
   <p>The launcher supplies PostgreSQL 18.6 in private per-instance data and Unix-socket directories. It needs no system PostgreSQL, administrator access, TCP listener, or port configuration. It stays in the foreground; Ctrl-C stops the server and retains data. Run the same command with the same directory to restart. Add <code>--probe</code> to install or confirm Truss and stop while retaining data.</p>
   <p>This provisions a local database and Truss schema/routines, not an HTTP, MCP, or TrussRPC application service. Tools still embed the Python library, connect with an ordinary identity, and register their UMF documents. Public business-role and module-access configuration remains separate.</p>
-  <p>See the <a href="https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.46">0.0.46 release notes</a>, <a href="https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/evidence/isolated-local-install-20261021/validation.json">local validation record</a>, and <a href="https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/evidence/isolated-local-install-20261021/python311/receipt.json">Python 3.11 receipt</a>. The <a href="https://github.com/DocumentDrivenDX/truss/blob/main/docs/helix/04-build/evidence/isolated-local-install-20261021/published-0.0.46/receipt.json">published-package check</a> verifies two independent instances and retained restarts outside a checkout. For source development, use the <a href="https://github.com/DocumentDrivenDX/truss/blob/main/scripts/truss-local">checkout wrapper</a>.</p>
+  <p>See the <a href="https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.47">0.0.47 release notes and qualification assets</a> and <a href="https://github.com/DocumentDrivenDX/truss/blob/main/packages/python/README.md">Python migration guide</a>. Existing supported UMF 0.10 databases use the explicit offline migration tool before opening the latest runtime. The launcher never upgrades or resets an older installation. For source development, use the <a href="https://github.com/DocumentDrivenDX/truss/blob/main/scripts/truss-local">checkout wrapper</a>.</p>
 </section>

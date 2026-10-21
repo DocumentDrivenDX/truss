@@ -1,0 +1,93 @@
+{
+  "observedAt": "2026-10-21T23:25:55.512008+00:00",
+  "reviewKind": "Manual semantic review; no independent reviewer or formal proof claimed",
+  "sourceCommit": "04dc2b8b0aee1ad270d543c6ddde62bb9b69e069",
+  "findings": [
+    {
+      "id": "RM-R01",
+      "issue": "Native partition deparse depended on observer timezone, and original initializer produced distinct bounds under UTC and America/New_York",
+      "resolution": "Canonical UTC observations with caller setting restored; exact independently captured initializer alternatives; require source bounds unchanged through migration",
+      "evidence": [
+        "native-initialization-profiles-0.1.json",
+        "test_observer_timezone_cannot_convert_native_partition_bounds",
+        "test_other_qualified_bounds_cannot_replace_original_initialization"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "RM-R02",
+      "issue": "Global proof equality would force future releases to rewrite immutable historical profiles when adding a target initializer",
+      "resolution": "Every historical profile selects only rules present in its checksum-qualified proof; future proof may retain old rules alongside new exact rules without editing old profile artifacts",
+      "status": "fixed"
+    },
+    {
+      "id": "RM-R03",
+      "issue": "Publication needed actual installed migration evidence tied to its exact source",
+      "resolution": "Publish job requires passing, non-skipped Linux receipt with GITHUB_SHA, exact recipe and native manifest correspondence; archives complete original evidence before checksumming assets",
+      "status": "fixed"
+    },
+    {
+      "id": "RM-R04",
+      "issue": "Linux Nagle/delayed ACK in fault-only relay exhausted production migration deadline before COMMIT",
+      "resolution": "TCP_NODELAY on the fixture accepted socket; retain real COMMIT response loss and unchanged production budgets",
+      "evidence": [
+        "test_original_commit_reply_loss_recovers_after_restart"
+      ],
+      "status": "fixed"
+    },
+    {
+      "id": "RM-R05",
+      "issue": "Raw-native regression fixtures started fresh transactions without the new latest cohort declaration",
+      "resolution": "Adopt latest host sessions for native ceiling and second-reader controls; retain explicit unstamped refusal, original native guard results, distinct actor/validator identity and atomic no-write checks",
+      "status": "fixed",
+      "evidence": [
+        "native-cohort-controls.log",
+        "native-reader-cohort.log"
+      ]
+    }
+  ],
+  "reviewedInvariants": [
+    "Dedicated owned session and one explicit READ COMMITTED transaction; active caller work never adopted",
+    "Exact native/ACL/configuration/source cut precedes private source routine invocation and migration effects",
+    "Complete original data and sequence preservation; initializer alternatives never permit conversion",
+    "One final immutable native receipt and target publication; no intermediate application runtime or old compiler launched",
+    "Original dispatch custody, backend identity, compare-and-append observations and honest commit/resource certainty",
+    "Every admitted source/previous target remains reachable; published recipes/profiles/manifests stay immutable",
+    "Latest-only native admission fence exercised using actual old wheels; no general historical application execution path",
+    "Restore ACL companion stays explicit offline operator work; no silent migration repair",
+    "Publication requires current source-bound installed receipt and checksums complete release assets"
+  ],
+  "producerSha256": {
+    "packages/python/src/truss/migrations.py": "7037c9656d5a2918f0b9cf340e070d920f91edfe813160492f9cc93f856164b9",
+    "packages/python/src/truss/recovery_registry.py": "c4590bae27749d8354ab84bffa850a3430f87d12c8c5eaeb91b8af7a628a530b",
+    "packages/python/src/truss/_migration_recipe.py": "9f962162dba5dbc536cd34696f902fa40cc888b3b0e600fc76a55e484a11b4b4",
+    "packages/python/src/truss/_migration_verify.py": "fbcbe5986236c5262ea36ad9bd0b5941f61dc36983175d829c65f8eca533a58b",
+    "packages/python/src/truss/_migration_execute.py": "804ba184de3fce44316b99c120df56222c376cf63fcbd89ffbc53ff9624ed0d6",
+    "packages/python/src/truss/_runtime_admission.py": "2eb6bc1b9f3da8153142b738fe28543bff04ca56cc56ef43ba73b13af6883972",
+    "packages/python/src/truss/psycopg_host.py": "81f4ec61ff6355dfb84874da83450fad01c3d8913dbbbeca616be388b555a63b",
+    "packages/python/src/truss/_catalog_runtime/migrations.sql": "85f7ff1dac5afca7edc1157dc54edbba489b3fe2c2a3ac9211c0224a32fd468f",
+    "packages/python/src/truss/_catalog_runtime/runtime.sql": "0f5a990730c932b63d3ad17e786be518963e870d571b6b4040c4b688c48bc75c",
+    ".github/workflows/release.yml": "96c12649194548ea21d88add4354d79bdf4dda7bc314e2fe808c45c3faddca4c",
+    "scripts/qualify-runtime-migrations.py": "bc0a06341c43f86579fc579540d2833777eeba3084f0548243dab1a41fdaa4aa",
+    "packages/python/tests/security_commit_loss_proxy.py": "f534e8a28e3bfa53db469b89ed7f26d2b08e20646c4944e5f56ff8f34b84ac9f"
+  },
+  "openProductFindings": [],
+  "remainingGates": [
+    "Complete full Linux release workflow and original public workload",
+    "Merge reviewed PR, publish tag workflow, verify public assets and clean installed migration matrix"
+  ],
+  "deferredByScope": [
+    "First real subsequent edge supplies native multi-edge skip-release proof",
+    "No pre-0.10/protected-profile/downgrade/managed-service/physical-restore qualification"
+  ],
+  "updatedAt": "2026-10-21T23:35:58.438002+00:00",
+  "localAdditionalEvidence": {
+    "atomicCapacityTests": 23,
+    "passed": true,
+    "nativeCohortTests": 2,
+    "readerCohortTests": 1,
+    "actualCommitLossTests": 2,
+    "isolatedThousandTypeCase": true,
+    "incompleteSweep": "Parallel local sweep had PostgreSQL administrator shutdown and an old unstamped reader fixture; no full-sweep pass claimed. The large-schema case passes in isolation under unchanged limits."
+  }
+}

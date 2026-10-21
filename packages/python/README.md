@@ -475,10 +475,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.46 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.47 \
   --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.49 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.46'
+  'truss-toolkit[local,native,query]==0.0.47'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -494,10 +494,10 @@ x86_64 qualification. Other platforms are outside the selected release gates.
 
 ## Run a real workflow
 
-Check out the v0.0.46 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.47 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.46 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.47 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
@@ -515,15 +515,15 @@ previews retain their historical pins and none claims independent interchange.
 
 ## Run local PostgreSQL 18.6
 
-With `uv` installed, run the published `0.0.46` package in an isolated Python
+With `uv` installed, run the published `0.0.47` package in an isolated Python
 3.11 tool environment:
 
 ```sh
 uvx --no-config --isolated --python 3.11 \
-  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.46/isolated-runtime-constraints.txt \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.46 \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.47/isolated-runtime-constraints.txt \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.47 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  --from 'truss-toolkit[local,native]==0.0.46' \
+  --from 'truss-toolkit[local,native]==0.0.47' \
   truss-local-postgres \
   --data-dir "$HOME/.local/share/truss/beads" \
   --install
