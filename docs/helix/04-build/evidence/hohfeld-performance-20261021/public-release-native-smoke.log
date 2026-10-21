@@ -1,0 +1,9 @@
+test_unnamed_elements_refuse_before_registration_and_preserve_transaction (test_core10_catalog_native.Core10CatalogNativeTests.test_unnamed_elements_refuse_before_registration_and_preserve_transaction) ... ok
+test_combined_catalog_source_query_uses_one_operation_and_current_visibility (test_compiled_query_native.CompiledQueryTests.test_combined_catalog_source_query_uses_one_operation_and_current_visibility) ... ok
+test_complete_entity_materializes_facts_and_retains_nested_proofs (test_compiled_query_native.CompiledQueryTests.test_complete_entity_materializes_facts_and_retains_nested_proofs) ... ok
+test_independent_imports_share_one_native_set_based_group_and_exact_sources (test_batched_import_native.BatchedImportTests.test_independent_imports_share_one_native_set_based_group_and_exact_sources) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 20.404s
+
+OK
