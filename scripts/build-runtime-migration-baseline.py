@@ -16,7 +16,10 @@ parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--source44-wheel',required=True,type=Path)
 parser.add_argument('--source46-wheel',required=True,type=Path)
 parser.add_argument('--output',required=True,type=Path)
+parser.add_argument('--initialization-time-zone',choices=('America/New_York','UTC'),default='America/New_York')
+parser.add_argument('--initialization-peer',type=Path,help='Other qualified timezone capture; never infer native partition bounds')
 args=parser.parse_args()
+os.environ['TZ']=args.initialization_time_zone
 OUT=args.output;OUT.mkdir(parents=True,exist_ok=True)
 sys.path.insert(0,str(ROOT/'packages/python/tests'))
 pinned=json.loads((ROOT/'packages/python/src/truss/_migrations/manifest.json').read_bytes())
@@ -35,6 +38,8 @@ model['vocabularies']={'x-migration-opaque':{'version':'1.0.0'}}
 profiles={};inventories={};routines={};data={}
 with LocalPostgres(RUN/'data') as pg:
  uri=pg.info.connection_uri
+ with psycopg.connect(uri,autocommit=True) as control:
+  if control.execute('SHOW TimeZone').fetchone()!=(args.initialization_time_zone,):raise ValueError('Exact initializer timezone required')
  for label,path in [('source44',old),('source46',base),('target',ROOT/'packages/python/src')]:
   with psycopg.connect(uri,autocommit=True) as c:c.execute('CREATE DATABASE '+label)
   params=psycopg.conninfo.conninfo_to_dict(uri);params['dbname']=label;selected=psycopg.conninfo.make_conninfo(**params)
@@ -131,6 +136,49 @@ manifest['immutableFiles']=[e['artifact'] for e in edges]+[s+'.json' for s in ma
 for name in ('target.json','steps.json','ownership.json','new-module-grants.json'):(OUT/name).unlink()
 manifest['files']={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(OUT.glob('*.json')) if p.name!='manifest.json'}
 (OUT/'manifest.json').write_bytes(canonical(manifest))
+
+# Both initializers execute the original released SQL. Their different native
+# bounds remain different instants; canonical UTC observation is not conversion.
+capture={'initializationTimeZone':args.initialization_time_zone,
+         'inventories':{d['sha256']:hashlib.sha256(canonical(d['inventory'])).hexdigest() for d in data.values()}}
+(OUT/'capture.txt').write_bytes(canonical(capture))
+if args.initialization_peer:
+ peer=args.initialization_peer
+ prior=json.loads((peer/'capture.txt').read_bytes())
+ if {prior['initializationTimeZone'],args.initialization_time_zone}!={'America/New_York','UTC'}:
+  raise ValueError('The two exact initialization profiles are required')
+ rules=[]
+ for label,d in data.items():
+  other=json.loads((peer/(d['sha256']+'.json')).read_bytes())
+  if hashlib.sha256(canonical(other['inventory'])).hexdigest()!=prior['inventories'][d['sha256']]:
+   raise ValueError('Peer native observation changed')
+  for category,rows in d['inventory'].items():
+   before=other['inventory'][category]
+   if category!='relations':
+    if rows!=before:raise ValueError('Unreviewed initialization definition difference: '+category)
+    continue
+   if len(rows)!=len(before):raise ValueError('Initialization membership changed')
+   changed=[]
+   for left,right in zip(before,rows,strict=True):
+    if left==right:continue
+    if left[0]!='journal_runtime_horizon' or left[:7]+left[8:]!=right[:7]+right[8:]:
+     raise ValueError('Unreviewed native initialization difference')
+    changed.append({'surface':'relations','identity':['journal_runtime_horizon'],
+                    'rows':sorted([left,right],key=canonical)})
+   if len(changed)!=1:raise ValueError('Exactly the observed horizon difference required')
+   if rules and rules!=changed:raise ValueError('Source/target initialization profiles differ')
+   rules=changed
+ proof={'scope':'Original published-wheel initializers, exact native partition bounds; variants are distinct instants preserved without conversion',
+        'observationTimeZone':'UTC','qualifiedTimeZones':['America/New_York','UTC'],
+        'captures':sorted([prior,capture],key=lambda c:c['initializationTimeZone']),
+        'sourceWheels':manifest['sourceWheels'],'rules':rules}
+ name='native-initialization-profiles-0.1.json';(OUT/name).write_bytes(canonical(proof))
+ for d in data.values():
+  d['initializationAlternatives']=rules
+  (OUT/(d['sha256']+'.json')).write_bytes(canonical(d))
+ manifest['initializationProfiles']=name;manifest['immutableFiles'].append(name)
+ manifest['files']={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(OUT.glob('*.json')) if p.name!='manifest.json'}
+ (OUT/'manifest.json').write_bytes(canonical(manifest))
 
 for relative,name in [('docs/helix/02-design/models/truss-runtime-migrations-0.1.umf.json','receipt-model-0.1.umf.json'),('docs/helix/04-build/evidence/runtime-migrations-20261021/receipt-model.json','receipt-model-0.1.evidence.json')]:
  (OUT/name).write_bytes((ROOT/relative).read_bytes())

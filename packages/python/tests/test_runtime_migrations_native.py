@@ -120,6 +120,47 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
         self.assertEqual(command('reconcile','--reference',reference)['outcome'],'already_applied')
         self.assertEqual(command('receipt','--reference',reference)['attemptId'],prepared['attempt_id'])
 
+    def test_observer_timezone_cannot_convert_native_partition_bounds(self):
+        """@covers US-045-AC6 @covers US-045-AC7"""
+        before=self.state()[0]
+        original_zone=self.admin.execute('SHOW TimeZone').fetchone()[0]
+        try:
+            for zone in ('America/New_York','Pacific/Auckland'):
+                self.admin.execute("SELECT set_config('TimeZone',%s,false)",(zone,))
+                with self.admin.cursor() as cursor:self.assertEqual(structure(cursor),before)
+                self.assertEqual(self.admin.execute('SHOW TimeZone').fetchone(),(zone,))
+            tool=RuntimeMigrations(lambda:psycopg.connect(**self.params,autocommit=True,
+                options='-c statement_timeout=10000 -c TimeZone=Pacific/Auckland'),self.registry)
+            result=tool.apply(tool.prepare().reference)
+            self.assertEqual(result.outcome,'migrated',result)
+            after=self.state()[0]
+            self.assertEqual(next(r for r in before['relations'] if r[0]=='journal_runtime_horizon'),
+                             next(r for r in after['relations'] if r[0]=='journal_runtime_horizon'))
+        finally:self.admin.execute("SELECT set_config('TimeZone',%s,false)",(original_zone,))
+
+    def test_other_qualified_bounds_cannot_replace_original_initialization(self):
+        """@covers US-045-AC7: rollback even a separately qualified horizon change."""
+        from truss import _migration_execute
+        manifest,artifacts,_=load_recipe();before=self.state()
+        profile=json.loads(artifacts[manifest['target']+'.json'])
+        original=next(r for r in before[0]['relations'] if r[0]=='journal_runtime_horizon')
+        other=next(r for r in profile['initializationAlternatives'][0]['rows'] if r!=original)
+        verify=_migration_execute.verify_artifact;changed=False
+        def replace_bounds(cursor,selected):
+            nonlocal changed
+            if selected['sha256']==manifest['target'] and not changed:
+                cursor.execute('ALTER TABLE truss.journal DETACH PARTITION truss.journal_runtime_horizon',prepare=False)
+                cursor.execute('ALTER TABLE truss.journal ATTACH PARTITION truss.journal_runtime_horizon '+other[7],prepare=False)
+                changed=True
+            return verify(cursor,selected)
+        prepared=self.tool.prepare()
+        with patch('truss._migration_execute.verify_artifact',side_effect=replace_bounds):
+            result=self.tool.apply(prepared.reference)
+        self.assertTrue(changed)
+        self.assertEqual(result.outcome,'rolled_back',result)
+        self.assertIn('original native initialization',result.detail)
+        self.assertEqual(self.state(),before)
+
     def test_fresh_latest_has_empty_ledger_and_requires_no_migration(self):
         """@covers US-045-AC6 @covers US-045-AC8"""
         name='fresh_'+uuid4().hex[:12]

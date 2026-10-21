@@ -98,13 +98,14 @@ def main():
         suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(case))
     result=unittest.TextTestRunner(verbosity=2).run(suite)
     receipt={'scope':'Installed latest-only runtime migration gate; PostgreSQL18.6, unprotected UMF0.10 lineage',
+        'sourceCommit':os.environ.get('GITHUB_SHA'),'workflowRunId':os.environ.get('GITHUB_RUN_ID'),
         'package':importlib.metadata.version('truss-toolkit'),'loadedPackage':str(Path(truss.__file__).resolve()),
         'platform':sys.platform,'python':sys.version,'recipeSha256':recipe_digest,
         'targetManifestSha256':manifest['target'],'sources':sorted(fixtures),
         'originalWheels':{label:{'filename':path.name,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()} for label,path in wheels.items()},
         'previousMigrationRelease':previous[0] if previous else None,'tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),
         'skipped':len(result.skipped),'passed':result.wasSuccessful() and not result.skipped,
-        'limitations':['No pre-0.10 or protected-profile migration','Hosted Linux qualification must run separately','First real subsequent edge supplies native skip-release-chain proof']}
+        'limitations':['No pre-0.10 or protected-profile migration','Qualification applies only to the recorded platform and exact tuple','First real subsequent edge supplies native skip-release-chain proof']}
     args.output.parent.mkdir(parents=True,exist_ok=True);args.output.write_text(json.dumps(receipt,indent=2)+'\n')
     raise SystemExit(0 if receipt['passed'] else 1)
 

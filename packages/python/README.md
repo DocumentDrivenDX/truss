@@ -23,7 +23,10 @@ During an explicit offline restore, apply that original companion's
 `rowTypePrivilegeRestoreSql` before verification, migration or application access.
 Migration refuses privilege drift and never repairs it automatically. The two
 observed deparse spelling changes are qualified by identical pinned native parse
-trees; other definition differences remain refusals.
+trees. Inventory observation uses UTC and preserves the observer's timezone.
+The two exact journal-horizon initialization profiles created by the original
+installer under UTC and America/New_York are qualified separately; migration
+preserves the source bounds without conversion. Other differences refuse.
 The migration tool owns a separate idle administrative connection and its entire
 transaction. Application startup and `--install` never upgrade or reset a database.
 Set `TRUSS_DATABASE_URI` to the administrative connection URI, then use a durable,

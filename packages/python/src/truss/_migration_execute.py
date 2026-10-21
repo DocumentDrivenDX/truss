@@ -4,7 +4,7 @@ import json
 from hashlib import sha256
 from time import monotonic
 from psycopg import sql
-from ._migration_verify import verify,verify_artifact,verify_profile,preservation,canonical,acl
+from ._migration_verify import verify,verify_artifact,verify_profile,preservation,canonical,acl,require_preserved_initialization
 
 
 class MigrationCursor:
@@ -87,6 +87,7 @@ def execute(cursor,request,manifest,artifacts,recipe_digest,max_bytes,route):
     # grants forever would violate latest-only support. Retain both observations.
     target=json.loads(artifacts[manifest['target']+'.json'])
     _,target=verify_artifact(cursor,target)
+    require_preserved_initialization(source,target)
     cursor.execute('INSERT INTO truss.runtime_migration_receipt(attempt_id,request_bytes,request_sha256,source_sha256,target_sha256,target_release,target_layout_profile,target_configuration,recipe_sha256,recipe_bytes,source_inventory_bytes,target_inventory_bytes,step_evidence_bytes,preservation_bytes) VALUES(%s,%s,encode(sha256(%s),\'hex\'),%s,%s,%s,%s::jsonb,%s::jsonb,%s,%s,%s,%s,%s,%s)',
         (request['attemptId'],canonical(request),canonical(request),request['source'],manifest['target'],manifest['targetRelease'],json.dumps(target['manifest']['layoutProfile']),json.dumps(target['configuration']),recipe_digest,canonical(recipes),canonical(source),canonical(target),canonical({'steps':ordered,'sourceAcl':old_acl,'targetAcl':acl(cursor)}),canonical(before)),prepare=False)
     if active(cursor)!=(manifest['targetRelease'],manifest['target']):raise ValueError('Atomic target publication failed')

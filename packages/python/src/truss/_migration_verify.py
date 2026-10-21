@@ -64,9 +64,19 @@ _STRUCTURE = {
 
 def structure(cursor):
     result={}
-    for key,query in _STRUCTURE.items():
-        cursor.execute(query,prepare=False)
-        result[key]=[list(row) for row in cursor.fetchall()]
+    # Native timestamptz deparse depends on the observing session. A scoped
+    # transaction/savepoint gives even an idle autocommit observer a stable cut;
+    # restore its timezone before returning to an existing caller transaction.
+    with cursor.connection.transaction():
+        cursor.execute("SELECT current_setting('TimeZone')",prepare=False)
+        original_zone=cursor.fetchone()[0]
+        cursor.execute("SET LOCAL TimeZone='UTC'",prepare=False)
+        try:
+            for key,query in _STRUCTURE.items():
+                cursor.execute(query,prepare=False)
+                result[key]=[list(row) for row in cursor.fetchall()]
+        finally:
+            cursor.execute("SELECT set_config('TimeZone',%s,true)",(original_zone,),prepare=False)
     # Internal FK trigger names embed OIDs; constraint definitions already account for them.
     result['triggers']=[row for row in result['triggers'] if not row[3]]
     return result
@@ -166,15 +176,29 @@ def matches_inventory(observed,profile):
     expected=profile['inventory']
     if observed.keys()!=expected.keys():return False
     rules={(r['surface'],*r['identity']):r['definitions'] for r in profile.get('definitionAlternatives',[])}
+    initial={tuple(r['identity']):r['rows'] for r in profile.get('initializationAlternatives',[])}
     for category,rows in expected.items():
         actual=observed[category]
         if actual==rows:continue
-        if category not in ('constraints','triggers') or len(actual)!=len(rows):return False
+        if category not in ('constraints','triggers','relations') or len(actual)!=len(rows):return False
         for before,after in zip(rows,actual,strict=True):
             if before==after:continue
+            if category=='relations':
+                permitted=initial.get((before[0],),[])
+                if before not in permitted or after not in permitted:return False
+                continue
             permitted=rules.get((category,*before[:2]),[])
             if before[:-1]!=after[:-1] or before[-1] not in permitted or after[-1] not in permitted:return False
     return True
+
+
+def require_preserved_initialization(source,target):
+    """Qualified source variants are distinct native instants, never conversions."""
+    for rule in source.get('initializationAlternatives',[]):
+        identity=rule['identity'][0]
+        before=[r for r in source['inventory']['relations'] if r[0]==identity]
+        after=[r for r in target['inventory']['relations'] if r[0]==identity]
+        if len(before)!=1 or before!=after:raise ValueError('Migration changed original native initialization')
 
 
 def verify_artifact(cursor,profile):

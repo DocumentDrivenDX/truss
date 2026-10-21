@@ -34,9 +34,15 @@ def load_recipe():
     equivalence=json.loads(artifacts[manifest['definitionEquivalence']])
     if equivalence['passed'] is not True or equivalence['backend']!='@libpg-query/parser@17.6.10':
         raise ValueError('Qualified native deparse equivalence required')
+    initialization=json.loads(artifacts[manifest['initializationProfiles']])
+    if initialization['observationTimeZone']!='UTC' or initialization['qualifiedTimeZones']!=['America/New_York','UTC']:
+        raise ValueError('Exact native initialization qualification required')
     for endpoint in [manifest['target'],*manifest['sources']]:
-        if json.loads(artifacts[endpoint+'.json'])['definitionAlternatives']!=equivalence['rules']:
+        profile=json.loads(artifacts[endpoint+'.json'])
+        if profile['definitionAlternatives']!=equivalence['rules']:
             raise ValueError('Unqualified native definition alternative')
+        if profile['initializationAlternatives']!=initialization['rules']:
+            raise ValueError('Unqualified native initialization alternative')
     for edge in manifest['edges']:
         candidate=json.loads(artifacts[edge['artifact']])
         if candidate['source']!=edge['source'] or candidate['target']!=edge['target']:

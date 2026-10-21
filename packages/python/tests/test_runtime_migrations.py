@@ -53,6 +53,22 @@ class MigrationRecipeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Restart-durable'):
             RuntimeMigrations(lambda: self.fail('No connection'),Registry())
 
+    def test_only_exact_native_initialization_profiles_are_admitted_and_preserved(self):
+        """@covers US-045-AC6 @covers US-045-AC7"""
+        from truss._migration_verify import matches_inventory,require_preserved_initialization
+        manifest,artifacts,_=load_recipe();profile=json.loads(artifacts[manifest['sources'][0]+'.json'])
+        rule=profile['initializationAlternatives'][0]
+        selected=next(i for i,row in enumerate(profile['inventory']['relations']) if row[0]==rule['identity'][0])
+        for row in rule['rows']:
+            observed=copy.deepcopy(profile['inventory']);observed['relations'][selected]=row
+            self.assertTrue(matches_inventory(observed,profile))
+        changed=copy.deepcopy(profile);changed['inventory']['relations'][selected]=next(row for row in rule['rows'] if row!=profile['inventory']['relations'][selected])
+        with self.assertRaisesRegex(ValueError,'original native initialization'):require_preserved_initialization(profile,changed)
+        altered=copy.deepcopy(profile['inventory']);altered['relations'][selected][7]+=' '
+        self.assertFalse(matches_inventory(altered,profile))
+        altered=copy.deepcopy(profile['inventory']);altered['relations'][selected][3]=True
+        self.assertFalse(matches_inventory(altered,profile))
+
 
 class RecoveryRegistryTests(unittest.TestCase):
     def test_original_evidence_conflict_restart_and_observation_order(self):

@@ -109,6 +109,16 @@ repairs that drift. Only two exact deparse alternatives are admitted, justified
 by identical parse trees from the pinned UMF native backend with source positions
 excluded; raw observed definitions remain in receipts. Other differences refuse.
 
+Native inventory observation scopes `TimeZone=UTC` and restores the observer's
+original setting. The source installer used timezone-sensitive horizon literals;
+UTC and America/New_York therefore produced two distinct, qualified native
+partition-bound profiles. The packaged initialization proof records real original
+wheel captures for each. These bounds are not equivalent spellings or a temporal
+conversion: migration must preserve the exact source row unchanged, even when
+another row is independently admitted. Unknown bounds refuse. Tests change the
+observer timezone and deliberately substitute the other admitted bound; the
+latter must roll back. This adds no old application runtime support.
+
 The release gate retains every admitted source, previous target, published
 immutable artifact and original manifest. Real published wheels produce fixtures;
 only latest tooling performs conversions. An unchanged database tuple gets a
