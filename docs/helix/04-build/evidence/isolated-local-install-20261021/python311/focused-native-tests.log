@@ -1,0 +1,13 @@
+test_constructor_failure_with_postmaster_marker_retains_custody (packages.python.tests.test_local_runtime.LocalRuntimeTests.test_constructor_failure_with_postmaster_marker_retains_custody) ... ok
+test_failed_cleanup_retains_lease_until_explicit_recovery (packages.python.tests.test_local_runtime.LocalRuntimeTests.test_failed_cleanup_retains_lease_until_explicit_recovery) ... ok
+test_nested_directory_custody_and_independent_servers (packages.python.tests.test_local_runtime.LocalRuntimeTests.test_nested_directory_custody_and_independent_servers) ... ok
+test_nonempty_and_wrong_version_directories_refuse_unchanged (packages.python.tests.test_local_runtime.LocalRuntimeTests.test_nonempty_and_wrong_version_directories_refuse_unchanged) ... ok
+test_retained_commit_and_exception_cleanup (packages.python.tests.test_local_runtime.LocalRuntimeTests.test_retained_commit_and_exception_cleanup) ... ok
+test_retired_pgserver_version_refuses_before_startup (packages.python.tests.test_local_runtime.LocalRuntimeTests.test_retired_pgserver_version_refuses_before_startup) ... ok
+test_parallel_private_clusters_are_unix_only_and_retain_separate_data (packages.python.tests.test_local_runtime_native_isolation.LocalRuntimeNativeIsolationTests.test_parallel_private_clusters_are_unix_only_and_retain_separate_data) ... ok
+test_install_commit_and_restart_status (packages.python.tests.test_local_install_cli_native.LocalInstallCliTests.test_install_commit_and_restart_status) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 25.587s
+
+OK

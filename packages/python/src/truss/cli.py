@@ -1,10 +1,24 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """Pinned pgserver development launcher with fresh current Truss installation."""
 import argparse
+from contextlib import contextmanager
 import json
+import os
 from pathlib import Path
 import signal
 import threading
+
+
+@contextmanager
+def _without_postgres_environment():
+    """Keep inherited libpq defaults from changing the owned install session."""
+    saved = {name: value for name, value in os.environ.items() if name.startswith('PG')}
+    for name in saved:
+        os.environ.pop(name, None)
+    try:
+        yield
+    finally:
+        os.environ.update(saved)
 
 
 def _installation(connection_uri):
@@ -18,6 +32,8 @@ def _installation(connection_uri):
             raise RuntimeError(f'Truss installation/status refused: {result!r}')
         return result.value
 
+    # The URI carries the owned socket/database/user; the CLI has removed
+    # inherited PG* settings for this one-shot connection.
     with psycopg.connect(connection_uri, autocommit=True,
                          options='-c statement_timeout=10000') as connection:
         pending = None
@@ -81,9 +97,17 @@ def main():
         from truss import LocalPostgres
         with LocalPostgres(args.data_dir) as runtime:
             info = runtime.info
-            installation = _installation(info.connection_uri) if args.install else None
+            if args.install:
+                # This executable handles a single owned server in its own
+                # process, so temporarily remove libpq's process environment
+                # while creating its explicit host connection.
+                with _without_postgres_environment():
+                    installation = _installation(info.connection_uri)
+            else:
+                installation = None
             output = {'runtime': 'pgserver', 'runtimeVersion': info.runtime_version,
                               'serverVersion': info.server_version, 'dataDirectory': str(info.data_directory),
+                              'socketDirectory': str(info.socket_directory), 'port': info.port,
                               'connectionUri': info.connection_uri, 'trussInstallation': 'installed' if installation else info.truss_installation,
                               'scope': 'local_truss_candidate' if installation else 'local_postgresql_only'}
             if installation is not None:
