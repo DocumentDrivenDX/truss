@@ -1,0 +1,233 @@
+{
+  "passed": true,
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "sourceCheckoutRequired": false,
+  "workingDirectory": "/tmp/truss-published-uvx-noq_ajzx",
+  "command": [
+    "uvx",
+    "--no-config",
+    "--isolated",
+    "--python",
+    "3.11",
+    "--constraints",
+    "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.46/isolated-runtime-constraints.txt",
+    "--find-links",
+    "https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.46",
+    "--find-links",
+    "https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2",
+    "--from",
+    "truss-toolkit[local,native]==0.0.46",
+    "truss-local-postgres",
+    "--data-dir",
+    "$HOME/.local/share/truss/beads",
+    "--install"
+  ],
+  "package": {
+    "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+    "version": "0.0.46",
+    "loaded": "/Users/erik/.cache/uv/archive-v0/VeIP42n704GqUDGJ/lib/python3.11/site-packages/truss/__init__.py"
+  },
+  "original": [
+    {
+      "runtime": "pgserver",
+      "runtimeVersion": "18.6.1",
+      "serverVersion": "18.6",
+      "dataDirectory": "/private/tmp/truss-published-uvx-noq_ajzx/first",
+      "socketDirectory": "/private/tmp/truss-pg18-501/810e0db931754b1e1ec1792c",
+      "port": 5432,
+      "connectionUri": "postgresql://postgres@/postgres?host=%2Fprivate%2Ftmp%2Ftruss-pg18-501%2F810e0db931754b1e1ec1792c&port=5432",
+      "trussInstallation": "installed",
+      "scope": "local_truss_candidate",
+      "installation": {
+        "action": "created",
+        "installationId": "742846eb-a3b5-4af9-abb1-c1c973619946",
+        "catalogRevision": 0,
+        "releaseId": "truss-catalog-runtime/0.72-candidate",
+        "releaseSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+        "layoutProfile": {
+          "identity": "truss-layout",
+          "version": "1.0",
+          "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+        },
+        "ownerRole": "truss_owner_ed692adf13974309",
+        "registrarRole": "truss_registrar_ed692adf13974309"
+      }
+    },
+    {
+      "runtime": "pgserver",
+      "runtimeVersion": "18.6.1",
+      "serverVersion": "18.6",
+      "dataDirectory": "/private/tmp/truss-published-uvx-noq_ajzx/second",
+      "socketDirectory": "/private/tmp/truss-pg18-501/665a1d01b23ff7725f6c7155",
+      "port": 5432,
+      "connectionUri": "postgresql://postgres@/postgres?host=%2Fprivate%2Ftmp%2Ftruss-pg18-501%2F665a1d01b23ff7725f6c7155&port=5432",
+      "trussInstallation": "installed",
+      "scope": "local_truss_candidate",
+      "installation": {
+        "action": "created",
+        "installationId": "f391d9cc-eeb8-456c-8a14-d9963057d6b8",
+        "catalogRevision": 0,
+        "releaseId": "truss-catalog-runtime/0.72-candidate",
+        "releaseSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+        "layoutProfile": {
+          "identity": "truss-layout",
+          "version": "1.0",
+          "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+        },
+        "ownerRole": "truss_owner_2e80f37093ef421e",
+        "registrarRole": "truss_registrar_2e80f37093ef421e"
+      }
+    }
+  ],
+  "restarted": [
+    {
+      "runtime": "pgserver",
+      "runtimeVersion": "18.6.1",
+      "serverVersion": "18.6",
+      "dataDirectory": "/private/tmp/truss-published-uvx-noq_ajzx/first",
+      "socketDirectory": "/private/tmp/truss-pg18-501/810e0db931754b1e1ec1792c",
+      "port": 5432,
+      "connectionUri": "postgresql://postgres@/postgres?host=%2Fprivate%2Ftmp%2Ftruss-pg18-501%2F810e0db931754b1e1ec1792c&port=5432",
+      "trussInstallation": "installed",
+      "scope": "local_truss_candidate",
+      "installation": {
+        "action": "status_confirmed",
+        "installationId": "742846eb-a3b5-4af9-abb1-c1c973619946",
+        "catalogRevision": 0,
+        "releaseId": "truss-catalog-runtime/0.72-candidate",
+        "releaseSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+        "layoutProfile": {
+          "identity": "truss-layout",
+          "version": "1.0",
+          "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+        }
+      }
+    },
+    {
+      "runtime": "pgserver",
+      "runtimeVersion": "18.6.1",
+      "serverVersion": "18.6",
+      "dataDirectory": "/private/tmp/truss-published-uvx-noq_ajzx/second",
+      "socketDirectory": "/private/tmp/truss-pg18-501/665a1d01b23ff7725f6c7155",
+      "port": 5432,
+      "connectionUri": "postgresql://postgres@/postgres?host=%2Fprivate%2Ftmp%2Ftruss-pg18-501%2F665a1d01b23ff7725f6c7155&port=5432",
+      "trussInstallation": "installed",
+      "scope": "local_truss_candidate",
+      "installation": {
+        "action": "status_confirmed",
+        "installationId": "f391d9cc-eeb8-456c-8a14-d9963057d6b8",
+        "catalogRevision": 0,
+        "releaseId": "truss-catalog-runtime/0.72-candidate",
+        "releaseSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+        "layoutProfile": {
+          "identity": "truss-layout",
+          "version": "1.0",
+          "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+        }
+      }
+    }
+  ],
+  "releasePins": {
+    "tag": "v0.0.46",
+    "commit": "4c9a2a7d7abf47b10bb1d6db7dcfe5d5eea0b2ce",
+    "distribution": "truss-toolkit",
+    "version": "0.0.46",
+    "runtime": "truss-catalog-runtime/0.72-candidate",
+    "runtimeManifestSha256": "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+    "layout": {
+      "identity": "truss-layout",
+      "version": "1.0",
+      "sha256": "cf417e0af5d37dd61fa5f39f818d2e7282a29e6c6c6ab7fc0b26dcdde99e7dec"
+    },
+    "weftRelease": "v0.4.49",
+    "weftBackend": "0.4.41",
+    "pgserver": "pgserver-pg18==18.6.1",
+    "pgserverRelease": "pg18.6-pgv0.8.6-r2",
+    "psycopg": "3.3.6",
+    "deploymentJavaScript": "embedded-v8",
+    "embeddedEngine": "mini-racer==0.14.1",
+    "externalJavaScriptRuntimeRequired": false,
+    "nativePlatforms": [
+      "linux-x86_64"
+    ],
+    "localRuntimeConstraintsAsset": "isolated-runtime-constraints.txt",
+    "localRuntimeConstraintsSha256": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+    "catalogRegistrationReportInterface": "truss-catalog-registration-report/0.6",
+    "catalogPreparationInterface": "truss-registration-preparation/2.0",
+    "catalogAcceptanceInputInterface": "truss-acceptance-input/0.2.0",
+    "catalogViewInterface": "truss-catalog-view/0.2.0",
+    "mandatoryPreparationTranscript": false,
+    "supportedUmfVersions": [
+      "0.10.0"
+    ],
+    "installationUpgradesSupported": false,
+    "timestampComparisonProfile": "umf-rfc3339-exact-instant/1.0.0",
+    "umfExactInstantCommit": "cbb6fb87",
+    "umf010CatalogSupport": {
+      "identity": "truss-fresh-catalog-support",
+      "version": "0.20.0",
+      "sha256": "364335de9a0e6968106af189dcb11d5b4c86b2114361fcffd722c4154bf809cb"
+    },
+    "umf010CatalogReportInterface": "truss-catalog-registration-report/0.6",
+    "catalogSourceReferenceFormat": "truss-catalog-source-reference/0.1",
+    "catalogRebindReportInterface": "truss-catalog-registration-report/0.6",
+    "catalogRebindProfile": "truss-native-catalog-rebind/0.4",
+    "catalogRebindSupportedProfiles": [
+      "truss-native-catalog-rebind/0.1",
+      "truss-native-catalog-rebind/0.2",
+      "truss-native-catalog-rebind/0.3",
+      "truss-native-catalog-rebind/0.4"
+    ],
+    "catalogKeyBackfillReportInterface": "truss-catalog-registration-report/0.6",
+    "catalogKeyBackfillProfile": "truss-catalog-key-backfill/0.2",
+    "catalogKeyBackfillSupportedProfiles": [
+      "truss-catalog-key-backfill/0.1",
+      "truss-catalog-key-backfill/0.2"
+    ],
+    "currentQueryProfile": "truss-current-query-protection/0.1-candidate",
+    "currentQueryResultAbi": "weft.postgresql.current-values/0.2-candidate",
+    "currentQueryMode": "explicitly-activated-read-only",
+    "currentQueryPlatforms": [
+      "linux-x86_64"
+    ],
+    "currentQueryWeftSource": "5f013200cf36ddcaf5d4a380ba961267f819f7ca",
+    "mutationProfile": {
+      "identity": "truss-owned-scalar-graph",
+      "version": "0.1",
+      "sha256": "5f5badaa3b0beb01fef08d48883395eabc8499155d4c31f7ef802e63d49a6dde"
+    },
+    "valueProfile": {
+      "identity": "truss-scalar-string-values",
+      "version": "0.6",
+      "sha256": "ca49b4e13a55be8e23d44d4b00ef07332b6249d4f5ae16e5b82c8881061e22ce"
+    },
+    "objectReadProfiles": [
+      "truss-python-scalar-object/0.4",
+      "truss-python-logical-object/0.1"
+    ],
+    "logicalQueryAbi": {
+      "identity": "truss-postgresql-logical-query",
+      "version": "1.1",
+      "sha256": "9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f"
+    },
+    "compiledQueryCapability": {
+      "identity": "truss-native-weft-runtime-query",
+      "version": "0.8",
+      "sha256": "bd0ec0d430233128aa2b79f9c49ca534660290f49ae3aa1fa258027e1ffdfcd6"
+    },
+    "catalogRegistrationSourceFormat": "truss-registration-summary/2.0",
+    "catalogPreparationSummaryInterface": "truss-registration-preparation/2.0"
+  },
+  "verifiedAssets": {
+    "catalog-key-backfill-report-v0.1.md": "fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50",
+    "catalog-rebind-report-v0.2.md": "14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942",
+    "catalog-rebind-report-v0.4.md": "38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4",
+    "catalog-registration-summary-v0.1.md": "674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945",
+    "catalog-source-reference-v0.1.md": "41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7",
+    "isolated-runtime-constraints.txt": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+    "logical-query-abi.json": "9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f",
+    "release-pins.json": "c50d99e0bc5b2a67348a00ba4d336bf0ba26a5a59a16912a7af61363bfc69cbc",
+    "truss_toolkit-0.0.46-py3-none-any.whl": "b2c09c8d9c4f8cc40330d2fab4b5ea7cfb26559d2231455c2b1658a92c0368dc",
+    "truss_toolkit-0.0.46.tar.gz": "11cb86647084370843a41f5e45d57297a4e0c7da045113d40aa91bd487306ddb"
+  }
+}
