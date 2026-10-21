@@ -48,6 +48,11 @@ _CONSUMER_COHORTS=(
         'weftVersion':'0.4.49',
         'weftWheelSha256':'695e12867dfcffedb0e4bde7fa571835ebd43fd1c06b0d775b1abecb45ffa117',
         'weftModuleSha256':'2c0169ba875c3dd174e5c450c851d1cb295fddc2adf29943e660e8b6a9c9aa88'},
+    {**_DISCLOSURE_CONSUMER,
+        'weftRevision':'5f013200cf36ddcaf5d4a380ba961267f819f7ca',
+        'weftVersion':'0.4.49',
+        'weftWheelSha256':'8ca1625249c1d3bed20864dfd71481d8b956b3901ffdc619fc3ec4a1a473be9c',
+        'weftModuleSha256':'01a1e0002edafabffaa7611e40a3a33fc48d221a5e0084e96fe1806a0f0c3fa8'},
 )
 
 
