@@ -112,3 +112,14 @@ cursor too; its self-test and installed native Pizza workflow passed and report
 all11 submits. See `truss-hp-counter-native.json`. Earlier public workload counter
 receipts retain this specific counting limitation; their functional checks remain
 valid and are not promoted to complete statement budgets.
+
+Final exact-tag run39663493824 passed518 selected test executions across39
+commands and published Truss0.0.45. `linux-tagged-qualification.json` records
+its actual statement counts and links the compressed original public workload.
+`public-release-verification.json` records verified public checksums, all429
+exact wheel/sdist runtime payloads, release pins, a clean fresh dependency
+installation and four PostgreSQL18.6 native smoke cases. The original log is
+`public-release-native-smoke.log`. These receipts close publication and fresh
+artifact verification; the noisy-host latency and host-adoption limitations above
+remain unchanged. Weft's CI-only formal-selector correction is merged in PR26;
+all13 mapped Rust tests were selected and passed without changing release bytes.
