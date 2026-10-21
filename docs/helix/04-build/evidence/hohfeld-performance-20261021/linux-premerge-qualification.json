@@ -1,0 +1,122 @@
+{
+  "status": "passed",
+  "scope": "Pre-merge complete installed Linux campaign; exact tagged artifact publication remains separate",
+  "repository": "DocumentDrivenDX/truss",
+  "sourceCommit": "a063b104590ff21851994ecf6a97e1a44c6945b6",
+  "workflowRun": 39660391896,
+  "workflowUrl": "https://github.com/DocumentDrivenDX/truss/actions/runs/39660391896",
+  "platform": "linux-x86_64",
+  "postgresql": "18.6",
+  "python": "3.11.17",
+  "weft": "0.4.49",
+  "selectedTestExecutions": 518,
+  "testCommands": 39,
+  "counting": "Executions across selected commands, including intentional repeated focused controls; not unique test count or whole-repository discovery",
+  "jobs": [
+    {
+      "name": "package",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "large-capacity",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "native (ubuntu-24.04)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "publish",
+      "status": "completed",
+      "conclusion": "skipped"
+    },
+    {
+      "name": "stress",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ],
+  "statementBudgets": [
+    {
+      "operation": "read_by_business_key",
+      "executeCalls": 3,
+      "driverWaitCalls": 3,
+      "seconds": 0.013905969000006735
+    },
+    {
+      "operation": "list_page_51",
+      "executeCalls": 3,
+      "driverWaitCalls": 3,
+      "seconds": 0.0565307340000345
+    },
+    {
+      "operation": "type_enumeration",
+      "executeCalls": 3,
+      "driverWaitCalls": 3,
+      "seconds": 0.009935809000012341
+    },
+    {
+      "operation": "conditional_catalog_hit",
+      "executeCalls": 3,
+      "driverWaitCalls": 3,
+      "seconds": 0.0029064860000289627
+    },
+    {
+      "operation": "prepare_group",
+      "executeCalls": 3,
+      "driverWaitCalls": 3,
+      "seconds": 0.005979160000038064
+    },
+    {
+      "operation": "compiled_singleton_complete_entity",
+      "executeCalls": 11,
+      "driverWaitCalls": 11,
+      "seconds": 0.009407588000044598
+    },
+    {
+      "operation": "combined_catalog_source_singleton",
+      "executeCalls": 11,
+      "driverWaitCalls": 11,
+      "seconds": 0.011466842999993787
+    },
+    {
+      "operation": "single_effect_apply",
+      "executeCalls": 4,
+      "driverWaitCalls": 4,
+      "seconds": 0.04016071299997748
+    },
+    {
+      "operation": "three_effect_apply",
+      "executeCalls": 3,
+      "driverWaitCalls": 3,
+      "seconds": 0.10736325000004854
+    }
+  ],
+  "performanceScope": "Public API statements exclude connection/setup/adoption/settlement. Single-call times are not p95 certification; original Hohfeld noisy-host targets are not all established.",
+  "runtimePayloadCount": 429,
+  "exactRuntimePayloadsInWheelAndSdist": true,
+  "artifacts": [
+    {
+      "name": "truss_toolkit-0.0.45-py3-none-any.whl",
+      "sha256": "73d2968f33a2e8b51927ba775137478f44f731a18a97d108f527c9299369b942"
+    },
+    {
+      "name": "truss_toolkit-0.0.45.tar.gz",
+      "sha256": "f16b5164cc82a97268e77b28c3a53baf8f4d9f9bd880011098851888976f2ad2"
+    }
+  ],
+  "publicWorkload": {
+    "functionalPassed": true,
+    "nodes": 1000,
+    "edges": 1000,
+    "readSamples": 1000,
+    "committedUpdates": 200,
+    "reopenedValuesVerified": true,
+    "reportSha256": "fffa3efd9a8dfafff6fccdbfc4a551c16f59c59f5b3dec070c348fdba893cd72",
+    "report": "linux-premerge-public-workload.json.gz",
+    "counterCoverage": "Includes directly constructed RawCursor data query; complete compiled read has 11 submissions"
+  }
+}

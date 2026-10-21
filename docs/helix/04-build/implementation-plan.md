@@ -113,6 +113,22 @@ create, update, query and reopen. The benchmark SQL counter now also counts its
 direct RawCursor query; an actual installed workflow confirms11 statements,
 matching the independent operation-budget control.
 
+### Complete installed Linux gate — 2026-10-21
+
+Run39660391896 passed package reproducibility/exact payloads and the full selected
+native campaign:518 test executions across39 commands, including intentional
+repeated controls. This is release selection, not whole-repository discovery.
+The installed0.0.45 wheel and sdist each match all429 runtime source payloads.
+The public workload passed1,000 nodes,1,000 edges,1,000 read samples,200 committed
+updates and reopened-value verification with SQL10s/operation30s limits. The
+counter includes the raw compiled-data query. Current policy/disclosure, all27
+performance/live-authority controls, actual set-based import DML, lifecycle,
+audit and final host fault-containment checks passed. The original noisy-host
+latency targets remain separately qualified; no quiet-host certification follows.
+See `evidence/hohfeld-performance-20261021/linux-premerge-qualification.json`
+and its compressed original public-workload report. Review/merge/tagged-package
+qualification and fresh public release verification remain the final delivery steps.
+
 ## Registration names — R16.4, 2026-10-21
 
 Owner-authorized fix under FEAT-001/CAT-01 and
