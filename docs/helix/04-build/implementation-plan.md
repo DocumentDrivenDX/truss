@@ -129,6 +129,25 @@ See `evidence/hohfeld-performance-20261021/linux-premerge-qualification.json`
 and its compressed original public-workload report. Review/merge/tagged-package
 qualification and fresh public release verification remain the final delivery steps.
 
+### Merged and public release verified — 2026-10-21
+
+Truss PR23 merged at `d068a2edb10771d32a9373eaac13c6dc7185de66`;
+Weft PR25 merged and released0.4.49. Truss tag0.0.45 passed its own complete
+installed Linux gate (518 executions/39 commands), then published at20:01:20 UTC.
+Fresh public wheel/sdist checksums and all429 runtime payloads match. A pristine
+macOS ARM64 environment installed both public releases and PostgreSQL18.6;
+`pip check` and four real native registration/combined-read/facts/import smoke
+tests passed with Bun unavailable. Exact receipts are retained in
+[evidence](evidence/hohfeld-performance-20261021/public-release-verification.json)
+and [tagged qualification](evidence/hohfeld-performance-20261021/linux-tagged-qualification.json).
+
+The delivery goal is complete within this tested version/subset. The original
+noisy-host read/action targets are not certified, and Hohfeld's adoption of the
+combined API remains a host integration step. No managed-service, whole-workspace
+or general10× performance claim follows. Weft's separate CI-only PR26 corrected
+a stale formal test selector; all13 mapped Rust tests passed, with no binary
+change or replacement of the0.4.49 tag.
+
 ## Registration names — R16.4, 2026-10-21
 
 Owner-authorized fix under FEAT-001/CAT-01 and
