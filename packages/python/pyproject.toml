@@ -32,5 +32,6 @@ truss = ["_migrations/*.json", "_embedded_js/*.json", "_embedded_js/*.gz", "_emb
 truss = []
 
 [tool.uv]
-# Rebuild cached source-checkout tools when packaged runtime bytes change.
+# Source-checkout tool runs must rebuild when Python or bundled runtime bytes
+# change, including offline runs using cached build/runtime dependencies.
 cache-keys = [{ file = "pyproject.toml" }, { file = "src/**/*" }]

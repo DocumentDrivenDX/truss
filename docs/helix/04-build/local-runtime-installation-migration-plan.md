@@ -16,6 +16,82 @@ resource/restore limits and pending hosted release qualification. Earlier draft
 bindings below remain historical where they conflict with that selected profile.
 # Local runtime, installation and migration execution plan
 
+## Isolated one-shot installation — 2026-10-21
+
+The owner requested private local clusters/sockets, pinned dependencies,
+independent simultaneous instances and retained restart behavior. The checkout
+entrypoint is `scripts/truss-local --data-dir PATH --install`, with `--probe`
+for committed installation/status confirmation followed by shutdown. It selects
+the agreed Python3.11 consumer baseline, a separate uv tool environment, exact runtime dependency constraints,
+and the existing `pgserver-pg18==18.6.1`/PostgreSQL18.6 tuple. The owner subsequently authorized publication of
+v0.0.46 and deployment of the released-package microsite quickstart; actual
+publication and deployment receipts follow their required gates.
+
+
+The authorized release is now published as [v0.0.46](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.46)
+from commit `4c9a2a7d7abf47b10bb1d6db7dcfe5d5eea0b2ce`.
+The [Linux release gate](https://github.com/DocumentDrivenDX/truss/actions/runs/39670547224) passed, including all eight focused runtime tests in8.973seconds,
+selected installed-engine workflows and the original small public workload;
+optional large-capacity and stress jobs were skipped. Retained [workflow metadata](evidence/isolated-local-install-20261021/published-0.0.46/release-workflow.json)
+and [workload status](evidence/isolated-local-install-20261021/published-0.0.46/linux-public-workload-status.json)
+identify the exact source and scope. The [public-package receipt](evidence/isolated-local-install-20261021/published-0.0.46/receipt.json)
+verifies every downloaded asset checksum and the exact README `uvx` command
+from an unrelated temporary directory on macOS ARM64/Python3.11.17: two simultaneous
+private instances retain separate data and installation identities after restart.
+The README and microsite quickstart now resolve released wheels and constraints
+without a source checkout. Earlier source-only evidence below remains historical.
+
+Truss now invokes the bundled initdb/pg_ctl/psql executables directly. Each
+cluster retains its own directory lease, explicit effective data directory,
+short private Unix-socket directory and socket mode0700. TCP is disabled and
+all instances reuse socket number5432 in distinct directories. The wrapper
+controls Python import environment; the lifecycle and explicit installer
+control inherited PostgreSQL settings. Retained configuration cannot redirect
+cluster state. Unknown startup/shutdown custody retains the lease and refuses
+automatic takeover, data reset or migration.
+
+ISO-01 through ISO-03 in the [implementation plan](implementation-plan.md)
+have local macOS ARM64/PG18.6 evidence. The launcher follows the agreed Python3.11
+consumer baseline under ADR-003. An initial unnecessary3.13 launcher pin was
+corrected; no3.13-specific capability is required. The current
+[Python3.11.17 receipt](evidence/isolated-local-install-20261021/python311/receipt.json)
+records two clean launcher install/probe runs preserving the installation identity
+and all eight focused native tests passing in25.587seconds with the published
+DocumentDrivenDX/pgserver CPython3.11 wheel. The earlier3.13 results below remain
+historical and are not relabeled as3.11 execution.
+The [native log](evidence/isolated-local-install-20261021/native-tests.log)
+records eight passing lifecycle, isolation and explicit-installation tests.
+The [clean uv consumer receipt](evidence/isolated-local-install-20261021/clean-uv-consumer.json)
+records four actual launcher invocations: two simultaneous fresh installations,
+independent writes, SIGTERM shutdown, and two restarts preserving their data and
+installation identities, with cached dependencies and networking disabled for uv.
+The native test also verifies private socket modes, no actual TCP listeners,
+a long cluster path and a conflicting retained data-directory configuration.
+
+Luna implemented and independently monitored the changes; Sol reviewed runtime,
+CLI, dependency pins, wrapper and tests with no remaining material findings.
+Python module boundaries pass for1654 imports and all18 positive/negative
+controls; shell syntax and diff whitespace checks pass. The new native modules
+are wired into the existing installed-wheel smoke runner used by Linux CI.
+Linux execution was not performed here. These results do not qualify managed
+services, Windows, a new release or the complete protected security profile.
+
+The foreground launcher provides the local PostgreSQL wire protocol over its
+private Unix socket. It does not expose HTTP, MCP or a Truss RPC service. Tools
+still embed the Python API, supply their connections, configure ordinary-person
+access and register their UMF source models. This slice provisions the local
+database runtime and explicit Truss installation; it does not implement a
+standalone application service.
+
+The root README and microsite now prominently document the source-checkout
+`uvx` path and this interface boundary. The
+[literal README command receipt](evidence/isolated-local-install-20261021/python311/readme-uvx.json)
+records fresh creation and retained status confirmation using Python3.11 and
+the actual DocumentDrivenDX/pgserver release URL. Hugo builds with warnings
+treated as errors; all four pages pass link/navigation/source-seal checks.
+Sol reviewed the documentation with no material findings. This updates source
+documentation only; the microsite has not been deployed by this work.
+
 ## First-release scope — owner direction, 2026-10-13
 
 Python is the first-release public interface. Truss TypeScript implementation

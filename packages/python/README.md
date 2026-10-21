@@ -84,9 +84,10 @@ settings from redirecting the owned server or installation connection. It
 does not provide an HTTP, MCP or TrussRPC service. Local macOS 27 ARM64 evidence
 uses Python 3.11.17 and records eight focused lifecycle/isolation/CLI tests plus
 a clean `uvx` installation and same-identity status confirmation. See the
-[published v0.0.46 release](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.46)
-for that release's original qualification. Those historical results are scoped
-to its original bytes.
+[0.0.46 release notes](../../docs/helix/04-build/releases/v0.0.46.md),
+[local validation record](../../docs/helix/04-build/evidence/isolated-local-install-20261021/validation.json),
+[Python 3.11 receipt](../../docs/helix/04-build/evidence/isolated-local-install-20261021/python311/receipt.json) and
+[focused test log](../../docs/helix/04-build/evidence/isolated-local-install-20261021/python311/focused-native-tests.log).
 
 Historical version 0.0.45 added verified runtime and exact compiler caches, conditional query
 bindings, a combined catalog/source/query API and set-based independent imports.

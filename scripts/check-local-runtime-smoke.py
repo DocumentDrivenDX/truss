@@ -70,6 +70,8 @@ def execute(name, arguments, environment=env):
         raise RuntimeError(name + ' failed; see ' + str(log))
 
 execute('owned-lifecycle', [str(ROOT / 'scripts/run-python-test-module.py'), 'test_local_runtime', '-v'])
+execute('private-unix-isolation', [str(ROOT / 'scripts/run-python-test-module.py'), 'test_local_runtime_native_isolation', '-v'])
+execute('explicit-cli-installation', [str(ROOT / 'scripts/run-python-test-module.py'), 'test_local_install_cli_native', '-v'])
 with WorkerCluster() as worker:
     execute('supported-driver', [str(ROOT / 'scripts/run-python-test-module.py'), 'test_psycopg_host_native', '-v'], {**env, **worker.environment()})
     worker.verify_clean()
@@ -80,7 +82,8 @@ execute('transaction-timeout', [str(ROOT / 'scripts/check-pg17-transaction-timeo
 inputs = [Path(__file__), ROOT / 'scripts/native_fixture.py', ROOT / 'scripts/run-python-test-module.py',
           ROOT / 'scripts/check-native-worker-fixtures.py', ROOT / 'scripts/check-native-module-interruption.py',
           ROOT / 'scripts/check-python-installed-cli-signals.py', ROOT / 'scripts/check-pg17-transaction-timeout.py',
-          ROOT / 'packages/python/tests/test_local_runtime.py', ROOT / 'packages/python/tests/test_psycopg_host_native.py']
+          ROOT / 'packages/python/tests/test_local_runtime.py', ROOT / 'packages/python/tests/test_local_runtime_native_isolation.py',
+          ROOT / 'packages/python/tests/test_local_install_cli_native.py', ROOT / 'packages/python/tests/test_psycopg_host_native.py']
 receipt = {'passed': True, 'scope': 'Focused installed consumer, supported-driver adoption, retained restart, isolated lifecycle, shared fresh database/role cleanup, Unix socket/TCP collision, signals and transaction timeout; no full engine or Lakebase acceptance',
            'runtimeDistribution': RUNTIME_DISTRIBUTION, 'runtimeVersion': RUNTIME_VERSION, 'postgresql': SERVER_VERSION,
            'python': sys.version, 'platform': platform.platform(), 'libpq': pq.version(), 'payloads': payloads,

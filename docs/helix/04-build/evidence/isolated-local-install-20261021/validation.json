@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "baseline": "bea22f50105cf2c1ece243690495fbd2f1c0a00b",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "postgresql": "18.6",
+  "native_tests": {
+    "passed": 8,
+    "log": "native-tests.log"
+  },
+  "clean_uv_consumer": "clean-uv-consumer.json",
+  "module_boundary_imports": 1654,
+  "module_boundary_controls": 18,
+  "review": {
+    "model": "gpt-6.1-sol",
+    "remaining_material_findings": 0
+  },
+  "scope": "macOS ARM64 only; no Linux execution, managed-service, Windows or new release qualification",
+  "sha256": {
+    "scripts/truss-local": "2f59836f62c2775ff000c6bf642f8466f76acf00ebd12ef2a40561e70d747eba",
+    "packages/python/pyproject.toml": "b5e47d3690ddd2c7cefe4e7412601a651c38549c6bed8cf14bdf08681d9f2609",
+    "packages/python/isolated-runtime-constraints.txt": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+    "packages/python/src/truss/local_runtime.py": "7a0fce2fd418a3c239e7f6e847ac952d152d1967638251a4ebba2f5f29b90728",
+    "packages/python/src/truss/cli.py": "c9058f03a0c9d1d0956ecd44f603b908581f6976cd461729587d01d2796a925a",
+    "packages/python/tests/test_local_runtime.py": "3c4f012084a0a6f71638106e905c42a9981a8b901832004b9d2397e357b71a59",
+    "packages/python/tests/test_local_runtime_native_isolation.py": "3caf75fef7e5443647e20815f9108e6b577645f528e9f143bd2563f20b0100ae",
+    "packages/python/tests/test_local_install_cli_native.py": "84eec86519b514ea61b811a89b89bff38a5a92923547ba0b9990962b4f6b4a0f",
+    "scripts/check-local-runtime-smoke.py": "4f1f4bffe4851796f6f21473b8189e59b0a7a1da20a33514f51fb3987e4c30db",
+    "scripts/check-module-boundaries.py": "ed96b09e156d855ff9f0c3c74d83518657c1c5cb21b56cf682ea75a823aedfce"
+  }
+}

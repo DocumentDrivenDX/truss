@@ -1,0 +1,12 @@
+#!/bin/sh
+# SPDX-License-Identifier: MIT OR Apache-2.0
+# Run this checkout in a separate uv environment with exact runtime constraints.
+set -eu
+repository=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+pgserver_links=${TRUSS_PGSERVER_FIND_LINKS:-https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2}
+exec env -u PYTHONPATH -u PYTHONHOME uv tool run \
+  --no-config --isolated --python 3.11 \
+  --constraints "$repository/packages/python/isolated-runtime-constraints.txt" \
+  --find-links "$pgserver_links" \
+  --from "$repository/packages/python[local,native]" \
+  truss-local-postgres "$@"
