@@ -261,8 +261,10 @@ installed v0.0.44 runtime manifest. Retained local evidence records 74 API/wire
 tests, 70 regressions, two additional actual read-only/owned-audit controls and 44
 host-guard/fault controls passing. All 428 current runtime source hashes match
 the package receipt. Source review identifies no remaining blocking defect.
-Linux candidate/release CI and fresh public-artifact verification remain pending;
-the local result is not a publication claim.
+Linux candidate and tagged release CI both passed. Fresh public-download checks
+verified all ten assets, nine checksum entries, complete RECORD/metadata, all 428
+runtime files and full release pins against merge `5834509d`. The
+[delivery receipt](evidence/embedder-e2-e8-20261020/delivery.json) closes E2–E8.
 
 ## Risks and Rollbacks
 
@@ -277,17 +279,17 @@ the local result is not a publication claim.
 
 ## Exit Criteria
 
-- [ ] Every original accepted ask has a delivered API/documentation result and
+- [x] Every original accepted ask has a delivered API/documentation result and
   required native/consumer evidence, or its explicit adopted variant above.
-- [ ] E2–E7 required cases pass against exact installed source/wheel; no selected
+- [x] E2–E7 required cases pass against exact installed source/wheel; no selected
   opt-in case is counted passed when skipped.
-- [ ] Complete workflow statement budgets are measured for the actual consumer
+- [x] Complete workflow statement budgets are measured for the actual consumer
   read/write/import paths, with setup/settlement and server work separated.
-- [ ] E8 original consumer replay, current authority negatives, strict response,
+- [x] E8 original consumer replay, current authority negatives, strict response,
   cancellation/rollback/replay and cleanup controls pass.
-- [ ] Focused independent review has no unresolved findings on the exact release
+- [x] Focused independent review has no unresolved findings on the exact release
   source; Linux CI and source/wheel/sdist/RECORD/metadata checks pass.
-- [ ] Fresh public artifacts and checksums/release pins match the qualified source;
+- [x] Fresh public artifacts and checksums/release pins match the qualified source;
   canonical consumer docs state bounds, typed unions, durability and limitations.
 
 No slice is complete merely because its design is written or its budget is nearly

@@ -118,10 +118,24 @@ ignored errors.
 - [x] Installed consumer workflows/corpus and read/write budget checkpoint recorded.
 - [x] Final targeted read-only/owned-audit and corrected host-guard receipts retained; final CI repeats their committed module selection.
 - [x] Independent review of implementation commit `4a442f33` identifies no blocking finding.
-- [ ] Linux-only release CI passes on the qualified source.
-- [ ] Fresh wheel/sdist/metadata/RECORD/release pins match the qualified release source.
-- [ ] Publication and fresh public-download checks succeed, then pending release wording is closed.
+- [x] Linux candidate and tagged release CI pass on the qualified source.
+- [x] Fresh public wheel/sdist/metadata/RECORD/release pins match the qualified release source.
+- [x] Publication and unauthenticated public-download verification succeed; see `delivery.json` and `public-release.json`.
 
 Local native evidence selects macOS ARM64; hosted CI selects Linux x86_64 only.
 This receipt does not qualify managed services, Windows, every stress profile,
 all generated action handlers, the complete protected security profile or upgrades.
+
+
+## Published delivery closeout
+
+Release source `5834509d641a2961b1871d00cb1fd59962c5f086` has the reviewed
+runtime/test bytes. Candidate run 39538360360 and tagged run 39540319279 passed
+on Linux only. Each reports 494 unittest executions: 493 passed and one optional
+generated-client preflight skipped; the 76 new API controls have zero skips.
+That opt-in client/native path ran in the separately retained local 70-test run.
+[Public verification](public-release.json) resolves the public annotated tag to
+the merge and checks all ten unauthenticated assets, nine checksums, complete
+wheel RECORD/metadata, all 428 runtime files, sdist sources, full cohort/profile
+pins and five published contracts plus query ABI. The reviewed verifier pair is
+retained alongside the receipt. Historical qualification is not relabeled.

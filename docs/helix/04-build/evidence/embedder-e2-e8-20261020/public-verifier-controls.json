@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "controls": {
+    "candidateWheelRecord": true,
+    "candidateSdistSafe": true,
+    "duplicate-zip": true,
+    "unsafe-zip": true,
+    "symlink-zip": true,
+    "duplicate-tar": true,
+    "unsafe-tar": true,
+    "symlink-tar": true,
+    "nul-path": true
+  }
+}
