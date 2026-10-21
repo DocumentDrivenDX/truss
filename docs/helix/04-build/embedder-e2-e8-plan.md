@@ -235,12 +235,12 @@ their exact source, native manifest, installed wheel and test inputs.
 | E2 | Ten batched-import native controls; two legacy-parity/performance controls, including mixed edges, original source, reserved identity and 32/64/128-record comparisons plus 1,024 capacity | Repeat against the final audit-writer/source bundle; retain complete reports and exact timing/count samples |
 | E3/E4 | Conditional hit/miss authority controls, document CAS/replay and original UMF DDD optional-field controls have local native checkpoints | Final installed selection and exact original owner-asset correspondence |
 | E5 | Six native preview controls, including an actual revocation during observation and a concurrent data update under one truth snapshot; six wire controls | Final source/wheel binding and Linux execution; catalog-basis drift remains a typed observation refusal |
-| E6/E7 | Installer/status, module-grant, load-summary and mutation-audit controls exist; independent journal-only, module/type/deleted-entity and descending continuation cases are selected | Resolve installer marker/protected-configuration review findings, then retain final audit/lifecycle native receipts |
+| E6/E7 | Installer/status, module-grant, load-summary and mutation-audit controls pass locally; independent journal-only, module/type/deleted-entity and descending continuation cases are selected; marker/protected-configuration findings are fixed | Final Linux qualification repeats the committed audit/lifecycle selection |
 | E8 | Installed iteration-2 consumer corpus: 63 passed, nine declared limits, seven replica-only exclusions; original sample workflow suite: 21 passed with Python-only PATH | Repeat exact final wheel; retain the original limit declarations and sample workload identity |
 
 The iteration-2 original consumer trace reports 29 `Cursor.execute` calls plus two
-connection rollbacks for a read with facts, and 32 `Cursor.execute` calls plus one
-connection commit for a single-object update. These instrumented driver counts
+connection rollbacks for a read with facts, and 31 `Cursor.execute` calls plus one
+connection rollback and one connection commit for a single-object update. These instrumented driver counts
 are not a universal statement budget: the final trace must retain public-call,
 transaction-adoption, setup and settlement categories, sample distribution and
 transport. A separately adopted conditional catalog call retains its three-client-
@@ -254,6 +254,15 @@ lifecycle and core optional-field compatibility remain regressions. The nine
 consumer limits include projection/relationship limits and adapter replay/preview
 limitations outside the selected asks; they must remain explicit rather than
 becoming an unqualified whole-provider conformance claim.
+
+The [final implementation review and disposition receipt](evidence/embedder-e2-e8-20261020/review.md)
+reviews implementation commit `4a442f337c7f2508bd5a9064489f49d1b842cb79` and the
+installed v0.0.44 runtime manifest. Retained local evidence records 74 API/wire
+tests, 70 regressions, two additional actual read-only/owned-audit controls and 44
+host-guard/fault controls passing. All 428 current runtime source hashes match
+the package receipt. Source review identifies no remaining blocking defect.
+Linux candidate/release CI and fresh public-artifact verification remain pending;
+the local result is not a publication claim.
 
 ## Risks and Rollbacks
 
