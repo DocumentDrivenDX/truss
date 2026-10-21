@@ -1,0 +1,401 @@
+{
+  "consumerCommit": "fed2c116db5dcdf2ac3b12b71bbfdddc35d03f6c",
+  "corpusVersion": 13,
+  "python": "3.11.17",
+  "platform": "Darwin-arm64",
+  "trussVersion": "0.0.44",
+  "wheelSha256": "30d3147aa0b0ff7719c4105a9a377e1a4f0fccc56a1ae46e01a3f3d972b315df",
+  "runtimeManifestSha256": "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00",
+  "externalJavaScriptRuntimeRequired": false,
+  "strengthenedExpectations": {
+    "registry.register-checks-the-revision-it-was-planned-against": {
+      "step": "step 2 (register)",
+      "error": "Unsupported",
+      "detail": "this change to a registered document"
+    }
+  },
+  "originalLimitRemovalWitness": {
+    "case": "registry.register-checks-the-revision-it-was-planned-against",
+    "status": "failed",
+    "message": "passes, so its limit (step 2 (register): Unsupported(this change to a registered document)) is gone: remove it"
+  },
+  "report": {
+    "roles": [
+      "reader",
+      "provider"
+    ],
+    "corpus_version": 13,
+    "newer_corpus": false,
+    "results": [
+      {
+        "case": "read.key-lookup-whole-entity",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "read.relationship-columns-follow-ends",
+        "status": "limit",
+        "message": "step 0 (query): expected ['rows'], got Invalid(wft-output-name): sql: wft-output-name: Truss refused the statement (invalid_query, WFT-OUTPUT-NAME) [step 0 (query): Invalid(wft-output-name)]"
+      },
+      {
+        "case": "read.missing-key-is-no-rows",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "read.columns-and-filters",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "read.relationship-filter-both-directions",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "read.repeated-relationship-predicates-mean-both",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "read.count-group-by",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "read.inner-join-is-a-bag",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "read.count-over-a-join-by-several-columns",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "read.paging-by-key",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "read.relationship-columns-are-capped",
+        "status": "limit",
+        "message": "step 2 (query): expected ['row_len'], got Unsupported(Truss refused the statement (limits)): unsupported: Truss refused the statement (limits) [step 2 (query): Unsupported(refused the statement (limits))]"
+      },
+      {
+        "case": "read.the-named-module-scopes-the-statement",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "access.no-token-is-refused",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "access.anothers-token-is-refused",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "access.no-grant-is-refused-not-empty",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "access.expired-token-is-refused-not-unavailable",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "access.outage-is-unavailable-never-empty",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "access.no-token-is-refused-even-when-down",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "access.outage-during-a-write-changes-nothing",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "access.non-member-write-is-refused",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "freshness.status-states-availability",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "freshness.undeterminable-token-is-unavailable-not-false",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "freshness.store-has-reached-its-own-tokens",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "freshness.non-member-reached-is-refused",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "describe.capabilities-by-role",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "store.registers-under-the-schema-grant-and-never-attaches",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.applies-atomically-and-reads-back",
+        "status": "limit",
+        "message": "step 3 (query): expected ['rows'], got Invalid(wft-output-name): sql: wft-output-name: Truss refused the statement (invalid_query, WFT-OUTPUT-NAME) [step 3 (query): Invalid(wft-output-name)]"
+      },
+      {
+        "case": "action.failed-precondition-changes-nothing",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.conflict-rolls-back-the-unit",
+        "status": "limit",
+        "message": "step 4 (query): expected ['rows'], got Invalid(wft-output-name): sql: wft-output-name: Truss refused the statement (invalid_query, WFT-OUTPUT-NAME) [step 4 (query): Invalid(wft-output-name)]"
+      },
+      {
+        "case": "action.update-bumps-the-version-once",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.read-only-principal-is-refused",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.anothers-token-cannot-write",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.idempotent-retry-returns-the-original",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.keyed-retry-of-a-delete-replays",
+        "status": "limit",
+        "message": "step 1 (apply): expected ['receipt'], got Conflict(idempotency_key_reused): conflict (idempotency_key_reused): Truss holds that request for other input, or the original's targets no longer resolve [step 1 (apply): Conflict(idempotency_key_reused)]"
+      },
+      {
+        "case": "action.keyed-retry-of-an-unlink-replays",
+        "status": "limit",
+        "message": "step 1 (apply): expected ['receipt'], got Conflict(idempotency_key_reused): conflict (idempotency_key_reused): Truss holds that request for other input, or the original's targets no longer resolve [step 1 (apply): Conflict(idempotency_key_reused)]"
+      },
+      {
+        "case": "action.keyed-retry-after-its-target-was-deleted-replays",
+        "status": "limit",
+        "message": "step 2 (apply): expected ['receipt'], got Conflict(idempotency_key_reused): conflict (idempotency_key_reused): Truss holds that request for other input, or the original's targets no longer resolve [step 2 (apply): Conflict(idempotency_key_reused)]"
+      },
+      {
+        "case": "action.same-key-from-another-person-replays",
+        "status": "limit",
+        "message": "step 1 (apply): expected ['receipt'], got PreconditionFailed(fresh: a use case with that code exists): fresh: a use case with that code exists [step 1 (apply): PreconditionFailed(fresh)]"
+      },
+      {
+        "case": "action.key-reused-with-other-inputs-conflicts",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.dry-run-writes-nothing-and-keeps-the-key",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.deleted-keys-stay-deleted",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.atomic-batch-is-all-or-nothing",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.independent-batch-reports-each-item",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.batch-shape-and-access",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "import.identity-skip-and-provenance",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "import.original-time-names-its-offset",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "import.entities-before-relationships",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "import.administrative-principals-only",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "import.deleted-stays-deleted",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.receipt-names-its-group",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "action.retry-with-generated-keys-matches",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "journal.changes-are-committed-groups-newest-first",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "journal.loads-newest-first",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "registry.document-is-verbatim",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "registry.document-is-refused-without-read",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "text.every-word-in-some-property",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "text.folds-case",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "text.only-the-named-properties",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "text.percent-underscore-backslash-are-literal",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "text.rows-are-ordered-by-key-and-bounded",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "text.no-match-is-an-empty-answer",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "text.rows-carry-attribution",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "text.on-a-property-the-backend-does-not-list-is-unsupported",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "text.refused-without-the-grant",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "text.unavailable-is-not-empty",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "registry.validate-reports-without-applying",
+        "status": "limit",
+        "message": "step 0 (validate_register): expected ['registration'], got Unsupported(this change to a registered document): unsupported: this change to a registered document [step 0 (validate_register): Unsupported(this change to a registered document)]"
+      },
+      {
+        "case": "registry.schema-is-not-write",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "registry.register-checks-the-revision-it-was-planned-against",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "registry.rewritten-equal-document-registers-unchanged",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "registry.registers-a-new-record-type",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "export.canonical-order-and-absent-properties",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "export.refused-without-read-never-empty",
+        "status": "passed",
+        "message": ""
+      },
+      {
+        "case": "export.pages-resume-after-the-last-record",
+        "status": "passed",
+        "message": ""
+      }
+    ],
+    "skipped": [
+      "freshness.replica-status-states-its-position",
+      "freshness.unissued-token-is-invalid",
+      "freshness.replica-catches-up-to-a-token",
+      "replica.refuses-every-change",
+      "replica.holds-no-document",
+      "replica.refuses-validate-register",
+      "replica.export-is-unsupported"
+    ]
+  }
+}

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -13,6 +14,7 @@ root = Path(__file__).resolve().parents[1]
 umf = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else None
 if umf is None:
     raise SystemExit("UMF Git checkout required")
+dependencies = Path(os.environ.get("TRUSS_UMF_NODE_MODULES", str(umf / "node_modules"))).resolve()
 target = root / "packages/python/src/truss/_umf_core10"
 target.mkdir(parents=True, exist_ok=True)
 digest = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
@@ -54,7 +56,7 @@ licenses.mkdir(exist_ok=True)
 for package, filename in (("ajv", "LICENSE"), ("yaml", "LICENSE"),
                          ("fast-deep-equal", "LICENSE"), ("fast-uri", "LICENSE"),
                          ("json-schema-traverse", "LICENSE"), ("require-from-string", "license")):
-    source = umf / "node_modules" / package / filename
+    source = dependencies / package / filename
     if not source.exists():
         raise SystemExit(f"Bundled dependency license missing: {package}")
     shutil.copyfile(source, licenses / f"{package}.txt")
@@ -63,11 +65,11 @@ owner_manifest = json.loads((target / "producer-manifest.json").read_text())
 paths = ["acceptance-input-v0.1.schema.json", "keys.mjs", "preparation.mjs", "producer-manifest.json", "producer.js"]
 paths += [f"licenses/{path.name}" for path in sorted(licenses.iterdir()) if path.is_file()]
 manifest = {
-    "interfaceVersion": "truss-core10-catalog-producer/0.1.0",
+    "interfaceVersion": "truss-core10-catalog-producer/0.2.0",
     "runtimeVersion": subprocess.run(["bun", "--version"], check=True, text=True, capture_output=True).stdout.strip(),
     "owner": owner_manifest,
     "files": {name: digest(target / name) for name in paths},
-    "scope": "Original UMF 0.10.0 document validation and Truss current-key realization only; no inspector transcript or native admission claim.",
+    "scope": "Original UMF 0.10.0 core and selected DDD 0.1.0 document validation, plus Truss current-key realization; no native admission claim.",
 }
 encoded = json.dumps(manifest, indent=2) + "\n"
 (target / "manifest.json").write_text(encoded)

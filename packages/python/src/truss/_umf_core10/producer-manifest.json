@@ -12,12 +12,13 @@
     }
   },
   "archiveSha256": "df5dc79e607c95810574ce4d1015ed5846e7a8614d9a75c3980171f46176c027",
-  "bundleSha256": "16bf60b634484ceee7f56304014fbf0b4ac2f1aaf7fe6ceff15ea7f8267c9adc",
+  "bundleSha256": "0335643fd700df1eafedb88e6104d532096aa74c6081f8d96372d2779a4d34fd",
   "operations": [
     "readJsonValue",
     "validateSemanticTypesDocument",
     "encodeCoreKeyTupleBody",
-    "withCatalogResourceProfile"
+    "withCatalogResourceProfile",
+    "inspectDdd"
   ],
-  "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+  "scope": "Original UMF 0.10 core and umf.ddd 0.1.0 document validators, declaration identity and Truss key realization; no native acceptance/containment qualification."
 }

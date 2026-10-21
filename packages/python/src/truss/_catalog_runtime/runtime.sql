@@ -4,6 +4,9 @@ CREATE TABLE truss.catalog_runtime_installation (
  singleton boolean PRIMARY KEY DEFAULT true CHECK(singleton),installation_id uuid NOT NULL UNIQUE,
  release_id text NOT NULL,release_sha256 text NOT NULL,layout_profile jsonb NOT NULL,preparation_configuration jsonb NOT NULL,
  owner_oid oid NOT NULL,registrar_oid oid NOT NULL,genesis_at timestamptz NOT NULL);
+CREATE TABLE truss.reader_catalog_validator_secret(secret bytea PRIMARY KEY CHECK(octet_length(secret)=32));
+INSERT INTO truss.reader_catalog_validator_secret VALUES
+ (sha256(convert_to(gen_random_uuid()::text||clock_timestamp()::text,'UTF8')));
 CREATE TABLE truss.catalog_registration_request (
  registration_id uuid PRIMARY KEY DEFAULT pg_catalog.gen_random_uuid(),
  installation_id uuid NOT NULL REFERENCES truss.catalog_runtime_installation(installation_id),
@@ -11,6 +14,7 @@ CREATE TABLE truss.catalog_registration_request (
  writer_xid xid8 NOT NULL,accepted_at timestamptz NOT NULL,
  input_bytes bytea NOT NULL,document_bytes bytea NOT NULL,declaration_bytes bytea NOT NULL,
  source_bytes bytea NOT NULL,origin_bytes bytea NOT NULL,
+ expected_revision int,expected_documents bytea NOT NULL DEFAULT ''::bytea,
  revision int NOT NULL UNIQUE REFERENCES truss.schema_rev(rev),report_sha256 bytea NOT NULL,
  type_offset int NOT NULL CHECK(type_offset>=0),property_offset int NOT NULL CHECK(property_offset>=0),relationship_offset int NOT NULL CHECK(relationship_offset>=0),
  UNIQUE(installation_id,actor_oid,request_key),CHECK(revision>=1),
@@ -25,7 +29,7 @@ CREATE TABLE truss.catalog_unchanged_request (
  installation_id uuid NOT NULL REFERENCES truss.catalog_runtime_installation(installation_id),
  actor_oid oid NOT NULL,actor_name text NOT NULL,request_key text NOT NULL,
  registration_id uuid NOT NULL REFERENCES truss.catalog_registration_request(registration_id),
- origin_bytes bytea NOT NULL,
+ origin_bytes bytea NOT NULL,expected_revision int,expected_documents bytea NOT NULL DEFAULT ''::bytea,
  PRIMARY KEY(installation_id,actor_oid,request_key),
  CHECK(octet_length(request_key) BETWEEN 1 AND 1024),
  CHECK(octet_length(origin_bytes) BETWEEN 1 AND 1048576));
@@ -332,14 +336,115 @@ BEGIN
 END;
 $$;
 
+-- The only selected DDD extension evolution is an append-only optional Field
+-- whose exact core Field and Record member are added together. Unknown payload
+-- content stays in source custody; no other DDD change is inferred compatible.
+CREATE FUNCTION truss.catalog_ddd_optional_evolution_supported(documents_bytes bytea) RETURNS boolean
+LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE candidate jsonb;candidate_source jsonb;original jsonb;old_module jsonb;new_module jsonb;old_record jsonb;new_record jsonb;
+ old_ddd jsonb;new_ddd jsonb;old_fields jsonb;new_fields jsonb;appended_member jsonb;added_name text;
+ field_module text;field_id text;field_element jsonb;core_scalar text;ddd_scalar text;old_count int;member_index int;
+BEGIN
+ FOR candidate IN SELECT value FROM jsonb_array_elements(convert_from(documents_bytes,'UTF8')::jsonb) LOOP
+  SELECT document::jsonb INTO original FROM truss.schema_doc
+   WHERE doc_id=candidate->>'documentId' ORDER BY rev DESC LIMIT 1;
+  IF NOT FOUND OR original IS NULL THEN CONTINUE;END IF;
+  candidate_source:=(candidate->>'originalText')::jsonb;
+  IF original->'vocabularies'->'umf.ddd' IS DISTINCT FROM candidate_source->'vocabularies'->'umf.ddd'
+    OR original->'extensions'->'umf.ddd' IS DISTINCT FROM candidate_source->'extensions'->'umf.ddd' THEN RETURN false;END IF;
+  FOR old_module IN SELECT value FROM jsonb_array_elements(coalesce(original->'modules','[]'::jsonb)) LOOP
+   SELECT value INTO new_module FROM jsonb_array_elements(coalesce(candidate_source->'modules','[]'::jsonb)) WHERE value->>'id'=old_module->>'id';
+   IF NOT FOUND THEN
+    IF EXISTS(SELECT 1 FROM jsonb_array_elements(coalesce(old_module->'elements','[]'::jsonb)) e
+      WHERE e.value->>'kind'='record' AND e.value->'extensions' ? 'umf.ddd') THEN RETURN false;END IF;
+    CONTINUE;
+   END IF;
+   IF old_module->'extensions'->'umf.ddd' IS DISTINCT FROM new_module->'extensions'->'umf.ddd' THEN RETURN false;END IF;
+   FOR old_record IN SELECT value FROM jsonb_array_elements(coalesce(old_module->'elements','[]'::jsonb))
+    WHERE value->>'kind'='record' LOOP
+    SELECT value INTO new_record FROM jsonb_array_elements(coalesce(new_module->'elements','[]'::jsonb))
+     WHERE value->>'id'=old_record->>'id' AND value->>'kind'='record';
+    old_ddd:=old_record->'extensions'->'umf.ddd';
+    IF NOT FOUND THEN IF old_ddd IS NOT NULL THEN RETURN false;END IF;CONTINUE;END IF;
+    new_ddd:=new_record->'extensions'->'umf.ddd';
+    IF old_ddd IS NOT DISTINCT FROM new_ddd THEN
+     IF old_ddd IS NOT NULL AND (original->'vocabularies'->'umf.ddd'->>'version' IS DISTINCT FROM candidate_source->'vocabularies'->'umf.ddd'->>'version'
+       OR original->'vocabularies'->'umf.ddd'->>'version' IS DISTINCT FROM '0.1.0') THEN RETURN false;END IF;
+     IF old_ddd ? 'fields' AND old_record->'members' IS DISTINCT FROM new_record->'members' THEN RETURN false;END IF;
+     CONTINUE;
+    END IF;
+    old_fields:=old_ddd->'fields';new_fields:=new_ddd->'fields';
+    IF original->>'umf' IS DISTINCT FROM '0.10.0'
+      OR candidate_source->>'umf' IS DISTINCT FROM '0.10.0'
+      OR original->'vocabularies'->'umf.ddd'->>'version' IS DISTINCT FROM '0.1.0'
+      OR candidate_source->'vocabularies'->'umf.ddd'->>'version' IS DISTINCT FROM '0.1.0'
+      OR jsonb_typeof(old_fields) IS DISTINCT FROM 'object' OR jsonb_typeof(new_fields) IS DISTINCT FROM 'object' THEN
+      RETURN false;
+    END IF;
+    IF (new_record-ARRAY['members','extensions']) IS DISTINCT FROM (old_record-ARRAY['members','extensions'])
+      OR ((new_record->'extensions')-'umf.ddd'::text) IS DISTINCT FROM ((old_record->'extensions')-'umf.ddd'::text)
+      OR (new_ddd-'fields'::text) IS DISTINCT FROM (old_ddd-'fields'::text)
+      OR (SELECT count(*) FROM jsonb_object_keys(new_fields))<>(SELECT count(*) FROM jsonb_object_keys(old_fields))+1
+      OR jsonb_array_length(coalesce(new_record->'members','[]'::jsonb))<>jsonb_array_length(coalesce(old_record->'members','[]'::jsonb))+1
+      OR EXISTS(SELECT 1 FROM jsonb_object_keys(old_fields) AS k(key) WHERE new_fields->(k.key) IS DISTINCT FROM old_fields->(k.key)) THEN
+      RETURN false;
+    END IF;
+    old_count:=jsonb_array_length(old_record->'members');
+    IF old_count>0 THEN
+     FOR member_index IN 0..old_count-1 LOOP
+      IF old_record->'members'->member_index IS DISTINCT FROM new_record->'members'->member_index THEN RETURN false;END IF;
+     END LOOP;
+    END IF;
+    appended_member:=new_record->'members'->old_count;
+    IF jsonb_typeof(appended_member) IS DISTINCT FROM 'object'
+      OR (SELECT count(*) FROM jsonb_object_keys(appended_member))<>2
+      OR jsonb_typeof(appended_member->'module') IS DISTINCT FROM 'string'
+      OR jsonb_typeof(appended_member->'element') IS DISTINCT FROM 'string' THEN RETURN false;END IF;
+    added_name:=NULL;
+    SELECT k.key INTO added_name FROM jsonb_object_keys(new_fields) AS k(key) WHERE NOT (old_fields ? k.key);
+    IF added_name IS NULL OR old_fields ? added_name THEN RETURN false;END IF;
+    field_module:=appended_member->>'module';field_id:=appended_member->>'element';
+    SELECT element.value INTO field_element
+     FROM jsonb_array_elements(coalesce(candidate_source->'modules','[]'::jsonb)) module(value)
+     CROSS JOIN LATERAL jsonb_array_elements(coalesce(module.value->'elements','[]'::jsonb)) element(value)
+     WHERE module.value->>'id'=field_module AND element.value->>'id'=field_id;
+    IF NOT FOUND OR field_element->>'kind' IS DISTINCT FROM 'field'
+      OR field_element->>'name' IS DISTINCT FROM added_name
+      OR field_element->>'nullability' IS DISTINCT FROM 'absent-allowed'
+      OR field_element->>'cardinality' IS DISTINCT FROM 'one' THEN RETURN false;END IF;
+    core_scalar:=field_element->>'scalarType';
+    ddd_scalar:=CASE core_scalar WHEN 'string' THEN 'string' WHEN 'boolean' THEN 'boolean'
+      WHEN 'integer' THEN 'integer' WHEN 'decimal' THEN 'decimal' WHEN 'timestamp' THEN 'date-time' WHEN 'binary' THEN 'bytes' END;
+    IF ddd_scalar IS NULL OR jsonb_typeof(new_fields->added_name) IS DISTINCT FROM 'object'
+      OR (SELECT count(*) FROM jsonb_object_keys(new_fields->added_name)) NOT BETWEEN 2 AND 3
+      OR ((new_fields->added_name)-ARRAY['type','cardinality','description']) IS DISTINCT FROM '{}'::jsonb
+      OR jsonb_typeof(new_fields->added_name->'cardinality') IS DISTINCT FROM 'string'
+      OR new_fields->added_name->>'cardinality' IS DISTINCT FROM 'optional'
+      OR jsonb_typeof(new_fields->added_name->'type') IS DISTINCT FROM 'object'
+      OR (SELECT count(*) FROM jsonb_object_keys(new_fields->added_name->'type'))<>2
+      OR new_fields->added_name->'type'->>'kind' IS DISTINCT FROM 'scalar'
+      OR new_fields->added_name->'type'->>'name' IS DISTINCT FROM ddd_scalar
+      OR new_fields->added_name ? 'description' AND jsonb_typeof(new_fields->added_name->'description') IS DISTINCT FROM 'string' THEN
+      RETURN false;
+    END IF;
+   END LOOP;
+  END LOOP;
+ END LOOP;
+ RETURN true;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_ddd_optional_evolution_supported(bytea) FROM PUBLIC;
+
 CREATE FUNCTION truss.catalog_accept_with_keys(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea,
- source_bytes bytea,origin_bytes bytea,request_key text,key_receipts bytea,preview_mode boolean)
+ source_bytes bytea,origin_bytes bytea,request_key text,key_receipts bytea,preview_mode boolean,
+ expected_revision int,expected_documents bytea)
 RETURNS TABLE(revision text,registration_id text,report_bytes bytea,replayed boolean,unchanged boolean,actor_name text,violations_bytes bytea)
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp SET TimeZone='UTC' SET bytea_output='hex' AS $$
 DECLARE actor oid; installation truss.catalog_runtime_installation%ROWTYPE;
  request truss.catalog_registration_request%ROWTYPE; existing truss.catalog_registration_request%ROWTYPE;
  alias_request truss.catalog_unchanged_request%ROWTYPE;
  expected jsonb; prior_expected jsonb; origin bytea; original_report bytea; table_name text; columns text; assignments text;identity_column text;conflict_columns text; rows jsonb; raw bytea; total bigint:=0; request_count bigint;
+ expected_docs jsonb; expected_doc jsonb;
  prior_revision int;new_revision int;type_start int;property_start int;relationship_start int;component_index int:=0;component_limit int;compact boolean;violations bytea;key_candidates jsonb;verified_keys jsonb;
 BEGIN
  IF preview_mode IS NULL THEN RAISE EXCEPTION 'explicit catalog mode required' USING ERRCODE='22023';END IF;
@@ -358,6 +463,32 @@ BEGIN
  END LOOP;
  IF total>16777216 OR jsonb_typeof(convert_from(origin_bytes,'UTF8')::jsonb) IS DISTINCT FROM 'object' THEN
   RAISE EXCEPTION 'bounded catalog request required' USING ERRCODE='22023'; END IF;
+ IF expected_revision IS NOT NULL AND expected_revision NOT BETWEEN -1 AND 2147483647
+  OR expected_documents IS NULL OR octet_length(expected_documents) NOT BETWEEN 2 AND 1048576 THEN
+  RAISE EXCEPTION 'bounded catalog source expectations required' USING ERRCODE='22023';END IF;
+ -- The private host's immutable semantic-parameter lane excludes SQL NULL.
+ -- Normalize its -1 sentinel immediately so custody and replay remain byte-for-byte
+ -- identical to historical no-CAS requests.
+ IF expected_revision=-1 THEN expected_revision:=NULL;END IF;
+ expected_docs:=convert_from(expected_documents,'UTF8')::jsonb;
+ IF jsonb_typeof(expected_docs) IS DISTINCT FROM 'array' OR jsonb_array_length(expected_docs)>512 THEN
+  RAISE EXCEPTION 'catalog source expectations required' USING ERRCODE='22023';END IF;
+ IF jsonb_array_length(expected_docs)>0 THEN
+  IF jsonb_array_length(expected_docs)<>jsonb_array_length(convert_from(documents_bytes,'UTF8')::jsonb)
+   OR EXISTS(SELECT 1 FROM jsonb_array_elements(expected_docs) e
+    WHERE jsonb_typeof(e.value) IS DISTINCT FROM 'object'
+     OR (SELECT count(*) FROM jsonb_object_keys(e.value))<>2
+     OR jsonb_typeof(e.value->'documentId') IS DISTINCT FROM 'string'
+     OR octet_length(e.value->>'documentId') NOT BETWEEN 1 AND 4096
+     OR jsonb_typeof(e.value->'sourceCatalogRevision') IS DISTINCT FROM 'number'
+     OR (e.value->>'sourceCatalogRevision') !~ '^(0|[1-9][0-9]*)$'
+     OR (e.value->>'sourceCatalogRevision')::numeric>2147483647)
+   OR EXISTS(SELECT 1 FROM jsonb_array_elements(expected_docs) e GROUP BY e.value->>'documentId' HAVING count(*)<>1)
+   OR EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(documents_bytes,'UTF8')::jsonb) d GROUP BY d.value->>'documentId' HAVING count(*)<>1)
+   OR EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(documents_bytes,'UTF8')::jsonb) d
+    WHERE NOT EXISTS(SELECT 1 FROM jsonb_array_elements(expected_docs) e WHERE e.value->>'documentId'=d.value->>'documentId')) THEN
+   RAISE EXCEPTION 'exact submitted document expectation set required' USING ERRCODE='22023';END IF;
+ END IF;
  IF compact THEN declarations_bytes:=truss.runtime_owned_catalog_declarations(documents_bytes);END IF;
  -- Bound concurrency without an automatic retry loop.
  SELECT rev INTO STRICT prior_revision FROM truss.schema_head WHERE id=1 FOR UPDATE NOWAIT;
@@ -368,7 +499,7 @@ BEGIN
  IF request_count>1 THEN RAISE EXCEPTION 'unambiguous catalog request required' USING ERRCODE='55000'; END IF;
  SELECT * INTO existing FROM truss.catalog_registration_request r WHERE r.installation_id=installation.installation_id AND r.actor_oid=actor AND r.request_key=catalog_accept_with_keys.request_key;
  IF FOUND THEN
-  IF existing.input_bytes IS DISTINCT FROM input_bytes OR (CASE WHEN octet_length(existing.document_bytes)=0 THEN
+  IF existing.input_bytes IS DISTINCT FROM input_bytes OR existing.expected_revision IS DISTINCT FROM expected_revision OR existing.expected_documents IS DISTINCT FROM expected_documents OR (CASE WHEN octet_length(existing.document_bytes)=0 THEN
     convert_from(truss.runtime_owned_request_documents(existing),'UTF8')::jsonb IS DISTINCT FROM convert_from(documents_bytes,'UTF8')::jsonb
    ELSE existing.document_bytes IS DISTINCT FROM documents_bytes OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes END) OR existing.origin_bytes IS DISTINCT FROM origin_bytes THEN
    RAISE EXCEPTION 'request key reused with different registration input' USING ERRCODE='P1001'; END IF;
@@ -387,7 +518,8 @@ BEGIN
   IF existing.input_bytes IS DISTINCT FROM input_bytes OR (CASE WHEN octet_length(existing.document_bytes)=0 THEN
     convert_from(truss.runtime_owned_request_documents(existing),'UTF8')::jsonb IS DISTINCT FROM convert_from(documents_bytes,'UTF8')::jsonb
    ELSE existing.document_bytes IS DISTINCT FROM documents_bytes OR existing.declaration_bytes IS DISTINCT FROM declarations_bytes END)
-   OR alias_request.origin_bytes IS DISTINCT FROM origin_bytes THEN
+   OR alias_request.origin_bytes IS DISTINCT FROM origin_bytes OR alias_request.expected_revision IS DISTINCT FROM expected_revision
+   OR alias_request.expected_documents IS DISTINCT FROM expected_documents THEN
    RAISE EXCEPTION 'request key reused with different registration input' USING ERRCODE='P1001'; END IF;
   PERFORM truss.catalog_actor();
   PERFORM truss.catalog_rebind_report_reader(existing.registration_id);
@@ -398,6 +530,17 @@ BEGIN
   PERFORM truss.catalog_rebind_report_reader(existing.registration_id);
   RETURN;
  END IF;
+ -- Source and optional global CAS checks happen only after exact authorized
+ -- replay resolution, under the same schema-head serialization lock.
+ IF expected_revision IS NOT NULL AND prior_revision IS DISTINCT FROM expected_revision THEN
+  RAISE EXCEPTION 'expected catalog revision changed' USING ERRCODE='P1011';END IF;
+ IF jsonb_array_length(expected_docs)>0 THEN
+  FOR expected_doc IN SELECT value FROM jsonb_array_elements(expected_docs) LOOP
+   IF coalesce((SELECT max(rev) FROM truss.schema_doc WHERE doc_id=expected_doc->>'documentId'),0)
+     IS DISTINCT FROM (expected_doc->>'sourceCatalogRevision')::int THEN
+    RAISE EXCEPTION 'expected document source revision changed' USING ERRCODE='P1011';END IF;
+  END LOOP;
+ END IF;
  -- Ordinary registration keeps one validation summary per original document.
  -- Semantic source/declaration checks and atomic publication remain native.
  IF (convert_from(source_bytes,'UTF8')::jsonb)->>'sourceFormat' ='truss-registration-summary/2.0' THEN
@@ -405,7 +548,7 @@ BEGIN
    summary jsonb:=convert_from(source_bytes,'UTF8')::jsonb;
    original_input jsonb:=convert_from(input_bytes,'UTF8')::jsonb;
    original_docs jsonb:=convert_from(documents_bytes,'UTF8')::jsonb;
-   doc jsonb; validation jsonb; selected_doc jsonb; doc_index int:=0;
+   doc jsonb; validation jsonb; selected_doc jsonb; ddd_profile jsonb; ddd_validation jsonb; ddd_known boolean; doc_index int:=0;
   BEGIN
    IF (SELECT count(*) FROM jsonb_object_keys(summary))<>3
     OR jsonb_typeof(summary->'umf') IS DISTINCT FROM 'array'
@@ -417,14 +560,26 @@ BEGIN
    FOR doc IN SELECT value FROM jsonb_array_elements(original_docs) LOOP
     validation:=summary->'documentValidations'->doc_index;
     selected_doc:=original_input->'documents'->doc_index;
-     IF (SELECT count(*) FROM jsonb_object_keys(validation))<>3
+    ddd_known:=((doc->>'originalText')::jsonb->'vocabularies'->'umf.ddd'->>'version')='0.1.0';
+    ddd_profile:=validation->'dddProfile';ddd_validation:=validation->'dddValidation';
+    IF (SELECT count(*) FROM jsonb_object_keys(validation))<>
+      (CASE WHEN ddd_known THEN 5 ELSE 3 END)
       OR validation->>'documentId' IS DISTINCT FROM doc->>'documentId'
       OR validation->>'contentSha256' IS DISTINCT FROM selected_doc->'artifact'->>'sha256'
       OR selected_doc->'ingress' IS DISTINCT FROM '{"kind":"native"}'::jsonb
       OR validation->'validation' IS DISTINCT FROM doc->'validation'->'sourceValidation'
       OR validation->'validation'->'valid' IS DISTINCT FROM 'true'::jsonb
       OR jsonb_typeof(validation->'validation'->'complete') IS DISTINCT FROM 'boolean'
-      OR jsonb_typeof(validation->'validation'->'diagnostics') IS DISTINCT FROM 'array' THEN
+      OR jsonb_typeof(validation->'validation'->'diagnostics') IS DISTINCT FROM 'array'
+      OR ddd_known AND (ddd_profile IS DISTINCT FROM jsonb_build_object('identity','umf-ddd-document-validation',
+       'version',original_input->'validatorProfile'->>'version','sha256',original_input->'validatorProfile'->>'sha256')
+       OR ddd_profile IS DISTINCT FROM doc->'validation'->'dddProfile'
+       OR ddd_validation IS DISTINCT FROM doc->'validation'->'dddValidation'
+       OR ddd_validation->'valid' IS DISTINCT FROM 'true'::jsonb
+       OR jsonb_typeof(ddd_validation->'complete') IS DISTINCT FROM 'boolean'
+       OR jsonb_typeof(ddd_validation->'diagnostics') IS DISTINCT FROM 'array')
+      OR NOT ddd_known AND (validation ? 'dddProfile' OR validation ? 'dddValidation'
+       OR doc->'validation' ? 'dddProfile' OR doc->'validation' ? 'dddValidation') THEN
       RAISE EXCEPTION 'original document validation summary required' USING ERRCODE='22023';END IF;
     doc_index:=doc_index+1;
    END LOOP;
@@ -445,7 +600,8 @@ BEGIN
  IF FOUND THEN
   PERFORM truss.catalog_require_sources(input_bytes,documents_bytes,declarations_bytes);
   IF NOT preview_mode THEN
-  INSERT INTO truss.catalog_unchanged_request VALUES(installation.installation_id,actor,session_user::text,request_key,existing.registration_id,origin_bytes);
+  INSERT INTO truss.catalog_unchanged_request(installation_id,actor_oid,actor_name,request_key,registration_id,origin_bytes,expected_revision,expected_documents)
+   VALUES(installation.installation_id,actor,session_user::text,request_key,existing.registration_id,origin_bytes,expected_revision,expected_documents);
   IF NOT FOUND THEN RAISE EXCEPTION 'unchanged request not stored' USING ERRCODE='55000';END IF;
   END IF;
   alias_request.actor_name:=session_user::text;
@@ -461,6 +617,8 @@ BEGIN
  PERFORM truss.catalog_require_sources(input_bytes,documents_bytes,declarations_bytes);
  IF EXISTS(SELECT 1 FROM jsonb_array_elements(convert_from(documents_bytes,'UTF8')::jsonb) d
   JOIN truss.schema_doc s ON s.doc_id=d.value->>'documentId') THEN
+  IF NOT truss.catalog_ddd_optional_evolution_supported(documents_bytes) THEN
+   RAISE EXCEPTION 'known DDD source evolution is outside optional-member compatibility' USING ERRCODE='0A000';END IF;
   violations:=truss.catalog_scalar_violations_with_sources(declarations_bytes,documents_bytes);
   IF violations IS NOT NULL THEN
    PERFORM truss.catalog_actor();
@@ -520,6 +678,7 @@ BEGIN
  request.registration_id:=gen_random_uuid();request.installation_id:=installation.installation_id;
  request.actor_oid:=actor;request.actor_name:=session_user::text;request.request_key:=request_key;
  request.writer_xid:=pg_current_xact_id();request.accepted_at:=transaction_timestamp();request.revision:=new_revision;
+ request.expected_revision:=expected_revision;request.expected_documents:=expected_documents;
  request.type_offset:=type_start;request.property_offset:=property_start;request.relationship_offset:=relationship_start;
  request.input_bytes:=input_bytes;request.document_bytes:=CASE WHEN compact THEN ''::bytea ELSE documents_bytes END;
  request.declaration_bytes:=CASE WHEN compact THEN ''::bytea ELSE declarations_bytes END;
@@ -557,7 +716,16 @@ BEGIN
 END;
 $$;
 
+-- Preserve the original no-CAS native entrypoint and all existing call sites.
+CREATE FUNCTION truss.catalog_accept_with_keys(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea,
+ source_bytes bytea,origin_bytes bytea,request_key text,key_receipts bytea,preview_mode boolean)
+RETURNS TABLE(revision text,registration_id text,report_bytes bytea,replayed boolean,unchanged boolean,actor_name text,violations_bytes bytea)
+LANGUAGE sql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT * FROM truss.catalog_accept_with_keys(input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes,
+  request_key,key_receipts,preview_mode,NULL,convert_to('[]','UTF8'));
+$$;
 REVOKE ALL ON FUNCTION truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean) FROM PUBLIC;
+REVOKE ALL ON FUNCTION truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,int,bytea) FROM PUBLIC;
 CREATE FUNCTION truss.catalog_accept(input_bytes bytea,documents_bytes bytea,declarations_bytes bytea,source_bytes bytea,origin_bytes bytea,request_key text)
 RETURNS TABLE(revision text,registration_id text,report_bytes bytea,replayed boolean,unchanged boolean,actor_name text,violations_bytes bytea)
 LANGUAGE sql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$

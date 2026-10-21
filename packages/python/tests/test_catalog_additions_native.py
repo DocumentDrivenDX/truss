@@ -93,6 +93,7 @@ class CatalogAdditionTests(group_tests.PublicCreateGroupTests):
             self.assertIsInstance(key.value,ObjectFound);self.assertEqual(key.value.object.id,identity)
         catalog=assembly.reader_catalog_in_transaction(tx)
         self.assertIsInstance(catalog,Ok);self.assertEqual({m['documentId'] for m in catalog.value.modules},{'adoc','bdoc'})
+        self.assertEqual({m['documentId']:m['sourceCatalogRevision'] for m in catalog.value.modules},{'adoc':1,'bdoc':2})
         host.detach();connection.rollback()
 
     def test_multiple_pending_registrations_rollback_and_changed_document_refusal(self):

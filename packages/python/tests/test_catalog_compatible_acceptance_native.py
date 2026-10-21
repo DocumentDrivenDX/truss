@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT OR Apache-2.0
 """One real adopter workflow through compatible acceptance and recovery."""
 import json
+import os
 import psycopg
 from truss import CatalogDocument,CatalogRegistration,Ok,ObjectFound,HistoryEntity,HistoricalRecord
 from truss.contracts import TextValue,MapValue
@@ -13,6 +14,75 @@ import test_object_mutations_native as mutation_tests
 class CompatibleCatalogTests(mutation_tests.ObjectMutationTests):
     for _name in tuple(n for n in dir(mutation_tests.ObjectMutationTests) if n.startswith('test_')):
         locals()[_name]=None
+
+    def test_known_ddd_optional_field_evolves_only_with_matching_core_member(self):
+        def add_ddd(source):
+            source['vocabularies']={'umf.ddd':{'version':'0.1.0'},'x-retained':{'version':'1.0.0'}}
+            module=source['modules'][0]
+            module['extensions']['umf.ddd']={'kind':'bounded-context','terms':[]}
+            record=next(v for v in module['elements'] if v['id']=='A')
+            record['extensions']={'umf.ddd':{'kind':'entity','fields':{
+                'A-label':{'type':{'kind':'scalar','name':'string'},'cardinality':'one'},
+                'A-value':{'type':{'kind':'scalar','name':'string'},'cardinality':'one'}},
+                'identity':{'fields':['A-label'],'scope':'context'}},
+                'x-retained':{'opaque':{'version':7,'bytes':[3,1,4]}}}
+
+        connection,host,assembly,tx=self.ready(add_ddd,document_ids=('adoc',))
+        self.admin.execute(psycopg.sql.SQL('GRANT {} TO consumer WITH SET FALSE').format(
+            psycopg.sql.Identifier(self.installation.registrar_role)))
+        before=json.loads(self.documents[0].content)
+        old_record=next(v for v in before['modules'][0]['elements'] if v['id']=='A')
+        old_fields=json.loads(json.dumps(old_record['extensions']['umf.ddd']['fields']))
+        old_unknown=json.loads(json.dumps(old_record['extensions']['x-retained']))
+        evolved=json.loads(self.documents[0].content)
+        module=evolved['modules'][0]
+        record=next(v for v in module['elements'] if v['id']=='A')
+        record['members'].append({'module':'m','element':'A-note'})
+        record['extensions']['umf.ddd']['fields']['A-note']={
+            'type':{'kind':'scalar','name':'string'},'cardinality':'optional'}
+        module['elements'].append({'id':'A-note','name':'A-note','kind':'field','scalarType':'string',
+            'nullability':'absent-allowed','cardinality':'one','extensions':{}})
+        document=CatalogDocument('adoc','r2',json.dumps(evolved,ensure_ascii=False).encode())
+        prepared=assembly.prepare_catalog((document,),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        accepted=assembly.accept_in_transaction(tx,prepared,request_key='ddd-optional-r2')
+        self.assertIsInstance(accepted,Ok,repr(accepted)+' '+str(host._custody.last_attempt.error))
+        self.assertEqual(accepted.value.revision,2)
+        published=assembly.accepted_document_in_transaction(tx,document_id='adoc')
+        self.assertIsInstance(published,Ok);self.assertEqual(published.value.content,document.content)
+        self.assertIsNotNone(published.value.ddd_profile_bytes);self.assertIsNotNone(published.value.ddd_validation_bytes)
+        self.assertEqual(json.loads(published.value.ddd_profile_bytes)['identity'],'umf-ddd-document-validation')
+        self.assertTrue(json.loads(published.value.ddd_validation_bytes)['valid'])
+        current=json.loads(published.value.content)
+        current_record=next(v for v in current['modules'][0]['elements'] if v['id']=='A')
+        self.assertEqual({k:v for k,v in current_record['extensions']['umf.ddd']['fields'].items() if k!='A-note'},old_fields)
+        self.assertEqual(current_record['extensions']['x-retained'],old_unknown)
+        host.detach();connection.rollback()
+
+    def test_ddd_existing_field_meaning_change_is_not_optional_addition(self):
+        def add_ddd(source):
+            source['vocabularies']={'umf.ddd':{'version':'0.1.0'}}
+            module=source['modules'][0]
+            module['extensions']['umf.ddd']={'kind':'bounded-context','terms':[]}
+            record=next(v for v in module['elements'] if v['id']=='A')
+            record['extensions']={'umf.ddd':{'kind':'entity','fields':{
+                'A-label':{'type':{'kind':'scalar','name':'string'},'cardinality':'one'},
+                'A-value':{'type':{'kind':'scalar','name':'string'},'cardinality':'one'}},
+                'identity':{'fields':['A-label'],'scope':'context'}}}
+
+        connection,host,assembly,tx=self.ready(add_ddd,document_ids=('adoc',))
+        self.admin.execute(psycopg.sql.SQL('GRANT {} TO consumer WITH SET FALSE').format(
+            psycopg.sql.Identifier(self.installation.registrar_role)))
+        changed=json.loads(self.documents[0].content)
+        record=next(v for v in changed['modules'][0]['elements'] if v['id']=='A')
+        record['extensions']['umf.ddd']['fields']['A-value']['cardinality']='optional'
+        candidate=CatalogDocument('adoc','r2',json.dumps(changed,ensure_ascii=False).encode())
+        prepared=assembly.prepare_catalog((candidate,),bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+        result=assembly.accept_in_transaction(tx,prepared,request_key='ddd-existing-meaning-r2')
+        self.assertNotIsInstance(result,Ok)
+        error=host._custody.last_attempt.error
+        self.assertEqual(getattr(error,'sql_state',getattr(error,'sqlstate',None)),'0A000')
+        self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(1,))
+        host.detach();connection.rollback()
 
     def test_evolve_read_write_lookup_and_original_catalog_group_recovery(self):
         connection,host,assembly,tx=self.ready()

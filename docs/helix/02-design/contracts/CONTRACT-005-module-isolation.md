@@ -19,6 +19,49 @@ ddx:
 
 # Contract: Module isolation
 
+## Selected catalog, status and audit disclosure
+
+Conditional catalog hits and misses require the same current authenticated
+person and complete visible/dependency-owner policy as unconditional retrieval.
+A cache validator is not an authorization grant. Never expose hidden module IDs,
+counts, membership paths or private diagnostics through tokens or invalidation.
+
+An ordinary person status call returns only installed/absent/incompatible state,
+selected release compatibility and empty/accepted/unknown catalog state.
+Accepted-catalog status requires a current enrolled module reader, writer or
+auditor; audit-only enrollment does not disclose catalog contents or data.
+An authenticated original person permitted to invoke this facade MAY observe
+minimal empty/incompatible status; an absent namespace may return minimal
+absence. This supports startup before first acceptance without administrative
+role or installation inventory. An arbitrary CONNECT role gains no administrative
+status entitlement. Empty head zero is distinct from absence, denial and
+incompatible installation. Administrative role recovery is separately authorized.
+
+Module grant batches validate all submitted qualified document/module/role
+selections before applying any grant. A typed rejection retains every invalid
+input's original index and permitted module identity. Unknown modules cannot be
+silently skipped and mixed valid/invalid input cannot partially apply. Best-effort
+grant delivery is not the default selected profile. Existing administrative and
+protected activation guards still apply.
+
+Metadata-only audit uses an independent per-qualified-module auditor grant;
+ordinary data-read authority is not required. A trusted installer/administrator
+configures one NOLOGIN auditor role per document/module, distinct from its
+reader and writer role identities; a person may hold both grants, but module
+writers cannot enable their own audit grant. Ordinary
+read/write access alone does not enable audit. Fresh auditor membership must
+cover every retained declaration, endpoint and historical owner of a complete
+group. The selected projection contains IDs, operation kind, actor, explicit
+action, observation time and counts, never raw origin, input/key/property/source
+values or before/after images. A future value-bearing projection requires both
+audit and ordinary read authority over the complete owner union.
+
+Validate a complete group before releasing any member; a forbidden sibling
+refuses the whole page rather than being skipped or revealed by a count. Deleted
+entities use original retained ownership, not a live row lookup. Revocation
+between collection and release prevents disclosure. Audit grants confer no
+mutation, replication-feed or administrative authority.
+
 **Contract ID**: CONTRACT-005
 **Type**: schema
 **Version**: layout 0.2 (draft)

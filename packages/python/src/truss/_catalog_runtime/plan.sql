@@ -22,6 +22,68 @@ END;
 $$;
 REVOKE ALL ON FUNCTION truss.catalog_plan_source(jsonb,jsonb) FROM PUBLIC;
 
+-- Historical planning uses the exact source archives and their original UMF
+-- owner-validation receipts. This checks Truss's narrow correspondence rule;
+-- it does not implement or replace the DDD extension validator.
+CREATE FUNCTION truss.catalog_ddd_optional_record_addition(old_document jsonb,new_document jsonb,
+ selected_module text,old_record jsonb,new_record jsonb) RETURNS boolean
+LANGUAGE plpgsql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
+DECLARE old_module jsonb;new_module jsonb;old_ddd jsonb;new_ddd jsonb;old_source_document jsonb;new_source_document jsonb;
+ old_fields jsonb;new_fields jsonb;added_name text;member jsonb;field jsonb;
+BEGIN
+ old_source_document:=(old_document->>'document')::jsonb;new_source_document:=(new_document->>'document')::jsonb;
+ IF old_source_document IS NULL OR new_source_document IS NULL
+  OR old_source_document->>'umf' IS DISTINCT FROM '0.10.0' OR new_source_document->>'umf' IS DISTINCT FROM '0.10.0'
+  OR old_source_document->'vocabularies'->'umf.ddd'->>'version' IS DISTINCT FROM '0.1.0'
+  OR new_source_document->'vocabularies'->'umf.ddd'->>'version' IS DISTINCT FROM '0.1.0'
+  OR old_document->'validation'->'dddProfile' IS DISTINCT FROM new_document->'validation'->'dddProfile'
+  OR old_document->'validation'->'dddProfile'->>'identity' IS DISTINCT FROM 'umf-ddd-document-validation'
+  OR old_document->'validation'->'dddValidation'->'valid' IS DISTINCT FROM 'true'::jsonb
+  OR new_document->'validation'->'dddValidation'->'valid' IS DISTINCT FROM 'true'::jsonb THEN RETURN false;END IF;
+ SELECT value INTO old_module FROM jsonb_array_elements(old_source_document->'modules') WHERE value->>'id'=selected_module;
+ SELECT value INTO new_module FROM jsonb_array_elements(new_source_document->'modules') WHERE value->>'id'=selected_module;
+ IF old_module IS NULL OR new_module IS NULL
+  OR old_module->'extensions'->'umf.ddd' IS DISTINCT FROM new_module->'extensions'->'umf.ddd' THEN RETURN false;END IF;
+ old_ddd:=old_record->'extensions'->'umf.ddd';new_ddd:=new_record->'extensions'->'umf.ddd';
+ old_fields:=old_ddd->'fields';new_fields:=new_ddd->'fields';
+ IF jsonb_typeof(old_fields) IS DISTINCT FROM 'object' OR jsonb_typeof(new_fields) IS DISTINCT FROM 'object'
+  OR (new_record-ARRAY['members','extensions']) IS DISTINCT FROM (old_record-ARRAY['members','extensions'])
+  OR ((new_record->'extensions')-'umf.ddd'::text) IS DISTINCT FROM ((old_record->'extensions')-'umf.ddd'::text)
+  OR (new_ddd-'fields'::text) IS DISTINCT FROM (old_ddd-'fields'::text)
+  OR (SELECT count(*) FROM jsonb_object_keys(new_fields))<>(SELECT count(*) FROM jsonb_object_keys(old_fields))+1
+  OR jsonb_array_length(coalesce(new_record->'members','[]'::jsonb))<>jsonb_array_length(coalesce(old_record->'members','[]'::jsonb))+1
+  OR EXISTS(SELECT 1 FROM jsonb_object_keys(old_fields) AS k(key) WHERE new_fields->(k.key) IS DISTINCT FROM old_fields->(k.key)) THEN
+  RETURN false;
+ END IF;
+ IF jsonb_array_length(coalesce(old_record->'members','[]'::jsonb))>0 AND EXISTS(
+   SELECT 1 FROM jsonb_array_elements(old_record->'members') WITH ORDINALITY old_member(value,ordinality)
+   JOIN jsonb_array_elements(new_record->'members') WITH ORDINALITY new_member(value,ordinality) USING(ordinality)
+   WHERE old_member.value IS DISTINCT FROM new_member.value) THEN RETURN false;END IF;
+ member:=new_record->'members'->jsonb_array_length(coalesce(old_record->'members','[]'::jsonb));
+ IF jsonb_typeof(member) IS DISTINCT FROM 'object' OR (SELECT count(*) FROM jsonb_object_keys(member))<>2
+  OR member->>'module' IS DISTINCT FROM selected_module THEN RETURN false;END IF;
+ added_name:=NULL;
+ SELECT k.key INTO added_name FROM jsonb_object_keys(new_fields) AS k(key) WHERE NOT (old_fields ? k.key);
+ IF added_name IS NULL OR old_fields ? added_name THEN RETURN false;END IF;
+ SELECT element.value INTO field FROM jsonb_array_elements(new_module->'elements') element(value)
+  WHERE element.value->>'id'=member->>'element';
+ IF NOT FOUND OR field->>'kind' IS DISTINCT FROM 'field' OR field->>'name' IS DISTINCT FROM added_name
+  OR field->>'nullability' IS DISTINCT FROM 'absent-allowed' OR field->>'cardinality' IS DISTINCT FROM 'one' THEN RETURN false;END IF;
+ IF jsonb_typeof(new_fields->added_name) IS DISTINCT FROM 'object'
+  OR (SELECT count(*) FROM jsonb_object_keys(new_fields->added_name)) NOT BETWEEN 2 AND 3
+  OR ((new_fields->added_name)-ARRAY['type','cardinality','description']) IS DISTINCT FROM '{}'::jsonb
+  OR new_fields->added_name->>'cardinality' IS DISTINCT FROM 'optional'
+  OR new_fields->added_name->'type'->>'kind' IS DISTINCT FROM 'scalar' THEN RETURN false;END IF;
+ RETURN CASE field->>'scalarType' WHEN 'string' THEN new_fields->added_name->'type'->>'name'='string'
+  WHEN 'boolean' THEN new_fields->added_name->'type'->>'name'='boolean'
+  WHEN 'integer' THEN new_fields->added_name->'type'->>'name'='integer'
+  WHEN 'decimal' THEN new_fields->added_name->'type'->>'name'='decimal'
+  WHEN 'timestamp' THEN new_fields->added_name->'type'->>'name'='date-time'
+  WHEN 'binary' THEN new_fields->added_name->'type'->>'name'='bytes' ELSE false END;
+END;
+$$;
+REVOKE ALL ON FUNCTION truss.catalog_ddd_optional_record_addition(jsonb,jsonb,text,jsonb,jsonb) FROM PUBLIC;
+
 -- Compute a complete revision from an independently reconstructed prestate.
 -- This planner is private; acceptance and its protected persistence are separate.
 CREATE FUNCTION truss.catalog_revision_plan(prior jsonb,fresh jsonb) RETURNS jsonb
@@ -37,7 +99,7 @@ DECLARE result jsonb:=prior;types jsonb:=coalesce(prior->'type_def','[]');proper
  next_types jsonb[]:=ARRAY[]::jsonb[];next_properties jsonb[]:=ARRAY[]::jsonb[];next_relations jsonb[]:=ARRAY[]::jsonb[];
  next_keys jsonb[]:=ARRAY[]::jsonb[];next_lineages jsonb[]:=ARRAY[]::jsonb[];next_endpoints jsonb[]:=ARRAY[]::jsonb[];next_changes jsonb[]:=ARRAY[]::jsonb[];
  removed_type_ids int[]:=ARRAY[]::int[];removed_property_ids int[]:=ARRAY[]::int[];removed_relation_ids int[]:=ARRAY[]::int[];
- row jsonb;old jsonb;candidate jsonb;old_source jsonb;new_source jsonb;component jsonb;remapped jsonb;
+ row jsonb;old jsonb;candidate jsonb;old_source jsonb;new_source jsonb;old_document jsonb;new_document jsonb;component jsonb;remapped jsonb;
  tightening boolean;facet_map jsonb;compact_insertions boolean;
  assigned int;type_next int;property_next int;relationship_next int;key_next int;sequence int:=0;revision int;
 BEGIN
@@ -185,7 +247,14 @@ BEGIN
    new_source:=source_index->jsonb_build_array(row->>'definition_rev',row->>'definition_doc_ord',row->>'definition_document_id',row->>'module','element',row->>'element')::text;
    IF old_source IS NULL OR new_source IS NULL THEN RAISE NO_DATA_FOUND;END IF;
    IF old_source=new_source THEN CONTINUE;END IF;
-   IF old_source-ARRAY['members','name','keys'] IS DISTINCT FROM new_source-ARRAY['members','name','keys']
+   SELECT value INTO old_document FROM jsonb_array_elements(prior->'schema_doc')
+    WHERE value->>'rev'=old->>'definition_rev' AND value->>'ord'=old->>'definition_doc_ord'
+     AND value->>'doc_id'=old->>'definition_document_id';
+   SELECT value INTO new_document FROM jsonb_array_elements(fresh->'schema_doc')
+    WHERE value->>'rev'=row->>'definition_rev' AND value->>'ord'=row->>'definition_doc_ord'
+     AND value->>'doc_id'=row->>'definition_document_id';
+   IF (old_source-ARRAY['members','name','keys'] IS DISTINCT FROM new_source-ARRAY['members','name','keys']
+       AND NOT truss.catalog_ddd_optional_record_addition(old_document,new_document,row->>'module',old_source,new_source))
     OR EXISTS(SELECT value FROM jsonb_array_elements(coalesce(old_source->'keys','[]')) EXCEPT
               SELECT value FROM jsonb_array_elements(coalesce(new_source->'keys','[]')))
     OR EXISTS(SELECT value FROM jsonb_array_elements(old_source->'members') EXCEPT ALL

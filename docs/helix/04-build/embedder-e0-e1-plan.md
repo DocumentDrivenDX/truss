@@ -223,6 +223,9 @@ The earlier 65+2/412-file local receipts above retain their original scope; thos
 
 ## Risks and Rollbacks
 
+The [remaining embedder plan](embedder-e2-e8-plan.md) governs authorized E2–E8
+execution. Its contract adoption does not add qualification to the E0/E1 receipts.
+
 | Risk | Response / rollback |
 | --- | --- |
 | Larger condition inventory exceeds other bounds | Refuse the whole group at the governing bound; retain documented lower profile if qualification fails. |

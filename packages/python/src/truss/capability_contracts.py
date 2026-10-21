@@ -11,7 +11,7 @@ from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCu
 from .execution import Outcome, TransactionHandle
 from .preparation import CatalogDocument, PreparedAcceptance
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable
-from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogInvalid, CatalogRefused, CatalogUnavailable
+from .reader_catalog import ReaderCatalog, ReaderCatalogSnapshot, ReaderCatalogUnchanged, AcceptedDocument, CatalogInvalid, CatalogRefused, CatalogUnavailable
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
 from .object_read import ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadRefused, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from .edge_read import EdgeFound, EdgeNotFound, EdgePage, EdgePageCursor
@@ -23,7 +23,9 @@ from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 from .history import HistoryEntity,HistoryCursor,HistoryPage,HistoricalRecord,HistoricalDeleted,HistoryUnavailable
 
-from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogReport)
+from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogReport, CatalogDocumentExpectation, CatalogCASConflict, RegistrarStatus)
+from .batched_import import (BatchedImportInput, BatchedImportRuntimeContext, ImportRecordDraft,
+    BuiltImportRecords, BatchedImportExecutionResult)
 
 
 class NativeRuntimeOperations(Protocol):
@@ -36,7 +38,8 @@ class NativeRuntimeOperations(Protocol):
     def prepare_catalog(self, documents: tuple[CatalogDocument, ...], *, bun_executable: str='bun', source_version: str='0.10.0') -> PreparedAcceptance: ...
 
     def accept_in_transaction(self, transaction: TransactionHandle, prepared: PreparedAcceptance, *, request_key: str,
-                                  origin_bytes: bytes=b'{}',bun_executable: str='bun') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]: ...
+                                  origin_bytes: bytes=b'{}',bun_executable: str='bun',expected_revision: int | None=None,
+                                  expected_documents: tuple[CatalogDocumentExpectation,...]=()) -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused | CatalogCASConflict]: ...
 
     def report_in_transaction(self, transaction: TransactionHandle, revision: int=1) -> Outcome[CatalogReport]: ...
 
@@ -49,6 +52,11 @@ class NativeRuntimeOperations(Protocol):
 
     def accepted_document_in_transaction(self, transaction: TransactionHandle, *, document_id: str,
                                             maximum_bytes: int=1048576) -> Outcome[AcceptedDocument | CatalogInvalid | CatalogRefused | CatalogUnavailable]: ...
+
+    def reader_catalog_if_changed_in_transaction(self,transaction: TransactionHandle,*,validator: str | None=None,
+                                                 maximum_count: int=65536,maximum_bytes: int=1048576) -> Outcome[ReaderCatalogSnapshot | ReaderCatalogUnchanged | CatalogInvalid | CatalogRefused | CatalogUnavailable]: ...
+
+    def registrar_status_in_transaction(self,transaction: TransactionHandle) -> Outcome[RegistrarStatus | CatalogUnavailable]: ...
 
     def lookup_import_source_in_transaction(self,transaction: TransactionHandle,*,entity: HistoryEntity,
                                             maximum_bytes: int=1048576) -> Outcome[ImportSourceFound | ImportSourceAbsent | ImportSourceUnavailable]: ...
@@ -85,6 +93,12 @@ class NativeRuntimeOperations(Protocol):
                                                 values: tuple[AuthoredValue,...],source: MapValue | None=None) -> Outcome[ObjectImportRecord]: ...
 
     def import_in_transaction(self,transaction: TransactionHandle,input: ImportInput,*,documents: tuple[CatalogDocument,...],bun_executable: str='bun') -> ImportExecutionResult[Literal['host_adopted']]: ...
+
+    def batched_import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[BatchedImportRuntimeContext]: ...
+
+    def build_import_records_in_transaction(self,transaction: TransactionHandle,drafts: tuple[ImportRecordDraft,...]) -> Outcome[BuiltImportRecords]: ...
+
+    def import_batched_in_transaction(self,transaction: TransactionHandle,input: BatchedImportInput,*,documents: tuple[CatalogDocument,...]) -> BatchedImportExecutionResult: ...
 
     def read_feed_in_transaction(self,transaction: TransactionHandle,*,consumer_id: str,maximum_facts: int=4096,
                                      maximum_bytes: int=8388608) -> Outcome[FeedPage | FeedUnavailable]: ...

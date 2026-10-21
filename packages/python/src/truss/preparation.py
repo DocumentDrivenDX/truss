@@ -41,8 +41,10 @@ class DocumentInterpretation:
         if evidence.get('interfaceVersion')=='truss-registration-preparation/2.0':
             entry=next(d for d in evidence['documents'] if d['documentId']==self.document.document_id)
             if entry['contentSha256']!=sha256(self.document.content).hexdigest():raise ValueError('Original source digest required')
-            return {'originalText':self.document.content.decode('utf8'),'source':self.source(),
+            result={'originalText':self.document.content.decode('utf8'),'source':self.source(),
                 'sourceValidation':entry['validation']}
+            if 'dddProfile' in entry:result.update(dddProfile=entry['dddProfile'],dddValidation=entry['dddValidation'])
+            return result
         return evidence
 
     def source(self) -> dict[str,object]:
@@ -74,10 +76,15 @@ class PreparedAcceptance:
     @property
     def archive_documents_bytes(self) -> bytes:
         summary=json.loads(self.report_evidence_bytes)
-        validations={d['documentId']:d['validation'] for d in summary['documents']}
+        validations={d['documentId']:d for d in summary['documents']}
+        def stored_validation(document_id):
+            entry=validations[document_id]
+            result={'storageFormat':'truss-catalog-source/2','sourceValidation':entry['validation'],'transition':None}
+            if 'dddProfile' in entry:result.update(dddProfile=entry['dddProfile'],dddValidation=entry['dddValidation'])
+            return result
         return _json([{'documentId':d.document.document_id,'revision':d.document.document_revision,
             'umfVersion':d.source()['umf'],'originalText':d.document.content.decode('utf8'),
-            'validation':{'storageFormat':'truss-catalog-source/2','sourceValidation':validations[d.document.document_id],'transition':None}}
+            'validation':stored_validation(d.document.document_id)}
             for d in self.documents])
 
     def input(self) -> dict[str, object]:
@@ -279,10 +286,20 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
         observed=result['documents']
         if len(observed)!=len(documents):_reject('producer_unavailable')
         for document,item in zip(documents,observed,strict=True):
-            if (set(item)!={'documentId','revision','umfVersion','validation'}
+            source=json.loads(document.content)
+            ddd_known=source.get('vocabularies',{}).get('umf.ddd',{}).get('version')=='0.1.0'
+            expected_item_keys={'documentId','revision','umfVersion','validation'}|({'dddProfile','dddValidation'} if ddd_known else set())
+            if (set(item)!=expected_item_keys
                     or item['documentId']!=document.document_id or item['revision']!=document.document_revision
-                    or item['umfVersion']!=json.loads(document.content)['umf']
+                    or item['umfVersion']!=source['umf']
                     or item['validation'].get('valid') is not True):_reject('producer_unavailable')
+            if ddd_known:
+                expected_ddd_profile={'identity':'umf-ddd-document-validation','version':manifest['owner']['revision'],
+                    'sha256':manifest['owner']['bundleSha256']}
+                ddd_validation=item['dddValidation']
+                if (item['dddProfile']!=expected_ddd_profile or type(ddd_validation) is not dict
+                        or ddd_validation.get('valid') is not True or type(ddd_validation.get('complete')) is not bool
+                        or type(ddd_validation.get('diagnostics')) is not list):_reject('producer_unavailable')
         pin=result['provenance']['umfProfile']
         if (pin['identity'] != 'umf-core-document-validation'
                 or pin['version'] != manifest['owner']['revision']
@@ -292,7 +309,8 @@ def _prepare_acceptance(documents: tuple[CatalogDocument, ...],configuration:byt
         report_evidence=result['reportEvidence']
         expected_summary={'interfaceVersion':'truss-registration-preparation/2.0','documents':[
             {'documentId':document.document_id,'contentSha256':sha256(document.content).hexdigest(),
-             'validation':item['validation']}
+             'validation':item['validation'],**({'dddProfile':item['dddProfile'],'dddValidation':item['dddValidation']}
+                 if 'dddProfile' in item else {})}
             for document,item in zip(documents,observed,strict=True)]}
         if report_evidence!=expected_summary:_reject('producer_unavailable')
         summary_bytes=_json(report_evidence)

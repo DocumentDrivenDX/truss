@@ -385,6 +385,7 @@ async function loadCore10CatalogOwner(directory) {
   const { hash, captured } = await loadPinnedFunctions(directory, revision, "core10-catalog", [
     "readJsonValue",
     "validateSemanticTypesDocument",
+    "inspectDdd",
     "encodeCoreKeyTupleBody",
     "withCatalogResourceProfile"
   ]);
@@ -399,7 +400,10 @@ async function loadCore10CatalogOwner(directory) {
         if (source?.umf !== "0.10.0")
           throw Error("Unsupported original UMF version");
         const sourceValidation = captured.validateSemanticTypesDocument(source);
-        return { originalText, source, sourceValidation, transition: null, targetValidation: sourceValidation, target: source };
+        const dddVersion = source?.vocabularies?.["umf.ddd"]?.version;
+        const dddProfile = dddVersion === "0.1.0" ? Object.freeze({ identity: "umf-ddd-document-validation", version: revision, sha256: hash }) : undefined;
+        const dddValidation = dddProfile ? captured.inspectDdd(source) : undefined;
+        return { originalText, source, sourceValidation, dddProfile, dddValidation, transition: null, targetValidation: sourceValidation, target: source };
       });
     }
   });
@@ -541,16 +545,21 @@ async function createPreparation(directory, dependenciesPackage, schemaUrl) {
       } catch (error) {
         throw new CatalogDocumentRejected(source.documentId, source.documentRevision, error);
       }
-      if (!observation.sourceValidation.valid)
+      if (!observation.sourceValidation.valid || observation.dddValidation && !observation.dddValidation.valid)
         throw new CatalogDocumentRejected(source.documentId, source.documentRevision, null, observation);
       if (observation.source.id !== source.documentId)
         throw Error("Original document identity mismatch");
+      const validation = { sourceValidation: observation.sourceValidation };
+      if (observation.dddProfile && observation.dddValidation) {
+        validation.dddProfile = observation.dddProfile;
+        validation.dddValidation = observation.dddValidation;
+      }
       documents.push(Object.freeze({
         documentId: source.documentId,
         revision: source.documentRevision,
         umfVersion: observation.source.umf,
         originalText: source.originalText,
-        validation: { sourceValidation: observation.sourceValidation },
+        validation,
         interpretation: observation
       }));
     }
@@ -609,7 +618,9 @@ try {
     documents: prepared.documents.map((document, index) => ({
       documentId: document.documentId,
       contentSha256: prepared.original.documents[index].sha256,
-      validation: document.interpretation.sourceValidation
+      validation: document.interpretation.sourceValidation,
+      ...document.interpretation.dddProfile ? { dddProfile: document.interpretation.dddProfile } : {},
+      ...document.interpretation.dddValidation ? { dddValidation: document.interpretation.dddValidation } : {}
     }))
   };
   const descriptor = {
@@ -627,7 +638,9 @@ try {
       documentId: document.documentId,
       revision: document.revision,
       umfVersion: document.umfVersion,
-      validation: document.interpretation.sourceValidation
+      validation: document.interpretation.sourceValidation,
+      ...document.interpretation.dddProfile ? { dddProfile: document.interpretation.dddProfile } : {},
+      ...document.interpretation.dddValidation ? { dddValidation: document.interpretation.dddValidation } : {}
     })),
     reportEvidence,
     provenance: { umfProfile: prepared.umfProfile, schemaSha256: prepared.original.schemaSha256, scope: prepared.scope }
@@ -640,7 +653,11 @@ try {
     diagnostics = [{
       documentId: error.documentId,
       documentRevision: error.documentRevision,
-      ...error.observation ? { validation: error.observation.sourceValidation } : { originalError: {
+      ...error.observation ? {
+        validation: error.observation.sourceValidation,
+        ...error.observation.dddProfile ? { dddProfile: error.observation.dddProfile } : {},
+        ...error.observation.dddValidation ? { dddValidation: error.observation.dddValidation } : {}
+      } : { originalError: {
         message: message.slice(0, 8192),
         truncated: message.length > 8192,
         ...typeof cause?.code === "string" ? { code: cause.code.slice(0, 256) } : {},

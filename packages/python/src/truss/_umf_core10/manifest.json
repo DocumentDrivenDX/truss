@@ -1,5 +1,5 @@
 {
-  "interfaceVersion": "truss-core10-catalog-producer/0.1.0",
+  "interfaceVersion": "truss-core10-catalog-producer/0.2.0",
   "runtimeVersion": "1.4.3",
   "owner": {
     "revision": "b24e07abae445414c41d2f122deae596915c6bd5",
@@ -15,21 +15,22 @@
       }
     },
     "archiveSha256": "df5dc79e607c95810574ce4d1015ed5846e7a8614d9a75c3980171f46176c027",
-    "bundleSha256": "16bf60b634484ceee7f56304014fbf0b4ac2f1aaf7fe6ceff15ea7f8267c9adc",
+    "bundleSha256": "0335643fd700df1eafedb88e6104d532096aa74c6081f8d96372d2779a4d34fd",
     "operations": [
       "readJsonValue",
       "validateSemanticTypesDocument",
       "encodeCoreKeyTupleBody",
-      "withCatalogResourceProfile"
+      "withCatalogResourceProfile",
+      "inspectDdd"
     ],
-    "scope": "Original logical UMF producers only; no native acceptance/containment qualification."
+    "scope": "Original UMF 0.10 core and umf.ddd 0.1.0 document validators, declaration identity and Truss key realization; no native acceptance/containment qualification."
   },
   "files": {
     "acceptance-input-v0.1.schema.json": "0278cbbbde843091c005b688fd9c081a2fdff843b9adda006ba80fb87828d7cd",
     "keys.mjs": "a2ce760252646f92fc716a3eadf68d6797f1fcb2b777ed8d00be92bb8169918e",
-    "preparation.mjs": "b1e2526cdf9648f81f4aa629a53422fee8a2a05f7e06beee6e1f50ed9c60d62d",
-    "producer-manifest.json": "286dc750385f8097e0593b3025bbf0ae4349a085a62530f5d73bc8b92c30d6f9",
-    "producer.js": "16bf60b634484ceee7f56304014fbf0b4ac2f1aaf7fe6ceff15ea7f8267c9adc",
+    "preparation.mjs": "b750fa2c9bf29bd9f3598c4d1b8678b6540bf80a2e160deb01a187d2c6e38e03",
+    "producer-manifest.json": "4b557b9452c2591fa43b982253c20448fab94a43898a26d97f0e8e54fc1c967a",
+    "producer.js": "0335643fd700df1eafedb88e6104d532096aa74c6081f8d96372d2779a4d34fd",
     "licenses/ajv.txt": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3",
     "licenses/fast-deep-equal.txt": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a",
     "licenses/fast-uri.txt": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786",
@@ -37,5 +38,5 @@
     "licenses/require-from-string.txt": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f",
     "licenses/yaml.txt": "5bba27375d93e9119f76c1015f7672cf9ad5f70952296e0842fb2243d6376869"
   },
-  "scope": "Original UMF 0.10.0 document validation and Truss current-key realization only; no inspector transcript or native admission claim."
+  "scope": "Original UMF 0.10.0 core and selected DDD 0.1.0 document validation, plus Truss current-key realization; no native admission claim."
 }

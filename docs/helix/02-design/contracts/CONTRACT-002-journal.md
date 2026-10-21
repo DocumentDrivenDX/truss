@@ -19,6 +19,84 @@ ddx:
 
 # Contract: Journal
 
+## Selected group audit and load-attempt projection
+
+`LoadAuditPage`, `LoadAuditCursor` and `LoadAuditUnavailable` carry the selected
+load-read surface; `MutationGroupAuditPage` and
+`MutationGroupAuditListingCursor` carry separately typed mutation audit.
+`page_mutation_group_audit` and `page_import_load_audit` discover one complete
+mutation group or one import-invocation summary per page at a frozen committed frontier, scoped to a qualified
+document/module. Listing never replaces
+a complete group's owner-union authorization with per-entry filtering.
+A separate audit grant exposes complete committed mutation groups and load
+attempts under current authority over their complete original owner union.
+The selected page is metadata-only: stable group/attempt and entity IDs,
+operation kind, native actor, explicit action, observation time and declared
+counts/outcomes. It excludes input/property/key/before-after/source values and
+raw caller-asserted origin. Observation time is not commit time. Retained source
+and origin facts remain private; this page does not expose their payloads.
+It supports deleted-entity discovery without current canonical rows. Existing
+per-entity history and replication feed do not substitute for this group-scoped
+audit surface. It covers all selected completed mutation groups, including
+unchanged operations and cascade descendants; an import-load-only reader does
+not fulfill this contract. Filters select retained type/entity key, native person,
+explicit action, group identity and an observed-time interval. Module selection
+works independently of an entity selector. Pages order newest retained observation
+first, with declared stable timestamp/transaction/group tie breakers and a
+descending continuation. A matching member
+selects its entire group; filtering never removes siblings from that group.
+Historical business-key filtering, when selected, must use the exact retained
+revision/key interpretation, not a live bucket or a current-row lookup.
+
+R20's selected asserted action is the optional exact `x-action` key in the original
+`MapValue` entries, with a string value containing 1–4,096 UTF-8 bytes. Compare it
+with exact C-collation equality. An absent or malformed action projects null and
+does not match a nonnull action filter; it does not hide the otherwise auditable
+group. Never infer an action from another origin key or replace it with a digest
+of the entire origin. Native mutation operation kind remains a separate field.
+Historical person identity combines retained native actor OID and the original
+native role-name observation, not a current role-name lookup.
+
+Read only actually committed groups below a safe snapshot frontier. Order and
+continuations use descending retained observation time and declared stable tie
+breakers, not an invented commit timestamp or commit sequence. The committed
+frontier is fixed independently of that display order; a writer transaction ID
+proves eligibility below the frontier and is not the primary display order. `at`, journal sequence and transaction ID
+MUST NOT be advertised as commit time/order. Cursor identity binds installation,
+epoch, release, filters and observation basis; recheck current independent audit
+authority over every retained owner before each release. Ordinary entity-read
+authority is not required for this metadata-only page. Any future value-bearing
+projection requires both audit and ordinary read authority over its complete
+owner union. Pages do not split groups, skip forbidden siblings or truncate a supposedly complete event inventory. An oversized group
+returns typed resource unavailability.
+
+Each selected import invocation records its load-attempt summary transactionally,
+including zero-created loads, complete original-index outcome counts and actual
+chunk boundaries. The module-scoped companion load listing exposes load ID,
+authenticated initiator, retained observation time and explicit created, skipped
+and rejected counts; a consumer need not infer these from per-record details.
+`LoadAuditInvocationSummary` carries that listing result; separately bounded
+`LoadAuditPage` detail reads retain the original per-chunk outcome inventory.
+Preserve the original asserted origin privately, including zero-created loads;
+its metadata-only projection exposes only its digest.
+For engine-owned partial loads, counts/state cover only chunks within the fixed
+committed observation frontier and must not imply complete settlement of unseen
+or unknown chunks. Existing canonical import idempotency and retained source facts
+remain unchanged; a distinct explicit load-attempt observation is separately
+auditable. Exact native request replay cannot produce duplicate audit metadata.
+Unknown or empty owner scope cannot authorize disclosure by a vacuous membership
+check. Retain an explicitly unscoped load observation and return audit unavailable
+unless a qualified selected administrative/module scope supplies its entitlement.
+This includes literal zero-record loads; zero-created nonempty loads still derive
+their original owners. An unscopable rejected record must not erase otherwise
+valid partial import progress merely to create audit metadata.
+Caller-owned load rows remain pending and disappear on rollback; engine-owned
+rows commit with their corresponding chunk. Interrupted or unknown attempts
+cannot be upgraded to a complete committed load by a postcommit writer. Store
+original source references/digests and required reports without redundant copies
+of every raw record payload. Retention must preserve whole disclosed group/load
+inventories or return explicit unavailable history.
+
 ## Public native history reads — runtime 0.21
 
 The Python native history profile publishes one complete committed per-entity

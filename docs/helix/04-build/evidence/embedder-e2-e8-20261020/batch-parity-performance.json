@@ -1,0 +1,384 @@
+[
+  {
+    "records": 32,
+    "trial": 0,
+    "legacy": {
+      "builderStatements": 128,
+      "executeStatements": 298,
+      "builder": {
+        "seconds": 0.17269262502668425,
+        "clientPeakRssBytes": 176619520,
+        "backendPeakRssBytes": 21905408,
+        "clientRssSampleCount": 14,
+        "backendRssSampleCount": 14
+      },
+      "execute": {
+        "seconds": 0.4563026250107214,
+        "clientPeakRssBytes": 176685056,
+        "backendPeakRssBytes": 50462720,
+        "clientRssSampleCount": 37,
+        "backendRssSampleCount": 37
+      }
+    },
+    "batched": {
+      "builderStatements": 3,
+      "executeStatements": 6,
+      "builder": {
+        "seconds": 0.022581249999348074,
+        "clientPeakRssBytes": 176685056,
+        "backendPeakRssBytes": 51216384,
+        "clientRssSampleCount": 2,
+        "backendRssSampleCount": 2
+      },
+      "execute": {
+        "seconds": 0.3638362919446081,
+        "clientPeakRssBytes": 176685056,
+        "backendPeakRssBytes": 59228160,
+        "clientRssSampleCount": 31,
+        "backendRssSampleCount": 31
+      }
+    }
+  },
+  {
+    "records": 64,
+    "trial": 0,
+    "legacy": {
+      "builderStatements": 256,
+      "executeStatements": 586,
+      "builder": {
+        "seconds": 0.30263937497511506,
+        "clientPeakRssBytes": 176783360,
+        "backendPeakRssBytes": 59260928,
+        "clientRssSampleCount": 25,
+        "backendRssSampleCount": 25
+      },
+      "execute": {
+        "seconds": 0.860973583010491,
+        "clientPeakRssBytes": 176832512,
+        "backendPeakRssBytes": 63963136,
+        "clientRssSampleCount": 71,
+        "backendRssSampleCount": 71
+      }
+    },
+    "batched": {
+      "builderStatements": 3,
+      "executeStatements": 6,
+      "builder": {
+        "seconds": 0.039411166042555124,
+        "clientPeakRssBytes": 176832512,
+        "backendPeakRssBytes": 64389120,
+        "clientRssSampleCount": 4,
+        "backendRssSampleCount": 4
+      },
+      "execute": {
+        "seconds": 0.7400087080313824,
+        "clientPeakRssBytes": 176832512,
+        "backendPeakRssBytes": 69648384,
+        "clientRssSampleCount": 61,
+        "backendRssSampleCount": 61
+      }
+    }
+  },
+  {
+    "records": 128,
+    "trial": 0,
+    "legacy": {
+      "builderStatements": 512,
+      "executeStatements": 1162,
+      "builder": {
+        "seconds": 0.5894101249868982,
+        "clientPeakRssBytes": 177029120,
+        "backendPeakRssBytes": 69681152,
+        "clientRssSampleCount": 48,
+        "backendRssSampleCount": 48
+      },
+      "execute": {
+        "seconds": 1.6925612920313142,
+        "clientPeakRssBytes": 177078272,
+        "backendPeakRssBytes": 75415552,
+        "clientRssSampleCount": 137,
+        "backendRssSampleCount": 137
+      }
+    },
+    "batched": {
+      "builderStatements": 3,
+      "executeStatements": 6,
+      "builder": {
+        "seconds": 0.07149862498044968,
+        "clientPeakRssBytes": 177094656,
+        "backendPeakRssBytes": 76201984,
+        "clientRssSampleCount": 6,
+        "backendRssSampleCount": 6
+      },
+      "execute": {
+        "seconds": 1.557838874985464,
+        "clientPeakRssBytes": 177094656,
+        "backendPeakRssBytes": 86245376,
+        "clientRssSampleCount": 126,
+        "backendRssSampleCount": 126
+      }
+    }
+  },
+  {
+    "records": 32,
+    "trial": 1,
+    "legacy": {
+      "builderStatements": 128,
+      "executeStatements": 298,
+      "builder": {
+        "seconds": 0.16076495801098645,
+        "clientPeakRssBytes": 177094656,
+        "backendPeakRssBytes": 86245376,
+        "clientRssSampleCount": 14,
+        "backendRssSampleCount": 14
+      },
+      "execute": {
+        "seconds": 0.46200829197186977,
+        "clientPeakRssBytes": 177094656,
+        "backendPeakRssBytes": 87375872,
+        "clientRssSampleCount": 38,
+        "backendRssSampleCount": 38
+      }
+    },
+    "batched": {
+      "builderStatements": 3,
+      "executeStatements": 6,
+      "builder": {
+        "seconds": 0.023408915963955224,
+        "clientPeakRssBytes": 177094656,
+        "backendPeakRssBytes": 87408640,
+        "clientRssSampleCount": 3,
+        "backendRssSampleCount": 3
+      },
+      "execute": {
+        "seconds": 0.3869678329792805,
+        "clientPeakRssBytes": 177094656,
+        "backendPeakRssBytes": 89210880,
+        "clientRssSampleCount": 32,
+        "backendRssSampleCount": 32
+      }
+    }
+  },
+  {
+    "records": 64,
+    "trial": 1,
+    "legacy": {
+      "builderStatements": 256,
+      "executeStatements": 586,
+      "builder": {
+        "seconds": 0.3138189580058679,
+        "clientPeakRssBytes": 177094656,
+        "backendPeakRssBytes": 89210880,
+        "clientRssSampleCount": 26,
+        "backendRssSampleCount": 26
+      },
+      "execute": {
+        "seconds": 0.9332036250270903,
+        "clientPeakRssBytes": 177094656,
+        "backendPeakRssBytes": 91815936,
+        "clientRssSampleCount": 77,
+        "backendRssSampleCount": 77
+      }
+    },
+    "batched": {
+      "builderStatements": 3,
+      "executeStatements": 6,
+      "builder": {
+        "seconds": 0.039378790999762714,
+        "clientPeakRssBytes": 177094656,
+        "backendPeakRssBytes": 91848704,
+        "clientRssSampleCount": 4,
+        "backendRssSampleCount": 4
+      },
+      "execute": {
+        "seconds": 0.8158201670157723,
+        "clientPeakRssBytes": 177094656,
+        "backendPeakRssBytes": 95141888,
+        "clientRssSampleCount": 68,
+        "backendRssSampleCount": 68
+      }
+    }
+  },
+  {
+    "records": 128,
+    "trial": 1,
+    "legacy": {
+      "builderStatements": 512,
+      "executeStatements": 1162,
+      "builder": {
+        "seconds": 0.6262048750068061,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 95141888,
+        "clientRssSampleCount": 51,
+        "backendRssSampleCount": 51
+      },
+      "execute": {
+        "seconds": 1.8778428750229068,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 100548608,
+        "clientRssSampleCount": 154,
+        "backendRssSampleCount": 154
+      }
+    },
+    "batched": {
+      "builderStatements": 3,
+      "executeStatements": 6,
+      "builder": {
+        "seconds": 0.07571291696513072,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 100581376,
+        "clientRssSampleCount": 7,
+        "backendRssSampleCount": 7
+      },
+      "execute": {
+        "seconds": 1.6957887079915963,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 107167744,
+        "clientRssSampleCount": 139,
+        "backendRssSampleCount": 139
+      }
+    }
+  },
+  {
+    "records": 32,
+    "trial": 2,
+    "legacy": {
+      "builderStatements": 128,
+      "executeStatements": 298,
+      "builder": {
+        "seconds": 0.1456174170016311,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 107167744,
+        "clientRssSampleCount": 12,
+        "backendRssSampleCount": 12
+      },
+      "execute": {
+        "seconds": 0.49541629204759374,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 108331008,
+        "clientRssSampleCount": 41,
+        "backendRssSampleCount": 41
+      }
+    },
+    "batched": {
+      "builderStatements": 3,
+      "executeStatements": 6,
+      "builder": {
+        "seconds": 0.023544499999843538,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 108331008,
+        "clientRssSampleCount": 2,
+        "backendRssSampleCount": 2
+      },
+      "execute": {
+        "seconds": 0.420456167019438,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 110116864,
+        "clientRssSampleCount": 35,
+        "backendRssSampleCount": 35
+      }
+    }
+  },
+  {
+    "records": 64,
+    "trial": 2,
+    "legacy": {
+      "builderStatements": 256,
+      "executeStatements": 586,
+      "builder": {
+        "seconds": 0.29853212501620874,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 110116864,
+        "clientRssSampleCount": 25,
+        "backendRssSampleCount": 25
+      },
+      "execute": {
+        "seconds": 0.980038916983176,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 112738304,
+        "clientRssSampleCount": 80,
+        "backendRssSampleCount": 80
+      }
+    },
+    "batched": {
+      "builderStatements": 3,
+      "executeStatements": 6,
+      "builder": {
+        "seconds": 0.041755624988581985,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 112771072,
+        "clientRssSampleCount": 4,
+        "backendRssSampleCount": 4
+      },
+      "execute": {
+        "seconds": 0.8758632089593448,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 116080640,
+        "clientRssSampleCount": 72,
+        "backendRssSampleCount": 72
+      }
+    }
+  },
+  {
+    "records": 128,
+    "trial": 2,
+    "legacy": {
+      "builderStatements": 512,
+      "executeStatements": 1162,
+      "builder": {
+        "seconds": 0.6015162910334766,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 116080640,
+        "clientRssSampleCount": 49,
+        "backendRssSampleCount": 49
+      },
+      "execute": {
+        "seconds": 1.8618532089749351,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 121552896,
+        "clientRssSampleCount": 152,
+        "backendRssSampleCount": 152
+      }
+    },
+    "batched": {
+      "builderStatements": 3,
+      "executeStatements": 6,
+      "builder": {
+        "seconds": 0.07194729096954688,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 121569280,
+        "clientRssSampleCount": 6,
+        "backendRssSampleCount": 6
+      },
+      "execute": {
+        "seconds": 1.7174849580042064,
+        "clientPeakRssBytes": 177750016,
+        "backendPeakRssBytes": 127942656,
+        "clientRssSampleCount": 139,
+        "backendRssSampleCount": 139
+      }
+    }
+  },
+  {
+    "records": 1024,
+    "legacy": null,
+    "batched": {
+      "builderStatements": 3,
+      "executeStatements": 27,
+      "builder": {
+        "seconds": 0.5420267920126207,
+        "clientPeakRssBytes": 181633024,
+        "backendPeakRssBytes": 152322048,
+        "clientRssSampleCount": 42,
+        "backendRssSampleCount": 42
+      },
+      "execute": {
+        "seconds": 19.54728320799768,
+        "clientPeakRssBytes": 183189504,
+        "backendPeakRssBytes": 217759744,
+        "clientRssSampleCount": 1589,
+        "backendRssSampleCount": 1589
+      }
+    }
+  }
+]

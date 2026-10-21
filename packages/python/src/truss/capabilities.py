@@ -13,7 +13,7 @@ from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCu
 from .execution import Outcome, TransactionHandle
 from .preparation import CatalogDocument, PreparedAcceptance
 from .catalog_view import CatalogViewRequest, CatalogViewAvailable, CatalogViewUnavailable
-from .reader_catalog import ReaderCatalog, AcceptedDocument, CatalogInvalid, CatalogRefused, CatalogUnavailable
+from .reader_catalog import ReaderCatalog, ReaderCatalogSnapshot, ReaderCatalogUnchanged, AcceptedDocument, CatalogInvalid, CatalogRefused, CatalogUnavailable
 from .traversal import TraversalHop, TraversalComplete, TraversalLimited
 from .object_read import ObjectFound, ObjectNotFound, ObjectReadInvalid, ObjectReadRefused, ObjectReadUnavailable, ObjectPage, ObjectPageCursor
 from .edge_read import EdgeFound, EdgeNotFound, EdgePage, EdgePageCursor
@@ -26,7 +26,9 @@ from .receipt_visibility import ReceiptIncluded, ReceiptVisibilityUnavailable
 from .import_source import ImportSourceFound,ImportSourceAbsent,ImportSourceUnavailable
 from .history import HistoryEntity,HistoryCursor,HistoryPage,HistoricalRecord,HistoricalDeleted,HistoryUnavailable
 
-from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogReport)
+from .catalog_results import (CatalogRegistration, CatalogUnchanged, CatalogAcceptanceRefused, CatalogReport, CatalogDocumentExpectation, CatalogCASConflict, RegistrarStatus)
+from .batched_import import (BatchedImportInput, BatchedImportRuntimeContext, ImportRecordDraft,
+    BuiltImportRecords, BatchedImportExecutionResult)
 from .capability_contracts import NativeRuntimeOperations
 
 Family = TypeVar('Family', bound=CapabilityFamily)
@@ -52,8 +54,10 @@ class NativeCatalogCapability(_NativeCapability[Literal['catalog']]):
         return self._assembly.prepare_catalog(documents, bun_executable=bun_executable, source_version=source_version)
 
     def accept_in_transaction(self, transaction: TransactionHandle, prepared: PreparedAcceptance, *, request_key: str,
-                              origin_bytes: bytes=b'{}',bun_executable: str='bun') -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused]:
-        return self._assembly.accept_in_transaction(transaction,prepared,request_key=request_key,origin_bytes=origin_bytes,bun_executable=bun_executable)
+                              origin_bytes: bytes=b'{}',bun_executable: str='bun',expected_revision: int | None=None,
+                              expected_documents: tuple[CatalogDocumentExpectation,...]=()) -> Outcome[CatalogRegistration | CatalogUnchanged | CatalogAcceptanceRefused | CatalogCASConflict]:
+        return self._assembly.accept_in_transaction(transaction,prepared,request_key=request_key,origin_bytes=origin_bytes,
+            bun_executable=bun_executable,expected_revision=expected_revision,expected_documents=expected_documents)
 
     def report_in_transaction(self, transaction: TransactionHandle, revision: int=1) -> Outcome[CatalogReport]:
         return self._assembly.report_in_transaction(transaction,revision)
@@ -71,6 +75,14 @@ class NativeCatalogCapability(_NativeCapability[Literal['catalog']]):
     def accepted_document_in_transaction(self, transaction: TransactionHandle, *, document_id: str,
                                         maximum_bytes: int=1048576) -> Outcome[AcceptedDocument | CatalogInvalid | CatalogRefused | CatalogUnavailable]:
         return self._assembly.accepted_document_in_transaction(transaction,document_id=document_id,maximum_bytes=maximum_bytes)
+
+    def reader_catalog_if_changed_in_transaction(self, transaction: TransactionHandle, *, validator: str | None=None,
+                                                  maximum_count: int=65536,maximum_bytes: int=1048576) -> Outcome[ReaderCatalogSnapshot | ReaderCatalogUnchanged | CatalogInvalid | CatalogRefused | CatalogUnavailable]:
+        return self._assembly.reader_catalog_if_changed_in_transaction(transaction,validator=validator,
+            maximum_count=maximum_count,maximum_bytes=maximum_bytes)
+
+    def registrar_status_in_transaction(self, transaction: TransactionHandle) -> Outcome[RegistrarStatus | CatalogUnavailable]:
+        return self._assembly.registrar_status_in_transaction(transaction)
 
 
 @dataclass(frozen=True,slots=True,kw_only=True)
@@ -148,6 +160,15 @@ class NativeImportCapability(_NativeCapability[Literal['import']]):
 
     def import_in_transaction(self,transaction: TransactionHandle,input: ImportInput | OwnedImportInput) -> ImportExecutionResult[Literal['host_adopted']]:
         return self._assembly.import_in_transaction(transaction,input,documents=self._documents,bun_executable=self._bun_executable)
+
+    def batched_import_context_in_transaction(self,transaction: TransactionHandle) -> Outcome[BatchedImportRuntimeContext]:
+        return self._assembly.batched_import_context_in_transaction(transaction)
+
+    def build_import_records_in_transaction(self,transaction: TransactionHandle,drafts: tuple[ImportRecordDraft,...]) -> Outcome[BuiltImportRecords]:
+        return self._assembly.build_import_records_in_transaction(transaction,drafts)
+
+    def import_batched_in_transaction(self,transaction: TransactionHandle,input: BatchedImportInput) -> BatchedImportExecutionResult:
+        return self._assembly.import_batched_in_transaction(transaction,input,documents=self._documents)
 
 
 @dataclass(frozen=True,slots=True,kw_only=True)
