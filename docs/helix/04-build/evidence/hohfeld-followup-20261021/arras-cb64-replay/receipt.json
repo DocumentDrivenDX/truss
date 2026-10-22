@@ -1,0 +1,14 @@
+{
+  "status": "passed-focused-local-replay",
+  "sourceCommit": "cb64ecd7d70aae41e26cfc2d766a95b1c71e6441",
+  "passed": 23,
+  "skipped": 0,
+  "scope": "Original exact23 Linux failures replayed without Arras source/model changes using selected candidate dependencies on macOS ARM64/PG18.6; not full current Arras or Linux qualification",
+  "continuation": "Original receipt preserves the prior pending-push status; later direct owner authorization resolved that block. Public dependency publication and Arras-owned full Linux qualification remain open.",
+  "files": {
+    "original-receipt.json": "81b2bcb5f511deca2ca7a09bb1c9d45fb8efe431a07622368dc9a4bdafeca386",
+    "native.log": "8783d173d7bb5bae2fd28617a3a829b27189ec951346285995f21e2c3dcb3c3d",
+    "results.xml": "eef8b50fe25610715a3d96030104afa955f8d2d13d15b8cbe981df8110ab7e16",
+    "original-linux-ci.log": "51701b728dc0ccf31ed3adee7b565019f062c2d0d57b11b5b53e0392070165ab"
+  }
+}
