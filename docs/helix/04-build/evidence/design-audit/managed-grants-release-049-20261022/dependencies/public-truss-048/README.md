@@ -1,0 +1,5 @@
+# Public Truss 0.0.48 migration input
+
+The exact public wheel is 1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3 at the public v0.0.48 release URL recorded in verification.json. Selected original assets match their API digests and the unchanged public SHA256SUMS. The producer checks the exact tag, wheel RECORD inventory, native and migration bytes, all prior recipe pins, and public Linux migration/HF receipt identities. The wheel is retained in the private qualification capsule and public release, rather than duplicated here. The original checksum manifest covers every public asset except itself; this packet retains only selected inputs.
+
+This establishes public input integrity. It does not run a native check, admit the migration route, qualify final Truss 0.0.49 or establish Lakebase acceptance. Source48 initializer captures and final49 campaign receipts are separate. The producer preserves its original private output path; use a new path to replay without replacing evidence.

@@ -1,0 +1,14 @@
+{
+  "README.md": "4fdf42117f41ccbb277c18c156c230afedd3b4724a4bb626eaa4539887a43079",
+  "SHA256SUMS": "4275c8e7fd2efd7d5ec2a8d25bad4dc9959aed5c2b94a707db1eb63a209b1427",
+  "hf-conformance-qualification.json": "5a73bc61d1b0e092b73600d1487cfab2167d161d39455df25b1f83c7f4acb486",
+  "migration-qualification.json": "087f4d448e653116f0a0e99a644d86d000a3f2e59ba6118fcd1eb03f41cf103a",
+  "public-source48-verification.log": "37a95c893e63121312764abfb6ea24eff1d16dbaba52d76d4b27e38672e4c2de",
+  "published-migration-manifest.json": "7d165e4a344ca66d41a32b32f6bcf20f1f8fe73e4ba1137e4ca65780dcee6243",
+  "release-pins.json": "02efd75bfa3cebe62637d84044c6b199292a3ab54743337a6b5b54262869aa60",
+  "release.api.json": "9fdbee4dea53e5f0c8c2efa7dcb7d601171392ea05c3a4ba991b0e1b5861b7a3",
+  "source48-verifier-review.json": "e31e41d7aa36654fca6056a8ef338193e9d2c59430a146f131e15ba8570183e3",
+  "tag.api.json": "339968e4a3d26b702704cfd59bc865b3f264abb0be8943c39cc0b1ad087770c8",
+  "verification.json": "37a95c893e63121312764abfb6ea24eff1d16dbaba52d76d4b27e38672e4c2de",
+  "verify-public-source48.py": "51b7cc3c9db25ae8f62249934c32ddf0319ed9cf3a672d08866ab66754e177f8"
+}

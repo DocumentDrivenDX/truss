@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "scope": "Download and independently verify the actual public source48 migration input.",
+  "publicRelease": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.48",
+  "tagCommit": "8e89a068bcb68f1e631388ddc59bc97da748563d",
+  "wheel": "truss_toolkit-0.0.48-py3-none-any.whl",
+  "wheelSha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+  "nativeManifestSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+  "migrationManifestSha256": "7d165e4a344ca66d41a32b32f6bcf20f1f8fe73e4ba1137e4ca65780dcee6243",
+  "selectedAssets": {
+    "truss_toolkit-0.0.48-py3-none-any.whl": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+    "SHA256SUMS": "4275c8e7fd2efd7d5ec2a8d25bad4dc9959aed5c2b94a707db1eb63a209b1427",
+    "release-pins.json": "02efd75bfa3cebe62637d84044c6b199292a3ab54743337a6b5b54262869aa60",
+    "migration-qualification.json": "087f4d448e653116f0a0e99a644d86d000a3f2e59ba6118fcd1eb03f41cf103a",
+    "hf-conformance-qualification.json": "5a73bc61d1b0e092b73600d1487cfab2167d161d39455df25b1f83c7f4acb486"
+  },
+  "publishedAssetCount": 15,
+  "wheelRecordMembers": 463,
+  "migrationTests": 80,
+  "hfTests": 62,
+  "producerSha256": "51b7cc3c9db25ae8f62249934c32ddf0319ed9cf3a672d08866ab66754e177f8",
+  "nativeQualificationExecuted": false,
+  "lakebaseAcceptance": "not_run"
+}
