@@ -1,0 +1,319 @@
+[
+  {
+    "consumerHostAttempts": [
+      {
+        "type": "QueryCanceled",
+        "text": "canceling statement due to statement timeout\nCONTEXT:  PL/pgSQL function truss.runtime_read_mutation_group_audit(uuid,integer,text,text,boolean) line 191 at SQL statement\nPL/pgSQL function truss.page_mutation_group_audit(jsonb,integer,bytea,text,text) line 182 at assignment\nPL/pgSQL expression \"truss.page_mutation_group_audit(\"filters\",\"maximum_events\",\"original_cursor\",\"expected_release\",\"expected_digest\")\"\nPL/pgSQL function truss.person_page_mutation_group_audit(jsonb,integer,bytea,text,text) line 4 at RETURN",
+        "sqlstate": "57014",
+        "diag": {
+          "severity": "ERROR",
+          "sqlstate": "57014",
+          "message_primary": "canceling statement due to statement timeout",
+          "message_detail": null,
+          "message_hint": null,
+          "context": "PL/pgSQL function truss.runtime_read_mutation_group_audit(uuid,integer,text,text,boolean) line <number> at SQL statement\nPL/pgSQL function truss.page_mutation_group_audit(jsonb,integer,bytea,text,text) line <number> at assignment\nPL/pgSQL expression \"truss.page_mutation_group_audit(\"filters\",\"maximum_events\",\"original_cursor\",\"expected_release\",\"expected_digest\")\"\nPL/pgSQL function truss.person_page_mutation_group_audit(jsonb,integer,bytea,text,text) line <number> at RETURN",
+          "schema_name": null,
+          "table_name": null,
+          "column_name": null,
+          "constraint_name": null,
+          "statement_position": null,
+          "internal_position": null,
+          "internal_query": null
+        }
+      }
+    ]
+  },
+  {
+    "statementSha256": "96bd334e0589f054e29b1f1a2510902e271d5db0e1d5b0b7f990b22fe98ad3fc",
+    "explain": "estimated plan only; ANALYZE was not requested",
+    "plan": [
+      {
+        "Plan": {
+          "Node Type": "Nested Loop",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Join Type": "Left",
+          "Startup Cost": 32.91,
+          "Total Cost": 32.96,
+          "Plan Rows": 1,
+          "Plan Width": 256,
+          "Disabled": false,
+          "Output": [
+            "p.value",
+            "g.pid",
+            "g.vxid",
+            "g.isolation",
+            "g.readonly",
+            "g.xid",
+            "g.timeout",
+            "((InitPlan 6).col1)::text"
+          ],
+          "Inner Unique": false,
+          "Plans": [
+            {
+              "Node Type": "Limit",
+              "Parent Relationship": "InitPlan",
+              "Subplan Name": "CTE truss_guard",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 12.52,
+              "Total Cost": 32.57,
+              "Plan Rows": 1,
+              "Plan Width": 192,
+              "Disabled": false,
+              "Output": [
+                "((pg_backend_pid())::text)",
+                "l.virtualtransaction",
+                "(current_setting('transaction_isolation'::text))",
+                "(current_setting('transaction_read_only'::text))",
+                "((pg_current_xact_id_if_assigned())::text)",
+                "((InitPlan 2).col1)"
+              ],
+              "Plans": [
+                {
+                  "Node Type": "Result",
+                  "Parent Relationship": "InitPlan",
+                  "Subplan Name": "CTE truss_runtime_admission",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Startup Cost": 0.0,
+                  "Total Cost": 0.01,
+                  "Plan Rows": 1,
+                  "Plan Width": 32,
+                  "Disabled": false,
+                  "Output": [
+                    "set_config('truss.runtime_digest'::text, 'c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0'::text, true)"
+                  ]
+                },
+                {
+                  "Node Type": "Function Scan",
+                  "Parent Relationship": "InitPlan",
+                  "Subplan Name": "InitPlan 2",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Function Name": "pg_show_all_settings",
+                  "Schema": "pg_catalog",
+                  "Alias": "a",
+                  "Startup Cost": 0.0,
+                  "Total Cost": 12.5,
+                  "Plan Rows": 5,
+                  "Plan Width": 32,
+                  "Disabled": false,
+                  "Output": [
+                    "a.setting"
+                  ],
+                  "Function Call": "pg_show_all_settings()",
+                  "Filter": "(a.name = 'statement_timeout'::text)"
+                },
+                {
+                  "Node Type": "Nested Loop",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Join Type": "Inner",
+                  "Startup Cost": 0.0,
+                  "Total Cost": 20.05,
+                  "Plan Rows": 1,
+                  "Plan Width": 192,
+                  "Disabled": false,
+                  "Output": [
+                    "(pg_backend_pid())::text",
+                    "l.virtualtransaction",
+                    "current_setting('transaction_isolation'::text)",
+                    "current_setting('transaction_read_only'::text)",
+                    "(pg_current_xact_id_if_assigned())::text",
+                    "(InitPlan 2).col1"
+                  ],
+                  "Inner Unique": false,
+                  "Plans": [
+                    {
+                      "Node Type": "Function Scan",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "Function Name": "pg_lock_status",
+                      "Schema": "pg_catalog",
+                      "Alias": "l",
+                      "Startup Cost": 0.0,
+                      "Total Cost": 20.0,
+                      "Plan Rows": 1,
+                      "Plan Width": 32,
+                      "Disabled": false,
+                      "Output": [
+                        "l.locktype",
+                        "l.database",
+                        "l.relation",
+                        "l.page",
+                        "l.tuple",
+                        "l.virtualxid",
+                        "l.transactionid",
+                        "l.classid",
+                        "l.objid",
+                        "l.objsubid",
+                        "l.virtualtransaction",
+                        "l.pid",
+                        "l.mode",
+                        "l.granted",
+                        "l.fastpath",
+                        "l.waitstart"
+                      ],
+                      "Function Call": "pg_lock_status()",
+                      "Filter": "(l.granted AND (l.locktype = 'virtualxid'::text) AND (l.mode = 'ExclusiveLock'::text) AND (l.pid = pg_backend_pid()))"
+                    },
+                    {
+                      "Node Type": "CTE Scan",
+                      "Parent Relationship": "Inner",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "CTE Name": "truss_runtime_admission",
+                      "Alias": "truss_runtime_admission",
+                      "Startup Cost": 0.0,
+                      "Total Cost": 0.02,
+                      "Plan Rows": 1,
+                      "Plan Width": 0,
+                      "Disabled": false,
+                      "Output": [
+                        "truss_runtime_admission.set_config"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Node Type": "Result",
+              "Parent Relationship": "InitPlan",
+              "Subplan Name": "CTE truss_payload",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Startup Cost": 0.04,
+              "Total Cost": 0.32,
+              "Plan Rows": 1,
+              "Plan Width": 32,
+              "Disabled": false,
+              "Output": [
+                "truss.person_page_mutation_group_audit('{\"moduleId\": \"m\", \"documentId\": \"adoc\"}'::jsonb, 4096, NULL::bytea, 'truss-catalog-runtime/0.74-candidate'::text, 'c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0'::text)"
+              ],
+              "One-Time Filter": "((InitPlan 4).col1 = 1)",
+              "Plans": [
+                {
+                  "Node Type": "Aggregate",
+                  "Strategy": "Plain",
+                  "Partial Mode": "Simple",
+                  "Parent Relationship": "InitPlan",
+                  "Subplan Name": "InitPlan 4",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "Startup Cost": 0.02,
+                  "Total Cost": 0.03,
+                  "Plan Rows": 1,
+                  "Plan Width": 8,
+                  "Disabled": false,
+                  "Output": [
+                    "count(*)"
+                  ],
+                  "Plans": [
+                    {
+                      "Node Type": "CTE Scan",
+                      "Parent Relationship": "Outer",
+                      "Parallel Aware": false,
+                      "Async Capable": false,
+                      "CTE Name": "truss_guard",
+                      "Alias": "truss_guard",
+                      "Startup Cost": 0.0,
+                      "Total Cost": 0.02,
+                      "Plan Rows": 1,
+                      "Plan Width": 0,
+                      "Disabled": false,
+                      "Output": [
+                        "truss_guard.pid",
+                        "truss_guard.vxid",
+                        "truss_guard.isolation",
+                        "truss_guard.readonly",
+                        "truss_guard.xid",
+                        "truss_guard.timeout"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Node Type": "CTE Scan",
+                  "Parent Relationship": "Outer",
+                  "Parallel Aware": false,
+                  "Async Capable": false,
+                  "CTE Name": "truss_guard",
+                  "Alias": "truss_guard_1",
+                  "Startup Cost": 0.0,
+                  "Total Cost": 0.04,
+                  "Plan Rows": 1,
+                  "Plan Width": 0,
+                  "Disabled": false,
+                  "Output": [
+                    "truss_guard_1.pid",
+                    "truss_guard_1.vxid",
+                    "truss_guard_1.isolation",
+                    "truss_guard_1.readonly",
+                    "truss_guard_1.xid",
+                    "truss_guard_1.timeout"
+                  ],
+                  "Filter": "((truss_guard_1.pid = '2886'::text) AND (truss_guard_1.vxid = '8/2'::text) AND (truss_guard_1.isolation = 'read committed'::text) AND (truss_guard_1.readonly = 'on'::text) AND (truss_guard_1.timeout = '10000'::text))"
+                }
+              ]
+            },
+            {
+              "Node Type": "CTE Scan",
+              "Parent Relationship": "InitPlan",
+              "Subplan Name": "InitPlan 6",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "CTE Name": "truss_payload",
+              "Alias": "truss_payload",
+              "Startup Cost": 0.0,
+              "Total Cost": 0.02,
+              "Plan Rows": 1,
+              "Plan Width": 0,
+              "Disabled": false
+            },
+            {
+              "Node Type": "CTE Scan",
+              "Parent Relationship": "Outer",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "CTE Name": "truss_guard",
+              "Alias": "g",
+              "Startup Cost": 0.0,
+              "Total Cost": 0.02,
+              "Plan Rows": 1,
+              "Plan Width": 192,
+              "Disabled": false,
+              "Output": [
+                "g.pid",
+                "g.vxid",
+                "g.isolation",
+                "g.readonly",
+                "g.xid",
+                "g.timeout"
+              ]
+            },
+            {
+              "Node Type": "CTE Scan",
+              "Parent Relationship": "Inner",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "CTE Name": "truss_payload",
+              "Alias": "p",
+              "Startup Cost": 0.0,
+              "Total Cost": 0.02,
+              "Plan Rows": 1,
+              "Plan Width": 32,
+              "Disabled": false,
+              "Output": [
+                "p.value"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

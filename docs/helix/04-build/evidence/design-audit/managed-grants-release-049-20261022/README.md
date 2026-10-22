@@ -145,3 +145,18 @@ managed campaign, HF62, strict protected controls, all four source migration and
 recovery routes, lifecycle and the original public workload on the new native
 identity. Full Mac/Linux and tag/public verification remain pending. No release,
 full-engine, all-discovery or Lakebase acceptance is claimed.
+
+The [automatic comparison at source4188](audit-diagnostic-39854667352/receipt.json)
+remains red because public48's original and instrumented cases reached the
+unchanged deadline on an AMD EPYC7763 host. Candidate2888 passes both invocations:
+original whole-case time is 9.833s, versus 19.691s for public48; instrumented
+complete-page SQL takes 0.815960s, while public48 cancels at 10.000734s with
+SQLSTATE57014. Default-budget refusals remain 54000 and all four workers restore
+inventory and stop. The 24 retained outputs and five binary identities preserve
+this comparison; it is diagnostic evidence, not full release qualification.
+
+The temporary PR trigger is retired after diagnosis. Manual dispatch retains
+the same steps, failure exits, assertions and 10-second SQL/30-second operation
+limits. This keeps the known public48 benchmark out of ordinary PR acceptance
+without relabeling its failure. The mandatory release workflow and final
+qualification requirements are unchanged.

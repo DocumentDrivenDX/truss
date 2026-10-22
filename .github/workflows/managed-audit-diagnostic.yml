@@ -1,11 +1,6 @@
 name: Diagnose whole-group audit deadline
 on:
   workflow_dispatch:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths:
-      - 'scripts/diagnose-managed-audit-deadline.py'
-      - '.github/workflows/managed-audit-diagnostic.yml'
 permissions:
   contents: read
 concurrency:
