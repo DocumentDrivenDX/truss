@@ -1,0 +1,134 @@
+{
+  "passed": true,
+  "scope": "Published-wheel fresh binary installation, exact installed payloads, native version/vector/socket startup, retained commit/restart, exact AST-declared supported-driver tests and worker cleanup/collision controls; not full current Truss corpus or Lakebase acceptance",
+  "sourceRevision": "8e89a068bcb68f1e631388ddc59bc97da748563d",
+  "runtimeDistribution": "pgserver-pg18",
+  "runtimeVersion": "18.6.1",
+  "postgresql": "18.6",
+  "releaseUrl": "https://github.com/DocumentDrivenDX/pgserver/releases/tag/pg18.6-pgv0.8.6-r2",
+  "assetUrl": "https://github.com/DocumentDrivenDX/pgserver/releases/download/pg18.6-pgv0.8.6-r2/pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+  "directInstall": {
+    "archive_info": {
+      "hash": "sha256=fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649",
+      "hashes": {
+        "sha256": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649"
+      }
+    },
+    "url": "https://github.com/DocumentDrivenDX/pgserver/releases/download/pg18.6-pgv0.8.6-r2/pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl"
+  },
+  "payloads": {
+    "pgserver": {
+      "sha256": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649",
+      "members": 1714,
+      "loaded": "/private/tmp/truss-public-048-clean-venv/lib/python3.11/site-packages/pgserver"
+    },
+    "truss": {
+      "sha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+      "members": 455,
+      "loaded": "/private/tmp/truss-public-048-clean-venv/lib/python3.11/site-packages/truss"
+    }
+  },
+  "assetChecksums": {
+    "runtime": {
+      "manifestSha256": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f",
+      "wheelSha256": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649"
+    },
+    "truss": {
+      "manifestSha256": "4275c8e7fd2efd7d5ec2a8d25bad4dc9959aed5c2b94a707db1eb63a209b1427",
+      "wheelSha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3"
+    }
+  },
+  "driverTestEvidence": {
+    "sourceSha256": "2eddbc52eaa90c1352005e85b1d87add5c998d7af6970422fe4a37b2b342723b",
+    "declaredCount": 30,
+    "declaredNames": [
+      "test_active_readonly_identity_does_not_assign_xid",
+      "test_busy_disposal_closes_admission_immediately",
+      "test_cleanup_setup_failure_preserves_primary_and_quarantines",
+      "test_connection_and_profile_are_readonly",
+      "test_copied_host_cannot_borrow_attachment_or_invalidate_original_handles",
+      "test_custody_capacity_refuses_before_native_work",
+      "test_custom_host_text_loader_does_not_change_observer",
+      "test_detached_original_host_preserves_unusable_outcome",
+      "test_dispose_leaves_outer_transaction_and_connection_owned_by_host",
+      "test_duplicate_and_foreign_handles_refuse",
+      "test_entire_attempt_deadline_covers_initial_observation",
+      "test_expiry_between_savepoint_and_observer_prevents_submission",
+      "test_failed_host_transaction_is_not_repaired_by_adoption",
+      "test_fallible_setup_does_not_leak_lease",
+      "test_host_completion_stales_handle_without_claiming_commit",
+      "test_host_timeout_change_between_calls_uses_budget_and_restores_current_value",
+      "test_idle_refusal_does_not_begin",
+      "test_interrupt_after_write_is_contained_and_primary_preserved",
+      "test_matching_timeout_checks_admission_and_final_state_without_timeout_resets",
+      "test_monotonic_deadline_detects_delayed_timer",
+      "test_nonblocking_operation_lease",
+      "test_observer_and_timeout_do_not_use_custom_host_string_dumper",
+      "test_operation_error_preserves_prior_host_work_and_timeout",
+      "test_permanent_xid_can_first_be_assigned_by_write",
+      "test_serialization_failure_requires_new_host_transaction",
+      "test_success_path_join_failure_never_returns_success",
+      "test_success_path_join_interrupt_remains_primary_and_stops_once",
+      "test_timeout_refuses_once_and_confirmed_rollback_allows_reuse",
+      "test_unbounded_or_excessive_host_timeout_refuses_preserving_prior_work",
+      "test_uncertain_release_completion_quarantines_across_detach"
+    ],
+    "executedCount": 30,
+    "executedNames": [
+      "test_active_readonly_identity_does_not_assign_xid",
+      "test_busy_disposal_closes_admission_immediately",
+      "test_cleanup_setup_failure_preserves_primary_and_quarantines",
+      "test_connection_and_profile_are_readonly",
+      "test_copied_host_cannot_borrow_attachment_or_invalidate_original_handles",
+      "test_custody_capacity_refuses_before_native_work",
+      "test_custom_host_text_loader_does_not_change_observer",
+      "test_detached_original_host_preserves_unusable_outcome",
+      "test_dispose_leaves_outer_transaction_and_connection_owned_by_host",
+      "test_duplicate_and_foreign_handles_refuse",
+      "test_entire_attempt_deadline_covers_initial_observation",
+      "test_expiry_between_savepoint_and_observer_prevents_submission",
+      "test_failed_host_transaction_is_not_repaired_by_adoption",
+      "test_fallible_setup_does_not_leak_lease",
+      "test_host_completion_stales_handle_without_claiming_commit",
+      "test_host_timeout_change_between_calls_uses_budget_and_restores_current_value",
+      "test_idle_refusal_does_not_begin",
+      "test_interrupt_after_write_is_contained_and_primary_preserved",
+      "test_matching_timeout_checks_admission_and_final_state_without_timeout_resets",
+      "test_monotonic_deadline_detects_delayed_timer",
+      "test_nonblocking_operation_lease",
+      "test_observer_and_timeout_do_not_use_custom_host_string_dumper",
+      "test_operation_error_preserves_prior_host_work_and_timeout",
+      "test_permanent_xid_can_first_be_assigned_by_write",
+      "test_serialization_failure_requires_new_host_transaction",
+      "test_success_path_join_failure_never_returns_success",
+      "test_success_path_join_interrupt_remains_primary_and_stops_once",
+      "test_timeout_refuses_once_and_confirmed_rollback_allows_reuse",
+      "test_unbounded_or_excessive_host_timeout_refuses_preserving_prior_work",
+      "test_uncertain_release_completion_quarantines_across_detach"
+    ],
+    "skippedCount": 0,
+    "returnCode": 0
+  },
+  "checks": {
+    "nativeVersion": true,
+    "unixSocketNoTcp": true,
+    "pgvector": true,
+    "retainedCommitRestart": true,
+    "ownedStopConfirmed": true,
+    "supportedDriverExactDeclaredSuite": true,
+    "sharedDatabaseRoleBaselineRestored": true,
+    "cleanupCollision21Controls": true
+  },
+  "elapsedSeconds": 17.598070624982938,
+  "python": "3.11.17 (main, Oct  3 2026, 00:54:14) [Clang 22.1.3 ]",
+  "producerSha256": "b19c4420e6f8049ad695fe7f5646fed71a6b6f22269b380fa219708dd0803b23",
+  "sourceSha256": {
+    "scripts/native_fixture.py": "1f130fab83c0f931ce8b8b0a4f18e323e053c3dfc38a5cc529e1d60f5b2cda88",
+    "scripts/run-python-test-module.py": "0d6f19afcc764d1ba27e53ae5192881bbf770c8b5617d4f81c75f9609df60b92",
+    "scripts/check-native-worker-fixtures.py": "7f8f48f794fe8c6a56b3d6f25a1d80ce3482fe9367c30a6806692d2a2e49b97f",
+    "scripts/released_runtime_validation.py": "ba8cdfd0f316ccd982c1b6a5ad408cd53739d5f006dcc67d2ca308e1110eafc9",
+    "packages/python/tests/test_psycopg_host_native.py": "2eddbc52eaa90c1352005e85b1d87add5c998d7af6970422fe4a37b2b342723b"
+  },
+  "completeRuntimeQualified": false,
+  "lakebaseQualified": false
+}

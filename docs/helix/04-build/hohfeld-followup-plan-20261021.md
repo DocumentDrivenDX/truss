@@ -921,13 +921,10 @@ no suite pass, binary, cohort or release claim.
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).
-- [ ] Each selected behavior change has governing contract/test amendments and
-  native disclosure/transaction/fidelity evidence; declined variants are explicit.
-- [ ] Relevant original corpus assertions pass before their limits are removed.
-- [ ] Selected performance targets are met on a declared workload/tuple, or remain
-  explicitly unmet; neither API availability nor one timing closes them.
-- [ ] Runtime-changing release passes the existing migration lineage gate and
-  clean package qualification; broader index/platform/managed claims stay scoped.
+- [x] The selected behaviors shipped in v0.0.48 and enumerated in its release notes have governing contract/test amendments and native disclosure/transaction/fidelity evidence; each deferred or declined variant retains its own explicit matrix disposition. Public receipts: [30-driver receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-driver30/receipt.json), [Linux 62-case conformance receipt](evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/hf-conformance-qualification.json), [macOS 62-case conformance receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-independent62/qualification.json).
+- [x] Relevant original corpus assertions pass in the public installed 62-case archive; all 363 producer pins are verified, with the earlier one-pin refusal and original corpus preserved: [Linux 62-case conformance receipt](evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/hf-conformance-qualification.json), [macOS 62-case conformance receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-independent62/qualification.json).
+- [x] The declared 1,000-object/1,000-edge workload is measured for this tuple. General p95/nominal-baseline and broader index/scale targets remain explicitly unqualified; no universal latency claim follows: [public workload receipt](evidence/hohfeld-followup-20261021/published-0.0.48/linux-workload/status.json).
+- [x] The published runtime passes the latest-only migration lineage gate and clean package qualification; larger index, platform and managed-service claims stay scoped: [Linux 80-case migration receipt](evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/migration-qualification.json), [macOS 80-case migration receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-migration80/qualification.json), [30-driver receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-driver30/receipt.json), [two-instance uvx receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-uvx-two-instances/receipt.json), [public release validation](evidence/hohfeld-followup-20261021/published-0.0.48/validation.json).
 
 ## Source custody
 
@@ -981,3 +978,21 @@ retain the original bytes and explicit source correspondence. Public Weft
 publication/adoption, Truss tag-bound Linux gates and clean public-artifact
 verification remain open. Runtime support stays latest-only; admitted UMF 0.10
 sources migrate forward without a release-age cutoff.
+
+### Public v0.0.48 closeout — 2026-10-22
+
+The source-F local candidate and the public Truss v0.0.48 assets have separate
+receipts. Public clean-wheel checks bind the published package to the released
+source and close the selected 80-case migration, 62-case independent corpus,
+30-driver and two-instance `uvx` checks: [Linux 80-case migration receipt](evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/migration-qualification.json),
+[macOS 80-case migration receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-migration80/qualification.json), [Linux 62-case conformance receipt](evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/hf-conformance-qualification.json),
+[macOS 62-case conformance receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-independent62/qualification.json), [30-driver receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-driver30/receipt.json),
+[two-instance uvx receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-uvx-two-instances/receipt.json). Exact release assets and count are bound by
+[public release validation](evidence/hohfeld-followup-20261021/published-0.0.48/validation.json) (15 assets).
+
+The prior source-86 packet and all v0.0.47 receipts remain immutable historical
+evidence. Their claims do not transfer to the different source-F compiler module
+or the v0.0.48 runtime. The release supports only the latest application runtime;
+admitted UMF 0.10 databases migrate forward without a release-age cutoff.
+Pre-0.10/protected profiles, managed services, unselected drivers, broad p95
+targets and other deferred/declined Arras requests remain outside this evidence.

@@ -1,0 +1,27 @@
+{
+  "format": "truss-public-048-hf-command/1",
+  "argv": [
+    "env", "-u", "PYTHONPATH",
+    "/private/tmp/truss-public-048-clean-venv/bin/python",
+    "/private/tmp/truss-public-048-hf-conformance/scripts/run-hf-conformance.py",
+    "--installed-package",
+    "--output", "/private/tmp/truss-public-048-hf-evidence/qualification.json"
+  ],
+  "cwd": "/private/tmp/truss-public-048-hf-conformance",
+  "pythonpath": "unset",
+  "startUtc": "2026-10-22T19:52:34Z",
+  "endUtc": "2026-10-22T19:55:25Z",
+  "sourceCommit": "8e89a068bcb68f1e631388ddc59bc97da748563d",
+  "sourceWorktreeStatus": "clean",
+  "archiveSha256": "519a893197409e277feca8b0a878287adebad5d64e4813e30cd3ffdc2cff1706",
+  "archiveManifestFilesVerified": 410,
+  "corpusSha256": "66632198c1e381ece398af272c8c850b243f70555485fbaf527c24b55d2b2bcf",
+  "producerPinCount": 363,
+  "installedTruss": "0.0.48 public wheel; 455 runtime files match source and wheel",
+  "installedWeft": "0.4.51 public macOS wheel; module SHA-256 34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+  "rawQualificationPreserved": true,
+  "qualificationReportSha256": "8acda2891f10a72080be1d9a1e89fe707df7bc15f83df8406ac190cb23559b95",
+  "summary": {"tests": 62, "skipped": 0, "failures": 0, "errors": 0, "passed": true, "durationSeconds": 153.23570700001437, "exitCode": 0, "platform": "macOS-27.0.1-arm64-arm-64bit", "python": "3.11.17"},
+  "logs": {"stdoutStderr": "/private/tmp/truss-public-048-hf-evidence/run.log", "exitStatus": "/private/tmp/truss-public-048-hf-evidence/exit-status.txt"},
+  "qualificationNulls": {"sourceCommit": null, "workflowRunId": null}
+}

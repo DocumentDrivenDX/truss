@@ -10,14 +10,17 @@ complete declared route in one transaction and appends one final receipt; it
 does not launch intermediate application releases. Existing receipts retain
 their original bytes and remain observable through current tooling.
 
-The offline, transactional routes accept the exact UMF 0.10 installation
-from v0.0.44 and the shared installed tuple from v0.0.45/v0.0.46, on PostgreSQL
-18.6, plus v0.0.47 native0.73. The target is native `0.74-candidate`; exact manifest and installed definitions,
-privileges and preparation configuration decide admission. Matching release/layout
-labels alone do not. Pre-0.10 and protected-query installations are excluded.
-Unknown or modified sources refuse with their data intact. Current authored-name
-requirements apply to new registrations; already accepted v0.0.44 unnamed Records
-and Fields retain their original source and are exercised through latest reads/writes.
+The published offline, transactional routes accept the exact UMF 0.10 installation
+from v0.0.44, the shared tuple from v0.0.45/v0.0.46, and v0.0.47 native0.73, on
+PostgreSQL18.6. The target is native `0.74-candidate`; exact manifest and installed
+definitions, privileges and preparation configuration decide admission. Matching
+release/layout labels alone do not. The public 80-case gate includes the actual
+two-edge v0.0.46 → v0.0.47 → v0.0.48 route, the admitted earlier sources, and
+latest-tool-only execution: [Linux 80-case migration receipt](../../docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/migration-qualification.json),
+[macOS 80-case migration receipt](../../docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-migration80/qualification.json). Pre-0.10 and protected-query installations are
+excluded. Unknown or modified sources refuse with data intact. Current authored-name
+requirements apply to new registrations; previously accepted v0.0.44 unnamed
+Records and Fields retain their original source through latest reads and writes.
 
 Quiesce application and administrative writers and take a backup before applying.
 For logical backups on the qualified PG18.6 profile, also save
@@ -76,11 +79,11 @@ other restore/incarnation procedures need their own qualification.
 
 The release-blocking [migration gate](../../scripts/qualify-runtime-migrations.py)
 runs every admitted source against the installed latest wheel and refuses removed
-paths or changed published recipes. Exact source-bound evidence and delivery status are recorded in the
-[execution plan](../../docs/helix/04-build/runtime-migration-restoration-plan.md).
-Published release assets include the Linux migration receipt, original native
-evidence archive, dependency pins and checksums; the tag workflow requires all
-selected installed-runtime gates before publication.
+paths or changed published recipes. The public v0.0.48 verification record binds
+all assets and the clean installed migration/corpus receipts:
+[public release validation](../../docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/validation.json). Published release assets include the Linux
+migration receipt, original native evidence archive, dependency pins and checksums;
+the tag workflow requires all selected installed-runtime gates before publication.
 
 
 Version 0.0.46 adds an explicit local PostgreSQL 18.6 launcher using private
@@ -151,10 +154,12 @@ complete ordered public readback, plus refusal at 1,025 and rollback on a
 failure at operation 1,024. Other
 byte/value limits and ordinary deadlines still apply.
 
-Version 0.0.45 pins `weft-sql==0.4.49`, backend `0.4.41` / binding `0.5`,
+Historical v0.0.45 pins `weft-sql==0.4.49`, backend `0.4.41` / binding `0.5`,
 and query ABI 1.1. The backend version identifies the runtime ABI separately
 from the compiler package version. The historical v0.0.39 package used
-`weft-sql==0.4.41` with the same backend/binding versions.
+`weft-sql==0.4.41` with the same backend/binding versions. These descriptions
+remain scoped to their named releases; the active v0.0.48 ABI1.2 cohort appears
+below in [Arras follow-up cohort — v0.0.48](#arras-follow-up-cohort--v0048).
 ABI 1.1 buffers complete source sets before caller predicates and scans at most
 10,000 rows per selected Record or Relationship type; a small output limit does
 not bypass that source bound. Complete-entity relationships have a separate
@@ -494,9 +499,11 @@ not deployment requirements. Ordinary object keys are derived in PostgreSQL
 for admitted current catalogs. Create/update, imports, preconditions, backfills
 and lookups require no client encoder or per-key receipt. Weft remains optional
 through `query` and is not a key-encoding dependency.
-Each release publishes package checksums and source/runtime/backend pins. The
-release receipts distinguish local macOS ARM64 native checks from hosted Linux
-x86_64 qualification. Other platforms are outside the selected release gates.
+The published v0.0.48 assets list 15 files. Their verification
+record binds package checksums and source/runtime/backend pins. The release receipts
+distinguish clean public-wheel macOS ARM64 checks from hosted Linux x86_64
+qualification. Other platforms are outside the selected release gates. See
+[public release validation](../../docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/validation.json).
 
 ## Run a real workflow
 
@@ -535,8 +542,11 @@ uvx --no-config --isolated --python 3.11 \
   --install
 ```
 
-The first run may download Python and package wheels. The launcher creates a
-private PostgreSQL cluster and Truss schema/routines using Unix sockets only;
+The published v0.0.48 `uvx` command was checked in a clean environment with two
+independent instances retaining their own data across restart:
+[two-instance uvx receipt](../../docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-uvx-two-instances/receipt.json). The first run may download Python and package
+wheels. The launcher creates a private PostgreSQL cluster and Truss schema/routines
+using Unix sockets only;
 it needs no system PostgreSQL, administrator access, TCP listener or port
 configuration. It runs in the foreground. Ctrl-C stops the server and retains
 data; repeat with the same directory to restart. Add `--probe` to install or
@@ -883,8 +893,10 @@ Wildcard `EXCLUDE`/`REPLACE` syntax is not selected for this release, and no
 delivery date is committed. To omit or rename wildcard members, write an explicit
 projection list; to add a relationship projection after `a.*`, use a unique alias.
 
-For the pinned Weft0.4.49 Truss backend0.4.41 and query ABI1.1,
-`maximum_scan_rows` is a **source population bound**, capped at10,000. It applies
+Historical ABI1.1 behavior for pinned Weft0.4.49 and Truss backend0.4.41:
+`maximum_scan_rows` was a **source population bound**, capped at10,000. The table
+below is limited to that historical cohort; current v0.0.48 / ABI1.2 behavior is
+specified in [Arras follow-up cohort — v0.0.48](#arras-follow-up-cohort--v0048). It applies
 before outer SQL predicates, joins, ordering, aggregates and `LIMIT`. A selective
 key predicate or small output does not make a large type admissible.
 
