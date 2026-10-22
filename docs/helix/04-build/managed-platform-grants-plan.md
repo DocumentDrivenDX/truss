@@ -522,8 +522,8 @@ evidence. In the 363-entry producer ledger, the merge changes only the reviewed
 disclosure-cohort digest; all 62 cases and limits, the six
 managed/portable producer overrides, v0.0.49 toolkit version, native35fd and
 managed release gates are preserved. Final Truss qualification must use the
-new public compiler bytes. Final v0.0.49 installed/Linux qualification and
-publication remain pending.
+new public compiler bytes. The final v0.0.49 installed macOS campaign below
+passes; hosted Linux qualification and publication remain pending.
 
 The [public v0.0.48 integrity receipt](evidence/design-audit/managed-grants-release-049-20261022/dependencies/public-truss-048/verification.json)
 binds its published wheel SHA-256
@@ -539,6 +539,54 @@ the fourth source without changing native35fd. The resulting migration manifest
 is `86bcf78541e316c7e5697fb91e09d4741ef3e3cb5600b9b76ac5c6cc2e836923`.
 This closes public input integrity and route admission; it does not qualify the
 final v0.0.49 wheel or its complete migration/recovery campaign.
+
+### Final installed macOS qualification
+
+The [final local receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json)
+accepts the exact macOS ARM64 scope on source
+`6287e52a5ef8a0abce90341106e8e9389216cb80`, Python3.11.17, PostgreSQL18.6,
+Weft0.4.51 source557/Mac native3469 and the independent UMF5ba/Bun1.4.3 oracle.
+Its [payload audit](evidence/design-audit/managed-grants-release-049-20261022/final-local/payload-verification.json)
+records these artifact identities:
+
+| Artifact | SHA-256 |
+| --- | --- |
+| Wheel | `26cf1fd712930bc9e573682cc6b04b428756201cf619de902d2108769a90e5ff` |
+| Native manifest | `35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f` |
+| HF62 corpus | `d5b89965ea9962049077fb1b813aed32341c9c8948c70b526a8baf21e5eeabfe` |
+| HF archive | `c6b1eff58cf81beaf85bf0013f72156aca15654e2a61de49e5e43d440c1666c3` |
+
+All eight local campaign steps exit zero: 20 boundary controls, 20 managed
+modules/128 tests, 62 HF cases, nine strict protected tests, all 106 migration
+and recovery tests over four actual published source wheels, lifecycle controls
+and the original public workload. Test campaigns have zero skips, failures and
+errors. Lifecycle evidence covers supported additive evolution, contained
+unsupported-retirement refusal and later selected ACL changes with the immutable
+carrier preserved. The workload verifies 1,000 objects, 1,000 edges, 1,000 reads,
+200 committed updates and values after connection reopen; it counts 26,121 SQL
+submissions. It does not establish a broader performance target.
+
+The review verifies all 1,198 frozen input pins, 462 matching
+source/wheel/sdist/installed runtime files, oracle/compiler identities, eight
+outer log hashes and all 20 managed module log hashes. Worker cleanup and the
+local producer's unchanged-input/payload/identity controls pass. The
+[retained-file index](evidence/design-audit/managed-grants-release-049-20261022/final-local/retained-files.json)
+binds the 56 original outputs retained losslessly. This is local acceptance of
+the recorded artifact and platform; hosted Linux and public verification remain
+separate requirements.
+
+The [first Linux failure](evidence/design-audit/managed-grants-release-049-20261022/linux-attempt-1/receipt.json)
+preserves the two source48 rollback-test failures caused by fault injectors that
+matched a statement absent from the short edge. The reviewed correction retains
+all prior assertions and deadlines and adds exact injection checks across all
+four routes. Only its HF producer digest changed. The
+[second Linux failure](evidence/design-audit/managed-grants-release-049-20261022/linux-attempt-2/receipt.json)
+preserves the corrected source628 run: all 106 migration tests passed, while one
+HF case exceeded a native deadline with SQLSTATE57014. The same unchanged case
+passed in the local campaign and public48 Linux evidence. Host speed is a possible
+explanation, not an established cause. Sol recommended one unchanged failed-job
+rerun of run39845177814; attempt2 is pending. No assertion or limit was weakened.
+A repeated failure requires Linux timing/plan diagnosis before release.
 
 The current release acceptance campaign is the finite installed-package campaign
 in [`.github/workflows/release.yml`](../../../.github/workflows/release.yml),
@@ -592,9 +640,9 @@ unrun/unqualified status.
 | Release slice | Required result | Current state |
 | --- | --- | --- |
 | Integrate and version | Preserve the HF baseline and select v0.0.49 with its own notes | Source integration and version selection complete; [release draft](releases/v0.0.49.md) prepared |
-| Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Complete: actual public wheel integrity and paired native initializer captures; [admission receipt](evidence/design-audit/managed-grants-release-049-20261022/source48-admission/receipt.json). Final release migration campaign remains pending |
-| Freeze and review | Build final wheel/sdist/archive; verify exact runtime payload, historical bytes, compiler cohort, source boundaries and final diff | Pending final lineage/artifact freeze |
-| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Earlier local candidate passed its recorded scope; final v0.0.49 evidence pending |
+| Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Complete: actual public wheel integrity and paired native initializer captures; [admission receipt](evidence/design-audit/managed-grants-release-049-20261022/source48-admission/receipt.json). Final local 106-case campaign passes; mandatory Linux/tag campaign remains pending |
+| Freeze and review | Build final wheel/sdist/archive; verify exact runtime payload, historical bytes, compiler cohort, source boundaries and final diff | Exact source628 local artifact freeze and payload review complete; tag/public artifact review remains required |
+| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Final exact macOS campaign passes: 128/62/9/106 tests, lifecycle and workload; [receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json). Hosted Linux remains pending |
 | Hosted release and public verification | Mandatory Linux package/native campaign passes, then tag/asset/source pins and public downloads agree | Pending; no v0.0.49 publication claimed |
 
 Actual Arras/Lakebase TLS/token/workflow acceptance remains a separate deployment
@@ -608,8 +656,9 @@ wheel hashes to the new release.
 
 Planning, implementation and the earlier explicitly selected local qualification
 are complete for their recorded candidate. The authorized v0.0.49 release remains
-pending until final artifact review, the complete installed lineage campaign,
-mandatory Linux campaign and public-artifact verification pass. Actual public
+pending until tag/final artifact review, the mandatory Linux campaign and
+public-artifact verification pass. The exact source628 installed macOS campaign
+and complete local lineage gate pass. Actual public
 v0.0.48 input integrity and additive route admission are complete. The historical all-discovery
 diagnostic remains unqualified outside that supported release campaign. Actual
 Lakebase/Arras deployment acceptance stays a separate gate with no support claim

@@ -10,8 +10,8 @@ verifies all nine API asset digests and three wheel checksum/ZIP/RECORD/native
 inventories. Public packaging metadata binds source557 separately from the
 tag/workflow commitd4b. Mac ARM64 and Linux x86_64 match the selected Truss
 cohorts; Linux aarch64 remains packaging-only. No native tests run in this
-dependency audit. Final Truss qualification on the refreshed public compiler
-and v0.0.49 publication remain pending.
+dependency audit. Final local Truss qualification on the refreshed public
+compiler now passes below; hosted Linux and v0.0.49 publication remain pending.
 
 `preliminary/receipt.json` inventories the retained preliminary evidence and
 records its limits, including earlier failed attempts and incomplete raw-log
@@ -40,9 +40,9 @@ not establish final v0.0.49 installed lineage or release qualification.
 `supplemental/run_final_local_campaign.py` is the final local campaign producer.
 It records the wheel, input files, installed payload, exact independent UMF
 oracle, Bun and PostgreSQL identities and verifies them again at completion.
-The lifecycle producer is retained unchanged in the same directory. Final local,
-hosted Linux and public-download receipts will be added separately so the
-preliminary record remains intact.
+The lifecycle producer is retained unchanged in the same directory. The final
+local record below is separate from the preliminary evidence; hosted Linux and
+public-download receipts remain pending.
 
 The mandatory finite release campaign is defined by
 [the release workflow](../../../../../../.github/workflows/release.yml).
@@ -58,4 +58,45 @@ failing at the subsequent function statement and explicitly assert injection.
 All original rollback, state, ledger and resource-close assertions and deadlines
 remain. Sol reviewed eight pure cursor controls across all four routes; only
 this producer digest changed, with the other 362 pins and 62 cases preserved.
-The hosted rerun and final local campaign remain pending.
+The final local campaign below passes. The original failed hosted receipt is
+preserved unchanged.
+
+## Final installed macOS ARM64 campaign
+
+The [final local qualification](final-local/qualification.json) passes on source
+`6287e52a5ef8a0abce90341106e8e9389216cb80`, Python3.11.17, PostgreSQL18.6,
+public Weft0.4.51 source557/Mac native3469, and the independent clean UMF5ba
+oracle with Bun1.4.3. The [payload audit](final-local/payload-verification.json)
+binds wheel
+`26cf1fd712930bc9e573682cc6b04b428756201cf619de902d2108769a90e5ff`,
+native manifest
+`35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f`,
+HF62 corpus
+`d5b89965ea9962049077fb1b813aed32341c9c8948c70b526a8baf21e5eeabfe`
+and HF archive
+`c6b1eff58cf81beaf85bf0013f72156aca15654e2a61de49e5e43d440c1666c3`.
+All 462 source/wheel/sdist/installed runtime files agree. All 1,198 frozen
+inputs, oracle/compiler identities, eight outer logs and 20 managed module logs
+verify; cleanup and unchanged-input/payload controls pass. The
+[retained-file index](final-local/retained-files.json) binds 56 original outputs
+retained losslessly.
+
+The eight steps include 20 boundary controls, 20 managed modules/128 tests,
+62 HF cases, nine strict protected tests, all 106 migration/recovery tests over
+four actual published source wheels, lifecycle controls and the original public
+workload. Test campaigns have zero skips, failures and errors. Lifecycle evidence
+preserves the carrier through supported evolution, contained unsupported-record-
+retirement refusal and later selected ACL variation. The workload verifies
+1,000 objects, 1,000 edges, 1,000 reads, 200 committed updates and values after
+connection reopen; it counts 26,121 SQL submissions. Local acceptance is confined
+to this exact artifact and macOS scope; it establishes no broader performance,
+full-engine, all-discovery or Lakebase claim.
+
+The [second Linux diagnostic](linux-attempt-2/receipt.json) retains corrected
+source628's 106 passing migration tests and one HF62 native-deadline failure
+(SQLSTATE57014). That unchanged case passes locally and in public48 Linux
+receipts. Host speed is a possible explanation, not an established cause. Sol
+recommended one unchanged failed-job rerun of run39845177814; attempt2 is pending.
+No assertion or limit was changed. A repeat requires Linux timing/plan diagnosis
+before release. Hosted Linux/tag qualification and public-download verification
+remain open.

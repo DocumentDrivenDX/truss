@@ -1,0 +1,17 @@
+Starting boundaries
+boundaries exit 0
+Starting boundary-controls
+boundary-controls exit 0
+Starting managed
+managed exit 0
+Starting supplemental
+supplemental exit 0
+Starting hf-corpus
+hf-corpus exit 0
+Starting protected
+protected exit 0
+Starting migrations
+migrations exit 0
+Starting public-workload
+public-workload exit 0
+{"passed": true, "receipt": "/private/tmp/truss-managed-grants-049/final-local-source48-1/qualification.json"}
