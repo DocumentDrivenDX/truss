@@ -1,0 +1,35 @@
+{
+  "archiveSha256": "519a893197409e277feca8b0a878287adebad5d64e4813e30cd3ffdc2cff1706",
+  "archiveCorpusSha256": "66632198c1e381ece398af272c8c850b243f70555485fbaf527c24b55d2b2bcf",
+  "runStatus": "passed",
+  "tests": 62,
+  "passed": 62,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "exitCode": 0,
+  "compilerSourceRevision": "557153731e9f5d0583193a1189a07c6ed485d3d3",
+  "compilerNativeModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+  "nativeManifestSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+  "toolkit": "0.0.48",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "runtimeSecondsFromReport": 706.2315041249967,
+  "evidenceFiles": {
+    "conformance.json": {
+      "bytes": 14944,
+      "sha256": "5e9ce6087d0dd78451d90e554ee765502d224df55160481c46b56ab343469fef"
+    },
+    "exit-status.txt": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "run-command.txt": {
+      "bytes": 275,
+      "sha256": "a6ddbcaa0a6eeffd92f514f340e91a066a7778899e2aa2cc95eccde3c6670a05"
+    },
+    "run.log": {
+      "bytes": 13406,
+      "sha256": "e097b23336b4ebbea7cb45a8c6cf926dee832a6cc546e95b0b7dd4e27a99dd27"
+    }
+  }
+}

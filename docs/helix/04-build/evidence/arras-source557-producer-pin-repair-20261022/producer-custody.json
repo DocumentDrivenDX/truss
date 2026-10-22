@@ -96,6 +96,31 @@
       "file": "refreshed/corpus.json",
       "bytes": 72092,
       "sha256": "66632198c1e381ece398af272c8c850b243f70555485fbaf527c24b55d2b2bcf"
+    },
+    {
+      "file": "refreshed/native-run/run.log",
+      "bytes": 13406,
+      "sha256": "e097b23336b4ebbea7cb45a8c6cf926dee832a6cc546e95b0b7dd4e27a99dd27"
+    },
+    {
+      "file": "refreshed/native-run/conformance.json",
+      "bytes": 14944,
+      "sha256": "5e9ce6087d0dd78451d90e554ee765502d224df55160481c46b56ab343469fef"
+    },
+    {
+      "file": "refreshed/native-run/exit-status.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "refreshed/native-run/run-command.txt",
+      "bytes": 275,
+      "sha256": "a6ddbcaa0a6eeffd92f514f340e91a066a7778899e2aa2cc95eccde3c6670a05"
+    },
+    {
+      "file": "refreshed/native-run/run-custody.json",
+      "bytes": 1248,
+      "sha256": "066835cd9a6f6df240346df31a7e9106ee6afd3409582e5cd735eb24b694ef02"
     }
   ],
   "refreshedArchive": {
@@ -108,7 +133,26 @@
     "corpusSha256": "66632198c1e381ece398af272c8c850b243f70555485fbaf527c24b55d2b2bcf",
     "crcCheck": "passed",
     "exactActiveCorpusMatch": true,
-    "nativeRunStatus": "pending"
+    "nativeRunStatus": "passed",
+    "nativeRun": {
+      "evidenceDirectory": "refreshed/native-run",
+      "command": "refreshed/native-run/run-command.txt",
+      "report": "refreshed/native-run/conformance.json",
+      "reportSha256": "5e9ce6087d0dd78451d90e554ee765502d224df55160481c46b56ab343469fef",
+      "log": "refreshed/native-run/run.log",
+      "logSha256": "e097b23336b4ebbea7cb45a8c6cf926dee832a6cc546e95b0b7dd4e27a99dd27",
+      "exitStatusFile": "refreshed/native-run/exit-status.txt",
+      "exitCode": 0,
+      "tests": 62,
+      "passed": 62,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "compilerSourceRevision": "557153731e9f5d0583193a1189a07c6ed485d3d3",
+      "compilerNativeModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+      "nativeManifestSha256": "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0",
+      "platform": "macOS-27.0.1-arm64-arm-64bit"
+    }
   },
   "correctedSourceMismatch": {
     "producer": "packages/python/tests/test_current_disclosure_cohort.py",
