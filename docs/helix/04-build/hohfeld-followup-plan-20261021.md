@@ -786,12 +786,17 @@ release pins. The latest Mac candidate is the only active compiler tuple locally
 Linux must use newly rebuilt, independently verified artifacts, not the historical
 f003 wheel. No old application-runtime compatibility mode or age cutoff is added.
 
-Remote push remains blocked by automatic approval review: it requires direct
-user authorization for external source disclosure and did not accept the earlier
-chat's explicit release handoff as sufficient. A direct approval request is pending.
-Local review and qualification continue independently. Linux artifacts/gates,
-Weft publication, exact Linux adoption, Truss publication/public verification and
-site/docs delivery remain open; neither0.4.51 nor0.0.48 is published.
+The owner directly authorized resolving, committing, reviewing, testing, pushing
+and releasing these issues, with coordination across sessions. This resolves the
+prior automatic-review push block. Weft selected sourceae2b5c7a, integration2ddaa2e9
+and Truss227d982f are pushed. Final selected-source Linux packaging run39810539922
+and integration conformance39810483375 have started. Fresh-eyes review identified
+a packaging-reuse source-custody gap: workflow head SHA can differ from an explicit
+tag checkout. The publisher must verify actual checked-out source recorded with
+each packaging receipt; the fix and a fresh packaging run are release gates.
+Linux artifacts/gates, Weft publication, exact Linux adoption, Truss publication/
+public verification and site/docs delivery remain open; neither0.4.51 nor0.0.48
+is published. Arras owns its dependency adoption and full native Linux gate.
 
 ## Exit criteria
 
