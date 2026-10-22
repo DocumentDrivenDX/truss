@@ -1,5 +1,18 @@
 # Consumer readiness handoff
 
+## Runtime migration release — 2026-10-22 UTC
+
+[v0.0.47](releases/v0.0.47.md) restores explicit administrative migration from the
+exact populated UMF 0.10 v0.0.44 and shared v0.0.45/46 installations. Only the latest
+application runtime is supported; previous admitted databases move forward through
+the latest tool without age-based expiry. Pre-0.10, protected-profile migration and
+downgrades are excluded. [Release verification](evidence/runtime-migrations-20261021/published-0.0.47/validation.json)
+records the full Linux tag gate, 52 installed migration cases without skips on
+Linux and clean public-wheel macOS ARM64, public asset checksums and the package-only
+`uvx` restart/isolation check. See the [operator guide](../../../packages/python/README.md#runtime-migrations--v0047)
+for backup, owned settlement, limits and original-attempt recovery. Earlier
+checkpoint interfaces below remain historical where they conflict with this release.
+
 ## Current owner release scope — 2026-10-13
 
 Finish the Python release without building an independent second implementation.
@@ -10,7 +23,7 @@ reproducible installation; qualify only the versions and capabilities actually
 advertised. Broader verification work needs a concrete consumer need or defect.
 
 
-## Current public Python checkpoint — 2026-10-13
+## Historical public Python checkpoint — 2026-10-13
 
 Use the [public Python guide](../../../packages/python/README.md) for the callable
 interface and installation instructions. The current ordinary-role candidate is

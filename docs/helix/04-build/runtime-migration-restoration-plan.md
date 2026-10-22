@@ -36,10 +36,12 @@ The owner decision of 2026-10-21 restores migrations for UMF 0.10 and supersedes
 the predecessor-upgrade withdrawal. Old application runtimes and pre-0.10 source
 adapters stay retired. Historical manifests, recipes and test fixtures serve
 migration only. The owner subsequently authorized implementation in this chat. The v0.0.47
-candidate implements the bounded routes below; native qualification is reported
+release implements the bounded routes below; native qualification is reported
 from original run evidence. Final installed migration qualification passes 52 cases
-without skips on macOS ARM64 and Linux x86_64; the complete Linux release/public-workload workflow also passes. Merge, tag
-publication and public clean-install verification are the remaining delivery gates.
+without skips on macOS ARM64 and Linux x86_64. The complete Linux release/public-
+workload workflow also passes. Merge, tag publication and public clean-install
+verification are complete;
+the released delivery record below binds their original evidence.
 
 Governing behavior: [PRD](../01-frame/prd.md#owner-decision--forward-migrations-to-the-latest-release-2026-10-21),
 [ADR-008](../02-design/adr/ADR-008-trusted-embedding-host.md),
@@ -61,7 +63,7 @@ interfaces must be checked before implementing each dependent slice.
 | Source | v0.0.44; runtime manifest SHA-256 `9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00` | Initial populated UMF 0.10 predecessor; create fixture using its real released wheel |
 | Current runtime baseline | v0.0.45 and locally available v0.0.46 tag; manifest SHA-256 `71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e` | Same native bytes despite different SDK labels; this candidate adopts v0.0.46 local runtime isolation and CLI fixes |
 | Shared labels | `truss-catalog-runtime/0.72-candidate`, layout `1.0`, PostgreSQL 18.6 | Labels are shared across changed manifests and cannot establish compatibility |
-| Target | v0.0.47 candidate; native `0.73-candidate`; manifest SHA-256 `7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea` | Frozen native inventory, ordered recipes and UMF receipt model are packaged under `truss/_migrations/`; original published assets remain unchanged |
+| Target | v0.0.47; native `0.73-candidate`; manifest SHA-256 `7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea` | Frozen native inventory, ordered recipes and UMF receipt model are packaged under `truss/_migrations/`; original published assets remain unchanged |
 
 The first delivery is v0.0.44 → that exact target. Include admission from existing
 v0.0.45/46 databases when their identical installed tuple is verified; their
@@ -290,16 +292,42 @@ macOS ARM64. [Hosted evidence](evidence/runtime-migrations-20261021/hosted-linux
 and [local installed evidence](evidence/runtime-migrations-20261021/final-installed-local/qualification.json)
 bind the final artifacts. All 445 runtime payload files in both wheel and source
 archive match source. Optional stress/large-capacity jobs and broad discovery
-are outside this result. Merge, tag publication and public installed verification
-remain pending.
+are outside this result. The released delivery below completes the remaining gates.
+
+## Released delivery — 2026-10-22 UTC
+
+[PR #27](https://github.com/DocumentDrivenDX/truss/pull/27) merged at
+`6c9365c8be60b55602fe4e7bd4e45b4b5040ec74`. [v0.0.47](https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.47)
+was published after the complete [tag workflow](https://github.com/DocumentDrivenDX/truss/actions/runs/39702368076)
+passed its package, Linux native and publication jobs. The tag repeats the 52-case
+installed migration matrix without skips and the original public workload.
+
+The [public verification](evidence/runtime-migrations-20261021/published-0.0.47/validation.json)
+checks all 12 checksummed assets and byte equality with the tag's tested packages,
+constraints and original native evidence. All 445 runtime payload files in wheel
+and source archive match the released source. A fresh Python 3.11.17 environment
+installed the public wheel and passed all 52 migration cases without skips on
+macOS ARM64. The published `uvx` command also passed outside the checkout with two
+independent local instances retaining their data and installation identities
+across restart. Original receipts, logs, pins, checksum list and native archive
+remain alongside that record. No production database was used.
+
+Only the latest application runtime is supported. Every admitted database source
+retains a migration path to latest without age-based expiry. The release does not
+maintain old application runtimes or extend the tested subset/platform claims.
 
 ## Exit criteria
 
-- [x] First populated v0.0.44 → frozen candidate route and v0.0.45/46 exact tuple pass local installed qualification.
+- [x] First populated v0.0.44 → frozen v0.0.47 route and v0.0.45/46 exact tuple pass local installed qualification.
 - [x] Latest-only admission, preservation, rollback, actual lost-ack recovery and public packaged tooling pass locally.
 - [x] Future-release lineage/removal/immutability gate is blocking; latest tooling retains every admitted source path.
 - [x] Package guidance, public binding and current HELIX specifications capture latest-only runtime support and forward database migration.
 - [x] Local boundaries, package payload and focused regression checks pass for the recorded exact artifacts.
 - [x] Complete hosted Linux release/public-workload workflow passes for the final migration candidate.
-- [ ] Reviewed PR is merged, v0.0.47 is published and its public checksums/assets/clean installed migration gates are verified.
-- [ ] First real subsequent edge supplies native skip-release-chain proof; no fabricated future-release evidence.
+- [x] Reviewed PR is merged, v0.0.47 is published and its public checksums/assets/clean installed migration gates are verified.
+
+## Next release gate
+
+The first real subsequent native edge must supply native skip-release-chain
+execution proof. This remains blocking when that edge exists; the first release
+does not fabricate a future native edge or claim that proof has already passed.

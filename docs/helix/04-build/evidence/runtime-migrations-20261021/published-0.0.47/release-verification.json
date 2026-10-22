@@ -1,0 +1,74 @@
+{
+  "observedAt": "2026-10-22T01:16:35.970807+00:00",
+  "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.47",
+  "publishedAt": "2026-10-22T01:16:06Z",
+  "tag": "v0.0.47",
+  "sourceCommit": "6c9365c8be60b55602fe4e7bd4e45b4b5040ec74",
+  "runtimeSupport": "latest-only",
+  "publicChecksumsVerified": true,
+  "tagPackageArtifactsMatched": true,
+  "tagOriginalEvidenceMatched": true,
+  "assetsSha256": {
+    "catalog-key-backfill-report-v0.1.md": "fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50",
+    "catalog-rebind-report-v0.2.md": "14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942",
+    "catalog-rebind-report-v0.4.md": "38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4",
+    "catalog-registration-summary-v0.1.md": "674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945",
+    "catalog-source-reference-v0.1.md": "41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7",
+    "isolated-runtime-constraints.txt": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+    "logical-query-abi.json": "9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f",
+    "migration-qualification-evidence.tar.gz": "a77d1017ff5932089b95e2ff54554c5b920e4c4dd2d09eae5816d4ee3ad6834f",
+    "migration-qualification.json": "23bdea211ecb7716267b084f85dadc7c4a56687047aa7866d75635f0cb2f367f",
+    "release-pins.json": "a996ea2e0c0811efcd16c597247ec305fd61f4d60d7c9f2fa9e38e549866b6b2",
+    "truss_toolkit-0.0.47-py3-none-any.whl": "d06e1c1d06d6be9c205f524fb81b26c19cdb3902677e47998c9a854ada0d609c",
+    "truss_toolkit-0.0.47.tar.gz": "e9b33110443d3d0558af28bf704cf8a027b8eec7bccadf9e01372b9081446059"
+  },
+  "checksumFileSha256": "8f01be119c42cdb79b77c94ef6e0f6fad1a31c70f7da7c33ba45620e466603eb",
+  "runtimePayloadMatched": true,
+  "runtimeFiles": 445,
+  "nativeManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+  "migrationManifestSha256": "132526a7d5429a8cd40ccb7d6ebc16a2448ed0ea3b8bcd75aec89d65403a32d0",
+  "linuxQualification": {
+    "scope": "Installed latest-only runtime migration gate; PostgreSQL18.6, unprotected UMF0.10 lineage",
+    "sourceCommit": "6c9365c8be60b55602fe4e7bd4e45b4b5040ec74",
+    "workflowRunId": "39702368076",
+    "package": "0.0.47",
+    "loadedPackage": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/truss/__init__.py",
+    "platform": "linux",
+    "python": "3.11.17 (main, Oct  1 2026, 14:32:31) [GCC 13.3.0]",
+    "recipeSha256": "132526a7d5429a8cd40ccb7d6ebc16a2448ed0ea3b8bcd75aec89d65403a32d0",
+    "targetManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+    "sources": [
+      "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+      "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00"
+    ],
+    "originalWheels": {
+      "source44": {
+        "filename": "truss_toolkit-0.0.44-py3-none-any.whl",
+        "sha256": "7cdea3af955feb11bd3cb4ca58b2f0cd9f336412d64de14bcba272711f1638d8"
+      },
+      "source46": {
+        "filename": "truss_toolkit-0.0.46-py3-none-any.whl",
+        "sha256": "b2c09c8d9c4f8cc40330d2fab4b5ea7cfb26559d2231455c2b1658a92c0368dc"
+      }
+    },
+    "previousMigrationRelease": null,
+    "tests": 52,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": true,
+    "limitations": [
+      "No pre-0.10 or protected-profile migration",
+      "Qualification applies only to the recorded platform and exact tuple",
+      "First real subsequent edge supplies native skip-release-chain proof"
+    ]
+  },
+  "originalNativeEvidenceSha256": {
+    "qualification.json": "23bdea211ecb7716267b084f85dadc7c4a56687047aa7866d75635f0cb2f367f",
+    "source44-native-inventory.json": "ea95d68b229c834f7a0240c94fc36f758d90722b9db3f5d9bbfadcf42bc3f88e",
+    "source44-original-evidence.json": "4f7d8d2bfaef5929758c61ce5eda3c5fa4090c4b2782ea488277edd64cd5777a",
+    "source46-native-inventory.json": "a6fac66745236e20b0844bfe2d2e653252f43a584702f25424862313331f073d",
+    "source46-original-evidence.json": "bef52265a14b30a4816fe3066482f3201e16a0fd14ff91c34cd6f5d2455c91b3"
+  },
+  "scope": "Public GitHub release assets and exact installed Linux migration qualification; separate clean installed macOS test follows"
+}
