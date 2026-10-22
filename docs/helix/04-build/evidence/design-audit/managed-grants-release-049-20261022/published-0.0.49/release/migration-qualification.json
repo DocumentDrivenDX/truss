@@ -1,0 +1,46 @@
+{
+  "scope": "Installed latest-only runtime migration gate; PostgreSQL18.6, unprotected UMF0.10 lineage",
+  "sourceCommit": "dd13e95804abc30202d449a756240c6a684ab942",
+  "workflowRunId": "39868241011",
+  "package": "0.0.49",
+  "loadedPackage": "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/truss/__init__.py",
+  "platform": "linux",
+  "python": "3.11.17 (main, Oct  1 2026, 14:32:31) [GCC 13.3.0]",
+  "recipeSha256": "96addcdb95523f478d8f50b0b47198e47a860680c7400dd359711930e837e535",
+  "targetManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+  "sources": [
+    "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e",
+    "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+    "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00",
+    "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0"
+  ],
+  "originalWheels": {
+    "source44": {
+      "filename": "truss_toolkit-0.0.44-py3-none-any.whl",
+      "sha256": "7cdea3af955feb11bd3cb4ca58b2f0cd9f336412d64de14bcba272711f1638d8"
+    },
+    "source46": {
+      "filename": "truss_toolkit-0.0.46-py3-none-any.whl",
+      "sha256": "b2c09c8d9c4f8cc40330d2fab4b5ea7cfb26559d2231455c2b1658a92c0368dc"
+    },
+    "source47": {
+      "filename": "truss_toolkit-0.0.47-py3-none-any.whl",
+      "sha256": "d06e1c1d06d6be9c205f524fb81b26c19cdb3902677e47998c9a854ada0d609c"
+    },
+    "source48": {
+      "filename": "truss_toolkit-0.0.48-py3-none-any.whl",
+      "sha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3"
+    }
+  },
+  "previousMigrationRelease": "v0.0.48",
+  "tests": 106,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "passed": true,
+  "limitations": [
+    "No pre-0.10 or protected-profile migration",
+    "Qualification applies only to the recorded platform and exact tuple",
+    "One final publication per complete route; actual multi-edge and prior published receipt controls are included"
+  ]
+}

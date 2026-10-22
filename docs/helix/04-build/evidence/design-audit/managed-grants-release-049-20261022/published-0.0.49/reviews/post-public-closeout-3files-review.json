@@ -1,0 +1,34 @@
+{
+  "scope": "Conditional source review of private three-document publication closeout; no application or qualification claim",
+  "patchSha256": "7d836d9795caf4a7a1f8d127aba900b5de9816317564862256426cf520de0e74",
+  "approvedConditionally": false,
+  "condition": "Actual retry2 passed, cleanup and retained proof independently reviewed",
+  "paths": [
+    "docs/helix/04-build/releases/v0.0.49.md",
+    "docs/helix/04-build/managed-platform-grants-plan.md",
+    "docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/README.md"
+  ],
+  "review": [
+    "Release-note status change matches prior released48 convention; plan draft retained with open Arras/Lakebase slice",
+    "Actual public17/wheel7ea/sdist34ec/archiveae57 separated from earlier57fd local/branch identities",
+    "Failed history and current trust/lifecycle/migration constraints retained",
+    "Tag Linux130/HF62/106 distinct from public Mac driver/worker/HF scope",
+    "No protected/service/broad-discovery/fullengine claim"
+  ],
+  "checks": {
+    "gitApplyCheck": true,
+    "trackedSourceUnchanged": true,
+    "onlyExpectedVerifierEvidenceUntracked": true,
+    "repositoryEditsByReviewer": false,
+    "nativeExecutionByReviewer": false
+  },
+  "reviewHistory": [
+    {
+      "patchSha256": "bf99648673edb3a5521070e0844775b7643612add72b977bac5127aa61e4e8b2",
+      "condition": "Actual public verifier retry2 terminal pass, cleanup and retained proof independently reviewed before application",
+      "approvedConditionally": true
+    }
+  ],
+  "approved": true,
+  "actualProofReview": "published-049-actual-evidence-sol-review.json"
+}

@@ -1,0 +1,11 @@
+{
+  "scope": "Pure fresh-environment bootstrap diagnosis, no PostgreSQL or runtime qualification.",
+  "failedOuterLauncher": "/Users/erik/.local/bin/python3.11",
+  "resolvedCanonicalBase": "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/bin/python3.11",
+  "canonicalBaseSha256": "5ebf120b62e8d02ab22485ca328da471db27fd278069df3de01c957cc02d9cd6",
+  "failedReadonlyProbeExitCode": 1,
+  "canonicalBootstrapExitCode": 0,
+  "canonicalEnvironmentCheckExitCode": 0,
+  "sameReviewedHelperChange": "none; invoke unchanged helper with canonical Python3.11 executable instead of a user-bin launcher",
+  "freshEnvironment": "/private/tmp/truss-managed-grants-049/venv-bootstrap-diagnosis/canonical-env"
+}

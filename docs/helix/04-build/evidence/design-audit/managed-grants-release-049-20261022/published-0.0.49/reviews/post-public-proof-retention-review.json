@@ -1,0 +1,27 @@
+{
+  "scope": "Independent Sol source review of private post-public retention producer; not a native or public qualification run",
+  "approvedProducer": "/private/tmp/truss-managed-grants-049/retain-published-049-proof.py",
+  "producerSha256": "5039db0cca967acbe17cf15bc8a41edcc2fdc728c4e74850f8a1d607cfdff31c",
+  "planSha256": "776f173355db7912b685b09d5bddfce19bf0714d0bd7f501d7cc3523931bc001",
+  "approval": "Ready for use only after actual fresh output2 terminal pass and owned cleanup; no execution by reviewer",
+  "reviewedProperties": [
+    "Exact tag/API/fullcapsule checksum+size+public130/62/106 correspondence",
+    "Actual supplied capsule argument, fresh destination/no overwrite, input stability",
+    "All output2 successful-step log digests, checker duplicate receipt and HF receipt hash closure",
+    "Separate Mac/Linux compiler hashes with shared actual source-freeze identity",
+    "Raw checker evidence sidecars recursively retained with safe path/symlink/size bounds",
+    "Both outer driver logs, original ensurepip failure, full tag-workflow log and all3 extensionless checksum manifests retained",
+    "Byte-exact reviewed verifier and retention producer sources copied before single final verified receipt write",
+    "Virtualenv/corpus/binary payload exclusions explicit; bootstrap retained as unqualified diagnosis; Lakebase not_run"
+  ],
+  "pureControls": {
+    "actualFailedAttemptRefused": true,
+    "logHashMismatchRefused": true,
+    "logTraversalRefused": true,
+    "inMemorySchemaPositivePassed": true,
+    "controlScope": "validate_release only using actual capsule/API plus explicitly in-memory synthetic successful control; main not called and no qualification packet produced"
+  },
+  "repositoryClean": true,
+  "nativeExecution": false,
+  "repositoryEdits": false
+}

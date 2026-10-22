@@ -1,0 +1,35 @@
+{
+  "assetDigests": {
+    "SHA256SUMS": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f",
+    "pgserver_pg18-18.6.1-cp310-cp310-macosx_14_0_arm64.whl": "44a58f739c77cc3b5fa413e2e671de9941ec788fb537bae6725c2c92a14b80af",
+    "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "00caeafb593579007992c062f8b6637b26fe7521015d9fd1057f55711924f30e",
+    "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "f0ea4b564dc26d5128c1280a55cd29da31104e49417a4aad3c014e31157aa925",
+    "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649",
+    "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "471f642e1dd38ec9eded27416b8f976f078c04faf13a47bc4bb0075a4906d6d3",
+    "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "e1b99a6971fa869885398fe8a77d5e718e77572aa6d85b03d5c2f207496ab56c",
+    "pgserver_pg18-18.6.1-cp312-cp312-macosx_14_0_arm64.whl": "424165d468f69ab6b73ac40de3258d8e9cb85b4ffb6496767671edc836cdb862",
+    "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "ffe48e2a865e9d89738780568d4503df75aed22dbb1f702876146d3ba5e05090",
+    "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "0ad9646ee66b36444cce4bb0186b3bae9267806b1653fbb9fea16dc8d4bcb212",
+    "pgserver_pg18-18.6.1-cp313-cp313-macosx_14_0_arm64.whl": "032ff91c4c94f3a6734f52ac0e26c11a99fdb636955c78f4d6dfad9110a214cb",
+    "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "125ce679dc70a8730f41aa083f70e2bb8de079e4d78277205de87906ab5f88b6",
+    "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "8cd40d44b54b8cb41b5b6950b1fea8bef58133c840a003bc12b217f7fb03b51d"
+  },
+  "assets": [
+    "pgserver_pg18-18.6.1-cp310-cp310-macosx_14_0_arm64.whl",
+    "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+    "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+    "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+    "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "pgserver_pg18-18.6.1-cp312-cp312-macosx_14_0_arm64.whl",
+    "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+    "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "pgserver_pg18-18.6.1-cp313-cp313-macosx_14_0_arm64.whl",
+    "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+    "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "SHA256SUMS"
+  ],
+  "isDraft": false,
+  "publishedAt": "2026-10-12T00:38:37Z",
+  "tagName": "pg18.6-pgv0.8.6-r2"
+}

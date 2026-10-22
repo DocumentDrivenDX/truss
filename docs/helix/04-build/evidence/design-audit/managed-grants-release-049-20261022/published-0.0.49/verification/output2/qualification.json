@@ -1,0 +1,751 @@
+{
+  "actualLakebaseAcceptance": "not_run",
+  "assetChecksums": {
+    "linuxWeftSha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+    "macWeftSha256": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+    "runtimeSha256": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649",
+    "trussSha256": "7ea14b2787f02cbeec9ad99d835adbcc30c684fd5be8e0765a1d8198b50e7182"
+  },
+  "completedAt": 1792712932.795802,
+  "errors": [],
+  "githubReleases": {
+    "runtime": {
+      "assetDigests": {
+        "SHA256SUMS": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f",
+        "pgserver_pg18-18.6.1-cp310-cp310-macosx_14_0_arm64.whl": "44a58f739c77cc3b5fa413e2e671de9941ec788fb537bae6725c2c92a14b80af",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "00caeafb593579007992c062f8b6637b26fe7521015d9fd1057f55711924f30e",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "f0ea4b564dc26d5128c1280a55cd29da31104e49417a4aad3c014e31157aa925",
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "471f642e1dd38ec9eded27416b8f976f078c04faf13a47bc4bb0075a4906d6d3",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "e1b99a6971fa869885398fe8a77d5e718e77572aa6d85b03d5c2f207496ab56c",
+        "pgserver_pg18-18.6.1-cp312-cp312-macosx_14_0_arm64.whl": "424165d468f69ab6b73ac40de3258d8e9cb85b4ffb6496767671edc836cdb862",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "ffe48e2a865e9d89738780568d4503df75aed22dbb1f702876146d3ba5e05090",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "0ad9646ee66b36444cce4bb0186b3bae9267806b1653fbb9fea16dc8d4bcb212",
+        "pgserver_pg18-18.6.1-cp313-cp313-macosx_14_0_arm64.whl": "032ff91c4c94f3a6734f52ac0e26c11a99fdb636955c78f4d6dfad9110a214cb",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "125ce679dc70a8730f41aa083f70e2bb8de079e4d78277205de87906ab5f88b6",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "8cd40d44b54b8cb41b5b6950b1fea8bef58133c840a003bc12b217f7fb03b51d"
+      },
+      "assets": [
+        "pgserver_pg18-18.6.1-cp310-cp310-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "SHA256SUMS"
+      ],
+      "isDraft": false,
+      "publishedAt": "2026-10-12T00:38:37Z",
+      "tagName": "pg18.6-pgv0.8.6-r2"
+    },
+    "truss": {
+      "assetDigests": {
+        "SHA256SUMS": "8852b526aef5d88173e768c0182dbfbb18234902fc7003f4ffeba525b35b3de4",
+        "catalog-key-backfill-report-v0.1.md": "fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50",
+        "catalog-rebind-report-v0.2.md": "14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942",
+        "catalog-rebind-report-v0.4.md": "38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4",
+        "catalog-registration-summary-v0.1.md": "674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945",
+        "catalog-source-reference-v0.1.md": "41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7",
+        "hf-conformance-qualification.json": "e070e85eba61c255567c5d24bbfe11ba8f61cfce705417c93a1a7860d87158f0",
+        "isolated-runtime-constraints.txt": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+        "logical-query-abi.json": "8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96",
+        "managed-grants-qualification-evidence.tar.gz": "26f1a786ca103c7630e8b433d0d552c9e04457c13a8e5ad86e43d366bc0b5a00",
+        "managed-grants-qualification.json": "e782a4b93e52dfa604ca1aee5167fecd321891c9a9c28ba7cb3e282748703437",
+        "migration-qualification-evidence.tar.gz": "46b66c297b81caa81883eea3799ec616f26c1345c263e36bbedf2000b7a2618b",
+        "migration-qualification.json": "1fa17cb02f51e2a44f30015342d59c2a51da83bb47ab62634fdb00e56bec5878",
+        "release-pins.json": "d75df322ea0508c43a2c22d5ac667e9d155b17243feecd049920dba8c7acb70f",
+        "truss-hf-conformance-0.0.49.zip": "ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6",
+        "truss_toolkit-0.0.49-py3-none-any.whl": "7ea14b2787f02cbeec9ad99d835adbcc30c684fd5be8e0765a1d8198b50e7182",
+        "truss_toolkit-0.0.49.tar.gz": "34ec940aa5ffac7466c1c73cd8cd330e82630d0901023cfe2cba3d353154570a"
+      },
+      "assets": [
+        "catalog-key-backfill-report-v0.1.md",
+        "catalog-rebind-report-v0.2.md",
+        "catalog-rebind-report-v0.4.md",
+        "catalog-registration-summary-v0.1.md",
+        "catalog-source-reference-v0.1.md",
+        "hf-conformance-qualification.json",
+        "isolated-runtime-constraints.txt",
+        "logical-query-abi.json",
+        "managed-grants-qualification-evidence.tar.gz",
+        "managed-grants-qualification.json",
+        "migration-qualification-evidence.tar.gz",
+        "migration-qualification.json",
+        "release-pins.json",
+        "SHA256SUMS",
+        "truss-hf-conformance-0.0.49.zip",
+        "truss_toolkit-0.0.49-py3-none-any.whl",
+        "truss_toolkit-0.0.49.tar.gz"
+      ],
+      "isDraft": false,
+      "publishedAt": "2026-10-22T23:24:20Z",
+      "tagName": "v0.0.49"
+    },
+    "weft": {
+      "assetDigests": {
+        "SHA256SUMS": "62c9d8082eb2f446446d7b94ff7ef7f48769e3cd836e5641c2951069302a6c75",
+        "local-macos-qualification.json": "6ee046368173604aac9b824e19a5443474432b23af6872ba835e896271c02293",
+        "packaging-aarch64-apple-darwin.json": "a15ae959b0e42840473bd58ce61e0752248e241b6b1c65c34e4c1a59b3907ff3",
+        "packaging-aarch64-unknown-linux-gnu.json": "0b41270a01cbfa60c3428ed84e99c1f601984746bb3988466a3bb62200c7e5eb",
+        "packaging-x86_64-unknown-linux-gnu.json": "0e2ecca911a768ff679fbe0a3ab4d387cae7b22b64a8c202d6db7c8c92506606",
+        "release-pins.json": "aceaf8be26a0b652b88f048a89ea4ee9475a2e7e0c7c89b2a2a8fae071eff36d",
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "42f846d689ace027d6bb2951f27c587660d4e5151285fe911ce7a3006d0001de",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5"
+      },
+      "assets": [
+        "local-macos-qualification.json",
+        "packaging-aarch64-apple-darwin.json",
+        "packaging-aarch64-unknown-linux-gnu.json",
+        "packaging-x86_64-unknown-linux-gnu.json",
+        "release-pins.json",
+        "SHA256SUMS",
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "isDraft": false,
+      "publishedAt": "2026-10-22T19:16:14Z",
+      "tagName": "v0.4.51"
+    }
+  },
+  "hfArchive": "truss-hf-conformance-0.0.49.zip",
+  "hfArchiveSha256": "ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6",
+  "hfImportIsolation": {
+    "PYTHONPATH": null,
+    "allSelectedModulesPresent": true,
+    "runner": "/private/tmp/truss-managed-grants-049/published-049-verification-2/hf-standalone/scripts/run-hf-conformance.py",
+    "testRoot": "/private/tmp/truss-managed-grants-049/published-049-verification-2/hf-standalone/packages/python/tests",
+    "workingDirectory": "/private/tmp/truss-managed-grants-049/published-049-verification-2/hf-standalone"
+  },
+  "hfReceipt": "/private/tmp/truss-managed-grants-049/published-049-verification-2/hf-qualification.json",
+  "hfReceiptSha256": "fe27b489d27b65a6827fa8a3f312e11856f3faa13181325c41ef6e522d8117ea",
+  "hfTests": 62,
+  "inputsUnchanged": true,
+  "installedPayload": {
+    "identities": {
+      "runtimeDistribution": "pgserver-pg18",
+      "runtimeVersion": "18.6.1",
+      "selectedRuntimeVersion": "18.6.1",
+      "trussVersion": "0.0.49",
+      "weftCohort": {
+        "embeddedManifestSha256": "10cd59e88cab06630ff96ecd721e37a1e83b723d3dbb4f050341219e80d4d442",
+        "embeddedProfile": "truss.embedded-v8/2",
+        "embeddedRuntime": "mini-racer==0.14.1",
+        "embeddedV8Version": "14.4.258.23",
+        "profile": "truss-current-query-consumer/0.2-candidate",
+        "resultAbi": "weft.postgresql.current-values/0.2-candidate",
+        "umfBundleSha256": "5c0996adf80552753899d7b3e196b93f7641bdf82d6bbb30dace8c90ad1ff004",
+        "umfManifestSha256": "16df44d7d0d1ce2a59c9b12129ab803f025d3fdb4a4aefdf98474b9e22fcbc62",
+        "umfRevision": "9ff2ba12271be889aad81c09695487e14655893d",
+        "weftModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+        "weftRevision": "557153731e9f5d0583193a1189a07c6ed485d3d3",
+        "weftWheelSha256": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487"
+      },
+      "weftModulePath": "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/lib/python3.11/site-packages/weft/weft.abi3.so",
+      "weftModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+      "weftVersion": "0.4.51"
+    },
+    "pgserver": {
+      "files": 1714,
+      "path": "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/lib/python3.11/site-packages/pgserver",
+      "payloadSha256": "d186752958c98b48289d818a0491f272c96e23eeb5963911f6729321591463c6"
+    },
+    "truss": {
+      "files": 467,
+      "path": "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/lib/python3.11/site-packages/truss",
+      "payloadSha256": "f5c13e634aeac8ee14f409a59be52023f288f30205a578ad3936e4c9a0a802e3"
+    },
+    "weft": {
+      "files": 2,
+      "path": "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/lib/python3.11/site-packages/weft",
+      "payloadSha256": "2aa3ca05868ae0ba01cde7b5cf1e8c0293a52923905287d5eb3994f725df0d88"
+    }
+  },
+  "linuxWeftVerification": {
+    "cohortCount": 2,
+    "nativeModule": "weft/weft.abi3.so",
+    "nativeModuleSha256": "ef293922003832fbd87041a28c6dbde33927fee573270f203aa51daf06bcd445",
+    "record": "weft_sql-0.4.51.dist-info/RECORD",
+    "recordedPayloadCount": 9,
+    "status": "verified",
+    "wheel": "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "wheelSha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5"
+  },
+  "linuxWeftWheel": "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+  "localPlatform": "macos-arm64",
+  "macWeftVerification": {
+    "cohortCount": 2,
+    "nativeModule": "weft/weft.abi3.so",
+    "nativeModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+    "record": "weft_sql-0.4.51.dist-info/RECORD",
+    "recordedPayloadCount": 9,
+    "status": "verified",
+    "wheel": "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+    "wheelSha256": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487"
+  },
+  "macWeftWheel": "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+  "passed": true,
+  "publicAssetCapsules": {
+    "releasePinsSha256": "d75df322ea0508c43a2c22d5ac667e9d155b17243feecd049920dba8c7acb70f",
+    "runtime": {
+      "assetNames": [
+        "SHA256SUMS",
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl"
+      ],
+      "checksumPayloadNames": [
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl"
+      ],
+      "manifestAssetNames": [
+        "pgserver_pg18-18.6.1-cp310-cp310-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "manifestEntries": 12,
+      "payloadNames": [
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl"
+      ],
+      "payloadSha256": {
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649"
+      },
+      "publicApiAssetNames": [
+        "SHA256SUMS",
+        "pgserver_pg18-18.6.1-cp310-cp310-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "selectedEntries": 1,
+      "selectionIsComplete": true,
+      "sha256SumsSha256": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f"
+    },
+    "runtimeAssetSha256": {
+      "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649"
+    },
+    "truss": {
+      "assetNames": [
+        "SHA256SUMS",
+        "catalog-key-backfill-report-v0.1.md",
+        "catalog-rebind-report-v0.2.md",
+        "catalog-rebind-report-v0.4.md",
+        "catalog-registration-summary-v0.1.md",
+        "catalog-source-reference-v0.1.md",
+        "hf-conformance-qualification.json",
+        "isolated-runtime-constraints.txt",
+        "logical-query-abi.json",
+        "managed-grants-qualification-evidence.tar.gz",
+        "managed-grants-qualification.json",
+        "migration-qualification-evidence.tar.gz",
+        "migration-qualification.json",
+        "release-pins.json",
+        "truss-hf-conformance-0.0.49.zip",
+        "truss_toolkit-0.0.49-py3-none-any.whl",
+        "truss_toolkit-0.0.49.tar.gz"
+      ],
+      "manifestEntries": 16,
+      "payloadNames": [
+        "catalog-key-backfill-report-v0.1.md",
+        "catalog-rebind-report-v0.2.md",
+        "catalog-rebind-report-v0.4.md",
+        "catalog-registration-summary-v0.1.md",
+        "catalog-source-reference-v0.1.md",
+        "hf-conformance-qualification.json",
+        "isolated-runtime-constraints.txt",
+        "logical-query-abi.json",
+        "managed-grants-qualification-evidence.tar.gz",
+        "managed-grants-qualification.json",
+        "migration-qualification-evidence.tar.gz",
+        "migration-qualification.json",
+        "release-pins.json",
+        "truss-hf-conformance-0.0.49.zip",
+        "truss_toolkit-0.0.49-py3-none-any.whl",
+        "truss_toolkit-0.0.49.tar.gz"
+      ],
+      "payloadSha256": {
+        "catalog-key-backfill-report-v0.1.md": "fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50",
+        "catalog-rebind-report-v0.2.md": "14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942",
+        "catalog-rebind-report-v0.4.md": "38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4",
+        "catalog-registration-summary-v0.1.md": "674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945",
+        "catalog-source-reference-v0.1.md": "41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7",
+        "hf-conformance-qualification.json": "e070e85eba61c255567c5d24bbfe11ba8f61cfce705417c93a1a7860d87158f0",
+        "isolated-runtime-constraints.txt": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+        "logical-query-abi.json": "8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96",
+        "managed-grants-qualification-evidence.tar.gz": "26f1a786ca103c7630e8b433d0d552c9e04457c13a8e5ad86e43d366bc0b5a00",
+        "managed-grants-qualification.json": "e782a4b93e52dfa604ca1aee5167fecd321891c9a9c28ba7cb3e282748703437",
+        "migration-qualification-evidence.tar.gz": "46b66c297b81caa81883eea3799ec616f26c1345c263e36bbedf2000b7a2618b",
+        "migration-qualification.json": "1fa17cb02f51e2a44f30015342d59c2a51da83bb47ab62634fdb00e56bec5878",
+        "release-pins.json": "d75df322ea0508c43a2c22d5ac667e9d155b17243feecd049920dba8c7acb70f",
+        "truss-hf-conformance-0.0.49.zip": "ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6",
+        "truss_toolkit-0.0.49-py3-none-any.whl": "7ea14b2787f02cbeec9ad99d835adbcc30c684fd5be8e0765a1d8198b50e7182",
+        "truss_toolkit-0.0.49.tar.gz": "34ec940aa5ffac7466c1c73cd8cd330e82630d0901023cfe2cba3d353154570a"
+      },
+      "sha256SumsSha256": "8852b526aef5d88173e768c0182dbfbb18234902fc7003f4ffeba525b35b3de4"
+    },
+    "trussAssetSha256": {
+      "catalog-key-backfill-report-v0.1.md": "fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50",
+      "catalog-rebind-report-v0.2.md": "14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942",
+      "catalog-rebind-report-v0.4.md": "38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4",
+      "catalog-registration-summary-v0.1.md": "674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945",
+      "catalog-source-reference-v0.1.md": "41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7",
+      "hf-conformance-qualification.json": "e070e85eba61c255567c5d24bbfe11ba8f61cfce705417c93a1a7860d87158f0",
+      "isolated-runtime-constraints.txt": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+      "logical-query-abi.json": "8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96",
+      "managed-grants-qualification-evidence.tar.gz": "26f1a786ca103c7630e8b433d0d552c9e04457c13a8e5ad86e43d366bc0b5a00",
+      "managed-grants-qualification.json": "e782a4b93e52dfa604ca1aee5167fecd321891c9a9c28ba7cb3e282748703437",
+      "migration-qualification-evidence.tar.gz": "46b66c297b81caa81883eea3799ec616f26c1345c263e36bbedf2000b7a2618b",
+      "migration-qualification.json": "1fa17cb02f51e2a44f30015342d59c2a51da83bb47ab62634fdb00e56bec5878",
+      "release-pins.json": "d75df322ea0508c43a2c22d5ac667e9d155b17243feecd049920dba8c7acb70f",
+      "truss-hf-conformance-0.0.49.zip": "ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6",
+      "truss_toolkit-0.0.49-py3-none-any.whl": "7ea14b2787f02cbeec9ad99d835adbcc30c684fd5be8e0765a1d8198b50e7182",
+      "truss_toolkit-0.0.49.tar.gz": "34ec940aa5ffac7466c1c73cd8cd330e82630d0901023cfe2cba3d353154570a"
+    },
+    "weft": {
+      "assetNames": [
+        "SHA256SUMS",
+        "packaging-aarch64-apple-darwin.json",
+        "packaging-x86_64-unknown-linux-gnu.json",
+        "release-pins.json",
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "checksumPayloadNames": [
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "manifestAssetNames": [
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "manifestEntries": 3,
+      "payloadNames": [
+        "packaging-aarch64-apple-darwin.json",
+        "packaging-x86_64-unknown-linux-gnu.json",
+        "release-pins.json",
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "payloadSha256": {
+        "packaging-aarch64-apple-darwin.json": "a15ae959b0e42840473bd58ce61e0752248e241b6b1c65c34e4c1a59b3907ff3",
+        "packaging-x86_64-unknown-linux-gnu.json": "0e2ecca911a768ff679fbe0a3ab4d387cae7b22b64a8c202d6db7c8c92506606",
+        "release-pins.json": "aceaf8be26a0b652b88f048a89ea4ee9475a2e7e0c7c89b2a2a8fae071eff36d",
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5"
+      },
+      "publicApiAssetNames": [
+        "SHA256SUMS",
+        "local-macos-qualification.json",
+        "packaging-aarch64-apple-darwin.json",
+        "packaging-aarch64-unknown-linux-gnu.json",
+        "packaging-x86_64-unknown-linux-gnu.json",
+        "release-pins.json",
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "selectedEntries": 5,
+      "selectionIsComplete": true,
+      "sha256SumsSha256": "62c9d8082eb2f446446d7b94ff7ef7f48769e3cd836e5641c2951069302a6c75"
+    },
+    "weftAssetSha256": {
+      "packaging-aarch64-apple-darwin.json": "a15ae959b0e42840473bd58ce61e0752248e241b6b1c65c34e4c1a59b3907ff3",
+      "packaging-x86_64-unknown-linux-gnu.json": "0e2ecca911a768ff679fbe0a3ab4d387cae7b22b64a8c202d6db7c8c92506606",
+      "release-pins.json": "aceaf8be26a0b652b88f048a89ea4ee9475a2e7e0c7c89b2a2a8fae071eff36d",
+      "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+      "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5"
+    }
+  },
+  "publicAssetSha256": {
+    "runtime": {
+      "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649"
+    },
+    "truss": {
+      "catalog-key-backfill-report-v0.1.md": "fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50",
+      "catalog-rebind-report-v0.2.md": "14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942",
+      "catalog-rebind-report-v0.4.md": "38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4",
+      "catalog-registration-summary-v0.1.md": "674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945",
+      "catalog-source-reference-v0.1.md": "41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7",
+      "hf-conformance-qualification.json": "e070e85eba61c255567c5d24bbfe11ba8f61cfce705417c93a1a7860d87158f0",
+      "isolated-runtime-constraints.txt": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+      "logical-query-abi.json": "8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96",
+      "managed-grants-qualification-evidence.tar.gz": "26f1a786ca103c7630e8b433d0d552c9e04457c13a8e5ad86e43d366bc0b5a00",
+      "managed-grants-qualification.json": "e782a4b93e52dfa604ca1aee5167fecd321891c9a9c28ba7cb3e282748703437",
+      "migration-qualification-evidence.tar.gz": "46b66c297b81caa81883eea3799ec616f26c1345c263e36bbedf2000b7a2618b",
+      "migration-qualification.json": "1fa17cb02f51e2a44f30015342d59c2a51da83bb47ab62634fdb00e56bec5878",
+      "release-pins.json": "d75df322ea0508c43a2c22d5ac667e9d155b17243feecd049920dba8c7acb70f",
+      "truss-hf-conformance-0.0.49.zip": "ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6",
+      "truss_toolkit-0.0.49-py3-none-any.whl": "7ea14b2787f02cbeec9ad99d835adbcc30c684fd5be8e0765a1d8198b50e7182",
+      "truss_toolkit-0.0.49.tar.gz": "34ec940aa5ffac7466c1c73cd8cd330e82630d0901023cfe2cba3d353154570a"
+    },
+    "weft": {
+      "packaging-aarch64-apple-darwin.json": "a15ae959b0e42840473bd58ce61e0752248e241b6b1c65c34e4c1a59b3907ff3",
+      "packaging-x86_64-unknown-linux-gnu.json": "0e2ecca911a768ff679fbe0a3ab4d387cae7b22b64a8c202d6db7c8c92506606",
+      "release-pins.json": "aceaf8be26a0b652b88f048a89ea4ee9475a2e7e0c7c89b2a2a8fae071eff36d",
+      "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+      "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5"
+    }
+  },
+  "publicAssets": {
+    "runtime": {
+      "assetNames": [
+        "SHA256SUMS",
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl"
+      ],
+      "checksumPayloadNames": [
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl"
+      ],
+      "manifestAssetNames": [
+        "pgserver_pg18-18.6.1-cp310-cp310-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "manifestEntries": 12,
+      "payloadNames": [
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl"
+      ],
+      "payloadSha256": {
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649"
+      },
+      "publicApiAssetNames": [
+        "SHA256SUMS",
+        "pgserver_pg18-18.6.1-cp310-cp310-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-macosx_14_0_arm64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "pgserver_pg18-18.6.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "selectedEntries": 1,
+      "selectionIsComplete": true,
+      "sha256SumsSha256": "b192171fed9c463e57605903de03c164722a440cd4eae9dacc50fafe5806841f"
+    },
+    "truss": {
+      "assetNames": [
+        "SHA256SUMS",
+        "catalog-key-backfill-report-v0.1.md",
+        "catalog-rebind-report-v0.2.md",
+        "catalog-rebind-report-v0.4.md",
+        "catalog-registration-summary-v0.1.md",
+        "catalog-source-reference-v0.1.md",
+        "hf-conformance-qualification.json",
+        "isolated-runtime-constraints.txt",
+        "logical-query-abi.json",
+        "managed-grants-qualification-evidence.tar.gz",
+        "managed-grants-qualification.json",
+        "migration-qualification-evidence.tar.gz",
+        "migration-qualification.json",
+        "release-pins.json",
+        "truss-hf-conformance-0.0.49.zip",
+        "truss_toolkit-0.0.49-py3-none-any.whl",
+        "truss_toolkit-0.0.49.tar.gz"
+      ],
+      "manifestEntries": 16,
+      "payloadNames": [
+        "catalog-key-backfill-report-v0.1.md",
+        "catalog-rebind-report-v0.2.md",
+        "catalog-rebind-report-v0.4.md",
+        "catalog-registration-summary-v0.1.md",
+        "catalog-source-reference-v0.1.md",
+        "hf-conformance-qualification.json",
+        "isolated-runtime-constraints.txt",
+        "logical-query-abi.json",
+        "managed-grants-qualification-evidence.tar.gz",
+        "managed-grants-qualification.json",
+        "migration-qualification-evidence.tar.gz",
+        "migration-qualification.json",
+        "release-pins.json",
+        "truss-hf-conformance-0.0.49.zip",
+        "truss_toolkit-0.0.49-py3-none-any.whl",
+        "truss_toolkit-0.0.49.tar.gz"
+      ],
+      "payloadSha256": {
+        "catalog-key-backfill-report-v0.1.md": "fc2617cbd710b34f30051b6936a57b47b535b2e9082300f2c2473e4a6fcbec50",
+        "catalog-rebind-report-v0.2.md": "14e3a6d1ee0e0334249b29913b78367dbfd94a90a88e386d507476f36b0da942",
+        "catalog-rebind-report-v0.4.md": "38fffeb0f864ae4e19cc265471b79f5e10bde738d1b9ef6cf4dcd94c1528cbf4",
+        "catalog-registration-summary-v0.1.md": "674575473324a81eae73ba2af1772ec4fea5f1643e5b76a808bb2ef5798b6945",
+        "catalog-source-reference-v0.1.md": "41721077342c4fb4b7fddcd760c4c1ca5984984347c361bc74d85124a049ffa7",
+        "hf-conformance-qualification.json": "e070e85eba61c255567c5d24bbfe11ba8f61cfce705417c93a1a7860d87158f0",
+        "isolated-runtime-constraints.txt": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+        "logical-query-abi.json": "8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96",
+        "managed-grants-qualification-evidence.tar.gz": "26f1a786ca103c7630e8b433d0d552c9e04457c13a8e5ad86e43d366bc0b5a00",
+        "managed-grants-qualification.json": "e782a4b93e52dfa604ca1aee5167fecd321891c9a9c28ba7cb3e282748703437",
+        "migration-qualification-evidence.tar.gz": "46b66c297b81caa81883eea3799ec616f26c1345c263e36bbedf2000b7a2618b",
+        "migration-qualification.json": "1fa17cb02f51e2a44f30015342d59c2a51da83bb47ab62634fdb00e56bec5878",
+        "release-pins.json": "d75df322ea0508c43a2c22d5ac667e9d155b17243feecd049920dba8c7acb70f",
+        "truss-hf-conformance-0.0.49.zip": "ae5726d745e6ce52f1229ad1d1b46ca6a5ff55d8cb0bb0aa73751f2dd8fd0eb6",
+        "truss_toolkit-0.0.49-py3-none-any.whl": "7ea14b2787f02cbeec9ad99d835adbcc30c684fd5be8e0765a1d8198b50e7182",
+        "truss_toolkit-0.0.49.tar.gz": "34ec940aa5ffac7466c1c73cd8cd330e82630d0901023cfe2cba3d353154570a"
+      },
+      "sha256SumsSha256": "8852b526aef5d88173e768c0182dbfbb18234902fc7003f4ffeba525b35b3de4"
+    },
+    "weft": {
+      "assetNames": [
+        "SHA256SUMS",
+        "packaging-aarch64-apple-darwin.json",
+        "packaging-x86_64-unknown-linux-gnu.json",
+        "release-pins.json",
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "checksumPayloadNames": [
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "manifestAssetNames": [
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "manifestEntries": 3,
+      "payloadNames": [
+        "packaging-aarch64-apple-darwin.json",
+        "packaging-x86_64-unknown-linux-gnu.json",
+        "release-pins.json",
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "payloadSha256": {
+        "packaging-aarch64-apple-darwin.json": "a15ae959b0e42840473bd58ce61e0752248e241b6b1c65c34e4c1a59b3907ff3",
+        "packaging-x86_64-unknown-linux-gnu.json": "0e2ecca911a768ff679fbe0a3ab4d387cae7b22b64a8c202d6db7c8c92506606",
+        "release-pins.json": "aceaf8be26a0b652b88f048a89ea4ee9475a2e7e0c7c89b2a2a8fae071eff36d",
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5"
+      },
+      "publicApiAssetNames": [
+        "SHA256SUMS",
+        "local-macos-qualification.json",
+        "packaging-aarch64-apple-darwin.json",
+        "packaging-aarch64-unknown-linux-gnu.json",
+        "packaging-x86_64-unknown-linux-gnu.json",
+        "release-pins.json",
+        "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+        "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      ],
+      "selectedEntries": 5,
+      "selectionIsComplete": true,
+      "sha256SumsSha256": "62c9d8082eb2f446446d7b94ff7ef7f48769e3cd836e5641c2951069302a6c75"
+    }
+  },
+  "publicWeftTagCommit": "d4b0b98507ae15bd98180a2ea2030ea92ce11d96",
+  "publishedNativePlatforms": [
+    "linux-x86_64"
+  ],
+  "releasePinsSha256": "d75df322ea0508c43a2c22d5ac667e9d155b17243feecd049920dba8c7acb70f",
+  "releasedRuntimeReceipt": "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/mg49-public-published-049-verification-2/receipt.json",
+  "releasedRuntimeReceiptSha256": "12c2e67eef660c01d2dd2ba3b29e3905b02e38aee9998ddbdb35aaf83dbff41d",
+  "runtimeDirectUrl": "https://github.com/DocumentDrivenDX/pgserver/releases/download/pg18.6-pgv0.8.6-r2/pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+  "runtimeWheel": "pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+  "scope": "Actual published v0.0.49 assets; complete Truss API inventory; selected Mac PostgreSQL and Mac/Linux Weft public assets with complete SHA256SUMS coverage; Linux release pins checked against the Linux wheel; Mac ARM64 local install and HF62; actual Lakebase acceptance is not run.",
+  "sourceCommit": "dd13e95804abc30202d449a756240c6a684ab942",
+  "sourceInputBasis": {
+    "packages/python/pyproject.toml": "e403b00de1b2604029b116968d78db051b07dd22d155019756dd0cf0092a9dc6",
+    "packages/python/src/truss/_catalog_runtime/manifest.json": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+    "packages/python/src/truss/_current_query_originals.py": "7e699690ab328b5222858dab06e9b3ceffe2eef1b0979e98846bf6dbfa3630b7",
+    "packages/python/src/truss/_migrations/manifest.json": "96addcdb95523f478d8f50b0b47198e47a860680c7400dd359711930e837e535",
+    "packages/python/src/truss/_profiles/local-postgres-runtime.json": "9cbe351f9357213b2918fed12380f57daf93551be41c611138b5b94916146bae",
+    "scripts/check-native-worker-fixtures.py": "7f8f48f794fe8c6a56b3d6f25a1d80ce3482fe9367c30a6806692d2a2e49b97f",
+    "scripts/check-released-runtime.py": "b19c4420e6f8049ad695fe7f5646fed71a6b6f22269b380fa219708dd0803b23",
+    "scripts/native_fixture.py": "1f130fab83c0f931ce8b8b0a4f18e323e053c3dfc38a5cc529e1d60f5b2cda88",
+    "scripts/released_runtime_validation.py": "ba8cdfd0f316ccd982c1b6a5ad408cd53739d5f006dcc67d2ca308e1110eafc9",
+    "scripts/run-hf-conformance.py": "41aedcd99999f60b18cba7e62d6ec5396bf09bdaaaa74a8165268df8f93b3d07",
+    "scripts/run-python-test-module.py": "0d6f19afcc764d1ba27e53ae5192881bbf770c8b5617d4f81c75f9609df60b92",
+    "scripts/verify-weft-release-wheel.py": "b0fe98d592be8e95c430cad2db80331ec3dbb1f6ce6d6b7aa89f95f87f76f65a"
+  },
+  "startedAt": 1792712722.498073,
+  "steps": [
+    {
+      "command": [
+        "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/bin/python3.11",
+        "/Users/erik/Projects/truss/scripts/verify-weft-release-wheel.py",
+        "/private/tmp/truss-managed-grants-049/public-weft-051/selected/weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "--source",
+        "/Users/erik/Projects/truss/packages/python/src/truss/_current_query_originals.py"
+      ],
+      "cwd": "/Users/erik/Projects/truss",
+      "log": "verify-weft-public-wheel-macos-arm64.log",
+      "logSha256": "3ac298d17e422d8f2434e4afdf8fc15100f202b4bbf92d0c00a53ecdd5eaa250",
+      "name": "verify-weft-public-wheel-macos-arm64",
+      "returncode": 0,
+      "seconds": 0.13478899002075195,
+      "timedOut": false
+    },
+    {
+      "command": [
+        "/Users/erik/.local/share/uv/python/cpython-3.11.17-macos-aarch64-none/bin/python3.11",
+        "/Users/erik/Projects/truss/scripts/verify-weft-release-wheel.py",
+        "/private/tmp/truss-managed-grants-049/public-weft-051/selected/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "--source",
+        "/Users/erik/Projects/truss/packages/python/src/truss/_current_query_originals.py"
+      ],
+      "cwd": "/Users/erik/Projects/truss",
+      "log": "verify-weft-public-wheel-linux-x86_64.log",
+      "logSha256": "56ff63743bdd96443c407b390138a6505ef4f6bd04293f06b009295ab267b349",
+      "name": "verify-weft-public-wheel-linux-x86_64",
+      "returncode": 0,
+      "seconds": 0.1276109218597412,
+      "timedOut": false
+    },
+    {
+      "command": [
+        "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--only-binary=:all:",
+        "--no-deps",
+        "https://github.com/DocumentDrivenDX/pgserver/releases/download/pg18.6-pgv0.8.6-r2/pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl#sha256=fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649"
+      ],
+      "cwd": "/Users/erik/Projects/truss",
+      "log": "install-public-runtime-direct-url.log",
+      "logSha256": "2e5c13a331e971ecd66f4364d6cf060327d62783b53d598592d4691030275a39",
+      "name": "install-public-runtime-direct-url",
+      "returncode": 0,
+      "seconds": 8.01471996307373,
+      "timedOut": false
+    },
+    {
+      "command": [
+        "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--only-binary=:all:",
+        "--no-deps",
+        "/private/tmp/truss-managed-grants-049/public-weft-051/selected/weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl"
+      ],
+      "cwd": "/Users/erik/Projects/truss",
+      "log": "install-exact-public-macos-arm64-weft-wheel.log",
+      "logSha256": "89c7c775fd6ac778aa5b8d9d7054a6e539cad3bf8ddc52c6f80482d398f1ef2c",
+      "name": "install-exact-public-macos-arm64-weft-wheel",
+      "returncode": 0,
+      "seconds": 1.6000170707702637,
+      "timedOut": false
+    },
+    {
+      "command": [
+        "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--only-binary=:all:",
+        "/private/tmp/truss-managed-grants-049/public-049/all/truss_toolkit-0.0.49-py3-none-any.whl[local,native,experimental-pg8000,query]"
+      ],
+      "cwd": "/Users/erik/Projects/truss",
+      "log": "install-public-truss-wheel-and-pinned-dependencies.log",
+      "logSha256": "f934e1f75f73fdcc19fc32d8c056938ce8040553c4cc98e6f9bced2187e240e1",
+      "name": "install-public-truss-wheel-and-pinned-dependencies",
+      "returncode": 0,
+      "seconds": 4.222879886627197,
+      "timedOut": false
+    },
+    {
+      "command": [
+        "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/bin/python",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "cwd": "/Users/erik/Projects/truss",
+      "log": "pip-check.log",
+      "logSha256": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+      "name": "pip-check",
+      "returncode": 0,
+      "seconds": 1.1239969730377197,
+      "timedOut": false
+    },
+    {
+      "command": [
+        "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/bin/python",
+        "-c",
+        "import hashlib,importlib,importlib.metadata,json,sys,zipfile\nfrom pathlib import Path\nrows={}\nfor wheel,pkgname in ((Path(sys.argv[1]),'pgserver'),(Path(sys.argv[2]),'truss'),(Path(sys.argv[3]),'weft')):\n module=importlib.import_module(pkgname);loaded=Path(module.__file__).resolve().parent\n prefix=pkgname+'/'\n with zipfile.ZipFile(wheel) as z:expected={n[len(prefix):]:hashlib.sha256(z.read(n)).hexdigest() for n in z.namelist() if n.startswith(prefix) and not n.endswith('/')}\n actual={p.relative_to(loaded).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in loaded.rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.suffix not in ('.pyc','.pyo')}\n if expected!=actual:raise SystemExit('whole installed payload differs: '+pkgname)\n rows[pkgname]={'path':str(loaded),'files':len(actual),'payloadSha256':hashlib.sha256(json.dumps(actual,sort_keys=True,separators=(',',':')).encode()).hexdigest()}\nimport weft,weft.weft as native\nfrom truss._runtime_profile import RUNTIME_DISTRIBUTION,RUNTIME_VERSION\nfrom truss._current_query_originals import _actual_consumer\ncompiler_sha=hashlib.sha256(Path(native.__file__).read_bytes()).hexdigest();cohort=_actual_consumer()\nif cohort['weftModuleSha256']!=compiler_sha:raise SystemExit('installed compiler cohort mismatch')\nrows['identities']={'trussVersion':importlib.metadata.version('truss-toolkit'),'runtimeDistribution':RUNTIME_DISTRIBUTION,'runtimeVersion':importlib.metadata.version(RUNTIME_DISTRIBUTION),'selectedRuntimeVersion':RUNTIME_VERSION,'weftVersion':importlib.metadata.version('weft-sql'),'weftModulePath':native.__file__,'weftModuleSha256':compiler_sha,'weftCohort':cohort}\nprint(json.dumps(rows,sort_keys=True))",
+        "/private/tmp/truss-managed-grants-049/final-clean-environment/pgserver/pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+        "/private/tmp/truss-managed-grants-049/public-049/all/truss_toolkit-0.0.49-py3-none-any.whl",
+        "/private/tmp/truss-managed-grants-049/public-weft-051/selected/weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl"
+      ],
+      "cwd": "/Users/erik/Projects/truss",
+      "log": "verify-installed-whole-wheel-payloads.log",
+      "logSha256": "3b0b67afa887a0c4f922f82f52bfe472e0b8f45e5f44947d8c5e2390ae84aa8f",
+      "name": "verify-installed-whole-wheel-payloads",
+      "returncode": 0,
+      "seconds": 5.03340220451355,
+      "timedOut": false
+    },
+    {
+      "command": [
+        "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/bin/python",
+        "/Users/erik/Projects/truss/scripts/check-released-runtime.py",
+        "/private/tmp/truss-managed-grants-049/final-clean-environment/pgserver/pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+        "/private/tmp/truss-managed-grants-049/public-049/all/truss_toolkit-0.0.49-py3-none-any.whl",
+        "/private/tmp/truss-managed-grants-049/final-clean-environment/pgserver/SHA256SUMS",
+        "--run-id",
+        "mg49-public-published-049-verification-2",
+        "--truss-checksums",
+        "/private/tmp/truss-managed-grants-049/public-049/all/SHA256SUMS"
+      ],
+      "cwd": "/Users/erik/Projects/truss",
+      "log": "check-released-runtime-public.log",
+      "logSha256": "f330a5ae1ad7c4fb557c59ec1838a62481f334fe1f15f0e5ca7a3628409b4226",
+      "name": "check-released-runtime-public",
+      "returncode": 0,
+      "seconds": 22.488937377929688,
+      "timedOut": false
+    },
+    {
+      "command": [
+        "/private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/bin/python",
+        "/private/tmp/truss-managed-grants-049/published-049-verification-2/hf-standalone/scripts/run-hf-conformance.py",
+        "--installed-package",
+        "--output",
+        "/private/tmp/truss-managed-grants-049/published-049-verification-2/hf-qualification.json"
+      ],
+      "cwd": "/private/tmp/truss-managed-grants-049/published-049-verification-2/hf-standalone",
+      "log": "hf62-public-archive.log",
+      "logSha256": "cf8cfaa7ee0bbba0e221e7ecc5ea9713a9038f638fa588761916c3f8bcde1e56",
+      "name": "hf62-public-archive",
+      "returncode": 0,
+      "seconds": 161.22664189338684,
+      "timedOut": false
+    }
+  ],
+  "trussWheel": "truss_toolkit-0.0.49-py3-none-any.whl",
+  "weftSourceFreezeRevision": "557153731e9f5d0583193a1189a07c6ed485d3d3"
+}

@@ -478,11 +478,10 @@ the exact typed tuple and named refusal, select its exact wheel/native tuple,
 and qualify its actual Lakebase TLS/token/transaction behavior and required
 protected features. Those external receipts remain open.
 
-Concurrent HF changes have been composed into the frozen candidate; the original
-assessment anchors are historical context. This documentation ownership covers
-the listed governing documents and plan only. Runtime source and qualification
-outputs have their separate owners. No release tag or publication is authorized
-by this local qualification.
+Concurrent HF changes were composed into the frozen candidate; the original
+assessment anchors are historical context. Local qualification alone did not
+authorize publication. The owner subsequently authorized the release; its exact
+current public status is recorded in the release execution and closeout below.
 
 ## v0.0.49 release execution — 2026-10-22
 
@@ -496,7 +495,8 @@ The active [operator guide](../../../packages/python/README.md#runtime-migration
 selects v0.0.49 in pip, example-tag and isolated `uvx`/constraints commands.
 Its commands require the matching qualified public assets and tag. The historical
 v0.0.48 follow-up section and migration link alias remain intact. Actual public
-source48 admission is complete; final v0.0.49 release receipts remain pending.
+source48 admission is complete. The v0.0.49 release is published and its
+exact tag/public verification is retained in [public release proof](evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json).
 
 The integrated source retains the newer HF62 corpus, exact public Weft0.4.51
 cohorts from source `557153731e9f5d0583193a1189a07c6ed485d3d3`, reproducible archive
@@ -526,7 +526,8 @@ managed/portable producer overrides, v0.0.49 toolkit version, native35fd and
 managed release gates are preserved. Final Truss qualification must use the
 new public compiler bytes. The historical35fd installed macOS campaign below passes for its recorded
 artifact. Current native2888 installed macOS ARM64 and hosted branch Linux
-qualification pass below; final tag and public verification remain pending.
+qualification pass below; this candidate checkpoint preceded the final tag
+and public verification retained in [public release proof](evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json).
 
 The [public v0.0.48 integrity receipt](evidence/design-audit/managed-grants-release-049-20261022/dependencies/public-truss-048/verification.json)
 binds its published wheel SHA-256
@@ -575,8 +576,8 @@ outer log hashes and all 20 managed module log hashes. Worker cleanup and the
 local producer's unchanged-input/payload/identity controls pass. The
 [retained-file index](evidence/design-audit/managed-grants-release-049-20261022/final-local/retained-files.json)
 binds the 56 original outputs retained losslessly. This is local acceptance of
-the recorded artifact and platform; hosted Linux and public verification remain
-separate requirements.
+the recorded artifact and platform. The later hosted tag Linux campaign and
+public verification are retained in [public release proof](evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json).
 
 The [first Linux failure](evidence/design-audit/managed-grants-release-049-20261022/linux-attempt-1/receipt.json)
 preserves the two source48 rollback-test failures caused by fault injectors that
@@ -643,11 +644,11 @@ unrun/unqualified status.
 
 | Release slice | Required result | Current state |
 | --- | --- | --- |
-| Integrate and version | Preserve the HF baseline and select v0.0.49 with its own notes | Source integration and version selection complete; [release draft](releases/v0.0.49.md) prepared |
+| Integrate and version | Preserve the HF baseline and select v0.0.49 with its own notes | Complete; [released notes](releases/v0.0.49.md) and the published artifact identities are retained in [public release proof](evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json) |
 | Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Complete: actual public wheel integrity and paired native initializer captures; [admission receipt](evidence/design-audit/managed-grants-release-049-20261022/source48-admission/receipt.json). Current2888 macOS and branch Linux 106-case campaigns pass below |
 | Freeze and review | Build final wheel/sdist/archive; verify exact runtime payload, historical bytes, compiler cohort, source boundaries and final diff | Current2888 wheel57fd, archiveae57, migration96add and historical bytes reviewed; exact installed Mac and branch Linux campaigns pass |
-| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Current manifest `288801f7…` macOS campaign at commit `19d7bbe5` passes 130/62/9/106 tests, lifecycle and workload; [receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/qualification.json). Commit `4188141f` branch Linux also passes; final tag/public gates remain pending |
-| Hosted release and public verification | Mandatory Linux package/native campaign passes, then tag/asset/source pins and public downloads agree | Full source4188 branch Linux passes; tag campaign and public verification pending, with no v0.0.49 publication claimed |
+| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Complete for published native manifest `288801f7…`: selected Mac ARM64 installed campaign and branch Linux campaign pass 21-module/130-test managed controls, HF62, 106 migration/recovery tests, lifecycle/protected controls and workload. See the [Mac receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/qualification.json), [Linux receipt](evidence/design-audit/managed-grants-release-049-20261022/linux-2888-branch/receipt.json), and [public release proof](evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json) |
+| Hosted release and public verification | Mandatory Linux package/native campaign passes, then tag/asset/source pins and public downloads agree | Complete: tag `v0.0.49` at `dd13e95804abc30202d449a756240c6a684ab942`, mandatory hosted Linux release workflow, public API asset digests/checksums and independent installed Mac ARM64 verifier agree; see [public release proof](evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json) |
 
 Actual Arras/Lakebase TLS/token/workflow acceptance remains a separate deployment
 qualification. The package may describe the explicit policy and locally proven
@@ -658,11 +659,13 @@ wheel hashes to the new release.
 
 ## Exit criteria
 
-Planning, implementation and the earlier explicitly selected local qualification
-are complete for their recorded candidate. The authorized v0.0.49 release remains
-pending until tag/final artifact review, the mandatory exact-tag Linux campaign
-and public-artifact verification pass. Current native2888 source19 macOS and
-source4188 hosted branch Linux campaigns pass, including complete local lineage.
+Planning, implementation, Truss release qualification and publication of
+v0.0.49 are complete for the exact artifacts retained in the [public release proof](evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json). The tag
+campaign and independent public verifier bind the published assets and source.
+Truss has completed its MG-5 release slice; Arras consumer forwarding/adoption
+and actual Lakebase TLS, token and transaction acceptance remain separate open
+work. The selected Mac ARM64 and hosted Linux proofs do not establish full-engine
+or all-discovery qualification.
 The source628/native35fd macOS campaign remains historical. Actual public
 v0.0.48 input integrity and additive route admission are complete. The historical all-discovery
 diagnostic remains unqualified outside that supported release campaign. Actual
@@ -707,7 +710,8 @@ semantic controls. HF keeps all 62 cases, limits and compiler cohorts; all 363
 existing producer digests remain unchanged and the new test producer makes 364.
 Native capture/packaging and one-case diagnosis are complete. New exact-artifact
 Mac/Linux/corpus/lineage/lifecycle/workload qualification now passes below.
-The final tag and public verification remain pending; no publication is claimed.
+At this earlier candidate checkpoint, the final tag and public verification
+were pending; the later completed status is retained in [public release proof](evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json).
 
 ### Hosted branch Linux qualification — native2888
 
@@ -736,7 +740,7 @@ three original binary artifacts. This is complete branch Linux qualification
 for the recorded source/artifacts, not publication: the publish job is skipped
 on that branch run. The diagnostic-trigger-only follow-up does not change the
 runtime/test/recipe basis. Current2888 full macOS qualification also passes below;
-final tag Linux campaign and public-download verification remain pending. Earlier failed runs
+the later tag Linux campaign and public-download verification are retained in [public release proof](evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json). Earlier failed runs
 and source628/native35fd local receipts keep their original scopes.
 
 ### Current installed macOS ARM64 qualification — native manifest `288801f7…`
@@ -764,9 +768,10 @@ binds 53 original outputs retained losslessly. [Scoped cleanup](evidence/design-
 confirms no campaign-owned or newly created PostgreSQL process remains;
 unrelated pre-existing servers were outside custody and unchanged. The
 [retention statement](evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/retention.json)
-records that exact branch wheel/sdist/archive containers are private or held in
-GitHub artifacts subject to retention limits, rather than permanent public
-release assets. Their hashes and payload identities remain durable. Final tag
-Linux and independent public-download verification are still required; these
-selected platform results make no publication, full-engine, broad discovery,
-general p95 or actual Lakebase/Arras acceptance claim.
+records that the exact branch wheel/sdist/archive containers are private or held
+in GitHub artifacts subject to retention limits. Their hashes and payload
+identities remain durable, distinct from the published identities in [public release proof](evidence/design-audit/managed-grants-release-049-20261022/published-0.0.49/receipt.json).
+This earlier branch record did not claim publication. The later tag Linux and
+public-download verification are retained in the proof; these selected platform
+results make no full-engine, broad discovery, general p95 or actual Lakebase/Arras
+acceptance claim.

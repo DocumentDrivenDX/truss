@@ -1,0 +1,7 @@
+{
+  "scope": "Only retry2 pgserver PostgreSQL executables and checker-owned process markers; unrelated PostgreSQL excluded",
+  "checkedAt": 1792712943.4795148,
+  "passed": true,
+  "remainingOwnedPostgres": [],
+  "helperCompletedAt": 1792712932.795802
+}

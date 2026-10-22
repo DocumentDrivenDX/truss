@@ -1,0 +1,6 @@
+Processing /private/tmp/truss-managed-grants-049/public-weft-051/selected/weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl
+Installing collected packages: weft-sql
+Successfully installed weft-sql-0.4.51
+
+[notice] A new release of pip is available: 24.0 -> 26.2.2
+[notice] To update, run: /private/tmp/truss-managed-grants-049/published-049-verification-2/public-venv/bin/python -m pip install --upgrade pip
