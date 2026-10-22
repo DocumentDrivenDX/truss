@@ -869,6 +869,42 @@ This closes only the local full-workspace gate for those source bytes. Hosted
 Linux conformance, browser/native packaging, installed Truss adoption, publication
 and public-release gates remain separate and are not credited from this run.
 
+### Selected Weft full-workspace follow-up — 2026-10-22
+
+The preceding full-workspace pass is evidence for integration source
+`6e1b64a750c6db15c52ad2aac9ba9afc0b38d02a`; it does not close the selected
+Weft 0.4.51 source release gate. A later selected-source candidate run at
+`84bde6e6f1ebe406cf01f4b344c977739dbe0180`, with the restored historical B-001
+harness from `e43b7a8c`, failed one runtime `cfg(test)` assertion. Its retained
+B-006 request is UMF 0.7.0; the current envelope correctly returns `WFT-INPUT`
+without SQL, while the old test expected the historical compiled response.
+Selected Weft commit `56d5507c` corrects only that test expectation, retaining
+the old source request and golden unchanged. The original candidate log and the
+test correction are recorded in the [selected full-workspace evidence
+packet](evidence/hohfeld-followup-20261021/weft-full-workspace-arras-051-failure/README.md).
+
+The candidate attempt completed 42 result groups with 1,012 passed and one
+failed. The qualified attempt was deliberately stopped after 29 groups and 682
+passing tests; it has no terminal Cargo result and is not a pass. Both full
+selected-source variants must be rerun and exit successfully before a new final
+source freeze or final-source Mac/Linux build. The earlier `86c` Mac wheel and
+`616aa7b6` Linux packaging artifacts remain intact as historical evidence but
+are superseded as active final-release candidates. Do not transfer their
+compiler pins into Truss or claim a replacement binary/cohort from this update.
+
+After both suites pass, freeze the tested selected source, build the Mac wheel
+with the release workflow's Rust 1.90.0 and maturin 1.9.6 into a source-keyed
+fresh output directory, and use a dedicated `CARGO_TARGET_DIR` with
+`CARGO_INCREMENTAL=0`. Verify the exact wheel archive, RECORD, metadata, ABI,
+notices and embedded native-module digest with
+`scripts/release/verify-wheel-packaging.py`; retain the new wheel/native hashes
+and source correspondence without overwriting the `a21`/`86c` artifacts. Rebuild
+Linux only from the same new freeze, then refresh Truss's active source and Mac
+and Linux compiler cohort identities from those actual wheel bytes and rerun
+the installed-consumer and release gates. New builds, Truss pin changes, hosted
+overall conformance and public release remain pending; no new binary or release
+is credited here.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).
