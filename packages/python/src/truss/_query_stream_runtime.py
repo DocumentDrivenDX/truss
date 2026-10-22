@@ -167,7 +167,7 @@ def fetch_stream(assembly,transaction,handle,*,count,validate,operation_deadline
                 for index,t in zip(keys,types,strict=True):_page_key_token(row[index],t)
             _admit(cursor,state,pin_cursor)
             if _current(cursor,state,pin_cursor) != state.export:raise QueryStreamRefused(QueryRefused('stale_context'))
-            rows=QueryRows(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=json.loads(state.request['target']['bindingJson'])['catalogRevision'])
+            rows=QueryRows(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=json.loads(state.request['target']['bindingJson'])['catalogRevision'],column_descriptors=result.column_descriptors[:visible])
             validated=tuple(validate(rows))
             if len(validated)!=len(retained):raise ValueError('DTO validation must preserve native row count')
             _admit(cursor,state,pin_cursor)

@@ -191,3 +191,51 @@ class GroupRequestRecoveryNativeTests(fixtures.EdgeMutationTests):
         self.assertEqual(recovered.response.semantic,pending.response.semantic)
         self.assertEqual(recovered.group_id,pending.group_id)
         h2.detach();c2.commit();self.assertEqual(self.group_effect_counts(),before)
+
+    def expire_header_fixture(self):
+        """Administrator fixture only; this does not qualify an expiry writer."""
+        with self.assertRaises(psycopg.errors.ObjectNotInPrerequisiteState):
+            self.admin.execute("UPDATE truss.request_receipt SET lifecycle_generation=lifecycle_generation")
+        guards=self.admin.execute("SELECT tgname,tgenabled FROM pg_trigger WHERE tgrelid='truss.request_receipt'::regclass "
+            "AND tgfoid='truss.catalog_immutable()'::regprocedure ORDER BY tgname").fetchall()
+        self.assertTrue(guards);self.assertTrue(all(state in ('O','A') for _,state in guards))
+        # Seed the observer-only state atomically and restore every original
+        # immutable guard before another connection can observe the fixture.
+        with self.admin.transaction():
+            for name,_ in guards:
+                self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.request_receipt DISABLE TRIGGER {}').format(psycopg.sql.Identifier(name)))
+            self.admin.execute("UPDATE truss.request_receipt SET payload_state='expired',lifecycle_generation=1,"
+                "original_receipt_bytes=NULL,expired_identity_bytes=convert_to('{\"fixtureOnly\":true}','UTF8'),"
+                "expiry_writer_xid=pg_current_xact_id(),expiry_writer_context_bytes=convert_to('fixture-only','UTF8')")
+            for name,state in guards:
+                mode=psycopg.sql.SQL('ENABLE ALWAYS') if state=='A' else psycopg.sql.SQL('ENABLE')
+                self.admin.execute(psycopg.sql.SQL('ALTER TABLE truss.request_receipt {} TRIGGER {}').format(mode,psycopg.sql.Identifier(name)))
+        self.assertEqual(self.admin.execute("SELECT tgname,tgenabled FROM pg_trigger WHERE tgrelid='truss.request_receipt'::regclass "
+            "AND tgfoid='truss.catalog_immutable()'::regprocedure ORDER BY tgname").fetchall(),guards)
+
+    def test_selected_retention_denies_direct_mutation_and_expired_observer_never_reapplies(self):
+        c,h,a,t=self.ready(document_ids=('adoc',));semantic,request=self.input(a,t);frame=self.frame(semantic,request)
+        self.assertEqual(c.execute("SELECT has_table_privilege(session_user,'truss.request_receipt','UPDATE'),"
+            "has_table_privilege(session_user,'truss.request_receipt','DELETE')").fetchone(),(False,False))
+        self.assertIsInstance(a.apply_in_transaction(t,semantic,request,documents=self.documents).value,GroupSuccess)
+        h.detach();c.commit();self.expire_header_fixture();before=self.group_effect_counts()
+        header=self.admin.execute('SELECT to_jsonb(r) FROM truss.request_receipt r').fetchone()
+        c,h,a,t=self.consumer();result=self.recovery(a,t,frame)
+        self.assertIsInstance(result,GroupUnavailable);self.assertEqual(result.reason,'receipt_expired')
+        h.detach();c.commit();self.assertEqual(self.group_effect_counts(),before)
+        self.assertEqual(self.admin.execute('SELECT to_jsonb(r) FROM truss.request_receipt r').fetchone(),header)
+
+    def test_expired_header_does_not_disclose_retention_after_retained_writer_revocation(self):
+        c,h,a,t=self.ready();semantic,request=self.input(a,t);frame=self.frame(semantic,request)
+        self.assertIsInstance(a.apply_in_transaction(t,semantic,request,documents=self.documents).value,GroupSuccess)
+        h.detach();c.commit();self.expire_header_fixture()
+        for role in ('other_retention_reader','other_retention_writer'):
+            self.admin.execute(psycopg.sql.SQL('CREATE ROLE {} NOLOGIN').format(psycopg.sql.Identifier(role)))
+            self.addCleanup(self.admin.execute,psycopg.sql.SQL('DROP ROLE {}').format(psycopg.sql.Identifier(role)))
+        self.admin.execute('BEGIN');ah=adopt_psycopg_host(self.admin);at=ah.adopt_transaction().value;aa=create_reference_assembly(CatalogRuntimeConfiguration(),ah).value
+        self.assertIsInstance(aa.configure_module_access_in_transaction(at,(ModuleAccessGrant('zdoc','m','other_retention_reader','other_retention_writer'),)),Ok)
+        ah.detach();self.admin.commit()
+        self.admin.execute('GRANT other_retention_writer,group_reader TO consumer WITH SET FALSE');self.admin.execute('REVOKE group_writer FROM consumer')
+        c,h,a,t=self.consumer()
+        for frozen in (frame,self.frame(replace(semantic,asserted_origin=MapValue(entries=())),request)):
+            result=self.recovery(a,t,frozen);self.assertIsInstance(result,GroupFailed);self.assertIsInstance(result.failure,UnauthorizedPerson)

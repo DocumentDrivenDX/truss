@@ -31,6 +31,16 @@ back or safe-to-reapply. Existing apply/replay remains available when the caller
 retains its original complete input. The retained audit attempt supplies the stable
 group identity; no second identity service or journal reconstruction is selected.
 
+The selected ordinary runtime retains complete managed receipts indefinitely;
+it exposes no time-based payload-pruning or expiry-writer operation. Its policy
+therefore preserves the minimum replay window independently of journal retention.
+This is an implementation/policy claim, not an elapsed24-hour timing experiment.
+Native ordinary-writer ACL controls must deny direct receipt UPDATE/DELETE.
+An administrator-seeded expired-header fixture qualifies only the observer:
+return explicit expiry unavailability after retained-owner authorization and
+never reapply. It does not qualify a production expiry transition, clock,
+protection-generation or cleanup protocol. Those proposals below remain separate.
+
 
 ## Owner decisions — 2026-10-07
 

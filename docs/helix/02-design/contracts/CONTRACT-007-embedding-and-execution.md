@@ -56,6 +56,32 @@ package files in a running process is unsupported; restart after installation.
 This optimization MUST NOT cache database installation, schema, caller,
 permission, transaction or current-native-authority observations.
 
+## Selected query descriptors and entity facts — HF-04
+
+Ordinary `QueryRows` and `QueryPage` expose an ordered `column_descriptors` tuple
+with compiler-owned positions, labels, representations, source identities and
+the original type graph. These facts exist for empty and all-null results.
+Logical type/nullability, absent availability and native envelope permission
+remain distinct from physical SQL-carrier nullability. Retain unknown descriptor
+members in an immutable original mapping. Do not infer types from returned values
+or reinterpret SQL in Truss. The separately governed protected/current-query
+profiles retain their own descriptor contracts.
+
+An explicit immutable `QueryEntityProjection` selects an ordered unique tuple
+of the eight known native facts and whether automatic complete relationships
+are included. It selects Weft's `weft-truss-entity-read/0.4.0`; older read profiles
+retain their original output. The authored Record member projection stays
+complete. Omitting automatic relationships permits existing explicit bounded
+`RELATED_KEYS` with its truncation marker; selecting complete relationships keeps
+the 100-item whole-query refusal. Neither option silently cuts complete content.
+
+The same selection can accompany compiler-owned pages. Page continuations bind
+the selection alongside SQL, parameters, model/runtime, caller and resource
+context. Hidden sort columns and their descriptors are removed using original
+compiler positions. Current authorization, exact values and statement snapshot
+remain mandatory. This profile does not itself lift the existing pre-filter
+source cap; indexed selective execution is a separate versioned HF-05 gate.
+
 The Truss Python query executor MAY retain pure successful Weft compile results
 under the exact compiler callable identity and complete original request text,
 including model bytes/pins, binding, selected backend/profile/limits and exact

@@ -43,7 +43,7 @@ from ._group_runtime import GroupRuntimeContext, CatalogRevisionProbe, PreparedG
 from .contracts import CapabilitySelection, TypedIdentity, ProfilePin
 from .groups import GroupSemanticInput, GroupRequestSelection, GroupApplicationResult, OrderKey
 from decimal import Decimal
-from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor,QueryCatalogSources,QueryCatalogRead
+from .query import QueryRows,QueryRefused,QueryUnavailable,QueryPage,QueryPageCursor,QueryEntityProjection,QueryCatalogSources,QueryCatalogRead
 from .execution import Ok, Error, ExecutionFailure, Outcome, TransactionHandle
 from .psycopg_host import PsycopgHost
 from .preparation import CatalogDocument, PreparedAcceptance, _require_original_preparation
@@ -385,16 +385,16 @@ class CatalogReferenceAssembly:
     def query_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
                              maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
                              read_profile: Literal['entity-page','related-entity-page','count-summary','complete-entity'] | None=None,
-                             engine_program: str | None=None) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]:
+                             engine_program: str | None=None,entity_projection: QueryEntityProjection | None=None) -> Outcome[QueryRows | QueryRefused | QueryUnavailable]:
         from ._query_runtime import run_query
         manifest,digest,_=_release()
         return run_query(self._host,transaction,sql=sql,document_ids=document_ids,parameters={} if parameters is None else parameters,
-            maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=read_profile,engine_program=engine_program)
+            maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=read_profile,engine_program=engine_program,entity_projection=entity_projection)
 
     @_active_operation
     def query_with_catalog_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
                              catalog_validator: str | None=None,maximum_rows: int=1000,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
-                             read_profile: Literal['entity-page','related-entity-page','count-summary','complete-entity'] | None=None) -> Outcome[QueryCatalogRead | QueryRefused | QueryUnavailable]:
+                             read_profile: Literal['entity-page','related-entity-page','count-summary','complete-entity'] | None=None,entity_projection: QueryEntityProjection | None=None) -> Outcome[QueryCatalogRead | QueryRefused | QueryUnavailable]:
         """One adopted transaction/operation for current catalog, sources and query.
 
         Both rows and catalog are withheld if either authority/basis changes.
@@ -404,7 +404,7 @@ class CatalogReferenceAssembly:
         manifest,digest,_=_release()
         return run_query(self._host,transaction,sql=sql,document_ids=document_ids,parameters={} if parameters is None else parameters,
             maximum_rows=maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,manifest=manifest,digest=digest,
-            pin_cursor=_pin_cursor,read_profile=read_profile,read_catalog=True,catalog_validator=catalog_validator)
+            pin_cursor=_pin_cursor,read_profile=read_profile,read_catalog=True,catalog_validator=catalog_validator,entity_projection=entity_projection)
 
     @_active_operation
     def query_catalog_sources_in_transaction(self, transaction: TransactionHandle, *, sql: str,
@@ -451,13 +451,13 @@ class CatalogReferenceAssembly:
     @_active_operation
     def query_page_in_transaction(self,transaction: TransactionHandle,*,sql: str,document_ids: tuple[str,...],parameters: Mapping[str,str|int|bool|Decimal|TextValue] | None=None,
                                   limit: int=100,cursor: QueryPageCursor | None=None,maximum_scan_rows: int=10000,maximum_bytes: int=1048576,
-                                  engine_program: str | None=None,maximum_rows: int | None=None) -> Outcome[QueryPage | QueryRefused | QueryUnavailable]:
+                                  engine_program: str | None=None,maximum_rows: int | None=None,entity_projection: QueryEntityProjection | None=None) -> Outcome[QueryPage | QueryRefused | QueryUnavailable]:
         from ._query_runtime import run_query
         manifest,digest,_=_release()
         if maximum_rows is not None and engine_program is None:return Ok(QueryRefused("invalid_query"))
         return run_query(self._host,transaction,sql=sql,document_ids=document_ids,parameters={} if parameters is None else parameters,
             maximum_rows=(limit+1 if type(limit) is int else 0) if maximum_rows is None else maximum_rows,maximum_scan_rows=maximum_scan_rows,maximum_bytes=maximum_bytes,
-            manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=None,page_size=limit,page_cursor=cursor,engine_program=engine_program)
+            manifest=manifest,digest=digest,pin_cursor=_pin_cursor,read_profile=None,page_size=limit,page_cursor=cursor,engine_program=engine_program,entity_projection=entity_projection)
 
     @_active_operation
     def query_stream_open_in_transaction(self,transaction,*,engine_program,parameters,operation_deadline=None):

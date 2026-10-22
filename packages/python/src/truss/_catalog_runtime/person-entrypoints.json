@@ -361,6 +361,33 @@
       "mode": "write",
       "result": "bytea",
       "set": false
+    },
+    {
+      "name": "query_binding",
+      "publicName": "person_query_binding",
+      "signature": "truss.query_binding(jsonb,integer,integer,integer,text,text)",
+      "arguments": "selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "query_binding_if_changed",
+      "publicName": "person_query_binding_if_changed",
+      "signature": "truss.query_binding_if_changed(jsonb,integer,integer,integer,text,text,text)",
+      "arguments": "selected_documents jsonb, maximum_scan_rows integer, maximum_result_rows integer, maximum_bytes integer, expected_release text, expected_digest text, validator text",
+      "mode": "read",
+      "result": "bytea",
+      "set": false
+    },
+    {
+      "name": "query_scope",
+      "publicName": "person_query_scope",
+      "signature": "truss.query_scope(jsonb)",
+      "arguments": "binding jsonb",
+      "mode": "read",
+      "result": "void",
+      "set": false
     }
   ]
 }

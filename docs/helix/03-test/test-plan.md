@@ -27,9 +27,6 @@ ddx:
       kind: informed_by
 ---
 
-## P0 forward migration release gate — 2026-10-21
-
-
 ## HF-02 selected person admission and original-request recovery
 
 The post-0.0.47 selection uses CONTRACT-004/005/007/009 and ADR-005. Native
@@ -68,6 +65,13 @@ The lost-acknowledgement control commits through the real driver before injectin
 the missing acknowledgement; recovery independently observes the committed receipt.
 It qualifies that observation, not a general network-fault transport protocol.
 
+The selected ordinary runtime retains complete receipts indefinitely. Direct
+writer UPDATE/DELETE remains denied; no supported expiry writer is selected.
+The two expired-header controls explicitly seed an administrative fixture while
+restoring the original immutable triggers before observation. They qualify
+disclosure-safe expired receipt observation and no reapplication, without claiming
+an elapsed retention-window test or a supported pruning/protection transition.
+
 Final-state controls in `test_group_create_native` and `test_edge_mutations_native`
 require P1405, typed multiplicity/phase, the authorized qualified relationship and
 exact native endpoint/rule evidence, no fabricated causal ordinal, and no residue.
@@ -85,6 +89,8 @@ prior-meaning refusal controls remain required. The native plan/census must run
 under the catalog-head gate; no independent host emptiness probe may authorize it.
 
 
+## P0 forward migration release gate — 2026-10-21
+
 The latest-only policy requires a release-blocking populated predecessor-to-latest
 workflow, plus migration of every admitted lineage source using the latest tool.
 [STP-045](test-plans/STP-045-bootstrap-the-internal-layout-from-umf.md) owns RM-T01–08
@@ -98,6 +104,28 @@ Linux only. Exact server/driver/UMF/Weft/platform tuples scope each receipt.
 The first route uses UMF 0.10 v0.0.44 as source. Each future release adds its source
 fixture to the migration lineage; fixtures support conversion tests, not old runtime
 support. Pre-0.10, downgrade and mixed-runtime online operation remain excluded.
+
+## HF-04 compiler-owned columns and explicit entity selection
+
+`test_query_descriptors_native` verifies compiler metadata on empty, aggregate,
+all-null and paged results, including source availability, native null, SQL
+nullability, immutable original descriptors and exclusion of hidden sort outputs.
+Never infer a descriptor from returned values. A damaged original query-binding
+grant remains PostgreSQL42501 and preserves earlier caller work. The existing
+compiled-query suite verifies nonmember/refreshed-role denial with cache reuse
+and the combined catalog/read route through guarded person entrypoints.
+
+`test_query_entity_projection_native` verifies ordered selected facts, facts-free
+entities, facts with continuation, selection-bound cursors, local invalid-selector
+refusal, and actual101-edge complete-result refusal versus explicitly bounded
+truncation. After deleting one edge, complete100 succeeds. Preserve the old entity
+profile's shape and exact scalar/page behavior. The companion Weft15-case corpus
+must pass through its installed native compiler and actual Chromium/WASM with
+byte-identical artifacts, including exact/one-over transport limits and traps.
+
+These are source component gates. Typed diagnostic reasons, indexed selective
+sources above10,000, final package versions, full migration lineage, Linux and
+public release qualification remain separate required work.
 
 
 # Truss project test plan

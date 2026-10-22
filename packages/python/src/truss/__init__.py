@@ -105,11 +105,11 @@ from .catalog_runtime import PendingRuntimeUpgrade
 __all__ += ["PendingRuntimeUpgrade"]
 
 from .query import QueryRelatedKeys,QueryRows,QueryRefused,QueryUnavailable,QueryAbsent,QueryDiagnostic,QueryValue
-from .query import QueryDocument,QueryCatalogRead
+from .query import QueryDocument,QueryCatalogRead,QueryColumnDescriptor,QueryEntityProjection
 from .capabilities import NativeCompiledExecutionCapability
 
 __all__ += ['QueryRelatedKeys','QueryRows','QueryRefused','QueryUnavailable','QueryAbsent','QueryDiagnostic','QueryValue','NativeCompiledExecutionCapability']
-__all__ += ['QueryDocument','QueryCatalogRead']
+__all__ += ['QueryDocument','QueryCatalogRead','QueryColumnDescriptor','QueryEntityProjection']
 
 from .query import QueryPage,QueryPageCursor
 __all__ += ['QueryPage','QueryPageCursor']

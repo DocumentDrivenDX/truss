@@ -12,18 +12,19 @@ from .execution import Error, Ok, ExecutionFailure
 from .contracts import TextValue
 from ._query_cache import compile_response, binding_hint, remember_binding
 from .reader_catalog import ReaderCatalog, ReaderCatalogSnapshot, ReaderCatalogUnchanged
-from .query import QueryDocument, QueryCatalogRead
+from .query import QueryDocument, QueryCatalogRead, QueryColumnDescriptor, QueryEntityProjection
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition, QueryCatalogSources
 
 BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.41',
            'targetProfile': 'truss-runtime-pg18.6/0.5', 'interfaceVersion': 'weft-backend/0.2.7'}
 
 
-def compiler(*, engine_catalog=False, engine_pages=False):
+def compiler(*, engine_catalog=False, engine_pages=False, entity_projection=False):
     try:
         import weft
-        if weft.__version__ != '0.4.49' or not callable(getattr(weft,'compile_truss_runtime_json',None)):
+        if weft.__version__ not in ('0.4.49','0.4.51-dev.1') or not callable(getattr(weft,'compile_truss_runtime_json',None)):
             return None
+        if entity_projection and weft.__version__=='0.4.49':return None
         if engine_catalog and not callable(getattr(weft,'check_engine_read_json',None)):return None
         if engine_pages and not callable(getattr(weft,'check_engine_page_json',None)):return None
         return weft.compile_truss_runtime_json
@@ -128,6 +129,40 @@ def _decode_value(value, descriptor_id, descriptors_by_identity):
     raise ValueError('Unsupported query result shape')
 
 
+def _immutable_metadata(value):
+    if type(value) is dict:
+        return MappingProxyType({k:_immutable_metadata(v) for k,v in value.items()})
+    if type(value) is list:
+        return tuple(_immutable_metadata(v) for v in value)
+    return value
+
+
+def _column_descriptors(artifact):
+    original_graph=artifact['logicalPlan']['typeGraph']
+    _index_value_descriptors(original_graph)
+    graph=tuple(_immutable_metadata(d) for d in original_graph)
+    indexed={_descriptor_identity_key(d['identity']):frozen for d,frozen in zip(original_graph,graph,strict=True)}
+    result=[]
+    for position,column in enumerate(artifact['columns'],1):
+        if (type(column.get('position')) is not int or column['position']!=position
+            or type(column.get('outputName')) is not str or type(column.get('nullable')) is not bool
+            or type(column.get('representation')) is not dict or type(column.get('sourceIdentities')) is not list
+            or any(type(identity) is not dict for identity in column['sourceIdentities'])):
+            raise ValueError('Original compiler column metadata required')
+        original=_immutable_metadata(column);representation=original['representation']
+        descriptor=None
+        if representation['kind']=='value':
+            descriptor=indexed[_descriptor_identity_key(column['representation']['descriptor'])]
+        logical_type=representation.get('logicalType')
+        if logical_type is None and descriptor is not None and descriptor['kind']=='scalar':
+            logical_type=descriptor['type']
+        result.append(QueryColumnDescriptor(position=position,output_name=column['outputName'],
+            representation=representation,source_identities=original['sourceIdentities'],
+            sql_nullable=column['nullable'],logical_type=logical_type,value_descriptor=descriptor,
+            type_graph=graph,original=original))
+    return tuple(result)
+
+
 def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
     columns = artifact['columns']
     if len(raw_rows) > maximum_rows:
@@ -189,12 +224,13 @@ def _decode_rows(raw_rows, artifact, maximum_rows, maximum_bytes):
             else:
                 raise ValueError('Unknown compiled representation refused')
         rows.append(tuple(decoded))
-    return QueryRows(columns=tuple(c['outputName'] for c in columns), rows=tuple(rows), catalog_revision=0)
+    return QueryRows(columns=tuple(c['outputName'] for c in columns), rows=tuple(rows), catalog_revision=0,
+        column_descriptors=_column_descriptors(artifact))
 
 
 def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
               maximum_scan_rows, maximum_bytes, manifest, digest, pin_cursor, read_profile, page_size=None, page_cursor=None, engine_program=None, capture_catalog=False,
-              read_catalog=False,catalog_validator=None):
+              read_catalog=False,catalog_validator=None,entity_projection=None):
     try:
         valid = type(sql) is str and 1 <= len(sql.encode('utf8')) <= 1048576 and '\0' not in sql
         valid = valid and type(document_ids) is tuple and 1 <= len(document_ids) <= 32 and len(set(document_ids)) == len(document_ids)
@@ -205,6 +241,13 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
     except (UnicodeError, TypeError, ValueError):
         valid = False
     valid=valid and (read_profile is None or type(read_profile) is str and read_profile in ('entity-page','related-entity-page','count-summary','complete-entity'))
+    if entity_projection is not None:
+        valid=valid and (type(entity_projection) is QueryEntityProjection
+            and type(entity_projection.facts) is tuple and len(entity_projection.facts)<=8
+            and all(type(f) is str and f in ('version','createdBy','createdAt','updatedBy','updatedAt','originalAuthor','originalAt','loadId') for f in entity_projection.facts)
+            and len(set(entity_projection.facts))==len(entity_projection.facts)
+            and type(entity_projection.relationships) is bool
+            and read_profile is None and engine_program is None and not capture_catalog)
     if not valid:
         return Ok(QueryRefused(code='invalid_query'))
     if type(read_catalog) is not bool or read_catalog and (page_size is not None or capture_catalog or engine_program is not None
@@ -227,7 +270,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                 return Ok(QueryRefused(code='invalid_query'))
     if type(capture_catalog) is not bool or engine_program is not None and (type(engine_program) is not str or len(engine_program.encode("utf8")) > 4194304) or capture_catalog and (page_size is not None or read_profile is not None) or engine_program is not None and read_profile is not None:
         return Ok(QueryRefused(code="invalid_query"))
-    compile_query = compiler(engine_catalog=engine_program is not None,engine_pages=page_size is not None and engine_program is not None)
+    compile_query = compiler(engine_catalog=engine_program is not None,engine_pages=page_size is not None and engine_program is not None,entity_projection=entity_projection is not None)
     if compile_query is None:
         return Ok(QueryUnavailable(reason='compiler'))
     if page_size is not None:
@@ -266,11 +309,11 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         pin_cursor(cursor)
         cache_key=(digest,document_ids,maximum_scan_rows,maximum_rows,maximum_bytes)
         hint=binding_hint(cache_key)
-        context_sql='SELECT truss.query_binding_if_changed(%s::pg_catalog.jsonb,%s,%s,%s,%s,%s,%s)'
+        context_sql='SELECT truss.person_query_binding_if_changed(%s::pg_catalog.jsonb,%s,%s,%s,%s,%s,%s)'
         context_parameters=(json.dumps(document_ids),maximum_scan_rows,maximum_rows,maximum_bytes,manifest['releaseId'],digest,
                             None if hint is None else hint[0])
         if read_catalog:
-            context_sql+=',truss.reader_catalog_if_changed(65536,%s,%s,%s,%s)'
+            context_sql+=',truss.person_reader_catalog_if_changed(65536,%s,%s,%s,%s)'
             context_parameters+=(maximum_bytes,manifest['releaseId'],digest,catalog_validator)
         cursor.execute(context_sql,context_parameters,prepare=False)
         context_row=cursor.fetchone()
@@ -305,11 +348,16 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                    'target': {'backendId': BACKEND['backendId'], 'backendVersion': BACKEND['backendVersion'],
                               'targetProfile': BACKEND['targetProfile'], 'bindingJson': binding_json, 'bindingSha256': binding_sha}}
         if read_profile is not None:request['readProfile']={'version':'weft-truss-entity-read/0.3.0' if read_profile=='complete-entity' else 'weft-application-read/0.2.0','subset':read_profile}
+        if entity_projection is not None:
+            request['readProfile']={'version':'weft-truss-entity-read/0.4.0',
+                'subset':'complete-entity-page' if page_size is not None else 'complete-entity',
+                'entityProjection':{'facts':list(entity_projection.facts),'relationships':entity_projection.relationships}}
         page_metadata = None
         if page_size is not None:
             # Each page composes and reauthorizes the current accepted catalog.
             context = sha256(json.dumps({'sql':sql,'parameters':values,'exactParameters':exact_values,'documents':document_ids,
-                'binding':binding,'actorOid':bundle['actorOid'],'pageSize':page_size},sort_keys=True,ensure_ascii=False,separators=(',',':')).encode('utf8')).hexdigest()
+                'binding':binding,'actorOid':bundle['actorOid'],'pageSize':page_size,
+                'entityProjection':None if entity_projection is None else request['readProfile']},sort_keys=True,ensure_ascii=False,separators=(',',':')).encode('utf8')).hexdigest()
             if page_state is not None and page_state['context'] != context:
                 return QueryRefused(code='stale_context')
             response = compile_response(compile_query,json.dumps(request,ensure_ascii=False),page_size,None if page_state is None else page_state['after'])
@@ -322,7 +370,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         else:
             artifact = compile_response(compile_query,json.dumps(request, ensure_ascii=False))
         if artifact['status'] != 'compiled':
-            cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
+            cursor.execute('SELECT truss.person_query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
             diagnostics = tuple(QueryDiagnostic(code=d['code'], message=d['message']) for d in artifact.get('diagnostics', ()))
             unsupported = any(d.code in ('WFT-CAPABILITY', 'WFT-TYPE', 'WFT-PROFILE') for d in diagnostics)
             return QueryRefused(code='unsupported_query' if unsupported else 'invalid_query', diagnostics=diagnostics)
@@ -347,10 +395,10 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                     ('truss-runtime','weft.engine-'+profile_kind+'/0.1'),
                     ('truss-runtime-binary','weft.engine-'+profile_kind+'/0.2')) or checked.get("artifact") != artifact
                 or page_size is not None and (checked.get("pageSize") != page_size or checked.get("page") != page_metadata)):
-                cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
+                cursor.execute('SELECT truss.person_query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
                 return QueryRefused(code='stale_context')
         if capture_catalog:
-            cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
+            cursor.execute('SELECT truss.person_query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
             return QueryCatalogSources(request_json=json.dumps(request, ensure_ascii=False, separators=(',', ':')))
         if not artifact['obligations'] or any(o['id'] != 'truss.runtime.context/0.1' or o['owner'] != 'host' for o in artifact['obligations']):
             raise ValueError('Every compiled obligation must have an installed handler')
@@ -363,7 +411,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         if pinned_path != 'pg_catalog,pg_temp':
             raise ValueError('Fixed query search path required')
         # Fixed context handler and source functions independently recheck all owners.
-        cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
+        cursor.execute('SELECT truss.person_query_scope(%s::pg_catalog.jsonb)', (binding_json,), prepare=False)
         for slot in slots:
             logical_type=slot['logicalType']
             if logical_type == {'kind':'exactScalar','scalarType':'binary'}:
@@ -384,7 +432,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             if family in ('integer','decimal'):
                 cursor.execute('SELECT truss.query_numeric_value(%s,%s)',(slot['value'],family),prepare=False)
                 if cursor.fetchone()!=(True,):
-                    cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)',(binding_json,),prepare=False)
+                    cursor.execute('SELECT truss.person_query_scope(%s::pg_catalog.jsonb)',(binding_json,),prepare=False)
                     cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
                     if cursor.fetchone()!=(original_path,):raise ValueError('Caller path restoration required')
                     return QueryRefused(code='native_domain')
@@ -401,7 +449,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             'at':captured_at.isoformat(timespec='microseconds'),'callerXidAssigned':caller_xid is not None}
         position_bytes=json.dumps(position_data,ensure_ascii=False,separators=(',',':')).encode('utf8')
         if len(position_bytes)>65536:
-            cursor.execute('SELECT truss.query_scope(%s::pg_catalog.jsonb)',(binding_json,),prepare=False)
+            cursor.execute('SELECT truss.person_query_scope(%s::pg_catalog.jsonb)',(binding_json,),prepare=False)
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()!=(original_path,):raise ValueError('Caller path restoration required')
             return QueryRefused(code='limits')
@@ -416,7 +464,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             if raw.description is None or [(c.name, c.type_code) for c in raw.description] != [(c['outputName'], 25) for c in artifact['columns']]:
                 raise ValueError('Original result column labels and text carriers required')
             result = _decode_rows(raw.fetchmany(maximum_rows + 1), artifact, maximum_rows, maximum_bytes)
-        final_sql='SELECT truss.query_scope(%s::pg_catalog.jsonb),r.oid::text'
+        final_sql='SELECT truss.person_query_scope(%s::pg_catalog.jsonb),r.oid::text'
         final_parameters=(binding_json,)
         if read_catalog:
             final_sql+=',truss.reader_catalog_if_changed(65536,%s,%s,%s,%s)'
@@ -446,9 +494,9 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
                 token = json.dumps({'profile':'truss-query-page/0.2','context':context,'after':lexical_keys[len(retained)-1]},ensure_ascii=False,separators=(',',':')).encode('utf8')
                 if len(token)>65536:return QueryRefused(code='limits')
                 next_cursor = QueryPageCursor(original_bytes=token)
-            return QueryPage(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=binding['catalogRevision'],next_cursor=next_cursor,as_of=position,next_sort_values=None if next_cursor is None else tuple(retained[-1][index] for index in keys))
+            return QueryPage(columns=result.columns[:visible],rows=tuple(row[:visible] for row in retained),catalog_revision=binding['catalogRevision'],next_cursor=next_cursor,as_of=position,next_sort_values=None if next_cursor is None else tuple(retained[-1][index] for index in keys),column_descriptors=result.column_descriptors[:visible])
         if isinstance(result, QueryRows):
-            rows=QueryRows(columns=result.columns,rows=result.rows,catalog_revision=binding['catalogRevision'],as_of=position)
+            rows=QueryRows(columns=result.columns,rows=result.rows,catalog_revision=binding['catalogRevision'],as_of=position,column_descriptors=result.column_descriptors)
             if read_catalog:
                 documents=tuple(QueryDocument(m['pin']['documentId'],m['pin']['revision'],m['pin']['umfVersion'],m['pin']['sha256'],m['documentJson'].encode('utf8')) for m in bundle['modules'])
                 if any(sha256(d.content).hexdigest()!=d.sha256 for d in documents):

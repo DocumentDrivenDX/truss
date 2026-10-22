@@ -448,6 +448,36 @@ is introduced. Per-slice token usage remains unavailable. These are component
 claims; the selected expiry/protection disposition, HF-04–HF-07, frozen migration
 edge, final Linux/installed cohort and publication are still required.
 
+### HF-04 source component checkpoint — 2026-10-22
+
+Compiler-owned immutable column descriptors now accompany buffered, streamed and
+paged decoded rows, including empty/all-null results. Explicit entity selection
+retains ordered facts and separately requests relationships; facts can accompany
+continuation. The existing complete entity profile is preserved. The selected
+public-Weft0.4.49-based development cohort is frozen at
+`5b51e5ce0df2945fd2f90e8a53e081a6158a1bcb`; its wheel SHA-256 is
+`0bcf3c81417df7be210e48f2876fc2473498f459fc3c3a7f27e751a883b16ddd`.
+It passes355 core and199 backend tests,15 installed compiler cases and actual
+Chromium151 byte parity. It excludes the separately gated managed UC tranche.
+Development version0.4.51.dev1 is not a reserved publication number.
+
+The first expanded Truss native run passed21/23 and exposed two revoked-reader
+failures: compiled queries still invoked private binding functions before the
+typed person gate. Three native-declared query shims extend the finite registry
+to43 declarations. The combined catalog call also uses the existing guarded
+reader shim. All24 native query/page cases then pass in50.877s, including a new
+damaged original binding grant control retaining42501 and prior caller work.
+Preserve the failed run and actual PostgreSQL declarations with the component
+evidence. Python boundaries retain1,702 imports and20 checker controls.
+
+ADR-005 now selects indefinite complete-receipt retention for ordinary runtime
+operation. Two explicit administrative expired-header fixtures qualify observer
+behavior only; direct writer mutation and original immutable-trigger bypass are
+not supported APIs. They do not claim an elapsed24-hour protection experiment or
+an expiry writer. No new release, indexed query support or completion/audit
+extension is qualified by this checkpoint. The new native target remains
+unfrozen until the remaining HF-05–HF-07 changes and migration gate pass.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).
