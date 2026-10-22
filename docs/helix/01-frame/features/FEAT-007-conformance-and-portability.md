@@ -75,6 +75,15 @@ CNF-06. An implementation reads UMF so that it accepts and rejects the same docu
 
 CNF-07. The internal physical layout is a versioned UMF artifact that generates reproducible bootstrap SQL. Every physical object is accounted for, unsupported generation is reported, and catalog/behavior parity must pass before it replaces the SQL baseline (FR-56).
 
+CNF-08. Truss supports the latest runtime only. Previous releases are supported
+by forward database migration to latest. From the UMF 0.10 migration baseline,
+each future release preserves an executable path for every admitted installation,
+including skipped releases, without intermediate application runtimes or permanent
+old-runtime support. Explicit administrative migration preserves data and retained
+meaning, qualifies rollback/uncertain settlement, and rejects old runtimes after
+upgrade. Populated source-to-latest qualification blocks release. Pre-0.10
+compatibility and downgrade operation are excluded (PRD owner decision 2026-10-21).
+
 ### Non-Functional Requirements
 
 - **Reproducibility**: the DDL and its check run on PostgreSQL 16.2 and 17.9 today.

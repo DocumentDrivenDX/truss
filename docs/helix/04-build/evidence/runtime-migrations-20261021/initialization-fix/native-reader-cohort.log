@@ -1,0 +1,6 @@
+test_query_binding_cache_isolated_by_current_person (test_schema_cache_native.SchemaCacheTests.test_query_binding_cache_isolated_by_current_person) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 5.165s
+
+OK

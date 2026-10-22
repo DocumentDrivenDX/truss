@@ -29,6 +29,9 @@ def main():
     if not baseline['passed']:
         raise AssertionError(baseline['errors'])
     cases = [
+        ('migration-recipe-allowed', 'migrations.py', '\nfrom ._migration_recipe import load_recipe\n', None),
+        ('query-forbidden-migration', '_query_runtime.py', '\nfrom ._migration_execute import execute\n', 'forbidden import truss._migration_execute'),
+
         ('allowed-nested-import', 'numeric.py', '\ndef fixture():\n    from decimal import Decimal\n', None),
         ('forbidden-driver', 'numeric.py', '\ndef fixture():\n    import pgserver\n', 'forbidden import pgserver'),
         ('private-custody-access', 'numeric.py', '\nfrom ._operation_admission import AdmissionCustody\n', 'forbidden import truss._operation_admission'),

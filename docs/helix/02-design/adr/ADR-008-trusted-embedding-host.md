@@ -85,9 +85,42 @@ Installation and initial Python operations need this concrete subset; unrelated
 security capabilities are not prerequisites. Truss must not fork its resolver or
 adopt a partial component count as a complete handoff.
 
-The 2026-10-18 owner decision selects UMF 0.10.0 as the sole current source
-format and removes all earlier-format adapters and predecessor installation
-upgrades. This is pre-release software: design iterations do not establish a
-permanent compatibility obligation. Current-format schema revisions within a
-live installation remain required for evolution and historical reads. Fresh
-installation refuses existing data; no automatic reset or migration is implied.
+## Owner decision — forward migrations to the latest release, 2026-10-21
+
+This decision supersedes the 2026-10-18 withdrawal of predecessor installation
+upgrades. Truss supports one application runtime: the latest release. Previous
+releases are supported solely by migrating their databases forward to the latest.
+There is no obligation to keep older runtimes, APIs, compiler cohorts or source
+admission paths operational. Retaining migration recipes and preservation tests
+must not create permanent old-runtime compatibility branches.
+
+UMF 0.10.0 is the initial migration baseline; pre-0.10 compatibility is excluded.
+The first qualified path starts at Truss v0.0.44 and ends at the migration-enabled
+current release. Subsequent releases MUST preserve a forward path from every
+installation admitted to this migration lineage. Skipping releases MUST work
+through the latest migration tooling, using immutable ordered recipes as needed,
+without running intermediate application versions. No age-based migration expiry
+or reset requirement is implied. Future source-format changes require explicit
+conversion and retained-meaning preservation before release.
+
+Every future release MUST classify changes to installed routines, storage,
+privileges, encodings and metadata meaning. It MUST ship and qualify the required
+forward path, or prove that the exact existing installation requires no migration.
+A release that strands an admitted database MUST NOT ship. Unknown, modified or
+unsupported source installations refuse without effects; failure or uncertain
+commit must preserve recovery custody. Migration MUST preserve existing data,
+accepted source bytes, unknown extension content, identities, history, receipts,
+feed continuation and acknowledgments, or provide an explicit verified semantic
+conversion. Successful upgrade admits only the latest runtime; old runtimes must
+refuse before application effects.
+
+Operators invoke migrations explicitly with administrative authority. Fresh
+installation continues to refuse existing data; application startup does not
+upgrade, reset or rewrite a database. Live catalog evolution and historical reads
+remain supported by the latest runtime. Downgrades and parallel old-runtime
+operation are excluded. Recovery uses a forward fix or a tested backup restore;
+a restored older database is eligible for migration, not supported old-runtime
+operation. Historical release claims retain their original scope.
+
+See the [restoration plan](../../04-build/runtime-migration-restoration-plan.md) for implementation gates. This decision
+specifies required behavior; it does not claim that migration tooling is shipped.

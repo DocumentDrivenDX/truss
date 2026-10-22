@@ -7,7 +7,7 @@ import tempfile
 import unittest
 import psycopg
 from truss import (LocalPostgres,Ok,Error,adopt_psycopg_host,
-                   create_reference_assembly,CatalogRuntimeConfiguration,CatalogDocument)
+                   create_reference_assembly,CatalogRuntimeConfiguration,CatalogDocument,ModuleAccessBatchRefused)
 from test_catalog_relational_support import relational_document
 
 class PublicCatalogRuntimeTests(unittest.TestCase):
@@ -52,6 +52,11 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
             for role in (self.installation.owner_role,self.installation.registrar_role):
                 self.admin.execute('DROP OWNED BY '+psycopg.sql.Identifier(role).as_string(self.admin))
                 self.admin.execute('DROP ROLE '+psycopg.sql.Identifier(role).as_string(self.admin))
+    def assert_module_refused(self,result,errors):
+        self.assertIsInstance(result,Ok,result)
+        self.assertIsInstance(result.value,ModuleAccessBatchRefused,result)
+        self.assertEqual(tuple((error.index,error.code) for error in result.value.errors),errors)
+
     def install(self):
         result=self.assembly.install_in_transaction(self.tx)
         if isinstance(result,Error):self.fail(repr(result.error)+' '+str(self.host._custody.last_attempt.error))
@@ -328,12 +333,12 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         second=ModuleAccessGrant('zdoc','m','app_reader','app_writer')
         invalid=ModuleAccessGrant('absent','m','app_reader','app_writer')
         failed=self.assembly.configure_module_access_in_transaction(self.tx,(valid,invalid))
-        self.assertIsInstance(failed,Error)
+        self.assert_module_refused(failed,((1,'unknown_module'),))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
         for unsafe in ('consumer','postgres',self.installation.owner_role,self.installation.registrar_role):
             with self.subTest(unsafe=unsafe):
                 denied=self.assembly.configure_module_access_in_transaction(self.tx,(ModuleAccessGrant('adoc','m','app_reader',unsafe),))
-                self.assertIsInstance(denied,Error)
+                self.assert_module_refused(denied,((0,'unsafe_role'),))
         self.admin.execute("""CREATE FUNCTION truss.fixture_suppress_module_grant() RETURNS trigger LANGUAGE plpgsql AS $$
           BEGIN IF NEW.document_id='zdoc' THEN RETURN NULL; END IF; RETURN NEW; END $$;
           CREATE TRIGGER fixture_suppress_module_grant BEFORE INSERT ON truss.module_access
@@ -394,7 +399,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
                     try:
                         grant=ModuleAccessGrant('adoc','m',role if position=='reader' else 'app_reader',role if position=='writer' else 'app_writer')
                         result=self.assembly.configure_module_access_in_transaction(self.tx,(grant,))
-                        self.assertIsInstance(result,Error)
+                        self.assert_module_refused(result,((0,'unsafe_role'),))
                         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
                     finally:
                         self.admin.execute('ROLLBACK TO variant');self.admin.execute('RELEASE variant')
@@ -414,7 +419,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.admin.execute("CREATE TEMP TABLE caller_module_sentinel(value text); INSERT INTO caller_module_sentinel VALUES ('kept')")
         grant=ModuleAccessGrant('adoc','m','app_reader','app_writer')
         result=self.assembly.configure_module_access_in_transaction(self.tx,(grant,))
-        self.assertIsInstance(result,Error)
+        self.assert_module_refused(result,((0,'unsafe_role'),))
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
         self.assertEqual(self.admin.execute('SELECT value FROM caller_module_sentinel').fetchall(),[('kept',)])
         self.admin.execute('REVOKE pg_read_server_files FROM app_reader')
@@ -453,13 +458,13 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.assembly=create_reference_assembly(CatalogRuntimeConfiguration(),self.host).value
         grant=ModuleAccessGrant('adoc','m','safe_reader','unsafe_writer')
         self.admin.execute(psycopg.sql.SQL('GRANT {} TO unsafe_writer').format(psycopg.sql.Identifier(self.installation.owner_role)))
-        self.assertIsInstance(self.assembly.configure_module_access_in_transaction(self.tx,(grant,)),Error)
+        self.assert_module_refused(self.assembly.configure_module_access_in_transaction(self.tx,(grant,)),((0,'unsafe_role'),))
         self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM unsafe_writer').format(psycopg.sql.Identifier(self.installation.owner_role)))
         self.admin.execute('GRANT SELECT ON truss.object TO unsafe_writer')
-        self.assertIsInstance(self.assembly.configure_module_access_in_transaction(self.tx,(grant,)),Error)
+        self.assert_module_refused(self.assembly.configure_module_access_in_transaction(self.tx,(grant,)),((0,'unsafe_role'),))
         self.admin.execute('REVOKE SELECT ON truss.object FROM unsafe_writer')
         self.admin.execute('GRANT SELECT(id) ON truss.object TO unsafe_writer')
-        self.assertIsInstance(self.assembly.configure_module_access_in_transaction(self.tx,(grant,)),Error)
+        self.assert_module_refused(self.assembly.configure_module_access_in_transaction(self.tx,(grant,)),((0,'unsafe_role'),))
         self.admin.execute('REVOKE SELECT(id) ON truss.object FROM unsafe_writer')
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.module_access').fetchone(),(0,))
         self.host.detach();self.admin.rollback()

@@ -47,6 +47,8 @@ _MANAGED_TABLE_CALLS = {
     'SELECT * FROM truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false,%s::int,%s)': (
         'catalog_accept_with_keys','truss.catalog_accept_with_keys(%s,%s,%s,%s,%s,%s,NULL,false,%s::int,%s)',None),
 }
+from ._runtime_admission import runtime_digest
+
 _IDENTITY_SQL = """SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,
  l.virtualtransaction::pg_catalog.text,
  pg_catalog.current_setting('transaction_isolation')::pg_catalog.text,
@@ -56,6 +58,8 @@ _IDENTITY_SQL = """SELECT pg_catalog.pg_backend_pid()::pg_catalog.text,
  FROM pg_catalog.pg_locks l WHERE l.locktype OPERATOR(pg_catalog.=) 'virtualxid'::pg_catalog.text
  AND l.pid OPERATOR(pg_catalog.=) pg_catalog.pg_backend_pid() AND l.granted AND l.mode OPERATOR(pg_catalog.=) 'ExclusiveLock'::pg_catalog.text
  LIMIT 2"""
+_IDENTITY_SQL = "WITH truss_runtime_admission AS MATERIALIZED (SELECT pg_catalog.set_config('truss.runtime_digest','" + runtime_digest() + "',true)) " + _IDENTITY_SQL.replace('FROM pg_catalog.pg_locks l WHERE', 'FROM pg_catalog.pg_locks l CROSS JOIN truss_runtime_admission WHERE')
+
 # Same six facts, one row, so a single-statement call can carry its own admission
 # check. Evaluated after the payload so a write's assigned xid is visible.
 _ADMISSION_TAIL = """(SELECT pg_catalog.pg_backend_pid()::pg_catalog.text),

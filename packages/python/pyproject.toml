@@ -6,13 +6,14 @@ build-backend = "setuptools.build_meta"
 license = "MIT OR Apache-2.0"
 license-files = ["LICENSE.md", "LICENSE-MIT", "LICENSE-APACHE"]
 name = "truss-toolkit"
-version = "0.0.46"
+version = "0.0.47"
 description = "Experimental Truss Python embedding components"
 requires-python = ">=3.11"
 dependencies = ["jsonschema==4.26.0", "referencing==0.37.0", "mini-racer==0.14.1"]
 
 [project.scripts]
 truss-local-postgres = "truss.cli:main"
+truss-migrate = "truss.cli:migrate_main"
 
 [project.optional-dependencies]
 native = ["psycopg[binary]==3.3.6"]
@@ -25,7 +26,7 @@ local = ["pgserver-pg18==18.6.1", "fasteners==0.20", "platformdirs==4.12.4", "ps
 where = ["src"]
 
 [tool.setuptools.package-data]
-truss = ["_embedded_js/*.json", "_embedded_js/*.gz", "_embedded_js/*.js", "_current_disclosure_owner/*.mjs", "_current_disclosure_owner/*.json", "_current_disclosure_owner/notices/*/*", "_current_query_owner/*.mjs", "_current_query_owner/*.json", "_current_query_owner/notices/*/*", "_preparation_sources/*.js", "_preparation_sources/*.mjs", "_preparation_sources/*.json", "_preparation_sources/licenses/*", "_security_source_epoch/*.sql", "_security_source_epoch/*.json", "_umf_core10/*.js", "_umf_core10/*.mjs", "_umf_core10/*.json", "_umf_core10/licenses/*.txt", "_source_census/*.sql", "_security_bootstrap/*.sql", "_catalog_runtime/*.sql", "_catalog_runtime/*.json", "_report_schemas/*.json", "_installation/manifest.json", "_installation/sources.zip", "_installation/statements.json", "_installation/definitions.json", "_installation/definitions.sql", "py.typed", "_profiles/*.json", "_inventory_sql/*.sql", "_inventory_sql/manifest.json", "_umf/licenses/*.txt", "_umf/runtime-manifest.json", "_umf/runtime/package.json", "_umf/runtime/node_modules/ajv/dist/2020.js"]
+truss = ["_migrations/*.json", "_embedded_js/*.json", "_embedded_js/*.gz", "_embedded_js/*.js", "_current_disclosure_owner/*.mjs", "_current_disclosure_owner/*.json", "_current_disclosure_owner/notices/*/*", "_current_query_owner/*.mjs", "_current_query_owner/*.json", "_current_query_owner/notices/*/*", "_preparation_sources/*.js", "_preparation_sources/*.mjs", "_preparation_sources/*.json", "_preparation_sources/licenses/*", "_security_source_epoch/*.sql", "_security_source_epoch/*.json", "_umf_core10/*.js", "_umf_core10/*.mjs", "_umf_core10/*.json", "_umf_core10/licenses/*.txt", "_source_census/*.sql", "_security_bootstrap/*.sql", "_catalog_runtime/*.sql", "_catalog_runtime/*.json", "_report_schemas/*.json", "_installation/manifest.json", "_installation/sources.zip", "_installation/statements.json", "_installation/definitions.json", "_installation/definitions.sql", "py.typed", "_profiles/*.json", "_inventory_sql/*.sql", "_inventory_sql/manifest.json", "_umf/licenses/*.txt", "_umf/runtime-manifest.json", "_umf/runtime/package.json", "_umf/runtime/node_modules/ajv/dist/2020.js"]
 
 [tool.setuptools.exclude-package-data]
 truss = []

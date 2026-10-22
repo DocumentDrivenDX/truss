@@ -1,0 +1,23 @@
+{
+  "runId": 39699389717,
+  "runUrl": "https://github.com/DocumentDrivenDX/truss/actions/runs/39699389717",
+  "sourceCommit": "885faa77397cbaa997b8e189638d630173f8ba3c",
+  "runtimeFiles": 445,
+  "runtimePayloadMatched": true,
+  "nativeManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+  "migrationManifestSha256": "132526a7d5429a8cd40ccb7d6ebc16a2448ed0ea3b8bcd75aec89d65403a32d0",
+  "packageArtifacts": {
+    "isolated-runtime-constraints.txt": "cbc86dce6b1241d367798d37d5eebfab436b477b5e1c5bc27b12c1bbcdcf2889",
+    "truss_toolkit-0.0.47-py3-none-any.whl": "eac348a4846082d1745bbaa3d20456de5a79e63ec6a90d30566e263a32d80199",
+    "truss_toolkit-0.0.47.tar.gz": "376f356b6c098b4ca82dc5baa9ce5c5092c9b3f45a9d4dbe71f9d665f6221bef"
+  },
+  "nativeEvidence": {
+    "qualification.json": "52ff4171065ee162b2af3e6ceab1c7311c1902c1ae87cd9523a41558ef5f5657",
+    "source44-native-inventory.json": "ea95d68b229c834f7a0240c94fc36f758d90722b9db3f5d9bbfadcf42bc3f88e",
+    "source44-original-evidence.json": "016153da975f53594d1c1afc27e4e8fdec53ad1a4125487bf43b6a246722acbc",
+    "source46-native-inventory.json": "a6fac66745236e20b0844bfe2d2e653252f43a584702f25424862313331f073d",
+    "source46-original-evidence.json": "bf780692e791cf151c4458f2919953d9114600a868d0c4520c47b902802c56c5"
+  },
+  "scope": "Complete hosted Linux release workflow and original public workload passed; optional large-capacity/stress jobs excluded",
+  "runConclusion": "success"
+}

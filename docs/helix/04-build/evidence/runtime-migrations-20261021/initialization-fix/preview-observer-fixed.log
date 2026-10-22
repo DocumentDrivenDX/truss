@@ -1,0 +1,9 @@
+test_preview_data_uses_one_snapshot_across_concurrent_update (test_group_preview_native.GroupPreviewNativeTests.test_preview_data_uses_one_snapshot_across_concurrent_update)
+@covers US-040-AC1: condition reads share the reported snapshot basis. ... ok
+test_preview_refuses_when_reader_is_revoked_during_observation (test_group_preview_native.GroupPreviewNativeTests.test_preview_refuses_when_reader_is_revoked_during_observation)
+@covers US-040-AC2: a mid-observation reader revocation withholds results. ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 8.374s
+
+OK

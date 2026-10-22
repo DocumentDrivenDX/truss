@@ -78,6 +78,9 @@ class QueryExportSourceTests(base.PublicCreateGroupTests):
         root = self.admin.execute('SELECT id FROM truss.object WHERE type_id=%s', (root_type,)).fetchone()[0]
         self.admin.execute('UPDATE truss.object SET root_id=%s,root_type=%s WHERE type_id=%s', (root, root_type, child_type))
         connection.execute('BEGIN READ ONLY')
+        latest=adopt_psycopg_host(connection)
+        self.addCleanup(latest.detach)
+        self.assertIsInstance(latest.adopt_transaction(access_mode='read_only'),Ok)
         missing_root = self.binding(connection)
         self.refusal(connection, '0A000', 'SELECT count(*) FROM truss.query_export_objects(%s::jsonb,%s)', (missing_root, child_type))
         complete = self.binding(connection, ('adoc','zdoc'))
@@ -85,4 +88,4 @@ class QueryExportSourceTests(base.PublicCreateGroupTests):
                                             (complete, child_type)).fetchone(), (1,))
         self.admin.execute('REVOKE export_root_reader FROM consumer')
         self.refusal(connection, '42501', 'SELECT count(*) FROM truss.query_export_objects(%s::jsonb,%s)', (complete, child_type))
-        connection.rollback()
+        latest.detach();connection.rollback()

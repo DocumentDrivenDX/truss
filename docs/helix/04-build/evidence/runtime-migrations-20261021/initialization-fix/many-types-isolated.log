@@ -1,0 +1,7 @@
+test_thousand_type_catalog_first_distinct_type_create_batch (test_stress_registration_native.StressRegistrationTests.test_thousand_type_catalog_first_distinct_type_create_batch) ... {"applicationSchema": {"recordTypes": 1000, "properties": 12000, "estimatedResidentBytes": 8124944, "sharedCacheRetainedBytes": 58274660, "retainedBudgetBytes": 134217728}}
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 12.721s
+
+OK

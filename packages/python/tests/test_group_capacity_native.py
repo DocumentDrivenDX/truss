@@ -173,12 +173,12 @@ class GroupCapacityTests(base.PublicCreateGroupTests):
         def native(input):
             return json.loads(bytes(connection.execute('SELECT truss.apply_group(%s,%s,%s,%s,%s)',
                 (_bytes(_wire(input)),documents,_bytes(_wire(RequestNone())),manifest['releaseId'],digest)).fetchone()[0]))
-        connection.execute('BEGIN')
+        connection,host,assembly,tx=self.consumer()
         self.assertEqual(native(replace(original,operations=original.operations[:1]))['outcome'],'success')
-        connection.rollback();self.assert_empty()
-        connection.execute('BEGIN')
+        host.detach();connection.rollback();self.assert_empty()
+        connection,host,assembly,tx=self.consumer()
         refusal=native(original);self.assertEqual(refusal['outcome'],'unavailable')
-        connection.commit();self.assert_empty()
+        host.detach();connection.commit();self.assert_empty()
         legacy=replace(original,operations=original.operations[:129],mutation_profile=ProfilePin(
             identity='truss-rootless-scalar-graph',version='0.4',sha256='b814eb5b33ff59340d2f9bd13866ccb97d49f42fd38ce1e9c97facab5668a2f8'))
         connection,host,assembly,tx=self.consumer()
@@ -186,8 +186,9 @@ class GroupCapacityTests(base.PublicCreateGroupTests):
         self.assertIsInstance(refused,Ok);self.assertIsInstance(refused.value,GroupUnavailable)
         self.assertEqual(refused.value.reason,'resource')
         host.detach();connection.commit();self.assert_empty()
-        connection.execute('BEGIN');self.assertEqual(native(legacy)['outcome'],'unavailable')
-        connection.commit();self.assert_empty()
+        connection,host,assembly,tx=self.consumer()
+        self.assertEqual(native(legacy)['outcome'],'unavailable')
+        host.detach();connection.commit();self.assert_empty()
 
     def test_effect_fault_at_index_1023_rolls_back_the_entire_group(self):
         connection,host,assembly,tx=self.ready(document_ids=('adoc',))

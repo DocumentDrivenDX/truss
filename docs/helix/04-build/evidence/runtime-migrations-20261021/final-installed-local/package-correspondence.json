@@ -1,0 +1,14 @@
+{
+  "sourceCommit": "885faa77397cbaa997b8e189638d630173f8ba3c",
+  "scope": "Separate local package/source correspondence; original local qualification sourceCommit remains null because it did not run under GitHub Actions",
+  "runtimeFiles": 445,
+  "runtimePayloadMatched": true,
+  "artifacts": {
+    "truss_toolkit-0.0.47-py3-none-any.whl": "d49cba6e901e7e14ce208dde16fcd1ea21687c99331efd939d8a03346073768f",
+    "truss_toolkit-0.0.47.tar.gz": "f09347bb380e76c8c2f3622670b2efc1227465bbc5f06b72736b60efbdaa9055"
+  },
+  "qualification": "qualification.json",
+  "tests": 52,
+  "passed": true,
+  "skipped": 0
+}

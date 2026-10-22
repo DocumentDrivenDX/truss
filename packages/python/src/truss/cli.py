@@ -122,3 +122,28 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def migrate_main():
+    """Explicit migration commands; never start an application or reset a database."""
+    import os
+    import psycopg
+    from dataclasses import asdict
+    from truss.migrations import RuntimeMigrations
+    from truss.recovery_registry import HostRecoveryRegistry
+    parser=argparse.ArgumentParser(description=migrate_main.__doc__)
+    parser.add_argument('action',choices=('status','verify','backup-metadata','prepare','apply','reconcile','receipt'))
+    parser.add_argument('--registry',required=True,type=Path,help='Host-owned restart-durable recovery registry')
+    parser.add_argument('--reference',help='Original reference returned by prepare; retain it across restarts')
+    args=parser.parse_args()
+    uri=os.environ.get('TRUSS_DATABASE_URI')
+    if not uri:parser.error('Set TRUSS_DATABASE_URI to the administrative connection URI')
+    if args.action in ('apply','reconcile','receipt') and not args.reference:parser.error('Original --reference required')
+    tool=RuntimeMigrations(lambda:psycopg.connect(uri,autocommit=True,options='-c statement_timeout=10000'),HostRecoveryRegistry(args.registry))
+    try:
+        result=getattr(tool,args.action)(args.reference) if args.action in ('apply','reconcile','receipt') else getattr(tool,args.action.replace('-','_'))()
+        value=result if isinstance(result,dict) else asdict(result)
+    except Exception as error:
+        print(json.dumps({'outcome':'refused','detail':str(error)}));raise SystemExit(1)
+    print(json.dumps(value))
+    if value.get('outcome') in ('rolled_back','commit_unknown','recovery_required','committed_unverified'):raise SystemExit(1)

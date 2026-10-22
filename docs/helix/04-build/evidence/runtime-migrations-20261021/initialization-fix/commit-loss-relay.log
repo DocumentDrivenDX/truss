@@ -1,0 +1,9 @@
+test_original_commit_reply_loss_recovers_after_restart (test_runtime_migrations_native.RuntimeMigrationNativeTests.test_original_commit_reply_loss_recovers_after_restart)
+@covers US-045-AC7 ... ok
+test_original_commit_reply_loss_recovers_after_restart (test_runtime_migrations_native.CurrentTupleMigrationNativeTests.test_original_commit_reply_loss_recovers_after_restart)
+@covers US-045-AC7 ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 15.392s
+
+OK

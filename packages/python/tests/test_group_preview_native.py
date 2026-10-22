@@ -19,6 +19,23 @@ class GroupPreviewNativeTests(precondition_tests.GroupPreconditionTests):
                        if n.startswith('test_')):
         locals()[_name] = None
 
+    def mark_native_preview_statement(self,host):
+        # The real function name may be beyond pg_stat_activity's 1024-byte
+        # capture after host admission SQL. Tag only the actual preview command
+        # at the driver boundary; preserve its single-statement snapshot.
+        original=host._cursor
+        class MarkedCursor:
+            def __init__(self,inner):self.inner=inner
+            def __getattr__(self,name):return getattr(self.inner,name)
+            def __enter__(self):self.inner.__enter__();return self
+            def __exit__(self,*args):return self.inner.__exit__(*args)
+            def execute(self,query,*args,**kwargs):
+                if isinstance(query,str) and 'truss.preview_group_conditions(' in query:
+                    query='/* truss-preview-race */ '+query
+                self.inner.execute(query,*args,**kwargs)
+                return self
+        host._cursor=lambda:MarkedCursor(original())
+
     def test_readonly_preview_observes_all_five_conditions_without_effects(self):
         """@covers US-040-AC1 / US-040-AC2: preview reports an observation only."""
         connection, host, assembly, tx, a, b, pin = self.initialized()
@@ -165,6 +182,7 @@ class GroupPreviewNativeTests(precondition_tests.GroupPreconditionTests):
         preview=self._preview_input(assembly,tx,a,conditions)
         backend_pid=connection.execute('SELECT pg_backend_pid()').fetchone()[0]
         writer_connection,writer_host,writer_assembly,writer_tx=self.consumer()
+        self.mark_native_preview_statement(host)
 
         def observe():
             try:
@@ -180,7 +198,7 @@ class GroupPreviewNativeTests(precondition_tests.GroupPreconditionTests):
             while time.monotonic()<deadline and not pending.done():
                 active=self.admin.execute(
                     "SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE pid=%s "
-                    "AND state='active' AND query ILIKE '%%preview_group_conditions%%')",
+                    "AND state='active' AND query LIKE '/* truss-preview-race */%%')",
                     (backend_pid,)).fetchone()[0]
                 if active:
                     changed,_,_=self.condition_group(writer_assembly,writer_tx,a,(),
@@ -208,6 +226,7 @@ class GroupPreviewNativeTests(precondition_tests.GroupPreconditionTests):
                          for index in range(3072))
         preview=self._preview_input(assembly,tx,a,conditions)
         backend_pid=connection.execute('SELECT pg_backend_pid()').fetchone()[0]
+        self.mark_native_preview_statement(host)
 
         def observe():
             try:
@@ -223,7 +242,7 @@ class GroupPreviewNativeTests(precondition_tests.GroupPreconditionTests):
             while time.monotonic()<deadline and not pending.done():
                 active=self.admin.execute(
                     "SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE pid=%s "
-                    "AND state='active' AND query ILIKE '%%preview_group_conditions%%')",
+                    "AND state='active' AND query LIKE '/* truss-preview-race */%%')",
                     (backend_pid,)).fetchone()[0]
                 if active:
                     self.admin.execute('REVOKE group_reader FROM consumer')

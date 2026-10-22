@@ -15,6 +15,69 @@ ddx:
       kind: informed_by
 ---
 
+## Latest-only forward migration contract — 2026-10-21
+
+The [PRD decision](../../01-frame/prd.md#owner-decision--forward-migrations-to-the-latest-release-2026-10-21)
+and ADR-008 supersede fresh-only release restrictions for the new migration
+lineage. Older proposals below apply only where consistent with this amendment
+and the trusted embedding host boundary. No pre-0.10 adapter is required.
+
+- **RM-01 route identity:** identify source and target by exact manifests and
+  installed definitions, including routines, constraints, indexes, grants and
+  retained encodings. Equal `releaseId` or layout version is insufficient. The
+  first source is v0.0.44; the target is the exact migration-enabled current
+  release, frozen before qualification. Altered or unrecognized sources refuse.
+- **RM-02 execution:** latest administrative tooling alone executes immutable,
+  ordered forward recipes under quiescence and common writer/installer exclusion.
+  The tool owns a dedicated transaction; do not wrap it in an application outer
+  transaction. Source verification, all steps, preservation verification and
+  target/receipt publication are atomic for the initial transactional route.
+  Source installations without a migration ledger initialize it in that same
+  transaction. Fresh installation creates empty migration state, not a receipt.
+- **RM-03 preservation:** retain original documents/extensions, graph and catalog
+  IDs, exact values/keys, retained data, ownership, journal/history, registration
+  reports, request replay identity/outcomes, import provenance/audit, feed positions,
+  enrollment and acknowledgments. Preserve sequence high-water marks and recovery
+  references. Never fabricate changes, reset horizons or reinterpret old evidence
+  as a new mutation. Declare and independently verify any conversion.
+- **RM-04 settlement:** reuse existing installed-target host recovery custody.
+  Expose status/verify/prepare/apply/reconcile/receipt through the Python
+  `RuntimeMigrations` administrative binding and `truss-migrate` CLI. The legacy
+  `upgrade_in_transaction` must refuse caller-owned settlement and direct users
+  to the separately owned session. Persist original attempt identity before submission. Unknown commit
+  closes readiness and reconciles that attempt without executing recipes again.
+  Same settled request returns its original result plus fresh target verification;
+  changed request/recipe or native drift refuses. A later migration does not erase
+  original results; an old receipt alone cannot prove current target readiness.
+- **RM-05 runtime admission:** the latest runtime checks the exact active tuple
+  before application effects. The migration excludes old writers and never
+  publishes intermediate readiness. After commit, old-runtime entry points must
+  reject the upgraded installation; test actual predecessor wheels. Recapture
+  caches/query bindings and re-enroll optional security profiles where their exact
+  tuple changes. Do not grant bypass rights or silently discard registrations.
+- **RM-06 future releases:** retain a path from every admitted lineage source to
+  latest in the latest tooling. Chained recipes operate on data only; intermediate
+  application runtimes are never launched. Applied recipes are immutable; repairs
+  append forward steps. Package-only updates with identical installed meaning
+  require compatibility evidence, not an invented database migration.
+- **RM-07 release gate:** a populated predecessor-to-latest test and all prior
+  lineage-to-latest paths block release, including skip-release chains. Test
+  rollback, concurrency, drift, lost acknowledgment and recovery. New schema or
+  encoding changes require explicit preservation/conversion and forward recovery.
+
+Truss owns recipes, verification, orchestration and publication; UMF owns reused
+metadata semantics and SQL generation; Weft owns compilation. Reuse the actual
+trusted host and administrative services. Unrelated complete protected-security
+work, formal proofs and custom transport instrumentation are not prerequisites.
+Optional activated profiles must either have a qualified transition or cause an
+explicit pre-effect refusal with the original installation intact. The initial
+release must list its supported profile scope.
+
+The exact first recipe and source/target preservation evidence are delivery
+outputs of the [restoration plan](../../04-build/runtime-migration-restoration-plan.md).
+Current released upgrade refusal remains factual until those gates pass.
+
+
 ## Current release resource selection — owner decision 2026-10-11
 
 The stock-PostgreSQL release uses logical input, occurrence, row, statement and

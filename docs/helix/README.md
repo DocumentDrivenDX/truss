@@ -1,6 +1,14 @@
 # truss project documentation
 
-The next release is [Python SDK v0.0.42](04-build/releases/v0.0.42.md), adding
+Current delivery: [restore runtime migrations](04-build/runtime-migration-restoration-plan.md).
+The latest runtime is the sole support target. Previous databases migrate forward;
+old application runtimes do not remain supported. The UMF 0.10 routes are implemented in the v0.0.47 candidate;
+52 installed migration cases without skips on macOS ARM64 and Linux x86_64, plus
+the complete Linux release/public-workload gate, pass for the frozen runtime.
+Merge, tag publication and public-install verification are recorded in that plan. The PRD/ADR-008 amendment supersedes earlier upgrade withdrawal.
+
+
+The historical [Python SDK v0.0.42](04-build/releases/v0.0.42.md) added
 the experimental registered typed-action host and strict native receipt admission.
 Its final qualification is carried with the release assets. The
 [v0.0.40 checkpoint](03-test/performance/README.md#2026-10-19-current-local-qualification-checkpoint)
@@ -36,8 +44,8 @@ The tested local tuple is DocumentDrivenDX `pgserver-pg18==18.6.1`, PostgreSQL18
 and psycopg3.3.6 binary/libpq18.6. The host supplies its authenticated connection
 and owns outer transactions; the current release embeds V8 for UMF preparation.
 
-Available operations include installation/status and additive predecessor
-upgrades, accepted catalogs/reports/original source, compatible scalar evolution,
+Available operations include installation/status, accepted catalogs/reports/original
+source, compatible scalar evolution,
 exact object/key/edge reads, atomic groups/preconditions/dry-run/durable replay,
 caller-owned imports, Weft queries, receipt visibility, committed feed/ACK and
 retained scalar/edge history, bounded traversal, exact typed SQL pages and

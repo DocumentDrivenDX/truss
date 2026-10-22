@@ -1,0 +1,7 @@
+test_original_root_document_and_current_reader_are_required (test_query_export_sources_native.QueryExportSourceTests.test_original_root_document_and_current_reader_are_required) ... ok
+test_sources_exceed_ordinary_cap_and_keep_complete_key_checks (test_query_export_sources_native.QueryExportSourceTests.test_sources_exceed_ordinary_cap_and_keep_complete_key_checks) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 11.745s
+
+OK

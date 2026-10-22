@@ -42,6 +42,8 @@ BEGIN
  IF current_setting('transaction_isolation')<>'read committed' THEN
   RAISE EXCEPTION 'catalog authorization requires READ COMMITTED' USING ERRCODE='0A000'; END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
+ IF current_setting('truss.runtime_digest',true) IS DISTINCT FROM installation.release_sha256 THEN
+  RAISE EXCEPTION 'latest runtime required; explicitly migrate the installation' USING ERRCODE='0A000'; END IF;
  SELECT oid,rolcanlogin,rolsuper,rolcreaterole,rolcreatedb,rolreplication,rolbypassrls INTO STRICT actor
  FROM pg_roles WHERE rolname=session_user;
  -- Read membership rows under the current snapshot instead of a role cache
@@ -452,7 +454,7 @@ BEGIN
  IF compact AND declarations_bytes<>''::bytea THEN RAISE EXCEPTION 'source-only catalog request required' USING ERRCODE='22023';END IF;
  actor:=truss.catalog_actor();
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
- IF installation.release_id<>'truss-catalog-runtime/0.72-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
+ IF installation.release_id<>'truss-catalog-runtime/0.73-candidate' OR request_key IS NULL OR octet_length(request_key) NOT BETWEEN 1 AND 1024 THEN
   RAISE EXCEPTION 'selected catalog release and request key required' USING ERRCODE='22023'; END IF;
  FOREACH raw IN ARRAY ARRAY[input_bytes,documents_bytes,declarations_bytes,source_bytes,origin_bytes] LOOP
   component_index:=component_index+1;

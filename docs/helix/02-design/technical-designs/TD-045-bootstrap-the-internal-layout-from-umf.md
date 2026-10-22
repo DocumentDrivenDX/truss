@@ -15,6 +15,119 @@ ddx:
       kind: informed_by
 ---
 
+## Forward runtime migration design — 2026-10-21
+
+Apply CONTRACT-008 RM-01–07 and the architecture's latest-runtime migration
+boundary. The first route upgrades a populated v0.0.44 UMF 0.10 installation to
+the exact migration-enabled current bundle. v0.0.45 and v0.0.46 have the same
+runtime manifest in the inspected repository; package labels do not define edges.
+The current v0.0.46 baseline has changed SQL relative to v0.0.44 despite retaining
+`0.72-candidate` and layout `1.0`. Freeze full digests and installed inventories.
+
+Restore only useful transaction/fencing/receipt mechanisms from historical
+migration code. Do not restore pre-0.10 producers or old execution cohorts. Compile
+an explicit ordered recipe from the actual inventory delta, with expected source
+and target definitions, privilege effects and preservation checks. Include ledger
+initialization and required routine replacement; do not scrape all current SQL
+with regular expressions and treat it as a verified upgrade recipe.
+
+Use an explicit administrative session outside application transactions. Acquire
+a stable source/writer/installer exclusion in a documented common order, verify
+source and authority under that cut, run bounded transactional steps, independently
+verify target and preservation, then publish target identity and original receipt
+atomically. Fail-fast contention has no internal retry. Use stock driver settlement
+and existing recovery custody; lost acknowledgment is reconciled without replay.
+
+Initial route is offline and transactional. Use expand/backfill/contract for future
+destructive transformations, bounded passes and explicit forward fixes. A recipe
+needing nontransactional work or incompatible active security profiles must refuse
+until its distinct recovery/transition is qualified. Exact reader ABI and old-wheel
+admission behavior are part of the recipe, not presumed from unchanged tables.
+
+Implementation slices and unresolved measurements live in the
+[restoration plan](../../04-build/runtime-migration-restoration-plan.md); exact
+preservation and failure assertions live in STP-045. Planning does not qualify an
+upgrade or amend historical release evidence.
+
+
+### Selected Python runtime-migration profile
+
+`RuntimeMigrations` in `truss.migrations` and `truss-migrate` own a dedicated idle
+psycopg connection, explicit READ COMMITTED transaction and settlement. The host
+supplies restart-durable CONTRACT-007 installed-target register/append/inspect
+custody; `recovery_registry.HostRecoveryRegistry` implements that port with SQLite
+synchronous FULL, immutable originals and compare-and-append observations. It does
+not execute work. The caller-owned `upgrade_in_transaction` cannot adopt this
+ownership and refuses with the new entry point.
+
+`_migration_recipe` admits only checksum-pinned inventories, ordered native recipe
+artifacts and a forward DAG to the latest target. `_migration_verify` observes
+native definitions, cross-namespace table/index inheritance, partition keys,
+ownership, effective role/grant closure, exact configuration, server and
+database/source identity. Verify definitions before invoking private
+installation functions. `_migration_execute` takes the installer's advisory key,
+then ACCESS EXCLUSIVE NOWAIT table locks in sorted order; it verifies source,
+executes the ordered delta and ownership/grants, verifies each endpoint, compares
+all original table-row and sequence fingerprints, and publishes one final receipt
+and active target in the same transaction. No intermediate runtime is opened.
+
+The immutable genesis installation stays exact. `runtime_current_installation`
+overlays the newest native migration receipt's release/configuration. The original
+business layout stays `1.0`; the new administrative adjunct has its own
+[UMF 0.10 native model](../models/truss-runtime-migrations-0.1.umf.json), owner
+import/export correspondence and exact full-release inventory. Receipt rows retain
+original request, recipes, observed inventories, ordered SQL completion/privilege
+and preservation bytes, writer XID and preparation time. Their trigger is ALWAYS
+and denies mutation, deletion and truncation. XID/time do not claim commit time.
+
+Latest host transaction adoption declares its exact runtime digest. The native
+`runtime_person` fence rejects the old host after migration, including facades
+without a digest argument. This cohort declaration adds no authority; existing
+native caller and privilege checks still apply. Latest application operations
+never import historical conversion implementations or auto-upgrade on startup.
+
+Submission custody records the actual backend PID/start before BEGIN. A missing
+receipt cannot establish rollback while that backend lives. Lost COMMIT replies
+reconcile the original attempt under exclusion without resubmission. A visible
+receipt proves application durability but cannot fabricate original resource
+release. Known commit plus current drift remains committed-unverified. Future
+packages archive exact old manifests to interpret original requests/receipts;
+unsubmitted requests must be re-prepared for the latest target.
+
+Defaults are 256 MiB per streamed preservation pass, 10s per statement and 30s
+per operation; larger finite constructor limits are explicit and recorded in the
+request. Each pass hashes length-framed, C-ordered row bytes plus sequence state.
+This bounds the selected scan, not hidden PostgreSQL sort allocation or general
+large-database capacity. Contention/limits refuse without internal retries.
+
+The qualified initial profile is PostgreSQL 18.6, UMF 0.10, ordinary unprotected
+roles/catalogs/import/feed/audit and the two exact source tuples in the packaged
+manifest. Unknown/pre-0.10/activated protected profiles refuse. Logical backup
+recovery targets a new database identity before target writes. PostgreSQL dump
+omits the original private table-row-type ACLs; `backup_metadata()` exports the
+explicit companion closure for offline restore before admission. Migration never
+repairs that drift. Only two exact deparse alternatives are admitted, justified
+by identical parse trees from the pinned UMF native backend with source positions
+excluded; raw observed definitions remain in receipts. Other differences refuse.
+
+Native inventory observation scopes `TimeZone=UTC` and restores the observer's
+original setting. The source installer used timezone-sensitive horizon literals;
+UTC and America/New_York therefore produced two distinct, qualified native
+partition-bound profiles. The packaged initialization proof records real original
+wheel captures for each. These bounds are not equivalent spellings or a temporal
+conversion: migration must preserve the exact source row unchanged, even when
+another row is independently admitted. Unknown bounds refuse. Tests change the
+observer timezone and deliberately substitute the other admitted bound; the
+latter must roll back. This adds no old application runtime support.
+
+The release gate retains every admitted source, previous target, published
+immutable artifact and original manifest. Real published wheels produce fixtures;
+only latest tooling performs conversions. An unchanged database tuple gets a
+no-change case. A future real second edge must supply native skip-release-chain
+proof; a synthetic graph test cannot supply it. Exact executed evidence belongs
+in the restoration plan, not in historical qualification claims.
+
+
 # TD-045: Bootstrap the internal layout from UMF
 
 **User Story:** US-045. **Feature:** FEAT-007. **Parent:** SD-007.

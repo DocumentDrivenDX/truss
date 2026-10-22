@@ -1,0 +1,9 @@
+{
+  "nativeManifestSha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea",
+  "migrationManifestSha256": "5f6e099b8a315fdfabae99b41df86383cf78c9cf6a8afc8e1cd11d16ee7f3f80",
+  "scope": "Real released-wheel UTC and America/New_York initializers; UTC observation; original native bounds preserved exactly",
+  "localInstalledTests": 48,
+  "localPassed": true,
+  "initializationProofSha256": "f96ab35237f7b0b9ee3d708c8271c70ddc27dfe40f77a5a5127f13054951a835",
+  "linuxPending": true
+}

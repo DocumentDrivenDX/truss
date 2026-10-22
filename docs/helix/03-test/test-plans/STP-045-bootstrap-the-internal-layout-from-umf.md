@@ -15,6 +15,50 @@ ddx:
       kind: informed_by
 ---
 
+## Latest-only migration assertions — RM-T01–08, 2026-10-21
+
+| Story criterion | Primary planned proof | Required test citation |
+| --- | --- | --- |
+| US-045-AC6 | RM-T01/02/04; real source creation, migration and independent latest readback | `@covers US-045-AC6` |
+| US-045-AC7 | RM-T03/05/06; rollback, fencing and original-attempt reconciliation | `@covers US-045-AC7` |
+| US-045-AC8 | RM-T07/08; installed latest tool, skip-release paths and release blocking | `@covers US-045-AC8` |
+
+These planned tests refine LM-T01–08 under the latest PRD/ADR-008 policy. Their
+existence in this plan is not executed evidence. Use a real predecessor wheel to
+create and commit the source, then a clean installed latest migration package.
+Record exact wheel/artifact/manifest hashes, profiles, native inventories, original
+before/after observations and actual command/settlement outcomes.
+
+| Test | Requirement | Required observable assertion |
+| --- | --- | --- |
+| RM-T01 | RM-01/02 | Populated v0.0.44 → current migration-enabled target succeeds; initializer and exact routine/grant delta commit once; fresh bootstrap creates no applied-migration receipt |
+| RM-T02 | RM-03 | Independent expectations preserve exact scalar/collection values, keys, graph ownership/edges, retained/unknown content, accepted bytes/IDs/revisions/reports, history, replay results, imports/audits, feed continuation/ACK and sequence high-water marks; latest APIs read and extend the migrated state |
+| RM-T03 | RM-02/05 | Concurrent old writer/installer and upgrade follow one lock order; contention refuses without partial effects; actual old wheel refuses application work after upgrade; latest cannot use an uncommitted target |
+| RM-T04 | RM-01/04 | Same ID/layout with changed definitions, grants or bytes refuses; unknown/pre-0.10 source and changed applied recipe refuse before effects; exact settled repeat verifies target without another step/receipt |
+| RM-T05 | RM-02/04 | First-step effects followed by later failure fully roll back data/DDL/ledger/target state; connection loss/cancel retains honest outcome and source or recovery custody |
+| RM-T06 | RM-04 | Drop actual COMMIT response and restart tool; same attempt reconciles without duplicate execution. Confirmed commit plus failed verification remains committed-unverified and closes target readiness |
+| RM-T07 | RM-06/07 | Seed each admitted historical lineage fixture and migrate directly with latest tooling. Exercise at least a two-edge skip-release chain when its next real edge exists; no intermediate runtime launches or restored old application execution imports |
+| RM-T08 | RM-05/07 | Clean distribution contains exact recipes, verifier and recovery artifacts; explicit consumer command upgrades then verifies and opens latest. Startup/import never migrates; stale caches/bindings refuse or are explicitly recaptured. Backup restore plus remigration works; package downgrade never claims rollback |
+
+Execute unit recipe/admission tests before native tests; execute clean-wheel tests
+before advertising a route. Every future release must run all admitted source-to-latest
+cases and the new predecessor case. Identical installed artifacts require a verified
+no-change case. Nontransactional and activated-profile refusals are explicit controls,
+not successful migrations. The planned suite is `test_runtime_migrations_native.py`
+plus `test_runtime_migrations.py` under `packages/python/tests/`; final commands,
+fixture membership and original receipts are recorded in the restoration plan.
+
+
+Execution evidence: the [restoration plan](../../04-build/runtime-migration-restoration-plan.md#execution-contract-and-continuation-evidence)
+links the installed v0.0.47 candidate receipt and focused regressions. The source
+fixture is synthetic, populated and keyed, with import/retained unknown content,
+edge/history/replay/feed acknowledgment. Whole-table/sequence fingerprints are
+separate from independently authored latest API read/write/key assertions. The
+fixture does not exhaust every scalar/container/ownership variant. Native
+skip-release-chain execution awaits the first real subsequent edge; metadata
+planning tests do not qualify it. Hosted Linux remains a publication gate.
+
+
 ## Current release resource selection — owner decision 2026-10-11
 
 The stock-PostgreSQL release uses logical input, occurrence, row, statement and

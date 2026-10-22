@@ -1,0 +1,12 @@
+{
+  "edgeCount": 1693,
+  "errors": [],
+  "passed": true,
+  "scope": "python-only",
+  "unqualified": [
+    "TypeScript imports",
+    "native SQL dependencies",
+    "reflection/indirect dynamic execution",
+    "runtime private-object visibility"
+  ]
+}

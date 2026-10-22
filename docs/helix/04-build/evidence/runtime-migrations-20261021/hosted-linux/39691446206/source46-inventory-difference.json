@@ -1,0 +1,29 @@
+{
+  "source": "source46",
+  "locale": [
+    "C.UTF-8",
+    "C.UTF-8",
+    "c"
+  ],
+  "matches": false,
+  "differences": {
+    "relations": {
+      "expectedRows": 174,
+      "observedRows": 174,
+      "expectedOnly": [
+        {
+          "sha256": "09b4f2181c0998ce4074ef79b915b248b793ed2ef6aeca2d23660c38b757cf39",
+          "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-09-01 00:00:00-04') TO ('2027-11-01 00:00:00-04')\",\"heap\",null]"
+        }
+      ],
+      "observedOnly": [
+        {
+          "sha256": "654c3e01b0df9dafc32bbc31b3c9efba3bc7692ecb150d2677b6841457fff088",
+          "prefix": "[\"journal_runtime_horizon\",\"r\",\"p\",false,false,null,true,\"FOR VALUES FROM ('2026-09-01 00:00:00+00') TO ('2027-11-01 00:00:00+00')\",\"heap\",null]"
+        }
+      ],
+      "orderingOnly": false
+    }
+  },
+  "fullNativeObservationSha256": "15a2ec482ca3f330ce98b3f7cd371dbcd2e2b2454ee0b1f3f4f85ca888b92063"
+}

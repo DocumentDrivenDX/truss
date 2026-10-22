@@ -46,6 +46,7 @@ The table also owns feature-level traceability; exact per-criterion tests belong
 | CNF-05 | Disposable native install plus full catalog and behavior checks | Actual selected layout passes on each qualified server |
 | CNF-06 | Pinned UMF validity and diagnostic corpus | Same severity/code/path; no host-specific semantic reinterpretation |
 | CNF-07 | UMF native model/export and independent baseline candidate oracle | US-045 determinism, complete inventory, edited model and refusal cases |
+| CNF-08 | Latest-only application runtime, separate forward migration boundary under CONTRACT-008 RM-01–07 | US-045-AC6–08; populated RM-T01–08, every admitted source-to-latest route and old-wheel refusal |
 
 ## Solution Approaches
 

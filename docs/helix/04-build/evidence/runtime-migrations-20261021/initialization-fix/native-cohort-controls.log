@@ -1,0 +1,8 @@
+test_owned_precondition_ceiling_plus_one_refuses_in_native (test_group_preconditions_native.GroupPreconditionTests.test_owned_precondition_ceiling_plus_one_refuses_in_native)
+@covers US-040-AC2: over-ceiling input refuses without group effects. ... ok
+test_1025_refuses_in_host_and_native_without_durable_effects (test_group_capacity_native.GroupCapacityTests.test_1025_refuses_in_host_and_native_without_durable_effects) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 9.872s
+
+OK

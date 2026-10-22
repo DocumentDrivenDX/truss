@@ -1,0 +1,10 @@
+{
+  "runId": 39690997485,
+  "sourceCommit": "aaa449b325061c999e630286d17145fa0818a1ef",
+  "runtimeFiles": 444,
+  "runtimePayloadMatched": true,
+  "artifacts": {
+    "truss_toolkit-0.0.47-py3-none-any.whl": "470a7bb0de90be98f6604c146eecbdc62e989eefe633d0a6d964f39308a70f91",
+    "truss_toolkit-0.0.47.tar.gz": "5f293be3da15ef7cf4989bbc1a576f697405f43f75cde25ddfc58bd57e008451"
+  }
+}

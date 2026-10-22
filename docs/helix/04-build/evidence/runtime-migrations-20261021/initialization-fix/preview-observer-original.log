@@ -1,0 +1,27 @@
+test_preview_data_uses_one_snapshot_across_concurrent_update (test_group_preview_native.GroupPreviewNativeTests.test_preview_data_uses_one_snapshot_across_concurrent_update)
+@covers US-040-AC1: condition reads share the reported snapshot basis. ... FAIL
+test_preview_refuses_when_reader_is_revoked_during_observation (test_group_preview_native.GroupPreviewNativeTests.test_preview_refuses_when_reader_is_revoked_during_observation)
+@covers US-040-AC2: a mid-observation reader revocation withholds results. ... FAIL
+
+======================================================================
+FAIL: test_preview_data_uses_one_snapshot_across_concurrent_update (test_group_preview_native.GroupPreviewNativeTests.test_preview_data_uses_one_snapshot_across_concurrent_update)
+@covers US-040-AC1: condition reads share the reported snapshot basis.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_preview_native.py", line 193, in test_preview_data_uses_one_snapshot_across_concurrent_update
+    self.assertTrue(active,'native preview completed before the concurrent update began')
+AssertionError: False is not true : native preview completed before the concurrent update began
+
+======================================================================
+FAIL: test_preview_refuses_when_reader_is_revoked_during_observation (test_group_preview_native.GroupPreviewNativeTests.test_preview_refuses_when_reader_is_revoked_during_observation)
+@covers US-040-AC2: a mid-observation reader revocation withholds results.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_preview_native.py", line 233, in test_preview_refuses_when_reader_is_revoked_during_observation
+    self.assertTrue(active,'native preview completed before the revocation race was observed')
+AssertionError: False is not true : native preview completed before the revocation race was observed
+
+----------------------------------------------------------------------
+Ran 2 tests in 12.293s
+
+FAILED (failures=2)

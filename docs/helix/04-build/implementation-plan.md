@@ -36,6 +36,21 @@ ddx:
 
 ---
 
+## Current migration direction — 2026-10-21
+
+The [restoration plan](runtime-migration-restoration-plan.md) and PRD owner
+decision supersede earlier migration sequencing and compatibility assumptions
+where they conflict. Support the latest runtime only; previous databases move
+forward through the latest migration tooling. Start with a populated UMF 0.10
+v0.0.44 source; pre-0.10, old-runtime operation and downgrades are excluded.
+Keep admitted database migration paths through future releases. Historical
+component receipts and older draft interfaces do not establish shipped support.
+Use CONTRACT-008 RM-01–07, STP-045 RM-T01–08 and restoration slices RM-S1–S7.
+The v0.0.47 candidate implements these routes; exact installed-package evidence
+and the hosted release gate status are recorded in the restoration plan.
+Historical sections below retain their original scope.
+
+
 # Truss build plan
 
 ## One-shot isolated local installation — owner direction 2026-10-21

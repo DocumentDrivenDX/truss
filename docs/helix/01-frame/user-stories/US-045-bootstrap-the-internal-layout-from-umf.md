@@ -16,7 +16,7 @@ ddx:
 # US-045: Bootstrap the internal layout from UMF
 
 **Feature:** FEAT-007 — Conformance and Portability
-**Feature Requirements:** CNF-07
+**Feature Requirements:** CNF-07, CNF-08
 **PRD Requirements:** FR-56
 **Priority:** P0
 **Status:** Draft
@@ -45,6 +45,10 @@ Application-model acceptance adds catalog rows and its required atomic data/repo
 - [ ] **US-045-AC3** — Given a required unsupported or omitted object, when generation is attempted, then installation readiness is refused with a source-qualified diagnostic and no hidden patch.
 - [ ] **US-045-AC4** — Given an edited native layout model, when SQL is regenerated, then it reflects the current model, while the original source remains retained and is not substituted.
 - [ ] **US-045-AC5** — Given a nonempty incompatible database, when fresh bootstrap is requested, then it is refused without changing existing objects.
+
+- [ ] **US-045-AC6** — Given a populated admitted UMF 0.10 predecessor, explicit latest migration tooling upgrades it to the exact current target while preserving catalog/data/history/replay/feed meaning; pre-0.10 or modified sources refuse without effects.
+- [ ] **US-045-AC7** — Given failure, concurrent writers or uncertain commit, migration preserves atomicity, fences mixed runtimes and reconciles the original attempt without blind replay; an old runtime refuses after upgrade.
+- [ ] **US-045-AC8** — Given any later release, every admitted migration-lineage source has a tested path to latest through the latest tool alone, including skipped releases. Missing paths block publication; old runtime operation is not a support obligation.
 
 ## Edge Cases
 
