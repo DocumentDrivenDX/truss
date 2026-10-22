@@ -905,6 +905,19 @@ the installed-consumer and release gates. New builds, Truss pin changes, hosted
 overall conformance and public release remain pending; no new binary or release
 is credited here.
 
+### Candidate invocation source-start correction — 2026-10-22
+
+The candidate command began with Weft `HEAD` at `874e0f67255be297ee321024e8f6d180c668f951`
+and four dirty B-001 paths whose bytes match the later `e43b7a8c` commit.
+During the run, `HEAD` advanced through `e43b7a8c` to `84bde6e6`; the latter
+changed only the Ubuntu apt-source helper and the two CI workflow files. This
+clarifies the earlier packet's `selectedSourceRevision` field without changing
+its original logs or receipt. The separate [source-start provenance
+correction](evidence/hohfeld-followup-20261021/weft-full-workspace-arras-051-failure/source-start-provenance-correction.md)
+preserves the captured B-001 patch and per-file blob correspondence. The
+candidate result remains failed historical evidence; this clarification adds
+no suite pass, binary, cohort or release claim.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).
