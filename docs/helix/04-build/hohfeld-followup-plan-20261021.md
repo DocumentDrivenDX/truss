@@ -39,8 +39,9 @@ evidence boundaries to preserve during the next release.
 The original request snapshot compares the four supplied Hohfeld documents with
 Truss 0.0.45 and Weft 0.4.49 as observed on 2026-10-21. Execution starts from
 released Truss 0.0.47 at `6c9365c8be60b55602fe4e7bd4e45b4b5040ec74` and main
-`da677e40660b90bcd8f2a6309d40bd2ae90abaf0`; unchanged source document hashes are
-confirmed below. Reproduce disputes using the verified public wheel, not historical
+`da677e40660b90bcd8f2a6309d40bd2ae90abaf0`; the historical source document hashes
+are retained below. The active consumer is now Arras, as recorded in the current
+source-custody amendment. Reproduce disputes using the verified public wheel, not historical
 adapter wording.
 This is the follow-up queue for requests left after the
 [embedder delivery](embedder-e2-e8-plan.md) and
@@ -674,6 +675,70 @@ the x86 wheel for its upcoming native Linux gate. Exact public publication and
 clean installed adoption remain required. Two main-integration stale workspace
 controls (missing example feature and promotion of an old UMF0.7 success golden)
 were fixed without compiler behavior changes; the next full hosted run is required.
+
+### Final local upstream gate and engineering review — 2026-10-22
+
+Committed Weft integration61c994b8 passes the complete fresh-host gate with5,451
+source inputs reconciled after actual CLI, installed native-wheel and Chromium
+execution. The original2,181 UMF0.7 requests are explicitly qualified as current
+envelope refusals, with zero current compiled inputs credited. Historical success
+proofs remain immutable. Separate current compilation evidence is the31-case
+UMF0.10 native/Chromium corpus, including original extension-bearing source.
+Seventeen resource/security cases retain exact cross-host parity. The initial
+stale full-host gate and local setup failures were retained and repaired rather
+than reviving old core execution. [Complete source-bound local host receipt](evidence/hohfeld-followup-20261021/weft-final-host-source61c/receipt.json).
+
+Engineering review rechecked finite native grant/owner separation, stable data
+snapshots versus current authorization, observer-only original request recovery,
+empty-only paired DDD admission versus retained-value core rebind, complete
+candidate bounds before residual query evaluation, host-owned constraint/rollback
+custody, reader authorization for audit key data, immutable old audit headers,
+and one final publication per complete migration route. The review's discovered
+receipt visibility gap and stale race instrumentation are fixed with independent
+native controls. No unresolved local behavior finding remains in the accepted
+scope. Broader performance targets, managed support, additional driver/query
+subsets and all written pushbacks remain explicit limits.
+
+Weft PR27 and Truss PR29 still require final hosted gates, merge, exact selected
+Weft publication/adoption, Truss tag qualification, public artifact verification
+and documentation publication. Local success is not the release exit.
+
+### Arras source and qualification amendment — 2026-10-22
+
+The owner identifies Arras as the renamed Hohfeld consumer and requests that this
+release target its active sources. The four documents now live under
+`/Users/erik/Projects/arras/docs/helix/02-design/`. Registration is byte-identical;
+query findings rename the consumer and `hohfeld.view` to `arras.view`.
+Requirements and overhead documents also relabel six historical measurements
+from51 Records to30 while retaining their original timings. Those timings retain
+their original51-record scope; Arras owns the correction or a fresh30-record run.
+
+| Current source | SHA-256 |
+| --- | --- |
+| truss-requirements.md | `0a7be408d15947382f0ab3a5af05a3ff0978c85e597db31ff6acb50caeabed60` |
+| truss-statement-overhead-spec.md | `caeb0276935514aa05735772fd3653dd9fb6cefaf7145d8f3263d60b6ba4ff15` |
+| truss-registration-evidence-spec.md | `1a60da1464be4d1b03b0877e27b497551b86782ef55c1776eeaa4c72a3742abf` |
+| truss-query-and-conditions-findings.md | `d31e36a1fdfa47fb35a0999f22317b410ad22455fb343d80f3362aad3228e777` |
+
+`arras.view` is a real source namespace change. The f003 compiler artifacts and
+31-case historical corpus above remain valid component evidence but cannot
+qualify it. Rebuild the unpublished Weft0.4.51 candidate from its selected release
+source, admitting opaque Record/Field metadata only when the same exact original
+owning document declares `arras.view` version0.1.0. Missing, malformed or unsupported
+declarations and unknown selected semantics must refuse without SQL. One document's
+declaration must not qualify another's payload. Preserve original bytes/pins and
+unselected unknown content; do not interpret presentation metadata or broaden
+raw-table relationship semantics.
+
+Sol owns review and Luna implementation under the owner's explicit allocation.
+The new native Truss fixture first reproduced ordinary acceptance/source custody
+followed by the old compiler's WFT-TYPE refusal. Positive original-source query
+and relationship composition, supported/unsupported declarations, native wheel
+and Chromium parity, refreshed exact compiler cohorts and all final release gates
+remain required. Truss nativec433 is unchanged by a compiler-only metadata fix.
+Arras's coordinating chat owns its adapter, parse harness, dependency adoption and
+consumer evidence after the exact public package pair is available. Its fixture
+parse harness that strips extensions is not runtime acceptance evidence.
 
 ## Exit criteria
 

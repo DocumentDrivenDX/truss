@@ -1,0 +1,17 @@
+{
+  "scope": "Complete local macOS ARM64 fresh-host gate for committed Weft integration61c994b8; no selected-release wheel or database execution claim",
+  "source": "61c994b811ea7564d8318cf23f1c1642528f3074",
+  "status": "passed",
+  "inputFiles": 5451,
+  "retiredInputRefusals": 2181,
+  "currentCompiledInputsInThisHistoricalCorpus": 0,
+  "currentCompilationEvidence": "Separate Weft selected-source31-case UMF0.10 native/Chromium corpus and Truss installed61-case native corpus",
+  "resourceSecurityCases": 17,
+  "pinnedBunArchiveSha256": "90987a3a16d7db556d886ac3d551e7b6d3edf0a1cf43acaed622e8676be1d12f",
+  "files": {
+    "qualification.json": "1fa6afb060874828335c8f7bf7a230e437df1fa23cc051e5dba9c2947f5c44ec",
+    "run.log": "5d6abd926d2cc19ac229bf141b65dfa01384a67c8e4e6f30702707ca050cac7c",
+    "events.jsonl": "0f540be916e7603a13a06db940f4775cfd72288fe63a21249d3b1a5f57e7703b",
+    "manifest.json": "7738512111a94572157f489337745f3c4f0246a131a1cbfcda8edf055a3c0c43"
+  }
+}

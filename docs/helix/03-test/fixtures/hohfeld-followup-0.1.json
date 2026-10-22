@@ -310,6 +310,11 @@
       "id": "receipt_visibility_current_membership_and_actual_execute",
       "test": "test_receipt_visibility_native.ReceiptVisibilityTests.test_commit_token_readonly_reached_and_current_reader_authority",
       "expectation": "The original receipt token remains included after authorized history changes; no membership returns typed authorization unavailable, while an actual removed original EXECUTE grant remains42501."
+    },
+    {
+      "id": "arras_view_original_source_query_and_relationship",
+      "test": "test_arras_view_model_native.ArrasViewModelNativeTests.test_arras_view_metadata_is_retained_and_current_weft_query_succeeds",
+      "expectation": "Ordinary UMF0.10 acceptance retains exact original arras.view0.1.0 Record/Field/relationship metadata and nested unknown document content, while a public create/edge/HAS_RELATED query returns rows and the same original document bytes/pin. This does not qualify Arras parser naming conventions."
     }
   ],
   "producers": {
@@ -329,6 +334,7 @@
     "packages/python/tests/test_adopter_workflow_native.py": "50a1a88e1b754ba4ef536db566308c5161caea39d07918c5c9d0cbd242818f83",
     "packages/python/tests/test_adoption_cancellation.py": "6a1313df979294d678fddde367c7e922cbfc7e265964b75c6cfb10a41c82ee3c",
     "packages/python/tests/test_archive_self_write_fence_native.py": "abe3fcfe1bf19f3ed13900fc1047fd6acb9b3fdb1256e9e735d904e0668022b9",
+    "packages/python/tests/test_arras_view_model_native.py": "a56214368ea2ba48dfc9872ec1e93b3d002a61ccd607ffb54532f3c1ea7e1c64",
     "packages/python/tests/test_atomic_group_surface_native.py": "dbd11bae8f3e7c79bc23d23aca41bacafa5aac1659c529f9b926be974604b7a0",
     "packages/python/tests/test_audit_disclosure_native.py": "1d39f754e11dd0e9e80a516c864e16bc5c72ce590c51f6ca5d15fed5fcc68770",
     "packages/python/tests/test_batched_import_native.py": "e4508be76b9fd86c4b27b7ac743d964dac74f286510f6fb4df581d8a99678b3c",
