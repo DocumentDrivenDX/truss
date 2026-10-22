@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "scope": "Owned uvx fixture process observation after all four launchers exited0",
+  "fixture": "/tmp/truss-published-uvx-gmhp9u0s",
+  "remainingOwnedPostgresOrLauncherProcesses": []
+}

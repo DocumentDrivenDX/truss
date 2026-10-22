@@ -77,13 +77,15 @@ a current installation remain available under their existing authority rules.
 
 Catalog preparation retains original source documents,
 reuses immutable schema indexes in application memory, and checks the current
-database basis and authority before prepared writes. Query ABI 1.1 buffers each
-selected record or relationship type's complete source set before caller
-predicates, up to 10,000 rows per type; complete-entity relationship data remains
-separately bounded to 100 related keys. Behavior and qualification
-evidence are tracked in [`docs/helix/`](docs/helix/README.md). Cyclic schema
-definitions, record-valued properties, history offload and managed-service
-qualification remain unfinished.
+database basis and authority before prepared writes. Truss v0.0.48 query ABI1.2
+uses native-indexed exact string/boolean equality and eligible single required
+string-key pages above10,000 source rows. Complete candidate and byte limits apply
+before residual filters and `LIMIT`; numeric, temporal, composite and larger-key
+queries retain the bounded complete fallback. Complete-entity relationships
+remain capped at100 related keys. The v0.0.47/Weft0.4.49 ABI1.1 source-bound
+behavior remains historical. Behavior and evidence are tracked in
+[`docs/helix/`](docs/helix/README.md). Cyclic schema definitions, record-valued
+properties, history offload and managed-service qualification remain unfinished.
 
 ## Relationship to other DocumentDrivenDX projects
 

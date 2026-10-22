@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/private/tmp/truss-hf048-release/scripts/check-released-runtime.py", line 9, in <module>
+    from native_fixture import WorkerCluster
+  File "/private/tmp/truss-hf048-release/scripts/native_fixture.py", line 18, in <module>
+    import pg8000.native
+ModuleNotFoundError: No module named 'pg8000'

@@ -1,0 +1,4 @@
+Processing /private/tmp/weft-public-051-verification/assets/weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl
+Processing /private/tmp/truss-public-048-verification/assets/truss_toolkit-0.0.48-py3-none-any.whl
+Installing collected packages: weft-sql, truss-toolkit
+Successfully installed truss-toolkit-0.0.48 weft-sql-0.4.51

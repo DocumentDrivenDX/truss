@@ -3,22 +3,26 @@
 [Managed platform grants](04-build/managed-platform-grants-plan.md) are implemented
 in the [v0.0.49 source candidate](04-build/releases/v0.0.49.md), with explicit
 retained grantee policy, typed contained refusals and lifecycle/migration
-consistency. It retains the separate v0.0.48 HF baseline and earlier exact-candidate
-local evidence. Final lineage and mandatory hosted Linux release qualification
-are pending. Arras is the active consumer name; historical Praxis
-requests and snapshots retain their original provenance. Actual Lakebase support
-requires separate consumer/service qualification.
+consistency. The [final local campaign](04-build/evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json)
+passes on its exact macOS ARM64 tuple, including actual public v0.0.48 migration
+admission. Hosted Linux release qualification and publication remain pending.
+Arras is the active consumer name; historical Praxis requests and snapshots
+retain their original provenance. Actual Lakebase support requires separate
+consumer/service qualification.
 
-Current delivery: [runtime migrations released in v0.0.47](04-build/runtime-migration-restoration-plan.md).
-Only the latest application runtime is supported. Previous admitted databases
-migrate forward without age-based expiry; old application runtimes do not remain
-supported. The exact UMF 0.10 v0.0.44 and shared v0.0.45/46 routes are released.
-The complete Linux tag workflow passes, including 52 migration cases without
-skips and the original public workload. The public wheel also passes all 52 cases
-in a fresh macOS ARM64 environment, and the published `uvx` quickstart retains two
-independent instances across restart. [Public release verification](04-build/evidence/runtime-migrations-20261021/published-0.0.47/validation.json)
-records the checksummed assets, exact source, subset and limits. The PRD/ADR-008
-amendment supersedes earlier upgrade withdrawal.
+Current public delivery: [runtime migrations released in v0.0.48](04-build/runtime-migration-restoration-plan.md) and [release notes](04-build/releases/v0.0.48.md).
+Only the latest application runtime is supported. Every admitted database retains
+an unexpired forward route to the latest runtime; previous application runtimes
+do not remain supported. The v0.0.48 public gate covers the exact UMF 0.10
+v0.0.44 source, shared v0.0.45/46 lineage and v0.0.47 predecessor on PostgreSQL
+18.6. Public Linux and clean macOS ARM64 receipts cover the 80-case migration gate,
+the 62-case independent archive and the selected driver and `uvx` checks:
+[Linux 80-case migration receipt](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/migration-qualification.json), [macOS 80-case migration receipt](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-migration80/qualification.json),
+[Linux 62-case conformance receipt](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/hf-conformance-qualification.json), [macOS 62-case conformance receipt](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-independent62/qualification.json),
+[30-driver receipt](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-driver30/receipt.json), [two-instance uvx receipt](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-uvx-two-instances/receipt.json).
+[Public release verification](04-build/evidence/hohfeld-followup-20261021/published-0.0.48/validation.json)
+records the exact asset count (15) and package/source pins.
+The v0.0.47 receipts and claims remain historical.
 
 
 The historical [Python SDK v0.0.42](04-build/releases/v0.0.42.md) added

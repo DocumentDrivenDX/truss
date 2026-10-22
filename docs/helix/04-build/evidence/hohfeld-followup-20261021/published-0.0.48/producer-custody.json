@@ -1,0 +1,48 @@
+{
+  "format": "truss-public-release-producer-custody/1",
+  "tagSource": "8e89a068bcb68f1e631388ddc59bc97da748563d",
+  "trackedTagSourceUnchangedThroughAllPublicGates": true,
+  "expectedUntrackedSourceOutput": "docs/helix/04-build/evidence/design-audit/public-048-postgres186-20261022",
+  "taggedProducersSha256": {
+    "scripts/check-released-runtime.py": "b19c4420e6f8049ad695fe7f5646fed71a6b6f22269b380fa219708dd0803b23",
+    "scripts/released_runtime_validation.py": "ba8cdfd0f316ccd982c1b6a5ad408cd53739d5f006dcc67d2ca308e1110eafc9",
+    "scripts/native_fixture.py": "1f130fab83c0f931ce8b8b0a4f18e323e053c3dfc38a5cc529e1d60f5b2cda88",
+    "scripts/run-python-test-module.py": "0d6f19afcc764d1ba27e53ae5192881bbf770c8b5617d4f81c75f9609df60b92",
+    "scripts/check-native-worker-fixtures.py": "7f8f48f794fe8c6a56b3d6f25a1d80ce3482fe9367c30a6806692d2a2e49b97f",
+    "packages/python/tests/test_psycopg_host_native.py": "2eddbc52eaa90c1352005e85b1d87add5c998d7af6970422fe4a37b2b342723b",
+    "scripts/qualify-runtime-migrations.py": "5ad43674df301e042ab80440b8d7947bfd923c8cd3ea379bcb42e47e06e1eacd",
+    "scripts/run-hf-conformance.py": "41aedcd99999f60b18cba7e62d6ec5396bf09bdaaaa74a8165268df8f93b3d07"
+  },
+  "externalProducersSha256": {
+    "truss-048-finalize-public-packet.py": "ce9419dfa71df9867b3b81dc7e1a094e8bf570d4b29fc0366487a40595bc54b7",
+    "truss-public-048-download-verify.sh": "c01d8a05bde7aeb79a8b942f68dc724363c1e6e6dbdcae59a57c4b4bbd2d50cd",
+    "truss-public-048-verify-assets.py": "d7aaf609fb40e312fe6120116e2045ed73b8a7ea95379cbdafab601e42de81cf",
+    "truss-public-048-check-uvx.py": "8c75aaaa3a93d9f607b16392155ebc94c547ae6eb13a9db083ddea959d10e598"
+  },
+  "localRawCIFields": "Preserved null; source binding comes from separate clean tag/package snapshots, not fabricated CI identity.",
+  "preGoSnapshots": "Original pending/no-native-start fields are installation-stage observations, retained unchanged.",
+  "driverPrerequisiteRefusal": {
+    "retained": "mac-driver30/truss-public-048-driver-prerequisite-refusal.log",
+    "qualified": false,
+    "reason": "Missing repository-pinned pg8000==1.31.5 fixture dependency; import stopped before database work. Installed exact pin, then unmodified checker passed. This adds no pg8000 support claim."
+  },
+  "driverCommand": [
+    "/private/tmp/truss-public-048-clean-venv/bin/python",
+    "scripts/check-released-runtime.py",
+    "/private/tmp/truss-public-047-clean-runtime-wheels/pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+    "/private/tmp/truss-public-048-verification/assets/truss_toolkit-0.0.48-py3-none-any.whl",
+    "/private/tmp/truss-public-048-runtime-wheels/SHA256SUMS",
+    "--run-id",
+    "public-048-postgres186-20261022",
+    "--truss-checksums",
+    "/private/tmp/truss-public-048-verification/assets/SHA256SUMS"
+  ],
+  "driverExitCode": 0,
+  "uvxCommand": [
+    "/private/tmp/truss-public-048-clean-venv/bin/python",
+    "/private/tmp/truss-public-048-check-uvx.py",
+    "/private/tmp/truss-public-048-verification/assets"
+  ],
+  "uvxExitCode": 0,
+  "qualificationBounds": "Original producer deadlines unchanged. Policy SQL2s/op30s; original public workload SQL10s/op30s."
+}

@@ -1,0 +1,106 @@
+{
+  "format": "truss-public-048-migration-native-evidence-custody/1",
+  "method": "Deterministic gzip with mtime=0; all retained members decompress byte-for-byte to the original runner-created JSON.",
+  "files": [
+    {
+      "originalFile": "source44-native-inventory.json",
+      "rawBytes": 1667495,
+      "rawSha256": "6b1fb5be9e4ea557879e93021b9ec7fe9929a2596cc9ec908dac57f6a163bac3",
+      "retainedAs": "source44-native-inventory.json.gz",
+      "gzipBytes": 247087,
+      "gzipSha256": "5225129b630bb0f76a36ee32d1f4b6e521265899155f91a8736a1f32717c31d1",
+      "gzipMtime": 0,
+      "decompressedByteMatch": true
+    },
+    {
+      "originalFile": "source46-native-inventory.json",
+      "rawBytes": 1676787,
+      "rawSha256": "2885dab7aad39de0032ef34338df086204e7892fd80ba99844e5f2c91ce8b198",
+      "retainedAs": "source46-native-inventory.json.gz",
+      "gzipBytes": 248601,
+      "gzipSha256": "1f2969f09a88c600f2975cc0e7735dca56cdd38d5840c0a279154ccb84095f7c",
+      "gzipMtime": 0,
+      "decompressedByteMatch": true
+    },
+    {
+      "originalFile": "source47-native-inventory.json",
+      "rawBytes": 1686852,
+      "rawSha256": "ee822b3c7e21956faacf9ec9826386ab54c6791d410280df1136d1379bdeca92",
+      "retainedAs": "source47-native-inventory.json.gz",
+      "gzipBytes": 249321,
+      "gzipSha256": "dca366b4d0b80d5621fe9599be78d3102efe2ed4a2a612b5f6915ea6589345f8",
+      "gzipMtime": 0,
+      "decompressedByteMatch": true
+    },
+    {
+      "originalFile": "source44-original-evidence.json",
+      "rawBytes": 451928,
+      "rawSha256": "99e8cb7175eb5dc8746a67a67bd1fe4e18ed8d86b289d530e7f43e90bf3aa2a2",
+      "retainedAs": "source44-original-evidence.json.gz",
+      "gzipBytes": 36878,
+      "gzipSha256": "8ebbe56a76a7441fb9da5ce7301799c2478f9682c0eae25b7af01fb86695bab1",
+      "gzipMtime": 0,
+      "decompressedByteMatch": true
+    },
+    {
+      "originalFile": "source46-original-evidence.json",
+      "rawBytes": 451782,
+      "rawSha256": "d063beee844ab805afeb0f2a92114c8b31f9e1215abd9b25db7c16037f1eae83",
+      "retainedAs": "source46-original-evidence.json.gz",
+      "gzipBytes": 36745,
+      "gzipSha256": "fd851830cdf2f8f704ebee55ca1a628191d7c5ced0faef06bb34a410fe4b550f",
+      "gzipMtime": 0,
+      "decompressedByteMatch": true
+    },
+    {
+      "originalFile": "source47-original-evidence.json",
+      "rawBytes": 449809,
+      "rawSha256": "b658084f0279ac4fa2e3c3fad1ff1c19777b52a0c400511ab2d1272646bca4fa",
+      "retainedAs": "source47-original-evidence.json.gz",
+      "gzipBytes": 35936,
+      "gzipSha256": "71e1fb9a2d20c99b18bbc86c7d6e8988cdc9565d08caa09e50d30664c57680da",
+      "gzipMtime": 0,
+      "decompressedByteMatch": true
+    },
+    {
+      "originalFile": "source44MigrationTests-before-close.json",
+      "rawBytes": 16763,
+      "rawSha256": "d33cd124a30d5b85e36b2e524a5a2d5c5da55b04c9449805f498e347d28df819",
+      "retainedAs": "source44MigrationTests-before-close.json.gz",
+      "gzipBytes": 3229,
+      "gzipSha256": "62d237678156f37bfce573aa9cd472c27913739c97e1d0e408d7e5bc2c8ae190",
+      "gzipMtime": 0,
+      "decompressedByteMatch": true
+    },
+    {
+      "originalFile": "source46MigrationTests-before-close.json",
+      "rawBytes": 16772,
+      "rawSha256": "b8a32426af4fc21d3302531353ade0075899cf138250260a1373bc9bf46671b3",
+      "retainedAs": "source46MigrationTests-before-close.json.gz",
+      "gzipBytes": 3274,
+      "gzipSha256": "3e7443a4951f34d11ae05765f979dec95c399f0c98fb80a4e9f98e21ccb02c70",
+      "gzipMtime": 0,
+      "decompressedByteMatch": true
+    },
+    {
+      "originalFile": "source47MigrationTests-before-close.json",
+      "rawBytes": 16803,
+      "rawSha256": "0d36a6da90fb0c23b610a37f50056deb360595a6359823d5bcadebdd47119792",
+      "retainedAs": "source47MigrationTests-before-close.json.gz",
+      "gzipBytes": 3171,
+      "gzipSha256": "70c7c6a3bc76714776b160e6d7a0a9ab10f0beb1fec61f80d51523ab9929b1d8",
+      "gzipMtime": 0,
+      "decompressedByteMatch": true
+    },
+    {
+      "originalFile": "PriorPublishedReceiptTests-before-close.json",
+      "rawBytes": 4959,
+      "rawSha256": "5b9260f6488be17466ca0bb1ab0a388747897b4fb08947a9184542ee10f00d22",
+      "retainedAs": "PriorPublishedReceiptTests-before-close.json.gz",
+      "gzipBytes": 1774,
+      "gzipSha256": "2a398d872d990c52c67fe1fc741506058aee6d2127b8fca19b90b8961a987320",
+      "gzipMtime": 0,
+      "decompressedByteMatch": true
+    }
+  ]
+}

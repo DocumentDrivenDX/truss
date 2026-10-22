@@ -1,0 +1,25 @@
+{
+  "format": "truss-public-048-migration-command/1",
+  "argv": [
+    "env", "-u", "PYTHONPATH",
+    "/private/tmp/truss-public-048-clean-venv/bin/python",
+    "/private/tmp/truss-hf048-release/scripts/qualify-runtime-migrations.py",
+    "--installed-package", "--download",
+    "--wheelhouse", "/private/tmp/truss-public-048-source-wheelhouse",
+    "--output", "/private/tmp/truss-public-048-migrations/qualification.json"
+  ],
+  "cwd": "/private/tmp/truss-hf048-release",
+  "pythonpath": "unset",
+  "startUtc": "2026-10-22T19:48:52Z",
+  "endUtc": "2026-10-22T19:52:34Z",
+  "sourceCommit": "8e89a068bcb68f1e631388ddc59bc97da748563d",
+  "sourceWorktreeStatus": "clean",
+  "installedTruss": "0.0.48 public wheel; 455 runtime files match source and wheel",
+  "installedWeft": "0.4.51 public macOS wheel; module SHA-256 34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+  "postgresDirectUrlPreserved": true,
+  "rawQualificationPreserved": true,
+  "qualificationReportSha256": "6413cf6c34346191c41a39fea5ecbd30051582f6b36a4efc673e00c8e884e561",
+  "summary": {"tests": 80, "skipped": 0, "failures": 0, "errors": 0, "passed": true, "durationSecondsFromRunnerLog": 205.963, "exitCode": 0},
+  "logs": {"stdoutStderr": "/private/tmp/truss-public-048-migrations/run.log", "exitStatus": "/private/tmp/truss-public-048-migrations/exit-status.txt"},
+  "qualificationNulls": {"sourceCommit": null, "workflowRunId": null}
+}

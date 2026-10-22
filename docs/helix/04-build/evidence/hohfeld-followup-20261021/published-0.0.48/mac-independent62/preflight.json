@@ -1,0 +1,17 @@
+{
+  "format": "truss-public-048-hf-preflight/1",
+  "sourceCommit": "8e89a068bcb68f1e631388ddc59bc97da748563d",
+  "publicArchive": "/private/tmp/truss-public-048-verification/assets/truss-hf-conformance-0.0.48.zip",
+  "archiveSha256": "519a893197409e277feca8b0a878287adebad5d64e4813e30cd3ffdc2cff1706",
+  "extractedRoot": "/private/tmp/truss-public-048-hf-conformance",
+  "archiveManifestFilesVerified": 410,
+  "profile": "truss-hf-conformance/0.1",
+  "caseCount": 62,
+  "producerPinCount": 363,
+  "installedTrussVersion": "0.0.48",
+  "installedWeftVersion": "0.4.51",
+  "installedModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+  "runnerStarted": false,
+  "postgresStarted": false,
+  "pending": "await root GO for native runner"
+}

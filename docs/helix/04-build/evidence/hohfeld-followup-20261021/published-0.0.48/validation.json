@@ -1,0 +1,63 @@
+{
+  "format": "truss-public-release-validation/1",
+  "observedAt": "2026-10-22T20:00:05.475181+00:00",
+  "passed": true,
+  "release": "https://github.com/DocumentDrivenDX/truss/releases/tag/v0.0.48",
+  "sourceCommit": "8e89a068bcb68f1e631388ddc59bc97da748563d",
+  "pullRequest": "https://github.com/DocumentDrivenDX/truss/pull/29",
+  "linuxWorkflow": "https://github.com/DocumentDrivenDX/truss/actions/runs/39838914360",
+  "requiredLinuxReleaseJobsPassed": [
+    "package",
+    "native (ubuntu-24.04)",
+    "publish"
+  ],
+  "optionalStressAndCapacityQualified": false,
+  "publicAssetsVerified": 15,
+  "checksummedPayloadAssets": 14,
+  "runtimeFilesMatched": 455,
+  "linuxMigrationTests": 80,
+  "macOSPublicMigrationTests": 80,
+  "linuxIndependentConformanceTests": 62,
+  "macOSPublicIndependentConformanceTests": 62,
+  "allFourSuitesFailuresErrorsSkips": 0,
+  "macOSDeclaredDriverTests": 30,
+  "macOSWorkerCleanupControls": 21,
+  "publicQuickstartOutsideCheckout": true,
+  "freshEmptyUvCache": true,
+  "independentInstancesRetainDataAndIdentity": 2,
+  "ownedProcessesStopped": true,
+  "runtimeSupport": "latest-only",
+  "migrationSupport": "Admitted exact UMF0.10 source databases migrate to latest without release-age expiry; prior application runtimes are unsupported.",
+  "pre010Supported": false,
+  "weftPublicRelease": "https://github.com/DocumentDrivenDX/weft/releases/tag/v0.4.51",
+  "weftCompilerSource": "557153731e9f5d0583193a1189a07c6ed485d3d3",
+  "weftMacWheelSha256": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+  "weftMacModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+  "weftLinuxWheelSha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+  "weftLinuxModuleSha256": "ef293922003832fbd87041a28c6dbde33927fee573270f203aa51daf06bcd445",
+  "receiptPaths": {
+    "linux80": "public-assets/migration-qualification.json",
+    "linux62": "public-assets/hf-conformance-qualification.json",
+    "mac80": "mac-migration80/qualification.json",
+    "mac62": "mac-independent62/qualification.json",
+    "driver30": "mac-driver30/receipt.json",
+    "uvx": "mac-uvx-two-instances/receipt.json",
+    "linuxWorkload": "linux-workload/status.json"
+  },
+  "limits": [
+    "Exact unprotected PostgreSQL18.6/UMF0.10 source tuples and recorded initializer profiles only",
+    "No pre0.10/protected-profile migration, downgrade, managed-service, physical-restore or large-database migration-capacity qualification",
+    "No broad discovery, universal latency/p95, unrestricted query-source-size or additional driver/platform qualification",
+    "Required Linux release gates passed; optional stress/capacity jobs skipped and unqualified",
+    "Local raw CI identity remains null; final source binding is the retained separate custody evidence"
+  ],
+  "receiptsSha256": {
+    "public-assets/migration-qualification.json": "087f4d448e653116f0a0e99a644d86d000a3f2e59ba6118fcd1eb03f41cf103a",
+    "public-assets/hf-conformance-qualification.json": "5a73bc61d1b0e092b73600d1487cfab2167d161d39455df25b1f83c7f4acb486",
+    "mac-migration80/qualification.json": "6413cf6c34346191c41a39fea5ecbd30051582f6b36a4efc673e00c8e884e561",
+    "mac-independent62/qualification.json": "8acda2891f10a72080be1d9a1e89fe707df7bc15f83df8406ac190cb23559b95",
+    "mac-driver30/receipt.json": "aa7bb3390ac91b893c3df0d8ed64ee93ed1d7a05a894ff4a3e96556a2953c8f5",
+    "mac-uvx-two-instances/receipt.json": "f5db44bf6eb01c272f44763cee1eea515da685569e5161dadbc31c1e922e2b93",
+    "linux-workload/status.json": "9305dfa53984920b32132e314a44a952d3101f30e4359fc2bed4d5a58c97d4fd"
+  }
+}

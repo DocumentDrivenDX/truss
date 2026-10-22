@@ -1,0 +1,29 @@
+{
+  "scope": "Immutable public archives retained by URL/size/SHA; copied report assets are raw original bytes",
+  "archives": [
+    {
+      "name": "migration-qualification-evidence.tar.gz",
+      "size": 867593,
+      "sha256": "0d0345d906b9bc65193eda46fe94fb00bc3e89d1ecb6df4ce350aba080178ca5",
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/migration-qualification-evidence.tar.gz"
+    },
+    {
+      "name": "truss-hf-conformance-0.0.48.zip",
+      "size": 1194897,
+      "sha256": "519a893197409e277feca8b0a878287adebad5d64e4813e30cd3ffdc2cff1706",
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/truss-hf-conformance-0.0.48.zip"
+    },
+    {
+      "name": "truss_toolkit-0.0.48-py3-none-any.whl",
+      "size": 5506731,
+      "sha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/truss_toolkit-0.0.48-py3-none-any.whl"
+    },
+    {
+      "name": "truss_toolkit-0.0.48.tar.gz",
+      "size": 5951958,
+      "sha256": "a7a746c7ce2978e451710a152f776592ea1a0b794c7982cbad4bca0d55a115c8",
+      "url": "https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/truss_toolkit-0.0.48.tar.gz"
+    }
+  ]
+}
