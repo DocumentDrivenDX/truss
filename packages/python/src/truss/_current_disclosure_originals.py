@@ -45,6 +45,11 @@ _CONSUMER_COHORTS=(
         'weftVersion':'0.4.51',
         'weftWheelSha256':'a21faed75304e730c7cc9782394001be2ba1772b429e587f0d1910c2269dabbe',
         'weftModuleSha256':'93bee228350743286073a9400bdf5ec92e387c5e35431bbf34b0f81279c460a2'},
+    {**_DISCLOSURE_CONSUMER,
+        'weftRevision':'86c092178bb8ca1a0d84edfebc175009d8862493',
+        'weftVersion':'0.4.51',
+        'weftWheelSha256':'b1f8ef915c289966b00c6a40c409c56f09d47d07f70ac8222862ac259cb1df5f',
+        'weftModuleSha256':'cb38361b37c3543667178f44c4ea3598222a773f6757d188c94a7bd95583715a'},
 )
 
 

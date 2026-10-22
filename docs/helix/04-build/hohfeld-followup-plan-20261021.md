@@ -798,6 +798,29 @@ Linux artifacts/gates, Weft publication, exact Linux adoption, Truss publication
 public verification and site/docs delivery remain open; neither0.4.51 nor0.0.48
 is published. Arras owns its dependency adoption and full native Linux gate.
 
+
+### Final-source Linux packaging — 2026-10-22
+
+Reviewed publisher fix616aa7b6 binds each actual Linux build checkout and requires
+Mac source-freeze ancestry plus identical compiler/build/contract inputs. Real
+negative controls reject the18 differing integration files and admit the selected
+release source. Both Linux packaging jobs in39811059843 pass; archive RECORD,
+native module and sourceCommit hashes are independently reverified.
+
+The selected x86_64 wheel SHA is
+`b1f8ef915c289966b00c6a40c409c56f09d47d07f70ac8222862ac259cb1df5f`;
+native module SHA is
+`cb38361b37c3543667178f44c4ea3598222a773f6757d188c94a7bd95583715a`.
+The runtime and independent corpus now admit that exact Linux cohort alongside
+the unchanged Mac86c cohort. ARM Linux receives packaging checks only and is not
+admitted as a Truss native runtime. The rebuilt local dual-cohort Truss wheel is
+`39452d0cc0f976fef30caad00cb4902a18063fcd36f6c5dec312a16b98b8acd8`;
+all455 runtime files match source/wheel/sdist. The reproducible62-case archive SHA
+is`cef097386dc0f6a3c2e1e2e27c2021c663e406d0c0a6435c06b8e61bc982bcb3`.
+[Packaging/source correspondence](evidence/hohfeld-followup-20261021/weft-linux-source616a/receipt.json)
+retains the original reports. These checks do not establish Linux native execution;
+the full public-compiler Truss release gate remains mandatory.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).
