@@ -1,0 +1,15 @@
+test_500kib_original_document_accepts_and_reads_exact_bytes (test_catalog_document_bounds_native.CatalogDocumentBoundsTests.test_500kib_original_document_accepts_and_reads_exact_bytes) ... ok
+test_one_byte_above_document_budget_refuses_without_native_effects (test_catalog_document_bounds_native.CatalogDocumentBoundsTests.test_one_byte_above_document_budget_refuses_without_native_effects) ... FAIL
+
+======================================================================
+FAIL: test_one_byte_above_document_budget_refuses_without_native_effects (test_catalog_document_bounds_native.CatalogDocumentBoundsTests.test_one_byte_above_document_budget_refuses_without_native_effects)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_catalog_document_bounds_native.py", line 26, in test_one_byte_above_document_budget_refuses_without_native_effects
+    with self.assertRaises(PreparationRejected) as raised:a.prepare_catalog((CatalogDocument('adoc','over-r2',raw),))
+AssertionError: PreparationRejected not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 5.332s
+
+FAILED (failures=1)

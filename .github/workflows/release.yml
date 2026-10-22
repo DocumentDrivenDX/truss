@@ -71,6 +71,10 @@ jobs:
               assert actual==expected, 'Sdist runtime payload differs from source'
           print(f'Verified {len(expected)} exact source payloads in wheel and sdist')
           PYTHON
+      - name: Build the independent HF corpus archive
+        run: |
+          version=$(python -c "import tomllib;print(tomllib.load(open('packages/python/pyproject.toml','rb'))['project']['version'])")
+          python scripts/build-hf-conformance-archive.py --output "dist/truss-hf-conformance-${version}.zip"
       - name: Stage package-only local runtime constraints asset
         run: |
           python - <<'PYTHON'
@@ -131,6 +135,25 @@ jobs:
         with:
           name: runtime-migration-qualification-${{ matrix.os }}
           path: /tmp/truss-migration-evidence/*
+          if-no-files-found: error
+      - name: Unpack the independent conformance archive outside the checkout
+        run: |
+          python - <<'PYTHON'
+          import os,pathlib,zipfile
+          archives=list(pathlib.Path('dist').glob('truss-hf-conformance-*.zip'));assert len(archives)==1
+          destination=pathlib.Path(os.environ['RUNNER_TEMP'])/'hf-conformance'
+          destination.mkdir()
+          zipfile.ZipFile(archives[0]).extractall(destination)
+          PYTHON
+      - name: Qualify the installed final package with independent HF assertions
+        working-directory: ${{ runner.temp }}/hf-conformance
+        run: python scripts/run-hf-conformance.py --installed-package --output "$RUNNER_TEMP/hf-conformance-qualification/qualification.json"
+      - name: Retain independent conformance qualification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hf-conformance-qualification-${{ matrix.os }}
+          path: ${{ runner.temp }}/hf-conformance-qualification/*
           if-no-files-found: error
       - name: Verify installed local runtime lifecycle and isolation
         env:
@@ -559,6 +582,10 @@ jobs:
         with:
           name: runtime-migration-qualification-ubuntu-24.04
           path: /tmp/published-migration-evidence
+      - uses: actions/download-artifact@v4
+        with:
+          name: hf-conformance-qualification-ubuntu-24.04
+          path: /tmp/published-hf-conformance
       - name: Record exact assets and publish
         env:
           GH_TOKEN: ${{ github.token }}
@@ -568,7 +595,7 @@ jobs:
           import ast,hashlib,json,os,pathlib,tarfile,tomllib
           project=tomllib.load(open('packages/python/pyproject.toml','rb'))['project']
           backend=next(ast.literal_eval(n.value) for n in ast.parse(pathlib.Path('packages/python/src/truss/_query_runtime.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='BACKEND' for t in n.targets))
-          root=pathlib.Path('dist');assets=sorted(root.iterdir());assert len(assets)==3
+          root=pathlib.Path('dist');assets=sorted(root.iterdir());assert len(assets)==4
           assert len(list(root.glob('*.whl')))==len(list(root.glob('*.tar.gz')))==1
           evidence=pathlib.Path('/tmp/published-migration-evidence')
           qualification=json.loads((evidence/'qualification.json').read_bytes())
@@ -577,6 +604,11 @@ jobs:
           assert qualification['sourceCommit']==os.environ['GITHUB_SHA'] and qualification['platform']=='linux'
           assert qualification['recipeSha256']==hashlib.sha256(migration_bytes).hexdigest()
           (root/'migration-qualification.json').write_bytes((evidence/'qualification.json').read_bytes())
+          hf_path=pathlib.Path('/tmp/published-hf-conformance/qualification.json')
+          hf=json.loads(hf_path.read_bytes())
+          assert hf['passed'] and hf['skipped']==0 and hf['sourceCommit']==os.environ['GITHUB_SHA']
+          assert hf['nativeManifestSha256']==qualification['targetManifestSha256']
+          (root/'hf-conformance-qualification.json').write_bytes(hf_path.read_bytes())
           with tarfile.open(root/'migration-qualification-evidence.tar.gz','w:gz') as archive:
               for path in sorted(evidence.iterdir()):
                   if path.is_file():archive.add(path,arcname=path.name)
@@ -591,6 +623,7 @@ jobs:
           manifest=pathlib.Path('packages/python/src/truss/_catalog_runtime/manifest.json');runtime=json.loads(manifest.read_bytes())
           assert qualification['targetManifestSha256']==hashlib.sha256(manifest.read_bytes()).hexdigest()
           pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('weft-sql=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','deploymentJavaScript':'embedded-v8','embeddedEngine':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'nativePlatforms':['linux-x86_64']}
+          pins.update(hfConformanceProfile=hf['profile'],hfConformanceCorpusSha256=hf['corpusSha256'],hfConformanceArchive=next(root.glob('truss-hf-conformance-*.zip')).name,hfConformanceTests=hf['tests'])
           pins.update(localRuntimeConstraintsAsset=constraints.name,localRuntimeConstraintsSha256=hashlib.sha256(constraints.read_bytes()).hexdigest())
           profile=pathlib.Path('packages/python/src/truss/_profiles/fresh-catalog-support-current010.json')
           policy=json.loads(profile.read_bytes())

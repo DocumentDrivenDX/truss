@@ -1820,3 +1820,28 @@ producer. Credential/issuer nonexposure, app route inventory, daemon/OS/IPv6 and
 continuous topology/authority lifetime remain open. No backend promotion; the
 original132 cases remain required. Evidence:
 `docs/helix/04-build/evidence/network-isolation-20261013/receipt.json`.
+
+HF-05 fresh protected activation admits exactly the two reviewed private
+`object_key_query_string_order`/`object_key_query_string_exception` expression
+indexes over `object_key_bucket`. The attachment must match its exact captured
+index definition and original IMMUTABLE STRICT invoker decoder body, with the
+same private owner. Arbitrary expression indexes and external routine
+attachments still refuse. This fresh-install proof does not migrate an
+existing protected installation.
+
+### HF-06 selected validation settlement
+
+The psycopg host owns validation containment. A completion observation forces
+only currently deferred constraints in the installed `truss` namespace, inside
+one host savepoint, then rolls back to that savepoint before publishing. It
+restores the caller's constraint modes and prior pending trigger queue; it does
+not settle the outer transaction or force unrelated host constraints. Native
+SQLSTATE, retry, cancellation and uncertain cleanup follow the ordinary host
+error contract. No callback-issued savepoint or synthetic success exception
+can establish rollback. A full dry run executes the ordinary request-free group
+inside that same boundary, forces completion, and publishes its semantic result
+only after confirmed rollback. It returns no receipt, committed position or
+durable created identity. Its basis names original input/document digests,
+catalog revision, source epoch and observed native snapshot. Ordinals, sequence
+allocations and locks/CPU consumed during validation need not rewind. A successful
+observation does not promise that a later real application or outer commit succeeds.

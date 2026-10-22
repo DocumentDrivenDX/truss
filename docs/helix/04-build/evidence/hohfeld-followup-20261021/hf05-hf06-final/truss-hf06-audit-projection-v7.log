@@ -1,0 +1,15 @@
+test_optional_key_version_projection_requires_separate_readers_and_named_key (test_audit_disclosure_native.AuditDisclosureNativeTests.test_optional_key_version_projection_requires_separate_readers_and_named_key) ... FAIL
+
+======================================================================
+FAIL: test_optional_key_version_projection_requires_separate_readers_and_named_key (test_audit_disclosure_native.AuditDisclosureNativeTests.test_optional_key_version_projection_requires_separate_readers_and_named_key)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 160, in test_optional_key_version_projection_requires_separate_readers_and_named_key
+    found=self.page(a,t,dict(scope,entityKey=named));self.assertIsInstance(found,MutationGroupAuditPage,repr(found))
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: LoadAuditUnavailable(reason='observation', interface_version='truss-load-audit-unavailable/0.1.0') is not an instance of <class 'truss.load_audit.MutationGroupAuditPage'> : LoadAuditUnavailable(reason='observation', interface_version='truss-load-audit-unavailable/0.1.0')
+
+----------------------------------------------------------------------
+Ran 1 test in 4.482s
+
+FAILED (failures=1)

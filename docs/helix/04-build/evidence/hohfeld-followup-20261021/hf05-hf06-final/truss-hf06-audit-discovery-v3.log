@@ -1,0 +1,110 @@
+test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group (test_audit_disclosure_native.AuditDisclosureNativeTests.test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group) ... ERROR
+test_deleted_entity_type_filter_and_descending_python_continuation (test_audit_disclosure_native.AuditDisclosureNativeTests.test_deleted_entity_type_filter_and_descending_python_continuation) ... ERROR
+test_unqualified_discovery_omits_hidden_whole_groups_and_binds_cursor (test_audit_disclosure_native.AuditDisclosureNativeTests.test_unqualified_discovery_omits_hidden_whole_groups_and_binds_cursor) ... ERROR
+test_whole_group_more_than_1024_events_uses_separate_event_budget (test_audit_disclosure_native.AuditDisclosureNativeTests.test_whole_group_more_than_1024_events_uses_separate_event_budget) ... ERROR
+
+======================================================================
+ERROR: test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group (test_audit_disclosure_native.AuditDisclosureNativeTests.test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 70, in test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group
+    self.setup_scopes()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in setup_scopes
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 22, in administer
+    result=callback(assembly,tx)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in <lambda>
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 211, in guarded
+    return method(self,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 1271, in grant_module_audit_access_in_transaction
+    from ._load_audit_runtime import _decode_grant, _reason
+  File "/Users/erik/Projects/truss/packages/python/src/truss/_load_audit_runtime.py", line 335
+    if (type(scope) is not dict or set(scope)!={'documentId','moduleId'}
+       ^
+SyntaxError: '(' was never closed
+
+======================================================================
+ERROR: test_deleted_entity_type_filter_and_descending_python_continuation (test_audit_disclosure_native.AuditDisclosureNativeTests.test_deleted_entity_type_filter_and_descending_python_continuation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 99, in test_deleted_entity_type_filter_and_descending_python_continuation
+    self.setup_scopes()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in setup_scopes
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 22, in administer
+    result=callback(assembly,tx)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in <lambda>
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 211, in guarded
+    return method(self,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 1271, in grant_module_audit_access_in_transaction
+    from ._load_audit_runtime import _decode_grant, _reason
+  File "/Users/erik/Projects/truss/packages/python/src/truss/_load_audit_runtime.py", line 335
+    if (type(scope) is not dict or set(scope)!={'documentId','moduleId'}
+       ^
+SyntaxError: '(' was never closed
+
+======================================================================
+ERROR: test_unqualified_discovery_omits_hidden_whole_groups_and_binds_cursor (test_audit_disclosure_native.AuditDisclosureNativeTests.test_unqualified_discovery_omits_hidden_whole_groups_and_binds_cursor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 120, in test_unqualified_discovery_omits_hidden_whole_groups_and_binds_cursor
+    self.setup_scopes()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in setup_scopes
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 22, in administer
+    result=callback(assembly,tx)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in <lambda>
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 211, in guarded
+    return method(self,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 1271, in grant_module_audit_access_in_transaction
+    from ._load_audit_runtime import _decode_grant, _reason
+  File "/Users/erik/Projects/truss/packages/python/src/truss/_load_audit_runtime.py", line 335
+    if (type(scope) is not dict or set(scope)!={'documentId','moduleId'}
+       ^
+SyntaxError: '(' was never closed
+
+======================================================================
+ERROR: test_whole_group_more_than_1024_events_uses_separate_event_budget (test_audit_disclosure_native.AuditDisclosureNativeTests.test_whole_group_more_than_1024_events_uses_separate_event_budget)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 135, in test_whole_group_more_than_1024_events_uses_separate_event_budget
+    self.setup_scopes();operations=[]
+    ^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in setup_scopes
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 22, in administer
+    result=callback(assembly,tx)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in <lambda>
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 211, in guarded
+    return method(self,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 1271, in grant_module_audit_access_in_transaction
+    from ._load_audit_runtime import _decode_grant, _reason
+  File "/Users/erik/Projects/truss/packages/python/src/truss/_load_audit_runtime.py", line 335
+    if (type(scope) is not dict or set(scope)!={'documentId','moduleId'}
+       ^
+SyntaxError: '(' was never closed
+
+----------------------------------------------------------------------
+Ran 4 tests in 6.299s
+
+FAILED (errors=4)

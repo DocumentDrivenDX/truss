@@ -18,8 +18,8 @@ UPDATE truss.runtime_object_attempt a SET audit_observed_at=(
 CREATE INDEX IF NOT EXISTS runtime_object_attempt_audit_observed
  ON truss.runtime_object_attempt(audit_observed_at DESC,id DESC) WHERE complete;
 
-CREATE FUNCTION truss.read_mutation_group_audit(selected_attempt uuid,maximum_events int,
- expected_release text,expected_digest text) RETURNS bytea
+CREATE FUNCTION truss.runtime_read_mutation_group_audit(selected_attempt uuid,maximum_events int,
+ expected_release text,expected_digest text,include_data boolean) RETURNS bytea
 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp
  SET row_security=off SET TimeZone='UTC' SET bytea_output=hex AS $$
 DECLARE actor oid;installation truss.catalog_runtime_installation%ROWTYPE;
@@ -29,10 +29,10 @@ DECLARE actor oid;installation truss.catalog_runtime_installation%ROWTYPE;
  property_context jsonb;event_pin text;image_revision int;image_type int;operation_index int;
  event_count int:=0;byte_count int:=0;entries jsonb:='[]'::jsonb;operation_entries jsonb;
  edge_context jsonb;endpoint jsonb;operation_name text;actor_name text;group_action text;
- plan_row record;owner_candidate jsonb;owner_count int;scope_entry jsonb;image_map jsonb;
+ plan_row record;owner_candidate jsonb;owner_count int;scope_entry jsonb;image_map jsonb;projected_entries jsonb;projected_data jsonb;node jsonb;side text;key_entry record;key_values jsonb;key_rows jsonb;result_bytes bytea;
 BEGIN
  actor:=truss.runtime_person(false);
- IF selected_attempt IS NULL OR maximum_events IS NULL OR maximum_events NOT BETWEEN 1 AND 1024 THEN
+ IF include_data IS NULL OR selected_attempt IS NULL OR maximum_events IS NULL OR maximum_events NOT BETWEEN 1 AND 4096 THEN
   RAISE EXCEPTION 'bounded complete mutation group required' USING ERRCODE='22023';END IF;
  SELECT * INTO STRICT installation FROM truss.runtime_current_installation();
  IF installation.release_id IS DISTINCT FROM expected_release OR installation.release_sha256 IS DISTINCT FROM expected_digest
@@ -268,19 +268,65 @@ BEGIN
    AND a.module=owner->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
    RAISE EXCEPTION 'complete mutation group audit membership required' USING ERRCODE='P1403';END IF;
  END LOOP;
+ IF include_data THEN
+  FOR owner IN SELECT value FROM jsonb_array_elements(owner_union) LOOP
+   IF truss.runtime_can_read(owner->>'documentId',owner->>'moduleId') IS NOT TRUE THEN
+    RAISE EXCEPTION 'separate complete retained data readership required' USING ERRCODE='P1403';END IF;
+  END LOOP;
+  projected_entries:='[]'::jsonb;
+  FOR entry IN SELECT value FROM jsonb_array_elements(entries) LOOP
+   image_map:=truss.runtime_owned_plan(attempt.id,(entry->>'operationIndex')::int);
+   projected_data:=jsonb_build_object('basis','retained-operation','before',NULL,'after',NULL);
+   FOREACH side IN ARRAY ARRAY['before','after'] LOOP
+    SELECT n.value INTO node FROM jsonb_each(image_map->(side||CASE WHEN entry->>'entityKind'='edge' THEN 'Edges' ELSE 'Nodes' END)) n
+     WHERE truss.runtime_owned_identity(attempt.id,(entry->>'operationIndex')::int,n.key,entry->>'entityKind',image_map,attempt)->>'id'=entry->>'entityId'
+      AND n.value->'identity'->>'typeId'=entry->>'entityType';
+    image:=node->'image';key_rows:='[]'::jsonb;
+    IF image IS NOT NULL AND image<>'null'::jsonb THEN
+     IF entry->>'entityKind'='object' THEN
+      FOR key_entry IN SELECT k.key_id,k.key_num,k.prop_ids,d.definition_pin
+       FROM jsonb_populate_recordset(NULL::truss.key_def,truss.catalog_all_expected_records((image->>'rev')::int)->'key_def') k JOIN truss.type_def t ON t.type_id=k.type_id
+       JOIN truss.runtime_definition_source d ON d.rev=k.definition_rev AND d.ord=k.definition_doc_ord
+        AND d.doc_id=k.definition_document_id AND d.module_id=t.module AND d.element_id=t.element AND d.kind='key' AND d.key_id=k.key_id
+       WHERE k.type_id=(entry->>'entityType')::int AND k.since_rev<=(image->>'rev')::int
+        AND (k.retired_rev IS NULL OR k.retired_rev>(image->>'rev')::int) ORDER BY k.key_num LOOP
+       SELECT jsonb_agg(image->'props'->p.id::text ORDER BY p.ordinality) INTO key_values
+        FROM unnest(key_entry.prop_ids) WITH ORDINALITY p(id,ordinality);
+       IF key_values IS NULL OR EXISTS(SELECT 1 FROM jsonb_array_elements(key_values) v WHERE v.value='null'::jsonb) THEN
+        RAISE EXCEPTION 'complete retained key values unavailable' USING ERRCODE='P1010';END IF;
+       key_rows:=key_rows||jsonb_build_array(jsonb_build_object('keyId',key_entry.key_id,'keyNumber',key_entry.key_num::text,
+        'definitionPin',key_entry.definition_pin,'values',key_values));
+      END LOOP;
+     END IF;
+     projected_data:=jsonb_set(projected_data,ARRAY[side],jsonb_build_object('version',image->>'ver','keys',key_rows));
+    END IF;
+   END LOOP;
+   IF projected_data->'before'='null'::jsonb AND projected_data->'after'='null'::jsonb THEN RAISE EXCEPTION 'retained operation images unavailable' USING ERRCODE='P1010';END IF;
+   projected_entries:=projected_entries||jsonb_build_array(entry||jsonb_build_object('data',projected_data));
+  END LOOP;
+  entries:=projected_entries;
+  IF octet_length(entries::text)>1048576 THEN RAISE EXCEPTION 'projected audit byte bound exceeded' USING ERRCODE='54000';END IF;
+ END IF;
  -- Recheck every original owner after constructing the whole-group projection.
  FOR owner IN SELECT value FROM jsonb_array_elements(owner_union) LOOP
+  IF include_data AND truss.runtime_can_read(owner->>'documentId',owner->>'moduleId') IS NOT TRUE THEN RAISE EXCEPTION 'retained data readership changed' USING ERRCODE='P1403';END IF;
   IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=owner->>'documentId'
    AND a.module=owner->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
    RAISE EXCEPTION 'mutation group audit authority changed before release' USING ERRCODE='P1403';END IF;
  END LOOP;
  PERFORM truss.runtime_person(false);
- RETURN convert_to(jsonb_build_object('outcome','page','attemptId',attempt.id::text,
+ result_bytes:=convert_to(jsonb_build_object('outcome','page','attemptId',attempt.id::text,
   'nativeActorOid',attempt.actor_oid::text,'nativeActorName',actor_name,'assertedAction',group_action,'writerXid',attempt.writer_xid::text,
   'observedAt',to_char(attempt.audit_observed_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),'ownerScopes',owner_union,
   'operationCount',attempt.next_index::text,'eventCount',jsonb_array_length(entries)::text,'entries',entries)::text,'UTF8');
+ IF octet_length(result_bytes)>1048576 THEN RAISE EXCEPTION 'complete audit response exceeds byte bound' USING ERRCODE='54000';END IF;
+ RETURN result_bytes;
 END;
 $$;
+REVOKE ALL ON FUNCTION truss.runtime_read_mutation_group_audit(uuid,int,text,text,boolean) FROM PUBLIC;
+CREATE FUNCTION truss.read_mutation_group_audit(selected_attempt uuid,maximum_events int,expected_release text,expected_digest text) RETURNS bytea
+LANGUAGE sql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp AS $$
+ SELECT truss.runtime_read_mutation_group_audit(selected_attempt,maximum_events,expected_release,expected_digest,false) $$;
 REVOKE ALL ON FUNCTION truss.read_mutation_group_audit(uuid,int,text,text) FROM PUBLIC;
 
 CREATE FUNCTION truss.runtime_mutation_audit_cursor(selected_installation uuid,selected_epoch uuid,
@@ -443,7 +489,7 @@ LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pg_temp
  SET row_security=off SET TimeZone='UTC' AS $$
 DECLARE actor oid;installation truss.catalog_runtime_installation%ROWTYPE;filter_sha text;
  cursor_value jsonb;frontier xid8;last_observed timestamptz;last_attempt uuid;candidate record;
- group_bytes bytea;group_value jsonb;cursor_bytes bytea;key_filter jsonb;release_check bytea;
+ group_bytes bytea;group_value jsonb;cursor_bytes bytea;key_filter jsonb;release_check bytea;selected_key record;scope_owner jsonb;
 BEGIN
  actor:=truss.runtime_person(false);
  IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
@@ -451,13 +497,14 @@ BEGIN
   RAISE EXCEPTION 'current mutation audit enrollment required' USING ERRCODE='P1403';END IF;
  IF filters IS NULL OR jsonb_typeof(filters) IS DISTINCT FROM 'object'
   OR filters-ARRAY['attemptId','documentId','moduleId','entityId','entityType','entityKey','nativeActorOid',
-    'assertedAction','observedAtFrom','observedAtUntil']<>'{}'::jsonb
+    'assertedAction','observedAtFrom','observedAtUntil','includeData']<>'{}'::jsonb
   OR octet_length(convert_to(filters::text,'UTF8'))>65536
-  OR maximum_events IS NULL OR maximum_events NOT BETWEEN 1 AND 1024 THEN
+  OR maximum_events IS NULL OR maximum_events NOT BETWEEN 1 AND 4096 THEN
   RAISE EXCEPTION 'bounded mutation-group audit listing required' USING ERRCODE='22023';END IF;
- IF filters ? 'attemptId' AND (jsonb_typeof(filters->'attemptId') IS DISTINCT FROM 'string'
+ IF filters ? 'includeData' AND jsonb_typeof(filters->'includeData') IS DISTINCT FROM 'boolean'
+  OR filters ? 'attemptId' AND (jsonb_typeof(filters->'attemptId') IS DISTINCT FROM 'string'
    OR filters->>'attemptId' !~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$')
-  OR (filters ? 'documentId') IS NOT TRUE OR (filters ? 'moduleId') IS NOT TRUE
+  OR (filters ? 'documentId') IS DISTINCT FROM (filters ? 'moduleId')
   OR filters ? 'entityId' AND (filters ? 'entityType') IS NOT TRUE
   OR filters ? 'nativeActorOid' AND (jsonb_typeof(filters->'nativeActorOid') IS DISTINCT FROM 'string'
    OR filters->>'nativeActorOid' !~ '^[1-9][0-9]{0,9}$' OR (filters->>'nativeActorOid')::numeric>4294967295)
@@ -465,7 +512,7 @@ BEGIN
    OR filters->>'entityId' !~ '^[1-9][0-9]{0,18}$')
   OR filters ? 'entityType' AND (jsonb_typeof(filters->'entityType') IS DISTINCT FROM 'string'
    OR filters->>'entityType' !~ '^[1-9][0-9]{0,9}$')
-  OR filters ? 'entityKey' AND (jsonb_typeof(filters->'entityKey') IS DISTINCT FROM 'object'
+  OR filters ? 'entityKey' AND NOT (filters->'entityKey' ? 'recordId') AND (jsonb_typeof(filters->'entityKey') IS DISTINCT FROM 'object'
    OR (filters->'entityKey')-ARRAY['documentId','moduleId','typeId','keyNumber','definitionPin','values']<>'{}'::jsonb
    OR jsonb_typeof(filters->'entityKey'->'documentId') IS DISTINCT FROM 'string'
    OR octet_length(filters->'entityKey'->>'documentId') NOT BETWEEN 1 AND 4096
@@ -492,7 +539,7 @@ BEGIN
   OR filters ? 'observedAtUntil' AND (jsonb_typeof(filters->'observedAtUntil') IS DISTINCT FROM 'string'
    OR filters->>'observedAtUntil' !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,6})?(Z|[+-][0-9]{2}:[0-9]{2})$') THEN
   RAISE EXCEPTION 'canonical bounded mutation audit filters required' USING ERRCODE='22023';END IF;
- IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
+ IF filters ? 'documentId' AND NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
    WHERE a.document_id=filters->>'documentId' AND a.module=filters->>'moduleId'
     AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
   RAISE EXCEPTION 'qualified mutation audit module enrollment required' USING ERRCODE='P1403';END IF;
@@ -504,6 +551,25 @@ BEGIN
     RAISE EXCEPTION 'ordered observed-time range required' USING ERRCODE='22023';END IF;
   EXCEPTION WHEN SQLSTATE '22007' OR SQLSTATE '22008' THEN
    RAISE EXCEPTION 'canonical mutation audit time range required' USING ERRCODE='22023';END;
+ END IF;
+ IF filters ? 'entityKey' AND filters->'entityKey' ? 'recordId' THEN
+  key_filter:=filters->'entityKey';
+  IF key_filter-ARRAY['documentId','moduleId','recordId','keyId','values']<>'{}'::jsonb
+   OR EXISTS(SELECT 1 FROM unnest(ARRAY['documentId','moduleId','recordId','keyId']) n(name)
+    WHERE jsonb_typeof(key_filter->n.name) IS DISTINCT FROM 'string' OR octet_length(key_filter->>n.name) NOT BETWEEN 1 AND 4096)
+   OR jsonb_typeof(key_filter->'values') IS DISTINCT FROM 'array'
+   OR key_filter->>'documentId' IS DISTINCT FROM filters->>'documentId' OR key_filter->>'moduleId' IS DISTINCT FROM filters->>'moduleId' THEN
+   RAISE EXCEPTION 'qualified named key reference required' USING ERRCODE='22023';END IF;
+  IF truss.runtime_can_read(key_filter->>'documentId',key_filter->>'moduleId') IS NOT TRUE THEN RAISE EXCEPTION 'separate key data readership required' USING ERRCODE='P1403';END IF;
+  SELECT t.type_id,k.key_num,d.definition_pin INTO selected_key
+   FROM truss.type_def t JOIN truss.key_def k ON k.type_id=t.type_id
+   JOIN truss.runtime_definition_source d ON d.rev=k.definition_rev AND d.ord=k.definition_doc_ord
+    AND d.doc_id=k.definition_document_id AND d.module_id=t.module AND d.element_id=t.element AND d.kind='key' AND d.key_id=k.key_id
+   WHERE t.document_id=key_filter->>'documentId' AND t.module=key_filter->>'moduleId'
+    AND t.element=key_filter->>'recordId' AND t.retired_rev IS NULL AND k.key_id=key_filter->>'keyId' AND k.retired_rev IS NULL;
+  IF NOT FOUND THEN RAISE EXCEPTION 'current named key reference unavailable' USING ERRCODE='P1002';END IF;
+  filters:=jsonb_set(filters,'{entityKey}',jsonb_build_object('documentId',key_filter->>'documentId','moduleId',key_filter->>'moduleId',
+   'typeId',selected_key.type_id::text,'keyNumber',selected_key.key_num::text,'definitionPin',selected_key.definition_pin,'values',key_filter->'values'));
  END IF;
  IF filters ? 'entityKey' THEN
   key_filter:=filters->'entityKey';
@@ -529,11 +595,11 @@ BEGIN
   OR pg_is_in_recovery() THEN RAISE EXCEPTION 'current mutation audit release required' USING ERRCODE='0A000';END IF;
  filter_sha:=encode(sha256(convert_to(filters::text,'UTF8')),'hex');
  frontier:=pg_catalog.pg_snapshot_xmin(pg_catalog.pg_current_snapshot());
- IF EXISTS(SELECT 1 FROM truss.runtime_object_attempt a
+ IF filters ? 'documentId' AND EXISTS(SELECT 1 FROM truss.runtime_object_attempt a
    WHERE a.complete AND a.writer_xid<frontier AND a.audit_observed_at IS NULL
-    AND EXISTS(SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=a.id AND p.writer_xid=a.writer_xid
+    AND (NOT filters ? 'documentId' OR EXISTS(SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=a.id AND p.writer_xid=a.writer_xid
      AND jsonb_path_exists(p.plan,'$.** ? (@.documentId == $document && @.moduleId == $module)',
-      jsonb_build_object('document',to_jsonb(filters->>'documentId'),'module',to_jsonb(filters->>'moduleId'))))) THEN
+      jsonb_build_object('document',to_jsonb(filters->>'documentId'),'module',to_jsonb(filters->>'moduleId')))))) THEN
   RAISE EXCEPTION 'retained mutation group has no truthful observation time' USING ERRCODE='P1010';END IF;
  IF original_cursor IS NOT NULL THEN
   IF octet_length(original_cursor) NOT BETWEEN 1 AND 65536
@@ -570,21 +636,30 @@ BEGIN
   last_observed:='infinity'::timestamptz;last_attempt:='ffffffff-ffff-ffff-ffff-ffffffffffff'::uuid;
  END IF;
  FOR candidate IN SELECT a.id,a.writer_xid,a.audit_observed_at FROM truss.runtime_object_attempt a
-  WHERE a.complete AND a.writer_xid<frontier
+  WHERE a.complete AND a.audit_observed_at IS NOT NULL AND a.writer_xid<frontier
    AND a.audit_observed_at IS NOT NULL
-   AND EXISTS(SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=a.id AND p.writer_xid=a.writer_xid
+   AND (NOT filters ? 'documentId' OR EXISTS(SELECT 1 FROM truss.runtime_owned_operation p WHERE p.attempt_id=a.id AND p.writer_xid=a.writer_xid
     AND jsonb_path_exists(p.plan,'$.** ? (@.documentId == $document && @.moduleId == $module)',
-     jsonb_build_object('document',to_jsonb(filters->>'documentId'),'module',to_jsonb(filters->>'moduleId'))))
+     jsonb_build_object('document',to_jsonb(filters->>'documentId'),'module',to_jsonb(filters->>'moduleId')))))
    AND (original_cursor IS NULL OR (a.audit_observed_at,a.id)<(last_observed,last_attempt))
    AND (NOT filters ? 'attemptId' OR a.id=(filters->>'attemptId')::uuid)
    AND (NOT filters ? 'nativeActorOid' OR a.actor_oid=(filters->>'nativeActorOid')::oid)
   ORDER BY a.audit_observed_at DESC,a.id DESC LOOP
   -- Authorize and validate the complete original owner union before applying
   -- identity or business-key filters that inspect retained private values.
-  group_bytes:=truss.read_mutation_group_audit(candidate.id,maximum_events,expected_release,expected_digest);
+  BEGIN
+   group_bytes:=truss.runtime_read_mutation_group_audit(candidate.id,maximum_events,expected_release,expected_digest,coalesce((filters->>'includeData')::boolean,false));
+  EXCEPTION WHEN SQLSTATE 'P1403' THEN
+   IF filters ? 'documentId' THEN RAISE;ELSE CONTINUE;END IF;
+  END;
   group_value:=convert_from(group_bytes,'UTF8')::jsonb;
   IF filters ? 'documentId' AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(group_value->'ownerScopes') scope(value)
     WHERE scope.value->>'documentId'=filters->>'documentId' AND scope.value->>'moduleId'=filters->>'moduleId') THEN CONTINUE;END IF;
+  IF filters ? 'entityKey' THEN
+   FOR scope_owner IN SELECT value FROM jsonb_array_elements(group_value->'ownerScopes') LOOP
+    IF truss.runtime_can_read(scope_owner->>'documentId',scope_owner->>'moduleId') IS NOT TRUE THEN RAISE EXCEPTION 'complete retained key data readership required' USING ERRCODE='P1403';END IF;
+   END LOOP;
+  END IF;
   IF truss.runtime_mutation_audit_attempt_matches(candidate.id,filters) IS NOT TRUE THEN CONTINUE;END IF;
   cursor_bytes:=truss.runtime_mutation_audit_cursor(installation.installation_id,
     installation.source_epoch,expected_release,expected_digest,frontier,filter_sha,
@@ -592,11 +667,16 @@ BEGIN
   -- The collector checks the complete historical owner union. Re-run it after
   -- cursor/projection work so revocation during page assembly cannot release
   -- a group on the strength of an earlier membership observation.
-  release_check:=truss.read_mutation_group_audit(candidate.id,maximum_events,expected_release,expected_digest);
+  release_check:=truss.runtime_read_mutation_group_audit(candidate.id,maximum_events,expected_release,expected_digest,coalesce((filters->>'includeData')::boolean,false));
+  IF filters ? 'entityKey' THEN
+   FOR scope_owner IN SELECT value FROM jsonb_array_elements(group_value->'ownerScopes') LOOP
+    IF truss.runtime_can_read(scope_owner->>'documentId',scope_owner->>'moduleId') IS NOT TRUE THEN RAISE EXCEPTION 'retained key data readership changed' USING ERRCODE='P1403';END IF;
+   END LOOP;
+  END IF;
   PERFORM truss.runtime_person(false);
   RETURN convert_to((group_value||jsonb_build_object('nextPageCursor',convert_from(cursor_bytes,'UTF8')::jsonb))::text,'UTF8');
  END LOOP;
- IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
+ IF filters ? 'documentId' AND NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
    WHERE a.document_id=filters->>'documentId' AND a.module=filters->>'moduleId'
     AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
   RAISE EXCEPTION 'mutation audit module authority changed before empty-page release' USING ERRCODE='P1403';END IF;

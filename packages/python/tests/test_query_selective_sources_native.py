@@ -146,6 +146,21 @@ class QuerySelectiveSourcesTests(fixtures.CompiledQueryTests):
             print(json.dumps({'managedPopulationBatch':batches[-1]}),flush=True)
         h.detach();c.commit();c,h,a,t=self.consumer()
         self.assertEqual(self.admin.execute('SELECT count(*) FROM truss.object').fetchone(),(10001,))
+        # Public compiler/runtime composition over the same committed population.
+        from truss import QueryRows,QueryPage
+        for label,expected in [('k09999',(('k09999',),)),('absent',())]:
+            selected=a.query_in_transaction(t,sql='SELECT a."A-label" FROM "A" a WHERE a."A-label"=:label LIMIT 1',document_ids=('adoc',),parameters={'label':label},maximum_scan_rows=1)
+            self.assertIsInstance(selected,Ok,repr(selected));self.assertIsInstance(selected.value,QueryRows,repr(selected));self.assertEqual(selected.value.rows,expected)
+        first=a.query_page_in_transaction(t,sql='SELECT a."A-label" FROM "A" a',document_ids=('adoc',),limit=3,maximum_scan_rows=4)
+        self.assertIsInstance(first,Ok,repr(first));self.assertIsInstance(first.value,QueryPage,repr(first));self.assertEqual(first.value.rows,(('k00000',),('k00001',),('k00002',)))
+        second=a.query_page_in_transaction(t,sql='SELECT a."A-label" FROM "A" a',document_ids=('adoc',),limit=3,maximum_scan_rows=4,cursor=first.value.next_cursor)
+        self.assertIsInstance(second.value,QueryPage,repr(second));self.assertEqual(second.value.rows,(('k00003',),('k00004',),('k00005',)))
+        sparse=a.query_page_in_transaction(t,sql='SELECT a."A-label" FROM "A" a WHERE a."A-value"=:value',document_ids=('adoc',),parameters={'value':'sparse'},limit=3,maximum_scan_rows=20)
+        self.assertIsInstance(sparse.value,QueryPage,repr(sparse));self.assertEqual(sparse.value.rows,(('k00000',),('k00997',),('k01994',)))
+        sparse2=a.query_page_in_transaction(t,sql='SELECT a."A-label" FROM "A" a WHERE a."A-value"=:value',document_ids=('adoc',),parameters={'value':'sparse'},limit=3,maximum_scan_rows=20,cursor=sparse.value.next_cursor)
+        self.assertIsInstance(sparse2.value,QueryPage,repr(sparse2));self.assertEqual(sparse2.value.rows,(('k02991',),('k03988',),('k04985',)))
+        residual=a.query_in_transaction(t,sql='SELECT a."A-label" FROM "A" a WHERE a."A-value"=:value AND a."A-label"=:label LIMIT 1',document_ids=('adoc',),parameters={'value':'ordinary','label':'k00001'},maximum_scan_rows=2)
+        self.assertEqual(residual,Ok(QueryRefused(code='limits')),'Residual LIMIT cannot narrow a complete indexed candidate bound')
         selected_type,property_id,key=self.coordinates();binding=self.binding(c)
         self.admin.execute('ANALYZE truss.object');self.admin.execute('ANALYZE truss.object_key_bucket')
         legacy=a.query_in_transaction(t,sql='SELECT COUNT(*) FROM "A" a',document_ids=('adoc',))

@@ -1,0 +1,17 @@
+test_legacy_relationship_only_incomplete_owner_header_survives_without_fabricated_backfill (test_runtime_migrations_subsequent_native.SubsequentRuntimeMigrationTests.test_legacy_relationship_only_incomplete_owner_header_survives_without_fabricated_backfill) ... FAIL
+test_previous_receipt_survives_lost_latest_commit_response_and_reconciliation (test_runtime_migrations_subsequent_native.SubsequentRuntimeMigrationTests.test_previous_receipt_survives_lost_latest_commit_response_and_reconciliation) ... ok
+test_previously_upgraded47_keeps_original_receipt_and_publishes_one_new_head (test_runtime_migrations_subsequent_native.SubsequentRuntimeMigrationTests.test_previously_upgraded47_keeps_original_receipt_and_publishes_one_new_head) ... ok
+
+======================================================================
+FAIL: test_legacy_relationship_only_incomplete_owner_header_survives_without_fabricated_backfill (test_runtime_migrations_subsequent_native.SubsequentRuntimeMigrationTests.test_legacy_relationship_only_incomplete_owner_header_survives_without_fabricated_backfill)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_runtime_migrations_subsequent_native.py", line 107, in test_legacy_relationship_only_incomplete_owner_header_survives_without_fabricated_backfill
+    self.assertIsInstance(observed,Ok,observed);self.assertIsInstance(observed.value,LoadAuditUnavailable)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: LoadAuditListingEnd(interface_version='truss-load-audit-listing-end/0.1.0') is not an instance of <class 'truss.load_audit.LoadAuditUnavailable'>
+
+----------------------------------------------------------------------
+Ran 3 tests in 15.679s
+
+FAILED (failures=1)

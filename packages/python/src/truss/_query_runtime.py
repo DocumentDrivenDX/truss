@@ -15,16 +15,15 @@ from .reader_catalog import ReaderCatalog, ReaderCatalogSnapshot, ReaderCatalogU
 from .query import QueryDocument, QueryCatalogRead, QueryColumnDescriptor, QueryEntityProjection
 from .query import QueryAbsent, QueryRelatedKeys, QueryRows, QueryDiagnostic, QueryRefused, QueryUnavailable, QueryPage, QueryPageCursor, QueryReadPosition, QueryCatalogSources
 
-BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.41',
-           'targetProfile': 'truss-runtime-pg18.6/0.5', 'interfaceVersion': 'weft-backend/0.2.7'}
+BACKEND = {'backendId': 'truss.postgresql.runtime', 'backendVersion': '0.4.43',
+           'targetProfile': 'truss-runtime-pg18.6/0.6', 'interfaceVersion': 'weft-backend/0.2.9'}
 
 
 def compiler(*, engine_catalog=False, engine_pages=False, entity_projection=False):
     try:
         import weft
-        if weft.__version__ not in ('0.4.49','0.4.51-dev.1') or not callable(getattr(weft,'compile_truss_runtime_json',None)):
+        if weft.__version__ != '0.4.51' or not callable(getattr(weft,'compile_truss_runtime_json',None)):
             return None
-        if entity_projection and weft.__version__=='0.4.49':return None
         if engine_catalog and not callable(getattr(weft,'check_engine_read_json',None)):return None
         if engine_pages and not callable(getattr(weft,'check_engine_page_json',None)):return None
         return weft.compile_truss_runtime_json
@@ -343,7 +342,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
         if binding != bundle['binding'] or binding['releaseId'] != manifest['releaseId'] or binding['releaseSha256'] != digest:
             raise ValueError('Exact installed query binding required')
         binding_sha = sha256(binding_json.encode('utf8')).hexdigest()
-        request = {'interfaceVersion': 'weft-compile/0.2.7', 'dialect': 'weft-sql/0.2.0', 'sql': sql,
+        request = {'interfaceVersion': 'weft-compile/0.2.8', 'dialect': 'weft-sql/0.2.0', 'sql': sql,
                    'timestampComparisonProfile':'umf-rfc3339-exact-instant/1.0.0', 'modules': bundle['modules'], 'parameters': values, 'exactParameters': exact_values, 'options': {'allowCandidate': True},
                    'target': {'backendId': BACKEND['backendId'], 'backendVersion': BACKEND['backendVersion'],
                               'targetProfile': BACKEND['targetProfile'], 'bindingJson': binding_json, 'bindingSha256': binding_sha}}
@@ -374,7 +373,7 @@ def run_query(host, transaction, *, sql, document_ids, parameters, maximum_rows,
             diagnostics = tuple(QueryDiagnostic(code=d['code'], message=d['message']) for d in artifact.get('diagnostics', ()))
             unsupported = any(d.code in ('WFT-CAPABILITY', 'WFT-TYPE', 'WFT-PROFILE') for d in diagnostics)
             return QueryRefused(code='unsupported_query' if unsupported else 'invalid_query', diagnostics=diagnostics)
-        if artifact['interfaceVersion'] != request['interfaceVersion'] or artifact['dialect'] != request['dialect'] or artifact['logicalPlan']['irVersion'] != 'weft-ir/0.2.7':
+        if artifact['interfaceVersion'] != request['interfaceVersion'] or artifact['dialect'] != request['dialect'] or artifact['logicalPlan']['irVersion'] != 'weft-ir/0.2.8':
             raise ValueError('Exact selected compile/dialect/IR versions required')
         if artifact['backend'] != BACKEND or artifact['bindingSha256'] != binding_sha or artifact['modelPins'] != [m['pin'] for m in bundle['modules']]:
             raise ValueError('Original compiled binding/model/backend required')

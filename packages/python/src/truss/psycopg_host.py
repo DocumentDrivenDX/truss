@@ -595,7 +595,7 @@ class PsycopgHost:
                 raise
             return False
 
-    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None, parameter_limit=4194304, function_call=False, adoption=False):
+    def _attempt(self, callback, custody=None, publish=None, *, semantic=False, parameter_producer=None, operation_deadline=None, parameter_limit=4194304, function_call=False, adoption=False, validation=False):
         """Retain one attempt before SQL; contain BaseException and cursor failures."""
         from psycopg import pq, sql
         host_reservation=self._custody.reservation
@@ -725,7 +725,20 @@ class PsycopgHost:
                 attempt.result = result
                 attempt.phase = 'command_returned'
                 deadline.check()
-                after = (work.admission if function_call else before if adoption else self._observe(cursor))
+                if validation:
+                    # Namespace-qualified finite native inventory; never SET
+                    # CONSTRAINTS ALL, which would force unrelated host work.
+                    cursor.execute("SELECT DISTINCT conname FROM pg_catalog.pg_constraint WHERE connamespace=pg_catalog.to_regnamespace('truss') AND condeferrable ORDER BY conname",prepare=False)
+                    constraints=tuple(row[0] for row in cursor.fetchall())
+                    if not constraints or len(constraints)>256:
+                        raise ValueError('Bounded installed Truss completion inventory required')
+                    cursor.execute(sql.SQL('SET CONSTRAINTS {} IMMEDIATE').format(sql.SQL(',').join(sql.Identifier('truss',item) for item in constraints)),prepare=False)
+                    deadline.check()
+                    cursor.execute(sql.SQL('ROLLBACK TO SAVEPOINT {}').format(name),prepare=False)
+                    if cursor.statusmessage != 'ROLLBACK':
+                        raise ValueError('Original validation rollback completion required')
+                    attempt.phase = 'validation_rolled_back'
+                after = (self._observe(cursor) if validation else work.admission if function_call else before if adoption else self._observe(cursor))
                 if before[0] != after[0]:
                     raise ValueError('Original caller transaction changed during operation')
                 if custody is not None: self._match(custody, after)
@@ -864,6 +877,16 @@ class PsycopgHost:
                 or (transaction.isolation, transaction.access_mode) != custody.identity[2:]):
             return _failure('invalid_transaction', 'Original issued transaction handle required')
         return self._attempt(callback, custody, operation_deadline=operation_deadline, function_call=function_call)
+
+    def _run_validation_operation(self, transaction, callback):
+        """Trusted Truss validation only; publish after checked host rollback."""
+        custody = (self._transactions.get(transaction._key)
+                   if type(transaction) is TransactionHandle and transaction._issuer is self._issuer else None)
+        if (custody is None or custody.handle is not transaction
+                or (transaction.isolation, transaction.access_mode) != custody.identity[2:]
+                or transaction.access_mode != 'read_write'):
+            return _failure('invalid_transaction','Original read-write transaction required')
+        return self._attempt(callback,custody,validation=True)
 
     def _run_published_operation(self, transaction, callback, publisher):
         """Private trusted receiver hook after native completion, under lease.

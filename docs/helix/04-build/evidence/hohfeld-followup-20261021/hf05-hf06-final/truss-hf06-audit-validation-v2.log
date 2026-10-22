@@ -1,0 +1,106 @@
+EEEEE...
+======================================================================
+ERROR: test_invocation_audit_summary_pages_complete_counts_and_scope (test_load_audit_native.LoadAuditNativeTests.test_invocation_audit_summary_pages_complete_counts_and_scope)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_load_audit_native.py", line 67, in test_invocation_audit_summary_pages_complete_counts_and_scope
+    protected_grant=admin_assembly.grant_module_audit_access_in_transaction(admin_tx,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 211, in guarded
+    return method(self,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 1271, in grant_module_audit_access_in_transaction
+    from ._load_audit_runtime import _decode_grant, _reason
+  File "/Users/erik/Projects/truss/packages/python/src/truss/_load_audit_runtime.py", line 335
+    if (type(scope) is not dict or set(scope)!={'documentId','moduleId'}
+       ^
+SyntaxError: '(' was never closed
+
+======================================================================
+ERROR: test_group_audit_requires_separate_role_and_preserves_noop_metadata (test_mutation_group_audit_native.MutationGroupAuditNativeTests.test_group_audit_requires_separate_role_and_preserves_noop_metadata)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_mutation_group_audit_native.py", line 94, in test_group_audit_requires_separate_role_and_preserves_noop_metadata
+    denied = assembly.page_mutation_group_audit_in_transaction(tx, filters={**scope, 'attemptId': create_attempt})
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 211, in guarded
+    return method(self,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 1308, in page_mutation_group_audit_in_transaction
+    from ._load_audit_runtime import page_mutation_group_audit
+  File "/Users/erik/Projects/truss/packages/python/src/truss/_load_audit_runtime.py", line 335
+    if (type(scope) is not dict or set(scope)!={'documentId','moduleId'}
+       ^
+SyntaxError: '(' was never closed
+
+======================================================================
+ERROR: test_edge_endpoints_and_owned_cascade_require_complete_audit_scope (test_owned_group_audit_native.OwnedGroupAuditNativeTests.test_edge_endpoints_and_owned_cascade_require_complete_audit_scope)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_owned_group_audit_native.py", line 84, in test_edge_endpoints_and_owned_cascade_require_complete_audit_scope
+    grant_m=admin_assembly.grant_module_audit_access_in_transaction(admin_tx,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 211, in guarded
+    return method(self,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 1271, in grant_module_audit_access_in_transaction
+    from ._load_audit_runtime import _decode_grant, _reason
+  File "/Users/erik/Projects/truss/packages/python/src/truss/_load_audit_runtime.py", line 335
+    if (type(scope) is not dict or set(scope)!={'documentId','moduleId'}
+       ^
+SyntaxError: '(' was never closed
+
+======================================================================
+ERROR: test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group (test_audit_disclosure_native.AuditDisclosureNativeTests.test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 70, in test_audit_only_scope_filters_unrelated_groups_but_refuses_mixed_group
+    self.setup_scopes()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in setup_scopes
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 22, in administer
+    result=callback(assembly,tx)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in <lambda>
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 211, in guarded
+    return method(self,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 1271, in grant_module_audit_access_in_transaction
+    from ._load_audit_runtime import _decode_grant, _reason
+  File "/Users/erik/Projects/truss/packages/python/src/truss/_load_audit_runtime.py", line 335
+    if (type(scope) is not dict or set(scope)!={'documentId','moduleId'}
+       ^
+SyntaxError: '(' was never closed
+
+======================================================================
+ERROR: test_deleted_entity_type_filter_and_descending_python_continuation (test_audit_disclosure_native.AuditDisclosureNativeTests.test_deleted_entity_type_filter_and_descending_python_continuation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 99, in test_deleted_entity_type_filter_and_descending_python_continuation
+    self.setup_scopes()
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in setup_scopes
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 22, in administer
+    result=callback(assembly,tx)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_audit_disclosure_native.py", line 49, in <lambda>
+    updated=self.administer(lambda assembly,tx:assembly.grant_module_audit_access_in_transaction(tx,
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 211, in guarded
+    return method(self,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 1271, in grant_module_audit_access_in_transaction
+    from ._load_audit_runtime import _decode_grant, _reason
+  File "/Users/erik/Projects/truss/packages/python/src/truss/_load_audit_runtime.py", line 335
+    if (type(scope) is not dict or set(scope)!={'documentId','moduleId'}
+       ^
+SyntaxError: '(' was never closed
+
+----------------------------------------------------------------------
+Ran 8 tests in 27.570s
+
+FAILED (errors=5)

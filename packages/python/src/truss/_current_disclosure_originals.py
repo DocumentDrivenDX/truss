@@ -15,7 +15,8 @@ class CurrentDisclosureOriginals:
     consumer_bytes:bytes
 
 
-# Frozen Weft 0.4.48/0.4.49 sources with exact per-platform wheel/module identities.
+# Current selected Weft0.4.51 only, with exact qualified wheel/module identities.
+# Historical consumer snapshots remain evidence, not runtime compatibility modes.
 _EMBEDDED_CONSUMER={
     'embeddedRuntime':'mini-racer==0.14.1',
     'embeddedProfile':'truss.embedded-v8/2',
@@ -39,20 +40,11 @@ _DISCLOSURE_CONSUMER={
     'resultAbi':'weft.postgresql.current-presence.sql/0.1-candidate',
 }
 _CONSUMER_COHORTS=(
-    _DISCLOSURE_CONSUMER,
     {**_DISCLOSURE_CONSUMER,
-        'weftWheelSha256':'8226b0cbc17b611abaaff30357aad7230e135fa713c8d3d4e05e0536a6d9a2c3',
-        'weftModuleSha256':'de3289ad3d8779bd2e347c15379596495acb08381741991935b6f85c7a24b2fc'},
-    {**_DISCLOSURE_CONSUMER,
-        'weftRevision':'5f013200cf36ddcaf5d4a380ba961267f819f7ca',
-        'weftVersion':'0.4.49',
-        'weftWheelSha256':'695e12867dfcffedb0e4bde7fa571835ebd43fd1c06b0d775b1abecb45ffa117',
-        'weftModuleSha256':'2c0169ba875c3dd174e5c450c851d1cb295fddc2adf29943e660e8b6a9c9aa88'},
-    {**_DISCLOSURE_CONSUMER,
-        'weftRevision':'5f013200cf36ddcaf5d4a380ba961267f819f7ca',
-        'weftVersion':'0.4.49',
-        'weftWheelSha256':'8ca1625249c1d3bed20864dfd71481d8b956b3901ffdc619fc3ec4a1a473be9c',
-        'weftModuleSha256':'01a1e0002edafabffaa7611e40a3a33fc48d221a5e0084e96fe1806a0f0c3fa8'},
+        'weftRevision':'f003997997e1d1a84ff47df34d1dc181660f2827',
+        'weftVersion':'0.4.51',
+        'weftWheelSha256':'fc23ae27b687d49d3f2d495478ce9c55c43f7b9b20765f2967197c2e3afd6390',
+        'weftModuleSha256':'6d05fb7c27365cc1502117169c8113b93fcfa2db100ef4af4f45d3f5459d419c'},
 )
 
 

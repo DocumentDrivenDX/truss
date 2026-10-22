@@ -1,0 +1,27 @@
+test_relationship_only_load_and_unqualified_listing (test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing) ... EDGE_IDENTITY_PROBE EdgeImportIdentity(relationship_definition_pin='23c6581ef7ea4ace6ebcdce41b630ddddf301d651e9249c3f16d5cf8f0d9b727', source=TypedIdentity(id='1', type_id='1', definition_pin='92aa17f09d16ebd97882db8037a51a49b5887873ad24d120e80a9936eb618b21', owner=QualifiedOwner(document_id='adoc', module_id='m')), target=TypedIdentity(id='2', type_id='2', definition_pin='6152a0f401dda69f63414c9bf02f61d944443ee9ae55e397a106cb76e1565c5b', owner=QualifiedOwner(document_id='adoc', module_id='m')))
+EDGE_TYPE_PROBE [(1, 'adoc', 'm', 1, 0, 'adoc', 'element', '92aa17f09d16ebd97882db8037a51a49b5887873ad24d120e80a9936eb618b21'), (2, 'adoc', 'm', 1, 0, 'adoc', 'element', '6152a0f401dda69f63414c9bf02f61d944443ee9ae55e397a106cb76e1565c5b')]
+FAIL
+
+======================================================================
+FAIL: test_relationship_only_load_and_unqualified_listing (test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_load_audit_native.py", line 141, in test_relationship_only_load_and_unqualified_listing
+    result=self.run_batch(a,t,built.value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_batched_import_native.py", line 31, in run_batch
+    self.assertIsInstance(result.result,ImportReported,repr(result)+' '+str(assembly._host._custody.last_attempt.error))
+AssertionError: ImportExecutionFailed(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='22023', catalog_code=None), report=None, outcome='execution_failed', reason='execution') is not an instance of <class 'truss.imports.ImportReported'> : BatchedImportExecutionResult(result=ImportExecutionFailed(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='22023', catalog_code=None), report=None, outcome='execution_failed', reason='execution'), empty_load_settlement=None) cannot cast jsonb string to type integer
+CONTEXT:  SQL statement "SELECT t.*                    FROM truss.type_def t JOIN truss.runtime_definition_source d
+      ON d.rev=t.definition_rev AND d.ord=t.definition_doc_ord AND d.doc_id=t.definition_document_id AND d.module_id=t.module AND d.element_id=t.element
+       AND d.kind='element' AND d.key_id='' WHERE t.type_id=(identity_value->'source'->'typeId')::int
+       AND t.kind='record' AND NOT t.provisional AND t.retired_rev IS NULL AND d.definition_pin=identity_value->'source'->>'definitionPin'"
+PL/pgSQL function truss.runtime_record_import_load(uuid,integer,integer,text,jsonb,text,integer,jsonb,jsonb,jsonb,text,text) line 101 at SQL statement
+SQL statement "SELECT truss.runtime_record_import_load(invocation_id,chunk_index,total_chunks,input->>'loadId',input->'assertedOrigin',input_digest,counted,input->'records',to_jsonb(original_records),to_jsonb(outcomes),expected_release,expected_digest)"
+PL/pgSQL function truss.process_import_chunk(bytea,bytea,uuid,integer,text,text) line 140 at PERFORM
+PL/pgSQL function truss.person_process_import_chunk(bytea,bytea,uuid,integer,text,text) line 4 at RETURN
+
+----------------------------------------------------------------------
+Ran 1 test in 4.702s
+
+FAILED (failures=1)

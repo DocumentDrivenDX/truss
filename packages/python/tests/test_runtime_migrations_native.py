@@ -185,7 +185,11 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
         self.assertEqual(result.outcome,'migrated',result)
         self.assertEqual(self.tool.status()['state'],'current')
         after=self.state()
-        for name,value in before[1].items():self.assertEqual(after[1][name],value,name)
+        for name,value in before[1].items():
+            if name!='runtime_migration_receipt':self.assertEqual(after[1][name],value,name)
+        # The tool verifies all prior ledger rows before its one final append.
+        # A fresh47 source already owns the empty ledger table.
+        self.assertEqual(after[1]['runtime_migration_receipt']['rows'],before[1].get('runtime_migration_receipt',{'rows':0})['rows']+1)
         self.assertEqual(self.tool.apply(prepared.reference).outcome,'already_applied')
         original=self.tool.receipt(prepared.reference)
         import base64
@@ -197,7 +201,8 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
             decoded=lambda name:json.loads(base64.b64decode(original[name]['bytesBase64'],validate=True))
             evidence={'source':self.source_label,'attemptId':prepared.attempt_id,
                 'sourceManifestSha256':prepared.source,'targetManifestSha256':prepared.target,
-                'preservationBefore':before[1],'preservationAfter':{name:after[1][name] for name in before[1]},
+                'preservationBefore':{name:value for name,value in before[1].items() if name!='runtime_migration_receipt'},'preservationAfter':{name:after[1][name] for name in before[1] if name!='runtime_migration_receipt'},
+                'previousLedgerRows':before[1].get('runtime_migration_receipt',{'rows':0})['rows'],'finalLedgerRows':after[1]['runtime_migration_receipt']['rows'],
                 'preservationMatched':True,'originalRequest':decoded('originalRequest'),
                 'orderedStepEvidence':decoded('orderedStepEvidence'),
                 'originalArtifactSha256':{name:original[name]['sha256'] for name in
@@ -224,6 +229,8 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
                 self.assertIsInstance(queried,Ok,queried)
                 self.assertIsInstance(queried.value,QueryRows,queried)
                 self.assertEqual(queried.value.rows,(('exact-value',),))
+                status=engine.person_runtime_status_in_transaction(tx)
+                self.assertIsInstance(status,Ok,status);self.assertEqual(status.value.installation,'compatible')
                 context=engine.group_context_in_transaction(tx).value
                 from truss.groups import CreateObject,AuthoredValue,RootlessOwnership,CommittedReceiptReplay,UpdateObject,StoredObjectReference
                 from truss.contracts import MapValue,TextValue
@@ -271,6 +278,16 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
         before=self.state()
         with self.assertRaisesRegex(ValueError,'privilege|grant'):self.tool.prepare()
         self.assertEqual(self.state(),before)
+
+    def test_long_overload_acl_identity_cannot_be_satisfied_by_its_sibling(self):
+        # These full native signatures share the old63-byte ACL display prefix.
+        signature='truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean,integer,bytea)'
+        sibling='truss.catalog_accept_with_keys(bytea,bytea,bytea,bytea,bytea,text,bytea,boolean)'
+        self.assertEqual(self.admin.execute("SELECT has_function_privilege(%s,%s,'EXECUTE'),has_function_privilege(%s,%s,'EXECUTE')",(self.seed['registrar'],signature,self.seed['registrar'],sibling)).fetchone(),(True,True))
+        before=self.state()
+        self.admin.execute(psycopg.sql.SQL('REVOKE EXECUTE ON FUNCTION '+signature+' FROM {}').format(psycopg.sql.Identifier(self.seed['registrar'])))
+        with self.assertRaisesRegex(ValueError,'privileges drifted'):self.tool.status()
+        self.assertEqual(self.state()[1],before[1])
 
     def test_external_inheritance_parent_refuses_before_migration(self):
         """@covers US-045-AC6: private rows cannot acquire an unqualified ancestor."""
@@ -373,6 +390,7 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
     def test_later_native_step_failure_rolls_back_initializer(self):
         """@covers US-045-AC7"""
         prepared=self.tool.prepare();before=self.state()
+        original_ledger=self.admin.execute("SELECT to_regclass('truss.runtime_migration_receipt')").fetchone()[0]
         class FailingCursor(psycopg.Cursor):
             def execute(self,query,*args,**kwargs):
                 if isinstance(query,str) and query.startswith('CREATE OR REPLACE FUNCTION truss.catalog_accept_with_keys'):
@@ -382,7 +400,7 @@ with psycopg.connect(**p,autocommit=True,options='-c statement_timeout=10000') a
         result=RuntimeMigrations(connect,self.registry).apply(prepared.reference)
         self.assertEqual(result.outcome,'rolled_back',result)
         self.assertEqual(self.state(),before)
-        self.assertIsNone(self.admin.execute("SELECT to_regclass('truss.runtime_migration_receipt')").fetchone()[0])
+        self.assertEqual(self.admin.execute("SELECT to_regclass('truss.runtime_migration_receipt')").fetchone()[0],original_ledger)
 
     def test_original_commit_reply_loss_recovers_after_restart(self):
         """@covers US-045-AC7"""

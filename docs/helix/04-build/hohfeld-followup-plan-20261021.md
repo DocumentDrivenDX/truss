@@ -582,6 +582,57 @@ unchanged prior receipt rows plus one new final append, no old-wheel execution,
 rollback/lost-ack settlement and current person status. Published47 source
 profiles and recipes stay immutable. No release-age eligibility cutoff is added.
 
+### ABI1.2, completion and audit candidate checkpoint — 2026-10-22
+
+HF-04/05 now consume the selected Weft0.4.51 compiler, compile/IR0.2.8,
+backend43/44 and interface0.2.9. Exact descriptors and requested ordered entity
+facts come from the compiler. Native indexed predicates bound the complete
+candidate set before residual evaluation; supported ordered string keys use a
+generic Btree and all other key domains retain the complete bounded fallback.
+Actual 10,001-object public populations prove GIN/Btree use and refusal boundaries.
+Unlimited cursor portals do not inherit a finite key-page optimization.
+
+The import owner-union pass now deduplicates exact owners without skipping any
+original input identity. Original 1,024-record build/import samples improve from
+12.845s to8.316s; a later instrumented sample records8.281s through build/import,
+0.0065s describe and0.1246s commit,8.415s end to end. The final sample attributes
+7.544 native CPU seconds and0.654 Python CPU seconds, with30 client submissions,
+eight set-based writes each to object/journal/owned-operation and active native
+wait samples. These are synthetic macOS ARM64 observations, not p95, universal
+10×,20ms, or cross-platform performance claims. Broader targets remain unmet.
+
+HF-06 completion and dry-run execute under a host-owned savepoint, force only
+installed Truss deferred constraints, and publish an observation only after
+rollback and custody rechecks. They preserve prior caller work and unrelated
+host constraints. They issue no durable receipt or stable created identity.
+Audit discovery may span modules but omits entries lacking complete current
+scope. Whole mutation metadata permits4,096 events within its separate byte
+budget. Optional key/version data requires current data readership before and
+after projection. Named entity-key filters are native resolved; they are not an
+auditor-only value oracle.
+
+A previously undiscovered relationship-only test exposed real endpoint JSON
+casts, nullable association ownership and omitted actor-name detail defects.
+The corrected test is now in the explicit shared corpus. Newly produced loads
+have exact complete owner inventories; real public47 incomplete headers remain
+byte-preserved and unavailable after upgrade. No historical ownership is invented.
+Source component probes, failures, exact producers and captures are retained in
+[evidence custody](evidence/hohfeld-followup-20261021/hf05-hf06-final/custody.json).
+Unpublished b7/977 candidates remain separately archived, not admitted historical
+releases.
+
+HF-07 provides an independently extracted60-case corpus archive and an installed
+runner requiring the exact toolkit/compiler/native cohort with zero skips.
+The80-case lineage gate includes all three published source-wheel populations,
+actual44→47→latest custody, unchanged prior receipts, real lost COMMIT response
+and historical audit preservation. Both full installed local gates pass without skips:80 migration cases in
+133.713s and60 independently extracted corpus cases in138.515s
+([original receipts](evidence/hohfeld-followup-20261021/installed-048-native2f23/receipt.json)).
+The final native target is `2f230a44571ceb5c6ea04d86770cfd3cd3adcf18a09c5f658d644d74e01ec9fb`.
+Only current Weft51 consumers enter the runtime cohort; older consumer records
+remain evidence. Hosted Linux, exact published package adoption, review, merge
+and publication remain required before this checkpoint is delivery.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).

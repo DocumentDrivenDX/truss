@@ -1336,6 +1336,21 @@ class CatalogReferenceAssembly:
                            manifest,digest,_pin_cursor,bun_executable=bun_executable,_schema_state=self._record_schema_state)
 
     @_active_operation
+    def complete_in_transaction(self,transaction: TransactionHandle):
+        """Observe Truss deferred completion; caller still owns outer settlement."""
+        from ._preview_runtime import validate_completion
+        manifest,digest,_=_release()
+        return validate_completion(self._host,transaction,manifest,digest,_pin_cursor)
+
+    @_active_operation
+    def dry_run_in_transaction(self,transaction: TransactionHandle,input: GroupSemanticInput,*,documents: tuple[CatalogDocument,...]=()):
+        """Apply request-free, check native completion, then confirm local rollback."""
+        from ._preview_runtime import validate_completion
+        manifest,digest,_=_release()
+        return validate_completion(self._host,transaction,manifest,digest,_pin_cursor,input=input,
+            documents=documents or self._group_documents,schema_state=self._record_schema_state,dry_run=True)
+
+    @_active_operation
     def get_type_reference_in_transaction(self,transaction: TransactionHandle,*,document_id: str,module_id: str,record_id: str) -> Outcome[CatalogDefinitionReference | None | CatalogRefused]:
         """Resolve a genuine accepted type pin using current module read/write authority."""
         from .catalog_view import CatalogDefinitionReference

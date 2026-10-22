@@ -1,0 +1,7 @@
+{
+  "scope": "Unpublished candidate refinement; no public lineage source removed",
+  "priorTarget": "977149364e8a51fa9561fa0550faa20315ca7b9cfb14829703003a671d18d420",
+  "target": "2f230a44571ceb5c6ea04d86770cfd3cd3adcf18a09c5f658d644d74e01ec9fb",
+  "reason": "Discovered relationship-only test exposed JSONB-to-integer endpoint casts, nullable association scope, and omitted retained actor-name output. Newly produced complete inventories work; historical incomplete headers remain immutable and unavailable.",
+  "bothNativeInitializersAndLogicalRestorePassed": true
+}

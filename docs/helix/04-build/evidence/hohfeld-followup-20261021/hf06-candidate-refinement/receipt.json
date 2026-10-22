@@ -1,0 +1,9 @@
+{
+  "scope": "Unpublished candidate refinement, no admitted public source is removed",
+  "priorTarget": "b7a8785c149f6f488306ec568dc8a849cdc01b5389822e4218c0e4029a95a179",
+  "finalTarget": "977149364e8a51fa9561fa0550faa20315ca7b9cfb14829703003a671d18d420",
+  "reason": "Full response byte refusal and explicit missing retained-image refusal; archived revision key projection; dry-run invalid None input cannot become a completion-only success",
+  "published47ArtifactsUnchanged": true,
+  "bothInitializersAndLogicalRestorePassed": true,
+  "priorCandidateArchiveSha256": "29bdc3849728ed7f0f9c38e8d168420fc5814095b76c6e8740484b9acc8d3863"
+}

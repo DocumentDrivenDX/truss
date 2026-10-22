@@ -173,3 +173,6 @@ __all__ += ['BatchedImportInput','BatchedImportRuntimeContext','ObjectImportDraf
 from .groups import FrozenGroupRequest
 from ._group_runtime import freeze_group_request
 __all__ += ['FrozenGroupRequest','freeze_group_request']
+
+from .preview import ValidationObservationBasis,CompletionObserved,GroupValidationObserved
+__all__ += ['ValidationObservationBasis','CompletionObserved','GroupValidationObserved']

@@ -1,0 +1,19 @@
+test_relationship_only_load_and_unqualified_listing (test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing) ... EDGE_IDENTITY_PROBE EdgeImportIdentity(relationship_definition_pin='23c6581ef7ea4ace6ebcdce41b630ddddf301d651e9249c3f16d5cf8f0d9b727', source=TypedIdentity(id='1', type_id='1', definition_pin='92aa17f09d16ebd97882db8037a51a49b5887873ad24d120e80a9936eb618b21', owner=QualifiedOwner(document_id='adoc', module_id='m')), target=TypedIdentity(id='2', type_id='2', definition_pin='6152a0f401dda69f63414c9bf02f61d944443ee9ae55e397a106cb76e1565c5b', owner=QualifiedOwner(document_id='adoc', module_id='m')))
+EDGE_TYPE_PROBE [(1, 'adoc', 'm', 1, 0, 'adoc', 'element', '92aa17f09d16ebd97882db8037a51a49b5887873ad24d120e80a9936eb618b21'), (2, 'adoc', 'm', 1, 0, 'adoc', 'element', '6152a0f401dda69f63414c9bf02f61d944443ee9ae55e397a106cb76e1565c5b')]
+FAIL
+
+======================================================================
+FAIL: test_relationship_only_load_and_unqualified_listing (test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_load_audit_native.py", line 146, in test_relationship_only_load_and_unqualified_listing
+    self.assertIsInstance(listing,Ok,repr(listing));self.assertIsInstance(listing.value,LoadAuditInvocationSummary,repr(listing)+' '+str(h._custody.last_attempt.error)+' '+str(self.admin.execute('SELECT owner_inventory_complete,original_owners FROM truss.runtime_import_load_chunk').fetchall()));self.assertEqual(listing.value.created_count,'1')
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: LoadAuditUnavailable(reason='unauthorized', interface_version='truss-load-audit-unavailable/0.1.0') is not an instance of <class 'truss.load_audit.LoadAuditInvocationSummary'> : Ok(value=LoadAuditUnavailable(reason='unauthorized', interface_version='truss-load-audit-unavailable/0.1.0'), status='ok') complete original import owner inventory required
+CONTEXT:  PL/pgSQL function truss.page_import_load_audit(jsonb,integer,bytea,text,text) line 110 at RAISE
+PL/pgSQL function truss.person_page_import_load_audit(jsonb,integer,bytea,text,text) line 4 at RETURN [(False, [])]
+
+----------------------------------------------------------------------
+Ran 1 test in 4.500s
+
+FAILED (failures=1)

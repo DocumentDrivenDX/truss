@@ -75,3 +75,30 @@ ConditionPreviewResult: TypeAlias = PreviewObserved | PreviewRefused
 __all__ = ['GroupConditionPreviewInput', 'PreviewConditionResult',
            'PreviewObservationBasis', 'PreviewObserved', 'PreviewRefused',
            'ConditionPreviewResult']
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class ValidationObservationBasis(_Carrier):
+    catalog_revision: str
+    snapshot: str
+    source_epoch: str
+    release_id: str
+    release_sha256: str
+    input_sha256: str | None
+    documents_sha256: str | None
+    durability: Literal['rolled_back'] = field(default='rolled_back', init=False)
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class CompletionObserved(_Carrier):
+    basis: ValidationObservationBasis
+    outcome: Literal['completion_observed'] = field(default='completion_observed', init=False)
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class GroupValidationObserved(_Carrier):
+    basis: ValidationObservationBasis
+    operation_count: int
+    outcome: Literal['validated'] = field(default='validated', init=False)
+
+__all__ += ['ValidationObservationBasis','CompletionObserved','GroupValidationObserved']

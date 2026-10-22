@@ -89,6 +89,11 @@ class CurrentQueryRuntimeNativeTests(full.CurrentQueryFullSourcesNativeTests):
             self.assertIsInstance(refused,Error)
             self.assertIn('External routine attachments',str(self.host._custody.last_attempt.error))
             self.admin.execute('DROP TABLE public.preexisting_feed_carrier')
+            self.admin.execute('CREATE INDEX unreviewed_key_decoder ON truss.object_key_bucket (truss.runtime_query_single_string_key(key_bytes))')
+            refused=activate_current_query_protection_in_transaction(self.host,self.tx,subject_registration=self.current_subject_registration)
+            self.assertIsInstance(refused,Error)
+            self.assertIn('External routine attachments',str(self.host._custody.last_attempt.error))
+            self.admin.execute('DROP INDEX truss.unreviewed_key_decoder')
         activated=activate_current_query_protection_in_transaction(self.host,self.tx,subject_registration=self.current_subject_registration)
         self.assertIsInstance(activated,Ok,str(self.host._custody.last_attempt.error))
         self.host.detach();self.admin.commit()
@@ -196,8 +201,10 @@ class CurrentQueryRuntimeNativeTests(full.CurrentQueryFullSourcesNativeTests):
                 with c.transaction():
                     c.execute(statement,parameters)
         result=a.get_object_in_transaction(t,document_id='domain',module_id='m',record_id='Resource',object_id=3)
-        self.assertIsInstance(result,Ok)
-        self.assertEqual(result.value,ObjectReadRefused())
+        # Intentional protected lockdown removed EXECUTE on the legacy shim.
+        # Preserve native42501; HF-02 no longer masks every missing grant as a business denial.
+        self.assertIsInstance(result,Error)
+        self.assertEqual(result.error.sql_state,'42501')
         self.assertEqual(c.execute("SELECT has_table_privilege('truss.object','SELECT')").fetchone(),(False,))
         self.assertIsInstance(a.reader_catalog_in_transaction(t),Ok)
 

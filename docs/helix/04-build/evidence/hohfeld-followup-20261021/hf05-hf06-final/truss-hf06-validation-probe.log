@@ -1,0 +1,20 @@
+test_dry_run_checks_completion_without_durable_receipt_or_data (test_group_validation_native.GroupValidationTests.test_dry_run_checks_completion_without_durable_receipt_or_data) ... FAIL
+
+======================================================================
+FAIL: test_dry_run_checks_completion_without_durable_receipt_or_data (test_group_validation_native.GroupValidationTests.test_dry_run_checks_completion_without_durable_receipt_or_data)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_validation_native.py", line 25, in test_dry_run_checks_completion_without_durable_receipt_or_data
+    self.assertIsInstance(result,Ok,repr(result)+' '+str(h._custody.last_attempt.error));self.assertIsInstance(result.value,GroupValidationObserved,repr(result))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='P1403', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Error(error=ExecutionFailure(code='execution_obligation', message='Original operation failed and locally contained', retry_scope='none', sql_state='P1403', catalog_code=None), status='error') catalog registration authorization required
+CONTEXT:  PL/pgSQL function truss.runtime_person(boolean) line 48 at RAISE
+SQL statement "SELECT truss.runtime_person(false)"
+PL/pgSQL function truss.require_person_invocation(regprocedure,text) line 34 at PERFORM
+SQL statement "SELECT truss.require_person_invocation('truss.group_context(text,text)'::regprocedure,'read')"
+PL/pgSQL function truss.person_group_context(text,text) line 3 at PERFORM
+
+----------------------------------------------------------------------
+Ran 1 test in 3.421s
+
+FAILED (failures=1)

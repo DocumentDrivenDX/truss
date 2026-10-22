@@ -2306,3 +2306,21 @@ Final six native/TLS cases pass53.069s. [Evidence](../04-build/evidence/register
 retains failed historical setup/path runs, independent comparison controls and
 single-caller external registered transport. Full backend B01 admission remains
 unqualified; all132 required cases remain required.
+
+### HF-06 completion and full dry-run controls
+
+Exercise actual deferred Truss trigger failure before rollback, successful
+request-free group validation without object/journal/attempt residue, preserved
+prior caller work and caller constraint mode, an unrelated host deferred
+constraint left untouched, nonrewinding sequence effects, and a subsequent real
+application and caller-owned outer COMMIT. Native failure remains an execution
+outcome with original SQLSTATE; uncertain rollback cannot publish validation.
+
+HF-07 distributes `fixtures/hohfeld-followup-0.1.json`, its exact independently
+asserted test producers and `scripts/run-hf-conformance.py` in a separate release
+archive. The runner refuses a package/compiler/native-profile mismatch and any
+skip, failure or test-count discrepancy. Run it outside the checkout with the
+installed final wheel. This is separate from the mandatory complete source
+lineage gate, which now includes the actual prior-publication/lost-response
+controls. Record full native ACL identities, whole-route receipt append and
+existing ledger row preservation; never infer receipt-table absence from age.

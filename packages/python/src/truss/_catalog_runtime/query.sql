@@ -58,7 +58,7 @@ REVOKE ALL ON FUNCTION truss.query_numeric_value(text,text) FROM PUBLIC;
 -- Hash of the exact packaged query-abi.json descriptor bytes, independent of
 -- unrelated runtime implementation edits. Actual execution still pins runtime.
 CREATE FUNCTION truss.query_abi() RETURNS jsonb
-LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT '{"identity":"truss-postgresql-logical-query","version":"1.1","sha256":"9b67333abf263078e7e7239fe5accc228b063dc2fcc5488ca068d7331986949f"}'::jsonb; $$;
+LANGUAGE sql IMMUTABLE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$ SELECT '{"identity":"truss-postgresql-logical-query","version":"1.2","sha256":"8266c19d6f1bc4e816d5981cd594b224f09bafd4975e1c851610fa94d1f75f96"}'::jsonb; $$;
 REVOKE ALL ON FUNCTION truss.query_abi() FROM PUBLIC;
 
 CREATE FUNCTION truss.query_scope(binding jsonb) RETURNS void

@@ -102,7 +102,7 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
         finally:
             for source in originals.values():self.admin.execute(source)
 
-    def test_legacy_source_bound_precedes_filter_limit_count_and_page(self):
+    def test_indexed_equality_precedes_residual_limit_with_legacy_count_page_bounds(self):
         connection,host,assembly,tx=self.ready(document_ids=('adoc',))
         created=self.run_group(assembly,tx,(self.create(label='first',alias='first'),self.create(label='second',alias='second')),'source-bound-create')[0]
         self.assertIsInstance(created,GroupSuccess)
@@ -113,7 +113,9 @@ class CompiledQueryTests(mutation_tests.ObjectMutationTests):
             with self.subTest(sql=sql):
                 params={'label':'first'} if ':label' in sql else None
                 result=assembly.query_in_transaction(tx,sql=sql,document_ids=('adoc',),parameters=params,maximum_scan_rows=1,read_profile=profile)
-                self.assertEqual(result,Ok(QueryRefused(code='limits')))
+                if ':label' in sql:
+                    self.assertIsInstance(result,Ok,repr(result));self.assertIsInstance(result.value,QueryRows,repr(result));self.assertEqual(result.value.rows,(('first',),))
+                else:self.assertEqual(result,Ok(QueryRefused(code='limits')))
 
 
     def test_wide_complete_entity_preserves_fields_with_explicit_byte_budget(self):

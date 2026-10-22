@@ -63,7 +63,7 @@ BEGIN
  END IF;
  PERFORM truss.runtime_person(false);
  RETURN convert_to(jsonb_build_object('outcome','page','invocationId',selected.invocation_id::text,
-  'loadId',selected.load_id,'assertedOriginSha256',selected.asserted_origin_sha256,'nativeActor',selected.native_actor::text,
+  'loadId',selected.load_id,'assertedOriginSha256',selected.asserted_origin_sha256,'nativeActor',selected.native_actor::text,'nativeActorName',selected.native_actor_name,
   'observedAt',to_char(selected.audit_observed_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"'),'createdCount',created_count::text,
   'skippedCount',skipped_count::text,'rejectedCount',rejected_count::text,
   'loadCreatedCount',CASE WHEN state_value='complete' THEN load_created::text ELSE NULL END,
@@ -118,7 +118,6 @@ BEGIN
   OR filters ? 'nativeActorOid' AND (jsonb_typeof(filters->'nativeActorOid') IS DISTINCT FROM 'string'
    OR filters->>'nativeActorOid' !~ '^[1-9][0-9]{0,9}$' OR (filters->>'nativeActorOid')::numeric>4294967295)
   OR (filters ? 'documentId') IS DISTINCT FROM (filters ? 'moduleId')
-  OR filters ? 'documentId' IS NOT TRUE OR filters ? 'moduleId' IS NOT TRUE
   OR filters ? 'documentId' AND (jsonb_typeof(filters->'documentId') IS DISTINCT FROM 'string'
    OR octet_length(filters->>'documentId') NOT BETWEEN 1 AND 4096
    OR jsonb_typeof(filters->'moduleId') IS DISTINCT FROM 'string'
@@ -137,7 +136,7 @@ BEGIN
   IF from_time IS NOT NULL AND until_time IS NOT NULL AND from_time>=until_time THEN
    RAISE EXCEPTION 'ordered import audit observed-time range required' USING ERRCODE='22023';END IF;
  END IF;
- IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
+ IF filters ? 'documentId' AND NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
    WHERE a.document_id=filters->>'documentId' AND a.module=filters->>'moduleId'
     AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
   RAISE EXCEPTION 'qualified import audit module enrollment required' USING ERRCODE='P1403';END IF;
@@ -208,6 +207,7 @@ BEGIN
    RAISE EXCEPTION 'complete original import owner inventory required' USING ERRCODE='P1403';END IF;
   owners:=source_row.original_owners;
   IF jsonb_array_length(owners)=0 THEN PERFORM truss.runtime_person(true);END IF;
+  IF NOT filters ? 'documentId' AND EXISTS(SELECT 1 FROM jsonb_array_elements(owners) owner(value) WHERE NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=owner.value->>'documentId' AND a.module=owner.value->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid))) THEN CONTINUE;END IF;
   FOR owner IN SELECT value FROM jsonb_array_elements(owners) LOOP
    IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a WHERE a.document_id=owner->>'documentId'
      AND a.module=owner->>'moduleId' AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
@@ -258,7 +258,7 @@ BEGIN
    'createdCount',created_count::text,'skippedCount',skipped_count::text,'rejectedCount',rejected_count::text,
    'chunks',entries,'nextPageCursor',convert_from(cursor_bytes,'UTF8')::jsonb)::text,'UTF8');
  END LOOP;
- IF NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
+ IF filters ? 'documentId' AND NOT EXISTS(SELECT 1 FROM truss.runtime_import_audit_access a
    WHERE a.document_id=filters->>'documentId' AND a.module=filters->>'moduleId'
     AND truss.runtime_audit_role_member(actor,a.auditor_oid)) THEN
   RAISE EXCEPTION 'load audit module authority changed before empty-page release' USING ERRCODE='P1403';END IF;

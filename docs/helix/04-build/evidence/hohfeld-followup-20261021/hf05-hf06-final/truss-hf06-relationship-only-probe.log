@@ -1,0 +1,17 @@
+test_relationship_only_load_and_unqualified_listing (test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing) ... FAIL
+
+======================================================================
+FAIL: test_relationship_only_load_and_unqualified_listing (test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_load_audit_native.py", line 143, in test_relationship_only_load_and_unqualified_listing
+    self.assertIsInstance(listing,Ok,repr(listing));self.assertIsInstance(listing.value,LoadAuditInvocationSummary,repr(listing)+' '+str(h._custody.last_attempt.error)+' '+str(self.admin.execute('SELECT owner_inventory_complete,original_owners FROM truss.runtime_import_load_chunk').fetchall()));self.assertEqual(listing.value.created_count,'1')
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: LoadAuditUnavailable(reason='unauthorized', interface_version='truss-load-audit-unavailable/0.1.0') is not an instance of <class 'truss.load_audit.LoadAuditInvocationSummary'> : Ok(value=LoadAuditUnavailable(reason='unauthorized', interface_version='truss-load-audit-unavailable/0.1.0'), status='ok') complete original import owner inventory required
+CONTEXT:  PL/pgSQL function truss.page_import_load_audit(jsonb,integer,bytea,text,text) line 110 at RAISE
+PL/pgSQL function truss.person_page_import_load_audit(jsonb,integer,bytea,text,text) line 4 at RETURN [(False, [])]
+
+----------------------------------------------------------------------
+Ran 1 test in 7.142s
+
+FAILED (failures=1)

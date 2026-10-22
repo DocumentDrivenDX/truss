@@ -1,0 +1,6 @@
+test_optional_key_version_projection_requires_separate_readers_and_named_key (test_audit_disclosure_native.AuditDisclosureNativeTests.test_optional_key_version_projection_requires_separate_readers_and_named_key) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 5.100s
+
+OK

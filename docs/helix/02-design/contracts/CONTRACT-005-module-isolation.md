@@ -720,3 +720,6 @@ ended-peer refusal. This is a scoped reconciliation component, not original
 backend/coordinator incarnation, authority, store or program admission. Complete
 anchor/guard/selection/finalization obligations above remain open; no protected
 profile or backend acceptance case is promoted.
+
+HF-06 completion and dry-run settlement follow CONTRACT-007; current native
+person/module rights remain mandatory at effect and deferred completion time.

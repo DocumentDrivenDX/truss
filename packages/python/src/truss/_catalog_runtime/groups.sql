@@ -139,7 +139,7 @@ BEGIN
  IF revision<1 THEN RAISE EXCEPTION 'accepted catalog required' USING ERRCODE='0A000'; END IF;
  RETURN convert_to((truss.runtime_group_profiles()||jsonb_build_object('layoutProfile',installation.layout_profile,
   'authorizedScopeIdentity','truss-person:'||installation.installation_id||':'||person::text,
-  'installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,'historyProfile',
+  'catalogRevision',revision::text,'installationId',installation.installation_id::text,'sourceEpoch',installation.source_epoch::text,'historyProfile',
    CASE WHEN truss.runtime_group_profiles()->'mutationProfile'=truss.runtime_owned_profile() THEN 'truss-native-owned-create/0.1' ELSE 'truss-native-scalar-create/0.2' END))::text,'UTF8');
 END;
 $$;

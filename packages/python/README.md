@@ -1,14 +1,18 @@
 # Truss Python toolkit
 
-## Runtime migrations — v0.0.47
+## Runtime migrations — v0.0.48
 
 Truss supports the latest application runtime only. Previous databases move
 forward through `RuntimeMigrations` or the explicit `truss-migrate` command;
 older application runtimes are not maintained as compatibility modes.
+Admitted databases do not expire by release age. The latest tool follows the
+complete declared route in one transaction and appends one final receipt; it
+does not launch intermediate application releases. Existing receipts retain
+their original bytes and remain observable through current tooling.
 
-The initial offline, transactional routes accept the exact UMF 0.10 installation
+The offline, transactional routes accept the exact UMF 0.10 installation
 from v0.0.44 and the shared installed tuple from v0.0.45/v0.0.46, on PostgreSQL
-18.6. The target is native `0.73-candidate`; exact manifest and installed definitions,
+18.6, plus v0.0.47 native0.73. The target is native `0.74-candidate`; exact manifest and installed definitions,
 privileges and preparation configuration decide admission. Matching release/layout
 labels alone do not. Pre-0.10 and protected-query installations are excluded.
 Unknown or modified sources refuse with their data intact. Current authored-name
@@ -329,7 +333,7 @@ retain a fixed committed frontier. Deleted and unchanged operations remain
 represented. Literal empty loads are retained but have no module scope and require
 the separate registrar disclosure path.
 
-## Install version 0.0.47
+## Install version 0.0.48
 
 Use the matching Truss and Weft release artifacts below. Source builds require
 the current version cohort; existing installations require explicit migration.
@@ -477,10 +481,10 @@ PostgreSQL18 profile. Prebuilt Weft wheels remove the Rust/Cargo build requireme
 
 ```sh
 python -m pip install --only-binary=:all: \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.47 \
-  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.49 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48 \
+  --find-links https://github.com/DocumentDrivenDX/weft/releases/expanded_assets/v0.4.51 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  'truss-toolkit[local,native,query]==0.0.47'
+  'truss-toolkit[local,native,query]==0.0.48'
 ```
 
 Python deployment requires no Bun, Node, or external JavaScript process. The
@@ -496,7 +500,7 @@ x86_64 qualification. Other platforms are outside the selected release gates.
 
 ## Run a real workflow
 
-Check out the v0.0.47 tag to obtain the examples, then run with a new directory:
+Check out the v0.0.48 tag to obtain the examples, then run with a new directory:
 
 ```sh
 git clone --branch v0.0.47 --depth 1 https://github.com/DocumentDrivenDX/truss.git
@@ -523,7 +527,7 @@ With `uv` installed, run the published `0.0.47` package in an isolated Python
 ```sh
 uvx --no-config --isolated --python 3.11 \
   --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.47/isolated-runtime-constraints.txt \
-  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.47 \
+  --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
   --from 'truss-toolkit[local,native]==0.0.47' \
   truss-local-postgres \
@@ -991,3 +995,50 @@ accepted scope amendment. Experimental pg8000 and older private profiles are his
 
 The [runtime history](docs/runtime-history.md) preserves the earlier release diary.
 Its old limitations describe their named versions, not the current interface.
+
+## Hohfeld follow-up cohort — v0.0.48
+
+This cohort pins Weft0.4.51, compile/IR0.2.8, backend43/44, interface0.2.9
+and Truss query ABI1.2. Native-indexed exact string/boolean equality and eligible
+single required string key pages can select over populations above10,000 rows.
+Complete candidate/byte limits still apply before residual filters and LIMIT;
+numeric, temporal, composite and larger-key routes retain the bounded fallback.
+A cursor retains its statement snapshot while current person/scope checks stay
+live. Compiler descriptors accompany empty/null results, pages and streams.
+`QueryEntityProjection(facts=(...), relationships=False)` explicitly selects
+ordered facts and relationship expansion; continuation is bound to that choice.
+
+`freeze_group_request` freezes original complete inputs/documents before state
+resolution. `recover_group_request_in_transaction` observes the retained request
+without executing on a missing receipt or reconstructing it from current rows.
+It preserves full-input conflict and current retained-owner checks. A successful
+group exposes its existing stable attempt ID; no cross-person replay namespace
+is implied. Ordinary runtime receipts are retained indefinitely.
+
+`complete_in_transaction(tx)` checks Truss's deferred constraints under host-owned
+rollback containment. `dry_run_in_transaction(tx, input, documents=...)` executes
+the ordinary request-free group, forces those completion checks, and returns a
+`GroupValidationObserved` only after confirmed rollback. Its basis is an
+observation, with original input/document digests, native snapshot, source epoch
+and catalog revision. It issues no receipt/committed position; sequences may
+advance. Neither method settles the caller transaction or forces unrelated host
+constraints. Native errors and uncertain cleanup retain their execution outcome.
+
+Audit discovery accepts either a qualified document/module pair or neither.
+Unqualified discovery omits whole groups/loads without complete current audit
+authority. Mutation filters may explicitly request `includeData=True` for
+retained operation key/version projections, requiring separate complete data
+readership. `entityKey` also accepts the named reference shape
+`{documentId, moduleId, recordId, keyId, values}`; native resolution owns its
+actual definition pin and key number. Key filtering requires data readership.
+Whole mutation pages admit up to4,096 events within the independent byte bound.
+New relationship-only imports retain their declaration/endpoint owner union.
+Older incomplete audit headers remain immutable and unavailable through a known
+reference; they cannot be discovered through a scope that was never retained.
+No historical backfill, commit timestamp or total commit order is invented.
+
+The release's independent conformance archive includes original asserted test
+producers, exact profile pins and `scripts/run-hf-conformance.py`. Unzip it outside
+the checkout and run the installed final cohort with `--installed-package`.
+The runner rejects skips and mismatched cohorts. The separate migration gate
+covers every admitted source, real multi-edge routes and prior publication.

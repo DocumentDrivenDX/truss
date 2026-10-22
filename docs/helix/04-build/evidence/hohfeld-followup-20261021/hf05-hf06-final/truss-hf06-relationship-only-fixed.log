@@ -1,0 +1,15 @@
+test_relationship_only_load_and_unqualified_listing (test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing) ... FAIL
+
+======================================================================
+FAIL: test_relationship_only_load_and_unqualified_listing (test_load_audit_native.LoadAuditNativeTests.test_relationship_only_load_and_unqualified_listing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_load_audit_native.py", line 143, in test_relationship_only_load_and_unqualified_listing
+    self.assertIsInstance(listing,Ok,repr(listing));self.assertIsInstance(listing.value,LoadAuditInvocationSummary,repr(listing));self.assertEqual(listing.value.created_count,'1')
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: LoadAuditUnavailable(reason='unauthorized', interface_version='truss-load-audit-unavailable/0.1.0') is not an instance of <class 'truss.load_audit.LoadAuditInvocationSummary'> : Ok(value=LoadAuditUnavailable(reason='unauthorized', interface_version='truss-load-audit-unavailable/0.1.0'), status='ok')
+
+----------------------------------------------------------------------
+Ran 1 test in 5.580s
+
+FAILED (failures=1)
