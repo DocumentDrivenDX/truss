@@ -608,6 +608,15 @@ jobs:
           hf=json.loads(hf_path.read_bytes())
           assert hf['passed'] and hf['skipped']==0 and hf['sourceCommit']==os.environ['GITHUB_SHA']
           assert hf['nativeManifestSha256']==qualification['targetManifestSha256']
+          corpus_path=pathlib.Path('docs/helix/03-test/fixtures/hohfeld-followup-0.1.json')
+          corpus=json.loads(corpus_path.read_bytes())
+          assert hf['corpusSha256']==hashlib.sha256(corpus_path.read_bytes()).hexdigest()
+          assert hf['profile']==corpus['profile']
+          assert hf['toolkit']==corpus['toolkitVersion']==project['version']
+          assert hf['compiler']==corpus['compilerVersion']==project['optional-dependencies']['query'][0].removeprefix('weft-sql==')
+          assert hf['tests']==len(corpus['cases']) and hf['failures']==hf['errors']==0
+          compiler_cohorts=[c for c in corpus['compilerCohorts'] if c['nativeModuleSha256']==hf['compilerNativeModuleSha256'] and c['sourceRevision']==hf['compilerSourceRevision'] and c['platform']=='linux-x86_64']
+          assert len(compiler_cohorts)==1
           (root/'hf-conformance-qualification.json').write_bytes(hf_path.read_bytes())
           with tarfile.open(root/'migration-qualification-evidence.tar.gz','w:gz') as archive:
               for path in sorted(evidence.iterdir()):
@@ -624,6 +633,7 @@ jobs:
           assert qualification['targetManifestSha256']==hashlib.sha256(manifest.read_bytes()).hexdigest()
           pins={'tag':os.environ['GITHUB_REF_NAME'],'commit':os.environ['GITHUB_SHA'],'distribution':'truss-toolkit','version':project['version'],'runtime':runtime['releaseId'],'runtimeManifestSha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),'layout':runtime['layoutProfile'],'weftRelease':'v'+project['optional-dependencies']['query'][0].removeprefix('weft-sql=='),'weftBackend':backend['backendVersion'],'pgserver':'pgserver-pg18==18.6.1','pgserverRelease':'pg18.6-pgv0.8.6-r2','psycopg':'3.3.6','deploymentJavaScript':'embedded-v8','embeddedEngine':'mini-racer==0.14.1','externalJavaScriptRuntimeRequired':False,'nativePlatforms':['linux-x86_64']}
           pins.update(hfConformanceProfile=hf['profile'],hfConformanceCorpusSha256=hf['corpusSha256'],hfConformanceArchive=next(root.glob('truss-hf-conformance-*.zip')).name,hfConformanceTests=hf['tests'])
+          pins.update(weftSourceRevision=hf['compilerSourceRevision'],weftNativeModuleSha256=hf['compilerNativeModuleSha256'],weftWheelSha256=compiler_cohorts[0]['wheelSha256'])
           pins.update(localRuntimeConstraintsAsset=constraints.name,localRuntimeConstraintsSha256=hashlib.sha256(constraints.read_bytes()).hexdigest())
           profile=pathlib.Path('packages/python/src/truss/_profiles/fresh-catalog-support-current010.json')
           policy=json.loads(profile.read_bytes())
@@ -635,6 +645,7 @@ jobs:
           (root/'catalog-key-backfill-report-v0.1.md').write_bytes(pathlib.Path('docs/helix/02-design/contracts/catalog-key-backfill-report-v0.1.md').read_bytes())
           pins.update(catalogKeyBackfillReportInterface='truss-catalog-registration-report/0.4',catalogKeyBackfillProfile='truss-catalog-key-backfill/0.2',catalogKeyBackfillSupportedProfiles=['truss-catalog-key-backfill/0.1','truss-catalog-key-backfill/0.2'])
           compiler_source=next(ast.literal_eval(n.value) for n in ast.parse(pathlib.Path('scripts/build-weft-runtime-python.py').read_text()).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='REVISION' for t in n.targets))
+          assert compiler_source==hf['compilerSourceRevision']
           pins.update(currentQueryProfile='truss-current-query-protection/0.1-candidate',currentQueryResultAbi='weft.postgresql.current-values/0.2-candidate',currentQueryMode='explicitly-activated-read-only',currentQueryPlatforms=['linux-x86_64'],currentQueryWeftSource=compiler_source)
           group_profiles=json.loads(pathlib.Path('packages/python/src/truss/_catalog_runtime/group-profiles.json').read_bytes())['profiles']
           query_abi_bytes=pathlib.Path('packages/python/src/truss/_catalog_runtime/query-abi.json').read_bytes()

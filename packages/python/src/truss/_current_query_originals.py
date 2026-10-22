@@ -25,13 +25,9 @@ _CURRENT_CONSUMER['embeddedManifestSha256']=EMBEDDED_MANIFEST_SHA256
 # Historical consumer snapshots remain evidence, not runtime compatibility modes.
 _CONSUMER_COHORTS=(
     {**_CURRENT_CONSUMER,
-        'weftRevision':'f003997997e1d1a84ff47df34d1dc181660f2827',
-        'weftWheelSha256':'fc23ae27b687d49d3f2d495478ce9c55c43f7b9b20765f2967197c2e3afd6390',
-        'weftModuleSha256':'6d05fb7c27365cc1502117169c8113b93fcfa2db100ef4af4f45d3f5459d419c'},
-    {**_CURRENT_CONSUMER,
-        'weftRevision':'f003997997e1d1a84ff47df34d1dc181660f2827',
-        'weftWheelSha256':'2a9d05c7e5bd84cb8e626d611b84dad9ae4a8dbba401897f77a216b3aec963fb',
-        'weftModuleSha256':'cf28f29c1dfb5bc92467d5db070da88377e4b14eaf25f25d82d0aceb9db0f223'},
+        'weftRevision':'86c092178bb8ca1a0d84edfebc175009d8862493',
+        'weftWheelSha256':'a21faed75304e730c7cc9782394001be2ba1772b429e587f0d1910c2269dabbe',
+        'weftModuleSha256':'93bee228350743286073a9400bdf5ec92e387c5e35431bbf34b0f81279c460a2'},
 )
 
 

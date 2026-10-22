@@ -29,7 +29,7 @@ ddx:
       kind: informed_by
 ---
 
-# Hohfeld follow-up dispositions and execution order
+# Arras follow-up dispositions and execution order (formerly Hohfeld)
 
 The [pushback response](hohfeld-pushbacks-20261021.md) states the semantic and
 evidence boundaries to preserve during the next release.
@@ -739,6 +739,57 @@ remain required. Truss nativec433 is unchanged by a compiler-only metadata fix.
 Arras's coordinating chat owns its adapter, parse harness, dependency adoption and
 consumer evidence after the exact public package pair is available. Its fixture
 parse harness that strips extensions is not runtime acceptance evidence.
+
+### Reviewed Arras local candidate — 2026-10-22
+
+Selected compiler source is now `86c092178bb8ca1a0d84edfebc175009d8862493`.
+The exact Mac Weft0.4.51 wheel is
+`a21faed75304e730c7cc9782394001be2ba1772b429e587f0d1910c2269dabbe`;
+its native module is `93bee228350743286073a9400bdf5ec92e387c5e35431bbf34b0f81279c460a2`.
+Actual release-profile Chromium WASM is9,740,400 bytes, SHA
+`73012141c317c5eea4feabe81f448b8df832822267cd3ca83b4b1420fe875d30`.
+Core/backend qualification passes874 tests across33 groups (357 core and200
+backend unit cases); the exact standard runtime library passes51. Native Python
+and real Chromium have byte parity for33 entity and5 facts cases. The historical31
+entity cases remain intact. Only source-bound Arras0.1.0 metadata is newly admitted.
+
+The local installed Truss candidate wheel SHA is
+`e701b06fa1972e91c8039b32bba164ea908d3fa3e0b73f6ccbec4597d9e9bbdd`.
+Its455 runtime payloads match original source and sdist exactly. Nativec433 and
+migration manifest7d165e4a remain unchanged. The complete installed migration gate
+passes80 tests without skips in397.052s, including all three published predecessor
+cohorts and actual prior47 receipts/multi-step routes. The independently extracted
+archive passes62 cases without skips in257.245s, including original Arras metadata,
+public edge creation and HAS_RELATED with exact returned source bytes/pin.
+Ten focused current-policy/source-cut/disclosure native controls pass68.305s with
+no skips. Those retain their read-only component scope; protected migration and
+broader security acceptance remain unqualified.
+
+The first repeat under concurrent build activity failed20 cases: one fresh
+CREATE DATABASE timed out at its unchanged10s limit; another cohort received
+administrator shutdown during setup, causing18 subsequent setup errors. Cause
+remains unknown. Evidence-only class-qualified server-log capture now runs before
+cleanup and on the first setup failure. The full serial rerun passes without
+relaxing assertions or limits. Shared incremental-cache and package scratch-copy
+failures also remain disclosed; isolated builds and exact455-file checks repair
+them. A copied legacy AJV asset omission was caught before qualification and restored
+byte-identically. No defective package is promoted.
+
+The independent runner now hashes the actual loaded native compiler, requires an
+exact unique corpus and installed Truss cohort match, and records source/module
+identity. An actual prior same-version Weft0.4.51 candidate refuses before database
+tests start. Publication rechecks original corpus hash, package/compiler versions,
+case count, native/compiler identities and source correspondence before exposing
+release pins. The latest Mac candidate is the only active compiler tuple locally;
+Linux must use newly rebuilt, independently verified artifacts, not the historical
+f003 wheel. No old application-runtime compatibility mode or age cutoff is added.
+
+Remote push remains blocked by automatic approval review: it requires direct
+user authorization for external source disclosure and did not accept the earlier
+chat's explicit release handoff as sufficient. A direct approval request is pending.
+Local review and qualification continue independently. Linux artifacts/gates,
+Weft publication, exact Linux adoption, Truss publication/public verification and
+site/docs delivery remain open; neither0.4.51 nor0.0.48 is published.
 
 ## Exit criteria
 
