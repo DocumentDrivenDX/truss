@@ -495,8 +495,8 @@ source, immutable migration evidence and publication ownership.
 The active [operator guide](../../../packages/python/README.md#runtime-migrations--v0049)
 selects v0.0.49 in pip, example-tag and isolated `uvx`/constraints commands.
 It labels the qualified assets and tag as not yet public. The historical
-v0.0.48 follow-up section and migration link alias remain intact; final source48
-admission and release receipts are still pending.
+v0.0.48 follow-up section and migration link alias remain intact. Actual public
+source48 admission is complete; final v0.0.49 release receipts remain pending.
 
 The integrated source retains the newer HF62 corpus, exact public Weft0.4.51
 cohorts from source `557153731e9f5d0583193a1189a07c6ed485d3d3`, reproducible archive
@@ -522,8 +522,23 @@ evidence. In the 363-entry producer ledger, the merge changes only the reviewed
 disclosure-cohort digest; all 62 cases and limits, the six
 managed/portable producer overrides, v0.0.49 toolkit version, native35fd and
 managed release gates are preserved. Final Truss qualification must use the
-new public compiler bytes. Public v0.0.48 admission and v0.0.49 installed/Linux
-qualification and publication remain pending.
+new public compiler bytes. Final v0.0.49 installed/Linux qualification and
+publication remain pending.
+
+The [public v0.0.48 integrity receipt](evidence/design-audit/managed-grants-release-049-20261022/dependencies/public-truss-048/verification.json)
+binds its published wheel SHA-256
+`1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3`
+to tag commit `8e89a068bcb68f1e631388ddc59bc97da748563d`, nativec433 and
+original migration manifest7d165. The
+[source48 admission receipt](evidence/design-audit/managed-grants-release-049-20261022/source48-admission/receipt.json)
+records successful America/New_York and UTC captures, read-only comparison and
+additive packaging. All 18 previously pinned current artifacts and all 15
+published v0.0.48 migration artifacts retain their exact bytes. The added ACL
+profile, managed-grants-only edge and archived original v0.0.48 manifest admit
+the fourth source without changing native35fd. The resulting migration manifest
+is `86bcf78541e316c7e5697fb91e09d4741ef3e3cb5600b9b76ac5c6cc2e836923`.
+This closes public input integrity and route admission; it does not qualify the
+final v0.0.49 wheel or its complete migration/recovery campaign.
 
 The current release acceptance campaign is the finite installed-package campaign
 in [`.github/workflows/release.yml`](../../../.github/workflows/release.yml),
@@ -577,7 +592,7 @@ unrun/unqualified status.
 | Release slice | Required result | Current state |
 | --- | --- | --- |
 | Integrate and version | Preserve the HF baseline and select v0.0.49 with its own notes | Source integration and version selection complete; [release draft](releases/v0.0.49.md) prepared |
-| Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Pending v0.0.48 publication and native route qualification |
+| Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Complete: actual public wheel integrity and paired native initializer captures; [admission receipt](evidence/design-audit/managed-grants-release-049-20261022/source48-admission/receipt.json). Final release migration campaign remains pending |
 | Freeze and review | Build final wheel/sdist/archive; verify exact runtime payload, historical bytes, compiler cohort, source boundaries and final diff | Pending final lineage/artifact freeze |
 | Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Earlier local candidate passed its recorded scope; final v0.0.49 evidence pending |
 | Hosted release and public verification | Mandatory Linux package/native campaign passes, then tag/asset/source pins and public downloads agree | Pending; no v0.0.49 publication claimed |
@@ -593,8 +608,9 @@ wheel hashes to the new release.
 
 Planning, implementation and the earlier explicitly selected local qualification
 are complete for their recorded candidate. The authorized v0.0.49 release remains
-pending until its actual v0.0.48 lineage, final artifact review, mandatory Linux
-campaign and public-artifact verification pass. The historical all-discovery
+pending until final artifact review, the complete installed lineage campaign,
+mandatory Linux campaign and public-artifact verification pass. Actual public
+v0.0.48 input integrity and additive route admission are complete. The historical all-discovery
 diagnostic remains unqualified outside that supported release campaign. Actual
 Lakebase/Arras deployment acceptance stays a separate gate with no support claim
 until its exact consumer workflow is qualified.

@@ -10,8 +10,8 @@ verifies all nine API asset digests and three wheel checksum/ZIP/RECORD/native
 inventories. Public packaging metadata binds source557 separately from the
 tag/workflow commitd4b. Mac ARM64 and Linux x86_64 match the selected Truss
 cohorts; Linux aarch64 remains packaging-only. No native tests run in this
-dependency audit. Final Truss qualification on the refreshed public compiler,
-actual public v0.0.48 admission and v0.0.49 publication remain pending.
+dependency audit. Final Truss qualification on the refreshed public compiler
+and v0.0.49 publication remain pending.
 
 `preliminary/receipt.json` inventories the retained preliminary evidence and
 records its limits, including earlier failed attempts and incomplete raw-log
@@ -22,11 +22,20 @@ workload retains 1,000 objects and 1,000 edges, 1,000 reads and 200 committed
 updates. These counts describe the retained candidate receipts before the
 public source557 compiler refresh; source86 evidence is preserved unchanged.
 
-The candidate source48 captures are preliminary inputs. They must not be
-substituted for captures from the checksum-verified, actually published
-v0.0.48 wheel. Final source48 admission must preserve every published immutable
-artifact and the original migration manifest before adding its route to the
-managed-grants target.
+The [public v0.0.48 audit](dependencies/public-truss-048/verification.json)
+verifies the actual published wheel SHA-256
+`1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3`,
+tag commit8e89, nativec433, original migration manifest7d165 and published
+Linux migration80/HF62 receipts. The
+[source48 admission receipt](source48-admission/receipt.json) retains the new
+America/New_York and UTC captures and raw logs. Both captures, comparison and
+additive packaging passed; all 18 existing current pins and all 15 published
+v0.0.48 migration artifact bytes remain unchanged. Three new artifacts add
+the ACL profile, managed-grants-only edge to native35fd and archived original
+v0.0.48 manifest. The resulting migration manifest SHA-256 is
+`86bcf78541e316c7e5697fb91e09d4741ef3e3cb5600b9b76ac5c6cc2e836923`.
+Earlier candidate source48 captures remain preliminary history. Admission does
+not establish final v0.0.49 installed lineage or release qualification.
 
 `supplemental/run_final_local_campaign.py` is the final local campaign producer.
 It records the wheel, input files, installed payload, exact independent UMF
