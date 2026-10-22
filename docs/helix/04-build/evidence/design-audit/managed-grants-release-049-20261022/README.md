@@ -5,13 +5,22 @@ and [RELEASE-PYTHON-0.0.49](../../../releases/v0.0.49.md). Final publication is
 pending. Preliminary results below do not establish qualification of a public
 v0.0.49 package.
 
+The [public Weft0.4.51 dependency audit](dependencies/public-weft-051/verification.json)
+verifies all nine API asset digests and three wheel checksum/ZIP/RECORD/native
+inventories. Public packaging metadata binds source557 separately from the
+tag/workflow commitd4b. Mac ARM64 and Linux x86_64 match the selected Truss
+cohorts; Linux aarch64 remains packaging-only. No native tests run in this
+dependency audit. Final Truss qualification on the refreshed public compiler,
+actual public v0.0.48 admission and v0.0.49 publication remain pending.
+
 `preliminary/receipt.json` inventories the retained preliminary evidence and
 records its limits, including earlier failed attempts and incomplete raw-log
 retention. The integrated macOS ARM64 candidate passed the selected 20-module
 campaign (128 tests, no skips), the 62-case HF corpus, nine strict protected
 checks, the original public workload and the lifecycle supplement. The public
 workload retains 1,000 objects and 1,000 edges, 1,000 reads and 200 committed
-updates. These counts describe the retained candidate receipts only.
+updates. These counts describe the retained candidate receipts before the
+public source557 compiler refresh; source86 evidence is preserved unchanged.
 
 The candidate source48 captures are preliminary inputs. They must not be
 substituted for captures from the checksum-verified, actually published

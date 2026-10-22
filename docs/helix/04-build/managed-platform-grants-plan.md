@@ -498,8 +498,8 @@ It labels the qualified assets and tag as not yet public. The historical
 v0.0.48 follow-up section and migration link alias remain intact; final source48
 admission and release receipts are still pending.
 
-The integrated source retains the newer HF62 corpus, exact Weft0.4.51 compiler
-cohorts from source `86c092178bb8ca1a0d84edfebc175009d8862493`, reproducible archive
+The integrated source retains the newer HF62 corpus, exact public Weft0.4.51
+cohorts from source `557153731e9f5d0583193a1189a07c6ed485d3d3`, reproducible archive
 generation and publisher compiler/source checks. The native manifest remains
 `35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f`.
 CONTRACT-008 RM-01 uses exact manifest identity; the shared native label
@@ -507,6 +507,23 @@ CONTRACT-008 RM-01 uses exact manifest identity; the shared native label
 installation current. The earlier 459-file candidate and HF61 archive remain
 historical evidence after this integration. Final v0.0.49 package/recipe/archive
 hashes must come from its own build and receipts.
+
+Public Weft0.4.51 dependency integrity is now verified in the
+[public dependency receipt](evidence/design-audit/managed-grants-release-049-20261022/dependencies/public-weft-051/verification.json).
+All nine assets match their public API digests; the original checksum manifest
+covers the three wheels. Wheel ZIP/RECORD/native checks and the public packaging
+receipts bind the selected Mac ARM64 and Linux x86_64 cohorts to source557.
+The public tag/workflow commit `d4b0b98507ae15bd98180a2ea2030ea92ce11d96`
+is distinct from that compiler source freeze. Linux aarch64 received packaging
+inspection only. This dependency audit executes no native qualification.
+
+The source86 artifacts and earlier preliminary Truss results remain historical
+evidence. In the 363-entry producer ledger, the merge changes only the reviewed
+disclosure-cohort digest; all 62 cases and limits, the six
+managed/portable producer overrides, v0.0.49 toolkit version, native35fd and
+managed release gates are preserved. Final Truss qualification must use the
+new public compiler bytes. Public v0.0.48 admission and v0.0.49 installed/Linux
+qualification and publication remain pending.
 
 The current release acceptance campaign is the finite installed-package campaign
 in [`.github/workflows/release.yml`](../../../.github/workflows/release.yml),

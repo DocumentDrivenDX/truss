@@ -1,0 +1,73 @@
+{
+  "passedPublicIntegrity": true,
+  "releaseUrl": "https://github.com/DocumentDrivenDX/weft/releases/tag/v0.4.51",
+  "publishedAt": "2026-10-22T19:16:14Z",
+  "tagCommit": "d4b0b98507ae15bd98180a2ea2030ea92ce11d96",
+  "compilerSourceFreeze": "557153731e9f5d0583193a1189a07c6ed485d3d3",
+  "scope": "All nine assets verified against public GitHub SHA256 digests. Three wheel checksums, ZIP/RECORD and native bytes verified. Only Mac ARM64 and Linux x86_64 match Truss cohorts; Linux aarch64 is packaging-only. No native qualification executed by this producer.",
+  "assetSha256": {
+    "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": "42f846d689ace027d6bb2951f27c587660d4e5151285fe911ce7a3006d0001de",
+    "packaging-aarch64-apple-darwin.json": "a15ae959b0e42840473bd58ce61e0752248e241b6b1c65c34e4c1a59b3907ff3",
+    "packaging-aarch64-unknown-linux-gnu.json": "0b41270a01cbfa60c3428ed84e99c1f601984746bb3988466a3bb62200c7e5eb",
+    "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+    "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+    "release-pins.json": "aceaf8be26a0b652b88f048a89ea4ee9475a2e7e0c7c89b2a2a8fae071eff36d",
+    "packaging-x86_64-unknown-linux-gnu.json": "0e2ecca911a768ff679fbe0a3ab4d387cae7b22b64a8c202d6db7c8c92506606",
+    "SHA256SUMS": "62c9d8082eb2f446446d7b94ff7ef7f48769e3cd836e5641c2951069302a6c75",
+    "local-macos-qualification.json": "6ee046368173604aac9b824e19a5443474432b23af6872ba835e896271c02293"
+  },
+  "wheels": [
+    {
+      "wheel": "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+      "wheelSha256": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+      "nativeModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+      "recordVerified": true,
+      "sourceFreezeDeclaredByPublicPackaging": "557153731e9f5d0583193a1189a07c6ed485d3d3",
+      "localNativeExecution": false,
+      "TrussCohortVerification": {
+        "status": "verified",
+        "wheel": "weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+        "wheelSha256": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+        "nativeModule": "weft/weft.abi3.so",
+        "nativeModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+        "record": "weft_sql-0.4.51.dist-info/RECORD",
+        "recordedPayloadCount": 9,
+        "cohortCount": 2
+      }
+    },
+    {
+      "wheel": "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+      "wheelSha256": "42f846d689ace027d6bb2951f27c587660d4e5151285fe911ce7a3006d0001de",
+      "nativeModuleSha256": "c1d973c1c8a40c99ce5ceb737708e511da7b07a63fe9dcbd8bef9357d3ac6ee5",
+      "recordVerified": true,
+      "sourceFreezeDeclaredByPublicPackaging": "557153731e9f5d0583193a1189a07c6ed485d3d3",
+      "localNativeExecution": false,
+      "TrussAdmitted": false,
+      "scope": "packaging-only; no local platform execution"
+    },
+    {
+      "wheel": "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "wheelSha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+      "nativeModuleSha256": "ef293922003832fbd87041a28c6dbde33927fee573270f203aa51daf06bcd445",
+      "recordVerified": true,
+      "sourceFreezeDeclaredByPublicPackaging": "557153731e9f5d0583193a1189a07c6ed485d3d3",
+      "localNativeExecution": false,
+      "TrussCohortVerification": {
+        "status": "verified",
+        "wheel": "weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+        "wheelSha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+        "nativeModule": "weft/weft.abi3.so",
+        "nativeModuleSha256": "ef293922003832fbd87041a28c6dbde33927fee573270f203aa51daf06bcd445",
+        "record": "weft_sql-0.4.51.dist-info/RECORD",
+        "recordedPayloadCount": 9,
+        "cohortCount": 2
+      }
+    }
+  ],
+  "packagingRun": 39830424802,
+  "publisherRun": 39838369924,
+  "producerSha256": "a508da38a2ddb06893091301e3f219b6d4e393024ca1c744a0c42ca4ec8278c4",
+  "wheelVerifierSha256": "b0fe98d592be8e95c430cad2db80331ec3dbb1f6ce6d6b7aa89f95f87f76f65a",
+  "sourceProvenance": "Public pins/packaging reports declare the freeze; owner strict-build handoff establishes build provenance. Public tag separately resolved.",
+  "initialInspection": "Earlier tool-only format assertion expected SUMS to cover all assets and refused; actual provider SUMS covers wheels only. Original failure remains in tool output; no raw file was retained. No qualification result was represented as passed."
+}
