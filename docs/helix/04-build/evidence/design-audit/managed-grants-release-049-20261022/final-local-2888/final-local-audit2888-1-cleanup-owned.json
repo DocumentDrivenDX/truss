@@ -1,0 +1,9 @@
+{
+  "scope": "Read-only process observation after successful campaign; unrelated pre-existing servers are outside custody and unchanged.",
+  "campaignStartedAt": "2026-10-22T22:33:28.511399+00:00",
+  "ownedCampaignTerminalExitCode": 0,
+  "ownedPathMatches": [],
+  "postgresProcessesCreatedDuringCampaign": [],
+  "ownedProcessesAbsent": true,
+  "unrelatedPreExistingPostgresProcessCount": 36
+}

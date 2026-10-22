@@ -1,0 +1,10 @@
+{
+  "scope": "Original full Mac campaign outputs and scoped owned-process cleanup retained losslessly. Unrelated pre-existing local PostgreSQL servers were observed outside fixture custody and were not changed.",
+  "privateOnlyBroadProcessObservation": {
+    "sha256": "d03c7b39a89258827bfcd2b25121f37216bf740d392e31a7b54c77f761cf9df5",
+    "retainedPrivately": "/private/tmp/truss-managed-grants-049/final-local-audit2888-1-cleanup.json",
+    "reason": "Contains unrelated local process paths; the retained scoped observation verifies no campaign-owned or newly created PostgreSQL process survives."
+  },
+  "binaryRetention": "Exact branch wheel, sdist and corpus archive containers are retained privately and in GitHub run39854672450 artifacts subject to their retention policy. They are not permanent public release assets. Durable hashes and payload maps bind the tested bytes; actual public release assets receive a separate verification record.",
+  "actualLakebaseAcceptance": "not_run"
+}

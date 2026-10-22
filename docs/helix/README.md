@@ -3,9 +3,11 @@
 [Managed platform grants](04-build/managed-platform-grants-plan.md) are implemented
 in the [v0.0.49 source candidate](04-build/releases/v0.0.49.md), with explicit
 retained grantee policy, typed contained refusals and lifecycle/migration
-consistency. The [final local campaign](04-build/evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json)
-passes on its exact macOS ARM64 tuple, including actual public v0.0.48 migration
-admission. Hosted Linux release qualification and publication remain pending.
+consistency. The [macOS ARM64 campaign at commit `19d7bbe5`](04-build/evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/qualification.json)
+and [hosted Linux campaign at commit `4188141f`](04-build/evidence/design-audit/managed-grants-release-049-20261022/linux-2888-branch/receipt.json)
+pass on the same exact wheel and native manifest SHA-256 prefix `288801f7`,
+including all four published migration sources. Final tag qualification and
+public-download verification remain pending; v0.0.49 is not yet published.
 Arras is the active consumer name; historical Praxis requests and snapshots
 retain their original provenance. Actual Lakebase support requires separate
 consumer/service qualification.

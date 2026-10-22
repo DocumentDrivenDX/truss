@@ -494,14 +494,16 @@ source, immutable migration evidence and publication ownership.
 
 The active [operator guide](../../../packages/python/README.md#runtime-migrations--v0049)
 selects v0.0.49 in pip, example-tag and isolated `uvx`/constraints commands.
-It labels the qualified assets and tag as not yet public. The historical
+Its commands require the matching qualified public assets and tag. The historical
 v0.0.48 follow-up section and migration link alias remain intact. Actual public
 source48 admission is complete; final v0.0.49 release receipts remain pending.
 
 The integrated source retains the newer HF62 corpus, exact public Weft0.4.51
 cohorts from source `557153731e9f5d0583193a1189a07c6ed485d3d3`, reproducible archive
-generation and publisher compiler/source checks. The native manifest remains
-`35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f`.
+generation and publisher compiler/source checks. At that integration checkpoint,
+the native manifest was
+`35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f`;
+the later qualified audit-accumulation target is native2888 below.
 CONTRACT-008 RM-01 uses exact manifest identity; the shared native label
 `truss-catalog-runtime/0.74-candidate` does not make the v0.0.48 `c4339ac7…`
 installation current. The earlier 459-file candidate and HF61 archive remain
@@ -523,8 +525,8 @@ disclosure-cohort digest; all 62 cases and limits, the six
 managed/portable producer overrides, v0.0.49 toolkit version, native35fd and
 managed release gates are preserved. Final Truss qualification must use the
 new public compiler bytes. The historical35fd installed macOS campaign below passes for its recorded
-artifact. New2888 hosted branch Linux qualification passes below; new macOS,
-tag and public verification remain pending.
+artifact. Current native2888 installed macOS ARM64 and hosted branch Linux
+qualification pass below; final tag and public verification remain pending.
 
 The [public v0.0.48 integrity receipt](evidence/design-audit/managed-grants-release-049-20261022/dependencies/public-truss-048/verification.json)
 binds its published wheel SHA-256
@@ -586,8 +588,8 @@ preserves the corrected source628 run: all 106 migration tests passed, while one
 HF case exceeded a native deadline with SQLSTATE57014. The same unchanged case
 passed in the local campaign and public48 Linux evidence. Host speed is a possible
 explanation, not an established cause. Sol recommended one unchanged failed-job
-rerun of run39845177814; attempt2 is pending. No assertion or limit was weakened.
-A repeated failure requires Linux timing/plan diagnosis before release.
+rerun of run39845177814 at that checkpoint. The repeated failure retained below
+led to Linux timing/plan diagnosis; no assertion or limit was weakened.
 
 The current release acceptance campaign is the finite installed-package campaign
 in [`.github/workflows/release.yml`](../../../.github/workflows/release.yml),
@@ -642,9 +644,9 @@ unrun/unqualified status.
 | Release slice | Required result | Current state |
 | --- | --- | --- |
 | Integrate and version | Preserve the HF baseline and select v0.0.49 with its own notes | Source integration and version selection complete; [release draft](releases/v0.0.49.md) prepared |
-| Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Complete: actual public wheel integrity and paired native initializer captures; [admission receipt](evidence/design-audit/managed-grants-release-049-20261022/source48-admission/receipt.json). Historical35fd local 106-case campaign passes; complete2888 qualification remains pending |
-| Freeze and review | Build final wheel/sdist/archive; verify exact runtime payload, historical bytes, compiler cohort, source boundaries and final diff | Historical source628/native35fd artifacts reviewed; new 2888 artifact freeze and complete qualification pending |
-| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Historical source628/native35fd macOS campaign passes: 128/62/9/106 tests, lifecycle and workload; [receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json). New2888 branch Linux passes below; new Mac and tag/public gates remain pending |
+| Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Complete: actual public wheel integrity and paired native initializer captures; [admission receipt](evidence/design-audit/managed-grants-release-049-20261022/source48-admission/receipt.json). Current2888 macOS and branch Linux 106-case campaigns pass below |
+| Freeze and review | Build final wheel/sdist/archive; verify exact runtime payload, historical bytes, compiler cohort, source boundaries and final diff | Current2888 wheel57fd, archiveae57, migration96add and historical bytes reviewed; exact installed Mac and branch Linux campaigns pass |
+| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Current manifest `288801f7…` macOS campaign at commit `19d7bbe5` passes 130/62/9/106 tests, lifecycle and workload; [receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/qualification.json). Commit `4188141f` branch Linux also passes; final tag/public gates remain pending |
 | Hosted release and public verification | Mandatory Linux package/native campaign passes, then tag/asset/source pins and public downloads agree | Full source4188 branch Linux passes; tag campaign and public verification pending, with no v0.0.49 publication claimed |
 
 Actual Arras/Lakebase TLS/token/workflow acceptance remains a separate deployment
@@ -658,9 +660,10 @@ wheel hashes to the new release.
 
 Planning, implementation and the earlier explicitly selected local qualification
 are complete for their recorded candidate. The authorized v0.0.49 release remains
-pending until new2888 macOS qualification, tag/final artifact review, the mandatory
-tag Linux campaign and public-artifact verification pass. The exact source628 installed macOS campaign
-and complete local lineage gate pass. Actual public
+pending until tag/final artifact review, the mandatory exact-tag Linux campaign
+and public-artifact verification pass. Current native2888 source19 macOS and
+source4188 hosted branch Linux campaigns pass, including complete local lineage.
+The source628/native35fd macOS campaign remains historical. Actual public
 v0.0.48 input integrity and additive route admission are complete. The historical all-discovery
 diagnostic remains unqualified outside that supported release campaign. Actual
 Lakebase/Arras deployment acceptance stays a separate gate with no support claim
@@ -703,8 +706,8 @@ The managed campaign now selects 21 modules/130 tests, including the two new
 semantic controls. HF keeps all 62 cases, limits and compiler cohorts; all 363
 existing producer digests remain unchanged and the new test producer makes 364.
 Native capture/packaging and one-case diagnosis are complete. New exact-artifact
-Mac/Linux/corpus/lineage/lifecycle/workload and tag/public verification remain
-pending except for the hosted branch Linux pass below; no publication is claimed.
+Mac/Linux/corpus/lineage/lifecycle/workload qualification now passes below.
+The final tag and public verification remain pending; no publication is claimed.
 
 ### Hosted branch Linux qualification — native2888
 
@@ -732,6 +735,38 @@ The receipt retains 46 original logs/JSON outputs losslessly and identifies the
 three original binary artifacts. This is complete branch Linux qualification
 for the recorded source/artifacts, not publication: the publish job is skipped
 on that branch run. The diagnostic-trigger-only follow-up does not change the
-runtime/test/recipe basis. New2888 full macOS qualification, final tag Linux
-campaign and public-download verification remain pending. Earlier failed runs
+runtime/test/recipe basis. Current2888 full macOS qualification also passes below;
+final tag Linux campaign and public-download verification remain pending. Earlier failed runs
 and source628/native35fd local receipts keep their original scopes.
+
+### Current installed macOS ARM64 qualification — native manifest `288801f7…`
+
+The [complete local receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/qualification.json)
+passes at source `19d7bbe5793e61e4034769a18b1d9a03b5c7e959` on Python3.11.17,
+PostgreSQL18.6, psycopg3.3.6 and public Weft0.4.51 compiler source `55715373…` with the exact Mac
+native cohort `34691932…`. It uses the same wheel `57fd9520…`, native manifest `288801f7…` and migration manifest `96addcdb…`
+and HF archive `ae5726d7…` as the passing commit `4188141f` Linux campaign above. All 467
+source/wheel/installed runtime files agree. All 1,206 input hashes, the pinned
+clean UMF commit `5ba77cff` / Bun1.4.3 oracle and compiler/worker identities remain unchanged.
+
+All eight steps exit with status0: module boundaries and 20 allowed/forbidden controls;
+21 managed modules/130 tests; lifecycle; HF62; nine strict protected tests;
+106 migration/recovery tests over four actual public source wheels; and the
+original public workload. Selected test campaigns have zero skips, failures or
+errors. Lifecycle checks preserve the original carrier through supported r2
+additive evolution, contained SQLSTATE `0A000` unsupported-retirement refusal and later
+selected ACL variation. The workload verifies 1,000 objects, 1,000 edges,
+1,000 reads, 200 committed updates and values after connection reopen, with
+26,122 SQL submissions. The original 10s SQL/30s operation limits are unchanged.
+
+The [retained-file index](evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/retained-files.json)
+binds 53 original outputs retained losslessly. [Scoped cleanup](evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/final-local-audit2888-1-cleanup-owned.json)
+confirms no campaign-owned or newly created PostgreSQL process remains;
+unrelated pre-existing servers were outside custody and unchanged. The
+[retention statement](evidence/design-audit/managed-grants-release-049-20261022/final-local-2888/retention.json)
+records that exact branch wheel/sdist/archive containers are private or held in
+GitHub artifacts subject to retention limits, rather than permanent public
+release assets. Their hashes and payload identities remain durable. Final tag
+Linux and independent public-download verification are still required; these
+selected platform results make no publication, full-engine, broad discovery,
+general p95 or actual Lakebase/Arras acceptance claim.

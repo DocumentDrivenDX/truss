@@ -10,9 +10,9 @@ verifies all nine API asset digests and three wheel checksum/ZIP/RECORD/native
 inventories. Public packaging metadata binds source557 separately from the
 tag/workflow commitd4b. Mac ARM64 and Linux x86_64 match the selected Truss
 cohorts; Linux aarch64 remains packaging-only. No native tests run in this
-dependency audit. Historical native35fd local qualification and new native2888
-branch Linux qualification pass for their exact artifacts below; new macOS,
-final tag and public verification remain pending.
+dependency audit. Current native2888 macOS ARM64 and branch Linux qualification
+pass on the same exact wheel below. Final tag and public verification remain
+pending; historical native35fd results retain their original scopes.
 
 `preliminary/receipt.json` inventories the retained preliminary evidence and
 records its limits, including earlier failed attempts and incomplete raw-log
@@ -42,8 +42,8 @@ not establish final v0.0.49 installed lineage or release qualification.
 It records the wheel, input files, installed payload, exact independent UMF
 oracle, Bun and PostgreSQL identities and verifies them again at completion.
 The lifecycle producer is retained unchanged in the same directory. The final
-local record below is separate from the preliminary evidence; hosted Linux and
-public-download receipts remain pending.
+local record below is separate from preliminary evidence. Current macOS and
+hosted branch Linux receipts pass; final tag and public-download gates remain open.
 
 The mandatory finite release campaign is defined by
 [the release workflow](../../../../../../.github/workflows/release.yml).
@@ -62,7 +62,7 @@ this producer digest changed, with the other 362 pins and 62 cases preserved.
 The final local campaign below passes. The original failed hosted receipt is
 preserved unchanged.
 
-## Final installed macOS ARM64 campaign
+## Historical source628/native35fd macOS ARM64 campaign
 
 The [final local qualification](final-local/qualification.json) passes on source
 `6287e52a5ef8a0abce90341106e8e9389216cb80`, Python3.11.17, PostgreSQL18.6,
@@ -97,14 +97,14 @@ The [second Linux diagnostic](linux-attempt-2/receipt.json) retains corrected
 source628's 106 passing migration tests and one HF62 native-deadline failure
 (SQLSTATE57014). That unchanged case passes locally and in public48 Linux
 receipts. Host speed is a possible explanation, not an established cause. Sol
-recommended one unchanged failed-job rerun of run39845177814; attempt2 is pending.
-No assertion or limit was changed. A repeat requires Linux timing/plan diagnosis
-before release. Hosted Linux/tag qualification and public-download verification
-remain open.
+recommended one unchanged failed-job rerun of run39845177814 at that checkpoint.
+The rerun below reproduced it and led to native diagnosis; no assertion or limit
+was changed. Current native2888 macOS and branch Linux results below supersede
+that candidate's readiness, while final tag/public verification remain open.
 
 The [unchanged Linux rerun](linux-attempt-3/receipt.json) reproduced the same
-whole-group audit SQL cancellation. Linux qualification and publication remain
-blocked pending same-host public48/current49 SQL timing and plan diagnosis.
+whole-group audit SQL cancellation. At that checkpoint, release was held for
+same-host public48/current49 SQL timing and plan diagnosis.
 There is no further incidental rerun; the original workload, assertions and
 10-second SQL / 30-second operation limits remain unchanged. The retained final
 Mac pass qualifies its recorded source and tuple only.
@@ -144,8 +144,8 @@ previous 9V74 failures remain separate original evidence.
 The next gate is a fresh complete artifact freeze and the 21-module/130-test
 managed campaign, HF62, strict protected controls, all four source migration and
 recovery routes, lifecycle and the original public workload on the new native
-identity. Full branch Linux qualification now passes below. New Mac and tag/public
-verification remain pending. No release,
+identity. Full macOS ARM64 and branch Linux qualification now pass below.
+Final tag/public verification remain pending. No release,
 full-engine, all-discovery or Lakebase acceptance is claimed.
 
 The [automatic comparison at source4188](audit-diagnostic-39854667352/receipt.json)
@@ -189,6 +189,38 @@ module logs, full workflow log and run metadata, with three binary identities
 retained privately. The input payload audit's original `nativeQualification:
 pending` field remains its pre-gate observation; the completed workflow and
 aggregate receipt record the subsequent Linux result. No original evidence is
-rewritten. This is a branch Linux pass; publication was skipped. New2888 full
-Mac qualification, the final tag campaign and public-download verification
-remain pending, with no Lakebase or full-engine claim.
+rewritten. This is a branch Linux pass; publication was skipped. Current2888 full
+Mac qualification also passes below. The final tag campaign and public-download
+verification remain pending, with no Lakebase or full-engine claim.
+
+## Current installed macOS ARM64 qualification — native manifest `288801f7…`
+
+The [complete local receipt](./final-local-2888/qualification.json)
+passes at source `19d7bbe5793e61e4034769a18b1d9a03b5c7e959` on Python3.11.17,
+PostgreSQL18.6, psycopg3.3.6 and public Weft0.4.51 compiler source `55715373…` with the exact Mac
+native cohort `34691932…`. It uses the same wheel `57fd9520…`, native manifest `288801f7…` and migration manifest `96addcdb…`
+and HF archive `ae5726d7…` as the passing commit `4188141f` Linux campaign above. All 467
+source/wheel/installed runtime files agree. All 1,206 input hashes, the pinned
+clean UMF commit `5ba77cff` / Bun1.4.3 oracle and compiler/worker identities remain unchanged.
+
+All eight steps exit with status0: module boundaries and 20 allowed/forbidden controls;
+21 managed modules/130 tests; lifecycle; HF62; nine strict protected tests;
+106 migration/recovery tests over four actual public source wheels; and the
+original public workload. Selected test campaigns have zero skips, failures or
+errors. Lifecycle checks preserve the original carrier through supported r2
+additive evolution, contained SQLSTATE `0A000` unsupported-retirement refusal and later
+selected ACL variation. The workload verifies 1,000 objects, 1,000 edges,
+1,000 reads, 200 committed updates and values after connection reopen, with
+26,122 SQL submissions. The original 10s SQL/30s operation limits are unchanged.
+
+The [retained-file index](./final-local-2888/retained-files.json)
+binds 53 original outputs retained losslessly. [Scoped cleanup](./final-local-2888/final-local-audit2888-1-cleanup-owned.json)
+confirms no campaign-owned or newly created PostgreSQL process remains;
+unrelated pre-existing servers were outside custody and unchanged. The
+[retention statement](./final-local-2888/retention.json)
+records that exact branch wheel/sdist/archive containers are private or held in
+GitHub artifacts subject to retention limits, rather than permanent public
+release assets. Their hashes and payload identities remain durable. Final tag
+Linux and independent public-download verification are still required; these
+selected platform results make no publication, full-engine, broad discovery,
+general p95 or actual Lakebase/Arras acceptance claim.

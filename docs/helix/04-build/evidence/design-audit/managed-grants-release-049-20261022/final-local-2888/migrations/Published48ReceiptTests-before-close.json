@@ -1,0 +1,25 @@
+{
+  "source": "source44",
+  "class": "Published48ReceiptTests",
+  "stage": "before-close",
+  "test": null,
+  "time": "2026-10-22T22:44:01.759180+00:00",
+  "dataDirectory": "/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-runtime-migrations-22hfegj3/data",
+  "files": {
+    "log": {
+      "bytes": 2101,
+      "truncated": false,
+      "tail": "2026-10-22 18:43:38.045 EDT [34376] LOG:  starting PostgreSQL 18.6 on aarch64-apple-darwin23.6.0, compiled by Apple clang version 15.0.0 (clang-1500.3.9.4), 64-bit\n2026-10-22 18:43:38.045 EDT [34376] LOG:  listening on Unix socket \"/private/tmp/truss-pg18-501/62e1abbbd79960c39ecb4125/.s.PGSQL.5432\"\n2026-10-22 18:43:38.303 EDT [34385] LOG:  database system was shut down at 2026-10-22 18:43:37 EDT\n2026-10-22 18:43:38.307 EDT [34376] LOG:  database system is ready to accept connections\n2026-10-22 18:43:47.319 EDT [34383] LOG:  checkpoint starting: immediate force wait\n2026-10-22 18:43:47.408 EDT [34383] LOG:  checkpoint complete: wrote 1736 buffers (10.6%), wrote 4 SLRU buffers; 0 WAL file(s) added, 0 removed, 1 recycled; write=0.061 s, sync=0.023 s, total=0.090 s; sync files=593, longest=0.001 s, average=0.001 s; distance=20796 kB, estimate=20796 kB; lsn=0/2B61050, redo lsn=0/2B60FF8\n2026-10-22 18:43:54.231 EDT [34383] LOG:  checkpoint starting: immediate force wait\n2026-10-22 18:43:54.254 EDT [34383] LOG:  checkpoint complete: wrote 21 buffers (0.1%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 1 recycled; write=0.009 s, sync=0.006 s, total=0.023 s; sync files=8, longest=0.006 s, average=0.001 s; distance=11105 kB, estimate=19827 kB; lsn=0/36397C8, redo lsn=0/3639770\n2026-10-22 18:43:59.193 EDT [34383] LOG:  checkpoint starting: immediate force wait\n2026-10-22 18:43:59.215 EDT [34383] LOG:  checkpoint complete: wrote 22 buffers (0.1%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 1 recycled; write=0.009 s, sync=0.006 s, total=0.023 s; sync files=9, longest=0.006 s, average=0.001 s; distance=10094 kB, estimate=18854 kB; lsn=0/4014FD8, redo lsn=0/4014F80\n2026-10-22 18:44:01.661 EDT [34383] LOG:  checkpoint starting: immediate force wait\n2026-10-22 18:44:01.674 EDT [34383] LOG:  checkpoint complete: wrote 17 buffers (0.1%), wrote 2 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.006 s, total=0.014 s; sync files=8, longest=0.006 s, average=0.001 s; distance=12126 kB, estimate=18181 kB; lsn=0/4BEC9F8, redo lsn=0/4BEC9A0\n"
+    },
+    "postmaster.pid": {
+      "bytes": 201,
+      "truncated": false,
+      "tail": "34376\n/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-runtime-migrations-22hfegj3/data\n1792709018\n5432\n/private/tmp/truss-pg18-501/62e1abbbd79960c39ecb4125\n\n226084982  66191422\nready   \n"
+    },
+    "postmaster.opts": {
+      "bytes": 449,
+      "truncated": false,
+      "tail": "/private/tmp/truss-managed-grants-049/final-venv-2/lib/python3.11/site-packages/pgserver/pginstall/bin/postgres \"-D\" \"/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-runtime-migrations-22hfegj3/data\" \"-h\" \"\" \"-k\" \"/private/tmp/truss-pg18-501/62e1abbbd79960c39ecb4125\" \"-p\" \"5432\" \"-c\" \"data_directory=/private/var/folders/z0/kv_wlyps77b_txh08w55z99w0000gn/T/truss-runtime-migrations-22hfegj3/data\" \"-c\" \"unix_socket_permissions=0700\"\n"
+    }
+  }
+}
