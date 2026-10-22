@@ -953,3 +953,31 @@ Earlier embedder prose permitting nameless registration is superseded by the
 0.0.45 contract/release. Older planning statements that upgrades are forbidden
 are superseded by the restoration plan and actual v0.0.47 release evidence;
 original older release claims remain historical.
+
+
+### 2026-10-22 19:09 UTC — source-F local qualification complete
+
+The actual rebuilt Weft compiler/build source is
+`557153731e9f5d0583193a1189a07c6ed485d3d3`. The prior source-86 module differs
+and supplies no transferred native qualification. The new installed macOS ARM64
+candidate passes 80 migration cases, 62 independent archive cases, six cohort
+controls, 14 policy executions covering 10 distinct controls, and the original
+1,000-object/1,000-edge public workload. Final suites have no failures, errors or
+skips. All 455 runtime payloads match the original source, wheel and sdist built
+at `22ed3335`.
+
+The original sandboxed migration refusal, skipped policy run and enabled policy
+statement-timeout failure remain preserved. The serialized policy retry passes
+the same 2-second statement and 30-second operation limits; the timeout cause is
+unproven. The public workload separately retains its 10-second statement limit.
+The strict archive initially refused one stale producer hash after the expected
+compiler-cohort literals changed. A reviewed one-pin amendment preserves the
+prior source/corpus/archive/log and all unchanged expectations; its rebuilt
+archive passes all 363 producer checks and all 62 native cases.
+
+[Exact source-F evidence](evidence/hohfeld-followup-20261021/installed-048-arras-source557/receipt.json)
+and the [producer-pin repair](evidence/arras-source557-producer-pin-repair-20261022/README.md)
+retain the original bytes and explicit source correspondence. Public Weft
+publication/adoption, Truss tag-bound Linux gates and clean public-artifact
+verification remain open. Runtime support stays latest-only; admitted UMF 0.10
+sources migrate forward without a release-age cutoff.
