@@ -3,11 +3,6 @@
 CREATE TABLE truss.catalog_runtime_installation (
  singleton boolean PRIMARY KEY DEFAULT true CHECK(singleton),installation_id uuid NOT NULL UNIQUE,
  release_id text NOT NULL,release_sha256 text NOT NULL,layout_profile jsonb NOT NULL,preparation_configuration jsonb NOT NULL,
- managed_grants jsonb NOT NULL DEFAULT '{"interfaceVersion":"truss-managed-grants/0.1","roles":[],"observations":[]}'::jsonb
-   CHECK(jsonb_typeof(managed_grants)='object' AND managed_grants->>'interfaceVersion'='truss-managed-grants/0.1'
-     AND jsonb_typeof(managed_grants->'roles')='array' AND jsonb_array_length(managed_grants->'roles')<=32
-     AND jsonb_typeof(managed_grants->'observations')='array' AND jsonb_array_length(managed_grants->'observations')<=16384
-     AND octet_length(managed_grants::text)<=8388608),
  owner_oid oid NOT NULL,registrar_oid oid NOT NULL,genesis_at timestamptz NOT NULL);
 CREATE TABLE truss.reader_catalog_validator_secret(secret bytea PRIMARY KEY CHECK(octet_length(secret)=32));
 INSERT INTO truss.reader_catalog_validator_secret VALUES
