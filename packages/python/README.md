@@ -24,12 +24,18 @@ complete declared route in one transaction and appends one final receipt; it
 does not launch intermediate application releases. Existing receipts retain
 their original bytes and remain observable through current tooling.
 
-The published offline, transactional routes accept the exact UMF 0.10 installation
-from v0.0.44, the shared tuple from v0.0.45/v0.0.46, and v0.0.47 native0.73, on
-PostgreSQL18.6. The target is native `0.74-candidate`; exact manifest and installed
-definitions, privileges and preparation configuration decide admission. Matching
-release/layout labels alone do not. The public 80-case gate includes the actual
-two-edge v0.0.46 → v0.0.47 → v0.0.48 route, the admitted earlier sources, and
+The v0.0.49 source routes accept the exact UMF0.10 installation from v0.0.44,
+the shared tuple from v0.0.45/v0.0.46, v0.0.47 native0.73 and the actual public
+v0.0.48 nativec433 target, on PostgreSQL18.6. The v0.0.49 target is native
+`0.74-candidate` with manifest35fd; exact manifest and installed definitions,
+privileges and preparation configuration decide admission. Matching release/layout
+labels alone do not. The [final local source628 receipt](../../docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json)
+passes all 106 migration/recovery cases on its exact macOS ARM64 artifact.
+Hosted Linux/tag and public v0.0.49 verification remain separate requirements;
+consult the linked release notes for status.
+
+The published v0.0.48 baseline has its own 80-case gate, including the actual
+two-edge v0.0.46 → v0.0.47 → v0.0.48 route, earlier admitted sources and
 latest-tool-only execution: [Linux 80-case migration receipt](../../docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/migration-qualification.json),
 [macOS 80-case migration receipt](../../docs/helix/04-build/evidence/hohfeld-followup-20261021/published-0.0.48/mac-migration80/qualification.json). Pre-0.10 and protected-query installations are
 excluded. Unknown or modified sources refuse with data intact. Current authored-name
@@ -172,8 +178,8 @@ Historical v0.0.45 pins `weft-sql==0.4.49`, backend `0.4.41` / binding `0.5`,
 and query ABI 1.1. The backend version identifies the runtime ABI separately
 from the compiler package version. The historical v0.0.39 package used
 `weft-sql==0.4.41` with the same backend/binding versions. These descriptions
-remain scoped to their named releases; the active v0.0.48 ABI1.2 cohort appears
-below in [Arras follow-up cohort — v0.0.48](#arras-follow-up-cohort--v0048).
+remain scoped to their named releases. The v0.0.49 source inherits the
+v0.0.48 ABI1.2 cohort described below in [Arras follow-up cohort — v0.0.48](#arras-follow-up-cohort--v0048).
 ABI 1.1 buffers complete source sets before caller predicates and scans at most
 10,000 rows per selected Record or Relationship type; a small output limit does
 not bypass that source bound. Complete-entity relationships have a separate
@@ -977,8 +983,8 @@ projection list; to add a relationship projection after `a.*`, use a unique alia
 
 Historical ABI1.1 behavior for pinned Weft0.4.49 and Truss backend0.4.41:
 `maximum_scan_rows` was a **source population bound**, capped at10,000. The table
-below is limited to that historical cohort; current v0.0.48 / ABI1.2 behavior is
-specified in [Arras follow-up cohort — v0.0.48](#arras-follow-up-cohort--v0048). It applies
+below is limited to that historical cohort. The v0.0.49 source inherits the
+v0.0.48 ABI1.2 behavior specified in [Arras follow-up cohort — v0.0.48](#arras-follow-up-cohort--v0048). It applies
 before outer SQL predicates, joins, ordering, aggregates and `LIMIT`. A selective
 key predicate or small output does not make a large type admissible.
 

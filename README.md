@@ -15,11 +15,12 @@ use embedded V8 through `mini-racer==0.14.1`; Bun and Node are not required. Sta
 
 The source candidate is **v0.0.49**, adding explicit managed platform grants to
 the separate [v0.0.48 HF baseline](docs/helix/04-build/releases/v0.0.48.md).
-Final v0.0.49 lineage, installed-artifact and Linux publication qualification
-are pending; see the [v0.0.49 draft](docs/helix/04-build/releases/v0.0.49.md).
-The command below targets v0.0.49 and requires its qualified release assets and
-tag, which are not public yet. Do not substitute v0.0.48 when you need
-managed-grants support.
+The [exact source628 local campaign](docs/helix/04-build/evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json)
+passes on macOS ARM64, including all four published migration sources. Hosted
+Linux/tag qualification and public v0.0.49 verification remain pending; see the
+[v0.0.49 release notes](docs/helix/04-build/releases/v0.0.49.md) for current status.
+The command below requires checksum-verified public v0.0.49 assets and their
+matching tag. Do not substitute v0.0.48 when you need managed-grants support.
 
 With `uv` installed, run the v0.0.49 launcher in an isolated Python3.11 tool
 environment after its assets are qualified and public:
@@ -48,8 +49,9 @@ separate. For development against the current checkout, use `./scripts/truss-loc
 
 **Source candidate v0.0.49:** native `0.74-candidate`, Weft `0.4.51`, UMF core
 `0.10.0`. It adds managed platform grants to the v0.0.48 HF baseline. Final
-v0.0.49 lineage, installed-artifact and hosted Linux qualification remain
-pending. The latest application runtime is the sole support target. Existing
+v0.0.49 installed qualification passes for the recorded source628 macOS tuple;
+hosted Linux/tag qualification and public verification remain pending. The latest
+application runtime is the sole support target. Existing
 databases from the exact v0.0.44, shared v0.0.45/46, v0.0.47 and v0.0.48
 tuples move forward through explicit transactional migration with
 original-attempt recovery and no release-age cutoff. Startup never upgrades or
