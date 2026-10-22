@@ -13,12 +13,18 @@
   "files": {
     "America_New_York.json.gz": "47edabc9fa99850f71e98ac977239c80cb26f2f96b532b9a21b6bb09ee260d3e",
     "UTC.json.gz": "53a96b2c7bf5df614f7a3b267c2e1a4d4c964badda26432966e3e38a05d01d7a",
+    "integrated-corpus-protected/hf-corpus/qualification.json": "e599dfec1549c22ec4f9333760934837803667084b8520f13ccce51d319030d6",
+    "integrated-corpus-protected/hf-corpus.log": "f6c5dd7e8a3d0da73accd268d46bab604f847d2aa01c85685723a93845cb1bfb",
+    "integrated-corpus-protected/protected.log": "f55b6173fa24c05076760cce93d2ce14d441ebcee551ee32df227028d6f4e1e4",
     "key-backfill-preliminary.log": "92f98930a6ad21f6698221dad1e2f8c5e8a54ee82638da45b779b11bbfffff14",
     "owner-dependencies-v2.log": "83e5a061fe90b71dbb591e234433e4658c5d7cfa835ce40624c0658ea9cf8642",
     "owner-dependencies.log": "ed1172e21b715f7aa0735b2dad13ba9f53aa63d834b4191abba02dd3eecd95fd",
     "preliminary-selected-v3.log": "0444a42c1fdfa1dc7b4d7dbd67fe3414e4ac08ac9de8db094622f3e4b035b876",
     "preliminary-selected-v4.log": "3563837ed23cc094c5a0461c12ef3c89ef025c66dc1976c0de49dff46edb3f42",
     "preliminary-selected.log": "f855e579aa855cf479364ea242ab49e1e6f5d43c9834986c1f01fa5ad2e11bd2",
+    "public-workload/report.json": "5a9a1b1643be6ee868a4de7afd51c007246398684ae3a9bf482ca53843b9a4ea",
+    "public-workload/report.jsonl": "f052e603fc63498cffea95ef897959cc80c83bd5fafe005756aaa7c259b04737",
+    "public-workload.log": "ddfc678f47aa095f96d58fbac7e645fd558754a78ae8de4456e49f6adcb610c5",
     "selected-v2/qualification.json": "e3213a81766fe3c2c07ed94a6546fab454a36e6d57dbb67a574ccee3194f64d4",
     "selected-v2/test_action_role_installation_native.log.gz": "08e47af49139ee5c00aff7464d8e1c2dc8ab17dde732027b994cf02a019ee9be",
     "selected-v2/test_host_control_custody.log.gz": "5cfd93846c94a66aa69e8cbaebe4473be311946ae96415a6b1b739a7afa5be40",
@@ -65,5 +71,16 @@
     "inputsUnchanged": true,
     "payloadUnchanged": true,
     "scope": "Integrated candidate before admitting actual public48; final49 package qualification still required"
+  },
+  "preliminaryIntegrated": {
+    "hfCases": 62,
+    "hfSkipped": 0,
+    "protectedTests": 9,
+    "passed": true,
+    "scope": "Integrated49 preliminary wheel before actual public48 admission; final package and Linux receipts remain mandatory"
+  },
+  "preliminaryPublicWorkload": {
+    "functionalPassed": true,
+    "scope": "Original1000object/1000edge,1000reads/200committedupdates integratedpreliminary49; not finalpublic-release qualification"
   }
 }

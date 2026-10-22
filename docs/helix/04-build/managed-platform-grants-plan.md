@@ -518,6 +518,19 @@ Every mandatory campaign step must pass.
 Normal PR smoke checks and selected local component receipts alone cannot close
 release acceptance.
 
+The 20-module campaign also requires an independent strict protected test oracle:
+set `UMF_OWNER_ROOT` to an unmodified UMF checkout at
+`5ba77cff91a121a44c82f6bce32a78d8842161b5`, install its dependencies with
+`bun install --frozen-lockfile`, and select Bun1.4.3 through
+`TRUSS_BUN_EXECUTABLE`/PATH. The release workflow checks out that exact owner
+revision separately; the runner verifies the revision, source/lock cleanliness,
+package/lock hashes and unchanged oracle inputs before and after the campaign.
+This test oracle supplies original UMF action preparation. It is not a deployment
+sidecar or a change to Truss's embedded runtime dependencies. Use an isolated
+checkout when the primary UMF workspace has concurrent changes. Earlier missing
+oracle or platform-specific executable failures remain diagnostic evidence;
+portable executable selection preserves the original behavioral assertions.
+
 | Campaign source | Acceptance authority and scope |
 | --- | --- |
 | `.github/workflows/release.yml` package/native jobs and publish dependencies | Mandatory current Linux release campaign, including its original public workload on a tag and the explicit managed-grants step |

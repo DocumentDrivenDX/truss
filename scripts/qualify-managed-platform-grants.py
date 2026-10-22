@@ -53,7 +53,10 @@ def payload_under(root):
 
 
 def input_basis():
-    inputs = files_under(ROOT / 'packages/python/tests') + files_under(ROOT / 'scripts')
+    inputs = []
+    for directory in ('packages/python/tests', 'packages/python/examples',
+                      'packages/browser/fixtures', 'tests/fixtures', 'scripts'):
+        inputs.extend(files_under(ROOT / directory))
     inputs += [ROOT / name for name in (
         'tests/fixtures/layout-migration-planning.json',
         'tests/fixtures/operation-ordinal-issuer.json',
@@ -107,7 +110,7 @@ def main():
         'ownerOracle': {'sourceCommit': owner_revision, 'sourceClean': not owner_status,
             'packageJsonSha256': digest(owner / 'package.json'), 'lockSha256': digest(owner / 'bun.lock'),
             'Bun': bun_version, 'scope': 'Independent strict protected regression test oracle; not a deployment sidecar'},
-        'inputPinScope': 'All checked-in test/helper and script files plus eight explicit external fixture paths; not a hermetic host or external-owner-input claim',
+        'inputPinScope': 'All test/helper, Python example, browser fixture, root fixture and script files plus eight explicit fixture paths; not a hermetic host or external-owner-input claim',
         'outcomes': [],
         'passed': False, 'workerStopped': False, 'lakebaseAcceptance': 'not_run'}
     receipt = destination / 'qualification.json'
