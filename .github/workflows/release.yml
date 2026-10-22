@@ -155,7 +155,23 @@ jobs:
           name: hf-conformance-qualification-${{ matrix.os }}
           path: ${{ runner.temp }}/hf-conformance-qualification/*
           if-no-files-found: error
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.3'
+      - name: Check out the independent strict protected test oracle
+        uses: actions/checkout@v6
+        with:
+          repository: DocumentDrivenDX/umf
+          ref: 5ba77cff91a121a44c82f6bce32a78d8842161b5
+          path: .qualification/umf-owner
+          persist-credentials: false
+      - name: Install pinned independent test oracle dependencies
+        working-directory: .qualification/umf-owner
+        run: bun install --frozen-lockfile
       - name: Qualify installed managed platform grants and contained refusals
+        env:
+          UMF_OWNER_ROOT: ${{ github.workspace }}/.qualification/umf-owner
+          TRUSS_BUN_EXECUTABLE: bun
         run: python scripts/qualify-managed-platform-grants.py --wheel "$(find dist -name 'truss_toolkit-*.whl' -print -quit)" --output "$RUNNER_TEMP/managed-grants"
       - name: Retain managed platform grants qualification
         if: always()
@@ -638,6 +654,17 @@ jobs:
           assert managed['nativeManifestSha256']==qualification['targetManifestSha256']
           assert managed['wheelSha256']==hashlib.sha256(next(root.glob('*.whl')).read_bytes()).hexdigest()
           assert managed['workerStopped'] and managed['workerBaselineRestored'] and managed['inputsUnchanged'] and managed['payloadUnchanged']
+          assert managed['ownerOracle']['inputsUnchanged'] and managed['ownerOracle']['sourceClean']
+          assert managed['ownerOracle']['Bun']=='1.4.3'
+          gate_ast=ast.parse(pathlib.Path('scripts/qualify-managed-platform-grants.py').read_bytes())
+          gate_constants={n.targets[0].id:ast.literal_eval(n.value) for n in gate_ast.body if isinstance(n,ast.Assign) and len(n.targets)==1 and isinstance(n.targets[0],ast.Name) and n.targets[0].id in ('MODULES','UMF_OWNER_REVISION')}
+          assert managed['ownerOracle']['sourceCommit']==gate_constants['UMF_OWNER_REVISION']
+          assert [row['module'] for row in managed['outcomes']]==list(gate_constants['MODULES'])
+          assert managed['tests']==sum(row['tests'] for row in managed['outcomes'])
+          for row in managed['outcomes']:
+              assert row['passed'] and row['returncode']==0 and row['tests']>0 and row['baselineRestored'] and not row['timedOut']
+              assert pathlib.Path(row['log']).name==row['log']
+              assert hashlib.sha256((managed_path.parent/row['log']).read_bytes()).hexdigest()==row['logSha256']
           (root/'managed-grants-qualification.json').write_bytes(managed_path.read_bytes())
           with tarfile.open(root/'managed-grants-qualification-evidence.tar.gz','w:gz') as archive:
               for path in sorted(managed_path.parent.iterdir()):

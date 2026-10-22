@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import platform
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -23,6 +24,7 @@ import truss
 from native_fixture import WorkerCluster
 
 ROOT = Path(__file__).resolve().parents[1]
+UMF_OWNER_REVISION = '5ba77cff91a121a44c82f6bce32a78d8842161b5'
 MODULES = (
     'test_managed_platform_grants_native', 'test_managed_grants_migration_native',
     'test_preparation_runtime_recipe', 'test_installation_privileges_native',
@@ -72,6 +74,18 @@ def main():
     args = parser.parse_args()
     destination = args.output.resolve()
     destination.mkdir(parents=True, exist_ok=False)
+    owner = Path(os.environ.get('UMF_OWNER_ROOT', ''))
+    if not os.environ.get('UMF_OWNER_ROOT') or not (owner / 'src/index.ts').is_file():
+        raise ValueError('UMF_OWNER_ROOT must select the pinned independent test oracle source')
+    owner_revision = subprocess.check_output(['git', '-C', str(owner), 'rev-parse', 'HEAD'], text=True).strip()
+    owner_status = subprocess.check_output(['git', '-C', str(owner), 'status', '--porcelain',
+        '--', 'src', 'package.json', 'bun.lock'], text=True)
+    if owner_revision != UMF_OWNER_REVISION or owner_status:
+        raise ValueError('Exact unmodified independent UMF owner source/lock required')
+    bun = os.environ.get('TRUSS_BUN_EXECUTABLE') or shutil.which('bun') or 'bun'
+    bun_version = subprocess.check_output([bun, '--version'], text=True).strip()
+    if bun_version != '1.4.3':
+        raise ValueError('Bun 1.4.3 required for the independent test oracle')
     loaded = Path(truss.__file__).resolve().parent
     if loaded.is_relative_to(ROOT) or not loaded.is_relative_to(Path(sys.prefix).resolve()):
         raise ValueError('Exact installed package outside the checkout required')
@@ -90,6 +104,9 @@ def main():
         'wheelSha256': wheel_digest, 'loadedPackage': str(loaded),
         'nativeManifestSha256': digest(source / '_catalog_runtime/manifest.json'),
         'packageFilesVerified': len(payload), 'inputBasis': basis,
+        'ownerOracle': {'sourceCommit': owner_revision, 'sourceClean': not owner_status,
+            'packageJsonSha256': digest(owner / 'package.json'), 'lockSha256': digest(owner / 'bun.lock'),
+            'Bun': bun_version, 'scope': 'Independent strict protected regression test oracle; not a deployment sidecar'},
         'inputPinScope': 'All checked-in test/helper and script files plus eight explicit external fixture paths; not a hermetic host or external-owner-input claim',
         'outcomes': [],
         'passed': False, 'workerStopped': False, 'lakebaseAcceptance': 'not_run'}
@@ -145,10 +162,17 @@ def main():
     record['inputsUnchanged'] = input_basis() == basis
     record['payloadUnchanged'] = (payload_under(source) == expected
         and payload_under(loaded) == expected and digest(args.wheel) == wheel_digest)
+    record['ownerOracle']['inputsUnchanged'] = (
+        subprocess.check_output(['git', '-C', str(owner), 'rev-parse', 'HEAD'], text=True).strip() == owner_revision
+        and not subprocess.check_output(['git', '-C', str(owner), 'status', '--porcelain',
+            '--', 'src', 'package.json', 'bun.lock'], text=True)
+        and digest(owner / 'package.json') == record['ownerOracle']['packageJsonSha256']
+        and digest(owner / 'bun.lock') == record['ownerOracle']['lockSha256'])
     record['tests'] = sum(row['tests'] for row in record['outcomes'])
     record['skipped'] = 0 if all(row['passed'] for row in record['outcomes']) else None
     record['passed'] = (len(record['outcomes']) == len(MODULES) and all(row['passed'] for row in record['outcomes'])
-        and record['workerStopped'] and record['inputsUnchanged'] and record['payloadUnchanged'] and 'error' not in record)
+        and record['workerStopped'] and record['inputsUnchanged'] and record['payloadUnchanged']
+        and record['ownerOracle']['inputsUnchanged'] and 'error' not in record)
     save()
     return 0 if record['passed'] else 1
 

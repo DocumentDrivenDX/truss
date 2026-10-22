@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/scripts/qualify-managed-platform-grants.py", line 23, in <module>
+    from native_fixture import WorkerCluster
+  File "/Users/erik/Projects/truss/scripts/native_fixture.py", line 18, in <module>
+    import pg8000.native
+ModuleNotFoundError: No module named 'pg8000'

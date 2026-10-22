@@ -100,6 +100,13 @@ def main():
     os.environ['TRUSS_MIGRATION_WHEELHOUSE']=str(args.wheelhouse.resolve())
     subsequent=type('PriorPublishedReceiptTests',(SubsequentRuntimeMigrationTests,),{'wheel_environment':'TRUSS_MIGRATION_GATE_SOURCE44'})
     suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(subsequent))
+    # Exercise the actual published 0.44 → 0.47 → 0.48 → current chain. The
+    # ordinary source matrix proves every direct latest route; this additional
+    # fixture proves that both already-published receipts survive the next
+    # upgrade, restart recovery, and logical restore.
+    import test_published48_migration_receipts_native
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(
+        test_published48_migration_receipts_native.Published48ReceiptTests))
     result=unittest.TextTestRunner(verbosity=2).run(suite)
     receipt={'scope':'Installed latest-only runtime migration gate; PostgreSQL18.6, unprotected UMF0.10 lineage',
         'sourceCommit':os.environ.get('GITHUB_SHA'),'workflowRunId':os.environ.get('GITHUB_RUN_ID'),

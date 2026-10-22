@@ -1,0 +1,8 @@
+test_44_to_47_to_48_to_49_preserves_both_published_receipts (test_published48_migration_receipts_native.Published48ReceiptTests.test_44_to_47_to_48_to_49_preserves_both_published_receipts) ... ok
+test_49_lost_commit_response_preserves_47_and_48_receipts (test_published48_migration_receipts_native.Published48ReceiptTests.test_49_lost_commit_response_preserves_47_and_48_receipts) ... ok
+test_49_upgrade_after_dump_restore_preserves_both_published_receipts (test_published48_migration_receipts_native.Published48ReceiptTests.test_49_upgrade_after_dump_restore_preserves_both_published_receipts) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 28.955s
+
+OK
