@@ -1,0 +1,33 @@
+{
+  "scope": "Pure synthetic generator validator/packager controls, not native capture or qualification",
+  "passed": true,
+  "producerSha256": "8ce83ab47ed7dfdff6178500c38b0bcd870dc365e1808500f5a0cd2465ffd6df",
+  "target": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+  "controls": [
+    "synthetic positive pair and package (no files written)",
+    "all21priorpins preserved",
+    "all4publicsourcewheel entries unchanged",
+    "fullcomment-prefixedSQL retained",
+    "all4forwardroutes terminateatnewtarget",
+    "wrong routine changed rejected",
+    "changed exact ACL rejected",
+    "changed native column rejected",
+    "wrong source wheel rejected"
+  ],
+  "routes": {
+    "9f6aab31802e9bebcd886f735ba9fe0bb405e69d3501a32f36cee8827b544d00": 3,
+    "71c4c3d4c05a2229c4cdec1643cabe0da7055965f0b0d23195e83ad780042a2e": 3,
+    "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea": 2,
+    "c4339ac7f09ab5a004c272ab00962107a970938004c1765ec4163e4d5ca9b6f0": 2
+  },
+  "sourceWheels": 4,
+  "priorFilesPreserved": 21,
+  "generatedFiles": [
+    "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4.acl.json",
+    "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4.json",
+    "86bcf78541e316c7e5697fb91e09d4741ef3e3cb5600b9b76ac5c6cc2e836923.manifest.json",
+    "edge-35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f-288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4.json"
+  ],
+  "packageFilesWritten": false,
+  "nativeExecuted": false
+}

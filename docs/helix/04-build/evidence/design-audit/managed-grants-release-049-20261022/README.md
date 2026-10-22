@@ -115,7 +115,33 @@ the same values and order before the existing JSON bounds, exact DISTINCT owner
 reduction and authorization checks. The original collector source and all prior
 migration artifacts remain unchanged. Two additional semantic controls join the
 managed campaign (21 modules / 130 discovered tests); the independent corpus
-retains its 62 cases and all existing producer pins. This candidate is initially
-for fresh-install Linux diagnosis. Its new migration profile/edge, native tests
-and full qualification remain pending. Source628/native35fd local results above
-remain evidence for that exact earlier candidate, without qualification of2888.
+retains its 62 cases and all 363 existing producer digests, adding the new test
+producer for 364 bindings. Source628/native35fd local results above remain
+evidence for that exact earlier candidate, without qualification of2888.
+
+The [native capture and packaging receipt](audit-accumulation/receipt.json)
+records passing actual New York/UTC source-and-target captures, read-only
+comparison and additive packaging. The old private v0.0.49 wheel26cf supplies native35fd only as
+an intermediate fixture; it does not join the four public source-wheel inputs.
+All 21 prior migration artifact bytes remain unchanged. Four additions retain
+manifest86bc and add the 2888 profile, exact ACL census and 35fd→2888 SQL-only edge.
+The new migration manifest SHA-256 is
+`96addcdb95523f478d8f50b0b47198e47a860680c7400dd359711930e837e535`.
+All four forward routes resolve to 2888 in 3/3/2/2 edges for public 44/shared46/47/48.
+This native profile admission is not a complete installed migration campaign.
+
+The [retained diagnostic](audit-diagnostic-39852375031/receipt.json) ([run39852375031](https://github.com/DocumentDrivenDX/truss/actions/runs/39852375031))
+passes original and instrumented invocations of the unchanged audit case on both
+public48 and candidate2888 on the same AMD EPYC9V45 host. The instrumented
+complete-page query takes 6.940221s versus 0.380100s; original whole-case times are
+12.764s versus 5.619s. Default-budget refusals remain SQLSTATE54000, original
+10-second SQL/30-second operation limits are unchanged, and all owned worker
+inventories and shutdowns verify. Instrumentation affects timing; these figures
+are bounded prototype evidence, not broader performance qualification. The
+previous 9V74 failures remain separate original evidence.
+
+The next gate is a fresh complete artifact freeze and the 21-module/130-test
+managed campaign, HF62, strict protected controls, all four source migration and
+recovery routes, lifecycle and the original public workload on the new native
+identity. Full Mac/Linux and tag/public verification remain pending. No release,
+full-engine, all-discovery or Lakebase acceptance is claimed.

@@ -540,7 +540,7 @@ is `86bcf78541e316c7e5697fb91e09d4741ef3e3cb5600b9b76ac5c6cc2e836923`.
 This closes public input integrity and route admission; it does not qualify the
 final v0.0.49 wheel or its complete migration/recovery campaign.
 
-### Final installed macOS qualification
+### Historical source628 installed macOS qualification
 
 The [final local receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json)
 accepts the exact macOS ARM64 scope on source
@@ -594,9 +594,10 @@ executed on hosted Linux only. It already names supported embedding, native
 authorization, preparation, query/disclosure, catalog, capacity, lifecycle,
 migration and original public-workload regressions. The new mandatory managed
 step invokes `scripts/qualify-managed-platform-grants.py` against the installed
-wheel. Its 20 explicit modules include managed install/migration, preparation,
+wheel. Its 21 explicit modules include managed install/migration, preparation,
 CLI, strict lifecycle/ACL/host and catalog regressions, including the complete
-`test_catalog_key_backfill_native` module. It owns a native worker, requires
+`test_catalog_key_backfill_native` module and two audit-accumulation semantic
+controls. The selected set discovers 130 tests. It owns a native worker, requires
 inventory restoration after each module, stops on failure, rejects skips and
 retains raw logs and the final cleanup/input/payload receipt. The separate
 local-runtime step also includes `test_local_install_cli_native`.
@@ -604,7 +605,7 @@ Every mandatory campaign step must pass.
 Normal PR smoke checks and selected local component receipts alone cannot close
 release acceptance.
 
-The 20-module campaign also requires an independent strict protected test oracle:
+The 21-module campaign also requires an independent strict protected test oracle:
 set `UMF_OWNER_ROOT` to an unmodified UMF checkout at
 `5ba77cff91a121a44c82f6bce32a78d8842161b5`, install its dependencies with
 `bun install --frozen-lockfile`, and select Bun1.4.3 through
@@ -620,7 +621,7 @@ portable executable selection preserves the original behavioral assertions.
 | Campaign source | Acceptance authority and scope |
 | --- | --- |
 | `.github/workflows/release.yml` package/native jobs and publish dependencies | Mandatory current Linux release campaign, including its original public workload on a tag and the explicit managed-grants step |
-| `scripts/qualify-managed-platform-grants.py` | Installed/wheel/source correspondence and 20 explicit regression modules on an owned native worker; this current candidate gate does not relabel the earlier 19-module receipt |
+| `scripts/qualify-managed-platform-grants.py` | Installed/wheel/source correspondence and 21 explicit regression modules on an owned native worker; earlier 19/20-module receipts retain their original scopes |
 | `scripts/qualify-runtime-migrations.py` and packaged `_migrations/manifest.json` | Every admitted source needs an exact real wheel fixture and a route; prior published manifests/immutable files remain in custody; skipped cases cannot pass |
 | `scripts/run-hf-conformance.py` and `hohfeld-followup-0.1.json` | Exact current package/native/compiler cohort and all 62 authored corpus cases; changed producers or skipped cases cannot pass |
 | `.github/workflows/python-runtime.yml` | PR/runtime smoke qualification; does not replace the release campaign |
@@ -640,9 +641,9 @@ unrun/unqualified status.
 | Release slice | Required result | Current state |
 | --- | --- | --- |
 | Integrate and version | Preserve the HF baseline and select v0.0.49 with its own notes | Source integration and version selection complete; [release draft](releases/v0.0.49.md) prepared |
-| Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Complete: actual public wheel integrity and paired native initializer captures; [admission receipt](evidence/design-audit/managed-grants-release-049-20261022/source48-admission/receipt.json). Final local 106-case campaign passes; mandatory Linux/tag campaign remains pending |
-| Freeze and review | Build final wheel/sdist/archive; verify exact runtime payload, historical bytes, compiler cohort, source boundaries and final diff | Exact source628 local artifact freeze and payload review complete; tag/public artifact review remains required |
-| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Final exact macOS campaign passes: 128/62/9/106 tests, lifecycle and workload; [receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json). Hosted Linux remains pending |
+| Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Complete: actual public wheel integrity and paired native initializer captures; [admission receipt](evidence/design-audit/managed-grants-release-049-20261022/source48-admission/receipt.json). Historical35fd local 106-case campaign passes; complete2888 qualification remains pending |
+| Freeze and review | Build final wheel/sdist/archive; verify exact runtime payload, historical bytes, compiler cohort, source boundaries and final diff | Historical source628/native35fd artifacts reviewed; new 2888 artifact freeze and complete qualification pending |
+| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Historical source628/native35fd macOS campaign passes: 128/62/9/106 tests, lifecycle and workload; [receipt](evidence/design-audit/managed-grants-release-049-20261022/final-local/qualification.json). This does not qualify2888; full new Mac/Linux gates remain pending |
 | Hosted release and public verification | Mandatory Linux package/native campaign passes, then tag/asset/source pins and public downloads agree | Pending; no v0.0.49 publication claimed |
 
 Actual Arras/Lakebase TLS/token/workflow acceptance remains a separate deployment
@@ -672,8 +673,34 @@ deadline in the shared collector. A representation-only appended collector
 override is now a diagnostic candidate with native manifest
 `288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4`.
 The original35fd local pass remains historical evidence for source628. The new
-candidate preserves validation, order, duplicates, nulls, owner reduction, bounds
-and late authorization. Its additive35fd-to-new migration edge and target capture
-are pending; the four actual public source wheels and all existing21 artifact
-bytes are retained. Fresh-install diagnosis does not qualify migration or final
-publication. Full local/Linux/corpus/lineage/public gates remain required.
+candidate preserves validation, order, duplicates, nulls, owner reduction, bounds,
+late authorization and both complete collector calls.
+
+The [capture and packaging receipt](evidence/design-audit/managed-grants-release-049-20261022/audit-accumulation/receipt.json)
+records passing actual America/New_York and UTC native source/target comparisons
+and additive packaging through the reviewed
+[producer](../../../scripts/build-audit-accumulation-migration.py). The exact
+private source fixture is the earlier v0.0.49 wheel26cf; it is an intermediate
+native fixture, not an admitted public source wheel. All 21 prior migration
+artifact bytes and the four actual public source-wheel entries remain unchanged.
+Four additions retain the old 86bc manifest and supply the new 2888 profile, exact
+ACL census and 35fd→2888 SQL-only edge. The current migration manifest is
+`96addcdb95523f478d8f50b0b47198e47a860680c7400dd359711930e837e535`.
+The complete forward routes contain three edges for public 44/shared46 and two
+for public47/public48, executed atomically by the latest tool.
+
+The fresh-install [retained diagnostic](evidence/design-audit/managed-grants-release-049-20261022/audit-diagnostic-39852375031/receipt.json) ([run39852375031](https://github.com/DocumentDrivenDX/truss/actions/runs/39852375031))
+passes both the unchanged public48 and new 2888 case on the same AMD EPYC9V45
+host. Instrumented complete-page SQL takes 6.940221s versus 0.380100s; original
+whole-test times are 12.764s versus 5.619s. Both default event-budget refusals remain
+SQLSTATE54000, the 10-second SQL/30-second operation limits remain unchanged, and
+all owned workers restore inventory and stop. These are bounded prototype
+measurements with instrumentation overhead, not a release performance budget.
+They do not replace the failed 9V74 diagnostics or establish full corpus success.
+
+The managed campaign now selects 21 modules/130 tests, including the two new
+semantic controls. HF keeps all 62 cases, limits and compiler cohorts; all 363
+existing producer digests remain unchanged and the new test producer makes 364.
+Native capture/packaging and one-case diagnosis are complete. New exact-artifact
+Mac/Linux/corpus/lineage/lifecycle/workload and tag/public verification remain
+pending; no 2888 full qualification or publication is claimed.

@@ -1,0 +1,69 @@
+{
+  "scope": "Actual America/New_York and UTC native captures and reviewed additive migration packaging; not full new-target qualification.",
+  "sourceCommit": "77069818",
+  "nativeManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
+  "migrationManifestSha256": "96addcdb95523f478d8f50b0b47198e47a860680c7400dd359711930e837e535",
+  "bothCapturesExitCode": 0,
+  "checkOnlyExitCode": 0,
+  "packageExitCode": 0,
+  "silentSuccessfulCaptureLogsAreEmpty": true,
+  "all21PriorArtifactPinsUnchanged": true,
+  "publicSourceVersions": [
+    "0.0.44",
+    "0.0.46",
+    "0.0.47",
+    "0.0.48"
+  ],
+  "routeLengths": [
+    3,
+    3,
+    2,
+    2
+  ],
+  "private49SourceFixtureIsNotAnAdmittedPublicSource": true,
+  "retainedEvidence": {
+    "captures/America_New_York.json": {
+      "originalSha256": "4f1d9e1ad011fd583c824da231a4797159baca3cc6b626602b38ac80bc366be8",
+      "retained": "captures/America_New_York.json.gz",
+      "retainedSha256": "5a08c4988ea4fab51e9d013f4f0e5e8550cf6bec7c21677cb2b7307e7d3ec722",
+      "gzipOriginal": true
+    },
+    "captures/UTC.json": {
+      "originalSha256": "05951b125614f53472236a7325858e6b08ed50140722b7cd1c698e1490b25142",
+      "retained": "captures/UTC.json.gz",
+      "retainedSha256": "9ee3c665b6cf994f05c4aefa9ecaaf65a918c755257f7de3a8828730ec1d71cf",
+      "gzipOriginal": true
+    },
+    "audit-2888-ny.log": {
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained": "audit-2888-ny.log",
+      "retainedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipOriginal": false
+    },
+    "audit-2888-utc.log": {
+      "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained": "audit-2888-utc.log",
+      "retainedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "gzipOriginal": false
+    },
+    "audit-2888-check-only.log": {
+      "originalSha256": "2723b8488ecb23aaf48b37062083344dfc278019f09f6601f5c6bfc11aba71cc",
+      "retained": "audit-2888-check-only.log",
+      "retainedSha256": "2723b8488ecb23aaf48b37062083344dfc278019f09f6601f5c6bfc11aba71cc",
+      "gzipOriginal": false
+    },
+    "audit-2888-package.log": {
+      "originalSha256": "0e4fef2f51e9f47b51f4149046583b046b6e5a01050abbbe3529fa5e9e6fbd7f",
+      "retained": "audit-2888-package.log",
+      "retainedSha256": "0e4fef2f51e9f47b51f4149046583b046b6e5a01050abbbe3529fa5e9e6fbd7f",
+      "gzipOriginal": false
+    },
+    "audit-migration-producer-review.json": {
+      "originalSha256": "d7ff594f66e42f2184776720d4d7d4032428d625698e8b8d0b488133e5d71995",
+      "retained": "audit-migration-producer-review.json",
+      "retainedSha256": "d7ff594f66e42f2184776720d4d7d4032428d625698e8b8d0b488133e5d71995",
+      "gzipOriginal": false
+    }
+  },
+  "actualLakebaseAcceptance": "not_run"
+}
