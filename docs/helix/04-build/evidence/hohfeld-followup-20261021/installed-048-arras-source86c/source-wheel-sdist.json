@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "sourcePayloads": 455,
+  "wheelSha256": "e701b06fa1972e91c8039b32bba164ea908d3fa3e0b73f6ccbec4597d9e9bbdd",
+  "sdistSha256": "9be85a0955e0602a787ef0ab5557127475fcee73033fae2093a4fd9e7609de20",
+  "scope": "Local Mac-only compiler cohort candidate; Linux cohort and publication remain pending."
+}

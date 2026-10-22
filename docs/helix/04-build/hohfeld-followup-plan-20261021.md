@@ -762,7 +762,9 @@ cohorts and actual prior47 receipts/multi-step routes. The independently extract
 archive passes62 cases without skips in257.245s, including original Arras metadata,
 public edge creation and HAS_RELATED with exact returned source bytes/pin.
 Ten focused current-policy/source-cut/disclosure native controls pass68.305s with
-no skips. Those retain their read-only component scope; protected migration and
+no skips. The original installed1,000-object/1,000-edge public workload also
+passes39.405s; its latency budgets remain provisional and no nominal prior-run
+baseline is supplied. [Exact local candidate and preserved failures](evidence/hohfeld-followup-20261021/installed-048-arras-source86c/receipt.json). Those retain their read-only component scope; protected migration and
 broader security acceptance remain unqualified.
 
 The first repeat under concurrent build activity failed20 cases: one fresh
