@@ -1,0 +1,106 @@
+{
+  "case": "facets.batch",
+  "actual": {
+    "carrier": "BatchedImportExecutionResult",
+    "result": {
+      "carrier": "ImportReported",
+      "report": {
+        "carrier": "ImportReport",
+        "attempt_id": "788f955b-d19d-497f-beaa-2907c1ebfbc5",
+        "input_count": "2",
+        "executed_catalog_revision": "1",
+        "import_profile": {
+          "carrier": "ProfilePin",
+          "identity": "truss-batched-scalar-import",
+          "version": "0.1",
+          "sha256": "eee24b7750660bf65f1d18a1290e6b335a0024cfd562b926d7a946e7277fada0"
+        },
+        "selected_configuration": {
+          "carrier": "SelectedMutationConfiguration",
+          "source_epoch": "4b880dbb-c550-44dd-a3fa-83532754ff09",
+          "installation_id": "0cab146f-a4c7-479b-ba47-b57d81804c14",
+          "generation": "1",
+          "key_reuse": "forbid",
+          "journal_mode": "engine",
+          "configuration_profile": {
+            "carrier": "ProfilePin",
+            "identity": "truss-installed-engine-forbid",
+            "version": "0.1",
+            "sha256": "502ecaf1a476e1d2350e55d009210b5444a65487f86f9d65b78aec275726fe96"
+          },
+          "installed_producer_inventory_sha256": "7ac989147f22d437b1ce0d814ebbfaa25aa868ab5495de125aa5e2bda7b963ea"
+        },
+        "input_sha256": "d7dc1735a53f247279c444f70c28dc1667398e64d22af0509db08f3b75875650",
+        "execution": "host_adopted",
+        "status": "processed",
+        "outcomes": [
+          {
+            "carrier": "ImportCreated",
+            "input_index": "0",
+            "batch_id": "788f955b-d19d-497f-beaa-2907c1ebfbc5:0",
+            "identity": {
+              "carrier": "TypedIdentity",
+              "id": "3",
+              "type_id": "1",
+              "definition_pin": "386b45537e78e13c8eb6266421773cea1b2087f03aaa6b74a687ca8ad662d3ac",
+              "owner": {
+                "carrier": "QualifiedOwner",
+                "document_id": "adoc",
+                "module_id": "m"
+              }
+            },
+            "version": "1",
+            "outcome": "created"
+          },
+          {
+            "carrier": "ImportRejected",
+            "input_index": "1",
+            "batch_id": "788f955b-d19d-497f-beaa-2907c1ebfbc5:0",
+            "code": "invalid",
+            "path": {
+              "carrier": "Absent"
+            },
+            "outcome": "rejected"
+          }
+        ],
+        "batches": [
+          {
+            "carrier": "PendingBatch",
+            "batch_id": "788f955b-d19d-497f-beaa-2907c1ebfbc5:0",
+            "input_indices": [
+              "0",
+              "1"
+            ],
+            "host_transaction_id": "truss-pending-transaction:4b880dbb-c550-44dd-a3fa-83532754ff09:765",
+            "disposition": "pending"
+          }
+        ],
+        "unprocessed_indices": [],
+        "counts": {
+          "carrier": "ImportCounts",
+          "created_committed": "0",
+          "created_pending": "1",
+          "created_rolled_back": "0",
+          "created_commit_unknown": "0",
+          "created_transaction_unresolved": "0",
+          "attempt_unknown": "0",
+          "skipped": "0",
+          "rejected": "1",
+          "unprocessed": "0"
+        },
+        "interface_version": "truss-import-report/0.1.0"
+      },
+      "outcome": "reported"
+    },
+    "empty_load_settlement": null
+  },
+  "desiredOutcomeSatisfied": true,
+  "facts": null,
+  "documents": [
+    {
+      "id": "adoc",
+      "sha256": "1e9eac595a74660c1dd09da125cd89ecdf00d30208aa318177bc07c4a53f777a",
+      "originalBytesBase64": "ewogICJ1bWYiOiAiMC4xMC4wIiwKICAiaWQiOiAiYWRvYyIsCiAgInZvY2FidWxhcmllcyI6IHt9LAogICJleHRlbnNpb25zIjoge30sCiAgIm1vZHVsZXMiOiBbCiAgICB7CiAgICAgICJpZCI6ICJtIiwKICAgICAgIm5hbWVzcGFjZSI6ICJtIiwKICAgICAgImV4dGVuc2lvbnMiOiB7fSwKICAgICAgImVsZW1lbnRzIjogWwogICAgICAgIHsKICAgICAgICAgICJpZCI6ICJBIiwKICAgICAgICAgICJuYW1lIjogIkEiLAogICAgICAgICAgImtpbmQiOiAicmVjb3JkIiwKICAgICAgICAgICJtZW1iZXJzIjogWwogICAgICAgICAgICB7CiAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAiZWxlbWVudCI6ICJBLWxhYmVsIgogICAgICAgICAgICB9LAogICAgICAgICAgICB7CiAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAiZWxlbWVudCI6ICJBLXZhbHVlIgogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgImtleXMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAiaWQiOiAiei1hbHQiLAogICAgICAgICAgICAgICJuYW1lIjogImFsdCIsCiAgICAgICAgICAgICAgImZpZWxkcyI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQS1sYWJlbCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICBdCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAiaWQiOiAiYS1wcmltYXJ5IiwKICAgICAgICAgICAgICAibmFtZSI6ICJwcmltYXJ5IiwKICAgICAgICAgICAgICAicHJpbWFyeSI6IHRydWUsCiAgICAgICAgICAgICAgImZpZWxkcyI6IFsKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQS12YWx1ZSIKICAgICAgICAgICAgICAgIH0sCiAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICJtb2R1bGUiOiAibSIsCiAgICAgICAgICAgICAgICAgICJlbGVtZW50IjogIkEtbGFiZWwiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgXQogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgImV4dGVuc2lvbnMiOiB7fQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgImlkIjogIkIiLAogICAgICAgICAgIm5hbWUiOiAiQiIsCiAgICAgICAgICAia2luZCI6ICJyZWNvcmQiLAogICAgICAgICAgIm1lbWJlcnMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAibW9kdWxlIjogIm0iLAogICAgICAgICAgICAgICJlbGVtZW50IjogIkItbGFiZWwiCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAibW9kdWxlIjogIm0iLAogICAgICAgICAgICAgICJlbGVtZW50IjogIkItdmFsdWUiCiAgICAgICAgICAgIH0KICAgICAgICAgIF0sCiAgICAgICAgICAia2V5cyI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICJpZCI6ICJ6LWFsdCIsCiAgICAgICAgICAgICAgIm5hbWUiOiAiYWx0IiwKICAgICAgICAgICAgICAiZmllbGRzIjogWwogICAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICAibW9kdWxlIjogIm0iLAogICAgICAgICAgICAgICAgICAiZWxlbWVudCI6ICJCLWxhYmVsIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgIF0KICAgICAgICAgICAgfSwKICAgICAgICAgICAgewogICAgICAgICAgICAgICJpZCI6ICJhLXByaW1hcnkiLAogICAgICAgICAgICAgICJuYW1lIjogInByaW1hcnkiLAogICAgICAgICAgICAgICJwcmltYXJ5IjogdHJ1ZSwKICAgICAgICAgICAgICAiZmllbGRzIjogWwogICAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgICAibW9kdWxlIjogIm0iLAogICAgICAgICAgICAgICAgICAiZWxlbWVudCI6ICJCLXZhbHVlIgogICAgICAgICAgICAgICAgfSwKICAgICAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICAgIm1vZHVsZSI6ICJtIiwKICAgICAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQi1sYWJlbCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICBdCiAgICAgICAgICAgIH0KICAgICAgICAgIF0sCiAgICAgICAgICAiZXh0ZW5zaW9ucyI6IHt9CiAgICAgICAgfSwKICAgICAgICB7CiAgICAgICAgICAiaWQiOiAiQS1sYWJlbCIsCiAgICAgICAgICAibmFtZSI6ICJBLWxhYmVsIiwKICAgICAgICAgICJraW5kIjogImZpZWxkIiwKICAgICAgICAgICJzY2FsYXJUeXBlIjogInN0cmluZyIsCiAgICAgICAgICAibnVsbGFiaWxpdHkiOiAicmVxdWlyZWQiLAogICAgICAgICAgImNhcmRpbmFsaXR5IjogIm9uZSIsCiAgICAgICAgICAiZXh0ZW5zaW9ucyI6IHt9CiAgICAgICAgfSwKICAgICAgICB7CiAgICAgICAgICAiaWQiOiAiQS12YWx1ZSIsCiAgICAgICAgICAibmFtZSI6ICJBLXZhbHVlIiwKICAgICAgICAgICJraW5kIjogImZpZWxkIiwKICAgICAgICAgICJzY2FsYXJUeXBlIjogInN0cmluZyIsCiAgICAgICAgICAibnVsbGFiaWxpdHkiOiAicmVxdWlyZWQiLAogICAgICAgICAgImNhcmRpbmFsaXR5IjogIm9uZSIsCiAgICAgICAgICAiZXh0ZW5zaW9ucyI6IHt9LAogICAgICAgICAgImZhY2V0cyI6IHsKICAgICAgICAgICAgImxlbmd0aCI6IHsKICAgICAgICAgICAgICAibWF4IjogNCwKICAgICAgICAgICAgICAidW5pdCI6ICJ1bmljb2RlLXNjYWxhciIKICAgICAgICAgICAgfQogICAgICAgICAgfQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgImlkIjogIkItbGFiZWwiLAogICAgICAgICAgIm5hbWUiOiAiQi1sYWJlbCIsCiAgICAgICAgICAia2luZCI6ICJmaWVsZCIsCiAgICAgICAgICAic2NhbGFyVHlwZSI6ICJzdHJpbmciLAogICAgICAgICAgIm51bGxhYmlsaXR5IjogInJlcXVpcmVkIiwKICAgICAgICAgICJjYXJkaW5hbGl0eSI6ICJvbmUiLAogICAgICAgICAgImV4dGVuc2lvbnMiOiB7fQogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgImlkIjogIkItdmFsdWUiLAogICAgICAgICAgIm5hbWUiOiAiQi12YWx1ZSIsCiAgICAgICAgICAia2luZCI6ICJmaWVsZCIsCiAgICAgICAgICAic2NhbGFyVHlwZSI6ICJzdHJpbmciLAogICAgICAgICAgIm51bGxhYmlsaXR5IjogInJlcXVpcmVkIiwKICAgICAgICAgICJjYXJkaW5hbGl0eSI6ICJvbmUiLAogICAgICAgICAgImV4dGVuc2lvbnMiOiB7fQogICAgICAgIH0KICAgICAgXSwKICAgICAgInJlbGF0aW9uc2hpcHMiOiBbCiAgICAgICAgewogICAgICAgICAgImlkIjogIkEtQiIsCiAgICAgICAgICAibmFtZSI6ICJBLUIiLAogICAgICAgICAgInNvdXJjZSI6IFsKICAgICAgICAgICAgewogICAgICAgICAgICAgICJtb2R1bGUiOiAibSIsCiAgICAgICAgICAgICAgImVsZW1lbnQiOiAiQSIKICAgICAgICAgICAgfQogICAgICAgICAgXSwKICAgICAgICAgICJ0YXJnZXQiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAibW9kdWxlIjogIm0iLAogICAgICAgICAgICAgICJlbGVtZW50IjogIkIiLAogICAgICAgICAgICAgICJrZXkiOiAiYS1wcmltYXJ5IgogICAgICAgICAgICB9CiAgICAgICAgICBdLAogICAgICAgICAgInNvdXJjZU11bHRpcGxpY2l0eSI6IHsKICAgICAgICAgICAgIm1pbiI6IDAsCiAgICAgICAgICAgICJtYXgiOiAxCiAgICAgICAgICB9LAogICAgICAgICAgInRhcmdldE11bHRpcGxpY2l0eSI6IHsKICAgICAgICAgICAgIm1pbiI6IDAsCiAgICAgICAgICAgICJtYXgiOiAyCiAgICAgICAgICB9LAogICAgICAgICAgInRhcmdldExpZmVjeWNsZSI6ICJpbmRlcGVuZGVudCIsCiAgICAgICAgICAiZGlyZWN0ZWQiOiB0cnVlCiAgICAgICAgfQogICAgICBdCiAgICB9CiAgXQp9"
+    }
+  ]
+}
