@@ -1,5 +1,11 @@
 # truss project documentation
 
+[Managed platform grants assessment and plan](04-build/managed-platform-grants-plan.md)
+addresses Praxis's Lakebase installation refusal with explicit retained grantee
+policy, typed contained refusals, lifecycle/migration consistency and separate
+local versus managed-service qualification. This is proposed work, not delivered
+Lakebase support.
+
 Current delivery: [runtime migrations released in v0.0.47](04-build/runtime-migration-restoration-plan.md).
 Only the latest application runtime is supported. Previous admitted databases
 migrate forward without age-based expiry; old application runtimes do not remain

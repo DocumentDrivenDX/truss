@@ -1,0 +1,35 @@
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/managed-grants-20261022/supplemental/managed_grants_lifecycle_installed.py", line 444, in <module>
+    main()
+  File "/Users/erik/Projects/truss/docs/helix/04-build/evidence/design-audit/managed-grants-20261022/supplemental/managed_grants_lifecycle_installed.py", line 163, in main
+    with WorkerCluster() as worker:
+  File "/Users/erik/Projects/truss/scripts/native_fixture.py", line 60, in __enter__
+    self.server = pgserver.get_server(self.root / 'data', cleanup_mode='stop')
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-managed-grants-qualification/venv-final-2/lib/python3.11/site-packages/pgserver/postgres_server.py", line 292, in get_server
+    return PostgresServer(pgdata, cleanup_mode=cleanup_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-managed-grants-qualification/venv-final-2/lib/python3.11/site-packages/pgserver/postgres_server.py", line 62, in __init__
+    with self._lock:
+  File "/private/tmp/truss-managed-grants-qualification/venv-final-2/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-managed-grants-qualification/venv-final-2/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-managed-grants-qualification/venv-final-2/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'
+Exception ignored in atexit callback: <bound method PostgresServer._cleanup of <pgserver.postgres_server.PostgresServer object at 0x10836d6d0>>
+Traceback (most recent call last):
+  File "/private/tmp/truss-managed-grants-qualification/venv-final-2/lib/python3.11/site-packages/pgserver/postgres_server.py", line 205, in _cleanup
+    with self._lock:
+  File "/private/tmp/truss-managed-grants-qualification/venv-final-2/lib/python3.11/site-packages/fasteners/process_lock.py", line 166, in __enter__
+    gotten = self.acquire()
+             ^^^^^^^^^^^^^^
+  File "/private/tmp/truss-managed-grants-qualification/venv-final-2/lib/python3.11/site-packages/fasteners/process_lock.py", line 144, in acquire
+    self._do_open()
+  File "/private/tmp/truss-managed-grants-qualification/venv-final-2/lib/python3.11/site-packages/fasteners/process_lock.py", line 114, in _do_open
+    self.lockfile = open(self.path, 'a')
+                    ^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 1] Operation not permitted: b'/Users/erik/Library/Caches/TemporaryItems/python_PostgresServer/.lockfile'

@@ -1,0 +1,9 @@
+{
+  "oldWheelSha256": "9e6ad94f1f08d8c965b46e8b80d1bbbb96eefdf986fa60e7d3e3c6baeaf59b3d",
+  "newWheelSha256": "7a41a223033c1af0da4a2df2d377c672fcd3b3be1fcfc5b5bf8232d009725ed4",
+  "changedPackageFiles": [
+    "truss/cli.py"
+  ],
+  "unchangedPackageFiles": 458,
+  "nativeManifestUnchanged": true
+}

@@ -81,6 +81,8 @@ def bootstrap_preparation_catalog_cut_in_transaction(host,transaction,*,executor
     raw=files('truss').joinpath('_security_bootstrap','preparation-catalog-cut.sql').read_bytes()
     def install(cursor,observed):
         _pin_cursor(cursor)
+        from ._installation_privileges import require_empty_managed_grants_with_cursor
+        require_empty_managed_grants_with_cursor(cursor,'Preparation catalog cut')
         prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::text",limit=1)
         if len(prior)!=1:raise ValueError('Original preparation installer path required')
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)

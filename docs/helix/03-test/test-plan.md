@@ -27,6 +27,23 @@ ddx:
       kind: informed_by
 ---
 
+## Managed platform grant qualification — 2026-10-22
+
+CONTRACT-007/008 and STP-045 MG-T01–08 govern the explicit installation-scoped
+platform-grantee profile under FR-41/43/44/48. Qualification requires independent
+native ACL preservation and grant-option/delegation observations, strict-default
+negative controls, retained name/OID identity, post-DDL contained refusal and
+fresh-assembly lifecycle use. Protected activation either has exact combined
+qualification or refuses before effects without rewriting platform access.
+
+The installed-wheel gate exercises all published migration lineage sources to
+the latest combined target, preserving original recipes/receipts and populated
+source/data/history/feed state. Ordinary runtime and managed event-trigger
+stand-in receipts qualify only their exact local subset. Actual Lakebase support
+requires the original consumer workflow and deployment tuple; unavailable managed
+credentials do not block local implementation. The execution plan records the
+concrete inventory, commands, source freeze and remaining external evidence.
+
 ## HF-02 selected person admission and original-request recovery
 
 The post-0.0.47 selection uses CONTRACT-004/005/007/009 and ADR-005. Native

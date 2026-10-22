@@ -15,6 +15,33 @@ ddx:
       kind: informed_by
 ---
 
+## Managed platform grant assertions — MG-T01–08, 2026-10-22
+
+FR-41/43/44/48, CONTRACT-007/008 and ADR-008 govern these planned controls.
+They refine bootstrap and migration acceptance; a local stand-in is not managed
+service qualification. Preserve original native ACL observations independently
+from production policy classification and expected inventory generation.
+
+| Test | Required original assertion |
+| --- | --- |
+| MG-T01 | Empty policy refuses the exact unexpected grantee for schema/table/sequence/routine/type/column grants; a non-superuser installer cannot disable the fixture event trigger. Tolerated plus unlisted grantee names the unlisted role. |
+| MG-T02 | Exact-name policy accepts its finite bounds; reject 33 names, invalid/overlong UTF-8, NUL, duplicates, reserved/installation identities, missing roles, pattern-looking mistaken matches, overflow and SQL injection. Quoted/case-sensitive names retain literal meaning. |
+| MG-T03 | Independently compare native grants before/after ownership transfer and final installation, including grant options, grantor transformation and column ACLs. Inject an unlisted grantee on final GRANT/COMMENT statements and require contained refusal. No tolerance-issued grant/membership appears. Prove an otherwise exact declared ordinary EXECUTE granted by a validated selected role retains its native grantor and verifies; added ordinary grant option or an unlisted role still refuses. PUBLIC and ordinary-client/effective-delegation controls remain intact. |
+| MG-T04 | Commit, reconnect and construct a fresh assembly; status, catalog acceptance/registration, module access, audit/feed enrollment, writes/history/feed/ACK and supported catalog evolution continue under stored policy; unsupported retirement returns its existing contained refusal with unchanged source/head/history. Missing/renamed/recreated roles and spoofed fresh configuration cannot widen it. Database-role retirement has no fabricated public API. |
+| MG-T05 | Post-DDL private marker produces typed refusal only after confirmed operation rollback. Independently prove no schema/role/grant/marker survived, prior caller work/search path survive and another operation succeeds. Failed rollback, cancellation, permission/native retry and unknown outcome retain outer failure/custody. |
+| MG-T06 | Every affected protected bootstrap/activation route, including directly callable lower-level helpers, refuses a nonempty policy before its effects unless its exact combination is independently qualified. Native ACLs remain unchanged; ordinary module authority never inherits platform raw access. |
+| MG-T07 | All admitted published lineage sources migrate to the combined latest target with empty strict policy, preserved populated state and immutable original receipts. Compare every original source-era field, including installation metadata; verify the new strict carrier separately rather than skipping its table. Qualify a fresh managed-policy target, later-object grants, drift, rollback, logical restore/remapping refusal and lost-COMMIT reconciliation. No unpublished target silently becomes a historical source. |
+| MG-T08 | Clean installed wheel contains the selected policy/native/migration tuple; Python/CLI configuration and named refusal forwarding agree. The actual Arras managed workflow separately pins server, driver, wheel, TLS/token behavior and full registration/mutation/feed/ACK evidence. |
+
+Extend `test_installation_privileges_native`, `test_managed_installation_native`,
+`test_install_preflight_native`, `test_lifecycle_native`,
+`test_module_access_batch_native`, `test_runtime_migrations_native` and
+`test_runtime_migrations_subsequent_native`. New names/citations and actual results
+belong in the execution plan. Reuse owned PostgreSQL 18.6 Unix-socket workers,
+fresh databases/roles and inventory-checked cleanup; isolate lifecycle and
+cluster-wide event-trigger tests. Hosted CI is Linux only; local native
+qualification uses the development machine's platform.
+
 ## Latest-only migration assertions — RM-T01–08, 2026-10-21
 
 | Story criterion | Primary planned proof | Required test citation |

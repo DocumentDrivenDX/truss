@@ -35,12 +35,24 @@ class CatalogCodeTests(catalog_tests.PublicCatalogRuntimeTests):
         self.assertIsInstance(unchanged,Ok);self.assertIsInstance(unchanged.value,CatalogUnchanged)
         source=relational_document();source['id']='adoc'
         changed=assembly.prepare_catalog((CatalogDocument('adoc','r2',json.dumps(source).encode()),),bun_executable='/opt/homebrew/bin/bun')
-        self.code(assembly.accept_in_transaction(tx,changed,request_key='changed'),'unauthorized','42501')
+        self.code(assembly.accept_in_transaction(tx,changed,request_key='changed'),'unauthorized','P1403')
         self.assertIsInstance(assembly.report_in_transaction(tx),Ok)
         self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(self.installation.registrar_role)))
-        for result in (assembly.accept_in_transaction(tx,prepared,request_key='denied'),assembly.report_in_transaction(tx),
-                       assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request()),assembly.status_in_transaction(tx)):
-            self.code(result,'unauthorized','42501')
+        for result in (assembly.accept_in_transaction(tx,prepared,request_key='denied'),
+                       assembly.report_in_transaction(tx),
+                       assembly.catalog_view_in_transaction(tx,assembly.catalog_view_request())):
+            self.code(result,'unauthorized','P1403')
+        status=assembly.status_in_transaction(tx)
+        self.assertIsInstance(status,Error)
+        self.assertEqual(status.error.code,'execution_obligation')
+        self.assertIsNone(status.error.catalog_code)
+        self.assertEqual(status.error.sql_state,'42501')
+        connection.execute('SAVEPOINT raw_status_denied')
+        with self.assertRaises(psycopg.errors.InsufficientPrivilege) as denied_status:
+            connection.execute('SELECT * FROM truss.catalog_status()',prepare=False)
+        self.assertEqual(denied_status.exception.sqlstate,'42501')
+        connection.execute('ROLLBACK TO raw_status_denied')
+        connection.execute('RELEASE raw_status_denied')
         self.assertEqual(connection.execute('TABLE catalog_prior').fetchall(),[('kept',)])
         host.detach();connection.rollback()
         self.assertEqual(self.admin.execute('SELECT rev FROM truss.schema_head').fetchone(),(0,))

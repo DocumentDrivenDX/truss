@@ -581,6 +581,55 @@ names. Ordinary-person registration and module access still require the role
 configuration described below. Without `--install`, the launcher only starts
 PostgreSQL. Confirmed candidate status does not establish full security readiness.
 
+### Managed platform grants — locally qualified candidate
+
+Managed-grantee support is available in the current source candidate; the
+published `0.0.47` command above does not include it. From a checkout containing
+the managed-grants change, an explicit fresh local install can pass one or more
+exact PostgreSQL role names:
+
+```sh
+./scripts/truss-local \
+  --data-dir "$HOME/.local/share/truss/beads-managed" \
+  --install \
+  --tolerated-grantee databricks_service \
+  --tolerated-grantee operator_reader
+```
+
+The option records selected native role identities and existing ACL observations;
+it does not issue grants. Named roles must already exist; a missing role returns
+`invalid_roles`. Names are exact and patterns are unsupported. The flag
+is valid only for fresh installation. Later status and migration checks use the
+stored policy. The embedding API uses
+`install_in_transaction(tx, tolerated_grantees=("databricks_service", ...))`.
+An `InstallRefused` with `code="third_party_grant"` carries bounded
+`role_name`, `object_class` and `phase` fields only after the host confirms
+operation rollback; map those fields directly in an Arras adapter and preserve
+outer transaction/transport failures. The local CLI writes a safe refusal JSON
+object and exits with status 1; other transaction/transport failures retain their
+original failure path.
+
+The final local candidate wheel SHA-256 is
+`7a41a223033c1af0da4a2df2d377c672fcd3b3be1fcfc5b5bf8232d009725ed4`,
+with native manifest
+`35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f`.
+[Selected installed regression](../../docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-4/selected-components/qualification.json)
+passes 19 modules/116 tests with zero skips.
+[Other final local gates](../../docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-5/qualification.json)
+pass the 61-case HF corpus, 9 strict protected regressions, all 80 supported
+migration controls and the original 1,000-object/1,000-edge public workload.
+[Managed lifecycle evidence](../../docs/helix/04-build/evidence/design-audit/managed-grants-20261022/supplemental/final-3/receipt.json)
+qualifies supported evolution, contained unsupported-retirement refusal and later
+selected ACL changes without rewriting initial evidence.
+
+This candidate is not published and does not claim Lakebase support. The legacy
+complete-suite diagnostic remains unresolved; historical proof/opt-in campaigns,
+hosted Linux and published-artifact acceptance remain separate gates.
+Arras adoption must bind the exact qualified Truss wheel and native target
+manifest together with its UMF/Weft dependency pins, use the qualified
+PostgreSQL 18.6 / psycopg 3.3.6 local profile for local evidence, and separately
+retain the actual Lakebase TLS, transaction and consumer-workflow receipt.
+
 ## Embed in your host
 
 Use an ordinary authenticated person's connection for business operations.

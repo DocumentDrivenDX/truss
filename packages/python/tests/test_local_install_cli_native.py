@@ -12,6 +12,20 @@ import unittest
 
 
 class LocalInstallCliTests(unittest.TestCase):
+    def test_fresh_invalid_tolerated_role_returns_structured_refusal(self):
+        parent = Path(tempfile.mkdtemp(prefix='truss-install-cli-refusal-', dir='/tmp'))
+        directory = parent / 'postgres'
+        command = [sys.executable, '-m', 'truss.cli', '--data-dir', str(directory),
+                   '--install', '--probe', '--tolerated-grantee', 'truss_cli_missing_role']
+        result = subprocess.run(command, check=False, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 1, result.stderr)
+        refusal = json.loads(result.stdout)
+        self.assertEqual(refusal, {'outcome': 'refused', 'code': 'invalid_roles'})
+        self.assertNotIn('AttributeError', result.stderr)
+        self.assertTrue((directory / 'PG_VERSION').is_file())
+        self.assertFalse((directory / 'postmaster.pid').exists())
+        shutil.rmtree(parent)
+
     def test_install_commit_and_restart_status(self):
         parent = Path(tempfile.mkdtemp(prefix='truss-install-cli-', dir='/tmp'))
         directory = parent / 'postgres'

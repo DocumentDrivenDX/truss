@@ -1,0 +1,18 @@
+{
+  "repository": "/Users/erik/Projects/truss",
+  "baseline": "/private/tmp/truss-managed-grants-baseline-20261022/baseline.json",
+  "qualificationKind": "local-only",
+  "lakebaseAcceptance": "not_run",
+  "nativeWorkers": "owned Unix-socket PostgreSQL18.6; no shared TCP listener",
+  "environment": "/private/tmp/truss-managed-grants-qualification/venv",
+  "localWheelInputs": [
+    {
+      "path": "/private/tmp/truss-public-047-clean-runtime-wheels/pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+      "sha256": "fd42f07982693e16478ed42a297890d142d22250116e08887146e690f0dd2649"
+    },
+    {
+      "path": "/private/tmp/weft-051-release-wheels/weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+      "sha256": "fc23ae27b687d49d3f2d495478ce9c55c43f7b9b20765f2967197c2e3afd6390"
+    }
+  ]
+}

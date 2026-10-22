@@ -34,7 +34,10 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
         cls.addClassCleanup(shutil.rmtree,cls.root)
         cls.addClassCleanup(cls.runtime.close)
         cls.uri=cls.runtime.info.connection_uri
-        manifest,_,_=load_recipe();wheel=Path(os.environ.get(cls.wheel_environment,cls.wheel_default))
+        manifest,artifacts,_=load_recipe()
+        cls.source_profile=json.loads(
+            artifacts[manifest['sourceWheels'][cls.source_label]['runtimeManifestSha256']+'.json'])
+        wheel=Path(os.environ.get(cls.wheel_environment,cls.wheel_default))
         if not wheel.is_file():raise AssertionError('Real predecessor wheel required: '+str(wheel))
         if sha256(wheel.read_bytes()).hexdigest()!=manifest['sourceWheels'][cls.source_label]['sha256']:
             raise AssertionError('Exact published predecessor wheel required')
@@ -102,7 +105,12 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
         with self.admin.transaction(), self.admin.cursor() as cursor:
             cursor.execute('SET search_path=pg_catalog,pg_temp')
             observed=structure(cursor)
-            return observed,preservation(cursor,observed)
+            # Compare every source-era table field. The target adds a managed
+            # carrier column to catalog_runtime_installation, whose own strict
+            # default/shape is asserted separately after migration.
+            census=dict(observed)
+            census['columns']=self.source_profile['inventory']['columns']
+            return observed,preservation(cursor,census)
 
     def test_clean_installed_cli_prepare_apply_verify_and_receipt(self):
         """@covers US-045-AC8: separate CLI processes retain one original attempt."""
@@ -187,6 +195,11 @@ class RuntimeMigrationNativeTests(unittest.TestCase):
         after=self.state()
         for name,value in before[1].items():
             if name!='runtime_migration_receipt':self.assertEqual(after[1][name],value,name)
+        managed=self.admin.execute('''
+            SELECT managed_grants FROM truss.catalog_runtime_installation WHERE singleton
+        ''').fetchone()[0]
+        self.assertEqual(managed,{'interfaceVersion':'truss-managed-grants/0.1',
+            'roles':[],'observations':[]})
         # The tool verifies all prior ledger rows before its one final append.
         # A fresh47 source already owns the empty ledger table.
         self.assertEqual(after[1]['runtime_migration_receipt']['rows'],before[1].get('runtime_migration_receipt',{'rows':0})['rows']+1)

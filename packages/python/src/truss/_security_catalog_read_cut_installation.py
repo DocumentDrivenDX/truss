@@ -7,7 +7,7 @@ from psycopg import sql
 from .execution import Error,ExecutionFailure
 from .psycopg_host import PsycopgHost
 from .catalog_runtime import _pin_cursor
-from ._installation_privileges import installation_administrator_with_cursor
+from ._installation_privileges import installation_administrator_with_cursor, require_empty_managed_grants_with_cursor
 from ._security_catalog_subject_installation import _text_rows
 
 
@@ -61,6 +61,7 @@ def bootstrap_catalog_read_table_cut_issuer_in_transaction(host,transaction,*,ex
  source_sha=sha256(source).hexdigest()
  def install(cursor,observed):
   _pin_cursor(cursor)
+  require_empty_managed_grants_with_cursor(cursor,'Catalog read cut')
   prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",limit=1)
   if len(prior)!=1:raise ValueError('Original catalog read table cut installer path required')
   cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)

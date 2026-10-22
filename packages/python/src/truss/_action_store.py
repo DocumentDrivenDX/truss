@@ -165,6 +165,8 @@ def register_action_store_in_transaction(host,transaction,*,tenant,registration_
         tenant_bytes=encode_action_tenant_identity(tenant);storage,issuer=_sources();manifest,digest,sources=_release()
     except (ValueError,TypeError,UnicodeError):return Error(ExecutionFailure('execution_obligation','Original bounded shared store registration required'))
     def register(cursor,observed):
+        from ._installation_privileges import require_empty_managed_grants_with_cursor
+        require_empty_managed_grants_with_cursor(cursor,'Action store registry')
         path,identity,owner,actor=_context(cursor);_runtime_inventory(cursor,sources,owner)
         from ._current_query_protection import require_unprotected_configuration
         require_unprotected_configuration(cursor,allow_uninstalled=True)

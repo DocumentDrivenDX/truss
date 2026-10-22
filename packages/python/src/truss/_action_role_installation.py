@@ -15,7 +15,7 @@ from ._action_store import ActionStoreObservation, _capture_action_store_context
 from .psycopg_host import PsycopgHost
 from .execution import Error, ExecutionFailure
 from .catalog_runtime import _pin_cursor
-from ._installation_privileges import installation_administrator_with_cursor
+from ._installation_privileges import installation_administrator_with_cursor, require_empty_managed_grants_with_cursor
 from ._security_catalog_subject_installation import _text_rows
 
 
@@ -62,6 +62,7 @@ def bootstrap_action_roles_in_transaction(host, transaction, *, registration, en
 
     def install(cursor, observed):
         _pin_cursor(cursor)
+        require_empty_managed_grants_with_cursor(cursor, 'Action role')
         prior = _text_rows(cursor, "SELECT pg_catalog.current_setting('search_path')::pg_catalog.text", limit=1)
         cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog,pg_temp',true)", prepare=False)
         cursor.fetchone()

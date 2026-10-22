@@ -28,12 +28,12 @@ class LifecycleRefused(_Carrier):
 
 @dataclass(frozen=True, slots=True, kw_only=True)
 class InstallRefused(_Carrier):
-    """A known fresh-install preflight result, before installation DDL begins."""
+    """A known fresh-install refusal, including confirmed contained grant refusal."""
     code: Literal['busy', 'invalid_roles', 'unsupported_postgres', 'already_installed',
                   'incompatible', 'unauthorized', 'role_exists', 'read_only',
                   'third_party_grant']
     role_name: str | None = None
-    object_class: Literal['schema', 'relation', 'routine', 'type', 'column'] | None = None
+    object_class: Literal['schema', 'relation', 'sequence', 'routine', 'type', 'column'] | None = None
     phase: Literal['pre_ownership', 'post_installation'] | None = None
     outcome: Literal['refused'] = field(default='refused', init=False)
 

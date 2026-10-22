@@ -74,6 +74,6 @@ class CatalogEvolutionTests(group_tests.PublicCreateGroupTests):
         connection,host,assembly,tx=self.consumer()
         result=assembly.accept_in_transaction(tx,self.prepare_changed(assembly),request_key='hidden-count')
         self.assertIsInstance(result,Error);self.assertEqual(result.error.catalog_code,'unauthorized')
-        self.assertEqual(result.error.sql_state,'42501')
+        self.assertEqual(result.error.sql_state,'P1403')
         self.assertEqual(connection.execute('SELECT 42').fetchone(),(42,))
         host.detach();connection.rollback()

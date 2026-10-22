@@ -10,7 +10,7 @@ from importlib.resources import files
 import json
 import struct
 from ._current_query_pipe import _envelope
-from ._installation_privileges import installation_administrator_with_cursor
+from ._installation_privileges import installation_administrator_with_cursor, require_empty_managed_grants_with_cursor
 from ._security_catalog_assessment import capture_accepted_catalog
 from ._security_graph_source import acquire_graph_source_catalog_cut
 from ._security_catalog_subject_installation import _text_rows
@@ -184,6 +184,7 @@ def _register_sources(host, transaction, *, initialize_bytes, accepted_request_b
     except (ValueError, TypeError, KeyError, UnicodeError):
         return Error(ExecutionFailure('execution_obligation', 'Original bounded current-query source inputs required'))
     def install(cursor, observed):
+        require_empty_managed_grants_with_cursor(cursor,'Current query source archive')
         if observed[0][2:] != ('read_committed', 'read_write'):
             raise ValueError('Current-query registration requires a read-write READ COMMITTED transaction')
         _pin_cursor(cursor)

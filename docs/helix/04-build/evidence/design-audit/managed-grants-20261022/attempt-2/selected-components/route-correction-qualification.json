@@ -1,0 +1,98 @@
+{
+  "purpose": "Candidate2 installed-wheel qualification of the three HF61 producer modules after route-specific authorization expectation correction.",
+  "passed": true,
+  "wheel": {
+    "path": "/private/tmp/truss-managed-grants-qualification/dist-final-2/truss_toolkit-0.0.48-py3-none-any.whl",
+    "sha256": "9e6ad94f1f08d8c965b46e8b80d1bbbb96eefdf986fa60e7d3e3c6baeaf59b3d",
+    "packageVersion": "0.0.48",
+    "loadedPackage": "/private/tmp/truss-managed-grants-qualification/venv-final-2/lib/python3.11/site-packages/truss/__init__.py",
+    "interpreter": "/private/tmp/truss-managed-grants-qualification/venv-final-2/bin/python",
+    "python": "3.11.17",
+    "weft": "0.4.51",
+    "nativeManifestSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f"
+  },
+  "commands": {
+    "test_catalog_codes_native": "TRUSS_BUN_EXECUTABLE=/opt/homebrew/bin/bun PYTHONPATH=/Users/erik/Projects/truss/scripts:/Users/erik/Projects/truss/packages/python/tests /private/tmp/truss-managed-grants-qualification/venv-final-2/bin/python scripts/run-python-test-module.py test_catalog_codes_native",
+    "test_catalog_runtime_native": "TRUSS_BUN_EXECUTABLE=/opt/homebrew/bin/bun PYTHONPATH=/Users/erik/Projects/truss/scripts:/Users/erik/Projects/truss/packages/python/tests /private/tmp/truss-managed-grants-qualification/venv-final-2/bin/python scripts/run-python-test-module.py test_catalog_runtime_native",
+    "test_catalog_evolution_native": "TRUSS_BUN_EXECUTABLE=/opt/homebrew/bin/bun PYTHONPATH=/Users/erik/Projects/truss/scripts:/Users/erik/Projects/truss/packages/python/tests /private/tmp/truss-managed-grants-qualification/venv-final-2/bin/python scripts/run-python-test-module.py test_catalog_evolution_native"
+  },
+  "tests": {
+    "test_catalog_codes_native": {
+      "count": 2,
+      "passed": true,
+      "output": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_catalog_codes_native-rerun.log",
+      "outputSha256": "83d43f21bcc19240e901fe346ba8585fc886ef923e0dd51552191e98858a8a81"
+    },
+    "test_catalog_runtime_native": {
+      "count": 34,
+      "passed": true,
+      "output": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_catalog_runtime_native-rerun.log",
+      "outputSha256": "5f8447baa121041ca6cc02ba5e881f981645fc70edeff818cb220d8fdb0751a0"
+    },
+    "test_catalog_evolution_native": {
+      "count": 3,
+      "passed": true,
+      "output": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_catalog_evolution_native-rerun.log",
+      "outputSha256": "edd0744bac53a542445bec8831f77cd8c56bcef1067a68168c4c86b35a783824"
+    }
+  },
+  "totalTests": 39,
+  "testSourceSha256BeforeAfter": {
+    "packages/python/tests/test_catalog_codes_native.py": {
+      "before": "9495a653e08d76b1c555e5552472cb7fb50f35d888d0d8ea9cec64949e9f360c",
+      "after": "6fa2b13ee942fc138d1fc6e94cdd277aab8c44c201ceeb2840ae0d64654479ae"
+    },
+    "packages/python/tests/test_catalog_evolution_native.py": {
+      "before": "7592a51efc0a13beae8ef0063baba1a827a31c0b57a0cb066f464888a5796873",
+      "after": "7592a51efc0a13beae8ef0063baba1a827a31c0b57a0cb066f464888a5796873"
+    },
+    "packages/python/tests/test_catalog_runtime_native.py": {
+      "before": "b349bc0549dd78eaf646cf0173f09bf2c81ab620873562567a534ae01b82936d",
+      "after": "b349bc0549dd78eaf646cf0173f09bf2c81ab620873562567a534ae01b82936d"
+    }
+  },
+  "routeDiagnosis": {
+    "publicAcceptReportView": {
+      "catalogCode": "unauthorized",
+      "sqlState": "P1403",
+      "nativePath": "finite truss.person_catalog_* wrapper calls truss.require_person_invocation"
+    },
+    "publicStatusMethod": {
+      "errorCode": "execution_obligation",
+      "catalogCode": null,
+      "sqlState": "42501",
+      "nativePath": "status_in_transaction calls truss.catalog_status directly; missing EXECUTE is native"
+    },
+    "rawStatusQuery": {
+      "exception": "psycopg.errors.InsufficientPrivilege",
+      "sqlState": "42501"
+    },
+    "diagnosticOutput": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_catalog_codes_diagnostic.json",
+    "diagnosticOutputSha256": "6f5d5dc2f97acaf9b7b6e215286cbcadfae435bca6455692c10170a8fe854821"
+  },
+  "cleanup": {
+    "runner": "scripts/run-python-test-module.py",
+    "classCleanupExceptions": 0,
+    "LocalPostgresStopConfirmed": true,
+    "evidence": "each runner exited 0; LocalPostgres.close runs in registered class cleanup and raises unless postmaster.pid is absent after pg_ctl stop"
+  },
+  "profile": {
+    "preCorrection": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/hf61/hohfeld-followup-0.1.pre-final-gate-correction.json",
+    "preCorrectionSha256": "cc67adb510305a225be8daef47946fe839fa6cad736aad345208e58f134278d5",
+    "current": "/Users/erik/Projects/truss/docs/helix/03-test/fixtures/hohfeld-followup-0.1.json",
+    "currentSha256": "497b2181f8f6ef90eef741343abac8e782b9a5366217fba43c934525a13e529c",
+    "caseCount": 61,
+    "caseDefinitionsAndLimitsUnchanged": true,
+    "changedProducerBindings": [
+      "packages/python/tests/test_catalog_codes_native.py"
+    ]
+  },
+  "archive": {
+    "path": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/hf61/hohfeld-followup-managed-grants-hf61-final-35fd-route-corrected.zip",
+    "sha256": "b8737709efaf6f3cc86da19df2ebe9c61441e535c393d5d07dbf8def5fcdff44",
+    "priorArchivePreserved": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/hf61/hohfeld-followup-managed-grants-hf61-final-35fd.zip",
+    "priorArchiveSha256": "b2840368e8ae9f58dd9c582381d8518ac863a4166b046a5eab2d427116859a6b"
+  },
+  "originalAttempt2CodesLog": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/attempt-2/selected-components/test_catalog_codes_native.log.gz",
+  "originalAttempt2CodesLogSha256": "43e084ab86b1e7d65a8fa378523114590d59a2a93b150dced122b20a704dd8b6"
+}

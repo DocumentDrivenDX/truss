@@ -13,7 +13,7 @@ from psycopg import sql
 from .execution import Error,ExecutionFailure
 from .psycopg_host import PsycopgHost
 from .catalog_runtime import _release,_pin_cursor
-from ._installation_privileges import installation_administrator_with_cursor
+from ._installation_privileges import installation_administrator_with_cursor, require_empty_managed_grants_with_cursor
 from ._security_catalog_source_installation import _catalog_mapping_snapshot
 from ._security_catalog_assessment import capture_accepted_catalog
 from ._security_catalog_subject_helpers import verify_catalog_subject_helpers_with_cursor
@@ -64,6 +64,7 @@ def bootstrap_catalog_subjects_in_transaction(host,transaction,*,mapping,binding
  except (ValueError,TypeError,KeyError,UnicodeError):return Error(ExecutionFailure('execution_obligation','Original bounded named Subject installation required'))
  def install(cursor,observed):
   _pin_cursor(cursor);manifest,digest,_=_release()
+  require_empty_managed_grants_with_cursor(cursor,'Catalog Subject')
   prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",limit=1)
   if len(prior)!=1:raise ValueError('Original Subject installation path required')
   cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
@@ -193,6 +194,7 @@ def bootstrap_role_catalog_cut_issuer_in_transaction(host,transaction,*,executor
  source_sha=sha256(source).hexdigest()
  def install(cursor,observed):
   _pin_cursor(cursor)
+  require_empty_managed_grants_with_cursor(cursor,'Role catalog cut')
   prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')::pg_catalog.text",limit=1)
   if len(prior)!=1:raise ValueError('Original role cut installer path required')
   cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog, pg_temp',true)",prepare=False)
@@ -259,6 +261,7 @@ def bootstrap_owned_action_role_cut_in_transaction(host,transaction):
  source_sha=sha256(source).hexdigest()
  def install(cursor,observed):
   _pin_cursor(cursor)
+  require_empty_managed_grants_with_cursor(cursor,'Owned action role cut')
   prior=_text_rows(cursor,"SELECT pg_catalog.current_setting('search_path')",limit=1)
   cursor.execute("SELECT pg_catalog.set_config('search_path','pg_catalog,pg_temp',true)",prepare=False);cursor.fetchone()
   from ._current_query_protection import require_unprotected_configuration

@@ -12,6 +12,7 @@ from psycopg import sql
 from .execution import Error, ExecutionFailure
 from .psycopg_host import PsycopgHost
 from .catalog_runtime import _release, _pin_cursor
+from ._installation_privileges import require_empty_managed_grants_with_cursor
 from ._preparation_source_epoch import _context, _restore, _runtime_inventory
 
 _TABLE = 'runtime_preparation_seal'
@@ -110,6 +111,7 @@ def bootstrap_preparation_seal_storage_in_transaction(host, transaction):
     raw=files('truss').joinpath('_security_bootstrap','preparation-seal-storage.sql').read_bytes()
     _,_,sources=_release()
     def install(cursor,observed):
+        require_empty_managed_grants_with_cursor(cursor, 'Preparation seal')
         path,identity,owner,actor=_context(cursor)
         _runtime_inventory(cursor,sources,owner)
         cursor.execute("SELECT n.nspowner,r.rolname FROM pg_catalog.pg_namespace n JOIN pg_catalog.pg_roles r ON r.oid=n.nspowner WHERE n.nspname='truss'", prepare=False)

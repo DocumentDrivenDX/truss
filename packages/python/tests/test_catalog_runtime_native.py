@@ -156,7 +156,8 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.assertEqual(connection.execute(statement).fetchone()[0],self.installation.installation_id)
         self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(self.installation.registrar_role)))
         connection.execute('SAVEPOINT denied')
-        with self.assertRaises(psycopg.errors.InsufficientPrivilege):connection.execute(statement,prepare=False)
+        with self.assertRaises(psycopg.Error) as raised:connection.execute(statement,prepare=False)
+        self.assertEqual(raised.exception.sqlstate,'P1403')
         connection.execute('ROLLBACK TO denied');connection.execute('RELEASE denied')
         host.detach();connection.rollback()
     def test_catalog_refuses_stale_authorization_snapshot_isolation(self):
@@ -601,7 +602,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
             connection.execute('ROLLBACK TO denied');connection.execute('RELEASE denied')
         self.admin.execute(psycopg.sql.SQL('REVOKE {} FROM consumer').format(psycopg.sql.Identifier(self.installation.registrar_role)))
         result=assembly.accept_in_transaction(tx,self.prepared(assembly),request_key='outsider')
-        self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'42501')
+        self.assertIsInstance(result,Error);self.assertEqual(result.error.sql_state,'P1403')
         host.detach();connection.rollback()
 
     def test_explicit_role_setting_cannot_replace_authenticated_person(self):
@@ -609,8 +610,9 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
         self.admin.execute(psycopg.sql.SQL('GRANT {} TO consumer WITH SET TRUE').format(psycopg.sql.Identifier(self.installation.registrar_role)))
         connection.execute(psycopg.sql.SQL('SET LOCAL ROLE {}').format(psycopg.sql.Identifier(self.installation.registrar_role)))
         connection.execute('SAVEPOINT denied')
-        with self.assertRaises(psycopg.errors.InsufficientPrivilege):
+        with self.assertRaises(psycopg.Error) as raised:
             connection.execute('SELECT * FROM truss.catalog_status()')
+        self.assertEqual(raised.exception.sqlstate,'P1403')
         connection.execute('ROLLBACK TO denied');connection.execute('RELEASE denied')
         connection.execute('RESET ROLE')
         self.assertIsInstance(assembly.status_in_transaction(tx),Ok)
@@ -749,7 +751,7 @@ class PublicCatalogRuntimeTests(unittest.TestCase):
                     if privilege=='SELECT':
                         self.assertEqual(len(connection.execute('SELECT installation_id FROM truss.catalog_runtime_installation').fetchall()),1)
                     refused=assembly.status_in_transaction(tx)
-                    self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'42501')
+                    self.assertIsInstance(refused,Error);self.assertEqual(refused.error.sql_state,'P1403')
                 finally:
                     self.admin.execute(psycopg.sql.SQL('REVOKE {}(installation_id) ON truss.catalog_runtime_installation FROM PUBLIC').format(psycopg.sql.SQL(privilege)))
                 self.assertIsInstance(assembly.status_in_transaction(tx),Ok)

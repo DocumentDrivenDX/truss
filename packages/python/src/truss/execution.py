@@ -68,6 +68,10 @@ class Error:
 
 Outcome = Ok[T] | Error
 
+
+class _UnsupportedProfileIncompatibility(ValueError):
+    """Private marker for a contained policy-profile refusal."""
+
 @dataclass(frozen=True)
 class TransactionObservation:
     """Original native identity supplied by a registered trusted driver port."""

@@ -175,7 +175,7 @@ def _verified_release():
     original=root.joinpath('manifest.json').read_bytes()
     manifest=json.loads(original)
     sources=[]
-    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','query-selective.sql','person-entrypoints.sql'):
+    for name in ('layout.sql','lineage.sql','plan.sql','runtime.sql','source-references.sql','migrations.sql','barrier.sql','view.sql','scalars.sql','containers.sql','read.sql','key-derivation.sql','keys.sql','definition-source.sql','groups.sql','reader.sql','key-read.sql','pages.sql','evolution.sql','operations.sql','ownership.sql','owned.sql','catalog-rebind-storage.sql','catalog-rebind.sql','catalog-key-backfill-storage.sql','catalog-key-backfill.sql','preconditions.sql','imports.sql','feed.sql','history.sql','query.sql','query-export.sql','entity-query.sql','entity-times.sql','entity-load.sql','feed-receipts.sql','traversal.sql','schema-cache.sql','preview.sql','load-audit-storage.sql','lifecycle.sql','load-audit-writer.sql','load-audit-reader.sql','import-batches.sql','group-audit-reader.sql','group-recovery.sql','query-selective.sql','person-entrypoints.sql','managed-grants.sql'):
         raw=root.joinpath(name).read_bytes()
         if sha256(raw).hexdigest()!=manifest['files'][name]:raise ValueError('Catalog release source changed')
         source=raw.decode('utf-8')
@@ -491,13 +491,18 @@ class CatalogReferenceAssembly:
     def install_in_transaction(self,transaction: TransactionHandle,*,owner_role: str | None=None,registrar_role: str | None=None,tolerated_grantees: tuple[str,...]=()) -> Outcome[PendingCatalogInstallation | InstallRefused]:
         self._available()
         from psycopg import sql
-        from ._installation_privileges import (InstallationRoles, _name, protect_installation_with_cursor,
+        from ._installation_privileges import (InstallationRoles, _name, _policy_names,
+                                                _resolved_tolerated_roles,
+                                                protect_installation_with_cursor,
+                                                finalize_installation_grants,
+                                                installation_grant_policy_with_cursor,
                                                 installation_administrator_with_cursor)
         manifest,digest,sources=_release()
         suffix=uuid4().hex[:16]
         roles=InstallationRoles(owner_role or 'truss_owner_'+suffix,registrar_role or 'truss_registrar_'+suffix,tolerated_grantees)
         try:
             valid_roles=_name(roles.owner) and _name(roles.client) and roles.owner!=roles.client
+            selected_grantees=_policy_names(tolerated_grantees,reserved=(roles.owner,roles.client))
         except (UnicodeError, ValueError, TypeError):
             valid_roles=False
         if not valid_roles:
@@ -521,6 +526,11 @@ class CatalogReferenceAssembly:
                 actor = installation_administrator_with_cursor(cursor)
             except ValueError:
                 return refuse('unauthorized')
+            try:
+                resolved_tolerated=_resolved_tolerated_roles(cursor,selected_grantees,
+                    owner=roles.owner,client=roles.client,installer=actor[1])
+            except ValueError:
+                return refuse('invalid_roles')
             cursor.execute("SELECT pg_catalog.current_setting('transaction_read_only')='off'",prepare=False)
             if cursor.fetchone()!=(True,):
                 return refuse('read_only')
@@ -561,6 +571,10 @@ class CatalogReferenceAssembly:
                         or columns['release_sha256'][0]!=text_oid
                         or columns['layout_profile'][0]!=jsonb_oid):
                     return refuse('incompatible')
+                try:
+                    installation_grant_policy_with_cursor(cursor)
+                except (ValueError, TypeError, UnicodeError):
+                    return refuse('incompatible')
                 cursor.execute("SELECT release_id,release_sha256,layout_profile FROM ONLY truss.catalog_runtime_installation WHERE singleton",prepare=False)
                 installed=cursor.fetchmany(2)
                 if (len(installed)==1 and installed[0][0]==manifest['releaseId']
@@ -572,12 +586,7 @@ class CatalogReferenceAssembly:
             if cursor.fetchone()[0]:
                 return refuse('role_exists')
             for source in sources:cursor.execute(source,prepare=False)
-            privileges=protect_installation_with_cursor(cursor,roles)
-            cursor.execute('''INSERT INTO truss.catalog_runtime_installation(singleton,installation_id,release_id,release_sha256,layout_profile,preparation_configuration,managed_grants,owner_oid,registrar_oid,genesis_at)
-                SELECT true,pg_catalog.gen_random_uuid(),%s,%s,%s::pg_catalog.jsonb,%s::pg_catalog.jsonb,%s::pg_catalog.jsonb,%s,%s,accepted_at
-                FROM truss.schema_rev WHERE rev=0 RETURNING installation_id::pg_catalog.text''',
-                (manifest['releaseId'],digest,json.dumps(manifest['layoutProfile']),json.dumps(_configuration()),json.dumps(privileges.managed_grants),privileges.owner_oid,privileges.client_oid),prepare=False)
-            identity=cursor.fetchone()[0]
+            privileges=protect_installation_with_cursor(cursor,roles,resolved_tolerated=resolved_tolerated)
             from ._runtime_admission import person_entrypoints
             cursor.execute('GRANT USAGE ON SCHEMA truss TO PUBLIC',prepare=False)
             for entry in person_entrypoints():
@@ -587,13 +596,20 @@ class CatalogReferenceAssembly:
                 cursor.execute(sql.SQL('GRANT EXECUTE ON FUNCTION truss.{} TO {}').format(sql.SQL(signature),sql.Identifier(roles.client)),prepare=False)
             cursor.execute('GRANT EXECUTE ON FUNCTION truss.admin_install_recovery(),truss.grant_import_audit_access(text,text,text) TO CURRENT_USER',prepare=False)
             cursor.execute("COMMENT ON SCHEMA truss IS 'Truss installed runtime: exact active release and layout from truss.runtime_current_installation()'",prepare=False)
+            managed_grants=finalize_installation_grants(cursor,privileges,roles,
+                resolved_tolerated,actor[0])
+            cursor.execute('''INSERT INTO truss.catalog_runtime_installation(singleton,installation_id,release_id,release_sha256,layout_profile,preparation_configuration,managed_grants,owner_oid,registrar_oid,genesis_at)
+                SELECT true,pg_catalog.gen_random_uuid(),%s,%s,%s::pg_catalog.jsonb,%s::pg_catalog.jsonb,%s::pg_catalog.jsonb,%s,%s,accepted_at
+                FROM truss.schema_rev WHERE rev=0 RETURNING installation_id::pg_catalog.text''',
+                (manifest['releaseId'],digest,json.dumps(manifest['layoutProfile']),json.dumps(_configuration()),
+                 json.dumps(managed_grants,ensure_ascii=False,separators=(',',':')),privileges.owner_oid,privileges.client_oid),prepare=False)
+            identity=cursor.fetchone()[0]
             cursor.execute("SELECT pg_catalog.set_config('search_path',%s,true)",(original_path,),prepare=False)
             if cursor.fetchone()[0]!=original_path:raise ValueError('Caller search path restoration failed')
             return PendingCatalogInstallation(identity,roles.owner,roles.client,manifest['releaseId'])
-        result=self._host._run_operation(transaction,install)
+        result,attempt=self._host._run_operation_with_attempt(transaction,install)
         from ._installation_privileges import _ThirdPartyGrantRefusal
         if isinstance(result,Error):
-            attempt=getattr(getattr(self._host,'_custody',None),'last_attempt',None)
             error=getattr(attempt,'error',None)
             if (isinstance(error,_ThirdPartyGrantRefusal)
                     and getattr(attempt,'phase',None)=='contained'

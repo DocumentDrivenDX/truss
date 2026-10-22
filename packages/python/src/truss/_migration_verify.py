@@ -88,6 +88,8 @@ def structure(cursor):
 
 
 def context(cursor):
+    from ._installation_privileges import installation_grant_policy_with_cursor
+    managed=installation_grant_policy_with_cursor(cursor)
     cursor.execute('SELECT installation_id::text,owner_oid,registrar_oid,source_epoch::text FROM truss.catalog_runtime_installation',prepare=False)
     rows=cursor.fetchmany(2)
     if len(rows)!=1:raise ValueError('One original installation required')
@@ -98,7 +100,7 @@ def context(cursor):
     cursor.execute("SELECT oid::text,current_database() FROM pg_database WHERE datname=current_database()",prepare=False)
     oid,name=cursor.fetchone()
     return {'kind':'installed','installationId':identity,'sourceEpoch':epoch,
-            'databaseIdentity':system+':'+oid+':'+name,'schemaName':'truss'},owner,registrar
+            'databaseIdentity':system+':'+oid+':'+name,'schemaName':'truss'},owner,registrar,managed
 
 
 def verify_profile(cursor,expected):
@@ -116,7 +118,10 @@ _ACL = """WITH objects AS (
  UNION ALL SELECT 'routine',p.proname||'('||oidvectortypes(p.proargtypes)||')',p.proowner,p.proacl,'f'::\"char\"
  FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='truss'
  UNION ALL SELECT 'type',t.typname::text,t.typowner,t.typacl,'T'::\"char\" FROM pg_type t JOIN pg_namespace n ON n.oid=t.typnamespace
- WHERE n.nspname='truss')
+ WHERE n.nspname='truss'
+ UNION ALL SELECT 'column',c.relname::text||'.'||a.attname::text,c.relowner,a.attacl,'r'::\"char\"
+ FROM pg_attribute a JOIN pg_class c ON c.oid=a.attrelid JOIN pg_namespace n ON n.oid=c.relnamespace
+ WHERE n.nspname='truss' AND a.attnum>0 AND NOT a.attisdropped AND a.attacl IS NOT NULL)
  SELECT o.kind,o.name,o.owner,a.grantee,a.privilege_type,a.is_grantable,a.grantor FROM objects o
  CROSS JOIN LATERAL aclexplode(coalesce(o.acl,acldefault(o.code,o.owner))) a
  ORDER BY o.kind,o.name,a.grantee,a.privilege_type"""
@@ -128,12 +133,12 @@ def acl(cursor,*,full_names=False):
     return [list(row) for row in cursor.fetchall()]
 
 
-def roles(cursor,owner,registrar):
+def roles(cursor,owner,registrar,managed_oids=()):
     result={owner:{'owner'},registrar:{'registrar'},0:{'public'}}
     def add(oid,kind):result.setdefault(oid,set()).add(kind)
     cursor.execute("SELECT DISTINCT a.grantee FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace CROSS JOIN LATERAL aclexplode(p.proacl) a WHERE n.nspname='truss' AND p.proname='admin_install_recovery' AND a.grantee<>p.proowner",prepare=False)
     for (oid,) in cursor.fetchall():
-        if oid in (owner,registrar,0):continue
+        if oid in (owner,registrar,0) or oid in managed_oids:continue
         cursor.execute('SELECT rolsuper OR rolcreaterole FROM pg_roles WHERE oid=%s',(oid,),prepare=False)
         if cursor.fetchone()!=(True,):raise ValueError('Unsafe installation administrator grant')
         add(oid,'administrator')
@@ -149,12 +154,22 @@ def roles(cursor,owner,registrar):
 
 def verify(cursor,expected,acl_profiles,*,full_names=False):
     if structure(cursor)!=expected:raise ValueError('Installed native definitions drifted')
-    ctx,owner,registrar=context(cursor)
+    ctx,owner,registrar,managed=context(cursor)
     cursor.execute("SELECT nspowner FROM pg_namespace WHERE nspname='truss'",prepare=False)
     if cursor.fetchone()!=(owner,):raise ValueError('Installation owner drifted')
     cursor.execute('SELECT rolcanlogin,rolsuper,rolcreatedb,rolcreaterole,rolreplication,rolbypassrls,rolinherit FROM pg_roles WHERE oid=ANY(%s)',([owner,registrar],),prepare=False)
     if cursor.fetchall()!=[(False,)*7,(False,)*7]:raise ValueError('Installation roles drifted')
-    mapping=roles(cursor,owner,registrar)
+    managed_oids={role['oid'] for role in managed['roles']}
+    mapping=roles(cursor,owner,registrar,managed_oids)
+    ordinary_roles={oid for oid,kinds in mapping.items()
+        if kinds & {'registrar','reader','writer','feed','audit'}}
+    if managed_oids & ordinary_roles:
+        raise ValueError('Managed platform role cannot also be an ordinary application role')
+    for ordinary in ordinary_roles:
+        for platform in managed_oids:
+            cursor.execute("SELECT pg_catalog.pg_has_role(%s,%s,'MEMBER')",(ordinary,platform),prepare=False)
+            if cursor.fetchone()!=(False,):
+                raise ValueError('Ordinary runtime role inherits a tolerated platform-grant role')
     for oid,kinds in mapping.items():
         if kinds & {'owner','registrar','administrator','public'}:continue
         cursor.execute("""WITH RECURSIVE memberships(oid) AS (SELECT %s::oid UNION SELECT m.roleid FROM pg_auth_members m JOIN memberships p ON m.member=p.oid)
@@ -164,17 +179,32 @@ def verify(cursor,expected,acl_profiles,*,full_names=False):
         if cursor.fetchone()!=(False,):raise ValueError('Unsafe module/feed/audit role membership')
     actual={oid:set() for oid in mapping}
     for kind,name,objowner,grantee,priv,grantable,grantor in acl(cursor,full_names=full_names):
-        if objowner!=owner or grantee not in mapping or grantor not in (owner,grantee):
+        if objowner!=owner:
+            raise ValueError('Unexpected native owner or grant: '+kind+' '+name)
+        if grantee in managed_oids:
+            continue
+        # A selected platform identity may have issued a duplicate, otherwise
+        # profile-exact ordinary grant when PostgreSQL resolves inherited
+        # grant-option paths.  The complete ACL set comparison below still
+        # requires the exact ordinary grantee, object, privilege and option;
+        # this does not admit additional authority.
+        if grantee not in mapping or (grantor not in (owner,grantee)
+                and grantor not in managed_oids):
             raise ValueError('Unexpected native owner or grant: '+kind+' '+name)
         actual[grantee].add((kind,name,priv,grantable))
     for oid,kinds in mapping.items():
         wanted={tuple(row) for kind in kinds for row in acl_profiles[kind]}
-        if actual[oid]!=wanted:raise ValueError('Installed privileges drifted: '+','.join(sorted(kinds)))
-    # Attribute grants/default privileges are independent of relation ACLs.
-    cursor.execute("SELECT count(*) FROM pg_attribute a JOIN pg_class c ON c.oid=a.attrelid JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='truss' AND a.attacl IS NOT NULL",prepare=False)
-    if cursor.fetchone()!=(0,):raise ValueError('Unexpected column grants')
+        if oid in managed_oids:
+            if not wanted<=actual[oid]:
+                raise ValueError('Installed privileges drifted: '+','.join(sorted(kinds)))
+        elif actual[oid]!=wanted:
+            raise ValueError('Installed privileges drifted: '+','.join(sorted(kinds)))
     cursor.execute("SELECT d.defaclobjtype,d.defaclnamespace,a.grantee,a.privilege_type,a.is_grantable FROM pg_default_acl d CROSS JOIN LATERAL aclexplode(d.defaclacl) a WHERE d.defaclrole=%s ORDER BY d.defaclobjtype",(owner,),prepare=False)
-    if set(cursor.fetchall())!={('f',0,owner,'EXECUTE',False),('T',0,owner,'USAGE',False)}:raise ValueError('Private default grants drifted')
+    # Managed-grantee policy covers retained object ACL observations, not
+    # default ACLs: those affect future objects and are not represented in the
+    # bounded installation evidence. Keep the original exact default check.
+    defaults=set(cursor.fetchall())
+    if defaults!={('f',0,owner,'EXECUTE',False),('T',0,owner,'USAGE',False)}:raise ValueError('Private default grants drifted')
     return ctx
 
 
@@ -249,9 +279,15 @@ def preservation(cursor,expected,max_bytes=268435456):
         digest=sha256();count=0
         # A named portal prevents psycopg buffering the entire table before the
         # byte limit can be checked. One row is bounded by the admitted source.
+        source_columns=[row[2] for row in expected.get('columns',[])
+            if row[0]==name and not row[7]]
+        projection=(sql.SQL('row_to_json(ROW({}))').format(sql.SQL(',').join(
+            sql.SQL('t.{}').format(sql.Identifier(column)) for column in source_columns))
+            if source_columns else sql.SQL('row_to_json(t)'))
         with cursor.connection.cursor(name='truss_migration_census') as scan:
             if hasattr(cursor,'check'):cursor.check()
-            scan.execute(sql.SQL('SELECT row_to_json(t)::text FROM truss.{} t ORDER BY row_to_json(t)::text COLLATE "C"').format(sql.Identifier(name)))
+            scan.execute(sql.SQL('SELECT {}::text FROM truss.{} t ORDER BY {}::text COLLATE "C"').format(
+                projection,sql.Identifier(name),projection))
             while rows:=scan.fetchmany(1):
                 if hasattr(cursor,'check'):cursor.check()
                 for (row,) in rows:

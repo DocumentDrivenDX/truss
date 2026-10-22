@@ -15,7 +15,7 @@ from ._security_relationship_source import PreparedRelationshipSecuritySource,sn
 from ._security_graph_source import PreparedGraphSecuritySource,snapshot_graph_security_source,graph_source_archives,acquire_graph_source_catalog_cut
 from ._security_catalog_mapping import map_catalog_dependencies
 from ._security_catalog_assessment import capture_accepted_catalog
-from ._installation_privileges import installation_administrator_with_cursor
+from ._installation_privileges import installation_administrator_with_cursor,require_empty_managed_grants_with_cursor
 from .catalog_runtime import _release,_pin_cursor
 
 @dataclass(frozen=True,slots=True)
@@ -83,6 +83,7 @@ def bootstrap_catalog_source_marker_in_transaction(host,transaction,mapping):
   return Error(ExecutionFailure('execution_obligation','Exact bounded original catalog sources required'))
  def install(cursor,observed):
   _pin_cursor(cursor);manifest,digest,_=_release()
+  require_empty_managed_grants_with_cursor(cursor,'Catalog source marker')
   cursor.execute("SELECT pg_catalog.current_setting('search_path')",prepare=False)
   paths=cursor.fetchmany(2)
   if len(paths)!=1 or type(paths[0][0]) is not str:raise ValueError('Original installer search path required')

@@ -230,7 +230,7 @@ The direct read and traversal requirements below are convenience operations and 
 
 ### Subsystem: Host integration
 
-- **FR-41** — A host may add its own tables, functions, roles, triggers and row-level security in its own schema, and may not change a truss column, key or constraint. The contracts say which are permitted.
+- **FR-41** — A host may add its own tables, functions, roles, triggers and row-level security in its own schema, and may not change a truss column, key or constraint. The contracts say which are permitted. An installation administrator may explicitly acknowledge exact existing platform grantees under a retained deployment trust policy. Installation and later supported lifecycle/migration operations preserve their native access, identify disallowed grants in a contained refusal, and keep ordinary caller authority and separately protected guarantees explicit. Strict defaults remain; role names alone never prove platform control.
 - **FR-42** — Writes can be governed by database role grants: a host can assume a role per transaction, and truss records the assumed role in the journal.
 - **FR-43** — truss embeds on a host-supplied PostgreSQL connection and preserves caller transaction ownership. Connection pool provisioning and operation belong to the host. Truss keeps no mutable session dependency across completed transactions and supports parameterized execution without requiring persistent prepared statements. No pooler-specific latency threshold is a product acceptance gate.
 - **FR-44** — The layout and its protocols work on an embedded PostgreSQL for development and tests, with the same DDL as a server.

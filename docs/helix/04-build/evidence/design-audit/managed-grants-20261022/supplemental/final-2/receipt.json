@@ -1,0 +1,29 @@
+{
+  "scope": "Supplemental installed-wheel managed-grant catalog lifecycle qualification; isolated synthetic PostgreSQL worker only.",
+  "passed": true,
+  "checks": [
+    "supported additive catalog evolution retained source/head/history/object/journal and managed-grant carrier/native ACLs",
+    "explicit unsupported record retirement returned exact SQLSTATE 0A000 and catalog_code unsupported_profile while preserving caller work and committed state",
+    "selected platform INSERT ACL add/revoke remained accepted by RuntimeMigrations.status/verify without changing stored policy carrier"
+  ],
+  "nativeServerVersion": "18.6",
+  "workerSocketOnly": true,
+  "workerInventoryRestored": true,
+  "workerStopped": true,
+  "pythonRunLog": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/supplemental/final-2/run-elevated.log",
+  "pythonRunLogSha256": "e3a5a050ff2ffd63a0b534bde94dfd62fbe9f454b2937773b71fbc62c4e1d479",
+  "result": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/supplemental/managed_grants_lifecycle_installed.json",
+  "resultSha256": "e3a5a050ff2ffd63a0b534bde94dfd62fbe9f454b2937773b71fbc62c4e1d479",
+  "producer": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/supplemental/managed_grants_lifecycle_installed.py",
+  "producerSha256": "015ea0cbd1acc4e26efc64511f028399297ec08a17a7fe81c389b8fa9cd03306",
+  "wheel": "/private/tmp/truss-managed-grants-qualification/dist-final-2/truss_toolkit-0.0.48-py3-none-any.whl",
+  "wheelSha256": "9e6ad94f1f08d8c965b46e8b80d1bbbb96eefdf986fa60e7d3e3c6baeaf59b3d",
+  "nativeManifestSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f",
+  "hfProfileSha256": "cc67adb510305a225be8daef47946fe839fa6cad736aad345208e58f134278d5",
+  "hfArchive": "docs/helix/04-build/evidence/design-audit/managed-grants-20261022/hf61/hohfeld-followup-managed-grants-hf61-final-35fd.zip",
+  "hfArchiveSha256": "b2840368e8ae9f58dd9c582381d8518ac863a4166b046a5eab2d427116859a6b",
+  "previousArchive": "/private/tmp/truss-managed-grants-qualification/hohfeld-followup-managed-grants-hf60.zip",
+  "previousArchiveStatus": "reported prior digest, artifact unavailable/unverified",
+  "previousReportedSha256": "731215545497a36ae878233dad44ea3d61cc573f2bdc22b9013bfc3b9bd547d0",
+  "sandboxAttempt": "Initial non-escalated attempt failed before PostgreSQL startup because pgserver cache lock was denied; no worker directory/process was created. The approved elevated run succeeded."
+}

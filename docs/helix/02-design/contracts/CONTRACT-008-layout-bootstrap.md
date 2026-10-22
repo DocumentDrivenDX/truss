@@ -15,6 +15,86 @@ ddx:
       kind: informed_by
 ---
 
+## Managed platform grantee policy — 2026-10-22
+
+This amendment refines fresh installation and latest-only migration under FR-41,
+FR-43/44/48 and ADR-008. It selects an ordinary managed deployment trust boundary;
+actual managed-service support requires its own original native evidence.
+
+- `install_in_transaction(..., tolerated_grantees: tuple[str, ...] = ())` is
+  additive. The list has at most 32 exact PostgreSQL role names. Each is a
+  nonempty, valid UTF-8 string of at most 63 encoded bytes with no NUL. Reject
+  duplicates, `PUBLIC`, `pg_` reserved names, the installer and selected
+  owner/registrar identities. No case folding, trimming, pattern expansion or
+  identifier truncation is permitted. Resolve each existing name to its native
+  role object identifier (OID) under the original administrative exclusion;
+  missing identities refuse. Values are SQL parameters or quoted identifiers.
+- The existing `catalog_runtime_installation` metadata retains one `managed_grants`
+  JSONB carrier with `interfaceVersion: "truss-managed-grants/0.1"`, `roles`
+  and `observations`. `roles` is the exact set of `{name, oid}` pairs in
+  ascending UTF-8 name order; OIDs are positive database-local integers.
+  `observations` retains initial before/after ownership-transfer ACL rows for
+  the selected tolerated grantees only,
+  including phase, object class/OID/name, optional column identity, grantee and
+  grantor OIDs, privilege and grant option. The complete canonical UTF-8 carrier
+  is at most 4 MiB and contains at most 16,384 observations; overflow refuses
+  atomically, without truncation. An empty strict policy has empty arrays.
+  Evidence is observation, not a second readiness or authorization authority.
+  Empty strict policy retains no observation rows. Full unexpected-grantee and
+  effective-rights validation remains mandatory; limiting retained evidence cannot
+  remove those checks. Capture native ACL rows with bounded set-oriented queries,
+  avoiding one query per installed object. `post_installation` is observed after
+  all installer DDL, declared grants and comments, before the callback returns;
+  event-trigger effects at those late boundaries cannot escape classification.
+- Schema, relation, sequence, routine, type and column ACLs may retain privileges
+  of the selected identities, including grant options. Truss issues no grant or
+  membership to them, clones none to later objects, and removes none. Preserve
+  independently observed effective permission; record ownership-induced grantor
+  changes explicitly. Selected identities and their effective delegates belong
+  to the trusted platform boundary. A validated selected identity may also be
+  the native grantor of an otherwise exact declared ordinary grant when
+  PostgreSQL resolves grant-option paths. This changes no permitted ordinary
+  object/grantee/privilege/grant-option tuple: extra or missing ordinary authority
+  still refuses, and an unrelated grantor is not admitted by this exception.
+  Ordinary client effective-rights, role closure, private defaults, ownership,
+  definition and PUBLIC checks still apply. Initial observations are historical
+  provenance, not a frozen allowlist of later selected-role object/column ACLs.
+- Later administration and verification use the stored policy. Fresh host
+  configuration cannot widen it. Missing, renamed or recreated roles, malformed
+  carriers or a name/OID mismatch refuse as incompatible. Administrative policy
+  reconciliation and restored-database remapping must be explicit and requalified;
+  an implementation without that operation refuses drift and requires a separately
+  reviewed recovery procedure. No new role-retirement API is implied.
+- A nonempty policy is incompatible with a separately protected profile until
+  that exact combination is independently qualified. Refuse activation before
+  effects and preserve platform grants. Apply this guard to every public or
+  internal bootstrap route that can install the affected profile; a top-level
+  guard alone does not cover directly reachable helpers.
+- Exact forward migration adds the metadata carrier and required routines;
+  existing admitted installations receive the empty strict policy. Preserve
+  historical source/recipe/receipt bytes and qualify every lineage path. An
+  unpublished combined target may be recaptured; it cannot relabel a published
+  source or acquire historical evidence by sharing its release label.
+
+An observation has exactly `class`, `objectOid`, `name`, `detail`, `column`,
+`granteeOid`, `grantorOid`, `privilege`, `grantOption`, `phase`, `grantee` and
+`grantor`. Classes are CONTRACT-007's enum; phases are `pre_ownership` and
+`post_installation`. OIDs are positive native unsigned 32-bit values. Names are
+nonempty native strings, at most 63 UTF-8 bytes; `detail` is a nullable exact
+routine identity-argument string, at most 16 KiB. `column` is null or
+`{number, name}` with a native attribute number from 1 through 32,767 and exact column name.
+`privilege` is a finite native privilege label and `grantOption` is Boolean.
+Grantee name/OID must correspond to a selected role. Preserve the original grantor
+name/OID even when later ownership transforms it. Observations have deterministic
+canonical ordering by their canonical UTF-8 JSON representation, no duplicates,
+and no malformed or omitted identity cells. Empty policy requires empty evidence.
+
+For example, `tolerated_grantees=("databricks_platform_role",)` opts into exactly
+that existing native identity. It does not trust a subsequently created role
+with a similar name. The selected profile initially retains immutable installation
+observations; later operations may return fresh observations without overwriting
+that original evidence or converting it into a new support claim.
+
 ## Latest-only forward migration contract — 2026-10-21
 
 The [PRD decision](../../01-frame/prd.md#owner-decision--forward-migrations-to-the-latest-release-2026-10-21)
