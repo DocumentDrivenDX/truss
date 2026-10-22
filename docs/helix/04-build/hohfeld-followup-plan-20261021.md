@@ -821,6 +821,20 @@ is`cef097386dc0f6a3c2e1e2e27c2021c663e406d0c0a6435c06b8e61bc982bcb3`.
 retains the original reports. These checks do not establish Linux native execution;
 the full public-compiler Truss release gate remains mandatory.
 
+
+### Historical spike boundary repair — 2026-10-22
+
+Final Weft integration CI39811016266 passed mutation/formal controls but failed
+its historical B001 numeric test: the intentionally UMF0.7 spike had begun reading
+the shared fixture already updated to UMF0.10. Reviewed test-only fix6e1b64a7
+restores the byte-exact original636-case snapshot for historical consumers, keeps
+all575 numeric expectations (288 accepts/287 refusals), leaves current0.10fixtures
+unchanged and explicitly checks that the current frontend refuses those575 original
+old requests. Spike3/currentfrontend6 focused tests pass. Original failure, successful
+controls and actual synthetic PR checkoutc40909fe are [retained](evidence/hohfeld-followup-20261021/weft-spike-boundary-failure/receipt.json).
+Complete local candidate/qualified workspace checks and a new full hosted run
+remain required. The selected86c compiler/build source and all wheel pins are unchanged.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).
