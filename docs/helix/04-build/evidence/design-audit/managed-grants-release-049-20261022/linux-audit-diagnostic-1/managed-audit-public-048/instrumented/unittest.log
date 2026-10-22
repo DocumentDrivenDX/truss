@@ -1,0 +1,18 @@
+test_whole_group_more_than_1024_events_uses_separate_event_budget (test_audit_disclosure_native.AuditDisclosureNativeTests.test_whole_group_more_than_1024_events_uses_separate_event_budget) ... FAIL
+
+======================================================================
+FAIL: test_whole_group_more_than_1024_events_uses_separate_event_budget (test_audit_disclosure_native.AuditDisclosureNativeTests.test_whole_group_more_than_1024_events_uses_separate_event_budget)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/runner/work/_temp/managed-audit-public-048/instrumented/bootstrap/sitecustomize.py", line 120, in _diagnose_target
+    try: return _target(self,*args,**kwargs)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/truss/truss/packages/python/tests/test_audit_disclosure_native.py", line 145, in test_whole_group_more_than_1024_events_uses_separate_event_budget
+    self.assertIsInstance(result,Ok,repr(result));self.assertIsInstance(result.value,MutationGroupAuditPage,repr(result))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error') is not an instance of <class 'truss.execution.Ok'> : Error(error=ExecutionFailure(code='cancelled', message='Original operation cancelled and locally contained', retry_scope='none', sql_state='57014', catalog_code=None), status='error')
+
+----------------------------------------------------------------------
+Ran 1 test in 17.731s
+
+FAILED (failures=1)

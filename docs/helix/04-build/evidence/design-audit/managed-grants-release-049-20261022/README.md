@@ -107,3 +107,15 @@ blocked pending same-host public48/current49 SQL timing and plan diagnosis.
 There is no further incidental rerun; the original workload, assertions and
 10-second SQL / 30-second operation limits remain unchanged. The retained final
 Mac pass qualifies its recorded source and tuple only.
+
+A new diagnostic native candidate is
+`288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4`.
+It appends a representation-only audit collector override: native arrays retain
+the same values and order before the existing JSON bounds, exact DISTINCT owner
+reduction and authorization checks. The original collector source and all prior
+migration artifacts remain unchanged. Two additional semantic controls join the
+managed campaign (21 modules / 130 discovered tests); the independent corpus
+retains its 62 cases and all existing producer pins. This candidate is initially
+for fresh-install Linux diagnosis. Its new migration profile/edge, native tests
+and full qualification remain pending. Source628/native35fd local results above
+remain evidence for that exact earlier candidate, without qualification of2888.

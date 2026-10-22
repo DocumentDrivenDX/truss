@@ -109,7 +109,7 @@ def _record(query, elapsed, error=None, kind="execute", connection=None):
     return row
 
 def _candidate(row,query,args,kwargs):
-    if TARGET_ACTIVE and row.get("safeSql","").lstrip().upper().startswith("SELECT"):
+    if TARGET_ACTIVE and row.get("safeSql","").lstrip().upper().startswith(("SELECT","WITH")):
         params=args[0] if args else kwargs.get("params")
         CANDIDATES.append((row,query,params))
 

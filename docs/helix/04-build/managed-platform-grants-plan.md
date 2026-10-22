@@ -663,3 +663,17 @@ v0.0.48 input integrity and additive route admission are complete. The historica
 diagnostic remains unqualified outside that supported release campaign. Actual
 Lakebase/Arras deployment acceptance stays a separate gate with no support claim
 until its exact consumer workflow is qualified.
+
+### Audit deadline diagnosis and additive candidate supersession
+
+The unchanged Linux rerun reproduced the whole-group audit deadline failure.
+Same-host public48/current49 diagnostics both reached the original 10-second SQL
+deadline in the shared collector. A representation-only appended collector
+override is now a diagnostic candidate with native manifest
+`288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4`.
+The original35fd local pass remains historical evidence for source628. The new
+candidate preserves validation, order, duplicates, nulls, owner reduction, bounds
+and late authorization. Its additive35fd-to-new migration edge and target capture
+are pending; the four actual public source wheels and all existing21 artifact
+bytes are retained. Fresh-install diagnosis does not qualify migration or final
+publication. Full local/Linux/corpus/lineage/public gates remain required.

@@ -36,6 +36,7 @@ MODULES = (
     'test_catalog_evolution_native', 'test_catalog_runtime_native',
     'test_cli_install_refusal', 'test_local_install_cli_native',
     'test_catalog_key_backfill_native',
+    'test_audit_accumulation_native',
 )
 
 

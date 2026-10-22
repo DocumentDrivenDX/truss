@@ -4,7 +4,7 @@
   "compilerVersion": "0.4.51",
   "umfVersion": "0.10.0",
   "postgresqlVersion": "18.6",
-  "nativeManifestSha256": "35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f",
+  "nativeManifestSha256": "288801f7177338328441b5d3ce9328af31740ebf513f04ea45e30ae316a9f3a4",
   "cases": [
     {
       "id": "nonmember_all_selected_surfaces_have_typed_denial",
@@ -336,6 +336,7 @@
     "packages/python/tests/test_archive_self_write_fence_native.py": "abe3fcfe1bf19f3ed13900fc1047fd6acb9b3fdb1256e9e735d904e0668022b9",
     "packages/python/tests/test_arras_view_model_native.py": "a56214368ea2ba48dfc9872ec1e93b3d002a61ccd607ffb54532f3c1ea7e1c64",
     "packages/python/tests/test_atomic_group_surface_native.py": "dbd11bae8f3e7c79bc23d23aca41bacafa5aac1659c529f9b926be974604b7a0",
+    "packages/python/tests/test_audit_accumulation_native.py": "75e5b1d212792be602b1371a2d1dec5a333de0504322d7d976013af1f1627e11",
     "packages/python/tests/test_audit_disclosure_native.py": "1d39f754e11dd0e9e80a516c864e16bc5c72ce590c51f6ca5d15fed5fcc68770",
     "packages/python/tests/test_batched_import_native.py": "e4508be76b9fd86c4b27b7ac743d964dac74f286510f6fb4df581d8a99678b3c",
     "packages/python/tests/test_batched_import_parity_native.py": "165b14a8f9c5ba45bb4e10be534deeee8f11b398228769ad8a934d1b83f4e9eb",

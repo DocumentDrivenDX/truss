@@ -1,0 +1,68 @@
+[
+  {
+    "consumerHostAttempts": [
+      {
+        "type": "QueryCanceled",
+        "text": "canceling statement due to statement timeout\nCONTEXT:  PL/pgSQL function truss.runtime_owned_journal_materialize(jsonb) line 6 at FOR over SELECT rows\nPL/pgSQL function truss.runtime_read_mutation_group_audit(uuid,integer,text,text,boolean) line 127 at assignment\nPL/pgSQL function truss.page_mutation_group_audit(jsonb,integer,bytea,text,text) line 182 at assignment\nPL/pgSQL expression \"truss.page_mutation_group_audit(\"filters\",\"maximum_events\",\"original_cursor\",\"expected_release\",\"expected_digest\")\"\nPL/pgSQL function truss.person_page_mutation_group_audit(jsonb,integer,bytea,text,text) line 4 at RETURN",
+        "sqlstate": "57014",
+        "diag": {
+          "severity": "ERROR",
+          "sqlstate": "57014",
+          "message_primary": "canceling statement due to statement timeout",
+          "message_detail": null,
+          "message_hint": null,
+          "context": "PL/pgSQL function truss.runtime_owned_journal_materialize(jsonb) line <number> at FOR over SELECT rows\nPL/pgSQL function truss.runtime_read_mutation_group_audit(uuid,integer,text,text,boolean) line <number> at assignment\nPL/pgSQL function truss.page_mutation_group_audit(jsonb,integer,bytea,text,text) line <number> at assignment\nPL/pgSQL expression \"truss.page_mutation_group_audit(\"filters\",\"maximum_events\",\"original_cursor\",\"expected_release\",\"expected_digest\")\"\nPL/pgSQL function truss.person_page_mutation_group_audit(jsonb,integer,bytea,text,text) line <number> at RETURN",
+          "schema_name": null,
+          "table_name": null,
+          "column_name": null,
+          "constraint_name": null,
+          "statement_position": null,
+          "internal_position": null,
+          "internal_query": null
+        }
+      }
+    ]
+  },
+  {
+    "statementSha256": "243a6a301bdf05edb0425cb0a600a8b26ae21912acd1e01159e127a4998bed7f",
+    "explain": "estimated plan only; ANALYZE was not requested",
+    "plan": [
+      {
+        "Plan": {
+          "Node Type": "Result",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Startup Cost": 8.3,
+          "Total Cost": 8.31,
+          "Plan Rows": 1,
+          "Plan Width": 1,
+          "Disabled": false,
+          "Output": [
+            "(InitPlan 1).col1"
+          ],
+          "Plans": [
+            {
+              "Node Type": "Index Scan",
+              "Parent Relationship": "InitPlan",
+              "Subplan Name": "InitPlan 1",
+              "Parallel Aware": false,
+              "Async Capable": false,
+              "Scan Direction": "Forward",
+              "Index Name": "pg_depend_depender_index",
+              "Relation Name": "pg_depend",
+              "Schema": "pg_catalog",
+              "Alias": "pg_depend",
+              "Startup Cost": 0.28,
+              "Total Cost": 8.3,
+              "Plan Rows": 1,
+              "Plan Width": 0,
+              "Disabled": false,
+              "Index Cond": "((pg_depend.classid = '1259'::oid) AND (pg_depend.objid = '17911'::oid))",
+              "Filter": "(pg_depend.deptype = 'e'::\"char\")"
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

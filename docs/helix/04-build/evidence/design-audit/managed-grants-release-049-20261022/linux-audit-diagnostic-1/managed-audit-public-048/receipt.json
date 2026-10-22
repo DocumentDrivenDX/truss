@@ -1,0 +1,137 @@
+{
+  "cohort": "public-truss-0.0.48",
+  "passed": false,
+  "test": "test_audit_disclosure_native.AuditDisclosureNativeTests.test_whole_group_more_than_1024_events_uses_separate_event_budget",
+  "testSource": {
+    "path": "packages/python/tests/test_audit_disclosure_native.py",
+    "sha256": "1d39f754e11dd0e9e80a516c864e16bc5c72ce590c51f6ca5d15fed5fcc68770"
+  },
+  "diagnosticOnly": true,
+  "instrumentationCanAffectTiming": true,
+  "originalTestResultIsUninstrumented": {
+    "passed": false,
+    "exitCode": 1,
+    "instrumented": false,
+    "instrumentationLoaded": null
+  },
+  "instrumentedDiagnosticResult": {
+    "passed": false,
+    "exitCode": 1,
+    "instrumented": true,
+    "instrumentationLoaded": true
+  },
+  "retries": 0,
+  "limitsMs": {
+    "statement": 10000,
+    "operation": 30000,
+    "outerWatchdog": 120000
+  },
+  "python": "3.11.17 (main, Oct  1 2026, 14:32:31) [GCC 13.3.0]",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "cpuCount": 4,
+  "cpuModel": "AMD EPYC 9V74 80-Core Processor",
+  "loadAverage": [
+    1.18701171875,
+    0.49951171875,
+    0.18896484375
+  ],
+  "systemBefore": {
+    "loadAverage": [
+      1.19287109375,
+      0.39208984375,
+      0.1396484375
+    ],
+    "cpuCount": 4,
+    "cpuModel": "AMD EPYC 9V74 80-Core Processor"
+  },
+  "systemAfter": {
+    "loadAverage": [
+      1.18701171875,
+      0.49951171875,
+      0.18896484375
+    ],
+    "cpuCount": 4,
+    "cpuModel": "AMD EPYC 9V74 80-Core Processor"
+  },
+  "truss": {
+    "version": "0.0.48",
+    "wheel": "/home/runner/work/_temp/truss-public-048/truss_toolkit-0.0.48-py3-none-any.whl",
+    "wheelSha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+    "loadedFrom": "/home/runner/work/_temp/venv-public-048/lib/python3.11/site-packages/truss",
+    "payload": {
+      "members": 455,
+      "exact": true
+    },
+    "installationOrigin": {
+      "archive_info": {
+        "hash": "sha256=1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+        "hashes": {
+          "sha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3"
+        }
+      },
+      "url": "file:///home/runner/work/_temp/truss-public-048/truss_toolkit-0.0.48-py3-none-any.whl"
+    }
+  },
+  "postgresql": {
+    "serverVersion": "18.6",
+    "pgserverDistribution": "18.6.1",
+    "pgserverModule": "/home/runner/work/_temp/venv-public-048/lib/python3.11/site-packages/pgserver/__init__.py",
+    "installationOrigin": null
+  },
+  "psycopg": {
+    "version": "3.3.6",
+    "module": "/home/runner/work/_temp/venv-public-048/lib/python3.11/site-packages/psycopg/__init__.py"
+  },
+  "weft": {
+    "version": "0.4.51",
+    "module": "/home/runner/work/_temp/venv-public-048/lib/python3.11/site-packages/weft/__init__.py",
+    "installationOrigin": {
+      "archive_info": {
+        "hash": "sha256=a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5",
+        "hashes": {
+          "sha256": "a23142f12b59444138b588a8a764666b025552a14036f62d83af022153f1a0a5"
+        }
+      },
+      "url": "file:///home/runner/work/_temp/weft-051/weft_sql-0.4.51-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+    }
+  },
+  "weftNative": {
+    "module": "/home/runner/work/_temp/venv-public-048/lib/python3.11/site-packages/weft/weft.abi3.so",
+    "sha256": "ef293922003832fbd87041a28c6dbde33927fee573270f203aa51daf06bcd445"
+  },
+  "sourceRevision": "bc7ac7d0b5b4593f582157ab1c6a8df8b72cd368",
+  "driverSha256": "49ff9941dfcb48bf220b64e1446819310a14b36b6a32670817c3bbea27607387",
+  "workers": {
+    "original": {
+      "inventoryRestored": true,
+      "serverStoppedAndDirectoryRemoved": true,
+      "settings": {
+        "autovacuum": "off",
+        "listen_addresses": "",
+        "port": "5432",
+        "server_version": "18.6",
+        "unix_socket_directories": "/tmp/truss-nw-dlpr_urs/data"
+      },
+      "baselineDigest": "0cf5b8e6069e6483514e6f98c2cd714d2708593a0fa10b661bb68f464c8559a6"
+    },
+    "instrumented": {
+      "inventoryRestored": true,
+      "serverStoppedAndDirectoryRemoved": true,
+      "settings": {
+        "autovacuum": "off",
+        "listen_addresses": "",
+        "port": "5432",
+        "server_version": "18.6",
+        "unix_socket_directories": "/tmp/truss-nw-zijse7or/data"
+      },
+      "baselineDigest": "0cf5b8e6069e6483514e6f98c2cd714d2708593a0fa10b661bb68f464c8559a6"
+    }
+  },
+  "elapsedSeconds": 38.46244409299999,
+  "cursorTrace": {
+    "path": "instrumented/cursor-statements.jsonl",
+    "sha256": "bbc0f4f53cabf1f41f1af505fb46a7a2c726ef02e4710db61f714b1dd2ebfe3c",
+    "statementCount": 3092
+  },
+  "failureDiagnostics": "instrumented/failure-diagnostics.json"
+}
