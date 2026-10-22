@@ -484,10 +484,81 @@ the listed governing documents and plan only. Runtime source and qualification
 outputs have their separate owners. No release tag or publication is authorized
 by this local qualification.
 
+## v0.0.49 release execution — 2026-10-22
+
+The owner has now authorized finishing, committing, reviewing, testing and
+releasing this change. This extends the earlier local-only execution authority;
+it does not relabel any earlier artifact or failed diagnostic. The selected
+managed-grants version is v0.0.49. Preserve v0.0.48's separate HF release notes,
+source, immutable migration evidence and publication ownership.
+
+The integrated source retains the newer HF62 corpus, exact Weft0.4.51 compiler
+cohorts from source `86c092178bb8ca1a0d84edfebc175009d8862493`, reproducible archive
+generation and publisher compiler/source checks. The native manifest remains
+`35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f`.
+CONTRACT-008 RM-01 uses exact manifest identity; the shared native label
+`truss-catalog-runtime/0.74-candidate` does not make the v0.0.48 `c4339ac7…`
+installation current. The earlier 459-file candidate and HF61 archive remain
+historical evidence after this integration. Final v0.0.49 package/recipe/archive
+hashes must come from its own build and receipts.
+
+The current release acceptance campaign is the finite installed-package campaign
+in [`.github/workflows/release.yml`](../../../.github/workflows/release.yml),
+executed on hosted Linux only. It already names supported embedding, native
+authorization, preparation, query/disclosure, catalog, capacity, lifecycle,
+migration and original public-workload regressions. The new mandatory managed
+step invokes `scripts/qualify-managed-platform-grants.py` against the installed
+wheel. Its 20 explicit modules include managed install/migration, preparation,
+CLI, strict lifecycle/ACL/host and catalog regressions, including the complete
+`test_catalog_key_backfill_native` module. It owns a native worker, requires
+inventory restoration after each module, stops on failure, rejects skips and
+retains raw logs and the final cleanup/input/payload receipt. The separate
+local-runtime step also includes `test_local_install_cli_native`.
+Every mandatory campaign step must pass.
+Normal PR smoke checks and selected local component receipts alone cannot close
+release acceptance.
+
+| Campaign source | Acceptance authority and scope |
+| --- | --- |
+| `.github/workflows/release.yml` package/native jobs and publish dependencies | Mandatory current Linux release campaign, including its original public workload on a tag and the explicit managed-grants step |
+| `scripts/qualify-managed-platform-grants.py` | Installed/wheel/source correspondence and 20 explicit regression modules on an owned native worker; this current candidate gate does not relabel the earlier 19-module receipt |
+| `scripts/qualify-runtime-migrations.py` and packaged `_migrations/manifest.json` | Every admitted source needs an exact real wheel fixture and a route; prior published manifests/immutable files remain in custody; skipped cases cannot pass |
+| `scripts/run-hf-conformance.py` and `hohfeld-followup-0.1.json` | Exact current package/native/compiler cohort and all 62 authored corpus cases; changed producers or skipped cases cannot pass |
+| `.github/workflows/python-runtime.yml` | PR/runtime smoke qualification; does not replace the release campaign |
+| `scripts/check-python-installed-suite.py` and `scripts/run-python-installed-workers.py` | Historical all-discovery diagnostic over every `test_*.py`; not invoked by the release workflow and not evidence that all discovered components match the selected runtime |
+
+The earlier all-discovery diagnostic is preserved as incomplete and unqualified.
+Its historical proof fixtures depend on removed native homes, while some opt-in
+campaigns require incompatible older compiler bundles. Those are outside the
+supported current release campaign. This release disposition supersedes the
+earlier wording that made a green unchanged all-discovery producer a separate
+release prerequisite. It does not delete tests, grant a generic skip allowance,
+or claim all-module discovery passed. Any failure in a mandatory current release
+step still blocks release and requires diagnosis; failed native cleanup still
+forbids worker reuse. Separate exact historical campaigns retain their own
+unrun/unqualified status.
+
+| Release slice | Required result | Current state |
+| --- | --- | --- |
+| Integrate and version | Preserve the HF baseline and select v0.0.49 with its own notes | Source integration and version selection complete; [release draft](releases/v0.0.49.md) prepared |
+| Admit v0.0.48 | Use its actual public wheel/hash, retain its exact source profile and original migration manifest, append the `c4339ac7…` → current route | Pending v0.0.48 publication and native route qualification |
+| Freeze and review | Build final wheel/sdist/archive; verify exact runtime payload, historical bytes, compiler cohort, source boundaries and final diff | Pending final lineage/artifact freeze |
+| Qualify final artifacts | Installed managed controls, current HF62 corpus, all four native source manifests, prior receipts/recovery/restore, supported strict/protected routes and original public workload | Earlier local candidate passed its recorded scope; final v0.0.49 evidence pending |
+| Hosted release and public verification | Mandatory Linux package/native campaign passes, then tag/asset/source pins and public downloads agree | Pending; no v0.0.49 publication claimed |
+
+Actual Arras/Lakebase TLS/token/workflow acceptance remains a separate deployment
+qualification. The package may describe the explicit policy and locally proven
+behavior without claiming that external deployment. Nonempty-policy protected
+activation stays unsupported. Release closeout must keep those limits explicit
+and link the final exact artifact receipts; it must not promote the old local
+wheel hashes to the new release.
+
 ## Exit criteria
 
-Planning, implementation and the explicitly selected local qualification are
-complete for the recorded candidate. Release acceptance remains open: the legacy
-complete-suite gate is unresolved, hosted Linux/public-artifact qualification is
-not run, and actual Lakebase support requires the managed Arras workflow and
-exact release evidence. Local qualification cannot close those gates.
+Planning, implementation and the earlier explicitly selected local qualification
+are complete for their recorded candidate. The authorized v0.0.49 release remains
+pending until its actual v0.0.48 lineage, final artifact review, mandatory Linux
+campaign and public-artifact verification pass. The historical all-discovery
+diagnostic remains unqualified outside that supported release campaign. Actual
+Lakebase/Arras deployment acceptance stays a separate gate with no support claim
+until its exact consumer workflow is qualified.

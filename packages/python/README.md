@@ -1,5 +1,12 @@
 # Truss Python toolkit
 
+The source candidate is **v0.0.49**, adding explicit managed platform grants to
+the separate [v0.0.48 HF baseline](../../docs/helix/04-build/releases/v0.0.48.md).
+Final v0.0.49 lineage, installed-artifact and Linux publication qualification are
+pending; see the [v0.0.49 draft](../../docs/helix/04-build/releases/v0.0.49.md).
+The versioned installation commands below retain the v0.0.48 baseline; they do
+not install the managed-grants candidate or establish public availability.
+
 ## Runtime migrations — v0.0.48
 
 Truss supports the latest application runtime only. Previous databases move
@@ -581,11 +588,11 @@ names. Ordinary-person registration and module access still require the role
 configuration described below. Without `--install`, the launcher only starts
 PostgreSQL. Confirmed candidate status does not establish full security readiness.
 
-### Managed platform grants — locally qualified candidate
+### Managed platform grants — v0.0.49 candidate
 
-Managed-grantee support is available in the current source candidate; the
-published `0.0.47` command above does not include it. From a checkout containing
-the managed-grants change, an explicit fresh local install can pass one or more
+Managed-grantee support is available in the v0.0.49 source candidate; the
+v0.0.48 baseline commands do not include it. From a checkout containing the
+managed-grants change, an explicit fresh local install can pass one or more
 exact PostgreSQL role names:
 
 ```sh
@@ -609,7 +616,7 @@ outer transaction/transport failures. The local CLI writes a safe refusal JSON
 object and exits with status 1; other transaction/transport failures retain their
 original failure path.
 
-The final local candidate wheel SHA-256 is
+The earlier pre-integration local candidate wheel SHA-256 is
 `7a41a223033c1af0da4a2df2d377c672fcd3b3be1fcfc5b5bf8232d009725ed4`,
 with native manifest
 `35fd797b5cf48dd888c68e53b9e599df20cffe00f8f3d33e1563820ea808d59f`.
@@ -622,9 +629,13 @@ migration controls and the original 1,000-object/1,000-edge public workload.
 qualifies supported evolution, contained unsupported-retirement refusal and later
 selected ACL changes without rewriting initial evidence.
 
-This candidate is not published and does not claim Lakebase support. The legacy
-complete-suite diagnostic remains unresolved; historical proof/opt-in campaigns,
-hosted Linux and published-artifact acceptance remain separate gates.
+Those receipts qualify their exact earlier candidate, before integration of
+the newer HF62/compiler cohort and v0.0.48 migration source. Final v0.0.49
+wheel/archive hashes and installed/Linux receipts remain pending.
+The candidate does not claim Lakebase support. The retained legacy all-discovery
+diagnostic remains incomplete and unqualified outside the mandatory supported
+campaign in [the Linux release workflow](../../.github/workflows/release.yml).
+That campaign and public-artifact verification must pass before release.
 Arras adoption must bind the exact qualified Truss wheel and native target
 manifest together with its UMF/Weft dependency pins, use the qualified
 PostgreSQL 18.6 / psycopg 3.3.6 local profile for local evidence, and separately

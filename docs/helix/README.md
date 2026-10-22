@@ -1,10 +1,13 @@
 # truss project documentation
 
-[Managed platform grants assessment and plan](04-build/managed-platform-grants-plan.md)
-addresses Praxis's Lakebase installation refusal with explicit retained grantee
-policy, typed contained refusals, lifecycle/migration consistency and separate
-local versus managed-service qualification. This is proposed work, not delivered
-Lakebase support.
+[Managed platform grants](04-build/managed-platform-grants-plan.md) are implemented
+in the [v0.0.49 source candidate](04-build/releases/v0.0.49.md), with explicit
+retained grantee policy, typed contained refusals and lifecycle/migration
+consistency. It retains the separate v0.0.48 HF baseline and earlier exact-candidate
+local evidence. Final lineage and mandatory hosted Linux release qualification
+are pending. Arras is the active consumer name; historical Praxis
+requests and snapshots retain their original provenance. Actual Lakebase support
+requires separate consumer/service qualification.
 
 Current delivery: [runtime migrations released in v0.0.47](04-build/runtime-migration-restoration-plan.md).
 Only the latest application runtime is supported. Previous admitted databases
