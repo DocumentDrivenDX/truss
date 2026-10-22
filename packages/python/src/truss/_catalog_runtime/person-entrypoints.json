@@ -388,6 +388,105 @@
       "mode": "read",
       "result": "void",
       "set": false
+    },
+    {
+      "name": "query_edges",
+      "publicName": "person_query_edges",
+      "signature": "truss.query_edges(jsonb,integer)",
+      "arguments": "binding jsonb, selected_relationship integer",
+      "mode": "read",
+      "result": "TABLE(id bigint, source_id bigint, target_id bigint)",
+      "set": true
+    },
+    {
+      "name": "query_export_edges",
+      "publicName": "person_query_export_edges",
+      "signature": "truss.query_export_edges(jsonb,integer)",
+      "arguments": "binding jsonb, selected_relationship integer",
+      "mode": "read",
+      "result": "TABLE(id bigint, source_id bigint, target_id bigint)",
+      "set": true
+    },
+    {
+      "name": "query_export_objects",
+      "publicName": "person_query_export_objects",
+      "signature": "truss.query_export_objects(jsonb,integer)",
+      "arguments": "binding jsonb, selected_type integer",
+      "mode": "read",
+      "result": "TABLE(id bigint, props jsonb)",
+      "set": true
+    },
+    {
+      "name": "query_export_page_objects",
+      "publicName": "person_query_export_page_objects",
+      "signature": "truss.query_export_page_objects(jsonb,integer,text)",
+      "arguments": "binding jsonb, selected_type integer, selected_key text",
+      "mode": "read",
+      "result": "TABLE(id bigint, props jsonb)",
+      "set": true
+    },
+    {
+      "name": "query_object_attribution",
+      "publicName": "person_query_object_attribution",
+      "signature": "truss.query_object_attribution(jsonb,integer,bigint)",
+      "arguments": "binding jsonb, selected_type integer, selected_id bigint",
+      "mode": "read",
+      "result": "jsonb",
+      "set": false
+    },
+    {
+      "name": "query_object_load_id",
+      "publicName": "person_query_object_load_id",
+      "signature": "truss.query_object_load_id(jsonb,integer,bigint)",
+      "arguments": "binding jsonb, selected_type integer, selected_id bigint",
+      "mode": "read",
+      "result": "jsonb",
+      "set": false
+    },
+    {
+      "name": "query_object_times",
+      "publicName": "person_query_object_times",
+      "signature": "truss.query_object_times(jsonb,integer,bigint)",
+      "arguments": "binding jsonb, selected_type integer, selected_id bigint",
+      "mode": "read",
+      "result": "jsonb",
+      "set": false
+    },
+    {
+      "name": "query_objects",
+      "publicName": "person_query_objects",
+      "signature": "truss.query_objects(jsonb,integer)",
+      "arguments": "binding jsonb, selected_type integer",
+      "mode": "read",
+      "result": "TABLE(id bigint, props jsonb)",
+      "set": true
+    },
+    {
+      "name": "query_page_objects",
+      "publicName": "person_query_page_objects",
+      "signature": "truss.query_page_objects(jsonb,integer,text)",
+      "arguments": "binding jsonb, selected_type integer, selected_key text",
+      "mode": "read",
+      "result": "TABLE(id bigint, props jsonb)",
+      "set": true
+    },
+    {
+      "name": "query_seek_objects",
+      "publicName": "person_query_seek_objects",
+      "signature": "truss.query_seek_objects(jsonb,integer,text,text,integer)",
+      "arguments": "binding jsonb, selected_type integer, selected_key text, after_value text, page_limit integer",
+      "mode": "read",
+      "result": "TABLE(id bigint, props jsonb)",
+      "set": true
+    },
+    {
+      "name": "query_selected_objects",
+      "publicName": "person_query_selected_objects",
+      "signature": "truss.query_selected_objects(jsonb,integer,jsonb)",
+      "arguments": "binding jsonb, selected_type integer, selected_cells jsonb",
+      "mode": "read",
+      "result": "TABLE(id bigint, props jsonb)",
+      "set": true
     }
   ]
 }

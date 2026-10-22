@@ -43,6 +43,52 @@ settles or retries the caller's outer transaction. Current retained-owner rights
 and the original authenticated person scope govern every replay publication.
 
 
+## Indexed query source selection — HF-05 design
+
+The next ordinary query profile selects new compile/IR0.2.8 and backend-interface0.2.9
+and Truss query ABI1.2; preserve published0.2.7 and ABI1.1 definitions. The
+unpublished HF-04 profile moves to0.2.8 before publication. Weft owns source
+selection from resolved fields, operands and page plans; Truss never parses SQL
+or reconstructs a missing compiler predicate. Typed compiler diagnostics distinguish
+unknown/ambiguous columns from unavailable sources within supplied authorized
+models. Hidden and absent sources intentionally share the unavailable outcome.
+Reauthorize the native query scope before releasing compiler refusals.
+
+The first indexed equality subset is singular string/boolean field equality to
+an admitted literal or source parameter. A generic JSONB path-ops GIN index over
+canonical property cells admits candidate selection without per-type DDL or
+numeric normalization. Compound conjunctions may narrow by admitted exact terms;
+all residual predicates still execute over the complete bounded candidate set.
+More than maximumScanRows candidates refuses the whole query, before LIMIT/count
+can hide the excess. Unsupported/numeric/temporal predicates retain the existing
+full-source scan bound. Query result, byte, statement and operation bounds remain.
+Index traversal work is subject to native deadlines; a candidate row bound alone
+is not an exact physical index-entry or heap-allocation ceiling.
+
+The first ordered seek subset is a complete authored single required string key,
+whose exact UMF key tuple yields at most1,024 UTF-8 key bytes. A generic derived
+index decodes the existing UMF tuple transport, preserving its original bytes and
+using C ordering. Nonindexable/long/composite/nonstring tuples remain valid stored
+keys and use the existing bounded fallback. An exception index must establish the
+whole selected key inventory is indexable before ordered seeking. A redundant
+unique derived index may enforce only the already global authored key meaning;
+prove that implication from the actual namespace/codec and populated fixtures
+before accepting its DDL. Otherwise retain a typed bounded refusal/fallback.
+Never omit unindexable members or silently shorten a sparse/residual page.
+
+Every returned candidate retains complete selected row/value/root validation and
+current selected-owner authorization, plus closing scope checks. New source and
+fact invocations use the finite person gate, retaining original EXECUTE/owner
+checks and genuine installation failures. The original-function owner/EXECUTE
+observation uses a fresh plan of a fixed parameterized native catalog SELECT;
+only the original caller/function OIDs vary. Qualify revocation after an earlier
+contained native source error in the same outer transaction. Generic index/type/function additions
+need native source/UMF inventory custody and the next populated migration edge.
+Qualify10,001+ managed populations, present/absent/equality/keyset cases, actual
+native plans/index effects, exact keys, rollback, revocation, malformed rows and
+all fallback boundaries before claiming this profile supported. These paragraphs
+select implementation work; no indexed support is yet qualified.
+
 ## Immutable package verification lifetime
 
 An installed runtime package is immutable for the lifetime of its Python

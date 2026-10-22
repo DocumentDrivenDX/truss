@@ -1,0 +1,24 @@
+test_original_umf_key_projection_is_exact_or_explicitly_unindexable (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_original_umf_key_projection_is_exact_or_explicitly_unindexable) ... ok
+test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals) ... ERROR
+
+======================================================================
+ERROR: test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_query_selective_sources_native.py", line 42, in test_selected_source_and_ordered_seek_retain_native_refusals
+    selected_type,property_id,key=self.coordinates();binding=self.binding(c)
+                                  ^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_query_selective_sources_native.py", line 25, in coordinates
+    return self.admin.execute("SELECT t.type_id,p.prop_id,k.key_id FROM truss.type_def t JOIN truss.prop_def p USING(type_id) JOIN truss.key_def k USING(type_id) WHERE t.type_key='A' AND p.prop_key='A-label' AND k.retired_rev IS NULL ORDER BY k.key_num LIMIT 1").fetchone()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/truss-hf04-cohort049-venv/lib/python3.11/site-packages/psycopg/connection.py", line 304, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UndefinedColumn: column t.type_key does not exist
+LINE 1: ...ype_id) JOIN truss.key_def k USING(type_id) WHERE t.type_key...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "t.type_id".
+
+----------------------------------------------------------------------
+Ran 2 tests in 6.656s
+
+FAILED (errors=1)

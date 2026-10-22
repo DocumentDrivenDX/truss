@@ -11,6 +11,10 @@ modes={
 'accepted_document':'catalog','catalog_revision':'read','catalog_report':'registrar','catalog_view_basis':'registrar','catalog_accept_with_keys':'registrar',
 'reader_catalog':'catalog','reader_catalog_if_changed':'catalog','registrar_status':'catalog','person_runtime_status':'status',
 'query_binding':'read','query_binding_if_changed':'read','query_scope':'read',
+'query_objects':'read','query_edges':'read','query_page_objects':'read',
+'query_export_objects':'read','query_export_edges':'read','query_export_page_objects':'read',
+'query_selected_objects':'read','query_seek_objects':'read',
+'query_object_attribution':'read','query_object_times':'read','query_object_load_id':'read',
 'group_context':'read','group_type_reference':'read','group_relationship_reference':'read','prepare_group':'read',
 'get_object':'read','get_edge':'read','lookup_string_key':'read','page_objects':'read','page_edges':'read','traverse_objects':'read','preview_group_conditions':'read',
 'recover_group_request':'write','apply_group':'write','apply_group_prepared':'write','writer_schema_basis':'write',
@@ -23,7 +27,7 @@ helper='''-- SPDX-License-Identifier: MIT OR Apache-2.0
 -- Denial-capable public invocations; private grants remain mandatory.
 CREATE FUNCTION truss.require_person_invocation(original_function regprocedure,admission_kind text) RETURNS void
 LANGUAGE plpgsql VOLATILE SECURITY INVOKER SET search_path=pg_catalog,pg_temp AS $$
-DECLARE actor oid;enrolled boolean;installation truss.catalog_runtime_installation%ROWTYPE;original_owner oid;
+DECLARE actor oid;enrolled boolean;installation truss.catalog_runtime_installation%ROWTYPE;original_owner oid;original_execute boolean;
 BEGIN
  SELECT oid INTO STRICT actor FROM pg_roles WHERE rolname=session_user;
  IF admission_kind NOT IN ('read','write','catalog','registrar','audit','status') OR admission_kind IS NULL THEN
@@ -45,11 +49,15 @@ BEGIN
  IF enrolled IS DISTINCT FROM true THEN
   RAISE EXCEPTION 'current person invocation admission required' USING ERRCODE='P1403';END IF;
  SELECT * INTO STRICT installation FROM truss.catalog_runtime_installation WHERE singleton;
- SELECT proowner INTO STRICT original_owner FROM pg_proc WHERE oid=original_function::oid;
+ -- Replan this fixed catalog observation. A retained SPI plan after a contained
+ -- source error otherwise reused an obsolete EXECUTE verdict on PostgreSQL18.6.
+ -- Only these two typed OIDs vary; no caller SQL or identifier is interpolated.
+ EXECUTE 'SELECT p.proowner,pg_catalog.has_function_privilege($1,p.oid,''EXECUTE'') FROM pg_catalog.pg_proc p WHERE p.oid=$2'
+ INTO STRICT original_owner,original_execute USING actor,original_function::oid;
  IF original_owner IS DISTINCT FROM installation.owner_oid
   OR (SELECT oid FROM pg_roles WHERE rolname=current_user) IS DISTINCT FROM installation.owner_oid THEN
   RAISE EXCEPTION 'original installed invocation owner required' USING ERRCODE='55000';END IF;
- IF NOT has_function_privilege(actor,original_function::oid,'EXECUTE') THEN
+ IF original_execute IS DISTINCT FROM true THEN
   RAISE EXCEPTION 'original invocation EXECUTE grant required' USING ERRCODE='42501';END IF;
  PERFORM truss.runtime_person(false);
 END;

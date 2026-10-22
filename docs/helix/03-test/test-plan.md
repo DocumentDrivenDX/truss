@@ -105,6 +105,26 @@ The first route uses UMF 0.10 v0.0.44 as source. Each future release adds its so
 fixture to the migration lineage; fixtures support conversion tests, not old runtime
 support. Pre-0.10, downgrade and mixed-runtime online operation remain excluded.
 
+## HF-05 native selective source component
+
+`test_query_selective_sources_native` creates10,001 committed objects through
+actual public groups, separately tests native candidate/ordered sources and
+preserves the legacy full-source refusal. Require actual GIN/Btree index scan
+deltas and original EXPLAIN ANALYZE BUFFERS; a fast result or created index alone
+is insufficient. Keep original asynchronous-GIN sequential-scan evidence and
+measure the selected synchronous index's real managed write costs. Qualify exact
+UMF key framing/Unicode/empty/length boundaries, missing keys, lookahead tails,
+resource refusal before residual truncation, and valid longer-key complete
+fallback. Preserve prior committed population and caller work on rollback.
+
+Original-function grant damage must remain42501 even after a contained54000
+source error in the same outer transaction. Role revocation remains P1403.
+The shared guard's fixed native ACL query is replanned with typed OID parameters;
+no caller SQL is interpolated. Retain the failed cached/plain-SELECT controls.
+This native source component is not the new compiler/public composition gate:
+that gate must repeat the paths via final0.2.8 artifacts, selected facts/pages,
+sparse residuals, exact fallback families and real application authorization.
+
 ## HF-04 compiler-owned columns and explicit entity selection
 
 `test_query_descriptors_native` verifies compiler metadata on empty, aggregate,

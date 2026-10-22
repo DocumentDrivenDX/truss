@@ -478,6 +478,57 @@ an expiry writer. No new release, indexed query support or completion/audit
 extension is qualified by this checkpoint. The new native target remains
 unfrozen until the remaining HF-05–HF-07 changes and migration gate pass.
 
+### HF-05 selected implementation design — 2026-10-22
+
+CONTRACT-007 selects compile/IR0.2.8 and query ABI1.2, with new backend43
+(and44 for cursor delivery;42 already belongs to the existing cursor backend).
+Move the unpublished entity-selector profile off the published0.2.7 schemas.
+Start with exact string/boolean equality via generic property GIN and complete
+bounded residual evaluation; numeric/temporal equality retains the old fallback.
+Qualify authored single required string ordered seeks up to1,024 UTF-8 bytes,
+with an indexed whole-key exception check; preserve valid larger/composite/exact
+numeric keys through the existing bounded route. Global redundant uniqueness
+and complete key inventory are explicit native proof obligations, not assumptions
+in a support claim. Do not turn candidate limits into claimed index-node limits.
+Typed resolution categories are emitted by Weft where known and disclosed only
+after current native scope checks. Remaining import/write/describe performance
+measurements and honest unmet targets remain part ofHF-05.
+
+### HF-05 native source checkpoint — 2026-10-22
+
+The native component creates/commits10,001 objects through public groups, retains
+legacy full-source refusal, and admits exact candidate equality and eligible
+ordered seeks. Generic JSONB path-ops GIN and short single-string key order/
+exception indexes add no per-type DDL. Original native plans and actual source
+index scan deltas qualify index use; the first asynchronous-maintenance GIN plan
+instead scanned all10,001 rows and is retained as a failed optimization attempt.
+The selected GIN uses synchronous maintenance; actual managed batch timings are
+retained rather than claiming a universal speedup or physical work-node bound.
+Valid1,025-byte keys remain writable and force complete bounded fallback; caller
+rollback preserves the prior10,001 committed objects. Other key families remain
+on the existing bounded route. Exact UMF encoder/decoder controls retain empty,
+Unicode, length framing and1,024/1,025 boundaries.
+
+The expanded registry has54 actual native declarations. An original ACL check
+after a contained54000 source error incorrectly retained an old EXECUTE verdict;
+a separate native probe reproduces it. A plain fixed SELECT also failed. A fresh
+plan of the fixed parameterized native owner/ACL query passes the same sequence,
+without interpolating caller SQL or changing client statement counts. Native
+PostgreSQL internals were not independently traced. The final combined source
+run passes51 cases without skips in95.221s, covering actual index use, long-key
+fallback, original-grant damage after refusal, revocation, all query/page cases,
+person admission and16 retained-request recovery cases. Original failed controls
+and source hashes remain in
+`evidence/hohfeld-followup-20261021/hf05-native-source/qualification.json`.
+
+The new compile/IR0.2.8 and query ABI1.2 integration is still in progress. Backend
+interface0.2.8 was already used by ordered-engine profiles, so this increment
+uses fresh backend interface0.2.9. Candidate ABI bytes are governed in
+`../02-design/contracts/query-abi1.2.proposal.json`; they are not yet selected by the installed runtime. This checkpoint
+qualifies native source components only. Original native-index/model custody,
+full new compiler/public composition, remaining HF-05 costs, HF-06/07, target
+freeze, populated migration lineage and final release gates remain required.
+
 ## Exit criteria
 
 - [x] Disputed consumer failures are reproduced or corrected with exact artifacts (selected HF-01 scope above).

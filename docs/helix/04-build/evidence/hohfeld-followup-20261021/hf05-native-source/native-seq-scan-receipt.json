@@ -1,0 +1,221 @@
+{
+  "scope": "Native source component,10001 public-group-created committed objects; exact compiled-query composition not yet qualified",
+  "managedBatches": [
+    {
+      "start": 0,
+      "objects": 1000,
+      "seconds": 0.7459027500008233
+    },
+    {
+      "start": 1000,
+      "objects": 1000,
+      "seconds": 0.5480419170344248
+    },
+    {
+      "start": 2000,
+      "objects": 1000,
+      "seconds": 0.5362704579601996
+    },
+    {
+      "start": 3000,
+      "objects": 1000,
+      "seconds": 0.55268799996702
+    },
+    {
+      "start": 4000,
+      "objects": 1000,
+      "seconds": 0.5487734579946846
+    },
+    {
+      "start": 5000,
+      "objects": 1000,
+      "seconds": 0.5584116250392981
+    },
+    {
+      "start": 6000,
+      "objects": 1000,
+      "seconds": 0.5456700829672627
+    },
+    {
+      "start": 7000,
+      "objects": 1000,
+      "seconds": 0.5624219170422293
+    },
+    {
+      "start": 8000,
+      "objects": 1000,
+      "seconds": 0.6371489579905756
+    },
+    {
+      "start": 9000,
+      "objects": 1000,
+      "seconds": 0.5600676670437679
+    },
+    {
+      "start": 10000,
+      "objects": 1,
+      "seconds": 0.010215167014393955
+    }
+  ],
+  "selectedReads": [
+    {
+      "key": "k09999",
+      "rows": 1,
+      "seconds": 0.004243375035002828,
+      "nativeCandidatePlan": [
+        {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 0.0,
+            "Total Cost": 383.01,
+            "Plan Rows": 1,
+            "Plan Width": 8,
+            "Actual Startup Time": 1.016,
+            "Actual Total Time": 1.016,
+            "Actual Rows": 1.0,
+            "Actual Loops": 1,
+            "Disabled": false,
+            "Shared Hit Blocks": 233,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Seq Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "object",
+                "Alias": "o",
+                "Startup Cost": 0.0,
+                "Total Cost": 383.01,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Actual Startup Time": 1.015,
+                "Actual Total Time": 1.016,
+                "Actual Rows": 1.0,
+                "Actual Loops": 1,
+                "Disabled": false,
+                "Filter": "((props @> '{\"1\": {\"kind\": \"string\", \"text\": \"k09999\"}}'::jsonb) AND (type_id = '1'::smallint))",
+                "Rows Removed by Filter": 10000,
+                "Shared Hit Blocks": 233,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              }
+            ]
+          },
+          "Planning": {
+            "Shared Hit Blocks": 50,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.145,
+          "Triggers": [],
+          "Execution Time": 1.018
+        }
+      ]
+    },
+    {
+      "key": "absent",
+      "rows": 0,
+      "seconds": 0.0028256250079721212,
+      "nativeCandidatePlan": [
+        {
+          "Plan": {
+            "Node Type": "Limit",
+            "Parallel Aware": false,
+            "Async Capable": false,
+            "Startup Cost": 0.0,
+            "Total Cost": 383.01,
+            "Plan Rows": 1,
+            "Plan Width": 8,
+            "Actual Startup Time": 0.979,
+            "Actual Total Time": 0.979,
+            "Actual Rows": 0.0,
+            "Actual Loops": 1,
+            "Disabled": false,
+            "Shared Hit Blocks": 233,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0,
+            "Plans": [
+              {
+                "Node Type": "Seq Scan",
+                "Parent Relationship": "Outer",
+                "Parallel Aware": false,
+                "Async Capable": false,
+                "Relation Name": "object",
+                "Alias": "o",
+                "Startup Cost": 0.0,
+                "Total Cost": 383.01,
+                "Plan Rows": 1,
+                "Plan Width": 8,
+                "Actual Startup Time": 0.978,
+                "Actual Total Time": 0.978,
+                "Actual Rows": 0.0,
+                "Actual Loops": 1,
+                "Disabled": false,
+                "Filter": "((props @> '{\"1\": {\"kind\": \"string\", \"text\": \"absent\"}}'::jsonb) AND (type_id = '1'::smallint))",
+                "Rows Removed by Filter": 10001,
+                "Shared Hit Blocks": 233,
+                "Shared Read Blocks": 0,
+                "Shared Dirtied Blocks": 0,
+                "Shared Written Blocks": 0,
+                "Local Hit Blocks": 0,
+                "Local Read Blocks": 0,
+                "Local Dirtied Blocks": 0,
+                "Local Written Blocks": 0,
+                "Temp Read Blocks": 0,
+                "Temp Written Blocks": 0
+              }
+            ]
+          },
+          "Planning": {
+            "Shared Hit Blocks": 1,
+            "Shared Read Blocks": 0,
+            "Shared Dirtied Blocks": 0,
+            "Shared Written Blocks": 0,
+            "Local Hit Blocks": 0,
+            "Local Read Blocks": 0,
+            "Local Dirtied Blocks": 0,
+            "Local Written Blocks": 0,
+            "Temp Read Blocks": 0,
+            "Temp Written Blocks": 0
+          },
+          "Planning Time": 0.018,
+          "Triggers": [],
+          "Execution Time": 0.98
+        }
+      ]
+    }
+  ],
+  "serverVersion": "18.6"
+}

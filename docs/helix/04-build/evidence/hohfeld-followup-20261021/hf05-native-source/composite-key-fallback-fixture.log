@@ -1,0 +1,23 @@
+test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals) ... FAIL
+
+======================================================================
+FAIL: test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_query_selective_sources_native.py", line 48, in test_selected_source_and_ordered_seek_retain_native_refusals
+    self.assertEqual(sorted(r[1][str(property_id)]['text'] for r in rows),expected)
+AssertionError: Lists differ: ['a', 'aa', 'z'] != ['a', 'aa']
+
+First list contains 1 additional elements.
+First extra element 2:
+'z'
+
+- ['a', 'aa', 'z']
+?           -----
+
++ ['a', 'aa']
+
+----------------------------------------------------------------------
+Ran 1 test in 4.421s
+
+FAILED (failures=1)

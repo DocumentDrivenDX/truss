@@ -1,0 +1,28 @@
+test_original_umf_key_projection_is_exact_or_explicitly_unindexable (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_original_umf_key_projection_is_exact_or_explicitly_unindexable) ... ok
+test_populated_10001_managed_objects_select_without_legacy_source_scan (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_populated_10001_managed_objects_select_without_legacy_source_scan) ... ERROR
+test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals) ... ok
+
+======================================================================
+ERROR: test_populated_10001_managed_objects_select_without_legacy_source_scan (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_populated_10001_managed_objects_select_without_legacy_source_scan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_query_selective_sources_native.py", line 65, in test_populated_10001_managed_objects_select_without_legacy_source_scan
+    c,h,a,t=self.ready(single_primary,document_ids=('adoc',));batches=[]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/tests/test_group_create_native.py", line 29, in ready
+    prepared=assembly.prepare_catalog(tuple(documents),source_version=json.loads(documents[0].content)['umf'],bun_executable=os.environ.get('TRUSS_BUN_EXECUTABLE','bun'))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_runtime.py", line 489, in prepare_catalog
+    return prepare_catalog(documents,source_version=source_version,bun_executable=bun_executable)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/catalog_preparation.py", line 49, in prepare_catalog
+    return _prepare_acceptance(documents,canonical_numeric_free(_configuration()),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/erik/Projects/truss/packages/python/src/truss/preparation.py", line 278, in _prepare_acceptance
+    raise PreparationRejected(reason,diagnostics=diagnostics)
+truss.preparation.PreparationRejected: Truss preparation refused: invalid_document
+
+----------------------------------------------------------------------
+Ran 3 tests in 6.611s
+
+FAILED (errors=1)

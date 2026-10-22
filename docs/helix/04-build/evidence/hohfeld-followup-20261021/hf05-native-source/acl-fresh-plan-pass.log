@@ -1,0 +1,6 @@
+test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 5.192s
+
+OK

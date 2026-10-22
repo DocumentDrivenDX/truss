@@ -1,0 +1,27 @@
+test_original_umf_key_projection_is_exact_or_explicitly_unindexable (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_original_umf_key_projection_is_exact_or_explicitly_unindexable) ... ok
+test_populated_10001_managed_objects_select_without_legacy_source_scan (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_populated_10001_managed_objects_select_without_legacy_source_scan) ... {"managedPopulationBatch": {"start": 0, "objects": 1000, "seconds": 0.7445127500104718}}
+{"managedPopulationBatch": {"start": 1000, "objects": 1000, "seconds": 0.5863195419660769}}
+{"managedPopulationBatch": {"start": 2000, "objects": 1000, "seconds": 0.592716500046663}}
+{"managedPopulationBatch": {"start": 3000, "objects": 1000, "seconds": 0.5617859999765642}}
+{"managedPopulationBatch": {"start": 4000, "objects": 1000, "seconds": 0.5912311249994673}}
+{"managedPopulationBatch": {"start": 5000, "objects": 1000, "seconds": 0.6181814579758793}}
+{"managedPopulationBatch": {"start": 6000, "objects": 1000, "seconds": 0.6255537089891732}}
+{"managedPopulationBatch": {"start": 7000, "objects": 1000, "seconds": 0.5786718330346048}}
+{"managedPopulationBatch": {"start": 8000, "objects": 1000, "seconds": 0.5964776250184514}}
+{"managedPopulationBatch": {"start": 9000, "objects": 1000, "seconds": 0.592061500006821}}
+{"managedPopulationBatch": {"start": 10000, "objects": 1, "seconds": 0.010233042004983872}}
+ok
+test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals) ... FAIL
+
+======================================================================
+FAIL: test_selected_source_and_ordered_seek_retain_native_refusals (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_selected_source_and_ordered_seek_retain_native_refusals)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/erik/Projects/truss/packages/python/tests/test_query_selective_sources_native.py", line 56, in test_selected_source_and_ordered_seek_retain_native_refusals
+    with self.assertRaises(psycopg.Error) as raised:
+AssertionError: Error not raised
+
+----------------------------------------------------------------------
+Ran 3 tests in 14.427s
+
+FAILED (failures=1)

@@ -1,0 +1,9 @@
+first [(2, {'1': {'kind': 'string', 'text': 'aa'}, '2': {'kind': 'string', 'text': 'value'}})]
+notes ['invocation actor=16384 original=truss.query_binding(jsonb,integer,integer,integer,text,text) execute=t current=truss_owner_df8c9310b13d48db session=consumer', 'invocation actor=16384 original=truss.query_selected_objects(jsonb,integer,jsonb) execute=t current=truss_owner_df8c9310b13d48db session=consumer']
+contained refusal 54000
+prior (42,)
+before notes ['invocation actor=16384 original=truss.query_seek_objects(jsonb,integer,text,text,integer) execute=t current=truss_owner_df8c9310b13d48db session=consumer', 'invocation actor=16384 original=truss.query_seek_objects(jsonb,integer,text,text,integer) execute=t current=truss_owner_df8c9310b13d48db session=consumer', 'invocation actor=16384 original=truss.query_seek_objects(jsonb,integer,text,text,integer) execute=t current=truss_owner_df8c9310b13d48db session=consumer', 'invocation actor=16384 original=truss.query_binding(jsonb,integer,integer,integer,text,text) execute=t current=truss_owner_df8c9310b13d48db session=consumer', 'invocation actor=16384 original=truss.query_seek_objects(jsonb,integer,text,text,integer) execute=t current=truss_owner_df8c9310b13d48db session=consumer']
+admin (False,)
+second [(2, {'1': {'kind': 'string', 'text': 'aa'}, '2': {'kind': 'string', 'text': 'value'}})]
+after notes ['invocation actor=16384 original=truss.query_selected_objects(jsonb,integer,jsonb) execute=t current=truss_owner_df8c9310b13d48db session=consumer']
+consumer after ('consumer', 'consumer', False)

@@ -57,9 +57,10 @@
     "load-audit-reader.sql": "df9c4ba844ae257eb15d8a493448586d8990381f2d57dc2bfa99dec702f82516",
     "import-batches.sql": "97cf1f1b1012864df0a95c12ba693c5a935a515047ca4533041ee4c8fc3e80a1",
     "group-audit-reader.sql": "5de164f7c191a41b2531395d5910ba0b8ffe1e94a07f597658fdb7a8e7b89d5b",
-    "person-entrypoints.sql": "f836ecab95a2f0eedb5d5c065b8960ba7e87d6c448184f5c1f4eada90d21d1e2",
-    "person-entrypoints.json": "d7f3cd1b489bf1953f15facdee97d080920533dc0ca4621047a18464186a1b5f",
-    "group-recovery.sql": "a3fcbd45ea69595b88679903d20533e9bbe18c2f5864caa6a75f82985bdca300"
+    "person-entrypoints.sql": "cc4bd94dbdec92cc0d38f79c759ffac188dda5d26f741934fc22f34bb2217705",
+    "person-entrypoints.json": "cb266f1d21deedccaf59e158354750deab1ca8b27641ff3507d09308100bcbf4",
+    "group-recovery.sql": "a3fcbd45ea69595b88679903d20533e9bbe18c2f5864caa6a75f82985bdca300",
+    "query-selective.sql": "2869ad143454cfea77187a3082f7f77d0ed7b57c8722880e7635d3b71062d6ac"
   },
   "version": "0.73"
 }

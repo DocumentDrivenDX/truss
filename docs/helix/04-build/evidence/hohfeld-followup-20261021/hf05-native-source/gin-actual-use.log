@@ -1,0 +1,17 @@
+test_populated_10001_managed_objects_select_without_legacy_source_scan (test_query_selective_sources_native.QuerySelectiveSourcesTests.test_populated_10001_managed_objects_select_without_legacy_source_scan) ... {"managedPopulationBatch": {"start": 0, "objects": 1000, "seconds": 0.7297074579983018}}
+{"managedPopulationBatch": {"start": 1000, "objects": 1000, "seconds": 0.595279874978587}}
+{"managedPopulationBatch": {"start": 2000, "objects": 1000, "seconds": 0.6086759159807116}}
+{"managedPopulationBatch": {"start": 3000, "objects": 1000, "seconds": 0.5823556249961257}}
+{"managedPopulationBatch": {"start": 4000, "objects": 1000, "seconds": 1.177474791998975}}
+{"managedPopulationBatch": {"start": 5000, "objects": 1000, "seconds": 0.7507744160247967}}
+{"managedPopulationBatch": {"start": 6000, "objects": 1000, "seconds": 0.7689761660294607}}
+{"managedPopulationBatch": {"start": 7000, "objects": 1000, "seconds": 1.2350607920088805}}
+{"managedPopulationBatch": {"start": 8000, "objects": 1000, "seconds": 2.0179714579717256}}
+{"managedPopulationBatch": {"start": 9000, "objects": 1000, "seconds": 0.5857813750044443}}
+{"managedPopulationBatch": {"start": 10000, "objects": 1, "seconds": 0.010915084043517709}}
+ok
+
+----------------------------------------------------------------------
+Ran 1 test in 15.249s
+
+OK
