@@ -1,0 +1,26 @@
+{
+  "format": "truss-public-048-native-command-record/1",
+  "commands": [
+    {
+      "argv": ["python3", "verify all 14 public Truss assets against verification.json and the public Weft Mac wheel against Weft verification.json"],
+      "exitCode": 0,
+      "output": "verified Truss assets: 14; Weft wheel SHA-256 e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487"
+    },
+    {
+      "argv": ["/private/tmp/truss-public-048-clean-venv/bin/python", "-m", "pip", "install", "--no-deps", "--no-cache-dir", "/private/tmp/weft-public-051-verification/assets/weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl", "/private/tmp/truss-public-048-verification/assets/truss_toolkit-0.0.48-py3-none-any.whl"],
+      "exitCode": 0,
+      "log": "/private/tmp/truss-public-048-native/install-public-wheels.log"
+    },
+    {
+      "argv": ["/private/tmp/truss-public-048-clean-venv/bin/python", "-m", "pip", "check"],
+      "exitCode": 0,
+      "log": "/private/tmp/truss-public-048-native/pip-check.log"
+    },
+    {
+      "argv": ["compare all 455 wheel truss/ members to exact tag source and installed package; compare installed Weft module to public Mac wheel"],
+      "exitCode": 0,
+      "receipt": "/private/tmp/truss-public-048-native/installed-payload-proof.json"
+    }
+  ],
+  "postgresStart": "not authorized yet; none of these commands starts PostgreSQL"
+}

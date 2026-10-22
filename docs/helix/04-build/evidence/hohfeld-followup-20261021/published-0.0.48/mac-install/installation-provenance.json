@@ -1,0 +1,22 @@
+{
+  "format": "truss-public-wheel-install-provenance/1",
+  "sourceTag": "8e89a068bcb68f1e631388ddc59bc97da748563d",
+  "releaseWorkflow": "https://github.com/DocumentDrivenDX/truss/actions/runs/39838914360",
+  "publicVerification": "/private/tmp/truss-public-048-verification/verification.json",
+  "cleanVenv": "/private/tmp/truss-public-048-clean-venv",
+  "trussWheel": "/private/tmp/truss-public-048-verification/assets/truss_toolkit-0.0.48-py3-none-any.whl",
+  "trussWheelSha256": "1aedf614ff3d3ff7a61bd4d91887ede650a7135d1239e8564c1c297c0ddc37c3",
+  "weftWheel": "/private/tmp/weft-public-051-verification/assets/weft_sql-0.4.51-cp39-abi3-macosx_11_0_arm64.whl",
+  "weftWheelSha256": "e60e552f02c670b43a43111b08d26d6b415aaa9b9de42f241c37ad1d9fdd2487",
+  "weftNativeModuleSha256": "34691932af5b84a3e8629b318aa69e88a5e2df46e47ffc143b4950aa6defc5aa",
+  "postgres": {
+    "distribution": "pgserver-pg18==18.6.1",
+    "directUrlPath": "/private/tmp/truss-public-048-clean-venv/lib/python3.11/site-packages/pgserver_pg18-18.6.1.dist-info/direct_url.json",
+    "directUrlSha256BeforeAndAfter": "unchanged; see pg-direct-url-before.sha256 and pg-direct-url-after.sha256",
+    "directUrl": "https://github.com/DocumentDrivenDX/pgserver/releases/download/pg18.6-pgv0.8.6-r2/pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl",
+    "started": false
+  },
+  "sourceAndWheelAndInstalledRuntimeFiles": 455,
+  "pipCheck": "passed",
+  "nativeQualification": "not started; waiting for root GO"
+}

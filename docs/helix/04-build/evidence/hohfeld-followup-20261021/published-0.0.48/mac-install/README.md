@@ -1,0 +1,3 @@
+Public Truss 0.0.48 and Weft 0.4.51 wheels were independently verified against their release metadata and installed into the reserved clean venv using `pip install --no-deps`. The existing public PG18.6.1 wheel direct_url.json was hashed before and after and is unchanged. All 455 Truss wheel runtime members byte-match the exact tag source and installed files; the loaded Weft native module byte-matches the public Mac wheel.
+
+`pre-go-installation-provenance.json` and `pre-go-commands.json` are immutable pre-native-test snapshots. They truthfully say native tests were pending when installation finished; the later run records live in the separate migration80 and independent62 directories. No PG process was started during this install/preflight stage.

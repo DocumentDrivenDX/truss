@@ -1,0 +1,21 @@
+Name: truss-toolkit
+Version: 0.0.48
+Summary: Experimental Truss Python embedding components
+Home-page: 
+Author: 
+Author-email: 
+License: 
+Location: /private/tmp/truss-public-048-clean-venv/lib/python3.11/site-packages
+Requires: jsonschema, mini-racer, referencing
+Required-by: 
+---
+Name: weft-sql
+Version: 0.4.51
+Summary: Native UMF-powered SQL compiler with explicit backend profiles
+Home-page: 
+Author: 
+Author-email: 
+License: 
+Location: /private/tmp/truss-public-048-clean-venv/lib/python3.11/site-packages
+Requires: 
+Required-by: 

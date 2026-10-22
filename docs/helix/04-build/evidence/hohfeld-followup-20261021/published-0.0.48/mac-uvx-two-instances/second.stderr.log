@@ -1,0 +1,11 @@
+WARN Range requests not supported for `truss_toolkit-0.0.48-py3-none-any.whl`; streaming wheel
+WARN Range requests not supported for `pgserver_pg18-18.6.1-cp311-cp311-macosx_14_0_arm64.whl`; streaming wheel
+Downloading mini-racer (17.7MiB)
+Downloading psycopg-binary (4.6MiB)
+ Downloaded psycopg-binary
+ Downloaded mini-racer
+Downloading truss-toolkit (5.3MiB)
+Downloading pgserver-pg18 (10.3MiB)
+ Downloaded truss-toolkit
+ Downloaded pgserver-pg18
+Installed 14 packages in 50ms

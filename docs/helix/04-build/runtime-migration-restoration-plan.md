@@ -343,3 +343,17 @@ admission profile strengthens verification without executing an old runtime.
 Require a native collision countercontrol that revokes exactly one overloaded
 signature and cannot pass by observing the sibling's grant. New target profiles
 and every intermediate edge are checked with the full identities.
+
+### First real follow-up edge — v0.0.48
+
+The published v0.0.48 latest tool closes the first native skip-release-chain gate.
+Its installed lineage suite executes the actual v0.0.46 → v0.0.47 → v0.0.48
+two-edge route and also qualifies the admitted v0.0.44 and shared v0.0.45/46
+source populations. The completed route retains prior source recipes and receipts,
+appends one final v0.0.48 receipt, and does not launch an intermediate application
+runtime. Public Linux and macOS evidence: [Linux 80-case migration receipt](evidence/hohfeld-followup-20261021/published-0.0.48/public-assets/migration-qualification.json) and
+[macOS 80-case migration receipt](evidence/hohfeld-followup-20261021/published-0.0.48/mac-migration80/qualification.json). The independent verification record is
+[public release validation](evidence/hohfeld-followup-20261021/published-0.0.48/validation.json). This closes the first real subsequent-edge
+proof; each later migration edge must satisfy the same lineage and publication
+gates. Only the latest application runtime remains supported, and admitted
+databases have no release-age expiry.

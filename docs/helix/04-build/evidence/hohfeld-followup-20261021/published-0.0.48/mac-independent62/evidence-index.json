@@ -1,0 +1,66 @@
+{
+  "format": "truss-public-048-macos-evidence-index/1",
+  "directory": "mac-independent62",
+  "artifacts": [
+    {
+      "path": "README.md",
+      "size": 572,
+      "sha256": "e7798eb532f0b384cc63e6167dc796d2fae0e6a76f13d37a3e0149c41159aac4"
+    },
+    {
+      "path": "checkout-source-commit.txt",
+      "size": 41,
+      "sha256": "2be14eff70f6bfde92b7a53555af8c42eba68782bc0ac582c72b5b63783db685"
+    },
+    {
+      "path": "checkout-source-status.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "command.json",
+      "size": 1617,
+      "sha256": "659e72188f8ba4975eea0c2f9576499fc31f8be50b9a3d436d3003c9691e6596"
+    },
+    {
+      "path": "end-time.txt",
+      "size": 21,
+      "sha256": "31c512d9603b27d62a748ba93229a5886184171e0dc457149c78fc97ab5a3339"
+    },
+    {
+      "path": "exit-status.txt",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "preflight.json",
+      "size": 766,
+      "sha256": "4a41c7854cb5403ee6afaf188558a55837278d24f19f8a33cb183572e48f6b60"
+    },
+    {
+      "path": "qualification.json",
+      "size": 14967,
+      "sha256": "8acda2891f10a72080be1d9a1e89fe707df7bc15f83df8406ac190cb23559b95"
+    },
+    {
+      "path": "run.log",
+      "size": 13410,
+      "sha256": "7da46233625ae8bceb50f59110e966c19a5dc49d0f179941a7bf68f9745ca9b0"
+    },
+    {
+      "path": "source-commit-after.txt",
+      "size": 41,
+      "sha256": "2be14eff70f6bfde92b7a53555af8c42eba68782bc0ac582c72b5b63783db685"
+    },
+    {
+      "path": "source-status-after.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "start-time.txt",
+      "size": 21,
+      "sha256": "0653d089c9b0591af4e59c8ada020628e8591f79c1522e2cca61fd4185538916"
+    }
+  ]
+}

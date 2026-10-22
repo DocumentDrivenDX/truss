@@ -1,0 +1,81 @@
+{
+  "format": "truss-public-048-macos-evidence-index/1",
+  "directory": "mac-install",
+  "artifacts": [
+    {
+      "path": "README.md",
+      "size": 757,
+      "sha256": "49bb903f990b0f174a62a01cb89ae933a677d1019e6915d6ee2b0a2fbdd22d63"
+    },
+    {
+      "path": "commands.json",
+      "size": 1366,
+      "sha256": "d6006decbc33dbc8ac7af270a7aafc0ab566172f7757791b07767909c0e04e85"
+    },
+    {
+      "path": "install-preflight.json",
+      "size": 310,
+      "sha256": "accb8442382851c26e9dbad3ecb0891d6d2aa5a2f517449a9535de700a5894c3"
+    },
+    {
+      "path": "install-public-wheels.exit",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "install-public-wheels.log",
+      "size": 322,
+      "sha256": "eb7aebaf96682d5e48da7a48e08b310a9ac61e274f29e5e25f23ed80ee40903b"
+    },
+    {
+      "path": "installation-provenance.json",
+      "size": 1485,
+      "sha256": "0d7d56bfb2f0ff94b8637089e17db416896429270f0d0eb21b669b59e2dd56be"
+    },
+    {
+      "path": "installed-distributions.txt",
+      "size": 536,
+      "sha256": "4798b15edf2025cd573278804898978947982f542375e397528f01d7ee1d95db"
+    },
+    {
+      "path": "installed-payload-proof.json",
+      "size": 81034,
+      "sha256": "75034ae315962aeeef760e99e0d46cca9e7ada0b8a38a52fd8fc332936cb051d"
+    },
+    {
+      "path": "pg-direct-url-after.sha256",
+      "size": 183,
+      "sha256": "b8a8084f2ea2e7b27b2159218c1d42a7a27d9fbb66b5051f44be5b4f7845e302"
+    },
+    {
+      "path": "pg-direct-url-before.sha256",
+      "size": 183,
+      "sha256": "b8a8084f2ea2e7b27b2159218c1d42a7a27d9fbb66b5051f44be5b4f7845e302"
+    },
+    {
+      "path": "pip-check.exit",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "pip-check.log",
+      "size": 302,
+      "sha256": "d0b0f783aafb6b8554cd928f14f27df0d4c6c31ee5fd80fd5ac48b05cba5cf2d"
+    },
+    {
+      "path": "pre-go-commands.json",
+      "size": 1366,
+      "sha256": "d6006decbc33dbc8ac7af270a7aafc0ab566172f7757791b07767909c0e04e85"
+    },
+    {
+      "path": "pre-go-installation-provenance.json",
+      "size": 1485,
+      "sha256": "0d7d56bfb2f0ff94b8637089e17db416896429270f0d0eb21b669b59e2dd56be"
+    },
+    {
+      "path": "pre-pg-provenance-time.txt",
+      "size": 21,
+      "sha256": "38f19acf285e99761dc6a7634e39d08589c05b6db60317a6285980a319d2827f"
+    }
+  ]
+}
