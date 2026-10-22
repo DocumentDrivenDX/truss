@@ -503,7 +503,7 @@ x86_64 qualification. Other platforms are outside the selected release gates.
 Check out the v0.0.48 tag to obtain the examples, then run with a new directory:
 
 ```sh
-git clone --branch v0.0.47 --depth 1 https://github.com/DocumentDrivenDX/truss.git
+git clone --branch v0.0.48 --depth 1 https://github.com/DocumentDrivenDX/truss.git
 cd truss
 python packages/python/examples/adopter_workflow.py /tmp/truss-adopter-demo
 ```
@@ -521,15 +521,15 @@ previews retain their historical pins and none claims independent interchange.
 
 ## Run local PostgreSQL 18.6
 
-With `uv` installed, run the published `0.0.47` package in an isolated Python
+With `uv` installed, run the published `0.0.48` package in an isolated Python
 3.11 tool environment:
 
 ```sh
 uvx --no-config --isolated --python 3.11 \
-  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.47/isolated-runtime-constraints.txt \
+  --constraints https://github.com/DocumentDrivenDX/truss/releases/download/v0.0.48/isolated-runtime-constraints.txt \
   --find-links https://github.com/DocumentDrivenDX/truss/releases/expanded_assets/v0.0.48 \
   --find-links https://github.com/DocumentDrivenDX/pgserver/releases/expanded_assets/pg18.6-pgv0.8.6-r2 \
-  --from 'truss-toolkit[local,native]==0.0.47' \
+  --from 'truss-toolkit[local,native]==0.0.48' \
   truss-local-postgres \
   --data-dir "$HOME/.local/share/truss/beads" \
   --install
